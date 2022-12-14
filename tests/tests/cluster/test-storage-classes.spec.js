@@ -20,9 +20,7 @@ context('Test Storage Classes', () => {
   it('Create Storage Class', () => {
     cy.navigateTo('Storage', 'Storage Classes');
 
-    cy.getIframeBody()
-      .contains('Create Storage Class')
-      .click();
+    cy.contains('Create Storage Class').click();
 
     cy.wrap(loadSC(Cypress.env('STORAGE_CLASS_NAME'))).then(SC_CONFIG => {
       const SC = JSON.stringify(SC_CONFIG);
@@ -30,34 +28,21 @@ context('Test Storage Classes', () => {
       cy.pasteToMonaco(SC);
     });
 
-    cy.getIframeBody()
-      .find('[role="dialog"]')
-      .contains('button', 'Create')
-      .click();
+    cy.contains('[role="dialog"] button', 'Create').click();
   });
 
   it('Checking details', () => {
-    cy.getIframeBody()
-      .contains(Cypress.env('STORAGE_CLASS_NAME'))
-      .should('be.visible');
+    cy.contains(Cypress.env('STORAGE_CLASS_NAME')).should('be.visible');
 
-    cy.getIframeBody()
-      .contains('pd.csi.storage.gke.io')
-      .should('be.visible');
+    cy.contains('pd.csi.storage.gke.io').should('be.visible');
 
-    cy.getIframeBody()
-      .contains('pd-ssd')
-      .should('be.visible');
+    cy.contains('pd-ssd').should('be.visible');
 
-    cy.getIframeBody()
-      .contains('Retain')
-      .should('be.visible');
+    cy.contains('Retain').should('be.visible');
   });
 
   it('Checking list and delete', () => {
-    cy.getIframeBody()
-      .contains('Storage Classes')
-      .click();
+    cy.contains('Storage Classes').click();
 
     cy.deleteFromGenericList(Cypress.env('STORAGE_CLASS_NAME'));
   });

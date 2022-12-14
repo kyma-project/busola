@@ -147,12 +147,12 @@ data:
       resource:
         kind: Secret
         version: v1
-      filter: $item.metadata.name = $root.spec.recipeSecret
+      filter: $item.metadata.name = $root.spec.recipeSecret.name
     relatedSecrets:
       resource:
         kind: Secret
         version: v1
-      filter: $root.spec.recipeSecret = $item.metadata.name
+      filter: $root.spec.recipeSecret.name = $item.metadata.name
     relatedPizzaOrders:
       resource:
         kind: PizzaOrder

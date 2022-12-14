@@ -1,35 +1,36 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { ResourceForm } from 'shared/ResourceForm';
+import { useCustomResourceUrl } from 'resources/CustomResourceDefinitions/useCustomResourceUrl';
+
 import { createTemplate } from './templates';
-import { useNavigateToCustomResource } from './useNavigateToCustomResource';
 
 function CRCreate({ onChange, formElementRef, crd, toggleFormFn }) {
-  const [CR, setCR] = useState(createTemplate(crd));
-  const navigateToCustomResource = useNavigateToCustomResource();
+  const [cr, setCr] = useState(createTemplate(crd));
+  const customUrl = useCustomResourceUrl(crd);
+  const navigate = useNavigate();
 
-  const createResourceUrl = (cr, crd) => {
-    const currentVersion = crd.spec.versions.find(ver => ver.storage).name;
-    const namespace =
-      crd.spec.scope === 'Namespaced'
-        ? `/namespaces/${cr.metadata?.namespace || ''}`
-        : '';
-    return `/apis/${crd.spec?.group || ''}/${currentVersion}${namespace}/${
-      crd.spec.names.plural
-    }`;
-  };
+  const currentVersion = crd.spec.versions.find(ver => ver.storage).name;
+  const namespace =
+    crd.spec.scope === 'Namespaced'
+      ? `/namespaces/${cr.metadata?.namespace || ''}`
+      : '';
+  const createUrl = `/apis/${crd.spec?.group ||
+    ''}/${currentVersion}${namespace}/${crd.spec.names.plural}`;
 
   return (
     <ResourceForm
       pluralKind={crd.spec.names.plural}
       singularName={crd.spec.names.kind}
-      resource={CR}
-      setResource={setCR}
+      resource={cr}
+      setResource={setCr}
       onChange={onChange}
       formElementRef={formElementRef}
-      createUrl={createResourceUrl(CR, crd)}
+      createUrl={createUrl}
       onlyYaml
       afterCreatedFn={() => {
-        navigateToCustomResource(CR, crd);
+        navigate(customUrl(cr));
         toggleFormFn();
       }}
     />

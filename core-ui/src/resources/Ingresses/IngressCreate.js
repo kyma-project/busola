@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 import { createIngressTemplate } from './templates';
+import { useRecoilValue } from 'recoil';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 export function IngressCreate({
   formElementRef,
@@ -11,7 +12,7 @@ export function IngressCreate({
   resourceUrl,
   ...props
 }) {
-  const { namespaceId } = useMicrofrontendContext();
+  const namespaceId = useRecoilValue(activeNamespaceIdState);
   const [ingress, setIngress] = useState(createIngressTemplate(namespaceId));
   const { t } = useTranslation();
 

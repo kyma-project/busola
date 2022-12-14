@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useRecoilValue } from 'recoil';
 
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { ResourceForm } from 'shared/ResourceForm';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 import { createNetworkPolicyTemplate } from './templates';
 
@@ -13,7 +14,7 @@ export function NetworkPolicyCreate({
   resourceUrl,
   ...props
 }) {
-  const { namespaceId } = useMicrofrontendContext();
+  const namespaceId = useRecoilValue(activeNamespaceIdState);
   const [networkPolicy, setNetworkPolicy] = useState(
     createNetworkPolicyTemplate(namespaceId),
   );

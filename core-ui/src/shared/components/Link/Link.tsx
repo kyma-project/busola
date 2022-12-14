@@ -7,9 +7,16 @@ type LinkProps = {
   text?: string;
   className?: string;
   children?: ReactNode;
+  dataTestId?: string;
 };
 
-export const Link = ({ url, text, className, children }: LinkProps) => {
+export const Link = ({
+  url,
+  text,
+  className,
+  children,
+  dataTestId,
+}: LinkProps) => {
   const { t } = useTranslation();
 
   return (
@@ -18,6 +25,7 @@ export const Link = ({ url, text, className, children }: LinkProps) => {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
+      data-test-id={dataTestId}
     >
       {text || children || url}
       <Icon

@@ -1,10 +1,9 @@
 import React from 'react';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
+import { useFeature } from './useFeature';
 
 export function useSentry() {
-  const { features } = useMicrofrontendContext();
   const [dsn, setDsn] = React.useState();
 
   const initSentry = dsn => {
@@ -17,7 +16,7 @@ export function useSentry() {
   };
 
   try {
-    const feature = features?.SENTRY || {};
+    const feature = useFeature('SENTRY') || {};
     if (feature.isEnabled && feature.config?.dsn) {
       const nextDsn = feature.config.dsn;
 

@@ -21,13 +21,14 @@ import {
 import { Labels } from 'shared/components/Labels/Labels';
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { useVersionWarning } from 'hooks/useVersionWarning';
+import { useUrl } from 'hooks/useUrl';
+
 import { Tooltip } from '../Tooltip/Tooltip';
 
 // This component is loaded after the page mounts.
@@ -86,14 +87,14 @@ function ResourceDetailsRenderer(props) {
 
   const updateResourceMutation = useUpdate(props.resourceUrl);
   const deleteResourceMutation = useDelete(props.resourceUrl);
+  const { resourceListUrl } = useUrl();
 
   if (loading) return <Spinner />;
   if (error) {
     const breadcrumbItems = props.breadcrumbs || [
       {
         name: prettifyNamePlural(props.resourceTitle, props.resourceType),
-        path: '/',
-        fromContext: props.resourceType.toLowerCase(),
+        url: resourceListUrl(resource, { resourceType: props.resourceType }),
       },
       { name: '' },
     ];
@@ -176,12 +177,12 @@ function Resource({
 
   const { setEditedYaml: setEditedSpec } = useYamlEditor();
   const notification = useNotification();
+  const { resourceListUrl } = useUrl();
 
   const breadcrumbItems = breadcrumbs || [
     {
       name: pluralizedResourceKind,
-      path: '/',
-      fromContext: pluralize(resource.kind).toLowerCase(),
+      url: resourceListUrl(resource, { resourceType }),
     },
     { name: '' },
   ];

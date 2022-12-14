@@ -6,6 +6,8 @@ const USERNAME = Cypress.env('OIDC_USER');
 const PASSWORD = Cypress.env('OIDC_PASS');
 
 Cypress.Commands.add('loginAndSelectCluster', function(params) {
+  cy.handleExceptions();
+
   const defaults = {
     fileName: 'kubeconfig.yaml',
     expectedLocation: /overview$/,
@@ -94,33 +96,23 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
     }
 
     cy.visit(`${config.clusterAddress}/clusters`)
-      .getIframeBody()
       .contains('Connect cluster')
       .click();
 
-    cy.getIframeBody()
-      .contains('Drag your file here or click to upload')
-      .attachFile(fileName, { subjectType: 'drag-n-drop' });
+    cy.contains('Drag your file here or click to upload').attachFile(fileName, {
+      subjectType: 'drag-n-drop',
+    });
 
-    cy.getIframeBody()
-      .contains('Next')
-      .click();
+    cy.contains('Next').click();
 
     if (storage) {
-      cy.getIframeBody()
-        .contains(storage)
-        .click();
+      cy.contains(storage).click();
     }
 
-    cy.getIframeBody()
-      .find('[role="dialog"]')
-      .contains('button', 'Connect cluster')
-      .click();
+    cy.contains('[role="dialog"] button', 'Connect cluster').click();
 
     cy.url().should('match', expectedLocation);
-    cy.getIframeBody()
-      .find('thead')
-      .should('be.visible'); //wait for the namespaces XHR request to finish to continue running the tests. There's no <thead> while the request is pending.
+    cy.contains('Cluster Details').should('be.visible');
 
     return cy.end();
   });

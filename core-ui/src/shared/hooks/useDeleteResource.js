@@ -1,14 +1,14 @@
-import LuigiClient from '@luigi-project/client';
 import { Button, Checkbox, MessageBox, MessageStrip } from 'fundamental-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
-import { navigateToList } from 'shared/hooks/navigate';
 import { prettifyNameSingular } from 'shared/utils/helpers';
 import { dontConfirmDeleteState } from 'state/preferences/dontConfirmDeleteAtom';
+import { useUrl } from 'hooks/useUrl';
 
 export function useDeleteResource({
   resourceTitle,
@@ -23,6 +23,8 @@ export function useDeleteResource({
     dontConfirmDeleteState,
   );
   const notification = useNotification();
+  const navigate = useNavigate();
+  const { resourceListUrl } = useUrl();
 
   const prettifiedResourceName = prettifyNameSingular(
     resourceTitle,
@@ -43,7 +45,9 @@ export function useDeleteResource({
             resourceType: prettifiedResourceName,
           }),
         });
-        if (navigateToListAfterDelete) navigateToList(resourceType);
+        if (navigateToListAfterDelete) {
+          navigate(resourceListUrl(resource, { resourceType }));
+        }
       }
     } catch (e) {
       console.error(e);
@@ -58,7 +62,6 @@ export function useDeleteResource({
   };
 
   const closeDeleteDialog = () => {
-    LuigiClient.uxManager().removeBackdrop();
     setShowDeleteDialog(false);
   };
 
@@ -66,7 +69,6 @@ export function useDeleteResource({
     if (dontConfirmDelete) {
       performDelete(resource, resourceUrl, deleteFn);
     } else {
-      LuigiClient.uxManager().addBackdrop();
       setShowDeleteDialog(true);
     }
   };

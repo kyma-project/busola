@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, LayoutPanel } from 'fundamental-react';
+import { LayoutPanel } from 'fundamental-react';
+import { Link } from 'react-router-dom';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
@@ -9,13 +10,14 @@ import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow'
 import { Tokens } from 'shared/components/Tokens';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
-import { navigateToResource } from 'shared/helpers/universalLinks';
+import { useUrl } from 'hooks/useUrl';
 
 import { PersistentVolumeStatus } from './PersistentVolumeStatus';
 import { PersistentVolumeCreate } from './PersistentVolumeCreate';
 
 export function PersistentVolumeDetails(props) {
   const { t } = useTranslation();
+  const { resourceUrl } = useUrl();
 
   const customColumns = [
     {
@@ -66,12 +68,13 @@ export function PersistentVolumeDetails(props) {
                 ({ metadata }) => metadata.name === spec?.storageClassName,
               ) ? (
                 <Link
-                  onClick={() =>
-                    navigateToResource({
-                      kind: 'StorageClass',
+                  className="fd-link"
+                  to={resourceUrl({
+                    kind: 'StorageClass',
+                    metadata: {
                       name: spec?.storageClassName,
-                    })
-                  }
+                    },
+                  })}
                 >
                   {spec?.storageClassName}
                 </Link>
@@ -87,13 +90,16 @@ export function PersistentVolumeDetails(props) {
                 ({ metadata }) => metadata.name === spec?.claimRef?.name,
               ) ? (
                 <Link
-                  onClick={() =>
-                    navigateToResource({
-                      name: spec?.claimRef?.name,
+                  className="fd-link"
+                  to={resourceUrl(
+                    {
                       kind: 'PersistentVolumeClaim',
-                      namespace: spec?.claimRef?.namespace,
-                    })
-                  }
+                      metadata: {
+                        name: spec?.claimRef?.name,
+                      },
+                    },
+                    { namespace: spec?.claimRef?.namespace },
+                  )}
                 >
                   {spec?.claimRef?.name}
                 </Link>

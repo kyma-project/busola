@@ -11,79 +11,53 @@ function closeCommandPalette() {
 }
 
 function getQueryInput() {
-  return cy.getIframeBody().find('[aria-label=command-palette-search]');
+  return cy.get('[aria-label=command-palette-search]');
 }
 
 context('Test Command Palette navigation', () => {
   Cypress.skipAfterFail();
 
-  // Luigi throws error of the "replace" function when entering the Preferences dialog. Remove the code below after Luigi's removal
-  Cypress.on('uncaught:exception', () => {
-    return false;
-  });
-
   before(() => {
     cy.loginAndSelectCluster();
   });
 
-  it('Opening and closing Command Palette from both main frame and inner frame', () => {
+  it('Opening and closing Command Palette', () => {
     const expectOpened = () => getQueryInput().should('be.visible');
     const expectClosed = () => getQueryInput().should('not.exist');
 
-    // main frame
     openCommandPalette();
     expectOpened();
 
     closeCommandPalette();
     expectClosed();
 
-    // inner frame
-    cy.getIframeBody().type(
-      `${Cypress.platform === 'darwin' ? '{cmd}k' : '{ctrl}k'}`,
-    );
-    expectOpened();
-
-    cy.getIframeBody().type('{esc}');
-    expectClosed();
-
-    // any frame, but click on background to close
     openCommandPalette();
-    cy.getIframeBody()
-      .find('#command-palette-background')
-      .click();
+    cy.get('#command-palette-background').click();
     expectClosed();
   });
 
   it('Basic navigation', () => {
-    cy.getIframeBody().contains('Cluster Details');
+    cy.contains('Cluster Details');
 
     // navigate to namespace
     openCommandPalette();
 
-    cy.getIframeBody()
-      .find('[aria-label="Remove Namespace context"]')
-      .should('not.exist');
+    cy.get('[aria-label="Remove Namespace context"]').should('not.exist');
 
     getQueryInput().type('ns default');
 
-    cy.getIframeBody()
-      .contains('default')
-      .click();
+    cy.contains('default').click();
 
-    cy.url().should('match', new RegExp('namespaces/default/details'));
+    cy.url().should('match', new RegExp('namespaces/default'));
 
     // navigate to list of cluster role bindings
     openCommandPalette();
 
-    cy.getIframeBody()
-      .find('[aria-label="Remove Namespace context"]')
-      .should('be.visible');
+    cy.get('[aria-label="Remove Namespace context"]').should('be.visible');
 
     getQueryInput().type('crb');
 
-    cy.getIframeBody()
-      .contains('List of Cluster Role Bindings')
-      .click();
+    cy.contains('List of Cluster Role Bindings').click();
 
     cy.url().should('match', new RegExp(`/clusterrolebindings`));
 
@@ -92,25 +66,20 @@ context('Test Command Palette navigation', () => {
 
     getQueryInput().type('nodes ');
 
-    cy.getIframeBody()
-      .contains('Cluster Details > Nodes')
+    cy.contains('Cluster Details > Nodes')
       .first()
       .click();
 
-    cy.getIframeBody()
-      .contains('Cluster Details - Nodes')
-      .should('be.visible');
+    cy.contains('Cluster Details - Nodes').should('be.visible');
 
-    // navigate to cluster overview
+    // navigate to cluster overviewf
     openCommandPalette();
 
     getQueryInput().type('ov');
 
     getQueryInput().trigger('keydown', { key: 'Enter' });
 
-    cy.getIframeBody()
-      .contains('API Server Address')
-      .should('be.visible');
+    cy.contains('API Server Address').should('be.visible');
 
     // navigate to generic CR
     openCommandPalette();
@@ -119,9 +88,7 @@ context('Test Command Palette navigation', () => {
 
     getQueryInput().trigger('keydown', { key: 'Enter' });
 
-    cy.getIframeBody()
-      .contains('VerticalPodAutoscalerCheckpoints')
-      .should('be.visible');
+    cy.contains('VerticalPodAutoscalerCheckpoints').should('be.visible');
   });
 
   it('History', () => {
@@ -135,8 +102,7 @@ context('Test Command Palette navigation', () => {
     getQueryInput().type('{uparrow}');
 
     // search from previous case
-    cy.getIframeBody()
-      .find('[placeholder^="overview"]')
+    cy.get('[placeholder^="overview"]')
       .should('be.visible')
       // back to normal mode
 
@@ -148,16 +114,12 @@ context('Test Command Palette navigation', () => {
   it('Help', () => {
     getQueryInput().type('?');
 
-    cy.getIframeBody()
-      .contains('to navigate between results')
-      .should('be.visible');
+    cy.contains('to navigate between results').should('be.visible');
 
     getQueryInput().clear();
     getQueryInput().type('help');
 
-    cy.getIframeBody()
-      .contains('to navigate between results')
-      .should('be.visible');
+    cy.contains('to navigate between results').should('be.visible');
 
     getQueryInput().clear();
   });
@@ -165,19 +127,13 @@ context('Test Command Palette navigation', () => {
   it('DidYouMean', () => {
     getQueryInput().type('podz');
 
-    cy.getIframeBody()
-      .contains('Did you mean: pod')
-      .should('be.visible');
+    cy.contains('Did you mean: pod').should('be.visible');
 
-    cy.getIframeBody()
-      .contains('List of Pods')
-      .should('not.exist');
+    cy.contains('List of Pods').should('not.exist');
 
     getQueryInput().trigger('keydown', { key: 'Tab' });
 
-    cy.getIframeBody()
-      .contains('List of Pods')
-      .should('be.visible');
+    cy.contains('List of Pods').should('be.visible');
     closeCommandPalette();
   });
 
@@ -191,13 +147,9 @@ context('Test Command Palette navigation', () => {
 
     getQueryInput().trigger('keydown', { key: 'Enter' });
 
-    cy.getIframeBody()
-      .contains('Cluster interaction')
-      .should('be.visible');
+    cy.contains('Cluster interaction').should('be.visible');
 
-    cy.getIframeBody()
-      .contains('Close')
-      .click();
+    cy.contains('Close').click();
   });
 
   it('Disables Command Palette if a modal is present', () => {
@@ -206,9 +158,7 @@ context('Test Command Palette navigation', () => {
     getQueryInput().type('deploy');
     getQueryInput().trigger('keydown', { key: 'Enter' });
 
-    cy.getIframeBody()
-      .contains('Create Deployment')
-      .click();
+    cy.contains('Create Deployment').click();
 
     openCommandPalette();
 

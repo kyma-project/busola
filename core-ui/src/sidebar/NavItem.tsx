@@ -1,9 +1,9 @@
-import { useRecoilValue } from 'recoil';
 import { Icon, SideNav } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { Link } from 'react-router-dom';
+
 import { NavNode } from 'state/types';
-import { luigiNavigate } from 'resources/createResourceRoutes';
+import { useUrl } from 'hooks/useUrl';
 
 import './NavItem.scss';
 
@@ -12,11 +12,15 @@ type NavItemProps = {
 };
 
 export function NavItem({ node }: NavItemProps) {
-  const namespaceId = useRecoilValue(activeNamespaceIdState);
   const { t } = useTranslation();
+  const urlGenerators = useUrl();
+  const { scopedUrl } = urlGenerators;
 
   const isNodeSelected = () => {
     if (node.externalUrl) return false;
+    return false;
+    //TODO
+    /*
     const { pathname } = window.location;
     const namespacePart = namespaceId ? `/namespaces/${namespaceId}/` : '/';
     const resourcePart = pathname.replace(namespacePart, '');
@@ -24,30 +28,33 @@ export function NavItem({ node }: NavItemProps) {
     return (
       pathSegment === node.pathSegment || pathSegment === node.resourceType
     );
+     */
   };
 
-  // TODO: Show it's external node - implemented in fd, types dont match
+  const name = t(node.label, { defaultValue: node.label });
+
   return (
     <SideNav.ListItem
       selected={isNodeSelected()}
       key={node.pathSegment}
       id={node.pathSegment}
-      // @ts-ignore
-      name={
-        <span className={node.externalUrl ? 'nav-item__external-link' : ''}>
-          {t(node.label, { defaultValue: node.label })}
-          {node.externalUrl && <Icon glyph="inspect" />}
-        </span>
-      }
-      url="#"
       glyph={node.icon}
-      onClick={() => {
-        if (node.externalUrl) {
-          window.open(node.externalUrl, '_blank', 'noopener,noreferrer');
-        } else {
-          luigiNavigate(node, namespaceId);
-        }
-      }}
-    />
+    >
+      {node.externalUrl ? (
+        <a className="nav-item__external-link" href={node.externalUrl}>
+          {name} <Icon glyph="inspect" />
+        </a>
+      ) : (
+        <Link
+          to={
+            node.createUrlFn
+              ? node.createUrlFn(urlGenerators)
+              : scopedUrl(node.pathSegment)
+          }
+        >
+          {name}
+        </Link>
+      )}
+    </SideNav.ListItem>
   );
 }

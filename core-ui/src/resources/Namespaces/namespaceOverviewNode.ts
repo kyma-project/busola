@@ -4,7 +4,7 @@ export const namespaceOverviewNode: NavNode = {
   category: '',
   icon: 'product',
   resourceType: 'namespaces',
-  pathSegment: 'details',
+  pathSegment: '',
   label: 'Overview',
   namespaced: true,
   requiredFeatures: [],

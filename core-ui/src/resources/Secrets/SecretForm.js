@@ -2,13 +2,14 @@ import React from 'react';
 import { TextFormItem } from 'shared/components/TextFormItem/TextFormItem';
 import { LabelSelectorInput } from 'shared/components/LabelSelectorInput/LabelSelectorInput';
 import { KeyValueForm } from 'shared/components/KeyValueForm/KeyValueForm';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { K8sNameInput } from 'shared/components/K8sNameInput/K8sNameInput';
 import { Tab, TabGroup } from 'fundamental-react';
 import { createSecretInput, mapObjectValues } from './helpers';
 import './SecretForm.scss';
 import { DecodeSecretSwitch } from './DecodeSecretSwitch';
 import { useTranslation } from 'react-i18next';
+import { useRecoilValue } from 'recoil';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 export function SecretForm({
   formElementRef,
@@ -18,8 +19,7 @@ export function SecretForm({
   onSubmit,
   readonlyName,
 }) {
-  const { namespaceId } = useMicrofrontendContext();
-  const [name, setName] = React.useState(secret.metadata.name);
+  const namespaceId = useRecoilValue(activeNamespaceIdState);
   const [labels, setLabels] = React.useState(secret.metadata.labels);
   const [annotations, setAnnotations] = React.useState(
     secret.metadata.annotations,

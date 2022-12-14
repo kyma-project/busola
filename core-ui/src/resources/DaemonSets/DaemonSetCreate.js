@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useRecoilState } from 'recoil';
 
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { ResourceForm } from 'shared/ResourceForm';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 import { createDaemonSetTemplate } from './templates';
 
@@ -13,7 +14,7 @@ export function DaemonSetCreate({
   resourceUrl,
   ...props
 }) {
-  const { namespaceId } = useMicrofrontendContext();
+  const namespaceId = useRecoilState(activeNamespaceIdState);
   const [daemonSet, setDaemonSet] = useState(
     createDaemonSetTemplate(namespaceId),
   );

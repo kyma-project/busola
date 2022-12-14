@@ -4,7 +4,6 @@ import { useCallback } from 'react';
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { createPatch } from 'rfc6902';
 
 import { useComponentDidMount } from 'shared/useComponentDidMount';
@@ -14,6 +13,8 @@ import {
   OPERATION_STATE_SUCCEEDED,
   OPERATION_STATE_WAITING,
 } from './YamlUploadDialog';
+import { useRecoilValue } from 'recoil';
+import { clusterAndNsNodesSelector } from 'state/navigation/clusterAndNsNodesSelector';
 
 export const STATE_ERROR = 'ERROR';
 export const STATE_WAITING = 'WAITING';
@@ -29,7 +30,12 @@ export function useUploadResources(
   const fetch = useSingleGet();
   const post = usePost();
   const patch = useUpdate();
-  const { namespaceNodes, clusterNodes } = useMicrofrontendContext();
+  const clusterNodes = useRecoilValue(clusterAndNsNodesSelector).filter(
+    node => !node.namespaced,
+  );
+  const namespaceNodes = useRecoilValue(clusterAndNsNodesSelector).filter(
+    node => node.namespaced,
+  );
   const filteredResources = resources?.filter(
     resource => resource?.value !== null,
   );

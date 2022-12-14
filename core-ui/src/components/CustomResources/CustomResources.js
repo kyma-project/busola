@@ -3,13 +3,12 @@ import * as jp from 'jsonpath';
 import pluralize from 'pluralize';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { useNavigateToCustomResource } from 'resources/CustomResourceDefinitions/useNavigateToCustomResource';
+import { useCustomResourceUrl } from 'resources/CustomResourceDefinitions/useCustomResourceUrl';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { CRCreate } from 'resources/CustomResourceDefinitions/CRCreate';
 
 export function CustomResources({
   crd,
-  namespace,
   version,
   showTitle = true,
   omitColumnsIds,
@@ -17,11 +16,8 @@ export function CustomResources({
 }) {
   const { group, names } = crd.spec;
   const name = names.plural;
-  const navigateFn = useNavigateToCustomResource();
-
-  const resourceUrl = namespace
-    ? `/apis/${group}/${version.name}/namespaces/${namespace}/${name}`
-    : `/apis/${group}/${version.name}/${name}`;
+  const customUrl = useCustomResourceUrl(crd);
+  const resourceUrl = `/apis/${group}/${version.name}/${name}`;
 
   const getJsonPath = (resource, jsonPath) => {
     const value =
@@ -45,11 +41,10 @@ export function CustomResources({
 
   const params = {
     hasDetailsView: true,
-    navigateFn: cr => navigateFn(cr, crd),
+    customUrl,
     resourceUrl,
     title: pluralize(crd.spec.names.kind),
     resourceType: crd.spec.names.kind,
-    namespace,
     isCompact: true,
     showTitle,
     customColumns,

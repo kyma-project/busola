@@ -18,77 +18,65 @@ context('Test DNS Entries', () => {
   });
 
   it('Create DNS Entry', () => {
-    cy.navigateTo('Configuration', 'DNS Entries');
+    cy.wait(500);
+    cy.navigateTo('Configuration', 'Dns Entries');
 
-    cy.getIframeBody()
-      .contains('Create DNS Entry')
-      .click();
+    cy.contains('Create DNS Entry').click();
 
     // name
-    cy.getIframeBody()
-      .find('[ariaLabel="DNSEntry name"]:visible')
-      .type(DNS_ENTRY_NAME);
+    cy.get('[ariaLabel="DNSEntry name"]:visible').type(DNS_ENTRY_NAME);
 
     // ttl
-    cy.getIframeBody()
-      .find('[placeholder^="Enter the time to live"]:visible')
+    cy.get('[placeholder^="Enter the time to live"]:visible')
       .clear()
       .type(TTL);
 
     // dns name
-    cy.getIframeBody()
-      .find('[placeholder^="Select the DNSName"]:visible')
+    cy.get('[placeholder^="Select the DNSName"]:visible')
       .type(DNS_NAME)
       .click();
 
     // target
-    cy.getIframeBody()
-      .find('[aria-label^="Enter the A record"]:visible')
-      .click();
+    cy.get('[aria-label^="Enter the A record"]:visible').click();
 
-    cy.getIframeBody()
-      .contains('istio-ingressgateway')
-      .click();
+    cy.contains('istio-ingressgateway').click();
 
-    cy.getIframeBody()
-      .find('[role="dialog"]')
+    cy.get('[role="dialog"]')
       .contains('button', 'Create')
       .click();
   });
 
   it('Inspect details', () => {
-    cy.getIframeBody().contains(DNS_ENTRY_NAME);
+    cy.contains(DNS_ENTRY_NAME);
 
-    cy.getIframeBody().contains(`DNSName${DNS_NAME}`);
+    cy.contains(`DNSName${DNS_NAME}`);
 
-    cy.getIframeBody().contains(`TTL${TTL}`);
+    cy.contains(`TTL${TTL}`);
   });
 
   it('Edit DNS Entry', () => {
-    cy.getIframeBody()
-      .contains('Edit')
-      .click();
+    cy.contains('Edit').click();
 
     // name should be disabled for edit
-    cy.getIframeBody()
-      .find('[ariaLabel="DNSEntry name"]:visible')
-      .should('have.attr', 'readonly');
+    cy.get('[ariaLabel="DNSEntry name"]:visible').should(
+      'have.attr',
+      'readonly',
+    );
 
     // change from A to CNAME
-    cy.getIframeBody()
-      .find('[placeholder^="Enter the A record"]:visible')
+    cy.get('[placeholder^="Enter the A record"]:visible')
       .last()
       .type('e');
-    cy.getIframeBody()
-      .find('[placeholder^="Enter the CNAME record"]:visible')
-      .type('xample.com');
 
-    cy.getIframeBody()
-      .find('[role="dialog"]')
+    cy.get('[placeholder^="Enter the CNAME record"]:visible').type(
+      'xample.com',
+    );
+
+    cy.get('[role="dialog"]')
       .contains('button', 'Update')
       .click();
 
-    cy.getIframeBody().contains(/Targets.*, example\.com/);
+    cy.contains(/Targets.*, example\.com/);
   });
 
   it('Inspect list', () => {

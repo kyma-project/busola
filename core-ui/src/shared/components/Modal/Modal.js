@@ -1,5 +1,4 @@
 import React from 'react';
-import LuigiClient from '@luigi-project/client';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import './Modal.scss';
@@ -55,7 +54,6 @@ export function Modal({
     if (onShow) {
       onShow();
     }
-    LuigiClient.uxManager().addBackdrop();
     setShow(true);
   }
 
@@ -63,7 +61,6 @@ export function Modal({
     if (onHide) {
       onHide();
     }
-    LuigiClient.uxManager().removeBackdrop();
     setShow(false);
   }
 

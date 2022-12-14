@@ -25,26 +25,23 @@ context('Test Services', () => {
   it('Create a Service', () => {
     cy.navigateTo('Discovery and Network', 'Services');
 
-    cy.getIframeBody()
-      .contains('Create Service')
-      .click();
+    cy.contains('Create Service').click();
 
     cy.wrap(loadService()).then(S_CONFIG => {
       const S = JSON.stringify(S_CONFIG);
       cy.pasteToMonaco(S);
     });
 
-    cy.getIframeBody()
-      .find('[role="dialog"]')
+    cy.get('[role="dialog"]')
       .contains('button', 'Create')
       .click();
 
-    cy.url().should('match', new RegExp(`/services/details/${SERVICE_NAME}$`));
+    cy.url().should('match', new RegExp(`/services/${SERVICE_NAME}$`));
   });
 
   it('Inspect Service', () => {
-    cy.getIframeBody().contains('h3', SERVICE_NAME);
-    cy.getIframeBody().contains('8080');
+    cy.contains('h3', SERVICE_NAME);
+    cy.contains('8080');
   });
 
   it('Inspect services list', () => {

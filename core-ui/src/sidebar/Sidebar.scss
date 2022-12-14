@@ -22,10 +22,9 @@
     flex-grow: 1;
   }
 
-  .fd-nested-list__link {
-    overflow-x: hidden;
-
-    &:has(i, .fd-nested-list__icon) {
+  .has-child {
+    .fd-nested-list__link {
+      overflow-x: hidden;
       padding-left: 0 !important;
     }
   }

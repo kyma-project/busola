@@ -1,5 +1,5 @@
 import { RecoilValueReadOnly, selector } from 'recoil';
-import { openapiState } from './openapiAtom';
+import { openapiState } from './openapiSelector';
 
 type OpenapiPathIdList = string[];
 

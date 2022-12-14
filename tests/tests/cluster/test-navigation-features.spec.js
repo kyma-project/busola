@@ -29,25 +29,16 @@ context('Test navigation features', () => {
     // visual resources
     cy.navigateTo('Configuration', 'Cluster Role Bindings');
 
-    cy.getIframeBody()
-      .find('[aria-label="open-search"]')
-      .click();
+    cy.get('[aria-label="open-search"]').click();
 
-    cy.getIframeBody()
-      .find('[aria-label="search-input"]')
-      .type('eventing-controller');
+    cy.get('[aria-label="search-input"]').type('eventing-controller');
 
-    cy.getIframeBody()
-      .contains('eventing-controller (SA)') // link wrapper
+    cy.contains('eventing-controller (SA)') // link wrapper
       .contains('eventing-controller') // link itself
       .click();
 
-    cy.getIframeBody()
-      .contains('kubernetes.io/service-account-token')
-      .should('exist');
+    cy.contains('kubernetes.io/service-account-token').should('exist');
 
-    cy.getIframeBody()
-      .contains('Resource Graph')
-      .should('not.exist');
+    cy.contains('Resource Graph').should('not.exist');
   });
 });

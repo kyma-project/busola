@@ -1,8 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'fundamental-react';
-
-import { navigateToResource } from 'shared/helpers/universalLinks';
+import { Link } from 'react-router-dom';
+import { useUrl } from 'hooks/useUrl';
 
 import { useGetPlaceholder, useGetTranslation } from '../helpers';
 import { useJsonata } from '../hooks/useJsonata';
@@ -17,6 +16,7 @@ export function ResourceLink({
   const { t } = useTranslation();
   const { t: tExt } = useGetTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
+  const { resourceUrl } = useUrl();
 
   const jsonata = useJsonata({
     resource: originalResource,
@@ -43,7 +43,15 @@ export function ResourceLink({
   return (
     <Link
       className="fd-link"
-      onClick={() => navigateToResource({ name, namespace, kind })}
+      to={resourceUrl(
+        {
+          kind,
+          metadata: {
+            name,
+          },
+        },
+        { namespace },
+      )}
     >
       {tExt(value)}
     </Link>

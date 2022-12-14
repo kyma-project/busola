@@ -33,7 +33,6 @@ export const GenericSecrets = ({
       {...{
         name: title,
         hasDetailsView: true,
-        fixedPath: true,
         resourceUrl: secretsUrl,
         resourceType: 'secrets',
         namespace,

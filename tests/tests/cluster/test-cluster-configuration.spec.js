@@ -39,9 +39,8 @@ const requestData = {
 context('Test Cluster configuration', () => {
   Cypress.skipAfterFail();
 
-  // Luigi throws error of the "replace" function when entering the Preferences dialog. Remove the code below after Luigi's removal
-  Cypress.on('uncaught:exception', () => {
-    return false;
+  before(() => {
+    cy.handleExceptions();
   });
 
   it('Applies config from target cluster', () => {
@@ -49,10 +48,11 @@ context('Test Cluster configuration', () => {
     cy.loginAndSelectCluster();
     cy.url().should('match', /overview$/);
 
+    // TODO: Bring back the overwritten message
     // cluster storage message should be visible
-    cy.contains(/The chosen storage type has been overwritten/).should(
-      'be.visible',
-    );
+    // cy.contains(/The chosen storage type has been overwritten/).should(
+    //   'be.visible',
+    // );
 
     // custom category should be added
     cy.contains('Category from target cluster').should('be.visible');
@@ -61,7 +61,7 @@ context('Test Cluster configuration', () => {
     cy.getLeftNav()
       .contains('Cluster Details')
       .click();
-    cy.contains('sessionStorage').should('be.visible');
+    cy.contains(/session storage/i).should('be.visible');
   });
 
   it('Test pagination', () => {
@@ -69,34 +69,24 @@ context('Test Cluster configuration', () => {
 
     cy.navigateTo('Configuration', 'Cluster Roles');
 
-    cy.getIframeBody()
-      .find('[role=row]')
-      .should('have.length', 20);
+    cy.get('[role=row]').should('have.length', 20);
 
-    cy.get('[data-testid="luigi-topnav-profile-btn"]').click();
+    cy.get('[aria-label="topnav-profile-btn"]').click();
 
     cy.contains('Preferences').click();
 
-    cy.getIframeBody()
-      .contains('Other')
-      .click();
+    cy.contains('Other').click();
 
-    cy.getIframeBody()
-      .find('[role=dialog]')
+    cy.get('[role=dialog]')
       .contains('20')
       .click();
 
-    cy.getIframeBody()
-      .find('[role=list]:visible')
+    cy.get('[role=list]:visible')
       .contains('10')
       .click();
 
-    cy.getIframeBody()
-      .contains('Close')
-      .click();
+    cy.contains('Close').click();
 
-    cy.getIframeBody()
-      .find('[role=row]')
-      .should('have.length', 10);
+    cy.get('[role=row]').should('have.length', 10);
   });
 });

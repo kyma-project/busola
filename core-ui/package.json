@@ -5,7 +5,6 @@
   "dependencies": {
     "@datasert/cronjs-parser": "^1.1.0",
     "@hookform/resolvers": "^2.8.8",
-    "@luigi-project/client": "^1.21.0",
     "@openapi-contrib/openapi-schema-to-json-schema": "^3.1.1",
     "@peculiar/x509": "^1.6.0",
     "@sentry/react": "^6.17.4",
@@ -28,6 +27,8 @@
     "lodash-es": "^4.17.21",
     "monaco-editor": "^0.33.0",
     "monaco-yaml": "^4.0.0-alpha.2",
+    "oidc-client": "^1.11.5",
+    "oidc-client-ts": "^2.2.0",
     "pako": "^2.0.4",
     "pluralize": "^8.0.0",
     "prop-types": "^15.7.2",
@@ -44,8 +45,9 @@
     "yup": "^0.28.5"
   },
   "scripts": {
-    "start": "(cd ..; gulp copy-themes) && PORT=8889 BROWSER=none GENERATE_SOURCEMAP=false react-app-rewired start",
-    "build": "(cd ..; gulp copy-themes) && PUBLIC_URL=/core-ui INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false react-app-rewired build",
+    "start": "(cd ..; gulp copy-themes) && PORT=8080 BROWSER=none GENERATE_SOURCEMAP=false react-app-rewired start",
+    "build": "(cd ..; gulp copy-themes) && INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false react-app-rewired build",
+    "build:docker": "(cd ..; gulp copy-themes) && INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false react-app-rewired build --env IS_DOCKER=true",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },
@@ -82,6 +84,7 @@
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.3",
     "@types/enzyme": "^3.10.12",
+    "@types/file-saver": "^2.0.5",
     "@types/fundamental-react": "^0.13.10",
     "@types/jest": "^29.1.2",
     "@types/lodash": "^4.14.186",
@@ -89,12 +92,14 @@
     "@types/pluralize": "^0.0.29",
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
+    "@types/uuid": "^9.0.0",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.6",
     "babel-polyfill": "^6.26.0",
     "enzyme": "^3.10.0",
     "enzyme-to-json": "^3.4.0",
     "react-app-rewired": "^2.2.1",
     "react-scripts": "^5.0.0",
-    "typescript": "^4.8.4"
+    "typescript": "^4.8.4",
+    "uuid": "^9.0.0"
   }
 }

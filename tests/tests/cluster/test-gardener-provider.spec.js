@@ -17,9 +17,7 @@ context('Test Gardener provider', () => {
 
     cy.loginAndSelectCluster();
 
-    cy.getIframeBody()
-      .contains('Provider')
-      .should('not.exist');
+    cy.contains('Provider').should('not.exist');
   });
 
   it('Enabled by ConfigMap', () => {
@@ -27,9 +25,7 @@ context('Test Gardener provider', () => {
 
     cy.loginAndSelectCluster();
 
-    cy.getIframeBody()
-      .contains('Provider')
-      .should('exist');
+    cy.contains('Provider').should('exist');
   });
 
   it('Fails gracefully', () => {
@@ -37,8 +33,6 @@ context('Test Gardener provider', () => {
     mockShootCMForbidden();
     cy.loginAndSelectCluster();
 
-    cy.getIframeBody()
-      .contains('Provider:')
-      .should('not.exist');
+    cy.contains('Provider:').should('not.exist');
   });
 });

@@ -1,7 +1,6 @@
-import { fireEvent, render } from '@testing-library/react';
-import { DataSourcesContextProvider } from 'components/Extensibility/contexts/DataSources';
-import { act } from 'react-dom/test-utils';
 import copyToClipboard from 'copy-to-clipboard';
+import { act, fireEvent, render, waitFor } from 'testing/reactTestingUtils';
+import { ExtensibilityTestWrapper } from './helpers';
 
 // those tests are in separate file as we need to mock the `widgets` collection from `./../index.js`...
 // ... which originals in turn are required in other `Widget.test.js`
@@ -16,12 +15,6 @@ jest.doMock('./../index', () => {
 
 jest.mock('copy-to-clipboard');
 
-const environmentMock = ({ children }) => (
-  <DataSourcesContextProvider value={{}} dataSources={{}}>
-    {children}
-  </DataSourcesContextProvider>
-);
-
 // Widget needs to be imported in each test so that mocking './../index' works
 describe('Widget.copyable', () => {
   it('Render copy button', async () => {
@@ -30,26 +23,26 @@ describe('Widget.copyable', () => {
     CopyableMockWidget.inline = true;
 
     const { getByRole } = render(
-      <Widget
-        structure={{
-          source: '"test-value"',
-          widget: 'CopyableMockWidget',
-          copyable: true,
-        }}
-      />,
-      { wrapper: environmentMock },
+      <ExtensibilityTestWrapper>
+        <Widget
+          structure={{
+            source: '"test-value"',
+            widget: 'CopyableMockWidget',
+            copyable: true,
+          }}
+        />
+      </ExtensibilityTestWrapper>,
     );
 
-    // wait is added because `useJsonata` in `Widget` doesn't return immediately
-    await act(async () => {
-      await new Promise(setTimeout);
+    await waitFor(async () => {
+      await act(async () => {
+        // find copy button
+        const button = getByRole('button');
 
-      // find copy button
-      const button = getByRole('button');
+        fireEvent.click(button);
 
-      fireEvent.click(button);
-
-      expect(copyToClipboard).toHaveBeenCalledWith('test-value');
+        expect(copyToClipboard).toHaveBeenCalledWith('test-value');
+      });
     });
   });
 
@@ -65,10 +58,14 @@ describe('Widget.copyable', () => {
       CopyableMockWidget.copyable = widgetCopyable;
 
       const { queryByRole } = render(
-        <Widget
-          structure={{ widget: 'CopyableMockWidget', copyable: schemaCopyable }}
-        />,
-        { wrapper: environmentMock },
+        <ExtensibilityTestWrapper>
+          <Widget
+            structure={{
+              widget: 'CopyableMockWidget',
+              copyable: schemaCopyable,
+            }}
+          />
+        </ExtensibilityTestWrapper>,
       );
 
       expect(queryByRole('button')).not.toBeInTheDocument();
@@ -82,26 +79,26 @@ describe('Widget.copyable', () => {
     CopyableMockWidget.copyFunction = ({ value }) => 'this is ' + value;
 
     const { getByRole } = render(
-      <Widget
-        structure={{
-          source: '"test-value"',
-          widget: 'CopyableMockWidget',
-          copyable: true,
-        }}
-      />,
-      { wrapper: environmentMock },
+      <ExtensibilityTestWrapper>
+        <Widget
+          structure={{
+            source: '"test-value"',
+            widget: 'CopyableMockWidget',
+            copyable: true,
+          }}
+        />
+      </ExtensibilityTestWrapper>,
     );
 
-    // wait is added because `useJsonata` in `Widget` doesn't return immediately
-    await act(async () => {
-      await new Promise(setTimeout);
+    await waitFor(async () => {
+      await act(async () => {
+        // find copy button
+        const button = getByRole('button');
 
-      // find copy button
-      const button = getByRole('button');
+        fireEvent.click(button);
 
-      fireEvent.click(button);
-
-      expect(copyToClipboard).toHaveBeenCalledWith('this is test-value');
+        expect(copyToClipboard).toHaveBeenCalledWith('this is test-value');
+      });
     });
   });
 });

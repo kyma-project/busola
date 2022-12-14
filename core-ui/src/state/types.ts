@@ -2,11 +2,11 @@ import { IconGlyph } from 'fundamental-react/lib/Icon/Icon';
 
 export type Scope = 'namespace' | 'cluster';
 
-export type ConfigFeature = {
+export interface ConfigFeature {
   isEnabled?: boolean;
   stage?: 'PRIMARY' | 'SECONDARY';
   [key: string]: any;
-};
+}
 
 export type ConfigFeaturesNames = typeof configFeaturesNames[keyof typeof configFeaturesNames];
 export const configFeaturesNames = {
@@ -17,7 +17,6 @@ export const configFeaturesNames = {
   CUSTOM_DOMAINS: 'CUSTOM_DOMAINS',
   ISTIO: 'ISTIO',
   LEGAL_LINKS: 'LEGAL_LINKS',
-  SSO_LOGIN: 'SSO_LOGIN',
   SENTRY: 'SENTRY',
   KUBECONFIG_ID: 'KUBECONFIG_ID',
   OBSERVABILITY: 'OBSERVABILITY',
@@ -28,6 +27,7 @@ export const configFeaturesNames = {
   REACT_NAVIGATION: 'REACT_NAVIGATION',
   PROTECTED_RESOURCES: 'PROTECTED_RESOURCES',
   EXTERNAL_NODES: 'EXTERNAL_NODES',
+  PROMETHEUS: 'PROMETHEUS',
 } as const;
 
 export type ConfigFeatureList = {
@@ -67,6 +67,16 @@ export type ExtResource = {
   dataSources: Record<string, any>;
 };
 
+export interface UrlGenerators {
+  cluster: string;
+  namespace: string;
+  clusterUrl: (path: string) => string;
+  namespaceUrl: (path: string) => string;
+  scopedUrl: (path: string) => string;
+  resourceListUrl: (path: string) => string;
+  resourceUrl: (path: string) => string;
+}
+
 export type NavNode = {
   resourceType: string; // Jobs, CronJobs etc.
   category: string;
@@ -79,5 +89,7 @@ export type NavNode = {
   icon?: IconGlyph;
   topLevelNode?: boolean;
   externalUrl?: string;
-  createUrlFn?: (namespaceId: string) => string;
+  createUrlFn?: (generators: UrlGenerators) => string;
 };
+
+export type ClusterStorage = 'localStorage' | 'sessionStorage' | string;

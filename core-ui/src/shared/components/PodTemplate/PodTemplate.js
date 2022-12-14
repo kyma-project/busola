@@ -30,13 +30,13 @@ export function PodTemplate({ template }) {
       </LayoutPanel.Body>
       {template.spec.containers && (
         <ContainersPanel
-          title={t('pods.labels.constainers')}
+          title={t('pods.labels.containers')}
           containers={template.spec.containers}
         />
       )}
       {template.spec.initContainers && (
         <ContainersPanel
-          title={t('pods.labels.init-constainers')}
+          title={t('pods.labels.init-containers')}
           containers={template.spec.initContainers}
         />
       )}

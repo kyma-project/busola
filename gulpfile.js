@@ -34,7 +34,7 @@ const install = async dir => {
 };
 
 // APPS
-const apps = ['core', 'core-ui', 'backend'];
+const apps = ['core-ui', 'backend'];
 
 // Installing apps
 apps.forEach(app => {
@@ -166,7 +166,7 @@ data:
         newLine: '---\n',
       }),
     )
-    .pipe(gulp.dest('core/src/assets/extensions'))
+    .pipe(gulp.dest('core-ui/src/assets/extensions'))
     .pipe(rename('builtin-resource-extensions.configmap.yaml'))
     .pipe(intoConfigMap)
     .pipe(gulp.dest('resources/extensions-patch/'));

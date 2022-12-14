@@ -7,6 +7,7 @@ import { usePrepareListProps } from 'resources/helpers';
 import { prettifyKind } from 'shared/utils/helpers';
 import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
 import { useGetSchema } from 'hooks/useGetSchema';
+import { getExtensibilityPath } from 'components/Extensibility/helpers/getExtensibilityPath';
 
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { ExtensibilityCreate } from './ExtensibilityCreate';
@@ -31,8 +32,7 @@ export const ExtensibilityListCore = ({
   const { t: tBusola } = useTranslation();
   const jsonata = useJsonata({});
 
-  const { urlPath, resource, description, features } =
-    resMetaData?.general ?? {};
+  const { resource, description, features } = resMetaData?.general ?? {};
 
   const { disableCreate, disableEdit, disableDelete } = features?.actions ?? {
     disableCreate: props.disableCreate,
@@ -45,7 +45,13 @@ export const ExtensibilityListCore = ({
     resource,
   });
 
-  const listProps = usePrepareListProps(urlPath, 'name');
+  const listProps = usePrepareListProps({
+    resourceCustomType: getExtensibilityPath(resMetaData?.general),
+    resourceI18Key: 'name',
+    apiGroup: resource?.group,
+    apiVersion: resource?.version,
+    hasDetailsView: !!resMetaData?.details,
+  });
 
   const resourceTitle = resMetaData?.general?.name;
   listProps.resourceTitle = exists('name')
@@ -121,7 +127,7 @@ const ExtensibilityList = ({ overrideResMetadata, ...props }) => {
   return (
     <TranslationBundleContext.Provider
       value={{
-        translationBundle: urlPath,
+        translationBundle: getExtensibilityPath(resMetaData?.general),
         defaultResourcePlaceholder: defaultPlaceholder,
       }}
     >

@@ -5,7 +5,11 @@ import './Labels.scss';
 
 const SHORTENING_TRESHOLD = 60;
 
-export const Labels = ({ labels, className, shortenLongLabels = false }) => {
+export const Labels = ({
+  labels,
+  className = '',
+  shortenLongLabels = false,
+}) => {
   if (!labels || Object.keys(labels).length === 0) {
     return <span>{EMPTY_TEXT_PLACEHOLDER}</span>;
   }

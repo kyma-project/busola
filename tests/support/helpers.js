@@ -1,9 +1,9 @@
 export function chooseComboboxOption(selector, optionText) {
-  cy.getIframeBody()
-    .find(selector)
+  cy.get(selector)
     .filterWithNoValue()
     .type(optionText);
-  cy.getIframeBody()
-    .contains(optionText)
-    .click();
+
+  cy.contains(optionText).click();
+
+  return cy.end();
 }

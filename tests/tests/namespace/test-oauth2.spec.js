@@ -12,31 +12,22 @@ context('Test OAuth2 Clients', () => {
   });
 
   it('Create a Client', () => {
-    cy.navigateTo('Configuration', 'OAuth2 Clients');
+    cy.wait(500); // TODO
+    cy.navigateTo('Configuration', 'O Auth2 Clients');
 
-    cy.getIframeBody()
-      .contains('Create OAuth2 Client')
-      .click();
+    cy.contains('Create OAuth2 Client').click();
 
-    cy.getIframeBody()
-      .contains('Advanced')
-      .click();
+    cy.contains('Advanced').click();
 
-    cy.getIframeBody()
-      .find('[ariaLabel="OAuth2 Client name"]')
+    cy.get('[ariaLabel="OAuth2 Client name"]')
       .clear()
       .type(CLIENT_NAME);
 
-    cy.getIframeBody()
-      .contains('label', 'ID Token')
-      .click();
+    cy.contains('label', 'ID Token').click();
 
-    cy.getIframeBody()
-      .contains('label', 'Authorization Code')
-      .click();
+    cy.contains('label', 'Authorization Code').click();
 
-    cy.getIframeBody()
-      .find('[ariaLabel="OAuth2 Client scope"]')
+    cy.get('[ariaLabel="OAuth2 Client scope"]')
       .first()
       .clear()
       .type('openid', {
@@ -45,98 +36,67 @@ context('Test OAuth2 Clients', () => {
         waitForAnimations: true,
       });
 
-    cy.getIframeBody()
-      .contains('label', 'Scope')
-      .click();
+    cy.contains('label', 'Scope').click();
 
-    cy.getIframeBody()
-      .find('[role="dialog"]')
+    cy.get('[role="dialog"]')
       .contains('button', 'Create')
       .click();
   });
 
   it('Checking details', () => {
-    cy.getIframeBody()
-      .contains(CLIENT_NAME)
-      .click();
+    cy.contains(CLIENT_NAME).click();
 
-    cy.getIframeBody()
-      .contains(CLIENT_NAME)
-      .should('be.visible');
+    cy.contains(CLIENT_NAME).should('be.visible');
 
-    cy.getIframeBody()
-      .contains('ID Token')
-      .should('be.visible');
+    cy.contains('ID Token').should('be.visible');
 
-    cy.getIframeBody()
-      .contains('Authorization Code')
-      .should('be.visible');
+    cy.contains('Authorization Code').should('be.visible');
 
-    cy.getIframeBody()
-      .contains('openid')
-      .should('be.visible');
+    cy.contains('openid').should('be.visible');
 
     // don't check Secret section, as Secret may not be created yet
-    // cy.getIframeBody()
+    // cy
     //   .contains('client_id')
     //   .should('be.visible');
 
-    // cy.getIframeBody()
+    // cy
     //   .contains('client_secret')
     //   .should('be.visible');
   });
 
   it('Edit client', () => {
-    cy.getIframeBody()
-      .contains('Edit')
-      .click();
+    cy.contains('Edit').click();
 
-    cy.getIframeBody()
-      .contains('label', 'ID Token')
-      .click();
+    cy.contains('label', 'ID Token').click();
 
-    cy.getIframeBody()
-      .contains('label', 'Code')
-      .click();
+    cy.contains('label', 'Code').click();
 
-    cy.getIframeBody()
-      .contains('label', 'Authorization Code')
-      .click();
+    cy.contains('label', 'Authorization Code').click();
 
-    cy.getIframeBody()
-      .contains('label', 'Implicit')
-      .click();
+    cy.contains('label', 'Implicit').click();
 
-    cy.getIframeBody()
-      .find('[value="openid"]')
+    cy.get('[value="openid"]')
       .clear()
       .type('email{downarrow}');
 
-    cy.getIframeBody()
-      .find('[role="dialog"]')
+    cy.get('[role="dialog"]')
       .contains('button', 'Update')
       .click();
   });
 
   it('Checking updates details', () => {
-    cy.getIframeBody()
-      .contains('Code')
-      .should('be.visible');
+    cy.contains('Code').should('be.visible');
 
-    cy.getIframeBody()
-      .contains('Implicit')
-      .should('be.visible');
+    cy.contains('Implicit').should('be.visible');
 
-    cy.getIframeBody()
-      .contains('email')
-      .should('be.visible');
+    cy.contains('email').should('be.visible');
 
     // don't check Secret section, as Secret may not be created yet
-    // cy.getIframeBody()
+    // cy
     //   .contains('client_id')
     //   .should('be.visible');
 
-    // cy.getIframeBody()
+    // cy
     //   .contains('client_secret')
     //   .should('be.visible');
   });

@@ -1,13 +1,15 @@
-import { checkForTokenExpiration } from 'shared/hooks/BackendAPI/checkForTokenExpiration';
+import { useRecoilValue } from 'recoil';
+
 import { createHeaders } from 'shared/hooks/BackendAPI/createHeaders';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { baseUrl, throwHttpError } from 'shared/hooks/BackendAPI/config';
-import { useConfig } from 'shared/contexts/ConfigContext';
-import { AuthDataState } from '../../../state/authDataAtom';
-import { SsoDataState } from '../../../state/ssoDataAtom';
-import { ClusterConfigState } from '../../../state/clusterConfigAtom';
-import { FromConfig } from '../../../state/configAtom';
-import { ClusterState } from '../../../state/clusterAtom';
+import { throwHttpError } from 'shared/hooks/BackendAPI/config';
+
+import { authDataState, AuthDataState } from '../../../state/authDataAtom';
+import {
+  clusterConfigState,
+  ClusterConfigState,
+} from '../../../state/clusterConfigSelector';
+import { getClusterConfig } from '../../../state/utils/getBackendInfo';
+import { clusterState, ActiveClusterState } from '../../../state/clusterAtom';
 
 export type FetchFn = ({
   relativeUrl,
@@ -23,14 +25,12 @@ export const createFetchFn = ({
   authData,
   cluster,
   config,
-  ssoData,
-  fromConfig,
+  backendAddress,
 }: {
   authData: AuthDataState;
-  cluster: ClusterState;
+  cluster: ActiveClusterState;
   config: ClusterConfigState;
-  ssoData: SsoDataState;
-  fromConfig: FromConfig;
+  backendAddress: string;
 }): FetchFn => async ({
   relativeUrl,
   abortController,
@@ -40,20 +40,17 @@ export const createFetchFn = ({
   init?: any;
   abortController?: AbortController;
 }) => {
-  const token = authData && 'token' in authData ? authData.token : undefined;
-  checkForTokenExpiration(token);
-  checkForTokenExpiration(ssoData?.idToken, { reason: 'sso-expiration' });
   init = {
     ...init,
     headers: {
       ...(init?.headers || {}),
-      ...createHeaders(authData, cluster?.cluster, config?.requiresCA, ssoData),
+      ...createHeaders(authData, cluster, config?.requiresCA!), //todo '!'
     },
     signal: abortController?.signal,
   };
 
   try {
-    const response = await fetch(baseUrl(fromConfig) + relativeUrl, init);
+    const response = await fetch(backendAddress + relativeUrl, init);
     if (response.ok) {
       return response;
     } else {
@@ -66,21 +63,16 @@ export const createFetchFn = ({
 };
 
 export const useFetch = () => {
-  const {
-    authData,
-    cluster,
-    config,
-    ssoData,
-  } = useMicrofrontendContext() as any;
-  const { fromConfig } = useConfig() as any;
+  const authData = useRecoilValue(authDataState);
+  const cluster = useRecoilValue(clusterState);
+  const config = useRecoilValue(clusterConfigState);
+  const { backendAddress } = getClusterConfig();
 
-  if (!authData) return () => {};
   const fetchFn = createFetchFn({
     authData,
     cluster,
     config,
-    ssoData,
-    fromConfig,
+    backendAddress,
   });
   return fetchFn;
 };

@@ -1,92 +1,94 @@
-import { DataSourcesContextProvider } from 'components/Extensibility/contexts/DataSources';
-import { mount } from 'enzyme';
+import { render, waitFor } from 'testing/reactTestingUtils';
 import { Widget } from '../Widget';
+import { ExtensibilityTestWrapper } from './helpers';
 
 jest.mock('components/Extensibility/ExtensibilityCreate', () => null);
 
-jest.mock('../../hooks/useJsonata', () => ({
-  useJsonata: () => {
-    return query => {
-      const jsonataResponse = query === 'false' ? false : query;
-      const jsonataError = query === 'error' ? 'Error!' : null;
-      return [jsonataResponse, jsonataError];
-    };
-  },
-}));
+const resource = {
+  test: 'test-value',
+};
 
 describe('Widget', () => {
   describe('structure.visible', () => {
-    it('not set -> render component as usual', () => {
-      const container = mount(
-        <DataSourcesContextProvider value={{}} dataSources={{}}>
-          <Widget value="test-value" structure={{ source: 'child-value' }} />
-        </DataSourcesContextProvider>,
+    it('not set -> render component as usual', async () => {
+      const { findByText } = render(
+        <ExtensibilityTestWrapper>
+          <Widget value={resource} structure={{ source: '$.test' }} />
+        </ExtensibilityTestWrapper>,
       );
 
-      expect(container.text()).toBe('child-value');
+      expect(await findByText('test-value'));
     });
 
-    it('falsy (but not boolean "false") -> render component as usual', () => {
-      const container = mount(
-        <DataSourcesContextProvider value={{}} dataSources={{}}>
+    it('falsy (but not boolean "false") -> render component as usual', async () => {
+      const { findByText } = render(
+        <ExtensibilityTestWrapper>
           <Widget
-            value="test-value"
-            structure={{ source: '', visibility: null }}
+            value={resource}
+            structure={{ source: '$.test', visibility: null }}
           />
-        </DataSourcesContextProvider>,
+        </ExtensibilityTestWrapper>,
       );
 
-      setTimeout(() => expect(container.text()).toBe('test-value'));
+      expect(await findByText('test-value'));
     });
 
-    it('Explicitly false -> hide component', () => {
-      const container = mount(
-        <DataSourcesContextProvider value={{}} dataSources={{}}>
+    it('Explicitly false -> hide component', async () => {
+      const { queryByText } = render(
+        <ExtensibilityTestWrapper>
           <Widget
-            value="test-value"
-            structure={{ source: '', visibility: false }}
+            value={resource}
+            structure={{ source: '$.test', visibility: false }}
           />
-        </DataSourcesContextProvider>,
+        </ExtensibilityTestWrapper>,
       );
 
-      expect(container.isEmptyRender()).toBe(true);
+      await waitFor(() => {
+        expect(queryByText(/loading/)).not.toBeInTheDocument();
+        expect(queryByText(/test-value/)).not.toBeInTheDocument();
+      });
     });
 
-    it('jsonata error -> display error', () => {
+    it('jsonata error -> display error', async () => {
       console.warn = jest.fn();
 
-      const container = mount(
-        <DataSourcesContextProvider value={{}} dataSources={{}}>
+      const { findByText } = render(
+        <ExtensibilityTestWrapper>
           <Widget
-            value="test-value"
-            structure={{ source: '', visibility: 'error' }}
+            value={resource}
+            structure={{ source: '$.test', visibility: '$undefinedMethod()' }}
           />
-        </DataSourcesContextProvider>,
+        </ExtensibilityTestWrapper>,
       );
-      expect(container.text()).toBe('extensibility.configuration-error');
+      expect(await findByText('extensibility.configuration-error'));
     });
 
-    it('jsonata -> control visibility', () => {
-      const container1 = mount(
-        <DataSourcesContextProvider value={{}} dataSources={{}}>
+    it('jsonata -> control visibility', async () => {
+      const { queryByText } = render(
+        <ExtensibilityTestWrapper>
           <Widget
-            value="test-value"
-            structure={{ source: '', visibility: '$contains(data, "test")' }}
+            value={resource}
+            structure={{
+              source: '$.test',
+              visibility: '$contains($value, "test")',
+            }}
           />
-        </DataSourcesContextProvider>,
-      );
-      const container2 = mount(
-        <DataSourcesContextProvider value={{}} dataSources={{}}>
           <Widget
-            value="test-value"
-            structure={{ source: '', visibility: '$contains(data, "tets")' }}
+            value={resource}
+            structure={{
+              source: '$.test',
+              visibility: '$contains($value, "not-test")',
+            }}
           />
-        </DataSourcesContextProvider>,
+        </ExtensibilityTestWrapper>,
       );
 
-      setTimeout(() => {
-        expect(container1.text()).toBe('test-value');
-        expect(container2.isEmptyRender()).toBe(true);
+      await waitFor(() => {
+        expect(queryByText(/loading/)).not.toBeInTheDocument();
+
+        // you have to use queryByText here because you expect `test-value` to be rendered only once
+        // if there were more elements, it would be necessary to use `queryAllByText` and `queryByText` would fail
+        expect(queryByText(/test-value/)).toBeInTheDocument();
       });
     });
   });

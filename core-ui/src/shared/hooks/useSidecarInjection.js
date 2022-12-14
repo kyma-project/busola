@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import * as jp from 'jsonpath';
+import { useFeature } from 'hooks/useFeature';
 
 export const useSidecar = ({
   initialRes,
@@ -11,8 +11,7 @@ export const useSidecar = ({
   enabled,
   disabled,
 }) => {
-  const { features } = useMicrofrontendContext();
-  const isIstioFeatureOn = features?.ISTIO?.isEnabled;
+  const isIstioFeatureOn = useFeature('ISTIO')?.isEnabled;
 
   const isInitSidecarInjectionTurnedOn =
     jp.value(initialRes || {}, `${path}["${[label]}"]`) === enabled;

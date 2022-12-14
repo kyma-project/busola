@@ -1,6 +1,37 @@
+import { isEqual } from 'lodash';
 import { RecoilValue, selector } from 'recoil';
 import { activeNamespaceIdState } from './activeNamespaceIdAtom';
+import { clusterState } from './clusterAtom';
 import { getPostFn } from './utils/getPostFn';
+
+export function hasAnyRoleBound(permissionSet: PermissionSetState) {
+  const ssrr = {
+    apiGroups: ['authorization.k8s.io'],
+    resources: ['selfsubjectaccessreviews', 'selfsubjectrulesreviews'],
+    verbs: ['create'],
+  };
+
+  const filterSelfSubjectRulesReview = (permission: PermissionSet) =>
+    !isEqual(permission, ssrr);
+
+  // leave out ssrr permission, as it's always there
+  permissionSet = permissionSet.filter(filterSelfSubjectRulesReview);
+
+  const verbs = permissionSet.flatMap(p => p.verbs);
+
+  const usefulVerbs = [
+    'get',
+    'list',
+    'watch',
+    'create',
+    'update',
+    'patch',
+    'delete',
+    '*',
+  ];
+
+  return verbs.some(v => usefulVerbs.includes(v));
+}
 
 export type PermissionSet = {
   verbs: string[];
@@ -15,7 +46,9 @@ export const permissionSetsSelector: RecoilValue<PermissionSetState> = selector<
 >({
   key: 'PermissionSet',
   get: async ({ get }) => {
-    const activeNamespaceId = get(activeNamespaceIdState);
+    const cluster = get(clusterState);
+    const activeNamespaceId =
+      get(activeNamespaceIdState) || cluster?.currentContext.namespace;
     const postFn = getPostFn(get);
 
     if (postFn) {
@@ -29,9 +62,23 @@ export const permissionSetsSelector: RecoilValue<PermissionSetState> = selector<
         spec: { namespace: namespaceName },
       };
 
-      const permissions = await postFn(path, ssrr, {});
+      try {
+        const permissions = await postFn(path, ssrr, {});
+        const resourceRules: PermissionSetState =
+          permissions.status.resourceRules;
 
-      return permissions.status.resourceRules;
+        if (
+          !hasAnyRoleBound(resourceRules) &&
+          !window.location.href.endsWith('/no-permissions')
+        ) {
+          window.location.href =
+            window.origin + `/cluster/${cluster?.contextName}/no-permissions`;
+        }
+        return resourceRules;
+      } catch (e) {
+        return [];
+      }
     }
+    return [];
   },
 });

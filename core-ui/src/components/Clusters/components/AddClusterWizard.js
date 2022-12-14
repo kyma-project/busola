@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { MessageStrip, Wizard } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
+import { useRecoilValue } from 'recoil';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator';
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
 import { addByContext, getUser, hasKubeconfigAuth } from '../shared';
 import { AuthForm } from './AuthForm';
 import { KubeconfigUpload } from './KubeconfigUpload/KubeconfigUpload';
 import { ContextChooser } from './ContextChooser/ContextChooser';
 import { ChooseStorage } from './ChooseStorage';
+
+import { useClustersInfo } from 'state/utils/getClustersInfo';
+import { configurationAtom } from 'state/configuration/configurationAtom';
 
 import './AddClusterWizard.scss';
 
@@ -21,14 +24,15 @@ export function AddClusterWizard({
   onCancel,
   config,
 }) {
-  const { busolaClusterParams } = useMicrofrontendContext();
+  const busolaClusterParams = useRecoilValue(configurationAtom);
   const { t } = useTranslation();
   const notification = useNotification();
+  const clustersInfo = useClustersInfo();
 
   const [hasAuth, setHasAuth] = useState(false);
   const [hasOneContext, setHasOneContext] = useState(false);
   const [storage, setStorage] = useState(
-    busolaClusterParams?.config?.storage || 'localStorage',
+    busolaClusterParams?.config?.storage || 'sessionStorage',
   );
   const {
     isValid: authValid,
@@ -65,34 +69,40 @@ export function AddClusterWizard({
     try {
       const contextName = kubeconfig['current-context'];
       if (!kubeconfig.contexts?.length) {
-        addByContext({
-          kubeconfig,
-          context: {
-            name: kubeconfig.clusters[0].name,
-            context: {
-              cluster: kubeconfig.clusters[0].name,
-              user: kubeconfig.users[0].name,
-            },
-          },
-
-          storage,
-          config,
-        });
-      } else if (contextName === '-all-') {
-        kubeconfig.contexts.forEach((context, index) => {
-          addByContext({
+        addByContext(
+          {
             kubeconfig,
-            context,
-            switchCluster: !index,
+            context: {
+              name: kubeconfig.clusters[0].name,
+              context: {
+                cluster: kubeconfig.clusters[0].name,
+                user: kubeconfig.users[0].name,
+              },
+            },
+
             storage,
             config,
-          });
+          },
+          clustersInfo,
+        );
+      } else if (contextName === '-all-') {
+        kubeconfig.contexts.forEach((context, index) => {
+          addByContext(
+            {
+              kubeconfig,
+              context,
+              switchCluster: !index,
+              storage,
+              config,
+            },
+            clustersInfo,
+          );
         });
       } else {
         const context = kubeconfig.contexts.find(
           context => context.name === contextName,
         );
-        addByContext({ kubeconfig, context, storage, config });
+        addByContext({ kubeconfig, context, storage, config }, clustersInfo);
       }
     } catch (e) {
       notification.notifyError({

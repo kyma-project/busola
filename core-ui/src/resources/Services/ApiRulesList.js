@@ -1,12 +1,11 @@
 import React, { Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import LuigiClient from '@luigi-project/client';
-import pluralize from 'pluralize';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 
 import './ServiceDetails.scss';
+import { useRecoilValue } from 'recoil';
+import { extensionsState } from 'state/navigation/extensionsAtom';
 
 const ExtensibilityList = React.lazy(() =>
   import('../../components/Extensibility/ExtensibilityList'),
@@ -14,9 +13,9 @@ const ExtensibilityList = React.lazy(() =>
 
 export function ApiRulesList({ serviceName, namespace }) {
   const { t } = useTranslation();
-  const { customResources } = useMicrofrontendContext();
+  const extensions = useRecoilValue(extensionsState);
 
-  const extensibilityAPIRules = customResources.find(
+  const extensibilityAPIRules = extensions.find(
     cR => cR.general?.resource?.kind === 'APIRule',
   );
 
@@ -27,21 +26,6 @@ export function ApiRulesList({ serviceName, namespace }) {
       ref => ref.service?.name === serviceName,
     );
     return mainService || ruleService;
-  };
-
-  const navigateToApiRule = entry => {
-    const {
-      kind,
-      metadata: { name, namespace },
-    } = entry;
-
-    const namespacePart = namespace ? `namespaces/${namespace}/` : '';
-    const resourceTypePart =
-      extensibilityAPIRules.general.urlPath || pluralize(kind.toLowerCase());
-
-    LuigiClient.linkManager()
-      .fromContext('cluster')
-      .navigate(namespacePart + resourceTypePart + '/details/' + name);
   };
 
   if (extensibilityAPIRules)
@@ -56,7 +40,6 @@ export function ApiRulesList({ serviceName, namespace }) {
           showTitle
           disableCreate
           title={t('api-rules')}
-          navigateFn={navigateToApiRule}
         />
       </Suspense>
     );
@@ -65,7 +48,6 @@ export function ApiRulesList({ serviceName, namespace }) {
     <ResourcesList
       key="api-rule-services"
       hasDetailsView
-      fixedPath
       resourceUrl={url}
       title={t('api-rules')}
       resourceType={'apirules'}
