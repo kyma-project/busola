@@ -53,7 +53,7 @@ context('Prepare funtions for testing', () => {
 
     cy.getIframeBody()
       .find('[aria-label="Combobox input arrow"]:visible')
-      .eq(1)
+      .eq(2)
       .click();
 
     cy.getIframeBody()
