@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
-import { useShowNodeParamsError } from 'shared/hooks/useShowNodeParamsError';
 import { Link, Button, MessagePage } from 'fundamental-react';
 
 import { useClustersInfo } from 'state/utils/getClustersInfo';
@@ -42,8 +41,6 @@ function ClusterList() {
   const [editedCluster, setEditedCluster] = useState(null);
 
   const { clusters, activeClusterName } = clustersInfo;
-
-  useShowNodeParamsError();
 
   const styleActiveCluster = entry => {
     return entry?.kubeconfig?.['current-context'] === activeClusterName
