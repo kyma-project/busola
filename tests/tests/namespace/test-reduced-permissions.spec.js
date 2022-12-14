@@ -204,16 +204,9 @@ context('Test reduced permissions', () => {
       .first()
       .click();
 
-    // wait until original cluster loads
-    cy.getLeftNav()
-      .contains('Configuration')
-      .should('exist');
-
-    cy.wait(5000); // TODO
-
     // delete binding
     cy.getLeftNav()
-      .contains('Configuration')
+      .contains('Configuration', { timeout: 2000 })
       .click();
 
     cy.getLeftNav()
