@@ -25,48 +25,42 @@ export const PageHeader = ({
   actions,
   children,
   columnWrapperClassName,
-}) => {
-  console.log(title);
-  return (
-    <LayoutPanel className="page-header">
-      <LayoutPanel.Header>
-        <section className="header-wrapper">
-          {breadcrumbItems.length ? (
-            <section>
-              <Breadcrumb>
-                {breadcrumbItems.map(item => {
-                  return (
-                    <Breadcrumb.Item
-                      aria-label="breadcrumb-item"
-                      key={item.name}
-                    >
-                      <Link to={item.url}>{item.name}</Link>
-                    </Breadcrumb.Item>
-                  );
-                })}
-              </Breadcrumb>
-            </section>
-          ) : null}
-          {title !== 'Clusters Overview' ? (
-            <LayoutPanel.Head title={title} aria-label="title" />
-          ) : null}
-          {/* don't use Panel.Head's description, as it accepts only strings */}
-          {description && <p className="description">{description}</p>}
-          <section className={`column-wrapper ${columnWrapperClassName || ''}`}>
-            {' '}
-            {children}
+}) => (
+  <LayoutPanel className="page-header">
+    <LayoutPanel.Header>
+      <section className="header-wrapper">
+        {breadcrumbItems.length ? (
+          <section>
+            <Breadcrumb>
+              {breadcrumbItems.map(item => {
+                return (
+                  <Breadcrumb.Item aria-label="breadcrumb-item" key={item.name}>
+                    <Link to={item.url}>{item.name}</Link>
+                  </Breadcrumb.Item>
+                );
+              })}
+            </Breadcrumb>
           </section>
+        ) : null}
+        {title !== 'Clusters Overview' ? (
+          <LayoutPanel.Head title={title} aria-label="title" />
+        ) : null}
+        {/* don't use Panel.Head's description, as it accepts only strings */}
+        {description && <p className="description">{description}</p>}
+        <section className={`column-wrapper ${columnWrapperClassName || ''}`}>
+          {' '}
+          {children}
         </section>
+      </section>
 
-        {actions && (
-          <LayoutPanel.Actions className="fd-margin-begin--sm">
-            {actions}
-          </LayoutPanel.Actions>
-        )}
-      </LayoutPanel.Header>
-    </LayoutPanel>
-  );
-};
+      {actions && (
+        <LayoutPanel.Actions className="fd-margin-begin--sm">
+          {actions}
+        </LayoutPanel.Actions>
+      )}
+    </LayoutPanel.Header>
+  </LayoutPanel>
+);
 PageHeader.Column = Column;
 
 PageHeader.propTypes = {
