@@ -48,7 +48,7 @@ context('Prepare funtions for testing', () => {
     cy.contains('button', 'Edit').click();
 
     cy.get('[aria-label="Combobox input arrow"]:visible')
-      .eq(1)
+      .eq(2)
       .click();
 
     cy.contains('Node.js 16').click();
