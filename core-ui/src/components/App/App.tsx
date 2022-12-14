@@ -30,6 +30,7 @@ import { IncorrectPath } from './IncorrectPath';
 
 import './App.scss';
 import { useAfterInitHook } from 'state/useAfterInitHook';
+import useSidebarCondensed from 'sidebar/useSidebarCondensed';
 
 export default function App() {
   const { t, i18n } = useTranslation();
@@ -45,6 +46,7 @@ export default function App() {
   useHandleResetEndpoint();
   const kubeconfigIdState = useLoginWithKubeconfigID();
   useResourceSchemas();
+  useSidebarCondensed();
 
   useInitTheme();
   useAuthHandler();
