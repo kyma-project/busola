@@ -452,7 +452,7 @@ components:
       default: Incorrect path
     message: 
       default: The provided path does not exist. You will get redirected.
-      cluster: The provided path does not exist. You will get redirected to the cluster overview.
+      cluster: The provided path does not exist. You will get redirected to Clusters Details.
       clusters: The provided path does not exist. You will get redirected to the clusters list.
       namespace: The provided path does not exist. You will get redirected to the namespace overview.
   dropdown:
