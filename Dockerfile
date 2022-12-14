@@ -19,8 +19,7 @@ RUN make resolve
 RUN make validate
 RUN make pull-licenses
 
-# TODO: ENABLE IT BEFORE PUSHING TO MAIN
-RUN cd /app/core-ui && make build
+RUN cd /app/core-ui && make test && make build
 
 # ---- Serve ----
 FROM nginxinc/nginx-unprivileged:1.21
