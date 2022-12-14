@@ -132,7 +132,6 @@ data:
               - widget: ResourceList
                 source: $subscriptions()
                 name: configuration.subscriptions
-                disableCreate: true
           - name: tabs.resources
             children:
               - widget: Panel
@@ -179,12 +178,27 @@ data:
       dynamicValue: '$exists(spec.source.gitRepository) ? "Git Repository" : "Inline"'
       name: header.sourceType
     - simple: true
+      type: string
+      name: Language
+      var: language
+      enum: [nodejs, python]
+      trigger: [language]
+      dynamicValue: |
+        spec.runtime in ['nodejs14', 'nodejs16'] ? 'nodejs' :
+        spec.runtime in ['python39'] ? 'python' :
+        ''
+    - simple: true
       path: spec.runtime
       placeholder: placeholders.spec.runtime
-      enum:
-        - nodejs14
-        - nodejs16
-        - python39
+      enum: |
+        $language = 'nodejs' ? ['nodejs14', 'nodejs16'] :
+        $language = 'python' ? ['python39'] :
+        []
+      subscribe:
+        language: |
+          $language = 'nodejs' ? 'nodejs16' :
+          $language = 'python' ? 'python39' :
+          ''
     - path: spec.runtimeImageOverride
     - path: spec.source.inline
       visibility: $sourceType = 'Inline'
@@ -193,6 +207,22 @@ data:
           widget: CodeEditor
           language: '$contains($root.spec.runtime, "node") ? "javascript" : "python"'
           defaultExpanded: true
+          subscribe:
+            language: |-
+              $language = 'nodejs' ? "module.exports = {
+                main: async function (event, context) {
+                  const message = `Hello World`
+                    + ` from the Kyma Function ${context['function-name']}`
+                    + ` running on ${context.runtime}!`;
+                  console.log(message);
+                  return message;
+                }
+              }" :
+              $language = 'python' ? "def main(event, context):
+                  message = 'Hello World from the Kyma Function '+context['function-name']+' running on '+context['runtime']+ '!';
+                  print(message)
+                  return message" :
+              ''
         - path: dependencies
           widget: CodeEditor
           language: '$contains($root.spec.runtime, "node") ? "javascript" : "plaintext"'
