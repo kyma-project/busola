@@ -86,6 +86,3 @@ jest.mock('react-i18next', () => ({
 }));
 
 Enzyme.configure({ adapter: new Adapter() });
-
-// don't use "import" as Luigi needs to be imported after mocking getRandomValues
-require('@luigi-project/client').setTargetOrigin('target-origin-for-tests');
