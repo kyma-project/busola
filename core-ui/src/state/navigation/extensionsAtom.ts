@@ -42,7 +42,7 @@ const getExtensions = async (fetchFn: any) => {
     let defaultConfigMap = jsyaml.load(await extensionsResponse.text()) as any;
 
     const defaultExtensions = jsyaml.loadAll(
-      defaultConfigMap?.data['extensions.yaml'],
+      defaultConfigMap?.data?.['extensions.yaml'] ?? '',
     ) as ExtResource[];
 
     let configMapResponse: ConfigMapListResponse;
