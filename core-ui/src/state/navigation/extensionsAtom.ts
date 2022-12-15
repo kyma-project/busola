@@ -42,6 +42,8 @@ const getExtensions = async (fetchFn: any) => {
       await extensionsResponse.text(),
     ) as ExtResource[];
 
+    if ((defaultExtensions as any)?.[0]?.length === 0) defaultExtensions = [];
+
     let configMapResponse: ConfigMapListResponse;
     try {
       const response = await fetchFn({
