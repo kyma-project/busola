@@ -40,7 +40,7 @@ config:
           - label: Jaeger
             path: apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/tracing
     EXTERNAL_NODES:
-      isEnabled: true
+      isEnabled: false
       stage: SECONDARY
       nodes:
         - category: My Category
