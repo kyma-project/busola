@@ -166,7 +166,7 @@ data:
         newLine: '---\n',
       }),
     )
-    .pipe(gulp.dest('core-ui/src/assets/extensions'))
+    .pipe(gulp.dest('core-ui/public/extensions/extensions'))
     .pipe(rename('builtin-resource-extensions.configmap.yaml'))
     .pipe(intoConfigMap)
     .pipe(gulp.dest('resources/extensions-patch/'));
