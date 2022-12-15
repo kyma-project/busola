@@ -4,7 +4,6 @@ Cypress.Commands.add(
     // Remove eq(1) after fixing doubled catagories
     cy.getLeftNav()
       .get('[title="Discovery and Network"')
-      .eq(1)
       .click();
 
     cy.getLeftNav()

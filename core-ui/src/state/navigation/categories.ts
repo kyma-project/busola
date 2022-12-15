@@ -5,9 +5,9 @@ export type PredefinedCategories = typeof predefinedCategories[keyof typeof pred
 
 export const predefinedCategories = {
   workloads: 'Workloads',
-  'discovery-and-network': 'Discovery-and-network',
+  'discovery-and-network': 'Discovery and Network',
   istio: 'Istio',
-  'service-management': 'Service-management',
+  'service-management': 'Service Management',
   storage: 'Storage',
   apps: 'Apps',
   configuration: 'Configuration',
