@@ -11,6 +11,7 @@ const configMock = {
             isEnabled: false,
           },
           EXTERNAL_NODES: {
+            isEnabled: true,
             nodes: [
               {
                 category: 'Category from target cluster',
