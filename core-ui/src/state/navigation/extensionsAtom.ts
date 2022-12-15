@@ -38,11 +38,8 @@ const getExtensions = async (fetchFn: any) => {
       '/extensions/extensions.yaml' + cacheBuster,
     );
 
-    // TODO add ConfigMap type
-    let defaultConfigMap = jsyaml.load(await extensionsResponse.text()) as any;
-
-    const defaultExtensions = jsyaml.loadAll(
-      defaultConfigMap?.data?.['extensions.yaml'] ?? '',
+    let defaultExtensions = jsyaml.loadAll(
+      await extensionsResponse.text(),
     ) as ExtResource[];
 
     let configMapResponse: ConfigMapListResponse;
