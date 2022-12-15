@@ -153,7 +153,7 @@ export function ExtensibilityCreateCore({
         if (oldMode === ModeSelector.MODE_YAML) {
           triggers.disable();
           readVars(resource);
-          triggers.enable();
+          setTimeout(() => triggers.enable());
         }
       }}
       formElementRef={formElementRef}
