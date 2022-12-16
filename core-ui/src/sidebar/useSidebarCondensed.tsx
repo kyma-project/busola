@@ -29,7 +29,6 @@ export default function useSidebarCondensed() {
 
   const setSidebarCondensed = useSetRecoilState(isSidebarCondensedState);
 
-  if (width <= 900) {
-    setSidebarCondensed(true);
-  } else setSidebarCondensed(false);
+  if (width <= 900) setSidebarCondensed(true);
+  else setSidebarCondensed(false);
 }
