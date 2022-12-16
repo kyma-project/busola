@@ -86,7 +86,7 @@ export function useDeleteResource({
       title={t('common.delete-dialog.title', {
         name: resourceTitle || resource?.metadata?.name,
       })}
-      className="deleteMessageBox"
+      className="delete-message-box"
       actions={[
         <Button
           data-testid="delete-confirmation"
