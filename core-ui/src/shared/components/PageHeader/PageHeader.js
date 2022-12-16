@@ -43,7 +43,9 @@ export const PageHeader = ({
           </section>
         ) : null}
 
-        <LayoutPanel.Head title={title} aria-label="title" />
+        {title !== 'Clusters Overview' ? (
+          <LayoutPanel.Head title={title} aria-label="title" />
+        ) : null}
         {/* don't use Panel.Head's description, as it accepts only strings */}
         {description && <p className="description">{description}</p>}
         <section className={`column-wrapper ${columnWrapperClassName || ''}`}>
