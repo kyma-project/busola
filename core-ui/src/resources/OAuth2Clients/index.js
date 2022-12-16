@@ -4,6 +4,7 @@ import { predefinedCategories } from 'state/navigation/categories';
 export const resourceType = 'OAuth2Clients';
 export const namespaced = true;
 export const resourceI18Key = 'oauth2-clients.title';
+export const label = 'oauth2-clients.title';
 
 export const List = React.lazy(() => import('./OAuth2ClientList'));
 export const Details = React.lazy(() => import('./OAuth2ClientDetails'));
