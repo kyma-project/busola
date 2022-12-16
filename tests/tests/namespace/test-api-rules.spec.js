@@ -39,11 +39,9 @@ context('Test API Rules in the Function details view', () => {
     });
   });
 
-  // Remove eq(1) after fixing doubled catagories
   it('Create an API Rule for the Function', () => {
     cy.getLeftNav()
       .get('[title="Discovery and Network"')
-      .eq(1)
       .click();
 
     cy.getLeftNav()
