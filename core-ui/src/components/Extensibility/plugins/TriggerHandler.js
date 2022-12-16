@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-// import { mapValues } from 'lodash';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 
 import { useTrigger, useSubscription } from '../hooks/useTriggers';

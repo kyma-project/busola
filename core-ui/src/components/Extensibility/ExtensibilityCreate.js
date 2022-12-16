@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState, useContext } from 'react';
 import Immutable from 'immutable';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
@@ -24,7 +24,7 @@ import { useVariables } from './hooks/useVariables';
 import { prepareRules } from './helpers/prepareRules';
 import { merge } from 'lodash';
 
-import { TriggerContextProvider } from './contexts/Trigger';
+import { TriggerContext, TriggerContextProvider } from './contexts/Trigger';
 import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
@@ -40,12 +40,13 @@ export function ExtensibilityCreateCore({
   editMode = false,
   ...props
 }) {
-  const { prepareVars, resetVars, readVars } = useVariables();
+  const { prepareVars, readVars } = useVariables();
   const namespace = useRecoilValue(activeNamespaceIdState);
   const notification = useNotification();
   const { t } = useTranslation();
   const general = createResource?.general;
   const api = useMemo(() => general?.resource || {}, [general?.resource]);
+  const triggers = useContext(TriggerContext);
 
   const emptyTemplate = useMemo(
     () => createTemplate(api, namespace, general?.scope),
@@ -66,7 +67,6 @@ export function ExtensibilityCreateCore({
   const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
 
   const updateStore = res => {
-    resetVars();
     readVars(res);
     const newStore = Immutable.fromJS(res);
     setStore(prevStore => prevStore.set('values', newStore));
@@ -147,13 +147,13 @@ export function ExtensibilityCreateCore({
           presetValue,
         );
         setStore(getUIStoreFromResourceObj(updatedResource));
-        resetVars();
         readVars(updatedResource);
       }}
       onModeChange={(oldMode, newMode) => {
         if (oldMode === ModeSelector.MODE_YAML) {
-          resetVars();
+          triggers.disable();
           readVars(resource);
+          setTimeout(() => triggers.enable());
         }
       }}
       formElementRef={formElementRef}
