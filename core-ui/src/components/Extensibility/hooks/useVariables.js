@@ -94,15 +94,6 @@ export function useVariables() {
     setDefs({ ...defs });
   };
 
-  const resetVars = () => {
-    Object.values(defs)
-      .filter(def => def.dynamicValue)
-      .forEach(def => {
-        delete vars[def.var];
-      });
-    setVars({ ...vars });
-  };
-
   const readVars = resource => {
     const readVar = (def, path, base = resource) => {
       if (path.length) {
@@ -130,7 +121,7 @@ export function useVariables() {
     };
 
     const promises = Object.values(defs)
-      .filter(def => typeof vars[def.var] === 'undefined')
+      .filter(def => typeof vars[def.var] === 'undefined' || def.dynamicValue)
       .map(def => {
         return Promise.any([
           readVar(def, initial(def.path.split(/\.?\[\]\.?/))),
@@ -152,6 +143,5 @@ export function useVariables() {
     itemVars,
     prepareVars,
     readVars,
-    resetVars,
   };
 }

@@ -39,12 +39,16 @@ export const TriggerContext = createContext({
   subscribe: () => {},
   unsubscribe: () => {},
   setResource: () => {},
+  disable: () => {},
+  enable: () => {},
 });
 
 export function TriggerContextProvider({ children }) {
   const [subs, setSubs] = useState([]);
+  const [enabled, setEnabled] = useState(true);
 
   const trigger = (name, storeKeys) => {
+    if (!enabled) return;
     setTimeout(() =>
       subs
         .map(sub => sub.current[name])
@@ -62,12 +66,22 @@ export function TriggerContextProvider({ children }) {
     setSubs(subs => subs.filter(s => s.sub !== sub));
   };
 
+  const disable = () => {
+    setEnabled(false);
+  };
+
+  const enable = () => {
+    setEnabled(true);
+  };
+
   return (
     <TriggerContext.Provider
       value={{
         trigger,
         subscribe,
         unsubscribe,
+        disable,
+        enable,
       }}
     >
       {children}
