@@ -1,10 +1,8 @@
 Cypress.Commands.add(
   'createApiRule',
   (ApiRuleName, ApiPort, ApiRuleHostSubdomain) => {
-    // Remove eq(1) after fixing doubled catagories
     cy.getLeftNav()
       .get('[title="Discovery and Network"')
-      .eq(1)
       .click();
 
     cy.getLeftNav()
