@@ -15,7 +15,7 @@ export function ApiRulesList({ serviceName, namespace }) {
   const { t } = useTranslation();
   const extensions = useRecoilValue(extensionsState);
 
-  const extensibilityAPIRules = extensions.find(
+  const extensibilityAPIRules = extensions?.find(
     cR => cR.general?.resource?.kind === 'APIRule',
   );
 
