@@ -462,12 +462,6 @@ components:
   file-input:
     drag-file: Drag your file here or click to upload
   generic-list:
-    acion-header:
-      messages:
-        confirmation: Are you sure you want to delete {{resourceType}} "{{name}}"?
-        failure: 'Failed to delete the {{resourceType}}: {{error}}'
-        success: '{{resourceType}} deleted'
-      title: Delete {{resourceType}}
     messages:
       no-search-results: Couldn't find resources matching this query.
       not-found: No entries found
