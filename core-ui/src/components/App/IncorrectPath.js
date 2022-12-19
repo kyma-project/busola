@@ -1,6 +1,7 @@
 import { Button, MessageBox } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import './IncorrectPath.scss';
 
 export function IncorrectPath({ to, title = '', message = '' }) {
   const { t } = useTranslation();
@@ -13,6 +14,7 @@ export function IncorrectPath({ to, title = '', message = '' }) {
     <MessageBox
       type="warning"
       title={title}
+      className="incorrect-path-message-box"
       actions={[
         <Button
           data-testid="delete-confirmation"
