@@ -246,7 +246,7 @@ Name widgets render a name input field. They contain an automatic name generator
 
 - **extraPaths** - an array of extra paths to fill in with the contents of the field. Each path can either be a period-separated string or an array of strings.
 - **placeholder** - specifies a short hint about the input field value.
-- **inputInfo** - a string below the input field that shows how to fill in the input. It defaults to `Name must consist of lower case alphanumeric characters or '-', and must start and end with an alphanumeric character (e.g. 'my-name', or '123-abc').`. To disable any suggestion, set this value to `null`.
+    k8s-name-input: "Name must consist of lowercase alphanumeric characters or '-', and must start and end with an alphanumeric character (e.g. 'my-name', or '123-abc')."
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
 - **disableOnEdit** - parameter used to disable field in edit mode, defaults to `false`.
 
