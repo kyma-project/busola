@@ -80,3 +80,5 @@ config:
       selectors:
         - type: apiGroup
           apiGroup: gateway.kyma-project.io
+    GARDENER_LOGIN:
+      isEnabled: true # todo false

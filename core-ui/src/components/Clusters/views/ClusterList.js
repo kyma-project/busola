@@ -12,6 +12,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 import { GenericList } from 'shared/components/GenericList/GenericList';
+import { ConnectGardenerClusterModal } from '../components/Gardener/ConnectGardenerClusterModal';
 
 import { addCluster, deleteCluster } from './../shared';
 import { AddClusterDialog } from '../components/AddClusterDialog';
@@ -23,6 +24,7 @@ import { useLoadDefaultKubeconfigId } from 'components/App/useLoginWithKubeconfi
 import { useFeature } from 'hooks/useFeature';
 
 function ClusterList() {
+  const gardenerLoginFeature = useFeature('GARDENER_LOGIN');
   const kubeconfigIdFeature = useFeature('KUBECONFIG_ID');
   const loadDefaultKubeconfigId = useLoadDefaultKubeconfigId();
 
@@ -135,15 +137,30 @@ function ClusterList() {
   ];
 
   const extraHeaderContent = (
-    <Button
-      option="transparent"
-      glyph="add"
-      className="fd-margin-begin--sm"
-      onClick={() => setShowAdd(true)}
-      iconBeforeText
-    >
-      {t('clusters.add.title')}
-    </Button>
+    <>
+      <Button
+        option="transparent"
+        glyph="add"
+        className="fd-margin-begin--sm"
+        onClick={() => setShowAdd(true)}
+        iconBeforeText
+      >
+        {t('clusters.add.title')}
+      </Button>
+      {gardenerLoginFeature.isEnabled && (
+        <ConnectGardenerClusterModal
+          modalOpeningComponent={
+            <Button
+              option="transparent"
+              glyph="add"
+              className="fd-margin-begin--sm"
+            >
+              {t('clusters.gardener.title')}
+            </Button>
+          }
+        />
+      )}
+    </>
   );
 
   const addDialog = (
@@ -178,6 +195,12 @@ function ClusterList() {
     </>
   );
 
+  const gardenerLoginButton = gardenerLoginFeature.isEnabled && (
+    <ConnectGardenerClusterModal
+      modalOpeningComponent={<Button>{t('clusters.gardener.title')}</Button>}
+    />
+  );
+
   if (!entries.length) {
     const subtitle = t('clusters.empty.subtitle');
     return (
@@ -200,6 +223,7 @@ function ClusterList() {
               >
                 {t('clusters.add.title')}
               </Button>
+              {gardenerLoginButton}
               {loadDefaultClusterButton}
             </>
           }

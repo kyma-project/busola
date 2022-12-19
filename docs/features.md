@@ -108,7 +108,9 @@ EXTENSIBILITY:
             link: https://github.com/kyma-project/busola
   ```
 
-* **GZIP** – is used to indicate whether a response from the backend server should be compressed or not.
+- **GARDENER_LOGIN** - is used to enable or disable the option of logging in with the Gardener kubeconfig.
+
+- **GZIP** – is used to indicate whether a response from the backend server should be compressed or not.
 
 > **NOTE:** It's a backend feature, so it cannot be modified at the cluster's ConfigMap level.
 
