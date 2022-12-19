@@ -8,7 +8,9 @@ export function decodeHelmRelease(encodedRelease) {
     // ungzip
     const charArray = s.split('').map(c => c.charCodeAt(0));
     const data = inflate(new Uint8Array(charArray));
-    const strRelease = String.fromCharCode.apply(null, new Uint16Array(data));
+
+    const decoder = new TextDecoder();
+    const strRelease = decoder.decode(data);
     return JSON.parse(strRelease);
   } catch (e) {
     console.warn(e);
