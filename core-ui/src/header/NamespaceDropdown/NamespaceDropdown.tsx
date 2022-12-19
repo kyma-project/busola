@@ -5,18 +5,23 @@ import { useUrl } from 'hooks/useUrl';
 import { NamespacesState } from 'state/namespacesAtom';
 
 import './NamespaceDropdown.scss';
+import { useTranslation } from 'react-i18next';
 
 export function NamespaceDropdown({
   namespaces,
+  hideDropdown,
 }: {
   namespaces: NamespacesState;
+  hideDropdown: () => void;
 }) {
   const { clusterUrl } = useUrl();
+  const { t } = useTranslation();
 
   const namespacesOverviewNode = (
     <Menu.Item>
       <Link to={clusterUrl(`namespaces`)}>
-        <Icon glyph="dimension" /> Namespaces Overview
+        <Icon glyph="dimension" className="fd-margin-end--tiny" />
+        {t('namespaces.namespaces-overview')}
       </Link>
     </Menu.Item>
   );
@@ -30,7 +35,7 @@ export function NamespaceDropdown({
 
   return (
     <Menu>
-      <Menu.List>
+      <Menu.List onClick={hideDropdown}>
         {namespacesOverviewNode}
         {namespacesDropdownList}
       </Menu.List>

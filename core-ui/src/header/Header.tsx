@@ -14,6 +14,7 @@ import { SidebarSwitcher } from './SidebarSwitcher/SidebarSwitcher';
 import { useAvailableNamespaces } from './useAvailableNamespaces';
 
 import './Header.scss';
+import { useState } from 'react';
 
 export function Header() {
   const { t } = useTranslation();
@@ -24,6 +25,8 @@ export function Header() {
   const setPreferencesOpen = useSetRecoilState(isPreferencesOpenState);
   const cluster = useRecoilValue(clusterState);
   const clusters = useRecoilValue(clustersState);
+
+  const [isNamespaceOpen, setIsNamespaceOpen] = useState(false);
 
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
     name => name !== cluster?.name,
@@ -64,8 +67,16 @@ export function Header() {
           glyph: 'megamenu',
           label: activeNamespace || t('navigation.select-namespace'),
           notificationCount: 0,
-          callback: () => refetch(),
-          menu: <NamespaceDropdown namespaces={namespaces} />,
+          callback: () => {
+            refetch();
+            setIsNamespaceOpen(!isNamespaceOpen);
+          },
+          menu: (
+            <NamespaceDropdown
+              hideDropdown={() => setIsNamespaceOpen(false)}
+              namespaces={namespaces}
+            />
+          ),
         },
       ]}
       profileMenu={[
@@ -77,6 +88,11 @@ export function Header() {
       // @ts-ignore
       popoverPropsFor={{
         profileMenu: { 'aria-label': 'topnav-profile-btn' },
+        actionMenu: {
+          show: isNamespaceOpen,
+          onClickOutside: () => setIsNamespaceOpen(false),
+          onEscapeKey: () => setIsNamespaceOpen(false),
+        },
       }}
     />
   );
