@@ -15,10 +15,7 @@ import { ResourceSchema } from './ResourceSchema';
 import { usePreparePresets, createTemplate, getDefaultPreset } from './helpers';
 import { DataSourcesContextProvider } from './contexts/DataSources';
 import { VarStoreContextProvider } from './contexts/VarStore';
-import {
-  filterSchemaRules,
-  prepareSchemaRules,
-} from './helpers/prepareSchemaRules';
+import { prepareSchemaRules } from './helpers/prepareSchemaRules';
 import {
   getResourceObjFromUIStore,
   getUIStoreFromResourceObj,
