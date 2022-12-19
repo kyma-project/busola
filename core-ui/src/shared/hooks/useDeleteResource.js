@@ -10,6 +10,8 @@ import { prettifyNameSingular } from 'shared/utils/helpers';
 import { dontConfirmDeleteState } from 'state/preferences/dontConfirmDeleteAtom';
 import { useUrl } from 'hooks/useUrl';
 
+import './useDeleteResource.scss';
+
 export function useDeleteResource({
   resourceTitle,
   resourceType,
@@ -84,6 +86,7 @@ export function useDeleteResource({
       title={t('common.delete-dialog.title', {
         name: resourceTitle || resource?.metadata?.name,
       })}
+      className="delete-message-box"
       actions={[
         <Button
           data-testid="delete-confirmation"
