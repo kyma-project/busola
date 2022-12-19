@@ -21,7 +21,6 @@ export function NavItem({ node }: NavItemProps) {
   const { scopedUrl } = urlGenerators;
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const cluster = useRecoilValue(clusterState);
-  console.log(cluster);
 
   const isNodeSelected = () => {
     if (node.externalUrl) return false;
