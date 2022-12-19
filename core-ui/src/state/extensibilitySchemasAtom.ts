@@ -22,7 +22,7 @@ export const useGetExtensibilitySchemas = async () => {
   const auth = useRecoilValue(authDataState);
 
   useEffect(() => {
-    const setClusterConfig = async () => {
+    const setCluster = async () => {
       if (!cluster) {
         setSchemas(null);
       } else {
@@ -41,7 +41,7 @@ export const useGetExtensibilitySchemas = async () => {
         });
       }
     };
-    setClusterConfig();
+    setCluster();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cluster, auth]);
 };
