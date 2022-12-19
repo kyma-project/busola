@@ -144,7 +144,8 @@ clusters:
     title: There are no clusters yet
   gardener:
     connect: Connect
-    enter-kubeconfig: Enter your kubeconfig file here
+    enter-kubeconfig: 'Enter your kubeconfig file here:'
+    error: 'Adding clusters failed: {{message}}.'
     title: Connect Gardener cluster
   kubeconfig: kubeconfig
   labels:
