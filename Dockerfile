@@ -7,7 +7,7 @@ WORKDIR /app
 # Install global dependencies
 RUN apk update && \
   apk upgrade && \
-  apk add --no-cache curl make
+  apk add --no-cache curl make vim nano wget
 
 # Set env variables
 ENV PRODUCTION true
