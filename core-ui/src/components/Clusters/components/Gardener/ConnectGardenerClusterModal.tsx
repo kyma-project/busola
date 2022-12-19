@@ -3,6 +3,7 @@ import { Modal } from 'shared/components/Modal/Modal';
 import { useTranslation } from 'react-i18next';
 import { MessageStrip } from 'fundamental-react';
 import { useGardenerLogin } from './useGardenerLogin';
+import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 
 export function ConnectGardenerClusterModal({
   modalOpeningComponent,
@@ -45,25 +46,31 @@ export function ConnectGardenerClusterModal({
         setKubeconfigText('');
       }}
     >
-      <p className="fd-has-color-status-4 fd-has-font-style-italic">
-        {t('clusters.gardener.enter-kubeconfig')}
-      </p>
-      <textarea
-        onChange={e => setKubeconfigText(e.target.value)}
-        value={kubeconfigText}
-        className="fd-margin-top--tiny"
-        style={{ minHeight: '200px', width: '70vw' }}
-      />
-      {report && (
-        <MessageStrip type="information" className="fd-margin-top--sm">
-          {report}
-        </MessageStrip>
-      )}
-      {error && (
-        <MessageStrip type="error" className="fd-margin-top--sm">
-          {error}
-        </MessageStrip>
-      )}
+      <div style={{ width: '70vw' }}>
+        <p className="fd-has-color-status-4 fd-has-font-style-italic">
+          {t('clusters.gardener.enter-kubeconfig')}
+        </p>
+        <div style={{ height: '50vh' }}>
+          {/* @ts-ignore */}
+          <Editor
+            value={kubeconfigText}
+            onChange={setKubeconfigText}
+            language="yaml"
+            height="100%"
+            autocompletionDisabled
+          />
+        </div>
+        {report && (
+          <MessageStrip type="information" className="fd-margin-top--sm">
+            {report}
+          </MessageStrip>
+        )}
+        {error && (
+          <MessageStrip type="error" className="fd-margin-top--sm">
+            {error}
+          </MessageStrip>
+        )}
+      </div>
     </Modal>
   );
 }
