@@ -100,7 +100,7 @@ function ClusterList() {
     </>,
     entry.currentContext.cluster.cluster.server,
     <ClusterStorageType clusterConfig={entry.config} />,
-    entry.config.description || EMPTY_TEXT_PLACEHOLDER,
+    entry.config?.description || EMPTY_TEXT_PLACEHOLDER,
   ];
 
   const actions = [

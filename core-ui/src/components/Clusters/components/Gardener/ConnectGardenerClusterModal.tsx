@@ -2,9 +2,7 @@ import { useState } from 'react';
 import { Modal } from 'shared/components/Modal/Modal';
 import { useTranslation } from 'react-i18next';
 import { MessageStrip } from 'fundamental-react';
-import { performGardenerLogin } from './performGardenerLogin';
-import { getClusterConfig } from 'state/utils/getBackendInfo';
-import { useClustersInfo } from 'state/utils/getClustersInfo';
+import { useGardenerLogin } from './useGardenerLogin';
 
 export function ConnectGardenerClusterModal({
   modalOpeningComponent,
@@ -14,9 +12,9 @@ export function ConnectGardenerClusterModal({
   const [kubeconfigText, setKubeconfigText] = useState('');
   const [report, setReport] = useState('');
   const [error, setError] = useState('');
+  const [isFetching, setFetching] = useState(false);
   const { t } = useTranslation();
-  const { backendAddress } = getClusterConfig();
-  const clustersInfo = useClustersInfo();
+  const performGardenerLogin = useGardenerLogin(setReport);
 
   return (
     <Modal
@@ -24,22 +22,21 @@ export function ConnectGardenerClusterModal({
       modalOpeningComponent={modalOpeningComponent}
       confirmText={t('clusters.gardener.connect')}
       cancelText={t('common.buttons.cancel')}
-      disabledConfirm={!kubeconfigText}
+      disabledConfirm={!kubeconfigText || isFetching}
       onConfirm={async () => {
+        setError('');
+        setFetching(true);
         try {
-          await performGardenerLogin(
-            kubeconfigText,
-            setReport,
-            backendAddress,
-            clustersInfo,
-          );
+          await performGardenerLogin(kubeconfigText);
         } catch (e) {
           console.log(e);
           setError(
             t('clusters.gardener.error', { message: (e as Error).message }),
           );
+          return false;
+        } finally {
+          setFetching(false);
         }
-        return false;
       }}
       disableAutoClose
       onShow={() => {

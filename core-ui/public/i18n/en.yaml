@@ -145,7 +145,8 @@ clusters:
   gardener:
     connect: Connect
     enter-kubeconfig: 'Enter your kubeconfig file here:'
-    error: 'Adding clusters failed: {{message}}.'
+    error: 'Connecting clusters failed: {{message}}.'
+    no-token-auth: Only token authorization is supported
     title: Connect Gardener cluster
   kubeconfig: kubeconfig
   labels:
