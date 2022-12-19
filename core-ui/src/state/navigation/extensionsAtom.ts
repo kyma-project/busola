@@ -33,10 +33,7 @@ const getExtensions = async (fetchFn: any) => {
   }
 
   try {
-    const cacheBuster = '?cache-buster=' + Date.now();
-    const extensionsResponse = await fetch(
-      '/extensions/extensions.yaml' + cacheBuster,
-    );
+    const extensionsResponse = await fetch('/extensions/extensions.yaml');
 
     let defaultExtensions = jsyaml.loadAll(
       await extensionsResponse.text(),
