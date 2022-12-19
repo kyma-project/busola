@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import * as Sentry from '@sentry/react';
+import './ErrorBoundary.scss';
 
 class ErrorBoundaryComponent extends React.Component {
   constructor(props) {
@@ -24,7 +25,7 @@ class ErrorBoundaryComponent extends React.Component {
     if (this.state.hasError) {
       return (
         <div role="alert">
-          <p className="fd-margin-top-bottom--sm">
+          <p className="fd-margin-top-bottom--sm error-message">
             {this.props.customMessage ||
               this.props.t('err-boundary.restored-initial-form')}
           </p>

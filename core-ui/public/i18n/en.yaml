@@ -1118,6 +1118,8 @@ navigation:
   preferences:
     title: Preferences
   select-namespace: Select Namespace...
+  errors:
+    sidebar: Failed to load navigation items
 network-policies:
   description: <0>NetworkPolicy</0> allows you to control how a Pod communicates with different network entities.
   headers:
