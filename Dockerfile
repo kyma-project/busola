@@ -7,7 +7,7 @@ WORKDIR /app
 # Install global dependencies
 RUN apk update && \
   apk upgrade && \
-  apk add --no-cache curl make vim nano wget
+  apk add --no-cache curl make
 
 # Set env variables
 ENV PRODUCTION true
@@ -16,10 +16,10 @@ ENV CI true
 COPY . /app
 
 RUN make resolve
-# RUN make validate
-# RUN make pull-licenses
+RUN make validate
+RUN make pull-licenses
 
-RUN cd /app/core-ui && make build
+RUN cd /app/core-ui && make test && make build
 
 # ---- Serve ----
 FROM nginxinc/nginx-unprivileged:1.21
