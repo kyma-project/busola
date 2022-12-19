@@ -36,7 +36,7 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
     const cacheBuster = '?cache-buster=' + Date.now();
 
     const defaultConfigResponse = await fetch(
-      '/config/defaultConfig.yaml' + cacheBuster,
+      '/defaultConfig.yaml' + cacheBuster,
     );
 
     const configResponse = await fetch('/config/config.yaml' + cacheBuster);
