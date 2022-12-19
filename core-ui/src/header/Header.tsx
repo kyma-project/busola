@@ -27,6 +27,7 @@ export function Header() {
   const clusters = useRecoilValue(clustersState);
 
   const [isNamespaceOpen, setIsNamespaceOpen] = useState(false);
+  const [isClustersOpen, setIsClustersOpen] = useState(true);
 
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
     name => name !== cluster?.name,
@@ -37,12 +38,14 @@ export function Header() {
       name,
       callback: () => {
         navigate(`/cluster/${name}`);
+        setIsClustersOpen(false);
       },
     })),
     {
       name: t('clusters.overview.title-all-clusters'),
       callback: () => {
         navigate('/clusters');
+        setIsClustersOpen(false);
       },
     },
   ];
@@ -92,6 +95,12 @@ export function Header() {
           show: isNamespaceOpen,
           onClickOutside: () => setIsNamespaceOpen(false),
           onEscapeKey: () => setIsNamespaceOpen(false),
+        },
+        productMenu: {
+          show: isClustersOpen,
+          onClickOutside: () => setIsClustersOpen(false),
+          onEscapeKey: () => setIsClustersOpen(false),
+          onClick: () => setIsClustersOpen(!isClustersOpen),
         },
       }}
     />
