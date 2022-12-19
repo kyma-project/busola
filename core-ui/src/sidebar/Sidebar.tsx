@@ -1,4 +1,6 @@
+import { Suspense } from 'react';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 import { SidebarNavigation } from 'sidebar/SidebarNavigation';
 import { Footer } from './Footer/Footer';
 
@@ -10,12 +12,14 @@ export const Sidebar = () => {
 
   return (
     <aside className="sidebar">
-      <section className="sidebar__content">
-        <ErrorBoundary customMessage="navigation error" displayButton={false}>
-          <SidebarNavigation />
-        </ErrorBoundary>
-      </section>
-      <Footer />
+      <Suspense fallback={<Spinner size="m" />}>
+        <section className="sidebar__content">
+          <ErrorBoundary customMessage="navigation error" displayButton={false}>
+            <SidebarNavigation />
+          </ErrorBoundary>
+        </section>
+        <Footer />
+      </Suspense>
     </aside>
   );
 };
