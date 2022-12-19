@@ -89,7 +89,7 @@ export const useGetExtensions = () => {
   const fetchFn = getFetchFn(useRecoilValue);
 
   useEffect(() => {
-    const setCluster = async () => {
+    const manageExtensions = async () => {
       if (!cluster) {
         setExtensions(null);
       } else {
@@ -97,7 +97,7 @@ export const useGetExtensions = () => {
         setExtensions(configs);
       }
     };
-    setCluster();
+    manageExtensions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cluster, auth]);
 };
