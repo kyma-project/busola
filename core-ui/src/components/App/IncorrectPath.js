@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { extensionsState } from 'state/navigation/extensionsAtom';
 
+import './IncorrectPath.scss';
+
 export function IncorrectPath({ to, title = '', message = '' }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -18,6 +20,7 @@ export function IncorrectPath({ to, title = '', message = '' }) {
     <MessageBox
       type="warning"
       title={title}
+      className="incorrect-path-message-box"
       actions={[
         <Button
           data-testid="delete-confirmation"
