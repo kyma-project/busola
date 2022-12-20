@@ -1,0 +1,141 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: dnsentries.dns.gardener.cloud
+  namespace: kube-public
+  uid: fe706782-8172-44b9-89f9-1ddc4e05f96e
+  resourceVersion: '2404697'
+  creationTimestamp: '2022-12-13T08:04:42Z'
+  labels:
+    app.kubernetes.io/name: dnsentries.dns.gardener.cloud
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+  managedFields:
+    - manager: Mozilla
+      operation: Update
+      apiVersion: v1
+      time: '2022-12-13T11:21:06Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:data':
+          .: {}
+          'f:details': {}
+          'f:form': {}
+          'f:general': {}
+          'f:list': {}
+          'f:presets': {}
+          'f:translations': {}
+        'f:metadata':
+          'f:labels':
+            .: {}
+            'f:app.kubernetes.io/name': {}
+            'f:busola.io/extension': {}
+            'f:busola.io/extension-version': {}
+data:
+  details: |-
+
+    header: 
+      - source: 'status.state ? status.state : "UNKNOWN"'
+        highlights:
+          informative:
+          - UNKNOWN
+        type: string
+        name: status
+        widget: Badge
+        description: status.message
+    body: 
+      - name: Provider
+        widget: Panel
+        children:
+          - name: Provider
+            source: status.provider
+      - name: Specification
+        widget: Panel
+        children:
+          - name: spec.dnsName
+            source: spec.dnsName 
+          - name: TTL
+            source: spec.ttl
+          - name: spec.targets
+            widget: JoinedArray
+            source: spec.targets
+
+  form: |-
+    - simple: true
+      path: spec.dnsName
+      placeholder: dnsName.placeholder
+      required: true
+    - simple: true
+      name: TTL
+      path: spec.ttl
+      required: true
+
+    - path: spec.targets
+      widget: SimpleList
+      defaultExpanded: true
+      required: true    
+      simple: true
+      name: spec.targets
+      children:
+        - widget: Text
+          enum: 
+            - 35.204.159.60 #(frontend-external)
+            - 34.147.91.1 #(istio-ingressgateway)
+          placeholder: target.placeholder 
+
+    - path: spec.text
+      name: spec.text
+      widget: SimpleList
+      children:
+        - []
+      placeholder: text.placeholder
+      defaultExpanded: true
+  general: |-
+    resource: 
+      kind: DNSEntry
+      group: dns.gardener.cloud
+      version: "v1alpha1"
+    name: DNS Entries
+    category: Custom Resources
+    urlPath: dnsentries-ex
+    scope: namespace
+    description: >-
+      {{[DNSEntry](https://kyma-project.io/docs/kyma/latest/03-tutorials/00-api-exposure/apix-01-own-domain)}}
+      is an object that represents the request to create an external DNS record.
+  list: |-
+    - source: 'status.state ? status.state : "UNKNOWN"'
+      highlights:
+        informative:
+        - UNKNOWN
+      type: string
+      name: status
+      isSelected: true
+      widget: Badge
+      description: status.message
+  presets: |-
+    - name: template
+      default: true
+      value:
+        metadata:
+          annotations: 
+            dns.gardener.cloud/class: garden 
+        spec:
+          ttl: 600
+          dnsName: ''
+          targets: []
+          text: []
+          items: []
+          name: ''
+          bool: false
+  translations: |-
+    en: 
+      metadata.annotations: Annotations
+      metadata.labels: Labels
+      metadata.creationTimestamp: Created at
+      target.placeholder: Enter the A record target
+      spec.targets: Targets
+      spec.dnsName: DNSName
+      spec.text: Text
+      dnsName.placeholder: select the DNSNAME
+      text.placeholder: Text record must be a string. Provide either target or text. 
+      status: Status
