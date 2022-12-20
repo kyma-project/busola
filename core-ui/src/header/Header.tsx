@@ -65,23 +65,27 @@ export function Header() {
         glyph: 'customer',
         colorAccent: 10,
       }}
-      actions={[
-        {
-          glyph: 'megamenu',
-          label: activeNamespace || t('navigation.select-namespace'),
-          notificationCount: 0,
-          callback: () => {
-            refetch();
-            setIsNamespaceOpen(!isNamespaceOpen);
-          },
-          menu: (
-            <NamespaceDropdown
-              hideDropdown={() => setIsNamespaceOpen(false)}
-              namespaces={namespaces}
-            />
-          ),
-        },
-      ]}
+      actions={
+        cluster
+          ? [
+              {
+                glyph: 'megamenu',
+                label: activeNamespace || t('navigation.select-namespace'),
+                notificationCount: 0,
+                callback: () => {
+                  refetch();
+                  setIsNamespaceOpen(!isNamespaceOpen);
+                },
+                menu: (
+                  <NamespaceDropdown
+                    hideDropdown={() => setIsNamespaceOpen(false)}
+                    namespaces={namespaces}
+                  />
+                ),
+              },
+            ]
+          : []
+      }
       profileMenu={[
         {
           name: t('navigation.preferences.title'),
