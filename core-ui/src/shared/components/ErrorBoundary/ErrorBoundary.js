@@ -24,7 +24,7 @@ class ErrorBoundaryComponent extends React.Component {
     if (this.state.hasError) {
       return (
         <div role="alert">
-          <p className="fd-margin-top-bottom--sm">
+          <p className="fd-margin-top-bottom--sm fd-color--text">
             {this.props.customMessage ||
               this.props.t('err-boundary.restored-initial-form')}
           </p>
