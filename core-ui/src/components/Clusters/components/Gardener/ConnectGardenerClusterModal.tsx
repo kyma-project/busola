@@ -47,7 +47,7 @@ export function ConnectGardenerClusterModal({
       }}
     >
       <div style={{ width: '70vw' }}>
-        <p className="fd-has-color-status-4 fd-has-font-style-italic">
+        <p className="fd-has-color-status-4 fd-has-font-style-italic fd-margin-bottom--tiny">
           {t('clusters.gardener.enter-kubeconfig')}
         </p>
         <div style={{ height: '50vh' }}>
