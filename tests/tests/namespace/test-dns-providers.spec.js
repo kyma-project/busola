@@ -12,6 +12,9 @@ context('Test DNS Providers', () => {
   Cypress.skipAfterFail();
 
   before(() => {
+    cy.setBusolaFeature('EXTENSIBILITY', true);
+    cy.mockExtensions(['examples/resources/configuration/dns-providers.yaml']);
+
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
@@ -23,17 +26,25 @@ context('Test DNS Providers', () => {
     cy.contains('Create DNS Provider').click();
 
     // type
-    cy.contains('Choose Provider type')
-      .filter(':visible', { log: false })
-      .click();
+    cy.get('[placeholder="Choose Provider type"]')
+      .filter(':visible')
+      .type('Cloudflare DNS');
 
     cy.contains(PROVIDER_TYPE_PRETTY)
       .scrollIntoView()
       .click();
 
     // secret
+    cy.get('[placeholder^="Select Namespace"]:visible', { log: false }).type(
+      'defaul',
+    );
+
+    cy.contains('default')
+      .scrollIntoView()
+      .click();
+
     cy.get('[placeholder^="Select name"]:visible', { log: false }).type(
-      'default',
+      'defaul',
     );
 
     cy.contains(/default-token/).click();
@@ -83,7 +94,7 @@ context('Test DNS Providers', () => {
 
     cy.get('[placeholder="Enter key"]:visible')
       .filterWithNoValue()
-      .type('is-edited');
+      .type('edited');
 
     cy.get('[role=dialog]')
       .find('[placeholder="Enter value"]:visible')
@@ -92,11 +103,6 @@ context('Test DNS Providers', () => {
       .type('yes');
 
     // edit excluded domains
-    cy.get('[role=dialog]')
-      .contains('Include Domains')
-      .filter(':visible', { log: false })
-      .click();
-
     cy.get('[placeholder="Domain that is allowed"]')
       .filterWithNoValue()
       .type(PROVIDER_INCLUDED_DOMAIN_2);
@@ -127,7 +133,7 @@ context('Test DNS Providers', () => {
     cy.inspectList('DNS Providers', PROVIDER_NAME);
 
     // label
-    cy.contains('is-edited=yes');
+    cy.contains('edited=yes');
     // type
     cy.contains(PROVIDER_TYPE);
   });
