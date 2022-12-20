@@ -27,7 +27,7 @@ export function Header() {
   const clusters = useRecoilValue(clustersState);
 
   const [isNamespaceOpen, setIsNamespaceOpen] = useState(false);
-  const [isClustersOpen, setIsClustersOpen] = useState(true);
+  const [isClustersOpen, setIsClustersOpen] = useState(false);
 
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
     name => name !== cluster?.name,
