@@ -1,36 +1,12 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: dnsentries.dns.gardener.cloud
+  name: dnsentries
   namespace: kube-public
-  uid: fe706782-8172-44b9-89f9-1ddc4e05f96e
-  resourceVersion: '2404697'
-  creationTimestamp: '2022-12-13T08:04:42Z'
   labels:
-    app.kubernetes.io/name: dnsentries.dns.gardener.cloud
+    app.kubernetes.io/name: dnsentries
     busola.io/extension: resource
     busola.io/extension-version: '0.5'
-  managedFields:
-    - manager: Mozilla
-      operation: Update
-      apiVersion: v1
-      time: '2022-12-13T11:21:06Z'
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:data':
-          .: {}
-          'f:details': {}
-          'f:form': {}
-          'f:general': {}
-          'f:list': {}
-          'f:presets': {}
-          'f:translations': {}
-        'f:metadata':
-          'f:labels':
-            .: {}
-            'f:app.kubernetes.io/name': {}
-            'f:busola.io/extension': {}
-            'f:busola.io/extension-version': {}
 data:
   details: |-
 
@@ -79,8 +55,8 @@ data:
       children:
         - widget: Text
           enum: 
-            - 35.204.159.60 #(frontend-external)
-            - 34.147.91.1 #(istio-ingressgateway)
+            - 35.204.159.60 
+            - 34.147.91.1
           placeholder: target.placeholder 
 
     - path: spec.text
