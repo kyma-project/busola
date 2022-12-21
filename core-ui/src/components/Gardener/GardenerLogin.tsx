@@ -67,7 +67,7 @@ export default function GardenerLogin() {
   }, [token]);
 
   return (
-    <>
+    <div style={{ marginRight: '260px' }}>
       <MessageStrip type="information" className="fd-margin-top--sm">
         {report}
       </MessageStrip>
@@ -76,6 +76,6 @@ export default function GardenerLogin() {
           {t('clusters.gardener.error', { message: error.message })}
         </MessageStrip>
       )}
-    </>
+    </div>
   );
 }
