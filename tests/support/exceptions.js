@@ -12,6 +12,9 @@ Cypress.Commands.add('handleExceptions', () => {
       ) ||
       err.message.includes(
         "Uncaught NetworkError: Failed to execute 'importScripts' on 'WorkerGlobalScope': The script at",
+      ) ||
+      err.message.includes(
+        "Cannot read properties of undefined (reading 'category')",
       )
     )
       return false;
