@@ -82,3 +82,32 @@ config:
           apiGroup: gateway.kyma-project.io
     GARDENER_LOGIN:
       isEnabled: true # todo false
+      kubeconfig:
+        kind: Config
+        apiVersion: v1
+        clusters:
+          - name: garden-hasselhoff
+            cluster:
+              server: 'https://api.dev.gardener.cloud.sap'
+        contexts:
+          - context:
+              cluster: garden-hasselhoff
+              user: oidc-login
+              namespace: garden-hasselhoff
+            name: garden-hasselhoff
+        current-context: garden-hasselhoff
+        users:
+          - name: oidc-login
+            user:
+              exec:
+                apiVersion: client.authentication.k8s.io/v1beta1
+                command: kubectl
+                args:
+                  - oidc-login
+                  - get-token
+                  - '--oidc-issuer-url=https://gardener-live.accounts.ondemand.com'
+                  - '--oidc-client-id=d6feea7d-2414-41e3-8462-44c496e10b61'
+                  - '--oidc-use-pkce'
+                  - '--grant-type=auto'
+
+

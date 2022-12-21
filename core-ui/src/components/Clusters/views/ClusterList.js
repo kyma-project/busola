@@ -12,7 +12,6 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { ConnectGardenerClusterModal } from '../components/Gardener/ConnectGardenerClusterModal';
 
 import { addCluster, deleteCluster } from './../shared';
 import { AddClusterDialog } from '../components/AddClusterDialog';
@@ -22,6 +21,7 @@ import { ClusterStorageType } from './ClusterStorageType';
 import './ClusterList.scss';
 import { useLoadDefaultKubeconfigId } from 'components/App/useLoginWithKubeconfigID';
 import { useFeature } from 'hooks/useFeature';
+import { useNavigate } from 'react-router-dom';
 
 function ClusterList() {
   const gardenerLoginFeature = useFeature('GARDENER_LOGIN');
@@ -30,6 +30,7 @@ function ClusterList() {
 
   const clustersInfo = useClustersInfo();
   const notification = useNotification();
+  const navigate = useNavigate();
   const { t } = useTranslation();
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
@@ -148,17 +149,14 @@ function ClusterList() {
         {t('clusters.add.title')}
       </Button>
       {gardenerLoginFeature.isEnabled && (
-        <ConnectGardenerClusterModal
-          modalOpeningComponent={
-            <Button
-              option="transparent"
-              glyph="add"
-              className="fd-margin-begin--sm"
-            >
-              {t('clusters.gardener.title')}
-            </Button>
-          }
-        />
+        <Button
+          option="transparent"
+          glyph="add"
+          className="fd-margin-begin--sm"
+          onClick={() => navigate('/gardener-login')}
+        >
+          {t('clusters.gardener.button')}
+        </Button>
       )}
     </>
   );
@@ -196,9 +194,9 @@ function ClusterList() {
   );
 
   const gardenerLoginButton = gardenerLoginFeature.isEnabled && (
-    <ConnectGardenerClusterModal
-      modalOpeningComponent={<Button>{t('clusters.gardener.title')}</Button>}
-    />
+    <Button onClick={() => navigate('/gardener-login')}>
+      {t('clusters.gardener.button')}
+    </Button>
   );
 
   if (!entries.length) {

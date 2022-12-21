@@ -35,13 +35,16 @@ type handleLoginProps = {
   onError: () => void;
 };
 
-export function createUserManager(userCredentials: KubeconfigOIDCAuth) {
+export function createUserManager(
+  userCredentials: KubeconfigOIDCAuth,
+  redirectPath = '',
+) {
   const { issuerUrl, clientId, clientSecret, scope } = parseOIDCparams(
     userCredentials,
   );
 
   return new UserManager({
-    redirect_uri: window.location.origin,
+    redirect_uri: window.location.origin + redirectPath,
     post_logout_redirect_uri: window.location.origin + '/logout.html',
     loadUserInfo: true,
     automaticSilentRenew: false,
@@ -114,6 +117,7 @@ export function useAuthHandler() {
     if (!cluster) {
       setAuth(null);
     } else {
+      alert('this shouldnt happen');
       const userCredentials = cluster.currentContext?.user?.user;
       if (hasNonOidcAuth(userCredentials)) {
         setAuth(userCredentials as KubeconfigNonOIDCAuth);

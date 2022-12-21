@@ -4,7 +4,6 @@ import { addCluster } from 'components/Clusters/shared';
 import { K8sResource, ValidKubeconfig } from 'types';
 import { PermissionSet } from 'state/permissionSetsSelector';
 import { ActiveClusterState } from 'state/clusterAtom';
-import { useTranslation } from 'react-i18next';
 import { getClusterConfig } from 'state/utils/getBackendInfo';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 
@@ -22,7 +21,6 @@ async function failFastFetch<T>(
 }
 
 export function useGardenerLogin(setReport: (report: string) => void) {
-  const { t } = useTranslation();
   const { backendAddress } = getClusterConfig();
   const clustersInfo = useClustersInfo();
 
@@ -135,17 +133,11 @@ export function useGardenerLogin(setReport: (report: string) => void) {
     addCluster(cluster, clustersInfo, false);
   };
 
-  return async (kubeconfigText: string) => {
-    const kubeconfig = jsyaml.load(kubeconfigText) as ValidKubeconfig;
-
-    if (!('token' in kubeconfig.users[0].user)) {
-      throw Error(t('clusters.gardener.no-token-auth'));
-    }
-
+  return async (serverAddress: string, token: string) => {
     const fetchHeaders = {
       'Content-Type': 'application/json',
-      'X-Cluster-Url': kubeconfig.clusters[0].cluster.server,
-      'X-K8s-Authorization': `Bearer ${kubeconfig.users[0].user.token}`,
+      'X-Cluster-Url': serverAddress,
+      'X-K8s-Authorization': `Bearer ${token}`,
     };
 
     const availableProjects = await getAvailableProjects(fetchHeaders);
