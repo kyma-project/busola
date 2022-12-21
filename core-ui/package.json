@@ -95,7 +95,6 @@
     "babel-polyfill": "^6.26.0",
     "enzyme": "^3.10.0",
     "enzyme-to-json": "^3.4.0",
-    "jsdom-worker-fix": "^0.1.8",
     "node-sass": "^7.0.1",
     "react-app-rewired": "^2.2.1",
     "react-scripts": "^5.0.0",
