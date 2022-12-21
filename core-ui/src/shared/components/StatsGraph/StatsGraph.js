@@ -9,6 +9,7 @@ import './StatsGraph.scss';
 const CANVAS_SCALE = 2;
 const STATS_RATIO = 1 / 6;
 const PADDING = 5;
+const SCALING_THRESHOLD = 1;
 
 function getGeometry(ctx, { scale, hScale, dataPoints }) {
   const textHeight = parseInt(ctx?.font);
@@ -218,8 +219,17 @@ export function StatsGraph({
     if (!canvas.current) return;
 
     const resizeObserver = new ResizeObserver(([e]) => {
-      setWidth(e.contentRect.width * CANVAS_SCALE);
-      setHeight(e.contentRect.height * CANVAS_SCALE);
+      // Scale over treshold to avoid ResizeObserver loops
+      if (
+        Math.abs(e.contentRect.width * CANVAS_SCALE - canvas.current.width) >
+        SCALING_THRESHOLD
+      )
+        setWidth(e.contentRect.width * CANVAS_SCALE);
+      if (
+        Math.abs(e.contentRect.height * CANVAS_SCALE - canvas.current.height) >
+        SCALING_THRESHOLD
+      )
+        setHeight(e.contentRect.height * CANVAS_SCALE);
     });
 
     resizeObserver.observe(canvas.current);
