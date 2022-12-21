@@ -117,7 +117,6 @@ export function useAuthHandler() {
     if (!cluster) {
       setAuth(null);
     } else {
-      alert('this shouldnt happen');
       const userCredentials = cluster.currentContext?.user?.user;
       if (hasNonOidcAuth(userCredentials)) {
         setAuth(userCredentials as KubeconfigNonOIDCAuth);
