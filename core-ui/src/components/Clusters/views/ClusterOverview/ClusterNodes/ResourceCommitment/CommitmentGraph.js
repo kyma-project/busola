@@ -224,8 +224,9 @@ export function CommitmentGraph({ data }) {
     const resizeObserver = new ResizeObserver(([e]) => {
       // Scale over treshold to avoid ResizeObserver loops
       if (
-        Math.abs(e.contentRect.width * CANVAS_SCALE - canvasRef.current.width) >
-        SCALING_THRESHOLD
+        Math.abs(
+          e.contentRect.width * CANVAS_SCALE - canvasRef.current?.width,
+        ) > SCALING_THRESHOLD
       )
         setWidth(e.contentRect.width * CANVAS_SCALE);
     });

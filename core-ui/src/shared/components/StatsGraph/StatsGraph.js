@@ -221,12 +221,12 @@ export function StatsGraph({
     const resizeObserver = new ResizeObserver(([e]) => {
       // Scale over treshold to avoid ResizeObserver loops
       if (
-        Math.abs(e.contentRect.width * CANVAS_SCALE - canvas.current.width) >
+        Math.abs(e.contentRect.width * CANVAS_SCALE - canvas.current?.width) >
         SCALING_THRESHOLD
       )
         setWidth(e.contentRect.width * CANVAS_SCALE);
       if (
-        Math.abs(e.contentRect.height * CANVAS_SCALE - canvas.current.height) >
+        Math.abs(e.contentRect.height * CANVAS_SCALE - canvas.current?.height) >
         SCALING_THRESHOLD
       )
         setHeight(e.contentRect.height * CANVAS_SCALE);
