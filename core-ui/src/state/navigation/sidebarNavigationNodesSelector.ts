@@ -12,6 +12,9 @@ import { activeNamespaceIdState } from '../activeNamespaceIdAtom';
 import { configurationAtom } from '../configuration/configurationAtom';
 import { extensionsState } from './extensionsAtom';
 import { mapExtResourceToNavNode } from '../resourceList/mapExtResourceToNavNode';
+import { openapiPathIdListSelector } from 'state/openapi/openapiPathIdSelector';
+import { permissionSetsSelector } from 'state/permissionSetsSelector';
+import { shouldNodeBeVisible } from './filters/shouldNodeBeVisible';
 
 export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = selector<
   Category[]
@@ -23,6 +26,8 @@ export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = s
     const observabilityNodes = get(externalNodesSelector);
     const configuration = get(configurationAtom);
     const features = configuration?.features;
+    const openapiPathIdList = get(openapiPathIdListSelector);
+    const permissionSet = get(permissionSetsSelector);
 
     const scope: Scope = activeNamespaceId ? 'namespace' : 'cluster';
     if (!navNodes || !observabilityNodes) {
@@ -42,8 +47,24 @@ export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = s
 
     const nodesFromCurrentScope = partial(hasCurrentScope, scope);
     const filteredNodes = allNodes.filter(nodesFromCurrentScope);
+
+    const configSet = {
+      configFeatures: features!,
+      openapiPathIdList,
+      permissionSet,
+    };
+    const isNodeVisibleForCurrentConfigSet = partial(
+      shouldNodeBeVisible,
+      configSet,
+    );
+    const visibleNodes = filteredNodes.filter(node =>
+      isNodeVisibleForCurrentConfigSet(node),
+    );
+
+    console.log(filteredNodes?.length, visibleNodes?.length);
+
     const assignedToCategories: Category[] = assignNodesToCategories(
-      filteredNodes,
+      visibleNodes,
     );
 
     return assignedToCategories;
