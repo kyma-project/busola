@@ -42,6 +42,7 @@ export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = s
 
     const nodesFromCurrentScope = partial(hasCurrentScope, scope);
     const filteredNodes = allNodes.filter(nodesFromCurrentScope);
+
     const assignedToCategories: Category[] = assignNodesToCategories(
       filteredNodes,
     );
