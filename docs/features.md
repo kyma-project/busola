@@ -108,7 +108,15 @@ EXTENSIBILITY:
             link: https://github.com/kyma-project/busola
   ```
 
-- **GARDENER_LOGIN** - is used to enable or disable the option of logging in with the Gardener kubeconfig.
+- **GARDENER_LOGIN** - is used to enable or disable the option of logging in with the Gardener kubeconfig. If enabled, you must set **kubeconfig** parameter to a valid kubeconfig object.
+
+Default settings:
+
+```yaml
+GARDENER_LOGIN:
+  isEnabled: false
+  kubeconfig: null
+```
 
 - **GZIP** – is used to indicate whether a response from the backend server should be compressed or not.
 
