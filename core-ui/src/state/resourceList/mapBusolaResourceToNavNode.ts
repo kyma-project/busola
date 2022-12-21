@@ -4,6 +4,7 @@ type PartialNavNode = Partial<NavNode> & Pick<NavNode, 'resourceType'>;
 
 export const mapBusolaResourceToNavNode = (resource: PartialNavNode) => {
   const node: NavNode = {} as NavNode;
+  if (!resource) return node;
 
   node.category = resource.category || '';
   node.resourceType = resource.resourceType.toLowerCase();
