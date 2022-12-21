@@ -61,8 +61,6 @@ export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = s
       isNodeVisibleForCurrentConfigSet(node),
     );
 
-    console.log(filteredNodes?.length, visibleNodes?.length);
-
     const assignedToCategories: Category[] = assignNodesToCategories(
       visibleNodes,
     );
