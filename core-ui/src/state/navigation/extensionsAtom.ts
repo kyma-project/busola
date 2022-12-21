@@ -80,10 +80,10 @@ const getExtensions = async (fetchFn: any) => {
 };
 
 export const useGetExtensions = () => {
-  const setExtensions = useSetRecoilState(extensionsState);
-  const fetchFn = getFetchFn(useRecoilValue);
   const cluster = useRecoilValue(clusterState);
   const auth = useRecoilValue(authDataState);
+  const setExtensions = useSetRecoilState(extensionsState);
+  const fetchFn = getFetchFn(useRecoilValue);
 
   useEffect(() => {
     const manageExtensions = async () => {
