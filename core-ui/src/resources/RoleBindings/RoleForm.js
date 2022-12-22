@@ -43,7 +43,7 @@ export const RoleForm = ({
   );
 
   const rolesForCurrentType =
-    binding.roleRef.kind === 'ClusterRole' ? clusterRoles : roles;
+    binding.roleRef?.kind === 'ClusterRole' ? clusterRoles : roles;
   const options = (rolesForCurrentType || []).map(r => ({
     key: r.metadata.name,
     text: r.metadata.name,
@@ -66,7 +66,7 @@ export const RoleForm = ({
             searchFullString
             placeholder={t('common.messages.type-to-select', {
               value: t(
-                binding.roleRef.kind === 'ClusterRole'
+                binding.roleRef?.kind === 'ClusterRole'
                   ? 'cluster-roles.name_singular'
                   : 'roles.name_singular',
               ),
