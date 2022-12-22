@@ -7,8 +7,7 @@ function openSearchWithSlashShortcut() {
 
 const random = Math.floor(Math.random() * 9999) + 1000;
 const FUNCTION_NAME = 'test-function';
-const API_RULE_NAME = 'test-api-rule';
-const API_RULE_SUBDOMAIN = API_RULE_NAME + '-' + random;
+const API_RULE_NAME = `test-api-rule-${random}`;
 const API_RULE_PATH = '/test-path';
 const API_RULE_DEFAULT_PATH = '/.*';
 
@@ -86,7 +85,7 @@ context('Test API Rules in the Function details view', () => {
 
     cy.get('[aria-label="Combobox input"]:visible', { log: false })
       .first()
-      .type(API_RULE_SUBDOMAIN);
+      .type(API_RULE_NAME);
 
     cy.get('[aria-label="Combobox input"]:visible', { log: false })
       .first()
@@ -229,7 +228,7 @@ context('Test API Rules in the Function details view', () => {
 
     openSearchWithSlashShortcut();
 
-    cy.get('[role="search"] [aria-label="search-input"]').type(API_RULE_NAME);
+    cy.get('[role="search"] [aria-label="open-search"]').type(API_RULE_NAME);
 
     cy.contains(API_RULE_NAME).should('be.visible');
   });

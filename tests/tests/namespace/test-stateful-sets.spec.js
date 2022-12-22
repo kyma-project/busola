@@ -23,7 +23,9 @@ context('Test Stateful Sets', () => {
       .contains('Namespaces')
       .click();
 
-    cy.contains('a', 'kyma-system').click();
+    cy.get('[role="search"] [aria-label="open-search"]').type('kyma-system');
+
+    cy.contains('a.fd-link', 'kyma-system').click();
 
     cy.navigateTo('Workloads', 'Stateful Sets');
   });
