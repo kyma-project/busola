@@ -40,10 +40,10 @@ function ClusterList() {
   const [showEdit, setShowEdit] = useState(false);
   const [editedCluster, setEditedCluster] = useState(null);
 
-  const { clusters, activeClusterName } = clustersInfo;
+  const { clusters, currentCluster } = clustersInfo;
 
   const styleActiveCluster = entry => {
-    return entry?.kubeconfig?.['current-context'] === activeClusterName
+    return entry?.kubeconfig?.['current-context'] === currentCluster.contextName
       ? { fontWeight: 'bolder' }
       : {};
   };
