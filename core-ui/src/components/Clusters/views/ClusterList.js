@@ -154,6 +154,7 @@ function ClusterList() {
           glyph="add"
           className="fd-margin-begin--sm"
           onClick={() => navigate('/gardener-login')}
+          iconBeforeText
         >
           {t('clusters.gardener.button')}
         </Button>
@@ -194,7 +195,7 @@ function ClusterList() {
   );
 
   const gardenerLoginButton = gardenerLoginFeature.isEnabled && (
-    <Button onClick={() => navigate('/gardener-login')}>
+    <Button onClick={() => navigate('/gardener-login')} iconBeforeText>
       {t('clusters.gardener.button')}
     </Button>
   );
