@@ -12,6 +12,7 @@ function getTextBoundingBox(ctx, text, padding) {
 }
 
 const LIMITS_WARNING_VALUE = 1.5; // 150%
+const SCALING_THRESHOLD = 1;
 
 export function CommitmentGraph({ data }) {
   const CANVAS_SCALE = 2; // used to make Canvas text crisp
@@ -221,7 +222,13 @@ export function CommitmentGraph({ data }) {
     if (!canvasRef.current) return;
 
     const resizeObserver = new ResizeObserver(([e]) => {
-      setWidth(e.contentRect.width * CANVAS_SCALE);
+      // Scale over treshold to avoid ResizeObserver loops
+      if (
+        Math.abs(
+          e.contentRect.width * CANVAS_SCALE - canvasRef.current?.width,
+        ) > SCALING_THRESHOLD
+      )
+        setWidth(e.contentRect.width * CANVAS_SCALE);
     });
 
     resizeObserver.observe(canvasRef.current);
