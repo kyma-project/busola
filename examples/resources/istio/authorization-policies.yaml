@@ -181,125 +181,171 @@ data:
       simple: true
       children:
         - path: '[].from'
+          simple: true
           widget: GenericList
           children:
             - path: '[].source'
+              simple: true
               widget: FormGroup
               defaultExpanded: true
               children:
                 - path: principals
+                  simple: true
                   widget: SimpleList
                   description: description.rules.from.principals
                   children:
                     - path: '[]'
+                      simple: true
                 - path: notPrincipals
+                  simple: true
                   widget: SimpleList
                   description: description.rules.from.notPrincipals
                   children:
                     - path: '[]'
+                      simple: true
                 - path: requestPrincipals
+                  simple: true
                   widget: SimpleList
                   description: description.rules.from.requestPrincipals
                   children:
                     - path: '[]'
+                      simple: true
                 - path: notRequestPrincipals
+                  simple: true
                   widget: SimpleList
                   description: description.rules.from.notRequestPrincipals
                   children:
                     - path: '[]'
+                      simple: true
                 - path: namespaces
+                  simple: true
                   widget: SimpleList
                   description: description.rules.from.namespaces
                   children:
                     - path: '[]'
+                      simple: true
                 - path: notNamespaces
+                  simple: true
                   widget: SimpleList
                   description: description.rules.from.notNamespaces
                   children:
                     - path: '[]'
+                      simple: true
                 - path: ipBlocks
+                  simple: true
                   widget: SimpleList
                   description: description.rules.from.ipBlocks
                   children:
                     - path: '[]'
+                      simple: true
                 - path: notIpBlocks
+                  simple: true
                   widget: SimpleList
                   description: description.rules.from.notIpBlocks
                   children:
                     - path: '[]'
+                      simple: true
                 - path: remoteIpBlocks
+                  simple: true
                   widget: SimpleList
                   description: description.rules.from.remoteIpBlocks
                   children:
                     - path: '[]'
+                      simple: true
                 - path: notRemoteIpBlocks
+                  simple: true
                   widget: SimpleList
                   description: description.rules.from.notRemoteIpBlocks
                   children:
                     - path: '[]'
+                      simple: true
         - path: '[].to'
+          simple: true
           widget: GenericList
           children:
             - path: '[].operation'
+              simple: true
               widget: FormGroup
               defaultExpanded: true
               children:
                 - path: hosts
+                  simple: true
                   widget: SimpleList
                   description: description.rules.to.hosts
                   children:
                     - path: '[]'
+                      simple: true
                 - path: notHosts
+                  simple: true
                   widget: SimpleList
                   description: description.rules.to.notHosts
                   children:
                     - path: '[]'
+                      simple: true
                 - path: ports
+                  simple: true
                   widget: SimpleList
                   description: description.rules.to.ports
                   children:
                     - path: '[]'
+                      simple: true
                 - path: notPorts
+                  simple: true
                   widget: SimpleList
                   description: description.rules.to.notPorts
                   children:
                     - path: '[]'
+                      simple: true
                 - path: methods
+                  simple: true
                   widget: SimpleList
                   description: description.rules.to.methods
                   children:
                     - path: '[]'
+                      simple: true
                 - path: notMethods
+                  simple: true
                   widget: SimpleList
                   description: description.rules.to.notMethods
                   children:
                     - path: '[]'
+                      simple: true
                 - path: paths
+                  simple: true
                   widget: SimpleList
                   description: description.rules.to.paths
                   children:
                     - path: '[]'
+                      simple: true
                 - path: notPaths
+                  simple: true
                   widget: SimpleList
                   description: description.rules.to.notPaths
                   children:
                     - path: '[]'
+                      simple: true
         - path: '[].when'
+          simple: true
           widget: GenericList
           children:
             - path: '[].key'
+              simple: true
               widget: Text
               description: description.rules.when.key
             - path: '[].values'
+              simple: true
               widget: SimpleList
               description: description.rules.when.values
               children:
                 - path: '[]'
+                  simple: true
             - path: '[].notValues'
+              simple: true
               widget: SimpleList
               description: description.rules.when.notValues
               children:
                 - path: '[]'
+                  simple: true
   general: |-
     resource:
       kind: AuthorizationPolicy

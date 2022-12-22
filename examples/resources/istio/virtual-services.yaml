@@ -504,12 +504,15 @@ data:
       widget: GenericList
       children:
         - path: '[].match'
+          simple: true
           name: matches
           widget: GenericList
           children:
             - path: '[].name'
+              simple: true
               name: t-name
             - path: '[].uri'
+              simple: true
               name: uri
               widget: KeyValuePair
               keyEnum:
@@ -517,6 +520,7 @@ data:
                 - exact
                 - regex
             - path: '[].scheme'
+              simple: true
               name: scheme
               widget: KeyValuePair
               keyEnum:
@@ -524,6 +528,7 @@ data:
                 - exact
                 - regex
             - path: '[].method'
+              simple: true
               name: method
               widget: KeyValuePair
               keyEnum:
@@ -531,6 +536,7 @@ data:
                 - exact
                 - regex
             - path: '[].authority'
+              simple: true
               name: authority
               widget: KeyValuePair
               keyEnum:
@@ -538,6 +544,7 @@ data:
                 - exact
                 - regex
             - path: '[].headers'
+              simple: true
               name: headers
               widget: KeyValuePair
               value:
@@ -547,16 +554,20 @@ data:
                   - exact
                   - regex
             - path: '[].port'
+              simple: true
               name: port
             - path: '[].sourceLabels'
+              simple: true
               name: sourceLabels
               widget: KeyValuePair
             - path: '[].gateways'
+              simple: true
               name: gateways
               widget: SimpleList
               children:
                 - path: '[]'
             - path: '[].queryParams'
+              simple: true
               name: queryParams
               widget: KeyValuePair
               value:
@@ -566,8 +577,10 @@ data:
                   - exact
                   - regex
             - path: '[].ignoreUriCase'
+              simple: true
               name: ignoreUriCase
             - path: '[].withoutHeaders'
+              simple: true
               name: withoutHeaders
               widget: KeyValuePair
               value:
@@ -577,13 +590,17 @@ data:
                   - exact
                   - regex
             - path: '[].sourceNamespace'
+              simple: true
               name: sourceNamespace
             - path: '[].statPrefix'
+              simple: true
               name: statPrefix
         - path: '[].route'
+          simple: true
           name: routes
           children:
             - path: '[].destination'
+              simple: true
               name: destination
               widget: FormGroup
               children:
@@ -594,197 +611,267 @@ data:
                 - path: port.number
                   name: port.number
             - path: '[].weight'
+              simple: true
               name: weight
             - path: '[].headers'
+              simple: true
               name: headers
               widget: FormGroup
               children:
                 - path: response
+                  simple: true
                   name: response
                   widget: FormGroup
                   children:
                     - path: set
+                      simple: true
                       name: set
                       widget: KeyValuePair
                     - path: add
+                      simple: true
                       name: add
                       widget: KeyValuePair
                     - path: remove
+                      simple: true
                       name: remove
                       widget: SimpleList
                       children:
                         - path: '[]'
+                          simple: true
                 - path: request
+                  simple: true
                   name: request
                   widget: FormGroup
                   children:
                     - path: set
+                      simple: true
                       name: set
                       widget: KeyValuePair
                     - path: add
+                      simple: true
                       name: add
                       widget: KeyValuePair
                     - path: remove
+                      simple: true
                       name: remove
                       widget: SimpleList
                       children:
                         - path: '[]'
+                          simple: true
         - path: '[].redirect'
+          simple: true
           name: redirect
           widget: FormGroup
           children:
             - path: uri
+              simple: true
               name: uri
             - path: authority
+              simple: true
               name: authority
             - path: port
+              simple: true
               name: port
             - path: derivePort
+              simple: true
               name: derivePort
             - path: scheme
+              simple: true
               name: scheme
             - path: redirectCode
+              simple: true
               name: redirectCode
         - path: '[].directResponse'
+          simple: true
           name: directResponse
           widget: FormGroup
           children:
             - path: status
+              simple: true
               name: status
             - path: body
+              simple: true
               name: body
               widget: FormGroup
               children:
                 - path: string
+                  simple: true
                   name: string
                 - path: bytes
+                  simple: true
                   name: bytes
         - path: '[].delegate'
+          simple: true
           name: delegate
           widget: FormGroup
           children:
             - path: name
+              simple: true
               name: name
             - path: namespace
+              simple: true
               name: namespace
         - path: '[].rewrite'
+          simple: true
           name: rewrite
           widget: FormGroup
           children:
             - path: uri
+              simple: true
               name: uri
             - path: authority
+              simple: true
               name: authority
         - path: '[].timeout'
+          simple: true
           name: timeout
         - path: '[].retries'
+          simple: true
           name: retries
           widget: FormGroup
           children:
             - path: attempts
+              simple: true
               name: attempts
             - path: perTryTimeout
+              simple: true
               name: perTryTimeout
             - path: retryOn
+              simple: true
               name: retryOn
             - path: retryRemoteLocalities
+              simple: true
               name: retryRemoteLocalities
         - path: '[].fault'
+          simple: true
           name: fault
           widget: FormGroup
           children:
             - path: delay
+              simple: true
               name: delay
               widget: FormGroup
               children:
                 - path: fixedDelay
+                  simple: true
                   name: fixedDelay
                 - path: percentage.value
+                  simple: true
                   name: percentage.value
                 - path: percent
+                  simple: true
                   name: percent
             - path: abort
+              simple: true
               name: abort
               widget: FormGroup
               children:
                 - path: httpStatus
+                  simple: true
                   name: httpStatus
                 - path: grpcStatus
+                  simple: true
                   name: grpcStatus
                 - path: percentage.value
+                  simple: true
                   name: percentage.value
         - path: '[].mirror'
+          simple: true
           name: mirror
           widget: FormGroup
           children:
             - path: host
+              simple: true
               name: host
             - path: subset
+              simple: true
               name: subset
             - path: port.number
+              simple: true
               name: port.number
         - path: '[].mirrorPercentage.value'
+          simple: true
           name: mirrorPercentage
         - path: '[].corsPolicy'
+          simple: true
           name: corsPolicy
           widget: FormGroup
           children:
             - path: allowCredentials
+              simple: true
               name: allowCredentials
               type: boolean
             - path: allowMethods
+              simple: true
               name: allowMethods
               widget: SimpleList
               placeholder: allowMethods.placeholder
               children:
                 - path: '[]'
+                  simple: true
             - path: allowHeaders
+              simple: true
               name: allowHeaders
               widget: SimpleList
               children:
                 - path: '[]'
+                  simple: true
             - path: exposeHeaders
+              simple: true
               name: exposeHeaders
               widget: SimpleList
               children:
                 - path: '[]'
+                  simple: true
             - path: maxAge
+              simple: true
               name: maxAge
               placeholder: maxAge.placeholder
         - path: '[].headers'
+          simple: true
           name: headers
           widget: FormGroup
           children:
             - path: response
+              simple: true
               name: response
               widget: FormGroup
               children:
                 - path: set
+                  simple: true
                   name: set
                   widget: KeyValuePair
                 - path: add
+                  simple: true
                   name: add
                   widget: KeyValuePair
                 - path: remove
+                  simple: true
                   name: remove
                   widget: SimpleList
                   children:
                     - path: '[]'
+                      simple: true
             - path: request
+              simple: true
               name: request
               widget: FormGroup
               children:
                 - path: set
+                  simple: true
                   name: set
                   widget: KeyValuePair
                 - path: add
+                  simple: true
                   name: add
                   widget: KeyValuePair
                 - path: remove
+                  simple: true
                   name: remove
                   widget: SimpleList
                   children:
                     - path: '[]'
+                      simple: true
     - path: spec.hosts
       name: hosts
       widget: SimpleList
