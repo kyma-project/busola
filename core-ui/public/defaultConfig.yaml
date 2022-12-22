@@ -42,12 +42,6 @@ config:
     EXTERNAL_NODES:
       isEnabled: false
       stage: SECONDARY
-      nodes:
-        - category: My Category
-          icon: course-book
-          children:
-            - label: Example Node Label
-              link: https://github.com/kyma-project/busola
     HIDDEN_NAMESPACES:
       isEnabled: true
       config:
