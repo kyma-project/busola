@@ -93,7 +93,7 @@ export function useGardenerLogin(setReport: (report: string) => void) {
         const payload = {
           apiVersion: 'authentication.gardener.cloud/v1alpha1',
           kind: 'AdminKubeconfigRequest',
-          spec: { expirationSeconds: 60 * 60 },
+          spec: { expirationSeconds: 3 * 60 * 60 }, // 3h
         };
 
         const kubeconfigUrl = `${backendAddress}/apis/core.gardener.cloud/v1beta1/namespaces/garden-${project}/shoots/${shoot.metadata.name}/adminkubeconfig`;
@@ -127,7 +127,7 @@ export function useGardenerLogin(setReport: (report: string) => void) {
       contextName,
       currentContext,
       kubeconfig,
-      config: null,
+      config: { storage: 'sessionStorage', requiresCA: true },
     };
 
     addCluster(cluster, clustersInfo, false);
