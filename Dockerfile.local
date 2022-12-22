@@ -37,6 +37,7 @@ COPY --from=builder /app/core-ui/build /app/core-ui
 COPY --from=builder /app/backend/backend-production.js /app/backend-production.js
 COPY --from=builder /app/backend/certs.pem /app/certs.pem
 COPY --from=builder /app/backend/package* /app/
+COPY --from=builder /app/backend/settings/* /app/settings/
 
 # move out the packed extensions for further use
 RUN mv /app/core-ui/extensions/extensions.yaml /app/extensions.yaml
