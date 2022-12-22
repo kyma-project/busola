@@ -19,10 +19,12 @@ try {
   );
 
   // config retrieved from busola's config map
-
-  const configFromMap = jsyaml.load(fs.readFileSync('./config/config.yaml'));
-
-  global.config = merge(defaultConfig, configFromMap).config;
+  if (fs.existsSync('./config/config.yaml')) {
+    const configFromMap = jsyaml.load(fs.readFileSync('./config/config.yaml'));
+    global.config = merge(defaultConfig, configFromMap).config;
+  } else {
+    global.config = defaultConfig.config;
+  }
 } catch (e) {
   console.log('Error while reading the configuration files', e?.message || e);
 }
