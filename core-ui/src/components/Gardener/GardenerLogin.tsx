@@ -28,9 +28,10 @@ export default function GardenerLogin() {
         const userManager = createUserManager(auth, '/gardener-login');
         try {
           const storedUser = await userManager.getUser();
-          const user = storedUser
-            ? storedUser
-            : await userManager.signinRedirectCallback(window.location.href);
+          const user =
+            storedUser && !storedUser.expired
+              ? storedUser
+              : await userManager.signinRedirectCallback(window.location.href);
 
           setToken(user.id_token!);
         } catch (e) {
