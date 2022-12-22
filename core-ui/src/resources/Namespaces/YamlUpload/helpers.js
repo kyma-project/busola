@@ -6,13 +6,12 @@ export const getResourceKindUrl = resource => {
 };
 
 export const getResourceUrl = (resource, namespace) => {
-  if (namespace === undefined) {
+  if (namespace === undefined || namespace === null) {
     namespace = resource?.metadata?.namespace;
   }
 
   const apiPath = getResourceKindUrl(resource);
   const namespacePart = namespace ? `/namespaces/${namespace}` : '';
   const resourceType = pluralize(resource?.kind?.toLowerCase() || '');
-
   return `${apiPath}${namespacePart}/${resourceType}`;
 };
