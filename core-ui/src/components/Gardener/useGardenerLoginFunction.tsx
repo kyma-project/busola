@@ -82,13 +82,9 @@ export function useGardenerLogin(setReport: (report: string) => void) {
 
       for (const [index, shoot] of shoots.items.entries()) {
         setReport(
-          'Fetching shoots in ' +
-            project +
-            ' (' +
-            (index + 1) +
-            ' / ' +
-            shoots.items.length +
-            ')',
+          `Fetching shoots in ${project} (${index + 1} / ${
+            shoots.items.length
+          })`,
         );
         const payload = {
           apiVersion: 'authentication.gardener.cloud/v1alpha1',

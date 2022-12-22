@@ -36,7 +36,7 @@ export default function GardenerLogin() {
         } catch (e) {
           // ignore 'No state in response' error - it means we didn't fire login request yet
           if (!(e as Error).message.includes('No state in response')) {
-            console.log('Login eror: ' + e);
+            console.warn('Login eror: ' + e);
           } else {
             // no response data yet, try to log in
             await userManager.clearStaleState();
