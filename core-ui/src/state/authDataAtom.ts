@@ -117,6 +117,10 @@ export function useAuthHandler() {
     if (!cluster) {
       setAuth(null);
     } else {
+      // don't do the auth flow on cluster list (e.g. after refresh, while the OIDC cluster is still connected)
+      if (window.location.pathname === '/clusters') {
+        return;
+      }
       const userCredentials = cluster.currentContext?.user?.user;
       if (hasNonOidcAuth(userCredentials)) {
         setAuth(userCredentials as KubeconfigNonOIDCAuth);

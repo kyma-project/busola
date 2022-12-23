@@ -24,6 +24,7 @@ context('Test DNS Entries', () => {
     cy.contains('Create DNS Entry').click();
 
     // name
+    cy.wait(500);
     cy.get('[ariaLabel="DNSEntry name"]:visible').type(DNS_ENTRY_NAME);
 
     // ttl
