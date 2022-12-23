@@ -75,7 +75,7 @@ config:
         - type: apiGroup
           apiGroup: gateway.kyma-project.io
     GARDENER_LOGIN:
-      isEnabled: true # todo false
+      isEnabled: false
       kubeconfig:
         kind: Config
         apiVersion: v1
@@ -103,5 +103,3 @@ config:
                   - '--oidc-client-id=d6feea7d-2414-41e3-8462-44c496e10b61'
                   - '--oidc-use-pkce'
                   - '--grant-type=auto'
-
-
