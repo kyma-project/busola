@@ -21,13 +21,16 @@ import { ClusterStorageType } from './ClusterStorageType';
 import './ClusterList.scss';
 import { useLoadDefaultKubeconfigId } from 'components/App/useLoginWithKubeconfigID';
 import { useFeature } from 'hooks/useFeature';
+import { useNavigate } from 'react-router-dom';
 
 function ClusterList() {
+  const gardenerLoginFeature = useFeature('GARDENER_LOGIN');
   const kubeconfigIdFeature = useFeature('KUBECONFIG_ID');
   const loadDefaultKubeconfigId = useLoadDefaultKubeconfigId();
 
   const clustersInfo = useClustersInfo();
   const notification = useNotification();
+  const navigate = useNavigate();
   const { t } = useTranslation();
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
@@ -99,7 +102,7 @@ function ClusterList() {
     </>,
     entry.currentContext.cluster.cluster.server,
     <ClusterStorageType clusterConfig={entry.config} />,
-    entry.config.description || EMPTY_TEXT_PLACEHOLDER,
+    entry.config?.description || EMPTY_TEXT_PLACEHOLDER,
   ];
 
   const actions = [
@@ -136,15 +139,28 @@ function ClusterList() {
   ];
 
   const extraHeaderContent = (
-    <Button
-      option="transparent"
-      glyph="add"
-      className="fd-margin-begin--sm"
-      onClick={() => setShowAdd(true)}
-      iconBeforeText
-    >
-      {t('clusters.add.title')}
-    </Button>
+    <>
+      <Button
+        option="transparent"
+        glyph="add"
+        className="fd-margin-begin--sm"
+        onClick={() => setShowAdd(true)}
+        iconBeforeText
+      >
+        {t('clusters.add.title')}
+      </Button>
+      {gardenerLoginFeature.isEnabled && (
+        <Button
+          option="transparent"
+          glyph="add"
+          className="fd-margin-begin--sm"
+          onClick={() => navigate('/gardener-login')}
+          iconBeforeText
+        >
+          {t('clusters.gardener.button')}
+        </Button>
+      )}
+    </>
   );
 
   const addDialog = (
@@ -179,6 +195,12 @@ function ClusterList() {
     </>
   );
 
+  const gardenerLoginButton = gardenerLoginFeature.isEnabled && (
+    <Button onClick={() => navigate('/gardener-login')} iconBeforeText>
+      {t('clusters.gardener.button')}
+    </Button>
+  );
+
   if (!entries.length) {
     const subtitle = t('clusters.empty.subtitle');
     return (
@@ -201,6 +223,7 @@ function ClusterList() {
               >
                 {t('clusters.add.title')}
               </Button>
+              {gardenerLoginButton}
               {loadDefaultClusterButton}
             </>
           }

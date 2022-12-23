@@ -28,6 +28,7 @@ export const configFeaturesNames = {
   PROTECTED_RESOURCES: 'PROTECTED_RESOURCES',
   EXTERNAL_NODES: 'EXTERNAL_NODES',
   PROMETHEUS: 'PROMETHEUS',
+  GARDENER_LOGIN: 'GARDENER_LOGIN',
 } as const;
 
 export type ConfigFeatureList = {
