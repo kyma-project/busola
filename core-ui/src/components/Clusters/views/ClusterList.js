@@ -43,7 +43,8 @@ function ClusterList() {
   const { clusters, currentCluster } = clustersInfo;
 
   const styleActiveCluster = entry => {
-    return entry?.kubeconfig?.['current-context'] === currentCluster.contextName
+    return entry?.kubeconfig?.['current-context'] ===
+      currentCluster?.contextName
       ? { fontWeight: 'bolder' }
       : {};
   };
