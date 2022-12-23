@@ -108,7 +108,7 @@ EXTENSIBILITY:
             link: https://github.com/kyma-project/busola
   ```
 
-- **GARDENER_LOGIN** - is used to enable or disable the option of logging in with the Gardener kubeconfig. If enabled, you must set **kubeconfig** parameter to a valid kubeconfig object.
+- **GARDENER_LOGIN** - is used to enable or disable the option of logging in with the Gardener kubeconfig. If enabled, you must set the **kubeconfig** parameter to a valid kubeconfig object.
 
 Default settings:
 
