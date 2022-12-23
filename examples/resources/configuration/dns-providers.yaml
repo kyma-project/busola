@@ -66,14 +66,15 @@ data:
       simple: true
       widget: SimpleList
       children:
-        - []
+        - path: '[]'
+          simple: true
       placeholder: domain.allowed
       defaultExpanded: true
       required: true
     - path: spec.domains.exclude
       widget: SimpleList
       children:
-        - []
+        - path: '[]'
       placeholder: domain.forbidden
   general: |-
     resource:

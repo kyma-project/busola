@@ -111,6 +111,7 @@ data:
       simple: true
       children:
         - path: '[]'
+          simple: true
     - path: spec.recipeSecret
       widget: Resource
       resource:

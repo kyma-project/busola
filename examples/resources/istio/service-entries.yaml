@@ -107,6 +107,7 @@ data:
       required: true
       children:
         - path: '[]'
+          simple: true
     - path: spec.addresses
       name: spec.addresses
       widget: SimpleList
