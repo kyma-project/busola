@@ -25,7 +25,6 @@ export const availableNodesSelector: RecoilValueReadOnly<NavNode[]> = selector<
       const extNavNodes = extResources?.map(ext =>
         mapExtResourceToNavNode(ext),
       );
-
       extensibilityNodes = mergeInExtensibilityNav(navNodes, extNavNodes);
     }
 
