@@ -96,9 +96,11 @@ data:
           name: spec.filter.eventType
           placeholder: placeholder.eventType
           inputInfo: inputInfo.eventType
+          simple: true
         - path: '[].eventSource.value'
           name: spec.filter.eventSource
           required: false
+          simple: true
       template:
         eventSource:
           property: source
