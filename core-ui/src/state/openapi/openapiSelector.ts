@@ -4,6 +4,7 @@ import { getFetchFn } from 'state/utils/getFetchFn';
 type OpenapiState = {
   swagger: string;
   paths: Record<string, any>;
+  error: true | undefined;
 } | null;
 
 export const openapiState: RecoilValue<OpenapiState> = selector<OpenapiState>({
@@ -17,7 +18,7 @@ export const openapiState: RecoilValue<OpenapiState> = selector<OpenapiState>({
       return await response.json();
     } catch (e) {
       console.warn(e);
-      return null;
+      return { error: true, swagger: '', paths: {} };
     }
   },
 });
