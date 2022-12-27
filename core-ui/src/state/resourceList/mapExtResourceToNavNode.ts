@@ -5,8 +5,6 @@ import { ExtResource, NavNode } from '../types';
 export const mapExtResourceToNavNode = (extRes: ExtResource) => {
   const node: NavNode = {} as NavNode;
 
-  if (!extRes.general) return null;
-
   node.category = extRes.general.category;
   node.icon = extRes.general.icon;
   node.resourceType = extRes.general.resource.kind.toLowerCase();
