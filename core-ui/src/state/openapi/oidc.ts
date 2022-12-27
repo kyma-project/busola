@@ -99,14 +99,3 @@ export async function handleAuth(setAuth: any, cluster: any, navigate: any) {
     }
   }
 }
-
-// export async function checkIfClusterRequiresCA(url: string, authData) {
-//   try {
-//     // try to fetch with CA (if 'requiresCA' is undefined => send CA)
-//     await fetch(url + '/api', authData);
-//     return true;
-//   } catch (_) {
-//     // if it fails, don't send CA anymore
-//     return false;
-//   }
-// }

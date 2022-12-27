@@ -110,10 +110,6 @@ export function useAuthHandler() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(
-      'currentCluster reference changed, TODO make sure to deeply compare',
-    );
-
     if (!cluster) {
       setAuth(null);
     } else {
