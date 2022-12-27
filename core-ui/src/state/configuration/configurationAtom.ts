@@ -59,12 +59,6 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
       ? (jsyaml.load(configMapResponse.data.config) as Config)
       : {};
 
-    console.log({
-      'defaultParams?.config': defaultParams?.config,
-      'configParams?.config': configParams?.config,
-      'mapParams?.config': mapParams?.config,
-    });
-
     return merge(
       defaultParams?.config,
       configParams?.config,
@@ -87,7 +81,6 @@ export const configurationAtom: RecoilValue<Configuration> = selector<
     const fetchFn = getFetchFn(get);
 
     if (!fetchFn && !!cluster) {
-      console.log('null', { fetchFn, auth, cluster });
       return null;
     }
 
@@ -96,7 +89,6 @@ export const configurationAtom: RecoilValue<Configuration> = selector<
       configs.features.PROMETHEUS = getPrometheusConfig(auth, apis, fetchFn);
     }
     const updatedFeatures = await getFeatures(configs?.features);
-    console.log('nie null', { ...configs, features: updatedFeatures });
     return { ...configs, features: updatedFeatures };
   },
 });
