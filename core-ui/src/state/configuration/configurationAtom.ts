@@ -1,9 +1,7 @@
 import jsyaml from 'js-yaml';
 import { merge } from 'lodash';
-import { useEffect } from 'react';
-import { atom, RecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { RecoilValue, selector } from 'recoil';
 
-import { clusterState } from '../clusterAtom';
 import { authDataState } from '../authDataAtom';
 import { getFetchFn } from '../utils/getFetchFn';
 import { ConfigFeatureList } from '../types';
@@ -11,6 +9,7 @@ import { apiGroupState } from '..//discoverability/apiGroupsSelector';
 import { getPrometheusConfig } from './prometheusFeature';
 import { getFeatures } from './getFeatures';
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
+import { clusterState } from 'state/clusterAtom';
 
 type Configuration = {
   features?: ConfigFeatureList;
@@ -28,8 +27,6 @@ type ConfigMapResponse =
       };
     }
   | undefined;
-
-const defaultValue: Configuration = {};
 
 const getConfigs = async (fetchFn: FetchFn | undefined) => {
   try {
@@ -62,6 +59,12 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
       ? (jsyaml.load(configMapResponse.data.config) as Config)
       : {};
 
+    console.log({
+      'defaultParams?.config': defaultParams?.config,
+      'configParams?.config': configParams?.config,
+      'mapParams?.config': mapParams?.config,
+    });
+
     return merge(
       defaultParams?.config,
       configParams?.config,
@@ -73,30 +76,27 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
   }
 };
 
-export const useGetConfiguration = () => {
-  const cluster = useRecoilValue(clusterState);
-  const auth = useRecoilValue(authDataState);
-  const apis = useRecoilValue(apiGroupState);
-  const setConfig = useSetRecoilState(configurationAtom);
-  const fetchFn = getFetchFn(useRecoilValue);
-
-  useEffect(() => {
-    const setClusterConfig = async () => {
-      const configs = await getConfigs(fetchFn);
-      if (configs?.features) {
-        configs.features.PROMETHEUS = getPrometheusConfig(auth, apis, fetchFn);
-      }
-      const updatedFeatures = await getFeatures(configs?.features);
-      setConfig({ ...configs, features: updatedFeatures });
-    };
-    setClusterConfig();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cluster, auth, apis]);
-};
-
-export const configurationAtom: RecoilState<Configuration> = atom<
+export const configurationAtom: RecoilValue<Configuration> = selector<
   Configuration
 >({
   key: 'configurationAtom',
-  default: defaultValue,
+  get: async ({ get }) => {
+    const cluster = get(clusterState);
+    const auth = get(authDataState);
+    const apis = get(apiGroupState);
+    const fetchFn = getFetchFn(get);
+
+    if (!fetchFn && !!cluster) {
+      console.log('null', { fetchFn, auth, cluster });
+      return null;
+    }
+
+    const configs = await getConfigs(fetchFn);
+    if (configs?.features) {
+      configs.features.PROMETHEUS = getPrometheusConfig(auth, apis, fetchFn);
+    }
+    const updatedFeatures = await getFeatures(configs?.features);
+    console.log('nie null', { ...configs, features: updatedFeatures });
+    return { ...configs, features: updatedFeatures };
+  },
 });

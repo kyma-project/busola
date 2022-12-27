@@ -2,7 +2,14 @@ import jsyaml from 'js-yaml';
 import { mapValues, partial } from 'lodash';
 import { useEffect } from 'react';
 import { ExtResource } from '../types';
-import { atom, RecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  atom,
+  RecoilState,
+  RecoilValue,
+  selector,
+  useRecoilValue,
+  useSetRecoilState,
+} from 'recoil';
 import { clusterState } from '../clusterAtom';
 import { authDataState } from '../authDataAtom';
 import { getFetchFn } from '../utils/getFetchFn';
@@ -84,50 +91,37 @@ const getExtensions = async (fetchFn: any) => {
   }
 };
 
-export const useGetExtensions = () => {
-  const cluster = useRecoilValue(clusterState);
-  const auth = useRecoilValue(authDataState);
-  const setExtensions = useSetRecoilState(extensionsState);
-  const fetchFn = getFetchFn(useRecoilValue);
-  const configuration = useRecoilValue(configurationAtom);
-  const features = configuration?.features;
-  const openapiPathIdList = useRecoilValue(openapiPathIdListSelector);
-  const permissionSet = useRecoilValue(permissionSetsSelector);
-
-  useEffect(() => {
-    const manageExtensions = async () => {
-      if (!cluster) {
-        setExtensions(null);
-      } else {
-        const configs = await getExtensions(fetchFn);
-        if (!configs) {
-          setExtensions(null);
-        } else {
-          const configSet = {
-            configFeatures: features!,
-            openapiPathIdList,
-            permissionSet,
-          };
-          const isNodeVisibleForCurrentConfigSet = partial(
-            shouldNodeBeVisible,
-            configSet,
-          );
-          const filteredConfigs = configs.filter(node =>
-            isNodeVisibleForCurrentConfigSet(mapExtResourceToNavNode(node)),
-          );
-          setExtensions(filteredConfigs);
-        }
-      }
-    };
-    manageExtensions();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cluster, auth]);
-};
-
-const defaultValue = null;
-export const extensionsState: RecoilState<ExtResource[] | null> = atom<
+export const extensionsState: RecoilValue<ExtResource[] | null> = selector<
   ExtResource[] | null
 >({
   key: 'extensionsState',
-  default: defaultValue,
+  get: async ({ get }) => {
+    const cluster = get(clusterState);
+    const fetchFn = getFetchFn(get);
+    const configuration = get(configurationAtom);
+    const openapiPathIdList = get(openapiPathIdListSelector);
+    const permissionSet = get(permissionSetsSelector);
+    if (!cluster) {
+      return null;
+    } else {
+      const configs = await getExtensions(fetchFn);
+      if (!configs) {
+        return null;
+      } else {
+        const configSet = {
+          configFeatures: configuration?.features!,
+          openapiPathIdList,
+          permissionSet,
+        };
+        const isNodeVisibleForCurrentConfigSet = partial(
+          shouldNodeBeVisible,
+          configSet,
+        );
+        const filteredConfigs = configs.filter(node =>
+          isNodeVisibleForCurrentConfigSet(mapExtResourceToNavNode(node)),
+        );
+        return filteredConfigs;
+      }
+    }
+  },
 });
