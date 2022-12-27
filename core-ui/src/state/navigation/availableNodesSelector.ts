@@ -22,9 +22,10 @@ export const availableNodesSelector: RecoilValueReadOnly<NavNode[]> = selector<
     let extensibilityNodes: NavNode[] = [];
     const isExtensibilityOn = features?.EXTENSIBILITY?.isEnabled;
     if (isExtensibilityOn && extResources) {
-      const extNavNodes = extResources?.map(ext =>
-        mapExtResourceToNavNode(ext),
-      );
+      const extNavNodes = extResources
+        ?.map(node => mapExtResourceToNavNode(node))
+        .filter(node => !!node) as any;
+
       extensibilityNodes = mergeInExtensibilityNav(navNodes, extNavNodes);
     }
 

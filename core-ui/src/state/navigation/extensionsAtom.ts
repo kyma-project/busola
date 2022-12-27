@@ -112,9 +112,12 @@ export const useGetExtensions = () => {
             shouldNodeBeVisible,
             configSet,
           );
-          const filteredConfigs = configs.filter(node =>
-            isNodeVisibleForCurrentConfigSet(mapExtResourceToNavNode(node)),
-          );
+
+          const filteredConfigs = configs
+            .map(node => mapExtResourceToNavNode(node))
+            .filter(node => !!node)
+            .filter(node => isNodeVisibleForCurrentConfigSet(node!)) as any;
+
           setExtensions(filteredConfigs);
         }
       }

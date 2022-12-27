@@ -34,10 +34,12 @@ export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = s
 
     const isExtensibilityOn = features?.EXTENSIBILITY?.isEnabled;
     if (isExtensibilityOn && extResources) {
-      const extNavNodes = extResources?.map(ext =>
-        mapExtResourceToNavNode(ext),
-      );
+      const extNavNodes = extResources
+        ?.map(node => mapExtResourceToNavNode(node))
+        .filter(node => !!node) as any;
+
       allNodes = mergeInExtensibilityNav(allNodes, extNavNodes);
+      console.log(allNodes);
     }
 
     const nodesFromCurrentScope = partial(hasCurrentScope, scope);
