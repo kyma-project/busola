@@ -7,10 +7,12 @@ import { Footer } from './Footer/Footer';
 
 import './Sidebar.scss';
 
+const noSidebarPathnames = ['/clusters', '/no-permissions', '/gardener-login'];
+
 export const Sidebar = () => {
   const { t } = useTranslation();
   const pathname = window.location.pathname;
-  if (pathname === '/clusters' || pathname === '/no-permissions') return null;
+  if (noSidebarPathnames.includes(pathname)) return null;
 
   return (
     <aside className="sidebar">

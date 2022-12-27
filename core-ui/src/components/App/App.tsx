@@ -16,6 +16,7 @@ import { useGetExtensions } from 'state/navigation/extensionsAtom';
 import { useGetExtensibilitySchemas } from 'state/extensibilitySchemasAtom';
 
 import { useLoginWithKubeconfigID } from 'components/App/useLoginWithKubeconfigID';
+import { useMakeGardenerLoginRoute } from 'components/Gardener/useMakeGardenerLoginRoute';
 import { useHandleResetEndpoint } from 'components/Clusters/shared';
 import { Preferences } from 'components/Preferences/Preferences';
 import { useResourceSchemas } from './resourceSchemas/useResourceSchemas';
@@ -38,6 +39,7 @@ export default function App() {
   const cluster = useRecoilValue(clusterState);
   const setNamespace = useSetRecoilState(activeNamespaceIdState);
   const { namespace } = useUrl();
+  const makeGardenerLoginRoute = useMakeGardenerLoginRoute();
 
   useEffect(() => {
     setNamespace(namespace);
@@ -88,6 +90,7 @@ export default function App() {
               path="cluster/:currentClusterName/*"
               element={<ClusterRoutes />}
             />
+            {makeGardenerLoginRoute()}
           </Routes>
           <Preferences />
         </ContentWrapper>

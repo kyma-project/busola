@@ -1,6 +1,17 @@
 const eqPath = (a, b) => JSON.stringify(b) === JSON.stringify(a);
 
-export function prepareSchemaRules(ruleDefs) {
+function filterSchemaRules(allRuleDefs, filter) {
+  if (!allRuleDefs) return undefined;
+
+  return allRuleDefs.filter(filter).map(item => ({
+    ...item,
+    children: filterSchemaRules(item.children, filter),
+  }));
+}
+
+export function prepareSchemaRules(allRuleDefs, filter) {
+  const ruleDefs = filterSchemaRules(allRuleDefs, filter);
+
   const root = { path: [], children: [] };
   let stack = [root];
 

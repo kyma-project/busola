@@ -38,6 +38,11 @@ export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
       return;
     }
 
+    // wait until gardener login is done
+    if (window.location.pathname === '/gardener-login') {
+      return;
+    }
+
     // cluster not yet loaded
     if (!cluster === undefined) {
       return;

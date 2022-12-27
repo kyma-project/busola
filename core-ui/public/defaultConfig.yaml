@@ -42,12 +42,6 @@ config:
     EXTERNAL_NODES:
       isEnabled: false
       stage: SECONDARY
-      nodes:
-        - category: My Category
-          icon: course-book
-          children:
-            - label: Example Node Label
-              link: https://github.com/kyma-project/busola
     HIDDEN_NAMESPACES:
       isEnabled: true
       config:
@@ -80,3 +74,6 @@ config:
       selectors:
         - type: apiGroup
           apiGroup: gateway.kyma-project.io
+    GARDENER_LOGIN:
+      isEnabled: false
+      kubeconfig: null

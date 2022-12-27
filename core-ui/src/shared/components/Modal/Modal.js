@@ -47,6 +47,7 @@ export function Modal({
   tooltipData,
   children,
   className,
+  disableAutoClose = true,
 }) {
   const { t } = useTranslation();
   const [show, setShow] = React.useState(false);
@@ -64,9 +65,9 @@ export function Modal({
     setShow(false);
   }
 
-  function handleConfirmClicked() {
+  async function handleConfirmClicked() {
     if (onConfirm) {
-      const result = onConfirm();
+      const result = await onConfirm();
       // check if confirm is not explicitly cancelled
       if (result !== false) {
         onClose();
@@ -137,6 +138,7 @@ export function Modal({
         show={show}
         onClose={onClose}
         actions={modalActions()}
+        disableAutoClose={disableAutoClose}
       >
         {children}
       </FdModal>
