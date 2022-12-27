@@ -37,7 +37,7 @@ export const useResourceSchemas = () => {
     ) {
       // TODO message
       notification.notifyError({
-        content: t('clusters.add.errors.failed-to-add-cluster'),
+        content: t('clusters.messages.connection-failed'),
       });
       navigate('/clusters');
     }
