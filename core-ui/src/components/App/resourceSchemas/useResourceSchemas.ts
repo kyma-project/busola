@@ -13,6 +13,8 @@ import { useUrl } from 'hooks/useUrl';
 import { authDataState } from 'state/authDataAtom';
 import { openapiState } from 'state/openapi/openapiSelector';
 import { clusterState } from 'state/clusterAtom';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import { useTranslation } from 'react-i18next';
 
 export const useResourceSchemas = () => {
   const { cluster: activeClusterName } = useUrl();
@@ -21,9 +23,11 @@ export const useResourceSchemas = () => {
   const navigate = useNavigate();
   const cluster = useRecoilValue(clusterState);
   const isClusterList = useMatch({ path: '/clusters' });
+  const notification = useNotification();
+  const { t } = useTranslation();
 
   const setSchemasState = useSetRecoilState(schemaWorkerStatusState);
-  const lastFetched = useRef<string | null>(null);
+  // const lastFetched = useRef<string | null>(null);
 
   useEffect(() => {
     if (
@@ -32,6 +36,9 @@ export const useResourceSchemas = () => {
       !isClusterList
     ) {
       // TODO message
+      notification.notifyError({
+        content: t('clusters.add.errors.failed-to-add-cluster'),
+      });
       navigate('/clusters');
     }
   }, [activeClusterName, openApi]); // eslint-disable-line react-hooks/exhaustive-deps
