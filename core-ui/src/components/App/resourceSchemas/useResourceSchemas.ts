@@ -45,7 +45,14 @@ export const useResourceSchemas = () => {
       setSchemasState({ areSchemasComputed: false, schemasError: err });
       console.error(err);
     });
-  }, [activeClusterName, authData, openApi, setSchemasState]);
+  }, [
+    activeClusterName,
+    authData,
+    openApi,
+    lastFetched,
+    setSchemasState,
+    setLastFetched,
+  ]);
 
   useEffect(() => {
     return () => {
