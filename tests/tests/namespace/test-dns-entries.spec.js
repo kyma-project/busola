@@ -22,7 +22,7 @@ context('Test DNS Entries', () => {
 
   it('Create DNS Entry', () => {
     cy.wait(500);
-    cy.navigateTo('Configuration', 'Dns Entries');
+    cy.navigateTo('Configuration', 'DNS Entries');
 
     cy.contains('Create DNS Entry').click();
 
@@ -41,9 +41,11 @@ context('Test DNS Entries', () => {
       .click();
 
     // target
-    cy.get('[aria-label^="Enter the A record"]:visible').click();
 
-    cy.contains('istio-ingressgateway').click();
+    cy.get(
+      '[placeholder^="Enter the A record target or CNAME record"]:visible',
+    ).type('35');
+    cy.contains(/35.204.159.60/).click();
 
     cy.get('[role="dialog"]')
       .contains('button', 'Create')
@@ -68,13 +70,9 @@ context('Test DNS Entries', () => {
     );
 
     // change from A to CNAME
-    cy.get('[placeholder^="Enter the A record"]:visible')
+    cy.get('[placeholder^="Enter the A record target"]:visible')
       .last()
-      .type('e');
-
-    cy.get('[placeholder^="Enter the CNAME record"]:visible').type(
-      'xample.com',
-    );
+      .type('example.com');
 
     cy.get('[role="dialog"]')
       .contains('button', 'Update')

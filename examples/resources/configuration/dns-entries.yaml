@@ -43,37 +43,39 @@ data:
       required: true
     - simple: true
       name: TTL
+      placeholder: ttl.placeholder
       path: spec.ttl
       required: true
 
     - path: spec.targets
       widget: SimpleList
+      simple: true
       defaultExpanded: true
       required: true    
-      simple: true
       name: spec.targets
       children:
         - widget: Text
+          simple: true
           enum: 
             - 35.204.159.60 
             - 34.147.91.1
           placeholder: target.placeholder 
-
     - path: spec.text
       name: spec.text
       widget: SimpleList
       children:
-        - []
+        - path: '[]'
+          simple: true  
       placeholder: text.placeholder
       defaultExpanded: true
-  general: |-
-    resource: 
+  general: |
+    resource:
       kind: DNSEntry
       group: dns.gardener.cloud
-      version: "v1alpha1"
+      version: v1alpha1
     name: DNS Entries
-    category: Custom Resources
-    urlPath: dnsentries-ex
+    category: Configuration
+    urlPath: dnsentries
     scope: namespace
     description: >-
       {{[DNSEntry](https://kyma-project.io/docs/kyma/latest/03-tutorials/00-api-exposure/apix-01-own-domain)}}
@@ -108,10 +110,11 @@ data:
       metadata.annotations: Annotations
       metadata.labels: Labels
       metadata.creationTimestamp: Created at
-      target.placeholder: Enter the A record target
+      target.placeholder: Enter the A record target or CNAME record
       spec.targets: Targets
       spec.dnsName: DNSName
+      ttl.placeholder: Enter the time to live
       spec.text: Text
-      dnsName.placeholder: select the DNSNAME
+      dnsName.placeholder: Select the DNSName
       text.placeholder: Text record must be a string. Provide either target or text. 
       status: Status
