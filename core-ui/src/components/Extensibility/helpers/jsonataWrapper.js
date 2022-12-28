@@ -1,6 +1,6 @@
 import jsonata from 'jsonata';
 import { isEqual } from 'lodash';
-import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
+import { getReadableTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 
 export function jsonataWrapper(expression) {
   const exp = jsonata(expression);
@@ -30,7 +30,7 @@ export function jsonataWrapper(expression) {
   });
 
   exp.registerFunction('readableTimestamp', timestamp => {
-    return ReadableCreationTimestamp((timestamp = { timestamp }));
+    return getReadableTimestamp(timestamp);
   });
 
   return exp;

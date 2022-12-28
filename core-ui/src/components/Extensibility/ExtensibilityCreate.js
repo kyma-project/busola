@@ -110,10 +110,12 @@ export function ExtensibilityCreateCore({
 
     return {
       simpleRules: prepareSchemaRules(
-        fullSchemaRules.filter(item => item.simple ?? false),
+        fullSchemaRules,
+        item => item.simple ?? false,
       ),
       advancedRules: prepareSchemaRules(
-        fullSchemaRules.filter(item => item.advanced ?? true),
+        fullSchemaRules,
+        item => item.advanced ?? true,
       ),
     };
   }, [createResource]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -164,7 +166,7 @@ export function ExtensibilityCreateCore({
       initialResource={initialResource}
       afterCreatedFn={afterCreatedFn}
       handleNameChange={handleNameChange}
-      urlPath={general.urlPath}
+      urlPath={general?.urlPath}
       disableDefaultFields
     >
       <ResourceSchema

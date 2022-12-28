@@ -37,6 +37,7 @@ export type PermissionSet = {
   verbs: string[];
   apiGroups: string[];
   resources: string[];
+  resourceNames?: string[];
 };
 
 export type PermissionSetState = PermissionSet[];

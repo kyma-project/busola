@@ -1,6 +1,6 @@
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
-import { usePut, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
+import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { createPatch } from 'rfc6902';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
@@ -24,7 +24,6 @@ export function useCreateResource({
   const notification = useNotification();
   const getRequest = useSingleGet();
   const postRequest = usePost();
-  const putRequest = usePut();
   const patchRequest = useUpdate();
   const { scopedUrl } = useUrl();
   const navigate = useNavigate();
@@ -80,12 +79,15 @@ export function useCreateResource({
     if (e) {
       e.preventDefault();
     }
-
     const mergedResource = {
       ...initialResource,
       ...resource,
-      metadata: { ...initialResource?.metadata, ...resource.metadata },
+      metadata: {
+        ...initialResource?.metadata,
+        ...resource.metadata,
+      },
     };
+
     try {
       if (isEdit) {
         await patchRequest(
@@ -111,9 +113,13 @@ export function useCreateResource({
 
         const makeForceUpdateFn = closeModal => {
           return async () => {
-            delete mergedResource?.metadata?.resourceVersion;
+            mergedResource.metadata.resourceVersion =
+              initialResource?.metadata.resourceVersion;
             try {
-              await putRequest(createUrl, mergedResource);
+              await patchRequest(
+                createUrl,
+                createPatch(initialResource, mergedResource),
+              );
               closeModal();
               onSuccess();
               if (typeof toggleFormFn === 'function') {

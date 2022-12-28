@@ -1,11 +1,16 @@
 import jsyaml from 'js-yaml';
-import { mapValues } from 'lodash';
+import { mapValues, partial } from 'lodash';
 import { useEffect } from 'react';
 import { ExtResource } from '../types';
 import { atom, RecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { clusterState } from '../clusterAtom';
 import { authDataState } from '../authDataAtom';
 import { getFetchFn } from '../utils/getFetchFn';
+import { configurationAtom } from 'state/configuration/configurationAtom';
+import { openapiPathIdListSelector } from 'state/openapi/openapiPathIdSelector';
+import { permissionSetsSelector } from 'state/permissionSetsSelector';
+import { shouldNodeBeVisible } from './filters/shouldNodeBeVisible';
+import { mapExtResourceToNavNode } from 'state/resourceList/mapExtResourceToNavNode';
 
 type ConfigMapData = {
   general: string;
@@ -33,10 +38,7 @@ const getExtensions = async (fetchFn: any) => {
   }
 
   try {
-    const cacheBuster = '?cache-buster=' + Date.now();
-    const extensionsResponse = await fetch(
-      '/extensions/extensions.yaml' + cacheBuster,
-    );
+    const extensionsResponse = await fetch('/extensions/extensions.yaml');
 
     let defaultExtensions = jsyaml.loadAll(
       await extensionsResponse.text(),
@@ -74,8 +76,9 @@ const getExtensions = async (fetchFn: any) => {
       ) as ExtResource;
     });
 
-    const allExtensions = [...defaultExtensions, ...configMapsExtensions];
-    return allExtensions;
+    return [...defaultExtensions, ...configMapsExtensions].filter(
+      e => !!e.general,
+    );
   } catch (e) {
     console.warn('Cannot load cluster params: ', e);
     return null;
@@ -87,6 +90,10 @@ export const useGetExtensions = () => {
   const auth = useRecoilValue(authDataState);
   const setExtensions = useSetRecoilState(extensionsState);
   const fetchFn = getFetchFn(useRecoilValue);
+  const configuration = useRecoilValue(configurationAtom);
+  const features = configuration?.features;
+  const openapiPathIdList = useRecoilValue(openapiPathIdListSelector);
+  const permissionSet = useRecoilValue(permissionSetsSelector);
 
   useEffect(() => {
     const manageExtensions = async () => {
@@ -94,7 +101,23 @@ export const useGetExtensions = () => {
         setExtensions(null);
       } else {
         const configs = await getExtensions(fetchFn);
-        setExtensions(configs);
+        if (!configs) {
+          setExtensions(null);
+        } else {
+          const configSet = {
+            configFeatures: features!,
+            openapiPathIdList,
+            permissionSet,
+          };
+          const isNodeVisibleForCurrentConfigSet = partial(
+            shouldNodeBeVisible,
+            configSet,
+          );
+          const filteredConfigs = configs.filter(node =>
+            isNodeVisibleForCurrentConfigSet(mapExtResourceToNavNode(node)),
+          );
+          setExtensions(filteredConfigs);
+        }
       }
     };
     manageExtensions();
