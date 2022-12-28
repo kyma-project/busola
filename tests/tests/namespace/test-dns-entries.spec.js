@@ -13,6 +13,9 @@ context('Test DNS Entries', () => {
   Cypress.skipAfterFail();
 
   before(() => {
+    cy.setBusolaFeature('EXTENSIBILITY', true);
+    cy.mockExtensions(['examples/resources/configuration/dns-entries.yaml']);
+
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
