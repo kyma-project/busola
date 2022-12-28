@@ -123,7 +123,7 @@ export function useGardenerLogin(setReport: (report: string) => void) {
       contextName,
       currentContext,
       kubeconfig,
-      config: { storage: 'sessionStorage', requiresCA: true },
+      config: { storage: 'sessionStorage' },
     };
 
     addCluster(cluster, clustersInfo, false);

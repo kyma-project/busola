@@ -98,31 +98,35 @@ export function ResourceList({
   }
 
   return (
-    <ListRenderer
-      skipDataLoading={true}
-      loading={value?.loading}
-      error={value?.error}
-      resources={value?.items}
-      resourceUrl={resourceUrl}
-      resourceUrlPrefix={resourceUrlPrefix}
-      resourceType={pluralize(kind)}
-      resourceTitle={prettifyKind(kind)}
-      namespace={value?.namespace || namespaceId}
-      isCompact
-      title={widgetT(structure)}
-      disableCreate={structure.disableCreate || false}
-      showTitle={true}
-      hasDetailsView={structure.hasDetailsView ?? !!PredefinedRenderer?.Details}
-      columns={children}
-      sortBy={defaultSortOptions =>
-        sortBy(jsonata, sortOptions, t, defaultSort ? defaultSortOptions : {})
-      }
-      searchSettings={{
-        textSearchProperties: defaultSortOptions =>
-          textSearchProperties(defaultSortOptions),
-      }}
-      {...structure}
-      {...props}
-    />
+    <Suspense fallback={<Spinner />}>
+      <ListRenderer
+        skipDataLoading={true}
+        loading={value?.loading}
+        error={value?.error}
+        resources={value?.items}
+        resourceUrl={resourceUrl}
+        resourceUrlPrefix={resourceUrlPrefix}
+        resourceType={pluralize(kind)}
+        resourceTitle={prettifyKind(kind)}
+        namespace={value?.namespace || namespaceId}
+        isCompact
+        title={widgetT(structure)}
+        disableCreate={structure.disableCreate || false}
+        showTitle={true}
+        hasDetailsView={
+          structure.hasDetailsView ?? !!PredefinedRenderer?.Details
+        }
+        columns={children}
+        sortBy={defaultSortOptions =>
+          sortBy(jsonata, sortOptions, t, defaultSort ? defaultSortOptions : {})
+        }
+        searchSettings={{
+          textSearchProperties: defaultSortOptions =>
+            textSearchProperties(defaultSortOptions),
+        }}
+        {...structure}
+        {...props}
+      />
+    </Suspense>
   );
 }
