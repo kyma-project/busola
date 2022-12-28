@@ -2,19 +2,19 @@ import { Shellbar } from 'fundamental-react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 import { clustersState } from 'state/clustersAtom';
 import { clusterState } from 'state/clusterAtom';
 import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
+import { useAvailableNamespaces } from '../hooks/useAvailableNamespaces';
 import { useUrl } from 'hooks/useUrl';
 
 import { Logo } from './Logo/Logo';
 import { NamespaceDropdown } from './NamespaceDropdown/NamespaceDropdown';
 import { SidebarSwitcher } from './SidebarSwitcher/SidebarSwitcher';
-import { useAvailableNamespaces } from './useAvailableNamespaces';
 
 import './Header.scss';
-import { useState } from 'react';
 
 export function Header() {
   const { t } = useTranslation();
@@ -50,6 +50,16 @@ export function Header() {
     },
   ];
 
+  const namespaceLabel = () => {
+    if (!activeNamespace) return t('navigation.select-namespace');
+
+    return namespaces.includes(activeNamespace)
+      ? activeNamespace
+      : t('components.resource-not-found.messages.not-found', {
+          resource: 'Namespace',
+        });
+  };
+
   return (
     <Shellbar
       className="header"
@@ -70,7 +80,7 @@ export function Header() {
           ? [
               {
                 glyph: 'megamenu',
-                label: activeNamespace || t('navigation.select-namespace'),
+                label: namespaceLabel(),
                 notificationCount: 0,
                 callback: () => {
                   refetch();
