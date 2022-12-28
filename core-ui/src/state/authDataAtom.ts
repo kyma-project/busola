@@ -6,6 +6,7 @@ import { atom, useSetRecoilState, useRecoilValue, RecoilState } from 'recoil';
 import { KubeconfigNonOIDCAuth, KubeconfigOIDCAuth } from 'types';
 import { clusterState } from './clusterAtom';
 import { getPreviousPath } from './useAfterInitHook';
+import { openapiLastFetchedState } from 'state/openapi/openapiLastFetchedAtom';
 
 export const hasNonOidcAuth = (
   user?: KubeconfigNonOIDCAuth | KubeconfigOIDCAuth,
@@ -108,6 +109,7 @@ export function useAuthHandler() {
   const cluster = useRecoilValue(clusterState);
   const setAuth = useSetRecoilState(authDataState);
   const navigate = useNavigate();
+  const setLastFetched = useSetRecoilState(openapiLastFetchedState);
 
   useEffect(() => {
     console.log(
@@ -146,6 +148,8 @@ export function useAuthHandler() {
         });
       }
     }
+    setLastFetched(null);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cluster]);
 }

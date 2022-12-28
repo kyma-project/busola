@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Route, Routes, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue, useRecoilState } from 'recoil';
+import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { WithTitle } from 'shared/hooks/useWindowTitle';
@@ -15,6 +15,8 @@ import { otherRoutes } from 'resources/other';
 import { resourceRoutes } from 'resources';
 import { createExtensibilityRoutes } from './ExtensibilityRoutes';
 import { extensionsState } from 'state/navigation/extensionsAtom';
+import { schemaWorkerStatusState } from 'state/schemaWorkerStatusAtom';
+
 import { IncorrectPath } from './IncorrectPath';
 
 export default function ClusterRoutes() {
@@ -26,6 +28,8 @@ export default function ClusterRoutes() {
   const clusters = useRecoilValue(clustersState);
   const extensions = useRecoilValue(extensionsState);
   const [cluster, setCluster] = useRecoilState(clusterState);
+  const setSchemasState = useSetRecoilState(schemaWorkerStatusState);
+
   const [search] = useSearchParams();
 
   useEffect(() => {
@@ -38,6 +42,7 @@ export default function ClusterRoutes() {
       return;
     }
     setCluster(currentCluster);
+    setSchemasState({ areSchemasComputed: false, schemasError: null });
   }, [currentClusterName, cluster, clusters, navigate, setCluster, search]);
 
   return (
