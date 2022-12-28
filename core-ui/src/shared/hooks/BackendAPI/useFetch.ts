@@ -4,10 +4,6 @@ import { createHeaders } from 'shared/hooks/BackendAPI/createHeaders';
 import { throwHttpError } from 'shared/hooks/BackendAPI/config';
 
 import { authDataState, AuthDataState } from '../../../state/authDataAtom';
-import {
-  clusterConfigState,
-  ClusterConfigState,
-} from '../../../state/clusterConfigSelector';
 import { getClusterConfig } from '../../../state/utils/getBackendInfo';
 import { clusterState, ActiveClusterState } from '../../../state/clusterAtom';
 
@@ -24,13 +20,9 @@ export type FetchFn = ({
 export const createFetchFn = ({
   authData,
   cluster,
-  config,
-  backendAddress,
 }: {
   authData: AuthDataState;
   cluster: ActiveClusterState;
-  config: ClusterConfigState;
-  backendAddress: string;
 }): FetchFn => async ({
   relativeUrl,
   abortController,
@@ -44,10 +36,11 @@ export const createFetchFn = ({
     ...init,
     headers: {
       ...(init?.headers || {}),
-      ...createHeaders(authData, cluster, config?.requiresCA!), //todo '!'
+      ...createHeaders(authData, cluster),
     },
     signal: abortController?.signal,
   };
+  const { backendAddress } = getClusterConfig();
 
   try {
     const response = await fetch(backendAddress + relativeUrl, init);
@@ -65,14 +58,10 @@ export const createFetchFn = ({
 export const useFetch = () => {
   const authData = useRecoilValue(authDataState);
   const cluster = useRecoilValue(clusterState);
-  const config = useRecoilValue(clusterConfigState);
-  const { backendAddress } = getClusterConfig();
 
   const fetchFn = createFetchFn({
     authData,
     cluster,
-    config,
-    backendAddress,
   });
   return fetchFn;
 };

@@ -4,7 +4,6 @@ import { CLUSTERS_STORAGE_KEY } from './clustersAtom';
 import { ClusterStorage } from './types';
 
 type ClusterConfig = {
-  requiresCA: boolean;
   storage: ClusterStorage;
 } | null;
 

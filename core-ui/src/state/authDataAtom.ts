@@ -131,7 +131,7 @@ export function useAuthHandler() {
           if (!getPreviousPath() || getPreviousPath() === '/clusters') {
             if (cluster.currentContext.namespace) {
               navigate(
-                `/cluster/${cluster.name}/namespaces/${cluster.currentContext.namespace}/details`,
+                `/cluster/${cluster.name}/namespaces/${cluster.currentContext.namespace}`,
               );
             } else {
               navigate('/cluster/' + cluster.name);
