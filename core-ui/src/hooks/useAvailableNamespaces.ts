@@ -7,39 +7,31 @@ import { namespacesState } from 'state/namespacesAtom';
 import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
 import { K8sResource } from 'types';
 
-export function useAvailableNamespaces(skipCall?: boolean) {
+export function useAvailableNamespaces() {
   const showHiddenNamespaces = useRecoilValue(showHiddenNamespacesState);
   const hiddenNamespaces = useGetHiddenNamespaces();
   const [namespaces, setNamespaces] = useRecoilState(namespacesState);
 
   const { data, refetch } = useGetList()('/api/v1/namespaces', {
-    skip: skipCall,
+    skip: false,
     pollingInterval: 0,
     onDataReceived: () => {},
   }) as {
     data: Array<K8sResource> | null;
-    refetch: VoidFunction;
+    refetch: () => void;
   };
 
-  const namespaceFilter = () => (namespaceName: string) => {
-    if (showHiddenNamespaces) return true;
-    return !hiddenNamespaces.includes(namespaceName);
-  };
-
-  const prepareFetchedNamespaces = (namespaces: Array<K8sResource> | null) => {
-    return namespaces?.map(n => n.metadata?.name);
-  };
-
-  const filteredNamespaces = (skipCall
-    ? namespaces
-    : prepareFetchedNamespaces(data)
-  )?.filter(namespaceFilter);
+  const filteredNamespaces = data
+    ?.map((n: K8sResource) => n.metadata?.name)
+    ?.filter(n => {
+      if (showHiddenNamespaces) return true;
+      return !hiddenNamespaces.includes(n);
+    });
 
   useEffect(() => {
     if (filteredNamespaces && !isEqual(namespaces, filteredNamespaces)) {
       setNamespaces(filteredNamespaces);
     }
   }, [filteredNamespaces, namespaces, setNamespaces]);
-
   return { namespaces, refetch };
 }
