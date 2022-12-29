@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useMatch } from 'react-router';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -41,13 +41,20 @@ export const useResourceSchemas = () => {
       openApi?.state === 'hasError' &&
       !isClusterList
     ) {
-      // TODO message
       notification.notifyError({
         content: t('clusters.messages.connection-failed'),
       });
       navigate('/clusters');
     }
-  }, [activeClusterName, openApi.state]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [
+    activeClusterName,
+    cluster?.contextName,
+    openApi.state,
+    isClusterList,
+    navigate,
+    t,
+    notification,
+  ]);
 
   useEffect(() => {
     const isOngoingClusterChange = !activeClusterName || !authData;
@@ -81,6 +88,7 @@ export const useResourceSchemas = () => {
     activeClusterName,
     authData,
     openApi.state,
+    openApi.contents,
     lastFetched,
     setSchemasState,
     setLastFetched,
