@@ -11,14 +11,10 @@ export const openapiState: RecoilValue<OpenapiState> = selector<OpenapiState>({
   key: 'openapiState',
   get: async ({ get }) => {
     const fetchFn = getFetchFn(get);
-    if (!fetchFn) return null;
+    if (!fetchFn) return undefined;
 
-    try {
-      const response = await fetchFn({ relativeUrl: '/openapi/v2' });
-      return await response.json();
-    } catch (e) {
-      console.warn(e);
-      return { error: true, swagger: '', paths: {} };
-    }
+    const response = await fetchFn({ relativeUrl: '/openapi/v2' });
+    const json = await response.json();
+    return json;
   },
 });

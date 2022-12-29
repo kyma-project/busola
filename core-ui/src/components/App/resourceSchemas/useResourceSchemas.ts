@@ -7,7 +7,12 @@ import {
   addWorkerErrorListener,
   terminateWorker,
 } from './resourceSchemaWorkerApi';
-import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
+import {
+  useRecoilValue,
+  useRecoilValueLoadable,
+  useRecoilState,
+  useSetRecoilState,
+} from 'recoil';
 import { schemaWorkerStatusState } from 'state/schemaWorkerStatusAtom';
 import { useUrl } from 'hooks/useUrl';
 import { authDataState } from 'state/authDataAtom';
@@ -20,7 +25,7 @@ import { useTranslation } from 'react-i18next';
 export const useResourceSchemas = () => {
   const { cluster: activeClusterName } = useUrl();
   const authData = useRecoilValue(authDataState);
-  const openApi = useRecoilValue(openapiState);
+  const openApi = useRecoilValueLoadable(openapiState);
   const navigate = useNavigate();
   const cluster = useRecoilValue(clusterState);
   const isClusterList = useMatch({ path: '/clusters' });
@@ -29,6 +34,20 @@ export const useResourceSchemas = () => {
 
   const setSchemasState = useSetRecoilState(schemaWorkerStatusState);
   const [lastFetched, setLastFetched] = useRecoilState(openapiLastFetchedState);
+
+  useEffect(() => {
+    if (
+      activeClusterName === cluster?.contextName &&
+      openApi?.state === 'hasError' &&
+      !isClusterList
+    ) {
+      // TODO message
+      notification.notifyError({
+        content: t('clusters.messages.connection-failed'),
+      });
+      navigate('/clusters');
+    }
+  }, [activeClusterName, openApi.state]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const isOngoingClusterChange = !activeClusterName || !authData;
@@ -40,8 +59,10 @@ export const useResourceSchemas = () => {
 
     // Luigi updates authData a few times during a cluster load. The below line cancels repeated requests after the first fetch
     if (lastFetched === activeClusterName) return;
+    if (openApi.state !== 'hasValue') return;
+
     setLastFetched(activeClusterName);
-    sendWorkerMessage('sendingOpenapi', openApi, activeClusterName);
+    sendWorkerMessage('sendingOpenapi', openApi.contents, activeClusterName);
 
     addWorkerListener('computedToJSON', () => {
       setSchemasState({ areSchemasComputed: true, schemasError: null });
@@ -59,7 +80,7 @@ export const useResourceSchemas = () => {
   }, [
     activeClusterName,
     authData,
-    openApi,
+    openApi.state,
     lastFetched,
     setSchemasState,
     setLastFetched,
