@@ -1,8 +1,14 @@
 import jsyaml from 'js-yaml';
 import { mapValues, partial } from 'lodash';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ExtResource } from '../types';
-import { atom, RecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  atom,
+  RecoilState,
+  useRecoilState,
+  useRecoilValue,
+  useSetRecoilState,
+} from 'recoil';
 import { clusterState } from '../clusterAtom';
 import { authDataState } from '../authDataAtom';
 import { getFetchFn } from '../utils/getFetchFn';
@@ -16,6 +22,7 @@ import { shouldNodeBeVisible } from './filters/shouldNodeBeVisible';
 import { mapExtResourceToNavNode } from 'state/resourceList/mapExtResourceToNavNode';
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 import { doesUserHavePermission } from './filters/permissions';
+import { useUrl } from 'hooks/useUrl';
 
 type ConfigMapData = {
   general: string;
@@ -125,39 +132,58 @@ export const useGetExtensions = () => {
   const features = configuration?.features;
   const openapiPathIdList = useRecoilValue(openapiPathIdListSelector);
   const permissionSet = useRecoilValue(permissionSetsSelector);
+  const [nonNamespacedExtensions, setNonNamespacedExtensions] = useState(null);
+  const { namespace } = useUrl();
 
   useEffect(() => {
     const manageExtensions = async () => {
       if (!cluster) {
         setExtensions(null);
+        setNonNamespacedExtensions(null);
       } else {
         const configs = await getExtensions(
           fetchFn,
           cluster.currentContext.namespace,
           permissionSet,
         );
+        console.log('configs');
         if (!configs) {
           setExtensions(null);
+          setNonNamespacedExtensions(null);
         } else {
-          const configSet = {
-            configFeatures: features!,
-            openapiPathIdList,
-            permissionSet,
-          };
-          const isNodeVisibleForCurrentConfigSet = partial(
-            shouldNodeBeVisible,
-            configSet,
-          );
-          const filteredConfigs = configs.filter(node =>
-            isNodeVisibleForCurrentConfigSet(mapExtResourceToNavNode(node)),
-          );
-          setExtensions(filteredConfigs);
+          if (!nonNamespacedExtensions) {
+            const configSet = {
+              configFeatures: features!,
+              openapiPathIdList,
+              permissionSet,
+            };
+            const isNodeVisibleForCurrentConfigSet = partial(
+              shouldNodeBeVisible,
+              configSet,
+            );
+            const filteredConfigs = configs.filter(node =>
+              isNodeVisibleForCurrentConfigSet(mapExtResourceToNavNode(node)),
+            );
+            setExtensions(extensions => [
+              ...(extensions || []),
+              ...filteredConfigs,
+            ]);
+          }
+
+          if (namespace) {
+            const hasAccessToClusterCMList = doesUserHavePermission(
+              ['list'],
+              { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
+              permissionSet,
+            );
+          }
         }
       }
     };
+
     manageExtensions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cluster, auth, permissionSet]);
+  }, [cluster, auth, permissionSet, namespace]);
 };
 
 const defaultValue = null;
