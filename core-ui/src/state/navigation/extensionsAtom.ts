@@ -8,9 +8,14 @@ import { authDataState } from '../authDataAtom';
 import { getFetchFn } from '../utils/getFetchFn';
 import { configurationAtom } from 'state/configuration/configurationAtom';
 import { openapiPathIdListSelector } from 'state/openapi/openapiPathIdSelector';
-import { permissionSetsSelector } from 'state/permissionSetsSelector';
+import {
+  permissionSetsSelector,
+  PermissionSetState,
+} from 'state/permissionSetsSelector';
 import { shouldNodeBeVisible } from './filters/shouldNodeBeVisible';
 import { mapExtResourceToNavNode } from 'state/resourceList/mapExtResourceToNavNode';
+import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
+import { doesUserHavePermission } from './filters/permissions';
 
 type ConfigMapData = {
   general: string;
@@ -32,7 +37,39 @@ type ConfigMapListResponse =
     }
   | undefined;
 
-const getExtensions = async (fetchFn: any) => {
+async function getExtensionConfigMaps(
+  fetchFn: FetchFn,
+  kubeconfigNamespace: string,
+  permissionSet: PermissionSetState,
+) {
+  const hasAccessToClusterCMList = doesUserHavePermission(
+    ['list'],
+    { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
+    permissionSet,
+  );
+
+  const clusterCMUrl =
+    '/api/v1/configmaps?labelSelector=busola.io/extension=resource';
+  const namespacedCMUrl = `/api/v1/namespaces/${kubeconfigNamespace}/configmaps?labelSelector=busola.io/extension=resource`;
+
+  // user has no access to clusterwide namespace listing, fall back to namespaced listing
+  const url = hasAccessToClusterCMList ? clusterCMUrl : namespacedCMUrl;
+
+  try {
+    const response = await fetchFn({ relativeUrl: url });
+    const configMapResponse: ConfigMapListResponse = await response.json();
+    return configMapResponse?.items || [];
+  } catch (e) {
+    console.warn('Cannot load cluster params from the target cluster: ', e);
+    return [];
+  }
+}
+
+const getExtensions = async (
+  fetchFn: FetchFn | undefined,
+  kubeconfigNamespace = 'kube-public',
+  permissionSet: PermissionSetState,
+) => {
   if (!fetchFn) {
     return null;
   }
@@ -47,18 +84,12 @@ const getExtensions = async (fetchFn: any) => {
     if (Array.isArray(defaultExtensions[0]))
       defaultExtensions = defaultExtensions[0];
 
-    let configMapResponse: ConfigMapListResponse;
-    try {
-      const response = await fetchFn({
-        relativeUrl:
-          '/api/v1/configmaps?labelSelector=busola.io/extension=resource',
-      });
-      configMapResponse = await response.json();
-    } catch (e) {
-      console.warn('Cannot load cluster params from the target cluster: ', e);
-    }
+    const configMaps = await getExtensionConfigMaps(
+      fetchFn,
+      kubeconfigNamespace,
+      permissionSet,
+    );
 
-    const configMaps = configMapResponse?.items || [];
     const configMapsExtensions = configMaps?.map(configMap => {
       const convertYamlToObject: (
         yamlString: string,
@@ -100,7 +131,11 @@ export const useGetExtensions = () => {
       if (!cluster) {
         setExtensions(null);
       } else {
-        const configs = await getExtensions(fetchFn);
+        const configs = await getExtensions(
+          fetchFn,
+          cluster.currentContext.namespace,
+          permissionSet,
+        );
         if (!configs) {
           setExtensions(null);
         } else {
@@ -122,7 +157,7 @@ export const useGetExtensions = () => {
     };
     manageExtensions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cluster, auth]);
+  }, [cluster, auth, permissionSet]);
 };
 
 const defaultValue = null;
