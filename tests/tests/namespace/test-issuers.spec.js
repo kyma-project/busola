@@ -5,6 +5,9 @@ context('Test Issuers', () => {
   Cypress.skipAfterFail();
 
   before(() => {
+    cy.setBusolaFeature('EXTENSIBILITY', true);
+    cy.mockExtensions(['examples/resources/configuration/issuers.yaml']);
+
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
 
@@ -31,9 +34,10 @@ context('Test Issuers', () => {
 
     cy.get('[ariaLabel="Issuer name"]:visible').type(ISSUER_NAME);
 
-    cy.contains('Select Issuer type')
+    cy.get('[placeholder="Select Issuer type"]')
       .filter(':visible')
-      .click();
+      .click()
+      .type('CA');
 
     cy.contains('CA')
       .filter(':visible')
@@ -66,7 +70,17 @@ context('Test Issuers', () => {
 
     cy.contains('Edit').click();
 
+    cy.get('[placeholder="Select Issuer type"]')
+      .filter(':visible')
+      .click()
+      .type('CA');
+
     cy.contains('CA').click();
+
+    cy.get('[placeholder="Select Issuer type"]')
+      .filter(':visible')
+      .click()
+      .type('ACME');
 
     cy.contains('ACME').click();
 

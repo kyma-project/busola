@@ -1,0 +1,187 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: issuers.cert.gardener.cloud
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: issuers.cert.gardener.cloud
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+data:
+  details: |-
+    header:
+      - name: spec.acme.email
+        source: spec.acme.email
+      - source: 'status.state ? status.state : "UNKNOWN"'
+        highlights:
+          informative:
+          - UNKNOWN
+        name: status
+        widget: Badge
+        description: status.message
+      - name: spec.acme.server
+        source: spec.acme.server
+    body:
+      - widget: Columns
+        children:
+        - name: included.domains
+          widget: Table
+          showHeader: false
+          source: spec.acme.domains.include
+          children:
+            - source: $item
+              search: true
+        - name: excluded.domains
+          widget: Table
+          showHeader: false
+          source: spec.acme.domains.exclude
+          children:
+            - source: $item
+              search: true
+  form: |-
+    - var: IssuerType
+      dynamicValue: | 
+        $exists(spec.acme) ? 'ACME' : $exists(spec.ca) ? 'CA' : ''
+      name: issuertype
+      simple: true
+      widget: Text
+      enum:
+        - CA
+        - ACME
+      required: true
+      placeholder: selectissuertype
+    - path: spec.requestsPerDayQuota
+      required: true
+    - simple: true
+      path: spec.acme
+      visibility: "$IssuerType = 'ACME'"
+      children:
+        - path: server
+          simple: true
+          overwrite: false
+          placeholder: spec.acme.serverurl
+        - path: email
+          simple: true
+          placeholder: email.for.registration
+        - path: skipDNSChallengeValidation
+        - path: privateKeySecretRef
+          widget: ResourceRef
+          provideVar: secret
+          resource:
+            kind: Secret
+            version: v1
+          defaultExpanded: true
+        - path: autoRegistration
+        - path: domains.include
+          simple: true
+          widget: SimpleList
+          children:
+            - []
+          placeholder: spec.acme.domainallowed
+        - path: domains.exclude
+          widget: SimpleList
+          children:
+            - []
+          placeholder: spec.acme.domainforbidden
+        - path: externalAccountBinding
+          widget: FormGroup
+          children:
+            - path: keyID
+              required: false
+              placeholder: spec.acme.externalAccountBinding.id
+        - path: externalAccountBinding.keySecretRef
+          widget: ResourceRef      
+          provideVar: secret
+          resource:
+            kind: Secret
+            version: v1
+          defaultExpanded: true
+          visibility: "$exists(spec.acme.externalAccountBinding.keyID)"
+    - simple: true
+      path: spec.ca
+      visibility: "$IssuerType = 'CA'"
+      children:
+        - simple: true
+          path: privateKeySecretRef
+          widget: ResourceRef      
+          provideVar: secret
+          resource:
+            kind: Secret
+            version: v1
+          defaultExpanded: true
+          required: true
+  general: |-
+    resource: 
+      kind: Issuer
+      group: cert.gardener.cloud
+      version: v1alpha1
+    name: Issuers
+    category: Configuration
+    urlPath: issuers
+    scope: namespace
+    description: >-
+      {{[Issuer](https://cert-manager.io/docs/concepts/issuer/)}}
+      is a Namespace resource responsible for provisioning of certificates.
+  list: |-
+    - name: spec.acme.email
+      source: spec.acme.email
+    - name: status
+      source: 'status.state ? status.state : "UNKNOWN"'
+      highlights:
+        informative:
+        - UNKNOWN
+      widget: Badge
+      description: status.message
+  presets: |-
+    - name: Default
+      default: true
+      value: 
+        spec:
+          requestsPerDayQuota: 0
+    - name: Lets Encrypt stage
+      value: 
+        metadata:
+          name: lets-encrypt-stage
+        spec:
+          requestsPerDayQuota: 0
+          acme:
+            server: 'https://acme-staging-v02.api.letsencrypt.org/directory'
+            email: ''
+            autoRegistration: true
+    - name: Lets Encrypt Production
+      value: 
+        metadata:
+          name: lets-encrypt-prod
+        spec:
+          requestsPerDayQuota: 0
+          acme:
+            server: 'https://acme-v02.api.letsencrypt.org/directory'
+            email: ''
+            autoRegistration: true
+  translations: |-
+    en:
+      metadata.annotations: Annotations
+      metadata.labels: Labels
+      metadata.creationTimestamp: Created at
+      issuertype: Issuer Type
+      selectissuertype: Select Issuer type
+      spec.requestsPerDayQuota: Daily Requests Quota
+      spec.acme.email: Email
+      email.for.registration: Email address for user registration
+      spec.acme.server: Server
+      spec.acme.serverurl: ACME Server URL
+      spec.acme.domains.include: Include Domains
+      spec.acme.domains.exclude: Exclude Domains
+      spec.acme.includeddomains: Included Domains
+      spec.acme.excludeddomains: Excluded Domains
+      spec.acme.domainallowed: Domain that is allowed
+      spec.acme.domainforbidden: Domain that is forbidden
+      status: Status
+      spec.acme.skipDNSChallengeValidation: Skip DNS challenge validation
+      spec.acme.privateKeySecretRef: Private key Secret
+      spec.acme.autoRegistration: Auto registration
+      spec.acme.externalAccountBinding: External account binding
+      spec.acme.externalAccountBinding.keyID: CA key ID
+      spec.acme.externalAccountBinding.id: ID of the CA that the external account is bound to
+      spec.acme.externalAccountBinding.keySecretRef: Symmetric MAC Secret
+      spec.ca.privateKeySecretRef: Private key Secret
