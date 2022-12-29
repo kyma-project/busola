@@ -76,8 +76,9 @@ const getExtensions = async (fetchFn: any) => {
       ) as ExtResource;
     });
 
-    const allExtensions = [...defaultExtensions, ...configMapsExtensions];
-    return allExtensions;
+    return [...defaultExtensions, ...configMapsExtensions].filter(
+      e => !!e.general,
+    );
   } catch (e) {
     console.warn('Cannot load cluster params: ', e);
     return null;
