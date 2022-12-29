@@ -7,11 +7,12 @@ import {
   addWorkerErrorListener,
   terminateWorker,
 } from './resourceSchemaWorkerApi';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
 import { schemaWorkerStatusState } from 'state/schemaWorkerStatusAtom';
 import { useUrl } from 'hooks/useUrl';
 import { authDataState } from 'state/authDataAtom';
 import { openapiState } from 'state/openapi/openapiSelector';
+import { openapiLastFetchedState } from 'state/openapi/openapiLastFetchedAtom';
 import { clusterState } from 'state/clusterAtom';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
@@ -27,34 +28,19 @@ export const useResourceSchemas = () => {
   const { t } = useTranslation();
 
   const setSchemasState = useSetRecoilState(schemaWorkerStatusState);
-  // const lastFetched = useRef<string | null>(null);
+  const [lastFetched, setLastFetched] = useRecoilState(openapiLastFetchedState);
 
   useEffect(() => {
-    if (
-      activeClusterName === cluster?.contextName &&
-      openApi?.error &&
-      !isClusterList
-    ) {
-      // TODO message
-      notification.notifyError({
-        content: t('clusters.messages.connection-failed'),
-      });
-      navigate('/clusters');
+    const isOngoingClusterChange = !activeClusterName || !authData;
+    if (isOngoingClusterChange) {
+      setSchemasState({ areSchemasComputed: false, schemasError: null });
+      setLastFetched(null);
+      return;
     }
-  }, [activeClusterName, openApi]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    // const isOngoingClusterChange = !activeClusterName || !authData;
-    // if (isOngoingClusterChange) {
-    // setSchemasState({ areSchemasComputed: false, schemasError: null });
-    // lastFetched.current = null;
-    // return;
-    // }
 
     // Luigi updates authData a few times during a cluster load. The below line cancels repeated requests after the first fetch
-    // if (lastFetched.current === activeClusterName) return;
-    // lastFetched.current = activeClusterName;
-
+    if (lastFetched === activeClusterName) return;
+    setLastFetched(activeClusterName);
     sendWorkerMessage('sendingOpenapi', openApi, activeClusterName);
 
     addWorkerListener('computedToJSON', () => {
@@ -70,7 +56,14 @@ export const useResourceSchemas = () => {
       setSchemasState({ areSchemasComputed: false, schemasError: err });
       console.error(err);
     });
-  }, [activeClusterName, authData, openApi, setSchemasState]);
+  }, [
+    activeClusterName,
+    authData,
+    openApi,
+    lastFetched,
+    setSchemasState,
+    setLastFetched,
+  ]);
 
   useEffect(() => {
     return () => {
