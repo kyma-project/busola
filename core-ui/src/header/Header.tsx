@@ -21,14 +21,18 @@ export function Header() {
   const navigate = useNavigate();
   const { namespaces, refetch } = useAvailableNamespaces();
   const { namespace: activeNamespace } = useUrl();
+
   const setPreferencesOpen = useSetRecoilState(isPreferencesOpenState);
   const cluster = useRecoilValue(clusterState);
   const clusters = useRecoilValue(clustersState);
+
   const [isNamespaceOpen, setIsNamespaceOpen] = useState(false);
   const [isClustersOpen, setIsClustersOpen] = useState(false);
+
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
     name => name !== cluster?.name,
   );
+
   const clustersList = [
     ...inactiveClusterNames.map(name => ({
       name,
