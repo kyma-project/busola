@@ -36,7 +36,7 @@ context('Test DNS Providers', () => {
       'default',
     );
 
-    cy.contains(/default-token/).click();
+    cy.contains('serverless-registry-config-default').click();
 
     // include domains
     cy.get('[placeholder="Domain that is allowed"]:visible', { log: false })
@@ -91,7 +91,7 @@ context('Test DNS Providers', () => {
       .first()
       .type('yes');
 
-    // edit excluded domains
+    // edit included domains
     cy.get('[role=dialog]')
       .contains('Include Domains')
       .filter(':visible', { log: false })
