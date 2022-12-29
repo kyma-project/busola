@@ -75,6 +75,7 @@ context('Test reduced permissions 2', () => {
     cy.getTopNav()
       .contains(Cypress.env('NAMESPACE_NAME'))
       .click();
+
     cy.get('[role="menu"]')
       .contains('kube-public')
       .click();
@@ -98,6 +99,8 @@ context('Test reduced permissions 2', () => {
   });
 
   it('Test extension CMs call - user has access to clusterwide CMs', () => {
+    // nasluchujemy/spy na pobieranie CM w kontekscie klastra, bo mamy uprawnienia
+    //
     cy.intercept({
       method: 'GET',
       url:
@@ -108,6 +111,7 @@ context('Test reduced permissions 2', () => {
 
     cy.wait('@clusterwide CM call');
 
+    // udajemy ze nie ma uprawnien do pobrania CM w kontekscie klastra
     mockPermissionsCall([
       {
         verbs: ['*'],
@@ -116,6 +120,7 @@ context('Test reduced permissions 2', () => {
       },
     ]);
 
+    // fallback na pobranie CM ale w kontekscie namespace
     cy.intercept({
       method: 'GET',
       url:
@@ -125,5 +130,6 @@ context('Test reduced permissions 2', () => {
     cy.reload();
 
     cy.wait('@kube-public CM call');
+    //
   });
 });

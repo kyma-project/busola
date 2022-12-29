@@ -44,37 +44,70 @@ type ConfigMapListResponse =
     }
   | undefined;
 
+// to juz jest: pobieranie permisionow jak jetesmy na klastrze i namespace, fallback zeby pobierac w scope namespace jesli ten z klastra sie nie powiodl,
+
+//tego nie ma:
+// pobierz extensiony ze scopu namespace w momencie gdy globalny sie nie powiedzie
+//+ test
+
+// stretch:
+// problem z gatewayami ->
+// widgety ktore pobieraja dane powinny obslugiwac przypadki
+// 1. god mode, mamy wszystko, nic nie obslugujemy
+// 2.  call po wszystkie resourcy ze wszystkich namespaców nie powiedzie sie, wiec robimy drugi ktory sprawdza czy mamy dostep do tych naszego namespace'a - pokazuje ostrzezenie, ze np. lista moze byc niekompletna
+// 3. brak calkowitych uprawnien, mozesz wpisac z palca, ale nie gwarantujemy ze bedzie git, stosowny powod
 async function getExtensionConfigMaps(
   fetchFn: FetchFn,
   kubeconfigNamespace: string,
+  currentNamespace: string,
   permissionSet: PermissionSetState,
 ) {
-  const hasAccessToClusterCMList = doesUserHavePermission(
-    ['list'],
-    { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
-    permissionSet,
-  );
-
   const clusterCMUrl =
     '/api/v1/configmaps?labelSelector=busola.io/extension=resource';
-  const namespacedCMUrl = `/api/v1/namespaces/${kubeconfigNamespace}/configmaps?labelSelector=busola.io/extension=resource`;
+  const namespacedCMUrl = `/api/v1/namespaces/${currentNamespace ??
+    kubeconfigNamespace}/configmaps?labelSelector=busola.io/extension=resource`;
+  //sprawdzic czy jest currentnamespace
+  if (!currentNamespace) {
+    const hasAccessToClusterCMList = doesUserHavePermission(
+      ['list'],
+      { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
+      permissionSet,
+    );
 
-  // user has no access to clusterwide namespace listing, fall back to namespaced listing
-  const url = hasAccessToClusterCMList ? clusterCMUrl : namespacedCMUrl;
+    // user has no access to clusterwide namespace listing, fall back to namespaced listing
+    const url = hasAccessToClusterCMList ? clusterCMUrl : namespacedCMUrl;
 
-  try {
-    const response = await fetchFn({ relativeUrl: url });
-    const configMapResponse: ConfigMapListResponse = await response.json();
-    return configMapResponse?.items || [];
-  } catch (e) {
-    console.warn('Cannot load cluster params from the target cluster: ', e);
-    return [];
+    try {
+      const response = await fetchFn({ relativeUrl: url });
+      const configMapResponse: ConfigMapListResponse = await response.json();
+      return configMapResponse?.items || [];
+    } catch (e) {
+      console.warn('Cannot load cluster params from the target cluster: ', e);
+      return [];
+    }
+  } else {
+    // + domergowanie listy dla current namespace jesśli istnieje + nie robimy tego calla jeśli mieliśmy dostęp do wszystkich CM  doesUserHavePermission oraz fetch pod `/api/v1/namespaces/${currentNamespace}/configmaps?labelSelector=busola.io/extension=resource`;
+    const hasAccessToClusterCMList = doesUserHavePermission(
+      ['list'],
+      { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
+      permissionSet,
+    );
+    const url = hasAccessToClusterCMList ? clusterCMUrl : namespacedCMUrl;
+
+    try {
+      const response = await fetchFn({ relativeUrl: url });
+      const configMapResponse: ConfigMapListResponse = await response.json();
+      return configMapResponse?.items || [];
+    } catch (error) {
+      return [];
+    }
   }
 }
 
 const getExtensions = async (
   fetchFn: FetchFn | undefined,
   kubeconfigNamespace = 'kube-public',
+  currentNamespace: string,
   permissionSet: PermissionSetState,
 ) => {
   if (!fetchFn) {
@@ -94,6 +127,7 @@ const getExtensions = async (
     const configMaps = await getExtensionConfigMaps(
       fetchFn,
       kubeconfigNamespace,
+      currentNamespace,
       permissionSet,
     );
 
@@ -144,6 +178,7 @@ export const useGetExtensions = () => {
         const configs = await getExtensions(
           fetchFn,
           cluster.currentContext.namespace,
+          namespace,
           permissionSet,
         );
         console.log('configs');
