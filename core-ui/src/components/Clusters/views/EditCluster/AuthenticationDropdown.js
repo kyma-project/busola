@@ -14,7 +14,7 @@ export function AuthenticationTypeDropdown({ type, setType }) {
       options={options}
       selectedKey={type}
       onSelect={(_, selected) => setType(selected.key)}
-      placeholder={t('issuers.placeholders.type')}
+      placeholder={t('clusters.placeholders.type')}
       fullWidth
       required
     />
