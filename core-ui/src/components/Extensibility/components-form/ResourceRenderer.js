@@ -51,7 +51,7 @@ export function ResourceRenderer({
       label={tFromStoreKeys(storeKeys, schema)}
       input={() => (
         <K8sResourceSelectWithUseGetList
-          data-testid={storeKeys.join('.')}
+          data-testid={storeKeys.join('.') || tFromStoreKeys(storeKeys, schema)}
           url={url}
           filter={item => {
             if (schema.get('filter')) {
