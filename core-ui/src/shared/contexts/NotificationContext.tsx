@@ -29,7 +29,7 @@ export const NotificationProvider = ({
   children,
   defaultVisibilityTime = 5000,
 }: NotificationContextProps) => {
-  const [toastProps, setToastProps] = useState<null | any>();
+  const [toastProps, setToastProps] = useState<null | ToastProps>();
   const [errorProps, setErrorProps] = useState<null | ErrorModalProps>();
 
   const methods = {
