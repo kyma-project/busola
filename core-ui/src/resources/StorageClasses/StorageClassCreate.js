@@ -20,7 +20,7 @@ export function StorageClassCreate({
   return (
     <ResourceForm
       {...props}
-      pluralKind="storageclass"
+      pluralKind="storageclasses"
       singularName={t('storage-classes.name_singular')}
       resource={storageClass}
       setResource={setStorageClass}

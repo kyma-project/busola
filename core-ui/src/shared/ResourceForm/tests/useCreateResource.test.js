@@ -1,8 +1,7 @@
-import { fireEvent, render, waitFor } from '@testing-library/react';
+import { fireEvent, render, waitFor } from 'testing/reactTestingUtils';
 import { useCreateResource } from '../useCreateResource';
 
 import { createPatch } from 'rfc6902';
-import { MicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { ignoreConsoleErrors } from 'setupTests';
 
 const mockNotifySuccess = jest.fn();
@@ -19,12 +18,6 @@ jest.mock('shared/hooks/BackendAPI/useFetch', () => ({
   useFetch: () => mockFetch,
 }));
 
-const mockNavigateToResourceAfterCreate = jest.fn();
-jest.mock('shared/hooks/navigate', () => ({
-  navigateToResourceAfterCreate: (...args) =>
-    mockNavigateToResourceAfterCreate(args),
-}));
-
 const consoleErrorMock = jest
   .spyOn(console, 'error')
   .mockImplementation(() => jest.fn());
@@ -35,11 +28,7 @@ const Testbed = ({ namespace = 'test-namespace', ...props }) => {
     return <button onClick={() => createResource()}>Act</button>;
   };
 
-  return (
-    <MicrofrontendContext.Provider value={{ namespaceId: namespace }}>
-      <Component />
-    </MicrofrontendContext.Provider>
-  );
+  return <Component />;
 };
 
 describe('useCreateResource', () => {
@@ -99,7 +88,6 @@ describe('useCreateResource', () => {
       expect(mockNotifySuccess).toHaveBeenCalledWith({
         content: 'common.create-form.messages.patch-success',
       });
-      expect(mockNavigateToResourceAfterCreate).not.toHaveBeenCalled();
     });
   });
 
@@ -123,7 +111,6 @@ describe('useCreateResource', () => {
       expect(mockNotifyError).toHaveBeenCalledWith({
         content: 'common.create-form.messages.create-failure',
       });
-      expect(mockNavigateToResourceAfterCreate).not.toHaveBeenCalled();
     });
   });
 });

@@ -15,100 +15,75 @@ context('Test Deployments', () => {
   it('Create a Deployment', () => {
     cy.navigateTo('Workloads', 'Deployments');
 
-    cy.getIframeBody()
-      .contains('Create Deployment')
-      .click();
+    cy.contains('Create Deployment').click();
 
-    cy.getIframeBody()
-      .find('[ariaLabel="Deployment name"]:visible')
+    cy.get('[ariaLabel="Deployment name"]:visible')
       .clear()
       .type(DEPLOYMENT_NAME);
 
-    cy.getIframeBody()
-      .contains('Advanced')
-      .click();
+    cy.contains('Advanced').click();
 
-    cy.getIframeBody()
-      .find('[aria-label="expand Labels"]')
-      .click();
+    cy.get('[aria-label="expand Labels"]').click();
 
-    cy.getIframeBody()
-      .find('[placeholder="Enter key"]:visible')
+    cy.get('[placeholder="Enter key"]:visible')
       .filterWithNoValue()
       .type('app');
 
-    cy.getIframeBody()
-      .find('[placeholder="Enter value"]:visible')
+    cy.get('[placeholder="Enter value"]:visible')
       .filterWithNoValue()
       .first()
       .type(DEPLOYMENT_NAME);
 
-    cy.getIframeBody()
-      .find('[placeholder="Enter key"]:visible')
+    cy.get('[placeholder="Enter key"]:visible')
       .filterWithNoValue()
       .type('example');
 
-    cy.getIframeBody()
-      .find('[placeholder="Enter value"]:visible')
+    cy.get('[placeholder="Enter value"]:visible')
       .filterWithNoValue()
       .first()
       .type(DEPLOYMENT_NAME);
 
-    cy.getIframeBody()
-      .find('[placeholder^="Enter the Docker image"]:visible')
-      .type(DOCKER_IMAGE);
+    cy.get('[placeholder^="Enter the Docker image"]:visible').type(
+      DOCKER_IMAGE,
+    );
 
-    cy.getIframeBody()
-      .contains('Advanced')
-      .click();
+    cy.contains('Advanced').click();
 
-    cy.getIframeBody()
-      .contains('label', 'Memory Requests')
-      .next()
-      .find('input')
-      .clear()
-      .type('16');
-
-    cy.getIframeBody()
-      .contains('label', 'Memory Limits')
+    cy.contains('label', 'Memory Requests')
       .next()
       .find('input')
       .clear()
       .type('32');
 
-    cy.getIframeBody()
-      .contains('label', 'CPU Requests (m)')
+    cy.contains('label', 'Memory Limits')
+      .next()
+      .find('input')
+      .clear()
+      .type('64');
+
+    cy.contains('label', 'CPU Requests (m)')
       .next()
       .find('input')
       .clear()
       .type('10');
 
-    cy.getIframeBody()
-      .contains('label', 'CPU Limits (m)')
+    cy.contains('label', 'CPU Limits (m)')
       .next()
       .find('input')
       .clear()
       .type('20');
 
-    cy.getIframeBody()
-      .contains('button', /^Create$/)
-      .click();
+    cy.contains('button', /^Create$/).click();
   });
 
   it('Check if deployment and pod exist', () => {
-    cy.url().should(
-      'match',
-      new RegExp(`\/deployments\/details\/${DEPLOYMENT_NAME}$`),
-    );
+    cy.url().should('match', new RegExp(`\/deployments\/${DEPLOYMENT_NAME}$`));
 
-    cy.getIframeBody()
-      .contains('a', DEPLOYMENT_NAME)
+    cy.contains('[role=row]', DEPLOYMENT_NAME)
       .should('be.visible')
       .click();
 
-    cy.getIframeBody()
-      .contains('h3', DEPLOYMENT_NAME)
-      .should('be.visible');
+    cy.contains('[aria-label="title"]', DEPLOYMENT_NAME).should('be.visible');
   });
 
   it('Edit a deployment', () => {
@@ -116,40 +91,29 @@ context('Test Deployments', () => {
       .contains('Deployments')
       .click();
 
-    cy.wait(1000);
-
-    cy.getIframeBody()
+    cy.get('[role=row]')
       .contains('a', DEPLOYMENT_NAME)
-      .should('be.visible')
       .click();
 
-    cy.getIframeBody()
-      .find('[data-testid="has-tooltip"]')
-      .contains('span', '1 / 1', { timeout: 60 * 1000 });
+    cy.get('[data-testid="has-tooltip"]').contains('span', '1 / 1', {
+      timeout: 60 * 1000,
+    });
 
-    cy.getIframeBody()
-      .contains('Edit')
-      .click();
+    cy.contains('Edit').click();
 
-    cy.getIframeBody()
-      .find('[aria-label="expand Labels"]')
-      .click();
+    cy.get('[aria-label="expand Labels"]').click();
 
-    cy.getIframeBody()
-      .find('[placeholder="Enter key"]:visible')
+    cy.get('[placeholder="Enter key"]:visible')
       .filterWithNoValue()
       .type('label-key');
 
-    cy.getIframeBody()
-      .find('[placeholder="Enter value"]:visible')
+    cy.get('[placeholder="Enter value"]:visible')
       .filterWithNoValue()
       .first()
       .type('label-value');
 
-    cy.getIframeBody()
-      .contains('button', 'Update')
-      .click();
+    cy.contains('button', 'Update').click();
 
-    cy.getIframeBody().contains('label-key=label-value');
+    cy.contains('label-key=label-value');
   });
 });

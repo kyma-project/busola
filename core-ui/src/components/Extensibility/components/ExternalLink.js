@@ -42,7 +42,7 @@ export const ExternalLink = ({
     <Link href={href} target="_blank" rel="noopener noreferrer">
       {value}
       <Icon
-        glyph="inspect"
+        glyph="action"
         size="s"
         className="fd-margin-begin--tiny"
         ariaLabel={t('common.ariaLabel.new-tab-link')}

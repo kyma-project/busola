@@ -1,13 +1,7 @@
 Cypress.Commands.add('inspectList', (resource, resourceName) => {
-  cy.getIframeBody()
-    .contains('a', resource)
-    .click();
+  cy.contains('[aria-label="breadcrumb-item"]', resource).click();
 
-  cy.getIframeBody()
-    .find('[role="search"] [aria-label="open-search"]')
-    .type(resourceName);
+  cy.get('[role="search"] [aria-label="open-search"]').type(resourceName);
 
-  cy.getIframeBody()
-    .contains(resourceName)
-    .should('be.visible');
+  cy.contains(resourceName).should('be.visible');
 });

@@ -25,8 +25,8 @@ test('Busola Lighthouse audit', async () => {
     page,
     port: 9222,
     thresholds: {
-      accessibility: 72,
-      'best-practices': 90,
+      accessibility: 80,
+      'best-practices': 100,
     },
   });
 
@@ -36,45 +36,34 @@ test('Busola Lighthouse audit', async () => {
   });
 
   // add a cluster
-  await page
-    .frameLocator('iframe')
-    .locator('button:has-text("Connect cluster")')
-    .click();
+  await page.locator('button:has-text("Connect cluster")').click();
 
   await page
-    .frameLocator('iframe')
     .locator('input[type="file"]')
     .setInputFiles('./fixtures/kubeconfig.yaml');
 
-  await page
-    .frameLocator('iframe')
-    .locator('button:has-text("Next step")')
-    .click();
+  await page.locator('button:has-text("Next step")').click();
 
   await page
-    .frameLocator('iframe')
     .locator(
       'text=Local storage: Cluster data is persisted between browser reloads.',
     )
     .click();
 
   await page
-    .frameLocator('iframe')
     .locator(
       '[aria-label="Connect\\ cluster"] button:has-text("Connect cluster")',
     )
     .click();
 
-  await expect(
-    page.frameLocator('iframe').locator('text=Cluster Details'),
-  ).toBeVisible();
+  await expect(page.locator('h3:text("Cluster Details")')).toBeVisible();
 
   console.log('Running audit on cluster details...');
   await playAudit({
     page,
     port: 9222,
     thresholds: {
-      accessibility: 75,
+      accessibility: 80,
       'best-practices': 90,
     },
   });

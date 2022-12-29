@@ -35,8 +35,8 @@ If you target elements of an array rather than the array itself, you can use the
 - **visibility** - a [JSONata](jsonata.md) expression controlling the visibility of the element.
 - **overwrite** - parameter used to disable the overwriting (clearing) of hidden fields. Used together with **visibility**, defaults to `true`.
   **NOTE:** it is recommended to set **overwrite** to `false` when defining fields with the same `path` and different **visibility** conditions.
-- **trigger** - Value change triggers, see [Dynamic fields section](#dynamic-field-values).
-- **subscription** - Trigger subscriptions for variable values, see [Dynamic fields section](#dynamic-field-values).
+- **trigger** - List of events to trigger, see [Dynamic fields section](#dynamic-field-values).
+- **subscribe** - A map of events to subscribe to, to their respective values, see [Dynamic fields section](#dynamic-field-values).
 
 ### Example
 
@@ -74,7 +74,7 @@ When using a variable inside an array it has to be wrapped inside a `[]` element
 - **var** - _[required]_ variable name.
 - **type** - _[required]_ type of field, as defined by JSON Schema.
 - **defaultValue** - default value used for the variable when opening the form.
-- **dynamicVariable** - a [JSONata](jsonata.md) expression used to calculate the value of the variable. This happens when opening the form or after editing the raw YAML of the resource.
+- **dynamicValue** - a [JSONata](jsonata.md) expression used to calculate the value of the variable. This happens when opening the form or after editing the raw YAML of the resource.
 
 All other fields can be used analogously to regular form items (except for the **path** and **children** parameters).
 
@@ -111,7 +111,7 @@ In the example, the visibility for item price and color are analogous - the form
 
 It's possible to modify field values automatically when another value changes. This works on a subscriber system. Any field (including variable fields) can send a trigger. When that happens a field that subscribes to it will have its value changed accordingly.
 
-Triggers are listed as a **triggers** field that contains a list of string labels.
+Triggers are listed as a **trigger** field that contains a list of string labels.
 
 Subscriptions are a key-value object where in the most generic case the key is the name of the trigger, while the value is a [JSONata](jsonata.md) expression used to generate the new value.
 
@@ -119,11 +119,11 @@ Subscriptions are a key-value object where in the most generic case the key is t
 
 ```yaml
 - path: spec.url
-  triggers: [server]
+  trigger: [server]
 - path: spec.port
-  triggers: [server]
+  trigger: [server]
 - path: spec.server
-  subscriptions:
+  subscribe:
     server: "'http://' & spec.url & ':' & spec.port"
 ```
 
@@ -132,12 +132,12 @@ or with variables:
 ```yaml
 - var: url
   type: string
-  triggers: [server]
+  trigger: [server]
 - var: port
   type: string
-  triggers: [server]
+  trigger: [server]
 - path: spec.server
-  subscriptions:
+  subscribe:
     server: "'http://' & $url & ':' & $port"
 ```
 
@@ -246,7 +246,7 @@ Name widgets render a name input field. They contain an automatic name generator
 
 - **extraPaths** - an array of extra paths to fill in with the contents of the field. Each path can either be a period-separated string or an array of strings.
 - **placeholder** - specifies a short hint about the input field value.
-- **inputInfo** - a string below the input field that shows how to fill in the input. It defaults to `Name must consist of lowercase alphanumeric characters, can contain '-' and '.' (e.g.: 'my.name-1').`. To disable any suggestion, set this value to `null`.
+- **inputInfo** - a string below the input field that shows how to fill in the input. It defaults to `Name must consist of lowercase alphanumeric characters or '-', and must start and end with an alphanumeric character (e.g. 'my-name', or '123-abc').`. To disable any suggestion, set this value to `null`.
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
 - **disableOnEdit** - parameter used to disable field in edit mode, defaults to `false`.
 

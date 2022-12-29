@@ -8,7 +8,7 @@ const ClusterList = React.lazy(() =>
 
 export default (
   <Route
-    path={'/clusters'}
+    path={'clusters'}
     element={
       <Suspense fallback={<Spinner />}>
         <ClusterList />

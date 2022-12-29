@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Menu, Button } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { useEventListener } from 'hooks/useEventListener';
-import { useCustomMessageListener } from 'hooks/useCustomMessageListener';
 
 import 'core-js/es/array/flat-map';
 
@@ -70,15 +69,6 @@ export function SearchInput({
     allowSlashShortcut,
     isSideDrawerOpened,
   ]);
-  useCustomMessageListener(
-    'busola.toggle-open-search',
-    () => {
-      if (!disabled && allowSlashShortcut) {
-        setSearchHidden(false);
-      }
-    },
-    [disabled, allowSlashShortcut],
-  );
 
   const renderSearchList = entries => {
     const suggestions = getSearchSuggestions(entries);

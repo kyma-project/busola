@@ -17,43 +17,29 @@
   "dependencies": {
     "@sap-theming/theming-base-content": "^11.1.28",
     "@sentry/tracing": "^6.12.0",
-    "@types/jsonpath": "^0.2.0",
     "@types/pluralize": "^0.0.29",
     "file-saver": "^2.0.2",
     "i18next": "^20.3.4",
     "i18next-http-backend": "^1.3.2",
-    "immutable": "^4.0.0",
     "js-yaml": "^4.1.0",
-    "jsonata": "^1.8.6",
-    "jsonpath": "^1.1.1",
-    "jwt-decode": "^3.1.2",
-    "lodash": "^4.17.19"
+    "jsonpath": "^1.1.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.17.0",
-    "@babel/preset-env": "^7.16.11",
-    "@types/js-yaml": "^4.0.5",
     "cli-color": "^1.4.0",
-    "concurrently": "^5.0.0",
     "fancy-log": "^1.3.3",
     "gulp": "^4.0.1",
     "gulp-clean": "^0.4.0",
     "gulp-concat": "^2.6.1",
     "gulp-rename": "^2.0.0",
-    "gulp-watch": "^5.0.1",
     "husky": "^2.4.1",
     "jest": "26.6.0",
-    "jsdom-worker-fix": "^0.1.8",
     "lerna": "^4.0.0",
     "lint-staged": "^10.4.0",
-    "node-sass": "^7.0.1",
-    "prettier": "^1.18.2",
-    "sass-loader": "^12.4.0",
-    "webpack-cli": "^4.9.2",
-    "yaml-sort": "^1.2.1"
+    "jsdom-worker-fix": "^0.1.8",
+    "prettier": "^1.18.2"
   },
   "lint-staged": {
-    "core/src/i18n/*.yaml": "yaml-sort --lineWidth=-1 -i ",
+    "core-ui/src/i18n/*.yaml": "yaml-sort --lineWidth=-1 -i ",
     "*.{ts,tsx,js,jsx,json,html,css,scss,yaml,md}": "prettier --write"
   },
   "husky": {

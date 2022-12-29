@@ -1,16 +1,17 @@
 import React from 'react';
-import LuigiClient from '@luigi-project/client';
-import { Link } from 'fundamental-react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { DefinitionList } from 'shared/components/DefinitionList/DefinitionList';
+import { useUrl } from 'hooks/useUrl';
 import { ServiceInstanceLink } from './ServiceInstanceLink';
 
 export function ServiceBindingData({ metadata, spec, status }) {
   const { t } = useTranslation();
+  const { namespaceUrl } = useUrl();
 
   const { data, loading } = useGet(
     `/api/v1/namespaces/${metadata.namespace}/secrets/${spec.secretName}`,
@@ -19,11 +20,6 @@ export function ServiceBindingData({ metadata, spec, status }) {
     },
   );
   const secretExists = !!data;
-
-  const navigateToSecret = secretName =>
-    LuigiClient.linkManager()
-      .fromContext('namespace')
-      .navigate(`/secrets/details/${secretName}`);
 
   const list = [
     {
@@ -41,7 +37,7 @@ export function ServiceBindingData({ metadata, spec, status }) {
         secretExists || loading ? (
           <Link
             className="fd-link"
-            onClick={() => navigateToSecret(spec.secretName)}
+            to={namespaceUrl(`secrets/${spec.secretName}`)}
           >
             {spec.secretName}
           </Link>

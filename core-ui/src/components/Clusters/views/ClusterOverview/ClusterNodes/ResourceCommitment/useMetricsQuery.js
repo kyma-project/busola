@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Dropdown } from 'shared/ResourceForm/inputs';
 import { useTranslation } from 'react-i18next';
 import { useCurrentQuery } from './queries';
-import { useFeature } from 'shared/hooks/useFeature';
+import { useFeature } from 'hooks/useFeature';
 
 export function useMetricsQuery() {
   const { serviceUrl } = useFeature('PROMETHEUS');

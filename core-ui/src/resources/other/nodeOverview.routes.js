@@ -13,7 +13,7 @@ const RoutedNodeOverview = () => {
 
 export default (
   <Route
-    path={'/overview/nodes/:nodeName'}
+    path={'overview/nodes/:nodeName'}
     element={
       <Suspense fallback={<Spinner />}>
         <RoutedNodeOverview />

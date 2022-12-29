@@ -2,7 +2,6 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, BusyIndicator } from 'fundamental-react';
 import * as jp from 'jsonpath';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { ResourceForm } from 'shared/ResourceForm';
 import { ComboboxArrayInput, TextArrayInput } from 'shared/ResourceForm/fields';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
@@ -13,6 +12,9 @@ import {
   getApiGroupInputOptions,
   unique,
 } from './helpers';
+import { useRecoilValue } from 'recoil';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { groupVersionState } from 'state/discoverability/groupVersionsSelector';
 
 const nonResourceUrls = [
   '/healthz/ready',
@@ -42,7 +44,8 @@ const verbs = [
 ];
 
 export function RuleInput({ rule, rules, setRules, isAdvanced }) {
-  const { namespaceId, groupVersions } = useMicrofrontendContext();
+  const groupVersions = useRecoilValue(groupVersionState);
+  const namespaceId = useRecoilValue(activeNamespaceIdState);
   const { t } = useTranslation();
 
   if (!Array.isArray(rule?.apiGroups)) {

@@ -1,9 +1,7 @@
-import LuigiClient from '@luigi-project/client';
 import pluralize from 'pluralize';
 import React, { Suspense } from 'react';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { prettifyKind } from 'shared/utils/helpers';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { resources } from 'resources';
 
 import { getTextSearchProperties, useGetTranslation } from '../helpers';
@@ -11,6 +9,9 @@ import { sortBy } from '../helpers/sortBy';
 import { useJsonata } from '../hooks/useJsonata';
 import { getChildren, getSearchDetails, getSortDetails } from './helpers';
 import { Spinner } from 'shared/components/Spinner/Spinner';
+import { useRecoilValue } from 'recoil';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { extensionsState } from 'state/navigation/extensionsAtom';
 
 const ExtensibilityList = React.lazy(() => import('../ExtensibilityList'));
 
@@ -35,7 +36,8 @@ export function ResourceList({
   ...props
 }) {
   const { widgetT, t } = useGetTranslation();
-  const { namespaceId, customResources } = useMicrofrontendContext();
+  const extensions = useRecoilValue(extensionsState);
+  const namespaceId = useRecoilValue(activeNamespaceIdState);
   const kind = (value?.kind ?? '').replace(/List$/, '');
   const pluralKind = pluralize(kind || '')?.toLowerCase();
   const namespacePart = getProperNamespacePart(value?.namespace, namespaceId);
@@ -50,7 +52,7 @@ export function ResourceList({
     arrayItems,
   });
 
-  const extensibilityResourceSchema = customResources.find(
+  const extensibilityResourceSchema = extensions?.find(
     cR => cR.general?.resource?.kind === kind,
   );
 
@@ -73,27 +75,6 @@ export function ResourceList({
           loading={value?.loading}
           title={t(structure.name)}
           disableCreate={structure.disableCreate || false}
-          navigateFn={entry => {
-            try {
-              const {
-                kind,
-                metadata: { name, namespace },
-              } = entry;
-
-              const namespacePart = namespace ? `namespaces/${namespace}/` : '';
-              const resourceTypePart =
-                extensibilityResourceSchema.general.urlPath ||
-                pluralize(kind.toLowerCase());
-
-              LuigiClient.linkManager()
-                .fromContext('cluster')
-                .navigate(
-                  namespacePart + resourceTypePart + '/details/' + name,
-                );
-            } catch (e) {
-              alert(1);
-            }
-          }}
         />
       </Suspense>
     );
@@ -117,32 +98,35 @@ export function ResourceList({
   }
 
   return (
-    <ListRenderer
-      skipDataLoading={true}
-      loading={value?.loading}
-      error={value?.error}
-      resources={value?.items}
-      resourceUrl={resourceUrl}
-      resourceUrlPrefix={resourceUrlPrefix}
-      resourceType={prettifyKind(kind)}
-      resourceTitle={prettifyKind(kind)}
-      namespace={namespaceId}
-      isCompact
-      title={widgetT(structure)}
-      disableCreate={structure.disableCreate || false}
-      showTitle={true}
-      hasDetailsView={structure.hasDetailsView ?? !!PredefinedRenderer?.Details}
-      fixedPath={true}
-      columns={children}
-      sortBy={defaultSortOptions =>
-        sortBy(jsonata, sortOptions, t, defaultSort ? defaultSortOptions : {})
-      }
-      searchSettings={{
-        textSearchProperties: defaultSortOptions =>
-          textSearchProperties(defaultSortOptions),
-      }}
-      {...structure}
-      {...props}
-    />
+    <Suspense fallback={<Spinner />}>
+      <ListRenderer
+        skipDataLoading={true}
+        loading={value?.loading}
+        error={value?.error}
+        resources={value?.items}
+        resourceUrl={resourceUrl}
+        resourceUrlPrefix={resourceUrlPrefix}
+        resourceType={pluralize(kind)}
+        resourceTitle={prettifyKind(kind)}
+        namespace={value?.namespace || namespaceId}
+        isCompact
+        title={widgetT(structure)}
+        disableCreate={structure.disableCreate || false}
+        showTitle={true}
+        hasDetailsView={
+          structure.hasDetailsView ?? !!PredefinedRenderer?.Details
+        }
+        columns={children}
+        sortBy={defaultSortOptions =>
+          sortBy(jsonata, sortOptions, t, defaultSort ? defaultSortOptions : {})
+        }
+        searchSettings={{
+          textSearchProperties: defaultSortOptions =>
+            textSearchProperties(defaultSortOptions),
+        }}
+        {...structure}
+        {...props}
+      />
+    </Suspense>
   );
 }

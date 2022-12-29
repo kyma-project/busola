@@ -1,13 +1,15 @@
 import React from 'react';
-import { Link } from 'fundamental-react';
+import { Link } from 'react-router-dom';
 
 import { useGetTranslation } from '../helpers';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useTranslation } from 'react-i18next';
-import { navigateToResource } from 'shared/helpers/universalLinks';
+import { useUrl } from 'hooks/useUrl';
 
 export function ResourceRefs({ value, structure, schema, disableMargin }) {
   const { t } = useTranslation();
+  const { resourceUrl } = useUrl();
+
   const { widgetT } = useGetTranslation();
   const resourceType = structure.kind;
   //kyma logpipeline api can return object in place of array wrongly, if only one record is defined
@@ -22,13 +24,14 @@ export function ResourceRefs({ value, structure, schema, disableMargin }) {
 
   const rowRenderer = ({ name, namespace }) => [
     <Link
-      onClick={() =>
-        navigateToResource({
-          kind: resourceType,
+      className="fd-link"
+      to={resourceUrl({
+        kind: resourceType,
+        metadata: {
           name,
           namespace,
-        })
-      }
+        },
+      })}
     >
       {namespace}/{name}
     </Link>,

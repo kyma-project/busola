@@ -11,7 +11,6 @@ Cypress.skipAfterFail = ({ skipAllSuits = false } = {}) => {
       },
     );
   });
-
   afterEach(function() {
     if (this.currentTest.state === 'failed') {
       if (!Cypress.config('isInteractive')) {
@@ -20,7 +19,6 @@ Cypress.skipAfterFail = ({ skipAllSuits = false } = {}) => {
         // This will skip remaining test in the current context when a test fails.
         Cypress.runner.stop();
       }
-
       if (skipAllSuits) {
         cy.task('dynamicSharedStore', {
           name: 'cancelTests',
@@ -52,7 +50,7 @@ Cypress.Commands.add('goToNamespaceDetails', () => {
     .contains('Namespaces')
     .click();
 
-  cy.getIframeBody()
+  cy.get('[role=row]')
     .contains('a', Cypress.env('NAMESPACE_NAME'))
     .click();
 
@@ -107,55 +105,35 @@ function paste(subject, { pastePayload }) {
 }
 
 Cypress.Commands.add('getLeftNav', () => {
-  cy.get('nav[data-testid=semiCollapsibleLeftNav]');
+  return cy.get('aside.sidebar');
 });
 
 Cypress.Commands.add('deleteInDetails', () => {
-  cy.getIframeBody()
-    .contains('button', 'Delete')
-    .click();
+  cy.contains('button', 'Delete').click();
 
-  cy.getIframeBody()
-    .find('[data-testid="delete-confirmation"]')
-    .click();
+  cy.get('[data-testid="delete-confirmation"]').click();
 
-  cy.getIframeBody()
-    .contains(/deleted/)
-    .should('be.visible');
+  cy.contains(/deleted/).should('be.visible');
 });
 
 Cypress.Commands.add(
   'deleteFromGenericList',
   (searchTerm, confirmationEnabled = true, deletedVisible = true) => {
-    cy.getIframeBody()
-      .find('[aria-label="open-search"]')
-      .click();
+    cy.get('[aria-label="open-search"]').click();
 
-    cy.getIframeBody()
-      .find('[placeholder="Search"]')
-      .type(searchTerm);
+    cy.get('[placeholder="Search"]').type(searchTerm);
 
-    cy.getIframeBody()
-      .contains(searchTerm)
-      .should('be.visible');
+    cy.contains(searchTerm).should('be.visible');
 
-    cy.getIframeBody()
-      .find('[aria-label="Delete"]')
-      .click();
+    cy.get('[aria-label="Delete"]').click();
 
     if (confirmationEnabled) {
-      cy.getIframeBody()
-        .contains('button', 'Delete')
-        .click();
+      cy.contains('button', 'Delete').click();
       if (deletedVisible) {
-        cy.getIframeBody()
-          .contains(/deleted/)
-          .should('be.visible');
+        cy.contains(/deleted/).should('be.visible');
       }
 
-      cy.getIframeBody()
-        .contains(searchTerm)
-        .should('not.exist');
+      cy.contains(searchTerm).should('not.exist');
     }
   },
 );

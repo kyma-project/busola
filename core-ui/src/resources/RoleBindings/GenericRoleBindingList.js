@@ -1,24 +1,21 @@
 import React from 'react';
-import LuigiClient from '@luigi-project/client';
 import { useTranslation, Trans } from 'react-i18next';
-import { Link } from 'fundamental-react';
+import { Link } from 'react-router-dom';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { Link as ReactSharedLink } from 'shared/components/Link/Link';
+import { useUrl } from 'hooks/useUrl';
 
 export function GenericRoleBindingList({ descriptionKey, ...params }) {
   const { t } = useTranslation();
+  const { clusterUrl, namespaceUrl } = useUrl();
 
   const navigateToRole = role => {
     if (role.kind === 'ClusterRole') {
-      LuigiClient.linkManager()
-        .fromContext('cluster')
-        .navigate(`/clusterroles/details/${role.name}`);
+      return clusterUrl(`clusterroles/${role.name}`);
     } else {
-      LuigiClient.linkManager()
-        .fromContext('namespace')
-        .navigate(`/roles/details/${role.name}`);
+      return namespaceUrl(`roles/${role.name}`);
     }
   };
 
@@ -35,13 +32,9 @@ export function GenericRoleBindingList({ descriptionKey, ...params }) {
     <div key={subject.kind + ' ' + subject.name}>
       <Link
         className="fd-link"
-        onClick={() =>
-          LuigiClient.linkManager()
-            .fromContext('cluster')
-            .navigate(
-              `/namespaces/${subject.namespace}/serviceaccounts/details/${subject.name}`,
-            )
-        }
+        to={namespaceUrl(`serviceaccounts/${subject.name}`, {
+          namespace: subject.namespace,
+        })}
       >
         {subject.name}
       </Link>
@@ -64,10 +57,7 @@ export function GenericRoleBindingList({ descriptionKey, ...params }) {
     {
       header: t('role-bindings.headers.role-ref'),
       value: binding => (
-        <Link
-          className="fd-link"
-          onClick={() => navigateToRole(binding.roleRef)}
-        >
+        <Link className="fd-link" to={navigateToRole(binding.roleRef)}>
           {binding.roleRef.name}
         </Link>
       ),

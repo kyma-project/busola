@@ -3,16 +3,11 @@ Cypress.Commands.add('navigateToFunctionCreate', functionName => {
     .contains('Functions')
     .click();
 
-  cy.getIframeBody()
-    .contains('Create Function')
-    .click();
+  cy.contains('Create Function').click();
 
-  cy.getIframeBody()
-    .contains('Advanced')
-    .click();
+  cy.contains('Advanced').click();
 
-  cy.getIframeBody()
-    .find('.advanced-form')
+  cy.get('.advanced-form')
     .find('[ariaLabel="Function name"]')
     .type(functionName);
 });
@@ -24,8 +19,7 @@ Cypress.Commands.add('createSimpleFunction', functionName => {
 
   cy.navigateToFunctionCreate(functionName);
 
-  cy.getIframeBody()
-    .find('[role="dialog"]')
+  cy.get('[role="dialog"]')
     .contains('button', 'Create')
     .click();
 });
@@ -36,16 +30,14 @@ Cypress.Commands.add(
     cy.navigateToFunctionCreate(functionName);
 
     //paste code to the Source Tab code editor
-    cy.getIframeBody()
-      .find('[aria-label="expand Source"]')
+    cy.get('[aria-label="expand Source"]')
       .readFile(functionPath)
       .then(body => {
         cy.pasteToMonaco(body);
       });
 
     //open Dependencies Tab and paste the dependencies to the code editor
-    cy.getIframeBody()
-      .find('[aria-label="expand Dependencies"]')
+    cy.get('[aria-label="expand Dependencies"]')
       .click()
       .readFile(dependenciesPath)
       .then(body => {
@@ -53,12 +45,11 @@ Cypress.Commands.add(
       });
 
     // click Create button
-    cy.getIframeBody()
-      .find('[role=dialog]')
+    cy.get('[role=dialog]')
       .contains('button', 'Create')
       .click();
 
     //check whether Function has been created
-    cy.getIframeBody().contains('button', 'Edit');
+    cy.contains('button', 'Edit');
   },
 );

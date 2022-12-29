@@ -28,101 +28,79 @@ context('Test Sidecars', () => {
   it('Create a Sidecar', () => {
     cy.navigateTo('Istio', 'Sidecars');
 
-    cy.getIframeBody()
-      .contains('Create Sidecar')
-      .click();
+    cy.contains('Create Sidecar').click();
 
     // Name
-    cy.getIframeBody()
-      .find('[arialabel="Sidecar name"]:visible', { log: false })
-      .type(SIDECAR_NAME);
+    cy.get('[arialabel="Sidecar name"]:visible', { log: false }).type(
+      SIDECAR_NAME,
+    );
 
     // Egress
-    cy.getIframeBody()
-      .find('[aria-label="expand Egress"]:visible', { log: false })
+    cy.get('[aria-label="expand Egress"]:visible', { log: false })
       .contains('Add')
       .click();
 
-    cy.getIframeBody()
-      .find('[aria-label="expand Port"]:visible', { log: false })
-      .click();
+    cy.get('[aria-label="expand Port"]:visible', { log: false }).click();
 
-    cy.getIframeBody()
-      .find('[placeholder="Enter the port number"]:visible', { log: false })
-      .type(PORT_NUMBER);
+    cy.get('[placeholder="Enter the port number"]:visible', {
+      log: false,
+    }).type(PORT_NUMBER);
 
-    cy.getIframeBody()
-      .find('[arialabel="Sidecar name"]:visible', { log: false })
+    cy.get('[arialabel="Sidecar name"]:visible', { log: false })
       .filterWithNoValue()
       .type(EGRESS_NAME);
 
-    cy.getIframeBody()
-      .find('[aria-label="Combobox input"]:visible', { log: false })
+    cy.get('[aria-label="Combobox input"]:visible', { log: false })
       .first()
       .type(PORT_PROTOCOL);
 
-    cy.getIframeBody()
-      .find('[aria-label="expand Hosts"]:visible', { log: false })
-      .click();
+    cy.get('[aria-label="expand Hosts"]:visible', { log: false }).click();
 
-    cy.getIframeBody()
-      .find('[placeholder="For example, *.api.mydomain.com"]:visible', {
-        log: false,
-      })
-      .type(EGRESS_HOST);
+    cy.get('[placeholder="For example, *.api.mydomain.com"]:visible', {
+      log: false,
+    }).type(EGRESS_HOST);
 
-    cy.getIframeBody()
-      .find('[aria-label="expand Egress"]:visible', { log: false })
+    cy.get('[aria-label="expand Egress"]:visible', { log: false })
       .first()
       .click();
 
     // Ingress
-    cy.getIframeBody()
-      .find('[aria-label="expand Ingress"]:visible', { log: false })
+    cy.get('[aria-label="expand Ingress"]:visible', { log: false })
       .contains('Add')
       .click();
 
-    cy.getIframeBody()
-      .find('[aria-label="expand Port"]:visible', { log: false })
-      .click();
+    cy.get('[aria-label="expand Port"]:visible', { log: false }).click();
 
-    cy.getIframeBody()
-      .find('[placeholder="Enter the port number"]:visible', { log: false })
-      .type(PORT_NUMBER);
+    cy.get('[placeholder="Enter the port number"]:visible', {
+      log: false,
+    }).type(PORT_NUMBER);
 
-    cy.getIframeBody()
-      .find('[aria-label="Combobox input"]:visible', { log: false })
+    cy.get('[aria-label="Combobox input"]:visible', { log: false })
       .first()
       .type(PORT_PROTOCOL);
 
-    cy.getIframeBody()
-      .find('[ariaLabel="Sidecar name"]:visible', { log: false })
+    cy.get('[ariaLabel="Sidecar name"]:visible', { log: false })
       .filterWithNoValue()
       .type(IGRES_NAME);
 
-    cy.getIframeBody()
-      .find('[placeholder="For example, 127.0.0.1:PORT"]:visible', {
-        log: false,
-      })
-      .type(DEFAULT_ENDPOINT);
+    cy.get('[placeholder="For example, 127.0.0.1:PORT"]:visible', {
+      log: false,
+    }).type(DEFAULT_ENDPOINT);
 
-    cy.getIframeBody()
-      .find('[role="dialog"]')
+    cy.get('[role="dialog"]')
       .contains('button', 'Create')
       .click();
 
-    cy.getIframeBody()
-      .contains('h3', SIDECAR_NAME)
-      .should('be.visible');
+    cy.contains('h3', SIDECAR_NAME).should('be.visible');
   });
 
   it('Check the Sidecar details', () => {
-    cy.getIframeBody().contains(PORT_NUMBER);
-    cy.getIframeBody().contains(EGRESS_NAME);
-    cy.getIframeBody().contains(IGRES_NAME);
-    cy.getIframeBody().contains(PORT_PROTOCOL);
-    cy.getIframeBody().contains(EGRESS_HOST);
-    cy.getIframeBody().contains(DEFAULT_ENDPOINT);
+    cy.contains(PORT_NUMBER);
+    cy.contains(EGRESS_NAME);
+    cy.contains(IGRES_NAME);
+    cy.contains(PORT_PROTOCOL);
+    cy.contains(EGRESS_HOST);
+    cy.contains(DEFAULT_ENDPOINT);
   });
 
   it('Check the Sidecars list', () => {

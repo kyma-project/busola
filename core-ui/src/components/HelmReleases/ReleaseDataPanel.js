@@ -1,16 +1,17 @@
 import React from 'react';
-import LuigiClient from '@luigi-project/client';
 import { LayoutPanel } from 'fundamental-react';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { HelmReleaseStatus } from 'components/HelmReleases/HelmReleaseStatus';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'fundamental-react';
+import { Link } from 'react-router-dom';
 import './HelmReleaseDataPanel.scss';
+import { useUrl } from 'hooks/useUrl';
 
 export function ReleaseDataPanel({ release, simpleHeader }) {
   const { t } = useTranslation();
+  const { namespaceUrl } = useUrl();
 
   const { name, version, chart, info } = release;
 
@@ -24,12 +25,8 @@ export function ReleaseDataPanel({ release, simpleHeader }) {
           <>
             <LayoutPanel.Head title={t('helm-releases.headers.release')} />
             <Link
-              className="release-link"
-              onClick={() =>
-                LuigiClient.linkManager()
-                  .fromContext('namespace')
-                  .navigate(`helm-releases/details/${name}`)
-              }
+              className="fd-link release-link"
+              to={namespaceUrl(`helm-releases/${name}`)}
             >
               {name}
             </Link>

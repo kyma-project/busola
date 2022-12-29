@@ -143,6 +143,7 @@ data:
       placeholder: For example, *.api.mydomain.com
       children:
         - path: '[]'
+          simple: true
     - widget: FormGroup
       path: spec.ingress[].port
       required: true

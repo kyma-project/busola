@@ -67,6 +67,8 @@ data:
       widget: SimpleList
       children:
         - []
+        #- path: '[]'
+        #  simple: true
       placeholder: domain.allowed
       defaultExpanded: true
       required: true
@@ -74,6 +76,7 @@ data:
       widget: SimpleList
       children:
         - []
+        #- path: '[]'
       placeholder: domain.forbidden
   general: |-
     resource:

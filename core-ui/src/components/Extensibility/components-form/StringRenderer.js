@@ -33,6 +33,9 @@ export function StringRenderer({
       if (typeof enumOptions === 'string') {
         enumOptions = [enumOptions];
       }
+      if (!Array.isArray(enumOptions)) {
+        enumOptions = [];
+      }
 
       const options = enumOptions.map(key => ({
         key,
@@ -50,14 +53,15 @@ export function StringRenderer({
     <ResourceForm.FormField
       value={value}
       setValue={value => {
-        onChange({
-          storeKeys,
-          scopes: ['value'],
-          type: 'set',
-          schema,
-          required,
-          data: { value },
-        });
+        onChange &&
+          onChange({
+            storeKeys,
+            scopes: ['value'],
+            type: 'set',
+            schema,
+            required,
+            data: { value },
+          });
       }}
       label={tFromStoreKeys(storeKeys, schema)}
       compact={compact}

@@ -164,6 +164,7 @@ data:
       placeholder: placeholders.hosts
       children:
         - path: '[]'
+          simple: true
   general: |-
     resource:
       kind: Gateway

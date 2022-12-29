@@ -94,41 +94,38 @@ export function useVariables() {
     setDefs({ ...defs });
   };
 
-  const resetVars = () => {
-    Object.values(defs)
-      .filter(def => def.dynamicValue)
-      .forEach(def => {
-        delete vars[def.var];
-      });
-    setVars({ ...vars });
-  };
-
   const readVars = resource => {
     const readVar = (def, path, base = resource) => {
       if (path.length) {
         const value = jp.value(base, pathToJP(path[0])) ?? [];
-        const promises = value.map(item => readVar(def, tail(path)));
+        const promises = value.map(item => readVar(def, tail(path), item));
         return Promise.all(promises).then(vars =>
           vars.map(v => applyDefaults(def, v)),
         );
       } else if (def.defaultValue) {
         return def.defaultValue;
       } else if (def.dynamicValue) {
-        return jsonata.async(def.dynamicValue, {
+        jsonata.async(def.dynamicValue, {
           resource,
           item: base,
         });
+        return jsonata
+          .async(def.dynamicValue, {
+            resource,
+            item: base,
+          })
+          .then(([v]) => v);
       } else {
         return '';
       }
     };
 
     const promises = Object.values(defs)
-      .filter(def => typeof vars[def.var] === 'undefined')
+      .filter(def => typeof vars[def.var] === 'undefined' || def.dynamicValue)
       .map(def => {
         return Promise.any([
-          readVar(def, initial(def.path.split(/\[\]\.?/))),
-        ]).then(([val, err]) => {
+          readVar(def, initial(def.path.split(/\.?\[\]\.?/))),
+        ]).then(val => {
           const newval = applyDefaults(def, val);
           return [def, newval];
         });
@@ -146,6 +143,5 @@ export function useVariables() {
     itemVars,
     prepareVars,
     readVars,
-    resetVars,
   };
 }

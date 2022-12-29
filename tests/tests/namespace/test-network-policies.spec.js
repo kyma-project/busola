@@ -27,9 +27,7 @@ context('Test Network Policy', () => {
   it('Create a Network Policy', () => {
     cy.navigateTo('Discovery and Network', 'Network Policies');
 
-    cy.getIframeBody()
-      .contains('Create Network Policy')
-      .click();
+    cy.contains('Create Network Policy').click();
 
     cy.wrap(loadNetworkPolicy(NAME, Cypress.env('NAMESPACE_NAME'))).then(
       NP_CONFIG => {
@@ -38,24 +36,17 @@ context('Test Network Policy', () => {
       },
     );
 
-    cy.getIframeBody()
-      .find('[role="dialog"]')
+    cy.get('[role="dialog"]')
       .contains('button', 'Create')
       .click();
   });
 
   it('Check Network Policy details', () => {
-    cy.getIframeBody()
-      .contains(NAME)
-      .should('be.visible');
+    cy.contains(NAME).should('be.visible');
 
-    cy.getIframeBody()
-      .contains(/CIDR/i)
-      .should('be.visible');
+    cy.contains(/CIDR/i).should('be.visible');
 
-    cy.getIframeBody()
-      .contains(/Protocol/i)
-      .should('be.visible');
+    cy.contains(/Protocol/i).should('be.visible');
   });
 
   it('Check Network Policy list', () => {

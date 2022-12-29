@@ -1,53 +1,70 @@
-import { useRecoilValue } from 'recoil';
-import { Icon, SideNav } from 'fundamental-react';
+import { SideNav } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { Link } from 'react-router-dom';
+import { Link as ExternalLink } from 'shared/components/Link/Link';
+
 import { NavNode } from 'state/types';
-import { luigiNavigate } from 'resources/createResourceRoutes';
+import { useUrl } from 'hooks/useUrl';
 
 import './NavItem.scss';
+import { useRecoilValue } from 'recoil';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { clusterState } from 'state/clusterAtom';
 
 type NavItemProps = {
   node: NavNode;
 };
 
 export function NavItem({ node }: NavItemProps) {
-  const namespaceId = useRecoilValue(activeNamespaceIdState);
   const { t } = useTranslation();
+  const urlGenerators = useUrl();
+  const { scopedUrl } = urlGenerators;
+  const namespaceId = useRecoilValue(activeNamespaceIdState);
+  const cluster = useRecoilValue(clusterState);
 
   const isNodeSelected = () => {
     if (node.externalUrl) return false;
-    const { pathname } = window.location;
-    const namespacePart = namespaceId ? `/namespaces/${namespaceId}/` : '/';
-    const resourcePart = pathname.replace(namespacePart, '');
-    const pathSegment = resourcePart.split('/')?.[0];
-    return (
-      pathSegment === node.pathSegment || pathSegment === node.resourceType
-    );
+    else {
+      const { pathname } = window.location;
+      const namespacePart = namespaceId ? `/namespaces/${namespaceId}/` : '/';
+      const resourcePart = pathname.replace(
+        `/cluster/${cluster?.name}${namespacePart}`,
+        '',
+      );
+      const pathSegment = resourcePart.split('/')?.[0];
+      return (
+        pathSegment === node.pathSegment || pathSegment === node.resourceType
+      );
+    }
   };
 
-  // TODO: Show it's external node - implemented in fd, types dont match
+  const name = t(node.label, { defaultValue: node.label });
+
   return (
     <SideNav.ListItem
       selected={isNodeSelected()}
       key={node.pathSegment}
       id={node.pathSegment}
-      // @ts-ignore
-      name={
-        <span className={node.externalUrl ? 'nav-item__external-link' : ''}>
-          {t(node.label, { defaultValue: node.label })}
-          {node.externalUrl && <Icon glyph="inspect" />}
-        </span>
-      }
-      url="#"
       glyph={node.icon}
-      onClick={() => {
-        if (node.externalUrl) {
-          window.open(node.externalUrl, '_blank', 'noopener,noreferrer');
-        } else {
-          luigiNavigate(node, namespaceId);
-        }
-      }}
-    />
+    >
+      {node.externalUrl ? (
+        <ExternalLink
+          className="nav-item__external-link"
+          url={node.externalUrl}
+        >
+          {name}
+        </ExternalLink>
+      ) : (
+        <Link
+          to={
+            node.createUrlFn
+              ? node.createUrlFn(urlGenerators)
+              : scopedUrl(node.pathSegment)
+          }
+        >
+          {name}
+        </Link>
+      )}
+    </SideNav.ListItem>
   );
 }

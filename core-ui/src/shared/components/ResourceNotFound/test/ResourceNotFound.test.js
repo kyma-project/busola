@@ -1,11 +1,11 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render } from 'testing/reactTestingUtils';
 
 import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNotFound';
 
 const breadcrumbs = [
-  { name: 'test-1', path: '/' },
-  { name: 'test-2', path: '/test' },
+  { name: 'test-1', url: '/' },
+  { name: 'test-2', url: '/test' },
 ];
 
 describe('ResourceNotFound', () => {

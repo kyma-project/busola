@@ -1,5 +1,4 @@
 import React from 'react';
-import LuigiClient from '@luigi-project/client';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import './Modal.scss';
@@ -48,6 +47,7 @@ export function Modal({
   tooltipData,
   children,
   className,
+  disableAutoClose = true,
 }) {
   const { t } = useTranslation();
   const [show, setShow] = React.useState(false);
@@ -55,7 +55,6 @@ export function Modal({
     if (onShow) {
       onShow();
     }
-    LuigiClient.uxManager().addBackdrop();
     setShow(true);
   }
 
@@ -63,13 +62,12 @@ export function Modal({
     if (onHide) {
       onHide();
     }
-    LuigiClient.uxManager().removeBackdrop();
     setShow(false);
   }
 
-  function handleConfirmClicked() {
+  async function handleConfirmClicked() {
     if (onConfirm) {
-      const result = onConfirm();
+      const result = await onConfirm();
       // check if confirm is not explicitly cancelled
       if (result !== false) {
         onClose();
@@ -140,6 +138,7 @@ export function Modal({
         show={show}
         onClose={onClose}
         actions={modalActions()}
+        disableAutoClose={disableAutoClose}
       >
         {children}
       </FdModal>

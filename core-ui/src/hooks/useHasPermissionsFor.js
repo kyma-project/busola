@@ -1,5 +1,6 @@
 import pluralize from 'pluralize';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { useRecoilValue } from 'recoil';
+import { permissionSetsSelector } from 'state/permissionSetsSelector';
 
 export function hasPermissionsFor(
   apiGroup,
@@ -32,7 +33,7 @@ export function hasPermissionsFor(
 }
 
 export function useHasPermissionsFor(queries) {
-  const { permissionSet } = useMicrofrontendContext();
+  const permissionSet = useRecoilValue(permissionSetsSelector);
 
   return queries.map(([apiGroup, resourceType, verbs]) =>
     hasPermissionsFor(apiGroup, resourceType, permissionSet, verbs),

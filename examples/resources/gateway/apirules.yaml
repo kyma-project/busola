@@ -198,6 +198,7 @@ data:
           name: path
           inputInfo: inputInfo.path
         - required: true
+          simple: true
           path: '[].accessStrategies'
           name: accessStrategies 
           widget: GenericList
@@ -206,6 +207,7 @@ data:
             handler: 'allow'
           children:
             - path: '[].config'
+              simple: true
               name: accessStrategies.config
               widget: KeyValuePair
               keyEnum:
@@ -213,6 +215,7 @@ data:
                 - trusted_issuers
                 - required_scope
             - required: true
+              simple: true
               path: '[].handler'
               name: accessStrategies.handler
               enum:
@@ -221,12 +224,14 @@ data:
                 - jwt
                 - oauth2_introspection
         - required: true
+          simple: true
           path: '[].methods'
           name: rules.methods 
           widget: SimpleList
           defaultExpanded: true
           children:
             - path: '[]' 
+              simple: true
               enum:
                 - GET
                 - POST
@@ -245,6 +250,7 @@ data:
               path: '[].handler'
               name: accessStrategies.handler
         - path: '[].service' 
+          simple: true
           name: service 
           widget: FormGroup
           children:

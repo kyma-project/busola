@@ -24,7 +24,7 @@ function createGithubLink(version: string): string {
 }
 
 async function getBusolaVersion(t: TFunction): Promise<string> {
-  return await fetch('/assets/version.yaml')
+  return await fetch('/version.yaml')
     .then(response => {
       return response.text();
     })
@@ -32,7 +32,10 @@ async function getBusolaVersion(t: TFunction): Promise<string> {
       const versionFile = jsyaml.load(text) as Record<string, string>;
       return versionFile.version;
     })
-    .catch(() => t('common.statuses.unknown'));
+    .catch(e => {
+      console.warn(e);
+      return t('common.statuses.unknown');
+    });
 }
 
 type BusolaVersionDetails = {

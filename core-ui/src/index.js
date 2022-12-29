@@ -1,18 +1,17 @@
-import { Suspense } from 'react';
 import ReactDOM from 'react-dom';
-import { RecoilRoot } from 'recoil';
 import i18next from 'i18next';
+import yaml from 'js-yaml';
+import { Suspense } from 'react';
+import { RecoilRoot } from 'recoil';
 import { initReactI18next } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 import i18nextBackend from 'i18next-http-backend';
-import yaml from 'js-yaml';
+import { savePreviousPath } from 'state/useAfterInitHook';
 
 import App from './components/App/App';
-
-import { Microfrontend } from 'shared/contexts/Microfrontend';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-
 import { CommandPaletteProvider } from 'command-pallette/CommandPaletteProvider';
+import { NotificationProvider } from 'shared/contexts/NotificationContext';
 
 import './styles/reset.css';
 import './styles/sapIllus-Fills.css';
@@ -46,17 +45,19 @@ i18next
     },
   });
 
+savePreviousPath();
+
 ReactDOM.render(
-  <Microfrontend env={process.env}>
-    <RecoilRoot>
-      <BrowserRouter basename={process.env.PUBLIC_URL}>
-        <Suspense fallback={<Spinner />}>
+  <RecoilRoot>
+    <BrowserRouter>
+      <Suspense fallback={<Spinner />}>
+        <NotificationProvider>
           <CommandPaletteProvider>
             <App />
           </CommandPaletteProvider>
-        </Suspense>
-      </BrowserRouter>
-    </RecoilRoot>
-  </Microfrontend>,
+        </NotificationProvider>
+      </Suspense>
+    </BrowserRouter>
+  </RecoilRoot>,
   document.getElementById('root'),
 );

@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 import { SideDrawer } from 'shared/components/SideDrawer/SideDrawer';
 import { Button } from 'fundamental-react';
-import LuigiClient from '@luigi-project/client';
 import { YamlContent } from 'shared/contexts/YamlEditorContext/YamlContent';
 import { isValidYaml } from 'shared/contexts/YamlEditorContext/isValidYaml';
 import 'shared/contexts/YamlEditorContext/YamlEditorContext.scss';
@@ -39,17 +38,12 @@ export const YamlEditorProvider = ({ children }) => {
   const onSaveFn = useRef(_ => {});
 
   useEffect(() => {
-    LuigiClient.uxManager().setDirtyStatus(false);
     yaml && setOpen(true);
   }, [yaml]);
 
   useEffect(() => {
     if (!isOpen) setYaml(null);
   }, [isOpen]);
-
-  useEffect(() => {
-    LuigiClient.uxManager().setDirtyStatus(!!changedYaml);
-  }, [changedYaml]);
 
   function setEditedYaml(newYaml, title, onSaveHandler, readOnly, isProtected) {
     onSaveFn.current = onSaveHandler;

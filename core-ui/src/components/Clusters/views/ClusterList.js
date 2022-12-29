@@ -2,28 +2,35 @@ import React, { useState } from 'react';
 import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
-import { useShowNodeParamsError } from 'shared/hooks/useShowNodeParamsError';
 import { Link, Button, MessagePage } from 'fundamental-react';
+
+import { useClustersInfo } from 'state/utils/getClustersInfo';
 
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
-import { setCluster, deleteCluster } from './../shared';
+import { addCluster, deleteCluster } from './../shared';
 import { AddClusterDialog } from '../components/AddClusterDialog';
 import { EditCluster } from './EditCluster/EditCluster';
 import { ClusterStorageType } from './ClusterStorageType';
 
 import './ClusterList.scss';
-import { loadDefaultKubeconfigId } from 'components/App/useLoginWithKubeconfigID';
+import { useLoadDefaultKubeconfigId } from 'components/App/useLoginWithKubeconfigID';
+import { useFeature } from 'hooks/useFeature';
+import { useNavigate } from 'react-router-dom';
 
 function ClusterList() {
-  const { clusters, activeClusterName, features } = useMicrofrontendContext();
+  const gardenerLoginFeature = useFeature('GARDENER_LOGIN');
+  const kubeconfigIdFeature = useFeature('KUBECONFIG_ID');
+  const loadDefaultKubeconfigId = useLoadDefaultKubeconfigId();
+
+  const clustersInfo = useClustersInfo();
   const notification = useNotification();
+  const navigate = useNavigate();
   const { t } = useTranslation();
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
@@ -36,14 +43,11 @@ function ClusterList() {
   const [showEdit, setShowEdit] = useState(false);
   const [editedCluster, setEditedCluster] = useState(null);
 
-  useShowNodeParamsError();
-
-  if (!clusters) {
-    return null;
-  }
+  const { clusters, currentCluster } = clustersInfo;
 
   const styleActiveCluster = entry => {
-    return entry?.kubeconfig?.['current-context'] === activeClusterName
+    return entry?.kubeconfig?.['current-context'] ===
+      currentCluster?.contextName
       ? { fontWeight: 'bolder' }
       : {};
   };
@@ -91,14 +95,14 @@ function ClusterList() {
       <Link
         className="fd-link"
         style={styleActiveCluster(entry)}
-        onClick={() => setCluster(entry.name)}
+        onClick={() => addCluster(entry, clustersInfo)}
       >
         {entry.name}
       </Link>
     </>,
     entry.currentContext.cluster.cluster.server,
     <ClusterStorageType clusterConfig={entry.config} />,
-    entry.config.description || EMPTY_TEXT_PLACEHOLDER,
+    entry.config?.description || EMPTY_TEXT_PLACEHOLDER,
   ];
 
   const actions = [
@@ -124,7 +128,7 @@ function ClusterList() {
         setChosenCluster(resource);
         handleResourceDelete({
           deleteFn: () => {
-            deleteCluster(resource?.name);
+            deleteCluster(resource?.name, clustersInfo);
             notification.notifySuccess({
               content: t('clusters.disconnect'),
             });
@@ -135,15 +139,28 @@ function ClusterList() {
   ];
 
   const extraHeaderContent = (
-    <Button
-      option="transparent"
-      glyph="add"
-      className="fd-margin-begin--sm"
-      onClick={() => setShowAdd(true)}
-      iconBeforeText
-    >
-      {t('clusters.add.title')}
-    </Button>
+    <>
+      <Button
+        option="transparent"
+        glyph="add"
+        className="fd-margin-begin--sm"
+        onClick={() => setShowAdd(true)}
+        iconBeforeText
+      >
+        {t('clusters.add.title')}
+      </Button>
+      {gardenerLoginFeature.isEnabled && (
+        <Button
+          option="transparent"
+          glyph="add"
+          className="fd-margin-begin--sm"
+          onClick={() => navigate('/gardener-login')}
+          iconBeforeText
+        >
+          {t('clusters.gardener.button')}
+        </Button>
+      )}
+    </>
   );
 
   const addDialog = (
@@ -166,16 +183,22 @@ function ClusterList() {
 
   const loadDefaultClusterButton = (
     <>
-      {features?.KUBECONFIG_ID?.isEnabled &&
-        features?.KUBECONFIG_ID?.config?.defaultKubeconfig && (
+      {kubeconfigIdFeature?.isEnabled &&
+        kubeconfigIdFeature?.config?.defaultKubeconfig && (
           <Button
-            onClick={() => loadDefaultKubeconfigId()}
+            onClick={loadDefaultKubeconfigId}
             className="fd-margin-end--tiny fd-margin-begin--tiny"
           >
             {t('clusters.add.load-default')}
           </Button>
         )}
     </>
+  );
+
+  const gardenerLoginButton = gardenerLoginFeature.isEnabled && (
+    <Button onClick={() => navigate('/gardener-login')} iconBeforeText>
+      {t('clusters.gardener.button')}
+    </Button>
   );
 
   if (!entries.length) {
@@ -200,6 +223,7 @@ function ClusterList() {
               >
                 {t('clusters.add.title')}
               </Button>
+              {gardenerLoginButton}
               {loadDefaultClusterButton}
             </>
           }
@@ -232,7 +256,7 @@ function ClusterList() {
         resource={chosenCluster}
         resourceTitle={chosenCluster?.kubeconfig['current-context']}
         deleteFn={e => {
-          deleteCluster(e.name);
+          deleteCluster(e.name, clustersInfo);
           notification.notifySuccess({
             content: t('clusters.disconnect'),
           });

@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
-import { Link, Button } from 'fundamental-react';
+import { Button } from 'fundamental-react';
+import { Link } from 'react-router-dom';
 import { createPatch } from 'rfc6902';
 import { cloneDeep } from 'lodash';
 import * as jp from 'jsonpath';
+import pluralize from 'pluralize';
 
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { usePut, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useGetList, useSingleGet } from 'shared/hooks/BackendAPI/useGet';
-import { navigateToResource, navigateToDetails } from 'shared/hooks/navigate';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
 import { YamlEditorProvider } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
@@ -26,9 +27,10 @@ import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useTranslation } from 'react-i18next';
 import { nameLocaleSort, timeSort } from '../../helpers/sortingfunctions';
 import { useVersionWarning } from 'hooks/useVersionWarning';
-import pluralize from 'pluralize';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
 import { ForceUpdateModalContent } from 'shared/ResourceForm/ForceUpdateModalContent';
+
+import { useUrl } from 'hooks/useUrl';
 
 /* to allow cloning of a resource set the following on the resource create component:
  *
@@ -55,14 +57,13 @@ ResourcesList.propTypes = {
   resourceTitle: PropTypes.string,
   namespace: PropTypes.string,
   hasDetailsView: PropTypes.bool,
-  fixedPath: PropTypes.bool,
   isCompact: PropTypes.bool,
   showTitle: PropTypes.bool,
   filter: PropTypes.func,
   listHeaderActions: PropTypes.node,
   description: PropTypes.node,
   readOnly: PropTypes.bool,
-  navigateFn: PropTypes.func,
+  customUrl: PropTypes.string,
   testid: PropTypes.string,
   omitColumnsIds: PropTypes.arrayOf(PropTypes.string.isRequired),
   resourceUrlPrefix: PropTypes.string,
@@ -152,12 +153,11 @@ export function ResourceListRenderer({
   createResourceForm: CreateResourceForm,
   createActionLabel,
   hasDetailsView,
-  fixedPath,
   title,
   showTitle,
   listHeaderActions,
   readOnly,
-  navigateFn,
+  customUrl,
   testid,
   omitColumnsIds = ['namespace'],
   customListActions = [],
@@ -203,6 +203,7 @@ export function ResourceListRenderer({
   const getRequest = useSingleGet();
   const updateResourceMutation = useUpdate(resourceUrl);
   const putRequest = usePut();
+  const { resourceUrl: resourceUrlFn } = useUrl();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => closeEditor(), [namespace]);
@@ -212,19 +213,15 @@ export function ResourceListRenderer({
     resourceType,
   );
 
+  const linkTo = entry =>
+    customUrl ? customUrl(entry) : resourceUrlFn(entry, { resourceType });
+
   const defaultColumns = [
     {
       header: t('common.headers.name'),
       value: entry =>
         hasDetailsView ? (
-          <Link
-            className="fd-link"
-            onClick={_ => {
-              if (navigateFn) return navigateFn(entry);
-              if (fixedPath) return navigateToResource(entry);
-              navigateToDetails(resourceType, entry.metadata.name);
-            }}
-          >
+          <Link className="fd-link" to={linkTo(entry)}>
             {nameSelector(entry)}
           </Link>
         ) : (

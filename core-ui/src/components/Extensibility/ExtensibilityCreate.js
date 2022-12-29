@@ -1,15 +1,15 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState, useContext } from 'react';
 import Immutable from 'immutable';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 
 import { ResourceForm } from 'shared/ResourceForm';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useGetSchema } from 'hooks/useGetSchema';
 import { prettifyKind } from 'shared/utils/helpers';
+import { ModeSelector } from 'shared/ResourceForm/components/ModeSelector';
 
 import { ResourceSchema } from './ResourceSchema';
 import { usePreparePresets, createTemplate, getDefaultPreset } from './helpers';
@@ -24,7 +24,9 @@ import { useVariables } from './hooks/useVariables';
 import { prepareRules } from './helpers/prepareRules';
 import { merge } from 'lodash';
 
-import { TriggerContextProvider } from './contexts/Trigger';
+import { TriggerContext, TriggerContextProvider } from './contexts/Trigger';
+import { useRecoilValue } from 'recoil';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 export function ExtensibilityCreateCore({
   formElementRef,
@@ -38,12 +40,13 @@ export function ExtensibilityCreateCore({
   editMode = false,
   ...props
 }) {
-  const { prepareVars, resetVars, readVars } = useVariables();
-  const { namespaceId: namespace } = useMicrofrontendContext();
+  const { prepareVars, readVars } = useVariables();
+  const namespace = useRecoilValue(activeNamespaceIdState);
   const notification = useNotification();
   const { t } = useTranslation();
   const general = createResource?.general;
   const api = useMemo(() => general?.resource || {}, [general?.resource]);
+  const triggers = useContext(TriggerContext);
 
   const emptyTemplate = useMemo(
     () => createTemplate(api, namespace, general?.scope),
@@ -64,7 +67,6 @@ export function ExtensibilityCreateCore({
   const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
 
   const updateStore = res => {
-    resetVars();
     readVars(res);
     const newStore = Immutable.fromJS(res);
     setStore(prevStore => prevStore.set('values', newStore));
@@ -108,10 +110,12 @@ export function ExtensibilityCreateCore({
 
     return {
       simpleRules: prepareSchemaRules(
-        fullSchemaRules.filter(item => item.simple ?? false),
+        fullSchemaRules,
+        item => item.simple ?? false,
       ),
       advancedRules: prepareSchemaRules(
-        fullSchemaRules.filter(item => item.advanced ?? true),
+        fullSchemaRules,
+        item => item.advanced ?? true,
       ),
     };
   }, [createResource]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -145,6 +149,14 @@ export function ExtensibilityCreateCore({
           presetValue,
         );
         setStore(getUIStoreFromResourceObj(updatedResource));
+        readVars(updatedResource);
+      }}
+      onModeChange={(oldMode, newMode) => {
+        if (oldMode === ModeSelector.MODE_YAML) {
+          triggers.disable();
+          readVars(resource);
+          setTimeout(() => triggers.enable());
+        }
       }}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
@@ -154,7 +166,7 @@ export function ExtensibilityCreateCore({
       initialResource={initialResource}
       afterCreatedFn={afterCreatedFn}
       handleNameChange={handleNameChange}
-      urlPath={general.urlPath}
+      urlPath={general?.urlPath}
       disableDefaultFields
     >
       <ResourceSchema

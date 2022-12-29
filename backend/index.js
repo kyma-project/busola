@@ -8,7 +8,6 @@ import { makeHandleRequest, serveStaticApp, serveMonaco } from './common';
 import { handleTracking } from './tracking.js';
 import jsyaml from 'js-yaml';
 //import { requestLogger } from './utils/other'; //uncomment this to log the outgoing traffic
-const { setupJWTCheck } = require('./jwtCheck');
 
 global.config = {};
 
@@ -20,10 +19,12 @@ try {
   );
 
   // config retrieved from busola's config map
-
-  const configFromMap = jsyaml.load(fs.readFileSync('./config/config.yaml'));
-
-  global.config = merge(defaultConfig, configFromMap).config;
+  if (fs.existsSync('./config/config.yaml')) {
+    const configFromMap = jsyaml.load(fs.readFileSync('./config/config.yaml'));
+    global.config = merge(defaultConfig, configFromMap).config;
+  } else {
+    global.config = defaultConfig.config;
+  }
 } catch (e) {
   console.log('Error while reading the configuration files', e?.message || e);
 }
@@ -50,7 +51,6 @@ if (gzipEnabled)
 if (process.env.NODE_ENV === 'development') {
   app.use(cors({ origin: '*' }));
 }
-setupJWTCheck(app);
 
 let server = null;
 
@@ -81,10 +81,9 @@ const handleRequest = makeHandleRequest();
 
 if (isDocker) {
   // yup, order matters here
-  serveStaticApp(app, '/core-ui/', '/core-ui');
   serveMonaco(app);
   app.use('/backend', handleRequest);
-  serveStaticApp(app, '/', '/core');
+  serveStaticApp(app, '/', '/core-ui');
 } else {
   handleTracking(app);
   app.use(handleRequest);

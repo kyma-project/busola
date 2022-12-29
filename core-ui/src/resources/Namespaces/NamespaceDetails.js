@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'fundamental-react';
 
@@ -60,7 +59,6 @@ export function NamespaceDetails(props) {
         glyph="add"
         onClick={() => {
           setShowAdd(true);
-          LuigiClient.uxManager().addBackdrop();
         }}
         iconBeforeText
       >
@@ -98,7 +96,6 @@ export function NamespaceDetails(props) {
         show={showAdd}
         onCancel={() => {
           setShowAdd(false);
-          LuigiClient.uxManager().removeBackdrop();
         }}
       />
     </ResourceDetails>

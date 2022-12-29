@@ -1,9 +1,14 @@
 import { ReactElement, ReactNode } from 'react';
 import { RecoilRoot } from 'recoil';
 import { mount, MountRendererProps } from 'enzyme';
+import { BrowserRouter } from 'react-router-dom';
 
 const AllTheProviders = ({ children }: { children: ReactNode }) => {
-  return <RecoilRoot>{children}</RecoilRoot>;
+  return (
+    <RecoilRoot>
+      <BrowserRouter>{children}</BrowserRouter>
+    </RecoilRoot>
+  );
 };
 
 const customMount = (node: ReactElement, options: MountRendererProps) =>

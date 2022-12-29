@@ -24,40 +24,26 @@ context('Test Persistent Volumes', () => {
   it('Create PV', () => {
     cy.navigateTo('Storage', 'Persistent Volumes');
 
-    cy.getIframeBody()
-      .contains('Create Persistent Volume')
-      .click();
+    cy.contains('Create Persistent Volume').click();
 
     cy.wrap(loadPV(PV_NAME)).then(PV_CONFIG => {
       const PV = JSON.stringify(PV_CONFIG);
       cy.pasteToMonaco(PV);
     });
 
-    cy.getIframeBody()
-      .find('[role="dialog"]')
-      .contains('button', 'Create')
-      .click();
+    cy.contains('[role="dialog"] button', 'Create').click();
 
-    cy.getIframeBody()
-      .contains('h3', PV_NAME)
-      .should('be.visible');
+    cy.contains('h3', PV_NAME).should('be.visible');
   });
 
   it('Check PV details', () => {
-    cy.getIframeBody()
-      .find('[data-testid=persistent-volumes-ref]')
-      .contains('ReadWriteOnce')
-      .should('be.visible');
+    cy.contains('ReadWriteOnce').should('be.visible');
 
-    cy.getIframeBody()
-      .contains('Events')
-      .should('be.visible');
+    cy.contains('Events').should('be.visible');
   });
 
   it('Check PV list and delete', () => {
-    cy.getIframeBody()
-      .contains('a', 'Persistent Volumes')
-      .click();
+    cy.contains('a', 'Persistent Volumes').click();
 
     cy.deleteFromGenericList(PV_NAME);
   });

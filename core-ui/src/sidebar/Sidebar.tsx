@@ -1,24 +1,30 @@
-import { useRecoilValue } from 'recoil';
+import { Suspense } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 import { SidebarNavigation } from 'sidebar/SidebarNavigation';
-import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
 import { Footer } from './Footer/Footer';
 
 import './Sidebar.scss';
 
-export const Sidebar = () => {
-  const pathname = window.location.pathname;
-  const configFeatures = useRecoilValue(configFeaturesState);
+const noSidebarPathnames = ['/clusters', '/no-permissions', '/gardener-login'];
 
-  if (!configFeatures?.REACT_NAVIGATION?.isEnabled || pathname === '/clusters')
-    return null;
+export const Sidebar = () => {
+  const { t } = useTranslation();
+  const pathname = window.location.pathname;
+  if (noSidebarPathnames.includes(pathname)) return null;
 
   return (
     <aside className="sidebar">
       <section className="sidebar__content">
-        <ErrorBoundary customMessage="navigation error" displayButton={false}>
-          <SidebarNavigation />
-        </ErrorBoundary>
+        <Suspense fallback={<Spinner size="m" />}>
+          <ErrorBoundary
+            customMessage={t('navigation.errors.sidebar')}
+            displayButton={false}
+          >
+            <SidebarNavigation />
+          </ErrorBoundary>
+        </Suspense>
       </section>
       <Footer />
     </aside>

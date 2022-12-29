@@ -27,7 +27,7 @@ const RoutedCRDetails = () => {
 export default (
   <Route
     path={
-      '/customresourcedefinitions/:customResourceDefinitionName/:resourceVersion/:resourceName'
+      'customresourcedefinitions/:customResourceDefinitionName/:resourceVersion/:resourceName'
     }
     element={
       <Suspense fallback={<Spinner />}>

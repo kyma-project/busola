@@ -406,6 +406,10 @@ input[type='checkbox'] {
   color: var(--sapCriticalColor) !important;
 }
 
+.fd-color--text {
+  color: var(--sapTextColor);
+}
+
 .break-word {
   word-break: break-word;
 }

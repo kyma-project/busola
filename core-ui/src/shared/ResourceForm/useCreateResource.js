@@ -1,14 +1,14 @@
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
-import { usePut, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
+import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
-import { navigateToResourceAfterCreate } from 'shared/hooks/navigate';
 import { createPatch } from 'rfc6902';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
 import { Button } from 'fundamental-react';
 import { ForceUpdateModalContent } from './ForceUpdateModalContent';
+import { useUrl } from 'hooks/useUrl';
+import { useNavigate } from 'react-router-dom';
 
 export function useCreateResource({
   singularName,
@@ -24,9 +24,10 @@ export function useCreateResource({
   const notification = useNotification();
   const getRequest = useSingleGet();
   const postRequest = usePost();
-  const putRequest = usePut();
   const patchRequest = useUpdate();
-  const { namespaceId } = useMicrofrontendContext();
+  const { scopedUrl } = useUrl();
+  const navigate = useNavigate();
+
   const isEdit = !!initialResource?.metadata?.name;
 
   const defaultAfterCreatedFn = () => {
@@ -40,12 +41,15 @@ export function useCreateResource({
         },
       ),
     });
-    if (!isEdit)
-      navigateToResourceAfterCreate(
-        namespaceId,
-        resource.metadata.name,
-        urlPath || pluralKind.toLowerCase(),
+    if (!isEdit) {
+      navigate(
+        scopedUrl(
+          `${urlPath || pluralKind.toLowerCase()}/${encodeURIComponent(
+            resource.metadata.name,
+          )}`,
+        ),
       );
+    }
   };
 
   const showError = error => {
@@ -75,12 +79,15 @@ export function useCreateResource({
     if (e) {
       e.preventDefault();
     }
-
     const mergedResource = {
       ...initialResource,
       ...resource,
-      metadata: { ...initialResource?.metadata, ...resource.metadata },
+      metadata: {
+        ...initialResource?.metadata,
+        ...resource.metadata,
+      },
     };
+
     try {
       if (isEdit) {
         await patchRequest(
@@ -106,9 +113,13 @@ export function useCreateResource({
 
         const makeForceUpdateFn = closeModal => {
           return async () => {
-            delete mergedResource?.metadata?.resourceVersion;
+            mergedResource.metadata.resourceVersion =
+              initialResource?.metadata.resourceVersion;
             try {
-              await putRequest(createUrl, mergedResource);
+              await patchRequest(
+                createUrl,
+                createPatch(initialResource, mergedResource),
+              );
               closeModal();
               onSuccess();
               if (typeof toggleFormFn === 'function') {
