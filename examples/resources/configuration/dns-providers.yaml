@@ -66,17 +66,15 @@ data:
       simple: true
       widget: SimpleList
       children:
-        - []
-        #- path: '[]'
-        #  simple: true
+        - path: '[]'
+          simple: true
       placeholder: domain.allowed
       defaultExpanded: true
       required: true
     - path: spec.domains.exclude
       widget: SimpleList
       children:
-        - []
-        #- path: '[]'
+        - path: '[]'
       placeholder: domain.forbidden
   general: |-
     resource:
@@ -107,6 +105,14 @@ data:
         metadata:
           annotations: 
             dns.gardener.cloud/class: garden
+        spec:
+          domains:
+            include: []
+            exclude: []
+          secretRef:
+            name: ''
+            namespace: ''
+          type: ''
   translations: |-
     en:
       metadata.annotations: Annotations
