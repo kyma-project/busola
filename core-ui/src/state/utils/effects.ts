@@ -79,10 +79,7 @@ export const clusterStorageEffect: ClusterStorageEffectFn = clusterStorageKey =>
             cluster?.config?.storage,
             'saving in localStorage',
           );
-          cluster.config = {
-            requiresCA: cluster.config ? cluster.config.requiresCA : false,
-            storage: 'localStorage',
-          };
+          cluster.config = { storage: 'localStorage' };
           localStorageClusters[clusterName] = cluster;
           break;
       }

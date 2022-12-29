@@ -19,13 +19,11 @@ export function createAuthHeaders(auth: AuthDataState) {
 export function createHeaders(
   authData: AuthDataState,
   cluster: ActiveClusterState,
-  requiresCA: boolean,
 ): HeadersInit {
   return {
     ...createAuthHeaders(authData),
     'X-Cluster-Url': cluster?.currentContext.cluster.cluster.server,
-    'X-Cluster-Certificate-Authority-Data': requiresCA
-      ? cluster?.currentContext.cluster.cluster['certificate-authority-data']
-      : undefined,
+    'X-Cluster-Certificate-Authority-Data':
+      cluster?.currentContext.cluster.cluster['certificate-authority-data'],
   } as HeadersInit;
 }
