@@ -17,6 +17,7 @@ export function ResourceRefRender({
   storeKeys,
   resource,
   widgets,
+  required,
   originalResource,
   nestingLevel,
   ...props
@@ -84,7 +85,7 @@ export function ResourceRefRender({
           data: { value: fromJS(value) },
         });
       }}
-      required
+      required={required}
       loading={loading}
       error={error}
       nestingLevel={nestingLevel}
