@@ -30,7 +30,6 @@ export function SimpleList({
   const { value } = store?.extractValues(storeKeys) || {};
   const listSize = value?.size || 0;
   const schemaPlaceholder = schema.get('placeholder');
-  const schemaRequired = schema.get('required');
   const inputInfo = schema.get('inputInfo');
   const tooltipContent = schema.get('description');
   const defaultOpen = schema.get('defaultExpanded');
@@ -66,16 +65,13 @@ export function SimpleList({
       defaultOpen={defaultOpen}
       container
       title={tFromStoreKeys(storeKeys, schema)}
-      required={schemaRequired ?? required}
+      required={required}
       nestingLevel={nestingLevel}
       {...props}
     >
       <div className="fd-row simple-list">
         <div className="fd-col fd-col-md--3 fd-margin-bottom--sm form-field__label">
-          <Label
-            required={schemaRequired ?? required}
-            tooltipContent={tExt(tooltipContent)}
-          >
+          <Label required={required} tooltipContent={tExt(tooltipContent)}>
             {tFromStoreKeys(storeKeys, schema)}
           </Label>
         </div>
