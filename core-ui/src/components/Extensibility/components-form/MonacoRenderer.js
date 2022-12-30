@@ -81,22 +81,18 @@ export function MonacoRenderer({
     [required, language],
   );
 
-  const schemaRequired = schema.get('required');
   const inputInfo = schema.get('inputInfo');
   const tooltipContent = schema.get('description');
 
   return (
     <ResourceForm.CollapsibleSection
       title={tFromStoreKeys(storeKeys, schema)}
-      required={schemaRequired ?? required}
+      required={required}
       defaultOpen={defaultOpen}
       nestingLevel={nestingLevel}
     >
       <div className="fd-margin-bottom--sm">
-        <Label
-          required={schemaRequired ?? required}
-          tooltipContent={tExt(tooltipContent)}
-        >
+        <Label required={required} tooltipContent={tExt(tooltipContent)}>
           {tFromStoreKeys(storeKeys, schema)}
         </Label>
       </div>

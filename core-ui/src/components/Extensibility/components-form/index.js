@@ -52,7 +52,10 @@ const pluginStack = [
 export const widgets = {
   RootRenderer: ({ children }) => <div>{children}</div>,
   GroupRenderer: ({ children }) => children,
-  WidgetRenderer,
+  WidgetRenderer: ({ schema, required, ...props }) => {
+    required = schema.get('required') ?? required;
+    return WidgetRenderer({ schema, required, ...props });
+  },
   pluginStack,
   pluginSimpleStack: validators,
   types: {
