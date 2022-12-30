@@ -14,7 +14,7 @@ import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
-import { addCluster, deleteCluster } from './../shared';
+import { deleteCluster } from './../shared';
 import { AddClusterDialog } from '../components/AddClusterDialog';
 import { EditCluster } from './EditCluster/EditCluster';
 import { ClusterStorageType } from './ClusterStorageType';
@@ -92,7 +92,11 @@ function ClusterList() {
   ];
 
   const rowRenderer = entry => [
-    <Link className="fd-link" to={`/cluster/${entry.contextName}`}>
+    <Link
+      className="fd-link"
+      to={`/cluster/${entry.contextName}`}
+      style={styleActiveCluster(entry)}
+    >
       {entry.name}
     </Link>,
     entry.currentContext.cluster.cluster.server,
