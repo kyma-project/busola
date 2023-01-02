@@ -206,6 +206,7 @@ Text widgets render a field as a text field. They are used by default for all st
 - **required** - a boolean which specifies if a field is required. The default value is taken from CustomResourceDefintion (CRD); if it doesn't exist in the CRD, then it defaults to `false`.
 - **inputInfo** - a string below the input field that shows how to fill in the input.
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
+- **readOnly** - a boolean which specifies if field is read only. Defaults to `false`.
 
 #### Example
 
