@@ -18,7 +18,7 @@ context('Test Custom Resources', () => {
       'cert.gardener.cloud',
     );
 
-    cy.get('table').should('have.length', 3);
+    cy.get('table').should('have.length', 1);
 
     cy.get('[role=row]')
       .contains('Certificates')
