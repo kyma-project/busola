@@ -8,6 +8,12 @@ metadata:
     busola.io/extension: resource
     busola.io/extension-version: '0.5'
 data:
+  dataSources: |-
+    otherTestResources:
+      resource:
+        kind: TestResource
+        group: busola.example.com
+        version: v1
   details: |-
     body:
       - name: Simple name
@@ -46,6 +52,7 @@ data:
           name: Type
 
     - var: varWithDefaultValue
+      name: varWithDefaultValue
       type: string
       simple: true
       widget: Text
@@ -55,18 +62,13 @@ data:
       name: varWithDynamicValue
       simple: true
       widget: Text
-      enum:
-        - 'Is simple'
-        - 'Is advanced'
-      dynamicValue: '$enumVar = simple ? "Is simple" : "Is advanced"'
-      visibility: '$exists($enumVar)'
-  list: |-
-    - name: Simple name
-      source: spec.name
-    - name: Advanced Name
-      source: spec.advancedName.name
-    - name: Advanced Type
-      source: spec.advancedName.type
+      dynamicValue: '$exists(spec.name) ? "Is simple" : "Is advanced"'
+
+    - var: varWithDataSources
+      name: varWithDataSources
+      simple: true
+      widget: Text
+      dynamicValue: "$string($otherTestResources())"
   general: |-
     resource:
       kind: TestResource
@@ -79,15 +81,13 @@ data:
     description: >-
       Customize the Test Resources view further with the Busola {{[extensibility
       docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}.
-  # dataSources: |-
-  #   relatedPizzas:
-  #     resource:
-  #       kind: Pizza
-  #       group: busola.example.com
-  #       version: v1
-  #     filter: >-
-  #       $root.spec.pizzas[name = $item.metadata.name and namespace =
-  #       $item.metadata.namespace]
+  list: |-
+    - name: Simple name
+      source: spec.name
+    - name: Advanced Name
+      source: spec.advancedName.name
+    - name: Advanced Type
+      source: spec.advancedName.type
   # presets: |-
   #   - name: Cash Delivery
   #     value:
