@@ -21,6 +21,9 @@ context('Test navigation features', () => {
     mockFeatures({
       PROMETHEUS: null,
       VISUAL_RESOURCES: { isEnabled: false },
+      HIDDEN_NAMESPACES: {
+        isEnabled: false,
+      },
     });
     cy.loginAndSelectCluster();
   });
@@ -37,7 +40,7 @@ context('Test navigation features', () => {
       .contains('eventing-controller') // link itself
       .click();
 
-    cy.contains('ServiceAccount').should('exist');
+    cy.contains('kubernetes.io/service-account-token').should('exist');
 
     cy.contains('Resource Graph').should('not.exist');
   });
