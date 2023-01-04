@@ -6,14 +6,6 @@ import { namespacesState } from 'state/namespacesAtom';
 import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
 import { K8sResource } from 'types';
 
-// type PayloadData = {
-//   data: {
-//     items: K8sResource[];
-//     apiVersion: string;
-//     kind: string;
-//   };
-// };
-
 export function useAvailableNamespaces() {
   const showHiddenNamespaces = useRecoilValue(showHiddenNamespacesState);
   const hiddenNamespaces = useGetHiddenNamespaces();
@@ -23,17 +15,6 @@ export function useAvailableNamespaces() {
     skip: false,
     pollingInterval: 0,
     onDataReceived: () => {},
-
-    // onDataReceived: () => {},
-    // onDataReceived: (payload: PayloadData) => {
-    //   const filteredNamespaces = payload.data.items
-    //     ?.map(n => n.metadata?.name)
-    //     ?.filter(n => {
-    //       if (showHiddenNamespaces) return true;
-    //       return !hiddenNamespaces.includes(n);
-    //     });
-    //   setNamespaces(filteredNamespaces);
-    // },
   }) as {
     loading: boolean;
     error: any;
