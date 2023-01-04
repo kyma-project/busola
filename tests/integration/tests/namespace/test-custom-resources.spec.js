@@ -9,7 +9,6 @@ context('Test Custom Resources', () => {
   });
 
   it('Check CR groups list', () => {
-    cy.wait(500); // TODO
     cy.navigateTo('Configuration', 'Custom Resources');
 
     cy.contains('h3', 'Custom Resources').should('be.visible');

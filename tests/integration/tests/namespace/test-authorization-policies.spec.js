@@ -83,8 +83,6 @@ context('Test Authorization Policies', () => {
 
     cy.contains('Matches all Pods in the Namespace').should('be.visible');
 
-    // cy.wait(500); // TODO check on CI
-
     cy.contains('Rule #1 to when', { timeout: 10000 }).click();
 
     cy.contains('To #1 methods paths', { timeout: 10000 }).click();

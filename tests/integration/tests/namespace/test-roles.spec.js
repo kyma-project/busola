@@ -16,7 +16,6 @@ context('Test Roles', () => {
   });
 
   it('Create a Role', () => {
-    cy.wait(500); // TODO - check why Configuration is detached from DOM
     cy.navigateTo('Configuration', 'Roles');
 
     cy.contains(ROLE_NAME).should('not.exist');

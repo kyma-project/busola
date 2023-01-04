@@ -47,7 +47,6 @@ context('Test Protected Resources', () => {
   });
 
   it('Create a protected resource', () => {
-    cy.wait(500); // TODO
     cy.navigateTo('Configuration', 'Config Maps');
 
     cy.contains('Create Config Map').click();

@@ -76,7 +76,6 @@ context('Test reduced permissions', () => {
   it('Create Service Account', () => {
     cy.goToNamespaceDetails();
 
-    cy.wait(500); // TODO
     cy.navigateTo('Configuration', 'Service Accounts');
 
     cy.contains('Create Service Account').click();
