@@ -125,9 +125,9 @@ export const useGetExtensions = () => {
   }, [cluster, auth]);
 };
 
-const defaultValue = null;
-// null for loading,
+// null for defaultValue,
 // empty array for value or error
+const defaultValue = null;
 export const extensionsState: RecoilState<ExtResource[] | null> = atom<
   ExtResource[] | null
 >({

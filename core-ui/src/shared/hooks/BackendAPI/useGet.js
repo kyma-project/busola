@@ -119,10 +119,6 @@ const useGetHook = processDataFn =>
 
     React.useEffect(_ => _ => abortController.current.abort(), []);
 
-    // if (path.endsWith('/namespaces')) {
-    //   console.log('dataaaa', data);
-    // }
-
     return {
       data,
       loading,
@@ -301,9 +297,7 @@ function handleListDataReceived(filter) {
             oldData[idx]?.metadata.resourceVersion,
         ))
     ) {
-      // console.log('tutaj', newData, oldData);
       lastResourceVersionRef.current = newData.metadata?.resourceVersion;
-      // console.log('newdatitems', newData.items);
       setDataFn(newData.items);
     }
   };
