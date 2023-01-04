@@ -4,6 +4,11 @@ context('Test Events', () => {
   Cypress.skipAfterFail();
 
   before(() => {
+    mockFeatures({
+      HIDDEN_NAMESPACES: {
+        isEnabled: false,
+      },
+    });
     cy.loginAndSelectCluster();
   });
 
