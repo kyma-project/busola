@@ -4,11 +4,8 @@ context('Test Events', () => {
   Cypress.skipAfterFail();
 
   before(() => {
-    mockFeatures({
-      HIDDEN_NAMESPACES: {
-        isEnabled: false,
-      },
-    });
+    cy.setBusolaFeature('HIDDEN_NAMESPACES', false);
+
     cy.loginAndSelectCluster();
   });
 
