@@ -13,7 +13,8 @@ $defs:
     description: A short hint about the input field value
   defaultExpanded:
     type: boolean
-    description: Whether the widget should be expanded by default. Defaults to false.
+    description: Whether the widget should be expanded by default. 
+    default: false
   component:
     type: object
     required:
@@ -287,3 +288,7 @@ $widgets:
             type: string
         placeholder:
           $ref: "#/$defs/placeholder"
+        readOnly:
+          type: boolean
+          description: a boolean which specifies if field is read only.
+          default: false
