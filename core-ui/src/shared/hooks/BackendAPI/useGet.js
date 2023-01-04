@@ -64,6 +64,7 @@ const useGetHook = processDataFn =>
         }
 
         if (abortController.current.signal.aborted) return;
+
         if (typeof onDataReceived === 'function') {
           onDataReceived({ data: payload });
         }
@@ -117,6 +118,10 @@ const useGetHook = processDataFn =>
     }, [authData]);
 
     React.useEffect(_ => _ => abortController.current.abort(), []);
+
+    // if (path.endsWith('/namespaces')) {
+    //   console.log('dataaaa', data);
+    // }
 
     return {
       data,
@@ -296,7 +301,9 @@ function handleListDataReceived(filter) {
             oldData[idx]?.metadata.resourceVersion,
         ))
     ) {
+      // console.log('tutaj', newData, oldData);
       lastResourceVersionRef.current = newData.metadata?.resourceVersion;
+      // console.log('newdatitems', newData.items);
       setDataFn(newData.items);
     }
   };

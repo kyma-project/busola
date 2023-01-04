@@ -17,9 +17,10 @@ import { useSidecar } from 'shared/hooks/useSidecarInjection';
 import { CONFIG } from './config';
 import { useUrl } from 'hooks/useUrl';
 import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+import { namespacesState } from 'state/namespacesAtom';
 
 import './NamespaceCreate.scss';
-import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
 
 const ISTIO_INJECTION_LABEL = 'istio-injection';
 const ISTIO_INJECTION_ENABLED = 'enabled';
@@ -39,7 +40,7 @@ export function NamespaceCreate({
   const { t } = useTranslation();
   const { clusterUrl } = useUrl();
   const navigate = useNavigate();
-  const { silentRefetch } = useAvailableNamespaces();
+  const setNamespaces = useSetRecoilState(namespacesState);
 
   const [namespace, setNamespace] = useState(
     initialNamespace ? cloneDeep(initialNamespace) : createNamespaceTemplate(),
@@ -125,8 +126,8 @@ export function NamespaceCreate({
 
   async function afterNamespaceCreated() {
     if (!initialNamespace) {
+      setNamespaces(namespaces => [...namespaces, namespace.metadata.name]);
       navigate(clusterUrl(`namespaces/${namespace.metadata?.name}`));
-      silentRefetch();
     }
 
     const additionalRequests = [];
@@ -141,6 +142,7 @@ export function NamespaceCreate({
     const rejectedRequest = additionalResults.find(
       result => result.status === 'rejected',
     );
+
     if (!rejectedRequest) {
       onCompleted(
         `Namespace ${namespace.metadata.name} ${
