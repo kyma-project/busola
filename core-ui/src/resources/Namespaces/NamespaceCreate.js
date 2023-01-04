@@ -19,6 +19,7 @@ import { useUrl } from 'hooks/useUrl';
 import { useNavigate } from 'react-router-dom';
 
 import './NamespaceCreate.scss';
+import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
 
 const ISTIO_INJECTION_LABEL = 'istio-injection';
 const ISTIO_INJECTION_ENABLED = 'enabled';
@@ -38,6 +39,7 @@ export function NamespaceCreate({
   const { t } = useTranslation();
   const { clusterUrl } = useUrl();
   const navigate = useNavigate();
+  const { silentRefetch } = useAvailableNamespaces();
 
   const [namespace, setNamespace] = useState(
     initialNamespace ? cloneDeep(initialNamespace) : createNamespaceTemplate(),
@@ -124,6 +126,7 @@ export function NamespaceCreate({
   async function afterNamespaceCreated() {
     if (!initialNamespace) {
       navigate(clusterUrl(`namespaces/${namespace.metadata?.name}`));
+      silentRefetch();
     }
 
     const additionalRequests = [];
