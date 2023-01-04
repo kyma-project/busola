@@ -24,7 +24,7 @@ export function useAvailableNamespaces() {
     pollingInterval: 0,
     onDataReceived: (payload: PayloadData) => {
       const filteredNamespaces = payload.data.items
-        ?.map((n: K8sResource) => n.metadata?.name)
+        ?.map(n => n.metadata?.name)
         ?.filter(n => {
           if (showHiddenNamespaces) return true;
           return !hiddenNamespaces.includes(n);
