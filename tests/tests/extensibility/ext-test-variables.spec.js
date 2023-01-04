@@ -135,11 +135,52 @@ context('Test extensibility variables', () => {
       .find('[data-testid="varWithDefaultValue"]:visible')
       .should('have.value', 'default');
 
-    // test vars with dynamicValue
+    // TO DO test vars with dynamicValue
     // cy.get('@form')
     //   .find('[data-testid="varWithDynamicValue"]:visible')
     //   .find('input')
     //   .should('have.value', 'Is default');
+  });
+
+  it('Tests data sources and triggers', () => {
+    cy.get('.fd-dialog__content').as('form');
+
+    // test if trigger / subscribe works
+    cy.get('@form')
+      .find('[data-testid="spec.combined"]:visible')
+      .should('have.value', '');
+
+    cy.get('@form')
+      .find('[data-testid="spec.prefix"]:visible')
+      .type('1');
+    cy.get('@form')
+      .find('[data-testid="anotherName"]:visible')
+      .type('2');
+    cy.get('@form')
+      .find('[data-testid="spec.suffix"]:visible')
+      .type('3');
+
+    cy.get('@form')
+      .find('[data-testid="spec.combined"]:visible')
+      .should('have.value', '123');
+
+    // test if trigger / subscribe works with data sources
+    cy.get('@form')
+      .find('[data-testid="spec.existingResources"]:visible')
+      .should('have.value', '');
+
+    cy.get('@form')
+      .find('[data-testid="spec.trigger"]:visible')
+      .type('s');
+    cy.wait(100);
+    cy.get('@form')
+      .find('[data-testid="spec.trigger"]:visible')
+      .clear()
+      .type('sth');
+
+    cy.get('@form')
+      .find('[data-testid="spec.existingResources"]:visible')
+      .should('have.value', '["var1","var2"]');
 
     // create resource
     cy.get('@form')

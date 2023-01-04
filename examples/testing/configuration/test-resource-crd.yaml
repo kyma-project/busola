@@ -38,5 +38,20 @@ spec:
                     type:
                       description: Advanced name type
                       type: string
+                trigger:
+                  description: Field that triggers another field
+                  type: string
+                existingResources:
+                  description: String of existing resource names
+                  type: string
+                prefix:
+                  type: string
+                  description: Prefix of an name
+                suffix:
+                  type: string
+                  description: Suffix of an name
+                combined:
+                  type: string
+                  description: Name combined from prefix and suffix
   conversion:
     strategy: None

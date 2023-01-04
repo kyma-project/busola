@@ -64,11 +64,38 @@ data:
       widget: Text
       dynamicValue: '$exists(spec.name) ? "Is simple" : "Is advanced"'
 
-    - var: varWithDataSources
-      name: varWithDataSources
+    - path: spec.prefix
+      name: Prefix
+      simple: true
+      trigger: [combined]
+
+    - var: anotherName
+      name: anotherName
       simple: true
       widget: Text
-      dynamicValue: "$string($otherTestResources())"
+      trigger: [combined]
+
+    - path: spec.suffix
+      name: Suffix
+      simple: true
+      trigger: [combined]
+
+    - path: spec.combined
+      name: Combined
+      simple: true
+      subscribe:        
+        combined: "spec.prefix & $anotherName & spec.suffix"
+
+    - simple: true
+      path: spec.trigger
+      name: Trigger
+      trigger: [testTrigger]
+
+    - simple: true
+      path: spec.existingResources
+      name: Existing resources
+      subscribe:        
+        testTrigger: "$string($otherTestResources().items.metadata.name)"
   general: |-
     resource:
       kind: TestResource
@@ -89,12 +116,10 @@ data:
     - name: Advanced Type
       source: spec.advancedName.type
   # presets: |-
-  #   - name: Cash Delivery
+  #   - name: default
+  #     default: true
   #     value:
   #       spec:
-  #         orderDetails:
-  #           paymentMethod: CASH
-  #           realization: DELIVERY
   #   - name: Card Pickup
   #     value:
   #       spec:
