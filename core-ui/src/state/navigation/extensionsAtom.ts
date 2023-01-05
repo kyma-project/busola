@@ -66,7 +66,8 @@ async function getExtensionConfigMaps(
     '/api/v1/configmaps?labelSelector=busola.io/extension=resource';
   const namespacedCMUrl = `/api/v1/namespaces/${currentNamespace ??
     kubeconfigNamespace}/configmaps?labelSelector=busola.io/extension=resource`;
-  //sprawdzic czy jest currentnamespace
+
+  //jestesmy na klastrze
   if (!currentNamespace) {
     const hasAccessToClusterCMList = doesUserHavePermission(
       ['list'],
@@ -86,12 +87,18 @@ async function getExtensionConfigMaps(
       return [];
     }
   } else {
+    console.log('hello');
+
     // + domergowanie listy dla current namespace jesśli istnieje + nie robimy tego calla jeśli mieliśmy dostęp do wszystkich CM  doesUserHavePermission oraz fetch pod `/api/v1/namespaces/${currentNamespace}/configmaps?labelSelector=busola.io/extension=resource`;
+
     const hasAccessToClusterCMList = doesUserHavePermission(
       ['list'],
       { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
       permissionSet,
     );
+
+    console.log({ hasAccessToClusterCMList });
+
     const url = hasAccessToClusterCMList ? clusterCMUrl : namespacedCMUrl;
 
     try {
@@ -174,45 +181,50 @@ export const useGetExtensions = () => {
       if (!cluster) {
         setExtensions([]);
         setNonNamespacedExtensions(null);
-      } else {
-        const configs = await getExtensions(
-          fetchFn,
-          cluster.currentContext.namespace,
-          namespace,
-          permissionSet,
-        );
-        console.log('configs');
-        if (!configs) {
-          setExtensions([]);
-          setNonNamespacedExtensions(null);
-        } else {
-          if (!nonNamespacedExtensions) {
-            const configSet = {
-              configFeatures: features!,
-              openapiPathIdList,
-              permissionSet,
-            };
-            const isNodeVisibleForCurrentConfigSet = partial(
-              shouldNodeBeVisible,
-              configSet,
-            );
-            const filteredConfigs = configs.filter(node =>
-              isNodeVisibleForCurrentConfigSet(mapExtResourceToNavNode(node)),
-            );
-            setExtensions(extensions => [
-              ...(extensions || []),
-              ...filteredConfigs,
-            ]);
-          }
+        return;
+      }
 
-          // if (namespace) {
-          //   const hasAccessToClusterCMList = doesUserHavePermission(
-          //     ['list'],
-          //     { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
-          //     permissionSet,
-          //   );
-          // }
+      const configs = await getExtensions(
+        fetchFn,
+        cluster.currentContext.namespace,
+        namespace,
+        permissionSet,
+      );
+
+      console.log({ configs });
+      if (!configs) {
+        setExtensions([]);
+        setNonNamespacedExtensions(null);
+      } else {
+        if (!nonNamespacedExtensions) {
+          const configSet = {
+            configFeatures: features!,
+            openapiPathIdList,
+            permissionSet,
+          };
+          console.log('here', configs);
+          const isNodeVisibleForCurrentConfigSet = partial(
+            shouldNodeBeVisible,
+            configSet,
+          );
+          const filteredConfigs = configs.filter(node =>
+            isNodeVisibleForCurrentConfigSet(mapExtResourceToNavNode(node)),
+          );
+
+          console.log({ filteredConfigs });
+          setExtensions(extensions => [
+            ...(extensions || []),
+            ...filteredConfigs,
+          ]);
         }
+
+        // if (namespace) {
+        //   const hasAccessToClusterCMList = doesUserHavePermission(
+        //     ['list'],
+        //     { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
+        //     permissionSet,
+        //   );
+        // }
       }
     };
 
