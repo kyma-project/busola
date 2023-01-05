@@ -61,7 +61,7 @@ async function getExtensionConfigMaps(
   kubeconfigNamespace: string,
   currentNamespace: string,
   permissionSet: PermissionSetState,
-) {
+): Promise<Array<ConfigMapResponse>> {
   const clusterCMUrl =
     '/api/v1/configmaps?labelSelector=busola.io/extension=resource';
   const namespacedCMUrl = `/api/v1/namespaces/${currentNamespace ??
@@ -80,7 +80,7 @@ async function getExtensionConfigMaps(
     try {
       const response = await fetchFn({ relativeUrl: url });
       const configMapResponse: ConfigMapListResponse = await response.json();
-      return configMapResponse?.items || [];
+      return configMapResponse?.items ?? [];
     } catch (e) {
       console.warn('Cannot load cluster params from the target cluster: ', e);
       return [];
@@ -131,7 +131,7 @@ const getExtensions = async (
       permissionSet,
     );
 
-    const configMapsExtensions = configMaps?.map(configMap => {
+    const configMapsExtensions = configMaps.map(configMap => {
       const convertYamlToObject: (
         yamlString: string,
       ) => Record<string, any> | null = yamlString => {
@@ -172,7 +172,7 @@ export const useGetExtensions = () => {
   useEffect(() => {
     const manageExtensions = async () => {
       if (!cluster) {
-        setExtensions(null);
+        setExtensions([]);
         setNonNamespacedExtensions(null);
       } else {
         const configs = await getExtensions(
@@ -183,7 +183,7 @@ export const useGetExtensions = () => {
         );
         console.log('configs');
         if (!configs) {
-          setExtensions(null);
+          setExtensions([]);
           setNonNamespacedExtensions(null);
         } else {
           if (!nonNamespacedExtensions) {
@@ -205,18 +205,18 @@ export const useGetExtensions = () => {
             ]);
           }
 
-          if (namespace) {
-            const hasAccessToClusterCMList = doesUserHavePermission(
-              ['list'],
-              { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
-              permissionSet,
-            );
-          }
+          // if (namespace) {
+          //   const hasAccessToClusterCMList = doesUserHavePermission(
+          //     ['list'],
+          //     { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
+          //     permissionSet,
+          //   );
+          // }
         }
       }
     };
 
-    manageExtensions();
+    void manageExtensions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cluster, auth, permissionSet, namespace]);
 };
