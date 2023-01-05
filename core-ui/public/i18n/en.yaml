@@ -162,6 +162,7 @@ clusters:
     missing-configuration-data: Configuration included properly. Fill the remaining required data.
     upload-paste-kubeconfig: Upload or paste your kubeconfig file
     wrong-configuration: Cannot apply the configuration
+    connection-failed: Error connecting to cluster. Check your configuration and make sure the cluster is online.
   name_singular: Cluster
   oidc: OIDC
   overview:
@@ -452,9 +453,9 @@ common:
   'yes': 'yes'
 components:
   incorrect-path:
-    title: 
+    title:
       default: Incorrect path
-    message: 
+    message:
       default: The provided path does not exist. You will get redirected.
       cluster: The provided path does not exist. You will get redirected to Clusters Details.
       clusters: The provided path does not exist. You will get redirected to Clusters Overview.
