@@ -10,8 +10,8 @@ type NotificationContextProps = {
   defaultVisibilityTime: number;
 };
 
-type NotifySuccessFn = (args: ToastProps) => void;
-type NotifyErrorFn = (args: ErrorModalProps) => void;
+type NotifySuccessFn = (props: ToastProps) => void;
+type NotifyErrorFn = (props: ErrorModalProps) => void;
 
 type NotificationContextArgs = {
   isOpen: boolean;
@@ -21,8 +21,8 @@ type NotificationContextArgs = {
 
 export const NotificationContext = createContext<NotificationContextArgs>({
   isOpen: false,
-  notifySuccess: () => {},
-  notifyError: () => {},
+  notifySuccess: props => {},
+  notifyError: props => {},
 });
 
 export const NotificationProvider = ({

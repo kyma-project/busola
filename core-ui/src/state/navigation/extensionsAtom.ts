@@ -122,7 +122,7 @@ export const useGetExtensions = () => {
     };
     void manageExtensions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cluster, auth]);
+  }, [cluster, auth, openapiPathIdList]);
 };
 
 // null for defaultValue,
