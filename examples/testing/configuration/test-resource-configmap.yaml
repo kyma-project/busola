@@ -101,11 +101,14 @@ data:
       path: spec.arrayOfObjects
       simple: true
       children:
-        - path: '[].string'
-          name: string
+        - path: '[].withValue'
+          name: withValue
+          simple: true
+        - path: '[].withoutValue'
+          name: withoutValue
           simple: true
       template:
-        string: 'string'
+        withValue: 'string'
 
   general: |-
     resource:

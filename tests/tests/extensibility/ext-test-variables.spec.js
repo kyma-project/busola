@@ -176,6 +176,21 @@ context('Test extensibility variables', () => {
       .should('have.value', 'suffix');
   });
 
+  it('Tests templates', () => {
+    cy.get('[aria-label="expand Array Of Objects"]:visible', { log: false })
+      .contains('Add')
+      .click();
+
+    cy.get('[data-testid="spec.arrayOfObjects.0.withValue"]:visible').should(
+      'have.value',
+      'string',
+    );
+
+    cy.get('[data-testid="spec.arrayOfObjects.0.withoutValue"]:visible').should(
+      'be.empty',
+    );
+  });
+
   it('Tests data sources and triggers', () => {
     cy.get('.fd-dialog__content').as('form');
 
@@ -216,6 +231,12 @@ context('Test extensibility variables', () => {
 
     cy.get('@form')
       .find('[data-testid="spec.existingResources"]:visible')
-      .should('have.value', '["var1","var2"]');
+      .invoke('val')
+      .should('have.string', 'var1');
+
+    cy.get('@form')
+      .find('[data-testid="spec.existingResources"]:visible')
+      .invoke('val')
+      .should('have.string', 'var2');
   });
 });

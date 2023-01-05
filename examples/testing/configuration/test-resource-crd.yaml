@@ -60,7 +60,9 @@ spec:
                   items:
                     type: object
                     properties:
-                      string:
+                      withValue:
+                        type: string
+                      withoutValue:
                         type: string
 
   conversion:
