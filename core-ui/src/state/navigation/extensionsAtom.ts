@@ -2,13 +2,7 @@ import jsyaml from 'js-yaml';
 import { mapValues, partial } from 'lodash';
 import { useEffect, useState } from 'react';
 import { ExtResource } from '../types';
-import {
-  atom,
-  RecoilState,
-  useRecoilState,
-  useRecoilValue,
-  useSetRecoilState,
-} from 'recoil';
+import { atom, RecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { clusterState } from '../clusterAtom';
 import { authDataState } from '../authDataAtom';
 import { getFetchFn } from '../utils/getFetchFn';
