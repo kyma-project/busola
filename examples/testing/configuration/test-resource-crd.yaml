@@ -53,5 +53,15 @@ spec:
                 combined:
                   type: string
                   description: Name combined from prefix and suffix
+
+                arrayOfObjects:
+                  type: array
+                  description: Array of objects
+                  items:
+                    type: object
+                    properties:
+                      string:
+                        type: string
+
   conversion:
     strategy: None

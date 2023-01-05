@@ -62,7 +62,7 @@ data:
       name: varWithDynamicValue
       simple: true
       widget: Text
-      dynamicValue: '$exists(spec.name) ? "Is simple" : "Is advanced"'
+      dynamicValue: '$root.metadata.name = "resource-name" ? "default name" : "unnamed"'
 
     - path: spec.prefix
       name: Prefix
@@ -96,6 +96,17 @@ data:
       name: Existing resources
       subscribe:        
         testTrigger: "$string($otherTestResources().items.metadata.name)"
+
+    - widget: GenericList
+      path: spec.arrayOfObjects
+      simple: true
+      children:
+        - path: '[].string'
+          name: string
+          simple: true
+      template:
+        string: 'string'
+
   general: |-
     resource:
       kind: TestResource
@@ -115,14 +126,14 @@ data:
       source: spec.advancedName.name
     - name: Advanced Type
       source: spec.advancedName.type
-  # presets: |-
-  #   - name: default
-  #     default: true
-  #     value:
-  #       spec:
-  #   - name: Card Pickup
-  #     value:
-  #       spec:
-  #         orderDetails:
-  #           paymentMethod: CARD
-  #           realization: SELF-PICKUP
+  presets: |-
+    - name: default
+      default: true
+      value:
+        metadata:
+          name: resource-name
+    - name: Fixes
+      value:
+        spec:
+          prefix: prefix
+          suffix: suffix

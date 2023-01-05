@@ -13,6 +13,7 @@ export function Presets({ presets, onSelect, ...otherProps }) {
   return (
     <div className="fd-margin-bottom--xs">
       <Dropdown
+        id="presets"
         className="resource-form__presets"
         placeholder={t('common.create-form.choose-preset')}
         compact

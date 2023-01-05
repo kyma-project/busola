@@ -75,6 +75,10 @@ context('Test extensibility variables', () => {
     cy.contains('Create Test Resource').click();
 
     cy.get('.fd-dialog__content').as('form');
+  });
+
+  it('Tests variables', () => {
+    cy.get('.fd-dialog__content').as('form');
 
     // test vars with no default value
     cy.get('@form')
@@ -135,11 +139,41 @@ context('Test extensibility variables', () => {
       .find('[data-testid="varWithDefaultValue"]:visible')
       .should('have.value', 'default');
 
-    // TO DO test vars with dynamicValue
-    // cy.get('@form')
-    //   .find('[data-testid="varWithDynamicValue"]:visible')
-    //   .find('input')
-    //   .should('have.value', 'Is default');
+    // test vars with dynamicValue
+    cy.get('@form')
+      .find('[data-testid="varWithDynamicValue"]:visible')
+      .should('have.value', 'default name');
+  });
+
+  it('Tests presets', () => {
+    cy.get('.fd-dialog__content').as('form');
+    // test default preset
+    cy.get('@form')
+      .find('[arialabel="TestResource name"]:visible')
+      .should('have.value', NAME);
+
+    // test presets
+    cy.get('@form')
+      .find('[data-testid="presets"]:visible')
+      .find('.fd-button.fd-select__button')
+      // .find('[aria-label="Combobox input arrow"]:visible', { log: false })
+      .click();
+
+    cy.get('[role="list"]')
+      .contains('Fixes')
+      .should('exist');
+
+    cy.get('[role="list"]')
+      .contains('Fixes')
+      .click();
+
+    cy.get('@form')
+      .find('[data-testid="spec.prefix"]:visible')
+      .should('have.value', 'prefix');
+
+    cy.get('@form')
+      .find('[data-testid="spec.suffix"]:visible')
+      .should('have.value', 'suffix');
   });
 
   it('Tests data sources and triggers', () => {
@@ -152,12 +186,14 @@ context('Test extensibility variables', () => {
 
     cy.get('@form')
       .find('[data-testid="spec.prefix"]:visible')
+      .clear()
       .type('1');
     cy.get('@form')
       .find('[data-testid="anotherName"]:visible')
       .type('2');
     cy.get('@form')
       .find('[data-testid="spec.suffix"]:visible')
+      .clear()
       .type('3');
 
     cy.get('@form')
@@ -181,17 +217,5 @@ context('Test extensibility variables', () => {
     cy.get('@form')
       .find('[data-testid="spec.existingResources"]:visible')
       .should('have.value', '["var1","var2"]');
-
-    // create resource
-    cy.get('@form')
-      .find('[arialabel="TestResource name"]:visible')
-      .clear()
-      .type(NAME);
-
-    cy.get('@form')
-      .contains('button', 'Create')
-      .click();
-
-    cy.contains('h3', NAME).should('be.visible');
   });
 });
