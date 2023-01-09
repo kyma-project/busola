@@ -2,13 +2,12 @@
 
 ## Overview
 
-Busola is a web-based UI for managing resources within Kyma or any Kubernetes cluster. It consists of separate frontend applications.
+Busola is a web-based UI for managing resources within a Kubernetes cluster. It's based on the [ReactJS](https://reactjs.org/) library.
 
-### Components
+### Subcomponents
 
-Busola project consists of the following UI projects:
+Busola project contains additional sub-projects:
 
-- [`Core UI`](./core-ui) - The main frame
 - [`Backend`](./backend) - A kind of a proxy between Busola and the Kubernetes cluster
 - [`Tests`](./tests) - Acceptance and end-to-end tests
 
@@ -27,16 +26,20 @@ Busola supports:
 To install dependencies for the root and all UI projects, and to prepare symlinks for local libraries within this repository, run the following command:
 
 ```bash
-npm run bootstrap:ci
+npm install
 ```
 
-> **NOTE:** The `npm run bootstrap:ci` command:
+> **NOTE:** The `npm run install` command:
 >
 > - Installs root dependencies provided in the [`package.json`](./package.json) file.
 > - Installs dependencies for the [libraries](#components).
 > - Builds all the [libraries](#components).
 
 Read [Install Kyma Dashboard manually](docs/install-kyma-dashboard-manually.md) to learn how to install the Dashboard with Istio Ingress and how to install it on a Kyma cluster.
+
+## Usage
+
+Run the `npm start` command in the root folder.
 
 ## Configuration
 
