@@ -1,4 +1,3 @@
-import { isEqual } from 'lodash';
 import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
@@ -12,27 +11,30 @@ export function useAvailableNamespaces() {
   const hiddenNamespaces = useGetHiddenNamespaces();
   const [namespaces, setNamespaces] = useRecoilState(namespacesState);
 
-  const { data, refetch } = useGetList()('/api/v1/namespaces', {
+  const { data, refetch, silentRefetch } = useGetList()('/api/v1/namespaces', {
     skip: false,
     pollingInterval: 0,
     onDataReceived: () => {},
   }) as {
+    loading: boolean;
+    error: any;
     data: Array<K8sResource> | null;
-    refetch: () => void;
+    refetch: VoidFunction;
+    silentRefetch: VoidFunction;
   };
 
-  const filteredNamespaces = data
-    ?.map((n: K8sResource) => n.metadata?.name)
-    ?.filter(n => {
-      if (showHiddenNamespaces) return true;
-      return !hiddenNamespaces.includes(n);
-    });
-
   useEffect(() => {
-    if (filteredNamespaces && !isEqual(namespaces, filteredNamespaces)) {
+    const filteredNamespaces = data
+      ?.map(n => n.metadata?.name)
+      ?.filter(n => {
+        if (showHiddenNamespaces) return true;
+        return !hiddenNamespaces.includes(n);
+      });
+    if (filteredNamespaces) {
+      console.log({ filteredNamespaces });
       setNamespaces(filteredNamespaces);
     }
-  }, [filteredNamespaces, namespaces, setNamespaces]);
+  }, [data, hiddenNamespaces, setNamespaces, showHiddenNamespaces]);
 
-  return { namespaces, refetch };
+  return { namespaces, refetch, silentRefetch, setNamespaces };
 }

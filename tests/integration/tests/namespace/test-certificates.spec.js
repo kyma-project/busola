@@ -15,7 +15,6 @@ context('Test Certificates', () => {
   });
 
   it('Adds and displays a certificate', () => {
-    cy.wait(500); // TODO
     cy.navigateTo('Configuration', 'Certificates');
 
     cy.url().should('match', /certificates$/);

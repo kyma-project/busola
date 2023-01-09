@@ -18,19 +18,17 @@ context('Test DNS Entries', () => {
   });
 
   it('Create DNS Entry', () => {
-    cy.wait(500);
     cy.navigateTo('Configuration', 'Dns Entries');
 
     cy.contains('Create DNS Entry').click();
-
-    // name
-    cy.wait(500);
-    cy.get('[ariaLabel="DNSEntry name"]:visible').type(DNS_ENTRY_NAME);
 
     // ttl
     cy.get('[placeholder^="Enter the time to live"]:visible')
       .clear()
       .type(TTL);
+
+    // name
+    cy.get('[ariaLabel="DNSEntry name"]:visible').type(DNS_ENTRY_NAME);
 
     // dns name
     cy.get('[placeholder^="Select the DNSName"]:visible')

@@ -1,7 +1,25 @@
 import { createContext, useContext, useState } from 'react';
-import { ErrorModal } from './ErrorModal/ErrorModal';
+import {
+  ErrorModal,
+  ErrorModalProps,
+  ToastProps,
+} from './ErrorModal/ErrorModal';
 
-export const NotificationContext = createContext({
+type NotificationContextProps = {
+  children: React.ReactNode;
+  defaultVisibilityTime: number;
+};
+
+type NotifySuccessFn = (props: ToastProps, visibilityTime?: number) => void;
+type NotifyErrorFn = (props: Omit<ErrorModalProps, 'close'>) => void;
+
+type NotificationContextArgs = {
+  isOpen: boolean;
+  notifySuccess: NotifySuccessFn;
+  notifyError: NotifyErrorFn;
+};
+
+export const NotificationContext = createContext<NotificationContextArgs>({
   isOpen: false,
   notifySuccess: props => {},
   notifyError: props => {},
@@ -10,14 +28,14 @@ export const NotificationContext = createContext({
 export const NotificationProvider = ({
   children,
   defaultVisibilityTime = 5000,
-}) => {
-  const [toastProps, setToastProps] = useState();
-  const [errorProps, setErrorProps] = useState();
+}: NotificationContextProps) => {
+  const [toastProps, setToastProps] = useState<ToastProps | null>();
+  const [errorProps, setErrorProps] = useState<ErrorModalProps | null>();
 
   const methods = {
     notifySuccess: function(
-      notificationProps,
-      visibilityTime = defaultVisibilityTime,
+      notificationProps: ToastProps,
+      visibilityTime: number = defaultVisibilityTime,
     ) {
       if (visibilityTime !== 0) {
         setTimeout(() => {
@@ -26,14 +44,10 @@ export const NotificationProvider = ({
       }
       setToastProps(notificationProps);
     },
-    notifyError: function(notificationProps) {
+    notifyError: function(notificationProps: Omit<ErrorModalProps, 'close'>) {
       setErrorProps({
-        type: 'error',
-        buttonConfirm: false,
-        buttonDismissText: 'Close',
-        header: 'Error',
-        close: () => setErrorProps(null),
         ...notificationProps,
+        close: () => setErrorProps(null),
       });
     },
   };
@@ -50,9 +64,7 @@ export const NotificationProvider = ({
           className="message-toast--wrapper"
           onClick={() => setToastProps(null)}
         >
-          <div className="fd-message-toast">
-            {toastProps.content || toastProps.title}
-          </div>
+          <div className="fd-message-toast">{toastProps.content}</div>
         </div>
       )}
       {errorProps && <ErrorModal {...errorProps} />}
