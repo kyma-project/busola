@@ -10,8 +10,8 @@ type NotificationContextProps = {
   defaultVisibilityTime: number;
 };
 
-type NotifySuccessFn = (props: ToastProps) => void;
-type NotifyErrorFn = (props: ErrorModalProps) => void;
+type NotifySuccessFn = (props: ToastProps, visibilityTime?: number) => void;
+type NotifyErrorFn = (props: Omit<ErrorModalProps, 'close'>) => void;
 
 type NotificationContextArgs = {
   isOpen: boolean;
@@ -29,8 +29,8 @@ export const NotificationProvider = ({
   children,
   defaultVisibilityTime = 5000,
 }: NotificationContextProps) => {
-  const [toastProps, setToastProps] = useState<null | ToastProps>();
-  const [errorProps, setErrorProps] = useState<null | ErrorModalProps>();
+  const [toastProps, setToastProps] = useState<ToastProps | null>();
+  const [errorProps, setErrorProps] = useState<ErrorModalProps | null>();
 
   const methods = {
     notifySuccess: function(
@@ -44,11 +44,10 @@ export const NotificationProvider = ({
       }
       setToastProps(notificationProps);
     },
-    notifyError: function(notificationProps: ErrorModalProps) {
+    notifyError: function(notificationProps: Omit<ErrorModalProps, 'close'>) {
       setErrorProps({
-        //@ts-ignore
-        close: () => setErrorProps(null),
         ...notificationProps,
+        close: () => setErrorProps(null),
       });
     },
   };

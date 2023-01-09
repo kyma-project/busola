@@ -15,7 +15,7 @@ export type ErrorModalProps = ToastProps & {
   header?: JSX.Element;
   buttonDismissText?: string;
   close: CloseFn;
-  actions: (
+  actions?: (
     close: CloseFn,
     defaultCloseButton: (close: CloseFn) => React.ReactNode,
   ) => React.ReactNode[];
