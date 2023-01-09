@@ -31,7 +31,6 @@ export const Link = ({
       <Icon
         glyph="action"
         size="s"
-        // className="fd-margin-begin--tiny"
         className="fd-margin-begin--tiny fd-margin-end--tiny"
         ariaLabel={t('common.ariaLabel.new-tab-link')}
       />
