@@ -69,7 +69,7 @@ export function ResourceRefRender({
           });
           value = error ? {} : external;
         }
-        const resource = data.find(
+        const resource = (data ?? []).find(
           res =>
             res.metadata.namespace === value.namespace &&
             res.metadata.name === value.name,
