@@ -23,23 +23,17 @@ Busola supports:
 
 ## Installation
 
-To install dependencies for the root and all UI projects, and to prepare symlinks for local libraries within this repository, run the following command:
+To install dependencies for the root and backend projects, and to prepare symlinks for local libraries within this repository, run the following command:
 
 ```bash
 npm install
 ```
 
-> **NOTE:** The `npm run install` command:
->
-> - Installs root dependencies provided in the [`package.json`](./package.json) file.
-> - Installs dependencies for the [libraries](#components).
-> - Builds all the [libraries](#components).
-
 Read [Install Kyma Dashboard manually](docs/install-kyma-dashboard-manually.md) to learn how to install the Dashboard with Istio Ingress and how to install it on a Kyma cluster.
 
 ## Usage
 
-Run the `npm start` command in the root folder.
+Run the `npm start` command.
 
 ## Configuration
 
@@ -92,10 +86,10 @@ See the available Busola [feature flags](docs/features.md) for more information.
 
 ### Start all views
 
-Use the following command to run Busola with the [`core-ui`](./core-ui) and all other views locally:
+Use the following command to run Busola with locally:
 
 ```bash
-npm run start
+npm start
 ```
 
 After a while, open the [http://localhost:8080](http://localhost:8080) address in your browser, and provide your kubeconfig in the **Connect cluster** wizard.
@@ -104,7 +98,7 @@ Once you started Busola locally, you can begin the development. All modules have
 
 The apps you started run at the following addresses:
 
-- `Core-UI` - [http://localhost:8080](http://localhost:8080)
+- `Busola` - [http://localhost:8080](http://localhost:8080)
 - `Backend` - [http://localhost:3001](http://localhost:3001)
 
 ### Security countermeasures
