@@ -108,7 +108,7 @@ data:
           name: withoutValue
           simple: true
       template:
-        withValue: 'string'
+        withValue: 'template value'
 
   general: |-
     resource:

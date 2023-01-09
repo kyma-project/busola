@@ -180,7 +180,7 @@ context('Test extensibility variables', () => {
 
     cy.get('[data-testid="spec.arrayOfObjects.0.withValue"]:visible').should(
       'have.value',
-      'string',
+      'template value',
     );
 
     cy.get('[data-testid="spec.arrayOfObjects.0.withoutValue"]:visible').should(
