@@ -10,9 +10,7 @@
     "start": "./scripts/pre-start-warning.sh && lerna exec --parallel -- npm run start",
     "lint-check": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
     "lint-fix": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
-    "lint-staged": "lint-staged --concurrent=false",
-    "pack-extensions": "gulp pack-extensions",
-    "prepare-extensions": "gulp clean-extensions && gulp download-extensions"
+    "lint-staged": "lint-staged --concurrent=false"
   },
   "dependencies": {
     "@sap-theming/theming-base-content": "^11.1.28",
