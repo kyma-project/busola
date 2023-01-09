@@ -1,12 +1,12 @@
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 import { Button, Dialog, Icon } from 'fundamental-react';
 import { useEventListener } from 'hooks/useEventListener';
-import { useTranslation } from 'react-i18next';
 
 import './ErrorModal.scss';
 
 export type ToastProps = {
-  content: JSX.Element;
+  content: React.ReactNode;
 };
 
 type CloseFn = () => void;
