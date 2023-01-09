@@ -62,7 +62,7 @@ data:
       name: varWithDynamicValue
       simple: true
       widget: Text
-      dynamicValue: '$root.metadata.name = "resource-name" ? "default name" : "unnamed"'
+      dynamicValue: '$root.metadata.name = "resource-name" ? "dynamic name" : "unnamed"'
 
     - path: spec.prefix
       name: Prefix

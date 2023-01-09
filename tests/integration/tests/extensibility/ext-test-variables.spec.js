@@ -16,10 +16,6 @@ context('Test extensibility variables', () => {
     cy.createNamespace(NAMESPACE);
   });
 
-  beforeEach(() => {
-    cy.setBusolaFeature('EXTENSIBILITY', true);
-  });
-
   it('Creates the EXT test resources config', () => {
     cy.getLeftNav()
       .contains('Cluster Details')
@@ -55,7 +51,7 @@ context('Test extensibility variables', () => {
       .should('have.length', 2);
   });
 
-  it('Tests variables', () => {
+  it('Go to variables', () => {
     cy.loginAndSelectCluster({
       fileName: 'kubeconfig-k3s.yaml',
       storage: 'Session storage',
@@ -142,7 +138,7 @@ context('Test extensibility variables', () => {
     // test vars with dynamicValue
     cy.get('@form')
       .find('[data-testid="varWithDynamicValue"]:visible')
-      .should('have.value', 'default name');
+      .should('have.value', 'dynamic name');
   });
 
   it('Tests presets', () => {
@@ -154,14 +150,10 @@ context('Test extensibility variables', () => {
 
     // test presets
     cy.get('@form')
-      .find('[data-testid="presets"]:visible')
-      .find('.fd-button.fd-select__button')
-      // .find('[aria-label="Combobox input arrow"]:visible', { log: false })
+      .find('.fd-select__text-content:visible')
+      .contains('Choose preset')
+      .next('.fd-button.fd-select__button')
       .click();
-
-    cy.get('[role="list"]')
-      .contains('Fixes')
-      .should('exist');
 
     cy.get('[role="list"]')
       .contains('Fixes')
@@ -174,6 +166,11 @@ context('Test extensibility variables', () => {
     cy.get('@form')
       .find('[data-testid="spec.suffix"]:visible')
       .should('have.value', 'suffix');
+
+    // test if dynamicValue is updated
+    cy.get('@form')
+      .find('[data-testid="varWithDynamicValue"]:visible')
+      .should('have.value', 'unnamed');
   });
 
   it('Tests templates', () => {
