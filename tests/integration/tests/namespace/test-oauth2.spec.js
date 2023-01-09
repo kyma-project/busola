@@ -12,7 +12,6 @@ context('Test OAuth2 Clients', () => {
   });
 
   it('Create a Client', () => {
-    cy.wait(500); // TODO
     cy.navigateTo('Configuration', 'OAuth2 Clients');
 
     cy.contains('Create OAuth2 Client').click();
