@@ -21,7 +21,7 @@ RUN make resolve
 RUN make validate
 RUN make pull-licenses
 
-RUN cd /app/core-ui && make test && make build-docker
+RUN npm test 2>&1 && npm run build:docker
 RUN cd /app/backend && npm run build
 
 # ---- Serve ----
@@ -33,14 +33,14 @@ RUN apk --no-cache upgrade && \
   apk add --update nodejs npm yq
 WORKDIR /app
 
-COPY --from=builder /app/core-ui/build /app/core-ui
+COPY --from=builder /app/build /app/core-ui
 COPY --from=builder /app/backend/backend-production.js /app/backend-production.js
 COPY --from=builder /app/backend/certs.pem /app/certs.pem
 COPY --from=builder /app/backend/package* /app/
 COPY --from=builder /app/backend/settings/* /app/settings/
 
 # move out the packed extensions for further use
-RUN mv /app/core-ui/extensions/extensions.yaml /app/extensions.yaml
+#RUN mv /app/extensions/extensions.yaml /app/extensions.yaml
 
 RUN npm ci --only=production
 
