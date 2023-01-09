@@ -17,7 +17,6 @@ context('Test Config Maps', () => {
   });
 
   it('Create a Config Map', () => {
-    cy.wait(500); // TODO
     cy.navigateTo('Configuration', 'Config Maps');
 
     cy.contains('Create Config Map').click();

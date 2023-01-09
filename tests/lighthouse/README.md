@@ -8,7 +8,7 @@ npm run test
 
 ## Running locally
 
-Make sure your kubeconfig is copied as `lighthouse/fixtures/kubeconfig.yaml`.
+Make sure your kubeconfig is copied as `fixtures/kubeconfig.yaml`.
 
 ```bash
 npm run test:local

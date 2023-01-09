@@ -19,7 +19,6 @@ context('Test Secrets', () => {
   });
 
   it('Create a secret', () => {
-    cy.wait(500); // TODO
     cy.navigateTo('Configuration', 'Secrets');
 
     cy.contains('Create Secret').click();

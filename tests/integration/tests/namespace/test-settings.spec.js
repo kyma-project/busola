@@ -28,7 +28,6 @@ context('Test app settings and preferences', () => {
 
     cy.contains('Close').click();
 
-    cy.wait(500); // TODO
     cy.navigateTo('Configuration', 'Config Maps');
 
     cy.contains('Create Config Map').click();
