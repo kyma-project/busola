@@ -3,8 +3,8 @@ import { ErrorModal } from './ErrorModal/ErrorModal';
 
 export const NotificationContext = createContext({
   isOpen: false,
-  notifySuccess: () => {},
-  notifyError: () => {},
+  notifySuccess: props => {},
+  notifyError: props => {},
 });
 
 export const NotificationProvider = ({

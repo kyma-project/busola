@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
-import { Link, Button, MessagePage } from 'fundamental-react';
+import { Button, MessagePage } from 'fundamental-react';
+import { Link } from 'react-router-dom';
 
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 
@@ -13,7 +14,7 @@ import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
-import { addCluster, deleteCluster } from './../shared';
+import { deleteCluster } from './../shared';
 import { AddClusterDialog } from '../components/AddClusterDialog';
 import { EditCluster } from './EditCluster/EditCluster';
 import { ClusterStorageType } from './ClusterStorageType';
@@ -91,15 +92,13 @@ function ClusterList() {
   ];
 
   const rowRenderer = entry => [
-    <>
-      <Link
-        className="fd-link"
-        style={styleActiveCluster(entry)}
-        onClick={() => addCluster(entry, clustersInfo)}
-      >
-        {entry.name}
-      </Link>
-    </>,
+    <Link
+      className="fd-link"
+      to={`/cluster/${entry.contextName}`}
+      style={styleActiveCluster(entry)}
+    >
+      {entry.name}
+    </Link>,
     entry.currentContext.cluster.cluster.server,
     <ClusterStorageType clusterConfig={entry.config} />,
     entry.config?.description || EMPTY_TEXT_PLACEHOLDER,
