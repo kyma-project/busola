@@ -81,7 +81,7 @@ const getExtensions = async (fetchFn: any) => {
     );
   } catch (e) {
     console.warn('Cannot load cluster params: ', e);
-    return null;
+    return [];
   }
 };
 
@@ -98,11 +98,11 @@ export const useGetExtensions = () => {
   useEffect(() => {
     const manageExtensions = async () => {
       if (!cluster) {
-        setExtensions(null);
+        setExtensions([]);
       } else {
         const configs = await getExtensions(fetchFn);
         if (!configs) {
-          setExtensions(null);
+          setExtensions([]);
         } else {
           const configSet = {
             configFeatures: features!,
@@ -120,11 +120,13 @@ export const useGetExtensions = () => {
         }
       }
     };
-    manageExtensions();
+    void manageExtensions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cluster, auth, openapiPathIdList]);
 };
 
+// null for defaultValue,
+// empty array for value or error
 const defaultValue = null;
 export const extensionsState: RecoilState<ExtResource[] | null> = atom<
   ExtResource[] | null

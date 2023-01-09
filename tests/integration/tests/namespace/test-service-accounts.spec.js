@@ -11,7 +11,6 @@ context('Test Service Accounts', () => {
   });
 
   it('Create a Service Account', () => {
-    cy.wait(500); // TODO
     cy.navigateTo('Configuration', 'Service Accounts');
 
     cy.contains('Create Service Account').click();
