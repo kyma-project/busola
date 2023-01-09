@@ -31,7 +31,7 @@ export function DnsProviderList(props) {
     <Trans i18nKey="dnsproviders.description">
       <Link
         className="fd-link"
-        url="https://kyma-project.io/docs/kyma/latest/03-tutorials/00-api-exposure/apix-01-own-domain"
+        url="https://kyma-project.io/docs/kyma/latest/03-tutorials/00-api-exposure/apix-02-setup-custom-domain-for-workload/"
       />
     </Trans>
   );
