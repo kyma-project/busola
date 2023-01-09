@@ -21,6 +21,9 @@ context('Test navigation features', () => {
     mockFeatures({
       PROMETHEUS: null,
       VISUAL_RESOURCES: { isEnabled: false },
+      HIDDEN_NAMESPACES: {
+        isEnabled: false,
+      },
     });
     cy.loginAndSelectCluster();
   });

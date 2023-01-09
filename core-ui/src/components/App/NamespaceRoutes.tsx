@@ -1,20 +1,33 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { useTranslation } from 'react-i18next';
 
 import { languageAtom } from 'state/preferences/languageAtom';
 import { extensionsState } from 'state/navigation/extensionsAtom';
+import { namespacesState } from 'state/namespacesAtom';
 
 import { resourceRoutesNamespaced } from 'resources';
 import { createExtensibilityRoutes } from './ExtensibilityRoutes';
 import { otherRoutesNamespaced } from 'resources/other';
 
 import { IncorrectPath } from './IncorrectPath';
+import { useUrl } from 'hooks/useUrl';
 
 export default function NamespaceRoutes() {
   const { t } = useTranslation();
+  const { namespaceId } = useParams();
+  const { clusterUrl } = useUrl();
   const language = useRecoilValue(languageAtom);
   const extensions = useRecoilValue(extensionsState);
+  const namespaces = useRecoilValue(namespacesState);
+
+  if (!namespaces.includes(namespaceId as string))
+    return (
+      <IncorrectPath
+        to={clusterUrl('overview')}
+        message={t('components.incorrect-path.message.cluster')}
+      />
+    );
 
   return (
     <Routes>

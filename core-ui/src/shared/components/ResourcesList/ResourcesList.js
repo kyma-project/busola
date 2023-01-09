@@ -25,12 +25,11 @@ import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useTranslation } from 'react-i18next';
+import { useUrl } from 'hooks/useUrl';
 import { nameLocaleSort, timeSort } from '../../helpers/sortingfunctions';
 import { useVersionWarning } from 'hooks/useVersionWarning';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
 import { ForceUpdateModalContent } from 'shared/ResourceForm/ForceUpdateModalContent';
-
-import { useUrl } from 'hooks/useUrl';
 
 /* to allow cloning of a resource set the following on the resource create component:
  *
