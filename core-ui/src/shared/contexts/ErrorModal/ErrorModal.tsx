@@ -1,16 +1,21 @@
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 import { Button, Dialog, Icon } from 'fundamental-react';
 import { useEventListener } from 'hooks/useEventListener';
+
 import './ErrorModal.scss';
+
+export type ToastProps = {
+  content: React.ReactNode;
+};
 
 type CloseFn = () => void;
 
-type ErrorModalProps = {
-  header: JSX.Element;
-  buttonDismissText: string;
-  content: JSX.Element;
+export type ErrorModalProps = ToastProps & {
+  header?: JSX.Element;
+  buttonDismissText?: string;
   close: CloseFn;
-  actions: (
+  actions?: (
     close: CloseFn,
     defaultCloseButton: (close: CloseFn) => React.ReactNode,
   ) => React.ReactNode[];
@@ -25,6 +30,10 @@ export function ErrorModal({
   close,
   wider,
 }: ErrorModalProps) {
+  const { t } = useTranslation();
+  buttonDismissText = buttonDismissText ?? t('common.buttons.close');
+  header = header ?? t('common.errors.error');
+
   useEventListener(
     'keydown',
     (e: Event) => {
