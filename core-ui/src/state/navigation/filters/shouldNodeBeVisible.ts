@@ -27,12 +27,6 @@ export const shouldNodeBeVisible = (
     navNode,
     permissionSet,
   );
-  console.log({
-    navNode,
-    nodeFeaturesEnabledInConfig,
-    nodeResourceExist,
-    nodeResourcePermittedForCurrentUser,
-  });
 
   return (
     nodeFeaturesEnabledInConfig &&
