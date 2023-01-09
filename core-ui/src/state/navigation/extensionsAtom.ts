@@ -154,7 +154,7 @@ const getExtensions = async (
     );
   } catch (e) {
     console.warn('Cannot load cluster params: ', e);
-    return null;
+    return [];
   }
 };
 
@@ -221,12 +221,13 @@ export const useGetExtensions = () => {
         // }
       }
     };
-
     void manageExtensions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cluster, auth, permissionSet, namespace, openapiPathIdList]);
 };
 
+// null for defaultValue,
+// empty array for value or error
 const defaultValue = null;
 export const extensionsState: RecoilState<ExtResource[] | null> = atom<
   ExtResource[] | null
