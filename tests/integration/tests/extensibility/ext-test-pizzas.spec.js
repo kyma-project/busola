@@ -18,10 +18,6 @@ context('Test Pizzas', () => {
     cy.createNamespace('pizzas');
   });
 
-  beforeEach(() => {
-    cy.setBusolaFeature('EXTENSIBILITY', true);
-  });
-
   it('Creates the EXT pizza config', () => {
     cy.getLeftNav()
       .contains('Cluster Details')
