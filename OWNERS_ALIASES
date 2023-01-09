@@ -1,18 +1,12 @@
 aliases:
     default-reviewers:
     - qbalukom
-    - Wawrzyn321
-    - dariadomagala
     - akucharska
-    - valentinvieriu
     - Lyczeq
     - mrCherry97
     default-approvers:
     - qbalukom
-    - Wawrzyn321
-    - dariadomagala
     - akucharska
-    - valentinvieriu
     - Lyczeq
     - mrCherry97
     documentation-reviewers:
