@@ -38,18 +38,6 @@ type ConfigMapListResponse =
     }
   | undefined;
 
-// to juz jest: pobieranie permisionow jak jetesmy na klastrze i namespace, fallback zeby pobierac w scope namespace jesli ten z klastra sie nie powiodl,
-
-//tego nie ma:
-// pobierz extensiony ze scopu namespace w momencie gdy globalny sie nie powiedzie
-//+ test
-
-// stretch:
-// problem z gatewayami ->
-// widgety ktore pobieraja dane powinny obslugiwac przypadki
-// 1. god mode, mamy wszystko, nic nie obslugujemy
-// 2.  call po wszystkie resourcy ze wszystkich namespaców nie powiedzie sie, wiec robimy drugi ktory sprawdza czy mamy dostep do tych naszego namespace'a - pokazuje ostrzezenie, ze np. lista moze byc niekompletna
-// 3. brak calkowitych uprawnien, mozesz wpisac z palca, ale nie gwarantujemy ze bedzie git, stosowny powod
 async function getExtensionConfigMaps(
   fetchFn: FetchFn,
   kubeconfigNamespace: string,
@@ -61,7 +49,6 @@ async function getExtensionConfigMaps(
   const namespacedCMUrl = `/api/v1/namespaces/${currentNamespace ??
     kubeconfigNamespace}/configmaps?labelSelector=busola.io/extension=resource`;
 
-  //jestesmy na klastrze
   if (!currentNamespace) {
     const hasAccessToClusterCMList = doesUserHavePermission(
       ['list'],
@@ -81,17 +68,11 @@ async function getExtensionConfigMaps(
       return [];
     }
   } else {
-    console.log('hello');
-
-    // + domergowanie listy dla current namespace jesśli istnieje + nie robimy tego calla jeśli mieliśmy dostęp do wszystkich CM  doesUserHavePermission oraz fetch pod `/api/v1/namespaces/${currentNamespace}/configmaps?labelSelector=busola.io/extension=resource`;
-
     const hasAccessToClusterCMList = doesUserHavePermission(
       ['list'],
       { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
       permissionSet,
     );
-
-    console.log({ hasAccessToClusterCMList });
 
     const url = hasAccessToClusterCMList ? clusterCMUrl : namespacedCMUrl;
 
@@ -196,7 +177,6 @@ export const useGetExtensions = () => {
             openapiPathIdList,
             permissionSet,
           };
-          console.log('here', configs);
           const isNodeVisibleForCurrentConfigSet = partial(
             shouldNodeBeVisible,
             configSet,
@@ -205,20 +185,11 @@ export const useGetExtensions = () => {
             isNodeVisibleForCurrentConfigSet(mapExtResourceToNavNode(node)),
           );
 
-          console.log({ filteredConfigs });
           setExtensions(extensions => [
             ...(extensions || []),
             ...filteredConfigs,
           ]);
         }
-
-        // if (namespace) {
-        //   const hasAccessToClusterCMList = doesUserHavePermission(
-        //     ['list'],
-        //     { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
-        //     permissionSet,
-        //   );
-        // }
       }
     };
     void manageExtensions();
