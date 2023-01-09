@@ -166,7 +166,6 @@ export const useGetExtensions = () => {
         permissionSet,
       );
 
-      console.log({ configs });
       if (!configs) {
         setExtensions([]);
         setNonNamespacedExtensions(null);

@@ -99,8 +99,7 @@ context('Test reduced permissions 2', () => {
   });
 
   it('Test extension CMs call - user has access to clusterwide CMs', () => {
-    // nasluchujemy/spy na pobieranie CM w kontekscie klastra, bo mamy uprawnienia
-    //
+    //spy na fetching CMs in the cluster-context, you have access
     cy.intercept({
       method: 'GET',
       url:
@@ -111,16 +110,17 @@ context('Test reduced permissions 2', () => {
 
     cy.wait('@clusterwide CM call');
 
-    // udajemy ze nie ma uprawnien do pobrania CM w kontekscie klastra
+    // mock that you don't have access to fetch CMs in the cluster-context
     mockPermissionsCall([
       {
         verbs: ['*'],
         apiGroups: [''],
-        resources: ['namespaces', 'pods'],
+        resources: ['namespaces', 'configmaps'],
+        namespace: 'kube-public',
       },
     ]);
 
-    // fallback na pobranie CM ale w kontekscie namespace
+    // fallback to fetch CMs in the kubeconfigNamespace
     cy.intercept({
       method: 'GET',
       url:
@@ -130,6 +130,29 @@ context('Test reduced permissions 2', () => {
     cy.reload();
 
     cy.wait('@kube-public CM call');
-    //
+  });
+
+  it('Test extension CMs call - user has no access to clusterwide CMs, fallback to namespace wide CMs', () => {
+    const namespaceName = Cypress.env('NAMESPACE_NAME');
+
+    cy.loginAndSelectCluster();
+    cy.goToNamespaceDetails();
+
+    mockPermissionsCall([
+      {
+        verbs: ['*'],
+        apiGroups: [''],
+        resources: ['pods', 'configmaps'],
+        namespace: namespaceName,
+      },
+    ]);
+
+    cy.intercept({
+      method: 'GET',
+      url: `/backend/api/v1/namespaces/${namespaceName}/configmaps?labelSelector=busola.io/extension=resource`,
+    }).as('logged namespace CM call');
+
+    cy.reload();
+    cy.wait('@logged namespace CM call');
   });
 });
