@@ -34,7 +34,6 @@ context('Test Persistent Volume Claims', () => {
   });
 
   it('Create a Persistent Volume Claim', () => {
-    cy.wait(500); // TODO
     cy.navigateTo('Storage', 'Persistent Volume Claims');
 
     cy.contains('Create Persistent Volume Claim').click();

@@ -47,11 +47,11 @@ licenses
 
 scripts/clusterRegistry.txt
 
-tests/cypress/*
-tests/fixtures/orders-function.js
-tests/fixtures/kubeconfig.yaml
-tests/fixtures/kubeconfig-k3s.yaml
-tests/fixtures/sa-kubeconfig.yaml
+tests/integration/cypress/*
+tests/integration/fixtures/orders-function.js
+tests/integration/fixtures/kubeconfig.yaml
+tests/integration/fixtures/kubeconfig-k3s.yaml
+tests/integration/fixtures/sa-kubeconfig.yaml
 
 core-ui/public/themes/@sap-theming/*
 

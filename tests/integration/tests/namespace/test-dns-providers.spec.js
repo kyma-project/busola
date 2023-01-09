@@ -17,7 +17,6 @@ context('Test DNS Providers', () => {
   });
 
   it('Create DNS Provider', () => {
-    cy.wait(500); // TODO
     cy.navigateTo('Configuration', 'Dns Providers');
 
     cy.contains('Create DNS Provider').click();
