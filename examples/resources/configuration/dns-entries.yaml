@@ -9,12 +9,11 @@ metadata:
     busola.io/extension-version: '0.5'
 data:
   details: |-
-
     header: 
       - source: 'status.state ? status.state : "UNKNOWN"'
         highlights:
           informative:
-          - UNKNOWN
+            - UNKNOWN
         type: string
         name: status
         widget: Badge
@@ -35,7 +34,6 @@ data:
           - name: spec.targets
             widget: JoinedArray
             source: spec.targets
-
   form: |-
     - simple: true
       path: spec.dnsName
@@ -46,7 +44,6 @@ data:
       placeholder: ttl.placeholder
       path: spec.ttl
       required: true
-
     - path: spec.targets
       widget: SimpleList
       simple: true
@@ -84,7 +81,7 @@ data:
     - source: 'status.state ? status.state : "UNKNOWN"'
       highlights:
         informative:
-        - UNKNOWN
+          - UNKNOWN
       type: string
       name: status
       isSelected: true
