@@ -51,7 +51,7 @@ context('Test extensibility variables', () => {
       .should('have.length', 2);
   });
 
-  it('Go to variables', () => {
+  it('Navigate to Test Resource Creation', () => {
     cy.loginAndSelectCluster({
       fileName: 'kubeconfig-k3s.yaml',
       storage: 'Session storage',
