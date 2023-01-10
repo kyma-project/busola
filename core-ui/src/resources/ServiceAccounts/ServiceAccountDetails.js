@@ -75,6 +75,7 @@ export function ServiceAccountDetails(props) {
   const headerActions = [
     <Button onClick={() => setTokenModalOpen(true)}>create token</Button>,
   ];
+
   return (
     <>
       <ResourceDetails
@@ -90,6 +91,8 @@ export function ServiceAccountDetails(props) {
       <TokenRequestModal
         isModalOpen={isTokenModalOpen}
         handleCloseModal={handleCloseModal}
+        namespace={props.namespace}
+        serviceAccountName={props.resourceName}
       />
     </>
   );

@@ -1,35 +1,40 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Dialog } from 'fundamental-react';
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 
 import './TokenRequestModal.scss';
+import { useCreateTokenRequest } from './useCreateTokenRequest';
 
 type TokenRequestModalProps = {
   isModalOpen: boolean;
   handleCloseModal: VoidFunction;
-};
-
-const creaTokenRequestTemplate = () => {
-  return {
-    apiVersion: 'authentication.k8s.io/v1',
-    kind: 'TokenRequest',
-    spec: {
-      expirationSeconds: 3600,
-    },
-  };
+  namespace: string;
+  serviceAccountName: string;
 };
 
 export const TokenRequestModal = ({
   isModalOpen,
   handleCloseModal,
+  namespace,
+  serviceAccountName,
 }: TokenRequestModalProps) => {
   const { t } = useTranslation();
-  const [tokenRequest, setTokenRequest] = useState(creaTokenRequestTemplate());
+
+  const {
+    createTokenRequestFn,
+    tokenRequest,
+    setTokenRequest,
+  } = useCreateTokenRequest(namespace, serviceAccountName);
+
+  const onCreateToken = () => {
+    createTokenRequestFn();
+    handleCloseModal();
+  };
 
   const actions = [
-    <Button onClick={() => {}}>{t('common.buttons.create')}</Button>,
+    <Button onClick={onCreateToken}>{t('common.buttons.create')}</Button>,
     <Button onClick={handleCloseModal}>{t('common.buttons.close')}</Button>,
   ];
 
