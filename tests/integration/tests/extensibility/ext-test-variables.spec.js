@@ -70,7 +70,6 @@ context('Test extensibility variables', () => {
 
     cy.contains('Create Test Resource').click();
 
-    cy.get('.fd-dialog__content').as('form');
   });
 
   it('Tests variables', () => {
