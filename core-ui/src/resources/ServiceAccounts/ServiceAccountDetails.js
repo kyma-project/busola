@@ -9,12 +9,17 @@ const ServiceAccountSecrets = serviceAccount => {
   const namespace = serviceAccount.metadata.namespace;
   const listKey = 'service-account-secrets';
   const title = 'Secrets';
-  const filterBySecret = secret =>
-    serviceAccount.secrets.find(
-      ({ name: secretName }) => secret.metadata.name === secretName,
-    );
 
-  return serviceAccount.secrets ? (
+  const filterBySecret = secret => {
+    const annotations = Object.entries(secret.metadata.annotations ?? {});
+    return annotations.find(
+      ([key, value]) =>
+        key === 'kubernetes.io/service-account.name' &&
+        value === serviceAccount.metadata.name,
+    );
+  };
+
+  return (
     <GenericSecrets
       key={listKey}
       namespace={namespace}
@@ -24,7 +29,7 @@ const ServiceAccountSecrets = serviceAccount => {
       allowKubeconfigDownload
       prefix={serviceAccount.metadata.name}
     />
-  ) : null;
+  );
 };
 
 const ServiceAccountImagePullSecrets = serviceAccount => {
