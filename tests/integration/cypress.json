@@ -36,6 +36,7 @@
     "cluster/test-navigation-features.spec.js",
     "extensibility/ext-test-pizzas.spec.js",
     "extensibility/ext-test-services.spec.js",
+    "extensibility/ext-test-variables.spec.js",
     "namespace/run-before.spec.js",
     "namespace/test-namespace-overview.spec.js",
     "namespace/run-prepare-functions.spec.js",

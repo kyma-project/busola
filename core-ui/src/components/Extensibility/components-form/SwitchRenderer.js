@@ -33,7 +33,7 @@ export function SwitchRenderer({
         });
       }}
       label={tFromStoreKeys(storeKeys, schema)}
-      data-testid={storeKeys.join('.')}
+      data-testid={storeKeys.join('.') || tFromStoreKeys(storeKeys, schema)}
       input={Inputs.Switch}
       compact={compact}
       {...props}
