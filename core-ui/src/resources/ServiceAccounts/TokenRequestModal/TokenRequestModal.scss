@@ -1,0 +1,12 @@
+.token-request-modal {
+  .fd-dialog__body {
+    background: var(--sapBackgroundColor);
+    width: 50vw;
+    height: 50vh;
+    padding: 0;
+    padding-top: -30px;
+  }
+  .resource-form::before {
+    content: none;
+  }
+}
