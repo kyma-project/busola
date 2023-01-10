@@ -1,4 +1,4 @@
-import { RecoilValueReadOnly, selector } from 'recoil';
+import { RecoilValueReadOnly, selector, noWait } from 'recoil';
 import { openapiState } from './openapiSelector';
 
 type OpenapiPathIdList = string[];
@@ -8,10 +8,10 @@ export const openapiPathIdListSelector: RecoilValueReadOnly<OpenapiPathIdList> =
 >({
   key: 'openapiPathIdList',
   get: ({ get }) => {
-    const openapi = get(openapiState);
+    const openApi = get(noWait(openapiState));
 
-    if (openapi?.paths) {
-      const openapiPathIdList = Object.keys(openapi.paths);
+    if (openApi.state === 'hasValue') {
+      const openapiPathIdList = Object.keys(openApi.contents?.paths ?? {});
       return openapiPathIdList;
     }
     return [];
