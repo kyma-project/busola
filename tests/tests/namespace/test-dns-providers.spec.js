@@ -103,12 +103,6 @@ context('Test DNS Providers', () => {
       .first()
       .type('yes');
 
-    // edit included domains
-    //cy.get('[role=dialog]')
-    //  .contains('Include Domains')
-    //  .filter(':visible', { log: false })
-    //  .click();
-
     cy.get('[placeholder="Domain that is allowed"]')
       .filterWithNoValue()
       .type(PROVIDER_INCLUDED_DOMAIN_2);

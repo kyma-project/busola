@@ -105,14 +105,6 @@ data:
         metadata:
           annotations: 
             dns.gardener.cloud/class: garden
-        spec:
-          domains:
-            include: []
-            exclude: []
-          secretRef:
-            name: ''
-            namespace: ''
-          type: ''
   translations: |-
     en:
       metadata.annotations: Annotations
