@@ -1,8 +1,8 @@
-import { useDownloadKubeconfigWithToken } from './../useDownloadKubeconfigWithToken';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { useCallback, useState } from 'react';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
+import { useDownloadKubeconfigWithToken } from './../useDownloadKubeconfigWithToken';
 
 const creaTokenRequestTemplate = () => {
   return {
