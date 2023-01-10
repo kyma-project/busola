@@ -17,10 +17,15 @@ spec:
         - name: echo-server
           image: ealen/echo-server
 ---
-apiVersion: applicationconnector.kyma-project.io/v1alpha1
-kind: Application
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
 metadata:
-  name: name
-  labels: {}
-  annotations: {}
-spec: {}
+  name: standard
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp2
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+mountOptions:
+  - debug
+volumeBindingMode: Immediate
