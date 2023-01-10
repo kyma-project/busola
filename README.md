@@ -86,7 +86,7 @@ See the available Busola [feature flags](docs/features.md) for more information.
 
 ### Start all views
 
-Use the following command to run Busola with locally:
+Use the following command to run Busola locally:
 
 ```bash
 npm start
@@ -103,7 +103,7 @@ The apps you started run at the following addresses:
 
 ### Security countermeasures
 
-When developing new features in Busola UI, adhere to the following rules. This will help you to mitigate any security-related threats.
+When developing new features in Busola, adhere to the following rules. This will help you to mitigate any security-related threats.
 
 1. Prevent cross-site request forgery (XSRF).
 
