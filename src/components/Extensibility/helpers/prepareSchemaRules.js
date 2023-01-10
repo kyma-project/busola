@@ -19,6 +19,7 @@ export function prepareSchemaRules(allRuleDefs, filter) {
     { path, var: varName, ...ruleDef },
     parentPath,
     index,
+    widget,
   ) => {
     const fullPath = (path
       ? [
@@ -27,7 +28,14 @@ export function prepareSchemaRules(allRuleDefs, filter) {
             ? path
             : path?.replace(/\[]/g, '.[]')?.split('.') || []),
         ]
-      : [...parentPath, varName ? `$${varName}` : `custom${index}`]
+      : [
+          ...parentPath,
+          ...(varName
+            ? [`$${varName}`]
+            : widget === 'GenericList'
+            ? ['[]', `custom${index}`]
+            : [`custom${index}`]),
+        ]
     ).filter(item => !!item);
 
     let lastArrayIndex;
@@ -72,7 +80,7 @@ export function prepareSchemaRules(allRuleDefs, filter) {
     }
 
     ruleDef.children?.forEach((subDef, index) =>
-      extractRules(subDef, fullPath, index),
+      extractRules(subDef, fullPath, index, ruleDef.widget),
     );
   };
 
