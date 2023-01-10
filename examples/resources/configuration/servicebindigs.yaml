@@ -16,6 +16,27 @@ data:
         source: status.conditions[0].reason
         widget: Badge
     body:
+      - name: Binding Data
+        widget: Panel
+        children:
+          - name: Service Instance Name
+            source: spec.serviceInstanceName
+          - name: Secret
+            source: spec.secretName
+          - name: External Name
+            source: spec.externalName
+          - name: Binding ID
+            source: spec.bindingID
+          - name: Instance ID
+            source: spec.instanceID
+      - name: Parameters
+        source: spec.parameters
+        widget: CodeViewer
+        language: 'javascript'
+      - name: Parameters from Secrets
+        source: spec.parametersFrom
+        widget: CodeViewer
+        language: 'javascript'
   form: |-
     - simple: true
       path: spec.serviceInstanceName
@@ -28,6 +49,23 @@ data:
       placeholder: Defaults to the Service Binding name if empty
     - name: Secret
       path: spec.secretName
+    - name: Parameters
+      path: spec.parameters
+      defaultExpanded: false
+      widget: KeyValuePair
+
+    - name: Parameters from Secrets
+      path: spec.parametersFrom
+      widget: KeyValuePair
+      placeholder: Choose Secret
+      keyEnum:
+        - dreary-bed
+        - serverless-registry-config-default
+      value:
+        type: object
+        valueEnum:
+          - blub
+          - blob
   general: |-
     resource:
       kind: ServiceBinding
