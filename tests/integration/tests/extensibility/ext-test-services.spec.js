@@ -13,10 +13,6 @@ context('Test Services', () => {
     cy.createNamespace('services');
   });
 
-  beforeEach(() => {
-    cy.setBusolaFeature('EXTENSIBILITY', true);
-  });
-
   it('Creates the EXT Services config', () => {
     cy.getLeftNav()
       .contains('Cluster Details')

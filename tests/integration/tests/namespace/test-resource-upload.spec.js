@@ -3,14 +3,16 @@ import 'cypress-file-upload';
 import { loadFile } from '../../support/loadFile';
 import jsyaml from 'js-yaml';
 
-const APPLICATION_NAME = `${Cypress.env('APP_NAME')}-upload-yaml`;
+const SC_NAME = `sc-upload-yaml-${Math.random()
+  .toString()
+  .substr(2, 8)}`;
 
 async function loadValidResources(namespaceName) {
   const resources = await loadFile('yaml-upload--valid.yaml', false);
   // deployment
   resources[0].metadata.namespace = namespaceName;
-  // application
-  resources[1].metadata.name = APPLICATION_NAME;
+  // storage class
+  resources[1].metadata.name = SC_NAME;
   return resources;
 }
 
@@ -18,11 +20,6 @@ context('Test resource upload', () => {
   Cypress.skipAfterFail();
 
   before(() => {
-    cy.setBusolaFeature('EXTENSIBILITY', true);
-    cy.mockExtensions([
-      'examples/resources/applicationconnector/applications.yaml',
-    ]);
-
     cy.loginAndSelectCluster();
   });
 
@@ -42,7 +39,7 @@ context('Test resource upload', () => {
 
     cy.contains('You will create 2 resources:').should('be.visible');
     cy.contains('Deployment echo-server-upload-yaml').should('be.visible');
-    cy.contains('Application ' + APPLICATION_NAME).should('be.visible');
+    cy.contains('StorageClass ' + SC_NAME).should('be.visible');
 
     cy.contains('Submit').click();
 
@@ -54,9 +51,7 @@ context('Test resource upload', () => {
       'be.visible',
     );
 
-    cy.contains('Application ' + APPLICATION_NAME + ' - Created').should(
-      'be.visible',
-    );
+    cy.contains('StorageClass ' + SC_NAME + ' - Created').should('be.visible');
   });
 
   it('Upserts resources', () => {
@@ -74,9 +69,7 @@ context('Test resource upload', () => {
       'be.visible',
     );
 
-    cy.contains('Application ' + APPLICATION_NAME + ' - Updated').should(
-      'be.visible',
-    );
+    cy.contains('StorageClass ' + SC_NAME + ' - Updated').should('be.visible');
   });
 
   it('Handles errors', () => {
@@ -102,9 +95,9 @@ context('Test resource upload', () => {
 
     cy.get('[role=dialog]').should('not.exist');
 
-    cy.navigateTo('Integration', 'Applications');
+    cy.navigateTo('Storage', 'Storage Classes');
 
-    cy.get('[role="search"] [aria-label="open-search"]').type(APPLICATION_NAME);
+    cy.get('[role="search"] [aria-label="open-search"]').type(SC_NAME);
 
     cy.get('tbody tr [aria-label="Delete"]').click({ force: true });
 
