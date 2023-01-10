@@ -86,7 +86,7 @@ data:
     urlPath: dnsproviders
     scope: namespace
     description: >-
-      {{[DNSProvider](https://kyma-project.io/docs/kyma/latest/03-tutorials/00-api-exposure/apix-01-own-domain)}}
+      {{[DNSProvider](https://kyma-project.io/docs/kyma/latest/03-tutorials/00-api-exposure/apix-02-setup-custom-domain-for-workload)}}
       is used to specify and manage the configuration for the external DNS services.
   list: |-
     - name: spec.type
