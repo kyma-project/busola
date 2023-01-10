@@ -69,11 +69,10 @@ context('Test extensibility variables', () => {
       .click();
 
     cy.contains('Create Test Resource').click();
-
   });
 
   it('Tests variables', () => {
-    cy.get('.fd-dialog__content').as('form');
+    cy.get('[role="document"]').as('form');
 
     // test vars with no default value
     cy.get('@form')
@@ -141,7 +140,7 @@ context('Test extensibility variables', () => {
   });
 
   it('Tests presets', () => {
-    cy.get('.fd-dialog__content').as('form');
+    cy.get('[role="document"]').as('form');
     // test default preset
     cy.get('@form')
       .find('[arialabel="TestResource name"]:visible')
@@ -151,7 +150,6 @@ context('Test extensibility variables', () => {
     cy.get('@form')
       .find('.fd-select__text-content:visible')
       .contains('Choose preset')
-      .next('.fd-button.fd-select__button')
       .click();
 
     cy.get('[role="list"]')
@@ -188,7 +186,7 @@ context('Test extensibility variables', () => {
   });
 
   it('Tests data sources and triggers', () => {
-    cy.get('.fd-dialog__content').as('form');
+    cy.get('[role="document"]').as('form');
 
     // test if trigger / subscribe works
     cy.get('@form')
