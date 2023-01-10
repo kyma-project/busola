@@ -76,7 +76,7 @@ export function Jsonata({
       }}
       label={tFromStoreKeys(storeKeys, schema)}
       compact={compact}
-      data-testid={storeKeys.join('.')}
+      data-testid={storeKeys.join('.') || tFromStoreKeys(storeKeys, schema)}
       placeholder={tExt(schemaPlaceholder) || tExt(placeholder)}
       input={JsonataInput}
       {...getPropsFromSchema(schema, required, tExt)}
