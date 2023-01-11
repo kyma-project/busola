@@ -53,6 +53,6 @@ tests/integration/fixtures/kubeconfig.yaml
 tests/integration/fixtures/kubeconfig-k3s.yaml
 tests/integration/fixtures/sa-kubeconfig.yaml
 
-core-ui/public/themes/@sap-theming/*
+public/themes/@sap-theming/*.css
 
 extensions/downloads/*

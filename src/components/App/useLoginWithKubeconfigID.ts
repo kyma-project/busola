@@ -36,7 +36,7 @@ function join(path: string, fileName: string) {
 export async function loadKubeconfigById(
   kubeconfigId: string,
   kubeconfigIdFeature: KubeconfigIdFeature,
-  t: TFunction<'translation', undefined>,
+  t: TFunction,
 ): Promise<ValidKubeconfig> {
   const url = join(kubeconfigIdFeature.config.kubeconfigUrl, kubeconfigId);
   const payload: any = await fetch(url)
@@ -59,7 +59,7 @@ const loadKubeconfigIdCluster = async (
   kubeconfigIdFeature: KubeconfigIdFeature,
   clusters: ClustersState,
   clusterInfo: useClustersInfoType,
-  t: TFunction<'translation', undefined>,
+  t: TFunction,
 ) => {
   try {
     const kubeconfig = await loadKubeconfigById(

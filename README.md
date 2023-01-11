@@ -2,13 +2,12 @@
 
 ## Overview
 
-Busola is a web-based UI for managing resources within Kyma or any Kubernetes cluster. It consists of separate frontend applications.
+Busola is a web-based UI for managing resources within a Kubernetes cluster. It's based on the [ReactJS](https://reactjs.org/) library.
 
-### Components
+### Subcomponents
 
-Busola project consists of the following UI projects:
+Busola project contains additional sub-projects:
 
-- [`Core UI`](./core-ui) - The main frame
 - [`Backend`](./backend) - A kind of a proxy between Busola and the Kubernetes cluster
 - [`Tests`](./tests) - Acceptance, regression and integration tests
 
@@ -24,19 +23,17 @@ Busola supports:
 
 ## Installation
 
-To install dependencies for the root and all UI projects, and to prepare symlinks for local libraries within this repository, run the following command:
+To install dependencies for the root and backend projects, and to prepare symlinks for local libraries within this repository, run the following command:
 
 ```bash
-npm run bootstrap:ci
+npm install
 ```
 
-> **NOTE:** The `npm run bootstrap:ci` command:
->
-> - Installs root dependencies provided in the [`package.json`](./package.json) file.
-> - Installs dependencies for the [libraries](#components).
-> - Builds all the [libraries](#components).
-
 Read [Install Kyma Dashboard manually](docs/install-kyma-dashboard-manually.md) to learn how to install the Dashboard with Istio Ingress and how to install it on a Kyma cluster.
+
+## Usage
+
+Run the `npm start` command.
 
 ## Configuration
 
@@ -65,10 +62,10 @@ Busola configuration is the product of gathering and merging the configurations 
 **Frontend:**
 
 - Built-in, hardcoded defaults.
-- Busola frontend default cluster configuration, acquired from the [defaultConfig.yaml](core-ui/public/defaultConfig.yaml) file.
+- Busola frontend default cluster configuration, acquired from the [defaultConfig.yaml](public/defaultConfig.yaml) file.
 - Busola cluster configuration, available on the Busola cluster in the ConfigMap "busola/busola-config" under the key "config".
   This data is mounted to the Busola `web` and `backend` Pods, and during the local development,
-  the [defaultConfig.yaml](core-ui/public/defaultConfig.yaml) file is used.
+  the [defaultConfig.yaml](public/defaultConfig.yaml) file is used.
 - Target cluster configuration, available on the target cluster in ConfigMap "kube-public/busola-config" under the key "config". Busola performs a request for that resource during the bootstrap process.
 
 ### Change the Configuration
@@ -89,10 +86,10 @@ See the available Busola [feature flags](docs/features.md) for more information.
 
 ### Start all views
 
-Use the following command to run Busola with the [`core-ui`](./core-ui) and all other views locally:
+Use the following command to run Busola locally:
 
 ```bash
-npm run start
+npm start
 ```
 
 After a while, open the [http://localhost:8080](http://localhost:8080) address in your browser, and provide your kubeconfig in the **Connect cluster** wizard.
@@ -101,12 +98,12 @@ Once you started Busola locally, you can begin the development. All modules have
 
 The apps you started run at the following addresses:
 
-- `Core-UI` - [http://localhost:8080](http://localhost:8080)
+- `Busola` - [http://localhost:8080](http://localhost:8080)
 - `Backend` - [http://localhost:3001](http://localhost:3001)
 
 ### Security countermeasures
 
-When developing new features in Busola UI, adhere to the following rules. This will help you to mitigate any security-related threats.
+When developing new features in Busola, adhere to the following rules. This will help you to mitigate any security-related threats.
 
 1. Prevent cross-site request forgery (XSRF).
 

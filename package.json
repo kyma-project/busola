@@ -4,40 +4,134 @@
   "name": "@kyma-project/busola",
   "version": "0.0.1-rc.8",
   "scripts": {
-    "bootstrap": "npm install &&  npm run install:apps",
-    "bootstrap:ci": "npm ci && npm run install:apps",
-    "install:apps": "gulp install:apps",
-    "start": "./scripts/pre-start-warning.sh && lerna exec --parallel -- npm run start",
+    "postinstall": "cd backend && npm install",
+    "start": "concurrently -c cyan,green npm:busola npm:backend",
+    "busola": "npm run copy-themes; PORT=8080 BROWSER=none GENERATE_SOURCEMAP=false react-app-rewired start",
+    "backend": "cd backend && npm run start",
     "lint-check": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
     "lint-fix": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
-    "lint-staged": "lint-staged --concurrent=false"
+    "lint-staged": "lint-staged --concurrent=false",
+    "test": "react-app-rewired test",
+    "eject": "react-scripts eject",
+    "build": "npm run copy-themes; INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false react-app-rewired build",
+    "build:docker": "npm run copy-themes; INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false react-app-rewired build --env IS_DOCKER=true",
+    "copy-themes": "cp node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3/css_variables.css public/themes/@sap-theming/default.css; for theme in hcb dark hcw light_dark ; do cp node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3_$theme/css_variables.css public/themes/@sap-theming/$theme.css ; done"
+  },
+  "eslintConfig": {
+    "extends": "react-app",
+    "rules": {},
+    "ignorePatterns": "tests/*",
+    "overrides": [
+      {
+        "files": [
+          "**/*.ts?(x)"
+        ],
+        "rules": {
+          "@typescript-eslint/no-unused-vars": "warn"
+        }
+      }
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "config": {
+    "unsafe-perm": true
   },
   "dependencies": {
+    "@datasert/cronjs-parser": "^1.1.0",
+    "@openapi-contrib/openapi-schema-to-json-schema": "^3.1.1",
+    "@peculiar/x509": "^1.6.0",
     "@sap-theming/theming-base-content": "^11.1.28",
+    "@sentry/react": "^6.17.4",
     "@sentry/tracing": "^6.12.0",
+    "@stoplight/json-ref-resolver": "^3.1.3",
+    "@types/jsonpath": "^0.2.0",
     "@types/pluralize": "^0.0.29",
+    "@ui-schema/ui-schema": "^0.4.0-beta.1",
+    "buffer": "^6.0.3",
+    "classnames": "^2.2.6",
+    "copy-to-clipboard": "^3.2.0",
+    "core-js": "^3.3.6",
+    "cronstrue": "^1.114.0",
+    "didyoumean": "^1.2.2",
     "file-saver": "^2.0.2",
-    "i18next": "^20.3.4",
+    "fundamental-react": "^0.14.5-rc.4",
+    "fundamental-styles": "^0.19.0",
+    "graphviz-react": "^1.2.0",
+    "http-status-codes": "^2.2.0",
+    "i18next": "^22.0.4",
     "i18next-http-backend": "^1.3.2",
+    "immutable": "^4.0.0",
     "js-yaml": "^4.1.0",
-    "jsonpath": "^1.1.1"
+    "jsonata": "^1.8.6",
+    "jsonpath": "^1.1.1",
+    "jsonschema": "^1.4.1",
+    "lodash": "^4.17.19",
+    "monaco-editor": "^0.33.0",
+    "monaco-yaml": "^4.0.0-alpha.2",
+    "oidc-client": "^1.11.5",
+    "oidc-client-ts": "^2.2.0",
+    "pako": "^2.0.4",
+    "pluralize": "^8.0.0",
+    "prop-types": "^15.7.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-i18next": "^11.18.6",
+    "react-router-dom": "^6.3.0",
+    "react-tippy": "^1.4.0",
+    "recoil": "^0.7.5",
+    "rfc6902": "^5.0.1",
+    "url": "^0.11.0"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.2",
+    "@testing-library/react": "^12.1.3",
+    "@types/didyoumean": "^1.2.0",
+    "@types/enzyme": "^3.10.12",
+    "@types/file-saver": "^2.0.5",
+    "@types/fundamental-react": "^0.13.10",
+    "@types/jest": "^29.1.2",
+    "@types/js-yaml": "^4.0.5",
+    "@types/lodash": "^4.14.186",
+    "@types/node": "^18.8.5",
+    "@types/pluralize": "^0.0.29",
+    "@types/react": "^18.0.21",
+    "@types/react-dom": "^18.0.6",
+    "@types/uuid": "^9.0.0",
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.6",
+    "babel-polyfill": "^6.26.0",
     "cli-color": "^1.4.0",
+    "concurrently": "^7.6.0",
+    "enzyme": "^3.10.0",
+    "enzyme-to-json": "^3.4.0",
     "fancy-log": "^1.3.3",
-    "gulp": "^4.0.1",
     "gulp-clean": "^0.4.0",
     "gulp-concat": "^2.6.1",
     "gulp-rename": "^2.0.0",
     "husky": "^2.4.1",
     "jest": "26.6.0",
-    "lerna": "^4.0.0",
-    "lint-staged": "^10.4.0",
     "jsdom-worker-fix": "^0.1.8",
-    "prettier": "^1.18.2"
+    "lint-staged": "^10.4.0",
+    "node-sass": "^7.0.1",
+    "prettier": "^1.18.2",
+    "react-app-rewired": "^2.2.1",
+    "react-scripts": "^5.0.0",
+    "sass-loader": "^12.4.0",
+    "typescript": "^4.8.4",
+    "uuid": "^9.0.0"
   },
   "lint-staged": {
-    "core-ui/src/i18n/*.yaml": "yaml-sort --lineWidth=-1 -i ",
+    "src/i18n/*.yaml": "yaml-sort --lineWidth=-1 -i ",
     "*.{ts,tsx,js,jsx,json,html,css,scss,yaml,md}": "prettier --write"
   },
   "husky": {
