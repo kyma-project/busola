@@ -6,6 +6,7 @@ import { List, fromJS } from 'immutable';
 // fake an OrderedMap-like structure using List to allow for duplicate keys
 const propertiesWrapper = src => ({
   map: cb => List(src?.map(([key, val]) => cb(val, key))),
+  toJSON: () => src,
 });
 
 export function SchemaRulesInjector({
@@ -29,7 +30,7 @@ export function SchemaRulesInjector({
     newSchema = newSchema.set('items', newItems);
   }
 
-  if (schema.get('properties')) {
+  if (newSchema.get('properties')) {
     const newProperties = childRules
       ?.map(rule => {
         if (rule.custom) {
@@ -37,9 +38,8 @@ export function SchemaRulesInjector({
         }
 
         const propertyKey = last(rule.path);
-        const property = newSchema
-          .get('properties')
-          .get(propertyKey)
+        const property = fromJS(newSchema.get('properties'))
+          ?.get(propertyKey)
           ?.set('schemaRule', rule);
 
         return property ? [propertyKey, property] : null;
