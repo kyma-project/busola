@@ -89,7 +89,7 @@ Default settings:
 
 ```yaml
 EXTENSIBILITY:
-  isEnabled: false
+  isEnabled: true
 ```
 
 - **EXTERNAL_NODES** - a list of links to external websites. `category`: a category name, `icon`: an optional icon, `children`: a list of pairs (label and link).

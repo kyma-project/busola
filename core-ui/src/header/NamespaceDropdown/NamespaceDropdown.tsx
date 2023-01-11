@@ -1,11 +1,11 @@
 import { Menu, Icon } from 'fundamental-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { useUrl } from 'hooks/useUrl';
 import { NamespacesState } from 'state/namespacesAtom';
 
 import './NamespaceDropdown.scss';
-import { useTranslation } from 'react-i18next';
 
 export function NamespaceDropdown({
   namespaces,

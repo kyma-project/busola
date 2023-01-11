@@ -41,7 +41,7 @@ export function NumberRenderer({
       }}
       label={tFromStoreKeys(storeKeys, schema)}
       placeholder={tExt(schemaPlaceholder) || tExt(placeholder)}
-      data-testid={storeKeys.join('.')}
+      data-testid={storeKeys.join('.') || tFromStoreKeys(storeKeys, schema)}
       input={Inputs.Number}
       compact={compact}
       {...numberProps}

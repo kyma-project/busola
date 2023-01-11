@@ -1,0 +1,21 @@
+apiVersion: busola.example.com/v1
+kind: TestResource
+metadata:
+  name: var1
+  labels:
+    app.kubernetes.io/name: var1
+  annotations: {}
+  namespace: testin
+spec:
+  name: var1
+---
+apiVersion: busola.example.com/v1
+kind: TestResource
+metadata:
+  name: var2
+  labels:
+    app.kubernetes.io/name: var2
+  annotations: {}
+  namespace: testin
+spec:
+  name: var2
