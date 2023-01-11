@@ -18,6 +18,7 @@ export function K8sNameField({
   showHelp = true,
   inputInfo,
   tooltipContent,
+  required = true,
   ...props
 }) {
   const { t } = useTranslation();
@@ -35,7 +36,7 @@ export function K8sNameField({
 
   return (
     <ResourceForm.FormField
-      required
+      required={required}
       className={className}
       propertyPath="$.metadata.name"
       label={t('common.labels.name')}
@@ -48,7 +49,7 @@ export function K8sNameField({
               <K8sNameInput
                 kind={kind}
                 compact
-                required
+                required={required}
                 showLabel={false}
                 onChange={e => setValue(e.target.value)}
                 value={value}
