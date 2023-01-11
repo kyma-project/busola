@@ -17,6 +17,15 @@ import { mapExtResourceToNavNode } from 'state/resourceList/mapExtResourceToNavN
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 import { doesUserHavePermission } from './filters/permissions';
 import { useUrl } from 'hooks/useUrl';
+import { K8sResource } from 'types';
+
+/*
+the order of the overwrting extensions
+- extensions that are in currentNamespace (they are overwritten only in that particular ns, you don't want to let someone else to overwrite your extensions)
+- extensions that are in kube-public
+- the ones from extensions.yaml
+- native ones
+*/
 
 type ConfigMapData = {
   general: string;
@@ -28,8 +37,12 @@ type ConfigMapData = {
   presets: string;
 };
 
-type ConfigMapResponse = {
+type ConfigMapResponse = K8sResource & {
   data: ConfigMapData;
+};
+
+type ExtResourceWithMetadata = K8sResource & {
+  data: ExtResource;
 };
 
 type ConfigMapListResponse =
@@ -37,6 +50,21 @@ type ConfigMapListResponse =
       items: ConfigMapResponse[];
     }
   | undefined;
+
+const isTheSameNameAndUrl = (firstCM: ExtResource, secondCM: ExtResource) =>
+  firstCM.general.name === secondCM.general.name &&
+  firstCM.general.urlPath === secondCM.general.urlPath;
+
+const convertYamlToObject: (
+  yamlString: string,
+) => Record<string, any> | null = yamlString => {
+  try {
+    return jsyaml.load(yamlString, { json: true }) as Record<string, any>;
+  } catch (error) {
+    console.warn('cannot parse ', yamlString, error);
+    return null;
+  }
+};
 
 async function getExtensionConfigMaps(
   fetchFn: FetchFn,
@@ -113,26 +141,102 @@ const getExtensions = async (
       permissionSet,
     );
 
-    const configMapsExtensions = configMaps.map(configMap => {
-      const convertYamlToObject: (
-        yamlString: string,
-      ) => Record<string, any> | null = yamlString => {
-        try {
-          return jsyaml.load(yamlString, { json: true }) as Record<string, any>;
-        } catch (error) {
-          console.warn('cannot parse ', yamlString, error);
-          return null;
+    const configMapsExtensions = configMaps.reduce(
+      (accumulator, currentConfigMap) => {
+        const extResourceWithMetadata = {
+          ...currentConfigMap,
+          data: mapValues(
+            currentConfigMap?.data || {},
+            convertYamlToObject,
+          ) as ExtResource,
+        };
+
+        const indexOfTheSameExtension = accumulator.findIndex(ext =>
+          isTheSameNameAndUrl(ext.data, extResourceWithMetadata.data),
+        );
+
+        if (indexOfTheSameExtension !== -1) {
+          const areNamespacesTheSame =
+            currentNamespace ===
+            accumulator[indexOfTheSameExtension].metadata.namespace;
+          if (areNamespacesTheSame) {
+            return accumulator;
+          }
+          accumulator[indexOfTheSameExtension] = extResourceWithMetadata;
+          return accumulator;
         }
-      };
-      return mapValues(
-        configMap?.data || {},
-        convertYamlToObject,
-      ) as ExtResource;
+
+        return [
+          ...accumulator,
+          {
+            ...currentConfigMap,
+            data: mapValues(
+              currentConfigMap?.data || {},
+              convertYamlToObject,
+            ) as ExtResource,
+          },
+        ];
+      },
+      [] as ExtResourceWithMetadata[],
+    );
+    const xx = defaultExtensions.filter(defExt => {
+      return configMapsExtensions.some(cmExt => {
+        const namespaces = ['kube-public', currentNamespace];
+        if (
+          namespaces.includes(cmExt.metadata.namespace!) &&
+          isTheSameNameAndUrl(cmExt.data, defExt)
+        )
+          return false;
+        return true;
+      });
     });
 
-    return [...defaultExtensions, ...configMapsExtensions].filter(
-      e => !!e.general,
+    const configMapsExtensionsDataOnly: ExtResource[] = configMapsExtensions.map(
+      cm => cm.data,
     );
+    const combinedExtensions = [...xx, ...configMapsExtensionsDataOnly].filter(
+      ext => !!ext.general,
+    );
+    console.log({ combinedExtensions });
+
+    return combinedExtensions;
+    // const configMapsExtensions = configMaps.reduce((accumulator,  currentConfigMap) => {
+
+    //   // configMap.metadata.namespace
+
+    //   const newExtension = mapValues(
+    //     currentConfigMap?.data || {},
+    //     convertYamlToObject,
+    //   ) as ExtResource
+
+    //   if(!newExtension || !newExtension.general) return accumulator
+
+    //   return [...accumulator,newExtension];
+    // }, [] as ExtResource[]);
+
+    // const combinedExtensions = [
+    //   ...defaultExtensions,
+    //   ...configMapsExtensions,
+    // ].reduce((accumulator, currentExtension) => {
+    //   if (!currentExtension.general) return accumulator;
+
+    //   const indexOfTheSameExtension = accumulator.findIndex(
+    //     ext =>
+    //       ext.general.name === currentExtension.general.name &&
+    //       ext.general.urlPath === currentExtension.general.urlPath,
+    //   );
+
+    //   if (indexOfTheSameExtension === -1)
+    //     return [...accumulator, currentExtension];
+
+    //   console.log({ currentExtension });
+
+    //   accumulator[indexOfTheSameExtension] = currentExtension;
+    //   return accumulator;
+    // }, [] as ExtResource[]);
+
+    // console.log({ combinedExtensions });
+    // return combinedExtensions;
   } catch (e) {
     console.warn('Cannot load cluster params: ', e);
     return [];
