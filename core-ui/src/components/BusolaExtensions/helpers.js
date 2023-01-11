@@ -2,6 +2,7 @@ import { prettifyKind } from 'shared/utils/helpers';
 import pluralize from 'pluralize';
 import { getLatestVersion } from 'components/Extensibility/migration';
 import { EXTENSION_VERSION_LABEL } from './constants';
+import jsyaml from 'js-yaml';
 
 export const SECTIONS = [
   'general',
@@ -149,7 +150,7 @@ export function createConfigmap(crd, data) {
     data: Object.fromEntries(
       Object.entries(data).map(([key, value]) => [
         key,
-        JSON.stringify(value, null, 2),
+        jsyaml.dump(value, null, 2),
       ]),
     ),
   };
