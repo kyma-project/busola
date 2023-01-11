@@ -19,14 +19,14 @@ RUN make resolve
 RUN make validate
 RUN make pull-licenses
 
-RUN cd /app/core-ui && make test && make build
+RUN npm test 2>&1 && npm run build:docker
 
 # ---- Serve ----
 FROM nginxinc/nginx-unprivileged:1.21
 WORKDIR /app
 
 # apps
-COPY --from=builder /app/core-ui/build /app/core-ui
+COPY --from=builder /app/build /app/core-ui
 
 # nginx
 COPY --from=builder /app/nginx/nginx.conf /etc/nginx/

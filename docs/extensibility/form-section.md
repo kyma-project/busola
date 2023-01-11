@@ -206,6 +206,7 @@ Text widgets render a field as a text field. They are used by default for all st
 - **required** - a boolean which specifies if a field is required. The default value is taken from CustomResourceDefintion (CRD); if it doesn't exist in the CRD, then it defaults to `false`.
 - **inputInfo** - a string below the input field that shows how to fill in the input.
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
+- **readOnly** - a boolean which specifies if a field is read-only. Defaults to `false`.
 
 #### Example
 
@@ -249,6 +250,7 @@ Name widgets render a name input field. They contain an automatic name generator
 - **inputInfo** - a string below the input field that shows how to fill in the input. It defaults to `Name must consist of lowercase alphanumeric characters or '-', and must start and end with an alphanumeric character (e.g. 'my-name', or '123-abc').`. To disable any suggestion, set this value to `null`.
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
 - **disableOnEdit** - parameter used to disable field in edit mode, defaults to `false`.
+- **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in CRD, then it defaults to `false`.
 
 #### Example
 
