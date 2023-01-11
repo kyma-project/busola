@@ -1,5 +1,6 @@
-import { Shellbar } from 'fundamental-react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useState } from 'react';
+import { Shellbar } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,10 +12,9 @@ import { useUrl } from 'hooks/useUrl';
 import { Logo } from './Logo/Logo';
 import { NamespaceDropdown } from './NamespaceDropdown/NamespaceDropdown';
 import { SidebarSwitcher } from './SidebarSwitcher/SidebarSwitcher';
-import { useAvailableNamespaces } from './useAvailableNamespaces';
+import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
 
 import './Header.scss';
-import { useState } from 'react';
 
 export function Header() {
   const { t } = useTranslation();

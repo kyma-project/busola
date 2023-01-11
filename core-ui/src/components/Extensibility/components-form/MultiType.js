@@ -54,7 +54,9 @@ export function MultiType({
       <ResourceForm.FormField
         value={value}
         label={tFromStoreKeys(storeKeys, schema)}
-        data-testid={`${storeKeys.join('.')}-type`}
+        data-testid={
+          `${storeKeys.join('.')}-type` || tFromStoreKeys(storeKeys, schema)
+        }
         input={() => (
           <ButtonSegmented>
             {types.map(type => (

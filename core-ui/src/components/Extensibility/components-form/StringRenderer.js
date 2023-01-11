@@ -20,6 +20,7 @@ export function StringRenderer({
 }) {
   const { tFromStoreKeys, t: tExt, exists } = useGetTranslation();
   const schemaPlaceholder = schema.get('placeholder');
+  const readOnly = schema.get('readOnly') ?? false;
 
   const getTypeSpecificProps = () => {
     if (schema.get('enum')) {
@@ -63,9 +64,10 @@ export function StringRenderer({
             data: { value },
           });
       }}
+      disabled={readOnly}
       label={tFromStoreKeys(storeKeys, schema)}
       compact={compact}
-      data-testid={storeKeys.join('.')}
+      data-testid={storeKeys.join('.') || tFromStoreKeys(storeKeys, schema)}
       placeholder={tExt(schemaPlaceholder) || tExt(placeholder)}
       {...getTypeSpecificProps()}
       {...getPropsFromSchema(schema, required, tExt)}

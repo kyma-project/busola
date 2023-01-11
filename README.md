@@ -10,7 +10,7 @@ Busola project consists of the following UI projects:
 
 - [`Core UI`](./core-ui) - The main frame
 - [`Backend`](./backend) - A kind of a proxy between Busola and the Kubernetes cluster
-- [`Tests`](./tests) - Acceptance and end-to-end tests
+- [`Tests`](./tests) - Acceptance, regression and integration tests
 
 ## Prerequisites
 
