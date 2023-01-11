@@ -18,10 +18,6 @@ context('Test Pizzas', () => {
     cy.createNamespace('pizzas');
   });
 
-  beforeEach(() => {
-    cy.setBusolaFeature('EXTENSIBILITY', true);
-  });
-
   it('Creates the EXT pizza config', () => {
     cy.getLeftNav()
       .contains('Cluster Details')
@@ -92,7 +88,7 @@ context('Test Pizzas', () => {
   it('Edits a Pizza Order', () => {
     cy.contains('button:visible', 'Edit').click();
 
-    cy.get('.fd-dialog__content').as('form');
+    cy.get('[role="document"]').as('form');
 
     cy.get('@form').contains('Name');
     cy.get('@form').contains('Labels');
@@ -142,7 +138,7 @@ context('Test Pizzas', () => {
   it('Tests the Create Form', () => {
     cy.contains('Create Pizza').click();
 
-    cy.get('.fd-dialog__content').as('form');
+    cy.get('[role="document"]').as('form');
 
     cy.get('@form')
       .find('[data-testid="spec.description"]:visible')
