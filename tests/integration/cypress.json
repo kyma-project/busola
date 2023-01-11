@@ -63,7 +63,6 @@
     "namespace/test-sidecars.spec.js",
     "namespace/test-secrets.spec.js",
     "namespace/test-service-accounts.spec.js",
-    "namespace/test-issuers.spec.js",
     "namespace/test-daemon-sets.spec.js",
     "namespace/test-api-rules.spec.js",
     "namespace/test-in-cluster-eventing.spec.js",
