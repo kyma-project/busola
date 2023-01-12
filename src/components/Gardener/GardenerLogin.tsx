@@ -1,6 +1,6 @@
 import { MessageStrip } from 'fundamental-react';
 import { useFeature } from 'hooks/useFeature';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createUserManager } from 'state/authDataAtom';
@@ -12,6 +12,8 @@ export default function GardenerLogin() {
   const [token, setToken] = useState('');
   const [error, setError] = useState<Error | null>(null);
   const [report, setReport] = useState('');
+
+  const { t } = useTranslation();
 
   const gardenerFeature = useFeature<GardenerLoginFeature>('GARDENER_LOGIN');
   const navigate = useNavigate();
