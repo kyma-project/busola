@@ -692,46 +692,6 @@ deployments:
   title: Deployments
 discovery-and-network:
   title: Discovery and Network
-dnsentries:
-  description: <0>DNSEntry</0> is an object that represents the request to create an external DNS record.
-  headers:
-    dns-name: DNSName
-    provider: Provider
-    provider-type: Provider Type
-    spec: Specification
-    status: $t(common.headers.status)
-    targets: Targets
-    ttl: TTL
-  labels:
-    dns-name: DNSName
-    target: Target
-    targets: Targets
-    text: Text
-    ttl: TTL
-    use-cname: Use CNAME
-  messages:
-    cannot-create: Failed to create the DNSEntry
-    created: DNSEntry created
-  name_singular: DNSEntry
-  placeholders:
-    dns-name: Select the DNSName
-    target-a: Enter the A record target
-    target-cname: Enter the CNAME record target
-    ttl: Enter the time to live
-  statuses:
-    deleting: Deleting
-    stale: Error
-  title: DNS Entries
-  tooltips:
-    deleting: Deleting the DNS records
-    invalid: A conflict exists with another DNSentry or owner.
-    pending: The DNS entry update is batched or in progress.
-    ready: The entry has been accepted and the DNS record created.
-    stale: The DNS entry exists, but there is an issue with the provider.
-    target: Target must be an A record, or a CNAME record. Provide either target or text.
-    text: Text record must be a string. Provide either target or text.
-    use-a: Switch to A record.
-    use-cname: Switch to CNAME record
 domains:
   example: For example, *.api.mydomain.com
   exclude:

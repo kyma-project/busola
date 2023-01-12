@@ -76,13 +76,11 @@ context('Test extensibility variables', () => {
 
     // test vars with no default value
     cy.get('@form')
-      .find('[data-testid="Simple / Advanced"]:visible')
       .find('input')
       .should('be.empty');
 
     // test vars with enums
     cy.get('@form')
-      .find('[data-testid="Simple / Advanced"]:visible')
       .find('span')
       .find('[aria-label="Combobox input arrow"]:visible', { log: false })
       .click();
@@ -115,7 +113,6 @@ context('Test extensibility variables', () => {
 
     // test visibility based on var (select 'advanced')
     cy.get('@form')
-      .find('[data-testid="Simple / Advanced"]:visible')
       .find('span')
       .find('[aria-label="Combobox input arrow"]:visible', { log: false })
       .click();
