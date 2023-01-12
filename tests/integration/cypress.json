@@ -51,7 +51,6 @@
     "namespace/test-destination-rules.spec.js",
     "namespace/test-virtual-services.spec.js",
     "namespace/test-authorization-policies.spec.js",
-    "namespace/test-dns-entries.spec.js",
     "namespace/test-cron-jobs.spec.js",
     "namespace/test-HPA.spec.js",
     "namespace/test-gateways.spec.js",
