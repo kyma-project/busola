@@ -7,7 +7,7 @@ TAG = $(DOCKER_TAG)
 
 .PHONY: resolve
 resolve:
-	npm run bootstrap:ci
+	npm install
 
 .PHONY: validate
 validate:
@@ -29,11 +29,11 @@ release: build-image push-image
 release-local: build-image-local push-image-local
 
 build-image:
-	sed -i 's/version: dev/version: ${TAG}/' core-ui/public/version.yaml
+	sed -i 's/version: dev/version: ${TAG}/' public/version.yaml
 	docker build -t $(IMG_NAME) -f Dockerfile .
 
 build-image-local:
-	sed -i 's/version: dev/version: ${TAG}/' core-ui/public/version.yaml
+	sed -i 's/version: dev/version: ${TAG}/' public/version.yaml
 	docker build -t $(LOCAL_IMG_NAME) -f Dockerfile.local .
 
 push-image:

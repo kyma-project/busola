@@ -18,5 +18,8 @@
     "jsx": "react-jsx",
     "baseUrl": "src"
   },
+  "typeAcquisition": {
+    "include": ["jest"]
+  },
   "include": ["src"]
 }
