@@ -138,8 +138,6 @@ clusters:
   description-visibility: Description is shown on the Clusters Overview list
   disconnect: Cluster disconnected
   edit-cluster: Edit Cluster
-  placeholders: 
-    type: Select Issuer type
   empty:
     go-to-btp-cockpit: To view your clusters, go to
     subtitle: Let's add one now!
