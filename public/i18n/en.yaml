@@ -732,30 +732,6 @@ dnsentries:
     text: Text record must be a string. Provide either target or text.
     use-a: Switch to A record.
     use-cname: Switch to CNAME record
-dnsproviders:
-  description: <0>DNSProvider</0> is used to specify and manage the configuration for the external DNS services.
-  domains: Domains
-  headers:
-    exclude: Excluded Domains
-    include: Included Domains
-    status: $t(common.headers.status)
-    type: Type
-  labels:
-    default-ttl: Default TTL
-    secret-reference: Secret Reference
-    type: Type
-  messages:
-    cannot-create: 'Failed to create the DNSProvider:'
-    created: DNSProvider created
-  name_singular: DNSProvider
-  placeholders:
-    default-ttl: Enter the default time to live
-    provider-type: Choose Provider type
-  title: DNS Providers
-  tooltips:
-    excluded-domains: The selection of forbidden domains (by default, all zones and domains in those zones are served), $t(domains.example).
-    included-domains: The selection of allowed domains (by default, all zones and domains in those zones are served), $t(domains.example).
-    ready: The entry has been accepted and the DNS record created.
 domains:
   example: For example, *.api.mydomain.com
   exclude:
