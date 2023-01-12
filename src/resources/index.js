@@ -61,7 +61,7 @@ export const resources = [
   Roles,
   RoleBindings,
   OAuth2Clients,
-  DnsProviders,
+  Issuers,
   DnsEntries,
   ConfigMaps,
   Certificates,
