@@ -19,7 +19,6 @@ import * as Issuers from './Issuers';
 import * as Ingresses from './Ingresses';
 import * as HorizontalPodAutoscalers from './HorizontalPodAutoscalers';
 import * as Events from './Events';
-import * as DnsProviders from './DnsProviders';
 import * as DnsEntries from './DnsEntries';
 import * as Deployments from './Deployments';
 import * as DaemonSets from './DaemonSets';
@@ -64,7 +63,6 @@ export const resources = [
   RoleBindings,
   OAuth2Clients,
   Issuers,
-  DnsProviders,
   DnsEntries,
   ConfigMaps,
   Certificates,
