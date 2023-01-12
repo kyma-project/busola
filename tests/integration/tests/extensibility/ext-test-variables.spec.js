@@ -76,7 +76,6 @@ context('Test extensibility variables', () => {
 
     // test vars with no default value
     cy.get('@form')
-      .find('[data-testid="Simple / Advanced"]:visible')
       .find('input')
       .should('be.empty');
 
