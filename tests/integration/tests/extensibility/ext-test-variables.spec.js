@@ -81,7 +81,6 @@ context('Test extensibility variables', () => {
 
     // test vars with enums
     cy.get('@form')
-      .find('[data-testid="Simple / Advanced"]:visible')
       .find('span')
       .find('[aria-label="Combobox input arrow"]:visible', { log: false })
       .click();
