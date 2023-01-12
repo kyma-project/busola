@@ -113,7 +113,6 @@ context('Test extensibility variables', () => {
 
     // test visibility based on var (select 'advanced')
     cy.get('@form')
-      .find('[data-testid="Simple / Advanced"]:visible')
       .find('span')
       .find('[aria-label="Combobox input arrow"]:visible', { log: false })
       .click();
