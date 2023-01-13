@@ -37,6 +37,7 @@ export function GenericList({
       type: 'list-item-add',
       schema,
       itemValue: fromJS(itemTemplate),
+      required,
     });
   };
 
