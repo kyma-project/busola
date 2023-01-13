@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Route, Routes, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue, useRecoilState } from 'recoil';
+import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { WithTitle } from 'shared/hooks/useWindowTitle';
@@ -15,6 +15,7 @@ import { otherRoutes } from 'resources/other';
 import { resourceRoutes } from 'resources';
 import { createExtensibilityRoutes } from './ExtensibilityRoutes';
 import { extensionsState } from 'state/navigation/extensionsAtom';
+import { authDataState } from 'state/authDataAtom';
 import { IncorrectPath } from './IncorrectPath';
 
 export default function ClusterRoutes() {
@@ -23,6 +24,7 @@ export default function ClusterRoutes() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const language = useRecoilValue(languageAtom);
+  const setAuth = useSetRecoilState(authDataState);
   const clusters = useRecoilValue(clustersState);
   const extensions = useRecoilValue(extensionsState);
   const [cluster, setCluster] = useRecoilState(clusterState);
@@ -37,8 +39,17 @@ export default function ClusterRoutes() {
       navigate('/clusters');
       return;
     }
+    setAuth(null);
     setCluster(currentCluster);
-  }, [currentClusterName, cluster, clusters, navigate, setCluster, search]);
+  }, [
+    currentClusterName,
+    cluster,
+    clusters,
+    navigate,
+    setCluster,
+    setAuth,
+    search,
+  ]);
 
   return (
     <Routes>
