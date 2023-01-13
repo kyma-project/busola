@@ -122,6 +122,8 @@
     "jest": "26.6.0",
     "jsdom-worker-fix": "^0.1.8",
     "lint-staged": "^10.4.0",
+    "minimatch": "^3.0.5",
+    "minimist": "^1.2.6",
     "node-sass": "^7.0.1",
     "prettier": "^1.18.2",
     "react-app-rewired": "^2.2.1",
