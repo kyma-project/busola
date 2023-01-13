@@ -21,6 +21,7 @@ export function CollapsibleSection({
   tooltipContent,
   nestingLevel = 0,
 }) {
+  console.log(className, required);
   const [open, setOpen] = useState(defaultOpen);
   const actionsRef = useRef();
   const iconGlyph = open ? 'navigation-down-arrow' : 'navigation-right-arrow';

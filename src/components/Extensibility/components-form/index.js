@@ -53,7 +53,9 @@ export const widgets = {
   RootRenderer: ({ children }) => <div>{children}</div>,
   GroupRenderer: ({ children }) => children,
   WidgetRenderer: ({ schema, required, ...props }) => {
+    console.log(required, schema.get('required'));
     required = schema.get('required') ?? required;
+    console.log(required);
     return WidgetRenderer({ schema, required, ...props });
   },
   pluginStack,
