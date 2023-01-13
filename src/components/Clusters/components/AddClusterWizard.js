@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { MessageStrip, Wizard } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator';
 import { useNotification } from 'shared/contexts/NotificationContext';
+import { useClustersInfo } from 'state/utils/getClustersInfo';
+import { configurationAtom } from 'state/configuration/configurationAtom';
+import { authDataState } from 'state/authDataAtom';
 
 import { addByContext, getUser, hasKubeconfigAuth } from '../shared';
 import { AuthForm } from './AuthForm';
 import { KubeconfigUpload } from './KubeconfigUpload/KubeconfigUpload';
 import { ContextChooser } from './ContextChooser/ContextChooser';
 import { ChooseStorage } from './ChooseStorage';
-
-import { useClustersInfo } from 'state/utils/getClustersInfo';
-import { configurationAtom } from 'state/configuration/configurationAtom';
 
 import './AddClusterWizard.scss';
 
@@ -28,6 +28,7 @@ export function AddClusterWizard({
   const { t } = useTranslation();
   const notification = useNotification();
   const clustersInfo = useClustersInfo();
+  const setAuth = useSetRecoilState(authDataState);
 
   const [hasAuth, setHasAuth] = useState(false);
   const [hasOneContext, setHasOneContext] = useState(false);
@@ -67,6 +68,7 @@ export function AddClusterWizard({
 
   const onComplete = () => {
     try {
+      setAuth(null);
       const contextName = kubeconfig['current-context'];
       if (!kubeconfig.contexts?.length) {
         addByContext(

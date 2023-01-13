@@ -9,13 +9,13 @@ import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/Clust
 import { clusterState } from 'state/clusterAtom';
 import { clustersState } from 'state/clustersAtom';
 import { languageAtom } from 'state/preferences/languageAtom';
-
-import NamespaceRoutes from './NamespaceRoutes';
-import { otherRoutes } from 'resources/other';
-import { resourceRoutes } from 'resources';
-import { createExtensibilityRoutes } from './ExtensibilityRoutes';
 import { extensionsState } from 'state/navigation/extensionsAtom';
 import { authDataState } from 'state/authDataAtom';
+import { otherRoutes } from 'resources/other';
+import { resourceRoutes } from 'resources';
+
+import NamespaceRoutes from './NamespaceRoutes';
+import { createExtensibilityRoutes } from './ExtensibilityRoutes';
 import { IncorrectPath } from './IncorrectPath';
 
 export default function ClusterRoutes() {
