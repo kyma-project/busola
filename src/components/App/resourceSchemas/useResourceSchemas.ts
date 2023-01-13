@@ -37,6 +37,7 @@ export const useResourceSchemas = () => {
 
   useEffect(() => {
     if (
+      authData &&
       activeClusterName === cluster?.contextName &&
       openApi?.state === 'hasError' &&
       !isClusterList
@@ -49,6 +50,7 @@ export const useResourceSchemas = () => {
   }, [
     activeClusterName,
     cluster?.contextName,
+    authData,
     openApi.state,
     isClusterList,
     navigate,
