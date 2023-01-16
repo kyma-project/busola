@@ -62,7 +62,6 @@ export function Panel({
             <Button
               option="transparent"
               glyph={isDecoded ? 'hide' : 'show'}
-              //disabled={!secret?.data}
               onClick={() => setDecoded(!isDecoded)}
               iconBeforeText
             >
