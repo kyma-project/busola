@@ -16,21 +16,22 @@ export function Checkboxes({
       setValue(value.filter(v => v !== key));
     }
   };
-
   return (
-    <FormRadioGroup inline={inline} className="inline-radio-group" {...props}>
-      {options.map(({ key, text }) => (
-        <Checkbox
-          data-testid={`${dataTestID}.${key}`}
-          compact
-          key={key}
-          value={key}
-          checked={value?.includes(key)}
-          onChange={e => updateValue(key, e.target.checked)}
-        >
-          {text}
-        </Checkbox>
-      ))}
-    </FormRadioGroup>
+    <div class="fd-col fd-col-md--11">
+      <FormRadioGroup inline={inline} className="inline-radio-group" {...props}>
+        {options.map(({ key, text }) => (
+          <Checkbox
+            data-testid={`${dataTestID}.${key}`}
+            compact
+            key={key}
+            value={key}
+            checked={value?.includes(key)}
+            onChange={e => updateValue(key, e.target.checked)}
+          >
+            {text}
+          </Checkbox>
+        ))}
+      </FormRadioGroup>
+    </div>
   );
 }
