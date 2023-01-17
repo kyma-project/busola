@@ -259,6 +259,9 @@ $widgets:
           type: boolean
         description:
           type: string
+        decodable:
+          type: boolean
+          description: Allows decoding of child values using base64
         children:
           $ref: "#/$defs/children"
   Plain:
