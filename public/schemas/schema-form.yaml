@@ -292,3 +292,7 @@ $widgets:
           type: boolean
           description: a boolean which specifies if field is read only.
           default: false
+        decoded:
+          type: string
+          widget: Jsonata
+          description: whether the field should be decoded from a base64 value in the resource
