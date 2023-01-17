@@ -260,7 +260,6 @@ command-palette:
     gateways: Gateways
     horizontalpodautoscalers: Horizontal Pod Autoscalers
     networkpolicies: Network Policies
-    oauth2clients: OAuth2 Clients
     persistentvolumeclaims: Persistent Volume Claims
     persistentvolumes: Persistent Volumes
     replicasets: Replica Sets
