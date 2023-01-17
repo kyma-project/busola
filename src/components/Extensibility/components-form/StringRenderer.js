@@ -1,11 +1,15 @@
 import React from 'react';
 
+import { base64Decode, base64Encode } from 'shared/helpers';
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import {
   useGetTranslation,
   getPropsFromSchema,
 } from 'components/Extensibility/helpers';
+
+import { useVariables } from '../hooks/useVariables';
+import { useJsonata } from '../hooks/useJsonata';
 
 export function StringRenderer({
   onChange,
@@ -16,11 +20,31 @@ export function StringRenderer({
   required,
   compact,
   placeholder,
+  originalResource,
   ...props
 }) {
+  const { itemVars } = useVariables();
+  const jsonata = useJsonata({
+    resource: originalResource,
+    scope: value,
+    value,
+  });
+
   const { tFromStoreKeys, t: tExt, exists } = useGetTranslation();
   const schemaPlaceholder = schema.get('placeholder');
   const readOnly = schema.get('readOnly') ?? false;
+  const [decoded] = jsonata(
+    schema.get('decoded'),
+    itemVars(originalResource, schema.get('itemVars'), storeKeys),
+  );
+
+  if (decoded) {
+    try {
+      value = base64Decode(value);
+    } catch (e) {
+      // noop
+    }
+  }
 
   const getTypeSpecificProps = () => {
     if (schema.get('enum')) {
@@ -54,6 +78,9 @@ export function StringRenderer({
     <ResourceForm.FormField
       value={value}
       setValue={value => {
+        if (decoded) {
+          value = base64Encode(value);
+        }
         onChange &&
           onChange({
             storeKeys,
