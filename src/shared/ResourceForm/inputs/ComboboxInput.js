@@ -21,7 +21,7 @@ export function ComboboxInput({
   return (
     <div
       className={classnames(
-        `resource-form-combobox fd-col fd-col-md--${fullWidth ? '12' : '11'}`,
+        `fd-col fd-col-md--${fullWidth ? '12' : '11'}`,
         className,
       )}
     >
