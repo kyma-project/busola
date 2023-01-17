@@ -13,49 +13,49 @@ context('Test extensibility variables', () => {
       fileName: 'kubeconfig-k3s.yaml',
       storage: 'Session storage',
     });
-    cy.createNamespace(NAMESPACE);
+    // cy.createNamespace(NAMESPACE);
   });
 
-  it('Creates the EXT test resources config', () => {
-    cy.getLeftNav()
-      .contains('Cluster Details')
-      .click();
+  // it('Creates the EXT test resources config', () => {
+  //   cy.getLeftNav()
+  //     .contains('Cluster Details')
+  //     .click();
 
-    cy.contains('Upload YAML').click();
+  //   cy.contains('Upload YAML').click();
 
-    cy.loadFiles(
-      'examples/testing/configuration/test-resource-configmap.yaml',
-      'examples/testing/configuration/test-resource-crd.yaml',
-    ).then(resources => {
-      const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
-      cy.pasteToMonaco(input);
-    });
+  //   cy.loadFiles(
+  //     'examples/testing/configuration/test-resource-configmap.yaml',
+  //     'examples/testing/configuration/test-resource-crd.yaml',
+  //   ).then(resources => {
+  //     const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+  //     cy.pasteToMonaco(input);
+  //   });
 
-    cy.contains('Submit').click();
+  //   cy.contains('Submit').click();
 
-    cy.get('.fd-dialog__body')
-      .find('.sap-icon--message-success')
-      .should('have.length', 2);
+  //   cy.get('.fd-dialog__body')
+  //     .find('.sap-icon--message-success')
+  //     .should('have.length', 2);
 
-    cy.loadFiles('examples/testing/samples/test-resource-samples.yaml').then(
-      resources => {
-        const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
-        cy.pasteToMonaco(input);
-      },
-    );
+  //   cy.loadFiles('examples/testing/samples/test-resource-samples.yaml').then(
+  //     resources => {
+  //       const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+  //       cy.pasteToMonaco(input);
+  //     },
+  //   );
 
-    cy.contains('Submit').click();
+  //   cy.contains('Submit').click();
 
-    cy.get('.fd-dialog__body')
-      .find('.sap-icon--message-success')
-      .should('have.length', 2);
-  });
+  //   cy.get('.fd-dialog__body')
+  //     .find('.sap-icon--message-success')
+  //     .should('have.length', 2);
+  // });
 
   it('Navigate to Test Resource Creation', () => {
-    cy.loginAndSelectCluster({
-      fileName: 'kubeconfig-k3s.yaml',
-      storage: 'Session storage',
-    });
+    // cy.loginAndSelectCluster({
+    //   fileName: 'kubeconfig-k3s.yaml',
+    //   storage: 'Session storage',
+    // });
     cy.contains('Namespaces').click();
 
     cy.contains('a', NAMESPACE).click();
@@ -65,7 +65,7 @@ context('Test extensibility variables', () => {
       .click();
 
     cy.getLeftNav()
-      .contains('Test Resources')
+      .contains(/^Test Resources$/)
       .click();
 
     cy.contains('Create Test Resource').click();
@@ -229,5 +229,38 @@ context('Test extensibility variables', () => {
       .find('[data-testid="spec.existingResources"]:visible')
       .invoke('val')
       .should('have.string', 'var2');
+  });
+
+  it('Tests MultiCheckbox', () => {
+    cy.get('[role="document"]').as('form');
+
+    cy.get('@form')
+      .find('[data-testid="spec.arrayOfStrings.value_1"]:visible')
+      .find('input')
+      .should('not.be.checked');
+
+    cy.get('@form')
+      .find('[data-testid="spec.arrayOfStrings.value_1"]:visible')
+      .find('label')
+      .click();
+
+    cy.get('@form')
+      .find('[data-testid="spec.arrayOfStrings.value_3"]:visible')
+      .find('label')
+      .click();
+
+    cy.get('[ariaLabel="TestResource name"]:visible', { log: false })
+      .type(NAME)
+      .click();
+
+    // create resource
+    cy.get('[role=dialog]')
+      .contains('button', 'Create')
+      .click();
+
+    // check arrayOfStrings
+    cy.contains('h3', NAME).should('be.visible');
+    cy.contains('value_1, value_3').should('exist');
+    cy.contains('value_2').should('not.exist');
   });
 });

@@ -65,5 +65,15 @@ spec:
                       withoutValue:
                         type: string
 
+                arrayOfStrings:
+                  type: array
+                  description: Array of strings
+                  items:
+                    type: string
+                    enum:
+                      - value_1
+                      - value_2
+                      - value_3
+
   conversion:
     strategy: None

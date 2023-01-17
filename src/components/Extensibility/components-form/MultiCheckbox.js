@@ -82,7 +82,7 @@ export function MultiCheckbox({
       disabled={readOnly}
       label={tFromStoreKeys(storeKeys, schema)}
       compact={compact}
-      data-testid={storeKeys.join('.') || tFromStoreKeys(storeKeys, schema)}
+      dataTestID={storeKeys.join('.') || tFromStoreKeys(storeKeys, schema)}
       placeholder={tExt(schemaPlaceholder) || tExt(placeholder)}
       {...getCheckboxesOptions()}
       {...getPropsFromSchema(schema, required, tExt)}

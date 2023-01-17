@@ -16,16 +16,13 @@ data:
         version: v1
   details: |-
     body:
-      - name: Simple name
-        source: spec.name
-      - name: Advanced name
-        source: spec.advancedName
+      - name: Panel
         widget: Panel
         children:
-          - name: Name
-            source: name
-          - name: Type
-            source: type
+          - name: Array of Strings
+            widget: JoinedArray
+            source: spec.arrayOfStrings
+            separator: ', '
   form: |-
     - var: enumVar
       name: Simple / Advanced
@@ -109,6 +106,14 @@ data:
           simple: true
       template:
         withValue: 'template value'
+      
+    - widget: MultiCheckbox
+      path: spec.arrayOfStrings
+      simple: true
+      enum:
+        - value_1
+        - value_2
+        - value_3
 
   general: |-
     resource:

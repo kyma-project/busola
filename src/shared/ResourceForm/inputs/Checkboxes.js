@@ -6,6 +6,7 @@ export function Checkboxes({
   setValue,
   options,
   inline,
+  dataTestID,
   ...props
 }) {
   const updateValue = (key, checked) => {
@@ -20,6 +21,7 @@ export function Checkboxes({
     <FormRadioGroup inline={inline} className="inline-radio-group" {...props}>
       {options.map(({ key, text }) => (
         <Checkbox
+          data-testid={`${dataTestID}.${key}`}
           compact
           key={key}
           value={key}
