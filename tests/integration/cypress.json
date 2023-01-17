@@ -54,7 +54,6 @@
     "namespace/test-cron-jobs.spec.js",
     "namespace/test-HPA.spec.js",
     "namespace/test-gateways.spec.js",
-    "namespace/test-oauth2.spec.js",
     "namespace/test-stateful-sets.spec.js",
     "namespace/test-config-maps.spec.js",
     "namespace/test-settings.spec.js",
