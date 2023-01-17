@@ -133,7 +133,6 @@ const getExtensions = async (
 
     if (Array.isArray(defaultExtensions[0]))
       defaultExtensions = defaultExtensions[0];
-    console.log(defaultExtensions);
 
     const configMaps = await getExtensionConfigMaps(
       fetchFn,
@@ -180,68 +179,32 @@ const getExtensions = async (
       },
       [] as ExtResourceWithMetadata[],
     );
-    console.log({ configMapsExtensions });
 
-    const xx = defaultExtensions.filter(defExt => {
-      return configMapsExtensions.every(cmExt => {
-        const namespaces = ['kube-public', currentNamespace];
+    const defaultExtensionsWithoutOverride = defaultExtensions.filter(
+      defExt => {
+        return configMapsExtensions.every(cmExt => {
+          const namespaces = ['kube-public', currentNamespace];
 
-        if (
-          namespaces.includes(cmExt.metadata.namespace!) &&
-          isTheSameNameAndUrl(cmExt.data, defExt)
-        ) {
-          return false;
-        }
-        return true;
-      });
-    });
+          if (
+            namespaces.includes(cmExt.metadata.namespace!) &&
+            isTheSameNameAndUrl(cmExt.data, defExt)
+          ) {
+            return false;
+          }
+          return true;
+        });
+      },
+    );
 
     const configMapsExtensionsDataOnly: ExtResource[] = configMapsExtensions.map(
       cm => cm.data,
     );
-    const combinedExtensions = [...xx, ...configMapsExtensionsDataOnly].filter(
-      ext => !!ext.general,
-    );
-    console.log({ combinedExtensions });
+    const combinedExtensions = [
+      ...defaultExtensionsWithoutOverride,
+      ...configMapsExtensionsDataOnly,
+    ].filter(ext => !!ext.general);
 
     return combinedExtensions;
-    // const configMapsExtensions = configMaps.reduce((accumulator,  currentConfigMap) => {
-
-    //   // configMap.metadata.namespace
-
-    //   const newExtension = mapValues(
-    //     currentConfigMap?.data || {},
-    //     convertYamlToObject,
-    //   ) as ExtResource
-
-    //   if(!newExtension || !newExtension.general) return accumulator
-
-    //   return [...accumulator,newExtension];
-    // }, [] as ExtResource[]);
-
-    // const combinedExtensions = [
-    //   ...defaultExtensions,
-    //   ...configMapsExtensions,
-    // ].reduce((accumulator, currentExtension) => {
-    //   if (!currentExtension.general) return accumulator;
-
-    //   const indexOfTheSameExtension = accumulator.findIndex(
-    //     ext =>
-    //       ext.general.name === currentExtension.general.name &&
-    //       ext.general.urlPath === currentExtension.general.urlPath,
-    //   );
-
-    //   if (indexOfTheSameExtension === -1)
-    //     return [...accumulator, currentExtension];
-
-    //   console.log({ currentExtension });
-
-    //   accumulator[indexOfTheSameExtension] = currentExtension;
-    //   return accumulator;
-    // }, [] as ExtResource[]);
-
-    // console.log({ combinedExtensions });
-    // return combinedExtensions;
   } catch (e) {
     console.warn('Cannot load cluster params: ', e);
     return [];
@@ -285,18 +248,17 @@ export const useGetExtensions = () => {
             openapiPathIdList,
             permissionSet,
           };
+
           const isNodeVisibleForCurrentConfigSet = partial(
             shouldNodeBeVisible,
             configSet,
           );
+
           const filteredConfigs = configs.filter(node =>
             isNodeVisibleForCurrentConfigSet(mapExtResourceToNavNode(node)),
           );
 
-          setExtensions(extensions => [
-            ...(extensions || []),
-            ...filteredConfigs,
-          ]);
+          setExtensions(filteredConfigs);
         }
       }
     };

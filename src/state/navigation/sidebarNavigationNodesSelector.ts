@@ -31,7 +31,6 @@ export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = s
     let allNodes = [...navNodes, ...observabilityNodes];
 
     const extResources = get(extensionsState);
-
     const isExtensibilityOn = features?.EXTENSIBILITY?.isEnabled;
     if (isExtensibilityOn && extResources) {
       const extNavNodes = extResources.map(ext => mapExtResourceToNavNode(ext));
