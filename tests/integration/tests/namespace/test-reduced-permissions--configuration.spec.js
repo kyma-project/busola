@@ -109,27 +109,6 @@ context('Test reduced permissions 2', () => {
     cy.loginAndSelectCluster();
 
     cy.wait('@clusterwide CM call');
-
-    // mock that you don't have access to fetch CMs in the cluster-context
-    mockPermissionsCall([
-      {
-        verbs: ['*'],
-        apiGroups: [''],
-        resources: ['namespaces', 'configmaps'],
-        namespace: 'kube-public',
-      },
-    ]);
-
-    // fallback to fetch CMs in the kubeconfigNamespace
-    cy.intercept({
-      method: 'GET',
-      url:
-        '/backend/api/v1/namespaces/kube-public/configmaps?labelSelector=busola.io/extension=resource',
-    }).as('kube-public CM call');
-
-    cy.reload();
-
-    cy.wait('@kube-public CM call');
   });
 
   it('Test extension CMs call - user has no access to clusterwide CMs, fallback to namespace wide CMs', () => {
