@@ -3,7 +3,7 @@ import { CATEGORIES, Category, PredefinedCategories } from './categories';
 import { cloneDeep } from 'lodash';
 
 export const assignNodesToCategories = (navList: NavNode[]): Category[] => {
-  const categories = cloneDeep(CATEGORIES);
+  const categories: Category[] = cloneDeep(CATEGORIES);
   navList.forEach(node => {
     if (node.topLevelNode) {
       categories.unshift({
@@ -33,5 +33,10 @@ export const assignNodesToCategories = (navList: NavNode[]): Category[] => {
     }
   });
 
-  return categories;
+  const sortedCategories: Category[] = categories.map(cat => {
+    cat.items = cat.items.sort((a, b) => a.label.localeCompare(b.label));
+    return cat;
+  });
+
+  return sortedCategories;
 };
