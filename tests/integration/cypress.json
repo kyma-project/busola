@@ -39,6 +39,7 @@
     "extensibility/ext-test-variables.spec.js",
     "namespace/run-before.spec.js",
     "namespace/test-namespace-overview.spec.js",
+    "namespace/test-navigation.spec.js",
     "namespace/run-prepare-functions.spec.js",
     "namespace/test-deployments.spec.js",
     "namespace/test-services.spec.js",
