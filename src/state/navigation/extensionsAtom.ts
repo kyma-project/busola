@@ -133,6 +133,7 @@ const getExtensions = async (
 
     if (Array.isArray(defaultExtensions[0]))
       defaultExtensions = defaultExtensions[0];
+    console.log(defaultExtensions);
 
     const configMaps = await getExtensionConfigMaps(
       fetchFn,
@@ -179,14 +180,18 @@ const getExtensions = async (
       },
       [] as ExtResourceWithMetadata[],
     );
+    console.log({ configMapsExtensions });
+
     const xx = defaultExtensions.filter(defExt => {
-      return configMapsExtensions.some(cmExt => {
+      return configMapsExtensions.every(cmExt => {
         const namespaces = ['kube-public', currentNamespace];
+
         if (
           namespaces.includes(cmExt.metadata.namespace!) &&
           isTheSameNameAndUrl(cmExt.data, defExt)
-        )
+        ) {
           return false;
+        }
         return true;
       });
     });
