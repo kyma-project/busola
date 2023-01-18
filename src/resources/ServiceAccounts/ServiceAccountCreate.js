@@ -146,9 +146,9 @@ export const ServiceAccountCreate = ({
       />
       <ResourceForm.FormField
         advanced
-        label={'Create connected Secret'}
+        label={t('service-accounts.associated-secret.label')}
         tooltipContent={t(
-          'Create a long-lived API token for a ServiceAccount which data is kept in a Secret',
+          t('service-accounts.create-modal.tooltips.associated-secret'),
         )}
         input={Inputs.Switch}
         disabled={!!initialServiceAccount}
@@ -158,9 +158,7 @@ export const ServiceAccountCreate = ({
       />
       {shouldCreateSecret && (
         <MessageStrip type="warning">
-          {t(
-            'The connected Secret contains long-lived API token data that may be used to log in with the ServiceAccount rights.',
-          )}
+          {t('service-accounts.associated-secret.warning')}
         </MessageStrip>
       )}
     </ResourceForm>

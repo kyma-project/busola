@@ -54,7 +54,6 @@ export const TokenRequestModal = ({
   };
 
   const isExpirationSecondsValueANumber = () => {
-    console.log(!!Number(tokenRequest.spec.expirationSeconds));
     return !Number(tokenRequest.spec.expirationSeconds);
   };
 
@@ -82,7 +81,7 @@ export const TokenRequestModal = ({
       >
         {/*@ts-ignore*/}
         <ResourceForm.FormField
-          pattern="\d*"
+          inputInfo={t('service-accounts.token-request.input-info')}
           simple
           required
           propertyPath="$.spec.expirationSeconds"
@@ -92,7 +91,7 @@ export const TokenRequestModal = ({
             setValue,
           }: {
             value: number;
-            setValue: (value: number | string) => void;
+            setValue: (value: number) => void;
           }) => (
             //@ts-ignore
             <ComboboxInput
@@ -101,14 +100,12 @@ export const TokenRequestModal = ({
               searchFullString
               selectionType="manual"
               required
-              compact
               options={expirationSecondsOptions}
               selectedKey={value}
               typedValue={value}
-              //@ts-ignore
               onSelectionChange={(
                 e: React.ChangeEvent<HTMLInputElement>,
-                selected: { key: string; value: number },
+                selected: { key: number; text: string },
               ) => {
                 if (e?.target?.value) {
                   setValue(Number(e.target.value));
@@ -119,14 +116,12 @@ export const TokenRequestModal = ({
             />
           )}
         />
-        {tokenRequest.spec.expirationSeconds >= SEVEN_DAYS_IN_SECONDS && (
-          <MessageStrip
-            type="warning"
-            className="fd-margin-end--lg fd-margin-begin--lg"
-          >
-            Be careful
-          </MessageStrip>
-        )}
+        <MessageStrip
+          type="warning"
+          className="fd-margin-end--lg fd-margin-begin--lg fd-margin-top--sm"
+        >
+          {t('service-accounts.token-request.warning')}
+        </MessageStrip>
         {/*@ts-ignore*/}
       </ResourceForm.Single>
     </Dialog>

@@ -32,11 +32,11 @@ export const useCreateTokenRequest = (
       );
       downloadKubeconfig(serviceAccountName, response.status.token);
       notifyToast({
-        content: t('token ok'),
+        content: t('service-accounts.token-request.notification-succes'),
       });
     } catch (error) {
       notifyToast({
-        content: t('failed to create token'),
+        content: t('service-accounts.token-request.notification-failure'),
       });
     }
   }, [
