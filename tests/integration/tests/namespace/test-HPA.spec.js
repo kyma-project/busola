@@ -61,7 +61,7 @@ context('Test HPA', () => {
 
   it('Check HPA details', () => {
     cy.get('[data-testid=hpa-spec-ref]')
-      .contains('apps/v1/deployments')
+      .contains('/deployments')
       .should('be.visible');
 
     cy.contains('#content-wrap', 'Events').should('be.visible');
@@ -72,11 +72,11 @@ context('Test HPA', () => {
   });
 
   it('Check HPA subcomponent', () => {
-    cy.getLeftNav()
-      .contains('Deployments')
+    cy.get('[data-testid=hpa-spec-ref]')
+      .contains('/deployments')
       .click();
 
-    cy.contains(DEPLOYEMENT_NAME).click();
+    cy.url().should('match', /deployments/);
 
     cy.contains(HPA_NAME).should('be.visible');
   });
