@@ -12,6 +12,7 @@ import { createServiceAccountTemplate } from './templates';
 import { validateServiceAccount } from './helpers';
 import { useNavigate } from 'react-router-dom';
 import { useUrl } from 'hooks/useUrl';
+import { MessageStrip } from 'fundamental-react';
 
 const createDefaultSecret = serviceAccountName => {
   return {
@@ -108,17 +109,6 @@ export const ServiceAccountCreate = ({
       initialResource={initialServiceAccount}
       afterCreatedFn={afterServiceAccountCreate}
     >
-      <ResourceForm.FormField
-        label={'Automatically create connected Secret'}
-        tooltipContent={t(
-          'service-accounts.create-modal.tooltips.auto-mount-token',
-        )}
-        input={Inputs.Switch}
-        readOnly={!!initialServiceAccount}
-        onChange={() =>
-          setShouldCreateSecret(shouldCreateSecret => !shouldCreateSecret)
-        }
-      />
       <ComboboxArrayInput
         advanced
         title={t('service-accounts.headers.image-pull-secrets')}
@@ -154,6 +144,25 @@ export const ServiceAccountCreate = ({
         }}
         checked={jp.value(serviceAccount, '$.automountServiceAccountToken')}
       />
+      <ResourceForm.FormField
+        advanced
+        label={'Create connected Secret'}
+        tooltipContent={t(
+          'Create a long-lived API token for a ServiceAccount which data is kept in a Secret',
+        )}
+        input={Inputs.Switch}
+        disabled={!!initialServiceAccount}
+        onChange={() =>
+          setShouldCreateSecret(shouldCreateSecret => !shouldCreateSecret)
+        }
+      />
+      {shouldCreateSecret && (
+        <MessageStrip type="warning">
+          {t(
+            'The connected Secret contains long-lived API token data that may be used to log in with the ServiceAccount rights.',
+          )}
+        </MessageStrip>
+      )}
     </ResourceForm>
   );
 };
