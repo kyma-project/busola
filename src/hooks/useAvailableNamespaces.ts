@@ -31,7 +31,6 @@ export function useAvailableNamespaces() {
         return !hiddenNamespaces.includes(n);
       });
     if (filteredNamespaces) {
-      console.log({ filteredNamespaces });
       setNamespaces(filteredNamespaces);
     }
   }, [data, hiddenNamespaces, setNamespaces, showHiddenNamespaces]);
