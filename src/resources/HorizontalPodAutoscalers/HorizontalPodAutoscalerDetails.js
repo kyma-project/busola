@@ -146,6 +146,7 @@ export function HorizontalPodAutoscalerDetails(props) {
             </LayoutPanel.Body>
             {scaleUp?.policies && (
               <GenericList
+                searchSettings={{ showSearchField: false }}
                 entries={scaleUp.policies}
                 key="behavior-scaleUp"
                 title={t('hpas.headers.scaleUp')}
@@ -179,6 +180,7 @@ export function HorizontalPodAutoscalerDetails(props) {
             </LayoutPanel.Body>
             {scaleDown?.policies && (
               <GenericList
+                searchSettings={{ showSearchField: false }}
                 entries={scaleDown.policies}
                 key="behavior-scaleUp"
                 title={t('hpas.headers.scaleDown')}
