@@ -14,6 +14,7 @@ import { useUrl } from 'hooks/useUrl';
 import { currentMetricsParser, metricsParser } from './helpers';
 import { HorizontalPodAutoscalerCreate } from './HorizontalPodAutoscalerCreate';
 import { Link } from 'react-router-dom';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 
 export function HorizontalPodAutoscalerDetails(props) {
   const { t } = useTranslation();
@@ -60,7 +61,7 @@ export function HorizontalPodAutoscalerDetails(props) {
           />
           <LayoutPanelRow
             name={t('hpas.current-replicas')}
-            value={status.currentReplicas}
+            value={status.currentReplicas ?? EMPTY_TEXT_PLACEHOLDER}
           />
           <LayoutPanelRow
             name={t('hpas.headers.max-pods')}
@@ -111,6 +112,90 @@ export function HorizontalPodAutoscalerDetails(props) {
     );
   };
 
+  const HPABehavior = ({ spec }) => {
+    if (!spec?.behavior) return null;
+
+    const scaleUp = spec?.behavior?.scaleUp;
+    const scaleDown = spec?.behavior?.scaleDown;
+
+    const rowRenderer = policy => {
+      return [policy.type, policy.value, policy.periodSeconds];
+    };
+
+    return (
+      <LayoutPanel className="fd-margin--md " key="hpa-behavior">
+        <LayoutPanel.Header>
+          <LayoutPanel.Head title={t('hpas.headers.behavior')} />
+        </LayoutPanel.Header>
+        {scaleUp && (
+          <LayoutPanel className="fd-margin--md " key="hpa-behavior-scale-up">
+            <LayoutPanel.Header>
+              <LayoutPanel.Head title={t('hpas.headers.scaleUp')} />
+            </LayoutPanel.Header>
+            <LayoutPanel.Body>
+              <LayoutPanelRow
+                name={t('hpas.headers.stabilizationWindowSeconds')}
+                value={
+                  scaleUp?.stabilizationWindowSeconds ?? EMPTY_TEXT_PLACEHOLDER
+                }
+              />
+              <LayoutPanelRow
+                name={t('hpas.headers.selectPolicy')}
+                value={scaleUp?.selectPolicy ?? EMPTY_TEXT_PLACEHOLDER}
+              />
+            </LayoutPanel.Body>
+            {scaleUp?.policies && (
+              <GenericList
+                entries={scaleUp.policies}
+                key="behavior-scaleUp"
+                title={t('hpas.headers.scaleUp')}
+                headerRenderer={() => [
+                  t('hpas.headers.type'),
+                  t('hpas.headers.value'),
+                  t('hpas.headers.periodSeconds'),
+                ]}
+                rowRenderer={rowRenderer}
+              />
+            )}
+          </LayoutPanel>
+        )}
+        {scaleDown && (
+          <LayoutPanel className="fd-margin--md " key="hpa-behavior-scale-up">
+            <LayoutPanel.Header>
+              <LayoutPanel.Head title={t('hpas.headers.scaleDown')} />
+            </LayoutPanel.Header>
+            <LayoutPanel.Body>
+              <LayoutPanelRow
+                name={t('hpas.headers.stabilizationWindowSeconds')}
+                value={
+                  scaleDown?.stabilizationWindowSeconds ??
+                  EMPTY_TEXT_PLACEHOLDER
+                }
+              />
+              <LayoutPanelRow
+                name={t('hpas.headers.selectPolicy')}
+                value={scaleDown?.selectPolicy ?? EMPTY_TEXT_PLACEHOLDER}
+              />
+            </LayoutPanel.Body>
+            {scaleDown?.policies && (
+              <GenericList
+                entries={scaleDown.policies}
+                key="behavior-scaleUp"
+                title={t('hpas.headers.scaleDown')}
+                headerRenderer={() => [
+                  t('hpas.headers.type'),
+                  t('hpas.headers.value'),
+                  t('hpas.headers.periodSeconds'),
+                ]}
+                rowRenderer={rowRenderer}
+              />
+            )}
+          </LayoutPanel>
+        )}
+      </LayoutPanel>
+    );
+  };
+
   const Events = () => (
     <EventsList
       namespace={props.namespace}
@@ -123,7 +208,7 @@ export function HorizontalPodAutoscalerDetails(props) {
     <ResourceDetails
       resourceName={t('hpas.name_singular')}
       customColumns={customColumns}
-      customComponents={[HPASpec, HPAMetrics, Events]}
+      customComponents={[HPASpec, HPAMetrics, HPABehavior, Events]}
       createResourceForm={HorizontalPodAutoscalerCreate}
       {...props}
     />
