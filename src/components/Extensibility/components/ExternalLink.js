@@ -11,7 +11,7 @@ const makeHref = ({ jsonata, value, structure }) => {
 
   let href;
   if (typeof value === 'string') {
-    href = value.startsWith('https://') ? value : `https://${value}`;
+    href = value.startsWith('https://') || value.startsWith('http://') ? value : `https://${value}`;
   }
 
   return link || href;
