@@ -72,11 +72,20 @@ context('Test reduced permissions 2', () => {
 
     // check out "special" namespace view - expect Pods and Services here
     mockNamespacePermissions();
-    cy.getTopNav()
-      .contains(Cypress.env('NAMESPACE_NAME'))
+
+    cy.getLeftNav()
+      .contains('Back To Cluster Details')
       .click();
 
-    cy.get('[role="menu"]')
+    cy.getLeftNav()
+      .contains('Namespaces')
+      .click();
+
+    cy.get('[aria-label="open-search"]').click();
+
+    cy.get('[aria-label="search-input"]').type('kube-public');
+
+    cy.get('[role="row"]')
       .contains('kube-public')
       .click();
 
