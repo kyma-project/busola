@@ -99,7 +99,11 @@ export function HorizontalPodAutoscalerDetails(props) {
                   {t(m.i18label)} {m.name}
                 </>
               }
-              value={`${current[id] || EMPTY_TEXT_PLACEHOLDER} / ${m.value}`}
+              value={
+                current[id] === '1m'
+                  ? `0 / ${m.value}`
+                  : `${current[id] || EMPTY_TEXT_PLACEHOLDER} / ${m.value}`
+              }
             />
           ))}
         </LayoutPanel.Body>
