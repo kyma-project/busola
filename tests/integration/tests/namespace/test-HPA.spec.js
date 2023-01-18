@@ -72,6 +72,10 @@ context('Test HPA', () => {
   });
 
   it('Check HPA subcomponent', () => {
+    cy.get('a')
+      .contains(HPA_NAME)
+      .click();
+
     cy.get('[data-testid=hpa-spec-ref]')
       .contains('/deployments')
       .click();
