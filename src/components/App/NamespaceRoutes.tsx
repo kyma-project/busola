@@ -4,14 +4,13 @@ import { useTranslation } from 'react-i18next';
 
 import { languageAtom } from 'state/preferences/languageAtom';
 import { extensionsState } from 'state/navigation/extensionsAtom';
-import { namespacesState } from 'state/namespacesAtom';
 
 import { resourceRoutesNamespaced } from 'resources';
 import { createExtensibilityRoutes } from './ExtensibilityRoutes';
 import { otherRoutesNamespaced } from 'resources/other';
-
 import { IncorrectPath } from './IncorrectPath';
 import { useUrl } from 'hooks/useUrl';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
 export default function NamespaceRoutes() {
   const { t } = useTranslation();
@@ -19,15 +18,21 @@ export default function NamespaceRoutes() {
   const { clusterUrl } = useUrl();
   const language = useRecoilValue(languageAtom);
   const extensions = useRecoilValue(extensionsState);
-  const namespaces = useRecoilValue(namespacesState);
 
-  if (!namespaces.includes(namespaceId as string))
+  const { error } = useGet(`/api/v1/namespaces/${namespaceId}`, {
+    skip: false,
+    pollingInterval: 0,
+    onDataReceived: () => {},
+  });
+
+  if (error) {
     return (
       <IncorrectPath
         to={clusterUrl('overview')}
         message={t('components.incorrect-path.message.cluster')}
       />
     );
+  }
 
   return (
     <Routes>
