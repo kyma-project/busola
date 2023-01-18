@@ -1,6 +1,10 @@
 /// <reference types="cypress" />
+const path = require('path');
 
 const SERVICE_NAME = 'test-sa-name';
+const DOWNLOADS_FOLDER = Cypress.config('downloadsFolder');
+
+const filepath = path.join(DOWNLOADS_FOLDER, `${SERVICE_NAME}.yaml`);
 
 context('Test Service Accounts', () => {
   Cypress.skipAfterFail();
@@ -21,17 +25,17 @@ context('Test Service Accounts', () => {
       .clear()
       .type(SERVICE_NAME);
 
-    cy.contains('Image Pull Secrets').click();
+    // Toggle 'Automount Token' switch
+    cy.get('[role="presentation"]')
+      .eq(0)
+      .click();
 
-    cy.get(
-      '[placeholder="Start typing to select Image Pull Secrets from the list"]',
-    )
-      .clear()
-      .type('default');
+    // Toggle 'Create associated Secret' switch
+    cy.get('[role="presentation"]')
+      .eq(1)
+      .click();
 
-    cy.contains('default-token').click();
-
-    cy.get('[role="presentation"]').click();
+    cy.contains('The associated Secret').should('be.visible');
 
     cy.get('[role="dialog"]')
       .contains('button', 'Create')
@@ -41,11 +45,9 @@ context('Test Service Accounts', () => {
   it('Checking details', () => {
     cy.contains(SERVICE_NAME).should('be.visible');
 
-    cy.contains(`${SERVICE_NAME}-token`).should('be.visible');
-
-    cy.contains('default-token').should('be.visible');
-
     cy.contains('enabled').should('be.visible');
+
+    cy.contains('kubernetes.io/service-account-token').should('be.visible');
   });
 
   it('Edit', () => {
@@ -64,7 +66,10 @@ context('Test Service Accounts', () => {
       .first()
       .type('test-value');
 
-    cy.get('[role="presentation"]').click();
+    // Toggle 'Automount Token' switch
+    cy.get('[role="presentation"]')
+      .eq(0)
+      .click();
 
     cy.get('[role="dialog"]')
       .contains('button', 'Update')
@@ -75,6 +80,25 @@ context('Test Service Accounts', () => {
     cy.contains('disabled').should('be.visible');
 
     cy.contains('test.key=test-value').should('be.visible');
+  });
+
+  it('Create TokenRequest', () => {
+    cy.contains('Create TokenRequest').click();
+
+    cy.contains(
+      'The TokenRequest will be deactivated after the expiration seconds',
+    ).should('be.visible');
+
+    cy.readFile(filepath).should('not.exist');
+
+    cy.get('[role="dialog"]')
+      .contains('button', 'Create')
+      .click();
+
+    cy.contains('TokenRequest created').should('be.visible');
+
+    cy.readFile(filepath).should('exist');
+    cy.task('removeFile', filepath);
   });
 
   it('Inspect list', () => {
