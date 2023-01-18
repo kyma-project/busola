@@ -1,10 +1,10 @@
-import { Button, Dialog } from 'fundamental-react';
+import { Button, Dialog, MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 
 import { ComboboxInput } from 'shared/ResourceForm/inputs';
-import './TokenRequestModal.scss';
 import { useCreateTokenRequest } from './useCreateTokenRequest';
+import './TokenRequestModal.scss';
 
 type TokenRequestModalProps = {
   isModalOpen: boolean;
@@ -13,21 +13,23 @@ type TokenRequestModalProps = {
   serviceAccountName: string;
 };
 
+const SEVEN_DAYS_IN_SECONDS = 604800;
+
 const expirationSecondsOptions = [
   {
-    text: '1h(3600s)',
+    text: '3600s (1h)',
     key: 3600,
   },
   {
-    text: '6h(21600s)',
+    text: '21600s (6h)',
     key: 21600,
   },
   {
-    text: '1d(86400s)',
+    text: '86400s (1d)',
     key: 86400,
   },
   {
-    text: '7d(604800s)',
+    text: '604800s (7d)',
     key: 604800,
   },
 ];
@@ -51,76 +53,82 @@ export const TokenRequestModal = ({
     handleCloseModal();
   };
 
+  const isExpirationSecondsValueANumber = () => {
+    console.log(!!Number(tokenRequest.spec.expirationSeconds));
+    return !Number(tokenRequest.spec.expirationSeconds);
+  };
+
   const actions = [
-    <Button onClick={onCreateToken}>{t('common.buttons.create')}</Button>,
+    <Button
+      onClick={onCreateToken}
+      disabled={isExpirationSecondsValueANumber()}
+    >
+      {t('common.buttons.create')}
+    </Button>,
     <Button onClick={handleCloseModal}>{t('common.buttons.close')}</Button>,
   ];
-  console.log(tokenRequest);
+
   return (
-    <>
-      <Dialog
-        show={isModalOpen}
-        title={t('service-accounts.token-request.create')}
-        actions={actions}
-        className="token-request-modal"
+    <Dialog
+      show={isModalOpen}
+      title={t('service-accounts.token-request.create')}
+      actions={actions}
+      className="token-request-modal"
+    >
+      {/*@ts-ignore*/}
+      <ResourceForm.Single
+        resource={tokenRequest}
+        setResource={setTokenRequest}
       >
         {/*@ts-ignore*/}
-        <ResourceForm.Single
-          resource={tokenRequest}
-          setResource={setTokenRequest}
-        >
-          {/*@ts-ignore*/}
-          <ResourceForm.FormField
-            simple
-            required
-            propertyPath="$.spec.expirationSeconds"
-            label="Expiration Seconds"
-            // value={tokenRequest.spec.expirationSeconds}
-            input={(props: any) => (
+        <ResourceForm.FormField
+          pattern="\d*"
+          simple
+          required
+          propertyPath="$.spec.expirationSeconds"
+          label={t('service-accounts.token-request.expiration-seconds')}
+          input={({
+            value,
+            setValue,
+          }: {
+            value: number;
+            setValue: (value: number | string) => void;
+          }) => (
+            //@ts-ignore
+            <ComboboxInput
+              id="event-version-combobox"
+              showAllEntries
+              searchFullString
+              selectionType="manual"
+              required
+              compact
+              options={expirationSecondsOptions}
+              selectedKey={value}
+              typedValue={value}
               //@ts-ignore
-              <ComboboxInput
-                id="event-version-combobox"
-                showAllEntries
-                searchFullString
-                selectionType="manual"
-                required
-                compact
-                options={expirationSecondsOptions}
-                selectedKey={props.value}
-                typedValue={props.value}
-                // onSelect={(e: any) => setValue(e.target.value)}
-                //@ts-ignore
-                onSelectionChange={(e, selected) => {
-                  // console.log(e.target.value);
-                  props.setValue(selected.key);
-                }}
-                {...props}
-
-                // setValue={(e: any) =>
-                //   setTokenRequest(tokenRequest => ({
-                //     ...tokenRequest,
-                //     spec: {
-                //       expirationSeconds: e.target.value,
-                //     },
-                //   }))
-                // }
-                // setValue={setTokenRequest}
-                // onSelectionChange={(_: any, selected: any) => {
-                //   console.log(value);
-                //   setTokenRequest(tokenRequest => ({
-                //     ...tokenRequest,
-                //     spec: {
-                //       expirationSeconds: selected.key,
-                //     },
-                //   }));
-                // }}
-              />
-            )}
-          />
-
-          {/*@ts-ignore*/}
-        </ResourceForm.Single>
-      </Dialog>
-    </>
+              onSelectionChange={(
+                e: React.ChangeEvent<HTMLInputElement>,
+                selected: { key: string; value: number },
+              ) => {
+                if (e?.target?.value) {
+                  setValue(Number(e.target.value));
+                } else {
+                  setValue(selected.key);
+                }
+              }}
+            />
+          )}
+        />
+        {tokenRequest.spec.expirationSeconds >= SEVEN_DAYS_IN_SECONDS && (
+          <MessageStrip
+            type="warning"
+            className="fd-margin-end--lg fd-margin-begin--lg"
+          >
+            Be careful
+          </MessageStrip>
+        )}
+        {/*@ts-ignore*/}
+      </ResourceForm.Single>
+    </Dialog>
   );
 };

@@ -1400,6 +1400,7 @@ service-accounts:
     enabled: enabled
   token-request:
     create: Create TokenRequest
+    expiration-seconds: Expiration seconds
   create-modal:
     at-least-one-secret-required: '{{resource}} must have at least one secret.'
     tooltips:

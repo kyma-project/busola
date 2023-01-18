@@ -26,14 +26,13 @@ export const useCreateTokenRequest = (
 
   const createTokenRequestFn = useCallback(async () => {
     try {
-      console.log(tokenRequest);
       const response = await post(
         `/api/v1/namespaces/${namespace}/serviceaccounts/${serviceAccountName}/token`,
         tokenRequest,
       );
       downloadKubeconfig(serviceAccountName, response.status.token);
       notifyToast({
-        content: 'token ok',
+        content: t('token ok'),
       });
     } catch (error) {
       notifyToast({
