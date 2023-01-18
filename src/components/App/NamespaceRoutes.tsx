@@ -25,13 +25,14 @@ export default function NamespaceRoutes() {
     onDataReceived: () => {},
   });
 
-  if (error)
+  if (error) {
     return (
       <IncorrectPath
         to={clusterUrl('overview')}
         message={t('components.incorrect-path.message.cluster')}
       />
     );
+  }
 
   return (
     <Routes>
