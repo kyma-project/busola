@@ -2,8 +2,6 @@ import React from 'react';
 import classnames from 'classnames';
 import { ComboboxInput as FundamentalComboboxInput } from 'fundamental-react';
 
-import './ComboboxInput.scss';
-
 export function ComboboxInput({
   value,
   setValue,
@@ -21,7 +19,7 @@ export function ComboboxInput({
   return (
     <div
       className={classnames(
-        `resource-form-combobox fd-col fd-col-md--${fullWidth ? '12' : '11'}`,
+        `fd-col fd-col-md--${fullWidth ? '12' : '11'}`,
         className,
       )}
     >
