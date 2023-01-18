@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Button } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
 
 import { base64Decode, base64Encode } from 'shared/helpers';
 import { ResourceForm } from 'shared/ResourceForm';
@@ -7,9 +9,7 @@ import {
   useGetTranslation,
   getPropsFromSchema,
 } from 'components/Extensibility/helpers';
-
-import { useVariables } from '../hooks/useVariables';
-import { useJsonata } from '../hooks/useJsonata';
+import { useNotification } from 'shared/contexts/NotificationContext';
 
 export function StringRenderer({
   onChange,
@@ -23,26 +23,22 @@ export function StringRenderer({
   originalResource,
   ...props
 }) {
-  const { itemVars } = useVariables();
-  const jsonata = useJsonata({
-    resource: originalResource,
-    scope: value,
-    value,
-  });
-
+  const { t } = useTranslation();
   const { tFromStoreKeys, t: tExt, exists } = useGetTranslation();
   const schemaPlaceholder = schema.get('placeholder');
   const readOnly = schema.get('readOnly') ?? false;
-  const [decoded] = jsonata(
-    schema.get('decoded'),
-    itemVars(originalResource, schema.get('itemVars'), storeKeys),
-  );
+  const decodable = schema.get('decodable');
+  const [decoded, setDecoded] = useState(true);
+  const notification = useNotification();
 
-  if (decoded) {
+  if (value && decoded) {
     try {
       value = base64Decode(value);
     } catch (e) {
-      // noop
+      notification.notifyError({
+        content: t('secrets.messages.decode-error'),
+      });
+      setDecoded(false);
     }
   }
 
@@ -70,7 +66,28 @@ export function StringRenderer({
       }));
       return { input: Inputs.ComboboxInput, options };
     } else {
-      return { input: Inputs.Text };
+      return {
+        input: params => (
+          <>
+            {Inputs.Text(params)}
+            {decodable && (
+              <div className="fd-col fd-col-md--1 generate-button">
+                <Button
+                  compact
+                  option="transparent"
+                  glyph={decoded ? 'hide' : 'show'}
+                  iconBeforeText
+                  onClick={() => setDecoded(!decoded)}
+                >
+                  {decoded
+                    ? t('secrets.buttons.encode')
+                    : t('secrets.buttons.decode')}
+                </Button>
+              </div>
+            )}
+          </>
+        ),
+      };
     }
   };
 
@@ -95,7 +112,11 @@ export function StringRenderer({
       label={tFromStoreKeys(storeKeys, schema)}
       compact={compact}
       data-testid={storeKeys.join('.') || tFromStoreKeys(storeKeys, schema)}
-      placeholder={tExt(schemaPlaceholder) || tExt(placeholder)}
+      placeholder={
+        (decoded && schema.get('decodedPlaceholder')) ||
+        tExt(schemaPlaceholder) ||
+        tExt(placeholder)
+      }
       {...getTypeSpecificProps()}
       {...getPropsFromSchema(schema, required, tExt)}
     />

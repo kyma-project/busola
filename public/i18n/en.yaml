@@ -1425,6 +1425,8 @@ secrets:
   labels:
     annotations: Annotations
     type: Secret Type
+  messages:
+    decode-error: Failed to decode, not a proper base64 string
   metadata: Metadata
   name_singular: Secret
   placeholders:
