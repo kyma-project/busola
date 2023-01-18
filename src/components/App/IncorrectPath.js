@@ -14,7 +14,7 @@ export function IncorrectPath({ to, title = '', message = '' }) {
   title = title || t('components.incorrect-path.title.default');
   message = message || t('components.incorrect-path.message.default');
 
-  if (!extensions || extensions?.length === 0) return null;
+  if (!extensions?.length) return null;
 
   return (
     <MessageBox
