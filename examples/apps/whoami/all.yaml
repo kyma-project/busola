@@ -60,7 +60,7 @@ spec:
       port: 80
       targetPort: 80
 ---
-apiVersion: autoscaling/v2beta1
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: whoami

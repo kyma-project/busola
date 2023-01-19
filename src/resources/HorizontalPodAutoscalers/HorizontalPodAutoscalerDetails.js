@@ -70,11 +70,12 @@ export function HorizontalPodAutoscalerDetails(props) {
           <LayoutPanelRow
             name={t('hpas.scale-target-ref')}
             value={
-              <Link className="fd-link" to={pathname}>
-                {spec.scaleTargetRef.apiVersion}/
-                {pluralize(spec.scaleTargetRef.kind.toLowerCase())}{' '}
-                {spec.scaleTargetRef.name}
-              </Link>
+              <p>
+                {spec.scaleTargetRef.kind}{' '}
+                <Link className="fd-link" to={pathname}>
+                  {`(${spec.scaleTargetRef.name})`}
+                </Link>
+              </p>
             }
           />
         </LayoutPanel.Body>
