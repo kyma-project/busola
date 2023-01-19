@@ -1,6 +1,5 @@
 import React from 'react';
 import { Checkbox, FormRadioGroup, Icon } from 'fundamental-react';
-import { Label } from '../../../shared/ResourceForm/components/Label';
 
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
