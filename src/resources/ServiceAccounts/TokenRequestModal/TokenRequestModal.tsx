@@ -13,8 +13,6 @@ type TokenRequestModalProps = {
   serviceAccountName: string;
 };
 
-const SEVEN_DAYS_IN_SECONDS = 604800;
-
 const expirationSecondsOptions = [
   {
     text: '3600s (1h)',
