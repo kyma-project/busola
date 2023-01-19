@@ -31,7 +31,7 @@ export function StringRenderer({
   const [decoded, setDecoded] = useState(true);
   const notification = useNotification();
 
-  if (value && decoded) {
+  if (value && decodable && decoded) {
     try {
       value = base64Decode(value);
     } catch (e) {
