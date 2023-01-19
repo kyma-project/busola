@@ -9,13 +9,9 @@ import { useDownloadKubeconfigWithToken } from '../useDownloadKubeconfigWithToke
 import { useGenerateTokenRequest } from './useGenerateTokenRequest';
 
 import './TokenRequestModal.scss';
-
-type TokenRequestModalProps = {
-  isModalOpen: boolean;
-  handleCloseModal: VoidFunction;
-  namespace: string;
-  serviceAccountName: string;
-};
+import { CopiableText } from 'shared/components/CopiableText/CopiableText';
+import jsyaml from 'js-yaml';
+import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 
 const expirationSecondsOptions = [
   {
@@ -36,8 +32,45 @@ const expirationSecondsOptions = [
   },
 ];
 
+const ComboboxInputWithSeconds = ({
+  value,
+  setValue,
+}: {
+  value: number;
+  setValue: (value: number) => void;
+}) => {
+  return (
+    //@ts-ignore
+    <ComboboxInput
+      id="event-version-combobox"
+      showAllEntries
+      searchFullString
+      selectionType="manual"
+      required
+      options={expirationSecondsOptions}
+      selectedKey={value}
+      typedValue={value}
+      onSelectionChange={(
+        e: React.ChangeEvent<HTMLInputElement>,
+        selected: { key: number; text: string },
+      ) => {
+        if (e?.target?.value) {
+          setValue(Number(e.target.value));
+        } else {
+          setValue(selected.key);
+        }
+      }}
+    />
+  );
+};
+
+type TokenRequestModalProps = {
+  handleCloseModal: VoidFunction;
+  namespace: string;
+  serviceAccountName: string;
+};
+
 export const TokenRequestModal = ({
-  isModalOpen,
   handleCloseModal,
   namespace,
   serviceAccountName,
@@ -63,7 +96,7 @@ export const TokenRequestModal = ({
 
   return (
     <Dialog
-      show={isModalOpen}
+      show
       title={t('service-accounts.token-request.create')}
       actions={actions}
       className="token-request-modal"
@@ -75,47 +108,53 @@ export const TokenRequestModal = ({
       >
         {/*@ts-ignore*/}
         <ResourceForm.FormField
-          inputInfo={t('service-accounts.token-request.input-info')}
           simple
           required
           propertyPath="$.spec.expirationSeconds"
+          inputInfo={t('service-accounts.token-request.input-info')}
           label={t('service-accounts.token-request.expiration-seconds')}
-          input={({
-            value,
-            setValue,
-          }: {
-            value: number;
-            setValue: (value: number) => void;
-          }) => (
+          input={ComboboxInputWithSeconds}
+        />
+        <div className="fd-margin-end--lg fd-margin-begin--lg fd-margin-top--sm">
+          <MessageStrip type="warning">
+            {t('service-accounts.token-request.warning')}
+          </MessageStrip>
+          <div className="fd-display-flex fd-justify-between fd-margin-top--sm fd-margin-bottom--sm">
+            <Button
+              onClick={generateTokenRequest}
+              disabled={isExpirationSecondsValueANumber()}
+            >
+              {t('common.buttons.generate-name')}
+            </Button>
+            <div className="fd-display-flex">
+              {/*@ts-ignore*/}
+              <CopiableText
+                iconOnly
+                buttonText="Copy"
+                className="fd-margin-end--tiny"
+                textToCopy={jsyaml.dump(
+                  createKubeconfig(serviceAccountName, token),
+                )}
+              />
+              <Button
+                onClick={() => downloadKubeconfig(serviceAccountName, token)}
+              >
+                Download Kubeconfig
+              </Button>
+            </div>
+          </div>
+          {/*@ts-ignore*/}
+          {token && (
             //@ts-ignore
-            <ComboboxInput
-              id="event-version-combobox"
-              showAllEntries
-              searchFullString
-              selectionType="manual"
-              required
-              options={expirationSecondsOptions}
-              selectedKey={value}
-              typedValue={value}
-              onSelectionChange={(
-                e: React.ChangeEvent<HTMLInputElement>,
-                selected: { key: number; text: string },
-              ) => {
-                if (e?.target?.value) {
-                  setValue(Number(e.target.value));
-                } else {
-                  setValue(selected.key);
-                }
-              }}
+            <Editor
+              value={jsyaml.dump(createKubeconfig(serviceAccountName, token))}
+              readOnly
+              autocompletionDisabled
+              height="50vh"
+              language="yaml"
             />
           )}
-        />
-        <MessageStrip
-          type="warning"
-          className="fd-margin-end--lg fd-margin-begin--lg fd-margin-top--sm"
-        >
-          {t('service-accounts.token-request.warning')}
-        </MessageStrip>
+        </div>
         {/*@ts-ignore*/}
       </ResourceForm.Single>
     </Dialog>

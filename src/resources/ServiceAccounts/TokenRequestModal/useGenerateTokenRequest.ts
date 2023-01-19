@@ -25,6 +25,7 @@ export const useGenerateTokenRequest = (
         `/api/v1/namespaces/${namespace}/serviceaccounts/${serviceAccountName}/token`,
         tokenRequest,
       );
+
       setToken(response.status.token);
     } catch (error) {}
   };

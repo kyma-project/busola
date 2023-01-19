@@ -90,12 +90,14 @@ export function ServiceAccountDetails(props) {
         headerActions={headerActions}
         {...props}
       />
-      <TokenRequestModal
-        isModalOpen={isTokenModalOpen}
-        handleCloseModal={handleCloseModal}
-        namespace={props.namespace}
-        serviceAccountName={props.resourceName}
-      />
+      {isTokenModalOpen ? (
+        <TokenRequestModal
+          isModalOpen={isTokenModalOpen}
+          handleCloseModal={handleCloseModal}
+          namespace={props.namespace}
+          serviceAccountName={props.resourceName}
+        />
+      ) : null}
     </>
   );
 }
