@@ -480,6 +480,7 @@ GenericList widgets render an array as a list of collapsible sections with their
 - **placeholder** - specifies a short hint about the input field value.
 - **template** - specifies default structure for a list item.
 - **defaultExpanded** - a boolean that specifies if the widget should be expanded by default. Defaults to `false`.
+- **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`.
 
 #### Example
 

@@ -36,8 +36,8 @@ export function GenericList({
       scopes: ['value', 'internal'],
       type: 'list-item-add',
       schema,
-      required,
       itemValue: fromJS(itemTemplate),
+      required,
     });
   };
 
@@ -58,6 +58,7 @@ export function GenericList({
       container
       title={tFromStoreKeys(storeKeys, schema)}
       nestingLevel={nestingLevel}
+      required={required}
       actions={setOpen => (
         <Button
           compact
