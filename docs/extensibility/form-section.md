@@ -207,7 +207,7 @@ Text widgets render a field as a text field. They are used by default for all st
 - **inputInfo** - a string below the input field that shows how to fill in the input.
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
 - **readOnly** - a boolean which specifies if a field is read-only. Defaults to `false`.
-- **decodable** - a boolean which specifies that the field is base64-encoded and can be decoded in UI.
+- **decodable** - a boolean which specifies that the field is base64-encoded and can be decoded in UI. Can't be used together with **enum**.
 - **decodedPlacehoder** - optional alternative placeholder to use when field is decoded.
 
 #### Example
