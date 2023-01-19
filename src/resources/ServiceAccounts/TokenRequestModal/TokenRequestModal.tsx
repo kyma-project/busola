@@ -5,6 +5,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { ComboboxInput } from 'shared/ResourceForm/inputs';
 import { useCreateTokenRequest } from './useCreateTokenRequest';
 import './TokenRequestModal.scss';
+import { useCallback } from 'react';
 
 type TokenRequestModalProps = {
   isModalOpen: boolean;
@@ -51,17 +52,11 @@ export const TokenRequestModal = ({
     handleCloseModal();
   };
 
-  const isExpirationSecondsValueANumber = () => {
+  const isExpirationSecondsValueANumber = useCallback(() => {
     return !Number(tokenRequest.spec.expirationSeconds);
-  };
+  }, [tokenRequest.spec.expirationSeconds]);
 
   const actions = [
-    <Button
-      onClick={onCreateToken}
-      disabled={isExpirationSecondsValueANumber()}
-    >
-      {t('common.buttons.create')}
-    </Button>,
     <Button onClick={handleCloseModal}>{t('common.buttons.close')}</Button>,
   ];
 
