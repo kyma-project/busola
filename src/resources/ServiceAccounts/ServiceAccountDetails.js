@@ -74,7 +74,7 @@ export function ServiceAccountDetails(props) {
 
   const headerActions = [
     <Button onClick={() => setTokenModalOpen(true)}>
-      {t('service-accounts.token-request.create')}
+      {t('service-accounts.token-request.generate')}
     </Button>,
   ];
 

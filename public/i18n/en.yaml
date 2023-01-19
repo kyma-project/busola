@@ -1404,7 +1404,7 @@ service-accounts:
   token-request:
     notification-succes: TokenRequest created. Kubeconfig file has been downloaded.
     notification-failure: Failed to create a TokenRequest.
-    create: Create TokenRequest
+    generate: Generate TokenRequest
     expiration-seconds: Expiration seconds
     warning: The TokenRequest will be deactivated after the expiration seconds. It allows you to log in with your ServiceAccount credentials.
     input-info: You can choose one of the provided options from the dropdown or enter the value in seconds.
