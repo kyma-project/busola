@@ -52,8 +52,8 @@ type ConfigMapListResponse =
   | undefined;
 
 const isTheSameNameAndUrl = (firstCM: ExtResource, secondCM: ExtResource) =>
-  firstCM.general.name === secondCM.general.name &&
-  firstCM.general.urlPath === secondCM.general.urlPath;
+  firstCM?.general?.name === secondCM?.general?.name &&
+  firstCM?.general?.urlPath === secondCM?.general?.urlPath;
 
 const convertYamlToObject: (
   yamlString: string,
@@ -187,7 +187,7 @@ const getExtensions = async (
 
           if (
             namespaces.includes(cmExt.metadata.namespace!) &&
-            isTheSameNameAndUrl(cmExt.data, defExt)
+            isTheSameNameAndUrl(cmExt?.data, defExt)
           ) {
             return false;
           }
@@ -206,7 +206,7 @@ const getExtensions = async (
 
     return combinedExtensions;
   } catch (e) {
-    console.warn('Cannot load cluster params: ', e);
+    console.warn('Cannot load extensions: ', e);
     return [];
   }
 };
