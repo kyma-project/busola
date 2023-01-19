@@ -2,10 +2,13 @@ import { Button, Dialog, MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 
-import { ComboboxInput } from 'shared/ResourceForm/inputs';
-import { useCreateTokenRequest } from './useCreateTokenRequest';
-import './TokenRequestModal.scss';
+import { useCreateKubeconfig } from 'hooks/useCreateKubeconfig';
 import { useCallback } from 'react';
+import { ComboboxInput } from 'shared/ResourceForm/inputs';
+import { useDownloadKubeconfigWithToken } from '../useDownloadKubeconfigWithToken';
+import { useGenerateTokenRequest } from './useGenerateTokenRequest';
+
+import './TokenRequestModal.scss';
 
 type TokenRequestModalProps = {
   isModalOpen: boolean;
@@ -40,17 +43,15 @@ export const TokenRequestModal = ({
   serviceAccountName,
 }: TokenRequestModalProps) => {
   const { t } = useTranslation();
+  const downloadKubeconfig = useDownloadKubeconfigWithToken();
+  const createKubeconfig = useCreateKubeconfig();
 
   const {
-    createTokenRequestFn,
+    token,
+    generateTokenRequest,
     tokenRequest,
     setTokenRequest,
-  } = useCreateTokenRequest(namespace, serviceAccountName);
-
-  const onCreateToken = () => {
-    createTokenRequestFn();
-    handleCloseModal();
-  };
+  } = useGenerateTokenRequest(namespace, serviceAccountName);
 
   const isExpirationSecondsValueANumber = useCallback(() => {
     return !Number(tokenRequest.spec.expirationSeconds);
