@@ -1,7 +1,8 @@
+import { fromJS } from 'immutable';
 import React, { createContext, useState } from 'react';
 
 export function scopePaths(storeKeys) {
-  const indexes = storeKeys
+  const indexes = fromJS(storeKeys)
     .toArray()
     .map((item, index) => ({ item, index }))
     .filter(({ item, index }) => typeof item === 'number')
@@ -54,7 +55,10 @@ export function TriggerContextProvider({ children }) {
         .map(sub => sub.current[name])
         .filter(sub => !!sub)
         .filter(sub => pathMatch(sub.storeKeys, storeKeys, sub.modifiers))
-        .forEach(sub => sub.callback()),
+        .forEach(sub => {
+          console.log('triggering', sub);
+          sub.callback();
+        }),
     );
   };
 
