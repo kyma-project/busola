@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { getObjectValueWorkaround } from 'components/Extensibility/helpers';
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import {
