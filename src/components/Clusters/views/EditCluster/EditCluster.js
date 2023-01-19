@@ -2,10 +2,8 @@ import React, { useState, useRef } from 'react';
 import * as jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
 import { useTranslation } from 'react-i18next';
+import { useSetRecoilState } from 'recoil';
 
-import { useClustersInfo } from 'state/utils/getClustersInfo';
-
-import { addCluster, getContext, deleteCluster } from '../../shared';
 import { ResourceForm } from 'shared/ResourceForm';
 import { K8sNameField } from 'shared/ResourceForm/fields';
 import { ChooseStorage } from 'components/Clusters/components/ChooseStorage';
@@ -13,6 +11,10 @@ import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { AuthenticationTypeDropdown } from 'components/Clusters/views/EditCluster/AuthenticationDropdown';
+import { useClustersInfo } from 'state/utils/getClustersInfo';
+import { authDataState } from 'state/authDataAtom';
+
+import { addCluster, getContext, deleteCluster } from '../../shared';
 
 function EditClusterComponent({
   formElementRef,
@@ -21,6 +23,7 @@ function EditClusterComponent({
   editedCluster,
 }) {
   const clustersInfo = useClustersInfo();
+  const setAuth = useSetRecoilState(authDataState);
   const [resource, setResource] = useState(cloneDeep(editedCluster));
   const [authenticationType, setAuthenticationType] = useState(
     resource?.kubeconfig?.users?.[0]?.user?.exec ? 'oidc' : 'token',
@@ -37,6 +40,7 @@ function EditClusterComponent({
         deleteCluster(originalName.current, clustersInfo);
       }
       const contextName = kubeconfig['current-context'];
+      setAuth(null);
       addCluster(
         {
           kubeconfig,

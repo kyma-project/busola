@@ -13,7 +13,7 @@ function createGithubLink(version: string): string {
   const devVersion = 'dev';
 
   if (version !== devVersion && version !== unknownVersion) {
-    if (version.startsWith('PR-')) {
+    if (version.toString().startsWith('PR-')) {
       return `${BUSOLA_GITHUB_LINKS.PULLS}/${version.slice(3)}`;
     }
 
