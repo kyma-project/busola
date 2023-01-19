@@ -22,7 +22,6 @@ import * as Events from './Events';
 import * as Deployments from './Deployments';
 import * as DaemonSets from './DaemonSets';
 import * as ConfigMaps from './ConfigMaps';
-import * as Certificates from './Certificates';
 import * as Subscriptions from './Subscriptions';
 import * as ServiceAccounts from './ServiceAccounts';
 
@@ -63,7 +62,6 @@ export const resources = [
   OAuth2Clients,
   Issuers,
   ConfigMaps,
-  Certificates,
   Subscriptions,
   ServiceAccounts,
 
