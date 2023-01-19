@@ -51,7 +51,10 @@ type ConfigMapListResponse =
     }
   | undefined;
 
-const isTheSameNameAndUrl = (firstCM: ExtResource, secondCM: ExtResource) =>
+const isTheSameNameAndUrl = (
+  firstCM: Partial<ExtResource>,
+  secondCM: Partial<ExtResource>,
+) =>
   firstCM?.general?.name === secondCM?.general?.name &&
   firstCM?.general?.urlPath === secondCM?.general?.urlPath;
 
@@ -151,6 +154,8 @@ const getExtensions = async (
           ) as ExtResource,
         };
 
+        if (!extResourceWithMetadata.data) return accumulator;
+
         const indexOfTheSameExtension = accumulator.findIndex(ext =>
           isTheSameNameAndUrl(ext.data, extResourceWithMetadata.data),
         );
@@ -162,20 +167,12 @@ const getExtensions = async (
           if (areNamespacesTheSame) {
             return accumulator;
           }
+
           accumulator[indexOfTheSameExtension] = extResourceWithMetadata;
           return accumulator;
         }
 
-        return [
-          ...accumulator,
-          {
-            ...currentConfigMap,
-            data: mapValues(
-              currentConfigMap?.data || {},
-              convertYamlToObject,
-            ) as ExtResource,
-          },
-        ];
+        return [...accumulator, extResourceWithMetadata];
       },
       [] as ExtResourceWithMetadata[],
     );
@@ -199,6 +196,7 @@ const getExtensions = async (
     const configMapsExtensionsDataOnly: ExtResource[] = configMapsExtensions.map(
       cm => cm.data,
     );
+
     const combinedExtensions = [
       ...defaultExtensionsWithoutOverride,
       ...configMapsExtensionsDataOnly,
