@@ -42,7 +42,7 @@ export function FormField({
           )}
         </div>
       </div>
-      <div className="fd-col fd-col-md--1 tooltip-column">
+      <div className="fd-col fd-col-md--1 tooltip-column tooltip-column--with-padding">
         {tooltipContent && (
           <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
             <Icon ariaLabel="" size="m" glyph="message-information" />

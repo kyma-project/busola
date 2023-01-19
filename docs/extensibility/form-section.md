@@ -340,7 +340,10 @@ MultiCheckbox widget render checkboxes that will be put saved into one path as a
 
 #### Widget-specific parameters
 
-- **enum[]** - _[required]_ an array of strings to generate the checkboxes. Optionally can be a string containing a [JSONata](jsonata.md) expression returning an array of options.
+- **options[]** - _[required]_ an array of objects to generate the checkboxes.
+  - **key** - _[required]_ a value used to generate checkboxes. Will be set if checkbox is selected. This `key` together with `path` defined for MultiCheckbox (`{path}.{key}`) can be used for **translation**.
+  - **name** - an optional name for the checkbox instead of the default capitalized last part of the path. This can be a key from the **translation** section.
+  - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the checkbox's label.
 - **required** - a boolean which specifies if a field is required. The default value is taken from CustomResourceDefintion (CRD); if it doesn't exist in the CRD, then it defaults to `false`.
 - **inputInfo** - a string below the input field that shows how to fill in the input.
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
@@ -352,10 +355,12 @@ MultiCheckbox widget render checkboxes that will be put saved into one path as a
 - widget: MultiCheckbox
   path: spec.methods
   simple: true
-  enum:
-    - GET
-    - POST
-    - DELETE
+  options:
+    - key: GET
+      name: Get
+      description: Get is the basic method
+    - key: POST
+    - key: DELETE
 ```
 
 <img src="./assets/form-widgets/MultiCheckbox.png" alt="Example of a MultiCheckbox widget" style="border: 1px solid #D2D5D9">

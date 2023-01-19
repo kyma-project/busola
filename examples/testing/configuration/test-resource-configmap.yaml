@@ -110,10 +110,13 @@ data:
     - widget: MultiCheckbox
       path: spec.arrayOfStrings
       simple: true
-      enum:
-        - value_1
-        - value_2
-        - value_3
+      options:
+        - key: value_1
+          name: Value 1
+        - key: value_2
+          name: Value 2
+        - key: value_3
+          name: Value 3
 
   general: |-
     resource:

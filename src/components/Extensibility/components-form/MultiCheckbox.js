@@ -20,7 +20,6 @@ export function MultiCheckbox({
   schema,
   storeKeys,
   required,
-
   resource,
   compact,
   placeholder,
@@ -31,31 +30,52 @@ export function MultiCheckbox({
   const value = getValue(storeKeys, resource);
 
   const getCheckboxesOptions = () => {
-    if (schema.get('enum')) {
+    if (schema.get('options')) {
       const translationPath = storeKeys
         .toArray()
         .filter(el => typeof el === 'string')
         .join('.');
 
-      let enumOptions = schema.toJS().enum;
+      let options = schema.toJS().options;
       // if there's only 1 option, it will be not in an array
-      if (typeof enumOptions === 'string') {
-        enumOptions = [enumOptions];
+      if (typeof options === 'string') {
+        options = [options];
       }
-      if (!Array.isArray(enumOptions)) {
-        enumOptions = [];
+      if (!Array.isArray(options)) {
+        options = [];
       }
+      console.log('!!!options', options);
+      const displayOptions = options.map(option => {
+        console.log('typeof option', typeof option, option);
+        if (typeof option === 'string') {
+          return {
+            key: option,
+            text: exists(translationPath + '.' + option)
+              ? tExt(translationPath + '.' + option)
+              : option,
+          };
+        }
+        let defaultText = exists(translationPath + '.' + option.key)
+          ? tExt(translationPath + '.' + option.key)
+          : option.key;
 
-      const options = enumOptions.map(key => ({
-        key,
-        text: exists(translationPath + '.' + key)
-          ? tExt(translationPath + '.' + key)
-          : key,
-      }));
-      console.log('options', options);
+        if (option.name) {
+          defaultText = exists(translationPath + '.' + option.name)
+            ? tExt(translationPath + '.' + option.name)
+            : option.name;
+        }
+        return {
+          key: option.key,
+          text: defaultText,
+          description: exists(translationPath + '.' + option.description)
+            ? tExt(translationPath + '.' + option.description)
+            : option.description,
+        };
+      });
+      console.log('!!!displayOptions', displayOptions);
       return {
         input: Inputs.Checkboxes,
-        options,
+        options: displayOptions,
       };
     } else {
       return {
