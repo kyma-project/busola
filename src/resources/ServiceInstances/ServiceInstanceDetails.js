@@ -5,7 +5,6 @@ import { BTPResourceStatus } from 'shared/components/BTPResourceStatus';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 
-import { ServiceBindingList } from './ServiceBindingList';
 import { ServiceInstanceData } from './ServiceInstanceData';
 import { ServiceInstanceCreate } from './ServiceInstanceCreate';
 
@@ -40,11 +39,7 @@ export function ServiceInstanceDetails(props) {
   return (
     <ResourceDetails
       customColumns={customColumns}
-      customComponents={[
-        ServiceInstanceData,
-        ServiceBindingList,
-        ServiceInstanceParameters,
-      ]}
+      customComponents={[ServiceInstanceData, ServiceInstanceParameters]}
       createResourceForm={ServiceInstanceCreate}
       {...props}
     />
