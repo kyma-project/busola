@@ -44,7 +44,7 @@ export const useDownloadKubeconfigWithToken = () => {
       const blob = new Blob([jsyaml.dump(kubeconfig)], {
         type: 'application/yaml;charset=utf-8',
       });
-      saveAs(blob, name + '.yaml');
+      saveAs(blob, `${name}-kubeconfig.yaml`);
     },
     [createKubeconfig],
   );
