@@ -18,6 +18,7 @@ context('Test navigation features', () => {
       cy.visit(newurl);
     });
 
+    cy.wait(500);
     cy.contains('Incorrect path');
     cy.contains('OK').click();
     cy.contains('Cluster Details');
