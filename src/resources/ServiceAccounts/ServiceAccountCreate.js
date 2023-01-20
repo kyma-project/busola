@@ -20,7 +20,7 @@ const createDefaultSecret = serviceAccountName => {
     kind: 'Secret',
     type: 'kubernetes.io/service-account-token',
     metadata: {
-      name: `${serviceAccountName}`,
+      name: `${serviceAccountName}-token`,
       labels: {},
       annotations: {
         'kubernetes.io/service-account.name': serviceAccountName,
