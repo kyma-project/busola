@@ -1,17 +1,15 @@
 import { Button, Dialog, MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-import { ResourceForm } from 'shared/ResourceForm';
-
-import { useCreateKubeconfig } from 'hooks/useCreateKubeconfig';
 import { useCallback } from 'react';
-import { ComboboxInput } from 'shared/ResourceForm/inputs';
-import { useDownloadKubeconfigWithToken } from '../useDownloadKubeconfigWithToken';
+
 import { useGenerateTokenRequest } from './useGenerateTokenRequest';
+import { useDownloadKubeconfigWithToken } from '../useDownloadKubeconfigWithToken';
+import { ResourceForm } from 'shared/ResourceForm';
+import { ComboboxInput } from 'shared/ResourceForm/inputs';
+import { CopiableText } from 'shared/components/CopiableText/CopiableText';
+import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 
 import './TokenRequestModal.scss';
-import { CopiableText } from 'shared/components/CopiableText/CopiableText';
-import jsyaml from 'js-yaml';
-import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 
 const expirationSecondsOptions = [
   {
@@ -77,9 +75,9 @@ export const TokenRequestModal = ({
 }: TokenRequestModalProps) => {
   const { t } = useTranslation();
   const downloadKubeconfig = useDownloadKubeconfigWithToken();
-  const createKubeconfig = useCreateKubeconfig();
 
   const {
+    kubeconfigYaml,
     token,
     generateTokenRequest,
     tokenRequest,
@@ -97,7 +95,7 @@ export const TokenRequestModal = ({
   return (
     <Dialog
       show
-      title={t('service-accounts.token-request.create')}
+      title={t('service-accounts.token-request.generate')}
       actions={actions}
       className="token-request-modal"
     >
@@ -119,41 +117,43 @@ export const TokenRequestModal = ({
           <MessageStrip type="warning">
             {t('service-accounts.token-request.warning')}
           </MessageStrip>
-          <div className="fd-display-flex fd-justify-between fd-margin-top--sm fd-margin-bottom--sm">
+          <div
+            className="fd-display-flex fd-margin-top--sm fd-margin-bottom--sm"
+            style={{
+              justifyContent: 'flex-end',
+            }}
+          >
+            {/*@ts-ignore*/}
+            <CopiableText
+              iconOnly
+              buttonText="Copy"
+              className="fd-margin-end--tiny"
+              textToCopy={kubeconfigYaml}
+            />
+            <Button
+              onClick={() => downloadKubeconfig(serviceAccountName, token)}
+              option="transparent"
+              className="fd-margin-end--tiny"
+              glyph="download"
+            >
+              {t('service-accounts.headers.download-kubeconfig')}
+            </Button>
             <Button
               onClick={generateTokenRequest}
               disabled={isExpirationSecondsValueANumber()}
             >
               {t('common.buttons.generate-name')}
             </Button>
-            <div className="fd-display-flex">
-              {/*@ts-ignore*/}
-              <CopiableText
-                iconOnly
-                buttonText="Copy"
-                className="fd-margin-end--tiny"
-                textToCopy={jsyaml.dump(
-                  createKubeconfig(serviceAccountName, token),
-                )}
-              />
-              <Button
-                onClick={() => downloadKubeconfig(serviceAccountName, token)}
-              >
-                Download Kubeconfig
-              </Button>
-            </div>
           </div>
           {/*@ts-ignore*/}
-          {token && (
-            //@ts-ignore
-            <Editor
-              value={jsyaml.dump(createKubeconfig(serviceAccountName, token))}
-              readOnly
-              autocompletionDisabled
-              height="50vh"
-              language="yaml"
-            />
-          )}
+          <Editor
+            value={kubeconfigYaml}
+            updateValueOnParentChange
+            readOnly
+            autocompletionDisabled
+            height="50vh"
+            language="yaml"
+          />
         </div>
         {/*@ts-ignore*/}
       </ResourceForm.Single>
