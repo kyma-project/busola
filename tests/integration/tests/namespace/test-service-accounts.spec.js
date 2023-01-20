@@ -82,23 +82,22 @@ context('Test Service Accounts', () => {
     cy.contains('test.key=test-value').should('be.visible');
   });
 
-  it('Create TokenRequest', () => {
-    cy.contains('Create TokenRequest').click();
+  it('Generate TokenRequest', () => {
+    cy.contains('Generate TokenRequest').click();
 
     cy.contains(
       'The TokenRequest will be deactivated after the expiration seconds',
     ).should('be.visible');
 
+    cy.contains('TokenRequest generated').should('be.visible');
     cy.readFile(filepath).should('not.exist');
 
-    cy.get('[role="dialog"]')
-      .contains('button', 'Create')
-      .click();
-
-    cy.contains('TokenRequest created').should('be.visible');
+    cy.contains('Download Kubeconfig').click();
 
     cy.readFile(filepath).should('exist');
     cy.task('removeFile', filepath);
+
+    cy.contains('Close').click();
   });
 
   it('Inspect list', () => {
