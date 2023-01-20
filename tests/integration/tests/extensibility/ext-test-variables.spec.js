@@ -13,49 +13,49 @@ context('Test extensibility variables', () => {
       fileName: 'kubeconfig-k3s.yaml',
       storage: 'Session storage',
     });
-    // cy.createNamespace(NAMESPACE);
+    cy.createNamespace(NAMESPACE);
   });
 
-  // it('Creates the EXT test resources config', () => {
-  //   cy.getLeftNav()
-  //     .contains('Cluster Details')
-  //     .click();
+  it('Creates the EXT test resources config', () => {
+    cy.getLeftNav()
+      .contains('Cluster Details')
+      .click();
 
-  //   cy.contains('Upload YAML').click();
+    cy.contains('Upload YAML').click();
 
-  //   cy.loadFiles(
-  //     'examples/testing/configuration/test-resource-configmap.yaml',
-  //     'examples/testing/configuration/test-resource-crd.yaml',
-  //   ).then(resources => {
-  //     const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
-  //     cy.pasteToMonaco(input);
-  //   });
+    cy.loadFiles(
+      'examples/testing/configuration/test-resource-configmap.yaml',
+      'examples/testing/configuration/test-resource-crd.yaml',
+    ).then(resources => {
+      const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+      cy.pasteToMonaco(input);
+    });
 
-  //   cy.contains('Submit').click();
+    cy.contains('Submit').click();
 
-  //   cy.get('.fd-dialog__body')
-  //     .find('.sap-icon--message-success')
-  //     .should('have.length', 2);
+    cy.get('.fd-dialog__body')
+      .find('.sap-icon--message-success')
+      .should('have.length', 2);
 
-  //   cy.loadFiles('examples/testing/samples/test-resource-samples.yaml').then(
-  //     resources => {
-  //       const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
-  //       cy.pasteToMonaco(input);
-  //     },
-  //   );
+    cy.loadFiles('examples/testing/samples/test-resource-samples.yaml').then(
+      resources => {
+        const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+        cy.pasteToMonaco(input);
+      },
+    );
 
-  //   cy.contains('Submit').click();
+    cy.contains('Submit').click();
 
-  //   cy.get('.fd-dialog__body')
-  //     .find('.sap-icon--message-success')
-  //     .should('have.length', 2);
-  // });
+    cy.get('.fd-dialog__body')
+      .find('.sap-icon--message-success')
+      .should('have.length', 2);
+  });
 
   it('Navigate to Test Resource Creation', () => {
-    // cy.loginAndSelectCluster({
-    //   fileName: 'kubeconfig-k3s.yaml',
-    //   storage: 'Session storage',
-    // });
+    cy.loginAndSelectCluster({
+      fileName: 'kubeconfig-k3s.yaml',
+      storage: 'Session storage',
+    });
     cy.contains('Namespaces').click();
 
     cy.contains('a', NAMESPACE).click();
