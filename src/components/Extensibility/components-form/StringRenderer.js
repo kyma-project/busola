@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button } from 'fundamental-react';
+import React, { useState, useEffect } from 'react';
+import { Button, FormInput } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 import { base64Decode, base64Encode } from 'shared/helpers';
@@ -9,7 +9,7 @@ import {
   useGetTranslation,
   getPropsFromSchema,
 } from 'components/Extensibility/helpers';
-import { useNotification } from 'shared/contexts/NotificationContext';
+// import { useNotification } from 'shared/contexts/NotificationContext';
 
 export function StringRenderer({
   onChange,
@@ -29,16 +29,17 @@ export function StringRenderer({
   const readOnly = schema.get('readOnly') ?? false;
   const decodable = schema.get('decodable');
   const [decoded, setDecoded] = useState(true);
-  const notification = useNotification();
 
-  if (value && decodable && decoded) {
+  let decodeError = false;
+  if (decodable) {
     try {
-      value = base64Decode(value);
+      if (value) {
+        const decodedValue = base64Decode(value);
+        if (decoded) value = decodedValue;
+      }
     } catch (e) {
-      notification.notifyError({
-        content: t('secrets.messages.decode-error'),
-      });
-      setDecoded(false);
+      decodeError = true;
+      if (decoded) setDecoded(false);
     }
   }
 
@@ -65,11 +66,13 @@ export function StringRenderer({
           : key,
       }));
       return { input: Inputs.ComboboxInput, options };
+    } else if (!decodable) {
+      return { input: Inputs.Text };
     } else {
       return {
         input: params => (
           <>
-            {Inputs.Text(params)}
+            <Inputs.Text {...params} />
             {decodable && (
               <div className="fd-col fd-col-md--1 generate-button">
                 <Button
@@ -92,33 +95,37 @@ export function StringRenderer({
   };
 
   return (
-    <ResourceForm.FormField
-      value={value}
-      setValue={value => {
-        if (decoded) {
-          value = base64Encode(value);
+    <ResourceForm.Wrapper resource={props?.resource}>
+      <ResourceForm.FormField
+        value={value}
+        setValue={value => {
+          if (decodable && decoded) {
+            value = base64Encode(value);
+          }
+          onChange &&
+            onChange({
+              storeKeys,
+              scopes: ['value'],
+              type: 'set',
+              schema,
+              required,
+              data: { value },
+            });
+        }}
+        disabled={readOnly}
+        label={tFromStoreKeys(storeKeys, schema)}
+        compact={compact}
+        data-testid={storeKeys.join('.') || tFromStoreKeys(storeKeys, schema)}
+        placeholder={
+          (decoded && schema.get('decodedPlaceholder')) ||
+          tExt(schemaPlaceholder) ||
+          tExt(placeholder)
         }
-        onChange &&
-          onChange({
-            storeKeys,
-            scopes: ['value'],
-            type: 'set',
-            schema,
-            required,
-            data: { value },
-          });
-      }}
-      disabled={readOnly}
-      label={tFromStoreKeys(storeKeys, schema)}
-      compact={compact}
-      data-testid={storeKeys.join('.') || tFromStoreKeys(storeKeys, schema)}
-      placeholder={
-        (decoded && schema.get('decodedPlaceholder')) ||
-        tExt(schemaPlaceholder) ||
-        tExt(placeholder)
-      }
-      {...getTypeSpecificProps()}
-      {...getPropsFromSchema(schema, required, tExt)}
-    />
+        {...getTypeSpecificProps()}
+        {...getPropsFromSchema(schema, required, tExt)}
+        validate={() => !decodable || !decodeError}
+        validateMessage={t('secrets.messages.decode-error')}
+      />
+    </ResourceForm.Wrapper>
   );
 }
