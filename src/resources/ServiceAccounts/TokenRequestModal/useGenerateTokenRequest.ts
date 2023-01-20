@@ -37,9 +37,12 @@ export const useGenerateTokenRequest = (
         tokenRequest,
       );
       setToken(response.status.token);
-      notifyToast({
-        content: t('service-accounts.token-request.notification.success'),
-      });
+      notifyToast(
+        {
+          content: t('service-accounts.token-request.notification.success'),
+        },
+        3000,
+      );
     } catch (error) {
       notifyToast({
         content: t('service-accounts.token-request.notification.failure'),

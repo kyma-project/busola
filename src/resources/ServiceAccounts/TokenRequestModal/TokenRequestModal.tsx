@@ -68,11 +68,11 @@ type TokenRequestModalProps = {
   serviceAccountName: string;
 };
 
-export const TokenRequestModal = ({
+export function TokenRequestModal({
   handleCloseModal,
   namespace,
   serviceAccountName,
-}: TokenRequestModalProps) => {
+}: TokenRequestModalProps) {
   const { t } = useTranslation();
   const downloadKubeconfig = useDownloadKubeconfigWithToken();
 
@@ -161,4 +161,4 @@ export const TokenRequestModal = ({
       </ResourceForm.Single>
     </Dialog>
   );
-};
+}
