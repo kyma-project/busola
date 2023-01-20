@@ -19,6 +19,8 @@ import { Link } from 'react-router-dom';
 export function HorizontalPodAutoscalerDetails(props) {
   const { t } = useTranslation();
 
+  <p>TEST</p>;
+
   const customColumns = [
     {
       header: t('common.headers.status'),
