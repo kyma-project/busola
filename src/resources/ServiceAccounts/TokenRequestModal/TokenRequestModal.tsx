@@ -10,6 +10,7 @@ import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 
 import './TokenRequestModal.scss';
+import { useEventListener } from 'hooks/useEventListener';
 
 const expirationSecondsOptions = [
   {
@@ -91,6 +92,12 @@ export function TokenRequestModal({
   const actions = [
     <Button onClick={handleCloseModal}>{t('common.buttons.close')}</Button>,
   ];
+
+  const handleCloseWithEscape = (e: Event) => {
+    if ((e as KeyboardEvent).key === 'Escape') handleCloseModal();
+  };
+
+  useEventListener('keydown', handleCloseWithEscape);
 
   return (
     <Dialog
