@@ -23,6 +23,7 @@ export function MultiCheckbox({
   resource,
   compact,
   placeholder,
+  ...props
 }) {
   const { tFromStoreKeys, t: tExt, exists } = useGetTranslation();
 
@@ -82,10 +83,11 @@ export function MultiCheckbox({
   };
 
   return (
-    <ResourceForm.FormField
-      value={value}
-      setValue={value => {
-        onChange &&
+    <ResourceForm.Wrapper resource={resource}>
+      <ResourceForm.FormField
+        value={value}
+        setValue={value => {
+          if (!onChange) return;
           onChange({
             storeKeys,
             scopes: ['value'],
@@ -94,14 +96,16 @@ export function MultiCheckbox({
             required,
             data: { value },
           });
-      }}
-      disabled={readOnly}
-      label={tFromStoreKeys(storeKeys, schema)}
-      compact={compact}
-      dataTestID={storeKeys.join('.') || tFromStoreKeys(storeKeys, schema)}
-      placeholder={tExt(schemaPlaceholder) || tExt(placeholder)}
-      {...getCheckboxesOptions()}
-      {...getPropsFromSchema(schema, required, tExt)}
-    />
+        }}
+        validate={() => value?.length}
+        disabled={readOnly}
+        label={tFromStoreKeys(storeKeys, schema)}
+        compact={compact}
+        dataTestID={storeKeys.join('.') || tFromStoreKeys(storeKeys, schema)}
+        placeholder={tExt(schemaPlaceholder) || tExt(placeholder)}
+        {...getCheckboxesOptions()}
+        {...getPropsFromSchema(schema, required, tExt)}
+      />
+    </ResourceForm.Wrapper>
   );
 }

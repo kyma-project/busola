@@ -9,6 +9,7 @@ export function Checkboxes({
   options,
   inline,
   dataTestID,
+  inputRef,
   ...props
 }) {
   const updateValue = (key, checked) => {
@@ -24,7 +25,11 @@ export function Checkboxes({
       className="inline-radio-group fd-col fd-col-md--12"
       {...props}
     >
-      {options.map(({ key, text, description }) => (
+      <input
+        ref={inputRef}
+        style={{ opacity: 0, position: 'absolute', left: '-1000px' }}
+      />
+      {options.map(({ key, text, description }, index) => (
         <div class="fd-row">
           <div class="fd-col-md--11">
             <Checkbox
