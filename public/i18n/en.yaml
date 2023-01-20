@@ -1403,7 +1403,7 @@ service-accounts:
     enabled: enabled
   token-request:
     notification:
-      succes: TokenRequest generated
+      success: TokenRequest generated
       failure: Failed to generate a TokenRequest
     generate: Generate TokenRequest
     expiration-seconds: Expiration seconds
