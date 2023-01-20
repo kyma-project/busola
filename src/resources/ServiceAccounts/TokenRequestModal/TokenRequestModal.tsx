@@ -126,12 +126,14 @@ export const TokenRequestModal = ({
             {/*@ts-ignore*/}
             <CopiableText
               iconOnly
-              buttonText="Copy"
+              buttonText={t('common.buttons.copy')}
               className="fd-margin-end--tiny"
               textToCopy={kubeconfigYaml}
+              disabled={token === ''}
             />
             <Button
               onClick={() => downloadKubeconfig(serviceAccountName, token)}
+              disabled={token === ''}
               option="transparent"
               className="fd-margin-end--tiny"
               glyph="download"
