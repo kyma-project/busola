@@ -31,7 +31,7 @@ export function Checkboxes({
       />
       {options.map(({ key, text, description }, index) => (
         <div class="fd-row">
-          <div class="fd-col-md--11">
+          <div>
             <Checkbox
               data-testid={`${dataTestID}.${key}`}
               compact
@@ -43,7 +43,7 @@ export function Checkboxes({
               {text}
             </Checkbox>
           </div>
-          <div className="fd-col-md--1 tooltip-column">
+          <div className="fd-col fd-col-md--1 tooltip-column">
             {description && (
               <Tooltip className="has-tooltip" delay={0} content={description}>
                 <Icon ariaLabel="" size="m" glyph="message-information" />
