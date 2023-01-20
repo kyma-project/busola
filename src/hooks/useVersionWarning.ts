@@ -17,13 +17,6 @@ export function useVersionWarning({
   useEffect(() => {
     if (!isTrackingEnabled) return;
 
-    if (resourceType.toLowerCase() === 'horizontalpodautoscalers') {
-      // we don't talk about HPAs
-
-      // unless it's https://github.com/kyma-project/busola/issues/1566
-      return;
-    }
-
     if (resourceUrl.startsWith('/api/v1')) return; // ignore core API group
 
     const urlSegments = resourceUrl.split('/'); // `/apis/<group>/<version>/...rest`
