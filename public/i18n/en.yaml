@@ -847,11 +847,11 @@ hpas:
     replicas: Replicas
     type: Type
     value: Value
-    scaleDown: Scale Down
-    scaleUp: Scale Up
-    periodSeconds: Period Seconds
-    selectPolicy: Select Policy
-    stabilizationWindowSeconds: Stabilization Window Seconds
+    scale-down: Scale Down
+    scale-up: Scale Up
+    period-seconds: Period Seconds
+    select-policy: Select Policy
+    stabilization-window-seconds: Stabilization Window Seconds
   metrics: Metrics
   name_singular: HorizontalPodAutoscaler
   object: Object

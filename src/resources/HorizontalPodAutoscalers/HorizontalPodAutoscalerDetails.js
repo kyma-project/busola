@@ -131,30 +131,30 @@ export function HorizontalPodAutoscalerDetails(props) {
         {scaleUp && (
           <LayoutPanel className="fd-margin--md " key="hpa-behavior-scale-up">
             <LayoutPanel.Header>
-              <LayoutPanel.Head title={t('hpas.headers.scaleUp')} />
+              <LayoutPanel.Head title={t('hpas.headers.scale-up')} />
             </LayoutPanel.Header>
             <LayoutPanel.Body>
               <LayoutPanelRow
-                name={t('hpas.headers.stabilizationWindowSeconds')}
+                name={t('hpas.headers.stabilization-window-seconds')}
                 value={
-                  scaleUp?.stabilizationWindowSeconds ?? EMPTY_TEXT_PLACEHOLDER
+                  scaleUp.stabilizationWindowSeconds ?? EMPTY_TEXT_PLACEHOLDER
                 }
               />
               <LayoutPanelRow
-                name={t('hpas.headers.selectPolicy')}
-                value={scaleUp?.selectPolicy ?? EMPTY_TEXT_PLACEHOLDER}
+                name={t('hpas.headers.select-policy')}
+                value={scaleUp.selectPolicy ?? EMPTY_TEXT_PLACEHOLDER}
               />
             </LayoutPanel.Body>
             {scaleUp?.policies && (
               <GenericList
                 searchSettings={{ showSearchField: false }}
                 entries={scaleUp.policies}
-                key="behavior-scaleUp"
-                title={t('hpas.headers.scaleUp')}
+                key="behavior-scale-up"
+                title={t('hpas.headers.scale-up')}
                 headerRenderer={() => [
                   t('hpas.headers.type'),
                   t('hpas.headers.value'),
-                  t('hpas.headers.periodSeconds'),
+                  t('hpas.headers.period-seconds'),
                 ]}
                 rowRenderer={rowRenderer}
               />
@@ -162,33 +162,32 @@ export function HorizontalPodAutoscalerDetails(props) {
           </LayoutPanel>
         )}
         {scaleDown && (
-          <LayoutPanel className="fd-margin--md " key="hpa-behavior-scale-up">
+          <LayoutPanel className="fd-margin--md " key="hpa-behavior-scale-down">
             <LayoutPanel.Header>
-              <LayoutPanel.Head title={t('hpas.headers.scaleDown')} />
+              <LayoutPanel.Head title={t('hpas.headers.scale-down')} />
             </LayoutPanel.Header>
             <LayoutPanel.Body>
               <LayoutPanelRow
-                name={t('hpas.headers.stabilizationWindowSeconds')}
+                name={t('hpas.headers.stabilization-window-seconds')}
                 value={
-                  scaleDown?.stabilizationWindowSeconds ??
-                  EMPTY_TEXT_PLACEHOLDER
+                  scaleDown.stabilizationWindowSeconds ?? EMPTY_TEXT_PLACEHOLDER
                 }
               />
               <LayoutPanelRow
-                name={t('hpas.headers.selectPolicy')}
-                value={scaleDown?.selectPolicy ?? EMPTY_TEXT_PLACEHOLDER}
+                name={t('hpas.headers.select-policy')}
+                value={scaleDown.selectPolicy ?? EMPTY_TEXT_PLACEHOLDER}
               />
             </LayoutPanel.Body>
             {scaleDown?.policies && (
               <GenericList
                 searchSettings={{ showSearchField: false }}
                 entries={scaleDown.policies}
-                key="behavior-scaleUp"
+                key="behavior-scale-down"
                 title={t('hpas.headers.scaleDown')}
                 headerRenderer={() => [
                   t('hpas.headers.type'),
                   t('hpas.headers.value'),
-                  t('hpas.headers.periodSeconds'),
+                  t('hpas.headers.period-seconds'),
                 ]}
                 rowRenderer={rowRenderer}
               />
