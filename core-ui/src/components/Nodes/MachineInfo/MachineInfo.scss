@@ -1,9 +1,0 @@
-.machine-info__body > * {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    margin-bottom: 8px;
-
-    & > :first-child {
-        color: var(--sapNeutralColor);
-    }
-}

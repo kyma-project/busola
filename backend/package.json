@@ -38,8 +38,5 @@
   },
   "node": {
     "child_process": false
-  },
-  "files": [
-    "core-ui/"
-  ]
+  }
 }

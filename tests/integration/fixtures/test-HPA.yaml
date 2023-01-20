@@ -1,0 +1,10 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: test-hpa
+  namespace: ''
+spec:
+  maxReplicas: 3
+  scaleTargetRef:
+    kind: Deployment
+    name: no-pod
