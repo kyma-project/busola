@@ -336,7 +336,7 @@ Resource widgets render a dropdown list of specified resources and store the sel
 
 ### MultiCheckbox
 
-MultiCheckbox widget render checkboxes that will be put saved into one path as array of strings.
+MultiCheckbox widgets render checkboxes that are saved into one path as an array of strings.
 
 #### Widget-specific parameters
 
