@@ -215,6 +215,11 @@ Text widgets render a field as a text field. They are used by default for all st
 ```yaml
 - path: spec.my-data
   widget: Text
+- path: spec.base64-data
+  widget: Text
+  decodable: true
+  placeholder: Base-64 encoded data
+  decodedPlaceholder: Plain text data
 ```
 
 <img src="./assets/form-widgets/Text.png" alt="Example of a text widget" style="border: 1px solid #D2D5D9">
