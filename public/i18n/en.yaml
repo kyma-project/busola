@@ -58,6 +58,11 @@ btp-service-bindings:
     provisioned: Provisioned
     secret: The name of the secret where the credentials are stored, defaults to the Service Binding name if not specified.
     secret-not-found: This Secret doesn't exist.
+certificates:
+  tooltips:
+    close-expiration: Certificate will expire in less than one day.
+    expired: Certificate expired
+    will-expire: Certificate will expire in {{daysToExpire}} {{daysForm}}.
 cluster-overview:
   headers:
     cpu: CPU
