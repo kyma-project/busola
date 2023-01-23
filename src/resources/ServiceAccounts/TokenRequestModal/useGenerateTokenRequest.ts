@@ -5,7 +5,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import jsyaml from 'js-yaml';
 
-const creaTokenRequestTemplate = () => {
+const createTokenRequestTemplate = () => {
   return {
     apiVersion: 'authentication.k8s.io/v1',
     kind: 'TokenRequest',
