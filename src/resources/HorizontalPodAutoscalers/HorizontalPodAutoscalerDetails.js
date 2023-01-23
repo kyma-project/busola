@@ -13,6 +13,7 @@ import { useUrl } from 'hooks/useUrl';
 
 import { currentMetricsParser, metricsParser } from './helpers';
 import { HorizontalPodAutoscalerCreate } from './HorizontalPodAutoscalerCreate';
+import { HPABehavior } from './HPABehavior';
 import { Link } from 'react-router-dom';
 
 export function HorizontalPodAutoscalerDetails(props) {
@@ -60,7 +61,7 @@ export function HorizontalPodAutoscalerDetails(props) {
           />
           <LayoutPanelRow
             name={t('hpas.current-replicas')}
-            value={status.currentReplicas}
+            value={status.currentReplicas ?? EMPTY_TEXT_PLACEHOLDER}
           />
           <LayoutPanelRow
             name={t('hpas.headers.max-pods')}
@@ -69,11 +70,12 @@ export function HorizontalPodAutoscalerDetails(props) {
           <LayoutPanelRow
             name={t('hpas.scale-target-ref')}
             value={
-              <Link className="fd-link" to={pathname}>
-                {spec.scaleTargetRef.apiVersion}/
-                {pluralize(spec.scaleTargetRef.kind.toLowerCase())}{' '}
-                {spec.scaleTargetRef.name}
-              </Link>
+              <p>
+                {spec.scaleTargetRef.kind}{' '}
+                <Link className="fd-link" to={pathname}>
+                  {`(${spec.scaleTargetRef.name})`}
+                </Link>
+              </p>
             }
           />
         </LayoutPanel.Body>
@@ -99,7 +101,11 @@ export function HorizontalPodAutoscalerDetails(props) {
                   {t(m.i18label)} {m.name}
                 </>
               }
-              value={`${current[id] || EMPTY_TEXT_PLACEHOLDER} / ${m.value}`}
+              value={
+                current[id] === '1m'
+                  ? `0 / ${m.value}`
+                  : `${current[id] || EMPTY_TEXT_PLACEHOLDER} / ${m.value}`
+              }
             />
           ))}
         </LayoutPanel.Body>
@@ -119,7 +125,7 @@ export function HorizontalPodAutoscalerDetails(props) {
     <ResourceDetails
       resourceName={t('hpas.name_singular')}
       customColumns={customColumns}
-      customComponents={[HPASpec, HPAMetrics, Events]}
+      customComponents={[HPASpec, HPAMetrics, HPABehavior, Events]}
       createResourceForm={HorizontalPodAutoscalerCreate}
       {...props}
     />

@@ -839,11 +839,19 @@ hpas:
   description: <0>HorizontalPodAutoscaler</0> automatically manages the number of Pod replicas to match the demand.
   external: External
   headers:
+    behavior: Behavior
     created: Created
     max-pods: Max Pods
     metrics: Metrics
     min-pods: Min Pods
     replicas: Replicas
+    type: Type
+    value: Value
+    scale-down: Scale Down
+    scale-up: Scale Up
+    period-seconds: Period Seconds
+    select-policy: Select Policy
+    stabilization-window-seconds: Stabilization Window Seconds
   metrics: Metrics
   name_singular: HorizontalPodAutoscaler
   object: Object
