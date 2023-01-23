@@ -1362,15 +1362,27 @@ selector:
     empty-selector: Matches all Pods in the Namespace
   title: Selector
 service-accounts:
+  associated-secret:
+    label: Create associated Secret
+    warning: The associated Secret contains long-lived API token data that may be used to log in with the ServiceAccount credentials.
   auto-mount-token:
     descriptions:
       disabled: For security reasons, don't enable automount if you don't need it.
       enabled: For security reasons, don't use automount if you don't need it.
     disabled: disabled
     enabled: enabled
+  token-request:
+    notification:
+      success: TokenRequest generated
+      failure: Failed to generate a TokenRequest
+    generate: Generate TokenRequest
+    expiration-seconds: Expiration seconds
+    warning: The TokenRequest allows you to log in with your ServiceAccount credentials. It  will be deactivated after the expiration seconds.
+    input-info: You can choose one of the provided options from the dropdown or enter the value in seconds.
   create-modal:
     at-least-one-secret-required: '{{resource}} must have at least one secret.'
     tooltips:
+      associated-secret: Creates a long-lived API token for a ServiceAccount which data is kept in the associated Secret.
       auto-mount-token: When set to true, it automatically mounts the ServiceAccount token within each container of a given Pod. For security reasons, don't enable automount if you don't need it.
       image-pull-secrets: Image Pull Secrets is a list of references to Secrets in the same Namespace to use for pulling any images in Pods that reference this ServiceAccount. Image Pull Secrets are distinct from Secrets because Secrets can be mounted in a Pod, but Image Pull Secrets are only accessed by the kubelet.
       secrets: Secrets is the list of Secrets allowed to be used by running Pods using this ServiceAccount.

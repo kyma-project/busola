@@ -8,6 +8,7 @@
   - [Name](#name)
   - [CodeEditor](#codeeditor)
   - [Resource](#resource)
+  - [MultiCheckbox](#multicheckbox)
 - [Complex widgets](#complex-widgets)
   - [KeyValuePair](#keyvaluepair)
   - [ResourceRef](#resourceref)
@@ -332,6 +333,37 @@ Resource widgets render a dropdown list of specified resources and store the sel
 ```
 
 <img src="./assets/form-widgets/Resource.png" alt="Example of a Resource widget" style="border: 1px solid #D2D5D9">
+
+### MultiCheckbox
+
+MultiCheckbox widgets render checkboxes that are saved into one path as an array of strings.
+
+#### Widget-specific parameters
+
+- **options[]** - _[required]_ an array of objects to generate the checkboxes.
+  - **key** - _[required]_ a value used to generate checkboxes. It is set if a checkbox is selected. This `key`, together with the `path` defined for MultiCheckbox (`{path}.{key}`), can be used for **translation**.
+  - **name** - an optional name for a checkbox instead of the default capitalized last part of the path. This can be a key from the **translation** section.
+  - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the checkbox's label.
+- **required** - a boolean which specifies if a field is required. The default value is taken from CustomResourceDefintion (CRD); if it doesn't exist in the CRD, then it defaults to `false`.
+- **inputInfo** - a string below the input field that shows how to write in the input.
+- **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
+- **readOnly** - a boolean which specifies if a field is read-only. Defaults to `false`.
+
+#### Example
+
+```yaml
+- widget: MultiCheckbox
+  path: spec.methods
+  simple: true
+  options:
+    - key: GET
+      name: Get
+      description: Get is the basic method
+    - key: POST
+    - key: DELETE
+```
+
+<img src="./assets/form-widgets/MultiCheckbox.png" alt="Example of a MultiCheckbox widget" style="border: 1px solid #D2D5D9">
 
 ## Complex widgets
 
