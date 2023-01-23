@@ -21,7 +21,9 @@ export const useGenerateTokenRequest = (
 ) => {
   const { t } = useTranslation();
   const post = usePost();
-  const [tokenRequest, setTokenRequest] = useState(creaTokenRequestTemplate());
+  const [tokenRequest, setTokenRequest] = useState(
+    createTokenRequestTemplate(),
+  );
   const [token, setToken] = useState<string>('');
   const createKubeconfig = useCreateKubeconfig();
   const { notifySuccess: notifyToast } = useNotification();
