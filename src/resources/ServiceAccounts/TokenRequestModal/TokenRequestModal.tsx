@@ -1,6 +1,5 @@
 import { Button, Dialog, MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-import { useCallback } from 'react';
 
 import { useGenerateTokenRequest } from './useGenerateTokenRequest';
 import { useDownloadKubeconfigWithToken } from '../useDownloadKubeconfigWithToken';
@@ -85,9 +84,8 @@ export function TokenRequestModal({
     setTokenRequest,
   } = useGenerateTokenRequest(namespace, serviceAccountName);
 
-  const isExpirationSecondsValueANumber = useCallback(() => {
-    return !Number(tokenRequest.spec.expirationSeconds);
-  }, [tokenRequest.spec.expirationSeconds]);
+  const isExpirationSecondsValueANumber = () =>
+    !Number(tokenRequest.spec.expirationSeconds);
 
   const actions = [
     <Button onClick={handleCloseModal}>{t('common.buttons.close')}</Button>,
