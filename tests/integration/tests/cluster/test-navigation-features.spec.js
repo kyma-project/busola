@@ -40,7 +40,7 @@ context('Test navigation features', () => {
       .contains('eventing-controller') // link itself
       .click();
 
-    cy.contains('kubernetes.io/service-account-token').should('exist');
+    cy.contains('disabled').should('exist');
 
     cy.contains('Resource Graph').should('not.exist');
   });

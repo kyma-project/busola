@@ -1,9 +1,14 @@
 import pluralize from 'pluralize';
+import { PermissionSetState } from 'state/permissionSetsSelector';
 
 export const doesResourceExist = ({
   resourceGroupAndVersion,
   resourceKind,
   resourceIdList,
+}: {
+  resourceGroupAndVersion: string;
+  resourceKind: string;
+  resourceIdList: string[];
 }) => {
   const resourceNamePlural = pluralize(resourceKind);
 
@@ -18,8 +23,8 @@ export const doesResourceExist = ({
 
 export const doesUserHavePermission = (
   permissions = ['list'],
-  resource,
-  permissionSet,
+  resource: { resourceGroupAndVersion: string; resourceKind: string },
+  permissionSet: PermissionSetState,
 ) => {
   const { resourceGroupAndVersion, resourceKind } = resource;
 
@@ -48,7 +53,7 @@ export const doesUserHavePermission = (
   return !!isPermitted;
 };
 
-const getResourceGroup = resourceGroupAndVersion => {
+const getResourceGroup = (resourceGroupAndVersion: string) => {
   // native resources don't have resourceGroup
   if (resourceGroupAndVersion === 'v1') return '';
   return resourceGroupAndVersion.split('/')[0];

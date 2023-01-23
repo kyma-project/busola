@@ -292,3 +292,10 @@ $widgets:
           type: boolean
           description: a boolean which specifies if field is read only.
           default: false
+        decodable:
+          type: boolean
+          default: false
+          description: field is base64-encoded and can be decoded in the UI
+        decodedPlaceholder:
+          type: string
+          description: optional alternative placeholder to use when the field is decoded

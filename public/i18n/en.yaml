@@ -839,11 +839,19 @@ hpas:
   description: <0>HorizontalPodAutoscaler</0> automatically manages the number of Pod replicas to match the demand.
   external: External
   headers:
+    behavior: Behavior
     created: Created
     max-pods: Max Pods
     metrics: Metrics
     min-pods: Min Pods
     replicas: Replicas
+    type: Type
+    value: Value
+    scale-down: Scale Down
+    scale-up: Scale Up
+    period-seconds: Period Seconds
+    select-policy: Select Policy
+    stabilization-window-seconds: Stabilization Window Seconds
   metrics: Metrics
   name_singular: HorizontalPodAutoscaler
   object: Object
@@ -878,52 +886,6 @@ ingresses:
   title: Ingresses
 integration:
   title: Integration
-issuers:
-  acme: ACME
-  auto-registration: Auto registration
-  ca: CA
-  create:
-    messages:
-      failure: Failed to create the issuer
-      success: Issuer created
-  description: <0>Issuer</0> is a Namespace resource responsible for provisioning of certificates.
-  domains:
-    excluded: Excluded domains
-    included: Included domains
-    title: Domains
-  email: Email
-  external-account:
-    key-id: CA key ID
-    secret: Symmetric MAC Secret
-    title: External account binding
-  name_singular: Issuer
-  placeholders:
-    email: Email address for user registration
-    key-id: ID of the CA that the external account is bound to
-    name: Issuer Name
-    server: ACME Server URL
-    type: Select Issuer type
-  private-key: Private key Secret
-  requests-per-day: Daily Requests Quota
-  server: Server
-  skip-dns: Skip DNS challenge validation
-  state: Status
-  title: Issuers
-  tooltips:
-    email: The email address to use for user registration.
-    excluded-domains: The domains (including subdomains) for which certificate requests are forbidden, $t(domains.example).
-    external-account-binding: ACMEExternalAccountBinding is a reference to a CA external account of the ACME server.
-    included-domains: The domains (including subdomains) for which certificate requests are allowed, $t(domains.example).
-    issuer-type: Certification authority used
-    key-secret-ref: keySecretRef is the secret ref to the Secret that holds the symmetric MAC key of the External Account Binding with data key 'hmacKey'. The secret key stored in the Secret **must** be un-padded, base64 URL encoded data.
-    pending: The Issuer's update is batched or in progress.
-    ready: Ready to generate the certificate
-    requests: RequestsPerDayQuota is the maximum number of certificate requests per days allowed for this issuer
-    secret-ref-acme: PrivateKeySecretRef is the secret ref to the ACME private key.
-    secret-ref-ca: PrivateKeySecretRef is the secret ref to the CA secret.
-    server: Server is the URL of the ACME server.
-    skip-dns: SkipDNSChallengeValidation marks that this issuer does not validate DNS challenges. In this case, no DNS entries/records are created for a DNS Challenge, and DNS propagation is not checked.
-  type: Issuer Type
 istio:
   title: Istio
 jobs:
@@ -1385,6 +1347,8 @@ secrets:
   labels:
     annotations: Annotations
     type: Secret Type
+  messages:
+    decode-error: Failed to decode, not a proper base64 string
   metadata: Metadata
   name_singular: Secret
   placeholders:
@@ -1398,15 +1362,27 @@ selector:
     empty-selector: Matches all Pods in the Namespace
   title: Selector
 service-accounts:
+  associated-secret:
+    label: Create associated Secret
+    warning: The associated Secret contains long-lived API token data that may be used to log in with the ServiceAccount credentials.
   auto-mount-token:
     descriptions:
       disabled: For security reasons, don't enable automount if you don't need it.
       enabled: For security reasons, don't use automount if you don't need it.
     disabled: disabled
     enabled: enabled
+  token-request:
+    notification:
+      success: TokenRequest generated
+      failure: Failed to generate a TokenRequest
+    generate: Generate TokenRequest
+    expiration-seconds: Expiration seconds
+    warning: The TokenRequest allows you to log in with your ServiceAccount credentials. It  will be deactivated after the expiration seconds.
+    input-info: You can choose one of the provided options from the dropdown or enter the value in seconds.
   create-modal:
     at-least-one-secret-required: '{{resource}} must have at least one secret.'
     tooltips:
+      associated-secret: Creates a long-lived API token for a ServiceAccount which data is kept in the associated Secret.
       auto-mount-token: When set to true, it automatically mounts the ServiceAccount token within each container of a given Pod. For security reasons, don't enable automount if you don't need it.
       image-pull-secrets: Image Pull Secrets is a list of references to Secrets in the same Namespace to use for pulling any images in Pods that reference this ServiceAccount. Image Pull Secrets are distinct from Secrets because Secrets can be mounted in a Pod, but Image Pull Secrets are only accessed by the kubelet.
       secrets: Secrets is the list of Secrets allowed to be used by running Pods using this ServiceAccount.

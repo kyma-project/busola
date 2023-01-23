@@ -1,20 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GenericSecrets } from './GenericSecrets';
 import { ServiceAccountTokenStatus } from 'shared/components/ServiceAccountTokenStatus';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { ServiceAccountCreate } from './ServiceAccountCreate';
+import { Button } from 'fundamental-react';
+import { TokenRequestModal } from './TokenRequestModal/TokenRequestModal';
 
 const ServiceAccountSecrets = serviceAccount => {
   const namespace = serviceAccount.metadata.namespace;
   const listKey = 'service-account-secrets';
   const title = 'Secrets';
-  const filterBySecret = secret =>
-    serviceAccount.secrets.find(
-      ({ name: secretName }) => secret.metadata.name === secretName,
-    );
 
-  return serviceAccount.secrets ? (
+  const filterBySecret = secret => {
+    const annotations = Object.entries(secret.metadata.annotations ?? {});
+    return annotations.find(
+      ([key, value]) =>
+        key === 'kubernetes.io/service-account.name' &&
+        value === serviceAccount.metadata.name,
+    );
+  };
+
+  return (
     <GenericSecrets
       key={listKey}
       namespace={namespace}
@@ -24,7 +31,7 @@ const ServiceAccountSecrets = serviceAccount => {
       allowKubeconfigDownload
       prefix={serviceAccount.metadata.name}
     />
-  ) : null;
+  );
 };
 
 const ServiceAccountImagePullSecrets = serviceAccount => {
@@ -50,6 +57,7 @@ const ServiceAccountImagePullSecrets = serviceAccount => {
 
 export function ServiceAccountDetails(props) {
   const { t } = useTranslation();
+  const [isTokenModalOpen, setTokenModalOpen] = useState(false);
   const customColumns = [
     {
       header: t('service-accounts.headers.auto-mount-token'),
@@ -60,13 +68,34 @@ export function ServiceAccountDetails(props) {
       ),
     },
   ];
+
+  const headerActions = [
+    <Button onClick={() => setTokenModalOpen(true)}>
+      {t('service-accounts.token-request.generate')}
+    </Button>,
+  ];
+
   return (
-    <ResourceDetails
-      customComponents={[ServiceAccountSecrets, ServiceAccountImagePullSecrets]}
-      customColumns={customColumns}
-      createResourceForm={ServiceAccountCreate}
-      {...props}
-    />
+    <>
+      <ResourceDetails
+        customComponents={[
+          ServiceAccountSecrets,
+          ServiceAccountImagePullSecrets,
+        ]}
+        customColumns={customColumns}
+        createResourceForm={ServiceAccountCreate}
+        headerActions={headerActions}
+        {...props}
+      />
+      {isTokenModalOpen ? (
+        <TokenRequestModal
+          isModalOpen={isTokenModalOpen}
+          handleCloseModal={() => setTokenModalOpen(false)}
+          namespace={props.namespace}
+          serviceAccountName={props.resourceName}
+        />
+      ) : null}
+    </>
   );
 }
 

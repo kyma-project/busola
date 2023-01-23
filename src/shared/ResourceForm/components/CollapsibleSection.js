@@ -54,6 +54,7 @@ export function CollapsibleSection({
         onClick={toggle}
         aria-label={`expand ${title}`}
         style={{ marginLeft: `${nestingLevel * 16}px` }}
+        className="header"
       >
         {
           <Title
@@ -77,6 +78,7 @@ export function CollapsibleSection({
           setResource={setResource}
           isAdvanced={isAdvanced}
           nestingLevel={nestingLevel + 1}
+          required={required}
         >
           {children}
         </ResourceFormWrapper>
