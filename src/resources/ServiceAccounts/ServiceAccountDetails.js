@@ -68,9 +68,6 @@ export function ServiceAccountDetails(props) {
       ),
     },
   ];
-  const handleCloseModal = () => {
-    setTokenModalOpen(false);
-  };
 
   const headerActions = [
     <Button onClick={() => setTokenModalOpen(true)}>
@@ -93,7 +90,7 @@ export function ServiceAccountDetails(props) {
       {isTokenModalOpen ? (
         <TokenRequestModal
           isModalOpen={isTokenModalOpen}
-          handleCloseModal={handleCloseModal}
+          handleCloseModal={() => setTokenModalOpen(false)}
           namespace={props.namespace}
           serviceAccountName={props.resourceName}
         />
