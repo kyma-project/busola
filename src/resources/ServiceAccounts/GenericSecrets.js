@@ -2,8 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { SecretList } from 'resources/Secrets/SecretList';
-
-import { useDownloadSecretKubeconfig } from './useDownloadSecretKubeconfig';
+import { useDownloadKubeconfigWithToken } from './useDownloadKubeconfigWithToken';
 
 export const GenericSecrets = ({
   namespace,
@@ -13,7 +12,14 @@ export const GenericSecrets = ({
   prefix,
 }) => {
   const { t } = useTranslation();
-  const downloadKubeconfig = useDownloadSecretKubeconfig();
+  const downloadKubeconfig = useDownloadKubeconfigWithToken();
+
+  const downloadSecretKubeconfig = secret => {
+    if (secret.type !== 'kubernetes.io/service-account-token') return;
+    const name = secret.metadata.name;
+    const serviceAccountToken = atob(secret.data.token);
+    downloadKubeconfig(name, serviceAccountToken);
+  };
 
   const secretsUrl = `/api/v1/namespaces/${namespace}/secrets`;
 
@@ -23,7 +29,7 @@ export const GenericSecrets = ({
       icon: 'download',
       disabledHandler: secret =>
         secret.type !== 'kubernetes.io/service-account-token',
-      handler: downloadKubeconfig,
+      handler: downloadSecretKubeconfig,
       tooltip: t('service-accounts.headers.download-kubeconfig'),
     },
   ];
