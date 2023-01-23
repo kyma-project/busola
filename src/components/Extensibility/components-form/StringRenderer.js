@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Button, FormInput } from 'fundamental-react';
+import React, { useState } from 'react';
+import { Button } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 import { base64Decode, base64Encode } from 'shared/helpers';
@@ -9,7 +9,6 @@ import {
   useGetTranslation,
   getPropsFromSchema,
 } from 'components/Extensibility/helpers';
-// import { useNotification } from 'shared/contexts/NotificationContext';
 
 export function StringRenderer({
   onChange,
