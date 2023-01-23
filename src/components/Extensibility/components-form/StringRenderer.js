@@ -93,6 +93,11 @@ export function StringRenderer({
     }
   };
 
+  const displayPlaceholder =
+    (decoded && tExt(schema.get('decodedPlaceholder'))) ||
+    tExt(schemaPlaceholder) ||
+    tExt(placeholder);
+
   return (
     <ResourceForm.Wrapper resource={props?.resource}>
       <ResourceForm.FormField
@@ -115,11 +120,7 @@ export function StringRenderer({
         label={tFromStoreKeys(storeKeys, schema)}
         compact={compact}
         data-testid={storeKeys.join('.') || tFromStoreKeys(storeKeys, schema)}
-        placeholder={
-          (decoded && schema.get('decodedPlaceholder')) ||
-          tExt(schemaPlaceholder) ||
-          tExt(placeholder)
-        }
+        placeholder={displayPlaceholder}
         {...getTypeSpecificProps()}
         {...getPropsFromSchema(schema, required, tExt)}
         validate={() => !decodable || !decodeError}
