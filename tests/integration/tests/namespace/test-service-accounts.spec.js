@@ -35,7 +35,9 @@ context('Test Service Accounts', () => {
       .eq(1)
       .click();
 
-    cy.contains('The associated Secret').should('be.visible');
+    cy.contains(
+      'The TokenRequest allows you to log in with your ServiceAccount credentials.',
+    ).should('be.visible');
 
     cy.get('[role="dialog"]')
       .contains('button', 'Create')
