@@ -35,9 +35,9 @@ context('Test Service Accounts', () => {
       .eq(1)
       .click();
 
-    cy.contains(
-      'The TokenRequest allows you to log in with your ServiceAccount credentials.',
-    ).should('be.visible');
+    cy.contains('The associated Secret contains long-lived API token').should(
+      'be.visible',
+    );
 
     cy.get('[role="dialog"]')
       .contains('button', 'Create')
@@ -88,7 +88,7 @@ context('Test Service Accounts', () => {
     cy.contains('Generate TokenRequest').click();
 
     cy.contains(
-      'The TokenRequest will be deactivated after the expiration seconds',
+      'The TokenRequest allows you to log in with your ServiceAccount credentials.',
     ).should('be.visible');
 
     cy.contains('TokenRequest generated').should('be.visible');
