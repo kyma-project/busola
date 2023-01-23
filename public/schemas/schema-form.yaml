@@ -295,7 +295,7 @@ $widgets:
         decodable:
           type: boolean
           default: false
-          description: field is base64-encoded and can be decoded in UI
+          description: field is base64-encoded and can be decoded in the UI
         decodedPlaceholder:
           type: string
           description: optional alternative placeholder to use when field is decoded
