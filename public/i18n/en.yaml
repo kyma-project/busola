@@ -1402,7 +1402,7 @@ selector:
 service-accounts:
   associated-secret:
     label: Create associated Secret
-    warning: The associated Secret contains a long-lived API token data that may be used to log in with the ServiceAccount credentials.
+    warning: The associated Secret contains long-lived API token data that may be used to log in with the ServiceAccount credentials.
   auto-mount-token:
     descriptions:
       disabled: For security reasons, don't enable automount if you don't need it.
