@@ -1415,7 +1415,7 @@ service-accounts:
       failure: Failed to generate a TokenRequest
     generate: Generate TokenRequest
     expiration-seconds: Expiration seconds
-    warning: The TokenRequest will be deactivated after the expiration seconds. It allows you to log in with your ServiceAccount credentials.
+    warning: The TokenRequest allows you to log in with your ServiceAccount credentials. It  will be deactivated after the expiration seconds.
     input-info: You can choose one of the provided options from the dropdown or enter the value in seconds.
   create-modal:
     at-least-one-secret-required: '{{resource}} must have at least one secret.'

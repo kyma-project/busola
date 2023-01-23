@@ -9,8 +9,8 @@ import { ComboboxInput } from 'shared/ResourceForm/inputs';
 import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 
-import './TokenRequestModal.scss';
 import { useEventListener } from 'hooks/useEventListener';
+import './TokenRequestModal.scss';
 
 const expirationSecondsOptions = [
   {
