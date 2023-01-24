@@ -18,17 +18,24 @@ const rtf = new Intl.RelativeTimeFormat('en', {
   style: 'long', // other values: "short" or "narrow"
 });
 
-export const getReadableTimestamp = (timestamp: string): string => {
+export const getReadableTimestamp = (
+  timestamp: string,
+  calculateRemainingTime?: boolean,
+): string => {
   if (!timestamp) return EMPTY_TEXT_PLACEHOLDER;
+  const isFutureTimestampMultiplier = calculateRemainingTime ? -1 : 1;
 
   const now = new Date();
   const createdAt = new Date(timestamp);
 
   const dayDifference = getDayDifference(createdAt, now);
-  if (dayDifference < -1) return rtf.format(Math.ceil(dayDifference), 'day');
+
+  if (dayDifference * isFutureTimestampMultiplier < -1)
+    return rtf.format(Math.ceil(dayDifference), 'day');
 
   const hourDifference = getHourDifference(createdAt, now);
-  if (hourDifference < -1) return rtf.format(Math.ceil(hourDifference), 'hour');
+  if (hourDifference * isFutureTimestampMultiplier < -1)
+    return rtf.format(Math.ceil(hourDifference), 'hour');
 
   return rtf.format(Math.ceil(getMinuteDifference(createdAt, now)), 'minute');
 };

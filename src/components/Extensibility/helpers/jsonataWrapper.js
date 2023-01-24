@@ -29,9 +29,12 @@ export function jsonataWrapper(expression) {
     return first?.localeCompare(second) ?? 1;
   });
 
-  exp.registerFunction('readableTimestamp', timestamp => {
-    return getReadableTimestamp(timestamp);
-  });
+  exp.registerFunction(
+    'readableTimestamp',
+    (timestamp, calculateRemainingTime) => {
+      return getReadableTimestamp(timestamp, calculateRemainingTime);
+    },
+  );
 
   return exp;
 }
