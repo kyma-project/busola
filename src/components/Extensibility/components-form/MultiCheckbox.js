@@ -52,7 +52,6 @@ export function MultiCheckbox({
     }
     const displayOptions = options.map(option => {
       if (typeof option === 'string') {
-        console.log('string');
         return {
           key: option,
           text: exists(translationPath + '.' + option)
