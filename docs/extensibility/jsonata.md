@@ -141,7 +141,7 @@ Example from the [ResourceList widget](display-section.md#resourcelist).
       default: true
 ```
 
-## readableTimestamp(timestamp, isFuture)
+## readableTimestamp(timestamp, calculateRemainingTime)
 
 You can use this function to convert time to readable time.
 
