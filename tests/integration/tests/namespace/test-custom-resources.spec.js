@@ -25,6 +25,10 @@ context('Test Custom Resources', () => {
   });
 
   it('Check single CR list', () => {
+    cy.get('[role=row]')
+      .contains('Certificates')
+      .click();
+
     cy.contains('cert.gardener.cloud').click();
 
     cy.url().should('match', /customresourcedefinitions/);
