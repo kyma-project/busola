@@ -52,6 +52,7 @@ export function MultiCheckbox({
     }
     const displayOptions = options.map(option => {
       if (typeof option === 'string') {
+        console.log('string');
         return {
           key: option,
           text: exists(translationPath + '.' + option)
@@ -59,15 +60,15 @@ export function MultiCheckbox({
             : option,
         };
       }
+
       let defaultText = exists(translationPath + '.' + option.key)
         ? tExt(translationPath + '.' + option.key)
         : option.key;
 
       if (option.name) {
-        defaultText = exists(translationPath + '.' + option.name)
-          ? tExt(translationPath + '.' + option.name)
-          : option.name;
+        defaultText = exists(option.name) ? tExt(option.name) : option.name;
       }
+
       return {
         key: option.key,
         text: defaultText,
@@ -76,6 +77,7 @@ export function MultiCheckbox({
           : option.description,
       };
     });
+
     return {
       input: Inputs.Checkboxes,
       options: displayOptions,
