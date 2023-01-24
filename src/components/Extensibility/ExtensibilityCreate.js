@@ -153,6 +153,10 @@ export function ExtensibilityCreateCore({
         readVars(updatedResource);
         triggers.trigger('init', []);
       }}
+      onReset={() => {
+        readVars(getResourceObjFromUIStore(store));
+        triggers.trigger('init', []);
+      }}
       onModeChange={(oldMode, newMode) => {
         if (oldMode === ModeSelector.MODE_YAML) {
           triggers.disable();

@@ -27,6 +27,7 @@ export function ResourceForm({
   createUrl,
   presets,
   onPresetSelected,
+  onReset,
   renderEditor,
   onSubmit,
   afterCreatedFn,
@@ -63,6 +64,7 @@ export function ResourceForm({
     resourceRef.current = JSON.stringify(resource);
     handleSetResetFormFn(() => () => {
       setResource(JSON.parse(resourceRef.current));
+      if (onReset) onReset();
     });
   }
 
