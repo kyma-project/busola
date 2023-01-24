@@ -149,7 +149,7 @@ You can use this function to convert time to readable time.
 
 - **timestamp** - timestamp to convert.
 
-### Examples
+### Example
 
 ```yaml
 - source: '$readableTimestamp($item.lastTransitionTime)'
