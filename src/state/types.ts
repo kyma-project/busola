@@ -68,14 +68,22 @@ export type ExtResource = {
   dataSources: Record<string, any>;
 };
 
+export interface UrlOverrides {
+  cluster?: string;
+  namespace?: string;
+  resourceType?: string;
+}
+
+type UrlFunction = (path: string, overrides?: UrlOverrides) => string;
+
 export interface UrlGenerators {
   cluster: string;
   namespace: string;
-  clusterUrl: (path: string) => string;
-  namespaceUrl: (path: string) => string;
-  scopedUrl: (path: string) => string;
-  resourceListUrl: (path: string) => string;
-  resourceUrl: (path: string) => string;
+  clusterUrl: UrlFunction;
+  namespaceUrl: UrlFunction;
+  scopedUrl: UrlFunction;
+  resourceListUrl: UrlFunction;
+  resourceUrl: UrlFunction;
 }
 
 export type NavNode = {

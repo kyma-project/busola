@@ -1,18 +1,51 @@
 import { Menu, Icon } from 'fundamental-react';
-import { Link } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import { namespacesState } from 'state/namespacesAtom';
 import { useUrl } from 'hooks/useUrl';
-import { NamespacesState } from 'state/namespacesAtom';
 
 import './NamespaceDropdown.scss';
 
+const Namespaces = () => {
+  const namespaces = useRecoilValue(namespacesState);
+  const { clusterUrl, namespace, namespaceUrl } = useUrl();
+  const { pathname } = useLocation();
+
+  const switchNamespace = (namespaceName: string) => {
+    if (!pathname.includes('/namespaces/'))
+      return clusterUrl(`namespaces/${namespaceName}`);
+
+    const pathElements = pathname
+      .substring(pathname.indexOf('namespaces/'))
+      .split('/');
+
+    console.log('dupa', pathname);
+
+    const resourceType = pathElements[2];
+    const resourceName = pathElements[3];
+
+    if (!resourceName) return pathname.replace(namespace, namespaceName);
+
+    return namespaceUrl(resourceType, { namespace: namespaceName });
+  };
+
+  return (
+    <>
+      {namespaces.map(ns => (
+        <Menu.Item key={ns}>
+          <Link to={switchNamespace(ns)}>{ns}</Link>
+        </Menu.Item>
+      ))}
+    </>
+  );
+};
+
 export function NamespaceDropdown({
-  namespaces,
   hideDropdown,
 }: {
-  namespaces: NamespacesState;
-  hideDropdown: () => void;
+  hideDropdown: VoidFunction;
 }) {
   const { clusterUrl } = useUrl();
   const { t } = useTranslation();
@@ -26,18 +59,11 @@ export function NamespaceDropdown({
     </Menu.Item>
   );
 
-  const namespacesDropdownList =
-    namespaces.map(n => (
-      <Menu.Item>
-        <Link to={clusterUrl(`namespaces/${n}`)}>{n}</Link>
-      </Menu.Item>
-    )) || [];
-
   return (
     <Menu>
       <Menu.List onClick={hideDropdown}>
         {namespacesOverviewNode}
-        {namespacesDropdownList}
+        <Namespaces />
       </Menu.List>
     </Menu>
   );

@@ -1,13 +1,7 @@
 import { useMatch } from 'react-router';
 import pluralize from 'pluralize';
 
-import { UrlGenerators } from 'state/types';
-
-export interface UrlOverrides {
-  cluster?: string;
-  namespace?: string;
-  resourceType?: string;
-}
+import { UrlGenerators, UrlOverrides } from 'state/types';
 
 export const useUrl: () => UrlGenerators = () => {
   const cluster =
@@ -38,7 +32,7 @@ export const useUrl: () => UrlGenerators = () => {
   const resourcePath = (resource: any, overrides: UrlOverrides = {}) =>
     (overrides.resourceType ?? pluralize(resource.kind || '')).toLowerCase();
 
-  const resourceListUrl = (resource: any, overrides: UrlOverrides = {}) => {
+  const resourceListUrl = (resource: any, overrides = {}) => {
     return scopedUrl(resourcePath(resource, overrides), {
       namespace: resource?.metadata?.namespace,
       ...overrides,
