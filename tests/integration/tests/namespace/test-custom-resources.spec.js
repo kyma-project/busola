@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 
+const PIZZA_NAME = 'diavola';
+
 context('Test Custom Resources', () => {
   Cypress.skipAfterFail();
 
@@ -13,29 +15,27 @@ context('Test Custom Resources', () => {
 
     cy.contains('h3', 'Custom Resources').should('be.visible');
 
-    cy.get('[role="search"] [aria-label="open-search"]').type(
-      'cert.gardener.cloud',
-    );
+    cy.get('[role="search"] [aria-label="open-search"]').type('busola.example');
 
     cy.get('table').should('have.length', 1);
 
     cy.get('[role=row]')
-      .contains('Certificates')
+      .contains('Pizzas')
       .should('be.visible');
   });
 
   it('Check single CR list', () => {
     cy.get('[role=row]')
-      .contains('Certificates')
+      .contains('Pizzas')
       .click();
 
     cy.get('[aria-label="title"]')
-      .contains('Certificates')
+      .contains('Pizzas')
       .should('be.visible');
 
-    cy.contains('cypress-test-name').should('be.visible');
+    cy.contains(PIZZA_NAME).should('be.visible');
 
-    cy.contains('certificates.cert.gardener.cloud').click();
+    cy.contains('pizzas.busola.example.com').click();
 
     cy.url().should('match', /customresourcedefinitions/);
   });
