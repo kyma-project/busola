@@ -7,11 +7,8 @@ export function useTrigger(storeKeys) {
   return triggers.trigger;
 }
 
-export function useSubscription(subscriptions) {
-  const subscription = useRef(null);
+export function useSubscription(subscription) {
   const triggers = useContext(TriggerContext);
-
-  subscription.current = subscriptions;
 
   useEffect(() => {
     triggers.subscribe(subscription);

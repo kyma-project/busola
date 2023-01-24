@@ -1,5 +1,5 @@
 import { fromJS } from 'immutable';
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useRef } from 'react';
 
 export function scopePaths(storeKeys) {
   const indexes = fromJS(storeKeys)
@@ -45,29 +45,26 @@ export const TriggerContext = createContext({
 });
 
 export function TriggerContextProvider({ children }) {
-  const [subs, setSubs] = useState([]);
+  const subs = useRef([]);
   const [enabled, setEnabled] = useState(true);
 
   const trigger = (name, storeKeys) => {
     if (!enabled) return;
     setTimeout(() =>
-      subs
-        .map(sub => sub.current[name])
+      subs.current
+        .map(sub => sub[name])
         .filter(sub => !!sub)
         .filter(sub => pathMatch(sub.storeKeys, storeKeys, sub.modifiers))
-        .forEach(sub => {
-          console.log('triggering', sub);
-          sub.callback();
-        }),
+        .forEach(sub => sub.callback()),
     );
   };
 
   const subscribe = sub => {
-    setSubs(subs => [...subs, sub]);
+    subs.current = [...subs.current, sub];
   };
 
   const unsubscribe = sub => {
-    setSubs(subs => subs.filter(s => s.sub !== sub));
+    subs.current = subs.current.filter(s => s.sub !== sub);
   };
 
   const disable = () => {

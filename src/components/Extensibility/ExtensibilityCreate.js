@@ -107,7 +107,7 @@ export function ExtensibilityCreateCore({
 
     prepareVars(fullSchemaRules);
     readVars(resource);
-    setTimeout(() => triggers.trigger('init', []), 500);
+    setTimeout(() => triggers.trigger('init', []));
 
     return {
       simpleRules: prepareSchemaRules(
