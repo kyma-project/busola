@@ -136,8 +136,10 @@ context('Test reduced permissions', () => {
 
     cy.contains(SA_NAME).click();
 
-    cy.get('[aria-label="Download Kubeconfig"]').click();
+    cy.contains('Generate TokenRequest').click();
+    cy.contains('Download Kubeconfig').click();
 
+    cy.contains('Close').click();
     cy.wait(200);
 
     cy.task('listDownloads', Cypress.config('downloadsFolder')).then(
