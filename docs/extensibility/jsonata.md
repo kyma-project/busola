@@ -141,17 +141,23 @@ Example from the [ResourceList widget](display-section.md#resourcelist).
       default: true
 ```
 
-## readableTimestamp(timestamp)
+## readableTimestamp(timestamp, isFuture)
 
 You can use this function to convert time to readable time.
 
 ### Function parameters
 
 - **timestamp** - timestamp to convert.
+- **calculateRemainingTime** - optional boolean that is used to calculate the remaining time
 
-### Example
+### Examples
 
 ```yaml
 - source: '$readableTimestamp($item.lastTransitionTime)'
   name: status.conditions.lastTransitionTime
+```
+
+```yaml
+- source: '$readableTimestamp(spec.expirationDate, true)'
+  name: spec.expirationDate
 ```
