@@ -3,8 +3,6 @@ import { namespacesState } from 'state/namespacesAtom';
 import { NamespaceDropdown } from './NamespaceDropdown';
 import { MutableSnapshot } from 'recoil';
 
-const CLUSTER_PREFIX = '/cluster/clusterName';
-
 const mockPathname = jest.fn();
 Object.defineProperty(window, 'location', {
   value: {
@@ -13,6 +11,8 @@ Object.defineProperty(window, 'location', {
     },
   },
 });
+
+const CLUSTER_PREFIX = '/cluster/clusterName';
 
 const INITIAL_STATE = {
   initializeState: (snapshot: MutableSnapshot) =>

@@ -21,8 +21,6 @@ const Namespaces = () => {
       .substring(pathname.indexOf('namespaces/'))
       .split('/');
 
-    console.log('dupa', pathname);
-
     const resourceType = pathElements[2];
     const resourceName = pathElements[3];
 
