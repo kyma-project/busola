@@ -1,7 +1,5 @@
 /// <reference types="cypress" />
 
-const PIZZA_NAME = 'diavola';
-
 context('Test Custom Resources', () => {
   Cypress.skipAfterFail();
 
