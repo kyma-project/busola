@@ -316,6 +316,8 @@ Resource widgets render a dropdown list of specified resources and store the sel
   - **version** - _[required]_ API version used for all requests.
   - **scope** - either `namespace` or `cluster`. When set to `cluster`, namespaced resources are fetched from all Namespaces. Defaults to `cluster`.
   - **namespace** - Namespace to fetch resources from. Used only when scope is `namespace` and resources need to be fetched from a specific Namespace. Defaults to the active Namespace when omitted.
+- **filter** - jsonata expression used to filter resource by the given condition
+- **provideVar** - when this field is defined, the chosen resource will be provided as a variable of this name.
 - **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in CRD, then it defaults to `false`.
 - **inputInfo** - a string below the input field that shows how to fill in the input.
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
