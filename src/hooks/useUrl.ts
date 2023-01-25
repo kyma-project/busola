@@ -32,7 +32,7 @@ export const useUrl: () => UrlGenerators = () => {
   const resourcePath = (resource: any, overrides: UrlOverrides = {}) =>
     (overrides.resourceType ?? pluralize(resource.kind || '')).toLowerCase();
 
-  const resourceListUrl = (resource: any, overrides = {}) => {
+  const resourceListUrl = (resource: any, overrides: UrlOverrides = {}) => {
     return scopedUrl(resourcePath(resource, overrides), {
       namespace: resource?.metadata?.namespace,
       ...overrides,
