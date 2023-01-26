@@ -46,7 +46,7 @@ config:
       isEnabled: true
       config:
         namespaces:
-          - kube-public
+          - kube-system
     VISUAL_RESOURCES:
       isEnabled: true
     EXTENSIBILITY:

@@ -138,7 +138,7 @@ HIDDEN_NAMESPACES:
   isEnabled: true
   config:
     namespaces:
-      - kube-public
+      - kube-system
 ```
 
 - **ISTIO** - is used to show or hide the Istio-related views and to define which APIs are required for the views to be shown properly.
