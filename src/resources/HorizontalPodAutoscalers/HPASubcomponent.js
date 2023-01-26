@@ -1,45 +1,58 @@
-import React, { useEffect, useState } from 'react';
-import { useGet } from 'shared/hooks/BackendAPI/useGet';
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { GenericList } from 'shared/components/GenericList/GenericList';
+import React from 'react';
+import { useRecoilValue } from 'recoil';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { useUrl } from 'hooks/useUrl';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 import { Tokens } from 'shared/components/Tokens';
 import { MetricsBrief } from './helpers';
-import { useRecoilValue } from 'recoil';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
-import { useUrl } from 'hooks/useUrl';
 
 export const HPASubcomponent = props => {
   const { t } = useTranslation();
+  const { kind, name } = props.metadata?.ownerReferences?.[0];
   const namespaceId = useRecoilValue(activeNamespaceIdState);
-  const { data, error } = useGet(
-    `/apis/autoscaling/v2/namespaces/${namespaceId}/horizontalpodautoscalers`,
-  );
-  const [associatedHPA, setAssociatedHPA] = useState([]);
   const { resourceUrl } = useUrl();
 
-  const {
-    kind,
-    metadata: { name },
-  } = props;
+  const { data, error } = useGetList(
+    hpa =>
+      hpa.spec?.scaleTargetRef?.kind === kind &&
+      hpa.spec?.scaleTargetRef?.name === name,
+  )(`/apis/autoscaling/v2/namespaces/${namespaceId}/horizontalpodautoscalers`);
 
-  useEffect(() => {
-    if (data?.items?.length) {
-      const hpas = data.items.filter(el => {
-        const sameKind = el.spec.scaleTargetRef.kind === props.kind;
-        const sameName = el.spec.scaleTargetRef.name === props.metadata.name;
-
-        return sameKind && sameName;
-      });
-
-      setAssociatedHPA(hpas);
-    }
-  }, [data, kind, name, setAssociatedHPA, props.kind, props.metadata.name]);
+  const rowRenderer = hpa => [
+    <Link
+      className="fd-link"
+      to={resourceUrl({
+        kind: 'horizontalpodautoscaler',
+        metadata: {
+          name: hpa.metadata.name,
+          namespace: namespaceId,
+        },
+      })}
+    >
+      {hpa.metadata.name}
+    </Link>,
+    <MetricsBrief {...hpa} />,
+    hpa.spec.minReplicas,
+    hpa.status?.currentReplicas || EMPTY_TEXT_PLACEHOLDER,
+    hpa.spec.maxReplicas,
+    <Tokens
+      tokens={hpa.status?.conditions?.reduce((result, condition) => {
+        if (condition.status === 'True') {
+          result.push(condition.type);
+        }
+        return result;
+      }, [])}
+    />,
+  ];
 
   return (
     <GenericList
-      entries={associatedHPA}
+      entries={data ?? []}
       key="associated-hpa-list"
       title={t('hpas.title')}
       serverDataError={error}
@@ -51,36 +64,7 @@ export const HPASubcomponent = props => {
         t('hpas.headers.max-pods'),
         t('common.headers.status'),
       ]}
-      rowRenderer={hpa => [
-        <Link
-          className="fd-link"
-          to={resourceUrl({
-            kind: 'horizontalpodautoscaler',
-            metadata: {
-              name: hpa.metadata.name,
-              namespace: namespaceId,
-            },
-          })}
-        >
-          {hpa.metadata.name}
-        </Link>,
-        <MetricsBrief {...hpa} />,
-        hpa.spec.minReplicas,
-        hpa.status?.currentReplicas || EMPTY_TEXT_PLACEHOLDER,
-        hpa.spec.maxReplicas,
-
-        <Tokens
-          tokens={
-            hpa.status?.conditions?.reduce((result, condition) => {
-              if (condition.status === 'True') {
-                result.push(condition.type);
-              }
-              return result;
-            }, []) || []
-          }
-        />,
-      ]}
-      notFoundMessage={EMPTY_TEXT_PLACEHOLDER}
+      rowRenderer={rowRenderer}
       searchSettings={{
         textSearchProperties: ['metadata.name'],
       }}
