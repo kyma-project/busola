@@ -1,4 +1,4 @@
-import { useEffect, useContext, useRef } from 'react';
+import { useEffect, useContext } from 'react';
 
 import { TriggerContext } from '../contexts/Trigger';
 
