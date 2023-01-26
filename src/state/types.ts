@@ -1,4 +1,5 @@
 import { IconGlyph } from 'fundamental-react/lib/Icon/Icon';
+import { K8sResource } from 'types';
 
 export type Scope = 'namespace' | 'cluster';
 
@@ -82,8 +83,8 @@ export interface UrlGenerators {
   clusterUrl: UrlFunction;
   namespaceUrl: UrlFunction;
   scopedUrl: UrlFunction;
-  resourceListUrl: UrlFunction;
-  resourceUrl: UrlFunction;
+  resourceListUrl: (resource: K8sResource, overrides?: UrlOverrides) => string;
+  resourceUrl: (resource: K8sResource, overrides?: UrlOverrides) => string;
 }
 
 export type NavNode = {

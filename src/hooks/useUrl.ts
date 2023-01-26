@@ -2,6 +2,7 @@ import { useMatch } from 'react-router';
 import pluralize from 'pluralize';
 
 import { UrlGenerators, UrlOverrides } from 'state/types';
+import { K8sResource } from 'types';
 
 export const useUrl: () => UrlGenerators = () => {
   const cluster =
@@ -29,7 +30,7 @@ export const useUrl: () => UrlGenerators = () => {
     }
   };
 
-  const resourcePath = (resource: any, overrides: UrlOverrides = {}) =>
+  const resourcePath = (resource: K8sResource, overrides: UrlOverrides = {}) =>
     (overrides.resourceType ?? pluralize(resource.kind || '')).toLowerCase();
 
   const resourceListUrl = (resource: any, overrides: UrlOverrides = {}) => {
@@ -39,7 +40,7 @@ export const useUrl: () => UrlGenerators = () => {
     });
   };
 
-  const resourceUrl = (resource: any, overrides: UrlOverrides = {}) => {
+  const resourceUrl = (resource: K8sResource, overrides: UrlOverrides = {}) => {
     const encodedName = encodeURIComponent(resource?.metadata?.name);
     const path = `${resourcePath(resource, overrides)}/${encodedName}`;
     return scopedUrl(path, {
