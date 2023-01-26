@@ -31,6 +31,7 @@ import { ResourceRenderer } from './ResourceRenderer';
 import { ResourceRefRender } from './ResourceRefRenderer';
 import { SimpleList } from './SimpleList';
 import { AlertRenderer } from './AlertRenderer';
+import { MultiCheckbox } from './MultiCheckbox';
 import { MultiType } from './MultiType';
 
 const pluginStack = [
@@ -95,6 +96,7 @@ export const widgets = {
     ResourceRef: ResourceRefRender,
     Resource: ResourceRenderer,
     Alert: AlertRenderer,
+    MultiCheckbox,
     MultiType,
   },
 };
