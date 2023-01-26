@@ -18,19 +18,40 @@ const rtf = new Intl.RelativeTimeFormat('en', {
   style: 'long', // other values: "short" or "narrow"
 });
 
+function getRemainingTime(timestampAsDate: Date, currentDate: Date): string {
+  const dayDifference = getDayDifference(timestampAsDate, currentDate);
+
+  if (dayDifference > -1) return rtf.format(Math.ceil(dayDifference), 'day');
+
+  const hourDifference = getHourDifference(timestampAsDate, currentDate);
+  if (hourDifference > -1) return rtf.format(Math.ceil(hourDifference), 'hour');
+
+  return rtf.format(
+    Math.ceil(getMinuteDifference(timestampAsDate, currentDate)),
+    'minute',
+  );
+}
+
 export const getReadableTimestamp = (timestamp: string): string => {
   if (!timestamp) return EMPTY_TEXT_PLACEHOLDER;
 
-  const now = new Date();
-  const createdAt = new Date(timestamp);
+  const currentDate = new Date();
+  const timestampAsDate = new Date(timestamp);
 
-  const dayDifference = getDayDifference(createdAt, now);
+  if (timestampAsDate > currentDate)
+    return getRemainingTime(timestampAsDate, currentDate);
+
+  const dayDifference = getDayDifference(timestampAsDate, currentDate);
+
   if (dayDifference < -1) return rtf.format(Math.ceil(dayDifference), 'day');
 
-  const hourDifference = getHourDifference(createdAt, now);
+  const hourDifference = getHourDifference(timestampAsDate, currentDate);
   if (hourDifference < -1) return rtf.format(Math.ceil(hourDifference), 'hour');
 
-  return rtf.format(Math.ceil(getMinuteDifference(createdAt, now)), 'minute');
+  return rtf.format(
+    Math.ceil(getMinuteDifference(timestampAsDate, currentDate)),
+    'minute',
+  );
 };
 
 export const ReadableCreationTimestamp = ({
