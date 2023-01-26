@@ -13,15 +13,21 @@ import { MetricsBrief } from './helpers';
 
 export const HPASubcomponent = props => {
   const { t } = useTranslation();
-  const { kind, name } = props.metadata?.ownerReferences?.[0];
+  const { kind, name } = props.metadata?.ownerReferences?.[0] ?? {};
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const { resourceUrl } = useUrl();
 
-  const { data, error } = useGetList(
-    hpa =>
+  const hpaFilter = hpa => {
+    if (!kind || !name) return true;
+    return (
       hpa.spec?.scaleTargetRef?.kind === kind &&
-      hpa.spec?.scaleTargetRef?.name === name,
-  )(`/apis/autoscaling/v2/namespaces/${namespaceId}/horizontalpodautoscalers`);
+      hpa.spec?.scaleTargetRef?.name === name
+    );
+  };
+
+  const { data, error } = useGetList(hpaFilter)(
+    `/apis/autoscaling/v2/namespaces/${namespaceId}/horizontalpodautoscalers`,
+  );
 
   const rowRenderer = hpa => [
     <Link
