@@ -47,12 +47,14 @@ export const HPASubcomponent = props => {
     hpa.status?.currentReplicas || EMPTY_TEXT_PLACEHOLDER,
     hpa.spec.maxReplicas,
     <Tokens
-      tokens={hpa.status?.conditions?.reduce((result, condition) => {
-        if (condition.status === 'True') {
-          result.push(condition.type);
-        }
-        return result;
-      }, [])}
+      tokens={
+        hpa.status?.conditions?.reduce((result, condition) => {
+          if (condition.status === 'True') {
+            result.push(condition.type);
+          }
+          return result;
+        }, []) || []
+      }
     />,
   ];
 
