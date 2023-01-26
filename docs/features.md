@@ -138,18 +138,7 @@ HIDDEN_NAMESPACES:
   isEnabled: true
   config:
     namespaces:
-      - compass-system
-      - istio-system
-      - knative-eventing
-      - knative-serving
-      - kube-system
-      - kyma-backup
-      - kyma-installer
-      - kyma-integration
-      - kyma-system
-      - natss
-      - kube-node-lease
-      - serverless-system
+      - kube-public
 ```
 
 - **ISTIO** - is used to show or hide the Istio-related views and to define which APIs are required for the views to be shown properly.
