@@ -257,7 +257,7 @@ $widgets:
         filter:
           type: string
           widget: Jsonata    
-          description: a JSONata function to filter resource by the given condition.  
+          description: a JSONata function to filter resources based on a given condition.  
         provideVar:
           type: string
           description: when this field is defined, the chosen resource will be provided as a variable of this name.
