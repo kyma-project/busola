@@ -8,6 +8,7 @@
   - [Name](#name)
   - [CodeEditor](#codeeditor)
   - [Resource](#resource)
+  - [MultiCheckbox](#multicheckbox)
 - [Complex widgets](#complex-widgets)
   - [KeyValuePair](#keyvaluepair)
   - [ResourceRef](#resourceref)
@@ -207,12 +208,19 @@ Text widgets render a field as a text field. They are used by default for all st
 - **inputInfo** - a string below the input field that shows how to fill in the input.
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
 - **readOnly** - a boolean which specifies if a field is read-only. Defaults to `false`.
+- **decodable** - a boolean that specifies that the field is base64-encoded and can be decoded in the UI. It can't be used together with **enum**.
+- **decodedPlacehoder** - optional alternative placeholder to use when the field is decoded.
 
 #### Example
 
 ```yaml
 - path: spec.my-data
   widget: Text
+- path: spec.base64-data
+  widget: Text
+  decodable: true
+  placeholder: Base-64 encoded data
+  decodedPlaceholder: Plain text data
 ```
 
 <img src="./assets/form-widgets/Text.png" alt="Example of a text widget" style="border: 1px solid #D2D5D9">
@@ -308,6 +316,8 @@ Resource widgets render a dropdown list of specified resources and store the sel
   - **version** - _[required]_ API version used for all requests.
   - **scope** - either `namespace` or `cluster`. When set to `cluster`, namespaced resources are fetched from all Namespaces. Defaults to `cluster`.
   - **namespace** - Namespace to fetch resources from. Used only when scope is `namespace` and resources need to be fetched from a specific Namespace. Defaults to the active Namespace when omitted.
+- **filter** - JSONata expression that filters resources based on a given condition.
+- **provideVar** - when this field is defined, the chosen resource is provided as a variable of this name.
 - **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in CRD, then it defaults to `false`.
 - **inputInfo** - a string below the input field that shows how to fill in the input.
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
@@ -332,6 +342,37 @@ Resource widgets render a dropdown list of specified resources and store the sel
 ```
 
 <img src="./assets/form-widgets/Resource.png" alt="Example of a Resource widget" style="border: 1px solid #D2D5D9">
+
+### MultiCheckbox
+
+MultiCheckbox widgets render checkboxes that are saved into one path as an array of strings.
+
+#### Widget-specific parameters
+
+- **options[]** - _[required]_ an array of objects to generate the checkboxes.
+  - **key** - _[required]_ a value used to generate checkboxes. It is set if a checkbox is selected. This `key`, together with the `path` defined for MultiCheckbox (`{path}.{key}`), can be used for **translation**.
+  - **name** - an optional name for a checkbox instead of the default capitalized last part of the path. This can be a key from the **translation** section.
+  - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the checkbox's label.
+- **required** - a boolean which specifies if a field is required. The default value is taken from CustomResourceDefintion (CRD); if it doesn't exist in the CRD, then it defaults to `false`.
+- **inputInfo** - a string below the input field that shows how to write in the input.
+- **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
+- **readOnly** - a boolean which specifies if a field is read-only. Defaults to `false`.
+
+#### Example
+
+```yaml
+- widget: MultiCheckbox
+  path: spec.methods
+  simple: true
+  options:
+    - key: GET
+      name: Get
+      description: Get is the basic method
+    - key: POST
+    - key: DELETE
+```
+
+<img src="./assets/form-widgets/MultiCheckbox.png" alt="Example of a MultiCheckbox widget" style="border: 1px solid #D2D5D9">
 
 ## Complex widgets
 
@@ -381,6 +422,7 @@ ResourceRef widgets render two dropdowns to select the associated resources' nam
   - **kind** - _[required]_ Kubernetes kind of the resource.
   - **group** - API group used for all requests. Not provided for Kubernetes resources in the core (also called legacy) group.
   - **version** - _[required]_ API version used for all requests.
+- **filter** - JSONata expression that filters resources based on a given condition.
 - **provideVar** - when this field is defined, the chosen resource will be provided as a variable of this name.
 - **toInternal** - a [JSONata](jsonata.md) function to convert from the stored value to the `{name, namespace}` format. Useful, for example, when the data is stored as a string.
 - **toExternal** - a corresponding function to convert back to store.
@@ -448,6 +490,7 @@ GenericList widgets render an array as a list of collapsible sections with their
 - **placeholder** - specifies a short hint about the input field value.
 - **template** - specifies default structure for a list item.
 - **defaultExpanded** - a boolean that specifies if the widget should be expanded by default. Defaults to `false`.
+- **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`.
 
 #### Example
 
