@@ -422,7 +422,7 @@ ResourceRef widgets render two dropdowns to select the associated resources' nam
   - **kind** - _[required]_ Kubernetes kind of the resource.
   - **group** - API group used for all requests. Not provided for Kubernetes resources in the core (also called legacy) group.
   - **version** - _[required]_ API version used for all requests.
-- **filter** - jsonata expression used to filter resources by the given condition.
+- **filter** - JSONata expression that filters resources based on a given condition.
 - **provideVar** - when this field is defined, the chosen resource will be provided as a variable of this name.
 - **toInternal** - a [JSONata](jsonata.md) function to convert from the stored value to the `{name, namespace}` format. Useful, for example, when the data is stored as a string.
 - **toExternal** - a corresponding function to convert back to store.
