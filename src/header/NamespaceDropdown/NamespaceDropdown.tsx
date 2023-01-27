@@ -1,6 +1,6 @@
 import { Menu, Icon } from 'fundamental-react';
 import { useRecoilValue } from 'recoil';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useMatch } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { namespacesState } from 'state/namespacesAtom';
@@ -11,22 +11,19 @@ import './NamespaceDropdown.scss';
 const Namespaces = () => {
   const namespaces = useRecoilValue(namespacesState);
   const { clusterUrl, namespace, namespaceUrl } = useUrl();
-  const { pathname } = useLocation();
+
+  const { resourceType = '' } =
+    useMatch({
+      path: '/cluster/:cluster/namespaces/:namespace/:resourceType',
+      end: false,
+    })?.params ?? {};
 
   const switchNamespace = (namespaceName: string) => {
-    if (!pathname.includes('/namespaces/'))
-      return clusterUrl(`namespaces/${namespaceName}`);
+    if (!namespace) return clusterUrl(`namespaces/${namespaceName}`);
 
-    const pathElements = pathname
-      .substring(pathname.indexOf('namespaces/'))
-      .split('/');
-
-    const resourceType = pathElements[2];
-    const resourceName = pathElements[3];
-
-    if (!resourceName) return pathname.replace(namespace, namespaceName);
-
-    return namespaceUrl(resourceType, { namespace: namespaceName });
+    return namespaceUrl(resourceType, {
+      namespace: namespaceName,
+    });
   };
 
   return (
