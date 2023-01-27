@@ -59,7 +59,7 @@ export function SimpleList({
   };
 
   const isObject = itemsSchema?.get('type') === 'object';
-  console.log(isObject);
+
   return (
     <ResourceForm.CollapsibleSection
       defaultOpen={defaultOpen}
