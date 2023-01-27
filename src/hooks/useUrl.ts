@@ -11,16 +11,16 @@ export const useUrl: () => UrlGenerators = () => {
     useMatch({ path: '/cluster/:cluster/namespaces/:namespace', end: false })
       ?.params?.namespace ?? '';
 
-  const clusterUrl = (path: string = '', overrides: UrlOverrides = {}) => {
-    return `/cluster/${overrides?.cluster ?? cluster}/${path}`;
+  const clusterUrl = (path: string, overrides: UrlOverrides = {}) => {
+    return `/cluster/${overrides?.cluster ?? cluster}/${path ?? ''}`;
   };
 
-  const namespaceUrl = (path: string = '', overrides: UrlOverrides = {}) => {
+  const namespaceUrl = (path: string, overrides: UrlOverrides = {}) => {
     return `/cluster/${overrides?.cluster ??
-      cluster}/namespaces/${overrides?.namespace ?? namespace}/${path}`;
+      cluster}/namespaces/${overrides?.namespace ?? namespace}/${path ?? ''}`;
   };
 
-  const scopedUrl = (path: string = '', overrides: UrlOverrides = {}) => {
+  const scopedUrl = (path: string, overrides: UrlOverrides = {}) => {
     if ((overrides?.resourceType || '').toLowerCase() === 'namespaces') {
       return clusterUrl(path, overrides);
     } else if (overrides?.namespace ?? namespace) {
