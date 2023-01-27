@@ -7,18 +7,6 @@ context('Test Stateful Sets', () => {
     // Ignor Cypress issue with Monaco on CI
     cy.loginAndSelectCluster();
 
-    cy.get('[aria-label="topnav-profile-btn"]').click();
-
-    cy.contains('Preferences').click();
-
-    cy.contains('Cluster interaction').click();
-
-    cy.contains('.preferences-row', 'Show hidden Namespaces')
-      .find('.fd-switch')
-      .click();
-
-    cy.contains('Close').click();
-
     cy.getLeftNav()
       .contains('Namespaces')
       .click();
