@@ -10,7 +10,7 @@ import './NamespaceDropdown.scss';
 
 const Namespaces = () => {
   const namespaces = useRecoilValue(namespacesState);
-  const { clusterUrl, namespace, namespaceUrl } = useUrl();
+  const { namespaceUrl } = useUrl();
 
   const { resourceType = '' } =
     useMatch({
@@ -18,19 +18,17 @@ const Namespaces = () => {
       end: false,
     })?.params ?? {};
 
-  const switchNamespace = (namespaceName: string) => {
-    if (!namespace) return clusterUrl(`namespaces/${namespaceName}`);
-
-    return namespaceUrl(resourceType, {
-      namespace: namespaceName,
-    });
-  };
-
   return (
     <>
       {namespaces.map(ns => (
         <Menu.Item key={ns}>
-          <Link to={switchNamespace(ns)}>{ns}</Link>
+          <Link
+            to={namespaceUrl(resourceType, {
+              namespace: ns,
+            })}
+          >
+            {ns}
+          </Link>
         </Menu.Item>
       ))}
     </>
