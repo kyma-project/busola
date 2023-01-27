@@ -77,29 +77,6 @@ export function SimpleList({
         </div>
         <div className="fd-col fd-col-md--8 form-field multi-input extensibility">
           <ul className={listClasses}>
-            {isObject && (
-              <li className="fd-row">
-                <PluginStack
-                  schema={itemsSchema}
-                  widgets={{
-                    ...widgets,
-                    types: mapValues(widgets.types, () => titleRenderer),
-                    custom: {
-                      ...mapValues(widgets.custom, () => titleRenderer),
-                      Null: () => '',
-                    },
-                  }}
-                  parentSchema={schema}
-                  storeKeys={storeKeys.push(0)}
-                  level={level + 1}
-                  nestingLevel={nestingLevel + 1}
-                  schemaKeys={schemaKeys?.push('items')}
-                />
-                <div className="fd-col fd-col-md--1">
-                  <span className="item-action"></span>
-                </div>
-              </li>
-            )}
             {Array(listSize + 1)
               .fill(null)
               .map((_val, index) => {
@@ -107,7 +84,36 @@ export function SimpleList({
 
                 return (
                   <>
-                    <li key={index} className="fd-row">
+                    <li
+                      className="fd-row"
+                      key={index}
+                      style={{
+                        display: 'grid',
+                        gridTemplateRows: '0.2fr 1fr',
+                        gridAutoFlow: 'column',
+                      }}
+                    >
+                      {isObject && (
+                        <PluginStack
+                          schema={itemsSchema}
+                          widgets={{
+                            ...widgets,
+                            types: mapValues(
+                              widgets.types,
+                              () => titleRenderer,
+                            ),
+                            custom: {
+                              ...mapValues(widgets.custom, () => titleRenderer),
+                              Null: () => '',
+                            },
+                          }}
+                          parentSchema={schema}
+                          storeKeys={storeKeys.push(0)}
+                          level={level + 1}
+                          nestingLevel={nestingLevel + 1}
+                          schemaKeys={schemaKeys?.push('items')}
+                        />
+                      )}
                       <PluginStack
                         showValidity={showValidity}
                         schema={itemsSchema}
