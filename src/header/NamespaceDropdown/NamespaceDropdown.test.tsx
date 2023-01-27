@@ -45,7 +45,7 @@ describe('NamespaceDropdown test', () => {
     const namespaceListItem = await findByText('test2');
     const hrefAttribute = namespaceListItem.getAttribute('href');
 
-    expect(hrefAttribute).toEqual(`${CLUSTER_PREFIX}/namespaces/test2`);
+    expect(hrefAttribute).toEqual(`${CLUSTER_PREFIX}/namespaces/test2/`);
   });
 
   it('Should navigate to deployments list but on different Namespace', async () => {
