@@ -59,7 +59,7 @@ export function SimpleList({
   };
 
   const isObject = itemsSchema?.get('type') === 'object';
-
+  console.log(isObject);
   return (
     <ResourceForm.CollapsibleSection
       defaultOpen={defaultOpen}
@@ -85,13 +85,10 @@ export function SimpleList({
                 return (
                   <>
                     <li
-                      className="fd-row"
+                      className={classnames('fd-row ', {
+                        'object-item': isObject,
+                      })}
                       key={index}
-                      style={{
-                        display: 'grid',
-                        gridTemplateRows: '0.2fr 1fr',
-                        gridAutoFlow: 'column',
-                      }}
                     >
                       {isObject && (
                         <PluginStack
