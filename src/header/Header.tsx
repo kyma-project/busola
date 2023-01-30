@@ -19,7 +19,7 @@ import './Header.scss';
 export function Header() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { namespaces, refetch } = useAvailableNamespaces();
+  const { refetch } = useAvailableNamespaces();
   const { namespace: activeNamespace } = useUrl();
 
   const setPreferencesOpen = useSetRecoilState(isPreferencesOpenState);
@@ -79,7 +79,6 @@ export function Header() {
                 menu: (
                   <NamespaceDropdown
                     hideDropdown={() => setIsNamespaceOpen(false)}
-                    namespaces={namespaces}
                   />
                 ),
               },

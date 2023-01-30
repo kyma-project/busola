@@ -1,13 +1,8 @@
 import { useMatch } from 'react-router';
 import pluralize from 'pluralize';
 
-import { UrlGenerators } from 'state/types';
-
-export interface UrlOverrides {
-  cluster?: string;
-  namespace?: string;
-  resourceType?: string;
-}
+import { UrlGenerators, UrlOverrides } from 'state/types';
+import { K8sResource } from 'types';
 
 export const useUrl: () => UrlGenerators = () => {
   const cluster =
@@ -17,12 +12,12 @@ export const useUrl: () => UrlGenerators = () => {
       ?.params?.namespace ?? '';
 
   const clusterUrl = (path: string, overrides: UrlOverrides = {}) => {
-    return `/cluster/${overrides?.cluster ?? cluster}/${path}`;
+    return `/cluster/${overrides?.cluster ?? cluster}/${path ?? ''}`;
   };
 
   const namespaceUrl = (path: string, overrides: UrlOverrides = {}) => {
     return `/cluster/${overrides?.cluster ??
-      cluster}/namespaces/${overrides?.namespace ?? namespace}/${path}`;
+      cluster}/namespaces/${overrides?.namespace ?? namespace}/${path ?? ''}`;
   };
 
   const scopedUrl = (path: string, overrides: UrlOverrides = {}) => {
@@ -35,17 +30,20 @@ export const useUrl: () => UrlGenerators = () => {
     }
   };
 
-  const resourcePath = (resource: any, overrides: UrlOverrides = {}) =>
+  const resourcePath = (resource: K8sResource, overrides: UrlOverrides = {}) =>
     (overrides.resourceType ?? pluralize(resource.kind || '')).toLowerCase();
 
-  const resourceListUrl = (resource: any, overrides: UrlOverrides = {}) => {
+  const resourceListUrl = (
+    resource: K8sResource,
+    overrides: UrlOverrides = {},
+  ) => {
     return scopedUrl(resourcePath(resource, overrides), {
       namespace: resource?.metadata?.namespace,
       ...overrides,
     });
   };
 
-  const resourceUrl = (resource: any, overrides: UrlOverrides = {}) => {
+  const resourceUrl = (resource: K8sResource, overrides: UrlOverrides = {}) => {
     const encodedName = encodeURIComponent(resource?.metadata?.name);
     const path = `${resourcePath(resource, overrides)}/${encodedName}`;
     return scopedUrl(path, {
