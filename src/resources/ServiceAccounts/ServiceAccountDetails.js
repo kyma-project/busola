@@ -70,7 +70,10 @@ export function ServiceAccountDetails(props) {
   ];
 
   const headerActions = [
-    <Button onClick={() => setTokenModalOpen(true)}>
+    <Button
+      className="fd-margin-end--tiny"
+      onClick={() => setTokenModalOpen(true)}
+    >
       {t('service-accounts.token-request.generate')}
     </Button>,
   ];
