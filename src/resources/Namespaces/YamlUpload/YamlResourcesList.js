@@ -88,10 +88,7 @@ export function YamlResourcesList({ resourcesData }) {
               />
             </div>
           </div>
-          <FilteredResourcesDetails
-            filteredResources={filteredResources}
-            isValidationOn={validateResources}
-          />
+          <FilteredResourcesDetails filteredResources={filteredResources} />
         </>
       );
     } else {
