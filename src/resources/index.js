@@ -22,7 +22,6 @@ import * as Deployments from './Deployments';
 import * as DaemonSets from './DaemonSets';
 import * as ConfigMaps from './ConfigMaps';
 import * as Certificates from './Certificates';
-import * as Subscriptions from './Subscriptions';
 import * as ServiceAccounts from './ServiceAccounts';
 
 // //cluster
@@ -62,7 +61,6 @@ export const resources = [
   OAuth2Clients,
   ConfigMaps,
   Certificates,
-  Subscriptions,
   ServiceAccounts,
 
   // cluster resources
