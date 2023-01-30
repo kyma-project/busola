@@ -1,30 +1,32 @@
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import { Switch } from 'fundamental-react';
-import { validateYamlState } from 'state/preferences/validateYamlAtom';
+import { validateResourcesState } from 'state/preferences/validateResourcesAtom';
 
-export default function YamlValidationSettings() {
+export default function ResourcesValidationSettings() {
   const { t } = useTranslation();
-  const [validateYaml, setValidateYaml] = useRecoilState(validateYamlState);
+  const [validateResources, setValidateResources] = useRecoilState(
+    validateResourcesState,
+  );
 
   const toggleVisibility = () => {
-    setValidateYaml(!validateYaml);
+    setValidateResources(!validateResources);
   };
 
   return (
     <div className="preferences-row">
       <span className="fd-has-color-status-4">
-        {t('settings.clusters.yamlValidation')}
+        {t('settings.clusters.resourcesValidation')}
       </span>
       <div>
         <Switch
           // TypeScript definitions are out of sync here
           // @ts-ignore
           localizedText={{
-            switchLabel: t('settings.clusters.yamlValidation'),
+            switchLabel: t('settings.clusters.resourcesValidation'),
           }}
           className="fd-has-display-inline-block fd-margin-begin--tiny"
-          checked={validateYaml}
+          checked={validateResources}
           onChange={toggleVisibility}
           compact
         />

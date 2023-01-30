@@ -1456,7 +1456,7 @@ settings:
     dontConfirmDelete: Delete without confirmation
     showHiddenNamespaces: Show hidden Namespaces
     title: Clusters
-    yamlValidation: Validate YAML-files
+    resourcesValidation: Validate Resources
   interface:
     description: Appearance, language
     themes:
