@@ -11,6 +11,7 @@ import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpen
 import ConfirmationSettings from './ConfirmationSettings';
 import LanguageSettings from './LanguageSettings';
 import NamespaceSettings from './NamespaceSettings';
+import ResourcesValidationSettings from './ResourcesValidationSettings';
 import OtherSettings from './OtherSettings';
 import ProtectedSettings from './ProtectedSettings';
 import ThemeChooser from './ThemeChooser';
@@ -100,6 +101,7 @@ export function Preferences() {
             <NamespaceSettings />
             <ConfirmationSettings />
             <ProtectedSettings />
+            <ResourcesValidationSettings />
           </div>
         </VerticalTabs.Content>
       </VerticalTabs>
