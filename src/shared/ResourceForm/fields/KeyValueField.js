@@ -17,7 +17,7 @@ export function KeyValueField({
   isAdvanced,
   input = {},
   keyProps = {
-    pattern: '([A-Za-z0-9][-A-Za-z0-9_./]*)?[A-Za-z0-9]',
+    pattern: '([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9]',
   },
   initialValue = '',
   readableFromFile = false,
