@@ -2,6 +2,8 @@ import React from 'react';
 import { Icon } from 'fundamental-react';
 import { Switch } from 'shared/ResourceForm/inputs';
 import { useTranslation } from 'react-i18next';
+import { useRecoilState } from 'recoil';
+import { validateResourcesState } from 'state/preferences/validateResourcesAtom';
 
 import {
   STATE_ERROR,
@@ -12,12 +14,11 @@ import {
 import { FilteredResourcesDetails } from './FilteredResourcesDetails/FilteredResourcesDetails';
 import './YamlResourcesList.scss';
 
-export function YamlResourcesList({
-  resourcesData,
-  isValidationOn,
-  handleResourceValidation,
-}) {
+export function YamlResourcesList({ resourcesData }) {
   const { t } = useTranslation();
+  const [validateResources, setValidateResources] = useRecoilState(
+    validateResourcesState,
+  );
   const filteredResources = resourcesData?.filter(
     resource => resource !== null,
   );
@@ -82,15 +83,12 @@ export function YamlResourcesList({
             <div className="validate-resources">
               <p>{t('upload-yaml.labels.validate-resources')}</p>
               <Switch
-                onChange={handleResourceValidation}
-                checked={isValidationOn}
+                onChange={() => setValidateResources(!validateResources)}
+                checked={validateResources}
               />
             </div>
           </div>
-          <FilteredResourcesDetails
-            filteredResources={filteredResources}
-            isValidationOn={isValidationOn}
-          />
+          <FilteredResourcesDetails filteredResources={filteredResources} />
         </>
       );
     } else {
