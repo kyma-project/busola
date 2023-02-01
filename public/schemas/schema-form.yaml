@@ -142,6 +142,7 @@ $widgets:
         template:
           description: Default structure for a list item
           widget: CodeEditor
+          language: "'YAML'"
         placeholder:
           $ref: "#/$defs/placeholder"
         defaultExpanded:
