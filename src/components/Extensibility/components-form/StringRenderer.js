@@ -60,9 +60,9 @@ export function StringRenderer({
 
       const options = enumOptions.map(key => ({
         key,
-        text: exists(translationPath + '.' + key)
-          ? tExt(translationPath + '.' + key)
-          : key,
+        text: exists(tExt(`${translationPath}.${key}`))
+          ? tExt(`${translationPath}.${key}`)
+          : tExt(key),
       }));
       return { input: Inputs.ComboboxInput, options };
     } else if (!decodable) {

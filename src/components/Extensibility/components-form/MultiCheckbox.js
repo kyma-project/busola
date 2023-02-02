@@ -54,26 +54,20 @@ export function MultiCheckbox({
       if (typeof option === 'string') {
         return {
           key: option,
-          text: exists(translationPath + '.' + option)
-            ? tExt(translationPath + '.' + option)
-            : option,
+          text: exists(tExt(option))
+            ? tExt(option)
+            : tExt(`${translationPath}.${option}`),
         };
       }
-      let defaultText = exists(translationPath + '.' + option.key)
-        ? tExt(translationPath + '.' + option.key)
-        : option.key;
 
-      if (option.name) {
-        defaultText = exists(translationPath + '.' + option.name)
-          ? tExt(translationPath + '.' + option.name)
-          : option.name;
-      }
       return {
         key: option.key,
-        text: defaultText,
-        description: exists(translationPath + '.' + option.description)
-          ? tExt(translationPath + '.' + option.description)
-          : option.description,
+        text: option.name
+          ? tExt(option.name)
+          : tExt(`${translationPath}.${option.key}`),
+        description: option.description
+          ? tExt(option.description)
+          : tExt(`${translationPath}.${option.description}`),
       };
     });
     return {
