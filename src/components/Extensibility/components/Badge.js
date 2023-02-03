@@ -32,12 +32,8 @@ export function Badge({
       if (Array.isArray(rule)) {
         return rule.includes(value);
       } else {
-        try {
-          return jsonata(rule);
-        } catch (e) {
-          console.warn(`invalid rule: ${rule}`, e);
-          return null;
-        }
+        const [doesMatch, error] = jsonata(rule);
+        return error ? false : doesMatch;
       }
     });
     if (match) {
