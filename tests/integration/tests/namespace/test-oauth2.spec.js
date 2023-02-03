@@ -14,7 +14,7 @@ context('Test OAuth2 Clients', () => {
   it('Create a Client', () => {
     cy.navigateTo('Configuration', 'OAuth2 Clients');
 
-    cy.contains('Create OAuth2 Client').click();
+    cy.contains('Create Auth Client').click();
 
     cy.contains('Advanced').click();
 
