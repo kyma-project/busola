@@ -50,7 +50,7 @@ export function CustomFieldInjector({
         schema={schema}
         value={jp.value(vars, varPath)}
         onChange={e => setVar(varPath, e.data.value)}
-        storeKeys={List([])}
+        storeKeys={storeKeys.set(-1, `$${varName}`)}
       />
     );
   } else {
