@@ -32,8 +32,8 @@ export function Badge({
       if (Array.isArray(rule)) {
         return rule.includes(value);
       } else {
-        const [doesMatch, error] = jsonata(rule);
-        return error ? false : doesMatch;
+        const [doesMatch, matchError] = jsonata(rule);
+        return matchError ? false : doesMatch;
       }
     });
     if (match) {
