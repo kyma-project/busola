@@ -52,7 +52,7 @@ export function TriggerContextProvider({ children }) {
     if (!enabled) return;
     setTimeout(() =>
       subs.current
-        .map(sub => sub[name])
+        .map(sub => sub.current[name])
         .filter(sub => !!sub)
         .filter(sub => pathMatch(sub.storeKeys, storeKeys, sub.modifiers))
         .forEach(sub => sub.callback()),

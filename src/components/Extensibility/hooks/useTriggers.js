@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useRef } from 'react';
 
 import { TriggerContext } from '../contexts/Trigger';
 
@@ -7,8 +7,11 @@ export function useTrigger(storeKeys) {
   return triggers.trigger;
 }
 
-export function useSubscription(subscription) {
+export function useSubscription(subscriptions) {
+  const subscription = useRef(null);
   const triggers = useContext(TriggerContext);
+
+  subscription.current = subscriptions;
 
   useEffect(() => {
     triggers.subscribe(subscription);
