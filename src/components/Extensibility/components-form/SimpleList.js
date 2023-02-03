@@ -79,22 +79,24 @@ export function SimpleList({
           <ul className={listClasses}>
             {isObject && (
               <li className="fd-row">
-                <PluginStack
-                  schema={itemsSchema}
-                  widgets={{
-                    ...widgets,
-                    types: mapValues(widgets.types, () => titleRenderer),
-                    custom: {
-                      ...mapValues(widgets.custom, () => titleRenderer),
-                      Null: () => '',
-                    },
-                  }}
-                  parentSchema={schema}
-                  storeKeys={storeKeys.push(0)}
-                  level={level + 1}
-                  nestingLevel={nestingLevel + 1}
-                  schemaKeys={schemaKeys?.push('items')}
-                />
+                <div className="fd-col-md--11 list-entry">
+                  <PluginStack
+                    schema={itemsSchema}
+                    widgets={{
+                      ...widgets,
+                      types: mapValues(widgets.types, () => titleRenderer),
+                      custom: {
+                        ...mapValues(widgets.custom, () => titleRenderer),
+                        Null: () => '',
+                      },
+                    }}
+                    parentSchema={schema}
+                    storeKeys={storeKeys.push(0)}
+                    level={level + 1}
+                    nestingLevel={nestingLevel + 1}
+                    schemaKeys={schemaKeys?.push('items')}
+                  />
+                </div>
                 <div className="fd-col fd-col-md--1">
                   <span className="item-action"></span>
                 </div>
@@ -108,17 +110,19 @@ export function SimpleList({
                 return (
                   <>
                     <li key={index} className="fd-row">
-                      <PluginStack
-                        showValidity={showValidity}
-                        schema={itemsSchema}
-                        parentSchema={schema}
-                        storeKeys={ownKeys}
-                        level={level + 1}
-                        schemaKeys={schemaKeys?.push('items')}
-                        compact
-                        placeholder={tExt(schemaPlaceholder)}
-                        inputInfo={inputInfo}
-                      />
+                      <div className="fd-col fd-col-md--11 list-entry">
+                        <PluginStack
+                          showValidity={showValidity}
+                          schema={itemsSchema}
+                          parentSchema={schema}
+                          storeKeys={ownKeys}
+                          level={level + 1}
+                          schemaKeys={schemaKeys?.push('items')}
+                          compact
+                          placeholder={tExt(schemaPlaceholder)}
+                          inputInfo={inputInfo}
+                        />
+                      </div>
                       <div className="fd-col fd-col-md--1">
                         <span className="item-action">
                           {!isLast(index) && (
