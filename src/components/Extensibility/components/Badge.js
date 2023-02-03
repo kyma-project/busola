@@ -7,6 +7,7 @@ import { useGetPlaceholder } from 'components/Extensibility/helpers';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 import './Badge.scss';
+import { useTranslation } from 'react-i18next';
 
 export function Badge({
   value,
@@ -16,6 +17,7 @@ export function Badge({
   scope,
   arrayItems,
 }) {
+  const { t } = useTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
   const jsonata = useJsonata({
     resource: originalResource,
@@ -32,12 +34,16 @@ export function Badge({
       if (Array.isArray(rule)) {
         return rule.includes(value);
       } else {
-        try {
-          return jsonata(rule);
-        } catch (e) {
-          console.warn(`invalid rule: ${rule}`, e);
-          return null;
+        const [doesMatch, matchError] = jsonata(rule);
+        if (matchError) {
+          console.error(
+            t('extensibility.configuration-error', {
+              error: matchError.message,
+            }),
+          );
+          return false;
         }
+        return doesMatch;
       }
     });
     if (match) {
