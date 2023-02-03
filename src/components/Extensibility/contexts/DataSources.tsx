@@ -22,6 +22,7 @@ export interface StoreItem {
   loading: boolean;
   error: Error | null;
   data: any;
+  firstFetch: any;
 }
 
 export interface Store {
@@ -177,9 +178,13 @@ export const DataSourcesContextProvider: FC<Props> = ({
       // mark dataSource as fetched
       dataSourcesDict.current[dataSourceName] = true;
 
-      setStore(dataSourceName, { loading: true, data: { loading: true } });
-
       const firstFetch = fetchResource(dataSource, dataSourceName, resource);
+      setStore(dataSourceName, {
+        loading: true,
+        data: { loading: true },
+        firstFetch,
+      });
+
       const REFETCH_INTERVAL = 6000;
       intervals.current.push(
         setInterval(
@@ -189,8 +194,10 @@ export const DataSourcesContextProvider: FC<Props> = ({
       );
 
       return firstFetch;
+    } else if (store?.[dataSourceName]?.loading) {
+      return store?.[dataSourceName]?.firstFetch;
     } else {
-      return Promise.resolve(dataSourcesDict.current[dataSourceName]);
+      return Promise.resolve(store?.[dataSourceName]?.data);
     }
   };
 
