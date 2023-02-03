@@ -101,6 +101,6 @@ context('Test OAuth2 Clients', () => {
   });
 
   it('Inpect list', () => {
-    cy.inspectList('OAuth2 Clients', CLIENT_NAME);
+    cy.inspectList('Auth Clients', CLIENT_NAME);
   });
 });
