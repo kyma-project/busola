@@ -5,6 +5,7 @@ import { useUrl } from 'hooks/useUrl';
 
 import { useGetPlaceholder, useGetTranslation } from '../helpers';
 import { useJsonata } from '../hooks/useJsonata';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
 export function ResourceLink({
   value,
@@ -16,7 +17,7 @@ export function ResourceLink({
   const { t } = useTranslation();
   const { t: tExt } = useGetTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
-  const { resourceUrl } = useUrl();
+  const { resourceUrl, scopedUrl } = useUrl();
 
   const jsonata = useJsonata({
     resource: originalResource,
@@ -25,13 +26,47 @@ export function ResourceLink({
     arrayItems,
   });
 
-  if (!value) {
-    return emptyLeafPlaceholder;
-  }
-
   const [name, nameError] = jsonata(structure.resource?.name);
   const [namespace, namespaceError] = jsonata(structure.resource?.namespace);
   const [kind, kindError] = jsonata(structure.resource?.kind);
+  const crd = structure.resource?.crd ?? '';
+
+  const { error } = useGet(
+    resourceUrl(
+      {
+        kind,
+        metadata: {
+          name,
+        },
+      },
+      { namespace },
+    ),
+    {
+      skip: false,
+      pollingInterval: 0,
+      onDataReceived: () => {},
+    },
+  );
+
+  const link = error
+    ? scopedUrl(
+        namespace
+          ? `namespaces/${namespace}/customresources/${crd}/${name}`
+          : `/customresources/${crd}/${name}`,
+      )
+    : resourceUrl(
+        {
+          kind,
+          metadata: {
+            name,
+          },
+        },
+        { namespace },
+      );
+
+  if (!value) {
+    return emptyLeafPlaceholder;
+  }
 
   const jsonataError = nameError || namespaceError || kindError;
   if (jsonataError) {
@@ -41,18 +76,7 @@ export function ResourceLink({
   }
 
   return (
-    <Link
-      className="fd-link"
-      to={resourceUrl(
-        {
-          kind,
-          metadata: {
-            name,
-          },
-        },
-        { namespace },
-      )}
-    >
+    <Link className="fd-link" to={link}>
       {tExt(value)}
     </Link>
   );
