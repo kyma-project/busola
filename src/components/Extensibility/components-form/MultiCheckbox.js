@@ -37,6 +37,11 @@ export function MultiCheckbox({
   const value = getValue(storeKeys, resource);
 
   const getCheckboxesOptions = () => {
+    const translationPath = storeKeys
+      .toArray()
+      .filter(el => typeof el === 'string')
+      .join('.');
+
     let options = schema.toJS().options;
     // if there's only 1 option, it will be not in an array
     if (typeof options === 'string') {
@@ -49,17 +54,22 @@ export function MultiCheckbox({
       if (typeof option === 'string') {
         return {
           key: option,
-          text: tExt(option),
+          text: exists(tExt(option))
+            ? tExt(option)
+            : tExt(`${translationPath}.${option}`),
         };
       }
 
       return {
         key: option.key,
-        text: option.name ? tExt(option.name) : tExt(option.key),
-        description: tExt(option.description),
+        text: option.name
+          ? tExt(option.name)
+          : tExt(`${translationPath}.${option.key}`),
+        description: option.description
+          ? tExt(option.description)
+          : tExt(`${translationPath}.${option.description}`),
       };
     });
-
     return {
       input: Inputs.Checkboxes,
       options: displayOptions,
