@@ -57,7 +57,7 @@ export function IncorrectPath({ to, title = '', message = '' }) {
 
     if (link && crdGroup) {
       notificationManager.notifySuccess({
-        content: 'This URL is not valid, you will be redirected',
+        content: t('components.incorrect-path.message.extensions'),
       });
       navigate(link);
     }
