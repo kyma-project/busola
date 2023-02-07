@@ -54,7 +54,7 @@ export function MultiCheckbox({
       if (typeof option === 'string') {
         return {
           key: option,
-          text: exists(tExt(option))
+          text: exists(option)
             ? tExt(option)
             : tExt(`${translationPath}.${option}`),
         };
