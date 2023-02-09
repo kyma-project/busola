@@ -56,7 +56,9 @@ export function MultiCheckbox({
           key: option,
           text: exists(option)
             ? tExt(option)
-            : tExt(`${translationPath}.${option}`),
+            : exists(`${translationPath}.${option}`)
+            ? tExt(`${translationPath}.${option}`)
+            : option,
         };
       }
 
@@ -64,11 +66,15 @@ export function MultiCheckbox({
         key: option.key,
         text: option.name
           ? tExt(option.name)
-          : tExt(`${translationPath}.${option.key}`),
+          : exists(`${translationPath}.${option.key}`)
+          ? tExt(`${translationPath}.${option.key}`)
+          : option.key,
         description: option.description
-          ? exists(tExt(option.description))
+          ? exists(option.description)
             ? tExt(option.description)
-            : tExt(`${translationPath}.${option.description}`)
+            : exists(`${translationPath}.${option.description}`)
+            ? tExt(`${translationPath}.${option.description}`)
+            : option.description
           : null,
       };
     });
