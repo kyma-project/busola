@@ -17,7 +17,7 @@ describe('Widget', () => {
         </ExtensibilityTestWrapper>,
       );
 
-      expect(await findByText('test-value'));
+      expect(await findByText('extensibility::test-value'));
     });
 
     it('falsy (but not boolean "false") -> render component as usual', async () => {
@@ -30,7 +30,7 @@ describe('Widget', () => {
         </ExtensibilityTestWrapper>,
       );
 
-      expect(await findByText('test-value'));
+      expect(await findByText('extensibility::test-value'));
     });
 
     it('Explicitly false -> hide component', async () => {
