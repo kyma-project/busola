@@ -21,7 +21,7 @@ export const assignNodesToCategories = (navList: NavNode[]): Category[] => {
     );
 
     if (existingCategory) {
-      existingCategory.items.push(node);
+      existingCategory.items.push({ ...node, icon: undefined });
     } else {
       const { icon, ...childNode } = node;
       categories.push({
