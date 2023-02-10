@@ -30,10 +30,6 @@
     }
   }
 
-  .fd-nested-list__link:has(span.fd-nested-list__icon) {
-    padding-left: 0 !important;
-  }
-
   .fd-nested-list__button.fd-button {
     i {
       color: var(--sapContent_IconColor) !important;
