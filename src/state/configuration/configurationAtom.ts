@@ -56,11 +56,11 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
     const defaultParams = jsyaml.load(
       await defaultConfigResponse.text(),
     ) as Config;
-    // const configParams = jsyaml.load(await configResponse.text()) as Config;
-    // const mapParams = configMapResponse?.data?.config
-    //   ? (jsyaml.load(configMapResponse.data.config) as Config)
-    //   : {};
-
+    const configParams = jsyaml.load(await configResponse.text()) as Config;
+    const mapParams = configMapResponse?.data?.config
+      ? (jsyaml.load(configMapResponse.data.config) as Config)
+      : {};
+    console.log(configParams, mapParams);
     const mapParams1: Config = {
       config: {
         features: {
