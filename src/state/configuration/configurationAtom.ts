@@ -61,12 +61,69 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
     const mapParams = configMapResponse?.data?.config
       ? (jsyaml.load(configMapResponse.data.config) as Config)
       : {};
+    console.log(
+      'defaultParams',
+      defaultParams,
+      'configParams',
+      configParams,
+      'mapParams',
+      mapParams,
+    );
 
-    return merge(
+    const mapParams1: Config = {
+      config: {
+        features: {
+          PROTECTED_RESOURCES: {
+            isEnabled: true,
+            config: {
+              resources: [
+                {
+                  match: {
+                    "$.metadata.labels['app.kubernetes.io/created-by']":
+                      'ConfigMap',
+                  },
+                  message: 'Locked resource. Vilain.',
+                },
+              ],
+            },
+          },
+        },
+      },
+    };
+    const configParams1: Config = {
+      config: {
+        features: {
+          PROTECTED_RESOURCES: {
+            isEnabled: true,
+            config: {
+              resources: [
+                {
+                  match: {
+                    "$.metadata.labels['app.kubernetes.io/created-by']":
+                      'Dev Config',
+                  },
+                  message: 'Locked resource. Batman.',
+                },
+                {
+                  match: {
+                    "$.metadata.labels['app.kubernetes.io/created-by']":
+                      'Env Congif',
+                  },
+                  message: 'Locked resource. Superman.',
+                },
+              ],
+            },
+          },
+        },
+      },
+    };
+    const merged = merge(
       defaultParams?.config,
-      configParams?.config,
-      mapParams?.config,
+      configParams1?.config,
+      mapParams1?.config,
     ) as Configuration;
+    console.log('lolo merged', merged);
+    return merged;
   } catch (e) {
     console.warn('Cannot load cluster params: ', e);
     return null;
@@ -87,6 +144,7 @@ export const useGetConfiguration = () => {
         configs.features.PROMETHEUS = getPrometheusConfig(auth, apis, fetchFn);
       }
       const updatedFeatures = await getFeatures(configs?.features);
+      console.log('updatedFeatures', updatedFeatures);
       setConfig({ ...configs, features: updatedFeatures });
     };
     setClusterConfig();

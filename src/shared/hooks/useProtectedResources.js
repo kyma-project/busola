@@ -10,6 +10,7 @@ import { disableResourceProtectionState } from 'state/preferences/disableResourc
 export function useProtectedResources() {
   const { t } = useTranslation();
   const protectedResourcesFeature = useFeature('PROTECTED_RESOURCES');
+  console.log('protectedResourcesFeature', protectedResourcesFeature);
   const disableResourceProtection = useRecoilValue(
     disableResourceProtectionState,
   );
