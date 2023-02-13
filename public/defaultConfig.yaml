@@ -66,10 +66,3 @@ config:
     GARDENER_LOGIN:
       isEnabled: false
       kubeconfig: null
-    PROTECTED_RESOURCES:
-      isEnabled: true
-      config:
-        resources:
-          - match:
-              $.metadata.labels['app.kubernetes.io/created-by']: Default
-            message: 'Default'
