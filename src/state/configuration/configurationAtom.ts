@@ -93,7 +93,6 @@ export const useGetConfiguration = () => {
         configs.features.PROMETHEUS = getPrometheusConfig(auth, apis, fetchFn);
       }
       const updatedFeatures = await getFeatures(configs?.features);
-      console.log('updatedFeatures', updatedFeatures);
       setConfig({ ...configs, features: updatedFeatures });
     };
     setClusterConfig();
