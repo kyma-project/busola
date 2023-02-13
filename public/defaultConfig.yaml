@@ -72,4 +72,4 @@ config:
         resources:
           - match:
               $.metadata.labels['app.kubernetes.io/created-by']: Default
-            message: 'Locked resource. Do not change. This resource is managed by my super power.'
+            message: 'Default'

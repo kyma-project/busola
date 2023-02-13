@@ -82,7 +82,7 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
                     "$.metadata.labels['app.kubernetes.io/created-by']":
                       'ConfigMap',
                   },
-                  message: 'Locked resource. Vilain.',
+                  message: 'Locked resource. ConfigMap.',
                 },
               ],
             },
@@ -102,14 +102,14 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
                     "$.metadata.labels['app.kubernetes.io/created-by']":
                       'Dev Config',
                   },
-                  message: 'Locked resource. Batman.',
+                  message: 'Locked resource. Dev Config.',
                 },
                 {
                   match: {
                     "$.metadata.labels['app.kubernetes.io/created-by']":
-                      'Env Congif',
+                      'Env Config',
                   },
-                  message: 'Locked resource. Superman.',
+                  message: 'Locked resource. Env Config.',
                 },
               ],
             },
