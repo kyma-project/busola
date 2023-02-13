@@ -1,5 +1,5 @@
 import jsyaml from 'js-yaml';
-import { merge } from 'lodash';
+import { mergeWith, isArray } from 'lodash';
 import { useEffect } from 'react';
 import { atom, RecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -40,7 +40,6 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
     );
 
     const configResponse = await fetch('/config/config.yaml' + cacheBuster);
-
     let configMapResponse: ConfigMapResponse;
     if (fetchFn) {
       try {
@@ -61,18 +60,13 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
     const mapParams = configMapResponse?.data?.config
       ? (jsyaml.load(configMapResponse.data.config) as Config)
       : {};
-    console.log(
-      'defaultParams',
-      defaultParams,
-      'configParams',
-      configParams,
-      'mapParams',
-      mapParams,
-    );
 
     const mapParams1: Config = {
       config: {
         features: {
+          EXTENSIBILITY: {
+            isEnabled: true,
+          },
           PROTECTED_RESOURCES: {
             isEnabled: true,
             config: {
@@ -90,6 +84,7 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
         },
       },
     };
+
     const configParams1: Config = {
       config: {
         features: {
@@ -117,12 +112,20 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
         },
       },
     };
-    const merged = merge(
+
+    const customizer = (obj: any, src: any) => {
+      if (isArray(obj)) {
+        return src;
+      }
+    };
+
+    const merged = mergeWith(
       defaultParams?.config,
       configParams1?.config,
       mapParams1?.config,
+      customizer,
     ) as Configuration;
-    console.log('lolo merged', merged);
+    console.log('lolo merged', jsyaml.dump(merged));
     return merged;
   } catch (e) {
     console.warn('Cannot load cluster params: ', e);
