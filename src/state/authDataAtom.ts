@@ -48,7 +48,6 @@ export function createUserManager(
     redirect_uri: window.location.origin + redirectPath,
     post_logout_redirect_uri: window.location.origin + '/logout.html',
     loadUserInfo: true,
-    automaticSilentRenew: false,
     client_id: clientId,
     authority: issuerUrl,
     client_secret: clientSecret,
