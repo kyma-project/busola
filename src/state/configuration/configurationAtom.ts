@@ -60,58 +60,6 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
     const mapParams = configMapResponse?.data?.config
       ? (jsyaml.load(configMapResponse.data.config) as Config)
       : {};
-    console.log(configParams, mapParams);
-    const mapParams1: Config = {
-      config: {
-        features: {
-          EXTENSIBILITY: {
-            isEnabled: true,
-          },
-          PROTECTED_RESOURCES: {
-            isEnabled: true,
-            config: {
-              resources: [
-                {
-                  match: {
-                    "$.metadata.labels['app.kubernetes.io/created-by']":
-                      'ConfigMap',
-                  },
-                  message: 'Locked resource. ConfigMap.',
-                },
-              ],
-            },
-          },
-        },
-      },
-    };
-
-    const configParams1: Config = {
-      config: {
-        features: {
-          PROTECTED_RESOURCES: {
-            isEnabled: true,
-            config: {
-              resources: [
-                {
-                  match: {
-                    "$.metadata.labels['app.kubernetes.io/created-by']":
-                      'Dev Config',
-                  },
-                  message: 'Locked resource. Dev Config.',
-                },
-                {
-                  match: {
-                    "$.metadata.labels['app.kubernetes.io/created-by']":
-                      'Env Config',
-                  },
-                  message: 'Locked resource. Env Config.',
-                },
-              ],
-            },
-          },
-        },
-      },
-    };
 
     const customizer = (obj: any, src: any) => {
       if (isArray(obj)) {
@@ -119,14 +67,12 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
       }
     };
 
-    const merged = mergeWith(
+    return mergeWith(
       defaultParams?.config,
-      configParams1?.config,
-      mapParams1?.config,
+      configParams?.config,
+      mapParams?.config,
       customizer,
     ) as Configuration;
-    console.log('lolo merged', jsyaml.dump(merged));
-    return merged;
   } catch (e) {
     console.warn('Cannot load cluster params: ', e);
     return null;
