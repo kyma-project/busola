@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
 import shortid from 'shortid';
 
@@ -26,62 +26,66 @@ const useGetHook = processDataFn =>
     const requestData = React.useRef({});
     const previousRequestNotFinished = React.useRef(null);
 
-    const refetch = (isSilent, currentData) => async () => {
-      if (skip || !authData || previousRequestNotFinished.current === path)
-        return;
-      if (!isSilent) setTimeout(_ => setLoading(true));
+    const refetch = useCallback(
+      (isSilent, currentData) => async () => {
+        if (skip || !authData || previousRequestNotFinished.current === path)
+          return;
+        if (!isSilent) setTimeout(_ => setLoading(true));
 
-      abortController.current = new AbortController();
+        abortController.current = new AbortController();
 
-      function processError(error) {
-        if (!abortController.current.signal.aborted) {
-          errorTolerancyCounter.current++;
-          if (errorTolerancyCounter.current > ERROR_TOLERANCY || !data) {
-            console.error(error);
-            setError(error);
+        function processError(error) {
+          if (!abortController.current.signal.aborted) {
+            errorTolerancyCounter.current++;
+            if (errorTolerancyCounter.current > ERROR_TOLERANCY || !data) {
+              console.error(error);
+              setError(error);
+            }
           }
         }
-      }
 
-      try {
-        previousRequestNotFinished.current = path;
-        requestData.current[currentRequestId] = { start: Date.now() };
-        const response = await fetch({
-          relativeUrl: path,
-          abortController: abortController.current,
-        });
-        const payload = await response.json();
+        try {
+          previousRequestNotFinished.current = path;
+          requestData.current[currentRequestId] = { start: Date.now() };
+          const response = await fetch({
+            relativeUrl: path,
+            abortController: abortController.current,
+          });
+          const payload = await response.json();
 
-        previousRequestNotFinished.current = null;
+          previousRequestNotFinished.current = null;
 
-        const currentRequest = requestData.current[currentRequestId];
-        const newerRequests = Object.values(requestData.current).filter(
-          request => request.start > currentRequest.start,
-        );
-        if (newerRequests.length) {
-          // don't override returned value with stale data
-          return;
+          const currentRequest = requestData.current[currentRequestId];
+          const newerRequests = Object.values(requestData.current).filter(
+            request => request.start > currentRequest.start,
+          );
+          if (newerRequests.length) {
+            // don't override returned value with stale data
+            return;
+          }
+
+          if (abortController.current.signal.aborted) return;
+
+          if (typeof onDataReceived === 'function') {
+            onDataReceived({ data: payload });
+          }
+          if (error) setTimeout(_ => setError(null)); // bring back the data and clear the error once the connection started working again
+          errorTolerancyCounter.current = 0;
+          setTimeout(_ =>
+            processDataFn(payload, currentData, setData, lastResourceVersion),
+          );
+        } catch (e) {
+          previousRequestNotFinished.current = null;
+          if (typeof onDataReceived === 'function')
+            onDataReceived({ error: e });
+          setTimeout(_ => processError(e));
         }
 
-        if (abortController.current.signal.aborted) return;
-
-        if (typeof onDataReceived === 'function') {
-          onDataReceived({ data: payload });
-        }
-        if (error) setTimeout(_ => setError(null)); // bring back the data and clear the error once the connection started working again
-        errorTolerancyCounter.current = 0;
-        setTimeout(_ =>
-          processDataFn(payload, currentData, setData, lastResourceVersion),
-        );
-      } catch (e) {
-        previousRequestNotFinished.current = null;
-        if (typeof onDataReceived === 'function') onDataReceived({ error: e });
-        setTimeout(_ => processError(e));
-      }
-
-      if (!isSilent && !abortController.current.signal.aborted)
-        setTimeout(_ => setLoading(false));
-    };
+        if (!isSilent && !abortController.current.signal.aborted)
+          setTimeout(_ => setLoading(false));
+      },
+      [fetch],
+    );
 
     React.useEffect(() => {
       const receivedForbidden = error?.code === 403;
@@ -90,7 +94,7 @@ const useGetHook = processDataFn =>
       if (!pollingInterval || receivedForbidden || skip) return;
       const intervalId = setInterval(refetch(true, data), pollingInterval);
       return _ => clearInterval(intervalId);
-    }, [path, pollingInterval, data, error, skip]);
+    }, [path, pollingInterval, data, error, skip, refetch]);
 
     React.useEffect(() => {
       // INITIAL FETCH on path being set/changed
