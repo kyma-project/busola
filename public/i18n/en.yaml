@@ -1013,6 +1013,7 @@ namespaces:
     usage-of-memory-limits: This Namespace uses {{valueText}} of {{maxText}} its memory limits.
     usage-of-memory-requests: This Namespace uses {{valueText}} of {{maxText}} its memory requests.
 navigation:
+  all-namespaces: All Namespaces
   preferences:
     title: Preferences
   select-namespace: Select Namespace...

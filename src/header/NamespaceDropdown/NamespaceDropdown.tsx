@@ -42,12 +42,28 @@ export function NamespaceDropdown({
 }) {
   const { clusterUrl } = useUrl();
   const { t } = useTranslation();
+  const { namespaceUrl } = useUrl();
 
   const namespacesOverviewNode = (
     <Menu.Item>
       <Link to={clusterUrl(`namespaces`)}>
-        <Icon glyph="dimension" className="fd-margin-end--tiny" />
+        <Icon glyph="list" className="fd-margin-end--tiny" />
         {t('namespaces.namespaces-overview')}
+      </Link>
+    </Menu.Item>
+  );
+
+  const { resourceType = '' } =
+    useMatch({
+      path: '/cluster/:cluster/namespaces/:namespace/:resourceType',
+      end: false,
+    })?.params ?? {};
+
+  const allNamespacesNode = (
+    <Menu.Item>
+      <Link to={namespaceUrl(resourceType, { namespace: '-all-' })}>
+        <Icon glyph="dimension" className="fd-margin-end--tiny" />
+        {t('navigation.all-namespaces')}
       </Link>
     </Menu.Item>
   );
@@ -56,6 +72,7 @@ export function NamespaceDropdown({
     <Menu>
       <Menu.List onClick={hideDropdown}>
         {namespacesOverviewNode}
+        {allNamespacesNode}
         <Namespaces />
       </Menu.List>
     </Menu>
