@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React, { useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import shortid from 'shortid';
 
@@ -14,17 +14,17 @@ const ERROR_TOLERANCY = 2;
 const useGetHook = processDataFn =>
   function(path, { pollingInterval, onDataReceived, skip } = {}) {
     const authData = useRecoilValue(authDataState);
-    const lastAuthData = React.useRef(null);
-    const lastResourceVersion = React.useRef(null);
-    const [data, setData] = React.useState(null);
-    const [loading, setLoading] = React.useState(!skip);
-    const [error, setError] = React.useState(null);
+    const lastAuthData = useRef(null);
+    const lastResourceVersion = useRef(null);
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(!skip);
+    const [error, setError] = useState(null);
     const fetch = useFetch();
-    const abortController = React.useRef(new AbortController());
-    const errorTolerancyCounter = React.useRef(0);
+    const abortController = useRef(new AbortController());
+    const errorTolerancyCounter = useRef(0);
     const currentRequestId = shortid();
-    const requestData = React.useRef({});
-    const previousRequestNotFinished = React.useRef(null);
+    const requestData = useRef({});
+    const previousRequestNotFinished = useRef(null);
 
     const refetch = useCallback(
       (isSilent, currentData) => async () => {
@@ -84,10 +84,10 @@ const useGetHook = processDataFn =>
         if (!isSilent && !abortController.current.signal.aborted)
           setTimeout(_ => setLoading(false));
       },
-      [fetch],
+      [fetch, authData],
     );
 
-    React.useEffect(() => {
+    useEffect(() => {
       const receivedForbidden = error?.code === 403;
 
       // POLLING
@@ -96,7 +96,7 @@ const useGetHook = processDataFn =>
       return _ => clearInterval(intervalId);
     }, [path, pollingInterval, data, error, skip, refetch]);
 
-    React.useEffect(() => {
+    useEffect(() => {
       // INITIAL FETCH on path being set/changed
       if (lastAuthData.current && path && !skip) refetch(false, null)();
       return _ => {
@@ -104,7 +104,7 @@ const useGetHook = processDataFn =>
       };
     }, [path]);
 
-    React.useEffect(() => {
+    useEffect(() => {
       // silent refetch once 'skip' has been disabled
       if (lastAuthData.current && path && !skip) refetch(true, null)();
       return _ => {
@@ -112,7 +112,7 @@ const useGetHook = processDataFn =>
       };
     }, [skip]);
 
-    React.useEffect(() => {
+    useEffect(() => {
       if (JSON.stringify(lastAuthData.current) !== JSON.stringify(authData)) {
         // authData reference is updated multiple times during the route change but the value stays the same (see MicrofrontendContext).
         // To avoid unnecessary refetch(), we 'cache' the last value and do the refetch only if there was an actual change
@@ -121,7 +121,7 @@ const useGetHook = processDataFn =>
       }
     }, [authData]);
 
-    React.useEffect(_ => _ => abortController.current.abort(), []);
+    useEffect(_ => _ => abortController.current.abort(), []);
 
     return {
       data,
@@ -133,15 +133,15 @@ const useGetHook = processDataFn =>
   };
 
 export const useGetStream = path => {
-  const lastAuthData = React.useRef(null);
-  const initialPath = React.useRef(true);
-  const timeoutRef = React.useRef();
-  const [data, setData] = React.useState([]);
-  const [error, setError] = React.useState(null);
+  const lastAuthData = useRef(null);
+  const initialPath = useRef(true);
+  const timeoutRef = useRef();
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
   const authData = useRecoilValue(authDataState);
   const fetch = useFetch();
-  const readerRef = React.useRef(null);
-  const abortController = React.useRef(new AbortController());
+  const readerRef = useRef(null);
+  const abortController = useRef(new AbortController());
 
   const processError = error => {
     console.error(error);
@@ -233,7 +233,7 @@ export const useGetStream = path => {
     fetchData();
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (initialPath.current) {
       initialPath.current = false;
       return;
@@ -243,14 +243,14 @@ export const useGetStream = path => {
     refetchData();
   }, [path]);
 
-  React.useEffect(_ => {
+  useEffect(_ => {
     cancelOldData();
     return () => {
       cancelOldData();
     };
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (
       authData &&
       JSON.stringify(lastAuthData.current) !== JSON.stringify(authData)
