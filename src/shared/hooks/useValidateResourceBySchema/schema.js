@@ -2661,5 +2661,2554 @@ export const schema = {
         items: { $ref: '#' },
       },
     },
+    {
+      id: 61,
+      name: 'Prevent containers from having unnecessary system call privileges',
+      uniqueName: 'CONTAINERS_INCORRECT_SECCOMP_PROFILE',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-system-call-privileges',
+      messageOnFailure:
+        'Incorrect value for key seccompProfile - set an explicit value to prevent malicious use of system calls within the container',
+      category: 'Containers',
+      complexity: 'medium',
+      impact:
+        'Running containers/Pods with the `seccomp` profile set to `unconfined` can give attackers dangerous privileges',
+      schema: {
+        definitions: {
+          seccompExplicit: {
+            if: {
+              properties: {
+                kind: {
+                  enum: [
+                    'Deployment',
+                    'Pod',
+                    'DaemonSet',
+                    'StatefulSet',
+                    'ReplicaSet',
+                    'CronJob',
+                    'Job',
+                  ],
+                },
+              },
+            },
+            then: {
+              properties: {
+                spec: {
+                  oneOf: [
+                    {
+                      $ref: '#/$defs/securityContextSeccompReq',
+                    },
+                    {
+                      $ref: '#/definitions/seccompExplicitInContainer',
+                    },
+                  ],
+                },
+              },
+            },
+          },
+          seccompExplicitInContainer: {
+            if: {
+              properties: {
+                kind: {
+                  enum: [
+                    'Deployment',
+                    'Pod',
+                    'DaemonSet',
+                    'StatefulSet',
+                    'ReplicaSet',
+                    'CronJob',
+                    'Job',
+                  ],
+                },
+              },
+            },
+            then: {
+              properties: {
+                containers: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/$defs/securityContextSeccompReq',
+                  },
+                },
+                initContainers: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/$defs/securityContextSeccompReq',
+                  },
+                },
+                ephemeralContainers: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/$defs/securityContextSeccompReq',
+                  },
+                },
+              },
+            },
+          },
+          seccompPatternInSpec: {
+            if: {
+              properties: {
+                kind: {
+                  enum: [
+                    'Deployment',
+                    'Pod',
+                    'DaemonSet',
+                    'StatefulSet',
+                    'ReplicaSet',
+                    'CronJob',
+                    'Job',
+                  ],
+                },
+              },
+            },
+            then: {
+              properties: {
+                spec: {
+                  $ref: '#/$defs/securityContextSeccomp',
+                },
+              },
+            },
+          },
+          seccompPatternInContainer: {
+            if: {
+              properties: {
+                kind: {
+                  enum: [
+                    'Deployment',
+                    'Pod',
+                    'DaemonSet',
+                    'StatefulSet',
+                    'ReplicaSet',
+                    'CronJob',
+                    'Job',
+                  ],
+                },
+              },
+            },
+            then: {
+              properties: {
+                spec: {
+                  properties: {
+                    containers: {
+                      type: 'array',
+                      items: {
+                        $ref: '#/$defs/securityContextSeccomp',
+                      },
+                    },
+                    initContainers: {
+                      type: 'array',
+                      items: {
+                        $ref: '#/$defs/securityContextSeccomp',
+                      },
+                    },
+                    ephemeralContainers: {
+                      type: 'array',
+                      items: {
+                        $ref: '#/$defs/securityContextSeccomp',
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        allOf: [
+          {
+            $ref: '#/definitions/seccompExplicit',
+          },
+          {
+            $ref: '#/definitions/seccompPatternInSpec',
+          },
+          {
+            $ref: '#/definitions/seccompPatternInContainer',
+          },
+        ],
+        additionalProperties: {
+          $ref: '#',
+          items: {
+            $ref: '#',
+          },
+        },
+        $defs: {
+          securityContextSeccompReq: {
+            required: ['securityContext'],
+            properties: {
+              securityContext: {
+                type: 'object',
+                required: ['seccompProfile'],
+                properties: {
+                  seccompProfile: {
+                    type: 'object',
+                    required: ['type'],
+                  },
+                },
+              },
+            },
+          },
+          securityContextSeccomp: {
+            properties: {
+              securityContext: {
+                type: 'object',
+                properties: {
+                  seccompProfile: {
+                    type: 'object',
+                    properties: {
+                      type: {
+                        not: {
+                          enum: ['unconfined', 'Unconfined'],
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 62,
+      name: 'Prevent exposed BitBucket secrets in objects',
+      uniqueName: 'ALL_EXPOSED_SECRET_BITBUCKET',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-exposed-secrets-bitbucket',
+      messageOnFailure:
+        'Secret data found in config - keep your sensitive data elsewhere to prevent it from being stolen',
+      category: 'Secrets',
+      complexity: 'medium',
+      impact:
+        'Exposing sensitive data in resource configs is risky and highly unrecommended, as it can be stolen and used maliciously',
+      schema: {
+        definitions: {
+          regexes: {
+            anyOf: [
+              {
+                pattern:
+                  '(?:bitbucket)(?:[0-9a-z\\-_\\t .]{0,20})(?:[\\s|\']|[\\s|"]){0,3}(?:=|>|:=|\\|\\|:|<=|=>|:)(?:\'|\\"|\\s|=|\\x60){0,5}([a-z0-9]{32})(?:[\'|\\"|\\n|\\r|\\s|\\x60|;]|$)',
+              },
+            ],
+          },
+        },
+        if: {
+          properties: {
+            kind: {
+              not: {
+                enum: ['Secret'],
+              },
+            },
+          },
+        },
+        then: {
+          type: 'object',
+          additionalProperties: {
+            if: {
+              type: 'object',
+            },
+            then: {
+              $ref: '#',
+            },
+            else: {
+              if: {
+                type: 'array',
+              },
+              then: {
+                items: {
+                  if: {
+                    type: 'object',
+                  },
+                  then: {
+                    $ref: '#',
+                  },
+                  else: {
+                    if: {
+                      type: 'string',
+                    },
+                    then: {
+                      not: {
+                        $ref: '#/definitions/regexes',
+                      },
+                    },
+                  },
+                },
+              },
+              else: {
+                if: {
+                  type: 'string',
+                },
+                then: {
+                  not: {
+                    $ref: '#/definitions/regexes',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 63,
+      name: 'Prevent exposed Datadog secrets in objects',
+      uniqueName: 'ALL_EXPOSED_SECRET_DATADOG',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-exposed-secrets-datadog',
+      messageOnFailure:
+        'Secret data found in config - keep your sensitive data elsewhere to prevent it from being stolen',
+      category: 'Secrets',
+      complexity: 'medium',
+      impact:
+        'Exposing sensitive data in resource configs is risky and highly unrecommended, as it can be stolen and used maliciously',
+      schema: {
+        definitions: {
+          regexes: {
+            anyOf: [
+              {
+                pattern:
+                  '(?:datadog)(?:[0-9a-z\\-_\\t .]{0,20})(?:[\\s|\']|[\\s|"]){0,3}(?:=|>|:=|\\|\\|:|<=|=>|:)(?:\'|\\"|\\s|=|\\x60){0,5}([a-z0-9]{40})(?:[\'|\\"|\\n|\\r|\\s|\\x60|;]|$)',
+              },
+            ],
+          },
+        },
+        if: {
+          properties: {
+            kind: {
+              not: {
+                enum: ['Secret'],
+              },
+            },
+          },
+        },
+        then: {
+          type: 'object',
+          additionalProperties: {
+            if: {
+              type: 'object',
+            },
+            then: {
+              $ref: '#',
+            },
+            else: {
+              if: {
+                type: 'array',
+              },
+              then: {
+                items: {
+                  if: {
+                    type: 'object',
+                  },
+                  then: {
+                    $ref: '#',
+                  },
+                  else: {
+                    if: {
+                      type: 'string',
+                    },
+                    then: {
+                      not: {
+                        $ref: '#/definitions/regexes',
+                      },
+                    },
+                  },
+                },
+              },
+              else: {
+                if: {
+                  type: 'string',
+                },
+                then: {
+                  not: {
+                    $ref: '#/definitions/regexes',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 64,
+      name: 'Prevent exposed GCP secrets in objects',
+      uniqueName: 'ALL_EXPOSED_SECRET_GCP',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-exposed-secrets-gcp',
+      messageOnFailure:
+        'Secret data found in config - keep your sensitive data elsewhere to prevent it from being stolen',
+      category: 'Secrets',
+      complexity: 'medium',
+      impact:
+        'Exposing sensitive data in resource configs is risky and highly unrecommended, as it can be stolen and used maliciously',
+      schema: {
+        definitions: {
+          regexes: {
+            anyOf: [
+              {
+                pattern:
+                  '\\b(AIza[0-9A-Za-z\\\\-_]{35})(?:[\'|\\"|\\n|\\r|\\s|\\x60|;]|$)',
+              },
+            ],
+          },
+        },
+        if: {
+          properties: {
+            kind: {
+              not: {
+                enum: ['Secret'],
+              },
+            },
+          },
+        },
+        then: {
+          type: 'object',
+          additionalProperties: {
+            if: {
+              type: 'object',
+            },
+            then: {
+              $ref: '#',
+            },
+            else: {
+              if: {
+                type: 'array',
+              },
+              then: {
+                items: {
+                  if: {
+                    type: 'object',
+                  },
+                  then: {
+                    $ref: '#',
+                  },
+                  else: {
+                    if: {
+                      type: 'string',
+                    },
+                    then: {
+                      not: {
+                        $ref: '#/definitions/regexes',
+                      },
+                    },
+                  },
+                },
+              },
+              else: {
+                if: {
+                  type: 'string',
+                },
+                then: {
+                  not: {
+                    $ref: '#/definitions/regexes',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 65,
+      name: 'Prevent exposed AWS secrets in objects',
+      uniqueName: 'ALL_EXPOSED_SECRET_AWS',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-exposed-secrets-aws',
+      messageOnFailure:
+        'Secret data found in config - keep your sensitive data elsewhere to prevent it from being stolen',
+      category: 'Secrets',
+      complexity: 'medium',
+      impact:
+        'Exposing sensitive data in resource configs is risky and highly unrecommended, as it can be stolen and used maliciously',
+      schema: {
+        definitions: {
+          regexes: {
+            anyOf: [
+              {
+                pattern:
+                  '(A3T[A-Z0-9]|AKIA|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16}',
+              },
+            ],
+          },
+        },
+        if: {
+          properties: {
+            kind: {
+              not: {
+                enum: ['Secret'],
+              },
+            },
+          },
+        },
+        then: {
+          type: 'object',
+          additionalProperties: {
+            if: {
+              type: 'object',
+            },
+            then: {
+              $ref: '#',
+            },
+            else: {
+              if: {
+                type: 'array',
+              },
+              then: {
+                items: {
+                  if: {
+                    type: 'object',
+                  },
+                  then: {
+                    $ref: '#',
+                  },
+                  else: {
+                    if: {
+                      type: 'string',
+                    },
+                    then: {
+                      not: {
+                        $ref: '#/definitions/regexes',
+                      },
+                    },
+                  },
+                },
+              },
+              else: {
+                if: {
+                  type: 'string',
+                },
+                then: {
+                  not: {
+                    $ref: '#/definitions/regexes',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 66,
+      name: 'Prevent exposed GitHub secrets in objects',
+      uniqueName: 'ALL_EXPOSED_SECRET_GITHUB',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-exposed-secrets-github',
+      messageOnFailure:
+        'Secret data found in config - keep your sensitive data elsewhere to prevent it from being stolen',
+      category: 'Secrets',
+      complexity: 'medium',
+      impact:
+        'Exposing sensitive data in resource configs is risky and highly unrecommended, as it can be stolen and used maliciously',
+      schema: {
+        definitions: {
+          regexes: {
+            anyOf: [
+              {
+                pattern: '(ghu|ghs)_[0-9a-zA-Z]{36}',
+              },
+              {
+                pattern: 'gho_[0-9a-zA-Z]{36}',
+              },
+              {
+                pattern: 'ghp_[0-9a-zA-Z]{36}',
+              },
+              {
+                pattern: 'ghr_[0-9a-zA-Z]{36}',
+              },
+            ],
+          },
+        },
+        if: {
+          properties: {
+            kind: {
+              not: {
+                enum: ['Secret'],
+              },
+            },
+          },
+        },
+        then: {
+          type: 'object',
+          additionalProperties: {
+            if: {
+              type: 'object',
+            },
+            then: {
+              $ref: '#',
+            },
+            else: {
+              if: {
+                type: 'array',
+              },
+              then: {
+                items: {
+                  if: {
+                    type: 'object',
+                  },
+                  then: {
+                    $ref: '#',
+                  },
+                  else: {
+                    if: {
+                      type: 'string',
+                    },
+                    then: {
+                      not: {
+                        $ref: '#/definitions/regexes',
+                      },
+                    },
+                  },
+                },
+              },
+              else: {
+                if: {
+                  type: 'string',
+                },
+                then: {
+                  not: {
+                    $ref: '#/definitions/regexes',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 67,
+      name: 'Prevent exposed GitLab secrets in objects',
+      uniqueName: 'ALL_EXPOSED_SECRET_GITLAB',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-exposed-secrets-gitlab',
+      messageOnFailure:
+        'Secret data found in config - keep your sensitive data elsewhere to prevent it from being stolen',
+      category: 'Secrets',
+      complexity: 'medium',
+      impact:
+        'Exposing sensitive data in resource configs is risky and highly unrecommended, as it can be stolen and used maliciously',
+      schema: {
+        definitions: {
+          regexes: {
+            anyOf: [
+              {
+                pattern: 'glpat-[0-9a-zA-Z\\-\\_]{20}',
+              },
+            ],
+          },
+        },
+        if: {
+          properties: {
+            kind: {
+              not: {
+                enum: ['Secret'],
+              },
+            },
+          },
+        },
+        then: {
+          type: 'object',
+          additionalProperties: {
+            if: {
+              type: 'object',
+            },
+            then: {
+              $ref: '#',
+            },
+            else: {
+              if: {
+                type: 'array',
+              },
+              then: {
+                items: {
+                  if: {
+                    type: 'object',
+                  },
+                  then: {
+                    $ref: '#',
+                  },
+                  else: {
+                    if: {
+                      type: 'string',
+                    },
+                    then: {
+                      not: {
+                        $ref: '#/definitions/regexes',
+                      },
+                    },
+                  },
+                },
+              },
+              else: {
+                if: {
+                  type: 'string',
+                },
+                then: {
+                  not: {
+                    $ref: '#/definitions/regexes',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 68,
+      name: 'Prevent exposed Terraform secrets in objects',
+      uniqueName: 'ALL_EXPOSED_SECRET_TERRAFORM',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-exposed-secrets-terraform',
+      messageOnFailure:
+        'Secret data found in config - keep your sensitive data elsewhere to prevent it from being stolen',
+      category: 'Secrets',
+      complexity: 'medium',
+      impact:
+        'Exposing sensitive data in resource configs is risky and highly unrecommended, as it can be stolen and used maliciously',
+      schema: {
+        definitions: {
+          regexes: {
+            anyOf: [
+              {
+                pattern: '[a-z0-9]{14}\\.atlasv1\\.[a-z0-9\\-_=]{60,70}',
+              },
+            ],
+          },
+        },
+        if: {
+          properties: {
+            kind: {
+              not: {
+                enum: ['Secret'],
+              },
+            },
+          },
+        },
+        then: {
+          type: 'object',
+          additionalProperties: {
+            if: {
+              type: 'object',
+            },
+            then: {
+              $ref: '#',
+            },
+            else: {
+              if: {
+                type: 'array',
+              },
+              then: {
+                items: {
+                  if: {
+                    type: 'object',
+                  },
+                  then: {
+                    $ref: '#',
+                  },
+                  else: {
+                    if: {
+                      type: 'string',
+                    },
+                    then: {
+                      not: {
+                        $ref: '#/definitions/regexes',
+                      },
+                    },
+                  },
+                },
+              },
+              else: {
+                if: {
+                  type: 'string',
+                },
+                then: {
+                  not: {
+                    $ref: '#/definitions/regexes',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 69,
+      name: 'Prevent exposed Heroku secrets in objects',
+      uniqueName: 'ALL_EXPOSED_SECRET_HEROKU',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-exposed-secrets-heroku',
+      messageOnFailure:
+        'Secret data found in config - keep your sensitive data elsewhere to prevent it from being stolen',
+      category: 'Secrets',
+      complexity: 'medium',
+      impact:
+        'Exposing sensitive data in resource configs is risky and highly unrecommended, as it can be stolen and used maliciously',
+      schema: {
+        definitions: {
+          regexes: {
+            anyOf: [
+              {
+                pattern:
+                  '(?:heroku)(?:[0-9a-z\\-_\\t .]{0,20})(?:[\\s|\']|[\\s|"]){0,3}(?:=|>|:=|\\|\\|:|<=|=>|:)(?:\'|\\"|\\s|=|\\x60){0,5}([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(?:[\'|\\"|\\n|\\r|\\s|\\x60|;]|$)',
+              },
+            ],
+          },
+        },
+        if: {
+          properties: {
+            kind: {
+              not: {
+                enum: ['Secret'],
+              },
+            },
+          },
+        },
+        then: {
+          type: 'object',
+          additionalProperties: {
+            if: {
+              type: 'object',
+            },
+            then: {
+              $ref: '#',
+            },
+            else: {
+              if: {
+                type: 'array',
+              },
+              then: {
+                items: {
+                  if: {
+                    type: 'object',
+                  },
+                  then: {
+                    $ref: '#',
+                  },
+                  else: {
+                    if: {
+                      type: 'string',
+                    },
+                    then: {
+                      not: {
+                        $ref: '#/definitions/regexes',
+                      },
+                    },
+                  },
+                },
+              },
+              else: {
+                if: {
+                  type: 'string',
+                },
+                then: {
+                  not: {
+                    $ref: '#/definitions/regexes',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 70,
+      name: 'Prevent exposed JWT secrets in objects',
+      uniqueName: 'ALL_EXPOSED_SECRET_JWT',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-exposed-secrets-jwt',
+      messageOnFailure:
+        'Secret data found in config - keep your sensitive data elsewhere to prevent it from being stolen',
+      category: 'Secrets',
+      complexity: 'medium',
+      impact:
+        'Exposing sensitive data in resource configs is risky and highly unrecommended, as it can be stolen and used maliciously',
+      schema: {
+        definitions: {
+          regexes: {
+            anyOf: [
+              {
+                pattern:
+                  '\\b(ey[0-9a-z]{30,34}\\.ey[0-9a-z-\\/_]{30,500}\\.[0-9a-zA-Z-\\/_]{10,200})(?:[\'|\\"|\\n|\\r|\\s|\\x60|;]|$)',
+              },
+            ],
+          },
+        },
+        if: {
+          properties: {
+            kind: {
+              not: {
+                enum: ['Secret'],
+              },
+            },
+          },
+        },
+        then: {
+          type: 'object',
+          additionalProperties: {
+            if: {
+              type: 'object',
+            },
+            then: {
+              $ref: '#',
+            },
+            else: {
+              if: {
+                type: 'array',
+              },
+              then: {
+                items: {
+                  if: {
+                    type: 'object',
+                  },
+                  then: {
+                    $ref: '#',
+                  },
+                  else: {
+                    if: {
+                      type: 'string',
+                    },
+                    then: {
+                      not: {
+                        $ref: '#/definitions/regexes',
+                      },
+                    },
+                  },
+                },
+              },
+              else: {
+                if: {
+                  type: 'string',
+                },
+                then: {
+                  not: {
+                    $ref: '#/definitions/regexes',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 71,
+      name: 'Prevent exposed LaunchDarkly secrets in objects',
+      uniqueName: 'ALL_EXPOSED_SECRET_LAUNCHDARKLY',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-exposed-secrets-launchdarkly',
+      messageOnFailure:
+        'Secret data found in config - keep your sensitive data elsewhere to prevent it from being stolen',
+      category: 'Secrets',
+      complexity: 'medium',
+      impact:
+        'Exposing sensitive data in resource configs is risky and highly unrecommended, as it can be stolen and used maliciously',
+      schema: {
+        definitions: {
+          regexes: {
+            anyOf: [
+              {
+                pattern:
+                  '(?:launchdarkly)(?:[0-9a-z\\-_\\t .]{0,20})(?:[\\s|\']|[\\s|"]){0,3}(?:=|>|:=|\\|\\|:|<=|=>|:)(?:\'|\\"|\\s|=|\\x60){0,5}([a-z0-9=_\\-]{40})(?:[\'|\\"|\\n|\\r|\\s|\\x60|;]|$)',
+              },
+            ],
+          },
+        },
+        if: {
+          properties: {
+            kind: {
+              not: {
+                enum: ['Secret'],
+              },
+            },
+          },
+        },
+        then: {
+          type: 'object',
+          additionalProperties: {
+            if: {
+              type: 'object',
+            },
+            then: {
+              $ref: '#',
+            },
+            else: {
+              if: {
+                type: 'array',
+              },
+              then: {
+                items: {
+                  if: {
+                    type: 'object',
+                  },
+                  then: {
+                    $ref: '#',
+                  },
+                  else: {
+                    if: {
+                      type: 'string',
+                    },
+                    then: {
+                      not: {
+                        $ref: '#/definitions/regexes',
+                      },
+                    },
+                  },
+                },
+              },
+              else: {
+                if: {
+                  type: 'string',
+                },
+                then: {
+                  not: {
+                    $ref: '#/definitions/regexes',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 72,
+      name: 'Prevent exposed New Relic secrets in objects',
+      uniqueName: 'ALL_EXPOSED_SECRET_NEWRELIC',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-exposed-secrets-newrelic',
+      messageOnFailure:
+        'Secret data found in config - keep your sensitive data elsewhere to prevent it from being stolen',
+      category: 'Secrets',
+      complexity: 'medium',
+      impact:
+        'Exposing sensitive data in resource configs is risky and highly unrecommended, as it can be stolen and used maliciously',
+      schema: {
+        definitions: {
+          regexes: {
+            anyOf: [
+              {
+                pattern:
+                  '(?:new-relic|newrelic|new_relic)(?:[0-9a-z\\-_\\t .]{0,20})(?:[\\s|\']|[\\s|"]){0,3}(?:=|>|:=|\\|\\|:|<=|=>|:)(?:\'|\\"|\\s|=|\\x60){0,5}(NRJS-[a-f0-9]{19})(?:[\'|\\"|\\n|\\r|\\s|\\x60|;]|$)',
+              },
+              {
+                pattern:
+                  '(?:new-relic|newrelic|new_relic)(?:[0-9a-z\\-_\\t .]{0,20})(?:[\\s|\']|[\\s|"]){0,3}(?:=|>|:=|\\|\\|:|<=|=>|:)(?:\'|\\"|\\s|=|\\x60){0,5}([a-z0-9]{64})(?:[\'|\\"|\\n|\\r|\\s|\\x60|;]|$)',
+              },
+              {
+                pattern:
+                  '(?:new-relic|newrelic|new_relic)(?:[0-9a-z\\-_\\t .]{0,20})(?:[\\s|\']|[\\s|"]){0,3}(?:=|>|:=|\\|\\|:|<=|=>|:)(?:\'|\\"|\\s|=|\\x60){0,5}(NRAK-[a-z0-9]{27})(?:[\'|\\"|\\n|\\r|\\s|\\x60|;]|$)',
+              },
+            ],
+          },
+        },
+        if: {
+          properties: {
+            kind: {
+              not: {
+                enum: ['Secret'],
+              },
+            },
+          },
+        },
+        then: {
+          type: 'object',
+          additionalProperties: {
+            if: {
+              type: 'object',
+            },
+            then: {
+              $ref: '#',
+            },
+            else: {
+              if: {
+                type: 'array',
+              },
+              then: {
+                items: {
+                  if: {
+                    type: 'object',
+                  },
+                  then: {
+                    $ref: '#',
+                  },
+                  else: {
+                    if: {
+                      type: 'string',
+                    },
+                    then: {
+                      not: {
+                        $ref: '#/definitions/regexes',
+                      },
+                    },
+                  },
+                },
+              },
+              else: {
+                if: {
+                  type: 'string',
+                },
+                then: {
+                  not: {
+                    $ref: '#/definitions/regexes',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 73,
+      name: 'Prevent exposed npm secrets in objects',
+      uniqueName: 'ALL_EXPOSED_SECRET_NPM',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-exposed-secrets-npm',
+      messageOnFailure:
+        'Secret data found in config - keep your sensitive data elsewhere to prevent it from being stolen',
+      category: 'Secrets',
+      complexity: 'medium',
+      impact:
+        'Exposing sensitive data in resource configs is risky and highly unrecommended, as it can be stolen and used maliciously',
+      schema: {
+        definitions: {
+          regexes: {
+            anyOf: [
+              {
+                pattern:
+                  '\\b(npm_[a-z0-9]{36})(?:[\'|\\"|\\n|\\r|\\s|\\x60|;]|$)',
+              },
+            ],
+          },
+        },
+        if: {
+          properties: {
+            kind: {
+              not: {
+                enum: ['Secret'],
+              },
+            },
+          },
+        },
+        then: {
+          type: 'object',
+          additionalProperties: {
+            if: {
+              type: 'object',
+            },
+            then: {
+              $ref: '#',
+            },
+            else: {
+              if: {
+                type: 'array',
+              },
+              then: {
+                items: {
+                  if: {
+                    type: 'object',
+                  },
+                  then: {
+                    $ref: '#',
+                  },
+                  else: {
+                    if: {
+                      type: 'string',
+                    },
+                    then: {
+                      not: {
+                        $ref: '#/definitions/regexes',
+                      },
+                    },
+                  },
+                },
+              },
+              else: {
+                if: {
+                  type: 'string',
+                },
+                then: {
+                  not: {
+                    $ref: '#/definitions/regexes',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 74,
+      name: 'Prevent exposed Okta secrets in objects',
+      uniqueName: 'ALL_EXPOSED_SECRET_OKTA',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-exposed-secrets-okta',
+      messageOnFailure:
+        'Secret data found in config - keep your sensitive data elsewhere to prevent it from being stolen',
+      category: 'Secrets',
+      complexity: 'medium',
+      impact:
+        'Exposing sensitive data in resource configs is risky and highly unrecommended, as it can be stolen and used maliciously',
+      schema: {
+        definitions: {
+          regexes: {
+            anyOf: [
+              {
+                pattern:
+                  '(?:okta)(?:[0-9a-z\\-_\\t .]{0,20})(?:[\\s|\']|[\\s|"]){0,3}(?:=|>|:=|\\|\\|:|<=|=>|:)(?:\'|\\"|\\s|=|\\x60){0,5}([a-z0-9=_\\-]{42})(?:[\'|\\"|\\n|\\r|\\s|\\x60|;]|$)',
+              },
+            ],
+          },
+        },
+        if: {
+          properties: {
+            kind: {
+              not: {
+                enum: ['Secret'],
+              },
+            },
+          },
+        },
+        then: {
+          type: 'object',
+          additionalProperties: {
+            if: {
+              type: 'object',
+            },
+            then: {
+              $ref: '#',
+            },
+            else: {
+              if: {
+                type: 'array',
+              },
+              then: {
+                items: {
+                  if: {
+                    type: 'object',
+                  },
+                  then: {
+                    $ref: '#',
+                  },
+                  else: {
+                    if: {
+                      type: 'string',
+                    },
+                    then: {
+                      not: {
+                        $ref: '#/definitions/regexes',
+                      },
+                    },
+                  },
+                },
+              },
+              else: {
+                if: {
+                  type: 'string',
+                },
+                then: {
+                  not: {
+                    $ref: '#/definitions/regexes',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 75,
+      name: 'Prevent exposed Stripe secrets in objects',
+      uniqueName: 'ALL_EXPOSED_SECRET_STRIPE',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-exposed-secrets-stripe',
+      messageOnFailure:
+        'Secret data found in config - keep your sensitive data elsewhere to prevent it from being stolen',
+      category: 'Secrets',
+      complexity: 'medium',
+      impact:
+        'Exposing sensitive data in resource configs is risky and highly unrecommended, as it can be stolen and used maliciously',
+      schema: {
+        definitions: {
+          regexes: {
+            anyOf: [
+              {
+                pattern: '(sk|pk)_(test|live)_[0-9a-z]{10,32}',
+              },
+            ],
+          },
+        },
+        if: {
+          properties: {
+            kind: {
+              not: {
+                enum: ['Secret'],
+              },
+            },
+          },
+        },
+        then: {
+          type: 'object',
+          additionalProperties: {
+            if: {
+              type: 'object',
+            },
+            then: {
+              $ref: '#',
+            },
+            else: {
+              if: {
+                type: 'array',
+              },
+              then: {
+                items: {
+                  if: {
+                    type: 'object',
+                  },
+                  then: {
+                    $ref: '#',
+                  },
+                  else: {
+                    if: {
+                      type: 'string',
+                    },
+                    then: {
+                      not: {
+                        $ref: '#/definitions/regexes',
+                      },
+                    },
+                  },
+                },
+              },
+              else: {
+                if: {
+                  type: 'string',
+                },
+                then: {
+                  not: {
+                    $ref: '#/definitions/regexes',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 76,
+      name: 'Prevent exposed SumoLogic secrets in objects',
+      uniqueName: 'ALL_EXPOSED_SECRET_SUMOLOGIC',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-exposed-secrets-sumologic',
+      messageOnFailure:
+        'Secret data found in config - keep your sensitive data elsewhere to prevent it from being stolen',
+      category: 'Secrets',
+      complexity: 'medium',
+      impact:
+        'Exposing sensitive data in resource configs is risky and highly unrecommended, as it can be stolen and used maliciously',
+      schema: {
+        definitions: {
+          regexes: {
+            anyOf: [
+              {
+                pattern:
+                  '(?:sumo)(?:[0-9a-z\\-_\\t .]{0,20})(?:[\\s|\']|[\\s|"]){0,3}(?:=|>|:=|\\|\\|:|<=|=>|:)(?:\'|\\"|\\s|=|\\x60){0,5}([a-z0-9]{14})(?:[\'|\\"|\\n|\\r|\\s|\\x60|;]|$)',
+              },
+              {
+                pattern:
+                  '(?:sumo)(?:[0-9a-z\\-_\\t .]{0,20})(?:[\\s|\']|[\\s|"]){0,3}(?:=|>|:=|\\|\\|:|<=|=>|:)(?:\'|\\"|\\s|=|\\x60){0,5}([a-z0-9]{64})(?:[\'|\\"|\\n|\\r|\\s|\\x60|;]|$)',
+              },
+            ],
+          },
+        },
+        if: {
+          properties: {
+            kind: {
+              not: {
+                enum: ['Secret'],
+              },
+            },
+          },
+        },
+        then: {
+          type: 'object',
+          additionalProperties: {
+            if: {
+              type: 'object',
+            },
+            then: {
+              $ref: '#',
+            },
+            else: {
+              if: {
+                type: 'array',
+              },
+              then: {
+                items: {
+                  if: {
+                    type: 'object',
+                  },
+                  then: {
+                    $ref: '#',
+                  },
+                  else: {
+                    if: {
+                      type: 'string',
+                    },
+                    then: {
+                      not: {
+                        $ref: '#/definitions/regexes',
+                      },
+                    },
+                  },
+                },
+              },
+              else: {
+                if: {
+                  type: 'string',
+                },
+                then: {
+                  not: {
+                    $ref: '#/definitions/regexes',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 77,
+      name: 'Prevent exposed Twilio secrets in objects',
+      uniqueName: 'ALL_EXPOSED_SECRET_TWILIO',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-exposed-secrets-twilio',
+      messageOnFailure:
+        'Secret data found in config - keep your sensitive data elsewhere to prevent it from being stolen',
+      category: 'Secrets',
+      complexity: 'medium',
+      impact:
+        'Exposing sensitive data in resource configs is risky and highly unrecommended, as it can be stolen and used maliciously',
+      schema: {
+        definitions: {
+          regexes: {
+            anyOf: [
+              {
+                pattern: 'SK[0-9a-fA-F]{32}',
+              },
+            ],
+          },
+        },
+        if: {
+          properties: {
+            kind: {
+              not: {
+                enum: ['Secret'],
+              },
+            },
+          },
+        },
+        then: {
+          type: 'object',
+          additionalProperties: {
+            if: {
+              type: 'object',
+            },
+            then: {
+              $ref: '#',
+            },
+            else: {
+              if: {
+                type: 'array',
+              },
+              then: {
+                items: {
+                  if: {
+                    type: 'object',
+                  },
+                  then: {
+                    $ref: '#',
+                  },
+                  else: {
+                    if: {
+                      type: 'string',
+                    },
+                    then: {
+                      not: {
+                        $ref: '#/definitions/regexes',
+                      },
+                    },
+                  },
+                },
+              },
+              else: {
+                if: {
+                  type: 'string',
+                },
+                then: {
+                  not: {
+                    $ref: '#/definitions/regexes',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 78,
+      name: 'Prevent exposed Vault secrets in objects',
+      uniqueName: 'ALL_EXPOSED_SECRET_VAULT',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-exposed-secrets-vault',
+      messageOnFailure:
+        'Secret data found in config - keep your sensitive data elsewhere to prevent it from being stolen',
+      category: 'Secrets',
+      complexity: 'medium',
+      impact:
+        'Exposing sensitive data in resource configs is risky and highly unrecommended, as it can be stolen and used maliciously',
+      schema: {
+        definitions: {
+          regexes: {
+            anyOf: [
+              {
+                pattern:
+                  '\\b(hvb\\.[a-z0-9_-]{138,212})(?:[\'|\\"|\\n|\\r|\\s|\\x60|;]|$)',
+              },
+              {
+                pattern:
+                  '\\b(hvs\\.[a-z0-9_-]{90,100})(?:[\'|\\"|\\n|\\r|\\s|\\x60|;]|$)',
+              },
+            ],
+          },
+        },
+        if: {
+          properties: {
+            kind: {
+              not: {
+                enum: ['Secret'],
+              },
+            },
+          },
+        },
+        then: {
+          type: 'object',
+          additionalProperties: {
+            if: {
+              type: 'object',
+            },
+            then: {
+              $ref: '#',
+            },
+            else: {
+              if: {
+                type: 'array',
+              },
+              then: {
+                items: {
+                  if: {
+                    type: 'object',
+                  },
+                  then: {
+                    $ref: '#',
+                  },
+                  else: {
+                    if: {
+                      type: 'string',
+                    },
+                    then: {
+                      not: {
+                        $ref: '#/definitions/regexes',
+                      },
+                    },
+                  },
+                },
+              },
+              else: {
+                if: {
+                  type: 'string',
+                },
+                then: {
+                  not: {
+                    $ref: '#/definitions/regexes',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 79,
+      name: 'Prevent exposed private keys in objects',
+      uniqueName: 'ALL_EXPOSED_SECRET_PRIVATEKEY',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-exposed-secrets-privatekey',
+      messageOnFailure:
+        'Secret data found in config - keep your sensitive data elsewhere to prevent it from being stolen',
+      category: 'Secrets',
+      complexity: 'medium',
+      impact:
+        'Exposing sensitive data in resource configs is risky and highly unrecommended, as it can be stolen and used maliciously',
+      schema: {
+        definitions: {
+          regexes: {
+            anyOf: [
+              {
+                pattern:
+                  '(?i)-----BEGIN[ A-Z0-9_-]{0,100}PRIVATE KEY-----[\\s\\S-]*KEY----',
+              },
+            ],
+          },
+        },
+        if: {
+          properties: {
+            kind: {
+              not: {
+                enum: ['Secret'],
+              },
+            },
+          },
+        },
+        then: {
+          type: 'object',
+          additionalProperties: {
+            if: {
+              type: 'object',
+            },
+            then: {
+              $ref: '#',
+            },
+            else: {
+              if: {
+                type: 'array',
+              },
+              then: {
+                items: {
+                  if: {
+                    type: 'object',
+                  },
+                  then: {
+                    $ref: '#',
+                  },
+                  else: {
+                    if: {
+                      type: 'string',
+                    },
+                    then: {
+                      not: {
+                        $ref: '#/definitions/regexes',
+                      },
+                    },
+                  },
+                },
+              },
+              else: {
+                if: {
+                  type: 'string',
+                },
+                then: {
+                  not: {
+                    $ref: '#/definitions/regexes',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 80,
+      name: 'Ensure each container fully utilizes CPU with no limitations',
+      uniqueName: 'EKS_INVALID_CPU_LIMIT',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/ensure-no-cpu-limit',
+      messageOnFailure:
+        'Invalid key `limits.cpu` - refrain from setting a CPU limit to better utilize the CPU and prevent starvation',
+      category: 'EKS',
+      complexity: 'easy',
+      impact:
+        'Setting a CPU limit may cause starvation and sub-optimal utilization of the CPU',
+      schema: {
+        definitions: {
+          cpuLimitPattern: {
+            properties: {
+              spec: {
+                properties: {
+                  containers: {
+                    type: 'array',
+                    items: {
+                      properties: {
+                        resources: {
+                          properties: {
+                            limits: {
+                              type: 'object',
+                              not: {
+                                required: ['cpu'],
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        allOf: [
+          {
+            $ref: '#/definitions/cpuLimitPattern',
+          },
+        ],
+        additionalProperties: {
+          $ref: '#',
+        },
+        items: {
+          $ref: '#',
+        },
+      },
+    },
+    {
+      id: 81,
+      name: 'Ensure container memory request and memory limit are equal',
+      uniqueName: 'EKS_INVALID_MEMORY_REQUEST_LIMIT',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/ensure-memory-request-limit-equal',
+      messageOnFailure:
+        'Invalid value for memory request and/or memory limit - ensure they are equal to prevent unpredictable behavior',
+      category: 'EKS',
+      complexity: 'easy',
+      impact:
+        'Setting memory request and limit to different values may cause unpredictable behavior',
+      schema: {
+        definitions: {
+          containerResourcesPattern: {
+            properties: {
+              spec: {
+                properties: {
+                  containers: {
+                    items: {
+                      properties: {
+                        resources: {
+                          customKeyRule81: {
+                            type: 'string',
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        allOf: [
+          {
+            $ref: '#/definitions/containerResourcesPattern',
+          },
+        ],
+        additionalProperties: {
+          $ref: '#',
+        },
+        items: {
+          $ref: '#',
+        },
+      },
+    },
+    {
+      id: 82,
+      name: 'Ensure containers have limited capabilities',
+      uniqueName: 'EKS_INVALID_CAPABILITIES_EKS',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/ensure-containers-limited-capabilities',
+      messageOnFailure:
+        'Incorrect value for key `add` - refrain from using insecure capabilities to prevent access to sensitive components',
+      category: 'EKS',
+      complexity: 'medium',
+      impact:
+        'Giving containers unnecessary capabilities may compromise them and allow attackers access to sensitive components',
+      schema: {
+        definitions: {
+          specContainerPattern: {
+            properties: {
+              spec: {
+                properties: {
+                  containers: {
+                    type: 'array',
+                    items: {
+                      properties: {
+                        securityContext: {
+                          properties: {
+                            capabilities: {
+                              properties: {
+                                add: {
+                                  type: 'array',
+                                  items: {
+                                    enum: [
+                                      'AUDIT_WRITE',
+                                      'CHOWN',
+                                      'DAC_OVERRIDE',
+                                      'FOWNER',
+                                      'FSETID',
+                                      'KILL',
+                                      'MKNOD',
+                                      'NET_BIND_SERVICE',
+                                      'SETFCAP',
+                                      'SETGID',
+                                      'SETPCAP',
+                                      'SETUID',
+                                      'SYS_CHROOT',
+                                    ],
+                                  },
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        allOf: [
+          {
+            $ref: '#/definitions/specContainerPattern',
+          },
+        ],
+        additionalProperties: {
+          $ref: '#',
+        },
+        items: {
+          $ref: '#',
+        },
+      },
+    },
+    {
+      id: 83,
+      name: 'Ensure multiple replicas run on different nodes',
+      uniqueName: 'EKS_MISSING_KEY_TOPOLOGYKEY',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/ensure-replicas-different-nodes',
+      messageOnFailure:
+        'Missing key `topologyKey` - add it to ensure replicas are spread across multiple nodes',
+      category: 'EKS',
+      complexity: 'medium',
+      impact:
+        'Running multiple replicas on the same node may cause downtime if the node becomes unavailable',
+      schema: {
+        definitions: {
+          antiAffinityPreferredPattern: {
+            properties: {
+              spec: {
+                properties: {
+                  affinity: {
+                    properties: {
+                      podAntiAffinity: {
+                        properties: {
+                          preferredDuringSchedulingIgnoredDuringExecution: {
+                            type: 'array',
+                            items: {
+                              properties: {
+                                podAffinityTerm: {
+                                  properties: {
+                                    topologyKey: {
+                                      type: 'string',
+                                    },
+                                  },
+                                  required: ['topologyKey'],
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          antiAffinityRequiredPattern: {
+            properties: {
+              spec: {
+                properties: {
+                  affinity: {
+                    properties: {
+                      podAntiAffinity: {
+                        properties: {
+                          requiredDuringSchedulingIgnoredDuringExecution: {
+                            type: 'array',
+                            items: {
+                              properties: {
+                                podAffinityTerm: {
+                                  properties: {
+                                    topologyKey: {
+                                      type: 'string',
+                                    },
+                                  },
+                                  required: ['topologyKey'],
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        allOf: [
+          {
+            $ref: '#/definitions/antiAffinityPreferredPattern',
+          },
+          {
+            $ref: '#/definitions/antiAffinityRequiredPattern',
+          },
+        ],
+        additionalProperties: {
+          $ref: '#',
+        },
+        items: {
+          $ref: '#',
+        },
+      },
+    },
+    {
+      id: 84,
+      name: 'Prevent pods from becoming unschedulable',
+      uniqueName: 'EKS_INVALID_VALUE_DONOOTSCHEDULE',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-pods-becoming-unschedulable',
+      messageOnFailure:
+        'Incorrect value for key `whenUnsatisfiable` - use a different value to ensure your pod does not become unschedulable',
+      category: 'EKS',
+      complexity: 'easy',
+      impact:
+        "Setting `whenUnsatisfiable` to `DoNotSchedule` will cause pods to be “unschedulable” if the topology spread constraint can't be fulfilled",
+      schema: {
+        definitions: {
+          specConstraintsPattern: {
+            properties: {
+              spec: {
+                properties: {
+                  topologySpreadConstraints: {
+                    type: 'array',
+                    items: {
+                      properties: {
+                        whenUnsatisfiable: {
+                          not: {
+                            enum: ['DoNotSchedule'],
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        allOf: [
+          {
+            $ref: '#/definitions/specConstraintsPattern',
+          },
+        ],
+        additionalProperties: {
+          $ref: '#',
+        },
+        items: {
+          $ref: '#',
+        },
+      },
+    },
+    {
+      id: 85,
+      name:
+        'Prevent Windows containers from running with unnecessary privileges',
+      uniqueName: 'EKS_INVALID_HOSTPROCESS_VALUE',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-windows-containers-unnecessary-privileges',
+      messageOnFailure:
+        "Incorrect value for key `hostProcess` - don't set or set to false to prevent unnecessary privileges",
+      category: 'EKS',
+      complexity: 'easy',
+      impact:
+        "Setting `hostProcess` to `true` will cause pods to be “unschedulable” if the topology spread constraint can't be fulfilled",
+      schema: {
+        definitions: {
+          hostProcessPattern: {
+            properties: {
+              windowsOptions: {
+                properties: {
+                  hostProcess: {
+                    enum: [false],
+                  },
+                },
+              },
+            },
+          },
+        },
+        allOf: [
+          {
+            $ref: '#/definitions/hostProcessPattern',
+          },
+        ],
+        additionalProperties: {
+          $ref: '#',
+        },
+        items: {
+          $ref: '#',
+        },
+      },
+    },
+    {
+      id: 86,
+      name:
+        'Prevent SELinux containers from running with unnecessary privileges',
+      uniqueName: 'EKS_INVALID_SELINUXOPTIONS_TYPE_VALUE',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-selinux-containers-unnecessary-privileges',
+      messageOnFailure:
+        'Invalid value for key `type` - set to a predefined type to prevent unnecessary privileges',
+      category: 'EKS',
+      complexity: 'medium',
+      impact:
+        'Using a different type than the allowed ones may grant attackers access to sensitive components',
+      schema: {
+        definitions: {
+          selinuxTypePattern: {
+            properties: {
+              securityContext: {
+                properties: {
+                  seLinuxOptions: {
+                    properties: {
+                      type: {
+                        enum: [
+                          'container_t',
+                          'container_init_t',
+                          'container_kvm_t',
+                        ],
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        allOf: [
+          {
+            $ref: '#/definitions/selinuxTypePattern',
+          },
+        ],
+        additionalProperties: {
+          $ref: '#',
+        },
+        items: {
+          $ref: '#',
+        },
+      },
+    },
+    {
+      id: 87,
+      name: 'Prevent SELinux containers from setting a user',
+      uniqueName: 'EKS_INVALID_SELINUXOPTIONS_USER_VALUE',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-selinux-containers-user',
+      messageOnFailure:
+        'Invalid key `user` - refrain from setting this key to prevent potential access to the host filesystem',
+      category: 'EKS',
+      complexity: 'easy',
+      impact:
+        'Setting an SELinux user may grant attackers access to sensitive components',
+      schema: {
+        definitions: {
+          selinuxUserPattern: {
+            properties: {
+              securityContext: {
+                properties: {
+                  seLinuxOptions: {
+                    not: {
+                      required: ['user'],
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        allOf: [
+          {
+            $ref: '#/definitions/selinuxUserPattern',
+          },
+        ],
+        additionalProperties: {
+          $ref: '#',
+        },
+        items: {
+          $ref: '#',
+        },
+      },
+    },
+    {
+      id: 88,
+      name: 'Prevent SELinux containers from setting a role',
+      uniqueName: 'EKS_INVALID_SELINUXOPTIONS_ROLE_VALUE',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-selinux-containers-role',
+      messageOnFailure:
+        'Invalid key `role` - refrain from setting this key to prevent potential access to the host filesystem',
+      category: 'EKS',
+      complexity: 'easy',
+      impact:
+        'Setting an SELinux role may grant attackers access to sensitive components',
+      schema: {
+        definitions: {
+          selinuxUserPattern: {
+            properties: {
+              securityContext: {
+                properties: {
+                  seLinuxOptions: {
+                    not: {
+                      required: ['role'],
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        allOf: [
+          {
+            $ref: '#/definitions/selinuxUserPattern',
+          },
+        ],
+        additionalProperties: {
+          $ref: '#',
+        },
+        items: {
+          $ref: '#',
+        },
+      },
+    },
+    {
+      id: 89,
+      name: 'Ensure hostPath volume mounts are read-only',
+      uniqueName: 'EKS_INVALID_HOSTPATH_MOUNT_READONLY_VALUE',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/ensure-hostpath-mounts-readonly',
+      messageOnFailure:
+        "Invalid key `readOnly` - set to 'true' to prevent potential attacks on the host filesystem",
+      category: 'EKS',
+      complexity: 'easy',
+      impact:
+        'Not setting hostPath mounts as `readOnly` may allow attackers to modify the host filesystem',
+      schema: {
+        definitions: {
+          specContainers: {
+            properties: {
+              spec: {
+                customKeyRule89: {
+                  type: 'string',
+                },
+              },
+            },
+          },
+        },
+        allOf: [
+          {
+            $ref: '#/definitions/specContainers',
+          },
+        ],
+        additionalProperties: {
+          $ref: '#',
+        },
+        items: {
+          $ref: '#',
+        },
+      },
+    },
+    {
+      id: 90,
+      name: 'Prevent deprecated APIs in Kubernetes v1.19',
+      uniqueName: 'K8S_DEPRECATED_APIVERSION_1.19',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-deprecated-api-119',
+      messageOnFailure:
+        'Incorrect value for key `apiVersion` - the version of the resource you are trying to use is deprecated in k8s v1.19',
+      category: 'Deprecation',
+      complexity: 'easy',
+      impact:
+        'Deploying a resource with a deprecated API version will cause Kubernetes to reject it',
+      schema: {
+        allOf: [
+          {
+            if: {
+              properties: {
+                apiVersion: {
+                  enum: ['networking.k8s.io/v1beta1'],
+                },
+              },
+            },
+            then: {
+              properties: {
+                kind: {
+                  not: {
+                    enum: ['Ingress', 'IngressClass'],
+                  },
+                },
+              },
+            },
+          },
+          {
+            if: {
+              properties: {
+                apiVersion: {
+                  enum: ['storage.k8s.io/v1beta1'],
+                },
+              },
+            },
+            then: {
+              properties: {
+                kind: {
+                  not: {
+                    enum: ['CSIDriver'],
+                  },
+                },
+              },
+            },
+          },
+          {
+            if: {
+              properties: {
+                apiVersion: {
+                  enum: ['certificates.k8s.io/v1beta1'],
+                },
+              },
+            },
+            then: {
+              properties: {
+                kind: {
+                  not: {
+                    enum: ['CertificateSigningRequest'],
+                  },
+                },
+              },
+            },
+          },
+          {
+            if: {
+              properties: {
+                apiVersion: {
+                  enum: ['events.k8s.io/v1beta1'],
+                },
+              },
+            },
+            then: {
+              properties: {
+                kind: {
+                  not: {
+                    enum: ['Event'],
+                  },
+                },
+              },
+            },
+          },
+          {
+            if: {
+              properties: {
+                apiVersion: {
+                  enum: ['coordination.k8s.io/v1beta1'],
+                },
+              },
+            },
+            then: {
+              properties: {
+                kind: {
+                  not: {
+                    enum: ['Lease', 'LeaseList'],
+                  },
+                },
+              },
+            },
+          },
+          {
+            if: {
+              properties: {
+                apiVersion: {
+                  enum: ['apiregistration.k8s.io/v1beta1'],
+                },
+              },
+            },
+            then: {
+              properties: {
+                kind: {
+                  not: {
+                    enum: ['APIService', 'APIServiceList'],
+                  },
+                },
+              },
+            },
+          },
+        ],
+      },
+    },
+    {
+      id: 91,
+      name: 'Prevent deprecated APIs in Kubernetes v1.21',
+      uniqueName: 'K8S_DEPRECATED_APIVERSION_1.21',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-deprecated-api-121',
+      messageOnFailure:
+        'Incorrect value for key `apiVersion` - the version of the resource you are trying to use is deprecated in k8s v1.21',
+      category: 'Deprecation',
+      complexity: 'easy',
+      impact:
+        'Deploying a resource with a deprecated API version will cause Kubernetes to reject it',
+      schema: {
+        allOf: [
+          {
+            if: {
+              properties: {
+                apiVersion: {
+                  enum: ['policy/v1beta1'],
+                },
+              },
+            },
+            then: {
+              properties: {
+                kind: {
+                  not: {
+                    enum: [
+                      'PodSecurityPolicy',
+                      'PodDisruptionBudget',
+                      'PodDisruptionBudgetList',
+                    ],
+                  },
+                },
+              },
+            },
+          },
+          {
+            if: {
+              properties: {
+                apiVersion: {
+                  enum: ['batch/v1beta1'],
+                },
+              },
+            },
+            then: {
+              properties: {
+                kind: {
+                  not: {
+                    enum: ['CronJob', 'CronJobList'],
+                  },
+                },
+              },
+            },
+          },
+          {
+            if: {
+              properties: {
+                apiVersion: {
+                  enum: ['discovery.k8s.io/v1beta1'],
+                },
+              },
+            },
+            then: {
+              properties: {
+                kind: {
+                  not: {
+                    enum: ['EndpointSlice'],
+                  },
+                },
+              },
+            },
+          },
+          {
+            if: {
+              properties: {
+                apiVersion: {
+                  enum: ['audit.k8s.io/v1beta1', 'audit.k8s.io/v1alpha1'],
+                },
+              },
+            },
+            then: {
+              properties: {
+                kind: {
+                  not: {
+                    enum: ['Event', 'EventList', 'Policy', 'PolicyList'],
+                  },
+                },
+              },
+            },
+          },
+        ],
+      },
+    },
+    {
+      id: 92,
+      name: 'Prevent deprecated APIs in Kubernetes v1.22',
+      uniqueName: 'K8S_DEPRECATED_APIVERSION_1.22',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-deprecated-api-122',
+      messageOnFailure:
+        'Incorrect value for key `apiVersion` - the version of the resource you are trying to use is deprecated in k8s v1.22',
+      category: 'Deprecation',
+      complexity: 'easy',
+      impact:
+        'Deploying a resource with a deprecated API version will cause Kubernetes to reject it',
+      schema: {
+        allOf: [
+          {
+            if: {
+              properties: {
+                apiVersion: {
+                  enum: ['autoscaling/v2beta1'],
+                },
+              },
+            },
+            then: {
+              properties: {
+                kind: {
+                  not: {
+                    enum: [
+                      'HorizontalPodAutoscaler',
+                      'HorizontalPodAutoscalerList',
+                    ],
+                  },
+                },
+              },
+            },
+          },
+        ],
+      },
+    },
+    {
+      id: 93,
+      name: 'Prevent deprecated APIs in Kubernetes v1.23',
+      uniqueName: 'K8S_DEPRECATED_APIVERSION_1.23',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-deprecated-api-123',
+      messageOnFailure:
+        'Incorrect value for key `apiVersion` - the version of the resource you are trying to use is deprecated in k8s v1.23',
+      category: 'Deprecation',
+      complexity: 'easy',
+      impact:
+        'Deploying a resource with a deprecated API version will cause Kubernetes to reject it',
+      schema: {
+        allOf: [
+          {
+            if: {
+              properties: {
+                apiVersion: {
+                  enum: ['autoscaling/v2beta2'],
+                },
+              },
+            },
+            then: {
+              properties: {
+                kind: {
+                  not: {
+                    enum: [
+                      'HorizontalPodAutoscaler',
+                      'HorizontalPodAutoscalerList',
+                    ],
+                  },
+                },
+              },
+            },
+          },
+        ],
+      },
+    },
+    {
+      id: 94,
+      name: 'Prevent deprecated APIs in Kubernetes v1.24',
+      uniqueName: 'K8S_DEPRECATED_APIVERSION_1.24',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-deprecated-api-124',
+      messageOnFailure:
+        'Incorrect value for key `apiVersion` - the version of the resource you are trying to use is deprecated in k8s v1.24',
+      category: 'Deprecation',
+      complexity: 'easy',
+      impact:
+        'Deploying a resource with a deprecated API version will cause Kubernetes to reject it',
+      schema: {
+        allOf: [
+          {
+            if: {
+              properties: {
+                apiVersion: {
+                  enum: ['storage.k8s.io/v1beta1'],
+                },
+              },
+            },
+            then: {
+              properties: {
+                kind: {
+                  not: {
+                    enum: ['CSIStorageCapacity'],
+                  },
+                },
+              },
+            },
+          },
+        ],
+      },
+    },
   ],
 };
