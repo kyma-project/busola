@@ -1,7 +1,7 @@
 import jsyaml from 'js-yaml';
 import { mapValues, partial } from 'lodash';
 import { useEffect, useState } from 'react';
-import { ExtResource } from '../types';
+import { ExtResource, ExtWidgetConfig } from '../types';
 import { atom, RecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { clusterState } from '../clusterAtom';
 import { authDataState } from '../authDataAtom';
@@ -213,6 +213,7 @@ export const useGetExtensions = () => {
   const cluster = useRecoilValue(clusterState);
   const auth = useRecoilValue(authDataState);
   const setExtensions = useSetRecoilState(extensionsState);
+  const setWidgets = useSetRecoilState(widgetsState);
   const fetchFn = getFetchFn(useRecoilValue);
   const configuration = useRecoilValue(configurationAtom);
   const features = configuration?.features;
@@ -225,6 +226,7 @@ export const useGetExtensions = () => {
     const manageExtensions = async () => {
       if (!cluster) {
         setExtensions([]);
+        setWidgets([]);
         setNonNamespacedExtensions(null);
         return;
       }
@@ -238,6 +240,7 @@ export const useGetExtensions = () => {
 
       if (!configs) {
         setExtensions([]);
+        setWidgets([]);
         setNonNamespacedExtensions(null);
       } else {
         if (!nonNamespacedExtensions) {
@@ -256,7 +259,20 @@ export const useGetExtensions = () => {
             isNodeVisibleForCurrentConfigSet(mapExtResourceToNavNode(node)),
           );
 
+          let widgetsConfigs: ExtWidgetConfig[] = [];
+          filteredConfigs.filter(config =>
+            config?.widgets?.map(widget =>
+              widgetsConfigs.push({
+                widget,
+                general: config.general,
+                dataSources: config.dataSources,
+              }),
+            ),
+          );
+          console.log('lolo filteredConfigs', filteredConfigs);
+          console.log('lolo widgetsConfigs', widgetsConfigs);
           setExtensions(filteredConfigs);
+          setWidgets(widgetsConfigs);
         }
       }
     };
@@ -272,5 +288,12 @@ export const extensionsState: RecoilState<ExtResource[] | null> = atom<
   ExtResource[] | null
 >({
   key: 'extensionsState',
+  default: defaultValue,
+});
+
+export const widgetsState: RecoilState<ExtWidgetConfig[] | null> = atom<
+  ExtWidgetConfig[] | null
+>({
+  key: 'widgetsState',
   default: defaultValue,
 });

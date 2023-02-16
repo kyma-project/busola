@@ -44,20 +44,41 @@ export type LazyConfigFeatureList = {
   [key in LazyConfigFeaturesNames]?: ConfigFeature;
 };
 
-export type ExtResource = {
-  general: {
-    resource: {
-      kind: string;
-      group: string;
-      version: string;
-    };
-    name: string;
-    category: string;
-    urlPath: string;
-    scope: 'namespace' | 'cluster';
-    description?: string;
-    icon?: IconGlyph;
+export type ExtWidget = {
+  name: string;
+  widget: string;
+  source: string;
+  slot: 'top' | 'bottom';
+  destination: 'ClusterOverview' | 'Pods';
+  resource: {
+    kind: string;
+    group: string;
+    version: string;
   };
+};
+
+export type ExtWidgetConfig = {
+  widget: ExtWidget;
+  general: ExtGeneral;
+  dataSources: Record<string, any>;
+};
+
+export type ExtGeneral = {
+  resource: {
+    kind: string;
+    group: string;
+    version: string;
+  };
+  name: string;
+  category: string;
+  urlPath: string;
+  scope: 'namespace' | 'cluster';
+  description?: string;
+  icon?: IconGlyph;
+};
+
+export type ExtResource = {
+  general: ExtGeneral;
   list: any[];
   details: {
     header: any[];
@@ -67,6 +88,7 @@ export type ExtResource = {
   translations: Record<string, any>;
   presets: any[];
   dataSources: Record<string, any>;
+  widgets?: ExtWidget[];
 };
 
 export interface UrlOverrides {
