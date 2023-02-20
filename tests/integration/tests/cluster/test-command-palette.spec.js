@@ -91,6 +91,16 @@ context('Test Command Palette navigation', () => {
     cy.contains('VerticalPodAutoscalerCheckpoints').should('be.visible');
   });
 
+  it('All namespaces', () => {
+    openCommandPalette();
+
+    getQueryInput().type('ns -a');
+
+    cy.contains('All Namespaces').click();
+
+    cy.url().should('match', /\/namespaces\/-all-$/);
+  });
+
   it('History', () => {
     openCommandPalette();
 
