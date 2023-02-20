@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import shortid from 'shortid';
 
@@ -14,85 +14,89 @@ const ERROR_TOLERANCY = 2;
 const useGetHook = processDataFn =>
   function(path, { pollingInterval, onDataReceived, skip } = {}) {
     const authData = useRecoilValue(authDataState);
-    const lastAuthData = React.useRef(null);
-    const lastResourceVersion = React.useRef(null);
-    const [data, setData] = React.useState(null);
-    const [loading, setLoading] = React.useState(!skip);
-    const [error, setError] = React.useState(null);
+    const lastAuthData = useRef(null);
+    const lastResourceVersion = useRef(null);
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(!skip);
+    const [error, setError] = useState(null);
     const fetch = useFetch();
-    const abortController = React.useRef(new AbortController());
-    const errorTolerancyCounter = React.useRef(0);
+    const abortController = useRef(new AbortController());
+    const errorTolerancyCounter = useRef(0);
     const currentRequestId = shortid();
-    const requestData = React.useRef({});
-    const previousRequestNotFinished = React.useRef(null);
+    const requestData = useRef({});
+    const previousRequestNotFinished = useRef(null);
 
-    const refetch = (isSilent, currentData) => async () => {
-      if (skip || !authData || previousRequestNotFinished.current === path)
-        return;
-      if (!isSilent) setTimeout(_ => setLoading(true));
+    const refetch = useCallback(
+      (isSilent, currentData) => async () => {
+        if (skip || !authData || previousRequestNotFinished.current === path)
+          return;
+        if (!isSilent) setTimeout(_ => setLoading(true));
 
-      abortController.current = new AbortController();
+        abortController.current = new AbortController();
 
-      function processError(error) {
-        if (!abortController.current.signal.aborted) {
-          errorTolerancyCounter.current++;
-          if (errorTolerancyCounter.current > ERROR_TOLERANCY || !data) {
-            console.error(error);
-            setError(error);
+        function processError(error) {
+          if (!abortController.current.signal.aborted) {
+            errorTolerancyCounter.current++;
+            if (errorTolerancyCounter.current > ERROR_TOLERANCY || !data) {
+              console.error(error);
+              setError(error);
+            }
           }
         }
-      }
 
-      try {
-        previousRequestNotFinished.current = path;
-        requestData.current[currentRequestId] = { start: Date.now() };
-        const response = await fetch({
-          relativeUrl: path,
-          abortController: abortController.current,
-        });
-        const payload = await response.json();
+        try {
+          previousRequestNotFinished.current = path;
+          requestData.current[currentRequestId] = { start: Date.now() };
+          const response = await fetch({
+            relativeUrl: path,
+            abortController: abortController.current,
+          });
+          const payload = await response.json();
 
-        previousRequestNotFinished.current = null;
+          previousRequestNotFinished.current = null;
 
-        const currentRequest = requestData.current[currentRequestId];
-        const newerRequests = Object.values(requestData.current).filter(
-          request => request.start > currentRequest.start,
-        );
-        if (newerRequests.length) {
-          // don't override returned value with stale data
-          return;
+          const currentRequest = requestData.current[currentRequestId];
+          const newerRequests = Object.values(requestData.current).filter(
+            request => request.start > currentRequest.start,
+          );
+          if (newerRequests.length) {
+            // don't override returned value with stale data
+            return;
+          }
+
+          if (abortController.current.signal.aborted) return;
+
+          if (typeof onDataReceived === 'function') {
+            onDataReceived({ data: payload });
+          }
+          if (error) setTimeout(_ => setError(null)); // bring back the data and clear the error once the connection started working again
+          errorTolerancyCounter.current = 0;
+          setTimeout(_ =>
+            processDataFn(payload, currentData, setData, lastResourceVersion),
+          );
+        } catch (e) {
+          previousRequestNotFinished.current = null;
+          if (typeof onDataReceived === 'function')
+            onDataReceived({ error: e });
+          setTimeout(_ => processError(e));
         }
 
-        if (abortController.current.signal.aborted) return;
+        if (!isSilent && !abortController.current.signal.aborted)
+          setTimeout(_ => setLoading(false));
+      },
+      [fetch, authData],
+    );
 
-        if (typeof onDataReceived === 'function') {
-          onDataReceived({ data: payload });
-        }
-        if (error) setTimeout(_ => setError(null)); // bring back the data and clear the error once the connection started working again
-        errorTolerancyCounter.current = 0;
-        setTimeout(_ =>
-          processDataFn(payload, currentData, setData, lastResourceVersion),
-        );
-      } catch (e) {
-        previousRequestNotFinished.current = null;
-        if (typeof onDataReceived === 'function') onDataReceived({ error: e });
-        setTimeout(_ => processError(e));
-      }
-
-      if (!isSilent && !abortController.current.signal.aborted)
-        setTimeout(_ => setLoading(false));
-    };
-
-    React.useEffect(() => {
+    useEffect(() => {
       const receivedForbidden = error?.code === 403;
 
       // POLLING
       if (!pollingInterval || receivedForbidden || skip) return;
       const intervalId = setInterval(refetch(true, data), pollingInterval);
       return _ => clearInterval(intervalId);
-    }, [path, pollingInterval, data, error, skip]);
+    }, [path, pollingInterval, data, error, skip, refetch]);
 
-    React.useEffect(() => {
+    useEffect(() => {
       // INITIAL FETCH on path being set/changed
       if (lastAuthData.current && path && !skip) refetch(false, null)();
       return _ => {
@@ -100,7 +104,7 @@ const useGetHook = processDataFn =>
       };
     }, [path]);
 
-    React.useEffect(() => {
+    useEffect(() => {
       // silent refetch once 'skip' has been disabled
       if (lastAuthData.current && path && !skip) refetch(true, null)();
       return _ => {
@@ -108,7 +112,7 @@ const useGetHook = processDataFn =>
       };
     }, [skip]);
 
-    React.useEffect(() => {
+    useEffect(() => {
       if (JSON.stringify(lastAuthData.current) !== JSON.stringify(authData)) {
         // authData reference is updated multiple times during the route change but the value stays the same (see MicrofrontendContext).
         // To avoid unnecessary refetch(), we 'cache' the last value and do the refetch only if there was an actual change
@@ -117,7 +121,7 @@ const useGetHook = processDataFn =>
       }
     }, [authData]);
 
-    React.useEffect(_ => _ => abortController.current.abort(), []);
+    useEffect(_ => _ => abortController.current.abort(), []);
 
     return {
       data,
@@ -129,15 +133,15 @@ const useGetHook = processDataFn =>
   };
 
 export const useGetStream = path => {
-  const lastAuthData = React.useRef(null);
-  const initialPath = React.useRef(true);
-  const timeoutRef = React.useRef();
-  const [data, setData] = React.useState([]);
-  const [error, setError] = React.useState(null);
+  const lastAuthData = useRef(null);
+  const initialPath = useRef(true);
+  const timeoutRef = useRef();
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
   const authData = useRecoilValue(authDataState);
   const fetch = useFetch();
-  const readerRef = React.useRef(null);
-  const abortController = React.useRef(new AbortController());
+  const readerRef = useRef(null);
+  const abortController = useRef(new AbortController());
 
   const processError = error => {
     console.error(error);
@@ -229,7 +233,7 @@ export const useGetStream = path => {
     fetchData();
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (initialPath.current) {
       initialPath.current = false;
       return;
@@ -239,14 +243,14 @@ export const useGetStream = path => {
     refetchData();
   }, [path]);
 
-  React.useEffect(_ => {
+  useEffect(_ => {
     cancelOldData();
     return () => {
       cancelOldData();
     };
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (
       authData &&
       JSON.stringify(lastAuthData.current) !== JSON.stringify(authData)
