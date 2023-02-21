@@ -28,7 +28,7 @@ export function NamespaceDetails(props) {
 
   const limitRangesParams = {
     hasDetailsView: false,
-    resourceUrl: `/api/v1/namespaces/${props.resourcename}/limitranges`,
+    resourceUrl: `/api/v1/namespaces/${props.resourceName}/limitranges`,
     resourceType: 'LimitRanges',
     namespace: props.resourceName,
     isCompact: true,
