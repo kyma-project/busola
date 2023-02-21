@@ -215,7 +215,6 @@ function createResults(context: CommandPaletteContext): Result[] {
 
   if (resourceType === 'namespaces' && ['-a', '*', 'all'].includes(name)) {
     return [
-      linkToList,
       {
         label: t('navigation.all-namespaces'),
         category: resourceTypeText,
@@ -233,6 +232,7 @@ function createResults(context: CommandPaletteContext): Result[] {
           navigate(pathname);
         },
       },
+      linkToList,
     ];
   }
 
