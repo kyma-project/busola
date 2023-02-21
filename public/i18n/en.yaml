@@ -240,7 +240,7 @@ command-palette:
     open-preferences: Open Preferences
     resource-aliases: Built-in Resource Aliases
     short-help: Type to search, e.g. "ns default" or "pod nginx"
-    all-namespaces: List resources from all namespaces
+    all-namespaces: List resources from all Namespaces
   item-actions:
     navigate: Navigate
     open: Open
