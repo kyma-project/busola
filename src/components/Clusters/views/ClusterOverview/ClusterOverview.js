@@ -12,8 +12,9 @@ export function ClusterOverview() {
   return (
     <>
       <ClusterOverviewHeader />
-      <Widgets destination="ClusterOverview" />
+      <Widgets destination="ClusterOverview" slot="top" />
       <ClusterNodes />
+      <Widgets destination="ClusterOverview" slot="bottom" />
     </>
   );
 }
