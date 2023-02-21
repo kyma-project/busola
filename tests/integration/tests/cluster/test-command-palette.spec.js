@@ -98,7 +98,7 @@ context('Test Command Palette navigation', () => {
 
     cy.contains('All Namespaces').click();
 
-    cy.url().should('match', /\/namespaces\/-all-$/);
+    cy.url().should('match', /\/namespaces\/-all-\/customresources$/);
   });
 
   it('History', () => {
