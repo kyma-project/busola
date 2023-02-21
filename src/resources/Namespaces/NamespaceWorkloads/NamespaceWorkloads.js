@@ -75,7 +75,7 @@ const PodsCircle = ({ namespace }) => {
   const navigate = useNavigate();
 
   const { data, error, loading = true } = useGetList()(
-    `/api/v1/namespaces/${namespace}/pods`,
+    namespace ? `/api/v1/namespaces/${namespace}/pods` : '/api/v1/pods',
     {
       pollingInterval: 3100,
     },
@@ -98,7 +98,9 @@ const DeploymentsCircle = ({ namespace }) => {
   const navigate = useNavigate();
   const { namespaceUrl } = useUrl();
   const { data, error, loading = true } = useGetList()(
-    `/apis/apps/v1/namespaces/${namespace}/deployments`,
+    namespace
+      ? `/apis/apps/v1/namespaces/${namespace}/deployments`
+      : '/apis/apps/v1/deployments',
     {
       pollingInterval: 3200,
     },

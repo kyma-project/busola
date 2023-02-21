@@ -240,6 +240,7 @@ command-palette:
     open-preferences: Open Preferences
     resource-aliases: Built-in Resource Aliases
     short-help: Type to search, e.g. "ns default" or "pod nginx"
+    all-namespaces: List resources from all Namespaces
   item-actions:
     navigate: Navigate
     open: Open
@@ -1013,6 +1014,7 @@ namespaces:
     usage-of-memory-limits: This Namespace uses {{valueText}} of {{maxText}} its memory limits.
     usage-of-memory-requests: This Namespace uses {{valueText}} of {{maxText}} its memory requests.
 navigation:
+  all-namespaces: All Namespaces
   preferences:
     title: Preferences
   select-namespace: Select Namespace...

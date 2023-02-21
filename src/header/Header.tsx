@@ -50,6 +50,11 @@ export function Header() {
     },
   ];
 
+  const getNamespaceLabel = () => {
+    if (activeNamespace === '-all-') return t('navigation.all-namespaces');
+    else return activeNamespace || t('navigation.select-namespace');
+  };
+
   return (
     <Shellbar
       className="header"
@@ -70,7 +75,7 @@ export function Header() {
           ? [
               {
                 glyph: 'megamenu',
-                label: activeNamespace || t('navigation.select-namespace'),
+                label: getNamespaceLabel(),
                 notificationCount: 0,
                 callback: () => {
                   refetch();
