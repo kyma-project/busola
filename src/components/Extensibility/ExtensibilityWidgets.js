@@ -8,6 +8,9 @@ import { useGetWidgets } from './useGetWidget';
 import { Widget } from './components/Widget';
 import { TranslationBundleContext } from './helpers';
 import { useJsonata } from './hooks/useJsonata';
+import { usePrepareResourceUrl } from 'resources/helpers';
+import pluralize from 'pluralize';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
 export const ExtensibilityWidgetsCore = ({ resMetaData }) => {
   console.log('ExtensibilityWidgetsCore', resMetaData);
@@ -17,26 +20,70 @@ export const ExtensibilityWidgetsCore = ({ resMetaData }) => {
     resource,
   });
 
+  let resourceUrl = usePrepareResourceUrl({
+    apiGroup: resource?.group,
+    apiVersion: resource?.version,
+    resourceType: pluralize(resource?.kind).toLowerCase(),
+  });
+  let resourceUrl2;
+  if (resource?.kind) {
+    resourceUrl2 = resourceUrl.replace(
+      urlPath,
+      pluralize(resource.kind).toLowerCase(),
+    );
+  }
+  console.log('resourceUrl', resourceUrl, 'resourceUrl2', resourceUrl2);
+  const {
+    // loading = true,
+    // error,
+    data,
+    // silentRefetch,
+  } = useGet(resourceUrl, { pollingInterval: 0 });
+  console.log('lolo resource data', data);
+
   const jsonata = useJsonata({});
 
   // there may be a moment when `resMetaData` is undefined (e.g. when switching the namespace)
   if (!resource) {
     return null;
   }
-
-  const widgetName = resMetaData?.widget?.name;
-  const widget = resMetaData?.widget;
+  const items = data?.items || [];
+  // const items = data?.items.filter(item => widget?.filter) || [];
 
   const dataSources = resMetaData?.dataSources || {};
+  const widget = resMetaData?.widget;
+  const widgetName = widget?.name;
+  const filter = widget?.filter;
 
+  const sth = items.filter(item => {
+    if (filter) {
+      const [value] = jsonata(filter, { item: item });
+      return value;
+    }
+    return true;
+  });
+  console.log('filter', filter, 'sth', sth);
+
+  // let itemList = [];
+  // items.forEach(item => {
+  //   itemList.push(<Widget
+  //     key={widgetName}
+  //     value={item}
+  //     structure={widget}
+  //     schema={schema}
+  //     dataSources={dataSources}
+  //     originalResource={item}
+  //     inlineContext={true}
+  //   />);
+  // });
   return (
     <Widget
       key={widgetName}
-      value={resource}
+      value={items}
       structure={widget}
       schema={schema}
       dataSources={dataSources}
-      originalResource={resource}
+      originalResource={items}
       inlineContext={true}
     />
   );
