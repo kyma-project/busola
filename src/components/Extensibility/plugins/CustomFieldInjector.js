@@ -1,6 +1,5 @@
 import React from 'react';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
-import { List } from 'immutable';
 import * as jp from 'jsonpath';
 
 import { useVariables } from '../hooks/useVariables';
@@ -50,7 +49,7 @@ export function CustomFieldInjector({
         schema={schema}
         value={jp.value(vars, varPath)}
         onChange={e => setVar(varPath, e.data.value)}
-        storeKeys={List([])}
+        storeKeys={storeKeys.set(-1, `$${varName}`)}
       />
     );
   } else {

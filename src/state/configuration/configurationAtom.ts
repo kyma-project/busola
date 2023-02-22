@@ -1,5 +1,5 @@
 import jsyaml from 'js-yaml';
-import { merge } from 'lodash';
+import { mergeWith, isArray } from 'lodash';
 import { useEffect } from 'react';
 import { atom, RecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -40,7 +40,6 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
     );
 
     const configResponse = await fetch('/config/config.yaml' + cacheBuster);
-
     let configMapResponse: ConfigMapResponse;
     if (fetchFn) {
       try {
@@ -62,10 +61,17 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
       ? (jsyaml.load(configMapResponse.data.config) as Config)
       : {};
 
-    return merge(
+    const customizer = (obj: any, src: any) => {
+      if (isArray(obj)) {
+        return src;
+      }
+    };
+
+    return mergeWith(
       defaultParams?.config,
       configParams?.config,
       mapParams?.config,
+      customizer,
     ) as Configuration;
   } catch (e) {
     console.warn('Cannot load cluster params: ', e);

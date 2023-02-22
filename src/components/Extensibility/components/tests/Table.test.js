@@ -110,7 +110,7 @@ describe('Table', () => {
         );
 
         expect(await component.findByLabelText('search-input'));
-        expect(await component.findByText('first'));
+        expect(await component.findByText('extensibility::first'));
       });
 
       it('Should search for simple data', async () => {
@@ -127,8 +127,8 @@ describe('Table', () => {
         } = render(<Table value={elements} structure={structure} />);
 
         // expect unfiltered results to exist
-        await findByText('first');
-        await findByText('second');
+        await findByText('extensibility::first');
+        await findByText('extensibility::second');
 
         //expect input to be displayed
         await findByLabelText('search-input');
