@@ -1,9 +1,10 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web
   labels:
     app: busola
+  name: web
 spec:
   replicas: 1
   selector:
@@ -15,22 +16,22 @@ spec:
         app: busola
     spec:
       containers:
-        - name: busola
-          image: eu.gcr.io/kyma-project/busola-web:PR-2354
+        - image: eu.gcr.io/kyma-project/busola-web:PR-2362
           imagePullPolicy: Always
+          name: busola
+          ports:
+            - containerPort: 8080
           resources:
             requests:
               cpu: 100m
               memory: 21Mi
-          ports:
-            - containerPort: 8080
           volumeMounts:
-            - name: config
-              mountPath: /app/core-ui/config
+            - mountPath: /app/core-ui/config
+              name: config
       volumes:
-        - name: config
-          configMap:
-            name: busola-config
+        - configMap:
             items:
               - key: config
                 path: config.yaml
+            name: busola-config
+          name: config
