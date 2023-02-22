@@ -47,22 +47,21 @@ export const ExtensibilityWidgetsCore = ({ resMetaData }) => {
   if (!resource) {
     return null;
   }
-  const items = data?.items || [];
-  // const items = data?.items.filter(item => widget?.filter) || [];
-
   const dataSources = resMetaData?.dataSources || {};
   const widget = resMetaData?.widget;
   const widgetName = widget?.name;
   const filter = widget?.filter;
 
-  const sth = items.filter(item => {
+  const items = data?.items || [];
+  const filteredItems = items.filter(item => {
     if (filter) {
       const [value] = jsonata(filter, { item: item });
+      console.log('lololo value of filter', value);
       return value;
     }
     return true;
   });
-  console.log('filter', filter, 'sth', sth);
+  console.log('filter', filter, 'filteredItems', filteredItems);
 
   // let itemList = [];
   // items.forEach(item => {
@@ -79,11 +78,11 @@ export const ExtensibilityWidgetsCore = ({ resMetaData }) => {
   return (
     <Widget
       key={widgetName}
-      value={items}
+      value={filteredItems}
       structure={widget}
       schema={schema}
       dataSources={dataSources}
-      originalResource={items}
+      originalResource={filteredItems}
       inlineContext={true}
     />
   );
