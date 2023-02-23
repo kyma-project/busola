@@ -187,7 +187,6 @@ function createResults(context: CommandPaletteContext): Result[] {
     activeClusterName,
     navigate,
   } = context;
-  console.log(window.location.pathname.includes('namespaces'));
   const [type, name] = tokens;
   const resourceType = toFullResourceType(type, resourceTypes);
   const matchedNode = findNavigationNode(resourceType, clusterNodes);
