@@ -1,0 +1,1019 @@
+// These rules implement the Kubernetes Pod Security Standards: https://kubernetes.io/docs/concepts/security/pod-security-standards
+
+export const podSecuritySchema = {
+  apiVersion: 'v1',
+  aliases: [
+    {
+      properties: {
+        kind: {
+          enum: [
+            'Deployment',
+            'Pod',
+            'DaemonSet',
+            'StatefulSet',
+            'ReplicaSet',
+            'CronJob',
+            'Job',
+          ],
+        },
+      },
+    },
+  ],
+  rules: [
+    {
+      id: 10001,
+      name: 'Enforce the baseline Pod Security Standards',
+      uniqueName: 'K8S_POD_SEC_ENFORCE_BASELINE',
+      enabledByDefault: true,
+      documentationUrl:
+        'https://kubernetes.io/docs/concepts/security/pod-security-standards/#baseline',
+      messageOnFailure:
+        'Incorrect or missing value for key `pod-security.kubernetes.io/enforce` - set it to either baseline or restricted',
+      category: 'Pod Security Standards Baseline',
+      schema: {
+        if: {
+          properties: {
+            kind: {
+              enum: ['Namespace'],
+            },
+          },
+        },
+        then: {
+          required: 'metadata',
+          properties: {
+            metadata: {
+              required: 'labels',
+              properties: {
+                labels: {
+                  required: 'pod-security.kubernetes.io/enforce',
+                  properties: {
+                    'pod-security.kubernetes.io/enforce': {
+                      enum: ['baseline', 'restricted'],
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 10002,
+      name: 'Enforce the restricted Pod Security Standards',
+      uniqueName: 'K8S_POD_SEC_ENFORCE_RESTRICTED',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted',
+      messageOnFailure:
+        'Incorrect or missing value for key `pod-security.kubernetes.io/enforce` - set it to restricted',
+      category: 'Pod Security Standards Restricted',
+      schema: {
+        if: {
+          properties: {
+            kind: {
+              enum: ['Namespace'],
+            },
+          },
+        },
+        then: {
+          required: ['metadata'],
+          properties: {
+            metadata: {
+              required: ['labels'],
+              properties: {
+                labels: {
+                  required: ['pod-security.kubernetes.io/enforce'],
+                  properties: {
+                    'pod-security.kubernetes.io/enforce': {
+                      enum: ['restricted'],
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 10003,
+      name:
+        'Prevent Windows containers from running with unnecessary privileges',
+      uniqueName: 'K8S_POD_SEC_HOST_PROCESS',
+      enabledByDefault: true,
+      documentationUrl:
+        'https://kubernetes.io/docs/concepts/security/pod-security-standards/#baseline',
+      messageOnFailure:
+        'Incorrect value for key `hostProcess` - remove the property or set it to false',
+      category: 'Pod Security Standards Baseline',
+      note: 'Dulicate to EKS_INVALID_HOSTPROCESS_VALUE',
+      schema: {
+        $defs: {
+          validSecurityContext: {
+            properties: {
+              securityContext: {
+                properties: {
+                  windowsOptions: {
+                    properties: {
+                      hostProcess: {
+                        enum: ['false'],
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        properties: {
+          spec: {
+            allOf: [
+              {
+                $ref: '#/$defs/validSecurityContext',
+              },
+              {
+                properties: {
+                  containers: {
+                    items: {
+                      $ref: '#/$defs/validSecurityContext',
+                    },
+                  },
+                  initContainers: {
+                    items: {
+                      $ref: '#/$defs/validSecurityContext',
+                    },
+                  },
+                  ephemeralContainers: {
+                    items: {
+                      $ref: '#/$defs/validSecurityContext',
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        },
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
+      },
+    },
+    {
+      id: 10004,
+      name: 'Prevent overriding or disabling the default AppArmor profile',
+      uniqueName: 'K8S_POD_SEC_APPARMOR',
+      enabledByDefault: true,
+      documentationUrl:
+        'https://kubernetes.io/docs/tutorials/security/apparmor',
+      messageOnFailure:
+        'Incorrect value for key `container.apparmor.security.beta.kubernetes.io/*` - remove the property or set it to runtime/default or localhost/*',
+      category: 'Pod Security Standards Baseline',
+      schema: {
+        properties: {
+          metadata: {
+            properties: {
+              annotations: {
+                properties: {
+                  'container.apparmor.security.beta.kubernetes.io/*': {
+                    oneOf: [
+                      {
+                        enum: ['runtime/default'],
+                      },
+                      {
+                        pattern: '^localhost/.*$',
+                      },
+                    ],
+                  },
+                },
+              },
+            },
+          },
+        },
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
+      },
+    },
+    {
+      id: 10005,
+      name: 'Use the default /proc mount',
+      uniqueName: 'K8S_POD_SEC_PROC_MOUNT',
+      enabledByDefault: true,
+      documentationUrl:
+        'https://kubernetes.io/docs/concepts/security/pod-security-standards/#baseline',
+      messageOnFailure:
+        'Incorrect value for key `procMount` - remove it or set it to Default',
+      category: 'Pod Security Standards Baseline',
+      schema: {
+        $defs: {
+          validSecurityContext: {
+            properties: {
+              securityContext: {
+                properties: {
+                  procMount: {
+                    enum: ['Default'],
+                  },
+                },
+              },
+            },
+          },
+        },
+        properties: {
+          spec: {
+            properties: {
+              containers: {
+                items: {
+                  $ref: '#/$defs/validSecurityContext',
+                },
+              },
+              initContainers: {
+                items: {
+                  $ref: '#/$defs/validSecurityContext',
+                },
+              },
+              ephemeralContainers: {
+                items: {
+                  $ref: '#/$defs/validSecurityContext',
+                },
+              },
+              template: {
+                $ref: '#',
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 10006,
+      name: 'Prevent setting the seccompProfile to unconfined',
+      uniqueName: 'K8S_POD_SEC_SECCOMP_PROFILE',
+      enabledByDefault: true,
+      documentationUrl:
+        'https://kubernetes.io/docs/concepts/security/pod-security-standards/#baseline',
+      messageOnFailure:
+        'Incorrect value for key `seccompProfile` - remove it or set the type to RuntimeDefault or Localhost',
+      category: 'Pod Security Standards Baseline',
+      schema: {
+        $defs: {
+          validSecurityContext: {
+            properties: {
+              securityContext: {
+                properties: {
+                  seccompProfile: {
+                    properties: {
+                      type: {
+                        enum: ['RuntimeDefault', 'Localhost'],
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        properties: {
+          spec: {
+            properties: {
+              containers: {
+                items: {
+                  $ref: '#/$defs/validSecurityContext',
+                },
+              },
+              initContainers: {
+                items: {
+                  $ref: '#/$defs/validSecurityContext',
+                },
+              },
+              ephemeralContainers: {
+                items: {
+                  $ref: '#/$defs/validSecurityContext',
+                },
+              },
+              template: {
+                $ref: '#',
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 10007,
+      name: 'Prevent disabling security mechanisms via sysctls',
+      uniqueName: 'K8S_POD_SEC_SYSCTLS',
+      enabledByDefault: true,
+      documentationUrl:
+        'https://kubernetes.io/docs/concepts/security/pod-security-standards/#baseline',
+      messageOnFailure:
+        'Incorrect value for key `sysctls[*].name` - Remove it or set it to one of the allowed values',
+      category: 'Pod Security Standards Baseline',
+      schema: {
+        $defs: {
+          validSecurityContext: {
+            properties: {
+              securityContext: {
+                properties: {
+                  sysctls: {
+                    items: {
+                      properties: {
+                        name: {
+                          enum: [
+                            'kernel.shm_rmid_forced',
+                            'net.ipv4.ip_local_port_range',
+                            'net.ipv4.ip_unprivileged_port_start',
+                            'net.ipv4.tcp_syncookies',
+                            'net.ipv4.ping_group_range',
+                          ],
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        properties: {
+          spec: {
+            allOf: [
+              {
+                $ref: '#/$defs/validSecurityContext',
+              },
+              {
+                properties: {
+                  template: { $ref: '#' },
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+    {
+      id: 10008,
+      name: 'Use one of the allowed volume types',
+      uniqueName: 'K8S_POD_SEC_ALLOWED_VOLUME_TYPES',
+      enabledByDefault: true,
+      documentationUrl:
+        'https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted',
+      messageOnFailure:
+        'Incorrect volume entry - Each volume has to be of one of the allowed volume types',
+      category: 'Pod Security Standards Restricted',
+      schema: {
+        properties: {
+          spec: {
+            allOf: [
+              {
+                properties: {
+                  volumes: {
+                    items: {
+                      oneOf: [
+                        { required: ['configMap'] },
+                        { required: ['csi'] },
+                        { required: ['downwardAPI'] },
+                        { required: ['emptyDir'] },
+                        { required: ['ephemeral'] },
+                        { required: ['persistentVolumeClaim'] },
+                        { required: ['projected'] },
+                        { required: ['secret'] },
+                      ],
+                    },
+                  },
+                },
+              },
+              {
+                properties: {
+                  template: { $ref: '#' },
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+    {
+      id: 10009,
+      name: 'Prevent allowing privilege escalation',
+      uniqueName: 'K8S_POD_SEC_PRIVILEGE_ESCALATION',
+      enabledByDefault: true,
+      documentationUrl:
+        'https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted',
+      messageOnFailure:
+        'Incorrect value for key `allowPrivilegeEscalation` - remove it or set it to false',
+      category: 'Pod Security Standards Restricted',
+      schema: {
+        $defs: {
+          validSecurityContext: {
+            properties: {
+              securityContext: {
+                properties: {
+                  allowPrivilegeEscalation: {
+                    enum: [false],
+                  },
+                },
+              },
+            },
+          },
+          validContainers: {
+            properties: {
+              containers: {
+                items: {
+                  $ref: '#/$defs/validSecurityContext',
+                },
+              },
+              initContainers: {
+                items: {
+                  $ref: '#/$defs/validSecurityContext',
+                },
+              },
+              ephemeralContainers: {
+                items: {
+                  $ref: '#/$defs/validSecurityContext',
+                },
+              },
+            },
+          },
+        },
+        properties: {
+          spec: {
+            allOf: [
+              {
+                if: {
+                  properties: {
+                    os: {
+                      properties: {
+                        not: { enum: ['windows'] },
+                      },
+                    },
+                  },
+                },
+                then: {
+                  $ref: '#/$defs/validContainers',
+                },
+              },
+              {
+                properties: {
+                  template: {
+                    $ref: '#',
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+    {
+      id: 10010,
+      name: 'Prevent running as root',
+      uniqueName: 'K8S_POD_SEC_RUNNING_AS_NON_ROOT',
+      enabledByDefault: true,
+      documentationUrl:
+        'https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted',
+      messageOnFailure:
+        'Incorrect value for key `runAsNonRoot` - set it to true',
+      category: 'Pod Security Standards Restricted',
+      schema: {
+        $defs: {
+          validSecurityContext: {
+            required: ['securityContext'],
+            properties: {
+              securityContext: {
+                required: ['runAsNonRoot'],
+                properties: {
+                  runAsNonRoot: {
+                    enum: [true],
+                  },
+                },
+              },
+            },
+          },
+          conditionallyValidSecurityContext: {
+            properties: {
+              securityContext: {
+                properties: {
+                  runAsNonRoot: {
+                    enum: [undefined, null, true],
+                  },
+                },
+              },
+            },
+          },
+          validSpec: {
+            properties: {
+              spec: {
+                anyOf: [
+                  {
+                    allOf: [
+                      { $ref: '#/$defs/validSecurityContext' },
+                      {
+                        properties: {
+                          containers: {
+                            items: {
+                              $ref: '#/$defs/conditionallyValidSecurityContext',
+                            },
+                          },
+                          initContainers: {
+                            items: {
+                              $ref: '#/$defs/conditionallyValidSecurityContext',
+                            },
+                          },
+                          ephemeralContainers: {
+                            items: {
+                              $ref: '#/$defs/conditionallyValidSecurityContext',
+                            },
+                          },
+                        },
+                      },
+                    ],
+                  },
+                  {
+                    properties: {
+                      containers: {
+                        items: {
+                          $ref: '#/$defs/validSecurityContext',
+                        },
+                      },
+                      initContainers: {
+                        items: {
+                          $ref: '#/$defs/validSecurityContext',
+                        },
+                      },
+                      ephemeralContainers: {
+                        items: {
+                          $ref: '#/$defs/validSecurityContext',
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+        allOf: [
+          {
+            if: {
+              properties: { kind: { enum: ['Pod'] } },
+            },
+            then: {
+              $ref: '#/$defs/validSpec',
+            },
+          },
+          {
+            if: {
+              properties: {
+                kind: {
+                  enum: [
+                    'Deployment',
+                    'DaemonSet',
+                    'StatefulSet',
+                    'ReplicaSet',
+                    'CronJob',
+                    'Job',
+                  ],
+                },
+              },
+            },
+            then: {
+              properties: {
+                spec: {
+                  properties: {
+                    template: {
+                      $ref: '#/$defs/validSpec',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        ],
+      },
+    },
+    {
+      id: 10011,
+      name: 'Run as non-root user',
+      uniqueName: 'K8S_POD_SEC_RUNNING_AS_NON_ROOT_USER',
+      enabledByDefault: true,
+      documentationUrl:
+        'https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted',
+      messageOnFailure:
+        'Incorrect value for key `runAsUser` - set it to a non-zero value or remove it',
+      category: 'Pod Security Standards Restricted',
+      schema: {
+        $defs: {
+          validSecurityContext: {
+            properties: {
+              securityContext: {
+                properties: {
+                  runAsUser: {
+                    not: {
+                      enum: [0],
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        properties: {
+          spec: {
+            allOf: [
+              {
+                $ref: '#/$defs/validSecurityContext',
+              },
+              {
+                properties: {
+                  containers: {
+                    items: {
+                      $ref: '#/$defs/validSecurityContext',
+                    },
+                  },
+                  initContainers: {
+                    items: {
+                      $ref: '#/$defs/validSecurityContext',
+                    },
+                  },
+                  ephemeralContainers: {
+                    items: {
+                      $ref: '#/$defs/validSecurityContext',
+                    },
+                  },
+                },
+              },
+              {
+                properties: {
+                  template: {
+                    $ref: '#',
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+    {
+      id: 10012,
+      name: 'Explicitely set the seccomp profile',
+      uniqueName: 'K8S_POD_SEC_SECCOMP_PROFILE_REQUIRED',
+      enabledByDefault: true,
+      documentationUrl:
+        'https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted',
+      messageOnFailure:
+        'Incorrect or missing value for key `seccompProfile.type` - set it to RuntimeDefault or Localhost',
+      category: 'Pod Security Standards Restricted',
+      schema: {
+        $defs: {
+          validSecurityContext: {
+            required: ['securityContext'],
+            properties: {
+              securityContext: {
+                required: ['seccompProfile'],
+                properties: {
+                  seccompProfile: {
+                    required: ['type'],
+                    properties: {
+                      type: {
+                        enum: ['RuntimeDefault', 'Localhost'],
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          conditionallyValidSecurityContext: {
+            properties: {
+              securityContext: {
+                properties: {
+                  seccompProfile: {
+                    properties: {
+                      type: {
+                        enum: [undefined, null, 'RuntimeDefault', 'Localhost'],
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          validSpec: {
+            properties: {
+              spec: {
+                if: {
+                  properties: {
+                    os: {
+                      properties: { name: { not: { enum: ['windows'] } } },
+                    },
+                  },
+                },
+                then: {
+                  anyOf: [
+                    {
+                      allOf: [
+                        {
+                          $ref: '#/$defs/validSecurityContext',
+                        },
+                        {
+                          properties: {
+                            containers: {
+                              items: {
+                                $ref:
+                                  '#/$defs/conditionallyValidSecurityContext',
+                              },
+                            },
+                            initContainers: {
+                              items: {
+                                $ref:
+                                  '#/$defs/conditionallyValidSecurityContext',
+                              },
+                            },
+                            ephemeralContainers: {
+                              items: {
+                                $ref:
+                                  '#/$defs/conditionallyValidSecurityContext',
+                              },
+                            },
+                          },
+                        },
+                      ],
+                    },
+                    {
+                      allOf: [
+                        {
+                          $ref: '#/$defs/conditionallyValidSecurityContext',
+                        },
+                        {
+                          properties: {
+                            containers: {
+                              items: {
+                                $ref: '#/$defs/validSecurityContext',
+                              },
+                            },
+                            initContainers: {
+                              items: {
+                                $ref: '#/$defs/validSecurityContext',
+                              },
+                            },
+                            ephemeralContainers: {
+                              items: {
+                                $ref: '#/$defs/validSecurityContext',
+                              },
+                            },
+                          },
+                        },
+                      ],
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+        allOf: [
+          {
+            if: {
+              properties: { kind: { enum: ['Pod'] } },
+            },
+            then: {
+              $ref: '#/$defs/validSpec',
+            },
+          },
+          {
+            if: {
+              properties: {
+                kind: {
+                  enum: [
+                    'Deployment',
+                    'DaemonSet',
+                    'StatefulSet',
+                    'ReplicaSet',
+                    'CronJob',
+                    'Job',
+                  ],
+                },
+              },
+            },
+            then: {
+              properties: {
+                spec: {
+                  properties: {
+                    template: {
+                      $ref: '#/$defs/validSpec',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        ],
+      },
+    },
+    {
+      id: 10013,
+      name: 'Containers must drop all capabilities',
+      uniqueName: 'K8S_POD_SEC_DROP_ALL_CAPABILITIES',
+      enabledByDefault: true,
+      documentationUrl:
+        'https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted',
+      messageOnFailure:
+        'Incorrect or missing values for `capabilities.drop` - must contain ALL',
+      category: 'Pod Security Standards Restricted',
+      schema: {
+        $defs: {
+          validSecurityContext: {
+            required: ['securityContext'],
+            properties: {
+              securityContext: {
+                required: ['capabilities'],
+                properties: {
+                  capabilities: {
+                    required: ['drop'],
+                    properties: {
+                      drop: {
+                        contains: {
+                          enum: ['ALL'],
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          validSpec: {
+            properties: {
+              spec: {
+                if: {
+                  properties: {
+                    os: {
+                      properties: { name: { not: { enum: ['windows'] } } },
+                    },
+                  },
+                },
+                then: {
+                  properties: {
+                    containers: {
+                      items: {
+                        $ref: '#/$defs/validSecurityContext',
+                      },
+                    },
+                    initContainers: {
+                      items: {
+                        $ref: '#/$defs/validSecurityContext',
+                      },
+                    },
+                    ephemeralContainers: {
+                      items: {
+                        $ref: '#/$defs/validSecurityContext',
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        allOf: [
+          {
+            if: {
+              properties: { kind: { enum: ['Pod'] } },
+            },
+            then: {
+              $ref: '#/$defs/validSpec',
+            },
+          },
+          {
+            if: {
+              properties: {
+                kind: {
+                  enum: [
+                    'Deployment',
+                    'DaemonSet',
+                    'StatefulSet',
+                    'ReplicaSet',
+                    'CronJob',
+                    'Job',
+                  ],
+                },
+              },
+            },
+            then: {
+              properties: {
+                spec: {
+                  properties: {
+                    template: {
+                      $ref: '#/$defs/validSpec',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        ],
+      },
+    },
+    {
+      id: 10014,
+      name: 'Containers must only add back NET_BIND_SERVICE',
+      uniqueName: 'K8S_POD_SEC_CAPABILITIES_ADD_ONLY_NET_BIND_SERVICE',
+      enabledByDefault: true,
+      documentationUrl:
+        'https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted',
+      messageOnFailure:
+        'Incorrect value for `capabilities.add` - must only contain NET_BIND_SERVICE',
+      category: 'Pod Security Standards Restricted',
+      schema: {
+        $defs: {
+          validSecurityContext: {
+            properties: {
+              securityContext: {
+                properties: {
+                  capabilities: {
+                    properties: {
+                      add: {
+                        items: {
+                          enum: ['NET_BIND_SERVICE'],
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          validSpec: {
+            properties: {
+              spec: {
+                if: {
+                  properties: {
+                    os: {
+                      properties: { name: { not: { enum: ['windows'] } } },
+                    },
+                  },
+                },
+                then: {
+                  properties: {
+                    containers: {
+                      items: {
+                        $ref: '#/$defs/validSecurityContext',
+                      },
+                    },
+                    initContainers: {
+                      items: {
+                        $ref: '#/$defs/validSecurityContext',
+                      },
+                    },
+                    ephemeralContainers: {
+                      items: {
+                        $ref: '#/$defs/validSecurityContext',
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        allOf: [
+          {
+            if: {
+              properties: { kind: { enum: ['Pod'] } },
+            },
+            then: {
+              $ref: '#/$defs/validSpec',
+            },
+          },
+          {
+            if: {
+              properties: {
+                kind: {
+                  enum: [
+                    'Deployment',
+                    'DaemonSet',
+                    'StatefulSet',
+                    'ReplicaSet',
+                    'CronJob',
+                    'Job',
+                  ],
+                },
+              },
+            },
+            then: {
+              properties: {
+                spec: {
+                  properties: {
+                    template: {
+                      $ref: '#/$defs/validSpec',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        ],
+      },
+    },
+  ],
+};
