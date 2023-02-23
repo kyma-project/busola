@@ -269,8 +269,6 @@ export const useGetExtensions = () => {
               }),
             ),
           );
-          console.log('lolo filteredConfigs', filteredConfigs);
-          console.log('lolo widgetsConfigs', widgetsConfigs);
           setExtensions(filteredConfigs);
           setWidgets(widgetsConfigs);
         }

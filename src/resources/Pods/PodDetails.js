@@ -14,7 +14,9 @@ import ContainersData from './ContainersData';
 import { PodCreate } from './PodCreate';
 import { PodStatsGraph } from './PodStatsGraph';
 import { useUrl } from 'hooks/useUrl';
-
+const Widgets = React.lazy(() =>
+  import('../../components/Extensibility/ExtensibilityWidgets'),
+);
 export function PodDetails(props) {
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();
@@ -25,6 +27,12 @@ export function PodDetails(props) {
       filter={filterByResource('Pod', props.resourceName)}
       hideInvolvedObjects={true}
     />
+  );
+  const WidgetsTop = resource => (
+    <Widgets destination="Pods" slot="top" root={resource} />
+  );
+  const WidgetsBottom = resource => (
+    <Widgets destination="Pods" slot="bottom" root={resource} />
   );
 
   const customColumns = [
@@ -102,11 +110,13 @@ export function PodDetails(props) {
   return (
     <ResourceDetails
       customComponents={[
+        WidgetsTop,
         PodStatsGraph,
         VolumesList,
         Containers,
         InitContainers,
         Events,
+        WidgetsBottom,
       ]}
       customColumns={customColumns}
       createResourceForm={PodCreate}

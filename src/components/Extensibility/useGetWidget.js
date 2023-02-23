@@ -13,7 +13,7 @@ export const useGetWidgets = (destination, slot) => {
     })
     .sort(
       (a, b) =>
-        b.widget?.order - a.widget?.order ||
+        a.widget?.order - b.widget?.order ||
         a.widget.name.localeCompare(b.widget.name),
     );
 

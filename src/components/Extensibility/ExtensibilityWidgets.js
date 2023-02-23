@@ -5,15 +5,14 @@ import { useGetSchema } from 'hooks/useGetSchema';
 
 import { DataSourcesContextProvider } from './contexts/DataSources';
 import { useGetWidgets } from './useGetWidget';
-import { Widget } from './components/Widget';
+import { Widget } from './components-widget/Widget';
 import { TranslationBundleContext } from './helpers';
 import { useJsonata } from './hooks/useJsonata';
 import { usePrepareResourceUrl } from 'resources/helpers';
 import pluralize from 'pluralize';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
-export const ExtensibilityWidgetsCore = ({ resMetaData }) => {
-  console.log('ExtensibilityWidgetsCore', resMetaData);
+export const ExtensibilityWidgetsCore = ({ resMetaData, root }) => {
   const { urlPath, resource } = resMetaData?.general ?? {};
 
   const { schema } = useGetSchema({
@@ -32,14 +31,7 @@ export const ExtensibilityWidgetsCore = ({ resMetaData }) => {
       pluralize(resource.kind).toLowerCase(),
     );
   }
-  console.log('resourceUrl', resourceUrl, 'resourceUrl2', resourceUrl2);
-  const {
-    // loading = true,
-    // error,
-    data,
-    // silentRefetch,
-  } = useGet(resourceUrl, { pollingInterval: 0 });
-  console.log('lolo resource data', data);
+  const { data } = useGet(resourceUrl, { pollingInterval: 0 });
 
   const jsonata = useJsonata({});
 
@@ -55,7 +47,7 @@ export const ExtensibilityWidgetsCore = ({ resMetaData }) => {
   const items = data?.items || [];
   const filteredItems = items.filter(item => {
     if (filter) {
-      const [value] = jsonata(filter, { item: item });
+      const [value] = jsonata(filter, { item, root });
       console.log('lololo value of filter', value);
       return value;
     }
@@ -63,18 +55,6 @@ export const ExtensibilityWidgetsCore = ({ resMetaData }) => {
   });
   console.log('filter', filter, 'filteredItems', filteredItems);
 
-  // let itemList = [];
-  // items.forEach(item => {
-  //   itemList.push(<Widget
-  //     key={widgetName}
-  //     value={item}
-  //     structure={widget}
-  //     schema={schema}
-  //     dataSources={dataSources}
-  //     originalResource={item}
-  //     inlineContext={true}
-  //   />);
-  // });
   return (
     <Widget
       key={widgetName}
@@ -88,17 +68,17 @@ export const ExtensibilityWidgetsCore = ({ resMetaData }) => {
   );
 };
 
-const ExtensibilityWidgets = ({ destination, slot }) => {
+const ExtensibilityWidgets = ({ destination, slot, root }) => {
   const widgets = useGetWidgets(destination, slot);
   console.log('ExtensibilityWidgets resMetaData', widgets, destination);
   let itemList = [];
   widgets.forEach(widget => {
-    itemList.push(<ExtensibilityWidget resMetaData={widget} />);
+    itemList.push(<ExtensibilityWidget resMetaData={widget} root={root} />);
   });
   return itemList;
 };
 
-const ExtensibilityWidget = ({ resMetaData }) => {
+const ExtensibilityWidget = ({ resMetaData, root }) => {
   console.log('!ExtensibilityWidget resMetaData', resMetaData);
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
   return (
@@ -110,32 +90,11 @@ const ExtensibilityWidget = ({ resMetaData }) => {
     >
       <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
         <ExtensibilityErrBoundary>
-          <ExtensibilityWidgetsCore resMetaData={resMetaData} />
+          <ExtensibilityWidgetsCore resMetaData={resMetaData} root={root} />
         </ExtensibilityErrBoundary>
       </DataSourcesContextProvider>
     </TranslationBundleContext.Provider>
   );
 };
-
-// const ExtensibilityWidgets = ({ destination }) => {
-//   const resMetaData = useGetWidgets(destination);
-
-//   console.log('!ExtensibilityWidget resMetaData', resMetaData);
-//   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
-//   return (
-//     <TranslationBundleContext.Provider
-//       value={{
-//         translationBundle: urlPath || 'extensibility',
-//         defaultResourcePlaceholder: defaultPlaceholder,
-//       }}
-//     >
-//       <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
-//         <ExtensibilityErrBoundary>
-//           <ExtensibilityWidgetsCore resMetaData={resMetaData} />
-//         </ExtensibilityErrBoundary>
-//       </DataSourcesContextProvider>
-//     </TranslationBundleContext.Provider>
-//   );
-// };
 
 export default ExtensibilityWidgets;
