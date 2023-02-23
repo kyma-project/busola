@@ -65,9 +65,5 @@ export function CustomResources({
     namespace,
   };
 
-  return (
-    <>
-      «{namespace}»<ResourcesList {...params} />
-    </>
-  );
+  return <ResourcesList {...params} />;
 }
