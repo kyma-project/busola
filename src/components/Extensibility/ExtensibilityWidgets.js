@@ -13,7 +13,7 @@ import pluralize from 'pluralize';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
 export const ExtensibilityWidgetsCore = ({ resMetaData, root }) => {
-  const { urlPath, resource } = resMetaData?.general ?? {};
+  const { resource } = resMetaData?.general ?? {};
 
   const { schema } = useGetSchema({
     resource,
