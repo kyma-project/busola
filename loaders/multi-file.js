@@ -10,6 +10,11 @@ function asyncGlob(pattern) {
   });
 }
 
+/**
+ * @see https://webpack.js.org/contribute/writing-a-loader
+ * @param {string} source a json string
+ * @returns {string} a json string
+ */
 export default async function multiFile(source) {
   const def = JSON.parse(source);
   const result = await Promise.all(
@@ -20,6 +25,7 @@ export default async function multiFile(source) {
       return Promise.all(
         matches.map(match => {
           const filePath = path.resolve(path.dirname(this.resourcePath), match);
+          this.addDependency(filePath);
           return this.importModule(filePath);
         }),
       );
