@@ -36,7 +36,7 @@ export const ExtensibilityWidgetsCore = ({ resMetaData, root }) => {
   const dataSources = resMetaData?.dataSources || {};
   const widget = resMetaData?.widget;
   const widgetName = widget?.name;
-  const filter = widget?.target.filter || widget?.filter;
+  const filter = widget?.target.filter || widget?.filter || null;
 
   const items = data?.items || [];
   const filteredItems = items.filter(item => {
