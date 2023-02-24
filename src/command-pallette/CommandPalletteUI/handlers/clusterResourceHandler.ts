@@ -213,6 +213,44 @@ function createResults(context: CommandPaletteContext): Result[] {
     },
   };
 
+  if (resourceType === 'namespaces' && ['-a', '*', 'all'].includes(name)) {
+    if (window.location.pathname.includes('namespaces')) {
+      return [
+        {
+          label: t('navigation.all-namespaces'),
+          category: resourceTypeText,
+          query: matchedNode.resourceType,
+          onActivate: () =>
+            sendNamespaceSwitchMessage('-all-', activeClusterName!, navigate),
+          customActionText: t('command-palette.item-actions.switch'),
+        },
+        {
+          label: t('navigation.all-namespaces'),
+          category: resourceTypeText,
+          query: matchedNode.resourceType,
+          onActivate: () => {
+            const pathname = `/cluster/${activeClusterName}/namespaces/-all-`;
+            navigate(pathname);
+          },
+        },
+        linkToList,
+      ];
+    } else {
+      return [
+        {
+          label: t('navigation.all-namespaces'),
+          category: resourceTypeText,
+          query: matchedNode.resourceType,
+          onActivate: () => {
+            const pathname = `/cluster/${activeClusterName}/namespaces/-all-`;
+            navigate(pathname);
+          },
+        },
+        linkToList,
+      ];
+    }
+  }
+
   let resources = resourceCache[resourceType];
   if (typeof resources !== 'object') {
     //@ts-ignore  TODO: handle typein Result

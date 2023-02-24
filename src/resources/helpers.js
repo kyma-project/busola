@@ -35,9 +35,10 @@ export const usePrepareListProps = ({
   const { i18n, t } = useTranslation();
 
   const api = apiGroup ? `apis/${apiGroup}/${apiVersion}` : `api/${apiVersion}`;
-  const resourceUrl = namespaceId
-    ? `/${api}/namespaces/${namespaceId}/${resourceType?.toLowerCase()}`
-    : `/${api}/${resourceType?.toLowerCase()}`;
+  const resourceUrl =
+    namespaceId && namespaceId !== '-all-'
+      ? `/${api}/namespaces/${namespaceId}/${resourceType?.toLowerCase()}`
+      : `/${api}/${resourceType?.toLowerCase()}`;
 
   return {
     hasDetailsView,
