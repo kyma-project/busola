@@ -24,13 +24,7 @@ export const ExtensibilityWidgetsCore = ({ resMetaData, root }) => {
     apiVersion: resource?.version,
     resourceType: pluralize(resource?.kind).toLowerCase(),
   });
-  let resourceUrl2;
-  if (resource?.kind) {
-    resourceUrl2 = resourceUrl.replace(
-      urlPath,
-      pluralize(resource.kind).toLowerCase(),
-    );
-  }
+
   const { data } = useGet(resourceUrl, { pollingInterval: 0 });
 
   const jsonata = useJsonata({});
@@ -42,18 +36,16 @@ export const ExtensibilityWidgetsCore = ({ resMetaData, root }) => {
   const dataSources = resMetaData?.dataSources || {};
   const widget = resMetaData?.widget;
   const widgetName = widget?.name;
-  const filter = widget?.filter;
+  const filter = widget?.target.filter || widget?.filter;
 
   const items = data?.items || [];
   const filteredItems = items.filter(item => {
     if (filter) {
       const [value] = jsonata(filter, { item, root });
-      console.log('lololo value of filter', value);
       return value;
     }
     return true;
   });
-  console.log('filter', filter, 'filteredItems', filteredItems);
 
   return (
     <Widget
@@ -70,7 +62,6 @@ export const ExtensibilityWidgetsCore = ({ resMetaData, root }) => {
 
 const ExtensibilityWidgets = ({ destination, slot, root }) => {
   const widgets = useGetWidgets(destination, slot);
-  console.log('ExtensibilityWidgets resMetaData', widgets, destination);
   let itemList = [];
   widgets.forEach(widget => {
     itemList.push(<ExtensibilityWidget resMetaData={widget} root={root} />);
@@ -79,7 +70,6 @@ const ExtensibilityWidgets = ({ destination, slot, root }) => {
 };
 
 const ExtensibilityWidget = ({ resMetaData, root }) => {
-  console.log('!ExtensibilityWidget resMetaData', resMetaData);
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
   return (
     <TranslationBundleContext.Provider

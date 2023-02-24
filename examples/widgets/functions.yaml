@@ -1,0 +1,57 @@
+widgets: |-
+  - name: Failing Functions
+    widget: Table
+    source: $root
+    targets:
+      - slot: top
+        location: ClusterOverview
+    filter: '$count($filter($item.status.conditions, function($v) { $v.status = "False" })) != 0'
+    order: 1 
+    children: 
+      - name: Name
+        source: metadata.name
+        widget: Text
+      - name: Namespace
+        source: metadata.namespace
+        widget: Text
+      - name: header.status
+        widget: Badge
+        highlights:
+          positive:
+            - RUNNING
+          negative:
+            - FAILED
+            - ERROR
+          informative:
+            - INITIALIZING
+          critical:
+            - DEPLOYING
+            - BUILDING
+            - PENDING
+        source: >-
+          ($.status = undefined or $.status.conditions = undefined or
+          $count($.status.conditions) = 0) ? 'INITIALIZING' :
+          $count($filter($.status.conditions, function($v) { $v.status = 'False' }))
+          != 0 ? $count($filter($.status.conditions, function($v) { $v.type =
+          'Running' and $v.status = 'True' })) != 0 ? 'ERROR' : 'FAILED' :
+          $count($filter($.status.conditions, function($v) { $v.type =
+          'ConfigurationReady' and $v.status = 'True' })) != 0 ?
+          $count($filter($.status.conditions, function($v) { $v.type = 'BuildReady'
+          and $v.status = 'True' })) != 0 ? $count($filter($.status.conditions,
+          function($v) { $v.type = 'Running' and $v.status = 'True' })) != 0 ?
+          'RUNNING' : $count($filter($.status.conditions, function($v) { $v.type =
+          'Running' and $v.status = 'Unknown' and $v.reason =
+          'MinReplicasNotAvailable' })) != 0 ? 'PENDING' : 'DEPLOYING' : 'BUILDING' :
+          'INITIALIZING' 
+  - name: Connected Functions
+    widget: Table
+    source: $root
+    targets:
+      - slot: top
+        location: Deploymets
+    filter: $contains($root.metadata.name, $item.metadata.name)
+    order: 1 
+    children: 
+      - name: Name
+        source: metadata.name
+        widget: Text

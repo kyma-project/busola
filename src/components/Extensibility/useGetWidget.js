@@ -1,21 +1,29 @@
 import { useRecoilValue } from 'recoil';
 import { widgetsState } from 'state/navigation/extensionsAtom';
 
-export const useGetWidgets = (destination, slot) => {
+export const useGetWidgets = (location, slot) => {
   const widgets = useRecoilValue(widgetsState);
-  console.log('lolo destination', destination, widgets);
-  const filteredWidgets = widgets
-    .filter(el => {
-      console.log('lolo el', el, destination);
-      return (
-        el.widget.destination === destination && el.widget.slots.includes(slot)
-      );
-    })
-    .sort(
-      (a, b) =>
-        a.widget?.order - b.widget?.order ||
-        a.widget.name.localeCompare(b.widget.name),
-    );
+  let filteredWidgets = [];
+  widgets.forEach(widget => {
+    const target = widget.widget.targets.find(t => {
+      return t.location === location && t.slot === slot;
+    });
+    if (target) {
+      filteredWidgets.push({
+        ...widget,
+        widget: {
+          ...widget.widget,
+          target: target,
+        },
+      });
+    }
+  });
+
+  filteredWidgets.sort(
+    (a, b) =>
+      a.widget?.order - b.widget?.order ||
+      a.widget.name.localeCompare(b.widget.name),
+  );
 
   return filteredWidgets;
 };
