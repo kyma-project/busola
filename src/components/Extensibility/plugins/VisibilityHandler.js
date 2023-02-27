@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 
 import { useVariables } from '../hooks/useVariables';
 import { useJsonata } from '../hooks/useJsonata';
+import { TriggerContext } from '../contexts/Trigger';
 
 export function VisibilityHandler({
   value,
@@ -14,6 +15,7 @@ export function VisibilityHandler({
   required,
   ...props
 }) {
+  const triggers = useContext(TriggerContext);
   const { itemVars } = useVariables();
   const jsonata = useJsonata({ resource });
 
@@ -23,7 +25,7 @@ export function VisibilityHandler({
   const visibilityFormula = schema.get('visibility');
   const overwrite = schema.get('overwrite') ?? true;
 
-  if (visibilityFormula) {
+  if (visibilityFormula && triggers.enabled) {
     const [visible] = jsonata(
       visibilityFormula,
       itemVars(resource, rule.itemVars, storeKeys),
