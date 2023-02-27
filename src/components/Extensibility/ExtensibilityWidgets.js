@@ -12,7 +12,7 @@ import { usePrepareResourceUrl } from 'resources/helpers';
 import pluralize from 'pluralize';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
-export const ExtensibilityWidgetsCore = ({ resMetaData, root }) => {
+export const ExtensibilityWidgetCore = ({ resMetaData, root }) => {
   const { resource } = resMetaData?.general ?? {};
 
   const { schema } = useGetSchema({
@@ -80,7 +80,7 @@ const ExtensibilityWidget = ({ resMetaData, root }) => {
     >
       <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
         <ExtensibilityErrBoundary>
-          <ExtensibilityWidgetsCore resMetaData={resMetaData} root={root} />
+          <ExtensibilityWidgetCore resMetaData={resMetaData} root={root} />
         </ExtensibilityErrBoundary>
       </DataSourcesContextProvider>
     </TranslationBundleContext.Provider>

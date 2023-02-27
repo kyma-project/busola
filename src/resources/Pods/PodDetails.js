@@ -14,9 +14,11 @@ import ContainersData from './ContainersData';
 import { PodCreate } from './PodCreate';
 import { PodStatsGraph } from './PodStatsGraph';
 import { useUrl } from 'hooks/useUrl';
+
 const Widgets = React.lazy(() =>
   import('../../components/Extensibility/ExtensibilityWidgets'),
 );
+
 export function PodDetails(props) {
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();

@@ -49,7 +49,7 @@ export type ExtWidget = {
   widget: string;
   source: string;
   slot: 'top' | 'bottom';
-  destination: 'ClusterOverview' | 'Pods';
+  destination: string;
   resource: {
     kind: string;
     group: string;

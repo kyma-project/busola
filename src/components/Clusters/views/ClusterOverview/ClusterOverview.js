@@ -5,14 +5,16 @@ import { ClusterOverviewHeader } from './ClusterOverviewHeader';
 import { ClusterNodes } from './ClusterNodes/ClusterNodes';
 
 import './ClusterOverview.scss';
+
 const Widgets = React.lazy(() =>
   import('../../../Extensibility/ExtensibilityWidgets'),
 );
+
 export function ClusterOverview() {
   return (
     <>
       <ClusterOverviewHeader />
-      <Widgets destination="ClusterOverview" slot="top" />
+      <Widgets destination="ClusterOverview" slot="top" root="" />
       <ClusterNodes />
       <Widgets destination="ClusterOverview" slot="bottom" />
     </>
