@@ -215,6 +215,7 @@ command-palette:
     open-preferences: Open Preferences
     resource-aliases: Built-in Resource Aliases
     short-help: Type to search, e.g. "ns default" or "pod nginx"
+    all-namespaces: List resources from all Namespaces
   item-actions:
     navigate: Navigate
     open: Open
@@ -434,6 +435,7 @@ components:
       default: The provided path does not exist. You will get redirected.
       cluster: The provided path does not exist. You will get redirected to Clusters Details.
       clusters: The provided path does not exist. You will get redirected to Clusters Overview.
+      extensions: The provided path does not exist. You will be redirected to the Custom Resource details.
       namespace: The provided path does not exist. You will get redirected to Namespace Overview.
   dropdown:
     empty-list: No resources available
@@ -987,6 +989,7 @@ namespaces:
     usage-of-memory-limits: This Namespace uses {{valueText}} of {{maxText}} its memory limits.
     usage-of-memory-requests: This Namespace uses {{valueText}} of {{maxText}} its memory requests.
 navigation:
+  all-namespaces: All Namespaces
   preferences:
     title: Preferences
   select-namespace: Select Namespace...
@@ -1431,6 +1434,7 @@ settings:
     dontConfirmDelete: Delete without confirmation
     showHiddenNamespaces: Show hidden Namespaces
     title: Clusters
+    resourcesValidation: Validate Resources
   interface:
     description: Appearance, language
     themes:

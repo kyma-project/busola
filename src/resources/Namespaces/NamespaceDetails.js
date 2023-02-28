@@ -14,12 +14,17 @@ import { NamespaceStatus } from './NamespaceStatus';
 import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
 import { ResourcesUsage } from './ResourcesUsage';
 import { NamespaceCreate } from './NamespaceCreate';
+import { AllNamespacesDetails } from './AllNamespacesDetails';
 
 import './NamespaceDetails.scss';
 
 export function NamespaceDetails(props) {
   const { t } = useTranslation();
   const [showAdd, setShowAdd] = useState(false);
+
+  if (props.resourceName === '-all-') {
+    return <AllNamespacesDetails {...props} />;
+  }
 
   const limitRangesParams = {
     hasDetailsView: false,

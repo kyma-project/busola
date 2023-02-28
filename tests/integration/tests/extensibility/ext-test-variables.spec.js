@@ -127,12 +127,12 @@ context('Test extensibility variables', () => {
 
     // test vars with defaultValue
     cy.get('@form')
-      .find('[data-testid="varWithDefaultValue"]:visible')
+      .find('[data-testid="$varWithDefaultValue"]:visible')
       .should('have.value', 'default');
 
     // test vars with dynamicValue
     cy.get('@form')
-      .find('[data-testid="varWithDynamicValue"]:visible')
+      .find('[data-testid="$varWithDynamicValue"]:visible')
       .should('have.value', 'dynamic name');
   });
 
@@ -163,7 +163,7 @@ context('Test extensibility variables', () => {
 
     // test if dynamicValue is updated
     cy.get('@form')
-      .find('[data-testid="varWithDynamicValue"]:visible')
+      .find('[data-testid="$varWithDynamicValue"]:visible')
       .should('have.value', 'unnamed');
   });
 
@@ -195,7 +195,7 @@ context('Test extensibility variables', () => {
       .clear()
       .type('1');
     cy.get('@form')
-      .find('[data-testid="anotherName"]:visible')
+      .find('[data-testid="$anotherName"]:visible')
       .type('2');
     cy.get('@form')
       .find('[data-testid="spec.suffix"]:visible')

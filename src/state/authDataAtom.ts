@@ -1,5 +1,5 @@
 import { parseOIDCparams } from 'components/Clusters/components/oidc-params';
-import { UserManager } from 'oidc-client-ts';
+import { UserManager, User } from 'oidc-client-ts';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { atom, useSetRecoilState, useRecoilValue, RecoilState } from 'recoil';
@@ -48,7 +48,6 @@ export function createUserManager(
     redirect_uri: window.location.origin + redirectPath,
     post_logout_redirect_uri: window.location.origin + '/logout.html',
     loadUserInfo: true,
-    automaticSilentRenew: false,
     client_id: clientId,
     authority: issuerUrl,
     client_secret: clientSecret,
@@ -77,17 +76,31 @@ async function handleLogin({
     });
   };
 
+  const setupVisibilityEventsHooks = (
+    userManager: UserManager,
+    user: User | null,
+  ) => {
+    document.addEventListener('visibilitychange', async event => {
+      if (document.visibilityState === 'visible') {
+        if (!!user?.expired || (user?.expires_in && user?.expires_in <= 2)) {
+          user = await userManager.signinSilent();
+          const token = user?.id_token!;
+          setAuth({ token });
+        }
+      }
+    });
+  };
+
   const userManager = createUserManager(userCredentials);
   try {
     const storedUser = await userManager.getUser();
-
     const user =
       storedUser && !storedUser.expired
         ? storedUser
         : await userManager.signinRedirectCallback(window.location.href);
-
-    setAuth({ token: user.id_token! });
+    setAuth({ token: user?.id_token! });
     setupAuthEventsHooks(userManager);
+    setupVisibilityEventsHooks(userManager, user);
     onAfterLogin();
   } catch (e) {
     // ignore 'No state in response' error - it means we didn't fire login request yet

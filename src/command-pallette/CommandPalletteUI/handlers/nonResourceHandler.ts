@@ -136,5 +136,10 @@ export const nonResourceHandler: Handler = {
       alias: 'prefs',
       description: t('command-palette.help.open-preferences'),
     },
+    {
+      name: 'ns -a',
+      alias: 'ns *, ns all',
+      description: t('command-palette.help.all-namespaces'),
+    },
   ],
 };

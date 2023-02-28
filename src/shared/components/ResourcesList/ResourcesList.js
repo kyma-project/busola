@@ -253,6 +253,10 @@ export function ResourceListRenderer({
     },
   ];
 
+  if (namespace === '-all-') {
+    omitColumnsIds = omitColumnsIds.filter(id => id !== 'namespace');
+  }
+
   customColumns =
     columns ||
     [...defaultColumns, ...customColumns].filter(
@@ -352,7 +356,7 @@ export function ResourceListRenderer({
     const namespace = resource?.metadata?.namespace;
     const pluralKind = pluralize((resource?.kind || '').toLowerCase());
 
-    return namespace
+    return namespace && namespace !== '-all-'
       ? `${resourceUrlPrefix}/namespaces/${namespace}/${pluralKind}/${encodedName}`
       : `${resourceUrlPrefix}/${pluralKind}/${encodedName}`;
   };

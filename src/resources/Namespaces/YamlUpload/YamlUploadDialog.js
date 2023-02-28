@@ -22,7 +22,6 @@ export const OPERATION_STATE_SOME_FAILED = 'SOME_FAILED';
 export function YamlUploadDialog({ show, onCancel }) {
   const { t } = useTranslation();
   const namespaceId = useRecoilValue(activeNamespaceIdState);
-  const [isValidationOn, setValidationOn] = useState(true);
   const defaultNamespace = namespaceId || 'default';
 
   const [resourcesData, setResourcesData] = useState();
@@ -109,8 +108,6 @@ export function YamlUploadDialog({ show, onCancel }) {
               {t('upload-yaml.info', { namespace: defaultNamespace })}
             </p>
             <YamlResourcesList
-              handleResourceValidation={() => setValidationOn(prev => !prev)}
-              isValidationOn={isValidationOn}
               resourcesData={resourcesWithStatuses}
               namespace={namespaceId}
             />

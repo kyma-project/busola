@@ -75,7 +75,7 @@ When using a variable inside an array it has to be wrapped inside a `[]` element
 - **var** - _[required]_ variable name.
 - **type** - _[required]_ type of field, as defined by JSON Schema.
 - **defaultValue** - default value used for the variable when opening the form.
-- **dynamicValue** - a [JSONata](jsonata.md) expression used to calculate the value of the variable. This happens when opening the form or after editing the raw YAML of the resource.
+- **dynamicValue** - a [JSONata](jsonata.md) expression used to calculate the default value of the variable. This happens when opening the form or after editing the raw YAML of the resource. This does not change on user input - for that see the [Dynamic fields section](#dynamic-field-values)
 
 All other fields can be used analogously to regular form items (except for the **path** and **children** parameters).
 
@@ -316,6 +316,8 @@ Resource widgets render a dropdown list of specified resources and store the sel
   - **version** - _[required]_ API version used for all requests.
   - **scope** - either `namespace` or `cluster`. When set to `cluster`, namespaced resources are fetched from all Namespaces. Defaults to `cluster`.
   - **namespace** - Namespace to fetch resources from. Used only when scope is `namespace` and resources need to be fetched from a specific Namespace. Defaults to the active Namespace when omitted.
+- **filter** - JSONata expression that filters resources based on a given condition.
+- **provideVar** - when this field is defined, the chosen resource is provided as a variable of this name.
 - **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in CRD, then it defaults to `false`.
 - **inputInfo** - a string below the input field that shows how to fill in the input.
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
@@ -420,6 +422,7 @@ ResourceRef widgets render two dropdowns to select the associated resources' nam
   - **kind** - _[required]_ Kubernetes kind of the resource.
   - **group** - API group used for all requests. Not provided for Kubernetes resources in the core (also called legacy) group.
   - **version** - _[required]_ API version used for all requests.
+- **filter** - JSONata expression that filters resources based on a given condition.
 - **provideVar** - when this field is defined, the chosen resource will be provided as a variable of this name.
 - **toInternal** - a [JSONata](jsonata.md) function to convert from the stored value to the `{name, namespace}` format. Useful, for example, when the data is stored as a string.
 - **toExternal** - a corresponding function to convert back to store.

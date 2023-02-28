@@ -104,7 +104,9 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
       nestingLevel={1}
     >
       {keyInput}
-      <div className="rich-editor__dropdown-wrapper">{languageDropdown}</div>
+      <div className="rich-editor__dropdown-wrapper">
+        <div className={'fd-margin--tiny'}>{languageDropdown}</div>
+      </div>
       {valueInput}
     </ResourceForm.CollapsibleSection>
   );

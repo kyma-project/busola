@@ -90,7 +90,7 @@ context('Test app settings and preferences', () => {
     cy.contains('Cluster interaction').click();
 
     cy.contains('.preferences-row', 'Show hidden Namespaces')
-      .find('.fd-switch')
+      .find('[aria-label="Show hidden Namespaces"]')
       .invoke('attr', 'aria-checked')
       .then(value => {
         if (value === 'false') {
@@ -110,7 +110,7 @@ context('Test app settings and preferences', () => {
       .contains('Namespaces')
       .click();
 
-    cy.contains('a', /^kube-/)
+    cy.contains('a', /^kube-system/)
       .first()
       .should('be.visible');
 
