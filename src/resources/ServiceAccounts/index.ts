@@ -17,9 +17,19 @@ export const resourceGraphConfig = (): ResourceRelationConfig => ({
   relations: [
     {
       resource: { kind: 'Secret' },
-      filter: (sa, secret) =>
-        sa.secrets?.find((s: any) => s.name === secret.metadata.name) ||
-        sa.imagePullSecrets?.find((s: any) => s.name === secret.metadata.name),
+      filter: (sa, secret) => {
+        const secretAnnotations = Object.entries(
+          secret.metadata.annotations ?? {},
+        );
+        return (
+          secretAnnotations.find(
+            ([key, value]) =>
+              key === 'kubernetes.io/service-account.name' &&
+              value === sa.metadata.name,
+          ) ||
+          sa.imagePullSecrets?.find((s: any) => s.name === secret.metadata.name)
+        );
+      },
     },
   ],
 });

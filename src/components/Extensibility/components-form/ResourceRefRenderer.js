@@ -39,6 +39,7 @@ export function ResourceRefRender({
   const toExternal = schema.get('toExternal');
   const provideVar = schema.get('provideVar');
   const defaultOpen = schema.get('defaultExpanded');
+  const filter = schema.get('filter');
 
   if (toInternal) {
     const [internal, error] = jsonata(toInternal);
@@ -60,7 +61,13 @@ export function ResourceRefRender({
       defaultOpen={defaultOpen}
       title={tFromStoreKeys(storeKeys, schema)}
       value={fromJS(value).toJS() || ''}
-      resources={data}
+      resources={(data ?? []).filter(res => {
+        if (filter) {
+          const [value] = jsonata(filter, { item: res });
+          return value;
+        }
+        return true;
+      })}
       setValue={value => {
         if (toExternal) {
           const [external, error] = jsonata(toExternal, {

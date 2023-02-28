@@ -107,6 +107,7 @@ export function ExtensibilityCreateCore({
 
     prepareVars(fullSchemaRules);
     readVars(resource);
+    setTimeout(() => triggers.trigger('init', []));
 
     return {
       simpleRules: prepareSchemaRules(
@@ -150,6 +151,11 @@ export function ExtensibilityCreateCore({
         );
         setStore(getUIStoreFromResourceObj(updatedResource));
         readVars(updatedResource);
+        triggers.trigger('init', []);
+      }}
+      onReset={() => {
+        readVars(getResourceObjFromUIStore(store));
+        triggers.trigger('init', []);
       }}
       onModeChange={(oldMode, newMode) => {
         if (oldMode === ModeSelector.MODE_YAML) {

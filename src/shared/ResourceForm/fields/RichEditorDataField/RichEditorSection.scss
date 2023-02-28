@@ -1,6 +1,8 @@
 .rich-editor__dropdown-wrapper {
   display: flex;
   justify-content: flex-end;
+  border: 1px solid var(--sapNeutralBackground);
+  border-bottom: none;
 
   & > {
     width: 300px;

@@ -25,10 +25,11 @@ function formatValue(value, language) {
   }
 }
 
-function getLanguage(jsonata, schema, value, resource) {
+function getLanguage(jsonata, schema) {
   const languageFormula = schema.get('language');
-  const [language, error] = jsonata(languageFormula);
+  if (!languageFormula) return 'json';
 
+  const [language, error] = jsonata(languageFormula);
   return error ? 'json' : (language || '').toLowerCase();
 }
 

@@ -65,7 +65,7 @@ context('Test extensibility variables', () => {
       .click();
 
     cy.getLeftNav()
-      .contains('Test Resources')
+      .contains(/^Test Resources$/)
       .click();
 
     cy.contains('Create Test Resource').click();
@@ -127,12 +127,12 @@ context('Test extensibility variables', () => {
 
     // test vars with defaultValue
     cy.get('@form')
-      .find('[data-testid="varWithDefaultValue"]:visible')
+      .find('[data-testid="$varWithDefaultValue"]:visible')
       .should('have.value', 'default');
 
     // test vars with dynamicValue
     cy.get('@form')
-      .find('[data-testid="varWithDynamicValue"]:visible')
+      .find('[data-testid="$varWithDynamicValue"]:visible')
       .should('have.value', 'dynamic name');
   });
 
@@ -163,7 +163,7 @@ context('Test extensibility variables', () => {
 
     // test if dynamicValue is updated
     cy.get('@form')
-      .find('[data-testid="varWithDynamicValue"]:visible')
+      .find('[data-testid="$varWithDynamicValue"]:visible')
       .should('have.value', 'unnamed');
   });
 
@@ -195,7 +195,7 @@ context('Test extensibility variables', () => {
       .clear()
       .type('1');
     cy.get('@form')
-      .find('[data-testid="anotherName"]:visible')
+      .find('[data-testid="$anotherName"]:visible')
       .type('2');
     cy.get('@form')
       .find('[data-testid="spec.suffix"]:visible')
@@ -229,5 +229,38 @@ context('Test extensibility variables', () => {
       .find('[data-testid="spec.existingResources"]:visible')
       .invoke('val')
       .should('have.string', 'var2');
+  });
+
+  it('Tests MultiCheckbox', () => {
+    cy.get('[role="document"]').as('form');
+
+    cy.get('@form')
+      .find('[data-testid="spec.arrayOfStrings.value_1"]:visible')
+      .find('input')
+      .should('not.be.checked');
+
+    cy.get('@form')
+      .find('[data-testid="spec.arrayOfStrings.value_1"]:visible')
+      .find('label')
+      .click();
+
+    cy.get('@form')
+      .find('[data-testid="spec.arrayOfStrings.value_3"]:visible')
+      .find('label')
+      .click();
+
+    cy.get('[ariaLabel="TestResource name"]:visible', { log: false })
+      .type(NAME)
+      .click();
+
+    // create resource
+    cy.get('[role=dialog]')
+      .contains('button', 'Create')
+      .click();
+
+    // check arrayOfStrings
+    cy.contains('h3', NAME).should('be.visible');
+    cy.contains('value_1, value_3').should('exist');
+    cy.contains('value_2').should('not.exist');
   });
 });

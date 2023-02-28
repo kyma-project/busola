@@ -1,4 +1,7 @@
-import { useGetPlaceholder } from 'components/Extensibility/helpers';
+import {
+  useGetPlaceholder,
+  useGetTranslation,
+} from 'components/Extensibility/helpers';
 import { Icon, Link } from 'fundamental-react';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +14,10 @@ const makeHref = ({ jsonata, value, structure }) => {
 
   let href;
   if (typeof value === 'string') {
-    href = value.startsWith('https://') ? value : `https://${value}`;
+    href =
+      value.startsWith('https://') || value.startsWith('http://')
+        ? value
+        : `https://${value}`;
   }
 
   return link || href;
@@ -26,6 +32,7 @@ export const ExternalLink = ({
 }) => {
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
   const { t } = useTranslation();
+  const { t: tExt } = useGetTranslation();
 
   const jsonata = useJsonata({
     resource: originalResource,
@@ -40,7 +47,7 @@ export const ExternalLink = ({
 
   return (
     <Link href={href} target="_blank" rel="noopener noreferrer">
-      {value}
+      {tExt(value)}
       <Icon
         glyph="action"
         size="s"

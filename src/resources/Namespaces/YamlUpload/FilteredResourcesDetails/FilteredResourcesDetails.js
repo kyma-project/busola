@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useRecoilValue } from 'recoil';
+import { Button, MessageStrip } from 'fundamental-react';
+import { validateResourcesState } from 'state/preferences/validateResourcesAtom';
 import { useIsInCurrentNamespace } from 'shared/hooks/useIsInCurrentNamespace';
 import { useValidateResourceBySchema } from 'shared/hooks/useValidateResourceBySchema/useValidateResourceBySchema';
 
-import { Button, MessageStrip } from 'fundamental-react';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
 import './FilteredResourcesDetails.scss';
@@ -98,10 +100,9 @@ const ValidationWarnings = ({ resource }) => {
   );
 };
 
-export const FilteredResourcesDetails = ({
-  filteredResources,
-  isValidationOn,
-}) => {
+export const FilteredResourcesDetails = ({ filteredResources }) => {
+  const validateResources = useRecoilValue(validateResourcesState);
+
   return (
     <ul className="resources-list">
       {filteredResources.map(r => (
@@ -113,7 +114,9 @@ export const FilteredResourcesDetails = ({
           <p style={{ fontSize: '16px' }}>
             {String(r?.value?.kind)} {String(r?.value?.metadata?.name)}
           </p>
-          {isValidationOn ? <ValidationWarnings resource={r?.value} /> : null}
+          {validateResources ? (
+            <ValidationWarnings resource={r?.value} />
+          ) : null}
         </li>
       ))}
     </ul>
