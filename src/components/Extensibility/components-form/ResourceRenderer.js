@@ -55,7 +55,9 @@ export function ResourceRenderer({
           url={url}
           filter={item => {
             if (schema.get('filter')) {
-              const [value] = jsonata(schema.get('filter'), { scope: item });
+              const [value] = jsonata(schema.get('filter'), {
+                item,
+              });
               return value;
             } else return true;
           }}

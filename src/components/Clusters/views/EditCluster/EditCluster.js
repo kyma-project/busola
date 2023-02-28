@@ -41,12 +41,14 @@ function EditClusterComponent({
       }
       const contextName = kubeconfig['current-context'];
       setAuth(null);
+
       addCluster(
         {
           kubeconfig,
           config: { ...(config || {}), config },
           contextName: resource?.kubeconfig?.['current-context'],
           currentContext: getContext(kubeconfig, contextName),
+          name: resource?.kubeconfig?.['current-context'],
         },
         clustersInfo,
       );

@@ -139,7 +139,9 @@ const MemoryLimitsCircle = ({ resourceQuotas, isLoading }) => {
 export const ResourcesUsage = ({ namespace }) => {
   const { t } = useTranslation();
   const { data: resourceQuotas, loading = true } = useGetList()(
-    `/api/v1/namespaces/${namespace}/resourcequotas`,
+    namespace
+      ? `/api/v1/namespaces/${namespace}/resourcequotas`
+      : '/api/v1/resourcequotas',
     {
       pollingInterval: 3300,
     },

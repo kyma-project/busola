@@ -3,7 +3,7 @@ import { FetchFn, useFetch } from 'shared/hooks/BackendAPI/useFetch';
 export type PostFn = (
   url: string,
   data: Record<string, any>,
-  options: Record<string, any>,
+  options?: Record<string, any>,
 ) => Promise<Record<string, any>>;
 
 export const createPostFn: (fetch: FetchFn) => PostFn = fetch => async (

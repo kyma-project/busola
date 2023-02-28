@@ -208,6 +208,7 @@ command-palette:
     open-preferences: Open Preferences
     resource-aliases: Built-in Resource Aliases
     short-help: Type to search, e.g. "ns default" or "pod nginx"
+    all-namespaces: List resources from all Namespaces
   item-actions:
     navigate: Navigate
     open: Open
@@ -427,6 +428,7 @@ components:
       default: The provided path does not exist. You will get redirected.
       cluster: The provided path does not exist. You will get redirected to Clusters Details.
       clusters: The provided path does not exist. You will get redirected to Clusters Overview.
+      extensions: The provided path does not exist. You will be redirected to the Custom Resource details.
       namespace: The provided path does not exist. You will get redirected to Namespace Overview.
   dropdown:
     empty-list: No resources available
@@ -980,6 +982,7 @@ namespaces:
     usage-of-memory-limits: This Namespace uses {{valueText}} of {{maxText}} its memory limits.
     usage-of-memory-requests: This Namespace uses {{valueText}} of {{maxText}} its memory requests.
 navigation:
+  all-namespaces: All Namespaces
   preferences:
     title: Preferences
   select-namespace: Select Namespace...
@@ -1355,6 +1358,8 @@ secrets:
   labels:
     annotations: Annotations
     type: Secret Type
+  messages:
+    decode-error: Failed to decode, not a proper base64 string
   metadata: Metadata
   name_singular: Secret
   placeholders:
@@ -1368,15 +1373,27 @@ selector:
     empty-selector: Matches all Pods in the Namespace
   title: Selector
 service-accounts:
+  associated-secret:
+    label: Create associated Secret
+    warning: The associated Secret contains long-lived API token data that may be used to log in with the ServiceAccount credentials.
   auto-mount-token:
     descriptions:
       disabled: For security reasons, don't enable automount if you don't need it.
       enabled: For security reasons, don't use automount if you don't need it.
     disabled: disabled
     enabled: enabled
+  token-request:
+    notification:
+      success: TokenRequest generated
+      failure: Failed to generate a TokenRequest
+    generate: Generate TokenRequest
+    expiration-seconds: Expiration seconds
+    warning: The TokenRequest allows you to log in with your ServiceAccount credentials. It  will be deactivated after the expiration seconds.
+    input-info: You can choose one of the provided options from the dropdown or enter the value in seconds.
   create-modal:
     at-least-one-secret-required: '{{resource}} must have at least one secret.'
     tooltips:
+      associated-secret: Creates a long-lived API token for a ServiceAccount which data is kept in the associated Secret.
       auto-mount-token: When set to true, it automatically mounts the ServiceAccount token within each container of a given Pod. For security reasons, don't enable automount if you don't need it.
       image-pull-secrets: Image Pull Secrets is a list of references to Secrets in the same Namespace to use for pulling any images in Pods that reference this ServiceAccount. Image Pull Secrets are distinct from Secrets because Secrets can be mounted in a Pod, but Image Pull Secrets are only accessed by the kubelet.
       secrets: Secrets is the list of Secrets allowed to be used by running Pods using this ServiceAccount.
@@ -1410,6 +1427,7 @@ settings:
     dontConfirmDelete: Delete without confirmation
     showHiddenNamespaces: Show hidden Namespaces
     title: Clusters
+    resourcesValidation: Validate Resources
   interface:
     description: Appearance, language
     themes:

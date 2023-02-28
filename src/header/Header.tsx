@@ -19,7 +19,7 @@ import './Header.scss';
 export function Header() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { namespaces, refetch } = useAvailableNamespaces();
+  const { refetch } = useAvailableNamespaces();
   const { namespace: activeNamespace } = useUrl();
 
   const setPreferencesOpen = useSetRecoilState(isPreferencesOpenState);
@@ -50,6 +50,11 @@ export function Header() {
     },
   ];
 
+  const getNamespaceLabel = () => {
+    if (activeNamespace === '-all-') return t('navigation.all-namespaces');
+    else return activeNamespace || t('navigation.select-namespace');
+  };
+
   return (
     <Shellbar
       className="header"
@@ -70,7 +75,7 @@ export function Header() {
           ? [
               {
                 glyph: 'megamenu',
-                label: activeNamespace || t('navigation.select-namespace'),
+                label: getNamespaceLabel(),
                 notificationCount: 0,
                 callback: () => {
                   refetch();
@@ -79,7 +84,6 @@ export function Header() {
                 menu: (
                   <NamespaceDropdown
                     hideDropdown={() => setIsNamespaceOpen(false)}
-                    namespaces={namespaces}
                   />
                 ),
               },

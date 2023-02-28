@@ -1,7 +1,8 @@
-import React, { createContext, useState } from 'react';
+import { fromJS } from 'immutable';
+import React, { createContext, useState, useRef } from 'react';
 
 export function scopePaths(storeKeys) {
-  const indexes = storeKeys
+  const indexes = fromJS(storeKeys)
     .toArray()
     .map((item, index) => ({ item, index }))
     .filter(({ item, index }) => typeof item === 'number')
@@ -44,13 +45,13 @@ export const TriggerContext = createContext({
 });
 
 export function TriggerContextProvider({ children }) {
-  const [subs, setSubs] = useState([]);
+  const subs = useRef([]);
   const [enabled, setEnabled] = useState(true);
 
   const trigger = (name, storeKeys) => {
     if (!enabled) return;
     setTimeout(() =>
-      subs
+      subs.current
         .map(sub => sub.current[name])
         .filter(sub => !!sub)
         .filter(sub => pathMatch(sub.storeKeys, storeKeys, sub.modifiers))
@@ -59,11 +60,11 @@ export function TriggerContextProvider({ children }) {
   };
 
   const subscribe = sub => {
-    setSubs(subs => [...subs, sub]);
+    subs.current = [...subs.current, sub];
   };
 
   const unsubscribe = sub => {
-    setSubs(subs => subs.filter(s => s.sub !== sub));
+    subs.current = subs.current.filter(s => s.sub !== sub);
   };
 
   const disable = () => {

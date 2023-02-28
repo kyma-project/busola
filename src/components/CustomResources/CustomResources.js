@@ -6,6 +6,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useCustomResourceUrl } from 'resources/CustomResourceDefinitions/useCustomResourceUrl';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { CRCreate } from 'resources/CustomResourceDefinitions/CRCreate';
+import { useUrl } from 'hooks/useUrl';
 
 export function CustomResources({
   crd,
@@ -17,7 +18,11 @@ export function CustomResources({
   const { group, names } = crd.spec;
   const name = names.plural;
   const customUrl = useCustomResourceUrl(crd);
-  const resourceUrl = `/apis/${group}/${version.name}/${name}`;
+  const { namespace } = useUrl();
+  const resourceUrl =
+    namespace && namespace !== '-all-'
+      ? `/apis/${group}/${version.name}/namespaces/${namespace}/${name}`
+      : `/apis/${group}/${version.name}/${name}`;
 
   const getJsonPath = (resource, jsonPath) => {
     const value =
@@ -57,6 +62,7 @@ export function CustomResources({
       textSearchProperties: ['metadata.namespace'],
       allowSlashShortcut: true,
     },
+    namespace,
   };
 
   return <ResourcesList {...params} />;

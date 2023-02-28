@@ -42,7 +42,9 @@ export function createRuleTemplate(isNamespaced) {
 }
 
 export function createRolePresets(namespace, translate, groupVersions) {
-  const apiGroups = getApiGroupInputOptions(groupVersions).map(g => g.key);
+  const apiGroups = getApiGroupInputOptions(groupVersions).map(g =>
+    g.key === 'core-api-group' ? '' : g.key,
+  );
 
   return [
     {
