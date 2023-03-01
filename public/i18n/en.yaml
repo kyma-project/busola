@@ -1,31 +1,6 @@
 api-rules: API Rules
 apps:
   title: Apps
-btp-instances:
-  description: ' <0>BTP Service Instance</0> makes the functionality of a service available for consumption.'
-  external-name: External Name
-  instance-data: Service Instance Data
-  instance-id: Instance ID
-  messages:
-    params-invalid: Invalid parameters. Provide a valid JSON object.
-  name_singular: BTP Service Instance
-  offering-name: Offering Name
-  parameters: Instance Parameters
-  placeholders:
-    external-name: Defaults to the instance name if empty
-    plan-name: The plan name to use for the Service Instance
-  plan-name: Plan Name
-  resource-type: Service Instance
-  statuses:
-    createfailed: Error
-    notprovisioned: Not Provisioned
-    provisioned: Provisioned
-  title: BTP Service Instances
-  tooltips:
-    createfailed: Creation failed
-    offering-name: You can find the SAP BTP service offering name in the Service Marketplace of the BTP Cockpit.
-    plan-name: You can find the relevant plan for the service instance in the Service Marketplace of the BTP Cockpit.
-    provisioned: Provisioned
 btp-service-bindings:
   binding-id: Binding ID
   data: Binding Data
@@ -240,6 +215,7 @@ command-palette:
     open-preferences: Open Preferences
     resource-aliases: Built-in Resource Aliases
     short-help: Type to search, e.g. "ns default" or "pod nginx"
+    all-namespaces: List resources from all Namespaces
   item-actions:
     navigate: Navigate
     open: Open
@@ -459,6 +435,7 @@ components:
       default: The provided path does not exist. You will get redirected.
       cluster: The provided path does not exist. You will get redirected to Clusters Details.
       clusters: The provided path does not exist. You will get redirected to Clusters Overview.
+      extensions: The provided path does not exist. You will be redirected to the Custom Resource details.
       namespace: The provided path does not exist. You will get redirected to Namespace Overview.
   dropdown:
     empty-list: No resources available
@@ -1012,6 +989,7 @@ namespaces:
     usage-of-memory-limits: This Namespace uses {{valueText}} of {{maxText}} its memory limits.
     usage-of-memory-requests: This Namespace uses {{valueText}} of {{maxText}} its memory requests.
 navigation:
+  all-namespaces: All Namespaces
   preferences:
     title: Preferences
   select-namespace: Select Namespace...
@@ -1416,6 +1394,7 @@ settings:
     dontConfirmDelete: Delete without confirmation
     showHiddenNamespaces: Show hidden Namespaces
     title: Clusters
+    resourcesValidation: Validate Resources
   interface:
     description: Appearance, language
     themes:

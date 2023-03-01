@@ -116,7 +116,7 @@ export function createExtensibilityTemplate(crd, t) {
 
 export function createConfigmap(crd, data) {
   const filterViewProps = arr =>
-    arr
+    (arr ?? [])
       .filter(e => e.isSelected)
       .map(e => ({
         name: e.name,
@@ -131,7 +131,7 @@ export function createConfigmap(crd, data) {
     data.details.body.splice(0, 1);
   }
 
-  data.form = data.form
+  data.form = (data.form ?? [])
     .filter(e => e.isSelected)
     .map(e => ({ simple: true, path: e.path, required: e.required }));
 

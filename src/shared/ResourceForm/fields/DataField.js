@@ -15,6 +15,9 @@ export function DataField({ title, ...props }) {
       readableFromFile
       className="resource-form__data-field"
       title={title || t('common.labels.data')}
+      keyProps={{
+        pattern: '([A-Za-z0-9.][-A-Za-z0-9_./]*)?[A-Za-z0-9]',
+      }}
       input={{
         value: ({ setValue, ...props }) => (
           <FormTextarea
