@@ -18,7 +18,7 @@ jest.mock('shared/hooks/BackendAPI/useGet', () => ({
   },
 }));
 
-jest.mock('components/Extensibility/ExtensibilityCreate', () => null);
+jest.mock('components/Extensibility/ExtensibilityWidgets', () => null);
 
 describe('ResourceDetails', () => {
   describe('Columns', () => {
