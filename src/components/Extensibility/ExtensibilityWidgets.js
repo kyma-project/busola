@@ -5,7 +5,7 @@ import { useGetSchema } from 'hooks/useGetSchema';
 
 import { DataSourcesContextProvider } from './contexts/DataSources';
 import { useGetWidgets } from './useGetWidget';
-import { Widget } from './components-widget/Widget';
+import { Widget } from './components/Widget';
 import { TranslationBundleContext } from './helpers';
 import { useJsonata } from './hooks/useJsonata';
 import { usePrepareResourceUrl } from 'resources/helpers';

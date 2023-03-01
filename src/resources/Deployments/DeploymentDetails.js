@@ -12,10 +12,6 @@ import { HPASubcomponent } from 'resources/HorizontalPodAutoscalers/HPASubcompon
 import { DeploymentStatus } from './DeploymentStatus';
 import { DeploymentCreate } from './DeploymentCreate';
 
-const Widgets = React.lazy(() =>
-  import('../../components/Extensibility/ExtensibilityWidgets'),
-);
-
 export function DeploymentDetails(props) {
   const { t } = useTranslation();
   const customColumns = [
@@ -30,12 +26,6 @@ export function DeploymentDetails(props) {
       value: deployment => <DeploymentStatus deployment={deployment} />,
     },
   ];
-  const WidgetsTop = resource => (
-    <Widgets destination="Deployments" slot="top" root={resource} />
-  );
-  const WidgetsBottom = resource => (
-    <Widgets destination="Deployments" slot="bottom" root={resource} />
-  );
 
   const MatchSelector = deployment => (
     <Selector
@@ -72,12 +62,10 @@ export function DeploymentDetails(props) {
   return (
     <ResourceDetails
       customComponents={[
-        WidgetsTop,
         HPASubcomponent,
         StatsComponent,
         MatchSelector,
         DeploymentPodTemplate,
-        WidgetsBottom,
       ]}
       customColumns={customColumns}
       createResourceForm={DeploymentCreate}

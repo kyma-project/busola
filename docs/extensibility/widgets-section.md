@@ -18,7 +18,7 @@ The **widgets** section contains a list of objects that defines the display stru
 - **order** - number that defines in what order widgets will be rendered. If one or more widgets have the same order, they will be sorted by name.
 - **targets** - array of targets
   - **slot** - _[required]_ defines what place on page the widget should be rendered on. Check the list of [all available slots](#all-available-slots)
-  - **location** - _[required]_ defines what view the widget should be rendered on. Currently widgets are rendered only on details views. For more information check the list of [all available locations](#all-available-locations)
+  - **location** - _[required]_ defines on what view the widget should be rendered. Currently widgets are rendered only on details views. For more information check the list of [all available locations](#all-available-locations)
   - **filter** - JSONata expression that filters resources based on a given condition. If defined it overrides general filter.
 - **children** - child widgets used for grouping. Child paths are relative to its parent.
 - **filter** - JSONata expression that filters resources based on a given condition. This is a general filter rule. If **filter** is defined in **targets** it will be ignored.
@@ -30,9 +30,38 @@ The **widgets** section contains a list of objects that defines the display stru
 
 ## All available locations
 
-- **ClusterOverview**
-- **Deployments**
-- **Pods**
+### Special views
+
+- ClusterOverview
+- CustomResourceDefinition
+
+### Resource views
+
+- Certificate
+- ClusterRoleBinding
+- ClusterRole
+- ConfigMap
+- CronJob
+- DaemonSet
+- Deployment
+- Event
+- HorizontalPodAutoscaler
+- Ingress
+- Job
+- Namespace
+- NetworkPolicy
+- OAuth2Client
+- PersistentVolumeClaim
+- PersistentVolume
+- Pod
+- ReplicaSet
+- RoleBinding
+- Role
+- Secret
+- ServiceBinding
+- ServiceInstance
+- Service
+- StatefulSet
 
 ## Example
 
