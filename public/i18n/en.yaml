@@ -1,38 +1,6 @@
 api-rules: API Rules
 apps:
   title: Apps
-btp-service-bindings:
-  binding-id: Binding ID
-  data: Binding Data
-  description: <0>BTP Service Binding</0> provides access details for an existing service instance.
-  external-name: External Name
-  instance-id: Instance ID
-  instance-name: Service Instance Name
-  messages:
-    duplicate-ref: This ref already exists
-    invalid-ref: Ref is invalid
-    params-invalid: Parameters must be an object
-    value-must-be-json-object: Secret data value must be a JSON object
-  name_singular: BTP Service Binding
-  parameters: Parameters
-  parameters-from: Parameters from Secrets
-  placeholders:
-    choose-secret: Choose Secret
-    choose-secret-first: Choose the Secret first
-    choose-secret-key: Choose Secret key
-    empty-secret: This Secret has no data
-    external-name: Defaults to the Service Binding name if empty
-  resource-type: Service Binding
-  secret: Secret
-  statuses:
-    notprovisioned: Not Provisioned
-    provisioned: Provisioned
-  title: BTP Service Bindings
-  tooltips:
-    parameters-from: Secret references to populate the parameters.
-    provisioned: Provisioned
-    secret: The name of the secret where the credentials are stored, defaults to the Service Binding name if not specified.
-    secret-not-found: This Secret doesn't exist.
 certificates:
   common-name: Common Name
   create:
