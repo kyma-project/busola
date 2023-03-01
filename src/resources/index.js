@@ -11,7 +11,6 @@ import * as RoleBindings from './RoleBindings';
 import * as ReplicaSets from './ReplicaSets';
 import * as Pods from './Pods';
 import * as PersistentVolumeClaims from './PersistentVolumeClaims';
-import * as OAuth2Clients from './OAuth2Clients';
 import * as NetworkPolicies from './NetworkPolicies';
 import * as Ingresses from './Ingresses';
 import * as HorizontalPodAutoscalers from './HorizontalPodAutoscalers';
@@ -53,7 +52,6 @@ export const resources = [
   Secrets,
   Roles,
   RoleBindings,
-  OAuth2Clients,
   ConfigMaps,
   Subscriptions,
   ServiceAccounts,
