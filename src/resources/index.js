@@ -5,7 +5,6 @@ import * as Jobs from './Jobs';
 import * as CronJobs from './CronJobs';
 import * as StatefulSets from './StatefulSets';
 import * as Services from './Services';
-import * as ServiceInstances from './ServiceInstances';
 import * as ServiceBindings from './ServiceBindings';
 import * as Secrets from './Secrets';
 import * as Roles from './Roles';
@@ -53,7 +52,6 @@ export const resources = [
   // storage
   PersistentVolumeClaims,
   // service management
-  ServiceInstances,
   ServiceBindings,
   // configuration
   Secrets,
