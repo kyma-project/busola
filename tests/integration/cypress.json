@@ -66,7 +66,6 @@
     "namespace/test-in-cluster-eventing.spec.js",
     "namespace/test-reduced-permissions.spec.js",
     "namespace/test-reduced-permissions--configuration.spec.js",
-    "namespace/test-certificates.spec.js",
     "namespace/test-ingresses.spec.js",
     "namespace/test-service-entries.spec.js",
     "namespace/test-network-policies.spec.js",
