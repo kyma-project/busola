@@ -105,10 +105,6 @@ export function useVariables() {
       } else if (def.defaultValue) {
         return def.defaultValue;
       } else if (def.dynamicValue) {
-        jsonata.async(def.dynamicValue, {
-          resource,
-          item: base,
-        });
         return jsonata
           .async(def.dynamicValue, {
             resource,
@@ -131,7 +127,7 @@ export function useVariables() {
         });
       });
 
-    Promise.all(promises).then(values => {
+    return Promise.all(promises).then(values => {
       values.forEach(([def, val]) => (vars[def.var] = applyDefaults(def, val)));
       setVars({ ...vars });
     });
