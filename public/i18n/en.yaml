@@ -1,48 +1,6 @@
 api-rules: API Rules
 apps:
   title: Apps
-certificates:
-  common-name: Common Name
-  create:
-    messages:
-      failure: Failed to create the Certificate
-      success: Certificate created
-  csr: CSR
-  description: <0>Certificate</0> provides a definition of a certificate that is then processed by the indicated issuer.
-  dns-names: DNS Names
-  existing-secret: Use the existing Secret
-  expiration-date: Expiration Date
-  issuer: Issuer
-  messages:
-    decode-error: 'Failed to decode the CSR: {{message}}'
-  name_singular: Certificate
-  placeholders:
-    common-name: Certificate CN (max 64 characters)
-    csr: Plain text Certificate Signing Request
-    dns-names: Additional domain names, one per line
-    encoded-csr: Base64-encoded Certificate Signing Request
-    name: Certificate name
-  refs: References
-  renew: Renew
-  secret-name: Secret name
-  secret-ref: Secret to use
-  state: Status
-  title: Certificates
-  tooltips:
-    close-expiration: Certificate will expire in less than one day.
-    common-name: Common Name is the primary domain name of the certificate.
-    csr: Certificate Signing Request is an alternative way to provide common name, DNSNames, and other information.
-    dns-names: DNS Names are the optional additional domain names of the certificate.
-    existing-secret: Use an existing Secret for storing the certificate if enabled. Otherwise a new Secret will be created.
-    expired: Certificate expired
-    issuer: Certificate issuer. If no issuer is given, the default issuer is used.
-    ready: Certificate issued
-    renew: Trigger a certificate renewal if enabled.
-    secret-name: Name of the Secret object to use for storing the certificate.
-    secret-ref: Reference of the existing Secret object to use for storing the certificate.
-    will-expire: Certificate will expire in {{daysToExpire}} {{daysForm}}.
-    with-csr: Enable to use a Certificate Signing Request instead of providing domain names manually.
-  with-csr: Use a CSR
 cluster-overview:
   headers:
     cpu: CPU
@@ -1309,6 +1267,10 @@ secrets:
     decode: Decode
     encode: Encode
     expand: Expand All
+  certificates:
+    close-expiration: Certificate will expire in less than one day.
+    expired: Certificate expired
+    will-expire: Certificate will expire in {{daysToExpire}} {{daysForm}}.
   certificate-panel:
     expiration-warning: This certificate is expired.
     expires: Expires
