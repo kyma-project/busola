@@ -211,9 +211,6 @@ const getExtensions = async (
 };
 
 export const useGetExtensions = () => {
-  const { isEnabled: isExtensibilityWidgetsEnabled } = useFeature(
-    'EXTENSIBILITY_WIDGETS',
-  );
   const cluster = useRecoilValue(clusterState);
   const auth = useRecoilValue(authDataState);
   const setExtensions = useSetRecoilState(extensionsState);
@@ -225,7 +222,9 @@ export const useGetExtensions = () => {
   const permissionSet = useRecoilValue(permissionSetsSelector);
   const [nonNamespacedExtensions, setNonNamespacedExtensions] = useState(null);
   const { namespace } = useUrl();
-
+  const { isEnabled: isExtensibilityWidgetsEnabled } = useFeature(
+    'EXTENSIBILITY_WIDGETS',
+  );
   useEffect(() => {
     const manageExtensions = async () => {
       if (!cluster) {
