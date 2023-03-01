@@ -18,6 +18,8 @@ jest.mock('shared/hooks/BackendAPI/useGet', () => ({
   },
 }));
 
+jest.mock('components/Extensibility/ExtensibilityCreate', () => null);
+
 describe('ResourceDetails', () => {
   describe('Columns', () => {
     fit('Renders basic column', async () => {
