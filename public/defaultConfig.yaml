@@ -51,6 +51,8 @@ config:
       isEnabled: true
     EXTENSIBILITY:
       isEnabled: true
+    EXTENSIBILITY_WIDGETS:
+      isEnabled: true
     TRACKING:
       isEnabled: false
     EVENTING:

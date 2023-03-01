@@ -18,6 +18,7 @@ import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 import { doesUserHavePermission } from './filters/permissions';
 import { useUrl } from 'hooks/useUrl';
 import { K8sResource } from 'types';
+import { useFeature } from 'hooks/useFeature';
 
 /*
 the order of the overwrting extensions
@@ -210,6 +211,9 @@ const getExtensions = async (
 };
 
 export const useGetExtensions = () => {
+  const { isEnabled: isExtensibilityWidgetsEnabled } = useFeature(
+    'EXTENSIBILITY_WIDGETS',
+  );
   const cluster = useRecoilValue(clusterState);
   const auth = useRecoilValue(authDataState);
   const setExtensions = useSetRecoilState(extensionsState);
@@ -270,7 +274,9 @@ export const useGetExtensions = () => {
             ),
           );
           setExtensions(filteredConfigs);
-          setWidgets(widgetsConfigs);
+          if (isExtensibilityWidgetsEnabled) {
+            setWidgets(widgetsConfigs);
+          }
         }
       }
     };
