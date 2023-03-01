@@ -5,8 +5,6 @@ import * as Jobs from './Jobs';
 import * as CronJobs from './CronJobs';
 import * as StatefulSets from './StatefulSets';
 import * as Services from './Services';
-import * as ServiceInstances from './ServiceInstances';
-import * as ServiceBindings from './ServiceBindings';
 import * as Secrets from './Secrets';
 import * as Roles from './Roles';
 import * as RoleBindings from './RoleBindings';
@@ -21,7 +19,6 @@ import * as Events from './Events';
 import * as Deployments from './Deployments';
 import * as DaemonSets from './DaemonSets';
 import * as ConfigMaps from './ConfigMaps';
-import * as Certificates from './Certificates';
 import * as Subscriptions from './Subscriptions';
 import * as ServiceAccounts from './ServiceAccounts';
 
@@ -52,16 +49,12 @@ export const resources = [
   HorizontalPodAutoscalers,
   // storage
   PersistentVolumeClaims,
-  // service management
-  ServiceInstances,
-  ServiceBindings,
   // configuration
   Secrets,
   Roles,
   RoleBindings,
   OAuth2Clients,
   ConfigMaps,
-  Certificates,
   Subscriptions,
   ServiceAccounts,
 
