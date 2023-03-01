@@ -1,8 +1,11 @@
+import { useRecoilValue } from 'recoil';
 import jsonata from 'jsonata';
 import { isEqual } from 'lodash';
 import { getReadableTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
+import { doesUserHavePermission } from 'state/navigation/filters/permissions';
+import { permissionSetsSelector } from 'state/permissionSetsSelector';
 
-export function jsonataWrapper(expression) {
+export function jsonataWrapper(expression: string) {
   const exp = jsonata(expression);
 
   exp.registerFunction('matchByLabelSelector', (pod, labels) => {
@@ -33,5 +36,16 @@ export function jsonataWrapper(expression) {
     return getReadableTimestamp(timestamp);
   });
 
+  exp.registerFunction('canI', (resourceGroupAndVersion, resourceType) => {
+    const permissionSet = useRecoilValue(permissionSetsSelector);
+
+    const isPermitted = doesUserHavePermission(
+      ['list'],
+      { resourceGroupAndVersion, resourceKind: resourceType },
+      permissionSet,
+    );
+
+    return isPermitted;
+  });
   return exp;
 }
