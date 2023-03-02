@@ -14,6 +14,7 @@ import { useAuthHandler } from 'state/authDataAtom';
 import { useGetConfiguration } from 'state/configuration/configurationAtom';
 import { useGetExtensions } from 'state/navigation/extensionsAtom';
 import { useGetExtensibilitySchemas } from 'state/extensibilitySchemasAtom';
+import { useGetValidationSchemas } from 'state/validationSchemasAtom';
 
 import { useLoginWithKubeconfigID } from 'components/App/useLoginWithKubeconfigID';
 import { useMakeGardenerLoginRoute } from 'components/Gardener/useMakeGardenerLoginRoute';
@@ -55,6 +56,7 @@ export default function App() {
   useGetConfiguration();
   useGetExtensions();
   useGetExtensibilitySchemas();
+  useGetValidationSchemas();
 
   useEffect(() => {
     i18n.changeLanguage(language);

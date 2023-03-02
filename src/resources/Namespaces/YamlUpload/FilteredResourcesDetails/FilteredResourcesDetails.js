@@ -9,6 +9,7 @@ import { useValidateResourceBySchema } from 'shared/hooks/useValidateResourceByS
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
 import './FilteredResourcesDetails.scss';
+import { validationSchemasState } from 'state/validationSchemasAtom';
 
 const WarningButton = ({
   handleShowWarnings,
@@ -49,15 +50,15 @@ const useNamespaceWarning = resource => {
       ];
 };
 
-const ValidationWarnings = ({ resource }) => {
+const ValidationWarnings = ({ resource, validationSchema }) => {
   const { t } = useTranslation();
   const [areWarningsVisible, setVisibleWarnings] = useState(false);
 
   //we expect two types here: []string or Promise
   const warnings = [
-    useValidateResourceBySchema,
-    useNamespaceWarning,
-  ].map(validate => validate(resource));
+    useValidateResourceBySchema(resource, validationSchema),
+    useNamespaceWarning(resource),
+  ];
 
   // if the element has the then function, it means it's a Promise
   if (warnings.some(w => w.then))
@@ -102,6 +103,7 @@ const ValidationWarnings = ({ resource }) => {
 
 export const FilteredResourcesDetails = ({ filteredResources }) => {
   const validateResources = useRecoilValue(validateResourcesState);
+  const validationSchemas = useRecoilValue(validationSchemasState);
 
   return (
     <ul className="resources-list">
@@ -115,7 +117,10 @@ export const FilteredResourcesDetails = ({ filteredResources }) => {
             {String(r?.value?.kind)} {String(r?.value?.metadata?.name)}
           </p>
           {validateResources ? (
-            <ValidationWarnings resource={r?.value} />
+            <ValidationWarnings
+              resource={r?.value}
+              validationSchema={validationSchemas}
+            />
           ) : null}
         </li>
       ))}
