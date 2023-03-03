@@ -5,7 +5,7 @@ import jsyaml from 'js-yaml';
 import { atom, RecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { permissionSetsSelector } from './permissionSetsSelector';
 import { useUrl } from 'hooks/useUrl';
-import { getConfigMaps } from './utils/getConfigMaps';
+import { ConfigMapResponse, getConfigMaps } from './utils/getConfigMaps';
 import { getFetchFn } from './utils/getFetchFn';
 import { JSONSchema4 } from 'json-schema';
 
@@ -16,6 +16,7 @@ interface ValidationSchemas {
 
 interface Rule {
   uniqueName: string;
+  policies?: ValidationPolicy[];
   schema: JSONSchema4;
 }
 
@@ -23,10 +24,46 @@ interface RuleSchema {
   rules: Array<Rule>;
 }
 
+interface ValidationConfig {
+  rules?: Array<Rule>;
+  policies?: Array<ValidationPolicy>;
+}
+
+type RuleReference = {
+  identifier: string;
+};
+
+type ValidationPolicy = {
+  name: string;
+  enabled: boolean;
+  rules: Array<RuleReference>;
+};
+
+interface ValidationPolicies {
+  policies: Array<ValidationPolicy>;
+}
+
 const getSchema = async (): Promise<RuleSchema> => {
-  const response = await fetch(`/validation/defaultRules.yaml`);
+  const response = await fetch(`/validation/rules.yaml`);
   const text = await response.text();
   return jsyaml.load(text) as RuleSchema;
+};
+
+const getPolicies = async (): Promise<ValidationPolicies> => {
+  const response = await fetch(`/validation/rules.yaml`);
+  const text = await response.text();
+  return jsyaml.load(text) as ValidationPolicies;
+};
+
+const getConfig = async (): Promise<ValidationConfig | null> => {
+  try {
+    const response = await fetch(`/validation/config.yaml`);
+    const text = await response.text();
+    return jsyaml.load(text) as ValidationConfig;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 };
 
 export const useGetValidationSchemas = async () => {
@@ -44,35 +81,86 @@ export const useGetValidationSchemas = async () => {
         setSchemas({});
       } else {
         let defaultSchema = await getSchema();
+        let defaultPolicies = await getPolicies();
 
-        const [ruleMaps, schemaMaps] = await Promise.all(
-          ['validation-rules', 'validation-schema'].map(type =>
+        const validationConfig = await getConfig();
+
+        const [schemaMaps, policyMaps] = await Promise.all(
+          ['validation-schema', 'validation-policy'].map(type =>
             getConfigMaps(
               fetchFn,
               cluster.currentContext.namespace,
               namespace,
               permissionSet,
-              `busola.io/config=${type}`,
+              `busola.io/validation-config=${type}`,
             ),
           ),
         );
 
-        const schemasFromConfigMap = (schemaMaps
-          ?.flatMap(configMap => Object.values(configMap.data))
-          .map(schemaText => jsyaml.load(schemaText)) ?? []) as Array<
+        const loadYamlValues = (configMaps: ConfigMapResponse[] | null) => {
+          return (
+            configMaps
+              ?.flatMap(configMap => Object.values(configMap.data))
+              .map(schemaText => jsyaml.load(schemaText)) ?? []
+          );
+        };
+
+        const schemasFromConfigMap = loadYamlValues(schemaMaps) as Array<
           RuleSchema
+        >;
+        const policiesFromConfigMap = loadYamlValues(policyMaps) as Array<
+          ValidationPolicies
         >;
 
         // const rulesFromConfigMap = ruleMaps?.flatMap(configMap => Object.values(configMap.data))
         //   .map(ruleText => jsyaml.load(ruleText));
 
         const rules = [
-          ...schemasFromConfigMap.map((schema: { rules: any }) => schema.rules),
-          ...defaultSchema.rules,
+          ...schemasFromConfigMap.flatMap(
+            (schema: { rules: any }) => schema.rules,
+          ),
+          // ...defaultSchema?.rules ?? [],
+          ...(validationConfig?.rules ?? []),
+        ];
+        console.log(validationConfig);
+
+        const rulesByName = rules.reduce(
+          (agg, rule) => ({ ...agg, [rule.uniqueName]: rule }),
+          {},
+        ) as { [key: string]: Rule };
+
+        const policies = [
+          ...policiesFromConfigMap.flatMap(schema => schema.policies),
+          // ...defaultPolicies?.policies ?? [],
+          ...(validationConfig?.policies ?? []),
         ];
 
+        const enabledRulesByName = policies
+          .filter(policy => policy.enabled)
+          .reduce((agg, policy) => {
+            policy.rules.forEach(rule => {
+              if (rule.identifier) {
+                const key = rule.identifier;
+
+                if (agg[key]) {
+                  agg[key].policies?.push(policy);
+                } else {
+                  agg[key] = {
+                    ...rulesByName[rule.identifier],
+                    policies: [policy],
+                  };
+                }
+              }
+            });
+            return agg;
+          }, {} as { [key: string]: Rule });
+
+        const enabledRules = Object.values(enabledRulesByName);
+
         setSchemas({
-          rules,
+          rules: enabledRules,
+          rulesByName,
+          policies,
           defaultSchema,
           schemasFromConfigMap,
         });

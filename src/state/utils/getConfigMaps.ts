@@ -3,11 +3,11 @@ import { doesUserHavePermission } from 'state/navigation/filters/permissions';
 import { PermissionSetState } from 'state/permissionSetsSelector';
 import { K8sResource } from 'types';
 
-type ConfigMapData = {
+export type ConfigMapData = {
   [key: string]: string;
 };
 
-type ConfigMapResponse = K8sResource & {
+export type ConfigMapResponse = K8sResource & {
   data: ConfigMapData;
 };
 
