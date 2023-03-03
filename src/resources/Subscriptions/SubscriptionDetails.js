@@ -88,7 +88,6 @@ export function SubscriptionDetails(props) {
     {
       header: t('subscriptions.headers.conditions.status'),
       value: ({ status }) => {
-        console.log(status?.conditions);
         const lastCondition = status?.conditions
           ? status?.conditions[status?.conditions.length - 1]
           : null;
