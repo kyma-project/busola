@@ -25,7 +25,11 @@ export default function NamespaceRoutes() {
     onDataReceived: () => {},
   });
 
-  if (namespaceId !== '-all-' && error) {
+  if (
+    namespaceId !== '-all-' &&
+    error &&
+    JSON.parse(JSON.stringify(error)).code === '403'
+  ) {
     return (
       <IncorrectPath
         to={clusterUrl('overview')}
