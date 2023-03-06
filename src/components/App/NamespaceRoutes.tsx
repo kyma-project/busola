@@ -37,22 +37,20 @@ export default function NamespaceRoutes() {
   }
 
   return (
-    <>
-      <Routes>
-        <Route
-          path="*"
-          element={
-            <IncorrectPath
-              to=""
-              message={t('components.incorrect-path.message.namespace')}
-            />
-          }
-        />
-        {/* extensibility routes should go first, so if someone overwrites the default view, the new one should have a higher priority */}
-        {extensions?.map(cr => createExtensibilityRoutes(cr, language))}
-        {resourceRoutesNamespaced}
-        {otherRoutesNamespaced}
-      </Routes>
-    </>
+    <Routes>
+      <Route
+        path="*"
+        element={
+          <IncorrectPath
+            to=""
+            message={t('components.incorrect-path.message.namespace')}
+          />
+        }
+      />
+      {/* extensibility routes should go first, so if someone overwrites the default view, the new one should have a higher priority */}
+      {extensions?.map(cr => createExtensibilityRoutes(cr, language))}
+      {resourceRoutesNamespaced}
+      {otherRoutesNamespaced}
+    </Routes>
   );
 }
