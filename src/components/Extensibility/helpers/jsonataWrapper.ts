@@ -41,7 +41,7 @@ export function jsonataWrapper(expression: string) {
 
     const isPermitted = doesUserHavePermission(
       ['list'],
-      { resourceGroupAndVersion, resourceKind: resourceType },
+      { resourceGroupAndVersion, resourceKind: resourceType.toLowerCase() },
       permissionSet,
     );
 
