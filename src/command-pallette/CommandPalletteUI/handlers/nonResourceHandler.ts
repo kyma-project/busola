@@ -13,6 +13,10 @@ function createNonResourceOptions({
       type: 'clusters',
     },
     {
+      names: ['upload', 'up'],
+      type: 'upload',
+    },
+    {
       names: ['preferences', 'prefs'],
       type: 'preferences',
     },
@@ -76,6 +80,17 @@ function createResults(context: CommandPaletteContext): Result[] | null {
             query: 'help',
             onActivate: () => false,
             customActionText: t('command-palette.item-actions.show-help'),
+          },
+        ];
+      case 'upload':
+        return [
+          {
+            label: t('navigation.upload-yaml.title'),
+            query: 'upload',
+            onActivate: () => {
+              context.setShowYamlUpload(true);
+            },
+            customActionText: t('command-palette.help.open-uploadYaml'),
           },
         ];
       case 'preferences':
