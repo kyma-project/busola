@@ -29,12 +29,10 @@ release: build-image push-image
 release-local: build-image-local push-image-local
 
 build-image:
-	sed -i 's/version: dev/version: ${TAG}/' public/version.yaml
-	docker build -t $(IMG_NAME) -f Dockerfile .
+	docker build --build-arg=TAG_DEFAULT_TAG=$(TAG) -t $(IMG_NAME) -f Dockerfile .
 
 build-image-local:
-	sed -i 's/version: dev/version: ${TAG}/' public/version.yaml
-	docker build -t $(LOCAL_IMG_NAME) -f Dockerfile.local .
+	docker build --build-arg=TAG_DEFAULT_TAG=$(TAG) -t $(LOCAL_IMG_NAME) -f Dockerfile.local .
 
 push-image:
 	docker tag $(IMG_NAME) $(IMG):$(TAG)
