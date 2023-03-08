@@ -2,13 +2,13 @@ aliases:
     default-reviewers:
     - qbalukom
     - akucharska
-    - Lyczeq
     - mrCherry97
+    - valentinvieriu
     default-approvers:
     - qbalukom
     - akucharska
-    - Lyczeq
     - mrCherry97
+    - valentinvieriu
     documentation-reviewers:
     - mmitoraj
     - grego952
