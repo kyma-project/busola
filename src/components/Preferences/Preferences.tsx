@@ -8,6 +8,7 @@ import { Tabs } from 'shared/components/Tabs/Tabs';
 import { VerticalTabs } from 'shared/components/VerticalTabs/VerticalTabs';
 import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
 import { showDebugonataState } from 'state/preferences/showDebugonataAtom';
+import { useFeature } from 'hooks/useFeature';
 
 import ConfirmationSettings from './ConfirmationSettings';
 import LanguageSettings from './LanguageSettings';
@@ -23,6 +24,8 @@ import './Preferences.scss';
 export function Preferences() {
   const { t } = useTranslation();
   const [isModalOpen, setModalOpen] = useRecoilState(isPreferencesOpenState);
+  const { isEnabled: isExtensibilityEnabled } = useFeature('EXTENSIBILITY');
+  const { isEnabled: isDevelopmentEnabled } = useFeature('DEVELOPMENT');
 
   const tabs = [
     {
@@ -49,6 +52,22 @@ export function Preferences() {
       ),
       id: 2,
     },
+    ...(isDevelopmentEnabled
+      ? [
+          {
+            title: t('settings.development.title'),
+            description: t('settings.development.description'),
+            icon: (
+              <Icon
+                glyph="source-code"
+                size="xl"
+                ariaLabel={t('settings.development.title')}
+              />
+            ),
+            id: 3,
+          },
+        ]
+      : []),
   ];
 
   const handleCloseModal = () => {
@@ -95,10 +114,6 @@ export function Preferences() {
               title={t('settings.other.title')}
             >
               <OtherSettings />
-              <Toggle
-                label={t('settings.showDebugonata')}
-                state={showDebugonataState}
-              />
             </Tab>
           </Tabs>
         </VerticalTabs.Content>
@@ -108,6 +123,16 @@ export function Preferences() {
             <ConfirmationSettings />
             <ProtectedSettings />
             <ResourcesValidationSettings />
+          </div>
+        </VerticalTabs.Content>
+        <VerticalTabs.Content id={3}>
+          <div>
+            {isExtensibilityEnabled && (
+              <Toggle
+                label={t('settings.development.showDebugonata')}
+                state={showDebugonataState}
+              />
+            )}
           </div>
         </VerticalTabs.Content>
       </VerticalTabs>

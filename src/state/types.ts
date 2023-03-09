@@ -30,6 +30,7 @@ export const configFeaturesNames = {
   EXTERNAL_NODES: 'EXTERNAL_NODES',
   PROMETHEUS: 'PROMETHEUS',
   GARDENER_LOGIN: 'GARDENER_LOGIN',
+  DEVELOPMENT: 'DEVELOPMENT',
 } as const;
 
 export type ConfigFeatureList = {
