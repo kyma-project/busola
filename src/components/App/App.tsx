@@ -33,6 +33,7 @@ import { IncorrectPath } from './IncorrectPath';
 import './App.scss';
 import { useAfterInitHook } from 'state/useAfterInitHook';
 import useSidebarCondensed from 'sidebar/useSidebarCondensed';
+import { useGetValidationEnabledSchemas } from 'state/validationEnabledSchemasAtom';
 
 export default function App() {
   const { t, i18n } = useTranslation();
@@ -57,6 +58,7 @@ export default function App() {
   useGetExtensions();
   useGetExtensibilitySchemas();
   useGetValidationSchemas();
+  useGetValidationEnabledSchemas();
 
   useEffect(() => {
     i18n.changeLanguage(language);

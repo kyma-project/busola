@@ -9,7 +9,8 @@ import { useValidateResourceBySchema } from 'shared/hooks/useValidateResourceByS
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
 import './FilteredResourcesDetails.scss';
-import { validationSchemasState } from 'state/validationSchemasAtom';
+import { useFeature } from 'hooks/useFeature';
+import { validationSchemasEnabledState } from 'state/validationEnabledSchemasAtom';
 
 const WarningButton = ({
   handleShowWarnings,
@@ -103,7 +104,9 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
 
 export const FilteredResourcesDetails = ({ filteredResources }) => {
   const validateResources = useRecoilValue(validateResourcesState);
-  const validationSchemas = useRecoilValue(validationSchemasState);
+  const { isEnabled, config } = useFeature('VALIDATION');
+  console.log(isEnabled, config);
+  const validationSchemas = useRecoilValue(validationSchemasEnabledState);
 
   return (
     <ul className="resources-list">

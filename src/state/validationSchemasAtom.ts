@@ -13,11 +13,6 @@ import { getFetchFn } from './utils/getFetchFn';
 import { JSONSchema4 } from 'json-schema';
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 
-type ValidationSchema = any;
-interface ValidationSchemas {
-  [key: string]: ValidationSchema;
-}
-
 interface Rule {
   uniqueName: string;
   policies?: ValidationPolicy[];
@@ -28,6 +23,16 @@ interface ValidationConfig {
   rules?: Array<Rule>;
   policies?: Array<ValidationPolicy>;
 }
+
+export interface ValidationSchema {
+  rules: Array<Rule>;
+  policies: Array<ValidationPolicy>;
+}
+
+export const emptyValidationSchema: ValidationSchema = {
+  rules: [],
+  policies: [],
+};
 
 type RuleReference = {
   identifier: string;
@@ -105,31 +110,32 @@ const fetchValidationConfig = async (
   return { rules, policies };
 };
 
-const getEnabledRules = (rules: Rule[], policies: ValidationPolicy[]) => {
+export const getEnabledRules = (
+  rules: Rule[],
+  policies: ValidationPolicy[],
+) => {
   const rulesByName = rules.reduce(
     (agg, rule) => ({ ...agg, [rule.uniqueName]: rule }),
     {},
   ) as { [key: string]: Rule };
 
-  const enabledRulesByName = policies
-    .filter(policy => policy.enabled)
-    .reduce((agg, policy) => {
-      policy.rules.forEach(rule => {
-        if (rule.identifier) {
-          const key = rule.identifier;
+  const enabledRulesByName = policies.reduce((agg, policy) => {
+    policy.rules.forEach(rule => {
+      if (rule.identifier) {
+        const key = rule.identifier;
 
-          if (agg[key]) {
-            agg[key].policies?.push(policy);
-          } else {
-            agg[key] = {
-              ...rulesByName[rule.identifier],
-              policies: [policy],
-            };
-          }
+        if (agg[key]) {
+          agg[key].policies?.push(policy);
+        } else {
+          agg[key] = {
+            ...rulesByName[rule.identifier],
+            policies: [policy],
+          };
         }
-      });
-      return agg;
-    }, {} as { [key: string]: Rule });
+      }
+    });
+    return agg;
+  }, {} as { [key: string]: Rule });
 
   const enabledRules = Object.values(enabledRulesByName);
 
@@ -147,7 +153,7 @@ export const useGetValidationSchemas = async () => {
   useEffect(() => {
     const setValidationSchema = async () => {
       if (!cluster) {
-        setSchemas({});
+        setSchemas(emptyValidationSchema);
       } else {
         const { rules, policies } = await fetchValidationConfig(
           fetchFn,
@@ -156,10 +162,8 @@ export const useGetValidationSchemas = async () => {
           permissionSet,
         );
 
-        const enabledRules = getEnabledRules(rules, policies);
-
         setSchemas({
-          rules: enabledRules,
+          rules,
           policies,
         });
       }
@@ -169,9 +173,9 @@ export const useGetValidationSchemas = async () => {
   }, [cluster, auth, permissionSet, namespace]);
 };
 
-export const validationSchemasState: RecoilState<ValidationSchemas | null> = atom<ValidationSchemas | null>(
+export const validationSchemasState: RecoilState<ValidationSchema | null> = atom<ValidationSchema | null>(
   {
     key: 'validationSchemasState',
-    default: {},
+    default: emptyValidationSchema,
   },
 );
