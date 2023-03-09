@@ -85,7 +85,6 @@ export function useJsonata({
       return [defaultValue, null];
     }
     const localScope = extras.scope || scope || extras.resource || resource;
-    // const dataSources = mapValues(dataSourceFetchers, dsf => dsf.value);
     const vars = {
       root: extras.resource || resource,
       items: extras?.arrayItems || arrayItems,
@@ -103,7 +102,10 @@ export function useJsonata({
     });
 
     try {
-      const value = jsonataWrapper(query).evaluate(localScope, vars);
+      const value = jsonataWrapper(query).evaluate(localScope, {
+        ...mapValues(dataSourceFetchers, dsf => dsf.value),
+        ...vars,
+      });
       debug.updateQuery(debugId, extras.datapoint, {
         value,
         error: null,
@@ -127,7 +129,6 @@ export function useJsonata({
     }
 
     const localScope = extras.scope || scope || extras.resource || resource;
-    const dataSources = mapValues(dataSourceFetchers, dsf => dsf.value);
     const vars = {
       root: extras.resource || resource,
       items: extras?.arrayItems || arrayItems,
@@ -148,7 +149,7 @@ export function useJsonata({
       jsonataWrapper(query).evaluate(
         localScope,
         {
-          ...dataSources,
+          ...mapValues(dataSourceFetchers, dsf => dsf.fetcher),
           ...vars,
         },
         (err, val) => {

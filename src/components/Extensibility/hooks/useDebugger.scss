@@ -23,8 +23,10 @@
     }
   }
 
-  .vars {
+  .vars,
+  .data-sources {
     padding-left: 1rem;
+
     dd {
       white-space: pre;
       max-height: 10vw;

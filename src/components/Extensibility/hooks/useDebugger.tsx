@@ -5,7 +5,7 @@ import React, {
   createContext,
   ReactNode,
 } from 'react';
-import { Icon, Popover } from 'fundamental-react';
+import { Icon, Popover, Button } from 'fundamental-react';
 import { isNil } from 'lodash';
 
 import './useDebugger.scss';
@@ -50,10 +50,23 @@ export const DebugContext = createContext<DebugContextProps>({
 });
 
 export function DataSource({ name, val }: { name: string; val: any }) {
+  const [value, setValue] = useState(val.value);
+  const fetchValue = () => val.fetcher().then(setValue);
   return (
     <>
       <dt>{name}</dt>
-      <dd>{val}</dd>
+      <dd>
+        {isNil(value) ? (
+          <Button
+            compact
+            glyph="refresh"
+            option="emphasized"
+            onClick={fetchValue}
+          />
+        ) : (
+          JSON.stringify(value, null, 4)
+        )}
+      </dd>
     </>
   );
 }
