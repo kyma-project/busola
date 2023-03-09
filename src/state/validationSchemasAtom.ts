@@ -3,11 +3,15 @@ import { authDataState } from 'state/authDataAtom';
 import { clusterState } from 'state/clusterAtom';
 import jsyaml from 'js-yaml';
 import { atom, RecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
-import { permissionSetsSelector } from './permissionSetsSelector';
+import {
+  permissionSetsSelector,
+  PermissionSetState,
+} from './permissionSetsSelector';
 import { useUrl } from 'hooks/useUrl';
 import { ConfigMapResponse, getConfigMaps } from './utils/getConfigMaps';
 import { getFetchFn } from './utils/getFetchFn';
 import { JSONSchema4 } from 'json-schema';
+import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 
 type ValidationSchema = any;
 interface ValidationSchemas {
@@ -18,10 +22,6 @@ interface Rule {
   uniqueName: string;
   policies?: ValidationPolicy[];
   schema: JSONSchema4;
-}
-
-interface RuleSchema {
-  rules: Array<Rule>;
 }
 
 interface ValidationConfig {
@@ -39,23 +39,7 @@ type ValidationPolicy = {
   rules: Array<RuleReference>;
 };
 
-interface ValidationPolicies {
-  policies: Array<ValidationPolicy>;
-}
-
-const getSchema = async (): Promise<RuleSchema> => {
-  const response = await fetch(`/validation/rules.yaml`);
-  const text = await response.text();
-  return jsyaml.load(text) as RuleSchema;
-};
-
-const getPolicies = async (): Promise<ValidationPolicies> => {
-  const response = await fetch(`/validation/rules.yaml`);
-  const text = await response.text();
-  return jsyaml.load(text) as ValidationPolicies;
-};
-
-const getConfig = async (): Promise<ValidationConfig | null> => {
+const fetchBaseValidationConfig = async (): Promise<ValidationConfig | null> => {
   try {
     const response = await fetch(`/validation/config.yaml`);
     const text = await response.text();
@@ -64,6 +48,92 @@ const getConfig = async (): Promise<ValidationConfig | null> => {
     console.error(error);
     return null;
   }
+};
+
+const loadYamlValues = (
+  configMaps: ConfigMapResponse[] | null,
+): ValidationConfig[] => {
+  return (configMaps
+    ?.flatMap(configMap => Object.values(configMap.data))
+    .map(schemaText => jsyaml.load(schemaText)) ?? []) as ValidationConfig[];
+};
+
+const fetchConfigMapValidationConfigs = async (
+  fetchFn: FetchFn | undefined,
+  kubeconfigNamespace = 'kube-public',
+  namespace: string,
+  permissionSet: PermissionSetState,
+): Promise<ValidationConfig[]> => {
+  const configMaps = await getConfigMaps(
+    fetchFn,
+    kubeconfigNamespace,
+    namespace,
+    permissionSet,
+    `busola.io/config=validation-set`,
+  );
+
+  const configFromConfigMap = loadYamlValues(configMaps) as Array<
+    ValidationConfig
+  >;
+  return configFromConfigMap;
+};
+
+const fetchValidationConfig = async (
+  fetchFn: FetchFn | undefined,
+  kubeconfigNamespace = 'kube-public',
+  namespace: string,
+  permissionSet: PermissionSetState,
+) => {
+  const validationConfig = await fetchBaseValidationConfig();
+  const configFromConfigMap = await fetchConfigMapValidationConfigs(
+    fetchFn,
+    kubeconfigNamespace,
+    namespace,
+    permissionSet,
+  );
+
+  const rules = [
+    ...(validationConfig?.rules ?? []),
+    ...configFromConfigMap.flatMap(schema => schema.rules ?? []),
+  ];
+
+  const policies = [
+    ...(validationConfig?.policies ?? []),
+    ...configFromConfigMap.flatMap(schema => schema.policies ?? []),
+  ];
+
+  return { rules, policies };
+};
+
+const getEnabledRules = (rules: Rule[], policies: ValidationPolicy[]) => {
+  const rulesByName = rules.reduce(
+    (agg, rule) => ({ ...agg, [rule.uniqueName]: rule }),
+    {},
+  ) as { [key: string]: Rule };
+
+  const enabledRulesByName = policies
+    .filter(policy => policy.enabled)
+    .reduce((agg, policy) => {
+      policy.rules.forEach(rule => {
+        if (rule.identifier) {
+          const key = rule.identifier;
+
+          if (agg[key]) {
+            agg[key].policies?.push(policy);
+          } else {
+            agg[key] = {
+              ...rulesByName[rule.identifier],
+              policies: [policy],
+            };
+          }
+        }
+      });
+      return agg;
+    }, {} as { [key: string]: Rule });
+
+  const enabledRules = Object.values(enabledRulesByName);
+
+  return enabledRules;
 };
 
 export const useGetValidationSchemas = async () => {
@@ -76,93 +146,21 @@ export const useGetValidationSchemas = async () => {
 
   useEffect(() => {
     const setValidationSchema = async () => {
-      console.log(`cluster: ${cluster}`);
       if (!cluster) {
         setSchemas({});
       } else {
-        let defaultSchema = await getSchema();
-        let defaultPolicies = await getPolicies();
-
-        const validationConfig = await getConfig();
-
-        const [schemaMaps, policyMaps] = await Promise.all(
-          ['validation-schema', 'validation-policy'].map(type =>
-            getConfigMaps(
-              fetchFn,
-              cluster.currentContext.namespace,
-              namespace,
-              permissionSet,
-              `busola.io/validation-config=${type}`,
-            ),
-          ),
+        const { rules, policies } = await fetchValidationConfig(
+          fetchFn,
+          cluster.currentContext.namespace,
+          namespace,
+          permissionSet,
         );
 
-        const loadYamlValues = (configMaps: ConfigMapResponse[] | null) => {
-          return (
-            configMaps
-              ?.flatMap(configMap => Object.values(configMap.data))
-              .map(schemaText => jsyaml.load(schemaText)) ?? []
-          );
-        };
-
-        const schemasFromConfigMap = loadYamlValues(schemaMaps) as Array<
-          RuleSchema
-        >;
-        const policiesFromConfigMap = loadYamlValues(policyMaps) as Array<
-          ValidationPolicies
-        >;
-
-        // const rulesFromConfigMap = ruleMaps?.flatMap(configMap => Object.values(configMap.data))
-        //   .map(ruleText => jsyaml.load(ruleText));
-
-        const rules = [
-          ...schemasFromConfigMap.flatMap(
-            (schema: { rules: any }) => schema.rules,
-          ),
-          // ...defaultSchema?.rules ?? [],
-          ...(validationConfig?.rules ?? []),
-        ];
-        console.log(validationConfig);
-
-        const rulesByName = rules.reduce(
-          (agg, rule) => ({ ...agg, [rule.uniqueName]: rule }),
-          {},
-        ) as { [key: string]: Rule };
-
-        const policies = [
-          ...policiesFromConfigMap.flatMap(schema => schema.policies),
-          // ...defaultPolicies?.policies ?? [],
-          ...(validationConfig?.policies ?? []),
-        ];
-
-        const enabledRulesByName = policies
-          .filter(policy => policy.enabled)
-          .reduce((agg, policy) => {
-            policy.rules.forEach(rule => {
-              if (rule.identifier) {
-                const key = rule.identifier;
-
-                if (agg[key]) {
-                  agg[key].policies?.push(policy);
-                } else {
-                  agg[key] = {
-                    ...rulesByName[rule.identifier],
-                    policies: [policy],
-                  };
-                }
-              }
-            });
-            return agg;
-          }, {} as { [key: string]: Rule });
-
-        const enabledRules = Object.values(enabledRulesByName);
+        const enabledRules = getEnabledRules(rules, policies);
 
         setSchemas({
           rules: enabledRules,
-          rulesByName,
           policies,
-          defaultSchema,
-          schemasFromConfigMap,
         });
       }
     };
