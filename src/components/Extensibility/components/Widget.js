@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
+import { useRecoilValue } from 'recoil';
 
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { stringifyIfBoolean } from 'shared/utils/helpers';
+import { showDebugonataState } from 'state/preferences/showDebugonataAtom';
+import { CopiableText } from 'shared/components/CopiableText/CopiableText';
+
 import { useGetTranslation, useGetPlaceholder } from '../helpers';
 import { useJsonata } from '../hooks/useJsonata';
+import { Debugonata, DebugContextProvider } from '../hooks/useDebugger';
 import { widgets, valuePreprocessors } from './index';
-import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 
 export const SimpleRenderer = ({ children }) => {
   return children;
@@ -37,57 +41,62 @@ InlineWidget.copyFunction = (props, Renderer, defaultCopyFunction) =>
     ? Renderer.copyFunction(props, Renderer, defaultCopyFunction)
     : defaultCopyFunction(props, Renderer, defaultCopyFunction);
 
+const CopyableWrapper = ({ Renderer, props, children }) => {
+  const isRendererCopyable =
+    typeof Renderer.copyable === 'function'
+      ? Renderer.copyable(Renderer)
+      : Renderer.copyable;
+
+  const jsonata = useJsonata({
+    resource: props.originalResource,
+    scope: props.scope,
+    value: props.value,
+    arrayItems: props.arrayItems,
+  });
+
+  if (!props.structure.copyable || !isRendererCopyable) return children;
+
+  const defaultCopyFunction = ({ value }) =>
+    typeof value === 'object' ? JSON.stringify(value) : value;
+
+  const copyFunction =
+    typeof Renderer.copyFunction === 'function'
+      ? Renderer.copyFunction
+      : defaultCopyFunction;
+
+  const textToCopy = copyFunction(
+    props,
+    Renderer,
+    defaultCopyFunction,
+    jsonata,
+  );
+  return (
+    <CopiableText compact textToCopy={textToCopy} disabled={!textToCopy}>
+      {children}
+    </CopiableText>
+  );
+};
+
 function SingleWidget({ inlineRenderer, Renderer, ...props }) {
+  const showDebugonata = useRecoilValue(showDebugonataState);
   const InlineRenderer = inlineRenderer || SimpleRenderer;
-
-  const CopyableWrapper = ({ children }) => {
-    const isRendererCopyable =
-      typeof Renderer.copyable === 'function'
-        ? Renderer.copyable(Renderer)
-        : Renderer.copyable;
-
-    const jsonata = useJsonata({
-      resource: props.originalResource,
-      scope: props.scope,
-      value: props.value,
-      arrayItems: props.arrayItems,
-    });
-
-    if (!props.structure.copyable || !isRendererCopyable) return children;
-
-    const defaultCopyFunction = ({ value }) =>
-      typeof value === 'object' ? JSON.stringify(value) : value;
-
-    const copyFunction =
-      typeof Renderer.copyFunction === 'function'
-        ? Renderer.copyFunction
-        : defaultCopyFunction;
-
-    const textToCopy = copyFunction(
-      props,
-      Renderer,
-      defaultCopyFunction,
-      jsonata,
-    );
-    return (
-      <CopiableText compact textToCopy={textToCopy} disabled={!textToCopy}>
-        {children}
-      </CopiableText>
-    );
-  };
 
   return Renderer.inline ? (
     <InlineRenderer {...props}>
-      <CopyableWrapper structure={props.structure} value={props.value}>
+      <CopyableWrapper props={props} Renderer={Renderer}>
         <Renderer {...props} />
+        {showDebugonata && <Debugonata />}
       </CopyableWrapper>
     </InlineRenderer>
   ) : (
-    <Renderer {...props} />
+    <>
+      <Renderer {...props} />
+      {showDebugonata && <Debugonata />}
+    </>
   );
 }
 
-export function Widget({
+export function WidgetCore({
   structure,
   value,
   arrayItems = [],
@@ -104,11 +113,12 @@ export function Widget({
     arrayItems,
   });
 
-  const [childValue] = jsonata(structure.source);
+  const [childValue] = jsonata(structure.source, { datapoint: 'source' });
 
   const [visible, visibilityError] = jsonata(
     structure.visibility?.toString(),
     {
+      datapoint: 'visibility',
       value: childValue,
     },
     true,
@@ -120,7 +130,9 @@ export function Widget({
     });
   }
 
-  if (visible === false) return null;
+  if (visible === false) {
+    return null;
+  }
 
   if (structure.valuePreprocessor) {
     const Preprocessor = valuePreprocessors[structure.valuePreprocessor];
@@ -181,5 +193,13 @@ export function Widget({
       structure={structure}
       originalResource={originalResource}
     />
+  );
+}
+
+export function Widget(props) {
+  return (
+    <DebugContextProvider>
+      <WidgetCore {...props} />
+    </DebugContextProvider>
   );
 }

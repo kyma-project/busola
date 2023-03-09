@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { isNil } from 'lodash';
-import { useJsonata } from '../hooks/useJsonata';
+import { useTranslation } from 'react-i18next';
 
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import {
@@ -9,8 +9,10 @@ import {
 } from 'components/Extensibility/helpers';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
+import { useJsonata } from '../hooks/useJsonata';
+import { DebugContext } from '../hooks/useDebugger';
+
 import './Badge.scss';
-import { useTranslation } from 'react-i18next';
 
 export function Badge({
   value,
@@ -23,6 +25,7 @@ export function Badge({
   const { t: tExt } = useGetTranslation();
   const { t } = useTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
+
   const jsonata = useJsonata({
     resource: originalResource,
     scope,
@@ -30,7 +33,7 @@ export function Badge({
     arrayItems,
   });
 
-  const [tooltip] = jsonata(structure?.description);
+  const [tooltip] = jsonata(structure?.description, { datapoint: 'tooltip' });
 
   let type = null;
   if (structure?.highlights) {
@@ -38,7 +41,9 @@ export function Badge({
       if (Array.isArray(rule)) {
         return rule.includes(value);
       } else {
-        const [doesMatch, matchError] = jsonata(rule);
+        const [doesMatch, matchError] = jsonata(rule, {
+          datapoint: `rule:${key}`,
+        });
         if (matchError) {
           console.error(
             t('extensibility.configuration-error', {

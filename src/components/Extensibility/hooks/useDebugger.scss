@@ -1,0 +1,44 @@
+.debugonata {
+  width: auto;
+  max-height: 50vh !important;
+
+  h1 {
+    font-weight: bold;
+    border-bottom: 1px solid var(--sapTextColor);
+    padding: 0.5rem;
+  }
+
+  h2 {
+    margin-top: 0.5rem;
+    font-weight: bold;
+  }
+
+  .query {
+    padding-left: 1rem;
+  }
+
+  .info {
+    dt {
+      font-weight: bold;
+    }
+  }
+
+  .vars {
+    padding-left: 1rem;
+    dd {
+      white-space: pre;
+      max-height: 10vw;
+      overflow: auto;
+    }
+  }
+
+  dl {
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+    column-gap: 1rem;
+  }
+}
+
+.debugonata-trigger {
+  width: auto;
+}

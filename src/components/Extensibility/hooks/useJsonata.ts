@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { last, mapValues } from 'lodash';
 
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
+import { DebugContext } from '../hooks/useDebugger';
 import {
   Resource,
   DataSourcesContextType,
@@ -48,6 +49,10 @@ export function useJsonata({
 }): JsonataFunction {
   const { t } = useTranslation();
   const dataSourcesContext = useContext(DataSourcesContext);
+  const debug = useContext(DebugContext);
+
+  const [debugId] = useState(() => crypto.randomUUID());
+  debug.init(debugId, { resource, scope, arrayItems });
 
   const [dataSourceFetchers, setDataSourceFetchers] = useState(
     getDataSourceFetchers(resource, dataSourcesContext),
@@ -66,26 +71,49 @@ export function useJsonata({
     extras = {},
     defaultValue = null,
   ) => {
+    debug.setQuery(debugId, extras.datapoint, {
+      query,
+      defaultValue,
+      extras,
+    });
+
     if (!query) {
+      debug.updateQuery(debugId, extras.datapoint, {
+        value: defaultValue,
+        error: null,
+      });
       return [defaultValue, null];
     }
+    const localScope = extras.scope || scope || extras.resource || resource;
+    // const dataSources = mapValues(dataSourceFetchers, dsf => dsf.value);
+    const vars = {
+      root: extras.resource || resource,
+      items: extras?.arrayItems || arrayItems,
+      item:
+        last(extras?.arrayItems) ||
+        last(arrayItems) ||
+        extras.resource ||
+        resource,
+      ...extras,
+    };
+    debug.updateQuery(debugId, extras.datapoint, {
+      scope: localScope,
+      dataSources: dataSourceFetchers,
+      vars,
+    });
+
     try {
-      const value = jsonataWrapper(query).evaluate(
-        extras.scope || scope || extras.resource || resource,
-        {
-          ...mapValues(dataSourceFetchers, dsf => dsf.value),
-          root: extras.resource || resource,
-          items: extras?.arrayItems || arrayItems,
-          item:
-            last(extras?.arrayItems) ||
-            last(arrayItems) ||
-            extras.resource ||
-            resource,
-          ...extras,
-        },
-      );
+      const value = jsonataWrapper(query).evaluate(localScope, vars);
+      debug.updateQuery(debugId, extras.datapoint, {
+        value,
+        error: null,
+      });
       return [value, null];
     } catch (e) {
+      debug.updateQuery(debugId, extras.datapoint, {
+        value: null,
+        error: e,
+      });
       return [
         t('extensibility.configuration-error', { error: (e as Error).message }),
         e as Error,
@@ -98,27 +126,46 @@ export function useJsonata({
       return Promise.resolve([defaultValue, null]);
     }
 
+    const localScope = extras.scope || scope || extras.resource || resource;
+    const dataSources = mapValues(dataSourceFetchers, dsf => dsf.value);
+    const vars = {
+      root: extras.resource || resource,
+      items: extras?.arrayItems || arrayItems,
+      item:
+        last(extras?.arrayItems) ||
+        last(arrayItems) ||
+        extras.resource ||
+        resource,
+      ...extras,
+    };
+    debug.updateQuery(debugId, extras.datapoint, {
+      scope: localScope,
+      dataSources: dataSourceFetchers,
+      vars,
+    });
+
     return new Promise(resolve =>
       jsonataWrapper(query).evaluate(
-        extras.scope || scope || extras.resource || resource,
+        localScope,
         {
-          ...mapValues(dataSourceFetchers, dsf => dsf.fetcher),
-          root: extras.resource || resource,
-          items: extras?.arrayItems || arrayItems,
-          item:
-            last(extras?.arrayItems) ||
-            last(arrayItems) ||
-            extras.resource ||
-            resource,
-          ...extras,
+          ...dataSources,
+          ...vars,
         },
         (err, val) => {
           if (err) {
+            debug.updateQuery(debugId, extras.datapoint, {
+              value: null,
+              error: err,
+            });
             resolve([
               t('extensibility.configuration-error', { error: err.message }),
               err,
             ]);
           } else {
+            debug.updateQuery(debugId, extras.datapoint, {
+              value: val,
+              error: null,
+            });
             resolve([val, null]);
           }
         },

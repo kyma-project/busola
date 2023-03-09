@@ -7,6 +7,7 @@ import { Tab } from 'shared/components/Tabs/Tab';
 import { Tabs } from 'shared/components/Tabs/Tabs';
 import { VerticalTabs } from 'shared/components/VerticalTabs/VerticalTabs';
 import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
+import { showDebugonataState } from 'state/preferences/showDebugonataAtom';
 
 import ConfirmationSettings from './ConfirmationSettings';
 import LanguageSettings from './LanguageSettings';
@@ -15,6 +16,7 @@ import ResourcesValidationSettings from './ResourcesValidationSettings';
 import OtherSettings from './OtherSettings';
 import ProtectedSettings from './ProtectedSettings';
 import ThemeChooser from './ThemeChooser';
+import Toggle from './Toggle';
 
 import './Preferences.scss';
 
@@ -93,6 +95,10 @@ export function Preferences() {
               title={t('settings.other.title')}
             >
               <OtherSettings />
+              <Toggle
+                label={t('settings.showDebugonata')}
+                state={showDebugonataState}
+              />
             </Tab>
           </Tabs>
         </VerticalTabs.Content>
