@@ -1,22 +1,13 @@
 import { useTranslation } from 'react-i18next';
-import { atom, useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { Switch, ComboboxInput } from 'fundamental-react';
-import { validateResourcesState } from 'state/preferences/validateResourcesAtom';
+import {
+  getExtendedValidateResourceState,
+  validateResourcesState,
+} from 'state/preferences/validateResourcesAtom';
 import { validationSchemasState } from 'state/validationSchemasAtom';
 import { useMemo } from 'react';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-
-type PolicyPreferences = Array<string>;
-
-const policyState = atom<PolicyPreferences>({
-  key: 'validation-policies-state',
-  default: ['Default'],
-});
-
-const validateCustomPoliciesState = atom<boolean>({
-  key: 'validate-custom-resources',
-  default: false,
-});
 
 export default function ResourcesValidationSettings() {
   const { t } = useTranslation();
@@ -24,9 +15,11 @@ export default function ResourcesValidationSettings() {
     validateResourcesState,
   );
 
-  const [validateCustomPolicies, setValidateCustomPolicies] = useRecoilState(
-    validateCustomPoliciesState,
-  );
+  const {
+    enabled,
+    choosePolicies,
+    policies: selectedPolicies = [],
+  } = getExtendedValidateResourceState(validateResources);
 
   const validationSchemas = useRecoilValue(validationSchemasState);
   const allOptions = useMemo(
@@ -37,20 +30,48 @@ export default function ResourcesValidationSettings() {
     [validationSchemas],
   );
 
-  const [config, setConfig] = useRecoilState(policyState);
-
   const remainingOptions = useMemo(
-    () => allOptions.filter(option => !config.includes(option.key)),
-    [allOptions, config],
+    () => allOptions.filter(option => !selectedPolicies.includes(option.key)),
+    [allOptions, selectedPolicies],
   );
 
   const toggleVisibility = () => {
-    setValidateResources(!validateResources);
+    setValidateResources({
+      enabled: !enabled,
+      choosePolicies,
+      policies: selectedPolicies,
+    });
   };
 
   const toggleCustomPolicyValidation = () => {
-    setValidateCustomPolicies(!validateCustomPolicies);
+    setValidateResources({
+      enabled,
+      choosePolicies: !choosePolicies,
+      policies: selectedPolicies,
+    });
   };
+
+  const deleteSelectedPolicy = (policyToDelete: string) => {
+    setValidateResources({
+      enabled,
+      choosePolicies,
+      policies: selectedPolicies.filter(policy => policy !== policyToDelete),
+    });
+  };
+
+  const addSelectedPolicy = (policyToAdd: string) => {
+    setValidateResources({
+      enabled,
+      choosePolicies,
+      policies: [...selectedPolicies, policyToAdd].sort(),
+    });
+  };
+
+  // This gets newly generated whenever the props change, removing the typed value
+  const PolicyComboBox = ({ ...props }) => (
+    // @ts-ignore
+    <ComboboxInput {...props} placeholder="Add a policy" />
+  );
 
   return (
     <>
@@ -66,13 +87,13 @@ export default function ResourcesValidationSettings() {
               switchLabel: t('settings.clusters.resourcesValidation'),
             }}
             className="fd-has-display-inline-block fd-margin-begin--tiny"
-            checked={validateResources}
+            checked={enabled}
             onChange={toggleVisibility}
             compact
           />
         </div>
       </div>
-      {validateResources && (
+      {enabled && (
         <div className="preferences-row">
           <span className="fd-has-color-status-4">Use custom policies</span>
           <div>
@@ -83,33 +104,30 @@ export default function ResourcesValidationSettings() {
                 switchLabel: t('settings.clusters.resourcesValidation'),
               }}
               className="fd-has-display-inline-block fd-margin-begin--tiny"
-              checked={validateCustomPolicies}
+              checked={choosePolicies}
               onChange={toggleCustomPolicyValidation}
               compact
             />
           </div>
         </div>
       )}
-      {validateResources && validateCustomPolicies && (
+      {enabled && choosePolicies && (
         <GenericList
           actions={[
             {
               name: 'Delete',
-              handler: (entry: string) => {
-                setConfig(config.filter(c => c !== entry));
-              },
+              handler: deleteSelectedPolicy,
             },
           ]}
-          entries={config}
           showHeader={false}
+          entries={selectedPolicies}
           headerRenderer={() => ['policies']}
           rowRenderer={entry => [entry]}
           extraHeaderContent={
             remainingOptions.length > 0 && (
               //@ts-ignore
-              <ComboboxInput
+              <PolicyComboBox
                 options={remainingOptions}
-                placeholder="Add a policy"
                 searchFullString
                 compact
                 onSelectionChange={(
@@ -117,9 +135,7 @@ export default function ResourcesValidationSettings() {
                   selected: { key: string | number; text: string },
                 ) => {
                   if (selected.key === -1) return;
-                  setConfig(currVal => {
-                    return [...currVal, selected.text].sort();
-                  });
+                  addSelectedPolicy(selected.text);
                 }}
               />
             )

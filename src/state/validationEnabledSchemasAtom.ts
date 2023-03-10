@@ -1,6 +1,11 @@
 import { useFeature } from 'hooks/useFeature';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { atom, RecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
+import {
+  ExtendedValidateResources,
+  getExtendedValidateResourceState,
+  validateResourcesState,
+} from './preferences/validateResourcesAtom';
 import {
   emptyValidationSchema,
   getEnabledRules,
@@ -17,35 +22,50 @@ type ValidationFeatureConfig = {
   };
 };
 
+const getEnabledPolicyNames = (
+  validationFeature: ValidationFeatureConfig,
+  validationPreferences: ExtendedValidateResources,
+): PolicyReference[] => {
+  if (validationPreferences.enabled) {
+    if (validationPreferences.choosePolicies) {
+      return validationPreferences.policies ?? [];
+    } else if (validationFeature.config?.policies) {
+      return validationFeature.config.policies ?? [];
+    }
+  }
+  return [];
+};
+
 export const useGetValidationEnabledSchemas = async () => {
   const setSchemas = useSetRecoilState(validationSchemasEnabledState);
 
   const validationSchemas = useRecoilValue(validationSchemasState);
   const validationFeature = useFeature('VALIDATION') as ValidationFeatureConfig;
-  const validationPreferences = {};
+  const validationPreferences = getExtendedValidateResourceState(
+    useRecoilValue(validateResourcesState),
+  );
+
+  const policySet = useMemo(() => {
+    const policyNames = getEnabledPolicyNames(
+      validationFeature,
+      validationPreferences,
+    );
+
+    return policyNames.reduce((agg, policyReference) => {
+      agg.add(policyReference);
+      return agg;
+    }, new Set()) as Set<PolicyReference>;
+  }, [validationFeature, validationPreferences]) as Set<PolicyReference>;
 
   useEffect(() => {
-    console.log('useGetValidationEnabledSchemas');
     if (!validationSchemas) setSchemas(emptyValidationSchema);
     else {
       const { rules, policies } = validationSchemas;
-
-      const { isEnabled, config } = validationFeature;
-
-      const policySet = (config?.policies ?? []).reduce(
-        (agg, policyReference) => {
-          agg.add(policyReference);
-          return agg;
-        },
-        new Set(),
-      ) as Set<PolicyReference>;
 
       const enabledPolicies = policies.filter(policy =>
         policySet.has(policy.name),
       );
       const enabledRules = getEnabledRules(rules, enabledPolicies);
-
-      // console.log('useGetValidationEnabledSchemas', config, enabledRules, enabledPolicies, rules, policies);
 
       setSchemas({
         rules: enabledRules,
@@ -53,7 +73,7 @@ export const useGetValidationEnabledSchemas = async () => {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [validationSchemas, validationFeature]);
+  }, [validationSchemas, policySet]);
 };
 
 export const validationSchemasEnabledState: RecoilState<ValidationSchema | null> = atom<ValidationSchema | null>(
