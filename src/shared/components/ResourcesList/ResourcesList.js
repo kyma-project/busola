@@ -30,6 +30,9 @@ import { nameLocaleSort, timeSort } from '../../helpers/sortingfunctions';
 import { useVersionWarning } from 'hooks/useVersionWarning';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
 import { ForceUpdateModalContent } from 'shared/ResourceForm/ForceUpdateModalContent';
+import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
+import { useRecoilState } from 'recoil';
+import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 /* to allow cloning of a resource set the following on the resource create component:
  *
@@ -177,6 +180,7 @@ export function ResourceListRenderer({
   },
   searchSettings,
 }) {
+  const [showAdd, setShowAdd] = useRecoilState(showYamlUploadDialogState);
   useVersionWarning({
     resourceUrl,
     resourceType,
@@ -518,6 +522,12 @@ export function ResourceListRenderer({
         searchSettings={{
           ...searchSettings,
           textSearchProperties: textSearchProperties(),
+        }}
+      />
+      <YamlUploadDialog
+        show={showAdd}
+        onCancel={() => {
+          setShowAdd(false);
         }}
       />
     </>
