@@ -1479,6 +1479,9 @@ settings:
         description: Automatically matches your system settings
         title: Light / Dark
     title: Interface
+  development:
+    title: Development
+    showDebugonata: Show JSONata debugger
   language: Language
   other:
     default-page-size: Default Page Size
