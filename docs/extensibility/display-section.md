@@ -705,8 +705,8 @@ The **Injections** section contains a list of objects that defines the display s
 - **widget** - optional widget used to render the field referred to by the **source** property. The widget should be adjusted to handle arrays.
 - **order** - number that defines in what order injections will be rendered. If one or more injections have the same order, they will be sorted by name.
 - **targets** - array of targets
-  - **slot** - _[required]_ defines what place on page the injection should be rendered on. Check the list of [all available slots](#all-available-slots)
-  - **location** - _[required]_ defines on what view the injection should be rendered. Currently injections are rendered only on details views. For more information check the list of [all available locations](#all-available-locations)
+  - **slot** - _[required]_ defines what place on page the injection should be rendered on. Check the list of [all available slots](#all-available-injections-slots)
+  - **location** - _[required]_ defines on what view the injection should be rendered. Currently injections are rendered only on details views. For more information check the list of [all available locations](#all-available-injections-locations)
   - **filter** - JSONata expression that filters resources based on a given condition. If defined it overrides general filter.
 - **filter** - JSONata expression that filters resources based on a given condition. This is a general filter rule. If **filter** is defined in **targets** it will be ignored.
 
