@@ -9,6 +9,8 @@ import { useGetTranslation } from 'components/Extensibility/helpers';
 
 import { useVariables } from '../hooks/useVariables';
 import { useJsonata } from '../hooks/useJsonata';
+import { useUrl } from 'hooks/useUrl';
+import { usePermittedUrl } from 'hooks/usePermittedUrl';
 
 export function ResourceRefRender({
   onChange,
@@ -22,11 +24,13 @@ export function ResourceRefRender({
   nestingLevel,
   ...props
 }) {
+  console.log('lolo ResourceRefRender');
   const jsonata = useJsonata({
     resource: originalResource,
     scope: value,
     value,
   });
+  const { namespace } = useUrl();
   const { tFromStoreKeys } = useGetTranslation();
   // TODO the value obtained by ui-schema is undefined for this component
   value = getObjectValueWorkaround(schema, resource, storeKeys, value);
@@ -51,17 +55,36 @@ export function ResourceRefRender({
   const resourceType = pluralize(schemaResource?.kind || '')?.toLowerCase();
   const groupPrefix = group ? `apis/${group}` : 'api';
   const url = `/${groupPrefix}/${version}/${resourceType}`;
-
+  console.log('lolo url', url);
   const { data, loading, error } = useGetList()(url);
-
+  const namespacedUrl = `/${groupPrefix}/${version}/namespaces/${namespace}/${resourceType}`;
+  console.log('lolo namespacedUrl', namespacedUrl);
+  const urlllll = usePermittedUrl(url, namespacedUrl);
+  console.log('lolo permittedUrls', namespacedUrl);
+  console.log('this is permited', urlllll);
+  const {
+    data: namespacedData,
+    loading: namespacedLoading,
+    error: namespacedError,
+  } = useGetList()(namespacedUrl, {
+    pollingInterval: 3300,
+    skip: !error,
+  });
+  const resourceLoading = error ? namespacedLoading : loading;
+  const resourceData = error ? namespacedData : data;
+  const resourceError = namespacedError;
+  console.log('lolo resourceError', resourceError, 'error', error);
+  console.log('lolo resourceData', resourceData);
+  console.log('lolo namespacedData', namespacedData);
   const { setVar } = useVariables();
 
   return (
     <ExternalResourceRef
       defaultOpen={defaultOpen}
+      defaultNamespace={namespace}
       title={tFromStoreKeys(storeKeys, schema)}
       value={fromJS(value).toJS() || ''}
-      resources={(data ?? []).filter(res => {
+      resources={(resourceData || []).filter(res => {
         if (filter) {
           const [value] = jsonata(filter, { item: res });
           return value;
@@ -93,8 +116,8 @@ export function ResourceRefRender({
         });
       }}
       required={required}
-      loading={loading}
-      error={error}
+      loading={resourceLoading}
+      error={resourceError}
       nestingLevel={nestingLevel}
     >
       {schema.get('type') === 'object' && (

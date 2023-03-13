@@ -36,7 +36,7 @@ export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selecto
       openapiPathIdList,
       permissionSet,
     };
-
+    console.log('configSet', configSet);
     const isNodeVisibleForCurrentConfigSet = partial(
       shouldNodeBeVisible,
       configSet,

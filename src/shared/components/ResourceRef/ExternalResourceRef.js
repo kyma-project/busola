@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import { useRecoilValue } from 'recoil';
 
 import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
-import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { useGetHiddenNamespaces } from 'shared/hooks/useGetHiddenNamespaces';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ResourceForm } from 'shared/ResourceForm';
@@ -31,18 +31,35 @@ export function ExternalResourceRef({
   index,
   children,
   nestingLevel = 0,
+  defaultNamespace,
 }) {
+  console.log(
+    'lolo ExternalResourceRef',
+    resources,
+    'defaultNamespace',
+    defaultNamespace,
+  );
   const { t } = useTranslation();
   const namespacesUrl = '/api/v1/namespaces';
-  const { data: namespaces, loading: namespacesLoading } = useGetList()(
-    namespacesUrl,
-  );
+  const {
+    data: namespaces,
+    loading: namespacesLoading,
+    error: namespacesError,
+  } = useGetList()(namespacesUrl);
 
   const showHiddenNamespaces = useRecoilValue(showHiddenNamespacesState);
-
+  console.log('lolo namespacesError', namespacesError);
   const hiddenNamespaces = useGetHiddenNamespaces();
-
-  const namespacesOptions = (namespaces || [])
+  const namespaceData = {
+    metadata: {
+      name: defaultNamespace,
+    },
+  };
+  console.log('lolo namespaceData', namespaceData, 'namespaces', namespaces);
+  const namespacesOptions = (namespacesError
+    ? [namespaceData]
+    : namespaces || []
+  )
     .filter(ns =>
       showHiddenNamespaces
         ? true
@@ -52,7 +69,7 @@ export function ExternalResourceRef({
       key: ns.metadata.name,
       text: ns.metadata.name,
     }));
-
+  console.log('namespacesOptions', namespacesOptions);
   if (loading || namespacesLoading) return <Spinner compact={true} />;
   if (error)
     return (
