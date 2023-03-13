@@ -1,6 +1,6 @@
 
 $schema: http://json-schema.org/draft-07/schema
-description: Schema defining structure of widgets configuration
+description: Schema defining structure of injections configuration
 type: array
 items:
   allOf:
@@ -14,7 +14,7 @@ items:
       description: JSONata filter used to filter the resources shown at the list section
         property.
     order:
-      description: number that defines in what order widgets will be rendered
+      description: number that defines in what order injections will be rendered
       type: number
     targets:
       description: array of targets
@@ -31,10 +31,10 @@ items:
             description: JSONata filter used to filter the resources shown at the
               list section property.
           location:
-            description: defines on what view the widget should be rendered
+            description: defines on what view the injection should be rendered
             type: string
           slot:
-            description: defines what place the widget should be rendered on
+            description: defines what place the injection should be rendered on
             type: string
 "$defs":
   children:
