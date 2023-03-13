@@ -38,8 +38,8 @@ const ResourceGraph = React.lazy(() =>
   import('../ResourceGraph/ResourceGraph'),
 );
 
-const Widgets = React.lazy(() =>
-  import('../../../components/Extensibility/ExtensibilityWidgets'),
+const Injections = React.lazy(() =>
+  import('../../../components/Extensibility/ExtensibilityInjections'),
 );
 
 ResourceDetails.propTypes = {
@@ -375,7 +375,7 @@ function Resource({
       </PageHeader>
       <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />
       <Suspense fallback={<Spinner />}>
-        <Widgets destination={resource.kind} slot="top" root={resource} />
+        <Injections destination={resource.kind} slot="top" root={resource} />
       </Suspense>
       {(customComponents || []).map(component =>
         component(resource, resourceUrl),
@@ -387,7 +387,7 @@ function Resource({
         </Suspense>
       )}
       <Suspense fallback={<Spinner />}>
-        <Widgets destination={resource.kind} slot="bottom" root={resource} />
+        <Injections destination={resource.kind} slot="bottom" root={resource} />
       </Suspense>
     </>
   );

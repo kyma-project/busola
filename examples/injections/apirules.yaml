@@ -1,4 +1,4 @@
-widgets: |-
+injections: |-
   - name: Failing API Rules
     widget: Table
     source: $root

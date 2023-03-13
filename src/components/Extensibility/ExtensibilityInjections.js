@@ -4,7 +4,7 @@ import { ExtensibilityErrBoundary } from 'components/Extensibility/Extensibility
 import { useGetSchema } from 'hooks/useGetSchema';
 
 import { DataSourcesContextProvider } from './contexts/DataSources';
-import { useGetWidgets } from './useGetWidget';
+import { useGetInjections } from './useGetInjection';
 import { Widget } from './components/Widget';
 import { TranslationBundleContext } from './helpers';
 import { useJsonata } from './hooks/useJsonata';
@@ -12,7 +12,7 @@ import { usePrepareResourceUrl } from 'resources/helpers';
 import pluralize from 'pluralize';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
-export const ExtensibilityWidgetCore = ({ resMetaData, root }) => {
+export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
   const { resource } = resMetaData?.general ?? {};
 
   const { schema } = useGetSchema({
@@ -34,9 +34,9 @@ export const ExtensibilityWidgetCore = ({ resMetaData, root }) => {
     return null;
   }
   const dataSources = resMetaData?.dataSources || {};
-  const widget = resMetaData?.widget;
-  const widgetName = widget?.name;
-  const filter = widget?.target.filter || widget?.filter || null;
+  const injection = resMetaData?.injection;
+  const injectionName = injection?.name;
+  const filter = injection?.target.filter || injection?.filter || null;
 
   const items = data?.items || [];
   const filteredItems = items.filter(item => {
@@ -49,9 +49,9 @@ export const ExtensibilityWidgetCore = ({ resMetaData, root }) => {
 
   return (
     <Widget
-      key={widgetName}
+      key={injectionName}
       value={filteredItems}
-      structure={widget}
+      structure={injection}
       schema={schema}
       dataSources={dataSources}
       originalResource={filteredItems}
@@ -60,16 +60,18 @@ export const ExtensibilityWidgetCore = ({ resMetaData, root }) => {
   );
 };
 
-const ExtensibilityWidgets = ({ destination, slot, root }) => {
-  const widgets = useGetWidgets(destination, slot);
+const ExtensibilityInjections = ({ destination, slot, root }) => {
+  const injections = useGetInjections(destination, slot);
   let itemList = [];
-  widgets.forEach(widget => {
-    itemList.push(<ExtensibilityWidget resMetaData={widget} root={root} />);
+  injections.forEach(injection => {
+    itemList.push(
+      <ExtensibilityInjection resMetaData={injection} root={root} />,
+    );
   });
   return itemList;
 };
 
-const ExtensibilityWidget = ({ resMetaData, root }) => {
+const ExtensibilityInjection = ({ resMetaData, root }) => {
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
   return (
     <TranslationBundleContext.Provider
@@ -80,11 +82,11 @@ const ExtensibilityWidget = ({ resMetaData, root }) => {
     >
       <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
         <ExtensibilityErrBoundary>
-          <ExtensibilityWidgetCore resMetaData={resMetaData} root={root} />
+          <ExtensibilityInjectionCore resMetaData={resMetaData} root={root} />
         </ExtensibilityErrBoundary>
       </DataSourcesContextProvider>
     </TranslationBundleContext.Provider>
   );
 };
 
-export default ExtensibilityWidgets;
+export default ExtensibilityInjections;

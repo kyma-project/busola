@@ -24,7 +24,7 @@ export const configFeaturesNames = {
   HIDDEN_NAMESPACES: 'HIDDEN_NAMESPACES',
   VISUAL_RESOURCES: 'VISUAL_RESOURCES',
   EXTENSIBILITY: 'EXTENSIBILITY',
-  EXTENSIBILITY_WIDGETS: 'EXTENSIBILITY_WIDGETS',
+  EXTENSIBILITY_INJECTIONS: 'EXTENSIBILITY_INJECTIONS',
   TRACKING: 'TRACKING',
   REACT_NAVIGATION: 'REACT_NAVIGATION',
   PROTECTED_RESOURCES: 'PROTECTED_RESOURCES',
@@ -45,7 +45,7 @@ export type LazyConfigFeatureList = {
   [key in LazyConfigFeaturesNames]?: ConfigFeature;
 };
 
-export type ExtWidget = {
+export type ExtInjection = {
   name: string;
   widget: string;
   source: string;
@@ -58,8 +58,8 @@ export type ExtWidget = {
   };
 };
 
-export type ExtWidgetConfig = {
-  widget: ExtWidget;
+export type ExtInjectionConfig = {
+  injection: ExtInjection;
   general: ExtGeneral;
   dataSources: Record<string, any>;
 };
@@ -89,7 +89,7 @@ export type ExtResource = {
   translations: Record<string, any>;
   presets: any[];
   dataSources: Record<string, any>;
-  widgets?: ExtWidget[];
+  injections?: ExtInjection[];
 };
 
 export interface UrlOverrides {

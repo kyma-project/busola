@@ -51,7 +51,7 @@ config:
       isEnabled: true
     EXTENSIBILITY:
       isEnabled: true
-    EXTENSIBILITY_WIDGETS:
+    EXTENSIBILITY_INJECTIONS:
       isEnabled: true
     TRACKING:
       isEnabled: false
