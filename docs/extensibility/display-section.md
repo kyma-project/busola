@@ -750,6 +750,10 @@ The **Injections** section contains a list of objects that defines the display s
 - Service
 - StatefulSet
 
+#### Extension views
+
+To use widget injections with extension views use **general.resource.kind** as an **location**
+
 ### _injections_ example
 
 ```yaml
