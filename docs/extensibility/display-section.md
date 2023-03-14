@@ -24,7 +24,7 @@
   - [ResourceRefs](#resourcerefs)
   - [Table](#table)
   - [Tabs](#tabs)
-- [Resource _injections_ overview](#resource-injections-overview)
+- [Widget _injections_ overview](#widget-injections-overview)
   - [Available _injections_ section parameters](#available-injections-section-parameters)
   - [All available _injections_ slots](#all-available-injections-slots)
   - [All available _injections_ locations](#all-available-injections-locations)
@@ -694,7 +694,7 @@ Tabs widgets render the child widgets in multiple tabs.
 
 <img src="./assets/display-widgets/Tabs.png" alt="Example of a tabs widget" style="border: 1px solid #D2D5D9">
 
-## Resource _injections_ overview
+## Widget _injections_ overview
 
 The **Injections** section contains a list of objects that defines the display structure of current extension on different view. Each object is a separate **injection** that will be injected on specified view at specified slot.
 
@@ -705,8 +705,8 @@ The **Injections** section contains a list of objects that defines the display s
 - **widget** - optional widget used to render the field referred to by the **source** property. The widget should be adjusted to handle arrays.
 - **order** - number that defines in what order injections will be rendered. If one or more injections have the same order, they will be sorted by name.
 - **targets** - array of targets
-  - **slot** - _[required]_ defines what place on page the injection should be rendered on. Check the list of [all available slots](#all-available-injections-slots)
   - **location** - _[required]_ defines on what view the injection should be rendered. Currently injections are rendered only on details views. For more information check the list of [all available locations](#all-available-injections-locations)
+  - **slot** - _[required]_ defines what place on page the injection should be rendered on. Check the list of [all available slots](#all-available-injections-slots)
   - **filter** - JSONata expression that filters resources based on a given condition. If defined it overrides general filter.
 - **filter** - JSONata expression that filters resources based on a given condition. This is a general filter rule. If **filter** is defined in **targets** it will be ignored.
 
