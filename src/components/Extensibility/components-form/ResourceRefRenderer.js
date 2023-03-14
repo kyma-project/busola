@@ -24,7 +24,6 @@ export function ResourceRefRender({
   nestingLevel,
   ...props
 }) {
-  console.log('lolo ResourceRefRender');
   const jsonata = useJsonata({
     resource: originalResource,
     scope: value,
@@ -53,38 +52,19 @@ export function ResourceRefRender({
   const group = (schemaResource?.group || '').toLowerCase();
   const version = schemaResource?.version;
   const resourceType = pluralize(schemaResource?.kind || '')?.toLowerCase();
-  const groupPrefix = group ? `apis/${group}` : 'api';
-  const url = `/${groupPrefix}/${version}/${resourceType}`;
-  console.log('lolo url', url);
-  const { data, loading, error } = useGetList()(url);
-  const namespacedUrl = `/${groupPrefix}/${version}/namespaces/${namespace}/${resourceType}`;
-  console.log('lolo namespacedUrl', namespacedUrl);
-  const urlllll = usePermittedUrl(url, namespacedUrl);
-  console.log('lolo permittedUrls', namespacedUrl);
-  console.log('this is permited', urlllll);
-  const {
-    data: namespacedData,
-    loading: namespacedLoading,
-    error: namespacedError,
-  } = useGetList()(namespacedUrl, {
-    pollingInterval: 3300,
-    skip: !error,
+  const url = usePermittedUrl(group, version, resourceType);
+  const { data, loading, error } = useGetList()(url, {
+    skip: !url,
   });
-  const resourceLoading = error ? namespacedLoading : loading;
-  const resourceData = error ? namespacedData : data;
-  const resourceError = namespacedError;
-  console.log('lolo resourceError', resourceError, 'error', error);
-  console.log('lolo resourceData', resourceData);
-  console.log('lolo namespacedData', namespacedData);
-  const { setVar } = useVariables();
 
+  const { setVar } = useVariables();
   return (
     <ExternalResourceRef
       defaultOpen={defaultOpen}
       defaultNamespace={namespace}
       title={tFromStoreKeys(storeKeys, schema)}
       value={fromJS(value).toJS() || ''}
-      resources={(resourceData || []).filter(res => {
+      resources={(data || []).filter(res => {
         if (filter) {
           const [value] = jsonata(filter, { item: res });
           return value;
@@ -116,8 +96,8 @@ export function ResourceRefRender({
         });
       }}
       required={required}
-      loading={resourceLoading}
-      error={resourceError}
+      loading={loading || !url}
+      error={error}
       nestingLevel={nestingLevel}
     >
       {schema.get('type') === 'object' && (
