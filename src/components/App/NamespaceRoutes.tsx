@@ -24,12 +24,10 @@ export default function NamespaceRoutes() {
     pollingInterval: 0,
     onDataReceived: () => {},
   });
-
-  if (
-    namespaceId !== '-all-' &&
-    error &&
-    JSON.parse(JSON.stringify(error)).code === '403'
-  ) {
+  const hasAccessToNamespace =
+    JSON.parse(JSON.stringify(error)) === null ||
+    JSON.parse(JSON.stringify(error))?.code === 403;
+  if (namespaceId !== '-all-' && error && !hasAccessToNamespace) {
     return (
       <IncorrectPath
         to={clusterUrl('overview')}

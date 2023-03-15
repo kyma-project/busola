@@ -158,10 +158,12 @@ export function ExtensibilityCreateCore({
         triggers.trigger('init', []);
       }}
       onModeChange={(oldMode, newMode) => {
-        if (oldMode === ModeSelector.MODE_YAML) {
+        if (newMode === ModeSelector.MODE_YAML) {
           triggers.disable();
-          readVars(resource);
-          setTimeout(() => triggers.enable());
+        } else if (oldMode === ModeSelector.MODE_YAML) {
+          readVars(resource).then(() => {
+            setTimeout(() => triggers.enable());
+          });
         }
       }}
       formElementRef={formElementRef}

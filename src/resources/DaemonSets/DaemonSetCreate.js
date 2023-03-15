@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
@@ -14,7 +14,7 @@ export function DaemonSetCreate({
   resourceUrl,
   ...props
 }) {
-  const namespaceId = useRecoilState(activeNamespaceIdState);
+  const namespaceId = useRecoilValue(activeNamespaceIdState);
   const [daemonSet, setDaemonSet] = useState(
     createDaemonSetTemplate(namespaceId),
   );
