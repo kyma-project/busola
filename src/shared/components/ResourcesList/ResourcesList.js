@@ -179,6 +179,7 @@ export function ResourceListRenderer({
     time: timeSort,
   },
   searchSettings,
+  isCompact,
 }) {
   const [showAdd, setShowAdd] = useRecoilState(showYamlUploadDialogState);
   useVersionWarning({
@@ -524,12 +525,14 @@ export function ResourceListRenderer({
           textSearchProperties: textSearchProperties(),
         }}
       />
-      <YamlUploadDialog
-        show={showAdd}
-        onCancel={() => {
-          setShowAdd(false);
-        }}
-      />
+      {!isCompact && (
+        <YamlUploadDialog
+          show={showAdd}
+          onCancel={() => {
+            setShowAdd(false);
+          }}
+        />
+      )}
     </>
   );
 }
