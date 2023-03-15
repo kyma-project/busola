@@ -2,6 +2,8 @@
 
 # ---- Base Alpine with Node ----
 FROM alpine:3.15.0 AS builder
+ARG TAG_DEFAULT_TAG
+
 RUN apk add --update nodejs npm
 
 WORKDIR /app
@@ -17,9 +19,7 @@ ENV CI true
 
 COPY . /app
 
-RUN make resolve
-RUN make validate
-RUN make pull-licenses
+RUN sed -i "s/version: dev/version: ${TAG_DEFAULT_TAG}/" public/version.yaml && make resolve validate
 
 RUN npm test 2>&1 && npm run build:docker
 RUN cd /app/backend && npm run build
