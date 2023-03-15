@@ -752,7 +752,7 @@ The **Injections** section contains a list of objects that defines the display s
 
 #### Extension views
 
-To use widget injections with extension views use **general.resource.kind** as a **location**
+Use **general.resource.kind** as a **location** for widget injections with extension views.
 
 ### _injections_ example
 
