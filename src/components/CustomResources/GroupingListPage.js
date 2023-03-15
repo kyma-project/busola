@@ -11,6 +11,9 @@ import { ResourceListRenderer } from 'shared/components/ResourcesList/ResourcesL
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
 import { SearchInput } from 'shared/components/GenericList/SearchInput';
+import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
+import { useRecoilState } from 'recoil';
+import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 export function GroupingListPage({
   title,
@@ -19,6 +22,7 @@ export function GroupingListPage({
   resourceListProps,
   showCrdScope,
 }) {
+  const [showAdd, setShowAdd] = useRecoilState(showYamlUploadDialogState);
   const [searchQuery, setSearchQuery] = useState('');
   const { t } = useTranslation();
   useWindowTitle(title);
@@ -86,6 +90,7 @@ export function GroupingListPage({
               showTitle={true}
               title={group}
               resources={crds}
+              isCompact={true}
               customColumns={[
                 {
                   header: t('custom-resource-definitions.headers.categories'),
@@ -115,7 +120,15 @@ export function GroupingListPage({
   return (
     <>
       {header}
-      <YamlEditorProvider>{lists}</YamlEditorProvider>
+      <YamlEditorProvider>
+        {lists}{' '}
+        <YamlUploadDialog
+          show={showAdd}
+          onCancel={() => {
+            setShowAdd(false);
+          }}
+        />
+      </YamlEditorProvider>
     </>
   );
 }
