@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import { useRecoilValue } from 'recoil';
 
 import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
-import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { useGetHiddenNamespaces } from 'shared/hooks/useGetHiddenNamespaces';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ResourceForm } from 'shared/ResourceForm';
