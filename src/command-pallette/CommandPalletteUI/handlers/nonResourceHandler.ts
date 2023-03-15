@@ -156,5 +156,10 @@ export const nonResourceHandler: Handler = {
       alias: 'ns *, ns all',
       description: t('command-palette.help.all-namespaces'),
     },
+    {
+      name: 'upload',
+      alias: 'up',
+      description: t('command-palette.help.open-upload-yaml'),
+    },
   ],
 };
