@@ -28,7 +28,7 @@
   - [Available _injections_ section parameters](#available-injections-section-parameters)
   - [All available _injections_ slots](#all-available-injections-slots)
   - [All available _injections_ locations](#all-available-injections-locations)
-  - [_injections_ Example](#injections-example)
+  - [_injections_ example](#injections-example)
 
 ## Resource _list_ overview
 
