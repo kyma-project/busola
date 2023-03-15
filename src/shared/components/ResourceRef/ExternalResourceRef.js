@@ -33,12 +33,6 @@ export function ExternalResourceRef({
   nestingLevel = 0,
   defaultNamespace,
 }) {
-  console.log(
-    'lolo ExternalResourceRef',
-    resources,
-    'defaultNamespace',
-    defaultNamespace,
-  );
   const { t } = useTranslation();
   const namespacesUrl = '/api/v1/namespaces';
   const {
@@ -48,14 +42,13 @@ export function ExternalResourceRef({
   } = useGetList()(namespacesUrl);
 
   const showHiddenNamespaces = useRecoilValue(showHiddenNamespacesState);
-  console.log('lolo namespacesError', namespacesError);
   const hiddenNamespaces = useGetHiddenNamespaces();
   const namespaceData = {
     metadata: {
       name: defaultNamespace,
     },
   };
-  console.log('lolo namespaceData', namespaceData, 'namespaces', namespaces);
+
   const namespacesOptions = (namespacesError
     ? [namespaceData]
     : namespaces || []
@@ -69,7 +62,7 @@ export function ExternalResourceRef({
       key: ns.metadata.name,
       text: ns.metadata.name,
     }));
-  console.log('namespacesOptions', namespacesOptions);
+
   if (loading || namespacesLoading) return <Spinner compact={true} />;
   if (error)
     return (
