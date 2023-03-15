@@ -90,7 +90,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
             onActivate: () => {
               context.setShowYamlUpload(true);
             },
-            customActionText: t('command-palette.help.open-uploadYaml'),
+            customActionText: t('command-palette.help.open-upload-yaml'),
           },
         ];
       case 'preferences':
