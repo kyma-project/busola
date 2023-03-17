@@ -525,7 +525,7 @@ export function ResourceListRenderer({
           textSearchProperties: textSearchProperties(),
         }}
       />
-      {!isCompact && !customUrl && (
+      {!isCompact && (
         <YamlUploadDialog
           show={showAdd}
           onCancel={() => {
