@@ -16,6 +16,7 @@ jest.mock('shared/hooks/BackendAPI/useGet', () => ({
       },
     };
   },
+  useSingleGet: () => {},
 }));
 
 jest.mock('components/Extensibility/ExtensibilityInjections', () => () => (

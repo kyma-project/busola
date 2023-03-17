@@ -8,7 +8,6 @@ import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { LimitRangeList } from 'resources/LimitRanges/LimitRangeList';
 import { ResourceQuotaList as ResourceQuotaListComponent } from 'resources/ResourceQuotas/ResourceQuotaList';
-import { YamlUploadDialog } from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 import { NamespaceStatus } from './NamespaceStatus';
@@ -18,11 +17,11 @@ import { NamespaceCreate } from './NamespaceCreate';
 import { AllNamespacesDetails } from './AllNamespacesDetails';
 
 import './NamespaceDetails.scss';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 
 export function NamespaceDetails(props) {
   const { t } = useTranslation();
-  const [showAdd, setShowAdd] = useRecoilState(showYamlUploadDialogState);
+  const setShowAdd = useSetRecoilState(showYamlUploadDialogState);
 
   if (props.resourceName === '-all-') {
     return <AllNamespacesDetails {...props} />;
@@ -99,12 +98,6 @@ export function NamespaceDetails(props) {
       {LimitrangesList}
       {ResourceQuotasList}
       {Events}
-      <YamlUploadDialog
-        show={showAdd}
-        onCancel={() => {
-          setShowAdd(false);
-        }}
-      />
     </ResourceDetails>
   );
 }
