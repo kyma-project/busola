@@ -9,6 +9,19 @@ import {
 import { useRecoilValue } from 'recoil';
 import { extensionsState } from 'state/navigation/extensionsAtom';
 
+export const usePrepareResourceUrl = ({
+  apiGroup,
+  apiVersion,
+  resourceType,
+}) => {
+  const { namespaceId } = useParams();
+
+  const api = apiGroup ? `apis/${apiGroup}/${apiVersion}` : `api/${apiVersion}`;
+  const resourceUrl = namespaceId
+    ? `/${api}/namespaces/${namespaceId}/${resourceType?.toLowerCase()}`
+    : `/${api}/${resourceType?.toLowerCase()}`;
+  return resourceUrl;
+};
 export const usePrepareListProps = ({
   resourceCustomType,
   resourceType,

@@ -30,15 +30,16 @@ import { useVersionWarning } from 'hooks/useVersionWarning';
 import { useUrl } from 'hooks/useUrl';
 
 import { Tooltip } from '../Tooltip/Tooltip';
-import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
-import { useRecoilState } from 'recoil';
-import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
 // It doesn't affect the lighthouse score, but it prolongs the graph waiting time.
 const ResourceGraph = React.lazy(() =>
   import('../ResourceGraph/ResourceGraph'),
+);
+
+const Injections = React.lazy(() =>
+  import('../../../components/Extensibility/ExtensibilityInjections'),
 );
 
 ResourceDetails.propTypes = {
@@ -160,7 +161,6 @@ function Resource({
   disableEdit,
   disableDelete,
 }) {
-  const [showAdd, setShowAdd] = useRecoilState(showYamlUploadDialogState);
   useVersionWarning({ resourceUrl, resourceType });
   const { t } = useTranslation();
   const prettifiedResourceKind = prettifyNameSingular(
@@ -374,6 +374,9 @@ function Resource({
         ))}
       </PageHeader>
       <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />
+      <Suspense fallback={<Spinner />}>
+        <Injections destination={resource.kind} slot="top" root={resource} />
+      </Suspense>
       {(customComponents || []).map(component =>
         component(resource, resourceUrl),
       )}
@@ -383,12 +386,9 @@ function Resource({
           <ResourceGraph resource={resource} config={resourceGraphConfig} />
         </Suspense>
       )}
-      <YamlUploadDialog
-        show={showAdd}
-        onCancel={() => {
-          setShowAdd(false);
-        }}
-      />
+      <Suspense fallback={<Spinner />}>
+        <Injections destination={resource.kind} slot="bottom" root={resource} />
+      </Suspense>
     </>
   );
 }
