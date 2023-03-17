@@ -5,10 +5,14 @@ import { Link as RRLink } from 'react-router-dom';
 import pluralize from 'pluralize';
 import { GroupingListPage } from './GroupingListPage';
 import { useUrl } from 'hooks/useUrl';
+import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
+import { useRecoilState } from 'recoil';
+import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 export default function CustomResourcesByGroup() {
   const { t } = useTranslation();
   const { namespace, clusterUrl, scopedUrl } = useUrl();
+  const [showAdd, setShowAdd] = useRecoilState(showYamlUploadDialogState);
   const description = (
     <Trans i18nKey="custom-resources.description">
       <Link
@@ -23,15 +27,25 @@ export default function CustomResourcesByGroup() {
   );
 
   return (
-    <GroupingListPage
-      title={t('custom-resources.title')}
-      description={description}
-      filter={crd => crd.spec.scope === (namespace ? 'Namespaced' : 'Cluster')}
-      resourceListProps={{
-        customUrl: crd => scopedUrl(`customresources/${crd.metadata.name}`),
-        nameSelector: entry => pluralize(entry?.spec.names.kind || ''),
-        readOnly: true,
-      }}
-    />
+    <>
+      <GroupingListPage
+        title={t('custom-resources.title')}
+        description={description}
+        filter={crd =>
+          crd.spec.scope === (namespace ? 'Namespaced' : 'Cluster')
+        }
+        resourceListProps={{
+          customUrl: crd => scopedUrl(`customresources/${crd.metadata.name}`),
+          nameSelector: entry => pluralize(entry?.spec.names.kind || ''),
+          readOnly: true,
+        }}
+      />
+      <YamlUploadDialog
+        show={showAdd}
+        onCancel={() => {
+          setShowAdd(false);
+        }}
+      />
+    </>
   );
 }
