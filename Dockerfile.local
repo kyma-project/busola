@@ -2,7 +2,7 @@
 
 # ---- Base Alpine with Node ----
 FROM alpine:3.15.0 AS builder
-ARG TAG_DEFAULT_TAG
+ARG TAG_default_tag
 
 RUN apk add --update nodejs npm
 
@@ -19,7 +19,7 @@ ENV CI true
 
 COPY . /app
 
-RUN sed -i "s/version: dev/version: ${TAG_DEFAULT_TAG}/" public/version.yaml && make resolve validate
+RUN sed -i "s/version: dev/version: ${TAG_default_tag}/" public/version.yaml && make resolve validate
 
 RUN npm test 2>&1 && npm run build:docker
 RUN cd /app/backend && npm run build
