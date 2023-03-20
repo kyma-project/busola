@@ -38,6 +38,10 @@ const ResourceGraph = React.lazy(() =>
   import('../ResourceGraph/ResourceGraph'),
 );
 
+const Injections = React.lazy(() =>
+  import('../../../components/Extensibility/ExtensibilityInjections'),
+);
+
 ResourceDetails.propTypes = {
   customColumns: CustomPropTypes.customColumnsType,
   children: PropTypes.node,
@@ -370,6 +374,9 @@ function Resource({
         ))}
       </PageHeader>
       <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />
+      <Suspense fallback={<Spinner />}>
+        <Injections destination={resource.kind} slot="top" root={resource} />
+      </Suspense>
       {(customComponents || []).map(component =>
         component(resource, resourceUrl),
       )}
@@ -379,6 +386,9 @@ function Resource({
           <ResourceGraph resource={resource} config={resourceGraphConfig} />
         </Suspense>
       )}
+      <Suspense fallback={<Spinner />}>
+        <Injections destination={resource.kind} slot="bottom" root={resource} />
+      </Suspense>
     </>
   );
 }

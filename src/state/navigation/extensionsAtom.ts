@@ -1,7 +1,7 @@
 import jsyaml from 'js-yaml';
 import { mapValues, partial } from 'lodash';
 import { useEffect, useState } from 'react';
-import { ExtResource } from '../types';
+import { ExtResource, ExtInjectionConfig } from '../types';
 import { atom, RecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { clusterState } from '../clusterAtom';
 import { authDataState } from '../authDataAtom';
@@ -18,6 +18,7 @@ import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 import { doesUserHavePermission } from './filters/permissions';
 import { useUrl } from 'hooks/useUrl';
 import { K8sResource } from 'types';
+import { useFeature } from 'hooks/useFeature';
 
 /*
 the order of the overwrting extensions
@@ -213,6 +214,7 @@ export const useGetExtensions = () => {
   const cluster = useRecoilValue(clusterState);
   const auth = useRecoilValue(authDataState);
   const setExtensions = useSetRecoilState(extensionsState);
+  const setInjections = useSetRecoilState(injectionsState);
   const fetchFn = getFetchFn(useRecoilValue);
   const configuration = useRecoilValue(configurationAtom);
   const features = configuration?.features;
@@ -220,11 +222,14 @@ export const useGetExtensions = () => {
   const permissionSet = useRecoilValue(permissionSetsSelector);
   const [nonNamespacedExtensions, setNonNamespacedExtensions] = useState(null);
   const { namespace } = useUrl();
-
+  const { isEnabled: isExtensibilityInjectionsEnabled } = useFeature(
+    'EXTENSIBILITY_INJECTIONS',
+  );
   useEffect(() => {
     const manageExtensions = async () => {
       if (!cluster) {
         setExtensions([]);
+        setInjections([]);
         setNonNamespacedExtensions(null);
         return;
       }
@@ -238,6 +243,7 @@ export const useGetExtensions = () => {
 
       if (!configs) {
         setExtensions([]);
+        setInjections([]);
         setNonNamespacedExtensions(null);
       } else {
         if (!nonNamespacedExtensions) {
@@ -256,7 +262,20 @@ export const useGetExtensions = () => {
             isNodeVisibleForCurrentConfigSet(mapExtResourceToNavNode(node)),
           );
 
+          let injectionsConfigs: ExtInjectionConfig[] = [];
+          filteredConfigs.filter(config =>
+            config?.injections?.map(injection =>
+              injectionsConfigs.push({
+                injection: injection,
+                general: config.general,
+                dataSources: config.dataSources,
+              }),
+            ),
+          );
           setExtensions(filteredConfigs);
+          if (isExtensibilityInjectionsEnabled) {
+            setInjections(injectionsConfigs);
+          }
         }
       }
     };
@@ -272,5 +291,12 @@ export const extensionsState: RecoilState<ExtResource[] | null> = atom<
   ExtResource[] | null
 >({
   key: 'extensionsState',
+  default: defaultValue,
+});
+
+export const injectionsState: RecoilState<ExtInjectionConfig[] | null> = atom<
+  ExtInjectionConfig[] | null
+>({
+  key: 'injectionsState',
   default: defaultValue,
 });

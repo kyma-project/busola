@@ -42,6 +42,7 @@ export const TriggerContext = createContext({
   setResource: () => {},
   disable: () => {},
   enable: () => {},
+  enabled: true,
 });
 
 export function TriggerContextProvider({ children }) {
@@ -83,6 +84,7 @@ export function TriggerContextProvider({ children }) {
         unsubscribe,
         disable,
         enable,
+        enabled,
       }}
     >
       {children}

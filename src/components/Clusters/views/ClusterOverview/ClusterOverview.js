@@ -6,11 +6,17 @@ import { ClusterNodes } from './ClusterNodes/ClusterNodes';
 
 import './ClusterOverview.scss';
 
+const Injections = React.lazy(() =>
+  import('../../../Extensibility/ExtensibilityInjections'),
+);
+
 export function ClusterOverview() {
   return (
     <>
       <ClusterOverviewHeader />
+      <Injections destination="ClusterOverview" slot="top" root="" />
       <ClusterNodes />
+      <Injections destination="ClusterOverview" slot="bottom" />
     </>
   );
 }
