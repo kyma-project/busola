@@ -386,6 +386,7 @@ function Resource({
           <ResourceGraph resource={resource} config={resourceGraphConfig} />
         </Suspense>
       )}
+      <p>TEST</p>
       <Suspense fallback={<Spinner />}>
         <Injections destination={resource.kind} slot="bottom" root={resource} />
       </Suspense>
