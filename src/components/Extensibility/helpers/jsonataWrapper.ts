@@ -36,12 +36,12 @@ export function jsonataWrapper(expression: string) {
     return getReadableTimestamp(timestamp);
   });
 
-  exp.registerFunction('canI', (resourceGroupAndVersion, resourceType) => {
+  exp.registerFunction('canI', (resourceGroupAndVersion, resourceKind) => {
     const permissionSet = useRecoilValue(permissionSetsSelector);
 
     const isPermitted = doesUserHavePermission(
       ['list'],
-      { resourceGroupAndVersion, resourceKind: resourceType.toLowerCase() },
+      { resourceGroupAndVersion, resourceKind: resourceKind.toLowerCase() },
       permissionSet,
     );
 
