@@ -94,10 +94,14 @@ export function ResourceForm({
 
   useEffect(() => {
     if (setCustomValid) {
-      setCustomValid(validationRef.current);
+      if (mode === ModeSelector.MODE_YAML) {
+        setCustomValid(true);
+      } else {
+        setCustomValid(validationRef.current);
+      }
     }
     validationRef.current = true;
-  }, [setCustomValid, resource, children]);
+  }, [setCustomValid, resource, children, mode]);
 
   const convertedResource = jsyaml.dump(resource);
 
@@ -177,46 +181,47 @@ export function ResourceForm({
             {editor}
           </>
         )}
-        {/* always keep the advanced form to ensure validation */}
-        <div
-          className="advanced-form"
-          onChange={onChange}
-          hidden={mode !== ModeSelector.MODE_ADVANCED}
-        >
-          <ResourceFormWrapper
-            resource={resource}
-            setResource={setResource}
-            isAdvanced={true}
-            validationRef={validationRef}
+        {mode === ModeSelector.MODE_ADVANCED && (
+          <div
+            className="advanced-form"
+            onChange={onChange}
+            hidden={mode !== ModeSelector.MODE_ADVANCED}
           >
-            {!disableDefaultFields && (
-              <>
-                <K8sNameField
-                  propertyPath="$.metadata.name"
-                  kind={singularName}
-                  readOnly={readOnly || !!initialResource}
-                  setValue={handleNameChange}
-                  {...nameProps}
-                />
-                <KeyValueField
-                  advanced
-                  propertyPath="$.metadata.labels"
-                  title={t('common.headers.labels')}
-                  className="fd-margin-top--sm"
-                  inputInfo={t('common.tooltips.key-value')}
-                  {...labelsProps}
-                />
-                <KeyValueField
-                  advanced
-                  propertyPath="$.metadata.annotations"
-                  title={t('common.headers.annotations')}
-                  inputInfo={t('common.tooltips.key-value')}
-                />
-              </>
-            )}
-            {children}
-          </ResourceFormWrapper>
-        </div>
+            <ResourceFormWrapper
+              resource={resource}
+              setResource={setResource}
+              isAdvanced={true}
+              validationRef={validationRef}
+            >
+              {!disableDefaultFields && (
+                <>
+                  <K8sNameField
+                    propertyPath="$.metadata.name"
+                    kind={singularName}
+                    readOnly={readOnly || !!initialResource}
+                    setValue={handleNameChange}
+                    {...nameProps}
+                  />
+                  <KeyValueField
+                    advanced
+                    propertyPath="$.metadata.labels"
+                    title={t('common.headers.labels')}
+                    className="fd-margin-top--sm"
+                    inputInfo={t('common.tooltips.key-value')}
+                    {...labelsProps}
+                  />
+                  <KeyValueField
+                    advanced
+                    propertyPath="$.metadata.annotations"
+                    title={t('common.headers.annotations')}
+                    inputInfo={t('common.tooltips.key-value')}
+                  />
+                </>
+              )}
+              {children}
+            </ResourceFormWrapper>
+          </div>
+        )}
       </form>
     </section>
   );
