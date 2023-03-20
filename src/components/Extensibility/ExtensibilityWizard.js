@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useMemo,
-  useCallback,
-  useContext,
-} from 'react';
+import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { Wizard } from 'fundamental-react';
 import { mapValues } from 'lodash'; // XXX temporary
 import jsyaml from 'js-yaml'; // XXX temporary
@@ -24,7 +18,6 @@ import widgets from './components-form';
 import { DataSourcesContextProvider } from './contexts/DataSources';
 import { VarStoreContextProvider } from './contexts/VarStore';
 import { TriggerContext, TriggerContextProvider } from './contexts/Trigger';
-import { ResourceSchema } from './ResourceSchema';
 import {
   getResourceObjFromUIStore,
   getUIStoreFromResourceObj,
@@ -57,7 +50,7 @@ export function ExtensibilityWizardCore({
   editMode = false,
   ...props
 }) {
-  const { prepareVars, readVars, setVar } = useVariables();
+  const { prepareVars, setVar } = useVariables();
   const { t } = useTranslation();
   const triggers = useContext(TriggerContext);
 
@@ -67,9 +60,7 @@ export function ExtensibilityWizardCore({
     ),
   );
 
-  const { schemas, loading: loadingOpenAPISchema } = useResourceSchemas(
-    resourceSchema.general.resources,
-  );
+  const { schemas } = useResourceSchemas(resourceSchema.general.resources);
   const schemaMaps = useMemo(
     () => mapValues(schemas, schema => createOrderedMap(schema)),
     [schemas],
@@ -79,7 +70,7 @@ export function ExtensibilityWizardCore({
     [store],
   );
   const [resourcesWithStatuses, setResourcesWithStatuses] = useState([]);
-  const onChange = useCallback((actions, resource) => {
+  const onChange = (actions, resource) => {
     console.log('UIStoreProvider::onChange', resource, actions);
     // console.trace();
     if (actions.scopes.includes('value')) {
@@ -91,7 +82,7 @@ export function ExtensibilityWizardCore({
         };
       });
     }
-  });
+  };
 
   useEffect(() => {
     const fullSchemaRules = prepareRules(
@@ -116,7 +107,7 @@ export function ExtensibilityWizardCore({
   useEffect(() => {
     console.log('resources changed', resources);
     Object.entries(resources).forEach(([key, val]) => setVar(`$.${key}`, val));
-  }, [resources]);
+  }, [resources, setVar]);
 
   const uploadResources = useUploadResources(
     resourcesWithStatuses,
