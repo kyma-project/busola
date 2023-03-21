@@ -4,6 +4,7 @@ import { Columns } from '../Columns';
 import { Widget } from '../Widget';
 
 jest.mock('components/Extensibility/ExtensibilityCreate', () => null);
+jest.mock('components/Extensibility/ExtensibilityWizard', () => null);
 
 describe('Columns', () => {
   it('Renders columns', () => {
