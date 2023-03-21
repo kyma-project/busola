@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Dialog } from 'fundamental-react';
 
-import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 
 import { ExtensibilityWizard } from '../ExtensibilityWizard';

@@ -105,7 +105,6 @@ export function ExtensibilityWizardCore({
   }, [resources]);
 
   useEffect(() => {
-    console.log('resources changed', resources);
     Object.entries(resources).forEach(([key, val]) => setVar(`$.${key}`, val));
   }, [resources, setVar]);
 

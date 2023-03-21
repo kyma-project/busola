@@ -76,7 +76,7 @@ export const useResourceSchemas = resources => {
   //
   // const [error, setError] = useState(null);
   // const [loading, setLoading] = useState(!isWorkerOkay ? false : !skip);
-  const [loading, setLoading] = useState([]);
+  // const [loading, setLoading] = useState([]);
 
   useEffect(() => {
     const hasSchemas = Object.keys(schemaIds).every(
@@ -86,7 +86,6 @@ export const useResourceSchemas = resources => {
       return;
     }
 
-    console.log('get schemas?');
     Object.entries(schemaIds).forEach(([key, schemaId]) => {
       sendWorkerMessage('getSchema', schemaId);
 
@@ -107,10 +106,11 @@ export const useResourceSchemas = resources => {
     // setLoading(false);
     // });
     // }, [areSchemasComputed, schemaIds, setSchemas, schemas, isWorkerOkay]);
-  }, [areSchemasComputed, schemaIds, isWorkerOkay]);
+  }, [areSchemasComputed, schemas.schemaId, schemaIds, isWorkerOkay]);
 
   return {
     schemas,
-    loading: Object.values(loading).some(v => !!v),
+    // TODO
+    // loading: Object.values(loading).some(v => !!v),
   };
 };
