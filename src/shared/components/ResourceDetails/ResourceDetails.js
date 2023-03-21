@@ -30,6 +30,9 @@ import { useVersionWarning } from 'hooks/useVersionWarning';
 import { useUrl } from 'hooks/useUrl';
 
 import { Tooltip } from '../Tooltip/Tooltip';
+import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
+import { useRecoilState } from 'recoil';
+import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
@@ -161,6 +164,7 @@ function Resource({
   disableEdit,
   disableDelete,
 }) {
+  const [showAdd, setShowAdd] = useRecoilState(showYamlUploadDialogState);
   useVersionWarning({ resourceUrl, resourceType });
   const { t } = useTranslation();
   const prettifiedResourceKind = prettifyNameSingular(
@@ -389,6 +393,12 @@ function Resource({
       <Suspense fallback={<Spinner />}>
         <Injections destination={resource.kind} slot="bottom" root={resource} />
       </Suspense>
+      <YamlUploadDialog
+        show={showAdd}
+        onCancel={() => {
+          setShowAdd(false);
+        }}
+      />
     </>
   );
 }

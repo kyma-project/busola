@@ -11,6 +11,9 @@ import { ResourceListRenderer } from 'shared/components/ResourcesList/ResourcesL
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
 import { SearchInput } from 'shared/components/GenericList/SearchInput';
+import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
+import { useRecoilState } from 'recoil';
+import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 export function GroupingListPage({
   title,
@@ -21,6 +24,7 @@ export function GroupingListPage({
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const { t } = useTranslation();
+  const [showAdd, setShowAdd] = useRecoilState(showYamlUploadDialogState);
   useWindowTitle(title);
 
   const resourceUrl = `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`;
@@ -86,6 +90,7 @@ export function GroupingListPage({
               showTitle={true}
               title={group}
               resources={crds}
+              isCompact={true}
               customColumns={[
                 {
                   header: t('custom-resource-definitions.headers.categories'),
@@ -116,6 +121,12 @@ export function GroupingListPage({
     <>
       {header}
       <YamlEditorProvider>{lists}</YamlEditorProvider>
+      <YamlUploadDialog
+        show={showAdd}
+        onCancel={() => {
+          setShowAdd(false);
+        }}
+      />
     </>
   );
 }

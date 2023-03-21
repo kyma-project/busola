@@ -139,6 +139,7 @@ command-palette:
     crd-aliases: CRD Aliases
     full: Use <0>↑</0> and <0>↓</0> to navigate between results, <0>⏎</0> to choose, <0>Tab</0> to autocomplete.
     navigation: Navigation
+    open-upload-yaml: Open Upload YAML
     open-preferences: Open Preferences
     resource-aliases: Built-in Resource Aliases
     short-help: Type to search, e.g. "ns default" or "pod nginx"
@@ -919,6 +920,8 @@ navigation:
   all-namespaces: All Namespaces
   preferences:
     title: Preferences
+  upload-yaml:
+    title: Upload YAML
   select-namespace: Select Namespace...
   errors:
     sidebar: Failed to load navigation items
