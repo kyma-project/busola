@@ -47,7 +47,7 @@ export function MonacoRenderer({
 
   const value = getValue(storeKeys, resource);
   const jsonata = useJsonata({
-    resource: originalResource,
+    resource: resource,
     scope: value,
     value,
   });
