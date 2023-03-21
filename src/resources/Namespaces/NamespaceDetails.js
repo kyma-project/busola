@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'fundamental-react';
 
@@ -8,7 +8,7 @@ import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { LimitRangeList } from 'resources/LimitRanges/LimitRangeList';
 import { ResourceQuotaList as ResourceQuotaListComponent } from 'resources/ResourceQuotas/ResourceQuotaList';
-import { YamlUploadDialog } from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
+import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 import { NamespaceStatus } from './NamespaceStatus';
 import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
@@ -17,10 +17,11 @@ import { NamespaceCreate } from './NamespaceCreate';
 import { AllNamespacesDetails } from './AllNamespacesDetails';
 
 import './NamespaceDetails.scss';
+import { useSetRecoilState } from 'recoil';
 
 export function NamespaceDetails(props) {
   const { t } = useTranslation();
-  const [showAdd, setShowAdd] = useState(false);
+  const setShowAdd = useSetRecoilState(showYamlUploadDialogState);
 
   if (props.resourceName === '-all-') {
     return <AllNamespacesDetails {...props} />;
@@ -97,12 +98,6 @@ export function NamespaceDetails(props) {
       {LimitrangesList}
       {ResourceQuotasList}
       {Events}
-      <YamlUploadDialog
-        show={showAdd}
-        onCancel={() => {
-          setShowAdd(false);
-        }}
-      />
     </ResourceDetails>
   );
 }
