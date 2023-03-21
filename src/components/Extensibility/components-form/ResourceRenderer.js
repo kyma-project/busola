@@ -1,7 +1,6 @@
 import React from 'react';
 import { fromJS } from 'immutable';
 
-import { getResourceUrl } from 'resources/Namespaces/YamlUpload/helpers';
 import {
   useGetTranslation,
   getPropsFromSchema,
@@ -10,6 +9,8 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 import { useVariables } from '../hooks/useVariables';
 import { useJsonata } from '../hooks/useJsonata';
+import { usePermittedUrl } from 'hooks/usePermittedUrl';
+
 import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
@@ -34,15 +35,14 @@ export function ResourceRenderer({
 
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
 
-  const { group, version, kind, scope = 'cluster', namespace = namespaceId } =
+  const { group, version, kind, scope = 'ź', namespace = namespaceId } =
     fromJS(schema.get('resource')).toJS() || {};
   const provideVar = schema.get('provideVar');
 
-  const url = getResourceUrl(
-    {
-      apiVersion: group ? `${group}/${version}` : version,
-      kind,
-    },
+  const url = usePermittedUrl(
+    group,
+    version,
+    kind,
     scope === 'namespace' ? namespace : null,
   );
 
