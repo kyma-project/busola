@@ -41,7 +41,6 @@ export function MonacoRenderer({
   required,
   resource,
   nestingLevel = 0,
-  originalResource,
 }) {
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
 
@@ -52,7 +51,7 @@ export function MonacoRenderer({
     value,
   });
 
-  const language = getLanguage(jsonata, schema, value, resource);
+  const language = getLanguage(jsonata, schema);
   const formattedValue = formatValue(value, language);
   const defaultOpen = schema.get('defaultExpanded');
 
