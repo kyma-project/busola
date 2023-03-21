@@ -80,11 +80,11 @@ Whenever data sources are provided, they are available as corresponding variable
 
 ### canI(resourceGroupAndVersion, resourceKind)
 
-You can use this function to determine if user has access rights for listing specified resource.
+You can use this function to determine if a user has access rights for listing a specified resource.
 
 #### Function parameters
 
-- **resourceGroupAndVersion** - first part of a resource url following the pattern: `${resource group}/${resource version}`.
+- **resourceGroupAndVersion** - the first part of a resource URL following the pattern: `${resource group}/${resource version}`.
 - **resourceKind** - resource kind.
 
 #### Example
@@ -106,7 +106,7 @@ You can use this function to sort two strings alphabetically.
 
 #### Example
 
-Example from the [ResourceList widget](display-section.md#resourcelist).
+Here is an example from the [ResourceList widget](display-section.md#resourcelist):
 
 ```yaml
 - widget: ResourceList
