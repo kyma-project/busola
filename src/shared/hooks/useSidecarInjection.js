@@ -20,28 +20,46 @@ export const useSidecar = ({
     isInitSidecarInjectionTurnedOn,
   );
 
+  const [isChanged, setIsChanged] = useState(false);
+
   useEffect(() => {
     // toggles istio-injection when 'Enable sidecar injection' is clicked
-    const toggleLabelInYaml = () => {
-      const newValue = isSidecarEnabled ? enabled : disabled;
-      jp.value(res, `${path}["${[label]}"]`, newValue);
-      setRes({ ...res });
-    };
-    toggleLabelInYaml();
-
+    if (isChanged) {
+      const toggleLabelInYaml = () => {
+        const newValue = isSidecarEnabled ? enabled : disabled;
+        jp.value(res, `${path}["${[label]}"]`, newValue);
+        setRes({ ...res });
+      };
+      toggleLabelInYaml();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSidecarEnabled, setSidecarEnabled, setRes, path, label, enabled]);
 
   useEffect(() => {
     // toggles 'Enable sidecar injection' off when istio-injection is deleted in yaml
-
     const isSidecarDisabledInYaml =
       jp.value(res, `${path}["${label}"]`) !== enabled;
 
-    if (isSidecarEnabled && isSidecarDisabledInYaml) {
-      setSidecarEnabled(false);
+    if (isChanged) {
+      if (isSidecarEnabled && isSidecarDisabledInYaml) {
+        setSidecarEnabled(false);
+      }
     }
-  }, [isSidecarEnabled, setSidecarEnabled, setRes, path, label, enabled, res]);
+  }, [
+    isSidecarEnabled,
+    setSidecarEnabled,
+    setRes,
+    path,
+    label,
+    enabled,
+    res,
+    isChanged,
+  ]);
 
-  return { isIstioFeatureOn, isSidecarEnabled, setSidecarEnabled };
+  return {
+    isIstioFeatureOn,
+    isSidecarEnabled,
+    setSidecarEnabled,
+    setIsChanged,
+  };
 };

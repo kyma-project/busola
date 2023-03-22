@@ -36,7 +36,12 @@ export function DeploymentCreate({
       ? _.cloneDeep(initialDeployment)
       : createDeploymentTemplate(namespace),
   );
-  const { isIstioFeatureOn, isSidecarEnabled, setSidecarEnabled } = useSidecar({
+  const {
+    isIstioFeatureOn,
+    isSidecarEnabled,
+    setSidecarEnabled,
+    setIsChanged,
+  } = useSidecar({
     initialRes: initialDeployment,
     res: deployment,
     setRes: setDeployment,
@@ -86,7 +91,10 @@ export function DeploymentCreate({
           label={t('namespaces.create-modal.enable-sidecar')}
           input={Inputs.Switch}
           checked={isSidecarEnabled}
-          onChange={() => setSidecarEnabled(value => !value)}
+          onChange={() => {
+            setSidecarEnabled(value => !value);
+            setIsChanged(true);
+          }}
         />
       ) : null}
 

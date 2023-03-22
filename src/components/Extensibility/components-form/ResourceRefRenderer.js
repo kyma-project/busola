@@ -9,6 +9,8 @@ import { useGetTranslation } from 'components/Extensibility/helpers';
 
 import { useVariables } from '../hooks/useVariables';
 import { useJsonata } from '../hooks/useJsonata';
+import { useUrl } from 'hooks/useUrl';
+import { usePermittedUrl } from 'hooks/usePermittedUrl';
 
 export function ResourceRefRender({
   onChange,
@@ -27,6 +29,7 @@ export function ResourceRefRender({
     scope: value,
     value,
   });
+  const { namespace } = useUrl();
   const { tFromStoreKeys } = useGetTranslation();
   // TODO the value obtained by ui-schema is undefined for this component
   value = getObjectValueWorkaround(schema, resource, storeKeys, value);
@@ -49,19 +52,19 @@ export function ResourceRefRender({
   const group = (schemaResource?.group || '').toLowerCase();
   const version = schemaResource?.version;
   const resourceType = pluralize(schemaResource?.kind || '')?.toLowerCase();
-  const groupPrefix = group ? `apis/${group}` : 'api';
-  const url = `/${groupPrefix}/${version}/${resourceType}`;
-
-  const { data, loading, error } = useGetList()(url);
+  const url = usePermittedUrl(group, version, resourceType);
+  const { data, loading, error } = useGetList()(url, {
+    skip: !url,
+  });
 
   const { setVar } = useVariables();
-
   return (
     <ExternalResourceRef
       defaultOpen={defaultOpen}
+      defaultNamespace={namespace}
       title={tFromStoreKeys(storeKeys, schema)}
       value={fromJS(value).toJS() || ''}
-      resources={(data ?? []).filter(res => {
+      resources={(data || []).filter(res => {
         if (filter) {
           const [value] = jsonata(filter, { item: res });
           return value;
@@ -93,7 +96,7 @@ export function ResourceRefRender({
         });
       }}
       required={required}
-      loading={loading}
+      loading={loading || !url}
       error={error}
       nestingLevel={nestingLevel}
     >
