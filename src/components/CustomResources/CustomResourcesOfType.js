@@ -8,10 +8,14 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { CustomResources } from 'components/CustomResources/CustomResources';
 import { LayoutPanel } from 'fundamental-react';
 import { useUrl } from 'hooks/useUrl';
+import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
+import { useRecoilState } from 'recoil';
+import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 export default function CustomResourcesOfType({ crdName }) {
   const { t } = useTranslation();
   const { clusterUrl } = useUrl();
+  const [showAdd, setShowAdd] = useRecoilState(showYamlUploadDialogState);
   const { data: crd, loading, error } = useGet(
     `/apis/apiextensions.k8s.io/v1/customresourcedefinitions/` + crdName,
   );
@@ -55,6 +59,12 @@ export default function CustomResourcesOfType({ crdName }) {
         version={crd.spec.versions.find(v => v.served)}
         showTitle={false}
         showNamespace={false}
+      />
+      <YamlUploadDialog
+        show={showAdd}
+        onCancel={() => {
+          setShowAdd(false);
+        }}
       />
     </>
   );

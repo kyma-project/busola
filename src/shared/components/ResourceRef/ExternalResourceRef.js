@@ -31,18 +31,28 @@ export function ExternalResourceRef({
   index,
   children,
   nestingLevel = 0,
+  defaultNamespace,
 }) {
   const { t } = useTranslation();
   const namespacesUrl = '/api/v1/namespaces';
-  const { data: namespaces, loading: namespacesLoading } = useGetList()(
-    namespacesUrl,
-  );
+  const {
+    data: namespaces,
+    loading: namespacesLoading,
+    error: namespacesError,
+  } = useGetList()(namespacesUrl);
 
   const showHiddenNamespaces = useRecoilValue(showHiddenNamespacesState);
-
   const hiddenNamespaces = useGetHiddenNamespaces();
+  const namespaceData = {
+    metadata: {
+      name: defaultNamespace,
+    },
+  };
 
-  const namespacesOptions = (namespaces || [])
+  const namespacesOptions = (namespacesError
+    ? [namespaceData]
+    : namespaces || []
+  )
     .filter(ns =>
       showHiddenNamespaces
         ? true
