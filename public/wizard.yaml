@@ -28,7 +28,7 @@ data:
       resource: qqq
       form:
         - path: metadata.name
-          widget: Name
+          #widget: 
         - id: foo
           path: spec.string-ref
           trigger: [sr]
@@ -53,6 +53,7 @@ data:
       resource: subqqq
       visibility: $withSubQqq
       form:
+        - path: metadata.name
         - path: spec.qqq
           visibility: $withSubQqq
         - path: spec.content

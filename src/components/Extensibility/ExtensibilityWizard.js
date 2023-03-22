@@ -71,8 +71,6 @@ export function ExtensibilityWizardCore({
   );
   const [resourcesWithStatuses, setResourcesWithStatuses] = useState([]);
   const onChange = (actions, resource) => {
-    console.log('UIStoreProvider::onChange', resource, actions);
-    // console.trace();
     if (actions.scopes.includes('value')) {
       setStore(prevStore => {
         const newStore = storeUpdater(actions)(prevStore[resource]);
@@ -118,8 +116,6 @@ export function ExtensibilityWizardCore({
   );
 
   const onComplete = () => {
-    // console.log('onComplete')
-    console.log('resourcesWithStatuses');
     uploadResources();
   };
 
