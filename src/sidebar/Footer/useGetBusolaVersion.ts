@@ -15,10 +15,12 @@ function createGithubLink(version: string): string {
   if (version !== devVersion && version !== unknownVersion) {
     if (version.toString().startsWith('PR-')) {
       return `${BUSOLA_GITHUB_LINKS.PULLS}/${version.slice(3)}`;
+    } else if (version.toString().startsWith('v20')) {
+      return `${BUSOLA_GITHUB_LINKS.COMMITS}/${version.substring(
+        version.length - 8,
+      )}`;
     }
-    // if the string doesn't match regex, returns full string anyway
-    const commit = version.replace(/v[0-9]-/, '');
-    return `${BUSOLA_GITHUB_LINKS.COMMITS}/${commit}`;
+    return `${BUSOLA_GITHUB_LINKS.COMMITS}/${version}`;
   }
 
   return BUSOLA_GITHUB_LINKS.REPOSITORY;
