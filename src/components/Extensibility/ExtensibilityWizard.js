@@ -13,6 +13,12 @@ import {
 
 import { useResourceSchemas } from 'hooks/useGetSchema';
 import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
+import { Editor } from 'shared/components/MonacoEditorESM/Editor';
+import {
+  OPERATION_STATE_INITIAL,
+  OPERATION_STATE_SUCCEEDED,
+} from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
+import { YamlResourcesList } from 'resources/Namespaces/YamlUpload/YamlResourcesList';
 
 import widgets from './components-form';
 import { DataSourcesContextProvider } from './contexts/DataSources';
@@ -26,6 +32,14 @@ import { prepareSchemaRules } from './helpers/prepareSchemaRules';
 import { createTemplate } from './helpers';
 import { useVariables } from './hooks/useVariables';
 import { prepareRules } from './helpers/prepareRules';
+
+import './ExtensibilityWizard.scss';
+
+// TODO extract this as a helper
+const isK8sResource = resource => {
+  if (!resource) return true;
+  return resource.apiVersion && resource.kind && resource.metadata;
+};
 
 // TODO common container
 function FormContainer({ children }) {
@@ -53,6 +67,8 @@ export function ExtensibilityWizardCore({
   const { prepareVars, setVar } = useVariables();
   const { t } = useTranslation();
   const triggers = useContext(TriggerContext);
+  const [uploadState, setUploadState] = useState(OPERATION_STATE_INITIAL);
+  const [error, setError] = useState('');
 
   const [store, setStore] = useState(() =>
     mapValues(resourceSchema.general.resources, res =>
@@ -93,30 +109,53 @@ export function ExtensibilityWizardCore({
     setTimeout(() => triggers.trigger('init', []));
   }, [resourceSchema]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const yaml = useMemo(() => {
-    setResourcesWithStatuses(
-      Object.values(resources).map(resource => ({ value: resource })),
+  const [yaml, setYaml] = useState('');
+  useEffect(() => {
+    setYaml(
+      Object.values(resources)
+        .map(resource => jsyaml.dump(resource))
+        .join('---\n'),
     );
-    return Object.values(resources)
-      .map(resource => jsyaml.dump(resource))
-      .join('\n---\n');
   }, [resources]);
 
   useEffect(() => {
     Object.entries(resources).forEach(([key, val]) => setVar(`$.${key}`, val));
   }, [resources, setVar]);
 
+  useEffect(() => {
+    // TODO common yaml parser with YamlUpload
+    try {
+      setUploadState(OPERATION_STATE_INITIAL);
+
+      const files = jsyaml.loadAll(yaml);
+      if (files.some(file => typeof file !== 'object')) {
+        setError(t('clusters.wizard.not-an-object'));
+      } else if (files.some(file => !isK8sResource(file))) {
+        setError(t('upload-yaml.messages.not-a-k8s-resource'));
+      } else {
+        setResourcesWithStatuses(files.map(resource => ({ value: resource })));
+        setError(null);
+      }
+    } catch ({ message }) {
+      setError(message.substr(0, message.indexOf('\n')));
+      setResourcesWithStatuses([]);
+    }
+  }, [yaml, t]);
+
   const uploadResources = useUploadResources(
     resourcesWithStatuses,
     setResourcesWithStatuses,
-    // setLastOperationState,
-    () => {},
+    setUploadState,
     // defaultNamespace,
     'default',
   );
 
   const onComplete = () => {
-    uploadResources();
+    if (uploadState === OPERATION_STATE_SUCCEEDED) {
+      onCancel();
+    } else {
+      uploadResources();
+    }
   };
 
   return (
@@ -125,7 +164,7 @@ export function ExtensibilityWizardCore({
         navigationType="tabs"
         headerSize="md"
         contentSize="md"
-        className="add-cluster-wizard"
+        className="extensibility-wizard"
         onCancel={onCancel}
         onComplete={onComplete}
       >
@@ -145,8 +184,27 @@ export function ExtensibilityWizardCore({
             </UIStoreProvider>
           </Wizard.Step>
         ))}
-        <Wizard.Step title={'«summary»'}>
-          <pre>{yaml}</pre>
+        <Wizard.Step
+          title={'«summary»'}
+          nextLabel={
+            uploadState === OPERATION_STATE_SUCCEEDED
+              ? t('common.buttons.close')
+              : '«upload»'
+          }
+        >
+          <div className="summary-content">
+            <Editor
+              autocompletionDisabled
+              height="60vh"
+              language="yaml"
+              value={yaml || ''}
+              onChange={setYaml}
+              error={error}
+            />
+            <div>
+              <YamlResourcesList resourcesData={resourcesWithStatuses} />
+            </div>
+          </div>
         </Wizard.Step>
       </Wizard>
     </UIMetaProvider>
