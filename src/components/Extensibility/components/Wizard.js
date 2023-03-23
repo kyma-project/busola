@@ -14,9 +14,11 @@ export function Wizard({
   scope,
   arrayItems,
 }) {
-  const { isEnabled: isWizardEnabled } = useFeature('EXTENSIBILITY_WIZARD');
   const [showWizard, setShowWizard] = useState(false);
+  const { isEnabled: isWizardEnabled } = useFeature('EXTENSIBILITY_WIZARD');
+
   if (!isWizardEnabled) return null;
+
   // structure?.steps
   return (
     <>
