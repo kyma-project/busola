@@ -155,6 +155,7 @@ export function ExtensibilityWizardCore({
 
 export function ExtensibilityWizard(props) {
   const [structure, setStructure] = useState({});
+
   useEffect(() => {
     fetch('/wizard.yaml')
       .then(res => res.text())

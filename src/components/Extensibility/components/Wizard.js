@@ -4,6 +4,7 @@ import { Button, Dialog } from 'fundamental-react';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 
 import { ExtensibilityWizard } from '../ExtensibilityWizard';
+import { useFeature } from 'hooks/useFeature';
 
 export function Wizard({
   value,
@@ -13,7 +14,9 @@ export function Wizard({
   scope,
   arrayItems,
 }) {
+  const { isEnabled: isWizardEnabled } = useFeature('EXTENSIBILITY_WIZARD');
   const [showWizard, setShowWizard] = useState(false);
+  if (!isWizardEnabled) return null;
   // structure?.steps
   return (
     <>
