@@ -1,4 +1,5 @@
 api-rules: API Rules
+subscriptions: Subscriptions
 apps:
   title: Apps
 cluster-overview:
@@ -1367,66 +1368,6 @@ storage-classes:
     reclaim-policy: Reclaim Policy
   name_singular: StorageClass
   title: Storage Classes
-subscriptions:
-  create:
-    labels:
-      add-filter: Add filter
-      application-name: Application name
-      event-name: Event name
-      event-source: Event source
-      event-type: Event type
-      event-type-plural: Event Types
-      event-version: Event version
-      filter: Filter {{name}}
-      filters: Filters
-      service-name: Service
-      sink: Sink
-    messages:
-      one-filter-required: Provide at least one filter.
-    placeholders:
-      application-name: Choose Application name
-      event-name: For example, order.cancelled
-      event-type: Enter the event type, for example, sap.kyma.custom.test-app.order.cancelled.v1
-      event-version: For example, v1
-      service-name: Choose Service for the sink
-    title: Add Subscription
-  description: <0>Subscription</0> is used to subscribe to events.
-  errors:
-    empty-event-types: You must provide at least one event type.
-    event-name-required: Event name is required.
-    event-name-segments: Event name must consist of at least 2 non-empty segments, separated by a dot.
-    event-type-7-segments: Event type must consist of at least 7 non-empty segments, separated by a dot.
-    event-type-allowed-charset: Event type may contain only letters, digits and dots.
-    event-type-prefix: Event type must start with "{{prefix}}".
-    event-type-required: Event type is required.
-  headers:
-    conditions:
-      last-transition: Last Transition
-      reason: Reason
-      status: Status
-      title: Conditions
-      type: Type
-    filters:
-      event-source: Event Source
-      event-type: Event Type
-      property: Property
-      title: Filters
-      type: Type
-      value: Value
-  name_singular: Subscription
-  sink: Sink
-  title: Subscriptions
-  tooltips:
-    application-name: Choose your Application from the cluster.
-    event-name: The name must consist of at least two parts divided by a dot.
-    event-source: Event source is the origin from which the event is published.
-    event-type-advanced: You can add more event types.
-    event-type-advanced-info: Event type must consist of minimum seven elements separated by dots. Prefix should be sap.kyma.custom. You can add more event types.
-    event-type-simple: Event type is defined based on the Application name, event name, and event version.
-    event-version: Choose the event version from the drop-down list or provide your own version.
-    ready: Subscription is active.
-    service-name: Choose a Service that connects to the sink.
-    sink: Specifies the HTTP endpoint where matching events should be sent to.
 top-nav:
   profile:
     preferences: $t(navigation.preferences.title)

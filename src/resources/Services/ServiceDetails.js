@@ -4,7 +4,8 @@ import { InfoLabel, Icon, Token } from 'fundamental-react';
 
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import { SubscriptionsList } from 'shared/components/SubscriptionsList';
+
+import SubscriptionsList from './SubscriptionsList';
 import { ApiRulesList } from './ApiRulesList';
 
 import { ServiceCreate } from './ServiceCreate';

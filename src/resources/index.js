@@ -18,7 +18,6 @@ import * as Events from './Events';
 import * as Deployments from './Deployments';
 import * as DaemonSets from './DaemonSets';
 import * as ConfigMaps from './ConfigMaps';
-import * as Subscriptions from './Subscriptions';
 import * as ServiceAccounts from './ServiceAccounts';
 
 // //cluster
@@ -53,7 +52,6 @@ export const resources = [
   Roles,
   RoleBindings,
   ConfigMaps,
-  Subscriptions,
   ServiceAccounts,
 
   // cluster resources
