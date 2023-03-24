@@ -1,3 +1,4 @@
+import { ExtWizardConfig } from './../types';
 import jsyaml from 'js-yaml';
 import { mapValues, partial } from 'lodash';
 import { useEffect, useState } from 'react';
@@ -80,6 +81,54 @@ async function getExtensionConfigMaps(
     '/api/v1/configmaps?labelSelector=busola.io/extension=resource';
   const namespacedCMUrl = `/api/v1/namespaces/${currentNamespace ??
     kubeconfigNamespace}/configmaps?labelSelector=busola.io/extension=resource`;
+
+  if (!currentNamespace) {
+    const hasAccessToClusterCMList = doesUserHavePermission(
+      ['list'],
+      { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
+      permissionSet,
+    );
+
+    // user has no access to clusterwide namespace listing, fall back to namespaced listing
+    const url = hasAccessToClusterCMList ? clusterCMUrl : namespacedCMUrl;
+
+    try {
+      const response = await fetchFn({ relativeUrl: url });
+      const configMapResponse: ConfigMapListResponse = await response.json();
+      return configMapResponse?.items ?? [];
+    } catch (e) {
+      console.warn('Cannot load cluster params from the target cluster: ', e);
+      return [];
+    }
+  } else {
+    const hasAccessToClusterCMList = doesUserHavePermission(
+      ['list'],
+      { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
+      permissionSet,
+    );
+
+    const url = hasAccessToClusterCMList ? clusterCMUrl : namespacedCMUrl;
+
+    try {
+      const response = await fetchFn({ relativeUrl: url });
+      const configMapResponse: ConfigMapListResponse = await response.json();
+      return configMapResponse?.items || [];
+    } catch (error) {
+      return [];
+    }
+  }
+}
+
+async function getExtensionWizardConfigMaps(
+  fetchFn: FetchFn,
+  kubeconfigNamespace: string,
+  currentNamespace: string,
+  permissionSet: PermissionSetState,
+): Promise<Array<ConfigMapResponse>> {
+  const clusterCMUrl =
+    '/api/v1/configmaps?labelSelector=busola.io/extension=wizard';
+  const namespacedCMUrl = `/api/v1/namespaces/${currentNamespace ??
+    kubeconfigNamespace}/configmaps?labelSelector=busola.io/extension=wizard`;
 
   if (!currentNamespace) {
     const hasAccessToClusterCMList = doesUserHavePermission(
@@ -215,6 +264,7 @@ export const useGetExtensions = () => {
   const auth = useRecoilValue(authDataState);
   const setExtensions = useSetRecoilState(extensionsState);
   const setInjections = useSetRecoilState(injectionsState);
+  const setWizard = useSetRecoilState(wizardState);
   const fetchFn = getFetchFn(useRecoilValue);
   const configuration = useRecoilValue(configurationAtom);
   const features = configuration?.features;
@@ -225,11 +275,16 @@ export const useGetExtensions = () => {
   const { isEnabled: isExtensibilityInjectionsEnabled } = useFeature(
     'EXTENSIBILITY_INJECTIONS',
   );
+  const { isEnabled: isExtensibilityWizardEnabled } = useFeature(
+    'EXTENSIBILITY_WIZARD',
+  );
+
   useEffect(() => {
     const manageExtensions = async () => {
       if (!cluster) {
         setExtensions([]);
         setInjections([]);
+        setWizard([]);
         setNonNamespacedExtensions(null);
         return;
       }
@@ -240,6 +295,32 @@ export const useGetExtensions = () => {
         namespace,
         permissionSet,
       );
+
+      let wizardConfigs;
+      if (fetchFn) {
+        wizardConfigs = await getExtensionWizardConfigMaps(
+          fetchFn,
+          cluster.currentContext.namespace || 'kube-public',
+          namespace,
+          permissionSet,
+        );
+      }
+
+      if (!wizardConfigs || !isExtensibilityWizardEnabled) {
+        setWizard([]);
+      } else {
+        let extWizardConfigs: ExtWizardConfig[] = [];
+        wizardConfigs.filter(config =>
+          config?.data?.map(data =>
+            extWizardConfigs.push({
+              injections: data.injections,
+              general: data.general,
+              steps: data.steps,
+            }),
+          ),
+        );
+        setWizard(extWizardConfigs);
+      }
 
       if (!configs) {
         setExtensions([]);
@@ -298,5 +379,12 @@ export const injectionsState: RecoilState<ExtInjectionConfig[] | null> = atom<
   ExtInjectionConfig[] | null
 >({
   key: 'injectionsState',
+  default: defaultValue,
+});
+
+export const wizardState: RecoilState<ExtWizardConfig[] | null> = atom<
+  ExtWizardConfig[] | null
+>({
+  key: 'wizardState',
   default: defaultValue,
 });

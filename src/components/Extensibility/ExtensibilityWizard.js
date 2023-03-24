@@ -34,6 +34,8 @@ import { useVariables } from './hooks/useVariables';
 import { prepareRules } from './helpers/prepareRules';
 
 import './ExtensibilityWizard.scss';
+import { useRecoilValue } from 'recoil';
+import { wizardState } from 'state/navigation/extensionsAtom';
 
 // TODO extract this as a helper
 const isK8sResource = resource => {
@@ -212,15 +214,8 @@ export function ExtensibilityWizardCore({
 }
 
 export function ExtensibilityWizard(props) {
-  const [structure, setStructure] = useState({});
+  const [structure] = useRecoilValue(wizardState);
 
-  useEffect(() => {
-    fetch('/wizard.yaml')
-      .then(res => res.text())
-      .then(rawdata => jsyaml.load(rawdata))
-      .then(cmdata => mapValues(cmdata.data, item => jsyaml.load(item)))
-      .then(setStructure);
-  }, []);
   const size = useMemo(() => Object.keys(structure).length, [structure]);
 
   if (size) {
