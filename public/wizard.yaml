@@ -22,6 +22,14 @@ data:
         group: busola.example.com
         version: v1
         multiple: true # v2
+  defaults: |
+    qqq:
+      spec:
+        string-ref: foo
+    subqqq:
+      metadata:
+        labels:
+          example: example
   steps: |
     - name: First step
       description: this is the first step
@@ -31,13 +39,23 @@ data:
           #widget: 
         - id: foo
           path: spec.string-ref
+          name: string ref
           trigger: [sr]
         - path: spec.double-ref.name
+          name: double ref name
+          visibility: false
+          overwrite: false
           subscribe:
+            init: spec."string-ref"
             sr: spec."string-ref"
         - path: spec.double-ref.namespace
           visibility: |
             $exists(spec."double-ref".name)
+        - path: spec.triple-ref.nane
+          name: triple ref name
+          # hidden: true
+          # subscribe:
+            # sr: 'spec."string.ref" & "-triple'
         # - path: $subqqq.spec.name
         # - ref: foo
         # - 

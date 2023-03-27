@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useContext } from 'react';
-import { Wizard, Spinner } from 'fundamental-react';
+import { Wizard } from 'fundamental-react';
 import { mapValues } from 'lodash';
 import jsyaml from 'js-yaml';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +19,7 @@ import {
   OPERATION_STATE_SUCCEEDED,
 } from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { YamlResourcesList } from 'resources/Namespaces/YamlUpload/YamlResourcesList';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 
 import widgets from './components-form';
 import { DataSourcesContextProvider } from './contexts/DataSources';
@@ -71,8 +72,11 @@ export function ExtensibilityWizardCore({
   const [error, setError] = useState('');
 
   const [store, setStore] = useState(() =>
-    mapValues(resourceSchema.general.resources, res =>
-      getUIStoreFromResourceObj(createTemplate(res, 'default', res.scope)),
+    mapValues(resourceSchema.general.resources, (res, key) =>
+      getUIStoreFromResourceObj({
+        ...createTemplate(res, 'default', res.scope),
+        ...(resourceSchema.defaults[key] || {}),
+      }),
     ),
   );
 

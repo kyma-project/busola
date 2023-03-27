@@ -48,8 +48,8 @@ const pluginStack = [
   SchemaRulesInjector,
   CustomFieldInjector,
   EnumHandler,
-  VisibilityHandler,
   TriggerHandler,
+  VisibilityHandler,
   PluginSimpleStack,
   ValidityReporter,
 ];

@@ -74,7 +74,7 @@ export const useGetResourceSchemas = resources => {
     }));
   const [error, setError] = useState(undefined);
   const [loading, setLoading] = useState(() =>
-    mapValues(resources).map(() => isWorkerOkay),
+    mapValues(resources, () => isWorkerOkay),
   );
 
   useEffect(() => {
