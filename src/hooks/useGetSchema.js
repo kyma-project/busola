@@ -50,7 +50,7 @@ export const useGetSchema = ({ schemaId, skip, resource }) => {
 };
 
 // TODO error/loading
-export const useResourceSchemas = resources => {
+export const useGetResourceSchemas = resources => {
   const schemaIds = useMemo(
     () =>
       mapValues(resources, resource => {
@@ -72,11 +72,10 @@ export const useResourceSchemas = resources => {
       ...schemas,
       [schemaId]: schema,
     }));
-  // TODO
-  //
-  // const [error, setError] = useState(null);
-  // const [loading, setLoading] = useState(!isWorkerOkay ? false : !skip);
-  // const [loading, setLoading] = useState([]);
+  const [error, setError] = useState(undefined);
+  const [loading, setLoading] = useState(() =>
+    mapValues(resources).map(() => isWorkerOkay),
+  );
 
   useEffect(() => {
     const hasSchemas = Object.keys(schemaIds).every(
@@ -91,26 +90,32 @@ export const useResourceSchemas = resources => {
 
       addWorkerListener(`schemaComputed:${schemaId}`, ({ schema }) => {
         setSchema(key, schema);
-        // TODO
-        // setError(null);
-        // setLoading(false);
+        setError(undefined);
+        setLoading(loading => ({
+          ...loading,
+          [key]: false,
+        }));
       });
     });
-    // TODO
-    // addWorkerListener('customError', err => {
-    // setError(err);
-    // setLoading(false);
-    // });
-    // addWorkerErrorListener(err => {
-    // setError(err);
-    // setLoading(false);
-    // });
-    // }, [areSchemasComputed, schemaIds, setSchemas, schemas, isWorkerOkay]);
-  }, [areSchemasComputed, schemas.schemaId, schemaIds, isWorkerOkay]);
+    addWorkerListener('customError', err => {
+      setError(err);
+      setLoading(mapValues(resources).map(() => false));
+    });
+    addWorkerErrorListener(err => {
+      setError(err);
+      setLoading(mapValues(resources).map(() => false));
+    });
+  }, [
+    areSchemasComputed,
+    schemas.schemaId,
+    schemaIds,
+    isWorkerOkay,
+    resources,
+  ]);
 
   return {
     schemas,
-    // TODO
-    // loading: Object.values(loading).some(v => !!v),
+    loading: Object.values(loading).some(v => !!v),
+    error,
   };
 };

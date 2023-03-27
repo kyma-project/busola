@@ -666,6 +666,9 @@ extensibility:
       error: 'Configuration error: The joined array widget configuration is incorrect. Path value must be an array type.'
     table:
       error: The table widget configuration is incorrect. Path value must be an array type.
+  wizard:
+    summary: Summary
+    upload: Upload
 gardener:
   headers:
     provider: Provider

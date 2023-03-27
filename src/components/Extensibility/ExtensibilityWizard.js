@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useContext } from 'react';
-import { Wizard } from 'fundamental-react';
-import { mapValues } from 'lodash'; // XXX temporary
-import jsyaml from 'js-yaml'; // XXX temporary
+import { Wizard, Spinner } from 'fundamental-react';
+import { mapValues } from 'lodash';
+import jsyaml from 'js-yaml';
 import { useTranslation } from 'react-i18next';
 import {
   UIMetaProvider,
@@ -11,7 +11,7 @@ import {
   storeUpdater,
 } from '@ui-schema/ui-schema';
 
-import { useResourceSchemas } from 'hooks/useGetSchema';
+import { useGetResourceSchemas } from 'hooks/useGetSchema';
 import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import {
@@ -76,7 +76,9 @@ export function ExtensibilityWizardCore({
     ),
   );
 
-  const { schemas } = useResourceSchemas(resourceSchema.general.resources);
+  const { schemas, loading: loadingSchemas } = useGetResourceSchemas(
+    resourceSchema.general.resources,
+  );
   const schemaMaps = useMemo(
     () => mapValues(schemas, schema => createOrderedMap(schema)),
     [schemas],
@@ -158,6 +160,8 @@ export function ExtensibilityWizardCore({
     }
   };
 
+  if (loadingSchemas) return <Spinner />;
+
   return (
     <UIMetaProvider widgets={widgets}>
       <Wizard
@@ -185,11 +189,11 @@ export function ExtensibilityWizardCore({
           </Wizard.Step>
         ))}
         <Wizard.Step
-          title={'«summary»'}
+          title={t('extensibility.wizard.summary')}
           nextLabel={
             uploadState === OPERATION_STATE_SUCCEEDED
               ? t('common.buttons.close')
-              : '«upload»'
+              : t('extensibility.wizard.upload')
           }
         >
           <div className="summary-content">
