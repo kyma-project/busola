@@ -291,7 +291,7 @@ injections:
         resource:
           name: metadata.name
           namespace: metadata.namespace
-          kind: '"Kyma"'
+          kind: '"AK-Kyma"'
       - widget: Alert
         severity: warning
         source: '"This module is in experimental phase and might change in future"'
@@ -303,16 +303,17 @@ injections:
         children: 
           - name: Name
             source: name
-          - name: Name
-            source: $parent.metadata.name
           - name: Namespace
             source: $parent.metadata.namespace
           - name: Channel
             source: channel
             widget: Text
+          - name: Version
+            source: '$parent.status.modules ? $filter($parent.status.modules, function($p){$p.name=name}).version : "-"'
+            widget: Text
           - name: State
             widget: Badge
-            source: '$parent.status.modules ? $filter($parent.status.modules, function($p){$p.name="cluster-ip"}).state : $parent.status.state'
+            source: '$parent.status.modules ? $filter($parent.status.modules, function($p){$p.name=name}).state : $parent.status.state'
             tooltip: status.state
           - name: ''
             source: '"Go to details"'
@@ -320,5 +321,5 @@ injections:
             resource:
               name: $parent.metadata.name
               namespace: $parent.metadata.namespace
-              kind: '"Kyma"'
+              kind: '"AK-Kyma"'
         
