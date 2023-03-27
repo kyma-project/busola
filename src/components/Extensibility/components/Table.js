@@ -99,9 +99,12 @@ export function Table({
           value={entry}
           scope={entry}
           arrayItems={[...arrayItems, entry]}
+          parent={value}
           structure={column}
           schema={schema}
           originalResource={originalResource}
+          singleRootResource={arrayItems}
+          index={index}
         />
       );
     });
@@ -125,6 +128,8 @@ export function Table({
               schema={schema}
               inlineRenderer={InlineWidget}
               originalResource={originalResource}
+              singleRootResource={arrayItems}
+              index={index}
             />
           ))}
         </td>

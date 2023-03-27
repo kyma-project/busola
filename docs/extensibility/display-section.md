@@ -11,6 +11,7 @@
   - [ExternalLink](#externallink)
   - [JoinedArray](#joinedarray)
   - [Labels](#labels)
+  - [ResourceButton](#resourcebutton)
   - [ResourceLink](#resourcelink)
   - [Text](#text)
 - [Block widgets](#block-widgets)
@@ -349,6 +350,32 @@ Labels widgets render all the array or object entries in the `value` or `key-val
 ```
 
 <img src="./assets/display-widgets/Labels.png" alt="Example of a Labels widget" width="40%" style="border: 1px solid #D2D5D9">
+
+### ResourceButton
+
+ResourceButton widgets render button that links to Kubernetes resources.
+
+#### Widget-specific parameters
+
+- **icon** - Name of an icon for this button. List of available icons can be found [here](https://sap.github.io/fundamental-react/?path=/docs/component-api-icon--primary). Use string after `--`, e.g. if icon is named `sap-icon--accept` use `accept`.
+- **resource** - To create a hyperlink, Busola needs the name and the kind of the target resource; they must be passed into the **resource** object as property paths in either **\$item** - value extracted using **source**, or **\$root** - the original resource. If the target resource is in a `namespace`, provide **namespace**, **name**, and **kind** properties.
+- **source** - a [JSONata](jsonata.md) expression resolving a link text, this property has access to **\$item** and **\$root**.
+
+#### Example
+
+##### _details_ section
+
+```yaml
+- widget: ResourceButton
+  source: "metadata.ownerReferences[0].status = 'Running' ? 'otherTranslations.linkText' : 'otherTranslations.errorLinkText'"
+  resource:
+    name: metadata.ownerReferences[0].name
+    namespace: $root.metadata.namespace
+    kind: "'Deployment'"
+  icon: add
+```
+
+<img src="./assets/display-widgets/ResourceButton.png" alt="Example of a ResourceButton widget" width="40%" style="border: 1px solid #D2D5D9">
 
 ### ResourceLink
 
