@@ -19,12 +19,14 @@ export function Badge({
   originalResource,
   scope,
   arrayItems,
+  singleRootResource,
 }) {
   const { t: tExt } = useGetTranslation();
   const { t } = useTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
   const jsonata = useJsonata({
     resource: originalResource,
+    parent: singleRootResource,
     scope,
     value,
     arrayItems,

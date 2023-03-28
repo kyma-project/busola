@@ -93,7 +93,7 @@ export function Widget({
   arrayItems = [],
   inlineRenderer,
   originalResource,
-  singleRootResource = {},
+  singleRootResource,
   index,
   ...props
 }) {

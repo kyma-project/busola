@@ -88,6 +88,7 @@ export function useJsonata({
           ...extras,
         },
       );
+
       return [value, null];
     } catch (e) {
       return [
