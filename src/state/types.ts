@@ -66,11 +66,9 @@ export type ExtInjectionConfig = {
 };
 
 export type ExtWizardConfig = {
-  data: {
-    injections: ExtInjection;
-    general: ExtGeneral;
-    steps: ExtWizardSteps;
-  };
+  injections: ExtInjection;
+  general: ExtGeneral;
+  steps: ExtWizardSteps;
 };
 
 export type ExtWizardSteps = {

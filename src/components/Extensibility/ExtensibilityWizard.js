@@ -36,6 +36,7 @@ import { prepareRules } from './helpers/prepareRules';
 import './ExtensibilityWizard.scss';
 import { useRecoilValue } from 'recoil';
 import { wizardState } from 'state/navigation/extensionsAtom';
+import { useGetCRbyPath } from './useGetCRbyPath';
 
 // TODO extract this as a helper
 const isK8sResource = resource => {
@@ -214,16 +215,29 @@ export function ExtensibilityWizardCore({
 }
 
 export function ExtensibilityWizard(props) {
-  const [structure] = useRecoilValue(wizardState);
+  console.log(props);
+  const wizard = useRecoilValue(wizardState);
+  const resMetaData = useGetCRbyPath();
+  console.log(resMetaData);
+  const [structure, setStructure] = useState([]);
+  console.log(wizard, structure);
 
-  const size = useMemo(() => Object.keys(structure).length, [structure]);
+  useEffect(() => {
+    fetch('/wizard.yaml')
+      .then(res => res.text())
+      .then(rawdata => jsyaml.load(rawdata))
+      .then(cmdata => mapValues(cmdata.data, item => jsyaml.load(item)))
+      .then(setStructure);
+  }, []);
+
+  const size = useMemo(() => Object.keys(wizard[0]).length, [wizard]);
 
   if (size) {
     return (
-      <DataSourcesContextProvider dataSources={structure?.dataSources || {}}>
+      <DataSourcesContextProvider dataSources={wizard[0]?.dataSources || {}}>
         <TriggerContextProvider>
           <VarStoreContextProvider>
-            <ExtensibilityWizardCore {...props} resourceSchema={structure} />
+            <ExtensibilityWizardCore {...props} resourceSchema={wizard[0]} />
           </VarStoreContextProvider>
         </TriggerContextProvider>
       </DataSourcesContextProvider>

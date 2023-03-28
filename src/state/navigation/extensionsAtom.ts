@@ -124,7 +124,7 @@ async function getExtensionWizardConfigMaps(
   kubeconfigNamespace: string,
   currentNamespace: string,
   permissionSet: PermissionSetState,
-): Promise<Array<ConfigMapResponse>> {
+): Promise<any> {
   const clusterCMUrl =
     '/api/v1/configmaps?labelSelector=busola.io/extension=wizard';
   const namespacedCMUrl = `/api/v1/namespaces/${currentNamespace ??
@@ -160,7 +160,60 @@ async function getExtensionWizardConfigMaps(
     try {
       const response = await fetchFn({ relativeUrl: url });
       const configMapResponse: ConfigMapListResponse = await response.json();
-      return configMapResponse?.items || [];
+      // return configMapResponse?.items || [];
+
+      const configMapsExtensions = configMapResponse?.items.reduce(
+        (accumulator, currentConfigMap) => {
+          const extResourceWithMetadata = {
+            ...currentConfigMap,
+            data: mapValues(
+              currentConfigMap?.data || {},
+              convertYamlToObject,
+            ) as ExtResource,
+          };
+
+          if (!extResourceWithMetadata.data) return accumulator;
+
+          const indexOfTheSameExtension = accumulator.findIndex(ext =>
+            isTheSameNameAndUrl(ext.data, extResourceWithMetadata.data),
+          );
+
+          if (indexOfTheSameExtension !== -1) {
+            const areNamespacesTheSame =
+              currentNamespace ===
+              accumulator[indexOfTheSameExtension].metadata.namespace;
+            if (areNamespacesTheSame) {
+              return accumulator;
+            }
+
+            accumulator[indexOfTheSameExtension] = extResourceWithMetadata;
+            return accumulator;
+          }
+
+          return [...accumulator, extResourceWithMetadata];
+        },
+        [] as ExtResourceWithMetadata[],
+      );
+      if (configMapsExtensions) {
+        configMapsExtensions.every(cmExt => {
+          const namespaces = ['kube-public', currentNamespace];
+
+          if (namespaces.includes(cmExt.metadata.namespace!)) {
+            return false;
+          }
+          return true;
+        });
+
+        const configMapsExtensionsDataOnly: ExtResource[] = configMapsExtensions.map(
+          cm => cm.data,
+        );
+
+        const combinedExtensions = [...configMapsExtensionsDataOnly].filter(
+          ext => !!ext.general,
+        );
+
+        return combinedExtensions;
+      }
     } catch (error) {
       return [];
     }
@@ -310,14 +363,12 @@ export const useGetExtensions = () => {
         setWizard([]);
       } else {
         let extWizardConfigs: ExtWizardConfig[] = [];
-        wizardConfigs.filter(config =>
-          config?.data?.map(data =>
-            extWizardConfigs.push({
-              injections: data.injections,
-              general: data.general,
-              steps: data.steps,
-            }),
-          ),
+        wizardConfigs.filter((config: any) =>
+          extWizardConfigs.push({
+            injections: config?.injections,
+            general: config?.general,
+            steps: config?.steps,
+          }),
         );
         setWizard(extWizardConfigs);
       }
