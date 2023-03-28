@@ -215,12 +215,14 @@ details:
         - name: channel
           source: spec.channel
         - name: State
+          widget: Badge
           source: status.state
+          description: 'status.state!="Ready" ? status.lastOperation.operation : ""'
         - name: Age
           source: metadata.creationTimestamp
     - widget: Alert
       severity: warning
-      source: '"This module is in experimental phase and might change in future"'
+      source: '"alert.beta"'
       visibility: '"beta" in $item.spec.modules.channel'
     - widget: Table
       source: 'spec.modules[]'
@@ -231,6 +233,12 @@ details:
           name: Module Name
         - source: $item.channel
           name: Channel
+        - name: Version
+          source: '$parent.status.modules ? $filter($parent.status.modules, function($p){$p.name=$item.name}).version : "-"'
+          widget: Text
+        - name: State
+          widget: Badge
+          source: '$filter($parent.status.modules, function($p){$p.name=name}).state'
 form:
   - simple: true
     path: spec.channel
@@ -250,7 +258,7 @@ form:
           }).spec.channel
   - widget: Alert
     severity: warning
-    alert: '"This module is in experimental phase and might change in future"'
+    alert: '"alert.beta"'
     visibility: '"beta" in $item.spec.modules.channel'
 general:
   resource:
@@ -276,6 +284,7 @@ translations:
     metadata.annotations: Annotations
     metadata.labels: Labels
     metadata.creationTimestamp: Created at
+    alert.beta: "CAUTION: The Service Level Agreements (SLA) and Support obligations do not apply to Beta modules and functionalities. If Beta modules or functionalities directly or indirectly affect other modules, the Service Level Agreements (SLA) and Support for these modules are limited to priority levels P3 (Medium) or P4 (Low). Thus, Beta releases are not intended for use in customer production environments."
 injections:
   - name: Kyma
     widget: Panel
@@ -291,15 +300,27 @@ injections:
         resource:
           name: metadata.name
           namespace: metadata.namespace
-          kind: '"AK-Kyma"'
+          kind: '"Kyma"'
+      - name: State
+        widget: Badge
+        source: status.state
+        description: 'status.state!="Ready" ? status.lastOperation.operation : ""'
       - widget: Alert
         severity: warning
-        source: '"This module is in experimental phase and might change in future"'
+        source: '"alert.beta"'
         visibility: '"beta" in $item.spec.modules.channel'
       - name: Installed Modules
         source: $item.spec.modules
         widget: Table
-        disablePadding: true  
+        disablePadding: true
+        extraHeaderContent: 
+          - name: ''
+            source: '"Modify"'
+            widget: ResourceButton
+            resource:
+              name: $parent.metadata.name
+              namespace: $parent.metadata.namespace
+              kind: '"Kyma"'
         children: 
           - name: Name
             source: name
@@ -313,13 +334,5 @@ injections:
             widget: Text
           - name: State
             widget: Badge
-            source: '$parent.status.modules ? $filter($parent.status.modules, function($p){$p.name=name}).state : $parent.status.state'
-            tooltip: status.state
-          - name: ''
-            source: '"Go to details"'
-            widget: ResourceButton
-            resource:
-              name: $parent.metadata.name
-              namespace: $parent.metadata.namespace
-              kind: '"AK-Kyma"'
+            source: '$filter($parent.status.modules, function($p){$p.name=name}).state'
         

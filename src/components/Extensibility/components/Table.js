@@ -40,6 +40,7 @@ export function Table({
   originalResource,
   scope,
   arrayItems = [],
+  singleRootResource,
   ...props
 }) {
   // cleanup jsonata results
@@ -55,6 +56,7 @@ export function Table({
   const { t: tExt } = useGetTranslation();
   const jsonata = useJsonata({
     resource: originalResource,
+    parent: singleRootResource,
     scope,
     value,
     arrayItems,
@@ -99,11 +101,10 @@ export function Table({
           value={entry}
           scope={entry}
           arrayItems={[...arrayItems, entry]}
-          parent={value}
           structure={column}
           schema={schema}
           originalResource={originalResource}
-          singleRootResource={arrayItems}
+          singleRootResource={singleRootResource}
           index={index}
         />
       );
@@ -128,7 +129,7 @@ export function Table({
               schema={schema}
               inlineRenderer={InlineWidget}
               originalResource={originalResource}
-              singleRootResource={arrayItems}
+              singleRootResource={singleRootResource}
               index={index}
             />
           ))}
@@ -140,6 +141,22 @@ export function Table({
   const { sortOptions } = getSortDetails(structure);
 
   const { searchOptions, defaultSearch } = getSearchDetails(structure);
+
+  const extraHeaderContent = (structure.extraHeaderContent || []).map(
+    content => {
+      return (
+        <Widget
+          {...props}
+          {...props}
+          value={value}
+          structure={content}
+          schema={schema}
+          originalResource={originalResource}
+          singleRootResource={singleRootResource}
+        />
+      );
+    },
+  );
 
   const textSearchProperties = getTextSearchProperties({
     searchOptions,
@@ -157,6 +174,7 @@ export function Table({
       title={tExt(structure.name, {
         defaultValue: structure.name || structure.source,
       })}
+      extraHeaderContent={extraHeaderContent}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       {...handleTableValue(value, t)}
