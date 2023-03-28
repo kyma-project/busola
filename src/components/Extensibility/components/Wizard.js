@@ -14,9 +14,9 @@ export function Wizard({
   scope,
   arrayItems,
 }) {
-  console.log(structure);
   const [showWizard, setShowWizard] = useState(false);
   const { isEnabled: isWizardEnabled } = useFeature('EXTENSIBILITY_WIZARD');
+  const wizardName = structure?.wizard || '';
 
   if (!isWizardEnabled) return null;
 
@@ -31,7 +31,10 @@ export function Wizard({
         actions={[]}
       >
         <ErrorBoundary>
-          <ExtensibilityWizard onCancel={() => setShowWizard(false)} name />
+          <ExtensibilityWizard
+            onCancel={() => setShowWizard(false)}
+            wizardName={wizardName}
+          />
         </ErrorBoundary>
       </Dialog>
     </>
