@@ -1,7 +1,7 @@
 import { useRecoilValue } from 'recoil';
 import { wizardState } from 'state/navigation/extensionsAtom';
 
-export const useGetWizardByPath = wizardName => {
+export const useGetWizard = wizardName => {
   const wizards = useRecoilValue(wizardState);
 
   const resource = wizards.find(el => {

@@ -34,7 +34,7 @@ import { useVariables } from './hooks/useVariables';
 import { prepareRules } from './helpers/prepareRules';
 
 import './ExtensibilityWizard.scss';
-import { useGetWizardByPath } from './useGetWizardByPath';
+import { useGetWizard } from './useGetWizard';
 
 // TODO extract this as a helper
 const isK8sResource = resource => {
@@ -213,7 +213,7 @@ export function ExtensibilityWizardCore({
 }
 
 export function ExtensibilityWizard(props) {
-  const resMetaData = useGetWizardByPath(props?.wizardName);
+  const resMetaData = useGetWizard(props?.wizardName);
 
   const size = useMemo(() => Object.keys(resMetaData).length, [resMetaData]);
 
