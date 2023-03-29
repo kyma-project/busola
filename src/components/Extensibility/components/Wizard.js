@@ -5,24 +5,27 @@ import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 
 import { ExtensibilityWizard } from '../ExtensibilityWizard';
 import { useFeature } from 'hooks/useFeature';
+import { useGetTranslation } from 'components/Extensibility/helpers';
 
 export function Wizard({
   value,
-  // structure,
+  structure,
   schema,
   originalResource,
   scope,
   arrayItems,
 }) {
+  const { t: tExt } = useGetTranslation();
   const [showWizard, setShowWizard] = useState(false);
   const { isEnabled: isWizardEnabled } = useFeature('EXTENSIBILITY_WIZARD');
 
   if (!isWizardEnabled) return null;
 
-  // structure?.steps
   return (
     <>
-      <Button onClick={() => setShowWizard(!showWizard)}>{value}</Button>
+      <Button onClick={() => setShowWizard(!showWizard)}>
+        {tExt(value ?? structure.name)}
+      </Button>
       <Dialog
         show={showWizard}
         className="wizard-dialog"

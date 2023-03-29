@@ -712,79 +712,80 @@ The **Injections** section contains a list of objects that defines the display s
 
 ### All available _injections_ slots
 
-- **top** - At the top of the view
-- **bottom** - At the bottom of the view
+- **details-top** - At the top of the resource view
+- **details-bottom** - At the bottom of the resource view
+- **list-header** - In the header of the list view
 
 ### All available _injections_ locations
 
 #### Special views
 
-- ClusterOverview
-- CustomResourceDefinition
+- ClusterOverview (only supports the **details-\*** slots)
+- CustomResourceDefinitions
 
 #### Resource views
 
-- Certificate
-- ClusterRoleBinding
-- ClusterRole
-- ConfigMap
-- CronJob
-- DaemonSet
-- Deployment
-- Event
-- HorizontalPodAutoscaler
-- Ingress
-- Job
-- Namespace
-- NetworkPolicy
-- OAuth2Client
-- PersistentVolumeClaim
-- PersistentVolume
-- Pod
-- ReplicaSet
-- RoleBinding
-- Role
-- Secret
-- ServiceBinding
-- ServiceInstance
-- Service
-- StatefulSet
+- Certificates
+- ClusterRoleBindings
+- ClusterRoles
+- ConfigMaps
+- CronJobs
+- DaemonSets
+- Deployments
+- Events
+- HorizontalPodAutoscalers
+- Ingresses
+- Jobs
+- Namespaces
+- NetworkPolicies
+- OAuth2Clients
+- PersistentVolumeClaims
+- PersistentVolumes
+- Pods
+- ReplicaSets
+- RoleBindings
+- Roles
+- Secrets
+- ServiceBindings
+- ServiceInstances
+- Services
+- StatefulSets
 
 #### Extension views
 
-Use **general.resource.kind** as a **location** for widget injections with extension views.
+When injecting into resources handled by another extension, a lowercase pluralized **general.resource.kind** should be used as the **location**.
 
 ### _injections_ example
 
-```yaml
 injections: |-
-  - name: Failing API Rules
-    widget: Table
-    source: $root
-    targets:
-      - slot: top
-        location: ClusterOverview
-      - slot: bottom
-        location: ClusterOverview
-        filter: '$item.status.APIRuleStatus.code="OK"'
+
+- name: Failing API Rules
+  widget: Table
+  source: \$root
+  targets:
+  - slot: details-top
+    location: ClusterOverview
+  - slot: details-bottom
+    location: ClusterOverview
+    filter: '$item.status.APIRuleStatus.code="OK"'
     filter: '$item.status.APIRuleStatus.code="ERROR"'
     order: 2
-    children: 
-      - name: Name
-        source: metadata.name
-        widget: Text
-      - name: Namespace
-        source: metadata.namespace
-        widget: Text
-      - name: status
-        widget: Badge
-        highlights: 
-          positive:
-            - 'OK'
-          negative:
-            - 'ERROR'
-          critical:
-            - 'SKIPPED'
-        source: 'status.APIRuleStatus.code ? status.APIRuleStatus.code : "UNKNOWN"'
-        description: status.APIRuleStatus.desc
+    children:
+  - name: Name
+    source: metadata.name
+    widget: Text
+  - name: Namespace
+    source: metadata.namespace
+    widget: Text
+  - name: status
+    widget: Badge
+    highlights:
+    positive: - 'OK'
+    negative: - 'ERROR'
+    critical: - 'SKIPPED'
+    source: 'status.APIRuleStatus.code ? status.APIRuleStatus.code : "UNKNOWN"'
+    description: status.APIRuleStatus.desc
+
+```
+
 ```

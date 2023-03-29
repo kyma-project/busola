@@ -379,7 +379,11 @@ function Resource({
       </PageHeader>
       <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />
       <Suspense fallback={<Spinner />}>
-        <Injections destination={resource.kind} slot="top" root={resource} />
+        <Injections
+          destination={resourceType}
+          slot="details-top"
+          root={resource}
+        />
       </Suspense>
       {(customComponents || []).map(component =>
         component(resource, resourceUrl),
@@ -391,7 +395,11 @@ function Resource({
         </Suspense>
       )}
       <Suspense fallback={<Spinner />}>
-        <Injections destination={resource.kind} slot="bottom" root={resource} />
+        <Injections
+          destination={resourceType}
+          slot="details-bottom"
+          root={resource}
+        />
       </Suspense>
       <YamlUploadDialog
         show={showAdd}
