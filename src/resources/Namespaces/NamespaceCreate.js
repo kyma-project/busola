@@ -43,7 +43,12 @@ export function NamespaceCreate({
     initialNamespace ? cloneDeep(initialNamespace) : createNamespaceTemplate(),
   );
 
-  const { isIstioFeatureOn, isSidecarEnabled, setSidecarEnabled } = useSidecar({
+  const {
+    isIstioFeatureOn,
+    isSidecarEnabled,
+    setSidecarEnabled,
+    setIsChanged,
+  } = useSidecar({
     initialRes: initialNamespace,
     res: namespace,
     setRes: setNamespace,
@@ -216,7 +221,10 @@ export function NamespaceCreate({
           label={t('namespaces.create-modal.enable-sidecar')}
           input={Inputs.Switch}
           checked={isSidecarEnabled}
-          onChange={() => setSidecarEnabled(value => !value)}
+          onChange={() => {
+            setSidecarEnabled(value => !value);
+            setIsChanged(true);
+          }}
         />
       ) : null}
 

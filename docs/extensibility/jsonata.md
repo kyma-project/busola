@@ -5,9 +5,10 @@
 - [Overview](#overview)
 - [Scoping](#scoping)
 - [Preset functions](#preset-functions)
+  - [_canI_](#caniresourcegroupandversion-resourcekind)
+  - [_compareStrings_](#comparestringsfirst-second)
   - [_matchByLabelSelector_](#matchbylabelselectoritem-selectorpath)
   - [_matchEvents_](#matcheventsitem-kind-name)
-  - [_compareStrings_](#comparestringsfirst-second)
 
 ## Overview
 
@@ -77,6 +78,46 @@ Whenever data sources are provided, they are available as corresponding variable
 
 ## Preset functions
 
+### canI(resourceGroupAndVersion, resourceKind)
+
+You can use this function to determine if a user has access rights for listing a specified resource.
+
+#### Function parameters
+
+- **resourceGroupAndVersion** - the first part of a resource URL following the pattern: `${resource group}/${resource version}`.
+- **resourceKind** - resource kind.
+
+#### Example
+
+```yaml
+- path: spec.gateway
+  name: gateway
+  visibility: $not($canI('networking.istio.io/v1beta1', 'Gateway'))
+```
+
+### compareStrings(first, second)
+
+You can use this function to sort two strings alphabetically.
+
+#### Function parameters
+
+- **first** - first string to compare.
+- **second** - second string to compare.
+
+#### Example
+
+Here is an example from the [ResourceList widget](display-section.md#resourcelist):
+
+```yaml
+- widget: ResourceList
+  source: '$myDeployments()'
+  name: Example ResourceList Deployments
+  sort:
+    - source: '$item.spec.strategy.type'
+      compareFunction: '$compareStrings($second, $first)'
+      default: true
+```
+
 ### matchByLabelSelector(item, selectorPath)
 
 You can use this function to match Pods using a resource selector.
@@ -118,38 +159,15 @@ You can use this function to match Events using a resource selector.
   hideInvolvedObjects: true
 ```
 
-### compareStrings(first, second)
-
-You can use this function to sort two strings alphabetically.
-
-#### Function parameters
-
-- **first** - first string to compare.
-- **second** - second string to compare.
-
-#### Example
-
-Example from the [ResourceList widget](display-section.md#resourcelist).
-
-```yaml
-- widget: ResourceList
-  source: '$myDeployments()'
-  name: Example ResourceList Deployments
-  sort:
-    - source: '$item.spec.strategy.type'
-      compareFunction: '$compareStrings($second, $first)'
-      default: true
-```
-
-## readableTimestamp(timestamp)
+### readableTimestamp(timestamp)
 
 You can use this function to convert time to readable time.
 
-### Function parameters
+#### Function parameters
 
 - **timestamp** - timestamp to convert.
 
-### Example
+#### Example
 
 ```yaml
 - source: '$readableTimestamp($item.lastTransitionTime)'

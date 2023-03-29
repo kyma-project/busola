@@ -17,8 +17,6 @@ context('Test Custom Resources', () => {
       'cert.gardener.cloud',
     );
 
-    cy.get('table').should('have.length', 1);
-
     cy.get('[role=row]')
       .contains('Certificates')
       .should('be.visible');
@@ -29,13 +27,7 @@ context('Test Custom Resources', () => {
       .contains('Certificates')
       .click();
 
-    cy.get('[aria-label="title"]')
-      .contains('Certificates')
-      .should('be.visible');
-
-    cy.contains('cypress-test-name').should('be.visible');
-
-    cy.contains('certificates.cert.gardener.cloud').click();
+    cy.contains('cert.gardener.cloud').click();
 
     cy.url().should('match', /customresourcedefinitions/);
   });

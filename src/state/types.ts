@@ -24,6 +24,7 @@ export const configFeaturesNames = {
   HIDDEN_NAMESPACES: 'HIDDEN_NAMESPACES',
   VISUAL_RESOURCES: 'VISUAL_RESOURCES',
   EXTENSIBILITY: 'EXTENSIBILITY',
+  EXTENSIBILITY_INJECTIONS: 'EXTENSIBILITY_INJECTIONS',
   TRACKING: 'TRACKING',
   REACT_NAVIGATION: 'REACT_NAVIGATION',
   PROTECTED_RESOURCES: 'PROTECTED_RESOURCES',
@@ -45,20 +46,41 @@ export type LazyConfigFeatureList = {
   [key in LazyConfigFeaturesNames]?: ConfigFeature;
 };
 
-export type ExtResource = {
-  general: {
-    resource: {
-      kind: string;
-      group: string;
-      version: string;
-    };
-    name: string;
-    category: string;
-    urlPath: string;
-    scope: 'namespace' | 'cluster';
-    description?: string;
-    icon?: IconGlyph;
+export type ExtInjection = {
+  name: string;
+  widget: string;
+  source: string;
+  slot: 'top' | 'bottom';
+  destination: string;
+  resource: {
+    kind: string;
+    group: string;
+    version: string;
   };
+};
+
+export type ExtInjectionConfig = {
+  injection: ExtInjection;
+  general: ExtGeneral;
+  dataSources: Record<string, any>;
+};
+
+export type ExtGeneral = {
+  resource: {
+    kind: string;
+    group: string;
+    version: string;
+  };
+  name: string;
+  category: string;
+  urlPath: string;
+  scope: 'namespace' | 'cluster';
+  description?: string;
+  icon?: IconGlyph;
+};
+
+export type ExtResource = {
+  general: ExtGeneral;
   list: any[];
   details: {
     header: any[];
@@ -68,6 +90,7 @@ export type ExtResource = {
   translations: Record<string, any>;
   presets: any[];
   dataSources: Record<string, any>;
+  injections?: ExtInjection[];
 };
 
 export interface UrlOverrides {

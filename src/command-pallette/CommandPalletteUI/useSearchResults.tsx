@@ -13,6 +13,7 @@ import { availableNodesSelector } from 'state/navigation/availableNodesSelector'
 import { CommandPaletteContext, HelpEntries, Result } from './types';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { useNavigate } from 'react-router-dom';
+import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 type useSearchResultsProps = {
   query: string;
@@ -45,6 +46,7 @@ export function useSearchResults({
   const fetch = useFetch();
   const { t } = useTranslation();
   const setOpenPreferencesModal = useSetRecoilState(isPreferencesOpenState);
+  const setShowYamlUpload = useSetRecoilState(showYamlUploadDialogState);
   const clustersInfo = useClustersInfo();
   const navigate = useNavigate();
 
@@ -64,6 +66,7 @@ export function useSearchResults({
     updateResourceCache,
     t,
     setOpenPreferencesModal,
+    setShowYamlUpload,
     clustersInfo,
     navigate,
   };
