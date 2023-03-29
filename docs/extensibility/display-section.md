@@ -353,13 +353,13 @@ Labels widgets render all the array or object entries in the `value` or `key-val
 
 ### ResourceButton
 
-ResourceButton widgets render button that links to Kubernetes resources.
+The ResourceButton widgets render a button that links to Kubernetes resources.
 
 #### Widget-specific parameters
 
-- **icon** - Name of an icon for this button. List of available icons can be found [here](https://sap.github.io/fundamental-react/?path=/docs/component-api-icon--primary). Use string after `--`, e.g. if icon is named `sap-icon--accept` use `accept`.
-- **resource** - To create a hyperlink, Busola needs the name and the kind of the target resource; they must be passed into the **resource** object as property paths in either **\$item** - value extracted using **source**, or **\$root** - the original resource. If the target resource is in a `namespace`, provide **namespace**, **name**, and **kind** properties.
-- **source** - a [JSONata](jsonata.md) expression resolving a link text, this property has access to **\$item** and **\$root**.
+- **icon** - The name of an icon for this button. You can find the list of available icons [here](https://sap.github.io/fundamental-react/?path=/docs/component-api-icon--primary). Use string after `--`, for example, if an icon is named `sap-icon--accept`, use `accept`.
+- **resource** - To create a hyperlink, Busola needs the name and the kind of the target resource; they must be passed into the **resource** object as property paths in either **\$item** - value extracted using **source**, or **\$root** - the original resource. If the target resource is in a `namespace`, provide **Namespace**, **name**, and **kind** properties.
+- **source** - a [JSONata](jsonata.md) expression resolving a link text; this property has access to **\$item** and **\$root**.
 
 #### Example
 
