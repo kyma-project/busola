@@ -35,6 +35,7 @@ import { useVariables } from './hooks/useVariables';
 import { prepareRules } from './helpers/prepareRules';
 
 import './ExtensibilityWizard.scss';
+import { useGetWizard } from './useGetWizard';
 
 // TODO extract this as a helper
 const isK8sResource = resource => {
@@ -220,23 +221,16 @@ export function ExtensibilityWizardCore({
 }
 
 export function ExtensibilityWizard(props) {
-  const [structure, setStructure] = useState({});
+  const resMetaData = useGetWizard(props?.wizardName);
 
-  useEffect(() => {
-    fetch('/wizard.yaml')
-      .then(res => res.text())
-      .then(rawdata => jsyaml.load(rawdata))
-      .then(cmdata => mapValues(cmdata.data, item => jsyaml.load(item)))
-      .then(setStructure);
-  }, []);
-  const size = useMemo(() => Object.keys(structure).length, [structure]);
+  const size = useMemo(() => Object.keys(resMetaData).length, [resMetaData]);
 
   if (size) {
     return (
-      <DataSourcesContextProvider dataSources={structure?.dataSources || {}}>
+      <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
         <TriggerContextProvider>
           <VarStoreContextProvider>
-            <ExtensibilityWizardCore {...props} resourceSchema={structure} />
+            <ExtensibilityWizardCore {...props} resourceSchema={resMetaData} />
           </VarStoreContextProvider>
         </TriggerContextProvider>
       </DataSourcesContextProvider>

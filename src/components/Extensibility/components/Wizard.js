@@ -8,7 +8,7 @@ import { useFeature } from 'hooks/useFeature';
 
 export function Wizard({
   value,
-  // structure,
+  structure,
   schema,
   originalResource,
   scope,
@@ -16,6 +16,7 @@ export function Wizard({
 }) {
   const [showWizard, setShowWizard] = useState(false);
   const { isEnabled: isWizardEnabled } = useFeature('EXTENSIBILITY_WIZARD');
+  const wizardName = structure?.wizard || '';
 
   if (!isWizardEnabled) return null;
 
@@ -30,7 +31,10 @@ export function Wizard({
         actions={[]}
       >
         <ErrorBoundary>
-          <ExtensibilityWizard onCancel={() => setShowWizard(false)} />
+          <ExtensibilityWizard
+            onCancel={() => setShowWizard(false)}
+            wizardName={wizardName}
+          />
         </ErrorBoundary>
       </Dialog>
     </>
