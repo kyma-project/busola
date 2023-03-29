@@ -18,6 +18,7 @@ export function Wizard({
   const { t: tExt } = useGetTranslation();
   const [showWizard, setShowWizard] = useState(false);
   const { isEnabled: isWizardEnabled } = useFeature('EXTENSIBILITY_WIZARD');
+  const wizardName = structure?.wizard || '';
 
   if (!isWizardEnabled) return null;
 
@@ -33,7 +34,10 @@ export function Wizard({
         actions={[]}
       >
         <ErrorBoundary>
-          <ExtensibilityWizard onCancel={() => setShowWizard(false)} />
+          <ExtensibilityWizard
+            onCancel={() => setShowWizard(false)}
+            wizardName={wizardName}
+          />
         </ErrorBoundary>
       </Dialog>
     </>
