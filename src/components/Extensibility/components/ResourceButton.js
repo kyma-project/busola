@@ -1,12 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useUrl } from 'hooks/useUrl';
+import { Button } from 'fundamental-react';
 
 import { useGetPlaceholder, useGetTranslation } from '../helpers';
 import { useJsonata } from '../hooks/useJsonata';
 
-export function ResourceLink({
+export function ResourceButton({
   value,
   structure,
   originalResource,
@@ -18,6 +19,7 @@ export function ResourceLink({
   const { t: tExt } = useGetTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
   const { resourceUrl } = useUrl();
+  const navigate = useNavigate();
 
   const jsonata = useJsonata({
     resource: originalResource,
@@ -42,21 +44,26 @@ export function ResourceLink({
   }
 
   return (
-    <Link
-      className="fd-link"
-      to={resourceUrl(
-        {
-          kind,
-          metadata: {
-            name,
-          },
-        },
-        { namespace },
-      )}
+    <Button
+      glyph={structure.icon}
+      className="fd-margin-begin--sm"
+      onClick={() =>
+        navigate(
+          resourceUrl(
+            {
+              kind,
+              metadata: {
+                name,
+              },
+            },
+            { namespace },
+          ),
+        )
+      }
     >
       {tExt(value)}
-    </Link>
+    </Button>
   );
 }
 
-ResourceLink.inline = true;
+ResourceButton.inline = true;

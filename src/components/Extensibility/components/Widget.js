@@ -39,7 +39,6 @@ InlineWidget.copyFunction = (props, Renderer, defaultCopyFunction) =>
 
 function SingleWidget({ inlineRenderer, Renderer, ...props }) {
   const InlineRenderer = inlineRenderer || SimpleRenderer;
-
   const CopyableWrapper = ({ children }) => {
     const isRendererCopyable =
       typeof Renderer.copyable === 'function'
@@ -48,6 +47,7 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
 
     const jsonata = useJsonata({
       resource: props.originalResource,
+      parent: props.singleRootResource,
       scope: props.scope,
       value: props.value,
       arrayItems: props.arrayItems,
@@ -93,19 +93,22 @@ export function Widget({
   arrayItems = [],
   inlineRenderer,
   originalResource,
+  singleRootResource,
+  index,
   ...props
 }) {
   const { Plain, Text } = widgets;
   const { t } = useTranslation();
-
   const jsonata = useJsonata({
     resource: originalResource,
+    parent: singleRootResource,
     scope: value,
     arrayItems,
   });
 
-  const [childValue] = jsonata(structure.source);
-
+  const [childValue] = jsonata(structure.source, {
+    index: index,
+  });
   const [visible, visibilityError] = jsonata(
     structure.visibility?.toString(),
     {
@@ -132,6 +135,7 @@ export function Widget({
         structure={copiedStructure}
         inlineRenderer={inlineRenderer}
         originalResource={originalResource}
+        singleRootResource={singleRootResource}
         {...props}
       />
     );
@@ -167,6 +171,7 @@ export function Widget({
         arrayItems={[...arrayItems, valueItem]}
         structure={structure}
         originalResource={originalResource}
+        singleRootResource={valueItem}
         scope={valueItem}
       />
     ))
@@ -180,6 +185,7 @@ export function Widget({
       arrayItems={arrayItems}
       structure={structure}
       originalResource={originalResource}
+      singleRootResource={singleRootResource || originalResource}
     />
   );
 }

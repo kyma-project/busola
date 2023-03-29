@@ -29,6 +29,7 @@ export const ExternalLink = ({
   structure,
   arrayItems,
   originalResource,
+  singleRootResource,
 }) => {
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
   const { t } = useTranslation();
@@ -36,6 +37,7 @@ export const ExternalLink = ({
 
   const jsonata = useJsonata({
     resource: originalResource,
+    parent: singleRootResource,
     scope,
     value,
     arrayItems,

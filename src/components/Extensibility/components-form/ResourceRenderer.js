@@ -23,12 +23,14 @@ export function ResourceRenderer({
   required,
   compact,
   originalResource,
+  singleRootResource,
   ...props
 }) {
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const { setVar } = useVariables();
   const jsonata = useJsonata({
     resource: originalResource,
+    parent: singleRootResource,
     scope: value,
     value,
   });
