@@ -362,15 +362,8 @@ export const useGetExtensions = () => {
       if (!wizardConfigs || !isExtensibilityWizardEnabled) {
         setWizard([]);
       } else {
-        let extWizardConfigs: ExtWizardConfig[] = [];
-        wizardConfigs.filter((config: any) =>
-          extWizardConfigs.push({
-            injections: config?.injections,
-            general: config?.general,
-            steps: config?.steps,
-          }),
-        );
-        setWizard(extWizardConfigs);
+        setWizard(wizardConfigs);
+        // TODO wizard injections
       }
 
       if (!configs) {
@@ -395,7 +388,7 @@ export const useGetExtensions = () => {
           );
 
           let injectionsConfigs: ExtInjectionConfig[] = [];
-          filteredConfigs.filter(config =>
+          filteredConfigs.forEach(config =>
             config?.injections?.map(injection =>
               injectionsConfigs.push({
                 injection: injection,
