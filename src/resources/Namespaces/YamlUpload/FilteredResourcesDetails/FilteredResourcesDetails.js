@@ -45,9 +45,11 @@ const useNamespaceWarning = resource => {
   return useIsInCurrentNamespace(resource)
     ? []
     : [
-        t('upload-yaml.warnings.different-namespace', {
-          namespace: resource?.metadata?.namespace,
-        }),
+        {
+          message: t('upload-yaml.warnings.different-namespace', {
+            namespace: resource?.metadata?.namespace,
+          }),
+        },
       ];
 };
 
@@ -90,9 +92,11 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
       {areWarningsVisible ? (
         <ul className="warnings-list">
           {warnings.flat().map(err => (
-            <li key={`${resource?.kind}-${resource?.metadata?.name}-${err}`}>
+            <li
+              key={`${resource?.kind}-${resource?.metadata?.name}-${err.message}`}
+            >
               <MessageStrip type="warning" className="fd-margin-top--sm">
-                {err}
+                {err.message}
               </MessageStrip>
             </li>
           ))}

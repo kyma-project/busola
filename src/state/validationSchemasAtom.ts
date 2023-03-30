@@ -13,21 +13,24 @@ import { getFetchFn } from './utils/getFetchFn';
 import { JSONSchema4 } from 'json-schema';
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 
-interface Rule {
+type Rule = {
   uniqueName: string;
+  messageOnFailure?: string;
+  documentationUrl?: string;
+  category?: string;
   policies?: ValidationPolicy[];
   schema: JSONSchema4;
-}
+};
 
-interface ValidationConfig {
+type ValidationConfig = {
   rules?: Array<Rule>;
   policies?: Array<ValidationPolicy>;
-}
+};
 
-export interface ValidationSchema {
+export type ValidationSchema = {
   rules: Array<Rule>;
   policies: Array<ValidationPolicy>;
-}
+};
 
 export const emptyValidationSchema: ValidationSchema = {
   rules: [],

@@ -95,7 +95,7 @@ export default function ResourcesValidationSettings() {
       </div>
       {enabled && (
         <div className="preferences-row">
-          <span className="fd-has-color-status-4">Use custom policies</span>
+          <span className="fd-has-color-status-4">Choose policies</span>
           <div>
             <Switch
               // TypeScript definitions are out of sync here
