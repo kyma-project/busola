@@ -258,7 +258,8 @@ export function ResourceListRenderer({
     },
   ];
 
-  if (namespace === '-all-') {
+  const isNamespaceAll = namespace === '-all-';
+  if (isNamespaceAll) {
     omitColumnsIds = omitColumnsIds.filter(id => id !== 'namespace');
   }
 
@@ -450,7 +451,7 @@ export function ResourceListRenderer({
   ];
 
   const extraHeaderContent = listHeaderActions || [
-    CreateResourceForm && !disableCreate && (
+    CreateResourceForm && !disableCreate && !isNamespaceAll && (
       <Button
         glyph="add"
         option="transparent"
