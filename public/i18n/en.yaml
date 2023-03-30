@@ -1451,12 +1451,19 @@ services:
 settings:
   clusters:
     confirmations: Confirmations
-    description: Cluster interaction
+    description: Cluster interaction, resource validation
     disableResourceProtection: Allow for modification of protected resources
     dontConfirmDelete: Delete without confirmation
     showHiddenNamespaces: Show hidden Namespaces
     title: Clusters
-    resourcesValidation: Validate Resources
+    resourcesValidation:
+      title: Resource Validation
+      validateResources: Validate Resources
+      choose-policies: Choose Policies
+      add-policy: Add a policy
+      no-policies-found: No policies found
+    interaction:
+      title: Cluster Interaction
   interface:
     description: Appearance, language
     themes:

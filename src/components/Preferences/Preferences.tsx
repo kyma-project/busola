@@ -97,12 +97,26 @@ export function Preferences() {
           </Tabs>
         </VerticalTabs.Content>
         <VerticalTabs.Content id={2}>
-          <div>
-            <NamespaceSettings />
-            <ConfirmationSettings />
-            <ProtectedSettings />
-            <ResourcesValidationSettings />
-          </div>
+          <Tabs className="fd-tabs fd-has-padding-left-regular">
+            <Tab
+              key="cluster-interaction"
+              id="cluster-interaction"
+              title={t('settings.clusters.interaction.title')}
+            >
+              <div>
+                <NamespaceSettings />
+                <ConfirmationSettings />
+                <ProtectedSettings />
+              </div>
+            </Tab>
+            <Tab
+              key="resource-validation"
+              id="resource-validation"
+              title={t('settings.clusters.resourcesValidation.title')}
+            >
+              <ResourcesValidationSettings />
+            </Tab>
+          </Tabs>
         </VerticalTabs.Content>
       </VerticalTabs>
     </Dialog>

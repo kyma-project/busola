@@ -70,21 +70,26 @@ export default function ResourcesValidationSettings() {
   // This gets newly generated whenever the props change, removing the typed value
   const PolicyComboBox = ({ ...props }) => (
     // @ts-ignore
-    <ComboboxInput {...props} placeholder="Add a policy" />
+    <ComboboxInput
+      {...props}
+      placeholder={t('settings.clusters.resourcesValidation.add-policy')}
+    />
   );
 
   return (
     <>
       <div className="preferences-row">
         <span className="fd-has-color-status-4">
-          {t('settings.clusters.resourcesValidation')}
+          {t('settings.clusters.resourcesValidation.validateResources')}
         </span>
         <div>
           <Switch
             // TypeScript definitions are out of sync here
             // @ts-ignore
             localizedText={{
-              switchLabel: t('settings.clusters.resourcesValidation'),
+              switchLabel: t(
+                'settings.clusters.resourcesValidation.validateResources',
+              ),
             }}
             className="fd-has-display-inline-block fd-margin-begin--tiny"
             checked={enabled}
@@ -95,13 +100,17 @@ export default function ResourcesValidationSettings() {
       </div>
       {enabled && (
         <div className="preferences-row">
-          <span className="fd-has-color-status-4">Choose policies</span>
+          <span className="fd-has-color-status-4">
+            {t('settings.clusters.resourcesValidation.choose-policies')}
+          </span>
           <div>
             <Switch
               // TypeScript definitions are out of sync here
               // @ts-ignore
               localizedText={{
-                switchLabel: t('settings.clusters.resourcesValidation'),
+                switchLabel: t(
+                  'settings.clusters.resourcesValidation.choose-policies',
+                ),
               }}
               className="fd-has-display-inline-block fd-margin-begin--tiny"
               checked={choosePolicies}
@@ -115,7 +124,7 @@ export default function ResourcesValidationSettings() {
         <GenericList
           actions={[
             {
-              name: 'Delete',
+              name: 'Delete', //t('settings.clusters.resourcesValidation.remove-policy'),
               handler: deleteSelectedPolicy,
             },
           ]}
@@ -142,7 +151,7 @@ export default function ResourcesValidationSettings() {
           }
           searchSettings={{
             showSearchSuggestion: false,
-            noSearchResultMessage: t('clusters.list.no-clusters-found'),
+            noSearchResultMessage: t('clusters.list.no-policies-found'),
           }}
         />
       )}
