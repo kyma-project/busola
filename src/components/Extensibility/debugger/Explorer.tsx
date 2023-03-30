@@ -13,7 +13,7 @@ export function Value({ value, label }: { value: any; label?: string }) {
     return (
       <>
         {label && <span className="label">{label}</span>} {/* @ts-ignore */}
-        <ObjectStatus>null</ObjectStatus>
+        <ObjectStatus inverted>null</ObjectStatus>
       </>
     );
   } else if (Array.isArray(value)) {
