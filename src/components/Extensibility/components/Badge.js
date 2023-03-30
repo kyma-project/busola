@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -10,7 +10,6 @@ import {
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 import { useJsonata } from '../hooks/useJsonata';
-import { DebugContext } from '../hooks/useDebugger';
 
 import './Badge.scss';
 

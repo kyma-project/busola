@@ -8,6 +8,8 @@ import React, {
 import { Icon, Popover, Button } from 'fundamental-react';
 import { isNil } from 'lodash';
 
+import { Query } from './Query';
+
 import './useDebugger.scss';
 
 type DebugContextEnv = {
@@ -49,78 +51,6 @@ export const DebugContext = createContext<DebugContextProps>({
   updateQuery: () => null,
 });
 
-export function DataSource({ name, val }: { name: string; val: any }) {
-  const [value, setValue] = useState(val.value);
-  const fetchValue = () => val.fetcher().then(setValue);
-  return (
-    <>
-      <dt>{name}</dt>
-      <dd>
-        {isNil(value) ? (
-          <Button
-            compact
-            glyph="refresh"
-            option="emphasized"
-            onClick={fetchValue}
-          />
-        ) : (
-          JSON.stringify(value, null, 4)
-        )}
-      </dd>
-    </>
-  );
-}
-
-export function DebugonataQuery({ name, data }: { name: string; data: any }) {
-  const [expanded, setExpanded] = useState(false);
-  console.log('DebugonataQuery', data);
-  return (
-    <li>
-      <div onClick={() => setExpanded(!expanded)}>
-        <Icon
-          className="control-icon"
-          ariaHidden
-          glyph={expanded ? 'navigation-down-arrow' : 'navigation-right-arrow'}
-        />{' '}
-        {name}
-      </div>
-      {expanded && (
-        <div className="query">
-          <dl className="info">
-            <dt>query</dt>
-            <dd>{data.query}</dd>
-            <dt>computed value</dt>
-            <dd>{data.value}</dd>
-          </dl>
-          {data.vars && (
-            <>
-              <h2>Variables</h2>
-              <dl className="vars">
-                {Object.entries(data.vars).map(([name, val]: any) => (
-                  <>
-                    <dt>{name}</dt>
-                    <dd>{!isNil(val) && JSON.stringify(val, null, 4)}</dd>
-                  </>
-                ))}
-              </dl>
-            </>
-          )}
-          {!!Object.keys(data.dataSources).length && (
-            <>
-              <h2>Data sources</h2>
-              <dl className="data-sources">
-                {Object.entries(data.dataSources).map(([name, val]: any) => (
-                  <DataSource name={name} val={val} />
-                ))}
-              </dl>
-            </>
-          )}
-        </div>
-      )}
-    </li>
-  );
-}
-
 export function DebugonataBody() {
   const { env, uuid } = useContext(DebugContext);
 
@@ -133,7 +63,7 @@ export function DebugonataBody() {
             {Object.entries(subenv?.queries)
               .filter(([name, data]: [string, any]) => data.query)
               .map(([name, data]: [string, any]) => (
-                <DebugonataQuery name={name} data={data} />
+                <Query name={name} data={data} />
               ))}
           </div>
         ))}

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { last, mapValues } from 'lodash';
 
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
-import { DebugContext } from '../hooks/useDebugger';
+import { DebugContext } from '../debugger/useDebugger';
 import {
   Resource,
   DataSourcesContextType,

@@ -10,7 +10,7 @@ import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 
 import { useGetTranslation, useGetPlaceholder } from '../helpers';
 import { useJsonata } from '../hooks/useJsonata';
-import { Debugonata, DebugContextProvider } from '../hooks/useDebugger';
+import { Debugonata, DebugContextProvider } from '../debugger/useDebugger';
 import { widgets, valuePreprocessors } from './index';
 
 export const SimpleRenderer = ({ children }) => {

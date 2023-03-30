@@ -1,16 +1,22 @@
 .debugonata {
   width: auto;
+  max-width: 70%;
   max-height: 50vh !important;
+  font-size: 1rem;
 
   h1 {
     font-weight: bold;
     border-bottom: 1px solid var(--sapTextColor);
-    padding: 0.5rem;
+    padding: 0.2rem;
   }
 
   h2 {
     margin-top: 0.5rem;
     font-weight: bold;
+  }
+
+  .expandable {
+    cursor: pointer;
   }
 
   .query {
@@ -27,7 +33,9 @@
   .data-sources {
     padding-left: 1rem;
 
-    dd {
+    dd > pre {
+      font-family: monospace;
+      font-size: 0.7rem;
       white-space: pre;
       max-height: 10vw;
       overflow: auto;
@@ -38,6 +46,15 @@
     display: grid;
     grid-template-columns: 1fr 5fr;
     column-gap: 1rem;
+  }
+
+  .explorer {
+    .label {
+      font-style: italic;
+    }
+    ul {
+      padding-left: 1rem;
+    }
   }
 }
 
