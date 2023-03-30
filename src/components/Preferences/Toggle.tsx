@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next';
 import { useRecoilState, RecoilState } from 'recoil';
 import { Switch } from 'fundamental-react';
 

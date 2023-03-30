@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Icon } from 'fundamental-react';
-import { isNil } from 'lodash';
 
 import { Explorer } from './Explorer';
 import { DataSource } from './DataSource';

@@ -5,8 +5,7 @@ import React, {
   createContext,
   ReactNode,
 } from 'react';
-import { Icon, Popover, Button } from 'fundamental-react';
-import { isNil } from 'lodash';
+import { Icon, Popover } from 'fundamental-react';
 
 import { Query } from './Query';
 
@@ -52,7 +51,7 @@ export const DebugContext = createContext<DebugContextProps>({
 });
 
 export function DebugonataBody() {
-  const { env, uuid } = useContext(DebugContext);
+  const { env } = useContext(DebugContext);
 
   return (
     <>
@@ -100,13 +99,12 @@ export function DebugContextProvider({
         env,
         uuid,
         init(debugId: string, { resource, scope, arrayItems }) {
-          const id = (env.current[debugId] = {
+          env.current[debugId] = {
             resource,
             scope,
             arrayItems,
             queries: {},
-          });
-          // return id;
+          };
         },
         setQuery(debugId: string, datapoint: string, data: any) {
           if (!debugId || !datapoint) return;

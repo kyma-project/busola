@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { useJsonata } from '../hooks/useJsonata';
 
 const makeHref = ({ jsonata, value, structure }) => {
-  const [link, linkError] = jsonata(structure.link);
+  const [link, linkError] = jsonata(structure.link, { datapoint: 'link' });
   if (linkError) return linkError.message;
 
   let href;

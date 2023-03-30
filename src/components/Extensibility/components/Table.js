@@ -82,6 +82,7 @@ export function Table({
             index: index,
             scope: entry,
             arrayItems: [...arrayItems, entry],
+            datapoint: 'collapsibleTitle',
           });
         } catch (e) {
           console.warn(e);

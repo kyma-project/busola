@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
