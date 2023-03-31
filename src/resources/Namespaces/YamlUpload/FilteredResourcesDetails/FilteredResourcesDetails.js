@@ -2,14 +2,16 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 import { Button, MessageStrip } from 'fundamental-react';
-import { validateResourcesState } from 'state/preferences/validateResourcesAtom';
+import {
+  getExtendedValidateResourceState,
+  validateResourcesState,
+} from 'state/preferences/validateResourcesAtom';
 import { useIsInCurrentNamespace } from 'shared/hooks/useIsInCurrentNamespace';
 import { useValidateResourceBySchema } from 'shared/hooks/useValidateResourceBySchema/useValidateResourceBySchema';
 
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
 import './FilteredResourcesDetails.scss';
-import { useFeature } from 'hooks/useFeature';
 import { validationSchemasEnabledState } from 'state/validationEnabledSchemasAtom';
 import { useLoadingDebounce } from 'shared/hooks/useLoadingDebounce';
 
@@ -21,23 +23,35 @@ const WarningButton = ({
 }) => {
   const { t } = useTranslation();
 
+  const noWarnings = warningsNumber === 0;
+
   return (
     <Button
-      onClick={handleShowWarnings}
+      onClick={noWarnings || handleShowWarnings}
       className="warning-button"
-      type="attention"
+      type={noWarnings ? 'positive' : 'attention'}
       glyph={
-        areWarningsVisible ? 'navigation-up-arrow' : 'navigation-down-arrow'
+        noWarnings
+          ? 'message-success'
+          : areWarningsVisible
+          ? 'navigation-up-arrow'
+          : 'navigation-down-arrow'
       }
     >
       <div>
         <p>
-          {!areWarningsVisible
-            ? t('upload-yaml.buttons.show-warnings')
-            : t('upload-yaml.buttons.hide-warnings')}
+          {noWarnings
+            ? t('upload-yaml.messages.no-warnings-found')
+            : areWarningsVisible
+            ? t('upload-yaml.buttons.hide-warnings')
+            : t('upload-yaml.buttons.show-warnings')}
         </p>
         {loading ? (
-          <Spinner className="warning-spinner" size="s" center={false} />
+          <Spinner
+            className={noWarnings ? 'positive-spinner' : 'warning-spinner'}
+            size="s"
+            center={false}
+          />
         ) : (
           <p>{warningsNumber}</p>
         )}
@@ -84,18 +98,6 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
       </MessageStrip>
     );
 
-  if (warnings.flat().length === 0)
-    return (
-      <MessageStrip type="success" className="fd-margin-bottom--sm">
-        {t('upload-yaml.messages.no-warnings-found')}
-        {loading ? (
-          <Spinner className="warning-spinner" size="s" center={false} />
-        ) : (
-          <></>
-        )}
-      </MessageStrip>
-    );
-
   return (
     <div>
       <WarningButton
@@ -124,9 +126,9 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
 };
 
 export const FilteredResourcesDetails = ({ filteredResources }) => {
-  const validateResources = useRecoilValue(validateResourcesState);
-  const { isEnabled, config } = useFeature('VALIDATION');
-  console.log(isEnabled, config);
+  const validateResources = getExtendedValidateResourceState(
+    useRecoilValue(validateResourcesState),
+  );
   const validationSchemas = useRecoilValue(validationSchemasEnabledState);
 
   return (
@@ -140,12 +142,12 @@ export const FilteredResourcesDetails = ({ filteredResources }) => {
           <p style={{ fontSize: '16px' }}>
             {String(r?.value?.kind)} {String(r?.value?.metadata?.name)}
           </p>
-          {validateResources ? (
+          {validateResources.enabled && (
             <ValidationWarnings
               resource={r?.value}
               validationSchema={validationSchemas}
             />
-          ) : null}
+          )}
         </li>
       ))}
     </ul>

@@ -128,7 +128,6 @@ export const getEnabledRules = (
     policy.rules.forEach(rule => {
       const key = typeof rule === 'string' ? rule : rule.identifier;
       if (key) {
-        console.log(key);
         if (agg[key]) {
           agg[key].policies?.push(policy);
         } else {
