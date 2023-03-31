@@ -124,7 +124,7 @@ export default function ResourcesValidationSettings() {
         <GenericList
           actions={[
             {
-              name: 'Delete', //t('settings.clusters.resourcesValidation.remove-policy'),
+              name: 'Delete',
               handler: deleteSelectedPolicy,
             },
           ]}

@@ -11,11 +11,13 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import './FilteredResourcesDetails.scss';
 import { useFeature } from 'hooks/useFeature';
 import { validationSchemasEnabledState } from 'state/validationEnabledSchemasAtom';
+import { useLoadingDebounce } from 'shared/hooks/useLoadingDebounce';
 
 const WarningButton = ({
   handleShowWarnings,
   areWarningsVisible,
   warningsNumber,
+  loading,
 }) => {
   const { t } = useTranslation();
 
@@ -34,7 +36,11 @@ const WarningButton = ({
             ? t('upload-yaml.buttons.show-warnings')
             : t('upload-yaml.buttons.hide-warnings')}
         </p>
-        <p>{warningsNumber}</p>
+        {loading ? (
+          <Spinner className="warning-spinner" size="s" center={false} />
+        ) : (
+          <p>{warningsNumber}</p>
+        )}
       </div>
     </Button>
   );
@@ -57,14 +63,16 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
   const { t } = useTranslation();
   const [areWarningsVisible, setVisibleWarnings] = useState(false);
 
+  const { debounced, loading } = useLoadingDebounce(resource, 500);
+
   //we expect two types here: []string or Promise
   const warnings = [
-    useValidateResourceBySchema(resource, validationSchema),
-    useNamespaceWarning(resource),
+    useValidateResourceBySchema(debounced, validationSchema),
+    useNamespaceWarning(debounced),
   ];
 
-  // if the element has the then function, it means it's a Promise
-  if (warnings.some(w => w.then))
+  // if the validationSchema is not yet available, set it to loading
+  if (!validationSchema)
     return (
       <MessageStrip
         type="warning"
@@ -79,6 +87,11 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
     return (
       <MessageStrip type="success" className="fd-margin-bottom--sm">
         {t('upload-yaml.messages.no-warnings-found')}
+        {loading ? (
+          <Spinner className="warning-spinner" size="s" center={false} />
+        ) : (
+          <></>
+        )}
       </MessageStrip>
     );
 
@@ -88,6 +101,7 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
         handleShowWarnings={() => setVisibleWarnings(prevState => !prevState)}
         areWarningsVisible={areWarningsVisible}
         warningsNumber={warnings.flat().length}
+        loading={loading}
       />
       {areWarningsVisible ? (
         <ul className="warnings-list">

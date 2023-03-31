@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, MutableRefObject } from 'react';
+import { useMemo } from 'react';
 import { Options, Validator } from 'jsonschema';
 import { K8sResource } from 'types';
 import { ValidationSchema } from 'state/validationSchemasAtom';
@@ -48,24 +48,7 @@ export const useValidateResourceBySchema = (
   resource: K8sResource,
   validationSchema: ValidationSchema,
 ) => {
-  const initialWarnings = (): Promise<Warning[]> | Warning[] =>
-    validateResourceBySchema(resource);
-  const [warnings, setWarnings] = useState(initialWarnings);
-
-  const intervalRef: MutableRefObject<NodeJS.Timeout | undefined> = useRef();
-
-  useEffect(() => {
-    clearTimeout(intervalRef.current);
-
-    intervalRef.current = setTimeout(async () => {
-      const warningMessages = await validateResourceBySchema(
-        resource,
-        validationSchema,
-      );
-
-      setWarnings(warningMessages);
-    }, 500);
+  return useMemo(() => {
+    return validateResourceBySchema(resource, validationSchema);
   }, [resource, validationSchema]);
-
-  return warnings;
 };
