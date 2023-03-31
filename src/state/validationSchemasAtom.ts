@@ -37,9 +37,11 @@ export const emptyValidationSchema: ValidationSchema = {
   policies: [],
 };
 
-type RuleReference = {
-  identifier: string;
-};
+type RuleReference =
+  | string
+  | {
+      identifier: string;
+    };
 
 type ValidationPolicy = {
   name: string;
@@ -124,14 +126,14 @@ export const getEnabledRules = (
 
   const enabledRulesByName = policies.reduce((agg, policy) => {
     policy.rules.forEach(rule => {
-      if (rule.identifier) {
-        const key = rule.identifier;
-
+      const key = typeof rule === 'string' ? rule : rule.identifier;
+      if (key) {
+        console.log(key);
         if (agg[key]) {
           agg[key].policies?.push(policy);
         } else {
           agg[key] = {
-            ...rulesByName[rule.identifier],
+            ...rulesByName[key],
             policies: [policy],
           };
         }

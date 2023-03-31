@@ -5,6 +5,7 @@ import { ValidationSchema } from 'state/validationSchemasAtom';
 
 type Warning =
   | {
+      key?: string;
       message?: string;
       link?: string;
       category?: string;
@@ -28,6 +29,7 @@ export const validateResourceBySchema = (
 
         if (result.errors.length > 0) {
           return {
+            key: currentRule.uniqueName,
             message: currentRule.messageOnFailure,
             link: currentRule.documentationUrl,
             category: currentRule.category,
