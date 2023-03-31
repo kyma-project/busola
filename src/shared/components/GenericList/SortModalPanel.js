@@ -28,7 +28,10 @@ export const SortModalPanel = ({ sortBy, sort, setSort, disabled = false }) => {
       actions={onClose => [
         <Button
           option="emphasized"
-          onClick={() => setSort({ name: name, order: order })}
+          onClick={() => {
+            setSort({ name: name, order: order });
+            onClose();
+          }}
           key="sort"
         >
           {t('common.buttons.ok')}
