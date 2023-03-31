@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { Switch, ComboboxInput } from 'fundamental-react';
+import { Switch, ComboboxInput, MessageStrip } from 'fundamental-react';
 import {
   getExtendedValidateResourceState,
   validateResourcesState,
@@ -32,6 +32,14 @@ export default function ResourcesValidationSettings() {
 
   const remainingOptions = useMemo(
     () => allOptions.filter(option => !selectedPolicies.includes(option.key)),
+    [allOptions, selectedPolicies],
+  );
+
+  const invalidOptions = useMemo(
+    () =>
+      selectedPolicies.filter(
+        policy => !allOptions.some(option => option.key === policy),
+      ),
     [allOptions, selectedPolicies],
   );
 
@@ -121,39 +129,47 @@ export default function ResourcesValidationSettings() {
         </div>
       )}
       {enabled && choosePolicies && (
-        <GenericList
-          actions={[
-            {
-              name: 'Delete',
-              handler: deleteSelectedPolicy,
-            },
-          ]}
-          showHeader={false}
-          entries={selectedPolicies}
-          headerRenderer={() => ['policies']}
-          rowRenderer={entry => [entry]}
-          extraHeaderContent={
-            remainingOptions.length > 0 && (
-              //@ts-ignore
-              <PolicyComboBox
-                options={remainingOptions}
-                searchFullString
-                compact
-                onSelectionChange={(
-                  _: any,
-                  selected: { key: string | number; text: string },
-                ) => {
-                  if (selected.key === -1) return;
-                  addSelectedPolicy(selected.text);
-                }}
-              />
-            )
-          }
-          searchSettings={{
-            showSearchSuggestion: false,
-            noSearchResultMessage: t('clusters.list.no-policies-found'),
-          }}
-        />
+        <>
+          <GenericList
+            actions={[
+              {
+                name: 'Delete',
+                handler: deleteSelectedPolicy,
+              },
+            ]}
+            showHeader={false}
+            entries={selectedPolicies}
+            headerRenderer={() => ['policies']}
+            rowRenderer={entry => [entry]}
+            extraHeaderContent={
+              remainingOptions.length > 0 && (
+                //@ts-ignore
+                <PolicyComboBox
+                  options={remainingOptions}
+                  searchFullString
+                  compact
+                  onSelectionChange={(
+                    _: any,
+                    selected: { key: string | number; text: string },
+                  ) => {
+                    if (selected.key === -1) return;
+                    addSelectedPolicy(selected.text);
+                  }}
+                />
+              )
+            }
+            searchSettings={{
+              showSearchSuggestion: false,
+              noSearchResultMessage: t('clusters.list.no-policies-found'),
+            }}
+          />
+          {invalidOptions.length > 0 && (
+            <MessageStrip type="warning">
+              Some policies do not exist in this cluster:{' '}
+              {invalidOptions.join(', ')}
+            </MessageStrip>
+          )}
+        </>
       )}
     </>
   );
