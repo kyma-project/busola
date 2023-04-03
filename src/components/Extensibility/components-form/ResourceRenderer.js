@@ -35,7 +35,7 @@ export function ResourceRenderer({
 
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
 
-  const { group, version, kind, scope = 'ź', namespace = namespaceId } =
+  const { group, version, kind, scope = 'cluster', namespace = namespaceId } =
     fromJS(schema.get('resource')).toJS() || {};
   const provideVar = schema.get('provideVar');
 

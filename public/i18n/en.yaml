@@ -670,6 +670,8 @@ extensibility:
   wizard:
     summary: Summary
     upload: Upload
+    headers:
+      name: Extensibility wizard
 gardener:
   headers:
     provider: Provider
