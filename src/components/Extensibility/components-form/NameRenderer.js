@@ -26,7 +26,7 @@ export function NameRenderer({
       readOnly={editMode && disableOnEdit}
       setValue={value => {
         onChange &&
-          onChange([
+          onChange(
             {
               storeKeys,
               scopes: ['value'],
@@ -47,7 +47,7 @@ export function NameRenderer({
               required,
               data: { value },
             })),
-          ]);
+          );
       }}
       validate={value => !!value}
       {...getPropsFromSchema(schema, required, tExt)}
