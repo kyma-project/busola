@@ -179,6 +179,7 @@ export function ExtensibilityWizardCore({
       >
         {resourceSchema.steps.map(step => (
           <Wizard.Step title={step.name}>
+            <p>{step?.description}</p>
             <UIStoreProvider
               store={store[step.resource]}
               showValidity={true}
