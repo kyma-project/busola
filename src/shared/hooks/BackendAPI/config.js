@@ -26,12 +26,12 @@ export async function throwHttpError(response) {
     try {
       const text = await response.text();
       return new Error(text);
-    } catch (e) {}
-  } // proceed to show more generic error
+    } catch (e) {
+      const { message, status, statusText } = response;
+      const errorMessage =
+        message || `${status} ${statusText || getReasonPhrase(status)}`;
 
-  const { message, status, statusText } = response;
-  const errorMessage =
-    message || `${status} ${statusText || getReasonPhrase(status)}`;
-
-  return new Error(errorMessage);
+      return new Error(errorMessage);
+    }
+  }
 }
