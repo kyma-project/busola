@@ -7,6 +7,7 @@ import { ExtensibilityWizard } from '../ExtensibilityWizard';
 import { useFeature } from 'hooks/useFeature';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 import { useTranslation } from 'react-i18next';
+import { useEventListener } from 'hooks/useEventListener';
 
 export function Wizard({
   value,
@@ -22,7 +23,17 @@ export function Wizard({
   const { isEnabled: isWizardEnabled } = useFeature('EXTENSIBILITY_WIZARD');
   const wizardName = structure?.wizard || '';
 
+  const handleCloseWithEscape = e => {
+    if (e.key === 'Escape') handleCloseModal();
+  };
+
+  useEventListener('keydown', handleCloseWithEscape);
+
   if (!isWizardEnabled) return null;
+
+  const handleCloseModal = () => {
+    setShowWizard(false);
+  };
 
   return (
     <>
@@ -35,7 +46,7 @@ export function Wizard({
         title={t('extensibility.wizard.headers.name') + ' ' + wizardName}
         actions={[]}
       >
-        <ErrorBoundary>
+        <ErrorBoundary onClose={handleCloseModal}>
           <ExtensibilityWizard
             onCancel={() => setShowWizard(false)}
             wizardName={wizardName}
