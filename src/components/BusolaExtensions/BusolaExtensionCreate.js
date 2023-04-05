@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { useUrl } from 'hooks/useUrl';
+import { useRecoilValue } from 'recoil';
 
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { useUpsert } from 'shared/hooks/BackendAPI/useUpsert';
@@ -12,13 +12,14 @@ import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { createExtensibilityTemplate, createConfigmap } from './helpers';
 import { ColumnsInput } from './ColumnsInput';
 import './ExtensibilityStarterForm.scss';
+import { clusterState } from 'state/clusterAtom';
 
 export function BusolaExtensionCreate({ formElementRef, onChange }) {
   const { t } = useTranslation();
   const notificationManager = useNotification();
   const upsert = useUpsert();
-  const { namespaceUrl } = useUrl();
   const navigate = useNavigate();
+  const cluster = useRecoilValue(clusterState);
 
   const { data: crds } = useGetList()(
     '/apis/apiextensions.k8s.io/v1/customresourcedefinitions',
@@ -46,9 +47,7 @@ export function BusolaExtensionCreate({ formElementRef, onChange }) {
             content: t('extensibility.starter-modal.messages.success'),
           });
           navigate(
-            namespaceUrl(`configmaps/${crd.metadata.name}`, {
-              namespace: 'kube-public',
-            }),
+            `/cluster/${cluster.contextName}/busolaextensions/kube-public/${crd.metadata.name}`,
           );
         };
 
