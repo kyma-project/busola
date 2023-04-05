@@ -14,11 +14,13 @@ export function EventList({
   scope,
   value,
   arrayItems,
+  singleRootResource,
 }) {
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const { widgetT } = useGetTranslation();
   const jsonata = useJsonata({
     resource: originalResource,
+    parent: singleRootResource,
     scope,
     value,
     arrayItems,

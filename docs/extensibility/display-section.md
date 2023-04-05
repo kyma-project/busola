@@ -11,6 +11,7 @@
   - [ExternalLink](#externallink)
   - [JoinedArray](#joinedarray)
   - [Labels](#labels)
+  - [ResourceButton](#resourcebutton)
   - [ResourceLink](#resourcelink)
   - [Text](#text)
 - [Block widgets](#block-widgets)
@@ -350,6 +351,32 @@ Labels widgets render all the array or object entries in the `value` or `key-val
 
 <img src="./assets/display-widgets/Labels.png" alt="Example of a Labels widget" width="40%" style="border: 1px solid #D2D5D9">
 
+### ResourceButton
+
+The ResourceButton widgets render a button that links to Kubernetes resources.
+
+#### Widget-specific parameters
+
+- **icon** - The name of an icon for this button. You can find the list of available icons [here](https://sap.github.io/fundamental-react/?path=/docs/component-api-icon--primary). Use string after `--`, for example, if an icon is named `sap-icon--accept`, use `accept`.
+- **resource** - To create a hyperlink, Busola needs the name and the kind of the target resource; they must be passed into the **resource** object as property paths in either **\$item** - value extracted using **source**, or **\$root** - the original resource. If the target resource is in a `namespace`, provide **Namespace**, **name**, and **kind** properties.
+- **source** - a [JSONata](jsonata.md) expression resolving a link text; this property has access to **\$item** and **\$root**.
+
+#### Example
+
+##### _details_ section
+
+```yaml
+- widget: ResourceButton
+  source: "metadata.ownerReferences[0].status = 'Running' ? 'otherTranslations.linkText' : 'otherTranslations.errorLinkText'"
+  resource:
+    name: metadata.ownerReferences[0].name
+    namespace: $root.metadata.namespace
+    kind: "'Deployment'"
+  icon: add
+```
+
+<img src="./assets/display-widgets/ResourceButton.png" alt="Example of a ResourceButton widget" width="40%" style="border: 1px solid #D2D5D9">
+
 ### ResourceLink
 
 ResourceLink widgets render internal links to Kubernetes resources.
@@ -645,6 +672,7 @@ Table widgets display array data as rows of a table instead of free-standing com
 - **collapsibleTitle** - an optional option for **collapsible** to define title for the collapsible sections, as string or the [JSONata](jsonata.md) function.
 - **disablePadding** - an optional boolean which disables the padding inside the panel body.
 - **showHeader** - an optional boolean which disables displaying the head row.
+- **extraHeaderContent** - an optional array of extra widgets to display as an action section. Uses the same format as the **children** parameter.
 - **sort** - optional sort option. If set to `true`, it allows you to sort using this value. Defaults to false. It can also be set to an object with the following properties:
   - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
   - **compareFunction** - optional [JSONata](jsonata.md) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`
