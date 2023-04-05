@@ -258,7 +258,8 @@ export function ResourceListRenderer({
     },
   ];
 
-  if (namespace === '-all-') {
+  const isNamespaceAll = namespace === '-all-';
+  if (isNamespaceAll) {
     omitColumnsIds = omitColumnsIds.filter(id => id !== 'namespace');
   }
 
@@ -356,10 +357,19 @@ export function ResourceListRenderer({
 
   const prepareResourceUrl = (resourceUrl, resource) => {
     const encodedName = encodeURIComponent(resource?.metadata.name);
-    if (!resourceUrlPrefix) return `${resourceUrl}/${encodedName}`;
-
     const namespace = resource?.metadata?.namespace;
     const pluralKind = pluralize((resource?.kind || '').toLowerCase());
+
+    if (!resourceUrlPrefix) {
+      if (window.location.pathname.includes('namespaces/-all-/')) {
+        const url = `${resourceUrl}`.substring(
+          0,
+          `${resourceUrl}`.lastIndexOf('/'),
+        );
+        return `${url}/namespaces/${namespace}/${pluralKind}/${encodedName}`;
+      }
+      return `${resourceUrl}/${encodedName}`;
+    }
 
     return namespace && namespace !== '-all-'
       ? `${resourceUrlPrefix}/namespaces/${namespace}/${pluralKind}/${encodedName}`
@@ -441,7 +451,7 @@ export function ResourceListRenderer({
   ];
 
   const extraHeaderContent = listHeaderActions || [
-    CreateResourceForm && !disableCreate && (
+    CreateResourceForm && !disableCreate && !isNamespaceAll && (
       <Button
         glyph="add"
         option="transparent"
