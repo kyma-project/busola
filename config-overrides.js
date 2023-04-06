@@ -2,6 +2,7 @@
 
 const path = require('path');
 const webpack = require('webpack');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   webpack: function override(config, env) {
@@ -17,7 +18,30 @@ module.exports = {
       new webpack.DefinePlugin({
         'process.env.IS_DOCKER': env.IS_DOCKER,
       }),
+      new CopyPlugin({
+        patterns: [
+          {
+            from: 'resources/resource-validation/configs/**/*.yaml',
+            to: 'resource-validation/config.yaml',
+            transformAll(assets) {
+              return assets.reduce((accumulator, asset) => {
+                return `${accumulator}---\n${asset.data}\n`;
+              }, '');
+            },
+          },
+        ],
+      }),
     ];
+
+    // config.resolveLoader = {
+    //   modules: ['node_modules', path.resolve(__dirname, './loaders')],
+    // };
+    // config.module.rules.push({
+    //   test: /\.ya?ml$/,
+    //   enforce: 'pre',
+    //   type: 'json',
+    //   use: 'yaml-loader',
+    // });
 
     return config;
   },

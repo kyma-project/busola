@@ -49,14 +49,14 @@ type ValidationPolicy = {
   rules: Array<RuleReference>;
 };
 
-const fetchBaseValidationConfig = async (): Promise<ValidationConfig | null> => {
+const fetchBaseValidationConfig = async (): Promise<ValidationConfig[]> => {
   try {
-    const response = await fetch(`/validation/config.yaml`);
+    const response = await fetch(`/resource-validation/config.yaml`);
     const text = await response.text();
-    return jsyaml.load(text) as ValidationConfig;
+    return jsyaml.loadAll(text) as ValidationConfig[];
   } catch (error) {
     console.error(error);
-    return null;
+    return [];
   }
 };
 
@@ -65,7 +65,8 @@ const loadYamlValues = (
 ): ValidationConfig[] => {
   return (configMaps
     ?.flatMap(configMap => Object.values(configMap.data))
-    .map(schemaText => jsyaml.load(schemaText)) ?? []) as ValidationConfig[];
+    .flatMap(schemaText => jsyaml.loadAll(schemaText)) ??
+    []) as ValidationConfig[];
 };
 
 const fetchConfigMapValidationConfigs = async (
@@ -102,15 +103,13 @@ const fetchValidationConfig = async (
     permissionSet,
   );
 
-  const rules = [
-    ...(validationConfig?.rules ?? []),
-    ...configFromConfigMap.flatMap(schema => schema.rules ?? []),
-  ];
+  const rules = [...validationConfig, ...configFromConfigMap].flatMap(
+    schema => schema.rules ?? [],
+  );
 
-  const policies = [
-    ...(validationConfig?.policies ?? []),
-    ...configFromConfigMap.flatMap(schema => schema.policies ?? []),
-  ];
+  const policies = [...validationConfig, ...configFromConfigMap].flatMap(
+    schema => schema.policies ?? [],
+  );
 
   return { rules, policies };
 };
