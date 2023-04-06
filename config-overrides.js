@@ -33,16 +33,6 @@ module.exports = {
       }),
     ];
 
-    // config.resolveLoader = {
-    //   modules: ['node_modules', path.resolve(__dirname, './loaders')],
-    // };
-    // config.module.rules.push({
-    //   test: /\.ya?ml$/,
-    //   enforce: 'pre',
-    //   type: 'json',
-    //   use: 'yaml-loader',
-    // });
-
     return config;
   },
   jest: function(config) {
