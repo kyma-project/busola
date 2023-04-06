@@ -104,7 +104,10 @@ async function fetchNamespacedResource(context: CommandPaletteContext) {
   }
 
   try {
-    const path = `${apiPath}/namespaces/${namespace}/${resourceType}`;
+    const path =
+      namespace === '-all-'
+        ? `${apiPath}/${resourceType}`
+        : `${apiPath}/namespaces/${namespace}/${resourceType}`;
     const response = await fetch(path);
     const { items } = await response.json();
     updateResourceCache(`${namespace}/${resourceType}`, items);

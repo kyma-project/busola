@@ -11,11 +11,13 @@ export function AlertRenderer({
   storeKeys,
   compact,
   originalResource,
+  singleRootResource,
   ...props
 }) {
   const { t: tExt } = useGetTranslation();
   const jsonata = useJsonata({
     resource: originalResource,
+    parent: singleRootResource,
     scope: value,
     value,
   });

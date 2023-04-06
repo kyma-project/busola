@@ -1,105 +1,7 @@
 api-rules: API Rules
+subscriptions: Subscriptions
 apps:
   title: Apps
-btp-instances:
-  description: ' <0>BTP Service Instance</0> makes the functionality of a service available for consumption.'
-  external-name: External Name
-  instance-data: Service Instance Data
-  instance-id: Instance ID
-  messages:
-    params-invalid: Invalid parameters. Provide a valid JSON object.
-  name_singular: BTP Service Instance
-  offering-name: Offering Name
-  parameters: Instance Parameters
-  placeholders:
-    external-name: Defaults to the instance name if empty
-    plan-name: The plan name to use for the Service Instance
-  plan-name: Plan Name
-  resource-type: Service Instance
-  statuses:
-    createfailed: Error
-    notprovisioned: Not Provisioned
-    provisioned: Provisioned
-  title: BTP Service Instances
-  tooltips:
-    createfailed: Creation failed
-    offering-name: You can find the SAP BTP service offering name in the Service Marketplace of the BTP Cockpit.
-    plan-name: You can find the relevant plan for the service instance in the Service Marketplace of the BTP Cockpit.
-    provisioned: Provisioned
-btp-service-bindings:
-  binding-id: Binding ID
-  data: Binding Data
-  description: <0>BTP Service Binding</0> provides access details for an existing service instance.
-  external-name: External Name
-  instance-id: Instance ID
-  instance-name: Service Instance Name
-  messages:
-    duplicate-ref: This ref already exists
-    invalid-ref: Ref is invalid
-    params-invalid: Parameters must be an object
-    value-must-be-json-object: Secret data value must be a JSON object
-  name_singular: BTP Service Binding
-  parameters: Parameters
-  parameters-from: Parameters from Secrets
-  placeholders:
-    choose-secret: Choose Secret
-    choose-secret-first: Choose the Secret first
-    choose-secret-key: Choose Secret key
-    empty-secret: This Secret has no data
-    external-name: Defaults to the Service Binding name if empty
-  resource-type: Service Binding
-  secret: Secret
-  statuses:
-    notprovisioned: Not Provisioned
-    provisioned: Provisioned
-  title: BTP Service Bindings
-  tooltips:
-    parameters-from: Secret references to populate the parameters.
-    provisioned: Provisioned
-    secret: The name of the secret where the credentials are stored, defaults to the Service Binding name if not specified.
-    secret-not-found: This Secret doesn't exist.
-certificates:
-  common-name: Common Name
-  create:
-    messages:
-      failure: Failed to create the Certificate
-      success: Certificate created
-  csr: CSR
-  description: <0>Certificate</0> provides a definition of a certificate that is then processed by the indicated issuer.
-  dns-names: DNS Names
-  existing-secret: Use the existing Secret
-  expiration-date: Expiration Date
-  issuer: Issuer
-  messages:
-    decode-error: 'Failed to decode the CSR: {{message}}'
-  name_singular: Certificate
-  placeholders:
-    common-name: Certificate CN (max 64 characters)
-    csr: Plain text Certificate Signing Request
-    dns-names: Additional domain names, one per line
-    encoded-csr: Base64-encoded Certificate Signing Request
-    name: Certificate name
-  refs: References
-  renew: Renew
-  secret-name: Secret name
-  secret-ref: Secret to use
-  state: Status
-  title: Certificates
-  tooltips:
-    close-expiration: Certificate will expire in less than one day.
-    common-name: Common Name is the primary domain name of the certificate.
-    csr: Certificate Signing Request is an alternative way to provide common name, DNSNames, and other information.
-    dns-names: DNS Names are the optional additional domain names of the certificate.
-    existing-secret: Use an existing Secret for storing the certificate if enabled. Otherwise a new Secret will be created.
-    expired: Certificate expired
-    issuer: Certificate issuer. If no issuer is given, the default issuer is used.
-    ready: Certificate issued
-    renew: Trigger a certificate renewal if enabled.
-    secret-name: Name of the Secret object to use for storing the certificate.
-    secret-ref: Reference of the existing Secret object to use for storing the certificate.
-    will-expire: Certificate will expire in {{daysToExpire}} {{daysForm}}.
-    with-csr: Enable to use a Certificate Signing Request instead of providing domain names manually.
-  with-csr: Use a CSR
 cluster-overview:
   headers:
     cpu: CPU
@@ -237,9 +139,11 @@ command-palette:
     crd-aliases: CRD Aliases
     full: Use <0>↑</0> and <0>↓</0> to navigate between results, <0>⏎</0> to choose, <0>Tab</0> to autocomplete.
     navigation: Navigation
+    open-upload-yaml: Open Upload YAML
     open-preferences: Open Preferences
     resource-aliases: Built-in Resource Aliases
     short-help: Type to search, e.g. "ns default" or "pod nginx"
+    all-namespaces: List resources from all Namespaces
   item-actions:
     navigate: Navigate
     open: Open
@@ -459,6 +363,7 @@ components:
       default: The provided path does not exist. You will get redirected.
       cluster: The provided path does not exist. You will get redirected to Clusters Details.
       clusters: The provided path does not exist. You will get redirected to Clusters Overview.
+      extensions: The provided path does not exist. You will be redirected to the Custom Resource details.
       namespace: The provided path does not exist. You will get redirected to Namespace Overview.
   dropdown:
     empty-list: No resources available
@@ -1012,8 +917,11 @@ namespaces:
     usage-of-memory-limits: This Namespace uses {{valueText}} of {{maxText}} its memory limits.
     usage-of-memory-requests: This Namespace uses {{valueText}} of {{maxText}} its memory requests.
 navigation:
+  all-namespaces: All Namespaces
   preferences:
     title: Preferences
+  upload-yaml:
+    title: Upload YAML
   select-namespace: Select Namespace...
   errors:
     sidebar: Failed to load navigation items
@@ -1058,46 +966,6 @@ nodes:
   name_singular: Node
   title: Nodes
   title_details: Node {{nodeName}}
-oauth2-clients:
-  aria-labels:
-    scope: OAuth2 Client scope
-  auth-methods:
-    client_secret_basic: Client Secret / Basic
-    client_secret_post: Client Secret / POST
-    none: None
-    private_key_jwt: Private Key / JWT
-  description: <0>OAuth2 Client</0> allows an application to acquire an OAuth2 token to access protected resources.
-  grant-types:
-    authorization_code: Authorization Code
-    client_credentials: Client Credentials
-    implicit: Implicit
-    refresh_token: Refresh Token
-  headers:
-    secret: Secret
-  labels:
-    audience: Audience
-    auth-method: Token Endpoint Authentication Method
-    client-name: Client Name
-    grant-types: Grant Types
-    post-logout-redirect-uris: Post-Logout Redirect URIs
-    redirect-uris: Redirect URIs
-    response-types: Response Types
-    scope: Scope
-    secret: Secret
-    secret-name: Secret Name
-    uris: URIs
-  name_singular: OAuth2 Client
-  response-types:
-    code: Code
-    id_token: ID Token
-    token: Token
-  secret: OAuth2 Client Credentials
-  title: OAuth2 Clients
-  tooltips:
-    audience: Audience is a whitelist defining the audiences this client is allowed to request tokens for.
-    client-name: Client name is the human-readable string name of the client to be presented to the end-user during authorization.
-    ok: Authorization completed
-    secret-name: Secret name points to the Kubernetes Secret that contains the client's ID and password.
 observability:
   title: Observability
 persistent-volume-claims:
@@ -1363,6 +1231,10 @@ secrets:
     decode: Decode
     encode: Encode
     expand: Expand All
+  certificates:
+    close-expiration: Certificate will expire in less than one day.
+    expired: Certificate expired
+    will-expire: Certificate will expire in {{daysToExpire}} {{daysForm}}.
   certificate-panel:
     expiration-warning: This certificate is expired.
     expires: Expires
@@ -1503,66 +1375,6 @@ storage-classes:
     reclaim-policy: Reclaim Policy
   name_singular: StorageClass
   title: Storage Classes
-subscriptions:
-  create:
-    labels:
-      add-filter: Add filter
-      application-name: Application name
-      event-name: Event name
-      event-source: Event source
-      event-type: Event type
-      event-type-plural: Event Types
-      event-version: Event version
-      filter: Filter {{name}}
-      filters: Filters
-      service-name: Service
-      sink: Sink
-    messages:
-      one-filter-required: Provide at least one filter.
-    placeholders:
-      application-name: Choose Application name
-      event-name: For example, order.cancelled
-      event-type: Enter the event type, for example, sap.kyma.custom.test-app.order.cancelled.v1
-      event-version: For example, v1
-      service-name: Choose Service for the sink
-    title: Add Subscription
-  description: <0>Subscription</0> is used to subscribe to events.
-  errors:
-    empty-event-types: You must provide at least one event type.
-    event-name-required: Event name is required.
-    event-name-segments: Event name must consist of at least 2 non-empty segments, separated by a dot.
-    event-type-7-segments: Event type must consist of at least 7 non-empty segments, separated by a dot.
-    event-type-allowed-charset: Event type may contain only letters, digits and dots.
-    event-type-prefix: Event type must start with "{{prefix}}".
-    event-type-required: Event type is required.
-  headers:
-    conditions:
-      last-transition: Last Transition
-      reason: Reason
-      status: Status
-      title: Conditions
-      type: Type
-    filters:
-      event-source: Event Source
-      event-type: Event Type
-      property: Property
-      title: Filters
-      type: Type
-      value: Value
-  name_singular: Subscription
-  sink: Sink
-  title: Subscriptions
-  tooltips:
-    application-name: Choose your Application from the cluster.
-    event-name: The name must consist of at least two parts divided by a dot.
-    event-source: Event source is the origin from which the event is published.
-    event-type-advanced: You can add more event types.
-    event-type-advanced-info: Event type must consist of minimum seven elements separated by dots. Prefix should be sap.kyma.custom. You can add more event types.
-    event-type-simple: Event type is defined based on the Application name, event name, and event version.
-    event-version: Choose the event version from the drop-down list or provide your own version.
-    ready: Subscription is active.
-    service-name: Choose a Service that connects to the sink.
-    sink: Specifies the HTTP endpoint where matching events should be sent to.
 top-nav:
   profile:
     preferences: $t(navigation.preferences.title)

@@ -1,4 +1,7 @@
-import { useGetPlaceholder } from 'components/Extensibility/helpers';
+import {
+  useGetPlaceholder,
+  useGetTranslation,
+} from 'components/Extensibility/helpers';
 import { Icon, Link } from 'fundamental-react';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -26,12 +29,15 @@ export const ExternalLink = ({
   structure,
   arrayItems,
   originalResource,
+  singleRootResource,
 }) => {
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
   const { t } = useTranslation();
+  const { t: tExt } = useGetTranslation();
 
   const jsonata = useJsonata({
     resource: originalResource,
+    parent: singleRootResource,
     scope,
     value,
     arrayItems,
@@ -43,7 +49,7 @@ export const ExternalLink = ({
 
   return (
     <Link href={href} target="_blank" rel="noopener noreferrer">
-      {value}
+      {tExt(value)}
       <Icon
         glyph="action"
         size="s"

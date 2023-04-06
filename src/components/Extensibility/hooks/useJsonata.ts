@@ -39,10 +39,12 @@ function getDataSourceFetchers(
 
 export function useJsonata({
   resource,
+  parent,
   scope,
   arrayItems,
 }: {
   resource: Resource;
+  parent: Resource;
   scope: any;
   arrayItems: any[];
 }): JsonataFunction {
@@ -69,12 +71,14 @@ export function useJsonata({
     if (!query) {
       return [defaultValue, null];
     }
+
     try {
       const value = jsonataWrapper(query).evaluate(
         extras.scope || scope || extras.resource || resource,
         {
           ...mapValues(dataSourceFetchers, dsf => dsf.value),
           root: extras.resource || resource,
+          parent: parent,
           items: extras?.arrayItems || arrayItems,
           item:
             last(extras?.arrayItems) ||
@@ -84,6 +88,7 @@ export function useJsonata({
           ...extras,
         },
       );
+
       return [value, null];
     } catch (e) {
       return [
@@ -104,6 +109,7 @@ export function useJsonata({
         {
           ...mapValues(dataSourceFetchers, dsf => dsf.fetcher),
           root: extras.resource || resource,
+          parent: parent,
           items: extras?.arrayItems || arrayItems,
           item:
             last(extras?.arrayItems) ||

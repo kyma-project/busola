@@ -2,27 +2,24 @@ aliases:
     default-reviewers:
     - qbalukom
     - akucharska
-    - Lyczeq
     - mrCherry97
+    - valentinvieriu
     default-approvers:
     - qbalukom
     - akucharska
-    - Lyczeq
     - mrCherry97
+    - valentinvieriu
     documentation-reviewers:
-    - mmitoraj
     - grego952
     - NHingerl
     - IwonaLanger
     - nataliasitko
     documentation-approvers:
-    - mmitoraj
     - grego952
     - NHingerl
     - IwonaLanger
     - nataliasitko
     technical-writers:
-    - mmitoraj
     - grego952
     - NHingerl
     - IwonaLanger

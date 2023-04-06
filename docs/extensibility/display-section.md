@@ -11,6 +11,7 @@
   - [ExternalLink](#externallink)
   - [JoinedArray](#joinedarray)
   - [Labels](#labels)
+  - [ResourceButton](#resourcebutton)
   - [ResourceLink](#resourcelink)
   - [Text](#text)
 - [Block widgets](#block-widgets)
@@ -24,6 +25,11 @@
   - [ResourceRefs](#resourcerefs)
   - [Table](#table)
   - [Tabs](#tabs)
+- [Widget _injections_ overview](#widget-injections-overview)
+  - [Available _injections_ section parameters](#available-injections-section-parameters)
+  - [All available _injections_ slots](#all-available-injections-slots)
+  - [All available _injections_ locations](#all-available-injections-locations)
+  - [_injections_ example](#injections-example)
 
 ## Resource _list_ overview
 
@@ -345,6 +351,32 @@ Labels widgets render all the array or object entries in the `value` or `key-val
 
 <img src="./assets/display-widgets/Labels.png" alt="Example of a Labels widget" width="40%" style="border: 1px solid #D2D5D9">
 
+### ResourceButton
+
+The ResourceButton widgets render a button that links to Kubernetes resources.
+
+#### Widget-specific parameters
+
+- **icon** - The name of an icon for this button. You can find the list of available icons [here](https://sap.github.io/fundamental-react/?path=/docs/component-api-icon--primary). Use string after `--`, for example, if an icon is named `sap-icon--accept`, use `accept`.
+- **resource** - To create a hyperlink, Busola needs the name and the kind of the target resource; they must be passed into the **resource** object as property paths in either **\$item** - value extracted using **source**, or **\$root** - the original resource. If the target resource is in a `namespace`, provide **Namespace**, **name**, and **kind** properties.
+- **source** - a [JSONata](jsonata.md) expression resolving a link text; this property has access to **\$item** and **\$root**.
+
+#### Example
+
+##### _details_ section
+
+```yaml
+- widget: ResourceButton
+  source: "metadata.ownerReferences[0].status = 'Running' ? 'otherTranslations.linkText' : 'otherTranslations.errorLinkText'"
+  resource:
+    name: metadata.ownerReferences[0].name
+    namespace: $root.metadata.namespace
+    kind: "'Deployment'"
+  icon: add
+```
+
+<img src="./assets/display-widgets/ResourceButton.png" alt="Example of a ResourceButton widget" width="40%" style="border: 1px solid #D2D5D9">
+
 ### ResourceLink
 
 ResourceLink widgets render internal links to Kubernetes resources.
@@ -640,6 +672,7 @@ Table widgets display array data as rows of a table instead of free-standing com
 - **collapsibleTitle** - an optional option for **collapsible** to define title for the collapsible sections, as string or the [JSONata](jsonata.md) function.
 - **disablePadding** - an optional boolean which disables the padding inside the panel body.
 - **showHeader** - an optional boolean which disables displaying the head row.
+- **extraHeaderContent** - an optional array of extra widgets to display as an action section. Uses the same format as the **children** parameter.
 - **sort** - optional sort option. If set to `true`, it allows you to sort using this value. Defaults to false. It can also be set to an object with the following properties:
   - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
   - **compareFunction** - optional [JSONata](jsonata.md) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`
@@ -688,3 +721,98 @@ Tabs widgets render the child widgets in multiple tabs.
 ```
 
 <img src="./assets/display-widgets/Tabs.png" alt="Example of a tabs widget" style="border: 1px solid #D2D5D9">
+
+## Widget _injections_ overview
+
+The **Injections** section contains a list of objects that defines the display structure of the current extension on a different view. Each object is a separate **injection** that will be injected on a specified view at a specified slot.
+
+### Available _injections_ section parameters
+
+- **source** - _[required]_ contains a [JSONata](jsonata.md) expression used to fetch data for the column. In its simplest form, it's the path to the value.
+- **name** - an optional name for the field instead of the default capitalized last part of the path. This can be a key from the **translation** section.
+- **widget** - an optional widget used to render the field referred to by the **source** property. The widget should be adjusted to handle arrays.
+- **order** - a number that defines in what order injections will be rendered. If one or more injections have the same order, they will be sorted by name.
+- **targets** - an array of targets
+  - **location** - _[required]_ defines on what view the injection should be rendered. Currently, injections are rendered only on details views. For more information, check the list of [all available locations](#all-available-injections-locations)
+  - **slot** - _[required]_ defines where the injection should be rendered on a page. Check the list of [all available slots](#all-available-injections-slots)
+  - **filter** - a JSONata expression that filters resources based on a given condition. If defined, it overrides the general filter.
+- **filter** - a JSONata expression that filters resources based on a given condition. This is a general filter rule. If **filter** is defined in **targets**, it will be ignored.
+
+### All available _injections_ slots
+
+- **top** - At the top of the view
+- **bottom** - At the bottom of the view
+
+### All available _injections_ locations
+
+#### Special views
+
+- ClusterOverview
+- CustomResourceDefinition
+
+#### Resource views
+
+- Certificate
+- ClusterRoleBinding
+- ClusterRole
+- ConfigMap
+- CronJob
+- DaemonSet
+- Deployment
+- Event
+- HorizontalPodAutoscaler
+- Ingress
+- Job
+- Namespace
+- NetworkPolicy
+- OAuth2Client
+- PersistentVolumeClaim
+- PersistentVolume
+- Pod
+- ReplicaSet
+- RoleBinding
+- Role
+- Secret
+- ServiceBinding
+- ServiceInstance
+- Service
+- StatefulSet
+
+#### Extension views
+
+Use **general.resource.kind** as a **location** for widget injections with extension views.
+
+### _injections_ example
+
+```yaml
+injections: |-
+  - name: Failing API Rules
+    widget: Table
+    source: $root
+    targets:
+      - slot: top
+        location: ClusterOverview
+      - slot: bottom
+        location: ClusterOverview
+        filter: '$item.status.APIRuleStatus.code="OK"'
+    filter: '$item.status.APIRuleStatus.code="ERROR"'
+    order: 2
+    children: 
+      - name: Name
+        source: metadata.name
+        widget: Text
+      - name: Namespace
+        source: metadata.namespace
+        widget: Text
+      - name: status
+        widget: Badge
+        highlights: 
+          positive:
+            - 'OK'
+          negative:
+            - 'ERROR'
+          critical:
+            - 'SKIPPED'
+        source: 'status.APIRuleStatus.code ? status.APIRuleStatus.code : "UNKNOWN"'
+        description: status.APIRuleStatus.desc
+```

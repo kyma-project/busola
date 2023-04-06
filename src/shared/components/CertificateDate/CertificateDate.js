@@ -19,7 +19,7 @@ export function CertificateDate({ date, lang }) {
 
   if (dateDifference < 0) {
     certificateDetails = {
-      tooltipContent: t('certificates.tooltips.expired'),
+      tooltipContent: t('secrets.certificates.expired'),
       ariaLabel: 'Error',
       glyph: 'message-warning',
       colorIndex: '3',
@@ -28,14 +28,14 @@ export function CertificateDate({ date, lang }) {
     let tooltipContent;
 
     if (dateDifference < 1)
-      tooltipContent = t('certificates.tooltips.close-expiration');
+      tooltipContent = t('secrets.certificates.close-expiration');
     else if (Math.floor(dateDifference) === 1)
-      tooltipContent = t('certificates.tooltips.will-expire', {
+      tooltipContent = t('secrets.certificates.will-expire', {
         daysToExpire: 1,
         daysForm: 'day',
       });
     else {
-      tooltipContent = t('certificates.tooltips.will-expire', {
+      tooltipContent = t('secrets.certificates.will-expire', {
         daysToExpire: Math.floor(dateDifference),
         daysForm: 'days',
       });

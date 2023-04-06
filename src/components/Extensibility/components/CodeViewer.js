@@ -17,6 +17,7 @@ export function CodeViewer({
   schema,
   scope,
   arrayItems,
+  singleRootResource,
 }) {
   const { widgetT } = useGetTranslation();
   const { t } = useTranslation();
@@ -25,6 +26,7 @@ export function CodeViewer({
 
   const jsonata = useJsonata({
     resource: originalResource,
+    parent: singleRootResource,
     scope,
     value,
     arrayItems,

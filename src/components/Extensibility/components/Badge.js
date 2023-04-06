@@ -3,7 +3,10 @@ import { isNil } from 'lodash';
 import { useJsonata } from '../hooks/useJsonata';
 
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
-import { useGetPlaceholder } from 'components/Extensibility/helpers';
+import {
+  useGetPlaceholder,
+  useGetTranslation,
+} from 'components/Extensibility/helpers';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 import './Badge.scss';
@@ -16,11 +19,14 @@ export function Badge({
   originalResource,
   scope,
   arrayItems,
+  singleRootResource,
 }) {
+  const { t: tExt } = useGetTranslation();
   const { t } = useTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
   const jsonata = useJsonata({
     resource: originalResource,
+    parent: singleRootResource,
     scope,
     value,
     arrayItems,
@@ -57,14 +63,14 @@ export function Badge({
     <Tooltip content={tooltip || ''}>
       <span className="status-badge-wrapper has-tooltip">
         <StatusBadge autoResolveType={!type} type={type}>
-          {value}
+          {tExt(value)}
         </StatusBadge>
       </span>
     </Tooltip>
   ) : (
     <span className="status-badge-wrapper">
       <StatusBadge autoResolveType={!type} type={type}>
-        {value}
+        {tExt(value)}
       </StatusBadge>
     </span>
   );

@@ -30,6 +30,9 @@ import { nameLocaleSort, timeSort } from '../../helpers/sortingfunctions';
 import { useVersionWarning } from 'hooks/useVersionWarning';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
 import { ForceUpdateModalContent } from 'shared/ResourceForm/ForceUpdateModalContent';
+import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
+import { useRecoilState } from 'recoil';
+import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 /* to allow cloning of a resource set the following on the resource create component:
  *
@@ -176,7 +179,9 @@ export function ResourceListRenderer({
     time: timeSort,
   },
   searchSettings,
+  isCompact,
 }) {
+  const [showAdd, setShowAdd] = useRecoilState(showYamlUploadDialogState);
   useVersionWarning({
     resourceUrl,
     resourceType,
@@ -252,6 +257,11 @@ export function ResourceListRenderer({
       id: 'labels',
     },
   ];
+
+  const isNamespaceAll = namespace === '-all-';
+  if (isNamespaceAll) {
+    omitColumnsIds = omitColumnsIds.filter(id => id !== 'namespace');
+  }
 
   customColumns =
     columns ||
@@ -347,12 +357,21 @@ export function ResourceListRenderer({
 
   const prepareResourceUrl = (resourceUrl, resource) => {
     const encodedName = encodeURIComponent(resource?.metadata.name);
-    if (!resourceUrlPrefix) return `${resourceUrl}/${encodedName}`;
-
     const namespace = resource?.metadata?.namespace;
     const pluralKind = pluralize((resource?.kind || '').toLowerCase());
 
-    return namespace
+    if (!resourceUrlPrefix) {
+      if (window.location.pathname.includes('namespaces/-all-/')) {
+        const url = `${resourceUrl}`.substring(
+          0,
+          `${resourceUrl}`.lastIndexOf('/'),
+        );
+        return `${url}/namespaces/${namespace}/${pluralKind}/${encodedName}`;
+      }
+      return `${resourceUrl}/${encodedName}`;
+    }
+
+    return namespace && namespace !== '-all-'
       ? `${resourceUrlPrefix}/namespaces/${namespace}/${pluralKind}/${encodedName}`
       : `${resourceUrlPrefix}/${pluralKind}/${encodedName}`;
   };
@@ -432,7 +451,7 @@ export function ResourceListRenderer({
   ];
 
   const extraHeaderContent = listHeaderActions || [
-    CreateResourceForm && !disableCreate && (
+    CreateResourceForm && !disableCreate && !isNamespaceAll && (
       <Button
         glyph="add"
         option="transparent"
@@ -516,6 +535,14 @@ export function ResourceListRenderer({
           textSearchProperties: textSearchProperties(),
         }}
       />
+      {!isCompact && (
+        <YamlUploadDialog
+          show={showAdd}
+          onCancel={() => {
+            setShowAdd(false);
+          }}
+        />
+      )}
     </>
   );
 }

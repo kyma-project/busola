@@ -1,9 +1,10 @@
 import { Button } from 'fundamental-react';
-import { useState } from 'react';
+import { useRecoilState } from 'recoil';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 
 import { YamlUploadDialog } from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
+import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 import { ClusterStorageType } from '../ClusterStorageType';
 import { useGetGardenerProvider } from './useGetGardenerProvider';
@@ -58,7 +59,7 @@ export function ClusterOverviewHeader() {
   const cluster = useRecoilValue(clusterState);
   const { currentCluster } = useClustersInfo();
   const config = currentCluster?.config;
-  const [showAdd, setShowAdd] = useState(false);
+  const [showAdd, setShowAdd] = useRecoilState(showYamlUploadDialogState);
 
   const actions = (
     <Button

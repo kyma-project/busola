@@ -12,6 +12,7 @@ export function ResourceLink({
   originalResource,
   scope,
   arrayItems,
+  singleRootResource,
 }) {
   const { t } = useTranslation();
   const { t: tExt } = useGetTranslation();
@@ -20,6 +21,7 @@ export function ResourceLink({
 
   const jsonata = useJsonata({
     resource: originalResource,
+    parent: singleRootResource,
     scope,
     value,
     arrayItems,
@@ -32,7 +34,6 @@ export function ResourceLink({
   const [name, nameError] = jsonata(structure.resource?.name);
   const [namespace, namespaceError] = jsonata(structure.resource?.namespace);
   const [kind, kindError] = jsonata(structure.resource?.kind);
-
   const jsonataError = nameError || namespaceError || kindError;
   if (jsonataError) {
     return t('extensibility.configuration-error', {

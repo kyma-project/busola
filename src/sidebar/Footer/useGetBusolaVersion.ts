@@ -15,8 +15,11 @@ function createGithubLink(version: string): string {
   if (version !== devVersion && version !== unknownVersion) {
     if (version.toString().startsWith('PR-')) {
       return `${BUSOLA_GITHUB_LINKS.PULLS}/${version.slice(3)}`;
+    } else if (version.toString().startsWith('v20')) {
+      return `${BUSOLA_GITHUB_LINKS.COMMITS}/${version.substring(
+        version.length - 8,
+      )}`;
     }
-
     return `${BUSOLA_GITHUB_LINKS.COMMITS}/${version}`;
   }
 
