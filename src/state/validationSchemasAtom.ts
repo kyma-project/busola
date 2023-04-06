@@ -51,7 +51,7 @@ type ValidationPolicy = {
 
 const fetchBaseValidationConfig = async (): Promise<ValidationConfig[]> => {
   try {
-    const response = await fetch(`/resource-validation/config.yaml`);
+    const response = await fetch(`/resource-validation/rule-set.yaml`);
     const text = await response.text();
     return jsyaml.loadAll(text) as ValidationConfig[];
   } catch (error) {
@@ -80,7 +80,7 @@ const fetchConfigMapValidationConfigs = async (
     kubeconfigNamespace,
     namespace,
     permissionSet,
-    `busola.io/config=validation-set`,
+    `busola.io/resource-validation=rule-set`,
   );
 
   const configFromConfigMap = loadYamlValues(configMaps) as Array<

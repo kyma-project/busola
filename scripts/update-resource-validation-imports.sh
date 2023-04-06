@@ -2,7 +2,7 @@
 
 datreeRuleSource="https://raw.githubusercontent.com/datreeio/datree/main/pkg/defaultRules/defaultRules.yaml"
 
-datreeRuleDir="resources/resource-validation/configs/datree"
+datreeRuleDir="resources/resource-validation/rule-sets/datree"
 datreeRuleFile="$datreeRuleDir/rules.yaml"
 
 mkdir -p "$datreeRuleDir"

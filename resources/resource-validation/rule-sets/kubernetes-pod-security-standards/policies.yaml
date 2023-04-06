@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=../../configSchema.json
+# yaml-language-server: $schema=../../rulesetSchema.json
 
 apiVersion: v1
 policies:
