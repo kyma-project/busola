@@ -80,7 +80,6 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
 
   const { debounced, loading } = useLoadingDebounce(resource, 500);
 
-  //we expect two types here: []string or Promise
   const warnings = [
     useValidateResourceBySchema(debounced, validationSchema),
     useNamespaceWarning(debounced),
