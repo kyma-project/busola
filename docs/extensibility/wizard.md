@@ -72,3 +72,5 @@ myresource:
   spec:
     enabled: true
 ```
+
+For example of usage please check [Get started with functions](../../examples/wizard/README.md) wizard.
