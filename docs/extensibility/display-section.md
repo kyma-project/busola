@@ -808,9 +808,12 @@ injections: |-
       - name: status
         widget: Badge
         highlights:
-          positive: - 'OK'
-          negative: - 'ERROR'
-          critical: - 'SKIPPED'
+          positive:
+            - 'OK'
+          negative:
+            - 'ERROR'
+          critical:
+            - 'SKIPPED'
         source: 'status.APIRuleStatus.code ? status.APIRuleStatus.code : "UNKNOWN"'
         description: status.APIRuleStatus.desc
 ```
