@@ -78,7 +78,7 @@ data:
           visibility: |
             $exists($qqq.spec."string-ref")
   # dataSources: |
-    # ''
+  # ''
   injections: |
     - widget: Wizard
       wizard: pizzas

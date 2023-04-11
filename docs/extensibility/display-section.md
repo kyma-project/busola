@@ -814,3 +814,15 @@ injections: |-
         source: 'status.APIRuleStatus.code ? status.APIRuleStatus.code : "UNKNOWN"'
         description: status.APIRuleStatus.desc
 ```
+
+Example of injection for wizard in function view:
+
+```
+injections: |-
+  - name: Get started with functions
+  widget: Wizard
+  wizard: serverless-wizard
+  targets:
+    - location: functions
+    slot: list-header
+```
