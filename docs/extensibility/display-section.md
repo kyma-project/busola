@@ -787,31 +787,30 @@ When injecting into resources handled by another extension, a lowercase pluraliz
 
 ```
 injections: |-
-
-- name: Failing API Rules
-  widget: Table
-  source: \$root
-  targets:
-  - slot: details-top
-    location: ClusterOverview
-  - slot: details-bottom
-    location: ClusterOverview
-    filter: '$item.status.APIRuleStatus.code="OK"'
-    filter: '$item.status.APIRuleStatus.code="ERROR"'
+  - name: Failing API Rules
+    widget: Table
+    source: \$root
+    targets:
+    - slot: details-top
+      location: ClusterOverview
+    - slot: details-bottom
+      location: ClusterOverview
+      filter: '$item.status.APIRuleStatus.code="OK"'
+      filter: '$item.status.APIRuleStatus.code="ERROR"'
     order: 2
     children:
-  - name: Name
-    source: metadata.name
-    widget: Text
-  - name: Namespace
-    source: metadata.namespace
-    widget: Text
-  - name: status
-    widget: Badge
-    highlights:
-      positive: - 'OK'
-      negative: - 'ERROR'
-      critical: - 'SKIPPED'
-    source: 'status.APIRuleStatus.code ? status.APIRuleStatus.code : "UNKNOWN"'
-    description: status.APIRuleStatus.desc
+      - name: Name
+        source: metadata.name
+        widget: Text
+      - name: Namespace
+        source: metadata.namespace
+        widget: Text
+      - name: status
+        widget: Badge
+        highlights:
+          positive: - 'OK'
+          negative: - 'ERROR'
+          critical: - 'SKIPPED'
+        source: 'status.APIRuleStatus.code ? status.APIRuleStatus.code : "UNKNOWN"'
+        description: status.APIRuleStatus.desc
 ```
