@@ -11,7 +11,7 @@ data:
   general: |
     id: pizzas
     name: Order a pizza
-    description: blah blah
+    description: Test description
     resources:
       qqq:
         kind: Qqq
@@ -77,8 +77,6 @@ data:
         - path: spec.content
           visibility: |
             $exists($qqq.spec."string-ref")
-  # dataSources: |
-  # ''
   injections: |
     - widget: Wizard
       wizard: pizzas

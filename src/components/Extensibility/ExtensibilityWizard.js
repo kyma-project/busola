@@ -179,19 +179,21 @@ export function ExtensibilityWizardCore({
       >
         {resourceSchema.steps.map(step => (
           <Wizard.Step title={step.name}>
-            <p>{step?.description}</p>
-            <UIStoreProvider
-              store={store[step.resource]}
-              showValidity={true}
-              rootRule={prepareSchemaRules(step.form)}
-              onChange={actions => onChange(actions, step.resource)}
-            >
-              <FormStack
-                isRoot
-                schema={schemaMaps[step.resource]}
-                resource={resources[step.resource]}
-              />
-            </UIStoreProvider>
+            <section className="resource-form">
+              <p>{step?.description}</p>
+              <UIStoreProvider
+                store={store[step.resource]}
+                showValidity={true}
+                rootRule={prepareSchemaRules(step.form)}
+                onChange={actions => onChange(actions, step.resource)}
+              >
+                <FormStack
+                  isRoot
+                  schema={schemaMaps[step.resource]}
+                  resource={resources[step.resource]}
+                />
+              </UIStoreProvider>
+            </section>
           </Wizard.Step>
         ))}
         <Wizard.Step

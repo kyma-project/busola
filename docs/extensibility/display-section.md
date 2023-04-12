@@ -791,12 +791,12 @@ injections: |-
     widget: Table
     source: \$root
     targets:
-    - slot: details-top
-      location: ClusterOverview
-    - slot: details-bottom
-      location: ClusterOverview
-      filter: '$item.status.APIRuleStatus.code="OK"'
-      filter: '$item.status.APIRuleStatus.code="ERROR"'
+      - slot: details-top
+        location: ClusterOverview
+      - slot: details-bottom
+        location: ClusterOverview
+        filter: '$item.status.APIRuleStatus.code="OK"'
+        filter: '$item.status.APIRuleStatus.code="ERROR"'
     order: 2
     children:
       - name: Name
@@ -827,5 +827,5 @@ injections: |-
   wizard: serverless-wizard
   targets:
     - location: functions
-    slot: list-header
+      slot: list-header
 ```
