@@ -796,7 +796,7 @@ injections: |-
       - slot: details-bottom
         location: ClusterOverview
         filter: '$item.status.APIRuleStatus.code="OK"'
-        filter: '$item.status.APIRuleStatus.code="ERROR"'
+    filter: '$item.status.APIRuleStatus.code="ERROR"'
     order: 2
     children:
       - name: Name
