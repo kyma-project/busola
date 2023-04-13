@@ -11,7 +11,7 @@ data:
   general: |
     id: serverless-wizard
     name: Get started with Serverless
-    description: Now that you've installed Kyma, let's deploy your first Function. We'll call it hello-world.
+    description: Now that you've installed Kyma, deploy your first Function and call it hello-world.
     resources:
       function:
         kind: Function
