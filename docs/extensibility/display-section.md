@@ -818,7 +818,7 @@ injections: |-
         description: status.APIRuleStatus.desc
 ```
 
-Example of injection for wizard in function view:
+Here's an example of an injection for a wizard in the function view:
 
 ```
 injections: |-
