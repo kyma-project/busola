@@ -1,3 +1,4 @@
+import { ExtWizardConfig } from './../types';
 import jsyaml from 'js-yaml';
 import { mapValues, partial } from 'lodash';
 import { useEffect, useState } from 'react';
@@ -118,6 +119,107 @@ async function getExtensionConfigMaps(
   }
 }
 
+async function getExtensionWizardConfigMaps(
+  fetchFn: FetchFn,
+  kubeconfigNamespace: string,
+  currentNamespace: string,
+  permissionSet: PermissionSetState,
+): Promise<any> {
+  const clusterCMUrl =
+    '/api/v1/configmaps?labelSelector=busola.io/extension=wizard';
+  const namespacedCMUrl = `/api/v1/namespaces/${currentNamespace ??
+    kubeconfigNamespace}/configmaps?labelSelector=busola.io/extension=wizard`;
+
+  if (!currentNamespace) {
+    const hasAccessToClusterCMList = doesUserHavePermission(
+      ['list'],
+      { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
+      permissionSet,
+    );
+
+    // user has no access to clusterwide namespace listing, fall back to namespaced listing
+    const url = hasAccessToClusterCMList ? clusterCMUrl : namespacedCMUrl;
+
+    try {
+      const response = await fetchFn({ relativeUrl: url });
+      const configMapResponse: ConfigMapListResponse = await response.json();
+      return configMapResponse?.items ?? [];
+    } catch (e) {
+      console.warn('Cannot load cluster params from the target cluster: ', e);
+      return [];
+    }
+  } else {
+    const hasAccessToClusterCMList = doesUserHavePermission(
+      ['list'],
+      { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
+      permissionSet,
+    );
+
+    const url = hasAccessToClusterCMList ? clusterCMUrl : namespacedCMUrl;
+
+    try {
+      const response = await fetchFn({ relativeUrl: url });
+      const configMapResponse: ConfigMapListResponse = await response.json();
+      // return configMapResponse?.items || [];
+
+      const configMapsExtensions = configMapResponse?.items.reduce(
+        (accumulator, currentConfigMap) => {
+          const extResourceWithMetadata = {
+            ...currentConfigMap,
+            data: mapValues(
+              currentConfigMap?.data || {},
+              convertYamlToObject,
+            ) as ExtResource,
+          };
+
+          if (!extResourceWithMetadata.data) return accumulator;
+
+          const indexOfTheSameExtension = accumulator.findIndex(ext =>
+            isTheSameNameAndUrl(ext.data, extResourceWithMetadata.data),
+          );
+
+          if (indexOfTheSameExtension !== -1) {
+            const areNamespacesTheSame =
+              currentNamespace ===
+              accumulator[indexOfTheSameExtension].metadata.namespace;
+            if (areNamespacesTheSame) {
+              return accumulator;
+            }
+
+            accumulator[indexOfTheSameExtension] = extResourceWithMetadata;
+            return accumulator;
+          }
+
+          return [...accumulator, extResourceWithMetadata];
+        },
+        [] as ExtResourceWithMetadata[],
+      );
+      if (configMapsExtensions) {
+        configMapsExtensions.every(cmExt => {
+          const namespaces = ['kube-public', currentNamespace];
+
+          if (namespaces.includes(cmExt.metadata.namespace!)) {
+            return false;
+          }
+          return true;
+        });
+
+        const configMapsExtensionsDataOnly: ExtResource[] = configMapsExtensions.map(
+          cm => cm.data,
+        );
+
+        const combinedExtensions = [...configMapsExtensionsDataOnly].filter(
+          ext => !!ext.general,
+        );
+
+        return combinedExtensions;
+      }
+    } catch (error) {
+      return [];
+    }
+  }
+}
+
 const getExtensions = async (
   fetchFn: FetchFn | undefined,
   kubeconfigNamespace = 'kube-public',
@@ -215,6 +317,7 @@ export const useGetExtensions = () => {
   const auth = useRecoilValue(authDataState);
   const setExtensions = useSetRecoilState(extensionsState);
   const setInjections = useSetRecoilState(injectionsState);
+  const setWizard = useSetRecoilState(wizardState);
   const fetchFn = getFetchFn(useRecoilValue);
   const configuration = useRecoilValue(configurationAtom);
   const features = configuration?.features;
@@ -225,11 +328,16 @@ export const useGetExtensions = () => {
   const { isEnabled: isExtensibilityInjectionsEnabled } = useFeature(
     'EXTENSIBILITY_INJECTIONS',
   );
+  const { isEnabled: isExtensibilityWizardEnabled } = useFeature(
+    'EXTENSIBILITY_WIZARD',
+  );
+
   useEffect(() => {
     const manageExtensions = async () => {
       if (!cluster) {
         setExtensions([]);
         setInjections([]);
+        setWizard([]);
         setNonNamespacedExtensions(null);
         return;
       }
@@ -240,6 +348,23 @@ export const useGetExtensions = () => {
         namespace,
         permissionSet,
       );
+
+      let wizardConfigs;
+      if (fetchFn) {
+        wizardConfigs = await getExtensionWizardConfigMaps(
+          fetchFn,
+          cluster.currentContext.namespace || 'kube-public',
+          namespace,
+          permissionSet,
+        );
+      }
+
+      if (!wizardConfigs || !isExtensibilityWizardEnabled) {
+        setWizard([]);
+      } else {
+        setWizard(wizardConfigs);
+        // TODO wizard injections
+      }
 
       if (!configs) {
         setExtensions([]);
@@ -263,7 +388,7 @@ export const useGetExtensions = () => {
           );
 
           let injectionsConfigs: ExtInjectionConfig[] = [];
-          filteredConfigs.filter(config =>
+          filteredConfigs.forEach(config =>
             config?.injections?.map(injection =>
               injectionsConfigs.push({
                 injection: injection,
@@ -298,5 +423,12 @@ export const injectionsState: RecoilState<ExtInjectionConfig[] | null> = atom<
   ExtInjectionConfig[] | null
 >({
   key: 'injectionsState',
+  default: defaultValue,
+});
+
+export const wizardState: RecoilState<ExtWizardConfig[] | null> = atom<
+  ExtWizardConfig[] | null
+>({
+  key: 'wizardState',
   default: defaultValue,
 });

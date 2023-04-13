@@ -1,4 +1,4 @@
-.add-cluster-dialog {
+.wizard-dialog {
   .fd-dialog__content {
     min-height: 90vh;
     min-width: 90vw;
@@ -29,6 +29,7 @@
     }
   }
   .fd-wizard__content {
+    background-color: var(--sapList_Background);
     padding-bottom: 16px;
     display: flex;
     flex-flow: column;

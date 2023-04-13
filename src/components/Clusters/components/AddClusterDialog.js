@@ -3,7 +3,6 @@ import { Dialog } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { AddClusterWizard } from './AddClusterWizard';
-import './AddClusterDialog.scss';
 
 function AddClusterDialogComponent({ show, onCancel }) {
   const [kubeconfig, setKubeconfig] = useState(undefined);
@@ -28,7 +27,7 @@ export function AddClusterDialog({ show, onCancel }) {
   return (
     <Dialog
       show={show}
-      className="add-cluster-dialog"
+      className="add-cluster-dialog wizard-dialog"
       title={t('clusters.add.title')}
       actions={[]}
     >
