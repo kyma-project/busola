@@ -781,7 +781,7 @@ The **Injections** section contains a list of objects that defines the display s
 
 #### Extension views
 
-When injecting into resources handled by another extension, a lowercase pluralized **general.resource.kind** should be used as the **location**.
+Use a lowercase pluralized **general.resource.kind** as the **location** for injections into resources handled by another extension.
 
 ### _injections_ example
 
