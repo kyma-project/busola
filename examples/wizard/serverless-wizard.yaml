@@ -157,7 +157,7 @@ data:
           visibility: $exposeFunction
     - name: Provide the name and service for APIRule
       resource: apirule
-      description: You need to specify name for APIRule and Service which you want to expose. We suggest to name APIRule same as you have a name for the function. Service name is name of you function.
+      description: You must specify the name of APIRule and the Service which you want to expose. We suggest naming APIRule the same as you have named the function. The service name is the name of your function.
       form:
         - path: metadata.name
           # widget: Name
