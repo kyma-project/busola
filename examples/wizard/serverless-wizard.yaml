@@ -146,7 +146,7 @@ data:
     - name: Expose the Function
       resource: function
       visiblity: false
-      description: After we've got our hello-world Function deployed, we might want to expose it outside our cluster so that it's available for other external services. For this case we need to create APIRule.
+      description: After you've got your hello-world Function deployed, you might want to expose it outside your cluster so that it's available for other external services. For this case, you need to create APIRule.
       form:
         - var: exposeFunction
           type: boolean
