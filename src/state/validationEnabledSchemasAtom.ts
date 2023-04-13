@@ -65,7 +65,7 @@ export const useGetValidationEnabledSchemas = async () => {
       const enabledPolicies = policies.filter(policy =>
         policySet.has(policy.name),
       );
-      const enabledRules = getEnabledRules(rules, enabledPolicies);
+      const enabledRules = getEnabledRules(rules, enabledPolicies, policies);
 
       setSchemas({
         rules: enabledRules,

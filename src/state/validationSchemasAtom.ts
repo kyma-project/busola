@@ -46,6 +46,7 @@ type RuleReference =
 type ValidationPolicy = {
   name: string;
   enabled: boolean;
+  includes: Array<string>;
   rules: Array<RuleReference>;
 };
 
@@ -114,18 +115,62 @@ const fetchValidationConfig = async (
   return { rules, policies };
 };
 
+const getRuleKey = (rule: RuleReference) => {
+  return typeof rule === 'string' ? rule : rule.identifier;
+};
+
+const resolveRulesForPolicy = (
+  policy: ValidationPolicy,
+  policyMap: Map<string, ValidationPolicy>,
+  included: Set<string> = new Set(), // avoid circular dependencies
+  includedRuleKeys: Set<string> = new Set(), // avoid duplicate rules
+): RuleReference[] => {
+  const rules = policy.rules.filter(rule => {
+    const key = getRuleKey(rule);
+    if (!includedRuleKeys.has(key)) {
+      includedRuleKeys.add(key);
+      return true;
+    } else return false;
+  });
+
+  const additionalRules =
+    policy.includes?.flatMap(name => {
+      if (included.has(name)) return [];
+      included.add(name);
+
+      const includedPolicy = policyMap.get(name);
+      if (includedPolicy) {
+        return resolveRulesForPolicy(
+          includedPolicy,
+          policyMap,
+          included,
+          includedRuleKeys,
+        );
+      } else return [];
+    }) ?? [];
+
+  return [...rules, ...additionalRules];
+};
+
 export const getEnabledRules = (
   rules: Rule[],
-  policies: ValidationPolicy[],
+  selectedPolicies: ValidationPolicy[],
+  allPolicies?: ValidationPolicy[],
 ) => {
   const rulesByName = rules.reduce(
     (agg, rule) => ({ ...agg, [rule.uniqueName]: rule }),
     {},
   ) as { [key: string]: Rule };
 
-  const enabledRulesByName = policies.reduce((agg, policy) => {
-    policy.rules.forEach(rule => {
-      const key = typeof rule === 'string' ? rule : rule.identifier;
+  const policyMap =
+    allPolicies?.reduce((agg, policy) => {
+      return agg.set(policy.name, policy);
+    }, new Map()) ?? (new Map() as Map<string, ValidationPolicy>);
+
+  const enabledRulesByName = selectedPolicies.reduce((agg, policy) => {
+    const policyRules = resolveRulesForPolicy(policy, policyMap);
+    policyRules.forEach(rule => {
+      const key = getRuleKey(rule);
       if (key) {
         if (agg[key]) {
           agg[key].policies?.push(policy);
