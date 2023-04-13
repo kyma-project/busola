@@ -50,7 +50,7 @@ resources:
 
 ## _steps_ section
 
-Each wizard consists of steps, this sections contains their definitions.
+Each wizard consists of steps. This section contains their definitions.
 
 ### Item parameters
 
