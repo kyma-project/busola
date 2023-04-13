@@ -25,7 +25,7 @@ The **general** section is required and contains basic information about the cre
 
 ### Item parameters
 
-- **id** - _[required]_ - an identifier used to reference the wizard to trigger it's opening.
+- **id** - _[required]_ - an identifier used to reference the wizard to trigger its opening.
 - **resources** - _[required]_ - information about the resources created by the wizard. This is a key value map with values consisting of:
   - **kind** - _[required]_ Kubernetes kind of the resource.
   - **version** - _[required]_ API version used for all requests.
