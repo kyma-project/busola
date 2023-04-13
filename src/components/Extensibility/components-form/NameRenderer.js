@@ -16,7 +16,7 @@ export function NameRenderer({
   editMode,
 }) {
   const { t: tExt } = useGetTranslation();
-  const extraPaths = schema.get('extraPaths') || [];
+  const extraPaths = schema.get('extraPaths');
   const disableOnEdit = schema.get('disableOnEdit') || false;
 
   return (
@@ -25,28 +25,37 @@ export function NameRenderer({
       kind={resource.kind}
       readOnly={editMode && disableOnEdit}
       setValue={value => {
-        onChange([
-          {
-            storeKeys,
-            scopes: ['value'],
-            type: 'set',
-            schema,
-            required,
-            data: { value },
-          },
-          ...extraPaths.map(path => ({
-            storeKeys: List(
-              Array.isArray(path)
-                ? path
-                : jp.parse(path).map(e => e.expression.value),
-            ),
-            scopes: ['value'],
-            type: 'set',
-            schema,
-            required,
-            data: { value },
-          })),
-        ]);
+        extraPaths
+          ? onChange([
+              {
+                storeKeys,
+                scopes: ['value'],
+                type: 'set',
+                schema,
+                required,
+                data: { value },
+              },
+              ...extraPaths.map(path => ({
+                storeKeys: List(
+                  Array.isArray(path)
+                    ? path
+                    : jp.parse(path).map(e => e.expression.value),
+                ),
+                scopes: ['value'],
+                type: 'set',
+                schema,
+                required,
+                data: { value },
+              })),
+            ])
+          : onChange({
+              storeKeys,
+              scopes: ['value'],
+              type: 'set',
+              schema,
+              required,
+              data: { value },
+            });
       }}
       validate={value => !!value}
       {...getPropsFromSchema(schema, required, tExt)}

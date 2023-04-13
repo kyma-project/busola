@@ -3,6 +3,7 @@ import { Widget } from '../Widget';
 import { ExtensibilityTestWrapper } from './helpers';
 
 jest.mock('components/Extensibility/ExtensibilityCreate', () => null);
+jest.mock('components/Extensibility/ExtensibilityWizard', () => null);
 
 const resource = {
   test: 'test-value',

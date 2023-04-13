@@ -6,11 +6,12 @@ The `examples` folder showcases some of the Busola features and concepts.
 
 ## List of examples
 
-| Name                           | Description                                                                    |
-| ------------------------------ | ------------------------------------------------------------------------------ |
-| [Apps](apps)                   | Showcases examples of Busola's usages                                          |
-| [Pizzas](pizzas/README.md)     | Showcases the Busola's extensibility feature                                   |
-| [Services](services/README.md) | Showcases the Busola's extensibility feature presented with existing resources |
+| Name                           | Description                                                                         |
+| ------------------------------ | ----------------------------------------------------------------------------------- |
+| [Apps](apps)                   | Showcases examples of Busola usages                                                 |
+| [Pizzas](pizzas/README.md)     | Showcases the Busola extensibility feature                                          |
+| [Services](services/README.md) | Showcases the Busola extensibility feature presented with existing resources        |
+| [Wizard](wizard/README.md)     | Showcases the Busola extensibility wizard for getting started guide with functions. |
 
 ## Installation
 
