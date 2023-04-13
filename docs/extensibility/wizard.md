@@ -63,7 +63,7 @@ Each step contains the following parameters:
 
 ## _defaults_ section
 
-Contains a map of default values for specific resources. This is appended to the basic skeleton resources created based on the data provided in the [_general_ section](#general-section). This section is optional and if present, not all resources have to be covered.
+This section contains a map of default values for specific resources. It is appended to the basic skeleton resources created based on the data provided in the [_general_ section](#general-section). This section is optional; if present, not all resources must be covered.
 
 ### Example
 
