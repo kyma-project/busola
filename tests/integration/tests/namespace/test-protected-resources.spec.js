@@ -137,10 +137,6 @@ context('Test Protected Resources', () => {
 
     cy.contains(`Delete ${NAME}`).should('exist');
 
-    cy.wait(3000);
-
-    cy.contains('button', 'Cancel')
-      .should('be.visible')
-      .click();
+    cy.contains('button', 'Cancel').click();
   });
 });
