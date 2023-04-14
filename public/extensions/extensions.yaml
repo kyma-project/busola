@@ -1,1 +1,770 @@
-[]
+dataSources:
+  moduleTemplates:
+    resource:
+      kind: ModuleTemplate
+      namespace: null
+      group: operator.kyma-project.io
+      version: v1alpha1
+details:
+  header: []
+  body:
+    - name: Summary
+      widget: Panel
+      children:
+        - name: channel
+          source: spec.channel
+        - name: State
+          widget: Badge
+          source: status.state
+          description: 'status.state!="Ready" ? status.lastOperation.operation : ""'
+        - name: Age
+          source: metadata.creationTimestamp
+    - widget: Alert
+      severity: warning
+      source: '"alert.beta"'
+      visibility: '"beta" in $item.spec.modules.channel'
+    - widget: Table
+      source: 'spec.modules[]'
+      name: Modules
+      visibility: $exists(*)
+      children:
+        - source: $item.name
+          name: Module Name
+        - source: $item.channel
+          name: Channel
+        - name: Version
+          source: '$parent.status.modules ? $filter($parent.status.modules, function($p){$p.name=name and $p.channel=channel}).version : "-"'
+          widget: Text
+        - name: State
+          widget: Badge
+          source: '$filter($parent.status.modules, function($p){$p.name=name and $p.channel=channel}).state'
+form:
+  - simple: true
+    path: spec.channel
+    required: true
+  - widget: GenericList
+    path: spec.modules
+    children:
+      - path: "[].name"
+        required: true
+        enum: '$distinct($moduleTemplates().items.metadata.labels."operator.kyma-project.io/module-name")'
+      - path: "[].channel"
+        required: true
+        visibility: "$boolean($item.name)"
+        enum: |
+          $filter($moduleTemplates().items, function($v) {
+            $v.metadata.labels."operator.kyma-project.io/module-name" = $item.name
+          }).spec.channel
+  - widget: Alert
+    severity: warning
+    alert: '"alert.beta"'
+    visibility: '"beta" in $item.spec.modules.channel'
+general:
+  resource:
+    kind: Kyma
+    group: operator.kyma-project.io
+    version: v1beta1
+  name: Kyma
+  category: Kyma
+  urlPath: kymas
+  scope: namespace
+list:
+  - name: channel
+    widget: Labels
+    source: spec.channel
+  - name: State
+    widget: Badge
+    source: status.state
+    tooltip: status.state
+  - name: Age
+    source: metadata.creationTimestamp
+translations:
+  en:
+    metadata.annotations: Annotations
+    metadata.labels: Labels
+    metadata.creationTimestamp: Created at
+    alert.beta: "CAUTION: The Service Level Agreements (SLA) and Support obligations do not apply to Beta modules and functionalities. If Beta modules or functionalities directly or indirectly affect other modules, the Service Level Agreements (SLA) and Support for these modules are limited to priority levels P3 (Medium) or P4 (Low). Thus, Beta releases are not intended for use in customer production environments."
+injections:
+  - name: Kyma
+    widget: Panel
+    source: $
+    targets:
+      - slot: top
+        location: ClusterOverview
+    order: 1 
+    children: 
+      - name: Name
+        source: metadata.name
+        widget: ResourceLink
+        resource:
+          name: metadata.name
+          namespace: metadata.namespace
+          kind: '"Kyma"'
+      - name: State
+        widget: Badge
+        source: status.state
+        description: 'status.state!="Ready" ? status.lastOperation.operation : ""'
+      - widget: Alert
+        severity: warning
+        source: '"alert.beta"'
+        visibility: '"beta" in $item.spec.modules.channel'
+      - name: Installed Modules
+        source: $item.spec.modules
+        widget: Table
+        disablePadding: true
+        extraHeaderContent: 
+          - name: ''
+            source: '"Modify"'
+            widget: ResourceButton
+            resource:
+              name: $parent.metadata.name
+              namespace: $parent.metadata.namespace
+              kind: '"Kyma"'
+        children: 
+          - name: Name
+            source: name
+          - name: Namespace
+            source: $parent.metadata.namespace
+          - name: Channel
+            source: channel
+            widget: Text
+          - name: Version
+            source: '$parent.status.modules ? $filter($parent.status.modules, function($p){$p.name=name and $p.channel=channel}).version : "-"'
+            widget: Text
+          - name: State
+            widget: Badge
+            source: '$filter($parent.status.modules, function($p){$p.name=name and $p.channel=channel}).state'
+---
+details:
+  {
+    "header": [
+      {
+        "source": "status.conditions[-1].type",
+        "name": "Status",
+        "widget": "Badge"
+      }
+    ],
+    "body": [
+      {
+        "source": "spec.parser",
+        "widget": "CodeViewer",
+        "language": "'plaintext'"
+      }
+    ]
+  }
+form:
+  [
+    {
+      "widget": "CodeEditor",
+      "path": "spec.parser",
+      "simple": true,
+      "language": "'plaintext'"
+    }
+  ]
+general:
+  {
+    "resource": {
+      "kind": "LogParser",
+      "group": "telemetry.kyma-project.io",
+      "version": "v1alpha1"
+    },
+    "name": "AK Log Parsers",
+    "category": "AK",
+    "urlPath": "ak-logparsers",
+    "scope": "cluster",
+    "description": "Configure custom Log Parsers",
+  }
+list:
+  [
+    {
+      "source": "status.conditions[-1].type",
+      "name": "Status",
+      "widget": "Badge"
+    },
+    {
+      "source": "$prepareUrl('The next text should be {lolo}', {lolo: 'replaced'})",
+      "name": "prepareUrl",
+    }
+  ]
+translations:
+  {
+    "en": {
+      "metadata.annotations": "Annotations",
+      "metadata.labels": "Labels",
+      "metadata.creationTimestamp": "Created at"
+    }
+  }
+---
+details:
+  {
+    "header": [
+        {
+        "source": "$each(spec.output, function($v, $k) {$v.url.value or $v.url.valueFrom.secretKeyRef.name or $v.host.value or $v.host.valueFrom.secretKeyRef.name ? $k})",
+        "placeholder": "custom",
+        "type": "string",
+        "name": "Type",
+        "isSelected": true,
+        "widget": "Text"
+      },
+      {
+        "name": "Unsupported-Mode",
+        "source": "status.unsupportedMode",
+        "widget": "Badge",
+        "highlights": {
+          "positive": ["false"],
+          "negative": ["true"]
+        }
+      },
+      {
+        "source": "status.conditions[-1].type",
+        "name": "Status",
+        "widget": "Badge"
+      }
+    ],
+    "body":
+      [
+        {
+          "widget": "Panel",
+          "name": "Applications",
+          "children":
+            [
+              {
+                "widget": "Panel",
+                "name": "Namespaces",
+                "children":
+                  [
+                    {
+                      "name": "Include",
+                      "widget": "JoinedArray",
+                      "source": "spec.input.application.namespaces.include",
+                      "separator": ", "
+                    },
+                    {
+                      "name": "Exclude",
+                      "widget": "JoinedArray",
+                      "source": "spec.input.application.namespaces.exclude",
+                      "separator": ", "
+                    },
+                    {
+                      "name": "System Namespaces",
+                      "source": "spec.input.application.namespaces.system"
+                    }
+                ]
+              },
+              {
+                "widget": "Panel",
+                "name": "Containers",
+                "children":
+                  [
+                    {
+                      "name": "Include",
+                      "widget": "JoinedArray",
+                      "source": "spec.input.application.containers.include",
+                      "separator": ", "
+                    },
+                    {
+                      "name": "Exclude",
+                      "widget": "JoinedArray",
+                      "source": "spec.input.application.containers.exclude",
+                      "separator": ", "
+                    }
+                  ]
+              },
+              {
+                "widget": "Panel",
+                "name": "Other Settings",
+                "children": [
+                  {
+                    "name": "Keep Annotations",
+                    "source": "spec.input.application.keepAnnotations"
+                  },
+                  {
+                    "name": "Drop Labels",
+                    "source": "spec.input.application.dropLabels"
+                  }
+                ]
+              }
+            ]
+        },
+        {
+          "widget": "Panel",
+          "name": "Output",
+          "children":
+            [
+              {
+                "name": "Custom",
+                "widget": "CodeViewer",
+                "language": "'plaintext'",
+                "source": "spec.output.custom",
+                "visibility": "$exists(spec.output.custom)",
+              },
+              {
+                "name": "Grafana-Loki",
+                "widget": "Panel",
+                "visibility": "$not($exists(spec.output.custom) or $exists(spec.output.http))",
+                "children": [
+                  {
+                    "name": "URL",
+                    "source": "spec.output.`grafana-loki`.url.value"
+                  },
+                  {
+                    "name": "Labels",
+                    "widget": "Labels",
+                    "source": "spec.output.`grafana-loki`.labels"
+                  },
+                  {
+                    "name": "Remove keys",
+                    "widget": "JoinedArray",
+                    "separator": ",",
+                    "source": "spec.output.`grafana-loki`.removeKeys",
+                  }
+                ]
+              },
+              {
+                "name": "HTTP",
+                "widget": "Panel",
+                "visibility": "$exists(spec.output.http)",
+                "children": [
+                  {
+                    "name": "Host",
+                    "widget": "Panel",
+                    "children": [
+                      {
+                        "name": "Value",
+                        "source": "spec.output.http.host.value",
+                        "visibility": "$exists(spec.output.http.host.value)"
+                      },
+                      {
+                        "name": "Value From Secret",
+                        "widget": "ResourceRefs",
+                        "source": "spec.output.http.host.valueFrom.secretKeyRef",
+                        "kind": "Secret",
+                        "visibility": "$exists(spec.output.http.host.valueFrom.secretKeyRef.name)"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "User",
+                    "widget": "Panel",
+                    "children": [
+                      {
+                        "name": "Value",
+                        "source": "spec.output.http.user.value",
+                        "visibility": "$exists(spec.output.http.user.value)"
+                      },
+                      {
+                        "name": "Value From Secret",
+                        "widget": "ResourceRefs",
+                        "source": "spec.output.http.user.valueFrom.secretKeyRef",
+                        "kind": "Secret",
+                        "visibility": "$exists(spec.output.http.user.valueFrom.secretKeyRef.name)"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Password",
+                    "widget": "Panel",
+                    "children": [
+                      {
+                        "name": "Value",
+                        "source": "spec.output.http.password.value",
+                        "visibility": "$exists(spec.output.http.password.value)"
+                      },
+                      {
+                        "name": "Value From Secret",
+                        "widget": "ResourceRefs",
+                        "source": "spec.output.http.password.valueFrom.secretKeyRef",
+                        "kind": "Secret",
+                        "visibility": "$exists(spec.output.http.password.valueFrom.secretKeyRef.name)"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "TLS Settings",
+                    "widget": "Panel",
+                    "children": [
+                      {
+                        "name": "Disabled",
+                        "source": "spec.output.http.tls.disabled",
+                        "placeholder": "false"
+                      },
+                      {
+                        "name": "Skip certificate validation",
+                        "source": "spec.output.http.tls.skipCertificateValidation",
+                        "placeholder": "false"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Other Settings",
+                    "widget": "Panel",
+                    "children": [
+                      {
+                        "name": "Compression",
+                        "source": "spec.output.http.compress"
+                      },
+                      {
+                        "name": "De-dot",
+                        "source": "spec.output.http.dedot",
+                        "placeholder": "false"
+                      },
+                      {
+                        "name": "Format",
+                        "source": "spec.output.http.format",
+                        "placeholder": "json"
+                      },
+                      {
+                        "name": "Port",
+                        "source": "spec.output.http.port",
+                        "placeholder": "443"
+                      },
+                      {
+                        "name": "URI",
+                        "source": "spec.output.http.uri"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+        }
+      ]
+  }
+form:
+  [
+    {
+      "path": "spec.input",
+      "widget": "FormGroup",
+      "defaultExpanded": true,
+      "simple": true,
+      "children":
+        [
+          {
+            "name": "Include Namespaces",
+            "widget": "SimpleList",
+            "path": "application.namespaces.include",
+            "defaultExpanded": true,
+            "inputInfo": "Include container logs from selected namespaces",
+            "children":
+              [
+                {
+                  "path": "[]",
+                  "widget": "Resource",
+                  "resource":
+                    { "scope": "cluster", "kind": "Namespace", "version": "v1" },
+                },
+              ]
+          },
+          {
+            "name": "Exclude Namespaces",
+            "widget": "SimpleList",
+            "path": "application.namespaces.exclude",
+            "children":
+              [
+                {
+                  "path": "[]",
+                  "widget": "Resource",
+                  "resource":
+                    { "scope": "cluster", "kind": "Namespace", "version": "v1" }
+                }
+              ]
+          },
+          {
+            "name": "Include System Namespaces",
+            "path": "application.namespaces.system"
+          },
+          {
+            "name": "Include Containers",
+            "widget": "SimpleList",
+            "path": "application.containers.include"
+          },
+          {
+            "name": "Exclude Containers",
+            "widget": "SimpleList",
+            "path": "application.containers.exclude"
+          },
+          {
+            "name": "Keep Annotations",
+            "path": "application.keepAnnotations"
+          },
+          {
+            "name": "Drop Labels",
+            "path": "application.dropLabels"
+          }
+        ]
+    },
+    {
+      "name": "Filters",
+      "widget": "SimpleList",
+      "path": "spec.filters",
+      "children":
+        [
+          {
+            "widget": "FormGroup",
+            "path": "[]",
+            "children":
+              [
+                {
+                  "widget": "CodeEditor",
+                  "path": "custom"
+                }
+              ]
+          }
+        ]
+    },
+    {
+      "path": "spec.output",
+      "widget": "FormGroup",
+      "defaultExpanded": true,
+      "simple": true,
+      "children":
+        [
+          {
+            "name": "Custom",
+            "path": "custom",
+            "widget": "CodeEditor",
+            "advanced": true,
+            "inputInfo": "Note: If you use a custom output, you put the LogPipeline in unsupported mode (https://kyma-project.io/docs/kyma/latest/01-overview/main-areas/observability/obsv-04-telemetry-in-kyma/#unsupported-mode)"
+          },
+          {
+            "name": "HTTP",
+            "path": "http",
+            "widget": "FormGroup",
+            "defaultExpanded": true,
+            "simple": true,
+            "children":
+              [
+                {
+                  "name": "Host",
+                  "path": "host",
+                  "widget": "FormGroup",
+                  "children":
+                    [
+                      {
+                        "name": "Value",
+                        "path": "value",
+                        "widget": "Text"
+                      },
+                      {
+                        "name": "Secret Reference",
+                        "path": "valueFrom.secretKeyRef",
+                        "widget": "ResourceRef",
+                        "resource": {
+                            "kind": "secret",
+                            "version": "v1",
+                        },
+                        "children": [{
+                            "path": "key",
+                            "enum": "$keys($secret.data)",
+                        },
+                        ],
+                      }
+                    ]
+                },
+                {
+                  "name": "User",
+                  "path": "user",
+                  "widget": "FormGroup",
+                  "children":
+                    [
+                      {
+                        "name": "Value",
+                        "path": "value",
+                        "widget": "Text"
+                      },
+                      {
+                        "name": "Secret Reference",
+                        "path": "valueFrom.secretKeyRef",
+                        "widget": "ResourceRef",
+                        "resource": {
+                            "kind": "secret",
+                            "version": "v1",
+                        },
+                        "children": [{
+                            "path": "key",
+                            "enum": "$keys($secret.data)",
+                        },
+                        ],
+                      }
+                    ]
+                },
+                {
+                  "name": "Password",
+                  "path": "password",
+                  "widget": "FormGroup",
+                  "children":
+                    [
+                      {
+                        "name": "Value",
+                        "path": "value",
+                        "widget": "Text"
+                      },
+                      {
+                        "name": "Secret Reference",
+                        "path": "valueFrom.secretKeyRef",
+                        "widget": "ResourceRef",
+                        "resource": {
+                            "kind": "secret",
+                            "version": "v1",
+                        },
+                        "children": [{
+                            "path": "key",
+                            "enum": "$keys($secret.data)",
+                        },
+                        ],
+                      }
+                    ]
+                },
+                {
+                  "name": "TLS",
+                  "widget": "FormGroup",
+                  "path": "tls",
+                  "children":
+                    [
+                      {
+                        "name": "Disabled",
+                        "path": "disabled"
+                      },
+                      {
+                        "name": "Skip Certificate Validation",
+                        "path": "skipCertificateValidation"
+                      }
+                    ]
+                },
+                {
+                  "name": "URI",
+                  "path": "uri",
+                  "widget": "Text"
+                },
+                {
+                  "name": "Port",
+                  "path": "port",
+                  "widget": "Text"
+                },
+                {
+                  "name": "Compress",
+                  "path": "compress",
+                  "widget": "Text"
+                },
+                {
+                  "name": "Format",
+                  "path": "format",
+                  "widget": "Text"
+                },
+                {
+                  "name": "Dedot",
+                  "path": "dedot"
+                },
+              ]
+          },
+        ]
+    }
+  ]
+general:
+  {
+    "resource": {
+      "kind": "LogPipeline",
+      "group": "telemetry.kyma-project.io",
+      "version": "v1alpha1"
+    },
+    "name": "AK Log Pipelines",
+    "category": "AK",
+    "urlPath": "ak-logpipelines",
+    "scope": "cluster",
+    "description": "Configure log selection, filters, and outputs",
+  }
+list:
+  [
+    {
+      "source": "$each(spec.output, function($v, $k) {$v.url.value or $v.url.valueFrom.secretKeyRef.name or $v.host.value or $v.host.valueFrom.secretKeyRef.name ? $k})",
+      "placeholder": "custom",
+      "type": "string",
+      "name": "Type",
+      "isSelected": true,
+      "widget": "Text"
+    },
+    {
+      "name": "Unsupported-Mode",
+      "source": "status.unsupportedMode",
+      "widget": "Badge",
+      "highlights": {
+        "positive": ["false"],
+        "negative": ["true"]
+      }
+    },
+    {
+      "source": "status.conditions[-1].type",
+      "name": "Status",
+      "widget": "Badge"
+    },
+    {
+      "source": "$prepareUrl('The next text should be replaced with {lolo} or variable {lolo2}', {'lolo': 'string', 'lolo2': metadata.name})",
+      "name": "prepareUrl",
+    },
+    {
+      "source": "'The next text should be replaced with {lolo} or variable {lolo2}'",
+      "name": "prepareUrl2",
+    }
+  ]
+translations:
+  {
+    "en": {
+      "metadata.annotations": "Annotations",
+      "metadata.labels": "Labels",
+      "metadata.creationTimestamp": "Created at"
+    }
+  }
+injections:
+  - name: Discover Logs
+    widget: Panel
+    source: $
+    targets:
+      - slot: details-top
+        location: Namespaces
+    order: 1 
+    # filter: $root.metadata.name = $item.metadata.name
+    children: 
+      - name: "$root.metadata.name"
+        source: "$root.metadata.name"
+      - name: "$item.metadata.name"
+        source: "$item.metadata.name"
+      - name: "metadata"
+        source: "metadata.name"
+      - name: "parent"
+        source: "parent"
+      - name: "embedResource"
+        source: "$embedResource"
+      - name: "prepareUrl"
+        source: "$prepareUrl(
+          'https://kibana-sf-a7ac93be-d8bd-43d1-b85a-dcf3bf46c470.cls-01.cloud.logs.services.sap.hana.ondemand.com/app/discover?security_tenant=global#/?_g=(filters:!(),refreshInterval:(pause:!f,value:5000),time:(from:now-7d,to:now))&_a=(columns:!(kubernetes.pod_name,kubernetes.container_name,log),filters:!((query:(match_phrase:(kubernetes.namespace_name:{namespace_name})))),index:maintained-by-perfx_kyma-content-package_index-pattern-logs-json-kyma)', 
+          {'namespace_name': $embedResource.metadata.name}
+        )"
+        link: "$prepareUrl(
+          'https://kibana-sf-a7ac93be-d8bd-43d1-b85a-dcf3bf46c470.cls-01.cloud.logs.services.sap.hana.ondemand.com/app/discover?security_tenant=global#/?_g=(filters:!(),refreshInterval:(pause:!f,value:5000),time:(from:now-7d,to:now))&_a=(columns:!(kubernetes.pod_name,kubernetes.container_name,log),filters:!((query:(match_phrase:(kubernetes.namespace_name:{namespace_name})))),index:maintained-by-perfx_kyma-content-package_index-pattern-logs-json-kyma)', 
+          {'namespace_name': $embedResource.metadata.name}
+        )"
+        widget: ExternalLink
+        copyable: false
+  - name: Discover Logss
+    widget: Panel
+    source: $
+    targets:
+      - slot: details-top
+        location: Pods
+    order: 1 
+    # filter: $root.metadata.name = $item.metadata.name
+    children: 
+      - name: "embedResource"
+        source: "$embedResource"
+      - name: "prepareUrl"
+        source: "$prepareUrl(
+          'https://kibana-sf-a7ac93be-d8bd-43d1-b85a-dcf3bf46c470.cls-01.cloud.logs.services.sap.hana.ondemand.com/app/discover?security_tenant=global#/?_g=(filters:!(),refreshInterval:(pause:!f,value:5000),time:(from:now-7d,to:now))&_a=(columns:!(kubernetes.pod_name,kubernetes.container_name,log),filters:!((query:(match_phrase:(kubernetes.namespace_name:{namespace_name})))),index:maintained-by-perfx_kyma-content-package_index-pattern-logs-json-kyma)', 
+          {'namespace_name': $embedResource.metadata.name}
+        )"
+        link: "$prepareUrl(
+          'https://kibana-sf-a7ac93be-d8bd-43d1-b85a-dcf3bf46c470.cls-01.cloud.logs.services.sap.hana.ondemand.com/app/discover?security_tenant=global#/?_g=(filters:!(),refreshInterval:(pause:!f,value:5000),time:(from:now-7d,to:now))&_a=(columns:!(kubernetes.pod_name,kubernetes.container_name,log),filters:!((query:(match_phrase:(kubernetes.namespace_name:{namespace_name}))),(query:(match_phrase:(kubernetes.pod_name:{pod_name})))),index:maintained-by-perfx_kyma-content-package_index-pattern-logs-json-kyma)', 
+          {'namespace_name': $embedResource.metadata.namespace,
+          'pod_name': $embedResource.metadata.name }
+        )"
+        widget: ExternalLink
+        copyable: false

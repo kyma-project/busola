@@ -14,7 +14,6 @@ import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
 export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
   const { resource } = resMetaData?.general ?? {};
-
   const { schema } = useGetSchema({
     resource,
   });
@@ -40,6 +39,8 @@ export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
 
   const items = data?.items || [];
   const filteredItems = items.filter(item => {
+    console.log('root', root, 'item', item);
+
     if (filter) {
       const [value] = jsonata(filter, { item, root });
       return value;
@@ -55,6 +56,7 @@ export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
       schema={schema}
       dataSources={dataSources}
       originalResource={filteredItems}
+      embedResource={root}
       inlineContext={true}
     />
   );
