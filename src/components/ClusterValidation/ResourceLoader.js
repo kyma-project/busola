@@ -68,3 +68,62 @@ export async function* loadResources(fetch) {
   }
   console.log('loading errors', errors);
 }
+
+/**
+ * A helper class to add identifiable running promises to an array.
+ * Control of when to remove the promise from the array is given to the consumer of the class.
+ */
+class RunningPromises {
+  constructor() {
+    this.running = [];
+    this.length = 0;
+  }
+
+  findFreeSlot() {
+    for (let i = 0; i <= this.running.length; i++) {
+      if (!this.running[i]) return i;
+    }
+  }
+
+  insert(promise) {
+    const id = this.findFreeSlot();
+    this.running[id] = promise
+      .then(result => ({ id, result }))
+      .catch(error => ({ id, error }));
+    this.length++;
+  }
+
+  remove(id) {
+    delete this.running[id];
+    this.length--;
+  }
+
+  [Symbol.iterator]() {
+    return this.running[Symbol.iterator]();
+  }
+}
+
+export async function* loadResourcesConcurrently(fetch, max = 3) {
+  const queue = [() => fetchGroups(fetch), () => fetchApiV1(fetch)];
+  const running = new RunningPromises();
+  const errors = [];
+
+  while (queue.length > 0 || running.length > 0) {
+    while (queue.length > 0 && running.length < max) {
+      const task = queue.shift();
+      const promise = task();
+      running.insert(promise);
+    }
+    try {
+      console.log(running.length);
+      const { id, result } = await Promise.race(running);
+      running.remove(id);
+      if (result.nextTasks) queue.push(...result.nextTasks);
+      if (result.resources) yield result.resources;
+    } catch ({ id, error }) {
+      errors.push(error);
+      running.remove(id);
+    }
+  }
+  console.log('loading errors', errors);
+}
