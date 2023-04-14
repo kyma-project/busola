@@ -62,7 +62,7 @@ export function MultiInput({
   const toInternalCallback = useCallback(toInternal, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    setInternalValue([...toInternalCallback(value), null]);
+    //setInternalValue([...toInternalCallback(value), null]);
   }, [value, toInternalCallback]);
 
   // diff by stringify, as useEffect won't fire for the same object ref
