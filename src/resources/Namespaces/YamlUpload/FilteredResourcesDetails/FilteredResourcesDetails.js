@@ -15,7 +15,7 @@ import './FilteredResourcesDetails.scss';
 import { validationSchemasEnabledState } from 'state/validationEnabledSchemasAtom';
 import { useLoadingDebounce } from 'shared/hooks/useLoadingDebounce';
 
-const WarningButton = ({
+export const WarningButton = ({
   handleShowWarnings,
   areWarningsVisible,
   warningsNumber,
