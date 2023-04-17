@@ -63,7 +63,7 @@ export function ExtensibilityWizardCore({
   toggleFormFn,
   resourceName,
   onCancel,
-  editMode = false,
+  disableOnEdit = false,
   ...props
 }) {
   const { prepareVars, setVar } = useVariables();
@@ -74,10 +74,12 @@ export function ExtensibilityWizardCore({
 
   const [store, setStore] = useState(() =>
     mapValues(resourceSchema.general.resources, (res, key) =>
-      getUIStoreFromResourceObj({
-        ...createTemplate(res, 'default', res.scope),
-        ...(resourceSchema?.defaults[key] ?? {}),
-      }),
+      getUIStoreFromResourceObj(
+        initialResource || {
+          ...createTemplate(res, 'default', res.scope),
+          ...(resourceSchema?.defaults[key] ?? {}),
+        },
+      ),
     ),
   );
 
@@ -108,7 +110,7 @@ export function ExtensibilityWizardCore({
   useEffect(() => {
     const fullSchemaRules = prepareRules(
       resourceSchema.steps.flatMap(step => step.form) ?? [],
-      editMode,
+      disableOnEdit,
       t,
     );
 
@@ -233,7 +235,11 @@ export function ExtensibilityWizard(props) {
       <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
         <TriggerContextProvider>
           <VarStoreContextProvider>
-            <ExtensibilityWizardCore {...props} resourceSchema={resMetaData} />
+            <ExtensibilityWizardCore
+              {...props}
+              resourceSchema={resMetaData}
+              resource={props?.originalResource}
+            />
           </VarStoreContextProvider>
         </TriggerContextProvider>
       </DataSourcesContextProvider>

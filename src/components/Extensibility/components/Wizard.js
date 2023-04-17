@@ -50,6 +50,7 @@ export function Wizard({
           <ExtensibilityWizard
             onCancel={() => setShowWizard(false)}
             wizardName={wizardName}
+            originalResource={originalResource}
           />
         </ErrorBoundary>
       </Dialog>
