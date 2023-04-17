@@ -76,7 +76,7 @@ export function ExtensibilityWizardCore({
     mapValues(resourceSchema.general.resources, (res, key) =>
       getUIStoreFromResourceObj({
         ...createTemplate(res, 'default', res.scope),
-        ...(resourceSchema.defaults[key] || {}),
+        ...(resourceSchema?.defaults[key] ?? {}),
       }),
     ),
   );
