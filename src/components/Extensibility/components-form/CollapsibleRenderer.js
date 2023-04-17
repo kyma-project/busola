@@ -25,6 +25,7 @@ export function CollapsibleRenderer({
       title={tFromStoreKeys(storeKeys, schema)}
       defaultOpen={defaultOpen}
       nestingLevel={nestingLevel}
+      required={String(schema.get('required')) === 'true'}
     >
       <div
         className="collapsible-renderer__grid-wrapper"
