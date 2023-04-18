@@ -238,7 +238,7 @@ export function ExtensibilityWizard(props) {
             <ExtensibilityWizardCore
               {...props}
               resourceSchema={resMetaData}
-              resource={props?.originalResource}
+              resource={props?.singleRootResource}
             />
           </VarStoreContextProvider>
         </TriggerContextProvider>
