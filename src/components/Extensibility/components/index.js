@@ -17,6 +17,7 @@ import { Alert } from './Alert';
 import { ExternalLink } from './ExternalLink';
 import { Tabs } from './Tabs';
 import { Wizard } from './Wizard';
+import { MessagePanel } from './MessagePage';
 
 import { APIRuleHost } from './APIRules/APIRuleHost';
 
@@ -44,6 +45,7 @@ export const widgets = {
   Tabs,
   Text,
   Wizard,
+  MessagePanel,
 };
 
 export const valuePreprocessors = {
