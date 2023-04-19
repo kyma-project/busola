@@ -1,7 +1,7 @@
-// import { useTranslation } from 'react-i18next';
 import { MessagePage } from 'fundamental-react';
 
 import { Widget, InlineWidget } from './Widget';
+import { useGetTranslation } from '../helpers';
 
 export function MessagePanel({
   value,
@@ -10,20 +10,17 @@ export function MessagePanel({
   disableMargin = false,
   ...props
 }) {
-  //   const { t } = useTranslation();
+  const { t: tExt } = useGetTranslation();
 
   return (
     <MessagePage
-      className="empty-list"
       image={
-        <svg role="presentation" className="fd-message-page__icon">
-          <use xlinkHref="#sapIllus-Scene-NoData" />
+        <svg role="img" className="fd-message-page__icon">
+          <use xlinkHref={`#${structure?.img}`} />
         </svg>
       }
-      title={"Seems that you don't have any Kyma Modules Configured"}
-      subtitle={
-        'Add at least one Kyma Module. Add your module under "kyma-system -> Kyma"'
-      }
+      title={tExt(structure?.title)}
+      subtitle={tExt(structure?.subtitle)}
       actions={structure.children.map((def, idx) => (
         <Widget
           key={idx}
