@@ -16,7 +16,7 @@ export function MessagePanel({
     <MessagePage
       image={
         <svg role="img" className="fd-message-page__icon">
-          <use xlinkHref={`#${structure?.img}`} />
+          <use xlinkHref="#sapIllus-Scene-NoData" />
         </svg>
       }
       title={tExt(structure?.title)}
