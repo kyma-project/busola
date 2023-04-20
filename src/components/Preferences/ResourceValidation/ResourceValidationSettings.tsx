@@ -137,32 +137,38 @@ export default function ResourceValidationSettings() {
           </div>
         </div>
       )}
-      {enabled && choosePolicies && (
+      {enabled && (
         <>
           <GenericList
             showHeader={false}
-            entries={policyList}
+            entries={
+              choosePolicies
+                ? policyList
+                : policyList.filter(policy => policy.selected)
+            }
             headerRenderer={() => ['policies']}
             rowRenderer={entry => [
               <div className="policy-row">
                 <span>{entry.text}</span>
-                <Switch
-                  // TypeScript definitions are out of sync here
-                  // @ts-ignore
-                  localizedText={{
-                    switchLabel: t(
-                      'settings.clusters.resourcesValidation.select-policy',
-                      {
-                        name: entry.text,
-                      },
-                    ),
-                  }}
-                  checked={entry.selected}
-                  onChange={() => {
-                    if (entry.selected) deleteSelectedPolicy(entry.key);
-                    else addSelectedPolicy(entry.key);
-                  }}
-                />
+                {choosePolicies && (
+                  <Switch
+                    // TypeScript definitions are out of sync here
+                    // @ts-ignore
+                    localizedText={{
+                      switchLabel: t(
+                        'settings.clusters.resourcesValidation.select-policy',
+                        {
+                          name: entry.text,
+                        },
+                      ),
+                    }}
+                    checked={entry.selected}
+                    onChange={() => {
+                      if (entry.selected) deleteSelectedPolicy(entry.key);
+                      else addSelectedPolicy(entry.key);
+                    }}
+                  />
+                )}
               </div>,
             ]}
             searchSettings={{
