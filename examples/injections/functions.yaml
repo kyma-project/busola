@@ -3,7 +3,7 @@ injections: |-
     widget: Table
     source: $root
     targets:
-      - slot: top
+      - slot: details-top
         location: ClusterOverview
     filter: '$count($filter($item.status.conditions, function($v) { $v.status = "False" })) != 0'
     order: 1 
@@ -47,8 +47,8 @@ injections: |-
     widget: Table
     source: $root
     targets:
-      - slot: top
-        location: Deploymets
+      - slot: details-top
+        location: Deployments
     filter: $contains($root.metadata.name, $item.metadata.name)
     order: 1 
     children: 

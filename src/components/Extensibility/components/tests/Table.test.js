@@ -5,6 +5,7 @@ import { fireEvent, render, waitFor } from 'testing/reactTestingUtils';
 import { Table } from '../Table';
 
 jest.mock('components/Extensibility/ExtensibilityCreate', () => null);
+jest.mock('components/Extensibility/ExtensibilityWizard', () => null);
 
 const genericNotFoundMessage = 'components.generic-list.messages.not-found';
 const elements = [

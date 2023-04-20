@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
+import { mapValues } from 'lodash';
 import {
   addWorkerListener,
   sendWorkerMessage,
@@ -46,4 +47,75 @@ export const useGetSchema = ({ schemaId, skip, resource }) => {
   }, [areSchemasComputed, schemaId, setSchema, schema, skip, isWorkerOkay]);
 
   return { schema, error, loading };
+};
+
+// TODO error/loading
+export const useGetResourceSchemas = resources => {
+  const schemaIds = useMemo(
+    () =>
+      mapValues(resources, resource => {
+        const { group, version, kind } = resource;
+        if (!group) return `${version}/${kind}`;
+        else return `${group}/${version}/${kind}`;
+      }),
+    [resources],
+  );
+
+  const { areSchemasComputed, schemasError } = useRecoilValue(
+    schemaWorkerStatusState,
+  );
+
+  const isWorkerOkay = isWorkerAvailable && !schemasError;
+  const [schemas, setSchemas] = useState({});
+  const setSchema = (schemaId, schema) =>
+    setSchemas(schemas => ({
+      ...schemas,
+      [schemaId]: schema,
+    }));
+  const [error, setError] = useState(undefined);
+  const [loading, setLoading] = useState(() =>
+    mapValues(resources, () => isWorkerOkay),
+  );
+
+  useEffect(() => {
+    const hasSchemas = Object.keys(schemaIds).every(
+      schemaId => schemas.schemaId,
+    );
+    if (!areSchemasComputed || hasSchemas || !isWorkerOkay) {
+      return;
+    }
+
+    Object.entries(schemaIds).forEach(([key, schemaId]) => {
+      sendWorkerMessage('getSchema', schemaId);
+
+      addWorkerListener(`schemaComputed:${schemaId}`, ({ schema }) => {
+        setSchema(key, schema);
+        setError(undefined);
+        setLoading(loading => ({
+          ...loading,
+          [key]: false,
+        }));
+      });
+    });
+    addWorkerListener('customError', err => {
+      setError(err);
+      setLoading(mapValues(resources).map(() => false));
+    });
+    addWorkerErrorListener(err => {
+      setError(err);
+      setLoading(mapValues(resources).map(() => false));
+    });
+  }, [
+    areSchemasComputed,
+    schemas.schemaId,
+    schemaIds,
+    isWorkerOkay,
+    resources,
+  ]);
+
+  return {
+    schemas,
+    loading: Object.values(loading).some(v => !!v),
+    error,
+  };
 };
