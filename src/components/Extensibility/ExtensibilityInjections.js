@@ -13,15 +13,20 @@ import pluralize from 'pluralize';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
 export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
+  const isStatic = resMetaData?.general?.type === 'static';
+  const staticResource = {
+    kind: root?.kind || 'Namespace',
+    version: root?.apiVersion || 'v1',
+  };
   const { resource } = resMetaData?.general ?? {};
   const { schema } = useGetSchema({
-    resource,
+    resource: isStatic ? staticResource : resource,
   });
 
   let resourceUrl = usePrepareResourceUrl({
     apiGroup: resource?.group,
     apiVersion: resource?.version,
-    resourceType: pluralize(resource?.kind).toLowerCase(),
+    resourceType: pluralize(resource?.kind || '').toLowerCase(),
   });
 
   const { data } = useGet(resourceUrl, { pollingInterval: 0 });
@@ -29,9 +34,10 @@ export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
   const jsonata = useJsonata({});
 
   // there may be a moment when `resMetaData` is undefined (e.g. when switching the namespace)
-  if (!resource) {
+  if (!resource && !isStatic) {
     return null;
   }
+
   const dataSources = resMetaData?.dataSources || {};
   const injection = resMetaData?.injection;
   const injectionName = injection?.name;
@@ -39,19 +45,16 @@ export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
 
   const items = data?.items || [];
   const filteredItems = items.filter(item => {
-    console.log('root', root, 'item', item);
-
     if (filter) {
       const [value] = jsonata(filter, { item, root });
       return value;
     }
     return true;
   });
-
   return (
     <Widget
       key={injectionName}
-      value={filteredItems}
+      value={isStatic ? [{}] : filteredItems}
       structure={injection}
       schema={schema}
       dataSources={dataSources}
@@ -65,7 +68,7 @@ export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
 const ExtensibilityInjections = ({ destination, slot, root }) => {
   const injections = useGetInjections(destination, slot);
   let itemList = [];
-  injections.forEach(injection => {
+  (injections || []).forEach(injection => {
     itemList.push(
       <ExtensibilityInjection resMetaData={injection} root={root} />,
     );

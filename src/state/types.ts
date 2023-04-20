@@ -84,6 +84,7 @@ export type ExtGeneral = {
     group: string;
     version: string;
   };
+  type: string;
   name: string;
   category: string;
   urlPath: string;
