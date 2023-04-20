@@ -16,6 +16,7 @@ export function Wizard({
   originalResource,
   scope,
   arrayItems,
+  singleRootResource,
 }) {
   const { t: tExt } = useGetTranslation();
   const { t } = useTranslation();
@@ -50,6 +51,7 @@ export function Wizard({
           <ExtensibilityWizard
             onCancel={() => setShowWizard(false)}
             wizardName={wizardName}
+            singleRootResource={singleRootResource}
           />
         </ErrorBoundary>
       </Dialog>
