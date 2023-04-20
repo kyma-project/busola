@@ -20,3 +20,25 @@ Cypress.Commands.add('setBusolaFeature', (featureName, isEnabled) => {
 
   cy.intercept(requestData, configMock);
 });
+
+Cypress.Commands.add(
+  'mockConfigMap',
+  ({ namespace = 'kube-public', label, data }) => {
+    const requestData = {
+      method: 'GET',
+      url: `/backend/api/v1/configmaps?labelSelector=${label}`,
+    };
+
+    const configMock = {
+      items: [
+        {
+          data: {
+            data,
+          },
+        },
+      ],
+    };
+
+    cy.intercept(requestData, configMock);
+  },
+);
