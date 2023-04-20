@@ -18,12 +18,16 @@ export default function ResourceValidationSettings() {
   const [validateResources, setValidateResources] = useRecoilState(
     validateResourcesState,
   );
-  const validationFeature = useFeature('VALIDATION') as ValidationFeatureConfig;
+  const validationFeature = useFeature(
+    'RESOURCE_VALIDATION',
+  ) as ValidationFeatureConfig;
 
   const {
     enabled,
     choosePolicies,
-    policies: selectedPolicies = validationFeature?.config?.policies ?? [],
+    policies: selectedPolicies = (validationFeature?.isEnabled &&
+      validationFeature?.config?.policies) ||
+      [],
   } = getExtendedValidateResourceState(validateResources);
 
   const validationSchemas = useRecoilValue(validationSchemasState);
@@ -65,7 +69,10 @@ export default function ResourceValidationSettings() {
       setValidateResources({
         enabled,
         choosePolicies: true,
-        policies: validationFeature?.config?.policies ?? [],
+        policies:
+          (validationFeature?.isEnabled &&
+            validationFeature?.config?.policies) ||
+          [],
       });
     }
   };
