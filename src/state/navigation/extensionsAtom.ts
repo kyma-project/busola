@@ -114,6 +114,7 @@ async function getExtensionConfigMaps(
       const configMapResponse: ConfigMapListResponse = await response.json();
       return configMapResponse?.items || [];
     } catch (error) {
+      console.error(error);
       return [];
     }
   }
@@ -143,7 +144,43 @@ async function getExtensionWizardConfigMaps(
     try {
       const response = await fetchFn({ relativeUrl: url });
       const configMapResponse: ConfigMapListResponse = await response.json();
-      return configMapResponse?.items ?? [];
+
+      const configMapsExtensions = configMapResponse?.items.reduce(
+        (accumulator, currentConfigMap) => {
+          const extResourceWithMetadata = {
+            ...currentConfigMap,
+            data: mapValues(
+              currentConfigMap?.data || {},
+              convertYamlToObject,
+            ) as ExtResource,
+          };
+
+          if (!extResourceWithMetadata.data) return accumulator;
+
+          const indexOfTheSameExtension = accumulator.findIndex(ext =>
+            isTheSameNameAndUrl(ext.data, extResourceWithMetadata.data),
+          );
+
+          if (indexOfTheSameExtension !== -1) {
+            accumulator[indexOfTheSameExtension] = extResourceWithMetadata;
+            return accumulator;
+          }
+
+          return [...accumulator, extResourceWithMetadata];
+        },
+        [] as ExtResourceWithMetadata[],
+      );
+      if (configMapsExtensions) {
+        const configMapsExtensionsDataOnly: ExtResource[] = configMapsExtensions.map(
+          cm => cm.data,
+        );
+
+        const combinedExtensions = [...configMapsExtensionsDataOnly].filter(
+          ext => !!ext.general,
+        );
+
+        return combinedExtensions;
+      }
     } catch (e) {
       console.warn('Cannot load cluster params from the target cluster: ', e);
       return [];
@@ -160,7 +197,6 @@ async function getExtensionWizardConfigMaps(
     try {
       const response = await fetchFn({ relativeUrl: url });
       const configMapResponse: ConfigMapListResponse = await response.json();
-      // return configMapResponse?.items || [];
 
       const configMapsExtensions = configMapResponse?.items.reduce(
         (accumulator, currentConfigMap) => {
@@ -215,6 +251,7 @@ async function getExtensionWizardConfigMaps(
         return combinedExtensions;
       }
     } catch (error) {
+      console.error(error);
       return [];
     }
   }
