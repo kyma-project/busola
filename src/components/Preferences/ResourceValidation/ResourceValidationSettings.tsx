@@ -162,6 +162,7 @@ export default function ResourceValidationSettings() {
                         },
                       ),
                     }}
+                    compact
                     checked={entry.selected}
                     onChange={() => {
                       if (entry.selected) deleteSelectedPolicy(entry.key);
