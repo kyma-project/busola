@@ -13,6 +13,7 @@ export function ResourceLink({
   scope,
   arrayItems,
   singleRootResource,
+  embedResource,
 }) {
   const { t } = useTranslation();
   const { t: tExt } = useGetTranslation();
@@ -22,6 +23,7 @@ export function ResourceLink({
   const jsonata = useJsonata({
     resource: originalResource,
     parent: singleRootResource,
+    embedResource: embedResource,
     scope,
     value,
     arrayItems,
