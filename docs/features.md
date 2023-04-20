@@ -305,3 +305,15 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   VISUAL_RESOURCES:
     isEnabled: true
   ```
+
+- **RESOURCE_VALIDATION** - determines the selected policies for resource validation. They can be overwritten in the user preferences.
+
+  Default settings:
+
+  ```yaml
+  RESOURCE_VALIDATION:
+    isEnabled: true
+    config:
+      policies:
+        - Default
+  ```
