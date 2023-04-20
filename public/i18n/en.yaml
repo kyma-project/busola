@@ -1332,7 +1332,7 @@ settings:
       title: Resource Validation
       validateResources: Validate Resources
       choose-policies: Choose Policies
-      add-policy: Add a policy
+      select-policy: Select policy {{name}}
       no-policies-found: No policies found
     interaction:
       title: Cluster Interaction

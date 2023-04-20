@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { Switch, ComboboxInput, MessageStrip } from 'fundamental-react';
+import { Switch } from 'fundamental-react';
 import {
   getExtendedValidateResourceState,
   validateResourcesState,
@@ -9,16 +9,21 @@ import { validationSchemasState } from 'state/validationSchemasAtom';
 import { useMemo } from 'react';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
-export default function ResourcesValidationSettings() {
+import './ResourceValidationSettings.scss';
+import { useFeature } from 'hooks/useFeature';
+import { ValidationFeatureConfig } from 'state/validationEnabledSchemasAtom';
+
+export default function ResourceValidationSettings() {
   const { t } = useTranslation();
   const [validateResources, setValidateResources] = useRecoilState(
     validateResourcesState,
   );
+  const validationFeature = useFeature('VALIDATION') as ValidationFeatureConfig;
 
   const {
     enabled,
     choosePolicies,
-    policies: selectedPolicies = [],
+    policies: selectedPolicies = validationFeature?.config?.policies ?? [],
   } = getExtendedValidateResourceState(validateResources);
 
   const validationSchemas = useRecoilValue(validationSchemasState);
@@ -30,18 +35,16 @@ export default function ResourcesValidationSettings() {
     [validationSchemas],
   );
 
-  const remainingOptions = useMemo(
-    () => allOptions.filter(option => !selectedPolicies.includes(option.key)),
-    [allOptions, selectedPolicies],
-  );
-
-  const invalidOptions = useMemo(
-    () =>
-      selectedPolicies.filter(
-        policy => !allOptions.some(option => option.key === policy),
-      ),
-    [allOptions, selectedPolicies],
-  );
+  const policyList = useMemo(() => {
+    const selectedPolicySet = selectedPolicies.reduce(
+      (agg, name) => agg.add(name),
+      new Set(),
+    );
+    return allOptions.map(option => ({
+      ...option,
+      selected: selectedPolicySet.has(option.key),
+    }));
+  }, [allOptions, selectedPolicies]);
 
   const toggleVisibility = () => {
     setValidateResources({
@@ -52,11 +55,19 @@ export default function ResourcesValidationSettings() {
   };
 
   const toggleCustomPolicyValidation = () => {
-    setValidateResources({
-      enabled,
-      choosePolicies: !choosePolicies,
-      policies: selectedPolicies,
-    });
+    if (choosePolicies) {
+      // deactivate
+      setValidateResources({
+        enabled,
+        choosePolicies: false,
+      });
+    } else {
+      setValidateResources({
+        enabled,
+        choosePolicies: true,
+        policies: validationFeature?.config?.policies ?? [],
+      });
+    }
   };
 
   const deleteSelectedPolicy = (policyToDelete: string) => {
@@ -74,15 +85,6 @@ export default function ResourcesValidationSettings() {
       policies: [...selectedPolicies, policyToAdd].sort(),
     });
   };
-
-  // This gets newly generated whenever the props change, removing the typed value
-  const PolicyComboBox = ({ ...props }) => (
-    // @ts-ignore
-    <ComboboxInput
-      {...props}
-      placeholder={t('settings.clusters.resourcesValidation.add-policy')}
-    />
-  );
 
   return (
     <>
@@ -131,44 +133,37 @@ export default function ResourcesValidationSettings() {
       {enabled && choosePolicies && (
         <>
           <GenericList
-            actions={[
-              {
-                name: 'Delete',
-                handler: deleteSelectedPolicy,
-              },
-            ]}
             showHeader={false}
-            entries={selectedPolicies}
+            entries={policyList}
             headerRenderer={() => ['policies']}
-            rowRenderer={entry => [entry]}
-            extraHeaderContent={
-              remainingOptions.length > 0 && (
-                //@ts-ignore
-                <PolicyComboBox
-                  options={remainingOptions}
-                  searchFullString
-                  compact
-                  onSelectionChange={(
-                    _: any,
-                    selected: { key: string | number; text: string },
-                  ) => {
-                    if (selected.key === -1) return;
-                    addSelectedPolicy(selected.text);
+            rowRenderer={entry => [
+              <div className="policy-row">
+                <span>{entry.text}</span>
+                <Switch
+                  // TypeScript definitions are out of sync here
+                  // @ts-ignore
+                  localizedText={{
+                    switchLabel: t(
+                      'settings.clusters.resourcesValidation.select-policy',
+                      {
+                        name: entry.text,
+                      },
+                    ),
+                  }}
+                  checked={entry.selected}
+                  onChange={() => {
+                    if (entry.selected) deleteSelectedPolicy(entry.key);
+                    else addSelectedPolicy(entry.key);
                   }}
                 />
-              )
-            }
+              </div>,
+            ]}
             searchSettings={{
               showSearchSuggestion: false,
               noSearchResultMessage: t('clusters.list.no-policies-found'),
+              textSearchProperties: ['key', 'text'],
             }}
           />
-          {invalidOptions.length > 0 && (
-            <MessageStrip type="warning">
-              Some policies do not exist in this cluster:{' '}
-              {invalidOptions.join(', ')}
-            </MessageStrip>
-          )}
         </>
       )}
     </>

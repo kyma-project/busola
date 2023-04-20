@@ -15,7 +15,7 @@ import {
 
 type PolicyReference = string;
 
-type ValidationFeatureConfig = {
+export type ValidationFeatureConfig = {
   isEnabled: boolean;
   config: {
     policies: PolicyReference[];
