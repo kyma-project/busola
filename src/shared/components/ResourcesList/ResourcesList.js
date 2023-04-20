@@ -34,6 +34,10 @@ import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { useRecoilState } from 'recoil';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
+const Injections = React.lazy(() =>
+  import('../../../components/Extensibility/ExtensibilityInjections'),
+);
+
 /* to allow cloning of a resource set the following on the resource create component:
  *
  * ResourceCreate.allowCreate = true;
@@ -97,7 +101,16 @@ export function ResourcesList(props) {
       {!props.isCompact && (
         <PageHeader
           title={prettifyNamePlural(props.resourceTitle, props.resourceType)}
-          actions={props.customHeaderActions}
+          actions={
+            <>
+              <Injections
+                destination={props.resourceType}
+                slot="list-header"
+                root={props.resources}
+              />
+              {props.customHeaderActions}
+            </>
+          }
           description={props.description}
         />
       )}
