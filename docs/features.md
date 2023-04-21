@@ -306,7 +306,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
     isEnabled: true
   ```
 
-- **RESOURCE_VALIDATION** - determines the selected policies for resource validation. They can be overwritten in the user preferences.
+- **RESOURCE_VALIDATION** - determines the selected policies for [resource validation](resource-validation/README.md). They can be overwritten in the user preferences.
 
   Default settings:
 
