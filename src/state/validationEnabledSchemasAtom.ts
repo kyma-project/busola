@@ -26,7 +26,7 @@ const getEnabledPolicyNames = (
   validationFeature: ValidationFeatureConfig,
   validationPreferences: ExtendedValidateResources,
 ): PolicyReference[] => {
-  if (validationPreferences.enabled) {
+  if (validationPreferences.isEnabled) {
     if (validationPreferences.choosePolicies) {
       return validationPreferences.policies ?? [];
     } else if (

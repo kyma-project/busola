@@ -2,7 +2,7 @@ import { atom, RecoilState } from 'recoil';
 import { localStorageEffect } from '../utils/effects';
 
 export type ExtendedValidateResources = {
-  enabled: boolean;
+  isEnabled: boolean;
   choosePolicies: boolean;
   policies?: string[];
 };
@@ -27,7 +27,7 @@ export const getExtendedValidateResourceState = (
 ): ExtendedValidateResources => {
   if (typeof validateResources === 'boolean') {
     return {
-      enabled: validateResources,
+      isEnabled: validateResources,
       choosePolicies: false,
     };
   } else {

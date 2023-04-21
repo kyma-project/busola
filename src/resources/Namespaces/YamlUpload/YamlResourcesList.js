@@ -23,7 +23,7 @@ export function YamlResourcesList({ resourcesData }) {
     validateResourcesState,
   );
   const {
-    enabled,
+    isEnabled,
     choosePolicies,
     policies: selectedPolicies = [],
   } = getExtendedValidateResourceState(validateResources);
@@ -93,12 +93,12 @@ export function YamlResourcesList({ resourcesData }) {
               <Switch
                 onChange={() =>
                   setValidateResources({
-                    enabled: !enabled,
+                    isEnabled: !isEnabled,
                     choosePolicies,
                     policies: selectedPolicies,
                   })
                 }
-                checked={enabled}
+                checked={isEnabled}
               />
             </div>
           </div>

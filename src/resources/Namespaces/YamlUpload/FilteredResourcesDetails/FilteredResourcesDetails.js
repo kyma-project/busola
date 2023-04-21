@@ -141,7 +141,7 @@ export const FilteredResourcesDetails = ({ filteredResources }) => {
           <p style={{ fontSize: '16px' }}>
             {String(r?.value?.kind)} {String(r?.value?.metadata?.name)}
           </p>
-          {validateResources.enabled && (
+          {validateResources.isEnabled && (
             <ValidationWarnings
               resource={r?.value}
               validationSchema={validationSchemas}

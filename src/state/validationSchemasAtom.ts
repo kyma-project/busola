@@ -45,7 +45,7 @@ type RuleReference =
 
 type ValidationPolicy = {
   name: string;
-  enabled: boolean;
+  isEnabled: boolean;
   includes: Array<string>;
   rules: Array<RuleReference>;
 };

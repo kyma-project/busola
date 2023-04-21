@@ -3,7 +3,6 @@
 apiVersion: v1
 policies:
   - name: PodSecurityStandardsBaseline
-    enabled: true
     rules:
       # Rules for the Kubernetes Pod Security Standards Baseline
       # https://kubernetes.io/docs/concepts/security/pod-security-standards/#baseline
@@ -35,7 +34,6 @@ policies:
       # Sysctls
       - 'K8S_POD_SEC_SYSCTLS'
   - name: PodSecurityStandardsRestricted
-    enabled: false
     # Rules for the Kubernetes Pod Security Standards Restricted
     # https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted
 

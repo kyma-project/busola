@@ -23,7 +23,7 @@ export default function ResourceValidationSettings() {
   ) as ValidationFeatureConfig;
 
   const {
-    enabled,
+    isEnabled,
     choosePolicies,
     policies: selectedPolicies = (validationFeature?.isEnabled &&
       validationFeature?.config?.policies) ||
@@ -52,7 +52,7 @@ export default function ResourceValidationSettings() {
 
   const toggleVisibility = () => {
     setValidateResources({
-      enabled: !enabled,
+      isEnabled: !isEnabled,
       choosePolicies,
       policies: selectedPolicies,
     });
@@ -62,12 +62,12 @@ export default function ResourceValidationSettings() {
     if (choosePolicies) {
       // deactivate
       setValidateResources({
-        enabled,
+        isEnabled,
         choosePolicies: false,
       });
     } else {
       setValidateResources({
-        enabled,
+        isEnabled,
         choosePolicies: true,
         policies:
           (validationFeature?.isEnabled &&
@@ -79,7 +79,7 @@ export default function ResourceValidationSettings() {
 
   const deleteSelectedPolicy = (policyToDelete: string) => {
     setValidateResources({
-      enabled,
+      isEnabled,
       choosePolicies,
       policies: selectedPolicies.filter(policy => policy !== policyToDelete),
     });
@@ -87,7 +87,7 @@ export default function ResourceValidationSettings() {
 
   const addSelectedPolicy = (policyToAdd: string) => {
     setValidateResources({
-      enabled,
+      isEnabled,
       choosePolicies,
       policies: [...selectedPolicies, policyToAdd].sort(),
     });
@@ -109,13 +109,13 @@ export default function ResourceValidationSettings() {
               ),
             }}
             className="fd-has-display-inline-block fd-margin-begin--tiny"
-            checked={enabled}
+            checked={isEnabled}
             onChange={toggleVisibility}
             compact
           />
         </div>
       </div>
-      {enabled && (
+      {isEnabled && (
         <div className="preferences-row">
           <span className="fd-has-color-status-4">
             {t('settings.clusters.resourcesValidation.choose-policies')}
@@ -137,7 +137,7 @@ export default function ResourceValidationSettings() {
           </div>
         </div>
       )}
-      {enabled &&
+      {isEnabled &&
         (choosePolicies ||
           policyList.filter(policy => policy.selected).length > 0) && (
           <>
