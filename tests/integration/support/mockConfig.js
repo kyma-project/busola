@@ -1,25 +1,28 @@
-Cypress.Commands.add('setBusolaFeature', (featureName, isEnabled) => {
-  cy.log(`Set Busola feature: ${featureName} -> ${isEnabled}`);
+Cypress.Commands.add(
+  'setBusolaFeature',
+  (featureName, isEnabled, properties = {}) => {
+    cy.log(`Set Busola feature: ${featureName} -> ${isEnabled}`);
 
-  const requestData = {
-    method: 'GET',
-    url: '/backend/api/v1/namespaces/kube-public/configmaps/busola-config',
-  };
+    const requestData = {
+      method: 'GET',
+      url: '/backend/api/v1/namespaces/kube-public/configmaps/busola-config',
+    };
 
-  const configMock = {
-    data: {
-      config: JSON.stringify({
-        config: {
-          features: {
-            [featureName]: { isEnabled },
+    const configMock = {
+      data: {
+        config: JSON.stringify({
+          config: {
+            features: {
+              [featureName]: { isEnabled, ...properties },
+            },
           },
-        },
-      }),
-    },
-  };
+        }),
+      },
+    };
 
-  cy.intercept(requestData, configMock);
-});
+    cy.intercept(requestData, configMock);
+  },
+);
 
 Cypress.Commands.add(
   'mockConfigMap',

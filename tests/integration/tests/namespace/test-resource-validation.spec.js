@@ -13,6 +13,24 @@ context('Test resource validation', () => {
     });
   });
 
+  it('Check for default policies', () => {
+    cy.contains('Upload YAML').click();
+
+    cy.fixture('examples/resource-validation/pod.yaml').then(podConfig => {
+      cy.pasteToMonaco(podConfig);
+    });
+    cy.contains('nginx:latest').should('be.visible');
+    cy.contains('Show warnings')
+      .should('be.visible')
+      .click();
+
+    cy.contains(
+      'specify an image version to avoid unpleasant "version surprises" in the future',
+    ).should('be.visible');
+
+    cy.contains('Cancel').click();
+  });
+
   it('Disables resource validation via preferences', () => {
     cy.get('[aria-label="topnav-profile-btn"]').click();
 
@@ -33,7 +51,7 @@ context('Test resource validation', () => {
     cy.fixture('examples/resource-validation/pod.yaml').then(podConfig => {
       cy.pasteToMonaco(podConfig);
     });
-    cy.contains('nginx:1.14.2').should('be.visible');
+    cy.contains('nginx:latest').should('be.visible');
     cy.contains('warnings').should('not.exist');
 
     cy.contains('.validate-resources', 'Validate resources')
@@ -43,7 +61,7 @@ context('Test resource validation', () => {
     cy.contains('Cancel').click();
   });
 
-  it('Enables choosing resource validation policies', () => {
+  it('Customize resource validation policies via preferences', () => {
     cy.get('[aria-label="topnav-profile-btn"]').click();
 
     cy.contains('Preferences').click();
@@ -71,7 +89,7 @@ context('Test resource validation', () => {
     cy.fixture('examples/resource-validation/pod.yaml').then(podConfig => {
       cy.pasteToMonaco(podConfig);
     });
-    cy.contains('nginx:1.14.2').should('be.visible');
+    cy.contains('nginx:latest').should('be.visible');
     cy.contains('Show warnings')
       .should('be.visible')
       .click();
@@ -94,5 +112,31 @@ context('Test resource validation', () => {
     cy.contains('Reset').click();
 
     cy.contains('Close').click();
+  });
+
+  it('Customize resource validation policies via feature flag', () => {
+    cy.setBusolaFeature('RESOURCE_VALIDATION', true, {
+      config: {
+        policies: ['Default', 'PodSecurityStandardsRestricted'],
+      },
+    });
+
+    cy.reload();
+
+    cy.contains('Upload YAML').click();
+
+    cy.fixture('examples/resource-validation/pod.yaml').then(podConfig => {
+      cy.pasteToMonaco(podConfig);
+    });
+    cy.contains('nginx:latest').should('be.visible');
+    cy.contains('Show warnings')
+      .should('be.visible')
+      .click();
+
+    cy.contains(
+      'Incorrect or missing values for `capabilities.drop` - must contain ALL',
+    ).should('be.visible');
+
+    cy.contains('Cancel').click();
   });
 });
