@@ -78,7 +78,7 @@ context('Test app settings and preferences', () => {
     cy.contains('Cancel').click();
   });
 
-  it.only('Enables choosing resource validation policies', () => {
+  it('Enables choosing resource validation policies', () => {
     cy.mockConfigMap({
       label: 'busola.io/resource-validation=rule-set',
       data: ruleSet,
