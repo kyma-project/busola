@@ -5,6 +5,7 @@ import { Button, FormLabel } from 'fundamental-react';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { useGetTranslation } from 'components/Extensibility/helpers';
+import { inputInfoLink } from '/Users/I583459/Desktop/Repos/busola/src/components/Extensibility/helpers/inputinfoLink';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { Label } from '../../../shared/ResourceForm/components/Label';
@@ -138,16 +139,9 @@ export function SimpleList({
                         </span>
                       </div>
                     </li>
-                    {isLast(index) && inputInfo && (
-                      <p
-                        style={{
-                          color: 'var(--sapNeutralTextColor)',
-                          margin: '0 8px',
-                        }}
-                      >
-                        {tExt(inputInfo)}
-                      </p>
-                    )}
+                    {isLast(index) &&
+                      inputInfo &&
+                      inputInfoLink(tExt(inputInfo))}
                   </>
                 );
               })}
