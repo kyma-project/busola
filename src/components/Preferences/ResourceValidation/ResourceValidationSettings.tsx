@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { Switch } from 'fundamental-react';
+import { Button, LayoutPanel, Switch } from 'fundamental-react';
 import {
   getExtendedValidateResourceState,
   validateResourcesState,
@@ -58,23 +58,21 @@ export default function ResourceValidationSettings() {
     });
   };
 
-  const toggleCustomPolicyValidation = () => {
-    if (choosePolicies) {
-      // deactivate
-      setValidateResources({
-        isEnabled,
-        choosePolicies: false,
-      });
-    } else {
-      setValidateResources({
-        isEnabled,
-        choosePolicies: true,
-        policies:
-          (validationFeature?.isEnabled &&
-            validationFeature?.config?.policies) ||
-          [],
-      });
-    }
+  const enablePolicyCustomization = () => {
+    setValidateResources({
+      isEnabled,
+      choosePolicies: true,
+      policies:
+        (validationFeature?.isEnabled && validationFeature?.config?.policies) ||
+        [],
+    });
+  };
+
+  const disablePolicyCustomization = () => {
+    setValidateResources({
+      isEnabled,
+      choosePolicies: false,
+    });
   };
 
   const deleteSelectedPolicy = (policyToDelete: string) => {
@@ -94,12 +92,12 @@ export default function ResourceValidationSettings() {
   };
 
   return (
-    <>
-      <div className="preferences-row">
-        <span className="fd-has-color-status-4">
-          {t('settings.clusters.resourcesValidation.validateResources')}
-        </span>
-        <div>
+    <LayoutPanel>
+      <LayoutPanel.Header>
+        <LayoutPanel.Head
+          title={t('settings.clusters.resourcesValidation.validateResources')}
+        />
+        <LayoutPanel.Actions>
           <Switch
             // TypeScript definitions are out of sync here
             // @ts-ignore
@@ -113,28 +111,13 @@ export default function ResourceValidationSettings() {
             onChange={toggleVisibility}
             compact
           />
-        </div>
-      </div>
-      {isEnabled && (
-        <div className="preferences-row">
+        </LayoutPanel.Actions>
+      </LayoutPanel.Header>
+      {!isEnabled && (
+        <div className="no-validation-info">
           <span className="fd-has-color-status-4">
-            {t('settings.clusters.resourcesValidation.choose-policies')}
+            {t('settings.clusters.resourcesValidation.validation-disabled')}
           </span>
-          <div>
-            <Switch
-              // TypeScript definitions are out of sync here
-              // @ts-ignore
-              localizedText={{
-                switchLabel: t(
-                  'settings.clusters.resourcesValidation.choose-policies',
-                ),
-              }}
-              className="fd-has-display-inline-block fd-margin-begin--tiny"
-              checked={choosePolicies}
-              onChange={toggleCustomPolicyValidation}
-              compact
-            />
-          </div>
         </div>
       )}
       {isEnabled &&
@@ -142,6 +125,9 @@ export default function ResourceValidationSettings() {
           policyList.filter(policy => policy.selected).length > 0) && (
           <>
             <GenericList
+              title={t(
+                'settings.clusters.resourcesValidation.enabled-policies',
+              )}
               showHeader={false}
               entries={
                 choosePolicies
@@ -174,14 +160,40 @@ export default function ResourceValidationSettings() {
                   )}
                 </div>,
               ]}
+              extraHeaderContent={
+                <>
+                  {!choosePolicies && (
+                    <Button
+                      option="transparent"
+                      glyph="customize"
+                      className="fd-margin-begin--sm"
+                      onClick={enablePolicyCustomization}
+                    >
+                      {t('settings.clusters.resourcesValidation.customize')}
+                    </Button>
+                  )}
+                  {choosePolicies && (
+                    <Button
+                      option="transparent"
+                      glyph="reset"
+                      className="fd-margin-begin--sm"
+                      onClick={disablePolicyCustomization}
+                    >
+                      {t('settings.clusters.resourcesValidation.reset')}
+                    </Button>
+                  )}
+                </>
+              }
               searchSettings={{
                 showSearchSuggestion: false,
-                noSearchResultMessage: t('clusters.list.no-policies-found'),
+                noSearchResultMessage: t(
+                  'settings.clusters.resourcesValidation.no-policies-found',
+                ),
                 textSearchProperties: ['key', 'text'],
               }}
             />
           </>
         )}
-    </>
+    </LayoutPanel>
   );
 }
