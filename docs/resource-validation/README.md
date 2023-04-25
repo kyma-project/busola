@@ -6,7 +6,7 @@ With Busola's resource validation feature, you can validate resources, for examp
 
 ## Select policies
 
-To choose which policies should be validated, you can either set a [feature flag](../features.md) or choose them via the user preferences.
+You can choose which policies should be validated in the user preferences or set a [feature flag](../features.md).
 
 In the user preferences, go to **Clusters > Resource Validation**. Click on **Customize** in the **Enabled Policies** section.
 
