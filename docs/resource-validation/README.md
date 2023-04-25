@@ -1,4 +1,4 @@
-# Resource Validation
+# Resource validation
 
 ## Overview
 
