@@ -6,10 +6,10 @@ export function useCustomFormValidator() {
   const [customValid, setCustomValid] = useState(true);
 
   const revalidate = (cv = customValid) => {
-    // Contains all the elements that need to be validated
-    const formContainer = formElementRef.current.querySelector(
-      'div.form-container',
-    );
+    // FormContainer: Extensibility = 'div.form-container', otherwise = .firstChild
+    const formContainer =
+      formElementRef.current.querySelector('div.form-container') ??
+      formElementRef.current.firstChild;
     setValid(cv && validateElement(formContainer));
   };
 
