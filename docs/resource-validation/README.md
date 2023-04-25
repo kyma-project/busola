@@ -4,7 +4,7 @@
 
 With Busola's resource validation feature, you can validate resources, for example, security and compliance, before uploading them to your cluster. The resource is active in the 'Upload YAML' dialog.
 
-## Select Policies
+## Select policies
 
 To choose which policies should be validated, you can either set a [feature flag](../features.md) or choose them via the user preferences.
 
