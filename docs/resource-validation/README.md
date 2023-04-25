@@ -12,7 +12,7 @@ In the user preferences, go to **Clusters > Resource Validation**. Click on **Cu
 
 <img src="./assets/customize-policy-preferences.png" alt="Preferences menu when choosing which policies to enable" width="40%" style="border: 1px solid #D2D5D9">
 
-In the [feature flag](../features.md) config, set e.g.:
+In the [feature flag](../features.md) config, set the following specifications:
 
 ```yaml
 RESOURCE_VALIDATION:
