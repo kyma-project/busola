@@ -54,4 +54,4 @@ policies:
 
 Policies can also reference rules in different rule sets as long as they are loaded in Busola.
 
-For a full example, check the [example rule-set](../../examples/resource-validation/rule-set.yaml).
+To see the full specifications, check the [example rule-set](../../examples/resource-validation/rule-set.yaml).
