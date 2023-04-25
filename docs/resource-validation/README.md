@@ -23,7 +23,7 @@ RESOURCE_VALIDATION:
       - PodSecurityStandardsBaseline
 ```
 
-## Upload Custom Rule Sets
+## Upload custom rule sets
 
 To further customize the validation, you can upload your own rules and policies as a ConfigMap with the label `busola.io/resource-validation=rule-set`.
 
