@@ -6,66 +6,70 @@ export function useCustomFormValidator() {
   const [customValid, setCustomValid] = useState(true);
 
   const revalidate = (cv = customValid) => {
-    setValid(
-      checkFormFields(formElementRef.current) &&
-        checkResourceForms(formElementRef.current),
+    // Contains all the elements that need to be validated
+    const formContainer = formElementRef.current.querySelector(
+      'div.form-container',
     );
-    //check not-required fields
+    setValid(cv && validateElement(formContainer));
   };
 
-  function checkFormFields(form) {
-    const formFields = form.querySelectorAll(
-      'div.fd-row.form-field:not(.multi-input)',
-    );
-    for (let i = 0; i < formFields.length; i++) {
-      const formField = formFields[i];
-      const isRequired =
-        formField.querySelector(
-          'div.form-field > div.form-field__label > label[aria-required="true"]',
-        ) !== null;
-      if (!isRequired) continue;
-      //Check if it has a parent and if so, if the parent is required as well
-      const hasNoParent = formField.parentNode.classList.contains(
-        'form-container',
-      );
-      const inputValid = formField.querySelector('[type]').checkValidity();
-      if (hasNoParent) {
-        if (!inputValid) {
-          return false;
+  // Recursively validates all of the element's children
+  function validateElement(element) {
+    let isValid = element.children.length > 0;
+
+    for (let i = 0; i < element.children.length; i++) {
+      const child = element.children[i];
+
+      if (child.classList.contains('form-field')) {
+        // Validates the KeyValuePair
+        if (child.classList.contains('multi-input')) {
+          isValid = isValid && validateInputList(child);
         }
-        continue;
+        // Validates the FormField
+        else {
+          isValid = isValid && validateFormField(child);
+        }
       }
-      const parentRequired = formField
-        .closest('div.resource-form__collapsible-section')
-        .classList.contains('required');
-      if (parentRequired) {
-        if (!inputValid) {
-          return false;
+      // Validates the SimpleList
+      else if (child.classList.contains('simple-list')) {
+        isValid = isValid && validateInputList(child);
+      }
+      // Validates the ResourceForm
+      else if (child.classList.contains('resource-form__collapsible-section')) {
+        // Finds the children's container
+        let contentParent = child.querySelector('div.content');
+        if (
+          contentParent.firstChild?.classList.contains(
+            'collapsible-renderer__grid-wrapper',
+          )
+        ) {
+          contentParent = contentParent.firstChild;
         }
-        continue;
+        // Validates the resourceForm's children if it is required
+        if (child.classList.contains('required')) {
+          isValid = isValid && validateElement(contentParent);
+        }
       }
     }
-    return true;
+
+    return isValid;
   }
 
-  function checkResourceForms(form) {
-    const resourceForms = form.querySelectorAll(
-      'div.resource-form__collapsible-section.required',
-    );
+  // Validates the FormField's input
+  function validateFormField(formField) {
+    const input = formField.querySelector('input');
+    return input.checkValidity();
+  }
 
-    for (let i = 0; i < resourceForms.length; i++) {
-      const content = resourceForms[i].querySelector('div.content');
-      // Checks if a GenericList has at least one child
-      if (content.children.length === 0) {
-        return false;
-      }
-      // Checks if a SimpleList or KeyValuePair has at least one child
-      let list = content.querySelector(
-        'div.content > .multi-input, div.content > .simple-list',
-      );
-      if (list?.querySelectorAll('ul > li').length < 2) {
-        return false;
-      }
+  function validateInputList(inputList) {
+    // The list is invalid if it has no children
+    const items = inputList.querySelectorAll('ul > li');
+    if (items.length < 2) return false;
+
+    // Validates the inputs of all the list's child elements
+    const inputs = inputList.querySelectorAll('input');
+    for (let i = 0; i < inputs.length; i++) {
+      if (!inputs[i].checkValidity()) return false;
     }
     return true;
   }
