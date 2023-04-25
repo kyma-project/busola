@@ -2,7 +2,7 @@
 
 ## Overview
 
-With Busola's resource validation feature, you can softly validate resources for e.g. security and compliance before uploading them to your cluster. It is currently active in the 'Upload YAML' dialog.
+With Busola's resource validation feature, you can validate resources, for example, security and compliance, before uploading them to your cluster. The resource is active in the 'Upload YAML' dialog.
 
 ## Select Policies
 
