@@ -43,7 +43,7 @@ rules:
           enum: [hello]
 ```
 
-A policy needs a `name` and a `rules` property. The `rules` property must be an array containing references to rules via the rule's `uniqueName`.
+A policy needs the **name** and **rules** properties. The **rules** property must be an array containing references to rules via the rule's **uniqueName**.
 
 ```yaml
 policies:
