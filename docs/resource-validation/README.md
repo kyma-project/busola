@@ -29,7 +29,7 @@ To further customize the validation, you can upload your own rules and policies 
 
 Rule sets consist of a rules array and a policies array. Both are optional.
 
-A rule needs a `uniqueName`, `messageOnFailure` and `schema` property. The `schema` property follows the [json-schema specification](http://json-schema.org/draft-07/schema).
+A rule needs the **uniqueName**, **messageOnFailure**, and **schema** properties. The **schema** property follows the [json-schema specification](http://json-schema.org/draft-07/schema).
 
 ```yaml
 rules:
