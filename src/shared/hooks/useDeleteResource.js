@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
@@ -11,6 +12,7 @@ import { dontConfirmDeleteState } from 'state/preferences/dontConfirmDeleteAtom'
 import { useUrl } from 'hooks/useUrl';
 
 import './useDeleteResource.scss';
+import { clusterState } from 'state/clusterAtom';
 
 export function useDeleteResource({
   resourceTitle,
@@ -27,6 +29,7 @@ export function useDeleteResource({
   const notification = useNotification();
   const navigate = useNavigate();
   const { resourceListUrl } = useUrl();
+  const cluster = useRecoilValue(clusterState);
 
   const prettifiedResourceName = prettifyNameSingular(
     resourceTitle,
@@ -48,7 +51,11 @@ export function useDeleteResource({
           }),
         });
         if (navigateToListAfterDelete) {
-          navigate(resourceListUrl(resource, { resourceType }));
+          if (window.location.pathname.includes('busolaextensions')) {
+            navigate(`/cluster/${cluster.contextName}/busolaextensions`);
+          } else {
+            navigate(resourceListUrl(resource, { resourceType }));
+          }
         }
       }
     } catch (e) {

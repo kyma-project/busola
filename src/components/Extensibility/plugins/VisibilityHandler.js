@@ -25,11 +25,16 @@ export function VisibilityHandler({
   const visibilityFormula = schema.get('visibility');
   const overwrite = schema.get('overwrite') ?? true;
 
-  if (visibilityFormula && triggers.enabled) {
-    const [visible] = jsonata(
-      visibilityFormula,
-      itemVars(resource, rule.itemVars, storeKeys),
-    );
+  if (triggers.enabled) {
+    let visible = true;
+    if (visibilityFormula) {
+      [visible] = jsonata(
+        visibilityFormula,
+        itemVars(resource, rule.itemVars, storeKeys),
+      );
+    } else if (visibilityFormula === false) {
+      visible = false;
+    }
 
     if (!visible) {
       if (value && overwrite) {

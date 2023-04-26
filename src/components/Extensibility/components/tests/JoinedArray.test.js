@@ -3,6 +3,7 @@ import { render } from '@testing-library/react';
 import { JoinedArray } from '../JoinedArray';
 
 jest.mock('components/Extensibility/ExtensibilityCreate', () => null);
+jest.mock('components/Extensibility/ExtensibilityWizard', () => null);
 
 describe('JoinedArray', () => {
   it('Renders joined array', () => {

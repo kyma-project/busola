@@ -28,7 +28,7 @@ The **general** section is required and contains basic information about the res
 
 ### Item parameters
 
-- **resource** - _[required]_ - information about the resoure.
+- **resource** - _[required]_ - information about the resource.
   - **kind** - _[required]_ Kubernetes kind of the resource.
   - **version** - _[required]_ API version used for all requests.
   - **group** - API group used for all requests. Not provided for Kubernetes resources in the core (also called legacy) group.

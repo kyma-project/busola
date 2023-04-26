@@ -1,0 +1,82 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pizzas
+  namespace: pizzas
+  labels:
+    app.kubernetes.io/name: qqqs
+    busola.io/extension: wizard
+    busola.io/extension-version: '0.5'
+data:
+  general: |
+    id: pizzas
+    name: Order a pizza
+    description: Test description
+    resources:
+      qqq:
+        kind: Qqq
+        group: busola.example.com
+        version: v1
+      subqqq:
+        kind: SubQqq
+        group: busola.example.com
+        version: v1
+        multiple: true # v2
+  defaults: |
+    qqq:
+      spec:
+        string-ref: foo
+    subqqq:
+      metadata:
+        labels:
+          example: example
+  steps: |
+    - name: First step
+      description: this is the first step
+      resource: qqq
+      form:
+        - path: metadata.name
+          #widget: 
+        - id: foo
+          path: spec.string-ref
+          name: string ref
+          trigger: [sr]
+        - path: spec.double-ref.name
+          name: double ref name
+          visibility: false
+          overwrite: false
+          subscribe:
+            init: spec."string-ref"
+            sr: spec."string-ref"
+        - path: spec.double-ref.namespace
+          visibility: |
+            $exists(spec."double-ref".name)
+        - path: spec.triple-ref.nane
+          name: triple ref name
+          # hidden: true
+          # subscribe:
+            # sr: 'spec."string.ref" & "-triple'
+        # - path: $subqqq.spec.name
+        # - ref: foo
+        # - 
+        # - ref:
+            # namespace: kube-public
+            # name: qqqs
+            # id: foo
+          # tooltip: override the tooltip
+        - name: add a subqqq
+          var: withSubQqq
+          type: boolean
+    - name: Second step
+      resource: subqqq
+      visibility: $withSubQqq
+      form:
+        - path: metadata.name
+        - path: spec.qqq
+          visibility: $withSubQqq
+        - path: spec.content
+          visibility: |
+            $exists($qqq.spec."string-ref")
+  injections: |
+    - widget: Wizard
+      wizard: pizzas

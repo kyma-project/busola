@@ -11,6 +11,8 @@ import {
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { Label } from '../../../shared/ResourceForm/components/Label';
+import { Icon } from 'fundamental-react';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 import './SimpleList.scss';
 
@@ -155,6 +157,13 @@ export function SimpleList({
                 );
               })}
           </ul>
+        </div>
+        <div className="fd-col fd-col-md--1 tooltip-column tooltip-column--with-padding">
+          {tooltipContent && (
+            <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
+              <Icon ariaLabel="" size="m" glyph="message-information" />
+            </Tooltip>
+          )}
         </div>
       </div>
     </ResourceForm.CollapsibleSection>
