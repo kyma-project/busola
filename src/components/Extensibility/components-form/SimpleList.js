@@ -4,8 +4,10 @@ import { PluginStack, useUIStore } from '@ui-schema/ui-schema';
 import { Button, FormLabel } from 'fundamental-react';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { useGetTranslation } from 'components/Extensibility/helpers';
-import { inputInfoLink } from '/Users/I583459/Desktop/Repos/busola/src/components/Extensibility/helpers/inputinfoLink';
+import {
+  useCreateResourceDescription,
+  useGetTranslation,
+} from 'components/Extensibility/helpers';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { Label } from '../../../shared/ResourceForm/components/Label';
@@ -31,7 +33,7 @@ export function SimpleList({
   const { value } = store?.extractValues(storeKeys) || {};
   const listSize = value?.size || 0;
   const schemaPlaceholder = schema.get('placeholder');
-  const inputInfo = schema.get('inputInfo');
+  const inputInfo = useCreateResourceDescription(schema.get('inputInfo'));
   const tooltipContent = schema.get('description');
   const defaultOpen = schema.get('defaultExpanded');
 
@@ -139,9 +141,16 @@ export function SimpleList({
                         </span>
                       </div>
                     </li>
-                    {isLast(index) &&
-                      inputInfo &&
-                      inputInfoLink(tExt(inputInfo))}
+                    {isLast(index) && inputInfo && (
+                      <p
+                        style={{
+                          color: 'var(--sapNeutralTextColor)',
+                          margin: '0',
+                        }}
+                      >
+                        {inputInfo}
+                      </p>
+                    )}
                   </>
                 );
               })}

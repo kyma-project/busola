@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { ResourceForm } from '..';
 
 import './MultiInput.scss';
+import { useCreateResourceDescription } from 'components/Extensibility/helpers';
 
 export function MultiInput({
   value,
@@ -40,6 +41,7 @@ export function MultiInput({
   const [internalValue, setInternalValue] = useState([]);
   const [keys, setKeys] = useState(1);
   const [refs, setRefs] = useState([]);
+  const inputInfoLink = useCreateResourceDescription(inputInfo);
 
   useEffect(() => {
     setRefs(
@@ -221,7 +223,9 @@ export function MultiInput({
             </li>
           ))}
           {inputInfo && (
-            <p style={{ color: 'var(--sapNeutralTextColor)' }}>{inputInfo}</p>
+            <p style={{ color: 'var(--sapNeutralTextColor)' }}>
+              {inputInfoLink}
+            </p>
           )}
         </ul>
       </div>
