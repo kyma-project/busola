@@ -127,7 +127,7 @@ For the information on how to run tests and configure them, go to the [`tests`](
 1. If you run Busola in Docker, you can mount your kubeconfig as a bind mount for Busola container. Execute the following command:
 
    ```bash
-   docker run --rm -it -p 3001:3001 -v <path to your kubeconfig>:/app/core-ui/kubeconfig/<your kubeconfig file name> --pid=host --name busola eu.gcr.io/kyma-project/busola:latest
+   docker run --rm -it -p 3001:3001 -v <path to your kubeconfig>:/app/core-ui/kubeconfig/<your kubeconfig file name> --pid=host --name busola europe-docker.pkg.dev/kyma-project/busola:latest
    ```
 
 2. When you open Busola in your browser, go to `http://localhost:3001?kubeconfigID={YOUR_KUBECONFIG_FILE_NAME}`. Busola will try to download that file and add it for your Busola instance.
@@ -149,11 +149,11 @@ When the k3d cluster's API server is exposed on the `0.0.0.0` address on you mac
 - For Docker Desktop for Mac and Windows, pass `DOCKER_DESKTOP_CLUSTER=true` on dockerized Busola startup. This way, `0.0.0.0` is automatically replaced with `host.docker.internal`.
 
   ```bash
-  docker run --rm -it -p 3001:3001 -e DOCKER_DESKTOP_CLUSTER=true --pid=host --name busola eu.gcr.io/kyma-project/busola:latest
+  docker run --rm -it -p 3001:3001 -e DOCKER_DESKTOP_CLUSTER=true --pid=host --name busola europe-docker.pkg.dev/kyma-project/busola:latest
   ```
 
 - For Linux, run Busola with `--net=host` (omitting the `-p` parameter).
 
   ```bash
-  docker run --rm -it --net=host --pid=host --name busola eu.gcr.io/kyma-project/busola:latest
+  docker run --rm -it --net=host --pid=host --name busola europe-docker.pkg.dev/kyma-project/busola:latest
   ```
