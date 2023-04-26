@@ -1,5 +1,5 @@
 APP_NAME = busola-backend
-BUILDPACK = europe-docker.pkg.dev/kyma-project/test-infra/buildpack-node:PR-2951
+BUILDPACK = europe-docker.pkg.dev/kyma-project/dev/test-infra/buildpack-node:PR-6434
 IMG_NAME := $(DOCKER_PUSH_REPOSITORY)$(DOCKER_PUSH_DIRECTORY)/$(APP_NAME)
 TAG := $(DOCKER_TAG)
 
