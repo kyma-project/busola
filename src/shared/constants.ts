@@ -1,5 +1,15 @@
 export const EMPTY_TEXT_PLACEHOLDER = '-';
 
+export const BLACKLISTED_FIELDS = [
+  'metadata.creationTimestamp',
+  'metadata.generation',
+  'metadata.managedFields',
+  'metadata.resourceVersion',
+  'metadata.selfLink',
+  'metadata.uid',
+  'status',
+];
+
 export type ResourceTypeWithAliases = {
   resourceType: string;
   aliases: string[];

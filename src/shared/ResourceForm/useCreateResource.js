@@ -10,16 +10,7 @@ import { ForceUpdateModalContent } from './ForceUpdateModalContent';
 import { useUrl } from 'hooks/useUrl';
 import { useNavigate } from 'react-router-dom';
 import { merge, omit } from 'lodash';
-
-const BLACKLISTED_FIELDS = [
-  'metadata.creationTimestamp',
-  'metadata.generation',
-  'metadata.managedFields',
-  'metadata.resourceVersion',
-  'metadata.selfLink',
-  'metadata.uid',
-  'status',
-];
+import { BLACKLISTED_FIELDS } from 'shared/constants';
 
 export function useCreateResource({
   singularName,
