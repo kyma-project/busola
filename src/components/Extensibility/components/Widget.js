@@ -48,6 +48,7 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
     const jsonata = useJsonata({
       resource: props.originalResource,
       parent: props.singleRootResource,
+      embedResource: props.embedResource,
       scope: props.scope,
       value: props.value,
       arrayItems: props.arrayItems,
@@ -94,6 +95,7 @@ export function Widget({
   inlineRenderer,
   originalResource,
   singleRootResource,
+  embedResource,
   index,
   ...props
 }) {
@@ -102,6 +104,7 @@ export function Widget({
   const jsonata = useJsonata({
     resource: originalResource,
     parent: singleRootResource,
+    embedResource: embedResource,
     scope: value,
     arrayItems,
   });
@@ -136,6 +139,7 @@ export function Widget({
         inlineRenderer={inlineRenderer}
         originalResource={originalResource}
         singleRootResource={singleRootResource}
+        embedResource={embedResource}
         {...props}
       />
     );
@@ -172,6 +176,7 @@ export function Widget({
         structure={structure}
         originalResource={originalResource}
         singleRootResource={valueItem}
+        embedResource={embedResource}
         scope={valueItem}
       />
     ))
@@ -186,6 +191,7 @@ export function Widget({
       structure={structure}
       originalResource={originalResource}
       singleRootResource={singleRootResource || originalResource}
+      embedResource={embedResource}
     />
   );
 }
