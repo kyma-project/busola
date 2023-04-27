@@ -45,6 +45,7 @@
     "namespace/test-events.spec.js",
     "namespace/test-roles.spec.js",
     "namespace/test-resource-upload.spec.js",
+    "namespace/test-resource-validation.spec.js",
     "namespace/test-protected-resources.spec.js",
     "namespace/test-jobs.spec.js",
     "namespace/test-replica-sets.spec.js",

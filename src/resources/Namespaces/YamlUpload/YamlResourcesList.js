@@ -3,7 +3,10 @@ import { Icon } from 'fundamental-react';
 import { Switch } from 'shared/ResourceForm/inputs';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
-import { validateResourcesState } from 'state/preferences/validateResourcesAtom';
+import {
+  getExtendedValidateResourceState,
+  validateResourcesState,
+} from 'state/preferences/validateResourcesAtom';
 
 import {
   STATE_ERROR,
@@ -19,6 +22,11 @@ export function YamlResourcesList({ resourcesData }) {
   const [validateResources, setValidateResources] = useRecoilState(
     validateResourcesState,
   );
+  const {
+    isEnabled,
+    choosePolicies,
+    policies: selectedPolicies = [],
+  } = getExtendedValidateResourceState(validateResources);
   const filteredResources = resourcesData?.filter(
     resource => resource !== null,
   );
@@ -83,8 +91,14 @@ export function YamlResourcesList({ resourcesData }) {
             <div className="validate-resources">
               <p>{t('upload-yaml.labels.validate-resources')}</p>
               <Switch
-                onChange={() => setValidateResources(!validateResources)}
-                checked={validateResources}
+                onChange={() =>
+                  setValidateResources({
+                    isEnabled: !isEnabled,
+                    choosePolicies,
+                    policies: selectedPolicies,
+                  })
+                }
+                checked={isEnabled}
               />
             </div>
           </div>

@@ -2,6 +2,7 @@
 
 const path = require('path');
 const webpack = require('webpack');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   webpack: function override(config, env) {
@@ -16,6 +17,19 @@ module.exports = {
       ...config.plugins,
       new webpack.DefinePlugin({
         'process.env.IS_DOCKER': env.IS_DOCKER,
+      }),
+      new CopyPlugin({
+        patterns: [
+          {
+            from: 'resources/resource-validation/rule-sets/**/*.yaml',
+            to: 'resource-validation/rule-set.yaml',
+            transformAll(assets) {
+              return assets.reduce((accumulator, asset) => {
+                return `${accumulator}---\n${asset.data}\n`;
+              }, '');
+            },
+          },
+        ],
       }),
     ];
 
