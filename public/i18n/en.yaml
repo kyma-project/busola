@@ -667,6 +667,11 @@ extensibility:
       error: 'Configuration error: The joined array widget configuration is incorrect. Path value must be an array type.'
     table:
       error: The table widget configuration is incorrect. Path value must be an array type.
+  wizard:
+    summary: Summary
+    upload: Upload
+    headers:
+      name: Extensibility wizard
 gardener:
   headers:
     provider: Provider
@@ -1331,8 +1336,11 @@ settings:
     resourcesValidation:
       title: Resource Validation
       validateResources: Validate Resources
-      choose-policies: Choose Policies
-      add-policy: Add a policy
+      choose-policies: Enable custom policies
+      enabled-policies: Enabled Policies
+      reset: Reset
+      customize: Customize
+      validation-disabled: Resource validation is disabled
       no-policies-found: No policies found
     interaction:
       title: Cluster Interaction

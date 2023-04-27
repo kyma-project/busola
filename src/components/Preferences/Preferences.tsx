@@ -11,7 +11,7 @@ import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpen
 import ConfirmationSettings from './ConfirmationSettings';
 import LanguageSettings from './LanguageSettings';
 import NamespaceSettings from './NamespaceSettings';
-import ResourcesValidationSettings from './ResourcesValidationSettings';
+import ResourceValidationSettings from './ResourceValidation/ResourceValidationSettings';
 import OtherSettings from './OtherSettings';
 import ProtectedSettings from './ProtectedSettings';
 import ThemeChooser from './ThemeChooser';
@@ -114,7 +114,7 @@ export function Preferences() {
               id="resource-validation"
               title={t('settings.clusters.resourcesValidation.title')}
             >
-              <ResourcesValidationSettings />
+              <ResourceValidationSettings />
             </Tab>
           </Tabs>
         </VerticalTabs.Content>

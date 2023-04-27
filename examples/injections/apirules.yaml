@@ -3,9 +3,9 @@ injections: |-
     widget: Table
     source: $root
     targets:
-      - slot: top
+      - slot: details-top
         location: ClusterOverview
-      - slot: bottom
+      - slot: details-bottom
         location: ClusterOverview
         filter: '$item.status.APIRuleStatus.code="OK"'
     filter: '$item.status.APIRuleStatus.code="ERROR"'

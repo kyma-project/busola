@@ -53,6 +53,8 @@ config:
       isEnabled: true
     EXTENSIBILITY_INJECTIONS:
       isEnabled: true
+    EXTENSIBILITY_WIZARD:
+      isEnabled: true
     TRACKING:
       isEnabled: false
     EVENTING:
@@ -68,7 +70,7 @@ config:
     GARDENER_LOGIN:
       isEnabled: false
       kubeconfig: null
-    VALIDATION:
+    RESOURCE_VALIDATION:
       isEnabled: true
       config:
         policies:

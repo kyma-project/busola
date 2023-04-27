@@ -1,13 +1,10 @@
-import React, {
-  useEffect,
-  useRef,
-  useState,
-  createRef,
-  useCallback,
-} from 'react';
+import React, { useEffect, useRef, useState, createRef } from 'react';
 import { Button } from 'fundamental-react';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import { Icon } from 'fundamental-react';
+
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 import { ResourceForm } from '..';
 
@@ -58,12 +55,6 @@ export function MultiInput({
       setInternalValue([...internalValue, null]);
     }
   }, [internalValue]);
-
-  const toInternalCallback = useCallback(toInternal, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    setInternalValue([...toInternalCallback(value), null]);
-  }, [value, toInternalCallback]);
 
   // diff by stringify, as useEffect won't fire for the same object ref
   if (
@@ -224,6 +215,13 @@ export function MultiInput({
             <p style={{ color: 'var(--sapNeutralTextColor)' }}>{inputInfo}</p>
           )}
         </ul>
+        <div className="fd-col fd-col-md--1 tooltip-column tooltip-column--with-padding">
+          {tooltipContent && (
+            <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
+              <Icon ariaLabel="" size="m" glyph="message-information" />
+            </Tooltip>
+          )}
+        </div>
       </div>
     </ResourceForm.CollapsibleSection>
   );

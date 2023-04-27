@@ -1,0 +1,7 @@
+injections: |
+  - name: Get started with functions
+    widget: Wizard
+    wizard: serverless-wizard
+    targets:
+      - location: functions
+        slot: list-header

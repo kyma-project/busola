@@ -3,7 +3,6 @@
 apiVersion: v1
 policies:
   - name: Default
-    enabled: true
     rules:
       - identifier: CONTAINERS_MISSING_IMAGE_VALUE_VERSION
       - identifier: CONTAINERS_MISSING_MEMORY_REQUEST_KEY

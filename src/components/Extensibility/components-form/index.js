@@ -17,6 +17,8 @@ import { CustomFieldInjector } from '../plugins/CustomFieldInjector';
 import { EnumHandler } from '../plugins/EnumHandler';
 import { VisibilityHandler } from '../plugins/VisibilityHandler';
 import { TriggerHandler } from '../plugins/TriggerHandler';
+// TODO
+// import { ContextSwitcher } from '../plugins/ContextSwitcher';
 
 import { Jsonata } from './Jsonata';
 import { StringRenderer } from './StringRenderer';
@@ -35,6 +37,8 @@ import { MultiCheckbox } from './MultiCheckbox';
 import { MultiType } from './MultiType';
 
 const pluginStack = [
+  // TODO
+  // ContextSwitcher,
   ReferencingHandler,
   ExtractStorePlugin,
   CombiningHandler,
@@ -44,8 +48,8 @@ const pluginStack = [
   SchemaRulesInjector,
   CustomFieldInjector,
   EnumHandler,
-  VisibilityHandler,
   TriggerHandler,
+  VisibilityHandler,
   PluginSimpleStack,
   ValidityReporter,
 ];

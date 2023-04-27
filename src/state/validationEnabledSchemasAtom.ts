@@ -15,7 +15,7 @@ import {
 
 type PolicyReference = string;
 
-type ValidationFeatureConfig = {
+export type ValidationFeatureConfig = {
   isEnabled: boolean;
   config: {
     policies: PolicyReference[];
@@ -26,10 +26,13 @@ const getEnabledPolicyNames = (
   validationFeature: ValidationFeatureConfig,
   validationPreferences: ExtendedValidateResources,
 ): PolicyReference[] => {
-  if (validationPreferences.enabled) {
+  if (validationPreferences.isEnabled) {
     if (validationPreferences.choosePolicies) {
       return validationPreferences.policies ?? [];
-    } else if (validationFeature.config?.policies) {
+    } else if (
+      validationFeature.isEnabled &&
+      validationFeature.config?.policies
+    ) {
       return validationFeature.config.policies ?? [];
     }
   }
@@ -40,7 +43,9 @@ export const useGetValidationEnabledSchemas = async () => {
   const setSchemas = useSetRecoilState(validationSchemasEnabledState);
 
   const validationSchemas = useRecoilValue(validationSchemasState);
-  const validationFeature = useFeature('VALIDATION') as ValidationFeatureConfig;
+  const validationFeature = useFeature(
+    'RESOURCE_VALIDATION',
+  ) as ValidationFeatureConfig;
   const validationPreferences = getExtendedValidateResourceState(
     useRecoilValue(validateResourcesState),
   );

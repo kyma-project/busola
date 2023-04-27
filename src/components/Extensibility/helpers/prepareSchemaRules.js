@@ -9,7 +9,7 @@ function filterSchemaRules(allRuleDefs, filter) {
   }));
 }
 
-export function prepareSchemaRules(allRuleDefs, filter) {
+export function prepareSchemaRules(allRuleDefs, filter = () => true) {
   const ruleDefs = filterSchemaRules(allRuleDefs, filter);
 
   const root = { path: [], children: [] };

@@ -1,0 +1,303 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: serverless-wizard
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: serverless-wizard
+    busola.io/extension: wizard
+    busola.io/extension-version: '0.5'
+data:
+  general: |
+    id: serverless-wizard
+    name: Get started with Serverless
+    description: Now that you've installed Kyma, deploy your first Function and call it hello-world.
+    resources:
+      function:
+        kind: Function
+        group: serverless.kyma-project.io
+        version: v1alpha2
+      apirule:
+        kind: APIRule
+        group: gateway.kyma-project.io
+        version: v1beta1
+  defaults: |
+    apirule:
+      spec:
+        gateway: kyma-gateway.kyma-system.svc.cluster.local
+        host: FUNCTION_NAME.cf4b545.kyma.ondemand.com
+        rules:
+          - path: /.*
+            methods:
+              - GET
+            accessStrategies:
+              - handler: allow
+  steps: |
+    - name: Create a Function
+      description: First, provide the name of your function and choose the language which you want to use for your function.
+      resource: function
+      form:
+        - path: metadata.name
+          widget: Name
+        - simple: true
+          type: string
+          name: Language
+          var: language
+          required: true
+          enum: [nodejs, python]
+          trigger: [language]
+          dynamicValue: |
+            spec.runtime in ['nodejs14', 'nodejs16'] ? 'nodejs' :
+            spec.runtime in ['python39'] ? 'python' :
+            ''
+        - simple: true
+          path: spec.runtime
+          placeholder: placeholders.spec.runtime
+          enum: |
+            $language = 'nodejs' ? ['nodejs14', 'nodejs16'] :
+            $language = 'python' ? ['python39'] :
+            []
+          subscribe:
+            language: |
+              $language = 'nodejs' ? ($exists($root.spec.runtime) and $root.spec.runtime != 'python39') ? $root.spec.runtime : 'nodejs16' :
+              $language = 'python' ? 'python39' :
+              ''
+    - name: Provide code of the function
+      description: Choose your source type of code and provide your code of the function
+      resource: function
+      form:
+        - var: sourceType
+          widget: Text
+          enum:
+            - Inline
+            - Git Repository
+          dynamicValue: '$exists(spec.source.gitRepository) ? "Git Repository" : "Inline"'
+          name: header.sourceType
+          trigger: [sourceType]
+        - path: spec.source.inline
+          visibility: $sourceType = 'Inline'
+          simple: true
+          children:
+            - path: source
+              widget: CodeEditor
+              simple: true
+              language: '$contains($root.spec.runtime, "node") ? "javascript" : "python"'
+              defaultExpanded: true
+              subscribe:
+                sourceType: |-
+                  $sourceType = 'Inline' ? $language = 'nodejs' ? $exists($root.metadata.creationTimestamp) ? $root.spec.source.inline.source : "module.exports = {
+                    main: async function (event, context) {
+                      const message = `Hello World`
+                        + ` from the Kyma Function ${context['function-name']}`
+                        + ` running on ${context.runtime}!`;
+                      console.log(message);
+                      return message;
+                    }
+                  }" :
+                  $language = 'python' ? $exists($root.metadata.creationTimestamp) ? $root.spec.source.inline.source : "def main(event, context):
+                      message = 'Hello World from the Kyma Function '+context['function-name']+' running on '+context['runtime']+ '!';
+                      print(message)
+                      return message" :
+                  '' : ''
+                language: |-
+                  $language = 'nodejs' ? $exists($root.metadata.creationTimestamp) ? $root.spec.source.inline.source : "module.exports = {
+                    main: async function (event, context) {
+                      const message = `Hello World`
+                        + ` from the Kyma Function ${context['function-name']}`
+                        + ` running on ${context.runtime}!`;
+                      console.log(message);
+                      return message;
+                    }
+                  }" :
+                  $language = 'python' ? $exists($root.metadata.creationTimestamp) ? $root.spec.source.inline.source : "def main(event, context):
+                      message = 'Hello World from the Kyma Function '+context['function-name']+' running on '+context['runtime']+ '!';
+                      print(message)
+                      return message" :
+                  ''
+            - path: dependencies
+              widget: CodeEditor
+              language: '$contains($root.spec.runtime, "node") ? "javascript" : "plaintext"'
+        - path: spec.source.gitRepository
+          widget: FormGroup
+          visibility: $sourceType = 'Git Repository'
+          defaultExpanded: true
+          children:
+            - path: url
+            - path: baseDir
+              required: true
+            - path: reference
+              required: true
+            - var: useAuthorization
+              type: boolean
+              name: code.gitRepository.auth
+              dynamicValue: $exists($.spec.source.gitRepository.auth)
+            - widget: FormGroup
+              path: auth
+              visibility: $useAuthorization
+              children:
+                - path: secretName
+                  widget: Resource
+                  resource:
+                    kind: Secret
+                    version: v1
+                    scope: namespace
+                - path: type
+
+    - name: Expose the Function
+      resource: function
+      visiblity: false
+      description: After you've got your hello-world Function deployed, you might want to expose it outside your cluster so that it's available for other external services. For this case, you need to create APIRule.
+      form:
+        - var: exposeFunction
+          type: boolean
+          name: You want to expose the function?
+        - var: protectedApiRule
+          type: boolean
+          name: You want to protect APIRule?
+          visibility: $exposeFunction
+    - name: Provide the name and service for APIRule
+      resource: apirule
+      description: You must specify the name of APIRule and the Service which you want to expose. We suggest naming APIRule the same as you have named the function. The service name is the name of your function.
+      form:
+        - path: metadata.name
+          # widget: Name
+        - path: spec.service.name
+          name: Service Name
+          widget: Resource
+          resource:
+            kind: Service
+            version: v1
+            scope: namespace
+    - name: Service Port and Subdomain
+      resource: apirule
+      description: Provide service port (80) and Choose your host from the Host dropdown and replace the asterisk (FUNCTION_NAME) with the name of your subdomain (name of your function).
+      form:
+        - path: spec.service.port
+          name: Service Port
+        - path: spec.host
+          name: Host
+        - simple: true
+          required: true
+          path: spec.rules 
+          name: Rules 
+          widget: GenericList 
+          defaultExpanded: true
+          visibility: $protectedApiRule
+          template:
+            path: '/.*'
+            methods: ['GET']
+            accessStrategies:
+              - handler: 'allow'
+          children:
+            - simple: true
+              required: true
+              path: '[].path'
+              name: Path
+              inputInfo: "Path can contain alphanumeric characters and '/', '.', '*', '?', '!', '-', '(', and ')'."
+            - required: true
+              simple: true
+              path: '[].accessStrategies'
+              name: Access Strategies 
+              widget: GenericList
+              defaultExpanded: true
+              template:
+                handler: 'allow'
+              children:
+                - required: true
+                  simple: true
+                  path: '[].handler'
+                  name: Handler
+                  enum:
+                    - allow
+                    - noop
+                    - jwt
+                    - oauth2_introspection
+                - path: '[].config'
+                  simple: true
+                  name: Config
+                  type: object
+                  properties:
+                    jwks_urls:
+                      type: array
+                      items:
+                        type: string
+                        pattern: ^(https://|file://).*$
+                    trusted_issuers:
+                      type: array
+                      items:
+                        type: string
+                        pattern: ^(https://|file://).*$
+                    required_scope:
+                      type: array
+                      items:
+                        type: string
+                  children:
+                    - path: jwks_urls
+                      name: JWKS URLs
+                      inputInfo: "JWKS URLs must start with 'https://' or 'file://'"
+                      simple: true
+                      widget: SimpleList
+                      visibility: '$item.handler="jwt"'
+                      children:
+                        - path: '[]'
+                          simple: true
+                    - path: trusted_issuers
+                      name: Trusted Issuers
+                      inputInfo: "Trusted Issuers must start with 'https://' or 'file://'"
+                      simple: true
+                      widget: SimpleList
+                      visibility: '$item.handler="jwt"'
+                      children:
+                        - path: '[]'
+                          simple: true
+                    - path: required_scope
+                      name: Required Scope
+                      simple: true
+                      widget: SimpleList
+                      visibility: '$item.handler="oauth2_introspection" or $item.handler="oauth2_client_credentials" or $item.handler="jwt"'
+                      children:
+                        - path: '[]'
+                          simple: true
+            - required: true
+              simple: true
+              path: '[].methods'
+              name: Methods 
+              widget: MultiCheckbox
+              options:
+                - key: GET
+                - key: POST
+                - key: PUT
+                - key: DELETE
+                - key: PATCH
+                - key: HEAD
+            - path: '[].mutators' 
+              name: Mutators 
+              widget: GenericList
+              children:
+                - path: '[].config'
+                  name: Config
+                  widget: KeyValuePair
+                - required: true
+                  path: '[].handler'
+                  name: Handler
+            - path: '[].service' 
+              simple: true
+              name: Service 
+              widget: FormGroup
+              children:
+                - simple: true
+                  required: false
+                  path: name
+                  name: Service Name
+                  widget: Resource
+                  resource:
+                    kind: Service
+                    version: v1
+                    scope: namespace
+                  trigger: [accessStrategyPort]
+                - simple: true
+                  required: false
+                  path: port 
+                  name: Port
+                  subscribe:
+                    accessStrategyPort: "$filter($relatedServices().items, function ($v) { $v.metadata.name = $item.service.name and $v.metadata.namespace = $root.metadata.namespace }).spec.ports[0].port"

@@ -25,13 +25,14 @@ export const configFeaturesNames = {
   VISUAL_RESOURCES: 'VISUAL_RESOURCES',
   EXTENSIBILITY: 'EXTENSIBILITY',
   EXTENSIBILITY_INJECTIONS: 'EXTENSIBILITY_INJECTIONS',
+  EXTENSIBILITY_WIZARD: 'EXTENSIBILITY_WIZARD',
   TRACKING: 'TRACKING',
   REACT_NAVIGATION: 'REACT_NAVIGATION',
   PROTECTED_RESOURCES: 'PROTECTED_RESOURCES',
   EXTERNAL_NODES: 'EXTERNAL_NODES',
   PROMETHEUS: 'PROMETHEUS',
   GARDENER_LOGIN: 'GARDENER_LOGIN',
-  VALIDATION: 'VALIDATION',
+  RESOURCE_VALIDATION: 'RESOURCE_VALIDATION',
 } as const;
 
 export type ConfigFeatureList = {
@@ -63,6 +64,19 @@ export type ExtInjectionConfig = {
   injection: ExtInjection;
   general: ExtGeneral;
   dataSources: Record<string, any>;
+};
+
+export type ExtWizardConfig = {
+  injections: ExtInjection;
+  general: ExtGeneral;
+  steps: ExtWizardSteps;
+};
+
+export type ExtWizardSteps = {
+  name: string;
+  description: string;
+  resource: string;
+  form: any[];
 };
 
 export type ExtGeneral = {

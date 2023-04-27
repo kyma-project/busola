@@ -16,6 +16,7 @@ import { Labels } from './Labels';
 import { Alert } from './Alert';
 import { ExternalLink } from './ExternalLink';
 import { Tabs } from './Tabs';
+import { Wizard } from './Wizard';
 
 import { APIRuleHost } from './APIRules/APIRuleHost';
 
@@ -23,25 +24,26 @@ import { PendingWrapper } from './PendingWrapper';
 
 export const widgets = {
   Null: () => '',
-  Badge,
-  Text,
-  Plain,
-  Panel,
-  Columns,
-  CodeViewer,
-  Table,
-  ResourceRefs,
-  ControlledBy,
-  JoinedArray,
-  ResourceList,
-  ResourceLink,
-  ResourceButton,
-  Labels,
-  Alert,
-  ExternalLink,
-  Tabs,
-  EventList,
   APIRuleHost,
+  Alert,
+  Badge,
+  CodeViewer,
+  Columns,
+  ControlledBy,
+  EventList,
+  ExternalLink,
+  JoinedArray,
+  Labels,
+  Panel,
+  Plain,
+  ResourceButton,
+  ResourceLink,
+  ResourceList,
+  ResourceRefs,
+  Table,
+  Tabs,
+  Text,
+  Wizard,
 };
 
 export const valuePreprocessors = {
