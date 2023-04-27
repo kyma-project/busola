@@ -5,7 +5,7 @@ async function fetchResources(fetch, base, path, kind) {
     kind,
     items: data.items,
   };
-  // nextTasks: pagination
+  // nextTasks: pagination (TODO)
   return {
     resources,
   };
@@ -26,7 +26,8 @@ async function fetchResourceList(fetch, groupVersion) {
   };
 }
 
-async function fetchGroups(fetch) {
+// Custom Resources
+async function fetchCustomResources(fetch) {
   const response = await fetch(`/apis`);
   const data = await response.json();
   const nextTasks = data.groups.map(group => () =>
@@ -37,7 +38,8 @@ async function fetchGroups(fetch) {
   };
 }
 
-async function fetchApiV1(fetch) {
+// Core Resources
+async function fetchCoreResources(fetch) {
   const base = `/api/v1`;
   const response = await fetch(base);
   const data = await response.json();
@@ -53,7 +55,10 @@ async function fetchApiV1(fetch) {
 }
 
 export async function* loadResources(fetch) {
-  const queue = [() => fetchGroups(fetch), () => fetchApiV1(fetch)];
+  const queue = [
+    () => fetchCustomResources(fetch),
+    () => fetchCoreResources(fetch),
+  ];
   const errors = [];
 
   while (queue.length > 0) {
@@ -104,7 +109,10 @@ class RunningPromises {
 }
 
 export async function* loadResourcesConcurrently(fetch, max = 3) {
-  const queue = [() => fetchGroups(fetch), () => fetchApiV1(fetch)];
+  const queue = [
+    () => fetchCustomResources(fetch),
+    () => fetchCoreResources(fetch),
+  ];
   const running = new RunningPromises();
   const errors = [];
 
