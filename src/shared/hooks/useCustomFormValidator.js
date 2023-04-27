@@ -78,8 +78,12 @@ export function useCustomFormValidator() {
 
   // Validates the FormField's input
   function validateFormField(formField) {
+    // Input: Extensibility = 'input', otherwise = #select-dropdown
     const input = formField.querySelector('input');
-    return { valid: input.checkValidity(), filled: input.value !== '' };
+    const isValid = input
+      ? input.checkValidity()
+      : formField.querySelector('#select-dropdown')?.textContent !== '';
+    return { valid: isValid, filled: input?.value !== '' };
   }
 
   function validateInputList(inputList, isRequired) {
