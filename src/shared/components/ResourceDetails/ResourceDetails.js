@@ -289,6 +289,13 @@ function Resource({
 
   const actions = readOnly ? null : (
     <>
+      <Suspense fallback={<Spinner />}>
+        <Injections
+          destination={resourceType}
+          slot="details-header"
+          root={resource}
+        />
+      </Suspense>
       {protectedResourceWarning(resource)}
       {editAction()}
       {headerActions}

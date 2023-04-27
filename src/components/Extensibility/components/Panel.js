@@ -14,6 +14,8 @@ export function Panel({
   structure,
   schema,
   disableMargin = false,
+  singleRootResource,
+  embedResource,
   ...props
 }) {
   const { decodable } = structure;
@@ -53,6 +55,8 @@ export function Panel({
                 structure={def}
                 schema={schema}
                 inlineContext={true}
+                singleRootResource={singleRootResource}
+                embedResource={embedResource}
                 {...props}
               />
             ))
@@ -82,6 +86,8 @@ export function Panel({
               schema={schema}
               inlineRenderer={InlineWidget}
               inlineContext={true}
+              singleRootResource={singleRootResource}
+              embedResource={embedResource}
               {...props}
             />
           ))}

@@ -4,10 +4,11 @@ import { injectionsState } from 'state/navigation/extensionsAtom';
 export const useGetInjections = (location, slot) => {
   const injections = useRecoilValue(injectionsState);
   let filteredInjections = [];
-  injections.forEach(injection => {
-    const target = injection.injection.targets.find(t => {
-      return t.location === location && t.slot === slot;
-    });
+
+  (injections || []).forEach(injection => {
+    const target = injection.injection.targets.find(
+      t => t.location === location && t.slot === slot,
+    );
     if (target) {
       filteredInjections.push({
         ...injection,
