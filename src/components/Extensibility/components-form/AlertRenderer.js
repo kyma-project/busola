@@ -12,12 +12,14 @@ export function AlertRenderer({
   compact,
   originalResource,
   singleRootResource,
+  embedResource,
   ...props
 }) {
   const { t: tExt } = useGetTranslation();
   const jsonata = useJsonata({
     resource: originalResource,
     parent: singleRootResource,
+    embedResource: embedResource,
     scope: value,
     value,
   });

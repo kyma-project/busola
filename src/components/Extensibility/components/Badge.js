@@ -20,6 +20,7 @@ export function Badge({
   scope,
   arrayItems,
   singleRootResource,
+  embedResource,
 }) {
   const { t: tExt } = useGetTranslation();
   const { t } = useTranslation();
@@ -27,6 +28,7 @@ export function Badge({
   const jsonata = useJsonata({
     resource: originalResource,
     parent: singleRootResource,
+    embedResource: embedResource,
     scope,
     value,
     arrayItems,

@@ -2,37 +2,59 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 import { Button, MessageStrip } from 'fundamental-react';
-import { validateResourcesState } from 'state/preferences/validateResourcesAtom';
+import {
+  getExtendedValidateResourceState,
+  validateResourcesState,
+} from 'state/preferences/validateResourcesAtom';
 import { useIsInCurrentNamespace } from 'shared/hooks/useIsInCurrentNamespace';
 import { useValidateResourceBySchema } from 'shared/hooks/useValidateResourceBySchema/useValidateResourceBySchema';
 
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
 import './FilteredResourcesDetails.scss';
+import { validationSchemasEnabledState } from 'state/validationEnabledSchemasAtom';
+import { useLoadingDebounce } from 'shared/hooks/useLoadingDebounce';
 
 const WarningButton = ({
   handleShowWarnings,
   areWarningsVisible,
   warningsNumber,
+  loading,
 }) => {
   const { t } = useTranslation();
 
+  const noWarnings = warningsNumber === 0;
+
   return (
     <Button
-      onClick={handleShowWarnings}
+      onClick={noWarnings || handleShowWarnings}
       className="warning-button"
-      type="attention"
+      type={noWarnings ? 'positive' : 'attention'}
       glyph={
-        areWarningsVisible ? 'navigation-up-arrow' : 'navigation-down-arrow'
+        noWarnings
+          ? 'message-success'
+          : areWarningsVisible
+          ? 'navigation-up-arrow'
+          : 'navigation-down-arrow'
       }
     >
       <div>
         <p>
-          {!areWarningsVisible
-            ? t('upload-yaml.buttons.show-warnings')
-            : t('upload-yaml.buttons.hide-warnings')}
+          {noWarnings
+            ? t('upload-yaml.messages.no-warnings-found')
+            : areWarningsVisible
+            ? t('upload-yaml.buttons.hide-warnings')
+            : t('upload-yaml.buttons.show-warnings')}
         </p>
-        <p>{warningsNumber}</p>
+        {loading ? (
+          <Spinner
+            className={noWarnings ? 'positive-spinner' : 'warning-spinner'}
+            size="s"
+            center={false}
+          />
+        ) : (
+          <p>{warningsNumber}</p>
+        )}
       </div>
     </Button>
   );
@@ -43,24 +65,28 @@ const useNamespaceWarning = resource => {
   return useIsInCurrentNamespace(resource)
     ? []
     : [
-        t('upload-yaml.warnings.different-namespace', {
-          namespace: resource?.metadata?.namespace,
-        }),
+        {
+          key: 'different-namespace',
+          message: t('upload-yaml.warnings.different-namespace', {
+            namespace: resource?.metadata?.namespace,
+          }),
+        },
       ];
 };
 
-const ValidationWarnings = ({ resource }) => {
+const ValidationWarnings = ({ resource, validationSchema }) => {
   const { t } = useTranslation();
   const [areWarningsVisible, setVisibleWarnings] = useState(false);
 
-  //we expect two types here: []string or Promise
-  const warnings = [
-    useValidateResourceBySchema,
-    useNamespaceWarning,
-  ].map(validate => validate(resource));
+  const { debounced, loading } = useLoadingDebounce(resource, 500);
 
-  // if the element has the then function, it means it's a Promise
-  if (warnings.some(w => w.then))
+  const warnings = [
+    useValidateResourceBySchema(debounced, validationSchema),
+    useNamespaceWarning(debounced),
+  ];
+
+  // if the validationSchema is not yet available, set it to loading
+  if (!validationSchema)
     return (
       <MessageStrip
         type="warning"
@@ -71,26 +97,24 @@ const ValidationWarnings = ({ resource }) => {
       </MessageStrip>
     );
 
-  if (warnings.flat().length === 0)
-    return (
-      <MessageStrip type="success" className="fd-margin-bottom--sm">
-        {t('upload-yaml.messages.no-warnings-found')}
-      </MessageStrip>
-    );
-
   return (
     <div>
       <WarningButton
         handleShowWarnings={() => setVisibleWarnings(prevState => !prevState)}
         areWarningsVisible={areWarningsVisible}
         warningsNumber={warnings.flat().length}
+        loading={loading}
       />
       {areWarningsVisible ? (
         <ul className="warnings-list">
-          {warnings.flat().map(err => (
-            <li key={`${resource?.kind}-${resource?.metadata?.name}-${err}`}>
+          {warnings.flat().map((warning, i) => (
+            <li
+              key={`${resource?.kind}-${
+                resource?.metadata?.name
+              }-${warning.key ?? i}`}
+            >
               <MessageStrip type="warning" className="fd-margin-top--sm">
-                {err}
+                {warning.message}
               </MessageStrip>
             </li>
           ))}
@@ -101,7 +125,10 @@ const ValidationWarnings = ({ resource }) => {
 };
 
 export const FilteredResourcesDetails = ({ filteredResources }) => {
-  const validateResources = useRecoilValue(validateResourcesState);
+  const validateResources = getExtendedValidateResourceState(
+    useRecoilValue(validateResourcesState),
+  );
+  const validationSchemas = useRecoilValue(validationSchemasEnabledState);
 
   return (
     <ul className="resources-list">
@@ -114,9 +141,12 @@ export const FilteredResourcesDetails = ({ filteredResources }) => {
           <p style={{ fontSize: '16px' }}>
             {String(r?.value?.kind)} {String(r?.value?.metadata?.name)}
           </p>
-          {validateResources ? (
-            <ValidationWarnings resource={r?.value} />
-          ) : null}
+          {validateResources.isEnabled && (
+            <ValidationWarnings
+              resource={r?.value}
+              validationSchema={validationSchemas}
+            />
+          )}
         </li>
       ))}
     </ul>

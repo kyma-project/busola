@@ -1,0 +1,16 @@
+.policy-row {
+  display: grid;
+  grid-template-columns: 1fr fit-content(50%);
+  align-items: center;
+  // padding: 4px;
+  font-size: var(--sapFontSize);
+
+  .fd-form-label {
+    display: none;
+  }
+}
+
+.no-validation-info {
+  margin: 16px;
+  text-align: center;
+}

@@ -766,8 +766,9 @@ The **Injections** section contains a list of objects that defines the display s
 
 ### All available _injections_ slots
 
-- **details-top** - At the top of the resource view
 - **details-bottom** - At the bottom of the resource view
+- **details-header** - In the header of the details view
+- **details-top** - At the top of the resource view
 - **list-header** - In the header of the list view
 
 ### All available _injections_ locations

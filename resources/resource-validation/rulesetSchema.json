@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "uniqueRuleName": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^([A-Za-z0-9_])*([0-9]+\\.?[0-9]*|\\.[0-9]+)?([A-Za-z0-9_])*$"
+    },
+    "rule": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uniqueName": {
+          "$ref": "#/definitions/uniqueRuleName"
+        },
+        "documentationUrl": {
+          "type": "string",
+          "minLength": 1
+        },
+        "messageOnFailure": {
+          "type": "string"
+        },
+        "schema": {
+          "$ref": "http://json-schema.org/draft-07/schema#",
+          "description": "this is the rule logic, should be a json schema"
+        }
+      },
+      "required": ["uniqueName", "messageOnFailure", "schema"]
+    },
+    "ruleReference": {
+      "type": "object",
+      "properties": {
+        "identifier": {
+          "$ref": "#/definitions/uniqueRuleName"
+        }
+      },
+      "required": ["identifier"]
+    },
+    "policy": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/uniqueRuleName"
+              },
+              {
+                "$ref": "#/definitions/ruleReference"
+              }
+            ]
+          }
+        }
+      },
+      "required": ["name", "rules"]
+    }
+  },
+  "properties": {
+    "apiVersion": {
+      "type": "string"
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/rule"
+      }
+    },
+    "policies": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/policy"
+      }
+    }
+  }
+}
