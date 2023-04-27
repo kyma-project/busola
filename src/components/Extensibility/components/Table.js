@@ -41,6 +41,7 @@ export function Table({
   scope,
   arrayItems = [],
   singleRootResource,
+  embedResource,
   ...props
 }) {
   // cleanup jsonata results
@@ -57,6 +58,7 @@ export function Table({
   const jsonata = useJsonata({
     resource: originalResource,
     parent: singleRootResource,
+    embedResource: embedResource,
     scope,
     value,
     arrayItems,
