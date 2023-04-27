@@ -1328,12 +1328,22 @@ services:
 settings:
   clusters:
     confirmations: Confirmations
-    description: Cluster interaction
+    description: Cluster interaction, resource validation
     disableResourceProtection: Allow for modification of protected resources
     dontConfirmDelete: Delete without confirmation
     showHiddenNamespaces: Show hidden Namespaces
     title: Clusters
-    resourcesValidation: Validate Resources
+    resourcesValidation:
+      title: Resource Validation
+      validateResources: Validate Resources
+      choose-policies: Enable custom policies
+      enabled-policies: Enabled Policies
+      reset: Reset
+      customize: Customize
+      validation-disabled: Resource validation is disabled
+      no-policies-found: No policies found
+    interaction:
+      title: Cluster Interaction
   interface:
     description: Appearance, language
     themes:
