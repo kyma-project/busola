@@ -10,6 +10,15 @@ export function useCustomFormValidator() {
     const formContainer =
       formElementRef.current.querySelector('div.form-container') ??
       formElementRef.current.firstChild;
+
+    console.time('myFunction');
+    validateElement(formContainer, true);
+    console.timeEnd('myFunction');
+
+    console.time('htmls function');
+    formElementRef.current.checkValidity();
+    console.timeEnd('htmls function');
+
     setValid(cv && validateElement(formContainer, true).valid);
   };
 
@@ -23,8 +32,8 @@ export function useCustomFormValidator() {
     // tracks if at least one child has been filled out, important for the valiation of non-required parent-elements
     let isFilled = false;
 
-    for (let i = 0; i < element.children.length; i++) {
-      const child = element.children[i];
+    for (const child of element.children) {
+      if (isRequired && !isValid) break;
       if (child.classList.contains('form-field')) {
         // Validates the KeyValuePair
         if (child.classList.contains('multi-input')) {
