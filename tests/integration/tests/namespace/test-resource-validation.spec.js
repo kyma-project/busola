@@ -19,7 +19,9 @@ context('Test resource validation', () => {
     cy.fixture('examples/resource-validation/pod.yaml').then(podConfig => {
       cy.pasteToMonaco(podConfig);
     });
+
     cy.contains('nginx:latest').should('be.visible');
+
     cy.contains('Show warnings')
       .should('be.visible')
       .click();
@@ -51,7 +53,9 @@ context('Test resource validation', () => {
     cy.fixture('examples/resource-validation/pod.yaml').then(podConfig => {
       cy.pasteToMonaco(podConfig);
     });
+
     cy.contains('nginx:latest').should('be.visible');
+
     cy.contains('warnings').should('not.exist');
 
     cy.contains('.validate-resources', 'Validate resources')
@@ -75,9 +79,11 @@ context('Test resource validation', () => {
     cy.contains('.policy-row', 'Default')
       .find('.fd-switch')
       .click();
+
     cy.contains('.policy-row', 'PodSecurityStandardsBaseline')
       .find('.fd-switch')
       .click();
+
     cy.contains('.policy-row', 'TestPolicy')
       .find('.fd-switch')
       .click();
@@ -89,7 +95,9 @@ context('Test resource validation', () => {
     cy.fixture('examples/resource-validation/pod.yaml').then(podConfig => {
       cy.pasteToMonaco(podConfig);
     });
+
     cy.contains('nginx:latest').should('be.visible');
+
     cy.contains('Show warnings')
       .should('be.visible')
       .click();
@@ -128,14 +136,16 @@ context('Test resource validation', () => {
     cy.fixture('examples/resource-validation/pod.yaml').then(podConfig => {
       cy.pasteToMonaco(podConfig);
     });
+
     cy.contains('nginx:latest').should('be.visible');
+
     cy.contains('Show warnings')
       .should('be.visible')
       .click();
 
-    cy.contains(
+    cy.get('[role=alert]').contains(
       'Incorrect or missing values for `capabilities.drop` - must contain ALL',
-    ).should('be.visible');
+    );
 
     cy.contains('Cancel').click();
   });
