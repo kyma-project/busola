@@ -9,8 +9,17 @@ import { Button } from 'fundamental-react';
 import { ForceUpdateModalContent } from './ForceUpdateModalContent';
 import { useUrl } from 'hooks/useUrl';
 import { useNavigate } from 'react-router-dom';
-import { merge } from 'lodash';
-import * as jp from 'jsonpath';
+import { merge, omit } from 'lodash';
+
+const BLACKLISTED_FIELDS = [
+  'metadata.creationTimestamp',
+  'metadata.generation',
+  'metadata.managedFields',
+  'metadata.resourceVersion',
+  'metadata.selfLink',
+  'metadata.uid',
+  'status',
+];
 
 export function useCreateResource({
   singularName,
@@ -22,7 +31,6 @@ export function useCreateResource({
   toggleFormFn,
   urlPath,
 }) {
-  console.log('useCreateResource');
   const { t } = useTranslation();
   const notification = useNotification();
   const getRequest = useSingleGet();
@@ -82,67 +90,10 @@ export function useCreateResource({
     if (e) {
       e.preventDefault();
     }
-    const mergedResource = {
-      ...initialResource,
-      ...resource,
-      metadata: {
-        ...initialResource?.metadata,
-        ...resource.metadata,
-      },
-    };
-    function removeField(obj, path) {
-      var parts = path.split('.');
-      var last = parts.pop();
-      for (var i = 0; i < parts.length; i++) {
-        obj = obj[parts[i]];
-      }
-      delete obj[last];
-    }
-    function stripResourceFromBlacklistedFields(resource) {
-      const blacklistedFields = [
-        'metadata.creationTimestamp',
-        'metadata.generation',
-        'metadata.managedFields',
-        'metadata.resourceVersion',
-        'metadata.selfLink',
-        'metadata.uid',
-        'status',
-      ];
-      const strippedResource = JSON.parse(JSON.stringify(resource));
 
-      blacklistedFields.forEach(field => {
-        console.log(
-          'blacklistedFields strippedResource',
-          JSON.parse(JSON.stringify(strippedResource)),
-          'field',
-          field,
-        );
-        removeField(strippedResource, field);
-        console.log(
-          'blacklistedFields after strippedResource',
-          strippedResource,
-        );
-      });
-      return strippedResource;
-    }
+    const strippedResource = omit(resource, BLACKLISTED_FIELDS);
+    const mergedResource = merge({}, initialResource, strippedResource);
 
-    const strippedResource = stripResourceFromBlacklistedFields(
-      initialResource,
-    );
-    const mergedResource2 = merge({}, initialResource, resource);
-    console.log(
-      'mergedResource2',
-      mergedResource2,
-      'strippedResource',
-      strippedResource,
-    );
-
-    delete mergedResource.metadata.resourceVersion;
-    console.log('mergedResource', mergedResource, initialResource, resource);
-    console.log(
-      'createPatch(initialResource, mergedResource)',
-      createPatch(initialResource, mergedResource),
-    );
     try {
       if (isEdit) {
         await patchRequest(
