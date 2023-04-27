@@ -10,7 +10,6 @@ export function useCustomFormValidator() {
     const formContainer =
       formElementRef.current.querySelector('div.form-container') ??
       formElementRef.current.firstChild;
-
     setValid(cv && validateElement(formContainer, true).valid);
   };
 
@@ -21,30 +20,34 @@ export function useCustomFormValidator() {
       !isRequired ||
       element.children.length > 0 ||
       (!isRequired && element.children.length === 0);
-    // tracks if at least one child has been filled out, important for the valiation of non-required parent-elements
-    let isFilled = false;
+    let isPartiallyFilled = false; // tracks if at least one child has been filled out, important for the validation of non-required FormGroups
+    let isComplete = true; // tracks if all children have been filled out, important for the validation of non-required GenericLists
 
     for (const child of element.children) {
       if (isRequired && !isValid) break;
+
       if (child.classList.contains('form-field')) {
         // Validates the KeyValuePair
         if (child.classList.contains('multi-input')) {
           const { valid, filled } = validateInputList(child, isRequired);
           isValid = isValid && valid;
-          isFilled = isFilled || filled;
+          isPartiallyFilled = isPartiallyFilled || filled;
+          isComplete = isComplete && filled;
         }
         // Validates the FormField
         else {
           const { valid, filled } = validateFormField(child);
           isValid = isValid && valid;
-          isFilled = isFilled || filled;
+          isPartiallyFilled = isPartiallyFilled || filled;
+          isComplete = isComplete && filled;
         }
       }
       // Validates the SimpleList
       else if (child.classList.contains('simple-list')) {
         const { valid, filled } = validateInputList(child, isRequired);
         isValid = isValid && valid;
-        isFilled = isFilled || filled;
+        isPartiallyFilled = isPartiallyFilled || filled;
+        isComplete = isComplete && filled;
       }
       //Validates the CollapsibleSection
       else if (child.classList.contains('resource-form__collapsible-section')) {
@@ -60,20 +63,32 @@ export function useCustomFormValidator() {
         const required = child.classList.contains('required');
         // Validates the GenericList
         if (child.querySelector('.actions').innerText === 'Add') {
-          const { valid, filled } = validateElement(contentParent, required);
-          isValid =
-            isValid && valid && (filled || contentParent.children.length === 0);
-          isFilled = isFilled || filled;
+          const { valid, filled, complete } = validateElement(
+            contentParent,
+            required,
+          );
+          //isValid = isValid && valid && (filled || contentParent.children.length === 0);
+          isPartiallyFilled = isPartiallyFilled || filled;
+          isComplete = isComplete && complete;
+          isValid = isValid && valid && complete;
         }
         // Validates the ResourceForm
         else {
-          const { valid, filled } = validateElement(contentParent, required);
+          const { valid, filled, complete } = validateElement(
+            contentParent,
+            required,
+          );
+          isPartiallyFilled = isPartiallyFilled || filled;
+          isComplete = isComplete && (complete || (valid && filled));
           isValid = isValid && valid;
-          isFilled = isFilled || filled;
         }
       }
     }
-    return { valid: isValid || (!isRequired && !isFilled), filled: isFilled };
+    return {
+      valid: isValid || (!isRequired && !isPartiallyFilled),
+      filled: isPartiallyFilled || isComplete,
+      complete: isComplete,
+    };
   }
 
   // Validates the FormField's input
