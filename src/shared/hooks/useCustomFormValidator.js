@@ -11,14 +11,6 @@ export function useCustomFormValidator() {
       formElementRef.current.querySelector('div.form-container') ??
       formElementRef.current.firstChild;
 
-    console.time('myFunction');
-    validateElement(formContainer, true);
-    console.timeEnd('myFunction');
-
-    console.time('htmls function');
-    formElementRef.current.checkValidity();
-    console.timeEnd('htmls function');
-
     setValid(cv && validateElement(formContainer, true).valid);
   };
 
