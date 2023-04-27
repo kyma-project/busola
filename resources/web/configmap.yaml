@@ -2,7 +2,6 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: busola-config
-  namespace: kube-public
 data:
   config: >
     {
