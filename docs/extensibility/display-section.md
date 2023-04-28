@@ -531,7 +531,7 @@ EventList widget renders a list of Events.
 
 ### MessagePanel
 
-MessagePanel widgets render an object as a panel with its own title and subtitle and widgets provided in children section.
+MessagePanel widgets render an object as a panel with its own title and subtitle, and widgets provided in the children section.
 
 #### Example
 
