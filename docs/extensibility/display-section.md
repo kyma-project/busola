@@ -551,7 +551,7 @@ MessagePanel widgets render an object as a panel with its own title and subtitle
 
 #### Widget-specific parameters
 
-- **title** - an optional string that is rendering title after image.
+- **title** - an optional string that renders a title after an image.
 - **subtitle** - an optional string that renders a subtitle.
 
 ### Panel
