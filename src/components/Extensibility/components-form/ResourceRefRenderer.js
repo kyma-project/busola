@@ -23,11 +23,13 @@ export function ResourceRefRender({
   originalResource,
   nestingLevel,
   singleRootResource,
+  embedResource,
   ...props
 }) {
   const jsonata = useJsonata({
     resource: originalResource,
     parent: singleRootResource,
+    embedResource: embedResource,
     scope: value,
     value,
   });

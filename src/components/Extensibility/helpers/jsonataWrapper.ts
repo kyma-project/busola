@@ -47,5 +47,16 @@ export function jsonataWrapper(expression: string) {
 
     return isPermitted;
   });
+
+  exp.registerFunction('prepareUrl', (url, overrides) => {
+    const parsedUrl = url.replace(new RegExp('{([^{]+)}', 'g'), function(
+      _: any,
+      overrideName: string,
+    ) {
+      return overrides[overrideName];
+    });
+    return parsedUrl;
+  });
+
   return exp;
 }

@@ -1,7 +1,7 @@
 import { ExtWizardConfig } from './../types';
 import jsyaml from 'js-yaml';
 import { mapValues, partial } from 'lodash';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { ExtResource, ExtInjectionConfig } from '../types';
 import { atom, RecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { clusterState } from '../clusterAtom';
@@ -71,16 +71,16 @@ const convertYamlToObject: (
   }
 };
 
-async function getExtensionConfigMaps(
+async function getConfigMapsWithSelector(
   fetchFn: FetchFn,
   kubeconfigNamespace: string,
   currentNamespace: string,
   permissionSet: PermissionSetState,
+  selector: string,
 ): Promise<Array<ConfigMapResponse>> {
-  const clusterCMUrl =
-    '/api/v1/configmaps?labelSelector=busola.io/extension=resource';
+  const clusterCMUrl = `/api/v1/configmaps?labelSelector=${selector}`;
   const namespacedCMUrl = `/api/v1/namespaces/${currentNamespace ??
-    kubeconfigNamespace}/configmaps?labelSelector=busola.io/extension=resource`;
+    kubeconfigNamespace}/configmaps?labelSelector=${selector}`;
 
   if (!currentNamespace) {
     const hasAccessToClusterCMList = doesUserHavePermission(
@@ -257,6 +257,76 @@ async function getExtensionWizardConfigMaps(
   }
 }
 
+const getStatics = async (
+  fetchFn: FetchFn | undefined,
+  kubeconfigNamespace = 'kube-public',
+  currentNamespace: string,
+  permissionSet: PermissionSetState,
+) => {
+  if (!fetchFn) {
+    return null;
+  }
+  try {
+    const staticsResponse = await fetch('/extensions/statics.yaml');
+
+    let defaultStatics = jsyaml.loadAll(
+      await staticsResponse.text(),
+    ) as ExtResource[];
+
+    if (Array.isArray(defaultStatics[0])) defaultStatics = defaultStatics[0];
+
+    const configMaps = await getConfigMapsWithSelector(
+      fetchFn,
+      kubeconfigNamespace,
+      currentNamespace,
+      permissionSet,
+      'busola.io/extension=statics',
+    );
+
+    const configMapStatics = configMaps.reduce(
+      (accumulator, currentConfigMap) => {
+        const extResourceWithMetadata = {
+          ...currentConfigMap,
+          data: mapValues(
+            currentConfigMap?.data || {},
+            convertYamlToObject,
+          ) as ExtResource,
+        };
+
+        if (!extResourceWithMetadata.data) return accumulator;
+
+        const indexOfTheSameExtension = accumulator.findIndex(ext =>
+          isTheSameNameAndUrl(ext.data, extResourceWithMetadata.data),
+        );
+
+        if (indexOfTheSameExtension !== -1) {
+          const areNamespacesTheSame =
+            currentNamespace ===
+            accumulator[indexOfTheSameExtension].metadata.namespace;
+          if (areNamespacesTheSame) {
+            return accumulator;
+          }
+
+          accumulator[indexOfTheSameExtension] = extResourceWithMetadata;
+          return accumulator;
+        }
+
+        return [...accumulator, extResourceWithMetadata];
+      },
+      [] as ExtResourceWithMetadata[],
+    );
+
+    const configMapStaticsDataOnly: ExtResource[] = configMapStatics.map(
+      cm => cm.data,
+    );
+    const combinedStatics = [...defaultStatics, ...configMapStaticsDataOnly];
+    return combinedStatics;
+  } catch (e) {
+    console.warn('Cannot load statics: ', e);
+    return [];
+  }
+};
+
 const getExtensions = async (
   fetchFn: FetchFn | undefined,
   kubeconfigNamespace = 'kube-public',
@@ -277,11 +347,12 @@ const getExtensions = async (
     if (Array.isArray(defaultExtensions[0]))
       defaultExtensions = defaultExtensions[0];
 
-    const configMaps = await getExtensionConfigMaps(
+    const configMaps = await getConfigMapsWithSelector(
       fetchFn,
       kubeconfigNamespace,
       currentNamespace,
       permissionSet,
+      'busola.io/extension=resource',
     );
 
     const configMapsExtensions = configMaps.reduce(
@@ -341,7 +412,6 @@ const getExtensions = async (
       ...defaultExtensionsWithoutOverride,
       ...configMapsExtensionsDataOnly,
     ].filter(ext => !!ext.general);
-
     return combinedExtensions;
   } catch (e) {
     console.warn('Cannot load extensions: ', e);
@@ -360,7 +430,6 @@ export const useGetExtensions = () => {
   const features = configuration?.features;
   const openapiPathIdList = useRecoilValue(openapiPathIdListSelector);
   const permissionSet = useRecoilValue(permissionSetsSelector);
-  const [nonNamespacedExtensions, setNonNamespacedExtensions] = useState(null);
   const { namespace } = useUrl();
   const { isEnabled: isExtensibilityInjectionsEnabled } = useFeature(
     'EXTENSIBILITY_INJECTIONS',
@@ -375,11 +444,17 @@ export const useGetExtensions = () => {
         setExtensions([]);
         setInjections([]);
         setWizard([]);
-        setNonNamespacedExtensions(null);
         return;
       }
 
       const configs = await getExtensions(
+        fetchFn,
+        cluster.currentContext.namespace || 'kube-public',
+        namespace,
+        permissionSet,
+      );
+
+      const statics = await getStatics(
         fetchFn,
         cluster.currentContext.namespace,
         namespace,
@@ -403,41 +478,57 @@ export const useGetExtensions = () => {
         // TODO wizard injections
       }
 
+      let filteredConfigs: ExtResource[] = [];
       if (!configs) {
         setExtensions([]);
-        setInjections([]);
-        setNonNamespacedExtensions(null);
       } else {
-        if (!nonNamespacedExtensions) {
-          const configSet = {
-            configFeatures: features!,
-            openapiPathIdList,
-            permissionSet,
-          };
+        const configSet = {
+          configFeatures: features!,
+          openapiPathIdList,
+          permissionSet,
+        };
 
-          const isNodeVisibleForCurrentConfigSet = partial(
-            shouldNodeBeVisible,
-            configSet,
-          );
+        const isNodeVisibleForCurrentConfigSet = partial(
+          shouldNodeBeVisible,
+          configSet,
+        );
 
-          const filteredConfigs = configs.filter(node =>
-            isNodeVisibleForCurrentConfigSet(mapExtResourceToNavNode(node)),
-          );
+        filteredConfigs = configs.filter(node =>
+          !node?.general?.resource === null
+            ? true
+            : isNodeVisibleForCurrentConfigSet(mapExtResourceToNavNode(node)),
+        );
 
-          let injectionsConfigs: ExtInjectionConfig[] = [];
-          filteredConfigs.forEach(config =>
-            config?.injections?.map(injection =>
-              injectionsConfigs.push({
-                injection: injection,
-                general: config.general,
-                dataSources: config.dataSources,
-              }),
-            ),
-          );
-          setExtensions(filteredConfigs);
-          if (isExtensibilityInjectionsEnabled) {
-            setInjections(injectionsConfigs);
-          }
+        setExtensions(filteredConfigs);
+      }
+
+      if (!filteredConfigs && !statics) {
+        setInjections([]);
+      } else {
+        let injectionsConfigs: ExtInjectionConfig[] = [];
+        filteredConfigs.forEach(config =>
+          config?.injections?.map(injection =>
+            injectionsConfigs.push({
+              injection: injection,
+              general: config.general,
+              dataSources: config.dataSources,
+            }),
+          ),
+        );
+        (statics || []).forEach(config =>
+          config?.injections?.map(injection =>
+            injectionsConfigs.push({
+              injection: injection,
+              general: {
+                ...config.general,
+                type: 'static',
+              },
+              dataSources: config.dataSources,
+            }),
+          ),
+        );
+        if (isExtensibilityInjectionsEnabled) {
+          setInjections(injectionsConfigs);
         }
       }
     };
