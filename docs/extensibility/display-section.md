@@ -538,7 +538,7 @@ MessagePanel widgets render an object as a panel with its own title and subtitle
 ```yaml
 - widget: MessagePanel
   source: $
-  title: Seems that you don't have any Kyma Modules Configured
+  title: Seems that you don't have any Kyma Modules configured
   subtitle: Add at least one Kyma Module. Add your module under "kyma-system -> Kyma"
   children:
     - widget: Wizard
