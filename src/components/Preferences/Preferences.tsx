@@ -11,7 +11,7 @@ import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpen
 import ConfirmationSettings from './ConfirmationSettings';
 import LanguageSettings from './LanguageSettings';
 import NamespaceSettings from './NamespaceSettings';
-import ResourcesValidationSettings from './ResourcesValidationSettings';
+import ResourceValidationSettings from './ResourceValidation/ResourceValidationSettings';
 import OtherSettings from './OtherSettings';
 import ProtectedSettings from './ProtectedSettings';
 import ThemeChooser from './ThemeChooser';
@@ -97,12 +97,26 @@ export function Preferences() {
           </Tabs>
         </VerticalTabs.Content>
         <VerticalTabs.Content id={2}>
-          <div>
-            <NamespaceSettings />
-            <ConfirmationSettings />
-            <ProtectedSettings />
-            <ResourcesValidationSettings />
-          </div>
+          <Tabs className="fd-tabs fd-has-padding-left-regular">
+            <Tab
+              key="cluster-interaction"
+              id="cluster-interaction"
+              title={t('settings.clusters.interaction.title')}
+            >
+              <div>
+                <NamespaceSettings />
+                <ConfirmationSettings />
+                <ProtectedSettings />
+              </div>
+            </Tab>
+            <Tab
+              key="resource-validation"
+              id="resource-validation"
+              title={t('settings.clusters.resourcesValidation.title')}
+            >
+              <ResourceValidationSettings />
+            </Tab>
+          </Tabs>
         </VerticalTabs.Content>
       </VerticalTabs>
     </Dialog>
