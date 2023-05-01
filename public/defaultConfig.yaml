@@ -70,3 +70,8 @@ config:
     GARDENER_LOGIN:
       isEnabled: false
       kubeconfig: null
+    RESOURCE_VALIDATION:
+      isEnabled: true
+      config:
+        policies:
+          - Default

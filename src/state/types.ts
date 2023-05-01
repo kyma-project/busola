@@ -32,6 +32,7 @@ export const configFeaturesNames = {
   EXTERNAL_NODES: 'EXTERNAL_NODES',
   PROMETHEUS: 'PROMETHEUS',
   GARDENER_LOGIN: 'GARDENER_LOGIN',
+  RESOURCE_VALIDATION: 'RESOURCE_VALIDATION',
 } as const;
 
 export type ConfigFeatureList = {
@@ -84,6 +85,7 @@ export type ExtGeneral = {
     group: string;
     version: string;
   };
+  type: string;
   name: string;
   category: string;
   urlPath: string;
