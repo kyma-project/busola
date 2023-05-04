@@ -19,7 +19,7 @@ export function CollapsibleRenderer({
   const gridTemplateColumns = `repeat(${columns}, 1fr)`;
 
   const defaultOpen = schema.get('defaultExpanded');
-  const required = schema.get('required') === true;
+  const required = schema.get('required') === true ?? props.required;
 
   return (
     <ResourceForm.CollapsibleSection
