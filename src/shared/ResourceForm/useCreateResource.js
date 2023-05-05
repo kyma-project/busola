@@ -9,14 +9,13 @@ import { Button } from 'fundamental-react';
 import { ForceUpdateModalContent } from './ForceUpdateModalContent';
 import { useUrl } from 'hooks/useUrl';
 import { useNavigate } from 'react-router-dom';
-import { merge, omit } from 'lodash';
-import { BLACKLISTED_FIELDS } from 'shared/constants';
 
 export function useCreateResource({
   singularName,
   pluralKind,
   resource,
   initialResource,
+  initialUnchangedResource,
   createUrl,
   afterCreatedFn,
   toggleFormFn,
@@ -82,14 +81,11 @@ export function useCreateResource({
       e.preventDefault();
     }
 
-    const strippedResource = omit(resource, BLACKLISTED_FIELDS);
-    const mergedResource = merge({}, initialResource, strippedResource);
-
     try {
       if (isEdit) {
         await patchRequest(
           createUrl,
-          createPatch(initialResource, mergedResource),
+          createPatch(initialUnchangedResource, resource),
         );
         if (typeof toggleFormFn === 'function') {
           toggleFormFn(false);
@@ -110,12 +106,12 @@ export function useCreateResource({
 
         const makeForceUpdateFn = closeModal => {
           return async () => {
-            mergedResource.metadata.resourceVersion =
-              initialResource?.metadata.resourceVersion;
+            resource.metadata.resourceVersion =
+              initialUnchangedResource?.metadata.resourceVersion;
             try {
               await patchRequest(
                 createUrl,
-                createPatch(initialResource, mergedResource),
+                createPatch(initialUnchangedResource, resource),
               );
               closeModal();
               onSuccess();
@@ -134,7 +130,7 @@ export function useCreateResource({
               error={e}
               singularName={singularName}
               initialResource={updatedResource}
-              modifiedResource={mergedResource}
+              modifiedResource={resource}
             />
           ),
           actions: (closeModal, defaultCloseButton) => [

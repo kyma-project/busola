@@ -4,7 +4,7 @@ import jsyaml from 'js-yaml';
 import { Button } from 'fundamental-react';
 import { Link } from 'react-router-dom';
 import { createPatch } from 'rfc6902';
-import { cloneDeep, merge, omit } from 'lodash';
+import { cloneDeep } from 'lodash';
 import * as jp from 'jsonpath';
 import pluralize from 'pluralize';
 
@@ -33,7 +33,6 @@ import { ForceUpdateModalContent } from 'shared/ResourceForm/ForceUpdateModalCon
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { useRecoilState } from 'recoil';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
-import { BLACKLISTED_FIELDS } from 'shared/constants';
 
 const Injections = React.lazy(() =>
   import('../../../components/Extensibility/ExtensibilityInjections'),
@@ -304,12 +303,8 @@ export function ResourceListRenderer({
     };
 
     const modifiedResource = jsyaml.load(newYAML);
-    const strippedResource = omit(modifiedResource, BLACKLISTED_FIELDS);
-    const mergedResource = merge({}, resourceData, strippedResource);
-
-    const diff = createPatch(resourceData, mergedResource);
+    const diff = createPatch(resourceData, modifiedResource);
     const url = prepareResourceUrl(resourceUrl, resourceData);
-
     try {
       await updateResourceMutation(url, diff);
       onSuccess();
