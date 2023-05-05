@@ -9,6 +9,7 @@ export function CollapsibleRenderer({
   storeKeys,
   widgets,
   nestingLevel = 0,
+  required = false,
   ...props
 }) {
   const { WidgetRenderer } = widgets;
@@ -19,12 +20,14 @@ export function CollapsibleRenderer({
   const gridTemplateColumns = `repeat(${columns}, 1fr)`;
 
   const defaultOpen = schema.get('defaultExpanded');
+  const schemaRequired = schema.get('required') ?? required;
 
   return (
     <ResourceForm.CollapsibleSection
       title={tFromStoreKeys(storeKeys, schema)}
       defaultOpen={defaultOpen}
       nestingLevel={nestingLevel}
+      required={schemaRequired}
     >
       <div
         className="collapsible-renderer__grid-wrapper"
