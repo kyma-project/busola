@@ -120,142 +120,75 @@ async function getConfigMapsWithSelector(
   }
 }
 
-async function getExtensionWizardConfigMaps(
-  fetchFn: FetchFn,
-  kubeconfigNamespace: string,
+const getExtensionWizards = async (
+  fetchFn: FetchFn | undefined,
+  kubeconfigNamespace = 'kube-public',
   currentNamespace: string,
   permissionSet: PermissionSetState,
-): Promise<any> {
-  const clusterCMUrl =
-    '/api/v1/configmaps?labelSelector=busola.io/extension=wizard';
-  const namespacedCMUrl = `/api/v1/namespaces/${currentNamespace ??
-    kubeconfigNamespace}/configmaps?labelSelector=busola.io/extension=wizard`;
-
-  if (!currentNamespace) {
-    const hasAccessToClusterCMList = doesUserHavePermission(
-      ['list'],
-      { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
-      permissionSet,
-    );
-
-    // user has no access to clusterwide namespace listing, fall back to namespaced listing
-    const url = hasAccessToClusterCMList ? clusterCMUrl : namespacedCMUrl;
-
-    try {
-      const response = await fetchFn({ relativeUrl: url });
-      const configMapResponse: ConfigMapListResponse = await response.json();
-
-      const configMapsExtensions = configMapResponse?.items.reduce(
-        (accumulator, currentConfigMap) => {
-          const extResourceWithMetadata = {
-            ...currentConfigMap,
-            data: mapValues(
-              currentConfigMap?.data || {},
-              convertYamlToObject,
-            ) as ExtResource,
-          };
-
-          if (!extResourceWithMetadata.data) return accumulator;
-
-          const indexOfTheSameExtension = accumulator.findIndex(ext =>
-            isTheSameNameAndUrl(ext.data, extResourceWithMetadata.data),
-          );
-
-          if (indexOfTheSameExtension !== -1) {
-            accumulator[indexOfTheSameExtension] = extResourceWithMetadata;
-            return accumulator;
-          }
-
-          return [...accumulator, extResourceWithMetadata];
-        },
-        [] as ExtResourceWithMetadata[],
-      );
-      if (configMapsExtensions) {
-        const configMapsExtensionsDataOnly: ExtResource[] = configMapsExtensions.map(
-          cm => cm.data,
-        );
-
-        const combinedExtensions = [...configMapsExtensionsDataOnly].filter(
-          ext => !!ext.general,
-        );
-
-        return combinedExtensions;
-      }
-    } catch (e) {
-      console.warn('Cannot load cluster params from the target cluster: ', e);
-      return [];
-    }
-  } else {
-    const hasAccessToClusterCMList = doesUserHavePermission(
-      ['list'],
-      { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
-      permissionSet,
-    );
-
-    const url = hasAccessToClusterCMList ? clusterCMUrl : namespacedCMUrl;
-
-    try {
-      const response = await fetchFn({ relativeUrl: url });
-      const configMapResponse: ConfigMapListResponse = await response.json();
-
-      const configMapsExtensions = configMapResponse?.items.reduce(
-        (accumulator, currentConfigMap) => {
-          const extResourceWithMetadata = {
-            ...currentConfigMap,
-            data: mapValues(
-              currentConfigMap?.data || {},
-              convertYamlToObject,
-            ) as ExtResource,
-          };
-
-          if (!extResourceWithMetadata.data) return accumulator;
-
-          const indexOfTheSameExtension = accumulator.findIndex(ext =>
-            isTheSameNameAndUrl(ext.data, extResourceWithMetadata.data),
-          );
-
-          if (indexOfTheSameExtension !== -1) {
-            const areNamespacesTheSame =
-              currentNamespace ===
-              accumulator[indexOfTheSameExtension].metadata.namespace;
-            if (areNamespacesTheSame) {
-              return accumulator;
-            }
-
-            accumulator[indexOfTheSameExtension] = extResourceWithMetadata;
-            return accumulator;
-          }
-
-          return [...accumulator, extResourceWithMetadata];
-        },
-        [] as ExtResourceWithMetadata[],
-      );
-      if (configMapsExtensions) {
-        configMapsExtensions.every(cmExt => {
-          const namespaces = ['kube-public', currentNamespace];
-
-          if (namespaces.includes(cmExt.metadata.namespace!)) {
-            return false;
-          }
-          return true;
-        });
-
-        const configMapsExtensionsDataOnly: ExtResource[] = configMapsExtensions.map(
-          cm => cm.data,
-        );
-
-        const combinedExtensions = [...configMapsExtensionsDataOnly].filter(
-          ext => !!ext.general,
-        );
-
-        return combinedExtensions;
-      }
-    } catch (error) {
-      console.error(error);
-      return [];
-    }
+) => {
+  if (!fetchFn) {
+    return null;
   }
-}
+  try {
+    const wizardsResponse = await fetch('/extensions/wizards.yaml');
+
+    let defaultWizards = jsyaml.loadAll(
+      await wizardsResponse.text(),
+    ) as ExtResource[];
+
+    if (Array.isArray(defaultWizards[0])) defaultWizards = defaultWizards[0];
+
+    const configMaps = await getConfigMapsWithSelector(
+      fetchFn,
+      kubeconfigNamespace,
+      currentNamespace,
+      permissionSet,
+      'busola.io/extension=wizard',
+    );
+
+    const configMapWizards = configMaps.reduce(
+      (accumulator, currentConfigMap) => {
+        const extResourceWithMetadata = {
+          ...currentConfigMap,
+          data: mapValues(
+            currentConfigMap?.data || {},
+            convertYamlToObject,
+          ) as ExtResource,
+        };
+
+        if (!extResourceWithMetadata.data) return accumulator;
+
+        const indexOfTheSameExtension = accumulator.findIndex(ext =>
+          isTheSameNameAndUrl(ext.data, extResourceWithMetadata.data),
+        );
+
+        if (indexOfTheSameExtension !== -1) {
+          const areNamespacesTheSame =
+            currentNamespace ===
+            accumulator[indexOfTheSameExtension].metadata.namespace;
+          if (areNamespacesTheSame) {
+            return accumulator;
+          }
+
+          accumulator[indexOfTheSameExtension] = extResourceWithMetadata;
+          return accumulator;
+        }
+
+        return [...accumulator, extResourceWithMetadata];
+      },
+      [] as ExtResourceWithMetadata[],
+    );
+
+    const configMapWizardsDataOnly: ExtResource[] = configMapWizards.map(
+      cm => cm.data,
+    );
+    const combinedWizards = [...defaultWizards, ...configMapWizardsDataOnly];
+    return combinedWizards;
+  } catch (e) {
+    console.warn('Cannot load wizards: ', e);
+    return [];
+  }
+};
 
 const getStatics = async (
   fetchFn: FetchFn | undefined,
@@ -461,20 +394,17 @@ export const useGetExtensions = () => {
         permissionSet,
       );
 
-      let wizardConfigs;
-      if (fetchFn) {
-        wizardConfigs = await getExtensionWizardConfigMaps(
-          fetchFn,
-          cluster.currentContext.namespace || 'kube-public',
-          namespace,
-          permissionSet,
-        );
-      }
+      const wizardConfigs = await getExtensionWizards(
+        fetchFn,
+        cluster.currentContext.namespace || 'kube-public',
+        namespace,
+        permissionSet,
+      );
 
       if (!wizardConfigs || !isExtensibilityWizardEnabled) {
         setWizard([]);
       } else {
-        setWizard(wizardConfigs);
+        setWizard(wizardConfigs as any);
         // TODO wizard injections
       }
 

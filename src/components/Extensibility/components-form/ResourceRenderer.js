@@ -80,6 +80,7 @@ export function ResourceRenderer({
               data: { value },
             });
           }}
+          required={required}
           value={value}
           resourceType={kind}
         />
