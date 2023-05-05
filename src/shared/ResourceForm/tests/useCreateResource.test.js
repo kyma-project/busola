@@ -70,7 +70,11 @@ describe('useCreateResource', () => {
   it('Fires PATCH if initial resource name exists', async () => {
     const initialResource = { metadata: { name: 'test-name' } };
     const { getByText } = render(
-      <Testbed {...props} initialResource={initialResource} />,
+      <Testbed
+        {...props}
+        initialResource={initialResource}
+        initialUnchangedResource={initialResource}
+      />,
     );
 
     fireEvent.click(getByText('Act'));

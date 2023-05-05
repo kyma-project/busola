@@ -70,6 +70,7 @@ export function NamespaceCreate({
     pluralKind: 'LimitRanges',
     resource: limits,
     initialResource: null,
+    initialUnchangedResource: null,
     createUrl: `/api/v1/namespaces/${namespace.metadata?.name}/limitranges`,
     afterCreatedFn: () => {},
   });
