@@ -87,7 +87,6 @@ context('Test Deployments', () => {
   });
 
   it('Edit a deployment', () => {
-    cy.wait(100);
     cy.getLeftNav()
       .contains('Deployments')
       .click();

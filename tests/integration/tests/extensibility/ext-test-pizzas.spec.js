@@ -86,7 +86,6 @@ context('Test Pizzas', () => {
   });
 
   it('Edits a Pizza Order', () => {
-    cy.wait(100);
     cy.contains('button:visible', 'Edit').click();
 
     cy.get('[role="document"]').as('form');

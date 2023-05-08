@@ -68,7 +68,6 @@ context('Test Roles', () => {
   });
 
   it('Edit the Role', () => {
-    cy.wait(100);
     cy.contains('Edit').click();
 
     chooseComboboxOption(
