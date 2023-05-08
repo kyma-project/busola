@@ -74,6 +74,7 @@ context('Test Cron Jobs', () => {
   });
 
   it('Edit Cron Job', () => {
+    cy.wait(100);
     cy.contains('Edit').click();
 
     cy.get('[placeholder="Hour"]')

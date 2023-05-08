@@ -64,6 +64,7 @@ context('Test Replica Sets', () => {
   });
 
   it('Edits the Docker image and Replicas amount in the Replica set', () => {
+    cy.wait(100);
     cy.contains('Edit').click();
 
     cy.get(

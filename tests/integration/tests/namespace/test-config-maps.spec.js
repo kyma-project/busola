@@ -45,6 +45,7 @@ context('Test Config Maps', () => {
   });
 
   it('Edit the Config MAp', () => {
+    cy.wait(100);
     cy.contains('Edit').click();
 
     // hide first entry so Cypress doesn't get confuused

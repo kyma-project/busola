@@ -52,7 +52,8 @@ context('Test Service Accounts', () => {
     cy.contains('kubernetes.io/service-account-token').should('be.visible');
   });
 
-  it('Edit', () => {
+  it('Edit a service account', () => {
+    cy.wait(100);
     cy.contains('Edit').click();
 
     cy.get('[role="document"]')

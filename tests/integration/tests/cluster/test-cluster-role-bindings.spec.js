@@ -44,6 +44,7 @@ context('Test Cluster Role Bindings', () => {
   });
 
   it('Edit', () => {
+    cy.wait(100);
     cy.contains('Edit').click();
 
     cy.contains('[role="combobox"]', 'User').click();

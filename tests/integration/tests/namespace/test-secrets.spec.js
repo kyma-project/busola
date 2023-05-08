@@ -61,6 +61,7 @@ context('Test Secrets', () => {
   });
 
   it('Edit a secret', () => {
+    cy.wait(100);
     cy.contains('Edit').click();
 
     cy.get('[placeholder="Enter value"]:visible')
@@ -81,7 +82,6 @@ context('Test Secrets', () => {
   });
 
   it('Checking an updated secret', () => {
-    cy.wait(1000);
     cy.contains('.layout-panel-row', SECRET_KEY).contains(btoa(SECRET_VALUE2));
 
     cy.contains('.layout-panel-row', SECRET2_KEY).should('not.exist');

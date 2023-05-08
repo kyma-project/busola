@@ -119,6 +119,7 @@ context('Test Jobs', () => {
   });
 
   it('Edit Job', () => {
+    cy.wait(100);
     cy.contains('Edit').click();
 
     // containers section should be readonly
