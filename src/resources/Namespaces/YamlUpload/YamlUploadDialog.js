@@ -74,10 +74,10 @@ export function YamlUploadDialog({ show, onCancel }) {
       status: '',
       message: '',
     }));
-    setResourcesWithStatuses(resourcesWithStatus);
-    if (!initialUnchangedResources?.length && resourcesWithStatuses?.length) {
-      setInitialUnchangedResources(resourcesWithStatuses);
+    if (!initialUnchangedResources?.length && resourcesWithStatus?.length) {
+      setInitialUnchangedResources(resourcesWithStatus);
     }
+    setResourcesWithStatuses(resourcesWithStatus);
     oldYaml.current = yaml;
   };
 
