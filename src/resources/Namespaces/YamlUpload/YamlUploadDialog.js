@@ -38,6 +38,7 @@ export function YamlUploadDialog({ show, onCancel }) {
     if (!initialUnchangedResources?.length && resourcesWithStatuses?.length) {
       setInitialUnchangedResources(resourcesWithStatuses);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resourcesWithStatuses]);
 
   const fetchResources = useUploadResources(

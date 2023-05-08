@@ -42,9 +42,6 @@ export function useUploadResources(
   const filteredResources = resources?.filter(
     resource => resource?.value !== null,
   );
-  const initialUnchangedResourcess = JSON.parse(
-    JSON.stringify(initialUnchangedResources),
-  );
 
   const updateState = (index, status, message = '') => {
     setResourcesData(data => {
