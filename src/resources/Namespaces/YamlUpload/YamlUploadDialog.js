@@ -33,6 +33,7 @@ export function YamlUploadDialog({ show, onCancel }) {
 
   const fetchResources = useUploadResources(
     resourcesWithStatuses,
+    [],
     setResourcesWithStatuses,
     setLastOperationState,
     defaultNamespace,
