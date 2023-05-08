@@ -36,6 +36,7 @@ export function DeploymentCreate({
       ? _.cloneDeep(initialDeployment)
       : createDeploymentTemplate(namespace),
   );
+  const [initialUnchangedResource] = useState(initialDeployment);
   const {
     isIstioFeatureOn,
     isSidecarEnabled,
@@ -84,6 +85,7 @@ export function DeploymentCreate({
       // create modal on a namespace details doesn't have the resourceUrl
       createUrl={resourceUrl}
       initialResource={initialDeployment}
+      initialUnchangedResource={initialUnchangedResource}
       handleNameChange={handleNameChange}
     >
       {isIstioFeatureOn ? (

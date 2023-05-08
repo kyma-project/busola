@@ -42,6 +42,7 @@ export function NamespaceCreate({
   const [namespace, setNamespace] = useState(
     initialNamespace ? cloneDeep(initialNamespace) : createNamespaceTemplate(),
   );
+  const [initialUnchangedResource] = useState(initialNamespace);
 
   const {
     isIstioFeatureOn,
@@ -209,6 +210,7 @@ export function NamespaceCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       initialResource={initialNamespace}
+      initialUnchangedResource={initialUnchangedResource}
       afterCreatedFn={afterNamespaceCreated}
       setCustomValid={setCustomValid}
       labelsProps={{
