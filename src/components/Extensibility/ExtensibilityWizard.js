@@ -95,6 +95,10 @@ export function ExtensibilityWizardCore({
     [store],
   );
   const [resourcesWithStatuses, setResourcesWithStatuses] = useState([]);
+  const [initialUnchangedResources, setInitialUnchangedResources] = useState(
+    resourcesWithStatuses,
+  );
+
   const onChange = (actions, resource) => {
     if (actions.scopes.includes('value')) {
       setStore(prevStore => {
@@ -142,19 +146,25 @@ export function ExtensibilityWizardCore({
       } else if (files.some(file => !isK8sResource(file))) {
         setError(t('upload-yaml.messages.not-a-k8s-resource'));
       } else {
-        setResourcesWithStatuses(files.map(resource => ({ value: resource })));
+        const tempResources = files.map(resource => ({ value: resource }));
+        setResourcesWithStatuses(tempResources);
+
+        if (!initialUnchangedResources.length)
+          setInitialUnchangedResources(tempResources);
         setError(null);
       }
     } catch ({ message }) {
       setError(message.substr(0, message.indexOf('\n')));
       setResourcesWithStatuses([]);
     }
-  }, [yaml, t]);
+  }, [yaml, t, initialUnchangedResources]);
 
   const uploadResources = useUploadResources(
     resourcesWithStatuses,
+    initialUnchangedResources,
     setResourcesWithStatuses,
     setUploadState,
+
     // defaultNamespace,
     'default',
   );

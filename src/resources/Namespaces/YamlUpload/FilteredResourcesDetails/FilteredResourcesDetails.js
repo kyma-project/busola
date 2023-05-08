@@ -27,7 +27,7 @@ const WarningButton = ({
 
   return (
     <Button
-      onClick={noWarnings || handleShowWarnings}
+      onClick={noWarnings ? () => {} : handleShowWarnings}
       className="warning-button"
       type={noWarnings ? 'positive' : 'attention'}
       glyph={

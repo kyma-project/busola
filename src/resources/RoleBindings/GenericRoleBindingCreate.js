@@ -38,6 +38,7 @@ export function GenericRoleBindingCreate({
   const [binding, setBinding] = useState(
     cloneDeep(initialRoleBinding) || createBindingTemplate(namespace),
   );
+  const [initialUnchangedResource] = useState(initialRoleBinding);
 
   React.useEffect(() => {
     setCustomValid(validateBinding(binding));
@@ -80,6 +81,7 @@ export function GenericRoleBindingCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       initialResource={initialRoleBinding}
+      initialUnchangedResource={initialUnchangedResource}
       nameProps={{ pattern: '.*', showHelp: false }}
       handleNameChange={name => {
         jp.value(binding, '$.metadata.name', name);

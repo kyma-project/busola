@@ -26,13 +26,24 @@ export function YamlUploadDialog({ show, onCancel }) {
 
   const [resourcesData, setResourcesData] = useState();
   const [resourcesWithStatuses, setResourcesWithStatuses] = useState();
+  const [initialUnchangedResources, setInitialUnchangedResources] = useState(
+    resourcesWithStatuses,
+  );
   const oldYaml = useRef();
   const [lastOperationState, setLastOperationState] = useState(
     OPERATION_STATE_INITIAL,
   );
 
+  useEffect(() => {
+    if (!initialUnchangedResources?.length && resourcesWithStatuses?.length) {
+      setInitialUnchangedResources(resourcesWithStatuses);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resourcesWithStatuses]);
+
   const fetchResources = useUploadResources(
     resourcesWithStatuses,
+    initialUnchangedResources,
     setResourcesWithStatuses,
     setLastOperationState,
     defaultNamespace,
@@ -48,6 +59,7 @@ export function YamlUploadDialog({ show, onCancel }) {
     if (!show) {
       setResourcesData(null);
       setResourcesWithStatuses(null);
+      setInitialUnchangedResources(null);
       setLastOperationState(OPERATION_STATE_INITIAL);
       oldYaml.current = null;
     }
@@ -63,6 +75,9 @@ export function YamlUploadDialog({ show, onCancel }) {
       message: '',
     }));
     setResourcesWithStatuses(resourcesWithStatus);
+    if (!initialUnchangedResources?.length && resourcesWithStatuses?.length) {
+      setInitialUnchangedResources(resourcesWithStatuses);
+    }
     oldYaml.current = yaml;
   };
 
