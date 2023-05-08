@@ -103,7 +103,6 @@ export function useUploadResources(
         );
       } else {
         const diff = createPatch(initialResource?.value, resource.value);
-
         await patchRequest(urlWithName, diff);
         updateState(index, STATE_UPDATED);
         setLastOperationState(lastOperationState =>
@@ -127,7 +126,16 @@ export function useUploadResources(
       for (const [index, resource] of filteredResources?.entries()) {
         updateState(index, STATE_WAITING);
         const matchedInitialResource = initialUnchangedResources?.find(
-          initial => initial.value.metadata.uid === resource.value.metadata.uid,
+          initial => {
+            if (initial?.value?.metadata?.uid) {
+              return initial.value.metadata.uid === resource.value.metadata.uid;
+            }
+            return (
+              initial.value.kind === resource.value.kind &&
+              initial.value.apiVersion === resource.value.apiVersion &&
+              initial.value.metadata.name === resource.value.metadata.name
+            );
+          },
         );
         fetchApiGroup(resource, matchedInitialResource, index);
       }
