@@ -36,6 +36,7 @@ export function JobCreate({
   const defaultSidecarAnnotations = initialJob
     ? initialJob?.spec?.template?.metadata?.annotations
     : {};
+  const [initialUnchangedResource] = useState(initialJob);
 
   const [job, setJob] = useState(
     initialJob
@@ -55,6 +56,7 @@ export function JobCreate({
       resource={job}
       setResource={setJob}
       initialResource={initialJob}
+      initialUnchangedResource={initialUnchangedResource}
       onChange={onChange}
       formElementRef={formElementRef}
       presets={

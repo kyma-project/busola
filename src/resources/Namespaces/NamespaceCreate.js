@@ -42,6 +42,7 @@ export function NamespaceCreate({
   const [namespace, setNamespace] = useState(
     initialNamespace ? cloneDeep(initialNamespace) : createNamespaceTemplate(),
   );
+  const [initialUnchangedResource] = useState(initialNamespace);
 
   const {
     isIstioFeatureOn,
@@ -70,6 +71,7 @@ export function NamespaceCreate({
     pluralKind: 'LimitRanges',
     resource: limits,
     initialResource: null,
+    initialUnchangedResource: null,
     createUrl: `/api/v1/namespaces/${namespace.metadata?.name}/limitranges`,
     afterCreatedFn: () => {},
   });
@@ -208,6 +210,7 @@ export function NamespaceCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       initialResource={initialNamespace}
+      initialUnchangedResource={initialUnchangedResource}
       afterCreatedFn={afterNamespaceCreated}
       setCustomValid={setCustomValid}
       labelsProps={{

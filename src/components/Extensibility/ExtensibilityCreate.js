@@ -65,6 +65,9 @@ export function ExtensibilityCreateCore({
 
   const presets = usePreparePresets(createResource?.presets, emptyTemplate);
   const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
+  const [initialUnchangedResource] = useState(
+    initialResource || defaultPreset?.value || emptyTemplate,
+  );
 
   const updateStore = res => {
     readVars(res);
@@ -172,6 +175,7 @@ export function ExtensibilityCreateCore({
       onlyYaml={!schema}
       presets={!initialResource && presets}
       initialResource={initialResource}
+      initialUnchangedResource={initialUnchangedResource}
       afterCreatedFn={afterCreatedFn}
       handleNameChange={handleNameChange}
       urlPath={general?.urlPath}

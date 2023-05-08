@@ -1,9 +1,10 @@
-import { merge } from 'lodash';
 import pluralize from 'pluralize';
 import { useCallback } from 'react';
+
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
+
 import { createPatch } from 'rfc6902';
 
 import { useComponentDidMount } from 'shared/useComponentDidMount';
@@ -23,13 +24,15 @@ export const STATE_CREATED = 'CREATED';
 
 export function useUploadResources(
   resources = [],
+  initialUnchangedResources = [],
   setResourcesData,
   setLastOperationState,
   namespaceId,
 ) {
   const fetch = useSingleGet();
   const post = usePost();
-  const patch = useUpdate();
+  const patchRequest = useUpdate();
+
   const clusterNodes = useRecoilValue(clusterAndNsNodesSelector).filter(
     node => !node.namespaced,
   );
@@ -84,13 +87,11 @@ export function useUploadResources(
     }
   };
 
-  const fetchApiGroup = async (resource, index) => {
+  const fetchApiGroup = async (resource, initialResource, index) => {
+    const url = await getUrl(resource.value);
+    const urlWithName = `${url}/${resource?.value?.metadata?.name}`;
+    const existingResource = await fetchPossibleExistingResource(urlWithName);
     try {
-      const url = await getUrl(resource.value);
-      const urlWithName = `${url}/${resource?.value?.metadata?.name}`;
-
-      const existingResource = await fetchPossibleExistingResource(urlWithName);
-
       //add a new resource
       if (!existingResource) {
         await post(url, resource.value);
@@ -101,10 +102,9 @@ export function useUploadResources(
             : lastOperationState,
         );
       } else {
-        //update a resource
-        const newResource = merge({}, existingResource, resource.value);
-        const diff = createPatch(existingResource, newResource);
-        await patch(urlWithName, diff);
+        const diff = createPatch(initialResource?.value, resource.value);
+
+        await patchRequest(urlWithName, diff);
         updateState(index, STATE_UPDATED);
         setLastOperationState(lastOperationState =>
           lastOperationState === OPERATION_STATE_WAITING
@@ -116,6 +116,8 @@ export function useUploadResources(
       console.warn(e);
       updateState(index, STATE_ERROR, e.message);
       setLastOperationState(() => OPERATION_STATE_SOME_FAILED);
+
+      return false;
     }
   };
 
@@ -124,7 +126,10 @@ export function useUploadResources(
       setLastOperationState(OPERATION_STATE_WAITING);
       for (const [index, resource] of filteredResources?.entries()) {
         updateState(index, STATE_WAITING);
-        fetchApiGroup(resource, index);
+        const matchedInitialResource = initialUnchangedResources?.find(
+          initial => initial.value.metadata.uid === resource.value.metadata.uid,
+        );
+        fetchApiGroup(resource, matchedInitialResource, index);
       }
     }
 

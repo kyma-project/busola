@@ -47,6 +47,7 @@ export const ServiceAccountCreate = ({
   const [serviceAccount, setServiceAccount] = useState(
     cloneDeep(initialServiceAccount) || createServiceAccountTemplate(namespace),
   );
+  const [initialUnchangedResource] = useState(initialServiceAccount);
 
   const [shouldCreateSecret, setShouldCreateSecret] = useState(false);
 
@@ -57,6 +58,7 @@ export const ServiceAccountCreate = ({
     pluralKind: 'Secrets',
     resource: createDefaultSecret(serviceAccount.metadata.name),
     initialResource: null,
+    initialUnchangedResource: null,
     createUrl: `/api/v1/namespaces/${serviceAccount.metadata.namespace}/secrets`,
     afterCreatedFn: () => {},
   });
@@ -107,6 +109,7 @@ export const ServiceAccountCreate = ({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       initialResource={initialServiceAccount}
+      initialUnchangedResource={initialUnchangedResource}
       afterCreatedFn={afterServiceAccountCreate}
     >
       <ComboboxArrayInput
