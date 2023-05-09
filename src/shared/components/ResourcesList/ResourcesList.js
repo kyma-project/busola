@@ -303,10 +303,8 @@ export function ResourceListRenderer({
     };
 
     const modifiedResource = jsyaml.load(newYAML);
-    delete resourceData.metadata?.resourceVersion;
     const diff = createPatch(resourceData, modifiedResource);
     const url = prepareResourceUrl(resourceUrl, resourceData);
-
     try {
       await updateResourceMutation(url, diff);
       onSuccess();
