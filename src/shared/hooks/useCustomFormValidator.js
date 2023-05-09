@@ -10,7 +10,15 @@ export function useCustomFormValidator() {
     const formContainer =
       formElementRef.current.querySelector('div.form-container') ??
       formElementRef.current.firstChild;
-    setValid(cv && validateElement(formContainer, true).valid);
+
+    // When formContainer doesn't exist, the form is a single element
+    // Then go with the default form validation
+    if (formContainer) {
+      setValid(cv && validateElement(formContainer, true).valid);
+    } else {
+      const formValid = formElementRef?.current?.checkValidity() ?? false;
+      setValid(cv && formValid);
+    }
   };
 
   // Recursively validates all of the element's required children
@@ -18,12 +26,12 @@ export function useCustomFormValidator() {
   function validateElement(element, isRequired) {
     let isValid =
       !isRequired ||
-      element.children.length > 0 ||
-      (!isRequired && element.children.length === 0);
+      element?.children.length > 0 ||
+      (!isRequired && element?.children.length === 0);
     let isPartiallyFilled = false; // tracks if at least one child has been filled out, important for the validation of non-required FormGroups
     let isComplete = true; // tracks if all children have been filled out, important for the validation of non-required GenericLists
 
-    for (const child of element.children) {
+    for (const child of element?.children) {
       if (isRequired && !isValid) break;
 
       if (child.classList.contains('form-field')) {
