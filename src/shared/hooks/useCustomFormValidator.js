@@ -11,6 +11,8 @@ export function useCustomFormValidator() {
       formElementRef.current.querySelector('div.form-container') ??
       formElementRef.current.firstChild;
 
+    // When formContainer doesn't exist, the form is a single element
+    // Then go with the default form validation
     if (formContainer) {
       setValid(cv && validateElement(formContainer, true).valid);
     } else {
