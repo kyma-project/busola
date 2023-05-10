@@ -76,14 +76,15 @@ export function ExtensibilityWizardCore({
 
   const [store, setStore] = useState(() =>
     mapValues(resourceSchema.general.resources, (res, key) => {
-      const path = buildPathsFromObject(resourceSchema?.defaults[key]);
+      if (initialResource && resourceSchema?.defaults?.[key]) {
+        const path = buildPathsFromObject(resourceSchema?.defaults[key]);
 
-      if (initialResource) {
         for (let i = 0; i < path.length; i++) {
           const value = jp.value(resourceSchema?.defaults[key], `$.${path[i]}`);
           jp.value(initialResource, `$.${path[i]}`, value);
         }
       }
+
       return getUIStoreFromResourceObj(
         initialResource || {
           ...createTemplate(res, 'default', res.scope),
