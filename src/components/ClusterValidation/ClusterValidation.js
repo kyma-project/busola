@@ -11,6 +11,12 @@ import { ResourceWarningList, ValidationWarnings } from './ValidationWarnings';
 import { Button, LayoutPanel, Tile } from 'fundamental-react';
 
 import './ClusterValidation.scss';
+import { ResourceLoader } from './ResourceLoader2';
+import { getInitialScanResult } from './ScanResult';
+import { createPostFn } from 'shared/hooks/BackendAPI/usePost';
+import { doesUserHavePermission } from 'state/navigation/filters/permissions';
+import { Scan } from './Scan';
+import { getPermissionResourceRules } from 'state/permissionSetsSelector';
 
 async function fetchResources(fetch) {
   // const response = await fetch({relativeUrl: `/apis/apps/v1/namespaces/jv/deployments?limit=500`});
@@ -23,15 +29,22 @@ async function fetchResources(fetch) {
 
 function ClusterValidation() {
   const { t } = useTranslation();
+  const fetch = useFetch();
+  const post = createPostFn(fetch);
+  const resourceLoader = new ResourceLoader(relativeUrl =>
+    fetch({ relativeUrl }),
+  );
   const validationSchemas = useRecoilValue(validationSchemasEnabledState);
 
   const [resources, setResources] = useState([]);
 
+  const [scanResult, setScanResult] = useState();
+
   const currentResources = [];
 
-  const fetch = useFetch();
-
   const scan = async () => {
+    const currentScan = new Scan(resourceLoader, validationSchemas);
+    setScanResult(currentScan.result);
     await ResourceValidation.setRuleset(validationSchemas);
 
     const existingResourcesString = localStorage.getItem(
@@ -44,21 +57,55 @@ function ClusterValidation() {
       return;
     }
 
-    for await (const rs of loadResourcesConcurrently(relativeUrl =>
-      fetch({ relativeUrl }),
-    )) {
-      const newResources = rs.items.map(r => ({
-        value: { kind: rs.kind, ...r },
-      }));
-      currentResources.push(...newResources);
-      const warningsPerResource = await ResourceValidation.validate(
-        newResources,
-      );
-      warningsPerResource.forEach((warnings, i) => {
-        newResources[i].warnings = warnings;
-      });
-      setResources([...currentResources]);
+    await currentScan.gatherAPIResources();
+    setScanResult(currentScan.result);
+
+    console.log(currentScan.result);
+
+    await currentScan.checkPermissions(post);
+    setScanResult(currentScan.result);
+
+    for (const resource of currentScan.listResourcesToScan()) {
+      console.log(`scan: ${resource.endpoint}`);
+      await currentScan.scanResource(resource);
+      setScanResult(currentScan.result);
     }
+
+    console.log(currentScan.result);
+
+    currentResources.push(
+      ...Object.values(currentScan.result.namespaces ?? {}).flatMap(
+        ({ name: namespace, resources }) =>
+          resources.flatMap(
+            ({ kind, items }) =>
+              items?.map(({ name, warnings }) => ({
+                value: {
+                  kind,
+                  metadata: {
+                    name: `${namespace} - ${name}`,
+                  },
+                },
+                warnings,
+              })) ?? [],
+          ),
+      ),
+    );
+
+    // for await (const rs of loadResourcesConcurrently(relativeUrl =>
+    //   fetch({ relativeUrl }),
+    // )) {
+    //   const newResources = rs.items.map(r => ({
+    //     value: { kind: rs.kind, ...r },
+    //   }));
+    //   currentResources.push(...newResources);
+    //   const warningsPerResource = await ResourceValidation.validate(
+    //     newResources,
+    //   );
+    //   warningsPerResource.forEach((warnings, i) => {
+    //     newResources[i].warnings = warnings;
+    //   });
+    //   setResources([...currentResources]);
+    // }
     console.log(currentResources);
     setResources([...currentResources]);
     localStorage.setItem(
