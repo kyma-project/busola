@@ -6,6 +6,7 @@ import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 import { Label } from './Label';
 import './FormField.scss';
+import { useCreateResourceDescription } from 'components/Extensibility/helpers';
 
 export function FormField({
   simple,
@@ -25,6 +26,7 @@ export function FormField({
   ...props
 }) {
   const { validate, ...inputProps } = props;
+  const inputInfoLink = useCreateResourceDescription(inputInfo);
   if (compact) return input({ required, disabled, ...inputProps });
 
   return (
@@ -38,7 +40,9 @@ export function FormField({
             ? messageStrip
             : input({ required, disabled, ...inputProps })}
           {inputInfo && (
-            <p style={{ color: 'var(--sapNeutralTextColor)' }}>{inputInfo}</p>
+            <p style={{ color: 'var(--sapNeutralTextColor)' }}>
+              {inputInfoLink}
+            </p>
           )}
         </div>
       </div>
