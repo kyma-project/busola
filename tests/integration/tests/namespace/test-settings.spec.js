@@ -110,9 +110,7 @@ context('Test app settings and preferences', () => {
       .contains('Namespaces')
       .click();
 
-    cy.contains('a', /^kube-system/)
-      .first()
-      .should('not.exist');
+    cy.contains('a', /^kube-system/).should('not.exist');
 
     cy.contains(Cypress.env('NAMESPACE_NAME')).click();
   });
