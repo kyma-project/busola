@@ -129,3 +129,20 @@ export const intersperse = (arr, sep) => arr.flatMap(el => [sep, el]).slice(1);
 
 export const stringifyIfBoolean = val =>
   typeof val === 'boolean' ? JSON.stringify(val) : val;
+
+export function buildPathsFromObject(object, path = '') {
+  let result = [];
+
+  for (const key in object) {
+    const value = object[key];
+    if (typeof value === 'object' && !Array.isArray(value)) {
+      result = result.concat(
+        buildPathsFromObject(value, path ? path + '.' + key : key),
+      );
+    } else {
+      result.push(path + '.' + key);
+    }
+  }
+
+  return result;
+}
