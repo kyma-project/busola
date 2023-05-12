@@ -18,6 +18,7 @@ import './styles/sapIllus-Fills.css';
 import './styles/sapIllus-Layout.css';
 import './styles/index.scss';
 import './styles/fiori-helpers.scss';
+import { ThemeProvider } from '@ui5/webcomponents-react';
 
 i18next
   .use(initReactI18next)
@@ -51,11 +52,13 @@ ReactDOM.render(
   <RecoilRoot>
     <BrowserRouter>
       <Suspense fallback={<Spinner />}>
-        <NotificationProvider>
-          <CommandPaletteProvider>
-            <App />
-          </CommandPaletteProvider>
-        </NotificationProvider>
+        <ThemeProvider>
+          <NotificationProvider>
+            <CommandPaletteProvider>
+              <App />
+            </CommandPaletteProvider>
+          </NotificationProvider>
+        </ThemeProvider>
       </Suspense>
     </BrowserRouter>
   </RecoilRoot>,

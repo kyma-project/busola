@@ -17,6 +17,7 @@ import { createPostFn } from 'shared/hooks/BackendAPI/usePost';
 import { doesUserHavePermission } from 'state/navigation/filters/permissions';
 import { Scan } from './Scan';
 import { getPermissionResourceRules } from 'state/permissionSetsSelector';
+import { ScanResultTree } from './ScanResultTree';
 
 async function fetchResources(fetch) {
   // const response = await fetch({relativeUrl: `/apis/apps/v1/namespaces/jv/deployments?limit=500`});
@@ -54,6 +55,13 @@ function ClusterValidation() {
       const existingResources = JSON.parse(existingResourcesString);
       setResources(existingResources);
       currentResources.push(...existingResources);
+    }
+    const existingScanResult = localStorage.getItem(
+      'cached-scan-result-for-test',
+    );
+    if (existingScanResult) {
+      currentScan.result = JSON.parse(existingScanResult);
+      setScanResult(currentScan.result);
       return;
     }
 
@@ -112,10 +120,15 @@ function ClusterValidation() {
       'cached-resources-for-test',
       JSON.stringify(currentResources),
     );
+    localStorage.setItem(
+      'cached-scan-result-for-test',
+      JSON.stringify(currentScan.result),
+    );
   };
 
   const clear = () => {
     localStorage.removeItem('cached-resources-for-test');
+    localStorage.removeItem('cached-scan-result-for-test');
     setResources([]);
     currentResources.length = 0;
   };
@@ -151,7 +164,8 @@ function ClusterValidation() {
           </div>
         </LayoutPanel.Filters>
         <LayoutPanel.Body>
-          <ResourceWarningList resources={resources} />
+          {/* <ResourceWarningList resources={resources} /> */}
+          <ScanResultTree scanResult={scanResult} />
         </LayoutPanel.Body>
       </LayoutPanel>
     </>

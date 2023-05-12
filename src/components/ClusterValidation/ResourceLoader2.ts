@@ -1,4 +1,3 @@
-import loki, { Collection } from 'lokijs';
 import { K8sAPIResource } from 'types';
 
 interface K8sGroup {
@@ -17,13 +16,9 @@ interface APIResource {
 }
 
 export class ResourceLoader {
-  db;
   fetch;
   constructor(fetch: (endpoint: string) => any) {
     this.fetch = fetch;
-    this.db = new loki('resources.db');
-    // @ts-ignore
-    window.db = this.db;
   }
 
   async fetchData(endpoint: string) {
@@ -77,36 +72,6 @@ export class ResourceLoader {
       }
     }
     return resourceItems;
-  }
-
-  async *fetchResources(name = 'pods', namespace = 'default') {
-    const resourceItems = this.db.getCollection('resources') as Collection<
-      APIResource
-    >;
-    const resourceItem = resourceItems.findOne({ name });
-    if (!resourceItem) throw new Error(`No Resource ${name} found`);
-
-    if (resourceItem.namespaced) {
-      const baseEndpoint = `${resourceItem.base}/namespaces/${namespace}/${resourceItem.name}`;
-      for await (const items of this.fetchPaginatedItems(baseEndpoint)) {
-        yield items;
-      }
-    }
-  }
-
-  async loadResources(name = 'pods', namespace = 'default') {
-    let collection = this.db.getCollection(name);
-    if (!collection) {
-      collection = this.db.addCollection(name);
-    }
-
-    for await (const items of this.fetchResources(name, namespace)) {
-      for (const item of items) {
-        collection.add(item);
-      }
-    }
-
-    return collection.find();
   }
 
   async listNamespaces() {

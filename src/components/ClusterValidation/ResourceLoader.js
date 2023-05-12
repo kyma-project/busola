@@ -54,6 +54,43 @@ async function fetchCoreResources(fetch) {
   };
 }
 
+async function fetchAPIGroup(fetch, endpoint) {
+  const response = await fetch(endpoint);
+  const data = await response.json();
+  if (data.kind === 'APIGroupList') {
+    return {
+      items: data.groups.map(group => ({
+        baseUrl: endpoint,
+        name: group.preferredVersion.groupVersion,
+        type: 'APIGroup',
+      })),
+    };
+  } else if (data.kind === 'APIResourceList') {
+    return {
+      items: data.resources.map(resource => ({
+        baseUrl: endpoint,
+        name: resource.name,
+        type: 'APIResource',
+        kind: resource.kind,
+        namespaced: resource.namespaced,
+      })),
+    };
+  } else {
+    throw new Error(
+      'expected either APIGroupList or APIResourceList from an APIGroup',
+    );
+  }
+}
+
+async function fetchAnything(fetch, obj, options) {
+  if (obj.type === 'APIGroup') {
+    await fetchAPIGroup(fetch, `${obj.base}/${obj.endpoint}`);
+  } else if (obj.type === 'APIResource') {
+  } else {
+    throw new Error('expected type: APIGroup or APIResource');
+  }
+}
+
 export async function* loadResources(fetch) {
   const queue = [
     () => fetchCustomResources(fetch),
@@ -105,6 +142,27 @@ class RunningPromises {
 
   [Symbol.iterator]() {
     return this.running[Symbol.iterator]();
+  }
+}
+
+async function* loadQueue(queue, max = 3) {
+  const running = new RunningPromises();
+  const errors = [];
+  while (queue.length > 0 || running.length > 0) {
+    while (queue.length > 0 && running.length < max) {
+      const task = queue.shift();
+      const promise = task(queue);
+      running.insert(promise);
+    }
+    try {
+      console.log(running.length);
+      const { id, result } = await Promise.race(running);
+      running.remove(id);
+      if (result) yield result;
+    } catch ({ id, error }) {
+      errors.push(error);
+      running.remove(id);
+    }
   }
 }
 
