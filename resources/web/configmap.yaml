@@ -43,14 +43,6 @@ data:
                 {
                   "label": "Grafana",
                   "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/monitoring-grafana"
-                },
-                {
-                  "label": "Kiali",
-                  "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/kiali"
-                },
-                {
-                  "label": "Jaeger",
-                  "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/tracing"
                 }
               ]
             }
