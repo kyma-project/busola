@@ -60,6 +60,11 @@ const isTheSameNameAndUrl = (
   firstCM?.general?.name === secondCM?.general?.name &&
   firstCM?.general?.urlPath === secondCM?.general?.urlPath;
 
+const isTheSameId = (
+  firstCM: Partial<ExtResource>,
+  secondCM: Partial<ExtResource>,
+) => firstCM?.general?.id === secondCM?.general?.id;
+
 const convertYamlToObject: (
   yamlString: string,
 ) => Record<string, any> | null = yamlString => {
@@ -179,10 +184,27 @@ const getExtensionWizards = async (
       [] as ExtResourceWithMetadata[],
     );
 
+    const defaultWizardsWithoutOverride = defaultWizards.filter(defExt => {
+      return configMapWizards.every(cmExt => {
+        const namespaces = ['kube-public', currentNamespace];
+
+        if (
+          namespaces.includes(cmExt.metadata.namespace!) &&
+          isTheSameId(cmExt?.data, defExt)
+        ) {
+          return false;
+        }
+        return true;
+      });
+    });
+
     const configMapWizardsDataOnly: ExtResource[] = configMapWizards.map(
       cm => cm.data,
     );
-    const combinedWizards = [...defaultWizards, ...configMapWizardsDataOnly];
+    const combinedWizards = [
+      ...defaultWizardsWithoutOverride,
+      ...configMapWizardsDataOnly,
+    ];
     return combinedWizards;
   } catch (e) {
     console.warn('Cannot load wizards: ', e);
