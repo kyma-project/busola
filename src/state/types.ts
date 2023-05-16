@@ -92,6 +92,7 @@ export type ExtGeneral = {
   scope: 'namespace' | 'cluster';
   description?: string;
   icon?: IconGlyph;
+  id?: string;
 };
 
 export type ExtResource = {
