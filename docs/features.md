@@ -207,12 +207,6 @@ HIDDEN_NAMESPACES:
         - label: Grafana
           path: >-
             apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/monitoring-grafana
-        - label: Kiali
-          path: >-
-            apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/kiali
-        - label: Tracing
-          path: >-
-            apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/tracing
   ```
 
 * **PROTECTED_RESOURCES** – is used to block the edit and delete functions based on the determined rules. If the resource meets the rule requirements, the resource becomes protected and cannot be edited/deleted.
