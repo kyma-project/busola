@@ -12,7 +12,6 @@ const ExtensibilityList = React.lazy(() =>
 );
 
 export const HPASubcomponent = props => {
-  console.log(props);
   const { t } = useTranslation();
   const { kind, name } = props.metadata?.ownerReferences?.[0] ?? {};
   const namespace = useRecoilValue(activeNamespaceIdState);
@@ -62,5 +61,3 @@ export const HPASubcomponent = props => {
     />
   );
 };
-
-export default HPASubcomponent;
