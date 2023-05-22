@@ -741,37 +741,6 @@ helm-releases:
     uninstalled: The release has been uninstalled from the cluster.
     uninstalling: An uninstall operation is underway.
     unknown: The release is in an uncertain state.
-hpas:
-  and-x-more: and {{x}} more
-  container-resource: Container resource
-  cpu-utilization: Target average CPU utilization
-  current-replicas: Current Replicas
-  description: <0>HorizontalPodAutoscaler</0> automatically manages the number of Pod replicas to match the demand.
-  external: External
-  headers:
-    behavior: Behavior
-    created: Created
-    max-pods: Max Pods
-    metrics: Metrics
-    min-pods: Min Pods
-    replicas: Replicas
-    type: Type
-    value: Value
-    scale-down: Scale Down
-    scale-up: Scale Up
-    period-seconds: Period Seconds
-    select-policy: Select Policy
-    stabilization-window-seconds: Stabilization Window Seconds
-  metrics: Metrics
-  name_singular: HorizontalPodAutoscaler
-  object: Object
-  'on': 'on'
-  on-pods: on Pods
-  pods: Pods
-  resource-cpu-on-pods: Resource CPU on Pods (current / target)
-  scale-target-ref: Scale Target Reference
-  spec: Specification
-  title: Horizontal Pod Autoscalers
 ingresses:
   description: <0>Ingress</0> describes the routing rules for traffic to services within a cluster. The routing is managed by the Ingress resource.
   labels:

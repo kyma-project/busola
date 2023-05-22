@@ -13,7 +13,6 @@ import * as Pods from './Pods';
 import * as PersistentVolumeClaims from './PersistentVolumeClaims';
 import * as NetworkPolicies from './NetworkPolicies';
 import * as Ingresses from './Ingresses';
-import * as HorizontalPodAutoscalers from './HorizontalPodAutoscalers';
 import * as Events from './Events';
 import * as Deployments from './Deployments';
 import * as DaemonSets from './DaemonSets';
@@ -44,7 +43,6 @@ export const resources = [
   Services,
   Ingresses,
   NetworkPolicies,
-  HorizontalPodAutoscalers,
   // storage
   PersistentVolumeClaims,
   // configuration
