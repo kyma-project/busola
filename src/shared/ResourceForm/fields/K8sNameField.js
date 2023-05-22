@@ -7,6 +7,7 @@ import { K8sNameInput } from 'shared/components/K8sNameInput/K8sNameInput';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { randomNamesGenerator } from 'shared/utils/randomNamesGenerator/randomNamesGenerator';
 import './K8sNameField.scss';
+import { useCreateResourceDescription } from 'components/Extensibility/helpers';
 
 export function K8sNameField({
   kind,
@@ -23,7 +24,7 @@ export function K8sNameField({
 }) {
   const { t } = useTranslation();
   const { isAdvanced, propertyPath, validate, readOnly, ...inputProps } = props;
-
+  const inputInfoLink = useCreateResourceDescription(inputInfo);
   const generateName = () => {
     const name = randomNamesGenerator();
     setValue(prefix ? `${prefix}-${name}` : name);
@@ -40,7 +41,7 @@ export function K8sNameField({
       className={className}
       propertyPath="$.metadata.name"
       label={t('common.labels.name')}
-      inputInfo={inputInfo}
+      inputInfo={inputInfoLink}
       tooltipContent={tooltipContent}
       input={() => {
         return (

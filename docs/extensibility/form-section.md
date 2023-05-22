@@ -158,7 +158,7 @@ You can change them by specyfing overrides in schema, for example:
 
 ```yaml
 - path: metadata.name
-  inputInfo: 'This is an important field.' # overrides the default information
+  inputInfo: 'This is an important field with an example link {{[SAP](https://www.sap.com)}}' # overrides the default information
 - path: metadata.annotations
   visibility: false # hides annotations
 ```
@@ -205,7 +205,7 @@ Text widgets render a field as a text field. They are used by default for all st
 - **enum[]** - an array of options to generate an input field with a dropdown. Optionally can be a string containing a [JSONata](jsonata.md) expression returning an array of options.
 - **placeholder** - specifies a short hint about the input field value.
 - **required** - a boolean which specifies if a field is required. The default value is taken from CustomResourceDefintion (CRD); if it doesn't exist in the CRD, then it defaults to `false`.
-- **inputInfo** - a string below the input field that shows how to fill in the input.
+- **inputInfo** - a string below the input field that shows how to fill in the input. You can use the {{ [`name`] (`link`) }} format to display a `name` instead of a `link.
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
 - **readOnly** - a boolean which specifies if a field is read-only. Defaults to `false`.
 - **decodable** - a boolean that specifies that the field is base64-encoded and can be decoded in the UI. It can't be used together with **enum**.
@@ -286,7 +286,7 @@ CodeEditor widgets render a versatile code editor that can be used to edit any v
 #### Widget-specific parameters
 
 - **language** - a [JSONata](jsonata.md) expression resolving the desired language. It has access to the `$root` variable, containing the entire resource.
-- **inputInfo** - a string below the input field that shows how to fill in the input.
+- **inputInfo** - a string below the input field that shows how to fill in the input. You can use the {{ [`name`] (`link`) }} format to display a `name` instead of a `link.
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
 - **defaultExpanded** - a boolean that specifies if the widget should be expanded by default. Defaults to `false`.
 
@@ -319,7 +319,7 @@ Resource widgets render a dropdown list of specified resources and store the sel
 - **filter** - JSONata expression that filters resources based on a given condition.
 - **provideVar** - when this field is defined, the chosen resource is provided as a variable of this name.
 - **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in CRD, then it defaults to `false`.
-- **inputInfo** - a string below the input field that shows how to fill in the input.
+- **inputInfo** - a string below the input field that shows how to fill in the input. You can use the {{ [`name`] (`link`) }} format to display a `name` instead of a `link.
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
 
 #### Example
@@ -354,7 +354,7 @@ MultiCheckbox widgets render checkboxes that are saved into one path as an array
   - **name** - an optional name for a checkbox instead of the default capitalized last part of the path. This can be a key from the **translation** section.
   - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the checkbox's label.
 - **required** - a boolean which specifies if a field is required. The default value is taken from CustomResourceDefintion (CRD); if it doesn't exist in the CRD, then it defaults to `false`.
-- **inputInfo** - a string below the input field that shows how to write in the input.
+- **inputInfo** - a string below the input field that shows how to write in the input. You can use the {{ [`name`] (`link`) }} format to display a `name` instead of a `link.
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
 - **readOnly** - a boolean which specifies if a field is read-only. Defaults to `false`.
 
@@ -390,7 +390,7 @@ KeyValuePair widgets render an `object` value as a list of fields. One is used f
   - **type** - a string that specifies the type of the value input. The options are `object`, `number`, `text`. Defaults to `text`.
   - **keyEnum[]** - an array of options to generate a key input field with a dropdown only if the `type` is set to `object`.
   - **valueEnum[]** - an array of options to generate a value input field with a dropdown.
-- **inputInfo** - a string below the input field that shows how to fill in the input.
+- **inputInfo** - a string below the input field that shows how to fill in the input. You can use the {{ [`name`] (`link`) }} format to display a `name` instead of a `link.
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
 - **defaultExpanded** - a boolean that specifies if the widget should be expanded by default. Defaults to `false`.
 
@@ -529,7 +529,7 @@ SimpleList widgets render an array as a table with rows representing data items 
 
 - **placeholder** - specifies a short hint about the input field value.
 - **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`.
-- **inputInfo** - a string below the input field that shows how to fill in the input.
+- **inputInfo** - a string below the input field that shows how to fill in the input. You can use the {{ [`name`] (`link`) }} format to display a `name` instead of a `link.
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
 - **defaultExpanded** - a boolean that specifies if the widget should be expanded by default. Defaults to `false`.
 

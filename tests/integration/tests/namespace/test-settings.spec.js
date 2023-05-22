@@ -93,7 +93,7 @@ context('Test app settings and preferences', () => {
       .find('[aria-label="Show hidden Namespaces"]')
       .invoke('attr', 'aria-checked')
       .then(value => {
-        if (value === 'false') {
+        if (value === 'true') {
           cy.contains('.preferences-row', 'Show hidden Namespaces')
             .find('.fd-switch')
             .click();
@@ -110,9 +110,7 @@ context('Test app settings and preferences', () => {
       .contains('Namespaces')
       .click();
 
-    cy.contains('a', /^kube-system/)
-      .first()
-      .should('be.visible');
+    cy.contains('a', /^kube-system/).should('not.exist');
 
     cy.contains(Cypress.env('NAMESPACE_NAME')).click();
   });
