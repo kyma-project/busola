@@ -1315,16 +1315,6 @@ service-accounts:
   title: Service Accounts
 service-management:
   title: Service Management
-services:
-  cluster-ip: Cluster IP
-  description: <0>Service</0> enables access to an application running on a set of Pods.
-  external-ips: External IPs
-  labels:
-    service: Service
-  name_singular: Service
-  ports: Ports
-  title: Services
-  type: Service Type
 settings:
   clusters:
     confirmations: Confirmations
