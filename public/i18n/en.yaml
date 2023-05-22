@@ -1,4 +1,5 @@
 api-rules: API Rules
+horizontal-pod-autoscalers: Horizontal Pod Autoscalers
 subscriptions: Subscriptions
 apps:
   title: Apps
