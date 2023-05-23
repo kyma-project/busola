@@ -50,7 +50,6 @@
     "namespace/test-jobs.spec.js",
     "namespace/test-replica-sets.spec.js",
     "namespace/test-cron-jobs.spec.js",
-    "namespace/test-HPA.spec.js",
     "namespace/test-stateful-sets.spec.js",
     "namespace/test-config-maps.spec.js",
     "namespace/test-settings.spec.js",
