@@ -158,7 +158,9 @@ export const useCreateResourceDescription = descID => {
   let linkText;
   if (!descID) return;
 
-  let trans = t(descID);
+  const helmBracketsRegex = /{{"(.*?)"}}/g;
+  let trans = t(descID.replace(helmBracketsRegex, '$1'));
+
   if (typeof trans === 'string') {
     const i18VarRegex = /{{.*?}}/g;
     const matchesIterator = trans?.matchAll(i18VarRegex);
