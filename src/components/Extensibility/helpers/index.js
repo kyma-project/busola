@@ -153,12 +153,17 @@ export const getObjectValueWorkaround = (
   }
 };
 
+export const removeHelmBrackets = text => {
+  const regex = /{{"(.*?)"}}/g;
+  return text.replace(regex, '$1');
+};
+
 export const useCreateResourceDescription = descID => {
   const { t, i18n } = useGetTranslation();
   let linkText;
   if (!descID) return;
 
-  let trans = t(descID);
+  let trans = t(removeHelmBrackets(descID));
   if (typeof trans === 'string') {
     const i18VarRegex = /{{.*?}}/g;
     const matchesIterator = trans?.matchAll(i18VarRegex);
