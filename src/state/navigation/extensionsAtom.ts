@@ -24,6 +24,7 @@ import { useFeature } from 'hooks/useFeature';
 /*
 the order of the overwrting extensions
 - extensions that are in currentNamespace (they are overwritten only in that particular ns, you don't want to let someone else to overwrite your extensions)
+- extensions that are in kyma-system
 - extensions that are in kube-public
 - the ones from extensions.yaml
 - native ones
@@ -186,7 +187,7 @@ const getExtensionWizards = async (
 
     const defaultWizardsWithoutOverride = defaultWizards.filter(defExt => {
       return configMapWizards.every(cmExt => {
-        const namespaces = ['kube-public', currentNamespace];
+        const namespaces = ['kube-public', 'kyma-system', currentNamespace];
 
         if (
           namespaces.includes(cmExt.metadata.namespace!) &&
@@ -197,7 +198,6 @@ const getExtensionWizards = async (
         return true;
       });
     });
-
     const configMapWizardsDataOnly: ExtResource[] = configMapWizards.map(
       cm => cm.data,
     );
@@ -346,7 +346,7 @@ const getExtensions = async (
     const defaultExtensionsWithoutOverride = defaultExtensions.filter(
       defExt => {
         return configMapsExtensions.every(cmExt => {
-          const namespaces = ['kube-public', currentNamespace];
+          const namespaces = ['kube-public', 'kyma-system', currentNamespace];
 
           if (
             namespaces.includes(cmExt.metadata.namespace!) &&
