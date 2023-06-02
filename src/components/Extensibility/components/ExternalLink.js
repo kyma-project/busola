@@ -54,7 +54,10 @@ export const ExternalLink = ({
       <Button
         glyph="action"
         className="fd-margin-begin--sm fd-margin-end--tiny"
-        onClick={() => window.open(href, '_blank')}
+        onClick={() => {
+          const newWindow = window.open(href, '_blank', 'noopener, noreferrer');
+          if (newWindow) newWindow.opener = null;
+        }}
       >
         {tExt(value)}
       </Button>
