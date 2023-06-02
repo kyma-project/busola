@@ -15,7 +15,7 @@ import {
   OPERATION_STATE_WAITING,
 } from './YamlUploadDialog';
 import { useRecoilValue } from 'recoil';
-import { clusterAndNsNodesSelector } from 'state/navigation/clusterAndNsNodesSelector';
+import { allNodesSelector } from 'state/navigation/allNodesSelector';
 
 export const STATE_ERROR = 'ERROR';
 export const STATE_WAITING = 'WAITING';
@@ -33,10 +33,10 @@ export function useUploadResources(
   const post = usePost();
   const patchRequest = useUpdate();
 
-  const clusterNodes = useRecoilValue(clusterAndNsNodesSelector).filter(
+  const clusterNodes = useRecoilValue(allNodesSelector).filter(
     node => !node.namespaced,
   );
-  const namespaceNodes = useRecoilValue(clusterAndNsNodesSelector).filter(
+  const namespaceNodes = useRecoilValue(allNodesSelector).filter(
     node => node.namespaced,
   );
   const filteredResources = resources?.filter(
