@@ -1,14 +1,14 @@
 import { useRecoilValue } from 'recoil';
 
-import { clusterAndNsNodesSelector } from 'state/navigation/clusterAndNsNodesSelector';
+import { allNodesSelector } from 'state/navigation/allNodesSelector';
 import { useUrl } from 'hooks/useUrl';
 
 export function useCustomResourceUrl(crd) {
   const { resourceUrl, clusterUrl, namespaceUrl } = useUrl();
-  const clusterNodes = useRecoilValue(clusterAndNsNodesSelector).filter(
+  const clusterNodes = useRecoilValue(allNodesSelector).filter(
     node => !node.namespaced,
   );
-  const namespaceNodes = useRecoilValue(clusterAndNsNodesSelector).filter(
+  const namespaceNodes = useRecoilValue(allNodesSelector).filter(
     node => node.namespaced,
   );
 
@@ -20,7 +20,6 @@ export function useCustomResourceUrl(crd) {
     const namespaceNode = namespaceNodes.find(
       res => res.resourceType === crdNamePlural,
     );
-
     if (clusterNode) {
       return resourceUrl(cr, { resourceType: clusterNode.pathSegment });
     } else if (namespaceNode) {

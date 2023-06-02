@@ -7,7 +7,7 @@ import {
   match,
 } from 'shared/components/ResourceGraph/buildGraph/helpers';
 import { useRecoilValue } from 'recoil';
-import { clusterAndNsNodesSelector } from 'state/navigation/clusterAndNsNodesSelector';
+import { allNodesSelector } from 'state/navigation/allNodesSelector';
 import { NavNode } from 'state/types';
 import {
   IHaveNoIdeaForNameHere,
@@ -160,10 +160,10 @@ export function useRelatedResources({
   config,
   events,
 }: useRelatedResourcesProps): useRelatedResourcesReturnValue {
-  const clusterNodes = useRecoilValue(clusterAndNsNodesSelector).filter(
+  const clusterNodes = useRecoilValue(allNodesSelector).filter(
     node => !node.namespaced,
   );
-  const namespaceNodes = useRecoilValue(clusterAndNsNodesSelector).filter(
+  const namespaceNodes = useRecoilValue(allNodesSelector).filter(
     node => node.namespaced,
   );
   const [startedLoading, setStartedLoading] = useState(false);

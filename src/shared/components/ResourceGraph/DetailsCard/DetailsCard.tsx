@@ -7,7 +7,7 @@ import { K8sResource } from 'types';
 import { useNavigate } from 'react-router-dom';
 import { useUrl } from 'hooks/useUrl';
 import { useRecoilValue } from 'recoil';
-import { clusterAndNsNodesSelector } from 'state/navigation/clusterAndNsNodesSelector';
+import { allNodesSelector } from 'state/navigation/allNodesSelector';
 import pluralize from 'pluralize';
 
 export function DetailsCard({
@@ -20,7 +20,7 @@ export function DetailsCard({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { clusterUrl } = useUrl();
-  const nodes = useRecoilValue(clusterAndNsNodesSelector);
+  const nodes = useRecoilValue(allNodesSelector);
 
   return (
     <div className="details-card-wrapper">
