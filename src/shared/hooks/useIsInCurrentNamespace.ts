@@ -2,10 +2,10 @@ import { K8sResource } from 'types';
 import pluralize from 'pluralize';
 import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
-import { clusterAndNsNodesSelector } from 'state/navigation/clusterAndNsNodesSelector';
+import { allNodesSelector } from 'state/navigation/allNodesSelector';
 
 export const useIsInCurrentNamespace = (resource: K8sResource) => {
-  const namespaceNodes = useRecoilValue(clusterAndNsNodesSelector).filter(
+  const namespaceNodes = useRecoilValue(allNodesSelector).filter(
     node => node.namespaced,
   );
   const namespace = useRecoilValue(activeNamespaceIdState);
