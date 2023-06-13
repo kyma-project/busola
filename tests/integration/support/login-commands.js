@@ -7,6 +7,9 @@ const PASSWORD = Cypress.env('OIDC_PASS');
 
 Cypress.Commands.add('loginAndSelectCluster', function(params) {
   cy.handleExceptions();
+  sessionStorage.clear();
+  cy.clearCookies();
+  cy.clearLocalStorage();
 
   const defaults = {
     fileName: 'kubeconfig.yaml',

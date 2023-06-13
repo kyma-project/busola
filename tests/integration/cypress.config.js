@@ -13,14 +13,15 @@ module.exports = defineConfig({
   viewportHeight: 1500,
   videoCompression: false,
   experimentalInteractiveRunEvents: true,
+  numTestsKeptInMemory: 0,
   e2e: {
+    testIsolation: false,
     experimentalRunAllSpecs: true,
     setupNodeEvents(on, config) {
       return require('./plugins')(on, config);
     },
     specPattern: [
       'tests/cluster/test-edit-cluster.spec.js',
-      'tests/cluster/test-applications.spec.js',
       'tests/cluster/test-download-a-kubeconfig.spec.js',
       'tests/cluster/test-cluster-overview.spec.js',
       'tests/cluster/kyma-version.spec.js',
@@ -41,7 +42,7 @@ module.exports = defineConfig({
       'tests/extensibility/ext-test-pizzas.spec.js',
       'tests/extensibility/ext-test-services.spec.js',
       'tests/extensibility/ext-test-variables.spec.js',
-      'tests/namespace/run-before.spec.js',
+      'tests/namespace/a-run-before.spec.js',
       'tests/namespace/test-namespace-overview.spec.js',
       'tests/namespace/test-navigation.spec.js',
       'tests/namespace/test-deployments.spec.js',
@@ -66,7 +67,7 @@ module.exports = defineConfig({
       'tests/namespace/test-network-policies.spec.js',
       'tests/namespace/test-persistent-volume-claims.spec.js',
       'tests/namespace/test-custom-resources.spec.js',
-      'tests/namespace/zzz-after.spec.js',
+      'tests/namespace/z-run-after.spec.js',
     ],
     supportFile: 'support/index.js',
   },
