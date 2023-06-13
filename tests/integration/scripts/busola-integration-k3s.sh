@@ -29,5 +29,5 @@ sleep 80
 
 echo "Run Cypress"
 cd tests/integration
-npm ci --no-optional
+npm install --save-dev
 npm run test:cluster
