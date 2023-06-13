@@ -2,6 +2,8 @@
 
 set -e
 
+apk add --no-cache xvfb
+
 VERSION=v16.20.0
 DISTRO=linux-x64
 
@@ -16,6 +18,7 @@ echo "NPM version: $(npm -v)"
 
 echo "Copying Kubeconfig"
 k3d kubeconfig get k3d > tests/integration/fixtures/kubeconfig.yaml
+k3d kubeconfig get k3d > tests/integration/fixtures/kubeconfig-k3s.yaml
 
 echo "Installing Busola"
 npm install
