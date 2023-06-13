@@ -5,7 +5,7 @@ set -e
 VERSION=v16.20.0
 DISTRO=linux-x64
 
-curl -Lo node.tar.xz https://nodejs.org/download/release/$VERSION/node-$VERSION-$DISTRO.tar.xz
+curl -Lo node.tar.xz https://unofficial-builds.nodejs.org/download/release/$VERSION/node-$VERSION-$DISTRO-musl.tar.xz
 mkdir -p /usr/local/lib/nodejs
 tar -xJvf node.tar.xz -C /usr/local/lib/nodejs 
 
