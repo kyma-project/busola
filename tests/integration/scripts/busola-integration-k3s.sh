@@ -9,7 +9,7 @@ curl -Lo node.tar.xz https://unofficial-builds.nodejs.org/download/release/$VERS
 mkdir -p /usr/local/lib/nodejs
 tar -xJvf node.tar.xz -C /usr/local/lib/nodejs 
 
-export PATH=/usr/local/lib/nodejs/node-$VERSION-$DISTRO/bin:$PATH
+export PATH=/usr/local/lib/nodejs/node-$VERSION-$DISTRO-musl/bin:$PATH
 
 echo "Node.js version: $(node -v)"
 echo "NPM version: $(npm -v)"
