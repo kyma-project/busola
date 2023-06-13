@@ -10,7 +10,7 @@
     "test:namespace:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/namespace/*.spec.js\" --browser chrome",
     "test:local": "CYPRESS_LOCAL_DEV=true $(npm bin)/cypress run --browser chrome",
     "test:local-docker": "CYPRESS_DOMAIN=http://localhost:3001 $(npm bin)/cypress run --browser chrome",
-    "test:local-smoke-docker": "CYPRESS_DOMAIN=http://localhost:3001 $(npm bin)/cypress run --browser chrome -C cypress-smoke.json"
+    "test:local-smoke-docker": "CYPRESS_DOMAIN=http://localhost:3001 $(npm bin)/cypress run --browser chrome -C cypress-smoke.js"
   },
   "devDependencies": {
     "cypress-file-upload": "^5.0.8",
