@@ -28,6 +28,9 @@ npm start 2>&1 &
 sleep 80
 
 echo "Run Cypress"
+
+export CYPRESS_CACHE_FOLDER=/root/.cahce/Cypress
+
 cd tests/integration
 npm install --save-dev
 npm run test:cluster
