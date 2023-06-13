@@ -175,6 +175,7 @@ context('Test reduced permissions', () => {
       expectedLocation: new RegExp(
         `/namespaces/${Cypress.env('NAMESPACE_NAME')}`,
       ),
+      disableClear: true,
     });
   });
 
@@ -209,10 +210,6 @@ context('Test reduced permissions', () => {
     cy.wait(2000);
 
     // delete binding
-    cy.getLeftNav()
-      .contains('Configuration', { timeout: 2000 })
-      .click();
-
     cy.getLeftNav()
       .contains('Cluster Role Bindings')
       .click();
