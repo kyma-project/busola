@@ -2,7 +2,7 @@
 
 set -e
 
-apk add --no-cache xvfb
+apk add --no-cache xvfb gtk+3.0-dev gtk+2.0-dev libnotify-dev mesa-dev nss-dev libx11 alsa-lib-dev libxtst xauth
 
 VERSION=v16.20.0
 DISTRO=linux-x64
