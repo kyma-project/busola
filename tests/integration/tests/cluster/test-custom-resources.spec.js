@@ -8,10 +8,6 @@ function openSearchWithSlashShortcut() {
   cy.get('body').type('/');
 }
 
-function getQueryInput() {
-  return cy.get('[aria-label=command-palette-search]');
-}
-
 context('Test Custom Resources', () => {
   Cypress.skipAfterFail();
 
