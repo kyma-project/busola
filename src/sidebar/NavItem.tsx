@@ -1,23 +1,26 @@
-import { SideNav } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
-import { Link as ExternalLink } from 'shared/components/Link/Link';
-
 import { NavNode } from 'state/types';
 import { useUrl } from 'hooks/useUrl';
 
-import './NavItem.scss';
 import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { clusterState } from 'state/clusterAtom';
+import {
+  SideNavigationSubItem,
+  SideNavigationItem,
+} from '@ui5/webcomponents-react';
+import { useNavigate } from 'react-router-dom';
 
 type NavItemProps = {
   node: NavNode;
+  subItem?: boolean;
 };
 
-export function NavItem({ node }: NavItemProps) {
+export function NavItem({ node, subItem = false }: NavItemProps) {
   const { t } = useTranslation();
   const urlGenerators = useUrl();
+  const navigate = useNavigate();
+
   const { scopedUrl } = urlGenerators;
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const cluster = useRecoilValue(clusterState);
@@ -37,34 +40,37 @@ export function NavItem({ node }: NavItemProps) {
       );
     }
   };
-
   const name = t(node.label, { defaultValue: node.label });
 
-  return (
-    <SideNav.ListItem
-      selected={isNodeSelected()}
-      key={node.pathSegment}
-      id={node.pathSegment}
-      glyph={node.icon}
-    >
-      {node.externalUrl ? (
-        <ExternalLink
-          className="nav-item__external-link"
-          url={node.externalUrl}
-        >
-          {name}
-        </ExternalLink>
-      ) : (
-        <Link
-          to={
-            node.createUrlFn
-              ? node.createUrlFn(urlGenerators)
-              : scopedUrl(node.pathSegment)
-          }
-        >
-          {name}
-        </Link>
-      )}
-    </SideNav.ListItem>
-  );
+  let propsForNav = {
+    icon: node.icon,
+    text: name,
+    selected: isNodeSelected(),
+    key: node.pathSegment,
+    // style: { color: 'red' } as React.CSSProperties,
+    onClick: (e: Event) => {
+      console.log('NavItem onClick', node, e);
+      e.preventDefault();
+      if (node.externalUrl) {
+        const newWindow = window.open(
+          node.externalUrl,
+          '_blank',
+          'noopener, noreferrer',
+        );
+        if (newWindow) newWindow.opener = null;
+      } else {
+        navigate(
+          node.createUrlFn
+            ? node.createUrlFn(urlGenerators)
+            : scopedUrl(node.pathSegment),
+        );
+      }
+    },
+  };
+
+  if (subItem) {
+    return <SideNavigationSubItem {...propsForNav} />;
+  }
+
+  return <SideNavigationItem {...propsForNav} />;
 }

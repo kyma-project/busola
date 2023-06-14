@@ -1,7 +1,8 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { SideNav } from 'fundamental-react';
+// import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
+import { SideNavigation } from '@ui5/webcomponents-react';
 import { sidebarNavigationNodesSelector } from 'state/navigation/sidebarNavigationNodesSelector';
-import { expandedCategoriesSelector } from 'state/navigation/expandedCategories/expandedCategoriesSelector';
+// import { expandedCategoriesSelector } from 'state/navigation/expandedCategories/expandedCategoriesSelector';
 import { CategoryItem } from './CategoryItem';
 import { NavItem } from './NavItem';
 import { isSidebarCondensedState } from 'state/preferences/isSidebarCondensedAtom';
@@ -11,9 +12,9 @@ export function SidebarNavigation() {
   const isSidebarCondensed = useRecoilValue(isSidebarCondensedState);
 
   // if it's in the CategoryItem, it causes needless re-renders
-  const [expandedCategories, setExpandedCategories] = useRecoilState(
-    expandedCategoriesSelector,
-  );
+  // const [expandedCategories, setExpandedCategories] = useRecoilState(
+  //   expandedCategoriesSelector,
+  // );
 
   const filteredNavigationNodes =
     navigationNodes.filter(nn => nn.items?.length > 0) || [];
@@ -21,24 +22,19 @@ export function SidebarNavigation() {
   const categoryNodes = filteredNavigationNodes?.filter(nn => !nn.topLevelNode);
 
   return (
-    <SideNav
-      skipLink={{ href: '', label: 'Side navigation' }}
-      style={{ width: '100%' }}
-      condensed={isSidebarCondensed}
-    >
-      <SideNav.List>
+    <>
+      <SideNavigation collapsed={isSidebarCondensed}>
         {topLevelNodes.map(node =>
           node.items?.map(item => <NavItem node={item} />),
         )}
         {categoryNodes.map(category => (
           <CategoryItem
             category={category}
-            expandedCategories={expandedCategories}
-            handleExpandedCategories={setExpandedCategories}
-            isSidebarCondensed={isSidebarCondensed}
+            // expandedCategories={expandedCategories}
+            // handleExpandedCategories={setExpandedCategories}
           />
         ))}
-      </SideNav.List>
-    </SideNav>
+      </SideNavigation>
+    </>
   );
 }

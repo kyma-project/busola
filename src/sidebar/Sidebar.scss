@@ -1,6 +1,6 @@
 :root {
-  --sidebar-condensed-width: 48px;
-  --sidebar-opened-width: 260px;
+  --sidebar-condensed-width: 80px;
+  --sidebar-opened-width: 15rem;
   --sidebar-width: var(--sidebar-opened-width);
 }
 
@@ -20,19 +20,5 @@
   .sidebar__content {
     overflow-x: hidden;
     flex-grow: 1;
-  }
-
-  .fd-nested-list.level-1 > .fd-nested-list__item {
-    > .fd-nested-list__link,
-    > .fd-nested-list__content > .fd-nested-list__link {
-      overflow-x: hidden;
-      padding-left: 0 !important;
-    }
-  }
-
-  .fd-nested-list__button.fd-button {
-    i {
-      color: var(--sapContent_IconColor) !important;
-    }
   }
 }
