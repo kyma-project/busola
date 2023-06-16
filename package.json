@@ -13,7 +13,7 @@
     "lint-staged": "lint-staged --concurrent=false",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
-    "build": "npm run copy-themes; INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false build",
+    "build": "npm run copy-themes; INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false react-app-rewired build",
     "build:docker": "npm run copy-themes; INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false react-app-rewired build --env IS_DOCKER=true",
     "copy-themes": "cp node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3/css_variables.css public/themes/@sap-theming/default.css; for theme in hcb dark hcw light_dark ; do cp node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3_$theme/css_variables.css public/themes/@sap-theming/$theme.css ; done"
   },
@@ -87,12 +87,16 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-i18next": "^11.18.6",
+    "react-app-rewired": "^2.2.1",
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.0",
     "react-tippy": "^1.4.0",
     "recoil": "^0.7.5",
     "rfc6902": "^5.0.1",
-    "url": "^0.11.0"
+    "url": "^0.11.0",
+    "sass-loader": "^12.4.0",
+    "typescript": "^4.8.4",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.2",
@@ -127,11 +131,7 @@
     "minimatch": "^3.0.5",
     "minimist": "^1.2.6",
     "node-sass": "^7.0.1",
-    "prettier": "^1.18.2",
-    "react-app-rewired": "^2.2.1",
-    "sass-loader": "^12.4.0",
-    "typescript": "^4.8.4",
-    "uuid": "^9.0.0"
+    "prettier": "^1.18.2"
   },
   "lint-staged": {
     "src/i18n/*.yaml": "yaml-sort --lineWidth=-1 -i ",
