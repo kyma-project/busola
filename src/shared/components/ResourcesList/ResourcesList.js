@@ -491,7 +491,7 @@ export function ResourceListRenderer({
       ...(searchSettings?.textSearchProperties || []),
     ];
   };
-
+  console.log(error);
   return (
     <>
       <ModalWithForm
@@ -528,24 +528,26 @@ export function ResourceListRenderer({
         resource={activeResource}
         resourceUrl={prepareResourceUrl(resourceUrl, activeResource)}
       />
-      <GenericList
-        title={showTitle ? title || prettifiedResourceName : null}
-        actions={actions}
-        entries={resources || []}
-        headerRenderer={headerRenderer}
-        rowRenderer={rowRenderer}
-        serverDataError={error}
-        serverDataLoading={loading}
-        pagination={{ autoHide: true, ...pagination }}
-        extraHeaderContent={extraHeaderContent}
-        testid={testid}
-        currentlyEditedResourceUID={currentlyEditedResourceUID}
-        sortBy={sortBy}
-        searchSettings={{
-          ...searchSettings,
-          textSearchProperties: textSearchProperties(),
-        }}
-      />
+      {!(error && error.toString().includes('is forbidden')) && (
+        <GenericList
+          title={showTitle ? title || prettifiedResourceName : null}
+          actions={actions}
+          entries={resources || []}
+          headerRenderer={headerRenderer}
+          rowRenderer={rowRenderer}
+          serverDataError={error}
+          serverDataLoading={loading}
+          pagination={{ autoHide: true, ...pagination }}
+          extraHeaderContent={extraHeaderContent}
+          testid={testid}
+          currentlyEditedResourceUID={currentlyEditedResourceUID}
+          sortBy={sortBy}
+          searchSettings={{
+            ...searchSettings,
+            textSearchProperties: textSearchProperties(),
+          }}
+        />
+      )}
       {!isCompact && (
         <YamlUploadDialog
           show={showAdd}
