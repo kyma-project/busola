@@ -491,7 +491,7 @@ export function ResourceListRenderer({
       ...(searchSettings?.textSearchProperties || []),
     ];
   };
-  console.log(error);
+
   return (
     <>
       <ModalWithForm

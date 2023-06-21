@@ -141,7 +141,7 @@ export function ClusterNodes() {
 
   return (
     <>
-      {!(error && error.toString().includes('Error: nodes is forbidden')) ? (
+      {!(error && error.toString().includes('Error: nodes is forbidden')) && (
         <GenericList
           title={t('cluster-overview.headers.nodes')}
           actions={[]}
@@ -159,7 +159,7 @@ export function ClusterNodes() {
             allowSlashShortcut: false,
           }}
         />
-      ) : null}
+      )}
       {error &&
         !error.toString().includes('Error: nodes is forbidden') &&
         !data && (
