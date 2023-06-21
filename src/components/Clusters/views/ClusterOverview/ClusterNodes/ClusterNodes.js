@@ -141,29 +141,33 @@ export function ClusterNodes() {
 
   return (
     <>
-      <GenericList
-        title={t('cluster-overview.headers.nodes')}
-        actions={[]}
-        entries={data || []}
-        headerRenderer={headerRenderer}
-        rowRenderer={rowRenderer}
-        serverDataError={usePrometheusQueries ? prometheusDataError : error}
-        serverDataLoading={
-          !data && (usePrometheusQueries ? prometheusDataLoading : loading)
-        }
-        pagination={{ autoHide: true }}
-        testid="cluster-nodes"
-        searchSettings={{
-          showSearchField: false,
-          allowSlashShortcut: false,
-        }}
-      />
-      {error && !data && (
-        <ErrorPanel
-          error={error}
-          title={t('cluster-overview.headers.metrics')}
+      {!(error && error.toString().includes('Error: nodes is forbidden')) ? (
+        <GenericList
+          title={t('cluster-overview.headers.nodes')}
+          actions={[]}
+          entries={data || []}
+          headerRenderer={headerRenderer}
+          rowRenderer={rowRenderer}
+          serverDataError={usePrometheusQueries ? prometheusDataError : error}
+          serverDataLoading={
+            !data && (usePrometheusQueries ? prometheusDataLoading : loading)
+          }
+          pagination={{ autoHide: true }}
+          testid="cluster-nodes"
+          searchSettings={{
+            showSearchField: false,
+            allowSlashShortcut: false,
+          }}
         />
-      )}
+      ) : null}
+      {error &&
+        !error.toString().includes('Error: nodes is forbidden') &&
+        !data && (
+          <ErrorPanel
+            error={error}
+            title={t('cluster-overview.headers.metrics')}
+          />
+        )}
       <div className="fd-margin--md cluster-overview__graphs-wrapper">
         <StatsPanel type="cluster" className="" />
         <ResourceCommitment />
