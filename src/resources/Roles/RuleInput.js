@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, BusyIndicator } from 'fundamental-react';
+import { Button, BusyIndicator, MessageStrip } from 'fundamental-react';
 import * as jp from 'jsonpath';
 import { ResourceForm } from 'shared/ResourceForm';
 import { ComboboxArrayInput, TextArrayInput } from 'shared/ResourceForm/fields';
@@ -147,12 +147,13 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
             <Tooltip content={t('roles.tooltips.load')}>
               <Button
                 compact
-                glyph="refresh"
                 option="transparent"
                 onClick={fetchResources}
                 disabled={!loadable}
                 ariaLabel={t('roles.buttons.load')}
-              />
+              >
+                Load resources
+              </Button>
             </Tooltip>
           )
         }
@@ -169,6 +170,12 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
           </Button>,
         ]}
       />
+      <MessageStrip
+        type="information"
+        className="fd-margin-bottom--sm fd-margin-begin--md"
+      >
+        {'Click Load resources after selecting API Group.'}
+      </MessageStrip>
       <ComboboxArrayInput
         filterOptions
         title={t('roles.headers.verbs')}
