@@ -152,7 +152,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
                 disabled={!loadable}
                 ariaLabel={t('roles.buttons.load')}
               >
-                Load resources
+                {t('roles.buttons.load-resources')}
               </Button>
             </Tooltip>
           )
@@ -174,7 +174,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         type="information"
         className="fd-margin-bottom--sm fd-margin-begin--md"
       >
-        {'Click Load resources after selecting API Group.'}
+        {t('roles.messages.load-resources')}
       </MessageStrip>
       <ComboboxArrayInput
         filterOptions
