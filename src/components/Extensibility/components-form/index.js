@@ -20,6 +20,7 @@ import { TriggerHandler } from '../plugins/TriggerHandler';
 // TODO
 // import { ContextSwitcher } from '../plugins/ContextSwitcher';
 
+import { CustomComponent } from './CustomComponent';
 import { Jsonata } from './Jsonata';
 import { StringRenderer } from './StringRenderer';
 import { NumberRenderer } from './NumberRenderer';
@@ -102,6 +103,7 @@ export const widgets = {
     Alert: AlertRenderer,
     MultiCheckbox,
     MultiType,
+    Custom: CustomComponent,
   },
 };
 export default widgets;
