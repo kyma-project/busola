@@ -1,3 +1,4 @@
+import PQueue from 'p-queue';
 import { PostFn } from 'shared/hooks/BackendAPI/usePost';
 import { doesUserHavePermission } from 'state/navigation/filters/permissions';
 import {
@@ -13,6 +14,7 @@ import {
   ScanNamespaceStatus,
   ScanResourceStatus,
 } from './ScanResult';
+import { NamespacesState } from 'state/namespacesAtom';
 
 export class Scan {
   resourceLoader;
@@ -22,7 +24,7 @@ export class Scan {
     this.result = getInitialScanResult(ruleset);
   }
 
-  async gatherAPIResources() {
+  async gatherAPIResources({ namespaces }: { namespaces: NamespacesState }) {
     const apiResources = await this.resourceLoader.loadResourceLists();
 
     const listableResources = apiResources.filter(resource =>
@@ -48,10 +50,15 @@ export class Scan {
       resources: clusterResourceStatus,
     };
 
-    const namespaces = await this.resourceLoader.listNamespaces();
+    // const namespaces = await this.resourceLoader.listNamespaces();
+    const namespaceNames = namespaces
+      ? namespaces
+      : ((await this.resourceLoader.listNamespaces()) as K8sResource[]).map(
+          ({ metadata: { name } }) => name,
+        );
 
-    const namespaceList = namespaces.map(
-      ({ metadata: { name } }: K8sResource): ScanNamespaceStatus => {
+    const namespaceList = namespaceNames.map(
+      (name): ScanNamespaceStatus => {
         return {
           name,
           resources: listableNamespaceResources.map(resource => ({
@@ -115,18 +122,34 @@ export class Scan {
     resource.scanned = true;
   }
 
-  *listResourcesToScan() {
+  *filterResourcesForScan(resources: ScanResourceStatus[], filter?: string[]) {
+    yield* resources.filter(
+      resource =>
+        !resource.scanned &&
+        !resource.unauthorized &&
+        (!filter || filter.includes(resource.kind)),
+    );
+  }
+
+  *listResourcesToScan(filter?: {
+    namespaces?: string[];
+    resources?: string[];
+  }) {
     if (!this.result.cluster || !this.result.namespaces)
       throw new Error('call gatherAPIResources first');
 
-    yield* this.result.cluster.resources.filter(
-      resource => !resource.scanned && !resource.unauthorized,
+    yield* this.filterResourcesForScan(
+      this.result.cluster.resources,
+      filter?.resources,
     );
 
-    for (const { resources } of Object.values(this.result.namespaces)) {
-      yield* resources.filter(
-        resource => !resource.scanned && !resource.unauthorized,
-      );
+    const namespaces = Object.values(this.result.namespaces);
+    const filteredNamespaces = filter?.namespaces
+      ? namespaces.filter(({ name }) => filter.namespaces?.includes(name))
+      : namespaces;
+
+    for (const { resources } of filteredNamespaces) {
+      yield* this.filterResourcesForScan(resources, filter?.resources);
     }
   }
 }

@@ -18,6 +18,9 @@ import { doesUserHavePermission } from 'state/navigation/filters/permissions';
 import { Scan } from './Scan';
 import { getPermissionResourceRules } from 'state/permissionSetsSelector';
 import { ScanResultTree } from './ScanResultTree';
+import PQueue from 'p-queue';
+import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
+import { Page } from '@ui5/webcomponents-react';
 
 async function fetchResources(fetch) {
   // const response = await fetch({relativeUrl: `/apis/apps/v1/namespaces/jv/deployments?limit=500`});
@@ -37,9 +40,24 @@ function ClusterValidation() {
   );
   const validationSchemas = useRecoilValue(validationSchemasEnabledState);
 
+  const { namespaces } = useAvailableNamespaces();
+
   const [resources, setResources] = useState([]);
 
-  const [scanResult, setScanResult] = useState();
+  const [scanResult, _setScanResult] = useState();
+  const setScanResult = result => {
+    console.log('setting scan result', result);
+    _setScanResult({ ...result });
+  };
+
+  const scanSettings = {
+    concurrentRequests: 5,
+    concurrentWorkers: 1,
+    backpressureBuffer: 3,
+  };
+  resourceLoader.queue.concurrency = scanSettings.concurrentRequests;
+
+  const [scanProgress, setScanProgress] = useState();
 
   const currentResources = [];
 
@@ -65,19 +83,41 @@ function ClusterValidation() {
       return;
     }
 
-    await currentScan.gatherAPIResources();
+    await currentScan.gatherAPIResources({ namespaces });
     setScanResult(currentScan.result);
 
-    console.log(currentScan.result);
+    console.log('after gathering api resources', currentScan.result.namespaces);
 
     await currentScan.checkPermissions(post);
     setScanResult(currentScan.result);
 
-    for (const resource of currentScan.listResourcesToScan()) {
-      console.log(`scan: ${resource.endpoint}`);
-      await currentScan.scanResource(resource);
-      setScanResult(currentScan.result);
-    }
+    let countScanned = 0;
+    const queue = new PQueue({
+      concurrency:
+        Math.max(
+          scanSettings.concurrentRequests,
+          scanSettings.concurrentWorkers,
+        ) + scanSettings.backpressureBuffer,
+    });
+    const toScan = [...currentScan.listResourcesToScan({ namespaces: ['jv'] })];
+    setScanProgress({ total: toScan.length });
+    await Promise.all(
+      toScan.map(async resource =>
+        queue.add(async () => {
+          await currentScan.scanResource(resource);
+          countScanned++;
+          setScanProgress({ total: toScan.length, scanned: countScanned });
+          setScanResult(currentScan.result);
+        }),
+      ),
+    );
+    // for (const resource of ) {
+    //   console.log(`scan: ${resource.endpoint}`);
+    //   countToScan++;
+    //   await currentScan.scanResource(resource);
+    //   console.log(`scanned: ${resource.endpoint}`);
+
+    // }
 
     console.log(currentScan.result);
 
@@ -159,8 +199,42 @@ function ClusterValidation() {
         </LayoutPanel.Header>
         <LayoutPanel.Filters>
           <div style={{ display: 'flex' }}>
-            <InfoTile title="Resource Number" content={resources.length} />
-            <InfoTile title="Resource Number" content={resources.length} />
+            <InfoTile
+              title="Namespaces"
+              content={
+                !scanResult?.namespaces
+                  ? 'N/A'
+                  : Object.keys(scanResult.namespaces)?.length
+              }
+            />
+            <InfoTile
+              title="Items Scanned"
+              content={
+                scanResult?.cluster?.resources?.reduce(
+                  (agg, resource) => agg + (resource.items?.length ?? 0),
+                  0,
+                ) ?? 0 + scanResult?.namespaces
+                  ? Object.values(scanResult.namespaces).reduce(
+                      (agg, { resources }) =>
+                        agg +
+                        resources.reduce(
+                          (agg, resource) =>
+                            agg + (resource.items?.length ?? 0),
+                          0,
+                        ),
+                      0,
+                    )
+                  : 0
+              }
+            />
+            <InfoTile
+              title="Scan"
+              content={
+                scanProgress
+                  ? `${scanProgress.scanned} / ${scanProgress.total}`
+                  : '-'
+              }
+            />
           </div>
         </LayoutPanel.Filters>
         <LayoutPanel.Body>
