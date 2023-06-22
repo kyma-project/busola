@@ -170,12 +170,14 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
           </Button>,
         ]}
       />
-      <MessageStrip
-        type="information"
-        className="fd-margin-bottom--sm fd-margin-begin--md"
-      >
-        {t('roles.messages.load-resources')}
-      </MessageStrip>
+      {loadable && (
+        <MessageStrip
+          type="information"
+          className="fd-margin-bottom--sm fd-margin-begin--md"
+        >
+          {t('roles.messages.load-resources')}
+        </MessageStrip>
+      )}
       <ComboboxArrayInput
         filterOptions
         title={t('roles.headers.verbs')}
