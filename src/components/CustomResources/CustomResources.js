@@ -25,9 +25,23 @@ export function CustomResources({
       : `/apis/${group}/${version.name}/${name}`;
 
   const getJsonPath = (resource, jsonPath) => {
-    const value =
-      jp.value(resource, jsonPath.substring(1)) || EMPTY_TEXT_PLACEHOLDER;
-
+    // try catch to parse annotations to take value from resource using jsonpath
+    let value;
+    try {
+      value =
+        jp.value(
+          resource,
+          jsonPath.includes('annotations.')
+            ? `${jsonPath
+                .substring(1)
+                .replace('annotations.', 'annotations["')
+                .replace('\\.', '.')}"]`
+            : jsonPath.substring(1),
+        ) || EMPTY_TEXT_PLACEHOLDER;
+    } catch (e) {
+      console.error(e);
+      value = e.message;
+    }
     if (typeof value === 'boolean') {
       return value.toString();
     } else if (typeof value === 'object') {
