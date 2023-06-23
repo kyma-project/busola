@@ -20,7 +20,15 @@ import { getPermissionResourceRules } from 'state/permissionSetsSelector';
 import { ScanResultTree } from './ScanResultTree';
 import PQueue from 'p-queue';
 import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
-import { Page } from '@ui5/webcomponents-react';
+import {
+  Bar,
+  Card,
+  CardHeader,
+  FlexBox,
+  Label,
+  Page,
+  ProgressIndicator,
+} from '@ui5/webcomponents-react';
 
 async function fetchResources(fetch) {
   // const response = await fetch({relativeUrl: `/apis/apps/v1/namespaces/jv/deployments?limit=500`});
@@ -62,6 +70,7 @@ function ClusterValidation() {
   const currentResources = [];
 
   const scan = async () => {
+    setScanProgress();
     const currentScan = new Scan(resourceLoader, validationSchemas);
     setScanResult(currentScan.result);
     await ResourceValidation.setRuleset(validationSchemas);
@@ -99,7 +108,8 @@ function ClusterValidation() {
           scanSettings.concurrentWorkers,
         ) + scanSettings.backpressureBuffer,
     });
-    const toScan = [...currentScan.listResourcesToScan({ namespaces: ['jv'] })];
+    // const toScan = [...currentScan.listResourcesToScan({ namespaces: ['jv'] })];
+    const toScan = [...currentScan.listResourcesToScan()];
     setScanProgress({ total: toScan.length });
     await Promise.all(
       toScan.map(async resource =>
@@ -111,13 +121,6 @@ function ClusterValidation() {
         }),
       ),
     );
-    // for (const resource of ) {
-    //   console.log(`scan: ${resource.endpoint}`);
-    //   countToScan++;
-    //   await currentScan.scanResource(resource);
-    //   console.log(`scanned: ${resource.endpoint}`);
-
-    // }
 
     console.log(currentScan.result);
 
@@ -139,21 +142,6 @@ function ClusterValidation() {
       ),
     );
 
-    // for await (const rs of loadResourcesConcurrently(relativeUrl =>
-    //   fetch({ relativeUrl }),
-    // )) {
-    //   const newResources = rs.items.map(r => ({
-    //     value: { kind: rs.kind, ...r },
-    //   }));
-    //   currentResources.push(...newResources);
-    //   const warningsPerResource = await ResourceValidation.validate(
-    //     newResources,
-    //   );
-    //   warningsPerResource.forEach((warnings, i) => {
-    //     newResources[i].warnings = warnings;
-    //   });
-    //   setResources([...currentResources]);
-    // }
     console.log(currentResources);
     setResources([...currentResources]);
     localStorage.setItem(
@@ -180,78 +168,127 @@ function ClusterValidation() {
 
   return (
     <>
-      <PageHeader title={t('clusters.overview.title-all-clusters')} />
-      {/* <FilteredResourcesDetails filteredResources={resources} /> */}
-      <LayoutPanel>
-        <LayoutPanel.Header>
-          <LayoutPanel.Head
-            description="description"
-            title="Cluster Validation"
-          />
-          <LayoutPanel.Actions>
+      <Bar
+        endContent={
+          <>
             <Button glyph="play" onClick={scan}>
               Scan
             </Button>
             <Button glyph="reset" onClick={clear}>
               Clear
             </Button>
-          </LayoutPanel.Actions>
-        </LayoutPanel.Header>
-        <LayoutPanel.Filters>
-          <div style={{ display: 'flex' }}>
-            <InfoTile
-              title="Namespaces"
-              content={
-                !scanResult?.namespaces
-                  ? 'N/A'
-                  : Object.keys(scanResult.namespaces)?.length
-              }
-            />
-            <InfoTile
-              title="Items Scanned"
-              content={
-                scanResult?.cluster?.resources?.reduce(
-                  (agg, resource) => agg + (resource.items?.length ?? 0),
-                  0,
-                ) ?? 0 + scanResult?.namespaces
-                  ? Object.values(scanResult.namespaces).reduce(
-                      (agg, { resources }) =>
-                        agg +
-                        resources.reduce(
-                          (agg, resource) =>
-                            agg + (resource.items?.length ?? 0),
-                          0,
-                        ),
-                      0,
-                    )
-                  : 0
-              }
-            />
-            <InfoTile
-              title="Scan"
-              content={
-                scanProgress
-                  ? `${scanProgress.scanned} / ${scanProgress.total}`
-                  : '-'
-              }
-            />
-          </div>
-        </LayoutPanel.Filters>
-        <LayoutPanel.Body>
-          {/* <ResourceWarningList resources={resources} /> */}
-          <ScanResultTree scanResult={scanResult} />
-        </LayoutPanel.Body>
-      </LayoutPanel>
+          </>
+        }
+      >
+        <Label>Cluster Validation</Label>
+      </Bar>
+
+      <Section>
+        <FlexBox>
+          <InfoTile
+            title="Namespaces"
+            content={
+              !scanResult?.namespaces
+                ? 'N/A'
+                : Object.keys(scanResult.namespaces)?.length
+            }
+          />
+          <Card style={{ width: 'fit-content', margin: '5px' }}>
+            <Label>Test</Label>
+          </Card>
+        </FlexBox>
+      </Section>
+      <Section
+        titleText="Scan Progress"
+        status={
+          scanProgress
+            ? `${scanProgress.scanned} / ${scanProgress.total}`
+            : 'Not started'
+        }
+      >
+        <ProgressIndicator
+          // displayValue={scanProgress? `${scanProgress.scanned} / ${scanProgress.total}` : 'Not started'}
+          value={
+            scanProgress
+              ? Math.floor((100 * scanProgress.scanned) / scanProgress.total)
+              : 0
+          }
+          valueState={
+            scanProgress && scanProgress.total === scanProgress.scanned
+              ? 'Success'
+              : 'None'
+          }
+          style={{ width: '96%', padding: '5px 2%' }}
+        ></ProgressIndicator>
+        {/* <FlexBox style={{margin: '10px'}}>
+      <InfoTile
+        title="Items Scanned"
+        content={
+          scanResult?.cluster?.resources?.reduce(
+            (agg, resource) => agg + (resource.items?.length ?? 0),
+
+            0,
+          ) ?? 0 + scanResult?.namespaces
+            ? Object.values(scanResult.namespaces).reduce(
+                (agg, { resources }) =>
+                  agg +
+                  resources.reduce(
+                    (agg, resource) =>
+                      agg + (resource.items?.length ?? 0),
+                    0,
+                  ),
+                0,
+              )
+            : 0
+        }
+      />
+      <InfoTile
+        title="Scan"
+        content={
+          scanProgress
+            ? `${scanProgress.scanned} / ${scanProgress.total}`
+            : '-'
+        }
+      />
+      </FlexBox> */}
+      </Section>
+
+      <Section titleText="Scan Result">
+        <ScanResultTree scanResult={scanResult} />
+      </Section>
     </>
   );
 }
 
 const InfoTile = ({ title, content }) => {
   return (
-    <Tile className="no-min-height" size="s">
-      <Tile.Header className="no-min-height">{title}</Tile.Header>
-      <Tile.Content className="no-min-height">{content}</Tile.Content>
-    </Tile>
+    <Card
+      header={<CardHeader titleText={title} subtitleText={content} />}
+      style={{ width: 'fit-content', margin: '5px' }}
+    ></Card>
+  );
+};
+
+const Section = ({ titleText, subtitleText, status, header, children }) => {
+  return (
+    <FlexBox alignItems="Center" justifyContent="Center">
+      <Card
+        header={
+          titleText ?? subtitleText ?? status ? (
+            <CardHeader
+              titleText={titleText}
+              subtitleText={subtitleText}
+              status={status}
+            />
+          ) : (
+            header
+          )
+        }
+        style={{ width: '95%', margin: '5px' }}
+      >
+        {children}
+      </Card>
+    </FlexBox>
   );
 };
 
