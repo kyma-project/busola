@@ -87,16 +87,11 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-i18next": "^11.18.6",
-    "react-app-rewired": "^2.2.1",
     "react-router-dom": "^6.3.0",
-    "react-scripts": "^5.0.0",
     "react-tippy": "^1.4.0",
     "recoil": "^0.7.5",
     "rfc6902": "^5.0.1",
-    "url": "^0.11.0",
-    "sass-loader": "^12.4.0",
-    "typescript": "^4.8.4",
-    "uuid": "^9.0.0"
+    "url": "^0.11.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.2",
@@ -131,7 +126,12 @@
     "minimatch": "^3.0.5",
     "minimist": "^1.2.6",
     "node-sass": "^7.0.1",
-    "prettier": "^1.18.2"
+    "prettier": "^1.18.2",
+    "react-app-rewired": "^2.2.1",
+    "react-scripts": "^5.0.0",
+    "sass-loader": "^12.4.0",
+    "typescript": "^4.8.4",
+    "uuid": "^9.0.0"
   },
   "lint-staged": {
     "src/i18n/*.yaml": "yaml-sort --lineWidth=-1 -i ",
