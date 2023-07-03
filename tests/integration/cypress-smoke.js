@@ -21,12 +21,11 @@ module.exports = defineConfig({
       return require('./plugins')(on, config);
     },
     specPattern: [
-      'tests/namespace/run-before.spec.js',
-      'tests/namespace/create-a-deployment.spec.js',
-      'tests/namespace/run-after.spec.js',
+      'tests/namespace/a-run-before.spec.js',
+      'tests/namespace/test-deployments.spec.js',
+      'tests/namespace/z-run-after.spec.js',
       'tests/cluster/test-cluster-overview.spec.js',
-      'tests/cluster/kyma-version.spec.js',
-      'tests/cluster/login-kubeconfigID.spec.js',
+      'tests/cluster/test-login-kubeconfigID.spec.js',
     ],
     supportFile: 'support/index.js',
   },
