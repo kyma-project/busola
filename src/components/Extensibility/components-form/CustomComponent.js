@@ -1,23 +1,4 @@
-import React, { lazy, Suspense } from 'react';
-import { List } from 'immutable';
-import * as jp from 'jsonpath';
-
-import { K8sNameField } from 'shared/ResourceForm/fields';
-import { useGetTranslation } from 'components/Extensibility/helpers';
-import { getPropsFromSchema } from 'components/Extensibility/helpers';
-import {
-  Icon,
-  Input,
-  ComboBox,
-  ComboBoxItem,
-  Select,
-  Option,
-} from '@ui5/webcomponents-react';
-import {
-  Resource,
-  DataSourcesContextType,
-  DataSourcesContext,
-} from '../contexts/DataSources';
+import React, { Fragment } from 'react';
 
 export function CustomComponent({
   storeKeys,
@@ -28,23 +9,51 @@ export function CustomComponent({
   required,
   editMode,
 }) {
-  const componentName = schema.get('componentName');
-  const customProps = schema.get('customProps');
+  const {
+    componentName,
+    componentType = 'custom',
+    ...customProps
+  } = schema.get('customProps');
+  const arrayProps = schema.get('arrayProps') || {};
+  const componentNameWithPrefix = `webcomponent-${componentName}`;
+  console.log('lololo props', componentName, componentType, customProps);
 
   function changeObjectIntoArray(object) {
     return Object.keys(object).map(key => ({ [key]: object[key] }));
   }
-
-  const DynamicComponentClass = require(`../../../custom-components/${componentName}`)
-    .default;
-  console.log('dynamic-component', componentName, DynamicComponentClass);
-
-  if (!customElements.get(componentName)) {
-    customElements.define(componentName, DynamicComponentClass);
+  console.log('lololo componentName', componentName);
+  let ui5Components;
+  if (componentType === 'ui5') {
+    ui5Components = require(`/node_modules/@ui5/webcomponents-react/dist/webComponents/${componentName}/index.js`);
+    console.log('lolo  sth', ui5Components);
   }
+  // else if (componentType === 'custom') {
+  //   const DynamicComponentClass = require(`/custom-components/${componentName}`).default;
+  //   if (!customElements.get(componentNameWithPrefix)) {
+  //     customElements.define(componentNameWithPrefix, DynamicComponentClass);
+  //   }
+  //   console.log('dynamic-component', componentNameWithPrefix, DynamicComponentClass);
 
-  return React.createElement(
-    componentName,
-    ...changeObjectIntoArray(customProps || {}),
-  );
+  // }
+  else {
+    return <>ERROR</>;
+  }
+  // const DynamicComponent = lazy(() => import(`@ui5/webcomponents-react`));
+  // console.log('lolo  DynamicComponent', DynamicComponent);
+
+  if (ui5Components && ui5Components[componentName]) {
+    return React.createElement(
+      Fragment,
+      null,
+      React.createElement(
+        ui5Components[componentName],
+        ...changeObjectIntoArray(
+          {
+            key: componentName,
+            ...customProps,
+          } || {},
+        ),
+      ),
+    );
+  }
 }
