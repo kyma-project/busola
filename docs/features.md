@@ -221,19 +221,6 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
       dsn: ''
   ```
 
-- **SERVERLESS** – is used to show or hide the **Serverless** view and to define which APIs are required for the view to be shown properly.
-  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
-
-  Default settings:
-
-  ```yaml
-  SERVERLESS:
-    isEnabled: true
-    selectors:
-      - type: apiGroup
-        apiGroup: serverless.kyma-project.io
-  ```
-
 - **SHOW_GARDENER_METADATA** - determines if the metadata taken from Gardener should be displayed. The displayed information is the value from the `shoot-info` ConfigMap based on the `kube-system` Namespace. If the ConfigMap doesn't exist, the information is not displayed.
 
   ```yaml

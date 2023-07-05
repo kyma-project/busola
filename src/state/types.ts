@@ -13,7 +13,6 @@ export type ConfigFeaturesNames = typeof configFeaturesNames[keyof typeof config
 export const configFeaturesNames = {
   EVENTING: 'EVENTING',
   API_GATEWAY: 'API_GATEWAY',
-  SERVERLESS: 'SERVERLESS',
   ISTIO: 'ISTIO',
   LEGAL_LINKS: 'LEGAL_LINKS',
   SENTRY: 'SENTRY',
