@@ -21,7 +21,7 @@ Cypress.Commands.add('handleExceptions', () => {
       ) ||
       err.message.includes('Model is disposed!') ||
       err.message.includes(
-        "TypeError: Cannot read properties of null (reading 'querySelector')",
+        "Cannot read properties of null (reading 'querySelector')",
       )
     )
       return false;

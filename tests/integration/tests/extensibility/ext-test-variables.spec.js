@@ -9,10 +9,14 @@ context('Test extensibility variables', () => {
   Cypress.skipAfterFail();
 
   before(() => {
+    cy.handleExceptions();
+
     cy.loginAndSelectCluster({
       fileName: 'kubeconfig-k3s.yaml',
       storage: 'Session storage',
+      context: false,
     });
+
     cy.createNamespace(NAMESPACE);
   });
 
@@ -55,6 +59,7 @@ context('Test extensibility variables', () => {
     cy.loginAndSelectCluster({
       fileName: 'kubeconfig-k3s.yaml',
       storage: 'Session storage',
+      context: false,
     });
     cy.contains('Namespaces').click();
 
