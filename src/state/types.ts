@@ -11,11 +11,9 @@ export interface ConfigFeature {
 
 export type ConfigFeaturesNames = typeof configFeaturesNames[keyof typeof configFeaturesNames];
 export const configFeaturesNames = {
-  BTP_CATALOG: 'BTP_CATALOG',
   EVENTING: 'EVENTING',
   API_GATEWAY: 'API_GATEWAY',
   SERVERLESS: 'SERVERLESS',
-  CUSTOM_DOMAINS: 'CUSTOM_DOMAINS',
   ISTIO: 'ISTIO',
   LEGAL_LINKS: 'LEGAL_LINKS',
   SENTRY: 'SENTRY',
