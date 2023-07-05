@@ -59,16 +59,6 @@ Note that some features must be run before the application starts the bootstrap 
         apiGroup: dns.gardener.cloud
   ```
 
-- **DISABLED_NODES** - an array of IDs of navigation nodes that are hidden from navigation. Format: `<category>.<nodeName>` or `namespace.<category>.<nodeName>`).
-
-  Default settings:
-
-  ```yaml
-  DISABLED_NODES:
-    isEnabled: false
-    nodes: []
-  ```
-
 - **EVENTING** – is used to show or hide the **Eventing** view and to define which APIs are required for the view to be shown properly.
   It is also used to determine if the **EventSubscriptions** should be displayed in **Function** and **Service** details.
   For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.

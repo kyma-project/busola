@@ -6,10 +6,6 @@ const configMock = {
     config: JSON.stringify({
       config: {
         features: {
-          DISABLED_NODES: {
-            nodes: [],
-            isEnabled: false,
-          },
           EXTERNAL_NODES: {
             isEnabled: true,
             nodes: [
