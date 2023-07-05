@@ -105,6 +105,8 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
 
     cy.contains('Next').click();
 
+    cy.contains('Next').click();
+
     if (storage) {
       cy.contains(storage).click();
     }
