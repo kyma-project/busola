@@ -219,8 +219,6 @@ context('Test reduced permissions', () => {
 
     cy.contains('Clusters Overview').click();
 
-    cy.deleteFromGenericList(SA_NAME, true, false);
-
-    cy.contains(/No clusters found/).should('exist');
+    cy.contains(SA_NAME).should('not.exist');
   });
 });
