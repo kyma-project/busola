@@ -175,6 +175,7 @@ context('Test reduced permissions', () => {
       expectedLocation: new RegExp(
         `/namespaces/${Cypress.env('NAMESPACE_NAME')}`,
       ),
+      staticToken: true,
     });
   });
 

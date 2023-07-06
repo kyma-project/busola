@@ -12,8 +12,12 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
     fileName: 'kubeconfig.yaml',
     expectedLocation: /overview$/,
     storage: null,
+    staticToken: false,
   };
-  const { fileName, expectedLocation, storage } = { ...defaults, ...params };
+  const { fileName, expectedLocation, storage, staticToken } = {
+    ...defaults,
+    ...params,
+  };
 
   cy.wrap(loadFile('kubeconfig.yaml')).then(kubeconfig => {
     if (kubeconfig.users?.[0]?.user?.exec?.args) {
@@ -105,7 +109,9 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
 
     cy.contains('Next').click();
 
-    cy.contains('Next').click();
+    if (!staticToken) {
+      cy.contains('Next').click();
+    }
 
     if (storage) {
       cy.contains(storage).click();

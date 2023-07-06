@@ -9,7 +9,9 @@ context('Test Services', () => {
     cy.loginAndSelectCluster({
       fileName: 'kubeconfig-k3s.yaml',
       storage: 'Session storage',
+      staticToken: true,
     });
+
     cy.createNamespace('services');
   });
 
@@ -47,6 +49,7 @@ context('Test Services', () => {
     cy.loginAndSelectCluster({
       fileName: 'kubeconfig-k3s.yaml',
       storage: 'Session storage',
+      staticToken: true,
     });
 
     cy.getLeftNav()
