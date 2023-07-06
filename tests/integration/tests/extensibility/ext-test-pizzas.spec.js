@@ -16,7 +16,7 @@ context('Test Pizzas', () => {
     cy.loginAndSelectCluster({
       fileName: 'kubeconfig-k3s.yaml',
       storage: 'Session storage',
-      context: false,
+      staticToken: true,
     });
 
     cy.createNamespace('pizzas');
@@ -64,8 +64,9 @@ context('Test Pizzas', () => {
     cy.loginAndSelectCluster({
       fileName: 'kubeconfig-k3s.yaml',
       storage: 'Session storage',
-      context: false,
+      staticToken: true,
     });
+
     cy.contains('Namespaces').click();
 
     cy.contains('a', 'pizzas').click();

@@ -17,9 +17,9 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
     fileName: 'kubeconfig.yaml',
     expectedLocation: /overview$/,
     storage: null,
-    context: true,
+    staticToken: false,
   };
-  const { fileName, expectedLocation, storage, context } = {
+  const { fileName, expectedLocation, storage, staticToken } = {
     ...defaults,
     ...params,
   };
@@ -114,7 +114,7 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
 
     cy.contains('Next').click();
 
-    if (context) {
+    if (!staticToken) {
       cy.contains('Next').click();
     }
 
