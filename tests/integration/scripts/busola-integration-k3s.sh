@@ -1,36 +1,34 @@
 #!/bin/bash
 
-set -e
+                set -e
+                export CYPRESS_DOMAIN=http://localhost:3000
+                export NO_COLOR=1
+                export KUBECONFIG="$GARDENER_KYMA_PROW_KUBECONFIG"
 
-apk add --no-cache xvfb gtk+3.0-dev gtk+2.0-dev libnotify-dev mesa-dev nss-dev libx11 alsa-lib-dev libxtst xauth
+                cat <<EOF | kubectl create -f - --raw "/apis/core.gardener.cloud/v1beta1/namespaces/garden-kyma-prow/shoots/nkyma/adminkubeconfig" | jq -r ".status.kubeconfig" | base64 -d > "kubeconfig--kyma--nkyma.yaml"
+                {
+                    "apiVersion": "authentication.gardener.cloud/v1alpha1",
+                    "kind": "AdminKubeconfigRequest",
+                    "spec": {
+                        "expirationSeconds": 10800
+                    }
+                }
+                EOF
+                
+                cp kubeconfig--kyma--nkyma.yaml tests/integration/fixtures/kubeconfig.yaml
+                k3d kubeconfig get k3d > tests/integration/fixtures/kubeconfig-k3s.yaml
+                
+                npm ci && npm run build
+                npm i -g serve 
+                serve -s build > $ARTIFACTS/busola.log &
 
-VERSION=v16.20.0
-DISTRO=linux-x64
+                pushd backend
+                npm start > $ARTIFACTS/backend.log &
+                popd
 
-curl -Lo node.tar.xz https://unofficial-builds.nodejs.org/download/release/$VERSION/node-$VERSION-$DISTRO-musl.tar.xz
-mkdir -p /usr/local/lib/nodejs
-tar -xJvf node.tar.xz -C /usr/local/lib/nodejs 
+                echo "waiting for server to be up..."
+                while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' "$CYPRESS_DOMAIN")" != "200" ]]; do sleep 5; done
+                sleep 10
 
-export PATH=/usr/local/lib/nodejs/node-$VERSION-$DISTRO-musl/bin:$PATH
-
-echo "Node.js version: $(node -v)"
-echo "NPM version: $(npm -v)"
-
-echo "Copying Kubeconfig"
-k3d kubeconfig get k3d > tests/integration/fixtures/kubeconfig.yaml
-k3d kubeconfig get k3d > tests/integration/fixtures/kubeconfig-k3s.yaml
-
-echo "Installing Busola"
-npm install
-
-echo "Starting Busola"
-npm start 2>&1 &
-sleep 80
-
-echo "Run Cypress"
-
-export CYPRESS_CACHE_FOLDER=/root/.cahce/Cypress
-
-cd tests/integration
-npm install --save-dev
-npm run test:cluster
+                cd tests/integration
+                npm ci && npm run "test:$SCOPE"
