@@ -15,7 +15,6 @@
   "videoCompression": false,
   "experimentalInteractiveRunEvents": true,
   "testFiles": [
-    "cluster/test-edit-cluster.spec.js",
     "cluster/test-applications.spec.js",
     "cluster/test-download-a-kubeconfig.spec.js",
     "cluster/test-cluster-overview.spec.js",
