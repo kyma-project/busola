@@ -200,14 +200,7 @@ context('Test reduced permissions', () => {
   it('Cleanup', () => {
     cy.get('[aria-controls="fd-shellbar-product-popover"]').click();
 
-    // 2 results: "Clusters Overview" node and original cluster, take second
-    cy.get('[role=menuitem]:visible')
-      // .eq(1) // TODO uncomment after resolving "second added cluster isn't showing in top nav"
-      .first()
-      .click();
-
-    // wait for the new cluster to load
-    cy.wait(2000);
+    cy.loginAndSelectCluster();
 
     // delete binding
     cy.getLeftNav()
