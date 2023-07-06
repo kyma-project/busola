@@ -44,6 +44,8 @@ test('Busola Lighthouse audit', async () => {
 
   await page.locator('button:has-text("Next step")').click();
 
+  await page.locator('button:has-text("Next step")').click();
+
   await page
     .locator(
       'text=Local storage: Cluster data is persisted between browser reloads.',
