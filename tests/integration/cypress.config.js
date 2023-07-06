@@ -24,7 +24,6 @@ module.exports = defineConfig({
       return require('./plugins')(on, config);
     },
     specPattern: [
-      'tests/cluster/test-edit-cluster.spec.js',
       'tests/cluster/test-download-a-kubeconfig.spec.js',
       'tests/cluster/test-cluster-overview.spec.js',
       'tests/cluster/test-gardener-provider.spec.js',

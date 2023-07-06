@@ -203,10 +203,7 @@ context('Test reduced permissions', () => {
 
     cy.loginAndSelectCluster();
 
-    // delete binding
-    cy.getLeftNav()
-      .contains('Cluster Role Bindings')
-      .click();
+    cy.navigateTo('Configuration', 'Cluster Role Bindings');
 
     cy.deleteFromGenericList(CRB_NAME);
 
