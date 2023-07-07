@@ -1,4 +1,6 @@
 import React, { Fragment } from 'react';
+import { useJsonata } from '../hooks/useJsonata';
+import { useVariables } from '../hooks/useVariables';
 
 export function CustomComponent({
   storeKeys,
@@ -9,6 +11,10 @@ export function CustomComponent({
   required,
   editMode,
 }) {
+  const { itemVars } = useVariables();
+
+  const rule = schema.get('schemaRule');
+  const item = itemVars(resource, rule.itemVars, storeKeys);
   const {
     componentName,
     componentType = 'custom',
@@ -18,17 +24,79 @@ export function CustomComponent({
   const componentNameWithPrefix = `webcomponent-${componentName}`;
   console.log('lololo props', componentName, componentType, customProps);
 
-  function changeObjectIntoArray(object) {
-    return Object.keys(object).map(key => ({ [key]: object[key] }));
+  const jsonata = useJsonata({
+    resource,
+    scope: value,
+    value,
+  });
+
+  function makeJsonata(propObject, item) {
+    const [value, error] = jsonata(propObject, item);
+    if (error) {
+      console.warn('Widget::CustomComponent error:', error);
+      return propObject;
+      // if (!Array.isArray(value)) { return }
+    } else {
+      return value;
+    }
   }
+  function changeObjectOfArraysIntoArray(object) {
+    let newProps = {};
+    let longestArrayLength = 0;
+    let longestArrayName = '';
+    Object.keys(object).forEach(key => {
+      newProps[key] = makeJsonata(object[key], item);
+      if (
+        Array.isArray(newProps[key]) &&
+        newProps[key].length > longestArrayLength
+      ) {
+        longestArrayLength = newProps[key].length;
+        longestArrayName = key;
+      }
+    });
+    console.log('lololo longestArrayKey', longestArrayName, longestArrayLength);
+
+    const finalResult = [];
+    (newProps[longestArrayName] || []).map((obj1, index) => {
+      for (let i = 0; i < longestArrayLength; i++) {
+        const result = {};
+
+        const allKeys = Object.keys(object);
+        allKeys.forEach(key => {
+          console.log('!!!!! ', newProps[key]);
+          if (newProps[key] && newProps[key][i]) {
+            result[key] = Array.isArray(newProps[key])
+              ? newProps[key][i]
+              : newProps[key];
+          }
+        });
+        finalResult.push(result);
+        console.log('!!!!! finalResult', finalResult);
+      }
+    });
+
+    console.log(
+      'lololo changeObjectOfArraysIntoArray',
+      newProps,
+      object,
+      'mergedArrays',
+      finalResult,
+    );
+    return finalResult;
+  }
+  let mergedArrays = [];
+  if (arrayProps) {
+    mergedArrays = changeObjectOfArraysIntoArray(arrayProps);
+  }
+
   console.log('lololo componentName', componentName);
-  let ui5Components;
+  let ui5Components, DynamicComponentClass;
   if (componentType === 'ui5') {
     ui5Components = require(`/node_modules/@ui5/webcomponents-react/dist/webComponents/${componentName}/index.js`);
     console.log('lolo  sth', ui5Components);
   }
   // else if (componentType === 'custom') {
-  //   const DynamicComponentClass = require(`/custom-components/${componentName}`).default;
+  //   DynamicComponentClass = require(`/custom-components/${componentName}`).default;
   //   if (!customElements.get(componentNameWithPrefix)) {
   //     customElements.define(componentNameWithPrefix, DynamicComponentClass);
   //   }
@@ -38,22 +106,57 @@ export function CustomComponent({
   else {
     return <>ERROR</>;
   }
+
   // const DynamicComponent = lazy(() => import(`@ui5/webcomponents-react`));
   // console.log('lolo  DynamicComponent', DynamicComponent);
-
+  console.log(
+    'lololo ui5Components',
+    ui5Components,
+    componentName,
+    arrayProps,
+    customProps,
+  );
   if (ui5Components && ui5Components[componentName]) {
     return React.createElement(
       Fragment,
       null,
-      React.createElement(
-        ui5Components[componentName],
-        ...changeObjectIntoArray(
-          {
-            key: componentName,
-            ...customProps,
-          } || {},
-        ),
-      ),
+      arrayProps
+        ? mergedArrays.map((obj, index) => {
+            return React.createElement(
+              ui5Components[componentName],
+              {
+                key: `${componentName}-${index}`,
+                ...customProps,
+                ...obj,
+                onChange: e => {
+                  onChange({
+                    storeKeys,
+                    scopes: ['value'],
+                    type: 'set',
+                    schema,
+                    required,
+                    data: { value: e.target.text },
+                  });
+                },
+              } || {},
+            );
+          })
+        : React.createElement(
+            ui5Components[componentName],
+            {
+              key: componentName,
+              ...customProps,
+            } || {},
+          ),
     );
   }
+  // if (DynamicComponentClass) {
+  //   return React.createElement(
+  //     DynamicComponentClass,
+  //     {
+  //       key: componentName,
+  //       ...customProps,
+  //     } || {},
+  //   )
+  // }
 }
