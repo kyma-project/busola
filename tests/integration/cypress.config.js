@@ -12,9 +12,12 @@ module.exports = defineConfig({
   viewportWidth: 1500,
   viewportHeight: 1500,
   videoCompression: false,
-  screenshotsFolder:
-    `${process.env?.ARTIFACTS}/screenshots` ?? 'cypress/screenshots',
-  videosFolder: `${process.env?.ARTIFACTS}/videos` ?? 'cypress/videos',
+  screenshotsFolder: process?.env?.ARTIFACTS
+    ? `${process.env?.ARTIFACTS}/screenshots`
+    : 'cypress/screenshots',
+  videosFolder: process?.env?.ARTIFACTS
+    ? `${process.env?.ARTIFACTS}/videos`
+    : 'cypress/videos',
   experimentalInteractiveRunEvents: true,
   numTestsKeptInMemory: 0,
   e2e: {
