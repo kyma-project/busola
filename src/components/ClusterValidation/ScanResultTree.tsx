@@ -1,4 +1,4 @@
-import { Tree, TreeItem } from '@ui5/webcomponents-react';
+import { Tree, TreeItem, FlexBox } from '@ui5/webcomponents-react';
 import {
   ScanResult,
   ScanResourceStatus,
@@ -148,7 +148,7 @@ const ScanResultNamespacesTree = ({
 
 export const ScanResultTree = ({ scanResult }: { scanResult?: ScanResult }) => {
   console.log(scanResult);
-  if (!scanResult) return 'No Results';
+  if (!scanResult) return <FlexBox justifyContent="Center">No Results</FlexBox>;
   return (
     <>
       <Tree>

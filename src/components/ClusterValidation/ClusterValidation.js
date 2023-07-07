@@ -1,10 +1,10 @@
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 
 import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
-import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
+import { useEffect, useMemo, useState, useCallback } from 'react';
+import { useFetch, createFetchFn } from 'shared/hooks/BackendAPI/useFetch';
 import { loadResources, loadResourcesConcurrently } from './ResourceLoader';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { validationSchemasEnabledState } from 'state/validationEnabledSchemasAtom';
 import { ResourceValidation } from './ResourceValidation';
 import { ResourceWarningList, ValidationWarnings } from './ValidationWarnings';
@@ -29,45 +29,76 @@ import {
   Page,
   ProgressIndicator,
 } from '@ui5/webcomponents-react';
+import { ClusterValidationConfigurationDialog } from './ClusterValidationConfiguration';
+import { resourcesState } from 'state/resourcesAtom';
 
-async function fetchResources(fetch) {
-  // const response = await fetch({relativeUrl: `/apis/apps/v1/namespaces/jv/deployments?limit=500`});
-  const response = await fetch({
-    relativeUrl: `/api/v1/namespaces/jv/pods?limit=500`,
-  });
-  const data = await response.json();
-  return data.items;
-}
+import { authDataState } from 'state/authDataAtom';
+import { clusterState } from 'state/clusterAtom';
+import { getDefaultScanConfiguration } from './ScanConfiguration';
 
 function ClusterValidation() {
   const { t } = useTranslation();
-  const fetch = useFetch();
-  const post = createPostFn(fetch);
-  const resourceLoader = new ResourceLoader(relativeUrl =>
-    fetch({ relativeUrl }),
+
+  const authData = useRecoilValue(authDataState);
+  const cluster = useRecoilValue(clusterState);
+
+  const { fetch, post } = useMemo(() => {
+    const fetch = createFetchFn({
+      authData,
+      cluster,
+    });
+    const post = createPostFn(fetch);
+    return { fetch, post };
+  }, [authData, cluster]);
+  const resourceLoader = useMemo(
+    () => new ResourceLoader(relativeUrl => fetch({ relativeUrl })),
+    [fetch],
   );
   const validationSchemas = useRecoilValue(validationSchemasEnabledState);
 
   const { namespaces } = useAvailableNamespaces();
 
-  const [resources, setResources] = useState([]);
+  const [resources, setResources] = useRecoilState(resourcesState);
+
+  const listableResources = useMemo(() => {
+    return resources?.filter(resource => resource.verbs?.includes('list'));
+  }, [resources]);
+
+  useEffect(() => {
+    resourceLoader.loadResourceLists().then(resourceList => {
+      setResources(resourceList);
+    });
+  }, [resourceLoader, setResources]);
+
+  const defaultConfiguration = useMemo(
+    () => getDefaultScanConfiguration(namespaces, resources, []),
+    [namespaces, resources],
+  );
+
+  const [selectedConfiguration, setConfiguration] = useState(null);
+  const configuration = useMemo(
+    () => selectedConfiguration ?? defaultConfiguration,
+    [selectedConfiguration, defaultConfiguration],
+  );
+  const [isConfigurationOpen, setConfigurationOpen] = useState(false);
+  const configure = () => {
+    setConfigurationOpen(true);
+  };
 
   const [scanResult, _setScanResult] = useState();
   const setScanResult = result => {
-    console.log('setting scan result', result);
     _setScanResult({ ...result });
   };
 
   const scanSettings = {
-    concurrentRequests: 5,
-    concurrentWorkers: 1,
+    concurrentRequests: configuration?.scanParameters?.parallelRequests ?? 5,
+    concurrentWorkers:
+      configuration?.scanParameters?.parallelWorkerThreads ?? 1,
     backpressureBuffer: 3,
   };
   resourceLoader.queue.concurrency = scanSettings.concurrentRequests;
 
   const [scanProgress, setScanProgress] = useState();
-
-  const currentResources = [];
 
   const scan = async () => {
     setScanProgress();
@@ -75,14 +106,6 @@ function ClusterValidation() {
     setScanResult(currentScan.result);
     await ResourceValidation.setRuleset(validationSchemas);
 
-    const existingResourcesString = localStorage.getItem(
-      'cached-resources-for-test',
-    );
-    if (existingResourcesString) {
-      const existingResources = JSON.parse(existingResourcesString);
-      setResources(existingResources);
-      currentResources.push(...existingResources);
-    }
     const existingScanResult = localStorage.getItem(
       'cached-scan-result-for-test',
     );
@@ -92,7 +115,7 @@ function ClusterValidation() {
       return;
     }
 
-    await currentScan.gatherAPIResources({ namespaces });
+    await currentScan.gatherAPIResources({ namespaces, resources });
     setScanResult(currentScan.result);
 
     console.log('after gathering api resources', currentScan.result.namespaces);
@@ -124,30 +147,6 @@ function ClusterValidation() {
 
     console.log(currentScan.result);
 
-    currentResources.push(
-      ...Object.values(currentScan.result.namespaces ?? {}).flatMap(
-        ({ name: namespace, resources }) =>
-          resources.flatMap(
-            ({ kind, items }) =>
-              items?.map(({ name, warnings }) => ({
-                value: {
-                  kind,
-                  metadata: {
-                    name: `${namespace} - ${name}`,
-                  },
-                },
-                warnings,
-              })) ?? [],
-          ),
-      ),
-    );
-
-    console.log(currentResources);
-    setResources([...currentResources]);
-    localStorage.setItem(
-      'cached-resources-for-test',
-      JSON.stringify(currentResources),
-    );
     localStorage.setItem(
       'cached-scan-result-for-test',
       JSON.stringify(currentScan.result),
@@ -155,10 +154,7 @@ function ClusterValidation() {
   };
 
   const clear = () => {
-    localStorage.removeItem('cached-resources-for-test');
     localStorage.removeItem('cached-scan-result-for-test');
-    setResources([]);
-    currentResources.length = 0;
   };
 
   // fetchResources(fetch).then(r => {
@@ -174,30 +170,17 @@ function ClusterValidation() {
             <Button glyph="play" onClick={scan}>
               Scan
             </Button>
+            <Button glyph="settings" onClick={configure}>
+              Configure
+            </Button>
             <Button glyph="reset" onClick={clear}>
               Clear
             </Button>
           </>
         }
-      >
-        <Label>Cluster Validation</Label>
-      </Bar>
+        startContent={<h3>Cluster Validation</h3>}
+      ></Bar>
 
-      <Section>
-        <FlexBox>
-          <InfoTile
-            title="Namespaces"
-            content={
-              !scanResult?.namespaces
-                ? 'N/A'
-                : Object.keys(scanResult.namespaces)?.length
-            }
-          />
-          <Card style={{ width: 'fit-content', margin: '5px' }}>
-            <Label>Test</Label>
-          </Card>
-        </FlexBox>
-      </Section>
       <Section
         titleText="Scan Progress"
         status={
@@ -253,9 +236,41 @@ function ClusterValidation() {
       </FlexBox> */}
       </Section>
 
+      <Section titleText="Scan Scope">
+        <FlexBox>
+          <InfoTile
+            title="Namespaces"
+            content={
+              !scanResult?.namespaces
+                ? 'N/A'
+                : Object.keys(scanResult.namespaces)?.length
+            }
+          />
+          <InfoTile
+            title="K8s API Resources"
+            content={!listableResources ? 'N/A' : listableResources.length}
+          />
+          {/* <Card style={{ width: 'fit-content', margin: '5px' }}>
+            <Label>Test</Label>
+          </Card> */}
+        </FlexBox>
+      </Section>
+
       <Section titleText="Scan Result">
         <ScanResultTree scanResult={scanResult} />
       </Section>
+
+      <ClusterValidationConfigurationDialog
+        show={isConfigurationOpen}
+        onCancel={() => setConfigurationOpen(false)}
+        onSubmit={newConfiguration => {
+          setConfiguration(newConfiguration);
+          setConfigurationOpen(false);
+        }}
+        configuration={configuration}
+        namespaces={namespaces}
+        resources={listableResources}
+      />
     </>
   );
 }

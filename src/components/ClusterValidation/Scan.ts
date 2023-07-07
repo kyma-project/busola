@@ -6,7 +6,7 @@ import {
   PermissionSet,
 } from 'state/permissionSetsSelector';
 import { ValidationSchema } from 'state/validationSchemasAtom';
-import { K8sResource } from 'types';
+import { K8sAPIResource, K8sResource } from 'types';
 import { ResourceLoader } from './ResourceLoader2';
 import { ResourceValidation } from './ResourceValidation';
 import {
@@ -24,8 +24,16 @@ export class Scan {
     this.result = getInitialScanResult(ruleset);
   }
 
-  async gatherAPIResources({ namespaces }: { namespaces: NamespacesState }) {
-    const apiResources = await this.resourceLoader.loadResourceLists();
+  async gatherAPIResources({
+    namespaces,
+    resources,
+  }: {
+    namespaces: NamespacesState;
+    resources: K8sAPIResource[];
+  }) {
+    const apiResources = resources
+      ? resources
+      : await this.resourceLoader.loadResourceLists();
 
     const listableResources = apiResources.filter(resource =>
       resource.verbs?.includes('list'),
