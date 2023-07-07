@@ -57,23 +57,21 @@ export function CustomComponent({
     console.log('lololo longestArrayKey', longestArrayName, longestArrayLength);
 
     const finalResult = [];
-    (newProps[longestArrayName] || []).map((obj1, index) => {
-      for (let i = 0; i < longestArrayLength; i++) {
-        const result = {};
+    for (let i = 0; i < longestArrayLength; i++) {
+      const result = {};
 
-        const allKeys = Object.keys(object);
-        allKeys.forEach(key => {
-          console.log('!!!!! ', newProps[key]);
-          if (newProps[key] && newProps[key][i]) {
-            result[key] = Array.isArray(newProps[key])
-              ? newProps[key][i]
-              : newProps[key];
-          }
-        });
-        finalResult.push(result);
-        console.log('!!!!! finalResult', finalResult);
-      }
-    });
+      const allKeys = Object.keys(object);
+      allKeys.forEach(key => {
+        console.log('!!!!! ', newProps[key]);
+        if (newProps[key] && newProps[key][i]) {
+          result[key] = Array.isArray(newProps[key])
+            ? newProps[key][i]
+            : newProps[key];
+        }
+      });
+      finalResult.push(result);
+      console.log('!!!!! finalResult', finalResult);
+    }
 
     console.log(
       'lololo changeObjectOfArraysIntoArray',
