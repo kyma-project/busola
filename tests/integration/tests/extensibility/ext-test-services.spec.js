@@ -6,6 +6,8 @@ context('Test Services', () => {
   Cypress.skipAfterFail();
 
   before(() => {
+    cy.handleExceptions();
+
     cy.loginAndSelectCluster({
       fileName: 'kubeconfig-k3s.yaml',
       storage: 'Session storage',

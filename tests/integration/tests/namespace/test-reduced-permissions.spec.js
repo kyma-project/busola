@@ -175,6 +175,7 @@ context('Test reduced permissions', () => {
       expectedLocation: new RegExp(
         `/namespaces/${Cypress.env('NAMESPACE_NAME')}`,
       ),
+      disableClear: true,
       staticToken: true,
     });
   });
@@ -200,13 +201,9 @@ context('Test reduced permissions', () => {
   it('Cleanup', () => {
     cy.get('[aria-controls="fd-shellbar-product-popover"]').click();
 
-    cy.loginAndSelectCluster();
+    cy.loginAndSelectCluster({ disableClear: true });
 
     // delete binding
-    cy.getLeftNav()
-      .contains('Configuration', { timeout: 2000 })
-      .click();
-
     cy.getLeftNav()
       .contains('Cluster Role Bindings')
       .click();

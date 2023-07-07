@@ -9,6 +9,10 @@ const kubeconfigIdAddress = `${config.clusterAddress}/kubeconfig`;
 context('Test login - kubeconfigID', () => {
   Cypress.skipAfterFail();
 
+  before(() => {
+    cy.handleExceptions();
+  });
+
   it('Adds cluster by kubeconfigID - no path, go to Cluster Overview', () => {
     cy.wrap(loadFile('kubeconfig.yaml')).then(kubeconfig => {
       cy.intercept(
