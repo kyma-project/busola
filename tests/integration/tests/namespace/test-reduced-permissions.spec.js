@@ -201,9 +201,12 @@ context('Test reduced permissions', () => {
   it('Cleanup', () => {
     cy.get('[aria-controls="fd-shellbar-product-popover"]').click();
 
-    cy.loginAndSelectCluster();
+    cy.loginAndSelectCluster({ disableClear: true });
 
-    cy.navigateTo('Configuration', 'Cluster Role Bindings');
+    // delete binding
+    cy.getLeftNav()
+      .contains('Cluster Role Bindings')
+      .click();
 
     cy.deleteFromGenericList(CRB_NAME);
 
@@ -219,6 +222,8 @@ context('Test reduced permissions', () => {
 
     cy.contains('Clusters Overview').click();
 
-    cy.contains(SA_NAME).should('not.exist');
+    cy.deleteFromGenericList(SA_NAME, true, false);
+
+    cy.contains(/No clusters found/).should('exist');
   });
 });

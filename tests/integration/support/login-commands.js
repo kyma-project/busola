@@ -7,6 +7,7 @@ const PASSWORD = Cypress.env('OIDC_PASS');
 
 Cypress.Commands.add('loginAndSelectCluster', function(params) {
   cy.handleExceptions();
+
   if (!params?.disableClear) {
     sessionStorage.clear();
     cy.clearCookies();
