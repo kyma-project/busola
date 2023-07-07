@@ -21,7 +21,7 @@ spec:
                   type: string
                 replicas:
                   type: integer
-  scope: Namespaced
+  scope: Cluster
   names:
     plural: test
     singular: test

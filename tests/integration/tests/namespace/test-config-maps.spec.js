@@ -44,7 +44,7 @@ context('Test Config Maps', () => {
     cy.contains('.fd-layout-panel', ENTRY_KEY).contains(ENTRY_VALUE);
   });
 
-  it('Edit the Config MAp', () => {
+  it('Edit the Config Map', () => {
     cy.contains('Edit').click();
 
     // hide first entry so Cypress doesn't get confuused

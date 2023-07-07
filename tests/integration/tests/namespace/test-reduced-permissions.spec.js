@@ -175,6 +175,8 @@ context('Test reduced permissions', () => {
       expectedLocation: new RegExp(
         `/namespaces/${Cypress.env('NAMESPACE_NAME')}`,
       ),
+      disableClear: true,
+      staticToken: true,
     });
   });
 
@@ -199,20 +201,9 @@ context('Test reduced permissions', () => {
   it('Cleanup', () => {
     cy.get('[aria-controls="fd-shellbar-product-popover"]').click();
 
-    // 2 results: "Clusters Overview" node and original cluster, take second
-    cy.get('[role=menuitem]:visible')
-      // .eq(1) // TODO uncomment after resolving "second added cluster isn't showing in top nav"
-      .first()
-      .click();
-
-    // wait for the new cluster to load
-    cy.wait(2000);
+    cy.loginAndSelectCluster({ disableClear: true });
 
     // delete binding
-    cy.getLeftNav()
-      .contains('Configuration', { timeout: 2000 })
-      .click();
-
     cy.getLeftNav()
       .contains('Cluster Role Bindings')
       .click();

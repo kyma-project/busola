@@ -59,17 +59,17 @@ context('Test multiple context kubeconfig', () => {
 
       cy.contains('Next').click();
 
-      cy.get('[role=combobox]').within(() => {
-        cy.contains(kubeconfig['current-context']).click();
+      cy.get('[role=combobox]').each($combobox => {
+        cy.wrap($combobox).within(() => {
+          cy.contains(kubeconfig['current-context']).click();
+        });
       });
 
-      cy.get('[role=option]').within(() => {
-        cy.contains(kubeconfig.contexts[1].name);
-      });
+      cy.get('[role=option]').contains(kubeconfig.contexts[1].name);
 
-      cy.get('[role=option]').within(() => {
-        cy.contains('All contexts').click();
-      });
+      cy.get('[role=option]')
+        .contains('All contexts')
+        .click();
 
       cy.contains('Next').click();
 
