@@ -1,1 +1,574 @@
-[]
+dataSources:
+  moduleTemplates:
+    resource:
+      kind: ModuleTemplate
+      namespace: null
+      group: operator.kyma-project.io
+      version: v1beta2
+  relatedModuleTemplate:
+    resource:
+      kind: Pod
+      version: v1
+    filter: $item.metadata.labels."operator.kyma-project.io/module-name" = "cluster-ip"
+details:
+  header: []
+  resourceGraph:
+      depth: 2
+      colorVariant: 1
+      dataSources:
+        - source: relatedModuleTemplate
+  body:
+    - name: Summary
+      widget: Panel
+      children:
+        - name: channel
+          source: spec.channel
+        - name: State
+          widget: Badge
+          source: status.state
+          description: 'status.state!="Ready" ? status.lastOperation.operation : ""'
+        - name: Age
+          source: metadata.creationTimestamp
+    - widget: Alert
+      severity: warning
+      source: '"alert.beta"'
+      visibility: '(
+        $fullModuleTemplate := $filter($moduleTemplates().items, function($v) {
+          $v.metadata.labels."operator.kyma-project.io/module-name" in $item.spec.modules.name
+          and $v.metadata.labels."operator.kyma-project.io/beta" = "true"
+          });
+          $isBeta := $count($fullModuleTemplate) > 0;
+      )'
+    - widget: Table
+      source: '$sort(status.modules[], function($l, $r) {$l.name < $r.name})'
+      name: Modules
+      visibility: $exists(*)
+      children:
+        - name: Name
+          source: $
+          widget: Plain
+          children:
+            - widget: ResourceLink
+              visibility: $exists(resource.metadata.name)
+              source: name
+              resource:
+                name: resource.metadata.name
+                namespace: resource.metadata.namespace
+                kind: resource.kind
+            - widget: Text
+              visibility: $not($exists(resource.metadata.name))   
+              source: name
+        - name: ''
+          source: '$filter($moduleTemplates().items, function($v) {$v.metadata.labels."operator.kyma-project.io/module-name" in name and $v.spec.channel=channel}).metadata.labels."operator.kyma-project.io/beta" = "true" ? "beta" : "-"'
+        - name: Namespace
+          source: $parent.metadata.namespace
+        - name: Channel
+          source: channel
+          widget: Text
+        - name: Version
+          source: version
+          widget: Text
+        - name: State
+          widget: Badge
+          source: state
+          description: 'message ? message : ""'
+        - name: 'Documentation'
+          widget: ExternalLink
+          copyable: false
+          source: '"Documentation"'
+          link: '$filter($moduleTemplates().items, function($v) {$v.metadata.labels."operator.kyma-project.io/module-name" in name and $v.spec.channel=channel}).metadata.annotations."operator.kyma-project.io/doc-url"'
+          visibility: '(
+            $docsLink := $filter($moduleTemplates().items, function($v) {$v.metadata.labels."operator.kyma-project.io/module-name" in name and $v.spec.channel=channel}).metadata.annotations."operator.kyma-project.io/doc-url";
+            $hasDocs := $count($docsLink) > 0;
+          )'
+form:
+  # - simple: true
+  #   path: spec.channel
+  #   widget: Custom
+  #   customProps:
+  #     componentName: new-component
+  #     name: Agatha
+  #   required: true
+  - widget: GenericList
+    path: spec.modules
+    simple: true
+    children:
+      - simple: true
+        path: "[].name"
+        widget: Custom
+        customProps:
+          componentType: ui5
+          componentName: CheckBox
+        arrayProps:
+          text: |
+            $distinct($moduleTemplates().items.metadata.labels."operator.kyma-project.io/module-name")
+             
+          text2: ['1','n']
+          lol: "'lol'"
+
+        required: true
+      
+      - simple: true
+        path: "[].channel"
+        widget: Custom
+        customProps:
+          componentType: ui5
+          componentName: CheckBox
+          text: static text
+        required: true
+      # - path: "[].channel"
+      #   visibility: "$boolean($item.name)"
+      #   enum: '(
+      #     $channels := $filter($moduleTemplates().items, function($v) {
+      #       $v.metadata.labels."operator.kyma-project.io/module-name" = $item.name
+      #     });
+      #     $channelsAsOptions := $map($channels, function ($v) {
+      #       {
+      #         "key": $v.spec.channel,
+      #         "name": $v.spec.channel & ($v.spec.descriptor.component.version ? " (version: " & $v.spec.descriptor.component.version & ")" : "")
+      #       }
+      #     });
+      #     $channelsAsOptions;
+      #   )'
+      - widget: Alert
+        severity: information
+        alert: '(
+          $linkToDocumentation := $filter($moduleTemplates().items, function($v) {$v.metadata.labels."operator.kyma-project.io/module-name" = $item.name and $v.spec.channel=$item.channel}).metadata.annotations."operator.kyma-project.io/doc-url";
+          $count($linkToDocumentation) > 0 ? "Link to {{[documentation](" & $linkToDocumentation & ")}}" : "";
+        )'
+        visibility: '(
+          $linkToDocumentation := $filter($moduleTemplates().items, function($v) {$v.metadata.labels."operator.kyma-project.io/module-name" = $item.name and $v.spec.channel=$item.channel}).metadata.annotations."operator.kyma-project.io/doc-url";
+          $count($linkToDocumentation) > 0;
+        )'
+  - widget: Alert
+    severity: warning
+    alert: '"alert.beta"'
+    visibility: '(  
+      $fullModuleTemplate := $filter($moduleTemplates().items, function($v) {
+      $v.metadata.labels."operator.kyma-project.io/module-name" in $item.spec.modules.name
+      and $v.metadata.labels."operator.kyma-project.io/beta" = "true"
+      });
+      $isBeta := $count($fullModuleTemplate) > 0;
+    )'
+general: 
+  resource:
+    kind: Kyma
+    group: operator.kyma-project.io
+    version: v1beta1
+  name: Kyma
+  category: Kyma
+  urlPath: kymas
+  scope: namespace
+  description: >-
+    {{[Kyma Custom Resource](https://github.com/kyma-project/lifecycle-manager/blob/main/docs/technical-reference/api/kyma-cr.md)}}
+    represents Kyma installation in a cluster.
+list:
+  - name: Channel
+    widget: Badge
+    source: spec.channel
+  - name: State
+    widget: Badge
+    source: status.state
+    tooltip: status.state
+translations:
+  en:
+    metadata.annotations: Annotations
+    metadata.labels: Labels
+    metadata.creationTimestamp: Created at
+    alert.beta: "CAUTION: The Service Level Agreements (SLAs) and Support obligations do not apply to Beta modules and functionalities. If Beta modules or functionalities directly or indirectly affect other modules, the Service Level Agreements and Support for these modules are limited to priority levels P3 (Medium) or P4 (Low). Thus, Beta releases are not intended for use in customer production environments."
+injections:
+  - name: Kyma Modules
+    widget: Panel
+    source: $
+    visibility: $not($exists($item.status.modules))
+    targets:
+      - slot: details-top
+        location: ClusterOverview
+    order: 1 
+    children: 
+      - widget: MessagePanel
+        source: $
+        name: Kyma Modules Panel
+        title: Seems that you don't have any Kyma Modules configured
+        subtitle: Add at least one Kyma Module. Add your module under "kyma-system -> Kyma"
+        children:
+          - widget: Wizard
+            name: Add Module
+            wizard: module-wizard
+            visibility: $not($exists($item.status.modules))
+  - name: Kyma
+    widget: Panel
+    description: To check the Kyma Modularisation documentation go to the {{[Kyma Modularisation](https://help.sap.com/docs/btp/sap-business-technology-platform-internal/kyma-environment)}}.
+    source: $
+    visibility: $exists($item.status.modules)
+    targets:
+      - slot: details-top
+        location: ClusterOverview
+    order: 2 
+    children: 
+      - name: Name
+        source: metadata.name
+        widget: ResourceLink
+        resource:
+          name: metadata.name
+          namespace: metadata.namespace
+          kind: '"Kyma"'
+      - name: State
+        widget: Badge
+        source: status.state
+        description: 'status.state!="Ready" ? status.lastOperation.operation : ""'
+      - widget: Alert
+        severity: warning
+        source: '"alert.beta"'
+        visibility: '(
+          $fullModuleTemplate := $filter($moduleTemplates().items, function($v) {
+            $v.metadata.labels."operator.kyma-project.io/module-name" in $item.status.modules.name 
+            and $v.metadata.labels."operator.kyma-project.io/beta" = "true"
+          });
+          $isBeta := $count($fullModuleTemplate) > 0;
+          $isBeta;
+        )'
+      - name: Installed Modules
+        source: '$sort($parent.status.modules[], function($l, $r) {$l.name < $r.name})'
+        widget: Table
+        disablePadding: true
+        extraHeaderContent: 
+          - name: ''
+            source: '"Modify"'
+            widget: ResourceButton
+            resource:
+              name: $parent.metadata.name
+              namespace: $parent.metadata.namespace
+              kind: '"Kyma"'
+        children: 
+          - name: Name
+            source: $
+            widget: Plain
+            children:
+              - widget: ResourceLink
+                visibility: $exists(resource.metadata.name)
+                source: name
+                resource:
+                  name: resource.metadata.name
+                  namespace: resource.metadata.namespace
+                  kind: resource.kind
+              - widget: Text
+                visibility: $not($exists(resource.metadata.name))
+                source: name
+          - name: ''
+            source: '$filter($moduleTemplates().items, function($v) {$v.metadata.labels."operator.kyma-project.io/module-name" in name and $v.spec.channel=channel}).metadata.labels."operator.kyma-project.io/beta" = "true" ? "beta" : "-"'
+          - name: Namespace
+            source: $parent.metadata.namespace
+          - name: Channel
+            source: channel
+            widget: Text
+          - name: Version
+            source: version
+            widget: Text
+          - name: State
+            widget: Badge
+            source: state
+            description: 'message ? message : ""'
+---
+dataSources:
+  relatedKyma:
+    resource:
+      kind: Kyma
+      group: operator.kyma-project.io
+      version: v1beta1
+    # filter: $root.metadata.labels."operator.kyma-project.io/module-name" in $item.spec.modules.name
+details:
+  resourceGraph:
+      depth: 2
+      colorVariant: 1
+      dataSources:
+        - source: relatedKyma
+  header: 
+    - name: Version
+      source: spec.descriptor.component.version
+  body:
+    - name: Summary
+      widget: Panel
+      visibility: $exists(metadata.annotations."operator.kyma-project.io/doc-url")
+      children:
+        - name: Channel
+          source: spec.channel
+          widget: Badge
+        - name: 'Documentation'
+          widget: ExternalLink
+          copyable: false
+          source: '"Documentation"'
+          link: metadata.annotations."operator.kyma-project.io/doc-url"
+    - name: Data
+      source: spec.data
+      widget: CodeViewer
+    - name: Descriptor
+      source: spec.descriptor
+      widget: CodeViewer
+general:
+  resource:
+    kind: ModuleTemplate
+    group: operator.kyma-project.io
+    version: v1beta2
+  name: Module Templates
+  category: Kyma
+  urlPath: moduletemplates
+  scope: namespace
+  features:
+    actions:
+      disableCreate: true
+      disableEdit: true
+  description: >-
+    {{[ModuleTemplate Custom Resource](https://github.com/kyma-project/lifecycle-manager/blob/main/docs/technical-reference/api/moduleTemplate-cr.md)}}
+    contains modules' metadata with links to their images and manifests.
+list:
+  - name: Channel
+    source: spec.channel
+    widget: Badge
+  - name: Version
+    source: spec.descriptor.component.version
+---
+details:
+  header:
+    - source: status.conditions[-1].type
+      name: Status
+      widget: Badge
+  body:
+    - source: spec.parser
+      widget: CodeViewer
+      language: "'plaintext'"
+form:
+  - widget: CodeEditor
+    path: spec.parser
+    simple: true
+    language: "'plaintext'"
+general:
+  resource:
+    kind: LogParser
+    group: telemetry.kyma-project.io
+    version: v1alpha1
+  name: Log Parsers
+  category: Observability
+  urlPath: logparsers
+  scope: cluster
+  description: >-
+    {{"{{[LogParser](https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/telemetry-02-logparser)}}"}} configures a custom Log Parser.
+list:
+  - source: status.conditions[-1].type
+    name: Status
+    widget: Badge
+---
+general:
+  resource:
+    kind: LogParser
+    group: telemetry.kyma-project.io
+    version: v1alpha1
+  name: Log Parsers1
+  category: Observability
+  urlPath: logparsers1
+  scope: namespace
+  description: >-
+    {{"{{[LogParser](https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/telemetry-02-logparser)}}"}} configures a custom Log Parser.
+list:
+  - source: status.conditions[-1].type
+    name: Status
+    widget: Badge
+---
+dataSources:
+  secret:
+    resource:
+      kind: Secret
+      version: v1
+    filter: '$item.metadata.name = $root.spec.secretName'
+details: 
+  header: 
+    - source: 'status.state ? "error" : "ok"'
+      highlights:
+        positive:
+          - ok
+        negative: 
+          - error
+      name: status
+      widget: Badge
+  body: 
+    - name: configuration
+      widget: Panel
+      children:
+        - name: spec.redirectUris
+          source: spec.redirectUris
+          widget: Labels
+          visibility: $exists(spec.redirectUris)
+        - name: spec.postLogoutRedirectUris
+          source: spec.postLogoutRedirectUris
+          widget: Labels
+          visibility: $exists(spec.postLogoutRedirectUris)
+        - name: spec.clientName
+          source: spec.clientName
+          widget: Labels
+          visibility: $exists(spec.clientName)
+        - name: spec.responseTypes
+          source: spec.responseTypes
+          widget: Labels
+        - name: spec.grantTypes
+          source: spec.grantTypes
+          widget: Labels
+        - name: spec.scope
+          source: spec.scope
+          widget: Labels
+        - name: spec.audience
+          source: spec.audience
+          widget: Labels
+          visibility: $exists(spec.audience)
+        - name: spec.secretName
+          widget: ResourceLink
+          source: spec.secretName
+          resource:
+            name: spec.secretName
+            namespace: $root.metadata.namespace
+            kind: "'Secret'"
+        - name: spec.tokenEndpointAuthMethod
+          source: spec.tokenEndpointAuthMethod
+          widget: Labels
+    - name: data
+      widget: Panel
+      source: $secret().items.data
+      decodable: true
+      children:
+        - name: secret.client_id
+          source: client_id
+        - name: secret.client_secret
+          source: client_secret
+form:
+  - path: metadata.name
+    extraPaths:
+      - spec.secretName
+      - metadata.labels['app.kubernetes.io/name']
+  - path: spec.responseTypes
+    simple: true
+    required: true
+    widget: MultiCheckbox
+    name: Response Types
+    options:
+      - key: id_token
+        name: ID Token
+      - key: code
+        name: Code
+      - key: token
+        name: Token
+  - path: spec.grantTypes
+    simple: true
+    required: true
+    widget: MultiCheckbox
+    options:
+      - key: client_credentials
+        name: Client Credentials
+      - key: authorization_code
+        name: Authorization Code
+      - key: implicit
+        name: Implicit
+      - key: refresh_token
+        name: Refresh Token
+  - name: spec.clientName
+    path: spec.clientName
+    widget: Text      
+  - name: spec.secretName
+    path: spec.secretName
+    widget: Resource
+    resource:
+      kind: Secret
+      scope: namespace
+      version: v1  
+  - name: spec.tokenEndpointAuthMethod
+    path: spec.tokenEndpointAuthMethod
+    enum:
+      - none
+      - client_secret_basic
+      - client_secret_post
+      - private_key_jwt
+  - name: spec.scope
+    widget: Text
+    simple: true
+    path: spec.scope
+    inputInfo: 'You can provide more then one Scope, but they have to be separated by a Space'    
+  - widget: SimpleList
+    name: spec.redirectUris
+    defaultExpanded: true
+    path: spec.redirectUris
+    inputInfo: "Input must consist of two parts, which are separated by ':' (e.g. 'test:temp')"      
+    children:
+      - path: '[]'
+  - name: spec.postLogoutRedirectUris
+    path: spec.postLogoutRedirectUris
+    widget: SimpleList
+    defaultExpanded: true
+    inputInfo: "Input must consist of two parts, which are separated by ':' (e.g. 'test:temp')"      
+    children:
+      - path: '[]'
+  - path: spec.audience
+    name: spec.audience
+    widget: SimpleList
+    defaultExpanded: true
+    children:
+      - path: '[]'
+general:
+  resource: 
+    kind: OAuth2Client
+    group: hydra.ory.sh
+    version: v1alpha1
+  name: OAuth2 Clients
+  category: Configuration
+  urlPath: oauth2clients
+  scope: namespace
+  description: >-
+    {{[OAuth2 Clients](https://kyma-project.io/docs/kyma/latest/03-tutorials/00-api-exposure/apix-05-expose-and-secure-workload-oauth2#register-an-o-auth2-client-and-get-tokens)}}
+    allows an application to acquire an OAuth2 token to access protected resources.
+list:
+  - name: spec.secretName
+    widget: ResourceLink
+    source: spec.secretName
+    resource:
+      name: spec.secretName
+      namespace: $root.metadata.namespace
+      kind: "'secret'"
+  - source: 'status.state ? "error" : "ok"'
+    highlights:
+      positive:
+        - ok
+      negative: 
+        - error
+    name: status
+    widget: Badge
+    description: status.message
+presets:
+  - name: template
+    default: true
+    value:
+      spec:
+        scope: ''
+        secretName: ''
+        tokenEndpointAuthMethod: client_secret_basic  
+        responseTypes: []
+        grantTypes: []
+translations:
+  en: 
+      metadata.annotations: Annotations
+      metadata.labels: Labels
+      metadata.creationTimestamp: Created at
+      status: Status
+      spec.scope: Scope
+      spec.responseTypes: Response Types
+      spec.grantTypes: Grant Types
+      spec.tokenEndpointAuthMethod: Token Endpoint Authentication Method
+      spec.tokenEndpointAuthMethod.none: None
+      spec.tokenEndpointAuthMethod.client_secret_basic: Client Secret/ Basic
+      spec.tokenEndpointAuthMethod.client_secret_post: Client Secret/ POST
+      spec.tokenEndpointAuthMethod.private_key_jwt: Private Key/ JWT
+      spec.redirectUris: Redirect URIs
+      spec.postLogoutRedirectUris: Post-Logout Redirect URIs
+      spec.audience: Audience
+      spec.secretName: Secret Name
+      configuration: Configuration
+      data: Data
+      spec.clientName: Client Name
+      secret.client_id: client_id
+      secret.client_secret: client_secret

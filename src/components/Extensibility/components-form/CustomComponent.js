@@ -20,9 +20,8 @@ export function CustomComponent({
     componentType = 'custom',
     ...customProps
   } = schema.get('customProps');
-  const arrayProps = schema.get('arrayProps') || {};
+  const arrayProps = schema.get('arrayProps');
   const componentNameWithPrefix = `webcomponent-${componentName}`;
-  console.log('lololo props', componentName, componentType, customProps);
 
   const jsonata = useJsonata({
     resource,
@@ -35,7 +34,6 @@ export function CustomComponent({
     if (error) {
       console.warn('Widget::CustomComponent error:', error);
       return propObject;
-      // if (!Array.isArray(value)) { return }
     } else {
       return value;
     }
@@ -43,7 +41,6 @@ export function CustomComponent({
   function changeObjectOfArraysIntoArray(object) {
     let newProps = {};
     let longestArrayLength = 0;
-    let longestArrayName = '';
     Object.keys(object).forEach(key => {
       newProps[key] = makeJsonata(object[key], item);
       if (
@@ -51,10 +48,8 @@ export function CustomComponent({
         newProps[key].length > longestArrayLength
       ) {
         longestArrayLength = newProps[key].length;
-        longestArrayName = key;
       }
     });
-    console.log('lololo longestArrayKey', longestArrayName, longestArrayLength);
 
     const finalResult = [];
     for (let i = 0; i < longestArrayLength; i++) {
@@ -62,7 +57,6 @@ export function CustomComponent({
 
       const allKeys = Object.keys(object);
       allKeys.forEach(key => {
-        console.log('!!!!! ', newProps[key]);
         if (newProps[key] && newProps[key][i]) {
           result[key] = Array.isArray(newProps[key])
             ? newProps[key][i]
@@ -70,16 +64,7 @@ export function CustomComponent({
         }
       });
       finalResult.push(result);
-      console.log('!!!!! finalResult', finalResult);
     }
-
-    console.log(
-      'lololo changeObjectOfArraysIntoArray',
-      newProps,
-      object,
-      'mergedArrays',
-      finalResult,
-    );
     return finalResult;
   }
   let mergedArrays = [];
@@ -87,45 +72,31 @@ export function CustomComponent({
     mergedArrays = changeObjectOfArraysIntoArray(arrayProps);
   }
 
-  console.log('lololo componentName', componentName);
   let ui5Components, DynamicComponentClass;
   if (componentType === 'ui5') {
     ui5Components = require(`/node_modules/@ui5/webcomponents-react/dist/webComponents/${componentName}/index.js`);
-    console.log('lolo  sth', ui5Components);
-  }
-  // else if (componentType === 'custom') {
-  //   DynamicComponentClass = require(`/custom-components/${componentName}`).default;
-  //   if (!customElements.get(componentNameWithPrefix)) {
-  //     customElements.define(componentNameWithPrefix, DynamicComponentClass);
-  //   }
-  //   console.log('dynamic-component', componentNameWithPrefix, DynamicComponentClass);
-
-  // }
-  else {
+  } else if (componentType === 'custom') {
+    DynamicComponentClass = require(`/custom-components/${componentName}`)
+      .default;
+    if (!customElements.get(componentNameWithPrefix)) {
+      customElements.define(componentNameWithPrefix, DynamicComponentClass);
+    }
+  } else {
     return <>ERROR</>;
   }
 
-  // const DynamicComponent = lazy(() => import(`@ui5/webcomponents-react`));
-  // console.log('lolo  DynamicComponent', DynamicComponent);
-  console.log(
-    'lololo ui5Components',
-    ui5Components,
-    componentName,
-    arrayProps,
-    customProps,
-  );
   if (ui5Components && ui5Components[componentName]) {
     return React.createElement(
       Fragment,
       null,
       arrayProps
-        ? mergedArrays.map((obj, index) => {
+        ? mergedArrays.map((entryProps, index) => {
             return React.createElement(
               ui5Components[componentName],
               {
                 key: `${componentName}-${index}`,
                 ...customProps,
-                ...obj,
+                ...entryProps,
                 onChange: e => {
                   onChange({
                     storeKeys,
@@ -144,17 +115,26 @@ export function CustomComponent({
             {
               key: componentName,
               ...customProps,
+              onChange: e => {
+                onChange({
+                  storeKeys,
+                  scopes: ['value'],
+                  type: 'set',
+                  schema,
+                  required,
+                  data: { value: e.target.text },
+                });
+              },
             } || {},
           ),
     );
+  } else if (DynamicComponentClass) {
+    return React.createElement(
+      componentNameWithPrefix,
+      {
+        key: componentName,
+        ...customProps,
+      } || {},
+    );
   }
-  // if (DynamicComponentClass) {
-  //   return React.createElement(
-  //     DynamicComponentClass,
-  //     {
-  //       key: componentName,
-  //       ...customProps,
-  //     } || {},
-  //   )
-  // }
 }
