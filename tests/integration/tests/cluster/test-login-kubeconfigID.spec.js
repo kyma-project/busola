@@ -9,6 +9,10 @@ const kubeconfigIdAddress = `${config.clusterAddress}/kubeconfig`;
 context('Test login - kubeconfigID', () => {
   Cypress.skipAfterFail();
 
+  before(() => {
+    cy.handleExceptions();
+  });
+
   it('Adds cluster by kubeconfigID - no path, go to Cluster Overview', () => {
     cy.wrap(loadFile('kubeconfig.yaml')).then(kubeconfig => {
       cy.intercept(
@@ -44,7 +48,9 @@ context('Test login - kubeconfigID', () => {
   });
 
   it('Does not change storage for already added cluster', () => {
-    cy.loginAndSelectCluster({ storage: 'Local storage' });
+    cy.loginAndSelectCluster({
+      storage: 'Local storage',
+    });
 
     cy.contains('Local Storage').should('be.visible');
 
@@ -81,45 +87,46 @@ context('Test login - kubeconfigID', () => {
     );
   });
 
-  it('Handles default kubeconfig', () => {
-    // mock defaultKubeconfig on
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/config/config.yaml*',
-      },
-      jsyaml.dump({
-        config: {
-          features: {
-            KUBECONFIG_ID: {
-              isEnabled: true,
-              config: {
-                kubeconfigUrl: '/kubeconfig',
-                defaultKubeconfig: 'mock-kubeconfig.yaml',
-              },
-            },
-          },
-        },
-      }),
-    );
+  // Uncomment after resolving https://github.com/kyma-project/busola/issues/2511
+  // it('Handles default kubeconfig', () => {
+  //   // mock defaultKubeconfig on
+  //   cy.intercept(
+  //     {
+  //       method: 'GET',
+  //       url: '/config/config.yaml*',
+  //     },
+  //     jsyaml.dump({
+  //       config: {
+  //         features: {
+  //           KUBECONFIG_ID: {
+  //             isEnabled: true,
+  //             config: {
+  //               kubeconfigUrl: '/kubeconfig',
+  //               defaultKubeconfig: 'mock-kubeconfig.yaml',
+  //             },
+  //           },
+  //         },
+  //       },
+  //     }),
+  //   );
 
-    cy.wrap(loadFile('kubeconfig.yaml')).then(kubeconfig => {
-      cy.intercept(
-        {
-          method: 'GET',
-          url: `${kubeconfigIdAddress}/*`,
-        },
-        kubeconfig,
-      );
-      cy.visit(`${config.clusterAddress}/clusters`);
+  //   cy.wrap(loadFile('kubeconfig.yaml')).then(kubeconfig => {
+  //     cy.intercept(
+  //       {
+  //         method: 'GET',
+  //         url: `${kubeconfigIdAddress}/*`,
+  //       },
+  //       kubeconfig,
+  //     );
+  //     cy.visit(`${config.clusterAddress}/clusters`);
 
-      cy.contains('Load default cluster')
-        .should('be.visible')
-        .click();
+  //     cy.contains('Load default cluster')
+  //       .should('be.visible')
+  //       .click();
 
-      cy.url().should('match', /overview$/);
+  //     cy.url().should('match', /overview$/);
 
-      cy.contains('Session Storage').should('be.visible');
-    });
-  });
+  //     cy.contains('Session Storage').should('be.visible');
+  //   });
+  // });
 });

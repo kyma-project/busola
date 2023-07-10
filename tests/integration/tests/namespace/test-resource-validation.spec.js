@@ -130,7 +130,7 @@ context('Test resource validation', () => {
       },
     });
 
-    cy.reload();
+    cy.loginAndSelectCluster();
 
     cy.contains('Upload YAML').click();
 

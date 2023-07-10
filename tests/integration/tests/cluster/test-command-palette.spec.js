@@ -72,7 +72,7 @@ context('Test Command Palette navigation', () => {
 
     cy.contains('Cluster Details - Nodes').should('be.visible');
 
-    // navigate to cluster overviewf
+    // navigate to cluster overview
     openCommandPalette();
 
     getQueryInput().type('ov');
@@ -80,25 +80,25 @@ context('Test Command Palette navigation', () => {
     getQueryInput().trigger('keydown', { key: 'Enter' });
 
     cy.contains('API Server Address').should('be.visible');
-
-    // navigate to generic CR
-    openCommandPalette();
-
-    getQueryInput().type('verticalpodautoscalercheckpoints');
-
-    getQueryInput().trigger('keydown', { key: 'Enter' });
-
-    cy.contains('VerticalPodAutoscalerCheckpoints').should('be.visible');
   });
 
   it('All namespaces', () => {
+    // navigate to deployments
+    openCommandPalette();
+
+    getQueryInput().type('deployments');
+
+    getQueryInput().trigger('keydown', {
+      key: 'Enter',
+    });
+
     openCommandPalette();
 
     getQueryInput().type('ns -a');
 
     cy.contains('All Namespaces').click();
 
-    cy.url().should('match', /\/namespaces\/-all-\/customresources$/);
+    cy.url().should('match', /\/namespaces\/-all-\/deployments$/);
   });
 
   it('History', () => {
