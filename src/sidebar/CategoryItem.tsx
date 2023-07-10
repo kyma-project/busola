@@ -1,53 +1,74 @@
+import { SideNav, Popover, Icon } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-// import { SetterOrUpdater } from 'recoil';
+import { SetterOrUpdater } from 'recoil';
 import { Category } from 'state/navigation/categories';
-import { SideNavigationItem } from '@ui5/webcomponents-react';
-
-// import { ExpandedCategories } from 'state/navigation/expandedCategories/expandedCategoriesAtom';
+import { ExpandedCategories } from 'state/navigation/expandedCategories/expandedCategoriesAtom';
 import { NavItem } from './NavItem';
+import './CategoryItem.scss';
 
 type CategoryItemProps = {
   category: Category;
-  // expandedCategories: string[];
-  // handleExpandedCategories: SetterOrUpdater<ExpandedCategories>;
+  expandedCategories: string[];
+  handleExpandedCategories: SetterOrUpdater<ExpandedCategories>;
+  isSidebarCondensed: boolean;
 };
 
 export function CategoryItem({
   category,
-}: // expandedCategories,
-// handleExpandedCategories,
-CategoryItemProps) {
+  expandedCategories,
+  handleExpandedCategories,
+  isSidebarCondensed,
+}: CategoryItemProps) {
   const { t } = useTranslation();
   const categoryName = t(category.label, { defaultValue: category.label });
 
-  // const expanded = expandedCategories.includes(category.key);
+  const expanded = expandedCategories.includes(category.key);
 
-  // const handleAddExpandedCategory = () => {
-  //   console.log('handleAddExpandedCategory', categoryName, category)
-  //   if (expanded) {
-  //     handleExpandedCategories(
-  //       expandedCategories.filter(el => el !== category.key),
-  //     );
-  //   } else {
-  //     handleExpandedCategories([...expandedCategories, category.key]);
-  //   }
-  // };
+  const handleAddExpandedCategory = () => {
+    if (expanded) {
+      handleExpandedCategories(
+        expandedCategories.filter(el => el !== category.key),
+      );
+    } else {
+      handleExpandedCategories([...expandedCategories, category.key]);
+    }
+  };
 
-  const children = category.items?.map(nn => (
-    <NavItem node={nn} key={nn.pathSegment} subItem={true} />
-  ));
+  const children = (
+    <SideNav.List level={2}>
+      {category.items?.map(nn => (
+        <NavItem node={nn} key={nn.pathSegment} />
+      ))}
+    </SideNav.List>
+  );
 
-  return (
-    <SideNavigationItem
-      key={category.key}
-      // key={expanded + category.key}
-      // expanded={expanded}
-      icon={category.icon}
-      text={categoryName}
-      wholeItemToggleable={true}
-      // onClick={handleAddExpandedCategory} // TODO handle saving Expanded Categories to local storage
+  return isSidebarCondensed ? (
+    <li className="fd-nested-list__item condensed-item">
+      <Popover
+        body={
+          <>
+            <p>{categoryName}</p>
+            {children}
+          </>
+        }
+        control={
+          <Icon glyph={category.icon} className="fd-nested-list__icon" />
+        }
+        placement="right-start"
+      />
+    </li>
+  ) : (
+    <SideNav.ListItem
+      key={expanded + category.key}
+      expandSubmenuLabel={`Expand ${categoryName} category`}
+      id={category.key}
+      name={categoryName}
+      url="#"
+      glyph={category.icon}
+      onClick={handleAddExpandedCategory}
+      expanded={expanded}
     >
       {children}
-    </SideNavigationItem>
+    </SideNav.ListItem>
   );
 }

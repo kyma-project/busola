@@ -1,0 +1,11 @@
+.nav-item__external-link {
+  display: inline-flex;
+  justify-content: space-between;
+  width: 100%;
+  padding-left: 2.75rem;
+
+  .sap-icon--inspect {
+    display: grid;
+    place-content: center;
+  }
+}
