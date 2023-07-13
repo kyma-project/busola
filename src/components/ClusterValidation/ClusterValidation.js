@@ -51,7 +51,12 @@ function ClusterValidation() {
     return { fetch, post };
   }, [authData, cluster]);
   const resourceLoader = useMemo(
-    () => new ResourceLoader(relativeUrl => fetch({ relativeUrl })),
+    () =>
+      new ResourceLoader(
+        relativeUrl => fetch({ relativeUrl }),
+        undefined,
+        null,
+      ),
     [fetch],
   );
   const validationSchemas = useRecoilValue(validationSchemasEnabledState);
@@ -101,7 +106,7 @@ function ClusterValidation() {
   const [scanProgress, setScanProgress] = useState();
 
   const scan = async () => {
-    setScanProgress();
+    setScanProgress({});
     const currentScan = new Scan(resourceLoader, validationSchemas);
     setScanResult(currentScan.result);
     await ResourceValidation.setRuleset(validationSchemas);
@@ -115,7 +120,14 @@ function ClusterValidation() {
       return;
     }
 
-    await currentScan.gatherAPIResources({ namespaces, resources });
+    const resourcesToScan = resources.filter(resource =>
+      configuration?.resources.includes(resource.kind),
+    );
+
+    await currentScan.gatherAPIResources({
+      namespaces: configuration?.namespaces,
+      resources: resourcesToScan,
+    });
     setScanResult(currentScan.result);
 
     console.log('after gathering api resources', currentScan.result.namespaces);
@@ -127,13 +139,14 @@ function ClusterValidation() {
     const queue = new PQueue({
       concurrency:
         Math.max(
-          scanSettings.concurrentRequests,
-          scanSettings.concurrentWorkers,
+          configuration.scanParameters.parallelRequests,
+          configuration.scanParameters.parallelWorkerThreads,
         ) + scanSettings.backpressureBuffer,
     });
     // const toScan = [...currentScan.listResourcesToScan({ namespaces: ['jv'] })];
     const toScan = [...currentScan.listResourcesToScan()];
     setScanProgress({ total: toScan.length });
+
     await Promise.all(
       toScan.map(async resource =>
         queue.add(async () => {
@@ -155,6 +168,8 @@ function ClusterValidation() {
 
   const clear = () => {
     localStorage.removeItem('cached-scan-result-for-test');
+    setScanResult();
+    setScanProgress();
   };
 
   // fetchResources(fetch).then(r => {
@@ -167,13 +182,17 @@ function ClusterValidation() {
       <Bar
         endContent={
           <>
-            <Button glyph="play" onClick={scan}>
+            <Button glyph="play" onClick={scan} disabled={!!scanProgress}>
               Scan
             </Button>
-            <Button glyph="settings" onClick={configure}>
+            <Button
+              glyph="settings"
+              onClick={configure}
+              disabled={!!scanProgress}
+            >
               Configure
             </Button>
-            <Button glyph="reset" onClick={clear}>
+            <Button glyph="reset" onClick={clear} disabled={!scanProgress}>
               Clear
             </Button>
           </>
@@ -185,7 +204,7 @@ function ClusterValidation() {
         titleText="Scan Progress"
         status={
           scanProgress
-            ? `${scanProgress.scanned} / ${scanProgress.total}`
+            ? `${scanProgress.scanned ?? 0} / ${scanProgress.total ?? '?'}`
             : 'Not started'
         }
       >
@@ -241,14 +260,18 @@ function ClusterValidation() {
           <InfoTile
             title="Namespaces"
             content={
-              !scanResult?.namespaces
+              !configuration?.namespaces
                 ? 'N/A'
-                : Object.keys(scanResult.namespaces)?.length
+                : configuration?.namespaces?.length
             }
           />
           <InfoTile
             title="K8s API Resources"
-            content={!listableResources ? 'N/A' : listableResources.length}
+            content={
+              !configuration?.resources
+                ? 'N/A'
+                : configuration?.resources.length
+            }
           />
           {/* <Card style={{ width: 'fit-content', margin: '5px' }}>
             <Label>Test</Label>

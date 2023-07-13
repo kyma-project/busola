@@ -125,7 +125,7 @@ export class Scan {
         );
       }
     } catch (error) {
-      //
+      console.error(`error during scan: ${error}`);
     }
     resource.scanned = true;
   }

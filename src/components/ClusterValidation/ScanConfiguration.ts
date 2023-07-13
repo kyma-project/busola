@@ -29,10 +29,7 @@ export const getDefaultScanConfiguration = (
     namespaces?.filter(name => !systemNamespaces.includes(name)) ?? [];
   return {
     namespaces: userNamespaces,
-    resources:
-      resources
-        ?.filter(({ kind }) => defaultResources.includes(kind))
-        .map(({ kind }) => kind) ?? [],
+    resources: resources?.map(({ kind }) => kind) ?? [],
     policies: [],
     scanParameters: {
       parallelRequests: 5,
