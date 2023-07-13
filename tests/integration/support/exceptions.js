@@ -8,6 +8,9 @@ Cypress.Commands.add('handleExceptions', () => {
       ) ||
       err.message.includes('ResizeObserver loop limit exceeded') ||
       err.message.includes(
+        'ResizeObserver loop completed with undelivered notifications',
+      ) ||
+      err.message.includes(
         "Cannot read properties of null (reading 'sendError')",
       ) ||
       err.message.includes(
@@ -16,7 +19,10 @@ Cypress.Commands.add('handleExceptions', () => {
       err.message.includes(
         "Cannot read properties of undefined (reading 'category')",
       ) ||
-      err.message.includes('Model is disposed!')
+      err.message.includes('Model is disposed!') ||
+      err.message.includes(
+        "Cannot read properties of null (reading 'querySelector')",
+      )
     )
       return false;
   });

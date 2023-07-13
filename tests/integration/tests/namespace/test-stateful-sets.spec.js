@@ -1,43 +1,63 @@
-const SET_NAME = 'alertmanager-monitoring-alertmanager';
+import { loadFile } from '../../support/loadFile';
+
+const FILE_NAME = 'test-stateful-sets.yaml';
+
+const SS_NAME =
+  'test-' +
+  Math.random()
+    .toString()
+    .substr(2, 8);
+
+async function loadSS(name, namespace, fileName) {
+  const resource = await loadFile(fileName);
+  const newResource = { ...resource };
+
+  newResource.metadata.name = name;
+  newResource.metadata.namespace = namespace;
+
+  return newResource;
+}
 
 context('Test Stateful Sets', () => {
   Cypress.skipAfterFail();
 
   before(() => {
-    // Ignor Cypress issue with Monaco on CI
     cy.loginAndSelectCluster();
-
-    cy.getLeftNav()
-      .contains('Namespaces')
-      .click();
-
-    cy.get('[role="search"] [aria-label="open-search"]').type('kyma-system');
-
-    cy.contains('a.fd-link', 'kyma-system').click();
-
-    cy.navigateTo('Workloads', 'Stateful Sets');
+    cy.goToNamespaceDetails();
   });
 
-  it('Create and inspect list', () => {
-    cy.url().should('match', /statefulsets$/);
+  it('Create Stateful Set', () => {
+    cy.navigateTo('Workloads', 'Stateful Sets');
 
-    cy.contains(SET_NAME);
+    cy.contains('Create Stateful Set').click();
+
+    cy.wrap(loadSS(SS_NAME, Cypress.env('NAMESPACE_NAME'), FILE_NAME)).then(
+      SS_CONFIG => {
+        const SS = JSON.stringify(SS_CONFIG);
+        cy.pasteToMonaco(SS);
+      },
+    );
+
+    cy.get('[role="dialog"]')
+      .contains('button', 'Create')
+      .click();
+
+    cy.contains('h3', SS_NAME).should('be.visible');
   });
 
   it('Inspect details', () => {
-    cy.get('[role="search"] [aria-label="open-search"]').type(SET_NAME);
-
-    cy.get('table.fd-table')
-      .contains(SET_NAME)
-      .click();
-
-    cy.url().should('match', new RegExp(`statefulsets/${SET_NAME}$`));
-
     // name
-    cy.contains(SET_NAME);
-    // controlled by
-    cy.contains('Alertmanager');
+    cy.contains(SS_NAME);
+    // selector
+    cy.contains('app=nginx');
     // pod
-    cy.contains('alertmanager-monitoring-alertmanager-0');
+    cy.contains(`${SS_NAME}-0`);
+    cy.contains('registry.k8s.io/nginx-slim:0.8');
+    cy.contains('/usr/share/nginx/html');
+    cy.contains('web:80/TCP');
+  });
+
+  it('Inspect list', () => {
+    cy.inspectList('Stateful Sets', SS_NAME);
   });
 });

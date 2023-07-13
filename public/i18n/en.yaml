@@ -1140,7 +1140,7 @@ role-bindings:
 roles:
   buttons:
     add-all: Add all
-    load: Load
+    load-resources: Load resources
   description: <0>Role</0> is a set of permissions within a Namespace that can be assigned to a user.
   headers:
     api-groups: API Groups
@@ -1152,6 +1152,7 @@ roles:
     rules: Rules
     verbs: Verbs
   messages:
+    load-resources: Click Load resources after selecting API Group.
     invalid: Rules cannot apply to both regular resources and non-resource URLs.
   name_singular: Role
   templates:
