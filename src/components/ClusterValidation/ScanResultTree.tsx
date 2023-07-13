@@ -7,18 +7,72 @@ import {
   ScanNamespaceStatus,
 } from './ScanResult';
 
+type TreeItemState = 'Success' | 'Warning' | 'None';
+
 const sum = (summed: number, x: number) => summed + x;
+
+const getWarningState = ({
+  warningCount,
+  resourceCount,
+  scanned,
+  unauthorized,
+}: {
+  warningCount: number;
+  resourceCount?: number;
+  scanned: boolean | number;
+  unauthorized?: boolean | number;
+}): { text: string; state: TreeItemState } => {
+  if (!scanned)
+    return {
+      text: 'Not scanned',
+      state: 'None',
+    };
+  if (unauthorized === true || unauthorized === resourceCount)
+    return {
+      text: 'Unauthorized',
+      state: 'Warning',
+    };
+
+  const textSegments = [`${warningCount} warnings`];
+  let state = warningCount > 0 ? 'Warning' : ('Success' as TreeItemState);
+
+  if (typeof unauthorized === 'number' && unauthorized > 0) {
+    textSegments.unshift(`${unauthorized} unauthorized`);
+    state = 'Warning';
+  }
+
+  if (
+    typeof scanned === 'number' &&
+    resourceCount &&
+    scanned <
+      (typeof unauthorized === 'number'
+        ? resourceCount - unauthorized
+        : resourceCount)
+  ) {
+    textSegments.unshift('partially scanned');
+  }
+
+  return {
+    text: textSegments.join(', '),
+    state,
+  };
+};
 
 const ScanResultItemTree = ({ item }: { item: ScanItemStatus }) => {
   const warningCount = item.warnings?.length ?? 0;
+  const warningState = getWarningState({
+    warningCount,
+    scanned: true,
+    unauthorized: false,
+  });
 
   return {
     warningCount,
     treeItem: (
       <TreeItem
         text={item.name}
-        additionalText={`${warningCount} warnings`}
-        additionalTextState={warningCount > 0 ? 'Warning' : 'Success'}
+        additionalText={warningState.text}
+        additionalTextState={warningState.state}
       >
         {item.warnings?.map(warning => (
           <>
@@ -54,13 +108,18 @@ const ScanResultResourceTree = ({
     const { elements, warningCount } = ScanResultItemsTree({
       items: resource.items,
     });
+    const warningState = getWarningState({
+      warningCount,
+      scanned: resource.scanned,
+      unauthorized: resource.unauthorized,
+    });
     return {
       warningCount,
       treeItem: (
         <TreeItem
           text={resource.kind}
-          additionalText={`${warningCount} warnings`}
-          additionalTextState={warningCount > 0 ? 'Warning' : 'Success'}
+          additionalText={warningState.text}
+          additionalTextState={warningState.state}
         >
           {elements}
         </TreeItem>
@@ -72,6 +131,14 @@ const ScanResultResourceTree = ({
     warningCount:
       mappedResources?.map(resource => resource.warningCount).reduce(sum, 0) ??
       0,
+    scanned:
+      resources?.map(resource => (resource.scanned ? 1 : 0)).reduce(sum, 0) ??
+      0,
+    unauthorized:
+      resources
+        ?.map(resource => (resource.unauthorized ? 1 : 0))
+        .reduce(sum, 0) ?? 0,
+    resourceCount: resources?.length ?? 0,
     elements: <>{mappedResources?.map(resource => resource.treeItem)}</>,
   };
 };
@@ -81,15 +148,27 @@ const ScanResultClusterTree = ({
 }: {
   cluster?: ScanClusterStatus;
 }) => {
-  const { elements, warningCount } = ScanResultResourceTree({
+  const {
+    elements,
+    warningCount,
+    scanned,
+    unauthorized,
+    resourceCount,
+  } = ScanResultResourceTree({
     resources: cluster?.resources,
+  });
+  const warningState = getWarningState({
+    warningCount,
+    scanned,
+    unauthorized,
+    resourceCount,
   });
   return (
     <>
       <TreeItem
         text="Cluster Resources"
-        additionalText={`${warningCount} warnings`}
-        additionalTextState={warningCount > 0 ? 'Warning' : 'Success'}
+        additionalText={warningState.text}
+        additionalTextState={warningState.state}
       >
         {elements}
       </TreeItem>
@@ -102,16 +181,31 @@ const ScanResultNamespaceTree = ({
 }: {
   namespace: ScanNamespaceStatus;
 }) => {
-  const { elements, warningCount } = ScanResultResourceTree({
+  const {
+    elements,
+    warningCount,
+    scanned,
+    unauthorized,
+    resourceCount,
+  } = ScanResultResourceTree({
     resources: namespace.resources,
+  });
+  const warningState = getWarningState({
+    warningCount,
+    scanned,
+    unauthorized,
+    resourceCount,
   });
   return {
     warningCount,
+    scanned,
+    unauthorized,
+    resourceCount,
     treeItem: (
       <TreeItem
         text={namespace.name}
-        additionalText={`${warningCount} warnings`}
-        additionalTextState={warningCount > 0 ? 'Warning' : 'Success'}
+        additionalText={warningState.text}
+        additionalTextState={warningState.state}
       >
         {elements}
       </TreeItem>
@@ -129,16 +223,32 @@ const ScanResultNamespacesTree = ({
   );
 
   const warningCount =
-    mappedNamespaces?.map(resource => resource.warningCount).reduce(sum, 0) ??
+    mappedNamespaces?.map(namespace => namespace.warningCount).reduce(sum, 0) ??
     0;
 
+  const scanned =
+    mappedNamespaces?.map(namespace => namespace.scanned).reduce(sum, 0) ?? 0;
+  const unauthorized =
+    mappedNamespaces?.map(namespace => namespace.unauthorized).reduce(sum, 0) ??
+    0;
+  const resourceCount =
+    mappedNamespaces
+      ?.map(namespace => namespace.resourceCount)
+      .reduce(sum, 0) ?? 0;
+
+  const warningState = getWarningState({
+    warningCount,
+    scanned,
+    unauthorized,
+    resourceCount,
+  });
   return (
     <>
       <TreeItem
         expanded
         text="Namespaces"
-        additionalText={`${warningCount} warnings`}
-        additionalTextState={warningCount > 0 ? 'Warning' : 'Success'}
+        additionalText={warningState.text}
+        additionalTextState={warningState.state}
       >
         {mappedNamespaces?.map(({ treeItem }) => treeItem)}
       </TreeItem>
@@ -147,7 +257,6 @@ const ScanResultNamespacesTree = ({
 };
 
 export const ScanResultTree = ({ scanResult }: { scanResult?: ScanResult }) => {
-  console.log(scanResult);
   if (!scanResult) return <FlexBox justifyContent="Center">No Results</FlexBox>;
   return (
     <>
