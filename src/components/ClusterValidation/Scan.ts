@@ -1,13 +1,9 @@
-import PQueue from 'p-queue';
 import { PostFn } from 'shared/hooks/BackendAPI/usePost';
 import { doesUserHavePermission } from 'state/navigation/filters/permissions';
-import {
-  getPermissionResourceRules,
-  PermissionSet,
-} from 'state/permissionSetsSelector';
+import { getPermissionResourceRules } from 'state/permissionSetsSelector';
 import { ValidationSchema } from 'state/validationSchemasAtom';
 import { K8sAPIResource, K8sResource } from 'types';
-import { ResourceLoader } from './ResourceLoader2';
+import { ResourceLoader } from './ResourceLoader';
 import { ResourceValidation } from './ResourceValidation';
 import {
   getInitialScanResult,

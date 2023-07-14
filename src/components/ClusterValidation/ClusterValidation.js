@@ -1,22 +1,15 @@
-import { PageHeader } from 'shared/components/PageHeader/PageHeader';
-
 import { useTranslation } from 'react-i18next';
-import { useEffect, useMemo, useState, useCallback } from 'react';
-import { useFetch, createFetchFn } from 'shared/hooks/BackendAPI/useFetch';
-import { loadResources, loadResourcesConcurrently } from './ResourceLoader';
+import { useEffect, useMemo, useState } from 'react';
+import { createFetchFn } from 'shared/hooks/BackendAPI/useFetch';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { validationSchemasEnabledState } from 'state/validationEnabledSchemasAtom';
 import { ResourceValidation } from './ResourceValidation';
-import { ResourceWarningList, ValidationWarnings } from './ValidationWarnings';
-import { Button, LayoutPanel, Tile } from 'fundamental-react';
+import { Button } from 'fundamental-react';
 
 import './ClusterValidation.scss';
-import { ResourceLoader } from './ResourceLoader2';
-import { getInitialScanResult } from './ScanResult';
+import { ResourceLoader } from './ResourceLoader';
 import { createPostFn } from 'shared/hooks/BackendAPI/usePost';
-import { doesUserHavePermission } from 'state/navigation/filters/permissions';
 import { Scan } from './Scan';
-import { getPermissionResourceRules } from 'state/permissionSetsSelector';
 import { ScanResultTree } from './ScanResultTree';
 import PQueue from 'p-queue';
 import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
@@ -25,8 +18,6 @@ import {
   Card,
   CardHeader,
   FlexBox,
-  Label,
-  Page,
   ProgressIndicator,
 } from '@ui5/webcomponents-react';
 import { ClusterValidationConfigurationDialog } from './ClusterValidationConfiguration';
@@ -76,8 +67,8 @@ function ClusterValidation() {
   }, [resourceLoader, setResources]);
 
   const defaultConfiguration = useMemo(
-    () => getDefaultScanConfiguration(namespaces, resources, []),
-    [namespaces, resources],
+    () => getDefaultScanConfiguration(namespaces, listableResources, []),
+    [namespaces, listableResources],
   );
 
   const [selectedConfiguration, setConfiguration] = useState(null);
@@ -143,7 +134,6 @@ function ClusterValidation() {
           configuration.scanParameters.parallelWorkerThreads,
         ) + scanSettings.backpressureBuffer,
     });
-    // const toScan = [...currentScan.listResourcesToScan({ namespaces: ['jv'] })];
     const toScan = [...currentScan.listResourcesToScan()];
     setScanProgress({ total: toScan.length });
 
@@ -171,11 +161,6 @@ function ClusterValidation() {
     setScanResult();
     setScanProgress();
   };
-
-  // fetchResources(fetch).then(r => {
-  //   console.log(r);
-  //   setResources(r.map(resource => ({value: {kind: 'Pod', ...resource}})));
-  // });
 
   return (
     <>
@@ -209,7 +194,6 @@ function ClusterValidation() {
         }
       >
         <ProgressIndicator
-          // displayValue={scanProgress? `${scanProgress.scanned} / ${scanProgress.total}` : 'Not started'}
           value={
             scanProgress
               ? Math.floor((100 * scanProgress.scanned) / scanProgress.total)
@@ -222,37 +206,6 @@ function ClusterValidation() {
           }
           style={{ width: '96%', padding: '5px 2%' }}
         ></ProgressIndicator>
-        {/* <FlexBox style={{margin: '10px'}}>
-      <InfoTile
-        title="Items Scanned"
-        content={
-          scanResult?.cluster?.resources?.reduce(
-            (agg, resource) => agg + (resource.items?.length ?? 0),
-
-            0,
-          ) ?? 0 + scanResult?.namespaces
-            ? Object.values(scanResult.namespaces).reduce(
-                (agg, { resources }) =>
-                  agg +
-                  resources.reduce(
-                    (agg, resource) =>
-                      agg + (resource.items?.length ?? 0),
-                    0,
-                  ),
-                0,
-              )
-            : 0
-        }
-      />
-      <InfoTile
-        title="Scan"
-        content={
-          scanProgress
-            ? `${scanProgress.scanned} / ${scanProgress.total}`
-            : '-'
-        }
-      />
-      </FlexBox> */}
       </Section>
 
       <Section titleText="Scan Scope">
@@ -273,9 +226,6 @@ function ClusterValidation() {
                 : configuration?.resources.length
             }
           />
-          {/* <Card style={{ width: 'fit-content', margin: '5px' }}>
-            <Label>Test</Label>
-          </Card> */}
         </FlexBox>
       </Section>
 

@@ -18,7 +18,6 @@ const systemNamespaces = [
   'kube-system',
   'kyma-system',
 ];
-const defaultResources = ['Pod', 'Deployment'];
 
 export const getDefaultScanConfiguration = (
   namespaces: string[],
@@ -27,6 +26,7 @@ export const getDefaultScanConfiguration = (
 ): ScanConfiguration => {
   const userNamespaces =
     namespaces?.filter(name => !systemNamespaces.includes(name)) ?? [];
+  console.log(resources);
   return {
     namespaces: userNamespaces,
     resources: resources?.map(({ kind }) => kind) ?? [],

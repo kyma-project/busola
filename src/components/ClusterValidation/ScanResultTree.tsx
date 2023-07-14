@@ -37,7 +37,7 @@ const getWarningState = ({
   let state = warningCount > 0 ? 'Warning' : ('Success' as TreeItemState);
 
   if (typeof unauthorized === 'number' && unauthorized > 0) {
-    textSegments.unshift(`${unauthorized} unauthorized`);
+    textSegments.unshift(`${unauthorized}/${resourceCount} unauthorized`);
     state = 'Warning';
   }
 
