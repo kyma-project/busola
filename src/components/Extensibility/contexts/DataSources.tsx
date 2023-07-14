@@ -177,7 +177,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
     if (
       !dataSourcesDict.current[dataSourceName] ||
       dataSourcesDict.current[dataSourceName].rootName !==
-        resource.metadata.name ||
+        resource?.metadata?.name ||
       dataSourcesDict.current[dataSourceName].filter !== dataSource.filter
     ) {
       // mark dataSource as fetched
