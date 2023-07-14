@@ -199,18 +199,18 @@ context('Test extensibility variables', () => {
     cy.get('@form')
       .find('[data-testid="spec.prefix"]:visible')
       .clear()
-      .type('1');
+      .type('a');
     cy.get('@form')
       .find('[data-testid="$anotherName"]:visible')
-      .type('2');
+      .type('b');
     cy.get('@form')
       .find('[data-testid="spec.suffix"]:visible')
       .clear()
-      .type('3');
+      .type('c');
 
     cy.get('@form')
       .find('[data-testid="spec.combined"]:visible')
-      .should('have.value', '123');
+      .should('have.value', 'abc');
 
     // test if trigger / subscribe works with data sources
     cy.get('@form')

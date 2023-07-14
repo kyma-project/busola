@@ -133,7 +133,9 @@ export function StringRenderer({
               type: 'set',
               schema,
               required,
-              data: { value },
+              data: {
+                value: isNaN(value) ? value : parseInt(value),
+              },
             });
         }}
         disabled={readOnly}
