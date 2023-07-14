@@ -178,12 +178,12 @@ export const DataSourcesContextProvider: FC<Props> = ({
       !dataSourcesDict.current[dataSourceName] ||
       dataSourcesDict.current[dataSourceName].rootName !==
         resource?.metadata?.name ||
-      dataSourcesDict.current[dataSourceName].filter !== dataSource.filter
+      dataSourcesDict.current[dataSourceName]?.filter !== dataSource?.filter
     ) {
       // mark dataSource as fetched
       dataSourcesDict.current[dataSourceName] = {
         rootName: resource.metadata.name,
-        filter: dataSource.filter,
+        filter: dataSource?.filter,
       };
 
       const firstFetch = fetchResource(dataSource, dataSourceName, resource);
