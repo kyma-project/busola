@@ -134,7 +134,11 @@ export function StringRenderer({
               schema,
               required,
               data: {
-                value: isNaN(value) ? value : parseInt(value),
+                value: isNaN(value)
+                  ? value
+                  : value.endsWith('.')
+                  ? value
+                  : parseFloat(value),
               },
             });
         }}
