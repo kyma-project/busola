@@ -1,21 +1,6 @@
 import { K8sAPIResource } from 'types';
 import PQueue from 'p-queue';
 
-interface K8sGroup {
-  name: string;
-  endpoint: string;
-}
-
-interface APIResource {
-  name: string;
-  namespaced: boolean;
-  kind: string;
-  verbs: string[];
-  base: string;
-  collectionName?: string;
-  revision?: string;
-}
-
 export class ResourceLoader {
   fetch;
   queue;
