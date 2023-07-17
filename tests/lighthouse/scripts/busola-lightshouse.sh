@@ -30,4 +30,4 @@ while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' "$CYPRESS_DOMAIN")" != "200
 sleep 10
 
 cd tests/lighthouse
-npm ci && npm run "test:local"
+npm ci && npm run "test"
