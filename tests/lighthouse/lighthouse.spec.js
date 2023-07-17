@@ -5,7 +5,7 @@ import { tmpdir } from 'os';
 
 const ADDRESS = process.env.LOCAL
   ? 'http://localhost:8080'
-  : 'https://local.kyma.dev';
+  : 'http://localhost:3000';
 
 test('Busola Lighthouse audit', async () => {
   const context = await chromium.launchPersistentContext(tmpdir(), {
