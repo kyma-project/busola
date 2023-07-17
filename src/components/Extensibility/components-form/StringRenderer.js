@@ -133,7 +133,13 @@ export function StringRenderer({
               type: 'set',
               schema,
               required,
-              data: { value },
+              data: {
+                value: isNaN(value)
+                  ? value
+                  : value.endsWith('.')
+                  ? value
+                  : parseFloat(value),
+              },
             });
         }}
         disabled={readOnly}

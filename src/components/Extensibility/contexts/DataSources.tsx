@@ -174,9 +174,17 @@ export const DataSourcesContextProvider: FC<Props> = ({
   const requestRelatedResource = (resource: any, dataSourceName: string) => {
     const dataSource = dataSources[dataSourceName];
 
-    if (!dataSourcesDict.current[dataSourceName]) {
+    if (
+      !dataSourcesDict.current[dataSourceName] ||
+      dataSourcesDict.current[dataSourceName].rootName !==
+        resource?.metadata?.name ||
+      dataSourcesDict.current[dataSourceName]?.filter !== dataSource?.filter
+    ) {
       // mark dataSource as fetched
-      dataSourcesDict.current[dataSourceName] = true;
+      dataSourcesDict.current[dataSourceName] = {
+        rootName: resource.metadata.name,
+        filter: dataSource?.filter,
+      };
 
       const firstFetch = fetchResource(dataSource, dataSourceName, resource);
       setStore(dataSourceName, {
