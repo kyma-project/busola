@@ -15,7 +15,7 @@ cat << EOF | kubectl create -f - --raw "/apis/core.gardener.cloud/v1beta1/namesp
 }
 EOF
 
-cp kubeconfig--kyma--nkyma.yaml tests/fixtures/kubeconfig.yaml
+cp kubeconfig--kyma--nkyma.yaml tests/lighthouse/fixtures/kubeconfig.yaml
 
 npm ci && npm run build
 npm i -g serve 
