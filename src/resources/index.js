@@ -4,7 +4,6 @@ import { createResourceRoutes } from './createResourceRoutes';
 import * as Jobs from './Jobs';
 import * as CronJobs from './CronJobs';
 import * as StatefulSets from './StatefulSets';
-import * as Services from './Services';
 import * as Secrets from './Secrets';
 import * as Roles from './Roles';
 import * as RoleBindings from './RoleBindings';
@@ -40,7 +39,6 @@ export const resources = [
   Deployments,
   DaemonSets,
   // discovery and network
-  Services,
   Ingresses,
   NetworkPolicies,
   // storage
