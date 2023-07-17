@@ -136,7 +136,7 @@ export function StringRenderer({
               data: {
                 value: isNaN(value)
                   ? value
-                  : value.endsWith('.')
+                  : value.endsWith('.') || value.endsWith('0')
                   ? value
                   : parseFloat(value),
               },
