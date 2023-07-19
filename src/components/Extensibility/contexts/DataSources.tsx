@@ -176,13 +176,13 @@ export const DataSourcesContextProvider: FC<Props> = ({
 
     if (
       !dataSourcesDict.current[dataSourceName] ||
-      dataSourcesDict.current[dataSourceName].rootName !==
-        resource?.metadata?.name ||
-      dataSourcesDict.current[dataSourceName]?.filter !== dataSource?.filter
+      (dataSourcesDict.current[dataSourceName].rootName !==
+        resource?.metadata?.name &&
+        dataSourcesDict.current[dataSourceName]?.filter !== dataSource?.filter)
     ) {
       // mark dataSource as fetched
       dataSourcesDict.current[dataSourceName] = {
-        rootName: resource.metadata.name,
+        rootName: resource?.metadata?.name,
         filter: dataSource?.filter,
       };
 
