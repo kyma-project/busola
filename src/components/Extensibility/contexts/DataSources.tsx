@@ -182,7 +182,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
     ) {
       // mark dataSource as fetched
       dataSourcesDict.current[dataSourceName] = {
-        rootName: resource.metadata.name,
+        rootName: resource?.metadata?.name,
         filter: dataSource?.filter,
       };
 
