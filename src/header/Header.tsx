@@ -102,6 +102,19 @@ export function Header() {
             ),
           },
         ]
+      : isFeedbackEnabled
+      ? [
+          {
+            glyph: 'feedback',
+            notificationCount: 0,
+            callback: () => {
+              window.open(
+                'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+                '_blank',
+              );
+            },
+          },
+        ]
       : [];
 
   return (
