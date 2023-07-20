@@ -72,5 +72,5 @@ config:
         policies:
           - Default
     FEEDBACK:
-      isEnabled: true
+      isEnabled: false
       link: https://www.youtube.com/watch?v=dQw4w9WgXcQ

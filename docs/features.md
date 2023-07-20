@@ -262,3 +262,13 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
       policies:
         - Default
   ```
+
+- **FEEDBACK** - determines if feedback icon should be rendered at top bar and link when user will be redirected.
+
+  Default settings:
+
+  ```yaml
+  FEEDBACK:
+    isEnabled: true
+    link: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+  ```
