@@ -59,59 +59,31 @@ export function Header() {
     else return activeNamespace || t('navigation.select-namespace');
   };
 
-  const headerActions =
-    cluster && isFeedbackEnabled
-      ? [
-          {
-            glyph: 'feedback',
-            notificationCount: 0,
-            callback: () => {
-              window.open(feedbackLink, '_blank');
-            },
-          },
-          {
-            glyph: 'megamenu',
-            label: getNamespaceLabel(),
-            notificationCount: 0,
-            callback: () => {
-              refetch();
-              setIsNamespaceOpen(!isNamespaceOpen);
-            },
-            menu: (
-              <NamespaceDropdown
-                hideDropdown={() => setIsNamespaceOpen(false)}
-              />
-            ),
-          },
-        ]
-      : cluster
-      ? [
-          {
-            glyph: 'megamenu',
-            label: getNamespaceLabel(),
-            notificationCount: 0,
-            callback: () => {
-              refetch();
-              setIsNamespaceOpen(!isNamespaceOpen);
-            },
-            menu: (
-              <NamespaceDropdown
-                hideDropdown={() => setIsNamespaceOpen(false)}
-              />
-            ),
-          },
-        ]
-      : isFeedbackEnabled
-      ? [
-          {
-            glyph: 'feedback',
-            notificationCount: 0,
-            callback: () => {
-              window.open(feedbackLink, '_blank');
-            },
-          },
-        ]
-      : [];
+  let headerActions = [];
+  if (cluster) {
+    headerActions.push({
+      glyph: 'megamenu',
+      label: getNamespaceLabel(),
+      notificationCount: 0,
+      callback: () => {
+        refetch();
+        setIsNamespaceOpen(!isNamespaceOpen);
+      },
+      menu: (
+        <NamespaceDropdown hideDropdown={() => setIsNamespaceOpen(false)} />
+      ),
+    });
+  }
+
+  if (isFeedbackEnabled) {
+    headerActions.unshift({
+      glyph: 'feedback',
+      notificationCount: 0,
+      callback: () => {
+        window.open(feedbackLink, '_blank');
+      },
+    });
+  }
 
   return (
     <Shellbar
