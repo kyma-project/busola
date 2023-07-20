@@ -22,7 +22,9 @@ export function Header() {
   const navigate = useNavigate();
   const { refetch } = useAvailableNamespaces();
   const { namespace: activeNamespace } = useUrl();
-  const { isEnabled: isFeedbackEnabled } = useFeature('FEEDBACK');
+  const { isEnabled: isFeedbackEnabled, link: feedbackLink } = useFeature(
+    'FEEDBACK',
+  );
 
   const setPreferencesOpen = useSetRecoilState(isPreferencesOpenState);
   const cluster = useRecoilValue(clusterState);
@@ -64,10 +66,7 @@ export function Header() {
             glyph: 'feedback',
             notificationCount: 0,
             callback: () => {
-              window.open(
-                'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                '_blank',
-              );
+              window.open(feedbackLink, '_blank');
             },
           },
           {
@@ -108,10 +107,7 @@ export function Header() {
             glyph: 'feedback',
             notificationCount: 0,
             callback: () => {
-              window.open(
-                'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                '_blank',
-              );
+              window.open(feedbackLink, '_blank');
             },
           },
         ]
