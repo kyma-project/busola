@@ -71,3 +71,5 @@ config:
       config:
         policies:
           - Default
+    FEEDBACK:
+      isEnabled: false
