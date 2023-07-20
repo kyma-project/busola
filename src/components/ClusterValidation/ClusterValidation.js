@@ -27,6 +27,8 @@ import { authDataState } from 'state/authDataAtom';
 import { clusterState } from 'state/clusterAtom';
 import { getDefaultScanConfiguration } from './ScanConfiguration';
 
+import '@ui5/webcomponents-icons/dist/status-positive.js';
+
 function ClusterValidation() {
   const { t } = useTranslation();
 
@@ -61,10 +63,11 @@ function ClusterValidation() {
   }, [resources]);
 
   useEffect(() => {
-    resourceLoader.loadResourceLists().then(resourceList => {
-      setResources(resourceList);
-    });
-  }, [resourceLoader, setResources]);
+    if (!resources)
+      resourceLoader.loadResourceLists().then(resourceList => {
+        setResources(resourceList);
+      });
+  }, [resources, resourceLoader, setResources]);
 
   const defaultConfiguration = useMemo(
     () => getDefaultScanConfiguration(namespaces, listableResources, []),
@@ -102,15 +105,6 @@ function ClusterValidation() {
     setScanResult(currentScan.result);
     await ResourceValidation.setRuleset(validationSchemas);
 
-    const existingScanResult = localStorage.getItem(
-      'cached-scan-result-for-test',
-    );
-    if (existingScanResult) {
-      currentScan.result = JSON.parse(existingScanResult);
-      setScanResult(currentScan.result);
-      return;
-    }
-
     const resourcesToScan = resources.filter(resource =>
       configuration?.resources.includes(resource.kind),
     );
@@ -121,9 +115,11 @@ function ClusterValidation() {
     });
     setScanResult(currentScan.result);
 
-    console.log('after gathering api resources', currentScan.result.namespaces);
-
     await currentScan.checkPermissions(post);
+    setScanResult(currentScan.result);
+
+    currentScan.initSummary();
+    currentScan.calculateFullSummary(currentScan.result.summary);
     setScanResult(currentScan.result);
 
     let countScanned = 0;
@@ -141,23 +137,16 @@ function ClusterValidation() {
       toScan.map(async resource =>
         queue.add(async () => {
           await currentScan.scanResource(resource);
+          currentScan.recalculateSummary(resource.summary);
           countScanned++;
           setScanProgress({ total: toScan.length, scanned: countScanned });
           setScanResult(currentScan.result);
         }),
       ),
     );
-
-    console.log(currentScan.result);
-
-    localStorage.setItem(
-      'cached-scan-result-for-test',
-      JSON.stringify(currentScan.result),
-    );
   };
 
   const clear = () => {
-    localStorage.removeItem('cached-scan-result-for-test');
     setScanResult();
     setScanProgress();
   };
@@ -168,17 +157,17 @@ function ClusterValidation() {
         endContent={
           <>
             <Button glyph="play" onClick={scan} disabled={!!scanProgress}>
-              Scan
+              {t('cluster-validation.scan.buttons.scan')}
             </Button>
             <Button
               glyph="settings"
               onClick={configure}
               disabled={!!scanProgress}
             >
-              Configure
+              {t('cluster-validation.scan.buttons.configure')}
             </Button>
             <Button glyph="reset" onClick={clear} disabled={!scanProgress}>
-              Clear
+              {t('cluster-validation.scan.buttons.clear')}
             </Button>
           </>
         }
@@ -186,11 +175,11 @@ function ClusterValidation() {
       ></Bar>
 
       <Section
-        titleText="Scan Progress"
+        titleText={t('cluster-validation.scan.progress')}
         status={
           scanProgress
             ? `${scanProgress.scanned ?? 0} / ${scanProgress.total ?? '?'}`
-            : 'Not started'
+            : t('cluster-validation.scan.not-started')
         }
       >
         <ProgressIndicator
@@ -208,28 +197,26 @@ function ClusterValidation() {
         ></ProgressIndicator>
       </Section>
 
-      <Section titleText="Scan Scope">
+      <Section titleText={t('cluster-validation.scan.scope')}>
         <FlexBox>
           <InfoTile
-            title="Namespaces"
+            title={t('common.headers.namespaces')}
             content={
               !configuration?.namespaces
-                ? 'N/A'
+                ? '-'
                 : configuration?.namespaces?.length
             }
           />
           <InfoTile
-            title="K8s API Resources"
+            title={t('cluster-validation.scan.k8s-api-resources')}
             content={
-              !configuration?.resources
-                ? 'N/A'
-                : configuration?.resources.length
+              !configuration?.resources ? '-' : configuration?.resources.length
             }
           />
         </FlexBox>
       </Section>
 
-      <Section titleText="Scan Result">
+      <Section titleText={t('cluster-validation.scan.result')}>
         <ScanResultTree scanResult={scanResult} />
       </Section>
 

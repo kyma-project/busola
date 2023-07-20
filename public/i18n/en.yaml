@@ -19,6 +19,28 @@ cluster-roles:
   description: <0>ClusterRole</0> is a set of cluster-level resources and permissions that can be assigned to a user.
   name_singular: ClusterRole
   title: Cluster Roles
+cluster-validation:
+  title: Cluster Validation
+  scan:
+    progress: Scan Progress
+    scope: Scan Scope
+    result: Scan Result
+    k8s-api-resources: K8s API Resources
+    cluster-resources: Cluster Resources
+    warning-count: '{{warningCount}} warnings'
+    unauthorized-count: '{{unauthorized}} / {{resourceCount}} unauthorized'
+    partially-scanned: 'partially scanned'
+    not-started: Not started
+    buttons:
+      scan: Scan
+      configure: Configure
+      clear: Clear
+    configuration:
+      title: Scan Configuration for Cluster Validation
+      namespaces: Namespaces To Scan
+      policies: Policies
+      parameters: Scan Parameters
+      parallel-requests: Parallel Requests
 clusters:
   add:
     errors:
@@ -247,8 +269,10 @@ common:
     logs: Logs
     name: Name
     namespace: Namespace
+    namespaces: Namespaces
     owner: Controlled By
     pods: Pods
+    policies: Policies
     region: Region
     resource: Resource
     resources: Resources

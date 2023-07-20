@@ -33,6 +33,7 @@ const ConfigurationForm = ({
   resources,
   policies,
 }) => {
+  const { t } = useTranslation();
   const [description, setDescription] = useNested(
     configuration,
     setConfiguration,
@@ -71,51 +72,34 @@ const ConfigurationForm = ({
 
   return (
     <ResourceForm
-      pluralKind="tests"
-      singularName="test"
       resource={configuration}
       setResource={val => {
         setConfiguration(val);
       }}
-      onPresetSelected={presetValue => {}}
-      onReset={() => {}}
-      formElementRef={null}
-      createUrl={() => {}}
-      setCustomValid={() => {}}
-      onlyYaml={false}
-      presets={false}
       initialResource={{}}
-      afterCreatedFn={() => {}}
-      handleNameChange={() => {}}
-      urlPath=""
       disableDefaultFields
     >
       <FormFieldset>
         <FormField
           simple
           advanced
-          propertyPath={undefined}
-          label={'Description'}
+          label={t('common.headers.description')}
           input={Inputs.Text}
-          className={undefined}
-          required={false}
-          disabled={false}
-          tooltipContent={undefined}
           isAdvanced={true}
           value={description}
           defaultValue={description}
           setValue={val => setDescription(val)}
-          messageStrip={undefined}
-          inputInfo={undefined}
         ></FormField>
       </FormFieldset>
 
-      <CollapsibleSection title="Namespaces To Scan">
+      <CollapsibleSection
+        title={t('cluster-validation.scan.configuration.namespaces')}
+      >
         <FormFieldset>
           <FormField
             simple
             advanced
-            label={'Namespaces'}
+            label={t('common.headers.namespaces')}
             input={Inputs.Checkboxes}
             options={namespaces ?? []}
             isAdvanced={true}
@@ -125,7 +109,7 @@ const ConfigurationForm = ({
         </FormFieldset>
       </CollapsibleSection>
 
-      <CollapsibleSection title="Resources To Scan">
+      {/* <CollapsibleSection title="Resources To Scan">
         <FormFieldset>
           <FormField
             simple
@@ -138,14 +122,14 @@ const ConfigurationForm = ({
             value={selectedResources}
           ></FormField>
         </FormFieldset>
-      </CollapsibleSection>
+      </CollapsibleSection> */}
 
-      <CollapsibleSection title="Policies">
+      <CollapsibleSection title={t('common.headers.policies')}>
         <FormFieldset>
           <FormField
             simple
             advanced
-            label={'Policies'}
+            label={t('common.headers.policies')}
             input={Inputs.Checkboxes}
             options={policies ?? []}
             isAdvanced={true}
@@ -155,18 +139,20 @@ const ConfigurationForm = ({
         </FormFieldset>
       </CollapsibleSection>
 
-      <CollapsibleSection title="Scan Parameters">
+      <CollapsibleSection
+        title={t('cluster-validation.scan.configuration.parameters')}
+      >
         <FormFieldset>
           <FormField
             simple
             advanced
-            label={'Parallel Requests'}
+            label={t('cluster-validation.scan.configuration.parallel-requests')}
             input={Inputs.Number}
             isAdvanced={true}
             setValue={val => setParallelRequests(val)}
             value={parallelRequests}
           />
-          <FormField
+          {/* <FormField
             simple
             advanced
             label={'Parallel Worker Threads'}
@@ -174,7 +160,7 @@ const ConfigurationForm = ({
             isAdvanced={true}
             setValue={val => setParallelWorkerThreads(val)}
             value={parallelWorkerThreads}
-          />
+          /> */}
         </FormFieldset>
       </CollapsibleSection>
     </ResourceForm>
@@ -205,7 +191,7 @@ export function ClusterValidationConfigurationDialog({
     <Dialog
       show={show}
       className="yaml-upload-modal"
-      title={'Scan Configuration for Cluster Validation'}
+      title={t('cluster-validation.scan.configuration.title')}
       actions={[
         <Button
           onClick={() => {

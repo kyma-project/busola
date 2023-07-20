@@ -1,4 +1,5 @@
 import { Tree, TreeItem, FlexBox } from '@ui5/webcomponents-react';
+import { useTranslation } from 'react-i18next';
 import {
   ScanResult,
   ScanResourceStatus,
@@ -9,35 +10,47 @@ import {
 
 type TreeItemState = 'Success' | 'Warning' | 'None';
 
-const sum = (summed: number, x: number) => summed + x;
+type WarningStateInput = {
+  warningCount?: number;
+  scanned?: number;
+  unauthorized?: number;
+  resourceCount?: number;
+};
 
-const getWarningState = ({
+const useWarningState = ({
   warningCount,
   resourceCount,
   scanned,
   unauthorized,
-}: {
-  warningCount: number;
-  resourceCount?: number;
-  scanned: boolean | number;
-  unauthorized?: boolean | number;
-}): { text: string; state: TreeItemState } => {
+}: WarningStateInput): {
+  additionalText?: string;
+  additionalTextState?: TreeItemState;
+} => {
+  const { t } = useTranslation();
   if (!scanned)
     return {
-      text: 'Not scanned',
-      state: 'None',
+      additionalText: t('cluster-validation.scan.not-started'),
+      additionalTextState: 'None',
     };
-  if (unauthorized === true || unauthorized === resourceCount)
+  if (unauthorized === resourceCount)
     return {
-      text: 'Unauthorized',
-      state: 'Warning',
+      additionalText: t('cluster-validation.scan.unauthorized'),
+      additionalTextState: 'Warning',
     };
 
-  const textSegments = [`${warningCount} warnings`];
-  let state = warningCount > 0 ? 'Warning' : ('Success' as TreeItemState);
+  const textSegments = [
+    t('cluster-validation.scan.warning-count', { warningCount }),
+  ];
+  let state =
+    (warningCount ?? 0) > 0 ? 'Warning' : ('Success' as TreeItemState);
 
   if (typeof unauthorized === 'number' && unauthorized > 0) {
-    textSegments.unshift(`${unauthorized}/${resourceCount} unauthorized`);
+    textSegments.unshift(
+      t('cluster-validation.scan.unauthorized-count', {
+        unauthorized,
+        resourceCount,
+      }),
+    );
     state = 'Warning';
   }
 
@@ -49,54 +62,51 @@ const getWarningState = ({
         ? resourceCount - unauthorized
         : resourceCount)
   ) {
-    textSegments.unshift('partially scanned');
+    textSegments.unshift(t('cluster-validation.scan.partially-scanned'));
   }
 
   return {
-    text: textSegments.join(', '),
-    state,
+    additionalText: textSegments.join(', '),
+    additionalTextState: state,
   };
 };
 
 const ScanResultItemTree = ({ item }: { item: ScanItemStatus }) => {
   const warningCount = item.warnings?.length ?? 0;
-  const warningState = getWarningState({
+  const warningState = useWarningState({
     warningCount,
-    scanned: true,
-    unauthorized: false,
+    scanned: 1,
+    unauthorized: 0,
   });
 
-  return {
-    warningCount,
-    treeItem: (
-      <TreeItem
-        text={item.name}
-        additionalText={warningState.text}
-        additionalTextState={warningState.state}
-      >
-        {item.warnings?.map(warning => (
-          <>
-            <TreeItem
-              text={typeof warning === 'string' ? warning : warning.message}
-            ></TreeItem>
-          </>
-        ))}
-      </TreeItem>
-    ),
-  };
-};
-
-const ScanResultItemsTree = ({ items }: { items?: ScanItemStatus[] }) => {
-  const mappedItems = items?.map(item => ScanResultItemTree({ item }));
-  const warningCount =
-    mappedItems?.map(resource => resource.warningCount).reduce(sum, 0) ?? 0;
-  return {
-    warningCount,
-    elements: mappedItems?.map(item => item.treeItem),
-  };
+  return (
+    <TreeItem key={item.name} text={item.name} {...warningState}>
+      {item.warnings?.map((warning, i) => (
+        <TreeItem
+          key={typeof warning === 'string' ? warning : warning.key}
+          text={typeof warning === 'string' ? warning : warning.message}
+        ></TreeItem>
+      ))}
+    </TreeItem>
+  );
 };
 
 const ScanResultResourceTree = ({
+  resource,
+}: {
+  resource: ScanResourceStatus;
+}) => {
+  const warningState = useWarningState(resource.summary ?? {});
+  return (
+    <TreeItem key={resource.endpoint} text={resource.kind} {...warningState}>
+      {resource.items?.map(item => (
+        <ScanResultItemTree item={item} />
+      ))}
+    </TreeItem>
+  );
+};
+
+const ScanResultResourcesTree = ({
   resources,
 }: {
   resources?: ScanResourceStatus[];
@@ -104,43 +114,13 @@ const ScanResultResourceTree = ({
   const filteredResources = resources?.filter(
     resource => resource.items && resource.items.length > 0,
   );
-  const mappedResources = filteredResources?.map(resource => {
-    const { elements, warningCount } = ScanResultItemsTree({
-      items: resource.items,
-    });
-    const warningState = getWarningState({
-      warningCount,
-      scanned: resource.scanned,
-      unauthorized: resource.unauthorized,
-    });
-    return {
-      warningCount,
-      treeItem: (
-        <TreeItem
-          text={resource.kind}
-          additionalText={warningState.text}
-          additionalTextState={warningState.state}
-        >
-          {elements}
-        </TreeItem>
-      ),
-    };
-  });
-
-  return {
-    warningCount:
-      mappedResources?.map(resource => resource.warningCount).reduce(sum, 0) ??
-      0,
-    scanned:
-      resources?.map(resource => (resource.scanned ? 1 : 0)).reduce(sum, 0) ??
-      0,
-    unauthorized:
-      resources
-        ?.map(resource => (resource.unauthorized ? 1 : 0))
-        .reduce(sum, 0) ?? 0,
-    resourceCount: resources?.length ?? 0,
-    elements: <>{mappedResources?.map(resource => resource.treeItem)}</>,
-  };
+  return (
+    <>
+      {filteredResources?.map(resource => (
+        <ScanResultResourceTree resource={resource} />
+      ))}
+    </>
+  );
 };
 
 const ScanResultClusterTree = ({
@@ -148,31 +128,16 @@ const ScanResultClusterTree = ({
 }: {
   cluster?: ScanClusterStatus;
 }) => {
-  const {
-    elements,
-    warningCount,
-    scanned,
-    unauthorized,
-    resourceCount,
-  } = ScanResultResourceTree({
-    resources: cluster?.resources,
-  });
-  const warningState = getWarningState({
-    warningCount,
-    scanned,
-    unauthorized,
-    resourceCount,
-  });
+  const { t } = useTranslation();
+  const warningState = useWarningState(cluster?.summary ?? {});
   return (
-    <>
-      <TreeItem
-        text="Cluster Resources"
-        additionalText={warningState.text}
-        additionalTextState={warningState.state}
-      >
-        {elements}
-      </TreeItem>
-    </>
+    <TreeItem
+      key="cluster-resources"
+      text={t('cluster-validation.scan.cluster-resources')}
+      {...warningState}
+    >
+      <ScanResultResourcesTree resources={cluster?.resources} />
+    </TreeItem>
   );
 };
 
@@ -181,78 +146,33 @@ const ScanResultNamespaceTree = ({
 }: {
   namespace: ScanNamespaceStatus;
 }) => {
-  const {
-    elements,
-    warningCount,
-    scanned,
-    unauthorized,
-    resourceCount,
-  } = ScanResultResourceTree({
-    resources: namespace.resources,
-  });
-  const warningState = getWarningState({
-    warningCount,
-    scanned,
-    unauthorized,
-    resourceCount,
-  });
-  return {
-    warningCount,
-    scanned,
-    unauthorized,
-    resourceCount,
-    treeItem: (
-      <TreeItem
-        text={namespace.name}
-        additionalText={warningState.text}
-        additionalTextState={warningState.state}
-      >
-        {elements}
-      </TreeItem>
-    ),
-  };
+  const warningState = useWarningState(namespace.summary ?? {});
+  return (
+    <TreeItem key={namespace.name} text={namespace.name} {...warningState}>
+      <ScanResultResourcesTree resources={namespace.resources} />
+    </TreeItem>
+  );
 };
 
 const ScanResultNamespacesTree = ({
-  namespaces,
+  scanResult,
 }: {
-  namespaces?: ScanNamespaceStatus[];
+  scanResult: ScanResult;
 }) => {
-  const mappedNamespaces = namespaces?.map(namespace =>
-    ScanResultNamespaceTree({ namespace }),
-  );
-
-  const warningCount =
-    mappedNamespaces?.map(namespace => namespace.warningCount).reduce(sum, 0) ??
-    0;
-
-  const scanned =
-    mappedNamespaces?.map(namespace => namespace.scanned).reduce(sum, 0) ?? 0;
-  const unauthorized =
-    mappedNamespaces?.map(namespace => namespace.unauthorized).reduce(sum, 0) ??
-    0;
-  const resourceCount =
-    mappedNamespaces
-      ?.map(namespace => namespace.resourceCount)
-      .reduce(sum, 0) ?? 0;
-
-  const warningState = getWarningState({
-    warningCount,
-    scanned,
-    unauthorized,
-    resourceCount,
-  });
+  const { t } = useTranslation();
+  const warningState = useWarningState(scanResult.namespaceSummary ?? {});
   return (
-    <>
-      <TreeItem
-        expanded
-        text="Namespaces"
-        additionalText={warningState.text}
-        additionalTextState={warningState.state}
-      >
-        {mappedNamespaces?.map(({ treeItem }) => treeItem)}
-      </TreeItem>
-    </>
+    <TreeItem
+      key="namespaces"
+      expanded
+      text={t('common.headers.namespaces')}
+      {...warningState}
+    >
+      {scanResult.namespaces &&
+        Object.values(scanResult.namespaces).map(namespace => (
+          <ScanResultNamespaceTree namespace={namespace} />
+        ))}
+    </TreeItem>
   );
 };
 
@@ -262,11 +182,7 @@ export const ScanResultTree = ({ scanResult }: { scanResult?: ScanResult }) => {
     <>
       <Tree>
         <ScanResultClusterTree cluster={scanResult.cluster} />
-        <ScanResultNamespacesTree
-          namespaces={
-            scanResult.namespaces && Object.values(scanResult.namespaces)
-          }
-        />
+        <ScanResultNamespacesTree scanResult={scanResult} />
       </Tree>
     </>
   );
