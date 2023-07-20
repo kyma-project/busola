@@ -2,7 +2,10 @@ import { useTranslation } from 'react-i18next';
 import { useEffect, useMemo, useState } from 'react';
 import { createFetchFn } from 'shared/hooks/BackendAPI/useFetch';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { validationSchemasEnabledState } from 'state/validationEnabledSchemasAtom';
+import {
+  getValidationEnabledSchemas,
+  usePolicySet,
+} from 'state/validationEnabledSchemasAtom';
 import { ResourceValidation } from './ResourceValidation';
 import { Button } from 'fundamental-react';
 
@@ -28,6 +31,7 @@ import { clusterState } from 'state/clusterAtom';
 import { getDefaultScanConfiguration } from './ScanConfiguration';
 
 import '@ui5/webcomponents-icons/dist/status-positive.js';
+import { validationSchemasState } from 'state/validationSchemasAtom';
 
 function ClusterValidation() {
   const { t } = useTranslation();
@@ -52,7 +56,8 @@ function ClusterValidation() {
       ),
     [fetch],
   );
-  const validationSchemas = useRecoilValue(validationSchemasEnabledState);
+  const validationSchemas = useRecoilValue(validationSchemasState);
+  const defaultPolicySet = usePolicySet();
 
   const { namespaces } = useAvailableNamespaces();
 
@@ -70,8 +75,11 @@ function ClusterValidation() {
   }, [resources, resourceLoader, setResources]);
 
   const defaultConfiguration = useMemo(
-    () => getDefaultScanConfiguration(namespaces, listableResources, []),
-    [namespaces, listableResources],
+    () =>
+      getDefaultScanConfiguration(namespaces, listableResources, [
+        ...defaultPolicySet.values(),
+      ]),
+    [namespaces, listableResources, defaultPolicySet],
   );
 
   const [selectedConfiguration, setConfiguration] = useState(null);
@@ -101,13 +109,15 @@ function ClusterValidation() {
 
   const scan = async () => {
     setScanProgress({});
-    const currentScan = new Scan(resourceLoader, validationSchemas);
-    setScanResult(currentScan.result);
-    await ResourceValidation.setRuleset(validationSchemas);
-
-    const resourcesToScan = resources.filter(resource =>
-      configuration?.resources.includes(resource.kind),
+    const enabledSchemas = getValidationEnabledSchemas(
+      validationSchemas,
+      new Set(configuration.policies),
     );
+    const currentScan = new Scan(resourceLoader, enabledSchemas);
+    setScanResult(currentScan.result);
+    await ResourceValidation.setRuleset(enabledSchemas);
+
+    const resourcesToScan = listableResources;
 
     await currentScan.gatherAPIResources({
       namespaces: configuration?.namespaces,
@@ -126,8 +136,8 @@ function ClusterValidation() {
     const queue = new PQueue({
       concurrency:
         Math.max(
-          configuration.scanParameters.parallelRequests,
-          configuration.scanParameters.parallelWorkerThreads,
+          scanSettings.concurrentRequests,
+          scanSettings.concurrentWorkers,
         ) + scanSettings.backpressureBuffer,
     });
     const toScan = [...currentScan.listResourcesToScan()];
@@ -209,9 +219,7 @@ function ClusterValidation() {
           />
           <InfoTile
             title={t('cluster-validation.scan.k8s-api-resources')}
-            content={
-              !configuration?.resources ? '-' : configuration?.resources.length
-            }
+            content={!listableResources ? '-' : listableResources.length}
           />
         </FlexBox>
       </Section>
@@ -230,6 +238,7 @@ function ClusterValidation() {
         configuration={configuration}
         namespaces={namespaces}
         resources={listableResources}
+        policies={validationSchemas.policies.map(policy => policy.name)}
       />
     </>
   );

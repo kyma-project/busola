@@ -69,6 +69,7 @@ const ConfigurationForm = ({
 
   namespaces = namespaces?.map(name => ({ key: name, text: name }));
   resources = resources?.map(({ kind }) => ({ key: kind, text: kind }));
+  policies = policies?.map(name => ({ key: name, text: name }));
 
   return (
     <ResourceForm
@@ -94,6 +95,7 @@ const ConfigurationForm = ({
 
       <CollapsibleSection
         title={t('cluster-validation.scan.configuration.namespaces')}
+        defaultOpen={true}
       >
         <FormFieldset>
           <FormField

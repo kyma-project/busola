@@ -39,10 +39,7 @@ const getEnabledPolicyNames = (
   return [];
 };
 
-export const useGetValidationEnabledSchemas = async () => {
-  const setSchemas = useSetRecoilState(validationSchemasEnabledState);
-
-  const validationSchemas = useRecoilValue(validationSchemasState);
+export const usePolicySet = () => {
   const validationFeature = useFeature(
     'RESOURCE_VALIDATION',
   ) as ValidationFeatureConfig;
@@ -50,7 +47,7 @@ export const useGetValidationEnabledSchemas = async () => {
     useRecoilValue(validateResourcesState),
   );
 
-  const policySet = useMemo(() => {
+  return useMemo(() => {
     const policyNames = getEnabledPolicyNames(
       validationFeature,
       validationPreferences,
@@ -61,21 +58,37 @@ export const useGetValidationEnabledSchemas = async () => {
       return agg;
     }, new Set()) as Set<PolicyReference>;
   }, [validationFeature, validationPreferences]) as Set<PolicyReference>;
+};
+
+export const getValidationEnabledSchemas = (
+  validationSchemas: ValidationSchema,
+  policySet: Set<PolicyReference>,
+) => {
+  const { rules, policies } = validationSchemas;
+
+  const enabledPolicies = policies.filter(policy => policySet.has(policy.name));
+  const enabledRules = getEnabledRules(rules, enabledPolicies, policies);
+
+  return {
+    rules: enabledRules,
+    policies: enabledPolicies,
+  };
+};
+
+export const useGetValidationEnabledSchemas = () => {
+  const setSchemas = useSetRecoilState(validationSchemasEnabledState);
+
+  const validationSchemas = useRecoilValue(validationSchemasState);
+  const policySet = usePolicySet();
 
   useEffect(() => {
     if (!validationSchemas) setSchemas(emptyValidationSchema);
     else {
-      const { rules, policies } = validationSchemas;
-
-      const enabledPolicies = policies.filter(policy =>
-        policySet.has(policy.name),
+      const enabledSchemas = getValidationEnabledSchemas(
+        validationSchemas,
+        policySet,
       );
-      const enabledRules = getEnabledRules(rules, enabledPolicies, policies);
-
-      setSchemas({
-        rules: enabledRules,
-        policies: enabledPolicies,
-      });
+      setSchemas(enabledSchemas);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [validationSchemas, policySet]);

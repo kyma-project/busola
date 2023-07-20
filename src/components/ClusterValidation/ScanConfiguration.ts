@@ -29,7 +29,7 @@ export const getDefaultScanConfiguration = (
   return {
     namespaces: userNamespaces,
     // resources: resources?.map(({ kind }) => kind) ?? [],
-    policies: [],
+    policies,
     scanParameters: {
       parallelRequests: 5,
       // parallelWorkerThreads: 1,
