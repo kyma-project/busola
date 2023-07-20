@@ -3,11 +3,11 @@ import { K8sAPIResource } from 'types';
 export type ScanConfiguration = {
   description?: string;
   namespaces: string[];
-  resources: string[];
+  // resources: string[];
   policies: string[];
   scanParameters: {
     parallelRequests: number;
-    parallelWorkerThreads: number;
+    // parallelWorkerThreads: number;
   };
 };
 
@@ -28,11 +28,11 @@ export const getDefaultScanConfiguration = (
     namespaces?.filter(name => !systemNamespaces.includes(name)) ?? [];
   return {
     namespaces: userNamespaces,
-    resources: resources?.map(({ kind }) => kind) ?? [],
+    // resources: resources?.map(({ kind }) => kind) ?? [],
     policies: [],
     scanParameters: {
       parallelRequests: 5,
-      parallelWorkerThreads: 1,
+      // parallelWorkerThreads: 1,
     },
   };
 };
