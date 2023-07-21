@@ -1,1 +1,283 @@
-[]
+dataSources:
+  moduleTemplates:
+    resource:
+      kind: ModuleTemplate
+      namespace: null
+      group: operator.kyma-project.io
+      version: v1beta2
+details:
+  header: []
+  body:
+    - name: Summary
+      widget: Panel
+      children:
+        - name: channel
+          source: spec.channel
+        - name: State
+          widget: Badge
+          source: status.state
+          description: 'status.state!="Ready" ? status.lastOperation.operation : ""'
+        - name: Age
+          source: metadata.creationTimestamp
+    - widget: Alert
+      severity: warning
+      source: '"alert.beta"'
+      visibility: '(
+        $fullModuleTemplate := $filter($moduleTemplates().items, function($v) {
+          $v.metadata.labels."operator.kyma-project.io/module-name" in $item.spec.modules.name
+          and $v.metadata.labels."operator.kyma-project.io/beta" = "true"
+          });
+          $isBeta := $count($fullModuleTemplate) > 0;
+      )'
+    - widget: Table
+      source: '$sort(status.modules[], function($l, $r) {$l.name < $r.name})'
+      name: Modules
+      visibility: $exists(*)
+      children:
+        - name: Name
+          source: $
+          widget: Plain
+          children:
+            - widget: ResourceLink
+              visibility: $exists(resource.metadata.name)
+              source: name
+              resource:
+                name: resource.metadata.name
+                namespace: resource.metadata.namespace
+                kind: resource.kind
+            - widget: Text
+              visibility: $not($exists(resource.metadata.name))   
+              source: name
+        - name: ''
+          source: '$filter($moduleTemplates().items, function($v) {$v.metadata.labels."operator.kyma-project.io/module-name" in name and $v.spec.channel=channel}).metadata.labels."operator.kyma-project.io/beta" = "true" ? "beta" : "-"'
+        - name: Namespace
+          source: $parent.metadata.namespace
+        - name: Channel
+          source: channel
+          widget: Text
+        - name: Version
+          source: version
+          widget: Text
+        - name: State
+          widget: Badge
+          source: state
+          description: 'message ? message : ""'
+        - name: 'Documentation'
+          widget: ExternalLink
+          copyable: false
+          source: '"Documentation"'
+          link: '$filter($moduleTemplates().items, function($v) {$v.metadata.labels."operator.kyma-project.io/module-name" in name and $v.spec.channel=channel}).metadata.annotations."operator.kyma-project.io/doc-url"'
+          visibility: '(
+            $docsLink := $filter($moduleTemplates().items, function($v) {$v.metadata.labels."operator.kyma-project.io/module-name" in name and $v.spec.channel=channel}).metadata.annotations."operator.kyma-project.io/doc-url";
+            $hasDocs := $count($docsLink) > 0;
+          )'
+form:
+  - simple: true
+    path: spec.channel
+    enum: '$distinct($moduleTemplates().items.spec.channel)'
+    required: true
+  - simple: true
+    path: spec.modules
+    widget: Modules
+    options: 
+      name: |
+        $distinct($moduleTemplates().items.metadata.labels."operator.kyma-project.io/module-name")
+      # channel: '(
+      #   $channels := $filter($moduleTemplates().items, function($v) {
+      #     $v.metadata.labels."operator.kyma-project.io/module-name" = $item.name
+      #   });
+      #   $channelsAsOptions := $map($channels, function ($v) {
+      #     {
+      #       "key": $v.spec.channel,
+      #       "name": $v.spec.channel & ($v.spec.descriptor.component.version ? " (version: " & $v.spec.descriptor.component.version & ")" : "")
+      #     }
+      #   });
+      #   $channelsAsOptions;
+      # )'
+      documentationLink: '(
+        $linkToDocumentation := $filter($moduleTemplates().items, function($v) {$v.metadata.labels."operator.kyma-project.io/module-name" = $item.name and $v.spec.channel=$item.channel}).metadata.annotations."operator.kyma-project.io/doc-url";
+        $count($linkToDocumentation) > 0 ? "Link to {{[documentation](" & $linkToDocumentation & ")}}" : "";
+      )'
+      documentationVisibility: '(
+        $linkToDocumentation := $filter($moduleTemplates().items, function($v) {$v.metadata.labels."operator.kyma-project.io/module-name" = $item.name and $v.spec.channel=$item.channel}).metadata.annotations."operator.kyma-project.io/doc-url";
+        $count($linkToDocumentation) > 0;
+      )'
+      betaAlert: '"alert.beta"'
+      betaVisibility: '(  
+        $fullModuleTemplate := $filter($moduleTemplates().items, function($v) {
+        $v.metadata.labels."operator.kyma-project.io/module-name" in $item.name
+        and $v.metadata.labels."operator.kyma-project.io/beta" = "true"
+        });
+        $isBeta := $count($fullModuleTemplate) > 0;
+      )'
+  - widget: GenericList
+    path: spec.modules
+    children:
+      - path: "[].name"
+        required: true
+        enum: |
+          $filter($distinct($moduleTemplates().items.metadata.labels."operator.kyma-project.io/module-name"), function ($v){ 
+            $not($v in $root.spec.modules.name)
+          })
+      - path: "[].channel"
+        visibility: "$boolean($item.name)"
+        enum: '(
+          $channels := $filter($moduleTemplates().items, function($v) {
+            $v.metadata.labels."operator.kyma-project.io/module-name" = $item.name
+          });
+          $channelsAsOptions := $map($channels, function ($v) {
+            {
+              "key": $v.spec.channel,
+              "name": $v.spec.channel & ($v.spec.descriptor.component.version ? " (version: " & $v.spec.descriptor.component.version & ")" : "")
+            }
+          });
+          $channelsAsOptions;
+        )'
+      - widget: Alert
+        severity: information
+        alert: '(
+          $linkToDocumentation := $filter($moduleTemplates().items, function($v) {$v.metadata.labels."operator.kyma-project.io/module-name" = $item.name and $v.spec.channel=$item.channel}).metadata.annotations."operator.kyma-project.io/doc-url";
+          $count($linkToDocumentation) > 0 ? "Link to {{[documentation](" & $linkToDocumentation & ")}}" : "";
+        )'
+        visibility: '(
+          $linkToDocumentation := $filter($moduleTemplates().items, function($v) {$v.metadata.labels."operator.kyma-project.io/module-name" = $item.name and $v.spec.channel=$item.channel}).metadata.annotations."operator.kyma-project.io/doc-url";
+          $count($linkToDocumentation) > 0;
+        )'
+      - widget: Alert
+        severity: warning
+        alert: '"alert.beta"'
+        visibility: '(  
+          $fullModuleTemplate := $filter($moduleTemplates().items, function($v) {
+          $v.metadata.labels."operator.kyma-project.io/module-name" in $item.name
+          and $v.metadata.labels."operator.kyma-project.io/beta" = "true"
+          });
+          $isBeta := $count($fullModuleTemplate) > 0;
+        )'
+general:
+  resource:
+    kind: Kyma
+    group: operator.kyma-project.io
+    version: v1beta1
+  name: Kyma
+  category: Kyma
+  urlPath: kymas
+  scope: namespace
+  description: >-
+    {{[Kyma Custom Resource](https://github.com/kyma-project/lifecycle-manager/blob/main/docs/technical-reference/api/kyma-cr.md)}}
+    represents Kyma installation in a cluster.
+list:
+  - name: Channel
+    widget: Badge
+    source: spec.channel
+  - name: State
+    widget: Badge
+    source: status.state
+    tooltip: status.state
+translations:
+  en:
+    metadata.annotations: Annotations
+    metadata.labels: Labels
+    metadata.creationTimestamp: Created at
+    alert.beta: "CAUTION: The Service Level Agreements (SLAs) and Support obligations do not apply to Beta modules and functionalities. If Beta modules or functionalities directly or indirectly affect other modules, the Service Level Agreements and Support for these modules are limited to priority levels P3 (Medium) or P4 (Low). Thus, Beta releases are not intended for use in customer production environments."
+injections:
+  - name: Kyma Modules
+    widget: Panel
+    source: $
+    visibility: $not($exists($item.status.modules))
+    targets:
+      - slot: details-top
+        location: ClusterOverview
+    order: 1 
+    children: 
+      - widget: MessagePanel
+        source: $
+        name: Kyma Modules Panel
+        title: Seems that you don't have any Kyma Modules configured
+        subtitle: Add at least one Kyma Module. Add your module under "kyma-system -> Kyma"
+        children:
+          - widget: Wizard
+            name: Add Module
+            wizard: module-wizard
+            visibility: $not($exists($item.status.modules))
+  - name: Kyma
+    widget: Panel
+    description: To check the Kyma Modularisation documentation go to the {{[Kyma Modularisation](https://help.sap.com/docs/btp/sap-business-technology-platform-internal/kyma-environment)}}.
+    source: $
+    visibility: $exists($item.status.modules)
+    targets:
+      - slot: details-top
+        location: ClusterOverview
+    order: 2 
+    children: 
+      - name: Name
+        source: metadata.name
+        widget: ResourceLink
+        resource:
+          name: metadata.name
+          namespace: metadata.namespace
+          kind: '"Kyma"'
+      - name: State
+        widget: Badge
+        source: status.state
+        description: 'status.state!="Ready" ? status.lastOperation.operation : ""'
+      - widget: Alert
+        severity: warning
+        source: '"alert.beta"'
+        visibility: '(
+          $fullModuleTemplate := $filter($moduleTemplates().items, function($v) {
+            $v.metadata.labels."operator.kyma-project.io/module-name" in $item.status.modules.name 
+            and $v.metadata.labels."operator.kyma-project.io/beta" = "true"
+          });
+          $isBeta := $count($fullModuleTemplate) > 0;
+          $isBeta;
+        )'
+      - name: Installed Modules
+        source: '$sort($parent.status.modules[], function($l, $r) {$l.name < $r.name})'
+        widget: Table
+        disablePadding: true
+        extraHeaderContent: 
+          - name: ''
+            source: '"Modify"'
+            widget: ResourceButton
+            resource:
+              name: $parent.metadata.name
+              namespace: $parent.metadata.namespace
+              kind: '"Kyma"'
+        children: 
+          - name: Name
+            source: $
+            widget: Plain
+            children:
+              - widget: ResourceLink
+                visibility: $exists(resource.metadata.name)
+                source: name
+                resource:
+                  name: resource.metadata.name
+                  namespace: resource.metadata.namespace
+                  kind: resource.kind
+              - widget: Text
+                visibility: $not($exists(resource.metadata.name))
+                source: name
+          - name: ''
+            source: '$filter($moduleTemplates().items, function($v) {$v.metadata.labels."operator.kyma-project.io/module-name" in name and $v.spec.channel=channel}).metadata.labels."operator.kyma-project.io/beta" = "true" ? "beta" : "-"'
+          - name: Namespace
+            source: $parent.metadata.namespace
+          - name: Channel
+            source: channel
+            widget: Text
+          - name: Version
+            source: version
+            widget: Text
+          - name: State
+            widget: Badge
+            source: state
+            description: 'message ? message : ""'
+          - name: 'Documentation'
+            widget: ExternalLink
+            copyable: false
+            source: '"Documentation"'
+            link: '$filter($moduleTemplates().items, function($v) {$v.metadata.labels."operator.kyma-project.io/module-name" in name and $v.spec.channel=channel}).metadata.annotations."operator.kyma-project.io/doc-url"'
+            visibility: '(
+              $docsLink := $filter($moduleTemplates().items, function($v) {$v.metadata.labels."operator.kyma-project.io/module-name" in name and $v.spec.channel=channel}).metadata.annotations."operator.kyma-project.io/doc-url";
+              $hasDocs := $count($docsLink) > 0;
+            )'
