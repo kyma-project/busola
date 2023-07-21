@@ -9,7 +9,6 @@ import busolaExtensions from './other/BusolaExtensions.routes';
 import containerDetails from './other/containerDetails.routes';
 import helmReleasesList from './other/helmReleasesList.routes';
 import helmReleaseDetails from './other/helmReleaseDetails.routes';
-import ClusterValidationRoutes from './other/ClusterValidation.routes';
 
 export const otherRoutes = (
   <>
@@ -19,7 +18,6 @@ export const otherRoutes = (
     {noPermissions}
     {nodeOverview}
     {clusterList}
-    {/* {ClusterValidationRoutes} */}
     {busolaExtensions}
   </>
 );

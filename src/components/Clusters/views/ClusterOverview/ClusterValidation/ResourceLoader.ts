@@ -4,30 +4,22 @@ import PQueue from 'p-queue';
 export class ResourceLoader {
   fetch;
   queue;
-  cache;
   constructor(
     fetch: (endpoint: string) => any,
     queue: PQueue = new PQueue({ concurrency: 5 }),
-    cache: Map<string, any> = new Map(),
   ) {
     this.fetch = fetch;
     this.queue = queue;
-    this.cache = cache;
   }
 
   async _fetchData(endpoint: string) {
     const response = await this.fetch(endpoint);
     const data = await response.json();
-    if (this.cache) {
-      this.cache.set(endpoint, data);
-    }
     return data;
   }
 
   async fetchData(endpoint: string) {
-    if (this.cache && this.cache.has(endpoint)) {
-      return this.cache.get(endpoint); // potentially with setImmediate to avoid event queue blocking
-    } else if (this.queue) {
+    if (this.queue) {
       return this.queue.add(() => this._fetchData(endpoint));
     } else {
       return this._fetchData(endpoint);

@@ -105,6 +105,7 @@ context('Test resource validation', () => {
     cy.contains(
       'refrain from using insecure capabilities to prevent access to sensitive components',
     ).should('be.visible');
+
     cy.contains('This is a test rule').should('be.visible');
 
     cy.contains('Cancel').click();

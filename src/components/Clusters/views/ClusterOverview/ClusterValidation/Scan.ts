@@ -57,7 +57,6 @@ export class Scan {
       resources: clusterResourceStatus,
     };
 
-    // const namespaces = await this.resourceLoader.listNamespaces();
     const namespaceNames = namespaces
       ? namespaces
       : ((await this.resourceLoader.listNamespaces()) as K8sResource[]).map(
@@ -224,10 +223,12 @@ export class Scan {
           })),
         );
       }
+      resource.scanned = true;
     } catch (error) {
-      console.error(`error during scan: ${error}`);
+      console.error(
+        `error during scan of resource ${resource.endpoint}: ${error}`,
+      );
     }
-    resource.scanned = true;
   }
 
   *filterResourcesForScan(resources: ScanResourceStatus[], filter?: string[]) {
