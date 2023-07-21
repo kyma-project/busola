@@ -18,11 +18,11 @@ const ResourceValidation = {
 self.onmessage = event => {
   const [method, ...parameters] = event.data;
 
-  if (typeof method !== 'string') {
-    // error
+  if (method === 'validate') {
+    const result = ResourceValidation.validate(...parameters);
+    self.postMessage(result);
+  } else if (method === 'setRuleset') {
+    const result = ResourceValidation.setRuleset(...parameters);
+    self.postMessage(result);
   }
-
-  const result = ResourceValidation[method](...parameters);
-
-  self.postMessage(result);
 };
