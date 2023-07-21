@@ -9,7 +9,6 @@ import {
 import { ResourceValidation } from './ResourceValidation';
 import { Button, LayoutPanel } from 'fundamental-react';
 
-import './ClusterValidation.scss';
 import { ResourceLoader } from './ResourceLoader';
 import { createPostFn } from 'shared/hooks/BackendAPI/usePost';
 import { Scan } from './Scan';

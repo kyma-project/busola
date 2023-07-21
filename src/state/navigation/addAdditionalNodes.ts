@@ -13,23 +13,6 @@ import * as secretMetadata from 'resources/Secrets';
 import * as crdMetadata from 'resources/CustomResourceDefinitions';
 import * as cmMetadata from 'resources/ConfigMaps';
 
-export const createClusterValidationNode = (scope: Scope): NavNode => ({
-  category: '',
-  icon: 'database',
-  resourceType: 'cluster-validation',
-  pathSegment: 'cluster-validation',
-  label: 'Cluster Validation',
-  namespaced: scope === 'namespace',
-  requiredFeatures: [],
-  apiGroup: '',
-  apiVersion: '',
-  topLevelNode: true,
-  createUrlFn:
-    scope === 'namespace'
-      ? ({ clusterUrl }) => clusterUrl('overview')
-      : undefined,
-});
-
 export const addAdditionalNodes = (
   navNodes: NavNode[],
   scope: Scope,
@@ -41,11 +24,6 @@ export const addAdditionalNodes = (
     addResource(namespaceOverviewNode, extNavList.length, extNavList);
   }
 
-  addResource(
-    createClusterValidationNode(scope),
-    extNavList.length,
-    extNavList,
-  );
   addResource(createClusterNode(scope), extNavList.length, extNavList);
 
   const isExtEnabled = areNodeFeaturesEnabled(

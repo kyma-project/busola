@@ -67,9 +67,12 @@ const ConfigurationForm = ({
     'parallelWorkerThreads',
   );
 
-  namespaces = namespaces?.map(name => ({ key: name, text: name }));
-  resources = resources?.map(({ kind }) => ({ key: kind, text: kind }));
-  policies = policies?.map(name => ({ key: name, text: name }));
+  const namespaceOptions = namespaces?.map(name => ({ key: name, text: name }));
+  const resourceOptions = resources?.map(({ kind }) => ({
+    key: kind,
+    text: kind,
+  }));
+  const policyOptions = policies?.map(name => ({ key: name, text: name }));
 
   return (
     <ResourceForm
@@ -103,7 +106,7 @@ const ConfigurationForm = ({
             advanced
             label={t('common.headers.namespaces')}
             input={Inputs.Checkboxes}
-            options={namespaces ?? []}
+            options={namespaceOptions ?? []}
             isAdvanced={true}
             setValue={val => setSelectedNamespaces(val)}
             value={selectedNamespaces}
@@ -118,7 +121,7 @@ const ConfigurationForm = ({
             advanced
             label={'Resources'}
             input={Inputs.Checkboxes}
-            options={resources ?? []}
+            options={resourceOptions ?? []}
             isAdvanced={true}
             setValue={val => setSelectedResources(val)}
             value={selectedResources}
@@ -133,7 +136,7 @@ const ConfigurationForm = ({
             advanced
             label={t('common.headers.policies')}
             input={Inputs.Checkboxes}
-            options={policies ?? []}
+            options={policyOptions ?? []}
             isAdvanced={true}
             setValue={val => setSelectedPolicies(val)}
             value={selectedPolicies}
