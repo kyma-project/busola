@@ -19,7 +19,7 @@ export const otherRoutes = (
     {noPermissions}
     {nodeOverview}
     {clusterList}
-    {ClusterValidationRoutes}
+    {/* {ClusterValidationRoutes} */}
     {busolaExtensions}
   </>
 );

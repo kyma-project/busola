@@ -7,7 +7,7 @@ import {
   usePolicySet,
 } from 'state/validationEnabledSchemasAtom';
 import { ResourceValidation } from './ResourceValidation';
-import { Button } from 'fundamental-react';
+import { Button, LayoutPanel } from 'fundamental-react';
 
 import './ClusterValidation.scss';
 import { ResourceLoader } from './ResourceLoader';
@@ -17,7 +17,6 @@ import { ScanResultTree } from './ScanResultTree';
 import PQueue from 'p-queue';
 import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
 import {
-  Bar,
   Card,
   CardHeader,
   FlexBox,
@@ -28,12 +27,12 @@ import { resourcesState } from 'state/resourcesAtom';
 
 import { authDataState } from 'state/authDataAtom';
 import { clusterState } from 'state/clusterAtom';
+import { validationSchemasState } from 'state/validationSchemasAtom';
 import { getDefaultScanConfiguration } from './ScanConfiguration';
 
 import '@ui5/webcomponents-icons/dist/status-positive.js';
-import { validationSchemasState } from 'state/validationSchemasAtom';
 
-function ClusterValidation() {
+export const ClusterValidation = () => {
   const { t } = useTranslation();
 
   const authData = useRecoilValue(authDataState);
@@ -162,8 +161,28 @@ function ClusterValidation() {
   };
 
   return (
-    <>
-      <Bar
+    <LayoutPanel className="fd-margin--md">
+      <LayoutPanel.Header className="fd-has-padding-left-small fd-has-padding-right-small">
+        <LayoutPanel.Head title={'Cluster Validation'} />
+        <LayoutPanel.Actions>
+          <Button glyph="play" onClick={scan} disabled={!!scanProgress}>
+            {t('cluster-validation.scan.buttons.scan')}
+          </Button>
+          <Button
+            glyph="settings"
+            onClick={configure}
+            disabled={!!scanProgress}
+          >
+            {t('cluster-validation.scan.buttons.configure')}
+          </Button>
+          <Button glyph="reset" onClick={clear} disabled={!scanProgress}>
+            {t('cluster-validation.scan.buttons.clear')}
+          </Button>
+        </LayoutPanel.Actions>
+      </LayoutPanel.Header>
+
+      <LayoutPanel.Body className="fd-has-padding-none">
+        {/* <Bar
         endContent={
           <>
             <Button glyph="play" onClick={scan} disabled={!!scanProgress}>
@@ -182,67 +201,68 @@ function ClusterValidation() {
           </>
         }
         startContent={<h3>Cluster Validation</h3>}
-      ></Bar>
+      ></Bar> */}
 
-      <Section
-        titleText={t('cluster-validation.scan.progress')}
-        status={
-          scanProgress
-            ? `${scanProgress.scanned ?? 0} / ${scanProgress.total ?? '?'}`
-            : t('cluster-validation.scan.not-started')
-        }
-      >
-        <ProgressIndicator
-          value={
+        <Section
+          titleText={t('cluster-validation.scan.progress')}
+          status={
             scanProgress
-              ? Math.floor((100 * scanProgress.scanned) / scanProgress.total)
-              : 0
+              ? `${scanProgress.scanned ?? 0} / ${scanProgress.total ?? '?'}`
+              : t('cluster-validation.scan.not-started')
           }
-          valueState={
-            scanProgress && scanProgress.total === scanProgress.scanned
-              ? 'Success'
-              : 'None'
-          }
-          style={{ width: '96%', padding: '5px 2%' }}
-        ></ProgressIndicator>
-      </Section>
-
-      <Section titleText={t('cluster-validation.scan.scope')}>
-        <FlexBox>
-          <InfoTile
-            title={t('common.headers.namespaces')}
-            content={
-              !configuration?.namespaces
-                ? '-'
-                : configuration?.namespaces?.length
+        >
+          <ProgressIndicator
+            value={
+              scanProgress
+                ? Math.floor((100 * scanProgress.scanned) / scanProgress.total)
+                : 0
             }
-          />
-          <InfoTile
-            title={t('cluster-validation.scan.k8s-api-resources')}
-            content={!listableResources ? '-' : listableResources.length}
-          />
-        </FlexBox>
-      </Section>
+            valueState={
+              scanProgress && scanProgress.total === scanProgress.scanned
+                ? 'Success'
+                : 'None'
+            }
+            style={{ width: '96%', padding: '5px 2%' }}
+          ></ProgressIndicator>
+        </Section>
 
-      <Section titleText={t('cluster-validation.scan.result')}>
-        <ScanResultTree scanResult={scanResult} />
-      </Section>
+        <Section titleText={t('cluster-validation.scan.scope')}>
+          <FlexBox>
+            <InfoTile
+              title={t('common.headers.namespaces')}
+              content={
+                !configuration?.namespaces
+                  ? '-'
+                  : configuration?.namespaces?.length
+              }
+            />
+            <InfoTile
+              title={t('cluster-validation.scan.k8s-api-resources')}
+              content={!listableResources ? '-' : listableResources.length}
+            />
+          </FlexBox>
+        </Section>
 
-      <ClusterValidationConfigurationDialog
-        show={isConfigurationOpen}
-        onCancel={() => setConfigurationOpen(false)}
-        onSubmit={newConfiguration => {
-          setConfiguration(newConfiguration);
-          setConfigurationOpen(false);
-        }}
-        configuration={configuration}
-        namespaces={namespaces}
-        resources={listableResources}
-        policies={validationSchemas.policies.map(policy => policy.name)}
-      />
-    </>
+        <Section titleText={t('cluster-validation.scan.result')}>
+          <ScanResultTree scanResult={scanResult} />
+        </Section>
+
+        <ClusterValidationConfigurationDialog
+          show={isConfigurationOpen}
+          onCancel={() => setConfigurationOpen(false)}
+          onSubmit={newConfiguration => {
+            setConfiguration(newConfiguration);
+            setConfigurationOpen(false);
+          }}
+          configuration={configuration}
+          namespaces={namespaces}
+          resources={listableResources}
+          policies={validationSchemas.policies.map(policy => policy.name)}
+        />
+      </LayoutPanel.Body>
+    </LayoutPanel>
   );
-}
+};
 
 const InfoTile = ({ title, content }) => {
   return (
@@ -276,4 +296,6 @@ const Section = ({ titleText, subtitleText, status, header, children }) => {
   );
 };
 
-export default ClusterValidation;
+export const ClusterValidationPanel = () => {
+  return <ClusterValidation />;
+};

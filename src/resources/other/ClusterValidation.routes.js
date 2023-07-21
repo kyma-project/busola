@@ -1,4 +1,4 @@
-import ClusterValidation from 'components/ClusterValidation/ClusterValidation';
+import ClusterValidation from 'components/Clusters/views/ClusterOverview/ClusterValidation/ClusterValidation';
 import React, { Suspense } from 'react';
 import { Route } from 'react-router-dom';
 import { Spinner } from 'shared/components/Spinner/Spinner';
@@ -11,9 +11,7 @@ export default (
   <Route
     path={'cluster-validation'}
     element={
-      <Suspense fallback={<Spinner />}>
-        <ClusterValidation />
-      </Suspense>
+      <Suspense fallback={<Spinner />}>{/* <ClusterValidation /> */}</Suspense>
     }
   />
 );
