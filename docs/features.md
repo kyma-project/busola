@@ -263,7 +263,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
         - Default
   ```
 
-- **FEEDBACK** - determines if the feedback icon should be rendered at the top bar and link when the user is redirected.
+- **FEEDBACK** - determines if the feedback icon with the link redirecting the user to the survey should be rendered at the top bar
 
   Default settings:
 
