@@ -44,11 +44,6 @@ const ConfigurationForm = ({
     setConfiguration,
     'namespaces',
   );
-  const [selectedResources, setSelectedResources] = useNested(
-    configuration,
-    setConfiguration,
-    'resources',
-  );
   const [selectedPolicies, setSelectedPolicies] = useNested(
     configuration,
     setConfiguration,
@@ -60,18 +55,8 @@ const ConfigurationForm = ({
     'scanParameters',
     'parallelRequests',
   );
-  const [parallelWorkerThreads, setParallelWorkerThreads] = useNested(
-    configuration,
-    setConfiguration,
-    'scanParameters',
-    'parallelWorkerThreads',
-  );
 
   const namespaceOptions = namespaces?.map(name => ({ key: name, text: name }));
-  const resourceOptions = resources?.map(({ kind }) => ({
-    key: kind,
-    text: kind,
-  }));
   const policyOptions = policies?.map(name => ({ key: name, text: name }));
 
   return (
@@ -114,21 +99,6 @@ const ConfigurationForm = ({
         </FormFieldset>
       </CollapsibleSection>
 
-      {/* <CollapsibleSection title="Resources To Scan">
-        <FormFieldset>
-          <FormField
-            simple
-            advanced
-            label={'Resources'}
-            input={Inputs.Checkboxes}
-            options={resourceOptions ?? []}
-            isAdvanced={true}
-            setValue={val => setSelectedResources(val)}
-            value={selectedResources}
-          ></FormField>
-        </FormFieldset>
-      </CollapsibleSection> */}
-
       <CollapsibleSection title={t('common.headers.policies')}>
         <FormFieldset>
           <FormField
@@ -157,15 +127,6 @@ const ConfigurationForm = ({
             setValue={val => setParallelRequests(val)}
             value={parallelRequests}
           />
-          {/* <FormField
-            simple
-            advanced
-            label={'Parallel Worker Threads'}
-            input={Inputs.Number}
-            isAdvanced={true}
-            setValue={val => setParallelWorkerThreads(val)}
-            value={parallelWorkerThreads}
-          /> */}
         </FormFieldset>
       </CollapsibleSection>
     </ResourceForm>

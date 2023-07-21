@@ -74,10 +74,8 @@ export const ClusterValidation = () => {
 
   const defaultConfiguration = useMemo(
     () =>
-      getDefaultScanConfiguration(namespaces, listableResources, [
-        ...defaultPolicySet.values(),
-      ]),
-    [namespaces, listableResources, defaultPolicySet],
+      getDefaultScanConfiguration(namespaces, [...defaultPolicySet.values()]),
+    [namespaces, defaultPolicySet],
   );
 
   const [selectedConfiguration, setConfiguration] = useState(null);
@@ -97,8 +95,7 @@ export const ClusterValidation = () => {
 
   const scanSettings = {
     concurrentRequests: configuration?.scanParameters?.parallelRequests ?? 5,
-    concurrentWorkers:
-      configuration?.scanParameters?.parallelWorkerThreads ?? 1,
+    concurrentWorkers: 1,
     backpressureBuffer: 3,
   };
   resourceLoader.queue.concurrency = scanSettings.concurrentRequests;
@@ -181,27 +178,6 @@ export const ClusterValidation = () => {
       </LayoutPanel.Header>
 
       <LayoutPanel.Body className="fd-has-padding-none">
-        {/* <Bar
-        endContent={
-          <>
-            <Button glyph="play" onClick={scan} disabled={!!scanProgress}>
-              {t('cluster-validation.scan.buttons.scan')}
-            </Button>
-            <Button
-              glyph="settings"
-              onClick={configure}
-              disabled={!!scanProgress}
-            >
-              {t('cluster-validation.scan.buttons.configure')}
-            </Button>
-            <Button glyph="reset" onClick={clear} disabled={!scanProgress}>
-              {t('cluster-validation.scan.buttons.clear')}
-            </Button>
-          </>
-        }
-        startContent={<h3>Cluster Validation</h3>}
-      ></Bar> */}
-
         <Section
           titleText={t('cluster-validation.scan.progress')}
           status={
