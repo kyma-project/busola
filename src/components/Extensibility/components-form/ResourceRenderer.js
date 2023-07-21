@@ -24,6 +24,7 @@ export function ResourceRenderer({
   compact,
   originalResource,
   singleRootResource,
+  embedResource,
   ...props
 }) {
   const namespaceId = useRecoilValue(activeNamespaceIdState);
@@ -31,6 +32,7 @@ export function ResourceRenderer({
   const jsonata = useJsonata({
     resource: originalResource,
     parent: singleRootResource,
+    embedResource: embedResource,
     scope: value,
     value,
   });
@@ -78,6 +80,7 @@ export function ResourceRenderer({
               data: { value },
             });
           }}
+          required={required}
           value={value}
           resourceType={kind}
         />

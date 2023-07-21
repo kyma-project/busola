@@ -2,7 +2,7 @@ import {
   useGetPlaceholder,
   useGetTranslation,
 } from 'components/Extensibility/helpers';
-import { Icon, Link } from 'fundamental-react';
+import { Button, Icon, Link } from 'fundamental-react';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -30,6 +30,7 @@ export const ExternalLink = ({
   arrayItems,
   originalResource,
   singleRootResource,
+  embedResource,
 }) => {
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
   const { t } = useTranslation();
@@ -38,6 +39,7 @@ export const ExternalLink = ({
   const jsonata = useJsonata({
     resource: originalResource,
     parent: singleRootResource,
+    embedResource: embedResource,
     scope,
     value,
     arrayItems,
@@ -46,6 +48,21 @@ export const ExternalLink = ({
   const href = makeHref({ jsonata, value, structure });
 
   if (isNil(value)) return emptyLeafPlaceholder;
+
+  if (structure.type === 'button') {
+    return (
+      <Button
+        glyph="action"
+        className="fd-margin-begin--sm fd-margin-end--tiny"
+        onClick={() => {
+          const newWindow = window.open(href, '_blank', 'noopener, noreferrer');
+          if (newWindow) newWindow.opener = null;
+        }}
+      >
+        {tExt(value)}
+      </Button>
+    );
+  }
 
   return (
     <Link href={href} target="_blank" rel="noopener noreferrer">

@@ -17,10 +17,10 @@ export function ClusterOverview() {
   return (
     <>
       <ClusterOverviewHeader />
-      <Injections destination="ClusterOverview" slot="top" root="" />
+      <Injections destination="ClusterOverview" slot="details-top" root="" />
       <ClusterNodes />
       {clusterValidation?.isEnabled && <ClusterValidation />}
-      <Injections destination="ClusterOverview" slot="bottom" />
+      <Injections destination="ClusterOverview" slot="details-bottom" />
     </>
   );
 }

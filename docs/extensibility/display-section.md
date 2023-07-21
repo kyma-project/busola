@@ -19,6 +19,7 @@
   - [CodeViewer](#codeviewer)
   - [Columns](#columns)
   - [EventList](#eventlist)
+  - [MessagePanel](#messagepanel)
   - [Panel](#panel)
   - [Plain](#plain)
   - [ResourceList](#resourcelist)
@@ -528,6 +529,31 @@ EventList widget renders a list of Events.
 
 <img src="./assets/display-widgets/EventListHiddenField.png" alt="Example of a EventList widget with hidden involved objects" style="border: 1px solid #D2D5D9">
 
+### MessagePanel
+
+MessagePanel widgets render an object as a panel with its own title and subtitle, and widgets provided in the children section.
+
+#### Example
+
+```yaml
+- widget: MessagePanel
+  source: $
+  title: Seems that you don't have any Kyma Modules configured
+  subtitle: Add at least one Kyma Module. Add your module under "kyma-system -> Kyma"
+  children:
+    - widget: Wizard
+      name: Add Module
+      wizard: module-wizard
+      visibility: $not($exists($item.spec.modules.channel))
+```
+
+<img src="./assets/display-widgets/MessagePanel.png" alt="Example of a message panel widget" style="border: 1px solid #D2D5D9">
+
+#### Widget-specific parameters
+
+- **title** - an optional string that renders a title after an image.
+- **subtitle** - an optional string that renders a subtitle.
+
 ### Panel
 
 Panel widgets render an object as a separate panel with its own title (based on its `source` or `name`).
@@ -740,8 +766,9 @@ The **Injections** section contains a list of objects that defines the display s
 
 ### All available _injections_ slots
 
-- **details-top** - At the top of the resource view
 - **details-bottom** - At the bottom of the resource view
+- **details-header** - In the header of the details view
+- **details-top** - At the top of the resource view
 - **list-header** - In the header of the list view
 
 ### All available _injections_ locations
@@ -823,9 +850,9 @@ Here's an example of an injection for a wizard in the function view:
 ```
 injections: |-
   - name: Get started with functions
-  widget: Wizard
-  wizard: serverless-wizard
-  targets:
-    - location: functions
-      slot: list-header
+    widget: Wizard
+    wizard: serverless-wizard
+    targets:
+      - location: functions
+        slot: list-header
 ```

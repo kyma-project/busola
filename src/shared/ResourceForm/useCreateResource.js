@@ -15,6 +15,7 @@ export function useCreateResource({
   pluralKind,
   resource,
   initialResource,
+  initialUnchangedResource,
   createUrl,
   afterCreatedFn,
   toggleFormFn,
@@ -79,20 +80,12 @@ export function useCreateResource({
     if (e) {
       e.preventDefault();
     }
-    const mergedResource = {
-      ...initialResource,
-      ...resource,
-      metadata: {
-        ...initialResource?.metadata,
-        ...resource.metadata,
-      },
-    };
 
     try {
       if (isEdit) {
         await patchRequest(
           createUrl,
-          createPatch(initialResource, mergedResource),
+          createPatch(initialUnchangedResource, resource),
         );
         if (typeof toggleFormFn === 'function') {
           toggleFormFn(false);
@@ -113,12 +106,12 @@ export function useCreateResource({
 
         const makeForceUpdateFn = closeModal => {
           return async () => {
-            mergedResource.metadata.resourceVersion =
-              initialResource?.metadata.resourceVersion;
+            resource.metadata.resourceVersion =
+              initialUnchangedResource?.metadata.resourceVersion;
             try {
               await patchRequest(
                 createUrl,
-                createPatch(initialResource, mergedResource),
+                createPatch(initialUnchangedResource, resource),
               );
               closeModal();
               onSuccess();
@@ -137,7 +130,7 @@ export function useCreateResource({
               error={e}
               singularName={singularName}
               initialResource={updatedResource}
-              modifiedResource={mergedResource}
+              modifiedResource={resource}
             />
           ),
           actions: (closeModal, defaultCloseButton) => [

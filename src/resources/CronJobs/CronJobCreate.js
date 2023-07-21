@@ -41,6 +41,7 @@ export function CronJobCreate({
   const [cronJob, setCronJob] = useState(
     cloneDeep(initialCronJob) || createCronJobTemplate(namespace),
   );
+  const [initialUnchangedResource] = useState(initialCronJob);
 
   useEffect(() => {
     setCustomValid(isCronJobValid(cronJob));
@@ -52,6 +53,7 @@ export function CronJobCreate({
       pluralKind="cronjobs"
       singularName={t(`cron-jobs.name_singular`)}
       initialResource={initialCronJob}
+      initialUnchangedResource={initialUnchangedResource}
       resource={cronJob}
       setResource={setCronJob}
       onChange={onChange}

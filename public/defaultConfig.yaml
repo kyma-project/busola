@@ -35,10 +35,6 @@ config:
         links:
           - label: Grafana
             path: apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/monitoring-grafana
-          - label: Kiali
-            path: apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/kiali
-          - label: Jaeger
-            path: apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/tracing
     EXTERNAL_NODES:
       isEnabled: false
       stage: SECONDARY
@@ -75,3 +71,6 @@ config:
       config:
         policies:
           - Default
+    FEEDBACK:
+      isEnabled: true
+      link: https://sapinsights.eu.qualtrics.com/jfe/form/SV_d3UPNymSgUHAb9Y?product=SAP%20BTP,%20Kyma%20Runtime&product_filter=Kyma

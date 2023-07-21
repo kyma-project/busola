@@ -55,18 +55,36 @@ export function StringRenderer({
         enumOptions = [enumOptions];
       }
       if (!Array.isArray(enumOptions)) {
-        enumOptions = [];
+        if (enumOptions.key) {
+          enumOptions = [enumOptions];
+        } else {
+          enumOptions = [];
+        }
       }
 
-      const options = enumOptions.map(key => ({
-        key,
-        text: exists(key)
-          ? tExt(key)
-          : exists(`${translationPath}.${key}`)
-          ? tExt(`${translationPath}.${key}`)
-          : key,
-      }));
-      return { input: Inputs.ComboboxInput, options };
+      const displayOptions = enumOptions.map(option => {
+        if (typeof option === 'string') {
+          return {
+            key: option,
+            text: exists(option)
+              ? tExt(option)
+              : exists(`${translationPath}.${option}`)
+              ? tExt(`${translationPath}.${option}`)
+              : option,
+          };
+        }
+
+        return {
+          key: option.key,
+          text: option.name
+            ? tExt(option.name)
+            : exists(`${translationPath}.${option.key}`)
+            ? tExt(`${translationPath}.${option.key}`)
+            : option.key,
+        };
+      });
+
+      return { input: Inputs.ComboboxInput, options: displayOptions };
     } else if (!decodable) {
       return { input: Inputs.Text };
     } else {
@@ -115,7 +133,13 @@ export function StringRenderer({
               type: 'set',
               schema,
               required,
-              data: { value },
+              data: {
+                value: isNaN(value)
+                  ? value
+                  : value.endsWith('.') || value.endsWith('.0')
+                  ? value
+                  : parseFloat(value),
+              },
             });
         }}
         disabled={readOnly}

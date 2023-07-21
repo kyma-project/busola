@@ -4,7 +4,6 @@ import { createResourceRoutes } from './createResourceRoutes';
 import * as Jobs from './Jobs';
 import * as CronJobs from './CronJobs';
 import * as StatefulSets from './StatefulSets';
-import * as Services from './Services';
 import * as Secrets from './Secrets';
 import * as Roles from './Roles';
 import * as RoleBindings from './RoleBindings';
@@ -13,7 +12,6 @@ import * as Pods from './Pods';
 import * as PersistentVolumeClaims from './PersistentVolumeClaims';
 import * as NetworkPolicies from './NetworkPolicies';
 import * as Ingresses from './Ingresses';
-import * as HorizontalPodAutoscalers from './HorizontalPodAutoscalers';
 import * as Events from './Events';
 import * as Deployments from './Deployments';
 import * as DaemonSets from './DaemonSets';
@@ -41,10 +39,8 @@ export const resources = [
   Deployments,
   DaemonSets,
   // discovery and network
-  Services,
   Ingresses,
   NetworkPolicies,
-  HorizontalPodAutoscalers,
   // storage
   PersistentVolumeClaims,
   // configuration

@@ -1,0 +1,54 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: kibana-links
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: kibana-links
+    busola.io/extension: statics
+    busola.io/extension-version: '0.5'
+data:
+  injections: |-
+    - name: "Logs for Namespace"
+      source: "'Discover Logs'"
+      link: "$prepareUrl(
+        '{kibana_url}/app/discover?security_tenant=global#/?_g=(filters:!(),refreshInterval:(pause:!f,value:5000),time:(from:now-7d,to:now))&_a=(columns:!(kubernetes.pod_name,kubernetes.container_name,log),filters:!((query:(match_phrase:(kubernetes.namespace_name:{namespace_name})))),index:maintained-by-perfx_kyma-content-package_index-pattern-logs-json-kyma)', 
+        {'kibana_url': 'https://kibana.url',
+        'namespace_name': $embedResource.metadata.name}
+      )"
+      widget: ExternalLink
+      type: button
+      copyable: false
+      targets:
+        - slot: details-header
+          location: Namespaces
+      order: 1 
+    - name: "Logs for Pod"
+      source: "'Discover Logs'"
+      link: "$prepareUrl(
+        '{kibana_url}/app/discover?security_tenant=global#/?_g=(filters:!(),refreshInterval:(pause:!f,value:5000),time:(from:now-7d,to:now))&_a=(columns:!(kubernetes.pod_name,kubernetes.container_name,log),filters:!((query:(match_phrase:(kubernetes.namespace_name:{namespace_name}))),(query:(match_phrase:(kubernetes.pod_name:{pod_name})))),index:maintained-by-perfx_kyma-content-package_index-pattern-logs-json-kyma)', 
+        {'kibana_url': 'https://kibana.url',
+        'namespace_name': $embedResource.metadata.namespace,
+        'pod_name': $embedResource.metadata.name }
+      )"
+      widget: ExternalLink
+      type: button
+      copyable: false
+      targets:
+        - slot: details-header
+          location: Pods
+      order: 1 
+    - name: "Traces for service"
+      source: "'Traces'"
+      link: "$prepareUrl(
+        \"{kibana_url}/app/discover?security_tenant=global#/?_g=(filters:!(),refreshInterval:(pause:!f,value:5000),time:(from:now-7d,to:now))&_a=(columns:!(name,kind),filters:!((query:(match_phrase:('resource.attributes.service@name':{service_name})))),index:aed40700-a71b-11ed-a702-51a34bc91bdd)\", 
+        {'kibana_url': 'https://kibana.url',
+        'service_name': $embedResource.metadata.name}
+      )"
+      widget: ExternalLink
+      type: button
+      copyable: false
+      targets:
+        - slot: details-header
+          location: Services
+      order: 1

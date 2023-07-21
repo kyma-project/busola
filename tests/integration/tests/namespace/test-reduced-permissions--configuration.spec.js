@@ -34,7 +34,7 @@ context('Test reduced permissions 2', () => {
         {
           verbs: ['*'],
           apiGroups: [''],
-          resources: ['namespaces', 'pods', 'services'],
+          resources: ['namespaces', 'pods', 'persistentvolumeclaims'],
         },
       ]);
 
@@ -94,16 +94,16 @@ context('Test reduced permissions 2', () => {
       .should('exist');
 
     cy.getLeftNav()
-      .contains('Discovery and Network')
+      .contains('Storage')
       .should('exist')
       .click();
 
     cy.getLeftNav()
-      .contains('Services')
+      .contains('Persistent Volume Claims')
       .should('exist');
 
     cy.getLeftNav()
-      .contains('API Rules')
+      .contains('Secrets')
       .should('not.exist');
   });
 

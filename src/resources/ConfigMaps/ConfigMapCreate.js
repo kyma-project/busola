@@ -21,6 +21,8 @@ export function ConfigMapCreate({
       ? cloneDeep(initialConfigMap)
       : createConfigMapTemplate(namespace || ''),
   );
+  const [initialUnchangedResource] = useState(initialConfigMap);
+
   const { t } = useTranslation();
 
   return (
@@ -30,6 +32,7 @@ export function ConfigMapCreate({
       singularName={t('config-maps.name_singular')}
       resource={configMap}
       initialResource={initialConfigMap}
+      initialUnchangedResource={initialUnchangedResource}
       setResource={setConfigMap}
       onChange={onChange}
       formElementRef={formElementRef}

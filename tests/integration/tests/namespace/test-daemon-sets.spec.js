@@ -1,49 +1,66 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
+import { loadFile } from '../../support/loadFile';
 
-const NAMESPACE = 'kube-system';
-const DAEMONSET_NAME = 'apiserver-proxy';
+const FILE_NAME = 'test-daemon-sets.yaml';
+
+const DS_NAME =
+  'test-' +
+  Math.random()
+    .toString()
+    .substr(2, 8);
+
+async function loadDS(name, namespace, fileName) {
+  const resource = await loadFile(fileName);
+  const newResource = { ...resource };
+
+  newResource.metadata.name = name;
+  newResource.metadata.namespace = namespace;
+
+  return newResource;
+}
 
 context('Test Daemon Sets', () => {
   Cypress.skipAfterFail();
 
   before(() => {
     cy.loginAndSelectCluster();
-
-    cy.get('[aria-label="topnav-profile-btn"]').click();
-
-    cy.contains('Preferences').click();
-
-    cy.contains('Cluster interaction').click();
-
-    cy.contains('.preferences-row', 'Show hidden Namespaces')
-      .find('.fd-switch')
-      .click();
-
-    cy.contains('Close').click();
-
-    cy.getLeftNav()
-      .contains('Namespaces')
-      .click();
-
-    cy.contains('a', NAMESPACE).click();
+    cy.goToNamespaceDetails();
   });
 
-  it('Inspect details and list', () => {
+  it('Create Daemon Set', () => {
     cy.navigateTo('Workloads', 'Daemon Sets');
 
-    cy.contains('a', DAEMONSET_NAME).click();
+    cy.contains('Create Daemon Set').click();
 
-    // name
-    cy.contains(DAEMONSET_NAME);
+    cy.wrap(loadDS(DS_NAME, Cypress.env('NAMESPACE_NAME'), FILE_NAME)).then(
+      DS_CONFIG => {
+        const DS = JSON.stringify(DS_CONFIG);
+        cy.pasteToMonaco(DS);
+      },
+    );
 
-    // created pod
-    cy.get('table')
-      .contains(new RegExp(DAEMONSET_NAME + '-'))
+    cy.get('[role="dialog"]')
+      .contains('button', 'Create')
       .click();
+  });
 
-    // images
-    cy.contains(/gardener\/apiserver-proxy/);
-    cy.contains(/envoyproxy/);
+  it('Inspect details', () => {
+    // name
+    cy.contains(DS_NAME);
+    // tolerations
+    cy.contains('node-role.kubernetes.io/control-plane');
+    cy.contains('node-role.kubernetes.io/master');
+    // selector
+    cy.contains('name=fluentd-elasticsearch');
+    // pod
+    cy.contains('quay.io/fluentd_elasticsearch/fluentd:v2.5.2');
+    cy.contains('/var/log');
+    cy.contains('varlog');
+    cy.contains('hostPath');
+  });
+
+  it('Inspect list', () => {
+    cy.inspectList('Daemon Sets', DS_NAME);
   });
 });

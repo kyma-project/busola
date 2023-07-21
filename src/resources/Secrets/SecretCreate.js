@@ -27,6 +27,8 @@ export function SecretCreate({
       ? { ...initialSecret }
       : createSecretTemplate(namespace || ''),
   );
+  const [initialUnchangedResource] = useState(initialSecret);
+
   const [lockedKeys, setLockedKeys] = useState([]);
 
   const features = useRecoilValue(configurationAtom)?.features;
@@ -61,6 +63,7 @@ export function SecretCreate({
       singularName={t('secrets.name_singular')}
       resource={secret}
       initialResource={initialSecret}
+      initialUnchangedResource={initialUnchangedResource}
       setResource={setSecret}
       onChange={onChange}
       formElementRef={formElementRef}

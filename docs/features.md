@@ -33,42 +33,6 @@ Note that some features must be run before the application starts the bootstrap 
         apiGroup: gateway.kyma-project.io
   ```
 
-- **BTP_CATALOG** – is used to show or hide the **BTP Catalog** view and to define which APIs are required for the view to be shown properly.
-  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
-
-  Default settings:
-
-  ```yaml
-  BTP_CATALOG:
-    isEnabled: true
-    selectors:
-      - type: apiGroup
-        apiGroup: services.cloud.sap.com
-  ```
-
-- **CUSTOM_DOMAINS** – is used to show or hide the **DNSEntry**, **DNSProvider**, **Gateway**, **Issuer**, and **Certificate** views.
-  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
-
-  Default settings:
-
-  ```yaml
-  CUSTOM_DOMAINS:
-    isEnabled: true
-    selectors:
-      - type: apiGroup
-        apiGroup: dns.gardener.cloud
-  ```
-
-- **DISABLED_NODES** - an array of IDs of navigation nodes that are hidden from navigation. Format: `<category>.<nodeName>` or `namespace.<category>.<nodeName>`).
-
-  Default settings:
-
-  ```yaml
-  DISABLED_NODES:
-    isEnabled: false
-    nodes: []
-  ```
-
 - **EVENTING** – is used to show or hide the **Eventing** view and to define which APIs are required for the view to be shown properly.
   It is also used to determine if the **EventSubscriptions** should be displayed in **Function** and **Service** details.
   For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
@@ -207,12 +171,6 @@ HIDDEN_NAMESPACES:
         - label: Grafana
           path: >-
             apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/monitoring-grafana
-        - label: Kiali
-          path: >-
-            apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/kiali
-        - label: Tracing
-          path: >-
-            apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/tracing
   ```
 
 * **PROTECTED_RESOURCES** – is used to block the edit and delete functions based on the determined rules. If the resource meets the rule requirements, the resource becomes protected and cannot be edited/deleted.
@@ -263,19 +221,6 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
       dsn: ''
   ```
 
-- **SERVERLESS** – is used to show or hide the **Serverless** view and to define which APIs are required for the view to be shown properly.
-  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
-
-  Default settings:
-
-  ```yaml
-  SERVERLESS:
-    isEnabled: true
-    selectors:
-      - type: apiGroup
-        apiGroup: serverless.kyma-project.io
-  ```
-
 - **SHOW_GARDENER_METADATA** - determines if the metadata taken from Gardener should be displayed. The displayed information is the value from the `shoot-info` ConfigMap based on the `kube-system` Namespace. If the ConfigMap doesn't exist, the information is not displayed.
 
   ```yaml
@@ -316,4 +261,14 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
     config:
       policies:
         - Default
+  ```
+
+- **FEEDBACK** - determines if the feedback icon with the link redirecting the user to the survey should be rendered at the top bar
+
+  Default settings:
+
+  ```yaml
+  FEEDBACK:
+    isEnabled: true
+    link: https://www.youtube.com/watch?v=dQw4w9WgXcQ
   ```

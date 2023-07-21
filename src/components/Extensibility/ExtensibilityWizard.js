@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { Wizard } from 'fundamental-react';
 import { mapValues } from 'lodash';
 import jsyaml from 'js-yaml';
+import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 import {
   UIMetaProvider,
@@ -31,6 +32,7 @@ import {
 } from './helpers/immutableConverter';
 import { prepareSchemaRules } from './helpers/prepareSchemaRules';
 import { createTemplate } from './helpers';
+import { buildPathsFromObject } from 'shared/utils/helpers';
 import { useVariables } from './hooks/useVariables';
 import { prepareRules } from './helpers/prepareRules';
 
@@ -71,17 +73,29 @@ export function ExtensibilityWizardCore({
   const triggers = useContext(TriggerContext);
   const [uploadState, setUploadState] = useState(OPERATION_STATE_INITIAL);
   const [error, setError] = useState('');
+  const [resourceInitial] = useState(
+    JSON.parse(JSON.stringify(initialResource)),
+  );
 
-  const [store, setStore] = useState(() =>
-    mapValues(resourceSchema.general.resources, (res, key) =>
-      getUIStoreFromResourceObj(
+  const [store, setStore] = useState(() => {
+    return mapValues(resourceSchema.general.resources, (res, key) => {
+      if (initialResource && resourceSchema?.defaults?.[key]) {
+        const path = buildPathsFromObject(resourceSchema?.defaults[key]);
+
+        for (let i = 0; i < path.length; i++) {
+          const value = jp.value(resourceSchema?.defaults[key], `$.${path[i]}`);
+          jp.value(initialResource, `$.${path[i]}`, value);
+        }
+      }
+
+      return getUIStoreFromResourceObj(
         initialResource || {
           ...createTemplate(res, 'default', res.scope),
           ...(resourceSchema?.defaults[key] ?? {}),
         },
-      ),
-    ),
-  );
+      );
+    });
+  });
 
   const { schemas, loading: loadingSchemas } = useGetResourceSchemas(
     resourceSchema.general.resources,
@@ -95,6 +109,10 @@ export function ExtensibilityWizardCore({
     [store],
   );
   const [resourcesWithStatuses, setResourcesWithStatuses] = useState([]);
+  const [initialUnchangedResources, setInitialUnchangedResources] = useState(
+    resourcesWithStatuses,
+  );
+
   const onChange = (actions, resource) => {
     if (actions.scopes.includes('value')) {
       setStore(prevStore => {
@@ -142,19 +160,38 @@ export function ExtensibilityWizardCore({
       } else if (files.some(file => !isK8sResource(file))) {
         setError(t('upload-yaml.messages.not-a-k8s-resource'));
       } else {
-        setResourcesWithStatuses(files.map(resource => ({ value: resource })));
+        setResourcesWithStatuses(
+          files.map(resource => {
+            return { value: resource };
+          }),
+        );
+
+        if (!initialUnchangedResources.length) {
+          const temp = files.map(resource => {
+            if (
+              resource.metadata.name === resourceInitial.metadata.name &&
+              resource.kind === resourceInitial.kind
+            ) {
+              const temp = { value: resourceInitial };
+              return temp;
+            } else return resource;
+          });
+          setInitialUnchangedResources(temp);
+        }
         setError(null);
       }
     } catch ({ message }) {
       setError(message.substr(0, message.indexOf('\n')));
       setResourcesWithStatuses([]);
     }
-  }, [yaml, t]);
+  }, [yaml, t, initialUnchangedResources, resourceInitial]);
 
   const uploadResources = useUploadResources(
     resourcesWithStatuses,
+    initialUnchangedResources,
     setResourcesWithStatuses,
     setUploadState,
+
     // defaultNamespace,
     'default',
   );

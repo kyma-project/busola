@@ -303,10 +303,8 @@ export function ResourceListRenderer({
     };
 
     const modifiedResource = jsyaml.load(newYAML);
-    delete resourceData.metadata?.resourceVersion;
     const diff = createPatch(resourceData, modifiedResource);
     const url = prepareResourceUrl(resourceUrl, resourceData);
-
     try {
       await updateResourceMutation(url, diff);
       onSuccess();
@@ -530,24 +528,26 @@ export function ResourceListRenderer({
         resource={activeResource}
         resourceUrl={prepareResourceUrl(resourceUrl, activeResource)}
       />
-      <GenericList
-        title={showTitle ? title || prettifiedResourceName : null}
-        actions={actions}
-        entries={resources || []}
-        headerRenderer={headerRenderer}
-        rowRenderer={rowRenderer}
-        serverDataError={error}
-        serverDataLoading={loading}
-        pagination={{ autoHide: true, ...pagination }}
-        extraHeaderContent={extraHeaderContent}
-        testid={testid}
-        currentlyEditedResourceUID={currentlyEditedResourceUID}
-        sortBy={sortBy}
-        searchSettings={{
-          ...searchSettings,
-          textSearchProperties: textSearchProperties(),
-        }}
-      />
+      {!(error && error.toString().includes('is forbidden')) && (
+        <GenericList
+          title={showTitle ? title || prettifiedResourceName : null}
+          actions={actions}
+          entries={resources || []}
+          headerRenderer={headerRenderer}
+          rowRenderer={rowRenderer}
+          serverDataError={error}
+          serverDataLoading={loading}
+          pagination={{ autoHide: true, ...pagination }}
+          extraHeaderContent={extraHeaderContent}
+          testid={testid}
+          currentlyEditedResourceUID={currentlyEditedResourceUID}
+          sortBy={sortBy}
+          searchSettings={{
+            ...searchSettings,
+            textSearchProperties: textSearchProperties(),
+          }}
+        />
+      )}
       {!isCompact && (
         <YamlUploadDialog
           show={showAdd}

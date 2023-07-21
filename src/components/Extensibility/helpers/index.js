@@ -155,9 +155,12 @@ export const getObjectValueWorkaround = (
 
 export const useCreateResourceDescription = descID => {
   const { t, i18n } = useGetTranslation();
+  let linkText;
   if (!descID) return;
 
-  let trans = t(descID);
+  const helmBracketsRegex = /{{"(.*?)"}}/g;
+  let trans = t(descID.replace(helmBracketsRegex, '$1'));
+
   if (typeof trans === 'string') {
     const i18VarRegex = /{{.*?}}/g;
     const matchesIterator = trans?.matchAll(i18VarRegex);
@@ -165,7 +168,11 @@ export const useCreateResourceDescription = descID => {
 
     if (matches.length) {
       matches.forEach((link, inx) => {
-        const linkText = link.match(/\[(.*?)]/)[1];
+        if (link.match(/\[(.*?)]/)) {
+          linkText = link.match(/\[(.*?)]/)[1];
+        } else {
+          linkText = link.match(/\((.*?)\)/)[1];
+        }
         trans = trans.replace(link, `<${inx}>${linkText}</${inx}>`);
       });
       return (

@@ -42,13 +42,13 @@ export function IncorrectPath({ to, title = '', message = '' }) {
     crd => pluralize(crd.spec.names.kind.toLowerCase()) === resourceType,
   )(resourceUrl, { skip: !extensions?.length });
 
-  if (!extensions?.length) return null;
+  if (!extensions?.length && extensions?.length !== 0) return null;
 
   if (!data) {
     return <Spinner />;
   }
 
-  if (data.length !== 0) {
+  if (data?.length !== 0 && data !== null) {
     const crdGroup = data[0]?.spec?.group;
 
     const path = `customresources/${resourceType}.${crdGroup}/${resourceName}`;
