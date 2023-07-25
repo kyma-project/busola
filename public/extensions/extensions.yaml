@@ -79,29 +79,13 @@ form:
   - simple: true
     path: spec.modules
     widget: Modules
+    name: Modules
+    defaultExpanded: true
     options: 
       name: |
         $distinct($moduleTemplates().items.metadata.labels."operator.kyma-project.io/module-name")
-      # channel: '(
-      #   $channels := $filter($moduleTemplates().items, function($v) {
-      #     $v.metadata.labels."operator.kyma-project.io/module-name" = $item.name
-      #   });
-      #   $channelsAsOptions := $map($channels, function ($v) {
-      #     {
-      #       "key": $v.spec.channel,
-      #       "name": $v.spec.channel & ($v.spec.descriptor.component.version ? " (version: " & $v.spec.descriptor.component.version & ")" : "")
-      #     }
-      #   });
-      #   $channelsAsOptions;
-      # )'
-      documentationLink: '(
-        $linkToDocumentation := $filter($moduleTemplates().items, function($v) {$v.metadata.labels."operator.kyma-project.io/module-name" = $item.name and $v.spec.channel=$item.channel}).metadata.annotations."operator.kyma-project.io/doc-url";
-        $count($linkToDocumentation) > 0 ? "Link to {{[documentation](" & $linkToDocumentation & ")}}" : "";
-      )'
-      documentationVisibility: '(
-        $linkToDocumentation := $filter($moduleTemplates().items, function($v) {$v.metadata.labels."operator.kyma-project.io/module-name" = $item.name and $v.spec.channel=$item.channel}).metadata.annotations."operator.kyma-project.io/doc-url";
-        $count($linkToDocumentation) > 0;
-      )'
+      moduleTemplates: >-
+        $moduleTemplates().items
       betaAlert: '"alert.beta"'
       betaVisibility: '(  
         $fullModuleTemplate := $filter($moduleTemplates().items, function($v) {
@@ -110,49 +94,26 @@ form:
         });
         $isBeta := $count($fullModuleTemplate) > 0;
       )'
-  - widget: GenericList
-    path: spec.modules
-    children:
-      - path: "[].name"
-        required: true
-        enum: |
-          $filter($distinct($moduleTemplates().items.metadata.labels."operator.kyma-project.io/module-name"), function ($v){ 
-            $not($v in $root.spec.modules.name)
-          })
-      - path: "[].channel"
-        visibility: "$boolean($item.name)"
-        enum: '(
-          $channels := $filter($moduleTemplates().items, function($v) {
-            $v.metadata.labels."operator.kyma-project.io/module-name" = $item.name
-          });
-          $channelsAsOptions := $map($channels, function ($v) {
-            {
-              "key": $v.spec.channel,
-              "name": $v.spec.channel & ($v.spec.descriptor.component.version ? " (version: " & $v.spec.descriptor.component.version & ")" : "")
-            }
-          });
-          $channelsAsOptions;
-        )'
-      - widget: Alert
-        severity: information
-        alert: '(
-          $linkToDocumentation := $filter($moduleTemplates().items, function($v) {$v.metadata.labels."operator.kyma-project.io/module-name" = $item.name and $v.spec.channel=$item.channel}).metadata.annotations."operator.kyma-project.io/doc-url";
-          $count($linkToDocumentation) > 0 ? "Link to {{[documentation](" & $linkToDocumentation & ")}}" : "";
-        )'
-        visibility: '(
-          $linkToDocumentation := $filter($moduleTemplates().items, function($v) {$v.metadata.labels."operator.kyma-project.io/module-name" = $item.name and $v.spec.channel=$item.channel}).metadata.annotations."operator.kyma-project.io/doc-url";
-          $count($linkToDocumentation) > 0;
-        )'
-      - widget: Alert
-        severity: warning
-        alert: '"alert.beta"'
-        visibility: '(  
-          $fullModuleTemplate := $filter($moduleTemplates().items, function($v) {
-          $v.metadata.labels."operator.kyma-project.io/module-name" in $item.name
-          and $v.metadata.labels."operator.kyma-project.io/beta" = "true"
-          });
-          $isBeta := $count($fullModuleTemplate) > 0;
-        )'
+  # - widget: Modules2
+  #   path: spec.modules
+  #   defaultExpanded: true
+  #   children:
+  #     - path: '[].name'
+  #       required: true
+  #       enum: >
+  #         $filter($distinct($moduleTemplates().items.metadata.labels."operator.kyma-project.io/module-name"),
+  #         function ($v){ 
+  #           $not($v in $root.spec.modules.name)
+  #         })
+  #     - path: '[].channel'
+  #       enum: >-
+  #         ( $channels := $filter($moduleTemplates().items, function($v) {
+  #         $v.metadata.labels."operator.kyma-project.io/module-name" =
+  #         $item.name }); $channelsAsOptions := $map($channels, function ($v)
+  #         { { "key": $v.spec.channel, "name": $v.spec.channel &
+  #         ($v.spec.descriptor.component.version ? " (version: " &
+  #         $v.spec.descriptor.component.version & ")" : "") } });
+  #         $channelsAsOptions; )
 general:
   resource:
     kind: Kyma
