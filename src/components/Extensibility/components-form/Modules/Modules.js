@@ -110,15 +110,7 @@ export function Modules({
       }
     });
 
-    let linkToDocs;
-
-    parsedOptions?.moduleTemplates?.map(moduleTemplate => {
-      console.log(
-        index,
-        resource?.spec?.modules
-          ? resource?.spec?.modules[index]?.channel
-          : null,
-      );
+    const link = parsedOptions?.moduleTemplates?.find(moduleTemplate => {
       const channel = resource?.spec?.modules
         ? resource?.spec?.modules[index]?.channel
         : null;
@@ -128,13 +120,9 @@ export function Modules({
         ] === name &&
         moduleTemplate?.spec?.channel === channel
       )
-        linkToDocs =
-          moduleTemplate?.metadata?.annotations[
-            'operator.kyma-project.io/doc-url'
-          ];
-    });
-
-    console.log(linkToDocs);
+        return moduleTemplate;
+      else return null;
+    })?.metadata?.annotations['operator.kyma-project.io/doc-url'];
 
     return (
       <FlexBox
@@ -153,20 +141,27 @@ export function Modules({
         />
         {/* <ComboBox readonly={!isChecked}> */}
         <ComboboxInput
+          disabled={!isChecked}
           options={channelTest.map(option => {
             return {
               text: `${option.text} ${option.additionalText}`,
               key: option.text,
             };
           })}
+          selectedKey={
+            resource?.spec?.modules
+              ? resource?.spec?.modules[index]?.channel
+              : ''
+          }
           onSelectionChange={(_, selected) => {
             if (selected.key !== -1) {
+              const xd = selected.key;
               onChange({
-                storeKeys: storeKeys,
-                scopes: ['value', 'internal'],
-                type: 'list-item-add',
+                storeKeys: storeKeys.push(index).push('channel'),
+                scopes: ['value'],
+                type: 'set',
                 schema,
-                itemValue: fromJS({ name: name, channel: selected.key }),
+                data: { value: xd },
                 required,
               });
             }
@@ -194,9 +189,9 @@ export function Modules({
           />
         </ComboboxInput>
         {/* beta */}
-        {linkToDocs ? (
+        {link ? (
           <MessageStrip type="information">
-            Link to documentation: <a href={linkToDocs}>DOCUMENTATION</a>
+            Link to documentation: <a href={link}>DOCUMENTATION</a>
           </MessageStrip>
         ) : null}
         {/* docs link*/}
