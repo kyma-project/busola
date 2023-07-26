@@ -13,6 +13,8 @@ import {
 import { fromJS } from 'immutable';
 import { ComboboxInput, MessageStrip } from 'fundamental-react';
 
+import './Modules.scss';
+
 export function Modules({
   storeKeys,
   resource,
@@ -112,7 +114,7 @@ export function Modules({
 
     const link = parsedOptions?.moduleTemplates?.find(moduleTemplate => {
       const channel = resource?.spec?.modules
-        ? resource?.spec?.modules[index]?.channel
+        ? resource?.spec?.modules[index]?.channel ?? resource?.spec?.channel
         : null;
       if (
         moduleTemplate?.metadata?.labels[
@@ -125,77 +127,64 @@ export function Modules({
     })?.metadata?.annotations['operator.kyma-project.io/doc-url'];
 
     return (
-      <FlexBox
-        alignItems="Center"
-        direction="Row"
-        justifyContent="SpaceBetween"
-        wrap="Wrap"
-        fitContainer
-      >
-        <CheckBox
-          text={name}
-          checked={isChecked}
-          onChange={e => {
-            setCheckbox(value, 'name', e.target.text, e.target.checked, index);
-          }}
-        />
-        {/* <ComboBox readonly={!isChecked}> */}
-        <ComboboxInput
-          disabled={!isChecked}
-          options={channelTest.map(option => {
-            return {
-              text: `${option.text} ${option.additionalText}`,
-              key: option.text,
-            };
-          })}
-          selectedKey={
-            resource?.spec?.modules
-              ? resource?.spec?.modules[index]?.channel
-              : ''
-          }
-          onSelectionChange={(_, selected) => {
-            if (selected.key !== -1) {
-              const xd = selected.key;
-              onChange({
-                storeKeys: storeKeys.push(index).push('channel'),
-                scopes: ['value'],
-                type: 'set',
-                schema,
-                data: { value: xd },
-                required,
-              });
+      // <FlexBox
+      //   alignItems="Center"
+      //   direction="Row"
+      //   justifyContent="SpaceBetween"
+      //   wrap="Wrap"
+      //   fitContainer
+      // >
+      <>
+        <div className="flexbox">
+          <CheckBox
+            text={name}
+            checked={isChecked}
+            onChange={e => {
+              setCheckbox(
+                value,
+                'name',
+                e.target.text,
+                e.target.checked,
+                index,
+              );
+            }}
+          />
+          <ComboboxInput
+            disabled={!isChecked}
+            options={channelTest.map(option => {
+              return {
+                text: `${option.text} ${option.additionalText}`,
+                key: option.text,
+              };
+            })}
+            selectedKey={
+              resource?.spec?.modules
+                ? resource?.spec?.modules[index]?.channel
+                : ''
             }
-          }}
-
-          // {e => {
-          //   console.log(e);
-          //   onChange({
-          //     storeKeys: storeKeys,
-          //     scopes: ['value', 'internal'],
-          //     type: 'list-item-add',
-          //     schema,
-          //     itemValue: fromJS({ name: name, channel: e }),
-          //     required,
-          //   });
-          // }}
-        >
-          <ComboBoxItem
-            text={channelTest[0].text}
-            additionalText={channelTest[0].additionalText}
+            onSelectionChange={(_, selected) => {
+              if (selected.key !== -1) {
+                const xd = selected.key;
+                onChange({
+                  storeKeys: storeKeys.push(index).push('channel'),
+                  scopes: ['value'],
+                  type: 'set',
+                  schema,
+                  data: { value: xd },
+                  required,
+                });
+              }
+            }}
           />
-          <ComboBoxItem
-            text={channelTest[1].text}
-            additionalText={channelTest[1].additionalText}
-          />
-        </ComboboxInput>
+        </div>
         {/* beta */}
-        {link ? (
+        {link && isChecked ? (
           <MessageStrip type="information">
             Link to documentation: <a href={link}>DOCUMENTATION</a>
           </MessageStrip>
         ) : null}
         {/* docs link*/}
-      </FlexBox>
+      </>
     );
   });
 

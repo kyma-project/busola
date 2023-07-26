@@ -29,6 +29,7 @@ steps:
         enum: $distinct($moduleTemplates().items.spec.channel)
       - widget: GenericList
         path: spec.modules
+        defaultExpanded: true
         children:
           - path: '[].name'
             required: true
@@ -53,16 +54,15 @@ steps:
               ( $linkToDocumentation := $filter($moduleTemplates().items,
               function($v)
               {$v.metadata.labels."operator.kyma-project.io/module-name" =
-              $item.name and $v.spec.channel =
-              $item.channel}).metadata.annotations."operator.kyma-project.io/doc-url";
-              $count($linkToDocumentation) > 0 ? "Link to {{[documentation](" &
-              $linkToDocumentation & ")}}" : ""; )
+              $item.name and ($v.spec.channel =
+              $item.channel or $v.spec.channel = $root.spec.channel) }).metadata.annotations."operator.kyma-project.io/doc-url";
+              $linkToDocumentation; )
             visibility: >-
               ( $linkToDocumentation := $filter($moduleTemplates().items,
               function($v)
               {$v.metadata.labels."operator.kyma-project.io/module-name" =
-              $item.name and $v.spec.channel =
-              $item.channel}).metadata.annotations."operator.kyma-project.io/doc-url";
+              $item.name and ($v.spec.channel =
+              $item.channel or $v.spec.channel = $root.spec.channel)}).metadata.annotations."operator.kyma-project.io/doc-url";
               $count($linkToDocumentation) > 0; )
           - widget: Alert
             severity: warning
