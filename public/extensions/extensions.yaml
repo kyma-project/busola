@@ -86,34 +86,8 @@ form:
         $distinct($moduleTemplates().items.metadata.labels."operator.kyma-project.io/module-name")
       moduleTemplates: >-
         $moduleTemplates().items
+      displayDocs: false
       betaAlert: '"alert.beta"'
-      betaVisibility: '(  
-        $fullModuleTemplate := $filter($moduleTemplates().items, function($v) {
-        $v.metadata.labels."operator.kyma-project.io/module-name" in $item.name
-        and $v.metadata.labels."operator.kyma-project.io/beta" = "true"
-        });
-        $isBeta := $count($fullModuleTemplate) > 0;
-      )'
-  # - widget: Modules2
-  #   path: spec.modules
-  #   defaultExpanded: true
-  #   children:
-  #     - path: '[].name'
-  #       required: true
-  #       enum: >
-  #         $filter($distinct($moduleTemplates().items.metadata.labels."operator.kyma-project.io/module-name"),
-  #         function ($v){ 
-  #           $not($v in $root.spec.modules.name)
-  #         })
-  #     - path: '[].channel'
-  #       enum: >-
-  #         ( $channels := $filter($moduleTemplates().items, function($v) {
-  #         $v.metadata.labels."operator.kyma-project.io/module-name" =
-  #         $item.name }); $channelsAsOptions := $map($channels, function ($v)
-  #         { { "key": $v.spec.channel, "name": $v.spec.channel &
-  #         ($v.spec.descriptor.component.version ? " (version: " &
-  #         $v.spec.descriptor.component.version & ")" : "") } });
-  #         $channelsAsOptions; )
 general:
   resource:
     kind: Kyma

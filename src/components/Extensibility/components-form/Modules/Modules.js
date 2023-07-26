@@ -4,9 +4,11 @@ import { useUIStore } from '@ui-schema/ui-schema';
 import { useJsonata } from '../../hooks/useJsonata';
 import { useVariables } from '../../hooks/useVariables';
 import { fromJS } from 'immutable';
-import { ComboboxInput, MessageStrip, Checkbox } from 'fundamental-react';
+import { ComboboxInput, MessageStrip, Checkbox, Link } from 'fundamental-react';
 
 import './Modules.scss';
+import { Trans } from 'react-i18next';
+import { useGetTranslation } from 'components/Extensibility/helpers';
 
 export function Modules({
   storeKeys,
@@ -16,16 +18,11 @@ export function Modules({
   required,
   editMode,
 }) {
-  // console.log(
-  //   storeKeys.toJS(),
-  //   resource,
-  //   onChange,
-  //   schema.toJS(),
-  //   required,
-  //   editMode,
-  // );
+  const { t: tExt } = useGetTranslation();
+  const sectionName = schema.get('name');
+
   const setCheckbox = (fullValue, key, entryValue, checked, index) => {
-    console.log(checked);
+    console.log(fullValue, key, entryValue, checked, index);
     if (checked) {
       onChange({
         storeKeys,
@@ -79,7 +76,6 @@ export function Modules({
 
   const Items = parsedOptions?.name?.map((name, index) => {
     const isChecked = !!(value ? value.toJS() : []).find(v => {
-      console.log(v);
       return v.name === name;
     });
 
@@ -120,16 +116,33 @@ export function Modules({
       else return null;
     })?.metadata?.annotations['operator.kyma-project.io/doc-url'];
 
+    const isBeta = parsedOptions?.moduleTemplates?.find(
+      moduleTemplate =>
+        moduleTemplate?.metadata?.labels[
+          'operator.kyma-project.io/module-name'
+        ] === name &&
+        moduleTemplate?.metadata?.labels['operator.kyma-project.io/beta'] ===
+          'true',
+    );
+
     return (
       <>
         <div className="flexbox">
+          <div>{index === 0 ? sectionName : ''}</div>
           <Checkbox
             key={name}
             value={name}
             checked={isChecked}
             onChange={e => {
-              console.log(e);
-              setCheckbox(value, 'name', name, e.target.checked, index);
+              setCheckbox(
+                value,
+                'name',
+                name,
+                e.target.checked,
+                resource?.spec?.modules.findIndex(object => {
+                  return object.name === name;
+                }),
+              );
             }}
           >
             {name}
@@ -162,13 +175,23 @@ export function Modules({
             }}
           />
         </div>
-        {/* beta */}
-        {link && isChecked ? (
+        {!parsedOptions?.displayDocs && link && isChecked ? (
           <MessageStrip type="information" className="fd-margin-bottom--sm">
-            Link to documentation: <a href={link}>DOCUMENTATION</a>
+            <Trans i18nKey="extensibility.message.link-to-docs">
+              <Link
+                className="fd-link"
+                href={link}
+                target="_blank"
+                rel="noopener noreferrer"
+              />
+            </Trans>
           </MessageStrip>
         ) : null}
-        {/* docs link*/}
+        {parsedOptions?.betaAlert && isBeta && isChecked ? (
+          <MessageStrip type="warning" className="fd-margin-bottom--sm">
+            {tExt(parsedOptions?.betaAlert)}
+          </MessageStrip>
+        ) : null}
       </>
     );
   });
