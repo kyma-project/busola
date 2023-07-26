@@ -1,17 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { useUIStore } from '@ui-schema/ui-schema';
 
 import { useJsonata } from '../../hooks/useJsonata';
 import { useVariables } from '../../hooks/useVariables';
-import {
-  CheckBox,
-  ComboBox,
-  ComboBoxItem,
-  FlexBox,
-} from '@ui5/webcomponents-react';
 import { fromJS } from 'immutable';
-import { ComboboxInput, MessageStrip } from 'fundamental-react';
+import { ComboboxInput, MessageStrip, Checkbox } from 'fundamental-react';
 
 import './Modules.scss';
 
@@ -32,6 +25,7 @@ export function Modules({
   //   editMode,
   // );
   const setCheckbox = (fullValue, key, entryValue, checked, index) => {
+    console.log(checked);
     if (checked) {
       onChange({
         storeKeys,
@@ -127,28 +121,19 @@ export function Modules({
     })?.metadata?.annotations['operator.kyma-project.io/doc-url'];
 
     return (
-      // <FlexBox
-      //   alignItems="Center"
-      //   direction="Row"
-      //   justifyContent="SpaceBetween"
-      //   wrap="Wrap"
-      //   fitContainer
-      // >
       <>
         <div className="flexbox">
-          <CheckBox
-            text={name}
+          <Checkbox
+            key={name}
+            value={name}
             checked={isChecked}
             onChange={e => {
-              setCheckbox(
-                value,
-                'name',
-                e.target.text,
-                e.target.checked,
-                index,
-              );
+              console.log(e);
+              setCheckbox(value, 'name', name, e.target.checked, index);
             }}
-          />
+          >
+            {name}
+          </Checkbox>
           <ComboboxInput
             disabled={!isChecked}
             options={channelTest.map(option => {
