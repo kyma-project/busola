@@ -164,7 +164,7 @@ export function Modules({
         </div>
         {/* beta */}
         {link && isChecked ? (
-          <MessageStrip type="information">
+          <MessageStrip type="information" className="fd-margin-bottom--sm">
             Link to documentation: <a href={link}>DOCUMENTATION</a>
           </MessageStrip>
         ) : null}
