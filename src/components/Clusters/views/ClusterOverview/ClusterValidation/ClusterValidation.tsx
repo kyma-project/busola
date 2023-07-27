@@ -193,7 +193,7 @@ export const ClusterValidation = () => {
         </LayoutPanel.Actions>
       </LayoutPanel.Header>
 
-      <LayoutPanel.Body className="fd-has-padding-none">
+      <LayoutPanel.Body>
         <Section
           titleText={t('cluster-validation.scan.progress')}
           status={
