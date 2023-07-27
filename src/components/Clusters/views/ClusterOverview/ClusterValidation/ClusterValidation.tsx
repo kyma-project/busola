@@ -194,31 +194,6 @@ export const ClusterValidation = () => {
       </LayoutPanel.Header>
 
       <LayoutPanel.Body>
-        <Section
-          titleText={t('cluster-validation.scan.progress')}
-          status={
-            scanProgress
-              ? `${scanProgress.scanned ?? 0} / ${scanProgress.total ?? '?'}`
-              : t('cluster-validation.scan.not-started')
-          }
-        >
-          <ProgressIndicator
-            value={
-              scanProgress && scanProgress.total
-                ? Math.floor(
-                    (100 * (scanProgress.scanned ?? 0)) / scanProgress.total,
-                  )
-                : 0
-            }
-            valueState={
-              scanProgress && scanProgress.total === scanProgress.scanned
-                ? 'Success'
-                : 'None'
-            }
-            style={{ width: '96%', padding: '5px 2%' }}
-          />
-        </Section>
-
         <Section titleText={t('cluster-validation.scan.scope')}>
           <FlexBox>
             <InfoTile
@@ -236,9 +211,38 @@ export const ClusterValidation = () => {
           </FlexBox>
         </Section>
 
-        <Section titleText={t('cluster-validation.scan.result')}>
-          <ScanResultTree scanResult={scanResult} />
-        </Section>
+        {scanProgress && (
+          <Section
+            titleText={t('cluster-validation.scan.progress')}
+            status={
+              scanProgress
+                ? `${scanProgress.scanned ?? 0} / ${scanProgress.total ?? '?'}`
+                : t('cluster-validation.scan.not-started')
+            }
+          >
+            <ProgressIndicator
+              value={
+                scanProgress && scanProgress.total
+                  ? Math.floor(
+                      (100 * (scanProgress.scanned ?? 0)) / scanProgress.total,
+                    )
+                  : 0
+              }
+              valueState={
+                scanProgress && scanProgress.total === scanProgress.scanned
+                  ? 'Success'
+                  : 'None'
+              }
+              style={{ width: '96%', padding: '5px 2%' }}
+            />
+          </Section>
+        )}
+
+        {scanResult && (
+          <Section titleText={t('cluster-validation.scan.result')}>
+            <ScanResultTree scanResult={scanResult} />
+          </Section>
+        )}
 
         <ClusterValidationConfigurationDialog
           show={isConfigurationOpen}
