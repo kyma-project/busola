@@ -3,7 +3,7 @@ import { Warning } from 'shared/hooks/useValidateResourceBySchema/useValidateRes
 import { ValidationSchema } from 'state/validationSchemasAtom';
 
 const worker = new Worker(
-  new URL('./ResourceValidation.worker.js', import.meta.url),
+  new URL('./ResourceValidation.worker.ts', import.meta.url),
   { type: 'module' },
 );
 

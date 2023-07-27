@@ -1,16 +1,18 @@
 /* eslint-disable no-restricted-globals */
 
 import { validateResourceBySchema } from 'shared/hooks/useValidateResourceBySchema/useValidateResourceBySchema';
+import { ValidationSchema } from 'state/validationSchemasAtom';
+import { K8sResource } from 'types';
 
-let validationRuleset;
+let validationRuleset: ValidationSchema;
 
 const ResourceValidation = {
-  validate(resources) {
+  validate(resources: K8sResource[]) {
     return resources.map(resource =>
       validateResourceBySchema(resource, validationRuleset),
     );
   },
-  setRuleset(ruleset) {
+  setRuleset(ruleset: ValidationSchema) {
     validationRuleset = ruleset;
   },
 };
@@ -19,10 +21,12 @@ self.onmessage = event => {
   const [method, ...parameters] = event.data;
 
   if (method === 'validate') {
-    const result = ResourceValidation.validate(...parameters);
+    const [resources] = parameters;
+    const result = ResourceValidation.validate(resources);
     self.postMessage(result);
   } else if (method === 'setRuleset') {
-    const result = ResourceValidation.setRuleset(...parameters);
+    const [ruleset] = parameters;
+    const result = ResourceValidation.setRuleset(ruleset);
     self.postMessage(result);
   }
 };
