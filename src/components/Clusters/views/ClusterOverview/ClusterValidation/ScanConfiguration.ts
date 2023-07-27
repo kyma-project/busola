@@ -2,8 +2,8 @@ export type ScanConfiguration = {
   description?: string;
   namespaces: string[];
   policies: string[];
-  scanParameters: {
-    parallelRequests: number;
+  scanParameters?: {
+    parallelRequests?: number;
   };
 };
 

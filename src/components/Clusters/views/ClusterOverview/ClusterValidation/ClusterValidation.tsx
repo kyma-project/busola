@@ -108,7 +108,10 @@ export const ClusterValidation = () => {
     concurrentWorkers: 1,
     backpressureBuffer: 3,
   };
-  resourceLoader.queue.concurrency = scanSettings.concurrentRequests;
+  resourceLoader.queue.concurrency = Math.max(
+    scanSettings.concurrentRequests,
+    1,
+  );
 
   const [scanProgress, setScanProgress] = useState<ScanProgress | null>();
 
@@ -246,7 +249,6 @@ export const ClusterValidation = () => {
           }}
           configuration={configuration}
           namespaces={namespaces}
-          resources={listableResources}
           policies={validationSchemas?.policies.map(policy => policy.name)}
         />
       </LayoutPanel.Body>

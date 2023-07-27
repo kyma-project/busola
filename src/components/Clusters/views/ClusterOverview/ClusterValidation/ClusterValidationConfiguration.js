@@ -16,7 +16,7 @@ const setNested = (obj, newVal, next, ...path) => {
   if (!next) return newVal;
   return {
     ...obj,
-    [next]: setNested(obj[next], newVal, ...path),
+    [next]: setNested(obj[next] ?? {}, newVal, ...path),
   };
 };
 
@@ -30,7 +30,6 @@ const ConfigurationForm = ({
   configuration,
   setConfiguration,
   namespaces,
-  resources,
   policies,
 }) => {
   const { t } = useTranslation();
@@ -124,8 +123,10 @@ const ConfigurationForm = ({
             label={t('cluster-validation.scan.configuration.parallel-requests')}
             input={Inputs.Number}
             isAdvanced={true}
-            setValue={val => setParallelRequests(val)}
-            value={parallelRequests}
+            setValue={val =>
+              setParallelRequests(Number.isInteger(val) ? val : undefined)
+            }
+            value={parallelRequests || ''}
           />
         </FormFieldset>
       </CollapsibleSection>
@@ -139,7 +140,6 @@ export function ClusterValidationConfigurationDialog({
   onSubmit,
   configuration,
   namespaces,
-  resources,
   policies,
 }) {
   const { t } = useTranslation();
@@ -183,7 +183,6 @@ export function ClusterValidationConfigurationDialog({
             configuration: tempConfiguration,
             setConfiguration: setTempConfiguration,
             namespaces,
-            resources,
             policies,
           }}
         />
