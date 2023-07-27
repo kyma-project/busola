@@ -19,6 +19,7 @@ import {
   Card,
   CardHeader,
   FlexBox,
+  Loader,
   ProgressIndicator,
 } from '@ui5/webcomponents-react';
 import { ClusterValidationConfigurationDialog } from './ClusterValidationConfiguration';
@@ -70,6 +71,8 @@ export const ClusterValidation = () => {
   const listableResources = useMemo(() => {
     return resources?.filter(resource => resource.verbs?.includes('list'));
   }, [resources]);
+
+  const scanReady = !!(validationSchemas && listableResources);
 
   useEffect(() => {
     if (!resources)
@@ -177,13 +180,17 @@ export const ClusterValidation = () => {
       <LayoutPanel.Header className="fd-has-padding-left-small fd-has-padding-right-small">
         <LayoutPanel.Head title={'Cluster Validation'} />
         <LayoutPanel.Actions>
-          <Button glyph="play" onClick={scan} disabled={!!scanProgress}>
+          <Button
+            glyph="play"
+            onClick={scan}
+            disabled={!!scanProgress || !scanReady}
+          >
             {t('cluster-validation.scan.buttons.scan')}
           </Button>
           <Button
             glyph="settings"
             onClick={configure}
-            disabled={!!scanProgress}
+            disabled={!!scanProgress || !scanReady}
           >
             {t('cluster-validation.scan.buttons.configure')}
           </Button>
@@ -192,6 +199,12 @@ export const ClusterValidation = () => {
           </Button>
         </LayoutPanel.Actions>
       </LayoutPanel.Header>
+
+      {!scanReady && (
+        <LayoutPanel.Filters className="fd-has-padding-none">
+          <Loader type="Indeterminate" />
+        </LayoutPanel.Filters>
+      )}
 
       <LayoutPanel.Body>
         <Section titleText={t('cluster-validation.scan.scope')}>
