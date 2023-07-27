@@ -9,18 +9,29 @@ import {
   getInitialScanResult,
   ScanNamespaceStatus,
   ScanResourceStatus,
+  ScanResult,
   ScanResultSummary,
 } from './ScanResult';
 import { NamespacesState } from 'state/namespacesAtom';
+import PQueue from 'p-queue';
 
 const sum = (summed: number, x: number) => summed + x;
+
+export type ScanProgress =
+  | {
+      total?: number;
+      scanned?: number;
+    }
+  | undefined;
 
 export class Scan {
   resourceLoader;
   result;
+  abortHandlers: (() => void)[];
   constructor(resourceLoader: ResourceLoader, ruleset: ValidationSchema) {
     this.resourceLoader = resourceLoader;
     this.result = getInitialScanResult(ruleset);
+    this.abortHandlers = [];
   }
 
   async gatherAPIResources({
@@ -260,5 +271,70 @@ export class Scan {
     for (const { resources } of filteredNamespaces) {
       yield* this.filterResourcesForScan(resources, filter?.resources);
     }
+  }
+
+  async scan({
+    namespaces,
+    resources,
+    setScanProgress,
+    setScanResult,
+    post,
+    concurrency,
+  }: {
+    namespaces: string[];
+    resources: K8sAPIResource[];
+    setScanProgress: (progress: ScanProgress) => void;
+    setScanResult: (result: ScanResult) => void;
+    post: PostFn;
+    concurrency: number;
+  }) {
+    let aborted = false;
+    this.abortHandlers.push(() => (aborted = true));
+
+    setScanProgress({});
+    setScanResult(this.result);
+
+    await this.gatherAPIResources({
+      namespaces,
+      resources,
+    });
+    if (aborted) return;
+    setScanResult(this.result);
+
+    await this.checkPermissions(post);
+    if (aborted) return;
+    setScanResult(this.result);
+
+    this.initSummary();
+    if (this.result.summary) this.calculateFullSummary(this.result.summary);
+    if (aborted) return;
+    setScanResult(this.result);
+
+    let countScanned = 0;
+    const queue = new PQueue({ concurrency });
+    const toScan = [...this.listResourcesToScan()];
+    if (aborted) return;
+    setScanProgress({ total: toScan.length });
+
+    await Promise.all(
+      toScan.map(async resource =>
+        queue.add(async () => {
+          await this.scanResource(resource);
+          if (aborted) {
+            queue.clear();
+            return;
+          }
+          if (resource.summary) this.recalculateSummary(resource.summary);
+          countScanned++;
+          setScanProgress({ total: toScan.length, scanned: countScanned });
+          setScanResult(this.result);
+        }),
+      ),
+    );
+  }
+
+  abort() {
+    this.abortHandlers.forEach(abort => abort());
+    this.abortHandlers.length = 0;
   }
 }

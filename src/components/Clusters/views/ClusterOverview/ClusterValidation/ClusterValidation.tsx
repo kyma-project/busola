@@ -11,9 +11,8 @@ import { Button, LayoutPanel } from 'fundamental-react';
 
 import { ResourceLoader } from './ResourceLoader';
 import { createPostFn } from 'shared/hooks/BackendAPI/usePost';
-import { Scan } from './Scan';
+import { Scan, ScanProgress } from './Scan';
 import { ScanResultTree } from './ScanResultTree';
-import PQueue from 'p-queue';
 import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
 import {
   Card,
@@ -35,13 +34,6 @@ import {
 
 import '@ui5/webcomponents-icons/dist/status-positive.js';
 import { ScanResult } from './ScanResult';
-
-type ScanProgress =
-  | {
-      total?: number;
-      scanned?: number;
-    }
-  | undefined;
 
 export const ClusterValidation = () => {
   const { t } = useTranslation();
@@ -100,6 +92,8 @@ export const ClusterValidation = () => {
     setConfigurationOpen(true);
   };
 
+  const [currentScan, setCurrentScan] = useState<Scan | null>();
+
   const [scanResult, _setScanResult] = useState<ScanResult | null>();
   const setScanResult = (result: ScanResult | null) => {
     if (result) _setScanResult({ ...result });
@@ -120,57 +114,33 @@ export const ClusterValidation = () => {
 
   const scan = async () => {
     if (!validationSchemas || !listableResources) return;
-    setScanProgress({});
     const enabledSchemas = getValidationEnabledSchemas(
       validationSchemas,
       new Set(configuration.policies),
     );
-    const currentScan = new Scan(resourceLoader, enabledSchemas);
-    setScanResult(currentScan.result);
+    const _currentScan = new Scan(resourceLoader, enabledSchemas);
+    setCurrentScan(_currentScan);
     await ResourceValidation.setRuleset(enabledSchemas);
 
     const resourcesToScan = listableResources;
 
-    await currentScan.gatherAPIResources({
+    await _currentScan.scan({
       namespaces: configuration?.namespaces,
       resources: resourcesToScan,
-    });
-    setScanResult(currentScan.result);
-
-    await currentScan.checkPermissions(post);
-    setScanResult(currentScan.result);
-
-    currentScan.initSummary();
-    if (currentScan.result.summary)
-      currentScan.calculateFullSummary(currentScan.result.summary);
-    setScanResult(currentScan.result);
-
-    let countScanned = 0;
-    const queue = new PQueue({
+      setScanProgress,
+      setScanResult,
+      post,
       concurrency:
         Math.max(
           scanSettings.concurrentRequests,
           scanSettings.concurrentWorkers,
         ) + scanSettings.backpressureBuffer,
     });
-    const toScan = [...currentScan.listResourcesToScan()];
-    setScanProgress({ total: toScan.length });
-
-    await Promise.all(
-      toScan.map(async resource =>
-        queue.add(async () => {
-          await currentScan.scanResource(resource);
-          if (resource.summary)
-            currentScan.recalculateSummary(resource.summary);
-          countScanned++;
-          setScanProgress({ total: toScan.length, scanned: countScanned });
-          setScanResult(currentScan.result);
-        }),
-      ),
-    );
   };
 
   const clear = () => {
+    currentScan?.abort();
+    setCurrentScan(null);
     setScanResult(null);
     setScanProgress(null);
   };
