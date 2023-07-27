@@ -27,9 +27,20 @@ import { resourcesState } from 'state/resourcesAtom';
 import { authDataState } from 'state/authDataAtom';
 import { clusterState } from 'state/clusterAtom';
 import { validationSchemasState } from 'state/validationSchemasAtom';
-import { getDefaultScanConfiguration } from './ScanConfiguration';
+import {
+  getDefaultScanConfiguration,
+  ScanConfiguration,
+} from './ScanConfiguration';
 
 import '@ui5/webcomponents-icons/dist/status-positive.js';
+import { ScanResult } from './ScanResult';
+
+type ScanProgress =
+  | {
+      total?: number;
+      scanned?: number;
+    }
+  | undefined;
 
 export const ClusterValidation = () => {
   const { t } = useTranslation();
@@ -46,12 +57,7 @@ export const ClusterValidation = () => {
     return { fetch, post };
   }, [authData, cluster]);
   const resourceLoader = useMemo(
-    () =>
-      new ResourceLoader(
-        relativeUrl => fetch({ relativeUrl }),
-        undefined,
-        null,
-      ),
+    () => new ResourceLoader(relativeUrl => fetch({ relativeUrl }), undefined),
     [fetch],
   );
   const validationSchemas = useRecoilValue(validationSchemasState);
@@ -78,7 +84,10 @@ export const ClusterValidation = () => {
     [namespaces, defaultPolicySet],
   );
 
-  const [selectedConfiguration, setConfiguration] = useState(null);
+  const [
+    selectedConfiguration,
+    setConfiguration,
+  ] = useState<ScanConfiguration | null>(null);
   const configuration = useMemo(
     () => selectedConfiguration ?? defaultConfiguration,
     [selectedConfiguration, defaultConfiguration],
@@ -88,9 +97,10 @@ export const ClusterValidation = () => {
     setConfigurationOpen(true);
   };
 
-  const [scanResult, _setScanResult] = useState();
-  const setScanResult = result => {
-    _setScanResult({ ...result });
+  const [scanResult, _setScanResult] = useState<ScanResult | null>();
+  const setScanResult = (result: ScanResult | null) => {
+    if (result) _setScanResult({ ...result });
+    else _setScanResult(result);
   };
 
   const scanSettings = {
@@ -100,9 +110,10 @@ export const ClusterValidation = () => {
   };
   resourceLoader.queue.concurrency = scanSettings.concurrentRequests;
 
-  const [scanProgress, setScanProgress] = useState();
+  const [scanProgress, setScanProgress] = useState<ScanProgress | null>();
 
   const scan = async () => {
+    if (!validationSchemas || !listableResources) return;
     setScanProgress({});
     const enabledSchemas = getValidationEnabledSchemas(
       validationSchemas,
@@ -124,7 +135,8 @@ export const ClusterValidation = () => {
     setScanResult(currentScan.result);
 
     currentScan.initSummary();
-    currentScan.calculateFullSummary(currentScan.result.summary);
+    if (currentScan.result.summary)
+      currentScan.calculateFullSummary(currentScan.result.summary);
     setScanResult(currentScan.result);
 
     let countScanned = 0;
@@ -142,7 +154,8 @@ export const ClusterValidation = () => {
       toScan.map(async resource =>
         queue.add(async () => {
           await currentScan.scanResource(resource);
-          currentScan.recalculateSummary(resource.summary);
+          if (resource.summary)
+            currentScan.recalculateSummary(resource.summary);
           countScanned++;
           setScanProgress({ total: toScan.length, scanned: countScanned });
           setScanResult(currentScan.result);
@@ -152,8 +165,8 @@ export const ClusterValidation = () => {
   };
 
   const clear = () => {
-    setScanResult();
-    setScanProgress();
+    setScanResult(null);
+    setScanProgress(null);
   };
 
   return (
@@ -188,8 +201,10 @@ export const ClusterValidation = () => {
         >
           <ProgressIndicator
             value={
-              scanProgress
-                ? Math.floor((100 * scanProgress.scanned) / scanProgress.total)
+              scanProgress && scanProgress.total
+                ? Math.floor(
+                    (100 * (scanProgress.scanned ?? 0)) / scanProgress.total,
+                  )
                 : 0
             }
             valueState={
@@ -198,7 +213,7 @@ export const ClusterValidation = () => {
                 : 'None'
             }
             style={{ width: '96%', padding: '5px 2%' }}
-          ></ProgressIndicator>
+          />
         </Section>
 
         <Section titleText={t('cluster-validation.scan.scope')}>
@@ -208,12 +223,12 @@ export const ClusterValidation = () => {
               content={
                 !configuration?.namespaces
                   ? '-'
-                  : configuration?.namespaces?.length
+                  : `${configuration?.namespaces?.length}`
               }
             />
             <InfoTile
               title={t('cluster-validation.scan.k8s-api-resources')}
-              content={!listableResources ? '-' : listableResources.length}
+              content={!listableResources ? '-' : `${listableResources.length}`}
             />
           </FlexBox>
         </Section>
@@ -225,21 +240,21 @@ export const ClusterValidation = () => {
         <ClusterValidationConfigurationDialog
           show={isConfigurationOpen}
           onCancel={() => setConfigurationOpen(false)}
-          onSubmit={newConfiguration => {
+          onSubmit={(newConfiguration: ScanConfiguration) => {
             setConfiguration(newConfiguration);
             setConfigurationOpen(false);
           }}
           configuration={configuration}
           namespaces={namespaces}
           resources={listableResources}
-          policies={validationSchemas.policies.map(policy => policy.name)}
+          policies={validationSchemas?.policies.map(policy => policy.name)}
         />
       </LayoutPanel.Body>
     </LayoutPanel>
   );
 };
 
-const InfoTile = ({ title, content }) => {
+const InfoTile = ({ title, content }: { title?: string; content?: string }) => {
   return (
     <Card
       header={<CardHeader titleText={title} subtitleText={content} />}
@@ -248,7 +263,19 @@ const InfoTile = ({ title, content }) => {
   );
 };
 
-const Section = ({ titleText, subtitleText, status, header, children }) => {
+const Section = ({
+  titleText,
+  subtitleText,
+  status,
+  header,
+  children,
+}: {
+  titleText?: string;
+  subtitleText?: string;
+  status?: string;
+  header?: any;
+  children?: any[] | any;
+}) => {
   return (
     <FlexBox alignItems="Center" justifyContent="Center">
       <Card

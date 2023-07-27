@@ -176,7 +176,11 @@ const ScanResultNamespacesTree = ({
   );
 };
 
-export const ScanResultTree = ({ scanResult }: { scanResult?: ScanResult }) => {
+export const ScanResultTree = ({
+  scanResult,
+}: {
+  scanResult?: ScanResult | null;
+}) => {
   if (!scanResult) return <FlexBox justifyContent="Center">No Results</FlexBox>;
   return (
     <>
