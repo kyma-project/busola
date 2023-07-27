@@ -139,9 +139,11 @@ export function Modules({
                 'name',
                 name,
                 e.target.checked,
-                resource?.spec?.modules.findIndex(object => {
-                  return object.name === name;
-                }),
+                resource?.spec?.modules
+                  ? resource?.spec?.modules.findIndex(module => {
+                      return module.name === name;
+                    })
+                  : index,
               );
             }}
           >
@@ -157,7 +159,11 @@ export function Modules({
             })}
             selectedKey={
               resource?.spec?.modules
-                ? resource?.spec?.modules[index]?.channel
+                ? resource?.spec?.modules[
+                    resource?.spec?.modules.findIndex(module => {
+                      return module.name === name;
+                    })
+                  ]?.channel
                 : ''
             }
             onSelectionChange={(_, selected) => {
