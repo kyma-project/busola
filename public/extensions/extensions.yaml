@@ -74,6 +74,7 @@ details:
 form:
   - simple: true
     path: spec.channel
+    name: Kyma Default Channel
     enum: '$distinct($moduleTemplates().items.spec.channel)'
     required: true
   - simple: true

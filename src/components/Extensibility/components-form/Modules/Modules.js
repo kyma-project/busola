@@ -4,10 +4,15 @@ import { useUIStore } from '@ui-schema/ui-schema';
 import { useJsonata } from '../../hooks/useJsonata';
 import { useVariables } from '../../hooks/useVariables';
 import { fromJS } from 'immutable';
-import { ComboboxInput, MessageStrip, Checkbox, Link } from 'fundamental-react';
+import {
+  ComboboxInput,
+  MessageStrip,
+  Checkbox,
+  Link,
+  Icon,
+} from 'fundamental-react';
 
 import './Modules.scss';
-import { Trans } from 'react-i18next';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 import { ResourceForm } from 'shared/ResourceForm';
 
@@ -105,7 +110,8 @@ export function Modules({
     const link = parsedOptions?.moduleTemplates?.find(moduleTemplate => {
       const channel = resource?.spec?.modules
         ? resource?.spec?.modules[index]?.channel ?? resource?.spec?.channel
-        : null;
+        : resource?.spec?.channel;
+
       if (
         moduleTemplate?.metadata?.labels[
           'operator.kyma-project.io/module-name'
@@ -127,9 +133,11 @@ export function Modules({
 
     return (
       <>
-        <div className="flexbox">
+        <div className="flexbox fd-margin-bottom--sm">
+          <div className="fd-color--neutral">
+            {index === 0 ? `${sectionName}:` : ''}
+          </div>
           <Checkbox
-            className="checkbox-test"
             key={name}
             value={name}
             checked={isChecked}
@@ -149,52 +157,60 @@ export function Modules({
           >
             {name}
           </Checkbox>
-          <ComboboxInput
-            disabled={!isChecked}
-            options={channelTest.map(option => {
-              return {
-                text: `${option.text} ${option.additionalText}`,
-                key: option.text,
-              };
-            })}
-            selectedKey={
-              resource?.spec?.modules
-                ? resource?.spec?.modules[
-                    resource?.spec?.modules.findIndex(module => {
-                      return module.name === name;
-                    })
-                  ]?.channel
-                : ''
-            }
-            onSelectionChange={(_, selected) => {
-              if (selected.key !== -1) {
-                const xd = selected.key;
-                onChange({
-                  storeKeys: storeKeys.push(index).push('channel'),
-                  scopes: ['value'],
-                  type: 'set',
-                  schema,
-                  data: { value: xd },
-                  required,
-                });
+          <div>
+            <p className="fd-color--neutral">Module channel overwrite:</p>
+            <ComboboxInput
+              compact
+              disabled={!isChecked}
+              placeholder={'Uses Default Kyma Channel'}
+              options={channelTest.map(option => {
+                return {
+                  text: `${option.text} ${option.additionalText}`,
+                  key: option.text,
+                };
+              })}
+              selectedKey={
+                resource?.spec?.modules
+                  ? resource?.spec?.modules[
+                      resource?.spec?.modules.findIndex(module => {
+                        return module.name === name;
+                      })
+                    ]?.channel
+                  : ''
               }
-            }}
-          />
+              onSelectionChange={(_, selected) => {
+                if (selected.key !== -1) {
+                  const xd = selected.key;
+                  onChange({
+                    storeKeys: storeKeys.push(index).push('channel'),
+                    scopes: ['value'],
+                    type: 'set',
+                    schema,
+                    data: { value: xd },
+                    required,
+                  });
+                }
+              }}
+            />
+          </div>
+
+          {!parsedOptions?.displayDocs && link ? (
+            <Link
+              href={link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="fd-align-vertical-center"
+            >
+              DOCUMENTATION
+              <Icon glyph="action" size="s" className="fd-margin-begin--tiny" />
+            </Link>
+          ) : null}
         </div>
-        {!parsedOptions?.displayDocs && link && isChecked ? (
-          <MessageStrip type="information" className="fd-margin-bottom--sm">
-            <Trans i18nKey="extensibility.message.link-to-docs">
-              <Link
-                className="fd-link"
-                href={link}
-                target="_blank"
-                rel="noopener noreferrer"
-              />
-            </Trans>
-          </MessageStrip>
-        ) : null}
         {parsedOptions?.betaAlert && isBeta && isChecked ? (
-          <MessageStrip type="warning" className="fd-margin-bottom--sm">
+          <MessageStrip
+            type="warning"
+            className="fd-margin-bottom--sm fd-margin-top--sm alert"
+          >
             {tExt(parsedOptions?.betaAlert)}
           </MessageStrip>
         ) : null}
@@ -203,7 +219,7 @@ export function Modules({
   });
 
   return (
-    <ResourceForm.CollapsibleSection title={tExt(sectionName)} defaultOpen>
+    <ResourceForm.CollapsibleSection defaultOpen title={sectionName || ''}>
       {Items ? Items : <p></p>}
     </ResourceForm.CollapsibleSection>
   );

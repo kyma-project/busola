@@ -1,8 +1,14 @@
 .flexbox {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 0.8fr 1.2fr 1fr;
+  column-gap: 16px;
 
-  .checkbox-test {
-    margin-left: 24.5%;
+  & > :first-child {
+    text-align: right;
+    color: var(--sapNeutralColor);
   }
+}
+
+.alert {
+  margin-left: 24.5%;
 }
