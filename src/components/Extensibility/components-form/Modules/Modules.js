@@ -134,10 +134,11 @@ export function Modules({
     return (
       <>
         <div className="flexbox fd-margin-bottom--sm">
-          <div className="fd-color--neutral">
+          <div className="fd-align-vertical-center-ignor-checkbox-label">
             {index === 0 ? `${sectionName}:` : ''}
           </div>
           <Checkbox
+            className="fd-align-vertical-center-ignor-checkbox-label"
             key={name}
             value={name}
             checked={isChecked}
@@ -157,49 +158,46 @@ export function Modules({
           >
             {name}
           </Checkbox>
-          <div>
-            <p className="fd-color--neutral">Module channel overwrite:</p>
-            <ComboboxInput
-              compact
-              disabled={!isChecked}
-              placeholder={'Uses Default Kyma Channel'}
-              options={channelTest.map(option => {
-                return {
-                  text: `${option.text} ${option.additionalText}`,
-                  key: option.text,
-                };
-              })}
-              selectedKey={
-                resource?.spec?.modules
-                  ? resource?.spec?.modules[
-                      resource?.spec?.modules.findIndex(module => {
-                        return module.name === name;
-                      })
-                    ]?.channel
-                  : ''
+          <ComboboxInput
+            label={'Module channel overwrite'}
+            compact
+            disabled={!isChecked}
+            placeholder={'Uses Default Kyma Channel'}
+            options={channelTest.map(option => {
+              return {
+                text: `${option.text} ${option.additionalText}`,
+                key: option.text,
+              };
+            })}
+            selectedKey={
+              resource?.spec?.modules
+                ? resource?.spec?.modules[
+                    resource?.spec?.modules.findIndex(module => {
+                      return module.name === name;
+                    })
+                  ]?.channel
+                : ''
+            }
+            onSelectionChange={(_, selected) => {
+              if (selected.key !== -1) {
+                onChange({
+                  storeKeys: storeKeys.push(index).push('channel'),
+                  scopes: ['value'],
+                  type: 'set',
+                  schema,
+                  data: { value: selected.key },
+                  required,
+                });
               }
-              onSelectionChange={(_, selected) => {
-                if (selected.key !== -1) {
-                  const xd = selected.key;
-                  onChange({
-                    storeKeys: storeKeys.push(index).push('channel'),
-                    scopes: ['value'],
-                    type: 'set',
-                    schema,
-                    data: { value: xd },
-                    required,
-                  });
-                }
-              }}
-            />
-          </div>
+            }}
+          />
 
           {!parsedOptions?.displayDocs && link ? (
             <Link
               href={link}
               target="_blank"
               rel="noopener noreferrer"
-              className="fd-align-vertical-center"
+              className="fd-align-vertical-center-ignor-checkbox-label"
             >
               DOCUMENTATION
               <Icon glyph="action" size="s" className="fd-margin-begin--tiny" />
@@ -220,7 +218,7 @@ export function Modules({
 
   return (
     <ResourceForm.CollapsibleSection defaultOpen title={sectionName || ''}>
-      {Items ? Items : <p></p>}
+      <div>{Items}</div>
     </ResourceForm.CollapsibleSection>
   );
 }

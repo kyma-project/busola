@@ -399,9 +399,9 @@ input[type='checkbox'] {
   align-items: center;
 }
 
-.fd-align-vertical-center {
+.fd-align-vertical-center-ignor-checkbox-label {
   margin-top: auto;
-  margin-bottom: auto;
+  margin-bottom: 0.3vh;
 }
 
 .fd-margin-0 {
