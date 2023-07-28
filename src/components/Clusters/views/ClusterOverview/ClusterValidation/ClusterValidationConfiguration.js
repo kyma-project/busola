@@ -26,6 +26,32 @@ const useNested = (obj, setObj, ...path) => {
   return [val, setter];
 };
 
+const ListActions = ({ options, setSelected }) => {
+  const { t } = useTranslation();
+  return (
+    <>
+      <Button
+        compact
+        glyph="add"
+        onClick={() => setSelected(options.map(({ key }) => key))}
+        option="transparent"
+        iconBeforeText
+      >
+        {t('common.buttons.add-all')}
+      </Button>
+      <Button
+        compact
+        glyph="less"
+        onClick={() => setSelected([])}
+        option="transparent"
+        iconBeforeText
+      >
+        {t('common.buttons.remove-all')}
+      </Button>
+    </>
+  );
+};
+
 const ConfigurationForm = ({
   configuration,
   setConfiguration,
@@ -83,6 +109,12 @@ const ConfigurationForm = ({
       <CollapsibleSection
         title={t('cluster-validation.scan.configuration.namespaces')}
         defaultOpen={true}
+        actions={
+          <ListActions
+            options={namespaceOptions}
+            setSelected={setSelectedNamespaces}
+          />
+        }
       >
         <FormFieldset>
           <FormField
@@ -98,7 +130,15 @@ const ConfigurationForm = ({
         </FormFieldset>
       </CollapsibleSection>
 
-      <CollapsibleSection title={t('common.headers.policies')}>
+      <CollapsibleSection
+        title={t('common.headers.policies')}
+        actions={
+          <ListActions
+            options={policyOptions}
+            setSelected={setSelectedPolicies}
+          />
+        }
+      >
         <FormFieldset>
           <FormField
             simple

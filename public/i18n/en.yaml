@@ -210,6 +210,7 @@ common:
     new-tab-link: This link will be opened in a new tab.
   buttons:
     add: Add
+    add-all: Add all
     add-new: Add New
     cancel: Cancel
     clone: Clone
@@ -222,6 +223,7 @@ common:
     generate-name: Generate
     load: Load
     ok: OK
+    remove-all: Remove all
     reset: Reset
     restart: Restart
     save: Save
@@ -1163,7 +1165,6 @@ role-bindings:
   title: Role Bindings
 roles:
   buttons:
-    add-all: Add all
     load-resources: Load resources
   description: <0>Role</0> is a set of permissions within a Namespace that can be assigned to a user.
   headers:
