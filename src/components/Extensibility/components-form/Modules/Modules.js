@@ -9,6 +9,7 @@ import { ComboboxInput, MessageStrip, Checkbox, Link } from 'fundamental-react';
 import './Modules.scss';
 import { Trans } from 'react-i18next';
 import { useGetTranslation } from 'components/Extensibility/helpers';
+import { ResourceForm } from 'shared/ResourceForm';
 
 export function Modules({
   storeKeys,
@@ -22,7 +23,6 @@ export function Modules({
   const sectionName = schema.get('name');
 
   const setCheckbox = (fullValue, key, entryValue, checked, index) => {
-    console.log(fullValue, key, entryValue, checked, index);
     if (checked) {
       onChange({
         storeKeys,
@@ -128,8 +128,8 @@ export function Modules({
     return (
       <>
         <div className="flexbox">
-          <div>{index === 0 ? sectionName : ''}</div>
           <Checkbox
+            className="checkbox-test"
             key={name}
             value={name}
             checked={isChecked}
@@ -202,5 +202,9 @@ export function Modules({
     );
   });
 
-  return <div>{Items}</div>;
+  return (
+    <ResourceForm.CollapsibleSection title={tExt(sectionName)} defaultOpen>
+      {Items ? Items : <p></p>}
+    </ResourceForm.CollapsibleSection>
+  );
 }
