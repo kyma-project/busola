@@ -42,6 +42,7 @@ cluster-validation:
       policies: Policies
       parameters: Scan Parameters
       parallel-requests: Parallel Requests
+      invalid-parallel-requests: Please select an integer greater than 0
 clusters:
   add:
     errors:

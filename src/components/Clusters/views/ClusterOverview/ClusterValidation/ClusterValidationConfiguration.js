@@ -166,7 +166,17 @@ const ConfigurationForm = ({
             setValue={val =>
               setParallelRequests(Number.isInteger(val) ? val : undefined)
             }
-            value={parallelRequests || ''}
+            value={parallelRequests ?? ''}
+            validationState={
+              parallelRequests < 1
+                ? {
+                    state: 'error',
+                    text: t(
+                      'cluster-validation.scan.configuration.invalid-parallel-requests',
+                    ),
+                  }
+                : {}
+            }
           />
         </FormFieldset>
       </CollapsibleSection>
