@@ -668,6 +668,10 @@ extensibility:
       error: 'Configuration error: The joined array widget configuration is incorrect. Path value must be an array type.'
     table:
       error: The table widget configuration is incorrect. Path value must be an array type.
+    modules:
+      documentation: DOCUMENTATION
+      module-channel-label: Module channel overwrite
+      module-channel-placeholder: Uses Default Kyma Channel
   wizard:
     summary: Summary
     upload: Upload
