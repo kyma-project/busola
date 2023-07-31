@@ -15,6 +15,7 @@ import {
 import './Modules.scss';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 import { ResourceForm } from 'shared/ResourceForm';
+import { useTranslation } from 'react-i18next';
 
 export function Modules({
   storeKeys,
@@ -25,9 +26,11 @@ export function Modules({
   editMode,
 }) {
   const { t: tExt } = useGetTranslation();
+  const { t } = useTranslation();
   const sectionName = schema.get('name');
 
   const setCheckbox = (fullValue, key, entryValue, checked, index) => {
+    console.log(storeKeys.toJS());
     if (checked) {
       onChange({
         storeKeys,
@@ -159,10 +162,12 @@ export function Modules({
             {name}
           </Checkbox>
           <ComboboxInput
-            label={'Module channel overwrite'}
+            label={t('extensibility.widgets.modules.module-channel-label')}
             compact
             disabled={!isChecked}
-            placeholder={'Uses Default Kyma Channel'}
+            placeholder={t(
+              'extensibility.widgets.modules.module-channel-placeholder',
+            )}
             options={channelTest.map(option => {
               return {
                 text: `${option.text} ${option.additionalText}`,
@@ -180,6 +185,13 @@ export function Modules({
             }
             onSelectionChange={(_, selected) => {
               if (selected.key !== -1) {
+                console.log(
+                  storeKeys
+                    .push(index)
+                    .push('channel')
+                    .toJS(),
+                  storeKeys.toJS(),
+                );
                 onChange({
                   storeKeys: storeKeys.push(index).push('channel'),
                   scopes: ['value'],
@@ -192,14 +204,14 @@ export function Modules({
             }}
           />
 
-          {!parsedOptions?.displayDocs && link ? (
+          {link ? (
             <Link
               href={link}
               target="_blank"
               rel="noopener noreferrer"
               className="fd-align-vertical-center-ignor-checkbox-label"
             >
-              DOCUMENTATION
+              {t('extensibility.widgets.modules.documentation')}
               <Icon glyph="action" size="s" className="fd-margin-begin--tiny" />
             </Link>
           ) : null}
