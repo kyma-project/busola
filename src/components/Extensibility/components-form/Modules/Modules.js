@@ -30,7 +30,6 @@ export function Modules({
   const sectionName = schema.get('name');
 
   const setCheckbox = (fullValue, key, entryValue, checked, index) => {
-    console.log(storeKeys.toJS());
     if (checked) {
       onChange({
         storeKeys,
@@ -185,13 +184,6 @@ export function Modules({
             }
             onSelectionChange={(_, selected) => {
               if (selected.key !== -1) {
-                console.log(
-                  storeKeys
-                    .push(index)
-                    .push('channel')
-                    .toJS(),
-                  storeKeys.toJS(),
-                );
                 onChange({
                   storeKeys: storeKeys.push(index).push('channel'),
                   scopes: ['value'],
