@@ -86,7 +86,7 @@ export function Modules({
       return v.name === name;
     });
 
-    let channelTest = [];
+    let channelModuleTemplate = [];
 
     parsedOptions?.moduleTemplates?.map(moduleTemplate => {
       if (
@@ -95,12 +95,12 @@ export function Modules({
         ] === name
       ) {
         if (moduleTemplate?.spec?.descriptor?.component?.version)
-          return channelTest.push({
+          return channelModuleTemplate.push({
             text: moduleTemplate.spec.channel,
             additionalText: `(version: ${moduleTemplate?.spec?.descriptor?.component?.version})`,
           });
 
-        return channelTest.push({
+        return channelModuleTemplate.push({
           text: moduleTemplate.spec.channel,
           additionalText: '',
         });
@@ -167,7 +167,7 @@ export function Modules({
             placeholder={t(
               'extensibility.widgets.modules.module-channel-placeholder',
             )}
-            options={channelTest.map(option => {
+            options={channelModuleTemplate.map(option => {
               return {
                 text: `${option.text} ${option.additionalText}`,
                 key: option.text,
@@ -185,7 +185,15 @@ export function Modules({
             onSelectionChange={(_, selected) => {
               if (selected.key !== -1) {
                 onChange({
-                  storeKeys: storeKeys.push(index).push('channel'),
+                  storeKeys: storeKeys
+                    .push(
+                      resource?.spec?.modules
+                        ? resource?.spec?.modules.findIndex(module => {
+                            return module.name === name;
+                          })
+                        : index,
+                    )
+                    .push('channel'),
                   scopes: ['value'],
                   type: 'set',
                   schema,
