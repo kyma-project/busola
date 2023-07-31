@@ -28,6 +28,20 @@ context('Test Cluster Overview', () => {
     cy.contains('Events').should('be.visible');
   });
 
+  it('Check feedback feature via feature flag', () => {
+    cy.setBusolaFeature('FEEDBACK', true);
+
+    cy.loginAndSelectCluster();
+
+    cy.get('.sap-icon--feedback').should('exist');
+
+    cy.setBusolaFeature('FEEDBACK', false);
+
+    cy.loginAndSelectCluster();
+
+    cy.get('.sap-icon--feedback').should('not.exist');
+  });
+
   it('Go to Node details', () => {
     cy.wait(500);
 

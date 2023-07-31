@@ -29,6 +29,7 @@ export const configFeaturesNames = {
   PROMETHEUS: 'PROMETHEUS',
   GARDENER_LOGIN: 'GARDENER_LOGIN',
   RESOURCE_VALIDATION: 'RESOURCE_VALIDATION',
+  FEEDBACK: 'FEEDBACK',
 } as const;
 
 export type ConfigFeatureList = {
