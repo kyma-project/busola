@@ -135,7 +135,7 @@ export function Modules({
 
     return (
       <>
-        <div className="flexbox fd-margin-bottom--sm">
+        <div className="gridbox fd-margin-bottom--sm">
           <div className="fd-align-vertical-center-ignor-checkbox-label">
             {index === 0 ? `${sectionName}:` : ''}
           </div>
