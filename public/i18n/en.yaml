@@ -626,7 +626,6 @@ extensibility:
   edit-section: Edit {{section}}
   error: Your extension configuration is incorrect.
   message:
-    link-to-docs: Link to documentation, <0>documentation</0>
     old-version: There is a newer version of the extensibility configuration. Please migrate to the newest version.
     unnown-version: Your extensibility configuration version is no longer supported, but cannot be migrated. For more information, see <0>Extensibility documentation</0>.
     unsupported-version: Your extensibility configuration version is no longer supported. Please migrate to the newest version.
