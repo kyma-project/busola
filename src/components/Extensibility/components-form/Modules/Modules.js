@@ -4,27 +4,15 @@ import { useUIStore } from '@ui-schema/ui-schema';
 import { useJsonata } from '../../hooks/useJsonata';
 import { useVariables } from '../../hooks/useVariables';
 import { fromJS } from 'immutable';
-import {
-  ComboboxInput,
-  MessageStrip,
-  Checkbox,
-  Link,
-  Icon,
-} from 'fundamental-react';
+import { MessageStrip, Checkbox, Link, Icon } from 'fundamental-react';
 
 import './Modules.scss';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 import { ResourceForm } from 'shared/ResourceForm';
 import { useTranslation } from 'react-i18next';
+import { Dropdown } from 'shared/ResourceForm/inputs';
 
-export function Modules({
-  storeKeys,
-  resource,
-  onChange,
-  schema,
-  required,
-  editMode,
-}) {
+export function Modules({ storeKeys, resource, onChange, schema, required }) {
   const { t: tExt } = useGetTranslation();
   const { t } = useTranslation();
   const sectionName = schema.get('name');
@@ -160,7 +148,7 @@ export function Modules({
           >
             {name}
           </Checkbox>
-          <ComboboxInput
+          <Dropdown
             label={t('extensibility.widgets.modules.module-channel-label')}
             compact
             disabled={!isChecked}
@@ -182,7 +170,7 @@ export function Modules({
                   ]?.channel
                 : ''
             }
-            onSelectionChange={(_, selected) => {
+            onSelect={(_, selected) => {
               if (selected.key !== -1) {
                 onChange({
                   storeKeys: storeKeys
