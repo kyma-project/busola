@@ -27,7 +27,7 @@ export function GenericList({
   const listSize = value?.size || 0;
   const schemaPlaceholder = schema.get('placeholder');
   const itemTemplate = schema.get('template') || {};
-  const defaultOpen = schema.get('defaultExpanded');
+  const defaultOpen = schema.get('defaultExpanded') ?? false;
   const [newItemIndex, setNewItemIndex] = useState(0);
 
   const addItem = itemTemplate => {

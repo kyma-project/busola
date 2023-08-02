@@ -53,7 +53,7 @@ export function MonacoRenderer({
 
   const language = getLanguage(jsonata, schema);
   const formattedValue = formatValue(value, language);
-  const defaultOpen = schema.get('defaultExpanded');
+  const defaultOpen = schema.get('defaultExpanded') ?? false;
 
   const handleChange = useCallback(
     value => {

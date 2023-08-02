@@ -19,7 +19,7 @@ export function CollapsibleRenderer({
   const columns = schema.get('columns');
   const gridTemplateColumns = `repeat(${columns}, 1fr)`;
 
-  const defaultOpen = schema.get('defaultExpanded');
+  const defaultOpen = schema.get('defaultExpanded') ?? false;
   const schemaRequired = schema.get('required') ?? required;
 
   return (
