@@ -45,7 +45,7 @@ export function ResourceRefRender({
   const toInternal = schema.get('toInternal');
   const toExternal = schema.get('toExternal');
   const provideVar = schema.get('provideVar');
-  const defaultOpen = schema.get('defaultExpanded');
+  const defaultOpen = schema.get('defaultExpanded') ?? false;
   const filter = schema.get('filter');
 
   if (toInternal) {
