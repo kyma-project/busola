@@ -119,7 +119,7 @@ export function KeyValuePairRenderer({
       className="key-enum"
       title={titleTranslation}
       initialValue={valueInfo.type === 'object' ? {} : ''}
-      defaultOpen={schema.get('defaultExpanded')}
+      defaultOpen={schema.get('defaultExpanded') ?? false}
       {...getPropsFromSchema(schema, required, tExt)}
     />
   );
