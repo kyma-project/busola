@@ -31,6 +31,7 @@ module.exports = defineConfig({
       'tests/cluster/test-cluster-overview.spec.js',
       'tests/cluster/test-gardener-provider.spec.js',
       'tests/cluster/test-cluster-role-bindings.spec.js',
+      'tests/cluster/test-cluster-validation.spec.js',
       'tests/cluster/test-storage-classes.spec.js',
       'tests/cluster/test-persistent-volumes.spec.js',
       'tests/cluster/test-dashboard-version.spec.js',
