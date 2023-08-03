@@ -66,10 +66,25 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
   }
 
   Object.keys(options).forEach(optionName => {
-    parsedOptions[optionName] = makeJsonata(options[optionName]);
+    if (
+      optionName === 'name' &&
+      !Array.isArray(makeJsonata(options[optionName]))
+    ) {
+      let moduleName = makeJsonata(options[optionName]);
+      parsedOptions[optionName] = [moduleName];
+    } else {
+      parsedOptions[optionName] = makeJsonata(options[optionName]);
+    }
   });
 
   const Items = parsedOptions?.name?.map((name, index) => {
+    if (!name)
+      return (
+        <MessageStrip type={'warning'}>
+          {t('extensibility.widgets.modules.no-modules')}
+        </MessageStrip>
+      );
+
     const isChecked = !!(value ? value.toJS() : []).find(v => {
       return v.name === name;
     });
