@@ -37,7 +37,7 @@ export function SimpleList({
   const schemaPlaceholder = schema.get('placeholder');
   const inputInfo = useCreateResourceDescription(schema.get('inputInfo'));
   const tooltipContent = schema.get('description');
-  const defaultOpen = schema.get('defaultExpanded');
+  const defaultOpen = schema.get('defaultExpanded') ?? false;
 
   const removeItem = index => {
     onChange({
