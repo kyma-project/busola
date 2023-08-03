@@ -43,8 +43,10 @@ export const usePolicySet = () => {
   const validationFeature = useFeature(
     'RESOURCE_VALIDATION',
   ) as ValidationFeatureConfig;
-  const validationPreferences = getExtendedValidateResourceState(
-    useRecoilValue(validateResourcesState),
+  const validateResources = useRecoilValue(validateResourcesState);
+  const validationPreferences = useMemo(
+    () => getExtendedValidateResourceState(validateResources),
+    [validateResources],
   );
 
   return useMemo(() => {

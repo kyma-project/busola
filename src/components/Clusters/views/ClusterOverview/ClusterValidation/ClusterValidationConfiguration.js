@@ -196,12 +196,13 @@ export function ClusterValidationConfigurationDialog({
 
   const [tempConfiguration, setTempConfiguration] = useState(configuration);
 
+  // Load configuration when the dialog is shown, but don't change it while open
   useEffect(() => {
     if (show) {
       setTempConfiguration(configuration);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [show, configuration]);
+  }, [show]);
 
   return (
     <Dialog
