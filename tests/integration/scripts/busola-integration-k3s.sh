@@ -18,7 +18,8 @@ EOF
 cp kubeconfig--kyma--nkyma.yaml tests/integration/fixtures/kubeconfig.yaml
 k3d kubeconfig get k3d > tests/integration/fixtures/kubeconfig-k3s.yaml
 
-npm ci && npm run build
+npm ci
+npm run build
 npm i -g serve 
 serve -s build > $ARTIFACTS/busola.log &
 
