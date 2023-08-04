@@ -14,7 +14,6 @@ context('Test extensibility variables', () => {
     cy.loginAndSelectCluster({
       fileName: 'kubeconfig-k3s.yaml',
       storage: 'Session storage',
-      staticToken: true,
     });
 
     cy.createNamespace(NAMESPACE);
@@ -59,7 +58,6 @@ context('Test extensibility variables', () => {
     cy.loginAndSelectCluster({
       fileName: 'kubeconfig-k3s.yaml',
       storage: 'Session storage',
-      staticToken: true,
     });
 
     cy.contains('Namespaces').click();

@@ -176,7 +176,6 @@ context('Test reduced permissions', () => {
         `/namespaces/${Cypress.env('NAMESPACE_NAME')}`,
       ),
       disableClear: true,
-      staticToken: true,
     });
   });
 
