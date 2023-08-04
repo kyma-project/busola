@@ -76,6 +76,7 @@ body {
     .fd-token__close {
       display: none !important;
     }
+
     &::after {
       content: none !important;
     }
@@ -118,6 +119,7 @@ body {
     padding-left: unset;
     padding: 0.5rem 1rem;
     height: auto;
+
     .fd-bar__right {
       padding: 0;
     }
@@ -143,6 +145,7 @@ body {
     display: flex;
     justify-content: space-between;
   }
+
   & > section {
     flex-grow: 1;
   }
@@ -226,6 +229,7 @@ input[type='checkbox'] {
   font-weight: normal;
   font-style: normal;
 }
+
 @font-face {
   font-family: '72';
   src: url('~@sap-theming/theming-base-content/content/Base/baseLib/baseTheme/fonts/72-Bold-full.woff')
@@ -233,6 +237,7 @@ input[type='checkbox'] {
   font-weight: 700;
   font-style: normal;
 }
+
 @font-face {
   font-family: '72';
   src: url('~@sap-theming/theming-base-content/content/Base/baseLib/baseTheme/fonts/72-Light-full.woff')
@@ -269,16 +274,20 @@ input[type='checkbox'] {
   width: 100% !important;
   max-height: 200px !important;
   overflow-y: auto !important;
+
   .fd-list--dropdown {
     max-width: 100% !important;
   }
+
   .fd-form-message {
     max-width: 100%;
   }
 }
+
 .fd-popover__popper {
   max-height: 200px !important;
   overflow-y: auto !important;
+
   .fd-list--dropdown {
     max-width: 100% !important;
   }
@@ -294,6 +303,7 @@ input[type='checkbox'] {
     min-width: unset;
   }
 }
+
 .fd-input.is-invalid {
   border-width: 0.125rem;
   background-color: var(--sapField_InvalidBackground, #fff);
@@ -384,8 +394,14 @@ input[type='checkbox'] {
 .fd-justify-between {
   justify-content: space-between;
 }
+
 .fd-align-center {
   align-items: center;
+}
+
+.fd-align-vertical-center-ignor-checkbox-label {
+  margin-top: auto;
+  margin-bottom: 0.3vh;
 }
 
 .fd-margin-0 {
@@ -410,6 +426,10 @@ input[type='checkbox'] {
 
 .fd-color--text {
   color: var(--sapTextColor);
+}
+
+.fd-color--neutral {
+  color: var(--sapNeutralColor);
 }
 
 .break-word {
