@@ -115,7 +115,7 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
 
     cy.contains('Next').click();
 
-    if (!staticToken) {
+    if (staticToken) {
       cy.contains('Next').click();
     }
 
