@@ -206,7 +206,10 @@ export class Scan {
     for (const resource of scope.resources) {
       const hasAccess = doesUserHavePermission(
         ['list'],
-        { resourceGroupAndVersion: '', resourceKind: resource.kind },
+        {
+          resourceGroupAndVersion: '',
+          resourceKind: resource.kind.toLowerCase(),
+        },
         scope.permissionSets,
       );
       resource.unauthorized = !hasAccess;

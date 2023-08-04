@@ -28,7 +28,7 @@ export const doesUserHavePermission = (
 ) => {
   const { resourceGroupAndVersion, resourceKind } = resource;
 
-  const resourceKindPlural = pluralize(resourceKind).toLowerCase();
+  const resourceKindPlural = pluralize(resourceKind);
   const resourceGroup = getResourceGroup(resourceGroupAndVersion);
 
   const isPermitted = permissionSet.find(set => {
