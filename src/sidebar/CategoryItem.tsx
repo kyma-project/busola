@@ -1,37 +1,43 @@
 import { useTranslation } from 'react-i18next';
-// import { SetterOrUpdater } from 'recoil';
+import { SetterOrUpdater } from 'recoil';
 import { Category } from 'state/navigation/categories';
-import { SideNavigationItem } from '@ui5/webcomponents-react';
+import { SideNavigationItem, Ui5CustomEvent } from '@ui5/webcomponents-react';
 
-// import { ExpandedCategories } from 'state/navigation/expandedCategories/expandedCategoriesAtom';
+import { ExpandedCategories } from 'state/navigation/expandedCategories/expandedCategoriesAtom';
 import { NavItem } from './NavItem';
 
 type CategoryItemProps = {
   category: Category;
-  // expandedCategories: string[];
-  // handleExpandedCategories: SetterOrUpdater<ExpandedCategories>;
+  expandedCategories: string[];
+  handleExpandedCategories: SetterOrUpdater<ExpandedCategories>;
 };
 
 export function CategoryItem({
   category,
-}: // expandedCategories,
-// handleExpandedCategories,
-CategoryItemProps) {
+  expandedCategories,
+  handleExpandedCategories,
+}: CategoryItemProps) {
   const { t } = useTranslation();
   const categoryName = t(category.label, { defaultValue: category.label });
+  const expanded = expandedCategories.includes(category.key);
 
-  // const expanded = expandedCategories.includes(category.key);
+  const handleAddExpandedCategory = (e: Ui5CustomEvent) => {
+    e.preventDefault();
 
-  // const handleAddExpandedCategory = () => {
-  //   console.log('handleAddExpandedCategory', categoryName, category)
-  //   if (expanded) {
-  //     handleExpandedCategories(
-  //       expandedCategories.filter(el => el !== category.key),
-  //     );
-  //   } else {
-  //     handleExpandedCategories([...expandedCategories, category.key]);
-  //   }
-  // };
+    console.log(
+      'handleAddExpandedCategory',
+      categoryName,
+      categoryName === e.target.parentElement?.getAttribute('text'),
+    );
+    if (categoryName === e.target.parentElement?.getAttribute('text')) {
+    } else if (expanded) {
+      handleExpandedCategories(
+        expandedCategories.filter(el => el !== category.key),
+      );
+    } else {
+      handleExpandedCategories([...expandedCategories, category.key]);
+    }
+  };
 
   const children = category.items?.map(nn => (
     <NavItem node={nn} key={nn.pathSegment} subItem={true} />
@@ -39,13 +45,12 @@ CategoryItemProps) {
 
   return (
     <SideNavigationItem
-      key={category.key}
-      // key={expanded + category.key}
-      // expanded={expanded}
+      key={expanded + category.key}
+      expanded={expanded}
+      selected={false}
       icon={category.icon}
       text={categoryName}
-      wholeItemToggleable={true}
-      // onClick={handleAddExpandedCategory} // TODO handle saving Expanded Categories to local storage
+      onClick={handleAddExpandedCategory} // TODO handle saving Expanded Categories to local storage
     >
       {children}
     </SideNavigationItem>

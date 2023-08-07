@@ -47,10 +47,9 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
     text: name,
     selected: isNodeSelected(),
     key: node.pathSegment,
-    // style: { color: 'red' } as React.CSSProperties,
     onClick: (e: Event) => {
-      console.log('NavItem onClick', node, e);
       e.preventDefault();
+
       if (node.externalUrl) {
         const newWindow = window.open(
           node.externalUrl,
