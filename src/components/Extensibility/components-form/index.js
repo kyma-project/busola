@@ -35,6 +35,7 @@ import { SimpleList } from './SimpleList';
 import { AlertRenderer } from './AlertRenderer';
 import { MultiCheckbox } from './MultiCheckbox';
 import { MultiType } from './MultiType';
+import { Modules } from './Modules/Modules';
 
 const pluginStack = [
   // TODO
@@ -102,6 +103,7 @@ export const widgets = {
     Alert: AlertRenderer,
     MultiCheckbox,
     MultiType,
+    Modules,
   },
 };
 export default widgets;

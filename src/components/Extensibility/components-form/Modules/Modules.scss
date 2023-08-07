@@ -1,0 +1,18 @@
+.gridbox {
+  display: grid;
+  grid-template-columns: 1fr 0.8fr 1.2fr 1fr;
+  column-gap: 16px;
+
+  & > :first-child {
+    text-align: right;
+    color: var(--sapNeutralColor);
+  }
+
+  label {
+    padding: 0;
+  }
+}
+
+.alert {
+  margin-left: 24.5%;
+}

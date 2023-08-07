@@ -15,12 +15,16 @@ import { SidebarSwitcher } from './SidebarSwitcher/SidebarSwitcher';
 import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
 
 import './Header.scss';
+import { useFeature } from 'hooks/useFeature';
 
 export function Header() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { refetch } = useAvailableNamespaces();
   const { namespace: activeNamespace } = useUrl();
+  const { isEnabled: isFeedbackEnabled, link: feedbackLink } = useFeature(
+    'FEEDBACK',
+  );
 
   const setPreferencesOpen = useSetRecoilState(isPreferencesOpenState);
   const cluster = useRecoilValue(clusterState);
@@ -55,6 +59,32 @@ export function Header() {
     else return activeNamespace || t('navigation.select-namespace');
   };
 
+  let headerActions = [];
+  if (cluster) {
+    headerActions.push({
+      glyph: 'megamenu',
+      label: getNamespaceLabel(),
+      notificationCount: 0,
+      callback: () => {
+        refetch();
+        setIsNamespaceOpen(!isNamespaceOpen);
+      },
+      menu: (
+        <NamespaceDropdown hideDropdown={() => setIsNamespaceOpen(false)} />
+      ),
+    });
+  }
+
+  if (isFeedbackEnabled) {
+    headerActions.unshift({
+      glyph: 'feedback',
+      notificationCount: 0,
+      callback: () => {
+        window.open(feedbackLink, '_blank');
+      },
+    });
+  }
+
   return (
     <Shellbar
       className="header"
@@ -70,26 +100,7 @@ export function Header() {
         glyph: 'customer',
         colorAccent: 10,
       }}
-      actions={
-        cluster
-          ? [
-              {
-                glyph: 'megamenu',
-                label: getNamespaceLabel(),
-                notificationCount: 0,
-                callback: () => {
-                  refetch();
-                  setIsNamespaceOpen(!isNamespaceOpen);
-                },
-                menu: (
-                  <NamespaceDropdown
-                    hideDropdown={() => setIsNamespaceOpen(false)}
-                  />
-                ),
-              },
-            ]
-          : []
-      }
+      actions={headerActions}
       profileMenu={[
         {
           name: t('navigation.preferences.title'),

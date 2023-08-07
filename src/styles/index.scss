@@ -399,6 +399,11 @@ input[type='checkbox'] {
   align-items: center;
 }
 
+.fd-align-vertical-center-ignor-checkbox-label {
+  margin-top: auto;
+  margin-bottom: 0.3vh;
+}
+
 .fd-margin-0 {
   margin: 0;
 }
@@ -421,6 +426,10 @@ input[type='checkbox'] {
 
 .fd-color--text {
   color: var(--sapTextColor);
+}
+
+.fd-color--neutral {
+  color: var(--sapNeutralColor);
 }
 
 .break-word {

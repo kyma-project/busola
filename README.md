@@ -13,8 +13,8 @@ Busola project contains additional sub-projects:
 
 ## Prerequisites
 
-- [`npm`](https://www.npmjs.com/) in version 8.1.2 or higher
-- [`node`](https://nodejs.org/en/) in version 16.13.2 or higher
+- [`npm`](https://www.npmjs.com/) in version 8.x
+- [`node`](https://nodejs.org/en/) in version 16.x
 
 Busola supports:
 
