@@ -9,10 +9,10 @@ ARCH="$(uname -m)"
 
 function deploy_k3d_kyma (){
 echo "Provisioning k3d cluster"
-k3d cluster create k3d
+k3d cluster create k3dCluster
 
-k3d kubeconfig get k3d > tests/integration/fixtures/kubeconfig.yaml
-k3d kubeconfig get k3d > tests/integration/fixtures/kubeconfig-k3s.yaml
+k3d kubeconfig get k3dCluster > tests/integration/fixtures/kubeconfig.yaml
+k3d kubeconfig get k3dCluster > tests/integration/fixtures/kubeconfig-k3s.yaml
 }
 
 function build_and_run_busola() {
