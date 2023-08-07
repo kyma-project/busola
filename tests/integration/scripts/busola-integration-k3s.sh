@@ -8,14 +8,10 @@ OS="$(uname -s)"
 ARCH="$(uname -m)"
 
 function deploy_k3d_kyma (){
-curl -sSLo kyma.tar.gz "https://github.com/kyma-project/cli/releases/latest/download/kyma_${OS}_${ARCH}.tar.gz"
-tar -zxvf kyma.tar.gz
-chmod +x ./kyma
+echo "Provisioning k3d cluster"
+k3d cluster create k3d
 
-echo "Provisioning k3d cluster for Kyma"
-./kyma provision k3d --ci
-
-k3d kubeconfig get kyma > tests/integration/fixtures/kubeconfig.yaml
+k3d kubeconfig get k3d > tests/integration/fixtures/kubeconfig.yaml
 k3d kubeconfig get k3d > tests/integration/fixtures/kubeconfig-k3s.yaml
 }
 
