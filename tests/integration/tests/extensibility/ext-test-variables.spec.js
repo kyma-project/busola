@@ -62,7 +62,7 @@ context('Test extensibility variables', () => {
       staticToken: true,
     });
 
-    cy.contains('Namespaces').click();
+    cy.contains('Namespaces', { includeShadowDom: true }).click();
 
     cy.contains('a', NAMESPACE).click();
 

@@ -67,7 +67,7 @@ context('Test Pizzas', () => {
       staticToken: true,
     });
 
-    cy.contains('Namespaces').click();
+    cy.contains('Namespaces', { includeShadowDom: true }).click();
 
     cy.contains('a', 'pizzas').click();
 
