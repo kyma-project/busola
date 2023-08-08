@@ -22,7 +22,7 @@ context('Test extensibility variables', () => {
 
   it('Creates the EXT test resources config', () => {
     cy.getLeftNav()
-      .contains('Cluster Details')
+      .contains('Cluster Details', { includeShadowDom: true })
       .click();
 
     cy.contains('Upload YAML').click();
@@ -67,11 +67,11 @@ context('Test extensibility variables', () => {
     cy.contains('a', NAMESPACE).click();
 
     cy.getLeftNav()
-      .contains('Testin')
+      .contains('Testin', { includeShadowDom: true })
       .click();
 
     cy.getLeftNav()
-      .contains(/^Test Resources$/)
+      .contains(/^Test Resources$/, { includeShadowDom: true })
       .click();
 
     cy.contains('Create Test Resource').click();

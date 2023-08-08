@@ -30,7 +30,7 @@ context('Test Custom Resources', () => {
 
   it('Check CR groups list with slash shortcut', () => {
     cy.getLeftNav()
-      .contains('Custom Resources')
+      .contains('Custom Resources', { includeShadowDom: true })
       .click();
 
     cy.contains('h3', 'Custom Resources').should('be.visible');

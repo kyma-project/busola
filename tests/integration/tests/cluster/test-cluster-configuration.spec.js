@@ -56,7 +56,7 @@ context('Test Cluster configuration', () => {
 
     // custom storage type should be set
     cy.getLeftNav()
-      .contains('Cluster Details')
+      .contains('Cluster Details', { includeShadowDom: true })
       .click();
 
     // Uncomment after resolving https://github.com/kyma-project/busola/issues/2511

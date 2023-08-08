@@ -24,7 +24,7 @@ context('Test Pizzas', () => {
 
   it('Creates the EXT pizza config', () => {
     cy.getLeftNav()
-      .contains('Cluster Details')
+      .contains('Cluster Details', { includeShadowDom: true })
       .click();
 
     cy.contains('Upload YAML').click();
@@ -72,11 +72,11 @@ context('Test Pizzas', () => {
     cy.contains('a', 'pizzas').click();
 
     cy.getLeftNav()
-      .contains('Lunch')
+      .contains('Lunch', { includeShadowDom: true })
       .click();
 
     cy.getLeftNav()
-      .contains('Pizza Orders')
+      .contains('Pizza Orders', { includeShadowDom: true })
       .click();
 
     cy.contains('DELIVERY');
@@ -130,7 +130,7 @@ context('Test Pizzas', () => {
     cy.contains('Diavola is such a spicy pizza').should('be.visible');
 
     cy.getLeftNav()
-      .contains(/^Pizzas$/)
+      .contains(/^Pizzas$/, { includeShadowDom: true })
       .click();
 
     cy.get('.fd-table__body')

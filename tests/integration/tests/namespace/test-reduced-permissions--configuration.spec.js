@@ -43,42 +43,42 @@ context('Test reduced permissions 2', () => {
     cy.loginAndSelectCluster();
 
     cy.getLeftNav()
-      .contains('Namespaces')
+      .contains('Namespaces', { includeShadowDom: true })
       .should('exist');
 
     cy.getLeftNav()
-      .contains('Events')
+      .contains('Events', { includeShadowDom: true })
       .should('not.exist');
 
     // check out "normal" namespace view - expect only Pods here
     cy.goToNamespaceDetails();
 
     cy.getLeftNav()
-      .contains('Discovery and Network')
+      .contains('Discovery and Network', { includeShadowDom: true })
       .should('not.exist');
 
     cy.getLeftNav()
-      .contains('Workloads')
+      .contains('Workloads', { includeShadowDom: true })
       .should('exist')
       .click();
 
     cy.getLeftNav()
-      .contains('Pods')
+      .contains('Pods', { includeShadowDom: true })
       .should('exist');
 
     cy.getLeftNav()
-      .contains('Deployments')
+      .contains('Deployments', { includeShadowDom: true })
       .should('not.exist');
 
     // check out "special" namespace view - expect Pods and Services here
     mockNamespacePermissions();
 
     cy.getLeftNav()
-      .contains('Back To Cluster Details')
+      .contains('Back To Cluster Details', { includeShadowDom: true })
       .click();
 
     cy.getLeftNav()
-      .contains('Namespaces')
+      .contains('Namespaces', { includeShadowDom: true })
       .click();
 
     cy.get('[aria-label="open-search"]').click();
@@ -90,20 +90,20 @@ context('Test reduced permissions 2', () => {
       .click();
 
     cy.getLeftNav()
-      .contains('Pods')
+      .contains('Pods', { includeShadowDom: true })
       .should('exist');
 
     cy.getLeftNav()
-      .contains('Storage')
+      .contains('Storage', { includeShadowDom: true })
       .should('exist')
       .click();
 
     cy.getLeftNav()
-      .contains('Persistent Volume Claims')
+      .contains('Persistent Volume Claims', { includeShadowDom: true })
       .should('exist');
 
     cy.getLeftNav()
-      .contains('Secrets')
+      .contains('Secrets', { includeShadowDom: true })
       .should('not.exist');
   });
 
