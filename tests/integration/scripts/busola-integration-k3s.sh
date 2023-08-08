@@ -4,15 +4,12 @@ set -e
 export CYPRESS_DOMAIN=http://localhost:3000
 export NO_COLOR=1
 export KUBECONFIG="$GARDENER_KYMA_PROW_KUBECONFIG"
-OS="$(uname -s)"
-ARCH="$(uname -m)"
 
 function deploy_k3d_kyma (){
 echo "Provisioning k3d cluster"
 k3d cluster create k3dCluster
 
 k3d kubeconfig get k3dCluster > tests/integration/fixtures/kubeconfig.yaml
-k3d kubeconfig get k3dCluster > tests/integration/fixtures/kubeconfig-k3s.yaml
 }
 
 function build_and_run_busola() {

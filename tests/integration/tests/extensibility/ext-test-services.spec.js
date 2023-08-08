@@ -8,10 +8,7 @@ context('Test Services', () => {
   before(() => {
     cy.handleExceptions();
 
-    cy.loginAndSelectCluster({
-      fileName: 'kubeconfig-k3s.yaml',
-      storage: 'Session storage',
-    });
+    cy.loginAndSelectCluster();
 
     cy.createNamespace('services');
   });
@@ -47,10 +44,7 @@ context('Test Services', () => {
   });
 
   it('Displays the EXT Services list view', () => {
-    cy.loginAndSelectCluster({
-      fileName: 'kubeconfig-k3s.yaml',
-      storage: 'Session storage',
-    });
+    cy.loginAndSelectCluster();
 
     cy.getLeftNav()
       .contains('Namespaces')

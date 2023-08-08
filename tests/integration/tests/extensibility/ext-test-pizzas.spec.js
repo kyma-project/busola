@@ -13,10 +13,7 @@ context('Test Pizzas', () => {
   before(() => {
     cy.handleExceptions();
 
-    cy.loginAndSelectCluster({
-      fileName: 'kubeconfig-k3s.yaml',
-      storage: 'Session storage',
-    });
+    cy.loginAndSelectCluster();
 
     cy.createNamespace('pizzas');
   });
@@ -60,10 +57,7 @@ context('Test Pizzas', () => {
   });
 
   it('Displays the Pizza Orders list/detail views from the samples', () => {
-    cy.loginAndSelectCluster({
-      fileName: 'kubeconfig-k3s.yaml',
-      storage: 'Session storage',
-    });
+    cy.loginAndSelectCluster();
 
     cy.contains('Namespaces').click();
 
