@@ -1,26 +1,13 @@
 /// <reference types="cypress" />
 
 import { loadFile } from '../../support/loadFile';
-import { generateRandomString } from '../../support/generateRandomString';
 
-const FILE_NAME = 'test-customresourcedefinisions.yaml';
-
-const CR_PLURAL_NAME = generateRandomString(7);
-const CR_NAME = CR_PLURAL_NAME + '.cypress.example.com';
+const FILE_NAME = 'test-customresourcedefinisions-cluster.yaml';
 
 function openSearchWithSlashShortcut() {
   cy.get('body').type('/', { force: true });
 }
-async function loadCR(name, plural, fileName) {
-  const resource = await loadFile(fileName);
-  const newResource = { ...resource };
 
-  newResource.metadata.name = name;
-  newResource.spec.names.plural = plural;
-  newResource.spec.names.singular = plural;
-
-  return newResource;
-}
 context('Test Custom Resources', () => {
   Cypress.skipAfterFail();
 
@@ -31,7 +18,7 @@ context('Test Custom Resources', () => {
 
     cy.contains('Create Custom Resource Definition').click();
 
-    cy.wrap(loadCR(CR_NAME, CR_PLURAL_NAME, FILE_NAME)).then(CRD_CONFIG => {
+    cy.wrap(loadFile(FILE_NAME)).then(CRD_CONFIG => {
       const CRD = JSON.stringify(CRD_CONFIG);
       cy.pasteToMonaco(CRD);
     });
@@ -55,23 +42,23 @@ context('Test Custom Resources', () => {
     cy.get('table').should('have.length', 1);
 
     cy.get('[role=row]')
-      .contains('CronTabs')
+      .contains('Tclusters')
       .should('be.visible');
   });
 
   it('Check single CR list', () => {
     cy.get('[role=row]')
-      .contains('CronTabs')
+      .contains('Tclusters')
       .click();
 
     cy.get('[aria-label="title"]')
-      .contains('CronTabs')
+      .contains('Tclusters')
       .should('be.visible');
 
-    cy.contains(/Create Cron Tab/i).should('be.visible');
+    cy.contains(/Create Tcluster/i).should('be.visible');
 
     cy.url().should('match', /customresources/);
-    cy.contains(CR_NAME).click();
+    cy.contains('tcluster.cypress.example.com').click();
     cy.url().should('match', /customresourcedefinitions/);
     cy.deleteInDetails();
   });

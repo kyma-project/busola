@@ -1,25 +1,8 @@
 /// <reference types="cypress" />
 
 import { loadFile } from '../../support/loadFile';
-import { generateRandomString } from '../../support/generateRandomString';
 
-const FILE_NAME = 'test-customresourcedefinisions.yaml';
-const SCOPE = 'Namespaced';
-
-const CRD_PLURAL_NAME = generateRandomString(7);
-const CRD_NAME = CRD_PLURAL_NAME + '.cypress.example.com';
-
-async function loadCRD(name, plural, scope, fileName) {
-  const resource = await loadFile(fileName);
-  const newResource = { ...resource };
-
-  newResource.metadata.name = name;
-  newResource.spec.names.plural = plural;
-  newResource.spec.names.singular = plural;
-  newResource.spec.scope = scope;
-
-  return newResource;
-}
+const FILE_NAME = 'test-customresourcedefinisions-namespaced.yaml';
 
 function getQueryInput() {
   return cy.get('[aria-label=command-palette-search]');
@@ -40,12 +23,10 @@ context('Test Custom Resources', () => {
 
     cy.contains('Upload YAML').click();
 
-    cy.wrap(loadCRD(CRD_NAME, CRD_PLURAL_NAME, SCOPE, FILE_NAME)).then(
-      CRD_CONFIG => {
-        const CRD = JSON.stringify(CRD_CONFIG);
-        cy.pasteToMonaco(CRD);
-      },
-    );
+    cy.wrap(loadFile(FILE_NAME)).then(CRD_CONFIG => {
+      const CRD = JSON.stringify(CRD_CONFIG);
+      cy.pasteToMonaco(CRD);
+    });
 
     cy.get('[role="dialog"]')
       .contains('button', 'Submit')
@@ -70,23 +51,23 @@ context('Test Custom Resources', () => {
     cy.get('table').should('have.length', 1);
 
     cy.get('[role=row]')
-      .contains('CronTabs')
+      .contains('Tnamespaces')
       .should('be.visible');
   });
 
   it('Check single CR list', () => {
     cy.get('[role=row]')
-      .contains('CronTabs')
+      .contains('Tnamespaces')
       .click();
 
     cy.get('[aria-label="title"]')
-      .contains('CronTabs')
+      .contains('Tnamespaces')
       .should('be.visible');
 
-    cy.contains(/Create Cron Tab/i).should('be.visible');
+    cy.contains(/Create Tnamespace/i).should('be.visible');
 
     cy.url().should('match', /customresources/);
-    cy.contains(CRD_NAME).click();
+    cy.contains('tnamespace.cypress.example.com').click();
     cy.url().should('match', /customresourcedefinitions/);
     cy.deleteInDetails();
   });
