@@ -5,7 +5,7 @@ export CYPRESS_DOMAIN=http://localhost:3000
 export NO_COLOR=1
 export KUBECONFIG="$GARDENER_KYMA_PROW_KUBECONFIG"
 
-function deploy_k3d_kyma (){
+function deploy_k3d (){
 echo "Provisioning k3d cluster"
 k3d cluster create k3dCluster
 
@@ -26,10 +26,10 @@ while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' "$CYPRESS_DOMAIN")" != "200
 sleep 10
 }
 
-deploy_k3d_kyma  &> $ARTIFACTS/kyma-alpha-deploy.log &
+deploy_k3d  &> $ARTIFACTS/k3d-deploy.log &
 build_and_run_busola  &> $ARTIFACTS/busola-build.log &
 
-echo 'Waiting for deploy_k3d_kyma and build_and_run_busola'
+echo 'Waiting for deploy_k3d and build_and_run_busola'
 wait -n
 echo "First process finished"
 wait -n
