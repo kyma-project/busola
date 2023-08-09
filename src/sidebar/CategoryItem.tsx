@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { SetterOrUpdater } from 'recoil';
+import { SetterOrUpdater, useRecoilValue } from 'recoil';
 import { Category } from 'state/navigation/categories';
 import { SideNavigationItem, Ui5CustomEvent } from '@ui5/webcomponents-react';
+import { isSidebarCondensedState } from 'state/preferences/isSidebarCondensedAtom';
 
 import { ExpandedCategories } from 'state/navigation/expandedCategories/expandedCategoriesAtom';
 import { NavItem } from './NavItem';
@@ -20,22 +21,19 @@ export function CategoryItem({
   const { t } = useTranslation();
   const categoryName = t(category.label, { defaultValue: category.label });
   const expanded = expandedCategories.includes(category.key);
+  const isSidebarCondensed = useRecoilValue(isSidebarCondensedState);
 
   const handleAddExpandedCategory = (e: Ui5CustomEvent) => {
     e.preventDefault();
-
-    console.log(
-      'handleAddExpandedCategory',
-      categoryName,
-      categoryName === e.target.parentElement?.getAttribute('text'),
-    );
-    if (categoryName === e.target.parentElement?.getAttribute('text')) {
-    } else if (expanded) {
-      handleExpandedCategories(
-        expandedCategories.filter(el => el !== category.key),
-      );
-    } else {
-      handleExpandedCategories([...expandedCategories, category.key]);
+    if (!isSidebarCondensed) {
+      if (categoryName === e.target.parentElement?.getAttribute('text')) {
+      } else if (expanded) {
+        handleExpandedCategories(
+          expandedCategories.filter(el => el !== category.key),
+        );
+      } else {
+        handleExpandedCategories([...expandedCategories, category.key]);
+      }
     }
   };
 
@@ -50,7 +48,7 @@ export function CategoryItem({
       selected={false}
       icon={category.icon}
       text={categoryName}
-      onClick={handleAddExpandedCategory} // TODO handle saving Expanded Categories to local storage
+      onClick={handleAddExpandedCategory}
     >
       {children}
     </SideNavigationItem>

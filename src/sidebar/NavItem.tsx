@@ -25,7 +25,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const cluster = useRecoilValue(clusterState);
 
-  const isNodeSelected = () => {
+  const isNodeSelected = (node: NavNode) => {
     if (node.externalUrl) return false;
     else {
       const { pathname } = window.location;
@@ -40,16 +40,13 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
       );
     }
   };
-  const name = t(node.label, { defaultValue: node.label });
 
   let propsForNav = {
     icon: node.icon,
-    text: name,
-    selected: isNodeSelected(),
+    text: t(node.label, { defaultValue: node.label }),
+    selected: isNodeSelected(node),
     key: node.pathSegment,
     onClick: (e: Event) => {
-      e.preventDefault();
-
       if (node.externalUrl) {
         const newWindow = window.open(
           node.externalUrl,
