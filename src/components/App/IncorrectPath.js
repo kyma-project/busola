@@ -44,7 +44,7 @@ export function IncorrectPath({ to, title = '', message = '' }) {
 
   if (!extensions?.length && extensions?.length !== 0) return null;
 
-  if (!data && !loading) {
+  if (!data && loading) {
     return <Spinner />;
   }
 
