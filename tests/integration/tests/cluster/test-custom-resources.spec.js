@@ -9,7 +9,7 @@ const CR_PLURAL_NAME = generateRandomString(7);
 const CR_NAME = CR_PLURAL_NAME + '.cypress.example.com';
 
 function openSearchWithSlashShortcut() {
-  cy.get('body').type('/');
+  cy.get('body').type('/', { force: true });
 }
 async function loadCR(name, plural, fileName) {
   const resource = await loadFile(fileName);
