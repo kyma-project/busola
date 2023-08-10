@@ -38,13 +38,13 @@ export function IncorrectPath({ to, title = '', message = '' }) {
   const resourceType = namespace ? namespaceResourceType : clusterResourceType;
   const resourceName = namespace ? namespaceResourceName : clusterResourceName;
 
-  const { data } = useGetList(
+  const { data, loading } = useGetList(
     crd => pluralize(crd.spec.names.kind.toLowerCase()) === resourceType,
   )(resourceUrl, { skip: !extensions?.length });
 
   if (!extensions?.length && extensions?.length !== 0) return null;
 
-  if (!data) {
+  if (!data && loading) {
     return <Spinner />;
   }
 

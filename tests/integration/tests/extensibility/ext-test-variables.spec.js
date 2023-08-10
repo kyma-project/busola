@@ -11,18 +11,14 @@ context('Test extensibility variables', () => {
   before(() => {
     cy.handleExceptions();
 
-    cy.loginAndSelectCluster({
-      fileName: 'kubeconfig-k3s.yaml',
-      storage: 'Session storage',
-      staticToken: true,
-    });
+    cy.loginAndSelectCluster();
 
     cy.createNamespace(NAMESPACE);
   });
 
   it('Creates the EXT test resources config', () => {
     cy.getLeftNav()
-      .contains('Cluster Details')
+      .contains('Cluster Details', { includeShadowDom: true })
       .click();
 
     cy.contains('Upload YAML').click();
@@ -56,22 +52,18 @@ context('Test extensibility variables', () => {
   });
 
   it('Navigate to Test Resource Creation', () => {
-    cy.loginAndSelectCluster({
-      fileName: 'kubeconfig-k3s.yaml',
-      storage: 'Session storage',
-      staticToken: true,
-    });
+    cy.loginAndSelectCluster();
 
-    cy.contains('Namespaces').click();
+    cy.contains('Namespaces', { includeShadowDom: true }).click();
 
     cy.contains('a', NAMESPACE).click();
 
     cy.getLeftNav()
-      .contains('Testin')
+      .contains('Testin', { includeShadowDom: true })
       .click();
 
     cy.getLeftNav()
-      .contains(/^Test Resources$/)
+      .contains(/^Test Resources$/, { includeShadowDom: true })
       .click();
 
     cy.contains('Create Test Resource').click();

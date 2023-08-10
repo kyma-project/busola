@@ -74,7 +74,7 @@ context('Test Protected Resources', () => {
 
   it('Protect a resource', () => {
     cy.getLeftNav()
-      .contains('Config Maps')
+      .contains('Config Maps', { includeShadowDom: true })
       .click();
 
     cy.contains('tr', NAME)
@@ -128,7 +128,7 @@ context('Test Protected Resources', () => {
 
   it("Don't protect a resource", () => {
     cy.getLeftNav()
-      .contains('Config Maps')
+      .contains('Config Maps', { includeShadowDom: true })
       .click();
 
     cy.contains('tr', NAME)

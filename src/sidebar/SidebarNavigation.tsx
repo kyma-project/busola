@@ -1,5 +1,5 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { SideNav } from 'fundamental-react';
+import { SideNavigation } from '@ui5/webcomponents-react';
 import { sidebarNavigationNodesSelector } from 'state/navigation/sidebarNavigationNodesSelector';
 import { expandedCategoriesSelector } from 'state/navigation/expandedCategories/expandedCategoriesSelector';
 import { CategoryItem } from './CategoryItem';
@@ -21,12 +21,11 @@ export function SidebarNavigation() {
   const categoryNodes = filteredNavigationNodes?.filter(nn => !nn.topLevelNode);
 
   return (
-    <SideNav
-      skipLink={{ href: '', label: 'Side navigation' }}
-      style={{ width: '100%' }}
-      condensed={isSidebarCondensed}
-    >
-      <SideNav.List>
+    <>
+      <SideNavigation
+        collapsed={isSidebarCondensed}
+        onSelectionChange={e => e.preventDefault()}
+      >
         {topLevelNodes.map(node =>
           node.items?.map(item => <NavItem node={item} />),
         )}
@@ -35,10 +34,9 @@ export function SidebarNavigation() {
             category={category}
             expandedCategories={expandedCategories}
             handleExpandedCategories={setExpandedCategories}
-            isSidebarCondensed={isSidebarCondensed}
           />
         ))}
-      </SideNav.List>
-    </SideNav>
+      </SideNavigation>
+    </>
   );
 }

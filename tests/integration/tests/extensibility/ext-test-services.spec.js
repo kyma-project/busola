@@ -8,18 +8,14 @@ context('Test Services', () => {
   before(() => {
     cy.handleExceptions();
 
-    cy.loginAndSelectCluster({
-      fileName: 'kubeconfig-k3s.yaml',
-      storage: 'Session storage',
-      staticToken: true,
-    });
+    cy.loginAndSelectCluster();
 
     cy.createNamespace('services');
   });
 
   it('Creates the EXT Services config', () => {
     cy.getLeftNav()
-      .contains('Cluster Details')
+      .contains('Cluster Details', { includeShadowDom: true })
       .click();
 
     cy.contains('Upload YAML').click();
@@ -48,24 +44,20 @@ context('Test Services', () => {
   });
 
   it('Displays the EXT Services list view', () => {
-    cy.loginAndSelectCluster({
-      fileName: 'kubeconfig-k3s.yaml',
-      storage: 'Session storage',
-      staticToken: true,
-    });
+    cy.loginAndSelectCluster();
 
     cy.getLeftNav()
-      .contains('Namespaces')
+      .contains('Namespaces', { includeShadowDom: true })
       .click();
 
     cy.contains('a', 'services').click();
 
     cy.getLeftNav()
-      .contains('Examples')
+      .contains('Examples', { includeShadowDom: true })
       .click();
 
     cy.getLeftNav()
-      .contains('Custom Services')
+      .contains('Custom Services', { includeShadowDom: true })
       .click();
 
     cy.contains('Type');
