@@ -125,13 +125,13 @@ context('Test reduced permissions', () => {
 
   it('Download kubeconfig for Service Account', () => {
     cy.getLeftNav()
-      .contains('Namespaces')
+      .contains('Namespaces', { includeShadowDom: true })
       .click();
 
     cy.goToNamespaceDetails();
 
     cy.getLeftNav()
-      .contains('Service Accounts')
+      .contains('Service Accounts', { includeShadowDom: true })
       .click();
 
     cy.contains(SA_NAME).click();
@@ -181,19 +181,19 @@ context('Test reduced permissions', () => {
 
   it('Inspect reduced permissions view', () => {
     cy.getLeftNav()
-      .contains('Workloads')
+      .contains('Workloads', { includeShadowDom: true })
       .click();
 
     cy.getLeftNav()
-      .contains('Deployments')
+      .contains('Deployments', { includeShadowDom: true })
       .should('be.visible');
 
     cy.getLeftNav()
-      .contains('Back To Cluster Details')
+      .contains('Back To Cluster Details', { includeShadowDom: true })
       .click();
 
     cy.getLeftNav()
-      .contains('Configuration')
+      .contains('Configuration', { includeShadowDom: true })
       .should('not.exist');
   });
 
@@ -204,14 +204,14 @@ context('Test reduced permissions', () => {
 
     // delete binding
     cy.getLeftNav()
-      .contains('Cluster Role Bindings')
+      .contains('Cluster Role Bindings', { includeShadowDom: true })
       .click();
 
     cy.deleteFromGenericList(CRB_NAME);
 
     // delete role
     cy.getLeftNav()
-      .contains('Cluster Roles')
+      .contains('Cluster Roles', { includeShadowDom: true })
       .click();
 
     cy.deleteFromGenericList(CR_NAME);

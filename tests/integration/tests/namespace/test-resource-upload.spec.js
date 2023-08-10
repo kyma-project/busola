@@ -25,7 +25,7 @@ context('Test resource upload', () => {
 
   it('Creates resources', () => {
     cy.getLeftNav()
-      .contains('Cluster Details')
+      .contains('Cluster Details', { includeShadowDom: true })
       .click();
 
     cy.contains('Upload YAML').click();

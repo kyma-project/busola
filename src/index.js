@@ -7,18 +7,19 @@ import { initReactI18next } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 import i18nextBackend from 'i18next-http-backend';
 import { savePreviousPath } from 'state/useAfterInitHook';
+import { ThemeProvider } from '@ui5/webcomponents-react';
 
 import App from './components/App/App';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { CommandPaletteProvider } from 'command-pallette/CommandPaletteProvider';
 import { NotificationProvider } from 'shared/contexts/NotificationContext';
+import '@ui5/webcomponents-icons/dist/AllIcons.js';
 
 import './styles/reset.css';
 import './styles/sapIllus-Fills.css';
 import './styles/sapIllus-Layout.css';
 import './styles/index.scss';
 import './styles/fiori-helpers.scss';
-import { ThemeProvider } from '@ui5/webcomponents-react';
 
 i18next
   .use(initReactI18next)
@@ -50,17 +51,17 @@ savePreviousPath();
 
 ReactDOM.render(
   <RecoilRoot>
-    <BrowserRouter>
-      <Suspense fallback={<Spinner />}>
-        <ThemeProvider>
+    <ThemeProvider>
+      <BrowserRouter>
+        <Suspense fallback={<Spinner />}>
           <NotificationProvider>
             <CommandPaletteProvider>
               <App />
             </CommandPaletteProvider>
           </NotificationProvider>
-        </ThemeProvider>
-      </Suspense>
-    </BrowserRouter>
+        </Suspense>
+      </BrowserRouter>
+    </ThemeProvider>
   </RecoilRoot>,
   document.getElementById('root'),
 );
