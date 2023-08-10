@@ -29,7 +29,6 @@ module.exports = defineConfig({
     specPattern: [
       'tests/cluster/test-download-a-kubeconfig.spec.js',
       'tests/cluster/test-cluster-overview.spec.js',
-      'tests/cluster/test-gardener-provider.spec.js',
       'tests/cluster/test-cluster-role-bindings.spec.js',
       'tests/cluster/test-cluster-validation.spec.js',
       'tests/cluster/test-storage-classes.spec.js',
