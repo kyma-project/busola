@@ -151,6 +151,7 @@ export const ClusterValidation = () => {
         <LayoutPanel.Head title={'Cluster Validation'} />
         <LayoutPanel.Actions>
           <Button
+            className="fd-margin-end--tiny"
             glyph="play"
             onClick={scan}
             disabled={!!scanProgress || !scanReady}
@@ -158,6 +159,7 @@ export const ClusterValidation = () => {
             {t('cluster-validation.scan.buttons.scan')}
           </Button>
           <Button
+            className="fd-margin-end--tiny"
             glyph="settings"
             onClick={configure}
             disabled={!!scanProgress || !scanReady}
@@ -178,7 +180,7 @@ export const ClusterValidation = () => {
 
       <LayoutPanel.Body>
         <Section titleText={t('cluster-validation.scan.scope')}>
-          <FlexBox>
+          <FlexBox className="fd-has-padding-small">
             <InfoTile
               title={t('common.headers.namespaces')}
               content={
