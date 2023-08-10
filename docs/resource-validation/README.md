@@ -58,6 +58,6 @@ To see the full specifications, check the [example rule-set](../../examples/reso
 
 ## Scan the cluster
 
-With the `CLUSTER_VALIDATION` [feature flag](../features.md) enabled, you can use these rules to scan existing resources in your cluster.
+With the **CLUSTER_VALIDATION** [feature flag](../features.md) enabled, you can use these rules to scan existing resources in your cluster.
 
 The Cluster Validation panel is located on the Cluster Overview page.
