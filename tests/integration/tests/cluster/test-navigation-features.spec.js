@@ -34,10 +34,10 @@ context('Test navigation features', () => {
 
     cy.get('[aria-label="open-search"]').click();
 
-    cy.get('[aria-label="search-input"]').type('eventing-controller');
+    cy.get('[aria-label="search-input"]').type('cronjob-controller');
 
-    cy.contains('eventing-controller (SA)') // link wrapper
-      .contains('eventing-controller') // link itself
+    cy.contains('cronjob-controller (SA)') // link wrapper
+      .contains('cronjob-controller') // link itself
       .click();
 
     cy.contains('disabled').should('exist');
