@@ -69,7 +69,7 @@ context('Test Config Maps', () => {
 
   it('Clone the secret', () => {
     cy.getLeftNav()
-      .contains('Config Maps')
+      .contains('Config Maps', { includeShadowDom: true })
       .click();
 
     cy.contains('.fd-table__row', CONFIG_MAP_NAME)

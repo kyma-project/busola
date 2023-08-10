@@ -9,7 +9,7 @@ context('Clean up Namespace', () => {
   });
   it('Delete the Namespace (step 1)', () => {
     cy.getLeftNav()
-      .contains('Namespaces')
+      .contains('Namespaces', { includeShadowDom: true })
       .click();
 
     cy.get('[role="search"] [aria-label="search-input"]').type(

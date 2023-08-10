@@ -2,17 +2,7 @@
 
 import { loadFile } from '../../support/loadFile';
 
-const FILE_NAME = 'test-customresourcedefinisions.yaml';
-const SCOPE = 'Namespaced';
-
-async function loadCRD(scope, fileName) {
-  const resource = await loadFile(fileName);
-  const newResource = { ...resource };
-
-  newResource.spec.scope = scope;
-
-  return newResource;
-}
+const FILE_NAME = 'test-customresourcedefinisions-namespaced.yaml';
 
 function getQueryInput() {
   return cy.get('[aria-label=command-palette-search]');
@@ -33,7 +23,7 @@ context('Test Custom Resources', () => {
 
     cy.contains('Upload YAML').click();
 
-    cy.wrap(loadCRD(SCOPE, FILE_NAME)).then(CRD_CONFIG => {
+    cy.wrap(loadFile(FILE_NAME)).then(CRD_CONFIG => {
       const CRD = JSON.stringify(CRD_CONFIG);
       cy.pasteToMonaco(CRD);
     });
@@ -41,6 +31,10 @@ context('Test Custom Resources', () => {
     cy.get('[role="dialog"]')
       .contains('button', 'Submit')
       .click();
+
+    cy.get('.fd-dialog__body')
+      .find('.sap-icon--message-success')
+      .should('have.length', 1);
 
     cy.get('[role="dialog"]')
       .contains('button', 'Close')
@@ -57,23 +51,23 @@ context('Test Custom Resources', () => {
     cy.get('table').should('have.length', 1);
 
     cy.get('[role=row]')
-      .contains('CronTabs')
+      .contains('Tnamespaces')
       .should('be.visible');
   });
 
   it('Check single CR list', () => {
     cy.get('[role=row]')
-      .contains('CronTabs')
+      .contains('Tnamespaces')
       .click();
 
     cy.get('[aria-label="title"]')
-      .contains('CronTabs')
+      .contains('Tnamespaces')
       .should('be.visible');
 
-    cy.contains(/Create Cron Tab/i).should('be.visible');
+    cy.contains(/Create Tnamespace/i).should('be.visible');
 
     cy.url().should('match', /customresources/);
-    cy.contains('test.cypress.example.com').click();
+    cy.contains('tnamespace.cypress.example.com').click();
     cy.url().should('match', /customresourcedefinitions/);
     cy.deleteInDetails();
   });

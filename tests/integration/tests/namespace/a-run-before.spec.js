@@ -7,7 +7,7 @@ context('Create Namespace', () => {
 
   it('Create Namespace', () => {
     cy.getLeftNav()
-      .contains('Namespaces')
+      .contains('Namespaces', { includeShadowDom: true })
       .click();
 
     cy.contains('Create Namespace').click();

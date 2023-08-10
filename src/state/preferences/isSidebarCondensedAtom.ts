@@ -7,8 +7,8 @@ const DEFAULT_IS_SIDEBAR_CONDENSED = false;
 type AddLinkEffect = () => AtomEffect<IsSidebarCondensed>;
 
 export const changeSidebarWidthEffect: AddLinkEffect = () => ({ onSet }) => {
-  const sidebarCondensedWidth = '48px';
-  const sidebarOpenedWidth = '260px';
+  const sidebarCondensedWidth = '52px';
+  const sidebarOpenedWidth = '15rem';
 
   onSet(isCondensed => {
     const root: HTMLElement = document.querySelector(':root')!;

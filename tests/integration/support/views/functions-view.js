@@ -14,7 +14,7 @@ Cypress.Commands.add('navigateToFunctionCreate', functionName => {
 
 Cypress.Commands.add('createSimpleFunction', functionName => {
   cy.getLeftNav()
-    .contains('Workloads')
+    .contains('Workloads', { includeShadowDom: true })
     .click();
 
   cy.navigateToFunctionCreate(functionName);

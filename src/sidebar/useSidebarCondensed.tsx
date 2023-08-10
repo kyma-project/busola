@@ -26,9 +26,10 @@ function useWindowDimensions() {
 
 export default function useSidebarCondensed() {
   const width = useWindowDimensions();
-
   const setSidebarCondensed = useSetRecoilState(isSidebarCondensedState);
 
-  if (width <= 900) setSidebarCondensed(true);
-  else setSidebarCondensed(false);
+  useEffect(() => {
+    if (width <= 900) setSidebarCondensed(true);
+    else setSidebarCondensed(false);
+  }, [width, setSidebarCondensed]);
 }

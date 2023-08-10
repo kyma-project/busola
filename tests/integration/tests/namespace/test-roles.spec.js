@@ -100,7 +100,7 @@ context('Test Roles', () => {
 
   it('Clone the Role', () => {
     cy.getLeftNav()
-      .contains('Roles')
+      .contains('Roles', { includeShadowDom: true })
       .click();
 
     cy.contains('.fd-table__row', ROLE_NAME)

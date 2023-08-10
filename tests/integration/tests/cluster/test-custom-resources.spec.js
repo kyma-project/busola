@@ -2,10 +2,10 @@
 
 import { loadFile } from '../../support/loadFile';
 
-const FILE_NAME = 'test-customresourcedefinisions.yaml';
+const FILE_NAME = 'test-customresourcedefinisions-cluster.yaml';
 
 function openSearchWithSlashShortcut() {
-  cy.get('body').type('/');
+  cy.get('body').type('/', { force: true });
 }
 
 context('Test Custom Resources', () => {
@@ -30,7 +30,7 @@ context('Test Custom Resources', () => {
 
   it('Check CR groups list with slash shortcut', () => {
     cy.getLeftNav()
-      .contains('Custom Resources')
+      .contains('Custom Resources', { includeShadowDom: true })
       .click();
 
     cy.contains('h3', 'Custom Resources').should('be.visible');
@@ -42,23 +42,23 @@ context('Test Custom Resources', () => {
     cy.get('table').should('have.length', 1);
 
     cy.get('[role=row]')
-      .contains('CronTabs')
+      .contains('Tclusters')
       .should('be.visible');
   });
 
   it('Check single CR list', () => {
     cy.get('[role=row]')
-      .contains('CronTabs')
+      .contains('Tclusters')
       .click();
 
     cy.get('[aria-label="title"]')
-      .contains('CronTabs')
+      .contains('Tclusters')
       .should('be.visible');
 
-    cy.contains(/Create Cron Tab/i).should('be.visible');
+    cy.contains(/Create Tcluster/i).should('be.visible');
 
     cy.url().should('match', /customresources/);
-    cy.contains('test.cypress.example.com').click();
+    cy.contains('tcluster.cypress.example.com').click();
     cy.url().should('match', /customresourcedefinitions/);
     cy.deleteInDetails();
   });

@@ -88,7 +88,7 @@ context('Test Deployments', () => {
 
   it('Edit a deployment', () => {
     cy.getLeftNav()
-      .contains('Deployments')
+      .contains('Deployments', { includeShadowDom: true })
       .click();
 
     cy.get('[role=row]')
