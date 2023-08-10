@@ -1,5 +1,6 @@
 import { isEqual } from 'lodash';
 import { RecoilValue, selector } from 'recoil';
+import { PostFn } from 'shared/hooks/BackendAPI/usePost';
 import { activeNamespaceIdState } from './activeNamespaceIdAtom';
 import { clusterState } from './clusterAtom';
 import { getPostFn } from './utils/getPostFn';
@@ -33,6 +34,25 @@ export function hasAnyRoleBound(permissionSet: PermissionSetState) {
   return verbs.some(v => usefulVerbs.includes(v));
 }
 
+export async function getPermissionResourceRules(
+  postFn: PostFn,
+  namespaceId?: string,
+) {
+  const namespaceName = namespaceId ? namespaceId : '*';
+  const path = '/apis/authorization.k8s.io/v1/selfsubjectrulesreviews';
+  const ssrr = {
+    typeMeta: {
+      kind: 'SelfSubjectRulesReview',
+      APIVersion: 'authorization.k8s.io/v1',
+    },
+    spec: { namespace: namespaceName },
+  };
+
+  const permissions = await postFn(path, ssrr, {});
+  const resourceRules: PermissionSetState = permissions.status.resourceRules;
+  return resourceRules;
+}
+
 export type PermissionSet = {
   verbs: string[];
   apiGroups: string[];
@@ -53,20 +73,11 @@ export const permissionSetsSelector: RecoilValue<PermissionSetState> = selector<
     const postFn = getPostFn(get);
 
     if (postFn) {
-      const namespaceName = activeNamespaceId ? activeNamespaceId : '*';
-      const path = '/apis/authorization.k8s.io/v1/selfsubjectrulesreviews';
-      const ssrr = {
-        typeMeta: {
-          kind: 'SelfSubjectRulesReview',
-          APIVersion: 'authorization.k8s.io/v1',
-        },
-        spec: { namespace: namespaceName },
-      };
-
       try {
-        const permissions = await postFn(path, ssrr, {});
-        const resourceRules: PermissionSetState =
-          permissions.status.resourceRules;
+        const resourceRules = await getPermissionResourceRules(
+          postFn,
+          activeNamespaceId,
+        );
 
         if (
           !hasAnyRoleBound(resourceRules) &&

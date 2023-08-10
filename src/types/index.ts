@@ -31,4 +31,12 @@ export type NestedPartial<K> = {
     : K[attr];
 };
 
+export interface K8sAPIResource {
+  name: string;
+  namespaced: boolean;
+  kind: string;
+  verbs: string[];
+  base: string;
+}
+
 export * from './kubeconfig';

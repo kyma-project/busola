@@ -55,3 +55,9 @@ policies:
 Policies can also reference rules in different rule sets as long as they are loaded in Busola.
 
 To see the full specifications, check the [example rule-set](../../examples/resource-validation/rule-set.yaml).
+
+## Scan the cluster
+
+With the **CLUSTER_VALIDATION** [feature flag](../features.md) enabled, you can use these rules to scan existing resources in your cluster.
+
+The Cluster Validation panel is located on the Cluster Overview page.
