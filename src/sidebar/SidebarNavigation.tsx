@@ -22,7 +22,10 @@ export function SidebarNavigation() {
 
   return (
     <>
-      <SideNavigation collapsed={isSidebarCondensed}>
+      <SideNavigation
+        collapsed={isSidebarCondensed}
+        onSelectionChange={e => e.preventDefault()}
+      >
         {topLevelNodes.map(node =>
           node.items?.map(item => <NavItem node={item} />),
         )}
