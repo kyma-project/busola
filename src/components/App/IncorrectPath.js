@@ -1,10 +1,9 @@
-import { Button, MessageBox } from 'fundamental-react';
+import { Button, MessageBox } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useMatch, useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { extensionsState } from 'state/navigation/extensionsAtom';
 
-import './IncorrectPath.scss';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import pluralize from 'pluralize';
 import { useUrl } from 'hooks/useUrl';
@@ -38,13 +37,13 @@ export function IncorrectPath({ to, title = '', message = '' }) {
   const resourceType = namespace ? namespaceResourceType : clusterResourceType;
   const resourceName = namespace ? namespaceResourceName : clusterResourceName;
 
-  const { data, loading } = useGetList(
+  const { data } = useGetList(
     crd => pluralize(crd.spec.names.kind.toLowerCase()) === resourceType,
   )(resourceUrl, { skip: !extensions?.length });
 
   if (!extensions?.length && extensions?.length !== 0) return null;
 
-  if (!data && loading) {
+  if (!data) {
     return <Spinner />;
   }
 
@@ -65,20 +64,19 @@ export function IncorrectPath({ to, title = '', message = '' }) {
 
   return (
     <MessageBox
-      type="warning"
-      title={title}
-      className="incorrect-path-message-box"
+      type="Warning"
+      titleText={title}
+      className="ui5-content-density-compact"
       actions={[
         <Button
           data-testid="delete-confirmation"
-          type="attention"
-          compact
+          design="Attention"
           onClick={() => navigate(to)}
         >
           {t('common.buttons.ok')}
         </Button>,
       ]}
-      show={true}
+      open={true}
     >
       <p>{message}</p>
     </MessageBox>
