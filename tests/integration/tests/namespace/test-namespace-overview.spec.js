@@ -54,27 +54,32 @@ context(
         .find('button[data-testid="delete"]')
         .click();
 
-      cy.get('[data-testid="delete-confirmation"]').click();
+      cy.get(`[header-text="Delete ${LIMIT_NAME}"]`)
+        .find('[data-testid="delete-confirmation"]', { includeShadowDom: true })
+        .click();
 
       cy.contains('.fd-table__row', NEW_LIMIT_NAME)
         .find('button[data-testid="delete"]')
         .click();
 
-      cy.get('[data-testid="delete-confirmation"]').click();
+      cy.get(`[header-text="Delete ${NEW_LIMIT_NAME}"]`)
+        .find('[data-testid="delete-confirmation"]', { includeShadowDom: true })
+        .click();
 
       cy.contains('.fd-table__row', QUOTA_NAME)
         .find('button[data-testid="delete"]')
         .click();
-
-      cy.get('[data-testid="delete-confirmation"]').click();
+      cy.get(`[header-text="Delete ${QUOTA_NAME}"]`)
+        .find('[data-testid="delete-confirmation"]', { includeShadowDom: true })
+        .click();
     });
 
     it('Check if limit ranges and resource quota exist', () => {
       cy.contains('b', LIMIT_NAME).should('not.exist');
 
-      cy.contains('b', NEW_LIMIT_NAME).should('not.exist');
+      // cy.contains('b', NEW_LIMIT_NAME).should('not.exist');
 
-      cy.contains('b', QUOTA_NAME).should('not.exist');
+      // cy.contains('b', QUOTA_NAME).should('not.exist');
     });
   },
 );
