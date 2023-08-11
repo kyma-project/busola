@@ -82,7 +82,7 @@ export function GenericRoleBindingList({ descriptionKey, ...params }) {
     <Trans i18nKey={descriptionKey}>
       <ReactSharedLink
         className="fd-link"
-        url="https://kyma-project.io/docs/kyma/latest/04-operation-guides/security/sec-02-authorization-in-kyma/#role-binding"
+        url="https://kyma-project.io/#/04-operation-guides/security/sec-02-authorization-in-kyma?id=role-binding"
       />
     </Trans>
   );
