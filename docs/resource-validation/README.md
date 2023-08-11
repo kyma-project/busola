@@ -56,9 +56,9 @@ Policies can also reference rules in different rule sets as long as they are loa
 
 To see the full specifications, check the [example rule-set](../../examples/resource-validation/rule-set.yaml).
 
-### Alternative Format: Custom Rules
+### Alternative format: Custom Rules
 
-Rules and policies can also be given using [datree's _Custom Rules_](https://hub.datree.io/custom-rules/custom-rules-overview) format as part of a rule set.
+Rules and policies can also be given using [datree's Custom Rules](https://hub.datree.io/custom-rules/custom-rules-overview) format as part of a rule set.
 
 ```yaml
 apiVersion: v1
@@ -86,6 +86,12 @@ customRules:
               enum:
                 - kyma
 ```
+
+## Download policies
+
+You can download the currently enabled policies.
+
+In the user preferences, go to **Clusters > Resource Validation**. Click on **Download** in the **Enabled Policies** section.
 
 ## Scan the cluster
 
