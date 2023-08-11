@@ -128,7 +128,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
             option="transparent"
             iconBeforeText
           >
-            {t('roles.buttons.add-all')}
+            {t('common.buttons.add-all')}
           </Button>
         }
       />
@@ -166,7 +166,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
             disabled={loading || !apiRules?.length}
             iconBeforeText
           >
-            {t('roles.buttons.add-all')}
+            {t('common.buttons.add-all')}
           </Button>,
         ]}
       />
@@ -193,7 +193,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
             option="transparent"
             iconBeforeText
           >
-            {t('roles.buttons.add-all')}
+            {t('common.buttons.add-all')}
           </Button>,
         ]}
       />

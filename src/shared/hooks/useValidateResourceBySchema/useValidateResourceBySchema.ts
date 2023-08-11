@@ -3,7 +3,7 @@ import { Options, Validator } from 'jsonschema';
 import { K8sResource } from 'types';
 import { ValidationSchema } from 'state/validationSchemasAtom';
 
-type Warning =
+export type Warning =
   | {
       key?: string;
       message?: string;

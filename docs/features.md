@@ -263,6 +263,15 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
         - Default
   ```
 
+- **CLUSTER_VALIDATION** - determines whether the Cluster Validation panel for scanning the cluster should be enabled in the Cluster Overview page. The scan uses the [resource validation](resource-validation/README.md) rules.
+
+  Default settings:
+
+  ```yaml
+  CLUSTER_VALIDATION:
+    isEnabled: false
+  ```
+
 - **FEEDBACK** - determines if the feedback icon with the link redirecting the user to the survey should be rendered at the top bar
 
   Default settings:

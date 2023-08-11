@@ -30,7 +30,7 @@ export function Checkboxes({
         style={{ opacity: 0, position: 'absolute', left: '-1000px' }}
       />
       {options.map(({ key, text, description }, index) => (
-        <div class="fd-row">
+        <div key={key} className="fd-row">
           <div>
             <Checkbox
               data-testid={`${dataTestID}.${key}`}
