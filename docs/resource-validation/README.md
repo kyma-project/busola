@@ -56,6 +56,37 @@ Policies can also reference rules in different rule sets as long as they are loa
 
 To see the full specifications, check the [example rule-set](../../examples/resource-validation/rule-set.yaml).
 
+### Alternative Format: Custom Rules
+
+Rules and policies can also be given using [datree's _Custom Rules_](https://hub.datree.io/custom-rules/custom-rules-overview) format as part of a rule set.
+
+```yaml
+apiVersion: v1
+policies:
+  - name: TestPolicy
+    isDefault: true
+    rules:
+      - identifier: TEST
+        messageOnFailure: This is a test rule
+customRules:
+  - identifier: TEST
+    name: This is a test rule
+    defaultMessageOnFailure: This is a test rule
+    schema:
+      required:
+        - test
+      properties:
+        test:
+          type: object
+          required:
+            - hello
+          properties:
+            hello:
+              type: string
+              enum:
+                - kyma
+```
+
 ## Scan the cluster
 
 With the **CLUSTER_VALIDATION** [feature flag](../features.md) enabled, you can use these rules to scan existing resources in your cluster.
