@@ -347,7 +347,6 @@ rules:
                 runAsNonRoot:
                   enum:
                     - null
-                    - null
                     - true
         validSpec:
           properties:
@@ -472,7 +471,6 @@ rules:
                   properties:
                     type:
                       enum:
-                        - null
                         - null
                         - RuntimeDefault
                         - Localhost
