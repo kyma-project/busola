@@ -1,4 +1,6 @@
 import { useTranslation } from 'react-i18next';
+import jsyaml from 'js-yaml';
+import { saveAs } from 'file-saver';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { Button, LayoutPanel, Switch } from 'fundamental-react';
 import {
@@ -6,12 +8,17 @@ import {
   validateResourcesState,
 } from 'state/preferences/validateResourcesAtom';
 import { validationSchemasState } from 'state/validationSchemasAtom';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
 import './ResourceValidationSettings.scss';
 import { useFeature } from 'hooks/useFeature';
-import { ValidationFeatureConfig } from 'state/validationEnabledSchemasAtom';
+import {
+  convertPoliciesForDatree,
+  usePolicySet,
+  ValidationFeatureConfig,
+} from 'state/validationEnabledSchemasAtom';
+import { useNotification } from 'shared/contexts/NotificationContext';
 
 export default function ResourceValidationSettings() {
   const { t } = useTranslation();
@@ -38,6 +45,34 @@ export default function ResourceValidationSettings() {
         .sort((a, b) => (a.key < b.key ? -1 : 1)) ?? [],
     [validationSchemas],
   );
+
+  const policySet = usePolicySet();
+  const notification = useNotification();
+
+  const download = useCallback(() => {
+    if (validationSchemas) {
+      try {
+        const customPolicyDefinition = convertPoliciesForDatree(
+          validationSchemas,
+          policySet,
+        );
+        const kubeconfigYaml = jsyaml.dump(customPolicyDefinition);
+        const blob = new Blob([kubeconfigYaml], {
+          type: 'application/yaml;charset=utf-8',
+        });
+        saveAs(blob, `customPolicies.yaml`);
+      } catch (e) {
+        console.error(e);
+        notification.notifyError({
+          content: t('settings.clusters.resourcesValidation.download-error'),
+        });
+      }
+    } else {
+      notification.notifyError({
+        content: t('settings.clusters.resourcesValidation.rule-set-missing'),
+      });
+    }
+  }, [validationSchemas, policySet, notification, t]);
 
   const policyList = useMemo(() => {
     const selectedPolicySet = selectedPolicies.reduce(
@@ -182,6 +217,14 @@ export default function ResourceValidationSettings() {
                       {t('settings.clusters.resourcesValidation.reset')}
                     </Button>
                   )}
+                  <Button
+                    option="transparent"
+                    glyph="download"
+                    className="fd-margin-begin--sm"
+                    onClick={download}
+                  >
+                    {t('common.buttons.download')}
+                  </Button>
                 </>
               }
               searchSettings={{

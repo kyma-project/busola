@@ -15,6 +15,7 @@ import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 
 type Rule = {
   uniqueName: string;
+  name?: string;
   messageOnFailure?: string;
   documentationUrl?: string;
   category?: string;
@@ -22,9 +23,17 @@ type Rule = {
   schema: JSONSchema4;
 };
 
+export type DatreeCustomRule = {
+  identifier: string;
+  name: string;
+  defaultMessageOnFailure: string;
+  schema: JSONSchema4;
+};
+
 type ValidationConfig = {
   rules?: Array<Rule>;
   policies?: Array<ValidationPolicy>;
+  customRules?: Array<DatreeCustomRule>;
 };
 
 export type ValidationSchema = {
@@ -41,6 +50,7 @@ type RuleReference =
   | string
   | {
       identifier: string;
+      messageOnFailure?: string;
     };
 
 type ValidationPolicy = {
@@ -48,6 +58,20 @@ type ValidationPolicy = {
   isEnabled: boolean;
   includes: Array<string>;
   rules: Array<RuleReference>;
+};
+
+const convertCustomRules = (customRules?: DatreeCustomRule[]): Rule[] => {
+  if (!customRules) return [];
+  return customRules?.map(
+    ({ identifier, name, defaultMessageOnFailure, schema }) => {
+      return {
+        uniqueName: identifier,
+        name,
+        messageOnFailure: defaultMessageOnFailure,
+        schema,
+      };
+    },
+  );
 };
 
 const fetchBaseValidationConfig = async (): Promise<ValidationConfig[]> => {
@@ -104,15 +128,27 @@ const fetchValidationConfig = async (
     permissionSet,
   );
 
-  const rules = [...validationConfig, ...configFromConfigMap].flatMap(
-    schema => schema.rules ?? [],
-  );
+  const rules = [
+    ...validationConfig,
+    ...configFromConfigMap,
+  ].flatMap(schema => [
+    ...(schema.rules ?? []),
+    ...convertCustomRules(schema.customRules),
+  ]);
 
   const policies = [...validationConfig, ...configFromConfigMap].flatMap(
     schema => schema.policies ?? [],
   );
 
   return { rules, policies };
+};
+
+const getPolicyMap = (policies?: ValidationPolicy[]) => {
+  return (
+    policies?.reduce((agg, policy) => {
+      return agg.set(policy.name, policy);
+    }, new Map()) ?? (new Map() as Map<string, ValidationPolicy>)
+  );
 };
 
 const getRuleKey = (rule: RuleReference) => {
@@ -152,6 +188,17 @@ const resolveRulesForPolicy = (
   return [...rules, ...additionalRules];
 };
 
+export const getResolvedPolicy = (
+  policy: ValidationPolicy,
+  allPolicies: ValidationPolicy[],
+) => {
+  const policyMap = getPolicyMap(allPolicies);
+  return {
+    ...policy,
+    rules: resolveRulesForPolicy(policy, policyMap),
+  };
+};
+
 export const getEnabledRules = (
   rules: Rule[],
   selectedPolicies: ValidationPolicy[],
@@ -162,10 +209,7 @@ export const getEnabledRules = (
     {},
   ) as { [key: string]: Rule };
 
-  const policyMap =
-    allPolicies?.reduce((agg, policy) => {
-      return agg.set(policy.name, policy);
-    }, new Map()) ?? (new Map() as Map<string, ValidationPolicy>);
+  const policyMap = getPolicyMap(allPolicies);
 
   const enabledRulesByName = selectedPolicies.reduce((agg, policy) => {
     const policyRules = resolveRulesForPolicy(policy, policyMap);

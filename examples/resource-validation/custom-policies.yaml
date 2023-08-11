@@ -1,0 +1,28 @@
+# datree 'policy as code' format
+# Can be validated using datree command:
+# datree test --ignore-missing-schemas --no-record --policy-config examples/resource-validation/custom-policies.yaml examples/resource-validation/pod.yaml
+
+apiVersion: v1
+policies:
+  - name: TestPolicy
+    isDefault: true
+    rules:
+      - identifier: TEST
+        messageOnFailure: This is a test rule
+customRules:
+  - identifier: TEST
+    name: This is a test rule
+    defaultMessageOnFailure: This is a test rule
+    schema:
+      required:
+        - test
+      properties:
+        test:
+          type: object
+          required:
+            - hello
+          properties:
+            hello:
+              type: string
+              enum:
+                - kyma

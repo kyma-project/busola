@@ -1,3 +1,6 @@
+import path from 'path';
+import jsyaml from 'js-yaml';
+
 context('Test resource validation', () => {
   Cypress.skipAfterFail();
 
@@ -105,6 +108,73 @@ context('Test resource validation', () => {
     cy.contains(
       'refrain from using insecure capabilities to prevent access to sensitive components',
     ).should('be.visible');
+
+    cy.contains('This is a test rule').should('be.visible');
+
+    cy.contains('Cancel').click();
+
+    cy.get('[aria-label="topnav-profile-btn"]').click();
+
+    cy.contains('Preferences').click();
+
+    cy.contains('Clusters').click();
+
+    cy.contains('Resource Validation').click();
+
+    cy.contains('Reset').click();
+
+    cy.contains('Close').click();
+  });
+
+  it('Download and reupload policies', () => {
+    cy.get('[aria-label="topnav-profile-btn"]').click();
+
+    cy.contains('Preferences').click();
+
+    cy.contains('Clusters').click();
+
+    cy.contains('Resource Validation').click();
+
+    cy.contains('Customize').click();
+
+    cy.contains('.policy-row', 'Default')
+      .find('.fd-switch')
+      .click();
+
+    cy.contains('.policy-row', 'TestPolicy')
+      .find('.fd-switch')
+      .click();
+
+    cy.contains('Download').click();
+
+    const downloadsFolder = Cypress.config('downloadsFolder');
+    cy.readFile(path.join(downloadsFolder, 'customPolicies.yaml'))
+      .then(downloadedYaml => {
+        cy.fixture('examples/resource-validation/custom-policies.yaml')
+          .then(customPolicies => jsyaml.load(customPolicies))
+          .should('deep.equal', jsyaml.load(downloadedYaml));
+        return cy.wrap(downloadedYaml);
+      })
+      .then(downloadedYaml => {
+        cy.mockConfigMap({
+          label: 'busola.io/resource-validation=rule-set',
+          data: downloadedYaml,
+        });
+
+        return cy.reload();
+      });
+
+    cy.contains('Upload YAML').click();
+
+    cy.fixture('examples/resource-validation/pod.yaml').then(podConfig => {
+      cy.pasteToMonaco(podConfig);
+    });
+
+    cy.contains('nginx:latest').should('be.visible');
+
+    cy.contains('Show warnings')
+      .should('be.visible')
+      .click();
 
     cy.contains('This is a test rule').should('be.visible');
 

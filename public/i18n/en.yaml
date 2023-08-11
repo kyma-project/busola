@@ -219,6 +219,7 @@ common:
     copy: Copy
     create: Create
     delete: Delete
+    download: Download
     edit: Edit
     edit-yaml: Edit YAML
     generate-name: Generate
@@ -1334,6 +1335,8 @@ settings:
       customize: Customize
       validation-disabled: Resource validation is disabled
       no-policies-found: No policies found
+      download-error: Error while downloading rule set
+      rule-set-missing: No rule set found
     interaction:
       title: Cluster Interaction
   interface:
