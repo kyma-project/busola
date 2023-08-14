@@ -143,8 +143,11 @@ Cypress.Commands.add(
       if (deletedVisible) {
         cy.contains(/deleted/).should('be.visible');
       }
+      cy.get('[placeholder="Search"]').clear();
 
-      cy.contains(searchTerm).should('not.exist');
+      cy.get('[role=row]')
+        .contains(searchTerm)
+        .should('not.exist');
     }
   },
 );
