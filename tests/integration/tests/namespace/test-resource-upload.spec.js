@@ -101,6 +101,8 @@ context('Test resource upload', () => {
 
     cy.get('tbody tr [aria-label="Delete"]').click({ force: true });
 
-    cy.contains('button', 'Delete').click();
+    cy.get(`[header-text="Delete ${SC_NAME}"]`)
+      .find('[data-testid="delete-confirmation"]', { includeShadowDom: true })
+      .click();
   });
 });

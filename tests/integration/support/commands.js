@@ -145,7 +145,7 @@ Cypress.Commands.add(
       }
       cy.get('[placeholder="Search"]').clear();
 
-      cy.get('[role=row]')
+      cy.get('.fd-table')
         .contains(searchTerm)
         .should('not.exist');
     }
