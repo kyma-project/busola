@@ -112,10 +112,12 @@ Cypress.Commands.add('getTopNav', () => {
   return cy.get('.fd-shellbar');
 });
 
-Cypress.Commands.add('deleteInDetails', () => {
+Cypress.Commands.add('deleteInDetails', resourceName => {
   cy.contains('button', 'Delete').click();
 
-  cy.get('[data-testid="delete-confirmation"]').click();
+  cy.get(`[header-text="Delete ${resourceName}"]`)
+    .find('[data-testid="delete-confirmation"]', { includeShadowDom: true })
+    .click();
 
   cy.contains(/deleted/).should('be.visible');
 });
@@ -129,10 +131,15 @@ Cypress.Commands.add(
 
     cy.contains(searchTerm).should('be.visible');
 
+    cy.contains(/created/).should('not.exist');
+
     cy.get('[aria-label="Delete"]').click();
 
     if (confirmationEnabled) {
-      cy.contains('button', 'Delete').click();
+      cy.get(`[header-text="Delete ${searchTerm}"]`)
+        .find('[data-testid="delete-confirmation"]', { includeShadowDom: true })
+        .click();
+
       if (deletedVisible) {
         cy.contains(/deleted/).should('be.visible');
       }
