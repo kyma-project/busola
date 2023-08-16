@@ -1,6 +1,13 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useState } from 'react';
-import { Shellbar } from 'fundamental-react';
+import {
+  Avatar,
+  Button,
+  CustomListItem,
+  ShellBar,
+  ShellBarItem,
+  StandardListItem,
+} from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -38,20 +45,31 @@ export function Header() {
   );
 
   const clustersList = [
-    ...inactiveClusterNames.map(name => ({
-      name,
-      callback: () => {
-        navigate(`/cluster/${name}`);
-        setIsClustersOpen(false);
-      },
-    })),
-    {
-      name: t('clusters.overview.title-all-clusters'),
-      callback: () => {
-        navigate('/clusters');
-        setIsClustersOpen(false);
-      },
-    },
+    ...inactiveClusterNames.map((name, index) => {
+      return (
+        <StandardListItem
+          data-key={index}
+          onClick={e => {
+            e.preventDefault();
+            console.log('XDDDD');
+          }}
+        >
+          {name}
+        </StandardListItem>
+      );
+      // name,
+      // callback: () => {
+      //   navigate(`/cluster/${name}`);
+      //   setIsClustersOpen(false);
+      // },
+    }),
+    // {
+    //   name: t('clusters.overview.title-all-clusters'),
+    //   callback: () => {
+    //     navigate('/clusters');
+    //     setIsClustersOpen(false);
+    //   },
+    // },
   ];
 
   const getNamespaceLabel = () => {
@@ -75,53 +93,58 @@ export function Header() {
     });
   }
 
-  if (isFeedbackEnabled) {
-    headerActions.unshift({
-      glyph: 'feedback',
-      notificationCount: 0,
-      callback: () => {
-        window.open(feedbackLink, '_blank');
-      },
-    });
-  }
-
   return (
-    <Shellbar
-      className="header"
-      logo={
-        <>
-          <SidebarSwitcher />
-          <Logo />
-        </>
-      }
-      productTitle={cluster?.contextName || cluster?.name}
-      productMenu={clustersList}
-      profile={{
-        glyph: 'customer',
-        colorAccent: 10,
-      }}
-      actions={headerActions}
-      profileMenu={[
-        {
-          name: t('navigation.preferences.title'),
-          callback: () => setPreferencesOpen(true),
-        },
-      ]}
-      // @ts-ignore
-      popoverPropsFor={{
-        profileMenu: { 'aria-label': 'topnav-profile-btn' },
-        actionMenu: {
-          show: isNamespaceOpen,
-          onClickOutside: () => setIsNamespaceOpen(false),
-          onEscapeKey: () => setIsNamespaceOpen(false),
-        },
-        productMenu: {
-          show: isClustersOpen,
-          onClickOutside: () => setIsClustersOpen(false),
-          onEscapeKey: () => setIsClustersOpen(false),
-          onClick: () => setIsClustersOpen(!isClustersOpen),
-        },
-      }}
-    />
+    <>
+      <ShellBar
+        className="header"
+        startButton={<SidebarSwitcher />}
+        onLogoClick={() => navigate('/clusters')}
+        logo={<Logo />}
+        primaryTitle={cluster?.contextName || cluster?.name}
+        menuItems={clustersList}
+        // onMenuItemClick={e => navigate('/clusters')}
+        profile={
+          <Avatar
+            icon="customer"
+            colorScheme="Accent10"
+            accessibleName="preferences"
+          />
+        }
+        onProfileClick={() => setPreferencesOpen(true)}
+        // actions={headerActions}
+        // profileMenu={[
+        //   {
+        //     name: t('navigation.preferences.title'),
+        //     callback: () => setPreferencesOpen(true),
+        //   },
+        // ]}
+        // @ts-ignore
+        popoverPropsFor={{
+          profileMenu: { 'aria-label': 'topnav-profile-btn' },
+          actionMenu: {
+            show: isNamespaceOpen,
+            onClickOutside: () => setIsNamespaceOpen(false),
+            onEscapeKey: () => setIsNamespaceOpen(false),
+          },
+          productMenu: {
+            show: isClustersOpen,
+            onClickOutside: () => setIsClustersOpen(false),
+            onEscapeKey: () => setIsClustersOpen(false),
+            onClick: () => setIsClustersOpen(!isClustersOpen),
+          },
+        }}
+      >
+        <ShellBarItem icon="megamenu" text="XDDDD">
+          <NamespaceDropdown hideDropdown={() => setIsNamespaceOpen(false)} />
+        </ShellBarItem>
+        {isFeedbackEnabled && (
+          <ShellBarItem
+            onClick={() => window.open(feedbackLink, '_blank')}
+            icon="feedback"
+            text="feedback"
+          />
+        )}
+      </ShellBar>
+    </>
   );
 }

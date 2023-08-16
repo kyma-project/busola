@@ -2,7 +2,11 @@
   --header-height: 50px;
 }
 
-.fd-shellbar.header {
+ui5-shellbar {
+  padding: 0;
+}
+
+ui5-shellbar.header {
   width: 100%;
   height: var(--header-height);
   position: fixed;
