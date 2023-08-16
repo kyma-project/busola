@@ -7,7 +7,6 @@ import { Button } from 'fundamental-react';
 import { ItemArray } from 'shared/ResourceForm/fields';
 import { createContainerTemplate } from './templates';
 import { SingleContainerForm, SingleContainerInput } from './Containers';
-import './ContainersSection.scss';
 
 export const ContainersSection = ({ readOnly, ...props }) => {
   const { t } = useTranslation();
