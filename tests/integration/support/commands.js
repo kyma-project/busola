@@ -124,7 +124,12 @@ Cypress.Commands.add('deleteInDetails', resourceName => {
 
 Cypress.Commands.add(
   'deleteFromGenericList',
-  (searchTerm, confirmationEnabled = true, deletedVisible = true) => {
+  (
+    searchTerm,
+    confirmationEnabled = true,
+    deletedVisible = true,
+    clearSearch = true,
+  ) => {
     cy.get('[aria-label="open-search"]').click();
 
     cy.get('[placeholder="Search"]').type(searchTerm);
@@ -143,7 +148,10 @@ Cypress.Commands.add(
       if (deletedVisible) {
         cy.contains(/deleted/).should('be.visible');
       }
-      cy.get('[placeholder="Search"]').clear();
+
+      if (clearSearch) {
+        cy.get('[placeholder="Search"]').clear();
+      }
 
       cy.get('.fd-table')
         .contains(searchTerm)
