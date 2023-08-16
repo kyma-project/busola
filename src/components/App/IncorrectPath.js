@@ -77,6 +77,7 @@ export function IncorrectPath({ to, title = '', message = '' }) {
         </Button>,
       ]}
       open={true}
+      onClose={() => {}}
     >
       <p>{message}</p>
     </MessageBox>
