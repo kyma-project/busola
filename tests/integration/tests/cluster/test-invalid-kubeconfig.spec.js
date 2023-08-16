@@ -14,7 +14,7 @@ context('Test invalid kubeconfig', () => {
     // trigger blur on editor
     cy.contains('Cancel').focus();
 
-    cy.get('.fd-message-strip--error').shouldHaveTrimmedText(
+    cy.get('.ui5-message-strip-root--negative').shouldHaveTrimmedText(
       'Parse error: kubeconfig is not an object, previous valid input will be used',
     );
   });
