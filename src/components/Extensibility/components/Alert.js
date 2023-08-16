@@ -1,13 +1,19 @@
 import React from 'react';
-
-import { MessageStrip } from 'fundamental-react';
+import { MessageStrip } from '@ui5/webcomponents-react';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 import classNames from 'classnames';
 
 export const Alert = ({ value, schema, structure, ...props }) => {
   const { t: tExt } = useGetTranslation();
 
-  const schemaType = structure.severity || 'information';
+  let schemaType = 'Information';
+  if (structure.severity === 'warning') {
+    schemaType = 'Warning';
+  } else if (structure.severity === 'error') {
+    schemaType = 'Negative';
+  } else if (structure.severity === 'success') {
+    schemaType = 'Positive';
+  }
 
   const messageClassNames = classNames({
     'fd-margin--md': !structure.disableMargin,
@@ -15,7 +21,9 @@ export const Alert = ({ value, schema, structure, ...props }) => {
 
   return (
     <div className={messageClassNames}>
-      <MessageStrip type={schemaType}>{tExt(value)}</MessageStrip>
+      <MessageStrip design={schemaType} hideCloseButton>
+        {tExt(value)}
+      </MessageStrip>
     </div>
   );
 };
