@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { base64Decode, base64Encode } from 'shared/helpers';
@@ -42,10 +42,9 @@ export function DecodeSecretSwitch({
 
   return (
     <Button
-      option="transparent"
-      glyph={isEncoded ? 'show' : 'hide'}
+      design="Transparent"
+      icon={isEncoded ? 'show' : 'hide'}
       onClick={onClick}
-      iconBeforeText
     >
       {isEncoded ? t('secrets.buttons.decode') : t('secrets.buttons.encode')}
     </Button>

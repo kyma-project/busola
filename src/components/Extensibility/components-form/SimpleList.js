@@ -1,7 +1,8 @@
 import React from 'react';
 import { mapValues } from 'lodash';
 import { PluginStack, useUIStore } from '@ui-schema/ui-schema';
-import { Button, FormLabel } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { FormLabel } from 'fundamental-react';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import {
@@ -132,12 +133,10 @@ export function SimpleList({
                         <span className="item-action">
                           {!isLast(index) && (
                             <Button
+                              design="Negative"
                               disabled={readOnly}
-                              compact
-                              glyph="delete"
-                              type="negative"
+                              icon="delete"
                               onClick={() => removeItem(index)}
-                              ariaLabel={t('common.buttons.delete')}
                             />
                           )}
                         </span>

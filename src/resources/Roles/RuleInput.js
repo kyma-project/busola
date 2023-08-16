@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, BusyIndicator, MessageStrip } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { BusyIndicator, MessageStrip } from 'fundamental-react';
 import * as jp from 'jsonpath';
 import { ResourceForm } from 'shared/ResourceForm';
 import { ComboboxArrayInput, TextArrayInput } from 'shared/ResourceForm/fields';
@@ -121,13 +122,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         defaultOpen
         nestingLevel={2}
         actions={
-          <Button
-            compact
-            glyph="add"
-            onClick={addAllApiGroups}
-            option="transparent"
-            iconBeforeText
-          >
+          <Button design="Transparent" icon="add" onClick={addAllApiGroups}>
             {t('common.buttons.add-all')}
           </Button>
         }
@@ -146,11 +141,9 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
           ) : (
             <Tooltip content={t('roles.tooltips.load')}>
               <Button
-                compact
-                option="transparent"
-                onClick={fetchResources}
+                design="Transparent"
                 disabled={!loadable}
-                ariaLabel={t('roles.buttons.load')}
+                onClick={fetchResources}
               >
                 {t('roles.buttons.load-resources')}
               </Button>
@@ -159,12 +152,10 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         }
         actions={[
           <Button
-            compact
-            glyph="add"
-            option="transparent"
-            onClick={addAllResources}
+            design="Transparent"
             disabled={loading || !apiRules?.length}
-            iconBeforeText
+            icon="add"
+            onClick={addAllResources}
           >
             {t('common.buttons.add-all')}
           </Button>,
@@ -186,13 +177,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         defaultOpen
         nestingLevel={2}
         actions={[
-          <Button
-            compact
-            glyph="add"
-            onClick={addAllVerbs}
-            option="transparent"
-            iconBeforeText
-          >
+          <Button design="Transparent" icon="add" onClick={addAllVerbs}>
             {t('common.buttons.add-all')}
           </Button>,
         ]}

@@ -1,5 +1,6 @@
 import React from 'react';
-import { ButtonSegmented, Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { ButtonSegmented } from 'fundamental-react';
 import { PluginStack } from '@ui-schema/ui-schema';
 import { isNil } from 'lodash';
 
@@ -61,7 +62,6 @@ export function MultiType({
           <ButtonSegmented>
             {types.map(type => (
               <Button
-                compact
                 key={type}
                 selected={type === selectedType}
                 onClick={() => {

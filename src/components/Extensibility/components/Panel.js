@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Button, LayoutPanel } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { LayoutPanel } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { mapValues } from 'lodash';
 import classNames from 'classnames';
@@ -64,10 +65,9 @@ export function Panel({
         {decodable && (
           <LayoutPanel.Actions>
             <Button
-              option="transparent"
-              glyph={isDecoded ? 'hide' : 'show'}
+              design="Transparent"
+              icon={isDecoded ? 'hide' : 'show'}
               onClick={() => setDecoded(!isDecoded)}
-              iconBeforeText
             >
               {isDecoded
                 ? t('secrets.buttons.encode')

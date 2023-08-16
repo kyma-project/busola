@@ -1,4 +1,5 @@
-import { Button, MessageBox } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { MessageBox } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { useMatch, useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
@@ -69,12 +70,7 @@ export function IncorrectPath({ to, title = '', message = '' }) {
       title={title}
       className="incorrect-path-message-box"
       actions={[
-        <Button
-          data-testid="delete-confirmation"
-          type="attention"
-          compact
-          onClick={() => navigate(to)}
-        >
+        <Button design="Attention" onClick={() => navigate(to)}>
           {t('common.buttons.ok')}
         </Button>,
       ]}
