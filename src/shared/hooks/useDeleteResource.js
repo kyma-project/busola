@@ -103,7 +103,10 @@ export function useDeleteResource({
         >
           {t('common.buttons.delete')}
         </Button>,
-        <Button onClick={() => setShowDeleteDialog(false)}>
+        <Button
+          data-testid="delete-cancel"
+          onClick={() => setShowDeleteDialog(false)}
+        >
           {t('common.buttons.cancel')}
         </Button>,
       ]}
