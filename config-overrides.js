@@ -40,6 +40,9 @@ module.exports = {
       '^shared/?(.*)': '<rootDir>/src/shared/$1',
       ...config.moduleNameMapper,
     };
+    config.transformIgnorePatterns = [
+      'node_modules/(?!(@ui5|lit-html|d3|internmap)).*\\.js$',
+    ];
     config.snapshotSerializers = [
       'enzyme-to-json/serializer',
       ...(config.snapshotSerializers || []),

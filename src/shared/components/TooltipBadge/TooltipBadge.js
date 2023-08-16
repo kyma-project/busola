@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ObjectStatus } from 'fundamental-react';
+import { ObjectStatus } from '@ui5/webcomponents-react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
@@ -21,7 +21,7 @@ export const TooltipBadge = ({
       ariaLabel="Status"
       role="status"
       inverted
-      status={type}
+      state={type}
       className={classes}
       data-testid={'has-tooltip'}
     >
@@ -38,7 +38,7 @@ export const TooltipBadge = ({
 
 TooltipBadge.propTypes = {
   tooltipContent: PropTypes.node,
-  type: PropTypes.oneOf(['positive', 'negative', 'critical', 'informative']),
+  type: PropTypes.oneOf(['Success', 'Error', 'None', 'Information']),
   tooltipProps: PropTypes.object,
   className: PropTypes.string,
 };
