@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ComboboxInput, MessageStrip } from 'fundamental-react';
+import { MessageStrip } from '@ui5/webcomponents-react';
+import { ComboboxInput } from 'fundamental-react';
 import classnames from 'classnames';
 import { useRecoilValue } from 'recoil';
 
@@ -66,7 +67,7 @@ export function ExternalResourceRef({
   if (loading || namespacesLoading) return <Spinner compact={true} />;
   if (error)
     return (
-      <MessageStrip dismissible={false} type="information">
+      <MessageStrip design="Information" hideCloseButton>
         {t('common.errors.couldnt-fetch-resources')}
       </MessageStrip>
     );

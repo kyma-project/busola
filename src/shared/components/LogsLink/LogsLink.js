@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { BusyIndicator, MessageStrip } from 'fundamental-react';
+import { MessageStrip } from '@ui5/webcomponents-react';
+import { BusyIndicator } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
@@ -44,7 +45,9 @@ export const LogsLink = ({
         content={t('grafana.not-exposed')}
         delay={0}
       >
-        <MessageStrip type="warning">{t('grafana.unavailable')}</MessageStrip>
+        <MessageStrip design="Warning" hideCloseButton>
+          {t('grafana.unavailable')}
+        </MessageStrip>
       </Tooltip>
     );
   }
@@ -57,7 +60,9 @@ export const LogsLink = ({
         content={t('grafana.missing-domain')}
         delay={0}
       >
-        <MessageStrip type="warning">{t('grafana.unavailable')}</MessageStrip>
+        <MessageStrip design="Warning" hideCloseButton>
+          {t('grafana.unavailable')}
+        </MessageStrip>
       </Tooltip>
     );
   }

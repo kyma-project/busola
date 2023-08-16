@@ -1,4 +1,5 @@
-import { Button, Checkbox, MessageBox, MessageStrip } from 'fundamental-react';
+import { MessageStrip } from '@ui5/webcomponents-react';
+import { Button, Checkbox, MessageBox } from 'fundamental-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
@@ -125,7 +126,11 @@ export function useDeleteResource({
         </Checkbox>
       </div>
       {dontConfirmDelete && (
-        <MessageStrip type="information" className="fd-margin-top--sm">
+        <MessageStrip
+          design="Information"
+          hideCloseButton
+          className="fd-margin-top--sm"
+        >
           {t('common.delete-dialog.information')}
         </MessageStrip>
       )}

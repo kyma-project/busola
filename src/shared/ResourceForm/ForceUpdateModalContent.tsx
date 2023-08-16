@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { MessageStrip } from 'fundamental-react';
+import { MessageStrip } from '@ui5/webcomponents-react';
 import jsyaml from 'js-yaml';
 import { useCreateDiffEditor } from 'shared/components/MonacoEditorESM/hooks/useCreateDiffEditor';
 import { RecoilRoot } from 'recoil';
@@ -43,7 +43,11 @@ function ForceUpdateModalContentComponent({
         })}
       </p>
       <div style={{ height: '400px' }} ref={divRef}></div>
-      <MessageStrip type="warning" className="fd-margin-top--sm">
+      <MessageStrip
+        design="Warning"
+        hideCloseButton
+        className="fd-margin-top--sm"
+      >
         {t('common.create-form.messages.force-update')}
       </MessageStrip>
     </>

@@ -65,7 +65,7 @@ export const NotificationProvider = ({
           className="message-toast--wrapper"
           onClick={() => setToastProps(null)}
         >
-          <MessageStrip design="Information" hideCloseButton={true}>
+          <MessageStrip design="Information" hideCloseButton>
             {toastProps.content}
           </MessageStrip>
         </div>
