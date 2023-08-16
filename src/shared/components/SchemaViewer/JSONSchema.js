@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { InfoLabel, ObjectStatus } from 'fundamental-react';
+import { InfoLabel } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 import { ObjectProperties } from './ObjectProperties';
+import { ObjectStatus } from '@ui5/webcomponents-react';
 
 export function JSONSchema({
   root = false,
@@ -34,7 +35,7 @@ export function JSONSchema({
               })
               .map(type => <InfoLabel key={type}>{type}</InfoLabel>)}{' '}
           {isRequired && (
-            <ObjectStatus inverted status="critical">
+            <ObjectStatus inverted state="Error">
               {t('schema.required')}
             </ObjectStatus>
           )}{' '}
