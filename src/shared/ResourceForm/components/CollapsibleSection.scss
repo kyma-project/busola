@@ -54,15 +54,6 @@
     }
   }
 
-  .fd-message-strip {
-    min-height: unset;
-    cursor: unset;
-  }
-
-  .fd-message-strip--warning:before {
-    top: 25%;
-  }
-
   &.required > .header .title-content::after {
     content: '*';
     font-size: var(--sapFontSize);

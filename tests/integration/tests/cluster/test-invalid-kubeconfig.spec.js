@@ -28,7 +28,7 @@ context('Test invalid kubeconfig', () => {
       'Drag your file here or click to upload',
     ).attachFile('kubeconfig--invalid.txt', { subjectType: 'drag-n-drop' });
 
-    cy.get('.fd-message-strip--error').should(
+    cy.get('.ui5-message-strip-root--negative').should(
       'contain.text',
       'Parse error: bad indentation of a mapping entry',
     );
