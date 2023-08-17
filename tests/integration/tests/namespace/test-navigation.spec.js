@@ -19,8 +19,8 @@ context('Test navigation features', () => {
     });
 
     cy.wait(500);
-    cy.contains('Incorrect path');
-    cy.contains('OK').click();
+    cy.contains('Incorrect path', { includeShadowDom: true });
+    cy.contains('OK', { includeShadowDom: true }).click();
     cy.contains('Cluster Details');
   });
 });

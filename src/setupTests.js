@@ -4,8 +4,11 @@ import 'jsdom-worker-fix';
 import { act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import 'babel-polyfill';
+import ResizeObserverPolyfill from 'resize-observer-polyfill';
 
 Element.prototype.scroll = () => {};
+
+window.ResizeObserver = ResizeObserverPolyfill;
 
 const originalConsoleError = console.error;
 export const ignoreConsoleErrors = patterns => {

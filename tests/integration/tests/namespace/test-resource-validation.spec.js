@@ -30,7 +30,7 @@ context('Test resource validation', () => {
       'specify an image version to avoid unpleasant "version surprises" in the future',
     ).should('be.visible');
 
-    cy.contains('Cancel').click();
+    cy.get('[data-testid=yaml-cancel]').click();
   });
 
   it('Disables resource validation via preferences', () => {
@@ -62,7 +62,7 @@ context('Test resource validation', () => {
       .find('.fd-switch')
       .click();
 
-    cy.contains('Cancel').click();
+    cy.get('[data-testid=yaml-cancel]').click();
   });
 
   it('Customize resource validation policies via preferences', () => {
@@ -108,7 +108,7 @@ context('Test resource validation', () => {
 
     cy.contains('This is a test rule').should('be.visible');
 
-    cy.contains('Cancel').click();
+    cy.get('[data-testid=yaml-cancel]').click();
 
     cy.get('[aria-label="topnav-profile-btn"]').click();
 
@@ -148,6 +148,6 @@ context('Test resource validation', () => {
       'Incorrect or missing values for `capabilities.drop` - must contain ALL',
     );
 
-    cy.contains('Cancel').click();
+    cy.get('[data-testid=yaml-cancel]').click();
   });
 });

@@ -48,12 +48,12 @@ context('Test app settings and preferences', () => {
       .find('button[data-testid="delete"]')
       .click();
 
-    cy.contains('Are you sure you want to delete').should('not.exist');
+    cy.contains('Are you sure you want to delete').should('not.be.visible');
 
     // disable "deletion without confirmation" to not mess other tests
     cy.get('[aria-label="topnav-profile-btn"]').click();
 
-    cy.contains('Preferences').click();
+    cy.contains('.fd-menu', 'Preferences').click();
 
     cy.contains('Cluster interaction').click();
 
