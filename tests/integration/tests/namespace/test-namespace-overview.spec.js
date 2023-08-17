@@ -77,9 +77,9 @@ context(
     it('Check if limit ranges and resource quota exist', () => {
       cy.contains('b', LIMIT_NAME).should('not.exist');
 
-      // cy.contains('b', NEW_LIMIT_NAME).should('not.exist');
+      cy.contains('b', NEW_LIMIT_NAME).should('not.exist');
 
-      // cy.contains('b', QUOTA_NAME).should('not.exist');
+      cy.contains('b', QUOTA_NAME).should('not.exist');
     });
   },
 );
