@@ -47,17 +47,7 @@ export function Header() {
 
   const clustersList = [
     ...inactiveClusterNames.map((name, index) => {
-      return (
-        <StandardListItem
-          data-key={index}
-          onClick={e => {
-            e.preventDefault();
-            console.log('XDDDD');
-          }}
-        >
-          {name}
-        </StandardListItem>
-      );
+      return <StandardListItem data-key={index}>{name}</StandardListItem>;
     }),
     <StandardListItem>
       {t('clusters.overview.title-all-clusters')}
