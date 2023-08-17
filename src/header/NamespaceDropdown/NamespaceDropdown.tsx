@@ -1,80 +1,39 @@
-import { Menu, Icon } from 'fundamental-react';
 import { useRecoilValue } from 'recoil';
-import { Link, useMatch } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { namespacesState } from 'state/namespacesAtom';
-import { useUrl } from 'hooks/useUrl';
 
 import './NamespaceDropdown.scss';
+import { MenuItem } from '@ui5/webcomponents-react';
 
 const Namespaces = () => {
   const namespaces = useRecoilValue(namespacesState);
-  const { namespaceUrl } = useUrl();
-
-  const { resourceType = '' } =
-    useMatch({
-      path: '/cluster/:cluster/namespaces/:namespace/:resourceType',
-      end: false,
-    })?.params ?? {};
 
   return (
     <>
       {namespaces.map(ns => (
-        <Menu.Item key={ns}>
-          <Link
-            to={namespaceUrl(resourceType, {
-              namespace: ns,
-            })}
-          >
-            {ns}
-          </Link>
-        </Menu.Item>
+        <MenuItem key={ns} text={ns} />
       ))}
     </>
   );
 };
 
-export function NamespaceDropdown({
-  hideDropdown,
-}: {
-  hideDropdown: VoidFunction;
-}) {
-  const { clusterUrl } = useUrl();
+export function NamespaceDropdown() {
   const { t } = useTranslation();
-  const { namespaceUrl } = useUrl();
 
   const namespacesOverviewNode = (
-    <Menu.Item>
-      <Link to={clusterUrl(`namespaces`)}>
-        <Icon glyph="list" className="fd-margin-end--tiny" />
-        {t('namespaces.namespaces-overview')}
-      </Link>
-    </Menu.Item>
+    <MenuItem icon="list" text={t('namespaces.namespaces-overview')} />
   );
 
-  const { resourceType = '' } =
-    useMatch({
-      path: '/cluster/:cluster/namespaces/:namespace/:resourceType',
-      end: false,
-    })?.params ?? {};
-
   const allNamespacesNode = (
-    <Menu.Item>
-      <Link to={namespaceUrl(resourceType, { namespace: '-all-' })}>
-        <Icon glyph="dimension" className="fd-margin-end--tiny" />
-        {t('navigation.all-namespaces')}
-      </Link>
-    </Menu.Item>
+    <MenuItem text={t('navigation.all-namespaces')} icon="dimension" />
   );
 
   return (
-    <Menu>
-      <Menu.List onClick={hideDropdown}>
-        {namespacesOverviewNode}
-        {allNamespacesNode}
-        <Namespaces />
-      </Menu.List>
-    </Menu>
+    <>
+      {namespacesOverviewNode}
+      {allNamespacesNode}
+      <Namespaces />
+    </>
   );
 }

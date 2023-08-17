@@ -1,15 +1,15 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import {
   Avatar,
-  Button,
-  CustomListItem,
+  Menu,
+  MenuDomRef,
   ShellBar,
   ShellBarItem,
   StandardListItem,
 } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useMatch, useNavigate } from 'react-router-dom';
 
 import { clustersState } from 'state/clustersAtom';
 import { clusterState } from 'state/clusterAtom';
@@ -23,11 +23,13 @@ import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
 
 import './Header.scss';
 import { useFeature } from 'hooks/useFeature';
+import { createPortal } from 'react-dom';
 
 export function Header() {
+  useAvailableNamespaces();
+
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { refetch } = useAvailableNamespaces();
   const { namespace: activeNamespace } = useUrl();
   const { isEnabled: isFeedbackEnabled, link: feedbackLink } = useFeature(
     'FEEDBACK',
@@ -38,7 +40,6 @@ export function Header() {
   const clusters = useRecoilValue(clustersState);
 
   const [isNamespaceOpen, setIsNamespaceOpen] = useState(false);
-  const [isClustersOpen, setIsClustersOpen] = useState(false);
 
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
     name => name !== cluster?.name,
@@ -57,19 +58,10 @@ export function Header() {
           {name}
         </StandardListItem>
       );
-      // name,
-      // callback: () => {
-      //   navigate(`/cluster/${name}`);
-      //   setIsClustersOpen(false);
-      // },
     }),
-    // {
-    //   name: t('clusters.overview.title-all-clusters'),
-    //   callback: () => {
-    //     navigate('/clusters');
-    //     setIsClustersOpen(false);
-    //   },
-    // },
+    <StandardListItem>
+      {t('clusters.overview.title-all-clusters')}
+    </StandardListItem>,
   ];
 
   const getNamespaceLabel = () => {
@@ -77,21 +69,18 @@ export function Header() {
     else return activeNamespace || t('navigation.select-namespace');
   };
 
-  let headerActions = [];
-  if (cluster) {
-    headerActions.push({
-      glyph: 'megamenu',
-      label: getNamespaceLabel(),
-      notificationCount: 0,
-      callback: () => {
-        refetch();
-        setIsNamespaceOpen(!isNamespaceOpen);
-      },
-      menu: (
-        <NamespaceDropdown hideDropdown={() => setIsNamespaceOpen(false)} />
-      ),
-    });
-  }
+  const namespaceMenuRef = useRef<MenuDomRef>(null);
+  const onNamespaceMenuClick = (e: any) => {
+    setIsNamespaceOpen(!isNamespaceOpen);
+    namespaceMenuRef.current?.showAt(e.detail.targetRef);
+  };
+
+  const { resourceType = '' } =
+    useMatch({
+      path: '/cluster/:cluster/namespaces/:namespace/:resourceType',
+      end: false,
+    })?.params ?? {};
+  const { clusterUrl, namespaceUrl } = useUrl();
 
   return (
     <>
@@ -102,46 +91,54 @@ export function Header() {
         logo={<Logo />}
         primaryTitle={cluster?.contextName || cluster?.name}
         menuItems={clustersList}
-        // onMenuItemClick={e => navigate('/clusters')}
+        onMenuItemClick={e =>
+          e.detail.item.textContent ===
+          t('clusters.overview.title-all-clusters')
+            ? navigate('/clusters')
+            : navigate(`/cluster/${e.detail.item.textContent}`)
+        }
         profile={
           <Avatar
             icon="customer"
             colorScheme="Accent10"
-            accessibleName="preferences"
+            accessibleName="Preferences"
           />
         }
         onProfileClick={() => setPreferencesOpen(true)}
-        // actions={headerActions}
-        // profileMenu={[
-        //   {
-        //     name: t('navigation.preferences.title'),
-        //     callback: () => setPreferencesOpen(true),
-        //   },
-        // ]}
-        // @ts-ignore
-        popoverPropsFor={{
-          profileMenu: { 'aria-label': 'topnav-profile-btn' },
-          actionMenu: {
-            show: isNamespaceOpen,
-            onClickOutside: () => setIsNamespaceOpen(false),
-            onEscapeKey: () => setIsNamespaceOpen(false),
-          },
-          productMenu: {
-            show: isClustersOpen,
-            onClickOutside: () => setIsClustersOpen(false),
-            onEscapeKey: () => setIsClustersOpen(false),
-            onClick: () => setIsClustersOpen(!isClustersOpen),
-          },
-        }}
       >
-        <ShellBarItem icon="megamenu" text="XDDDD">
-          <NamespaceDropdown hideDropdown={() => setIsNamespaceOpen(false)} />
-        </ShellBarItem>
+        <ShellBarItem
+          onClick={onNamespaceMenuClick}
+          icon="add"
+          text="Namespaces"
+          id="openMenuBtn"
+        />
+        {createPortal(
+          <Menu
+            opener={'openMenuBtn'}
+            open={isNamespaceOpen}
+            ref={namespaceMenuRef}
+            headerText={`Namespace: ${getNamespaceLabel()}`}
+            onItemClick={e =>
+              e.detail.item.text === t('namespaces.namespaces-overview')
+                ? navigate(clusterUrl(`namespaces`))
+                : e.detail.item.text === t('navigation.all-namespaces')
+                ? navigate(namespaceUrl(resourceType, { namespace: '-all-' }))
+                : navigate(
+                    namespaceUrl(resourceType, {
+                      namespace: e.detail.item.text,
+                    }),
+                  )
+            }
+          >
+            <NamespaceDropdown />
+          </Menu>,
+          document.body,
+        )}
         {isFeedbackEnabled && (
           <ShellBarItem
             onClick={() => window.open(feedbackLink, '_blank')}
             icon="feedback"
-            text="feedback"
+            text="Feedback"
           />
         )}
       </ShellBar>
