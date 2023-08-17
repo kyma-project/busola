@@ -42,7 +42,14 @@ context('Test Storage Classes', () => {
   });
 
   it('Checking list and delete', () => {
-    cy.contains('Storage Classes').click();
+    cy.get('ui5-breadcrumbs')
+      .shadow()
+      .find('ui5-link[href="/cluster/cluster-admin/storageclasses"]')
+      .should('contain.text', 'Storage Classes')
+      .shadow()
+      .find('a[href="/cluster/cluster-admin/storageclasses"]')
+      .should('be.visible')
+      .click({ force: true });
 
     cy.deleteFromGenericList(Cypress.env('STORAGE_CLASS_NAME'));
   });

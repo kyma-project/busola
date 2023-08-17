@@ -43,7 +43,14 @@ context('Test Persistent Volumes', () => {
   });
 
   it('Check PV list and delete', () => {
-    cy.contains('a', 'Persistent Volumes').click();
+    cy.get('ui5-breadcrumbs')
+      .shadow()
+      .find('ui5-link[href="/cluster/cluster-admin/persistentvolumes"]')
+      .should('contain.text', 'Persistent Volumes')
+      .shadow()
+      .find('a[href="/cluster/cluster-admin/persistentvolumes"]')
+      .should('be.visible')
+      .click({ force: true });
 
     cy.deleteFromGenericList(PV_NAME);
   });
