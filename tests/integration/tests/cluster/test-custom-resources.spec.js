@@ -60,6 +60,6 @@ context('Test Custom Resources', () => {
     cy.url().should('match', /customresources/);
     cy.contains('tcluster.cypress.example.com').click();
     cy.url().should('match', /customresourcedefinitions/);
-    cy.deleteInDetails();
+    cy.deleteInDetails('tcluster.cypress.example.com');
   });
 });

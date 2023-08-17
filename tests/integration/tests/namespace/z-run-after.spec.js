@@ -21,9 +21,9 @@ context('Clean up Namespace', () => {
 
     cy.get('tbody tr [aria-label="Delete"]').click({ force: true });
 
-    cy.contains('button', 'Delete')
-      .filter(':visible', { log: false })
-      .click({ force: true });
+    cy.get(`[header-text="Delete ${Cypress.env('NAMESPACE_NAME')}"]`)
+      .find('[data-testid="delete-confirmation"]', { includeShadowDom: true })
+      .click();
   });
 
   it('Check if the Namespace is terminated (step 2)', { retries: 3 }, () => {
