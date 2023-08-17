@@ -112,32 +112,50 @@ Cypress.Commands.add('getTopNav', () => {
   return cy.get('.fd-shellbar');
 });
 
-Cypress.Commands.add('deleteInDetails', () => {
+Cypress.Commands.add('deleteInDetails', resourceName => {
   cy.contains('button', 'Delete').click();
 
-  cy.get('[data-testid="delete-confirmation"]').click();
+  cy.get(`[header-text="Delete ${resourceName}"]`)
+    .find('[data-testid="delete-confirmation"]', { includeShadowDom: true })
+    .click();
 
   cy.contains(/deleted/).should('be.visible');
 });
 
 Cypress.Commands.add(
   'deleteFromGenericList',
-  (searchTerm, confirmationEnabled = true, deletedVisible = true) => {
+  (
+    searchTerm,
+    confirmationEnabled = true,
+    deletedVisible = true,
+    clearSearch = true,
+  ) => {
     cy.get('[aria-label="open-search"]').click();
 
     cy.get('[placeholder="Search"]').type(searchTerm);
 
     cy.contains(searchTerm).should('be.visible');
 
+    cy.contains(/created/).should('not.exist');
+
     cy.get('[aria-label="Delete"]').click();
 
     if (confirmationEnabled) {
-      cy.contains('button', 'Delete').click();
+      cy.get(`[header-text="Delete ${searchTerm}"]`)
+        .find('[data-testid="delete-confirmation"]', { includeShadowDom: true })
+        .click();
+
       if (deletedVisible) {
         cy.contains(/deleted/).should('be.visible');
       }
 
-      cy.contains(searchTerm).should('not.exist');
+      if (clearSearch) {
+        cy.get('[placeholder="Search"]').clear();
+      }
+
+      cy.get('.fd-table')
+        .contains(searchTerm)
+        .should('not.exist');
     }
   },
 );

@@ -135,8 +135,10 @@ context('Test Protected Resources', () => {
       .find('[aria-label="Delete"]')
       .click();
 
-    cy.contains(`Delete ${NAME}`).should('exist');
+    cy.contains(`Delete ${NAME}`, { includeShadowDom: true }).should('exist');
 
-    cy.contains('button', 'Cancel').click();
+    cy.get(`[header-text="Delete ${NAME}"]`)
+      .find('[data-testid="delete-cancel"]', { includeShadowDom: true })
+      .click();
   });
 });
