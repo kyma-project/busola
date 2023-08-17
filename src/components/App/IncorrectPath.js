@@ -70,7 +70,11 @@ export function IncorrectPath({ to, title = '', message = '' }) {
       title={title}
       className="incorrect-path-message-box"
       actions={[
-        <Button design="Attention" onClick={() => navigate(to)}>
+        <Button
+          design="Attention"
+          onClick={() => navigate(to)}
+          data-testid="delete-confirmation"
+        >
           {t('common.buttons.ok')}
         </Button>,
       ]}

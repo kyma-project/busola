@@ -124,7 +124,13 @@ const CollapsedRowRenderer = ({
   if (withCollapseControl) {
     rowRenderer = [
       showCollapseControl ? (
-        <Button design="Transparent" onClick={() => setOpen(!isOpen)}>
+        <Button
+          design="Transparent"
+          onClick={() => setOpen(!isOpen)}
+          data-testid={
+            isOpen ? 'collapse-button-open' : 'collapse-button-close'
+          }
+        >
           <Icon
             className="fd-margin-end--tiny"
             glyph={isOpen ? 'navigation-up-arrow' : 'navigation-down-arrow'}

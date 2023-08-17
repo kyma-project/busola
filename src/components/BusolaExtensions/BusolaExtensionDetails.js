@@ -81,7 +81,7 @@ export function BusolaExtensionDetails(props) {
                   section: t(`extensibility.sections.${key}`),
                 })}
                 modalOpeningComponent={
-                  <Button className="fd-margin-end--tiny" design="emphasized">
+                  <Button className="fd-margin-end--tiny" design="Emphasized">
                     {t('extensibility.edit-section', {
                       section: t(`extensibility.sections.${key}`),
                     })}

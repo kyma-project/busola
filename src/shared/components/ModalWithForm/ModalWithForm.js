@@ -102,7 +102,7 @@ export const ModalWithForm = ({
     const disabled = !isValid;
     const button = (
       <Button
-        design="emphasized"
+        design="Emphasized"
         disabled={disabled}
         onClick={handleFormSubmit}
         aria-disabled={disabled}

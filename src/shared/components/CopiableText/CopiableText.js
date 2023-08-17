@@ -28,9 +28,8 @@ export function CopiableText({
       {!iconOnly ? children || textToCopy : null}
       <Tooltip content={t('common.tooltips.copy-to-clipboard')} position="top">
         <Button
-          compact={compact}
-          glyph="copy"
-          option="transparent"
+          design="Transparent"
+          icon="copy"
           className="fd-margin-begin--tiny"
           onClick={() => copyToCliboard(textToCopy)}
           {...buttonProps}

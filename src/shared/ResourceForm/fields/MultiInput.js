@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, createRef } from 'react';
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { Icon } from 'fundamental-react';
@@ -196,14 +196,12 @@ export function MultiInput({
                 <div className="fd-col fd-col-md--1 action-button">
                   {!isLast(index) && (
                     <Button
+                      design="Negative"
+                      icon="delete"
                       disabled={readOnly}
-                      compact
-                      option="transparent"
                       className={classnames({
                         hidden: isEntryLocked(entry),
                       })}
-                      glyph="delete"
-                      type="negative"
                       onClick={() => removeValue(index)}
                       ariaLabel={t('common.buttons.delete')}
                     />

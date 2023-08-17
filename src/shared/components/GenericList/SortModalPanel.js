@@ -13,7 +13,12 @@ export const SortModalPanel = ({ sortBy, sort, setSort, disabled = false }) => {
 
   const sortOpeningComponent = (
     <Tooltip content={t('common.tooltips.sort')}>
-      <Button design="Transparent" disabled={disabled} icon="sort" />
+      <Button
+        design="Transparent"
+        disabled={disabled}
+        icon="sort"
+        aria-label="open-sort"
+      />
     </Tooltip>
   );
 
@@ -22,7 +27,7 @@ export const SortModalPanel = ({ sortBy, sort, setSort, disabled = false }) => {
       title={t('common.sorting.sort')}
       actions={onClose => [
         <Button
-          design="emphasized"
+          design="Emphasized"
           onClick={() => {
             setSort({ name: name, order: order });
             onClose();

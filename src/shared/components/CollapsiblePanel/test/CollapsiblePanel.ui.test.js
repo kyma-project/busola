@@ -1,6 +1,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { Button, LayoutPanel } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { LayoutPanel } from 'fundamental-react';
 import { mount, shallow } from 'enzyme';
 
 import { CollapsiblePanel } from 'shared/components/CollapsiblePanel/CollapsiblePanel';

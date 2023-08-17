@@ -144,6 +144,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
                 design="Transparent"
                 disabled={!loadable}
                 onClick={fetchResources}
+                ariaLabel={t('roles.buttons.load')}
               >
                 {t('roles.buttons.load-resources')}
               </Button>

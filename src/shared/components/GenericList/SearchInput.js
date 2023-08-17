@@ -160,6 +160,7 @@ export function SearchInput({
             disabled={disabled}
             icon="search"
             onClick={openSearchList}
+            aria-label="open-search"
           />
         </Tooltip>
       )}

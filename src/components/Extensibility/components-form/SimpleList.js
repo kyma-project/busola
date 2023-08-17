@@ -137,6 +137,7 @@ export function SimpleList({
                               disabled={readOnly}
                               icon="delete"
                               onClick={() => removeItem(index)}
+                              ariaLabel={t('common.buttons.delete')}
                             />
                           )}
                         </span>
