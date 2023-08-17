@@ -96,7 +96,7 @@ export function YamlUploadDialog({ show, onCancel }) {
         >
           {t('common.buttons.submit')}
         </Button>
-        <Button design="Transparent" onClick={onCancel}>
+        <Button design="Transparent" onClick={onCancel} data-testid="yaml-cancel">
           {lastOperationState !== OPERATION_STATE_SOME_FAILED
             ? t('common.buttons.cancel')
             : t('common.buttons.close')}
