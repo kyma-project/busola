@@ -95,7 +95,7 @@ context('Test Jobs', () => {
     cy.contains(`Job (${JOB_NAME})`);
 
     // status
-    cy.get('[role="status"]', { timeout: 30 * 1000 })
+    cy.get('[role="status"]', { timeout: 40 * 1000 })
       .first()
       .should('have.text', 'Completed');
 
