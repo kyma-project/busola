@@ -14,7 +14,7 @@ context('Test invalid kubeconfig', () => {
     // trigger blur on editor
     cy.contains('Cancel').focus();
 
-    cy.get('.ui5-message-strip-root--negative').shouldHaveTrimmedText(
+    cy.get('ui5-message-strip[design="Negative"]').shouldHaveTrimmedText(
       'Parse error: kubeconfig is not an object, previous valid input will be used',
     );
   });
@@ -28,7 +28,7 @@ context('Test invalid kubeconfig', () => {
       'Drag your file here or click to upload',
     ).attachFile('kubeconfig--invalid.txt', { subjectType: 'drag-n-drop' });
 
-    cy.get('.ui5-message-strip-root--negative').should(
+    cy.get('ui5-message-strip[design="Negative"]').should(
       'contain.text',
       'Parse error: bad indentation of a mapping entry',
     );
