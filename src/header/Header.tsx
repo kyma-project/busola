@@ -30,7 +30,7 @@ export function Header() {
 
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { namespace: activeNamespace } = useUrl();
+  const { namespace: activeNamespace, clusterUrl, namespaceUrl } = useUrl();
   const { isEnabled: isFeedbackEnabled, link: feedbackLink } = useFeature(
     'FEEDBACK',
   );
@@ -80,7 +80,6 @@ export function Header() {
       path: '/cluster/:cluster/namespaces/:namespace/:resourceType',
       end: false,
     })?.params ?? {};
-  const { clusterUrl, namespaceUrl } = useUrl();
 
   return (
     <>
