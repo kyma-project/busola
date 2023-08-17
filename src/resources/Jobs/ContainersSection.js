@@ -1,7 +1,8 @@
 import React from 'react';
 import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
-import { Button, MessageStrip } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { MessageStrip } from 'fundamental-react';
 
 import { ItemArray } from 'shared/ResourceForm/fields';
 import { createContainerTemplate } from './templates';
@@ -47,14 +48,13 @@ export const ContainerSection = ({ readOnly, ...props }) => {
       <MessageStrip type="warning" className="fd-margin-top--sm">
         {t('jobs.create-modal.at-least-one-container-required')}
         <Button
-          glyph="add"
-          compact
+          design="Transparent"
           disabled={readOnly}
+          icon="add"
           onClick={() => {
             jp.value(value, '$[0]', createContainerTemplate());
             setValue(value);
           }}
-          option="transparent"
         >
           {t('deployment.create-modal.advanced.add-container')}
         </Button>

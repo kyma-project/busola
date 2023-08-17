@@ -1,11 +1,7 @@
 import { zip } from 'lodash';
 import React, { useState } from 'react';
-import {
-  LayoutPanel,
-  Button,
-  ButtonSegmented,
-  BusyIndicator,
-} from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { LayoutPanel, ButtonSegmented, BusyIndicator } from 'fundamental-react';
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
 import { useFeature } from 'hooks/useFeature';
 import { getErrorMessage } from 'shared/utils/helpers';
@@ -292,7 +288,6 @@ export function StatsPanel({
           <ButtonSegmented>
             {visibleTimeSpans.map(ts => (
               <Button
-                compact
                 key={ts}
                 selected={timeSpan === ts}
                 onClick={() => setTimeSpan(ts)}

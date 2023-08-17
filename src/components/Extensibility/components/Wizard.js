@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Dialog } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { Dialog } from 'fundamental-react';
 
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 

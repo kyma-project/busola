@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { LayoutPanel, Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { LayoutPanel } from 'fundamental-react';
 import './ContainersData.scss';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { ContainerStatus } from './ContainerStatus';
@@ -23,11 +24,9 @@ export default function ContainersData({ type, containers, statuses }) {
         <LayoutPanel.Head title={container.name} />
         <LayoutPanel.Actions>
           <Button
-            aria-label={'view-logs-for-' + container.name}
             onClick={() => {
               navigate(`containers/${container.name}`, { replace: true });
             }}
-            iconBeforeText
           >
             {t('pods.buttons.view-logs')}
           </Button>

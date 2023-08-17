@@ -1,4 +1,5 @@
-import { Button, Checkbox, MessageBox, MessageStrip } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { Checkbox, MessageBox, MessageStrip } from 'fundamental-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
@@ -97,13 +98,12 @@ export function useDeleteResource({
       actions={[
         <Button
           data-testid="delete-confirmation"
-          type="negative"
-          compact
+          design="Negative"
           onClick={() => performDelete(resource, resourceUrl, deleteFn)}
         >
           {t('common.buttons.delete')}
         </Button>,
-        <Button onClick={() => setShowDeleteDialog(false)} compact>
+        <Button onClick={() => setShowDeleteDialog(false)}>
           {t('common.buttons.cancel')}
         </Button>,
       ]}

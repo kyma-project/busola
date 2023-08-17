@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, ButtonSegmented } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { ButtonSegmented } from 'fundamental-react';
 import './ModeSelector.scss';
 
 export function ModeSelector({ mode, isEditing, setMode }) {
@@ -33,7 +34,6 @@ export function ModeSelector({ mode, isEditing, setMode }) {
       <ButtonSegmented>
         {buttonsToDisplay.map(button => (
           <Button
-            compact
             key={button.mode}
             selected={mode === button.mode}
             onClick={() => setMode(button.mode)}

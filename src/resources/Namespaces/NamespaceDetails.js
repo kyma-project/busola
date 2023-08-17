@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
@@ -61,12 +61,11 @@ export function NamespaceDetails(props) {
   const headerActions = (
     <>
       <Button
+        icon="add"
         className="fd-margin-end--tiny"
-        glyph="add"
         onClick={() => {
           setShowAdd(true);
         }}
-        iconBeforeText
       >
         {t('upload-yaml.title')}
       </Button>

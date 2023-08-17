@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { LayoutPanel, Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { LayoutPanel } from 'fundamental-react';
 import './CollapsiblePanel.scss';
 
 export const CollapsiblePanel = ({
@@ -30,8 +31,8 @@ export const CollapsiblePanel = ({
         <LayoutPanel.Actions>
           {actions}
           <Button
-            glyph={isOpen ? 'navigation-up-arrow' : 'navigation-down-arrow'}
-            option="transparent"
+            design="Transparent"
+            icon={isOpen ? 'navigation-up-arrow' : 'navigation-down-arrow'}
             onClick={switchOpen}
           />
         </LayoutPanel.Actions>

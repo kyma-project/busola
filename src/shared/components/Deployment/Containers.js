@@ -3,7 +3,8 @@ import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 import { K8sNameField } from 'shared/ResourceForm/fields';
 
-import { Button, MessageStrip } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { MessageStrip } from 'fundamental-react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
@@ -86,10 +87,8 @@ export function Containers({ value: containers, setValue: setContainers }) {
       })}
       actions={
         <Button
-          glyph="delete"
-          type="negative"
-          option="transparent"
-          compact
+          design="negative"
+          icon="delete"
           onClick={() => removeContainer(i)}
         />
       }

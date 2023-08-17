@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 import copyToCliboard from 'copy-to-clipboard';
 import { saveAs } from 'file-saver';
 import 'shared/contexts/YamlEditorContext/EditorActions.scss';
@@ -19,8 +19,8 @@ const ButtonWithTooltip = ({
   return (
     <Tooltip className={className} content={tooltipContent} position="top">
       <Button
-        option="transparent"
-        glyph={glyph}
+        design="Transparent"
+        icon={glyph}
         onClick={onClick}
         disabled={disabled}
         className="circle-button"

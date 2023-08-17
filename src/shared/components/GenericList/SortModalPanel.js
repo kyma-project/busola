@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 import { Modal } from '../Modal/Modal';
 import { FormRadioGroup, FormRadioItem } from 'fundamental-react';
 import { Tooltip } from '../Tooltip/Tooltip';
@@ -13,12 +13,7 @@ export const SortModalPanel = ({ sortBy, sort, setSort, disabled = false }) => {
 
   const sortOpeningComponent = (
     <Tooltip content={t('common.tooltips.sort')}>
-      <Button
-        disabled={disabled}
-        option="transparent"
-        glyph="sort"
-        aria-label="open-sort"
-      />
+      <Button design="Transparent" disabled={disabled} icon="sort" />
     </Tooltip>
   );
 
@@ -27,7 +22,7 @@ export const SortModalPanel = ({ sortBy, sort, setSort, disabled = false }) => {
       title={t('common.sorting.sort')}
       actions={onClose => [
         <Button
-          option="emphasized"
+          design="emphasized"
           onClick={() => {
             setSort({ name: name, order: order });
             onClose();

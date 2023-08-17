@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Menu, Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { Menu } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { useEventListener } from 'hooks/useEventListener';
 
@@ -155,11 +156,10 @@ export function SearchInput({
       {showControl && (
         <Tooltip content={t('common.tooltips.search')}>
           <Button
+            design="Transparent"
             disabled={disabled}
-            option="transparent"
-            glyph="search"
+            icon="search"
             onClick={openSearchList}
-            aria-label="open-search"
           />
         </Tooltip>
       )}

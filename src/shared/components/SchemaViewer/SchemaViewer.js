@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { LayoutPanel, Button, ButtonSegmented } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { LayoutPanel, ButtonSegmented } from 'fundamental-react';
 import EditorWrapper from 'shared/ResourceForm/fields/Editor';
 import { useTranslation } from 'react-i18next';
 
@@ -21,21 +22,18 @@ export function SchemaViewer({ name, schema }) {
         <LayoutPanel.Actions>
           <ButtonSegmented>
             <Button
-              compact
               selected={schemaMode === 'viewer'}
               onClick={() => setSchemaMode('viewer')}
             >
               {t('schema.modes.viewer')}
             </Button>
             <Button
-              compact
               selected={schemaMode === 'json'}
               onClick={() => setSchemaMode('json')}
             >
               {t('schema.modes.json')}
             </Button>
             <Button
-              compact
               selected={schemaMode === 'yaml'}
               onClick={() => setSchemaMode('yaml')}
             >

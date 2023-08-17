@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Button } from '@ui5/webcomponents-react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
@@ -80,7 +81,7 @@ export const SideDrawer = ({
       style={style}
     >
       {(isOpen || children) && (
-        <button
+        <Button
           className={`open-btn ${!buttonText ? 'open-btn-hidden' : ''}`}
           onClick={() => setOpen(!isOpen)}
         >
@@ -90,7 +91,7 @@ export const SideDrawer = ({
             ariaLabel="Open/close the drawer"
           />
           {buttonText}
-        </button>
+        </Button>
       )}
 
       <section className="content">

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Dialog, Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { Dialog } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -101,10 +102,10 @@ export const ModalWithForm = ({
     const disabled = !isValid;
     const button = (
       <Button
+        design="emphasized"
         disabled={disabled}
-        aria-disabled={disabled}
         onClick={handleFormSubmit}
-        option="emphasized"
+        aria-disabled={disabled}
       >
         {confirmText}
       </Button>
@@ -134,12 +135,11 @@ export const ModalWithForm = ({
       </div>
     ) : (
       <Button
-        glyph={button.glyph || null}
-        aria-label={button.label || null}
-        option={button.option}
-        compact={button.compact || false}
+        design={button.option}
         disabled={!!button.disabled}
+        icon={button.glyph || null}
         onClick={() => setOpenStatus(true)}
+        aria-label={button.label || null}
       >
         {button.text}
       </Button>
@@ -154,14 +154,14 @@ export const ModalWithForm = ({
         show={isOpen}
         actions={[
           renderConfirmButton(),
-          <Button onClick={resetFormFn} option="transparent">
+          <Button design="Transparent" onClick={resetFormFn}>
             {t('common.buttons.reset')}
           </Button>,
           <Button
+            design="Transparent"
             onClick={() => {
               setOpenStatus(false);
             }}
-            option="transparent"
           >
             {t('common.buttons.cancel')}
           </Button>,

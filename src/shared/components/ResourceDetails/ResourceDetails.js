@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 import { createPatch } from 'rfc6902';
 import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNotFound';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
@@ -226,7 +226,7 @@ function Resource({
         <Button
           className="fd-margin-end--tiny"
           onClick={() => openYaml(resource)}
-          option="emphasized"
+          design="emphasized"
         >
           {t('common.buttons.edit-yaml')}
         </Button>
@@ -242,7 +242,7 @@ function Resource({
             })
           }
           modalOpeningComponent={
-            <Button className="fd-margin-end--tiny" option="emphasized">
+            <Button className="fd-margin-end--tiny" design="emphasized">
               {editActionLabel ||
                 t('components.resource-details.edit', {
                   resourceType: prettifiedResourceKind,
@@ -302,10 +302,9 @@ function Resource({
       {resourceHeaderActions.map(resourceAction => resourceAction(resource))}
       {deleteButtonWrapper(
         <Button
+          design="Negative"
           disabled={protectedResource || disableDelete}
           onClick={() => handleResourceDelete({ resourceUrl })}
-          option="transparent"
-          type="negative"
         >
           {t('common.buttons.delete')}
         </Button>,
