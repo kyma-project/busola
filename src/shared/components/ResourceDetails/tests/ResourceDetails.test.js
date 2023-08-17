@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { render, waitFor } from 'testing/reactTestingUtils';
 import { ResourceDetails } from '../ResourceDetails';
+import { ThemeProvider } from '@ui5/webcomponents-react';
 
 jest.mock('shared/hooks/BackendAPI/useGet', () => ({
   useGet: () => {
@@ -27,19 +28,23 @@ describe('ResourceDetails', () => {
   describe('Columns', () => {
     fit('Renders basic column', async () => {
       const { queryByText } = render(
-        <Suspense fallback="loading">
-          <ResourceDetails
-            resourceUrl="test-resource-url"
-            resourceType="test-resource-type"
-            customColumns={[
-              {
-                header: 'some-header',
-                value: resource =>
-                  resource.metadata.name + ' | ' + resource.metadata.namespace,
-              },
-            ]}
-          />
-        </Suspense>,
+        <ThemeProvider>
+          <Suspense fallback="loading">
+            <ResourceDetails
+              resourceUrl="test-resource-url"
+              resourceType="test-resource-type"
+              customColumns={[
+                {
+                  header: 'some-header',
+                  value: resource =>
+                    resource.metadata.name +
+                    ' | ' +
+                    resource.metadata.namespace,
+                },
+              ]}
+            />
+          </Suspense>
+        </ThemeProvider>,
       );
 
       await waitFor(() => {

@@ -72,6 +72,6 @@ context('Test Cluster Role Bindings', () => {
   });
 
   it('Delete Cluster Role Binding', () => {
-    cy.deleteInDetails();
+    cy.deleteInDetails(CRB_NAME);
   });
 });
