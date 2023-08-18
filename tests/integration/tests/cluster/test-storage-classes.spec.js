@@ -42,16 +42,7 @@ context('Test Storage Classes', () => {
   });
 
   it('Checking list and delete', () => {
-    cy.get('ui5-breadcrumbs')
-      .find('ui5-link[href*="storageclasses"]', {
-        includeShadowDom: true,
-      })
-      .should('contain.text', 'Storage Classes')
-      .find('a[href*="storageclasses"]', {
-        includeShadowDom: true,
-      })
-      .should('be.visible')
-      .click({ force: true });
+    cy.navigateBackTo('storageclasses', 'Storage Classes');
 
     cy.deleteFromGenericList(Cypress.env('STORAGE_CLASS_NAME'));
   });

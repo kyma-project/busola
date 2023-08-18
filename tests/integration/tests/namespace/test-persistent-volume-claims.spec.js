@@ -70,16 +70,7 @@ context('Test Persistent Volume Claims', () => {
   });
 
   it('Check the Persistent Volume Claims list and delete', () => {
-    cy.get('ui5-breadcrumbs')
-      .find('ui5-link[href*="persistentvolumeclaims"]', {
-        includeShadowDom: true,
-      })
-      .should('contain.text', 'Persistent Volume Claims')
-      .find('a[href*="persistentvolumeclaims"]', {
-        includeShadowDom: true,
-      })
-      .should('be.visible')
-      .click({ force: true });
+    cy.navigateBackTo('persistentvolumeclaims', 'Persistent Volume Claims');
 
     cy.contains(CAPACITY_VALUE);
 

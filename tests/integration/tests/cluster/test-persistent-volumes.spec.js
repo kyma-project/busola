@@ -43,16 +43,7 @@ context('Test Persistent Volumes', () => {
   });
 
   it('Check PV list and delete', () => {
-    cy.get('ui5-breadcrumbs')
-      .find('ui5-link[href*="persistentvolumes"]', {
-        includeShadowDom: true,
-      })
-      .should('contain.text', 'Persistent Volumes')
-      .find('a[href*="persistentvolumes"]', {
-        includeShadowDom: true,
-      })
-      .should('be.visible')
-      .click({ force: true });
+    cy.navigateBackTo('persistentvolumes', 'Persistent Volumes');
 
     cy.deleteFromGenericList(PV_NAME);
   });

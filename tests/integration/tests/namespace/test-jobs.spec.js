@@ -14,16 +14,7 @@ function checkJobLogs({ showLogsSelector, expectedLogs }) {
 
   cy.contains(expectedLogs);
 
-  cy.get('ui5-breadcrumbs')
-    .find(`ui5-link[href*=${JOB_NAME}]`, {
-      includeShadowDom: true,
-    })
-    .should('contain.text', JOB_NAME)
-    .find(`a[href*=${JOB_NAME}]`, {
-      includeShadowDom: true,
-    })
-    .should('be.visible')
-    .click({ force: true });
+  cy.navigateBackTo(JOB_NAME, JOB_NAME);
 }
 
 context('Test Jobs', () => {
