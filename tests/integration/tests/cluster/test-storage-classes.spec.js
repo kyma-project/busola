@@ -43,11 +43,13 @@ context('Test Storage Classes', () => {
 
   it('Checking list and delete', () => {
     cy.get('ui5-breadcrumbs')
-      .shadow()
-      .find('ui5-link[href="/cluster/cluster-admin/storageclasses"]')
+      .find('ui5-link[href="/cluster/cluster-admin/storageclasses"]', {
+        includeShadowDom: true,
+      })
       .should('contain.text', 'Storage Classes')
-      .shadow()
-      .find('a[href="/cluster/cluster-admin/storageclasses"]')
+      .find('a[href="/cluster/cluster-admin/storageclasses"]', {
+        includeShadowDom: true,
+      })
       .should('be.visible')
       .click({ force: true });
 
