@@ -74,7 +74,17 @@ context('Test Services', () => {
 
     cy.contains('Type');
     cy.contains('LoadBalancer');
-    cy.contains('a', 'Custom Services');
+
+    cy.get('ui5-breadcrumbs')
+      .find('ui5-link[href*="example-services"]', {
+        includeShadowDom: true,
+      })
+      .should('contain.text', 'Custom Services')
+      .find('a[href*="example-services"]', {
+        includeShadowDom: true,
+      })
+      .should('be.visible')
+      .click({ force: true });
   });
 
   it('Displays the header overridden by translations (on Details)', () => {
