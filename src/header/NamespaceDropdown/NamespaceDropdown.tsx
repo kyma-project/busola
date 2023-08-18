@@ -4,36 +4,26 @@ import { useTranslation } from 'react-i18next';
 import { namespacesState } from 'state/namespacesAtom';
 
 import './NamespaceDropdown.scss';
-import { MenuItem } from '@ui5/webcomponents-react';
-
-const Namespaces = () => {
-  const namespaces = useRecoilValue(namespacesState);
-
-  return (
-    <>
-      {namespaces.map(ns => (
-        <MenuItem key={ns} text={ns} />
-      ))}
-    </>
-  );
-};
+import { StandardListItem } from '@ui5/webcomponents-react';
 
 export function NamespaceDropdown() {
   const { t } = useTranslation();
+  const allNamespaces = useRecoilValue(namespacesState);
 
-  const namespacesOverviewNode = (
-    <MenuItem icon="list" text={t('namespaces.namespaces-overview')} />
+  let namespaces = [];
+
+  namespaces.push(
+    <StandardListItem icon="list" data-key="overview">
+      {t('namespaces.namespaces-overview')}
+    </StandardListItem>,
+    <StandardListItem icon="dimension" data-key="all-namespaces">
+      {t('navigation.all-namespaces')}
+    </StandardListItem>,
   );
 
-  const allNamespacesNode = (
-    <MenuItem text={t('navigation.all-namespaces')} icon="dimension" />
+  allNamespaces.map(ns =>
+    namespaces.push(<StandardListItem data-key={ns}>{ns}</StandardListItem>),
   );
 
-  return (
-    <>
-      {namespacesOverviewNode}
-      {allNamespacesNode}
-      <Namespaces />
-    </>
-  );
+  return namespaces;
 }
