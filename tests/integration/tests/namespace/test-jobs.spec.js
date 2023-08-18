@@ -14,10 +14,16 @@ function checkJobLogs({ showLogsSelector, expectedLogs }) {
 
   cy.contains(expectedLogs);
 
-  // back to pod details
-  cy.get('[role=menu]')
-    .contains(JOB_NAME)
-    .click();
+  cy.get('ui5-breadcrumbs')
+    .find(`ui5-link[href*=${JOB_NAME}]`, {
+      includeShadowDom: true,
+    })
+    .should('contain.text', JOB_NAME)
+    .find(`a[href*=${JOB_NAME}]`, {
+      includeShadowDom: true,
+    })
+    .should('be.visible')
+    .click({ force: true });
 }
 
 context('Test Jobs', () => {
@@ -149,6 +155,6 @@ context('Test Jobs', () => {
   });
 
   it('Inspect list', () => {
-    cy.inspectList(/^Jobs/, JOB_NAME);
+    cy.inspectList('Jobs', JOB_NAME);
   });
 });

@@ -84,7 +84,16 @@ context('Test Replica Sets', () => {
   });
 
   it('Checks the new Docker image', () => {
-    cy.contains('Replica Sets').click();
+    cy.get('ui5-breadcrumbs')
+      .find('ui5-link[href*="replicasets"]', {
+        includeShadowDom: true,
+      })
+      .should('contain.text', 'Replica Sets')
+      .find('a[href*="replicasets"]', {
+        includeShadowDom: true,
+      })
+      .should('be.visible')
+      .click({ force: true });
 
     cy.contains(EDITED_DOCKER_IMAGE_TAG);
   });
