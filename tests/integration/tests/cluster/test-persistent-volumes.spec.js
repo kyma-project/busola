@@ -44,11 +44,11 @@ context('Test Persistent Volumes', () => {
 
   it('Check PV list and delete', () => {
     cy.get('ui5-breadcrumbs')
-      .find('ui5-link[href="/cluster/cluster-admin/persistentvolumes"]', {
+      .find('ui5-link[href*="persistentvolumes"]', {
         includeShadowDom: true,
       })
       .should('contain.text', 'Persistent Volumes')
-      .find('a[href="/cluster/cluster-admin/persistentvolumes"]', {
+      .find('a[href*="persistentvolumes"]', {
         includeShadowDom: true,
       })
       .should('be.visible')
