@@ -1,4 +1,4 @@
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { useRef, useState } from 'react';
 import {
   Avatar,
@@ -10,6 +10,7 @@ import {
 } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useMatch, useNavigate } from 'react-router-dom';
+import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 import { clustersState } from 'state/clustersAtom';
 import { clusterState } from 'state/clusterAtom';
@@ -40,6 +41,7 @@ export function Header() {
   const clusters = useRecoilValue(clustersState);
 
   const [isNamespaceOpen, setIsNamespaceOpen] = useState(false);
+  const setShowAdd = useSetRecoilState(showYamlUploadDialogState);
 
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
     name => name !== cluster?.name,
@@ -71,6 +73,33 @@ export function Header() {
       end: false,
     })?.params ?? {};
 
+  // {
+  //   createPortal(
+  //     <Menu
+  //       opener={'openMenuBtn'}
+  //       open={isNamespaceOpen}
+  //       ref={namespaceMenuRef}
+  //       headerText={`Namespace: ${getNamespaceLabel()}`}
+  //       onItemClick={e =>
+  //         e.detail.item.text === t('namespaces.namespaces-overview')
+  //           ? navigate(clusterUrl(`namespaces`))
+  //           : e.detail.item.text === t('navigation.all-namespaces')
+  //           ? navigate(
+  //               namespaceUrl(resourceType, { namespace: '-all-' }),
+  //             )
+  //           : navigate(
+  //               namespaceUrl(resourceType, {
+  //                 namespace: e.detail.item.text,
+  //               }),
+  //             )
+  //       }
+  //     >
+  //       <NamespaceDropdown />
+  //     </Menu>,
+  //     document.body,
+  //   );
+  // }
+
   return (
     <>
       <ShellBar
@@ -96,33 +125,10 @@ export function Header() {
         onProfileClick={() => setPreferencesOpen(true)}
       >
         <ShellBarItem
-          onClick={onNamespaceMenuClick}
+          onClick={() => setShowAdd(true)}
           icon="add"
-          text="Namespaces"
-          id="openMenuBtn"
+          text="Upload YAML"
         />
-        {createPortal(
-          <Menu
-            opener={'openMenuBtn'}
-            open={isNamespaceOpen}
-            ref={namespaceMenuRef}
-            headerText={`Namespace: ${getNamespaceLabel()}`}
-            onItemClick={e =>
-              e.detail.item.text === t('namespaces.namespaces-overview')
-                ? navigate(clusterUrl(`namespaces`))
-                : e.detail.item.text === t('navigation.all-namespaces')
-                ? navigate(namespaceUrl(resourceType, { namespace: '-all-' }))
-                : navigate(
-                    namespaceUrl(resourceType, {
-                      namespace: e.detail.item.text,
-                    }),
-                  )
-            }
-          >
-            <NamespaceDropdown />
-          </Menu>,
-          document.body,
-        )}
         {isFeedbackEnabled && (
           <ShellBarItem
             onClick={() => window.open(feedbackLink, '_blank')}
