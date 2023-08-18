@@ -1,6 +1,6 @@
 Cypress.Commands.add('inspectList', (resource, resourceName) => {
   const resourceUrl = resource.replace(/\s/g, '').toLowerCase();
-  cy.navigateBackTo(resourceUrl, resourceName);
+  cy.navigateBackTo(resourceUrl, resource);
 
   cy.get('[role="search"] [aria-label="open-search"]').type(resourceName);
 
