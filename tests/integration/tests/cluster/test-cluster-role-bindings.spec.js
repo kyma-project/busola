@@ -30,7 +30,10 @@ context('Test Cluster Role Bindings', () => {
       .clear()
       .type(USER_NAME);
 
-    cy.contains('[role="dialog"] button', 'Create').click();
+    cy.get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
+      .click();
   });
 
   it('Checking details', () => {
@@ -62,7 +65,10 @@ context('Test Cluster Role Bindings', () => {
       .clear()
       .type('test-group');
 
-    cy.contains('[role="dialog"] button', 'Update').click();
+    cy.get('ui5-button.fd-dialog__decisive-button')
+      .contains('Update')
+      .should('be.visible')
+      .click();
   });
 
   it('Checking updates details', () => {

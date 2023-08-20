@@ -31,7 +31,10 @@ context('Test Persistent Volumes', () => {
       cy.pasteToMonaco(PV);
     });
 
-    cy.contains('[role="dialog"] button', 'Create').click();
+    cy.get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
+      .click();
 
     cy.contains('h3', PV_NAME).should('be.visible');
   });

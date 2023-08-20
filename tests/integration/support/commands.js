@@ -113,7 +113,10 @@ Cypress.Commands.add('getTopNav', () => {
 });
 
 Cypress.Commands.add('deleteInDetails', resourceName => {
-  cy.contains('button', 'Delete').click();
+  cy.get('ui5-button')
+    .contains('Delete')
+    .should('be.visible')
+    .click();
 
   cy.get(`[header-text="Delete ${resourceName}"]`)
     .find('[data-testid="delete-confirmation"]', { includeShadowDom: true })

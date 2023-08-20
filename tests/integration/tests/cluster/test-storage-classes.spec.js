@@ -28,7 +28,10 @@ context('Test Storage Classes', () => {
       cy.pasteToMonaco(SC);
     });
 
-    cy.contains('[role="dialog"] button', 'Create').click();
+    cy.get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
+      .click();
   });
 
   it('Checking details', () => {
