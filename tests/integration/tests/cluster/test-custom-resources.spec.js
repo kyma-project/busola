@@ -24,7 +24,7 @@ context('Test Custom Resources', () => {
     });
 
     cy.get('[role="dialog"]')
-      .get('ui5-button.fd-dialog__decisive-button')
+      .get('ui5-button')
       .contains('Create')
       .should('be.visible')
       .click();

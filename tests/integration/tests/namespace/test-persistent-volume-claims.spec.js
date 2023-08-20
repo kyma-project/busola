@@ -51,7 +51,9 @@ context('Test Persistent Volume Claims', () => {
     });
 
     cy.get('[role="dialog"]')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
 
     cy.contains('h3', PVC_NAME).should('be.visible');

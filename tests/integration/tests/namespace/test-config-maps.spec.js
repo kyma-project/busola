@@ -32,7 +32,9 @@ context('Test Config Maps', () => {
       .type(ENTRY_VALUE);
 
     cy.get('[role="dialog"]')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
 
     cy.url().should('match', new RegExp(`/configmaps/${CONFIG_MAP_NAME}$`));
@@ -45,7 +47,10 @@ context('Test Config Maps', () => {
   });
 
   it('Edit the Config Map', () => {
-    cy.contains('Edit').click();
+    cy.get('ui5-button')
+      .contains('Edit')
+      .should('be.visible')
+      .click();
 
     // hide first entry so Cypress doesn't get confuused
     cy.get('[aria-label="expand config-map-key"]').click();
@@ -55,7 +60,9 @@ context('Test Config Maps', () => {
     cy.findMonaco(1).type(ENTRY_VALUE2);
 
     cy.get('[role=dialog]')
-      .contains('button', 'Update')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Update')
+      .should('be.visible')
       .click();
   });
 
@@ -73,14 +80,17 @@ context('Test Config Maps', () => {
       .click();
 
     cy.contains('.fd-table__row', CONFIG_MAP_NAME)
-      .find('button[data-testid="clone"]')
+      .find('ui5-button[data-testid="clone"]')
       .click();
 
     cy.get('[ariaLabel="ConfigMap name"]:visible')
       .type(CLONE_NAME)
       .click();
 
-    cy.contains('button', /^Create$/).click();
+    cy.get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
+      .click();
   });
 
   it('Inspect the clone', () => {

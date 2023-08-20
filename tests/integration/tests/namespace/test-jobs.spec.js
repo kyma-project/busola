@@ -74,7 +74,9 @@ context('Test Jobs', () => {
 
     // create
     cy.get('[role=dialog]')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
   });
 
@@ -119,14 +121,18 @@ context('Test Jobs', () => {
   });
 
   it('Edit Job', () => {
-    cy.contains('Edit').click();
+    cy.get('ui5-button')
+      .contains('Edit')
+      .should('be.visible')
+      .click();
 
     // containers section should be readonly
     cy.contains('After a Job is created, the containers are read-only.');
 
-    cy.contains('Add Container')
-      .filter(':visible', { log: false })
-      .should('be.disabled');
+    cy.get('[role="dialog"]')
+      .get('ui5-button[icon="add"][disabled="true"]')
+      .contains('Add Container')
+      .should('be.visible');
 
     // edit labels
     cy.get('[role=dialog]')
@@ -143,7 +149,10 @@ context('Test Jobs', () => {
       .first()
       .type('b');
 
-    cy.contains('button', 'Update').click();
+    cy.get('ui5-button.fd-dialog__decisive-button')
+      .contains('Update')
+      .should('be.visible')
+      .click();
 
     cy.contains('a=b');
   });
