@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
 import { base64Decode, base64Encode } from 'shared/helpers';
@@ -96,9 +96,8 @@ export function StringRenderer({
               <div className="fd-col fd-col-md--1 generate-button">
                 <Button
                   compact
-                  option="transparent"
-                  glyph={decoded ? 'hide' : 'show'}
-                  iconBeforeText
+                  design="Transparent"
+                  icon={decoded ? 'hide' : 'show'}
                   onClick={() => setDecoded(!decoded)}
                 >
                   {decoded

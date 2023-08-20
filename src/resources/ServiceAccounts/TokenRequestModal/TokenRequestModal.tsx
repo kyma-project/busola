@@ -1,4 +1,5 @@
-import { Button, Dialog, MessageStrip } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { Dialog, MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 import { useGenerateTokenRequest } from './useGenerateTokenRequest';
@@ -139,9 +140,10 @@ export function TokenRequestModal({
             <Button
               onClick={() => downloadKubeconfig(serviceAccountName, token)}
               disabled={token === ''}
-              option="transparent"
+              design="Transparent"
               className="fd-margin-end--tiny"
-              glyph="download"
+              icon="download"
+              iconEnd
             >
               {t('service-accounts.headers.download-kubeconfig')}
             </Button>

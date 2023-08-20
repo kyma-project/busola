@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './CopiableText.scss';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 import copyToCliboard from 'copy-to-clipboard';
 import { useTranslation } from 'react-i18next';
 
@@ -29,8 +29,8 @@ export function CopiableText({
       <Tooltip content={t('common.tooltips.copy-to-clipboard')} position="top">
         <Button
           compact={compact}
-          glyph="copy"
-          option="transparent"
+          icon="copy"
+          design="Transparent"
           className="fd-margin-begin--tiny"
           onClick={() => copyToCliboard(textToCopy)}
           {...buttonProps}
