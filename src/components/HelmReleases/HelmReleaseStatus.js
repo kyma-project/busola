@@ -5,15 +5,15 @@ export function HelmReleaseStatus({ status }) {
   const resolveType = status => {
     switch (status) {
       case 'deployed':
-        return 'positive';
+        return 'Success';
       case 'uninstalling':
-        return 'critical';
+        return 'Error';
       case 'failed':
-        return 'negative';
+        return 'Error';
       case 'unknown':
-        return undefined;
+        return 'None';
       default:
-        return 'informative';
+        return 'Information';
     }
   };
 
