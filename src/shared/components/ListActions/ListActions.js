@@ -26,7 +26,6 @@ const StandaloneAction = ({ action, entry, compact }) => {
       className="list-actions__standalone"
       design="Transparent"
       icon={typeof icon === 'function' ? icon(entry) : icon}
-      iconEnd
       aria-label={action.name}
       compact={compact}
       disabled={action.disabledHandler && action.disabledHandler(entry)}
