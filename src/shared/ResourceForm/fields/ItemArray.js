@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, MessageStrip } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from '..';
@@ -58,11 +59,10 @@ export function ItemArray({
           actions={
             <Button
               compact
-              glyph="delete"
-              type="negative"
+              icon="delete"
+              design="Negative"
               onClick={() => remove(i)}
               disabled={readOnly}
-              option="transparent"
             />
           }
         >
@@ -81,15 +81,14 @@ export function ItemArray({
       title={listTitle}
       actions={setOpen => (
         <Button
-          glyph="add"
+          icon="add"
           compact
           onClick={() => {
             setValues([...values, newResourceTemplateFn()]);
             setOpen(true);
           }}
           disabled={readOnly}
-          option="transparent"
-          iconBeforeText
+          design="Transparent"
         >
           {t('common.buttons.add')} {nameSingular}
         </Button>

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Button } from '@ui5/webcomponents-react';
 import { Icon } from 'fundamental-react';
 import './Pagination.scss';
 import classNames from 'classnames';
@@ -24,14 +25,14 @@ const Link = ({ children, isInteractable, isCurrent, onClick, ...props }) => {
   });
 
   return (
-    <button
+    <Button
       disabled={!isInteractable}
       className={className}
       onClick={onClick}
       {...props}
     >
       {children}
-    </button>
+    </Button>
   );
 };
 

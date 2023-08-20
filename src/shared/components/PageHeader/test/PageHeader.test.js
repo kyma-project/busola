@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from '@ui5/webcomponents-react';
 import { render } from 'testing/reactTestingUtils';
 
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
@@ -14,7 +15,7 @@ describe('PageHeader', () => {
     const { getByLabelText } = render(
       <PageHeader
         title="page title"
-        actions={<button aria-label="abc"></button>}
+        actions={<Button aria-label="abc"></Button>}
       />,
     );
 

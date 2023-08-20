@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
-import { Button, ComboboxInput } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { ComboboxInput } from 'fundamental-react';
 import { isNil } from 'lodash';
 import { languages } from 'monaco-editor';
 import { useTranslation } from 'react-i18next';
@@ -50,12 +51,11 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
 
   const deleteButton = (
     <Button
-      glyph="delete"
+      icon="delete"
       disabled={!item}
       compact
-      type="negative"
+      design="Negative"
       onClick={onDelete}
-      option="transparent"
     />
   );
 

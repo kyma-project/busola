@@ -49,7 +49,6 @@ function NoPermissions() {
           }
         />
         <Button
-          type="Submit"
           design="Emphasized"
           className="update-namespace-button"
           disabled={!namespaceName}

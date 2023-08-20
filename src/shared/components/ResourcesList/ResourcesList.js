@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 import { Link } from 'react-router-dom';
 import { createPatch } from 'rfc6902';
 import { cloneDeep } from 'lodash';
@@ -464,13 +464,12 @@ export function ResourceListRenderer({
   const extraHeaderContent = listHeaderActions || [
     CreateResourceForm && !disableCreate && !isNamespaceAll && (
       <Button
-        glyph="add"
-        option="transparent"
+        icon="add"
+        design="Transparent"
         onClick={() => {
           setActiveResource(undefined);
           setShowEditDialog(true);
         }}
-        iconBeforeText
       >
         {createActionLabel ||
           t('components.resources-list.create', {

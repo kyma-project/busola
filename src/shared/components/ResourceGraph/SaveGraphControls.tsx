@@ -1,5 +1,6 @@
 import { saveAs } from 'file-saver';
-import { Button, Icon } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { Icon } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 export function SaveGraphControls({

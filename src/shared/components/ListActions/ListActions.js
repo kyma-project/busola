@@ -1,5 +1,6 @@
 import React from 'react';
-import { Popover, Menu, Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { Popover, Menu } from 'fundamental-react';
 import './ListActions.scss';
 
 import PropTypes from 'prop-types';
@@ -23,10 +24,9 @@ const StandaloneAction = ({ action, entry, compact }) => {
       data-testid={action.name.replace(' ', '').toLowerCase()}
       onClick={() => action.handler(entry)}
       className="list-actions__standalone"
-      option="transparent"
-      glyph={typeof icon === 'function' ? icon(entry) : icon}
+      design="Transparent"
+      icon={typeof icon === 'function' ? icon(entry) : icon}
       aria-label={action.name}
-      typeAttr="button"
       compact={compact}
       disabled={action.disabledHandler && action.disabledHandler(entry)}
     >
@@ -82,8 +82,8 @@ const ListActions = ({ actions, entry, compact }) => {
           }
           control={
             <Button
-              glyph="vertical-grip"
-              option="transparent"
+              icon="vertical-grip"
+              design="Transparent"
               aria-label="more-actions"
             />
           }

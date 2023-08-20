@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Icon } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { Icon } from 'fundamental-react';
 import ListActions from 'shared/components/ListActions/ListActions';
 import classNames from 'classnames';
 
@@ -127,10 +128,10 @@ const CollapsedRowRenderer = ({
           data-testid={
             isOpen ? 'collapse-button-open' : 'collapse-button-close'
           }
-          option="transparent"
+          design="Transparent"
           onClick={() => setOpen(!isOpen)}
-          compact={true}
-          typeAttr="button"
+          compact
+          c
         >
           <Icon
             className="fd-margin-end--tiny"

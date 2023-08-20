@@ -2,7 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
-import { Button, LayoutPanel } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from '../LayoutPanelRow/LayoutPanelRow';
 import './SecretData.scss';
 import { base64Decode } from 'shared/helpers';
@@ -82,11 +83,10 @@ export default function SecretData({ secret }) {
         <LayoutPanel.Actions>
           {showExpandButton && (
             <Button
-              option="transparent"
-              glyph={isCollapsed ? 'show' : 'hide'}
+              design="Transparent"
+              icon={isCollapsed ? 'show' : 'hide'}
               disabled={!secret?.data}
               onClick={() => setCollapsed(!isCollapsed)}
-              iconBeforeText
             >
               {isCollapsed
                 ? t('secrets.buttons.expand')
@@ -94,13 +94,12 @@ export default function SecretData({ secret }) {
             </Button>
           )}
           <Button
-            option="transparent"
-            glyph={isEncoded ? 'show' : 'hide'}
+            design="Transparent"
+            icon={isEncoded ? 'show' : 'hide'}
             disabled={!secret?.data}
             onClick={() => {
               return isEncoded ? encode() : decode();
             }}
-            iconBeforeText
           >
             {isEncoded
               ? t('secrets.buttons.decode')

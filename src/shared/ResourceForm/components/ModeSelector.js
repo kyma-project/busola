@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, ButtonSegmented } from 'fundamental-react';
+import { SegmentedButton, SegmentedButtonItem } from '@ui5/webcomponents-react';
 import './ModeSelector.scss';
 
 export function ModeSelector({ mode, isEditing, setMode }) {
@@ -30,18 +30,17 @@ export function ModeSelector({ mode, isEditing, setMode }) {
 
   return (
     <div className="mode-selector">
-      <ButtonSegmented>
+      <SegmentedButton className="fd-segmented-button">
         {buttonsToDisplay.map(button => (
-          <Button
-            compact
+          <SegmentedButtonItem
             key={button.mode}
-            selected={mode === button.mode}
+            pressed={mode === button.mode}
             onClick={() => setMode(button.mode)}
           >
             {button.label}
-          </Button>
+          </SegmentedButtonItem>
         ))}
-      </ButtonSegmented>
+      </SegmentedButton>
     </div>
   );
 }
