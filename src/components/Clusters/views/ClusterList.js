@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
-import { Button, MessagePage } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { MessagePage } from 'fundamental-react';
 import { Link } from 'react-router-dom';
 
 import { useClustersInfo } from 'state/utils/getClustersInfo';
@@ -140,21 +141,19 @@ function ClusterList() {
   const extraHeaderContent = (
     <>
       <Button
-        option="transparent"
-        glyph="add"
+        design="Transparent"
+        icon="add"
         className="fd-margin-begin--sm"
         onClick={() => setShowAdd(true)}
-        iconBeforeText
       >
         {t('clusters.add.title')}
       </Button>
       {gardenerLoginFeature.isEnabled && (
         <Button
-          option="transparent"
-          glyph="add"
+          design="Transparent"
+          icon="add"
           className="fd-margin-begin--sm"
           onClick={() => navigate('/gardener-login')}
-          iconBeforeText
         >
           {t('clusters.gardener.button')}
         </Button>
@@ -195,7 +194,7 @@ function ClusterList() {
   );
 
   const gardenerLoginButton = gardenerLoginFeature.isEnabled && (
-    <Button onClick={() => navigate('/gardener-login')} iconBeforeText>
+    <Button onClick={() => navigate('/gardener-login')}>
       {t('clusters.gardener.button')}
     </Button>
   );

@@ -1,4 +1,4 @@
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 import { useRecoilState } from 'recoil';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
@@ -63,11 +63,10 @@ export function ClusterOverviewHeader() {
 
   const actions = (
     <Button
-      glyph="add"
+      icon="add"
       onClick={() => {
         setShowAdd(true);
       }}
-      iconBeforeText
     >
       {t('upload-yaml.title')}
     </Button>

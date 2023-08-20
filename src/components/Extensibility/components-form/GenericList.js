@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { PluginStack, useUIStore } from '@ui-schema/ui-schema';
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm';
@@ -62,9 +62,8 @@ export function GenericList({
       actions={setOpen => (
         <Button
           compact
-          option="transparent"
-          glyph="add"
-          iconBeforeText
+          design="Transparent"
+          icon="add"
           onClick={() => {
             addItem(itemTemplate);
             setOpen(true);
@@ -92,9 +91,8 @@ export function GenericList({
               actions={
                 <Button
                   compact
-                  option="transparent"
-                  glyph="delete"
-                  type="negative"
+                  icon="delete"
+                  design="Negative"
                   onClick={() => removeItem(index)}
                   disabled={readOnly}
                 />
