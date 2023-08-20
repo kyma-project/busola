@@ -136,6 +136,7 @@ export const ModalWithForm = ({
     ) : (
       <Button
         icon={button.icon || null}
+        iconEnd
         aria-label={button.label || null}
         design={button.design}
         compact={button.compact || false}

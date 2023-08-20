@@ -167,6 +167,7 @@ export default function ResourceValidationSettings() {
                     <Button
                       design="Transparent"
                       icon="customize"
+                      iconEnd
                       className="fd-margin-begin--sm"
                       onClick={enablePolicyCustomization}
                     >
@@ -177,6 +178,7 @@ export default function ResourceValidationSettings() {
                     <Button
                       design="Transparent"
                       icon="reset"
+                      iconEnd
                       className="fd-margin-begin--sm"
                       onClick={disablePolicyCustomization}
                     >

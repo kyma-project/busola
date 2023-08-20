@@ -154,6 +154,7 @@ export const ClusterValidation = () => {
           <Button
             className="fd-margin-end--tiny"
             icon="play"
+            iconEnd
             onClick={scan}
             disabled={!!scanProgress || !scanReady}
           >
@@ -162,12 +163,13 @@ export const ClusterValidation = () => {
           <Button
             className="fd-margin-end--tiny"
             icon="settings"
+            iconEnd
             onClick={configure}
             disabled={!!scanProgress || !scanReady}
           >
             {t('cluster-validation.scan.buttons.configure')}
           </Button>
-          <Button icon="reset" onClick={clear} disabled={!scanProgress}>
+          <Button icon="reset" iconEnd onClick={clear} disabled={!scanProgress}>
             {t('cluster-validation.scan.buttons.clear')}
           </Button>
         </LayoutPanel.Actions>

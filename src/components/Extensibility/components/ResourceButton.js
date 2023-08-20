@@ -48,6 +48,7 @@ export function ResourceButton({
   return (
     <Button
       icon={structure.icon}
+      iconEnd
       className="fd-margin-begin--sm"
       onClick={() =>
         navigate(

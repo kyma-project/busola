@@ -54,6 +54,7 @@ export const ExternalLink = ({
     return (
       <Button
         icon="action"
+        iconEnd
         className="fd-margin-begin--sm fd-margin-end--tiny"
         onClick={() => {
           const newWindow = window.open(href, '_blank', 'noopener, noreferrer');

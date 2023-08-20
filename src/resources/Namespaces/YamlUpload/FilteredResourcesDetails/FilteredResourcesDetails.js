@@ -38,6 +38,7 @@ const WarningButton = ({
           ? 'navigation-up-arrow'
           : 'navigation-down-arrow'
       }
+      iconEnd
     >
       <div>
         <p>

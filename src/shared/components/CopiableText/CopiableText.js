@@ -30,6 +30,7 @@ export function CopiableText({
         <Button
           compact={compact}
           icon="copy"
+          iconEnd
           design="Transparent"
           className="fd-margin-begin--tiny"
           onClick={() => copyToCliboard(textToCopy)}

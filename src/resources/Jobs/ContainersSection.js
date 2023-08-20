@@ -49,6 +49,7 @@ export const ContainerSection = ({ readOnly, ...props }) => {
         {t('jobs.create-modal.at-least-one-container-required')}
         <Button
           icon="add"
+          iconEnd
           compact
           disabled={readOnly}
           onClick={() => {
