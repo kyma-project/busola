@@ -1,4 +1,4 @@
-import { MessageStrip } from 'fundamental-react';
+import { MessageStrip } from '@ui5/webcomponents-react';
 import { useFeature } from 'hooks/useFeature';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
@@ -71,11 +71,19 @@ export default function GardenerLogin() {
 
   return (
     <div style={{ marginRight: '260px' }}>
-      <MessageStrip type="information" className="fd-margin-top--sm">
+      <MessageStrip
+        design="Information"
+        hideCloseButton
+        className="fd-margin-top--sm"
+      >
         {report}
       </MessageStrip>
       {error && (
-        <MessageStrip type="error" className="fd-margin-top--sm">
+        <MessageStrip
+          design="Negative"
+          hideCloseButton
+          className="fd-margin-top--sm"
+        >
           {t('clusters.gardener.error', { message: error.message })}
         </MessageStrip>
       )}

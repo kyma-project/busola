@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@ui5/webcomponents-react';
-import { BusyIndicator, MessageStrip } from 'fundamental-react';
+import { Button, MessageStrip } from '@ui5/webcomponents-react';
+import { BusyIndicator } from 'fundamental-react';
 import * as jp from 'jsonpath';
 import { ResourceForm } from 'shared/ResourceForm';
 import { ComboboxArrayInput, TextArrayInput } from 'shared/ResourceForm/fields';
@@ -164,7 +164,8 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
       />
       {loadable && (
         <MessageStrip
-          type="information"
+          design="Information"
+          hideCloseButton
           className="fd-margin-bottom--sm fd-margin-begin--md"
         >
           {t('roles.messages.load-resources')}

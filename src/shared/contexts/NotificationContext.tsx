@@ -1,3 +1,4 @@
+import { MessageStrip } from '@ui5/webcomponents-react';
 import { createContext, useContext, useState } from 'react';
 import {
   ErrorModal,
@@ -64,7 +65,9 @@ export const NotificationProvider = ({
           className="message-toast--wrapper"
           onClick={() => setToastProps(null)}
         >
-          <div className="fd-message-toast">{toastProps.content}</div>
+          <MessageStrip design="Information" hideCloseButton>
+            {toastProps.content}
+          </MessageStrip>
         </div>
       )}
       {errorProps && <ErrorModal {...errorProps} />}

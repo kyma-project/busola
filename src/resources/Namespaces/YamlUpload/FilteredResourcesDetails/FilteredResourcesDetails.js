@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
-import { Button } from '@ui5/webcomponents-react';
-import { MessageStrip } from 'fundamental-react';
+import { Button, MessageStrip } from '@ui5/webcomponents-react';
 import {
   getExtendedValidateResourceState,
   validateResourcesState,
@@ -91,8 +90,9 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
   if (!validationSchema)
     return (
       <MessageStrip
-        type="warning"
-        className="fd-margin-bottom--sm fd-messsage_strip__content"
+        design="Warning"
+        hideCloseButton
+        className="fd-margin-bottom--sm"
       >
         <p> {t('common.headers.loading')}</p>
         <Spinner className="warning-spinner" size="s" center={false} />
@@ -115,7 +115,11 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
                 resource?.metadata?.name
               }-${warning.key ?? i}`}
             >
-              <MessageStrip type="warning" className="fd-margin-top--sm">
+              <MessageStrip
+                design="Warning"
+                hideCloseButton
+                className="fd-margin-top--sm"
+              >
                 {warning.message}
               </MessageStrip>
             </li>

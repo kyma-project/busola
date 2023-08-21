@@ -1,6 +1,5 @@
 import React from 'react';
-import { Button } from '@ui5/webcomponents-react';
-import { MessageStrip } from 'fundamental-react';
+import { Button, MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from '..';
@@ -96,7 +95,9 @@ export function ItemArray({
     >
       {content}
       {atLeastOneRequiredMessage && !values.length && (
-        <MessageStrip type="warning">{atLeastOneRequiredMessage}</MessageStrip>
+        <MessageStrip design="Warning" hideCloseButton>
+          {atLeastOneRequiredMessage}
+        </MessageStrip>
       )}
     </ResourceForm.CollapsibleSection>
   );
