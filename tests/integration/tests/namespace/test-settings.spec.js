@@ -34,8 +34,10 @@ context('Test app settings and preferences', () => {
 
     cy.get('input[ariaLabel="ConfigMap name"]:visible').type(NAME);
 
-    cy.get('[role=dialog]')
-      .contains('button', 'Create')
+    cy.get('[role="dialog"]')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
 
     cy.contains('[aria-label="title"]', NAME).should('be.visible');
@@ -45,7 +47,7 @@ context('Test app settings and preferences', () => {
       .click();
 
     cy.contains('.fd-table__row', NAME)
-      .find('button[data-testid="delete"]')
+      .find('ui5-button[data-testid="delete"]')
       .click();
 
     cy.contains('Are you sure you want to delete').should('not.be.visible');
