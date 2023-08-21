@@ -66,6 +66,7 @@ export function SidebarNavigation() {
               ></SideNavigationItem>
             </SideNavigation>
             <ShellBar
+              style={namespace ? {} : { display: 'none' }}
               // logo={<Icon name="employee" />}
               menuItems={NamespaceDropdown()}
               onMenuItemClick={e =>
