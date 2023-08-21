@@ -33,13 +33,13 @@ context('Test Cluster Overview', () => {
 
     cy.loginAndSelectCluster();
 
-    cy.get('.sap-icon--feedback').should('exist');
+    cy.get('[name="feedback"]', { includeShadowDom: true }).should('exist');
 
     cy.setBusolaFeature('FEEDBACK', false);
 
     cy.loginAndSelectCluster();
 
-    cy.get('.sap-icon--feedback').should('not.exist');
+    cy.get('[name="feedback"]', { includeShadowDom: true }).should('not.exist');
   });
 
   it('Go to Node details', () => {

@@ -72,9 +72,7 @@ context('Test Cluster configuration', () => {
 
     cy.get('[role=row]').should('have.length', 20);
 
-    cy.get('[aria-label="topnav-profile-btn"]').click();
-
-    cy.contains('Preferences').click();
+    cy.get('[title="Profile"]', { includeShadowDom: true }).click();
 
     cy.contains('Other').click();
 

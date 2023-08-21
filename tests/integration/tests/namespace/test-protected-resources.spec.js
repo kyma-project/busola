@@ -110,9 +110,7 @@ context('Test Protected Resources', () => {
   });
 
   it('Change protection setting', () => {
-    cy.get('[aria-label="topnav-profile-btn"]').click();
-
-    cy.contains('Preferences').click();
+    cy.get('[title="Profile"]', { includeShadowDom: true }).click();
 
     cy.contains('Cluster interaction').click();
 
