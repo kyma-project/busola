@@ -92,7 +92,7 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
       <MessageStrip
         design="Warning"
         hideCloseButton
-        className="fd-margin-bottom--sm fd-messsage_strip__content"
+        className="fd-margin-bottom--sm"
       >
         <p> {t('common.headers.loading')}</p>
         <Spinner className="warning-spinner" size="s" center={false} />
