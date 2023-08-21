@@ -85,6 +85,14 @@ export function SidebarNavigation() {
           </>
         }
       >
+        {isSidebarCondensed && (
+          <SideNavigationItem
+            icon={namespace ? 'slim-arrow-left' : 'database'}
+            text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}
+            onClick={() => navigate(clusterUrl(`overview`))}
+            selected={isClusterOverviweSelected()}
+          ></SideNavigationItem>
+        )}
         {topLevelNodes.map(node =>
           node.items?.map(item => <NavItem node={item} />),
         )}
