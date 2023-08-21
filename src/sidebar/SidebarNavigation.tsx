@@ -61,11 +61,7 @@ export function SidebarNavigation() {
               <SideNavigationItem
                 icon={namespace ? 'slim-arrow-left' : 'database'}
                 text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}
-                onClick={() =>
-                  namespace
-                    ? navigate(clusterUrl(`namespaces`))
-                    : navigate(clusterUrl(`overview`))
-                }
+                onClick={() => navigate(clusterUrl(`overview`))}
                 selected={isClusterOverviweSelected()}
               ></SideNavigationItem>
             </SideNavigation>
