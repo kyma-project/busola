@@ -95,7 +95,6 @@ export function StringRenderer({
             {decodable && (
               <div className="fd-col fd-col-md--1 generate-button">
                 <Button
-                  compact
                   design="Transparent"
                   icon={decoded ? 'hide' : 'show'}
                   onClick={() => setDecoded(!decoded)}

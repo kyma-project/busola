@@ -139,7 +139,6 @@ export const ModalWithForm = ({
         iconEnd
         aria-label={button.label || null}
         design={button.design}
-        compact={button.compact || false}
         disabled={!!button.disabled}
         onClick={() => setOpenStatus(true)}
       >

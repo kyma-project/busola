@@ -62,7 +62,6 @@ export function K8sNameField({
             <div className="fd-col fd-col-md--1 generate-button">
               <Tooltip content={t('common.tooltips.generate-name')}>
                 <Button
-                  compact
                   design="Transparent"
                   onClick={generateName}
                   ariaLabel="Generate name button"

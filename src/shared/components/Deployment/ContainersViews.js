@@ -95,7 +95,6 @@ export function AdvancedContainersView({
         actions={setOpen => (
           <Button
             icon="add"
-            compact
             onClick={() => {
               const path = '$.spec.template.spec.containers';
               const nextContainers = [

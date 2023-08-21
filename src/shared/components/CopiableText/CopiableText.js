@@ -11,7 +11,6 @@ CopiableText.propTypes = {
   buttonText: PropTypes.string,
   children: PropTypes.node,
   iconOnly: PropTypes.bool,
-  compact: PropTypes.bool,
 };
 
 export function CopiableText({
@@ -19,7 +18,6 @@ export function CopiableText({
   buttonText,
   children,
   iconOnly,
-  compact,
   ...buttonProps
 }) {
   const { t } = useTranslation();
@@ -28,7 +26,6 @@ export function CopiableText({
       {!iconOnly ? children || textToCopy : null}
       <Tooltip content={t('common.tooltips.copy-to-clipboard')} position="top">
         <Button
-          compact={compact}
           icon="copy"
           iconEnd
           design="Transparent"

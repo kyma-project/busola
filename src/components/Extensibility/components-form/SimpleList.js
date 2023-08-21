@@ -124,7 +124,6 @@ export function SimpleList({
                           storeKeys={ownKeys}
                           level={level + 1}
                           schemaKeys={schemaKeys?.push('items')}
-                          compact
                           placeholder={tExt(schemaPlaceholder)}
                           inputInfo={inputInfo}
                         />
@@ -134,7 +133,6 @@ export function SimpleList({
                           {!isLast(index) && (
                             <Button
                               disabled={readOnly}
-                              compact
                               icon="delete"
                               design="Negative"
                               onClick={() => removeItem(index)}

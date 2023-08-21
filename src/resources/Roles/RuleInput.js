@@ -122,12 +122,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         defaultOpen
         nestingLevel={2}
         actions={
-          <Button
-            compact
-            icon="add"
-            onClick={addAllApiGroups}
-            design="Transparent"
-          >
+          <Button icon="add" onClick={addAllApiGroups} design="Transparent">
             {t('common.buttons.add-all')}
           </Button>
         }
@@ -146,7 +141,6 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
           ) : (
             <Tooltip content={t('roles.tooltips.load')}>
               <Button
-                compact
                 design="Transparent"
                 onClick={fetchResources}
                 disabled={!loadable}
@@ -159,7 +153,6 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         }
         actions={[
           <Button
-            compact
             icon="add"
             design="Transparent"
             onClick={addAllResources}
@@ -185,7 +178,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         defaultOpen
         nestingLevel={2}
         actions={[
-          <Button compact icon="add" onClick={addAllVerbs} design="Transparent">
+          <Button icon="add" onClick={addAllVerbs} design="Transparent">
             {t('common.buttons.add-all')}
           </Button>,
         ]}

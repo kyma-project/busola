@@ -197,7 +197,6 @@ export function MultiInput({
                   {!isLast(index) && (
                     <Button
                       disabled={readOnly}
-                      compact
                       className={classnames({
                         hidden: isEntryLocked(entry),
                       })}

@@ -53,7 +53,6 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
     <Button
       icon="delete"
       disabled={!item}
-      compact
       design="Negative"
       onClick={onDelete}
     />

@@ -341,7 +341,7 @@ export function ResourceListRenderer({
             />
           ),
           actions: (closeModal, defaultCloseButton) => [
-            <Button compact onClick={makeForceUpdateFn(closeModal)}>
+            <Button onClick={makeForceUpdateFn(closeModal)}>
               {t('common.create-form.force-update')}
             </Button>,
             defaultCloseButton(closeModal),

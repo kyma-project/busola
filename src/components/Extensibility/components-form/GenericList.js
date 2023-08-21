@@ -61,7 +61,6 @@ export function GenericList({
       required={required}
       actions={setOpen => (
         <Button
-          compact
           design="Transparent"
           icon="add"
           onClick={() => {
@@ -90,7 +89,6 @@ export function GenericList({
               nestingLevel={nestingLevel + 1}
               actions={
                 <Button
-                  compact
                   icon="delete"
                   design="Negative"
                   onClick={() => removeItem(index)}

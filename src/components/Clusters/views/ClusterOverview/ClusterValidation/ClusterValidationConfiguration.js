@@ -32,19 +32,13 @@ const ListActions = ({ options, setSelected }) => {
   return (
     <>
       <Button
-        compact
         icon="add"
         onClick={() => setSelected(options.map(({ key }) => key))}
         design="Transparent"
       >
         {t('common.buttons.add-all')}
       </Button>
-      <Button
-        compact
-        icon="less"
-        onClick={() => setSelected([])}
-        desgin="Transparent"
-      >
+      <Button icon="less" onClick={() => setSelected([])} desgin="Transparent">
         {t('common.buttons.remove-all')}
       </Button>
     </>

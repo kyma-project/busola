@@ -50,7 +50,6 @@ export const ContainerSection = ({ readOnly, ...props }) => {
         <Button
           icon="add"
           iconEnd
-          compact
           disabled={readOnly}
           onClick={() => {
             jp.value(value, '$[0]', createContainerTemplate());

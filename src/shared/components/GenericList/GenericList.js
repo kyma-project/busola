@@ -202,7 +202,6 @@ export const GenericList = ({
         entry={e}
         actions={actions}
         rowRenderer={rowRenderer}
-        compact={compact}
         isBeingEdited={
           currentlyEditedResourceUID &&
           e?.metadata?.uid === currentlyEditedResourceUID

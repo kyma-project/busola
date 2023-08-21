@@ -73,7 +73,6 @@ const DefaultRowRenderer = ({
   entry,
   actions,
   rowRenderer,
-  compact,
   isBeingEdited = false,
 }) => {
   const cells = rowRenderer.map((cell, id) => {
@@ -94,7 +93,7 @@ const DefaultRowRenderer = ({
   });
   const actionsCell = (
     <td className="fd-table__cell">
-      <ListActions actions={actions} entry={entry} compact={compact} />
+      <ListActions actions={actions} entry={entry} />
     </td>
   );
   return (
@@ -130,8 +129,6 @@ const CollapsedRowRenderer = ({
           }
           design="Transparent"
           onClick={() => setOpen(!isOpen)}
-          compact
-          c
         >
           <Icon
             className="fd-margin-end--tiny"

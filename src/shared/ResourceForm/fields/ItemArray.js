@@ -58,7 +58,6 @@ export function ItemArray({
           }
           actions={
             <Button
-              compact
               icon="delete"
               design="Negative"
               onClick={() => remove(i)}
@@ -82,7 +81,6 @@ export function ItemArray({
       actions={setOpen => (
         <Button
           icon="add"
-          compact
           onClick={() => {
             setValues([...values, newResourceTemplateFn()]);
             setOpen(true);

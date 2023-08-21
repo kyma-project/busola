@@ -59,7 +59,6 @@ export function KeyValueField({
     actions = [
       ...actions,
       <Button
-        compact
         design="Transparent"
         icon={valuesEncoded ? 'show' : 'hide'}
         onClick={toggleEncoding}
@@ -139,7 +138,6 @@ export function KeyValueField({
             {readableFromFile ? (
               <Tooltip content={t('common.tooltips.read-file')}>
                 <Button
-                  compact
                   className="read-from-file"
                   onClick={() =>
                     readFromFile()?.then(result => {

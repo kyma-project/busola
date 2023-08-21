@@ -89,7 +89,6 @@ export function Containers({ value: containers, setValue: setContainers }) {
         <Button
           icon="delete"
           design="Negative"
-          compact
           onClick={() => removeContainer(i)}
         />
       }
