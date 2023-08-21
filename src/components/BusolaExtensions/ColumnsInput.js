@@ -1,13 +1,14 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { FormInput, Checkbox, MessageStrip } from 'fundamental-react';
+import { MessageStrip } from '@ui5/webcomponents-react';
+import { FormInput, Checkbox } from 'fundamental-react';
 
 export function ColumnsInput({ value: columns, setValue: setColumns }) {
   const { t } = useTranslation();
 
   if (!columns?.length) {
     return (
-      <MessageStrip type="warning">
+      <MessageStrip design="Warning" hideCloseButton>
         {t('extensibility.starter-modal.messages.no-columns')}
       </MessageStrip>
     );

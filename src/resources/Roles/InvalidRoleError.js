@@ -1,5 +1,5 @@
-import { MessageStrip } from 'fundamental-react';
 import React from 'react';
+import { MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { isRuleInvalid } from './helpers';
 
@@ -8,7 +8,11 @@ export function InvalidRoleError({ rule }) {
 
   return (
     isRuleInvalid(rule) && (
-      <MessageStrip type="warning" className="fd-margin-top--sm">
+      <MessageStrip
+        design="Warning"
+        hideCloseButton
+        className="fd-margin-top--sm"
+      >
         {t('roles.messages.invalid')}
       </MessageStrip>
     )

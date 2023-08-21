@@ -12,7 +12,7 @@ import { createServiceAccountTemplate } from './templates';
 import { validateServiceAccount } from './helpers';
 import { useNavigate } from 'react-router-dom';
 import { useUrl } from 'hooks/useUrl';
-import { MessageStrip } from 'fundamental-react';
+import { MessageStrip } from '@ui5/webcomponents-react';
 
 const createDefaultSecret = serviceAccountName => {
   return {
@@ -160,7 +160,7 @@ export const ServiceAccountCreate = ({
         }
       />
       {shouldCreateSecret && (
-        <MessageStrip type="warning">
+        <MessageStrip design="Warning" hideCloseButton>
           {t('service-accounts.associated-secret.warning')}
         </MessageStrip>
       )}
