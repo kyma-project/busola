@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { MessageStrip, Select } from 'fundamental-react';
+import { MessageStrip } from '@ui5/webcomponents-react';
+import { Select } from 'fundamental-react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 
@@ -41,7 +42,8 @@ export function ContextChooser(params) {
       />
       {kubeconfig['current-context'] === '-all-' && (
         <MessageStrip
-          type="information"
+          design="Information"
+          hideCloseButton
           className="fd-margin-top--sm fd-margin-bottom--sm"
         >
           {t('clusters.wizard.multi-context-info', {

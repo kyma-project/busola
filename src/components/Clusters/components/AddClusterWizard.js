@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { MessageStrip, Wizard } from 'fundamental-react';
+import { MessageStrip } from '@ui5/webcomponents-react';
+import { Wizard } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -134,7 +135,8 @@ export function AddClusterWizard({
       >
         <p>{t('clusters.wizard.intro')}</p>
         <MessageStrip
-          type="information"
+          design="Information"
+          hideCloseButton
           className="add-cluster__kubeconfig-info fd-margin-top--sm fd-margin-bottom--sm"
         >
           {t('clusters.wizard.storage-info')}

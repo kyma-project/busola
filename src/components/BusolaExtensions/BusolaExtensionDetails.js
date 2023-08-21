@@ -2,7 +2,8 @@ import React from 'react';
 import { Link } from 'shared/components/Link/Link';
 import { Trans, useTranslation } from 'react-i18next';
 import { createPatch } from 'rfc6902';
-import { LayoutPanel, MessageStrip, Button } from 'fundamental-react';
+import { MessageStrip } from '@ui5/webcomponents-react';
+import { LayoutPanel, Button } from 'fundamental-react';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
@@ -144,19 +145,31 @@ export function BusolaExtensionDetails(props) {
         return null;
       } else if (isSupportedVersion) {
         return (
-          <MessageStrip type="information" className="fd-margin-bottom--sm">
+          <MessageStrip
+            design="Information"
+            hideCloseButton
+            className="fd-margin-bottom--sm"
+          >
             {t('extensibility.message.old-version')}
           </MessageStrip>
         );
       } else if (hasMigrationFunction) {
         return (
-          <MessageStrip type="error" className="fd-margin-bottom--sm">
+          <MessageStrip
+            design="Negative"
+            hideCloseButton
+            className="fd-margin-bottom--sm"
+          >
             {t('extensibility.message.unsupported-version')}
           </MessageStrip>
         );
       } else {
         return (
-          <MessageStrip type="error" className="fd-margin-bottom--sm">
+          <MessageStrip
+            design="Negative"
+            hideCloseButton
+            className="fd-margin-bottom--sm"
+          >
             <Trans i18nKey="extensibility.message.unnown-version">
               <Link
                 className="fd-link"

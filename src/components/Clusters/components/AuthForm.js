@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MessageStrip, Switch } from 'fundamental-react';
+import { MessageStrip } from '@ui5/webcomponents-react';
+import { Switch } from 'fundamental-react';
 import * as jp from 'jsonpath';
 import { createLoginCommand, tryParseOIDCparams } from './oidc-params';
 
@@ -115,7 +116,8 @@ export function AuthForm({
       {...props}
     >
       <MessageStrip
-        type="warning"
+        design="Warning"
+        hideCloseButton
         className="fd-margin-top--sm fd-margin-bottom--sm"
       >
         {t('clusters.wizard.incomplete', {
@@ -128,7 +130,8 @@ export function AuthForm({
       {!useOidc && <TokenForm />}
       {!useOidc && (
         <MessageStrip
-          type="information"
+          design="Information"
+          hideCloseButton
           className="fd-margin-top--sm fd-margin-bottom--sm"
         >
           {t('clusters.wizard.token-info')}

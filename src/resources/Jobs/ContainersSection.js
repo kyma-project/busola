@@ -1,12 +1,12 @@
 import React from 'react';
 import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
-import { Button, MessageStrip } from 'fundamental-react';
+import { MessageStrip } from '@ui5/webcomponents-react';
+import { Button } from 'fundamental-react';
 
 import { ItemArray } from 'shared/ResourceForm/fields';
 import { createContainerTemplate } from './templates';
 import { SingleContainerForm, SingleContainerInput } from './Containers';
-import './ContainersSection.scss';
 
 export const ContainersSection = ({ readOnly, ...props }) => {
   const { t } = useTranslation();
@@ -44,7 +44,11 @@ export const ContainerSection = ({ readOnly, ...props }) => {
     <SingleContainerInput simple readOnly={readOnly} {...props} />
   ) : (
     <div className="job-container__message">
-      <MessageStrip type="warning" className="fd-margin-top--sm">
+      <MessageStrip
+        design="Warning"
+        hideCloseButton
+        className="fd-margin-top--sm"
+      >
         {t('jobs.create-modal.at-least-one-container-required')}
         <Button
           glyph="add"
