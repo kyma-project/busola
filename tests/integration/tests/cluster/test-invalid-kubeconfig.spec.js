@@ -12,7 +12,9 @@ context('Test invalid kubeconfig', () => {
     cy.pasteToMonaco('wrong_kubeconfig');
 
     // trigger blur on editor
-    cy.contains('Cancel').focus();
+    cy.get('button.fd-button--transparent.fd-button--compact')
+      .should('contain.text', 'Cancel')
+      .focus();
 
     cy.get('.fd-message-strip--error').shouldHaveTrimmedText(
       'Parse error: kubeconfig is not an object, previous valid input will be used',
