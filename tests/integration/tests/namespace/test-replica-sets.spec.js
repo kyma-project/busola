@@ -39,7 +39,9 @@ context('Test Replica Sets', () => {
       .should('have.value', DOCKER_IMAGE_TAG);
 
     cy.get('[role="document"]')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
   });
 
@@ -79,7 +81,9 @@ context('Test Replica Sets', () => {
       .should('have.value', EDITED_REPLICAS_AMOUNT);
 
     cy.get('[role="document"]')
-      .contains('button', 'Update')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Update')
+      .should('be.visible')
       .click();
   });
 
