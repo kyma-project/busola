@@ -43,6 +43,13 @@ export function SidebarNavigation() {
   const topLevelNodes = filteredNavigationNodes?.filter(nn => nn.topLevelNode);
   const categoryNodes = filteredNavigationNodes?.filter(nn => !nn.topLevelNode);
 
+  const isClusterOverviweSelected = () => {
+    const { pathname } = window.location;
+    if (pathname.includes('overview') && !pathname.includes('namespaces'))
+      return true;
+    else return false;
+  };
+
   return (
     <>
       <SideNavigation
@@ -59,6 +66,7 @@ export function SidebarNavigation() {
                     ? navigate(clusterUrl(`namespaces`))
                     : navigate(clusterUrl(`overview`))
                 }
+                selected={isClusterOverviweSelected()}
               ></SideNavigationItem>
             </SideNavigation>
             <ShellBar
