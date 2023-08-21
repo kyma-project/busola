@@ -58,7 +58,7 @@ context('Test Cluster configuration', () => {
 
     // custom storage type should be set
     cy.getLeftNav()
-      .contains('Cluster Details', { includeShadowDom: true })
+      .contains('Cluster Details')
       .click();
 
     // Uncomment after resolving https://github.com/kyma-project/busola/issues/2511
@@ -72,7 +72,7 @@ context('Test Cluster configuration', () => {
 
     cy.get('[role=row]').should('have.length', 20);
 
-    cy.get('[title="Profile"]', { includeShadowDom: true }).click();
+    cy.get('[title="Profile"]').click();
 
     cy.contains('Other').click();
 

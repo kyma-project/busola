@@ -9,7 +9,7 @@ context('Test app settings and preferences', () => {
   });
 
   it('Deletes without confirmation', () => {
-    cy.get('[title="Profile"]', { includeShadowDom: true }).click();
+    cy.get('[title="Profile"]').click();
 
     cy.contains('Cluster interaction').click();
 
@@ -39,7 +39,7 @@ context('Test app settings and preferences', () => {
     cy.contains('[aria-label="title"]', NAME).should('be.visible');
 
     cy.getLeftNav()
-      .contains('Config Maps', { includeShadowDom: true })
+      .contains('Config Maps')
       .click();
 
     cy.contains('.fd-table__row', NAME)
@@ -49,7 +49,7 @@ context('Test app settings and preferences', () => {
     cy.contains('Are you sure you want to delete').should('not.be.visible');
 
     // disable "deletion without confirmation" to not mess other tests
-    cy.get('[title="Profile"]', { includeShadowDom: true }).click();
+    cy.get('[title="Profile"]').click();
 
     cy.contains('Cluster interaction').click();
 
@@ -61,7 +61,7 @@ context('Test app settings and preferences', () => {
   });
 
   it('Changes application theme', () => {
-    cy.get('[title="Profile"]', { includeShadowDom: true }).click();
+    cy.get('[title="Profile"]').click();
 
     cy.contains('High-Contrast Black').click();
 
@@ -77,7 +77,7 @@ context('Test app settings and preferences', () => {
   });
 
   it('Shows hidden namespaces', () => {
-    cy.get('[title="Profile"]', { includeShadowDom: true }).click();
+    cy.get('[title="Profile"]').click();
 
     cy.contains('Cluster interaction').click();
 
@@ -95,15 +95,15 @@ context('Test app settings and preferences', () => {
     cy.contains('Close').click();
 
     cy.getLeftNav()
-      .contains('Back To Cluster Details', { includeShadowDom: true })
+      .contains('Back To Cluster Details')
       .click();
 
     cy.getLeftNav()
-      .contains('Namespaces', { includeShadowDom: true })
+      .contains('Namespaces')
       .click();
 
     cy.contains('a', /^kube-system/).should('not.exist');
 
-    cy.contains(Cypress.env('NAMESPACE_NAME')).click();
+    cy.goToNamespaceDetails();
   });
 });
