@@ -50,7 +50,7 @@ export function SidebarNavigation() {
         onSelectionChange={e => e.preventDefault()}
         header={
           <>
-            <SideNavigation>
+            <SideNavigation style={{ height: 'auto' }}>
               <SideNavigationItem
                 icon={namespace ? 'slim-arrow-left' : 'database'}
                 text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}
