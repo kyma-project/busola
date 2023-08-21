@@ -144,7 +144,7 @@ context('Test resource validation', () => {
       .should('be.visible')
       .click();
 
-    cy.get('[role=alert]').contains(
+    cy.get('ui5-message-strip[design="Warning"]').contains(
       'Incorrect or missing values for `capabilities.drop` - must contain ALL',
     );
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessageStrip } from 'fundamental-react';
+import { MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
@@ -85,16 +85,16 @@ export function Editor({
       <div ref={divRef} className="resource-form__editor" />
       <div className="resource-form__legend">
         {error && (
-          <MessageStrip type="error" className="fd-margin--sm break-word">
+          <MessageStrip
+            design="Negative"
+            hideCloseButton
+            className="fd-margin--sm break-word"
+          >
             {t('common.create-form.editor-error', { error })}
           </MessageStrip>
         )}
         {schemaError && (
-          <MessageStrip
-            type="warning"
-            className="fd-margin--sm break-word"
-            dismissible
-          >
+          <MessageStrip design="Warning" className="fd-margin--sm break-word">
             {t('common.create-form.autocomplete-unavailable-error', {
               error: schemaError.error || schemaError.message || schemaError,
             })}
@@ -102,7 +102,11 @@ export function Editor({
         )}
         {warnings.length ? (
           <div>
-            <MessageStrip type="warning" className="fd-margin--sm break-word">
+            <MessageStrip
+              design="Warning"
+              hideCloseButton
+              className="fd-margin--sm break-word"
+            >
               {warnings.map(m => (
                 <span
                   className="line"
