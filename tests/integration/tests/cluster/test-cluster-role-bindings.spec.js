@@ -34,7 +34,7 @@ context('Test Cluster Role Bindings', () => {
   });
 
   it('Checking details', () => {
-    cy.contains(CRB_NAME).should('be.visible');
+    cy.contains(CRB_NAME, { includeShadowDom: false }).should('be.visible');
 
     cy.contains('User').should('be.visible');
 
