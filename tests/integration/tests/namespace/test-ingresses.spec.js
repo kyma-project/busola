@@ -45,7 +45,7 @@ context('Test Ingresses', () => {
   });
 
   it('Check Ingress details', () => {
-    cy.contains(NAME).should('be.visible');
+    cy.contains(NAME, { includeShadowDom: false }).should('be.visible');
 
     cy.get('#content-wrap')
       .contains(/rules/i)
