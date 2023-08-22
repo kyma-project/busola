@@ -96,6 +96,7 @@ context('Test reduced permissions', () => {
     cy.get('[role=dialog]')
       .contains('User')
       .click();
+
     cy.get('[role=list]')
       .contains('ServiceAccount')
       .click();
@@ -137,9 +138,11 @@ context('Test reduced permissions', () => {
     cy.contains(SA_NAME).click();
 
     cy.contains('Generate TokenRequest').click();
+
     cy.contains('Download Kubeconfig').click();
 
     cy.contains('Close').click();
+
     cy.wait(200);
 
     cy.task('listDownloads', Cypress.config('downloadsFolder')).then(
