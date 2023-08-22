@@ -201,8 +201,6 @@ context('Test reduced permissions', () => {
   });
 
   it('Cleanup', () => {
-    cy.get('[aria-controls="fd-shellbar-product-popover"]').click();
-
     cy.loginAndSelectCluster({ disableClear: true });
 
     // delete binding
@@ -220,9 +218,7 @@ context('Test reduced permissions', () => {
     cy.deleteFromGenericList(CR_NAME);
 
     // remove cluster
-    cy.get('[aria-controls="fd-shellbar-product-popover"]').click();
-
-    cy.contains('Clusters Overview').click();
+    cy.changeCluster('all-clusters');
 
     cy.deleteFromGenericList(SA_NAME, true, false, false);
 
