@@ -41,9 +41,13 @@ export function Header() {
 
   const clustersList = [
     ...inactiveClusterNames.map((name, index) => {
-      return <StandardListItem data-key={index}>{name}</StandardListItem>;
+      return (
+        <StandardListItem aria-label={name} data-key={index}>
+          {name}
+        </StandardListItem>
+      );
     }),
-    <StandardListItem>
+    <StandardListItem aria-label="all-clusters">
       {t('clusters.overview.title-all-clusters')}
     </StandardListItem>,
   ];
