@@ -55,7 +55,7 @@ context('Test Replica Sets', () => {
 
   it('Checks the list view', () => {
     cy.getLeftNav()
-      .contains('Replica Sets', { includeShadowDom: true })
+      .contains('Replica Sets')
       .click();
 
     cy.contains(REPLICA_SET_NAME).click();

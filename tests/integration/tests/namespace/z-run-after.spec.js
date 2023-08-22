@@ -9,7 +9,7 @@ context('Clean up Namespace', () => {
   });
   it('Delete the Namespace (step 1)', () => {
     cy.getLeftNav()
-      .contains('Namespaces', { includeShadowDom: true })
+      .contains('Namespaces')
       .click();
 
     cy.get('[role="search"] [aria-label="search-input"]').type(
@@ -22,7 +22,7 @@ context('Clean up Namespace', () => {
     cy.get('tbody tr [aria-label="Delete"]').click({ force: true });
 
     cy.get(`[header-text="Delete ${Cypress.env('NAMESPACE_NAME')}"]`)
-      .find('[data-testid="delete-confirmation"]', { includeShadowDom: true })
+      .find('[data-testid="delete-confirmation"]')
       .click();
   });
 

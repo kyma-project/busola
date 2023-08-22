@@ -10,7 +10,7 @@ context('Test Cluster Overview', () => {
 
   it('Check Cluster Overview details', () => {
     cy.getLeftNav()
-      .contains('Cluster Details', { includeShadowDom: true })
+      .contains('Cluster Details')
       .click();
 
     cy.contains('h3', 'Cluster Details').should('be.visible');

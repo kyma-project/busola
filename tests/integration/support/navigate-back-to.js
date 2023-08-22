@@ -4,9 +4,7 @@ Cypress.Commands.add('navigateBackTo', (resourceUrl, resourceName) => {
       includeShadowDom: true,
     })
     .should('contain.text', resourceName)
-    .find(`a[href*=${resourceUrl}]`, {
-      includeShadowDom: true,
-    })
+    .find(`a[href*=${resourceUrl}]`)
     .should('be.visible')
     .click({ force: true });
 });
