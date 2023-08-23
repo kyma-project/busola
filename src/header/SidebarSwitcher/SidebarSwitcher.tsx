@@ -4,11 +4,11 @@ import { isSidebarCondensedState } from 'state/preferences/isSidebarCondensedAto
 
 import './SidebarSwitcher.scss';
 
-export function SidebarSwitcher() {
+export function SidebarSwitcher(props: any) {
   const setSidebarCondensed = useSetRecoilState(isSidebarCondensedState);
 
   return (
-    <div className="sidebar-switcher-wrapper">
+    <div slot={props.slot} className="sidebar-switcher-wrapper">
       <Button
         onClick={() => setSidebarCondensed(prevState => !prevState)}
         glyph="menu2"

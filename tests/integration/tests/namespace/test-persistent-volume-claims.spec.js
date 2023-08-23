@@ -64,7 +64,11 @@ context('Test Persistent Volume Claims', () => {
 
     cy.contains(VOLUME_MODE_VALUE).should('be.visible');
 
-    cy.contains(Cypress.env('STORAGE_CLASS_NAME')).should('be.visible');
+    cy.get('.fd-layout-panel')
+      .contains(Cypress.env('STORAGE_CLASS_NAME'), {
+        includeShadowDom: false,
+      })
+      .should('be.visible');
 
     cy.contains('Events').should('be.visible');
   });
