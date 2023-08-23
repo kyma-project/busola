@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { LayoutPanel, Breadcrumb } from 'fundamental-react';
-import { Link } from 'react-router-dom';
+import { Breadcrumbs, BreadcrumbsItem } from '@ui5/webcomponents-react';
+import { LayoutPanel } from 'fundamental-react';
 
 import './PageHeader.scss';
 
@@ -31,15 +31,19 @@ export const PageHeader = ({
       <section className="header-wrapper">
         {breadcrumbItems.length ? (
           <section>
-            <Breadcrumb>
+            <Breadcrumbs design="NoCurrentPage">
               {breadcrumbItems.map(item => {
                 return (
-                  <Breadcrumb.Item aria-label="breadcrumb-item" key={item.name}>
-                    <Link to={item.url}>{item.name}</Link>
-                  </Breadcrumb.Item>
+                  <BreadcrumbsItem
+                    aria-label="breadcrumb-item"
+                    key={item.name}
+                    href={item.url}
+                  >
+                    {item.name}
+                  </BreadcrumbsItem>
                 );
               })}
-            </Breadcrumb>
+            </Breadcrumbs>
           </section>
         ) : null}
 

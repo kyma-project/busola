@@ -25,7 +25,7 @@ context('Test resource upload', () => {
 
   it('Creates resources', () => {
     cy.getLeftNav()
-      .contains('Cluster Details', { includeShadowDom: true })
+      .contains('Cluster Details')
       .click();
 
     cy.contains('Upload YAML').click();
@@ -102,7 +102,7 @@ context('Test resource upload', () => {
     cy.get('tbody tr [aria-label="Delete"]').click({ force: true });
 
     cy.get(`[header-text="Delete ${SC_NAME}"]`)
-      .find('[data-testid="delete-confirmation"]', { includeShadowDom: true })
+      .find('[data-testid="delete-confirmation"]')
       .click();
   });
 });

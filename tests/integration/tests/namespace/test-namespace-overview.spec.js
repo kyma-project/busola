@@ -55,7 +55,7 @@ context(
         .click();
 
       cy.get(`[header-text="Delete ${LIMIT_NAME}"]`)
-        .find('[data-testid="delete-confirmation"]', { includeShadowDom: true })
+        .find('[data-testid="delete-confirmation"]')
         .click();
 
       cy.contains('.fd-table__row', NEW_LIMIT_NAME)
@@ -63,14 +63,14 @@ context(
         .click();
 
       cy.get(`[header-text="Delete ${NEW_LIMIT_NAME}"]`)
-        .find('[data-testid="delete-confirmation"]', { includeShadowDom: true })
+        .find('[data-testid="delete-confirmation"]')
         .click();
 
       cy.contains('.fd-table__row', QUOTA_NAME)
         .find('button[data-testid="delete"]')
         .click();
       cy.get(`[header-text="Delete ${QUOTA_NAME}"]`)
-        .find('[data-testid="delete-confirmation"]', { includeShadowDom: true })
+        .find('[data-testid="delete-confirmation"]')
         .click();
     });
 

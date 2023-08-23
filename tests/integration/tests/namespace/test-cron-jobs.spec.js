@@ -66,9 +66,9 @@ context('Test Cron Jobs', () => {
   });
 
   it('Checking details', () => {
-    cy.contains(CRON_JOB_NAME).click();
-
-    cy.contains(CRON_JOB_NAME).should('be.visible');
+    cy.contains(CRON_JOB_NAME, { includeShadowDom: false }).should(
+      'be.visible',
+    );
 
     cy.contains('0 0 1 * *').should('be.visible');
   });
@@ -114,7 +114,9 @@ context('Test Cron Jobs', () => {
   });
 
   it('Checking updates details', () => {
-    cy.contains(CRON_JOB_NAME).should('be.visible');
+    cy.get('h3.fd-title')
+      .contains(CRON_JOB_NAME)
+      .should('be.visible');
 
     cy.contains('0 * * * *').should('be.visible');
   });
