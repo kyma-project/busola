@@ -14,10 +14,7 @@ function checkJobLogs({ showLogsSelector, expectedLogs }) {
 
   cy.contains(expectedLogs);
 
-  // back to pod details
-  cy.get('[role=menu]')
-    .contains(JOB_NAME)
-    .click();
+  cy.navigateBackTo(JOB_NAME, JOB_NAME);
 }
 
 context('Test Jobs', () => {
@@ -97,7 +94,7 @@ context('Test Jobs', () => {
     cy.contains(`Job (${JOB_NAME})`);
 
     // status
-    cy.get('[role="status"]', { timeout: 50 * 1000 })
+    cy.get('[role="status"]', { timeout: 60 * 1000 })
       .first()
       .should('have.text', 'Completed');
 
@@ -158,6 +155,6 @@ context('Test Jobs', () => {
   });
 
   it('Inspect list', () => {
-    cy.inspectList(/^Jobs/, JOB_NAME);
+    cy.inspectList('Jobs', JOB_NAME);
   });
 });

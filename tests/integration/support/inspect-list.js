@@ -1,5 +1,6 @@
 Cypress.Commands.add('inspectList', (resource, resourceName) => {
-  cy.contains('[aria-label="breadcrumb-item"]', resource).click();
+  const resourceUrl = resource.replace(/\s/g, '').toLowerCase();
+  cy.navigateBackTo(resourceUrl, resource);
 
   cy.get('ui5-button[aria-label="open-search"]')
     .click()

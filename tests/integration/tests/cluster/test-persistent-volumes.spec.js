@@ -46,7 +46,7 @@ context('Test Persistent Volumes', () => {
   });
 
   it('Check PV list and delete', () => {
-    cy.contains('a', 'Persistent Volumes').click();
+    cy.navigateBackTo('persistentvolumes', 'Persistent Volumes');
 
     cy.deleteFromGenericList(PV_NAME);
   });

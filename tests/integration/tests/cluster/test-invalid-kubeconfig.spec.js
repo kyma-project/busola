@@ -14,6 +14,7 @@ context('Test invalid kubeconfig', () => {
     // trigger blur on editor
     cy.get('button.fd-button--transparent.fd-button--compact')
       .should('contain.text', 'Cancel')
+      .should('be.visible')
       .focus();
 
     cy.get('ui5-message-strip[design="Negative"]').shouldHaveTrimmedText(

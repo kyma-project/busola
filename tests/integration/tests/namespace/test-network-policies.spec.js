@@ -44,7 +44,7 @@ context('Test Network Policy', () => {
   });
 
   it('Check Network Policy details', () => {
-    cy.contains(NAME).should('be.visible');
+    cy.contains(NAME, { includeShadowDom: false }).should('be.visible');
 
     cy.contains(/CIDR/i).should('be.visible');
 

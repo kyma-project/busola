@@ -11,7 +11,7 @@ context('Test Events', () => {
 
   it('Checking list', () => {
     cy.getLeftNav()
-      .contains('Events', { includeShadowDom: true })
+      .contains('Events')
       .click();
 
     cy.get('td a')

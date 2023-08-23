@@ -35,7 +35,9 @@ context('Test Storage Classes', () => {
   });
 
   it('Checking details', () => {
-    cy.contains(Cypress.env('STORAGE_CLASS_NAME')).should('be.visible');
+    cy.get('h3.fd-title')
+      .contains(Cypress.env('STORAGE_CLASS_NAME'))
+      .should('be.visible');
 
     cy.contains('pd.csi.storage.gke.io').should('be.visible');
 
@@ -45,7 +47,7 @@ context('Test Storage Classes', () => {
   });
 
   it('Checking list and delete', () => {
-    cy.contains('Storage Classes').click();
+    cy.navigateBackTo('storageclasses', 'Storage Classes');
 
     cy.deleteFromGenericList(Cypress.env('STORAGE_CLASS_NAME'));
   });

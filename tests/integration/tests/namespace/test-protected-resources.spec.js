@@ -76,7 +76,7 @@ context('Test Protected Resources', () => {
 
   it('Protect a resource', () => {
     cy.getLeftNav()
-      .contains('Config Maps', { includeShadowDom: true })
+      .contains('Config Maps')
       .click();
 
     cy.get('tr')
@@ -133,17 +133,17 @@ context('Test Protected Resources', () => {
 
   it("Don't protect a resource", () => {
     cy.getLeftNav()
-      .contains('Config Maps', { includeShadowDom: true })
+      .contains('Config Maps')
       .click();
 
     cy.contains('tr', NAME)
       .find('[aria-label="Delete"]')
       .click();
 
-    cy.contains(`Delete ${NAME}`, { includeShadowDom: true }).should('exist');
+    cy.contains(`Delete ${NAME}`).should('exist');
 
     cy.get(`[header-text="Delete ${NAME}"]`)
-      .find('[data-testid="delete-cancel"]', { includeShadowDom: true })
+      .find('[data-testid="delete-cancel"]')
       .click();
   });
 });
