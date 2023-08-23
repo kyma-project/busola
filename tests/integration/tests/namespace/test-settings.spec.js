@@ -41,7 +41,7 @@ context('Test app settings and preferences', () => {
     cy.contains('[aria-label="title"]', NAME).should('be.visible');
 
     cy.getLeftNav()
-      .contains('Config Maps', { includeShadowDom: true })
+      .contains('Config Maps')
       .click();
 
     cy.contains('.fd-table__row', NAME)
@@ -103,11 +103,11 @@ context('Test app settings and preferences', () => {
     cy.contains('Close').click();
 
     cy.getLeftNav()
-      .contains('Back To Cluster Details', { includeShadowDom: true })
+      .contains('Back To Cluster Details')
       .click();
 
     cy.getLeftNav()
-      .contains('Namespaces', { includeShadowDom: true })
+      .contains('Namespaces')
       .click();
 
     cy.contains('a', /^kube-system/).should('not.exist');

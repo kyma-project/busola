@@ -9,7 +9,7 @@ export function GenericRoleList({ descriptionKey, ...otherParams }) {
     <Trans i18nKey={descriptionKey}>
       <Link
         className="fd-link"
-        url="https://kyma-project.io/#/04-operation-guides/security/sec-02-authorization-in-kyma?id=user-authorization"
+        url="https://kyma-project.io/docs/kyma/latest/04-operation-guides/security/sec-02-authorization-in-kyma/#user-authorization"
       />
     </Trans>
   );

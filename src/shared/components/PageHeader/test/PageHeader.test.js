@@ -31,6 +31,6 @@ describe('PageHeader', () => {
     expect(anchorElement).toBeInTheDocument();
 
     const hrefAttribute = anchorElement.getAttribute('href');
-    expect(hrefAttribute).toBe(`/${breadcrumbItems[0].url}`);
+    expect(hrefAttribute).toBe(breadcrumbItems[0].url);
   });
 });

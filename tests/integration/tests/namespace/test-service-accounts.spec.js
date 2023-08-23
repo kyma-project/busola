@@ -26,12 +26,12 @@ context('Test Service Accounts', () => {
       .type(SERVICE_NAME);
 
     // Toggle 'Automount Token' switch
-    cy.get('[role="presentation"]')
+    cy.get('.fd-switch__handle')
       .eq(0)
       .click();
 
     // Toggle 'Create associated Secret' switch
-    cy.get('[role="presentation"]')
+    cy.get('.fd-switch__handle')
       .eq(1)
       .click();
 
@@ -45,7 +45,7 @@ context('Test Service Accounts', () => {
   });
 
   it('Checking details', () => {
-    cy.contains(SERVICE_NAME).should('be.visible');
+    cy.contains(SERVICE_NAME, { includeShadowDom: false }).should('be.visible');
 
     cy.contains('enabled').should('be.visible');
 
@@ -69,7 +69,7 @@ context('Test Service Accounts', () => {
       .type('test-value');
 
     // Toggle 'Automount Token' switch
-    cy.get('[role="presentation"]')
+    cy.get('.fd-switch__handle')
       .eq(0)
       .click();
 
