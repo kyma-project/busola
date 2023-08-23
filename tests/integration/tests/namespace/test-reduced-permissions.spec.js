@@ -96,6 +96,7 @@ context('Test reduced permissions', () => {
     cy.get('[role=dialog]')
       .contains('User')
       .click();
+
     cy.get('[role=list]')
       .contains('ServiceAccount')
       .click();
@@ -137,9 +138,11 @@ context('Test reduced permissions', () => {
     cy.contains(SA_NAME).click();
 
     cy.contains('Generate TokenRequest').click();
+
     cy.contains('Download Kubeconfig').click();
 
     cy.contains('Close').click();
+
     cy.wait(200);
 
     cy.task('listDownloads', Cypress.config('downloadsFolder')).then(
@@ -198,8 +201,6 @@ context('Test reduced permissions', () => {
   });
 
   it('Cleanup', () => {
-    cy.get('[aria-controls="fd-shellbar-product-popover"]').click();
-
     cy.loginAndSelectCluster({ disableClear: true });
 
     // delete binding
@@ -217,9 +218,7 @@ context('Test reduced permissions', () => {
     cy.deleteFromGenericList(CR_NAME);
 
     // remove cluster
-    cy.get('[aria-controls="fd-shellbar-product-popover"]').click();
-
-    cy.contains('Clusters Overview').click();
+    cy.changeCluster('all-clusters');
 
     cy.deleteFromGenericList(SA_NAME, true, false, false);
 

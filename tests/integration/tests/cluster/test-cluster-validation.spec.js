@@ -86,13 +86,15 @@ context('Test Cluster Validation Scan', () => {
     cy.contains('Submit').click();
 
     cy.get('@clusterValidationPanel')
-      .contains('button', 'Scan')
-      .should('be.visible')
-      .click();
+      .find('button')
+      .contains('Scan')
+      .click({ force: true });
 
     // wait for scan to finish
     cy.contains('Scan Progress').should('be.visible');
+
     containsInShadowDom('ui5-card', 'Scan Progress').as('scanProgress');
+
     cy.get('@scanProgress')
       .contains('100%', { timeout: 30000 })
       .should('be.visible');

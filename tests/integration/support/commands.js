@@ -134,7 +134,7 @@ Cypress.Commands.add(
 
     cy.get('[placeholder="Search"]').type(searchTerm);
 
-    cy.contains(searchTerm).should('be.visible');
+    cy.contains('a', searchTerm).should('be.visible');
 
     cy.contains(/created/).should('not.exist');
 
@@ -159,3 +159,12 @@ Cypress.Commands.add(
     }
   },
 );
+
+Cypress.Commands.add('changeCluster', clusterName => {
+  cy.get('[aria-haspopup="menu"]:visible').click();
+
+  cy.get('ui5-list')
+    .find(`[aria-label="${clusterName}"]:visible`)
+    .find('span[part="title"]')
+    .click({ force: true });
+});

@@ -9,9 +9,7 @@ context('Test app settings and preferences', () => {
   });
 
   it('Deletes without confirmation', () => {
-    cy.get('[aria-label="topnav-profile-btn"]').click();
-
-    cy.contains('Preferences').click();
+    cy.get('[title="Profile"]').click();
 
     cy.contains('Cluster interaction').click();
 
@@ -51,9 +49,7 @@ context('Test app settings and preferences', () => {
     cy.contains('Are you sure you want to delete').should('not.be.visible');
 
     // disable "deletion without confirmation" to not mess other tests
-    cy.get('[aria-label="topnav-profile-btn"]').click();
-
-    cy.contains('.fd-menu', 'Preferences').click();
+    cy.get('[title="Profile"]').click();
 
     cy.contains('Cluster interaction').click();
 
@@ -65,9 +61,7 @@ context('Test app settings and preferences', () => {
   });
 
   it('Changes application theme', () => {
-    cy.get('[aria-label="topnav-profile-btn"]').click();
-
-    cy.contains('Preferences').click();
+    cy.get('[title="Profile"]').click();
 
     cy.contains('High-Contrast Black').click();
 
@@ -83,9 +77,7 @@ context('Test app settings and preferences', () => {
   });
 
   it('Shows hidden namespaces', () => {
-    cy.get('[aria-label="topnav-profile-btn"]').click();
-
-    cy.contains('Preferences').click();
+    cy.get('[title="Profile"]').click();
 
     cy.contains('Cluster interaction').click();
 
@@ -112,6 +104,6 @@ context('Test app settings and preferences', () => {
 
     cy.contains('a', /^kube-system/).should('not.exist');
 
-    cy.contains(Cypress.env('NAMESPACE_NAME')).click();
+    cy.goToNamespaceDetails();
   });
 });

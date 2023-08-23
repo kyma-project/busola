@@ -93,8 +93,6 @@ context('Test resource upload', () => {
     // close
     cy.get('body').type('{esc}');
 
-    cy.get('[role=dialog]').should('not.exist');
-
     cy.navigateTo('Storage', 'Storage Classes');
 
     cy.get('[role="search"] [aria-label="open-search"]').type(SC_NAME);
