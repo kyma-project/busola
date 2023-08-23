@@ -1339,16 +1339,16 @@ settings:
   interface:
     description: Appearance, language
     themes:
-      dark:
+      sap_horizon_dark:
         description: Use in dimmed environments
         title: Dark
-      hcb:
+      sap_horizon_hcb:
         description: Optimized contrast and accessibility for bright environments
         title: High-Contrast Black
-      hcw:
+      sap_horizon_hcw:
         description: Optimized contrast and accessibility for dark environments
         title: High-Contrast White
-      light:
+      sap_horizon:
         description: Use in default office environments
         title: Light
       light_dark:

@@ -7,15 +7,6 @@ type ThemePreviewProps = {
 };
 
 export function ThemePreview({ theme }: ThemePreviewProps) {
-  if (theme === 'light_dark') {
-    return (
-      <div className="double-theme">
-        <ThemePreview theme="dark" />
-        <ThemePreview theme="light" />
-      </div>
-    );
-  }
-
   // those are copied from https://sap.live.dxp.k8s.ondemand.com/projects
   return (
     <div className="theme-wrapper">

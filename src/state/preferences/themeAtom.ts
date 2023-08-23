@@ -1,14 +1,22 @@
 import { atom, RecoilState, AtomEffect } from 'recoil';
 import { localStorageEffect } from '../utils/effects';
 
-export type Theme = 'dark' | 'light' | 'light_dark' | 'hcw' | 'hcb';
+export type Theme =
+  | 'sap_horizon'
+  | 'sap_horizon_dark'
+  | 'sap_horizon_hcw'
+  | 'sap_horizon_hcb';
 
 const THEME_STORAGE_KEY = 'busola.theme';
-const DEFAULT_THEME = 'light_dark';
+const DEFAULT_THEME = 'sap_horizon';
 
-export function applyThemeToLinkNode(name = 'light_dark', publicUrl = ''): any {
+export function applyThemeToLinkNode(
+  name = 'sap_horizon',
+  publicUrl = '',
+): any {
   const link = document.querySelector('head #_theme') as HTMLLinkElement;
-  if (name === 'light' && link) {
+  console.log(link, publicUrl);
+  if (name === 'sap_horizon' && link) {
     link.parentNode?.removeChild(link);
   }
   if (!link) {
@@ -41,5 +49,5 @@ export const addLinkEffect: AddLinkEffect = () => ({ onSet, setSelf }) => {
 export const themeState: RecoilState<Theme> = atom<Theme>({
   key: 'themeState',
   default: DEFAULT_THEME,
-  effects: [localStorageEffect<Theme>(THEME_STORAGE_KEY), addLinkEffect()],
+  effects: [localStorageEffect<Theme>(THEME_STORAGE_KEY)],
 });

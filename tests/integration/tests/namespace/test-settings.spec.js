@@ -77,7 +77,7 @@ context('Test app settings and preferences', () => {
       'rgb(0, 0, 0)',
     );
 
-    cy.contains('Light / Dark').click();
+    cy.contains('Light').click();
 
     cy.contains('Close').click();
   });

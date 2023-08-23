@@ -9,7 +9,11 @@ export function Logo() {
   return (
     <img
       alt="Kyma"
-      src={theme === 'hcw' ? '/assets/logo-black.svg' : '/assets/logo.svg'}
+      src={
+        theme === 'sap_horizon_hcw' || theme === 'sap_horizon'
+          ? '/assets/logo-black.svg'
+          : '/assets/logo.svg'
+      }
     />
   );
 }
