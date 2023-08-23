@@ -52,6 +52,8 @@ export function Header() {
     </StandardListItem>,
   ];
 
+  console.log(window.location.pathname);
+
   return (
     <>
       <ShellBar
@@ -59,8 +61,12 @@ export function Header() {
         startButton={<SidebarSwitcher />}
         onLogoClick={() => navigate('/clusters')}
         logo={<Logo />}
-        primaryTitle={cluster?.contextName || cluster?.name}
-        menuItems={clustersList}
+        primaryTitle={
+          window.location.pathname !== '/clusters'
+            ? cluster?.contextName || cluster?.name
+            : ''
+        }
+        menuItems={window.location.pathname !== '/clusters' ? clustersList : []}
         onMenuItemClick={e =>
           e.detail.item.textContent ===
           t('clusters.overview.title-all-clusters')
@@ -76,11 +82,13 @@ export function Header() {
         }
         onProfileClick={() => setPreferencesOpen(true)}
       >
-        <ShellBarItem
-          onClick={() => setShowAdd(true)}
-          icon="add"
-          text="Upload YAML"
-        />
+        {window.location.pathname !== '/clusters' && (
+          <ShellBarItem
+            onClick={() => setShowAdd(true)}
+            icon="add"
+            text="Upload YAML"
+          />
+        )}
         {isFeedbackEnabled && (
           <ShellBarItem
             onClick={() => window.open(feedbackLink, '_blank')}

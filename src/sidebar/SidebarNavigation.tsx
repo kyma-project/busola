@@ -43,7 +43,7 @@ export function SidebarNavigation() {
   const topLevelNodes = filteredNavigationNodes?.filter(nn => nn.topLevelNode);
   const categoryNodes = filteredNavigationNodes?.filter(nn => !nn.topLevelNode);
 
-  const isClusterOverviweSelected = () => {
+  const isClusterOverviewSelected = () => {
     const { pathname } = window.location;
     if (pathname.includes('overview') && !pathname.includes('namespaces'))
       return true;
@@ -62,7 +62,7 @@ export function SidebarNavigation() {
                 icon={namespace ? 'slim-arrow-left' : 'database'}
                 text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}
                 onClick={() => navigate(clusterUrl(`overview`))}
-                selected={isClusterOverviweSelected()}
+                selected={isClusterOverviewSelected()}
               ></SideNavigationItem>
             </SideNavigation>
             <ShellBar
@@ -91,7 +91,7 @@ export function SidebarNavigation() {
             icon={namespace ? 'slim-arrow-left' : 'database'}
             text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}
             onClick={() => navigate(clusterUrl(`overview`))}
-            selected={isClusterOverviweSelected()}
+            selected={isClusterOverviewSelected()}
           ></SideNavigationItem>
         )}
         {topLevelNodes.map(node =>

@@ -164,9 +164,7 @@ Cypress.Commands.add('changeCluster', clusterName => {
   cy.get('[aria-haspopup="menu"]:visible').click();
 
   cy.get('ui5-list')
-    .find(`[aria-label="${clusterName}"]:visible`, {
-      includeShadowDom: true,
-    })
+    .find(`[aria-label="${clusterName}"]:visible`)
     .find('span[part="title"]')
     .click({ force: true });
 });
