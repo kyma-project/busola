@@ -45,7 +45,7 @@ context('Test Service Accounts', () => {
   });
 
   it('Checking details', () => {
-    cy.contains(SERVICE_NAME).should('be.visible');
+    cy.contains(SERVICE_NAME, { includeShadowDom: false }).should('be.visible');
 
     cy.contains('enabled').should('be.visible');
 

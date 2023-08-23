@@ -74,7 +74,8 @@ context('Test Services', () => {
 
     cy.contains('Type');
     cy.contains('LoadBalancer');
-    cy.contains('a', 'Custom Services');
+
+    cy.navigateBackTo('example-services', 'Custom Services');
   });
 
   it('Displays the header overridden by translations (on Details)', () => {

@@ -55,7 +55,7 @@ context('Test Replica Sets', () => {
 
   it('Checks the list view', () => {
     cy.getLeftNav()
-      .contains('Replica Sets', { includeShadowDom: true })
+      .contains('Replica Sets')
       .click();
 
     cy.contains(REPLICA_SET_NAME).click();
@@ -84,7 +84,7 @@ context('Test Replica Sets', () => {
   });
 
   it('Checks the new Docker image', () => {
-    cy.contains('Replica Sets').click();
+    cy.navigateBackTo('replicasets', 'Replica Sets');
 
     cy.contains(EDITED_DOCKER_IMAGE_TAG);
   });

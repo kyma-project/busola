@@ -52,9 +52,7 @@ context('Test Cluster configuration', () => {
     // );
 
     // custom category should be added
-    cy.contains('Category from target cluster', {
-      includeShadowDom: true,
-    }).should('be.visible');
+    cy.contains('Category from target cluster').should('be.visible');
 
     // custom storage type should be set
     cy.getLeftNav()

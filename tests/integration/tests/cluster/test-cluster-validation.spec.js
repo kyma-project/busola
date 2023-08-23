@@ -96,12 +96,11 @@ context('Test Cluster Validation Scan', () => {
     containsInShadowDom('ui5-card', 'Scan Progress').as('scanProgress');
 
     cy.get('@scanProgress')
-      .contains('100%', { timeout: 30000, includeShadowDom: true })
+      .contains('100%', { timeout: 30000 })
       .should('be.visible');
 
     // Check items in scan result tree
     cy.contains('Scan Result').should('be.visible');
-
     containsInShadowDom('ui5-card', 'Scan Result').as('scanResult');
 
     cy.get('@scanResult').should('be.visible');

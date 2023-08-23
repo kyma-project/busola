@@ -44,7 +44,7 @@ context('Test Storage Classes', () => {
   });
 
   it('Checking list and delete', () => {
-    cy.contains('Storage Classes').click();
+    cy.navigateBackTo('storageclasses', 'Storage Classes');
 
     cy.deleteFromGenericList(Cypress.env('STORAGE_CLASS_NAME'));
   });

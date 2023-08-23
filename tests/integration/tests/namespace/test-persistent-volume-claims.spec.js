@@ -74,7 +74,7 @@ context('Test Persistent Volume Claims', () => {
   });
 
   it('Check the Persistent Volume Claims list and delete', () => {
-    cy.contains('a', 'Persistent Volume Claims').click();
+    cy.navigateBackTo('persistentvolumeclaims', 'Persistent Volume Claims');
 
     cy.contains(CAPACITY_VALUE);
 
