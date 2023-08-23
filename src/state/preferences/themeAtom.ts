@@ -1,4 +1,4 @@
-import { atom, RecoilState, AtomEffect } from 'recoil';
+import { atom, RecoilState } from 'recoil';
 import { localStorageEffect } from '../utils/effects';
 
 export type Theme =
@@ -10,44 +10,8 @@ export type Theme =
 const THEME_STORAGE_KEY = 'busola.theme';
 const DEFAULT_THEME = 'sap_horizon';
 
-export function applyThemeToLinkNode(
-  name = 'sap_horizon',
-  publicUrl = '',
-): any {
-  const link = document.querySelector('head #_theme') as HTMLLinkElement;
-  console.log(link, publicUrl);
-  if (name === 'sap_horizon' && link) {
-    link.parentNode?.removeChild(link);
-  }
-  if (!link) {
-    addLinkNode();
-    return applyThemeToLinkNode(name, publicUrl);
-  }
-
-  link.href = `${publicUrl || ''}/themes/${name}.css`;
-}
-
-function addLinkNode() {
-  const newLink = document.createElement('link');
-  newLink.id = '_theme';
-  newLink.rel = 'stylesheet';
-  document.head.appendChild(newLink);
-}
-type AddLinkEffect = () => AtomEffect<Theme>;
-export const addLinkEffect: AddLinkEffect = () => ({ onSet, setSelf }) => {
-  setSelf(param => {
-    const defaultValue = param as Theme;
-    applyThemeToLinkNode(defaultValue, process.env.PUBLIC_URL);
-    return defaultValue;
-  });
-
-  onSet(newTheme => {
-    applyThemeToLinkNode(newTheme, process.env.PUBLIC_URL);
-  });
-};
-
 export const themeState: RecoilState<Theme> = atom<Theme>({
   key: 'themeState',
   default: DEFAULT_THEME,
-  effects: [localStorageEffect<Theme>(THEME_STORAGE_KEY), addLinkEffect()],
+  effects: [localStorageEffect<Theme>(THEME_STORAGE_KEY)],
 });
