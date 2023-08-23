@@ -135,7 +135,7 @@ context('Test Protected Resources', () => {
       .click();
 
     cy.contains('tr', NAME)
-      .find('[aria-label="Delete"]')
+      .find('ui5-button[data-testid="delete"]')
       .click();
 
     cy.contains(`Delete ${NAME}`).should('exist');

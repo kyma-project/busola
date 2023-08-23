@@ -141,7 +141,7 @@ Cypress.Commands.add(
 
     cy.contains(/created/).should('not.exist');
 
-    cy.get('[aria-label="Delete"]').click();
+    cy.get('ui5-button[data-testid="delete"]').click();
 
     if (confirmationEnabled) {
       cy.get(`[header-text="Delete ${searchTerm}"]`)
