@@ -34,11 +34,9 @@ context('Test resource validation', () => {
   });
 
   it('Disables resource validation via preferences', () => {
-    cy.get('[aria-label="topnav-profile-btn"]').click();
+    cy.get('[title="Profile"]').click();
 
-    cy.contains('Preferences').click();
-
-    cy.contains('Clusters').click();
+    cy.contains('Cluster interaction').click();
 
     cy.contains('Resource Validation').click();
 
@@ -66,11 +64,9 @@ context('Test resource validation', () => {
   });
 
   it('Customize resource validation policies via preferences', () => {
-    cy.get('[aria-label="topnav-profile-btn"]').click();
+    cy.get('[title="Profile"]').click();
 
-    cy.contains('Preferences').click();
-
-    cy.contains('Clusters').click();
+    cy.contains('Cluster interaction').click();
 
     cy.contains('Resource Validation').click();
 
@@ -110,11 +106,9 @@ context('Test resource validation', () => {
 
     cy.get('[data-testid=yaml-cancel]').click();
 
-    cy.get('[aria-label="topnav-profile-btn"]').click();
+    cy.get('[title="Profile"]').click();
 
-    cy.contains('Preferences').click();
-
-    cy.contains('Clusters').click();
+    cy.contains('Cluster interaction').click();
 
     cy.contains('Resource Validation').click();
 

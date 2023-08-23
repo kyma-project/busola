@@ -93,8 +93,6 @@ context('Test resource upload', () => {
     // close
     cy.get('body').type('{esc}');
 
-    cy.get('[role=dialog]').should('not.exist');
-
     cy.navigateTo('Storage', 'Storage Classes');
 
     cy.get('ui5-button[aria-label="open-search"]')

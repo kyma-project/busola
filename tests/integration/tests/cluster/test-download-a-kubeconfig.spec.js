@@ -12,8 +12,7 @@ context('Test Download a Kubeconfig', () => {
   });
 
   it('Download a Kubeconfig from the Clusters list', () => {
-    cy.get('[aria-controls="fd-shellbar-product-popover"]').click();
-    cy.contains('Clusters Overview').click();
+    cy.changeCluster('all-clusters');
 
     cy.get('.fd-table__body .fd-table__cell')
       .eq(0)
