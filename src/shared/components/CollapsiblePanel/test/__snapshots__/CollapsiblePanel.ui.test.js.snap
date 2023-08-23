@@ -18,16 +18,12 @@ exports[`Collapsible Panel Renders in closed state 1`] = `
       className="fd-layout-panel__actions"
     >
       <button
-        className="fd-button fd-button--transparent"
+        className="fd-button"
+        design="Transparent"
+        icon="navigation-down-arrow"
         onClick={[Function]}
         type="button"
-      >
-        <i
-          aria-hidden={true}
-          className="sap-icon--navigation-down-arrow"
-          role="img"
-        />
-      </button>
+      />
     </div>
   </div>
   <div
@@ -58,16 +54,12 @@ exports[`Collapsible Panel Renders with minimal props (opened state) 1`] = `
       className="fd-layout-panel__actions"
     >
       <button
-        className="fd-button fd-button--transparent"
+        className="fd-button"
+        design="Transparent"
+        icon="navigation-up-arrow"
         onClick={[Function]}
         type="button"
-      >
-        <i
-          aria-hidden={true}
-          className="sap-icon--navigation-up-arrow"
-          role="img"
-        />
-      </button>
+      />
     </div>
   </div>
   <div
