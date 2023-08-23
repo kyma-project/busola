@@ -10,8 +10,10 @@ export function Logo() {
     <img
       alt="Kyma"
       src={
-        theme === 'sap_horizon_hcw' || theme === 'sap_horizon'
+        theme === 'sap_horizon_hcw'
           ? '/assets/logo-black.svg'
+          : theme === 'sap_horizon'
+          ? '/assets/logo-blue.svg'
           : '/assets/logo.svg'
       }
     />
