@@ -7,5 +7,4 @@ import { setTheme } from '@ui5/webcomponents-base/dist/config/Theme';
 export const useInitTheme = () => {
   const theme = useRecoilValue(themeState);
   setTheme(theme);
-  void useRecoilValue(themeState);
 };
