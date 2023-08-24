@@ -10,8 +10,8 @@ export function ThemePreview({ theme }: ThemePreviewProps) {
   if (theme === 'light_dark') {
     return (
       <div className="double-theme">
-        <ThemePreview theme="dark" />
-        <ThemePreview theme="light" />
+        <ThemePreview theme="sap_horizon_dark" />
+        <ThemePreview theme="sap_horizon" />
       </div>
     );
   }

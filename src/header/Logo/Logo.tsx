@@ -8,7 +8,13 @@ export function Logo(props: any) {
     <div slot={props.slot}>
       <img
         alt="Kyma"
-        src={theme === 'hcw' ? '/assets/logo-black.svg' : '/assets/logo.svg'}
+        src={
+          theme === 'sap_horizon_hcw'
+            ? '/assets/logo-black.svg'
+            : theme === 'sap_horizon'
+            ? '/assets/logo-blue.svg'
+            : '/assets/logo.svg'
+        }
       />
     </div>
   );
