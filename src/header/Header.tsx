@@ -56,7 +56,9 @@ export function Header() {
     <>
       <ShellBar
         className="header"
-        startButton={<SidebarSwitcher />}
+        startButton={
+          window.location.pathname !== '/clusters' && <SidebarSwitcher />
+        }
         onLogoClick={() => navigate('/clusters')}
         logo={<Logo />}
         primaryTitle={
