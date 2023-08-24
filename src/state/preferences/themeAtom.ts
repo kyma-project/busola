@@ -15,16 +15,20 @@ export function applyThemeToLinkNode(
   publicUrl = '',
 ): any {
   const link = document.querySelector('head #_theme') as HTMLLinkElement;
-  console.log(link, publicUrl);
   if (name === 'sap_horizon' && link) {
     link.parentNode?.removeChild(link);
   }
+
   if (!link) {
     addLinkNode();
-    return applyThemeToLinkNode(name, publicUrl);
+    if (name === 'sap_horizon')
+      return applyThemeToLinkNode('default', publicUrl);
+    else return applyThemeToLinkNode(name.slice(12), publicUrl);
   }
 
-  link.href = `${publicUrl || ''}/themes/${name}.css`;
+  link.href = `${publicUrl || ''}/themes/${
+    name === 'sap_horizon' ? 'default' : name
+  }.css`;
 }
 
 function addLinkNode() {
@@ -42,7 +46,9 @@ export const addLinkEffect: AddLinkEffect = () => ({ onSet, setSelf }) => {
   });
 
   onSet(newTheme => {
-    applyThemeToLinkNode(newTheme, process.env.PUBLIC_URL);
+    const themeNew =
+      newTheme === 'sap_horizon' ? 'default' : newTheme.slice(12);
+    applyThemeToLinkNode(themeNew, process.env.PUBLIC_URL);
   });
 };
 
