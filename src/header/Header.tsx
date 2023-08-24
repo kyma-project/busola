@@ -52,8 +52,6 @@ export function Header() {
     </StandardListItem>,
   ];
 
-  console.log(window.location.pathname);
-
   return (
     <>
       <ShellBar
