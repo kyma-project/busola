@@ -123,20 +123,12 @@ export function AddClusterWizard({
   return (
     <Wizard
       contentLayout="SingleStep"
-      // onCancel={onCancel}
-      // onComplete={onComplete}
-      // navigationType="tabs"
-      // headerSize="md"
-      // contentSize="md"
       // className="add-cluster-wizard"
     >
       <WizardStep
         titleText={t('clusters.wizard.kubeconfig')}
         branching={!kubeconfig}
-        // indicator="1"
         // valid={!!kubeconfig}
-        // previousLabel={t('clusters.buttons.previous-step')}
-        // nextLabel={t('clusters.buttons.next-step')}
       >
         <p>{t('clusters.wizard.intro')}</p>
         <MessageStrip
@@ -165,10 +157,7 @@ export function AddClusterWizard({
       {kubeconfig && (!hasAuth || !hasOneContext) && (
         <WizardStep
           titleText={t('clusters.wizard.update')}
-          // indicator="2"
           // valid={authValid}
-          // previousLabel={t('clusters.buttons.previous-step')}
-          // nextLabel={t('clusters.buttons.next-step')}
         >
           <ResourceForm.Single
             formElementRef={authFormRef}
@@ -200,8 +189,7 @@ export function AddClusterWizard({
 
       <WizardStep
         title={t('clusters.wizard.storage')}
-        // indicator="2"
-        valid={!!storage}
+        // valid={!!storage}
       >
         <ChooseStorage storage={storage} setStorage={setStorage} />
         <Button onClick={function ka() {}}>
