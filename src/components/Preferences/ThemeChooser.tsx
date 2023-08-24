@@ -18,7 +18,7 @@ export default function ThemeChooser() {
   const { t } = useTranslation();
   const [theme, setUsedTheme] = useRecoilState(themeState);
 
-  const getCurrentTheme = () =>
+  const isSystemThemeDark = () =>
     window.matchMedia('(prefers-color-scheme: dark)').matches;
 
   return (
@@ -36,7 +36,7 @@ export default function ThemeChooser() {
             handleClick={() => {
               setUsedTheme(themeName);
               if (theme === 'light_dark') {
-                if (getCurrentTheme()) setTheme('sap_horizon_dark');
+                if (isSystemThemeDark()) setTheme('sap_horizon_dark');
                 else setTheme('sap_horizon');
               } else {
                 setTheme(theme);

@@ -11,7 +11,7 @@ export type Theme =
 const THEME_STORAGE_KEY = 'busola.theme';
 const DEFAULT_THEME = 'sap_horizon';
 
-const getCurrentTheme = () => {
+const isSystemThemeDark = () => {
   return window.matchMedia('(prefers-color-scheme: dark)').matches
     ? 'dark'
     : 'default';
@@ -31,12 +31,12 @@ export function applyThemeToLinkNode(
     if (name === 'sap_horizon')
       return applyThemeToLinkNode('default', publicUrl);
     else if (name === 'light_dark')
-      return applyThemeToLinkNode(getCurrentTheme(), publicUrl);
+      return applyThemeToLinkNode(isSystemThemeDark(), publicUrl);
     else return applyThemeToLinkNode(name.slice(12), publicUrl);
   }
 
   if (name === 'light_dark')
-    link.href = `${publicUrl || ''}/themes/${getCurrentTheme()}.css`;
+    link.href = `${publicUrl || ''}/themes/${isSystemThemeDark()}.css`;
   else
     link.href = `${publicUrl || ''}/themes/${
       name === 'sap_horizon' ? 'default' : name
@@ -59,7 +59,7 @@ export const addLinkEffect: AddLinkEffect = () => ({ onSet, setSelf }) => {
 
   onSet(newTheme => {
     let themeNew;
-    if (newTheme === 'light_dark') themeNew = getCurrentTheme();
+    if (newTheme === 'light_dark') themeNew = isSystemThemeDark();
     else themeNew = newTheme === 'sap_horizon' ? 'default' : newTheme.slice(12);
     applyThemeToLinkNode(themeNew, process.env.PUBLIC_URL);
   });
