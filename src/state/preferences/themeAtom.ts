@@ -1,22 +1,46 @@
 import { atom, RecoilState, AtomEffect } from 'recoil';
 import { localStorageEffect } from '../utils/effects';
 
-export type Theme = 'dark' | 'light' | 'light_dark' | 'hcw' | 'hcb';
+export type Theme =
+  | 'light_dark'
+  | 'sap_horizon'
+  | 'sap_horizon_dark'
+  | 'sap_horizon_hcw'
+  | 'sap_horizon_hcb';
 
 const THEME_STORAGE_KEY = 'busola.theme';
-const DEFAULT_THEME = 'light_dark';
+const DEFAULT_THEME = 'sap_horizon';
 
-export function applyThemeToLinkNode(name = 'light_dark', publicUrl = ''): any {
+const isSystemThemeDark = () => {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches
+    ? 'dark'
+    : 'default';
+};
+
+export function applyThemeToLinkNode(
+  name = 'sap_horizon',
+  publicUrl = '',
+): any {
   const link = document.querySelector('head #_theme') as HTMLLinkElement;
-  if (name === 'light' && link) {
+  if (name === 'sap_horizon' && link) {
     link.parentNode?.removeChild(link);
   }
+
   if (!link) {
     addLinkNode();
-    return applyThemeToLinkNode(name, publicUrl);
+    if (name === 'sap_horizon')
+      return applyThemeToLinkNode('default', publicUrl);
+    else if (name === 'light_dark')
+      return applyThemeToLinkNode(isSystemThemeDark(), publicUrl);
+    else return applyThemeToLinkNode(name.slice(12), publicUrl);
   }
 
-  link.href = `${publicUrl || ''}/themes/${name}.css`;
+  if (name === 'light_dark')
+    link.href = `${publicUrl || ''}/themes/${isSystemThemeDark()}.css`;
+  else
+    link.href = `${publicUrl || ''}/themes/${
+      name === 'sap_horizon' ? 'default' : name
+    }.css`;
 }
 
 function addLinkNode() {
@@ -34,7 +58,10 @@ export const addLinkEffect: AddLinkEffect = () => ({ onSet, setSelf }) => {
   });
 
   onSet(newTheme => {
-    applyThemeToLinkNode(newTheme, process.env.PUBLIC_URL);
+    let themeNew;
+    if (newTheme === 'light_dark') themeNew = isSystemThemeDark();
+    else themeNew = newTheme === 'sap_horizon' ? 'default' : newTheme.slice(12);
+    applyThemeToLinkNode(themeNew, process.env.PUBLIC_URL);
   });
 };
 

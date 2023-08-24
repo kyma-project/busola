@@ -21,36 +21,7 @@
   border: 1px solid var(--sapContent_Illustrative_Color5);
   border-radius: 50%;
 
-  &.theme--light {
-    .cls-1 {
-      fill: #f7f7f7;
-    }
-    .cls-2 {
-      fill: #ccc;
-    }
-    .cls-3 {
-      fill: #fff;
-    }
-    .cls-4 {
-      fill: #d9d9d9;
-    }
-    .cls-5 {
-      fill: #0854a0;
-    }
-    .cls-6 {
-      fill: #6a6d70;
-    }
-    .cls-7 {
-      fill: #354a5f;
-    }
-    .cls-8 {
-      fill: #7996b4;
-    }
-    .cls-9 {
-      fill: #fff;
-    }
-  }
-  &.theme--dark {
+  &.theme--sap_horizon_dark {
     .cls-1 {
       fill: #1c2228;
     }
@@ -79,7 +50,7 @@
       fill: #fafafa;
     }
   }
-  &.theme--hcb {
+  &.theme--sap_horizon_hcb {
     .cls-1,
     .cls-3,
     .cls-7 {
@@ -96,7 +67,7 @@
       fill: #0f5d94;
     }
   }
-  &.theme--hcw {
+  &.theme--sap_horizon_hcw {
     .cls-1,
     .cls-3,
     .cls-7 {
@@ -111,6 +82,33 @@
     }
     .cls-5 {
       fill: #8fb5ff;
+    }
+  }
+  &.theme--sap_horizon {
+    .cls-1 {
+      fill: #f5f6f7;
+    }
+    .cls-2 {
+      fill: #ccc;
+    }
+    .cls-3,
+    .cls-7 {
+      fill: #fff;
+    }
+    .cls-4 {
+      fill: #d9d9d9;
+    }
+    .cls-5 {
+      fill: #0070f2;
+    }
+    .cls-6 {
+      fill: #556b82;
+    }
+    .cls-8 {
+      fill: #788fa6;
+    }
+    .cls-9 {
+      fill: #223548;
     }
   }
 }
