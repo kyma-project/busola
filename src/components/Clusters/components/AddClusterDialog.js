@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Dialog } from 'fundamental-react';
+import { Dialog } from '@ui5/webcomponents-react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { AddClusterWizard } from './AddClusterWizard';
@@ -26,10 +26,9 @@ export function AddClusterDialog({ show, onCancel }) {
 
   return (
     <Dialog
-      show={show}
+      open={show}
       className="add-cluster-dialog wizard-dialog"
-      title={t('clusters.add.title')}
-      actions={[]}
+      header-text={t('clusters.add.title')}
     >
       <ErrorBoundary>
         <AddClusterDialogComponent onCancel={onCancel} show={show} />

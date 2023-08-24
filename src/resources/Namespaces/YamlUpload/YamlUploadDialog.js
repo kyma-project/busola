@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, Suspense } from 'react';
-import { Dialog, Button } from 'fundamental-react';
+import { Dialog, Bar, Button } from '@ui5/webcomponents-react';
 import { isEqual } from 'lodash';
 
 import { YamlResourcesList } from './YamlResourcesList';
@@ -83,21 +83,23 @@ export function YamlUploadDialog({ show, onCancel }) {
 
   const actions = [
     lastOperationState === OPERATION_STATE_SUCCEEDED ? (
-      <Button onClick={onCancel} option="emphasized">
+      <Button slot="endContent" onClick={onCancel} design="Emphasized">
         {t('common.buttons.close')}
       </Button>
     ) : (
       <>
         <Button
+          slot="endContent"
           onClick={fetchResources}
           disabled={!resourcesWithStatuses?.length}
-          option="emphasized"
+          design="Emphasized"
         >
           {t('common.buttons.submit')}
         </Button>
         <Button
+          slot="endContent"
           onClick={onCancel}
-          option="transparent"
+          design="Transparent"
           data-testid="yaml-cancel"
         >
           {lastOperationState !== OPERATION_STATE_SOME_FAILED
@@ -110,9 +112,8 @@ export function YamlUploadDialog({ show, onCancel }) {
 
   return (
     <Dialog
-      show={show}
-      title={t('upload-yaml.title')}
-      actions={actions}
+      open={show}
+      header-text={t('upload-yaml.title')}
       className="yaml-upload-modal"
     >
       <Suspense fallback={<Spinner />}>
@@ -133,6 +134,9 @@ export function YamlUploadDialog({ show, onCancel }) {
           </div>
         </div>
       </Suspense>
+      <Bar slot="footer" design="Footer">
+        {actions}
+      </Bar>
     </Dialog>
   );
 }

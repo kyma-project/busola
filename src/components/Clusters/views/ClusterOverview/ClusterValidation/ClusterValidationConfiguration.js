@@ -1,4 +1,5 @@
-import { Button, Dialog, FormFieldset } from 'fundamental-react';
+import { Dialog, Bar, Button } from '@ui5/webcomponents-react';
+import { FormFieldset } from 'fundamental-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
@@ -31,21 +32,13 @@ const ListActions = ({ options, setSelected }) => {
   return (
     <>
       <Button
-        compact
-        glyph="add"
+        icon="add"
         onClick={() => setSelected(options.map(({ key }) => key))}
-        option="transparent"
-        iconBeforeText
+        design="Transparent"
       >
         {t('common.buttons.add-all')}
       </Button>
-      <Button
-        compact
-        glyph="less"
-        onClick={() => setSelected([])}
-        option="transparent"
-        iconBeforeText
-      >
+      <Button icon="less" onClick={() => setSelected([])} design="Transparent">
         {t('common.buttons.remove-all')}
       </Button>
     </>
@@ -204,29 +197,32 @@ export function ClusterValidationConfigurationDialog({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show]);
 
+  const actions = [
+    <Button
+      slot="endContent"
+      onClick={() => {
+        onCancel();
+      }}
+      design="Transparent"
+    >
+      {t('common.buttons.cancel')}
+    </Button>,
+    <Button
+      slot="endContent"
+      onClick={() => {
+        onSubmit(tempConfiguration);
+      }}
+      design="Emphasized"
+    >
+      {t('common.buttons.submit')}
+    </Button>,
+  ];
+
   return (
     <Dialog
-      show={show}
+      open={show}
       className="yaml-upload-modal"
-      title={t('cluster-validation.scan.configuration.title')}
-      actions={[
-        <Button
-          onClick={() => {
-            onCancel();
-          }}
-          option="transparent"
-        >
-          {t('common.buttons.cancel')}
-        </Button>,
-        <Button
-          onClick={() => {
-            onSubmit(tempConfiguration);
-          }}
-          option="emphasized"
-        >
-          {t('common.buttons.submit')}
-        </Button>,
-      ]}
+      header-text={t('cluster-validation.scan.configuration.title')}
     >
       <ErrorBoundary>
         <ConfigurationForm
@@ -238,6 +234,9 @@ export function ClusterValidationConfigurationDialog({
           }}
         />
       </ErrorBoundary>
+      <Bar slot="footer" design="Footer">
+        {actions}
+      </Bar>
     </Dialog>
   );
 }

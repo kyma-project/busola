@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { Button, Dialog, Icon } from 'fundamental-react';
+import { Dialog, Bar, Button } from '@ui5/webcomponents-react';
+import { Icon } from 'fundamental-react';
 import { useEventListener } from 'hooks/useEventListener';
 
 import './ErrorModal.scss';
@@ -47,7 +48,7 @@ export function ErrorModal({
   );
 
   const defaultCloseButton = (close: CloseFn): React.ReactNode => (
-    <Button option="emphasized" compact onClick={close}>
+    <Button slot="endContent" design="Emphasized" onClick={close}>
       {buttonDismissText}
     </Button>
   );
@@ -63,15 +64,15 @@ export function ErrorModal({
     <Dialog
       className={classNames('error-modal', { 'error-modal--wider': wider })}
       // @ts-ignore Type 'Element' is not assignable to type 'string', but we need an icon inside
-      title={title}
-      actions={
-        actions
-          ? actions(close, defaultCloseButton)
-          : [defaultCloseButton(close)]
-      }
-      show
+      header-text={title}
+      open
     >
       {content}
+      <Bar slot="footer" design="Footer">
+        {actions
+          ? actions(close, defaultCloseButton)
+          : [defaultCloseButton(close)]}
+      </Bar>
     </Dialog>
   );
 }

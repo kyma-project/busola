@@ -1,21 +1,7 @@
 .wizard-dialog {
-  .fd-dialog__content {
-    min-height: 90vh;
-    min-width: 90vw;
-  }
-
   div[role='alert'] {
     padding-left: 32px;
     padding-right: 32px;
-  }
-
-  .fd-dialog__body {
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-  }
-  .fd-dialog__footer {
-    display: none;
   }
 
   .fd-wizard {
@@ -28,6 +14,7 @@
       flex-shrink: 0;
     }
   }
+
   .fd-wizard__content {
     background-color: var(--sapList_Background);
     padding-bottom: 16px;

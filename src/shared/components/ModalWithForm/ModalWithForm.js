@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { Dialog, Bar, Button } from '@ui5/webcomponents-react';
 import PropTypes from 'prop-types';
-import { Dialog, Button } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -101,10 +101,11 @@ export const ModalWithForm = ({
     const disabled = !isValid;
     const button = (
       <Button
+        slot="endContent"
         disabled={disabled}
         aria-disabled={disabled}
         onClick={handleFormSubmit}
-        option="emphasized"
+        design="Emphasized"
       >
         {confirmText}
       </Button>
@@ -134,10 +135,9 @@ export const ModalWithForm = ({
       </div>
     ) : (
       <Button
-        glyph={button.glyph || null}
+        icon={button.glyph || null}
         aria-label={button.label || null}
-        option={button.option}
-        compact={button.compact || false}
+        design={button.option}
         disabled={!!button.disabled}
         onClick={() => setOpenStatus(true)}
       >
@@ -145,32 +145,34 @@ export const ModalWithForm = ({
       </Button>
     );
 
+  const actions = [
+    renderConfirmButton(),
+    <Button slot="endContent" onClick={resetFormFn} design="Transparent">
+      {t('common.buttons.reset')}
+    </Button>,
+    <Button
+      slot="endContent"
+      onClick={() => {
+        setOpenStatus(false);
+      }}
+      design="Transparent"
+    >
+      {t('common.buttons.cancel')}
+    </Button>,
+  ];
+
   return (
     <>
       {alwaysOpen ? null : renderModalOpeningComponent()}
       <Dialog
         className={className}
         {...props}
-        show={isOpen}
-        actions={[
-          renderConfirmButton(),
-          <Button onClick={resetFormFn} option="transparent">
-            {t('common.buttons.reset')}
-          </Button>,
-          <Button
-            onClick={() => {
-              setOpenStatus(false);
-            }}
-            option="transparent"
-          >
-            {t('common.buttons.cancel')}
-          </Button>,
-        ]}
+        open={isOpen}
         disableAutoClose={true}
         onClose={() => {
           setOpenStatus(false);
         }}
-        title={title}
+        header-text={title}
       >
         {isOpen &&
           renderForm({
@@ -184,6 +186,9 @@ export const ModalWithForm = ({
             performManualSubmit: handleFormSubmit,
             item: item,
           })}
+        <Bar slot="footer" design="Footer">
+          {actions}
+        </Bar>
       </Dialog>
     </>
   );

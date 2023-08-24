@@ -1,5 +1,4 @@
-import { MessageStrip } from '@ui5/webcomponents-react';
-import { Button, Dialog } from 'fundamental-react';
+import { Dialog, Bar, Button, MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
 import { useGenerateTokenRequest } from './useGenerateTokenRequest';
@@ -89,7 +88,9 @@ export function TokenRequestModal({
     !Number(tokenRequest.spec.expirationSeconds);
 
   const actions = [
-    <Button onClick={handleCloseModal}>{t('common.buttons.close')}</Button>,
+    <Button slot="endContent" onClick={handleCloseModal}>
+      {t('common.buttons.close')}
+    </Button>,
   ];
 
   const handleCloseWithEscape = (e: Event) => {
@@ -100,9 +101,8 @@ export function TokenRequestModal({
 
   return (
     <Dialog
-      show
-      title={t('service-accounts.token-request.generate')}
-      actions={actions}
+      open
+      header-text={t('service-accounts.token-request.generate')}
       className="token-request-modal"
     >
       {/*@ts-ignore*/}
@@ -140,9 +140,9 @@ export function TokenRequestModal({
             <Button
               onClick={() => downloadKubeconfig(serviceAccountName, token)}
               disabled={token === ''}
-              option="transparent"
+              design="Transparent"
               className="fd-margin-end--tiny"
-              glyph="download"
+              icon="download"
             >
               {t('service-accounts.headers.download-kubeconfig')}
             </Button>
@@ -165,6 +165,9 @@ export function TokenRequestModal({
         </div>
         {/*@ts-ignore*/}
       </ResourceForm.Single>
+      <Bar slot="footer" design="Footer">
+        {actions}
+      </Bar>
     </Dialog>
   );
 }

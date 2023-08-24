@@ -1,4 +1,5 @@
-import { Button, Dialog, Icon } from 'fundamental-react';
+import { Dialog, Bar, Button } from '@ui5/webcomponents-react';
+import { Icon } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 
@@ -58,19 +59,20 @@ export function Preferences() {
   };
 
   const actions = [
-    <Button onClick={handleCloseModal}>{t('common.buttons.close')}</Button>,
+    <Button slot="endContent" design="Emphasized" onClick={handleCloseModal}>
+      {t('common.buttons.close')}
+    </Button>,
   ];
 
   useEventListener('keydown', handleCloseWithEscape);
 
   return (
     <Dialog
-      show={isModalOpen}
-      title={t('navigation.preferences.title')}
-      actions={actions}
-      className="preferences-dialog"
+      open={isModalOpen}
+      header-text={t('navigation.preferences.title')}
+      id="dialog"
     >
-      <VerticalTabs tabs={tabs} height="100vh">
+      <VerticalTabs tabs={tabs} height="70vh">
         <VerticalTabs.Content id={1}>
           <Tabs className="fd-tabs fd-has-padding-left-regular">
             <Tab
@@ -119,6 +121,9 @@ export function Preferences() {
           </Tabs>
         </VerticalTabs.Content>
       </VerticalTabs>
+      <Bar slot="footer" design="Footer">
+        {actions}
+      </Bar>
     </Dialog>
   );
 }
