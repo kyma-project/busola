@@ -1,12 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { saveAs } from 'file-saver';
-import {
-  Button,
-  LayoutPanel,
-  Switch,
-  Select,
-  FormLabel,
-} from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { LayoutPanel, Switch, Select, FormLabel } from 'fundamental-react';
 import { LogsLink } from 'shared/components/LogsLink/LogsLink';
 import { useGetStream } from 'shared/hooks/BackendAPI/useGet';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ButtonSegmented, Button } from 'fundamental-react';
+import { SegmentedButton, SegmentedButtonItem } from '@ui5/webcomponents-react';
 import { PluginStack } from '@ui-schema/ui-schema';
 import { isNil } from 'lodash';
 
@@ -58,12 +58,12 @@ export function MultiType({
           `${storeKeys.join('.')}-type` || tFromStoreKeys(storeKeys, schema)
         }
         input={() => (
-          <ButtonSegmented>
+          <SegmentedButton>
             {types.map(type => (
-              <Button
+              <SegmentedButtonItem
                 compact
                 key={type}
-                selected={type === selectedType}
+                pressed={type === selectedType}
                 onClick={() => {
                   onChange &&
                     onChange({
@@ -77,9 +77,9 @@ export function MultiType({
                 }}
               >
                 {tFromStoreKeys(storeKeys.push(type), schema)}
-              </Button>
+              </SegmentedButtonItem>
             ))}
-          </ButtonSegmented>
+          </SegmentedButton>
         )}
       />
       <PluginStack

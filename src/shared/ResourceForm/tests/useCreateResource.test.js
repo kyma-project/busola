@@ -1,3 +1,4 @@
+import { Button } from '@ui5/webcomponents-react';
 import { fireEvent, render, waitFor } from 'testing/reactTestingUtils';
 import { useCreateResource } from '../useCreateResource';
 
@@ -25,7 +26,7 @@ const consoleErrorMock = jest
 const Testbed = ({ namespace = 'test-namespace', ...props }) => {
   const Component = () => {
     const createResource = useCreateResource(props);
-    return <button onClick={() => createResource()}>Act</button>;
+    return <Button onClick={() => createResource()}>Act</Button>;
   };
 
   return <Component />;

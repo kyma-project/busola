@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef, Suspense } from 'react';
-import { Dialog, Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { Dialog } from 'fundamental-react';
 import { isEqual } from 'lodash';
 
 import { YamlResourcesList } from './YamlResourcesList';
@@ -83,7 +84,7 @@ export function YamlUploadDialog({ show, onCancel }) {
 
   const actions = [
     lastOperationState === OPERATION_STATE_SUCCEEDED ? (
-      <Button onClick={onCancel} option="emphasized">
+      <Button onClick={onCancel} design="Emphasized">
         {t('common.buttons.close')}
       </Button>
     ) : (
@@ -91,13 +92,13 @@ export function YamlUploadDialog({ show, onCancel }) {
         <Button
           onClick={fetchResources}
           disabled={!resourcesWithStatuses?.length}
-          option="emphasized"
+          design="Emphasized"
         >
           {t('common.buttons.submit')}
         </Button>
         <Button
           onClick={onCancel}
-          option="transparent"
+          design="Transparent"
           data-testid="yaml-cancel"
         >
           {lastOperationState !== OPERATION_STATE_SOME_FAILED

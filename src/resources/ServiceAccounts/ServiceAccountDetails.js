@@ -4,7 +4,7 @@ import { GenericSecrets } from './GenericSecrets';
 import { ServiceAccountTokenStatus } from 'shared/components/ServiceAccountTokenStatus';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { ServiceAccountCreate } from './ServiceAccountCreate';
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 import { TokenRequestModal } from './TokenRequestModal/TokenRequestModal';
 
 const ServiceAccountSecrets = serviceAccount => {

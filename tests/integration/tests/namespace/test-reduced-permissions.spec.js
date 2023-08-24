@@ -69,7 +69,9 @@ context('Test reduced permissions', () => {
     );
 
     cy.get('[role="dialog"]')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
   });
 
@@ -83,7 +85,9 @@ context('Test reduced permissions', () => {
     cy.get('[ariaLabel="ServiceAccount name"]:visible').type(SA_NAME);
 
     cy.get('[role="dialog"]')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
   });
 
@@ -120,7 +124,9 @@ context('Test reduced permissions', () => {
     chooseComboboxOption('[placeholder="Select name"]:visible', SA_NAME);
 
     cy.get('[role="dialog"]')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
   });
 

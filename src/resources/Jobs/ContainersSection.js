@@ -1,8 +1,7 @@
 import React from 'react';
 import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
-import { MessageStrip } from '@ui5/webcomponents-react';
-import { Button } from 'fundamental-react';
+import { Button, MessageStrip } from '@ui5/webcomponents-react';
 
 import { ItemArray } from 'shared/ResourceForm/fields';
 import { createContainerTemplate } from './templates';
@@ -51,14 +50,14 @@ export const ContainerSection = ({ readOnly, ...props }) => {
       >
         {t('jobs.create-modal.at-least-one-container-required')}
         <Button
-          glyph="add"
-          compact
+          icon="add"
+          iconEnd
           disabled={readOnly}
           onClick={() => {
             jp.value(value, '$[0]', createContainerTemplate());
             setValue(value);
           }}
-          option="transparent"
+          design="Transparent"
         >
           {t('deployment.create-modal.advanced.add-container')}
         </Button>

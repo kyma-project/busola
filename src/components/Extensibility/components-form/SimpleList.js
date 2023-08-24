@@ -1,7 +1,8 @@
 import React from 'react';
 import { mapValues } from 'lodash';
 import { PluginStack, useUIStore } from '@ui-schema/ui-schema';
-import { Button, FormLabel } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { FormLabel } from 'fundamental-react';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import {
@@ -123,7 +124,6 @@ export function SimpleList({
                           storeKeys={ownKeys}
                           level={level + 1}
                           schemaKeys={schemaKeys?.push('items')}
-                          compact
                           placeholder={tExt(schemaPlaceholder)}
                           inputInfo={inputInfo}
                         />
@@ -133,9 +133,8 @@ export function SimpleList({
                           {!isLast(index) && (
                             <Button
                               disabled={readOnly}
-                              compact
-                              glyph="delete"
-                              type="negative"
+                              icon="delete"
+                              design="Negative"
                               onClick={() => removeItem(index)}
                               ariaLabel={t('common.buttons.delete')}
                             />
