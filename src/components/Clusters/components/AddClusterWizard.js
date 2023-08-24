@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { MessageStrip } from '@ui5/webcomponents-react';
-import { Wizard } from 'fundamental-react';
+import {
+  Button,
+  MessageStrip,
+  Wizard,
+  WizardStep,
+} from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -118,20 +122,21 @@ export function AddClusterWizard({
 
   return (
     <Wizard
-      onCancel={onCancel}
-      onComplete={onComplete}
-      navigationType="tabs"
-      headerSize="md"
-      contentSize="md"
-      className="add-cluster-wizard"
+      contentLayout="SingleStep"
+      // onCancel={onCancel}
+      // onComplete={onComplete}
+      // navigationType="tabs"
+      // headerSize="md"
+      // contentSize="md"
+      // className="add-cluster-wizard"
     >
-      <Wizard.Step
-        title={t('clusters.wizard.kubeconfig')}
+      <WizardStep
+        titleText={t('clusters.wizard.kubeconfig')}
         branching={!kubeconfig}
-        indicator="1"
-        valid={!!kubeconfig}
-        previousLabel={t('clusters.buttons.previous-step')}
-        nextLabel={t('clusters.buttons.next-step')}
+        // indicator="1"
+        // valid={!!kubeconfig}
+        // previousLabel={t('clusters.buttons.previous-step')}
+        // nextLabel={t('clusters.buttons.next-step')}
       >
         <p>{t('clusters.wizard.intro')}</p>
         <MessageStrip
@@ -145,15 +150,25 @@ export function AddClusterWizard({
           kubeconfig={kubeconfig}
           setKubeconfig={updateKubeconfig}
         />
-      </Wizard.Step>
+        <Button
+          design="Emphasized"
+          onClick={function ka() {}}
+          disabled={!kubeconfig}
+        >
+          {t('clusters.buttons.next-step')}
+        </Button>
+        <Button design="Transparent" onClick={onCancel}>
+          {t('common.buttons.cancel')}
+        </Button>
+      </WizardStep>
 
       {kubeconfig && (!hasAuth || !hasOneContext) && (
-        <Wizard.Step
-          title={t('clusters.wizard.update')}
-          indicator="2"
-          valid={authValid}
-          previousLabel={t('clusters.buttons.previous-step')}
-          nextLabel={t('clusters.buttons.next-step')}
+        <WizardStep
+          titleText={t('clusters.wizard.update')}
+          // indicator="2"
+          // valid={authValid}
+          // previousLabel={t('clusters.buttons.previous-step')}
+          // nextLabel={t('clusters.buttons.next-step')}
         >
           <ResourceForm.Single
             formElementRef={authFormRef}
@@ -167,18 +182,38 @@ export function AddClusterWizard({
             {!hasOneContext && <ContextChooser />}
             {!hasAuth && <AuthForm revalidate={revalidate} />}
           </ResourceForm.Single>
-        </Wizard.Step>
+          <Button onClick={function ka() {}}>
+            {t('clusters.buttons.previous-step')}
+          </Button>
+          <Button
+            design="Emphasized"
+            onClick={function ka() {}}
+            disabled={authValid}
+          >
+            {t('clusters.buttons.next-step')}
+          </Button>
+          <Button design="Transparent" onClick={function ka() {}}>
+            {t('common.buttons.cancel')}
+          </Button>
+        </WizardStep>
       )}
 
-      <Wizard.Step
+      <WizardStep
         title={t('clusters.wizard.storage')}
-        indicator="2"
+        // indicator="2"
         valid={!!storage}
-        previousLabel={t('clusters.buttons.previous-step')}
-        nextLabel={t('clusters.buttons.verify-and-add')}
       >
         <ChooseStorage storage={storage} setStorage={setStorage} />
-      </Wizard.Step>
+        <Button onClick={function ka() {}}>
+          {t('clusters.buttons.previous-step')}
+        </Button>
+        <Button design="Emphasized" onClick={onComplete} disabled={!storage}>
+          {t('clusters.buttons.verify-and-add')}
+        </Button>
+        <Button design="Transparent" onClick={onCancel}>
+          {t('common.buttons.cancel')}
+        </Button>
+      </WizardStep>
     </Wizard>
   );
 }
