@@ -86,9 +86,9 @@ context('Test Cluster Validation Scan', () => {
     cy.contains('Submit').click();
 
     cy.get('@clusterValidationPanel')
-      .find('button')
+      .find('ui5-button')
       .contains('Scan')
-      .click({ force: true });
+      .click();
 
     // wait for scan to finish
     cy.contains('Scan Progress').should('be.visible');

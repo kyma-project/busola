@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'shared/components/Link/Link';
 import { Trans, useTranslation } from 'react-i18next';
 import { createPatch } from 'rfc6902';
-import { MessageStrip } from '@ui5/webcomponents-react';
-import { LayoutPanel, Button } from 'fundamental-react';
+import { Button, MessageStrip } from '@ui5/webcomponents-react';
+import { LayoutPanel } from 'fundamental-react';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
@@ -81,7 +81,7 @@ export function BusolaExtensionDetails(props) {
                   section: t(`extensibility.sections.${key}`),
                 })}
                 modalOpeningComponent={
-                  <Button className="fd-margin-end--tiny" option="emphasized">
+                  <Button className="fd-margin-end--tiny" design="Emphasized">
                     {t('extensibility.edit-section', {
                       section: t(`extensibility.sections.${key}`),
                     })}
@@ -190,7 +190,8 @@ export function BusolaExtensionDetails(props) {
                 {currentVersion && (
                   <Button
                     disabled={currentVersion === getLatestVersion()}
-                    glyph="forward" // generate-shortcut journey-arrive journey-change tools-opportunity trend-up
+                    icon="forward"
+                    iconEnd
                     onClick={() => {
                       const newBusolaExtension = migrateToLatest(configmap);
                       updateBusolaExtension(newBusolaExtension, configmap);

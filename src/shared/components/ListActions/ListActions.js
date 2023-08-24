@@ -1,5 +1,6 @@
 import React from 'react';
-import { Popover, Menu, Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { Popover, Menu } from 'fundamental-react';
 import './ListActions.scss';
 
 import PropTypes from 'prop-types';
@@ -12,7 +13,7 @@ const AUTO_ICONS_BY_NAME = new Map([
   ['Details', 'detail-view'],
 ]);
 
-const StandaloneAction = ({ action, entry, compact }) => {
+const StandaloneAction = ({ action, entry }) => {
   const icon = action.icon || AUTO_ICONS_BY_NAME.get(action.name);
 
   if (action.component) {
@@ -23,11 +24,9 @@ const StandaloneAction = ({ action, entry, compact }) => {
       data-testid={action.name.replace(' ', '').toLowerCase()}
       onClick={() => action.handler(entry)}
       className="list-actions__standalone"
-      option="transparent"
-      glyph={typeof icon === 'function' ? icon(entry) : icon}
+      design="Transparent"
+      icon={typeof icon === 'function' ? icon(entry) : icon}
       aria-label={action.name}
-      typeAttr="button"
-      compact={compact}
       disabled={action.disabledHandler && action.disabledHandler(entry)}
     >
       {icon ? '' : action.name}
@@ -51,7 +50,7 @@ const StandaloneAction = ({ action, entry, compact }) => {
   );
 };
 
-const ListActions = ({ actions, entry, compact }) => {
+const ListActions = ({ actions, entry }) => {
   if (!actions.length) {
     return null;
   }
@@ -60,12 +59,7 @@ const ListActions = ({ actions, entry, compact }) => {
   return (
     <div className="list-actions">
       {actions.slice(0, 3).map(a => (
-        <StandaloneAction
-          key={a.name}
-          action={a}
-          entry={entry}
-          compact={compact}
-        />
+        <StandaloneAction key={a.name} action={a} entry={entry} />
       ))}
       {listItems.length ? (
         <Popover
@@ -82,8 +76,8 @@ const ListActions = ({ actions, entry, compact }) => {
           }
           control={
             <Button
-              glyph="vertical-grip"
-              option="transparent"
+              icon="vertical-grip"
+              design="Transparent"
               aria-label="more-actions"
             />
           }
@@ -97,7 +91,6 @@ const ListActions = ({ actions, entry, compact }) => {
 ListActions.propTypes = {
   actions: CustomPropTypes.listActions,
   entry: PropTypes.any.isRequired,
-  compact: PropTypes.bool,
 };
 
 export default ListActions;

@@ -2,7 +2,8 @@ import {
   useGetPlaceholder,
   useGetTranslation,
 } from 'components/Extensibility/helpers';
-import { Button, Icon, Link } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { Icon, Link } from 'fundamental-react';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -52,7 +53,8 @@ export const ExternalLink = ({
   if (structure.type === 'button') {
     return (
       <Button
-        glyph="action"
+        icon="action"
+        iconEnd
         className="fd-margin-begin--sm fd-margin-end--tiny"
         onClick={() => {
           const newWindow = window.open(href, '_blank', 'noopener, noreferrer');

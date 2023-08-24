@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Button, FormInput, Icon } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { FormInput, Icon } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import './NoPermissions.scss';
 import { addCluster } from 'components/Clusters/shared';
@@ -48,8 +49,7 @@ function NoPermissions() {
           }
         />
         <Button
-          typeAttr="submit"
-          option="emphasized"
+          design="Emphasized"
           className="update-namespace-button"
           disabled={!namespaceName}
         >

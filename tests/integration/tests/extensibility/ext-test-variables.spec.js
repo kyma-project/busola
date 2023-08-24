@@ -253,7 +253,9 @@ context('Test extensibility variables', () => {
 
     // create resource
     cy.get('[role=dialog]')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
 
     // check arrayOfStrings

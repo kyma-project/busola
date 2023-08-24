@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import * as Sentry from '@sentry/react';
 

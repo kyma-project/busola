@@ -29,7 +29,9 @@ context('Test Custom Resources', () => {
     });
 
     cy.get('[role="dialog"]')
-      .contains('button', 'Submit')
+      .get('ui5-button')
+      .contains('Submit')
+      .should('be.visible')
       .click();
 
     cy.get('.fd-dialog__body')
@@ -37,7 +39,9 @@ context('Test Custom Resources', () => {
       .should('have.length', 1);
 
     cy.get('[role="dialog"]')
-      .contains('button', 'Close')
+      .get('ui5-button')
+      .contains('Close')
+      .should('be.visible')
       .click();
   });
 
@@ -46,7 +50,10 @@ context('Test Custom Resources', () => {
 
     cy.contains('h3', 'Custom Resources').should('be.visible');
 
-    cy.get('[role="search"] [aria-label="open-search"]').type('cypress');
+    cy.get('ui5-button[aria-label="open-search"]')
+      .click()
+      .get('input[aria-label="search-input"]')
+      .type('cypress');
 
     cy.get('table').should('have.length', 1);
 

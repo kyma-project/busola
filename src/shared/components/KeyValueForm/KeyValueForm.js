@@ -1,12 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Button,
-  FormLabel,
-  FormInput,
-  FormTextarea,
-  Icon,
-} from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { FormLabel, FormInput, FormTextarea, Icon } from 'fundamental-react';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import {
   fromEntries,
@@ -69,14 +64,7 @@ export function KeyValueForm({
     <section className="key-value-form">
       <span className="fd-has-color-text-4"></span>
       <header className="fd-margin-top--sm fd-margin-bottom--sm">
-        <Button
-          className="add-entry"
-          glyph="add"
-          type="ghost"
-          typeAttr="button"
-          onClick={addEntry}
-          iconBeforeText
-        >
+        <Button className="add-entry" icon="add" onClick={addEntry}>
           {t('components.key-value-form.add-entry')}
         </Button>
         {customHeaderAction && customHeaderAction(entries, setEntries)}
@@ -137,7 +125,6 @@ export function KeyValueForm({
               </Tooltip>
               <Tooltip content={t('common.tooltips.read-file')}>
                 <Button
-                  typeAttr="button"
                   onClick={() =>
                     readFromFile().then(result => {
                       if (result) {
@@ -152,9 +139,8 @@ export function KeyValueForm({
                 </Button>
               </Tooltip>
               <Button
-                type="negative"
-                typeAttr="button"
-                glyph="delete"
+                design="Negative"
+                icon="delete"
                 aria-label="Delete entry"
                 onClick={() => deleteEntry(entry)}
               />

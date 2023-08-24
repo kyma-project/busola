@@ -5,7 +5,7 @@ import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { createPatch } from 'rfc6902';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 import { ForceUpdateModalContent } from './ForceUpdateModalContent';
 import { useUrl } from 'hooks/useUrl';
 import { useNavigate } from 'react-router-dom';
@@ -134,7 +134,7 @@ export function useCreateResource({
             />
           ),
           actions: (closeModal, defaultCloseButton) => [
-            <Button compact onClick={makeForceUpdateFn(closeModal)}>
+            <Button onClick={makeForceUpdateFn(closeModal)}>
               {t('common.create-form.force-update')}
             </Button>,
             defaultCloseButton(closeModal),

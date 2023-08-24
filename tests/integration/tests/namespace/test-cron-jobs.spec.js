@@ -61,7 +61,9 @@ context('Test Cron Jobs', () => {
     cy.contains('Always').click();
 
     cy.get('[role="dialog"]')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
   });
 
@@ -74,7 +76,10 @@ context('Test Cron Jobs', () => {
   });
 
   it('Edit Cron Job', () => {
-    cy.contains('Edit').click();
+    cy.get('ui5-button')
+      .contains('Edit')
+      .should('be.visible')
+      .click();
 
     cy.get('[placeholder="Hour"]')
       .clear()
@@ -109,7 +114,9 @@ context('Test Cron Jobs', () => {
     cy.contains('Never').click();
 
     cy.get('[role="dialog"]')
-      .contains('button', 'Update')
+      .get('ui5-button')
+      .contains('Update')
+      .should('be.visible')
       .click();
   });
 
