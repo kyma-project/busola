@@ -7,6 +7,7 @@ import { ThemePreview } from './ThemePreview/ThemePreview';
 import { useTranslation } from 'react-i18next';
 
 const AVAILABLE_THEMES: Theme[] = [
+  'light_dark',
   'sap_horizon',
   'sap_horizon_dark',
   'sap_horizon_hcw',
@@ -16,6 +17,9 @@ const AVAILABLE_THEMES: Theme[] = [
 export default function ThemeChooser() {
   const { t } = useTranslation();
   const [theme, setUsedTheme] = useRecoilState(themeState);
+
+  const getCurrentTheme = () =>
+    window.matchMedia('(prefers-color-scheme: dark)').matches;
 
   return (
     <>
@@ -31,7 +35,12 @@ export default function ThemeChooser() {
             isActive={themeName === theme}
             handleClick={() => {
               setUsedTheme(themeName);
-              setTheme(themeName);
+              if (theme === 'light_dark') {
+                if (getCurrentTheme()) setTheme('sap_horizon_dark');
+                else setTheme('sap_horizon');
+              } else {
+                setTheme(theme);
+              }
             }}
           />
         );

@@ -2,6 +2,7 @@ import { atom, RecoilState, AtomEffect } from 'recoil';
 import { localStorageEffect } from '../utils/effects';
 
 export type Theme =
+  | 'light_dark'
   | 'sap_horizon'
   | 'sap_horizon_dark'
   | 'sap_horizon_hcw'
@@ -9,6 +10,12 @@ export type Theme =
 
 const THEME_STORAGE_KEY = 'busola.theme';
 const DEFAULT_THEME = 'sap_horizon';
+
+const getCurrentTheme = () => {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches
+    ? 'dark'
+    : 'default';
+};
 
 export function applyThemeToLinkNode(
   name = 'sap_horizon',
@@ -23,12 +30,17 @@ export function applyThemeToLinkNode(
     addLinkNode();
     if (name === 'sap_horizon')
       return applyThemeToLinkNode('default', publicUrl);
+    else if (name === 'light_dark')
+      return applyThemeToLinkNode(getCurrentTheme(), publicUrl);
     else return applyThemeToLinkNode(name.slice(12), publicUrl);
   }
 
-  link.href = `${publicUrl || ''}/themes/${
-    name === 'sap_horizon' ? 'default' : name
-  }.css`;
+  if (name === 'light_dark')
+    link.href = `${publicUrl || ''}/themes/${getCurrentTheme()}.css`;
+  else
+    link.href = `${publicUrl || ''}/themes/${
+      name === 'sap_horizon' ? 'default' : name
+    }.css`;
 }
 
 function addLinkNode() {
@@ -46,8 +58,9 @@ export const addLinkEffect: AddLinkEffect = () => ({ onSet, setSelf }) => {
   });
 
   onSet(newTheme => {
-    const themeNew =
-      newTheme === 'sap_horizon' ? 'default' : newTheme.slice(12);
+    let themeNew;
+    if (newTheme === 'light_dark') themeNew = getCurrentTheme();
+    else themeNew = newTheme === 'sap_horizon' ? 'default' : newTheme.slice(12);
     applyThemeToLinkNode(themeNew, process.env.PUBLIC_URL);
   });
 };
