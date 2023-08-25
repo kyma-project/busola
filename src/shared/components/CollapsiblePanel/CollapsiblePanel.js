@@ -30,8 +30,8 @@ export const CollapsiblePanel = ({
         <LayoutPanel.Actions>
           {actions}
           <Button
-            glyph={isOpen ? 'navigation-up-arrow' : 'navigation-down-arrow'}
-            option="transparent"
+            icon={isOpen ? 'navigation-up-arrow' : 'navigation-down-arrow'}
+            design="Transparent"
             onClick={switchOpen}
           />
         </LayoutPanel.Actions>

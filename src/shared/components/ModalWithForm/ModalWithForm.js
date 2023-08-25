@@ -135,9 +135,10 @@ export const ModalWithForm = ({
       </div>
     ) : (
       <Button
-        icon={button.glyph || null}
+        icon={button.icon || null}
+        iconEnd
         aria-label={button.label || null}
-        design={button.option}
+        design={button.design}
         disabled={!!button.disabled}
         onClick={() => setOpenStatus(true)}
       >

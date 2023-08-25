@@ -95,7 +95,10 @@ context('Test resource upload', () => {
 
     cy.navigateTo('Storage', 'Storage Classes');
 
-    cy.get('[role="search"] [aria-label="open-search"]').type(SC_NAME);
+    cy.get('ui5-button[aria-label="open-search"]')
+      .click()
+      .get('input[aria-label="search-input"]')
+      .type(SC_NAME);
 
     cy.get('tbody tr [aria-label="Delete"]').click({ force: true });
 

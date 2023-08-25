@@ -143,6 +143,7 @@ export function TokenRequestModal({
               design="Transparent"
               className="fd-margin-end--tiny"
               icon="download"
+              iconEnd
             >
               {t('service-accounts.headers.download-kubeconfig')}
             </Button>

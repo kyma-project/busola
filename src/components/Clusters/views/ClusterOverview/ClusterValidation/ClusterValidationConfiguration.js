@@ -38,7 +38,7 @@ const ListActions = ({ options, setSelected }) => {
       >
         {t('common.buttons.add-all')}
       </Button>
-      <Button icon="less" onClick={() => setSelected([])} design="Transparent">
+      <Button icon="less" onClick={() => setSelected([])} desgin="Transparent">
         {t('common.buttons.remove-all')}
       </Button>
     </>

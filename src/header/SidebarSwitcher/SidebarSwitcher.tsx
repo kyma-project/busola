@@ -1,4 +1,4 @@
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 import { useSetRecoilState } from 'recoil';
 import { isSidebarCondensedState } from 'state/preferences/isSidebarCondensedAtom';
 
@@ -11,8 +11,8 @@ export function SidebarSwitcher(props: any) {
     <div slot={props.slot} className="sidebar-switcher-wrapper">
       <Button
         onClick={() => setSidebarCondensed(prevState => !prevState)}
-        glyph="menu2"
-        option="transparent"
+        icon="menu2"
+        design="Transparent"
         className="sidebar-switcher"
       />
     </div>

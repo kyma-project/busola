@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { Button, LayoutPanel, Switch } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { LayoutPanel, Switch } from 'fundamental-react';
 import {
   getExtendedValidateResourceState,
   validateResourcesState,
@@ -164,8 +165,9 @@ export default function ResourceValidationSettings() {
                 <>
                   {!choosePolicies && (
                     <Button
-                      option="transparent"
-                      glyph="customize"
+                      design="Transparent"
+                      icon="customize"
+                      iconEnd
                       className="fd-margin-begin--sm"
                       onClick={enablePolicyCustomization}
                     >
@@ -174,8 +176,9 @@ export default function ResourceValidationSettings() {
                   )}
                   {choosePolicies && (
                     <Button
-                      option="transparent"
-                      glyph="reset"
+                      design="Transparent"
+                      icon="reset"
+                      iconEnd
                       className="fd-margin-begin--sm"
                       onClick={disablePolicyCustomization}
                     >

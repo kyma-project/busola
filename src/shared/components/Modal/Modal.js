@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import './Modal.scss';
-import { Dialog as FdModal, Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { Dialog as FdModal } from 'fundamental-react';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useTranslation } from 'react-i18next';
@@ -88,7 +89,7 @@ export function Modal({
 
     const confirmButton = (
       <Button
-        option="emphasized"
+        design="Emphasized"
         onClick={handleConfirmClicked}
         disabled={disabledConfirm}
         data-e2e-id="modal-confirmation-button"
@@ -110,7 +111,7 @@ export function Modal({
       output.push(
         <Button
           style={{ marginRight: '12px' }}
-          option="transparent"
+          design="Transparent"
           onClick={onClose}
         >
           {cancelText}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from '@ui5/webcomponents-react';
 import { Token } from 'fundamental-react';
 import { Trans, useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
@@ -21,9 +22,9 @@ export function SuggestedQuery({
   return (
     <>
       {t('command-palette.results.did-you-mean')}
-      <button className="button-link" onClick={() => setQuery(suggestedQuery)}>
+      <Button className="button-link" onClick={() => setQuery(suggestedQuery)}>
         {suggestedQuery}
-      </button>
+      </Button>
     </>
   );
 }
@@ -62,9 +63,9 @@ export function ShortHelpText({ showFullHelp }: { showFullHelp: () => void }) {
   return (
     <p className="short-help help-text">
       {t('command-palette.help.short-help')}
-      <button className="button-link" onClick={showFullHelp}>
+      <Button className="button-link" onClick={showFullHelp}>
         {t('command-palette.item-actions.show-help')}
-      </button>
+      </Button>
     </p>
   );
 }

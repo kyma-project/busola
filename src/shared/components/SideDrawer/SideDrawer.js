@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import jsyaml from 'js-yaml';
+import { Button } from '@ui5/webcomponents-react';
 import { Icon } from 'fundamental-react';
 
 import './SideDrawer.scss';
@@ -80,7 +81,7 @@ export const SideDrawer = ({
       style={style}
     >
       {(isOpen || children) && (
-        <button
+        <Button
           className={`open-btn ${!buttonText ? 'open-btn-hidden' : ''}`}
           onClick={() => setOpen(!isOpen)}
         >
@@ -90,7 +91,7 @@ export const SideDrawer = ({
             ariaLabel="Open/close the drawer"
           />
           {buttonText}
-        </button>
+        </Button>
       )}
 
       <section className="content">

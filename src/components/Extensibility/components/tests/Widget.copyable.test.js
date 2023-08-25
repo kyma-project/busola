@@ -1,5 +1,5 @@
 import copyToClipboard from 'copy-to-clipboard';
-import { act, fireEvent, render, waitFor } from 'testing/reactTestingUtils';
+import { act, render, waitFor } from 'testing/reactTestingUtils';
 import { ExtensibilityTestWrapper } from './helpers';
 
 // those tests are in separate file as we need to mock the `widgets` collection from `./../index.js`...
@@ -22,7 +22,7 @@ describe('Widget.copyable', () => {
     CopyableMockWidget.copyable = true;
     CopyableMockWidget.inline = true;
 
-    const { getByRole } = render(
+    const { container } = render(
       <ExtensibilityTestWrapper>
         <Widget
           structure={{
@@ -37,9 +37,7 @@ describe('Widget.copyable', () => {
     await waitFor(async () => {
       await act(async () => {
         // find copy button
-        const button = getByRole('button');
-
-        fireEvent.click(button);
+        container.querySelector('ui5-button').click();
 
         expect(copyToClipboard).toHaveBeenCalledWith('test-value');
       });
@@ -78,7 +76,7 @@ describe('Widget.copyable', () => {
     CopyableMockWidget.inline = true;
     CopyableMockWidget.copyFunction = ({ value }) => 'this is ' + value;
 
-    const { getByRole } = render(
+    const { container } = render(
       <ExtensibilityTestWrapper>
         <Widget
           structure={{
@@ -93,9 +91,7 @@ describe('Widget.copyable', () => {
     await waitFor(async () => {
       await act(async () => {
         // find copy button
-        const button = getByRole('button');
-
-        fireEvent.click(button);
+        container.querySelector('ui5-button').click();
 
         expect(copyToClipboard).toHaveBeenCalledWith('this is test-value');
       });

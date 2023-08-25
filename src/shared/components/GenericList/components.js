@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Icon } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { Icon } from 'fundamental-react';
 import ListActions from 'shared/components/ListActions/ListActions';
 import classNames from 'classnames';
 
@@ -72,7 +73,6 @@ const DefaultRowRenderer = ({
   entry,
   actions,
   rowRenderer,
-  compact,
   isBeingEdited = false,
 }) => {
   const cells = rowRenderer.map((cell, id) => {
@@ -93,7 +93,7 @@ const DefaultRowRenderer = ({
   });
   const actionsCell = (
     <td className="fd-table__cell">
-      <ListActions actions={actions} entry={entry} compact={compact} />
+      <ListActions actions={actions} entry={entry} />
     </td>
   );
   return (
@@ -127,10 +127,8 @@ const CollapsedRowRenderer = ({
           data-testid={
             isOpen ? 'collapse-button-open' : 'collapse-button-close'
           }
-          option="transparent"
+          design="Transparent"
           onClick={() => setOpen(!isOpen)}
-          compact={true}
-          typeAttr="button"
         >
           <Icon
             className="fd-margin-end--tiny"

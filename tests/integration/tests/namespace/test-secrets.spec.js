@@ -39,8 +39,10 @@ context('Test Secrets', () => {
 
     cy.contains(btoa(SECRET_VALUE));
 
-    cy.get('[role=dialog]')
-      .contains('button', 'Create')
+    cy.get('[role="dialog"]')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
 
     cy.url().should('match', new RegExp(`/secrets/${SECRET_NAME}$`));
@@ -75,8 +77,10 @@ context('Test Secrets', () => {
       .eq(1)
       .click();
 
-    cy.get('[role=dialog]')
-      .contains('button', 'Update')
+    cy.get('[role="dialog"]')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Update')
+      .should('be.visible')
       .click();
   });
 

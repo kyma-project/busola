@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
-import { MessageStrip } from '@ui5/webcomponents-react';
-import { Button } from 'fundamental-react';
+import { Button, MessageStrip } from '@ui5/webcomponents-react';
 import {
   getExtendedValidateResourceState,
   validateResourcesState,
@@ -30,14 +29,15 @@ const WarningButton = ({
     <Button
       onClick={noWarnings ? () => {} : handleShowWarnings}
       className="warning-button"
-      type={noWarnings ? 'positive' : 'attention'}
-      glyph={
+      design={noWarnings ? 'Positive' : 'Attention'}
+      icon={
         noWarnings
           ? 'message-success'
           : areWarningsVisible
           ? 'navigation-up-arrow'
           : 'navigation-down-arrow'
       }
+      iconEnd
     >
       <div>
         <p>

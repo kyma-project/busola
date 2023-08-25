@@ -71,7 +71,7 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
       jsonata,
     );
     return (
-      <CopiableText compact textToCopy={textToCopy} disabled={!textToCopy}>
+      <CopiableText textToCopy={textToCopy} disabled={!textToCopy}>
         {children}
       </CopiableText>
     );
