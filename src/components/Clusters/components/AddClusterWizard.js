@@ -40,30 +40,8 @@ export function AddClusterWizard({
   const [storage, setStorage] = useState(
     busolaClusterParams?.config?.storage || 'sessionStorage',
   );
-  const [selected, setSelected] = useState('1');
-  const [disabled, setDisabled] = useState({ '2': true, '3': true, '4': true });
+  const [selected, setSelected] = useState(1);
 
-  const goToStep1 = () => {
-    setDisabled(prev => {
-      const { '1': _omit, ...rest } = prev;
-      return rest;
-    });
-    setSelected('1');
-  };
-  const goToStep2 = () => {
-    setDisabled(prev => {
-      const { '2': _omit, ...rest } = prev;
-      return rest;
-    });
-    setSelected('2');
-  };
-  const goToStep3 = () => {
-    setDisabled(prev => {
-      const { '3': _omit, ...rest } = prev;
-      return rest;
-    });
-    setSelected('3');
-  };
   const {
     isValid: authValid,
     formElementRef: authFormRef,
@@ -144,6 +122,14 @@ export function AddClusterWizard({
     }
   };
 
+  const goToNextStep = () => {
+    setSelected(selected + 1);
+  };
+
+  const goToPreviousStep = () => {
+    setSelected(selected - 1);
+  };
+
   return (
     <Wizard
       contentLayout="SingleStep"
@@ -153,7 +139,7 @@ export function AddClusterWizard({
         titleText={t('clusters.wizard.kubeconfig')}
         branching={!kubeconfig}
         // valid={!!kubeconfig}
-        selected={selected === '1'}
+        selected={selected === 1}
       >
         <p>{t('clusters.wizard.intro')}</p>
         <MessageStrip
@@ -169,9 +155,7 @@ export function AddClusterWizard({
         />
         <Button
           design="Emphasized"
-          onClick={
-            kubeconfig && (!hasAuth || !hasOneContext) ? goToStep2 : goToStep3
-          }
+          onClick={goToNextStep}
           disabled={!kubeconfig}
         >
           {t('clusters.buttons.next-step')}
@@ -185,8 +169,8 @@ export function AddClusterWizard({
         <WizardStep
           titleText={t('clusters.wizard.update')}
           // valid={authValid}
-          selected={selected === '2'}
-          disabled={disabled['2']}
+          selected={selected === 2}
+          disabled={selected !== 2}
         >
           <ResourceForm.Single
             formElementRef={authFormRef}
@@ -200,10 +184,14 @@ export function AddClusterWizard({
             {!hasOneContext && <ContextChooser />}
             {!hasAuth && <AuthForm revalidate={revalidate} />}
           </ResourceForm.Single>
-          <Button onClick={goToStep1}>
+          <Button onClick={goToPreviousStep}>
             {t('clusters.buttons.previous-step')}
           </Button>
-          <Button design="Emphasized" onClick={goToStep3} disabled={authValid}>
+          <Button
+            design="Emphasized"
+            onClick={goToNextStep}
+            disabled={!authValid}
+          >
             {t('clusters.buttons.next-step')}
           </Button>
           <Button design="Transparent" onClick={onCancel}>
@@ -215,15 +203,19 @@ export function AddClusterWizard({
       <WizardStep
         title={t('clusters.wizard.storage')}
         // valid={!!storage}
-        selected={selected === '3'}
-        disabled={disabled['3']}
+        selected={
+          kubeconfig && (!hasAuth || !hasOneContext)
+            ? selected === 3
+            : selected === 2
+        }
+        disabled={
+          kubeconfig && (!hasAuth || !hasOneContext)
+            ? selected !== 3
+            : selected !== 2
+        }
       >
         <ChooseStorage storage={storage} setStorage={setStorage} />
-        <Button
-          onClick={
-            kubeconfig && (!hasAuth || !hasOneContext) ? goToStep2 : goToStep1
-          }
-        >
+        <Button onClick={goToPreviousStep}>
           {t('clusters.buttons.previous-step')}
         </Button>
         <Button design="Emphasized" onClick={onComplete} disabled={!storage}>
