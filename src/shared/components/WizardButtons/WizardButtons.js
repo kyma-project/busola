@@ -1,8 +1,6 @@
 import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
-import './WizardButtons.scss';
-
 export function WizardButtons({
   selected,
   setSelected,
@@ -24,9 +22,9 @@ export function WizardButtons({
   };
 
   return (
-    <div className="wizard-buttons">
+    <div className="fd-margin-top--sm">
       {!firstStep && (
-        <Button onClick={goToPreviousStep}>
+        <Button onClick={goToPreviousStep} className="fd-margin-end--tiny">
           {t('clusters.buttons.previous-step')}
         </Button>
       )}
@@ -34,6 +32,7 @@ export function WizardButtons({
         design="Emphasized"
         onClick={lastStep ? onComplete : goToNextStep}
         disabled={validation}
+        className="fd-margin-end--tiny"
       >
         {lastStep
           ? customFinish
