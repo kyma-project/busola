@@ -1,6 +1,8 @@
 import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
+import './WizardButtons.scss';
+
 export function WizardButtons({
   selected,
   setSelected,
@@ -22,7 +24,7 @@ export function WizardButtons({
   };
 
   return (
-    <>
+    <div className="wizard-buttons">
       {!firstStep && (
         <Button onClick={goToPreviousStep}>
           {t('clusters.buttons.previous-step')}
@@ -42,6 +44,6 @@ export function WizardButtons({
       <Button design="Transparent" onClick={onCancel}>
         {t('common.buttons.cancel')}
       </Button>
-    </>
+    </div>
   );
 }
