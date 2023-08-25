@@ -14,15 +14,15 @@ context('Test Cluster Role Bindings', () => {
   it('Create a ClusterRoleBinding', () => {
     cy.navigateTo('Configuration', 'Cluster Role Bindings');
 
-    cy.contains('Create Cluster Role Binding').click();
+    cy.get('ui5-button')
+      .contains('Create Cluster Role Binding')
+      .click();
 
     cy.contains('Advanced').click();
 
     cy.get('[ariaLabel="ClusterRoleBinding name"]').type(CRB_NAME);
 
-    cy.get(
-      '[placeholder="Start typing to select ClusterRole from the list"]',
-    ).type('admin');
+    cy.get('input[id="role-input"]').type('cluster-admin');
 
     cy.contains('li', 'cluster-admin').click();
 
@@ -30,7 +30,7 @@ context('Test Cluster Role Bindings', () => {
       .clear()
       .type(USER_NAME);
 
-    cy.get('ui5-button.fd-dialog__decisive-button')
+    cy.get('ui5-button.ui5-bar-content')
       .contains('Create')
       .should('be.visible')
       .click();
@@ -43,11 +43,15 @@ context('Test Cluster Role Bindings', () => {
 
     cy.contains(USER_NAME).should('be.visible');
 
-    cy.contains('cluster-admin').should('be.visible');
+    cy.get('.fd-link')
+      .contains('cluster-admin')
+      .should('be.visible');
   });
 
   it('Edit', () => {
-    cy.contains('Edit').click();
+    cy.get('ui5-button')
+      .contains('Edit')
+      .click();
 
     cy.contains('[role="combobox"]', 'User').click();
 
@@ -65,7 +69,7 @@ context('Test Cluster Role Bindings', () => {
       .clear()
       .type('test-group');
 
-    cy.get('ui5-button.fd-dialog__decisive-button')
+    cy.get('ui5-button.ui5-bar-content')
       .contains('Update')
       .should('be.visible')
       .click();

@@ -6,6 +6,7 @@ context('Test invalid kubeconfig', () => {
 
   it('Use wrong kubeconfig - textfield', () => {
     cy.visit(`${config.clusterAddress}/clusters`)
+      .get('ui5-button')
       .contains('Connect cluster')
       .click();
 
@@ -24,6 +25,7 @@ context('Test invalid kubeconfig', () => {
 
   it('Use wrong kubeconfig - from file', () => {
     cy.visit(`${config.clusterAddress}/clusters`)
+      .get('ui5-button')
       .contains('Connect cluster')
       .click();
 

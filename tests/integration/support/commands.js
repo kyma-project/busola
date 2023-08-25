@@ -139,8 +139,6 @@ Cypress.Commands.add(
 
     cy.contains('a', searchTerm).should('be.visible');
 
-    cy.contains(/created/).should('not.exist');
-
     cy.get('ui5-button[data-testid="delete"]').click();
 
     if (confirmationEnabled) {

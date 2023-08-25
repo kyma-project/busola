@@ -170,7 +170,9 @@ context('Test Command Palette navigation', () => {
     getQueryInput().type('deploy');
     getQueryInput().trigger('keydown', { key: 'Enter' });
 
-    cy.contains('Create Deployment').click();
+    cy.get('ui5-button')
+      .contains('Create Deployment')
+      .click();
 
     openCommandPalette();
 

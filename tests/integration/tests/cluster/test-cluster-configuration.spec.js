@@ -74,7 +74,7 @@ context('Test Cluster configuration', () => {
 
     cy.contains('Other').click();
 
-    cy.get('[role=dialog]')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
       .contains('20')
       .click();
 

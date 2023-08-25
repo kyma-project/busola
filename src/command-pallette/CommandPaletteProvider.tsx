@@ -16,9 +16,7 @@ export const CommandPaletteProvider = ({
   >();
 
   const setShowDialog = (value: boolean) => {
-    const modalPresent = document.querySelector(
-      '[data-focus-lock-disabled=false]',
-    );
+    const modalPresent = document.querySelector('ui5-dialog[open="true"]');
     // disable opening palette if other modal is present
     if (!modalPresent || !value) {
       _setShowDialog(value);

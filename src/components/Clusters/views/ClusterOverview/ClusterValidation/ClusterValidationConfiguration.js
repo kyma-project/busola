@@ -213,6 +213,7 @@ export function ClusterValidationConfigurationDialog({
         onSubmit(tempConfiguration);
       }}
       design="Emphasized"
+      data-testid="submit-cluster-valiation-configuration"
     >
       {t('common.buttons.submit')}
     </Button>,
@@ -221,7 +222,6 @@ export function ClusterValidationConfigurationDialog({
   return (
     <Dialog
       open={show}
-      className="yaml-upload-modal"
       header-text={t('cluster-validation.scan.configuration.title')}
     >
       <ErrorBoundary>

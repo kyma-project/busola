@@ -20,7 +20,9 @@ context('Test Storage Classes', () => {
   it('Create Storage Class', () => {
     cy.navigateTo('Storage', 'Storage Classes');
 
-    cy.contains('Create Storage Class').click();
+    cy.get('ui5-button')
+      .contains('Create Storage Class')
+      .click();
 
     cy.wrap(loadSC(Cypress.env('STORAGE_CLASS_NAME'))).then(SC_CONFIG => {
       const SC = JSON.stringify(SC_CONFIG);
@@ -28,7 +30,7 @@ context('Test Storage Classes', () => {
       cy.pasteToMonaco(SC);
     });
 
-    cy.get('ui5-button.fd-dialog__decisive-button')
+    cy.get('ui5-button.ui5-bar-content')
       .contains('Create')
       .should('be.visible')
       .click();
