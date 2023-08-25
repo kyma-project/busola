@@ -18,7 +18,9 @@ context('Test Services', () => {
       .contains('Cluster Details')
       .click();
 
-    cy.contains('Upload YAML').click();
+    cy.get('ui5-button')
+      .contains('Upload YAML')
+      .click();
 
     cy.loadFiles('examples/services/configuration.yaml').then(resources => {
       const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
@@ -27,7 +29,7 @@ context('Test Services', () => {
 
     cy.contains('Submit').click();
 
-    cy.get('.fd-dialog__body')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
       .find('.sap-icon--message-success')
       .should('have.length', 1);
 
@@ -38,7 +40,7 @@ context('Test Services', () => {
 
     cy.contains('Submit').click();
 
-    cy.get('.fd-dialog__body')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
       .find('.sap-icon--message-success')
       .should('have.length', 1);
   });

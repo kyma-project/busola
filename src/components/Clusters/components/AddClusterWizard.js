@@ -169,7 +169,6 @@ export function AddClusterWizard({
           </ResourceForm.Single>
         </Wizard.Step>
       )}
-
       <Wizard.Step
         title={t('clusters.wizard.storage')}
         indicator="2"

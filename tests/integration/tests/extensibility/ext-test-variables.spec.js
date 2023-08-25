@@ -21,7 +21,9 @@ context('Test extensibility variables', () => {
       .contains('Cluster Details')
       .click();
 
-    cy.contains('Upload YAML').click();
+    cy.get('ui5-button')
+      .contains('Upload YAML')
+      .click();
 
     cy.loadFiles(
       'examples/testing/configuration/test-resource-configmap.yaml',
@@ -33,7 +35,7 @@ context('Test extensibility variables', () => {
 
     cy.contains('Submit').click();
 
-    cy.get('.fd-dialog__body')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
       .find('.sap-icon--message-success')
       .should('have.length', 2);
 
@@ -46,7 +48,7 @@ context('Test extensibility variables', () => {
 
     cy.contains('Submit').click();
 
-    cy.get('.fd-dialog__body')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
       .find('.sap-icon--message-success')
       .should('have.length', 2);
   });
@@ -66,11 +68,13 @@ context('Test extensibility variables', () => {
       .contains(/^Test Resources$/)
       .click();
 
-    cy.contains('Create Test Resource').click();
+    cy.get('ui5-button')
+      .contains('Create Test Resource')
+      .click();
   });
 
   it('Tests variables', () => {
-    cy.get('[role="document"]').as('form');
+    cy.get('ui5-dialog[accessible-role="Dialog"]').as('form');
 
     // test vars with no default value
     cy.get('@form')
@@ -135,7 +139,7 @@ context('Test extensibility variables', () => {
   });
 
   it('Tests presets', () => {
-    cy.get('[role="document"]').as('form');
+    cy.get('ui5-dialog[accessible-role="Dialog"]').as('form');
     // test default preset
     cy.get('@form')
       .find('[arialabel="TestResource name"]:visible')
@@ -181,7 +185,7 @@ context('Test extensibility variables', () => {
   });
 
   it('Tests data sources and triggers', () => {
-    cy.get('[role="document"]').as('form');
+    cy.get('ui5-dialog[accessible-role="Dialog"]').as('form');
 
     // test if trigger / subscribe works
     cy.get('@form')
@@ -230,7 +234,7 @@ context('Test extensibility variables', () => {
   });
 
   it('Tests MultiCheckbox', () => {
-    cy.get('[role="document"]').as('form');
+    cy.get('ui5-dialog[accessible-role="Dialog"]').as('form');
 
     cy.get('@form')
       .find('[data-testid="spec.arrayOfStrings.value_1"]:visible')
@@ -253,7 +257,7 @@ context('Test extensibility variables', () => {
 
     // create resource
     cy.get('[role=dialog]')
-      .get('ui5-button.fd-dialog__decisive-button')
+      .get('ui5-button.ui5-bar-content')
       .contains('Create')
       .should('be.visible')
       .click();

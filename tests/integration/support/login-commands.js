@@ -106,6 +106,7 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
     }
 
     cy.visit(`${config.clusterAddress}/clusters`)
+      .get('ui5-button')
       .contains('Connect cluster')
       .click();
 
@@ -123,7 +124,9 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
       cy.contains(storage).click();
     }
 
-    cy.contains('[role="dialog"] button', 'Connect cluster').click();
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
+      .contains('button', 'Connect cluster')
+      .click();
 
     cy.url().should('match', expectedLocation);
 
