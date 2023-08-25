@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Button,
-  MessageStrip,
-  Wizard,
-  WizardStep,
-} from '@ui5/webcomponents-react';
+import { MessageStrip, Wizard, WizardStep } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -22,6 +17,7 @@ import { ContextChooser } from './ContextChooser/ContextChooser';
 import { ChooseStorage } from './ChooseStorage';
 
 import './AddClusterWizard.scss';
+import { WizardButtons } from 'shared/components/WizardButtons/WizardButtons';
 
 export function AddClusterWizard({
   kubeconfig,
@@ -122,23 +118,11 @@ export function AddClusterWizard({
     }
   };
 
-  const goToNextStep = () => {
-    setSelected(selected + 1);
-  };
-
-  const goToPreviousStep = () => {
-    setSelected(selected - 1);
-  };
-
   return (
-    <Wizard
-      contentLayout="SingleStep"
-      // className="add-cluster-wizard"
-    >
+    <Wizard contentLayout="SingleStep">
       <WizardStep
         titleText={t('clusters.wizard.kubeconfig')}
         branching={!kubeconfig}
-        // valid={!!kubeconfig}
         selected={selected === 1}
       >
         <p>{t('clusters.wizard.intro')}</p>
@@ -153,22 +137,18 @@ export function AddClusterWizard({
           kubeconfig={kubeconfig}
           setKubeconfig={updateKubeconfig}
         />
-        <Button
-          design="Emphasized"
-          onClick={goToNextStep}
-          disabled={!kubeconfig}
-        >
-          {t('clusters.buttons.next-step')}
-        </Button>
-        <Button design="Transparent" onClick={onCancel}>
-          {t('common.buttons.cancel')}
-        </Button>
+        <WizardButtons
+          selected={selected}
+          setSelected={setSelected}
+          firstStep={true}
+          onCancel={onCancel}
+          validation={!kubeconfig}
+        />
       </WizardStep>
 
       {kubeconfig && (!hasAuth || !hasOneContext) && (
         <WizardStep
           titleText={t('clusters.wizard.update')}
-          // valid={authValid}
           selected={selected === 2}
           disabled={selected !== 2}
         >
@@ -184,25 +164,17 @@ export function AddClusterWizard({
             {!hasOneContext && <ContextChooser />}
             {!hasAuth && <AuthForm revalidate={revalidate} />}
           </ResourceForm.Single>
-          <Button onClick={goToPreviousStep}>
-            {t('clusters.buttons.previous-step')}
-          </Button>
-          <Button
-            design="Emphasized"
-            onClick={goToNextStep}
-            disabled={!authValid}
-          >
-            {t('clusters.buttons.next-step')}
-          </Button>
-          <Button design="Transparent" onClick={onCancel}>
-            {t('common.buttons.cancel')}
-          </Button>
+          <WizardButtons
+            selected={selected}
+            setSelected={setSelected}
+            onCancel={onCancel}
+            validation={!authValid}
+          />
         </WizardStep>
       )}
 
       <WizardStep
         title={t('clusters.wizard.storage')}
-        // valid={!!storage}
         selected={
           kubeconfig && (!hasAuth || !hasOneContext)
             ? selected === 3
@@ -215,15 +187,15 @@ export function AddClusterWizard({
         }
       >
         <ChooseStorage storage={storage} setStorage={setStorage} />
-        <Button onClick={goToPreviousStep}>
-          {t('clusters.buttons.previous-step')}
-        </Button>
-        <Button design="Emphasized" onClick={onComplete} disabled={!storage}>
-          {t('clusters.buttons.verify-and-add')}
-        </Button>
-        <Button design="Transparent" onClick={onCancel}>
-          {t('common.buttons.cancel')}
-        </Button>
+        <WizardButtons
+          selected={selected}
+          setSelected={setSelected}
+          lastStep={true}
+          customFinish={t('clusters.buttons.verify-and-add')}
+          validation={!storage}
+          onComplete={onComplete}
+          onCancel={onCancel}
+        />
       </WizardStep>
     </Wizard>
   );
