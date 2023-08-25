@@ -24,7 +24,11 @@ export function WizardButtons({
   return (
     <div className="fd-margin-top--sm">
       {!firstStep && (
-        <Button onClick={goToPreviousStep} className="fd-margin-end--tiny">
+        <Button
+          onClick={goToPreviousStep}
+          className="fd-margin-end--tiny"
+          aria-label="previous-step"
+        >
           {t('clusters.buttons.previous-step')}
         </Button>
       )}
@@ -33,6 +37,7 @@ export function WizardButtons({
         onClick={lastStep ? onComplete : goToNextStep}
         disabled={validation}
         className="fd-margin-end--tiny"
+        aria-label={lastStep ? 'last-step' : 'next-step'}
       >
         {lastStep
           ? customFinish
@@ -40,7 +45,7 @@ export function WizardButtons({
             : t('common.buttons.submit')
           : t('clusters.buttons.next-step')}
       </Button>
-      <Button design="Transparent" onClick={onCancel}>
+      <Button design="Transparent" onClick={onCancel} aria-label="cancel">
         {t('common.buttons.cancel')}
       </Button>
     </div>
