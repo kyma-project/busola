@@ -27,7 +27,7 @@ export const ModalWithForm = ({
   ...props
 }) => {
   const { t } = useTranslation();
-  const [isOpen, setOpen] = useState(alwaysOpen || false);
+  const [isOpen, setOpen] = useState(alwaysOpen);
   const [resetFormFn, setResetFormFn] = useState(() => {});
 
   const {
@@ -165,6 +165,7 @@ export const ModalWithForm = ({
   return (
     <>
       {alwaysOpen ? null : renderModalOpeningComponent()}
+      {renderModalOpeningComponent()}
       <Dialog
         className={className}
         {...props}
