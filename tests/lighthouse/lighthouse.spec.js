@@ -42,9 +42,7 @@ test('Busola Lighthouse audit', async () => {
     .locator('input[id="file-upload"]')
     .setInputFiles('./fixtures/kubeconfig.yaml');
 
-  await page
-    .locator('[aria-label="next-step"] ui5-button:has-text("Next Step")')
-    .click();
+  await page.locator('ui5-button:has-text("Next Step")').click();
 
   await page
     .locator(
@@ -52,11 +50,7 @@ test('Busola Lighthouse audit', async () => {
     )
     .click();
 
-  await page
-    .locator(
-      '[aria-label="Connect\\ cluster"] button:has-text("Connect cluster")',
-    )
-    .click();
+  await page.locator('ui5-button:has-text("Connect cluster")').click();
 
   await expect(page.locator('h3:text("Cluster Details")')).toBeVisible();
 
