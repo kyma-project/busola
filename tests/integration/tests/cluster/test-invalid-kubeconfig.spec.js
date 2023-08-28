@@ -12,7 +12,7 @@ context('Test invalid kubeconfig', () => {
     cy.pasteToMonaco('wrong_kubeconfig');
 
     // trigger blur on editor
-    cy.get('button.fd-button--transparent.fd-button--compact')
+    cy.get('[aria-label="cancel"]')
       .should('contain.text', 'Cancel')
       .should('be.visible')
       .focus();
