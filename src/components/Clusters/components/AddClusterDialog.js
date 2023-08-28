@@ -29,6 +29,7 @@ export function AddClusterDialog({ show, onCancel }) {
       open={show}
       className="add-cluster-dialog wizard-dialog"
       header-text={t('clusters.add.title')}
+      onBeforeClose={onCancel}
     >
       <ErrorBoundary>
         <AddClusterDialogComponent onCancel={onCancel} show={show} />

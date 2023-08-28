@@ -36,6 +36,7 @@ export function Wizard({ value, structure, singleRootResource }) {
       </Button>
       <Dialog
         show={showWizard}
+        onBeforeClose={setShowWizard(false)}
         className="wizard-dialog"
         title={t('extensibility.wizard.headers.name') + ' ' + wizardName}
         actions={[]}

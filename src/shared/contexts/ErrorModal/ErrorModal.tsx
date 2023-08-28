@@ -66,6 +66,7 @@ export function ErrorModal({
       // @ts-ignore Type 'Element' is not assignable to type 'string', but we need an icon inside
       header-text={title}
       open
+      onBeforeClose={close}
     >
       {content}
       <Bar slot="footer" design="Footer">
