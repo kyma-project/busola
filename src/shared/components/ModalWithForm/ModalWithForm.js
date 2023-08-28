@@ -7,7 +7,6 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator';
-import { useEventListener } from 'hooks/useEventListener';
 
 export const ModalWithForm = ({
   performRefetch,
@@ -48,12 +47,6 @@ export const ModalWithForm = ({
   useEffect(() => {
     if (isOpen !== undefined) onModalOpenStateChange(isOpen);
   }, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const handleCloseWithEscape = e => {
-    if (e.key === 'Escape') setOpenStatus(false);
-  };
-
-  useEventListener('keydown', handleCloseWithEscape);
 
   const setOpenStatus = status => {
     if (status) {
