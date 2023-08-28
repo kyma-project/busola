@@ -73,9 +73,9 @@ context('Test multiple context kubeconfig', () => {
 
       cy.contains('Next').click();
 
-      cy.get('[role="dialog"]')
-        .contains('button', 'Connect cluster')
-        .click();
+      cy.get(`[aria-label="last-step"]:visible`)
+        .contains('Connect cluster')
+        .click({ force: true });
 
       cy.contains('Cluster Details').should('exist');
 
