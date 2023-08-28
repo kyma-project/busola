@@ -18,7 +18,7 @@ context('Test extensibility variables', () => {
 
   it('Creates the EXT test resources config', () => {
     cy.getLeftNav()
-      .contains('Cluster Details', { includeShadowDom: true })
+      .contains('Cluster Details')
       .click();
 
     cy.contains('Upload YAML').click();
@@ -54,16 +54,16 @@ context('Test extensibility variables', () => {
   it('Navigate to Test Resource Creation', () => {
     cy.loginAndSelectCluster();
 
-    cy.contains('Namespaces', { includeShadowDom: true }).click();
+    cy.contains('Namespaces').click();
 
     cy.contains('a', NAMESPACE).click();
 
     cy.getLeftNav()
-      .contains('Testin', { includeShadowDom: true })
+      .contains('Testin')
       .click();
 
     cy.getLeftNav()
-      .contains(/^Test Resources$/, { includeShadowDom: true })
+      .contains(/^Test Resources$/)
       .click();
 
     cy.contains('Create Test Resource').click();
@@ -253,7 +253,9 @@ context('Test extensibility variables', () => {
 
     // create resource
     cy.get('[role=dialog]')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
 
     // check arrayOfStrings

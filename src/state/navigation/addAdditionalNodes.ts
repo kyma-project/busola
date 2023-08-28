@@ -3,7 +3,6 @@ import { isEqual } from 'lodash';
 import { mapBusolaResourceToNavNode } from '../resourceList/mapBusolaResourceToNavNode';
 import { areNodeFeaturesEnabled } from './filters/areNodeFeaturesEnabled';
 
-import { createClusterNode } from 'components/Clusters/views/ClusterOverview/clusterDetailsNode';
 import { extensionsNavNode } from 'components/BusolaExtensions/extensionsNode';
 import { helmReleasesNode } from 'components/HelmReleases/helmReleasesNode';
 import { createCustomResourcesNavNode } from 'components/CustomResources/customResourcesNode';
@@ -23,8 +22,6 @@ export const addAdditionalNodes = (
   if (scope === 'namespace') {
     addResource(namespaceOverviewNode, extNavList.length, extNavList);
   }
-
-  addResource(createClusterNode(scope), extNavList.length, extNavList);
 
   const isExtEnabled = areNodeFeaturesEnabled(
     extensionsNavNode,

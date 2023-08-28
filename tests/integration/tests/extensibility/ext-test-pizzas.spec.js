@@ -20,7 +20,7 @@ context('Test Pizzas', () => {
 
   it('Creates the EXT pizza config', () => {
     cy.getLeftNav()
-      .contains('Cluster Details', { includeShadowDom: true })
+      .contains('Cluster Details')
       .click();
 
     cy.contains('Upload YAML').click();
@@ -59,16 +59,16 @@ context('Test Pizzas', () => {
   it('Displays the Pizza Orders list/detail views from the samples', () => {
     cy.loginAndSelectCluster();
 
-    cy.contains('Namespaces', { includeShadowDom: true }).click();
+    cy.contains('Namespaces').click();
 
     cy.contains('a', 'pizzas').click();
 
     cy.getLeftNav()
-      .contains('Lunch', { includeShadowDom: true })
+      .contains('Lunch')
       .click();
 
     cy.getLeftNav()
-      .contains('Pizza Orders', { includeShadowDom: true })
+      .contains('Pizza Orders')
       .click();
 
     cy.contains('DELIVERY');
@@ -84,7 +84,10 @@ context('Test Pizzas', () => {
   });
 
   it('Edits a Pizza Order', () => {
-    cy.contains('button:visible', 'Edit').click();
+    cy.get('ui5-button')
+      .contains('Edit')
+      .should('be.visible')
+      .click();
 
     cy.get('[role="document"]').as('form');
 
@@ -106,7 +109,9 @@ context('Test Pizzas', () => {
       .should('have.length', 3);
 
     cy.get('@form')
-      .contains('button:visible', 'Update')
+      .get('ui5-button')
+      .contains('Update')
+      .should('be.visible')
       .click();
 
     cy.contains('span', /^READY$/i).should('not.exist');
@@ -122,7 +127,7 @@ context('Test Pizzas', () => {
     cy.contains('Diavola is such a spicy pizza').should('be.visible');
 
     cy.getLeftNav()
-      .contains(/^Pizzas$/, { includeShadowDom: true })
+      .contains(/^Pizzas$/)
       .click();
 
     cy.get('.fd-table__body')
@@ -161,7 +166,9 @@ context('Test Pizzas', () => {
       .type(PIZZA_NAME);
 
     cy.get('@form')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
 
     cy.contains('h3', PIZZA_NAME).should('be.visible');

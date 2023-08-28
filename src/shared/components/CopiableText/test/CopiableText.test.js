@@ -1,9 +1,8 @@
 import { render } from '@testing-library/react';
 import { CopiableText } from 'shared/components/CopiableText/CopiableText';
-import React from 'react';
+import copyToClipboard from 'copy-to-clipboard';
 
 jest.mock('copy-to-clipboard');
-import copyToClipboard from 'copy-to-clipboard';
 
 describe('CopiableText', () => {
   it('renders the text', () => {
@@ -24,9 +23,9 @@ describe('CopiableText', () => {
 
   it('copies text to clipboard whe button is clicked', () => {
     const text = 'abcd und 123456';
-    const { getByRole } = render(<CopiableText textToCopy={text} />);
+    const { container } = render(<CopiableText textToCopy={text} />);
 
-    getByRole('button').click();
+    container.querySelector('ui5-button').click();
 
     expect(copyToClipboard).toHaveBeenCalledWith(text);
   });

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { LayoutPanel, Button, ButtonSegmented } from 'fundamental-react';
+import { SegmentedButton, SegmentedButtonItem } from '@ui5/webcomponents-react';
+import { LayoutPanel } from 'fundamental-react';
 import EditorWrapper from 'shared/ResourceForm/fields/Editor';
 import { useTranslation } from 'react-i18next';
 
@@ -19,29 +20,29 @@ export function SchemaViewer({ name, schema }) {
           title={t('custom-resource-definitions.subtitle.schema')}
         />
         <LayoutPanel.Actions>
-          <ButtonSegmented>
-            <Button
+          <SegmentedButton>
+            <SegmentedButtonItem
               compact
-              selected={schemaMode === 'viewer'}
+              pressed={schemaMode === 'viewer'}
               onClick={() => setSchemaMode('viewer')}
             >
               {t('schema.modes.viewer')}
-            </Button>
-            <Button
+            </SegmentedButtonItem>
+            <SegmentedButtonItem
               compact
-              selected={schemaMode === 'json'}
+              pressed={schemaMode === 'json'}
               onClick={() => setSchemaMode('json')}
             >
               {t('schema.modes.json')}
-            </Button>
-            <Button
+            </SegmentedButtonItem>
+            <SegmentedButtonItem
               compact
-              selected={schemaMode === 'yaml'}
+              pressed={schemaMode === 'yaml'}
               onClick={() => setSchemaMode('yaml')}
             >
               {t('schema.modes.yaml')}
-            </Button>
-          </ButtonSegmented>
+            </SegmentedButtonItem>
+          </SegmentedButton>
         </LayoutPanel.Actions>
       </LayoutPanel.Header>
       <LayoutPanel.Body>

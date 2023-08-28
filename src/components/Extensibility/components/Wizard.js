@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Dialog } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { Dialog } from 'fundamental-react';
 
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 
@@ -9,15 +10,7 @@ import { useGetTranslation } from 'components/Extensibility/helpers';
 import { useTranslation } from 'react-i18next';
 import { useEventListener } from 'hooks/useEventListener';
 
-export function Wizard({
-  value,
-  structure,
-  schema,
-  originalResource,
-  scope,
-  arrayItems,
-  singleRootResource,
-}) {
+export function Wizard({ value, structure, singleRootResource }) {
   const { t: tExt } = useGetTranslation();
   const { t } = useTranslation();
   const [showWizard, setShowWizard] = useState(false);

@@ -1,9 +1,9 @@
-import React from 'react';
 import renderer from 'react-test-renderer';
-import { Button, LayoutPanel } from 'fundamental-react';
+import { LayoutPanel } from 'fundamental-react';
 import { mount, shallow } from 'enzyme';
 
 import { CollapsiblePanel } from 'shared/components/CollapsiblePanel/CollapsiblePanel';
+import { Button } from '@ui5/webcomponents-react';
 
 describe('Collapsible Panel', () => {
   const exceptPanelVisible = (component, isVisible) => {
@@ -65,7 +65,7 @@ describe('Collapsible Panel', () => {
     const component = mount(
       <CollapsiblePanel children={<p>test</p>} title="Collapsible panel" />,
     );
-    const button = component.find(Button);
+    const button = component.find(LayoutPanel.Header);
 
     // initially opened
     exceptPanelVisible(component, true);
@@ -108,14 +108,14 @@ describe('Collapsible Panel', () => {
         children={child}
         title="Collapsible panel"
         actions={
-          <button id="action-button" onClick={() => {}}>
+          <Button id="action-button" onClick={() => {}}>
             test
-          </button>
+          </Button>
         }
       />,
     );
 
-    const button = component.find('#action-button');
+    const button = component.find('ui5-button');
 
     // close
     button.simulate('click');

@@ -28,11 +28,16 @@ context('Test Storage Classes', () => {
       cy.pasteToMonaco(SC);
     });
 
-    cy.contains('[role="dialog"] button', 'Create').click();
+    cy.get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
+      .click();
   });
 
   it('Checking details', () => {
-    cy.contains(Cypress.env('STORAGE_CLASS_NAME')).should('be.visible');
+    cy.contains(Cypress.env('STORAGE_CLASS_NAME'), {
+      includeShadowDom: false,
+    }).should('be.visible');
 
     cy.contains('pd.csi.storage.gke.io').should('be.visible');
 
@@ -42,7 +47,7 @@ context('Test Storage Classes', () => {
   });
 
   it('Checking list and delete', () => {
-    cy.contains('Storage Classes').click();
+    cy.navigateBackTo('storageclasses', 'Storage Classes');
 
     cy.deleteFromGenericList(Cypress.env('STORAGE_CLASS_NAME'));
   });

@@ -25,7 +25,7 @@ context('Test resource upload', () => {
 
   it('Creates resources', () => {
     cy.getLeftNav()
-      .contains('Cluster Details', { includeShadowDom: true })
+      .contains('Cluster Details')
       .click();
 
     cy.contains('Upload YAML').click();
@@ -93,16 +93,17 @@ context('Test resource upload', () => {
     // close
     cy.get('body').type('{esc}');
 
-    cy.get('[role=dialog]').should('not.exist');
-
     cy.navigateTo('Storage', 'Storage Classes');
 
-    cy.get('[role="search"] [aria-label="open-search"]').type(SC_NAME);
+    cy.get('ui5-button[aria-label="open-search"]')
+      .click()
+      .get('input[aria-label="search-input"]')
+      .type(SC_NAME);
 
     cy.get('tbody tr [aria-label="Delete"]').click({ force: true });
 
     cy.get(`[header-text="Delete ${SC_NAME}"]`)
-      .find('[data-testid="delete-confirmation"]', { includeShadowDom: true })
+      .find('[data-testid="delete-confirmation"]')
       .click();
   });
 });

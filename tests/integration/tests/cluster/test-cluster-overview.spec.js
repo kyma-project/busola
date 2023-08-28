@@ -10,7 +10,7 @@ context('Test Cluster Overview', () => {
 
   it('Check Cluster Overview details', () => {
     cy.getLeftNav()
-      .contains('Cluster Details', { includeShadowDom: true })
+      .contains('Cluster Details')
       .click();
 
     cy.contains('h3', 'Cluster Details').should('be.visible');
@@ -33,13 +33,13 @@ context('Test Cluster Overview', () => {
 
     cy.loginAndSelectCluster();
 
-    cy.get('.sap-icon--feedback').should('exist');
+    cy.get('[name="feedback"]').should('exist');
 
     cy.setBusolaFeature('FEEDBACK', false);
 
     cy.loginAndSelectCluster();
 
-    cy.get('.sap-icon--feedback').should('not.exist');
+    cy.get('[name="feedback"]').should('not.exist');
   });
 
   it('Go to Node details', () => {

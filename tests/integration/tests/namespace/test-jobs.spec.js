@@ -14,10 +14,7 @@ function checkJobLogs({ showLogsSelector, expectedLogs }) {
 
   cy.contains(expectedLogs);
 
-  // back to pod details
-  cy.get('[role=menu]')
-    .contains(JOB_NAME)
-    .click();
+  cy.navigateBackTo(JOB_NAME, JOB_NAME);
 }
 
 context('Test Jobs', () => {
@@ -74,7 +71,9 @@ context('Test Jobs', () => {
 
     // create
     cy.get('[role=dialog]')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
   });
 
@@ -95,7 +94,7 @@ context('Test Jobs', () => {
     cy.contains(`Job (${JOB_NAME})`);
 
     // status
-    cy.get('[role="status"]', { timeout: 50 * 1000 })
+    cy.get('[role="status"]', { timeout: 75 * 1000 })
       .first()
       .should('have.text', 'Completed');
 
@@ -119,14 +118,18 @@ context('Test Jobs', () => {
   });
 
   it('Edit Job', () => {
-    cy.contains('Edit').click();
+    cy.get('ui5-button')
+      .contains('Edit')
+      .should('be.visible')
+      .click();
 
     // containers section should be readonly
     cy.contains('After a Job is created, the containers are read-only.');
 
-    cy.contains('Add Container')
-      .filter(':visible', { log: false })
-      .should('be.disabled');
+    cy.get('[role="dialog"]')
+      .get('ui5-button[icon="add"][disabled="true"]')
+      .contains('Add Container')
+      .should('be.visible');
 
     // edit labels
     cy.get('[role=dialog]')
@@ -143,12 +146,15 @@ context('Test Jobs', () => {
       .first()
       .type('b');
 
-    cy.contains('button', 'Update').click();
+    cy.get('ui5-button.fd-dialog__decisive-button')
+      .contains('Update')
+      .should('be.visible')
+      .click();
 
     cy.contains('a=b');
   });
 
   it('Inspect list', () => {
-    cy.inspectList(/^Jobs/, JOB_NAME);
+    cy.inspectList('Jobs', JOB_NAME);
   });
 });

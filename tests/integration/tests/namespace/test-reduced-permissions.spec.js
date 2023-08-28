@@ -69,7 +69,9 @@ context('Test reduced permissions', () => {
     );
 
     cy.get('[role="dialog"]')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
   });
 
@@ -83,7 +85,9 @@ context('Test reduced permissions', () => {
     cy.get('[ariaLabel="ServiceAccount name"]:visible').type(SA_NAME);
 
     cy.get('[role="dialog"]')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
   });
 
@@ -96,6 +100,7 @@ context('Test reduced permissions', () => {
     cy.get('[role=dialog]')
       .contains('User')
       .click();
+
     cy.get('[role=list]')
       .contains('ServiceAccount')
       .click();
@@ -119,27 +124,31 @@ context('Test reduced permissions', () => {
     chooseComboboxOption('[placeholder="Select name"]:visible', SA_NAME);
 
     cy.get('[role="dialog"]')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
   });
 
   it('Download kubeconfig for Service Account', () => {
     cy.getLeftNav()
-      .contains('Namespaces', { includeShadowDom: true })
+      .contains('Namespaces')
       .click();
 
     cy.goToNamespaceDetails();
 
     cy.getLeftNav()
-      .contains('Service Accounts', { includeShadowDom: true })
+      .contains('Service Accounts')
       .click();
 
     cy.contains(SA_NAME).click();
 
     cy.contains('Generate TokenRequest').click();
+
     cy.contains('Download Kubeconfig').click();
 
     cy.contains('Close').click();
+
     cy.wait(200);
 
     cy.task('listDownloads', Cypress.config('downloadsFolder')).then(
@@ -181,45 +190,41 @@ context('Test reduced permissions', () => {
 
   it('Inspect reduced permissions view', () => {
     cy.getLeftNav()
-      .contains('Workloads', { includeShadowDom: true })
+      .contains('Workloads')
       .click();
 
     cy.getLeftNav()
-      .contains('Deployments', { includeShadowDom: true })
+      .contains('Deployments')
       .should('be.visible');
 
     cy.getLeftNav()
-      .contains('Back To Cluster Details', { includeShadowDom: true })
+      .contains('Back To Cluster Details')
       .click();
 
     cy.getLeftNav()
-      .contains('Configuration', { includeShadowDom: true })
+      .contains('Configuration')
       .should('not.exist');
   });
 
   it('Cleanup', () => {
-    cy.get('[aria-controls="fd-shellbar-product-popover"]').click();
-
     cy.loginAndSelectCluster({ disableClear: true });
 
     // delete binding
     cy.getLeftNav()
-      .contains('Cluster Role Bindings', { includeShadowDom: true })
+      .contains('Cluster Role Bindings')
       .click();
 
     cy.deleteFromGenericList(CRB_NAME);
 
     // delete role
     cy.getLeftNav()
-      .contains('Cluster Roles', { includeShadowDom: true })
+      .contains('Cluster Roles')
       .click();
 
     cy.deleteFromGenericList(CR_NAME);
 
     // remove cluster
-    cy.get('[aria-controls="fd-shellbar-product-popover"]').click();
-
-    cy.contains('Clusters Overview').click();
+    cy.changeCluster('all-clusters');
 
     cy.deleteFromGenericList(SA_NAME, true, false, false);
 

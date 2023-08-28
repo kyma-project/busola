@@ -3,7 +3,7 @@
 function containsInShadowDom(selector, content, options) {
   return cy
     .get(selector, options)
-    .contains(content, { includeShadowDom: true })
+    .contains(content)
     .parentsUntil(selector)
     .last()
     .parent();
@@ -86,28 +86,27 @@ context('Test Cluster Validation Scan', () => {
     cy.contains('Submit').click();
 
     cy.get('@clusterValidationPanel')
+      .find('ui5-button')
       .contains('Scan')
       .click();
 
     // wait for scan to finish
-    cy.contains('Scan Progress', { includeShadowDom: true }).should(
-      'be.visible',
-    );
+    cy.contains('Scan Progress').should('be.visible');
+
     containsInShadowDom('ui5-card', 'Scan Progress').as('scanProgress');
+
     cy.get('@scanProgress')
-      .contains('100%', { timeout: 30000, includeShadowDom: true })
+      .contains('100%', { timeout: 30000 })
       .should('be.visible');
 
     // Check items in scan result tree
-    cy.contains('Scan Result', { includeShadowDom: true }).should('be.visible');
+    cy.contains('Scan Result').should('be.visible');
     containsInShadowDom('ui5-card', 'Scan Result').as('scanResult');
 
     cy.get('@scanResult').should('be.visible');
 
     function findTitle(title) {
-      return cy
-        .get('@scanResult')
-        .contains('.ui5-li-title:visible', title, { includeShadowDom: true });
+      return cy.get('@scanResult').contains('.ui5-li-title:visible', title);
     }
 
     function toggleTreeItem(title) {
@@ -115,7 +114,7 @@ context('Test Cluster Validation Scan', () => {
         .parentsUntil('ui5-tree-item')
         .last()
         .parent()
-        .find('.ui5-li-tree-toggle-icon:visible', { includeShadowDom: true })
+        .find('.ui5-li-tree-toggle-icon:visible')
         .click();
     }
 

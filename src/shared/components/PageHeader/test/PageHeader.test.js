@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from '@ui5/webcomponents-react';
 import { render } from 'testing/reactTestingUtils';
 
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
@@ -14,7 +15,7 @@ describe('PageHeader', () => {
     const { getByLabelText } = render(
       <PageHeader
         title="page title"
-        actions={<button aria-label="abc"></button>}
+        actions={<Button aria-label="abc"></Button>}
       />,
     );
 
@@ -31,6 +32,6 @@ describe('PageHeader', () => {
     expect(anchorElement).toBeInTheDocument();
 
     const hrefAttribute = anchorElement.getAttribute('href');
-    expect(hrefAttribute).toBe(`/${breadcrumbItems[0].url}`);
+    expect(hrefAttribute).toBe(breadcrumbItems[0].url);
   });
 });

@@ -1,4 +1,5 @@
-import { Button, Dialog, Icon } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
+import { Dialog, Icon } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 

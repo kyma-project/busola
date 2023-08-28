@@ -7,7 +7,7 @@ import {
   usePolicySet,
 } from 'state/validationEnabledSchemasAtom';
 import { ResourceValidation } from './ResourceValidation';
-import { Button, LayoutPanel } from 'fundamental-react';
+import { LayoutPanel } from 'fundamental-react';
 
 import { ResourceLoader } from './ResourceLoader';
 import { createPostFn } from 'shared/hooks/BackendAPI/usePost';
@@ -15,6 +15,7 @@ import { Scan, ScanProgress } from './Scan';
 import { ScanResultTree } from './ScanResultTree';
 import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
 import {
+  Button,
   Card,
   CardHeader,
   FlexBox,
@@ -152,7 +153,8 @@ export const ClusterValidation = () => {
         <LayoutPanel.Actions>
           <Button
             className="fd-margin-end--tiny"
-            glyph="play"
+            icon="play"
+            iconEnd
             onClick={scan}
             disabled={!!scanProgress || !scanReady}
           >
@@ -160,13 +162,14 @@ export const ClusterValidation = () => {
           </Button>
           <Button
             className="fd-margin-end--tiny"
-            glyph="settings"
+            icon="settings"
+            iconEnd
             onClick={configure}
             disabled={!!scanProgress || !scanReady}
           >
             {t('cluster-validation.scan.buttons.configure')}
           </Button>
-          <Button glyph="reset" onClick={clear} disabled={!scanProgress}>
+          <Button icon="reset" iconEnd onClick={clear} disabled={!scanProgress}>
             {t('cluster-validation.scan.buttons.clear')}
           </Button>
         </LayoutPanel.Actions>

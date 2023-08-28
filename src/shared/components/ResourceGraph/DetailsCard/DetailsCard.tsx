@@ -1,4 +1,4 @@
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 import { Labels } from 'shared/components/Labels/Labels';
 import { useTranslation } from 'react-i18next';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';

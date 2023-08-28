@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { Button, Icon } from 'fundamental-react';
 import {
-  Text,
+  Button,
+  FlexBox,
+  Icon,
+  Label,
   TableCell,
   TableColumn,
   TableRow,
-  Label,
+  Text,
 } from '@ui5/webcomponents-react';
 import ListActions from 'shared/components/ListActions/ListActions';
 import classNames from 'classnames';
@@ -83,7 +85,6 @@ const DefaultRowRenderer = ({
   entry,
   actions,
   rowRenderer,
-  compact,
   isBeingEdited = false,
 }) => {
   const cells = rowRenderer.map((cell, id) => {
@@ -101,7 +102,7 @@ const DefaultRowRenderer = ({
   });
   const actionsCell = (
     <TableCell>
-      <ListActions actions={actions} entry={entry} compact={compact} />
+      <ListActions actions={actions} entry={entry} />
     </TableCell>
   );
   return (
@@ -136,16 +137,16 @@ const CollapsedRowRenderer = ({
           data-testid={
             isOpen ? 'collapse-button-open' : 'collapse-button-close'
           }
-          option="transparent"
+          design="Transparent"
           onClick={() => setOpen(!isOpen)}
-          compact={true}
-          typeAttr="button"
         >
-          <Icon
-            className="fd-margin-end--tiny"
-            glyph={isOpen ? 'navigation-up-arrow' : 'navigation-down-arrow'}
-          />
-          {title}
+          <FlexBox>
+            <Icon
+              className="fd-margin-end--tiny"
+              name={isOpen ? 'navigation-up-arrow' : 'navigation-down-arrow'}
+            />
+            {title}
+          </FlexBox>
         </Button>
       ) : (
         <></>

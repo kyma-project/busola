@@ -52,13 +52,11 @@ context('Test Cluster configuration', () => {
     // );
 
     // custom category should be added
-    cy.contains('Category from target cluster', {
-      includeShadowDom: true,
-    }).should('be.visible');
+    cy.contains('Category from target cluster').should('be.visible');
 
     // custom storage type should be set
     cy.getLeftNav()
-      .contains('Cluster Details', { includeShadowDom: true })
+      .contains('Cluster Details')
       .click();
 
     // Uncomment after resolving https://github.com/kyma-project/busola/issues/2511
@@ -72,9 +70,7 @@ context('Test Cluster configuration', () => {
 
     cy.get('[role=row]').should('have.length', 20);
 
-    cy.get('[aria-label="topnav-profile-btn"]').click();
-
-    cy.contains('Preferences').click();
+    cy.get('[title="Profile"]').click();
 
     cy.contains('Other').click();
 

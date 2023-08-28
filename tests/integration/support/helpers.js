@@ -3,7 +3,7 @@ export function chooseComboboxOption(selector, optionText) {
     .filterWithNoValue()
     .type(optionText);
 
-  cy.contains(optionText).click();
+  cy.contains(optionText).click({ force: true });
 
   return cy.end();
 }

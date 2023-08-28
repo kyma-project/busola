@@ -48,7 +48,11 @@ context('Test Roles', () => {
       'create',
     );
 
-    cy.contains('button', /^Create$/).click();
+    cy.get('[role="dialog"]')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
+      .click();
   });
 
   it('Check the Role details', () => {
@@ -75,7 +79,11 @@ context('Test Roles', () => {
       'watch',
     );
 
-    cy.contains('button', 'Update').click();
+    cy.get('[role="dialog"]')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Update')
+      .should('be.visible')
+      .click();
   });
 
   it('Check the Role details after edit', () => {
@@ -100,18 +108,22 @@ context('Test Roles', () => {
 
   it('Clone the Role', () => {
     cy.getLeftNav()
-      .contains('Roles', { includeShadowDom: true })
+      .contains('Roles')
       .click();
 
     cy.contains('.fd-table__row', ROLE_NAME)
-      .find('button[data-testid="clone"]')
+      .find('ui5-button[data-testid="clone"]')
       .click();
 
     cy.get('[ariaLabel="Role name"]:visible', { log: false })
       .type(CLONE_NAME)
       .click();
 
-    cy.contains('button', /^Create$/).click();
+    cy.get('[role="dialog"]')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
+      .click();
   });
 
   it('Check the clone details', () => {

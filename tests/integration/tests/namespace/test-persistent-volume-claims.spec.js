@@ -51,7 +51,9 @@ context('Test Persistent Volume Claims', () => {
     });
 
     cy.get('[role="dialog"]')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
 
     cy.contains('h3', PVC_NAME).should('be.visible');
@@ -64,13 +66,17 @@ context('Test Persistent Volume Claims', () => {
 
     cy.contains(VOLUME_MODE_VALUE).should('be.visible');
 
-    cy.contains(Cypress.env('STORAGE_CLASS_NAME')).should('be.visible');
+    cy.get('.fd-layout-panel')
+      .contains(Cypress.env('STORAGE_CLASS_NAME'), {
+        includeShadowDom: false,
+      })
+      .should('be.visible');
 
     cy.contains('Events').should('be.visible');
   });
 
   it('Check the Persistent Volume Claims list and delete', () => {
-    cy.contains('a', 'Persistent Volume Claims').click();
+    cy.navigateBackTo('persistentvolumeclaims', 'Persistent Volume Claims');
 
     cy.contains(CAPACITY_VALUE);
 

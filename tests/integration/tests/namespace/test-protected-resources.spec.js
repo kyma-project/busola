@@ -68,21 +68,24 @@ context('Test Protected Resources', () => {
       .type('true');
 
     cy.get('[role=dialog]')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
   });
 
   it('Protect a resource', () => {
     cy.getLeftNav()
-      .contains('Config Maps', { includeShadowDom: true })
+      .contains('Config Maps')
       .click();
 
-    cy.contains('tr', NAME)
-      .find('[aria-label="Delete"]')
-      .should('be.disabled')
-      .click({ force: true });
+    cy.get('tr')
+      .contains(NAME)
+      .click();
 
-    cy.contains(`Delete ${NAME}`).should('not.exist');
+    cy.get('ui5-button[disabled="true"]')
+      .should('contain.text', 'Delete')
+      .should('be.visible');
   });
 
   it('Create a protected Pod controlled by Deployment', () => {
@@ -97,7 +100,9 @@ context('Test Protected Resources', () => {
     cy.get('[placeholder^="Enter the Docker image"]:visible').type(IMAGE);
 
     cy.get('[role=dialog]')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
   });
 
@@ -105,14 +110,12 @@ context('Test Protected Resources', () => {
     cy.url().should('match', new RegExp(`\/deployments\/${NAME}$`));
 
     cy.contains('tr', NAME)
-      .find('[aria-label="Delete"]')
-      .should('be.disabled');
+      .find('[aria-label="Delete"][disabled="true"]')
+      .should('be.visible');
   });
 
   it('Change protection setting', () => {
-    cy.get('[aria-label="topnav-profile-btn"]').click();
-
-    cy.contains('Preferences').click();
+    cy.get('[title="Profile"]').click();
 
     cy.contains('Cluster interaction').click();
 
@@ -128,17 +131,17 @@ context('Test Protected Resources', () => {
 
   it("Don't protect a resource", () => {
     cy.getLeftNav()
-      .contains('Config Maps', { includeShadowDom: true })
+      .contains('Config Maps')
       .click();
 
     cy.contains('tr', NAME)
-      .find('[aria-label="Delete"]')
+      .find('ui5-button[data-testid="delete"]')
       .click();
 
-    cy.contains(`Delete ${NAME}`, { includeShadowDom: true }).should('exist');
+    cy.contains(`Delete ${NAME}`).should('exist');
 
     cy.get(`[header-text="Delete ${NAME}"]`)
-      .find('[data-testid="delete-cancel"]', { includeShadowDom: true })
+      .find('[data-testid="delete-cancel"]')
       .click();
   });
 });
