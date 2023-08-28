@@ -42,7 +42,9 @@ test('Busola Lighthouse audit', async () => {
     .locator('input[id="file-upload"]')
     .setInputFiles('./fixtures/kubeconfig.yaml');
 
-  await page.locator('button:has-text("Next step")').click();
+  await page
+    .locator('[aria-label="next-step"] ui5-button:has-text("Next Step")')
+    .click();
 
   await page
     .locator(
