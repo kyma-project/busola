@@ -49,11 +49,13 @@ export const ModalWithForm = ({
   }, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const setOpenStatus = status => {
+    console.log(status);
     if (status) {
       setTimeout(() => revalidate());
     } else {
       if (customCloseAction) customCloseAction();
     }
+    console.log(status);
     setOpen(status);
   };
 
@@ -171,7 +173,7 @@ export const ModalWithForm = ({
         {...props}
         open={isOpen}
         disableAutoClose={true}
-        onClose={() => {
+        onBeforeClose={() => {
           setOpenStatus(false);
         }}
         header-text={title}
