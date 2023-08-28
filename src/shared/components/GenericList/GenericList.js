@@ -5,11 +5,24 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
+import {
+  Button,
+  Text,
+  FlexBox,
+  Table,
+  TableColumn,
+  TableRow,
+  TableCell,
+  Label,
+} from '@ui5/webcomponents-react';
 
 import {
   BodyFallback,
   HeaderRenderer,
   RowRenderer,
+  OLDBodyFallback,
+  OLDHeaderRenderer,
+  OLDRowRenderer,
 } from 'shared/components/GenericList/components';
 import { filterEntries } from 'shared/components/GenericList/helpers';
 import { Pagination } from 'shared/components/GenericList/Pagination/Pagination';
@@ -211,11 +224,77 @@ export const GenericList = ({
     ));
   };
 
-  const tableClassNames = classnames(
+  // --------------> OLD <----------------
+  const OLDrenderTableBody = () => {
+    if (serverDataError) {
+      return (
+        <OLDBodyFallback>
+          <p>{getErrorMessage(serverDataError)}</p>
+        </OLDBodyFallback>
+      );
+    }
+
+    if (serverDataLoading) {
+      return (
+        <OLDBodyFallback>
+          <Spinner />
+        </OLDBodyFallback>
+      );
+    }
+    if (!filteredEntries.length) {
+      if (searchQuery) {
+        return (
+          <OLDBodyFallback>
+            <p>
+              {i18n.exists(searchSettings.noSearchResultMessage)
+                ? t(searchSettings.noSearchResultMessage)
+                : searchSettings.noSearchResultMessage}
+            </p>
+          </OLDBodyFallback>
+        );
+      }
+      return (
+        <OLDBodyFallback>
+          <p>
+            {i18n.exists(notFoundMessage)
+              ? t(notFoundMessage)
+              : notFoundMessage}
+          </p>
+        </OLDBodyFallback>
+      );
+    }
+
+    let pagedItems = filteredEntries;
+    if (pagination) {
+      pagedItems = filteredEntries.slice(
+        (currentPage - 1) * pagination.itemsPerPage,
+        currentPage * pagination.itemsPerPage,
+      );
+    }
+
+    return pagedItems.map((e, index) => (
+      <OLDRowRenderer
+        index={index}
+        key={e.metadata?.uid || e.name || e.metadata?.name || index}
+        entry={e}
+        actions={actions}
+        rowRenderer={rowRenderer}
+        compact={compact}
+        isBeingEdited={
+          currentlyEditedResourceUID &&
+          e?.metadata?.uid === currentlyEditedResourceUID
+        }
+      />
+    ));
+  };
+
+  const OLDtableClassNames = classnames(
     'fd-table',
     'fd-table--no-horizontal-borders',
     { compact },
   );
+  // --------------> END OF OLD <----------------
+
   const panelClassNames = classnames(
     'generic-list',
     {
@@ -224,42 +303,63 @@ export const GenericList = ({
     className,
   );
 
-  return (
-    <LayoutPanel className={panelClassNames} data-testid={testid}>
-      <LayoutPanel.Header className="fd-has-padding-left-small fd-has-padding-right-small">
-        <LayoutPanel.Head title={title} />
-        <LayoutPanel.Actions>{headerActions}</LayoutPanel.Actions>
-      </LayoutPanel.Header>
+  const tableClassNames = classnames('ui5-generic-list', {
+    'ui5-content-density-compact': compact,
+  });
 
-      <LayoutPanel.Body className="fd-has-padding-none">
-        <table className={tableClassNames}>
-          {showHeader && (
-            <thead className="fd-table__header">
-              <tr className="fd-table__row">
-                <HeaderRenderer
-                  entries={entries}
-                  actions={actions}
-                  headerRenderer={headerRenderer}
-                />
-              </tr>
-            </thead>
+  return (
+    <>
+      <LayoutPanel className={panelClassNames} data-testid={testid}>
+        <LayoutPanel.Header className="fd-has-padding-left-small fd-has-padding-right-small">
+          <LayoutPanel.Head title={title} />
+          <LayoutPanel.Actions>{headerActions}</LayoutPanel.Actions>
+        </LayoutPanel.Header>
+
+        <LayoutPanel.Body className="fd-has-padding-none">
+          <Table
+            className={tableClassNames}
+            columns={
+              <HeaderRenderer
+                entries={entries}
+                actions={actions}
+                headerRenderer={headerRenderer}
+              />
+            }
+            onLoadMore={function ka() {}}
+            onRowClick={function ka() {}}
+            onSelectionChange={function ka() {}}
+          >
+            {renderTableBody()}
+          </Table>
+          <table className={OLDtableClassNames}>
+            {showHeader && (
+              <thead className="fd-table__header">
+                <tr className="fd-table__row">
+                  <OLDHeaderRenderer
+                    entries={entries}
+                    actions={actions}
+                    headerRenderer={headerRenderer}
+                  />
+                </tr>
+              </thead>
+            )}
+            <tbody className="fd-table__body">{OLDrenderTableBody()}</tbody>
+          </table>
+        </LayoutPanel.Body>
+        {!!pagination &&
+          (!pagination.autoHide ||
+            filteredEntries.length > pagination.itemsPerPage) && (
+            <LayoutPanel.Footer>
+              <Pagination
+                itemsTotal={filteredEntries.length}
+                currentPage={currentPage}
+                itemsPerPage={pagination.itemsPerPage}
+                onChangePage={setCurrentPage}
+              />
+            </LayoutPanel.Footer>
           )}
-          <tbody className="fd-table__body">{renderTableBody()}</tbody>
-        </table>
-      </LayoutPanel.Body>
-      {!!pagination &&
-        (!pagination.autoHide ||
-          filteredEntries.length > pagination.itemsPerPage) && (
-          <LayoutPanel.Footer>
-            <Pagination
-              itemsTotal={filteredEntries.length}
-              currentPage={currentPage}
-              itemsPerPage={pagination.itemsPerPage}
-              onChangePage={setCurrentPage}
-            />
-          </LayoutPanel.Footer>
-        )}
-    </LayoutPanel>
+      </LayoutPanel>
+    </>
   );
 };
 

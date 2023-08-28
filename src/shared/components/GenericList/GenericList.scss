@@ -1,3 +1,13 @@
+.ui5-generic-list.hide-header {
+  .ui5-table-root {
+    border: 1px solid red;
+
+    thead {
+      display: none !important;
+    }
+  }
+}
+
 .generic-list {
   height: fit-content;
 
@@ -14,6 +24,7 @@
     &__row.is-edited {
       position: relative;
       background-color: var(--sapInformationBackground);
+
       &::after {
         position: absolute;
         content: '';
@@ -64,6 +75,7 @@
       margin-top: -12px;
       margin-bottom: -12px;
     }
+
     & > * {
       display: inline-block !important; //override the default fd-modal opening component 'display: contents';
     }
@@ -83,6 +95,7 @@
     font-size: var(--sapFontHeader3Size);
     background: none;
   }
+
   input {
     // override .fd-input
     width: 200px;
