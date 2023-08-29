@@ -23,6 +23,7 @@ export const ignoreConsoleErrors = patterns => {
 ignoreConsoleErrors([
   'Element passed as the argument does not exist in the instance',
   'Error: Could not parse CSS stylesheet',
+  'Warning: validateDOMNesting(...): <tr> cannot appear as a child of <ui5-table>.',
 ]);
 
 // Mock IntersectionObserver
