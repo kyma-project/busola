@@ -49,13 +49,15 @@ context('Test Protected Resources', () => {
   it('Create a protected resource', () => {
     cy.navigateTo('Configuration', 'Config Maps');
 
-    cy.contains('Create Config Map').click();
+    cy.get('ui5-button')
+      .contains('Create Config Map')
+      .click();
 
     cy.get('[ariaLabel="ConfigMap name"]:visible').type(NAME);
 
     cy.contains('Advanced').click();
 
-    cy.get('[role=dialog]')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
       .contains('Labels')
       .click();
 
@@ -67,8 +69,8 @@ context('Test Protected Resources', () => {
       .eq(1)
       .type('true');
 
-    cy.get('[role=dialog]')
-      .get('ui5-button.fd-dialog__decisive-button')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
+      .get('ui5-button.ui5-bar-content')
       .contains('Create')
       .should('be.visible')
       .click();
@@ -91,7 +93,9 @@ context('Test Protected Resources', () => {
   it('Create a protected Pod controlled by Deployment', () => {
     cy.navigateTo('Workloads', 'Deployments');
 
-    cy.contains('Create Deployment').click();
+    cy.get('ui5-button')
+      .contains('Create Deployment')
+      .click();
 
     cy.get('[ariaLabel="Deployment name"]:visible')
       .clear()
@@ -99,8 +103,8 @@ context('Test Protected Resources', () => {
 
     cy.get('[placeholder^="Enter the Docker image"]:visible').type(IMAGE);
 
-    cy.get('[role=dialog]')
-      .get('ui5-button.fd-dialog__decisive-button')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
+      .get('ui5-button.ui5-bar-content')
       .contains('Create')
       .should('be.visible')
       .click();

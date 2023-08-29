@@ -17,7 +17,9 @@ context('Test Service Accounts', () => {
   it('Create a Service Account', () => {
     cy.navigateTo('Configuration', 'Service Accounts');
 
-    cy.contains('Create Service Account').click();
+    cy.get('ui5-button')
+      .contains('Create Service Account')
+      .click();
 
     cy.contains('Advanced').click();
 
@@ -39,8 +41,8 @@ context('Test Service Accounts', () => {
       'be.visible',
     );
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button.fd-dialog__decisive-button')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
+      .get('ui5-button.ui5-bar-content')
       .contains('Create')
       .should('be.visible')
       .click();
@@ -57,7 +59,7 @@ context('Test Service Accounts', () => {
   it('Edit', () => {
     cy.contains('Edit').click();
 
-    cy.get('[role="document"]')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
       .contains('Labels')
       .click();
 
@@ -75,8 +77,8 @@ context('Test Service Accounts', () => {
       .eq(0)
       .click();
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button.fd-dialog__decisive-button')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
+      .get('ui5-button.ui5-bar-content')
       .contains('Update')
       .should('be.visible')
       .click();

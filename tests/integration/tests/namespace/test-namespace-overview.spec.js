@@ -29,14 +29,16 @@ context(
     });
 
     it('Add a new limit range', () => {
-      cy.contains('Create Limit Range').click();
+      cy.get('ui5-button')
+        .contains('Create Limit Range')
+        .click();
 
       cy.wrap(loadFile('test-limit-ranges.yaml')).then(LR_CONFIG => {
         const LR = JSON.stringify(LR_CONFIG);
         cy.pasteToMonaco(LR);
       });
 
-      cy.get('ui5-button.fd-dialog__decisive-button')
+      cy.get('ui5-button.ui5-bar-content')
         .contains('Create')
         .should('be.visible')
         .click();

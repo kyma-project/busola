@@ -36,7 +36,9 @@ context('Test Persistent Volume Claims', () => {
   it('Create a Persistent Volume Claim', () => {
     cy.navigateTo('Storage', 'Persistent Volume Claims');
 
-    cy.contains('Create Persistent Volume Claim').click();
+    cy.get('ui5-button')
+      .contains('Create Persistent Volume Claim')
+      .click();
 
     cy.wrap(
       loadPVC(
@@ -50,8 +52,8 @@ context('Test Persistent Volume Claims', () => {
       cy.pasteToMonaco(PVC);
     });
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button.fd-dialog__decisive-button')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
+      .get('ui5-button.ui5-bar-content')
       .contains('Create')
       .should('be.visible')
       .click();

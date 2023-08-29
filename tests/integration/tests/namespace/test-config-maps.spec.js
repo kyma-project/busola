@@ -19,7 +19,9 @@ context('Test Config Maps', () => {
   it('Create a Config Map', () => {
     cy.navigateTo('Configuration', 'Config Maps');
 
-    cy.contains('Create Config Map').click();
+    cy.get('ui5-button')
+      .contains('Create Config Map')
+      .click();
 
     cy.get('[ariaLabel="ConfigMap name"]:visible')
       .type(CONFIG_MAP_NAME)
@@ -31,8 +33,8 @@ context('Test Config Maps', () => {
       .first()
       .type(ENTRY_VALUE);
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button.fd-dialog__decisive-button')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
+      .get('ui5-button.ui5-bar-content')
       .contains('Create')
       .should('be.visible')
       .click();
@@ -57,10 +59,10 @@ context('Test Config Maps', () => {
 
     cy.get('[placeholder="Enter key"]:visible').type(ENTRY_KEY2);
 
-    cy.findMonaco(1).type(ENTRY_VALUE2);
+    cy.findMonaco(0).type(ENTRY_VALUE2);
 
-    cy.get('[role=dialog]')
-      .get('ui5-button.fd-dialog__decisive-button')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
+      .get('ui5-button.ui5-bar-content')
       .contains('Update')
       .should('be.visible')
       .click();
@@ -87,7 +89,7 @@ context('Test Config Maps', () => {
       .type(CLONE_NAME)
       .click();
 
-    cy.get('ui5-button.fd-dialog__decisive-button')
+    cy.get('ui5-button.ui5-bar-content')
       .contains('Create')
       .should('be.visible')
       .click();

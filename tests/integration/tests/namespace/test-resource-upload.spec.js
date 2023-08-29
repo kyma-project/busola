@@ -28,7 +28,9 @@ context('Test resource upload', () => {
       .contains('Cluster Details')
       .click();
 
-    cy.contains('Upload YAML').click();
+    cy.get('ui5-button')
+      .contains('Upload YAML')
+      .click();
 
     cy.wrap(loadValidResources(Cypress.env('NAMESPACE_NAME'))).then(
       resources => {
@@ -91,7 +93,9 @@ context('Test resource upload', () => {
 
   it('Cleanup', () => {
     // close
-    cy.get('body').type('{esc}');
+    cy.get('ui5-button')
+      .contains('Close')
+      .click();
 
     cy.navigateTo('Storage', 'Storage Classes');
 

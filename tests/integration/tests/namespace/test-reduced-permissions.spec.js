@@ -29,7 +29,9 @@ context('Test reduced permissions', () => {
   it('Create Cluster Role with reduced permissions', () => {
     cy.navigateTo('Configuration', 'Cluster Roles');
 
-    cy.contains('Create Cluster Role').type(CR_NAME);
+    cy.get('ui5-button')
+      .contains('Create Cluster Role')
+      .type(CR_NAME);
 
     cy.get('[ariaLabel="ClusterRole name"]:visible').type(CR_NAME);
 
@@ -68,8 +70,8 @@ context('Test reduced permissions', () => {
       'list',
     );
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button.fd-dialog__decisive-button')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
+      .get('ui5-button.ui5-bar-content')
       .contains('Create')
       .should('be.visible')
       .click();
@@ -80,12 +82,14 @@ context('Test reduced permissions', () => {
 
     cy.navigateTo('Configuration', 'Service Accounts');
 
-    cy.contains('Create Service Account').click();
+    cy.get('ui5-button')
+      .contains('Create Service Account')
+      .click();
 
     cy.get('[ariaLabel="ServiceAccount name"]:visible').type(SA_NAME);
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button.fd-dialog__decisive-button')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
+      .get('ui5-button.ui5-bar-content')
       .contains('Create')
       .should('be.visible')
       .click();
@@ -94,10 +98,12 @@ context('Test reduced permissions', () => {
   it('Create a ClusterRoleBinding for SA and CR', () => {
     cy.navigateTo('Back To Cluster Details', 'Cluster Role Bindings');
 
-    cy.contains('Create Cluster Role Binding').click();
+    cy.get('ui5-button')
+      .contains('Create Cluster Role Binding')
+      .click();
 
     // subject type - select it first so the list starts loading
-    cy.get('[role=dialog]')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
       .contains('User')
       .click();
 
@@ -123,8 +129,8 @@ context('Test reduced permissions', () => {
     // service account name
     chooseComboboxOption('[placeholder="Select name"]:visible', SA_NAME);
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button.fd-dialog__decisive-button')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
+      .get('ui5-button.ui5-bar-content')
       .contains('Create')
       .should('be.visible')
       .click();

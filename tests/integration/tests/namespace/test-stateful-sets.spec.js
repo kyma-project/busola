@@ -29,7 +29,9 @@ context('Test Stateful Sets', () => {
   it('Create Stateful Set', () => {
     cy.navigateTo('Workloads', 'Stateful Sets');
 
-    cy.contains('Create Stateful Set').click();
+    cy.get('ui5-button')
+      .contains('Create Stateful Set')
+      .click();
 
     cy.wrap(loadSS(SS_NAME, Cypress.env('NAMESPACE_NAME'), FILE_NAME)).then(
       SS_CONFIG => {
@@ -38,8 +40,8 @@ context('Test Stateful Sets', () => {
       },
     );
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button.fd-dialog__decisive-button')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
+      .get('ui5-button.ui5-bar-content')
       .contains('Create')
       .should('be.visible')
       .click();

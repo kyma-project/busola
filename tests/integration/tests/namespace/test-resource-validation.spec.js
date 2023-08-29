@@ -14,7 +14,9 @@ context('Test resource validation', () => {
   });
 
   it('Check for default policies', () => {
-    cy.contains('Upload YAML').click();
+    cy.get('ui5-button')
+      .contains('Upload YAML')
+      .click();
 
     cy.fixture('examples/resource-validation/pod.yaml').then(podConfig => {
       cy.pasteToMonaco(podConfig);
@@ -46,7 +48,9 @@ context('Test resource validation', () => {
 
     cy.contains('Close').click();
 
-    cy.contains('Upload YAML').click();
+    cy.get('ui5-button')
+      .contains('Upload YAML')
+      .click();
 
     cy.fixture('examples/resource-validation/pod.yaml').then(podConfig => {
       cy.pasteToMonaco(podConfig);
@@ -86,7 +90,9 @@ context('Test resource validation', () => {
 
     cy.contains('Close').click();
 
-    cy.contains('Upload YAML').click();
+    cy.get('ui5-button')
+      .contains('Upload YAML')
+      .click();
 
     cy.fixture('examples/resource-validation/pod.yaml').then(podConfig => {
       cy.pasteToMonaco(podConfig);
@@ -112,7 +118,9 @@ context('Test resource validation', () => {
 
     cy.contains('Resource Validation').click();
 
-    cy.contains('Reset').click();
+    cy.get('ui5-button[data-testid="reset-validation-policies"]') //.get('ui5-dialog[accessible-role="Dialog"]')
+      .contains('Reset')
+      .click();
 
     cy.contains('Close').click();
   });
@@ -126,7 +134,9 @@ context('Test resource validation', () => {
 
     cy.loginAndSelectCluster();
 
-    cy.contains('Upload YAML').click();
+    cy.get('ui5-button')
+      .contains('Upload YAML')
+      .click();
 
     cy.fixture('examples/resource-validation/pod.yaml').then(podConfig => {
       cy.pasteToMonaco(podConfig);

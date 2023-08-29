@@ -20,7 +20,9 @@ context('Test Roles', () => {
 
     cy.contains(ROLE_NAME).should('not.exist');
 
-    cy.contains('Create Role').click();
+    cy.get('ui5-button')
+      .contains('Create Role')
+      .click();
 
     cy.get('[ariaLabel="Role name"]:visible', { log: false })
       .type(ROLE_NAME)
@@ -48,8 +50,8 @@ context('Test Roles', () => {
       'create',
     );
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button.fd-dialog__decisive-button')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
+      .get('ui5-button.ui5-bar-content')
       .contains('Create')
       .should('be.visible')
       .click();
@@ -79,8 +81,8 @@ context('Test Roles', () => {
       'watch',
     );
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button.fd-dialog__decisive-button')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
+      .get('ui5-button.ui5-bar-content')
       .contains('Update')
       .should('be.visible')
       .click();
@@ -119,8 +121,8 @@ context('Test Roles', () => {
       .type(CLONE_NAME)
       .click();
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button.fd-dialog__decisive-button')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
+      .get('ui5-button.ui5-bar-content')
       .contains('Create')
       .should('be.visible')
       .click();

@@ -77,7 +77,7 @@ context('Test multiple context kubeconfig', () => {
         .contains('button', 'Next')
         .click();
 
-      cy.get('[role="dialog"]')
+      cy.get('ui5-dialog[accessible-role="Dialog"]')
         .get('footer')
         .contains('button', 'Connect cluster')
         .click();

@@ -178,6 +178,7 @@ export default function ResourceValidationSettings() {
                     <Button
                       design="Transparent"
                       icon="reset"
+                      data-testid="reset-validation-policies"
                       iconEnd
                       className="fd-margin-begin--sm"
                       onClick={disablePolicyCustomization}

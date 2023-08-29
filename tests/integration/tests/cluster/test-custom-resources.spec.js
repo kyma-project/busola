@@ -25,7 +25,7 @@ context('Test Custom Resources', () => {
       cy.pasteToMonaco(CRD);
     });
 
-    cy.get('[role="dialog"]')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
       .get('ui5-button.ui5-bar-content')
       .contains('Create')
       .should('be.visible')

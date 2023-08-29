@@ -18,7 +18,7 @@ context('Test Cluster Role Bindings', () => {
       .contains('Create Cluster Role Binding')
       .click();
 
-    cy.get('ui5-segmented-button-item')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
       .contains('Advanced')
       .click();
 

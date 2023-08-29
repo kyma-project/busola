@@ -28,7 +28,9 @@ context('Test Jobs', () => {
   it('Create Job', () => {
     cy.navigateTo('Workloads', /^Jobs/);
 
-    cy.contains('Create Job').click();
+    cy.get('ui5-button')
+      .contains('Create Job')
+      .click();
 
     // job name
     cy.get('[ariaLabel="Job name"]:visible')
@@ -70,8 +72,8 @@ context('Test Jobs', () => {
     );
 
     // create
-    cy.get('[role=dialog]')
-      .get('ui5-button.fd-dialog__decisive-button')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
+      .get('ui5-button.ui5-bar-content')
       .contains('Create')
       .should('be.visible')
       .click();
@@ -126,13 +128,13 @@ context('Test Jobs', () => {
     // containers section should be readonly
     cy.contains('After a Job is created, the containers are read-only.');
 
-    cy.get('[role="dialog"]')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
       .get('ui5-button[icon="add"][disabled="true"]')
       .contains('Add Container')
       .should('be.visible');
 
     // edit labels
-    cy.get('[role=dialog]')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
       .contains('Labels')
       .filter(':visible', { log: false })
       .click();
@@ -146,7 +148,7 @@ context('Test Jobs', () => {
       .first()
       .type('b');
 
-    cy.get('ui5-button.fd-dialog__decisive-button')
+    cy.get('ui5-button.ui5-bar-content')
       .contains('Update')
       .should('be.visible')
       .click();

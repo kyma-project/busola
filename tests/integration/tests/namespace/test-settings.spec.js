@@ -28,12 +28,14 @@ context('Test app settings and preferences', () => {
 
     cy.navigateTo('Configuration', 'Config Maps');
 
-    cy.contains('Create Config Map').click();
+    cy.get('ui5-button')
+      .contains('Create Config Map')
+      .click();
 
     cy.get('input[ariaLabel="ConfigMap name"]:visible').type(NAME);
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button.fd-dialog__decisive-button')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
+      .get('ui5-button.ui5-bar-content')
       .contains('Create')
       .should('be.visible')
       .click();

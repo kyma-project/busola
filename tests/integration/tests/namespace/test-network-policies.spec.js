@@ -27,7 +27,9 @@ context('Test Network Policy', () => {
   it('Create a Network Policy', () => {
     cy.navigateTo('Discovery and Network', 'Network Policies');
 
-    cy.contains('Create Network Policy').click();
+    cy.get('ui5-button')
+      .contains('Create Network Policy')
+      .click();
 
     cy.wrap(loadNetworkPolicy(NAME, Cypress.env('NAMESPACE_NAME'))).then(
       NP_CONFIG => {
@@ -36,8 +38,8 @@ context('Test Network Policy', () => {
       },
     );
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button.fd-dialog__decisive-button')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
+      .get('ui5-button.ui5-bar-content')
       .contains('Create')
       .should('be.visible')
       .click();

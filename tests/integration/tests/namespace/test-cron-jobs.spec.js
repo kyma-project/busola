@@ -14,7 +14,9 @@ context('Test Cron Jobs', () => {
   it('Create Cron Job', () => {
     cy.navigateTo('Workloads', 'Cron Jobs');
 
-    cy.contains('Create Cron Job').click();
+    cy.get('ui5-button')
+      .contains('Create Cron Job')
+      .click();
 
     cy.contains('Advanced').click();
 
@@ -60,8 +62,8 @@ context('Test Cron Jobs', () => {
 
     cy.contains('Always').click();
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button.fd-dialog__decisive-button')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
+      .get('ui5-button.ui5-bar-content')
       .contains('Create')
       .should('be.visible')
       .click();
@@ -113,7 +115,7 @@ context('Test Cron Jobs', () => {
 
     cy.contains('Never').click();
 
-    cy.get('[role="dialog"]')
+    cy.get('ui5-dialog[accessible-role="Dialog"]')
       .get('ui5-button')
       .contains('Update')
       .should('be.visible')
