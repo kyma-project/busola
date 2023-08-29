@@ -67,6 +67,8 @@ context('Test app settings and preferences', () => {
   it('Changes application theme', () => {
     cy.get('[title="Profile"]').click();
 
+    cy.contains('Interface').click();
+
     cy.contains('High-Contrast Black').click();
 
     cy.get('.vertical-tabs-wrapper').should(

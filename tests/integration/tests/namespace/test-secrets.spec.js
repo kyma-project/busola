@@ -65,7 +65,9 @@ context('Test Secrets', () => {
   });
 
   it('Edit a secret', () => {
-    cy.contains('Edit').click();
+    cy.get('ui5-button')
+      .contains('Edit')
+      .click();
 
     cy.get('[placeholder="Enter value"]:visible')
       .eq(0)

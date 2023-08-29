@@ -161,7 +161,6 @@ export const ModalWithForm = ({
       {t('common.buttons.cancel')}
     </Button>,
   ];
-  console.log(alwaysOpen);
   return (
     <>
       {alwaysOpen ? null : renderModalOpeningComponent()}

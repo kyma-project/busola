@@ -57,7 +57,9 @@ context('Test Service Accounts', () => {
   });
 
   it('Edit', () => {
-    cy.contains('Edit').click();
+    cy.get('ui5-button')
+      .contains('Edit')
+      .click();
 
     cy.get('ui5-dialog[accessible-role="Dialog"]')
       .contains('Labels')
