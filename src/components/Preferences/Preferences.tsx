@@ -67,11 +67,7 @@ export function Preferences() {
   useEventListener('keydown', handleCloseWithEscape);
 
   return (
-    <Dialog
-      open={isModalOpen}
-      header-text={t('navigation.preferences.title')}
-      id="dialog"
-    >
+    <Dialog open={isModalOpen} header-text={t('navigation.preferences.title')}>
       <VerticalTabs tabs={tabs} height="70vh">
         <VerticalTabs.Content id={1}>
           <Tabs className="fd-tabs fd-has-padding-left-regular">
