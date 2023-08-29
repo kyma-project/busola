@@ -27,7 +27,7 @@ export const ModalWithForm = ({
   ...props
 }) => {
   const { t } = useTranslation();
-  const [isOpen, setOpen] = useState(alwaysOpen);
+  const [isOpen, setOpen] = useState(alwaysOpen || false);
   const [resetFormFn, setResetFormFn] = useState(() => {});
 
   const {
@@ -161,11 +161,10 @@ export const ModalWithForm = ({
       {t('common.buttons.cancel')}
     </Button>,
   ];
-
+  console.log(alwaysOpen);
   return (
     <>
       {alwaysOpen ? null : renderModalOpeningComponent()}
-      {renderModalOpeningComponent()}
       <Dialog
         className={className}
         {...props}
