@@ -22,7 +22,27 @@ export const ignoreConsoleErrors = patterns => {
 // shutup popper error
 ignoreConsoleErrors([
   'Element passed as the argument does not exist in the instance',
+  'Error: Could not parse CSS stylesheet',
 ]);
+
+// Mock IntersectionObserver
+class IntersectionObserver {
+  observe = jest.fn();
+  disconnect = jest.fn();
+  unobserve = jest.fn();
+}
+
+Object.defineProperty(window, 'IntersectionObserver', {
+  writable: true,
+  configurable: true,
+  value: IntersectionObserver,
+});
+
+Object.defineProperty(global, 'IntersectionObserver', {
+  writable: true,
+  configurable: true,
+  value: IntersectionObserver,
+});
 
 var nodeCrypto = require('crypto');
 global.crypto = {
