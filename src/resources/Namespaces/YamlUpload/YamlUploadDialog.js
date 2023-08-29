@@ -115,6 +115,7 @@ export function YamlUploadDialog({ show, onCancel }) {
       open={show}
       header-text={t('upload-yaml.title')}
       className="yaml-upload-modal"
+      style={{ height: '90vh', width: '125vh' }}
     >
       <Suspense fallback={<Spinner />}>
         <div className="yaml-upload-modal__layout">

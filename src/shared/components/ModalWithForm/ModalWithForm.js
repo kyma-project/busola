@@ -175,6 +175,7 @@ export const ModalWithForm = ({
           setOpenStatus(false);
         }}
         header-text={title}
+        style={{ height: '90vh', width: '125vh' }}
       >
         {isOpen &&
           renderForm({

@@ -104,6 +104,7 @@ export function TokenRequestModal({
       open
       header-text={t('service-accounts.token-request.generate')}
       className="token-request-modal"
+      style={{ height: '90vh', width: '125vh' }}
     >
       {/*@ts-ignore*/}
       <ResourceForm.Single
