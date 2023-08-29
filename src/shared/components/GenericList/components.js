@@ -15,7 +15,7 @@ import classNames from 'classnames';
 export const BodyFallback = ({ children }) => (
   // TODO replace once new Table component is available in ui5-webcomponents-react
   <tr>
-    <td colspan="100%">
+    <td colSpan="100%">
       <div className="body-fallback">{children}</div>{' '}
     </td>
   </tr>
