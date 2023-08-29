@@ -126,14 +126,6 @@ body {
   }
 }
 
-.modal-size--l {
-  .fd-dialog__content {
-    width: 80vw;
-    height: 80vw;
-    min-width: unset;
-  }
-}
-
 .modal--no-padding {
   .fd-dialog__body {
     padding: 0 !important;
@@ -295,13 +287,6 @@ input[type='checkbox'] {
 
 .fd-switch__input {
   position: absolute !important;
-}
-
-.modal-size--l {
-  .fd-dialog__content {
-    width: 80vw;
-    min-width: unset;
-  }
 }
 
 .fd-input.is-invalid {

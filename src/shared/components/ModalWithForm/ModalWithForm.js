@@ -168,7 +168,6 @@ export const ModalWithForm = ({
         className={className}
         {...props}
         open={isOpen}
-        disableAutoClose={true}
         onBeforeClose={() => {
           setOpenStatus(false);
         }}
