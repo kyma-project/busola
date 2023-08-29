@@ -224,6 +224,7 @@ export function ClusterValidationConfigurationDialog({
       open={show}
       onBeforeClose={onCancel}
       header-text={t('cluster-validation.scan.configuration.title')}
+      style={{ height: '90vh', width: '125vh' }}
     >
       <ErrorBoundary>
         <ConfigurationForm
