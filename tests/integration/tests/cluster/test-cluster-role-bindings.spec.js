@@ -18,7 +18,9 @@ context('Test Cluster Role Bindings', () => {
       .contains('Create Cluster Role Binding')
       .click();
 
-    cy.contains('Advanced').click();
+    cy.get('ui5-segmented-button-item')
+      .contains('Advanced')
+      .click();
 
     cy.get('[ariaLabel="ClusterRoleBinding name"]').type(CRB_NAME);
 
