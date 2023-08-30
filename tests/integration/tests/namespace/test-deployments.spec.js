@@ -82,7 +82,7 @@ context('Test Deployments', () => {
   it('Check if deployment and pod exist', () => {
     cy.url().should('match', new RegExp(`\/deployments\/${DEPLOYMENT_NAME}$`));
 
-    cy.contains('ui5-table-row', DEPLOYMENT_NAME)
+    cy.contains('ui5-table-cell', DEPLOYMENT_NAME)
       .should('be.visible')
       .click();
 
