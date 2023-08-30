@@ -27,7 +27,7 @@ export function AddClusterDialog({ show, onCancel }) {
   return (
     <Dialog
       open={show}
-      className="add-cluster-dialog wizard-dialog"
+      className="wizard-dialog"
       header-text={t('clusters.add.title')}
       onBeforeClose={onCancel}
     >
