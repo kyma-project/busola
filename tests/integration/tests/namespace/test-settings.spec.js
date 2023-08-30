@@ -44,7 +44,7 @@ context('Test app settings and preferences', () => {
       .contains('Config Maps')
       .click();
 
-    cy.contains('.fd-table__row', NAME)
+    cy.contains('ui5-table-row', NAME)
       .find('ui5-button[data-testid="delete"]')
       .click();
 
