@@ -241,9 +241,6 @@ export const GenericList = ({
                 headerRenderer={headerRenderer}
               />
             }
-            onLoadMore={function ka() {}}
-            onRowClick={function ka() {}}
-            onSelectionChange={function ka() {}}
           >
             {renderTableBody()}
           </Table>
