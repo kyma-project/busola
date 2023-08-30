@@ -2,7 +2,7 @@
   display: grid;
   font-size: var(--sapFontSmallSize, 0.875rem);
   place-items: center;
-  width: 400px;
+  max-width: 40vh;
   height: 80px;
   border-radius: 8px;
   background: var(--sapButton_Background);
