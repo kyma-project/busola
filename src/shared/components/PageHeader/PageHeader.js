@@ -6,6 +6,7 @@ import {
   DynamicPage,
   DynamicPageHeader,
   DynamicPageTitle,
+  Text,
   Title,
 } from '@ui5/webcomponents-react';
 
@@ -64,7 +65,7 @@ export const PageHeader = ({
       }
       headerContent={
         <DynamicPageHeader className="header-wrapper">
-          {description && <p className="description">{description}</p>}
+          {description && <Text className="description">{description}</Text>}
           <section className={`column-wrapper ${columnWrapperClassName || ''}`}>
             {children}
           </section>

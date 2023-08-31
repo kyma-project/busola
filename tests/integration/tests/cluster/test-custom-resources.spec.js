@@ -53,9 +53,7 @@ context('Test Custom Resources', () => {
       .contains('Tclusters')
       .click();
 
-    cy.get('[aria-label="title"]')
-      .contains('Tclusters')
-      .should('be.visible');
+    cy.contains('ui5-title', 'Tclusters').should('be.visible');
 
     cy.contains(/Create Tcluster/i).should('be.visible');
 

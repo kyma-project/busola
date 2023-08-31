@@ -67,9 +67,7 @@ context('Test Custom Resources', () => {
       .contains('Tnamespaces')
       .click();
 
-    cy.get('[aria-label="title"]')
-      .contains('Tnamespaces')
-      .should('be.visible');
+    cy.contains('ui5-title', 'Tnamespaces').should('be.visible');
 
     cy.contains(/Create Tnamespace/i).should('be.visible');
 
