@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Icon, LayoutPanel } from 'fundamental-react';
+import { Icon } from 'fundamental-react';
+import { Panel } from '@ui5/webcomponents-react';
 import { Link } from 'react-router-dom';
 
 import { useUrl } from 'hooks/useUrl';
@@ -18,25 +19,22 @@ const Message = event => {
   const { t } = useTranslation();
 
   return (
-    <LayoutPanel key="specification-panel" className="fd-margin--md">
-      <LayoutPanel.Header>
-        <LayoutPanel.Head title={t('events.headers.message')} />
-      </LayoutPanel.Header>
-      <LayoutPanel.Body>
-        {event.message && (
-          <RowComponent
-            name={t('events.headers.message')}
-            value={event.message}
-          />
-        )}
-        {event.reason && (
-          <RowComponent
-            name={t('events.headers.reason')}
-            value={event.reason}
-          />
-        )}
-      </LayoutPanel.Body>
-    </LayoutPanel>
+    <Panel
+      fixed
+      key="specification-panel"
+      className="fd-margin--md"
+      headerText={t('events.headers.message')}
+    >
+      {event.message && (
+        <RowComponent
+          name={t('events.headers.message')}
+          value={event.message}
+        />
+      )}
+      {event.reason && (
+        <RowComponent name={t('events.headers.reason')} value={event.reason} />
+      )}
+    </Panel>
   );
 };
 
