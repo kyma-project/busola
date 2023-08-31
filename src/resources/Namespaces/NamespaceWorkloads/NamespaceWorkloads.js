@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import { LayoutPanel, Icon } from 'fundamental-react';
 import { CircleProgress } from 'shared/components/CircleProgress/CircleProgress';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { Spinner } from 'shared/components/Spinner/Spinner';
@@ -13,6 +12,7 @@ import {
   getHealthyStatusesCount,
   getHealthyReplicasCount,
 } from './NamespaceWorkloadsHelpers';
+import { Panel, Title, Icon } from '@ui5/webcomponents-react';
 
 NamespaceWorkloads.propTypes = { namespace: PropTypes.string.isRequired };
 
@@ -121,20 +121,23 @@ const DeploymentsCircle = ({ namespace }) => {
 export function NamespaceWorkloads({ namespace }) {
   const { t } = useTranslation();
   return (
-    <LayoutPanel>
-      <LayoutPanel.Header>
-        <Icon
-          size="m"
-          className="fd-margin-end--sm"
-          glyph="stethoscope"
-          ariaLabel="Health icon"
-        />
-        <LayoutPanel.Head title={t('namespaces.overview.workloads.title')} />
-      </LayoutPanel.Header>
-      <LayoutPanel.Body className="namespace-workloads__body">
+    <Panel
+      fixed
+      header={
+        <>
+          <Icon
+            className="fd-margin-end--sm"
+            name="stethoscope"
+            aria-label="Health icon"
+          />
+          <Title level="H5">{t('namespaces.overview.workloads.title')}</Title>
+        </>
+      }
+    >
+      <div className="namespace-workloads__body">
         <PodsCircle namespace={namespace} />
         <DeploymentsCircle namespace={namespace} />
-      </LayoutPanel.Body>
-    </LayoutPanel>
+      </div>
+    </Panel>
   );
 }
