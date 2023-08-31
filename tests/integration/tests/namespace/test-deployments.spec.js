@@ -86,7 +86,7 @@ context('Test Deployments', () => {
       .should('be.visible')
       .click();
 
-    cy.contains('ui5-title', DEPLOYMENT_NAME).should('be.visible');
+    cy.contains('[aria-label="title"]', DEPLOYMENT_NAME).should('be.visible');
   });
 
   it('Edit a deployment', () => {

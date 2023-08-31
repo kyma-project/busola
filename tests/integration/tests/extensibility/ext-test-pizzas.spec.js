@@ -171,6 +171,6 @@ context('Test Pizzas', () => {
       .should('be.visible')
       .click();
 
-    cy.contains('h3', PIZZA_NAME).should('be.visible');
+    cy.contains('ui5-title', PIZZA_NAME).should('be.visible');
   });
 });
