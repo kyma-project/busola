@@ -1,6 +1,8 @@
 import React from 'react';
-import { LayoutPanel } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
+import { Panel } from '@ui5/webcomponents-react';
+import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+
 import './MachineInfo.scss';
 
 export function MachineInfo({ nodeInfo, capacity }) {
@@ -9,40 +11,35 @@ export function MachineInfo({ nodeInfo, capacity }) {
   const { t } = useTranslation();
 
   return (
-    <LayoutPanel>
-      <LayoutPanel.Header>
-        <LayoutPanel.Head title={t('machine-info.title')} />
-      </LayoutPanel.Header>
-      <LayoutPanel.Body className="machine-info__body">
-        <dl>
-          <dd>{t('machine-info.operating-system')}</dd>
-          <dt>{`${nodeInfo.operatingSystem} (${nodeInfo.osImage})`}</dt>
-        </dl>
-        <dl>
-          <dd>{t('machine-info.architecture-cpus')}</dd>
-          <dt>
-            {nodeInfo.architecture}, {capacity.cpu} {t('machine-info.cpus')}
-          </dt>
-        </dl>
-        <dl>
-          <dd>{t('machine-info.pods-capacity')}</dd>
-          <dt>{capacity.pods}</dt>
-        </dl>
-        <dl>
-          <dd>{t('machine-info.memory')}</dd>
-          <dt>
-            {formattedMemory} {t('machine-info.gib')}
-          </dt>
-        </dl>
-        <dl>
-          <dd>{t('machine-info.kube-proxy-version')}</dd>
-          <dt>{nodeInfo.kubeProxyVersion}</dt>
-        </dl>
-        <dl>
-          <dd>{t('machine-info.kubelet-version')}</dd>
-          <dt>{nodeInfo.kubeletVersion}</dt>
-        </dl>
-      </LayoutPanel.Body>
-    </LayoutPanel>
+    <Panel fixed headerText={t('machine-info.title')}>
+      <div className="machine-info__body">
+        <LayoutPanelRow
+          name={t('machine-info.operating-system')}
+          value={`${nodeInfo.operatingSystem} (${nodeInfo.osImage})`}
+        />
+        <LayoutPanelRow
+          name={t('machine-info.architecture-cpus')}
+          value={`${nodeInfo.architecture}, ${capacity.cpu} ${t(
+            'machine-info.cpus',
+          )}`}
+        />
+        <LayoutPanelRow
+          name={t('machine-info.pods-capacity')}
+          value={capacity.pods}
+        />
+        <LayoutPanelRow
+          name={t('machine-info.memory')}
+          value={`${formattedMemory} ${t('machine-info.gib')}`}
+        />
+        <LayoutPanelRow
+          name={t('machine-info.kube-proxy-version')}
+          value={nodeInfo.kubeProxyVersion}
+        />
+        <LayoutPanelRow
+          name={t('machine-info.kubelet-version')}
+          value={nodeInfo.kubeletVersion}
+        />
+      </div>
+    </Panel>
   );
 }

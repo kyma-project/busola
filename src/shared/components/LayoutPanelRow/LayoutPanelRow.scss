@@ -1,8 +1,9 @@
 .layout-panel-row {
   display: grid;
   grid-template-columns: 1fr 2fr;
-}
-
-.layout-panel-row {
   color: var(--sapContent_LabelColor);
+
+  & > :first-child {
+    color: var(--sapNeutralColor);
+  }
 }

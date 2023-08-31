@@ -1,5 +1,4 @@
 import React from 'react';
-import { LayoutPanel } from 'fundamental-react';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
@@ -8,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import './HelmReleaseDataPanel.scss';
 import { useUrl } from 'hooks/useUrl';
+import { Panel, Title } from '@ui5/webcomponents-react';
 
 export function ReleaseDataPanel({ release, simpleHeader }) {
   const { t } = useTranslation();
@@ -15,33 +15,36 @@ export function ReleaseDataPanel({ release, simpleHeader }) {
 
   const { name, version, chart, info } = release;
 
+  console.log(simpleHeader);
+
   return (
-    <LayoutPanel className="fd-margin--md">
-      <LayoutPanel.Header>
-        {simpleHeader && (
-          <LayoutPanel.Head title={t('helm-releases.headers.release-data')} />
-        )}
-        {!simpleHeader && (
-          <>
-            <LayoutPanel.Head title={t('helm-releases.headers.release')} />
-            <Link
-              className="fd-link release-link"
-              to={namespaceUrl(`helm-releases/${name}`)}
-            >
-              {name}
-            </Link>
-            <div className="fd-margin-begin--sm">
-              <StatusBadge noTooltip type="info">
-                {t('helm-releases.headers.release-version', { version })}
-              </StatusBadge>
-            </div>
-            <div className="fd-margin-begin--tiny">
-              <HelmReleaseStatus status={release.info.status} />
-            </div>
-          </>
-        )}
-      </LayoutPanel.Header>
-      <LayoutPanel.Body>
+    <>
+      <Panel
+        fixed
+        className="fd-margin--md"
+        header={
+          simpleHeader ? (
+            <Title level="H5">{t('helm-releases.headers.release-data')}</Title>
+          ) : (
+            <>
+              <Link
+                className="fd-link release-link"
+                to={namespaceUrl(`helm-releases/${name}`)}
+              >
+                {name}
+              </Link>
+              <div className="fd-margin-begin--sm">
+                <StatusBadge noTooltip type="info">
+                  {t('helm-releases.headers.release-version', { version })}
+                </StatusBadge>
+              </div>
+              <div className="fd-margin-begin--tiny">
+                <HelmReleaseStatus status={release.info.status} />
+              </div>
+            </>
+          )
+        }
+      >
         <LayoutPanelRow
           name={t('helm-releases.headers.chart-version')}
           value={chart.metadata.version}
@@ -62,7 +65,7 @@ export function ReleaseDataPanel({ release, simpleHeader }) {
           name={t('helm-releases.headers.last-deployed')}
           value={<ReadableCreationTimestamp timestamp={info.last_deployed} />}
         />
-      </LayoutPanel.Body>
-    </LayoutPanel>
+      </Panel>
+    </>
   );
 }
