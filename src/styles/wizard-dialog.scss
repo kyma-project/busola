@@ -3,24 +3,4 @@
     padding-left: 32px;
     padding-right: 32px;
   }
-
-  .fd-wizard {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    overflow: hidden;
-
-    .fd-bar--footer {
-      flex-shrink: 0;
-    }
-  }
-
-  .fd-wizard__content {
-    background-color: var(--sapList_Background);
-    padding-bottom: 16px;
-    display: flex;
-    flex-flow: column;
-    flex-grow: 1;
-    overflow: auto;
-  }
 }

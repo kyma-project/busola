@@ -73,14 +73,11 @@ context('Test multiple context kubeconfig', () => {
         .contains('All contexts')
         .click();
 
-      cy.get('footer')
-        .contains('button', 'Next')
-        .click();
+      cy.contains('Next').click({ force: true });
 
-      cy.get('ui5-dialog[accessible-role="Dialog"]')
-        .get('footer')
-        .contains('button', 'Connect cluster')
-        .click();
+      cy.get(`[aria-label="last-step"]:visible`)
+        .contains('Connect cluster')
+        .click({ force: true });
 
       cy.contains('Cluster Details').should('exist');
 

@@ -124,9 +124,9 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
       cy.contains(storage).click();
     }
 
-    cy.get('ui5-dialog[accessible-role="Dialog"]')
-      .contains('button', 'Connect cluster')
-      .click();
+    cy.get(`[aria-label="last-step"]:visible`)
+      .contains('Connect cluster')
+      .click({ force: true });
 
     cy.url().should('match', expectedLocation);
 
