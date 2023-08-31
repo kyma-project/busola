@@ -48,7 +48,7 @@ context('Test Custom Resources', () => {
   it('Check CR groups list', () => {
     cy.navigateTo('Configuration', 'Custom Resources');
 
-    cy.contains('h3', 'Custom Resources').should('be.visible');
+    cy.contains('ui5-title', 'Custom Resources').should('be.visible');
 
     cy.get('ui5-button[aria-label="open-search"]')
       .click()

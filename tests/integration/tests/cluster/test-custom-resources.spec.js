@@ -35,7 +35,7 @@ context('Test Custom Resources', () => {
       .contains('Custom Resources')
       .click();
 
-    cy.contains('h3', 'Custom Resources').should('be.visible');
+    cy.contains('ui5-title', 'Custom Resources').should('be.visible');
 
     openSearchWithSlashShortcut();
 

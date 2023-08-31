@@ -80,7 +80,7 @@ context('Test Pizzas', () => {
 
     cy.contains('paymentMethod: CARD');
     cy.contains('realization=SELF-PICKUP');
-    cy.contains('h3', 'Pizzas');
+    cy.contains('ui5-title', 'Pizzas');
   });
 
   it('Edits a Pizza Order', () => {
@@ -171,6 +171,6 @@ context('Test Pizzas', () => {
       .should('be.visible')
       .click();
 
-    cy.contains('h3', PIZZA_NAME).should('be.visible');
+    cy.contains('ui5-title', PIZZA_NAME).should('be.visible');
   });
 });
