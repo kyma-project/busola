@@ -10,6 +10,8 @@ context('Create Namespace', () => {
       .contains('Namespaces')
       .click();
 
+    cy.wait(800);
+
     cy.get('ui5-button')
       .contains('Create Namespace')
       .click();
