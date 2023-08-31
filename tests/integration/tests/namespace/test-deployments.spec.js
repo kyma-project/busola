@@ -82,11 +82,11 @@ context('Test Deployments', () => {
   it('Check if deployment and pod exist', () => {
     cy.url().should('match', new RegExp(`\/deployments\/${DEPLOYMENT_NAME}$`));
 
+    cy.contains('[aria-label="title"]', DEPLOYMENT_NAME).should('be.visible');
+
     cy.contains('[role=row]', DEPLOYMENT_NAME)
       .should('be.visible')
       .click();
-
-    cy.contains('[aria-label="title"]', DEPLOYMENT_NAME).should('be.visible');
   });
 
   it('Edit a deployment', () => {
