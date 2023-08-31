@@ -106,7 +106,7 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
     }
 
     cy.visit(`${config.clusterAddress}/clusters`)
-      .get('ui5-button')
+      .get('ui5-button:visible')
       .contains('Connect cluster')
       .click();
 
