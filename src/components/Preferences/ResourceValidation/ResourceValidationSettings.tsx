@@ -1,7 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { Button } from '@ui5/webcomponents-react';
-import { LayoutPanel, Switch } from 'fundamental-react';
+import {
+  Button,
+  Panel,
+  Title,
+  Toolbar,
+  ToolbarSpacer,
+} from '@ui5/webcomponents-react';
+import { Switch } from 'fundamental-react';
 import {
   getExtendedValidateResourceState,
   validateResourcesState,
@@ -93,12 +99,14 @@ export default function ResourceValidationSettings() {
   };
 
   return (
-    <LayoutPanel>
-      <LayoutPanel.Header>
-        <LayoutPanel.Head
-          title={t('settings.clusters.resourcesValidation.validateResources')}
-        />
-        <LayoutPanel.Actions>
+    <Panel
+      fixed
+      header={
+        <Toolbar>
+          <Title level="H4">
+            {t('settings.clusters.resourcesValidation.validateResources')}
+          </Title>
+          <ToolbarSpacer />
           <Switch
             // TypeScript definitions are out of sync here
             // @ts-ignore
@@ -112,8 +120,9 @@ export default function ResourceValidationSettings() {
             onChange={toggleVisibility}
             compact
           />
-        </LayoutPanel.Actions>
-      </LayoutPanel.Header>
+        </Toolbar>
+      }
+    >
       {!isEnabled && (
         <div className="no-validation-info">
           <span className="fd-has-color-status-4">
@@ -197,6 +206,6 @@ export default function ResourceValidationSettings() {
             />
           </>
         )}
-    </LayoutPanel>
+    </Panel>
   );
 }

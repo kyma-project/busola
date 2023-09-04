@@ -6,11 +6,11 @@ import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { CustomResources } from 'components/CustomResources/CustomResources';
-import { LayoutPanel } from 'fundamental-react';
 import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { useRecoilState } from 'recoil';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
+import { Panel } from '@ui5/webcomponents-react';
 
 export default function CustomResourcesOfType({ crdName }) {
   const { t } = useTranslation();
@@ -23,9 +23,9 @@ export default function CustomResourcesOfType({ crdName }) {
   if (loading) return <Spinner />;
   if (error) {
     return (
-      <LayoutPanel className="fd-has-padding-regular fd-margin--md">
+      <Panel fixed className="fd-has-padding-regular fd-margin--md">
         {error.message}
-      </LayoutPanel>
+      </Panel>
     );
   }
 
