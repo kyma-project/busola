@@ -7,7 +7,6 @@ import {
   TableCell,
   TableColumn,
   TableRow,
-  Text,
 } from '@ui5/webcomponents-react';
 import ListActions from 'shared/components/ListActions/ListActions';
 import classNames from 'classnames';
@@ -16,7 +15,7 @@ export const BodyFallback = ({ children }) => (
   // TODO replace once new Table component is available in ui5-webcomponents-react
   <tr>
     <td colSpan="100%">
-      <div className="body-fallback">{children}</div>{' '}
+      <div className="body-fallback">{children}</div>
     </td>
   </tr>
 );
@@ -26,7 +25,7 @@ export const HeaderRenderer = ({ slot, actions, headerRenderer }) => {
   if (actions.length) {
     emptyColumn = (
       <TableColumn slot={slot} key="actions-column" aria-label="actions-column">
-        <Label></Label>
+        <Label />
       </TableColumn>
     );
   }
@@ -38,7 +37,7 @@ export const HeaderRenderer = ({ slot, actions, headerRenderer }) => {
             slot={`${slot}-${index}`}
             key={typeof h === 'object' ? index : h}
           >
-            <Text>{h}</Text>
+            <Label>{h}</Label>
           </TableColumn>
         );
       })}
@@ -92,7 +91,6 @@ const DefaultRowRenderer = ({
       const { content, ...props } = cell;
       return (
         <TableCell key={id} {...props}>
-          {' '}
           {content}
         </TableCell>
       );

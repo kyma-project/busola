@@ -17,7 +17,7 @@ context('Test Download a Kubeconfig', () => {
     cy.get('ui5-table-cell')
       .eq(0)
       .then(el => {
-        const contextName = el.text().trim();
+        const contextName = el.text();
 
         const filepath = path.join(
           DOWNLOADS_FOLDER,

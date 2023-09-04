@@ -224,41 +224,39 @@ export const GenericList = ({
   });
 
   return (
-    <>
-      <LayoutPanel className={panelClassNames} data-testid={testid}>
-        <LayoutPanel.Header className="fd-has-padding-left-small fd-has-padding-right-small">
-          <LayoutPanel.Head title={title} />
-          <LayoutPanel.Actions>{headerActions}</LayoutPanel.Actions>
-        </LayoutPanel.Header>
+    <LayoutPanel className={panelClassNames} data-testid={testid}>
+      <LayoutPanel.Header className="fd-has-padding-left-small fd-has-padding-right-small">
+        <LayoutPanel.Head title={title} />
+        <LayoutPanel.Actions>{headerActions}</LayoutPanel.Actions>
+      </LayoutPanel.Header>
 
-        <LayoutPanel.Body className="fd-has-padding-none">
-          <Table
-            className={tableClassNames}
-            columns={
-              <HeaderRenderer
-                entries={entries}
-                actions={actions}
-                headerRenderer={headerRenderer}
-              />
-            }
-          >
-            {renderTableBody()}
-          </Table>
-        </LayoutPanel.Body>
-        {!!pagination &&
-          (!pagination.autoHide ||
-            filteredEntries.length > pagination.itemsPerPage) && (
-            <LayoutPanel.Footer>
-              <Pagination
-                itemsTotal={filteredEntries.length}
-                currentPage={currentPage}
-                itemsPerPage={pagination.itemsPerPage}
-                onChangePage={setCurrentPage}
-              />
-            </LayoutPanel.Footer>
-          )}
-      </LayoutPanel>
-    </>
+      <LayoutPanel.Body className="fd-has-padding-none">
+        <Table
+          className={tableClassNames}
+          columns={
+            <HeaderRenderer
+              entries={entries}
+              actions={actions}
+              headerRenderer={headerRenderer}
+            />
+          }
+        >
+          {renderTableBody()}
+        </Table>
+      </LayoutPanel.Body>
+      {!!pagination &&
+        (!pagination.autoHide ||
+          filteredEntries.length > pagination.itemsPerPage) && (
+          <LayoutPanel.Footer>
+            <Pagination
+              itemsTotal={filteredEntries.length}
+              currentPage={currentPage}
+              itemsPerPage={pagination.itemsPerPage}
+              onChangePage={setCurrentPage}
+            />
+          </LayoutPanel.Footer>
+        )}
+    </LayoutPanel>
   );
 };
 
