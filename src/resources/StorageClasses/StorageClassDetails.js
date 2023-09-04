@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { LayoutPanel } from 'fundamental-react';
 
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
@@ -11,6 +10,7 @@ import { filterByResource } from 'hooks/useMessageList';
 import { PersistentVolumesList } from './PersistentVolumesList';
 import { PersistentVolumeClaimsList } from './PersistentVolumeClaimsList';
 import { StorageClassCreate } from './StorageClassCreate';
+import { Panel, Text, Title, Toolbar } from '@ui5/webcomponents-react';
 
 export function StorageClassDetails(props) {
   const { t } = useTranslation();
@@ -19,28 +19,32 @@ export function StorageClassDetails(props) {
     const parameters = storageclass?.parameters || [];
 
     return (
-      <LayoutPanel className="fd-margin--md" key={'storageclass-parameters'}>
-        <LayoutPanel.Header>
-          <LayoutPanel.Head title={t('storage-classes.headers.parameters')} />
-        </LayoutPanel.Header>
-        <LayoutPanel.Body>
-          {Object.keys(parameters).length > 0 ? (
-            Object.entries(parameters).map(parameters => {
-              return (
-                <LayoutPanelRow
-                  name={parameters[0]}
-                  value={parameters[1] || EMPTY_TEXT_PLACEHOLDER}
-                  key={parameters[0]}
-                />
-              );
-            })
-          ) : (
-            <p className="no-entries-message body-fallback">
-              {t('common.messages.no-entries-found')}
-            </p>
-          )}
-        </LayoutPanel.Body>
-      </LayoutPanel>
+      <Panel
+        fixed
+        className="fd-margin--md"
+        key={'storageclass-parameters'}
+        header={
+          <Toolbar>
+            <Title level="H5">{t('storage-classes.headers.parameters')}</Title>
+          </Toolbar>
+        }
+      >
+        {Object.keys(parameters).length > 0 ? (
+          Object.entries(parameters).map(parameters => {
+            return (
+              <LayoutPanelRow
+                name={parameters[0]}
+                value={parameters[1] || EMPTY_TEXT_PLACEHOLDER}
+                key={parameters[0]}
+              />
+            );
+          })
+        ) : (
+          <Text className="no-entries-message body-fallback">
+            {t('common.messages.no-entries-found')}
+          </Text>
+        )}
+      </Panel>
     );
   };
 
