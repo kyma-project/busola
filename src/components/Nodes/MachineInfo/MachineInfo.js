@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Panel } from '@ui5/webcomponents-react';
+import { Panel, Title, Toolbar } from '@ui5/webcomponents-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
 import './MachineInfo.scss';
@@ -11,7 +11,14 @@ export function MachineInfo({ nodeInfo, capacity }) {
   const { t } = useTranslation();
 
   return (
-    <Panel fixed headerText={t('machine-info.title')}>
+    <Panel
+      fixed
+      header={
+        <Toolbar>
+          <Title level="H5">{t('machine-info.title')}</Title>
+        </Toolbar>
+      }
+    >
       <div className="machine-info__body">
         <LayoutPanelRow
           name={t('machine-info.operating-system')}

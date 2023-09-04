@@ -12,7 +12,7 @@ import {
   getHealthyStatusesCount,
   getHealthyReplicasCount,
 } from './NamespaceWorkloadsHelpers';
-import { Panel, Title, Icon } from '@ui5/webcomponents-react';
+import { Panel, Title, Icon, Toolbar } from '@ui5/webcomponents-react';
 
 NamespaceWorkloads.propTypes = { namespace: PropTypes.string.isRequired };
 
@@ -124,14 +124,14 @@ export function NamespaceWorkloads({ namespace }) {
     <Panel
       fixed
       header={
-        <>
+        <Toolbar>
           <Icon
             className="fd-margin-end--sm"
             name="stethoscope"
             aria-label="Health icon"
           />
           <Title level="H5">{t('namespaces.overview.workloads.title')}</Title>
-        </>
+        </Toolbar>
       }
     >
       <div className="namespace-workloads__body">

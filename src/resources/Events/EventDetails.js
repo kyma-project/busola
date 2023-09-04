@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Icon } from 'fundamental-react';
-import { Panel } from '@ui5/webcomponents-react';
+import { Panel, Title, Toolbar } from '@ui5/webcomponents-react';
 import { Link } from 'react-router-dom';
 
 import { useUrl } from 'hooks/useUrl';
@@ -23,7 +23,11 @@ const Message = event => {
       fixed
       key="specification-panel"
       className="fd-margin--md"
-      headerText={t('events.headers.message')}
+      header={
+        <Toolbar>
+          <Title level="H5">{t('events.headers.message')}</Title>
+        </Toolbar>
+      }
     >
       {event.message && (
         <RowComponent

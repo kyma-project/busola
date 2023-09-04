@@ -6,7 +6,7 @@ import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { useUrl } from 'hooks/useUrl';
-import { Panel } from '@ui5/webcomponents-react';
+import { Panel, Title, Toolbar } from '@ui5/webcomponents-react';
 
 export const DefaultBackendPanel = ({ backend, namespace }) => {
   const { t } = useTranslation();
@@ -19,7 +19,11 @@ export const DefaultBackendPanel = ({ backend, namespace }) => {
     <Panel
       fixed
       className="fd-margin--md default-backend-panel"
-      headerText={t('ingresses.labels.default-backend')}
+      header={
+        <Toolbar>
+          <Title level="H5">{t('ingresses.labels.default-backend')}</Title>
+        </Toolbar>
+      }
     >
       {backend.service && (
         <>

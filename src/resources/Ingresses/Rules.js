@@ -5,7 +5,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { Link } from 'react-router-dom';
-import { Panel } from '@ui5/webcomponents-react';
+import { Panel, Title, Toolbar } from '@ui5/webcomponents-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
@@ -82,7 +82,11 @@ export const Rules = ({ rules }) => {
         <Panel
           fixed
           className="fd-margin--md rule-panel"
-          headerText={t('ingresses.labels.rules')}
+          header={
+            <Toolbar>
+              <Title level="H5">{t('ingresses.labels.rules')}</Title>
+            </Toolbar>
+          }
         >
           {rule.host && (
             <LayoutPanelRow
