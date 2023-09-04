@@ -156,7 +156,7 @@ Cypress.Commands.add(
         cy.get('[placeholder="Search"]').clear();
       }
 
-      cy.get('.fd-table')
+      cy.get('ui5-table')
         .contains(searchTerm)
         .should('not.exist');
     }

@@ -130,9 +130,7 @@ context('Test Pizzas', () => {
       .contains(/^Pizzas$/)
       .click();
 
-    cy.get('.fd-table__body')
-      .find('tr')
-      .should('have.length', 2);
+    cy.get('[role=row]').should('have.length', 2);
 
     cy.contains('Margherita is a simple, vegetarian pizza.');
     cy.contains('Toppings price');
