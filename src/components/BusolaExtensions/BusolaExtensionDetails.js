@@ -2,7 +2,14 @@ import React from 'react';
 import { Link } from 'shared/components/Link/Link';
 import { Trans, useTranslation } from 'react-i18next';
 import { createPatch } from 'rfc6902';
-import { Button, MessageStrip } from '@ui5/webcomponents-react';
+import {
+  Button,
+  MessageStrip,
+  Panel,
+  Title,
+  Toolbar,
+  ToolbarSpacer,
+} from '@ui5/webcomponents-react';
 import { LayoutPanel } from 'fundamental-react';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
@@ -181,41 +188,45 @@ export function BusolaExtensionDetails(props) {
       }
     };
     return (
-      <LayoutPanel className="fd-margin--md">
-        <LayoutPanel.Header>
-          <LayoutPanel.Head title={t('extensibility.sections.version')} />
-          <LayoutPanel.Actions>
+      <Panel
+        fixed
+        header={
+          <Toolbar>
+            <Title level="H4">{t('extensibility.sections.version')}</Title>
             {hasMigrationFunction && (
               <>
                 {currentVersion && (
-                  <Button
-                    disabled={currentVersion === getLatestVersion()}
-                    icon="forward"
-                    iconEnd
-                    onClick={() => {
-                      const newBusolaExtension = migrateToLatest(configmap);
-                      updateBusolaExtension(newBusolaExtension, configmap);
-                    }}
-                  >
-                    {t('config-maps.buttons.migrate')}
-                  </Button>
+                  <>
+                    <ToolbarSpacer />
+                    <Button
+                      disabled={currentVersion === getLatestVersion()}
+                      icon="forward"
+                      iconEnd
+                      onClick={() => {
+                        const newBusolaExtension = migrateToLatest(configmap);
+                        updateBusolaExtension(newBusolaExtension, configmap);
+                      }}
+                    >
+                      {t('config-maps.buttons.migrate')}
+                    </Button>
+                  </>
                 )}
               </>
             )}
-          </LayoutPanel.Actions>
-        </LayoutPanel.Header>
-        <LayoutPanel.Body>
-          {showMessage()}
-          <LayoutPanelRow
-            name={t('extensibility.version.current')}
-            value={currentVersion || EMPTY_TEXT_PLACEHOLDER}
-          />
-          <LayoutPanelRow
-            name={t('extensibility.version.latest')}
-            value={getLatestVersion()}
-          />
-        </LayoutPanel.Body>
-      </LayoutPanel>
+          </Toolbar>
+        }
+        className="fd-margin--md"
+      >
+        {showMessage()}
+        <LayoutPanelRow
+          name={t('extensibility.version.current')}
+          value={currentVersion || EMPTY_TEXT_PLACEHOLDER}
+        />
+        <LayoutPanelRow
+          name={t('extensibility.version.latest')}
+          value={getLatestVersion()}
+        />
+      </Panel>
     );
   };
 
