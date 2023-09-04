@@ -1,9 +1,9 @@
-import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from '../LayoutPanelRow/LayoutPanelRow';
 import { useTranslation } from 'react-i18next';
 import { getPorts } from '../GetContainersPorts';
 import { Link } from 'react-router-dom';
 import { useUrl } from 'hooks/useUrl';
+import { Panel, Title, Toolbar } from '@ui5/webcomponents-react';
 
 function Table({ items, headers, rowRenderer }) {
   if (!items?.length) {
@@ -30,90 +30,93 @@ function Table({ items, headers, rowRenderer }) {
 
 function ContainerComponent({ container }) {
   const { t } = useTranslation();
+
   return (
-    <>
-      <LayoutPanel.Header>
-        <LayoutPanel.Head title={container.name} />
-      </LayoutPanel.Header>
-      <LayoutPanel.Body>
-        <LayoutPanelRow name={t('pods.labels.image')} value={container.image} />
+    <Panel
+      fixed
+      header={
+        <Toolbar>
+          <Title level="H5">{container.name}</Title>
+        </Toolbar>
+      }
+    >
+      <LayoutPanelRow name={t('pods.labels.image')} value={container.image} />
+      <LayoutPanelRow
+        name={t('pods.labels.image-pull-policy')}
+        value={container.imagePullPolicy || 'Always'}
+      />
+      <LayoutPanelRow
+        name={t('pods.labels.ports')}
+        value={getPorts(container.ports)}
+      />
+      {container.env && (
         <LayoutPanelRow
-          name={t('pods.labels.image-pull-policy')}
-          value={container.imagePullPolicy || 'Always'}
+          name={t('pods.labels.env')}
+          value={
+            <Table
+              items={container.env}
+              headers={[t('common.headers.name'), t('common.headers.value')]}
+              rowRenderer={env => (
+                <>
+                  <td>{env.name}</td>
+                  <td>
+                    {env.value || env?.valueFrom?.secretKeyRef?.name || ''}
+                  </td>
+                </>
+              )}
+            />
+          }
         />
+      )}
+      {container.volumeMounts && (
         <LayoutPanelRow
-          name={t('pods.labels.ports')}
-          value={getPorts(container.ports)}
+          name={t('pods.labels.volume-mounts')}
+          value={
+            <Table
+              items={container.volumeMounts}
+              headers={[t('common.headers.name'), t('pods.labels.mount-path')]}
+              rowRenderer={mount => (
+                <>
+                  <td>{mount.name}</td>
+                  <td>{mount?.mountPath}</td>
+                </>
+              )}
+            />
+          }
         />
-        {container.env && (
-          <LayoutPanelRow
-            name={t('pods.labels.env')}
-            value={
-              <Table
-                items={container.env}
-                headers={[t('common.headers.name'), t('common.headers.value')]}
-                rowRenderer={env => (
-                  <>
-                    <td>{env.name}</td>
-                    <td>
-                      {env.value || env?.valueFrom?.secretKeyRef?.name || ''}
-                    </td>
-                  </>
-                )}
-              />
-            }
-          />
-        )}
-        {container.volumeMounts && (
-          <LayoutPanelRow
-            name={t('pods.labels.volume-mounts')}
-            value={
-              <Table
-                items={container.volumeMounts}
-                headers={[
-                  t('common.headers.name'),
-                  t('pods.labels.mount-path'),
-                ]}
-                rowRenderer={mount => (
-                  <>
-                    <td>{mount.name}</td>
-                    <td>{mount?.mountPath}</td>
-                  </>
-                )}
-              />
-            }
-          />
-        )}
-        {container.command && (
-          <LayoutPanelRow
-            name={t('pods.labels.command')}
-            value={<p className="code-block">{container.command.join(' ')}</p>}
-          />
-        )}
-        {container.args && (
-          <LayoutPanelRow
-            name={t('pods.labels.args')}
-            value={<p className="code-block">{container.args.join(' ')}</p>}
-          />
-        )}
-      </LayoutPanel.Body>
-    </>
+      )}
+      {container.command && (
+        <LayoutPanelRow
+          name={t('pods.labels.command')}
+          value={<p className="code-block">{container.command.join(' ')}</p>}
+        />
+      )}
+      {container.args && (
+        <LayoutPanelRow
+          name={t('pods.labels.args')}
+          value={<p className="code-block">{container.args.join(' ')}</p>}
+        />
+      )}
+    </Panel>
   );
 }
 
 export function ContainersPanel({ title, containers }) {
   return (
     <>
-      <LayoutPanel className="fd-margin--md">
-        <LayoutPanel.Header>
-          <LayoutPanel.Head title={title} />
-        </LayoutPanel.Header>
-        <LayoutPanel.Body>
-          {containers?.map(container => (
-            <ContainerComponent key={container.name} container={container} />
-          ))}
-        </LayoutPanel.Body>
-      </LayoutPanel>
+      <Panel
+        fixed
+        className="fd-margin--md"
+        header={
+          <Toolbar>
+            <Title level="H5">{title}</Title>
+          </Toolbar>
+        }
+      >
+        {containers?.map(container => (
+          <ContainerComponent key={container.name} container={container} />
+        ))}
+      </Panel>
     </>
   );
 }
@@ -140,45 +143,47 @@ export function Volume({ volume }) {
   const k8sResourceName = configMap?.name || secret?.secretName;
 
   return (
-    <>
-      <LayoutPanel.Header>
-        <LayoutPanel.Head title={name} />
-      </LayoutPanel.Header>
-      <LayoutPanel.Body>
-        <LayoutPanelRow name="Type" value={typeLabel} />
-        {k8sResource && (
-          <LayoutPanelRow
-            name={t('common.headers.resource')}
-            value={
-              <Link
-                className="fd-link"
-                to={namespaceUrl(
-                  `${configMap ? 'configmaps' : 'secrets'}/${k8sResourceName}`,
-                )}
-              >
-                {k8sResourceName}
-              </Link>
-            }
-          />
-        )}
-        {k8sResource?.items && (
-          <LayoutPanelRow
-            name={t('common.headers.items')}
-            value={
-              <Table
-                items={k8sResource.items}
-                headers={[t('common.headers.key'), t('common.labels.path')]}
-                rowRenderer={mount => (
-                  <>
-                    <td>{mount.key}</td>
-                    <td>{mount.path}</td>
-                  </>
-                )}
-              />
-            }
-          />
-        )}
-      </LayoutPanel.Body>
-    </>
+    <Panel
+      fixed
+      header={
+        <Toolbar>
+          <Title level="H5">{name}</Title>
+        </Toolbar>
+      }
+    >
+      <LayoutPanelRow name="Type" value={typeLabel} />
+      {k8sResource && (
+        <LayoutPanelRow
+          name={t('common.headers.resource')}
+          value={
+            <Link
+              className="fd-link"
+              to={namespaceUrl(
+                `${configMap ? 'configmaps' : 'secrets'}/${k8sResourceName}`,
+              )}
+            >
+              {k8sResourceName}
+            </Link>
+          }
+        />
+      )}
+      {k8sResource?.items && (
+        <LayoutPanelRow
+          name={t('common.headers.items')}
+          value={
+            <Table
+              items={k8sResource.items}
+              headers={[t('common.headers.key'), t('common.labels.path')]}
+              rowRenderer={mount => (
+                <>
+                  <td>{mount.key}</td>
+                  <td>{mount.path}</td>
+                </>
+              )}
+            />
+          }
+        />
+      )}
+    </Panel>
   );
 }

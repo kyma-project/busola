@@ -1,33 +1,32 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Labels } from '../Labels/Labels';
 import { ContainersPanel, Volume } from './components';
+import { Panel, Title, Toolbar } from '@ui5/webcomponents-react';
+
 import './PodTemplate.scss';
 
 export function PodTemplate({ template }) {
   const { t } = useTranslation();
 
   const header = (
-    <LayoutPanel.Header>
-      <LayoutPanel.Head title={t('pods.labels.pod-template')} />
+    <Toolbar style={{ height: '10vh' }}>
+      <Title level="H5">{t('pods.labels.pod-template')}</Title>
       <Labels
         className="fd-margin-begin--tiny"
         labels={template.metadata.labels}
       />
-    </LayoutPanel.Header>
+    </Toolbar>
   );
 
   const body = (
     <>
-      <LayoutPanel.Body className="fd-has-padding-bottom-none">
-        <LayoutPanelRow
-          name={t('pods.labels.restart-policy')}
-          value={template.spec.restartPolicy}
-        />
-      </LayoutPanel.Body>
+      <LayoutPanelRow
+        name={t('pods.labels.restart-policy')}
+        value={template.spec.restartPolicy}
+      />
       {template.spec.containers && (
         <ContainersPanel
           title={t('pods.labels.containers')}
@@ -42,25 +41,31 @@ export function PodTemplate({ template }) {
       )}
       {template.spec.volumes && (
         <>
-          <LayoutPanel className="fd-margin--md">
-            <LayoutPanel.Header>
-              <LayoutPanel.Head title={t('pods.labels.volumes')} />
-            </LayoutPanel.Header>
-            <LayoutPanel.Body>
-              {template.spec.volumes.map(volume => (
-                <Volume key={volume.name} volume={volume} />
-              ))}
-            </LayoutPanel.Body>
-          </LayoutPanel>
+          <Panel
+            fixed
+            className="fd-margin--md"
+            header={
+              <Toolbar style={{ height: '10vh' }}>
+                <Title level="H5">{t('pods.labels.volumes')}</Title>
+                <Labels
+                  className="fd-margin-begin--tiny"
+                  labels={template.metadata.labels}
+                />
+              </Toolbar>
+            }
+          >
+            {template.spec.volumes.map(volume => (
+              <Volume key={volume.name} volume={volume} />
+            ))}
+          </Panel>
         </>
       )}
     </>
   );
 
   return (
-    <LayoutPanel className="fd-margin--md" key="pod-template">
-      {header}
+    <Panel fixed className="fd-margin--md" key="pod-template" header={header}>
       {body}
-    </LayoutPanel>
+    </Panel>
   );
 }
