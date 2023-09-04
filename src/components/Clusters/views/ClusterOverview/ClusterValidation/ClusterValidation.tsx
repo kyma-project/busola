@@ -7,7 +7,6 @@ import {
   usePolicySet,
 } from 'state/validationEnabledSchemasAtom';
 import { ResourceValidation } from './ResourceValidation';
-import { LayoutPanel } from 'fundamental-react';
 
 import { ResourceLoader } from './ResourceLoader';
 import { createPostFn } from 'shared/hooks/BackendAPI/usePost';
@@ -20,7 +19,11 @@ import {
   CardHeader,
   FlexBox,
   Loader,
+  Panel,
   ProgressIndicator,
+  Title,
+  Toolbar,
+  ToolbarSpacer,
 } from '@ui5/webcomponents-react';
 import { ClusterValidationConfigurationDialog } from './ClusterValidationConfiguration';
 import { resourcesState } from 'state/resourcesAtom';
@@ -147,10 +150,13 @@ export const ClusterValidation = () => {
   };
 
   return (
-    <LayoutPanel className="fd-margin--md">
-      <LayoutPanel.Header className="fd-has-padding-left-small fd-has-padding-right-small">
-        <LayoutPanel.Head title={'Cluster Validation'} />
-        <LayoutPanel.Actions>
+    <Panel
+      fixed
+      className="fd-margin--md"
+      header={
+        <Toolbar>
+          <Title level="H4">{t('cluster-validation.title')}</Title>
+          <ToolbarSpacer />
           <Button
             className="fd-margin-end--tiny"
             icon="play"
@@ -172,79 +178,73 @@ export const ClusterValidation = () => {
           <Button icon="reset" iconEnd onClick={clear} disabled={!scanProgress}>
             {t('cluster-validation.scan.buttons.clear')}
           </Button>
-        </LayoutPanel.Actions>
-      </LayoutPanel.Header>
+        </Toolbar>
+      }
+    >
+      {!scanReady && <Loader type="Indeterminate" />}
 
-      {!scanReady && (
-        <LayoutPanel.Filters className="fd-has-padding-none">
-          <Loader type="Indeterminate" />
-        </LayoutPanel.Filters>
+      <Section titleText={t('cluster-validation.scan.scope')}>
+        <FlexBox className="fd-has-padding-small">
+          <InfoTile
+            title={t('common.headers.namespaces')}
+            content={
+              !configuration?.namespaces
+                ? '-'
+                : `${configuration?.namespaces?.length}`
+            }
+          />
+          <InfoTile
+            title={t('cluster-validation.scan.k8s-api-resources')}
+            content={!listableResources ? '-' : `${listableResources.length}`}
+          />
+        </FlexBox>
+      </Section>
+
+      {scanProgress && (
+        <Section
+          titleText={t('cluster-validation.scan.progress')}
+          status={
+            scanProgress
+              ? `${scanProgress.scanned ?? 0} / ${scanProgress.total ?? '?'}`
+              : t('cluster-validation.scan.not-started')
+          }
+        >
+          <ProgressIndicator
+            value={
+              scanProgress && scanProgress.total
+                ? Math.floor(
+                    (100 * (scanProgress.scanned ?? 0)) / scanProgress.total,
+                  )
+                : 0
+            }
+            valueState={
+              scanProgress && scanProgress.total === scanProgress.scanned
+                ? 'Success'
+                : 'None'
+            }
+            style={{ width: '96%', padding: '5px 2%' }}
+          />
+        </Section>
       )}
 
-      <LayoutPanel.Body>
-        <Section titleText={t('cluster-validation.scan.scope')}>
-          <FlexBox className="fd-has-padding-small">
-            <InfoTile
-              title={t('common.headers.namespaces')}
-              content={
-                !configuration?.namespaces
-                  ? '-'
-                  : `${configuration?.namespaces?.length}`
-              }
-            />
-            <InfoTile
-              title={t('cluster-validation.scan.k8s-api-resources')}
-              content={!listableResources ? '-' : `${listableResources.length}`}
-            />
-          </FlexBox>
+      {scanResult && (
+        <Section titleText={t('cluster-validation.scan.result')}>
+          <ScanResultTree scanResult={scanResult} />
         </Section>
+      )}
 
-        {scanProgress && (
-          <Section
-            titleText={t('cluster-validation.scan.progress')}
-            status={
-              scanProgress
-                ? `${scanProgress.scanned ?? 0} / ${scanProgress.total ?? '?'}`
-                : t('cluster-validation.scan.not-started')
-            }
-          >
-            <ProgressIndicator
-              value={
-                scanProgress && scanProgress.total
-                  ? Math.floor(
-                      (100 * (scanProgress.scanned ?? 0)) / scanProgress.total,
-                    )
-                  : 0
-              }
-              valueState={
-                scanProgress && scanProgress.total === scanProgress.scanned
-                  ? 'Success'
-                  : 'None'
-              }
-              style={{ width: '96%', padding: '5px 2%' }}
-            />
-          </Section>
-        )}
-
-        {scanResult && (
-          <Section titleText={t('cluster-validation.scan.result')}>
-            <ScanResultTree scanResult={scanResult} />
-          </Section>
-        )}
-
-        <ClusterValidationConfigurationDialog
-          show={isConfigurationOpen}
-          onCancel={() => setConfigurationOpen(false)}
-          onSubmit={(newConfiguration: ScanConfiguration) => {
-            setConfiguration(newConfiguration);
-            setConfigurationOpen(false);
-          }}
-          configuration={configuration}
-          namespaces={namespaces}
-          policies={validationSchemas?.policies.map(policy => policy.name)}
-        />
-      </LayoutPanel.Body>
-    </LayoutPanel>
+      <ClusterValidationConfigurationDialog
+        show={isConfigurationOpen}
+        onCancel={() => setConfigurationOpen(false)}
+        onSubmit={(newConfiguration: ScanConfiguration) => {
+          setConfiguration(newConfiguration);
+          setConfigurationOpen(false);
+        }}
+        configuration={configuration}
+        namespaces={namespaces}
+        policies={validationSchemas?.policies.map(policy => policy.name)}
+      />
+    </Panel>
   );
 };
 

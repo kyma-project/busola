@@ -10,7 +10,6 @@ import {
   Toolbar,
   ToolbarSpacer,
 } from '@ui5/webcomponents-react';
-import { LayoutPanel } from 'fundamental-react';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
