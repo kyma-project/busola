@@ -2,11 +2,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Labels } from 'shared/components/Labels/Labels';
-import { LayoutPanel } from 'fundamental-react';
 import './Selector.scss';
 import { RelatedPods } from '../RelatedPods';
 import { MatchExpressionsList } from '../MatchExpressionsList';
 import { isEmpty, isEqual } from 'lodash';
+import { Panel, Text, Title, Toolbar } from '@ui5/webcomponents-react';
 
 const SelectorDetails = ({
   expressions,
@@ -66,22 +66,22 @@ export const Selector = ({
   const selectorLabels = !isEmpty(labels) ? labels : null;
 
   return (
-    <LayoutPanel
+    <Panel
+      fixed
       className="fd-margin--md"
       key="workload-selector"
       data-test-id="workload-selector"
+      header={
+        <Toolbar>
+          <Title level="H5" className="header">
+            {title || t('selector.title')}
+          </Title>
+          {selectorLabels ? <Labels labels={selectorLabels} /> : null}
+        </Toolbar>
+      }
     >
-      <LayoutPanel.Header>
-        <LayoutPanel.Head
-          title={title || t('selector.title')}
-          className="header"
-        />
-        {selectorLabels ? <Labels labels={selectorLabels} /> : null}
-      </LayoutPanel.Header>
       {isSelectorDefinedOrEmpty ? (
-        <LayoutPanel.Body>
-          <p>{message || t('selector.message.empty-selector')}</p>
-        </LayoutPanel.Body>
+        <Text>{message || t('selector.message.empty-selector')}</Text>
       ) : (
         <SelectorDetails
           expressions={expressions}
@@ -90,6 +90,6 @@ export const Selector = ({
           RelatedResources={RelatedResources}
         />
       )}
-    </LayoutPanel>
+    </Panel>
   );
 };

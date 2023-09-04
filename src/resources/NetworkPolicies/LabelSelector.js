@@ -1,9 +1,9 @@
-import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Tokens } from 'shared/components/Tokens';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Panel, Title, Toolbar } from '@ui5/webcomponents-react';
 
 export const LabelSelector = ({ selector, title }) => {
   const { t } = useTranslation();
@@ -14,27 +14,31 @@ export const LabelSelector = ({ selector, title }) => {
 
   if (selector.matchLabels)
     return (
-      <LayoutPanel className="fd-margin--md" key="policy-types">
-        <LayoutPanel.Header>
-          <LayoutPanel.Head
-            title={title || t('network-policies.headers.pod-selector')}
-          />
-        </LayoutPanel.Header>
-        <LayoutPanel.Body>
-          <LayoutPanelRow
-            name={t('network-policies.headers.match-labels')}
-            value={
-              <Tokens
-                tokens={
-                  Object.entries(selector.matchLabels).map(
-                    ([key, value]) => `${key}=${value}`,
-                  ) || []
-                }
-              />
-            }
-          />
-        </LayoutPanel.Body>
-      </LayoutPanel>
+      <Panel
+        fixed
+        className="fd-margin--md"
+        key="policy-types"
+        header={
+          <Toolbar>
+            <Title level="H5">
+              {title || t('network-policies.headers.pod-selector')}
+            </Title>
+          </Toolbar>
+        }
+      >
+        <LayoutPanelRow
+          name={t('network-policies.headers.match-labels')}
+          value={
+            <Tokens
+              tokens={
+                Object.entries(selector.matchLabels).map(
+                  ([key, value]) => `${key}=${value}`,
+                ) || []
+              }
+            />
+          }
+        />
+      </Panel>
     );
 
   if (selector.matchExpressions) {
@@ -65,15 +69,19 @@ export const LabelSelector = ({ selector, title }) => {
 
   // selector defined but empty
   return (
-    <LayoutPanel className="fd-margin--md" key="policy-types">
-      <LayoutPanel.Header>
-        <LayoutPanel.Head
-          title={title || t('network-policies.headers.pod-selector')}
-        />
-      </LayoutPanel.Header>
-      <LayoutPanel.Body>
-        {t('network-policies.present-but-empty')}
-      </LayoutPanel.Body>
-    </LayoutPanel>
+    <Panel
+      fixed
+      className="fd-margin--md"
+      key="policy-types"
+      header={
+        <Toolbar>
+          <Title level="H5">
+            {title || t('network-policies.headers.pod-selector')}
+          </Title>
+        </Toolbar>
+      }
+    >
+      {t('network-policies.present-but-empty')}
+    </Panel>
   );
 };
