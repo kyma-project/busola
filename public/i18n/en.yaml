@@ -1002,6 +1002,7 @@ pods:
     type: Type
     volume-name: Volume Name
   labels:
+    logs: Logs
     args: Args
     command: Command
     containers: Containers
