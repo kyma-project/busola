@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
 import { Button } from '@ui5/webcomponents-react';
-import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from '../LayoutPanelRow/LayoutPanelRow';
 import './SecretData.scss';
 import { base64Decode } from 'shared/helpers';
+import { UI5Panel } from '../UI5Panel/UI5Panel';
 
 const SecretComponent = ({ name, value, showEncoded, isCollapsed }) => (
   <LayoutPanelRow
@@ -55,14 +55,14 @@ export default function SecretData({ secret }) {
     );
 
     if (!secret) {
-      return <SecretWrapper>Secret not found</SecretWrapper>;
+      return <SecretWrapper>{t('secrets.secret-not-found')}</SecretWrapper>;
     }
     if (!secret.data) {
-      return <SecretWrapper>Empty Secret</SecretWrapper>;
+      return <SecretWrapper>{t('secrets.secret-empty')}</SecretWrapper>;
     }
 
     return (
-      <LayoutPanel.Body>
+      <>
         {Object.keys(secret.data).map(key => (
           <SecretComponent
             name={key}
@@ -72,15 +72,15 @@ export default function SecretData({ secret }) {
             isCollapsed={isCollapsed}
           />
         ))}
-      </LayoutPanel.Body>
+      </>
     );
   };
 
   return (
-    <LayoutPanel className="fd-margin--md secret-panel">
-      <LayoutPanel.Header>
-        <LayoutPanel.Head title={t('secrets.data')} />
-        <LayoutPanel.Actions>
+    <UI5Panel
+      title={t('secrets.data')}
+      headerActions={
+        <>
           {showExpandButton && (
             <Button
               design="Transparent"
@@ -105,9 +105,10 @@ export default function SecretData({ secret }) {
               ? t('secrets.buttons.decode')
               : t('secrets.buttons.encode')}
           </Button>
-        </LayoutPanel.Actions>
-      </LayoutPanel.Header>
+        </>
+      }
+    >
       {body()}
-    </LayoutPanel>
+    </UI5Panel>
   );
 }
