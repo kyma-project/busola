@@ -61,7 +61,11 @@ describe('Table', () => {
     describe('entries', () => {
       it('passes array as entries', () => {
         const value = ['a'];
-        const component = mount(<Table value={value} structure={{}} />);
+        const component = mount(
+          <ThemeProvider>
+            <Table value={value} structure={{}} />
+          </ThemeProvider>,
+        );
         const list = component.find(GenericList);
         expect(list).toHaveLength(1);
 
@@ -71,7 +75,11 @@ describe('Table', () => {
       });
 
       it('for nullish value defaults to empty array', () => {
-        const component = mount(<Table value={null} structure={{}} />);
+        const component = mount(
+          <ThemeProvider>
+            <Table value={null} structure={{}} />
+          </ThemeProvider>,
+        );
         const list = component.find(GenericList);
         expect(list).toHaveLength(1);
 
@@ -81,7 +89,11 @@ describe('Table', () => {
       });
 
       it('for invalid value, renders "not-found" message', () => {
-        const component = mount(<Table value={-3} structure={{}} />);
+        const component = mount(
+          <ThemeProvider>
+            <Table value={-3} structure={{}} />
+          </ThemeProvider>,
+        );
         const list = component.find(GenericList);
         expect(list).toHaveLength(1);
 
@@ -134,7 +146,11 @@ describe('Table', () => {
           findAllByRole,
           queryByText,
           findByLabelText,
-        } = render(<Table value={elements} structure={structure} />);
+        } = render(
+          <ThemeProvider>
+            <Table value={elements} structure={structure} />
+          </ThemeProvider>,
+        );
 
         // expect unfiltered results to exist
         await findByText('extensibility::first');
