@@ -6,7 +6,7 @@ import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { useUrl } from 'hooks/useUrl';
-import { Panel, Title, Toolbar } from '@ui5/webcomponents-react';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 export const DefaultBackendPanel = ({ backend, namespace }) => {
   const { t } = useTranslation();
@@ -16,15 +16,7 @@ export const DefaultBackendPanel = ({ backend, namespace }) => {
   );
 
   return (
-    <Panel
-      fixed
-      className="fd-margin--md default-backend-panel"
-      header={
-        <Toolbar>
-          <Title level="H5">{t('ingresses.labels.default-backend')}</Title>
-        </Toolbar>
-      }
-    >
+    <UI5Panel title={t('ingresses.labels.default-backend')}>
       {backend.service && (
         <>
           {backend.service.name && (
@@ -86,6 +78,6 @@ export const DefaultBackendPanel = ({ backend, namespace }) => {
           />
         </>
       )}
-    </Panel>
+    </UI5Panel>
   );
 };

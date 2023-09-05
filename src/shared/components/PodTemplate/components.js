@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { getPorts } from '../GetContainersPorts';
 import { Link } from 'react-router-dom';
 import { useUrl } from 'hooks/useUrl';
-import { Panel, Title, Toolbar } from '@ui5/webcomponents-react';
+import { UI5Panel } from '../UI5Panel/UI5Panel';
 
 function Table({ items, headers, rowRenderer }) {
   if (!items?.length) {
@@ -32,14 +32,7 @@ function ContainerComponent({ container }) {
   const { t } = useTranslation();
 
   return (
-    <Panel
-      fixed
-      header={
-        <Toolbar>
-          <Title level="H5">{container.name}</Title>
-        </Toolbar>
-      }
-    >
+    <UI5Panel disableMargin title={container.name}>
       <LayoutPanelRow name={t('pods.labels.image')} value={container.image} />
       <LayoutPanelRow
         name={t('pods.labels.image-pull-policy')}
@@ -97,26 +90,18 @@ function ContainerComponent({ container }) {
           value={<p className="code-block">{container.args.join(' ')}</p>}
         />
       )}
-    </Panel>
+    </UI5Panel>
   );
 }
 
 export function ContainersPanel({ title, containers }) {
   return (
     <>
-      <Panel
-        fixed
-        className="fd-margin--md"
-        header={
-          <Toolbar>
-            <Title level="H5">{title}</Title>
-          </Toolbar>
-        }
-      >
+      <UI5Panel title={title}>
         {containers?.map(container => (
           <ContainerComponent key={container.name} container={container} />
         ))}
-      </Panel>
+      </UI5Panel>
     </>
   );
 }
@@ -143,14 +128,7 @@ export function Volume({ volume }) {
   const k8sResourceName = configMap?.name || secret?.secretName;
 
   return (
-    <Panel
-      fixed
-      header={
-        <Toolbar>
-          <Title level="H5">{name}</Title>
-        </Toolbar>
-      }
-    >
+    <UI5Panel disableMargin title={name}>
       <LayoutPanelRow name="Type" value={typeLabel} />
       {k8sResource && (
         <LayoutPanelRow
@@ -184,6 +162,6 @@ export function Volume({ volume }) {
           }
         />
       )}
-    </Panel>
+    </UI5Panel>
   );
 }

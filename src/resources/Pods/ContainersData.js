@@ -3,17 +3,11 @@ import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import {
-  Button,
-  Panel,
-  Title,
-  Toolbar,
-  ToolbarSpacer,
-} from '@ui5/webcomponents-react';
-import './ContainersData.scss';
+import { Button } from '@ui5/webcomponents-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { ContainerStatus } from './ContainerStatus';
 import { getPorts } from 'shared/components/GetContainersPorts';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 ContainersData.propTypes = {
   containers: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -24,23 +18,18 @@ export default function ContainersData({ type, containers, statuses }) {
   const navigate = useNavigate();
 
   const ContainerComponent = ({ container, status }) => (
-    <Panel
-      fixed
-      header={
-        <Toolbar>
-          <Title level="H5" className="header">
-            {container.name}
-          </Title>
-          <ToolbarSpacer />
-          <Button
-            aria-label={'view-logs-for-' + container.name}
-            onClick={() => {
-              navigate(`containers/${container.name}`, { replace: true });
-            }}
-          >
-            {t('pods.buttons.view-logs')}
-          </Button>
-        </Toolbar>
+    <UI5Panel
+      disableMargin
+      title={container.name}
+      headerActions={
+        <Button
+          aria-label={'view-logs-for-' + container.name}
+          onClick={() => {
+            navigate(`containers/${container.name}`, { replace: true });
+          }}
+        >
+          {t('pods.buttons.view-logs')}
+        </Button>
       }
     >
       <LayoutPanelRow
@@ -62,7 +51,7 @@ export default function ContainersData({ type, containers, statuses }) {
           value={getPorts(container.ports)}
         />
       )}
-    </Panel>
+    </UI5Panel>
   );
 
   if (!containers) {
@@ -70,17 +59,7 @@ export default function ContainersData({ type, containers, statuses }) {
   }
 
   return (
-    <Panel
-      fixed
-      className="fd-margin--md container-panel"
-      header={
-        <Toolbar>
-          <Title level="H5" className="header">
-            {type}
-          </Title>
-        </Toolbar>
-      }
-    >
+    <UI5Panel title={type}>
       {containers.map(container => (
         <ContainerComponent
           key={container.name}
@@ -88,6 +67,6 @@ export default function ContainersData({ type, containers, statuses }) {
           status={statuses?.find(status => status.name === container.name)}
         />
       ))}
-    </Panel>
+    </UI5Panel>
   );
 }

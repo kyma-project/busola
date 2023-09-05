@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Panel, Title, Toolbar } from '@ui5/webcomponents-react';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
 import './MachineInfo.scss';
@@ -11,14 +11,7 @@ export function MachineInfo({ nodeInfo, capacity }) {
   const { t } = useTranslation();
 
   return (
-    <Panel
-      fixed
-      header={
-        <Toolbar>
-          <Title level="H5">{t('machine-info.title')}</Title>
-        </Toolbar>
-      }
-    >
+    <UI5Panel title={t('machine-info.title')} disableMargin>
       <div className="machine-info__body">
         <LayoutPanelRow
           name={t('machine-info.operating-system')}
@@ -47,6 +40,6 @@ export function MachineInfo({ nodeInfo, capacity }) {
           value={nodeInfo.kubeletVersion}
         />
       </div>
-    </Panel>
+    </UI5Panel>
   );
 }

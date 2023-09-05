@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
@@ -10,7 +11,7 @@ import { filterByResource } from 'hooks/useMessageList';
 import { PersistentVolumesList } from './PersistentVolumesList';
 import { PersistentVolumeClaimsList } from './PersistentVolumeClaimsList';
 import { StorageClassCreate } from './StorageClassCreate';
-import { Panel, Text, Title, Toolbar } from '@ui5/webcomponents-react';
+import { Text } from '@ui5/webcomponents-react';
 
 export function StorageClassDetails(props) {
   const { t } = useTranslation();
@@ -19,15 +20,11 @@ export function StorageClassDetails(props) {
     const parameters = storageclass?.parameters || [];
 
     return (
-      <Panel
+      <UI5Panel
         fixed
         className="fd-margin--md"
         key={'storageclass-parameters'}
-        header={
-          <Toolbar>
-            <Title level="H5">{t('storage-classes.headers.parameters')}</Title>
-          </Toolbar>
-        }
+        title={t('storage-classes.headers.parameters')}
       >
         {Object.keys(parameters).length > 0 ? (
           Object.entries(parameters).map(parameters => {
@@ -44,7 +41,7 @@ export function StorageClassDetails(props) {
             {t('common.messages.no-entries-found')}
           </Text>
         )}
-      </Panel>
+      </UI5Panel>
     );
   };
 

@@ -5,7 +5,8 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useTranslation } from 'react-i18next';
 
 import { getSIPrefix } from 'shared/helpers/siPrefixes';
-import { Panel, Title, Icon, Toolbar } from '@ui5/webcomponents-react';
+import { Icon } from '@ui5/webcomponents-react';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 const MEMORY_SUFFIX_POWER = {
   // must be sorted from the smallest to the largest; it is case sensitive; more info: https://medium.com/swlh/understanding-kubernetes-resource-cpu-and-memory-units-30284b3cc866
@@ -148,18 +149,10 @@ export const ResourcesUsage = ({ namespace }) => {
   );
 
   return (
-    <Panel
-      fixed
-      header={
-        <Toolbar>
-          <Icon
-            className="fd-margin-end--sm"
-            name="it-host"
-            aria-label="Resource icon"
-          />
-          <Title level="H5">{t('namespaces.overview.resources.title')}</Title>
-        </Toolbar>
-      }
+    <UI5Panel
+      disableMargin
+      icon={<Icon name="it-host" aria-label="Resource icon" />}
+      title={t('namespaces.overview.resources.title')}
     >
       <div className="resources-usage__body">
         <MemoryRequestsCircle
@@ -171,6 +164,6 @@ export const ResourcesUsage = ({ namespace }) => {
           isLoading={loading}
         />
       </div>
-    </Panel>
+    </UI5Panel>
   );
 };

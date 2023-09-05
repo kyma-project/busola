@@ -1,12 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import {
-  Button,
-  Panel,
-  Title,
-  Toolbar,
-  ToolbarSpacer,
-} from '@ui5/webcomponents-react';
+import { Button } from '@ui5/webcomponents-react';
 import { Switch } from 'fundamental-react';
 import {
   getExtendedValidateResourceState,
@@ -16,9 +10,11 @@ import { validationSchemasState } from 'state/validationSchemasAtom';
 import { useMemo } from 'react';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
-import './ResourceValidationSettings.scss';
 import { useFeature } from 'hooks/useFeature';
 import { ValidationFeatureConfig } from 'state/validationEnabledSchemasAtom';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+
+import './ResourceValidationSettings.scss';
 
 export default function ResourceValidationSettings() {
   const { t } = useTranslation();
@@ -99,28 +95,22 @@ export default function ResourceValidationSettings() {
   };
 
   return (
-    <Panel
-      fixed
-      header={
-        <Toolbar>
-          <Title level="H4">
-            {t('settings.clusters.resourcesValidation.validateResources')}
-          </Title>
-          <ToolbarSpacer />
-          <Switch
-            // TypeScript definitions are out of sync here
-            // @ts-ignore
-            localizedText={{
-              switchLabel: t(
-                'settings.clusters.resourcesValidation.validateResources',
-              ),
-            }}
-            className="fd-has-display-inline-block fd-margin-begin--tiny"
-            checked={isEnabled}
-            onChange={toggleVisibility}
-            compact
-          />
-        </Toolbar>
+    <UI5Panel
+      title={t('settings.clusters.resourcesValidation.validateResources')}
+      headerActions={
+        <Switch
+          // TypeScript definitions are out of sync here
+          // @ts-ignore
+          localizedText={{
+            switchLabel: t(
+              'settings.clusters.resourcesValidation.validateResources',
+            ),
+          }}
+          className="fd-has-display-inline-block fd-margin-begin--tiny"
+          checked={isEnabled}
+          onChange={toggleVisibility}
+          compact
+        />
       }
     >
       {!isEnabled && (
@@ -206,6 +196,6 @@ export default function ResourceValidationSettings() {
             />
           </>
         )}
-    </Panel>
+    </UI5Panel>
   );
 }

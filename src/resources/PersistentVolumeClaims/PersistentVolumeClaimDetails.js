@@ -18,7 +18,7 @@ import { useUrl } from 'hooks/useUrl';
 
 import PersistentVolumesList from 'resources/PersistentVolumes/PersistentVolumeList';
 import { PersistentVolumeClaimCreate } from './PersistentVolumeClaimCreate';
-import { Panel, Title, Toolbar } from '@ui5/webcomponents-react';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 const RelatedVolumes = ({ labels }) => {
   const PVParams = {
@@ -66,17 +66,9 @@ export const PVCConfiguration = pvc => {
     '/apis/storage.k8s.io/v1/storageclasses',
   );
   return (
-    <Panel
-      fixed
-      className="fd-margin--md"
+    <UI5Panel
+      title={t('persistent-volume-claims.headers.configuration')}
       key={'pvc-configuration'}
-      header={
-        <Toolbar>
-          <Title level="H5">
-            {t('persistent-volume-claims.headers.configuration')}
-          </Title>
-        </Toolbar>
-      }
     >
       <LayoutPanelRow
         key={pvc.spec?.volumeMode}
@@ -126,7 +118,7 @@ export const PVCConfiguration = pvc => {
           )
         }
       />
-    </Panel>
+    </UI5Panel>
   );
 };
 

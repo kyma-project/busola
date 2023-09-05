@@ -2,11 +2,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Labels } from 'shared/components/Labels/Labels';
-import './Selector.scss';
 import { RelatedPods } from '../RelatedPods';
 import { MatchExpressionsList } from '../MatchExpressionsList';
 import { isEmpty, isEqual } from 'lodash';
-import { Panel, Text, Title, Toolbar } from '@ui5/webcomponents-react';
+import { Text, Title } from '@ui5/webcomponents-react';
+import { UI5Panel } from '../UI5Panel/UI5Panel';
 
 const SelectorDetails = ({
   expressions,
@@ -66,19 +66,15 @@ export const Selector = ({
   const selectorLabels = !isEmpty(labels) ? labels : null;
 
   return (
-    <Panel
-      fixed
-      className="fd-margin--md"
+    <UI5Panel
+      title={
+        <>
+          <Title level="H5">{title || t('selector.title')}</Title>
+          {selectorLabels ? <Labels labels={selectorLabels} /> : null}
+        </>
+      }
       key="workload-selector"
       data-test-id="workload-selector"
-      header={
-        <Toolbar>
-          <Title level="H5" className="header">
-            {title || t('selector.title')}
-          </Title>
-          {selectorLabels ? <Labels labels={selectorLabels} /> : null}
-        </Toolbar>
-      }
     >
       {isSelectorDefinedOrEmpty ? (
         <Text>{message || t('selector.message.empty-selector')}</Text>
@@ -90,6 +86,6 @@ export const Selector = ({
           RelatedResources={RelatedResources}
         />
       )}
-    </Panel>
+    </UI5Panel>
   );
 };

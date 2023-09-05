@@ -7,8 +7,10 @@ import { useTranslation } from 'react-i18next';
 
 import { SchemaViewer } from 'shared/components/SchemaViewer/SchemaViewer';
 import { CustomResources } from 'components/CustomResources/CustomResources';
+import { Title } from '@ui5/webcomponents-react';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+
 import './CurrentCRDVersion.scss';
-import { Panel, Title, Toolbar } from '@ui5/webcomponents-react';
 
 const AdditionalPrinterColumns = ({ additionalPrinterColumns }) => {
   const { t } = useTranslation();
@@ -47,11 +49,9 @@ export const CurrentCRDVersion = resource => {
   const storageVersion = versions.find(v => v.storage);
 
   return (
-    <Panel
-      fixed
-      className="fd-margin--md"
-      header={
-        <Toolbar>
+    <UI5Panel
+      title={
+        <>
           <Title level="H4">{`${t(
             'custom-resource-definitions.subtitle.version',
           )} ${storageVersion.name}`}</Title>
@@ -73,7 +73,7 @@ export const CurrentCRDVersion = resource => {
               {t('custom-resource-definitions.status.storage')}
             </StatusBadge>
           )}
-        </Toolbar>
+        </>
       }
     >
       <CustomResources
@@ -95,6 +95,6 @@ export const CurrentCRDVersion = resource => {
           schema={storageVersion.schema}
         />
       )}
-    </Panel>
+    </UI5Panel>
   );
 };

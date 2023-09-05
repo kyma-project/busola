@@ -8,7 +8,7 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import { NetworkPolicyPorts } from './Ports';
 import { NetworkPolicyPeers } from './Peers';
 import { NetworkPolicyCreate } from './NetworkPolicyCreate';
-import { Panel, Title, Toolbar } from '@ui5/webcomponents-react';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 export function NetworkPolicyDetails(props) {
   const { t } = useTranslation();
@@ -24,17 +24,9 @@ export function NetworkPolicyDetails(props) {
     if (!spec.ingress?.length) return null;
 
     return spec.ingress.map((ingress, idx) => (
-      <Panel
-        fixed
-        className="fd-margin--md"
+      <UI5Panel
+        title={t('network-policies.headers.ingress') + ` #${idx + 1}`}
         key={idx}
-        header={
-          <Toolbar>
-            <Title level="H5">
-              {t('network-policies.headers.ingress') + ` #${idx + 1}`}
-            </Title>
-          </Toolbar>
-        }
       >
         <NetworkPolicyPeers
           peers={ingress.from}
@@ -44,7 +36,7 @@ export function NetworkPolicyDetails(props) {
           ports={ingress.ports}
           title={t('network-policies.headers.policy-port')}
         />
-      </Panel>
+      </UI5Panel>
     ));
   };
 
@@ -52,17 +44,9 @@ export function NetworkPolicyDetails(props) {
     if (!spec.egress?.length) return null;
 
     return spec.egress.map((egress, idx) => (
-      <Panel
-        fixed
-        className="fd-margin--md"
+      <UI5Panel
+        title={t('network-policies.headers.egress') + ` #${idx + 1}`}
         key={idx}
-        header={
-          <Toolbar>
-            <Title level="H5">
-              {t('network-policies.headers.egress') + ` #${idx + 1}`}
-            </Title>
-          </Toolbar>
-        }
       >
         <NetworkPolicyPeers
           peers={egress.to}
@@ -72,7 +56,7 @@ export function NetworkPolicyDetails(props) {
           ports={egress.ports}
           title={t('network-policies.headers.policy-port')}
         />
-      </Panel>
+      </UI5Panel>
     ));
   };
 

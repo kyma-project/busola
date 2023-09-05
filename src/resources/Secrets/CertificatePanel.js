@@ -2,23 +2,17 @@ import React from 'react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { useTranslation } from 'react-i18next';
 import { CertificateDate } from 'shared/components/CertificateDate/CertificateDate';
-import { Panel, Title, Toolbar } from '@ui5/webcomponents-react';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 export function CertificatePanel({ name, certificate }) {
   const { t, i18n } = useTranslation();
   const { format: formatDate } = new Intl.DateTimeFormat('en');
 
   return (
-    <Panel
+    <UI5Panel
       fixed
       className="fd-margin--md"
-      header={
-        <Toolbar>
-          <Title level="H5">
-            {t('secrets.certificate-panel.title', { name })}
-          </Title>
-        </Toolbar>
-      }
+      title={t('secrets.certificate-panel.title', { name })}
     >
       <LayoutPanelRow
         name={t('secrets.certificate-panel.subject')}
@@ -38,6 +32,6 @@ export function CertificatePanel({ name, certificate }) {
           <CertificateDate lang={i18n.language} date={certificate.notAfter} />
         }
       />
-    </Panel>
+    </UI5Panel>
   );
 }

@@ -14,28 +14,22 @@ export function ReadonlyEditorPanel({ title, value, editorProps, actions }) {
   };
 
   return (
-    <UI5Panel
-      title={title}
-      content={
-        <>
-          <EditorActions
-            val={value}
-            editor={editor}
-            title={title}
-            saveDisabled={true}
-          />
-          <Editor
-            height="20em"
-            value={value}
-            options={options}
-            onMount={setEditor}
-            autocompletionDisabled
-            readOnly
-            {...editorProps}
-          />
-        </>
-      }
-      headerActions={actions}
-    />
+    <UI5Panel title={title} headerActions={actions}>
+      <EditorActions
+        val={value}
+        editor={editor}
+        title={title}
+        saveDisabled={true}
+      />
+      <Editor
+        height="20em"
+        value={value}
+        options={options}
+        onMount={setEditor}
+        autocompletionDisabled
+        readOnly
+        {...editorProps}
+      />
+    </UI5Panel>
   );
 }

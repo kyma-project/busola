@@ -19,11 +19,7 @@ import {
   CardHeader,
   FlexBox,
   Loader,
-  Panel,
   ProgressIndicator,
-  Title,
-  Toolbar,
-  ToolbarSpacer,
 } from '@ui5/webcomponents-react';
 import { ClusterValidationConfigurationDialog } from './ClusterValidationConfiguration';
 import { resourcesState } from 'state/resourcesAtom';
@@ -38,6 +34,7 @@ import {
 
 import '@ui5/webcomponents-icons/dist/status-positive.js';
 import { ScanResult } from './ScanResult';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 export const ClusterValidation = () => {
   const { t } = useTranslation();
@@ -150,13 +147,11 @@ export const ClusterValidation = () => {
   };
 
   return (
-    <Panel
-      fixed
-      className="fd-margin--md"
-      header={
-        <Toolbar>
-          <Title level="H4">{t('cluster-validation.title')}</Title>
-          <ToolbarSpacer />
+    <UI5Panel
+      key="cluster-validation"
+      title={t('cluster-validation.title')}
+      headerActions={
+        <>
           <Button
             className="fd-margin-end--tiny"
             icon="play"
@@ -178,7 +173,7 @@ export const ClusterValidation = () => {
           <Button icon="reset" iconEnd onClick={clear} disabled={!scanProgress}>
             {t('cluster-validation.scan.buttons.clear')}
           </Button>
-        </Toolbar>
+        </>
       }
     >
       {!scanReady && <Loader type="Indeterminate" />}
@@ -244,7 +239,7 @@ export const ClusterValidation = () => {
         namespaces={namespaces}
         policies={validationSchemas?.policies.map(policy => policy.name)}
       />
-    </Panel>
+    </UI5Panel>
   );
 };
 

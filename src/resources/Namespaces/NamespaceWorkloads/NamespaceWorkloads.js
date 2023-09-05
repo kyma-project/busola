@@ -12,7 +12,8 @@ import {
   getHealthyStatusesCount,
   getHealthyReplicasCount,
 } from './NamespaceWorkloadsHelpers';
-import { Panel, Title, Icon, Toolbar } from '@ui5/webcomponents-react';
+import { Icon } from '@ui5/webcomponents-react';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 NamespaceWorkloads.propTypes = { namespace: PropTypes.string.isRequired };
 
@@ -121,23 +122,15 @@ const DeploymentsCircle = ({ namespace }) => {
 export function NamespaceWorkloads({ namespace }) {
   const { t } = useTranslation();
   return (
-    <Panel
-      fixed
-      header={
-        <Toolbar>
-          <Icon
-            className="fd-margin-end--sm"
-            name="stethoscope"
-            aria-label="Health icon"
-          />
-          <Title level="H5">{t('namespaces.overview.workloads.title')}</Title>
-        </Toolbar>
-      }
+    <UI5Panel
+      disableMargin
+      icon={<Icon name="stethoscope" aria-label="Health icon" />}
+      title={t('namespaces.overview.workloads.title')}
     >
       <div className="namespace-workloads__body">
         <PodsCircle namespace={namespace} />
         <DeploymentsCircle namespace={namespace} />
       </div>
-    </Panel>
+    </UI5Panel>
   );
 }

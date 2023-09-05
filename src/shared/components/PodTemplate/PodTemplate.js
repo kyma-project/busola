@@ -4,21 +4,22 @@ import { useTranslation } from 'react-i18next';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Labels } from '../Labels/Labels';
 import { ContainersPanel, Volume } from './components';
-import { Panel, Title, Toolbar } from '@ui5/webcomponents-react';
+import { Title } from '@ui5/webcomponents-react';
 
 import './PodTemplate.scss';
+import { UI5Panel } from '../UI5Panel/UI5Panel';
 
 export function PodTemplate({ template }) {
   const { t } = useTranslation();
 
   const header = (
-    <Toolbar style={{ height: '10vh' }}>
+    <>
       <Title level="H5">{t('pods.labels.pod-template')}</Title>
       <Labels
         className="fd-margin-begin--tiny"
         labels={template.metadata.labels}
       />
-    </Toolbar>
+    </>
   );
 
   const body = (
@@ -41,31 +42,29 @@ export function PodTemplate({ template }) {
       )}
       {template.spec.volumes && (
         <>
-          <Panel
-            fixed
-            className="fd-margin--md"
-            header={
-              <Toolbar style={{ height: '10vh' }}>
+          <UI5Panel
+            title={
+              <>
                 <Title level="H5">{t('pods.labels.volumes')}</Title>
                 <Labels
                   className="fd-margin-begin--tiny"
                   labels={template.metadata.labels}
                 />
-              </Toolbar>
+              </>
             }
           >
             {template.spec.volumes.map(volume => (
               <Volume key={volume.name} volume={volume} />
             ))}
-          </Panel>
+          </UI5Panel>
         </>
       )}
     </>
   );
 
   return (
-    <Panel fixed className="fd-margin--md" key="pod-template" header={header}>
+    <UI5Panel key="pod-template" title={header}>
       {body}
-    </Panel>
+    </UI5Panel>
   );
 }

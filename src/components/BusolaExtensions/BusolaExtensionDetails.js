@@ -2,14 +2,7 @@ import React from 'react';
 import { Link } from 'shared/components/Link/Link';
 import { Trans, useTranslation } from 'react-i18next';
 import { createPatch } from 'rfc6902';
-import {
-  Button,
-  MessageStrip,
-  Panel,
-  Title,
-  Toolbar,
-  ToolbarSpacer,
-} from '@ui5/webcomponents-react';
+import { Button, MessageStrip, ToolbarSpacer } from '@ui5/webcomponents-react';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
@@ -38,6 +31,7 @@ import { SectionEditor } from './SectionEditor';
 import { BusolaExtensionEdit } from './BusolaExtensionEdit';
 import { SECTIONS } from './helpers';
 import { EXTENSION_VERSION_LABEL } from './constants';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 export function BusolaExtensionDetails(props) {
   const { t } = useTranslation();
@@ -187,34 +181,31 @@ export function BusolaExtensionDetails(props) {
       }
     };
     return (
-      <Panel
-        fixed
-        header={
-          <Toolbar>
-            <Title level="H4">{t('extensibility.sections.version')}</Title>
-            {hasMigrationFunction && (
-              <>
-                {currentVersion && (
-                  <>
-                    <ToolbarSpacer />
-                    <Button
-                      disabled={currentVersion === getLatestVersion()}
-                      icon="forward"
-                      iconEnd
-                      onClick={() => {
-                        const newBusolaExtension = migrateToLatest(configmap);
-                        updateBusolaExtension(newBusolaExtension, configmap);
-                      }}
-                    >
-                      {t('config-maps.buttons.migrate')}
-                    </Button>
-                  </>
-                )}
-              </>
-            )}
-          </Toolbar>
+      <UI5Panel
+        key="extensibility-version"
+        title={t('extensibility.sections.version')}
+        headerActions={
+          hasMigrationFunction && (
+            <>
+              {currentVersion && (
+                <>
+                  <ToolbarSpacer />
+                  <Button
+                    disabled={currentVersion === getLatestVersion()}
+                    icon="forward"
+                    iconEnd
+                    onClick={() => {
+                      const newBusolaExtension = migrateToLatest(configmap);
+                      updateBusolaExtension(newBusolaExtension, configmap);
+                    }}
+                  >
+                    {t('config-maps.buttons.migrate')}
+                  </Button>
+                </>
+              )}
+            </>
+          )
         }
-        className="fd-margin--md"
       >
         {showMessage()}
         <LayoutPanelRow
@@ -225,7 +216,7 @@ export function BusolaExtensionDetails(props) {
           name={t('extensibility.version.latest')}
           value={getLatestVersion()}
         />
-      </Panel>
+      </UI5Panel>
     );
   };
 

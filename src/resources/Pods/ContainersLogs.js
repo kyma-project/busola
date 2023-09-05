@@ -1,13 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { saveAs } from 'file-saver';
-import {
-  Button,
-  Panel,
-  Title,
-  Toolbar,
-  ToolbarSpacer,
-  Text,
-} from '@ui5/webcomponents-react';
+import { Button, Text } from '@ui5/webcomponents-react';
 import { Switch, Select, FormLabel } from 'fundamental-react';
 import { LogsLink } from 'shared/components/LogsLink/LogsLink';
 import { useGetStream } from 'shared/hooks/BackendAPI/useGet';
@@ -17,6 +10,7 @@ import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 import { SearchInput } from 'shared/components/GenericList/SearchInput';
 import { useTranslation } from 'react-i18next';
 import { useUrl } from 'hooks/useUrl';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import './ContainersLogs.scss';
 
@@ -184,15 +178,10 @@ const ContainersLogs = ({ params }) => {
           breadcrumbItems={breadcrumbs}
         />
       </div>
-      <Panel
-        fixed
-        className="fd-margin--md logs-panel"
-        header={
-          <Toolbar>
-            <Title level="H5" className="logs-title">
-              {t('pods.labels.logs')}
-            </Title>
-            <ToolbarSpacer />
+      <UI5Panel
+        title={t('pods.labels.logs')}
+        headerActions={
+          <>
             <FormLabel htmlFor="context-chooser">
               {t('pods.labels.filter-timeframe')}
             </FormLabel>
@@ -238,7 +227,7 @@ const ContainersLogs = ({ params }) => {
               showSuggestion={false}
               onKeyDown={changeSelectedLog}
             />
-          </Toolbar>
+          </>
         }
       >
         <div className="logs-panel-body">
@@ -247,7 +236,7 @@ const ContainersLogs = ({ params }) => {
             containerName={params.containerName}
           />
         </div>
-      </Panel>
+      </UI5Panel>
     </div>
   );
 };

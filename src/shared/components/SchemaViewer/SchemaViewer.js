@@ -1,18 +1,12 @@
 import React, { useState } from 'react';
-import {
-  Panel,
-  SegmentedButton,
-  SegmentedButtonItem,
-  Title,
-  Toolbar,
-  ToolbarSpacer,
-} from '@ui5/webcomponents-react';
+import { SegmentedButton, SegmentedButtonItem } from '@ui5/webcomponents-react';
 import EditorWrapper from 'shared/ResourceForm/fields/Editor';
 import { useTranslation } from 'react-i18next';
 
 import { JSONSchema } from './JSONSchema';
 
 import './SchemaViewer.scss';
+import { UI5Panel } from '../UI5Panel/UI5Panel';
 
 export function SchemaViewer({ name, schema }) {
   const [schemaMode, setSchemaMode] = useState('viewer');
@@ -20,16 +14,11 @@ export function SchemaViewer({ name, schema }) {
   const { t } = useTranslation();
 
   return (
-    <Panel
-      fixed
+    <UI5Panel
+      title={t('custom-resource-definitions.subtitle.schema')}
       key={`crd-schema-${name}`}
-      className="fd-margin--md"
-      header={
-        <Toolbar>
-          <Title level="H4">
-            {t('custom-resource-definitions.subtitle.schema')}
-          </Title>
-          <ToolbarSpacer />
+      headerActions={
+        <>
           <SegmentedButton>
             <SegmentedButtonItem
               compact
@@ -53,7 +42,7 @@ export function SchemaViewer({ name, schema }) {
               {t('schema.modes.yaml')}
             </SegmentedButtonItem>
           </SegmentedButton>
-        </Toolbar>
+        </>
       }
     >
       {schemaMode === 'viewer' && (
@@ -89,6 +78,6 @@ export function SchemaViewer({ name, schema }) {
           }}
         />
       )}
-    </Panel>
+    </UI5Panel>
   );
 }

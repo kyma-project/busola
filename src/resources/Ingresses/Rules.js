@@ -5,11 +5,11 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { Link } from 'react-router-dom';
-import { Panel, Title, Toolbar } from '@ui5/webcomponents-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 const Port = ({ serviceName, port, services }) => {
   const { namespaceUrl } = useUrl();
@@ -79,15 +79,7 @@ export const Rules = ({ rules }) => {
   return (
     <>
       {rules.map((rule, i) => (
-        <Panel
-          fixed
-          className="fd-margin--md rule-panel"
-          header={
-            <Toolbar>
-              <Title level="H5">{t('ingresses.labels.rules')}</Title>
-            </Toolbar>
-          }
-        >
+        <UI5Panel title={t('ingresses.labels.rules')}>
           {rule.host && (
             <LayoutPanelRow
               name={t('ingresses.labels.host')}
@@ -112,7 +104,7 @@ export const Rules = ({ rules }) => {
               showSearchField: false,
             }}
           />
-        </Panel>
+        </UI5Panel>
       ))}
     </>
   );

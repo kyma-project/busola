@@ -1,15 +1,16 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { CircleProgress } from 'shared/components/CircleProgress/CircleProgress';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import './NodeResources.scss';
-import { Panel } from '@ui5/webcomponents-react';
 
 export function NodeResources({ metrics, headerContent }) {
   const { t } = useTranslation();
   const { cpu, memory } = metrics || {};
+
   return (
-    <Panel fixed className="node-resources" header={<>{headerContent}</>}>
+    <UI5Panel disableMargin title={headerContent} className="node-resources">
       {cpu && memory ? (
         <>
           <CircleProgress
@@ -38,6 +39,6 @@ export function NodeResources({ metrics, headerContent }) {
       ) : (
         t('components.error-panel.error')
       )}
-    </Panel>
+    </UI5Panel>
   );
 }

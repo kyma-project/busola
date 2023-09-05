@@ -13,7 +13,7 @@ import { useUrl } from 'hooks/useUrl';
 
 import { PersistentVolumeStatus } from './PersistentVolumeStatus';
 import { PersistentVolumeCreate } from './PersistentVolumeCreate';
-import { Panel, Title, Toolbar } from '@ui5/webcomponents-react';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 export function PersistentVolumeDetails(props) {
   const { t } = useTranslation();
@@ -36,15 +36,7 @@ export function PersistentVolumeDetails(props) {
 
   const PvDetails = ({ spec, metadata, status }) => (
     <div key="persistent-volumes-ref" data-testid="persistent-volumes-ref">
-      <Panel
-        fixed
-        className="fd-margin--md"
-        header={
-          <Toolbar>
-            <Title level="H5">{t('pv.details')}</Title>
-          </Toolbar>
-        }
-      >
+      <UI5Panel title={t('pv.details')}>
         <LayoutPanelRow
           name={t('pv.headers.finalizers')}
           value={<Tokens tokens={metadata.finalizers} />}
@@ -112,17 +104,9 @@ export function PersistentVolumeDetails(props) {
             )
           }
         />
-      </Panel>
+      </UI5Panel>
 
-      <Panel
-        fixed
-        className="fd-margin--md"
-        header={
-          <Toolbar>
-            <Title level="H5">{t('pv.nfs')}</Title>
-          </Toolbar>
-        }
-      >
+      <UI5Panel title={t('pv.nfs')}>
         <LayoutPanelRow
           name={t('pv.headers.server')}
           value={spec.nfs?.server || EMPTY_TEXT_PLACEHOLDER}
@@ -131,7 +115,7 @@ export function PersistentVolumeDetails(props) {
           name={t('pv.headers.path')}
           value={spec.nfs?.path || EMPTY_TEXT_PLACEHOLDER}
         />
-      </Panel>
+      </UI5Panel>
     </div>
   );
 

@@ -1,9 +1,9 @@
+import React from 'react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Tokens } from 'shared/components/Tokens';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Panel, Title, Toolbar } from '@ui5/webcomponents-react';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 export const LabelSelector = ({ selector, title }) => {
   const { t } = useTranslation();
@@ -14,17 +14,9 @@ export const LabelSelector = ({ selector, title }) => {
 
   if (selector.matchLabels)
     return (
-      <Panel
-        fixed
-        className="fd-margin--md"
+      <UI5Panel
+        title={title || t('network-policies.headers.pod-selector')}
         key="policy-types"
-        header={
-          <Toolbar>
-            <Title level="H5">
-              {title || t('network-policies.headers.pod-selector')}
-            </Title>
-          </Toolbar>
-        }
       >
         <LayoutPanelRow
           name={t('network-policies.headers.match-labels')}
@@ -38,7 +30,7 @@ export const LabelSelector = ({ selector, title }) => {
             />
           }
         />
-      </Panel>
+      </UI5Panel>
     );
 
   if (selector.matchExpressions) {
@@ -69,19 +61,11 @@ export const LabelSelector = ({ selector, title }) => {
 
   // selector defined but empty
   return (
-    <Panel
-      fixed
-      className="fd-margin--md"
+    <UI5Panel
+      title={title || t('network-policies.headers.pod-selector')}
       key="policy-types"
-      header={
-        <Toolbar>
-          <Title level="H5">
-            {title || t('network-policies.headers.pod-selector')}
-          </Title>
-        </Toolbar>
-      }
     >
       {t('network-policies.present-but-empty')}
-    </Panel>
+    </UI5Panel>
   );
 };

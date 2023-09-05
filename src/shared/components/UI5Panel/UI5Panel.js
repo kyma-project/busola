@@ -1,13 +1,35 @@
 import { Panel, Title, Toolbar, ToolbarSpacer } from '@ui5/webcomponents-react';
+import classNames from 'classnames';
 
-export const UI5Panel = ({ fixed = true, title, headerActions, content }) => {
+export const UI5Panel = ({
+  fixed = true,
+  icon = undefined,
+  title,
+  headerActions,
+  key = 'UI5Panel',
+  disableMargin = false,
+  className = '',
+  children,
+}) => {
+  const panelClassNames = classNames({
+    'fd-margin--md': !disableMargin,
+  });
+
   return (
     <Panel
       fixed={fixed}
-      className="fd-margin--md"
+      key={key}
+      className={`${panelClassNames} ${className}`}
       header={
-        <Toolbar>
-          <Title level="H5">{title}</Title>
+        <Toolbar
+          style={{ height: '100%', paddingTop: '10px', paddingBottom: '10px' }}
+        >
+          {icon && icon}
+          {typeof title === 'string' ? (
+            <Title level="H5">{title}</Title>
+          ) : (
+            title
+          )}
           {headerActions && (
             <>
               <ToolbarSpacer />
@@ -17,7 +39,7 @@ export const UI5Panel = ({ fixed = true, title, headerActions, content }) => {
         </Toolbar>
       }
     >
-      {content}
+      {children}
     </Panel>
   );
 };
