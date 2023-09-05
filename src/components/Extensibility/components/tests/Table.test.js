@@ -140,9 +140,10 @@ describe('Table', () => {
 
         //there are two items with role='row', the header and the table's row
         const rows = await findAllByRole('row');
-        expect(rows).toHaveLength(2);
-        expect(rows.at(1)).toHaveTextContent('first');
-        expect(queryByText('second')).not.toBeInTheDocument();
+        expect(rows).toHaveLength(1);
+        expect(queryByText('extensibility::first')).toBeInTheDocument();
+
+        expect(queryByText('extensibility::second')).not.toBeInTheDocument();
       });
 
       it('Should search for complex data with a predefined function', async () => {
@@ -165,20 +166,19 @@ describe('Table', () => {
             arrayItems={elements}
           />,
         );
-
         // find and interact with search input
         const searchInput = await findByLabelText('search-input');
         await fireEvent.change(searchInput, { target: { value: 'fi' } });
 
         // get Table's rows
         const rows = await findAllByRole('row');
-        expect(rows).toHaveLength(2);
+        expect(rows).toHaveLength(1);
 
         //check whether search input works, 'first' text should be displayed
-        expect(rows.at(1)).toHaveTextContent('first');
+        expect(queryByText('extensibility::first')).toBeInTheDocument();
 
         // 'second' text shouldn't be displayed
-        expect(queryByText('second')).not.toBeInTheDocument();
+        expect(queryByText('extensibility::second')).not.toBeInTheDocument();
       });
     });
 

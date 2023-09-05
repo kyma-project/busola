@@ -81,7 +81,7 @@ context('Test Protected Resources', () => {
       .contains('Config Maps')
       .click();
 
-    cy.get('tr')
+    cy.get('ui5-table-row')
       .contains(NAME)
       .click();
 
@@ -113,7 +113,7 @@ context('Test Protected Resources', () => {
   it('Check if Pod is protected', () => {
     cy.url().should('match', new RegExp(`\/deployments\/${NAME}$`));
 
-    cy.contains('tr', NAME)
+    cy.contains('ui5-table-row', NAME)
       .find('[aria-label="Delete"][disabled="true"]')
       .should('be.visible');
   });
@@ -138,7 +138,7 @@ context('Test Protected Resources', () => {
       .contains('Config Maps')
       .click();
 
-    cy.contains('tr', NAME)
+    cy.contains('ui5-table-row', NAME)
       .find('ui5-button[data-testid="delete"]')
       .click();
 

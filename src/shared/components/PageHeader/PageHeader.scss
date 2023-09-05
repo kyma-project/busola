@@ -1,19 +1,10 @@
 .page-header {
-  .fd-layout-panel__title {
-    .fd-title {
-      font-size: var(--sapFontHeader3Size);
-    }
-    // font-size: 1.5rem;
-    word-break: break-word;
-  }
-
-  .fd-layout-panel__actions {
-    display: flex;
+  .ui5-title {
+    font-size: var(--sapFontHeader3Size);
   }
 
   .description {
-    // font-size: 14px;
-    margin-top: 4px;
+    color: var(--sapNeutralColor);
   }
 
   .protected-resource-warning {
@@ -27,9 +18,14 @@
 }
 
 .header-wrapper {
-  flex-grow: 1;
   font-size: var(--sapFontSize);
 }
+
+// workaround for displaying empty DynamicPageContent
+[data-component-name='DynamicPageContent'] {
+  display: none;
+}
+
 .column-wrapper {
   display: grid;
   grid-gap: 8px;

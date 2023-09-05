@@ -81,7 +81,7 @@ context('Test Config Maps', () => {
       .contains('Config Maps')
       .click();
 
-    cy.contains('.fd-table__row', CONFIG_MAP_NAME)
+    cy.contains('ui5-table-row', CONFIG_MAP_NAME)
       .find('ui5-button[data-testid="clone"]')
       .click();
 

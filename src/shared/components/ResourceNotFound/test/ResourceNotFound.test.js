@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from 'testing/reactTestingUtils';
 
 import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNotFound';
+import { ThemeProvider } from '@ui5/webcomponents-react';
 
 const breadcrumbs = [
   { name: 'test-1', url: '/' },
@@ -11,7 +12,9 @@ const breadcrumbs = [
 describe('ResourceNotFound', () => {
   it('Renders resource type and breadcrumb', () => {
     const { queryByText } = render(
-      <ResourceNotFound resource="Resource" breadcrumbs={breadcrumbs} />,
+      <ThemeProvider>
+        <ResourceNotFound resource="Resource" breadcrumbs={breadcrumbs} />
+      </ThemeProvider>,
     );
     expect(
       queryByText('components.resource-not-found.messages.not-found'),
@@ -25,11 +28,13 @@ describe('ResourceNotFound', () => {
     const message = 'Error';
 
     const { queryByText } = render(
-      <ResourceNotFound
-        resource="Resource"
-        breadcrumbs={breadcrumbs}
-        customMessage={message}
-      />,
+      <ThemeProvider>
+        <ResourceNotFound
+          resource="Resource"
+          breadcrumbs={breadcrumbs}
+          customMessage={message}
+        />
+      </ThemeProvider>,
     );
 
     expect(queryByText(message)).toBeInTheDocument();

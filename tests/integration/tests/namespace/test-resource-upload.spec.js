@@ -104,7 +104,7 @@ context('Test resource upload', () => {
       .get('input[aria-label="search-input"]')
       .type(SC_NAME);
 
-    cy.get('tbody tr [aria-label="Delete"]').click({ force: true });
+    cy.get('ui5-table-row [aria-label="Delete"]').click({ force: true });
 
     cy.get(`[header-text="Delete ${SC_NAME}"]`)
       .find('[data-testid="delete-confirmation"]')

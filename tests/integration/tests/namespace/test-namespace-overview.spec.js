@@ -55,7 +55,7 @@ context(
     });
 
     it('Delete all limits and quotas', () => {
-      cy.contains('.fd-table__row', LIMIT_NAME)
+      cy.contains('ui5-table-row', LIMIT_NAME)
         .find('ui5-button[data-testid="delete"]')
         .click();
 
@@ -63,7 +63,7 @@ context(
         .find('[data-testid="delete-confirmation"]')
         .click();
 
-      cy.contains('.fd-table__row', NEW_LIMIT_NAME)
+      cy.contains('ui5-table-row', NEW_LIMIT_NAME)
         .find('ui5-button[data-testid="delete"]')
         .click();
 
@@ -71,7 +71,7 @@ context(
         .find('[data-testid="delete-confirmation"]')
         .click();
 
-      cy.contains('.fd-table__row', QUOTA_NAME)
+      cy.contains('ui5-table-row', QUOTA_NAME)
         .find('ui5-button[data-testid="delete"]')
         .click();
       cy.get(`[header-text="Delete ${QUOTA_NAME}"]`)

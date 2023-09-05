@@ -82,7 +82,7 @@ context('Test Pizzas', () => {
 
     cy.contains('paymentMethod: CARD');
     cy.contains('realization=SELF-PICKUP');
-    cy.contains('h3', 'Pizzas');
+    cy.contains('ui5-breadcrumbs', 'Pizza Orders');
   });
 
   it('Edits a Pizza Order', () => {
@@ -132,9 +132,7 @@ context('Test Pizzas', () => {
       .contains(/^Pizzas$/)
       .click();
 
-    cy.get('.fd-table__body')
-      .find('tr')
-      .should('have.length', 2);
+    cy.get('[role=row]').should('have.length', 2);
 
     cy.contains('Margherita is a simple, vegetarian pizza.');
     cy.contains('Toppings price');
@@ -175,6 +173,6 @@ context('Test Pizzas', () => {
       .should('be.visible')
       .click();
 
-    cy.contains('h3', PIZZA_NAME).should('be.visible');
+    cy.contains('ui5-title', PIZZA_NAME).should('be.visible');
   });
 });
