@@ -10,7 +10,7 @@ import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { useRecoilState } from 'recoil';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
-import { Panel } from '@ui5/webcomponents-react';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 export default function CustomResourcesOfType({ crdName }) {
   const { t } = useTranslation();
@@ -22,11 +22,7 @@ export default function CustomResourcesOfType({ crdName }) {
 
   if (loading) return <Spinner />;
   if (error) {
-    return (
-      <Panel fixed className="fd-has-padding-regular fd-margin--md">
-        {error.message}
-      </Panel>
-    );
+    return <UI5Panel title={error.message} />;
   }
 
   const breadcrumbItems = [

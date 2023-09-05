@@ -13,7 +13,7 @@ import { SearchInput } from 'shared/components/GenericList/SearchInput';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { useRecoilState } from 'recoil';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
-import { Panel } from '@ui5/webcomponents-react';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 export function GroupingListPage({
   title,
@@ -40,11 +40,7 @@ export function GroupingListPage({
   }
 
   if (error) {
-    return (
-      <Panel fixed className="fd-has-padding-regular fd-margin--md">
-        {error.message}
-      </Panel>
-    );
+    return <UI5Panel title={error.message} />;
   }
 
   let entries = Object.entries(crdsByGroup);
