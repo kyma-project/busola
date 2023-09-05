@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
-import { Button } from '@ui5/webcomponents-react';
-import { Icon } from 'fundamental-react';
+import { useState } from 'react';
+import {
+  Button,
+  FlexBox,
+  Icon,
+  Label,
+  TableCell,
+  TableColumn,
+  TableRow,
+} from '@ui5/webcomponents-react';
 import ListActions from 'shared/components/ListActions/ListActions';
 import classNames from 'classnames';
 
 export const BodyFallback = ({ children }) => (
+  // TODO replace once new Table component is available in ui5-webcomponents-react
   <tr>
     <td colSpan="100%">
       <div className="body-fallback">{children}</div>
@@ -12,29 +20,32 @@ export const BodyFallback = ({ children }) => (
   </tr>
 );
 
-export const HeaderRenderer = ({ actions, headerRenderer }) => {
-  let emptyColumn = [];
+export const HeaderRenderer = ({ slot, actions, headerRenderer }) => {
+  let emptyColumn = null;
   if (actions.length) {
-    emptyColumn = [
-      <th
-        key="actions-column"
-        aria-label="actions-column"
-        className="fd-table__cell"
-      ></th>,
-    ];
+    emptyColumn = (
+      <TableColumn slot={slot} key="actions-column" aria-label="actions-column">
+        <Label />
+      </TableColumn>
+    );
   }
-  return [
-    headerRenderer().map((h, index) => (
-      <th
-        className="fd-table__cell"
-        scope="col"
-        key={typeof h === 'object' ? index : h}
-      >
-        {h}
-      </th>
-    )),
-    ...emptyColumn,
-  ];
+  const Header = (
+    <>
+      {headerRenderer().map((h, index) => {
+        return (
+          <TableColumn
+            slot={`${slot}-${index}`}
+            key={typeof h === 'object' ? index : h}
+          >
+            <Label>{h}</Label>
+          </TableColumn>
+        );
+      })}
+      {emptyColumn}
+    </>
+  );
+
+  return Header;
 };
 
 export const RowRenderer = ({
@@ -79,31 +90,28 @@ const DefaultRowRenderer = ({
     if (cell?.content) {
       const { content, ...props } = cell;
       return (
-        <td className="fd-table__cell" key={id} {...props}>
+        <TableCell key={id} {...props}>
           {content}
-        </td>
+        </TableCell>
       );
     } else {
-      return (
-        <td className="fd-table__cell" key={id}>
-          {cell}
-        </td>
-      );
+      return <TableCell key={id}> {cell}</TableCell>;
     }
   });
   const actionsCell = (
-    <td className="fd-table__cell">
+    <TableCell>
       <ListActions actions={actions} entry={entry} />
-    </td>
+    </TableCell>
   );
   return (
-    <tr
+    <TableRow
       role="row"
-      className={classNames('fd-table__row', { 'is-edited': isBeingEdited })}
+      selected={isBeingEdited}
+      className={classNames({ 'is-edited': isBeingEdited })}
     >
       {cells}
       {!!actions.length && actionsCell}
-    </tr>
+    </TableRow>
   );
 };
 
@@ -130,11 +138,13 @@ const CollapsedRowRenderer = ({
           design="Transparent"
           onClick={() => setOpen(!isOpen)}
         >
-          <Icon
-            className="fd-margin-end--tiny"
-            glyph={isOpen ? 'navigation-up-arrow' : 'navigation-down-arrow'}
-          />
-          {title}
+          <FlexBox>
+            <Icon
+              className="fd-margin-end--tiny"
+              name={isOpen ? 'navigation-up-arrow' : 'navigation-down-arrow'}
+            />
+            {title}
+          </FlexBox>
         </Button>
       ) : (
         <></>
@@ -148,11 +158,8 @@ const CollapsedRowRenderer = ({
   );
 
   let collapseRow = collapseContent && (
-    <tr
-      role="row"
-      className="collapse-content fd-table__row"
-      data-testid="collapse-content"
-    >
+    // TODO replace once new Table component is available in ui5-webcomponents-react
+    <tr role="row" className="collapse-content" data-testid="collapse-content">
       {collapseContent}
     </tr>
   );

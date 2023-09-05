@@ -38,7 +38,7 @@ context('Create Namespace', () => {
       .should('be.visible')
       .click();
 
-    cy.contains('[aria-label="title"]', Cypress.env('NAMESPACE_NAME')).should(
+    cy.contains('ui5-title', Cypress.env('NAMESPACE_NAME')).should(
       'be.visible',
     );
 

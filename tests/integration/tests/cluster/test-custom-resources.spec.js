@@ -35,7 +35,7 @@ context('Test Custom Resources', () => {
       .contains('Custom Resources')
       .click();
 
-    cy.contains('h3', 'Custom Resources').should('be.visible');
+    cy.contains('ui5-title', 'Custom Resources').should('be.visible');
 
     openSearchWithSlashShortcut();
 
@@ -53,9 +53,7 @@ context('Test Custom Resources', () => {
       .contains('Tclusters')
       .click();
 
-    cy.get('[aria-label="title"]')
-      .contains('Tclusters')
-      .should('be.visible');
+    cy.contains('ui5-title', 'Tclusters').should('be.visible');
 
     cy.contains(/Create Tcluster/i).should('be.visible');
 

@@ -14,7 +14,7 @@ context('Test Events', () => {
       .contains('Events')
       .click();
 
-    cy.get('td a')
+    cy.get('ui5-table-cell a')
       .first()
       .click({ force: true });
   });

@@ -13,7 +13,7 @@ context('Test Cluster Overview', () => {
       .contains('Cluster Details')
       .click();
 
-    cy.contains('h3', 'Cluster Details').should('be.visible');
+    cy.contains('ui5-title', 'Cluster Details').should('be.visible');
 
     cy.contains('Version')
       .next('.content')
