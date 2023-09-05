@@ -1234,6 +1234,8 @@ schema:
     yaml: YAML
   required: Required
 secrets:
+  secret-not-found: Secret not found
+  secret-empty: Empty Secret
   buttons:
     collapse: Collapse All
     decode: Decode
