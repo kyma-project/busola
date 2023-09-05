@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import { Panel, Title, Toolbar, ToolbarSpacer } from '@ui5/webcomponents-react';
