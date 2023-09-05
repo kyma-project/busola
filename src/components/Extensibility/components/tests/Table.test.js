@@ -3,6 +3,7 @@ import { GenericList } from 'shared/components/GenericList/GenericList';
 import { mount } from 'testing/enzymeUtils';
 import { fireEvent, render, waitFor } from 'testing/reactTestingUtils';
 import { Table } from '../Table';
+import { ThemeProvider } from '@ui5/webcomponents-react';
 
 jest.mock('components/Extensibility/ExtensibilityCreate', () => null);
 jest.mock('components/Extensibility/ExtensibilityWizard', () => null);
@@ -22,16 +23,18 @@ describe('Table', () => {
   describe('title', () => {
     it('From name, translated', async () => {
       const component = render(
-        <TranslationBundleContext.Provider
-          value={{ translationBundle: 'myResource.source' }}
-        >
-          <Table
-            value={elements}
-            structure={{
-              name: 'my-title',
-            }}
-          />
-        </TranslationBundleContext.Provider>,
+        <ThemeProvider>
+          <TranslationBundleContext.Provider
+            value={{ translationBundle: 'myResource.source' }}
+          >
+            <Table
+              value={elements}
+              structure={{
+                name: 'my-title',
+              }}
+            />
+          </TranslationBundleContext.Provider>
+        </ThemeProvider>,
       );
 
       await component.findByText(/my-title/);
@@ -39,11 +42,13 @@ describe('Table', () => {
 
     it('No name, fall back to source, translated', async () => {
       const component = render(
-        <TranslationBundleContext.Provider
-          value={{ translationBundle: 'myResource.source' }}
-        >
-          <Table value={[]} structure={{ source: 'resource.array-data' }} />
-        </TranslationBundleContext.Provider>,
+        <ThemeProvider>
+          <TranslationBundleContext.Provider
+            value={{ translationBundle: 'myResource.source' }}
+          >
+            <Table value={[]} structure={{ source: 'resource.array-data' }} />
+          </TranslationBundleContext.Provider>
+        </ThemeProvider>,
       );
       await waitFor(async () => {
         expect(
@@ -93,7 +98,9 @@ describe('Table', () => {
         };
 
         const { queryByLabelText } = render(
-          <Table value={null} structure={structure} />,
+          <ThemeProvider>
+            <Table value={null} structure={structure} />
+          </ThemeProvider>,
         );
 
         await waitFor(() => {
@@ -107,7 +114,9 @@ describe('Table', () => {
         };
 
         const component = render(
-          <Table value={elements} structure={structure} />,
+          <ThemeProvider>
+            <Table value={elements} structure={structure} />
+          </ThemeProvider>,
         );
 
         expect(await component.findByLabelText('search-input'));
@@ -160,11 +169,13 @@ describe('Table', () => {
         };
 
         const { findAllByRole, queryByText, findByLabelText } = render(
-          <Table
-            value={elements}
-            structure={structure}
-            arrayItems={elements}
-          />,
+          <ThemeProvider>
+            <Table
+              value={elements}
+              structure={structure}
+              arrayItems={elements}
+            />
+          </ThemeProvider>,
         );
         // find and interact with search input
         const searchInput = await findByLabelText('search-input');
