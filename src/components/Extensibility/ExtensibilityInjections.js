@@ -70,7 +70,11 @@ const ExtensibilityInjections = ({ destination, slot, root }) => {
   let itemList = [];
   (injections || []).forEach(injection => {
     itemList.push(
-      <ExtensibilityInjection resMetaData={injection} root={root} />,
+      <ExtensibilityInjection
+        key={injection?.general?.resource?.kind}
+        resMetaData={injection}
+        root={root}
+      />,
     );
   });
   return itemList;
