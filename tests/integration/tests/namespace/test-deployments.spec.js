@@ -84,7 +84,7 @@ context('Test Deployments', () => {
 
     cy.contains('ui5-title', DEPLOYMENT_NAME).should('be.visible');
 
-    cy.contains('[role=row]', DEPLOYMENT_NAME)
+    cy.contains('ui5-table-cell', DEPLOYMENT_NAME)
       .should('be.visible')
       .click();
   });
@@ -94,7 +94,7 @@ context('Test Deployments', () => {
       .contains('Deployments')
       .click();
 
-    cy.get('[role=row]')
+    cy.get('ui5-table-row')
       .contains('a', DEPLOYMENT_NAME)
       .click();
 

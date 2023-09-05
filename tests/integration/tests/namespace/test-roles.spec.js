@@ -111,7 +111,7 @@ context('Test Roles', () => {
       .contains('Roles')
       .click();
 
-    cy.contains('.fd-table__row', ROLE_NAME)
+    cy.contains('ui5-table-row', ROLE_NAME)
       .find('ui5-button[data-testid="clone"]')
       .click();
 
