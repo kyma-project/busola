@@ -38,7 +38,7 @@ context('Test Persistent Volumes', () => {
       .should('be.visible')
       .click();
 
-    cy.contains('h3', PV_NAME).should('be.visible');
+    cy.contains('ui5-title', PV_NAME).should('be.visible');
   });
 
   it('Check PV details', () => {

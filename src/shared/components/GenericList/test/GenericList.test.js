@@ -287,14 +287,14 @@ describe('GenericList', () => {
     fireEvent.click(getByText('common.buttons.ok'));
 
     // checking sorted items
+    expect(getAllByRole('row')[0].textContent).toBe(
+      ' THIRD_ENTRY testdescription3',
+    );
     expect(getAllByRole('row')[1].textContent).toBe(
-      'THIRD_ENTRYtestdescription3',
+      ' second_entry testdescription2',
     );
     expect(getAllByRole('row')[2].textContent).toBe(
-      'second_entrytestdescription2',
-    );
-    expect(getAllByRole('row')[3].textContent).toBe(
-      'first_entrytestdescription1',
+      ' first_entry testdescription1',
     );
   });
 
@@ -337,13 +337,13 @@ describe('GenericList', () => {
         />,
       );
       expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(
-        mockEntries.length + 1,
-      ); // header + {mockEntries.length} rows
+        mockEntries.length,
+      );
 
       const searchInput = await getByLabelText('search-input');
       fireEvent.change(searchInput, { target: { value: searchText } });
 
-      expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(2); // header + one row
+      expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(1);
     });
 
     it('Finds proper entries by label when search text is entered', async () => {
@@ -360,13 +360,13 @@ describe('GenericList', () => {
         />,
       );
       expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(
-        mockEntries.length + 1,
-      ); // header + {mockEntries.length} rows
+        mockEntries.length,
+      );
 
       const searchInput = await getByLabelText('search-input');
       fireEvent.change(searchInput, { target: { value: searchText } });
 
-      expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(3); // header + one row
+      expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(2);
     });
 
     it('Search is case insensitive', async () => {
@@ -381,19 +381,19 @@ describe('GenericList', () => {
       );
 
       expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(
-        mockEntries.length + 1,
-      ); // header + {mockEntries.length} rows
+        mockEntries.length,
+      );
 
       let searchInput = await getByLabelText('search-input');
       fireEvent.change(searchInput, { target: { value: searchText } });
 
-      expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(2); // header + one row
+      expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(1);
 
       searchText = 'THIRD';
       searchInput = await getByLabelText('search-input');
       fireEvent.change(searchInput, { target: { value: searchText } });
 
-      expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(2); // header + one row
+      expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(1);
     });
 
     it('Shows no search result message when there are no results', async () => {
@@ -412,13 +412,13 @@ describe('GenericList', () => {
       );
 
       expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(
-        mockEntries.length + 1,
-      ); // header + {mockEntries.length} rows
+        mockEntries.length,
+      );
 
       const searchInput = await getByLabelText('search-input');
       fireEvent.change(searchInput, { target: { value: searchText } });
 
-      expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(2); // header + NoSearchResultMessage dedicated row
+      expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(1);
       expect(await getByText(noSearchResultMessage)).toBeInTheDocument();
     });
 
@@ -437,7 +437,7 @@ describe('GenericList', () => {
         />,
       );
 
-      expect(await queryAllByRole('row')).toHaveLength(2); // header + ServerErrorMessage dedicated row
+      expect(await queryAllByRole('row')).toHaveLength(1);
       expect(
         await getByText(new RegExp(serverErrorMessage.message, 'i')),
       ).toBeInTheDocument();

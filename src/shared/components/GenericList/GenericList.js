@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
+import { Table } from '@ui5/webcomponents-react';
 
 import {
   BodyFallback,
@@ -210,18 +211,17 @@ export const GenericList = ({
     ));
   };
 
-  const tableClassNames = classnames(
-    'fd-table',
-    'fd-table--no-horizontal-borders',
-    { compact },
-  );
   const panelClassNames = classnames(
-    'generic-list',
+    'ui5-generic-list',
     {
       'fd-margin--md': !className?.includes('fd-margin'),
     },
     className,
   );
+
+  const tableClassNames = classnames('ui5-generic-list', {
+    'ui5-content-density-compact': compact,
+  });
 
   return (
     <LayoutPanel className={panelClassNames} data-testid={testid}>
@@ -231,20 +231,18 @@ export const GenericList = ({
       </LayoutPanel.Header>
 
       <LayoutPanel.Body className="fd-has-padding-none">
-        <table className={tableClassNames}>
-          {showHeader && (
-            <thead className="fd-table__header">
-              <tr className="fd-table__row">
-                <HeaderRenderer
-                  entries={entries}
-                  actions={actions}
-                  headerRenderer={headerRenderer}
-                />
-              </tr>
-            </thead>
-          )}
-          <tbody className="fd-table__body">{renderTableBody()}</tbody>
-        </table>
+        <Table
+          className={tableClassNames}
+          columns={
+            <HeaderRenderer
+              entries={entries}
+              actions={actions}
+              headerRenderer={headerRenderer}
+            />
+          }
+        >
+          {renderTableBody()}
+        </Table>
       </LayoutPanel.Body>
       {!!pagination &&
         (!pagination.autoHide ||

@@ -58,7 +58,7 @@ context('Test Roles', () => {
   });
 
   it('Check the Role details', () => {
-    cy.contains('h3', ROLE_NAME).should('be.visible');
+    cy.contains('ui5-title', ROLE_NAME).should('be.visible');
 
     cy.get('[data-testid=rules-list]')
       .find('[data-testid=get]')
@@ -89,7 +89,7 @@ context('Test Roles', () => {
   });
 
   it('Check the Role details after edit', () => {
-    cy.contains('h3', ROLE_NAME).should('be.visible');
+    cy.contains('ui5-title', ROLE_NAME).should('be.visible');
 
     cy.get('[data-testid=rules-list]')
       .find('[data-testid=get]')
@@ -113,7 +113,7 @@ context('Test Roles', () => {
       .contains('Roles')
       .click();
 
-    cy.contains('.fd-table__row', ROLE_NAME)
+    cy.contains('ui5-table-row', ROLE_NAME)
       .find('ui5-button[data-testid="clone"]')
       .click();
 
@@ -129,7 +129,7 @@ context('Test Roles', () => {
   });
 
   it('Check the clone details', () => {
-    cy.contains('h3', CLONE_NAME).should('be.visible');
+    cy.contains('ui5-title', CLONE_NAME).should('be.visible');
 
     cy.get('[data-testid=rules-list]')
       .find('[data-testid=create]')

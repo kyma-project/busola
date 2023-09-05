@@ -263,7 +263,7 @@ context('Test extensibility variables', () => {
       .click();
 
     // check arrayOfStrings
-    cy.contains('h3', NAME).should('be.visible');
+    cy.contains('ui5-title', NAME).should('be.visible');
     cy.contains('value_1, value_3').should('exist');
     cy.contains('value_2').should('not.exist');
   });

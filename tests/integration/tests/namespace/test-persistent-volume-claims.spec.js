@@ -58,7 +58,7 @@ context('Test Persistent Volume Claims', () => {
       .should('be.visible')
       .click();
 
-    cy.contains('h3', PVC_NAME).should('be.visible');
+    cy.contains('ui5-title', PVC_NAME).should('be.visible');
   });
 
   it('Check the Persistent Volume Claims details', () => {

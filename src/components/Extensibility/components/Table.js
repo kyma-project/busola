@@ -120,7 +120,8 @@ export function Table({
       cells,
       title: makeTitle(),
       collapseContent: (
-        <td colspan="100%" className={tdClassNames}>
+        // TODO replace once new Table component is available in ui5-webcomponents-react
+        <td colSpan="100%" className={tdClassNames}>
           {structure.collapsible.map(child => (
             <Widget
               {...props}

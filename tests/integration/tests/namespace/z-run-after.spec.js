@@ -19,7 +19,7 @@ context('Clean up Namespace', () => {
       },
     ); // use force to skip clicking (the table could re-render between the click and the typing)
 
-    cy.get('tbody tr [aria-label="Delete"]').click({ force: true });
+    cy.get('ui5-table-row [aria-label="Delete"]').click({ force: true });
 
     cy.get(`[header-text="Delete ${Cypress.env('NAMESPACE_NAME')}"]`)
       .find('[data-testid="delete-confirmation"]')
