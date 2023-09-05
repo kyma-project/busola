@@ -1,7 +1,7 @@
 import { zip } from 'lodash';
 import React, { useState } from 'react';
 import { SegmentedButton, SegmentedButtonItem } from '@ui5/webcomponents-react';
-import { LayoutPanel, BusyIndicator } from 'fundamental-react';
+import { BusyIndicator } from 'fundamental-react';
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
 import { useFeature } from 'hooks/useFeature';
 import { getErrorMessage } from 'shared/utils/helpers';
@@ -10,9 +10,9 @@ import { useTranslation } from 'react-i18next';
 import { usePrometheus } from 'shared/hooks/usePrometheus';
 import { StatsGraph } from 'shared/components/StatsGraph';
 import { GraphLegend } from 'shared/components/GraphLegend/GraphLegend';
+import { UI5Panel } from '../UI5Panel/UI5Panel';
 
 import './StatsPanel.scss';
-import { UI5Panel } from '../UI5Panel/UI5Panel';
 
 const DATA_POINTS = 60;
 
@@ -269,7 +269,7 @@ export function StatsPanel({
       disableMargin={props.disableMargin}
       title={
         graphOptions?.length === 1 ? (
-          <LayoutPanel.Head title={t(`graphs.${graphOptions[0]}`)} />
+          t(`graphs.${graphOptions[0]}`)
         ) : (
           <Dropdown
             compact
