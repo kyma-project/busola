@@ -13,7 +13,7 @@ context('Test Cluster Overview', () => {
       .contains('Cluster Details')
       .click();
 
-    cy.contains('ui5-title', 'Cluster Details').should('be.visible');
+    cy.contains('h3', 'Cluster Details').should('be.visible');
 
     cy.contains('Version')
       .next('.content')
@@ -45,7 +45,7 @@ context('Test Cluster Overview', () => {
   it('Go to Node details', () => {
     cy.wait(500);
 
-    cy.get('[data-testid=cluster-nodes]').within(_ => {
+    cy.contains('ui5-panel', 'Nodes').within(_ => {
       cy.get('a')
         .first()
         .click();

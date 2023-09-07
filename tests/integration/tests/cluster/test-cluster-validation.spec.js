@@ -65,9 +65,8 @@ context('Test Cluster Validation Scan', () => {
     cy.contains('Scan Progress').should('not.exist');
     cy.contains('Scan Result').should('not.exist');
 
-    cy.contains('.fd-layout-panel', 'Cluster Validation').as(
-      'clusterValidationPanel',
-    );
+    cy.contains('ui5-panel', 'Cluster Validation').as('clusterValidationPanel');
+
     cy.get('@clusterValidationPanel')
       .contains('Configure')
       .click();
