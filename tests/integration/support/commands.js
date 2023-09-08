@@ -133,7 +133,7 @@ Cypress.Commands.add(
     deletedVisible = true,
     clearSearch = true,
   ) => {
-    cy.get('[aria-label="open-search"]').click();
+    cy.get('[aria-label="open-search"]:visible').click();
 
     cy.get('[placeholder="Search"]').type(searchTerm);
 
