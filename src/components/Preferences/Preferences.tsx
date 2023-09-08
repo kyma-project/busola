@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 
 import { useEventListener } from 'hooks/useEventListener';
-import { Tab } from 'shared/components/Tabs/Tab';
 import { Tabs } from 'shared/components/Tabs/Tabs';
 import { VerticalTabs } from 'shared/components/VerticalTabs/VerticalTabs';
 import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
@@ -74,32 +73,33 @@ export function Preferences() {
       <VerticalTabs tabs={tabs} height="100vh">
         <VerticalTabs.Content id={1}>
           <Tabs className="fd-tabs fd-has-padding-left-regular">
-            <Tab
+            <div
+              style={{ padding: '-16px -32px' }}
               key="theme-settings"
               id="theme-settings"
               title={t('settings.theme')}
             >
               <ThemeChooser />
-            </Tab>
-            <Tab
+            </div>
+            <div
               key="language-settings"
               id="language-settings"
               title={t('settings.language')}
             >
               <LanguageSettings />
-            </Tab>
-            <Tab
+            </div>
+            <div
               key="other-settings"
               id="other-settings"
               title={t('settings.other.title')}
             >
               <OtherSettings />
-            </Tab>
+            </div>
           </Tabs>
         </VerticalTabs.Content>
         <VerticalTabs.Content id={2}>
           <Tabs className="fd-tabs fd-has-padding-left-regular">
-            <Tab
+            <div
               key="cluster-interaction"
               id="cluster-interaction"
               title={t('settings.clusters.interaction.title')}
@@ -109,14 +109,14 @@ export function Preferences() {
                 <ConfirmationSettings />
                 <ProtectedSettings />
               </div>
-            </Tab>
-            <Tab
+            </div>
+            <div
               key="resource-validation"
               id="resource-validation"
               title={t('settings.clusters.resourcesValidation.title')}
             >
               <ResourceValidationSettings />
-            </Tab>
+            </div>
           </Tabs>
         </VerticalTabs.Content>
       </VerticalTabs>
