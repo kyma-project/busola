@@ -38,13 +38,13 @@ context('Test app settings and preferences', () => {
       .should('be.visible')
       .click();
 
-    cy.contains('[aria-label="title"]', NAME).should('be.visible');
+    cy.contains('ui5-title', NAME).should('be.visible');
 
     cy.getLeftNav()
       .contains('Config Maps')
       .click();
 
-    cy.contains('.fd-table__row', NAME)
+    cy.contains('ui5-table-row', NAME)
       .find('ui5-button[data-testid="delete"]')
       .click();
 
