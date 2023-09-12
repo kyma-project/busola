@@ -38,7 +38,9 @@ context('Test resource validation', () => {
 
     cy.contains('Cluster interaction').click();
 
-    cy.contains('Resource Validation').click();
+    cy.contains('Resource Validation')
+      .parentsUntil('[role=tab]')
+      .click({ force: true });
 
     cy.contains('.fd-layout-panel__header', 'Validate Resources')
       .find('.fd-switch')
@@ -68,7 +70,9 @@ context('Test resource validation', () => {
 
     cy.contains('Cluster interaction').click();
 
-    cy.contains('Resource Validation').click();
+    cy.contains('Resource Validation')
+      .parentsUntil('[role=tab]')
+      .click({ force: true });
 
     cy.contains('Customize').click();
 
@@ -110,7 +114,9 @@ context('Test resource validation', () => {
 
     cy.contains('Cluster interaction').click();
 
-    cy.contains('Resource Validation').click();
+    cy.contains('Resource Validation')
+      .parentsUntil('[role=tab]')
+      .click({ force: true });
 
     cy.contains('Reset').click();
 

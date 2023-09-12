@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 
 import { useEventListener } from 'hooks/useEventListener';
-import { Tabs } from 'shared/components/Tabs/Tabs';
+import { TabContainer, Tab } from '@ui5/webcomponents-react';
+
 import { VerticalTabs } from 'shared/components/VerticalTabs/VerticalTabs';
 import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
 
@@ -72,52 +73,41 @@ export function Preferences() {
     >
       <VerticalTabs tabs={tabs} height="100vh">
         <VerticalTabs.Content id={1}>
-          <Tabs className="fd-tabs fd-has-padding-left-regular">
-            <div
+          <TabContainer>
+            <Tab
               style={{ padding: '-16px -32px' }}
               key="theme-settings"
-              id="theme-settings"
-              title={t('settings.theme')}
+              text={t('settings.theme')}
             >
               <ThemeChooser />
-            </div>
-            <div
-              key="language-settings"
-              id="language-settings"
-              title={t('settings.language')}
-            >
+            </Tab>
+            <Tab key="language-settings" text={t('settings.language')}>
               <LanguageSettings />
-            </div>
-            <div
-              key="other-settings"
-              id="other-settings"
-              title={t('settings.other.title')}
-            >
+            </Tab>
+            <Tab key="other-settings" text={t('settings.other.title')}>
               <OtherSettings />
-            </div>
-          </Tabs>
+            </Tab>
+          </TabContainer>
         </VerticalTabs.Content>
         <VerticalTabs.Content id={2}>
-          <Tabs className="fd-tabs fd-has-padding-left-regular">
-            <div
+          <TabContainer>
+            <Tab
               key="cluster-interaction"
-              id="cluster-interaction"
-              title={t('settings.clusters.interaction.title')}
+              text={t('settings.clusters.interaction.title')}
             >
               <div>
                 <NamespaceSettings />
                 <ConfirmationSettings />
                 <ProtectedSettings />
               </div>
-            </div>
-            <div
+            </Tab>
+            <Tab
               key="resource-validation"
-              id="resource-validation"
-              title={t('settings.clusters.resourcesValidation.title')}
+              text={t('settings.clusters.resourcesValidation.title')}
             >
               <ResourceValidationSettings />
-            </div>
-          </Tabs>
+            </Tab>
+          </TabContainer>
         </VerticalTabs.Content>
       </VerticalTabs>
     </Dialog>

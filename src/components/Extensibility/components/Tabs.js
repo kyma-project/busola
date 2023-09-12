@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { Tabs as BusolaTabs } from '../../../shared/components/Tabs/Tabs';
 import { Widget, InlineWidget } from './Widget';
 import { useGetTranslation } from '../helpers';
+import { TabContainer, Tab } from '@ui5/webcomponents-react';
 
 import './Tabs.scss';
 
@@ -18,9 +18,9 @@ export function Tabs({
   return (
     <>
       {Array.isArray(structure?.children) && (
-        <BusolaTabs className="tabs">
+        <TabContainer>
           {structure.children.map((child, idx) => (
-            <div key={`tab-wrapper-${idx}`} title={widgetT(child)}>
+            <Tab key={`tab-wrapper-${idx}`} text={widgetT(child)}>
               {Array.isArray(child?.children) &&
                 child.children.map((def, idx) => (
                   <Widget
@@ -33,9 +33,9 @@ export function Tabs({
                     {...props}
                   />
                 ))}
-            </div>
+            </Tab>
           ))}
-        </BusolaTabs>
+        </TabContainer>
       )}
     </>
   );
