@@ -72,7 +72,9 @@ context('Test Cluster configuration', () => {
 
     cy.get('[title="Profile"]').click();
 
-    cy.contains('Other').click();
+    cy.contains('Other')
+      .parentsUntil('[role=tab]')
+      .click({ force: true });
 
     cy.get('[role=dialog]')
       .contains('20')
