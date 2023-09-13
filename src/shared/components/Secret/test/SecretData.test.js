@@ -44,7 +44,7 @@ describe('SecretData', () => {
   });
 
   it('Decodes and encodes secret values', async () => {
-    const { findByText, queryByText } = render(
+    const { findByText, getAllByText, queryByText } = render(
       <ThemeProvider>
         <SecretData secret={secret} />
       </ThemeProvider>,
@@ -53,7 +53,7 @@ describe('SecretData', () => {
     fireEvent.click(await findByText('secrets.buttons.decode'));
     await expectDecodedState({ findByText, queryByText });
 
-    fireEvent.click(await findByText('secrets.buttons.encode'));
+    fireEvent.click(await getAllByText('secrets.buttons.encode')[0]);
     await expectEncodedState({ findByText, queryByText });
   });
 
