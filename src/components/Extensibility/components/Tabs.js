@@ -18,7 +18,7 @@ export function Tabs({
   return (
     <>
       {Array.isArray(structure?.children) && (
-        <TabContainer>
+        <TabContainer tabLayout="Inline" contentBackgroundDesign="Transparent">
           {structure.children.map((child, idx) => (
             <Tab key={`tab-wrapper-${idx}`} text={widgetT(child)}>
               {Array.isArray(child?.children) &&

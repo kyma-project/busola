@@ -73,7 +73,10 @@ export function Preferences() {
     >
       <VerticalTabs tabs={tabs} height="100vh">
         <VerticalTabs.Content id={1}>
-          <TabContainer>
+          <TabContainer
+            tabLayout="Inline"
+            contentBackgroundDesign="Transparent"
+          >
             <Tab
               style={{ padding: '-16px -32px' }}
               key="theme-settings"
@@ -90,7 +93,10 @@ export function Preferences() {
           </TabContainer>
         </VerticalTabs.Content>
         <VerticalTabs.Content id={2}>
-          <TabContainer>
+          <TabContainer
+            tabLayout="Inline"
+            contentBackgroundDesign="Transparent"
+          >
             <Tab
               key="cluster-interaction"
               text={t('settings.clusters.interaction.title')}
