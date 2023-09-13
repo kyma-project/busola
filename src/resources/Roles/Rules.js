@@ -7,10 +7,8 @@ import { Icon } from '@ui5/webcomponents-react';
 function VerbStatus({ rule, verb }) {
   const hasVerb = rule.verbs?.includes(verb) || rule.verbs?.includes('*');
 
-  console.log(hasVerb);
-
   return hasVerb ? (
-    <Icon name="accept" aria-hidden />
+    <Icon name="accept" aria-hidden aria-label={verb} data-testid={verb} />
   ) : (
     <span data-testid={verb}>{EMPTY_TEXT_PLACEHOLDER}</span>
   );

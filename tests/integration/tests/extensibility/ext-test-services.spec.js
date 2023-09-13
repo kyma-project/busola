@@ -28,7 +28,7 @@ context('Test Services', () => {
     cy.contains('Submit').click();
 
     cy.get('.fd-dialog__body')
-      .find('.sap-icon--message-success')
+      .find('.status-message-success')
       .should('have.length', 1);
 
     cy.loadFiles('examples/services/samples.yaml').then(resources => {
@@ -39,7 +39,7 @@ context('Test Services', () => {
     cy.contains('Submit').click();
 
     cy.get('.fd-dialog__body')
-      .find('.sap-icon--message-success')
+      .find('.status-message-success')
       .should('have.length', 1);
   });
 

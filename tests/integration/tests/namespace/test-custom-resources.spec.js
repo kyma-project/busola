@@ -35,7 +35,7 @@ context('Test Custom Resources', () => {
       .click();
 
     cy.get('.fd-dialog__body')
-      .find('.sap-icon--message-success')
+      .find('.status-message-success')
       .should('have.length', 1);
 
     cy.get('[role="dialog"]')
