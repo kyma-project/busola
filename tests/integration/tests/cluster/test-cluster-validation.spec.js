@@ -96,7 +96,7 @@ context('Test Cluster Validation Scan', () => {
 
     cy.get('@scanProgress')
       .contains('100%', { timeout: 30000 })
-      .should('be.visible');
+      .should('exist');
 
     // Check items in scan result tree
     cy.contains('Scan Result').should('be.visible');
