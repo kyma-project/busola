@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import { LayoutPanel, Icon } from 'fundamental-react';
+import { LayoutPanel } from 'fundamental-react';
 import { CircleProgress } from 'shared/components/CircleProgress/CircleProgress';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { Spinner } from 'shared/components/Spinner/Spinner';
@@ -13,6 +13,7 @@ import {
   getHealthyStatusesCount,
   getHealthyReplicasCount,
 } from './NamespaceWorkloadsHelpers';
+import { Icon } from '@ui5/webcomponents-react';
 
 NamespaceWorkloads.propTypes = { namespace: PropTypes.string.isRequired };
 
@@ -124,10 +125,9 @@ export function NamespaceWorkloads({ namespace }) {
     <LayoutPanel>
       <LayoutPanel.Header>
         <Icon
-          size="m"
-          className="fd-margin-end--sm"
-          glyph="stethoscope"
-          ariaLabel="Health icon"
+          className="fd-margin-end--sm ui5-icon-m"
+          name="stethoscope"
+          aria-label="Health icon"
         />
         <LayoutPanel.Head title={t('namespaces.overview.workloads.title')} />
       </LayoutPanel.Header>

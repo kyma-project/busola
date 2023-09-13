@@ -1,11 +1,12 @@
 import React from 'react';
-import { LayoutPanel, Icon } from 'fundamental-react';
+import { LayoutPanel } from 'fundamental-react';
 import { CircleProgress } from 'shared/components/CircleProgress/CircleProgress';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useTranslation } from 'react-i18next';
 
 import { getSIPrefix } from 'shared/helpers/siPrefixes';
+import { Icon } from '@ui5/webcomponents-react';
 
 const MEMORY_SUFFIX_POWER = {
   // must be sorted from the smallest to the largest; it is case sensitive; more info: https://medium.com/swlh/understanding-kubernetes-resource-cpu-and-memory-units-30284b3cc866
@@ -151,10 +152,9 @@ export const ResourcesUsage = ({ namespace }) => {
     <LayoutPanel>
       <LayoutPanel.Header>
         <Icon
-          size="m"
-          className="fd-margin-end--sm"
-          glyph="it-host"
-          ariaLabel="Resource icon"
+          className="fd-margin-end--sm ui5-icon-m"
+          name="it-host"
+          aria-label="Resource icon"
         />
         <LayoutPanel.Head title={t('namespaces.overview.resources.title')} />
       </LayoutPanel.Header>

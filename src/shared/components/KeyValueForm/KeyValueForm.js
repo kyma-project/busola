@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@ui5/webcomponents-react';
-import { FormLabel, FormInput, FormTextarea, Icon } from 'fundamental-react';
+import { Button, Icon } from '@ui5/webcomponents-react';
+import { FormLabel, FormInput, FormTextarea } from 'fundamental-react';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import {
   fromEntries,
@@ -81,7 +81,7 @@ export function KeyValueForm({
                     position="right"
                     content={t('common.tooltips.duplicate-key')}
                   >
-                    <Icon ariaLabel="Duplicate key" glyph="alert" />
+                    <Icon aria-label="Duplicate key" name="alert" />
                   </Tooltip>
                 )}
               </FormLabel>
