@@ -1237,10 +1237,8 @@ secrets:
   secret-not-found: Secret not found
   secret-empty: Empty Secret
   buttons:
-    collapse: Collapse All
     decode: Decode
     encode: Encode
-    expand: Expand All
   certificates:
     close-expiration: Certificate will expire in less than one day.
     expired: Certificate expired

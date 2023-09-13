@@ -13,6 +13,17 @@ export const secret = {
 export const empty_secret = {};
 
 describe('SecretData', () => {
+  const expectInitialState = async ({ getAllByText, queryByText }) => {
+    expect(await getAllByText('*****')).toHaveLength(2);
+
+    expect(queryByText(secret.data.client_id)).not.toBeInTheDocument();
+    expect(queryByText(secret.data.client_secret)).not.toBeInTheDocument();
+    expect(queryByText(btoa(secret.data.client_id))).not.toBeInTheDocument();
+    expect(
+      queryByText(btoa(secret.data.client_secret)),
+    ).not.toBeInTheDocument();
+  };
+
   const expectDecodedState = async ({ findByText, queryByText }) => {
     expect(await findByText(atob(secret.data.client_id))).toBeInTheDocument();
     expect(
@@ -49,6 +60,8 @@ describe('SecretData', () => {
         <SecretData secret={secret} />
       </ThemeProvider>,
     );
+
+    await expectInitialState({ getAllByText, queryByText });
 
     fireEvent.click(await findByText('secrets.buttons.decode'));
     await expectDecodedState({ findByText, queryByText });
