@@ -142,10 +142,10 @@ describe('Table', () => {
 
         const {
           findByText,
-          getByLabelText,
+          getAllByLabelText,
           findAllByRole,
           queryByText,
-          findByLabelText,
+          findAllByLabelText,
         } = render(
           <ThemeProvider>
             <Table value={elements} structure={structure} />
@@ -155,12 +155,11 @@ describe('Table', () => {
         // expect unfiltered results to exist
         await findByText('extensibility::first');
         await findByText('extensibility::second');
-
         //expect input to be displayed
-        await findByLabelText('search-input');
+        (await findAllByLabelText('search-input'))[0];
 
         //interact with input
-        const searchInput = getByLabelText('search-input');
+        const searchInput = await getAllByLabelText('search-input')[0];
         fireEvent.change(searchInput, { target: { value: 'firs' } });
 
         //there are two items with role='row', the header and the table's row
@@ -184,7 +183,7 @@ describe('Table', () => {
           ],
         };
 
-        const { findAllByRole, queryByText, findByLabelText } = render(
+        const { findAllByRole, queryByText, getByLabelText } = render(
           <ThemeProvider>
             <Table
               value={elements}
@@ -194,8 +193,8 @@ describe('Table', () => {
           </ThemeProvider>,
         );
         // find and interact with search input
-        const searchInput = await findByLabelText('search-input');
-        await fireEvent.change(searchInput, { target: { value: 'fi' } });
+        const searchInput = await getByLabelText('search-input');
+        fireEvent.change(searchInput, { target: { value: 'fi' } });
 
         // get Table's rows
         const rows = await findAllByRole('row');
