@@ -2,8 +2,7 @@ import {
   useGetPlaceholder,
   useGetTranslation,
 } from 'components/Extensibility/helpers';
-import { Button } from '@ui5/webcomponents-react';
-import { Icon, Link } from 'fundamental-react';
+import { Button, Icon, Link } from '@ui5/webcomponents-react';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -70,9 +69,9 @@ export const ExternalLink = ({
     <Link href={href} target="_blank" rel="noopener noreferrer">
       {tExt(value)}
       <Icon
-        glyph="action"
-        size="s"
-        className="fd-margin-begin--tiny"
+        design="Information"
+        name="action"
+        className="fd-margin-begin--tiny ui5-icon-s"
         ariaLabel={t('common.ariaLabel.new-tab-link')}
         originalResource={originalResource}
       />

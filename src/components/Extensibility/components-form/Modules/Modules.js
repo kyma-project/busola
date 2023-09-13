@@ -4,8 +4,8 @@ import { useUIStore } from '@ui-schema/ui-schema';
 import { useJsonata } from '../../hooks/useJsonata';
 import { useVariables } from '../../hooks/useVariables';
 import { fromJS } from 'immutable';
-import { MessageStrip } from '@ui5/webcomponents-react';
-import { Checkbox, Link, Icon } from 'fundamental-react';
+import { Icon, Link, MessageStrip } from '@ui5/webcomponents-react';
+import { Checkbox } from 'fundamental-react';
 
 import './Modules.scss';
 import { useGetTranslation } from 'components/Extensibility/helpers';
@@ -216,7 +216,11 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
               className="fd-align-vertical-center-ignor-checkbox-label"
             >
               {t('extensibility.widgets.modules.documentation')}
-              <Icon glyph="action" size="s" className="fd-margin-begin--tiny" />
+              <Icon
+                name="action"
+                design="Information"
+                className="fd-margin-begin--tiny ui5-icon-s"
+              />
             </Link>
           ) : null}
         </div>

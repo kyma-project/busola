@@ -406,6 +406,26 @@ input[type='checkbox'] {
   padding: 0 !important;
 }
 
+.ui5-icon-s {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.ui5-icon-m {
+  width: 1rem;
+  height: 1rem;
+}
+
+.ui5-icon-l {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.ui5-icon-xl {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
 @include graph-node-border(pod, 4);
 @include graph-node-border(virtualservice, 1);
 @include graph-node-border(rolebinding, 2);

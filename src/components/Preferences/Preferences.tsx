@@ -1,5 +1,5 @@
-import { Button } from '@ui5/webcomponents-react';
-import { Dialog, Icon } from 'fundamental-react';
+import { Button, Icon } from '@ui5/webcomponents-react';
+import { Dialog } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 
@@ -29,9 +29,10 @@ export function Preferences() {
       description: t('settings.interface.description'),
       icon: (
         <Icon
-          glyph="accelerated"
-          size="xl"
-          ariaLabel={t('settings.interface.title')}
+          style={{ margin: 'auto' }}
+          name="accelerated"
+          aria-label={t('settings.interface.title')}
+          className="ui5-icon-xl"
         />
       ),
       id: 1,
@@ -41,9 +42,10 @@ export function Preferences() {
       description: t('settings.clusters.description'),
       icon: (
         <Icon
-          glyph="database"
-          size="xl"
-          ariaLabel={t('settings.clusters.title')}
+          style={{ margin: 'auto' }}
+          name="database"
+          aria-label={t('settings.clusters.title')}
+          className="ui5-icon-xl"
         />
       ),
       id: 2,
