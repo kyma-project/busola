@@ -1,8 +1,8 @@
 import React from 'react';
-import { LayoutPanel } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import * as Sentry from '@sentry/react';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 class ExtensibilityErrBoundaryComponent extends React.Component {
   constructor(props) {
@@ -30,11 +30,8 @@ class ExtensibilityErrBoundaryComponent extends React.Component {
       const hasCause = this.state.error.cause !== undefined;
 
       return (
-        <LayoutPanel className="fd-margin--md" role="alert">
-          <LayoutPanel.Header>
-            <LayoutPanel.Head title={this.state.error.name} />
-          </LayoutPanel.Header>
-          <LayoutPanel.Body
+        <UI5Panel title={this.state.error.name} role="alert">
+          <div
             style={{
               fontSize: '18px',
             }}
@@ -48,8 +45,8 @@ class ExtensibilityErrBoundaryComponent extends React.Component {
                 readOnly
               />
             ) : null}
-          </LayoutPanel.Body>
-        </LayoutPanel>
+          </div>
+        </UI5Panel>
       );
     }
 

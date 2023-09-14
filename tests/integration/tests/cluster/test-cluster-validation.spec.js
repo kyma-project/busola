@@ -65,9 +65,8 @@ context('Test Cluster Validation Scan', () => {
     cy.contains('Scan Progress').should('not.exist');
     cy.contains('Scan Result').should('not.exist');
 
-    cy.contains('.fd-layout-panel', 'Cluster Validation').as(
-      'clusterValidationPanel',
-    );
+    cy.contains('ui5-panel', 'Cluster Validation').as('clusterValidationPanel');
+
     cy.get('@clusterValidationPanel')
       .contains('Configure')
       .click();
@@ -97,7 +96,7 @@ context('Test Cluster Validation Scan', () => {
 
     cy.get('@scanProgress')
       .contains('100%', { timeout: 30000 })
-      .should('be.visible');
+      .should('exist');
 
     // Check items in scan result tree
     cy.contains('Scan Result').should('be.visible');

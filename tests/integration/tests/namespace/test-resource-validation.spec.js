@@ -42,7 +42,7 @@ context('Test resource validation', () => {
       .parentsUntil('[role=tab]')
       .click({ force: true });
 
-    cy.contains('.fd-layout-panel__header', 'Validate Resources')
+    cy.contains('ui5-panel', 'Validate Resources')
       .find('.fd-switch')
       .click();
 

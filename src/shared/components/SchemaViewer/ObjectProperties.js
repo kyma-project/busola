@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { Icon } from 'fundamental-react';
 
 import { Generic, PROPERTIES } from './handlers';
+import { Text } from '@ui5/webcomponents-react';
 
 function ObjectProperty({
   propKey,
@@ -33,7 +34,7 @@ function ObjectProperty({
             }
           />
         )}{' '}
-        {label}
+        <Text>{label}</Text>
       </dd>
       {(!handler.expandable || !collapsed) && (
         <dt

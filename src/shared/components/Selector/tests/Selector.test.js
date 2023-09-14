@@ -2,6 +2,7 @@ import { render } from 'testing/reactTestingUtils';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Selector } from '../Selector';
+import { ThemeProvider } from '@ui5/webcomponents-react';
 
 jest.mock('../../RelatedPods.js', () => ({
   RelatedPods: ({ namespace }) => <div>Related Pods for {namespace}</div>,
@@ -10,14 +11,22 @@ jest.mock('../../RelatedPods.js', () => ({
 describe('Selector tests', () => {
   describe('Selector tests for Kubernetes resources', () => {
     it('Does not render Selector when selector is null', () => {
-      const { queryByText } = render(<Selector selector={null} />);
+      const { queryByText } = render(
+        <ThemeProvider>
+          <Selector selector={null} />
+        </ThemeProvider>,
+      );
       expect(queryByText('selector.title')).not.toBeInTheDocument();
     });
 
     it('Renders default message when selector labels are null', () => {
       const mockedSelector = {};
 
-      const { getByText } = render(<Selector selector={mockedSelector} />);
+      const { getByText } = render(
+        <ThemeProvider>
+          <Selector selector={mockedSelector} />
+        </ThemeProvider>,
+      );
       expect(getByText('selector.message.empty-selector')).toBeInTheDocument();
     });
 
@@ -29,11 +38,13 @@ describe('Selector tests', () => {
       };
 
       const { getByText } = render(
-        <Selector
-          selector={mockedSelector}
-          namespace="test-namespace"
-          labels={mockedSelector.matchLabels}
-        />,
+        <ThemeProvider>
+          <Selector
+            selector={mockedSelector}
+            namespace="test-namespace"
+            labels={mockedSelector.matchLabels}
+          />
+        </ThemeProvider>,
       );
 
       expect(getByText('Related Pods for test-namespace')).toBeInTheDocument();
@@ -51,12 +62,14 @@ describe('Selector tests', () => {
       };
 
       const { getByText } = render(
-        <Selector
-          selector={mockedSelector}
-          namespace="namespace"
-          labels={mockedSelector.matchLabels}
-          expressions={mockedSelector.matchExpressions}
-        />,
+        <ThemeProvider>
+          <Selector
+            selector={mockedSelector}
+            namespace="namespace"
+            labels={mockedSelector.matchLabels}
+            expressions={mockedSelector.matchExpressions}
+          />
+        </ThemeProvider>,
       );
 
       expect(getByText('match-expressions.title')).toBeInTheDocument(); //title of the matchExpressions table
@@ -70,10 +83,12 @@ describe('Selector tests', () => {
       const mockedSelector = {};
       const { t } = useTranslation();
       const { getByText } = render(
-        <Selector
-          selector={mockedSelector}
-          message={t('persistent-volume-claims.message.empty-selector')}
-        />,
+        <ThemeProvider>
+          <Selector
+            selector={mockedSelector}
+            message={t('persistent-volume-claims.message.empty-selector')}
+          />
+        </ThemeProvider>,
       );
 
       expect(
@@ -88,12 +103,14 @@ describe('Selector tests', () => {
         },
       };
       const { getByText } = render(
-        <Selector
-          selector={mockedSelector}
-          labels={mockedSelector.matchLabels}
-          namespace="namespace"
-          RelatedResources={() => <p>Persistent Volumes</p>}
-        />,
+        <ThemeProvider>
+          <Selector
+            selector={mockedSelector}
+            labels={mockedSelector.matchLabels}
+            namespace="namespace"
+            RelatedResources={() => <p>Persistent Volumes</p>}
+          />
+        </ThemeProvider>,
       );
 
       expect(getByText('Persistent Volumes')).toBeInTheDocument();
@@ -103,7 +120,9 @@ describe('Selector tests', () => {
   describe('Selector tests for Istio resources', () => {
     it('Renders message when selector is null', () => {
       const { getByText } = render(
-        <Selector selector={null} isIstioSelector />,
+        <ThemeProvider>
+          <Selector selector={null} isIstioSelector />
+        </ThemeProvider>,
       );
       expect(getByText('selector.message.empty-selector')).toBeInTheDocument();
     });
@@ -112,11 +131,13 @@ describe('Selector tests', () => {
       const { t } = useTranslation();
 
       const { getByText } = render(
-        <Selector
-          selector={null}
-          title={t('workload-selector-title')}
-          isIstioSelector
-        />,
+        <ThemeProvider>
+          <Selector
+            selector={null}
+            title={t('workload-selector-title')}
+            isIstioSelector
+          />
+        </ThemeProvider>,
       );
       expect(getByText('workload-selector-title')).toBeInTheDocument();
     });
@@ -129,13 +150,15 @@ describe('Selector tests', () => {
       };
 
       const { getByText } = render(
-        <Selector
-          selector={mockedSelector}
-          labels={mockedSelector.matchLabels}
-          namespace="namespace"
-          isIstioSelector
-          RelatedResources={() => <p>Custom Resources</p>}
-        />,
+        <ThemeProvider>
+          <Selector
+            selector={mockedSelector}
+            labels={mockedSelector.matchLabels}
+            namespace="namespace"
+            isIstioSelector
+            RelatedResources={() => <p>Custom Resources</p>}
+          />
+        </ThemeProvider>,
       );
 
       expect(getByText('Custom Resources')).toBeInTheDocument();
