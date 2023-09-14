@@ -1,5 +1,5 @@
+import { Icon } from '@ui5/webcomponents-react';
 import React, { ReactNode } from 'react';
-import { Icon } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 type LinkProps = {
@@ -29,10 +29,10 @@ export const Link = ({
     >
       {text || children || url}
       <Icon
-        glyph="action"
-        size="s"
-        className="fd-margin-begin--tiny fd-margin-end--tiny"
-        ariaLabel={t('common.ariaLabel.new-tab-link')}
+        design="Information"
+        name="action"
+        className="fd-margin-begin--tiny fd-margin-end--tiny ui5-icon-s"
+        aria-label={t('common.ariaLabel.new-tab-link')}
       />
     </a>
   );

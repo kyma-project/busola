@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Text } from '@ui5/webcomponents-react';
-import { Icon } from 'fundamental-react';
+import { Button, Text, Icon } from '@ui5/webcomponents-react';
 import classNames from 'classnames';
 
 import './Pagination.scss';
@@ -58,7 +57,11 @@ export const Pagination = ({
         onClick={() => onChangePage(currentPage - 1)}
         aria-label="Previous page"
       >
-        <Icon ariaLabel="previous page icon" glyph="navigation-left-arrow" />
+        <Icon
+          aria-label="previous page icon"
+          name="navigation-left-arrow"
+          design="Information"
+        />
       </Link>
 
       {partitions.map((current, i) => (
@@ -79,7 +82,11 @@ export const Pagination = ({
         onClick={() => onChangePage(currentPage + 1)}
         aria-label="Next page"
       >
-        <Icon ariaLabel="next page icon" glyph="navigation-right-arrow" />
+        <Icon
+          aria-label="next page icon"
+          name="navigation-right-arrow"
+          design="Information"
+        />
       </Link>
     </div>
   );

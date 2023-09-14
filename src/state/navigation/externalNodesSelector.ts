@@ -4,13 +4,12 @@ import { predefinedCategories } from './categories';
 import { ConfigFeature, configFeaturesNames, NavNode } from '../types';
 import { getFetchFn } from '../utils/getFetchFn';
 import { FetchFn } from '../../shared/hooks/BackendAPI/useFetch';
-import { IconGlyph } from 'fundamental-react/lib/Icon/Icon';
 
 const createExternalNode = (
   url: string,
   label: string,
   category?: string,
-  icon?: IconGlyph,
+  icon?: string,
 ): NavNode => ({
   resourceType: '',
   category: category || predefinedCategories.observability,
@@ -62,7 +61,7 @@ const getExternalNodes = (
       children,
     }: {
       category: string;
-      icon: IconGlyph;
+      icon: string;
       children: NodeChild[];
     }) =>
       children.map(({ label, link }) =>

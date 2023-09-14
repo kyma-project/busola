@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@ui5/webcomponents-react';
-import { Dialog, Icon } from 'fundamental-react';
+import { Button, Icon } from '@ui5/webcomponents-react';
+import { Dialog } from 'fundamental-react';
 import { useEventListener } from 'hooks/useEventListener';
 
 import './ErrorModal.scss';
@@ -55,7 +55,11 @@ export function ErrorModal({
 
   const title = (
     <>
-      <Icon glyph="message-error" className="fd-margin-end--tiny" />
+      <Icon
+        design="Negative"
+        name="message-error"
+        className="fd-margin-end--tiny"
+      />
       {header}
     </>
   );

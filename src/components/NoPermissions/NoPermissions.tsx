@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { Button } from '@ui5/webcomponents-react';
-import { FormInput, Icon } from 'fundamental-react';
+import { Button, Icon } from '@ui5/webcomponents-react';
+import { FormInput } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-import './NoPermissions.scss';
 import { addCluster } from 'components/Clusters/shared';
 import { useRecoilValue } from 'recoil';
 import { clusterState } from 'state/clusterAtom';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { cloneDeep } from 'lodash';
+
+import './NoPermissions.scss';
 
 function NoPermissions() {
   const { t } = useTranslation();
@@ -32,7 +33,7 @@ function NoPermissions() {
 
   return (
     <section className="no-permissions">
-      <Icon ariaLabel="no-permissions" glyph="locked" />
+      <Icon aria-label="no-permissions" name="locked" />
       <header>{t('common.errors.no-permissions-header')}</header>
       <p className="fd-margin-top--md">{t('common.errors.no-permissions')}</p>
       <p>{t('common.errors.no-permissions-message')}</p>
@@ -53,7 +54,7 @@ function NoPermissions() {
           className="update-namespace-button"
           disabled={!namespaceName}
         >
-          Save
+          {t('common.buttons.save')}
         </Button>
       </form>
     </section>

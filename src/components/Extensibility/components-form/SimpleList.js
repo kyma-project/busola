@@ -1,7 +1,7 @@
 import React from 'react';
 import { mapValues } from 'lodash';
 import { PluginStack, useUIStore } from '@ui-schema/ui-schema';
-import { Button } from '@ui5/webcomponents-react';
+import { Button, Icon } from '@ui5/webcomponents-react';
 import { FormLabel } from 'fundamental-react';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -12,7 +12,6 @@ import {
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { Label } from '../../../shared/ResourceForm/components/Label';
-import { Icon } from 'fundamental-react';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 import './SimpleList.scss';
@@ -159,8 +158,12 @@ export function SimpleList({
         </div>
         <div className="fd-col fd-col-md--1 tooltip-column tooltip-column--with-padding">
           {tooltipContent && (
-            <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
-              <Icon ariaLabel="" size="m" glyph="message-information" />
+            <Tooltip
+              className="has-tooltip"
+              delay={0}
+              content={tExt(tooltipContent)}
+            >
+              <Icon name="message-information" className="ui5-icon-m" />
             </Tooltip>
           )}
         </div>

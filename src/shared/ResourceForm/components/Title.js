@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon } from 'fundamental-react';
+import { Icon } from '@ui5/webcomponents-react';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 export function Title({
@@ -12,12 +12,12 @@ export function Title({
   return (
     <div className="title">
       {!disabled && canChangeState && (
-        <Icon className="control-icon" ariaHidden glyph={iconGlyph} />
+        <Icon className="control-icon" aria-hidden name={iconGlyph} />
       )}
       <span className="title-content">{title}</span>
       {tooltipContent && (
         <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
-          <Icon ariaLabel="" glyph="question-mark" />
+          <Icon ariaLabel="" name="question-mark" />
         </Tooltip>
       )}
     </div>
