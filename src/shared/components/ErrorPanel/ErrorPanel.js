@@ -1,23 +1,20 @@
 import React from 'react';
-import { LayoutPanel } from 'fundamental-react';
 import { getErrorMessage } from 'shared/utils/helpers';
 import { useTranslation } from 'react-i18next';
+import { UI5Panel } from '../UI5Panel/UI5Panel';
 
 export const ErrorPanel = ({ error, title }) => {
   const { t } = useTranslation();
 
   return (
-    <LayoutPanel className="fd-margin--md">
-      <LayoutPanel.Header>
-        <LayoutPanel.Head title={title || 'Error'} />
-      </LayoutPanel.Header>
-      <LayoutPanel.Body
+    <UI5Panel title={title || 'Error'}>
+      <div
         style={{
           fontSize: '18px',
         }}
       >
         {getErrorMessage(error, t('components.error-panel.error'))}
-      </LayoutPanel.Body>
-    </LayoutPanel>
+      </div>
+    </UI5Panel>
   );
 };

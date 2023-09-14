@@ -1,5 +1,3 @@
-import classnames from 'classnames';
-import { LayoutPanel } from 'fundamental-react';
 import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -24,6 +22,7 @@ import { nameLocaleSort, timeSort } from 'shared/helpers/sortingfunctions';
 import { getErrorMessage } from 'shared/utils/helpers';
 import { pageSizeState } from 'state/preferences/pageSizeAtom';
 import './GenericList.scss';
+import { UI5Panel } from '../UI5Panel/UI5Panel';
 
 const defaultSort = {
   name: nameLocaleSort,
@@ -211,52 +210,32 @@ export const GenericList = ({
     ));
   };
 
-  const panelClassNames = classnames(
-    'ui5-generic-list',
-    {
-      'fd-margin--md': !className?.includes('fd-margin'),
-    },
-    className,
-  );
-
-  const tableClassNames = classnames('ui5-generic-list', {
-    'ui5-content-density-compact': compact,
-  });
-
   return (
-    <LayoutPanel className={panelClassNames} data-testid={testid}>
-      <LayoutPanel.Header className="fd-has-padding-left-small fd-has-padding-right-small">
-        <LayoutPanel.Head title={title} />
-        <LayoutPanel.Actions>{headerActions}</LayoutPanel.Actions>
-      </LayoutPanel.Header>
+    <UI5Panel title={title} headerActions={headerActions} data-testid={testid}>
+      <Table
+        className={'ui5-generic-list'}
+        columns={
+          <HeaderRenderer
+            entries={entries}
+            actions={actions}
+            headerRenderer={headerRenderer}
+          />
+        }
+      >
+        {renderTableBody()}
+      </Table>
 
-      <LayoutPanel.Body className="fd-has-padding-none">
-        <Table
-          className={tableClassNames}
-          columns={
-            <HeaderRenderer
-              entries={entries}
-              actions={actions}
-              headerRenderer={headerRenderer}
-            />
-          }
-        >
-          {renderTableBody()}
-        </Table>
-      </LayoutPanel.Body>
       {!!pagination &&
         (!pagination.autoHide ||
           filteredEntries.length > pagination.itemsPerPage) && (
-          <LayoutPanel.Footer>
-            <Pagination
-              itemsTotal={filteredEntries.length}
-              currentPage={currentPage}
-              itemsPerPage={pagination.itemsPerPage}
-              onChangePage={setCurrentPage}
-            />
-          </LayoutPanel.Footer>
+          <Pagination
+            itemsTotal={filteredEntries.length}
+            currentPage={currentPage}
+            itemsPerPage={pagination.itemsPerPage}
+            onChangePage={setCurrentPage}
+          />
         )}
-    </LayoutPanel>
+    </UI5Panel>
   );
 };
 

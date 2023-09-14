@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { groupBy } from 'lodash';
 import { Tokens } from 'shared/components/Tokens';
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
-import { LayoutPanel } from 'fundamental-react';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { YamlEditorProvider } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
@@ -14,6 +13,7 @@ import { SearchInput } from 'shared/components/GenericList/SearchInput';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { useRecoilState } from 'recoil';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 export function GroupingListPage({
   title,
@@ -40,11 +40,7 @@ export function GroupingListPage({
   }
 
   if (error) {
-    return (
-      <LayoutPanel className="fd-has-padding-regular fd-margin--md">
-        {error.message}
-      </LayoutPanel>
-    );
+    return <UI5Panel title={error.message} />;
   }
 
   let entries = Object.entries(crdsByGroup);

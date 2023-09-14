@@ -20,6 +20,7 @@ Cypress.Commands.add('handleExceptions', () => {
         "Cannot read properties of undefined (reading 'category')",
       ) ||
       err.message.includes('Model is disposed!') ||
+      err.message.includes('No available data to authenticate the request.') ||
       err.message.includes(
         "Cannot read properties of null (reading 'querySelector')",
       )

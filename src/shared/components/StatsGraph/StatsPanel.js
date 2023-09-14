@@ -1,7 +1,7 @@
 import { zip } from 'lodash';
 import React, { useState } from 'react';
 import { SegmentedButton, SegmentedButtonItem } from '@ui5/webcomponents-react';
-import { LayoutPanel, BusyIndicator } from 'fundamental-react';
+import { BusyIndicator } from 'fundamental-react';
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
 import { useFeature } from 'hooks/useFeature';
 import { getErrorMessage } from 'shared/utils/helpers';
@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { usePrometheus } from 'shared/hooks/usePrometheus';
 import { StatsGraph } from 'shared/components/StatsGraph';
 import { GraphLegend } from 'shared/components/GraphLegend/GraphLegend';
+import { UI5Panel } from '../UI5Panel/UI5Panel';
 
 import './StatsPanel.scss';
 
@@ -264,45 +265,55 @@ export function StatsPanel({
 
   const graphOptions = getGraphOptions(type);
   return (
-    <LayoutPanel className={`${className} stats-panel`}>
-      <LayoutPanel.Header>
-        <LayoutPanel.Filters>
-          {graphOptions?.length === 1 ? (
-            <LayoutPanel.Head title={t(`graphs.${graphOptions[0]}`)} />
-          ) : (
-            <Dropdown
+    <UI5Panel
+      disableMargin={props.disableMargin}
+      title={
+        graphOptions?.length === 1 ? (
+          t(`graphs.${graphOptions[0]}`)
+        ) : (
+          <Dropdown
+            compact
+            selectedKey={metric}
+            onSelect={(e, val) => {
+              setMetric(val.key);
+              setTimeSpan(getTimeSpansByMetric(val.key)[0]);
+            }}
+            options={graphOptions?.map(option => ({
+              key: option,
+              text: t(`graphs.${option}`),
+            }))}
+          />
+        )
+      }
+      headerActions={
+        <SegmentedButton>
+          {visibleTimeSpans.map(ts => (
+            <SegmentedButtonItem
               compact
-              selectedKey={metric}
-              onSelect={(e, val) => {
-                setMetric(val.key);
-                setTimeSpan(getTimeSpansByMetric(val.key)[0]);
-              }}
-              options={graphOptions?.map(option => ({
-                key: option,
-                text: t(`graphs.${option}`),
-              }))}
-            />
-          )}
-        </LayoutPanel.Filters>
-        <LayoutPanel.Actions>
-          <SegmentedButton>
-            {visibleTimeSpans.map(ts => (
-              <SegmentedButtonItem
-                compact
-                key={ts}
-                pressed={timeSpan === ts}
-                onClick={() => setTimeSpan(ts)}
-              >
-                {ts}
-              </SegmentedButtonItem>
-            ))}
-          </SegmentedButton>
-        </LayoutPanel.Actions>
-      </LayoutPanel.Header>
-      <LayoutPanel.Body>
-        {!dualGraphs.includes(metric) &&
-          (mode === 'multiple' ? (
-            <SingleMetricMultipeGraph
+              key={ts}
+              pressed={timeSpan === ts}
+              onClick={() => setTimeSpan(ts)}
+            >
+              {ts}
+            </SegmentedButtonItem>
+          ))}
+        </SegmentedButton>
+      }
+      className={`${className} stats-panel`}
+    >
+      {!dualGraphs.includes(metric) &&
+        (mode === 'multiple' ? (
+          <SingleMetricMultipeGraph
+            type={type}
+            mode={mode}
+            metric={metric}
+            className={metric}
+            timeSpan={timeSpans[timeSpan]}
+            {...props}
+          />
+        ) : (
+          <>
+            <SingleGraph
               type={type}
               mode={mode}
               metric={metric}
@@ -310,32 +321,21 @@ export function StatsPanel({
               timeSpan={timeSpans[timeSpan]}
               {...props}
             />
-          ) : (
-            <>
-              <SingleGraph
-                type={type}
-                mode={mode}
-                metric={metric}
-                className={metric}
-                timeSpan={timeSpans[timeSpan]}
-                {...props}
-              />
-              <GraphLegend values={getLegendValues(metric)} />
-            </>
-          ))}
-        {dualGraphs.includes(metric) && (
-          <>
-            <DualGraph
-              type={type}
-              mode={mode}
-              timeSpan={timeSpans[timeSpan]}
-              {...getDualGraphValues(metric, t)}
-              {...props}
-            />
             <GraphLegend values={getLegendValues(metric)} />
           </>
-        )}
-      </LayoutPanel.Body>
-    </LayoutPanel>
+        ))}
+      {dualGraphs.includes(metric) && (
+        <>
+          <DualGraph
+            type={type}
+            mode={mode}
+            timeSpan={timeSpans[timeSpan]}
+            {...getDualGraphValues(metric, t)}
+            {...props}
+          />
+          <GraphLegend values={getLegendValues(metric)} />
+        </>
+      )}
+    </UI5Panel>
   );
 }
