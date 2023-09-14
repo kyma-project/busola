@@ -133,7 +133,7 @@ Cypress.Commands.add(
     deletedVisible = true,
     clearSearch = true,
   ) => {
-    cy.get('[aria-label="open-search"]').click();
+    cy.get('[aria-label="open-search"]:visible').click();
 
     cy.get('[placeholder="Search"]').type(searchTerm);
 
@@ -162,7 +162,9 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add('changeCluster', clusterName => {
-  cy.get('[aria-haspopup="menu"]:visible').click();
+  cy.get('header')
+    .find('[aria-haspopup="menu"]:visible')
+    .click();
 
   cy.get('ui5-list')
     .find(`[aria-label="${clusterName}"]:visible`)

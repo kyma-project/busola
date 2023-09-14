@@ -197,7 +197,7 @@ export function StatsGraph({
   const geometry = getGeometry(ctx, { scale, hScale, dataPoints });
 
   const watchCss = [
-    ['color', textColor, setTextColor],
+    ['--sapTextColor', textColor, setTextColor],
     ['--bar-color', barColor, setBarColor],
     ['--highlight-color', highlightColor, setHighlightColor],
     ['--tooltip-color', tooltipColor, setTooltipColor],

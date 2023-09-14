@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Icon, LayoutPanel } from 'fundamental-react';
+import { Icon } from 'fundamental-react';
 import { Link } from 'react-router-dom';
 
 import { useUrl } from 'hooks/useUrl';
@@ -10,6 +10,7 @@ import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTim
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 const RowComponent = ({ name, value }) =>
   value ? <LayoutPanelRow name={name} value={value} /> : null;
@@ -18,25 +19,17 @@ const Message = event => {
   const { t } = useTranslation();
 
   return (
-    <LayoutPanel key="specification-panel" className="fd-margin--md">
-      <LayoutPanel.Header>
-        <LayoutPanel.Head title={t('events.headers.message')} />
-      </LayoutPanel.Header>
-      <LayoutPanel.Body>
-        {event.message && (
-          <RowComponent
-            name={t('events.headers.message')}
-            value={event.message}
-          />
-        )}
-        {event.reason && (
-          <RowComponent
-            name={t('events.headers.reason')}
-            value={event.reason}
-          />
-        )}
-      </LayoutPanel.Body>
-    </LayoutPanel>
+    <UI5Panel title={t('events.headers.message')} key="specification-panel">
+      {event.message && (
+        <RowComponent
+          name={t('events.headers.message')}
+          value={event.message}
+        />
+      )}
+      {event.reason && (
+        <RowComponent name={t('events.headers.reason')} value={event.reason} />
+      )}
+    </UI5Panel>
   );
 };
 

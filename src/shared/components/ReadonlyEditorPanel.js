@@ -1,7 +1,8 @@
 import React from 'react';
-import { LayoutPanel } from 'fundamental-react';
+
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
+import { UI5Panel } from './UI5Panel/UI5Panel';
 
 export function ReadonlyEditorPanel({ title, value, editorProps, actions }) {
   const [editor, setEditor] = React.useState(null);
@@ -13,28 +14,22 @@ export function ReadonlyEditorPanel({ title, value, editorProps, actions }) {
   };
 
   return (
-    <LayoutPanel className="fd-margin--md">
-      <LayoutPanel.Header>
-        <LayoutPanel.Head title={title} />
-        {actions && <LayoutPanel.Actions>{actions}</LayoutPanel.Actions>}
-      </LayoutPanel.Header>
-      <LayoutPanel.Body>
-        <EditorActions
-          val={value}
-          editor={editor}
-          title={title}
-          saveDisabled={true}
-        />
-        <Editor
-          height="20em"
-          value={value}
-          options={options}
-          onMount={setEditor}
-          autocompletionDisabled
-          readOnly
-          {...editorProps}
-        />
-      </LayoutPanel.Body>
-    </LayoutPanel>
+    <UI5Panel title={title} headerActions={actions}>
+      <EditorActions
+        val={value}
+        editor={editor}
+        title={title}
+        saveDisabled={true}
+      />
+      <Editor
+        height="20em"
+        value={value}
+        options={options}
+        onMount={setEditor}
+        autocompletionDisabled
+        readOnly
+        {...editorProps}
+      />
+    </UI5Panel>
   );
 }

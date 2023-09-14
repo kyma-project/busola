@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { themeState } from 'state/preferences/themeAtom';
 import './GraphLegend.scss';
+import { Text } from '@ui5/webcomponents-react';
 
 export function GraphLegend({ values, isStatsPanel = true }) {
   const { t } = useTranslation();
@@ -47,7 +48,9 @@ export function GraphLegend({ values, isStatsPanel = true }) {
             }
           ></div>
           <span>
-            {t(`graphs.${val.metric}`)} {val?.label}
+            <Text>
+              {t(`graphs.${val.metric}`)} {val?.label}
+            </Text>
           </span>
         </div>
       ))}

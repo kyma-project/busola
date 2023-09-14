@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { SegmentedButton, SegmentedButtonItem } from '@ui5/webcomponents-react';
-import { LayoutPanel } from 'fundamental-react';
 import EditorWrapper from 'shared/ResourceForm/fields/Editor';
 import { useTranslation } from 'react-i18next';
 
 import { JSONSchema } from './JSONSchema';
 
 import './SchemaViewer.scss';
+import { UI5Panel } from '../UI5Panel/UI5Panel';
 
 export function SchemaViewer({ name, schema }) {
   const [schemaMode, setSchemaMode] = useState('viewer');
@@ -14,12 +14,11 @@ export function SchemaViewer({ name, schema }) {
   const { t } = useTranslation();
 
   return (
-    <LayoutPanel key={`crd-schema-${name}`} className="fd-margin--md">
-      <LayoutPanel.Header>
-        <LayoutPanel.Head
-          title={t('custom-resource-definitions.subtitle.schema')}
-        />
-        <LayoutPanel.Actions>
+    <UI5Panel
+      title={t('custom-resource-definitions.subtitle.schema')}
+      key={`crd-schema-${name}`}
+      headerActions={
+        <>
           <SegmentedButton>
             <SegmentedButtonItem
               compact
@@ -43,43 +42,42 @@ export function SchemaViewer({ name, schema }) {
               {t('schema.modes.yaml')}
             </SegmentedButtonItem>
           </SegmentedButton>
-        </LayoutPanel.Actions>
-      </LayoutPanel.Header>
-      <LayoutPanel.Body>
-        {schemaMode === 'viewer' && (
-          <div className="schema-viewer">
-            <JSONSchema root={true} {...schema.openAPIV3Schema} />
-          </div>
-        )}
-        {schemaMode === 'json' && (
-          <EditorWrapper
-            language="json"
-            height="20em"
-            value={schema}
-            autocompletionDisabled
-            readOnly
-            options={{
-              minimap: {
-                enabled: false,
-              },
-            }}
-          />
-        )}
-        {schemaMode === 'yaml' && (
-          <EditorWrapper
-            language="yaml"
-            autocompletionDisabled
-            height="20em"
-            value={schema}
-            readOnly
-            options={{
-              minimap: {
-                enabled: false,
-              },
-            }}
-          />
-        )}
-      </LayoutPanel.Body>
-    </LayoutPanel>
+        </>
+      }
+    >
+      {schemaMode === 'viewer' && (
+        <div className="schema-viewer">
+          <JSONSchema root={true} {...schema.openAPIV3Schema} />
+        </div>
+      )}
+      {schemaMode === 'json' && (
+        <EditorWrapper
+          language="json"
+          height="20em"
+          value={schema}
+          autocompletionDisabled
+          readOnly
+          options={{
+            minimap: {
+              enabled: false,
+            },
+          }}
+        />
+      )}
+      {schemaMode === 'yaml' && (
+        <EditorWrapper
+          language="yaml"
+          autocompletionDisabled
+          height="20em"
+          value={schema}
+          readOnly
+          options={{
+            minimap: {
+              enabled: false,
+            },
+          }}
+        />
+      )}
+    </UI5Panel>
   );
 }

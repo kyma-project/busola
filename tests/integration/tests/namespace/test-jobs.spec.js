@@ -84,9 +84,7 @@ context('Test Jobs', () => {
     cy.contains(JOB_NAME);
 
     // created pod
-    cy.get('[data-test-id="workload-selector"]')
-      .contains(new RegExp(JOB_NAME + '-'))
-      .click();
+    cy.contains('a', new RegExp(JOB_NAME + '-')).click();
 
     // images for both containers
     cy.contains(/Imagebusybox/);
@@ -112,7 +110,7 @@ context('Test Jobs', () => {
 
     // back to job
     cy.contains(`Job (${JOB_NAME})`)
-      .contains(JOB_NAME)
+      .contains('a', JOB_NAME)
       .click();
 
     // pod status

@@ -37,7 +37,7 @@ context('Test Command Palette navigation', () => {
   });
 
   it('Basic navigation', () => {
-    cy.contains('Cluster Details');
+    cy.contains('ui5-title', 'Cluster Details');
 
     // navigate to namespace
     openCommandPalette();

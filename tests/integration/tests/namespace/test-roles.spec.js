@@ -60,15 +60,15 @@ context('Test Roles', () => {
   it('Check the Role details', () => {
     cy.contains('ui5-title', ROLE_NAME).should('be.visible');
 
-    cy.get('[data-testid=rules-list]')
+    cy.contains('ui5-panel', 'Rules')
       .find('[data-testid=get]')
       .should('not.have.text', '-');
 
-    cy.get('[data-testid=rules-list]')
+    cy.contains('ui5-panel', 'Rules')
       .find('[data-testid=create]')
       .should('not.have.text', '-');
 
-    cy.get('[data-testid=rules-list]')
+    cy.contains('ui5-panel', 'Rules')
       .find('[data-testid=watch]')
       .should('have.text', '-');
   });
@@ -91,15 +91,15 @@ context('Test Roles', () => {
   it('Check the Role details after edit', () => {
     cy.contains('ui5-title', ROLE_NAME).should('be.visible');
 
-    cy.get('[data-testid=rules-list]')
+    cy.contains('ui5-panel', 'Rules')
       .find('[data-testid=get]')
       .should('not.have.text', '-');
 
-    cy.get('[data-testid=rules-list]')
+    cy.contains('ui5-panel', 'Rules')
       .find('[data-testid=create]')
       .should('not.have.text', '-');
 
-    cy.get('[data-testid=rules-list]')
+    cy.contains('ui5-panel', 'Rules')
       .find('[data-testid=watch]')
       .should('not.have.text', '-');
   });
@@ -131,19 +131,19 @@ context('Test Roles', () => {
   it('Check the clone details', () => {
     cy.contains('ui5-title', CLONE_NAME).should('be.visible');
 
-    cy.get('[data-testid=rules-list]')
+    cy.contains('ui5-panel', 'Rules')
       .find('[data-testid=create]')
       .should('not.have.text', '-');
 
-    cy.get('[data-testid=rules-list]')
+    cy.contains('ui5-panel', 'Rules')
       .find('[data-testid=get]')
       .should('not.have.text', '-');
 
-    cy.get('[data-testid=rules-list]')
+    cy.contains('ui5-panel', 'Rules')
       .find('[data-testid=watch]')
       .should('not.have.text', '-');
 
-    cy.get('[data-testid=rules-list]')
+    cy.contains('ui5-panel', 'Rules')
       .find('[data-testid=list]')
       .should('have.text', '-');
   });

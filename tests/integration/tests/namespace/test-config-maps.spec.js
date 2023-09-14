@@ -45,7 +45,7 @@ context('Test Config Maps', () => {
   it('Inspect the Config Map', () => {
     cy.contains(CONFIG_MAP_NAME);
 
-    cy.contains('.fd-layout-panel', ENTRY_KEY).contains(ENTRY_VALUE);
+    cy.contains('ui5-panel', ENTRY_KEY).contains(ENTRY_VALUE);
   });
 
   it('Edit the Config Map', () => {
@@ -69,7 +69,7 @@ context('Test Config Maps', () => {
   });
 
   it('Inspect the updated Config Map', () => {
-    cy.contains('.fd-layout-panel', ENTRY_KEY2).contains(ENTRY_VALUE2);
+    cy.contains('ui5-panel', ENTRY_KEY2).contains(ENTRY_VALUE2);
   });
 
   it('Inspect list', () => {
@@ -98,8 +98,8 @@ context('Test Config Maps', () => {
   it('Inspect the clone', () => {
     cy.contains(CLONE_NAME);
 
-    cy.contains('.fd-layout-panel', ENTRY_KEY).contains(ENTRY_VALUE);
+    cy.contains('ui5-panel', ENTRY_KEY).contains(ENTRY_VALUE);
 
-    cy.contains('.fd-layout-panel', ENTRY_KEY2).contains(ENTRY_VALUE2);
+    cy.contains('ui5-panel', ENTRY_KEY2).contains(ENTRY_VALUE2);
   });
 });
