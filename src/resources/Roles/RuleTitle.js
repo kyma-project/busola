@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { isRuleInvalid, hasRuleRequiredProperties } from './helpers';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-import { Icon } from 'fundamental-react';
+import { Icon } from '@ui5/webcomponents-react';
 
 export function RuleTitle({ rule, i }) {
   const { t } = useTranslation();
@@ -15,9 +15,9 @@ export function RuleTitle({ rule, i }) {
       delay={0}
     >
       <Icon
-        className=" fd-color--warning"
-        ariaLabel={t('common.messages.validation-error')}
-        glyph="alert"
+        className="fd-color--warning"
+        aria-label={t('common.messages.validation-error')}
+        name="alert"
       />
     </Tooltip>
   );

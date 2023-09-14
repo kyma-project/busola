@@ -1,9 +1,10 @@
 import React from 'react';
-import { Icon } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { FormattedDatetime } from 'shared/components/FormattedDate/FormattedDate';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
+
 import './CertificateDate.scss';
+import { Icon } from '@ui5/webcomponents-react';
 
 export function CertificateDate({ date, lang }) {
   const { t } = useTranslation();
@@ -53,10 +54,9 @@ export function CertificateDate({ date, lang }) {
       <FormattedDatetime date={date} lang={lang} />
       <Tooltip content={certificateDetails.tooltipContent} className="tooltip">
         <Icon
-          ariaLabel={certificateDetails.ariaLabel}
-          glyph={certificateDetails.glyph}
-          size="s"
-          className={`fd-has-color-status-${certificateDetails.colorIndex} has-tooltip`}
+          aria-label={certificateDetails.ariaLabel}
+          name={certificateDetails.glyph}
+          className={`fd-has-color-status-${certificateDetails.colorIndex} has-tooltip ui5-icon-s`}
         />
       </Tooltip>
     </div>

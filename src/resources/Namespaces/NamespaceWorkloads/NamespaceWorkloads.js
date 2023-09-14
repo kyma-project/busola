@@ -124,7 +124,13 @@ export function NamespaceWorkloads({ namespace }) {
   return (
     <UI5Panel
       disableMargin
-      icon={<Icon name="stethoscope" aria-label="Health icon" />}
+      icon={
+        <Icon
+          className="ui5-icon-m"
+          name="stethoscope"
+          aria-label="Health icon"
+        />
+      }
       title={t('namespaces.overview.workloads.title')}
     >
       <div className="namespace-workloads__body">

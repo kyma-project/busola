@@ -59,11 +59,11 @@ context('Test Roles', () => {
     cy.contains('ui5-title', ROLE_NAME).should('be.visible');
 
     cy.contains('ui5-panel', 'Rules')
-      .find('[data-testid=get]')
+      .find('[aria-label="get"]')
       .should('not.have.text', '-');
 
     cy.contains('ui5-panel', 'Rules')
-      .find('[data-testid=create]')
+      .find('[aria-label="create"]')
       .should('not.have.text', '-');
 
     cy.contains('ui5-panel', 'Rules')
@@ -90,15 +90,15 @@ context('Test Roles', () => {
     cy.contains('ui5-title', ROLE_NAME).should('be.visible');
 
     cy.contains('ui5-panel', 'Rules')
-      .find('[data-testid=get]')
+      .find('[aria-label="get"]')
       .should('not.have.text', '-');
 
     cy.contains('ui5-panel', 'Rules')
-      .find('[data-testid=create]')
+      .find('[aria-label="create"]')
       .should('not.have.text', '-');
 
     cy.contains('ui5-panel', 'Rules')
-      .find('[data-testid=watch]')
+      .find('[aria-label="watch"]')
       .should('not.have.text', '-');
   });
 

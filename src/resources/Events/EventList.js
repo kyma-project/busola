@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { Icon } from 'fundamental-react';
 
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
@@ -9,6 +8,7 @@ import { useMessageList } from 'hooks/useMessageList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { useUrl } from 'hooks/useUrl';
+import { Icon } from '@ui5/webcomponents-react';
 
 export function EventList({
   defaultType,
@@ -52,19 +52,17 @@ export function EventList({
           {e.type === 'Warning' ? (
             <Tooltip content={e.type}>
               <Icon
-                ariaLabel="Warning"
-                glyph="message-warning"
-                size="s"
-                className="fd-has-color-status-2 has-tooltip"
+                aria-label="Warning"
+                name="message-warning"
+                className="fd-has-color-status-2 has-tooltip ui5-icon-m"
               />
             </Tooltip>
           ) : (
             <Tooltip content={e.type}>
               <Icon
-                ariaLabel="Normal"
-                glyph="message-information"
-                size="s"
-                className="has-tooltip"
+                aria-label="Normal"
+                name="message-information"
+                className="has-tooltip ui5-icon-m"
               />
             </Tooltip>
           )}

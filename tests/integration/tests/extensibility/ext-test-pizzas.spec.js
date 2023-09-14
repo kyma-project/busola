@@ -38,7 +38,7 @@ context('Test Pizzas', () => {
     cy.contains('Submit').click();
 
     cy.get('.fd-dialog__body')
-      .find('.sap-icon--message-success')
+      .find('.status-message-success')
       .should('have.length', 4);
 
     cy.loadFiles(
@@ -52,7 +52,7 @@ context('Test Pizzas', () => {
     cy.contains('Submit').click();
 
     cy.get('.fd-dialog__body')
-      .find('.sap-icon--message-success')
+      .find('.status-message-success')
       .should('have.length', 6);
   });
 

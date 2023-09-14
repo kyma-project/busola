@@ -34,7 +34,7 @@ context('Test extensibility variables', () => {
     cy.contains('Submit').click();
 
     cy.get('.fd-dialog__body')
-      .find('.sap-icon--message-success')
+      .find('.status-message-success')
       .should('have.length', 2);
 
     cy.loadFiles('examples/testing/samples/test-resource-samples.yaml').then(
@@ -47,7 +47,7 @@ context('Test extensibility variables', () => {
     cy.contains('Submit').click();
 
     cy.get('.fd-dialog__body')
-      .find('.sap-icon--message-success')
+      .find('.status-message-success')
       .should('have.length', 2);
   });
 

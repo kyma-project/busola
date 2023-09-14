@@ -3,11 +3,10 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import jsyaml from 'js-yaml';
-import { Button } from '@ui5/webcomponents-react';
-import { Icon } from 'fundamental-react';
+import { Button, Icon } from '@ui5/webcomponents-react';
+import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 
 import './SideDrawer.scss';
-import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 
 const MIN_EDITOR_RATIO = 33; // %
 const MAX_EDITOR_RATIO = 100;
@@ -86,9 +85,9 @@ export const SideDrawer = ({
           onClick={() => setOpen(!isOpen)}
         >
           <Icon
-            glyph={isOpen ? 'open-command-field' : 'close-command-field'}
-            size="l"
-            ariaLabel="Open/close the drawer"
+            name={isOpen ? 'open-command-field' : 'close-command-field'}
+            className="ui5-icon-l"
+            aria-label="Open/close the drawer"
           />
           {buttonText}
         </Button>
@@ -96,7 +95,11 @@ export const SideDrawer = ({
 
       <section className="content">
         <div className="handle" onMouseDown={onResizeStart}>
-          <Icon glyph="vertical-grip" ariaLabel="resize" size="m" />
+          <Icon
+            name="vertical-grip"
+            aria-label="resize"
+            className="ui5-icon-m"
+          />
         </div>
         <div className="content-wrapper">
           {children}

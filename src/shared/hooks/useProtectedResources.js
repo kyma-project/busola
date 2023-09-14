@@ -1,4 +1,4 @@
-import { Icon } from 'fundamental-react';
+import { Icon } from '@ui5/webcomponents-react';
 import { useFeature } from 'hooks/useFeature';
 import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
@@ -57,7 +57,7 @@ export function useProtectedResources() {
         content={message}
         delay={0}
       >
-        <Icon className="fd-object-status--critical" glyph="locked" />
+        <Icon design="Critical" name="locked" />
       </Tooltip>
     );
   };

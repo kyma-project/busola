@@ -151,7 +151,13 @@ export const ResourcesUsage = ({ namespace }) => {
   return (
     <UI5Panel
       disableMargin
-      icon={<Icon name="it-host" aria-label="Resource icon" />}
+      icon={
+        <Icon
+          className="ui5-icon-m"
+          name="it-host"
+          aria-label="Resource icon"
+        />
+      }
       title={t('namespaces.overview.resources.title')}
     >
       <div className="resources-usage__body">
