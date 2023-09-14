@@ -29,8 +29,8 @@ context('Test Services', () => {
 
     cy.contains('Submit').click();
 
-    cy.get('ui5-dialog[accessible-role="Dialog"]')
-      .find('.sap-icon--message-success')
+    cy.get('.yaml-upload-modal')
+      .find('.status-message-success')
       .should('have.length', 1);
 
     cy.loadFiles('examples/services/samples.yaml').then(resources => {
@@ -40,8 +40,8 @@ context('Test Services', () => {
 
     cy.contains('Submit').click();
 
-    cy.get('ui5-dialog[accessible-role="Dialog"]')
-      .find('.sap-icon--message-success')
+    cy.get('.ui5-dialog[accessible-role="Dialog"]')
+      .find('.status-message-success')
       .should('have.length', 1);
   });
 

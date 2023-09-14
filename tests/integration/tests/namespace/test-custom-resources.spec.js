@@ -36,8 +36,8 @@ context('Test Custom Resources', () => {
       .should('be.visible')
       .click();
 
-    cy.get('ui5-dialog[accessible-role="Dialog"]')
-      .find('.sap-icon--message-success')
+    cy.get('.ui5-dialog[accessible-role="Dialog"]')
+      .find('.status-message-success')
       .should('have.length', 1);
 
     cy.get('ui5-dialog[accessible-role="Dialog"]')

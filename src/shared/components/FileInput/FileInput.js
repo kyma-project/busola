@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from 'fundamental-react';
+import { Icon } from '@ui5/webcomponents-react';
 import classNames from 'classnames';
-import './FileInput.scss';
 import { useTranslation } from 'react-i18next';
+
+import './FileInput.scss';
 
 FileInput.propTypes = {
   fileInputChanged: PropTypes.func.isRequired,
@@ -71,7 +72,7 @@ export function FileInput({
         multiple={allowMultiple}
       />
       <div>
-        <Icon glyph="upload" ariaLabel="file upload" />
+        <Icon name="upload" aria-label="file upload" design="Information" />
         <p>{t('components.file-input.drag-file')}</p>
         {availableFormatsMessage && (
           <p className="file-input__secondary">{availableFormatsMessage}</p>

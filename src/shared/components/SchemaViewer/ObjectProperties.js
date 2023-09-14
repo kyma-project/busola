@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
-import { Icon } from 'fundamental-react';
+import { Icon } from '@ui5/webcomponents-react';
 
 import { Generic, PROPERTIES } from './handlers';
 import { Text } from '@ui5/webcomponents-react';
@@ -28,8 +28,8 @@ function ObjectProperty({
         {handler.expandable && (
           <Icon
             className="control-icon"
-            ariaHidden
-            glyph={
+            aria-hidden
+            name={
               collapsed ? 'navigation-right-arrow' : 'navigation-down-arrow'
             }
           />

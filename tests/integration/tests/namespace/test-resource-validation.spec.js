@@ -40,7 +40,9 @@ context('Test resource validation', () => {
 
     cy.contains('Cluster interaction').click();
 
-    cy.contains('Resource Validation').click();
+    cy.contains('Resource Validation')
+      .parentsUntil('[role=tab]')
+      .click({ force: true });
 
     cy.contains('ui5-panel', 'Validate Resources')
       .find('.fd-switch')
@@ -72,7 +74,9 @@ context('Test resource validation', () => {
 
     cy.contains('Cluster interaction').click();
 
-    cy.contains('Resource Validation').click();
+    cy.contains('Resource Validation')
+      .parentsUntil('[role=tab]')
+      .click({ force: true });
 
     cy.contains('Customize').click();
 
@@ -116,7 +120,9 @@ context('Test resource validation', () => {
 
     cy.contains('Cluster interaction').click();
 
-    cy.contains('Resource Validation').click();
+    cy.contains('Resource Validation')
+      .parentsUntil('[role=tab]')
+      .click({ force: true });
 
     cy.get('ui5-button[data-testid="reset-validation-policies"]') //.get('ui5-dialog[accessible-role="Dialog"]')
       .contains('Reset')

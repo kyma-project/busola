@@ -40,7 +40,7 @@ context('Test Pizzas', () => {
     cy.contains('Submit').click();
 
     cy.get('.yaml-upload-modal')
-      .find('.sap-icon--message-success')
+      .find('.status-message-success')
       .should('have.length', 4);
 
     cy.loadFiles(
@@ -54,7 +54,7 @@ context('Test Pizzas', () => {
     cy.contains('Submit').click();
 
     cy.get('.yaml-upload-modal')
-      .find('.sap-icon--message-success')
+      .find('.status-message-success')
       .should('have.length', 6);
   });
 

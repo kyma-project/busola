@@ -35,8 +35,8 @@ context('Test extensibility variables', () => {
 
     cy.contains('Submit').click();
 
-    cy.get('ui5-dialog[accessible-role="Dialog"]')
-      .find('.sap-icon--message-success')
+    cy.get('.ui5-dialog[accessible-role="Dialog"]')
+      .find('.status-message-success')
       .should('have.length', 2);
 
     cy.loadFiles('examples/testing/samples/test-resource-samples.yaml').then(
@@ -48,8 +48,8 @@ context('Test extensibility variables', () => {
 
     cy.contains('Submit').click();
 
-    cy.get('ui5-dialog[accessible-role="Dialog"]')
-      .find('.sap-icon--message-success')
+    cy.get('.ui5-dialog[accessible-role="Dialog"]')
+      .find('.status-message-success')
       .should('have.length', 2);
   });
 

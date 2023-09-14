@@ -1,4 +1,3 @@
-import { IconGlyph } from 'fundamental-react/lib/Icon/Icon';
 import { NavNode } from '../types';
 
 export type PredefinedCategories = typeof predefinedCategories[keyof typeof predefinedCategories];
@@ -17,7 +16,7 @@ export const predefinedCategories = {
 
 export type Category = {
   key: PredefinedCategories;
-  icon: IconGlyph;
+  icon: string;
   label: string;
   items: NavNode[];
 
