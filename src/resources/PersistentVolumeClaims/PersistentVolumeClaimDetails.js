@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { LayoutPanel } from 'fundamental-react';
 import { isEqual } from 'lodash';
 import { Link } from 'react-router-dom';
 
@@ -19,6 +18,7 @@ import { useUrl } from 'hooks/useUrl';
 
 import PersistentVolumesList from 'resources/PersistentVolumes/PersistentVolumeList';
 import { PersistentVolumeClaimCreate } from './PersistentVolumeClaimCreate';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 const RelatedVolumes = ({ labels }) => {
   const PVParams = {
@@ -66,63 +66,59 @@ export const PVCConfiguration = pvc => {
     '/apis/storage.k8s.io/v1/storageclasses',
   );
   return (
-    <LayoutPanel className="fd-margin--md" key={'pvc-configuration'}>
-      <LayoutPanel.Header>
-        <LayoutPanel.Head
-          title={t('persistent-volume-claims.headers.configuration')}
-        />
-      </LayoutPanel.Header>
-      <LayoutPanel.Body>
-        <LayoutPanelRow
-          key={pvc.spec?.volumeMode}
-          name={t('persistent-volume-claims.headers.volume-mode')}
-          value={pvc.spec?.volumeMode}
-        />
-        <LayoutPanelRow
-          key={pvc.spec?.accessModes}
-          name={t('persistent-volume-claims.headers.access-modes')}
-          value={<Tokens tokens={pvc.spec?.accessModes} />}
-        />
-        <LayoutPanelRow
-          key={pvc.spec?.volumeName}
-          name={t('persistent-volume-claims.headers.volume-name')}
-          value={
-            pvc.spec?.volumeName ? (
-              <Link
-                className="fd-link"
-                to={clusterUrl(`persistentvolumes/${pvc.spec?.volumeName}`)}
-              >
-                {pvc.spec?.volumeName}
-              </Link>
-            ) : (
-              <p>{EMPTY_TEXT_PLACEHOLDER}</p>
-            )
-          }
-        />
-        <LayoutPanelRow
-          key={pvc.spec?.storageClassName}
-          name={t('persistent-volume-claims.headers.storage-class-name')}
-          value={
-            storageClasses?.find(
-              ({ metadata }) => metadata.name === pvc.spec?.storageClassName,
-            ) ? (
-              <Link
-                className="fd-link"
-                to={clusterUrl(`storageclasses/${pvc.spec?.storageClassName}`)}
-              >
-                {pvc.spec?.storageClassName}
-              </Link>
-            ) : (
-              <p>
-                {pvc.spec?.storageClassName !== ''
-                  ? pvc.spec?.storageClassName
-                  : EMPTY_TEXT_PLACEHOLDER}
-              </p>
-            )
-          }
-        />
-      </LayoutPanel.Body>
-    </LayoutPanel>
+    <UI5Panel
+      title={t('persistent-volume-claims.headers.configuration')}
+      key={'pvc-configuration'}
+    >
+      <LayoutPanelRow
+        key={pvc.spec?.volumeMode}
+        name={t('persistent-volume-claims.headers.volume-mode')}
+        value={pvc.spec?.volumeMode}
+      />
+      <LayoutPanelRow
+        key={pvc.spec?.accessModes}
+        name={t('persistent-volume-claims.headers.access-modes')}
+        value={<Tokens tokens={pvc.spec?.accessModes} />}
+      />
+      <LayoutPanelRow
+        key={pvc.spec?.volumeName}
+        name={t('persistent-volume-claims.headers.volume-name')}
+        value={
+          pvc.spec?.volumeName ? (
+            <Link
+              className="fd-link"
+              to={clusterUrl(`persistentvolumes/${pvc.spec?.volumeName}`)}
+            >
+              {pvc.spec?.volumeName}
+            </Link>
+          ) : (
+            <p>{EMPTY_TEXT_PLACEHOLDER}</p>
+          )
+        }
+      />
+      <LayoutPanelRow
+        key={pvc.spec?.storageClassName}
+        name={t('persistent-volume-claims.headers.storage-class-name')}
+        value={
+          storageClasses?.find(
+            ({ metadata }) => metadata.name === pvc.spec?.storageClassName,
+          ) ? (
+            <Link
+              className="fd-link"
+              to={clusterUrl(`storageclasses/${pvc.spec?.storageClassName}`)}
+            >
+              {pvc.spec?.storageClassName}
+            </Link>
+          ) : (
+            <p>
+              {pvc.spec?.storageClassName !== ''
+                ? pvc.spec?.storageClassName
+                : EMPTY_TEXT_PLACEHOLDER}
+            </p>
+          )
+        }
+      />
+    </UI5Panel>
   );
 };
 

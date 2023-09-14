@@ -169,7 +169,7 @@ export function ClusterNodes() {
           />
         )}
       <div className="fd-margin--md cluster-overview__graphs-wrapper">
-        <StatsPanel type="cluster" className="" />
+        <StatsPanel type="cluster" className="" disableMargin />
         <ResourceCommitment />
       </div>
       {Events}

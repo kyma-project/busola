@@ -45,7 +45,7 @@ context('Test Cluster Overview', () => {
   it('Go to Node details', () => {
     cy.wait(500);
 
-    cy.get('[data-testid=cluster-nodes]').within(_ => {
+    cy.contains('ui5-panel', 'Nodes').within(_ => {
       cy.get('a')
         .first()
         .click();

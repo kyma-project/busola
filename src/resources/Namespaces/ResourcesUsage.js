@@ -1,5 +1,4 @@
 import React from 'react';
-import { LayoutPanel } from 'fundamental-react';
 import { CircleProgress } from 'shared/components/CircleProgress/CircleProgress';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { Spinner } from 'shared/components/Spinner/Spinner';
@@ -7,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { getSIPrefix } from 'shared/helpers/siPrefixes';
 import { Icon } from '@ui5/webcomponents-react';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 const MEMORY_SUFFIX_POWER = {
   // must be sorted from the smallest to the largest; it is case sensitive; more info: https://medium.com/swlh/understanding-kubernetes-resource-cpu-and-memory-units-30284b3cc866
@@ -149,16 +149,18 @@ export const ResourcesUsage = ({ namespace }) => {
   );
 
   return (
-    <LayoutPanel>
-      <LayoutPanel.Header>
+    <UI5Panel
+      disableMargin
+      icon={
         <Icon
-          className="fd-margin-end--sm ui5-icon-m"
+          className="ui5-icon-m"
           name="it-host"
           aria-label="Resource icon"
         />
-        <LayoutPanel.Head title={t('namespaces.overview.resources.title')} />
-      </LayoutPanel.Header>
-      <LayoutPanel.Body className="resources-usage__body">
+      }
+      title={t('namespaces.overview.resources.title')}
+    >
+      <div className="resources-usage__body">
         <MemoryRequestsCircle
           resourceQuotas={resourceQuotas}
           isLoading={loading}
@@ -167,7 +169,7 @@ export const ResourcesUsage = ({ namespace }) => {
           resourceQuotas={resourceQuotas}
           isLoading={loading}
         />
-      </LayoutPanel.Body>
-    </LayoutPanel>
+      </div>
+    </UI5Panel>
   );
 };

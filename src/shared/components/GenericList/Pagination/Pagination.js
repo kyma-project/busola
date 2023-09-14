@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Icon } from '@ui5/webcomponents-react';
-import './Pagination.scss';
+import { Button, Text, Icon } from '@ui5/webcomponents-react';
 import classNames from 'classnames';
+
+import './Pagination.scss';
 
 const makePartitions = (currentPage, pagesCount) => {
   const radius = 2;
@@ -65,7 +66,7 @@ export const Pagination = ({
 
       {partitions.map((current, i) => (
         <React.Fragment key={i}>
-          {i > 0 && current - partitions[i - 1] > 1 && '...'}
+          {i > 0 && current - partitions[i - 1] > 1 && <Text>...</Text>}
           <Link
             isInteractable={current + 1 !== currentPage}
             isCurrent={current + 1 === currentPage}

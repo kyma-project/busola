@@ -15,13 +15,6 @@
   margin-right: 20px;
 }
 
-.logs-panel {
-  max-height: calc(100% - 152px); // 88px(header height) + 2*32px(padding)
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-}
-
 .logs-panel-header {
   min-height: unset;
 }

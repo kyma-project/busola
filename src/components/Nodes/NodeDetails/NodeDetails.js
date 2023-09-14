@@ -1,17 +1,16 @@
 import React from 'react';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useTranslation } from 'react-i18next';
-import { Title } from 'fundamental-react';
 import { useNodeQuery } from '../nodeQueries';
 import { NodeDetailsHeader } from '../NodeDetailsHeader';
 import { MachineInfo } from '../MachineInfo/MachineInfo';
 import { NodeResources } from '../NodeResources/NodeResources';
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
-
-import './NodeDetails.scss';
 import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
 import { useFeature } from 'hooks/useFeature';
+
+import './NodeDetails.scss';
 
 function NodeDetails({ nodeName }) {
   const { data, error, loading } = useNodeQuery(nodeName);
@@ -47,9 +46,7 @@ function NodeDetails({ nodeName }) {
             ) : (
               <NodeResources
                 {...data}
-                headerContent={
-                  <Title level={5}>{t('common.headers.resources')}</Title>
-                }
+                headerContent={t('common.headers.resources')}
               />
             )}
             <MachineInfo
