@@ -12,7 +12,7 @@ export function NodeResources({ metrics, headerContent }) {
   return (
     <UI5Panel disableMargin title={headerContent} className="node-resources">
       {cpu && memory ? (
-        <>
+        <div className="nodes-workloads__body">
           <CircleProgress
             color="var(--sapIndicationColor_7)"
             value={cpu.usage}
@@ -35,7 +35,7 @@ export function NodeResources({ metrics, headerContent }) {
               position: 'right',
             }}
           />
-        </>
+        </div>
       ) : (
         t('components.error-panel.error')
       )}
