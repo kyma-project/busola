@@ -60,7 +60,7 @@ context('Test Cluster Validation Scan', () => {
   });
 
   it('Cluster Scan', () => {
-    cy.contains('Cluster Validation').should('be.visible');
+    cy.contains('ui5-title', 'Cluster Validation').should('be.visible');
 
     cy.contains('Scan Progress').should('not.exist');
     cy.contains('Scan Result').should('not.exist');

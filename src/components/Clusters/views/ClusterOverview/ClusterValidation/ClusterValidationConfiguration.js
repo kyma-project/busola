@@ -1,5 +1,5 @@
-import { Button } from '@ui5/webcomponents-react';
-import { Dialog, FormFieldset } from 'fundamental-react';
+import { Dialog, Button, Bar } from '@ui5/webcomponents-react';
+import { FormFieldset } from 'fundamental-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
@@ -199,27 +199,34 @@ export function ClusterValidationConfigurationDialog({
 
   return (
     <Dialog
-      show={show}
-      className="yaml-upload-modal"
-      title={t('cluster-validation.scan.configuration.title')}
-      actions={[
-        <Button
-          design="Transparent"
-          onClick={() => {
-            onCancel();
-          }}
-        >
-          {t('common.buttons.cancel')}
-        </Button>,
-        <Button
-          desgin="Emphasized"
-          onClick={() => {
-            onSubmit(tempConfiguration);
-          }}
-        >
-          {t('common.buttons.submit')}
-        </Button>,
-      ]}
+      open={show}
+      headerText={t('cluster-validation.scan.configuration.title')}
+      footer={
+        <Bar
+          design="Footer"
+          endContent={
+            <>
+              <Button
+                design="Transparent"
+                onClick={() => {
+                  onCancel();
+                }}
+              >
+                {t('common.buttons.cancel')}
+              </Button>
+              <Button
+                desgin="Emphasized"
+                onClick={() => {
+                  onSubmit(tempConfiguration);
+                }}
+              >
+                {t('common.buttons.submit')}
+              </Button>
+            </>
+          }
+        />
+      }
+      style={{ height: '90vh', width: '125vh' }}
     >
       <ErrorBoundary>
         <ConfigurationForm
