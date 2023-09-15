@@ -1,7 +1,11 @@
 import { zip } from 'lodash';
 import React, { useState } from 'react';
-import { SegmentedButton, SegmentedButtonItem } from '@ui5/webcomponents-react';
-import { BusyIndicator } from 'fundamental-react';
+import {
+  BusyIndicator,
+  SegmentedButton,
+  SegmentedButtonItem,
+} from '@ui5/webcomponents-react';
+
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
 import { useFeature } from 'hooks/useFeature';
 import { getErrorMessage } from 'shared/utils/helpers';
@@ -40,21 +44,26 @@ export function SingleGraph({ type, mode, timeSpan, metric, ...props }) {
   return (
     <>
       {!error ? (
-        <StatsGraph
-          data={data}
-          binary={binary}
-          unit={unit}
-          startDate={startDate}
-          endDate={endDate}
-          dataPoints={DATA_POINTS}
-          {...props}
+        <BusyIndicator
+          delay="0"
+          active={loading}
+          children={
+            <StatsGraph
+              data={data}
+              binary={binary}
+              unit={unit}
+              startDate={startDate}
+              endDate={endDate}
+              dataPoints={DATA_POINTS}
+              {...props}
+            />
+          }
         />
       ) : (
         <div className="error-message">
           <p>{getErrorMessage(error, t('components.error-panel.error'))}</p>
         </div>
       )}
-      <BusyIndicator className="throbber" show={loading} />
     </>
   );
 }
@@ -93,14 +102,20 @@ export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
   return (
     <>
       {!error1 && !error2 ? (
-        <StatsGraph
-          data={zip(data1, data2)}
-          binary={binary}
-          unit={unit}
-          startDate={startDate}
-          endDate={endDate}
-          dataPoints={DATA_POINTS}
-          {...props}
+        <BusyIndicator
+          delay="0"
+          active={loading1 || loading2}
+          children={
+            <StatsGraph
+              data={zip(data1, data2)}
+              binary={binary}
+              unit={unit}
+              startDate={startDate}
+              endDate={endDate}
+              dataPoints={DATA_POINTS}
+              {...props}
+            />
+          }
         />
       ) : (
         <div className="error-message">
@@ -112,7 +127,6 @@ export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
           )}
         </div>
       )}
-      <BusyIndicator className="throbber" show={loading1 || loading2} />
     </>
   );
 }
@@ -158,22 +172,27 @@ export function SingleMetricMultipeGraph({
   return (
     <>
       {!error ? (
-        <StatsGraph
-          data={zip(...data)}
-          binary={binary}
-          unit={unit}
-          startDate={startDate}
-          endDate={endDate}
-          dataPoints={DATA_POINTS}
-          labels={labels ? labels : defaultLabels}
-          {...props}
+        <BusyIndicator
+          delay="0"
+          active={loading}
+          children={
+            <StatsGraph
+              data={zip(...data)}
+              binary={binary}
+              unit={unit}
+              startDate={startDate}
+              endDate={endDate}
+              dataPoints={DATA_POINTS}
+              labels={labels ? labels : defaultLabels}
+              {...props}
+            />
+          }
         />
       ) : (
         <div className="error-message">
           <p>{getErrorMessage(error, t('components.error-panel.error'))}</p>
         </div>
       )}
-      <BusyIndicator className="throbber" show={loading} />
       <GraphLegend values={legendValues} />
     </>
   );
