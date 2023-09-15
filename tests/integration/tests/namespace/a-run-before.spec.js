@@ -10,7 +10,7 @@ context('Create Namespace', () => {
       .contains('Namespaces')
       .click();
 
-    cy.contains('Create Namespace').click();
+    cy.contains('ui5-button', 'Create Namespace').click();
 
     cy.contains('Advanced').click();
 

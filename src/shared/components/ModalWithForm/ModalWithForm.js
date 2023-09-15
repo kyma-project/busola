@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@ui5/webcomponents-react';
-import { Dialog } from 'fundamental-react';
+import { Dialog, Button, Bar } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -150,28 +149,35 @@ export const ModalWithForm = ({
     <>
       {alwaysOpen ? null : renderModalOpeningComponent()}
       <Dialog
+        style={{ height: '90vh', width: '125vh' }}
         className={className}
         {...props}
-        show={isOpen}
-        actions={[
-          renderConfirmButton(),
-          <Button onClick={resetFormFn} design="Transparent">
-            {t('common.buttons.reset')}
-          </Button>,
-          <Button
-            onClick={() => {
-              setOpenStatus(false);
-            }}
-            design="Transparent"
-          >
-            {t('common.buttons.cancel')}
-          </Button>,
-        ]}
-        disableAutoClose={true}
-        onClose={() => {
+        open={isOpen}
+        footer={
+          <Bar
+            design="Footer"
+            endContent={
+              <>
+                {renderConfirmButton()}
+                <Button onClick={resetFormFn} design="Transparent">
+                  {t('common.buttons.reset')}
+                </Button>
+                <Button
+                  onClick={() => {
+                    setOpenStatus(false);
+                  }}
+                  design="Transparent"
+                >
+                  {t('common.buttons.cancel')}
+                </Button>
+              </>
+            }
+          />
+        }
+        onAfterClose={() => {
           setOpenStatus(false);
         }}
-        title={title}
+        headerText={title}
       >
         {isOpen &&
           renderForm({
