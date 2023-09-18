@@ -103,6 +103,14 @@ body {
   }
 }
 
+// ui5-static-area-item {
+//   display: none;
+// }
+
+ui5-dialog {
+  z-index: 1000 !important;
+}
+
 .fd-dialog {
   z-index: 1000;
 

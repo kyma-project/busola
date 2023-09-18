@@ -96,6 +96,15 @@ export function ResourcesList(props) {
     return <></>; // wait for the context update
   }
 
+  const content = props.resources ? (
+    <ResourceListRenderer
+      resources={(props.resources || []).filter(props.filterFn)}
+      {...props}
+    />
+  ) : (
+    <Resources {...props} />
+  );
+
   return (
     <YamlEditorProvider>
       {!props.isCompact && (
@@ -112,15 +121,8 @@ export function ResourcesList(props) {
             </>
           }
           description={props.description}
+          content={content}
         />
-      )}
-      {props.resources ? (
-        <ResourceListRenderer
-          resources={(props.resources || []).filter(props.filterFn)}
-          {...props}
-        />
-      ) : (
-        <Resources {...props} />
       )}
     </YamlEditorProvider>
   );

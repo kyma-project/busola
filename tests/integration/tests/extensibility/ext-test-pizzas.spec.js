@@ -35,7 +35,9 @@ context('Test Pizzas', () => {
       cy.pasteToMonaco(input);
     });
 
-    cy.contains('Submit').click();
+    cy.get('[aria-label="Upload YAML"]')
+      .contains('Submit')
+      .click({ force: true });
 
     cy.get('.fd-dialog__body')
       .find('.status-message-success')
@@ -49,7 +51,9 @@ context('Test Pizzas', () => {
       cy.pasteToMonaco(input);
     });
 
-    cy.contains('Submit').click();
+    cy.get('[aria-label="Upload YAML"]')
+      .contains('Submit')
+      .click({ force: true });
 
     cy.get('.fd-dialog__body')
       .find('.status-message-success')
@@ -59,7 +63,9 @@ context('Test Pizzas', () => {
   it('Displays the Pizza Orders list/detail views from the samples', () => {
     cy.loginAndSelectCluster();
 
-    cy.contains('Namespaces').click();
+    cy.getLeftNav()
+      .contains('Namespaces')
+      .click();
 
     cy.contains('a', 'pizzas').click();
 
@@ -89,7 +95,7 @@ context('Test Pizzas', () => {
       .should('be.visible')
       .click();
 
-    cy.get('[role="document"]').as('form');
+    cy.get('ui5-dialog').as('form');
 
     cy.get('@form').contains('Name');
     cy.get('@form').contains('Labels');
@@ -137,9 +143,9 @@ context('Test Pizzas', () => {
   });
 
   it('Tests the Create Form', () => {
-    cy.contains('Create Pizza').click();
+    cy.contains('ui5-button', 'Create Pizza').click();
 
-    cy.get('[role="document"]').as('form');
+    cy.get('ui5-dialog').as('form');
 
     cy.get('@form')
       .find('[data-testid="spec.description"]:visible')
@@ -164,8 +170,7 @@ context('Test Pizzas', () => {
       .type(PIZZA_NAME);
 
     cy.get('@form')
-      .get('ui5-button.fd-dialog__decisive-button')
-      .contains('Create')
+      .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
 

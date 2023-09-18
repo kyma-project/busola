@@ -32,10 +32,14 @@ export const PageHeader = ({
   actions,
   children,
   columnWrapperClassName,
+  content,
 }) => {
   return (
     <DynamicPage
-      style={title === 'Clusters Overview' ? { height: '50px' } : null}
+      style={{
+        height: '100vh',
+      }}
+      // style={title === 'Clusters Overview' ? { height: '50px' } : null}
       className="page-header"
       alwaysShowContentHeader
       showHideHeaderButton={false}
@@ -71,7 +75,9 @@ export const PageHeader = ({
           </section>
         </DynamicPageHeader>
       }
-    />
+    >
+      {content}
+    </DynamicPage>
   );
 };
 PageHeader.Column = Column;

@@ -362,6 +362,44 @@ function Resource({
         title={resource.metadata.name}
         actions={actions}
         breadcrumbItems={breadcrumbItems}
+        content={
+          <>
+            {' '}
+            <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />
+            <Suspense fallback={<Spinner />}>
+              <Injections
+                destination={resourceType}
+                slot="details-top"
+                root={resource}
+              />
+            </Suspense>
+            {(customComponents || []).map(component =>
+              component(resource, resourceUrl),
+            )}
+            {children}
+            {resourceGraphConfig?.[resource.kind] && (
+              <Suspense fallback={<Spinner />}>
+                <ResourceGraph
+                  resource={resource}
+                  config={resourceGraphConfig}
+                />
+              </Suspense>
+            )}
+            <Suspense fallback={<Spinner />}>
+              <Injections
+                destination={resourceType}
+                slot="details-bottom"
+                root={resource}
+              />
+            </Suspense>
+            <YamlUploadDialog
+              show={showAdd}
+              onCancel={() => {
+                setShowAdd(false);
+              }}
+            />
+          </>
+        }
       >
         <PageHeader.Column
           key="Labels"
@@ -383,36 +421,6 @@ function Resource({
           </PageHeader.Column>
         ))}
       </PageHeader>
-      <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />
-      <Suspense fallback={<Spinner />}>
-        <Injections
-          destination={resourceType}
-          slot="details-top"
-          root={resource}
-        />
-      </Suspense>
-      {(customComponents || []).map(component =>
-        component(resource, resourceUrl),
-      )}
-      {children}
-      {resourceGraphConfig?.[resource.kind] && (
-        <Suspense fallback={<Spinner />}>
-          <ResourceGraph resource={resource} config={resourceGraphConfig} />
-        </Suspense>
-      )}
-      <Suspense fallback={<Spinner />}>
-        <Injections
-          destination={resourceType}
-          slot="details-bottom"
-          root={resource}
-        />
-      </Suspense>
-      <YamlUploadDialog
-        show={showAdd}
-        onCancel={() => {
-          setShowAdd(false);
-        }}
-      />
     </>
   );
 }

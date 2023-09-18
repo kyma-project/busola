@@ -149,8 +149,8 @@ export const ModalWithForm = ({
     <>
       {alwaysOpen ? null : renderModalOpeningComponent()}
       <Dialog
-        style={{ height: '90vh', width: '125vh' }}
-        className={className}
+        style={{ height: '70vh', width: '100vh' }}
+        // className={`${className}`}
         {...props}
         open={isOpen}
         footer={
