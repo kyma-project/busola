@@ -82,13 +82,14 @@ export function Header() {
         }
         onProfileClick={() => setPreferencesOpen(true)}
       >
-        {window.location.pathname !== '/clusters' && (
-          <ShellBarItem
-            onClick={() => setShowAdd(true)}
-            icon="add"
-            text="Upload YAML"
-          />
-        )}
+        {window.location.pathname !== '/clusters' &&
+          !window.location.pathname.endsWith('/no-permissions') && (
+            <ShellBarItem
+              onClick={() => setShowAdd(true)}
+              icon="add"
+              text="Upload YAML"
+            />
+          )}
         {isFeedbackEnabled && (
           <ShellBarItem
             onClick={() => window.open(feedbackLink, '_blank')}
