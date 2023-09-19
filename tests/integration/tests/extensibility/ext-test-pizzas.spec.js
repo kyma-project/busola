@@ -23,7 +23,7 @@ context('Test Pizzas', () => {
       .contains('Cluster Details')
       .click();
 
-    cy.contains('Upload YAML').click();
+    cy.contains('ui5-button', 'Upload YAML').click();
 
     cy.loadFiles(
       'examples/pizzas/configuration/pizzas-configmap.yaml',
@@ -35,11 +35,12 @@ context('Test Pizzas', () => {
       cy.pasteToMonaco(input);
     });
 
-    cy.get('[aria-label="Upload YAML"]')
-      .contains('Submit')
-      .click({ force: true });
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Submit')
+      .should('be.visible')
+      .click();
 
-    cy.get('.fd-dialog__body')
+    cy.get('ui5-dialog')
       .find('.status-message-success')
       .should('have.length', 4);
 
@@ -51,11 +52,12 @@ context('Test Pizzas', () => {
       cy.pasteToMonaco(input);
     });
 
-    cy.get('[aria-label="Upload YAML"]')
-      .contains('Submit')
-      .click({ force: true });
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Submit')
+      .should('be.visible')
+      .click();
 
-    cy.get('.fd-dialog__body')
+    cy.get('ui5-dialog')
       .find('.status-message-success')
       .should('have.length', 6);
   });
