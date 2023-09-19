@@ -54,7 +54,7 @@ const GardenerProvider = () => {
   );
 };
 
-export function ClusterOverviewHeader() {
+export function ClusterOverviewHeader(content) {
   const { t } = useTranslation();
   const cluster = useRecoilValue(clusterState);
   const { currentCluster } = useClustersInfo();
@@ -77,6 +77,7 @@ export function ClusterOverviewHeader() {
       <PageHeader
         title={t('clusters.overview.title-current-cluster')}
         actions={actions}
+        content={content?.content}
       >
         <Versions />
         <PageHeader.Column title={t('clusters.common.api-server-address')}>

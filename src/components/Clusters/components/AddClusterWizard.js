@@ -25,7 +25,6 @@ export function AddClusterWizard({
   onCancel,
   config,
 }) {
-  console.log(kubeconfig);
   const busolaClusterParams = useRecoilValue(configurationAtom);
   const { t } = useTranslation();
   const notification = useNotification();

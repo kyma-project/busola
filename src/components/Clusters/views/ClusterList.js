@@ -234,31 +234,37 @@ function ClusterList() {
     <>
       {addDialog}
       {editDialog}
-      <PageHeader title={t('clusters.overview.title-all-clusters')} />
-      <GenericList
-        entries={entries}
-        headerRenderer={headerRenderer}
-        rowRenderer={rowRenderer}
-        actions={actions}
-        extraHeaderContent={extraHeaderContent}
-        sortBy={{
-          name: (a, b) => a.contextName?.localeCompare(b.contextName),
-        }}
-        searchSettings={{
-          textSearchProperties,
-          showSearchSuggestion: false,
-          noSearchResultMessage: t('clusters.list.no-clusters-found'),
-        }}
-      />
-      <DeleteMessageBox
-        resource={chosenCluster}
-        resourceTitle={chosenCluster?.kubeconfig['current-context']}
-        deleteFn={e => {
-          deleteCluster(e.name, clustersInfo);
-          notification.notifySuccess({
-            content: t('clusters.disconnect'),
-          });
-        }}
+      <PageHeader
+        title={t('clusters.overview.title-all-clusters')}
+        content={
+          <>
+            <GenericList
+              entries={entries}
+              headerRenderer={headerRenderer}
+              rowRenderer={rowRenderer}
+              actions={actions}
+              extraHeaderContent={extraHeaderContent}
+              sortBy={{
+                name: (a, b) => a.contextName?.localeCompare(b.contextName),
+              }}
+              searchSettings={{
+                textSearchProperties,
+                showSearchSuggestion: false,
+                noSearchResultMessage: t('clusters.list.no-clusters-found'),
+              }}
+            />
+            <DeleteMessageBox
+              resource={chosenCluster}
+              resourceTitle={chosenCluster?.kubeconfig['current-context']}
+              deleteFn={e => {
+                deleteCluster(e.name, clustersInfo);
+                notification.notifySuccess({
+                  content: t('clusters.disconnect'),
+                });
+              }}
+            />
+          </>
+        }
       />
     </>
   );

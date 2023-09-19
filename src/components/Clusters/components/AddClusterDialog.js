@@ -13,8 +13,6 @@ function AddClusterDialogComponent({ show, onCancel }) {
     }
   }, [show]);
 
-  console.log(kubeconfig);
-
   return (
     <AddClusterWizard
       kubeconfig={kubeconfig}

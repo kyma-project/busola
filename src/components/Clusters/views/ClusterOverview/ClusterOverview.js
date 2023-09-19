@@ -15,12 +15,19 @@ const Injections = React.lazy(() =>
 export function ClusterOverview() {
   const clusterValidation = useFeature('CLUSTER_VALIDATION');
   return (
-    <>
-      <ClusterOverviewHeader />
-      <Injections destination="ClusterOverview" slot="details-top" root="" />
-      <ClusterNodes />
-      {clusterValidation?.isEnabled && <ClusterValidation />}
-      <Injections destination="ClusterOverview" slot="details-bottom" />
-    </>
+    <ClusterOverviewHeader
+      content={
+        <>
+          <Injections
+            destination="ClusterOverview"
+            slot="details-top"
+            root=""
+          />
+          <ClusterNodes />
+          {clusterValidation?.isEnabled && <ClusterValidation />}
+          <Injections destination="ClusterOverview" slot="details-bottom" />
+        </>
+      }
+    />
   );
 }
