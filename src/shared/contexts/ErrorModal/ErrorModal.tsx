@@ -1,7 +1,6 @@
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { Button, Icon } from '@ui5/webcomponents-react';
-import { Dialog } from 'fundamental-react';
+import { Button, Icon, Dialog, Bar, Title } from '@ui5/webcomponents-react';
 import { useEventListener } from 'hooks/useEventListener';
 
 import './ErrorModal.scss';
@@ -53,28 +52,37 @@ export function ErrorModal({
     </Button>
   );
 
-  const title = (
-    <>
-      <Icon
-        design="Negative"
-        name="message-error"
-        className="fd-margin-end--tiny"
-      />
-      {header}
-    </>
-  );
-
   return (
     <Dialog
       className={classNames('error-modal', { 'error-modal--wider': wider })}
-      // @ts-ignore Type 'Element' is not assignable to type 'string', but we need an icon inside
-      title={title}
-      actions={
-        actions
-          ? actions(close, defaultCloseButton)
-          : [defaultCloseButton(close)]
+      header={
+        <Bar
+          design="Header"
+          startContent={
+            <>
+              <Icon
+                design="Negative"
+                name="message-error"
+                className="fd-margin-end--tiny"
+              />
+              <Title level="H5">{header}</Title>
+            </>
+          }
+        />
       }
-      show
+      footer={
+        <Bar
+          design="Footer"
+          endContent={
+            <>
+              {actions
+                ? actions(close, defaultCloseButton)
+                : defaultCloseButton(close)}
+            </>
+          }
+        />
+      }
+      open
     >
       {content}
     </Dialog>
