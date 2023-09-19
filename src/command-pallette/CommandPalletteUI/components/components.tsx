@@ -45,7 +45,6 @@ export function NamespaceContextDisplay({
     <div className="namespace-context">
       <span className="namespace-name">{t('namespaces.name_singular')}:</span>
       <Token
-        // @ts-ignore fd-react types are wrong yet again
         className="fd-margin-end--tiny fd-margin-begin--tiny"
         text={namespaceContext}
         closeIcon={
