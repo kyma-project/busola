@@ -32,6 +32,7 @@ export const LogsLink = ({
       <BusyIndicator
         delay="0"
         className={classNames('logs-link', 'loading', className)}
+        size="Small"
         active
       />
     );
