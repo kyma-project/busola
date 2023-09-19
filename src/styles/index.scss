@@ -67,32 +67,6 @@ body {
   margin-right: 0.2rem;
 }
 
-.fd-token {
-  font-size: 0.75rem !important;
-  flex: none !important;
-  padding: 0 8px !important;
-
-  &--readonly {
-    .fd-token__close {
-      display: none !important;
-    }
-
-    &::after {
-      content: none !important;
-    }
-
-    &:hover {
-      background-color: initial !important;
-      border-color: initial !important;
-    }
-  }
-
-  .fd-token__close {
-    padding-right: 0;
-    display: inline;
-  }
-}
-
 .fd-dialog,
 .fd-panel,
 .fd-action-bar {
@@ -208,13 +182,6 @@ li {
 
 .fd-hidden {
   visibility: hidden !important;
-}
-
-.no-dismiss-tokens {
-  .fd-token::after,
-  &.fd-token::after {
-    content: none !important;
-  }
 }
 
 .clearfix::after {
