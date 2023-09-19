@@ -148,6 +148,11 @@ export const GenericList = ({
     </>
   );
 
+  const headerActionsEmpty =
+    !searchSettings?.showSearchField &&
+    !(sortBy && !isEmpty(sortBy)) &&
+    !extraHeaderContent;
+
   const renderTableBody = () => {
     if (serverDataError) {
       return (
@@ -211,7 +216,11 @@ export const GenericList = ({
   };
 
   return (
-    <UI5Panel title={title} headerActions={headerActions} data-testid={testid}>
+    <UI5Panel
+      title={title}
+      headerActions={!headerActionsEmpty && headerActions}
+      data-testid={testid}
+    >
       <Table
         className={'ui5-generic-list'}
         columns={
