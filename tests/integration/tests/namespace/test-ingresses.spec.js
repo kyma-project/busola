@@ -30,7 +30,7 @@ context('Test Ingresses', () => {
   it('Create an Ingress', () => {
     cy.navigateTo('Discovery and Network', 'Ingress');
 
-    cy.contains('Create Ingress').click();
+    cy.contains('ui5-button', 'Create Ingress').click();
 
     cy.wrap(loadIngress(NAME, Cypress.env('NAMESPACE_NAME'))).then(
       INGRESS_CONFIG => {
@@ -39,9 +39,8 @@ context('Test Ingresses', () => {
       },
     );
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button.fd-dialog__decisive-button')
-      .contains('Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
   });

@@ -8,6 +8,10 @@ function getQueryInput() {
   return cy.get('[aria-label=command-palette-search]');
 }
 
+function openSearchWithSlashShortcut() {
+  cy.get('body').type('/', { force: true });
+}
+
 context('Test Custom Resources', () => {
   Cypress.skipAfterFail();
 
@@ -21,26 +25,24 @@ context('Test Custom Resources', () => {
 
     getQueryInput().type('up');
 
-    cy.contains('Upload YAML').click();
+    getQueryInput().trigger('keydown', { key: 'Enter' });
 
     cy.wrap(loadFile(FILE_NAME)).then(CRD_CONFIG => {
       const CRD = JSON.stringify(CRD_CONFIG);
       cy.pasteToMonaco(CRD);
     });
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button')
-      .contains('Submit')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Submit')
       .should('be.visible')
       .click();
 
-    cy.get('.fd-dialog__body')
+    cy.get('ui5-dialog')
       .find('.status-message-success')
       .should('have.length', 1);
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button')
-      .contains('Close')
+    cy.get('ui5-dialog')
+      .find('[aria-label="yaml-upload-close"]')
       .should('be.visible')
       .click();
   });
@@ -50,10 +52,9 @@ context('Test Custom Resources', () => {
 
     cy.contains('ui5-title', 'Custom Resources').should('be.visible');
 
-    cy.get('ui5-button[aria-label="open-search"]')
-      .click()
-      .get('input[aria-label="search-input"]')
-      .type('cypress');
+    openSearchWithSlashShortcut();
+
+    cy.get('[type="search"]').type('cypress', { force: true });
 
     cy.get('table').should('have.length', 1);
 
@@ -69,11 +70,11 @@ context('Test Custom Resources', () => {
 
     cy.contains('ui5-title', 'Tnamespaces').should('be.visible');
 
-    cy.contains(/Create Tnamespace/i).should('be.visible');
+    cy.contains('ui5-button', /Create Tnamespace/i).should('be.visible');
 
     cy.url().should('match', /customresources/);
-    // cy.contains('tnamespace.cypress.example.com').click();
+    cy.contains('tnamespace.cypress.example.com').click();
     cy.url().should('match', /customresourcedefinitions/);
-    // cy.deleteInDetails('tnamespace.cypress.example.com');
+    cy.deleteInDetails('tnamespace.cypress.example.com');
   });
 });

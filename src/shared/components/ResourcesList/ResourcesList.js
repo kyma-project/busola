@@ -555,14 +555,16 @@ export function ResourceListRenderer({
           }}
         />
       )}
-      {!isCompact && (
-        <YamlUploadDialog
-          open={showAdd}
-          onCancel={() => {
-            setShowAdd(false);
-          }}
-        />
-      )}
+      {!isCompact &&
+        createPortal(
+          <YamlUploadDialog
+            open={showAdd}
+            onCancel={() => {
+              setShowAdd(false);
+            }}
+          />,
+          document.body,
+        )}
     </>
   );
 }

@@ -420,12 +420,15 @@ function Resource({
             {col.value(resource)}
           </PageHeader.Column>
         ))}
-        <YamlUploadDialog
-          open={showAdd}
-          onCancel={() => {
-            setShowAdd(false);
-          }}
-        />
+        {createPortal(
+          <YamlUploadDialog
+            open={showAdd}
+            onCancel={() => {
+              setShowAdd(false);
+            }}
+          />,
+          document.body,
+        )}
       </PageHeader>
     </>
   );

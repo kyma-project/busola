@@ -83,7 +83,11 @@ export function YamlUploadDialog({ open, onCancel }) {
 
   const actions =
     lastOperationState === OPERATION_STATE_SUCCEEDED ? (
-      <Button onClick={onCancel} design="Emphasized">
+      <Button
+        onClick={onCancel}
+        design="Emphasized"
+        aria-label="yaml-upload-close"
+      >
         {t('common.buttons.close')}
       </Button>
     ) : (
