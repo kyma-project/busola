@@ -1,6 +1,2 @@
 @import '@sap-theming/default.css';
 
-html,
-#root {
-  background: var(--sapNeutralBackground);
-}
