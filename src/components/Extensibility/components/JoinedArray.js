@@ -24,39 +24,36 @@ export function JoinedArray({
   }
 
   const separator = structure?.separator ?? ', ';
-
-  if (separator === 'break') {
-    return value.map((val, i) => (
-      <p key={i}>
-        {structure?.children
-          ? structure?.children?.map((def, idx) => (
-              <Widget structure={def} value={val} key={idx} {...props} />
-            ))
-          : val}
-      </p>
-    ));
-  } else if (structure?.children) {
-    return (
-      <div>
-        {value.map((val, i) => (
-          <>
-            {structure?.children?.map((def, idx) => (
-              <Widget
-                structure={def}
-                arrayItems={[...arrayItems, val]}
-                value={val}
-                key={idx}
-                {...props}
-              />
-            ))}
-            {i !== value.length - 1 && separator}
-          </>
-        ))}
-      </div>
-    );
-  } else {
-    return value.join(separator) || emptyLeafPlaceholder;
-  }
+  return (
+    <div>
+      {separator === 'break'
+        ? value.map((val, i) => (
+            <div key={i}>
+              {structure?.children
+                ? structure?.children?.map((def, idx) => (
+                    <Widget structure={def} value={val} key={idx} {...props} />
+                  ))
+                : val}
+            </div>
+          ))
+        : structure?.children
+        ? value.map((val, i) => (
+            <>
+              {structure?.children?.map((def, idx) => (
+                <Widget
+                  structure={def}
+                  arrayItems={[...arrayItems, val]}
+                  value={val}
+                  key={idx}
+                  {...props}
+                />
+              ))}
+              {i !== value.length - 1 && separator}
+            </>
+          ))
+        : value.join(separator) || emptyLeafPlaceholder}
+    </div>
+  );
 }
 
 JoinedArray.array = true;
