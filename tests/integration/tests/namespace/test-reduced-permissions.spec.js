@@ -141,7 +141,9 @@ context('Test reduced permissions', () => {
       .contains('Service Accounts')
       .click();
 
-    cy.contains(SA_NAME).click();
+    cy.get('a.fd-link')
+      .contains(SA_NAME)
+      .click();
 
     cy.contains('Generate TokenRequest').click();
 
