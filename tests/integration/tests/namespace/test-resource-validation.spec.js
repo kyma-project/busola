@@ -14,7 +14,7 @@ context('Test resource validation', () => {
   });
 
   it('Check for default policies', () => {
-    cy.contains('Upload YAML').click();
+    cy.contains('ui5-button', 'Upload YAML').click();
 
     cy.fixture('examples/resource-validation/pod.yaml').then(podConfig => {
       cy.pasteToMonaco(podConfig);
@@ -46,9 +46,12 @@ context('Test resource validation', () => {
       .find('.fd-switch')
       .click();
 
-    cy.contains('Close').click();
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Close')
+      .should('be.visible')
+      .click();
 
-    cy.contains('Upload YAML').click();
+    cy.contains('ui5-button', 'Upload YAML').click();
 
     cy.fixture('examples/resource-validation/pod.yaml').then(podConfig => {
       cy.pasteToMonaco(podConfig);
@@ -74,7 +77,7 @@ context('Test resource validation', () => {
       .parentsUntil('[role=tab]')
       .click({ force: true });
 
-    cy.contains('Customize').click();
+    cy.contains('ui5-button', 'Customize').click();
 
     cy.contains('.policy-row', 'Default')
       .find('.fd-switch')
@@ -88,9 +91,12 @@ context('Test resource validation', () => {
       .find('.fd-switch')
       .click();
 
-    cy.contains('Close').click();
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Close')
+      .should('be.visible')
+      .click();
 
-    cy.contains('Upload YAML').click();
+    cy.contains('ui5-button', 'Upload YAML').click();
 
     cy.fixture('examples/resource-validation/pod.yaml').then(podConfig => {
       cy.pasteToMonaco(podConfig);
@@ -118,9 +124,15 @@ context('Test resource validation', () => {
       .parentsUntil('[role=tab]')
       .click({ force: true });
 
-    cy.contains('Reset').click();
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Reset')
+      .should('be.visible')
+      .click();
 
-    cy.contains('Close').click();
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Close')
+      .should('be.visible')
+      .click();
   });
 
   it('Customize resource validation policies via feature flag', () => {
@@ -132,7 +144,7 @@ context('Test resource validation', () => {
 
     cy.loginAndSelectCluster();
 
-    cy.contains('Upload YAML').click();
+    cy.contains('ui5-button', 'Upload YAML').click();
 
     cy.fixture('examples/resource-validation/pod.yaml').then(podConfig => {
       cy.pasteToMonaco(podConfig);

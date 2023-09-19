@@ -1,4 +1,4 @@
-import { Button, MessageBox } from '@ui5/webcomponents-react';
+import { Button, MessageBox, Text } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useMatch, useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
@@ -75,7 +75,7 @@ export function IncorrectPath({ to, title = '', message = '' }) {
       open={true}
       onClose={() => {}}
     >
-      <p>{message}</p>
+      <Text style={{ padding: '20px' }}>{message}</Text>
     </MessageBox>
   );
 }
