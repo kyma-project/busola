@@ -35,6 +35,7 @@ import {
 import '@ui5/webcomponents-icons/dist/status-positive.js';
 import { ScanResult } from './ScanResult';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { createPortal } from 'react-dom';
 
 export const ClusterValidation = () => {
   const { t } = useTranslation();
@@ -228,17 +229,20 @@ export const ClusterValidation = () => {
         </Section>
       )}
 
-      <ClusterValidationConfigurationDialog
-        show={isConfigurationOpen}
-        onCancel={() => setConfigurationOpen(false)}
-        onSubmit={(newConfiguration: ScanConfiguration) => {
-          setConfiguration(newConfiguration);
-          setConfigurationOpen(false);
-        }}
-        configuration={configuration}
-        namespaces={namespaces}
-        policies={validationSchemas?.policies.map(policy => policy.name)}
-      />
+      {createPortal(
+        <ClusterValidationConfigurationDialog
+          show={isConfigurationOpen}
+          onCancel={() => setConfigurationOpen(false)}
+          onSubmit={(newConfiguration: ScanConfiguration) => {
+            setConfiguration(newConfiguration);
+            setConfigurationOpen(false);
+          }}
+          configuration={configuration}
+          namespaces={namespaces}
+          policies={validationSchemas?.policies.map(policy => policy.name)}
+        />,
+        document.body,
+      )}
     </UI5Panel>
   );
 };

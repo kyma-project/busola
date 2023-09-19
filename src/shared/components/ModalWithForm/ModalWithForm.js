@@ -148,9 +148,7 @@ export const ModalWithForm = ({
 
   return (
     <>
-      {alwaysOpen
-        ? null
-        : createPortal(renderModalOpeningComponent(), document.body)}
+      {alwaysOpen ? null : renderModalOpeningComponent()}
       {createPortal(
         <Dialog
           className={`${className}`}
