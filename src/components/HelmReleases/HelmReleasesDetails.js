@@ -42,7 +42,22 @@ function HelmReleasesDetails({ releaseName }) {
 
   return (
     <>
-      <PageHeader title={releaseName} breadcrumbItems={breadcrumbItems}>
+      <PageHeader
+        title={releaseName}
+        breadcrumbItems={breadcrumbItems}
+        content={
+          <>
+            <HelmReleaseData
+              encodedRelease={releaseSecret.data.release}
+              simpleHeader
+            />
+            <OtherReleaseVersions
+              releaseSecret={releaseSecret}
+              secrets={data}
+            />
+          </>
+        }
+      >
         {releaseSecret && (
           <>
             <PageHeader.Column title={t('secrets.name_singular')}>
@@ -64,11 +79,6 @@ function HelmReleasesDetails({ releaseName }) {
           </>
         )}
       </PageHeader>
-      <HelmReleaseData
-        encodedRelease={releaseSecret.data.release}
-        simpleHeader
-      />
-      <OtherReleaseVersions releaseSecret={releaseSecret} secrets={data} />
     </>
   );
 }

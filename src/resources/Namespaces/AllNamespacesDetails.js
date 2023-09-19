@@ -27,11 +27,13 @@ export function AllNamespacesDetails(props) {
       <PageHeader
         title={t('navigation.all-namespaces')}
         breadcrumbItems={breadcrumbItems}
+        content={
+          <div className="panel-grid">
+            <NamespaceWorkloads />
+            <ResourcesUsage />
+          </div>
+        }
       />
-      <div className="panel-grid">
-        <NamespaceWorkloads />
-        <ResourcesUsage />
-      </div>
     </>
   );
 }

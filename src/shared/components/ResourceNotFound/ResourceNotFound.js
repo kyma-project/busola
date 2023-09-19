@@ -9,14 +9,19 @@ export const ResourceNotFound = ({ resource, breadcrumbs, customMessage }) => {
   const { t } = useTranslation();
   return (
     <>
-      <PageHeader title="" breadcrumbItems={breadcrumbs} />
-      <UI5Panel
-        title={
-          customMessage
-            ? customMessage
-            : t('components.resource-not-found.messages.not-found', {
-                resource,
-              })
+      <PageHeader
+        title=""
+        breadcrumbItems={breadcrumbs}
+        content={
+          <UI5Panel
+            title={
+              customMessage
+                ? customMessage
+                : t('components.resource-not-found.messages.not-found', {
+                    resource,
+                  })
+            }
+          />
         }
       />
     </>

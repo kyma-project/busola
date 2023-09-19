@@ -58,20 +58,6 @@ export function GroupingListPage({
       .filter(removeEmpty);
   }
 
-  const header = (
-    <PageHeader
-      title={title}
-      description={description}
-      actions={
-        <SearchInput
-          value={searchQuery}
-          handleQueryChange={setSearchQuery}
-          allowSlashShortcut
-        />
-      }
-    />
-  );
-
   const lists = (
     <ul>
       {entries
@@ -115,8 +101,19 @@ export function GroupingListPage({
 
   return (
     <>
-      {header}
-      <YamlEditorProvider>{lists}</YamlEditorProvider>
+      <PageHeader
+        title={title}
+        description={description}
+        actions={
+          <SearchInput
+            value={searchQuery}
+            handleQueryChange={setSearchQuery}
+            allowSlashShortcut
+          />
+        }
+        content={<YamlEditorProvider>{lists}</YamlEditorProvider>}
+      />
+
       <YamlUploadDialog
         show={showAdd}
         onCancel={() => {

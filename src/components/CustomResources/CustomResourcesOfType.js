@@ -38,6 +38,14 @@ export default function CustomResourcesOfType({ crdName }) {
       <PageHeader
         title={pluralize(crd.spec.names.kind)}
         breadcrumbItems={breadcrumbItems}
+        content={
+          <CustomResources
+            crd={crd}
+            version={crd.spec.versions.find(v => v.served)}
+            showTitle={false}
+            showNamespace={false}
+          />
+        }
       >
         <PageHeader.Column
           title={t('custom-resource-definitions.name_singular')}

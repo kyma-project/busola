@@ -36,16 +36,14 @@ export const PageHeader = ({
 }) => {
   return (
     <DynamicPage
-      style={{
-        height: '100vh',
-      }}
-      // style={title === 'Clusters Overview' ? { height: '50px' } : null}
+      style={{ height: '100vh' }}
       className="page-header"
       alwaysShowContentHeader
       showHideHeaderButton={false}
       headerContentPinnable={false}
       headerTitle={
         <DynamicPageTitle
+          style={title === 'Clusters Overview' ? { display: 'none' } : null}
           breadcrumbs={
             breadcrumbItems.length ? (
               <Breadcrumbs design="NoCurrentPage">

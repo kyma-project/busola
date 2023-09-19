@@ -33,6 +33,7 @@ import { Tooltip } from '../Tooltip/Tooltip';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { useRecoilState } from 'recoil';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
+import { createPortal } from 'react-dom';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
@@ -364,8 +365,13 @@ function Resource({
         breadcrumbItems={breadcrumbItems}
         content={
           <>
-            {' '}
-            <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />
+            {createPortal(
+              <DeleteMessageBox
+                resource={resource}
+                resourceUrl={resourceUrl}
+              />,
+              document.body,
+            )}
             <Suspense fallback={<Spinner />}>
               <Injections
                 destination={resourceType}
@@ -392,12 +398,6 @@ function Resource({
                 root={resource}
               />
             </Suspense>
-            <YamlUploadDialog
-              show={showAdd}
-              onCancel={() => {
-                setShowAdd(false);
-              }}
-            />
           </>
         }
       >
@@ -420,6 +420,12 @@ function Resource({
             {col.value(resource)}
           </PageHeader.Column>
         ))}
+        <YamlUploadDialog
+          show={showAdd}
+          onCancel={() => {
+            setShowAdd(false);
+          }}
+        />
       </PageHeader>
     </>
   );

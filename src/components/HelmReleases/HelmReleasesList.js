@@ -73,20 +73,22 @@ function HelmReleasesList() {
             />
           </Trans>
         }
-      />
-      <GenericList
-        entries={entries}
-        headerRenderer={headerRenderer}
-        rowRenderer={rowRenderer}
-        serverDataLoading={loading}
-        serverDataError={error}
-        allowSlashShortcut
-        sortBy={{
-          name: (a, b) => a.releaseName.localeCompare(b.releaseName),
-        }}
-        searchSettings={{
-          textSearchProperties: ['recentRelease.chart.metadata.name'],
-        }}
+        content={
+          <GenericList
+            entries={entries}
+            headerRenderer={headerRenderer}
+            rowRenderer={rowRenderer}
+            serverDataLoading={loading}
+            serverDataError={error}
+            allowSlashShortcut
+            sortBy={{
+              name: (a, b) => a.releaseName.localeCompare(b.releaseName),
+            }}
+            searchSettings={{
+              textSearchProperties: ['recentRelease.chart.metadata.name'],
+            }}
+          />
+        }
       />
     </>
   );
