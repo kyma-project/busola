@@ -39,7 +39,7 @@ context('Test Custom Resources', () => {
 
     openSearchWithSlashShortcut();
 
-    cy.get('[type="search"]').type('cypress');
+    cy.get('[type="search"]').type('cypress', { force: true });
 
     cy.get('table').should('have.length', 1);
 
