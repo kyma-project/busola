@@ -7,6 +7,7 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator';
+import { createPortal } from 'react-dom';
 
 export const ModalWithForm = ({
   performRefetch,
@@ -147,51 +148,55 @@ export const ModalWithForm = ({
 
   return (
     <>
-      {alwaysOpen ? null : renderModalOpeningComponent()}
-      <Dialog
-        style={{ height: '70vh', width: '100vh' }}
-        // className={`${className}`}
-        {...props}
-        open={isOpen}
-        footer={
-          <Bar
-            design="Footer"
-            endContent={
-              <>
-                {renderConfirmButton()}
-                <Button onClick={resetFormFn} design="Transparent">
-                  {t('common.buttons.reset')}
-                </Button>
-                <Button
-                  onClick={() => {
-                    setOpenStatus(false);
-                  }}
-                  design="Transparent"
-                >
-                  {t('common.buttons.cancel')}
-                </Button>
-              </>
-            }
-          />
-        }
-        onAfterClose={() => {
-          setOpenStatus(false);
-        }}
-        headerText={title}
-      >
-        {isOpen &&
-          renderForm({
-            handleSetResetFormFn: setResetFormFn,
-            formElementRef,
-            isValid,
-            setCustomValid,
-            onChange: handleFormChanged,
-            onError: handleFormError,
-            onCompleted: handleFormSuccess,
-            performManualSubmit: handleFormSubmit,
-            item: item,
-          })}
-      </Dialog>
+      {alwaysOpen
+        ? null
+        : createPortal(renderModalOpeningComponent(), document.body)}
+      {createPortal(
+        <Dialog
+          className={`${className}`}
+          {...props}
+          open={isOpen}
+          footer={
+            <Bar
+              design="Footer"
+              endContent={
+                <>
+                  {renderConfirmButton()}
+                  <Button onClick={resetFormFn} design="Transparent">
+                    {t('common.buttons.reset')}
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      setOpenStatus(false);
+                    }}
+                    design="Transparent"
+                  >
+                    {t('common.buttons.cancel')}
+                  </Button>
+                </>
+              }
+            />
+          }
+          onAfterClose={() => {
+            setOpenStatus(false);
+          }}
+          headerText={title}
+        >
+          {isOpen &&
+            renderForm({
+              handleSetResetFormFn: setResetFormFn,
+              formElementRef,
+              isValid,
+              setCustomValid,
+              onChange: handleFormChanged,
+              onError: handleFormError,
+              onCompleted: handleFormSuccess,
+              performManualSubmit: handleFormSubmit,
+              item: item,
+            })}
+        </Dialog>,
+        document.body,
+      )}
     </>
   );
 };

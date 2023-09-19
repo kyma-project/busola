@@ -134,12 +134,10 @@ ui5-dialog {
   }
 }
 
-.modal-size--l {
-  .fd-dialog__content {
-    width: 80vw;
-    height: 80vw;
-    min-width: unset;
-  }
+.modal-size--l::part(content) {
+  width: 80vw;
+  height: 80vw;
+  min-width: unset;
 }
 
 .modal--no-padding {
