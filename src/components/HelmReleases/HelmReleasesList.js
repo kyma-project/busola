@@ -10,13 +10,16 @@ import { decodeHelmRelease } from './decodeHelmRelease';
 import { findRecentRelease } from './findRecentRelease';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
 import { groupBy } from 'lodash';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
+import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
+import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 function HelmReleasesList() {
   const { t } = useTranslation();
   const namespace = useRecoilValue(activeNamespaceIdState);
+  const [showAdd, setShowAdd] = useRecoilState(showYamlUploadDialogState);
   const { namespaceUrl } = useUrl();
 
   const { data, loading, error } = useGetList(
@@ -89,6 +92,12 @@ function HelmReleasesList() {
             }}
           />
         }
+      />
+      <YamlUploadDialog
+        open={showAdd}
+        onCancel={() => {
+          setShowAdd(false);
+        }}
       />
     </>
   );

@@ -65,7 +65,7 @@ export default function CustomResourcesOfType({ crdName }) {
         showNamespace={false}
       />
       <YamlUploadDialog
-        show={showAdd}
+        open={showAdd}
         onCancel={() => {
           setShowAdd(false);
         }}

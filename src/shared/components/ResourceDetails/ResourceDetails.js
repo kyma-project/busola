@@ -421,7 +421,7 @@ function Resource({
           </PageHeader.Column>
         ))}
         <YamlUploadDialog
-          show={showAdd}
+          open={showAdd}
           onCancel={() => {
             setShowAdd(false);
           }}

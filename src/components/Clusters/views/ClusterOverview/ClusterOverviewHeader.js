@@ -89,7 +89,7 @@ export function ClusterOverviewHeader(content) {
         <GardenerProvider />
       </PageHeader>
       <YamlUploadDialog
-        show={showAdd}
+        open={showAdd}
         onCancel={() => {
           setShowAdd(false);
         }}

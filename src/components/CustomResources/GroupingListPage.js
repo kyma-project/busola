@@ -115,7 +115,7 @@ export function GroupingListPage({
       />
 
       <YamlUploadDialog
-        show={showAdd}
+        open={showAdd}
         onCancel={() => {
           setShowAdd(false);
         }}

@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef, Suspense } from 'react';
-import { Button } from '@ui5/webcomponents-react';
-import { Dialog } from 'fundamental-react';
+import { Bar, Button, Dialog } from '@ui5/webcomponents-react';
 import { isEqual } from 'lodash';
 
 import { YamlResourcesList } from './YamlResourcesList';
@@ -20,7 +19,7 @@ export const OPERATION_STATE_WAITING = 'WAITING';
 export const OPERATION_STATE_SUCCEEDED = 'SUCCEEDED';
 export const OPERATION_STATE_SOME_FAILED = 'SOME_FAILED';
 
-export function YamlUploadDialog({ show, onCancel }) {
+export function YamlUploadDialog({ open, onCancel }) {
   const { t } = useTranslation();
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const defaultNamespace = namespaceId || 'default';
@@ -57,14 +56,14 @@ export function YamlUploadDialog({ show, onCancel }) {
   });
 
   useEffect(() => {
-    if (!show) {
+    if (!open) {
       setResourcesData(null);
       setResourcesWithStatuses(null);
       setInitialUnchangedResources(null);
       setLastOperationState(OPERATION_STATE_INITIAL);
       oldYaml.current = null;
     }
-  }, [show]);
+  }, [open]);
 
   const updateYamlContent = yaml => {
     if (isEqual(yaml?.sort(), oldYaml?.current?.sort())) return;
@@ -82,7 +81,7 @@ export function YamlUploadDialog({ show, onCancel }) {
     oldYaml.current = yaml;
   };
 
-  const actions = [
+  const actions =
     lastOperationState === OPERATION_STATE_SUCCEEDED ? (
       <Button onClick={onCancel} design="Emphasized">
         {t('common.buttons.close')}
@@ -106,14 +105,13 @@ export function YamlUploadDialog({ show, onCancel }) {
             : t('common.buttons.close')}
         </Button>
       </>
-    ),
-  ];
+    );
 
   return (
     <Dialog
-      show={show}
-      title={t('upload-yaml.title')}
-      actions={actions}
+      open={open}
+      headerText={t('upload-yaml.title')}
+      footer={<Bar design="Footer" endContent={<>{actions}</>} />}
       className="yaml-upload-modal"
     >
       <Suspense fallback={<Spinner />}>

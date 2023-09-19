@@ -10,12 +10,15 @@ import { Link } from 'react-router-dom';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
 import { OtherReleaseVersions } from './OtherReleaseVersions';
 import { findRecentRelease } from './findRecentRelease';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
+import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
+import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 
 function HelmReleasesDetails({ releaseName }) {
   const { t } = useTranslation();
+  const [showAdd, setShowAdd] = useRecoilState(showYamlUploadDialogState);
   const { namespaceUrl } = useUrl();
 
   const namespace = useRecoilValue(activeNamespaceIdState);
@@ -78,6 +81,12 @@ function HelmReleasesDetails({ releaseName }) {
             </PageHeader.Column>
           </>
         )}
+        <YamlUploadDialog
+          open={showAdd}
+          onCancel={() => {
+            setShowAdd(false);
+          }}
+        />
       </PageHeader>
     </>
   );
