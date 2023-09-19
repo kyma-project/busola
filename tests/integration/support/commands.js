@@ -139,7 +139,7 @@ Cypress.Commands.add(
 
     cy.contains('a', searchTerm).should('be.visible');
 
-    cy.contains(/created/).should('not.exist');
+    cy.contains('ui5-message-strip', /created/).should('not.exist');
 
     cy.get('ui5-button[data-testid="delete"]').click();
 
@@ -149,7 +149,7 @@ Cypress.Commands.add(
         .click();
 
       if (deletedVisible) {
-        cy.contains(/deleted/).should('be.visible');
+        cy.contains('ui5-message-strip', /deleted/).should('be.visible');
       }
 
       if (clearSearch) {

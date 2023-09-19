@@ -33,6 +33,7 @@ import { ForceUpdateModalContent } from 'shared/ResourceForm/ForceUpdateModalCon
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { useRecoilState } from 'recoil';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
+import { createPortal } from 'react-dom';
 
 const Injections = React.lazy(() =>
   import('../../../components/Extensibility/ExtensibilityInjections'),
@@ -527,10 +528,13 @@ export function ResourceListRenderer({
         modalOpeningComponent={<></>}
         customCloseAction={() => setShowEditDialog(false)}
       />
-      <DeleteMessageBox
-        resource={activeResource}
-        resourceUrl={prepareResourceUrl(resourceUrl, activeResource)}
-      />
+      {createPortal(
+        <DeleteMessageBox
+          resource={activeResource}
+          resourceUrl={prepareResourceUrl(resourceUrl, activeResource)}
+        />,
+        document.body,
+      )}
       {!(error && error.toString().includes('is forbidden')) && (
         <GenericList
           title={showTitle ? title || prettifiedResourceName : null}

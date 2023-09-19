@@ -24,15 +24,15 @@ context('Test Persistent Volumes', () => {
   it('Create PV', () => {
     cy.navigateTo('Storage', 'Persistent Volumes');
 
-    cy.contains('Create Persistent Volume').click();
+    cy.contains('ui5-button', 'Create Persistent Volume').click();
 
     cy.wrap(loadPV(PV_NAME)).then(PV_CONFIG => {
       const PV = JSON.stringify(PV_CONFIG);
       cy.pasteToMonaco(PV);
     });
 
-    cy.get('ui5-button.fd-dialog__decisive-button')
-      .contains('Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
 

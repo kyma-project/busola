@@ -7,7 +7,9 @@ Cypress.Commands.add('createNamespace', namespaceName => {
 
   cy.contains('ui5-button', 'Create Namespace').click();
 
-  cy.get('input[ariaLabel="Namespace name"]:visible').type(namespaceName);
+  cy.get('input[ariaLabel="Namespace name"]:visible')
+    .click()
+    .type(namespaceName);
 
   cy.get('ui5-dialog')
     .contains('ui5-button', 'Create')

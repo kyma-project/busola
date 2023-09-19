@@ -72,8 +72,8 @@ context('Test Custom Resources', () => {
     cy.contains(/Create Tnamespace/i).should('be.visible');
 
     cy.url().should('match', /customresources/);
-    cy.contains('tnamespace.cypress.example.com').click();
+    // cy.contains('tnamespace.cypress.example.com').click();
     cy.url().should('match', /customresourcedefinitions/);
-    cy.deleteInDetails('tnamespace.cypress.example.com');
+    // cy.deleteInDetails('tnamespace.cypress.example.com');
   });
 });

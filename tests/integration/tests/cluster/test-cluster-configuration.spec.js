@@ -68,7 +68,9 @@ context('Test Cluster configuration', () => {
 
     cy.navigateTo('Configuration', 'Cluster Roles');
 
-    cy.get('[role=row]').should('have.length', 20);
+    cy.get('ui5-table')
+      .find('[role=row]')
+      .should('have.length', 20);
 
     cy.get('[title="Profile"]').click();
 
@@ -76,7 +78,7 @@ context('Test Cluster configuration', () => {
       .parentsUntil('[role=tab]')
       .click({ force: true });
 
-    cy.get('[role=dialog]')
+    cy.get('ui5-dialog')
       .contains('20')
       .click();
 

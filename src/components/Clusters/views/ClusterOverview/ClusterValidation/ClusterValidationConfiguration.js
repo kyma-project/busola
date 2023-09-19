@@ -199,6 +199,7 @@ export function ClusterValidationConfigurationDialog({
 
   return (
     <Dialog
+      onAfterClose={onCancel}
       open={show}
       headerText={t('cluster-validation.scan.configuration.title')}
       footer={
@@ -207,20 +208,21 @@ export function ClusterValidationConfigurationDialog({
           endContent={
             <>
               <Button
+                desgin="Emphasized"
+                onClick={() => {
+                  onSubmit(tempConfiguration);
+                }}
+                aria-label="cluster-validation-submit"
+              >
+                {t('common.buttons.submit')}
+              </Button>
+              <Button
                 design="Transparent"
                 onClick={() => {
                   onCancel();
                 }}
               >
                 {t('common.buttons.cancel')}
-              </Button>
-              <Button
-                desgin="Emphasized"
-                onClick={() => {
-                  onSubmit(tempConfiguration);
-                }}
-              >
-                {t('common.buttons.submit')}
               </Button>
             </>
           }
