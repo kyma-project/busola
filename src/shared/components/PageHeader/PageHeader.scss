@@ -21,11 +21,6 @@
   font-size: var(--sapFontSize);
 }
 
-// workaround for displaying empty DynamicPageContent
-[data-component-name='DynamicPageContent'] {
-  // display: none;
-}
-
 .column-wrapper {
   display: grid;
   grid-gap: 8px;
