@@ -4,10 +4,12 @@ import { render } from '@testing-library/react';
 
 describe('Labels', () => {
   it('Labels should render with labels', () => {
-    const { queryByText } = render(
+    const { container } = render(
       <Labels labels={{ testLabel: 'testValue' }} />,
     );
 
-    expect(queryByText('testLabel=testValue')).toBeInTheDocument();
+    expect(
+      container.querySelector("[text='testLabel=testValue']"),
+    ).toBeInTheDocument();
   });
 });
