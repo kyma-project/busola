@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { Token } from '@ui5/webcomponents-react';
 import './Labels.scss';
 
 const SHORTENING_TRESHOLD = 60;
@@ -25,23 +26,19 @@ export const Labels = ({
   return (
     <div className={classNames('labels', className)}>
       {separatedLabels.map((label, id) => (
-        <span
+        <Token
           aria-label={label}
-          className="fd-token fd-token--readonly"
           key={id}
+          className="token fd-margin-end--tiny"
+          readOnly
+          text={label}
           title={
             (shortenLongLabels &&
               label.length > SHORTENING_TRESHOLD &&
               label) ||
             undefined
           }
-        >
-          <span className="fd-token__text fd-has-font-size-small">
-            {shortenLongLabels && label.length > SHORTENING_TRESHOLD
-              ? shortenLabel(label)
-              : label}
-          </span>
-        </span>
+        />
       ))}
     </div>
   );

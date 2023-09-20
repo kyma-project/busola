@@ -79,7 +79,7 @@ context('Test Protected Resources', () => {
       .contains('Config Maps')
       .click();
 
-    cy.get('ui5-table-row')
+    cy.get('a.fd-link')
       .contains(NAME)
       .click();
 
