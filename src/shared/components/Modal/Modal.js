@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import './Modal.scss';
-import { Button } from '@ui5/webcomponents-react';
-import { Dialog as FdModal } from 'fundamental-react';
+import { Bar, Button, Dialog } from '@ui5/webcomponents-react';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useTranslation } from 'react-i18next';
+import { createPortal } from 'react-dom';
+
+import './Modal.scss';
 
 Modal.propTypes = {
   title: PropTypes.any,
@@ -132,17 +133,20 @@ export function Modal({
       <div style={{ display: 'contents' }} onClick={onOpen}>
         {modalOpeningComponent}
       </div>
-      <FdModal
-        className={classNames('custom-modal', className)}
-        type={type}
-        title={title}
-        show={show}
-        onClose={onClose}
-        actions={modalActions()}
-        disableAutoClose={disableAutoClose}
-      >
-        {children}
-      </FdModal>
+      {createPortal(
+        <Dialog
+          className={classNames('custom-modal', className)}
+          type={type}
+          headerText={title}
+          open={show}
+          onAfterClose={onClose}
+          actions={modalActions()}
+        >
+          {children}
+          <Bar design="footer" slot="footer" endContent={modalActions()} />
+        </Dialog>,
+        document.body,
+      )}
     </>
   );
 }

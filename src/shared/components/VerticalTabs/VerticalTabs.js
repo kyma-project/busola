@@ -30,7 +30,7 @@ export function VerticalTabs({ tabs, children, height }) {
   const [tabId, setTabId] = React.useState(children[0]?.props.id || 0);
 
   return (
-    <section className="vertical-tabs-wrapper" style={{ height }}>
+    <section className="vertical-tabs-wrapper">
       <ul>
         {tabs.map(({ id, ...props }) => (
           <TileButton

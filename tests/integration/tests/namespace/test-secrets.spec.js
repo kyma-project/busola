@@ -21,7 +21,7 @@ context('Test Secrets', () => {
   it('Create a secret', () => {
     cy.navigateTo('Configuration', 'Secrets');
 
-    cy.contains('Create Secret').click();
+    cy.contains('ui5-button', 'Create Secret').click();
 
     cy.get('[ariaLabel="Secret name"]:visible').type(SECRET_NAME);
 
@@ -39,9 +39,8 @@ context('Test Secrets', () => {
 
     cy.contains(btoa(SECRET_VALUE));
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button.fd-dialog__decisive-button')
-      .contains('Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
 
@@ -61,7 +60,7 @@ context('Test Secrets', () => {
 
     cy.contains('.layout-panel-row', SECRET_KEY).contains(SECRET_VALUE);
 
-    cy.contains('Encode').click();
+    cy.contains('ui5-button', 'Encode').click();
 
     cy.contains('.layout-panel-row', SECRET2_KEY).contains(btoa(SECRET2_VALUE));
 
@@ -69,7 +68,10 @@ context('Test Secrets', () => {
   });
 
   it('Edit a secret', () => {
-    cy.contains('Edit').click();
+    cy.get('ui5-button')
+      .contains('Edit')
+      .should('be.visible')
+      .click();
 
     cy.get('[placeholder="Enter value"]:visible')
       .eq(0)
@@ -83,9 +85,8 @@ context('Test Secrets', () => {
       .eq(1)
       .click();
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button.fd-dialog__decisive-button')
-      .contains('Update')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Update')
       .should('be.visible')
       .click();
   });
@@ -93,7 +94,7 @@ context('Test Secrets', () => {
   it('Checking an updated secret', () => {
     cy.wait(1000);
 
-    cy.contains('Decode').click();
+    cy.contains('ui5-button', 'Decode').click();
 
     cy.contains('.layout-panel-row', SECRET_KEY).contains(SECRET_VALUE2);
 

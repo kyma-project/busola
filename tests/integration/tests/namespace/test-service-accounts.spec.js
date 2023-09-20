@@ -17,7 +17,7 @@ context('Test Service Accounts', () => {
   it('Create a Service Account', () => {
     cy.navigateTo('Configuration', 'Service Accounts');
 
-    cy.contains('Create Service Account').click();
+    cy.contains('ui5-button', 'Create Service Account').click();
 
     cy.contains('Advanced').click();
 
@@ -39,9 +39,8 @@ context('Test Service Accounts', () => {
       'be.visible',
     );
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button.fd-dialog__decisive-button')
-      .contains('Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
   });
@@ -55,9 +54,12 @@ context('Test Service Accounts', () => {
   });
 
   it('Edit', () => {
-    cy.contains('Edit').click();
+    cy.get('ui5-button')
+      .contains('Edit')
+      .should('be.visible')
+      .click();
 
-    cy.get('[role="document"]')
+    cy.get('ui5-dialog')
       .contains('Labels')
       .click();
 
@@ -75,9 +77,8 @@ context('Test Service Accounts', () => {
       .eq(0)
       .click();
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button.fd-dialog__decisive-button')
-      .contains('Update')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Update')
       .should('be.visible')
       .click();
   });
@@ -89,7 +90,7 @@ context('Test Service Accounts', () => {
   });
 
   it('Generate TokenRequest', () => {
-    cy.contains('Generate TokenRequest').click();
+    cy.contains('ui5-button', 'Generate TokenRequest').click();
 
     cy.contains(
       'The TokenRequest allows you to log in with your ServiceAccount credentials.',
@@ -98,12 +99,15 @@ context('Test Service Accounts', () => {
     cy.contains('TokenRequest generated').should('be.visible');
     cy.readFile(filepath).should('not.exist');
 
-    cy.contains('Download Kubeconfig').click();
+    cy.contains('ui5-button', 'Download Kubeconfig').click();
 
     cy.readFile(filepath).should('exist');
     cy.task('removeFile', filepath);
 
-    cy.contains('Close').click();
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Close')
+      .should('be.visible')
+      .click();
   });
 
   it('Inspect list', () => {
