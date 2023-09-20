@@ -10,16 +10,14 @@ describe('NamespaceSettings', () => {
     });
 
     const toggle = getByLabelText('settings.clusters.showHiddenNamespaces');
+    const toggleSwitch = toggle.shadowRoot?.querySelector('[role="switch"]');
 
-    const toggleElement = toggle?.shadowRoot?.querySelector('[role="switch"]');
-    expect(toggleElement).toBeInTheDocument();
+    expect(toggleSwitch).toHaveAttribute('aria-checked', 'true');
 
-    expect(toggleElement).toHaveAttribute('aria-checked', 'true');
-
-    if (toggleElement) fireEvent.click(toggleElement);
+    if (toggleSwitch) fireEvent.click(toggleSwitch);
 
     await waitFor(() => {
-      expect(toggleElement).toHaveAttribute('aria-checked', 'false');
+      expect(toggleSwitch).toHaveAttribute('aria-checked', 'false');
     });
   });
 });
