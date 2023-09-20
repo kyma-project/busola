@@ -1,4 +1,5 @@
-import { MessagePage } from 'fundamental-react';
+import { IllustratedMessage } from '@ui5/webcomponents-react';
+import '@ui5/webcomponents-fiori/dist/illustrations/NoData';
 
 import { Widget, InlineWidget } from './Widget';
 import { useGetTranslation } from '../helpers';
@@ -13,15 +14,13 @@ export function MessagePanel({
   const { t: tExt } = useGetTranslation();
 
   return (
-    <MessagePage
-      image={
-        <svg role="img" className="fd-message-page__icon">
-          <use xlinkHref="#sapIllus-Scene-NoData" />
-        </svg>
-      }
-      title={tExt(structure?.title)}
-      subtitle={tExt(structure?.subtitle)}
-      actions={structure.children.map((def, idx) => (
+    <IllustratedMessage
+      name="NoData"
+      size="Scene"
+      titleText={tExt(structure?.title)}
+      subtitleText={tExt(structure?.subtitle)}
+    >
+      {structure.children.map((def, idx) => (
         <Widget
           key={idx}
           value={value}
@@ -32,6 +31,6 @@ export function MessagePanel({
           {...props}
         />
       ))}
-    />
+    </IllustratedMessage>
   );
 }
