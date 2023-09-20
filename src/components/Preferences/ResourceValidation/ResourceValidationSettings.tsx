@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { Button } from '@ui5/webcomponents-react';
-import { Switch } from 'fundamental-react';
+import { Button, Switch } from '@ui5/webcomponents-react';
 import {
   getExtendedValidateResourceState,
   validateResourcesState,
@@ -99,17 +98,11 @@ export default function ResourceValidationSettings() {
       title={t('settings.clusters.resourcesValidation.validateResources')}
       headerActions={
         <Switch
-          // TypeScript definitions are out of sync here
-          // @ts-ignore
-          localizedText={{
-            switchLabel: t(
-              'settings.clusters.resourcesValidation.validateResources',
-            ),
-          }}
-          className="fd-has-display-inline-block fd-margin-begin--tiny"
+          aria-label={t(
+            'settings.clusters.resourcesValidation.validateResources',
+          )}
           checked={isEnabled}
           onChange={toggleVisibility}
-          compact
         />
       }
     >
@@ -140,17 +133,12 @@ export default function ResourceValidationSettings() {
                   <span>{entry.text}</span>
                   {choosePolicies && (
                     <Switch
-                      // TypeScript definitions are out of sync here
-                      // @ts-ignore
-                      localizedText={{
-                        switchLabel: t(
-                          'settings.clusters.resourcesValidation.select-policy',
-                          {
-                            name: entry.text,
-                          },
-                        ),
-                      }}
-                      compact
+                      aria-label={t(
+                        'settings.clusters.resourcesValidation.select-policy',
+                        {
+                          name: entry.text,
+                        },
+                      )}
                       checked={entry.selected}
                       onChange={() => {
                         if (entry.selected) deleteSelectedPolicy(entry.key);
