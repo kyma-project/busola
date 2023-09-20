@@ -37,7 +37,7 @@ describe('Selector tests', () => {
         },
       };
 
-      const { getByText } = render(
+      const { container, getByText } = render(
         <ThemeProvider>
           <Selector
             selector={mockedSelector}
@@ -48,7 +48,7 @@ describe('Selector tests', () => {
       );
 
       expect(getByText('Related Pods for test-namespace')).toBeInTheDocument();
-      expect(getByText('test=test')).toBeInTheDocument(); // selector labels
+      expect(container.querySelector("[text='test=test']")).toBeInTheDocument(); // selector labels
     });
 
     it('Renders Selector with matchExpressions and without pods list', () => {
@@ -61,7 +61,7 @@ describe('Selector tests', () => {
         ],
       };
 
-      const { getByText } = render(
+      const { container, getByText } = render(
         <ThemeProvider>
           <Selector
             selector={mockedSelector}
@@ -73,10 +73,12 @@ describe('Selector tests', () => {
       );
 
       expect(getByText('match-expressions.title')).toBeInTheDocument(); //title of the matchExpressions table
-      expect(getByText('test=test')).toBeInTheDocument();
+      expect(container.querySelector("[text='test=test']")).toBeInTheDocument();
       expect(getByText('test-key')).toBeInTheDocument(); // matchExpressions elements
       expect(getByText('In')).toBeInTheDocument();
-      expect(getByText('test-value')).toBeInTheDocument();
+      expect(
+        container.querySelector("[text='test-value']"),
+      ).toBeInTheDocument();
     });
 
     it('Renders custom message when selector labels are null ', () => {
@@ -149,7 +151,7 @@ describe('Selector tests', () => {
         },
       };
 
-      const { getByText } = render(
+      const { container, getByText } = render(
         <ThemeProvider>
           <Selector
             selector={mockedSelector}
@@ -162,7 +164,7 @@ describe('Selector tests', () => {
       );
 
       expect(getByText('Custom Resources')).toBeInTheDocument();
-      expect(getByText('test=test')).toBeInTheDocument();
+      expect(container.querySelector("[text='test=test']")).toBeInTheDocument();
     });
   });
 });

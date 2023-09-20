@@ -85,7 +85,7 @@ context('Test reduced permissions 2', () => {
 
     cy.get('[aria-label="search-input"]').type('kube-public');
 
-    cy.get('[role="row"]')
+    cy.get('a.fd-link')
       .contains('kube-public')
       .click();
 
