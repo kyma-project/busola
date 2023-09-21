@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useUrl } from 'hooks/useUrl';
 
-export function NodeDetailsHeader({ nodeName, node, loading, error }) {
+export function NodeDetailsHeader({ nodeName, node, loading, error, content }) {
   const { t } = useTranslation();
   const { clusterUrl } = useUrl();
 
@@ -23,7 +23,11 @@ export function NodeDetailsHeader({ nodeName, node, loading, error }) {
   const zone = node?.metadata?.labels?.['topology.kubernetes.io/zone'];
 
   return (
-    <PageHeader title={nodeName} breadcrumbItems={breadcrumbs}>
+    <PageHeader
+      title={nodeName}
+      breadcrumbItems={breadcrumbs}
+      content={content}
+    >
       {loading && t('common.headers.loading')}
       {error && error.message}
       {node && (

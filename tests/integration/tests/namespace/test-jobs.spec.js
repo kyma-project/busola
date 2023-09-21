@@ -85,8 +85,7 @@ context('Test Jobs', () => {
 
     // created pod
     cy.get('ui5-table-cell')
-      .get('a.fd-link')
-      .contains(JOB_NAME + '-')
+      .contains('a', JOB_NAME + '-')
       .click();
 
     // images for both containers

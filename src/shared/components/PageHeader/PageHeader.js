@@ -36,7 +36,6 @@ export const PageHeader = ({
 }) => {
   return (
     <DynamicPage
-      style={{ height: '100vh' }}
       className="page-header"
       alwaysShowContentHeader
       showHideHeaderButton={false}
