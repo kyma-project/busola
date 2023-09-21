@@ -306,7 +306,7 @@ describe('GenericList', () => {
     expect(await getByText(content)).toBeInTheDocument();
   });
 
-  fit('Test sorting funcionality', () => {
+  it('Test sorting funcionality', () => {
     const {
       debug,
       queryByHeaderText,
