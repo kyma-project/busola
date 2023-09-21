@@ -112,7 +112,8 @@ context('Test Jobs', () => {
     });
 
     // back to job
-    cy.contains(`Job (${JOB_NAME})`)
+    cy.get('.page-header__column')
+      .contains(`Job (${JOB_NAME})`)
       .contains('a', JOB_NAME)
       .click();
 

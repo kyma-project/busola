@@ -172,7 +172,9 @@ context('Test Command Palette navigation', () => {
 
     cy.contains('ui5-button', 'Create Deployment').click();
 
-    openCommandPalette();
+    cy.get('[ariaLabel="Deployment name"]:visible')
+      .click()
+      .type(`${Cypress.platform === 'darwin' ? '{cmd}k' : '{ctrl}k'}`);
 
     getQueryInput().should('not.exist');
   });

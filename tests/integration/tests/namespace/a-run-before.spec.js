@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 context('Create Namespace', () => {
-  Cypress.skipAfterFail({ skipAllSuits: true });
+  // Cypress.skipAfterFail({ skipAllSuits: true });
 
   before(cy.loginAndSelectCluster);
 
@@ -26,6 +26,7 @@ context('Create Namespace', () => {
 
     cy.get('ui5-dialog')
       .find('input[ariaLabel="Namespace name"]:visible')
+      .click()
       .type(Cypress.env('NAMESPACE_NAME'));
 
     cy.get('ui5-dialog')
