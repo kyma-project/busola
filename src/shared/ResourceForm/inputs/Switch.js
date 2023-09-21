@@ -1,15 +1,10 @@
 import React from 'react';
-import { Switch as FundamentalSwitch } from 'fundamental-react';
+import { Switch as UI5Switch } from '@ui5/webcomponents-react';
 
 export function Switch({ value, setValue, ...props }) {
   return (
     <div className="fd-col fd-col-md--11">
-      <FundamentalSwitch
-        compact
-        onChange={e => setValue(!value)}
-        checked={value}
-        {...props}
-      />
+      <UI5Switch onChange={() => setValue(!value)} checked={value} {...props} />
     </div>
   );
 }

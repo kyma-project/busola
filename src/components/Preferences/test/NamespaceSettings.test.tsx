@@ -1,21 +1,23 @@
 import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
-import { render, fireEvent } from 'testing/reactTestingUtils';
+import { render, fireEvent, waitFor } from 'testing/reactTestingUtils';
 import NamespaceSettings from '../NamespaceSettings';
 
 describe('NamespaceSettings', () => {
-  it('Sends custom message on toggle', () => {
+  it('Sends custom message on toggle', async () => {
     const { getByLabelText } = render(<NamespaceSettings />, {
       initializeState: snapshot =>
         snapshot.set(showHiddenNamespacesState, true),
     });
 
-    const toggleElement = getByLabelText(
-      'settings.clusters.showHiddenNamespaces',
-    );
+    const toggle = getByLabelText('settings.clusters.showHiddenNamespaces');
+    const toggleSwitch = toggle.shadowRoot?.querySelector('[role="switch"]');
 
-    expect(toggleElement).toBeChecked();
-    fireEvent.click(toggleElement);
+    expect(toggleSwitch).toHaveAttribute('aria-checked', 'true');
 
-    expect(toggleElement).not.toBeChecked();
+    if (toggleSwitch) fireEvent.click(toggleSwitch);
+
+    await waitFor(() => {
+      expect(toggleSwitch).toHaveAttribute('aria-checked', 'false');
+    });
   });
 });

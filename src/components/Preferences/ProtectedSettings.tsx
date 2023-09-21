@@ -1,4 +1,4 @@
-import { Switch } from 'fundamental-react';
+import { Switch } from '@ui5/webcomponents-react';
 import { useFeature } from 'hooks/useFeature';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
@@ -24,11 +24,8 @@ export default function ProtectedSettings() {
       </span>
       <div>
         <Switch
-          compact
-          inputProps={{
-            'aria-label': t('settings.clusters.disableResourceProtection'),
-          }}
-          className="fd-has-display-inline-block fd-margin-begin--tiny"
+          aria-label={t('settings.clusters.disableResourceProtection')}
+          className="fd-margin-begin--tiny"
           checked={disableResourceProtection}
           onChange={() => setDisableResourceProtection(prevState => !prevState)}
         />
