@@ -2,7 +2,7 @@ Cypress.Commands.add('createNamespace', namespaceName => {
   cy.log('Create a Namespace');
 
   cy.getLeftNav()
-    .contains('Namespaces', { includeShadowDom: true })
+    .contains('Namespaces')
     .click();
 
   cy.contains('ui5-button', 'Create Namespace').click();

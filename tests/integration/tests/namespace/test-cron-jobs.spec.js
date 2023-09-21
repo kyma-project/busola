@@ -67,9 +67,7 @@ context('Test Cron Jobs', () => {
   });
 
   it('Checking details', () => {
-    cy.contains(CRON_JOB_NAME, { includeShadowDom: false }).should(
-      'be.visible',
-    );
+    cy.contains('ui5-title', CRON_JOB_NAME).should('be.visible');
 
     cy.contains('0 0 1 * *').should('be.visible');
   });

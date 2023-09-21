@@ -47,7 +47,7 @@ Cypress.Commands.add('filterWithNoValue', { prevSubject: true }, $elements =>
 Cypress.Commands.add('goToNamespaceDetails', () => {
   // Go to the details of namespace
   cy.getLeftNav()
-    .contains('Namespaces', { includeShadowDom: true })
+    .contains('Namespaces')
     .click();
 
   cy.get('[role=row]')
@@ -119,7 +119,7 @@ Cypress.Commands.add('deleteInDetails', resourceName => {
     .click();
 
   cy.get(`[header-text="Delete ${resourceName}"]`)
-    .find('[data-testid="delete-confirmation"]', { includeShadowDom: true })
+    .find('[data-testid="delete-confirmation"]')
     .click();
 
   cy.contains(/deleted/).should('be.visible');
@@ -145,7 +145,7 @@ Cypress.Commands.add(
 
     if (confirmationEnabled) {
       cy.get(`[header-text="Delete ${searchTerm}"]`)
-        .find('[data-testid="delete-confirmation"]', { includeShadowDom: true })
+        .find('[data-testid="delete-confirmation"]')
         .click();
 
       if (deletedVisible) {
