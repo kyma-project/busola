@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, MessageStrip } from '@ui5/webcomponents-react';
-import { BusyIndicator } from 'fundamental-react';
+import { BusyIndicator, Button, MessageStrip } from '@ui5/webcomponents-react';
 import * as jp from 'jsonpath';
 import { ResourceForm } from 'shared/ResourceForm';
 import { ComboboxArrayInput, TextArrayInput } from 'shared/ResourceForm/fields';
@@ -137,7 +136,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         nestingLevel={2}
         newItemAction={
           loading ? (
-            <BusyIndicator size="s" show={true} />
+            <BusyIndicator size="Small" active={true} delay="0" />
           ) : (
             <Tooltip content={t('roles.tooltips.load')}>
               <Button

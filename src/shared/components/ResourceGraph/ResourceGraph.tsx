@@ -96,7 +96,7 @@ function ResourceGraph({
   return (
     <Panel
       fixed
-      className="fd-margin--md resource-graph"
+      className="fd-margin--md"
       ref={(node: any) => setGraphEl(node)}
       header={
         <Toolbar>

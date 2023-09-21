@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { MessageStrip } from '@ui5/webcomponents-react';
-import { BusyIndicator } from 'fundamental-react';
+import { BusyIndicator, MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
@@ -31,9 +30,10 @@ export const LogsLink = ({
   if (loading) {
     return (
       <BusyIndicator
+        delay="0"
         className={classNames('logs-link', 'loading', className)}
-        show
-        size="s"
+        size="Small"
+        active
       />
     );
   }
