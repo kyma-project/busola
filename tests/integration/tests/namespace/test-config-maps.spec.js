@@ -22,6 +22,7 @@ context('Test Config Maps', () => {
     cy.contains('ui5-button', 'Create Config Map').click();
 
     cy.get('[ariaLabel="ConfigMap name"]:visible')
+      .click()
       .type(CONFIG_MAP_NAME)
       .click();
 
