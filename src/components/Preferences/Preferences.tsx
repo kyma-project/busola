@@ -85,6 +85,7 @@ export function Preferences() {
           <TabContainer
             tabLayout="Inline"
             contentBackgroundDesign="Transparent"
+            fixed
           >
             <Tab
               style={{ padding: '-16px -32px' }}
@@ -105,6 +106,7 @@ export function Preferences() {
           <TabContainer
             tabLayout="Inline"
             contentBackgroundDesign="Transparent"
+            fixed
           >
             <Tab
               key="cluster-interaction"
