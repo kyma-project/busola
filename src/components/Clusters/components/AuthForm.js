@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MessageStrip } from '@ui5/webcomponents-react';
-import { Switch } from 'fundamental-react';
+import { MessageStrip, Switch } from '@ui5/webcomponents-react';
 import * as jp from 'jsonpath';
 import { createLoginCommand, tryParseOIDCparams } from './oidc-params';
 
@@ -139,9 +138,7 @@ export function AuthForm({
       )}
       <ResourceForm.FormField
         label={t('clusters.wizard.auth.using-oidc')}
-        input={() => (
-          <Switch checked={useOidc} compact onChange={switchAuthVariant} />
-        )}
+        input={() => <Switch checked={useOidc} onChange={switchAuthVariant} />}
       />
       {useOidc && <OIDCform />}
     </ResourceForm.Wrapper>
