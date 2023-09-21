@@ -10,7 +10,7 @@ import {
   Title,
 } from '@ui5/webcomponents-react';
 
-import './PageHeader.scss';
+import './DynamicPageComponent.scss';
 
 const Column = ({ title, children, columnSpan, image, style = {} }) => {
   const styleComputed = { gridColumn: columnSpan, ...style };
@@ -25,7 +25,7 @@ const Column = ({ title, children, columnSpan, image, style = {} }) => {
   );
 };
 
-export const PageHeader = ({
+export const DynamicPageComponent = ({
   title,
   description,
   breadcrumbItems,
@@ -77,9 +77,9 @@ export const PageHeader = ({
     </DynamicPage>
   );
 };
-PageHeader.Column = Column;
+DynamicPageComponent.Column = Column;
 
-PageHeader.propTypes = {
+DynamicPageComponent.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.node,
   breadcrumbItems: PropTypes.arrayOf(
@@ -94,7 +94,7 @@ PageHeader.propTypes = {
   ),
 };
 
-PageHeader.defaultProps = {
+DynamicPageComponent.defaultProps = {
   breadcrumbItems: [],
   description: '',
 };

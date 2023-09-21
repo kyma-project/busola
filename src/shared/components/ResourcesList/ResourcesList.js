@@ -16,7 +16,7 @@ import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorConte
 import { YamlEditorProvider } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
 import { prettifyNameSingular, prettifyNamePlural } from 'shared/utils/helpers';
 import { Labels } from 'shared/components/Labels/Labels';
-import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
@@ -109,7 +109,7 @@ export function ResourcesList(props) {
   return (
     <YamlEditorProvider>
       {!props.isCompact ? (
-        <PageHeader
+        <DynamicPageComponent
           title={prettifyNamePlural(props.resourceTitle, props.resourceType)}
           actions={
             <>

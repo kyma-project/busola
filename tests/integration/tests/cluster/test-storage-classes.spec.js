@@ -35,9 +35,9 @@ context('Test Storage Classes', () => {
   });
 
   it('Checking details', () => {
-    cy.contains(Cypress.env('STORAGE_CLASS_NAME'), {
-      includeShadowDom: false,
-    }).should('be.visible');
+    cy.contains('ui5-title', Cypress.env('STORAGE_CLASS_NAME')).should(
+      'be.visible',
+    );
 
     cy.contains('pd.csi.storage.gke.io').should('be.visible');
 

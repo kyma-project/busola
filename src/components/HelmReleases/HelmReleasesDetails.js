@@ -4,7 +4,7 @@ import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNot
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { prettifyNameSingular } from 'shared/utils/helpers';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { HelmReleaseData } from './HelmReleaseData';
 import { Link } from 'react-router-dom';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
@@ -45,7 +45,7 @@ function HelmReleasesDetails({ releaseName }) {
 
   return (
     <>
-      <PageHeader
+      <DynamicPageComponent
         title={releaseName}
         breadcrumbItems={breadcrumbItems}
         content={
@@ -63,22 +63,24 @@ function HelmReleasesDetails({ releaseName }) {
       >
         {releaseSecret && (
           <>
-            <PageHeader.Column title={t('secrets.name_singular')}>
+            <DynamicPageComponent.Column title={t('secrets.name_singular')}>
               <Link
                 className="fd-link"
                 to={namespaceUrl(`secrets/${releaseSecret.metadata.name}`)}
               >
                 {releaseSecret.metadata.name}
               </Link>
-            </PageHeader.Column>
-            <PageHeader.Column title={t('helm-releases.headers.revision')}>
+            </DynamicPageComponent.Column>
+            <DynamicPageComponent.Column
+              title={t('helm-releases.headers.revision')}
+            >
               {releaseSecret.metadata.labels.version}
-            </PageHeader.Column>
-            <PageHeader.Column title={t('common.headers.status')}>
+            </DynamicPageComponent.Column>
+            <DynamicPageComponent.Column title={t('common.headers.status')}>
               <HelmReleaseStatus
                 status={releaseSecret.metadata.labels.status}
               />
-            </PageHeader.Column>
+            </DynamicPageComponent.Column>
           </>
         )}
         <YamlUploadDialog
@@ -87,7 +89,7 @@ function HelmReleasesDetails({ releaseName }) {
             setShowAdd(false);
           }}
         />
-      </PageHeader>
+      </DynamicPageComponent>
     </>
   );
 }

@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
-import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
 
 export const ResourceNotFound = ({ resource, breadcrumbs, customMessage }) => {
   const { t } = useTranslation();
   return (
     <>
-      <PageHeader
+      <DynamicPageComponent
         title=""
         breadcrumbItems={breadcrumbs}
         content={

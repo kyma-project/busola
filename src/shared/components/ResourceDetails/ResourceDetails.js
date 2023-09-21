@@ -19,7 +19,7 @@ import {
   prettifyNamePlural,
 } from 'shared/utils/helpers';
 import { Labels } from 'shared/components/Labels/Labels';
-import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
@@ -359,7 +359,7 @@ function Resource({
 
   return (
     <>
-      <PageHeader
+      <DynamicPageComponent
         title={resource.metadata.name}
         actions={actions}
         breadcrumbItems={breadcrumbItems}
@@ -401,24 +401,27 @@ function Resource({
           </>
         }
       >
-        <PageHeader.Column
+        <DynamicPageComponent.Column
           key="Labels"
           title={t('common.headers.labels')}
           columnSpan="1 / 3"
         >
           <Labels labels={resource.metadata.labels || {}} />
-        </PageHeader.Column>
+        </DynamicPageComponent.Column>
 
-        <PageHeader.Column key="Created" title={t('common.headers.created')}>
+        <DynamicPageComponent.Column
+          key="Created"
+          title={t('common.headers.created')}
+        >
           <ReadableCreationTimestamp
             timestamp={resource.metadata.creationTimestamp}
           />
-        </PageHeader.Column>
+        </DynamicPageComponent.Column>
 
         {customColumns.filter(filterColumns).map(col => (
-          <PageHeader.Column key={col.header} title={col.header}>
+          <DynamicPageComponent.Column key={col.header} title={col.header}>
             {col.value(resource)}
-          </PageHeader.Column>
+          </DynamicPageComponent.Column>
         ))}
         {createPortal(
           <YamlUploadDialog
@@ -429,7 +432,7 @@ function Resource({
           />,
           document.body,
         )}
-      </PageHeader>
+      </DynamicPageComponent>
     </>
   );
 }

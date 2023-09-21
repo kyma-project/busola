@@ -6,7 +6,7 @@ import { LogsLink } from 'shared/components/LogsLink/LogsLink';
 import { useGetStream } from 'shared/hooks/BackendAPI/useGet';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { SearchInput } from 'shared/components/GenericList/SearchInput';
 import { useTranslation } from 'react-i18next';
 import { useUrl } from 'hooks/useUrl';
@@ -171,7 +171,7 @@ const ContainersLogs = ({ params }) => {
   };
 
   return (
-    <PageHeader
+    <DynamicPageComponent
       title={params.containerName}
       breadcrumbItems={breadcrumbs}
       content={

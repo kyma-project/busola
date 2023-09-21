@@ -12,7 +12,7 @@ import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
-import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
 import { deleteCluster } from './../shared';
@@ -229,7 +229,7 @@ function ClusterList() {
     <>
       {addDialog}
       {editDialog}
-      <PageHeader
+      <DynamicPageComponent
         title={t('clusters.overview.title-all-clusters')}
         content={
           <>

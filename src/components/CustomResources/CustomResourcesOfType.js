@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
-import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { CustomResources } from 'components/CustomResources/CustomResources';
 import { useUrl } from 'hooks/useUrl';
@@ -35,7 +35,7 @@ export default function CustomResourcesOfType({ crdName }) {
 
   return (
     <>
-      <PageHeader
+      <DynamicPageComponent
         title={pluralize(crd.spec.names.kind)}
         breadcrumbItems={breadcrumbItems}
         content={
@@ -47,7 +47,7 @@ export default function CustomResourcesOfType({ crdName }) {
           />
         }
       >
-        <PageHeader.Column
+        <DynamicPageComponent.Column
           title={t('custom-resource-definitions.name_singular')}
         >
           <Link
@@ -56,8 +56,8 @@ export default function CustomResourcesOfType({ crdName }) {
           >
             {crd.metadata.name}
           </Link>
-        </PageHeader.Column>
-      </PageHeader>
+        </DynamicPageComponent.Column>
+      </DynamicPageComponent>
       <CustomResources
         crd={crd}
         version={crd.spec.versions.find(v => v.served)}
