@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { saveAs } from 'file-saver';
-import { Button, Text } from '@ui5/webcomponents-react';
-import { Switch, Select, FormLabel } from 'fundamental-react';
+import { Button, Label, Switch, Text } from '@ui5/webcomponents-react';
+import { Select, FormLabel } from 'fundamental-react';
 import { LogsLink } from 'shared/components/LogsLink/LogsLink';
 import { useGetStream } from 'shared/hooks/BackendAPI/useGet';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
@@ -189,20 +189,20 @@ const ContainersLogs = ({ params }) => {
                 selectedKey={sinceSeconds.toString()}
                 onSelect={(_, { key }) => onLogTimeframeChange(key)}
               />
-              <Switch
-                disabled={!logsToSave?.length}
-                compact
-                onChange={onSwitchChange}
-              >
+              <Label className="fd-margin-begin--sm">
                 {t('pods.labels.show-timestamps')}
-              </Switch>
+              </Label>
               <Switch
                 disabled={!logsToSave?.length}
-                compact
-                onChange={onReverseChange}
-              >
+                onChange={onSwitchChange}
+              />
+              <Label className="fd-margin-begin--sm">
                 {t('pods.labels.reverse-logs')}
-              </Switch>
+              </Label>
+              <Switch
+                disabled={!logsToSave?.length}
+                onChange={onReverseChange}
+              />
               <LogsLink
                 className="fd-margin-begin--tiny"
                 query={`{namespace="${params.namespace}",pod="${params.podName}",container="${params.containerName}"}`}

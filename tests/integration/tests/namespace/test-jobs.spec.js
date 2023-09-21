@@ -84,7 +84,10 @@ context('Test Jobs', () => {
     cy.contains(JOB_NAME);
 
     // created pod
-    cy.contains('a', new RegExp(JOB_NAME + '-')).click();
+    cy.get('ui5-table-cell')
+      .get('a.fd-link')
+      .contains(JOB_NAME + '-')
+      .click();
 
     // images for both containers
     cy.contains(/Imagebusybox/);

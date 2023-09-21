@@ -14,15 +14,8 @@ context('Test app settings and preferences', () => {
     cy.contains('Cluster interaction').click();
 
     cy.contains('.preferences-row', 'Delete without confirmation')
-      .find('[aria-label="Switch"]')
-      .invoke('attr', 'aria-checked')
-      .then(value => {
-        if (value === 'false') {
-          cy.contains('.preferences-row', 'Delete without confirmation')
-            .find('.fd-switch')
-            .click();
-        }
-      });
+      .find('ui5-switch')
+      .click();
 
     cy.get('ui5-dialog')
       .contains('ui5-button', 'Close')
@@ -60,7 +53,7 @@ context('Test app settings and preferences', () => {
     cy.contains('Cluster interaction').click();
 
     cy.contains('.preferences-row', 'Delete without confirmation')
-      .find('.fd-switch')
+      .find('ui5-switch')
       .click();
 
     cy.get('ui5-dialog')
@@ -101,7 +94,7 @@ context('Test app settings and preferences', () => {
       .then(value => {
         if (value === 'true') {
           cy.contains('.preferences-row', 'Show hidden Namespaces')
-            .find('.fd-switch')
+            .find('ui5-switch')
             .click();
         }
       });

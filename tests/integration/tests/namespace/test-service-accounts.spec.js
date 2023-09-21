@@ -26,12 +26,12 @@ context('Test Service Accounts', () => {
       .type(SERVICE_NAME);
 
     // Toggle 'Automount Token' switch
-    cy.get('[role="presentation"]', { includeShadowDom: false })
+    cy.get('ui5-switch')
       .eq(0)
       .click();
 
     // Toggle 'Create associated Secret' switch
-    cy.get('[role="presentation"]', { includeShadowDom: false })
+    cy.get('ui5-switch')
       .eq(1)
       .click();
 
@@ -73,7 +73,7 @@ context('Test Service Accounts', () => {
       .type('test-value');
 
     // Toggle 'Automount Token' switch
-    cy.get('[role="presentation"]', { includeShadowDom: false })
+    cy.get('ui5-switch')
       .eq(0)
       .click();
 

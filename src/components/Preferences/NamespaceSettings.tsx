@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
-import { Switch } from 'fundamental-react';
+import { Switch } from '@ui5/webcomponents-react';
 import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
 
 export default function NamespaceSettings() {
@@ -20,15 +20,10 @@ export default function NamespaceSettings() {
       </span>
       <div>
         <Switch
-          // TypeScript definitions are out of sync here
-          // @ts-ignore
-          localizedText={{
-            switchLabel: t('settings.clusters.showHiddenNamespaces'),
-          }}
-          className="fd-has-display-inline-block fd-margin-begin--tiny"
+          aria-label={t('settings.clusters.showHiddenNamespaces')}
+          className="fd-margin-begin--tiny"
           checked={showHiddenNamespaces}
           onChange={toggleVisibility}
-          compact
         />
       </div>
     </div>

@@ -123,7 +123,7 @@ context('Test Protected Resources', () => {
       '.preferences-row',
       'Allow for modification of protected resources',
     )
-      .find('.fd-switch')
+      .find('ui5-switch')
       .click();
 
     cy.contains('Close').click();
