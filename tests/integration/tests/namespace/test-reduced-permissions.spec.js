@@ -29,9 +29,11 @@ context('Test reduced permissions', () => {
   it('Create Cluster Role with reduced permissions', () => {
     cy.navigateTo('Configuration', 'Cluster Roles');
 
-    cy.contains('ui5-button', 'Create Cluster Role').type(CR_NAME);
+    cy.contains('ui5-button', 'Create Cluster Role').click();
 
-    cy.get('[ariaLabel="ClusterRole name"]:visible').type(CR_NAME);
+    cy.get('[ariaLabel="ClusterRole name"]:visible')
+      .click()
+      .type(CR_NAME);
 
     // api groups
     chooseComboboxOption(

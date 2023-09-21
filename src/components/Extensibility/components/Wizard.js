@@ -39,6 +39,7 @@ export function Wizard({ value, structure, singleRootResource }) {
           open={showWizard}
           className="wizard-dialog"
           headerText={t('extensibility.wizard.headers.name') + ' ' + wizardName}
+          onAfterClose={() => setShowWizard(false)}
         >
           <ErrorBoundary onClose={handleCloseModal}>
             <ExtensibilityWizard

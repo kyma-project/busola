@@ -24,6 +24,7 @@ import './ClusterList.scss';
 import { useLoadDefaultKubeconfigId } from 'components/App/useLoginWithKubeconfigID';
 import { useFeature } from 'hooks/useFeature';
 import { useNavigate } from 'react-router-dom';
+import { createPortal } from 'react-dom';
 
 function ClusterList() {
   const gardenerLoginFeature = useFeature('GARDENER_LOGIN');
@@ -253,16 +254,19 @@ function ClusterList() {
                 noSearchResultMessage: t('clusters.list.no-clusters-found'),
               }}
             />
-            <DeleteMessageBox
-              resource={chosenCluster}
-              resourceTitle={chosenCluster?.kubeconfig['current-context']}
-              deleteFn={e => {
-                deleteCluster(e.name, clustersInfo);
-                notification.notifySuccess({
-                  content: t('clusters.disconnect'),
-                });
-              }}
-            />
+            {createPortal(
+              <DeleteMessageBox
+                resource={chosenCluster}
+                resourceTitle={chosenCluster?.kubeconfig['current-context']}
+                deleteFn={e => {
+                  deleteCluster(e.name, clustersInfo);
+                  notification.notifySuccess({
+                    content: t('clusters.disconnect'),
+                  });
+                }}
+              />,
+              document.body,
+            )}
           </>
         }
       />

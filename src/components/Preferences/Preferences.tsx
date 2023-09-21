@@ -63,6 +63,7 @@ export function Preferences() {
 
   return (
     <Dialog
+      onAfterClose={handleCloseModal}
       open={isModalOpen}
       headerText={t('navigation.preferences.title')}
       footer={
