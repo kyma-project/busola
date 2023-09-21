@@ -273,11 +273,6 @@ input[type='checkbox'] {
   border-color: var(--sapField_InvalidColor, #b00);
 }
 
-.fd-layout-panel.page-header {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
-
 .message-toast--wrapper {
   position: fixed;
   transition: all ease-in-out 0.4s;
