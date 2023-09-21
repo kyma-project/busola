@@ -4,7 +4,8 @@ import { useUIStore } from '@ui-schema/ui-schema';
 import { useJsonata } from '../../hooks/useJsonata';
 import { useVariables } from '../../hooks/useVariables';
 import { fromJS } from 'immutable';
-import { MessageStrip, Checkbox, Link, Icon } from 'fundamental-react';
+import { Icon, Link, MessageStrip } from '@ui5/webcomponents-react';
+import { Checkbox } from 'fundamental-react';
 
 import './Modules.scss';
 import { useGetTranslation } from 'components/Extensibility/helpers';
@@ -80,7 +81,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
   const Items = parsedOptions?.name?.map((name, index) => {
     if (!name)
       return (
-        <MessageStrip type={'warning'}>
+        <MessageStrip design="Warning" hideCloseButton>
           {t('extensibility.widgets.modules.no-modules')}
         </MessageStrip>
       );
@@ -215,13 +216,18 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
               className="fd-align-vertical-center-ignor-checkbox-label"
             >
               {t('extensibility.widgets.modules.documentation')}
-              <Icon glyph="action" size="s" className="fd-margin-begin--tiny" />
+              <Icon
+                name="action"
+                design="Information"
+                className="fd-margin-begin--tiny ui5-icon-s"
+              />
             </Link>
           ) : null}
         </div>
         {parsedOptions?.betaAlert && isBeta && isChecked ? (
           <MessageStrip
-            type="warning"
+            design="Warning"
+            hideCloseButton
             className="fd-margin-bottom--sm fd-margin-top--sm alert"
           >
             {tExt(parsedOptions?.betaAlert)}

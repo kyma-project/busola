@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import SecretData from '../SecretData';
+import { ThemeProvider } from '@ui5/webcomponents-react';
 
 export const secret = {
   data: {
@@ -12,6 +13,17 @@ export const secret = {
 export const empty_secret = {};
 
 describe('SecretData', () => {
+  const expectInitialState = async ({ getAllByText, queryByText }) => {
+    expect(await getAllByText('*****')).toHaveLength(2);
+
+    expect(queryByText(secret.data.client_id)).not.toBeInTheDocument();
+    expect(queryByText(secret.data.client_secret)).not.toBeInTheDocument();
+    expect(queryByText(btoa(secret.data.client_id))).not.toBeInTheDocument();
+    expect(
+      queryByText(btoa(secret.data.client_secret)),
+    ).not.toBeInTheDocument();
+  };
+
   const expectDecodedState = async ({ findByText, queryByText }) => {
     expect(await findByText(atob(secret.data.client_id))).toBeInTheDocument();
     expect(
@@ -33,28 +45,46 @@ describe('SecretData', () => {
   };
 
   it('Renders header', async () => {
-    const { queryByText } = render(<SecretData secret={secret} />);
+    const { queryByText } = render(
+      <ThemeProvider>
+        <SecretData secret={secret} />
+      </ThemeProvider>,
+    );
 
     expect(queryByText('secrets.data')).toBeInTheDocument();
   });
 
   it('Decodes and encodes secret values', async () => {
-    const { findByText, queryByText } = render(<SecretData secret={secret} />);
+    const { findByText, getAllByText, queryByText } = render(
+      <ThemeProvider>
+        <SecretData secret={secret} />
+      </ThemeProvider>,
+    );
+
+    await expectInitialState({ getAllByText, queryByText });
 
     fireEvent.click(await findByText('secrets.buttons.decode'));
     await expectDecodedState({ findByText, queryByText });
 
-    fireEvent.click(await findByText('secrets.buttons.encode'));
+    fireEvent.click(await getAllByText('secrets.buttons.encode')[0]);
     await expectEncodedState({ findByText, queryByText });
   });
 
   it('Renders secret not found', async () => {
-    const { findByText } = render(<SecretData secret={null} />);
-    expect(await findByText('Secret not found')).toBeInTheDocument();
+    const { findByText } = render(
+      <ThemeProvider>
+        <SecretData secret={null} />
+      </ThemeProvider>,
+    );
+    expect(await findByText('secrets.secret-not-found')).toBeInTheDocument();
   });
 
   it('Renders empty secret', async () => {
-    const { findByText } = render(<SecretData secret={empty_secret} />);
-    expect(await findByText('Empty Secret')).toBeInTheDocument();
+    const { findByText } = render(
+      <ThemeProvider>
+        <SecretData secret={empty_secret} />
+      </ThemeProvider>,
+    );
+    expect(await findByText('secrets.secret-empty')).toBeInTheDocument();
   });
 });

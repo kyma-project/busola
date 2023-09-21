@@ -122,13 +122,14 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
     if (storage) {
       cy.contains(storage).click();
     }
-
-    cy.contains('[role="dialog"] button', 'Connect cluster').click();
+    cy.get(`[aria-label="last-step"]:visible`)
+      .contains('Connect cluster')
+      .click({ force: true });
 
     cy.url().should('match', expectedLocation);
 
     if (expectedLocation == /overview$/) {
-      cy.contains('Cluster Details').should('be.visible');
+      cy.contains('ui5-title', 'Cluster Details').should('be.visible');
     }
 
     return cy.end();

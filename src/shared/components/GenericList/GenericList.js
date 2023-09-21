@@ -1,10 +1,9 @@
-import classnames from 'classnames';
-import { LayoutPanel } from 'fundamental-react';
 import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
+import { Table } from '@ui5/webcomponents-react';
 
 import {
   BodyFallback,
@@ -23,6 +22,7 @@ import { nameLocaleSort, timeSort } from 'shared/helpers/sortingfunctions';
 import { getErrorMessage } from 'shared/utils/helpers';
 import { pageSizeState } from 'state/preferences/pageSizeAtom';
 import './GenericList.scss';
+import { UI5Panel } from '../UI5Panel/UI5Panel';
 
 const defaultSort = {
   name: nameLocaleSort,
@@ -148,6 +148,11 @@ export const GenericList = ({
     </>
   );
 
+  const headerActionsEmpty =
+    !searchSettings?.showSearchField &&
+    !(sortBy && !isEmpty(sortBy)) &&
+    !extraHeaderContent;
+
   const renderTableBody = () => {
     if (serverDataError) {
       return (
@@ -202,7 +207,6 @@ export const GenericList = ({
         entry={e}
         actions={actions}
         rowRenderer={rowRenderer}
-        compact={compact}
         isBeingEdited={
           currentlyEditedResourceUID &&
           e?.metadata?.uid === currentlyEditedResourceUID
@@ -211,55 +215,36 @@ export const GenericList = ({
     ));
   };
 
-  const tableClassNames = classnames(
-    'fd-table',
-    'fd-table--no-horizontal-borders',
-    { compact },
-  );
-  const panelClassNames = classnames(
-    'generic-list',
-    {
-      'fd-margin--md': !className?.includes('fd-margin'),
-    },
-    className,
-  );
-
   return (
-    <LayoutPanel className={panelClassNames} data-testid={testid}>
-      <LayoutPanel.Header className="fd-has-padding-left-small fd-has-padding-right-small">
-        <LayoutPanel.Head title={title} />
-        <LayoutPanel.Actions>{headerActions}</LayoutPanel.Actions>
-      </LayoutPanel.Header>
+    <UI5Panel
+      title={title}
+      headerActions={!headerActionsEmpty && headerActions}
+      data-testid={testid}
+    >
+      <Table
+        className={'ui5-generic-list'}
+        columns={
+          <HeaderRenderer
+            entries={entries}
+            actions={actions}
+            headerRenderer={headerRenderer}
+          />
+        }
+      >
+        {renderTableBody()}
+      </Table>
 
-      <LayoutPanel.Body className="fd-has-padding-none">
-        <table className={tableClassNames}>
-          {showHeader && (
-            <thead className="fd-table__header">
-              <tr className="fd-table__row">
-                <HeaderRenderer
-                  entries={entries}
-                  actions={actions}
-                  headerRenderer={headerRenderer}
-                />
-              </tr>
-            </thead>
-          )}
-          <tbody className="fd-table__body">{renderTableBody()}</tbody>
-        </table>
-      </LayoutPanel.Body>
       {!!pagination &&
         (!pagination.autoHide ||
           filteredEntries.length > pagination.itemsPerPage) && (
-          <LayoutPanel.Footer>
-            <Pagination
-              itemsTotal={filteredEntries.length}
-              currentPage={currentPage}
-              itemsPerPage={pagination.itemsPerPage}
-              onChangePage={setCurrentPage}
-            />
-          </LayoutPanel.Footer>
+          <Pagination
+            itemsTotal={filteredEntries.length}
+            currentPage={currentPage}
+            itemsPerPage={pagination.itemsPerPage}
+            onChangePage={setCurrentPage}
+          />
         )}
-    </LayoutPanel>
+    </UI5Panel>
   );
 };
 

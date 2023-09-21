@@ -7,7 +7,7 @@ context('Create Namespace', () => {
 
   it('Create Namespace', () => {
     cy.getLeftNav()
-      .contains('Namespaces', { includeShadowDom: true })
+      .contains('Namespaces')
       .click();
 
     cy.contains('Create Namespace').click();
@@ -33,17 +33,24 @@ context('Create Namespace', () => {
       .click();
 
     cy.get('[role=dialog]')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
 
-    cy.contains('[aria-label="title"]', Cypress.env('NAMESPACE_NAME')).should(
+    cy.contains('ui5-title', Cypress.env('NAMESPACE_NAME')).should(
       'be.visible',
     );
 
-    cy.contains('button', 'Edit').click();
+    cy.get('ui5-button')
+      .contains('Edit')
+      .should('be.visible')
+      .click();
 
     cy.get('[role=dialog]')
-      .contains('button', 'Update')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Update')
+      .should('be.visible')
       .click();
   });
 });

@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { Button, Dialog, Icon } from 'fundamental-react';
+import { Button, Icon } from '@ui5/webcomponents-react';
+import { Dialog } from 'fundamental-react';
 import { useEventListener } from 'hooks/useEventListener';
 
 import './ErrorModal.scss';
@@ -47,14 +48,18 @@ export function ErrorModal({
   );
 
   const defaultCloseButton = (close: CloseFn): React.ReactNode => (
-    <Button option="emphasized" compact onClick={close}>
+    <Button design="Emphasized" onClick={close}>
       {buttonDismissText}
     </Button>
   );
 
   const title = (
     <>
-      <Icon glyph="message-error" className="fd-margin-end--tiny" />
+      <Icon
+        design="Negative"
+        name="message-error"
+        className="fd-margin-end--tiny"
+      />
       {header}
     </>
   );

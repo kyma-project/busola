@@ -67,32 +67,6 @@ body {
   margin-right: 0.2rem;
 }
 
-.fd-token {
-  font-size: 0.75rem !important;
-  flex: none !important;
-  padding: 0 8px !important;
-
-  &--readonly {
-    .fd-token__close {
-      display: none !important;
-    }
-
-    &::after {
-      content: none !important;
-    }
-
-    &:hover {
-      background-color: initial !important;
-      border-color: initial !important;
-    }
-  }
-
-  .fd-token__close {
-    padding-right: 0;
-    display: inline;
-  }
-}
-
 .fd-dialog,
 .fd-panel,
 .fd-action-bar {
@@ -204,13 +178,6 @@ li {
   visibility: hidden !important;
 }
 
-.no-dismiss-tokens {
-  .fd-token::after,
-  &.fd-token::after {
-    content: none !important;
-  }
-}
-
 .clearfix::after {
   content: '';
   clear: both;
@@ -248,7 +215,7 @@ input[type='checkbox'] {
 
 @font-face {
   font-family: 'SAP-icons';
-  src: url('~@sap-theming/theming-base-content/content/Base/baseLib/baseTheme/fonts/SAP-icons.woff')
+  src: url('~@sap-theming/theming-base-content/content/Base/baseLib/sap_horizon/fonts/SAP-icons.woff')
     format('woff');
   font-weight: normal;
   font-style: normal;
@@ -256,7 +223,7 @@ input[type='checkbox'] {
 
 @font-face {
   font-family: 'BusinessSuiteInAppSymbols';
-  src: url('~@sap-theming/theming-base-content/content/Base/baseLib/baseTheme/fonts/BusinessSuiteInAppSymbols.woff')
+  src: url('~@sap-theming/theming-base-content/content/Base/baseLib/sap_horizon/fonts/BusinessSuiteInAppSymbols.woff')
     format('woff');
   font-weight: normal;
   font-style: normal;
@@ -264,7 +231,7 @@ input[type='checkbox'] {
 
 @font-face {
   font-family: 'SAP-icons-TNT';
-  src: url('~@sap-theming/theming-base-content/content/Base/baseLib/baseTheme/fonts/SAP-icons-TNT.woff')
+  src: url('~@sap-theming/theming-base-content/content/Base/baseLib/sap_horizon/fonts/SAP-icons-TNT.woff')
     format('woff');
   font-weight: normal;
   font-style: normal;
@@ -293,10 +260,6 @@ input[type='checkbox'] {
   }
 }
 
-.fd-switch__input {
-  position: absolute !important;
-}
-
 .modal-size--l {
   .fd-dialog__content {
     width: 80vw;
@@ -310,11 +273,6 @@ input[type='checkbox'] {
   border-color: var(--sapField_InvalidColor, #b00);
 }
 
-.fd-layout-panel.page-header {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
-
 .message-toast--wrapper {
   position: fixed;
   transition: all ease-in-out 0.4s;
@@ -323,60 +281,6 @@ input[type='checkbox'] {
   left: 50vw;
   transform: translateX(-50%);
   bottom: 50px;
-
-  .fd-message-toast {
-    line-height: 1.42857;
-    font-weight: 400;
-    -webkit-font-smoothing: antialiased;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-    border: 0;
-    display: -webkit-inline-box;
-    display: -ms-inline-flexbox;
-    display: inline-flex;
-    width: auto;
-    max-width: 20rem;
-    -webkit-box-shadow: 0 0 0 0.0625rem rgba(0, 0, 0, 0.42),
-      0 0.625rem 1.875rem 0 rgba(0, 0, 0, 0.3);
-    -webkit-box-shadow: var(
-      --sapContent_Shadow2,
-      0 0 0 0.0625rem rgba(0, 0, 0, 0.42),
-      0 0.625rem 1.875rem 0 rgba(0, 0, 0, 0.3)
-    );
-    box-shadow: 0 0 0 0.0625rem rgba(0, 0, 0, 0.42),
-      0 0.625rem 1.875rem 0 rgba(0, 0, 0, 0.3);
-    box-shadow: var(
-      --sapContent_Shadow2,
-      0 0 0 0.0625rem rgba(0, 0, 0, 0.42),
-      0 0.625rem 1.875rem 0 rgba(0, 0, 0, 0.3)
-    );
-    border-radius: 0.25rem;
-    border-radius: var(--sapElement_BorderCornerRadius, 0.25rem);
-    padding: 1rem;
-    font-family: '72', '72full', Arial, Helvetica, sans-serif;
-    font-family: var(
-      --sapFontFamily,
-      '72',
-      '72full',
-      Arial,
-      Helvetica,
-      sans-serif
-    );
-    font-size: 12px;
-    background-color: var(--sapBaseColor);
-    color: var(--sapTextColor);
-    word-break: break-word;
-    text-align: center;
-
-    &:after,
-    &:before {
-      -webkit-box-sizing: inherit;
-      box-sizing: inherit;
-      font-size: inherit;
-    }
-  }
 }
 
 .fd-textarea.resize-vertical {
@@ -456,12 +360,28 @@ input[type='checkbox'] {
   cursor: help;
 }
 
-.break-word {
-  word-wrap: break-word;
-}
-
 .no-padding {
   padding: 0 !important;
+}
+
+.ui5-icon-s {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.ui5-icon-m {
+  width: 1rem;
+  height: 1rem;
+}
+
+.ui5-icon-l {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.ui5-icon-xl {
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 @include graph-node-border(pod, 4);

@@ -73,25 +73,28 @@ context('Test Deployments', () => {
       .clear()
       .type('20');
 
-    cy.contains('button', /^Create$/).click();
+    cy.get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
+      .click();
   });
 
   it('Check if deployment and pod exist', () => {
     cy.url().should('match', new RegExp(`\/deployments\/${DEPLOYMENT_NAME}$`));
 
-    cy.contains('[role=row]', DEPLOYMENT_NAME)
+    cy.contains('ui5-title', DEPLOYMENT_NAME).should('be.visible');
+
+    cy.contains('ui5-table-cell', DEPLOYMENT_NAME)
       .should('be.visible')
       .click();
-
-    cy.contains('[aria-label="title"]', DEPLOYMENT_NAME).should('be.visible');
   });
 
   it('Edit a deployment', () => {
     cy.getLeftNav()
-      .contains('Deployments', { includeShadowDom: true })
+      .contains('Deployments')
       .click();
 
-    cy.get('[role=row]')
+    cy.get('ui5-table-row')
       .contains('a', DEPLOYMENT_NAME)
       .click();
 
@@ -99,7 +102,10 @@ context('Test Deployments', () => {
       timeout: 60 * 1000,
     });
 
-    cy.contains('Edit').click();
+    cy.get('ui5-button')
+      .contains('Edit')
+      .should('be.visible')
+      .click();
 
     cy.get('[aria-label="expand Labels"]').click();
 
@@ -112,7 +118,10 @@ context('Test Deployments', () => {
       .first()
       .type('label-value');
 
-    cy.contains('button', 'Update').click();
+    cy.get('ui5-button.fd-dialog__decisive-button')
+      .contains('Update')
+      .should('be.visible')
+      .click();
 
     cy.contains('label-key=label-value');
   });

@@ -15,7 +15,7 @@
     "eject": "react-scripts eject",
     "build": "npm run copy-themes; INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false react-app-rewired build",
     "build:docker": "npm run copy-themes; INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false react-app-rewired build --env IS_DOCKER=true",
-    "copy-themes": "cp node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3/css_variables.css public/themes/@sap-theming/default.css; for theme in hcb dark hcw light_dark ; do cp node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3_$theme/css_variables.css public/themes/@sap-theming/$theme.css ; done"
+    "copy-themes": "cp node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_horizon/css_variables.css public/themes/@sap-theming/default.css; for theme in hcb dark hcw ; do cp node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_horizon_$theme/css_variables.css public/themes/@sap-theming/$theme.css ; done"
   },
   "eslintConfig": {
     "extends": "react-app",
@@ -95,6 +95,7 @@
     "react-router-dom": "^6.3.0",
     "react-tippy": "^1.4.0",
     "recoil": "^0.7.5",
+    "resize-observer-polyfill": "^1.5.1",
     "rfc6902": "^5.0.1",
     "url": "^0.11.0"
   },

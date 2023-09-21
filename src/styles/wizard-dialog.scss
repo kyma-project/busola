@@ -1,6 +1,6 @@
 .wizard-dialog {
   .fd-dialog__content {
-    min-height: 90vh;
+    height: 90vh;
     min-width: 90vw;
   }
 
@@ -16,24 +16,5 @@
   }
   .fd-dialog__footer {
     display: none;
-  }
-
-  .fd-wizard {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    overflow: hidden;
-
-    .fd-bar--footer {
-      flex-shrink: 0;
-    }
-  }
-  .fd-wizard__content {
-    background-color: var(--sapList_Background);
-    padding-bottom: 16px;
-    display: flex;
-    flex-flow: column;
-    flex-grow: 1;
-    overflow: auto;
   }
 }

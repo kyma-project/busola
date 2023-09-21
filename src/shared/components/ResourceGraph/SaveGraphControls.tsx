@@ -1,5 +1,5 @@
 import { saveAs } from 'file-saver';
-import { Button, Icon } from 'fundamental-react';
+import { Button, Icon } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
 export function SaveGraphControls({
@@ -21,8 +21,8 @@ export function SaveGraphControls({
       }}
     >
       <Icon
-        ariaLabel="download"
-        glyph="download"
+        aria-label="download"
+        name="download"
         className="fd-margin-end--tiny"
       />
       {t('resource-graph.save-as-dot')}

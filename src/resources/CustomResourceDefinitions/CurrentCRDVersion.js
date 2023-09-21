@@ -1,5 +1,4 @@
 import React from 'react';
-import { LayoutPanel } from 'fundamental-react';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { GenericList } from 'shared/components/GenericList/GenericList';
@@ -8,6 +7,9 @@ import { useTranslation } from 'react-i18next';
 
 import { SchemaViewer } from 'shared/components/SchemaViewer/SchemaViewer';
 import { CustomResources } from 'components/CustomResources/CustomResources';
+import { Title } from '@ui5/webcomponents-react';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+
 import './CurrentCRDVersion.scss';
 
 const AdditionalPrinterColumns = ({ additionalPrinterColumns }) => {
@@ -47,32 +49,33 @@ export const CurrentCRDVersion = resource => {
   const storageVersion = versions.find(v => v.storage);
 
   return (
-    <LayoutPanel className="fd-margin--md">
-      <LayoutPanel.Header>
-        <LayoutPanel.Head
-          title={`${t('custom-resource-definitions.subtitle.version')} ${
-            storageVersion.name
-          }`}
-        />
-        <StatusBadge
-          type={storageVersion.served ? 'positive' : 'informative'}
-          className="version-status"
-          resourceKind="custom-resource-definitions"
-        >
-          {storageVersion.served
-            ? t('custom-resource-definitions.status.served')
-            : t('custom-resource-definitions.status.not-served')}
-        </StatusBadge>
-        {storageVersion.storage && (
+    <UI5Panel
+      title={
+        <>
+          <Title level="H4">{`${t(
+            'custom-resource-definitions.subtitle.version',
+          )} ${storageVersion.name}`}</Title>
           <StatusBadge
-            type="positive"
+            type={storageVersion.served ? 'Success' : 'Information'}
             className="version-status"
             resourceKind="custom-resource-definitions"
           >
-            {t('custom-resource-definitions.status.storage')}
+            {storageVersion.served
+              ? t('custom-resource-definitions.status.served')
+              : t('custom-resource-definitions.status.not-served')}
           </StatusBadge>
-        )}
-      </LayoutPanel.Header>
+          {storageVersion.storage && (
+            <StatusBadge
+              type="Success"
+              className="version-status"
+              resourceKind="custom-resource-definitions"
+            >
+              {t('custom-resource-definitions.status.storage')}
+            </StatusBadge>
+          )}
+        </>
+      }
+    >
       <CustomResources
         crd={resource}
         version={storageVersion}
@@ -92,6 +95,6 @@ export const CurrentCRDVersion = resource => {
           schema={storageVersion.schema}
         />
       )}
-    </LayoutPanel>
+    </UI5Panel>
   );
 };

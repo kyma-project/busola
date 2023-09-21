@@ -9,22 +9,13 @@ context('Test app settings and preferences', () => {
   });
 
   it('Deletes without confirmation', () => {
-    cy.get('[aria-label="topnav-profile-btn"]').click();
-
-    cy.contains('Preferences').click();
+    cy.get('[title="Profile"]').click();
 
     cy.contains('Cluster interaction').click();
 
     cy.contains('.preferences-row', 'Delete without confirmation')
-      .find('[aria-label="Switch"]')
-      .invoke('attr', 'aria-checked')
-      .then(value => {
-        if (value === 'false') {
-          cy.contains('.preferences-row', 'Delete without confirmation')
-            .find('.fd-switch')
-            .click();
-        }
-      });
+      .find('ui5-switch')
+      .click();
 
     cy.contains('Close').click();
 
@@ -34,40 +25,38 @@ context('Test app settings and preferences', () => {
 
     cy.get('input[ariaLabel="ConfigMap name"]:visible').type(NAME);
 
-    cy.get('[role=dialog]')
-      .contains('button', 'Create')
+    cy.get('[role="dialog"]')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
 
-    cy.contains('[aria-label="title"]', NAME).should('be.visible');
+    cy.contains('ui5-title', NAME).should('be.visible');
 
     cy.getLeftNav()
-      .contains('Config Maps', { includeShadowDom: true })
+      .contains('Config Maps')
       .click();
 
-    cy.contains('.fd-table__row', NAME)
-      .find('button[data-testid="delete"]')
+    cy.contains('ui5-table-row', NAME)
+      .find('ui5-button[data-testid="delete"]')
       .click();
 
-    cy.contains('Are you sure you want to delete').should('not.exist');
+    cy.contains('Are you sure you want to delete').should('not.be.visible');
 
     // disable "deletion without confirmation" to not mess other tests
-    cy.get('[aria-label="topnav-profile-btn"]').click();
-
-    cy.contains('Preferences').click();
+    cy.get('[title="Profile"]').click();
 
     cy.contains('Cluster interaction').click();
 
     cy.contains('.preferences-row', 'Delete without confirmation')
-      .find('.fd-switch')
+      .find('ui5-switch')
       .click();
 
     cy.contains('Close').click();
   });
 
   it('Changes application theme', () => {
-    cy.get('[aria-label="topnav-profile-btn"]').click();
-
-    cy.contains('Preferences').click();
+    cy.get('[title="Profile"]').click();
 
     cy.contains('High-Contrast Black').click();
 
@@ -77,15 +66,13 @@ context('Test app settings and preferences', () => {
       'rgb(0, 0, 0)',
     );
 
-    cy.contains('Light / Dark').click();
+    cy.contains('Light').click();
 
     cy.contains('Close').click();
   });
 
   it('Shows hidden namespaces', () => {
-    cy.get('[aria-label="topnav-profile-btn"]').click();
-
-    cy.contains('Preferences').click();
+    cy.get('[title="Profile"]').click();
 
     cy.contains('Cluster interaction').click();
 
@@ -95,7 +82,7 @@ context('Test app settings and preferences', () => {
       .then(value => {
         if (value === 'true') {
           cy.contains('.preferences-row', 'Show hidden Namespaces')
-            .find('.fd-switch')
+            .find('ui5-switch')
             .click();
         }
       });
@@ -103,15 +90,15 @@ context('Test app settings and preferences', () => {
     cy.contains('Close').click();
 
     cy.getLeftNav()
-      .contains('Back To Cluster Details', { includeShadowDom: true })
+      .contains('Back To Cluster Details')
       .click();
 
     cy.getLeftNav()
-      .contains('Namespaces', { includeShadowDom: true })
+      .contains('Namespaces')
       .click();
 
     cy.contains('a', /^kube-system/).should('not.exist');
 
-    cy.contains(Cypress.env('NAMESPACE_NAME')).click();
+    cy.goToNamespaceDetails();
   });
 });

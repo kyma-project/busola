@@ -48,21 +48,25 @@ context('Test Roles', () => {
       'create',
     );
 
-    cy.contains('button', /^Create$/).click();
+    cy.get('[role="dialog"]')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
+      .click();
   });
 
   it('Check the Role details', () => {
-    cy.contains('h3', ROLE_NAME).should('be.visible');
+    cy.contains('ui5-title', ROLE_NAME).should('be.visible');
 
-    cy.get('[data-testid=rules-list]')
-      .find('[data-testid=get]')
+    cy.contains('ui5-panel', 'Rules')
+      .find('[aria-label="get"]')
       .should('not.have.text', '-');
 
-    cy.get('[data-testid=rules-list]')
-      .find('[data-testid=create]')
+    cy.contains('ui5-panel', 'Rules')
+      .find('[aria-label="create"]')
       .should('not.have.text', '-');
 
-    cy.get('[data-testid=rules-list]')
+    cy.contains('ui5-panel', 'Rules')
       .find('[data-testid=watch]')
       .should('have.text', '-');
   });
@@ -75,22 +79,26 @@ context('Test Roles', () => {
       'watch',
     );
 
-    cy.contains('button', 'Update').click();
+    cy.get('[role="dialog"]')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Update')
+      .should('be.visible')
+      .click();
   });
 
   it('Check the Role details after edit', () => {
-    cy.contains('h3', ROLE_NAME).should('be.visible');
+    cy.contains('ui5-title', ROLE_NAME).should('be.visible');
 
-    cy.get('[data-testid=rules-list]')
-      .find('[data-testid=get]')
+    cy.contains('ui5-panel', 'Rules')
+      .find('[aria-label="get"]')
       .should('not.have.text', '-');
 
-    cy.get('[data-testid=rules-list]')
-      .find('[data-testid=create]')
+    cy.contains('ui5-panel', 'Rules')
+      .find('[aria-label="create"]')
       .should('not.have.text', '-');
 
-    cy.get('[data-testid=rules-list]')
-      .find('[data-testid=watch]')
+    cy.contains('ui5-panel', 'Rules')
+      .find('[aria-label="watch"]')
       .should('not.have.text', '-');
   });
 
@@ -100,36 +108,40 @@ context('Test Roles', () => {
 
   it('Clone the Role', () => {
     cy.getLeftNav()
-      .contains('Roles', { includeShadowDom: true })
+      .contains('Roles')
       .click();
 
-    cy.contains('.fd-table__row', ROLE_NAME)
-      .find('button[data-testid="clone"]')
+    cy.contains('ui5-table-row', ROLE_NAME)
+      .find('ui5-button[data-testid="clone"]')
       .click();
 
     cy.get('[ariaLabel="Role name"]:visible', { log: false })
       .type(CLONE_NAME)
       .click();
 
-    cy.contains('button', /^Create$/).click();
+    cy.get('[role="dialog"]')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
+      .click();
   });
 
   it('Check the clone details', () => {
-    cy.contains('h3', CLONE_NAME).should('be.visible');
+    cy.contains('ui5-title', CLONE_NAME).should('be.visible');
 
-    cy.get('[data-testid=rules-list]')
+    cy.contains('ui5-panel', 'Rules')
       .find('[data-testid=create]')
       .should('not.have.text', '-');
 
-    cy.get('[data-testid=rules-list]')
+    cy.contains('ui5-panel', 'Rules')
       .find('[data-testid=get]')
       .should('not.have.text', '-');
 
-    cy.get('[data-testid=rules-list]')
+    cy.contains('ui5-panel', 'Rules')
       .find('[data-testid=watch]')
       .should('not.have.text', '-');
 
-    cy.get('[data-testid=rules-list]')
+    cy.contains('ui5-panel', 'Rules')
       .find('[data-testid=list]')
       .should('have.text', '-');
   });

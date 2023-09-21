@@ -1,4 +1,5 @@
-import { Button, Dialog, MessageStrip } from 'fundamental-react';
+import { Button, MessageStrip } from '@ui5/webcomponents-react';
+import { Dialog } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 import { useGenerateTokenRequest } from './useGenerateTokenRequest';
@@ -119,7 +120,7 @@ export function TokenRequestModal({
           input={ComboboxInputWithSeconds}
         />
         <div className="fd-margin-end--lg fd-margin-begin--lg fd-margin-top--sm">
-          <MessageStrip type="warning">
+          <MessageStrip design="Warning" hideCloseButton>
             {t('service-accounts.token-request.warning')}
           </MessageStrip>
           <div
@@ -139,9 +140,10 @@ export function TokenRequestModal({
             <Button
               onClick={() => downloadKubeconfig(serviceAccountName, token)}
               disabled={token === ''}
-              option="transparent"
+              design="Transparent"
               className="fd-margin-end--tiny"
-              glyph="download"
+              icon="download"
+              iconEnd
             >
               {t('service-accounts.headers.download-kubeconfig')}
             </Button>

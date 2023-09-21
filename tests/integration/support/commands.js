@@ -112,32 +112,64 @@ Cypress.Commands.add('getTopNav', () => {
   return cy.get('.fd-shellbar');
 });
 
-Cypress.Commands.add('deleteInDetails', () => {
-  cy.contains('button', 'Delete').click();
+Cypress.Commands.add('deleteInDetails', resourceName => {
+  cy.get('ui5-button')
+    .contains('Delete')
+    .should('be.visible')
+    .click();
 
-  cy.get('[data-testid="delete-confirmation"]').click();
+  cy.get(`[header-text="Delete ${resourceName}"]`)
+    .find('[data-testid="delete-confirmation"]', { includeShadowDom: true })
+    .click();
 
   cy.contains(/deleted/).should('be.visible');
 });
 
 Cypress.Commands.add(
   'deleteFromGenericList',
-  (searchTerm, confirmationEnabled = true, deletedVisible = true) => {
-    cy.get('[aria-label="open-search"]').click();
+  (
+    searchTerm,
+    confirmationEnabled = true,
+    deletedVisible = true,
+    clearSearch = true,
+  ) => {
+    cy.get('[aria-label="open-search"]:visible').click();
 
     cy.get('[placeholder="Search"]').type(searchTerm);
 
-    cy.contains(searchTerm).should('be.visible');
+    cy.contains('a', searchTerm).should('be.visible');
 
-    cy.get('[aria-label="Delete"]').click();
+    cy.contains(/created/).should('not.exist');
+
+    cy.get('ui5-button[data-testid="delete"]').click();
 
     if (confirmationEnabled) {
-      cy.contains('button', 'Delete').click();
+      cy.get(`[header-text="Delete ${searchTerm}"]`)
+        .find('[data-testid="delete-confirmation"]', { includeShadowDom: true })
+        .click();
+
       if (deletedVisible) {
         cy.contains(/deleted/).should('be.visible');
       }
 
-      cy.contains(searchTerm).should('not.exist');
+      if (clearSearch) {
+        cy.get('[placeholder="Search"]').clear();
+      }
+
+      cy.get('ui5-table')
+        .contains(searchTerm)
+        .should('not.exist');
     }
   },
 );
+
+Cypress.Commands.add('changeCluster', clusterName => {
+  cy.get('header')
+    .find('[aria-haspopup="menu"]:visible')
+    .click();
+
+  cy.get('ui5-list')
+    .find(`[aria-label="${clusterName}"]:visible`)
+    .find('span[part="title"]')
+    .click({ force: true });
+});

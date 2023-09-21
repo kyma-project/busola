@@ -9,7 +9,7 @@ context('Clean up Namespace', () => {
   });
   it('Delete the Namespace (step 1)', () => {
     cy.getLeftNav()
-      .contains('Namespaces', { includeShadowDom: true })
+      .contains('Namespaces')
       .click();
 
     cy.get('[role="search"] [aria-label="search-input"]').type(
@@ -19,11 +19,11 @@ context('Clean up Namespace', () => {
       },
     ); // use force to skip clicking (the table could re-render between the click and the typing)
 
-    cy.get('tbody tr [aria-label="Delete"]').click({ force: true });
+    cy.get('ui5-table-row [aria-label="Delete"]').click({ force: true });
 
-    cy.contains('button', 'Delete')
-      .filter(':visible', { log: false })
-      .click({ force: true });
+    cy.get(`[header-text="Delete ${Cypress.env('NAMESPACE_NAME')}"]`)
+      .find('[data-testid="delete-confirmation"]')
+      .click();
   });
 
   it('Check if the Namespace is terminated (step 2)', { retries: 3 }, () => {

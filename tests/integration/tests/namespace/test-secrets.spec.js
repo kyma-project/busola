@@ -39,8 +39,10 @@ context('Test Secrets', () => {
 
     cy.contains(btoa(SECRET_VALUE));
 
-    cy.get('[role=dialog]')
-      .contains('button', 'Create')
+    cy.get('[role="dialog"]')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
 
     cy.url().should('match', new RegExp(`/secrets/${SECRET_NAME}$`));
@@ -49,15 +51,21 @@ context('Test Secrets', () => {
   it('Checking a secret details', () => {
     cy.contains(SECRET_NAME);
 
-    cy.contains('.layout-panel-row', SECRET2_KEY).contains(btoa(SECRET2_VALUE));
+    cy.contains('.layout-panel-row', SECRET2_KEY).contains('*****');
 
-    cy.contains('.layout-panel-row', SECRET_KEY).contains(btoa(SECRET_VALUE));
+    cy.contains('.layout-panel-row', SECRET_KEY).contains('*****');
 
     cy.contains('Decode').click();
+
+    cy.contains('.layout-panel-row', SECRET2_KEY).contains(SECRET2_VALUE);
 
     cy.contains('.layout-panel-row', SECRET_KEY).contains(SECRET_VALUE);
 
     cy.contains('Encode').click();
+
+    cy.contains('.layout-panel-row', SECRET2_KEY).contains(btoa(SECRET2_VALUE));
+
+    cy.contains('.layout-panel-row', SECRET_KEY).contains(btoa(SECRET_VALUE));
   });
 
   it('Edit a secret', () => {
@@ -75,18 +83,23 @@ context('Test Secrets', () => {
       .eq(1)
       .click();
 
-    cy.get('[role=dialog]')
-      .contains('button', 'Update')
+    cy.get('[role="dialog"]')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Update')
+      .should('be.visible')
       .click();
   });
 
   it('Checking an updated secret', () => {
     cy.wait(1000);
-    cy.contains('.layout-panel-row', SECRET_KEY).contains(btoa(SECRET_VALUE2));
+
+    cy.contains('Decode').click();
+
+    cy.contains('.layout-panel-row', SECRET_KEY).contains(SECRET_VALUE2);
 
     cy.contains('.layout-panel-row', SECRET2_KEY).should('not.exist');
 
-    cy.contains('.layout-panel-row', SECRET3_KEY).contains(btoa(SECRET3_VALUE));
+    cy.contains('.layout-panel-row', SECRET3_KEY).contains(SECRET3_VALUE);
   });
 
   it('Check list', () => {

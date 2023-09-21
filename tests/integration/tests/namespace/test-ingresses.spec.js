@@ -40,12 +40,14 @@ context('Test Ingresses', () => {
     );
 
     cy.get('[role="dialog"]')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
   });
 
   it('Check Ingress details', () => {
-    cy.contains(NAME).should('be.visible');
+    cy.contains(NAME, { includeShadowDom: false }).should('be.visible');
 
     cy.get('#content-wrap')
       .contains(/rules/i)

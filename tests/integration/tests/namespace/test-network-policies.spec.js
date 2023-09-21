@@ -37,12 +37,14 @@ context('Test Network Policy', () => {
     );
 
     cy.get('[role="dialog"]')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
   });
 
   it('Check Network Policy details', () => {
-    cy.contains(NAME).should('be.visible');
+    cy.contains(NAME, { includeShadowDom: false }).should('be.visible');
 
     cy.contains(/CIDR/i).should('be.visible');
 

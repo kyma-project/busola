@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessageStrip } from 'fundamental-react';
+import { MessageStrip } from '@ui5/webcomponents-react';
 
 import { useCreateResourceDescription } from 'components/Extensibility/helpers';
 
@@ -30,7 +30,16 @@ export function AlertRenderer({
     value,
   });
   const alert = schema.get('alert');
-  const schemaType = schema.get('severity') || 'information';
+  const severity = schema.get('severity');
+
+  let schemaType = 'Information';
+  if (severity === 'warning') {
+    schemaType = 'Warning';
+  } else if (severity === 'error') {
+    schemaType = 'Negative';
+  } else if (severity === 'success') {
+    schemaType = 'Positive';
+  }
 
   function alertJsonata(alertFormula, item) {
     const [value, error] = jsonata(alertFormula, item);
@@ -43,7 +52,11 @@ export function AlertRenderer({
   }
   const alertLink = useCreateResourceDescription(alertJsonata(alert, item));
   return (
-    <MessageStrip type={schemaType} className="fd-margin-top--sm">
+    <MessageStrip
+      design={schemaType}
+      hideCloseButton
+      className="fd-margin-top--sm"
+    >
       {alertLink}
     </MessageStrip>
   );

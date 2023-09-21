@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { parse } from '@datasert/cronjs-parser';
 import { toString as cRonstrue } from 'cronstrue/i18n';
-import { MessageStrip } from 'fundamental-react';
+import { MessageStrip } from '@ui5/webcomponents-react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
@@ -87,7 +87,11 @@ function ScheduleEditor({ schedule, setSchedule }) {
         />
       ))}
       {!isCronExpressionValid(schedule) && (
-        <MessageStrip type="error" className="fd-margin-top--sm">
+        <MessageStrip
+          design="Negative"
+          hideCloseButton
+          className="fd-margin-top--sm"
+        >
           {t('cron-jobs.create-modal.parse-error')}
         </MessageStrip>
       )}

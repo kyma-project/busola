@@ -2,6 +2,7 @@ import React from 'react';
 import { render, fireEvent, queryByText } from 'testing/reactTestingUtils';
 
 import { GenericList } from 'shared/components/GenericList/GenericList';
+import { ThemeProvider } from '@ui5/webcomponents-react';
 
 describe('GenericList', () => {
   const defaultNotFoundText = 'components.generic-list.messages.not-found';
@@ -32,12 +33,14 @@ describe('GenericList', () => {
 
   it('Renders with minimal props', async () => {
     const { getByText } = render(
-      <GenericList
-        title=""
-        entries={[]}
-        headerRenderer={() => []}
-        rowRenderer={() => []}
-      />,
+      <ThemeProvider>
+        <GenericList
+          title=""
+          entries={[]}
+          headerRenderer={() => []}
+          rowRenderer={() => []}
+        />
+      </ThemeProvider>,
     );
     expect(await getByText(defaultNotFoundText)).toBeInTheDocument();
   });
@@ -45,13 +48,15 @@ describe('GenericList', () => {
   it('Renders custom notFoundMessage props', async () => {
     const notFoundMessage = 'abcd';
     const { getByText } = render(
-      <GenericList
-        title=""
-        entries={[]}
-        headerRenderer={() => []}
-        rowRenderer={() => []}
-        notFoundMessage={notFoundMessage}
-      />,
+      <ThemeProvider>
+        <GenericList
+          title=""
+          entries={[]}
+          headerRenderer={() => []}
+          rowRenderer={() => []}
+          notFoundMessage={notFoundMessage}
+        />
+      </ThemeProvider>,
     );
     expect(await getByText(notFoundMessage)).toBeInTheDocument();
   });
@@ -59,12 +64,14 @@ describe('GenericList', () => {
   it('Renders title', async () => {
     const title = 'title';
     const { getByText } = render(
-      <GenericList
-        title={title}
-        entries={[]}
-        headerRenderer={() => []}
-        rowRenderer={() => []}
-      />,
+      <ThemeProvider>
+        <GenericList
+          title={title}
+          entries={[]}
+          headerRenderer={() => []}
+          rowRenderer={() => []}
+        />
+      </ThemeProvider>,
     );
     expect(await getByText(title)).toBeInTheDocument();
   });
@@ -73,12 +80,14 @@ describe('GenericList', () => {
     it("Renders actions button when 'actions' prop is provided", () => {
       const actions = [{ name: 'testaction', handler: () => {} }];
       const { getAllByLabelText } = render(
-        <GenericList
-          headerRenderer={() => []}
-          rowRenderer={() => []}
-          actions={actions}
-          entries={mockEntries}
-        />,
+        <ThemeProvider>
+          <GenericList
+            headerRenderer={() => []}
+            rowRenderer={() => []}
+            actions={actions}
+            entries={mockEntries}
+          />
+        </ThemeProvider>,
       );
       const actionButtons = getAllByLabelText(actions[0].name);
       expect(actionButtons.length).toBe(mockEntries.length);
@@ -94,12 +103,14 @@ describe('GenericList', () => {
         },
       ];
       const { queryByLabelText } = render(
-        <GenericList
-          headerRenderer={() => []}
-          rowRenderer={() => []}
-          actions={actions}
-          entries={[{ id: '23' }]}
-        />,
+        <ThemeProvider>
+          <GenericList
+            headerRenderer={() => []}
+            rowRenderer={() => []}
+            actions={actions}
+            entries={[{ id: '23' }]}
+          />
+        </ThemeProvider>,
       );
       expect(queryByLabelText(actions[0].name)).toBeNull();
       expect(queryByLabelText(actions[1].name)).toBeTruthy();
@@ -108,22 +119,26 @@ describe('GenericList', () => {
     it('Renders extra column in header when only actions are set', () => {
       const actions = [{ name: 'testaction', handler: () => {} }];
       const { queryByLabelText, rerender } = render(
-        <GenericList
-          headerRenderer={() => []}
-          rowRenderer={() => []}
-          actions={actions}
-          entries={mockEntries}
-        />,
+        <ThemeProvider>
+          <GenericList
+            headerRenderer={() => []}
+            rowRenderer={() => []}
+            actions={actions}
+            entries={mockEntries}
+          />
+        </ThemeProvider>,
       );
 
       expect(queryByLabelText('actions-column')).toBeInTheDocument();
 
       rerender(
-        <GenericList
-          headerRenderer={() => []}
-          rowRenderer={() => []}
-          entries={mockEntries}
-        />,
+        <ThemeProvider>
+          <GenericList
+            headerRenderer={() => []}
+            rowRenderer={() => []}
+            entries={mockEntries}
+          />
+        </ThemeProvider>,
       );
 
       expect(queryByLabelText('actions-column')).not.toBeInTheDocument();
@@ -132,16 +147,18 @@ describe('GenericList', () => {
 
   it('Renders entries', async () => {
     const { getByText } = render(
-      <GenericList
-        entries={mockEntries}
-        headerRenderer={mockHeaderRenderer}
-        rowRenderer={mockEntryRenderer}
-      />,
+      <ThemeProvider>
+        <GenericList
+          entries={mockEntries}
+          headerRenderer={mockHeaderRenderer}
+          rowRenderer={mockEntryRenderer}
+        />
+      </ThemeProvider>,
     );
 
     mockEntries.forEach(entry =>
       Object.keys(entry)
-        .filter(key => key != 'metadata')
+        .filter(key => key !== 'metadata')
         .forEach(key => getByText(entry[key])),
     );
   });
@@ -150,11 +167,13 @@ describe('GenericList', () => {
     const customEntryRenderer = entry => [entry.name, 'maskopatol'];
 
     const { queryByText } = render(
-      <GenericList
-        entries={[mockEntries[0]]}
-        headerRenderer={mockHeaderRenderer}
-        rowRenderer={customEntryRenderer}
-      />,
+      <ThemeProvider>
+        <GenericList
+          entries={[mockEntries[0]]}
+          headerRenderer={mockHeaderRenderer}
+          rowRenderer={customEntryRenderer}
+        />
+      </ThemeProvider>,
     );
 
     expect(await queryByText(mockEntries[0].name)).toBeInTheDocument();
@@ -168,11 +187,13 @@ describe('GenericList', () => {
     });
 
     const { getByText, getAllByTestId } = render(
-      <GenericList
-        entries={mockEntries}
-        headerRenderer={mockHeaderRenderer}
-        rowRenderer={mockCollapseEntryRenderer}
-      />,
+      <ThemeProvider>
+        <GenericList
+          entries={mockEntries}
+          headerRenderer={mockHeaderRenderer}
+          rowRenderer={mockCollapseEntryRenderer}
+        />
+      </ThemeProvider>,
     );
 
     mockEntries.forEach(entry =>
@@ -203,11 +224,13 @@ describe('GenericList', () => {
     });
 
     const { getAllByTestId, queryAllByTestId } = render(
-      <GenericList
-        entries={mockEntries}
-        headerRenderer={mockHeaderRenderer}
-        rowRenderer={mockCollapseEntryRenderer}
-      />,
+      <ThemeProvider>
+        <GenericList
+          entries={mockEntries}
+          headerRenderer={mockHeaderRenderer}
+          rowRenderer={mockCollapseEntryRenderer}
+        />
+      </ThemeProvider>,
     );
 
     let foundCollapseButtons = await queryAllByTestId('collapse-button-close');
@@ -221,11 +244,13 @@ describe('GenericList', () => {
 
   it('Renders headers', async () => {
     const { getByText } = render(
-      <GenericList
-        entries={mockEntries}
-        headerRenderer={mockHeaderRenderer}
-        rowRenderer={mockEntryRenderer}
-      />,
+      <ThemeProvider>
+        <GenericList
+          entries={mockEntries}
+          headerRenderer={mockHeaderRenderer}
+          rowRenderer={mockEntryRenderer}
+        />
+      </ThemeProvider>,
     );
 
     mockHeaderRenderer().forEach(async header => await getByText(header));
@@ -233,12 +258,14 @@ describe('GenericList', () => {
 
   it("Doesn't render header with showHeader set to false", async () => {
     const { queryAllByRole } = render(
-      <GenericList
-        entries={[]}
-        headerRenderer={mockHeaderRenderer}
-        rowRenderer={mockEntryRenderer}
-        showHeader={false}
-      />,
+      <ThemeProvider>
+        <GenericList
+          entries={[]}
+          headerRenderer={mockHeaderRenderer}
+          rowRenderer={mockEntryRenderer}
+          showHeader={false}
+        />
+      </ThemeProvider>,
     );
     const foundRows = queryAllByRole('row');
     expect(foundRows).toHaveLength(1);
@@ -248,12 +275,14 @@ describe('GenericList', () => {
   it('Renders extreaHeaderContent', async () => {
     const content = 'wow this is so extra!';
     const { getByText } = render(
-      <GenericList
-        entries={mockEntries}
-        headerRenderer={mockHeaderRenderer}
-        rowRenderer={mockEntryRenderer}
-        extraHeaderContent={<span>{content}</span>}
-      />,
+      <ThemeProvider>
+        <GenericList
+          entries={mockEntries}
+          headerRenderer={mockHeaderRenderer}
+          rowRenderer={mockEntryRenderer}
+          extraHeaderContent={<span>{content}</span>}
+        />
+      </ThemeProvider>,
     );
 
     expect(await getByText(content)).toBeInTheDocument();
@@ -261,16 +290,18 @@ describe('GenericList', () => {
 
   it('Test sorting funcionality', () => {
     const { getByLabelText, queryByText, getByText, getAllByRole } = render(
-      <GenericList
-        title=""
-        entries={mockEntries}
-        headerRenderer={() => ['name', 'description']}
-        rowRenderer={entry => [entry.name, entry.description]}
-        sortBy={{
-          name: (a, b) => a.name.localeCompare(b.name),
-          description: (a, b) => a.description.localeCompare(b.description),
-        }}
-      />,
+      <ThemeProvider>
+        <GenericList
+          title=""
+          entries={mockEntries}
+          headerRenderer={() => ['name', 'description']}
+          rowRenderer={entry => [entry.name, entry.description]}
+          sortBy={{
+            name: (a, b) => a.name.localeCompare(b.name),
+            description: (a, b) => a.description.localeCompare(b.description),
+          }}
+        />
+      </ThemeProvider>,
     );
     // opening sort modal
     fireEvent.click(getByLabelText('open-sort'));
@@ -287,25 +318,27 @@ describe('GenericList', () => {
     fireEvent.click(getByText('common.buttons.ok'));
 
     // checking sorted items
+    expect(getAllByRole('row')[0].textContent).toBe(
+      ' THIRD_ENTRY testdescription3',
+    );
     expect(getAllByRole('row')[1].textContent).toBe(
-      'THIRD_ENTRYtestdescription3',
+      ' second_entry testdescription2',
     );
     expect(getAllByRole('row')[2].textContent).toBe(
-      'second_entrytestdescription2',
-    );
-    expect(getAllByRole('row')[3].textContent).toBe(
-      'first_entrytestdescription1',
+      ' first_entry testdescription1',
     );
   });
 
   describe('Search', () => {
     it('Show search field by default', async () => {
       const { getByRole } = render(
-        <GenericList
-          entries={mockEntries}
-          headerRenderer={mockHeaderRenderer}
-          rowRenderer={mockEntryRenderer}
-        />,
+        <ThemeProvider>
+          <GenericList
+            entries={mockEntries}
+            headerRenderer={mockHeaderRenderer}
+            rowRenderer={mockEntryRenderer}
+          />
+        </ThemeProvider>,
       );
 
       expect(await getByRole('search')).toBeInTheDocument();
@@ -313,14 +346,16 @@ describe('GenericList', () => {
 
     it("Doesn't show search field when showSearchField is set to false", async () => {
       const { queryByRole } = render(
-        <GenericList
-          entries={mockEntries}
-          headerRenderer={mockHeaderRenderer}
-          rowRenderer={mockEntryRenderer}
-          searchSettings={{
-            showSearchField: false,
-          }}
-        />,
+        <ThemeProvider>
+          <GenericList
+            entries={mockEntries}
+            headerRenderer={mockHeaderRenderer}
+            rowRenderer={mockEntryRenderer}
+            searchSettings={{
+              showSearchField: false,
+            }}
+          />
+        </ThemeProvider>,
       );
 
       expect(await queryByRole('search')).toBeNull();
@@ -330,70 +365,76 @@ describe('GenericList', () => {
       const searchText = 'first';
 
       const { queryAllByRole, getByLabelText } = render(
-        <GenericList
-          entries={mockEntries}
-          headerRenderer={mockHeaderRenderer}
-          rowRenderer={mockEntryRenderer}
-        />,
+        <ThemeProvider>
+          <GenericList
+            entries={mockEntries}
+            headerRenderer={mockHeaderRenderer}
+            rowRenderer={mockEntryRenderer}
+          />
+        </ThemeProvider>,
       );
       expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(
-        mockEntries.length + 1,
-      ); // header + {mockEntries.length} rows
+        mockEntries.length,
+      );
 
       const searchInput = await getByLabelText('search-input');
       fireEvent.change(searchInput, { target: { value: searchText } });
 
-      expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(2); // header + one row
+      expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(1);
     });
 
     it('Finds proper entries by label when search text is entered', async () => {
       const searchText = 'label1=val';
 
       const { queryAllByRole, getByLabelText } = render(
-        <GenericList
-          entries={mockEntries}
-          headerRenderer={mockHeaderRenderer}
-          rowRenderer={mockEntryRenderer}
-          searchSettings={{
-            textSearchProperties: ['metadata.labels'],
-          }}
-        />,
+        <ThemeProvider>
+          <GenericList
+            entries={mockEntries}
+            headerRenderer={mockHeaderRenderer}
+            rowRenderer={mockEntryRenderer}
+            searchSettings={{
+              textSearchProperties: ['metadata.labels'],
+            }}
+          />
+        </ThemeProvider>,
       );
       expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(
-        mockEntries.length + 1,
-      ); // header + {mockEntries.length} rows
+        mockEntries.length,
+      );
 
       const searchInput = await getByLabelText('search-input');
       fireEvent.change(searchInput, { target: { value: searchText } });
 
-      expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(3); // header + one row
+      expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(2);
     });
 
     it('Search is case insensitive', async () => {
       let searchText = 'third';
 
       const { queryAllByRole, getByLabelText } = render(
-        <GenericList
-          entries={mockEntries}
-          headerRenderer={mockHeaderRenderer}
-          rowRenderer={mockEntryRenderer}
-        />,
+        <ThemeProvider>
+          <GenericList
+            entries={mockEntries}
+            headerRenderer={mockHeaderRenderer}
+            rowRenderer={mockEntryRenderer}
+          />
+        </ThemeProvider>,
       );
 
       expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(
-        mockEntries.length + 1,
-      ); // header + {mockEntries.length} rows
+        mockEntries.length,
+      );
 
       let searchInput = await getByLabelText('search-input');
       fireEvent.change(searchInput, { target: { value: searchText } });
 
-      expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(2); // header + one row
+      expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(1);
 
       searchText = 'THIRD';
       searchInput = await getByLabelText('search-input');
       fireEvent.change(searchInput, { target: { value: searchText } });
 
-      expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(2); // header + one row
+      expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(1);
     });
 
     it('Shows no search result message when there are no results', async () => {
@@ -401,24 +442,26 @@ describe('GenericList', () => {
       const noSearchResultMessage = 'Yes, sorry';
 
       const { queryAllByRole, getByLabelText, getByText } = render(
-        <GenericList
-          entries={mockEntries}
-          headerRenderer={mockHeaderRenderer}
-          rowRenderer={mockEntryRenderer}
-          searchSettings={{
-            noSearchResultMessage,
-          }}
-        />,
+        <ThemeProvider>
+          <GenericList
+            entries={mockEntries}
+            headerRenderer={mockHeaderRenderer}
+            rowRenderer={mockEntryRenderer}
+            searchSettings={{
+              noSearchResultMessage,
+            }}
+          />
+        </ThemeProvider>,
       );
 
       expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(
-        mockEntries.length + 1,
-      ); // header + {mockEntries.length} rows
+        mockEntries.length,
+      );
 
       const searchInput = await getByLabelText('search-input');
       fireEvent.change(searchInput, { target: { value: searchText } });
 
-      expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(2); // header + NoSearchResultMessage dedicated row
+      expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(1);
       expect(await getByText(noSearchResultMessage)).toBeInTheDocument();
     });
 
@@ -429,15 +472,17 @@ describe('GenericList', () => {
       };
 
       const { queryAllByRole, getByText } = render(
-        <GenericList
-          entries={[]}
-          headerRenderer={mockHeaderRenderer}
-          rowRenderer={mockEntryRenderer}
-          serverDataError={serverErrorMessage}
-        />,
+        <ThemeProvider>
+          <GenericList
+            entries={[]}
+            headerRenderer={mockHeaderRenderer}
+            rowRenderer={mockEntryRenderer}
+            serverDataError={serverErrorMessage}
+          />
+        </ThemeProvider>,
       );
 
-      expect(await queryAllByRole('row')).toHaveLength(2); // header + ServerErrorMessage dedicated row
+      expect(await queryAllByRole('row')).toHaveLength(1);
       expect(
         await getByText(new RegExp(serverErrorMessage.message, 'i')),
       ).toBeInTheDocument();
@@ -445,12 +490,14 @@ describe('GenericList', () => {
 
     it('Shows Spinner if dataLoading prop is true', async () => {
       const { getByLabelText } = render(
-        <GenericList
-          entries={[]}
-          headerRenderer={mockHeaderRenderer}
-          rowRenderer={mockEntryRenderer}
-          serverDataLoading={true}
-        />,
+        <ThemeProvider>
+          <GenericList
+            entries={[]}
+            headerRenderer={mockHeaderRenderer}
+            rowRenderer={mockEntryRenderer}
+            serverDataLoading={true}
+          />
+        </ThemeProvider>,
       );
 
       expect(await getByLabelText('Loading')).toBeInTheDocument();

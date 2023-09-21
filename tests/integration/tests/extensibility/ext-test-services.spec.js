@@ -15,7 +15,7 @@ context('Test Services', () => {
 
   it('Creates the EXT Services config', () => {
     cy.getLeftNav()
-      .contains('Cluster Details', { includeShadowDom: true })
+      .contains('Cluster Details')
       .click();
 
     cy.contains('Upload YAML').click();
@@ -28,7 +28,7 @@ context('Test Services', () => {
     cy.contains('Submit').click();
 
     cy.get('.fd-dialog__body')
-      .find('.sap-icon--message-success')
+      .find('.status-message-success')
       .should('have.length', 1);
 
     cy.loadFiles('examples/services/samples.yaml').then(resources => {
@@ -39,7 +39,7 @@ context('Test Services', () => {
     cy.contains('Submit').click();
 
     cy.get('.fd-dialog__body')
-      .find('.sap-icon--message-success')
+      .find('.status-message-success')
       .should('have.length', 1);
   });
 
@@ -47,17 +47,17 @@ context('Test Services', () => {
     cy.loginAndSelectCluster();
 
     cy.getLeftNav()
-      .contains('Namespaces', { includeShadowDom: true })
+      .contains('Namespaces')
       .click();
 
     cy.contains('a', 'services').click();
 
     cy.getLeftNav()
-      .contains('Examples', { includeShadowDom: true })
+      .contains('Examples')
       .click();
 
     cy.getLeftNav()
-      .contains('Custom Services', { includeShadowDom: true })
+      .contains('Custom Services')
       .click();
 
     cy.contains('Type');
@@ -74,7 +74,8 @@ context('Test Services', () => {
 
     cy.contains('Type');
     cy.contains('LoadBalancer');
-    cy.contains('a', 'Custom Services');
+
+    cy.navigateBackTo('example-services', 'Custom Services');
   });
 
   it('Displays the header overridden by translations (on Details)', () => {

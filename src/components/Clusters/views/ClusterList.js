@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
-import { Button, MessagePage } from 'fundamental-react';
+import { Button, IllustratedMessage } from '@ui5/webcomponents-react';
+import '@ui5/webcomponents-fiori/dist/illustrations/NoEntries';
 import { Link } from 'react-router-dom';
 
 import { useClustersInfo } from 'state/utils/getClustersInfo';
@@ -140,21 +141,19 @@ function ClusterList() {
   const extraHeaderContent = (
     <>
       <Button
-        option="transparent"
-        glyph="add"
+        design="Transparent"
+        icon="add"
         className="fd-margin-begin--sm"
         onClick={() => setShowAdd(true)}
-        iconBeforeText
       >
         {t('clusters.add.title')}
       </Button>
       {gardenerLoginFeature.isEnabled && (
         <Button
-          option="transparent"
-          glyph="add"
+          design="Transparent"
+          icon="add"
           className="fd-margin-begin--sm"
           onClick={() => navigate('/gardener-login')}
-          iconBeforeText
         >
           {t('clusters.gardener.button')}
         </Button>
@@ -195,38 +194,32 @@ function ClusterList() {
   );
 
   const gardenerLoginButton = gardenerLoginFeature.isEnabled && (
-    <Button onClick={() => navigate('/gardener-login')} iconBeforeText>
+    <Button onClick={() => navigate('/gardener-login')}>
       {t('clusters.gardener.button')}
     </Button>
   );
 
   if (!entries.length) {
-    const subtitle = t('clusters.empty.subtitle');
     return (
       <>
         {addDialog}
-        <MessagePage
+        <IllustratedMessage
+          name="NoEntries"
+          size="Scene"
           className="empty-cluster-list"
-          image={
-            <svg role="presentation" className="fd-message-page__icon">
-              <use xlinkHref="#sapIllus-Dialog-NoData"></use>
-            </svg>
-          }
-          title={t('clusters.empty.title')}
-          subtitle={subtitle}
-          actions={
-            <>
-              <Button
-                onClick={() => setShowAdd(true)}
-                className="fd-margin-end--tiny fd-margin-begin--tiny"
-              >
-                {t('clusters.add.title')}
-              </Button>
-              {gardenerLoginButton}
-              {loadDefaultClusterButton}
-            </>
-          }
-        />
+          titleText={t('clusters.empty.title')}
+          subtitleText={t('clusters.empty.subtitle')}
+        >
+          <Button
+            onClick={() => setShowAdd(true)}
+            className="fd-margin-end--tiny fd-margin-begin--tiny"
+            design="Emphasized"
+          >
+            {t('clusters.add.title')}
+          </Button>
+          {gardenerLoginButton}
+          {loadDefaultClusterButton}
+        </IllustratedMessage>
       </>
     );
   }

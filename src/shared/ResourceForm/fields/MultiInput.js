@@ -1,15 +1,14 @@
 import React, { useEffect, useRef, useState, createRef } from 'react';
-import { Button } from 'fundamental-react';
+import { Button, Icon } from '@ui5/webcomponents-react';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { Icon } from 'fundamental-react';
 
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 import { ResourceForm } from '..';
+import { useCreateResourceDescription } from 'components/Extensibility/helpers';
 
 import './MultiInput.scss';
-import { useCreateResourceDescription } from 'components/Extensibility/helpers';
 
 export function MultiInput({
   value,
@@ -197,13 +196,11 @@ export function MultiInput({
                   {!isLast(index) && (
                     <Button
                       disabled={readOnly}
-                      compact
-                      option="transparent"
                       className={classnames({
                         hidden: isEntryLocked(entry),
                       })}
-                      glyph="delete"
-                      type="negative"
+                      icon="delete"
+                      design="Negative"
                       onClick={() => removeValue(index)}
                       ariaLabel={t('common.buttons.delete')}
                     />
@@ -222,7 +219,11 @@ export function MultiInput({
         <div className="fd-col fd-col-md--1 tooltip-column tooltip-column--with-padding">
           {tooltipContent && (
             <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
-              <Icon ariaLabel="" size="m" glyph="message-information" />
+              <Icon
+                aria-label=""
+                className="ui5-icon-m"
+                name="message-information"
+              />
             </Tooltip>
           )}
         </div>

@@ -1,7 +1,8 @@
 import React from 'react';
 import { mapValues } from 'lodash';
 import { PluginStack, useUIStore } from '@ui-schema/ui-schema';
-import { Button, FormLabel } from 'fundamental-react';
+import { Button, Icon } from '@ui5/webcomponents-react';
+import { FormLabel } from 'fundamental-react';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import {
@@ -11,7 +12,6 @@ import {
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { Label } from '../../../shared/ResourceForm/components/Label';
-import { Icon } from 'fundamental-react';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 import './SimpleList.scss';
@@ -123,7 +123,6 @@ export function SimpleList({
                           storeKeys={ownKeys}
                           level={level + 1}
                           schemaKeys={schemaKeys?.push('items')}
-                          compact
                           placeholder={tExt(schemaPlaceholder)}
                           inputInfo={inputInfo}
                         />
@@ -133,9 +132,8 @@ export function SimpleList({
                           {!isLast(index) && (
                             <Button
                               disabled={readOnly}
-                              compact
-                              glyph="delete"
-                              type="negative"
+                              icon="delete"
+                              design="Negative"
                               onClick={() => removeItem(index)}
                               ariaLabel={t('common.buttons.delete')}
                             />
@@ -160,8 +158,12 @@ export function SimpleList({
         </div>
         <div className="fd-col fd-col-md--1 tooltip-column tooltip-column--with-padding">
           {tooltipContent && (
-            <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
-              <Icon ariaLabel="" size="m" glyph="message-information" />
+            <Tooltip
+              className="has-tooltip"
+              delay={0}
+              content={tExt(tooltipContent)}
+            >
+              <Icon name="message-information" className="ui5-icon-m" />
             </Tooltip>
           )}
         </div>

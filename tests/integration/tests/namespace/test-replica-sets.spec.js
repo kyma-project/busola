@@ -39,7 +39,9 @@ context('Test Replica Sets', () => {
       .should('have.value', DOCKER_IMAGE_TAG);
 
     cy.get('[role="document"]')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
   });
 
@@ -55,10 +57,12 @@ context('Test Replica Sets', () => {
 
   it('Checks the list view', () => {
     cy.getLeftNav()
-      .contains('Replica Sets', { includeShadowDom: true })
+      .contains('Replica Sets')
       .click();
 
-    cy.contains(REPLICA_SET_NAME).click();
+    cy.get('a.fd-link')
+      .contains(REPLICA_SET_NAME)
+      .click();
 
     cy.contains(REPLICA_SET_NAME);
   });
@@ -79,12 +83,14 @@ context('Test Replica Sets', () => {
       .should('have.value', EDITED_REPLICAS_AMOUNT);
 
     cy.get('[role="document"]')
-      .contains('button', 'Update')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Update')
+      .should('be.visible')
       .click();
   });
 
   it('Checks the new Docker image', () => {
-    cy.contains('Replica Sets').click();
+    cy.navigateBackTo('replicasets', 'Replica Sets');
 
     cy.contains(EDITED_DOCKER_IMAGE_TAG);
   });

@@ -12,9 +12,11 @@ context('Test invalid kubeconfig', () => {
     cy.pasteToMonaco('wrong_kubeconfig');
 
     // trigger blur on editor
-    cy.contains('Cancel').focus();
+    cy.get('[aria-label="cancel"]')
+      .should('contain.text', 'Cancel')
+      .should('be.visible');
 
-    cy.get('.fd-message-strip--error').shouldHaveTrimmedText(
+    cy.get('ui5-message-strip[design="Negative"]').shouldHaveTrimmedText(
       'Parse error: kubeconfig is not an object, previous valid input will be used',
     );
   });
@@ -28,7 +30,7 @@ context('Test invalid kubeconfig', () => {
       'Drag your file here or click to upload',
     ).attachFile('kubeconfig--invalid.txt', { subjectType: 'drag-n-drop' });
 
-    cy.get('.fd-message-strip--error').should(
+    cy.get('ui5-message-strip[design="Negative"]').should(
       'contain.text',
       'Parse error: bad indentation of a mapping entry',
     );

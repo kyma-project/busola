@@ -3,7 +3,7 @@ import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 import { K8sNameField } from 'shared/ResourceForm/fields';
 
-import { Button, MessageStrip } from 'fundamental-react';
+import { Button, MessageStrip } from '@ui5/webcomponents-react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
@@ -59,7 +59,7 @@ export function Containers({ value: containers, setValue: setContainers }) {
 
   if (!containers.length) {
     return (
-      <MessageStrip type="warning">
+      <MessageStrip design="Warning" hideCloseButton>
         {t('deployments.create-modal.advanced.one-container-required')}
       </MessageStrip>
     );
@@ -86,10 +86,8 @@ export function Containers({ value: containers, setValue: setContainers }) {
       })}
       actions={
         <Button
-          glyph="delete"
-          type="negative"
-          option="transparent"
-          compact
+          icon="delete"
+          design="Negative"
           onClick={() => removeContainer(i)}
         />
       }

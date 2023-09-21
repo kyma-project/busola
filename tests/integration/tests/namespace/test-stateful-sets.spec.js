@@ -39,10 +39,12 @@ context('Test Stateful Sets', () => {
     );
 
     cy.get('[role="dialog"]')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
 
-    cy.contains('h3', SS_NAME).should('be.visible');
+    cy.contains('ui5-title', SS_NAME).should('be.visible');
   });
 
   it('Inspect details', () => {

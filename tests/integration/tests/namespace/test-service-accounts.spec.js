@@ -26,12 +26,12 @@ context('Test Service Accounts', () => {
       .type(SERVICE_NAME);
 
     // Toggle 'Automount Token' switch
-    cy.get('[role="presentation"]')
+    cy.get('ui5-switch')
       .eq(0)
       .click();
 
     // Toggle 'Create associated Secret' switch
-    cy.get('[role="presentation"]')
+    cy.get('ui5-switch')
       .eq(1)
       .click();
 
@@ -40,12 +40,14 @@ context('Test Service Accounts', () => {
     );
 
     cy.get('[role="dialog"]')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
   });
 
   it('Checking details', () => {
-    cy.contains(SERVICE_NAME).should('be.visible');
+    cy.contains(SERVICE_NAME, { includeShadowDom: false }).should('be.visible');
 
     cy.contains('enabled').should('be.visible');
 
@@ -69,12 +71,14 @@ context('Test Service Accounts', () => {
       .type('test-value');
 
     // Toggle 'Automount Token' switch
-    cy.get('[role="presentation"]')
+    cy.get('ui5-switch')
       .eq(0)
       .click();
 
     cy.get('[role="dialog"]')
-      .contains('button', 'Update')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Update')
+      .should('be.visible')
       .click();
   });
 

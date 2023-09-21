@@ -29,24 +29,31 @@ context('Test Custom Resources', () => {
     });
 
     cy.get('[role="dialog"]')
-      .contains('button', 'Submit')
+      .get('ui5-button')
+      .contains('Submit')
+      .should('be.visible')
       .click();
 
     cy.get('.fd-dialog__body')
-      .find('.sap-icon--message-success')
+      .find('.status-message-success')
       .should('have.length', 1);
 
     cy.get('[role="dialog"]')
-      .contains('button', 'Close')
+      .get('ui5-button')
+      .contains('Close')
+      .should('be.visible')
       .click();
   });
 
   it('Check CR groups list', () => {
     cy.navigateTo('Configuration', 'Custom Resources');
 
-    cy.contains('h3', 'Custom Resources').should('be.visible');
+    cy.contains('ui5-title', 'Custom Resources').should('be.visible');
 
-    cy.get('[role="search"] [aria-label="open-search"]').type('cypress');
+    cy.get('ui5-button[aria-label="open-search"]')
+      .click()
+      .get('input[aria-label="search-input"]')
+      .type('cypress');
 
     cy.get('table').should('have.length', 1);
 
@@ -60,15 +67,13 @@ context('Test Custom Resources', () => {
       .contains('Tnamespaces')
       .click();
 
-    cy.get('[aria-label="title"]')
-      .contains('Tnamespaces')
-      .should('be.visible');
+    cy.contains('ui5-title', 'Tnamespaces').should('be.visible');
 
     cy.contains(/Create Tnamespace/i).should('be.visible');
 
     cy.url().should('match', /customresources/);
     cy.contains('tnamespace.cypress.example.com').click();
     cy.url().should('match', /customresourcedefinitions/);
-    cy.deleteInDetails();
+    cy.deleteInDetails('tnamespace.cypress.example.com');
   });
 });

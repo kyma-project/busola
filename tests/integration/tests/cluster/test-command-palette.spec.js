@@ -37,7 +37,7 @@ context('Test Command Palette navigation', () => {
   });
 
   it('Basic navigation', () => {
-    cy.contains('Cluster Details');
+    cy.contains('ui5-title', 'Cluster Details');
 
     // navigate to namespace
     openCommandPalette();
@@ -70,7 +70,9 @@ context('Test Command Palette navigation', () => {
       .first()
       .click();
 
-    cy.contains('Cluster Details - Nodes').should('be.visible');
+    cy.get('ui5-breadcrumbs')
+      .should('contain.text', 'Cluster Details - Nodes')
+      .should('be.visible');
 
     // navigate to cluster overview
     openCommandPalette();

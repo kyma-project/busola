@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { useTranslation } from 'react-i18next';
 
@@ -59,11 +59,9 @@ export function KeyValueField({
     actions = [
       ...actions,
       <Button
-        compact
-        option="transparent"
-        glyph={valuesEncoded ? 'show' : 'hide'}
+        design="Transparent"
+        icon={valuesEncoded ? 'show' : 'hide'}
         onClick={toggleEncoding}
-        iconBeforeText
       >
         {valuesEncoded
           ? t('secrets.buttons.decode')
@@ -140,7 +138,6 @@ export function KeyValueField({
             {readableFromFile ? (
               <Tooltip content={t('common.tooltips.read-file')}>
                 <Button
-                  compact
                   className="read-from-file"
                   onClick={() =>
                     readFromFile()?.then(result => {

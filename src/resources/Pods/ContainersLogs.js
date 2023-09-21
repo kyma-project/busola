@@ -1,12 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { saveAs } from 'file-saver';
-import {
-  Button,
-  LayoutPanel,
-  Switch,
-  Select,
-  FormLabel,
-} from 'fundamental-react';
+import { Button, Label, Switch, Text } from '@ui5/webcomponents-react';
+import { Select, FormLabel } from 'fundamental-react';
 import { LogsLink } from 'shared/components/LogsLink/LogsLink';
 import { useGetStream } from 'shared/hooks/BackendAPI/useGet';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
@@ -15,6 +10,7 @@ import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 import { SearchInput } from 'shared/components/GenericList/SearchInput';
 import { useTranslation } from 'react-i18next';
 import { useUrl } from 'hooks/useUrl';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import './ContainersLogs.scss';
 
@@ -151,9 +147,11 @@ const ContainersLogs = ({ params }) => {
     if (data.length === 0)
       return (
         <div className="empty-logs">
-          {t('pods.message.no-logs-available', {
-            containerName: containerName,
-          })}
+          <Text>
+            {t('pods.message.no-logs-available', {
+              containerName: containerName,
+            })}
+          </Text>
         </div>
       );
 
@@ -180,10 +178,10 @@ const ContainersLogs = ({ params }) => {
           breadcrumbItems={breadcrumbs}
         />
       </div>
-      <LayoutPanel className="fd-margin--md logs-panel">
-        <LayoutPanel.Header className="logs-panel-header">
-          <LayoutPanel.Head title="Logs" className="logs-title" />
-          <LayoutPanel.Actions className="logs-actions">
+      <UI5Panel
+        title={t('pods.labels.logs')}
+        headerActions={
+          <>
             <FormLabel htmlFor="context-chooser">
               {t('pods.labels.filter-timeframe')}
             </FormLabel>
@@ -194,20 +192,14 @@ const ContainersLogs = ({ params }) => {
               selectedKey={sinceSeconds.toString()}
               onSelect={(_, { key }) => onLogTimeframeChange(key)}
             />
-            <Switch
-              disabled={!logsToSave?.length}
-              compact
-              onChange={onSwitchChange}
-            >
+            <Label className="fd-margin-begin--sm">
               {t('pods.labels.show-timestamps')}
-            </Switch>
-            <Switch
-              disabled={!logsToSave?.length}
-              compact
-              onChange={onReverseChange}
-            >
+            </Label>
+            <Switch disabled={!logsToSave?.length} onChange={onSwitchChange} />
+            <Label className="fd-margin-begin--sm">
               {t('pods.labels.reverse-logs')}
-            </Switch>
+            </Label>
+            <Switch disabled={!logsToSave?.length} onChange={onReverseChange} />
             <LogsLink
               className="fd-margin-begin--tiny"
               query={`{namespace="${params.namespace}",pod="${params.podName}",container="${params.containerName}"}`}
@@ -229,15 +221,16 @@ const ContainersLogs = ({ params }) => {
               showSuggestion={false}
               onKeyDown={changeSelectedLog}
             />
-          </LayoutPanel.Actions>
-        </LayoutPanel.Header>
-        <LayoutPanel.Body className="logs-panel-body">
+          </>
+        }
+      >
+        <div className="logs-panel-body">
           <LogsPanel
             streamData={streamData}
             containerName={params.containerName}
           />
-        </LayoutPanel.Body>
-      </LayoutPanel>
+        </div>
+      </UI5Panel>
     </div>
   );
 };

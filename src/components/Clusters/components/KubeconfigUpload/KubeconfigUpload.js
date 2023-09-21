@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { MessageStrip } from 'fundamental-react';
+import { MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { KubeconfigFileUpload } from './KubeconfigFileUpload';
 import jsyaml from 'js-yaml';
@@ -57,7 +57,11 @@ export function KubeconfigUpload({
         onChange={updateKubeconfig}
       />
       {error && (
-        <MessageStrip type="error" className="fd-margin-top--sm">
+        <MessageStrip
+          design="Negative"
+          hideCloseButton
+          className="fd-margin-top--sm"
+        >
           {t('common.create-form.editor-error', { error })}
         </MessageStrip>
       )}

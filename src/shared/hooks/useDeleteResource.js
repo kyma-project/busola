@@ -1,4 +1,5 @@
-import { Button, Checkbox, MessageBox, MessageStrip } from 'fundamental-react';
+import { Button, MessageBox, MessageStrip } from '@ui5/webcomponents-react';
+import { Checkbox } from 'fundamental-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
@@ -11,7 +12,6 @@ import { prettifyNameSingular } from 'shared/utils/helpers';
 import { dontConfirmDeleteState } from 'state/preferences/dontConfirmDeleteAtom';
 import { useUrl } from 'hooks/useUrl';
 
-import './useDeleteResource.scss';
 import { clusterState } from 'state/clusterAtom';
 
 export function useDeleteResource({
@@ -89,25 +89,27 @@ export function useDeleteResource({
     deleteFn,
   }) => (
     <MessageBox
-      type="warning"
-      title={t('common.delete-dialog.title', {
+      type="Warning"
+      titleText={t('common.delete-dialog.title', {
         name: resourceTitle || resource?.metadata?.name,
       })}
-      className="delete-message-box"
+      open={showDeleteDialog}
+      className="ui5-content-density-compact"
       actions={[
         <Button
           data-testid="delete-confirmation"
-          type="negative"
-          compact
+          design="Negative"
           onClick={() => performDelete(resource, resourceUrl, deleteFn)}
         >
           {t('common.buttons.delete')}
         </Button>,
-        <Button onClick={() => setShowDeleteDialog(false)} compact>
+        <Button
+          data-testid="delete-cancel"
+          onClick={() => setShowDeleteDialog(false)}
+        >
           {t('common.buttons.cancel')}
         </Button>,
       ]}
-      show={showDeleteDialog}
       onClose={closeDeleteDialog}
     >
       <p>
@@ -125,7 +127,11 @@ export function useDeleteResource({
         </Checkbox>
       </div>
       {dontConfirmDelete && (
-        <MessageStrip type="information" className="fd-margin-top--sm">
+        <MessageStrip
+          design="Information"
+          hideCloseButton
+          className="fd-margin-top--sm"
+        >
           {t('common.delete-dialog.information')}
         </MessageStrip>
       )}

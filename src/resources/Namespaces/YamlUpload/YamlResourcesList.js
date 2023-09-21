@@ -1,6 +1,5 @@
 import React from 'react';
-import { Icon } from 'fundamental-react';
-import { Switch } from 'shared/ResourceForm/inputs';
+import { Icon, Switch } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import {
@@ -15,6 +14,7 @@ import {
   STATE_CREATED,
 } from './useUploadResources';
 import { FilteredResourcesDetails } from './FilteredResourcesDetails/FilteredResourcesDetails';
+
 import './YamlResourcesList.scss';
 
 export function YamlResourcesList({ resourcesData }) {
@@ -120,8 +120,8 @@ export function YamlResourcesList({ resourcesData }) {
               <li key={`${r?.value?.kind}-${r?.value?.metadata?.name}`}>
                 <Icon
                   className={`status status-${getIcon(r?.status)}`}
-                  glyph={getIcon(r?.status)}
-                  ariaLabel="status"
+                  name={getIcon(r?.status)}
+                  aria-label="status"
                 />
                 {String(r?.value?.kind)} {String(r?.value?.metadata?.name)} -{' '}
                 {getStatus(r?.status)}

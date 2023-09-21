@@ -24,20 +24,22 @@ context('Test Custom Resources', () => {
     });
 
     cy.get('[role="dialog"]')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
   });
 
   it('Check CR groups list with slash shortcut', () => {
     cy.getLeftNav()
-      .contains('Custom Resources', { includeShadowDom: true })
+      .contains('Custom Resources')
       .click();
 
-    cy.contains('h3', 'Custom Resources').should('be.visible');
+    cy.contains('ui5-title', 'Custom Resources').should('be.visible');
 
     openSearchWithSlashShortcut();
 
-    cy.get('[type="search"]').type('cypress');
+    cy.get('[type="search"]').type('cypress', { force: true });
 
     cy.get('table').should('have.length', 1);
 
@@ -51,15 +53,13 @@ context('Test Custom Resources', () => {
       .contains('Tclusters')
       .click();
 
-    cy.get('[aria-label="title"]')
-      .contains('Tclusters')
-      .should('be.visible');
+    cy.contains('ui5-title', 'Tclusters').should('be.visible');
 
     cy.contains(/Create Tcluster/i).should('be.visible');
 
     cy.url().should('match', /customresources/);
     cy.contains('tcluster.cypress.example.com').click();
     cy.url().should('match', /customresourcedefinitions/);
-    cy.deleteInDetails();
+    cy.deleteInDetails('tcluster.cypress.example.com');
   });
 });

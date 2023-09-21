@@ -1,7 +1,8 @@
 import React from 'react';
-import { Checkbox, FormRadioGroup, Icon } from 'fundamental-react';
+import { Checkbox, FormRadioGroup } from 'fundamental-react';
 
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
+import { Icon } from '@ui5/webcomponents-react';
 
 export function Checkboxes({
   value = [],
@@ -46,7 +47,11 @@ export function Checkboxes({
           <div className="fd-col fd-col-md--1 tooltip-column">
             {description && (
               <Tooltip className="has-tooltip" delay={0} content={description}>
-                <Icon ariaLabel="" size="m" glyph="message-information" />
+                <Icon
+                  aria-label=""
+                  className="ui5-icon-m"
+                  name="message-information"
+                />
               </Tooltip>
             )}
           </div>

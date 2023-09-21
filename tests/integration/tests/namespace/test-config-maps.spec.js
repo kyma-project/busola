@@ -32,7 +32,9 @@ context('Test Config Maps', () => {
       .type(ENTRY_VALUE);
 
     cy.get('[role="dialog"]')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
 
     cy.url().should('match', new RegExp(`/configmaps/${CONFIG_MAP_NAME}$`));
@@ -41,11 +43,14 @@ context('Test Config Maps', () => {
   it('Inspect the Config Map', () => {
     cy.contains(CONFIG_MAP_NAME);
 
-    cy.contains('.fd-layout-panel', ENTRY_KEY).contains(ENTRY_VALUE);
+    cy.contains('ui5-panel', ENTRY_KEY).contains(ENTRY_VALUE);
   });
 
   it('Edit the Config Map', () => {
-    cy.contains('Edit').click();
+    cy.get('ui5-button')
+      .contains('Edit')
+      .should('be.visible')
+      .click();
 
     // hide first entry so Cypress doesn't get confuused
     cy.get('[aria-label="expand config-map-key"]').click();
@@ -55,12 +60,14 @@ context('Test Config Maps', () => {
     cy.findMonaco(1).type(ENTRY_VALUE2);
 
     cy.get('[role=dialog]')
-      .contains('button', 'Update')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Update')
+      .should('be.visible')
       .click();
   });
 
   it('Inspect the updated Config Map', () => {
-    cy.contains('.fd-layout-panel', ENTRY_KEY2).contains(ENTRY_VALUE2);
+    cy.contains('ui5-panel', ENTRY_KEY2).contains(ENTRY_VALUE2);
   });
 
   it('Inspect list', () => {
@@ -69,25 +76,28 @@ context('Test Config Maps', () => {
 
   it('Clone the secret', () => {
     cy.getLeftNav()
-      .contains('Config Maps', { includeShadowDom: true })
+      .contains('Config Maps')
       .click();
 
-    cy.contains('.fd-table__row', CONFIG_MAP_NAME)
-      .find('button[data-testid="clone"]')
+    cy.contains('ui5-table-row', CONFIG_MAP_NAME)
+      .find('ui5-button[data-testid="clone"]')
       .click();
 
     cy.get('[ariaLabel="ConfigMap name"]:visible')
       .type(CLONE_NAME)
       .click();
 
-    cy.contains('button', /^Create$/).click();
+    cy.get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
+      .click();
   });
 
   it('Inspect the clone', () => {
     cy.contains(CLONE_NAME);
 
-    cy.contains('.fd-layout-panel', ENTRY_KEY).contains(ENTRY_VALUE);
+    cy.contains('ui5-panel', ENTRY_KEY).contains(ENTRY_VALUE);
 
-    cy.contains('.fd-layout-panel', ENTRY_KEY2).contains(ENTRY_VALUE2);
+    cy.contains('ui5-panel', ENTRY_KEY2).contains(ENTRY_VALUE2);
   });
 });

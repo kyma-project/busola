@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { MessageStrip, Wizard } from 'fundamental-react';
+import { MessageStrip, Wizard, WizardStep } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -17,6 +17,7 @@ import { ContextChooser } from './ContextChooser/ContextChooser';
 import { ChooseStorage } from './ChooseStorage';
 
 import './AddClusterWizard.scss';
+import { WizardButtons } from 'shared/components/WizardButtons/WizardButtons';
 
 export function AddClusterWizard({
   kubeconfig,
@@ -35,6 +36,8 @@ export function AddClusterWizard({
   const [storage, setStorage] = useState(
     busolaClusterParams?.config?.storage || 'sessionStorage',
   );
+  const [selected, setSelected] = useState(1);
+
   const {
     isValid: authValid,
     formElementRef: authFormRef,
@@ -116,25 +119,16 @@ export function AddClusterWizard({
   };
 
   return (
-    <Wizard
-      onCancel={onCancel}
-      onComplete={onComplete}
-      navigationType="tabs"
-      headerSize="md"
-      contentSize="md"
-      className="add-cluster-wizard"
-    >
-      <Wizard.Step
-        title={t('clusters.wizard.kubeconfig')}
+    <Wizard contentLayout="SingleStep">
+      <WizardStep
+        titleText={t('clusters.wizard.kubeconfig')}
         branching={!kubeconfig}
-        indicator="1"
-        valid={!!kubeconfig}
-        previousLabel={t('clusters.buttons.previous-step')}
-        nextLabel={t('clusters.buttons.next-step')}
+        selected={selected === 1}
       >
         <p>{t('clusters.wizard.intro')}</p>
         <MessageStrip
-          type="information"
+          design="Information"
+          hideCloseButton
           className="add-cluster__kubeconfig-info fd-margin-top--sm fd-margin-bottom--sm"
         >
           {t('clusters.wizard.storage-info')}
@@ -143,15 +137,20 @@ export function AddClusterWizard({
           kubeconfig={kubeconfig}
           setKubeconfig={updateKubeconfig}
         />
-      </Wizard.Step>
+        <WizardButtons
+          selected={selected}
+          setSelected={setSelected}
+          firstStep={true}
+          onCancel={onCancel}
+          validation={!kubeconfig}
+        />
+      </WizardStep>
 
       {kubeconfig && (!hasAuth || !hasOneContext) && (
-        <Wizard.Step
-          title={t('clusters.wizard.update')}
-          indicator="2"
-          valid={authValid}
-          previousLabel={t('clusters.buttons.previous-step')}
-          nextLabel={t('clusters.buttons.next-step')}
+        <WizardStep
+          titleText={t('clusters.wizard.update')}
+          selected={selected === 2}
+          disabled={selected !== 2}
         >
           <ResourceForm.Single
             formElementRef={authFormRef}
@@ -165,18 +164,39 @@ export function AddClusterWizard({
             {!hasOneContext && <ContextChooser />}
             {!hasAuth && <AuthForm revalidate={revalidate} />}
           </ResourceForm.Single>
-        </Wizard.Step>
+          <WizardButtons
+            selected={selected}
+            setSelected={setSelected}
+            onCancel={onCancel}
+            validation={!authValid}
+          />
+        </WizardStep>
       )}
 
-      <Wizard.Step
+      <WizardStep
         title={t('clusters.wizard.storage')}
-        indicator="2"
-        valid={!!storage}
-        previousLabel={t('clusters.buttons.previous-step')}
-        nextLabel={t('clusters.buttons.verify-and-add')}
+        selected={
+          kubeconfig && (!hasAuth || !hasOneContext)
+            ? selected === 3
+            : selected === 2
+        }
+        disabled={
+          kubeconfig && (!hasAuth || !hasOneContext)
+            ? selected !== 3
+            : selected !== 2
+        }
       >
         <ChooseStorage storage={storage} setStorage={setStorage} />
-      </Wizard.Step>
+        <WizardButtons
+          selected={selected}
+          setSelected={setSelected}
+          lastStep={true}
+          customFinish={t('clusters.buttons.verify-and-add')}
+          validation={!storage}
+          onComplete={onComplete}
+          onCancel={onCancel}
+        />
+      </WizardStep>
     </Wizard>
   );
 }

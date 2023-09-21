@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { InfoLabel, ObjectStatus } from 'fundamental-react';
+import { InfoLabel } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 import { ObjectProperties } from './ObjectProperties';
+import { ObjectStatus, Text } from '@ui5/webcomponents-react';
 
 export function JSONSchema({
   root = false,
@@ -20,7 +21,7 @@ export function JSONSchema({
     <section className="object-details">
       {!root && (
         <div>
-          {name && <span className="property-name">{name}</span>}{' '}
+          {name && <Text className="property-name">{name}</Text>}{' '}
           {types &&
             types
               .map(type => {
@@ -34,7 +35,7 @@ export function JSONSchema({
               })
               .map(type => <InfoLabel key={type}>{type}</InfoLabel>)}{' '}
           {isRequired && (
-            <ObjectStatus inverted status="critical">
+            <ObjectStatus inverted state="Warning">
               {t('schema.required')}
             </ObjectStatus>
           )}{' '}

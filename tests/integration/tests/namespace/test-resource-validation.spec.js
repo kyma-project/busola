@@ -30,20 +30,20 @@ context('Test resource validation', () => {
       'specify an image version to avoid unpleasant "version surprises" in the future',
     ).should('be.visible');
 
-    cy.contains('Cancel').click();
+    cy.get('[data-testid=yaml-cancel]').click();
   });
 
   it('Disables resource validation via preferences', () => {
-    cy.get('[aria-label="topnav-profile-btn"]').click();
+    cy.get('[title="Profile"]').click();
 
-    cy.contains('Preferences').click();
+    cy.contains('Cluster interaction').click();
 
-    cy.contains('Clusters').click();
+    cy.contains('Resource Validation')
+      .parentsUntil('[role=tab]')
+      .click({ force: true });
 
-    cy.contains('Resource Validation').click();
-
-    cy.contains('.fd-layout-panel__header', 'Validate Resources')
-      .find('.fd-switch')
+    cy.contains('ui5-panel', 'Validate Resources')
+      .find('ui5-switch')
       .click();
 
     cy.contains('Close').click();
@@ -59,33 +59,33 @@ context('Test resource validation', () => {
     cy.contains('warnings').should('not.exist');
 
     cy.contains('.validate-resources', 'Validate resources')
-      .find('.fd-switch')
+      .find('ui5-switch')
       .click();
 
-    cy.contains('Cancel').click();
+    cy.get('[data-testid=yaml-cancel]').click();
   });
 
   it('Customize resource validation policies via preferences', () => {
-    cy.get('[aria-label="topnav-profile-btn"]').click();
+    cy.get('[title="Profile"]').click();
 
-    cy.contains('Preferences').click();
+    cy.contains('Cluster interaction').click();
 
-    cy.contains('Clusters').click();
-
-    cy.contains('Resource Validation').click();
+    cy.contains('Resource Validation')
+      .parentsUntil('[role=tab]')
+      .click({ force: true });
 
     cy.contains('Customize').click();
 
     cy.contains('.policy-row', 'Default')
-      .find('.fd-switch')
+      .find('ui5-switch')
       .click();
 
     cy.contains('.policy-row', 'PodSecurityStandardsBaseline')
-      .find('.fd-switch')
+      .find('ui5-switch')
       .click();
 
     cy.contains('.policy-row', 'TestPolicy')
-      .find('.fd-switch')
+      .find('ui5-switch')
       .click();
 
     cy.contains('Close').click();
@@ -108,15 +108,15 @@ context('Test resource validation', () => {
 
     cy.contains('This is a test rule').should('be.visible');
 
-    cy.contains('Cancel').click();
+    cy.get('[data-testid=yaml-cancel]').click();
 
-    cy.get('[aria-label="topnav-profile-btn"]').click();
+    cy.get('[title="Profile"]').click();
 
-    cy.contains('Preferences').click();
+    cy.contains('Cluster interaction').click();
 
-    cy.contains('Clusters').click();
-
-    cy.contains('Resource Validation').click();
+    cy.contains('Resource Validation')
+      .parentsUntil('[role=tab]')
+      .click({ force: true });
 
     cy.contains('Reset').click();
 
@@ -144,10 +144,10 @@ context('Test resource validation', () => {
       .should('be.visible')
       .click();
 
-    cy.get('[role=alert]').contains(
+    cy.get('ui5-message-strip[design="Warning"]').contains(
       'Incorrect or missing values for `capabilities.drop` - must contain ALL',
     );
 
-    cy.contains('Cancel').click();
+    cy.get('[data-testid=yaml-cancel]').click();
   });
 });

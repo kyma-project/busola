@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
-import { Switch } from 'fundamental-react';
+import { Switch } from '@ui5/webcomponents-react';
 import { dontConfirmDeleteState } from 'state/preferences/dontConfirmDeleteAtom';
 
 export default function ConfirmationSettings() {
@@ -16,13 +16,10 @@ export default function ConfirmationSettings() {
       </span>
       <div>
         <Switch
-          inputProps={{
-            'aria-label': t('settings.clusters.dontConfirmDelete'),
-          }}
-          className="fd-has-display-inline-block fd-margin-begin--tiny"
+          aria-label={t('settings.clusters.dontConfirmDelete')}
+          className="fd-margin-begin--tiny"
           checked={dontConfirmDelete}
           onChange={() => setDontConfirmDelete(previousState => !previousState)}
-          compact
         />
       </div>
     </div>

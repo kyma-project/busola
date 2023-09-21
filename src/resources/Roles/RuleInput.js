@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, BusyIndicator, MessageStrip } from 'fundamental-react';
+import { BusyIndicator, Button, MessageStrip } from '@ui5/webcomponents-react';
 import * as jp from 'jsonpath';
 import { ResourceForm } from 'shared/ResourceForm';
 import { ComboboxArrayInput, TextArrayInput } from 'shared/ResourceForm/fields';
@@ -121,13 +121,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         defaultOpen
         nestingLevel={2}
         actions={
-          <Button
-            compact
-            glyph="add"
-            onClick={addAllApiGroups}
-            option="transparent"
-            iconBeforeText
-          >
+          <Button icon="add" onClick={addAllApiGroups} design="Transparent">
             {t('common.buttons.add-all')}
           </Button>
         }
@@ -142,12 +136,11 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         nestingLevel={2}
         newItemAction={
           loading ? (
-            <BusyIndicator size="s" show={true} />
+            <BusyIndicator size="Small" active={true} delay="0" />
           ) : (
             <Tooltip content={t('roles.tooltips.load')}>
               <Button
-                compact
-                option="transparent"
+                design="Transparent"
                 onClick={fetchResources}
                 disabled={!loadable}
                 ariaLabel={t('roles.buttons.load')}
@@ -159,12 +152,10 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         }
         actions={[
           <Button
-            compact
-            glyph="add"
-            option="transparent"
+            icon="add"
+            design="Transparent"
             onClick={addAllResources}
             disabled={loading || !apiRules?.length}
-            iconBeforeText
           >
             {t('common.buttons.add-all')}
           </Button>,
@@ -172,7 +163,8 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
       />
       {loadable && (
         <MessageStrip
-          type="information"
+          design="Information"
+          hideCloseButton
           className="fd-margin-bottom--sm fd-margin-begin--md"
         >
           {t('roles.messages.load-resources')}
@@ -186,13 +178,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         defaultOpen
         nestingLevel={2}
         actions={[
-          <Button
-            compact
-            glyph="add"
-            onClick={addAllVerbs}
-            option="transparent"
-            iconBeforeText
-          >
+          <Button icon="add" onClick={addAllVerbs} design="Transparent">
             {t('common.buttons.add-all')}
           </Button>,
         ]}

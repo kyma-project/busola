@@ -1,7 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { LayoutPanel, Breadcrumb } from 'fundamental-react';
-import { Link } from 'react-router-dom';
+import {
+  Breadcrumbs,
+  BreadcrumbsItem,
+  DynamicPage,
+  DynamicPageHeader,
+  DynamicPageTitle,
+  Text,
+  Title,
+} from '@ui5/webcomponents-react';
 
 import './PageHeader.scss';
 
@@ -25,43 +32,48 @@ export const PageHeader = ({
   actions,
   children,
   columnWrapperClassName,
-}) => (
-  <LayoutPanel className="page-header">
-    <LayoutPanel.Header>
-      <section className="header-wrapper">
-        {breadcrumbItems.length ? (
-          <section>
-            <Breadcrumb>
-              {breadcrumbItems.map(item => {
-                return (
-                  <Breadcrumb.Item aria-label="breadcrumb-item" key={item.name}>
-                    <Link to={item.url}>{item.name}</Link>
-                  </Breadcrumb.Item>
-                );
-              })}
-            </Breadcrumb>
+}) => {
+  return (
+    <DynamicPage
+      style={title === 'Clusters Overview' ? { height: '50px' } : null}
+      className="page-header"
+      alwaysShowContentHeader
+      showHideHeaderButton={false}
+      headerContentPinnable={false}
+      headerTitle={
+        <DynamicPageTitle
+          breadcrumbs={
+            breadcrumbItems.length ? (
+              <Breadcrumbs design="NoCurrentPage">
+                {breadcrumbItems.map(item => {
+                  return (
+                    <BreadcrumbsItem
+                      aria-label="breadcrumb-item"
+                      key={item.name}
+                      href={item.url}
+                    >
+                      {item.name}
+                    </BreadcrumbsItem>
+                  );
+                })}
+              </Breadcrumbs>
+            ) : null
+          }
+          header={<Title className="ui5-title">{title}</Title>}
+          actions={actions}
+        />
+      }
+      headerContent={
+        <DynamicPageHeader className="header-wrapper">
+          {description && <Text className="description">{description}</Text>}
+          <section className={`column-wrapper ${columnWrapperClassName || ''}`}>
+            {children}
           </section>
-        ) : null}
-
-        {title !== 'Clusters Overview' ? (
-          <LayoutPanel.Head title={title} aria-label="title" />
-        ) : null}
-        {/* don't use Panel.Head's description, as it accepts only strings */}
-        {description && <p className="description">{description}</p>}
-        <section className={`column-wrapper ${columnWrapperClassName || ''}`}>
-          {' '}
-          {children}
-        </section>
-      </section>
-
-      {actions && (
-        <LayoutPanel.Actions className="fd-margin-begin--sm">
-          {actions}
-        </LayoutPanel.Actions>
-      )}
-    </LayoutPanel.Header>
-  </LayoutPanel>
-);
+        </DynamicPageHeader>
+      }
+    />
+  );
+};
 PageHeader.Column = Column;
 
 PageHeader.propTypes = {

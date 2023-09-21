@@ -12,13 +12,12 @@ context('Test Download a Kubeconfig', () => {
   });
 
   it('Download a Kubeconfig from the Clusters list', () => {
-    cy.get('[aria-controls="fd-shellbar-product-popover"]').click();
-    cy.contains('Clusters Overview').click();
+    cy.changeCluster('all-clusters');
 
-    cy.get('.fd-table__body .fd-table__cell')
+    cy.get('ui5-table-cell')
       .eq(0)
       .then(el => {
-        const contextName = el.text();
+        const contextName = el.text().trim();
 
         const filepath = path.join(
           DOWNLOADS_FOLDER,

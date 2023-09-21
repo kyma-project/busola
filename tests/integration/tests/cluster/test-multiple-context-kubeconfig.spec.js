@@ -71,43 +71,22 @@ context('Test multiple context kubeconfig', () => {
         .contains('All contexts')
         .click();
 
-      cy.contains('Next').click();
+      cy.contains('Next').click({ force: true });
 
-      cy.get('[role="dialog"]')
-        .contains('button', 'Connect cluster')
-        .click();
+      cy.get(`[aria-label="last-step"]:visible`)
+        .contains('Connect cluster')
+        .click({ force: true });
 
       cy.contains('Cluster Details').should('exist');
 
-      cy.get('[aria-controls="fd-shellbar-product-popover"]')
-        .contains(kubeconfig.contexts[0].name)
-        .should('exist');
-
-      cy.get('[aria-controls="fd-shellbar-product-popover"]').click();
-
-      cy.get('[role=menuitem]:visible')
-        .contains(kubeconfig.contexts[1].name)
-        .click();
+      cy.changeCluster(kubeconfig.contexts[1].name);
 
       cy.url().should(
         'match',
         new RegExp(`${kubeconfig.contexts[1].name}/overview$`),
       );
 
-      cy.get('[aria-controls="fd-shellbar-product-popover"]')
-        .contains(kubeconfig.contexts[1].name)
-        .should('exist');
-
-      // TODO workaround to be removed after handling closing `productMenu` in Header.tsx
-      cy.get('[data-testid="cluster-nodes"]')
-        .contains('Nodes')
-        .click();
-
-      cy.get('[aria-controls="fd-shellbar-product-popover"]').click();
-
-      cy.get('[role=menuitem]:visible')
-        .contains('Clusters Overview')
-        .click();
+      cy.changeCluster('all-clusters');
 
       cy.url().should('match', new RegExp(`/clusters$`));
 

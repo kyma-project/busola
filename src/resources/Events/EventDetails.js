@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Icon, LayoutPanel } from 'fundamental-react';
 import { Link } from 'react-router-dom';
 
 import { useUrl } from 'hooks/useUrl';
@@ -10,6 +9,8 @@ import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTim
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { Icon } from '@ui5/webcomponents-react';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 const RowComponent = ({ name, value }) =>
   value ? <LayoutPanelRow name={name} value={value} /> : null;
@@ -18,25 +19,17 @@ const Message = event => {
   const { t } = useTranslation();
 
   return (
-    <LayoutPanel key="specification-panel" className="fd-margin--md">
-      <LayoutPanel.Header>
-        <LayoutPanel.Head title={t('events.headers.message')} />
-      </LayoutPanel.Header>
-      <LayoutPanel.Body>
-        {event.message && (
-          <RowComponent
-            name={t('events.headers.message')}
-            value={event.message}
-          />
-        )}
-        {event.reason && (
-          <RowComponent
-            name={t('events.headers.reason')}
-            value={event.reason}
-          />
-        )}
-      </LayoutPanel.Body>
-    </LayoutPanel>
+    <UI5Panel title={t('events.headers.message')} key="specification-panel">
+      {event.message && (
+        <RowComponent
+          name={t('events.headers.message')}
+          value={event.message}
+        />
+      )}
+      {event.reason && (
+        <RowComponent name={t('events.headers.reason')} value={event.reason} />
+      )}
+    </UI5Panel>
   );
 };
 
@@ -74,19 +67,17 @@ export function EventDetails(props) {
           {event.type === 'Warning' ? (
             <Tooltip content={event.type}>
               <Icon
-                ariaLabel="Warning"
-                glyph="message-warning"
-                size="s"
-                className="fd-has-color-status-2 has-tooltip"
+                aria-label="Warning"
+                name="message-warning"
+                className="fd-has-color-status-2 has-tooltip ui5-icon-s"
               />
             </Tooltip>
           ) : (
             <Tooltip content={event.type}>
               <Icon
-                ariaLabel="Normal"
-                glyph="message-information"
-                size="s"
-                className="has-tooltip"
+                aria-label="Normal"
+                name="message-information"
+                className="has-tooltip ui5-icon-s"
               />
             </Tooltip>
           )}

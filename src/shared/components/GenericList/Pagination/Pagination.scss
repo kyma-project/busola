@@ -4,6 +4,10 @@
   align-items: baseline;
 }
 
+.pagination > * {
+  margin: auto;
+}
+
 .nav-link {
   border: none;
   background: none;

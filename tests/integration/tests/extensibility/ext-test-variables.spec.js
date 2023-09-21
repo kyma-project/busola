@@ -18,7 +18,7 @@ context('Test extensibility variables', () => {
 
   it('Creates the EXT test resources config', () => {
     cy.getLeftNav()
-      .contains('Cluster Details', { includeShadowDom: true })
+      .contains('Cluster Details')
       .click();
 
     cy.contains('Upload YAML').click();
@@ -34,7 +34,7 @@ context('Test extensibility variables', () => {
     cy.contains('Submit').click();
 
     cy.get('.fd-dialog__body')
-      .find('.sap-icon--message-success')
+      .find('.status-message-success')
       .should('have.length', 2);
 
     cy.loadFiles('examples/testing/samples/test-resource-samples.yaml').then(
@@ -47,23 +47,23 @@ context('Test extensibility variables', () => {
     cy.contains('Submit').click();
 
     cy.get('.fd-dialog__body')
-      .find('.sap-icon--message-success')
+      .find('.status-message-success')
       .should('have.length', 2);
   });
 
   it('Navigate to Test Resource Creation', () => {
     cy.loginAndSelectCluster();
 
-    cy.contains('Namespaces', { includeShadowDom: true }).click();
+    cy.contains('Namespaces').click();
 
     cy.contains('a', NAMESPACE).click();
 
     cy.getLeftNav()
-      .contains('Testin', { includeShadowDom: true })
+      .contains('Testin')
       .click();
 
     cy.getLeftNav()
-      .contains(/^Test Resources$/, { includeShadowDom: true })
+      .contains(/^Test Resources$/)
       .click();
 
     cy.contains('Create Test Resource').click();
@@ -253,11 +253,13 @@ context('Test extensibility variables', () => {
 
     // create resource
     cy.get('[role=dialog]')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
 
     // check arrayOfStrings
-    cy.contains('h3', NAME).should('be.visible');
+    cy.contains('ui5-title', NAME).should('be.visible');
     cy.contains('value_1, value_3').should('exist');
     cy.contains('value_2').should('not.exist');
   });

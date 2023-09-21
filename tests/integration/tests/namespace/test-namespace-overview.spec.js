@@ -36,7 +36,10 @@ context(
         cy.pasteToMonaco(LR);
       });
 
-      cy.contains('button', /^Create$/).click();
+      cy.get('ui5-button.fd-dialog__decisive-button')
+        .contains('Create')
+        .should('be.visible')
+        .click();
 
       cy.contains('b', NEW_LIMIT_NAME).should('be.visible');
     });
@@ -50,23 +53,28 @@ context(
     });
 
     it('Delete all limits and quotas', () => {
-      cy.contains('.fd-table__row', LIMIT_NAME)
-        .find('button[data-testid="delete"]')
+      cy.contains('ui5-table-row', LIMIT_NAME)
+        .find('ui5-button[data-testid="delete"]')
         .click();
 
-      cy.get('[data-testid="delete-confirmation"]').click();
-
-      cy.contains('.fd-table__row', NEW_LIMIT_NAME)
-        .find('button[data-testid="delete"]')
+      cy.get(`[header-text="Delete ${LIMIT_NAME}"]`)
+        .find('[data-testid="delete-confirmation"]')
         .click();
 
-      cy.get('[data-testid="delete-confirmation"]').click();
-
-      cy.contains('.fd-table__row', QUOTA_NAME)
-        .find('button[data-testid="delete"]')
+      cy.contains('ui5-table-row', NEW_LIMIT_NAME)
+        .find('ui5-button[data-testid="delete"]')
         .click();
 
-      cy.get('[data-testid="delete-confirmation"]').click();
+      cy.get(`[header-text="Delete ${NEW_LIMIT_NAME}"]`)
+        .find('[data-testid="delete-confirmation"]')
+        .click();
+
+      cy.contains('ui5-table-row', QUOTA_NAME)
+        .find('ui5-button[data-testid="delete"]')
+        .click();
+      cy.get(`[header-text="Delete ${QUOTA_NAME}"]`)
+        .find('[data-testid="delete-confirmation"]')
+        .click();
     });
 
     it('Check if limit ranges and resource quota exist', () => {

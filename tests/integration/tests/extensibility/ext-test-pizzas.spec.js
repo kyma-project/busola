@@ -20,7 +20,7 @@ context('Test Pizzas', () => {
 
   it('Creates the EXT pizza config', () => {
     cy.getLeftNav()
-      .contains('Cluster Details', { includeShadowDom: true })
+      .contains('Cluster Details')
       .click();
 
     cy.contains('Upload YAML').click();
@@ -38,7 +38,7 @@ context('Test Pizzas', () => {
     cy.contains('Submit').click();
 
     cy.get('.fd-dialog__body')
-      .find('.sap-icon--message-success')
+      .find('.status-message-success')
       .should('have.length', 4);
 
     cy.loadFiles(
@@ -52,23 +52,23 @@ context('Test Pizzas', () => {
     cy.contains('Submit').click();
 
     cy.get('.fd-dialog__body')
-      .find('.sap-icon--message-success')
+      .find('.status-message-success')
       .should('have.length', 6);
   });
 
   it('Displays the Pizza Orders list/detail views from the samples', () => {
     cy.loginAndSelectCluster();
 
-    cy.contains('Namespaces', { includeShadowDom: true }).click();
+    cy.contains('Namespaces').click();
 
     cy.contains('a', 'pizzas').click();
 
     cy.getLeftNav()
-      .contains('Lunch', { includeShadowDom: true })
+      .contains('Lunch')
       .click();
 
     cy.getLeftNav()
-      .contains('Pizza Orders', { includeShadowDom: true })
+      .contains('Pizza Orders')
       .click();
 
     cy.contains('DELIVERY');
@@ -80,11 +80,14 @@ context('Test Pizzas', () => {
 
     cy.contains('paymentMethod: CARD');
     cy.contains('realization=SELF-PICKUP');
-    cy.contains('h3', 'Pizzas');
+    cy.contains('ui5-breadcrumbs', 'Pizza Orders');
   });
 
   it('Edits a Pizza Order', () => {
-    cy.contains('button:visible', 'Edit').click();
+    cy.get('ui5-button')
+      .contains('Edit')
+      .should('be.visible')
+      .click();
 
     cy.get('[role="document"]').as('form');
 
@@ -106,7 +109,9 @@ context('Test Pizzas', () => {
       .should('have.length', 3);
 
     cy.get('@form')
-      .contains('button:visible', 'Update')
+      .get('ui5-button')
+      .contains('Update')
+      .should('be.visible')
       .click();
 
     cy.contains('span', /^READY$/i).should('not.exist');
@@ -122,12 +127,10 @@ context('Test Pizzas', () => {
     cy.contains('Diavola is such a spicy pizza').should('be.visible');
 
     cy.getLeftNav()
-      .contains(/^Pizzas$/, { includeShadowDom: true })
+      .contains(/^Pizzas$/)
       .click();
 
-    cy.get('.fd-table__body')
-      .find('tr')
-      .should('have.length', 2);
+    cy.get('[role=row]').should('have.length', 2);
 
     cy.contains('Margherita is a simple, vegetarian pizza.');
     cy.contains('Toppings price');
@@ -161,9 +164,11 @@ context('Test Pizzas', () => {
       .type(PIZZA_NAME);
 
     cy.get('@form')
-      .contains('button', 'Create')
+      .get('ui5-button.fd-dialog__decisive-button')
+      .contains('Create')
+      .should('be.visible')
       .click();
 
-    cy.contains('h3', PIZZA_NAME).should('be.visible');
+    cy.contains('ui5-title', PIZZA_NAME).should('be.visible');
   });
 });
