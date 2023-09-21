@@ -1,6 +1,5 @@
 import React from 'react';
-import { Icon } from '@ui5/webcomponents-react';
-import { Switch } from 'shared/ResourceForm/inputs';
+import { Icon, Switch } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import {
