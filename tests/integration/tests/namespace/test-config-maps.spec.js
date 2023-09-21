@@ -41,7 +41,7 @@ context('Test Config Maps', () => {
   });
 
   it('Inspect the Config Map', () => {
-    cy.contains(CONFIG_MAP_NAME);
+    cy.url().should('match', new RegExp(`\/cronjobs\/${DEPLOYMENT_NAME}$`));
 
     cy.contains('ui5-panel', ENTRY_KEY).contains(ENTRY_VALUE);
   });
