@@ -1,7 +1,6 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { MessageStrip } from '@ui5/webcomponents-react';
-import { Select } from 'fundamental-react';
+import { Select, Option } from '@ui5/webcomponents-react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 
@@ -24,6 +23,11 @@ export function ContextChooser(params) {
     text: t('clusters.wizard.all-contexts'),
   });
 
+  const onChange = (event, setValue) => {
+    const selectedContext = event.detail.selectedOption.value;
+    setValue(selectedContext);
+  };
+
   return (
     <ResourceForm.Wrapper {...params}>
       <ResourceForm.FormField
@@ -34,10 +38,14 @@ export function ContextChooser(params) {
         input={({ value, setValue }) => (
           <Select
             id="context-chooser"
-            selectedKey={value}
-            options={contexts}
-            onSelect={(_, { key }) => setValue(key)}
-          />
+            onChange={event => {
+              onChange(event, setValue);
+            }}
+          >
+            {contexts.map(context => (
+              <Option value={context.key}>{context.text}</Option>
+            ))}
+          </Select>
         )}
       />
       {kubeconfig['current-context'] === '-all-' && (

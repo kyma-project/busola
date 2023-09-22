@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSetRecoilState } from 'recoil';
 import { Select, Option } from '@ui5/webcomponents-react';

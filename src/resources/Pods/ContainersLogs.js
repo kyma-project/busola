@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { saveAs } from 'file-saver';
 import { Button, Label, Switch, Text } from '@ui5/webcomponents-react';
-import { Select, FormLabel } from 'fundamental-react';
+import { Select, Option } from '@ui5/webcomponents-react';
+import { FormLabel } from 'fundamental-react';
 import { LogsLink } from 'shared/components/LogsLink/LogsLink';
 import { useGetStream } from 'shared/hooks/BackendAPI/useGet';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
@@ -183,12 +184,15 @@ const ContainersLogs = ({ params }) => {
                 {t('pods.labels.filter-timeframe')}
               </FormLabel>
               <Select
-                options={logTimeframeOptions}
-                placeholder="all"
-                compact
-                selectedKey={sinceSeconds.toString()}
-                onSelect={(_, { key }) => onLogTimeframeChange(key)}
-              />
+                onChange={event => {
+                  const selectedTimeFrame = event.detail.selectedOption.value;
+                  onLogTimeframeChange(selectedTimeFrame);
+                }}
+              >
+                {logTimeframeOptions.map(option => (
+                  <Option value={option.key}>{option.text}</Option>
+                ))}
+              </Select>
               <Label className="fd-margin-begin--sm">
                 {t('pods.labels.show-timestamps')}
               </Label>
