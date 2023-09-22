@@ -18,16 +18,19 @@ context('Test Services', () => {
       .contains('Cluster Details')
       .click();
 
-    cy.contains('Upload YAML').click();
+    cy.contains('ui5-button', 'Upload YAML').click();
 
     cy.loadFiles('examples/services/configuration.yaml').then(resources => {
       const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
       cy.pasteToMonaco(input);
     });
 
-    cy.contains('Submit').click();
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Submit')
+      .should('be.visible')
+      .click();
 
-    cy.get('.fd-dialog__body')
+    cy.get('ui5-dialog')
       .find('.status-message-success')
       .should('have.length', 1);
 
@@ -36,9 +39,12 @@ context('Test Services', () => {
       cy.pasteToMonaco(input);
     });
 
-    cy.contains('Submit').click();
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Submit')
+      .should('be.visible')
+      .click();
 
-    cy.get('.fd-dialog__body')
+    cy.get('ui5-dialog')
       .find('.status-message-success')
       .should('have.length', 1);
   });

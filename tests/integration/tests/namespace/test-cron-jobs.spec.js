@@ -14,7 +14,7 @@ context('Test Cron Jobs', () => {
   it('Create Cron Job', () => {
     cy.navigateTo('Workloads', 'Cron Jobs');
 
-    cy.contains('Create Cron Job').click();
+    cy.contains('ui5-button', 'Create Cron Job').click();
 
     cy.contains('Advanced').click();
 
@@ -60,17 +60,18 @@ context('Test Cron Jobs', () => {
 
     cy.contains('Always').click();
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button.fd-dialog__decisive-button')
-      .contains('Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
   });
 
   it('Checking details', () => {
-    cy.contains(CRON_JOB_NAME, { includeShadowDom: false }).should(
-      'be.visible',
-    );
+    cy.get('ui5-breadcrumbs')
+      .find(`ui5-link[href*=${'cronjob'}]`)
+      .scrollIntoView();
+
+    cy.contains('ui5-title', CRON_JOB_NAME).should('be.visible');
 
     cy.contains('0 0 1 * *').should('be.visible');
   });
@@ -113,17 +114,18 @@ context('Test Cron Jobs', () => {
 
     cy.contains('Never').click();
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button')
-      .contains('Update')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Update')
       .should('be.visible')
       .click();
   });
 
   it('Checking updates details', () => {
-    cy.contains(CRON_JOB_NAME, { includeShadowDom: false }).should(
-      'be.visible',
-    );
+    cy.get('ui5-breadcrumbs')
+      .find(`ui5-link[href*=${'cronjob'}]`)
+      .scrollIntoView();
+
+    cy.contains('ui5-title', CRON_JOB_NAME).should('be.visible');
 
     cy.contains('0 * * * *').should('be.visible');
   });

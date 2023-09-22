@@ -6,7 +6,7 @@ import { LogsLink } from 'shared/components/LogsLink/LogsLink';
 import { useGetStream } from 'shared/hooks/BackendAPI/useGet';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { SearchInput } from 'shared/components/GenericList/SearchInput';
 import { useTranslation } from 'react-i18next';
 import { useUrl } from 'hooks/useUrl';
@@ -171,67 +171,71 @@ const ContainersLogs = ({ params }) => {
   };
 
   return (
-    <div className="logs-wraper">
-      <div className="logs-header">
-        <PageHeader
-          title={params.containerName}
-          breadcrumbItems={breadcrumbs}
-        />
-      </div>
-      <UI5Panel
-        title={t('pods.labels.logs')}
-        headerActions={
-          <>
-            <FormLabel htmlFor="context-chooser">
-              {t('pods.labels.filter-timeframe')}
-            </FormLabel>
-            <Select
-              options={logTimeframeOptions}
-              placeholder="all"
-              compact
-              selectedKey={sinceSeconds.toString()}
-              onSelect={(_, { key }) => onLogTimeframeChange(key)}
+    <DynamicPageComponent
+      title={params.containerName}
+      breadcrumbItems={breadcrumbs}
+      content={
+        <UI5Panel
+          title={t('pods.labels.logs')}
+          headerActions={
+            <>
+              <FormLabel htmlFor="context-chooser">
+                {t('pods.labels.filter-timeframe')}
+              </FormLabel>
+              <Select
+                options={logTimeframeOptions}
+                placeholder="all"
+                compact
+                selectedKey={sinceSeconds.toString()}
+                onSelect={(_, { key }) => onLogTimeframeChange(key)}
+              />
+              <Label className="fd-margin-begin--sm">
+                {t('pods.labels.show-timestamps')}
+              </Label>
+              <Switch
+                disabled={!logsToSave?.length}
+                onChange={onSwitchChange}
+              />
+              <Label className="fd-margin-begin--sm">
+                {t('pods.labels.reverse-logs')}
+              </Label>
+              <Switch
+                disabled={!logsToSave?.length}
+                onChange={onReverseChange}
+              />
+              <LogsLink
+                className="fd-margin-begin--tiny"
+                query={`{namespace="${params.namespace}",pod="${params.podName}",container="${params.containerName}"}`}
+              >
+                {t('grafana.open-in-grafana')}
+              </LogsLink>
+              <Button
+                disabled={!logsToSave?.length}
+                className="logs-download"
+                onClick={() => saveToFile(params.podName, params.containerName)}
+              >
+                {t('pods.labels.save-to-file')}
+              </Button>
+              <SearchInput
+                disabled={!logsToSave?.length}
+                title={'Logs'}
+                searchQuery={searchQuery}
+                handleQueryChange={setSearchQuery}
+                showSuggestion={false}
+                onKeyDown={changeSelectedLog}
+              />
+            </>
+          }
+        >
+          <div className="logs-panel-body">
+            <LogsPanel
+              streamData={streamData}
+              containerName={params.containerName}
             />
-            <Label className="fd-margin-begin--sm">
-              {t('pods.labels.show-timestamps')}
-            </Label>
-            <Switch disabled={!logsToSave?.length} onChange={onSwitchChange} />
-            <Label className="fd-margin-begin--sm">
-              {t('pods.labels.reverse-logs')}
-            </Label>
-            <Switch disabled={!logsToSave?.length} onChange={onReverseChange} />
-            <LogsLink
-              className="fd-margin-begin--tiny"
-              query={`{namespace="${params.namespace}",pod="${params.podName}",container="${params.containerName}"}`}
-            >
-              {t('grafana.open-in-grafana')}
-            </LogsLink>
-            <Button
-              disabled={!logsToSave?.length}
-              className="logs-download"
-              onClick={() => saveToFile(params.podName, params.containerName)}
-            >
-              {t('pods.labels.save-to-file')}
-            </Button>
-            <SearchInput
-              disabled={!logsToSave?.length}
-              title={'Logs'}
-              searchQuery={searchQuery}
-              handleQueryChange={setSearchQuery}
-              showSuggestion={false}
-              onKeyDown={changeSelectedLog}
-            />
-          </>
-        }
-      >
-        <div className="logs-panel-body">
-          <LogsPanel
-            streamData={streamData}
-            containerName={params.containerName}
-          />
-        </div>
-      </UI5Panel>
-    </div>
+          </div>
+        </UI5Panel>
+      }
+    />
   );
 };
 

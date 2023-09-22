@@ -1,5 +1,4 @@
-import { Button, MessageStrip } from '@ui5/webcomponents-react';
-import { Dialog } from 'fundamental-react';
+import { Button, MessageStrip, Dialog, Bar } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
 import { useGenerateTokenRequest } from './useGenerateTokenRequest';
@@ -10,7 +9,6 @@ import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 
 import { useEventListener } from 'hooks/useEventListener';
-import './TokenRequestModal.scss';
 
 const expirationSecondsOptions = [
   {
@@ -88,10 +86,6 @@ export function TokenRequestModal({
   const isExpirationSecondsValueANumber = () =>
     !Number(tokenRequest.spec.expirationSeconds);
 
-  const actions = [
-    <Button onClick={handleCloseModal}>{t('common.buttons.close')}</Button>,
-  ];
-
   const handleCloseWithEscape = (e: Event) => {
     if ((e as KeyboardEvent).key === 'Escape') handleCloseModal();
   };
@@ -100,10 +94,21 @@ export function TokenRequestModal({
 
   return (
     <Dialog
-      show
-      title={t('service-accounts.token-request.generate')}
-      actions={actions}
-      className="token-request-modal"
+      open
+      onAfterClose={handleCloseModal}
+      headerText={t('service-accounts.token-request.generate')}
+      footer={
+        <Bar
+          design="Footer"
+          endContent={
+            <>
+              <Button onClick={handleCloseModal}>
+                {t('common.buttons.close')}
+              </Button>
+            </>
+          }
+        />
+      }
     >
       {/*@ts-ignore*/}
       <ResourceForm.Single

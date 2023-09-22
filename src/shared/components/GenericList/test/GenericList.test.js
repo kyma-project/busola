@@ -1,8 +1,26 @@
 import React from 'react';
-import { render, fireEvent, queryByText } from 'testing/reactTestingUtils';
-
+import {
+  render,
+  queries,
+  fireEvent,
+  queryByText,
+} from 'testing/reactTestingUtils';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { ThemeProvider } from '@ui5/webcomponents-react';
+
+const domTestingLib = require('@testing-library/dom');
+const { queryHelpers } = domTestingLib;
+
+export const queryByHeaderText = queryHelpers.queryByAttribute.bind(
+  null,
+  'header-text',
+);
+const allQueries = {
+  ...queries,
+  queryByHeaderText,
+};
+const customRender = (ui, options) =>
+  render(ui, { queries: allQueries, ...options });
 
 describe('GenericList', () => {
   const defaultNotFoundText = 'components.generic-list.messages.not-found';
@@ -289,7 +307,13 @@ describe('GenericList', () => {
   });
 
   it('Test sorting funcionality', () => {
-    const { getByLabelText, queryByText, getByText, getAllByRole } = render(
+    const {
+      queryByHeaderText,
+      getByLabelText,
+      queryByText,
+      getByText,
+      getAllByRole,
+    } = customRender(
       <ThemeProvider>
         <GenericList
           title=""
@@ -307,7 +331,8 @@ describe('GenericList', () => {
     fireEvent.click(getByLabelText('open-sort'));
 
     // checking is sort modal open
-    expect(queryByText('common.sorting.sort')).toBeInTheDocument();
+    const sortDialog = queryByHeaderText('common.sorting.sort');
+    expect(sortDialog).toHaveAttribute('open', 'true');
 
     // checking generating of sort by form
     expect(queryByText('common.sorting.description')).toBeInTheDocument();

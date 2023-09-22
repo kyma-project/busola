@@ -1,4 +1,9 @@
-import { Button, MessageBox, MessageStrip } from '@ui5/webcomponents-react';
+import {
+  Button,
+  MessageBox,
+  MessageStrip,
+  Text,
+} from '@ui5/webcomponents-react';
 import { Checkbox } from 'fundamental-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -112,20 +117,20 @@ export function useDeleteResource({
       ]}
       onClose={closeDeleteDialog}
     >
-      <p>
+      <Text style={{ padding: '20px' }}>
         {t('common.delete-dialog.message', {
           type: prettifiedResourceName,
           name: resourceTitle || resource?.metadata?.name,
         })}
-      </p>
-      <div className="fd-margin-top--sm">
-        <Checkbox
-          checked={dontConfirmDelete}
-          onChange={() => setDontConfirmDelete(prevState => !prevState)}
-        >
-          {t('common.delete-dialog.delete-confirm')}
-        </Checkbox>
-      </div>
+      </Text>
+
+      <Checkbox
+        checked={dontConfirmDelete}
+        onChange={() => setDontConfirmDelete(prevState => !prevState)}
+      >
+        {t('common.delete-dialog.delete-confirm')}
+      </Checkbox>
+
       {dontConfirmDelete && (
         <MessageStrip
           design="Information"

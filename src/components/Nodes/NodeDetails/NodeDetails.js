@@ -33,30 +33,37 @@ function NodeDetails({ nodeName }) {
         node={data?.node}
         error={error}
         loading={loading}
-      />
-      {data && (
-        <>
-          <div
-            className={`panels fd-margin--md  ${
-              isPrometheusEnabled ? 'withPrometheus' : ''
-            }`}
-          >
-            {isPrometheusEnabled ? (
-              <StatsPanel type="node" nodeName={data.node.metadata.name} />
-            ) : (
-              <NodeResources
-                {...data}
-                headerContent={t('common.headers.resources')}
-              />
+        content={
+          <>
+            {data && (
+              <>
+                <div
+                  className={`panels fd-margin--md  ${
+                    isPrometheusEnabled ? 'withPrometheus' : ''
+                  }`}
+                >
+                  {isPrometheusEnabled ? (
+                    <StatsPanel
+                      type="node"
+                      nodeName={data.node.metadata.name}
+                    />
+                  ) : (
+                    <NodeResources
+                      {...data}
+                      headerContent={t('common.headers.resources')}
+                    />
+                  )}
+                  <MachineInfo
+                    nodeInfo={data.node.status.nodeInfo}
+                    capacity={data.node.status.capacity}
+                  />
+                </div>
+                {Events}
+              </>
             )}
-            <MachineInfo
-              nodeInfo={data.node.status.nodeInfo}
-              capacity={data.node.status.capacity}
-            />
-          </div>
-          {Events}
-        </>
-      )}
+          </>
+        }
+      />
     </div>
   );
 }

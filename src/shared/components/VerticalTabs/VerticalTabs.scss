@@ -1,6 +1,7 @@
 .vertical-tabs-wrapper {
   display: grid;
   grid-template-columns: 1fr 2fr;
+  height: 100%;
 
   background: var(--sapBackgroundColor);
 

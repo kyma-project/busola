@@ -20,7 +20,7 @@ context('Test Storage Classes', () => {
   it('Create Storage Class', () => {
     cy.navigateTo('Storage', 'Storage Classes');
 
-    cy.contains('Create Storage Class').click();
+    cy.contains('ui5-button', 'Create Storage Class').click();
 
     cy.wrap(loadSC(Cypress.env('STORAGE_CLASS_NAME'))).then(SC_CONFIG => {
       const SC = JSON.stringify(SC_CONFIG);
@@ -28,16 +28,16 @@ context('Test Storage Classes', () => {
       cy.pasteToMonaco(SC);
     });
 
-    cy.get('ui5-button.fd-dialog__decisive-button')
-      .contains('Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
   });
 
   it('Checking details', () => {
-    cy.contains(Cypress.env('STORAGE_CLASS_NAME'), {
-      includeShadowDom: false,
-    }).should('be.visible');
+    cy.contains('ui5-title', Cypress.env('STORAGE_CLASS_NAME')).should(
+      'be.visible',
+    );
 
     cy.contains('pd.csi.storage.gke.io').should('be.visible');
 

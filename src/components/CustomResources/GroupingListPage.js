@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { groupBy } from 'lodash';
 import { Tokens } from 'shared/components/Tokens';
-import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { YamlEditorProvider } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
@@ -58,20 +58,6 @@ export function GroupingListPage({
       .filter(removeEmpty);
   }
 
-  const header = (
-    <PageHeader
-      title={title}
-      description={description}
-      actions={
-        <SearchInput
-          value={searchQuery}
-          handleQueryChange={setSearchQuery}
-          allowSlashShortcut
-        />
-      }
-    />
-  );
-
   const lists = (
     <ul>
       {entries
@@ -115,10 +101,21 @@ export function GroupingListPage({
 
   return (
     <>
-      {header}
-      <YamlEditorProvider>{lists}</YamlEditorProvider>
+      <DynamicPageComponent
+        title={title}
+        description={description}
+        actions={
+          <SearchInput
+            value={searchQuery}
+            handleQueryChange={setSearchQuery}
+            allowSlashShortcut
+          />
+        }
+        content={<YamlEditorProvider>{lists}</YamlEditorProvider>}
+      />
+
       <YamlUploadDialog
-        show={showAdd}
+        open={showAdd}
         onCancel={() => {
           setShowAdd(false);
         }}

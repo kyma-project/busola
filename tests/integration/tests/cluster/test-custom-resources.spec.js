@@ -16,16 +16,15 @@ context('Test Custom Resources', () => {
 
     cy.navigateTo('Configuration', 'Custom Resource Definitions');
 
-    cy.contains('Create Custom Resource Definition').click();
+    cy.contains('ui5-button', 'Create Custom Resource Definition').click();
 
     cy.wrap(loadFile(FILE_NAME)).then(CRD_CONFIG => {
       const CRD = JSON.stringify(CRD_CONFIG);
       cy.pasteToMonaco(CRD);
     });
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button.fd-dialog__decisive-button')
-      .contains('Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
   });
@@ -55,7 +54,7 @@ context('Test Custom Resources', () => {
 
     cy.contains('ui5-title', 'Tclusters').should('be.visible');
 
-    cy.contains(/Create Tcluster/i).should('be.visible');
+    cy.contains('ui5-button', /Create Tcluster/i).should('be.visible');
 
     cy.url().should('match', /customresources/);
     cy.contains('tcluster.cypress.example.com').click();

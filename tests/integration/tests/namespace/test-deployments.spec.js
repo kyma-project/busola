@@ -15,7 +15,7 @@ context('Test Deployments', () => {
   it('Create a Deployment', () => {
     cy.navigateTo('Workloads', 'Deployments');
 
-    cy.contains('Create Deployment').click();
+    cy.contains('ui5-button', 'Create Deployment').click();
 
     cy.get('[ariaLabel="Deployment name"]:visible')
       .clear()
@@ -73,8 +73,8 @@ context('Test Deployments', () => {
       .clear()
       .type('20');
 
-    cy.get('ui5-button.fd-dialog__decisive-button')
-      .contains('Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
   });
@@ -118,8 +118,8 @@ context('Test Deployments', () => {
       .first()
       .type('label-value');
 
-    cy.get('ui5-button.fd-dialog__decisive-button')
-      .contains('Update')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Update')
       .should('be.visible')
       .click();
 

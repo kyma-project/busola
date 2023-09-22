@@ -14,30 +14,33 @@ context('Test Cluster Role Bindings', () => {
   it('Create a ClusterRoleBinding', () => {
     cy.navigateTo('Configuration', 'Cluster Role Bindings');
 
-    cy.contains('Create Cluster Role Binding').click();
+    cy.contains('ui5-button', 'Create Cluster Role Binding').click();
 
     cy.contains('Advanced').click();
 
-    cy.get('[ariaLabel="ClusterRoleBinding name"]').type(CRB_NAME);
+    cy.get('[ariaLabel="ClusterRoleBinding name"]')
+      .click()
+      .type(CRB_NAME);
 
-    cy.get(
-      '[placeholder="Start typing to select ClusterRole from the list"]',
-    ).type('admin');
+    cy.get('[placeholder="Start typing to select ClusterRole from the list"]')
+      .click()
+      .type('admin');
 
     cy.contains('li', 'cluster-admin').click();
 
     cy.get('[ariaLabel="User name"]')
+      .click()
       .clear()
       .type(USER_NAME);
 
-    cy.get('ui5-button.fd-dialog__decisive-button')
-      .contains('Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
   });
 
   it('Checking details', () => {
-    cy.contains(CRB_NAME, { includeShadowDom: false }).should('be.visible');
+    cy.contains('ui5-title', CRB_NAME).should('be.visible');
 
     cy.contains('User').should('be.visible');
 
@@ -47,7 +50,7 @@ context('Test Cluster Role Bindings', () => {
   });
 
   it('Edit', () => {
-    cy.contains('Edit').click();
+    cy.contains('ui5-button', 'Edit').click();
 
     cy.contains('[role="combobox"]', 'User').click();
 
@@ -62,11 +65,12 @@ context('Test Cluster Role Bindings', () => {
     cy.contains('Group').click();
 
     cy.get('[ariaLabel="Group name"]')
+      .click()
       .clear()
       .type('test-group');
 
-    cy.get('ui5-button.fd-dialog__decisive-button')
-      .contains('Update')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Update')
       .should('be.visible')
       .click();
   });
