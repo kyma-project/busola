@@ -67,7 +67,11 @@ context('Test Cron Jobs', () => {
   });
 
   it('Checking details', () => {
-    cy.url().should('match', new RegExp(`/cronjobs/${CRON_JOB_NAME}$`));
+    cy.get('ui5-breadcrumbs')
+      .find(`ui5-link[href*=${'cronjob'}]`)
+      .scrollIntoView();
+
+    cy.contains('ui5-title', CRON_JOB_NAME).should('be.visible');
 
     cy.contains('0 0 1 * *').should('be.visible');
   });
@@ -117,7 +121,11 @@ context('Test Cron Jobs', () => {
   });
 
   it('Checking updates details', () => {
-    cy.url().should('match', new RegExp(`/cronjobs/${CRON_JOB_NAME}$`));
+    cy.get('ui5-breadcrumbs')
+      .find(`ui5-link[href*=${'cronjob'}]`)
+      .scrollIntoView();
+
+    cy.contains('ui5-title', CRON_JOB_NAME).should('be.visible');
 
     cy.contains('0 * * * *').should('be.visible');
   });
