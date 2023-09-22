@@ -117,7 +117,7 @@ context('Test Cron Jobs', () => {
   });
 
   it('Checking updates details', () => {
-    cy.contains('ui5-title', CRON_JOB_NAME).should('be.visible');
+    cy.url().should('match', new RegExp(`/cronjobs/${CRON_JOB_NAME}$`));
 
     cy.contains('0 * * * *').should('be.visible');
   });
