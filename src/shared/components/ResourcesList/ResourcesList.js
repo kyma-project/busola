@@ -16,7 +16,7 @@ import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorConte
 import { YamlEditorProvider } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
 import { prettifyNameSingular, prettifyNamePlural } from 'shared/utils/helpers';
 import { Labels } from 'shared/components/Labels/Labels';
-import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
@@ -33,6 +33,7 @@ import { ForceUpdateModalContent } from 'shared/ResourceForm/ForceUpdateModalCon
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { useRecoilState } from 'recoil';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
+import { createPortal } from 'react-dom';
 
 const Injections = React.lazy(() =>
   import('../../../components/Extensibility/ExtensibilityInjections'),
@@ -96,10 +97,19 @@ export function ResourcesList(props) {
     return <></>; // wait for the context update
   }
 
+  const content = props.resources ? (
+    <ResourceListRenderer
+      resources={(props.resources || []).filter(props.filterFn)}
+      {...props}
+    />
+  ) : (
+    <Resources {...props} />
+  );
+
   return (
     <YamlEditorProvider>
-      {!props.isCompact && (
-        <PageHeader
+      {!props.isCompact ? (
+        <DynamicPageComponent
           title={prettifyNamePlural(props.resourceTitle, props.resourceType)}
           actions={
             <>
@@ -112,15 +122,10 @@ export function ResourcesList(props) {
             </>
           }
           description={props.description}
-        />
-      )}
-      {props.resources ? (
-        <ResourceListRenderer
-          resources={(props.resources || []).filter(props.filterFn)}
-          {...props}
+          content={content}
         />
       ) : (
-        <Resources {...props} />
+        content
       )}
     </YamlEditorProvider>
   );
@@ -523,10 +528,13 @@ export function ResourceListRenderer({
         modalOpeningComponent={<></>}
         customCloseAction={() => setShowEditDialog(false)}
       />
-      <DeleteMessageBox
-        resource={activeResource}
-        resourceUrl={prepareResourceUrl(resourceUrl, activeResource)}
-      />
+      {createPortal(
+        <DeleteMessageBox
+          resource={activeResource}
+          resourceUrl={prepareResourceUrl(resourceUrl, activeResource)}
+        />,
+        document.body,
+      )}
       {!(error && error.toString().includes('is forbidden')) && (
         <GenericList
           title={showTitle ? title || prettifiedResourceName : null}
@@ -547,14 +555,16 @@ export function ResourceListRenderer({
           }}
         />
       )}
-      {!isCompact && (
-        <YamlUploadDialog
-          show={showAdd}
-          onCancel={() => {
-            setShowAdd(false);
-          }}
-        />
-      )}
+      {!isCompact &&
+        createPortal(
+          <YamlUploadDialog
+            open={showAdd}
+            onCancel={() => {
+              setShowAdd(false);
+            }}
+          />,
+          document.body,
+        )}
     </>
   );
 }

@@ -6,7 +6,7 @@ Cypress.Commands.add(
       .click();
 
     cy.getLeftNav()
-      .contains('API Rules', { includeShadowDom: true })
+      .contains('API Rules')
       .click();
 
     cy.contains('Create API Rule')
@@ -74,11 +74,11 @@ Cypress.Commands.add(
 
 Cypress.Commands.add('checkApiRuleStatus', ApiRuleName => {
   cy.getLeftNav()
-    .contains('Discovery and Network', { includeShadowDom: true })
+    .contains('Discovery and Network')
     .click();
 
   cy.getLeftNav()
-    .contains('API Rules', { includeShadowDom: true })
+    .contains('API Rules')
     .click({ force: true });
 
   cy.get('[aria-label="open-search"]').click();

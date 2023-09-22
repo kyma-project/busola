@@ -23,14 +23,13 @@ VerticalTabs.propTypes = {
     }),
   ).isRequired,
   children: childrenPropType,
-  height: PropTypes.string,
 };
 
-export function VerticalTabs({ tabs, children, height }) {
+export function VerticalTabs({ tabs, children }) {
   const [tabId, setTabId] = React.useState(children[0]?.props.id || 0);
 
   return (
-    <section className="vertical-tabs-wrapper" style={{ height }}>
+    <section className="vertical-tabs-wrapper">
       <ul>
         {tabs.map(({ id, ...props }) => (
           <TileButton

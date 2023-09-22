@@ -10,7 +10,7 @@ context('Create Namespace', () => {
       .contains('Namespaces')
       .click();
 
-    cy.contains('Create Namespace').click();
+    cy.contains('ui5-button', 'Create Namespace').click();
 
     cy.contains('Advanced').click();
 
@@ -24,17 +24,17 @@ context('Create Namespace', () => {
 
     cy.contains('XL (limits: 9Gi').click();
 
-    cy.get('[role=dialog]')
+    cy.get('ui5-dialog')
       .find('input[ariaLabel="Namespace name"]:visible')
+      .click()
       .type(Cypress.env('NAMESPACE_NAME'));
 
-    cy.get('[role=dialog]')
+    cy.get('ui5-dialog')
       .contains('Advanced')
       .click();
 
-    cy.get('[role=dialog]')
-      .get('ui5-button.fd-dialog__decisive-button')
-      .contains('Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
 
@@ -47,9 +47,8 @@ context('Create Namespace', () => {
       .should('be.visible')
       .click();
 
-    cy.get('[role=dialog]')
-      .get('ui5-button.fd-dialog__decisive-button')
-      .contains('Update')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Update')
       .should('be.visible')
       .click();
   });

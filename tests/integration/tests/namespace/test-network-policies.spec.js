@@ -27,7 +27,7 @@ context('Test Network Policy', () => {
   it('Create a Network Policy', () => {
     cy.navigateTo('Discovery and Network', 'Network Policies');
 
-    cy.contains('Create Network Policy').click();
+    cy.contains('ui5-button', 'Create Network Policy').click();
 
     cy.wrap(loadNetworkPolicy(NAME, Cypress.env('NAMESPACE_NAME'))).then(
       NP_CONFIG => {
@@ -36,15 +36,14 @@ context('Test Network Policy', () => {
       },
     );
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button.fd-dialog__decisive-button')
-      .contains('Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
   });
 
   it('Check Network Policy details', () => {
-    cy.contains(NAME, { includeShadowDom: false }).should('be.visible');
+    cy.contains('ui5-title', NAME).should('be.visible');
 
     cy.contains(/CIDR/i).should('be.visible');
 

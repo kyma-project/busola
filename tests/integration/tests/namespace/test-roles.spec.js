@@ -20,7 +20,7 @@ context('Test Roles', () => {
 
     cy.contains(ROLE_NAME).should('not.exist');
 
-    cy.contains('Create Role').click();
+    cy.contains('ui5-button', 'Create Role').click();
 
     cy.get('[ariaLabel="Role name"]:visible', { log: false })
       .type(ROLE_NAME)
@@ -48,9 +48,8 @@ context('Test Roles', () => {
       'create',
     );
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button.fd-dialog__decisive-button')
-      .contains('Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
   });
@@ -72,16 +71,18 @@ context('Test Roles', () => {
   });
 
   it('Edit the Role', () => {
-    cy.contains('Edit').click();
+    cy.get('ui5-button')
+      .contains('Edit')
+      .should('be.visible')
+      .click();
 
     chooseComboboxOption(
       '[placeholder^="Start typing to select Verbs"]:visible',
       'watch',
     );
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button.fd-dialog__decisive-button')
-      .contains('Update')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Update')
       .should('be.visible')
       .click();
   });
@@ -119,9 +120,8 @@ context('Test Roles', () => {
       .type(CLONE_NAME)
       .click();
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button.fd-dialog__decisive-button')
-      .contains('Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
   });

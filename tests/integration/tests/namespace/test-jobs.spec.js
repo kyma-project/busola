@@ -28,25 +28,28 @@ context('Test Jobs', () => {
   it('Create Job', () => {
     cy.navigateTo('Workloads', /^Jobs/);
 
-    cy.contains('Create Job').click();
+    cy.contains('ui5-button', 'Create Job').click();
 
     // job name
     cy.get('[ariaLabel="Job name"]:visible')
+      .click()
       .clear()
       .type(JOB_NAME);
 
     // job container name
-    cy.get('[ariaLabel="Container name"]:visible').type(JOB_NAME);
+    cy.get('[ariaLabel="Container name"]:visible')
+      .click()
+      .type(JOB_NAME);
 
     // job command
-    cy.get('[placeholder^="Command to run"]:visible').type(
-      '/bin/sh{downarrow}-c{downarrow}echo "Busola test"',
-    );
+    cy.get('[placeholder^="Command to run"]:visible')
+      .click()
+      .type('/bin/sh{downarrow}-c{downarrow}echo "Busola test"');
 
     // job docker image
-    cy.get('[placeholder^="Enter the Docker image tag"]:visible').type(
-      'busybox',
-    );
+    cy.get('[placeholder^="Enter the Docker image tag"]:visible')
+      .click()
+      .type('busybox');
 
     // we can't edit Job's template, so we add 2 containers now
     cy.contains('Advanced').click();
@@ -65,14 +68,13 @@ context('Test Jobs', () => {
     );
 
     // job docker image
-    cy.get('[placeholder^="Enter the Docker image tag"]:visible').type(
-      'node:14-alpine',
-    );
+    cy.get('[placeholder^="Enter the Docker image tag"]:visible')
+      .click()
+      .type('node:14-alpine');
 
     // create
-    cy.get('[role=dialog]')
-      .get('ui5-button.fd-dialog__decisive-button')
-      .contains('Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
   });
@@ -83,8 +85,7 @@ context('Test Jobs', () => {
 
     // created pod
     cy.get('ui5-table-cell')
-      .get('a.fd-link')
-      .contains(JOB_NAME + '-')
+      .contains('a', JOB_NAME + '-')
       .click();
 
     // images for both containers
@@ -110,7 +111,8 @@ context('Test Jobs', () => {
     });
 
     // back to job
-    cy.contains(`Job (${JOB_NAME})`)
+    cy.get('.page-header__column')
+      .contains(`Job (${JOB_NAME})`)
       .contains('a', JOB_NAME)
       .click();
 
@@ -127,13 +129,13 @@ context('Test Jobs', () => {
     // containers section should be readonly
     cy.contains('After a Job is created, the containers are read-only.');
 
-    cy.get('[role="dialog"]')
+    cy.get('ui5-dialog')
       .get('ui5-button[icon="add"][disabled="true"]')
       .contains('Add Container')
       .should('be.visible');
 
     // edit labels
-    cy.get('[role=dialog]')
+    cy.get('ui5-dialog')
       .contains('Labels')
       .filter(':visible', { log: false })
       .click();
@@ -147,8 +149,8 @@ context('Test Jobs', () => {
       .first()
       .type('b');
 
-    cy.get('ui5-button.fd-dialog__decisive-button')
-      .contains('Update')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Update')
       .should('be.visible')
       .click();
 

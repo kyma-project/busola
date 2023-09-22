@@ -60,7 +60,7 @@ context('Test Cluster Validation Scan', () => {
   });
 
   it('Cluster Scan', () => {
-    cy.contains('Cluster Validation').should('be.visible');
+    cy.contains('ui5-title', 'Cluster Validation').should('be.visible');
 
     cy.contains('Scan Progress').should('not.exist');
     cy.contains('Scan Result').should('not.exist');
@@ -82,7 +82,10 @@ context('Test Cluster Validation Scan', () => {
       .clear()
       .type(1);
 
-    cy.contains('Submit').click();
+    cy.get('ui5-dialog')
+      .find('[aria-label="cluster-validation-submit"]')
+      .should('be.visible')
+      .click();
 
     cy.get('@clusterValidationPanel')
       .find('ui5-button')

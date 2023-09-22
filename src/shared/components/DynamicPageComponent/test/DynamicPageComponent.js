@@ -2,14 +2,14 @@ import React from 'react';
 import { Button } from '@ui5/webcomponents-react';
 import { render } from 'testing/reactTestingUtils';
 
-import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { ThemeProvider } from '@ui5/webcomponents-react';
 
-describe('PageHeader', () => {
+describe('DynamicPageComponent', () => {
   it('Renders title', () => {
     const { getByText } = render(
       <ThemeProvider>
-        <PageHeader title="page title" />
+        <DynamicPageComponent title="page title" />
       </ThemeProvider>,
     );
 
@@ -19,7 +19,7 @@ describe('PageHeader', () => {
   it('Renders actions', () => {
     const { getByLabelText } = render(
       <ThemeProvider>
-        <PageHeader
+        <DynamicPageComponent
           title="page title"
           actions={<Button aria-label="abc"></Button>}
         />
@@ -33,7 +33,10 @@ describe('PageHeader', () => {
     const breadcrumbItems = [{ name: 'item1', url: 'path1' }];
     const { getByText } = render(
       <ThemeProvider>
-        <PageHeader title="page title" breadcrumbItems={breadcrumbItems} />
+        <DynamicPageComponent
+          title="page title"
+          breadcrumbItems={breadcrumbItems}
+        />
       </ThemeProvider>,
     );
 

@@ -42,7 +42,7 @@ export const SortModalPanel = ({ sortBy, sort, setSort, disabled = false }) => {
       ]}
       modalOpeningComponent={sortOpeningComponent}
     >
-      <p>{t('common.sorting.sort-order')}</p>
+      <p style={{ padding: '10px' }}>{t('common.sorting.sort-order')}</p>
       <FormRadioGroup onChange={(_, order) => setOrder(order)}>
         <FormRadioItem
           data="ASC"
@@ -61,7 +61,7 @@ export const SortModalPanel = ({ sortBy, sort, setSort, disabled = false }) => {
         </FormRadioItem>
       </FormRadioGroup>
 
-      <p>{t('common.sorting.sort-by')}</p>
+      <p style={{ padding: '10px' }}>{t('common.sorting.sort-by')}</p>
       <FormRadioGroup onChange={(_, name) => setName(name)}>
         {sortBy &&
           Object.entries(sortBy).flatMap(([value]) => {

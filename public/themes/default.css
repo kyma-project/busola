@@ -2,5 +2,5 @@
 
 html,
 #root {
-  background: var(--sapNeutralBackground);
+  background: var(--sapBackgroundColor);
 }

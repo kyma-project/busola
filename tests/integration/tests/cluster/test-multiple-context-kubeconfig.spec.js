@@ -43,9 +43,10 @@ context('Test multiple context kubeconfig', () => {
     cy.handleExceptions();
 
     cy.wrap(loadMultipleContextKubeconfig()).then(kubeconfig => {
-      cy.visit(`${config.clusterAddress}/clusters`);
-
-      cy.contains('Connect cluster').click();
+      cy.visit(`${config.clusterAddress}/clusters`)
+        .get('ui5-button:visible')
+        .contains('Connect cluster')
+        .click();
 
       cy.contains('Drag your file here or click to upload').attachFile(
         {
@@ -59,11 +60,9 @@ context('Test multiple context kubeconfig', () => {
 
       cy.contains('Next').click();
 
-      cy.get('[role=combobox]').each($combobox => {
-        cy.wrap($combobox).within(() => {
-          cy.contains(kubeconfig['current-context']).click();
-        });
-      });
+      cy.get('[role=combobox]')
+        .contains(kubeconfig['current-context'])
+        .click();
 
       cy.get('[role=option]').contains(kubeconfig.contexts[1].name);
 

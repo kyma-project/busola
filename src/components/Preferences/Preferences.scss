@@ -1,11 +1,9 @@
-.preferences-dialog {
-  .fd-dialog__body {
-    background: var(--sapBackgroundColor);
-    overflow-y: hidden;
-    width: 70vw;
-    height: 75vh;
-    padding: 0;
-  }
+.preferences-dialog::part(content) {
+  background: var(--sapBackgroundColor);
+  overflow-y: hidden;
+  width: 70vw;
+  height: 75vh;
+  padding: 0;
 
   .vertical-tabs-wrapper {
     height: 100% !important;

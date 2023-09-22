@@ -18,7 +18,7 @@ context('Test Replica Sets', () => {
   it('Creates a Replica Set', () => {
     cy.navigateTo('Workloads', 'Replica Sets');
 
-    cy.contains('Create Replica Set').click();
+    cy.contains('ui5-button', 'Create Replica Set').click();
 
     cy.contains('Advanced').click();
 
@@ -38,9 +38,8 @@ context('Test Replica Sets', () => {
       .type(DOCKER_IMAGE_TAG)
       .should('have.value', DOCKER_IMAGE_TAG);
 
-    cy.get('[role="document"]')
-      .get('ui5-button.fd-dialog__decisive-button')
-      .contains('Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
   });
@@ -68,7 +67,10 @@ context('Test Replica Sets', () => {
   });
 
   it('Edits the Docker image and Replicas amount in the Replica set', () => {
-    cy.contains('Edit').click();
+    cy.get('ui5-button')
+      .contains('Edit')
+      .should('be.visible')
+      .click();
 
     cy.get(
       '[placeholder="Enter the Docker image tag, for example, bitnami/nginx"]',
@@ -82,9 +84,8 @@ context('Test Replica Sets', () => {
       .type(EDITED_REPLICAS_AMOUNT)
       .should('have.value', EDITED_REPLICAS_AMOUNT);
 
-    cy.get('[role="document"]')
-      .get('ui5-button.fd-dialog__decisive-button')
-      .contains('Update')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Update')
       .should('be.visible')
       .click();
   });

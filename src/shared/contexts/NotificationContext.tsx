@@ -5,6 +5,7 @@ import {
   ErrorModalProps,
   ToastProps,
 } from './ErrorModal/ErrorModal';
+import { createPortal } from 'react-dom';
 
 type NotificationContextProps = {
   children: React.ReactNode;
@@ -70,7 +71,8 @@ export const NotificationProvider = ({
           </MessageStrip>
         </div>
       )}
-      {errorProps && <ErrorModal {...errorProps} />}
+      {errorProps &&
+        createPortal(<ErrorModal {...errorProps} />, document.body)}
       {children}
     </NotificationContext.Provider>
   );

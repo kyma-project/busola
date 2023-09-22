@@ -17,17 +17,21 @@ context('Test app settings and preferences', () => {
       .find('ui5-switch')
       .click();
 
-    cy.contains('Close').click();
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Close')
+      .should('be.visible')
+      .click();
 
     cy.navigateTo('Configuration', 'Config Maps');
 
-    cy.contains('Create Config Map').click();
+    cy.contains('ui5-button', 'Create Config Map').click();
 
-    cy.get('input[ariaLabel="ConfigMap name"]:visible').type(NAME);
+    cy.get('input[ariaLabel="ConfigMap name"]:visible')
+      .click()
+      .type(NAME);
 
-    cy.get('[role="dialog"]')
-      .get('ui5-button.fd-dialog__decisive-button')
-      .contains('Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
 
@@ -52,11 +56,16 @@ context('Test app settings and preferences', () => {
       .find('ui5-switch')
       .click();
 
-    cy.contains('Close').click();
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Close')
+      .should('be.visible')
+      .click();
   });
 
   it('Changes application theme', () => {
     cy.get('[title="Profile"]').click();
+
+    cy.contains('Interface').click();
 
     cy.contains('High-Contrast Black').click();
 
@@ -68,7 +77,10 @@ context('Test app settings and preferences', () => {
 
     cy.contains('Light').click();
 
-    cy.contains('Close').click();
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Close')
+      .should('be.visible')
+      .click();
   });
 
   it('Shows hidden namespaces', () => {
@@ -87,7 +99,10 @@ context('Test app settings and preferences', () => {
         }
       });
 
-    cy.contains('Close').click();
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Close')
+      .should('be.visible')
+      .click();
 
     cy.getLeftNav()
       .contains('Back To Cluster Details')

@@ -1,11 +1,11 @@
 import React from 'react';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
-import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useUrl } from 'hooks/useUrl';
 
-export function NodeDetailsHeader({ nodeName, node, loading, error }) {
+export function NodeDetailsHeader({ nodeName, node, loading, error, content }) {
   const { t } = useTranslation();
   const { clusterUrl } = useUrl();
 
@@ -23,33 +23,37 @@ export function NodeDetailsHeader({ nodeName, node, loading, error }) {
   const zone = node?.metadata?.labels?.['topology.kubernetes.io/zone'];
 
   return (
-    <PageHeader title={nodeName} breadcrumbItems={breadcrumbs}>
+    <DynamicPageComponent
+      title={nodeName}
+      breadcrumbItems={breadcrumbs}
+      content={content}
+    >
       {loading && t('common.headers.loading')}
       {error && error.message}
       {node && (
         <>
-          <PageHeader.Column title={t('common.headers.created')}>
+          <DynamicPageComponent.Column title={t('common.headers.created')}>
             <ReadableCreationTimestamp
               timestamp={node.metadata.creationTimestamp}
             />
-          </PageHeader.Column>
-          <PageHeader.Column title={t('node-details.pod-cidr')}>
+          </DynamicPageComponent.Column>
+          <DynamicPageComponent.Column title={t('node-details.pod-cidr')}>
             {node.spec.podCIDR}
-          </PageHeader.Column>
-          <PageHeader.Column title={t('node-details.internal-ip')}>
+          </DynamicPageComponent.Column>
+          <DynamicPageComponent.Column title={t('node-details.internal-ip')}>
             {internalIP.address}
-          </PageHeader.Column>
-          <PageHeader.Column title={t('common.labels.hostname')}>
+          </DynamicPageComponent.Column>
+          <DynamicPageComponent.Column title={t('common.labels.hostname')}>
             {hostname.address}
-          </PageHeader.Column>
-          <PageHeader.Column title={t('common.headers.region')}>
+          </DynamicPageComponent.Column>
+          <DynamicPageComponent.Column title={t('common.headers.region')}>
             {region ?? EMPTY_TEXT_PLACEHOLDER}
-          </PageHeader.Column>
-          <PageHeader.Column title={t('common.headers.zone')}>
+          </DynamicPageComponent.Column>
+          <DynamicPageComponent.Column title={t('common.headers.zone')}>
             {zone ?? EMPTY_TEXT_PLACEHOLDER}
-          </PageHeader.Column>
+          </DynamicPageComponent.Column>
         </>
       )}
-    </PageHeader>
+    </DynamicPageComponent>
   );
 }

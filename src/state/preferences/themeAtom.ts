@@ -9,7 +9,7 @@ export type Theme =
   | 'sap_horizon_hcb';
 
 const THEME_STORAGE_KEY = 'busola.theme';
-const DEFAULT_THEME = 'sap_horizon';
+const DEFAULT_THEME = 'light_dark';
 
 const isSystemThemeDark = () => {
   return window.matchMedia('(prefers-color-scheme: dark)').matches
