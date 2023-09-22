@@ -5,11 +5,11 @@ import {
   fireEvent,
   queryByText,
 } from 'testing/reactTestingUtils';
-const domTestingLib = require('@testing-library/dom');
-const { queryHelpers } = domTestingLib;
-
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { ThemeProvider } from '@ui5/webcomponents-react';
+
+const domTestingLib = require('@testing-library/dom');
+const { queryHelpers } = domTestingLib;
 
 export const queryByHeaderText = queryHelpers.queryByAttribute.bind(
   null,
@@ -308,7 +308,6 @@ describe('GenericList', () => {
 
   it('Test sorting funcionality', () => {
     const {
-      debug,
       queryByHeaderText,
       getByLabelText,
       queryByText,
