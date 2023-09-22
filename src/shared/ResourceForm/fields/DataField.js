@@ -8,7 +8,6 @@ import './DataField.scss';
 
 export function DataField({ title, ...props }) {
   const { t } = useTranslation();
-  console.log('props', props);
   return (
     <KeyValueField
       fullWidth
