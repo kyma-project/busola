@@ -80,7 +80,7 @@ export function Preferences() {
       }
       className="preferences-dialog"
     >
-      <VerticalTabs tabs={tabs} height="100vh">
+      <VerticalTabs tabs={tabs}>
         <VerticalTabs.Content id={1}>
           <TabContainer
             tabLayout="Inline"

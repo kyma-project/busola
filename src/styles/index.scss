@@ -67,7 +67,6 @@ body {
   margin-right: 0.2rem;
 }
 
-.fd-dialog,
 .fd-panel,
 .fd-action-bar {
   &__actions {
@@ -77,47 +76,10 @@ body {
   }
 }
 
-// ui5-static-area-item {
-//   display: none;
-// }
-
-ui5-dialog {
-  z-index: 1000 !important;
-}
-
-.fd-dialog {
-  z-index: 1000;
-
-  .fd-dialog__content {
-    resize: both;
-  }
-
-  .fd-dialog__footer {
-    button {
-      margin-left: 6px;
-    }
-
-    padding-right: unset;
-    padding-left: unset;
-    padding: 0.5rem 1rem;
-    height: auto;
-
-    .fd-bar__right {
-      padding: 0;
-    }
-  }
-}
-
 .modal-size--l::part(content) {
   width: 80vw;
   height: 80vw;
   min-width: unset;
-}
-
-.modal--no-padding {
-  .fd-dialog__body {
-    padding: 0 !important;
-  }
 }
 
 .action-bar-wrapper {
@@ -263,13 +225,6 @@ input[type='checkbox'] {
 
   .fd-list--dropdown {
     max-width: 100% !important;
-  }
-}
-
-.modal-size--l {
-  .fd-dialog__content {
-    width: 80vw;
-    min-width: unset;
   }
 }
 

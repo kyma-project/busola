@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 context('Create Namespace', () => {
-  // Cypress.skipAfterFail({ skipAllSuits: true });
+  Cypress.skipAfterFail({ skipAllSuits: true });
 
   before(cy.loginAndSelectCluster);
 
