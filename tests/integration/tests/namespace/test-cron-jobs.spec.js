@@ -67,7 +67,7 @@ context('Test Cron Jobs', () => {
   });
 
   it('Checking details', () => {
-    cy.url().should('match', new RegExp(`/configmaps/${CRON_JOB_NAME}$`));
+    cy.url().should('match', new RegExp(`/cronjobs/${CRON_JOB_NAME}$`));
 
     cy.contains('0 0 1 * *').should('be.visible');
   });
