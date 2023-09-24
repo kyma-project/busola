@@ -23,12 +23,13 @@ function testAndSelectOptions(section, selection) {
   cy.get(`@${section}Header`)
     .contains('Remove all')
     .click();
+
   cy.get(`@${section}FormField`)
     .find('[type="checkbox"]')
     .should('not.be.checked');
 
   cy.get(`@${section}FormField`)
-    .contains(selection)
+    .get(`ui5-checkbox[text="${selection}"][data-testid*="${selection}"]`)
     .click();
 }
 

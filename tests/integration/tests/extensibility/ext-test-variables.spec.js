@@ -241,21 +241,18 @@ context('Test extensibility variables', () => {
     cy.get('ui5-dialog').as('form');
 
     cy.get('@form')
-      .find('[data-testid="spec.arrayOfStrings.value_1"]:visible')
-      .find('input')
+      .get('ui5-checkbox[data-testid="spec.arrayOfStrings.value_1"]:visible')
       .should('not.be.checked');
 
     cy.get('@form')
-      .find('[data-testid="spec.arrayOfStrings.value_1"]:visible')
-      .find('label')
+      .get('ui5-checkbox[data-testid="spec.arrayOfStrings.value_1"]:visible')
       .click();
 
     cy.get('@form')
-      .find('[data-testid="spec.arrayOfStrings.value_3"]:visible')
-      .find('label')
+      .get('ui5-checkbox[data-testid="spec.arrayOfStrings.value_3"]:visible')
       .click();
 
-    cy.get('[ariaLabel="TestResource name"]:visible', { log: false })
+    cy.get('[ariaLabel="TestResource name"]', { log: false })
       .type(NAME)
       .click();
 
