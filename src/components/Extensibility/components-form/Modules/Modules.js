@@ -1,11 +1,9 @@
-import React from 'react';
 import { useUIStore } from '@ui-schema/ui-schema';
 
 import { useJsonata } from '../../hooks/useJsonata';
 import { useVariables } from '../../hooks/useVariables';
 import { fromJS } from 'immutable';
-import { Icon, Link, MessageStrip } from '@ui5/webcomponents-react';
-import { Checkbox } from 'fundamental-react';
+import { CheckBox, Icon, Link, MessageStrip } from '@ui5/webcomponents-react';
 
 import './Modules.scss';
 import { useGetTranslation } from 'components/Extensibility/helpers';
@@ -140,13 +138,11 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
     return (
       <>
         <div className="gridbox fd-margin-bottom--sm">
-          <div className="fd-align-vertical-center-ignor-checkbox-label">
+          <div className="fd-margin-top--sm">
             {index === 0 ? `${sectionName}:` : ''}
           </div>
-          <Checkbox
-            className="fd-align-vertical-center-ignor-checkbox-label"
-            key={name}
-            value={name}
+          <CheckBox
+            className="fd-margin-top--sm"
             checked={isChecked}
             onChange={e => {
               setCheckbox(
@@ -161,9 +157,8 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
                   : index,
               );
             }}
-          >
-            {name}
-          </Checkbox>
+            text={name}
+          />
           <Dropdown
             label={t('extensibility.widgets.modules.module-channel-label')}
             compact
@@ -213,7 +208,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
               href={link}
               target="_blank"
               rel="noopener noreferrer"
-              className="fd-align-vertical-center-ignor-checkbox-label"
+              className="fd-margin-top--md"
             >
               {t('extensibility.widgets.modules.documentation')}
               <Icon

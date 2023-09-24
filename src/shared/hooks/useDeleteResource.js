@@ -1,10 +1,10 @@
 import {
   Button,
+  CheckBox,
   MessageBox,
   MessageStrip,
   Text,
 } from '@ui5/webcomponents-react';
-import { Checkbox } from 'fundamental-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
@@ -123,14 +123,12 @@ export function useDeleteResource({
           name: resourceTitle || resource?.metadata?.name,
         })}
       </Text>
-
-      <Checkbox
+      <CheckBox
+        className="fd-margin-top--sm"
         checked={dontConfirmDelete}
         onChange={() => setDontConfirmDelete(prevState => !prevState)}
-      >
-        {t('common.delete-dialog.delete-confirm')}
-      </Checkbox>
-
+        text={t('common.delete-dialog.delete-confirm')}
+      />
       {dontConfirmDelete && (
         <MessageStrip
           design="Information"

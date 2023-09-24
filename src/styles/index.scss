@@ -54,17 +54,8 @@ body {
   background-color: transparent;
 }
 
-.fd-checkbox:focus + .fd-checkbox__label,
 .fd-radio:focus + .fd-radio__label {
   outline: none; // disable a weird outline on clicked checkbox
-}
-
-.fd-checkbox__text {
-  margin-left: 0.1rem;
-}
-
-.fd-checkbox__label:before {
-  margin-right: 0.2rem;
 }
 
 .fd-panel,
@@ -262,11 +253,6 @@ input[type='checkbox'] {
 
 .fd-align-center {
   align-items: center;
-}
-
-.fd-align-vertical-center-ignor-checkbox-label {
-  margin-top: auto;
-  margin-bottom: 0.3vh;
 }
 
 .fd-margin-0 {
