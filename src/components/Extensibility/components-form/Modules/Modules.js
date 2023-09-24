@@ -160,6 +160,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
             text={name}
           />
           <Dropdown
+            className="fd-margin-top--tiny"
             label={t('extensibility.widgets.modules.module-channel-label')}
             compact
             disabled={!isChecked}
