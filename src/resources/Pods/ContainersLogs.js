@@ -190,7 +190,12 @@ const ContainersLogs = ({ params }) => {
                 }}
               >
                 {logTimeframeOptions.map(option => (
-                  <Option value={option.key}>{option.text}</Option>
+                  <Option
+                    value={option.key}
+                    selected={sinceSeconds.toString() === option.key}
+                  >
+                    {option.text}
+                  </Option>
                 ))}
               </Select>
               <Label className="fd-margin-begin--sm">

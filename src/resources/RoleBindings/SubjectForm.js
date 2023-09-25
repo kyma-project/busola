@@ -69,7 +69,9 @@ export function SingleSubjectForm({
         input={() => (
           <Select onChange={onChange} className="fd-col fd-col-md--11">
             {SUBJECT_KINDS.map(kind => (
-              <Option value={kind}>{kind}</Option>
+              <Option value={kind} selected={(subject.kind || '') === kind}>
+                {kind}
+              </Option>
             ))}
           </Select>
         )}

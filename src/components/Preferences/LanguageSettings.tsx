@@ -6,7 +6,7 @@ import { languageAtom } from 'state/preferences/languageAtom';
 const AVAILABLE_LANGUAGES = [{ key: 'en', text: 'English' }];
 
 export default function LanguageSettings() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const setLanguage = useSetRecoilState(languageAtom);
 
   const onChange = (event: any) => {
@@ -18,8 +18,13 @@ export default function LanguageSettings() {
     <div className="preferences-row">
       <span className="fd-has-color-status-4">{t('settings.language')}</span>
       <Select onChange={onChange}>
-        {AVAILABLE_LANGUAGES.map(language => (
-          <Option value={language.key}>{language.text}</Option>
+        {AVAILABLE_LANGUAGES.map(available_language => (
+          <Option
+            value={available_language.key}
+            selected={i18n.language === available_language.key}
+          >
+            {available_language.text}
+          </Option>
         ))}
       </Select>
     </div>
