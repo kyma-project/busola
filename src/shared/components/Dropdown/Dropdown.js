@@ -2,6 +2,7 @@ import { ComboBox, ComboBoxItem } from '@ui5/webcomponents-react';
 import { FormLabel } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
+import classnames from 'classnames';
 import './Dropdown.scss';
 
 export function Dropdown({
@@ -19,6 +20,7 @@ export function Dropdown({
   className,
   ...fdSelectProps
 }) {
+  if (!fdSelectProps.readOnly) delete fdSelectProps.readOnly;
   const { t } = useTranslation();
   if (!options || !options.length) {
     options = [
@@ -33,14 +35,15 @@ export function Dropdown({
   id = id || 'select-dropdown';
 
   const onSelectionChange = event => {
-    console.log('onSelectionChange');
     const selectedOption = options.find(o => o.key === event.detail.item.id);
     if (selectedOption) onSelect(event, selectedOption);
   };
 
   const combobox = (
     <ComboBox
-      className={fullWidth && !label ? 'dropdown--full-width' : ''}
+      className={classnames(className, {
+        'dropdown--full-width': fullWidth && !label,
+      })}
       id={id}
       data-testid={id}
       aria-label={label}
