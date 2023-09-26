@@ -143,11 +143,6 @@ li {
   display: table;
 }
 
-// override fd-styles for Safari
-input[type='checkbox'] {
-  -webkit-appearance: checkbox !important;
-}
-
 @font-face {
   font-family: '72';
   src: url('~@sap-theming/theming-base-content/content/Base/baseLib/baseTheme/fonts/72-Regular-full.woff')
