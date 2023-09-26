@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
-import { Checkbox, FormFieldset } from 'fundamental-react';
+import { CheckBox } from '@ui5/webcomponents-react';
+import { FormFieldset } from 'fundamental-react';
 
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { ResourceForm } from 'shared/ResourceForm';
@@ -237,14 +238,12 @@ export function NamespaceCreate({
           title={t('namespaces.create-modal.apply-memory-quotas')}
           actions={() => (
             <div className="additional-resource">
-              <Checkbox
-                compact
+              <CheckBox
                 checked={withMemory}
                 onChange={() => setWithMemory(!withMemory)}
                 dir="rtl"
-              >
-                {t('namespaces.create-modal.create-resource-quota')}
-              </Checkbox>
+                text={t('namespaces.create-modal.create-resource-quota')}
+              />
               <MemoryPresets
                 presets={CONFIG.NS_MEMORY_QUOTAS_PRESET}
                 setValue={val => {
@@ -282,14 +281,12 @@ export function NamespaceCreate({
           title={t('namespaces.create-modal.apply-limits')}
           actions={() => (
             <div className="additional-resource">
-              <Checkbox
-                compact
+              <CheckBox
                 checked={withLimits}
                 onChange={() => setWithLimits(!withLimits)}
                 dir="rtl"
-              >
-                {t('namespaces.create-modal.create-limit-range')}
-              </Checkbox>
+                text={t('namespaces.create-modal.create-limit-range')}
+              />
               <LimitPresets
                 presets={CONFIG.NS_CONTAINER_LIMITS_PRESET}
                 setValue={val => {

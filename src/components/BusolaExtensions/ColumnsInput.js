@@ -1,7 +1,6 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { MessageStrip } from '@ui5/webcomponents-react';
-import { FormInput, Checkbox } from 'fundamental-react';
+import { CheckBox, MessageStrip } from '@ui5/webcomponents-react';
+import { FormInput } from 'fundamental-react';
 
 export function ColumnsInput({ value: columns, setValue: setColumns }) {
   const { t } = useTranslation();
@@ -17,7 +16,7 @@ export function ColumnsInput({ value: columns, setValue: setColumns }) {
   return columns.map(value => {
     return (
       <div key={value.path} className="columns-input">
-        <Checkbox
+        <CheckBox
           checked={value.isSelected}
           onChange={e => {
             value.isSelected = e.target.checked;

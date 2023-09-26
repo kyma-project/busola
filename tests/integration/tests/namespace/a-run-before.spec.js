@@ -14,9 +14,9 @@ context('Create Namespace', () => {
 
     cy.contains('Advanced').click();
 
-    cy.contains('Create Resource Quota').click();
+    cy.get('ui5-checkbox[text="Create Resource Quota"]').click();
 
-    cy.contains('Create Limit Range').click();
+    cy.get('ui5-checkbox[text="Create Limit Range"]').click();
 
     cy.get('[aria-label="expand Apply Total Memory Quotas"]')
       .contains('Choose preset')
