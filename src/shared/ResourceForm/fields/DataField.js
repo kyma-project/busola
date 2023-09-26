@@ -1,6 +1,6 @@
 import React from 'react';
-import { FormTextarea } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
+import { TextArea } from '@ui5/webcomponents-react';
 
 import { KeyValueField } from './KeyValueField';
 
@@ -8,7 +8,6 @@ import './DataField.scss';
 
 export function DataField({ title, ...props }) {
   const { t } = useTranslation();
-
   return (
     <KeyValueField
       fullWidth
@@ -20,12 +19,11 @@ export function DataField({ title, ...props }) {
       }}
       input={{
         value: ({ setValue, ...props }) => (
-          <FormTextarea
-            compact
+          <TextArea
             onChange={e => setValue(e.target.value)}
-            className="value-textarea"
+            growing
+            growingMaxLines={'10'}
             {...props}
-            onKeyDown={() => {}} // overwrites default onKeyDown that switches focus when Enter is pressed
           />
         ),
       }}

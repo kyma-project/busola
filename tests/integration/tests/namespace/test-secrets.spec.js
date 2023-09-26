@@ -25,13 +25,19 @@ context('Test Secrets', () => {
 
     cy.get('[ariaLabel="Secret name"]:visible').type(SECRET_NAME);
 
-    cy.get('[placeholder="Enter key"]:visible').type(
-      `${SECRET_KEY}{enter}{backspace}${SECRET_VALUE}`,
-    );
+    cy.get('[placeholder="Enter key"]:visible').type(`${SECRET_KEY}`);
+
+    cy.get('[placeholder="Enter value"]:visible')
+      .first()
+      .type(`${SECRET_VALUE}`, { force: true });
 
     cy.get('[placeholder="Enter key"]:visible')
       .last()
-      .type(`${SECRET2_KEY}{enter}{backspace}${SECRET2_VALUE}`);
+      .type(`${SECRET2_KEY}`);
+
+    cy.get('[placeholder="Enter value"]:visible')
+      .eq(1)
+      .type(`${SECRET2_VALUE}`, { force: true });
 
     cy.contains('Encode')
       .filter(':visible')
@@ -79,7 +85,11 @@ context('Test Secrets', () => {
 
     cy.get('[placeholder="Enter key"]:visible')
       .eq(2)
-      .type(`${SECRET3_KEY}{enter}{backspace}${SECRET3_VALUE}`);
+      .type(`${SECRET3_KEY}`);
+
+    cy.get('[placeholder="Enter value"]:visible')
+      .eq(2)
+      .type(`${SECRET3_VALUE}`, { force: true });
 
     cy.get('[ariaLabel="Delete"]:visible')
       .eq(1)
