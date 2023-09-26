@@ -42,11 +42,13 @@ export function Dropdown({
     <ComboBox
       className={fullWidth && !label ? 'dropdown--full-width' : ''}
       id={id}
-      contentEditable="false"
       data-testid={id}
       aria-label={label}
       placeholder={placeholder || label}
       disabled={disabled}
+      onKeyDown={event => {
+        event.preventDefault();
+      }}
       onSelectionChange={onSelectionChange}
       value={options.find(o => o.key === selectedKey)?.text}
       ref={_ref}
