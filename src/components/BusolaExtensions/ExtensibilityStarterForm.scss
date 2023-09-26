@@ -3,8 +3,8 @@
   grid-template-columns: 1fr 8fr 8fr 3fr;
   column-gap: 20px;
 
-  .fd-checkbox__label {
-    padding: 6px;
+  ui5-checkbox {
+    margin-top: -6.75px;
   }
 }
 

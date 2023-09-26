@@ -1,8 +1,7 @@
-import React from 'react';
-import { Checkbox, FormRadioGroup } from 'fundamental-react';
+import { FormRadioGroup } from 'fundamental-react';
 
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-import { Icon } from '@ui5/webcomponents-react';
+import { CheckBox, Icon } from '@ui5/webcomponents-react';
 
 export function Checkboxes({
   value = [],
@@ -30,20 +29,14 @@ export function Checkboxes({
         ref={inputRef}
         style={{ opacity: 0, position: 'absolute', left: '-1000px' }}
       />
-      {options.map(({ key, text, description }, index) => (
+      {options.map(({ key, text, description }) => (
         <div key={key} className="fd-row">
-          <div>
-            <Checkbox
-              data-testid={`${dataTestID}.${key}`}
-              compact
-              key={key}
-              value={key}
-              checked={value?.includes(key)}
-              onChange={e => updateValue(key, e.target.checked)}
-            >
-              {text}
-            </Checkbox>
-          </div>
+          <CheckBox
+            data-testid={`${dataTestID}.${key}`}
+            checked={value?.includes(key)}
+            onChange={e => updateValue(key, e.target.checked)}
+            text={text}
+          />
           <div className="fd-col fd-col-md--1 tooltip-column">
             {description && (
               <Tooltip className="has-tooltip" delay={0} content={description}>
