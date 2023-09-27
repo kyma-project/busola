@@ -151,11 +151,11 @@ context('Test extensibility variables', () => {
 
     // test presets
     cy.get('@form')
-      .find('.fd-select__text-content:visible')
-      .contains('Choose preset')
+      .get('ui5-combobox[placeholder="Choose preset"]')
+      .get('ui5-icon[accessible-name="Select Options"]')
       .click();
 
-    cy.get('[role="list"]')
+    cy.get('ui5-li:visible')
       .contains('Fixes')
       .click();
 
