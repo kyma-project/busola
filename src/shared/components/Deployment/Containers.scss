@@ -4,13 +4,4 @@
   & > :first-child {
     margin-top: 4px;
   }
-
-  .dropdown {
-    width: 100px;
-    margin-top: 4px;
-
-    .fd-select__text-content {
-      min-width: unset;
-    }
-  }
 }

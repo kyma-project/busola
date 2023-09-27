@@ -1,7 +1,5 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
-import './Presets.scss';
 
 export function Presets({ presets, onSelect, ...otherProps }) {
   const { t } = useTranslation();
