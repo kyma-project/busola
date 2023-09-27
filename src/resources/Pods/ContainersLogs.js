@@ -208,12 +208,6 @@ const ContainersLogs = ({ params }) => {
             >
               {t('pods.labels.reverse-logs')}
             </Switch>
-            <LogsLink
-              className="fd-margin-begin--tiny"
-              query={`{namespace="${params.namespace}",pod="${params.podName}",container="${params.containerName}"}`}
-            >
-              {t('grafana.open-in-grafana')}
-            </LogsLink>
             <Button
               disabled={!logsToSave?.length}
               className="logs-download"

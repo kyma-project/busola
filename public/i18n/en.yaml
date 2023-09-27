@@ -710,12 +710,6 @@ gardener:
     provider: Provider
 generic-list:
   no-entries-found: No entries found
-grafana:
-  logs: Logs
-  missing-domain: Grafana service does not have a host defined
-  not-exposed: Grafana service is not exposed
-  open-in-grafana: Open in Grafana
-  unavailable: No Grafana link
 graphs:
   capacity: Capacity
   cpu: CPU
