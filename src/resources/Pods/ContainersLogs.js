@@ -9,7 +9,6 @@ import {
   Text,
 } from '@ui5/webcomponents-react';
 import { FormLabel } from 'fundamental-react';
-import { LogsLink } from 'shared/components/LogsLink/LogsLink';
 import { useGetStream } from 'shared/hooks/BackendAPI/useGet';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -218,12 +217,6 @@ const ContainersLogs = ({ params }) => {
                 disabled={!logsToSave?.length}
                 onChange={onReverseChange}
               />
-              <LogsLink
-                className="fd-margin-begin--tiny"
-                query={`{namespace="${params.namespace}",pod="${params.podName}",container="${params.containerName}"}`}
-              >
-                {t('grafana.open-in-grafana')}
-              </LogsLink>
               <Button
                 disabled={!logsToSave?.length}
                 className="logs-download"
