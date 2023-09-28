@@ -7,7 +7,7 @@ export function BTPResourceStatus({ status, resourceKind }) {
 
   if (status?.ready === 'True' && lastCondition.type === 'Ready') {
     return (
-      <StatusBadge type="positive" resourceKind={resourceKind}>
+      <StatusBadge type="success" resourceKind={resourceKind}>
         {lastCondition.reason}
       </StatusBadge>
     );

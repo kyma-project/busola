@@ -7,7 +7,7 @@ export function JobCompletions({ job }) {
 
   const succeeded = job.status.succeeded || 0;
   const completions = job.spec.completions || 0;
-  const statusType = succeeded === completions ? 'positive' : 'informative';
+  const statusType = succeeded === completions ? 'Success' : 'Information';
 
   return (
     <TooltipBadge
