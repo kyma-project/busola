@@ -28,14 +28,14 @@ describe('Badge', () => {
     const value = 'yes';
     const structure = {
       highlights: {
-        success: ['yes', 'ok'],
+        Success: ['yes', 'ok'],
       },
     };
 
     const wrapper = shallow(<Badge value={value} structure={structure} />);
     const status = wrapper.find(StatusBadge);
     const badgeProps = status.props();
-    expect(badgeProps.type).toEqual('success');
+    expect(badgeProps.type).toEqual('Success');
     expect(badgeProps.autoResolveType).toEqual(false);
     expect(status).toHaveLength(1);
   });
@@ -44,7 +44,7 @@ describe('Badge', () => {
     const value = -2;
     const structure = {
       highlights: {
-        error: 'data < 0',
+        Error: 'data < 0',
       },
     };
 
