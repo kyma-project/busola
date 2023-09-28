@@ -31,7 +31,6 @@ export function Dropdown({ value, setValue, error, loading, ...props }) {
   return (
     <div className="fd-col fd-col-md--11">
       <BusolaDropown
-        compact
         fullWidth
         selectedKey={value}
         onSelect={(_, selected) => setValue(selected.key, selected)}
