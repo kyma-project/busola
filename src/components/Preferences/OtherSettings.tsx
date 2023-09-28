@@ -23,9 +23,9 @@ export default function OtherSettings() {
         {AVAILABLE_PAGE_SIZES.map(available_size => (
           <Option
             value={available_size.toString()}
-            selected={pageSize.toString() === available_size.toString()}
+            selected={pageSize === Number(available_size)}
           >
-            {available_size.toString()}
+            {available_size}
           </Option>
         ))}
       </Select>

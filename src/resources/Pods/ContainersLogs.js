@@ -1,7 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { saveAs } from 'file-saver';
-import { Button, Label, Switch, Text } from '@ui5/webcomponents-react';
-import { Select, Option } from '@ui5/webcomponents-react';
+import {
+  Button,
+  Label,
+  Switch,
+  Select,
+  Option,
+  Text,
+} from '@ui5/webcomponents-react';
 import { FormLabel } from 'fundamental-react';
 import { LogsLink } from 'shared/components/LogsLink/LogsLink';
 import { useGetStream } from 'shared/hooks/BackendAPI/useGet';

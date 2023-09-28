@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { MessageStrip } from '@ui5/webcomponents-react';
-import { Select, Option } from '@ui5/webcomponents-react';
+import { MessageStrip, Select, Option } from '@ui5/webcomponents-react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 

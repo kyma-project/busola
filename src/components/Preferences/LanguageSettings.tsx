@@ -9,7 +9,7 @@ export default function LanguageSettings() {
   const { t, i18n } = useTranslation();
   const setLanguage = useSetRecoilState(languageAtom);
 
-  const onChange = (event: any) => {
+  const onChange = (event: CustomEvent) => {
     const selectedLanguage = event.detail.selectedOption.value;
     setLanguage(selectedLanguage);
   };
