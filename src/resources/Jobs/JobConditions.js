@@ -15,11 +15,11 @@ export function JobConditions(job) {
   ];
   const conditionTypeStatus = type => {
     if (type === 'Complete') {
-      return 'success';
+      return 'Success';
     } else if (type === 'Failed') {
-      return 'error';
+      return 'Error';
     } else {
-      return 'info';
+      return 'Information';
     }
   };
   const rowRenderer = condition => {

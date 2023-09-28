@@ -4,7 +4,7 @@ import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 export function CronJobConcurrencyPolicy({ concurrencyPolicy }) {
   return (
     <StatusBadge
-      type="info"
+      type="Information"
       tooltipProps={{ position: 'bottom' }}
       resourceKind="cron-jobs"
     >
