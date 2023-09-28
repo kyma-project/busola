@@ -32,7 +32,6 @@ export function SelectArrayInput({
           <Inputs.Dropdown
             key={index}
             placeholder={placeholder}
-            compact
             _ref={ref}
             value={value}
             setValue={setValue}

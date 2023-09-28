@@ -82,7 +82,7 @@ context('Test Cluster configuration', () => {
       .contains('20')
       .click();
 
-    cy.get('[role=list]:visible')
+    cy.get('ui5-list:visible')
       .contains('10')
       .click();
 

@@ -23,6 +23,9 @@ const getEnumComponent = (
   return ({ onChange, setValue, onBlur, value, ...props }) => (
     <Dropdown
       {...props}
+      onKeyDown={event => {
+        event.preventDefault();
+      }}
       value={value}
       options={options}
       setValue={v => {
