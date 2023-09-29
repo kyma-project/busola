@@ -83,7 +83,7 @@ context('Test reduced permissions', () => {
 
     cy.contains('ui5-button', 'Create Service Account').click();
 
-    cy.get('[ariaLabel="ServiceAccount name"]:visible').type(SA_NAME);
+    cy.get('input[ariaLabel="ServiceAccount name"]:visible').type(SA_NAME);
 
     cy.get('ui5-dialog')
       .contains('ui5-button', 'Create')
@@ -98,10 +98,10 @@ context('Test reduced permissions', () => {
 
     // subject type - select it first so the list starts loading
     cy.get('ui5-dialog')
-      .contains('User')
+      .get('ui5-select:visible')
       .click();
 
-    cy.get('[role=list]')
+    cy.get('ui5-li:visible')
       .contains('ServiceAccount')
       .click();
 

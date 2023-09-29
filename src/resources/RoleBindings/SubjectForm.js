@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { FormFieldset } from 'fundamental-react';
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
-import { Select } from 'shared/components/Select/Select';
+import { Select, Option } from '@ui5/webcomponents-react';
 import { ServiceAccountRef } from 'shared/components/ResourceRef/ServiceAccountRef';
 
 import { DEFAULT_APIGROUP, SUBJECT_KINDS } from './templates';
@@ -18,8 +18,8 @@ export function SingleSubjectForm({
 }) {
   const { t } = useTranslation();
 
-  const setKind = (_, selected) => {
-    subject.kind = selected.key;
+  const setKind = selected => {
+    subject.kind = selected;
     switch (subject.kind) {
       case 'Group':
         delete subject.namespace;
@@ -55,6 +55,11 @@ export function SingleSubjectForm({
     setSubjects([...subjects]);
   };
 
+  const onChange = event => {
+    const selectedKind = event.detail.selectedOption.value;
+    setKind(selectedKind);
+  };
+
   return (
     <FormFieldset>
       <ResourceForm.FormField
@@ -62,16 +67,13 @@ export function SingleSubjectForm({
         tooltipContent={t('role-bindings.create-modal.tooltips.kind')}
         label={t('role-bindings.create-modal.kind')}
         input={() => (
-          <Select
-            compact
-            onSelect={setKind}
-            selectedKey={subject.kind || ''}
-            options={SUBJECT_KINDS.map(kind => ({
-              key: kind,
-              text: kind,
-            }))}
-            fullWidth
-          />
+          <Select onChange={onChange} className="fd-col fd-col-md--11">
+            {SUBJECT_KINDS.map(kind => (
+              <Option value={kind} selected={(subject.kind || '') === kind}>
+                {kind}
+              </Option>
+            ))}
+          </Select>
         )}
       />
 
