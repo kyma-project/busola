@@ -40,22 +40,14 @@ const ComboboxInputWithSeconds = ({
     //@ts-ignore
     <ComboboxInput
       id="event-version-combobox"
-      showAllEntries
-      searchFullString
-      selectionType="manual"
       required
       options={expirationSecondsOptions}
       selectedKey={value}
-      typedValue={value}
       onSelectionChange={(
-        e: React.ChangeEvent<HTMLInputElement>,
+        _: any,
         selected: { key: number; text: string },
-      ) => {
-        if (e?.target?.value) {
-          setValue(Number(e.target.value));
-        } else {
-          setValue(selected.key);
-        }
+      ): void => {
+        setValue(selected.key);
       }}
     />
   );
