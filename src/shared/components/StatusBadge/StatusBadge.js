@@ -32,6 +32,8 @@ const resolveType = status => {
 
     case 'UNKNOWN':
     case 'WARNING':
+      return 'Warning';
+
     case 'FAILED':
     case 'ERROR':
     case 'FAILURE':
