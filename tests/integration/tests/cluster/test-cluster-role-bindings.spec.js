@@ -46,7 +46,7 @@ context('Test Cluster Role Bindings', () => {
 
     cy.contains(USER_NAME).should('be.visible');
 
-    cy.contains('cluster-admin').should('be.visible');
+    cy.contains('a.fd-link', 'cluster-admin').should('be.visible');
   });
 
   it('Edit', () => {
@@ -60,7 +60,7 @@ context('Test Cluster Role Bindings', () => {
 
     cy.contains('Service Account Name').should('be.visible');
 
-    cy.contains('ServiceAccount').click();
+    cy.contains('[role="combobox"]', 'ServiceAccount').click();
 
     cy.contains('Group').click();
 

@@ -46,7 +46,6 @@ export function MemoryInput({
           {...otherProps}
         />
         <Dropdown
-          compact
           options={options}
           required={required}
           selectedKey={selectedUnit}

@@ -19,10 +19,15 @@ context('Create Namespace', () => {
     cy.get('ui5-checkbox[text="Create Limit Range"]').click();
 
     cy.get('[aria-label="expand Apply Total Memory Quotas"]')
-      .contains('Choose preset')
+      .find('ui5-combobox[placeholder="Choose preset"]:visible')
+      .find('ui5-icon[accessible-name="Select Options"]')
       .click();
 
-    cy.contains('XL (limits: 9Gi').click();
+    cy.get('ui5-static-area')
+      .find('ui5-li:visible')
+      .contains('XL (limits: 9Gi, requests: 8.4Gi)')
+      .find('li[role="listitem"]')
+      .click({ force: true });
 
     cy.get('ui5-dialog')
       .find('input[ariaLabel="Namespace name"]:visible')

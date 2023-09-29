@@ -51,13 +51,13 @@ context('Test Deployments', () => {
 
     cy.contains('label', 'Memory Requests')
       .next()
-      .find('input')
+      .find('input.fd-input')
       .clear()
       .type('32');
 
     cy.contains('label', 'Memory Limits')
       .next()
-      .find('input')
+      .find('input.fd-input')
       .clear()
       .type('64');
 

@@ -28,7 +28,6 @@ export function MemoryInput({ label, propertyPath, value = '', setValue }) {
         onChange={e => setValue(`${e.target.value}${selectedUnit}`)}
       />
       <Dropdown
-        compact
         options={options}
         selectedKey={selectedUnit}
         onSelect={(_, { key }) => setValue(`${numericValue}${key}`)}
