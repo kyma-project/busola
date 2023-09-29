@@ -1,7 +1,6 @@
 import { ComboBox, ComboBoxItem } from '@ui5/webcomponents-react';
 import { FormLabel } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-import classnames from 'classnames';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import './Dropdown.scss';
 
@@ -11,7 +10,6 @@ export function Dropdown({
   selectedKey,
   onSelect,
   inlineHelp = '',
-  fullWidth,
   id,
   disabled = false,
   placeholder,
@@ -41,9 +39,7 @@ export function Dropdown({
 
   const combobox = (
     <ComboBox
-      className={classnames(className, {
-        'dropdown--full-width': fullWidth && !label,
-      })}
+      className={className}
       id={id}
       data-testid={id}
       aria-label={label}
