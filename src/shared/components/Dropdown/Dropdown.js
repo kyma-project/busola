@@ -2,7 +2,6 @@ import { ComboBox, ComboBoxItem } from '@ui5/webcomponents-react';
 import { FormLabel } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-import './Dropdown.scss';
 
 export function Dropdown({
   label,
