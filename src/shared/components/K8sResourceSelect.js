@@ -93,6 +93,7 @@ export function K8sResourceSelect({
           value: resourceType,
         })}
         id="k8s-resource-dropdown"
+        data-testid={props['data-testid']}
         ariaLabel={t('common.messages.choose', { value: resourceType })}
         /*onSelectionChange={event => {
           const selectedOption = options.find(
@@ -111,7 +112,7 @@ export function K8sResourceSelect({
         value={value}
         valueState={getValidationState()?.state}
         valueStateMessage={<Text>{getValidationState()?.text}</Text>}
-        inputProps={{ pattern: k8sNamePattern, value, ...props }}
+        pattern={k8sNamePattern}
       >
         {options.map(option => (
           <ComboBoxItem id={option.key} text={option.text} />
