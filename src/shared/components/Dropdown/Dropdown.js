@@ -48,7 +48,7 @@ export function Dropdown({
       data-testid={id}
       aria-label={label}
       placeholder={placeholder || label}
-      disabled={disabled}
+      disabled={disabled || !options?.length}
       onKeyDown={event => {
         event.preventDefault();
       }}

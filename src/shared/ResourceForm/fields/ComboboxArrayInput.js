@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { MultiInput } from './MultiInput';
@@ -72,11 +71,8 @@ export function ComboboxArrayInput({
             <Inputs.ComboboxInput
               key={index}
               placeholder={placeholder}
-              compact
               _ref={ref}
               selectedKey={value}
-              typedValue={value || ''}
-              selectionType="manual"
               setValue={setValue}
               options={filteredOptions()}
               onKeyDown={focus}

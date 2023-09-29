@@ -91,11 +91,6 @@ header.sticky {
   z-index: 1;
 }
 
-// add a little padding to placeholder and value of Combobox's input
-[role='combobox'] .fd-input.fd-input-group__input {
-  padding-left: 8px !important;
-}
-
 li {
   list-style: none;
 }
