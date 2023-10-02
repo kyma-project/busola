@@ -4,13 +4,13 @@ import NamespaceSettings from '../NamespaceSettings';
 
 describe('NamespaceSettings', () => {
   it('Sends custom message on toggle', async () => {
-    const { getByLabelText } = render(<NamespaceSettings />, {
+    const { container } = render(<NamespaceSettings />, {
       initializeState: snapshot =>
         snapshot.set(showHiddenNamespacesState, true),
     });
 
-    const toggle = getByLabelText('settings.clusters.showHiddenNamespaces');
-    const toggleSwitch = toggle.shadowRoot?.querySelector('[role="switch"]');
+    const toggle = container.querySelector('ui5-switch');
+    const toggleSwitch = toggle?.shadowRoot?.querySelector('[role="switch"]');
 
     expect(toggleSwitch).toHaveAttribute('aria-checked', 'true');
 
