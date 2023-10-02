@@ -6,12 +6,12 @@ export function PersistentVolumeStatus({ status }) {
     switch (status) {
       case 'Bound':
       case 'Available':
-        return 'success';
+        return 'Success';
       case 'Released':
       case 'Pending':
-        return 'info';
+        return 'Information';
       default:
-        return 'error';
+        return 'Error';
     }
   };
 

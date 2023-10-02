@@ -32,7 +32,7 @@ const resolveType = status => {
 
     case 'UNKNOWN':
     case 'WARNING':
-      return 'Error';
+      return 'Warning';
 
     case 'FAILED':
     case 'ERROR':
@@ -177,16 +177,7 @@ export const StatusBadge = ({
 StatusBadge.propTypes = {
   additionalContent: PropTypes.node,
   tooltipContent: PropTypes.node,
-  type: PropTypes.oneOf([
-    'positive',
-    'negative',
-    'critical',
-    'informative',
-    'success',
-    'error',
-    'warning',
-    'info',
-  ]),
+  type: PropTypes.oneOf(['information', 'success', 'error', 'warning', 'none']),
   autoResolveType: PropTypes.bool,
   noTooltip: PropTypes.bool,
   resourceKind: PropTypes.string,

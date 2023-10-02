@@ -24,34 +24,34 @@ describe('Badge', () => {
     expect(status).toHaveLength(1);
   });
 
-  it('Renders a badge with positive type for custom highlights', () => {
+  it('Renders a badge with success type for custom highlights', () => {
     const value = 'yes';
     const structure = {
       highlights: {
-        positive: ['yes', 'ok'],
+        Success: ['yes', 'ok'],
       },
     };
 
     const wrapper = shallow(<Badge value={value} structure={structure} />);
     const status = wrapper.find(StatusBadge);
     const badgeProps = status.props();
-    expect(badgeProps.type).toEqual('positive');
+    expect(badgeProps.type).toEqual('Success');
     expect(badgeProps.autoResolveType).toEqual(false);
     expect(status).toHaveLength(1);
   });
 
-  it('Renders a badge with positive type for custom highlights', () => {
+  it('Renders a badge with error type for custom highlights', () => {
     const value = -2;
     const structure = {
       highlights: {
-        negative: 'data < 0',
+        Error: 'data < 0',
       },
     };
 
     const wrapper = shallow(<Badge value={value} structure={structure} />);
     const status = wrapper.find(StatusBadge);
     const badgeProps = status.props();
-    expect(badgeProps.type).toEqual('negative');
+    expect(badgeProps.type).toEqual('Error');
     expect(badgeProps.autoResolveType).toEqual(false);
     expect(status).toHaveLength(1);
   });

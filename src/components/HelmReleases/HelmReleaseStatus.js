@@ -7,7 +7,6 @@ export function HelmReleaseStatus({ status }) {
       case 'deployed':
         return 'Success';
       case 'uninstalling':
-        return 'Error';
       case 'failed':
         return 'Error';
       case 'unknown':

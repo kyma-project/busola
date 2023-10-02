@@ -143,7 +143,7 @@ items:
           type: object
           widget: FormGroup
           properties:
-            informative:
+            information:
               type:
               - string
               - array
@@ -153,7 +153,7 @@ items:
                 array: SimpleList
               items:
                 type: string
-            positive:
+            success:
               type:
               - string
               - array
@@ -163,17 +163,7 @@ items:
                 array: SimpleList
               items:
                 type: string
-            negative:
-              type:
-              - string
-              - array
-              widget: MultiType
-              widgets:
-                string: Jsonata
-                array: SimpleList
-              items:
-                type: string
-            critical:
+            error:
               type:
               - string
               - array

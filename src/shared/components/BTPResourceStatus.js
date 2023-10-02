@@ -7,14 +7,15 @@ export function BTPResourceStatus({ status, resourceKind }) {
 
   if (status?.ready === 'True' && lastCondition.type === 'Ready') {
     return (
-      <StatusBadge type="positive" resourceKind={resourceKind}>
+      <StatusBadge type="Success" resourceKind={resourceKind}>
         {lastCondition.reason}
       </StatusBadge>
     );
   }
 
   const message = conditions.find(c => c.message)?.message || '';
-  const type = lastCondition.reason === 'NotProvisioned' ? 'info' : 'error';
+  const type =
+    lastCondition.reason === 'NotProvisioned' ? 'Information' : 'Error';
 
   return (
     <StatusBadge
