@@ -30,7 +30,7 @@ export function ReleaseDataPanel({ release, simpleHeader }) {
               {name}
             </Link>
             <div className="fd-margin-begin--sm">
-              <StatusBadge noTooltip type="info">
+              <StatusBadge noTooltip type="Information">
                 {t('helm-releases.headers.release-version', { version })}
               </StatusBadge>
             </div>

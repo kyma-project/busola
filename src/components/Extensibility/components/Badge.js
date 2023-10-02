@@ -1,6 +1,7 @@
 import React from 'react';
 import { isNil } from 'lodash';
 import { useJsonata } from '../hooks/useJsonata';
+import { useTranslation } from 'react-i18next';
 
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import {
@@ -10,12 +11,10 @@ import {
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 import './Badge.scss';
-import { useTranslation } from 'react-i18next';
 
 export function Badge({
   value,
   structure,
-  schema,
   originalResource,
   scope,
   arrayItems,

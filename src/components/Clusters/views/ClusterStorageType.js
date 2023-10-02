@@ -8,7 +8,7 @@ export function ClusterStorageType({ clusterConfig }) {
   return (
     <StatusBadge
       resourceKind="clusters"
-      type={knownStorage.includes(storage) ? 'info' : 'warning'}
+      type={knownStorage.includes(storage) ? 'Information' : 'Warning'}
     >
       {storage || 'unknown'}
     </StatusBadge>

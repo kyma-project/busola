@@ -23,6 +23,7 @@ context('Test Replica Sets', () => {
     cy.contains('Advanced').click();
 
     cy.get('[ariaLabel="ReplicaSet name"]')
+      .click()
       .clear()
       .type(REPLICA_SET_NAME);
 

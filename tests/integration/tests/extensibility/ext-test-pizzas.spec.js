@@ -151,6 +151,7 @@ context('Test Pizzas', () => {
 
     cy.get('@form')
       .find('[data-testid="spec.description"]:visible')
+      .click()
       .clear()
       .type(PIZZA_DESC);
 
