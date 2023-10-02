@@ -15,7 +15,6 @@ export function ComboboxArrayInput({
   options,
   emptyStringKey,
   onBlur,
-  filterOptions,
   noEdit,
   ...props
 }) {
@@ -61,12 +60,6 @@ export function ComboboxArrayInput({
           focus,
           index,
         }) => {
-          const filteredOptions = () => {
-            if (!filterOptions) return options;
-            return options.filter(
-              option => !internalValue.includes(option.key),
-            );
-          };
           return (
             <Inputs.ComboboxInput
               key={index}
@@ -74,7 +67,7 @@ export function ComboboxArrayInput({
               _ref={ref}
               selectedKey={value}
               setValue={setValue}
-              options={filteredOptions()}
+              options={options}
               onKeyDown={focus}
               onBlur={onBlur}
               fullWidth

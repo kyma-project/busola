@@ -30,10 +30,10 @@ export function ComboboxInput({
         ref={_ref}
         disabled={props.disabled || !options?.length}
         filter="Contains"
-        onSelectionChange={event => {
+        onChange={event => {
           const selectedOption = options.find(
             // eslint-disable-next-line eqeqeq
-            o => o.key == event.detail.item.id,
+            o => o.text == event.target.value,
           );
           if (!selectedOption) return;
           if (onSelectionChange) {
