@@ -17,17 +17,17 @@ export function ContainerStatus({ status }) {
       case 'running':
       case 'completed':
       case 'succeeded':
-        return 'success';
+        return 'Success';
       case 'containercreating':
       case 'initing':
       case 'pending':
       case 'podinitializing':
       case 'terminating':
-        return 'info';
+        return 'Information';
       case 'unknown':
-        return undefined;
+        return 'None';
       default:
-        return 'error';
+        return 'Error';
     }
   };
 

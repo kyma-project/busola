@@ -1,7 +1,5 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
-import './Presets.scss';
 
 export function Presets({ presets, onSelect, ...otherProps }) {
   const { t } = useTranslation();
@@ -15,9 +13,9 @@ export function Presets({ presets, onSelect, ...otherProps }) {
       <Dropdown
         className="resource-form__presets"
         placeholder={t('common.create-form.choose-preset')}
-        compact
         options={options}
         selectedKey={''}
+        fullWidth
         onSelect={(e, preset) => {
           e.stopPropagation();
           onSelect(presets.find(p => p.name === preset.key));

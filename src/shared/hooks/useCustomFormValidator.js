@@ -105,7 +105,7 @@ export function useCustomFormValidator() {
     const input = formField.querySelector('input');
     const isValid = input
       ? input.checkValidity()
-      : formField.querySelector('#select-dropdown')?.textContent !== '';
+      : formField.querySelector('#select-dropdown')?.value !== '';
     return { valid: isValid, filled: input?.value !== '' };
   }
 

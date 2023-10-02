@@ -6,21 +6,21 @@ const createPhaseProperties = (phase, t) => {
   switch (phase) {
     case 'Bound':
       return {
-        type: 'success',
+        type: 'Success',
         tooltipContent: t('persistent-volume-claims.tooltips.bound'),
       };
     case 'Lost':
       return {
-        type: 'error',
+        type: 'Error',
         tooltipContent: t('persistent-volume-claims.tooltips.lost'),
       };
     case 'Pending':
       return {
-        type: 'warning',
+        type: 'Warning',
         tooltipContent: t('persistent-volume-claims.tooltips.pending'),
       };
     default:
-      return { type: 'info' };
+      return { type: 'Information' };
   }
 };
 

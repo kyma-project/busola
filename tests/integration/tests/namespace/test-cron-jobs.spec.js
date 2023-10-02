@@ -56,9 +56,13 @@ context('Test Cron Jobs', () => {
       .clear()
       .type('busybox');
 
-    cy.contains('IfNotPresent').click();
+    cy.get('ui5-combobox[value="IfNotPresent"]')
+      .find('ui5-icon[accessible-name="Select Options"]')
+      .click();
 
-    cy.contains('Always').click();
+    cy.get('ui5-li:visible')
+      .contains('Always')
+      .click();
 
     cy.get('ui5-dialog')
       .contains('ui5-button', 'Create')
@@ -110,9 +114,13 @@ context('Test Cron Jobs', () => {
       .clear()
       .type('busytest');
 
-    cy.contains('[data-testid="select-dropdown"]', 'Always').click();
+    cy.get('ui5-combobox[value="Always"]')
+      .find('ui5-icon[accessible-name="Select Options"]')
+      .click();
 
-    cy.contains('Never').click();
+    cy.get('ui5-li:visible')
+      .contains('Never')
+      .click();
 
     cy.get('ui5-dialog')
       .contains('ui5-button', 'Update')

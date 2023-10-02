@@ -64,9 +64,9 @@ context('Test multiple context kubeconfig', () => {
         .contains(kubeconfig['current-context'])
         .click();
 
-      cy.get('[role=option]').contains(kubeconfig.contexts[1].name);
+      cy.get('ui5-li:visible').contains(kubeconfig.contexts[1].name);
 
-      cy.get('[role=option]')
+      cy.get('ui5-li:visible')
         .contains('All contexts')
         .click();
 

@@ -291,7 +291,6 @@ export function StatsPanel({
           t(`graphs.${graphOptions[0]}`)
         ) : (
           <Dropdown
-            compact
             selectedKey={metric}
             onSelect={(e, val) => {
               setMetric(val.key);

@@ -93,7 +93,10 @@ context('Test Jobs', () => {
     cy.contains(/Imagenode:14-alpine/);
 
     // controlled-by
-    cy.contains(`Job (${JOB_NAME})`);
+    cy.contains('div', 'Controlled By')
+      .next()
+      .find(`div:contains("Job") a.fd-link:contains("${JOB_NAME}")`)
+      .should('exist');
 
     // status
     cy.get('[role="status"]', { timeout: 75 * 1000 })

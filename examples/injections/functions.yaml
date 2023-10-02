@@ -17,17 +17,16 @@ injections: |-
       - name: header.status
         widget: Badge
         highlights:
-          positive:
+          success:
             - RUNNING
-          negative:
+          error:
             - FAILED
             - ERROR
-          informative:
-            - INITIALIZING
-          critical:
             - DEPLOYING
             - BUILDING
             - PENDING
+          information:
+            - INITIALIZING
         source: >-
           ($.status = undefined or $.status.conditions = undefined or
           $count($.status.conditions) = 0) ? 'INITIALIZING' :

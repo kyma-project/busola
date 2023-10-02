@@ -1,9 +1,7 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSetRecoilState } from 'recoil';
-import { Select } from 'fundamental-react';
+import { Select, Option } from '@ui5/webcomponents-react';
 import { languageAtom } from 'state/preferences/languageAtom';
-import { Option } from 'fundamental-react/lib/Select/Select';
 
 const AVAILABLE_LANGUAGES = [{ key: 'en', text: 'English' }];
 
@@ -11,21 +9,24 @@ export default function LanguageSettings() {
   const { t, i18n } = useTranslation();
   const setLanguage = useSetRecoilState(languageAtom);
 
-  const selectLanguage = (
-    event: React.MouseEvent<HTMLLIElement> | React.KeyboardEvent<HTMLLIElement>,
-    language: Option,
-  ) => {
-    setLanguage(language.key);
+  const onChange = (event: CustomEvent) => {
+    const selectedLanguage = event.detail.selectedOption.value;
+    setLanguage(selectedLanguage);
   };
 
   return (
     <div className="preferences-row">
       <span className="fd-has-color-status-4">{t('settings.language')}</span>
-      <Select
-        options={AVAILABLE_LANGUAGES}
-        selectedKey={i18n.language}
-        onSelect={selectLanguage}
-      />
+      <Select onChange={onChange}>
+        {AVAILABLE_LANGUAGES.map(available_language => (
+          <Option
+            value={available_language.key}
+            selected={i18n.language === available_language.key}
+          >
+            {available_language.text}
+          </Option>
+        ))}
+      </Select>
     </div>
   );
 }
