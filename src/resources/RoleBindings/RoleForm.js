@@ -68,9 +68,9 @@ export const RoleForm = ({
               ),
             })}
             value={options.find(o => o.key === props.value)?.text ?? ''}
-            onSelectionChange={event => {
+            onChange={event => {
               const selectedOption = options.find(
-                o => o.key === event.detail.item.id,
+                o => o.text === event.target.value,
               );
               if (selectedOption) props.setValue(selectedOption.text);
             }}

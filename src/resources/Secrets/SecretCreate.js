@@ -83,9 +83,9 @@ export function SecretCreate({
               ariaLabel="Secret's type's Combobox"
               placeholder={t('secrets.placeholders.type')}
               value={options.find(o => o.key === value)?.text ?? ''}
-              onSelectionChange={event => {
+              onChange={event => {
                 const selectedOption = options.find(
-                  o => o.key === event.detail.item.id,
+                  o => o.text === event.target.value,
                 );
                 if (selectedOption) setValue(selectedOption.text);
               }}

@@ -114,9 +114,9 @@ export function ExternalResourceRef({
               id={`secret-namespace-combobox-${index}`}
               ariaLabel="Secret namespace Combobox"
               placeholder={t('common.placeholders.secret-ref-namespace')}
-              onSelectionChange={event => {
+              onChange={event => {
                 const selectedOption = namespacesOptions.find(
-                  o => o.key === event.detail.item.id,
+                  o => o.text === event.target.value,
                 );
                 if (selectedOption)
                   setValue({ name: '', namespace: selectedOption.text });
@@ -152,9 +152,9 @@ export function ExternalResourceRef({
               ariaLabel="Secret name Combobox"
               disabled={!filteredResourcesOptions?.length}
               placeholder={t('common.placeholders.secret-ref-name')}
-              onSelectionChange={event => {
+              onChange={event => {
                 const selectedOption = filteredResourcesOptions.find(
-                  o => o.key === event.detail.item.id,
+                  o => o.text === event.target.value,
                 );
                 if (selectedOption)
                   setValue({

@@ -35,9 +35,9 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
       ariaLabel="choose-language"
       disabled={!item}
       value={typeof language === 'string' ? language : ''}
-      onSelectionChange={event => {
+      onChange={event => {
         const selectedOption = getAvailableLanguages().find(
-          o => o.key === event.detail.item.id,
+          o => o.text === event.target.value,
         );
         if (selectedOption) onChange(selectedOption.key);
       }}
