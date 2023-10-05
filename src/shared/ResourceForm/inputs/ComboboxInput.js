@@ -1,8 +1,5 @@
 import classnames from 'classnames';
-import {
-  ComboBox as UI5ComboBox,
-  ComboBoxItem,
-} from '@ui5/webcomponents-react';
+import { ComboBox, ComboBoxItem } from '@ui5/webcomponents-react';
 
 export function ComboboxInput({
   value,
@@ -24,7 +21,7 @@ export function ComboboxInput({
         className,
       )}
     >
-      <UI5ComboBox
+      <ComboBox
         ariaLabel="Combobox input"
         id={id || 'combobox-input'}
         ref={_ref}
@@ -32,8 +29,7 @@ export function ComboboxInput({
         filter="Contains"
         onChange={event => {
           const selectedOption = options.find(
-            // eslint-disable-next-line eqeqeq
-            o => o.text == event.target.value,
+            o => o.text === event.target.value,
           );
           if (!selectedOption) return;
           if (onSelectionChange) {
@@ -47,8 +43,8 @@ export function ComboboxInput({
           }
         }}
         value={
-          // eslint-disable-next-line eqeqeq
-          options.find(o => o.key == value || o.key == selectedKey)?.text ?? ''
+          options.find(o => o.key === value || o.key === selectedKey)?.text ??
+          ''
         }
         placeholder={placeholder}
         {...props}
@@ -56,7 +52,7 @@ export function ComboboxInput({
         {options.map(option => (
           <ComboBoxItem id={option.key} text={option.text} />
         ))}
-      </UI5ComboBox>
+      </ComboBox>
     </div>
   );
 }
