@@ -1,6 +1,5 @@
-import React from 'react';
 import classnames from 'classnames';
-import { ComboboxInput as FundamentalComboboxInput } from 'fundamental-react';
+import { ComboBox, ComboBoxItem } from '@ui5/webcomponents-react';
 
 export function ComboboxInput({
   value,
@@ -9,7 +8,6 @@ export function ComboboxInput({
   options,
   id,
   placeholder,
-  typedValue,
   className,
   _ref,
   onSelectionChange,
@@ -23,26 +21,38 @@ export function ComboboxInput({
         className,
       )}
     >
-      <FundamentalComboboxInput
+      <ComboBox
         ariaLabel="Combobox input"
-        arrowLabel="Combobox input arrow"
         id={id || 'combobox-input'}
-        compact
         ref={_ref}
-        showAllEntries
-        searchFullString
-        selectionType="manual"
-        onSelectionChange={
-          onSelectionChange ||
-          ((_, selected) =>
-            setValue(selected.key !== -1 ? selected.key : selected.text))
+        disabled={props.disabled || !options?.length}
+        filter="Contains"
+        onChange={event => {
+          const selectedOption = options.find(
+            o => o.text === event.target.value,
+          );
+          if (!selectedOption) return;
+          if (onSelectionChange) {
+            onSelectionChange(event, selectedOption);
+          } else {
+            setValue(
+              selectedOption.key !== -1
+                ? selectedOption.key
+                : selectedOption.text,
+            );
+          }
+        }}
+        value={
+          options.find(o => o.key === value || o.key === selectedKey)?.text ??
+          ''
         }
-        typedValue={value ?? typedValue ?? ''}
-        selectedKey={value || selectedKey}
         placeholder={placeholder}
-        options={options}
         {...props}
-      />
+      >
+        {options.map(option => (
+          <ComboBoxItem id={option.key} text={option.text} />
+        ))}
+      </ComboBox>
     </div>
   );
 }

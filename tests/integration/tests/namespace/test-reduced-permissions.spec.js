@@ -109,10 +109,10 @@ context('Test reduced permissions', () => {
     cy.get('[ariaLabel="ClusterRoleBinding name"]:visible').type(CRB_NAME);
 
     // role
-    cy.get(
+    chooseComboboxOption(
       '[placeholder="Start typing to select ClusterRole from the list"]:visible',
-    ).type(CR_NAME);
-    cy.contains(new RegExp(CR_NAME)).click();
+      CR_NAME,
+    );
 
     // service account namespace
     chooseComboboxOption(
