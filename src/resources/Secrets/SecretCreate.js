@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ComboboxInput } from 'fundamental-react';
+import { ComboBox, ComboBoxItem } from '@ui5/webcomponents-react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { DataField } from 'shared/ResourceForm/fields';
@@ -40,6 +40,7 @@ export function SecretCreate({
   const secretTypes = Array.from(
     new Set(secretDefs.map(secret => secret.type || 'Opaque')),
   );
+  const options = secretTypes.map(type => ({ key: type, text: type }));
 
   useEffect(() => {
     setLockedKeys(currentDef?.data || []);
@@ -77,19 +78,23 @@ export function SecretCreate({
         label={t('secrets.type')}
         input={({ value, setValue }) => (
           <div className="fd-col fd-col-md--11">
-            <ComboboxInput
+            <ComboBox
               id="secrets-type-combobox"
               ariaLabel="Secret's type's Combobox"
-              required
-              compact
-              fullWidth
               placeholder={t('secrets.placeholders.type')}
-              options={secretTypes.map(type => ({ key: type, text: type }))}
-              selectedKey={value}
-              typedValue={value}
-              onSelect={e => setValue(e.target.value)}
-              disabled={!!initialSecret}
-            />
+              value={options.find(o => o.key === value)?.text ?? ''}
+              onChange={event => {
+                const selectedOption = options.find(
+                  o => o.text === event.target.value,
+                );
+                if (selectedOption) setValue(selectedOption.text);
+              }}
+              disabled={!!initialSecret || !options?.length}
+            >
+              {options.map(option => (
+                <ComboBoxItem id={option.key} text={option.text} />
+              ))}
+            </ComboBox>
           </div>
         )}
       />

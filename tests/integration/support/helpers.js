@@ -1,10 +1,11 @@
 export function chooseComboboxOption(selector, optionText) {
-  cy.get(selector)
+  cy.get(`ui5-combobox${selector}`)
+    .find('input')
     .filterWithNoValue()
     .click()
     .type(optionText);
 
-  cy.contains('li', optionText).click();
+  cy.contains('ui5-li:visible', optionText).click();
 
   return cy.end();
 }

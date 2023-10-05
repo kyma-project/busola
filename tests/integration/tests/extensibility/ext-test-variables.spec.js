@@ -87,15 +87,18 @@ context('Test extensibility variables', () => {
 
     // test vars with enums
     cy.get('@form')
-      .find('span')
-      .find('[aria-label="Combobox input arrow"]:visible', { log: false })
+      .get('.form-field')
+      .find('ui5-combobox')
+      .find('ui5-icon[accessible-name="Select Options"]:visible', {
+        log: false,
+      })
       .click();
 
-    cy.get('[role="list"]')
+    cy.get('ui5-li:visible')
       .contains('simple')
       .should('exist');
 
-    cy.get('[role="list"]')
+    cy.get('ui5-li:visible')
       .contains('advanced')
       .should('exist');
 
@@ -109,7 +112,7 @@ context('Test extensibility variables', () => {
     );
 
     // test visibility based on var (select 'simple')
-    cy.get('[role="list"]')
+    cy.get('ui5-li:visible')
       .contains('simple')
       .click();
 
@@ -119,11 +122,14 @@ context('Test extensibility variables', () => {
 
     // test visibility based on var (select 'advanced')
     cy.get('@form')
-      .find('span')
-      .find('[aria-label="Combobox input arrow"]:visible', { log: false })
+      .get('.form-field')
+      .find('ui5-combobox')
+      .find('ui5-icon[accessible-name="Select Options"]:visible', {
+        log: false,
+      })
       .click();
 
-    cy.get('[role="list"]')
+    cy.get('ui5-li:visible')
       .contains('advanced')
       .click();
 

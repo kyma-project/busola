@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { MultiInput } from './MultiInput';
@@ -16,7 +15,6 @@ export function ComboboxArrayInput({
   options,
   emptyStringKey,
   onBlur,
-  filterOptions,
   noEdit,
   ...props
 }) {
@@ -62,23 +60,14 @@ export function ComboboxArrayInput({
           focus,
           index,
         }) => {
-          const filteredOptions = () => {
-            if (!filterOptions) return options;
-            return options.filter(
-              option => !internalValue.includes(option.key),
-            );
-          };
           return (
             <Inputs.ComboboxInput
               key={index}
               placeholder={placeholder}
-              compact
               _ref={ref}
               selectedKey={value}
-              typedValue={value || ''}
-              selectionType="manual"
               setValue={setValue}
-              options={filteredOptions()}
+              options={options}
               onKeyDown={focus}
               onBlur={onBlur}
               fullWidth
