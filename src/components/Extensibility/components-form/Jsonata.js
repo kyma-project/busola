@@ -1,5 +1,5 @@
 import React from 'react';
-import { InputGroup, FormInput } from 'fundamental-react';
+import { InputGroup } from 'fundamental-react';
 
 import { useValidation } from 'shared/hooks/useValidation';
 import { ResourceForm } from 'shared/ResourceForm';
@@ -8,7 +8,7 @@ import {
   getPropsFromSchema,
 } from 'components/Extensibility/helpers';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-import { Icon } from '@ui5/webcomponents-react';
+import { Icon, Input } from '@ui5/webcomponents-react';
 
 export function JsonataInput({
   value,
@@ -36,12 +36,7 @@ export function JsonataInput({
             <Icon aria-label="Jsonata" name="source-code" />
           </Tooltip>
         </InputGroup.Addon>
-        <FormInput
-          compact
-          value={value || ''}
-          {...props}
-          {...validationProps}
-        />
+        <Input value={value || ''} {...props} {...validationProps} />
       </InputGroup>
     </div>
   );

@@ -1,7 +1,7 @@
 import React from 'react';
-import { FormInput } from 'fundamental-react';
 
 import { MultiInput } from './MultiInput';
+import { Input } from '@ui5/webcomponents-react';
 
 export function TextArrayInput({
   defaultOpen,
@@ -34,28 +34,27 @@ export function TextArrayInput({
           internalValue,
           setMultiValue,
         }) => (
-          <FormInput
+          <Input
             placeholder={Math.abs(index) === 1 ? placeholder : ''}
             key={index}
-            compact
             value={value || ''}
             ref={ref}
-            onChange={e => {
+            onInput={e => {
               setValue(e.target.value);
               updateValue();
             }}
-            onKeyDown={e => focus(e)}
-            onBlur={() => {
-              const fieldValue = internalValue?.filter(val => !!val);
-              setMultiValue(
-                typeof customFormatFn === 'function'
-                  ? customFormatFn(fieldValue)
-                  : fieldValue,
-              );
-            }}
+            // onKeyDown={e => focus(e)}
+            // onBlur={() => {
+            //   const fieldValue = internalValue?.filter(val => !!val);
+            //   setMultiValue(
+            //     typeof customFormatFn === 'function'
+            //       ? customFormatFn(fieldValue)
+            //       : fieldValue,
+            //   );
+            // }}
             readOnly={readOnly}
             {...inputProps}
-            ariaLabel={ariaLabel}
+            aria-label={ariaLabel}
           />
         ),
       ]}

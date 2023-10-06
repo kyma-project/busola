@@ -1,7 +1,7 @@
 import React from 'react';
-import { FormInput } from 'fundamental-react';
 
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
+import { Input } from '@ui5/webcomponents-react';
 
 export function MemoryInput({ label, propertyPath, value = '', setValue }) {
   const units = ['K', 'Ki', 'M', 'Mi', 'G', 'Gi', 'Ti', 'T'];
@@ -19,13 +19,12 @@ export function MemoryInput({ label, propertyPath, value = '', setValue }) {
 
   return (
     <div className="memory-input">
-      <FormInput
-        compact
+      <Input
         type="number"
         min="0"
         required
         value={numericValue}
-        onChange={e => setValue(`${e.target.value}${selectedUnit}`)}
+        onInput={e => setValue(`${e.target.value}${selectedUnit}`)}
       />
       <Dropdown
         options={options}

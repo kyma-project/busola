@@ -1,11 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  FormItem,
-  FormInput,
-  FormLabel,
-  FormFieldset,
-} from 'fundamental-react';
+import { FormItem, FormLabel, FormFieldset } from 'fundamental-react';
 import * as jp from 'jsonpath';
 
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
@@ -14,6 +9,7 @@ import { ResourceForm } from '..';
 import * as Inputs from '../inputs';
 
 import './RuntimeResources.scss';
+import { Input } from '@ui5/webcomponents-react';
 
 function MemoryInput({ label, propertyPath, container = {}, setContainer }) {
   const units = ['K', 'Ki', 'M', 'Mi', 'G', 'Gi', 'Ti', 'T'];
@@ -39,12 +35,11 @@ function MemoryInput({ label, propertyPath, container = {}, setContainer }) {
     <FormItem>
       <FormLabel required>{label}</FormLabel>
       <div className="memory-input fd-col fd-col-md--11">
-        <FormInput
-          compact
+        <Input
           type="number"
           min="0"
           value={numericValue}
-          onChange={e => setValue(e.target.value + selectedUnit)}
+          onInput={e => setValue(e.target.value + selectedUnit)}
         />
         <Dropdown
           options={options}

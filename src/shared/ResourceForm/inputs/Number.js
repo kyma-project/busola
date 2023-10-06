@@ -1,14 +1,13 @@
 import React from 'react';
-import { FormInput } from 'fundamental-react';
+import { Input } from '@ui5/webcomponents-react';
 
 export function Number({ value = '', setValue, ...props }) {
   return (
     <div className="fd-col fd-col-md--11">
-      <FormInput
-        compact
-        type="number"
+      <Input
+        type="Number"
         value={value}
-        onChange={e => setValue(e.target.valueAsNumber ?? null)}
+        onInput={e => setValue(e.target.valueAsNumber ?? null)}
         {...props}
       />
     </div>
