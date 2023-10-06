@@ -12,7 +12,7 @@ import { useCreateResource } from '../useCreateResource';
 import { KeyValueField, K8sNameField } from '../fields';
 import * as jp from 'jsonpath';
 
-import './ResourceForm.scss';
+// import './ResourceForm.scss';
 import { Form } from '@ui5/webcomponents-react';
 
 export function ResourceForm({
