@@ -6,7 +6,7 @@ export default function PodRestarts({ statuses }) {
   const { t } = useTranslation();
 
   const restartCount = statuses?.reduce((acc, c) => acc + c.restartCount, 0);
-  const type = restartCount ? 'error' : 'success';
+  const type = restartCount ? 'Error' : 'Success';
 
   const getTooltipContent = () => {
     if (!restartCount) return t('pods.tooltips.no-restarts');
