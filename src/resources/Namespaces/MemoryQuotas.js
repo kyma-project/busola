@@ -1,8 +1,8 @@
 import React from 'react';
-import { FormItem, FormInput, FormLabel } from 'fundamental-react';
 import * as jp from 'jsonpath';
 
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
+import { Input, FormItem } from '@ui5/webcomponents-react';
 
 export function MemoryInput({
   label,
@@ -32,27 +32,25 @@ export function MemoryInput({
   };
 
   return (
-    <FormItem>
-      <FormLabel required={required}>{label}</FormLabel>
-      <div className="memory-input">
-        <FormInput
-          compact
-          type="number"
-          min="0"
-          required={required}
-          value={numericValue}
-          step="any"
-          onChange={e => setValue(e.target.value + selectedUnit)}
-          {...otherProps}
-        />
-        <Dropdown
-          options={options}
-          required={required}
-          selectedKey={selectedUnit}
-          onSelect={(_, { key }) => setValue(numericValue.toString() + key)}
-          {...otherProps}
-        />
-      </div>
+    <FormItem label={label}>
+      {/* <FormLabel required={required}>{label}</FormLabel> */}
+      {/* <div className="memory-input"> */}
+      <Input
+        type="Number"
+        min="0"
+        required={required}
+        value={numericValue}
+        onInput={e => setValue(e.target.value + selectedUnit)}
+        {...otherProps}
+      />
+      <Dropdown
+        options={options}
+        required={required}
+        selectedKey={selectedUnit}
+        onSelect={(_, { key }) => setValue(numericValue.toString() + key)}
+        {...otherProps}
+      />
+      {/* </div> */}
     </FormItem>
   );
 }

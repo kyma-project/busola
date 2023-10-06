@@ -13,6 +13,7 @@ import { KeyValueField, K8sNameField } from '../fields';
 import * as jp from 'jsonpath';
 
 import './ResourceForm.scss';
+import { Form } from '@ui5/webcomponents-react';
 
 export function ResourceForm({
   pluralKind, // used for the request path
@@ -139,7 +140,7 @@ export function ResourceForm({
     : editor;
 
   return (
-    <section className={classnames('resource-form', className)}>
+    <Form className={classnames('resource-form', className)}>
       {presetsSelector}
       {onlyYaml ? null : (
         <ModeSelector
@@ -225,6 +226,6 @@ export function ResourceForm({
           </div>
         )}
       </form>
-    </section>
+    </Form>
   );
 }
