@@ -9,10 +9,10 @@ import { ResultsList } from './ResultsList/ResultsList';
 import { addHistoryEntry, getHistoryEntries } from './search-history';
 import { useSearchResults } from './useSearchResults';
 import './CommandPaletteUI.scss';
-import { FormInput } from 'fundamental-react';
 import { K8sResource } from 'types';
 import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { Input } from '@ui5/webcomponents-react';
 
 function Background({
   hide,
@@ -153,24 +153,21 @@ export function CommandPaletteUI({
             namespaceContext={namespaceContext}
             setNamespaceContext={setNamespaceContext}
           />
-          <FormInput
+          <Input
             aria-label="command-palette-search"
             value={!isHistoryMode ? query : ''}
             placeholder={!isHistoryMode ? '' : query}
-            onChange={(e: ChangeEvent) =>
-              setQuery((e.target as HTMLInputElement).value)
-            }
-            onKeyDown={(e: KeyboardEvent) => {
-              if (isHistoryMode) {
-                keyDownInHistoryMode(e);
-              } else {
-                keyDownInDropdownMode(e);
-              }
-            }}
-            autoFocus
+            onInput={(e: any) => setQuery((e.target as HTMLInputElement).value)}
+            // WE NEED SOME CUSTOM FUNCTIONALLITY FOR THAT
+            // onKeyDown={(e: KeyboardEvent) => {
+            //   if (isHistoryMode) {
+            //     keyDownInHistoryMode(e);
+            //   } else {
+            //     keyDownInDropdownMode(e);
+            //   }
+            // }}
             className="search-with-magnifying-glass"
-            type="search"
-            ref={inputRef}
+            // ref={inputRef}
           />
           {!showHelp && !query && (
             <ShortHelpText

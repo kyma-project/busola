@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Icon } from '@ui5/webcomponents-react';
-import { FormInput } from 'fundamental-react';
+import { Button, Icon, Input } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { addCluster } from 'components/Clusters/shared';
 import { useRecoilValue } from 'recoil';
@@ -30,7 +29,7 @@ function NoPermissions() {
 
     addCluster(updatedCluster, clustersInfo, true);
   };
-
+  console.log(namespaceName);
   return (
     <section className="no-permissions">
       <Icon aria-label="no-permissions" name="locked" />
@@ -41,13 +40,11 @@ function NoPermissions() {
         {t('no-permissions.enter-namespace-name')}
       </p>
       <form className="fd-display-flex" onSubmit={updateKubeconfig}>
-        <FormInput
+        <Input
           className="fd-margin-0"
           placeholder={t('no-permissions.enter-namespace-name-placeholder')}
           value={namespaceName}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setNamespaceName(e.target.value)
-          }
+          onInput={(e: any) => setNamespaceName(e.target.typedInValue)}
         />
         <Button
           design="Emphasized"

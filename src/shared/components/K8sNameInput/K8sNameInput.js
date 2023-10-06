@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
-import { FormLabel, FormInput } from 'fundamental-react';
+import { FormLabel } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import classnames from 'classnames';
 import { useValidation } from 'shared/hooks/useValidation';
+import { Input } from '@ui5/webcomponents-react';
 
 export const k8sNamePattern = '^[a-z0-9]([-a-z0-9]*[a-z0-9])?$';
 
@@ -36,13 +37,13 @@ export const K8sNameInput = ({
   });
 
   const input = (
-    <FormInput
-      ref={_ref}
-      type="text"
+    <Input
+      // ref={_ref}
+      type="Text"
       id={id}
       value={value || defaultValue || ''}
       aria-required={required ? 'true' : 'false'}
-      ariaLabel={t('components.k8s-name-input.aria-label', {
+      aria-label={t('components.k8s-name-input.aria-label', {
         resourceType: kind,
       })}
       required={required}
