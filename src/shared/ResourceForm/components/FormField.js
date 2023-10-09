@@ -1,4 +1,3 @@
-import React from 'react';
 import classnames from 'classnames';
 import { Icon } from '@ui5/webcomponents-react';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
@@ -19,21 +18,22 @@ export function FormField({
   disabled,
   tooltipContent,
   isAdvanced,
+  isListItem,
   defaultValue,
   messageStrip,
-  compact = false,
   inputInfo,
   ...props
 }) {
   const { validate, ...inputProps } = props;
   const inputInfoLink = useCreateResourceDescription(inputInfo);
-  if (compact) return input({ required, disabled, ...inputProps });
 
   return (
     <div className={classnames('fd-row form-field', className)}>
-      <div className="fd-col fd-col-md--3 form-field__label">
-        <Label required={required && !disabled}>{label}</Label>
-      </div>
+      {!isListItem && (
+        <div className="fd-col fd-col-md--3 form-field__label">
+          <Label required={required && !disabled}>{label}</Label>
+        </div>
+      )}
       <div className="fd-col fd-col-md--8">
         <div className="fd-row">
           {messageStrip

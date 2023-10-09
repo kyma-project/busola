@@ -17,7 +17,6 @@ export function StringRenderer({
   schema,
   storeKeys,
   required,
-  compact,
   placeholder,
   originalResource,
   ...props
@@ -141,8 +140,8 @@ export function StringRenderer({
             });
         }}
         disabled={readOnly}
+        isListItem={props.isListItem}
         label={tFromStoreKeys(storeKeys, schema)}
-        compact={compact}
         data-testid={storeKeys.join('.') || tFromStoreKeys(storeKeys, schema)}
         placeholder={displayPlaceholder}
         {...getTypeSpecificProps()}
