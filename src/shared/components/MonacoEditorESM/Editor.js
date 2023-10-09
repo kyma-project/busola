@@ -101,23 +101,21 @@ export function Editor({
           </MessageStrip>
         )}
         {warnings.length ? (
-          <div>
-            <MessageStrip
-              design="Warning"
-              hideCloseButton
-              className="fd-margin--sm break-word"
-            >
-              {warnings.map(m => (
-                <span
-                  className="line"
-                  key={`${m.startLineNumber}${m.startColumn}`}
-                >
-                  {t('common.tooltips.line')} {m.startLineNumber},{' '}
-                  {t('common.tooltips.column')} {m.startColumn}: {m.message}
-                </span>
-              ))}
-            </MessageStrip>
-          </div>
+          <MessageStrip
+            design="Warning"
+            hideCloseButton
+            className="fd-margin--sm break-word"
+          >
+            {warnings.map(m => (
+              <span
+                className="line"
+                key={`${m.startLineNumber}${m.startColumn}`}
+              >
+                {t('common.tooltips.line')} {m.startLineNumber},{' '}
+                {t('common.tooltips.column')} {m.startColumn}: {m.message}
+              </span>
+            ))}
+          </MessageStrip>
         ) : null}
       </div>
     </div>

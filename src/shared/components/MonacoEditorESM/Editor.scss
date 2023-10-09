@@ -8,7 +8,6 @@
 
 .resource-form__overlay {
   position: absolute;
-  //background-color: rgba(4,4,4,0.8);
   top: 0;
   bottom: 0;
   right: 0;
@@ -39,6 +38,10 @@
   .line {
     width: 100%;
     display: block;
+  }
+
+  ui5-message-strip {
+    max-width: 90%;
   }
 }
 
