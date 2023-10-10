@@ -13,7 +13,7 @@ import { KeyValueField, K8sNameField } from '../fields';
 import * as jp from 'jsonpath';
 
 // import './ResourceForm.scss';
-import { Form } from '@ui5/webcomponents-react';
+import { Form, FormItem } from '@ui5/webcomponents-react';
 
 export function ResourceForm({
   pluralKind, // used for the request path
@@ -140,7 +140,7 @@ export function ResourceForm({
     : editor;
 
   return (
-    <Form className={classnames('resource-form', className)}>
+    <section className={classnames('resource-form', className)}>
       {presetsSelector}
       {onlyYaml ? null : (
         <ModeSelector
@@ -153,79 +153,98 @@ export function ResourceForm({
         />
       )}
       <form ref={formElementRef} onSubmit={onSubmit || createResource}>
-        {mode === ModeSelector.MODE_SIMPLE && (
-          <div onChange={onChange} className="simple-form">
-            <ResourceFormWrapper
-              resource={resource}
-              setResource={setResource}
-              isAdvanced={false}
-            >
-              {!disableDefaultFields && (
-                <K8sNameField
-                  propertyPath="$.metadata.name"
-                  kind={singularName}
-                  readOnly={readOnly || !!initialResource}
-                  setValue={handleNameChange}
-                  {...nameProps}
+        <Form
+          className={classnames('resource-form', className)}
+          columnsL={1}
+          columnsM={1}
+          columnsS={1}
+          columnsXL={1}
+          labelSpanL={0}
+          labelSpanM={0}
+          labelSpanS={0}
+          labelSpanXL={0}
+          as="div"
+        >
+          {mode === ModeSelector.MODE_SIMPLE && (
+            <FormItem>
+              <div onChange={onChange} className="simple-form">
+                <ResourceFormWrapper
+                  resource={resource}
+                  setResource={setResource}
+                  isAdvanced={false}
+                >
+                  {!disableDefaultFields && (
+                    <K8sNameField
+                      propertyPath="$.metadata.name"
+                      kind={singularName}
+                      readOnly={readOnly || !!initialResource}
+                      setValue={handleNameChange}
+                      {...nameProps}
+                    />
+                  )}
+                  {children}
+                </ResourceFormWrapper>
+              </div>
+            </FormItem>
+          )}
+          {mode === ModeSelector.MODE_YAML && (
+            <FormItem>
+              <div style={{ width: '100%' }}>
+                <EditorActions
+                  val={convertedResource}
+                  editor={actionsEditor}
+                  title={`${resource?.metadata?.name || singularName}.yaml`}
+                  saveHidden
                 />
-              )}
-              {children}
-            </ResourceFormWrapper>
-          </div>
-        )}
-        {mode === ModeSelector.MODE_YAML && (
-          <>
-            <EditorActions
-              val={convertedResource}
-              editor={actionsEditor}
-              title={`${resource?.metadata?.name || singularName}.yaml`}
-              saveHidden
-            />
-            {editor}
-          </>
-        )}
-        {mode === ModeSelector.MODE_ADVANCED && (
-          <div
-            className="advanced-form"
-            onChange={onChange}
-            hidden={mode !== ModeSelector.MODE_ADVANCED}
-          >
-            <ResourceFormWrapper
-              resource={resource}
-              setResource={setResource}
-              isAdvanced={true}
-              validationRef={validationRef}
-            >
-              {!disableDefaultFields && (
-                <>
-                  <K8sNameField
-                    propertyPath="$.metadata.name"
-                    kind={singularName}
-                    readOnly={readOnly || !!initialResource}
-                    setValue={handleNameChange}
-                    {...nameProps}
-                  />
-                  <KeyValueField
-                    advanced
-                    propertyPath="$.metadata.labels"
-                    title={t('common.headers.labels')}
-                    className="fd-margin-top--sm"
-                    inputInfo={t('common.tooltips.key-value')}
-                    {...labelsProps}
-                  />
-                  <KeyValueField
-                    advanced
-                    propertyPath="$.metadata.annotations"
-                    title={t('common.headers.annotations')}
-                    inputInfo={t('common.tooltips.key-value')}
-                  />
-                </>
-              )}
-              {children}
-            </ResourceFormWrapper>
-          </div>
-        )}
+                {editor}
+              </div>
+            </FormItem>
+          )}
+          {mode === ModeSelector.MODE_ADVANCED && (
+            <FormItem>
+              <div
+                className="advanced-form"
+                onChange={onChange}
+                hidden={mode !== ModeSelector.MODE_ADVANCED}
+              >
+                <ResourceFormWrapper
+                  resource={resource}
+                  setResource={setResource}
+                  isAdvanced={true}
+                  validationRef={validationRef}
+                >
+                  {!disableDefaultFields && (
+                    <>
+                      <K8sNameField
+                        propertyPath="$.metadata.name"
+                        kind={singularName}
+                        readOnly={readOnly || !!initialResource}
+                        setValue={handleNameChange}
+                        {...nameProps}
+                      />
+                      <KeyValueField
+                        advanced
+                        propertyPath="$.metadata.labels"
+                        title={t('common.headers.labels')}
+                        className="fd-margin-top--sm"
+                        inputInfo={t('common.tooltips.key-value')}
+                        {...labelsProps}
+                      />
+                      <KeyValueField
+                        advanced
+                        propertyPath="$.metadata.annotations"
+                        title={t('common.headers.annotations')}
+                        inputInfo={t('common.tooltips.key-value')}
+                      />
+                    </>
+                  )}
+                  {children}
+                </ResourceFormWrapper>
+              </div>
+            </FormItem>
+          )}
+        </Form>
       </form>
-    </Form>
+    </section>
   );
 }
