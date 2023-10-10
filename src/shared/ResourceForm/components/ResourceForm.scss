@@ -2,6 +2,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  margin: 2%;
 
   form {
     overflow: auto;
@@ -45,4 +46,7 @@
   .fd-col {
     padding: 4px 0;
   }
+}
+.testnewmargin {
+  margin: 10%;
 }
