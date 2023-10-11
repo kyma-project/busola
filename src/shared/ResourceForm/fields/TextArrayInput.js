@@ -16,6 +16,8 @@ export function TextArrayInput({
   ...props
 }) {
   const { validate, ...inputProps } = _inputProps || {};
+  const readOnlyOptions = readOnly ? { readOnly: true } : {};
+
   return (
     <MultiInput
       defaultOpen={defaultOpen}
@@ -43,6 +45,7 @@ export function TextArrayInput({
               setValue(e.target.value);
               updateValue();
             }}
+            className="input-full"
             // onKeyDown={e => focus(e)}
             // onBlur={() => {
             //   const fieldValue = internalValue?.filter(val => !!val);
@@ -52,7 +55,7 @@ export function TextArrayInput({
             //       : fieldValue,
             //   );
             // }}
-            readOnly={readOnly}
+            {...readOnlyOptions}
             {...inputProps}
             aria-label={ariaLabel}
           />

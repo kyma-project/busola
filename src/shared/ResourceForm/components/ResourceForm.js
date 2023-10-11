@@ -12,7 +12,7 @@ import { useCreateResource } from '../useCreateResource';
 import { KeyValueField, K8sNameField } from '../fields';
 import * as jp from 'jsonpath';
 
-// import './ResourceForm.scss';
+import './ResourceForm.scss';
 import { Form, FormItem } from '@ui5/webcomponents-react';
 
 export function ResourceForm({
@@ -164,6 +164,7 @@ export function ResourceForm({
           labelSpanS={0}
           labelSpanXL={0}
           as="div"
+          className="ui5-content-density-compact"
         >
           {mode === ModeSelector.MODE_SIMPLE && (
             <FormItem>

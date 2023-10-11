@@ -27,8 +27,13 @@ export function FormField({
 }) {
   const { validate, ...inputProps } = props;
   const inputInfoLink = useCreateResourceDescription(inputInfo);
-  if (compact) return input({ required, disabled, ...inputProps });
-
+  if (compact)
+    return input({
+      required,
+      disabled,
+      className: 'input-full',
+      ...inputProps,
+    });
   return (
     <div className={classnames('fd-row form-field', className)}>
       <div className="fd-col fd-col-md--3 form-field__label">
@@ -38,7 +43,12 @@ export function FormField({
         <div className="fd-row">
           {messageStrip
             ? messageStrip
-            : input({ required, disabled, ...inputProps })}
+            : input({
+                required,
+                disabled,
+                className: 'input-full',
+                ...inputProps,
+              })}
           {inputInfo && (
             <p style={{ color: 'var(--sapNeutralTextColor)' }}>
               {inputInfoLink}

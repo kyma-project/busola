@@ -326,6 +326,10 @@ ui5-checkbox {
   height: 1.5rem;
 }
 
+.input-full {
+  width: 100%;
+}
+
 @include graph-node-border(pod, 4);
 @include graph-node-border(virtualservice, 1);
 @include graph-node-border(rolebinding, 2);

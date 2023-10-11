@@ -2,6 +2,7 @@ import React from 'react';
 import { Input } from '@ui5/webcomponents-react';
 
 export function Number({ value = '', setValue, ...props }) {
+  if (!props.readOnly) delete props.readOnly;
   return (
     <div className="fd-col fd-col-md--11">
       <Input

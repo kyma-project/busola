@@ -27,6 +27,7 @@ export function JsonataInput({
     inputRef,
     onChange: [onChange, e => setValue && setValue(e.target.value)],
   });
+  if (!props.readOnly) delete props.readOnly;
 
   return (
     <div className="fd-col fd-col-md--11">

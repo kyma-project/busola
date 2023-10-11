@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { FormItem, FormLabel, FormFieldset } from 'fundamental-react';
+import { FormFieldset } from 'fundamental-react';
 import * as jp from 'jsonpath';
 
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
@@ -9,7 +9,7 @@ import { ResourceForm } from '..';
 import * as Inputs from '../inputs';
 
 import './RuntimeResources.scss';
-import { Input } from '@ui5/webcomponents-react';
+import { FormItem, Input, FlexBox, Label } from '@ui5/webcomponents-react';
 
 function MemoryInput({ label, propertyPath, container = {}, setContainer }) {
   const units = ['K', 'Ki', 'M', 'Mi', 'G', 'Gi', 'Ti', 'T'];
@@ -32,8 +32,13 @@ function MemoryInput({ label, propertyPath, container = {}, setContainer }) {
   };
 
   return (
-    <FormItem>
-      <FormLabel required>{label}</FormLabel>
+    <FlexBox
+      direction="Column"
+      style={{
+        maxWidth: '100%',
+      }}
+    >
+      <Label required>{label}</Label>
       <div className="memory-input fd-col fd-col-md--11">
         <Input
           type="number"
@@ -47,7 +52,7 @@ function MemoryInput({ label, propertyPath, container = {}, setContainer }) {
           onSelect={(_, { key }) => setValue(numericValue.toString() + key)}
         />
       </div>
-    </FormItem>
+    </FlexBox>
   );
 }
 
@@ -66,14 +71,20 @@ function CpuInput({ label, propertyPath, container = {}, setContainer }) {
   };
 
   return (
-    <FormItem>
-      <FormLabel required>{label} (m)</FormLabel>
+    <FlexBox
+      direction="Column"
+      style={{
+        maxWidth: '100%',
+      }}
+    >
+      <Label required>{label} (m)</Label>
       <Inputs.Number
         min="0"
         value={value}
         setValue={value => setValue(value + 'm')}
+        className="input-full"
       />
-    </FormItem>
+    </FlexBox>
   );
 }
 

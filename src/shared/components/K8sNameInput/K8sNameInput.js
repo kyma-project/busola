@@ -29,11 +29,11 @@ export const K8sNameInput = ({
     inputRef,
     onChange,
   });
-
+  if (!props.readOnly) delete props.readOnly;
   const { className, compact, ...inputProps } = props || {};
 
-  const inputClassName = classnames('fd-input', className, {
-    'fd-input--compact': compact,
+  const inputClassName = classnames('input-full', className, {
+    'ui5-content-density-compact': compact,
   });
 
   const input = (

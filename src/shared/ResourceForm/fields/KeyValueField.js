@@ -87,6 +87,7 @@ export function KeyValueField({
           <div className="fd-col fd-col-md--6">
             {input.key({
               fullWidth: true,
+              className: 'input-full',
               disabled: lockedKeys.includes(value?.key),
               key: 'key',
               value: value?.key || '',
@@ -104,10 +105,10 @@ export function KeyValueField({
           </div>
         ),
         ({ focus, value, setValue, updateValue, ...props }) => (
-          <div className="fd-col fd-col-md--6">
+          <div className="fd-col fd-col-md--6 input-full">
             {input.value({
               fullWidth: true,
-              className: 'value-input',
+              className: 'value-input input-full',
               key: 'value',
               onKeyDown: e => focus(e),
               value: dataValue(value),
