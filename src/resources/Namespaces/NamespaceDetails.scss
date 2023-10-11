@@ -7,3 +7,17 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
+
+@media (max-width: 500px) {
+  .namespace-workloads__body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .resources-usage__body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}
