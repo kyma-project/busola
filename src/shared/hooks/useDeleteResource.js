@@ -1,6 +1,7 @@
 import {
   Button,
   CheckBox,
+  FlexBox,
   MessageBox,
   MessageStrip,
   Text,
@@ -117,10 +118,9 @@ export function useDeleteResource({
       ]}
       onClose={closeDeleteDialog}
     >
-      <div
+      <FlexBox
+        direction="Column"
         style={{
-          display: 'flex',
-          flexDirection: 'column',
           gap: '10px',
           padding: '15px 25px',
         }}
@@ -141,7 +141,7 @@ export function useDeleteResource({
             {t('common.delete-dialog.information')}
           </MessageStrip>
         )}
-      </div>
+      </FlexBox>
     </MessageBox>
   );
 
