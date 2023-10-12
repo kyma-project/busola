@@ -50,13 +50,18 @@ export function ResourceFormWrapper({
   useEffect(() => {
     React.Children.toArray(children).forEach((child, index) => {
       const inputRef = inputRefs[index];
+
       if (child.props?.validate) {
         const valid = isValid(child);
+
         if (inputRef?.current) {
+          const input = inputRef.current?.shadowRoot?.querySelector(
+            '.ui5-input-inner',
+          );
           if (!valid) {
-            inputRef.current.setCustomValidity(errorMessage(child));
+            input.setCustomValidity(errorMessage(child));
           } else {
-            inputRef.current.setCustomValidity('');
+            input.setCustomValidity('');
           }
         } else if (validationRef) {
           validationRef.current = validationRef.current && valid;
