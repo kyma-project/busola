@@ -10,6 +10,11 @@
     order: 2;
   }
 
+  .advanced-form,
+  .simple-form {
+    width: 100%;
+  }
+
   &:before {
     content: '';
     width: 100%;
@@ -31,16 +36,12 @@
     width: 100%;
   }
 
-  .fd-row {
-    margin: 0 !important; // override fd's margin: 0 -.25rem;
-  }
-
-  .fd-row + .resource-form__collapsible-section {
-    margin-top: 1rem;
-  }
-
   ui5-switch {
     margin-top: -0.5rem;
+  }
+
+  .form-field {
+    gap: 10px;
   }
 
   .fd-col {
