@@ -42,7 +42,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   };
 
   let propsForNav = {
-    icon: node.icon,
+    icon: node.externalUrl ? 'action' : node.icon,
     text: t(node.label, { defaultValue: node.label }),
     selected: isNodeSelected(node),
     key: node.pathSegment,
