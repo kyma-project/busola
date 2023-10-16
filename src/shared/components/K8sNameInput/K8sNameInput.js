@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
-import { FormLabel } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import classnames from 'classnames';
 import { useValidation } from 'shared/hooks/useValidation';
-import { Input } from '@ui5/webcomponents-react';
+import { Input, Label } from '@ui5/webcomponents-react';
 
 export const k8sNamePattern = '^[a-z0-9]([-a-z0-9]*[a-z0-9])?$';
 
@@ -57,9 +56,9 @@ export const K8sNameInput = ({
   return (
     <>
       {showLabel && (
-        <FormLabel required={required} htmlFor={id}>
+        <Label required={required} for={id}>
           {t(label)}
-        </FormLabel>
+        </Label>
       )}
       {input}
     </>

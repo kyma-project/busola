@@ -1,7 +1,11 @@
 import { mapValues } from 'lodash';
 import { PluginStack, useUIStore } from '@ui-schema/ui-schema';
-import { Button, Icon, FlexBox } from '@ui5/webcomponents-react';
-import { FormLabel } from 'fundamental-react';
+import {
+  Button,
+  Icon,
+  FlexBox,
+  Label as UI5Label,
+} from '@ui5/webcomponents-react';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import {
@@ -55,7 +59,7 @@ export function SimpleList({
   const itemsSchema = schema.get('items');
   const titleRenderer = ({ schema, storeKeys }) => {
     const label = tFromStoreKeys(storeKeys, schema);
-    return <FormLabel>{label}</FormLabel>;
+    return <UI5Label>{label}</UI5Label>;
   };
 
   const isObject = itemsSchema?.get('type') === 'object';

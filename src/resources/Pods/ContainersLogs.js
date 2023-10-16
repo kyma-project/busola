@@ -8,7 +8,6 @@ import {
   Option,
   Text,
 } from '@ui5/webcomponents-react';
-import { FormLabel } from 'fundamental-react';
 import { useGetStream } from 'shared/hooks/BackendAPI/useGet';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -185,9 +184,9 @@ const ContainersLogs = ({ params }) => {
           title={t('pods.labels.logs')}
           headerActions={
             <>
-              <FormLabel htmlFor="context-chooser">
+              <Label for="context-chooser">
                 {t('pods.labels.filter-timeframe')}
-              </FormLabel>
+              </Label>
               <Select
                 onChange={event => {
                   const selectedTimeFrame = event.detail.selectedOption.value;
