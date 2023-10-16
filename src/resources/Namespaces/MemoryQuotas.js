@@ -1,8 +1,7 @@
-import React from 'react';
 import * as jp from 'jsonpath';
 
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
-import { Input, Form, FlexBox, Label } from '@ui5/webcomponents-react';
+import { Input, FlexBox, Label } from '@ui5/webcomponents-react';
 
 export function MemoryInput({
   label,
