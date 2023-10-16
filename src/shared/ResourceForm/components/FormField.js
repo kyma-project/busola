@@ -1,6 +1,7 @@
 import classnames from 'classnames';
-import { FlexBox, Icon, Label } from '@ui5/webcomponents-react';
+import { FlexBox, Icon } from '@ui5/webcomponents-react';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
+import { Label } from '../../../shared/ResourceForm/components/Label';
 
 import { useCreateResourceDescription } from 'components/Extensibility/helpers';
 

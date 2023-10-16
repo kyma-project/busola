@@ -4,7 +4,8 @@ import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useTranslation } from 'react-i18next';
 import classnames from 'classnames';
 import { useValidation } from 'shared/hooks/useValidation';
-import { Input, Label } from '@ui5/webcomponents-react';
+import { Input } from '@ui5/webcomponents-react';
+import { Label } from '../../../shared/ResourceForm/components/Label';
 
 export const k8sNamePattern = '^[a-z0-9]([-a-z0-9]*[a-z0-9])?$';
 
@@ -56,7 +57,7 @@ export const K8sNameInput = ({
   return (
     <>
       {showLabel && (
-        <Label required={required} for={id}>
+        <Label required={required} forElement={id}>
           {t(label)}
         </Label>
       )}

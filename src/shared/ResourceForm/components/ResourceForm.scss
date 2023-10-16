@@ -45,6 +45,10 @@
     gap: 10px;
   }
 
+  .form-field + .resource-form__collapsible-section {
+    padding-top: 16px;
+  }
+
   .fd-col {
     padding: 4px 0;
   }

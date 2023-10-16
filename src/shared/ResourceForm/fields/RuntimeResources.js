@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { FormFieldset } from 'fundamental-react';
 import * as jp from 'jsonpath';
 
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
@@ -9,7 +8,8 @@ import { ResourceForm } from '..';
 import * as Inputs from '../inputs';
 
 import './RuntimeResources.scss';
-import { FormItem, Input, FlexBox, Label } from '@ui5/webcomponents-react';
+import { Input, FlexBox } from '@ui5/webcomponents-react';
+import { Label } from '../../../shared/ResourceForm/components/Label';
 
 function MemoryInput({ label, propertyPath, container = {}, setContainer }) {
   const units = ['K', 'Ki', 'M', 'Mi', 'G', 'Gi', 'Ti', 'T'];
@@ -39,19 +39,23 @@ function MemoryInput({ label, propertyPath, container = {}, setContainer }) {
       }}
     >
       <Label required>{label}</Label>
-      <div className="memory-input fd-col fd-col-md--11">
+      <FlexBox
+        style={{ gap: '10px' }}
+        className="memory-input fd-col fd-col-md--11"
+      >
         <Input
           type="number"
           min="0"
           value={numericValue}
           onInput={e => setValue(e.target.value + selectedUnit)}
+          className="input-full"
         />
         <Dropdown
           options={options}
           selectedKey={selectedUnit}
           onSelect={(_, { key }) => setValue(numericValue.toString() + key)}
         />
-      </div>
+      </FlexBox>
     </FlexBox>
   );
 }
@@ -128,7 +132,7 @@ export function RuntimeResources({
       }
       {...props}
     >
-      <FormFieldset className="runtime-profile-form">
+      <div className="runtime-profile-form">
         <MemoryInput
           label={t('deployments.create-modal.advanced.memory-requests')}
           propertyPath="$.requests.memory"
@@ -141,8 +145,8 @@ export function RuntimeResources({
           container={value}
           setContainer={setValue}
         />
-      </FormFieldset>
-      <FormFieldset className="runtime-profile-form">
+      </div>
+      <div className="runtime-profile-form">
         <CpuInput
           label={t('deployments.create-modal.advanced.cpu-requests')}
           propertyPath="$.requests.cpu"
@@ -155,7 +159,7 @@ export function RuntimeResources({
           container={value}
           setContainer={setValue}
         />
-      </FormFieldset>
+      </div>
     </ResourceForm.CollapsibleSection>
   );
 }

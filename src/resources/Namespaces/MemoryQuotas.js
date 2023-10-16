@@ -1,7 +1,8 @@
 import * as jp from 'jsonpath';
 
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
-import { Input, FlexBox, Label } from '@ui5/webcomponents-react';
+import { Input, FlexBox } from '@ui5/webcomponents-react';
+import { Label } from '../../shared/ResourceForm/components/Label';
 
 export function MemoryInput({
   label,
@@ -39,23 +40,24 @@ export function MemoryInput({
     >
       <div className="memory-input">
         <Label>{label}</Label>
-        <Input
-          type="Number"
-          min="0"
-          required={required}
-          value={numericValue}
-          onInput={e => setValue(e.target.value + selectedUnit)}
-          className="input-full"
-          {...otherProps}
-        />
-        <Dropdown
-          options={options}
-          required={required}
-          selectedKey={selectedUnit}
-          onSelect={(_, { key }) => setValue(numericValue.toString() + key)}
-          className="input-full"
-          {...otherProps}
-        />
+        <FlexBox style={{ gap: '10px' }}>
+          <Input
+            type="Number"
+            min="0"
+            required={required}
+            value={numericValue}
+            onInput={e => setValue(e.target.value + selectedUnit)}
+            className="input-full"
+            {...otherProps}
+          />
+          <Dropdown
+            options={options}
+            required={required}
+            selectedKey={selectedUnit}
+            onSelect={(_, { key }) => setValue(numericValue.toString() + key)}
+            {...otherProps}
+          />
+        </FlexBox>
       </div>
     </FlexBox>
   );

@@ -1,5 +1,4 @@
 import { Dialog, Button, Bar } from '@ui5/webcomponents-react';
-import { FormFieldset } from 'fundamental-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
@@ -86,7 +85,7 @@ const ConfigurationForm = ({
       initialResource={{}}
       disableDefaultFields
     >
-      <FormFieldset>
+      <div>
         <FormField
           simple
           advanced
@@ -97,7 +96,7 @@ const ConfigurationForm = ({
           defaultValue={description}
           setValue={val => setDescription(val)}
         ></FormField>
-      </FormFieldset>
+      </div>
 
       <CollapsibleSection
         title={t('cluster-validation.scan.configuration.namespaces')}
@@ -109,7 +108,7 @@ const ConfigurationForm = ({
           />
         }
       >
-        <FormFieldset>
+        <div>
           <FormField
             simple
             advanced
@@ -120,7 +119,7 @@ const ConfigurationForm = ({
             setValue={val => setSelectedNamespaces(val)}
             value={selectedNamespaces}
           ></FormField>
-        </FormFieldset>
+        </div>
       </CollapsibleSection>
 
       <CollapsibleSection
@@ -132,7 +131,7 @@ const ConfigurationForm = ({
           />
         }
       >
-        <FormFieldset>
+        <div>
           <FormField
             simple
             advanced
@@ -143,13 +142,13 @@ const ConfigurationForm = ({
             setValue={val => setSelectedPolicies(val)}
             value={selectedPolicies}
           ></FormField>
-        </FormFieldset>
+        </div>
       </CollapsibleSection>
 
       <CollapsibleSection
         title={t('cluster-validation.scan.configuration.parameters')}
       >
-        <FormFieldset>
+        <div>
           <FormField
             simple
             advanced
@@ -171,7 +170,7 @@ const ConfigurationForm = ({
                 : {}
             }
           />
-        </FormFieldset>
+        </div>
       </CollapsibleSection>
     </ResourceForm>
   );
