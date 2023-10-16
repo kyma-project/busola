@@ -22,11 +22,14 @@ context('Test Cluster Role Bindings', () => {
       .click()
       .type(CRB_NAME);
 
-    cy.get('[placeholder="Start typing to select ClusterRole from the list"]')
+    cy.get(
+      'ui5-combobox[placeholder="Start typing to select ClusterRole from the list"]',
+    )
+      .find('input')
       .click()
       .type('admin');
 
-    cy.contains('li', 'cluster-admin').click();
+    cy.contains('ui5-li:visible', 'cluster-admin').click();
 
     cy.get('[ariaLabel="User name"]')
       .click()

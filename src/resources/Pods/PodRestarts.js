@@ -1,4 +1,3 @@
-import React from 'react';
 import { TooltipBadge } from 'shared/components/TooltipBadge/TooltipBadge';
 import { useTranslation } from 'react-i18next';
 
@@ -6,7 +5,7 @@ export default function PodRestarts({ statuses }) {
   const { t } = useTranslation();
 
   const restartCount = statuses?.reduce((acc, c) => acc + c.restartCount, 0);
-  const type = restartCount ? 'error' : 'success';
+  const type = restartCount ? 'Error' : 'Success';
 
   const getTooltipContent = () => {
     if (!restartCount) return t('pods.tooltips.no-restarts');
@@ -21,7 +20,7 @@ export default function PodRestarts({ statuses }) {
 
   return (
     <TooltipBadge type={type} tooltipContent={getTooltipContent()}>
-      {restartCount || 0}
+      {(restartCount || 0).toString()}
     </TooltipBadge>
   );
 }

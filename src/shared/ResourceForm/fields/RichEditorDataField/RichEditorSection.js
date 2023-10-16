@@ -1,6 +1,5 @@
-import React, { useCallback } from 'react';
-import { Button } from '@ui5/webcomponents-react';
-import { ComboboxInput } from 'fundamental-react';
+import { useCallback } from 'react';
+import { Button, ComboBox, ComboBoxItem } from '@ui5/webcomponents-react';
 import { isNil } from 'lodash';
 import { languages } from 'monaco-editor';
 import { useTranslation } from 'react-i18next';
@@ -31,22 +30,23 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
   const { key, value, language } = item || {};
 
   const languageDropdown = (
-    <ComboboxInput
+    <ComboBox
       id="choose-language-input"
       ariaLabel="choose-language"
       disabled={!item}
-      compact
-      showAllEntries
-      searchFullString
-      selectionType="manual"
-      options={getAvailableLanguages()}
-      selectedKey={typeof language === 'string' ? language : undefined}
-      onSelectionChange={(e, { key: language }) => {
-        e?.stopPropagation(); // don't collapse the section
-        onChange({ language });
+      value={typeof language === 'string' ? language : ''}
+      onChange={event => {
+        const selectedOption = getAvailableLanguages().find(
+          o => o.text === event.target.value,
+        );
+        if (selectedOption) onChange(selectedOption.key);
       }}
       placeholder={t('components.rich-editor-data-field.language-placeholder')}
-    />
+    >
+      {getAvailableLanguages().map(language => (
+        <ComboBoxItem id={language.key} text={language.text} />
+      ))}
+    </ComboBox>
   );
 
   const deleteButton = (

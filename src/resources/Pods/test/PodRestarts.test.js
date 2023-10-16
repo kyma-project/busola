@@ -1,10 +1,15 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import PodRestarts from '../PodRestarts';
+import { ThemeProvider } from '@ui5/webcomponents-react';
 
 describe('PodRestarts', () => {
   it('Shows 0 for no statuses', () => {
-    const { queryByRole } = render(<PodRestarts statuses={[]} />);
+    const { queryByRole } = render(
+      <ThemeProvider>
+        <PodRestarts statuses={[]} />
+      </ThemeProvider>,
+    );
     expect(queryByRole('status')).toHaveTextContent('0');
   });
 
@@ -14,7 +19,11 @@ describe('PodRestarts', () => {
       { name: 'container-2', restartCount: 3 },
     ];
 
-    const { queryByRole } = render(<PodRestarts statuses={statuses} />);
+    const { queryByRole } = render(
+      <ThemeProvider>
+        <PodRestarts statuses={statuses} />
+      </ThemeProvider>,
+    );
     expect(queryByRole('status')).toHaveTextContent('13');
   });
 });

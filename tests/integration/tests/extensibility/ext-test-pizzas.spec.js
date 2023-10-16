@@ -163,12 +163,14 @@ context('Test Pizzas', () => {
 
     cy.get('@form')
       .find('[data-testid="spec.recipeSecret"]:visible')
-      .type(RECIPE);
+      .find('input')
+      .type(RECIPE, { force: true });
 
     cy.get('@form').contains('Owner References');
 
     cy.get('@form')
-      .find('[arialabel="Pizza name"]:visible')
+      .find('input[arialabel="Pizza name"]:visible')
+      .click()
       .clear()
       .type(PIZZA_NAME);
 
