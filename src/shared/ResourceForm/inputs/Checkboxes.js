@@ -25,10 +25,6 @@ export function Checkboxes({
       className="inline-radio-group fd-col fd-col-md--12"
       {...props}
     >
-      <input
-        ref={inputRef}
-        style={{ opacity: 0, position: 'absolute', left: '-1000px' }}
-      />
       {options.map(({ key, text, description }) => (
         <div key={key} className="fd-row">
           <CheckBox
