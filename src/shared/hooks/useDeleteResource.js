@@ -1,6 +1,7 @@
 import {
   Button,
   CheckBox,
+  FlexBox,
   MessageBox,
   MessageStrip,
   Text,
@@ -117,27 +118,30 @@ export function useDeleteResource({
       ]}
       onClose={closeDeleteDialog}
     >
-      <Text style={{ padding: '20px' }}>
-        {t('common.delete-dialog.message', {
-          type: prettifiedResourceName,
-          name: resourceTitle || resource?.metadata?.name,
-        })}
-      </Text>
-      <CheckBox
-        className="fd-margin-top--sm"
-        checked={dontConfirmDelete}
-        onChange={() => setDontConfirmDelete(prevState => !prevState)}
-        text={t('common.delete-dialog.delete-confirm')}
-      />
-      {dontConfirmDelete && (
-        <MessageStrip
-          design="Information"
-          hideCloseButton
-          className="fd-margin-top--sm"
-        >
-          {t('common.delete-dialog.information')}
-        </MessageStrip>
-      )}
+      <FlexBox
+        direction="Column"
+        style={{
+          gap: '10px',
+          padding: '15px 25px',
+        }}
+      >
+        <Text style={{ paddingLeft: '7.5px' }}>
+          {t('common.delete-dialog.message', {
+            type: prettifiedResourceName,
+            name: resourceTitle || resource?.metadata?.name,
+          })}
+        </Text>
+        <CheckBox
+          checked={dontConfirmDelete}
+          onChange={() => setDontConfirmDelete(prevState => !prevState)}
+          text={t('common.delete-dialog.delete-confirm')}
+        />
+        {dontConfirmDelete && (
+          <MessageStrip design="Information" hideCloseButton>
+            {t('common.delete-dialog.information')}
+          </MessageStrip>
+        )}
+      </FlexBox>
     </MessageBox>
   );
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import { mapValues } from 'lodash';
 import { PluginStack, useUIStore } from '@ui-schema/ui-schema';
 import { Button, Icon } from '@ui5/webcomponents-react';
@@ -124,6 +123,7 @@ export function SimpleList({
                           level={level + 1}
                           schemaKeys={schemaKeys?.push('items')}
                           placeholder={tExt(schemaPlaceholder)}
+                          isListItem
                           inputInfo={inputInfo}
                         />
                       </div>
