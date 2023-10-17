@@ -32,7 +32,8 @@ export const ExtensibilityListCore = ({
   const { t: tBusola } = useTranslation();
   const jsonata = useJsonata({});
 
-  const { resource, description, features } = resMetaData?.general ?? {};
+  const { resource, description, features, filter: generalFilter } =
+    resMetaData?.general ?? {};
 
   const { disableCreate, disableEdit, disableDelete } = features?.actions ?? {
     disableCreate: props.disableCreate,
@@ -85,9 +86,17 @@ export const ExtensibilityListCore = ({
       }))
     : [];
 
-  const isFilterAString = typeof resMetaData?.resource?.filter === 'string';
+  const isFilterAString =
+    typeof resMetaData?.resource?.filter === 'string' ||
+    typeof generalFilter === 'string';
+
   const filterFn = value =>
-    applyFormula(value, resMetaData.resource.filter, tBusola);
+    applyFormula(
+      value,
+      resMetaData?.resource?.filter || generalFilter,
+      tBusola,
+    );
+
   listProps.filter = isFilterAString ? filterFn : filterFunction;
 
   const sortOptions = (resMetaData?.list || []).filter(element => element.sort);
