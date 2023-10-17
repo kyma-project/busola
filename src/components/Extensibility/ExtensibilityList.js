@@ -96,6 +96,7 @@ export const ExtensibilityListCore = ({
       resMetaData?.resource?.filter || generalFilter,
       tBusola,
     );
+
   listProps.filter = isFilterAString ? filterFn : filterFunction;
 
   const sortOptions = (resMetaData?.list || []).filter(element => element.sort);
