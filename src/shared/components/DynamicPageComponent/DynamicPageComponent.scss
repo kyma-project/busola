@@ -37,7 +37,6 @@
   .title,
   .content {
     display: block;
-    // font-size: 1rem;
   }
 
   .image {
@@ -53,5 +52,13 @@
   .title {
     color: var(--sapNeutralColor);
     margin-bottom: 4px;
+  }
+}
+
+@media (max-width: 768px) {
+  .column-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
 }

@@ -13,3 +13,20 @@
     border-right: 1px solid var(--sapList_GroupHeaderBorderColor);
   }
 }
+
+@media (max-width: 768px) {
+  .vertical-tabs-wrapper {
+    grid-template-columns: 1fr;
+    grid-gap: 20px;
+    width: 100%;
+    height: auto;
+
+    ul {
+      display: flex;
+    }
+
+    & > :first-child {
+      border-right: none;
+    }
+  }
+}
