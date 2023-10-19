@@ -154,7 +154,10 @@ export function ResourceForm({
       )}
       <form ref={formElementRef} onSubmit={onSubmit || createResource}>
         <Form
-          className={classnames('resource-form', className)}
+          className={classnames(
+            'resource-form ui5-content-density-compact',
+            className,
+          )}
           columnsL={1}
           columnsM={1}
           columnsS={1}
@@ -164,7 +167,6 @@ export function ResourceForm({
           labelSpanS={0}
           labelSpanXL={0}
           as="div"
-          className="ui5-content-density-compact"
         >
           {mode === ModeSelector.MODE_SIMPLE && (
             <FormItem>
