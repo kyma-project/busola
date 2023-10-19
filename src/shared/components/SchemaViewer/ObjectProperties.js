@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
-import { Icon } from '@ui5/webcomponents-react';
+import { Text, Icon } from '@ui5/webcomponents-react';
 
 import { Generic, PROPERTIES } from './handlers';
-import { Text } from '@ui5/webcomponents-react';
 
 function ObjectProperty({
   propKey,
