@@ -1,4 +1,5 @@
-import { ChangeEvent, ReactNode, useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
+import { useEventListener } from 'hooks/useEventListener';
 import {
   CommandPalletteHelp,
   NamespaceContextDisplay,
@@ -76,27 +77,25 @@ export function CommandPaletteUI({
 
   useEffect(() => setNamespaceContext(namespace), [namespace]);
 
-  const keyDownInHistoryMode = (e: KeyboardEvent) => {
+  const keyDownInHistoryMode = (key: string) => {
     const historyEntries = getHistoryEntries();
-    if (e.key === 'Enter' && results[0]) {
+    if (key === 'Enter' && results[0]) {
       // choose current entry
       addHistoryEntry(results[0].query);
       results[0].onActivate();
-    } else if (e.key === 'Tab') {
+    } else if (key === 'Tab') {
       // fill search with active history entry
       setQuery(historyEntries[historyIndex]);
       setActiveResultIndex(0);
       setHistoryMode(false);
-      e.preventDefault();
-    } else if (e.key === 'ArrowUp') {
+    } else if (key === 'ArrowUp') {
       // try going up in history
       const entry = historyEntries[historyIndex + 1];
       if (entry) {
         setHistoryIndex(historyIndex + 1);
         setQuery(entry);
       }
-      e.preventDefault();
-    } else if (e.key === 'ArrowDown') {
+    } else if (key === 'ArrowDown') {
       if (historyIndex === 0) {
         // deactivate history mode
         setQuery(originalQuery);
@@ -116,8 +115,8 @@ export function CommandPaletteUI({
     }
   };
 
-  const keyDownInDropdownMode = (e: KeyboardEvent) => {
-    if (e.key === 'Tab') {
+  const keyDownInDropdownMode = (key: string) => {
+    if (key === 'Tab') {
       if (autocompletePhrase) {
         setQuery(autocompletePhrase);
       } else if (suggestedQuery) {
@@ -129,8 +128,7 @@ export function CommandPaletteUI({
         // fill search with active result
         setQuery(results[activeResultIndex].query || '');
       }
-      e.preventDefault();
-    } else if (e.key === 'ArrowUp') {
+    } else if (key === 'ArrowUp') {
       const historyEntries = getHistoryEntries();
       if (activeResultIndex === 0 && historyEntries.length) {
         // activate history mode
@@ -139,12 +137,20 @@ export function CommandPaletteUI({
         setHistoryMode(true);
         setHistoryIndex(0);
       }
-      e.preventDefault();
     }
   };
 
   const showHelp = query === '?' || query === 'help';
-
+  useEventListener(
+    'keydown',
+    (e: Event) => {
+      const { key } = e as KeyboardEvent;
+      return !isHistoryMode
+        ? keyDownInDropdownMode(key)
+        : keyDownInHistoryMode(key);
+    },
+    [isHistoryMode],
+  );
   return (
     <Background hide={hide}>
       <div className="command-palette-ui__wrapper" role="dialog">
@@ -158,16 +164,8 @@ export function CommandPaletteUI({
             value={!isHistoryMode ? query : ''}
             placeholder={!isHistoryMode ? '' : query}
             onInput={(e: any) => setQuery((e.target as HTMLInputElement).value)}
-            // WE NEED SOME CUSTOM FUNCTIONALLITY FOR THAT
-            // onKeyDown={(e: KeyboardEvent) => {
-            //   if (isHistoryMode) {
-            //     keyDownInHistoryMode(e);
-            //   } else {
-            //     keyDownInDropdownMode(e);
-            //   }
-            // }}
-            className="search-with-magnifying-glass"
-            // ref={inputRef}
+            showClearIcon
+            className="search-with-magnifying-glass input-full"
           />
           {!showHelp && !query && (
             <ShortHelpText
