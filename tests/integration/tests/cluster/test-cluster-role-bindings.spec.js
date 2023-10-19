@@ -18,8 +18,8 @@ context('Test Cluster Role Bindings', () => {
 
     cy.contains('Advanced').click();
 
-    cy.get('[ariaLabel="ClusterRoleBinding name"]')
-      .click()
+    cy.get('[aria-label="ClusterRoleBinding name"]')
+      .find('input')
       .type(CRB_NAME);
 
     cy.get(
