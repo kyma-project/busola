@@ -31,7 +31,7 @@ export function ColumnsInput({ value: columns, setValue: setColumns }) {
           }}
           required
           placeholder={t('extensibility.starter-modal.headers.field-name')}
-          {...readOnlyOptions}
+          readOnly={!value.isSelected ?  true : false}
         />
         <Input readOnly defaultValue={value?.path} />
         <Input readOnly defaultValue={value?.type} />

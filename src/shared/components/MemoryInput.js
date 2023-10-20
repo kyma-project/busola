@@ -20,7 +20,7 @@ export function MemoryInput({ label, propertyPath, value = '', setValue }) {
   return (
     <div className="memory-input">
       <Input
-        type="number"
+        type="Number"
         min="0"
         required
         value={numericValue}
