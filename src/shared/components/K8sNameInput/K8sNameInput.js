@@ -1,6 +1,4 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useTranslation } from 'react-i18next';
 import classnames from 'classnames';
 import { useValidation } from 'shared/hooks/useValidation';
@@ -10,7 +8,6 @@ import { Label } from '../../../shared/ResourceForm/components/Label';
 export const k8sNamePattern = '^[a-z0-9]([-a-z0-9]*[a-z0-9])?$';
 
 export const K8sNameInput = ({
-  _ref,
   id,
   kind,
   showHelp = true,
@@ -38,7 +35,6 @@ export const K8sNameInput = ({
 
   const input = (
     <Input
-      // ref={_ref}
       type="Text"
       id={id}
       value={value || defaultValue || ''}
@@ -67,7 +63,6 @@ export const K8sNameInput = ({
 };
 
 K8sNameInput.propTypes = {
-  _ref: CustomPropTypes.ref,
   id: PropTypes.string,
   kind: PropTypes.string.isRequired,
   showHelp: PropTypes.bool,

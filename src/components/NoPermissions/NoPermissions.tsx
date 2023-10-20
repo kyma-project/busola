@@ -29,7 +29,7 @@ function NoPermissions() {
 
     addCluster(updatedCluster, clustersInfo, true);
   };
-  console.log(namespaceName);
+
   return (
     <section className="no-permissions">
       <Icon aria-label="no-permissions" name="locked" />

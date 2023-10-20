@@ -111,7 +111,6 @@ export function SearchInput({
   };
 
   const handleOnKeyDown = e => {
-    console.log('handleOnKeyDown', e);
     if (e.key === 'Enter') {
       setSearchHidden(true);
     }
@@ -138,8 +137,6 @@ export function SearchInput({
             <Input
               id="search-input"
               aria-label="search-input"
-              onBlur={() => setSearchHidden(true)}
-              onFocus={() => setSearchHidden(false)}
               placeholder={t('common.tooltips.search')}
               value={searchQuery}
               onInput={e => handleQueryChange(e.target.value)}

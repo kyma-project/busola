@@ -82,7 +82,7 @@ export function SimpleList({
         <div className="fd-col-md--8 form-field multi-input extensibility">
           <ul className={listClasses}>
             {isObject && (
-              <li className="">
+              <li>
                 <FlexBox>
                   <div className="fd-col-md--11 list-entry">
                     <PluginStack
