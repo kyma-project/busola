@@ -13,7 +13,6 @@ export function ColumnsInput({ value: columns, setValue: setColumns }) {
   }
 
   return columns.map(value => {
-    const readOnlyOptions = !value.isSelected ? { readOnly: true } : {};
     return (
       <div key={value.path} className="columns-input">
         <CheckBox
@@ -31,7 +30,7 @@ export function ColumnsInput({ value: columns, setValue: setColumns }) {
           }}
           required
           placeholder={t('extensibility.starter-modal.headers.field-name')}
-          readOnly={!value.isSelected ?  true : false}
+          readOnly={!value.isSelected ? true : false}
         />
         <Input readOnly defaultValue={value?.path} />
         <Input readOnly defaultValue={value?.type} />
