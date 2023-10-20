@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { useEventListener } from 'hooks/useEventListener';
 import {
   CommandPalletteHelp,

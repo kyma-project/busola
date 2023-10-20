@@ -23,8 +23,8 @@ export function useValidation({ inputRef, onChange }) {
       } else if (onChange) {
         onChange(e);
       }
-      const selectionStart = ref.current?.selectionStart;
-      const selectionEnd = ref.current?.selectionEnd;
+      // const selectionStart = ref.current?.selectionStart;
+      // const selectionEnd = ref.current?.selectionEnd;
       setTouched(true);
       // TODO: fix validation
       // setTimeout(() => {

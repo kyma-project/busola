@@ -68,7 +68,7 @@ export function SearchInput({
     if (!isSearchHidden) {
       openSearchList();
     }
-  }, [isSearchHidden]);
+  }, [isSearchHidden]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEventListener('keydown', onKeyPress, [
     disabled,
