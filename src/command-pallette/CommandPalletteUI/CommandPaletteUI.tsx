@@ -38,12 +38,14 @@ function Background({
 }
 
 type CommandPaletteProps = {
+  showCommandPalette: boolean;
   hide: () => void;
   resourceCache: Record<string, K8sResource[]>;
   updateResourceCache: (key: string, resources: K8sResource[]) => void;
 };
 
 export function CommandPaletteUI({
+  showCommandPalette,
   hide,
   resourceCache,
   updateResourceCache,
@@ -55,8 +57,6 @@ export function CommandPaletteUI({
   const [namespaceContext, setNamespaceContext] = useState<string | null>(
     namespace,
   );
-
-  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const [activeResultIndex, setActiveResultIndex] = useState(0);
   const [isHistoryMode, setHistoryMode] = useState(false);
@@ -76,6 +76,11 @@ export function CommandPaletteUI({
   });
 
   useEffect(() => setNamespaceContext(namespace), [namespace]);
+  useEffect(() => {
+    document.getElementById('command-palette-search')?.focus();
+  }, []);
+
+  const commandPaletteInput = document.getElementById('command-palette-search');
 
   const keyDownInHistoryMode = (key: string) => {
     const historyEntries = getHistoryEntries();
@@ -160,6 +165,7 @@ export function CommandPaletteUI({
             setNamespaceContext={setNamespaceContext}
           />
           <Input
+            id="command-palette-search"
             aria-label="command-palette-search"
             value={!isHistoryMode ? query : ''}
             placeholder={!isHistoryMode ? '' : query}
@@ -171,7 +177,7 @@ export function CommandPaletteUI({
             <ShortHelpText
               showFullHelp={() => {
                 setQuery('help');
-                inputRef.current?.focus();
+                commandPaletteInput?.focus();
               }}
             />
           )}
@@ -184,7 +190,7 @@ export function CommandPaletteUI({
                   suggestedQuery={suggestedQuery}
                   setQuery={(query: string) => {
                     setQuery(query);
-                    inputRef.current?.focus();
+                    commandPaletteInput?.focus();
                   }}
                 />
               }
