@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import { Button } from '@ui5/webcomponents-react';
+import { useState } from 'react';
+import { Button, FlexBox, RadioButton } from '@ui5/webcomponents-react';
 import { Modal } from '../Modal/Modal';
-import { FormRadioGroup, FormRadioItem } from 'fundamental-react';
 import { Tooltip } from '../Tooltip/Tooltip';
 import { useTranslation } from 'react-i18next';
 
@@ -43,42 +42,42 @@ export const SortModalPanel = ({ sortBy, sort, setSort, disabled = false }) => {
       modalOpeningComponent={sortOpeningComponent}
     >
       <p style={{ padding: '10px' }}>{t('common.sorting.sort-order')}</p>
-      <FormRadioGroup onChange={(_, order) => setOrder(order)}>
-        <FormRadioItem
-          data="ASC"
+      <FlexBox direction="Column">
+        <RadioButton
+          name="sortOrder"
+          value="ASC"
           checked={order === 'ASC'}
-          // prevent error for checked without onChange
-          inputProps={{ onChange: () => {} }}
-        >
-          {t('common.sorting.asc')}
-        </FormRadioItem>
-        <FormRadioItem
-          data="DESC"
+          text={t('common.sorting.asc')}
+          onChange={event => setOrder(event.target.value)}
+        />
+        <RadioButton
+          name="sortOrder"
+          value="DESC"
           checked={order === 'DESC'}
-          inputProps={{ onChange: () => {} }}
-        >
-          {t('common.sorting.desc')}
-        </FormRadioItem>
-      </FormRadioGroup>
-
+          text={t('common.sorting.desc')}
+          onChange={event => setOrder(event.target.value)}
+        />
+      </FlexBox>
       <p style={{ padding: '10px' }}>{t('common.sorting.sort-by')}</p>
-      <FormRadioGroup onChange={(_, name) => setName(name)}>
-        {sortBy &&
-          Object.entries(sortBy).flatMap(([value]) => {
+      {sortBy && (
+        <FlexBox direction="Column">
+          {Object.entries(sortBy).flatMap(([value]) => {
             return (
-              <FormRadioItem
-                data={value}
-                key={value}
+              <RadioButton
+                name="sortBy"
+                value={value}
                 checked={name === value}
-                inputProps={{ onChange: () => {} }}
-              >
-                {i18n.exists(`common.sorting.${value}`)
-                  ? t(`common.sorting.${value}`)
-                  : value}
-              </FormRadioItem>
+                text={
+                  i18n.exists(`common.sorting.${value}`)
+                    ? t(`common.sorting.${value}`)
+                    : value
+                }
+                onChange={event => setName(event.target.value)}
+              />
             );
           })}
-      </FormRadioGroup>
+        </FlexBox>
+      )}
     </Modal>
   );
 };
