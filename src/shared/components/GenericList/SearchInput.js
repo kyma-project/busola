@@ -60,9 +60,17 @@ export function SearchInput({
     handleOnKeyDown(key);
   };
 
-  const searchInput = document.getElementById('search-input');
-  searchInput?.addEventListener('blur', () => setSearchHidden(true));
-  searchInput?.addEventListener('focus', () => setSearchHidden(false));
+  const searchInput = document.querySelector('#search-input');
+  const searchInputShadowElement = searchInput?.shadowRoot.querySelector(
+    '.ui5-input-inner',
+  );
+
+  searchInputShadowElement?.addEventListener('blur', () =>
+    setSearchHidden(true),
+  );
+  searchInputShadowElement?.addEventListener('focus', () =>
+    setSearchHidden(false),
+  );
 
   useEffect(() => {
     if (!isSearchHidden) {
@@ -106,7 +114,7 @@ export function SearchInput({
   const openSearchList = () => {
     setSearchHidden(false);
     setTimeout(() => {
-      searchInput.focus();
+      searchInputShadowElement?.focus();
     });
   };
 

@@ -54,7 +54,9 @@ context('Test Custom Resources', () => {
 
     openSearchWithSlashShortcut();
 
-    cy.get('[type="search"]').type('cypress', { force: true });
+    cy.get('ui5-input[placeholder="Search"]')
+      .find('input')
+      .type('cypress', { force: true });
 
     cy.get('table').should('have.length', 1);
 
