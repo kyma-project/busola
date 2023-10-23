@@ -1,11 +1,11 @@
-import React from 'react';
-import { Button } from '@ui5/webcomponents-react';
-import { Popover, Menu } from 'fundamental-react';
-import './ListActions.scss';
+import React, { useState } from 'react';
+import { Button, Menu, MenuItem } from '@ui5/webcomponents-react';
 
 import PropTypes from 'prop-types';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
+
+import './ListActions.scss';
 
 const AUTO_ICONS_BY_NAME = new Map([
   ['Edit', 'edit'],
@@ -51,38 +51,44 @@ const StandaloneAction = ({ action, entry }) => {
 };
 
 const ListActions = ({ actions, entry }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   if (!actions.length) {
     return null;
   }
 
   const listItems = actions.slice(3, actions.length);
+
   return (
     <div className="list-actions">
       {actions.slice(0, 3).map(a => (
         <StandaloneAction key={a.name} action={a} entry={entry} />
       ))}
       {listItems.length ? (
-        <Popover
-          body={
-            <Menu>
-              <Menu.List>
-                {listItems.map(a => (
-                  <Menu.Item onClick={() => a.handler(entry)} key={a.name}>
-                    {a.name}
-                  </Menu.Item>
-                ))}
-              </Menu.List>
-            </Menu>
-          }
-          control={
-            <Button
-              icon="vertical-grip"
-              design="Transparent"
-              aria-label="more-actions"
-            />
-          }
-          placement="bottom-end"
-        />
+        <>
+          <Button
+            id={'openMenuBtn'}
+            icon="vertical-grip"
+            design="Transparent"
+            aria-label="more-actions"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          />
+          <Menu
+            open={isMenuOpen}
+            opener={'openMenuBtn'}
+            onAfterClose={() => {
+              setIsMenuOpen(false);
+            }}
+          >
+            {listItems.map(a => (
+              <MenuItem
+                onClick={() => a.handler(entry)}
+                key={a.name}
+                text={a.name}
+              />
+            ))}
+          </Menu>
+        </>
       ) : null}
     </div>
   );

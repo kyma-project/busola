@@ -58,12 +58,6 @@ export default function CustomResourcesOfType({ crdName }) {
           </Link>
         </DynamicPageComponent.Column>
       </DynamicPageComponent>
-      <CustomResources
-        crd={crd}
-        version={crd.spec.versions.find(v => v.served)}
-        showTitle={false}
-        showNamespace={false}
-      />
       <YamlUploadDialog
         open={showAdd}
         onCancel={() => {
