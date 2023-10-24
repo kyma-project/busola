@@ -43,12 +43,21 @@ context('Test Jobs', () => {
 
     // job command
     cy.get('[placeholder^="Command to run"]:visible')
-      .click()
-      .type('/bin/sh{downarrow}-c{downarrow}echo "Busola test"');
+      .find('input')
+      .type('/bin/sh');
+    cy.get('[placeholder^="Command to run"]:visible')
+      .parentsUntil('ul')
+      .next()
+      .find('input')
+      .type('-c')
+      .parentsUntil('ul')
+      .next()
+      .find('input')
+      .type('echo "Busola test"');
 
     // job docker image
     cy.get('[placeholder^="Enter the Docker image tag"]:visible')
-      .click()
+      .find('input')
       .type('busybox');
 
     // we can't edit Job's template, so we add 2 containers now
@@ -65,13 +74,17 @@ context('Test Jobs', () => {
     // job args
     cy.get('[aria-label="expand Args"]:visible').click();
 
-    cy.get('[placeholder^="Arguments to the"]:visible').type(
-      '-e{downarrow}console.log("Node image test");',
-    );
+    cy.get('[placeholder^="Arguments to the"]:visible')
+      .find('input')
+      .type('-e')
+      .parentsUntil('ul')
+      .next()
+      .find('input')
+      .type('console.log("Node image test"); ');
 
     // job docker image
     cy.get('[placeholder^="Enter the Docker image tag"]:visible')
-      .click()
+      .find('input')
       .type('node:14-alpine');
 
     // create
@@ -146,10 +159,12 @@ context('Test Jobs', () => {
       .click();
 
     cy.get('[placeholder="Enter key"]:visible')
+      .find('input')
       .filterWithNoValue()
       .type('a');
 
     cy.get('[placeholder="Enter value"]:visible')
+      .find('input')
       .filterWithNoValue()
       .first()
       .type('b');

@@ -1,3 +1,9 @@
+form .resource-form {
+  overflow: auto;
+  flex-grow: 1;
+  order: 2;
+}
+
 .resource-form {
   height: 100%;
   display: flex;
