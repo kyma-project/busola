@@ -61,13 +61,15 @@ export function ResourceForm({
     };
   }
 
-  if (!resourceRef.current) {
-    resourceRef.current = JSON.stringify(resource);
-    handleSetResetFormFn(() => () => {
-      setResource(JSON.parse(resourceRef.current));
-      if (onReset) onReset();
-    });
-  }
+  useEffect(() => {
+    if (!resourceRef.current) {
+      resourceRef.current = JSON.stringify(resource);
+      handleSetResetFormFn(() => () => {
+        setResource(JSON.parse(resourceRef.current));
+        if (onReset) onReset();
+      });
+    }
+  }, [handleSetResetFormFn, onReset, resource, resourceRef, setResource]);
 
   const { t } = useTranslation();
   const createResource = useCreateResource({
