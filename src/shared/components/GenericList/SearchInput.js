@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@ui5/webcomponents-react';
-import { Menu } from 'fundamental-react';
+import { Button, Input, Menu, MenuItem } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useEventListener } from 'hooks/useEventListener';
 
@@ -44,7 +43,6 @@ export function SearchInput({
   const { t } = useTranslation();
   const [isSearchHidden, setSearchHidden] = React.useState(true);
   const { isOpen: isSideDrawerOpened } = useYamlEditor();
-  const searchInputRef = React.useRef();
 
   const onKeyPress = e => {
     const { key } = e;
@@ -57,13 +55,27 @@ export function SearchInput({
     if (key === '/' && !disabled && allowSlashShortcut && !isSideDrawerOpened) {
       openSearchList();
     }
+
+    handleOnKeyDown(key);
   };
+
+  const searchInput = document.querySelector('#search-input');
+  const searchInputShadowElement = searchInput?.shadowRoot.querySelector(
+    '.ui5-input-inner',
+  );
+
+  searchInputShadowElement?.addEventListener('blur', () =>
+    setSearchHidden(true),
+  );
+  searchInputShadowElement?.addEventListener('focus', () =>
+    setSearchHidden(false),
+  );
 
   useEffect(() => {
     if (!isSearchHidden) {
       openSearchList();
     }
-  }, [isSearchHidden]);
+  }, [isSearchHidden]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEventListener('keydown', onKeyPress, [
     disabled,
@@ -76,16 +88,12 @@ export function SearchInput({
 
     if (!suggestions.length) {
       return (
-        <Menu.Item className="no-entries">
-          {MESSAGES.NO_SEARCH_RESULT}
-        </Menu.Item>
+        <MenuItem className="no-entries" text={MESSAGES.NO_SEARCH_RESULT} />
       );
     }
 
     return suggestions.map(suggestion => (
-      <Menu.Item onClick={() => handleQueryChange(suggestion)} key={suggestion}>
-        {suggestion}
-      </Menu.Item>
+      <MenuItem key={suggestion} text={suggestion} />
     ));
   };
 
@@ -101,14 +109,12 @@ export function SearchInput({
   const openSearchList = () => {
     setSearchHidden(false);
     setTimeout(() => {
-      const inputField = searchInputRef.current;
-      inputField.focus();
+      searchInputShadowElement?.focus();
     });
   };
 
   const handleOnKeyDown = e => {
-    const ESCAPE_KEY_CODE = 27;
-    if (e.keyCode === ESCAPE_KEY_CODE) {
+    if (e.key === 'Enter') {
       setSearchHidden(true);
     }
     if (onKeyDown) {
@@ -117,6 +123,7 @@ export function SearchInput({
   };
 
   const showControl = showSearchControl && isSearchHidden && !searchQuery;
+
   return (
     <section
       className="generic-list-search"
@@ -130,25 +137,26 @@ export function SearchInput({
       >
         <div className="fd-popover__control">
           <div className="fd-combobox-control">
-            <input
+            <Input
+              id="search-input"
               aria-label="search-input"
-              ref={searchInputRef}
-              type="search"
               placeholder={t('common.tooltips.search')}
               value={searchQuery}
-              onBlur={() => setSearchHidden(true)}
-              onFocus={() => setSearchHidden(false)}
-              onChange={e => handleQueryChange(e.target.value)}
-              onKeyDown={handleOnKeyDown}
-              className="fd-margin-none fd-input"
+              onInput={e => handleQueryChange(e.target.value)}
+              showClearIcon
+              className="search-with-magnifying-glass "
             />
             {!!searchQuery && showSuggestion && (
-              <div
-                className="fd-popover__body fd-popover__body--no-arrow"
-                aria-hidden={isSearchHidden}
+              <Menu
+                open={!isSearchHidden}
+                opener="search-input"
+                onAfterClose={() => {
+                  setSearchHidden(true);
+                }}
+                onItemClick={e => handleQueryChange(e.detail.item.textContent)}
               >
-                <Menu>{renderSearchList(filteredEntries)}</Menu>
-              </div>
+                {renderSearchList(filteredEntries)}
+              </Menu>
             )}
           </div>
         </div>
