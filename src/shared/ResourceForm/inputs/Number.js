@@ -8,7 +8,7 @@ export function Number({ value = '', setValue, ...props }) {
       <Input
         type="Number"
         value={value}
-        onInput={e => setValue(e.target.valueAsNumber ?? null)}
+        onInput={e => setValue(e.target.value ?? null)}
         {...props}
       />
     </div>

@@ -26,7 +26,9 @@ context('Test Config Maps', () => {
       .type(CONFIG_MAP_NAME)
       .click();
 
-    cy.get('[placeholder="Enter key"]:visible').type(ENTRY_KEY);
+    cy.get('[placeholder="Enter key"]:visible')
+      .find('input')
+      .type(ENTRY_KEY);
 
     cy.findMonaco()
       .first()
@@ -53,7 +55,9 @@ context('Test Config Maps', () => {
     // hide first entry so Cypress doesn't get confuused
     cy.get('[aria-label="expand config-map-key"]').click();
 
-    cy.get('[placeholder="Enter key"]:visible').type(ENTRY_KEY2);
+    cy.get('[placeholder="Enter key"]:visible')
+      .find('input')
+      .type(ENTRY_KEY2);
 
     cy.findMonaco(1).type(ENTRY_VALUE2);
 

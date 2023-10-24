@@ -23,28 +23,37 @@ context('Test Cron Jobs', () => {
       .type(CRON_JOB_NAME);
 
     cy.get('[placeholder="Minute"]')
+      .find('input')
       .clear()
       .type(0);
 
     cy.get('[placeholder="Hour"]')
+      .find('input')
       .clear()
       .type(0);
 
     cy.get('[placeholder="Day of Month"]')
+      .find('input')
       .clear()
       .type(1);
 
     cy.get('[placeholder="Month"]')
+      .find('input')
       .clear()
       .type('*');
 
     cy.get('[placeholder="Day of Week"]')
+      .find('input')
       .clear()
       .type('*');
+    cy.get(
+      '[aria-label="expand Schedule: At 12:00 AM, on day 1 of the month"]',
+    ).click();
 
     cy.contains('Command').click();
 
     cy.get('[placeholder="Command to run in a container"]')
+      .find('input')
       .clear()
       .type('ls -la');
 
@@ -56,6 +65,7 @@ context('Test Cron Jobs', () => {
     cy.get(
       '[placeholder="Enter the Docker image tag, for example, \'busybox\'"]',
     )
+      .find('input')
       .clear()
       .type('busybox');
 
@@ -90,20 +100,24 @@ context('Test Cron Jobs', () => {
       .click();
 
     cy.get('[placeholder="Hour"]')
+      .find('input')
       .clear()
       .type('*');
 
     cy.get('[placeholder="Day of Month"]')
+      .find('input')
       .clear()
       .type('*');
 
     cy.get('[placeholder="Month"]')
+      .find('input')
       .clear()
       .type('*');
 
     cy.get('[aria-label="expand Command"]').click();
 
     cy.get('[placeholder="Command to run in a container"]')
+      .find('input')
       .clear()
       .type('ls');
 
@@ -115,6 +129,7 @@ context('Test Cron Jobs', () => {
     cy.get(
       '[placeholder="Enter the Docker image tag, for example, \'busybox\'"]',
     )
+      .find('input')
       .clear()
       .type('busytest');
 
