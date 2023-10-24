@@ -27,13 +27,16 @@ context('Test Secrets', () => {
       .find('input')
       .type(SECRET_NAME);
 
-    cy.get('[placeholder="Enter key"]:visible').type(`${SECRET_KEY}`);
+    cy.get('[placeholder="Enter key"]:visible')
+      .find('input')
+      .type(`${SECRET_KEY}`);
 
     cy.get('[placeholder="Enter value"]:visible')
       .first()
       .type(`${SECRET_VALUE}`, { force: true });
 
     cy.get('[placeholder="Enter key"]:visible')
+      .find('input')
       .last()
       .type(`${SECRET2_KEY}`);
 
@@ -86,6 +89,7 @@ context('Test Secrets', () => {
       .type(`{selectall}${SECRET_VALUE2}`);
 
     cy.get('[placeholder="Enter key"]:visible')
+      .find('input')
       .eq(2)
       .type(`${SECRET3_KEY}`);
 

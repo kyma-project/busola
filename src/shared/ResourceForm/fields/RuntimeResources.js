@@ -44,7 +44,7 @@ function MemoryInput({ label, propertyPath, container = {}, setContainer }) {
         className="memory-input fd-col fd-col-md--11"
       >
         <Input
-          type="number"
+          type="Number"
           min="0"
           value={numericValue}
           onInput={e => setValue(e.target.value + selectedUnit)}

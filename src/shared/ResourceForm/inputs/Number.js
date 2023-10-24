@@ -1,4 +1,3 @@
-import React from 'react';
 import { Input } from '@ui5/webcomponents-react';
 
 export function Number({ value = '', setValue, ...props }) {
@@ -8,7 +7,7 @@ export function Number({ value = '', setValue, ...props }) {
       <Input
         type="Number"
         value={value}
-        onInput={e => setValue(e.target.value ?? null)}
+        onInput={e => setValue(parseInt(e.target.value) ?? null)}
         {...props}
       />
     </div>

@@ -83,7 +83,7 @@ context('Test reduced permissions', () => {
 
     cy.contains('ui5-button', 'Create Service Account').click();
 
-    cy.get('input[aria-label="ServiceAccount name"]:visible')
+    cy.get('[aria-label="ServiceAccount name"]:visible')
       .find('input')
       .type(SA_NAME);
 

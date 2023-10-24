@@ -62,10 +62,12 @@ context('Test Protected Resources', () => {
       .click();
 
     cy.get('[placeholder="Enter key"]:visible')
+      .find('input')
       .eq(1)
       .type('protected');
 
     cy.get('[placeholder="Enter value"]:visible')
+      .find('input')
       .eq(1)
       .type('true');
 
@@ -99,7 +101,9 @@ context('Test Protected Resources', () => {
       .clear()
       .type(NAME);
 
-    cy.get('[placeholder^="Enter the Docker image"]:visible').type(IMAGE);
+    cy.get('[placeholder^="Enter the Docker image"]:visible')
+      .find('input')
+      .type(IMAGE);
 
     cy.get('ui5-dialog')
       .contains('ui5-button', 'Create')

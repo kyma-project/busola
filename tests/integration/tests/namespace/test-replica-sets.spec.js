@@ -28,6 +28,7 @@ context('Test Replica Sets', () => {
       .type(REPLICA_SET_NAME);
 
     cy.get('[placeholder="Replicas"]')
+      .find('input')
       .clear()
       .type(REPLICAS_AMOUNT)
       .should('have.value', REPLICAS_AMOUNT);
@@ -35,6 +36,7 @@ context('Test Replica Sets', () => {
     cy.get(
       '[placeholder="Enter the Docker image tag, for example, bitnami/nginx"]',
     )
+      .find('input')
       .clear()
       .type(DOCKER_IMAGE_TAG)
       .should('have.value', DOCKER_IMAGE_TAG);
@@ -76,11 +78,13 @@ context('Test Replica Sets', () => {
     cy.get(
       '[placeholder="Enter the Docker image tag, for example, bitnami/nginx"]',
     )
+      .find('input')
       .clear()
       .type(EDITED_DOCKER_IMAGE_TAG)
       .should('have.value', EDITED_DOCKER_IMAGE_TAG);
 
     cy.get('[placeholder="Replicas"]')
+      .find('input')
       .clear()
       .type(EDITED_REPLICAS_AMOUNT)
       .should('have.value', EDITED_REPLICAS_AMOUNT);
