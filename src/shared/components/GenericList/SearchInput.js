@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Input, Menu, MenuItem } from '@ui5/webcomponents-react';
+import { Button, ComboBox, ComboBoxItem } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useEventListener } from 'hooks/useEventListener';
 
@@ -61,7 +61,7 @@ export function SearchInput({
 
   const searchInput = document.querySelector('#search-input');
   const searchInputShadowElement = searchInput?.shadowRoot.querySelector(
-    '.ui5-input-inner',
+    '#ui5-combobox-input',
   );
 
   searchInputShadowElement?.addEventListener('blur', () =>
@@ -88,12 +88,16 @@ export function SearchInput({
 
     if (!suggestions.length) {
       return (
-        <MenuItem className="no-entries" text={MESSAGES.NO_SEARCH_RESULT} />
+        <ComboBoxItem
+          className="no-entries"
+          text={MESSAGES.NO_SEARCH_RESULT}
+          id={MESSAGES.NO_SEARCH_RESULT}
+        />
       );
     }
 
     return suggestions.map(suggestion => (
-      <MenuItem key={suggestion} text={suggestion} />
+      <ComboBoxItem id={suggestion} text={suggestion} />
     ));
   };
 
@@ -137,27 +141,19 @@ export function SearchInput({
       >
         <div className="fd-popover__control">
           <div className="fd-combobox-control">
-            <Input
+            <ComboBox
               id="search-input"
               aria-label="search-input"
               placeholder={t('common.tooltips.search')}
               value={searchQuery}
               onInput={e => handleQueryChange(e.target.value)}
-              showClearIcon
-              className="search-with-magnifying-glass "
-            />
-            {!!searchQuery && showSuggestion && (
-              <Menu
-                open={!isSearchHidden}
-                opener="search-input"
-                onAfterClose={() => {
-                  setSearchHidden(true);
-                }}
-                onItemClick={e => handleQueryChange(e.detail.item.textContent)}
-              >
-                {renderSearchList(filteredEntries)}
-              </Menu>
-            )}
+              onSelectionChange={() => setSearchHidden(true)}
+              className="search-with-magnifying-glass"
+            >
+              {!!searchQuery &&
+                showSuggestion &&
+                renderSearchList(filteredEntries)}
+            </ComboBox>
           </div>
         </div>
       </div>
