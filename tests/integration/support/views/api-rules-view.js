@@ -83,7 +83,10 @@ Cypress.Commands.add('checkApiRuleStatus', ApiRuleName => {
 
   cy.get('[aria-label="open-search"]').click();
 
-  cy.get('[aria-label="search-input"]').type(ApiRuleName);
+  ccy
+    .get('[aria-label="search-input"]')
+    .find('input')
+    .type(ApiRuleName);
 
   cy.get('[role="status"]').should('have.text', 'OK');
 });
