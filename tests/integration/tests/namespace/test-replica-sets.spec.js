@@ -22,8 +22,8 @@ context('Test Replica Sets', () => {
 
     cy.contains('Advanced').click();
 
-    cy.get('[ariaLabel="ReplicaSet name"]')
-      .click()
+    cy.get('[aria-label="ReplicaSet name"]')
+      .find('input')
       .clear()
       .type(REPLICA_SET_NAME);
 

@@ -31,14 +31,14 @@ context('Test Jobs', () => {
     cy.contains('ui5-button', 'Create Job').click();
 
     // job name
-    cy.get('[ariaLabel="Job name"]:visible')
-      .click()
+    cy.get('[aria-label="Job name"]:visible')
+      .find('input')
       .clear()
       .type(JOB_NAME);
 
     // job container name
-    cy.get('[ariaLabel="Container name"]:visible')
-      .click()
+    cy.get('[aria-label="Container name"]:visible')
+      .find('input')
       .type(JOB_NAME);
 
     // job command
@@ -58,7 +58,9 @@ context('Test Jobs', () => {
     cy.contains('Container 2').click();
 
     // job container name
-    cy.get('[ariaLabel="Container name"]:visible').type(SECOND_CONTAINER_NAME);
+    cy.get('[aria-label="Container name"]:visible')
+      .find('input')
+      .type(SECOND_CONTAINER_NAME);
 
     // job args
     cy.get('[aria-label="expand Args"]:visible').click();

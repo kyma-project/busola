@@ -18,7 +18,9 @@ context('Test Cron Jobs', () => {
 
     cy.contains('Advanced').click();
 
-    cy.get('[ariaLabel="CronJob name"]').type(CRON_JOB_NAME);
+    cy.get('[aria-label="CronJob name"]')
+      .find('input')
+      .type(CRON_JOB_NAME);
 
     cy.get('[placeholder="Minute"]')
       .clear()
@@ -46,7 +48,8 @@ context('Test Cron Jobs', () => {
       .clear()
       .type('ls -la');
 
-    cy.get('[ariaLabel="Container name"]')
+    cy.get('[aria-label="Container name"]')
+      .find('input')
       .clear()
       .type('test-container');
 
@@ -104,7 +107,8 @@ context('Test Cron Jobs', () => {
       .clear()
       .type('ls');
 
-    cy.get('[ariaLabel="Container name"]')
+    cy.get('[aria-label="Container name"]')
+      .find('input')
       .clear()
       .type('test-busybox');
 

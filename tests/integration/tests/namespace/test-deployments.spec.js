@@ -17,7 +17,8 @@ context('Test Deployments', () => {
 
     cy.contains('ui5-button', 'Create Deployment').click();
 
-    cy.get('[ariaLabel="Deployment name"]:visible')
+    cy.get('[aria-label="Deployment name"]:visible')
+      .find('input')
       .clear()
       .type(DEPLOYMENT_NAME);
 

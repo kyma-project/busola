@@ -8,7 +8,8 @@ Cypress.Commands.add('navigateToFunctionCreate', functionName => {
   cy.contains('Advanced').click();
 
   cy.get('.advanced-form')
-    .find('[ariaLabel="Function name"]')
+    .find('[aria-label="Function name"]')
+    .find('input')
     .type(functionName);
 });
 

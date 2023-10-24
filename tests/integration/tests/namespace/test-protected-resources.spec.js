@@ -51,8 +51,8 @@ context('Test Protected Resources', () => {
 
     cy.contains('ui5-button', 'Create Config Map').click();
 
-    cy.get('[ariaLabel="ConfigMap name"]:visible')
-      .click()
+    cy.get('[aria-label="ConfigMap name"]:visible')
+      .find('input')
       .type(NAME);
 
     cy.contains('Advanced').click();
@@ -94,7 +94,8 @@ context('Test Protected Resources', () => {
 
     cy.contains('ui5-button', 'Create Deployment').click();
 
-    cy.get('[ariaLabel="Deployment name"]:visible')
+    cy.get('[aria-label="Deployment name"]:visible')
+      .find('input')
       .clear()
       .type(NAME);
 

@@ -26,8 +26,8 @@ context('Test app settings and preferences', () => {
 
     cy.contains('ui5-button', 'Create Config Map').click();
 
-    cy.get('input[ariaLabel="ConfigMap name"]:visible')
-      .click()
+    cy.get('input[aria-label="ConfigMap name"]:visible')
+      .find('input')
       .type(NAME);
 
     cy.get('ui5-dialog')

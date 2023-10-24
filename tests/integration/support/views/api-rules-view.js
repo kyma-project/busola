@@ -14,9 +14,9 @@ Cypress.Commands.add(
       .click();
 
     // Name
-    cy.get('[ariaLabel="APIRule name"]:visible', { log: false }).type(
-      ApiRuleName,
-    );
+    cy.get('[aria-label="APIRule name"]:visible', { log: false })
+      .find('input')
+      .type(ApiRuleName);
 
     // Service
     cy.get('[aria-label="Choose Service"]:visible', { log: false })

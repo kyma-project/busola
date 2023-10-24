@@ -23,7 +23,9 @@ context('Test Secrets', () => {
 
     cy.contains('ui5-button', 'Create Secret').click();
 
-    cy.get('[ariaLabel="Secret name"]:visible').type(SECRET_NAME);
+    cy.get('[aria-label="Secret name"]:visible')
+      .find('input')
+      .type(SECRET_NAME);
 
     cy.get('[placeholder="Enter key"]:visible').type(`${SECRET_KEY}`);
 
