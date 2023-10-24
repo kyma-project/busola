@@ -59,9 +59,9 @@ export function ResourceFormWrapper({
             '.ui5-input-inner',
           );
           if (!valid) {
-            input.setCustomValidity(errorMessage(child));
+            input?.setCustomValidity(errorMessage(child));
           } else {
-            input.setCustomValidity('');
+            input?.setCustomValidity('');
           }
         } else if (validationRef) {
           validationRef.current = validationRef.current && valid;
