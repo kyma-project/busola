@@ -111,7 +111,7 @@ context('Test resource upload', () => {
 
     cy.get('[aria-label="search-input"]')
       .find('input')
-      .type(SC_NAME);
+      .type(SC_NAME, { force: true });
 
     cy.get('ui5-table-row [aria-label="Delete"]').click({ force: true });
 

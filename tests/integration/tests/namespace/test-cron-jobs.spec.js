@@ -20,7 +20,7 @@ context('Test Cron Jobs', () => {
 
     cy.get('[aria-label="CronJob name"]')
       .find('input')
-      .type(CRON_JOB_NAME);
+      .type(CRON_JOB_NAME, { force: true });
 
     cy.get('[placeholder="Minute"]')
       .find('input')

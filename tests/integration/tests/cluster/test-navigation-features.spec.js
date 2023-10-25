@@ -36,7 +36,7 @@ context('Test navigation features', () => {
 
     cy.get('[aria-label="search-input"]')
       .find('input')
-      .type('cronjob-controller');
+      .type('cronjob-controller', { force: true });
 
     cy.contains('cronjob-controller (SA)') // link wrapper
       .contains('cronjob-controller') // link itself
