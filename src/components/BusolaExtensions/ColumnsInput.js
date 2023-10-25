@@ -31,10 +31,10 @@ export function ColumnsInput({ value: columns, setValue: setColumns }) {
           className="input-full"
           required
           placeholder={t('extensibility.starter-modal.headers.field-name')}
-          readOnly={!value.isSelected ? true : false}
+          disabled={!value.isSelected ? true : false}
         />
-        <Input className="input-full" readOnly value={value?.path} />
-        <Input className="input-full" readOnly value={value?.type} />
+        <Input className="input-full" disabled value={value?.path} />
+        <Input className="input-full" disabled value={value?.type} />
       </div>
     );
   });
