@@ -25,27 +25,27 @@ context('Test Cron Jobs', () => {
     cy.get('[placeholder="Minute"]')
       .find('input')
       .clear()
-      .type(0);
+      .type(0, { force: true });
 
     cy.get('[placeholder="Hour"]')
       .find('input')
       .clear()
-      .type(0);
+      .type(0, { force: true });
 
     cy.get('[placeholder="Day of Month"]')
       .find('input')
       .clear()
-      .type(1);
+      .type(1, { force: true });
 
     cy.get('[placeholder="Month"]')
       .find('input')
       .clear()
-      .type('*');
+      .type('*', { force: true });
 
     cy.get('[placeholder="Day of Week"]')
       .find('input')
       .clear()
-      .type('*');
+      .type('*', { force: true });
     cy.get(
       '[aria-label="expand Schedule: At 12:00 AM, on day 1 of the month"]',
     ).click();
@@ -55,19 +55,19 @@ context('Test Cron Jobs', () => {
     cy.get('[placeholder="Command to run in a container"]')
       .find('input')
       .clear()
-      .type('ls -la');
+      .type('ls -la', { force: true });
 
     cy.get('[aria-label="Container name"]')
       .find('input')
       .clear()
-      .type('test-container');
+      .type('test-container', { force: true });
 
     cy.get(
       '[placeholder="Enter the Docker image tag, for example, \'busybox\'"]',
     )
       .find('input')
       .clear()
-      .type('busybox');
+      .type('busybox', { force: true });
 
     cy.get('ui5-combobox[value="IfNotPresent"]')
       .find('ui5-icon[accessible-name="Select Options"]')
@@ -102,36 +102,36 @@ context('Test Cron Jobs', () => {
     cy.get('[placeholder="Hour"]')
       .find('input')
       .clear()
-      .type('*');
+      .type('*', { force: true });
 
     cy.get('[placeholder="Day of Month"]')
       .find('input')
       .clear()
-      .type('*');
+      .type('*', { force: true });
 
     cy.get('[placeholder="Month"]')
       .find('input')
       .clear()
-      .type('*');
+      .type('*', { force: true });
 
     cy.get('[aria-label="expand Command"]').click();
 
     cy.get('[placeholder="Command to run in a container"]')
       .find('input')
       .clear()
-      .type('ls');
+      .type('ls', { force: true });
 
     cy.get('[aria-label="Container name"]')
       .find('input')
       .clear()
-      .type('test-busybox');
+      .type('test-busybox', { force: true });
 
     cy.get(
       '[placeholder="Enter the Docker image tag, for example, \'busybox\'"]',
     )
       .find('input')
       .clear()
-      .type('busytest');
+      .type('busytest', { force: true });
 
     cy.get('ui5-combobox[value="Always"]')
       .find('ui5-icon[accessible-name="Select Options"]')
