@@ -4,7 +4,7 @@ Cypress.Commands.add('inspectList', (resource, resourceName) => {
 
   cy.get('ui5-button[aria-label="open-search"]:visible')
     .click()
-    .get('input[aria-label="search-input"]')
+    .get('ui5-combobox[placeholder="Search"]')
     .type(resourceName);
 
   cy.contains(resourceName).should('be.visible');

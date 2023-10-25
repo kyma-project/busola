@@ -34,7 +34,7 @@ context('Test navigation features', () => {
 
     cy.get('[aria-label="open-search"]').click();
 
-    cy.get('[aria-label="search-input"]').type('cronjob-controller');
+    cy.get('ui5-combobox[placeholder="Search"]').type('cronjob-controller');
 
     cy.contains('cronjob-controller (SA)') // link wrapper
       .contains('cronjob-controller') // link itself

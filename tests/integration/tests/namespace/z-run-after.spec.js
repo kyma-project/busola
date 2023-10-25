@@ -12,7 +12,7 @@ context('Clean up Namespace', () => {
       .contains('Namespaces')
       .click();
 
-    cy.get('[role="search"] [aria-label="search-input"]').type(
+    cy.get('ui5-combobox[placeholder="Search"]').type(
       Cypress.env('NAMESPACE_NAME'),
       {
         force: true,

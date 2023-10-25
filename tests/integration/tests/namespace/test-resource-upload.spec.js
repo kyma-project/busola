@@ -109,7 +109,7 @@ context('Test resource upload', () => {
 
     cy.get('ui5-button[aria-label="open-search"]')
       .click()
-      .get('input[aria-label="search-input"]')
+      .get('ui5-combobox[placeholder="Search"]')
       .type(SC_NAME);
 
     cy.get('ui5-table-row [aria-label="Delete"]').click({ force: true });
