@@ -6,7 +6,7 @@ Cypress.Commands.add('inspectList', (resource, resourceName) => {
 
   cy.get('[aria-label="search-input"]')
     .find('input')
-    .type(resourceName);
+    .type(resourceName, { force: true });
 
   cy.contains(resourceName).should('be.visible');
 });
