@@ -34,7 +34,7 @@ context('Test Jobs', () => {
     cy.get('[aria-label="Job name"]:visible')
       .find('input')
       .clear()
-      .type(JOB_NAME);
+      .type(JOB_NAME, { force: true });
 
     // job container name
     cy.get('[aria-label="Container name"]:visible')

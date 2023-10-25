@@ -116,6 +116,7 @@ context('Test reduced permissions', () => {
     chooseComboboxOption(
       '[placeholder="Start typing to select ClusterRole from the list"]:visible',
       CR_NAME,
+      { force: true },
     );
 
     // service account namespace
