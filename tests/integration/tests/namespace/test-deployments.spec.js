@@ -20,7 +20,7 @@ context('Test Deployments', () => {
     cy.get('[aria-label="Deployment name"]:visible')
       .find('input')
       .clear()
-      .type(DEPLOYMENT_NAME);
+      .type(DEPLOYMENT_NAME, { force: true });
 
     cy.contains('Advanced').click();
 

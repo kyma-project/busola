@@ -23,7 +23,7 @@ context('Test Config Maps', () => {
 
     cy.get('[aria-label="ConfigMap name"]:visible')
       .find('input')
-      .type(CONFIG_MAP_NAME)
+      .type(CONFIG_MAP_NAME, { force: true })
       .click();
 
     cy.get('[placeholder="Enter key"]:visible')

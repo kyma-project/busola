@@ -33,7 +33,7 @@ context('Test reduced permissions', () => {
 
     cy.get('[aria-label="ClusterRole name"]:visible')
       .find('input')
-      .type(CR_NAME);
+      .type(CR_NAME, { force: true });
 
     // api groups
     chooseComboboxOption(

@@ -24,7 +24,7 @@ context('Test Roles', () => {
 
     cy.get('[aria-label="Role name"]:visible', { log: false })
       .find('input')
-      .type(ROLE_NAME)
+      .type(ROLE_NAME, { force: true })
       .click();
 
     chooseComboboxOption(

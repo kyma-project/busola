@@ -25,7 +25,7 @@ context('Test Secrets', () => {
 
     cy.get('[aria-label="Secret name"]:visible')
       .find('input')
-      .type(SECRET_NAME);
+      .type(SECRET_NAME, { force: true });
 
     cy.get('[placeholder="Enter key"]:visible')
       .find('input')
