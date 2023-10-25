@@ -138,7 +138,7 @@ export function SimpleList({
                                 icon="delete"
                                 design="Negative"
                                 onClick={() => removeItem(index)}
-                                ariaLabel={t('common.buttons.delete')}
+                                aria-label={t('common.buttons.delete')}
                               />
                             )}
                           </span>

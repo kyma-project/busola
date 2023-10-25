@@ -97,7 +97,7 @@ context('Test Secrets', () => {
       .eq(2)
       .type(`${SECRET3_VALUE}`, { force: true });
 
-    cy.get('[ariaLabel="Delete"]:visible')
+    cy.get('[aria-label="Delete"]:visible')
       .eq(1)
       .click();
 

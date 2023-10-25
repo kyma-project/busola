@@ -31,7 +31,7 @@ context('Test Cluster Role Bindings', () => {
 
     cy.contains('ui5-li:visible', 'cluster-admin').click();
 
-    cy.get('[arialabel="User name"]')
+    cy.get('[aria-label="User name"]')
       .find('input')
       .type(USER_NAME)
       .blur({ force: true });
@@ -67,7 +67,7 @@ context('Test Cluster Role Bindings', () => {
 
     cy.contains('Group').click();
 
-    cy.get('[arialabel="Group name"]')
+    cy.get('[aria-label="Group name"]')
       .find('input')
       .type('test-group')
       .blur({ force: true });
