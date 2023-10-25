@@ -62,6 +62,7 @@ Cypress.Commands.add('clearInput', { prevSubject: true }, element => {
     .wrap(element)
     .type(
       `${Cypress.platform === 'darwin' ? '{cmd}a' : '{ctrl}a'} {backspace}`,
+      { force: true },
     );
 });
 

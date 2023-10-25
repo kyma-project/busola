@@ -101,7 +101,7 @@ context('Test Cron Jobs', () => {
 
     cy.get('[placeholder="Hour"]')
       .find('input')
-      .clear()
+      .clear({ force: true })
       .type('*', { force: true });
 
     cy.get('[placeholder="Day of Month"]')
