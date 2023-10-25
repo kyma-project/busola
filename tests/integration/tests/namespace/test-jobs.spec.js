@@ -39,26 +39,26 @@ context('Test Jobs', () => {
     // job container name
     cy.get('[aria-label="Container name"]:visible')
       .find('input')
-      .type(JOB_NAME);
+      .type(JOB_NAME, { force: true });
 
     // job command
     cy.get('[placeholder^="Command to run"]:visible')
       .find('input')
-      .type('/bin/sh');
+      .type('/bin/sh', { force: true });
     cy.get('[placeholder^="Command to run"]:visible')
       .parentsUntil('ul')
       .next()
       .find('input')
-      .type('-c')
+      .type('-c', { force: true })
       .parentsUntil('ul')
       .next()
       .find('input')
-      .type('echo "Busola test"');
+      .type('echo "Busola test"', { force: true });
 
     // job docker image
     cy.get('[placeholder^="Enter the Docker image tag"]:visible')
       .find('input')
-      .type('busybox');
+      .type('busybox', { force: true });
 
     // we can't edit Job's template, so we add 2 containers now
     cy.contains('Advanced').click();
@@ -69,23 +69,23 @@ context('Test Jobs', () => {
     // job container name
     cy.get('[aria-label="Container name"]:visible')
       .find('input')
-      .type(SECOND_CONTAINER_NAME);
+      .type(SECOND_CONTAINER_NAME, { force: true });
 
     // job args
     cy.get('[aria-label="expand Args"]:visible').click();
 
     cy.get('[placeholder^="Arguments to the"]:visible')
       .find('input')
-      .type('-e')
+      .type('-e', { force: true })
       .parentsUntil('ul')
       .next()
       .find('input')
-      .type('console.log("Node image test"); ');
+      .type('console.log("Node image test"); ', { force: true });
 
     // job docker image
     cy.get('[placeholder^="Enter the Docker image tag"]:visible')
       .find('input')
-      .type('node:14-alpine');
+      .type('node:14-alpine', { force: true });
 
     // create
     cy.get('ui5-dialog')
@@ -161,13 +161,13 @@ context('Test Jobs', () => {
     cy.get('[placeholder="Enter key"]:visible')
       .find('input')
       .filterWithNoValue()
-      .type('a');
+      .type('a', { force: true });
 
     cy.get('[placeholder="Enter value"]:visible')
       .find('input')
       .filterWithNoValue()
       .first()
-      .type('b');
+      .type('b', { force: true });
 
     cy.get('ui5-dialog')
       .contains('ui5-button', 'Update')
