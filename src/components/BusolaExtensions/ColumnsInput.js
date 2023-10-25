@@ -28,12 +28,13 @@ export function ColumnsInput({ value: columns, setValue: setColumns }) {
             value.name = e.target.value;
             setColumns([...columns]);
           }}
+          className="input-full"
           required
           placeholder={t('extensibility.starter-modal.headers.field-name')}
           readOnly={!value.isSelected ? true : false}
         />
-        <Input readOnly defaultValue={value?.path} />
-        <Input readOnly defaultValue={value?.type} />
+        <Input className="input-full" readOnly value={value?.path} />
+        <Input className="input-full" readOnly value={value?.type} />
       </div>
     );
   });
