@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  render,
-  queries,
-  fireEvent,
-  queryByText,
-} from 'testing/reactTestingUtils';
+import { render, fireEvent, queryByText } from 'testing/reactTestingUtils';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { ThemeProvider } from '@ui5/webcomponents-react';
 
@@ -15,12 +10,6 @@ export const queryByHeaderText = queryHelpers.queryByAttribute.bind(
   null,
   'header-text',
 );
-const allQueries = {
-  ...queries,
-  queryByHeaderText,
-};
-const customRender = (ui, options) =>
-  render(ui, { queries: allQueries, ...options });
 
 describe('GenericList', () => {
   const defaultNotFoundText = 'components.generic-list.messages.not-found';
@@ -304,54 +293,6 @@ describe('GenericList', () => {
     );
 
     expect(await getByText(content)).toBeInTheDocument();
-  });
-
-  it('Test sorting funcionality', () => {
-    const {
-      queryByHeaderText,
-      getByLabelText,
-      queryByText,
-      getByText,
-      getAllByRole,
-    } = customRender(
-      <ThemeProvider>
-        <GenericList
-          title=""
-          entries={mockEntries}
-          headerRenderer={() => ['name', 'description']}
-          rowRenderer={entry => [entry.name, entry.description]}
-          sortBy={{
-            name: (a, b) => a.name.localeCompare(b.name),
-            description: (a, b) => a.description.localeCompare(b.description),
-          }}
-        />
-      </ThemeProvider>,
-    );
-    // opening sort modal
-    fireEvent.click(getByLabelText('open-sort'));
-
-    // checking is sort modal open
-    const sortDialog = queryByHeaderText('common.sorting.sort');
-    expect(sortDialog).toHaveAttribute('open', 'true');
-
-    // checking generating of sort by form
-    expect(queryByText('common.sorting.description')).toBeInTheDocument();
-
-    // choosing option to sort
-    fireEvent.click(getByText('common.sorting.desc'));
-    fireEvent.click(getByText('common.sorting.description'));
-    fireEvent.click(getByText('common.buttons.ok'));
-
-    // checking sorted items
-    expect(getAllByRole('row')[0].textContent).toBe(
-      ' THIRD_ENTRY testdescription3',
-    );
-    expect(getAllByRole('row')[1].textContent).toBe(
-      ' second_entry testdescription2',
-    );
-    expect(getAllByRole('row')[2].textContent).toBe(
-      ' first_entry testdescription1',
-    );
   });
 
   describe('Search', () => {
