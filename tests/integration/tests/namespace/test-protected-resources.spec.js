@@ -53,7 +53,7 @@ context('Test Protected Resources', () => {
 
     cy.get('[aria-label="ConfigMap name"]:visible')
       .find('input')
-      .type(NAME);
+      .type(NAME, { force: true });
 
     cy.contains('Advanced').click();
 
