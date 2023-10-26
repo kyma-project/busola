@@ -156,7 +156,10 @@ Cypress.Commands.add(
       }
 
       if (clearSearch) {
-        cy.get('ui5-combobox[placeholder="Search"]').clear();
+        cy.get('ui5-combobox[placeholder="Search"]')
+          .find('input')
+          .click()
+          .clear();
       }
 
       cy.get('ui5-table')

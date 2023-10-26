@@ -83,7 +83,10 @@ context('Test reduced permissions 2', () => {
 
     cy.get('[aria-label="open-search"]').click();
 
-    cy.get('ui5-combobox[placeholder="Search"]').type('kube-public');
+    cy.get('ui5-combobox[placeholder="Search"]')
+      .find('input')
+      .click()
+      .type('kube-public');
 
     cy.get('a.fd-link')
       .contains('kube-public')

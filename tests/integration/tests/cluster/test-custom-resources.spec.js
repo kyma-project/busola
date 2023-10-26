@@ -38,9 +38,12 @@ context('Test Custom Resources', () => {
 
     openSearchWithSlashShortcut();
 
-    cy.get('ui5-combobox[placeholder="Search"]').type('cypress', {
-      force: true,
-    });
+    cy.get('ui5-combobox[placeholder="Search"]')
+      .find('input')
+      .click()
+      .type('cypress', {
+        force: true,
+      });
 
     cy.get('table').should('have.length', 1);
 
