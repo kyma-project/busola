@@ -16,7 +16,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
   const { t } = useTranslation();
   const sectionName = schema.get('name');
 
-  const setCheckbox = (key, entryValue, checked, index) => {
+  const setCheckbox = (fullValue, key, entryValue, checked, index) => {
     if (checked) {
       onChange({
         storeKeys,
@@ -145,6 +145,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
             className="fd-margin-top--sm"
             checked={isChecked}
             onChange={e => {
+              console.log(e.target.checked);
               setCheckbox(
                 value,
                 'name',
