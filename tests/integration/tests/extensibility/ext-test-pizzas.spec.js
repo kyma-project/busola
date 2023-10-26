@@ -106,14 +106,16 @@ context('Test Pizzas', () => {
     cy.get('@form')
       .find('[data-testid="spec.status"]:visible')
       .find('input')
-      .type(`{backspace}{backspace}{backspace}{backspace}{backspace}`)
+      .type(`{backspace}{backspace}{backspace}{backspace}{backspace}`, {
+        force: true,
+      })
       .type('Error');
 
     cy.get('@form').contains('Status');
     cy.get('@form').contains('Order Details');
     cy.get('@form').contains('Pizzas');
     cy.get('@form')
-      .find('.fd-form-label--required:visible')
+      .find('ui5-label[required]:visible')
       .should('have.length', 3);
 
     cy.get('@form')
@@ -151,9 +153,9 @@ context('Test Pizzas', () => {
 
     cy.get('@form')
       .find('[data-testid="spec.description"]:visible')
-      .click()
-      .clear()
-      .type(PIZZA_DESC);
+      .find('input')
+      .clear({ force: true })
+      .type(PIZZA_DESC, { force: true });
 
     cy.get('@form')
       .find('[data-testid="spec.sauce"]:visible')
@@ -169,10 +171,10 @@ context('Test Pizzas', () => {
     cy.get('@form').contains('Owner References');
 
     cy.get('@form')
-      .find('input[arialabel="Pizza name"]:visible')
-      .click()
-      .clear()
-      .type(PIZZA_NAME);
+      .find('[aria-label="Pizza name"]:visible')
+      .find('input')
+      .clear({ force: true })
+      .type(PIZZA_NAME, { force: true });
 
     cy.get('@form')
       .contains('ui5-button', 'Create')

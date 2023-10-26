@@ -21,12 +21,14 @@ context('Test Config Maps', () => {
 
     cy.contains('ui5-button', 'Create Config Map').click();
 
-    cy.get('[ariaLabel="ConfigMap name"]:visible')
-      .click()
-      .type(CONFIG_MAP_NAME)
+    cy.get('[aria-label="ConfigMap name"]:visible')
+      .find('input')
+      .type(CONFIG_MAP_NAME, { force: true })
       .click();
 
-    cy.get('[placeholder="Enter key"]:visible').type(ENTRY_KEY);
+    cy.get('[placeholder="Enter key"]:visible')
+      .find('input')
+      .type(ENTRY_KEY);
 
     cy.findMonaco()
       .first()
@@ -53,7 +55,9 @@ context('Test Config Maps', () => {
     // hide first entry so Cypress doesn't get confuused
     cy.get('[aria-label="expand config-map-key"]').click();
 
-    cy.get('[placeholder="Enter key"]:visible').type(ENTRY_KEY2);
+    cy.get('[placeholder="Enter key"]:visible')
+      .find('input')
+      .type(ENTRY_KEY2);
 
     cy.findMonaco(1).type(ENTRY_VALUE2);
 
@@ -80,7 +84,8 @@ context('Test Config Maps', () => {
       .find('ui5-button[data-testid="clone"]')
       .click();
 
-    cy.get('[ariaLabel="ConfigMap name"]:visible')
+    cy.get('[aria-label="ConfigMap name"]:visible')
+      .find('input')
       .type(CLONE_NAME)
       .click();
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { FormFieldset } from 'fundamental-react';
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { Select, Option } from '@ui5/webcomponents-react';
@@ -61,7 +60,7 @@ export function SingleSubjectForm({
   };
 
   return (
-    <FormFieldset>
+    <div>
       <ResourceForm.FormField
         required
         tooltipContent={t('role-bindings.create-modal.tooltips.kind')}
@@ -84,7 +83,7 @@ export function SingleSubjectForm({
           value={subject.name || []}
           setValue={setName}
           input={Inputs.Text}
-          ariaLabel={t('role-bindings.create-modal.user-name')}
+          aria-label={t('role-bindings.create-modal.user-name')}
         />
       )}
 
@@ -95,7 +94,7 @@ export function SingleSubjectForm({
           value={subject.name || []}
           setValue={setName}
           input={Inputs.Text}
-          ariaLabel={t('role-bindings.create-modal.group-name')}
+          aria-label={t('role-bindings.create-modal.group-name')}
         />
       )}
 
@@ -123,7 +122,7 @@ export function SingleSubjectForm({
           nestingLevel={nestingLevel + 1}
         />
       )}
-    </FormFieldset>
+    </div>
   );
 }
 

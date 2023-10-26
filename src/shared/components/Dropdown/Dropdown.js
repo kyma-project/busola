@@ -1,7 +1,7 @@
 import { ComboBox, ComboBoxItem } from '@ui5/webcomponents-react';
-import { FormLabel } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
+import { Label } from '../../../shared/ResourceForm/components/Label';
 
 export function Dropdown({
   label,
@@ -60,7 +60,7 @@ export function Dropdown({
 
   return (
     <div>
-      {label && <FormLabel htmlFor={id}>{label}</FormLabel>}
+      {label && <Label forElement={id}>{label}</Label>}
       {inlineHelp ? (
         <Tooltip content={inlineHelp}>{combobox}</Tooltip>
       ) : (

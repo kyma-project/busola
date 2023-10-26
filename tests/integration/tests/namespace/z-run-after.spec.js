@@ -12,12 +12,13 @@ context('Clean up Namespace', () => {
       .contains('Namespaces')
       .click();
 
-    cy.get('[role="search"] [aria-label="search-input"]').type(
-      Cypress.env('NAMESPACE_NAME'),
-      {
+    cy.get('ui5-button[aria-label="open-search"]').click();
+
+    cy.get('[aria-label="search-input"]')
+      .find('input')
+      .type(Cypress.env('NAMESPACE_NAME'), {
         force: true,
-      },
-    ); // use force to skip clicking (the table could re-render between the click and the typing)
+      }); // use force to skip clicking (the table could re-render between the click and the typing)
 
     cy.get('ui5-table-row [aria-label="Delete"]').click({ force: true });
 

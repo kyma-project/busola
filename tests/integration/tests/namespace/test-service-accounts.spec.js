@@ -21,19 +21,22 @@ context('Test Service Accounts', () => {
 
     cy.contains('Advanced').click();
 
-    cy.get('[ariaLabel="ServiceAccount name"]')
+    cy.get('[aria-label="ServiceAccount name"]')
+      .find('input')
       .clear()
       .type(SERVICE_NAME);
 
     // Toggle 'Automount Token' switch
     cy.get('ui5-switch')
+      .find('input')
       .eq(0)
-      .click();
+      .click({ force: true });
 
     // Toggle 'Create associated Secret' switch
     cy.get('ui5-switch')
+      .find('input')
       .eq(1)
-      .click();
+      .click({ force: true });
 
     cy.contains('The associated Secret contains long-lived API token').should(
       'be.visible',
@@ -64,18 +67,21 @@ context('Test Service Accounts', () => {
       .click();
 
     cy.get('[placeholder="Enter key"]:visible')
+      .find('input')
       .filterWithNoValue()
       .type('test.key');
 
     cy.get('[placeholder="Enter value"]:visible')
+      .find('input')
       .filterWithNoValue()
       .first()
       .type('test-value');
 
     // Toggle 'Automount Token' switch
     cy.get('ui5-switch')
+      .find('input')
       .eq(0)
-      .click();
+      .click({ force: true });
 
     cy.get('ui5-dialog')
       .contains('ui5-button', 'Update')

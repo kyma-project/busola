@@ -29,7 +29,7 @@ export function ModeSelector({ mode, isEditing, setMode }) {
   const buttonsToDisplay = isEditing ? editModeButtons : createModeButtons;
 
   return (
-    <div className="mode-selector">
+    <div className="mode-selector ui5-content-density-compact">
       <SegmentedButton className="fd-segmented-button">
         {buttonsToDisplay.map(button => (
           <SegmentedButtonItem

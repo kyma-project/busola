@@ -1,12 +1,24 @@
+form .resource-form {
+  overflow: auto;
+  flex-grow: 1;
+  order: 2;
+}
+
 .resource-form {
   height: 100%;
   display: flex;
   flex-direction: column;
+  padding: 1rem 2rem;
 
   form {
     overflow: auto;
     flex-grow: 1;
     order: 2;
+  }
+
+  .advanced-form,
+  .simple-form {
+    width: 100%;
   }
 
   &:before {
@@ -30,16 +42,17 @@
     width: 100%;
   }
 
-  .fd-row {
-    margin: 0 !important; // override fd's margin: 0 -.25rem;
-  }
-
-  .fd-row + .resource-form__collapsible-section {
-    margin-top: 1rem;
-  }
-
   ui5-switch {
     margin-top: -0.5rem;
+  }
+
+  .form-field,
+  .simple-list {
+    gap: 10px;
+  }
+
+  .form-field + .resource-form__collapsible-section {
+    padding-top: 16px;
   }
 
   .fd-col {

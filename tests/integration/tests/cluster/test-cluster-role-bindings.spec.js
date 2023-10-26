@@ -18,8 +18,8 @@ context('Test Cluster Role Bindings', () => {
 
     cy.contains('Advanced').click();
 
-    cy.get('[ariaLabel="ClusterRoleBinding name"]')
-      .click()
+    cy.get('[aria-label="ClusterRoleBinding name"]')
+      .find('input')
       .type(CRB_NAME);
 
     cy.get(
@@ -31,10 +31,10 @@ context('Test Cluster Role Bindings', () => {
 
     cy.contains('ui5-li:visible', 'cluster-admin').click();
 
-    cy.get('[ariaLabel="User name"]')
-      .click()
-      .clear()
-      .type(USER_NAME);
+    cy.get('[aria-label="User name"]')
+      .find('input')
+      .type(USER_NAME)
+      .blur({ force: true });
 
     cy.get('ui5-dialog')
       .contains('ui5-button', 'Create')
@@ -67,10 +67,10 @@ context('Test Cluster Role Bindings', () => {
 
     cy.contains('Group').click();
 
-    cy.get('[ariaLabel="Group name"]')
-      .click()
-      .clear()
-      .type('test-group');
+    cy.get('[aria-label="Group name"]')
+      .find('input')
+      .type('test-group')
+      .blur({ force: true });
 
     cy.get('ui5-dialog')
       .contains('ui5-button', 'Update')

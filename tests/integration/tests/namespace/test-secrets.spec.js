@@ -23,15 +23,20 @@ context('Test Secrets', () => {
 
     cy.contains('ui5-button', 'Create Secret').click();
 
-    cy.get('[ariaLabel="Secret name"]:visible').type(SECRET_NAME);
+    cy.get('[aria-label="Secret name"]:visible')
+      .find('input')
+      .type(SECRET_NAME, { force: true });
 
-    cy.get('[placeholder="Enter key"]:visible').type(`${SECRET_KEY}`);
+    cy.get('[placeholder="Enter key"]:visible')
+      .find('input')
+      .type(`${SECRET_KEY}`);
 
     cy.get('[placeholder="Enter value"]:visible')
       .first()
       .type(`${SECRET_VALUE}`, { force: true });
 
     cy.get('[placeholder="Enter key"]:visible')
+      .find('input')
       .last()
       .type(`${SECRET2_KEY}`);
 
@@ -84,6 +89,7 @@ context('Test Secrets', () => {
       .type(`{selectall}${SECRET_VALUE2}`);
 
     cy.get('[placeholder="Enter key"]:visible')
+      .find('input')
       .eq(2)
       .type(`${SECRET3_KEY}`);
 
@@ -91,7 +97,7 @@ context('Test Secrets', () => {
       .eq(2)
       .type(`${SECRET3_VALUE}`, { force: true });
 
-    cy.get('[ariaLabel="Delete"]:visible')
+    cy.get('[aria-label="Delete"]:visible')
       .eq(1)
       .click();
 
