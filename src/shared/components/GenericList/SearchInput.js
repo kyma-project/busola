@@ -89,7 +89,6 @@ export function SearchInput({
     if (!suggestions.length) {
       return (
         <ComboBoxItem
-          className="no-entries"
           text={MESSAGES.NO_SEARCH_RESULT}
           id={MESSAGES.NO_SEARCH_RESULT}
         />
