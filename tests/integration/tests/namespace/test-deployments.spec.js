@@ -17,57 +17,64 @@ context('Test Deployments', () => {
 
     cy.contains('ui5-button', 'Create Deployment').click();
 
-    cy.get('[ariaLabel="Deployment name"]:visible')
+    cy.get('[aria-label="Deployment name"]:visible')
+      .find('input')
       .clear()
-      .type(DEPLOYMENT_NAME);
+      .type(DEPLOYMENT_NAME, { force: true });
 
     cy.contains('Advanced').click();
 
     cy.get('[aria-label="expand Labels"]').click();
 
     cy.get('[placeholder="Enter key"]:visible')
+      .find('input')
       .filterWithNoValue()
       .type('app');
 
     cy.get('[placeholder="Enter value"]:visible')
+      .find('input')
       .filterWithNoValue()
       .first()
       .type(DEPLOYMENT_NAME);
 
     cy.get('[placeholder="Enter key"]:visible')
+      .find('input')
       .filterWithNoValue()
       .type('example');
 
     cy.get('[placeholder="Enter value"]:visible')
+      .find('input')
       .filterWithNoValue()
       .first()
       .type(DEPLOYMENT_NAME);
 
-    cy.get('[placeholder^="Enter the Docker image"]:visible').type(
-      DOCKER_IMAGE,
-    );
+    cy.get('[placeholder^="Enter the Docker image"]:visible')
+      .find('input')
+      .type(DOCKER_IMAGE);
 
     cy.contains('Advanced').click();
 
-    cy.contains('label', 'Memory Requests')
+    cy.contains('ui5-label', 'Memory Requests')
       .next()
-      .find('input.fd-input')
+      .find('ui5-input')
+      .find('input')
       .clear()
       .type('32');
 
-    cy.contains('label', 'Memory Limits')
+    cy.contains('ui5-label', 'Memory Limits')
       .next()
-      .find('input.fd-input')
+      .find('ui5-input')
+      .find('input')
       .clear()
       .type('64');
 
-    cy.contains('label', 'CPU Requests (m)')
+    cy.contains('ui5-label', 'CPU Requests (m)')
       .next()
       .find('input')
       .clear()
       .type('10');
 
-    cy.contains('label', 'CPU Limits (m)')
+    cy.contains('ui5-label', 'CPU Limits (m)')
       .next()
       .find('input')
       .clear()
@@ -110,10 +117,12 @@ context('Test Deployments', () => {
     cy.get('[aria-label="expand Labels"]').click();
 
     cy.get('[placeholder="Enter key"]:visible')
+      .find('input')
       .filterWithNoValue()
       .type('label-key');
 
     cy.get('[placeholder="Enter value"]:visible')
+      .find('input')
       .filterWithNoValue()
       .first()
       .type('label-value');

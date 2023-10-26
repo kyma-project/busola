@@ -5,7 +5,7 @@ import { loadFile } from '../../support/loadFile';
 const FILE_NAME = 'test-customresourcedefinisions-namespaced.yaml';
 
 function getQueryInput() {
-  return cy.get('[aria-label=command-palette-search]');
+  return cy.get('[aria-label=command-palette-search]').find('input');
 }
 
 function openSearchWithSlashShortcut() {
@@ -23,9 +23,7 @@ context('Test Custom Resources', () => {
       `${Cypress.platform === 'darwin' ? '{cmd}k' : '{ctrl}k'}`,
     );
 
-    getQueryInput().type('up');
-
-    getQueryInput().trigger('keydown', { key: 'Enter' });
+    getQueryInput().type('up{enter}');
 
     cy.wrap(loadFile(FILE_NAME)).then(CRD_CONFIG => {
       const CRD = JSON.stringify(CRD_CONFIG);

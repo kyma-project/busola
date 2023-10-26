@@ -50,6 +50,7 @@ export const CommandPaletteProvider = ({
     <>
       {showDialog && (
         <CommandPaletteUI
+          showCommandPalette={showDialog}
           hide={hide}
           resourceCache={resourceCache}
           updateResourceCache={updateResourceCache}

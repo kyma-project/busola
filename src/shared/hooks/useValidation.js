@@ -23,15 +23,16 @@ export function useValidation({ inputRef, onChange }) {
       } else if (onChange) {
         onChange(e);
       }
-      const selectionStart = ref.current?.selectionStart;
-      const selectionEnd = ref.current?.selectionEnd;
+      // const selectionStart = ref.current?.selectionStart;
+      // const selectionEnd = ref.current?.selectionEnd;
       setTouched(true);
-      setTimeout(() => {
-        if (ref.current && document.activeElement !== ref.current) {
-          ref.current.focus();
-          ref.current.setSelectionRange(selectionStart, selectionEnd);
-        }
-      });
+      // TODO: fix validation
+      // setTimeout(() => {
+      //   if (ref.current && document.activeElement !== ref.current) {
+      //     ref.current.focus();
+      //     ref.current.setSelectionRange(selectionStart, selectionEnd);
+      //   }
+      // });
     },
   };
 }

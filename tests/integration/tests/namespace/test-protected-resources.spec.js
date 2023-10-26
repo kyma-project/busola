@@ -51,9 +51,9 @@ context('Test Protected Resources', () => {
 
     cy.contains('ui5-button', 'Create Config Map').click();
 
-    cy.get('[ariaLabel="ConfigMap name"]:visible')
-      .click()
-      .type(NAME);
+    cy.get('[aria-label="ConfigMap name"]:visible')
+      .find('input')
+      .type(NAME, { force: true });
 
     cy.contains('Advanced').click();
 
@@ -62,10 +62,12 @@ context('Test Protected Resources', () => {
       .click();
 
     cy.get('[placeholder="Enter key"]:visible')
+      .find('input')
       .eq(1)
       .type('protected');
 
     cy.get('[placeholder="Enter value"]:visible')
+      .find('input')
       .eq(1)
       .type('true');
 
@@ -94,11 +96,14 @@ context('Test Protected Resources', () => {
 
     cy.contains('ui5-button', 'Create Deployment').click();
 
-    cy.get('[ariaLabel="Deployment name"]:visible')
+    cy.get('[aria-label="Deployment name"]:visible')
+      .find('input')
       .clear()
       .type(NAME);
 
-    cy.get('[placeholder^="Enter the Docker image"]:visible').type(IMAGE);
+    cy.get('[placeholder^="Enter the Docker image"]:visible')
+      .find('input')
+      .type(IMAGE);
 
     cy.get('ui5-dialog')
       .contains('ui5-button', 'Create')

@@ -1,6 +1,3 @@
-import React from 'react';
-import { InputGroup, FormInput } from 'fundamental-react';
-
 import { useValidation } from 'shared/hooks/useValidation';
 import { ResourceForm } from 'shared/ResourceForm';
 import {
@@ -8,7 +5,7 @@ import {
   getPropsFromSchema,
 } from 'components/Extensibility/helpers';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-import { Icon } from '@ui5/webcomponents-react';
+import { Icon, Input } from '@ui5/webcomponents-react';
 
 export function JsonataInput({
   value,
@@ -27,22 +24,18 @@ export function JsonataInput({
     inputRef,
     onChange: [onChange, e => setValue && setValue(e.target.value)],
   });
+  if (!props.readOnly) delete props.readOnly;
 
   return (
     <div className="fd-col fd-col-md--11">
-      <InputGroup compact>
-        <InputGroup.Addon>
-          <Tooltip content="jsonata">
-            <Icon aria-label="Jsonata" name="source-code" />
-          </Tooltip>
-        </InputGroup.Addon>
-        <FormInput
-          compact
+      <Tooltip content="jsonata" position="bottom">
+        <Input
           value={value || ''}
           {...props}
           {...validationProps}
+          icon={<Icon aria-label="Jsonata" name="source-code" />}
         />
-      </InputGroup>
+      </Tooltip>
     </div>
   );
 }

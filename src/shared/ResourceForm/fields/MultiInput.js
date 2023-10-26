@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState, createRef } from 'react';
-import { Button, Icon } from '@ui5/webcomponents-react';
+import { useEffect, useRef, useState, createRef } from 'react';
+import { Button, Icon, FlexBox } from '@ui5/webcomponents-react';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
@@ -100,7 +100,6 @@ export function MultiInput({
 
   const listClasses = classnames({
     'text-array-input__list': true,
-    'fd-col': true,
     'fd-col-md--8': !fullWidth && (title || label),
     'fd-col-md--12': fullWidth && !(title || label),
   });
@@ -165,9 +164,9 @@ export function MultiInput({
       tooltipContent={sectionTooltipContent}
       {...props}
     >
-      <div className="fd-row form-field multi-input">
+      <FlexBox className="form-field multi-input">
         {!fullWidth && (title || label) && (
-          <div className="fd-col fd-col-md--3 form-field__label">
+          <div className="fd-col-md--3 form-field__label">
             <ResourceForm.Label
               required={required}
               tooltipContent={tooltipContent}
@@ -179,9 +178,9 @@ export function MultiInput({
         <ul className={listClasses}>
           {internalValue.map((entry, index) => (
             <li key={index}>
-              <div className="fd-row">
-                <div className="fd-col fd-col-md--11">
-                  <div className="fd-row">
+              <FlexBox alignItems="Center" style={{ gap: '10px' }}>
+                <div className="fd-col-md--11">
+                  <FlexBox>
                     {noEdit && !isLast(index) && (
                       <span className="readonly-value">{entry}</span>
                     )}
@@ -190,9 +189,9 @@ export function MultiInput({
                         (input, inputIndex) =>
                           inputComponents[index][inputIndex],
                       )}
-                  </div>
+                  </FlexBox>
                 </div>
-                <div className="fd-col fd-col-md--1 action-button">
+                <div className="fd-col-md--1">
                   {!isLast(index) && (
                     <Button
                       disabled={readOnly}
@@ -207,7 +206,7 @@ export function MultiInput({
                   )}
                   {isLast(index) && newItemAction}
                 </div>
-              </div>
+              </FlexBox>
             </li>
           ))}
           {inputInfo && (
@@ -216,7 +215,7 @@ export function MultiInput({
             </p>
           )}
         </ul>
-        <div className="fd-col fd-col-md--1 tooltip-column tooltip-column--with-padding">
+        <div className="fd-col-md--1 tooltip-column tooltip-column--with-padding">
           {tooltipContent && (
             <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
               <Icon
@@ -227,7 +226,7 @@ export function MultiInput({
             </Tooltip>
           )}
         </div>
-      </div>
+      </FlexBox>
     </ResourceForm.CollapsibleSection>
   );
 }
