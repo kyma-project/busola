@@ -29,7 +29,7 @@ export const ModalWithForm = ({
 }) => {
   const { t } = useTranslation();
   const [isOpen, setOpen] = useState(alwaysOpen || false);
-  const [resetFormFn, setResetFormFn] = useState(() => {});
+  const [resetFormFn, setResetFormFn] = useState(() => () => {});
 
   const {
     isValid,

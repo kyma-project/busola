@@ -6,6 +6,7 @@ import { useUrl } from 'hooks/useUrl';
 
 import { permittedUrlsState } from 'state/permittedUrlsAtom';
 import { K8sResource } from 'types';
+import { useEffect } from 'react';
 
 const DEFAULT_TIMEOUT = 3600;
 
@@ -60,19 +61,22 @@ export function usePermittedUrl(
     data: Array<K8sResource> | null;
   };
 
+  const permittedUrl = error ? (namespacedError ? null : namespacedUrl) : url;
+  useEffect(() => {
+    if (!loading || !resourceNamespace || !skip)
+      setPermittedUrls({
+        [url]: {
+          url: permittedUrl,
+          timestamp: new Date(),
+        },
+      });
+  }, [loading, skip, resourceNamespace, setPermittedUrls, url, permittedUrl]);
+
   if (loading) return null;
   if (resourceNamespace) return namespacedUrl;
   if (skip) {
     return permittedUrls?.[url].url;
   }
-
-  const permittedUrl = error ? (namespacedError ? null : namespacedUrl) : url;
-  setPermittedUrls({
-    [url]: {
-      url: permittedUrl,
-      timestamp: new Date(),
-    },
-  });
 
   return permittedUrl;
 }
