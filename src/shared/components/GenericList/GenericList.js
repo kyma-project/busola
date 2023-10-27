@@ -277,11 +277,9 @@ GenericList.propTypes = {
   actions: CustomPropTypes.listActions,
   extraHeaderContent: PropTypes.node,
   testid: PropTypes.string,
-  showHeader: PropTypes.bool,
   serverDataError: PropTypes.any,
   serverDataLoading: PropTypes.bool,
   pagination: PaginationProps,
-  compact: PropTypes.bool,
   className: PropTypes.string,
   currentlyEditedResourceUID: PropTypes.string,
   sortBy: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
@@ -292,10 +290,8 @@ GenericList.propTypes = {
 GenericList.defaultProps = {
   entries: [],
   actions: [],
-  showHeader: true,
   serverDataError: null,
   serverDataLoading: false,
-  compact: true,
   notFoundMessage: 'components.generic-list.messages.not-found',
   searchSettings: defaultSearch,
 };

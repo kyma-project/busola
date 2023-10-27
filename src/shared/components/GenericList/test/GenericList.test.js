@@ -1,15 +1,6 @@
-import React from 'react';
 import { render, fireEvent, queryByText } from 'testing/reactTestingUtils';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { ThemeProvider } from '@ui5/webcomponents-react';
-
-const domTestingLib = require('@testing-library/dom');
-const { queryHelpers } = domTestingLib;
-
-export const queryByHeaderText = queryHelpers.queryByAttribute.bind(
-  null,
-  'header-text',
-);
 
 describe('GenericList', () => {
   const defaultNotFoundText = 'components.generic-list.messages.not-found';
