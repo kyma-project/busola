@@ -75,7 +75,6 @@ export function useCustomFormValidator() {
             contentParent,
             required,
           );
-          //isValid = isValid && valid && (filled || contentParent.children.length === 0);
           isPartiallyFilled = isPartiallyFilled || filled;
           isComplete = isComplete && complete;
           isValid = isValid && valid && complete;
@@ -105,7 +104,7 @@ export function useCustomFormValidator() {
     const input = formField.querySelector('input');
     const isValid = input
       ? input.checkValidity()
-      : formField.querySelector('#select-dropdown')?.value !== '';
+      : formField.querySelector('ui5-combobox')?.value !== '';
     return { valid: isValid, filled: input?.value !== '' };
   }
 
