@@ -85,6 +85,8 @@ context('Test Secrets', () => {
       .click();
 
     cy.get('[placeholder="Enter value"]:visible')
+      .find('input')
+      .click()
       .eq(0)
       .type(`{selectall}${SECRET_VALUE2}`);
 

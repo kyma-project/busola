@@ -86,6 +86,7 @@ context('Test Config Maps', () => {
 
     cy.get('[aria-label="ConfigMap name"]:visible')
       .find('input')
+      .click()
       .type(CLONE_NAME)
       .click();
 
