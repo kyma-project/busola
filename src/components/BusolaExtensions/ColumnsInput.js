@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { CheckBox, MessageStrip } from '@ui5/webcomponents-react';
-import { FormInput } from 'fundamental-react';
+import { CheckBox, Input, MessageStrip } from '@ui5/webcomponents-react';
 
 export function ColumnsInput({ value: columns, setValue: setColumns }) {
   const { t } = useTranslation();
@@ -23,19 +22,19 @@ export function ColumnsInput({ value: columns, setValue: setColumns }) {
             setColumns([...columns]);
           }}
         />
-        <FormInput
-          compact
+        <Input
           value={value.name}
-          onChange={e => {
+          onInput={e => {
             value.name = e.target.value;
             setColumns([...columns]);
           }}
+          className="input-full"
           required
           placeholder={t('extensibility.starter-modal.headers.field-name')}
-          readOnly={!value.isSelected}
+          disabled={!value.isSelected ? true : false}
         />
-        <FormInput readOnly compact defaultValue={value?.path} />
-        <FormInput readOnly compact defaultValue={value?.type} />
+        <Input className="input-full" disabled value={value?.path} />
+        <Input className="input-full" disabled value={value?.type} />
       </div>
     );
   });

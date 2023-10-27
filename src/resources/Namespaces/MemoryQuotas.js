@@ -1,8 +1,8 @@
-import React from 'react';
-import { FormItem, FormInput, FormLabel } from 'fundamental-react';
 import * as jp from 'jsonpath';
 
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
+import { Input, FlexBox } from '@ui5/webcomponents-react';
+import { Label } from '../../shared/ResourceForm/components/Label';
 
 export function MemoryInput({
   label,
@@ -30,29 +30,35 @@ export function MemoryInput({
     jp.value(container, propertyPath, val);
     setContainer({ ...container });
   };
-
+  if (!otherProps.readOnly) delete otherProps.readOnly;
   return (
-    <FormItem>
-      <FormLabel required={required}>{label}</FormLabel>
+    <FlexBox
+      direction="Column"
+      style={{
+        maxWidth: '100%',
+      }}
+    >
       <div className="memory-input">
-        <FormInput
-          compact
-          type="number"
-          min="0"
-          required={required}
-          value={numericValue}
-          step="any"
-          onChange={e => setValue(e.target.value + selectedUnit)}
-          {...otherProps}
-        />
-        <Dropdown
-          options={options}
-          required={required}
-          selectedKey={selectedUnit}
-          onSelect={(_, { key }) => setValue(numericValue.toString() + key)}
-          {...otherProps}
-        />
+        <Label>{label}</Label>
+        <FlexBox style={{ gap: '10px' }}>
+          <Input
+            type="Number"
+            min="0"
+            required={required}
+            value={numericValue}
+            onInput={e => setValue(e.target.value + selectedUnit)}
+            className="input-full"
+            {...otherProps}
+          />
+          <Dropdown
+            options={options}
+            required={required}
+            selectedKey={selectedUnit}
+            onSelect={(_, { key }) => setValue(numericValue.toString() + key)}
+            {...otherProps}
+          />
+        </FlexBox>
       </div>
-    </FormItem>
+    </FlexBox>
   );
 }

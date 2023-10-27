@@ -30,8 +30,8 @@ context('Create Namespace', () => {
       .click({ force: true });
 
     cy.get('ui5-dialog')
-      .find('input[ariaLabel="Namespace name"]:visible')
-      .click()
+      .find('[aria-label="Namespace name"]:visible')
+      .find('input')
       .type(Cypress.env('NAMESPACE_NAME'));
 
     cy.get('ui5-dialog')

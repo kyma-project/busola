@@ -1,7 +1,7 @@
 import classnames from 'classnames';
-import { Icon } from '@ui5/webcomponents-react';
+import { FlexBox, Icon } from '@ui5/webcomponents-react';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-import { Label } from './Label';
+import { Label } from '../../../shared/ResourceForm/components/Label';
 
 import { useCreateResourceDescription } from 'components/Extensibility/helpers';
 
@@ -28,25 +28,33 @@ export function FormField({
   const inputInfoLink = useCreateResourceDescription(inputInfo);
 
   return (
-    <div className={classnames('fd-row form-field', className)}>
+    <FlexBox className={classnames('form-field', className)}>
       {!isListItem && (
-        <div className="fd-col fd-col-md--3 form-field__label">
+        <div className="fd-col-md--3 form-field__label">
           <Label required={required && !disabled}>{label}</Label>
         </div>
       )}
-      <div className="fd-col fd-col-md--8">
-        <div className="fd-row">
+      <div className="fd-col-md--8">
+        <FlexBox wrap="Wrap">
           {messageStrip
             ? messageStrip
-            : input({ required, disabled, ...inputProps })}
+            : input({
+                required,
+                disabled,
+                className: 'input-full',
+                ...inputProps,
+              })}
           {inputInfo && (
-            <p style={{ color: 'var(--sapNeutralTextColor)' }}>
+            <Label
+              wrappingType="Normal"
+              style={{ color: 'var(--sapNeutralTextColor)' }}
+            >
               {inputInfoLink}
-            </p>
+            </Label>
           )}
-        </div>
+        </FlexBox>
       </div>
-      <div className="fd-col fd-col-md--1 tooltip-column tooltip-column--with-padding">
+      <div className="fd-col-md--1 tooltip-column tooltip-column--with-padding">
         {tooltipContent && (
           <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
             <Icon
@@ -57,6 +65,6 @@ export function FormField({
           </Tooltip>
         )}
       </div>
-    </div>
+    </FlexBox>
   );
 }

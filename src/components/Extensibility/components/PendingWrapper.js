@@ -18,7 +18,7 @@ export function PendingWrapper({ value, ...props }) {
   const { data, loading, error } = value;
 
   if (loading) {
-    return <Spinner size="s" className="" center={false} />;
+    return <Spinner size="s" center={false} />;
   } else if (error) {
     return t('common.messages.error', { error });
   } else {

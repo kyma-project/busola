@@ -31,9 +31,9 @@ context('Test reduced permissions', () => {
 
     cy.contains('ui5-button', 'Create Cluster Role').click();
 
-    cy.get('[ariaLabel="ClusterRole name"]:visible')
-      .click()
-      .type(CR_NAME);
+    cy.get('[aria-label="ClusterRole name"]:visible')
+      .find('input')
+      .type(CR_NAME, { force: true });
 
     // api groups
     chooseComboboxOption(
@@ -83,7 +83,9 @@ context('Test reduced permissions', () => {
 
     cy.contains('ui5-button', 'Create Service Account').click();
 
-    cy.get('input[ariaLabel="ServiceAccount name"]:visible').type(SA_NAME);
+    cy.get('[aria-label="ServiceAccount name"]:visible')
+      .find('input')
+      .type(SA_NAME);
 
     cy.get('ui5-dialog')
       .contains('ui5-button', 'Create')
@@ -106,12 +108,15 @@ context('Test reduced permissions', () => {
       .click();
 
     // name
-    cy.get('[ariaLabel="ClusterRoleBinding name"]:visible').type(CRB_NAME);
+    cy.get('[aria-label="ClusterRoleBinding name"]:visible')
+      .find('input')
+      .type(CRB_NAME);
 
     // role
     chooseComboboxOption(
       '[placeholder="Start typing to select ClusterRole from the list"]:visible',
       CR_NAME,
+      { force: true },
     );
 
     // service account namespace

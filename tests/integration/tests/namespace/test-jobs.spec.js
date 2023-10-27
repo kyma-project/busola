@@ -31,25 +31,34 @@ context('Test Jobs', () => {
     cy.contains('ui5-button', 'Create Job').click();
 
     // job name
-    cy.get('[ariaLabel="Job name"]:visible')
-      .click()
+    cy.get('[aria-label="Job name"]:visible')
+      .find('input')
       .clear()
-      .type(JOB_NAME);
+      .type(JOB_NAME, { force: true });
 
     // job container name
-    cy.get('[ariaLabel="Container name"]:visible')
-      .click()
-      .type(JOB_NAME);
+    cy.get('[aria-label="Container name"]:visible')
+      .find('input')
+      .type(JOB_NAME, { force: true });
 
     // job command
     cy.get('[placeholder^="Command to run"]:visible')
-      .click()
-      .type('/bin/sh{downarrow}-c{downarrow}echo "Busola test"');
+      .find('input')
+      .type('/bin/sh', { force: true });
+    cy.get('[placeholder^="Command to run"]:visible')
+      .parentsUntil('ul')
+      .next()
+      .find('input')
+      .type('-c', { force: true })
+      .parentsUntil('ul')
+      .next()
+      .find('input')
+      .type('echo "Busola test"', { force: true });
 
     // job docker image
     cy.get('[placeholder^="Enter the Docker image tag"]:visible')
-      .click()
-      .type('busybox');
+      .find('input')
+      .type('busybox', { force: true });
 
     // we can't edit Job's template, so we add 2 containers now
     cy.contains('Advanced').click();
@@ -58,19 +67,25 @@ context('Test Jobs', () => {
     cy.contains('Container 2').click();
 
     // job container name
-    cy.get('[ariaLabel="Container name"]:visible').type(SECOND_CONTAINER_NAME);
+    cy.get('[aria-label="Container name"]:visible')
+      .find('input')
+      .type(SECOND_CONTAINER_NAME, { force: true });
 
     // job args
     cy.get('[aria-label="expand Args"]:visible').click();
 
-    cy.get('[placeholder^="Arguments to the"]:visible').type(
-      '-e{downarrow}console.log("Node image test");',
-    );
+    cy.get('[placeholder^="Arguments to the"]:visible')
+      .find('input')
+      .type('-e', { force: true })
+      .parentsUntil('ul')
+      .next()
+      .find('input')
+      .type('console.log("Node image test"); ', { force: true });
 
     // job docker image
     cy.get('[placeholder^="Enter the Docker image tag"]:visible')
-      .click()
-      .type('node:14-alpine');
+      .find('input')
+      .type('node:14-alpine', { force: true });
 
     // create
     cy.get('ui5-dialog')
@@ -144,13 +159,15 @@ context('Test Jobs', () => {
       .click();
 
     cy.get('[placeholder="Enter key"]:visible')
+      .find('input')
       .filterWithNoValue()
-      .type('a');
+      .type('a', { force: true });
 
     cy.get('[placeholder="Enter value"]:visible')
+      .find('input')
       .filterWithNoValue()
       .first()
-      .type('b');
+      .type('b', { force: true });
 
     cy.get('ui5-dialog')
       .contains('ui5-button', 'Update')
