@@ -146,6 +146,41 @@ context('Test Pizzas', () => {
     cy.contains('Toppings price');
   });
 
+  it('Test list sort-functionality', () => {
+    cy.get("[role='row']")
+      .eq(0)
+      .should('contain.text', 'margherita');
+    cy.get("[role='row']")
+      .eq(1)
+      .should('contain.text', 'diavola');
+
+    cy.get('ui5-button[aria-label="open-sort"]').click();
+    cy.get('ui5-radio-button[name="sortOrder"][text="Descending"]').click();
+    cy.get('ui5-button')
+      .contains('OK')
+      .click();
+
+    cy.get("[role='row']")
+      .eq(0)
+      .should('contain.text', 'diavola');
+    cy.get("[role='row']")
+      .eq(1)
+      .should('contain.text', 'margherita');
+
+    cy.get('ui5-button[aria-label="open-sort"]').click();
+    cy.get('ui5-radio-button[name="sortBy"][text="Name"]').click();
+    cy.get('ui5-button')
+      .contains('OK')
+      .click();
+
+    cy.get("[role='row']")
+      .eq(0)
+      .should('contain.text', 'margherita');
+    cy.get("[role='row']")
+      .eq(1)
+      .should('contain.text', 'diavola');
+  });
+
   it('Tests the Create Form', () => {
     cy.contains('ui5-button', 'Create Pizza').click();
 
