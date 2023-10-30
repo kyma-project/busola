@@ -17,7 +17,6 @@ Cypress.Commands.add(
 
     cy.findMonaco(monacoCount)
       .click()
-      .focus()
       .clearInput()
       .paste({ pastePayload: content });
   },

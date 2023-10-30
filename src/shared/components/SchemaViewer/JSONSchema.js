@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { InfoLabel } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 import { ObjectProperties } from './ObjectProperties';
@@ -33,12 +32,14 @@ export function JSONSchema({
                   return `${def.items.type}[]`;
                 }
               })
-              .map(type => <InfoLabel key={type}>{type}</InfoLabel>)}{' '}
+              .map(type => (
+                <ObjectStatus inverted>{type.toUpperCase()}</ObjectStatus>
+              ))}{' '}
           {isRequired && (
             <ObjectStatus inverted state="Warning">
               {t('schema.required')}
             </ObjectStatus>
-          )}{' '}
+          )}
         </div>
       )}
       {description && <div className="description">{description}</div>}

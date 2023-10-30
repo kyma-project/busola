@@ -2,11 +2,12 @@ Cypress.Commands.add('inspectList', (resource, resourceName) => {
   const resourceUrl = resource.replace(/\s/g, '').toLowerCase();
   cy.navigateBackTo(resourceUrl, resource);
 
-  cy.get('ui5-button[aria-label="open-search"]:visible').click();
-
-  cy.get('[aria-label="search-input"]')
+  cy.get('ui5-button[aria-label="open-search"]:visible')
+    .click()
+    .get('ui5-combobox[placeholder="Search"]')
     .find('input')
-    .type(resourceName, { force: true });
+    .click()
+    .type(resourceName);
 
   cy.contains(resourceName).should('be.visible');
 });

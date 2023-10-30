@@ -80,7 +80,7 @@ export function SecretCreate({
           <div className="fd-col fd-col-md--11">
             <ComboBox
               id="secrets-type-combobox"
-              ariaLabel="Secret's type's Combobox"
+              aria-label="Secret's type's Combobox"
               placeholder={t('secrets.placeholders.type')}
               value={options.find(o => o.key === value)?.text ?? ''}
               onChange={event => {
