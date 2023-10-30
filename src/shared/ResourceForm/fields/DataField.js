@@ -4,8 +4,6 @@ import { TextArea } from '@ui5/webcomponents-react';
 
 import { KeyValueField } from './KeyValueField';
 
-import './DataField.scss';
-
 export function DataField({ title, ...props }) {
   const { t } = useTranslation();
   return (
