@@ -108,10 +108,6 @@ Cypress.Commands.add('getLeftNav', () => {
   return cy.get('aside.sidebar');
 });
 
-Cypress.Commands.add('getTopNav', () => {
-  return cy.get('.fd-shellbar');
-});
-
 Cypress.Commands.add('deleteInDetails', resourceName => {
   cy.get('ui5-button')
     .contains('Delete')
