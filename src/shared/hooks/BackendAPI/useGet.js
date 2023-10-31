@@ -3,7 +3,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import shortid from 'shortid';
+import { v4 as uuid } from 'uuid';
 
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { authDataState } from '../../../state/authDataAtom';
@@ -22,7 +22,7 @@ const useGetHook = processDataFn =>
     const fetch = useFetch();
     const abortController = useRef(new AbortController());
     const errorTolerancyCounter = useRef(0);
-    const currentRequestId = shortid();
+    const currentRequestId = uuid();
     const requestData = useRef({});
     const previousRequestNotFinished = useRef(null);
 
