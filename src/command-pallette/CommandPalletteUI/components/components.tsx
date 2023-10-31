@@ -45,7 +45,7 @@ export function NamespaceContextDisplay({
     <div className="namespace-context">
       <span className="namespace-name">{t('namespaces.name_singular')}:</span>
       <Token
-        className="fd-margin-end--tiny fd-margin-begin--tiny"
+        className="bsl-margin-end--tiny bsl-margin-begin--tiny"
         text={namespaceContext}
         closeIcon={
           <Icon

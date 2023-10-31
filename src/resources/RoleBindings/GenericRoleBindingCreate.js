@@ -104,7 +104,7 @@ export function GenericRoleBindingCreate({
         <MessageStrip
           design="Warning"
           hideCloseButton
-          className="fd-margin-top--sm"
+          className="bsl-margin-top--sm"
         >
           {t('role-bindings.create-modal.at-least-one-subject-required', {
             resource: singularName,

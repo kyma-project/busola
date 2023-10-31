@@ -117,7 +117,7 @@ export function AuthForm({
       <MessageStrip
         design="Warning"
         hideCloseButton
-        className="fd-margin-top--sm fd-margin-bottom--sm"
+        className="bsl-margin-top--sm bsl-margin-bottom--sm"
       >
         {t('clusters.wizard.incomplete', {
           context:
@@ -131,7 +131,7 @@ export function AuthForm({
         <MessageStrip
           design="Information"
           hideCloseButton
-          className="fd-margin-top--sm fd-margin-bottom--sm"
+          className="bsl-margin-top--sm bsl-margin-bottom--sm"
         >
           {t('clusters.wizard.token-info')}
         </MessageStrip>

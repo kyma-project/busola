@@ -129,7 +129,7 @@ export function AddClusterWizard({
         <MessageStrip
           design="Information"
           hideCloseButton
-          className="add-cluster__kubeconfig-info fd-margin-top--sm fd-margin-bottom--sm"
+          className="add-cluster__kubeconfig-info bsl-margin-top--sm bsl-margin-bottom--sm"
         >
           {t('clusters.wizard.storage-info')}
         </MessageStrip>

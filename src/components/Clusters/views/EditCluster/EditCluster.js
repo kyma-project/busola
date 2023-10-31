@@ -159,8 +159,8 @@ function EditClusterComponent({
 
   return (
     <>
-      <div className="fd-margin-begin-end--md fd-margin-bottom--md">
-        <h3 className="fd-title fd-title--h5 fd-title--wrap fd-margin-bottom--sm">
+      <div className="bsl-margin-begin-end--md bsl-margin-bottom--md">
+        <h3 className="fd-title fd-title--h5 fd-title--wrap bsl-margin-bottom--sm">
           {t('clusters.storage.choose-storage.label')}
         </h3>
         <ChooseStorage

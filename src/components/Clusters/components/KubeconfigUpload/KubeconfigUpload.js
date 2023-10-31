@@ -46,7 +46,7 @@ export function KubeconfigUpload({
           editor.getModel().setValue(text);
         }}
       />
-      <p className="editor-label fd-margin-bottom--sm fd-margin-top--sm">
+      <p className="editor-label bsl-margin-bottom--sm bsl-margin-top--sm">
         {t('clusters.wizard.editor-label')}
       </p>
       <Editor
@@ -60,7 +60,7 @@ export function KubeconfigUpload({
         <MessageStrip
           design="Negative"
           hideCloseButton
-          className="fd-margin-top--sm"
+          className="bsl-margin-top--sm"
         >
           {t('common.create-form.editor-error', { error })}
         </MessageStrip>

@@ -49,7 +49,7 @@ export function ResourceButton({
     <Button
       icon={structure.icon}
       iconEnd
-      className="fd-margin-begin--sm"
+      className="bsl-margin-begin--sm"
       onClick={() =>
         navigate(
           resourceUrl(

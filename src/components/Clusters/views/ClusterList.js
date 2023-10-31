@@ -144,7 +144,7 @@ function ClusterList() {
       <Button
         design="Transparent"
         icon="add"
-        className="fd-margin-begin--sm"
+        className="bsl-margin-begin--sm"
         onClick={() => setShowAdd(true)}
       >
         {t('clusters.add.title')}
@@ -153,7 +153,7 @@ function ClusterList() {
         <Button
           design="Transparent"
           icon="add"
-          className="fd-margin-begin--sm"
+          className="bsl-margin-begin--sm"
           onClick={() => navigate('/gardener-login')}
         >
           {t('clusters.gardener.button')}
@@ -186,7 +186,7 @@ function ClusterList() {
         kubeconfigIdFeature?.config?.defaultKubeconfig && (
           <Button
             onClick={loadDefaultKubeconfigId}
-            className="fd-margin-end--tiny fd-margin-begin--tiny"
+            className="bsl-margin-end--tiny bsl-margin-begin--tiny"
           >
             {t('clusters.add.load-default')}
           </Button>
@@ -213,7 +213,7 @@ function ClusterList() {
         >
           <Button
             onClick={() => setShowAdd(true)}
-            className="fd-margin-end--tiny fd-margin-begin--tiny"
+            className="bsl-margin-end--tiny bsl-margin-begin--tiny"
             design="Emphasized"
           >
             {t('clusters.add.title')}

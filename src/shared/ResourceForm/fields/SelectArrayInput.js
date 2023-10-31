@@ -38,7 +38,7 @@ export function SelectArrayInput({
             options={options}
             onKeyDown={focus}
             onBlur={updateValue}
-            className="fd-margin-end--sm"
+            className="bsl-margin-end--sm"
           />
         ),
       ]}

@@ -75,7 +75,7 @@ export function YamlResourcesList({ resourcesData }) {
       return (
         <>
           <div
-            className="bsl-display-flex bsl-justify-between bsl-align-center fd-margin--tiny"
+            className="bsl-display-flex bsl-justify-between bsl-align-center bsl-margin--tiny"
             style={{ minHeight: '20px' }}
           >
             <p>
@@ -115,7 +115,7 @@ export function YamlResourcesList({ resourcesData }) {
             />
             <div id="upload-progress-bar-label">{getLabel()}</div>
           </div>
-          <ul className="fd-margin-top--tiny">
+          <ul className="bsl-margin-top--tiny">
             {filteredResources.map(r => (
               <li key={`${r?.value?.kind}-${r?.value?.metadata?.name}`}>
                 <Icon

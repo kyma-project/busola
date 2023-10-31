@@ -10,7 +10,7 @@ export function RuleTitle({ rule, i }) {
   const Alert = ({ tooltipContent }) => (
     <Tooltip
       position="right"
-      className="fd-margin-end--tiny"
+      className="bsl-margin-end--tiny"
       content={tooltipContent}
       delay={0}
     >

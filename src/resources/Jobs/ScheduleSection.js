@@ -91,13 +91,13 @@ function ScheduleEditor({ schedule, setSchedule }) {
         <MessageStrip
           design="Negative"
           hideCloseButton
-          className="fd-margin-top--sm"
+          className="bsl-margin-top--sm"
         >
           {t('cron-jobs.create-modal.parse-error')}
         </MessageStrip>
       )}
       <p
-        className="fd-margin-top--sm"
+        className="bsl-margin-top--sm"
         style={{ color: 'var(--sapNeutralTextColor)' }}
       >
         {t('cron-jobs.create-modal.schedule-description')}

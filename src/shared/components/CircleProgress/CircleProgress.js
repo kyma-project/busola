@@ -69,7 +69,7 @@ export const CircleProgress = ({
         <span className="title" style={titleStyle}>
           {isInErrorState(percent, max, reversed) && (
             <Icon
-              className="fd-margin-end--tiny bsl-icon-s"
+              className="bsl-margin-end--tiny bsl-icon-s"
               name="error"
               aria-label="Error state icon"
             />

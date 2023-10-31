@@ -31,7 +31,7 @@ export const Link = ({
       <Icon
         design="Information"
         name="action"
-        className="fd-margin-begin--tiny fd-margin-end--tiny bsl-icon-s"
+        className="bsl-margin-begin--tiny bsl-margin-end--tiny bsl-icon-s"
         aria-label={t('common.ariaLabel.new-tab-link')}
       />
     </a>

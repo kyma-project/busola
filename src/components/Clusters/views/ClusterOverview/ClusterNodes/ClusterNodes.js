@@ -168,7 +168,7 @@ export function ClusterNodes() {
             title={t('cluster-overview.headers.metrics')}
           />
         )}
-      <div className="fd-margin--md cluster-overview__graphs-wrapper">
+      <div className="bsl-margin--md cluster-overview__graphs-wrapper">
         <StatsPanel type="cluster" disableMargin />
         <ResourceCommitment />
       </div>

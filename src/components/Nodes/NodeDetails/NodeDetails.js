@@ -38,7 +38,7 @@ function NodeDetails({ nodeName }) {
             {data && (
               <>
                 <div
-                  className={`panels fd-margin--md  ${
+                  className={`panels bsl-margin--md  ${
                     isPrometheusEnabled ? 'withPrometheus' : ''
                   }`}
                 >

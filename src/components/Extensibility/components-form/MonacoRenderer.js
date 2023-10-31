@@ -91,7 +91,7 @@ export function MonacoRenderer({
       defaultOpen={defaultOpen}
       nestingLevel={nestingLevel}
     >
-      <div className="fd-margin-bottom--sm">
+      <div className="bsl-margin-bottom--sm">
         <Label required={required} tooltipContent={tExt(tooltipContent)}>
           {tFromStoreKeys(storeKeys, schema)}
         </Label>

@@ -25,7 +25,7 @@ export default function ProtectedSettings() {
       <div>
         <Switch
           aria-label={t('settings.clusters.disableResourceProtection')}
-          className="fd-margin-begin--tiny"
+          className="bsl-margin-begin--tiny"
           checked={disableResourceProtection}
           onChange={() => setDisableResourceProtection(prevState => !prevState)}
         />

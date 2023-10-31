@@ -140,7 +140,7 @@ const CollapsedRowRenderer = ({
         >
           <FlexBox>
             <Icon
-              className="fd-margin-end--tiny"
+              className="bsl-margin-end--tiny"
               name={isOpen ? 'navigation-up-arrow' : 'navigation-down-arrow'}
             />
             {title}

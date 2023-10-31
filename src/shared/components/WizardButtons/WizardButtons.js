@@ -22,11 +22,11 @@ export function WizardButtons({
   };
 
   return (
-    <div className="fd-margin-top--sm">
+    <div className="bsl-margin-top--sm">
       {!firstStep && (
         <Button
           onClick={goToPreviousStep}
-          className="fd-margin-end--tiny"
+          className="bsl-margin-end--tiny"
           aria-label="previous-step"
         >
           {t('clusters.buttons.previous-step')}
@@ -36,7 +36,7 @@ export function WizardButtons({
         design="Emphasized"
         onClick={lastStep ? onComplete : goToNextStep}
         disabled={validation}
-        className="fd-margin-end--tiny"
+        className="bsl-margin-end--tiny"
         aria-label={lastStep ? 'last-step' : 'next-step'}
       >
         {lastStep

@@ -154,7 +154,7 @@ export default function ResourceValidationSettings() {
                       design="Transparent"
                       icon="customize"
                       iconEnd
-                      className="fd-margin-begin--sm"
+                      className="bsl-margin-begin--sm"
                       onClick={enablePolicyCustomization}
                     >
                       {t('settings.clusters.resourcesValidation.customize')}
@@ -165,7 +165,7 @@ export default function ResourceValidationSettings() {
                       design="Transparent"
                       icon="reset"
                       iconEnd
-                      className="fd-margin-begin--sm"
+                      className="bsl-margin-begin--sm"
                       onClick={disablePolicyCustomization}
                     >
                       {t('settings.clusters.resourcesValidation.reset')}

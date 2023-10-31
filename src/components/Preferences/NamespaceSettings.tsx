@@ -21,7 +21,7 @@ export default function NamespaceSettings() {
       <div>
         <Switch
           aria-label={t('settings.clusters.showHiddenNamespaces')}
-          className="fd-margin-begin--tiny"
+          className="bsl-margin-begin--tiny"
           checked={showHiddenNamespaces}
           onChange={toggleVisibility}
         />

@@ -115,7 +115,7 @@ export function EditorActions({
   const { t } = useTranslation();
 
   return (
-    <section className="editor-actions fd-margin-bottom--sm">
+    <section className="editor-actions bsl-margin-bottom--sm">
       <ButtonWithTooltip
         tooltipContent={
           visible ? t('common.tooltips.hide') : t('common.tooltips.show')

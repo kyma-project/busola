@@ -74,7 +74,7 @@ export default function GardenerLogin() {
       <MessageStrip
         design="Information"
         hideCloseButton
-        className="fd-margin-top--sm"
+        className="bsl-margin-top--sm"
       >
         {report}
       </MessageStrip>
@@ -82,7 +82,7 @@ export default function GardenerLogin() {
         <MessageStrip
           design="Negative"
           hideCloseButton
-          className="fd-margin-top--sm"
+          className="bsl-margin-top--sm"
         >
           {t('clusters.gardener.error', { message: error.message })}
         </MessageStrip>

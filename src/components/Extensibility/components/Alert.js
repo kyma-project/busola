@@ -16,7 +16,7 @@ export const Alert = ({ value, schema, structure, ...props }) => {
   }
 
   const messageClassNames = classNames({
-    'fd-margin--md': !structure.disableMargin,
+    'bsl-margin--md': !structure.disableMargin,
   });
 
   return (

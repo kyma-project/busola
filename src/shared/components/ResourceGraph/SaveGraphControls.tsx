@@ -23,7 +23,7 @@ export function SaveGraphControls({
       <Icon
         aria-label="download"
         name="download"
-        className="fd-margin-end--tiny"
+        className="bsl-margin-end--tiny"
       />
       {t('resource-graph.save-as-dot')}
     </Button>

@@ -88,13 +88,13 @@ export function Editor({
           <MessageStrip
             design="Negative"
             hideCloseButton
-            className="fd-margin--sm break-word"
+            className="bsl-margin--sm break-word"
           >
             {t('common.create-form.editor-error', { error })}
           </MessageStrip>
         )}
         {schemaError && (
-          <MessageStrip design="Warning" className="fd-margin--sm break-word">
+          <MessageStrip design="Warning" className="bsl-margin--sm break-word">
             {t('common.create-form.autocomplete-unavailable-error', {
               error: schemaError.error || schemaError.message || schemaError,
             })}
@@ -104,7 +104,7 @@ export function Editor({
           <MessageStrip
             design="Warning"
             hideCloseButton
-            className="fd-margin--sm break-word"
+            className="bsl-margin--sm break-word"
           >
             {warnings.map(m => (
               <span

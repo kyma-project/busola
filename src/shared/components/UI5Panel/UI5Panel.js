@@ -20,7 +20,7 @@ export const UI5Panel = ({
   description = '',
 }) => {
   const panelClassNames = classNames({
-    'fd-margin--md': !disableMargin,
+    'bsl-margin--md': !disableMargin,
   });
 
   return (
