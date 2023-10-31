@@ -31,7 +31,7 @@ export function Preferences() {
           style={{ margin: 'auto' }}
           name="accelerated"
           aria-label={t('settings.interface.title')}
-          className="ui5-icon-xl"
+          className="bsl-icon-xl"
         />
       ),
       id: 1,
@@ -44,7 +44,7 @@ export function Preferences() {
           style={{ margin: 'auto' }}
           name="database"
           aria-label={t('settings.clusters.title')}
-          className="ui5-icon-xl"
+          className="bsl-icon-xl"
         />
       ),
       id: 2,

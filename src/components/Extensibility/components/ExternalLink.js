@@ -71,7 +71,7 @@ export const ExternalLink = ({
       <Icon
         design="Information"
         name="action"
-        className="fd-margin-begin--tiny ui5-icon-s"
+        className="fd-margin-begin--tiny bsl-icon-s"
         ariaLabel={t('common.ariaLabel.new-tab-link')}
         originalResource={originalResource}
       />

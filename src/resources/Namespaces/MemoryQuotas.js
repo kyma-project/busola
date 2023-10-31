@@ -47,7 +47,7 @@ export function MemoryInput({
             required={required}
             value={numericValue}
             onInput={e => setValue(e.target.value + selectedUnit)}
-            className="input-full"
+            className="full-width"
             {...otherProps}
           />
           <Dropdown

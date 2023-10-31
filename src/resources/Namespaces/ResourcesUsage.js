@@ -153,7 +153,7 @@ export const ResourcesUsage = ({ namespace }) => {
       disableMargin
       icon={
         <Icon
-          className="ui5-icon-m"
+          className="bsl-icon-m"
           name="it-host"
           aria-label="Resource icon"
         />

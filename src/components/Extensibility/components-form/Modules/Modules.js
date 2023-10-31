@@ -214,7 +214,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
               <Icon
                 name="action"
                 design="Information"
-                className="fd-margin-begin--tiny ui5-icon-s"
+                className="fd-margin-begin--tiny bsl-icon-s"
               />
             </Link>
           ) : null}

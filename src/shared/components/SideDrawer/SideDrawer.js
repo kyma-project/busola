@@ -86,7 +86,7 @@ export const SideDrawer = ({
         >
           <Icon
             name={isOpen ? 'open-command-field' : 'close-command-field'}
-            className="ui5-icon-l"
+            className="bsl-icon-l"
             aria-label="Open/close the drawer"
           />
           {buttonText}
@@ -98,7 +98,7 @@ export const SideDrawer = ({
           <Icon
             name="vertical-grip"
             aria-label="resize"
-            className="ui5-icon-m"
+            className="bsl-icon-m"
           />
         </div>
         <div className="content-wrapper">

@@ -45,7 +45,7 @@ export function TextArrayInput({
               setValue(e.target.value);
               updateValue();
             }}
-            className="input-full"
+            className="full-width"
             // onKeyDown={e => focus(e)}
             // onBlur={() => {
             //   const fieldValue = internalValue?.filter(val => !!val);

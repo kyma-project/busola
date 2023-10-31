@@ -41,7 +41,7 @@ export function FormField({
             : input({
                 required,
                 disabled,
-                className: 'input-full',
+                className: 'full-width',
                 ...inputProps,
               })}
           {inputInfo && (
@@ -59,7 +59,7 @@ export function FormField({
           <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
             <Icon
               aria-label=""
-              className="ui5-icon-m"
+              className="bsl-icon-m"
               name="message-information"
             />
           </Tooltip>

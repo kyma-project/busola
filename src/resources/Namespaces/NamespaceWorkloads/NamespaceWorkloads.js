@@ -126,7 +126,7 @@ export function NamespaceWorkloads({ namespace }) {
       disableMargin
       icon={
         <Icon
-          className="ui5-icon-m"
+          className="bsl-icon-m"
           name="stethoscope"
           aria-label="Health icon"
         />

@@ -220,7 +220,7 @@ export function MultiInput({
             <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
               <Icon
                 aria-label=""
-                className="ui5-icon-m"
+                className="bsl-icon-m"
                 name="message-information"
               />
             </Tooltip>

@@ -15,7 +15,7 @@ export function RuleTitle({ rule, i }) {
       delay={0}
     >
       <Icon
-        className="fd-color--warning"
+        className="bsl-color--warning"
         aria-label={t('common.messages.validation-error')}
         name="alert"
       />

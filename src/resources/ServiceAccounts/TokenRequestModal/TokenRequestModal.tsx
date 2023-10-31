@@ -121,7 +121,7 @@ export function TokenRequestModal({
             {t('service-accounts.token-request.warning')}
           </MessageStrip>
           <div
-            className="fd-display-flex fd-margin-top--sm fd-margin-bottom--sm"
+            className="bsl-display-flex fd-margin-top--sm fd-margin-bottom--sm"
             style={{
               justifyContent: 'flex-end',
             }}

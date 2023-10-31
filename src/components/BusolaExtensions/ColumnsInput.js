@@ -28,13 +28,13 @@ export function ColumnsInput({ value: columns, setValue: setColumns }) {
             value.name = e.target.value;
             setColumns([...columns]);
           }}
-          className="input-full"
+          className="full-width"
           required
           placeholder={t('extensibility.starter-modal.headers.field-name')}
           disabled={!value.isSelected ? true : false}
         />
-        <Input className="input-full" disabled value={value?.path} />
-        <Input className="input-full" disabled value={value?.type} />
+        <Input className="full-width" disabled value={value?.path} />
+        <Input className="full-width" disabled value={value?.type} />
       </div>
     );
   });

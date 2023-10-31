@@ -69,7 +69,7 @@ export function EventDetails(props) {
               <Icon
                 aria-label="Warning"
                 name="message-warning"
-                className="fd-has-color-status-2 has-tooltip ui5-icon-s"
+                className="fd-has-color-status-2 has-tooltip bsl-icon-s"
               />
             </Tooltip>
           ) : (
@@ -77,7 +77,7 @@ export function EventDetails(props) {
               <Icon
                 aria-label="Normal"
                 name="message-information"
-                className="has-tooltip ui5-icon-s"
+                className="has-tooltip bsl-icon-s"
               />
             </Tooltip>
           )}

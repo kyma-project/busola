@@ -75,7 +75,7 @@ export function YamlResourcesList({ resourcesData }) {
       return (
         <>
           <div
-            className="fd-display-flex fd-justify-between fd-align-center fd-margin--tiny"
+            className="bsl-display-flex bsl-justify-between bsl-align-center fd-margin--tiny"
             style={{ minHeight: '20px' }}
           >
             <p>
