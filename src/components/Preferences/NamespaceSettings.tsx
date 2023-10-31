@@ -15,7 +15,7 @@ export default function NamespaceSettings() {
 
   return (
     <div className="preferences-row">
-      <span className="fd-has-color-status-4">
+      <span className="bsl-has-color-status-4">
         {t('settings.clusters.showHiddenNamespaces')}
       </span>
       <div>

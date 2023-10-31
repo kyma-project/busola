@@ -27,7 +27,7 @@ export const SideDrawer = ({
     textToCopy = jsyaml.dump(children);
     children = (
       <>
-        <h1 className="fd-has-type-4">YAML</h1>
+        <h1 className="bsl-has-type-4">YAML</h1>
         <Editor
           height="90vh"
           autocompletionDisabled

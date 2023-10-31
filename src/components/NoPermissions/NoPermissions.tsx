@@ -41,7 +41,7 @@ function NoPermissions() {
       </p>
       <form className="bsl-display-flex" onSubmit={updateKubeconfig}>
         <Input
-          className="bsl-margin--zero"
+          className="bsl-margin--none"
           placeholder={t('no-permissions.enter-namespace-name-placeholder')}
           value={namespaceName}
           onInput={(e: any) => setNamespaceName(e.target.typedInValue)}

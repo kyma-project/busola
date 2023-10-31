@@ -18,7 +18,7 @@ export const YamlEditorContext = createContext({
 
 const DrawerHeader = ({ title, closeEditor }) => (
   <header className="yaml-editor-header">
-    <h1 className="fd-has-type-4">{title || 'YAML'}</h1>
+    <h1 className="bsl-has-type-4">{title || 'YAML'}</h1>
     <Button
       design="Transparent"
       icon="decline"

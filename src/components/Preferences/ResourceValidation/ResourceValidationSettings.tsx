@@ -108,7 +108,7 @@ export default function ResourceValidationSettings() {
     >
       {!isEnabled && (
         <div className="no-validation-info">
-          <span className="fd-has-color-status-4">
+          <span className="bsl-has-color-status-4">
             {t('settings.clusters.resourcesValidation.validation-disabled')}
           </span>
         </div>

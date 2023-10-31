@@ -56,7 +56,7 @@ export function CertificateDate({ date, lang }) {
         <Icon
           aria-label={certificateDetails.ariaLabel}
           name={certificateDetails.glyph}
-          className={`fd-has-color-status-${certificateDetails.colorIndex} has-tooltip bsl-icon-s`}
+          className={`bsl-has-color-status-${certificateDetails.colorIndex} has-tooltip bsl-icon-s`}
         />
       </Tooltip>
     </div>

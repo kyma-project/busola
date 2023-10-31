@@ -54,7 +54,7 @@ export function EventList({
               <Icon
                 aria-label="Warning"
                 name="message-warning"
-                className="fd-has-color-status-2 has-tooltip bsl-icon-m"
+                className="bsl-has-color-status-2 has-tooltip bsl-icon-m"
               />
             </Tooltip>
           ) : (
