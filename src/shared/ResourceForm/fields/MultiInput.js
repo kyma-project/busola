@@ -177,10 +177,10 @@ export function MultiInput({
         )}
         <ul className={listClasses}>
           {internalValue.map((entry, index) => (
-            <li key={index}>
-              <FlexBox alignItems="Center" style={{ gap: '10px' }}>
+            <li key={index} className="text-array-entry">
+              <FlexBox alignItems="Baseline" style={{ gap: '10px' }}>
                 <div className="fd-col-md--11">
-                  <FlexBox>
+                  <FlexBox wrap="Wrap" style={{ gap: '10px' }}>
                     {noEdit && !isLast(index) && (
                       <span className="readonly-value">{entry}</span>
                     )}

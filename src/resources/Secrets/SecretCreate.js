@@ -7,7 +7,6 @@ import { DataField } from 'shared/ResourceForm/fields';
 
 import { createSecretTemplate, createPresets, getSecretDefs } from './helpers';
 
-import './SecretCreate.scss';
 import { useRecoilValue } from 'recoil';
 import { configurationAtom } from 'state/configuration/configurationAtom';
 
