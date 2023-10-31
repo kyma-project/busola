@@ -172,7 +172,6 @@ export function Table({
 
   return (
     <GenericList
-      showHeader={structure?.showHeader}
       className={className}
       title={tExt(structure.name, {
         defaultValue: structure.name || structure.source,

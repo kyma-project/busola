@@ -121,7 +121,9 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
     }
 
     if (storage) {
-      cy.contains(storage).click();
+      cy.contains(storage)
+        .parent('ui5-radio-button')
+        .click();
     }
     cy.get(`[aria-label="last-step"]:visible`)
       .contains('Connect cluster')
