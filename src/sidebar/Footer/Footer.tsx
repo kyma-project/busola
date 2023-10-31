@@ -22,7 +22,7 @@ export function Footer() {
             key={legalLink.link}
             url={legalLink.link}
             text={legalLink.label}
-            className="fd-link"
+            className="bsl-link"
           />
         ))}
       </div>
@@ -32,7 +32,7 @@ export function Footer() {
           dataTestId="version-link"
           url={githubLink}
           text={busolaVersion}
-          className="fd-link"
+          className="bsl-link"
         />
       </div>
     </footer>

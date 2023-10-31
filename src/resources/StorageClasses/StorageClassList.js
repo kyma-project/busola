@@ -10,7 +10,7 @@ export function StorageClassList(props) {
   const description = (
     <Trans i18nKey="storage-classes.description">
       <Link
-        className="fd-link"
+        className="bsl-link"
         url="https://kubernetes.io/docs/concepts/storage/storage-classes/"
       />
     </Trans>

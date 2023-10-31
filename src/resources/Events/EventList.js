@@ -105,7 +105,7 @@ export function EventList({
   const description = (
     <Trans i18nKey="events.description">
       <DescriptionLink
-        className="fd-link"
+        className="bsl-link"
         url="https://kubernetes.io/docs/reference/kubernetes-api/cluster-resources/event-v1/"
       />
     </Trans>

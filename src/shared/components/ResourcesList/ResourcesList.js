@@ -243,7 +243,7 @@ export function ResourceListRenderer({
       header: t('common.headers.name'),
       value: entry =>
         hasDetailsView ? (
-          <Link className="fd-link" to={linkTo(entry)}>
+          <Link className="bsl-link" to={linkTo(entry)}>
             {nameSelector(entry)}
           </Link>
         ) : (

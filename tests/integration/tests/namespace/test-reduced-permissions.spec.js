@@ -146,7 +146,7 @@ context('Test reduced permissions', () => {
       .contains('Service Accounts')
       .click();
 
-    cy.get('a.fd-link')
+    cy.get('a.bsl-link')
       .contains(SA_NAME)
       .click();
 

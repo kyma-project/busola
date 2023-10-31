@@ -56,7 +56,7 @@ export function PodDetails(props) {
         volume.name,
         volumeType,
         <Link
-          className="fd-link"
+          className="bsl-link"
           to={namespaceUrl(
             `${pluralize(volumeType.toLowerCase() || '')}/${volume[volumeType]
               .name ||

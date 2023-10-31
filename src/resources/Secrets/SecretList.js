@@ -31,7 +31,7 @@ export function SecretList(props) {
   const description = (
     <Trans i18nKey="secrets.description">
       <Link
-        className="fd-link"
+        className="bsl-link"
         url="https://kubernetes.io/docs/concepts/configuration/secret/"
       />
     </Trans>

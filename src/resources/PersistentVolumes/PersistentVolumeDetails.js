@@ -64,7 +64,7 @@ export function PersistentVolumeDetails(props) {
               ({ metadata }) => metadata.name === spec?.storageClassName,
             ) ? (
               <Link
-                className="fd-link"
+                className="bsl-link"
                 to={resourceUrl({
                   kind: 'StorageClass',
                   metadata: {
@@ -86,7 +86,7 @@ export function PersistentVolumeDetails(props) {
               ({ metadata }) => metadata.name === spec?.claimRef?.name,
             ) ? (
               <Link
-                className="fd-link"
+                className="bsl-link"
                 to={resourceUrl(
                   {
                     kind: 'PersistentVolumeClaim',

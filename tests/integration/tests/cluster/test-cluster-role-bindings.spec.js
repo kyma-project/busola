@@ -49,7 +49,7 @@ context('Test Cluster Role Bindings', () => {
 
     cy.contains(USER_NAME).should('be.visible');
 
-    cy.contains('a.fd-link', 'cluster-admin').should('be.visible');
+    cy.contains('a.bsl-link', 'cluster-admin').should('be.visible');
   });
 
   it('Edit', () => {

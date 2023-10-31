@@ -24,7 +24,7 @@ export function ReleaseDataPanel({ release, simpleHeader }) {
         ) : (
           <>
             <Link
-              className="fd-link release-link"
+              className="bsl-link release-link"
               to={namespaceUrl(`helm-releases/${name}`)}
             >
               {name}

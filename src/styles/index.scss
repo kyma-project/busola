@@ -17,17 +17,18 @@ body {
   }
 }
 
-.fd-action-bar__actions .fd-popover {
-  top: 0 !important;
-}
-
 .cursor-pointer {
   cursor: pointer;
 }
 
-.link {
-  color: var(--sapBrandColor);
+.bsl-link {
+  color: var(--sapLinkColor);
   cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 
   &.no-border {
     border: none;
@@ -39,10 +40,6 @@ body {
   grid-template-columns: 2fr 2fr;
   margin: 32px;
   grid-gap: 32px;
-
-  .fd-panel {
-    margin: 0;
-  }
 
   @media screen and (max-width: 768px) {
     grid-template-columns: 1fr;
@@ -250,10 +247,6 @@ ui5-checkbox {
 
 .fd-margin-0 {
   margin: 0;
-}
-
-.fd-link {
-  cursor: pointer;
 }
 
 .fd-popover__popper b {

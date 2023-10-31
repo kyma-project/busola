@@ -95,7 +95,7 @@ function ClusterList() {
 
   const rowRenderer = entry => [
     <Link
-      className="fd-link"
+      className="bsl-link"
       to={`/cluster/${entry.contextName}`}
       style={styleActiveCluster(entry)}
     >

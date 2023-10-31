@@ -24,7 +24,7 @@ import { useUrl } from 'hooks/useUrl';
 const NodeHeader = ({ nodeName }) => {
   const { clusterUrl } = useUrl();
   return (
-    <Link className="fd-link" to={clusterUrl(`overview/nodes/${nodeName}`)}>
+    <Link className="bsl-link" to={clusterUrl(`overview/nodes/${nodeName}`)}>
       {nodeName}
     </Link>
   );

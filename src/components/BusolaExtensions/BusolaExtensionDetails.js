@@ -172,7 +172,7 @@ export function BusolaExtensionDetails(props) {
           >
             <Trans i18nKey="extensibility.message.unnown-version">
               <Link
-                className="fd-link"
+                className="bsl-link"
                 url="https://github.com/kyma-project/busola/tree/main/docs/extensibility"
               />
             </Trans>

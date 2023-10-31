@@ -51,7 +51,7 @@ export function EventDetails(props) {
       header: t('common.labels.namespace'),
       value: event => (
         <Link
-          className="fd-link"
+          className="bsl-link"
           data-testid="details-link"
           to={clusterUrl(`namespaces/${event.metadata.namespace}`)}
         >
