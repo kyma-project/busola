@@ -169,7 +169,7 @@ export function ClusterNodes() {
           />
         )}
       <div className="bsl-margin--md cluster-overview__graphs-wrapper">
-        <StatsPanel type="cluster" disableMargin />
+        <StatsPanel type="cluster" disableMargin className="" />
         <ResourceCommitment />
       </div>
       {Events}
