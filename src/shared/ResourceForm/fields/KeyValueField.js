@@ -84,7 +84,7 @@ export function KeyValueField({
       }
       inputs={[
         ({ value, setValue, ref, updateValue, focus }) => (
-          <div className="fd-col fd-col-md--6">
+          <div className="fd-col-md--5">
             {input.key({
               fullWidth: true,
               className: 'input-full',
@@ -105,7 +105,7 @@ export function KeyValueField({
           </div>
         ),
         ({ focus, value, setValue, updateValue, ...props }) => (
-          <div className="fd-col fd-col-md--6 input-full">
+          <div className="fd-col-md--6">
             {input.value({
               fullWidth: true,
               className: 'value-input input-full',
@@ -135,11 +135,10 @@ export function KeyValueField({
           </div>
         ),
         ({ value, setValue, updateValue }) => (
-          <div className="fd-col fd-col-md--6">
+          <div>
             {readableFromFile ? (
               <Tooltip content={t('common.tooltips.read-file')}>
                 <Button
-                  className="read-from-file"
                   onClick={() =>
                     readFromFile()?.then(result => {
                       setValue({
