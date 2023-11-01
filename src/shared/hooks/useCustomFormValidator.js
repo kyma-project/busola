@@ -41,6 +41,11 @@ export function useCustomFormValidator() {
           isValid = isValid && valid;
           isPartiallyFilled = isPartiallyFilled || filled;
           isComplete = isComplete && filled;
+        } else if (child.classList.contains('multi-checkbox')) {
+          const { valid, filled } = validateMultiCheckboxes(child, isRequired);
+          isValid = isValid && valid;
+          isPartiallyFilled = isPartiallyFilled || filled;
+          isComplete = isComplete && filled;
         }
         // Validates the FormField
         else {
@@ -114,6 +119,12 @@ export function useCustomFormValidator() {
       (pattern && !value.match(pattern))
     );
     return { valid: isValid, filled: value !== '' };
+  }
+
+  function validateMultiCheckboxes(formField, isRequired) {
+    const checkboxes = Array.from(formField.querySelectorAll('ui5-checkbox'));
+    const isFilled = checkboxes.some(checkbox => checkbox.checked);
+    return { valid: !isRequired || isFilled, filled: isFilled };
   }
 
   function validateInputList(inputList, isRequired) {
