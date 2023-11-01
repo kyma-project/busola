@@ -31,7 +31,6 @@ export function useCustomFormValidator() {
     let isPartiallyFilled = false; // tracks if at least one child has been filled out, important for the validation of non-required FormGroups
     let isComplete = true; // tracks if all children have been filled out, important for the validation of non-required GenericLists
 
-    console.log(element);
     for (const child of element?.children) {
       if (isRequired && !isValid) break;
 
@@ -97,11 +96,6 @@ export function useCustomFormValidator() {
         }
       }
     }
-    console.log({
-      valid: isValid || (!isRequired && !isPartiallyFilled),
-      filled: isPartiallyFilled || isComplete,
-      complete: isComplete,
-    });
     return {
       valid: isValid || (!isRequired && !isPartiallyFilled),
       filled: isPartiallyFilled || isComplete,
