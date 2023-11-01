@@ -135,8 +135,9 @@ Cypress.Commands.add(
   ) => {
     cy.get('[aria-label="open-search"]:visible').click();
 
-    cy.get('ui5-input[placeholder="Search"]')
+    cy.get('ui5-combobox[placeholder="Search"]')
       .find('input')
+      .click()
       .type(searchTerm);
 
     cy.contains('a', searchTerm).should('be.visible');
@@ -155,8 +156,9 @@ Cypress.Commands.add(
       }
 
       if (clearSearch) {
-        cy.get('ui5-input[placeholder="Search"]')
+        cy.get('ui5-combobox[placeholder="Search"]')
           .find('input')
+          .click()
           .clear();
       }
 

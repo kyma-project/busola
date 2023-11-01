@@ -7,7 +7,6 @@ import { DataField } from 'shared/ResourceForm/fields';
 
 import { createSecretTemplate, createPresets, getSecretDefs } from './helpers';
 
-import './SecretCreate.scss';
 import { useRecoilValue } from 'recoil';
 import { configurationAtom } from 'state/configuration/configurationAtom';
 
@@ -80,7 +79,7 @@ export function SecretCreate({
           <div className="fd-col fd-col-md--11">
             <ComboBox
               id="secrets-type-combobox"
-              ariaLabel="Secret's type's Combobox"
+              aria-label="Secret's type's Combobox"
               placeholder={t('secrets.placeholders.type')}
               value={options.find(o => o.key === value)?.text ?? ''}
               onChange={event => {

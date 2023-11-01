@@ -33,6 +33,7 @@ context('Test Jobs', () => {
     // job name
     cy.get('[aria-label="Job name"]:visible')
       .find('input')
+      .click()
       .clear()
       .type(JOB_NAME, { force: true });
 

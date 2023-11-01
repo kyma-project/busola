@@ -1,7 +1,4 @@
 .multi-input {
-  > .fd-col {
-    padding-top: 0;
-  }
   .readonly-value {
     width: 100%;
     display: flex;
@@ -17,5 +14,13 @@
 
   &.extensibility li {
     align-items: center;
+  }
+
+  .text-array-input__list {
+    flex-grow: 1;
+  }
+
+  .text-array-entry {
+    margin-bottom: 16px;
   }
 }

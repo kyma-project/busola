@@ -1,5 +1,3 @@
-import { FormRadioGroup } from 'fundamental-react';
-
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { CheckBox, Icon } from '@ui5/webcomponents-react';
 
@@ -20,11 +18,7 @@ export function Checkboxes({
     }
   };
   return (
-    <FormRadioGroup
-      inline={inline}
-      className="inline-radio-group fd-col fd-col-md--12"
-      {...props}
-    >
+    <>
       {options.map(({ key, text, description }) => (
         <div key={key} className="fd-row">
           <CheckBox
@@ -46,6 +40,6 @@ export function Checkboxes({
           </div>
         </div>
       ))}
-    </FormRadioGroup>
+    </>
   );
 }

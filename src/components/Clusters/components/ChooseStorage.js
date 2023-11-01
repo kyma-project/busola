@@ -1,6 +1,4 @@
-import React from 'react';
-
-import { FormRadioGroup, FormRadioItem } from 'fundamental-react';
+import { FlexBox, RadioButton } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import './ChooseStorage.scss';
 
@@ -10,39 +8,35 @@ export function ChooseStorage({ storage, setStorage }) {
   return (
     <>
       <p className="storage-info">{t('clusters.storage.info')}</p>
-
-      <FormRadioGroup
-        className="choose-storage"
-        onChange={(_, type) => setStorage(type)}
-      >
-        <FormRadioItem
-          data="localStorage"
+      <FlexBox direction="Column">
+        <RadioButton
+          name="storage"
+          value="localStorage"
           checked={storage === 'localStorage'}
-          // prevent error for checked without onChange
-          inputProps={{ onChange: () => {} }}
-        >
-          {t('clusters.storage.labels.localStorage')}:{' '}
-          {t('clusters.storage.descriptions.localStorage')}
-        </FormRadioItem>
-
-        <FormRadioItem
-          data="sessionStorage"
+          text={`${t('clusters.storage.labels.localStorage')}: ${t(
+            'clusters.storage.descriptions.localStorage',
+          )}`}
+          onChange={event => setStorage(event.target.value)}
+        />
+        <RadioButton
+          name="storage"
+          value="sessionStorage"
           checked={storage === 'sessionStorage'}
-          inputProps={{ onChange: () => {} }}
-        >
-          {t('clusters.storage.labels.sessionStorage')}:{' '}
-          {t('clusters.storage.descriptions.sessionStorage')}
-        </FormRadioItem>
-
-        <FormRadioItem
-          data="inMemory"
+          text={`${t('clusters.storage.labels.sessionStorage')}: ${t(
+            'clusters.storage.descriptions.sessionStorage',
+          )}`}
+          onChange={event => setStorage(event.target.value)}
+        />
+        <RadioButton
+          name="storage"
+          value="inMemory"
           checked={storage === 'inMemory'}
-          inputProps={{ onChange: () => {} }}
-        >
-          {t('clusters.storage.labels.inMemory')}:{' '}
-          {t('clusters.storage.descriptions.inMemory')}
-        </FormRadioItem>
-      </FormRadioGroup>
+          text={`${t('clusters.storage.labels.inMemory')}: ${t(
+            'clusters.storage.descriptions.inMemory',
+          )}`}
+          onChange={event => setStorage(event.target.value)}
+        />
+      </FlexBox>
     </>
   );
 }

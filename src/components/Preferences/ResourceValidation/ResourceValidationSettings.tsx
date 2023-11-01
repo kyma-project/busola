@@ -121,7 +121,6 @@ export default function ResourceValidationSettings() {
               title={t(
                 'settings.clusters.resourcesValidation.enabled-policies',
               )}
-              showHeader={false}
               entries={
                 choosePolicies
                   ? policyList

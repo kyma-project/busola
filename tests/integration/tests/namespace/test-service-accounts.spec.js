@@ -23,6 +23,7 @@ context('Test Service Accounts', () => {
 
     cy.get('[aria-label="ServiceAccount name"]')
       .find('input')
+      .click()
       .clear()
       .type(SERVICE_NAME);
 

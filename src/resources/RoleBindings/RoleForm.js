@@ -56,7 +56,7 @@ export const RoleForm = ({
         <div className="fd-col fd-col-md--11">
           <ComboBox
             id="role"
-            ariaLabel="Role Combobox"
+            aria-label="Role Combobox"
             disabled={props.disabled || !options?.length}
             filter="Contains"
             inputRef={props.inputRef}

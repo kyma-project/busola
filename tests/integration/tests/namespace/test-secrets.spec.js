@@ -84,8 +84,10 @@ context('Test Secrets', () => {
       .should('be.visible')
       .click();
 
-    cy.get('[placeholder="Enter value"]:visible')
+    cy.get('ui5-textarea[placeholder="Enter value"]:visible')
       .eq(0)
+      .find('textarea')
+      .click()
       .type(`{selectall}${SECRET_VALUE2}`);
 
     cy.get('[placeholder="Enter key"]:visible')

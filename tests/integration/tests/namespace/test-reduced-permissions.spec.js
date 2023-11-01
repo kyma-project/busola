@@ -85,6 +85,7 @@ context('Test reduced permissions', () => {
 
     cy.get('[aria-label="ServiceAccount name"]:visible')
       .find('input')
+      .click()
       .type(SA_NAME);
 
     cy.get('ui5-dialog')
