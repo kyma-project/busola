@@ -31,13 +31,14 @@ export function useCustomFormValidator() {
     let isPartiallyFilled = false; // tracks if at least one child has been filled out, important for the validation of non-required FormGroups
     let isComplete = true; // tracks if all children have been filled out, important for the validation of non-required GenericLists
 
+    console.log(element);
     for (const child of element?.children) {
       if (isRequired && !isValid) break;
 
       if (child.classList.contains('form-field')) {
         // Validates the KeyValuePair
         if (child.classList.contains('multi-input')) {
-          const { valid, filled } = validateInputList(child, isRequired);
+          const { valid, filled } = validateInputList(child, isRequired, 2);
           isValid = isValid && valid;
           isPartiallyFilled = isPartiallyFilled || filled;
           isComplete = isComplete && filled;
@@ -57,7 +58,7 @@ export function useCustomFormValidator() {
       }
       // Validates the SimpleList
       else if (child.classList.contains('simple-list')) {
-        const { valid, filled } = validateInputList(child, isRequired);
+        const { valid, filled } = validateInputList(child, isRequired, 1);
         isValid = isValid && valid;
         isPartiallyFilled = isPartiallyFilled || filled;
         isComplete = isComplete && filled;
@@ -96,6 +97,11 @@ export function useCustomFormValidator() {
         }
       }
     }
+    console.log({
+      valid: isValid || (!isRequired && !isPartiallyFilled),
+      filled: isPartiallyFilled || isComplete,
+      complete: isComplete,
+    });
     return {
       valid: isValid || (!isRequired && !isPartiallyFilled),
       filled: isPartiallyFilled || isComplete,
@@ -127,17 +133,17 @@ export function useCustomFormValidator() {
     return { valid: !isRequired || isFilled, filled: isFilled };
   }
 
-  function validateInputList(inputList, isRequired) {
+  function validateInputList(inputList, isRequired, placeholderElements) {
     // The list is invalid if it has no children
     const items = inputList.querySelectorAll('ul > li');
     if (isRequired && items.length < 2) return { valid: false, filled: false };
 
     // Validates the inputs of all the list's child elements
     const inputs = inputList.querySelectorAll('ui5-input');
-    for (let i = 0; i < inputs.length; i++) {
+    for (let i = 0; i < inputs.length - placeholderElements; i++) {
       const pattern = inputs[i].getAttribute('pattern');
       const value = inputs[i].value;
-      if (pattern && !value.match(pattern))
+      if (value === '' || (pattern && !value.match(pattern)))
         return { valid: false, filled: items.length >= 2 };
     }
     return { valid: true, filled: items.length >= 2 };
