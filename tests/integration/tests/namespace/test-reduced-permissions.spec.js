@@ -106,7 +106,8 @@ context('Test reduced permissions', () => {
 
     cy.get('ui5-li:visible')
       .contains('ServiceAccount')
-      .click();
+      .find('li')
+      .click({ force: true });
 
     // name
     cy.get('[aria-label="ClusterRoleBinding name"]:visible')

@@ -29,7 +29,10 @@ context('Test Cluster Role Bindings', () => {
       .click()
       .type('admin');
 
-    cy.contains('ui5-li:visible', 'cluster-admin').click();
+    cy.get('ui5-li:visible')
+      .contains('cluster-admin')
+      .find('li')
+      .click({ force: true });
 
     cy.get('[aria-label="User name"]')
       .find('input')
@@ -57,7 +60,10 @@ context('Test Cluster Role Bindings', () => {
 
     cy.contains('[role="combobox"]', 'User').click();
 
-    cy.contains('ServiceAccount').click();
+    cy.get('ui5-li:visible')
+      .contains('ServiceAccount')
+      .find('li')
+      .click({ force: true });
 
     cy.contains('Service Account Namespace').should('be.visible');
 

@@ -117,7 +117,7 @@ context('Test Roles', () => {
       .find('ui5-button[data-testid="clone"]')
       .click();
 
-    cy.get('[aria-label="Role name"]:visible', { log: false })
+    cy.get('ui5-input[aria-label="Role name"]:visible', { log: false })
       .find('input')
       .type(CLONE_NAME)
       .click();
