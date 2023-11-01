@@ -100,12 +100,20 @@ export function useCustomFormValidator() {
 
   // Validates the FormField's input
   function validateFormField(formField) {
-    // Input: Extensibility = 'input', otherwise = #select-dropdown
-    const input = formField.querySelector('input');
-    const isValid = input
-      ? input.checkValidity()
-      : formField.querySelector('ui5-combobox')?.value !== '';
-    return { valid: isValid, filled: input?.value !== '' };
+    // Input: Extensibility = 'input', otherwise = 'ui5-combobox'
+    const input =
+      formField.querySelector('ui5-input') ??
+      formField.querySelector('ui5-combobox');
+
+    const required = input.required;
+    const pattern = input.getAttribute('pattern');
+    const value = input.value;
+
+    const isValid = !(
+      (required && value === '') ||
+      (pattern && !value.match(pattern))
+    );
+    return { valid: isValid, filled: value !== '' };
   }
 
   function validateInputList(inputList, isRequired) {
@@ -114,9 +122,11 @@ export function useCustomFormValidator() {
     if (isRequired && items.length < 2) return { valid: false, filled: false };
 
     // Validates the inputs of all the list's child elements
-    const inputs = inputList.querySelectorAll('input');
+    const inputs = inputList.querySelectorAll('ui5-input');
     for (let i = 0; i < inputs.length; i++) {
-      if (!inputs[i].checkValidity())
+      const pattern = inputs[i].getAttribute('pattern');
+      const value = inputs[i].value;
+      if (pattern && !value.match(pattern))
         return { valid: false, filled: items.length >= 2 };
     }
     return { valid: true, filled: items.length >= 2 };
