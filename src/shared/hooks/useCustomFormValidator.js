@@ -2,22 +2,17 @@ import { useState, useRef } from 'react';
 
 export function useCustomFormValidator() {
   const formElementRef = useRef(null);
-  const [isValid, setValid] = useState(false);
+  const [isValid, setValid] = useState(true);
   const [customValid, setCustomValid] = useState(true);
 
   const revalidate = (cv = customValid) => {
-    // FormContainer: Extensibility = 'div.form-container', otherwise = .firstChild
-    const formContainer =
-      formElementRef.current.querySelector('div.form-container') ??
-      formElementRef.current.firstChild;
+    let formContainer =
+      formElementRef.current?.querySelector('div.simple-form') ??
+      formElementRef.current?.querySelector('div.advanced-form') ??
+      formElementRef.current?.querySelector('div.yaml-form');
 
-    // When formContainer doesn't exist, the form is a single element
-    // Then go with the default form validation
     if (formContainer) {
       setValid(cv && validateElement(formContainer, true).valid);
-    } else {
-      const formValid = formElementRef?.current?.checkValidity() ?? false;
-      setValid(cv && formValid);
     }
   };
 
@@ -108,7 +103,8 @@ export function useCustomFormValidator() {
     // Input: Extensibility = 'input', otherwise = 'ui5-combobox'
     const input =
       formField.querySelector('ui5-input') ??
-      formField.querySelector('ui5-combobox');
+      formField.querySelector('ui5-combobox') ??
+      formField.querySelector('ui5-switch');
 
     const required = input.required;
     const pattern = input.getAttribute('pattern');

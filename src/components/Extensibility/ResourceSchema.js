@@ -8,11 +8,7 @@ import { injectPluginStack } from '@ui-schema/ui-schema/applyPluginStack';
 import widgets from './components-form';
 
 function FormContainer({ children }) {
-  return (
-    <div className="form-container" container="true">
-      {children}
-    </div>
-  );
+  return <>{children}</>;
 }
 const FormStack = injectPluginStack(FormContainer);
 
