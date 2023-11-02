@@ -116,12 +116,12 @@ export function TokenRequestModal({
           label={t('service-accounts.token-request.expiration-seconds')}
           input={ComboboxInputWithSeconds}
         />
-        <div className="fd-margin-end--lg fd-margin-begin--lg fd-margin-top--sm">
+        <div className="bsl-margin-end--lg bsl-margin-begin--lg bsl-margin-top--sm">
           <MessageStrip design="Warning" hideCloseButton>
             {t('service-accounts.token-request.warning')}
           </MessageStrip>
           <div
-            className="fd-display-flex fd-margin-top--sm fd-margin-bottom--sm"
+            className="bsl-display-flex bsl-margin-top--sm bsl-margin-bottom--sm"
             style={{
               justifyContent: 'flex-end',
             }}
@@ -130,7 +130,7 @@ export function TokenRequestModal({
             <CopiableText
               iconOnly
               buttonText={t('common.buttons.copy')}
-              className="fd-margin-end--tiny"
+              className="bsl-margin-end--tiny"
               textToCopy={kubeconfigYaml}
               disabled={token === ''}
             />
@@ -138,7 +138,7 @@ export function TokenRequestModal({
               onClick={() => downloadKubeconfig(serviceAccountName, token)}
               disabled={token === ''}
               design="Transparent"
-              className="fd-margin-end--tiny"
+              className="bsl-margin-end--tiny"
               icon="download"
               iconEnd
             >

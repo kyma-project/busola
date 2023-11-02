@@ -31,7 +31,7 @@ export function NamespaceList(props) {
   const description = (
     <Trans i18nKey="namespaces.description">
       <Link
-        className="fd-link"
+        className="bsl-link"
         url="https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces"
       />
     </Trans>

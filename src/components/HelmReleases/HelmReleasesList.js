@@ -37,7 +37,7 @@ function HelmReleasesList() {
 
   const rowRenderer = entry => [
     <Link
-      className="fd-link"
+      className="bsl-link"
       to={namespaceUrl(`helm-releases/${entry.releaseName}`)}
     >
       {entry.releaseName}
@@ -71,7 +71,7 @@ function HelmReleasesList() {
         description={
           <Trans i18nKey={'helm-releases.description'}>
             <ExternalLink
-              className="fd-link"
+              className="bsl-link"
               url="https://helm.sh/docs/glossary/#release"
             />
           </Trans>

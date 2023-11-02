@@ -51,7 +51,7 @@ export function EventDetails(props) {
       header: t('common.labels.namespace'),
       value: event => (
         <Link
-          className="fd-link"
+          className="bsl-link"
           data-testid="details-link"
           to={clusterUrl(`namespaces/${event.metadata.namespace}`)}
         >
@@ -69,7 +69,7 @@ export function EventDetails(props) {
               <Icon
                 aria-label="Warning"
                 name="message-warning"
-                className="fd-has-color-status-2 has-tooltip ui5-icon-s"
+                className="bsl-has-color-status-2 has-tooltip bsl-icon-s"
               />
             </Tooltip>
           ) : (
@@ -77,7 +77,7 @@ export function EventDetails(props) {
               <Icon
                 aria-label="Normal"
                 name="message-information"
-                className="has-tooltip ui5-icon-s"
+                className="has-tooltip bsl-icon-s"
               />
             </Tooltip>
           )}

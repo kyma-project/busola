@@ -94,7 +94,7 @@ export function K8sResourceSelect({
         })}
         id="k8s-resource-dropdown"
         data-testid={props['data-testid']}
-        ariaLabel={t('common.messages.choose', { value: resourceType })}
+        aria-label={t('common.messages.choose', { value: resourceType })}
         onChange={event => {
           const selectedOption = options.find(
             o => o.text === event.target.value,

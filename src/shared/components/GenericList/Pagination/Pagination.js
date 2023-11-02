@@ -48,7 +48,7 @@ export const Pagination = ({
 
   return (
     <div className="pagination">
-      <span className="fd-has-color-status-4 fd-margin-end--sm">
+      <span className="bsl-has-color-status-4 bsl-margin-end--sm">
         {itemsTotal} items
       </span>
 

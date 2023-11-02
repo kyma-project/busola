@@ -171,7 +171,7 @@ export function CommandPaletteUI({
             placeholder={!isHistoryMode ? '' : query}
             onInput={(e: any) => setQuery((e.target as HTMLInputElement).value)}
             showClearIcon
-            className="search-with-magnifying-glass input-full"
+            className="search-with-magnifying-glass full-width"
           />
           {!showHelp && !query && (
             <ShortHelpText

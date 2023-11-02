@@ -29,7 +29,7 @@ function SingleContainerSection({ container, setContainer }) {
       />
       <ResourceForm.FormField
         required
-        className="fd-margin-bottom--sm"
+        className="bsl-margin-bottom--sm"
         propertyPath="$.image"
         label={t('deployments.create-modal.simple.docker-image')}
         input={Inputs.Text}

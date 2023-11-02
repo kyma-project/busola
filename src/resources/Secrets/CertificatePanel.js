@@ -11,7 +11,7 @@ export function CertificatePanel({ name, certificate }) {
   return (
     <UI5Panel
       fixed
-      className="fd-margin--md"
+      className="bsl-margin--md"
       title={t('secrets.certificate-panel.title', { name })}
     >
       <LayoutPanelRow

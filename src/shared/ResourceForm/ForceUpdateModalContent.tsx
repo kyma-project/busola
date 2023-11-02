@@ -36,7 +36,7 @@ function ForceUpdateModalContentComponent({
 
   return (
     <>
-      <p className="fd-margin-bottom--sm">
+      <p className="bsl-margin-bottom--sm">
         {t('common.create-form.messages.patch-failure', {
           resourceType: singularName,
           error: error.message,
@@ -46,7 +46,7 @@ function ForceUpdateModalContentComponent({
       <MessageStrip
         design="Warning"
         hideCloseButton
-        className="fd-margin-top--sm"
+        className="bsl-margin-top--sm"
       >
         {t('common.create-form.messages.force-update')}
       </MessageStrip>

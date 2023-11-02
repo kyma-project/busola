@@ -22,17 +22,17 @@ export function Footer() {
             key={legalLink.link}
             url={legalLink.link}
             text={legalLink.label}
-            className="fd-link"
+            className="bsl-link"
           />
         ))}
       </div>
-      <div className="fd-margin-top--sm">
+      <div className="bsl-margin-top--sm">
         <p className="footer__kyma-version">{t('common.labels.version')}</p>
         <Link
           dataTestId="version-link"
           url={githubLink}
           text={busolaVersion}
-          className="fd-link"
+          className="bsl-link"
         />
       </div>
     </footer>

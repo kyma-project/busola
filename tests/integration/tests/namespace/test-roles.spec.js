@@ -32,7 +32,7 @@ context('Test Roles', () => {
       API_GROUP,
     );
 
-    cy.get('[ariaLabel="roles.buttons.load"]:visible', { log: false }).click();
+    cy.get('[aria-label="roles.buttons.load"]:visible', { log: false }).click();
 
     chooseComboboxOption(
       '[placeholder^="Start typing to select Resources"]:visible',

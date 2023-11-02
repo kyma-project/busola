@@ -231,7 +231,7 @@ export function ResourceForm({
                         advanced
                         propertyPath="$.metadata.labels"
                         title={t('common.headers.labels')}
-                        className="fd-margin-top--sm"
+                        className="bsl-margin-top--sm"
                         inputInfo={t('common.tooltips.key-value')}
                         {...labelsProps}
                       />

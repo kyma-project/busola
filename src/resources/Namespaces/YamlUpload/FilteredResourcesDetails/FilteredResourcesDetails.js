@@ -92,7 +92,7 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
       <MessageStrip
         design="Warning"
         hideCloseButton
-        className="fd-margin-bottom--sm"
+        className="bsl-margin-bottom--sm"
       >
         <p> {t('common.headers.loading')}</p>
         <Spinner className="warning-spinner" size="s" center={false} />
@@ -118,7 +118,7 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
               <MessageStrip
                 design="Warning"
                 hideCloseButton
-                className="fd-margin-top--sm"
+                className="bsl-margin-top--sm"
               >
                 {warning.message}
               </MessageStrip>
@@ -140,7 +140,7 @@ export const FilteredResourcesDetails = ({ filteredResources }) => {
     <ul className="resources-list">
       {filteredResources.map(r => (
         <li
-          className="fd-margin-begin--sm fd-margin-end--sm fd-margin-bottom--sm"
+          className="bsl-margin-begin--sm bsl-margin-end--sm bsl-margin-bottom--sm"
           style={{ listStyle: 'disc' }}
           key={`${r?.value?.kind}-${r.value?.metadata?.name}`}
         >

@@ -16,7 +16,7 @@ export function PodTemplate({ template }) {
     <>
       <Title level="H5">{t('pods.labels.pod-template')}</Title>
       <Labels
-        className="fd-margin-begin--tiny"
+        className="bsl-margin-begin--tiny"
         labels={template.metadata.labels}
       />
     </>
@@ -47,7 +47,7 @@ export function PodTemplate({ template }) {
               <>
                 <Title level="H5">{t('pods.labels.volumes')}</Title>
                 <Labels
-                  className="fd-margin-begin--tiny"
+                  className="bsl-margin-begin--tiny"
                   labels={template.metadata.labels}
                 />
               </>

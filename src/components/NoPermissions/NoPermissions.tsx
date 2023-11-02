@@ -34,14 +34,14 @@ function NoPermissions() {
     <section className="no-permissions">
       <Icon aria-label="no-permissions" name="locked" />
       <header>{t('common.errors.no-permissions-header')}</header>
-      <p className="fd-margin-top--md">{t('common.errors.no-permissions')}</p>
+      <p className="bsl-margin-top--md">{t('common.errors.no-permissions')}</p>
       <p>{t('common.errors.no-permissions-message')}</p>
-      <p className="fd-margin-top--md fd-margin-bottom--sm">
+      <p className="bsl-margin-top--md bsl-margin-bottom--sm">
         {t('no-permissions.enter-namespace-name')}
       </p>
-      <form className="fd-display-flex" onSubmit={updateKubeconfig}>
+      <form className="bsl-display-flex" onSubmit={updateKubeconfig}>
         <Input
-          className="fd-margin-0"
+          className="bsl-margin--none"
           placeholder={t('no-permissions.enter-namespace-name-placeholder')}
           value={namespaceName}
           onInput={(e: any) => setNamespaceName(e.target.typedInValue)}

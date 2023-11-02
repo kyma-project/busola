@@ -21,7 +21,7 @@ export function BusolaPluginList(props) {
   const description = (
     <Trans i18nKey="extensibility.description">
       <Link
-        className="fd-link"
+        className="bsl-link"
         url="https://github.com/kyma-project/busola/tree/main/docs/extensibility"
       />
     </Trans>

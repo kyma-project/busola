@@ -11,7 +11,7 @@ export function InvalidRoleError({ rule }) {
       <MessageStrip
         design="Warning"
         hideCloseButton
-        className="fd-margin-top--sm"
+        className="bsl-margin-top--sm"
       >
         {t('roles.messages.invalid')}
       </MessageStrip>

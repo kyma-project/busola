@@ -24,17 +24,17 @@ export function ReleaseDataPanel({ release, simpleHeader }) {
         ) : (
           <>
             <Link
-              className="fd-link release-link"
+              className="bsl-link release-link"
               to={namespaceUrl(`helm-releases/${name}`)}
             >
               {name}
             </Link>
-            <div className="fd-margin-begin--sm">
+            <div className="bsl-margin-begin--sm">
               <StatusBadge noTooltip type="Information">
                 {t('helm-releases.headers.release-version', { version })}
               </StatusBadge>
             </div>
-            <div className="fd-margin-begin--tiny">
+            <div className="bsl-margin-begin--tiny">
               <HelmReleaseStatus status={release.info.status} />
             </div>
           </>

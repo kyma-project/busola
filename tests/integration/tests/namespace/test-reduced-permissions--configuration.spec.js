@@ -88,7 +88,7 @@ context('Test reduced permissions 2', () => {
       .click()
       .type('kube-public');
 
-    cy.get('a.fd-link')
+    cy.get('a.bsl-link')
       .contains('kube-public')
       .click();
 

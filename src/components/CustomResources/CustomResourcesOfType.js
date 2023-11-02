@@ -51,7 +51,7 @@ export default function CustomResourcesOfType({ crdName }) {
           title={t('custom-resource-definitions.name_singular')}
         >
           <Link
-            className="fd-link"
+            className="bsl-link"
             to={clusterUrl(`customresourcedefinitions/${crd.metadata.name}`)}
           >
             {crd.metadata.name}

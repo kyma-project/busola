@@ -9,7 +9,7 @@ const Tokens = ({ tokens }) => (
       ? tokens.map(scope => (
           <Token
             key={scope}
-            className="fd-margin-end--tiny"
+            className="bsl-margin-end--tiny"
             readOnly
             text={scope}
           />

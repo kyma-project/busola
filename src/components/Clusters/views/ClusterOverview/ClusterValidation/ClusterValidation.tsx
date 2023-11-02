@@ -154,7 +154,7 @@ export const ClusterValidation = () => {
       headerActions={
         <>
           <Button
-            className="fd-margin-end--tiny"
+            className="bsl-margin-end--tiny"
             icon="play"
             iconEnd
             onClick={scan}
@@ -163,7 +163,7 @@ export const ClusterValidation = () => {
             {t('cluster-validation.scan.buttons.scan')}
           </Button>
           <Button
-            className="fd-margin-end--tiny"
+            className="bsl-margin-end--tiny"
             icon="settings"
             iconEnd
             onClick={configure}
@@ -180,7 +180,7 @@ export const ClusterValidation = () => {
       {!scanReady && <Loader type="Indeterminate" />}
 
       <Section titleText={t('cluster-validation.scan.scope')}>
-        <FlexBox className="fd-has-padding-small">
+        <FlexBox className="bsl-has-padding-small">
           <InfoTile
             title={t('common.headers.namespaces')}
             content={

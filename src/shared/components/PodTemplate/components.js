@@ -135,7 +135,7 @@ export function Volume({ volume }) {
           name={t('common.headers.resource')}
           value={
             <Link
-              className="fd-link"
+              className="bsl-link"
               to={namespaceUrl(
                 `${configMap ? 'configmaps' : 'secrets'}/${k8sResourceName}`,
               )}

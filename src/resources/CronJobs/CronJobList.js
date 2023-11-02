@@ -28,7 +28,7 @@ export function CronJobList(props) {
   const description = (
     <Trans i18nKey="cron-jobs.description">
       <Link
-        className="fd-link"
+        className="bsl-link"
         url="https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/"
       />
     </Trans>

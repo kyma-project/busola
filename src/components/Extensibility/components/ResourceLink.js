@@ -45,7 +45,7 @@ export function ResourceLink({
 
   return (
     <Link
-      className="fd-link"
+      className="bsl-link"
       to={resourceUrl(
         {
           kind,

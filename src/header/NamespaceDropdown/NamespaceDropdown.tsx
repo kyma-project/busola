@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 
 import { namespacesState } from 'state/namespacesAtom';
 
-import './NamespaceDropdown.scss';
 import { StandardListItem } from '@ui5/webcomponents-react';
 
 export function NamespaceDropdown() {

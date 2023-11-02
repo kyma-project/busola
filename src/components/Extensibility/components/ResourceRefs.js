@@ -24,7 +24,7 @@ export function ResourceRefs({ value, structure, schema, disableMargin }) {
 
   const rowRenderer = ({ name, namespace }) => [
     <Link
-      className="fd-link"
+      className="bsl-link"
       to={resourceUrl({
         kind: resourceType,
         metadata: {

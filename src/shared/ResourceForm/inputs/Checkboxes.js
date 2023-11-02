@@ -30,11 +30,7 @@ export function Checkboxes({
           <div className="fd-col fd-col-md--1 tooltip-column">
             {description && (
               <Tooltip className="has-tooltip" delay={0} content={description}>
-                <Icon
-                  aria-label=""
-                  className="ui5-icon-m"
-                  name="message-information"
-                />
+                <Icon className="bsl-icon-m" name="message-information" />
               </Tooltip>
             )}
           </div>

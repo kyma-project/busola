@@ -80,7 +80,7 @@ export function JobCreate({
       <MessageStrip
         design="Information"
         hideCloseButton
-        className="fd-margin-top--sm"
+        className="bsl-margin-top--sm"
       >
         {t('jobs.create-modal.containers-readonly-in-edit')}
       </MessageStrip>

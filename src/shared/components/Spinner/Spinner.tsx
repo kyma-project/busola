@@ -13,7 +13,7 @@ export const Spinner = ({
   ariaLabel = 'Loading',
   compact = false,
   size,
-  className = 'fd-margin-top-bottom--md',
+  className = 'bsl-margin-top-bottom--md',
   center = true,
 }: SpinnerProps) => {
   size = size || (compact ? 'm' : 'l');
