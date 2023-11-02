@@ -150,7 +150,7 @@ export const StatusBadge = ({
   } else if (noTooltip) {
     return (
       <ObjectStatus
-        ariaLabel="Status"
+        aria-label="Status"
         role="status"
         inverted
         state={type}

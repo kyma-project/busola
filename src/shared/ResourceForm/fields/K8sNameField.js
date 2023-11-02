@@ -64,7 +64,7 @@ export function K8sNameField({
                 <Button
                   design="Transparent"
                   onClick={generateName}
-                  ariaLabel="Generate name button"
+                  aria-label="Generate name button"
                   disabled={readOnly}
                 >
                   {t('common.buttons.generate-name')}

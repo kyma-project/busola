@@ -112,7 +112,7 @@ export function ExternalResourceRef({
           <div className="fd-col fd-col-md--11">
             <ComboBox
               id={`secret-namespace-combobox-${index}`}
-              ariaLabel="Secret namespace Combobox"
+              aria-label="Secret namespace Combobox"
               placeholder={t('common.placeholders.secret-ref-namespace')}
               onChange={event => {
                 const selectedOption = namespacesOptions.find(
@@ -149,7 +149,7 @@ export function ExternalResourceRef({
           <div className="fd-col fd-col-md--11">
             <ComboBox
               id={`secret-name-combobox-${index}`}
-              ariaLabel="Secret name Combobox"
+              aria-label="Secret name Combobox"
               disabled={!filteredResourcesOptions?.length}
               placeholder={t('common.placeholders.secret-ref-name')}
               onChange={event => {

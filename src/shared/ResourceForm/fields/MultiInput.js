@@ -201,7 +201,7 @@ export function MultiInput({
                       icon="delete"
                       design="Negative"
                       onClick={() => removeValue(index)}
-                      ariaLabel={t('common.buttons.delete')}
+                      aria-label={t('common.buttons.delete')}
                     />
                   )}
                   {isLast(index) && newItemAction}

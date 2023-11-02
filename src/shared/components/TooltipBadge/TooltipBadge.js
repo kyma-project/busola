@@ -18,7 +18,7 @@ export const TooltipBadge = ({
 
   const badgeElement = (
     <ObjectStatus
-      ariaLabel="Status"
+      aria-label="Status"
       role="status"
       inverted
       state={type}

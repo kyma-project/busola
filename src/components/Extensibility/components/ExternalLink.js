@@ -72,7 +72,7 @@ export const ExternalLink = ({
         design="Information"
         name="action"
         className="bsl-margin-begin--tiny bsl-icon-s"
-        ariaLabel={t('common.ariaLabel.new-tab-link')}
+        aria-label={t('common.ariaLabel.new-tab-link')}
         originalResource={originalResource}
       />
     </Link>

@@ -46,7 +46,7 @@ context('Test reduced permissions', () => {
       'apps',
     );
 
-    cy.get('[ariaLabel="roles.buttons.load"]:visible', { log: false }).click();
+    cy.get('[aria-label="roles.buttons.load"]:visible', { log: false }).click();
 
     // resources
     chooseComboboxOption(
