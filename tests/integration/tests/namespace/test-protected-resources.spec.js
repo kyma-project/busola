@@ -61,14 +61,16 @@ context('Test Protected Resources', () => {
       .contains('Labels')
       .click();
 
-    cy.get('[placeholder="Enter key"]:visible')
+    cy.get('.multi-input')
+      .find('ui5-input[placeholder="Enter key"][value=""]:visible')
       .find('input')
-      .eq(1)
+      .click()
       .type('protected');
 
-    cy.get('[placeholder="Enter value"]:visible')
+    cy.get('.multi-input')
+      .find('ui5-input[placeholder="Enter value"][value=""]:visible')
       .find('input')
-      .eq(1)
+      .click()
       .type('true');
 
     cy.get('ui5-dialog')
