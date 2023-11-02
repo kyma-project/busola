@@ -22,7 +22,7 @@ export function ComboboxInput({
       )}
     >
       <ComboBox
-        ariaLabel="Combobox input"
+        aria-label="Combobox input"
         id={id || 'combobox-input'}
         ref={_ref}
         disabled={props.disabled || !options?.length}

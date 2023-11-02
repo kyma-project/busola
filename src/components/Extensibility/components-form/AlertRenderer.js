@@ -55,7 +55,7 @@ export function AlertRenderer({
     <MessageStrip
       design={schemaType}
       hideCloseButton
-      className="fd-margin-top--sm"
+      className="bsl-margin-top--sm"
     >
       {alertLink}
     </MessageStrip>

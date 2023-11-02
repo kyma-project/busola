@@ -86,7 +86,7 @@ export const PVCConfiguration = pvc => {
         value={
           pvc.spec?.volumeName ? (
             <Link
-              className="fd-link"
+              className="bsl-link"
               to={clusterUrl(`persistentvolumes/${pvc.spec?.volumeName}`)}
             >
               {pvc.spec?.volumeName}
@@ -104,7 +104,7 @@ export const PVCConfiguration = pvc => {
             ({ metadata }) => metadata.name === pvc.spec?.storageClassName,
           ) ? (
             <Link
-              className="fd-link"
+              className="bsl-link"
               to={clusterUrl(`storageclasses/${pvc.spec?.storageClassName}`)}
             >
               {pvc.spec?.storageClassName}

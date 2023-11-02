@@ -74,7 +74,7 @@ export function SimpleList({
       {...props}
     >
       <FlexBox className="simple-list">
-        <div className="fd-col-md--3 fd-margin-bottom--sm form-field__label">
+        <div className="fd-col-md--3 bsl-margin-bottom--sm form-field__label">
           <Label required={required} tooltipContent={tExt(tooltipContent)}>
             {tFromStoreKeys(storeKeys, schema)}
           </Label>
@@ -167,7 +167,7 @@ export function SimpleList({
               delay={0}
               content={tExt(tooltipContent)}
             >
-              <Icon name="message-information" className="ui5-icon-m" />
+              <Icon name="message-information" className="bsl-icon-m" />
             </Tooltip>
           )}
         </div>

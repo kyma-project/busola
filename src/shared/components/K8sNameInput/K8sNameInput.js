@@ -29,7 +29,7 @@ export const K8sNameInput = ({
   if (!props.readOnly) delete props.readOnly;
   const { className, compact, ...inputProps } = props || {};
 
-  const inputClassName = classnames('input-full', className, {
+  const inputClassName = classnames('full-width', className, {
     'ui5-content-density-compact': compact,
   });
 

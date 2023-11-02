@@ -46,7 +46,7 @@ export const ContainerSection = ({ readOnly, ...props }) => {
       <MessageStrip
         design="Warning"
         hideCloseButton
-        className="fd-margin-top--sm"
+        className="bsl-margin-top--sm"
       >
         {t('jobs.create-modal.at-least-one-container-required')}
         <Button

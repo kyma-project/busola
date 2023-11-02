@@ -54,7 +54,7 @@ export function EventList({
               <Icon
                 aria-label="Warning"
                 name="message-warning"
-                className="fd-has-color-status-2 has-tooltip ui5-icon-m"
+                className="bsl-has-color-status-2 has-tooltip bsl-icon-m"
               />
             </Tooltip>
           ) : (
@@ -62,7 +62,7 @@ export function EventList({
               <Icon
                 aria-label="Normal"
                 name="message-information"
-                className="has-tooltip ui5-icon-m"
+                className="has-tooltip bsl-icon-m"
               />
             </Tooltip>
           )}
@@ -105,7 +105,7 @@ export function EventList({
   const description = (
     <Trans i18nKey="events.description">
       <DescriptionLink
-        className="fd-link"
+        className="bsl-link"
         url="https://kubernetes.io/docs/reference/kubernetes-api/cluster-resources/event-v1/"
       />
     </Trans>

@@ -32,7 +32,7 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
   const languageDropdown = (
     <ComboBox
       id="choose-language-input"
-      ariaLabel="choose-language"
+      aria-label="choose-language"
       disabled={!item}
       value={typeof language === 'string' ? language : ''}
       onChange={event => {
@@ -64,7 +64,7 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
       setValue={key => onChange({ key })}
       input={Inputs.Text}
       label={t('components.key-value-form.key')}
-      className="fd-margin-bottom--sm"
+      className="bsl-margin-bottom--sm"
       placeholder={t('components.key-value-field.enter-key')}
       onBlur={pushValue}
       pattern={'[-._a-zA-Z0-9]+'}
@@ -104,7 +104,7 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
     >
       {keyInput}
       <div className="rich-editor__dropdown-wrapper">
-        <div className={'fd-margin--tiny'}>{languageDropdown}</div>
+        <div className={'bsl-margin--tiny'}>{languageDropdown}</div>
       </div>
       {valueInput}
     </ResourceForm.CollapsibleSection>

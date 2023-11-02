@@ -53,7 +53,7 @@ export function ContextChooser(params) {
         <MessageStrip
           design="Information"
           hideCloseButton
-          className="fd-margin-top--sm fd-margin-bottom--sm"
+          className="bsl-margin-top--sm bsl-margin-bottom--sm"
         >
           {t('clusters.wizard.multi-context-info', {
             context: kubeconfig.contexts[0]?.name,

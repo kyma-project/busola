@@ -29,7 +29,7 @@ export function CopiableText({
           icon="copy"
           iconEnd
           design="Transparent"
-          className="fd-margin-begin--tiny"
+          className="bsl-margin-begin--tiny"
           onClick={() => copyToCliboard(textToCopy)}
           {...buttonProps}
         >

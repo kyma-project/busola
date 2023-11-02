@@ -143,7 +143,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
                 design="Transparent"
                 onClick={fetchResources}
                 disabled={!loadable}
-                ariaLabel={t('roles.buttons.load')}
+                aria-label={t('roles.buttons.load')}
               >
                 {t('roles.buttons.load-resources')}
               </Button>
@@ -165,7 +165,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         <MessageStrip
           design="Information"
           hideCloseButton
-          className="fd-margin-bottom--sm fd-margin-begin--md"
+          className="bsl-margin-bottom--sm bsl-margin-begin--md"
         >
           {t('roles.messages.load-resources')}
         </MessageStrip>

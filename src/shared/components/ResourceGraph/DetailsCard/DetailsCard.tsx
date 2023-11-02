@@ -44,7 +44,7 @@ export function DetailsCard({
       </section>
       <div className="buttons-wrapper">
         <Button
-          className="fd-margin-end--sm"
+          className="bsl-margin-end--sm"
           onClick={() => {
             const namespacePart = resource.metadata.namespace
               ? `namespaces/${resource.metadata.namespace}/`
@@ -65,7 +65,10 @@ export function DetailsCard({
         >
           {t('resource-graph.buttons.go-to-details')}
         </Button>
-        <Button className="fd-margin-end--sm" onClick={() => handleCloseCard()}>
+        <Button
+          className="bsl-margin-end--sm"
+          onClick={() => handleCloseCard()}
+        >
           {t('common.buttons.close')}
         </Button>
       </div>

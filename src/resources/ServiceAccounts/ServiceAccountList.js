@@ -21,7 +21,7 @@ export function ServiceAccountList(props) {
   const description = (
     <Trans i18nKey="service-accounts.description">
       <Link
-        className="fd-link"
+        className="bsl-link"
         url="https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/"
       />
     </Trans>

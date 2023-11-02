@@ -61,7 +61,7 @@ export function NamespaceDetails(props) {
   const headerActions = (
     <>
       <Button
-        className="fd-margin-end--tiny"
+        className="bsl-margin-end--tiny"
         icon="add"
         onClick={() => {
           setShowAdd(true);

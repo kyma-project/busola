@@ -16,7 +16,7 @@ export default function OtherSettings() {
 
   return (
     <div className="preferences-row">
-      <span className="fd-has-color-status-4">
+      <span className="bsl-has-color-status-4">
         {t('settings.other.default-page-size')}
       </span>
       <Select onChange={onChange}>

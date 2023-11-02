@@ -27,7 +27,7 @@ export function CustomResourceDefinitionList(props) {
   const description = (
     <Trans i18nKey="custom-resource-definitions.description">
       <Link
-        className="fd-link"
+        className="bsl-link"
         url="https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/"
       />
     </Trans>

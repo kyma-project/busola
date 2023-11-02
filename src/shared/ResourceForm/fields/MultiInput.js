@@ -201,7 +201,7 @@ export function MultiInput({
                       icon="delete"
                       design="Negative"
                       onClick={() => removeValue(index)}
-                      ariaLabel={t('common.buttons.delete')}
+                      aria-label={t('common.buttons.delete')}
                     />
                   )}
                   {isLast(index) && newItemAction}
@@ -220,7 +220,7 @@ export function MultiInput({
             <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
               <Icon
                 aria-label=""
-                className="ui5-icon-m"
+                className="bsl-icon-m"
                 name="message-information"
               />
             </Tooltip>

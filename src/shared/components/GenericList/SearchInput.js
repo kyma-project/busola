@@ -134,28 +134,22 @@ export function SearchInput({
       role="search"
     >
       <div
-        className="fd-popover"
         style={{ display: showControl ? 'none' : 'initial' }}
         aria-expanded={!showControl}
       >
-        <div className="fd-popover__control">
-          <div className="fd-combobox-control">
-            <ComboBox
-              id="search-input"
-              aria-label="search-input"
-              placeholder={t('common.tooltips.search')}
-              value={searchQuery}
-              onInput={e => handleQueryChange(e.target.value)}
-              onSelectionChange={() => setSearchHidden(true)}
-              className="search-with-magnifying-glass"
-            >
-              {!!searchQuery &&
-                showSuggestion &&
-                renderSearchList(filteredEntries)}
-            </ComboBox>
-          </div>
-        </div>
+        <ComboBox
+          id="search-input"
+          aria-label="search-input"
+          placeholder={t('common.tooltips.search')}
+          value={searchQuery}
+          onInput={e => handleQueryChange(e.target.value)}
+          onSelectionChange={() => setSearchHidden(true)}
+          className="search-with-magnifying-glass"
+        >
+          {!!searchQuery && showSuggestion && renderSearchList(filteredEntries)}
+        </ComboBox>
       </div>
+
       {showControl && (
         <Tooltip content={t('common.tooltips.search')}>
           <Button

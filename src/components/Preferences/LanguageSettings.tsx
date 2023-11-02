@@ -16,7 +16,7 @@ export default function LanguageSettings() {
 
   return (
     <div className="preferences-row">
-      <span className="fd-has-color-status-4">{t('settings.language')}</span>
+      <span className="bsl-has-color-status-4">{t('settings.language')}</span>
       <Select onChange={onChange}>
         {AVAILABLE_LANGUAGES.map(available_language => (
           <Option

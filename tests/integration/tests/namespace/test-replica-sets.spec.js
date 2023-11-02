@@ -62,7 +62,7 @@ context('Test Replica Sets', () => {
       .contains('Replica Sets')
       .click();
 
-    cy.get('a.fd-link')
+    cy.get('a.bsl-link')
       .contains(REPLICA_SET_NAME)
       .click();
 

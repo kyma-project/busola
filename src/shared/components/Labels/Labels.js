@@ -29,7 +29,7 @@ export const Labels = ({
         <Token
           aria-label={label}
           key={id}
-          className="token fd-margin-end--tiny"
+          className="token bsl-margin-end--tiny"
           readOnly
           text={label}
           title={

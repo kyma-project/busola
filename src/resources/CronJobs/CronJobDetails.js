@@ -48,7 +48,7 @@ export function CronJobDetails(props) {
         const jobName =
           resource.status.active[resource.status.active.length - 1].name;
         return (
-          <Link className="fd-link" to={namespaceUrl(`jobs/${jobName}`)}>
+          <Link className="bsl-link" to={namespaceUrl(`jobs/${jobName}`)}>
             {jobName}
           </Link>
         );

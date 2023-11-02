@@ -23,7 +23,7 @@ export function RoleRef({ roleRef }) {
 
   return (
     <div>
-      <Link className="fd-link" to={roleDetailsLink()}>
+      <Link className="bsl-link" to={roleDetailsLink()}>
         {roleRef.name}
       </Link>
       <Tooltip delay={0} content={roleRef.kind}>

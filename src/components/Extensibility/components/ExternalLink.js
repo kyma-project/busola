@@ -54,7 +54,7 @@ export const ExternalLink = ({
       <Button
         icon="action"
         iconEnd
-        className="fd-margin-begin--sm fd-margin-end--tiny"
+        className="bsl-margin-begin--sm bsl-margin-end--tiny"
         onClick={() => {
           const newWindow = window.open(href, '_blank', 'noopener, noreferrer');
           if (newWindow) newWindow.opener = null;
@@ -71,8 +71,8 @@ export const ExternalLink = ({
       <Icon
         design="Information"
         name="action"
-        className="fd-margin-begin--tiny ui5-icon-s"
-        ariaLabel={t('common.ariaLabel.new-tab-link')}
+        className="bsl-margin-begin--tiny bsl-icon-s"
+        aria-label={t('common.ariaLabel.new-tab-link')}
         originalResource={originalResource}
       />
     </Link>

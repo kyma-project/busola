@@ -81,7 +81,7 @@ export function BusolaExtensionDetails(props) {
                   section: t(`extensibility.sections.${key}`),
                 })}
                 modalOpeningComponent={
-                  <Button className="fd-margin-end--tiny" design="Emphasized">
+                  <Button className="bsl-margin-end--tiny" design="Emphasized">
                     {t('extensibility.edit-section', {
                       section: t(`extensibility.sections.${key}`),
                     })}
@@ -148,7 +148,7 @@ export function BusolaExtensionDetails(props) {
           <MessageStrip
             design="Information"
             hideCloseButton
-            className="fd-margin-bottom--sm"
+            className="bsl-margin-bottom--sm"
           >
             {t('extensibility.message.old-version')}
           </MessageStrip>
@@ -158,7 +158,7 @@ export function BusolaExtensionDetails(props) {
           <MessageStrip
             design="Negative"
             hideCloseButton
-            className="fd-margin-bottom--sm"
+            className="bsl-margin-bottom--sm"
           >
             {t('extensibility.message.unsupported-version')}
           </MessageStrip>
@@ -168,11 +168,11 @@ export function BusolaExtensionDetails(props) {
           <MessageStrip
             design="Negative"
             hideCloseButton
-            className="fd-margin-bottom--sm"
+            className="bsl-margin-bottom--sm"
           >
             <Trans i18nKey="extensibility.message.unnown-version">
               <Link
-                className="fd-link"
+                className="bsl-link"
                 url="https://github.com/kyma-project/busola/tree/main/docs/extensibility"
               />
             </Trans>

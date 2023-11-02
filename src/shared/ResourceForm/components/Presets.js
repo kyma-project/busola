@@ -9,7 +9,7 @@ export function Presets({ presets, onSelect, ...otherProps }) {
   }));
 
   return (
-    <div className="fd-margin-bottom--xs ui5-content-density-compact">
+    <div className="bsl-margin-bottom--xs ui5-content-density-compact">
       <Dropdown
         className="resource-form__presets"
         placeholder={t('common.create-form.choose-preset')}

@@ -167,7 +167,7 @@ export function Table({
   });
 
   const className = `extensibility-table ${
-    disableMargin ? 'fd-margin--xs' : ''
+    disableMargin ? 'bsl-margin--tiny' : ''
   }`;
 
   return (

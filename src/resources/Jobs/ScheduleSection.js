@@ -54,12 +54,12 @@ function TimeInput({ entries, index, name, setSchedule }) {
             value={entries[index] || ''}
             setValue={setValue}
             placeholder={t('cron-jobs.create-modal.' + name)}
-            className="input-full"
+            className="full-width"
             required
           />
           <p
             style={{ color: 'var(--sapNeutralTextColor)' }}
-            className="input-full"
+            className="full-width"
           >
             {t('cron-jobs.create-modal.tooltips.' + name)}
           </p>
@@ -91,13 +91,13 @@ function ScheduleEditor({ schedule, setSchedule }) {
         <MessageStrip
           design="Negative"
           hideCloseButton
-          className="fd-margin-top--sm"
+          className="bsl-margin-top--sm"
         >
           {t('cron-jobs.create-modal.parse-error')}
         </MessageStrip>
       )}
       <p
-        className="fd-margin-top--sm"
+        className="bsl-margin-top--sm"
         style={{ color: 'var(--sapNeutralTextColor)' }}
       >
         {t('cron-jobs.create-modal.schedule-description')}

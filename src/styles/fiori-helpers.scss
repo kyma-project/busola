@@ -1,4 +1,4 @@
-$fdNamespace: fd-has;
+$bslNamespace: bsl-has;
 
 $properties: padding, padding-top, padding-bottom, padding-left, padding-right;
 $sizes: (
@@ -11,7 +11,7 @@ $sizes: (
 );
 @each $property in $properties {
   @each $sizeName, $sizeValue in $sizes {
-    .#{$fdNamespace}-#{$property}-#{$sizeName} {
+    .#{$bslNamespace}-#{$property}-#{$sizeName} {
       #{$property}: $sizeValue !important;
     }
   }
@@ -25,11 +25,7 @@ $statusColors: (
   'text-1': var(--sapTextColor),
 );
 @each $colorName, $colorValue in $statusColors {
-  .#{$fdNamespace}-color-#{$colorName} {
+  .#{$bslNamespace}-color-#{$colorName} {
     color: $colorValue !important;
   }
-}
-
-.fd-has-font-size-small {
-  font-size: var(--sapFontSmallSize);
 }

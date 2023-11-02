@@ -53,7 +53,7 @@ export function Result({
           <p className="description">{category}</p>
         </div>
         {activeIndex === index && (
-          <p className="fd-has-color-status-4 ">{actionText}</p>
+          <p className="bsl-has-color-status-4 ">{actionText}</p>
         )}
       </div>
     </li>

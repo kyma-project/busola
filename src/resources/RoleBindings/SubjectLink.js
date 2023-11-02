@@ -10,7 +10,7 @@ export function SubjectLink({ subject }) {
 
   if (subject.kind === 'ServiceAccount') {
     return (
-      <Link className="fd-link" to={path}>
+      <Link className="bsl-link" to={path}>
         {subject.name}
       </Link>
     );

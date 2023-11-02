@@ -137,12 +137,12 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
 
     return (
       <>
-        <div className="gridbox fd-margin-bottom--sm">
-          <div className="fd-margin-top--sm">
+        <div className="gridbox bsl-margin-bottom--sm">
+          <div className="bsl-margin-top--sm">
             {index === 0 ? `${sectionName}:` : ''}
           </div>
           <CheckBox
-            className="fd-margin-top--sm"
+            className="bsl-margin-top--sm"
             checked={isChecked}
             onChange={e => {
               setCheckbox(
@@ -160,7 +160,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
             text={name}
           />
           <Dropdown
-            className="fd-margin-top--tiny"
+            className="bsl-margin-top--tiny"
             label={t('extensibility.widgets.modules.module-channel-label')}
             disabled={!isChecked}
             placeholder={t(
@@ -208,13 +208,13 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
               href={link}
               target="_blank"
               rel="noopener noreferrer"
-              className="fd-margin-top--md"
+              className="bsl-margin-top--md"
             >
               {t('extensibility.widgets.modules.documentation')}
               <Icon
                 name="action"
                 design="Information"
-                className="fd-margin-begin--tiny ui5-icon-s"
+                className="bsl-margin-begin--tiny ui5-icon-s"
               />
             </Link>
           ) : null}
@@ -223,7 +223,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
           <MessageStrip
             design="Warning"
             hideCloseButton
-            className="fd-margin-bottom--sm fd-margin-top--sm alert"
+            className="bsl-margin-bottom--sm bsl-margin-top--sm alert"
           >
             {tExt(parsedOptions?.betaAlert)}
           </MessageStrip>

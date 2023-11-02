@@ -48,7 +48,7 @@ function MemoryInput({ label, propertyPath, container = {}, setContainer }) {
           min="0"
           value={numericValue}
           onInput={e => setValue(e.target.value + selectedUnit)}
-          className="input-full"
+          className="full-width"
         />
         <Dropdown
           options={options}
@@ -86,7 +86,7 @@ function CpuInput({ label, propertyPath, container = {}, setContainer }) {
         min="0"
         value={value}
         setValue={value => setValue(value + 'm')}
-        className="input-full"
+        className="full-width"
       />
     </FlexBox>
   );

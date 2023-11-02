@@ -64,7 +64,7 @@ export function ErrorModal({
               <Icon
                 design="Negative"
                 name="message-error"
-                className="fd-margin-end--tiny"
+                className="bsl-margin-end--tiny"
               />
               <Title level="H5">{header}</Title>
             </>

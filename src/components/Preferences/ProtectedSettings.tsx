@@ -19,13 +19,13 @@ export default function ProtectedSettings() {
 
   return (
     <div className="preferences-row">
-      <span className="fd-has-color-status-4">
+      <span className="bsl-has-color-status-4">
         {t('settings.clusters.disableResourceProtection')}
       </span>
       <div>
         <Switch
           aria-label={t('settings.clusters.disableResourceProtection')}
-          className="fd-margin-begin--tiny"
+          className="bsl-margin-begin--tiny"
           checked={disableResourceProtection}
           onChange={() => setDisableResourceProtection(prevState => !prevState)}
         />

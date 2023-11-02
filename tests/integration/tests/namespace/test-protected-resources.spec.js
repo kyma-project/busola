@@ -82,7 +82,7 @@ context('Test Protected Resources', () => {
       .contains('Config Maps')
       .click();
 
-    cy.get('a.fd-link')
+    cy.get('a.bsl-link')
       .contains(NAME)
       .click();
 

@@ -24,7 +24,7 @@ import { useUrl } from 'hooks/useUrl';
 const NodeHeader = ({ nodeName }) => {
   const { clusterUrl } = useUrl();
   return (
-    <Link className="fd-link" to={clusterUrl(`overview/nodes/${nodeName}`)}>
+    <Link className="bsl-link" to={clusterUrl(`overview/nodes/${nodeName}`)}>
       {nodeName}
     </Link>
   );
@@ -168,8 +168,8 @@ export function ClusterNodes() {
             title={t('cluster-overview.headers.metrics')}
           />
         )}
-      <div className="fd-margin--md cluster-overview__graphs-wrapper">
-        <StatsPanel type="cluster" disableMargin />
+      <div className="bsl-margin--md cluster-overview__graphs-wrapper">
+        <StatsPanel type="cluster" disableMargin className="" />
         <ResourceCommitment />
       </div>
       {Events}
