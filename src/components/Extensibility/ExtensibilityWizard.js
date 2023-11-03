@@ -48,11 +48,7 @@ const isK8sResource = resource => {
 
 // TODO common container
 function FormContainer({ children }) {
-  return (
-    <div className="form-container" container="true">
-      {children}
-    </div>
-  );
+  return <>{children}</>;
 }
 const FormStack = injectPluginStack(FormContainer);
 

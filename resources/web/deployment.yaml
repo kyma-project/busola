@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: busola
-          image: europe-docker.pkg.dev/kyma-project/dev/busola-web:PR-2631
+          image: europe-docker.pkg.dev/kyma-project/dev/busola-web:PR-2628
           imagePullPolicy: Always
           resources:
             requests:

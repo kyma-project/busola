@@ -15,11 +15,7 @@ import { limitedWidgets } from 'components/Extensibility/components-form';
 import { getResourceObjFromUIStore } from 'components/Extensibility/helpers/immutableConverter';
 
 function FormContainer({ children }) {
-  return (
-    <div className="form-container" container="true">
-      {children}
-    </div>
-  );
+  return <>{children}</>;
 }
 const FormStack = injectPluginStack(FormContainer);
 

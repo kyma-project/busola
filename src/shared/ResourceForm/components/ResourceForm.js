@@ -194,7 +194,7 @@ export function ResourceForm({
           )}
           {mode === ModeSelector.MODE_YAML && (
             <FormItem>
-              <div style={{ width: '100%' }}>
+              <div className="yaml-form" style={{ width: '100%' }}>
                 <EditorActions
                   val={convertedResource}
                   editor={actionsEditor}
