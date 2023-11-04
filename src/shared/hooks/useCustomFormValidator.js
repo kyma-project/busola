@@ -100,7 +100,6 @@ export function useCustomFormValidator() {
 
   // Validates the FormField's input
   function validateFormField(formField) {
-    // Input: Extensibility = 'input', otherwise = 'ui5-combobox'
     const input =
       formField.querySelector('ui5-input') ??
       formField.querySelector('ui5-combobox') ??
