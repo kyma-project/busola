@@ -11,7 +11,7 @@
   "fallbackRetryDelay": "30s",
   "ignorePatterns": [
     {
-      "pattern": "^http://localhost:.*"
+      "pattern": "^http://localhost"
     }
   ]
 }
