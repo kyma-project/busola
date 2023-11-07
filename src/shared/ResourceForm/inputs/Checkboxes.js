@@ -20,7 +20,7 @@ export function Checkboxes({
   return (
     <>
       {options.map(({ key, text, description }) => (
-        <div key={key} className="fd-row">
+        <div key={key}>
           <CheckBox
             data-testid={`${dataTestID}.${key}`}
             checked={value?.includes(key)}
