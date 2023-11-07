@@ -28,7 +28,7 @@ export function WrappedText({ value, setValue, onChange, inputRef, ...props }) {
     <div className={fullWidth ? '' : 'fd-col fd-col-md--11'}>
       <Input
         value={value || ''}
-        onInput={e => setValue && setValue(e.target.value)}
+        onInput={onChange ?? (e => setValue && setValue(e.target.value))}
         {...inputProps}
         {...validationProps}
       />
