@@ -14,6 +14,7 @@ import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useTranslation } from 'react-i18next';
 import { useMatch, useNavigate } from 'react-router';
 import { useUrl } from 'hooks/useUrl';
+import { Footer } from './Footer/Footer';
 
 export function SidebarNavigation() {
   const navigationNodes = useRecoilValue(sidebarNavigationNodesSelector);
@@ -55,6 +56,7 @@ export function SidebarNavigation() {
       <SideNavigation
         collapsed={isSidebarCondensed}
         onSelectionChange={e => e.preventDefault()}
+        fixedItems={<Footer />}
         header={
           <>
             <SideNavigation style={{ height: 'auto' }}>
@@ -92,7 +94,7 @@ export function SidebarNavigation() {
             text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}
             onClick={() => navigate(clusterUrl(`overview`))}
             selected={isClusterOverviewSelected()}
-          ></SideNavigationItem>
+          />
         )}
         {topLevelNodes.map(node =>
           node.items?.map(item => <NavItem node={item} />),
