@@ -33,6 +33,7 @@ export function JsonataInput({
           value={value || ''}
           {...props}
           {...validationProps}
+          onInput={e => setValue && setValue(e.target.value)}
           icon={<Icon aria-label="Jsonata" name="source-code" />}
         />
       </Tooltip>
