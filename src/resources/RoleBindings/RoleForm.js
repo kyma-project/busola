@@ -53,7 +53,7 @@ export const RoleForm = ({
       label={t('role-bindings.create-modal.role')}
       propertyPath="$.roleRef.name"
       input={props => (
-        <div className="fd-col bsl-col-md--11">
+        <div className="bsl-col bsl-col-md--11">
           <ComboBox
             id="role"
             aria-label="Role Combobox"

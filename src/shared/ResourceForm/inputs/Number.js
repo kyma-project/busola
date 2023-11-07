@@ -3,7 +3,7 @@ import { Input } from '@ui5/webcomponents-react';
 export function Number({ value = '', setValue, ...props }) {
   if (!props.readOnly) delete props.readOnly;
   return (
-    <div className="fd-col bsl-col-md--11">
+    <div className="bsl-col bsl-col-md--11">
       <Input
         type="Number"
         value={value}
