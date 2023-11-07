@@ -125,12 +125,14 @@ context('Test reduced permissions', () => {
     chooseComboboxOption(
       '[aria-label="Secret namespace Combobox"]:visible',
       Cypress.env('NAMESPACE_NAME'),
+      '[placeholder="Select Namespace"]',
     );
 
     // service account name
     chooseComboboxOption(
       '[aria-label="Secret name Combobox"]:visible',
       SA_NAME,
+      '[placeholder="Select name"]',
     );
 
     cy.get('ui5-dialog')

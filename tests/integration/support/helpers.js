@@ -1,6 +1,6 @@
-export function chooseComboboxOption(selector, optionText) {
+export function chooseComboboxOption(selector, optionText, inputSelector = '') {
   cy.get(`ui5-combobox${selector}`)
-    .find('input')
+    .find(`input${inputSelector}`)
     .filterWithNoValue()
     .click()
     .type(optionText);
