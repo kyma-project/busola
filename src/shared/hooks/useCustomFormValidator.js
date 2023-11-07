@@ -106,9 +106,9 @@ export function useCustomFormValidator() {
       formField.querySelector('ui5-combobox') ??
       formField.querySelector('ui5-switch');
 
-    const required = input.required;
-    const pattern = input.getAttribute('pattern');
-    const value = input.value;
+    const required = input?.required;
+    const pattern = input?.getAttribute('pattern');
+    const value = input?.value;
 
     const isValid = !(
       (required && value === '') ||

@@ -92,7 +92,7 @@ export function StringRenderer({
           <>
             <Inputs.Text {...params} />
             {decodable && (
-              <div className="fd-col fd-col-md--1 generate-button">
+              <div className="fd-col bsl-col-md--1 generate-button">
                 <Button
                   design="Transparent"
                   icon={decoded ? 'hide' : 'show'}

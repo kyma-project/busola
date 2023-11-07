@@ -100,8 +100,8 @@ export function MultiInput({
 
   const listClasses = classnames({
     'text-array-input__list': true,
-    'fd-col-md--8': !fullWidth && (title || label),
-    'fd-col-md--12': fullWidth && !(title || label),
+    'bsl-col-md--8': !fullWidth && (title || label),
+    'bsl-col-md--12': fullWidth && !(title || label),
   });
 
   useEffect(() => {
@@ -166,7 +166,7 @@ export function MultiInput({
     >
       <FlexBox className="form-field multi-input">
         {!fullWidth && (title || label) && (
-          <div className="fd-col-md--3 form-field__label">
+          <div className="bsl-col-md--3 form-field__label">
             <ResourceForm.Label
               required={required}
               tooltipContent={tooltipContent}
@@ -179,7 +179,7 @@ export function MultiInput({
           {internalValue.map((entry, index) => (
             <li key={index} className="text-array-entry">
               <FlexBox alignItems="Baseline" style={{ gap: '10px' }}>
-                <div className="fd-col-md--11">
+                <div className="bsl-col-md--11">
                   <FlexBox wrap="Wrap" style={{ gap: '10px' }}>
                     {noEdit && !isLast(index) && (
                       <span className="readonly-value">{entry}</span>
@@ -191,7 +191,7 @@ export function MultiInput({
                       )}
                   </FlexBox>
                 </div>
-                <div className="fd-col-md--1">
+                <div className="bsl-col-md--1">
                   {!isLast(index) && (
                     <Button
                       disabled={readOnly}
@@ -215,7 +215,7 @@ export function MultiInput({
             </p>
           )}
         </ul>
-        <div className="fd-col-md--1 tooltip-column tooltip-column--with-padding">
+        <div className="bsl-col-md--1 tooltip-column tooltip-column--with-padding">
           {tooltipContent && (
             <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
               <Icon

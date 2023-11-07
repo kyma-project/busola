@@ -97,7 +97,7 @@ export function MonacoRenderer({
         </Label>
       </div>
 
-      <div className="fd-col fd-col-md--11">
+      <div className="fd-col bsl-col-md--11">
         <Editor
           autocompletionDisabled
           updateValueOnParentChange

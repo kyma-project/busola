@@ -41,7 +41,7 @@ function MemoryInput({ label, propertyPath, container = {}, setContainer }) {
       <Label required>{label}</Label>
       <FlexBox
         style={{ gap: '10px' }}
-        className="memory-input fd-col fd-col-md--11"
+        className="memory-input fd-col bsl-col-md--11"
       >
         <Input
           type="Number"

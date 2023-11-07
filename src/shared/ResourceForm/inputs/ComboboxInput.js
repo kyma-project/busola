@@ -17,7 +17,7 @@ export function ComboboxInput({
   return (
     <div
       className={classnames(
-        `fd-col fd-col-md--${fullWidth ? '12' : '11'}`,
+        `fd-col bsl-col-md--${fullWidth ? '12' : '11'}`,
         className,
       )}
     >

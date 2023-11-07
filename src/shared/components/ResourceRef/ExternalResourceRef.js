@@ -109,7 +109,7 @@ export function ExternalResourceRef({
           resource: labelPrefix,
         })}
         input={() => (
-          <div className="fd-col fd-col-md--11">
+          <div className="fd-col bsl-col-md--11">
             <ComboBox
               id={`secret-namespace-combobox-${index}`}
               aria-label="Secret namespace Combobox"
@@ -146,7 +146,7 @@ export function ExternalResourceRef({
           resource: labelPrefix,
         })}
         input={() => (
-          <div className="fd-col fd-col-md--11">
+          <div className="fd-col bsl-col-md--11">
             <ComboBox
               id={`secret-name-combobox-${index}`}
               aria-label="Secret name Combobox"
