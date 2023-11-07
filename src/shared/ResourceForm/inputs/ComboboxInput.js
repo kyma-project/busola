@@ -39,7 +39,7 @@ export function ComboboxInput({
         id={id || 'combobox-input'}
         ref={_ref}
         disabled={props.disabled || !options?.length}
-        filter="None"
+        filter="Contains"
         onChange={onChange}
         onInput={updatesOnInput ? onChange : () => {}}
         value={
