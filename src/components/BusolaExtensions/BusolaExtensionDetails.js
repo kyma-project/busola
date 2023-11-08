@@ -18,6 +18,7 @@ import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { extensibilitySchemasState } from 'state/extensibilitySchemasAtom';
 import { useUrl } from 'hooks/useUrl';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 import {
   formatCurrentVersion,
@@ -81,7 +82,10 @@ export function BusolaExtensionDetails(props) {
                   section: t(`extensibility.sections.${key}`),
                 })}
                 modalOpeningComponent={
-                  <Button className="bsl-margin-end--tiny" design="Emphasized">
+                  <Button
+                    style={spacing.sapUiTinyMarginEnd}
+                    design="Emphasized"
+                  >
                     {t('extensibility.edit-section', {
                       section: t(`extensibility.sections.${key}`),
                     })}
