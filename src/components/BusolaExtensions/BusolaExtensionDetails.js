@@ -152,7 +152,7 @@ export function BusolaExtensionDetails(props) {
           <MessageStrip
             design="Information"
             hideCloseButton
-            className="bsl-margin-bottom--sm"
+            style={spacing.sapUiSmallMarginBottom}
           >
             {t('extensibility.message.old-version')}
           </MessageStrip>
@@ -162,7 +162,7 @@ export function BusolaExtensionDetails(props) {
           <MessageStrip
             design="Negative"
             hideCloseButton
-            className="bsl-margin-bottom--sm"
+            style={spacing.sapUiSmallMarginBottom}
           >
             {t('extensibility.message.unsupported-version')}
           </MessageStrip>
@@ -172,7 +172,7 @@ export function BusolaExtensionDetails(props) {
           <MessageStrip
             design="Negative"
             hideCloseButton
-            className="bsl-margin-bottom--sm"
+            style={spacing.sapUiSmallMarginBottom}
           >
             <Trans i18nKey="extensibility.message.unnown-version">
               <Link
