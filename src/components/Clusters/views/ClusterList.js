@@ -20,11 +20,13 @@ import { AddClusterDialog } from '../components/AddClusterDialog';
 import { EditCluster } from './EditCluster/EditCluster';
 import { ClusterStorageType } from './ClusterStorageType';
 
-import './ClusterList.scss';
 import { useLoadDefaultKubeconfigId } from 'components/App/useLoginWithKubeconfigID';
 import { useFeature } from 'hooks/useFeature';
 import { useNavigate } from 'react-router-dom';
 import { createPortal } from 'react-dom';
+
+import { spacing } from '@ui5/webcomponents-react-base';
+import './ClusterList.scss';
 
 function ClusterList() {
   const gardenerLoginFeature = useFeature('GARDENER_LOGIN');
@@ -141,19 +143,13 @@ function ClusterList() {
 
   const extraHeaderContent = (
     <>
-      <Button
-        design="Transparent"
-        icon="add"
-        className="bsl-margin-begin--sm"
-        onClick={() => setShowAdd(true)}
-      >
+      <Button design="Transparent" icon="add" onClick={() => setShowAdd(true)}>
         {t('clusters.add.title')}
       </Button>
       {gardenerLoginFeature.isEnabled && (
         <Button
           design="Transparent"
           icon="add"
-          className="bsl-margin-begin--sm"
           onClick={() => navigate('/gardener-login')}
         >
           {t('clusters.gardener.button')}
@@ -186,7 +182,7 @@ function ClusterList() {
         kubeconfigIdFeature?.config?.defaultKubeconfig && (
           <Button
             onClick={loadDefaultKubeconfigId}
-            className="bsl-margin-end--tiny bsl-margin-begin--tiny"
+            style={spacing.sapUiTinyMarginBeginEnd}
           >
             {t('clusters.add.load-default')}
           </Button>
@@ -213,7 +209,7 @@ function ClusterList() {
         >
           <Button
             onClick={() => setShowAdd(true)}
-            className="bsl-margin-end--tiny bsl-margin-begin--tiny"
+            style={spacing.sapUiTinyMarginBeginEnd}
             design="Emphasized"
           >
             {t('clusters.add.title')}

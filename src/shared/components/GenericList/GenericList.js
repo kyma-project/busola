@@ -280,7 +280,6 @@ GenericList.propTypes = {
   serverDataError: PropTypes.any,
   serverDataLoading: PropTypes.bool,
   pagination: PaginationProps,
-  className: PropTypes.string,
   currentlyEditedResourceUID: PropTypes.string,
   sortBy: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   notFoundMessage: PropTypes.string,

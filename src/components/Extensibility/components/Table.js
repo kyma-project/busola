@@ -166,13 +166,9 @@ export function Table({
     defaultSearch,
   });
 
-  const className = `extensibility-table ${
-    disableMargin ? 'bsl-margin--tiny' : ''
-  }`;
-
   return (
     <GenericList
-      className={className}
+      className={'extensibility-table'}
       title={tExt(structure.name, {
         defaultValue: structure.name || structure.source,
       })}

@@ -8,6 +8,8 @@ import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { getUser, getUserIndex } from '../shared';
 
+import { spacing } from '@ui5/webcomponents-react-base';
+
 export const AUTH_FORM_TOKEN = 'Token';
 export const AUTH_FORM_OIDC = 'OIDC';
 export const DEFAULT_SCOPE_VALUE = 'openid';
@@ -117,7 +119,7 @@ export function AuthForm({
       <MessageStrip
         design="Warning"
         hideCloseButton
-        className="bsl-margin-top--sm bsl-margin-bottom--sm"
+        style={spacing.sapUiSmallMarginTopBottom}
       >
         {t('clusters.wizard.incomplete', {
           context:
@@ -131,7 +133,7 @@ export function AuthForm({
         <MessageStrip
           design="Information"
           hideCloseButton
-          className="bsl-margin-top--sm bsl-margin-bottom--sm"
+          style={spacing.sapUiSmallMarginTopBottom}
         >
           {t('clusters.wizard.token-info')}
         </MessageStrip>

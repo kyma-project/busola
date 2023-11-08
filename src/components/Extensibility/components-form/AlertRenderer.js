@@ -5,6 +5,7 @@ import { useCreateResourceDescription } from 'components/Extensibility/helpers';
 
 import { useVariables } from '../hooks/useVariables';
 import { useJsonata } from '../hooks/useJsonata';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 export function AlertRenderer({
   value,
@@ -55,7 +56,7 @@ export function AlertRenderer({
     <MessageStrip
       design={schemaType}
       hideCloseButton
-      className="bsl-margin-top--sm"
+      style={spacing.sapUiTinyMarginTopBottom}
     >
       {alertLink}
     </MessageStrip>

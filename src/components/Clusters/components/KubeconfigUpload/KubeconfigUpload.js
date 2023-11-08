@@ -1,10 +1,11 @@
 import React, { useCallback, useState } from 'react';
-import { MessageStrip } from '@ui5/webcomponents-react';
+import { MessageStrip, Text } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { KubeconfigFileUpload } from './KubeconfigFileUpload';
 import jsyaml from 'js-yaml';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 
+import { spacing } from '@ui5/webcomponents-react-base';
 import './KubeconfigUpload.scss';
 
 export function KubeconfigUpload({
@@ -46,9 +47,9 @@ export function KubeconfigUpload({
           editor.getModel().setValue(text);
         }}
       />
-      <p className="editor-label bsl-margin-bottom--sm bsl-margin-top--sm">
+      <Text className="editor-label" style={spacing.sapUiSmallMarginTopBottom}>
         {t('clusters.wizard.editor-label')}
-      </p>
+      </Text>
       <Editor
         autocompletionDisabled
         language="yaml"
@@ -60,7 +61,7 @@ export function KubeconfigUpload({
         <MessageStrip
           design="Negative"
           hideCloseButton
-          className="bsl-margin-top--sm"
+          style={spacing.sapUiSmallMarginTop}
         >
           {t('common.create-form.editor-error', { error })}
         </MessageStrip>

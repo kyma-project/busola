@@ -7,6 +7,8 @@ import { Button } from '@ui5/webcomponents-react';
 import { useGetPlaceholder, useGetTranslation } from '../helpers';
 import { useJsonata } from '../hooks/useJsonata';
 
+import { spacing } from '@ui5/webcomponents-react-base';
+
 export function ResourceButton({
   value,
   structure,
@@ -49,7 +51,7 @@ export function ResourceButton({
     <Button
       icon={structure.icon}
       iconEnd
-      className="bsl-margin-begin--sm"
+      style={spacing.sapUiSmallMarginBegin}
       onClick={() =>
         navigate(
           resourceUrl(
