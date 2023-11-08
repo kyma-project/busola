@@ -5,6 +5,7 @@ import jsyaml from 'js-yaml';
 
 import { YamlFileUploader } from './YamlFileUploader';
 import { OPERATION_STATE_INITIAL } from './YamlUploadDialog';
+import { spacing } from '@ui5/webcomponents-react-base';
 const isK8sResource = resource => {
   if (!resource) return true;
   return resource.apiVersion && resource.kind && resource.metadata;
@@ -54,9 +55,7 @@ function YamlUpload({
           editor.getModel().setValue(val);
         }}
       />
-      <p style={{ minHeight: '20px' }} className="bsl-margin--tiny">
-        {t('upload-yaml.or-paste-here')}
-      </p>
+      <p style={spacing.sapUiTinyMargin}>{t('upload-yaml.or-paste-here')}</p>
       <Editor
         autocompletionDisabled
         height="60vh"

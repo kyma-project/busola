@@ -8,12 +8,7 @@ export function RuleTitle({ rule, i }) {
   const { t } = useTranslation();
 
   const Alert = ({ tooltipContent }) => (
-    <Tooltip
-      position="right"
-      className="bsl-margin-end--tiny"
-      content={tooltipContent}
-      delay={0}
-    >
+    <Tooltip position="right" content={tooltipContent} delay={0}>
       <Icon
         className="bsl-color--warning"
         aria-label={t('common.messages.validation-error')}

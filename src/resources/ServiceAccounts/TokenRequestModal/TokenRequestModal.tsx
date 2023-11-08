@@ -1,14 +1,15 @@
-import { Button, MessageStrip, Dialog, Bar } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-
 import { useGenerateTokenRequest } from './useGenerateTokenRequest';
 import { useDownloadKubeconfigWithToken } from '../useDownloadKubeconfigWithToken';
+import { useEventListener } from 'hooks/useEventListener';
+
+import { Button, MessageStrip, Dialog, Bar } from '@ui5/webcomponents-react';
 import { ResourceForm } from 'shared/ResourceForm';
 import { ComboboxInput } from 'shared/ResourceForm/inputs';
 import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 
-import { useEventListener } from 'hooks/useEventListener';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 const expirationSecondsOptions = [
   {
@@ -116,21 +117,23 @@ export function TokenRequestModal({
           label={t('service-accounts.token-request.expiration-seconds')}
           input={ComboboxInputWithSeconds}
         />
-        <div className="bsl-margin-end--lg bsl-margin-begin--lg bsl-margin-top--sm">
+        <div style={spacing.sapUiSmallMarginTop}>
           <MessageStrip design="Warning" hideCloseButton>
             {t('service-accounts.token-request.warning')}
           </MessageStrip>
           <div
-            className="bsl-display-flex bsl-margin-top--sm bsl-margin-bottom--sm"
+            className="bsl-display-flex"
             style={{
               justifyContent: 'flex-end',
+              marginTop: spacing.sapUiSmallMarginTop.marginTop,
+              marginBottom: spacing.sapUiSmallMarginBottom.marginBottom,
             }}
           >
             {/*@ts-ignore*/}
             <CopiableText
               iconOnly
               buttonText={t('common.buttons.copy')}
-              className="bsl-margin-end--tiny"
+              style={spacing.sapUiTinyMarginEnd}
               textToCopy={kubeconfigYaml}
               disabled={token === ''}
             />
@@ -138,7 +141,7 @@ export function TokenRequestModal({
               onClick={() => downloadKubeconfig(serviceAccountName, token)}
               disabled={token === ''}
               design="Transparent"
-              className="bsl-margin-end--tiny"
+              style={spacing.sapUiTinyMarginEnd}
               icon="download"
               iconEnd
             >

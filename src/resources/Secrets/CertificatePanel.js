@@ -9,11 +9,7 @@ export function CertificatePanel({ name, certificate }) {
   const { format: formatDate } = new Intl.DateTimeFormat('en');
 
   return (
-    <UI5Panel
-      fixed
-      className="bsl-margin--md"
-      title={t('secrets.certificate-panel.title', { name })}
-    >
+    <UI5Panel fixed title={t('secrets.certificate-panel.title', { name })}>
       <LayoutPanelRow
         name={t('secrets.certificate-panel.subject')}
         value={certificate.subject}

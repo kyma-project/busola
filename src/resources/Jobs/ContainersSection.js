@@ -7,6 +7,8 @@ import { ItemArray } from 'shared/ResourceForm/fields';
 import { createContainerTemplate } from './templates';
 import { SingleContainerForm, SingleContainerInput } from './Containers';
 
+import { spacing } from '@ui5/webcomponents-react-base';
+
 export const ContainersSection = ({ readOnly, ...props }) => {
   const { t } = useTranslation();
 
@@ -46,7 +48,7 @@ export const ContainerSection = ({ readOnly, ...props }) => {
       <MessageStrip
         design="Warning"
         hideCloseButton
-        className="bsl-margin-top--sm"
+        style={spacing.sapUiSmallMarginTop}
       >
         {t('jobs.create-modal.at-least-one-container-required')}
         <Button

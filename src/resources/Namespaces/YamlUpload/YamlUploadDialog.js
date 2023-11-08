@@ -6,11 +6,13 @@ import { YamlResourcesList } from './YamlResourcesList';
 import { useUploadResources } from './useUploadResources';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
-import './YamlUploadDialog.scss';
 import { useTranslation } from 'react-i18next';
 import { useEventListener } from 'hooks/useEventListener';
 import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+
+import { spacing } from '@ui5/webcomponents-react-base';
+import './YamlUploadDialog.scss';
 
 export const YamlUpload = React.lazy(() => import('./YamlUpload'));
 
@@ -127,7 +129,7 @@ export function YamlUploadDialog({ open, onCancel }) {
             setLastOperationState={setLastOperationState}
           />
           <div>
-            <p className="bsl-margin-begin--tiny" style={{ minHeight: '80px' }}>
+            <p style={spacing.sapUiTinyMarginBegin}>
               {t('upload-yaml.info', { namespace: defaultNamespace })}
             </p>
             <YamlResourcesList

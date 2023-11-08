@@ -32,4 +32,8 @@
 .resources-list {
   max-height: 60vh;
   overflow-y: auto;
+
+  .list-type {
+    list-style-type: disc;
+  }
 }

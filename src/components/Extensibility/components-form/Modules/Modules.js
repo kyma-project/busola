@@ -2,14 +2,16 @@ import { useUIStore } from '@ui-schema/ui-schema';
 
 import { useJsonata } from '../../hooks/useJsonata';
 import { useVariables } from '../../hooks/useVariables';
+import { useGetTranslation } from 'components/Extensibility/helpers';
+import { useTranslation } from 'react-i18next';
 import { fromJS } from 'immutable';
+
 import { CheckBox, Icon, Link, MessageStrip } from '@ui5/webcomponents-react';
+import { ResourceForm } from 'shared/ResourceForm';
+import { Dropdown } from 'shared/ResourceForm/inputs';
 
 import './Modules.scss';
-import { useGetTranslation } from 'components/Extensibility/helpers';
-import { ResourceForm } from 'shared/ResourceForm';
-import { useTranslation } from 'react-i18next';
-import { Dropdown } from 'shared/ResourceForm/inputs';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 export function Modules({ storeKeys, resource, onChange, schema, required }) {
   const { t: tExt } = useGetTranslation();
@@ -137,12 +139,12 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
 
     return (
       <>
-        <div className="gridbox bsl-margin-bottom--sm">
-          <div className="bsl-margin-top--sm">
+        <div className="gridbox ">
+          <div style={spacing.sapUiSmallMarginTop}>
             {index === 0 ? `${sectionName}:` : ''}
           </div>
           <CheckBox
-            className="bsl-margin-top--sm"
+            style={spacing.sapUiSmallMarginTop}
             checked={isChecked}
             onChange={e => {
               setCheckbox(
@@ -160,7 +162,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
             text={name}
           />
           <Dropdown
-            className="bsl-margin-top--tiny"
+            style={spacing.sapUiTinyMarginTop}
             label={t('extensibility.widgets.modules.module-channel-label')}
             disabled={!isChecked}
             placeholder={t(
@@ -208,13 +210,14 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
               href={link}
               target="_blank"
               rel="noopener noreferrer"
-              className="bsl-margin-top--md"
+              style={spacing.sapUiMediumMarginTop}
             >
               {t('extensibility.widgets.modules.documentation')}
               <Icon
                 name="action"
                 design="Information"
-                className="bsl-margin-begin--tiny ui5-icon-s"
+                className="ui5-icon-s"
+                style={spacing.sapUiTinyMarginBegin}
               />
             </Link>
           ) : null}
@@ -223,7 +226,8 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
           <MessageStrip
             design="Warning"
             hideCloseButton
-            className="bsl-margin-bottom--sm bsl-margin-top--sm alert"
+            className="alert"
+            style={spacing.sapUiSmallMarginTopBottom}
           >
             {tExt(parsedOptions?.betaAlert)}
           </MessageStrip>

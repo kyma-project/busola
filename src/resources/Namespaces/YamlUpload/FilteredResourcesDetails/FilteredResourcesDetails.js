@@ -11,9 +11,11 @@ import { useValidateResourceBySchema } from 'shared/hooks/useValidateResourceByS
 
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
-import './FilteredResourcesDetails.scss';
 import { validationSchemasEnabledState } from 'state/validationEnabledSchemasAtom';
 import { useLoadingDebounce } from 'shared/hooks/useLoadingDebounce';
+
+import { spacing } from '@ui5/webcomponents-react-base';
+import './FilteredResourcesDetails.scss';
 
 const WarningButton = ({
   handleShowWarnings,
@@ -92,7 +94,7 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
       <MessageStrip
         design="Warning"
         hideCloseButton
-        className="bsl-margin-bottom--sm"
+        style={spacing.sapUiSmallMarginBottom}
       >
         <p> {t('common.headers.loading')}</p>
         <Spinner className="warning-spinner" size="s" center={false} />
@@ -118,7 +120,7 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
               <MessageStrip
                 design="Warning"
                 hideCloseButton
-                className="bsl-margin-top--sm"
+                style={spacing.sapUiSmallMarginTop}
               >
                 {warning.message}
               </MessageStrip>
@@ -140,8 +142,8 @@ export const FilteredResourcesDetails = ({ filteredResources }) => {
     <ul className="resources-list">
       {filteredResources.map(r => (
         <li
-          className="bsl-margin-begin--sm bsl-margin-end--sm bsl-margin-bottom--sm"
-          style={{ listStyle: 'disc' }}
+          className="list-type"
+          style={spacing.sapUiSmallMarginBeginEnd}
           key={`${r?.value?.kind}-${r.value?.metadata?.name}`}
         >
           <p style={{ fontSize: '16px' }}>

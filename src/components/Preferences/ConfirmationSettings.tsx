@@ -17,7 +17,6 @@ export default function ConfirmationSettings() {
       <div>
         <Switch
           aria-label={t('settings.clusters.dontConfirmDelete')}
-          className="bsl-margin-begin--tiny"
           checked={dontConfirmDelete}
           onChange={() => setDontConfirmDelete(previousState => !previousState)}
         />

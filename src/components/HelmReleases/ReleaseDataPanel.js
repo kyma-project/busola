@@ -9,6 +9,7 @@ import { useUrl } from 'hooks/useUrl';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import './HelmReleaseDataPanel.scss';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 export function ReleaseDataPanel({ release, simpleHeader }) {
   const { t } = useTranslation();
@@ -29,12 +30,12 @@ export function ReleaseDataPanel({ release, simpleHeader }) {
             >
               {name}
             </Link>
-            <div className="bsl-margin-begin--sm">
+            <div style={spacing.sapUiSmallMarginBegin}>
               <StatusBadge noTooltip type="Information">
                 {t('helm-releases.headers.release-version', { version })}
               </StatusBadge>
             </div>
-            <div className="bsl-margin-begin--tiny">
+            <div style={spacing.sapUiTinyMarginBegin}>
               <HelmReleaseStatus status={release.info.status} />
             </div>
           </>

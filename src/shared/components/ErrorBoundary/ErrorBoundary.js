@@ -3,6 +3,7 @@ import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import * as Sentry from '@sentry/react';
 
+import { spacing } from '@ui5/webcomponents-react-base';
 import './ErrorBoundary.scss';
 
 class ErrorBoundaryComponent extends React.Component {
@@ -27,7 +28,10 @@ class ErrorBoundaryComponent extends React.Component {
       return (
         <>
           <div role="alert">
-            <p className="bsl-margin-top-bottom--sm bsl-color--text">
+            <p
+              className="bsl-color--text"
+              style={spacing.sapUiSmallMarginTopBottom}
+            >
               {this.props.customMessage ||
                 this.props.t('err-boundary.restored-initial-form')}
             </p>
