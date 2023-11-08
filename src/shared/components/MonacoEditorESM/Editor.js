@@ -1,8 +1,8 @@
 import React from 'react';
 import { MessageStrip } from '@ui5/webcomponents-react';
-import { useTranslation } from 'react-i18next';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
+import { useTranslation } from 'react-i18next';
 import { useAutocompleteWorker } from './autocompletion/useAutocompleteWorker';
 import { useOnFocus } from './hooks/useOnFocus';
 import { useOnBlur } from './hooks/useOnBlur';
@@ -12,6 +12,7 @@ import { useOnMount } from './hooks/useOnMount';
 import { useOnChange } from './hooks/useOnChange';
 import { useCreateEditor } from './hooks/useCreateEditor';
 
+import { spacing } from '@ui5/webcomponents-react-base';
 import './Editor.scss';
 
 export function Editor({
@@ -88,13 +89,18 @@ export function Editor({
           <MessageStrip
             design="Negative"
             hideCloseButton
-            className="bsl-margin--sm break-word"
+            className="break-word"
+            style={spacing.sapUiSmallMargin}
           >
             {t('common.create-form.editor-error', { error })}
           </MessageStrip>
         )}
         {schemaError && (
-          <MessageStrip design="Warning" className="bsl-margin--sm break-word">
+          <MessageStrip
+            design="Warning"
+            className="break-word"
+            style={spacing.sapUiSmallMargin}
+          >
             {t('common.create-form.autocomplete-unavailable-error', {
               error: schemaError.error || schemaError.message || schemaError,
             })}
@@ -104,7 +110,8 @@ export function Editor({
           <MessageStrip
             design="Warning"
             hideCloseButton
-            className="bsl-margin--sm break-word"
+            className="break-word"
+            style={spacing.sapUiSmallMargin}
           >
             {warnings.map(m => (
               <span

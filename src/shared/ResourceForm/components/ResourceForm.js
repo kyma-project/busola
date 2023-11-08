@@ -14,6 +14,7 @@ import * as jp from 'jsonpath';
 
 import './ResourceForm.scss';
 import { Form, FormItem } from '@ui5/webcomponents-react';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 export function ResourceForm({
   pluralKind, // used for the request path
@@ -231,7 +232,7 @@ export function ResourceForm({
                         advanced
                         propertyPath="$.metadata.labels"
                         title={t('common.headers.labels')}
-                        className="bsl-margin-top--sm"
+                        style={spacing.sapUiSmallMarginTop}
                         inputInfo={t('common.tooltips.key-value')}
                         {...labelsProps}
                       />

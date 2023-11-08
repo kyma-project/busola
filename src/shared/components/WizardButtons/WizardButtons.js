@@ -1,6 +1,8 @@
 import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
+import { spacing } from '@ui5/webcomponents-react-base';
+
 export function WizardButtons({
   selected,
   setSelected,
@@ -22,11 +24,11 @@ export function WizardButtons({
   };
 
   return (
-    <div className="bsl-margin-top--sm">
+    <div style={spacing.sapUiSmallMarginTop}>
       {!firstStep && (
         <Button
           onClick={goToPreviousStep}
-          className="bsl-margin-end--tiny"
+          style={spacing.sapUiTinyMarginEnd}
           aria-label="previous-step"
         >
           {t('clusters.buttons.previous-step')}
@@ -36,7 +38,7 @@ export function WizardButtons({
         design="Emphasized"
         onClick={lastStep ? onComplete : goToNextStep}
         disabled={validation}
-        className="bsl-margin-end--tiny"
+        style={spacing.sapUiTinyMarginEnd}
         aria-label={lastStep ? 'last-step' : 'next-step'}
       >
         {lastStep

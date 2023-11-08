@@ -10,6 +10,7 @@ import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
 import { useFeature } from 'hooks/useFeature';
 
+import { spacing } from '@ui5/webcomponents-react-base';
 import './NodeDetails.scss';
 
 function NodeDetails({ nodeName }) {
@@ -41,6 +42,7 @@ function NodeDetails({ nodeName }) {
                   className={`panels ${
                     isPrometheusEnabled ? 'withPrometheus' : ''
                   }`}
+                  style={spacing.sapUiMediumMargin}
                 >
                   {isPrometheusEnabled ? (
                     <StatsPanel

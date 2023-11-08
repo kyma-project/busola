@@ -12,6 +12,7 @@ export const Labels = ({
   labels,
   className = '',
   shortenLongLabels = false,
+  style = null,
 }) => {
   if (!labels || Object.keys(labels).length === 0) {
     return <span>{EMPTY_TEXT_PLACEHOLDER}</span>;
@@ -24,7 +25,7 @@ export const Labels = ({
 
   /* eslint-enable no-unused-vars */
   return (
-    <div className={classNames('labels', className)}>
+    <div className={classNames('labels', className)} style={style}>
       {separatedLabels.map((label, id) => (
         <Token
           aria-label={label}

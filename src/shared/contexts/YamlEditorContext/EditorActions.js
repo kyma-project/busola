@@ -3,8 +3,10 @@ import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { Button } from '@ui5/webcomponents-react';
 import copyToCliboard from 'copy-to-clipboard';
 import { saveAs } from 'file-saver';
-import 'shared/contexts/YamlEditorContext/EditorActions.scss';
 import { useTranslation } from 'react-i18next';
+
+import { spacing } from '@ui5/webcomponents-react-base';
+import 'shared/contexts/YamlEditorContext/EditorActions.scss';
 
 const EDITOR_VISIBILITY = 'editor-visibility';
 const READONLY_FIELDS = ['^ *managedFields:$', '^status:$'];
@@ -115,7 +117,7 @@ export function EditorActions({
   const { t } = useTranslation();
 
   return (
-    <section className="editor-actions bsl-margin-bottom--sm">
+    <section className="editor-actions" style={spacing.sapUiSmallMarginBottom}>
       <ButtonWithTooltip
         tooltipContent={
           visible ? t('common.tooltips.hide') : t('common.tooltips.show')

@@ -5,9 +5,10 @@ import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow'
 import { Labels } from '../Labels/Labels';
 import { ContainersPanel, Volume } from './components';
 import { Title } from '@ui5/webcomponents-react';
-
-import './PodTemplate.scss';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
+
+import { spacing } from '@ui5/webcomponents-react-base';
+import './PodTemplate.scss';
 
 export function PodTemplate({ template }) {
   const { t } = useTranslation();
@@ -16,7 +17,7 @@ export function PodTemplate({ template }) {
     <>
       <Title level="H5">{t('pods.labels.pod-template')}</Title>
       <Labels
-        className="bsl-margin-begin--tiny"
+        style={spacing.sapUiTinyMarginBegin}
         labels={template.metadata.labels}
       />
     </>
@@ -47,8 +48,8 @@ export function PodTemplate({ template }) {
               <>
                 <Title level="H5">{t('pods.labels.volumes')}</Title>
                 <Labels
-                  className="bsl-margin-begin--tiny"
                   labels={template.metadata.labels}
+                  style={spacing.sapUiTinyMarginBegin}
                 />
               </>
             }

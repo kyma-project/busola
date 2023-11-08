@@ -205,30 +205,20 @@ function Resource({
           className="actions-tooltip"
           content={t('common.tooltips.protected-resources-info')}
         >
-          <Button
-            className="bsl-margin-end--tiny"
-            onClick={() => openYaml(resource)}
-          >
+          <Button onClick={() => openYaml(resource)}>
             {t('common.buttons.view-yaml')}
           </Button>
         </Tooltip>
       );
     } else if (disableEdit) {
       return (
-        <Button
-          className="bsl-margin-end--tiny"
-          onClick={() => openYaml(resource)}
-        >
+        <Button onClick={() => openYaml(resource)}>
           {t('common.buttons.view-yaml')}
         </Button>
       );
     } else if (!CreateResourceForm || !CreateResourceForm?.allowEdit) {
       return (
-        <Button
-          className="bsl-margin-end--tiny"
-          onClick={() => openYaml(resource)}
-          design="Emphasized"
-        >
+        <Button onClick={() => openYaml(resource)} design="Emphasized">
           {t('common.buttons.edit-yaml')}
         </Button>
       );
@@ -243,7 +233,7 @@ function Resource({
             })
           }
           modalOpeningComponent={
-            <Button className="bsl-margin-end--tiny" design="Emphasized">
+            <Button design="Emphasized">
               {editActionLabel ||
                 t('components.resource-details.edit', {
                   resourceType: prettifiedResourceKind,

@@ -5,6 +5,7 @@ import { isSidebarCondensedState } from 'state/preferences/isSidebarCondensedAto
 import { useGetBusolaVersionDetails } from './useGetBusolaVersion';
 import { useGetLegalLinks } from './useGetLegalLinks';
 
+import { spacing } from '@ui5/webcomponents-react-base';
 import './Footer.scss';
 
 export function Footer() {
@@ -26,7 +27,7 @@ export function Footer() {
           />
         ))}
       </div>
-      <div className="bsl-margin-top--sm">
+      <div style={spacing.sapUiSmallMarginTop}>
         <p className="footer__kyma-version">{t('common.labels.version')}</p>
         <Link
           dataTestId="version-link"

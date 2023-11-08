@@ -20,6 +20,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useUrl } from 'hooks/useUrl';
 
+import { spacing } from '@ui5/webcomponents-react-base';
 import './ClusterNodes.scss';
 
 const NodeHeader = ({ nodeName }) => {
@@ -169,8 +170,11 @@ export function ClusterNodes() {
             title={t('cluster-overview.headers.metrics')}
           />
         )}
-      <div className="cluster-overview__graphs-wrapper">
-        <StatsPanel type="cluster" disableMargin className="" />
+      <div
+        className="cluster-overview__graphs-wrapper"
+        style={spacing.sapUiMediumMargin}
+      >
+        <StatsPanel type="cluster" disableMargin />
         <ResourceCommitment />
       </div>
       {Events}
