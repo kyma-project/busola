@@ -53,7 +53,7 @@ export function Header() {
   ];
 
   return (
-    <>
+    <div id="header-wrap">
       <ShellBar
         className="header"
         startButton={
@@ -98,6 +98,6 @@ export function Header() {
           />
         )}
       </ShellBar>
-    </>
+    </div>
   );
 }
