@@ -15,7 +15,7 @@ export const ContentWrapper = ({ children }: ContentWrapperProps) => {
         !reactNavEnabled || pathname === '/clusters' ? 'sidebar-hidden' : ''
       }
     >
-      {children}
+      <div className="content-scroll">{children}</div>
     </div>
   );
 };

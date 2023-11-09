@@ -8,20 +8,12 @@
   height: var(--header-height);
 }
 
-ui5-shellbar.header {
-  width: 100%;
-  height: var(--header-height);
-  // position: fixed;
-  background-color: var(--sapShellColor);
-  z-index: 9;
-  border-radius: var(--border-radius);
-  box-shadow: 0 0 0.125rem 0 rgba(34, 53, 72, 0.16),
-    0 0.5rem 1rem 0 rgba(34, 53, 72, 0.16);
-  overflow: hidden;
-
-  .fd-avatar {
-    i {
-      color: var(--sapBaseColor) !important;
-    }
-  }
+ui5-shellbar::part(root) {
+  padding-inline-start: 0.75rem;
+  padding-inline-end: 1.25rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 0.125rem 0
+      color-mix(in srgb, var(--sapContent_ShadowColor) 16%, transparent),
+    0 0.5rem 1rem 0
+      color-mix(in srgb, var(--sapContent_ShadowColor) 16%, transparent);
 }

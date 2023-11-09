@@ -59,7 +59,10 @@ export function SidebarNavigation() {
         fixedItems={<Footer />}
         header={
           <>
-            <SideNavigation style={{ height: 'auto' }}>
+            <SideNavigation
+              className="nested-navigation"
+              style={{ height: 'auto', width: 'auto' }}
+            >
               <SideNavigationItem
                 icon={namespace ? 'slim-arrow-left' : 'database'}
                 text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}
@@ -69,7 +72,6 @@ export function SidebarNavigation() {
             </SideNavigation>
             <ShellBar
               style={namespace ? {} : { display: 'none' }}
-              // logo={<Icon name="employee" />}
               menuItems={NamespaceDropdown()}
               onMenuItemClick={e =>
                 e.detail.item.textContent ===

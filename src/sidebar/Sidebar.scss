@@ -5,20 +5,16 @@
 }
 
 .sidebar {
-  margin-top: var(--header-height);
-  height: calc(100vh - var(--header-height));
-  // background-color: var(--sapList_Background);
-  position: fixed;
-  width: var(--sidebar-width);
-  transition: width 0.3s;
-  left: 0.5rem;
   margin: 0.5rem 0.5rem 0 0;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
+}
 
-  .sidebar__content {
-    overflow-x: hidden;
-    flex-grow: 1;
-  }
+.sidebar__content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
+}
+
+.nested-navigation {
+  margin: calc(-1 * var(--_ui5-v1-17-2_side_navigation_container_padding));
 }

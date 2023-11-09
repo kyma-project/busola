@@ -1,14 +1,35 @@
 #content-wrap {
   width: 100%;
-  flex-wrap: wrap;
-  margin: auto;
-  margin-left: var(--sidebar-width);
-  margin-top: var(--header-height);
-  transition: margin-left 0.3s;
-  overflow: auto;
+
+  background: var(--sapBackgroundColor);
+  border-radius: 0.5rem 0.5rem 0 0;
+  overflow-y: auto;
+  margin: 0.5rem 0 0 0;
+}
+
+.content-scroll {
+  height: 100%;
+  // will-change: scroll-position;
 }
 
 .sidebar-hidden {
   margin-left: 0 !important;
   margin-top: 0 !important;
+}
+
+html.sap-desktop:not(.sapUiNativeScrollbars) ::-webkit-scrollbar {
+  background-color: #fff;
+}
+
+html.sap-desktop:not(.sapUiNativeScrollbars) ::-webkit-scrollbar-corner {
+  background-color: #fff;
+}
+
+html.sap-desktop:not(.sapUiNativeScrollbars) ::-webkit-scrollbar-thumb {
+  border-radius: 0.75rem;
+  border: 0.125rem solid #fff;
+}
+
+html.sap-desktop:not(.sapUiNativeScrollbars) ::-webkit-scrollbar-thumb {
+  background-color: #7b91a8;
 }
