@@ -1,4 +1,4 @@
-import { atom, RecoilState, AtomEffect } from 'recoil';
+import { atom, RecoilState } from 'recoil';
 
 type IsSidebarCondensed = boolean;
 
