@@ -8,7 +8,7 @@
   height: var(--header-height);
 }
 
-ui5-shellbar::part(root) {
+ui5-shellbar.header::part(root) {
   padding-inline-start: 0.75rem;
   padding-inline-end: 1.25rem;
   border-radius: 0.5rem;
