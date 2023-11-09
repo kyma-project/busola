@@ -70,23 +70,28 @@ export function SidebarNavigation() {
                 selected={isClusterOverviewSelected()}
               ></SideNavigationItem>
             </SideNavigation>
-            <ShellBar
-              style={namespace ? {} : { display: 'none' }}
-              menuItems={NamespaceDropdown()}
-              onMenuItemClick={e =>
-                e.detail.item.textContent ===
-                t('namespaces.namespaces-overview')
-                  ? navigate(clusterUrl(`namespaces`))
-                  : e.detail.item.textContent === t('navigation.all-namespaces')
-                  ? navigate(namespaceUrl(resourceType, { namespace: '-all-' }))
-                  : navigate(
-                      namespaceUrl(resourceType, {
-                        namespace: e.detail.item.textContent ?? undefined,
-                      }),
-                    )
-              }
-              primaryTitle={getNamespaceLabel()}
-            ></ShellBar>
+            <div className="sidebar-namespaces">
+              <ShellBar
+                style={namespace ? {} : { display: 'none' }}
+                menuItems={NamespaceDropdown()}
+                onMenuItemClick={e =>
+                  e.detail.item.textContent ===
+                  t('namespaces.namespaces-overview')
+                    ? navigate(clusterUrl(`namespaces`))
+                    : e.detail.item.textContent ===
+                      t('navigation.all-namespaces')
+                    ? navigate(
+                        namespaceUrl(resourceType, { namespace: '-all-' }),
+                      )
+                    : navigate(
+                        namespaceUrl(resourceType, {
+                          namespace: e.detail.item.textContent ?? undefined,
+                        }),
+                      )
+                }
+                primaryTitle={getNamespaceLabel()}
+              ></ShellBar>
+            </div>
           </>
         }
       >
