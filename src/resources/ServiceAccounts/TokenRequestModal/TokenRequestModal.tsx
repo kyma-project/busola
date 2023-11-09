@@ -41,6 +41,7 @@ const ComboboxInputWithSeconds = ({
     <ComboboxInput
       id="event-version-combobox"
       required
+      updatesOnInput={false}
       options={expirationSecondsOptions}
       selectedKey={value}
       onSelectionChange={(

@@ -17,6 +17,7 @@ export const K8sNameInput = ({
   defaultValue,
   value,
   onChange,
+  onInput,
   inputRef,
   pattern = k8sNamePattern,
   ...props
@@ -44,6 +45,7 @@ export const K8sNameInput = ({
       })}
       required={required}
       pattern={pattern}
+      onInput={onInput}
       {...inputProps}
       {...validationProps}
       className={inputClassName}

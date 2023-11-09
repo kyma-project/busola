@@ -51,20 +51,14 @@ export function ComboboxArrayInput({
       sectionTooltipContent={sectionTooltipContent}
       className="combobox-array-input"
       inputs={[
-        ({
-          value,
-          internalValue,
-          setValue,
-          ref,
-          updateValue,
-          focus,
-          index,
-        }) => {
+        ({ value, setValue, ref, updateValue, focus, index }) => {
           return (
             <Inputs.ComboboxInput
+              updatesOnInput={false}
               key={index}
               placeholder={placeholder}
               _ref={ref}
+              value={value}
               selectedKey={value}
               setValue={setValue}
               options={options}

@@ -69,6 +69,7 @@ context('Test Protected Resources', () => {
 
     cy.get('.multi-input')
       .find('ui5-input[placeholder="Enter value"][value=""]:visible')
+      .eq(0)
       .find('input')
       .click()
       .type('true');

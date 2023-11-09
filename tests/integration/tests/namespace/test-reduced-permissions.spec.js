@@ -46,7 +46,8 @@ context('Test reduced permissions', () => {
       'apps',
     );
 
-    cy.get('[aria-label="roles.buttons.load"]:visible', { log: false }).click();
+    cy.get('ui5-button[aria-label="roles.buttons.load"]:visible').click();
+    cy.wait(500);
 
     // resources
     chooseComboboxOption(
@@ -110,7 +111,7 @@ context('Test reduced permissions', () => {
       .click({ force: true });
 
     // name
-    cy.get('[aria-label="ClusterRoleBinding name"]:visible')
+    cy.get('ui5-input[aria-label="ClusterRoleBinding name"]:visible')
       .find('input')
       .type(CRB_NAME);
 
@@ -118,17 +119,19 @@ context('Test reduced permissions', () => {
     chooseComboboxOption(
       '[placeholder="Start typing to select ClusterRole from the list"]:visible',
       CR_NAME,
-      { force: true },
     );
 
     // service account namespace
     chooseComboboxOption(
-      '[placeholder="Select Namespace"]:visible',
+      '[id="secret-namespace-combobox-0"][aria-label="Secret namespace Combobox"]:visible',
       Cypress.env('NAMESPACE_NAME'),
     );
 
     // service account name
-    chooseComboboxOption('[placeholder="Select name"]:visible', SA_NAME);
+    chooseComboboxOption(
+      '[id="secret-name-combobox-0"][aria-label="Secret name Combobox"]:visible',
+      SA_NAME,
+    );
 
     cy.get('ui5-dialog')
       .contains('ui5-button', 'Create')
