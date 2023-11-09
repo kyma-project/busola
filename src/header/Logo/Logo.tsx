@@ -1,21 +1,15 @@
-import { useRecoilValue } from 'recoil';
-import { themeState } from 'state/preferences/themeAtom';
+import { FlexBox } from '@ui5/webcomponents-react';
+import './Logo.scss';
 
 export function Logo(props: any) {
-  const theme = useRecoilValue(themeState);
-
   return (
-    <div slot={props.slot}>
+    <FlexBox alignItems="Center" slot={props.slot}>
       <img
         alt="Kyma"
-        src={
-          theme === 'sap_horizon_hcw'
-            ? '/assets/logo-black.svg'
-            : theme === 'sap_horizon'
-            ? '/assets/logo-blue.svg'
-            : '/assets/logo.svg'
-        }
+        src="https://sap.github.io/ui5-webcomponents/assets/images/sap-logo-svg.svg"
+        style={{ height: '32px' }}
       />
-    </div>
+      <div className="shellbar-title">Kyma</div>
+    </FlexBox>
   );
 }
