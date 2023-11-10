@@ -7,6 +7,7 @@ export function ComboboxInput({
   selectedKey,
   options,
   id,
+  updatesOnInput = true,
   placeholder,
   className,
   _ref,
@@ -14,6 +15,18 @@ export function ComboboxInput({
   fullWidth,
   ...props
 }) {
+  const onChange = event => {
+    const selectedOption = options.find(o => o.text === event.target.value) ?? {
+      key: event.target._state.filterValue,
+      text: event.target._state.filterValue,
+    };
+    if (onSelectionChange) {
+      onSelectionChange(event, selectedOption);
+    } else {
+      setValue(selectedOption.key);
+    }
+  };
+
   return (
     <div
       className={classnames(
@@ -27,24 +40,11 @@ export function ComboboxInput({
         ref={_ref}
         disabled={props.disabled || !options?.length}
         filter="Contains"
-        onChange={event => {
-          const selectedOption = options.find(
-            o => o.text === event.target.value,
-          );
-          if (!selectedOption) return;
-          if (onSelectionChange) {
-            onSelectionChange(event, selectedOption);
-          } else {
-            setValue(
-              selectedOption.key !== -1
-                ? selectedOption.key
-                : selectedOption.text,
-            );
-          }
-        }}
+        onChange={onChange}
+        onInput={updatesOnInput ? onChange : () => {}}
         value={
           options.find(o => o.key === value || o.key === selectedKey)?.text ??
-          ''
+          value
         }
         placeholder={placeholder}
         {...props}

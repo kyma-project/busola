@@ -47,6 +47,14 @@ export const RoleForm = ({
     text: r.metadata.name,
   }));
 
+  const onChange = (event, props) => {
+    const selectedOption = options.find(o => o.text === event.target.value) ?? {
+      key: event.target._state.filterValue,
+      text: event.target._state.filterValue,
+    };
+    props.setValue(selectedOption.text);
+  };
+
   const roleNameInput = (
     <ResourceForm.FormField
       required
@@ -67,13 +75,11 @@ export const RoleForm = ({
                   : 'roles.name_singular',
               ),
             })}
-            value={options.find(o => o.key === props.value)?.text ?? ''}
-            onChange={event => {
-              const selectedOption = options.find(
-                o => o.text === event.target.value,
-              );
-              if (selectedOption) props.setValue(selectedOption.text);
-            }}
+            value={
+              options.find(o => o.key === props.value)?.text ?? props.value
+            }
+            onChange={event => onChange(event, props)}
+            onInput={event => onChange(event, props)}
           >
             {options.map(option => (
               <ComboBoxItem id={option.key} text={option.text} />
