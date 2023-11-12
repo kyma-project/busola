@@ -143,7 +143,7 @@ export function SearchInput({
           placeholder={t('common.tooltips.search')}
           value={searchQuery}
           onInput={e => handleQueryChange(e.target.value)}
-          onSelectionChange={() => setSearchHidden(true)}
+          onChange={() => setSearchHidden(true)}
           className="search-with-magnifying-glass"
         >
           {!!searchQuery && showSuggestion && renderSearchList(filteredEntries)}

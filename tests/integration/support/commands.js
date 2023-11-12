@@ -60,6 +60,7 @@ Cypress.Commands.add('goToNamespaceDetails', () => {
 Cypress.Commands.add('clearInput', { prevSubject: true }, element => {
   return cy
     .wrap(element)
+    .click()
     .type(
       `${Cypress.platform === 'darwin' ? '{cmd}a' : '{ctrl}a'} {backspace}`,
     );

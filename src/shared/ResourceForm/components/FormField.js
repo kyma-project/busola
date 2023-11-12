@@ -22,6 +22,7 @@ export function FormField({
   defaultValue,
   messageStrip,
   inputInfo,
+  updatesOnInput,
   ...props
 }) {
   const { validate, ...inputProps } = props;
@@ -39,6 +40,7 @@ export function FormField({
           {messageStrip
             ? messageStrip
             : input({
+                updatesOnInput,
                 required,
                 disabled,
                 className: 'full-width',

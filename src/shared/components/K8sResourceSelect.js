@@ -84,6 +84,14 @@ export function K8sResourceSelect({
     } else return undefined;
   };
 
+  const onChange = event => {
+    const selectedOption = options.find(o => o.text === event.target.value) ?? {
+      key: event.target._state.filterValue,
+      text: event.target._state.filterValue,
+    };
+    onSelect(selectedOption.text, data);
+  };
+
   return (
     <div className="combobox--full-width fd-col fd-col-md--11">
       <ComboBox
@@ -95,14 +103,8 @@ export function K8sResourceSelect({
         id="k8s-resource-dropdown"
         data-testid={props['data-testid']}
         aria-label={t('common.messages.choose', { value: resourceType })}
-        onChange={event => {
-          const selectedOption = options.find(
-            o => o.text === event.target.value,
-          );
-          selectedOption
-            ? onSelect(selectedOption.text, data)
-            : onSelect(event.target.value);
-        }}
+        onChange={onChange}
+        onInput={onChange}
         value={value}
         valueState={getValidationState()?.state}
         valueStateMessage={<Text>{getValidationState()?.text}</Text>}
