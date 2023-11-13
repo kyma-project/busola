@@ -27,7 +27,7 @@ export function JsonataInput({
   if (!props.readOnly) delete props.readOnly;
 
   return (
-    <div className="fd-col fd-col-md--11">
+    <div className="bsl-col bsl-col-md--11">
       <Tooltip content="jsonata" position="bottom">
         <Input
           value={value || ''}

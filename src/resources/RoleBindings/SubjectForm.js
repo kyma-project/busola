@@ -66,7 +66,7 @@ export function SingleSubjectForm({
         tooltipContent={t('role-bindings.create-modal.tooltips.kind')}
         label={t('role-bindings.create-modal.kind')}
         input={() => (
-          <Select onChange={onChange} className="fd-col fd-col-md--11">
+          <Select onChange={onChange} className="bsl-col bsl-col-md--11">
             {SUBJECT_KINDS.map(kind => (
               <Option value={kind} selected={(subject.kind || '') === kind}>
                 {kind}

@@ -54,7 +54,7 @@ export function SimpleList({
     });
   };
 
-  const listClasses = classnames(['text-array-input__list', 'fd-col-md--12']);
+  const listClasses = classnames(['text-array-input__list', 'bsl-col-md--12']);
 
   const isLast = index => index === listSize;
   const itemsSchema = schema.get('items');
@@ -83,12 +83,12 @@ export function SimpleList({
             {tFromStoreKeys(storeKeys, schema)}
           </Label>
         </div>
-        <div className="fd-col-md--8 form-field multi-input extensibility">
+        <div className="bsl-col-md--8 form-field multi-input extensibility">
           <ul className={listClasses}>
             {isObject && (
               <li>
                 <FlexBox>
-                  <div className="fd-col-md--11 list-entry">
+                  <div className="bsl-col-md--11 list-entry">
                     <PluginStack
                       schema={itemsSchema}
                       widgets={{
@@ -106,7 +106,7 @@ export function SimpleList({
                       schemaKeys={schemaKeys?.push('items')}
                     />
                   </div>
-                  <div className="fd-col-md--1">
+                  <div className="bsl-col-md--1">
                     <span className="item-action"></span>
                   </div>
                 </FlexBox>
@@ -121,7 +121,7 @@ export function SimpleList({
                   <>
                     <li key={index}>
                       <FlexBox>
-                        <div className="fd-col-md--11 list-entry">
+                        <div className="bsl-col-md--11 list-entry">
                           <PluginStack
                             showValidity={showValidity}
                             schema={itemsSchema}
@@ -134,7 +134,7 @@ export function SimpleList({
                             inputInfo={inputInfo}
                           />
                         </div>
-                        <div className="fd-col-md--1">
+                        <div className="bsl-col-md--1">
                           <span className="item-action">
                             {!isLast(index) && (
                               <Button
@@ -164,7 +164,7 @@ export function SimpleList({
               })}
           </ul>
         </div>
-        <div className="fd-col-md--1 tooltip-column tooltip-column--with-padding">
+        <div className="bsl-col-md--1 tooltip-column tooltip-column--with-padding">
           {tooltipContent && (
             <Tooltip
               className="has-tooltip"

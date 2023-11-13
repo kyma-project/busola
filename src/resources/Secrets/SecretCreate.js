@@ -84,7 +84,7 @@ export function SecretCreate({
         propertyPath="$.type"
         label={t('secrets.type')}
         input={({ value, setValue }) => (
-          <div className="fd-col fd-col-md--11">
+          <div className="bsl-col bsl-col-md--11">
             <ComboBox
               id="secrets-type-combobox"
               aria-label="Secret's type's Combobox"

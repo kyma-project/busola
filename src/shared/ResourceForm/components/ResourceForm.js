@@ -11,9 +11,9 @@ import { Presets } from './Presets';
 import { useCreateResource } from '../useCreateResource';
 import { KeyValueField, K8sNameField } from '../fields';
 import * as jp from 'jsonpath';
+import { Form, FormItem } from '@ui5/webcomponents-react';
 
 import './ResourceForm.scss';
-import { Form, FormItem } from '@ui5/webcomponents-react';
 import { spacing } from '@ui5/webcomponents-react-base';
 
 export function ResourceForm({
