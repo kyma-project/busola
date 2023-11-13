@@ -13,8 +13,19 @@
   margin: calc(-1 * var(--_ui5-v1-17-2_side_navigation_container_padding));
 }
 
-.sidebar-namespaces {
+.shadow-overlay {
   margin: calc(-1 * var(--_ui5-v1-17-2_side_navigation_container_padding));
   padding: var(--_ui5-v1-17-2_side_navigation_container_padding);
   background: var(--sapList_Background);
+  position: absolute;
+  top: calc(56px + (2 * var(--_ui5-v1-17-2_side_navigation_container_padding)));
+  left: 0.5rem;
+  height: 100%;
+  width: var(--_ui5-v1-17-2_side_navigation_width);
+  box-sizing: border-box;
+  z-index: 0;
+}
+
+ui5-side-navigation.hide-shadow {
+  position: relative;
 }

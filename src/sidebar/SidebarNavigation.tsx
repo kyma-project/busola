@@ -64,34 +64,31 @@ export function SidebarNavigation() {
               style={{ height: 'auto', width: 'auto' }}
             >
               <SideNavigationItem
+                className="hide-shadow"
                 icon={namespace ? 'slim-arrow-left' : 'database'}
                 text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}
                 onClick={() => navigate(clusterUrl(`overview`))}
                 selected={isClusterOverviewSelected()}
               ></SideNavigationItem>
             </SideNavigation>
-            <div className="sidebar-namespaces">
-              <ShellBar
-                style={namespace ? {} : { display: 'none' }}
-                menuItems={NamespaceDropdown()}
-                onMenuItemClick={e =>
-                  e.detail.item.textContent ===
-                  t('namespaces.namespaces-overview')
-                    ? navigate(clusterUrl(`namespaces`))
-                    : e.detail.item.textContent ===
-                      t('navigation.all-namespaces')
-                    ? navigate(
-                        namespaceUrl(resourceType, { namespace: '-all-' }),
-                      )
-                    : navigate(
-                        namespaceUrl(resourceType, {
-                          namespace: e.detail.item.textContent ?? undefined,
-                        }),
-                      )
-                }
-                primaryTitle={getNamespaceLabel()}
-              ></ShellBar>
-            </div>
+            {!isSidebarCondensed && <div className="shadow-overlay"></div>}
+            <ShellBar
+              style={namespace ? {} : { display: 'none' }}
+              menuItems={NamespaceDropdown()}
+              onMenuItemClick={e =>
+                e.detail.item.textContent ===
+                t('namespaces.namespaces-overview')
+                  ? navigate(clusterUrl(`namespaces`))
+                  : e.detail.item.textContent === t('navigation.all-namespaces')
+                  ? navigate(namespaceUrl(resourceType, { namespace: '-all-' }))
+                  : navigate(
+                      namespaceUrl(resourceType, {
+                        namespace: e.detail.item.textContent ?? undefined,
+                      }),
+                    )
+              }
+              primaryTitle={getNamespaceLabel()}
+            ></ShellBar>
           </>
         }
       >
