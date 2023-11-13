@@ -84,7 +84,7 @@ export function KeyValueField({
       }
       inputs={[
         ({ value, setValue, ref, updateValue, focus }) => (
-          <div className="fd-col-md--5">
+          <div className="bsl-col-md--5">
             {input.key({
               fullWidth: true,
               className: 'full-width',
@@ -105,7 +105,7 @@ export function KeyValueField({
           </div>
         ),
         ({ focus, value, setValue, updateValue, ...props }) => (
-          <div className="fd-col-md--6">
+          <div className="bsl-col-md--6">
             {input.value({
               fullWidth: true,
               className: 'value-input full-width',

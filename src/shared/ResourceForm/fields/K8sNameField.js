@@ -46,7 +46,7 @@ export function K8sNameField({
       input={() => {
         return (
           <>
-            <div className="fd-col fd-col-md--11">
+            <div className="bsl-col bsl-col-md--11">
               <K8sNameInput
                 kind={kind}
                 compact
@@ -60,7 +60,7 @@ export function K8sNameField({
                 {...inputProps}
               />
             </div>
-            <div className="fd-col fd-col-md--1 generate-button">
+            <div className="bsl-col bsl-col-md--1 generate-button">
               <Tooltip content={t('common.tooltips.generate-name')}>
                 <Button
                   design="Transparent"
