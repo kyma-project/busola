@@ -217,6 +217,8 @@ export const GenericList = ({
       title={title}
       headerActions={!headerActionsEmpty && headerActions}
       data-testid={testid}
+      className="bls-margin-top--sm-md"
+      disableMargin
     >
       <Table
         className={'ui5-generic-list'}

@@ -219,19 +219,27 @@ $sap-container-sides: (
     &--#{$key} {
       margin: $value;
     }
+
     @each $sideKey, $_sideValue in $sap-container-sides {
       &-#{$sideKey}--#{$key} {
-        @if ($sideKey == top) {
+        @if ($sideKey ==top) {
           margin-top: $value;
-        } @else if($sideKey == bottom) {
+        } @else if($sideKey ==bottom) {
           margin-bottom: $value;
-        } @else if($sideKey == begin) {
+        } @else if($sideKey ==begin) {
           margin-left: $value;
-        } @else if($sideKey == end) {
+        } @else if($sideKey ==end) {
           margin-right: $value;
         }
       }
     }
+  }
+}
+
+.bls-margin-top--sm-md {
+  margin-top: map-get($sap-margins, md);
+  &:first-of-type {
+    margin-top: map-get($sap-margins, sm);
   }
 }
 

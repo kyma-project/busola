@@ -12,11 +12,6 @@
   // will-change: scroll-position;
 }
 
-.sidebar-hidden {
-  margin-left: 0 !important;
-  margin-top: 0 !important;
-}
-
 html.sap-desktop:not(.sapUiNativeScrollbars) ::-webkit-scrollbar {
   background-color: #fff;
 }
