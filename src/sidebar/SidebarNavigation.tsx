@@ -88,7 +88,7 @@ export function SidebarNavigation() {
                     )
               }
               primaryTitle={getNamespaceLabel()}
-            ></ShellBar>
+            />
           </>
         }
       >
