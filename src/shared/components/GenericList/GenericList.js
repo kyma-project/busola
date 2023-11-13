@@ -218,7 +218,7 @@ export const GenericList = ({
       headerActions={!headerActionsEmpty && headerActions}
       data-testid={testid}
       disableMargin
-      className="bsl-margin-top--md"
+      style={spacing.sapUiMediumMarginTop}
     >
       <Table
         className={'ui5-generic-list'}
