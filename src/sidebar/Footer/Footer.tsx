@@ -31,7 +31,6 @@ export function Footer() {
         />
       ))}
       <SideNavigationItem
-        data-testid="version-link"
         onClick={() => {
           const newWindow = window.open(
             githubLink,
