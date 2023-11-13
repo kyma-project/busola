@@ -2,5 +2,5 @@
 
 html,
 #root {
-  background: var(--sapNeutralBackground);
+  height: 100%;
 }

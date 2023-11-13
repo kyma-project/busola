@@ -14,6 +14,7 @@ import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useTranslation } from 'react-i18next';
 import { useMatch, useNavigate } from 'react-router';
 import { useUrl } from 'hooks/useUrl';
+import { Footer } from './Footer/Footer';
 
 export function SidebarNavigation() {
   const navigationNodes = useRecoilValue(sidebarNavigationNodesSelector);
@@ -55,19 +56,24 @@ export function SidebarNavigation() {
       <SideNavigation
         collapsed={isSidebarCondensed}
         onSelectionChange={e => e.preventDefault()}
+        fixedItems={<Footer />}
         header={
           <>
-            <SideNavigation style={{ height: 'auto' }}>
+            <SideNavigation
+              className="nested-navigation"
+              style={{ height: 'auto', width: 'auto' }}
+            >
               <SideNavigationItem
+                className="hide-shadow"
                 icon={namespace ? 'slim-arrow-left' : 'database'}
                 text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}
                 onClick={() => navigate(clusterUrl(`overview`))}
                 selected={isClusterOverviewSelected()}
               ></SideNavigationItem>
             </SideNavigation>
+            {!isSidebarCondensed && <div className="shadow-overlay"></div>}
             <ShellBar
               style={namespace ? {} : { display: 'none' }}
-              // logo={<Icon name="employee" />}
               menuItems={NamespaceDropdown()}
               onMenuItemClick={e =>
                 e.detail.item.textContent ===
@@ -82,7 +88,7 @@ export function SidebarNavigation() {
                     )
               }
               primaryTitle={getNamespaceLabel()}
-            ></ShellBar>
+            />
           </>
         }
       >
@@ -92,7 +98,7 @@ export function SidebarNavigation() {
             text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}
             onClick={() => navigate(clusterUrl(`overview`))}
             selected={isClusterOverviewSelected()}
-          ></SideNavigationItem>
+          />
         )}
         {topLevelNodes.map(node =>
           node.items?.map(item => <NavItem node={item} />),

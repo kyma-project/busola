@@ -2,5 +2,5 @@
 
 html,
 #root {
-  background: var(--sapBackgroundColor);
+  height: 100%;
 }

@@ -65,12 +65,16 @@ export const DynamicPageComponent = ({
         />
       }
       headerContent={
-        <DynamicPageHeader className="header-wrapper">
-          {description && <Text className="description">{description}</Text>}
-          <section className={`column-wrapper ${columnWrapperClassName || ''}`}>
-            {children}
-          </section>
-        </DynamicPageHeader>
+        title !== 'Clusters Overview' ? (
+          <DynamicPageHeader className="header-wrapper">
+            {description && <Text className="description">{description}</Text>}
+            <section
+              className={`column-wrapper ${columnWrapperClassName || ''}`}
+            >
+              {children}
+            </section>
+          </DynamicPageHeader>
+        ) : null
       }
     >
       {content}

@@ -5,17 +5,9 @@ type ContentWrapperProps = {
 };
 
 export const ContentWrapper = ({ children }: ContentWrapperProps) => {
-  const { pathname } = window.location;
-
-  const reactNavEnabled = true;
   return (
-    <div
-      id="content-wrap"
-      className={
-        !reactNavEnabled || pathname === '/clusters' ? 'sidebar-hidden' : ''
-      }
-    >
-      {children}
+    <div id="content-wrap">
+      <div className="content-scroll">{children}</div>
     </div>
   );
 };

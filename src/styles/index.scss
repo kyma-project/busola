@@ -38,7 +38,6 @@ body {
 .panel-grid {
   display: grid;
   grid-template-columns: 2fr 2fr;
-  margin: 32px;
   grid-gap: 32px;
 
   @media screen and (max-width: 768px) {
@@ -219,15 +218,16 @@ $sap-container-sides: (
     &--#{$key} {
       margin: $value;
     }
+
     @each $sideKey, $_sideValue in $sap-container-sides {
       &-#{$sideKey}--#{$key} {
-        @if ($sideKey == top) {
+        @if ($sideKey ==top) {
           margin-top: $value;
-        } @else if($sideKey == bottom) {
+        } @else if($sideKey ==bottom) {
           margin-bottom: $value;
-        } @else if($sideKey == begin) {
+        } @else if($sideKey ==begin) {
           margin-left: $value;
-        } @else if($sideKey == end) {
+        } @else if($sideKey ==end) {
           margin-right: $value;
         }
       }
