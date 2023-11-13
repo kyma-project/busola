@@ -20,14 +20,14 @@ export function Checkboxes({
   return (
     <>
       {options.map(({ key, text, description }) => (
-        <div key={key} className="fd-row">
+        <div key={key}>
           <CheckBox
             data-testid={`${dataTestID}.${key}`}
             checked={value?.includes(key)}
             onChange={e => updateValue(key, e.target.checked)}
             text={text}
           />
-          <div className="fd-col fd-col-md--1 tooltip-column">
+          <div className="bsl-col bsl-col-md--1 tooltip-column">
             {description && (
               <Tooltip className="has-tooltip" delay={0} content={description}>
                 <Icon className="bsl-icon-m" name="message-information" />

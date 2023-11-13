@@ -55,6 +55,14 @@ export function SecretCreate({
     });
   }, [type]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const onChangeInput = (event, setValue) => {
+    const selectedOption = options.find(o => o.text === event.target.value) ?? {
+      key: event.target._state.filterValue,
+      text: event.target._state.filterValue,
+    };
+    setValue(selectedOption.text);
+  };
+
   return (
     <ResourceForm
       {...props}
@@ -76,19 +84,15 @@ export function SecretCreate({
         propertyPath="$.type"
         label={t('secrets.type')}
         input={({ value, setValue }) => (
-          <div className="fd-col fd-col-md--11">
+          <div className="bsl-col bsl-col-md--11">
             <ComboBox
               id="secrets-type-combobox"
               aria-label="Secret's type's Combobox"
               placeholder={t('secrets.placeholders.type')}
-              value={options.find(o => o.key === value)?.text ?? ''}
-              onChange={event => {
-                const selectedOption = options.find(
-                  o => o.text === event.target.value,
-                );
-                if (selectedOption) setValue(selectedOption.text);
-              }}
+              value={options.find(o => o.key === value)?.text ?? value}
               disabled={!!initialSecret || !options?.length}
+              onChange={event => onChangeInput(event, setValue)}
+              onInput={event => onChangeInput(event, setValue)}
             >
               {options.map(option => (
                 <ComboBoxItem id={option.key} text={option.text} />

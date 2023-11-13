@@ -22,6 +22,7 @@ export function FormField({
   defaultValue,
   messageStrip,
   inputInfo,
+  updatesOnInput,
   ...props
 }) {
   const { validate, ...inputProps } = props;
@@ -30,15 +31,16 @@ export function FormField({
   return (
     <FlexBox className={classnames('form-field', className)}>
       {!isListItem && (
-        <div className="fd-col-md--3 form-field__label">
+        <div className="bsl-col-md--3 form-field__label">
           <Label required={required && !disabled}>{label}</Label>
         </div>
       )}
-      <div className="fd-col-md--8">
+      <div className="bsl-col-md--8">
         <FlexBox wrap="Wrap">
           {messageStrip
             ? messageStrip
             : input({
+                updatesOnInput,
                 required,
                 disabled,
                 className: 'full-width',
@@ -54,7 +56,7 @@ export function FormField({
           )}
         </FlexBox>
       </div>
-      <div className="fd-col-md--1 tooltip-column tooltip-column--with-padding">
+      <div className="bsl-col-md--1 tooltip-column tooltip-column--with-padding">
         {tooltipContent && (
           <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
             <Icon

@@ -62,6 +62,7 @@ export function BusolaExtensionCreate({ formElementRef, onChange }) {
     >
       <ResourceForm.Wrapper>
         <ResourceForm.FormField
+          updatesOnInput={false}
           required
           label={t('extensibility.starter-modal.crd')}
           value={crd?.metadata.name}
