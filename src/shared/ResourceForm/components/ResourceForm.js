@@ -129,7 +129,7 @@ export function ResourceForm({
   );
   let editor = (
     <EditorWrapper
-      height="675px"
+      height="86.5%"
       value={resource}
       onChange={setResource}
       onMount={setActionsEditor}
@@ -157,6 +157,17 @@ export function ResourceForm({
         />
       )}
       <form ref={formElementRef} onSubmit={onSubmit || createResource}>
+        {mode === ModeSelector.MODE_YAML && (
+          <div className="yaml-form" style={{ width: '100%', height: '100%' }}>
+            <EditorActions
+              val={convertedResource}
+              editor={actionsEditor}
+              title={`${resource?.metadata?.name || singularName}.yaml`}
+              saveHidden
+            />
+            {editor}
+          </div>
+        )}
         <Form
           className={classnames(
             'resource-form ui5-content-density-compact',
@@ -191,19 +202,6 @@ export function ResourceForm({
                   )}
                   {children}
                 </ResourceFormWrapper>
-              </div>
-            </FormItem>
-          )}
-          {mode === ModeSelector.MODE_YAML && (
-            <FormItem>
-              <div className="yaml-form" style={{ width: '100%' }}>
-                <EditorActions
-                  val={convertedResource}
-                  editor={actionsEditor}
-                  title={`${resource?.metadata?.name || singularName}.yaml`}
-                  saveHidden
-                />
-                {editor}
               </div>
             </FormItem>
           )}
