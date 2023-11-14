@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import * as Sentry from '@sentry/react';
 
 import { spacing } from '@ui5/webcomponents-react-base';
-import './ErrorBoundary.scss';
 
 class ErrorBoundaryComponent extends React.Component {
   constructor(props) {
