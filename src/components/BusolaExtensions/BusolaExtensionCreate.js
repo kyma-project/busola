@@ -60,57 +60,55 @@ export function BusolaExtensionCreate({ formElementRef, onChange }) {
         });
       }}
     >
-      <ResourceForm.Wrapper>
-        <ResourceForm.FormField
-          updatesOnInput={false}
-          required
-          label={t('extensibility.starter-modal.crd')}
-          value={crd?.metadata.name}
-          setValue={value => {
-            const crd = crds.find(crd => crd.metadata.name === value);
-            if (crd) {
-              setCrd(crd);
-              setState(createExtensibilityTemplate(crd, t));
-            }
-          }}
-          input={Inputs.ComboboxInput}
-          options={(crds ?? []).map(crd => ({
-            key: crd.metadata.name,
-            text: crd.metadata.name,
-          }))}
-        />
-        {crd && (
-          <>
-            <ResourceForm.FormField
-              required
-              propertyPath="$.general.name"
-              label={t('common.labels.name')}
-              input={Inputs.Text}
-            />
-            <ResourceForm.FormField
-              required
-              propertyPath="$.general.category"
-              label={t('common.labels.category')}
-              input={Inputs.Text}
-            />
-            <ResourceForm.CollapsibleSection
-              title={t('extensibility.starter-modal.headers.form-fields')}
-            >
-              <ColumnsInput propertyPath="$.form" />
-            </ResourceForm.CollapsibleSection>
-            <ResourceForm.CollapsibleSection
-              title={t('extensibility.starter-modal.headers.list-columns')}
-            >
-              <ColumnsInput propertyPath="$.list" />
-            </ResourceForm.CollapsibleSection>
-            <ResourceForm.CollapsibleSection
-              title={t('extensibility.starter-modal.headers.details-summary')}
-            >
-              <ColumnsInput propertyPath="$.details.body[0].children" />
-            </ResourceForm.CollapsibleSection>
-          </>
-        )}
-      </ResourceForm.Wrapper>
+      <ResourceForm.FormField
+        updatesOnInput={false}
+        required
+        label={t('extensibility.starter-modal.crd')}
+        value={crd?.metadata.name}
+        setValue={value => {
+          const crd = crds.find(crd => crd.metadata.name === value);
+          if (crd) {
+            setCrd(crd);
+            setState(createExtensibilityTemplate(crd, t));
+          }
+        }}
+        input={Inputs.ComboboxInput}
+        options={(crds ?? []).map(crd => ({
+          key: crd.metadata.name,
+          text: crd.metadata.name,
+        }))}
+      />
+      {crd && (
+        <>
+          <ResourceForm.FormField
+            required
+            propertyPath="$.general.name"
+            label={t('common.labels.name')}
+            input={Inputs.Text}
+          />
+          <ResourceForm.FormField
+            required
+            propertyPath="$.general.category"
+            label={t('common.labels.category')}
+            input={Inputs.Text}
+          />
+          <ResourceForm.CollapsibleSection
+            title={t('extensibility.starter-modal.headers.form-fields')}
+          >
+            <ColumnsInput propertyPath="$.form" />
+          </ResourceForm.CollapsibleSection>
+          <ResourceForm.CollapsibleSection
+            title={t('extensibility.starter-modal.headers.list-columns')}
+          >
+            <ColumnsInput propertyPath="$.list" />
+          </ResourceForm.CollapsibleSection>
+          <ResourceForm.CollapsibleSection
+            title={t('extensibility.starter-modal.headers.details-summary')}
+          >
+            <ColumnsInput propertyPath="$.details.body[0].children" />
+          </ResourceForm.CollapsibleSection>
+        </>
+      )}
     </ResourceForm.Single>
   );
 }

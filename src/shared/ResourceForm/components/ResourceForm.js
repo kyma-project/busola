@@ -129,6 +129,7 @@ export function ResourceForm({
   );
   let editor = (
     <EditorWrapper
+      height="675px"
       value={resource}
       onChange={setResource}
       onMount={setActionsEditor}
