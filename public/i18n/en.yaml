@@ -230,6 +230,7 @@ common:
     save: Save
     submit: Submit
     update: Update
+    upload: Upload
     view-yaml: View YAML
   create-form:
     autocomplete-unavailable-error: Monaco autocompletion unavailable. {{error}}.
