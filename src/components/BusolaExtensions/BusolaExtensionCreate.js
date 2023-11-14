@@ -28,87 +28,89 @@ export function BusolaExtensionCreate({ formElementRef, onChange }) {
   const [state, setState] = useState({});
 
   return (
-    <ResourceForm.Single
-      formElementRef={formElementRef}
-      onChange={onChange}
-      resource={state}
-      setResource={setState}
-      className="resource-form--unset-height"
-      createResource={async () => {
-        const onError = e =>
-          notificationManager.notifyError({
-            content: t('common.messages.error', { error: e.message }),
-            title: t('extensibility.starter-modal.messages.error'),
-            type: 'error',
-          });
+    <div style={{ overflow: 'auto', height: '100%' }}>
+      <ResourceForm.Single
+        formElementRef={formElementRef}
+        onChange={onChange}
+        resource={state}
+        setResource={setState}
+        className="resource-form--unset-height"
+        createResource={async () => {
+          const onError = e =>
+            notificationManager.notifyError({
+              content: t('common.messages.error', { error: e.message }),
+              title: t('extensibility.starter-modal.messages.error'),
+              type: 'error',
+            });
 
-        const onSuccess = () => {
-          notificationManager.notifySuccess({
-            content: t('extensibility.starter-modal.messages.success'),
-          });
-          navigate(
-            `/cluster/${cluster.contextName}/busolaextensions/kube-public/${crd.metadata.name}`,
-          );
-        };
+          const onSuccess = () => {
+            notificationManager.notifySuccess({
+              content: t('extensibility.starter-modal.messages.success'),
+            });
+            navigate(
+              `/cluster/${cluster.contextName}/busolaextensions/kube-public/${crd.metadata.name}`,
+            );
+          };
 
-        const configmap = createConfigmap(crd, state);
-        await upsert({
-          url: '/api/v1/namespaces/kube-public/configmaps',
-          resource: configmap,
-          onSuccess,
-          onError,
-        });
-      }}
-    >
-      <ResourceForm.FormField
-        updatesOnInput={false}
-        required
-        label={t('extensibility.starter-modal.crd')}
-        value={crd?.metadata.name}
-        setValue={value => {
-          const crd = crds.find(crd => crd.metadata.name === value);
-          if (crd) {
-            setCrd(crd);
-            setState(createExtensibilityTemplate(crd, t));
-          }
+          const configmap = createConfigmap(crd, state);
+          await upsert({
+            url: '/api/v1/namespaces/kube-public/configmaps',
+            resource: configmap,
+            onSuccess,
+            onError,
+          });
         }}
-        input={Inputs.ComboboxInput}
-        options={(crds ?? []).map(crd => ({
-          key: crd.metadata.name,
-          text: crd.metadata.name,
-        }))}
-      />
-      {crd && (
-        <>
-          <ResourceForm.FormField
-            required
-            propertyPath="$.general.name"
-            label={t('common.labels.name')}
-            input={Inputs.Text}
-          />
-          <ResourceForm.FormField
-            required
-            propertyPath="$.general.category"
-            label={t('common.labels.category')}
-            input={Inputs.Text}
-          />
-          <ResourceForm.CollapsibleSection
-            title={t('extensibility.starter-modal.headers.form-fields')}
-          >
-            <ColumnsInput propertyPath="$.form" />
-          </ResourceForm.CollapsibleSection>
-          <ResourceForm.CollapsibleSection
-            title={t('extensibility.starter-modal.headers.list-columns')}
-          >
-            <ColumnsInput propertyPath="$.list" />
-          </ResourceForm.CollapsibleSection>
-          <ResourceForm.CollapsibleSection
-            title={t('extensibility.starter-modal.headers.details-summary')}
-          >
-            <ColumnsInput propertyPath="$.details.body[0].children" />
-          </ResourceForm.CollapsibleSection>
-        </>
-      )}
-    </ResourceForm.Single>
+      >
+        <ResourceForm.FormField
+          updatesOnInput={false}
+          required
+          label={t('extensibility.starter-modal.crd')}
+          value={crd?.metadata.name}
+          setValue={value => {
+            const crd = crds.find(crd => crd.metadata.name === value);
+            if (crd) {
+              setCrd(crd);
+              setState(createExtensibilityTemplate(crd, t));
+            }
+          }}
+          input={Inputs.ComboboxInput}
+          options={(crds ?? []).map(crd => ({
+            key: crd.metadata.name,
+            text: crd.metadata.name,
+          }))}
+        />
+        {crd && (
+          <>
+            <ResourceForm.FormField
+              required
+              propertyPath="$.general.name"
+              label={t('common.labels.name')}
+              input={Inputs.Text}
+            />
+            <ResourceForm.FormField
+              required
+              propertyPath="$.general.category"
+              label={t('common.labels.category')}
+              input={Inputs.Text}
+            />
+            <ResourceForm.CollapsibleSection
+              title={t('extensibility.starter-modal.headers.form-fields')}
+            >
+              <ColumnsInput propertyPath="$.form" />
+            </ResourceForm.CollapsibleSection>
+            <ResourceForm.CollapsibleSection
+              title={t('extensibility.starter-modal.headers.list-columns')}
+            >
+              <ColumnsInput propertyPath="$.list" />
+            </ResourceForm.CollapsibleSection>
+            <ResourceForm.CollapsibleSection
+              title={t('extensibility.starter-modal.headers.details-summary')}
+            >
+              <ColumnsInput propertyPath="$.details.body[0].children" />
+            </ResourceForm.CollapsibleSection>
+          </>
+        )}
+      </ResourceForm.Single>
+    </div>
   );
 }
