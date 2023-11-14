@@ -9,6 +9,7 @@ import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
 import { ResourcesUsage } from './ResourcesUsage';
 
 import './NamespaceDetails.scss';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 export function AllNamespacesDetails(props) {
   const { t } = useTranslation();
@@ -28,7 +29,7 @@ export function AllNamespacesDetails(props) {
         title={t('navigation.all-namespaces')}
         breadcrumbItems={breadcrumbItems}
         content={
-          <div className="panel-grid bsl-margin-top--md">
+          <div className="panel-grid" style={spacing.sapUiMediumMarginTop}>
             <NamespaceWorkloads />
             <ResourcesUsage />
           </div>

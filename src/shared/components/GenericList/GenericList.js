@@ -23,6 +23,7 @@ import { getErrorMessage } from 'shared/utils/helpers';
 import { pageSizeState } from 'state/preferences/pageSizeAtom';
 import './GenericList.scss';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 const defaultSort = {
   name: nameLocaleSort,
@@ -218,7 +219,7 @@ export const GenericList = ({
       headerActions={!headerActionsEmpty && headerActions}
       data-testid={testid}
       disableMargin
-      className="bsl-margin-top--md"
+      style={spacing.sapUiMediumMarginTop}
     >
       <Table
         className={'ui5-generic-list'}

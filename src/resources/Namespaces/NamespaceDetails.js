@@ -18,6 +18,7 @@ import { AllNamespacesDetails } from './AllNamespacesDetails';
 
 import './NamespaceDetails.scss';
 import { useSetRecoilState } from 'recoil';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 export function NamespaceDetails(props) {
   const { t } = useTranslation();
@@ -88,7 +89,7 @@ export function NamespaceDetails(props) {
       customColumns={customColumns}
       headerActions={headerActions}
     >
-      <div className="panel-grid bsl-margin-top--md">
+      <div className="panel-grid" style={spacing.sapUiMediumMarginTop}>
         <NamespaceWorkloads namespace={props.resourceName} />
         <ResourcesUsage namespace={props.resourceName} />
       </div>
