@@ -69,7 +69,7 @@ export default function App() {
   useAfterInitHook(kubeconfigIdState);
 
   return (
-    <>
+    <div id="html-wrap">
       <Header />
       <div id="page-wrap">
         <Sidebar key={cluster?.name} />
@@ -99,6 +99,6 @@ export default function App() {
           <Preferences />
         </ContentWrapper>
       </div>
-    </>
+    </div>
   );
 }

@@ -8,8 +8,11 @@ context('Test Kyma Dashboard Version link', () => {
   });
 
   it('Check Kyma Dashboard Version link', () => {
-    cy.get('[data-test-id="version-link"]')
-      .should('have.attr', 'href')
-      .and('include', 'github.com/kyma-project/busola');
+    cy.get('.ui5-sn-divider')
+      .next()
+      .find('ui5-tree-item')
+      .last()
+      .should('have.attr', 'title')
+      .and('include', 'Kyma Dashboard version:');
   });
 });

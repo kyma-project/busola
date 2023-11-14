@@ -1,3 +1,21 @@
+#html-wrap {
+  position: absolute;
+  height: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: color-mix(in srgb, black 4%, var(--sapBackgroundColor));
+  padding: 0.5rem 0.5rem 0 0.5rem;
+}
+
 #page-wrap {
   display: flex;
+  flex: 1;
+  min-height: 0;
+  position: relative;
 }

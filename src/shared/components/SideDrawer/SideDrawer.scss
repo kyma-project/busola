@@ -10,11 +10,11 @@
   top: 0;
   height: 100%;
 
-  filter: drop-shadow(0 0 0.4em rgba(0, 0, 0, 0.42));
   transition: transform cubic-bezier(0.45, 0.05, 0.55, 0.95) 0.5s;
   transform: translateX(calc(100% - #{$btnWidth}));
 
   &--open {
+    filter: drop-shadow(0 0 0.4em rgba(0, 0, 0, 0.42));
     transform: unset;
   }
 
@@ -42,8 +42,10 @@
     overflow-wrap: anywhere;
     cursor: pointer;
     box-sizing: border-box;
+
     &-hidden {
       display: none;
+
       @at-root .side-drawer:not(.side-drawer--open) {
         transform: translateX(100%);
       }
