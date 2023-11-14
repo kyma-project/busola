@@ -7,6 +7,7 @@ import {
 } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { useFeature } from 'hooks/useFeature';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 import { clustersState } from 'state/clustersAtom';
@@ -18,7 +19,6 @@ import { SidebarSwitcher } from './SidebarSwitcher/SidebarSwitcher';
 import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
 
 import './Header.scss';
-import { useFeature } from 'hooks/useFeature';
 
 export function Header() {
   useAvailableNamespaces();
@@ -55,7 +55,6 @@ export function Header() {
   return (
     <>
       <ShellBar
-        className="header"
         startButton={
           window.location.pathname !== '/clusters' && <SidebarSwitcher />
         }
