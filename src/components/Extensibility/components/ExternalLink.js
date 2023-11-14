@@ -54,7 +54,7 @@ export const ExternalLink = ({
   if (structure.type === 'button') {
     return (
       <Button
-        icon="action"
+        icon="inspect"
         iconEnd
         style={spacing.sapUiTinyMarginBeginEnd}
         onClick={() => {
