@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@ui5/webcomponents-react';
+import { Bar, Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import * as Sentry from '@sentry/react';
 
@@ -27,7 +27,15 @@ class ErrorBoundaryComponent extends React.Component {
     if (this.state.hasError) {
       return (
         <>
-          <div role="alert">
+          <div
+            role="alert"
+            className="error-boundary"
+            style={{
+              width: '90vh',
+              height: '70vh',
+              margin: spacing.sapUiMediumMargin.margin,
+            }}
+          >
             <p
               className="bsl-color--text"
               style={spacing.sapUiSmallMarginTopBottom}
@@ -35,6 +43,7 @@ class ErrorBoundaryComponent extends React.Component {
               {this.props.customMessage ||
                 this.props.t('err-boundary.restored-initial-form')}
             </p>
+
             {this.props.displayButton ? (
               <Button
                 onClick={() => this.setState({ hasError: false, error: null })}
@@ -46,17 +55,14 @@ class ErrorBoundaryComponent extends React.Component {
             )}
           </div>
           {this.props.onClose ? (
-            <footer
-              className="fd-bar__right"
-              style={{
-                bottom: 0,
-                position: 'absolute',
-              }}
-            >
-              <Button onClick={this.props.onClose} className="close-button">
-                {this.props.t('common.buttons.close')}
-              </Button>
-            </footer>
+            <Bar
+              design="Footer"
+              endContent={
+                <Button onClick={this.props.onClose} className="close-button">
+                  {this.props.t('common.buttons.close')}
+                </Button>
+              }
+            />
           ) : (
             ''
           )}
