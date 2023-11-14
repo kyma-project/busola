@@ -16,6 +16,7 @@ import {
 import { FilteredResourcesDetails } from './FilteredResourcesDetails/FilteredResourcesDetails';
 
 import './YamlResourcesList.scss';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 export function YamlResourcesList({ resourcesData }) {
   const { t } = useTranslation();
@@ -75,8 +76,8 @@ export function YamlResourcesList({ resourcesData }) {
       return (
         <>
           <div
-            className="bsl-display-flex bsl-justify-between bsl-align-center bsl-margin--tiny"
-            style={{ minHeight: '20px' }}
+            className="bsl-display-flex bsl-justify-between bsl-align-center"
+            style={spacing.sapUiTinyMargin}
           >
             <p>
               {t(
@@ -115,7 +116,7 @@ export function YamlResourcesList({ resourcesData }) {
             />
             <div id="upload-progress-bar-label">{getLabel()}</div>
           </div>
-          <ul className="bsl-margin-top--tiny">
+          <ul style={spacing.sapUiTinyMarginTop}>
             {filteredResources.map(r => (
               <li key={`${r?.value?.kind}-${r?.value?.metadata?.name}`}>
                 <Icon

@@ -48,10 +48,7 @@ export const Pagination = ({
 
   return (
     <div className="pagination">
-      <span className="bsl-has-color-status-4 bsl-margin-end--sm">
-        {itemsTotal} items
-      </span>
-
+      <span className="bsl-has-color-status-4">{itemsTotal} items</span>
       <Link
         isInteractable={currentPage !== 1}
         onClick={() => onChangePage(currentPage - 1)}

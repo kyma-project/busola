@@ -17,6 +17,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { Label } from '../../../shared/ResourceForm/components/Label';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
+import { spacing } from '@ui5/webcomponents-react-base';
 import './SimpleList.scss';
 
 export function SimpleList({
@@ -74,7 +75,10 @@ export function SimpleList({
       {...props}
     >
       <FlexBox className="simple-list">
-        <div className="bsl-col-md--3 bsl-margin-bottom--sm form-field__label">
+        <div
+          className="fd-col-md--3 form-field__label"
+          style={spacing.sapUiSmallMarginBottom}
+        >
           <Label required={required} tooltipContent={tExt(tooltipContent)}>
             {tFromStoreKeys(storeKeys, schema)}
           </Label>

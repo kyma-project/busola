@@ -3,6 +3,8 @@ import { MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { isRuleInvalid } from './helpers';
 
+import { spacing } from '@ui5/webcomponents-react-base';
+
 export function InvalidRoleError({ rule }) {
   const { t } = useTranslation();
 
@@ -11,7 +13,7 @@ export function InvalidRoleError({ rule }) {
       <MessageStrip
         design="Warning"
         hideCloseButton
-        className="bsl-margin-top--sm"
+        style={spacing.sapUiSmallMarginTop}
       >
         {t('roles.messages.invalid')}
       </MessageStrip>

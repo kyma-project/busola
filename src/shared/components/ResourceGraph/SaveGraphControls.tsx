@@ -20,11 +20,7 @@ export function SaveGraphControls({
         saveAs(blob, name);
       }}
     >
-      <Icon
-        aria-label="download"
-        name="download"
-        className="bsl-margin-end--tiny"
-      />
+      <Icon aria-label="download" name="download" />
       {t('resource-graph.save-as-dot')}
     </Button>
   );

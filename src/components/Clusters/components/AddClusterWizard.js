@@ -15,9 +15,10 @@ import { AuthForm } from './AuthForm';
 import { KubeconfigUpload } from './KubeconfigUpload/KubeconfigUpload';
 import { ContextChooser } from './ContextChooser/ContextChooser';
 import { ChooseStorage } from './ChooseStorage';
-
-import './AddClusterWizard.scss';
 import { WizardButtons } from 'shared/components/WizardButtons/WizardButtons';
+
+import { spacing } from '@ui5/webcomponents-react-base';
+import './AddClusterWizard.scss';
 
 export function AddClusterWizard({
   kubeconfig,
@@ -129,7 +130,8 @@ export function AddClusterWizard({
         <MessageStrip
           design="Information"
           hideCloseButton
-          className="add-cluster__kubeconfig-info bsl-margin-top--sm bsl-margin-bottom--sm"
+          className="add-cluster__kubeconfig-info"
+          style={spacing.sapUiSmallMarginTopBottom}
         >
           {t('clusters.wizard.storage-info')}
         </MessageStrip>

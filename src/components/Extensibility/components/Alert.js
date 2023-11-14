@@ -1,7 +1,8 @@
 import React from 'react';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { useGetTranslation } from 'components/Extensibility/helpers';
-import classNames from 'classnames';
+
+import { spacing } from '@ui5/webcomponents-react-base';
 
 export const Alert = ({ value, schema, structure, ...props }) => {
   const { t: tExt } = useGetTranslation();
@@ -15,12 +16,8 @@ export const Alert = ({ value, schema, structure, ...props }) => {
     schemaType = 'Positive';
   }
 
-  const messageClassNames = classNames({
-    'bsl-margin--md': !structure.disableMargin,
-  });
-
   return (
-    <div className={messageClassNames}>
+    <div style={!structure.disableMargin ? spacing.sapUiMediumMargin : null}>
       <MessageStrip design={schemaType} hideCloseButton>
         {tExt(value)}
       </MessageStrip>

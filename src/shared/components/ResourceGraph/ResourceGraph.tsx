@@ -11,12 +11,14 @@ import { useTranslation } from 'react-i18next';
 import { useMinWidth, TABLET } from 'hooks/useMinWidth';
 import { SaveGraphControls } from './SaveGraphControls';
 import { DetailsCard } from './DetailsCard/DetailsCard';
-import './ResourceGraph.scss';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useFeature } from 'hooks/useFeature';
 import { K8sResource } from 'types';
 import { ResourceGraphConfig } from './types';
 import { Panel, Title, Toolbar, ToolbarSpacer } from '@ui5/webcomponents-react';
+
+import { spacing } from '@ui5/webcomponents-react-base';
+import './ResourceGraph.scss';
 
 function ResourceGraph({
   resource,
@@ -96,7 +98,7 @@ function ResourceGraph({
   return (
     <Panel
       fixed
-      className="bsl-margin--md"
+      style={spacing.sapUiMediumMargin}
       ref={(node: any) => setGraphEl(node)}
       header={
         <Toolbar>

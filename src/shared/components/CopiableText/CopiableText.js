@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './CopiableText.scss';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { Button } from '@ui5/webcomponents-react';
 import copyToCliboard from 'copy-to-clipboard';
 import { useTranslation } from 'react-i18next';
+
+import { spacing } from '@ui5/webcomponents-react-base';
+import './CopiableText.scss';
 
 CopiableText.propTypes = {
   textToCopy: PropTypes.string.isRequired,
@@ -29,7 +31,7 @@ export function CopiableText({
           icon="copy"
           iconEnd
           design="Transparent"
-          className="bsl-margin-begin--tiny"
+          style={spacing.sapUiTinyMarginBegin}
           onClick={() => copyToCliboard(textToCopy)}
           {...buttonProps}
         >

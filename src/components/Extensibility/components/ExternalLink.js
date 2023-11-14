@@ -4,9 +4,11 @@ import {
 } from 'components/Extensibility/helpers';
 import { Button, Icon, Link } from '@ui5/webcomponents-react';
 import { isNil } from 'lodash';
-import { useTranslation } from 'react-i18next';
 
+import { useTranslation } from 'react-i18next';
 import { useJsonata } from '../hooks/useJsonata';
+
+import { spacing } from '@ui5/webcomponents-react-base';
 
 const makeHref = ({ jsonata, value, structure }) => {
   const [link, linkError] = jsonata(structure.link);
@@ -54,7 +56,7 @@ export const ExternalLink = ({
       <Button
         icon="action"
         iconEnd
-        className="bsl-margin-begin--sm bsl-margin-end--tiny"
+        style={spacing.sapUiTinyMarginBeginEnd}
         onClick={() => {
           const newWindow = window.open(href, '_blank', 'noopener, noreferrer');
           if (newWindow) newWindow.opener = null;
@@ -71,7 +73,8 @@ export const ExternalLink = ({
       <Icon
         design="Information"
         name="action"
-        className="bsl-margin-begin--tiny bsl-icon-s"
+        className="bsl-icon-s"
+        style={spacing.sapUiTinyMarginBegin}
         aria-label={t('common.ariaLabel.new-tab-link')}
         originalResource={originalResource}
       />

@@ -8,6 +8,8 @@ import { KubeconfigOIDCAuth } from 'types';
 import { GardenerLoginFeature } from './GardenerLoginFeature';
 import { useGardenerLogin } from './useGardenerLoginFunction';
 
+import { spacing } from '@ui5/webcomponents-react-base';
+
 export default function GardenerLogin() {
   const [token, setToken] = useState('');
   const [error, setError] = useState<Error | null>(null);
@@ -74,7 +76,7 @@ export default function GardenerLogin() {
       <MessageStrip
         design="Information"
         hideCloseButton
-        className="bsl-margin-top--sm"
+        style={spacing.sapUiSmallMarginTop}
       >
         {report}
       </MessageStrip>
@@ -82,7 +84,7 @@ export default function GardenerLogin() {
         <MessageStrip
           design="Negative"
           hideCloseButton
-          className="bsl-margin-top--sm"
+          style={spacing.sapUiSmallMarginTop}
         >
           {t('clusters.gardener.error', { message: error.message })}
         </MessageStrip>

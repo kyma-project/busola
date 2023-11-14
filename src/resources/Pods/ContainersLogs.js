@@ -202,16 +202,12 @@ const ContainersLogs = ({ params }) => {
                   </Option>
                 ))}
               </Select>
-              <Label className="bsl-margin-begin--sm">
-                {t('pods.labels.show-timestamps')}
-              </Label>
+              <Label>{t('pods.labels.show-timestamps')}</Label>
               <Switch
                 disabled={!logsToSave?.length}
                 onChange={onSwitchChange}
               />
-              <Label className="bsl-margin-begin--sm">
-                {t('pods.labels.reverse-logs')}
-              </Label>
+              <Label>{t('pods.labels.reverse-logs')}</Label>
               <Switch
                 disabled={!logsToSave?.length}
                 onChange={onReverseChange}

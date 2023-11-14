@@ -19,6 +19,8 @@ import { validateBinding } from './helpers';
 import { RoleForm } from './RoleForm';
 import { useHasPermissionsFor } from 'hooks/useHasPermissionsFor';
 
+import { spacing } from '@ui5/webcomponents-react-base';
+
 export function GenericRoleBindingCreate({
   formElementRef,
   namespace,
@@ -104,7 +106,7 @@ export function GenericRoleBindingCreate({
         <MessageStrip
           design="Warning"
           hideCloseButton
-          className="bsl-margin-top--sm"
+          style={spacing.sapUiSmallMarginTop}
         >
           {t('role-bindings.create-modal.at-least-one-subject-required', {
             resource: singularName,

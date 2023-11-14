@@ -2,8 +2,10 @@ import React from 'react';
 import { Button, Icon, Token } from '@ui5/webcomponents-react';
 import { Trans, useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import './components.scss';
 import { HelpEntries } from '../types';
+
+import { spacing } from '@ui5/webcomponents-react-base';
+import './components.scss';
 
 export function SuggestedQuery({
   suggestedQuery,
@@ -45,7 +47,7 @@ export function NamespaceContextDisplay({
     <div className="namespace-context">
       <span className="namespace-name">{t('namespaces.name_singular')}:</span>
       <Token
-        className="bsl-margin-end--tiny bsl-margin-begin--tiny"
+        style={spacing.sapUiTinyMarginBeginEnd}
         text={namespaceContext}
         closeIcon={
           <Icon

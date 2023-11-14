@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'shared/components/Link/Link';
 import { Trans, useTranslation } from 'react-i18next';
 import { createPatch } from 'rfc6902';
-import { Button, MessageStrip, ToolbarSpacer } from '@ui5/webcomponents-react';
+import { Button, MessageStrip } from '@ui5/webcomponents-react';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
@@ -18,6 +18,7 @@ import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { extensibilitySchemasState } from 'state/extensibilitySchemasAtom';
 import { useUrl } from 'hooks/useUrl';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 import {
   formatCurrentVersion,
@@ -81,7 +82,10 @@ export function BusolaExtensionDetails(props) {
                   section: t(`extensibility.sections.${key}`),
                 })}
                 modalOpeningComponent={
-                  <Button className="bsl-margin-end--tiny" design="Emphasized">
+                  <Button
+                    style={spacing.sapUiTinyMarginEnd}
+                    design="Emphasized"
+                  >
                     {t('extensibility.edit-section', {
                       section: t(`extensibility.sections.${key}`),
                     })}
@@ -148,7 +152,7 @@ export function BusolaExtensionDetails(props) {
           <MessageStrip
             design="Information"
             hideCloseButton
-            className="bsl-margin-bottom--sm"
+            style={spacing.sapUiSmallMarginBottom}
           >
             {t('extensibility.message.old-version')}
           </MessageStrip>
@@ -158,7 +162,7 @@ export function BusolaExtensionDetails(props) {
           <MessageStrip
             design="Negative"
             hideCloseButton
-            className="bsl-margin-bottom--sm"
+            style={spacing.sapUiSmallMarginBottom}
           >
             {t('extensibility.message.unsupported-version')}
           </MessageStrip>
@@ -168,7 +172,7 @@ export function BusolaExtensionDetails(props) {
           <MessageStrip
             design="Negative"
             hideCloseButton
-            className="bsl-margin-bottom--sm"
+            style={spacing.sapUiSmallMarginBottom}
           >
             <Trans i18nKey="extensibility.message.unnown-version">
               <Link
@@ -189,7 +193,6 @@ export function BusolaExtensionDetails(props) {
             <>
               {currentVersion && (
                 <>
-                  <ToolbarSpacer />
                   <Button
                     disabled={currentVersion === getLatestVersion()}
                     icon="forward"

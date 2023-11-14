@@ -258,7 +258,7 @@ export function StatsPanel({
   type,
   mode = 'single',
   defaultMetric = 'cpu',
-  className = 'bsl-margin--md',
+  className = '',
   ...props
 }) {
   const timeSpans = {

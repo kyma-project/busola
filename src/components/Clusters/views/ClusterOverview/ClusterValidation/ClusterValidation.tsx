@@ -154,7 +154,6 @@ export const ClusterValidation = () => {
       headerActions={
         <>
           <Button
-            className="bsl-margin-end--tiny"
             icon="play"
             iconEnd
             onClick={scan}
@@ -163,7 +162,6 @@ export const ClusterValidation = () => {
             {t('cluster-validation.scan.buttons.scan')}
           </Button>
           <Button
-            className="bsl-margin-end--tiny"
             icon="settings"
             iconEnd
             onClick={configure}

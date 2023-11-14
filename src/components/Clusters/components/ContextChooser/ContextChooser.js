@@ -3,6 +3,7 @@ import { MessageStrip, Select, Option } from '@ui5/webcomponents-react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 
+import { spacing } from '@ui5/webcomponents-react-base';
 import './ContextChooser.scss';
 
 export function ContextChooser(params) {
@@ -53,7 +54,7 @@ export function ContextChooser(params) {
         <MessageStrip
           design="Information"
           hideCloseButton
-          className="bsl-margin-top--sm bsl-margin-bottom--sm"
+          style={spacing.sapUiSmallMarginTopBottom}
         >
           {t('clusters.wizard.multi-context-info', {
             context: kubeconfig.contexts[0]?.name,

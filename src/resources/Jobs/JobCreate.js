@@ -76,12 +76,7 @@ export function JobCreate({
         propertyPath="$.spec.template.spec.containers"
         readOnly={!!initialJob}
       />
-
-      <MessageStrip
-        design="Information"
-        hideCloseButton
-        className="bsl-margin-top--sm"
-      >
+      <MessageStrip design="Information" hideCloseButton>
         {t('jobs.create-modal.containers-readonly-in-edit')}
       </MessageStrip>
     </ResourceForm>

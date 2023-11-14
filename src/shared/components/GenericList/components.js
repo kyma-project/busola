@@ -11,6 +11,8 @@ import {
 import ListActions from 'shared/components/ListActions/ListActions';
 import classNames from 'classnames';
 
+import { spacing } from '@ui5/webcomponents-react-base';
+
 export const BodyFallback = ({ children }) => (
   // TODO replace once new Table component is available in ui5-webcomponents-react
   <tr>
@@ -140,7 +142,7 @@ const CollapsedRowRenderer = ({
         >
           <FlexBox>
             <Icon
-              className="bsl-margin-end--tiny"
+              style={spacing.sapUiTinyMarginEnd}
               name={isOpen ? 'navigation-up-arrow' : 'navigation-down-arrow'}
             />
             {title}

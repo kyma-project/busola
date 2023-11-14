@@ -22,7 +22,6 @@ export function StorageClassDetails(props) {
     return (
       <UI5Panel
         fixed
-        className="bsl-margin--md"
         key={'storageclass-parameters'}
         title={t('storage-classes.headers.parameters')}
       >

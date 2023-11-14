@@ -6,7 +6,8 @@ import {
   ToolbarSeparator,
   ToolbarSpacer,
 } from '@ui5/webcomponents-react';
-import classNames from 'classnames';
+
+import { spacing } from '@ui5/webcomponents-react-base';
 
 export const UI5Panel = ({
   fixed = true,
@@ -18,16 +19,14 @@ export const UI5Panel = ({
   className = '',
   children,
   description = '',
+  style = null,
 }) => {
-  const panelClassNames = classNames({
-    'bsl-margin--md': !disableMargin,
-  });
-
   return (
     <Panel
       fixed={fixed}
       key={key}
-      className={`${panelClassNames} ${className}`}
+      className={`${className}`}
+      style={style ? style : !disableMargin ? spacing.sapUiMediumMargin : null}
       header={
         <>
           <Toolbar
