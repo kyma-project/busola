@@ -57,7 +57,7 @@ context(
         .find('ui5-button[data-testid="delete"]')
         .click();
 
-      cy.contains(`Limit Range ${LIMIT_NAME}`);
+      cy.contains(`delete Limit Range ${LIMIT_NAME}`);
       cy.get(`[header-text="Delete Limit Range"]`)
         .find('[data-testid="delete-confirmation"]')
         .click();
@@ -66,7 +66,7 @@ context(
         .find('ui5-button[data-testid="delete"]')
         .click();
 
-      cy.contains(`Limit Range ${NEW_LIMIT_NAME}`);
+      cy.contains(`delete Limit Range ${NEW_LIMIT_NAME}`);
       cy.get(`[header-text="Delete Limit Range"]`)
         .find('[data-testid="delete-confirmation"]')
         .click();
@@ -75,7 +75,7 @@ context(
         .find('ui5-button[data-testid="delete"]')
         .click();
 
-      cy.contains(`Resource Quota ${QUOTA_NAME}`);
+      cy.contains(`delete Resource Quota ${QUOTA_NAME}`);
       cy.get(`[header-text="Delete Resource Quota"]`)
         .find('[data-testid="delete-confirmation"]')
         .click();
