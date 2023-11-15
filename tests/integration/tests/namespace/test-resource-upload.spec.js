@@ -42,7 +42,7 @@ context('Test resource upload', () => {
     cy.contains('StorageClass ' + SC_NAME).should('be.visible');
 
     cy.get('ui5-dialog')
-      .contains('ui5-button', 'Submit')
+      .contains('ui5-button', 'Upload')
       .should('be.visible')
       .click();
 
@@ -67,7 +67,7 @@ context('Test resource upload', () => {
     );
 
     cy.get('ui5-dialog')
-      .contains('ui5-button', 'Submit')
+      .contains('ui5-button', 'Upload')
       .should('be.visible')
       .click();
 
@@ -89,7 +89,7 @@ context('Test resource upload', () => {
     );
 
     cy.get('ui5-dialog')
-      .contains('ui5-button', 'Submit')
+      .contains('ui5-button', 'Upload')
       .should('be.visible')
       .click();
 
