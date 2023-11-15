@@ -252,7 +252,7 @@ common:
     delete-confirm: Don't ask again
     information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.
     message: Are you sure you want to delete {{type}} {{name}}?
-    title: Delete {{name}}
+    title: Delete {{type}}
   errors:
     couldnt-fetch-resources: Couldn't fetch resources.
     error: Error
