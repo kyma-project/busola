@@ -118,6 +118,7 @@ context('Test Cron Jobs', () => {
 
     cy.get('[placeholder="Command to run in a container"]')
       .find('input')
+      .click()
       .clear()
       .type('ls', { force: true });
 
