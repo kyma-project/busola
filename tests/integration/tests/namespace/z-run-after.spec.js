@@ -21,14 +21,19 @@ context('Clean up Namespace', () => {
 
     cy.get('ui5-table-row [aria-label="Delete"]').click({ force: true });
 
-    cy.get(`[header-text="Delete ${Cypress.env('NAMESPACE_NAME')}"]`)
+    cy.contains(`delete Namespace ${Cypress.env('NAMESPACE_NAME')}`);
+    cy.get(`[header-text="Delete Namespace"]`)
       .find('[data-testid="delete-confirmation"]')
       .click();
   });
 
   it('Check if the Namespace is terminated (step 2)', { retries: 3 }, () => {
-    cy.get('[role=row]')
-      .find('[role="status"]')
-      .should('have.text', 'Terminating');
+    cy.get('ui5-table-row')
+      .find('.status-badge')
+      .contains('Terminating');
+
+    cy.get('ui5-table')
+      .contains(Cypress.env('NAMESPACE_NAME'))
+      .should('not.exist');
   });
 });

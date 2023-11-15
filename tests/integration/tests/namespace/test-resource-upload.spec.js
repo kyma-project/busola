@@ -107,17 +107,6 @@ context('Test resource upload', () => {
 
     cy.navigateTo('Storage', 'Storage Classes');
 
-    cy.get('ui5-button[aria-label="open-search"]')
-      .click()
-      .get('ui5-combobox[placeholder="Search"]')
-      .find('input')
-      .click()
-      .type(SC_NAME);
-
-    cy.get('ui5-table-row [aria-label="Delete"]').click({ force: true });
-
-    cy.get(`[header-text="Delete ${SC_NAME}"]`)
-      .find('[data-testid="delete-confirmation"]')
-      .click();
+    cy.deleteFromGenericList('Storage Class', SC_NAME);
   });
 });

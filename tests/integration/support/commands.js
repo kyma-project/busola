@@ -115,8 +115,7 @@ Cypress.Commands.add('deleteInDetails', (resourceType, resourceName) => {
     .should('be.visible')
     .click();
 
-  cy.contains(`${resourceType} ${resourceName}`);
-
+  cy.contains(`delete ${resourceType} ${resourceName}`);
   cy.get(`[header-text="Delete ${resourceType}"]`)
     .find('[data-testid="delete-confirmation"]')
     .click();
