@@ -104,7 +104,7 @@ export function useDeleteResource({
       actions={[
         <Button
           data-testid="delete-confirmation"
-          design="Negative"
+          design="Emphasized"
           onClick={() => performDelete(resource, resourceUrl, deleteFn)}
         >
           {t('common.buttons.delete')}

@@ -199,7 +199,7 @@ export function MultiInput({
                         hidden: isEntryLocked(entry),
                       })}
                       icon="delete"
-                      design="Negative"
+                      design="Transparent"
                       onClick={() => removeValue(index)}
                       aria-label={t('common.buttons.delete')}
                     />
