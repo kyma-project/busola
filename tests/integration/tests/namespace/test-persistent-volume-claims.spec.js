@@ -77,6 +77,6 @@ context('Test Persistent Volume Claims', () => {
 
     cy.contains(CAPACITY_VALUE);
 
-    cy.deleteFromGenericList(PVC_NAME);
+    cy.deleteFromGenericList('Persistent Volume Claim', PVC_NAME);
   });
 });
