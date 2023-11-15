@@ -55,6 +55,7 @@ export function Header() {
   return (
     <>
       <ShellBar
+        className="header"
         startButton={
           window.location.pathname !== '/clusters' && <SidebarSwitcher />
         }
