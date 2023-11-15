@@ -109,13 +109,15 @@ Cypress.Commands.add('getLeftNav', () => {
   return cy.get('aside.sidebar');
 });
 
-Cypress.Commands.add('deleteInDetails', resourceName => {
+Cypress.Commands.add('deleteInDetails', (resourceType, resourceName) => {
   cy.get('ui5-button')
     .contains('Delete')
     .should('be.visible')
     .click();
 
-  cy.get(`[header-text="Delete ${resourceName}"]`)
+  cy.contains(`${resourceType} ${resourceName}`);
+
+  cy.get(`[header-text="Delete ${resourceType}"]`)
     .find('[data-testid="delete-confirmation"]')
     .click();
 
