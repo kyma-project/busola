@@ -77,10 +77,11 @@ context('Test Roles', () => {
       .should('be.visible')
       .click();
 
-    chooseComboboxOption(
-      '[placeholder^="Start typing to select Verbs"]:visible',
-      'watch',
-    );
+    cy.get(`ui5-combobox[placeholder^="Start typing to select Verbs"]:visible`)
+      .find('input')
+      .filterWithNoValue()
+      .click()
+      .type(watch);
 
     cy.get('ui5-dialog')
       .contains('ui5-button', 'Update')
