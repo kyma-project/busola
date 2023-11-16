@@ -81,7 +81,7 @@ context('Test Roles', () => {
       .find('input')
       .filterWithNoValue()
       .click()
-      .type(watch);
+      .type('watch');
 
     cy.get('ui5-dialog')
       .contains('ui5-button', 'Update')
