@@ -62,6 +62,7 @@ export function EventList({
               <Icon
                 aria-label="Normal"
                 name="message-information"
+                design="Information"
                 className="has-tooltip bsl-icon-m"
               />
             </Tooltip>

@@ -171,7 +171,11 @@ export function SimpleList({
               delay={0}
               content={tExt(tooltipContent)}
             >
-              <Icon name="message-information" className="bsl-icon-m" />
+              <Icon
+                name="message-information"
+                design="Information"
+                className="bsl-icon-m"
+              />
             </Tooltip>
           )}
         </div>
