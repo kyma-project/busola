@@ -101,11 +101,13 @@ context('Test Protected Resources', () => {
 
     cy.get('[aria-label="Deployment name"]:visible')
       .find('input')
+      .click()
       .clear()
       .type(NAME);
 
     cy.get('[placeholder^="Enter the Docker image"]:visible')
       .find('input')
+      .click()
       .type(IMAGE);
 
     cy.get('ui5-dialog')
