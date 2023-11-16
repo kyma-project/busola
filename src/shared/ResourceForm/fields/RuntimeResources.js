@@ -7,9 +7,10 @@ import { Dropdown } from 'shared/components/Dropdown/Dropdown';
 import { ResourceForm } from '..';
 import * as Inputs from '../inputs';
 
-import './RuntimeResources.scss';
 import { Input, FlexBox } from '@ui5/webcomponents-react';
 import { Label } from '../../../shared/ResourceForm/components/Label';
+
+import './RuntimeResources.scss';
 
 function MemoryInput({ label, propertyPath, container = {}, setContainer }) {
   const units = ['K', 'Ki', 'M', 'Mi', 'G', 'Gi', 'Ti', 'T'];

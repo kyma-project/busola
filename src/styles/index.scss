@@ -67,6 +67,11 @@ ui5-checkbox {
   -webkit-appearance: checkbox;
 }
 
+ui5-tabcontainer::part(content) {
+  padding: 0;
+  border-bottom: none;
+}
+
 @font-face {
   font-family: '72';
   src: url('~@sap-theming/theming-base-content/content/Base/baseLib/baseTheme/fonts/72-Regular-full.woff')

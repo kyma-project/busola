@@ -63,6 +63,7 @@ export function FormField({
               aria-label=""
               className="bsl-icon-m"
               name="message-information"
+              design="Information"
             />
           </Tooltip>
         )}

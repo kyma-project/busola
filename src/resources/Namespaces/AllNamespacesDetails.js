@@ -29,7 +29,7 @@ export function AllNamespacesDetails(props) {
         title={t('navigation.all-namespaces')}
         breadcrumbItems={breadcrumbItems}
         content={
-          <div className="panel-grid" style={spacing.sapUiMediumMarginTop}>
+          <div className="panel-grid" style={spacing.sapUiMediumMargin}>
             <NamespaceWorkloads />
             <ResourcesUsage />
           </div>

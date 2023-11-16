@@ -61,9 +61,10 @@ export function EventList({
             <Tooltip content={e.type}>
               <ObjectStatus
                 aria-label="Normal"
+                name="message-information"
+                design="Information"
+                className="has-tooltip bsl-icon-m"
                 icon={<Icon name="message-information" />}
-                className="has-tooltip"
-                state="Information"
               />
             </Tooltip>
           )}

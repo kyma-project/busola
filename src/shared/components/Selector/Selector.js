@@ -31,6 +31,7 @@ const SelectorDetails = ({
       namespace={namespace}
       labels={labels}
       filter={filterByLabels}
+      disableMargin
     />
   );
   return expressions ? (

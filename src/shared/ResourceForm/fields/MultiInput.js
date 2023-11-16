@@ -222,6 +222,7 @@ export function MultiInput({
                 aria-label=""
                 className="bsl-icon-m"
                 name="message-information"
+                design="Information"
               />
             </Tooltip>
           )}

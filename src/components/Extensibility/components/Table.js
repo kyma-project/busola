@@ -35,7 +35,6 @@ const handleTableValue = (value, t) => {
 export function Table({
   value,
   structure,
-  disableMargin,
   schema,
   originalResource,
   scope,
@@ -168,6 +167,7 @@ export function Table({
 
   return (
     <GenericList
+      disableMargin={structure.disablePadding}
       className={'extensibility-table'}
       title={tExt(structure.name, {
         defaultValue: structure.name || structure.source,

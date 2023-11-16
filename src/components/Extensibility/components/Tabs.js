@@ -4,8 +4,6 @@ import { Widget, InlineWidget } from './Widget';
 import { useGetTranslation } from '../helpers';
 import { TabContainer, Tab } from '@ui5/webcomponents-react';
 
-import './Tabs.scss';
-
 export function Tabs({
   value,
   structure,
