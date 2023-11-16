@@ -172,7 +172,7 @@ Cypress.Commands.add(
 Cypress.Commands.add('changeCluster', clusterName => {
   cy.get('header')
     .find('[aria-haspopup="menu"]:visible')
-    .click();
+    .click({ force: true });
 
   cy.get('ui5-list')
     .find(`[aria-label="${clusterName}"]:visible`)

@@ -24,28 +24,34 @@ context('Test Cron Jobs', () => {
 
     cy.get('[placeholder="Minute"]')
       .find('input')
+      .click()
       .clear()
       .type(0, { force: true });
 
     cy.get('[placeholder="Hour"]')
       .find('input')
+      .click()
       .clear()
       .type(0, { force: true });
 
     cy.get('[placeholder="Day of Month"]')
       .find('input')
+      .click()
       .clear()
       .type(1, { force: true });
 
     cy.get('[placeholder="Month"]')
       .find('input')
+      .click()
       .clear()
       .type('*', { force: true });
 
     cy.get('[placeholder="Day of Week"]')
       .find('input')
+      .click()
       .clear()
       .type('*', { force: true });
+
     cy.get(
       '[aria-label="expand Schedule: At 12:00 AM, on day 1 of the month"]',
     ).click();
@@ -54,11 +60,13 @@ context('Test Cron Jobs', () => {
 
     cy.get('[placeholder="Command to run in a container"]')
       .find('input')
+      .click()
       .clear()
       .type('ls -la', { force: true });
 
     cy.get('[aria-label="Container name"]')
       .find('input')
+      .click()
       .clear()
       .type('test-container', { force: true });
 
@@ -66,6 +74,7 @@ context('Test Cron Jobs', () => {
       '[placeholder="Enter the Docker image tag, for example, \'busybox\'"]',
     )
       .find('input')
+      .click()
       .clear()
       .type('busybox', { force: true });
 
@@ -106,18 +115,23 @@ context('Test Cron Jobs', () => {
 
     cy.get('[placeholder="Day of Month"]')
       .find('input')
+      .click()
       .clear()
       .type('*', { force: true });
 
     cy.get('[placeholder="Month"]')
       .find('input')
+      .click()
       .clear()
       .type('*', { force: true });
+
+    cy.get('[aria-label="expand Schedule: Every hour"]').click();
 
     cy.get('[aria-label="expand Command"]').click();
 
     cy.get('[placeholder="Command to run in a container"]')
       .find('input')
+      .click()
       .clear()
       .type('ls', { force: true });
 
@@ -130,6 +144,7 @@ context('Test Cron Jobs', () => {
       '[placeholder="Enter the Docker image tag, for example, \'busybox\'"]',
     )
       .find('input')
+      .click()
       .clear()
       .type('busytest', { force: true });
 

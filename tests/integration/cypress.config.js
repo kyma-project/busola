@@ -13,6 +13,7 @@ module.exports = defineConfig({
   viewportWidth: 1500,
   viewportHeight: 1500,
   videoCompression: false,
+  scrollBehavior: false,
   screenshotsFolder: process?.env?.ARTIFACTS
     ? `${process.env?.ARTIFACTS}/screenshots`
     : 'cypress/screenshots',
