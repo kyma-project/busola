@@ -44,6 +44,7 @@ export function PodTemplate({ template }) {
       {template.spec.volumes && (
         <>
           <UI5Panel
+            disableMargin
             title={
               <>
                 <Title level="H5">{t('pods.labels.volumes')}</Title>

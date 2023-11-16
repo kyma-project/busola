@@ -97,7 +97,7 @@ function ContainerComponent({ container }) {
 export function ContainersPanel({ title, containers }) {
   return (
     <>
-      <UI5Panel title={title}>
+      <UI5Panel title={title} disableMargin>
         {containers?.map(container => (
           <ContainerComponent key={container.name} container={container} />
         ))}

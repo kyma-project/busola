@@ -77,6 +77,7 @@ ResourcesList.propTypes = {
   disableCreate: PropTypes.bool,
   disableEdit: PropTypes.bool,
   disableDelete: PropTypes.bool,
+  disableMargin: PropTypes.bool,
 };
 
 ResourcesList.defaultProps = {
@@ -89,6 +90,7 @@ ResourcesList.defaultProps = {
   disableCreate: false,
   disableEdit: false,
   disableDelete: false,
+  disableMargin: false,
   filterFn: () => true,
 };
 
@@ -192,6 +194,7 @@ export function ResourceListRenderer({
   disableCreate,
   disableEdit,
   disableDelete,
+  disableMargin,
   sortBy = {
     name: nameLocaleSort,
     time: timeSort,
@@ -537,6 +540,7 @@ export function ResourceListRenderer({
       )}
       {!(error && error.toString().includes('is forbidden')) && (
         <GenericList
+          disableMargin={disableMargin}
           title={showTitle ? title || prettifiedResourceName : null}
           actions={actions}
           entries={resources || []}

@@ -54,6 +54,7 @@ export const GenericList = ({
   sortBy,
   notFoundMessage,
   searchSettings,
+  disableMargin,
 }) => {
   searchSettings = { ...defaultSearch, ...searchSettings };
 
@@ -219,7 +220,7 @@ export const GenericList = ({
       headerActions={!headerActionsEmpty && headerActions}
       data-testid={testid}
       disableMargin
-      style={spacing.sapUiMediumMarginTop}
+      style={disableMargin ? {} : spacing.sapUiMediumMargin}
     >
       <Table
         className={'ui5-generic-list'}
@@ -287,6 +288,7 @@ GenericList.propTypes = {
   sortBy: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   notFoundMessage: PropTypes.string,
   searchSettings: SearchProps,
+  disableMargin: PropTypes.bool,
 };
 
 GenericList.defaultProps = {
