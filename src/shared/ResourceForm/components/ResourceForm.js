@@ -13,8 +13,8 @@ import { KeyValueField, K8sNameField } from '../fields';
 import * as jp from 'jsonpath';
 import { Form, FormItem } from '@ui5/webcomponents-react';
 
-import './ResourceForm.scss';
 import { spacing } from '@ui5/webcomponents-react-base';
+import './ResourceForm.scss';
 
 export function ResourceForm({
   pluralKind, // used for the request path
