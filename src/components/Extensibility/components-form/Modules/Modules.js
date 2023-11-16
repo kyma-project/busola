@@ -214,7 +214,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
             >
               {t('extensibility.widgets.modules.documentation')}
               <Icon
-                name="action"
+                name="inspect"
                 design="Information"
                 className="ui5-icon-s"
                 style={spacing.sapUiTinyMarginBegin}

@@ -97,14 +97,14 @@ export function useDeleteResource({
     <MessageBox
       type="Warning"
       titleText={t('common.delete-dialog.title', {
-        name: resourceTitle || resource?.metadata?.name,
+        type: prettifiedResourceName,
       })}
       open={showDeleteDialog}
       className="ui5-content-density-compact"
       actions={[
         <Button
           data-testid="delete-confirmation"
-          design="Negative"
+          design="Emphasized"
           onClick={() => performDelete(resource, resourceUrl, deleteFn)}
         >
           {t('common.buttons.delete')}

@@ -148,9 +148,8 @@ context('Test Protected Resources', () => {
       .find('ui5-button[data-testid="delete"]')
       .click();
 
-    cy.contains(`Delete ${NAME}`).should('exist');
-
-    cy.get(`[header-text="Delete ${NAME}"]`)
+    cy.contains(`delete Config Map ${NAME}`);
+    cy.get(`[header-text="Delete Config Map"]`)
       .find('[data-testid="delete-cancel"]')
       .click();
   });

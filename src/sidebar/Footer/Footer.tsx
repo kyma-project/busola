@@ -27,7 +27,7 @@ export function Footer() {
           }}
           slot="fixedItems"
           text={legalLink.label}
-          icon="action"
+          icon="inspect"
         />
       ))}
       <SideNavigationItem
@@ -41,7 +41,7 @@ export function Footer() {
         }}
         slot="fixedItems"
         text={`${t('common.labels.version')} ${busolaVersion}`}
-        icon="action"
+        icon="inspect"
       />
     </>
   );

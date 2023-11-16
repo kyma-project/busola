@@ -99,7 +99,7 @@ export function YamlUploadDialog({ open, onCancel }) {
           disabled={!resourcesWithStatuses?.length}
           design="Emphasized"
         >
-          {t('common.buttons.submit')}
+          {t('common.buttons.upload')}
         </Button>
         <Button
           onClick={onCancel}
