@@ -55,6 +55,10 @@ ui5-combobox {
   width: 100%;
 }
 
+ui5-button::part(button) {
+  -webkit-font-smoothing: antialiased;
+}
+
 li {
   list-style: none;
 }
