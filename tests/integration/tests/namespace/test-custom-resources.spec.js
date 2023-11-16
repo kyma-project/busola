@@ -31,7 +31,7 @@ context('Test Custom Resources', () => {
     });
 
     cy.get('ui5-dialog')
-      .contains('ui5-button', 'Submit')
+      .contains('ui5-button', 'Upload')
       .should('be.visible')
       .click();
 
@@ -78,6 +78,9 @@ context('Test Custom Resources', () => {
     cy.url().should('match', /customresources/);
     cy.contains('tnamespace.cypress.example.com').click();
     cy.url().should('match', /customresourcedefinitions/);
-    cy.deleteInDetails('tnamespace.cypress.example.com');
+    cy.deleteInDetails(
+      'Custom Resource Definition',
+      'tnamespace.cypress.example.com',
+    );
   });
 });

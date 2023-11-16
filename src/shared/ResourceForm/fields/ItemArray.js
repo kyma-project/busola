@@ -58,7 +58,7 @@ export function ItemArray({
           actions={
             <Button
               icon="delete"
-              design="Negative"
+              design="Transparent"
               onClick={() => remove(i)}
               disabled={readOnly}
             />

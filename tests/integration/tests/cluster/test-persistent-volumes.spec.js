@@ -48,6 +48,6 @@ context('Test Persistent Volumes', () => {
   it('Check PV list and delete', () => {
     cy.navigateBackTo('persistentvolumes', 'Persistent Volumes');
 
-    cy.deleteFromGenericList(PV_NAME);
+    cy.deleteFromGenericList('Persistent Volume', PV_NAME);
   });
 });

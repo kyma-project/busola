@@ -90,7 +90,7 @@ export function GenericList({
               actions={
                 <Button
                   icon="delete"
-                  design="Negative"
+                  design="Transparent"
                   onClick={() => removeItem(index)}
                   disabled={readOnly}
                 />

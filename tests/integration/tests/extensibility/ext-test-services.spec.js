@@ -26,7 +26,7 @@ context('Test Services', () => {
     });
 
     cy.get('ui5-dialog')
-      .contains('ui5-button', 'Submit')
+      .contains('ui5-button', 'Upload')
       .should('be.visible')
       .click();
 
@@ -40,7 +40,7 @@ context('Test Services', () => {
     });
 
     cy.get('ui5-dialog')
-      .contains('ui5-button', 'Submit')
+      .contains('ui5-button', 'Upload')
       .should('be.visible')
       .click();
 

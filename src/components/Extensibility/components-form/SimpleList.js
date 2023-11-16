@@ -140,7 +140,7 @@ export function SimpleList({
                               <Button
                                 disabled={readOnly}
                                 icon="delete"
-                                design="Negative"
+                                design="Transparent"
                                 onClick={() => removeItem(index)}
                                 aria-label={t('common.buttons.delete')}
                               />

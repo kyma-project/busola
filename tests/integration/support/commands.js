@@ -109,13 +109,14 @@ Cypress.Commands.add('getLeftNav', () => {
   return cy.get('aside.sidebar');
 });
 
-Cypress.Commands.add('deleteInDetails', resourceName => {
+Cypress.Commands.add('deleteInDetails', (resourceType, resourceName) => {
   cy.get('ui5-button')
     .contains('Delete')
     .should('be.visible')
     .click();
 
-  cy.get(`[header-text="Delete ${resourceName}"]`)
+  cy.contains(`delete ${resourceType} ${resourceName}`);
+  cy.get(`[header-text="Delete ${resourceType}"]`)
     .find('[data-testid="delete-confirmation"]')
     .click();
 
@@ -125,7 +126,8 @@ Cypress.Commands.add('deleteInDetails', resourceName => {
 Cypress.Commands.add(
   'deleteFromGenericList',
   (
-    searchTerm,
+    resourceType,
+    resourceName,
     confirmationEnabled = true,
     deletedVisible = true,
     clearSearch = true,
@@ -135,16 +137,17 @@ Cypress.Commands.add(
     cy.get('ui5-combobox[placeholder="Search"]')
       .find('input')
       .click()
-      .type(searchTerm);
+      .type(resourceName);
 
-    cy.contains('a', searchTerm).should('be.visible');
+    cy.contains('a', resourceName).should('be.visible');
 
     cy.contains('ui5-message-strip', /created/).should('not.exist');
 
     cy.get('ui5-button[data-testid="delete"]').click();
 
     if (confirmationEnabled) {
-      cy.get(`[header-text="Delete ${searchTerm}"]`)
+      cy.contains(`delete ${resourceType} ${resourceName}`);
+      cy.get(`[header-text="Delete ${resourceType}"]`)
         .find('[data-testid="delete-confirmation"]')
         .click();
 
@@ -160,7 +163,7 @@ Cypress.Commands.add(
       }
 
       cy.get('ui5-table')
-        .contains(searchTerm)
+        .contains(resourceName)
         .should('not.exist');
     }
   },

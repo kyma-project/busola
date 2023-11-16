@@ -32,7 +32,7 @@ context('Test extensibility variables', () => {
     });
 
     cy.get('ui5-dialog')
-      .contains('ui5-button', 'Submit')
+      .contains('ui5-button', 'Upload')
       .should('be.visible')
       .click();
 
@@ -48,7 +48,7 @@ context('Test extensibility variables', () => {
     );
 
     cy.get('ui5-dialog')
-      .contains('ui5-button', 'Submit')
+      .contains('ui5-button', 'Upload')
       .should('be.visible')
       .click();
 

@@ -295,7 +295,7 @@ function Resource({
         <Button
           disabled={protectedResource || disableDelete}
           onClick={() => handleResourceDelete({ resourceUrl })}
-          design="Negative"
+          design="Transparent"
         >
           {t('common.buttons.delete')}
         </Button>,

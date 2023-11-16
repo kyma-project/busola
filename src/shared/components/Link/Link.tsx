@@ -32,7 +32,7 @@ export const Link = ({
       {text || children || url}
       <Icon
         design="Information"
-        name="action"
+        name="inspect"
         className="bsl-icon-s"
         style={spacing.sapUiTinyMarginBegin}
         aria-label={t('common.ariaLabel.new-tab-link')}

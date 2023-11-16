@@ -22,10 +22,10 @@ context('Test Roles', () => {
 
     cy.contains('ui5-button', 'Create Role').click();
 
-    cy.get('[aria-label="Role name"]:visible', { log: false })
+    cy.get('ui5-input[aria-label="Role name"]:visible', { log: false })
       .find('input')
-      .type(ROLE_NAME, { force: true })
-      .click();
+      .click()
+      .type(ROLE_NAME, { force: true });
 
     chooseComboboxOption(
       '[placeholder^="Start typing to select API"]:visible',
@@ -120,8 +120,8 @@ context('Test Roles', () => {
 
     cy.get('ui5-input[aria-label="Role name"]:visible', { log: false })
       .find('input')
-      .type(CLONE_NAME)
-      .click();
+      .click()
+      .type(CLONE_NAME);
 
     cy.get('ui5-dialog')
       .contains('ui5-button', 'Create')

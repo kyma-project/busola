@@ -86,7 +86,7 @@ export function Containers({ value: containers, setValue: setContainers }) {
       actions={
         <Button
           icon="delete"
-          design="Negative"
+          design="Transparent"
           onClick={() => removeContainer(i)}
         />
       }

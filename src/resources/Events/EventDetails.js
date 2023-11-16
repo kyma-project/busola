@@ -9,7 +9,7 @@ import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTim
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { Icon } from '@ui5/webcomponents-react';
+import { Icon, ObjectStatus } from '@ui5/webcomponents-react';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 const RowComponent = ({ name, value }) =>
@@ -66,18 +66,20 @@ export function EventDetails(props) {
           {event.type}{' '}
           {event.type === 'Warning' ? (
             <Tooltip content={event.type}>
-              <Icon
+              <ObjectStatus
                 aria-label="Warning"
-                name="message-warning"
-                className="bsl-has-color-status-2 has-tooltip bsl-icon-s"
+                icon={<Icon name="message-warning" />}
+                className="has-tooltip"
+                state="Warning"
               />
             </Tooltip>
           ) : (
             <Tooltip content={event.type}>
-              <Icon
+              <ObjectStatus
                 aria-label="Normal"
-                name="message-information"
-                className="has-tooltip bsl-icon-s"
+                icon={<Icon name="message-information" />}
+                className="has-tooltip"
+                state="Information"
               />
             </Tooltip>
           )}
