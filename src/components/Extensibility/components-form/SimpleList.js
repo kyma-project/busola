@@ -83,7 +83,7 @@ export function SimpleList({
             {tFromStoreKeys(storeKeys, schema)}
           </Label>
         </div>
-        <div className="bsl-col-md--8 form-field multi-input extensibility">
+        <div className="bsl-col-md--8 form-field multi-input">
           <ul className={listClasses}>
             {isObject && (
               <li>
@@ -105,9 +105,6 @@ export function SimpleList({
                       nestingLevel={nestingLevel + 1}
                       schemaKeys={schemaKeys?.push('items')}
                     />
-                  </div>
-                  <div className="bsl-col-md--1">
-                    <span className="item-action"></span>
                   </div>
                 </FlexBox>
               </li>

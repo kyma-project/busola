@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 
@@ -40,10 +39,7 @@ function MemoryInput({ label, propertyPath, container = {}, setContainer }) {
       }}
     >
       <Label required>{label}</Label>
-      <FlexBox
-        style={{ gap: '10px' }}
-        className="memory-input bsl-col bsl-col-md--11"
-      >
+      <FlexBox style={{ gap: '10px' }} className="bsl-col bsl-col-md--11">
         <Input
           type="Number"
           min="0"

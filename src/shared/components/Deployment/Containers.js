@@ -1,4 +1,3 @@
-import React from 'react';
 import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 import { K8sNameField } from 'shared/ResourceForm/fields';
@@ -8,8 +7,6 @@ import { Button, MessageStrip } from '@ui5/webcomponents-react';
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { RuntimeResources } from 'shared/ResourceForm/fields';
-
-import './Containers.scss';
 
 function SingleContainerSection({ container, setContainer }) {
   const { t } = useTranslation();

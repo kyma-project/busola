@@ -38,27 +38,25 @@ export function MemoryInput({
         maxWidth: '100%',
       }}
     >
-      <div className="memory-input">
-        <Label>{label}</Label>
-        <FlexBox style={{ gap: '10px' }}>
-          <Input
-            type="Number"
-            min="0"
-            required={required}
-            value={numericValue}
-            onInput={e => setValue(e.target.value + selectedUnit)}
-            className="full-width"
-            {...otherProps}
-          />
-          <Dropdown
-            options={options}
-            required={required}
-            selectedKey={selectedUnit}
-            onSelect={(_, { key }) => setValue(numericValue.toString() + key)}
-            {...otherProps}
-          />
-        </FlexBox>
-      </div>
+      <Label>{label}</Label>
+      <FlexBox style={{ gap: '10px' }}>
+        <Input
+          type="Number"
+          min="0"
+          required={required}
+          value={numericValue}
+          onInput={e => setValue(e.target.value + selectedUnit)}
+          className="full-width"
+          {...otherProps}
+        />
+        <Dropdown
+          options={options}
+          required={required}
+          selectedKey={selectedUnit}
+          onSelect={(_, { key }) => setValue(numericValue.toString() + key)}
+          {...otherProps}
+        />
+      </FlexBox>
     </FlexBox>
   );
 }

@@ -41,7 +41,7 @@ export function KubeconfigUpload({ kubeconfig, setKubeconfig }) {
           editor.getModel().setValue(text);
         }}
       />
-      <Text style={spacing.sapUiSmallMarginTopBottom}>
+      <Text className="editor-label" style={spacing.sapUiSmallMarginTopBottom}>
         {t('clusters.wizard.editor-label')}
       </Text>
       <Editor
