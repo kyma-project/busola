@@ -23,13 +23,18 @@ export function FormField({
   messageStrip,
   inputInfo,
   updatesOnInput,
+  style,
   ...props
 }) {
   const { validate, ...inputProps } = props;
   const inputInfoLink = useCreateResourceDescription(inputInfo);
 
   return (
-    <FlexBox className={classnames('form-field', className)}>
+    <FlexBox
+      className={classnames('form-field', className)}
+      justifyContent="Center"
+      style={style}
+    >
       {!isListItem && (
         <div className="bsl-col-md--3 form-field__label">
           <Label required={required && !disabled}>{label}</Label>
