@@ -512,7 +512,7 @@ export function ResourceListRenderer({
         opened={showEditDialog}
         confirmText={t('common.buttons.create')}
         id={`add-${resourceType}-modal`}
-        className="modal-size--l create-resource-modal"
+        className="modal-size--l"
         renderForm={props => (
           <ErrorBoundary>
             <CreateResourceForm

@@ -242,7 +242,7 @@ function Resource({
           }
           confirmText={t('common.buttons.update')}
           id={`edit-${resourceType}-modal`}
-          className="modal-size--l create-resource-modal"
+          className="modal-size--l"
           renderForm={props => (
             <ErrorBoundary>
               <CreateResourceForm
