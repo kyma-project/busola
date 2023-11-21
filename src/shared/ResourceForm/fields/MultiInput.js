@@ -7,6 +7,7 @@ import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 import { ResourceForm } from '..';
 import { useCreateResourceDescription } from 'components/Extensibility/helpers';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 import './MultiInput.scss';
 
@@ -177,7 +178,7 @@ export function MultiInput({
         )}
         <ul className={listClasses}>
           {internalValue.map((entry, index) => (
-            <li key={index} className="text-array-entry">
+            <li key={index} style={spacing.sapUiSmallMarginBottom}>
               <FlexBox alignItems="Baseline">
                 <div className="bsl-col-md--11">
                   <FlexBox wrap="Wrap" style={{ gap: '10px' }}>

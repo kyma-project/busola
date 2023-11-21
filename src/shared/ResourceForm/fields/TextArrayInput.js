@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { MultiInput } from './MultiInput';
 import { Input } from '@ui5/webcomponents-react';
 
@@ -26,16 +24,7 @@ export function TextArrayInput({
       sectionTooltipContent={sectionTooltipContent}
       readOnly={readOnly}
       inputs={[
-        ({
-          value,
-          setValue,
-          ref,
-          updateValue,
-          focus,
-          index,
-          internalValue,
-          setMultiValue,
-        }) => (
+        ({ value, setValue, ref, updateValue, index }) => (
           <Input
             placeholder={Math.abs(index) === 1 ? placeholder : ''}
             key={index}
@@ -46,15 +35,6 @@ export function TextArrayInput({
               updateValue();
             }}
             className="full-width"
-            // onKeyDown={e => focus(e)}
-            // onBlur={() => {
-            //   const fieldValue = internalValue?.filter(val => !!val);
-            //   setMultiValue(
-            //     typeof customFormatFn === 'function'
-            //       ? customFormatFn(fieldValue)
-            //       : fieldValue,
-            //   );
-            // }}
             {...readOnlyOptions}
             {...inputProps}
             aria-label={ariaLabel}

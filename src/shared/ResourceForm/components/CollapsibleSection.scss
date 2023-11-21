@@ -10,10 +10,6 @@
     padding: 8px 16px;
     border-top: 1px solid var(--sapList_GroupHeaderBorderColor);
     background: var(--sapNeutralBackground);
-
-    .control-icon {
-      margin-right: 8px;
-    }
   }
 
   &.disabled {
@@ -60,10 +56,6 @@
     font-weight: 700;
     color: var(--sapField_RequiredColor);
     margin-left: 4px;
-  }
-
-  .title-content {
-    margin-right: 0.5rem;
   }
 
   .actions {
