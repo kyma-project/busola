@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
-
 import { spacing } from '@ui5/webcomponents-react-base';
 
 export function Presets({ presets, onSelect, ...otherProps }) {
@@ -16,7 +15,6 @@ export function Presets({ presets, onSelect, ...otherProps }) {
       style={spacing.sapUiTinyMarginBottom}
     >
       <Dropdown
-        className="resource-form__presets"
         placeholder={t('common.create-form.choose-preset')}
         options={options}
         selectedKey={''}

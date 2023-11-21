@@ -9,7 +9,6 @@ import {
   TableRow,
 } from '@ui5/webcomponents-react';
 import ListActions from 'shared/components/ListActions/ListActions';
-import classNames from 'classnames';
 
 import { spacing } from '@ui5/webcomponents-react-base';
 
@@ -106,11 +105,7 @@ const DefaultRowRenderer = ({
     </TableCell>
   );
   return (
-    <TableRow
-      role="row"
-      selected={isBeingEdited}
-      className={classNames({ 'is-edited': isBeingEdited })}
-    >
+    <TableRow role="row" selected={isBeingEdited}>
       {cells}
       {!!actions.length && actionsCell}
     </TableRow>
