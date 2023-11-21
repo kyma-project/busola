@@ -102,7 +102,7 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
     );
 
   return (
-    <div>
+    <div style={spacing.sapUiSmallMarginTop}>
       <WarningButton
         handleShowWarnings={() => setVisibleWarnings(prevState => !prevState)}
         areWarningsVisible={areWarningsVisible}
@@ -110,7 +110,7 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
         loading={loading}
       />
       {areWarningsVisible ? (
-        <ul className="warnings-list">
+        <ul>
           {warnings.flat().map((warning, i) => (
             <li
               key={`${resource?.kind}-${

@@ -93,7 +93,7 @@ export function K8sResourceSelect({
   };
 
   return (
-    <div className="combobox--full-width bsl-col bsl-col-md--11">
+    <div className="bsl-col bsl-col-md--11">
       <ComboBox
         required={required}
         disabled={props.disabled || !options?.length}

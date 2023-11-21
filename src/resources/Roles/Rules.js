@@ -88,12 +88,10 @@ export const Rules = resource => {
   return (
     <GenericList
       key="rules"
-      className="rules-list"
       title={t('roles.headers.rules')}
       entries={resource.rules || []}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
-      testid="rules-list"
       searchSettings={{
         textSearchProperties,
       }}
