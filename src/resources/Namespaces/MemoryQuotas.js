@@ -10,6 +10,7 @@ export function MemoryInput({
   container = {},
   setContainer,
   required,
+  className,
   ...otherProps
 }) {
   const units = ['K', 'Ki', 'M', 'Mi', 'G', 'Gi', 'Ti', 'T'];
@@ -38,8 +39,8 @@ export function MemoryInput({
         maxWidth: '100%',
       }}
     >
-      <Label>{label}</Label>
-      <FlexBox style={{ gap: '10px' }}>
+      <Label required={required}>{label}</Label>
+      <FlexBox style={{ gap: '10px' }} className={className}>
         <Input
           type="Number"
           min="0"
