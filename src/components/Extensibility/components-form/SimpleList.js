@@ -6,7 +6,6 @@ import {
   FlexBox,
   Label as UI5Label,
 } from '@ui5/webcomponents-react';
-import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import {
   useCreateResourceDescription,
@@ -16,9 +15,6 @@ import {
 import { ResourceForm } from 'shared/ResourceForm';
 import { Label } from '../../../shared/ResourceForm/components/Label';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-
-import { spacing } from '@ui5/webcomponents-react-base';
-import './SimpleList.scss';
 
 export function SimpleList({
   storeKeys,
@@ -54,8 +50,6 @@ export function SimpleList({
     });
   };
 
-  const listClasses = classnames(['text-array-input__list', 'bsl-col-md--12']);
-
   const isLast = index => index === listSize;
   const itemsSchema = schema.get('items');
   const titleRenderer = ({ schema, storeKeys }) => {
@@ -74,21 +68,18 @@ export function SimpleList({
       nestingLevel={nestingLevel}
       {...props}
     >
-      <FlexBox className="simple-list">
-        <div
-          className="bsl-col-md--3 form-field__label"
-          style={spacing.sapUiSmallMarginBottom}
-        >
+      <FlexBox className="simple-list" justifyContent="Center">
+        <div className="bsl-col-md--3 form-field__label">
           <Label required={required} tooltipContent={tExt(tooltipContent)}>
             {tFromStoreKeys(storeKeys, schema)}
           </Label>
         </div>
         <div className="bsl-col-md--8 form-field multi-input">
-          <ul className={listClasses}>
+          <ul>
             {isObject && (
               <li>
                 <FlexBox>
-                  <div className="bsl-col-md--11 list-entry">
+                  <div className="bsl-col-md--11">
                     <PluginStack
                       schema={itemsSchema}
                       widgets={{
@@ -118,7 +109,7 @@ export function SimpleList({
                   <>
                     <li key={index}>
                       <FlexBox>
-                        <div className="bsl-col-md--11 list-entry">
+                        <div className="bsl-col-md--11">
                           <PluginStack
                             showValidity={showValidity}
                             schema={itemsSchema}
@@ -131,19 +122,15 @@ export function SimpleList({
                             inputInfo={inputInfo}
                           />
                         </div>
-                        <div className="bsl-col-md--1">
-                          <span className="item-action">
-                            {!isLast(index) && (
-                              <Button
-                                disabled={readOnly}
-                                icon="delete"
-                                design="Transparent"
-                                onClick={() => removeItem(index)}
-                                aria-label={t('common.buttons.delete')}
-                              />
-                            )}
-                          </span>
-                        </div>
+                        {!isLast(index) && (
+                          <Button
+                            disabled={readOnly}
+                            icon="delete"
+                            design="Transparent"
+                            onClick={() => removeItem(index)}
+                            aria-label={t('common.buttons.delete')}
+                          />
+                        )}
                       </FlexBox>
                     </li>
                     {isLast(index) && inputInfo && (
@@ -161,8 +148,8 @@ export function SimpleList({
               })}
           </ul>
         </div>
-        <div className="bsl-col-md--1 tooltip-column tooltip-column--with-padding">
-          {tooltipContent && (
+        {tooltipContent && (
+          <div className="bsl-col-md--1 tooltip-column tooltip-column--with-padding">
             <Tooltip
               className="has-tooltip"
               delay={0}
@@ -174,8 +161,8 @@ export function SimpleList({
                 className="bsl-icon-m"
               />
             </Tooltip>
-          )}
-        </div>
+          </div>
+        )}
       </FlexBox>
     </ResourceForm.CollapsibleSection>
   );

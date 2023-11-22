@@ -4,19 +4,4 @@
     display: flex;
     align-items: center;
   }
-
-  .item-action {
-    min-width: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  &.extensibility li {
-    align-items: center;
-  }
-
-  .text-array-input__list {
-    flex-grow: 1;
-  }
 }

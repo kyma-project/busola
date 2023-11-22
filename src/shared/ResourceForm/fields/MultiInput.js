@@ -100,7 +100,6 @@ export function MultiInput({
   const open = defaultOpen === undefined ? !isAdvanced : defaultOpen;
 
   const listClasses = classnames({
-    'text-array-input__list': true,
     'bsl-col-md--8': !fullWidth && (title || label),
     'bsl-col-md--12': fullWidth && !(title || label),
   });
@@ -165,7 +164,7 @@ export function MultiInput({
       tooltipContent={sectionTooltipContent}
       {...props}
     >
-      <FlexBox className="form-field multi-input">
+      <FlexBox className="form-field multi-input" justifyContent="Center">
         {!fullWidth && (title || label) && (
           <div className="bsl-col-md--3 form-field__label">
             <ResourceForm.Label
