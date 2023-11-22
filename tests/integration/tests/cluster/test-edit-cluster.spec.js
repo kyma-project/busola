@@ -12,7 +12,7 @@ context('Test edit cluster', () => {
   });
 
   it('Changes cluster name and adds description', () => {
-    cy.get('[aria-controls="fd-shellbar-product-popover"]').click();
+    cy.get('.ui5-shellbar-menu-button').click();
     cy.contains('Clusters Overview').click();
 
     cy.get('ui5-table-cell')

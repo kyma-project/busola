@@ -15,9 +15,9 @@ export function Dropdown({
   _ref,
   emptyListMessage,
   className,
-  ...fdSelectProps
+  ...props
 }) {
-  if (!fdSelectProps.readOnly) delete fdSelectProps.readOnly;
+  if (!props.readOnly) delete props.readOnly;
   const { t } = useTranslation();
   if (!options || !options.length) {
     options = [
@@ -50,7 +50,7 @@ export function Dropdown({
       onSelectionChange={onSelectionChange}
       value={options.find(o => o.key === selectedKey)?.text}
       ref={_ref}
-      {...fdSelectProps}
+      {...props}
     >
       {options.map(option => (
         <ComboBoxItem id={option.key} text={option.text} />

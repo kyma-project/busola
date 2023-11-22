@@ -76,7 +76,7 @@ export function SimpleList({
     >
       <FlexBox className="simple-list">
         <div
-          className="fd-col-md--3 form-field__label"
+          className="bsl-col-md--3 form-field__label"
           style={spacing.sapUiSmallMarginBottom}
         >
           <Label required={required} tooltipContent={tExt(tooltipContent)}>
