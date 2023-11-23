@@ -36,9 +36,7 @@ export function StorageClassDetails(props) {
             );
           })
         ) : (
-          <Text className="no-entries-message body-fallback">
-            {t('common.messages.no-entries-found')}
-          </Text>
+          <Text>{t('common.messages.no-entries-found')}</Text>
         )}
       </UI5Panel>
     );

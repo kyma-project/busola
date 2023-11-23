@@ -8,13 +8,7 @@ import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import { spacing } from '@ui5/webcomponents-react-base';
 import './KubeconfigUpload.scss';
 
-export function KubeconfigUpload({
-  onKubeconfig,
-  handleKubeconfigAdded,
-  kubeconfigFromParams,
-  kubeconfig,
-  setKubeconfig,
-}) {
+export function KubeconfigUpload({ kubeconfig, setKubeconfig }) {
   const [error, setError] = React.useState('');
   const [editor, setEditor] = useState(null);
 

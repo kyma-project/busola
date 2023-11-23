@@ -44,26 +44,24 @@ export const ContainerSection = ({ readOnly, ...props }) => {
   return value?.length ? (
     <SingleContainerInput simple readOnly={readOnly} {...props} />
   ) : (
-    <div className="job-container__message">
-      <MessageStrip
-        design="Warning"
-        hideCloseButton
-        style={spacing.sapUiSmallMarginTop}
+    <MessageStrip
+      design="Warning"
+      hideCloseButton
+      style={spacing.sapUiSmallMarginTop}
+    >
+      {t('jobs.create-modal.at-least-one-container-required')}
+      <Button
+        icon="add"
+        iconEnd
+        disabled={readOnly}
+        onClick={() => {
+          jp.value(value, '$[0]', createContainerTemplate());
+          setValue(value);
+        }}
+        design="Transparent"
       >
-        {t('jobs.create-modal.at-least-one-container-required')}
-        <Button
-          icon="add"
-          iconEnd
-          disabled={readOnly}
-          onClick={() => {
-            jp.value(value, '$[0]', createContainerTemplate());
-            setValue(value);
-          }}
-          design="Transparent"
-        >
-          {t('deployment.create-modal.advanced.add-container')}
-        </Button>
-      </MessageStrip>
-    </div>
+        {t('deployment.create-modal.advanced.add-container')}
+      </Button>
+    </MessageStrip>
   );
 };

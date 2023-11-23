@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { Button } from '@ui5/webcomponents-react';
 import copyToCliboard from 'copy-to-clipboard';
@@ -117,7 +117,12 @@ export function EditorActions({
   const { t } = useTranslation();
 
   return (
-    <section className="editor-actions" style={spacing.sapUiSmallMarginBottom}>
+    <section
+      style={{
+        ...spacing.sapUiSmallMarginTopBottom,
+        ...spacing.sapUiMediumMarginBegin,
+      }}
+    >
       <ButtonWithTooltip
         tooltipContent={
           visible ? t('common.tooltips.hide') : t('common.tooltips.show')
@@ -157,10 +162,7 @@ export function EditorActions({
         disabled={!editor}
       />
       {readOnly && (
-        <span
-          style={{ color: 'var(--sapNeutralTextColor,#6a6d70)' }}
-          className={'fd-object-status--critical'}
-        >
+        <span style={{ color: 'var(--sapNeutralTextColor,#6a6d70)' }}>
           {t('common.labels.read-only')}
         </span>
       )}

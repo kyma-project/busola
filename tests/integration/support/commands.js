@@ -106,7 +106,7 @@ function paste(subject, { pastePayload }) {
 }
 
 Cypress.Commands.add('getLeftNav', () => {
-  return cy.get('aside.sidebar');
+  return cy.get('aside');
 });
 
 Cypress.Commands.add('deleteInDetails', (resourceType, resourceName) => {

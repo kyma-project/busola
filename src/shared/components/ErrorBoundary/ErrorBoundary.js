@@ -18,7 +18,7 @@ class ErrorBoundaryComponent extends React.Component {
     return { hasError: true, error };
   }
 
-  componentDidCatch(error, errorInfo) {
+  componentDidCatch(error) {
     Sentry.captureException(error);
   }
 
@@ -28,7 +28,6 @@ class ErrorBoundaryComponent extends React.Component {
         <>
           <div
             role="alert"
-            className="error-boundary"
             style={{
               width: '90vh',
               height: '70vh',
@@ -57,7 +56,7 @@ class ErrorBoundaryComponent extends React.Component {
             <Bar
               design="Footer"
               endContent={
-                <Button onClick={this.props.onClose} className="close-button">
+                <Button onClick={this.props.onClose}>
                   {this.props.t('common.buttons.close')}
                 </Button>
               }

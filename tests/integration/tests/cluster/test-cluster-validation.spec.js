@@ -126,6 +126,7 @@ context('Test Cluster Validation Scan', () => {
 
     toggleTreeItem('default');
     toggleTreeItem('ConfigMap');
+    cy.get('@scanResult').scrollIntoView();
     toggleTreeItem('kube-root-ca.crt');
     findTitle('This is a test rule').should('be.visible');
 

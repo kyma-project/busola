@@ -1,17 +1,8 @@
 .nested-key-value-pair {
   margin-left: 16px;
 
-  .fd-input {
-    width: 140px;
-  }
-
   header.expand {
     width: 200px;
-  }
-
-  & + .fd-button--negative {
-    top: 0.15rem !important;
-    right: 3rem;
   }
 }
 

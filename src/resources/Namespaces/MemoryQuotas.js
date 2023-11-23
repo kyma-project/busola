@@ -10,6 +10,7 @@ export function MemoryInput({
   container = {},
   setContainer,
   required,
+  className,
   ...otherProps
 }) {
   const units = ['K', 'Ki', 'M', 'Mi', 'G', 'Gi', 'Ti', 'T'];
@@ -38,27 +39,25 @@ export function MemoryInput({
         maxWidth: '100%',
       }}
     >
-      <div className="memory-input">
-        <Label>{label}</Label>
-        <FlexBox style={{ gap: '10px' }}>
-          <Input
-            type="Number"
-            min="0"
-            required={required}
-            value={numericValue}
-            onInput={e => setValue(e.target.value + selectedUnit)}
-            className="full-width"
-            {...otherProps}
-          />
-          <Dropdown
-            options={options}
-            required={required}
-            selectedKey={selectedUnit}
-            onSelect={(_, { key }) => setValue(numericValue.toString() + key)}
-            {...otherProps}
-          />
-        </FlexBox>
-      </div>
+      <Label required={required}>{label}</Label>
+      <FlexBox style={{ gap: '10px' }} className={className}>
+        <Input
+          type="Number"
+          min="0"
+          required={required}
+          value={numericValue}
+          onInput={e => setValue(e.target.value + selectedUnit)}
+          className="full-width"
+          {...otherProps}
+        />
+        <Dropdown
+          options={options}
+          required={required}
+          selectedKey={selectedUnit}
+          onSelect={(_, { key }) => setValue(numericValue.toString() + key)}
+          {...otherProps}
+        />
+      </FlexBox>
     </FlexBox>
   );
 }

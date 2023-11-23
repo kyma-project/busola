@@ -7,6 +7,7 @@ import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 import { ResourceForm } from '..';
 import { useCreateResourceDescription } from 'components/Extensibility/helpers';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 import './MultiInput.scss';
 
@@ -99,7 +100,6 @@ export function MultiInput({
   const open = defaultOpen === undefined ? !isAdvanced : defaultOpen;
 
   const listClasses = classnames({
-    'text-array-input__list': true,
     'bsl-col-md--8': !fullWidth && (title || label),
     'bsl-col-md--12': fullWidth && !(title || label),
   });
@@ -164,7 +164,7 @@ export function MultiInput({
       tooltipContent={sectionTooltipContent}
       {...props}
     >
-      <FlexBox className="form-field multi-input">
+      <FlexBox className="form-field multi-input" justifyContent="Center">
         {!fullWidth && (title || label) && (
           <div className="bsl-col-md--3 form-field__label">
             <ResourceForm.Label
@@ -177,7 +177,7 @@ export function MultiInput({
         )}
         <ul className={listClasses}>
           {internalValue.map((entry, index) => (
-            <li key={index} className="text-array-entry">
+            <li key={index} style={spacing.sapUiSmallMarginBottom}>
               <FlexBox alignItems="Baseline">
                 <div className="bsl-col-md--11">
                   <FlexBox wrap="Wrap" style={{ gap: '10px' }}>

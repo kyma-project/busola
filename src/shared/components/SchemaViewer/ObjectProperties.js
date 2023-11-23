@@ -1,18 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import { Text, Icon } from '@ui5/webcomponents-react';
 
 import { Generic, PROPERTIES } from './handlers';
+import { spacing } from '@ui5/webcomponents-react-base';
 
-function ObjectProperty({
-  propKey,
-  label,
-  val,
-  handler,
-  required,
-  expanded = false,
-}) {
+function ObjectProperty({ label, val, handler, required, expanded = false }) {
   const [collapsed, setCollapsed] = useState(!expanded);
   const Handler = handler;
 
@@ -26,7 +20,7 @@ function ObjectProperty({
       >
         {handler.expandable && (
           <Icon
-            className="control-icon"
+            style={spacing.sapUiSmallMarginEnd}
             aria-hidden
             name={
               collapsed ? 'navigation-right-arrow' : 'navigation-down-arrow'
@@ -54,7 +48,7 @@ export function ObjectProperties({ def, expanded = false }) {
   return (
     <>
       {Object.entries(PROPERTIES)
-        .filter(([key, handler]) => !!handler)
+        .filter(handler => !!handler)
         .filter(([key]) => Object.keys(def).includes(key))
         .map(([key, handler]) => (
           <ObjectProperty

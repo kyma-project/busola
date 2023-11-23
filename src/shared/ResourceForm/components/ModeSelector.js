@@ -1,7 +1,5 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SegmentedButton, SegmentedButtonItem } from '@ui5/webcomponents-react';
-import './ModeSelector.scss';
 
 export function ModeSelector({ mode, isEditing, setMode }) {
   const { t } = useTranslation();
@@ -29,8 +27,8 @@ export function ModeSelector({ mode, isEditing, setMode }) {
   const buttonsToDisplay = isEditing ? editModeButtons : createModeButtons;
 
   return (
-    <div className="mode-selector ui5-content-density-compact">
-      <SegmentedButton className="fd-segmented-button">
+    <div className="ui5-content-density-compact">
+      <SegmentedButton className="full-width">
         {buttonsToDisplay.map(button => (
           <SegmentedButtonItem
             key={button.mode}

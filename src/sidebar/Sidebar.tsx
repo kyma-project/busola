@@ -5,6 +5,7 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { SidebarNavigation } from 'sidebar/SidebarNavigation';
 
 import './Sidebar.scss';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 const noSidebarPathnames = ['/clusters', '/no-permissions', '/gardener-login'];
 
@@ -14,7 +15,12 @@ export const Sidebar = () => {
   if (noSidebarPathnames.includes(pathname)) return null;
 
   return (
-    <aside className="sidebar">
+    <aside
+      style={{
+        ...spacing.sapUiTinyMarginEnd,
+        ...spacing.sapUiTinyMarginTop,
+      }}
+    >
       <section className="sidebar__content">
         <Suspense fallback={<Spinner size="m" />}>
           <ErrorBoundary

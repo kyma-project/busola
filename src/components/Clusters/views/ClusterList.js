@@ -164,7 +164,7 @@ function ClusterList() {
   const editDialog = (
     <ModalWithForm
       opened={showEdit}
-      className="modal-size--l create-resource-modal"
+      className="modal-size--l"
       title={t('clusters.edit-cluster')}
       id="edit-cluster"
       renderForm={props => (

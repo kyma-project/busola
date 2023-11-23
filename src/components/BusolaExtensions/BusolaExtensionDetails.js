@@ -93,7 +93,7 @@ export function BusolaExtensionDetails(props) {
                 }
                 confirmText={t('common.buttons.update')}
                 id={`edit-resource-modal`}
-                className="modal-size--l create-resource-modal"
+                className="modal-size--l"
                 renderForm={props => (
                   <ErrorBoundary>
                     <SectionEditor

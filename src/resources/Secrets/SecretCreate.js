@@ -66,7 +66,6 @@ export function SecretCreate({
   return (
     <ResourceForm
       {...props}
-      className="create-secret-form"
       pluralKind="secrets"
       singularName={t('secrets.name_singular')}
       resource={secret}

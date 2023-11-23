@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
@@ -6,11 +5,7 @@ import './ProgressBar.scss';
 
 const TooltipWrapper = ({ tooltipProps, children }) => {
   if (tooltipProps?.content) {
-    return (
-      <Tooltip {...tooltipProps} className="progress-bar-tooltip">
-        {children}
-      </Tooltip>
-    );
+    return <Tooltip {...tooltipProps}>{children}</Tooltip>;
   }
   return children;
 };
@@ -27,7 +22,7 @@ export function ProgressBar({
 
   return (
     <TooltipWrapper tooltipProps={tooltip}>
-      <div className="progress-bar-container">
+      <div className="progress-bar-container has-tooltip">
         <div className="progress-bar" style={progressBarStyle} />
       </div>
     </TooltipWrapper>

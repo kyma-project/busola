@@ -162,7 +162,12 @@ function EditClusterComponent({
 
   return (
     <>
-      <div style={spacing.sapUiMediumMarginBeginEnd}>
+      <div
+        style={{
+          ...spacing.sapUiLargeMarginBeginEnd,
+          ...spacing.sapUiSmallMarginTopBottom,
+        }}
+      >
         <Title level="H3" style={spacing.sapUiSmallMarginBottom}>
           {t('clusters.storage.choose-storage.label')}
         </Title>
@@ -174,6 +179,7 @@ function EditClusterComponent({
           }}
         />
         <ResourceForm.FormField
+          style={spacing.sapUiMediumMarginTop}
           label={t('common.headers.description')}
           data-testid="cluster-description"
           input={Inputs.Text}
