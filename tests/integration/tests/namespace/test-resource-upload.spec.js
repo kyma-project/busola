@@ -25,10 +25,10 @@ context('Test resource upload', () => {
 
   it('Creates resources', () => {
     cy.getLeftNav()
-      .contains('Cluster Details', { includeShadowDom: true })
+      .contains('Cluster Details')
       .click();
 
-    cy.contains('Upload YAML').click();
+    cy.contains('ui5-button', 'Upload YAML').click();
 
     cy.wrap(loadValidResources(Cypress.env('NAMESPACE_NAME'))).then(
       resources => {
@@ -41,7 +41,10 @@ context('Test resource upload', () => {
     cy.contains('Deployment echo-server-upload-yaml').should('be.visible');
     cy.contains('StorageClass ' + SC_NAME).should('be.visible');
 
-    cy.contains('Submit').click();
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Upload')
+      .should('be.visible')
+      .click();
 
     cy.contains('2/2').should('be.visible');
 
@@ -63,7 +66,10 @@ context('Test resource upload', () => {
       },
     );
 
-    cy.contains('Submit').click();
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Upload')
+      .should('be.visible')
+      .click();
 
     cy.contains('Deployment echo-server-upload-yaml-2 - Created').should(
       'be.visible',
@@ -82,7 +88,10 @@ context('Test resource upload', () => {
       },
     );
 
-    cy.contains('Submit').click();
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Upload')
+      .should('be.visible')
+      .click();
 
     cy.contains('Deployment echo-server-upload-yaml - Error').should(
       'be.visible',
@@ -91,16 +100,13 @@ context('Test resource upload', () => {
 
   it('Cleanup', () => {
     // close
-    cy.get('body').type('{esc}');
-
-    cy.get('[role=dialog]').should('not.exist');
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Close')
+      .should('be.visible')
+      .click();
 
     cy.navigateTo('Storage', 'Storage Classes');
 
-    cy.get('[role="search"] [aria-label="open-search"]').type(SC_NAME);
-
-    cy.get('tbody tr [aria-label="Delete"]').click({ force: true });
-
-    cy.contains('button', 'Delete').click();
+    cy.deleteFromGenericList('Storage Class', SC_NAME);
   });
 });

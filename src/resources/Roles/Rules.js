@@ -2,13 +2,13 @@ import React from 'react';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useTranslation } from 'react-i18next';
-import { Icon } from 'fundamental-react';
+import { Icon } from '@ui5/webcomponents-react';
 
 function VerbStatus({ rule, verb }) {
   const hasVerb = rule.verbs?.includes(verb) || rule.verbs?.includes('*');
 
   return hasVerb ? (
-    <Icon glyph="accept" data-testid={verb} ariaHidden />
+    <Icon name="accept" aria-hidden aria-label={verb} data-testid={verb} />
   ) : (
     <span data-testid={verb}>{EMPTY_TEXT_PLACEHOLDER}</span>
   );
@@ -88,12 +88,10 @@ export const Rules = resource => {
   return (
     <GenericList
       key="rules"
-      className="rules-list"
       title={t('roles.headers.rules')}
       entries={resource.rules || []}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
-      testid="rules-list"
       searchSettings={{
         textSearchProperties,
       }}

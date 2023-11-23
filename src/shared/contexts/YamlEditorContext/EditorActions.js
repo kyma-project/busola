@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 import copyToCliboard from 'copy-to-clipboard';
 import { saveAs } from 'file-saver';
-import 'shared/contexts/YamlEditorContext/EditorActions.scss';
 import { useTranslation } from 'react-i18next';
+
+import { spacing } from '@ui5/webcomponents-react-base';
+import 'shared/contexts/YamlEditorContext/EditorActions.scss';
 
 const EDITOR_VISIBILITY = 'editor-visibility';
 const READONLY_FIELDS = ['^ *managedFields:$', '^status:$'];
 
 const ButtonWithTooltip = ({
   tooltipContent,
-  glyph,
+  icon,
   onClick,
   className,
   disabled = false,
@@ -19,8 +21,8 @@ const ButtonWithTooltip = ({
   return (
     <Tooltip className={className} content={tooltipContent} position="top">
       <Button
-        option="transparent"
-        glyph={glyph}
+        design="Transparent"
+        icon={icon}
         onClick={onClick}
         disabled={disabled}
         className="circle-button"
@@ -115,18 +117,23 @@ export function EditorActions({
   const { t } = useTranslation();
 
   return (
-    <section className="editor-actions fd-margin-bottom--sm">
+    <section
+      style={{
+        ...spacing.sapUiSmallMarginTopBottom,
+        ...spacing.sapUiMediumMarginBegin,
+      }}
+    >
       <ButtonWithTooltip
         tooltipContent={
           visible ? t('common.tooltips.hide') : t('common.tooltips.show')
         }
-        glyph={visible ? 'hide' : 'show'}
+        icon={visible ? 'hide' : 'show'}
         onClick={visible ? hideReadOnlyLines : showReadOnlyLines}
         disabled={!editor}
       />
       <ButtonWithTooltip
         tooltipContent={t('common.tooltips.search')}
-        glyph="search"
+        icon="search"
         onClick={openSearch}
         disabled={!editor}
       />
@@ -137,28 +144,25 @@ export function EditorActions({
               ? t('common.tooltips.protected-resources-info')
               : t('common.tooltips.save')
           }
-          glyph="save"
+          icon="save"
           onClick={onSave}
           disabled={saveDisabled || !editor}
         />
       )}
       <ButtonWithTooltip
         tooltipContent={t('common.tooltips.copy-to-clipboard')}
-        glyph="copy"
+        icon="copy"
         onClick={() => copyToCliboard(val)}
         disabled={!editor}
       />
       <ButtonWithTooltip
         tooltipContent={t('common.tooltips.download')}
-        glyph="download"
+        icon="download"
         onClick={download}
         disabled={!editor}
       />
       {readOnly && (
-        <span
-          style={{ color: 'var(--sapNeutralTextColor,#6a6d70)' }}
-          className={'fd-object-status--critical'}
-        >
+        <span style={{ color: 'var(--sapNeutralTextColor,#6a6d70)' }}>
           {t('common.labels.read-only')}
         </span>
       )}

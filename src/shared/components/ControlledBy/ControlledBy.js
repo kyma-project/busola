@@ -45,7 +45,7 @@ export const GoToDetailsLink = ({
     return <>{noBrackets ? name : `(${name})`}</>;
   } else {
     return (
-      <Link className="fd-link" to={path}>
+      <Link className="bsl-link" to={path}>
         {noBrackets ? name : `(${name})`}
       </Link>
     );

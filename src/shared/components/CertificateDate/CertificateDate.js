@@ -1,9 +1,8 @@
-import React from 'react';
-import { Icon } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { FormattedDatetime } from 'shared/components/FormattedDate/FormattedDate';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-import './CertificateDate.scss';
+import { Icon } from '@ui5/webcomponents-react';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 export function CertificateDate({ date, lang }) {
   const { t } = useTranslation();
@@ -49,16 +48,16 @@ export function CertificateDate({ date, lang }) {
     };
   }
   return (
-    <div className="cert-date-wrapper">
+    <>
       <FormattedDatetime date={date} lang={lang} />
-      <Tooltip content={certificateDetails.tooltipContent} className="tooltip">
+      <Tooltip content={certificateDetails.tooltipContent}>
         <Icon
-          ariaLabel={certificateDetails.ariaLabel}
-          glyph={certificateDetails.glyph}
-          size="s"
-          className={`fd-has-color-status-${certificateDetails.colorIndex} has-tooltip`}
+          style={spacing.sapUiTinyMarginBegin}
+          aria-label={certificateDetails.ariaLabel}
+          name={certificateDetails.glyph}
+          className={`bsl-has-color-status-${certificateDetails.colorIndex} has-tooltip bsl-icon-s`}
         />
       </Tooltip>
-    </div>
+    </>
   );
 }

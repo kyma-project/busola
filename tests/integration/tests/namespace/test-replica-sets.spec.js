@@ -18,15 +18,17 @@ context('Test Replica Sets', () => {
   it('Creates a Replica Set', () => {
     cy.navigateTo('Workloads', 'Replica Sets');
 
-    cy.contains('Create Replica Set').click();
+    cy.contains('ui5-button', 'Create Replica Set').click();
 
     cy.contains('Advanced').click();
 
-    cy.get('[ariaLabel="ReplicaSet name"]')
+    cy.get('[aria-label="ReplicaSet name"]')
+      .find('input')
       .clear()
       .type(REPLICA_SET_NAME);
 
     cy.get('[placeholder="Replicas"]')
+      .find('input')
       .clear()
       .type(REPLICAS_AMOUNT)
       .should('have.value', REPLICAS_AMOUNT);
@@ -34,12 +36,14 @@ context('Test Replica Sets', () => {
     cy.get(
       '[placeholder="Enter the Docker image tag, for example, bitnami/nginx"]',
     )
+      .find('input')
       .clear()
       .type(DOCKER_IMAGE_TAG)
       .should('have.value', DOCKER_IMAGE_TAG);
 
-    cy.get('[role="document"]')
-      .contains('button', 'Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
+      .should('be.visible')
       .click();
   });
 
@@ -55,36 +59,44 @@ context('Test Replica Sets', () => {
 
   it('Checks the list view', () => {
     cy.getLeftNav()
-      .contains('Replica Sets', { includeShadowDom: true })
+      .contains('Replica Sets')
       .click();
 
-    cy.contains(REPLICA_SET_NAME).click();
+    cy.get('a.bsl-link')
+      .contains(REPLICA_SET_NAME)
+      .click();
 
     cy.contains(REPLICA_SET_NAME);
   });
 
   it('Edits the Docker image and Replicas amount in the Replica set', () => {
-    cy.contains('Edit').click();
+    cy.get('ui5-button')
+      .contains('Edit')
+      .should('be.visible')
+      .click();
 
     cy.get(
       '[placeholder="Enter the Docker image tag, for example, bitnami/nginx"]',
     )
+      .find('input')
       .clear()
       .type(EDITED_DOCKER_IMAGE_TAG)
       .should('have.value', EDITED_DOCKER_IMAGE_TAG);
 
     cy.get('[placeholder="Replicas"]')
+      .find('input')
       .clear()
       .type(EDITED_REPLICAS_AMOUNT)
       .should('have.value', EDITED_REPLICAS_AMOUNT);
 
-    cy.get('[role="document"]')
-      .contains('button', 'Update')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Update')
+      .should('be.visible')
       .click();
   });
 
   it('Checks the new Docker image', () => {
-    cy.contains('Replica Sets').click();
+    cy.navigateBackTo('replicasets', 'Replica Sets');
 
     cy.contains(EDITED_DOCKER_IMAGE_TAG);
   });

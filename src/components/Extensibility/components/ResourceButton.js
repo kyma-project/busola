@@ -2,10 +2,12 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useUrl } from 'hooks/useUrl';
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 
 import { useGetPlaceholder, useGetTranslation } from '../helpers';
 import { useJsonata } from '../hooks/useJsonata';
+
+import { spacing } from '@ui5/webcomponents-react-base';
 
 export function ResourceButton({
   value,
@@ -47,8 +49,9 @@ export function ResourceButton({
 
   return (
     <Button
-      glyph={structure.icon}
-      className="fd-margin-begin--sm"
+      icon={structure.icon}
+      iconEnd
+      style={spacing.sapUiSmallMarginBegin}
       onClick={() =>
         navigate(
           resourceUrl(

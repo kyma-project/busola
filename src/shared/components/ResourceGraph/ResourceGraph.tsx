@@ -9,14 +9,16 @@ import { buildGraph } from 'shared/components/ResourceGraph/buildGraph';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useTranslation } from 'react-i18next';
 import { useMinWidth, TABLET } from 'hooks/useMinWidth';
-import { LayoutPanel } from 'fundamental-react';
 import { SaveGraphControls } from './SaveGraphControls';
 import { DetailsCard } from './DetailsCard/DetailsCard';
-import './ResourceGraph.scss';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useFeature } from 'hooks/useFeature';
 import { K8sResource } from 'types';
 import { ResourceGraphConfig } from './types';
+import { Panel, Title, Toolbar, ToolbarSpacer } from '@ui5/webcomponents-react';
+
+import { spacing } from '@ui5/webcomponents-react-base';
+import './ResourceGraph.scss';
 
 function ResourceGraph({
   resource,
@@ -94,39 +96,45 @@ function ResourceGraph({
     return null;
   }
   return (
-    <LayoutPanel
-      className="fd-margin--md resource-graph"
+    <Panel
+      fixed
+      style={spacing.sapUiMediumMargin}
       ref={(node: any) => setGraphEl(node)}
+      header={
+        <Toolbar>
+          <Title level="H5">{t('resource-graph.title')}</Title>
+          {actions && (
+            <>
+              <ToolbarSpacer />
+              {actions}
+            </>
+          )}
+        </Toolbar>
+      }
     >
-      <LayoutPanel.Header>
-        <LayoutPanel.Head title={t('resource-graph.title')} />
-        {actions}
-      </LayoutPanel.Header>
       {startedLoading && dotSrc ? (
-        <LayoutPanel.Body>
-          <ErrorBoundary customMessage={t('resource-graph.error')}>
-            <div id="graph-area">
-              <MemoizedGraphviz dotSrc={dotSrc} isReady={isReady} />
-              <SaveGraphControls
-                content={dotSrc}
-                // .gv extension is preferred instead of .dot
-                name={`${resource.kind} ${resource.metadata.name}.gv`}
+        <ErrorBoundary customMessage={t('resource-graph.error')}>
+          <div id="graph-area">
+            <MemoizedGraphviz dotSrc={dotSrc} isReady={isReady} />
+            <SaveGraphControls
+              content={dotSrc}
+              // .gv extension is preferred instead of .dot
+              name={`${resource.kind} ${resource.metadata.name}.gv`}
+            />
+            {clickedResource ? (
+              <DetailsCard
+                resource={clickedResource}
+                handleCloseCard={() => setClickedResource(null)}
               />
-              {clickedResource ? (
-                <DetailsCard
-                  resource={clickedResource}
-                  handleCloseCard={() => setClickedResource(null)}
-                />
-              ) : null}
-            </div>
-          </ErrorBoundary>
-        </LayoutPanel.Body>
+            ) : null}
+          </div>
+        </ErrorBoundary>
       ) : (
         <div className="loader">
           <Spinner />
         </div>
       )}
-    </LayoutPanel>
+    </Panel>
   );
 }
 export default ResourceGraph;

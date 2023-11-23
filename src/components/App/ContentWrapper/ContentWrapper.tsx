@@ -1,3 +1,4 @@
+import { spacing } from '@ui5/webcomponents-react-base';
 import './ContentWrapper.scss';
 
 type ContentWrapperProps = {
@@ -5,17 +6,9 @@ type ContentWrapperProps = {
 };
 
 export const ContentWrapper = ({ children }: ContentWrapperProps) => {
-  const { pathname } = window.location;
-
-  const reactNavEnabled = true;
   return (
-    <div
-      id="content-wrap"
-      className={
-        !reactNavEnabled || pathname === '/clusters' ? 'sidebar-hidden' : ''
-      }
-    >
-      {children}
+    <div id="content-wrap" style={spacing.sapUiTinyMarginTop}>
+      <div className="content-scroll">{children}</div>
     </div>
   );
 };

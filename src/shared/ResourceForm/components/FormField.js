@@ -1,12 +1,11 @@
-import React from 'react';
 import classnames from 'classnames';
-import { Icon } from 'fundamental-react';
-
+import { FlexBox, Icon } from '@ui5/webcomponents-react';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
+import { Label } from '../../../shared/ResourceForm/components/Label';
 
-import { Label } from './Label';
-import './FormField.scss';
 import { useCreateResourceDescription } from 'components/Extensibility/helpers';
+
+import './FormField.scss';
 
 export function FormField({
   simple,
@@ -19,40 +18,61 @@ export function FormField({
   disabled,
   tooltipContent,
   isAdvanced,
+  isListItem,
   defaultValue,
   messageStrip,
-  compact = false,
   inputInfo,
+  updatesOnInput,
+  style,
   ...props
 }) {
   const { validate, ...inputProps } = props;
   const inputInfoLink = useCreateResourceDescription(inputInfo);
-  if (compact) return input({ required, disabled, ...inputProps });
 
   return (
-    <div className={classnames('fd-row form-field', className)}>
-      <div className="fd-col fd-col-md--3 form-field__label">
-        <Label required={required && !disabled}>{label}</Label>
-      </div>
-      <div className="fd-col fd-col-md--8">
-        <div className="fd-row">
+    <FlexBox
+      className={classnames('form-field', className)}
+      justifyContent="Center"
+      style={style}
+    >
+      {!isListItem && (
+        <div className="bsl-col-md--3 form-field__label">
+          <Label required={required && !disabled}>{label}</Label>
+        </div>
+      )}
+      <div className="bsl-col-md--8">
+        <FlexBox wrap="Wrap">
           {messageStrip
             ? messageStrip
-            : input({ required, disabled, ...inputProps })}
+            : input({
+                updatesOnInput,
+                required,
+                disabled,
+                className: 'full-width',
+                ...inputProps,
+              })}
           {inputInfo && (
-            <p style={{ color: 'var(--sapNeutralTextColor)' }}>
+            <Label
+              wrappingType="Normal"
+              style={{ color: 'var(--sapNeutralTextColor)' }}
+            >
               {inputInfoLink}
-            </p>
+            </Label>
           )}
-        </div>
+        </FlexBox>
       </div>
-      <div className="fd-col fd-col-md--1 tooltip-column tooltip-column--with-padding">
+      <div className="bsl-col-md--1 tooltip-column tooltip-column--with-padding">
         {tooltipContent && (
           <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
-            <Icon ariaLabel="" size="m" glyph="message-information" />
+            <Icon
+              aria-label=""
+              className="bsl-icon-m"
+              name="message-information"
+              design="Information"
+            />
           </Tooltip>
         )}
       </div>
-    </div>
+    </FlexBox>
   );
 }

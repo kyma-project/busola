@@ -6,7 +6,7 @@ import React, {
   useEffect,
 } from 'react';
 import { SideDrawer } from 'shared/components/SideDrawer/SideDrawer';
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 import { YamlContent } from 'shared/contexts/YamlEditorContext/YamlContent';
 import { isValidYaml } from 'shared/contexts/YamlEditorContext/isValidYaml';
 import 'shared/contexts/YamlEditorContext/YamlEditorContext.scss';
@@ -18,10 +18,10 @@ export const YamlEditorContext = createContext({
 
 const DrawerHeader = ({ title, closeEditor }) => (
   <header className="yaml-editor-header">
-    <h1 className="fd-has-type-4">{title || 'YAML'}</h1>
+    <h1 className="bsl-has-type-4">{title || 'YAML'}</h1>
     <Button
-      option="transparent"
-      glyph="decline"
+      design="Transparent"
+      icon="decline"
       aria-label="close drawer"
       onClick={closeEditor}
     />

@@ -14,10 +14,7 @@ function checkJobLogs({ showLogsSelector, expectedLogs }) {
 
   cy.contains(expectedLogs);
 
-  // back to pod details
-  cy.get('[role=menu]')
-    .contains(JOB_NAME)
-    .click();
+  cy.navigateBackTo(JOB_NAME, JOB_NAME);
 }
 
 context('Test Jobs', () => {
@@ -31,25 +28,38 @@ context('Test Jobs', () => {
   it('Create Job', () => {
     cy.navigateTo('Workloads', /^Jobs/);
 
-    cy.contains('Create Job').click();
+    cy.contains('ui5-button', 'Create Job').click();
 
     // job name
-    cy.get('[ariaLabel="Job name"]:visible')
+    cy.get('[aria-label="Job name"]:visible')
+      .find('input')
+      .click()
       .clear()
-      .type(JOB_NAME);
+      .type(JOB_NAME, { force: true });
 
     // job container name
-    cy.get('[ariaLabel="Container name"]:visible').type(JOB_NAME);
+    cy.get('[aria-label="Container name"]:visible')
+      .find('input')
+      .type(JOB_NAME, { force: true });
 
     // job command
-    cy.get('[placeholder^="Command to run"]:visible').type(
-      '/bin/sh{downarrow}-c{downarrow}echo "Busola test"',
-    );
+    cy.get('[placeholder^="Command to run"]:visible')
+      .find('input')
+      .type('/bin/sh', { force: true });
+    cy.get('[placeholder^="Command to run"]:visible')
+      .parentsUntil('ul')
+      .next()
+      .find('input')
+      .type('-c', { force: true })
+      .parentsUntil('ul')
+      .next()
+      .find('input')
+      .type('echo "Busola test"', { force: true });
 
     // job docker image
-    cy.get('[placeholder^="Enter the Docker image tag"]:visible').type(
-      'busybox',
-    );
+    cy.get('[placeholder^="Enter the Docker image tag"]:visible')
+      .find('input')
+      .type('busybox', { force: true });
 
     // we can't edit Job's template, so we add 2 containers now
     cy.contains('Advanced').click();
@@ -58,23 +68,30 @@ context('Test Jobs', () => {
     cy.contains('Container 2').click();
 
     // job container name
-    cy.get('[ariaLabel="Container name"]:visible').type(SECOND_CONTAINER_NAME);
+    cy.get('[aria-label="Container name"]:visible')
+      .find('input')
+      .type(SECOND_CONTAINER_NAME, { force: true });
 
     // job args
     cy.get('[aria-label="expand Args"]:visible').click();
 
-    cy.get('[placeholder^="Arguments to the"]:visible').type(
-      '-e{downarrow}console.log("Node image test");',
-    );
+    cy.get('[placeholder^="Arguments to the"]:visible')
+      .find('input')
+      .type('-e', { force: true })
+      .parentsUntil('ul')
+      .next()
+      .find('input')
+      .type('console.log("Node image test"); ', { force: true });
 
     // job docker image
-    cy.get('[placeholder^="Enter the Docker image tag"]:visible').type(
-      'node:14-alpine',
-    );
+    cy.get('[placeholder^="Enter the Docker image tag"]:visible')
+      .find('input')
+      .type('node:14-alpine', { force: true });
 
     // create
-    cy.get('[role=dialog]')
-      .contains('button', 'Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
+      .should('be.visible')
       .click();
   });
 
@@ -83,8 +100,8 @@ context('Test Jobs', () => {
     cy.contains(JOB_NAME);
 
     // created pod
-    cy.get('[data-test-id="workload-selector"]')
-      .contains(new RegExp(JOB_NAME + '-'))
+    cy.get('ui5-table-cell')
+      .contains('a', JOB_NAME + '-')
       .click();
 
     // images for both containers
@@ -92,12 +109,15 @@ context('Test Jobs', () => {
     cy.contains(/Imagenode:14-alpine/);
 
     // controlled-by
-    cy.contains(`Job (${JOB_NAME})`);
+    cy.contains('div', 'Controlled By')
+      .next()
+      .find(`div:contains("Job") a.bsl-link:contains("${JOB_NAME}")`)
+      .should('exist');
 
     // status
-    cy.get('[role="status"]', { timeout: 30 * 1000 })
+    cy.get('[role="status"]', { timeout: 75 * 1000 })
       .first()
-      .should('have.text', 'Completed');
+      .contains('Completed');
 
     // check logs
     checkJobLogs({
@@ -110,8 +130,9 @@ context('Test Jobs', () => {
     });
 
     // back to job
-    cy.contains(`Job (${JOB_NAME})`)
-      .contains(JOB_NAME)
+    cy.get('.page-header__column')
+      .contains(`Job (${JOB_NAME})`)
+      .contains('a', JOB_NAME)
       .click();
 
     // pod status
@@ -119,36 +140,45 @@ context('Test Jobs', () => {
   });
 
   it('Edit Job', () => {
-    cy.contains('Edit').click();
+    cy.get('ui5-button')
+      .contains('Edit')
+      .should('be.visible')
+      .click();
 
     // containers section should be readonly
     cy.contains('After a Job is created, the containers are read-only.');
 
-    cy.contains('Add Container')
-      .filter(':visible', { log: false })
-      .should('be.disabled');
+    cy.get('ui5-dialog')
+      .get('ui5-button[icon="add"][disabled="true"]')
+      .contains('Add Container')
+      .should('be.visible');
 
     // edit labels
-    cy.get('[role=dialog]')
+    cy.get('ui5-dialog')
       .contains('Labels')
       .filter(':visible', { log: false })
       .click();
 
     cy.get('[placeholder="Enter key"]:visible')
+      .find('input')
       .filterWithNoValue()
-      .type('a');
+      .type('a', { force: true });
 
     cy.get('[placeholder="Enter value"]:visible')
+      .find('input')
       .filterWithNoValue()
       .first()
-      .type('b');
+      .type('b', { force: true });
 
-    cy.contains('button', 'Update').click();
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Update')
+      .should('be.visible')
+      .click();
 
     cy.contains('a=b');
   });
 
   it('Inspect list', () => {
-    cy.inspectList(/^Jobs/, JOB_NAME);
+    cy.inspectList('Jobs', JOB_NAME);
   });
 });

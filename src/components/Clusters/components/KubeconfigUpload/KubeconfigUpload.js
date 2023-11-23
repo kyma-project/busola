@@ -1,19 +1,14 @@
 import React, { useCallback, useState } from 'react';
-import { MessageStrip } from 'fundamental-react';
+import { MessageStrip, Text } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { KubeconfigFileUpload } from './KubeconfigFileUpload';
 import jsyaml from 'js-yaml';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 
+import { spacing } from '@ui5/webcomponents-react-base';
 import './KubeconfigUpload.scss';
 
-export function KubeconfigUpload({
-  onKubeconfig,
-  handleKubeconfigAdded,
-  kubeconfigFromParams,
-  kubeconfig,
-  setKubeconfig,
-}) {
+export function KubeconfigUpload({ kubeconfig, setKubeconfig }) {
   const [error, setError] = React.useState('');
   const [editor, setEditor] = useState(null);
 
@@ -46,9 +41,9 @@ export function KubeconfigUpload({
           editor.getModel().setValue(text);
         }}
       />
-      <p className="editor-label fd-margin-bottom--sm fd-margin-top--sm">
+      <Text className="editor-label" style={spacing.sapUiSmallMarginTopBottom}>
         {t('clusters.wizard.editor-label')}
-      </p>
+      </Text>
       <Editor
         autocompletionDisabled
         language="yaml"
@@ -57,7 +52,11 @@ export function KubeconfigUpload({
         onChange={updateKubeconfig}
       />
       {error && (
-        <MessageStrip type="error" className="fd-margin-top--sm">
+        <MessageStrip
+          design="Negative"
+          hideCloseButton
+          style={spacing.sapUiSmallMarginTop}
+        >
           {t('common.create-form.editor-error', { error })}
         </MessageStrip>
       )}

@@ -1,7 +1,5 @@
-import React from 'react';
-import { Checkbox, FormRadioGroup, Icon } from 'fundamental-react';
-
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
+import { CheckBox, Icon } from '@ui5/webcomponents-react';
 
 export function Checkboxes({
   value = [],
@@ -20,38 +18,28 @@ export function Checkboxes({
     }
   };
   return (
-    <FormRadioGroup
-      inline={inline}
-      className="inline-radio-group fd-col fd-col-md--12"
-      {...props}
-    >
-      <input
-        ref={inputRef}
-        style={{ opacity: 0, position: 'absolute', left: '-1000px' }}
-      />
-      {options.map(({ key, text, description }, index) => (
-        <div key={key} className="fd-row">
-          <div>
-            <Checkbox
-              data-testid={`${dataTestID}.${key}`}
-              compact
-              key={key}
-              value={key}
-              checked={value?.includes(key)}
-              onChange={e => updateValue(key, e.target.checked)}
-            >
-              {text}
-            </Checkbox>
-          </div>
-          <div className="fd-col fd-col-md--1 tooltip-column">
+    <>
+      {options.map(({ key, text, description }) => (
+        <div key={key}>
+          <CheckBox
+            data-testid={`${dataTestID}.${key}`}
+            checked={value?.includes(key)}
+            onChange={e => updateValue(key, e.target.checked)}
+            text={text}
+          />
+          <div className="bsl-col bsl-col-md--1 tooltip-column">
             {description && (
               <Tooltip className="has-tooltip" delay={0} content={description}>
-                <Icon ariaLabel="" size="m" glyph="message-information" />
+                <Icon
+                  className="bsl-icon-m"
+                  name="message-information"
+                  design="Information"
+                />
               </Tooltip>
             )}
           </div>
         </div>
       ))}
-    </FormRadioGroup>
+    </>
   );
 }

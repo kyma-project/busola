@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 type SpinnerProps = {
   ariaLabel?: string;
@@ -13,14 +14,23 @@ export const Spinner = ({
   ariaLabel = 'Loading',
   compact = false,
   size,
-  className = 'fd-margin-top-bottom--md',
+  className = '',
   center = true,
 }: SpinnerProps) => {
   size = size || (compact ? 'm' : 'l');
   const sizeClassName = 'fd-busy-indicator--' + size;
   const style = center
-    ? { width: '100%', display: 'flex', justifyContent: 'center' }
-    : {};
+    ? {
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        marginTop: spacing.sapUiMediumMarginTop.marginTop,
+        marginBottom: spacing.sapUiMediumMarginBottom.marginBottom,
+      }
+    : {
+        marginTop: spacing.sapUiMediumMarginTop.marginTop,
+        marginBottom: spacing.sapUiMediumMarginBottom.marginBottom,
+      };
 
   return (
     <div

@@ -1,6 +1,10 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ComboboxInput, MessageStrip } from 'fundamental-react';
+import {
+  ComboBox,
+  ComboBoxItem,
+  MessageStrip,
+  Text,
+} from '@ui5/webcomponents-react';
 import classnames from 'classnames';
 import { useRecoilValue } from 'recoil';
 
@@ -66,7 +70,7 @@ export function ExternalResourceRef({
   if (loading || namespacesLoading) return <Spinner compact={true} />;
   if (error)
     return (
-      <MessageStrip dismissible={false} type="information">
+      <MessageStrip design="Information" hideCloseButton>
         {t('common.errors.couldnt-fetch-resources')}
       </MessageStrip>
     );
@@ -105,35 +109,32 @@ export function ExternalResourceRef({
           resource: labelPrefix,
         })}
         input={() => (
-          <div className="fd-col fd-col-md--11">
-            <ComboboxInput
+          <div className="bsl-col bsl-col-md--11">
+            <ComboBox
               id={`secret-namespace-combobox-${index}`}
-              ariaLabel="Secret namespace Combobox"
-              arrowLabel="Secret namespace Combobox arrow"
-              compact
-              showAllEntries
-              searchFullString
-              selectionType="manual"
-              options={namespacesOptions}
+              aria-label="Secret namespace Combobox"
               placeholder={t('common.placeholders.secret-ref-namespace')}
-              typedValue={value?.namespace || ''}
-              selectedKey={value?.namespace}
-              onSelect={e => {
-                setValue({
-                  name: '',
-                  namespace: e.target.value,
-                });
+              onChange={event => {
+                const selectedOption = namespacesOptions.find(
+                  o => o.text === event.target.value,
+                );
+                if (selectedOption)
+                  setValue({ name: '', namespace: selectedOption.text });
               }}
-              validationState={
-                namespaceValid
-                  ? null
-                  : {
-                      state: 'error',
-                      text: t('common.messages.resource-namespace-error'),
-                    }
+              value={value?.namespace || ''}
+              valueState={namespaceValid ? null : 'Error'}
+              valueStateMessage={
+                <Text>
+                  {namespaceValid
+                    ? ''
+                    : t('common.messages.resource-namespace-error')}
+                </Text>
               }
-              required={required}
-            />
+            >
+              {namespacesOptions.map(namespace => (
+                <ComboBoxItem id={namespace.key} text={namespace.text} />
+              ))}
+            </ComboBox>
           </div>
         )}
       />,
@@ -145,35 +146,37 @@ export function ExternalResourceRef({
           resource: labelPrefix,
         })}
         input={() => (
-          <div className="fd-col fd-col-md--11">
-            <ComboboxInput
+          <div className="bsl-col bsl-col-md--11">
+            <ComboBox
               id={`secret-name-combobox-${index}`}
-              ariaLabel="Secret name Combobox"
-              arrowLabel="Secret name Combobox arrow"
-              compact
-              showAllEntries
-              searchFullString
-              selectionType="manual"
-              options={filteredResourcesOptions}
+              aria-label="Secret name Combobox"
+              disabled={!filteredResourcesOptions?.length}
               placeholder={t('common.placeholders.secret-ref-name')}
-              selectedKey={value?.name || ''}
-              typedValue={value?.name || ''}
-              onSelect={e => {
-                setValue({
-                  name: e.target.value,
-                  namespace: value?.namespace,
-                });
+              onChange={event => {
+                const selectedOption = filteredResourcesOptions.find(
+                  o => o.text === event.target.value,
+                );
+                if (selectedOption)
+                  setValue({
+                    name: selectedOption.text,
+                    namespace: value?.namespace,
+                  });
               }}
-              validationState={
-                nameValid
-                  ? null
-                  : {
-                      state: 'error',
-                      text: t('common.messages.resource-name-error'),
-                    }
+              value={value?.name || ''}
+              valueState={nameValid ? null : 'Error'}
+              valueStateMessage={
+                <Text>
+                  {nameValid ? '' : t('common.messages.resource-name-error')}
+                </Text>
               }
-              required={required}
-            />
+            >
+              {filteredResourcesOptions.map(filteredResource => (
+                <ComboBoxItem
+                  id={filteredResource.key}
+                  text={filteredResource.text}
+                />
+              ))}
+            </ComboBox>
           </div>
         )}
       />,

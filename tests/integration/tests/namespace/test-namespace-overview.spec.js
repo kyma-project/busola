@@ -29,14 +29,17 @@ context(
     });
 
     it('Add a new limit range', () => {
-      cy.contains('Create Limit Range').click();
+      cy.contains('ui5-button', 'Create Limit Range').click();
 
       cy.wrap(loadFile('test-limit-ranges.yaml')).then(LR_CONFIG => {
         const LR = JSON.stringify(LR_CONFIG);
         cy.pasteToMonaco(LR);
       });
 
-      cy.contains('button', /^Create$/).click();
+      cy.get('ui5-dialog')
+        .contains('ui5-button', 'Create')
+        .should('be.visible')
+        .click();
 
       cy.contains('b', NEW_LIMIT_NAME).should('be.visible');
     });
@@ -50,23 +53,32 @@ context(
     });
 
     it('Delete all limits and quotas', () => {
-      cy.contains('.fd-table__row', LIMIT_NAME)
-        .find('button[data-testid="delete"]')
+      cy.contains('ui5-table-row', LIMIT_NAME)
+        .find('ui5-button[data-testid="delete"]')
         .click();
 
-      cy.get('[data-testid="delete-confirmation"]').click();
-
-      cy.contains('.fd-table__row', NEW_LIMIT_NAME)
-        .find('button[data-testid="delete"]')
+      cy.contains(`delete Limit Range ${LIMIT_NAME}`);
+      cy.get(`[header-text="Delete Limit Range"]`)
+        .find('[data-testid="delete-confirmation"]')
         .click();
 
-      cy.get('[data-testid="delete-confirmation"]').click();
-
-      cy.contains('.fd-table__row', QUOTA_NAME)
-        .find('button[data-testid="delete"]')
+      cy.contains('ui5-table-row', NEW_LIMIT_NAME)
+        .find('ui5-button[data-testid="delete"]')
         .click();
 
-      cy.get('[data-testid="delete-confirmation"]').click();
+      cy.contains(`delete Limit Range ${NEW_LIMIT_NAME}`);
+      cy.get(`[header-text="Delete Limit Range"]`)
+        .find('[data-testid="delete-confirmation"]')
+        .click();
+
+      cy.contains('ui5-table-row', QUOTA_NAME)
+        .find('ui5-button[data-testid="delete"]')
+        .click();
+
+      cy.contains(`delete Resource Quota ${QUOTA_NAME}`);
+      cy.get(`[header-text="Delete Resource Quota"]`)
+        .find('[data-testid="delete-confirmation"]')
+        .click();
     });
 
     it('Check if limit ranges and resource quota exist', () => {

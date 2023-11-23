@@ -1,8 +1,11 @@
-import React from 'react';
 import { mapValues } from 'lodash';
 import { PluginStack, useUIStore } from '@ui-schema/ui-schema';
-import { Button, FormLabel } from 'fundamental-react';
-import classnames from 'classnames';
+import {
+  Button,
+  Icon,
+  FlexBox,
+  Label as UI5Label,
+} from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import {
   useCreateResourceDescription,
@@ -11,10 +14,7 @@ import {
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { Label } from '../../../shared/ResourceForm/components/Label';
-import { Icon } from 'fundamental-react';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-
-import './SimpleList.scss';
 
 export function SimpleList({
   storeKeys,
@@ -50,17 +50,11 @@ export function SimpleList({
     });
   };
 
-  const listClasses = classnames([
-    'text-array-input__list',
-    'fd-col',
-    'fd-col-md--12',
-  ]);
-
   const isLast = index => index === listSize;
   const itemsSchema = schema.get('items');
   const titleRenderer = ({ schema, storeKeys }) => {
     const label = tFromStoreKeys(storeKeys, schema);
-    return <FormLabel>{label}</FormLabel>;
+    return <UI5Label>{label}</UI5Label>;
   };
 
   const isObject = itemsSchema?.get('type') === 'object';
@@ -74,37 +68,36 @@ export function SimpleList({
       nestingLevel={nestingLevel}
       {...props}
     >
-      <div className="fd-row simple-list">
-        <div className="fd-col fd-col-md--3 fd-margin-bottom--sm form-field__label">
+      <FlexBox className="simple-list" justifyContent="Center">
+        <div className="bsl-col-md--3 form-field__label">
           <Label required={required} tooltipContent={tExt(tooltipContent)}>
             {tFromStoreKeys(storeKeys, schema)}
           </Label>
         </div>
-        <div className="fd-col fd-col-md--8 form-field multi-input extensibility">
-          <ul className={listClasses}>
+        <div className="bsl-col-md--8 form-field multi-input">
+          <ul>
             {isObject && (
-              <li className="fd-row">
-                <div className="fd-col-md--11 list-entry">
-                  <PluginStack
-                    schema={itemsSchema}
-                    widgets={{
-                      ...widgets,
-                      types: mapValues(widgets.types, () => titleRenderer),
-                      custom: {
-                        ...mapValues(widgets.custom, () => titleRenderer),
-                        Null: () => '',
-                      },
-                    }}
-                    parentSchema={schema}
-                    storeKeys={storeKeys.push(0)}
-                    level={level + 1}
-                    nestingLevel={nestingLevel + 1}
-                    schemaKeys={schemaKeys?.push('items')}
-                  />
-                </div>
-                <div className="fd-col fd-col-md--1">
-                  <span className="item-action"></span>
-                </div>
+              <li>
+                <FlexBox>
+                  <div className="bsl-col-md--11">
+                    <PluginStack
+                      schema={itemsSchema}
+                      widgets={{
+                        ...widgets,
+                        types: mapValues(widgets.types, () => titleRenderer),
+                        custom: {
+                          ...mapValues(widgets.custom, () => titleRenderer),
+                          Null: () => '',
+                        },
+                      }}
+                      parentSchema={schema}
+                      storeKeys={storeKeys.push(0)}
+                      level={level + 1}
+                      nestingLevel={nestingLevel + 1}
+                      schemaKeys={schemaKeys?.push('items')}
+                    />
+                  </div>
+                </FlexBox>
               </li>
             )}
             {Array(listSize + 1)
@@ -114,34 +107,31 @@ export function SimpleList({
 
                 return (
                   <>
-                    <li key={index} className="fd-row">
-                      <div className="fd-col fd-col-md--11 list-entry">
-                        <PluginStack
-                          showValidity={showValidity}
-                          schema={itemsSchema}
-                          parentSchema={schema}
-                          storeKeys={ownKeys}
-                          level={level + 1}
-                          schemaKeys={schemaKeys?.push('items')}
-                          compact
-                          placeholder={tExt(schemaPlaceholder)}
-                          inputInfo={inputInfo}
-                        />
-                      </div>
-                      <div className="fd-col fd-col-md--1">
-                        <span className="item-action">
-                          {!isLast(index) && (
-                            <Button
-                              disabled={readOnly}
-                              compact
-                              glyph="delete"
-                              type="negative"
-                              onClick={() => removeItem(index)}
-                              ariaLabel={t('common.buttons.delete')}
-                            />
-                          )}
-                        </span>
-                      </div>
+                    <li key={index}>
+                      <FlexBox>
+                        <div className="bsl-col-md--11">
+                          <PluginStack
+                            showValidity={showValidity}
+                            schema={itemsSchema}
+                            parentSchema={schema}
+                            storeKeys={ownKeys}
+                            level={level + 1}
+                            schemaKeys={schemaKeys?.push('items')}
+                            placeholder={tExt(schemaPlaceholder)}
+                            isListItem
+                            inputInfo={inputInfo}
+                          />
+                        </div>
+                        {!isLast(index) && (
+                          <Button
+                            disabled={readOnly}
+                            icon="delete"
+                            design="Transparent"
+                            onClick={() => removeItem(index)}
+                            aria-label={t('common.buttons.delete')}
+                          />
+                        )}
+                      </FlexBox>
                     </li>
                     {isLast(index) && inputInfo && (
                       <p
@@ -158,14 +148,22 @@ export function SimpleList({
               })}
           </ul>
         </div>
-        <div className="fd-col fd-col-md--1 tooltip-column tooltip-column--with-padding">
-          {tooltipContent && (
-            <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
-              <Icon ariaLabel="" size="m" glyph="message-information" />
+        {tooltipContent && (
+          <div className="bsl-col-md--1 tooltip-column tooltip-column--with-padding">
+            <Tooltip
+              className="has-tooltip"
+              delay={0}
+              content={tExt(tooltipContent)}
+            >
+              <Icon
+                name="message-information"
+                design="Information"
+                className="bsl-icon-m"
+              />
             </Tooltip>
-          )}
-        </div>
-      </div>
+          </div>
+        )}
+      </FlexBox>
     </ResourceForm.CollapsibleSection>
   );
 }

@@ -19,48 +19,56 @@ context('Test Config Maps', () => {
   it('Create a Config Map', () => {
     cy.navigateTo('Configuration', 'Config Maps');
 
-    cy.contains('Create Config Map').click();
+    cy.contains('ui5-button', 'Create Config Map').click();
 
-    cy.get('[ariaLabel="ConfigMap name"]:visible')
-      .type(CONFIG_MAP_NAME)
+    cy.get('[aria-label="ConfigMap name"]:visible')
+      .find('input')
+      .type(CONFIG_MAP_NAME, { force: true })
       .click();
 
-    cy.get('[placeholder="Enter key"]:visible').type(ENTRY_KEY);
+    cy.get('[placeholder="Enter key"]:visible')
+      .find('input')
+      .type(ENTRY_KEY);
 
     cy.findMonaco()
       .first()
       .type(ENTRY_VALUE);
 
-    cy.get('[role="dialog"]')
-      .contains('button', 'Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
+      .should('be.visible')
       .click();
 
     cy.url().should('match', new RegExp(`/configmaps/${CONFIG_MAP_NAME}$`));
   });
 
   it('Inspect the Config Map', () => {
-    cy.contains(CONFIG_MAP_NAME);
-
-    cy.contains('.fd-layout-panel', ENTRY_KEY).contains(ENTRY_VALUE);
+    cy.contains('ui5-panel', ENTRY_KEY).contains(ENTRY_VALUE);
   });
 
   it('Edit the Config Map', () => {
-    cy.contains('Edit').click();
+    cy.get('ui5-button')
+      .contains('Edit')
+      .should('be.visible')
+      .click();
 
     // hide first entry so Cypress doesn't get confuused
     cy.get('[aria-label="expand config-map-key"]').click();
 
-    cy.get('[placeholder="Enter key"]:visible').type(ENTRY_KEY2);
+    cy.get('[placeholder="Enter key"]:visible')
+      .find('input')
+      .type(ENTRY_KEY2);
 
     cy.findMonaco(1).type(ENTRY_VALUE2);
 
-    cy.get('[role=dialog]')
-      .contains('button', 'Update')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Update')
+      .should('be.visible')
       .click();
   });
 
   it('Inspect the updated Config Map', () => {
-    cy.contains('.fd-layout-panel', ENTRY_KEY2).contains(ENTRY_VALUE2);
+    cy.contains('ui5-panel', ENTRY_KEY2).contains(ENTRY_VALUE2);
   });
 
   it('Inspect list', () => {
@@ -69,25 +77,30 @@ context('Test Config Maps', () => {
 
   it('Clone the secret', () => {
     cy.getLeftNav()
-      .contains('Config Maps', { includeShadowDom: true })
+      .contains('Config Maps')
       .click();
 
-    cy.contains('.fd-table__row', CONFIG_MAP_NAME)
-      .find('button[data-testid="clone"]')
+    cy.contains('ui5-table-row', CONFIG_MAP_NAME)
+      .find('ui5-button[data-testid="clone"]')
       .click();
 
-    cy.get('[ariaLabel="ConfigMap name"]:visible')
+    cy.get('[aria-label="ConfigMap name"]:visible')
+      .find('input')
+      .click()
       .type(CLONE_NAME)
       .click();
 
-    cy.contains('button', /^Create$/).click();
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
+      .should('be.visible')
+      .click();
   });
 
   it('Inspect the clone', () => {
     cy.contains(CLONE_NAME);
 
-    cy.contains('.fd-layout-panel', ENTRY_KEY).contains(ENTRY_VALUE);
+    cy.contains('ui5-panel', ENTRY_KEY).contains(ENTRY_VALUE);
 
-    cy.contains('.fd-layout-panel', ENTRY_KEY2).contains(ENTRY_VALUE2);
+    cy.contains('ui5-panel', ENTRY_KEY2).contains(ENTRY_VALUE2);
   });
 });

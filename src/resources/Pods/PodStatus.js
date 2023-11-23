@@ -32,17 +32,17 @@ const badgeType = status => {
     case 'Running':
     case 'Succeeded':
     case 'Completed':
-      return 'success';
+      return 'Success';
     case 'Terminated':
     case 'Pending':
     case 'Terminating':
     case 'PodInitializing':
     case 'ContainerCreating':
-      return 'info';
+      return 'Information';
     case 'Unknown':
-      return undefined;
+      return 'None';
     default:
-      return 'error';
+      return 'Error';
   }
 };
 

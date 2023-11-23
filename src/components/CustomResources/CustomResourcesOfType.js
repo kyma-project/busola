@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
-import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { CustomResources } from 'components/CustomResources/CustomResources';
-import { LayoutPanel } from 'fundamental-react';
 import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { useRecoilState } from 'recoil';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 export default function CustomResourcesOfType({ crdName }) {
   const { t } = useTranslation();
@@ -22,11 +22,7 @@ export default function CustomResourcesOfType({ crdName }) {
 
   if (loading) return <Spinner />;
   if (error) {
-    return (
-      <LayoutPanel className="fd-has-padding-regular fd-margin--md">
-        {error.message}
-      </LayoutPanel>
-    );
+    return <UI5Panel title={error.message} />;
   }
 
   const breadcrumbItems = [
@@ -39,29 +35,31 @@ export default function CustomResourcesOfType({ crdName }) {
 
   return (
     <>
-      <PageHeader
+      <DynamicPageComponent
         title={pluralize(crd.spec.names.kind)}
         breadcrumbItems={breadcrumbItems}
+        content={
+          <CustomResources
+            crd={crd}
+            version={crd.spec.versions.find(v => v.served)}
+            showTitle={false}
+            showNamespace={false}
+          />
+        }
       >
-        <PageHeader.Column
+        <DynamicPageComponent.Column
           title={t('custom-resource-definitions.name_singular')}
         >
           <Link
-            className="fd-link"
+            className="bsl-link"
             to={clusterUrl(`customresourcedefinitions/${crd.metadata.name}`)}
           >
             {crd.metadata.name}
           </Link>
-        </PageHeader.Column>
-      </PageHeader>
-      <CustomResources
-        crd={crd}
-        version={crd.spec.versions.find(v => v.served)}
-        showTitle={false}
-        showNamespace={false}
-      />
+        </DynamicPageComponent.Column>
+      </DynamicPageComponent>
       <YamlUploadDialog
-        show={showAdd}
+        open={showAdd}
         onCancel={() => {
           setShowAdd(false);
         }}

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm/components/ResourceForm';
@@ -46,26 +46,26 @@ export function K8sNameField({
       input={() => {
         return (
           <>
-            <div className="fd-col fd-col-md--11">
+            <div className="bsl-col bsl-col-md--11">
               <K8sNameInput
                 kind={kind}
                 compact
                 required={required}
                 showLabel={false}
                 onChange={e => setValue(e.target.value)}
+                onInput={e => setValue(e.target.value)}
                 value={value}
                 readOnly={readOnly}
                 pattern={pattern}
                 {...inputProps}
               />
             </div>
-            <div className="fd-col fd-col-md--1 generate-button">
+            <div className="bsl-col bsl-col-md--1 generate-button">
               <Tooltip content={t('common.tooltips.generate-name')}>
                 <Button
-                  compact
-                  option="transparent"
+                  design="Transparent"
                   onClick={generateName}
-                  ariaLabel="Generate name button"
+                  aria-label="Generate name button"
                   disabled={readOnly}
                 >
                   {t('common.buttons.generate-name')}

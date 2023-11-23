@@ -1,10 +1,10 @@
-import { Button, Dialog, Icon } from 'fundamental-react';
+import { Button, Icon, Dialog, Bar } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 
 import { useEventListener } from 'hooks/useEventListener';
-import { Tab } from 'shared/components/Tabs/Tab';
-import { Tabs } from 'shared/components/Tabs/Tabs';
+import { TabContainer, Tab } from '@ui5/webcomponents-react';
+
 import { VerticalTabs } from 'shared/components/VerticalTabs/VerticalTabs';
 import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
 
@@ -28,9 +28,10 @@ export function Preferences() {
       description: t('settings.interface.description'),
       icon: (
         <Icon
-          glyph="accelerated"
-          size="xl"
-          ariaLabel={t('settings.interface.title')}
+          style={{ margin: 'auto' }}
+          name="accelerated"
+          aria-label={t('settings.interface.title')}
+          className="bsl-icon-xl"
         />
       ),
       id: 1,
@@ -40,9 +41,10 @@ export function Preferences() {
       description: t('settings.clusters.description'),
       icon: (
         <Icon
-          glyph="database"
-          size="xl"
-          ariaLabel={t('settings.clusters.title')}
+          style={{ margin: 'auto' }}
+          name="database"
+          aria-label={t('settings.clusters.title')}
+          className="bsl-icon-xl"
         />
       ),
       id: 2,
@@ -57,51 +59,58 @@ export function Preferences() {
     if ((e as KeyboardEvent).key === 'Escape') handleCloseModal();
   };
 
-  const actions = [
-    <Button onClick={handleCloseModal}>{t('common.buttons.close')}</Button>,
-  ];
-
   useEventListener('keydown', handleCloseWithEscape);
 
   return (
     <Dialog
-      show={isModalOpen}
-      title={t('navigation.preferences.title')}
-      actions={actions}
+      onAfterClose={handleCloseModal}
+      open={isModalOpen}
+      headerText={t('navigation.preferences.title')}
+      footer={
+        <Bar
+          design="Footer"
+          endContent={
+            <>
+              <Button onClick={handleCloseModal}>
+                {t('common.buttons.close')}
+              </Button>
+            </>
+          }
+        />
+      }
       className="preferences-dialog"
     >
-      <VerticalTabs tabs={tabs} height="100vh">
+      <VerticalTabs tabs={tabs}>
         <VerticalTabs.Content id={1}>
-          <Tabs className="fd-tabs fd-has-padding-left-regular">
+          <TabContainer
+            tabLayout="Inline"
+            contentBackgroundDesign="Transparent"
+            fixed
+          >
             <Tab
+              style={{ padding: '-16px -32px' }}
               key="theme-settings"
-              id="theme-settings"
-              title={t('settings.theme')}
+              text={t('settings.theme')}
             >
               <ThemeChooser />
             </Tab>
-            <Tab
-              key="language-settings"
-              id="language-settings"
-              title={t('settings.language')}
-            >
+            <Tab key="language-settings" text={t('settings.language')}>
               <LanguageSettings />
             </Tab>
-            <Tab
-              key="other-settings"
-              id="other-settings"
-              title={t('settings.other.title')}
-            >
+            <Tab key="other-settings" text={t('settings.other.title')}>
               <OtherSettings />
             </Tab>
-          </Tabs>
+          </TabContainer>
         </VerticalTabs.Content>
         <VerticalTabs.Content id={2}>
-          <Tabs className="fd-tabs fd-has-padding-left-regular">
+          <TabContainer
+            tabLayout="Inline"
+            contentBackgroundDesign="Transparent"
+            fixed
+          >
             <Tab
               key="cluster-interaction"
-              id="cluster-interaction"
-              title={t('settings.clusters.interaction.title')}
+              text={t('settings.clusters.interaction.title')}
             >
               <div>
                 <NamespaceSettings />
@@ -111,12 +120,11 @@ export function Preferences() {
             </Tab>
             <Tab
               key="resource-validation"
-              id="resource-validation"
-              title={t('settings.clusters.resourcesValidation.title')}
+              text={t('settings.clusters.resourcesValidation.title')}
             >
               <ResourceValidationSettings />
             </Tab>
-          </Tabs>
+          </TabContainer>
         </VerticalTabs.Content>
       </VerticalTabs>
     </Dialog>

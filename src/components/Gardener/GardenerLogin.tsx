@@ -1,4 +1,4 @@
-import { MessageStrip } from 'fundamental-react';
+import { MessageStrip } from '@ui5/webcomponents-react';
 import { useFeature } from 'hooks/useFeature';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
@@ -7,6 +7,8 @@ import { createUserManager } from 'state/authDataAtom';
 import { KubeconfigOIDCAuth } from 'types';
 import { GardenerLoginFeature } from './GardenerLoginFeature';
 import { useGardenerLogin } from './useGardenerLoginFunction';
+
+import { spacing } from '@ui5/webcomponents-react-base';
 
 export default function GardenerLogin() {
   const [token, setToken] = useState('');
@@ -71,11 +73,19 @@ export default function GardenerLogin() {
 
   return (
     <div style={{ marginRight: '260px' }}>
-      <MessageStrip type="information" className="fd-margin-top--sm">
+      <MessageStrip
+        design="Information"
+        hideCloseButton
+        style={spacing.sapUiSmallMarginTop}
+      >
         {report}
       </MessageStrip>
       {error && (
-        <MessageStrip type="error" className="fd-margin-top--sm">
+        <MessageStrip
+          design="Negative"
+          hideCloseButton
+          style={spacing.sapUiSmallMarginTop}
+        >
           {t('clusters.gardener.error', { message: error.message })}
         </MessageStrip>
       )}

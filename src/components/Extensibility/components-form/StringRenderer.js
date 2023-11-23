@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
 import { base64Decode, base64Encode } from 'shared/helpers';
@@ -17,7 +17,6 @@ export function StringRenderer({
   schema,
   storeKeys,
   required,
-  compact,
   placeholder,
   originalResource,
   ...props
@@ -93,12 +92,10 @@ export function StringRenderer({
           <>
             <Inputs.Text {...params} />
             {decodable && (
-              <div className="fd-col fd-col-md--1 generate-button">
+              <div className="bsl-col bsl-col-md--1 generate-button">
                 <Button
-                  compact
-                  option="transparent"
-                  glyph={decoded ? 'hide' : 'show'}
-                  iconBeforeText
+                  design="Transparent"
+                  icon={decoded ? 'hide' : 'show'}
                   onClick={() => setDecoded(!decoded)}
                 >
                   {decoded
@@ -143,8 +140,8 @@ export function StringRenderer({
             });
         }}
         disabled={readOnly}
+        isListItem={props.isListItem}
         label={tFromStoreKeys(storeKeys, schema)}
-        compact={compact}
         data-testid={storeKeys.join('.') || tFromStoreKeys(storeKeys, schema)}
         placeholder={displayPlaceholder}
         {...getTypeSpecificProps()}

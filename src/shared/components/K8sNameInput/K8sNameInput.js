@@ -1,15 +1,13 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
-import { FormLabel, FormInput } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import classnames from 'classnames';
 import { useValidation } from 'shared/hooks/useValidation';
+import { Input } from '@ui5/webcomponents-react';
+import { Label } from '../../../shared/ResourceForm/components/Label';
 
 export const k8sNamePattern = '^[a-z0-9]([-a-z0-9]*[a-z0-9])?$';
 
 export const K8sNameInput = ({
-  _ref,
   id,
   kind,
   showHelp = true,
@@ -19,6 +17,7 @@ export const K8sNameInput = ({
   defaultValue,
   value,
   onChange,
+  onInput,
   inputRef,
   pattern = k8sNamePattern,
   ...props
@@ -28,25 +27,25 @@ export const K8sNameInput = ({
     inputRef,
     onChange,
   });
-
+  if (!props.readOnly) delete props.readOnly;
   const { className, compact, ...inputProps } = props || {};
 
-  const inputClassName = classnames('fd-input', className, {
-    'fd-input--compact': compact,
+  const inputClassName = classnames('full-width', className, {
+    'ui5-content-density-compact': compact,
   });
 
   const input = (
-    <FormInput
-      ref={_ref}
-      type="text"
+    <Input
+      type="Text"
       id={id}
       value={value || defaultValue || ''}
       aria-required={required ? 'true' : 'false'}
-      ariaLabel={t('components.k8s-name-input.aria-label', {
+      aria-label={t('components.k8s-name-input.aria-label', {
         resourceType: kind,
       })}
       required={required}
       pattern={pattern}
+      onInput={onInput}
       {...inputProps}
       {...validationProps}
       className={inputClassName}
@@ -56,9 +55,9 @@ export const K8sNameInput = ({
   return (
     <>
       {showLabel && (
-        <FormLabel required={required} htmlFor={id}>
+        <Label required={required} forElement={id}>
           {t(label)}
-        </FormLabel>
+        </Label>
       )}
       {input}
     </>
@@ -66,7 +65,6 @@ export const K8sNameInput = ({
 };
 
 K8sNameInput.propTypes = {
-  _ref: CustomPropTypes.ref,
   id: PropTypes.string,
   kind: PropTypes.string.isRequired,
   showHelp: PropTypes.bool,

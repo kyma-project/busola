@@ -30,7 +30,7 @@ context('Test Ingresses', () => {
   it('Create an Ingress', () => {
     cy.navigateTo('Discovery and Network', 'Ingress');
 
-    cy.contains('Create Ingress').click();
+    cy.contains('ui5-button', 'Create Ingress').click();
 
     cy.wrap(loadIngress(NAME, Cypress.env('NAMESPACE_NAME'))).then(
       INGRESS_CONFIG => {
@@ -39,13 +39,14 @@ context('Test Ingresses', () => {
       },
     );
 
-    cy.get('[role="dialog"]')
-      .contains('button', 'Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
+      .should('be.visible')
       .click();
   });
 
   it('Check Ingress details', () => {
-    cy.contains(NAME).should('be.visible');
+    cy.contains('ui5-title', NAME).should('be.visible');
 
     cy.get('#content-wrap')
       .contains(/rules/i)

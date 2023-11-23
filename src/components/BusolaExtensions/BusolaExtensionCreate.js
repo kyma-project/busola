@@ -28,40 +28,41 @@ export function BusolaExtensionCreate({ formElementRef, onChange }) {
   const [state, setState] = useState({});
 
   return (
-    <ResourceForm.Single
-      formElementRef={formElementRef}
-      onChange={onChange}
-      resource={state}
-      setResource={setState}
-      className="resource-form--unset-height"
-      createResource={async () => {
-        const onError = e =>
-          notificationManager.notifyError({
-            content: t('common.messages.error', { error: e.message }),
-            title: t('extensibility.starter-modal.messages.error'),
-            type: 'error',
-          });
+    <div style={{ overflow: 'auto', height: '100%' }}>
+      <ResourceForm.Single
+        formElementRef={formElementRef}
+        onChange={onChange}
+        resource={state}
+        setResource={setState}
+        className="resource-form--unset-height"
+        createResource={async () => {
+          const onError = e =>
+            notificationManager.notifyError({
+              content: t('common.messages.error', { error: e.message }),
+              title: t('extensibility.starter-modal.messages.error'),
+              type: 'error',
+            });
 
-        const onSuccess = () => {
-          notificationManager.notifySuccess({
-            content: t('extensibility.starter-modal.messages.success'),
-          });
-          navigate(
-            `/cluster/${cluster.contextName}/busolaextensions/kube-public/${crd.metadata.name}`,
-          );
-        };
+          const onSuccess = () => {
+            notificationManager.notifySuccess({
+              content: t('extensibility.starter-modal.messages.success'),
+            });
+            navigate(
+              `/cluster/${cluster.contextName}/busolaextensions/kube-public/${crd.metadata.name}`,
+            );
+          };
 
-        const configmap = createConfigmap(crd, state);
-        await upsert({
-          url: '/api/v1/namespaces/kube-public/configmaps',
-          resource: configmap,
-          onSuccess,
-          onError,
-        });
-      }}
-    >
-      <ResourceForm.Wrapper>
+          const configmap = createConfigmap(crd, state);
+          await upsert({
+            url: '/api/v1/namespaces/kube-public/configmaps',
+            resource: configmap,
+            onSuccess,
+            onError,
+          });
+        }}
+      >
         <ResourceForm.FormField
+          updatesOnInput={false}
           required
           label={t('extensibility.starter-modal.crd')}
           value={crd?.metadata.name}
@@ -109,7 +110,7 @@ export function BusolaExtensionCreate({ formElementRef, onChange }) {
             </ResourceForm.CollapsibleSection>
           </>
         )}
-      </ResourceForm.Wrapper>
-    </ResourceForm.Single>
+      </ResourceForm.Single>
+    </div>
   );
 }

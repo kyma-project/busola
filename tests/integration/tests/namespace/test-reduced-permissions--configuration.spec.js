@@ -43,67 +43,70 @@ context('Test reduced permissions 2', () => {
     cy.loginAndSelectCluster();
 
     cy.getLeftNav()
-      .contains('Namespaces', { includeShadowDom: true })
+      .contains('Namespaces')
       .should('exist');
 
     cy.getLeftNav()
-      .contains('Events', { includeShadowDom: true })
+      .contains('Events')
       .should('not.exist');
 
     // check out "normal" namespace view - expect only Pods here
     cy.goToNamespaceDetails();
 
     cy.getLeftNav()
-      .contains('Discovery and Network', { includeShadowDom: true })
+      .contains('Discovery and Network')
       .should('not.exist');
 
     cy.getLeftNav()
-      .contains('Workloads', { includeShadowDom: true })
+      .contains('Workloads')
       .should('exist')
       .click();
 
     cy.getLeftNav()
-      .contains('Pods', { includeShadowDom: true })
+      .contains('Pods')
       .should('exist');
 
     cy.getLeftNav()
-      .contains('Deployments', { includeShadowDom: true })
+      .contains('Deployments')
       .should('not.exist');
 
     // check out "special" namespace view - expect Pods and Services here
     mockNamespacePermissions();
 
     cy.getLeftNav()
-      .contains('Back To Cluster Details', { includeShadowDom: true })
+      .contains('Back To Cluster Details')
       .click();
 
     cy.getLeftNav()
-      .contains('Namespaces', { includeShadowDom: true })
+      .contains('Namespaces')
       .click();
 
     cy.get('[aria-label="open-search"]').click();
 
-    cy.get('[aria-label="search-input"]').type('kube-public');
+    cy.get('ui5-combobox[placeholder="Search"]')
+      .find('input')
+      .click()
+      .type('kube-public');
 
-    cy.get('[role="row"]')
+    cy.get('a.bsl-link')
       .contains('kube-public')
       .click();
 
     cy.getLeftNav()
-      .contains('Pods', { includeShadowDom: true })
+      .contains('Pods')
       .should('exist');
 
     cy.getLeftNav()
-      .contains('Storage', { includeShadowDom: true })
+      .contains('Storage')
       .should('exist')
       .click();
 
     cy.getLeftNav()
-      .contains('Persistent Volume Claims', { includeShadowDom: true })
+      .contains('Persistent Volume Claims')
       .should('exist');
 
     cy.getLeftNav()
-      .contains('Secrets', { includeShadowDom: true })
+      .contains('Secrets')
       .should('not.exist');
   });
 

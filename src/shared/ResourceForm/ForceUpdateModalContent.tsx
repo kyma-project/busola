@@ -1,9 +1,11 @@
 import { useTranslation } from 'react-i18next';
-import { MessageStrip } from 'fundamental-react';
+import { MessageStrip } from '@ui5/webcomponents-react';
 import jsyaml from 'js-yaml';
 import { useCreateDiffEditor } from 'shared/components/MonacoEditorESM/hooks/useCreateDiffEditor';
 import { RecoilRoot } from 'recoil';
 import { K8sResource } from 'types';
+
+import { spacing } from '@ui5/webcomponents-react-base';
 
 type ForceUpdateModalContentProps<TResourceType extends K8sResource> = {
   error: Error;
@@ -36,14 +38,18 @@ function ForceUpdateModalContentComponent({
 
   return (
     <>
-      <p className="fd-margin-bottom--sm">
+      <p style={spacing.sapUiSmallMarginBottom}>
         {t('common.create-form.messages.patch-failure', {
           resourceType: singularName,
           error: error.message,
         })}
       </p>
       <div style={{ height: '400px' }} ref={divRef}></div>
-      <MessageStrip type="warning" className="fd-margin-top--sm">
+      <MessageStrip
+        design="Warning"
+        hideCloseButton
+        style={spacing.sapUiSmallMarginTop}
+      >
         {t('common.create-form.messages.force-update')}
       </MessageStrip>
     </>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { useTranslation } from 'react-i18next';
 
@@ -59,11 +59,9 @@ export function KeyValueField({
     actions = [
       ...actions,
       <Button
-        compact
-        option="transparent"
-        glyph={valuesEncoded ? 'show' : 'hide'}
+        design="Transparent"
+        icon={valuesEncoded ? 'show' : 'hide'}
         onClick={toggleEncoding}
-        iconBeforeText
       >
         {valuesEncoded
           ? t('secrets.buttons.decode')
@@ -86,9 +84,10 @@ export function KeyValueField({
       }
       inputs={[
         ({ value, setValue, ref, updateValue, focus }) => (
-          <div className="fd-col fd-col-md--6">
+          <div className="bsl-col-md--5">
             {input.key({
               fullWidth: true,
+              className: 'full-width',
               disabled: lockedKeys.includes(value?.key),
               key: 'key',
               value: value?.key || '',
@@ -106,10 +105,10 @@ export function KeyValueField({
           </div>
         ),
         ({ focus, value, setValue, updateValue, ...props }) => (
-          <div className="fd-col fd-col-md--6">
+          <div className="bsl-col-md--6">
             {input.value({
               fullWidth: true,
-              className: 'value-input',
+              className: 'value-input full-width',
               key: 'value',
               onKeyDown: e => focus(e),
               value: dataValue(value),
@@ -136,12 +135,10 @@ export function KeyValueField({
           </div>
         ),
         ({ value, setValue, updateValue }) => (
-          <div className="fd-col fd-col-md--6">
+          <div>
             {readableFromFile ? (
               <Tooltip content={t('common.tooltips.read-file')}>
                 <Button
-                  compact
-                  className="read-from-file"
                   onClick={() =>
                     readFromFile()?.then(result => {
                       setValue({

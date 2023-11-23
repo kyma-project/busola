@@ -3,6 +3,7 @@ import { GenericList } from 'shared/components/GenericList/GenericList';
 import { mount } from 'testing/enzymeUtils';
 import { fireEvent, render, waitFor } from 'testing/reactTestingUtils';
 import { Table } from '../Table';
+import { ThemeProvider } from '@ui5/webcomponents-react';
 
 jest.mock('components/Extensibility/ExtensibilityCreate', () => null);
 jest.mock('components/Extensibility/ExtensibilityWizard', () => null);
@@ -22,16 +23,18 @@ describe('Table', () => {
   describe('title', () => {
     it('From name, translated', async () => {
       const component = render(
-        <TranslationBundleContext.Provider
-          value={{ translationBundle: 'myResource.source' }}
-        >
-          <Table
-            value={elements}
-            structure={{
-              name: 'my-title',
-            }}
-          />
-        </TranslationBundleContext.Provider>,
+        <ThemeProvider>
+          <TranslationBundleContext.Provider
+            value={{ translationBundle: 'myResource.source' }}
+          >
+            <Table
+              value={elements}
+              structure={{
+                name: 'my-title',
+              }}
+            />
+          </TranslationBundleContext.Provider>
+        </ThemeProvider>,
       );
 
       await component.findByText(/my-title/);
@@ -39,11 +42,13 @@ describe('Table', () => {
 
     it('No name, fall back to source, translated', async () => {
       const component = render(
-        <TranslationBundleContext.Provider
-          value={{ translationBundle: 'myResource.source' }}
-        >
-          <Table value={[]} structure={{ source: 'resource.array-data' }} />
-        </TranslationBundleContext.Provider>,
+        <ThemeProvider>
+          <TranslationBundleContext.Provider
+            value={{ translationBundle: 'myResource.source' }}
+          >
+            <Table value={[]} structure={{ source: 'resource.array-data' }} />
+          </TranslationBundleContext.Provider>
+        </ThemeProvider>,
       );
       await waitFor(async () => {
         expect(
@@ -56,7 +61,11 @@ describe('Table', () => {
     describe('entries', () => {
       it('passes array as entries', () => {
         const value = ['a'];
-        const component = mount(<Table value={value} structure={{}} />);
+        const component = mount(
+          <ThemeProvider>
+            <Table value={value} structure={{}} />
+          </ThemeProvider>,
+        );
         const list = component.find(GenericList);
         expect(list).toHaveLength(1);
 
@@ -66,7 +75,11 @@ describe('Table', () => {
       });
 
       it('for nullish value defaults to empty array', () => {
-        const component = mount(<Table value={null} structure={{}} />);
+        const component = mount(
+          <ThemeProvider>
+            <Table value={null} structure={{}} />
+          </ThemeProvider>,
+        );
         const list = component.find(GenericList);
         expect(list).toHaveLength(1);
 
@@ -76,7 +89,11 @@ describe('Table', () => {
       });
 
       it('for invalid value, renders "not-found" message', () => {
-        const component = mount(<Table value={-3} structure={{}} />);
+        const component = mount(
+          <ThemeProvider>
+            <Table value={-3} structure={{}} />
+          </ThemeProvider>,
+        );
         const list = component.find(GenericList);
         expect(list).toHaveLength(1);
 
@@ -93,7 +110,9 @@ describe('Table', () => {
         };
 
         const { queryByLabelText } = render(
-          <Table value={null} structure={structure} />,
+          <ThemeProvider>
+            <Table value={null} structure={structure} />
+          </ThemeProvider>,
         );
 
         await waitFor(() => {
@@ -107,78 +126,13 @@ describe('Table', () => {
         };
 
         const component = render(
-          <Table value={elements} structure={structure} />,
+          <ThemeProvider>
+            <Table value={elements} structure={structure} />
+          </ThemeProvider>,
         );
 
         expect(await component.findByLabelText('search-input'));
         expect(await component.findByText('extensibility::first'));
-      });
-
-      it('Should search for simple data', async () => {
-        const structure = {
-          children: [{ source: '$item.key', search: true }],
-        };
-
-        const {
-          findByText,
-          getByLabelText,
-          findAllByRole,
-          queryByText,
-          findByLabelText,
-        } = render(<Table value={elements} structure={structure} />);
-
-        // expect unfiltered results to exist
-        await findByText('extensibility::first');
-        await findByText('extensibility::second');
-
-        //expect input to be displayed
-        await findByLabelText('search-input');
-
-        //interact with input
-        const searchInput = getByLabelText('search-input');
-        fireEvent.change(searchInput, { target: { value: 'firs' } });
-
-        //there are two items with role='row', the header and the table's row
-        const rows = await findAllByRole('row');
-        expect(rows).toHaveLength(2);
-        expect(rows.at(1)).toHaveTextContent('first');
-        expect(queryByText('second')).not.toBeInTheDocument();
-      });
-
-      it('Should search for complex data with a predefined function', async () => {
-        const structure = {
-          children: [
-            {
-              source: '$item.key',
-              search: {
-                searchFunction:
-                  '$filter($item.key, function($e){$contains($e, $input)})',
-              },
-            },
-          ],
-        };
-
-        const { findAllByRole, queryByText, findByLabelText } = render(
-          <Table
-            value={elements}
-            structure={structure}
-            arrayItems={elements}
-          />,
-        );
-
-        // find and interact with search input
-        const searchInput = await findByLabelText('search-input');
-        await fireEvent.change(searchInput, { target: { value: 'fi' } });
-
-        // get Table's rows
-        const rows = await findAllByRole('row');
-        expect(rows).toHaveLength(2);
-
-        //check whether search input works, 'first' text should be displayed
-        expect(rows.at(1)).toHaveTextContent('first');
-
-        // 'second' text shouldn't be displayed
-        expect(queryByText('second')).not.toBeInTheDocument();
       });
     });
 

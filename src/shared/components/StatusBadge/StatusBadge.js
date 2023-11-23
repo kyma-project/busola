@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ObjectStatus } from 'fundamental-react';
+import { ObjectStatus } from '@ui5/webcomponents-react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
@@ -20,7 +20,7 @@ const resolveType = status => {
     case 'PENDING':
     case 'AVAILABLE':
     case 'RELEASED':
-      return 'informative';
+      return 'Information';
 
     case 'READY':
     case 'BOUND':
@@ -28,20 +28,20 @@ const resolveType = status => {
     case 'SUCCESS':
     case 'SUCCEEDED':
     case 'OK':
-      return 'positive';
+      return 'Success';
 
     case 'UNKNOWN':
     case 'WARNING':
-      return 'critical';
+      return 'Warning';
 
     case 'FAILED':
     case 'ERROR':
     case 'FAILURE':
     case 'INVALID':
-      return 'negative';
+      return 'Error';
 
     default:
-      return undefined;
+      return 'None';
   }
 };
 
@@ -59,10 +59,10 @@ const prepareTranslationPath = (resourceKind, value, type) => {
 };
 
 const TYPE_FALLBACK = new Map([
-  ['success', 'positive'],
-  ['warning', 'critical'],
-  ['error', 'negative'],
-  ['info', 'informative'],
+  ['success', 'Success'],
+  ['warning', 'Warning'],
+  ['error', 'Error'],
+  ['info', 'Information'],
 ]);
 
 export const StatusBadge = ({
@@ -150,10 +150,10 @@ export const StatusBadge = ({
   } else if (noTooltip) {
     return (
       <ObjectStatus
-        ariaLabel="Status"
+        aria-label="Status"
         role="status"
         inverted
-        status={type}
+        state={type}
         className={classes}
         data-testid="no-tooltip"
       >
@@ -177,16 +177,7 @@ export const StatusBadge = ({
 StatusBadge.propTypes = {
   additionalContent: PropTypes.node,
   tooltipContent: PropTypes.node,
-  type: PropTypes.oneOf([
-    'positive',
-    'negative',
-    'critical',
-    'informative',
-    'success',
-    'error',
-    'warning',
-    'info',
-  ]),
+  type: PropTypes.oneOf(['information', 'success', 'error', 'warning', 'none']),
   autoResolveType: PropTypes.bool,
   noTooltip: PropTypes.bool,
   resourceKind: PropTypes.string,

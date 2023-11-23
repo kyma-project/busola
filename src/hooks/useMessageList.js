@@ -52,7 +52,7 @@ export const FormatInvolvedObject = obj => {
   const { scopedUrl } = useUrl();
   const path = `${RESOURCE_PATH[obj.kind]}/${obj.name}`;
   return isLink ? (
-    <Link className="fd-link" to={scopedUrl(path, namespaceOverride)}>
+    <Link className="bsl-link" to={scopedUrl(path, namespaceOverride)}>
       {text}
     </Link>
   ) : (
@@ -64,7 +64,7 @@ export const FormatSourceObject = obj => {
   const { clusterUrl } = useUrl();
   if (!obj || Object.keys(obj).length === 0) return EMPTY_TEXT_PLACEHOLDER;
   return obj.host ? (
-    <Link className="fd-link" to={clusterUrl(`overview/nodes/${obj.host}`)}>
+    <Link className="bsl-link" to={clusterUrl(`overview/nodes/${obj.host}`)}>
       {obj.host}
     </Link>
   ) : (
@@ -78,7 +78,6 @@ export const useMessageList = (defaultType = EVENT_MESSAGE_TYPE.ALL) => {
 
   const MessageSelector = (
     <Dropdown
-      compact
       options={Object.values(EVENT_MESSAGE_TYPE).map(el => ({
         key: el.key,
         text: t(`node-details.${el.text}`),

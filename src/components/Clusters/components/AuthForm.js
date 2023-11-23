@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MessageStrip, Switch } from 'fundamental-react';
+import { MessageStrip, Switch } from '@ui5/webcomponents-react';
 import * as jp from 'jsonpath';
 import { createLoginCommand, tryParseOIDCparams } from './oidc-params';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { getUser, getUserIndex } from '../shared';
+
+import { spacing } from '@ui5/webcomponents-react-base';
 
 export const AUTH_FORM_TOKEN = 'Token';
 export const AUTH_FORM_OIDC = 'OIDC';
@@ -115,8 +117,9 @@ export function AuthForm({
       {...props}
     >
       <MessageStrip
-        type="warning"
-        className="fd-margin-top--sm fd-margin-bottom--sm"
+        design="Warning"
+        hideCloseButton
+        style={spacing.sapUiSmallMarginTopBottom}
       >
         {t('clusters.wizard.incomplete', {
           context:
@@ -128,17 +131,16 @@ export function AuthForm({
       {!useOidc && <TokenForm />}
       {!useOidc && (
         <MessageStrip
-          type="information"
-          className="fd-margin-top--sm fd-margin-bottom--sm"
+          design="Information"
+          hideCloseButton
+          style={spacing.sapUiSmallMarginTopBottom}
         >
           {t('clusters.wizard.token-info')}
         </MessageStrip>
       )}
       <ResourceForm.FormField
         label={t('clusters.wizard.auth.using-oidc')}
-        input={() => (
-          <Switch checked={useOidc} compact onChange={switchAuthVariant} />
-        )}
+        input={() => <Switch checked={useOidc} onChange={switchAuthVariant} />}
       />
       {useOidc && <OIDCform />}
     </ResourceForm.Wrapper>

@@ -1,11 +1,11 @@
 import { zip } from 'lodash';
 import React, { useState } from 'react';
 import {
-  LayoutPanel,
-  Button,
-  ButtonSegmented,
   BusyIndicator,
-} from 'fundamental-react';
+  SegmentedButton,
+  SegmentedButtonItem,
+} from '@ui5/webcomponents-react';
+
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
 import { useFeature } from 'hooks/useFeature';
 import { getErrorMessage } from 'shared/utils/helpers';
@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { usePrometheus } from 'shared/hooks/usePrometheus';
 import { StatsGraph } from 'shared/components/StatsGraph';
 import { GraphLegend } from 'shared/components/GraphLegend/GraphLegend';
+import { UI5Panel } from '../UI5Panel/UI5Panel';
 
 import './StatsPanel.scss';
 
@@ -43,21 +44,26 @@ export function SingleGraph({ type, mode, timeSpan, metric, ...props }) {
   return (
     <>
       {!error ? (
-        <StatsGraph
-          data={data}
-          binary={binary}
-          unit={unit}
-          startDate={startDate}
-          endDate={endDate}
-          dataPoints={DATA_POINTS}
-          {...props}
+        <BusyIndicator
+          delay="0"
+          active={loading}
+          children={
+            <StatsGraph
+              data={data}
+              binary={binary}
+              unit={unit}
+              startDate={startDate}
+              endDate={endDate}
+              dataPoints={DATA_POINTS}
+              {...props}
+            />
+          }
         />
       ) : (
         <div className="error-message">
           <p>{getErrorMessage(error, t('components.error-panel.error'))}</p>
         </div>
       )}
-      <BusyIndicator className="throbber" show={loading} />
     </>
   );
 }
@@ -96,14 +102,20 @@ export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
   return (
     <>
       {!error1 && !error2 ? (
-        <StatsGraph
-          data={zip(data1, data2)}
-          binary={binary}
-          unit={unit}
-          startDate={startDate}
-          endDate={endDate}
-          dataPoints={DATA_POINTS}
-          {...props}
+        <BusyIndicator
+          delay="0"
+          active={loading1 || loading2}
+          children={
+            <StatsGraph
+              data={zip(data1, data2)}
+              binary={binary}
+              unit={unit}
+              startDate={startDate}
+              endDate={endDate}
+              dataPoints={DATA_POINTS}
+              {...props}
+            />
+          }
         />
       ) : (
         <div className="error-message">
@@ -115,7 +127,6 @@ export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
           )}
         </div>
       )}
-      <BusyIndicator className="throbber" show={loading1 || loading2} />
     </>
   );
 }
@@ -161,22 +172,27 @@ export function SingleMetricMultipeGraph({
   return (
     <>
       {!error ? (
-        <StatsGraph
-          data={zip(...data)}
-          binary={binary}
-          unit={unit}
-          startDate={startDate}
-          endDate={endDate}
-          dataPoints={DATA_POINTS}
-          labels={labels ? labels : defaultLabels}
-          {...props}
+        <BusyIndicator
+          delay="0"
+          active={loading}
+          children={
+            <StatsGraph
+              data={zip(...data)}
+              binary={binary}
+              unit={unit}
+              startDate={startDate}
+              endDate={endDate}
+              dataPoints={DATA_POINTS}
+              labels={labels ? labels : defaultLabels}
+              {...props}
+            />
+          }
         />
       ) : (
         <div className="error-message">
           <p>{getErrorMessage(error, t('components.error-panel.error'))}</p>
         </div>
       )}
-      <BusyIndicator className="throbber" show={loading} />
       <GraphLegend values={legendValues} />
     </>
   );
@@ -242,7 +258,7 @@ export function StatsPanel({
   type,
   mode = 'single',
   defaultMetric = 'cpu',
-  className = 'fd-margin--md',
+  className = '',
   ...props
 }) {
   const timeSpans = {
@@ -268,45 +284,54 @@ export function StatsPanel({
 
   const graphOptions = getGraphOptions(type);
   return (
-    <LayoutPanel className={`${className} stats-panel`}>
-      <LayoutPanel.Header>
-        <LayoutPanel.Filters>
-          {graphOptions?.length === 1 ? (
-            <LayoutPanel.Head title={t(`graphs.${graphOptions[0]}`)} />
-          ) : (
-            <Dropdown
+    <UI5Panel
+      disableMargin={props.disableMargin}
+      title={
+        graphOptions?.length === 1 ? (
+          t(`graphs.${graphOptions[0]}`)
+        ) : (
+          <Dropdown
+            selectedKey={metric}
+            onSelect={(e, val) => {
+              setMetric(val.key);
+              setTimeSpan(getTimeSpansByMetric(val.key)[0]);
+            }}
+            options={graphOptions?.map(option => ({
+              key: option,
+              text: t(`graphs.${option}`),
+            }))}
+          />
+        )
+      }
+      headerActions={
+        <SegmentedButton>
+          {visibleTimeSpans.map(ts => (
+            <SegmentedButtonItem
               compact
-              selectedKey={metric}
-              onSelect={(e, val) => {
-                setMetric(val.key);
-                setTimeSpan(getTimeSpansByMetric(val.key)[0]);
-              }}
-              options={graphOptions?.map(option => ({
-                key: option,
-                text: t(`graphs.${option}`),
-              }))}
-            />
-          )}
-        </LayoutPanel.Filters>
-        <LayoutPanel.Actions>
-          <ButtonSegmented>
-            {visibleTimeSpans.map(ts => (
-              <Button
-                compact
-                key={ts}
-                selected={timeSpan === ts}
-                onClick={() => setTimeSpan(ts)}
-              >
-                {ts}
-              </Button>
-            ))}
-          </ButtonSegmented>
-        </LayoutPanel.Actions>
-      </LayoutPanel.Header>
-      <LayoutPanel.Body>
-        {!dualGraphs.includes(metric) &&
-          (mode === 'multiple' ? (
-            <SingleMetricMultipeGraph
+              key={ts}
+              pressed={timeSpan === ts}
+              onClick={() => setTimeSpan(ts)}
+            >
+              {ts}
+            </SegmentedButtonItem>
+          ))}
+        </SegmentedButton>
+      }
+      className={`${className} stats-panel`}
+    >
+      {!dualGraphs.includes(metric) &&
+        (mode === 'multiple' ? (
+          <SingleMetricMultipeGraph
+            type={type}
+            mode={mode}
+            metric={metric}
+            className={metric}
+            timeSpan={timeSpans[timeSpan]}
+            {...props}
+          />
+        ) : (
+          <>
+            <SingleGraph
               type={type}
               mode={mode}
               metric={metric}
@@ -314,32 +339,21 @@ export function StatsPanel({
               timeSpan={timeSpans[timeSpan]}
               {...props}
             />
-          ) : (
-            <>
-              <SingleGraph
-                type={type}
-                mode={mode}
-                metric={metric}
-                className={metric}
-                timeSpan={timeSpans[timeSpan]}
-                {...props}
-              />
-              <GraphLegend values={getLegendValues(metric)} />
-            </>
-          ))}
-        {dualGraphs.includes(metric) && (
-          <>
-            <DualGraph
-              type={type}
-              mode={mode}
-              timeSpan={timeSpans[timeSpan]}
-              {...getDualGraphValues(metric, t)}
-              {...props}
-            />
             <GraphLegend values={getLegendValues(metric)} />
           </>
-        )}
-      </LayoutPanel.Body>
-    </LayoutPanel>
+        ))}
+      {dualGraphs.includes(metric) && (
+        <>
+          <DualGraph
+            type={type}
+            mode={mode}
+            timeSpan={timeSpans[timeSpan]}
+            {...getDualGraphValues(metric, t)}
+            {...props}
+          />
+          <GraphLegend values={getLegendValues(metric)} />
+        </>
+      )}
+    </UI5Panel>
   );
 }

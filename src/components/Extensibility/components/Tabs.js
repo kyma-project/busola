@@ -1,11 +1,8 @@
 import React from 'react';
 
-import { Tabs as BusolaTabs } from '../../../shared/components/Tabs/Tabs';
-import { Tab as BusolaTab } from '../../../shared/components/Tabs/Tab';
 import { Widget, InlineWidget } from './Widget';
 import { useGetTranslation } from '../helpers';
-
-import './Tabs.scss';
+import { TabContainer, Tab } from '@ui5/webcomponents-react';
 
 export function Tabs({
   value,
@@ -19,13 +16,13 @@ export function Tabs({
   return (
     <>
       {Array.isArray(structure?.children) && (
-        <BusolaTabs className="tabs">
+        <TabContainer tabLayout="Inline" contentBackgroundDesign="Transparent">
           {structure.children.map((child, idx) => (
-            <BusolaTab key={idx} title={widgetT(child)}>
+            <Tab key={`tab-wrapper-${idx}`} text={widgetT(child)}>
               {Array.isArray(child?.children) &&
                 child.children.map((def, idx) => (
                   <Widget
-                    key={idx}
+                    key={`tab-content-${idx}`}
                     value={value}
                     structure={def}
                     schema={schema}
@@ -34,9 +31,9 @@ export function Tabs({
                     {...props}
                   />
                 ))}
-            </BusolaTab>
+            </Tab>
           ))}
-        </BusolaTabs>
+        </TabContainer>
       )}
     </>
   );

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
@@ -18,6 +18,7 @@ import { AllNamespacesDetails } from './AllNamespacesDetails';
 
 import './NamespaceDetails.scss';
 import { useSetRecoilState } from 'recoil';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 export function NamespaceDetails(props) {
   const { t } = useTranslation();
@@ -61,12 +62,10 @@ export function NamespaceDetails(props) {
   const headerActions = (
     <>
       <Button
-        className="fd-margin-end--tiny"
-        glyph="add"
+        icon="add"
         onClick={() => {
           setShowAdd(true);
         }}
-        iconBeforeText
       >
         {t('upload-yaml.title')}
       </Button>
@@ -90,7 +89,7 @@ export function NamespaceDetails(props) {
       customColumns={customColumns}
       headerActions={headerActions}
     >
-      <div className="panel-grid">
+      <div className="panel-grid" style={spacing.sapUiMediumMargin}>
         <NamespaceWorkloads namespace={props.resourceName} />
         <ResourcesUsage namespace={props.resourceName} />
       </div>

@@ -12,11 +12,11 @@ export default function CustomResourcesByGroup() {
   const description = (
     <Trans i18nKey="custom-resources.description">
       <Link
-        className="fd-link"
+        className="bsl-link"
         url="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/"
       />
       <RRLink
-        className="fd-link"
+        className="bsl-link"
         to={clusterUrl(`customresourcedefinitions`)}
       />
     </Trans>

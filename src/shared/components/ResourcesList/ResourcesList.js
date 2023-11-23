@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 import { Link } from 'react-router-dom';
 import { createPatch } from 'rfc6902';
 import { cloneDeep } from 'lodash';
@@ -16,7 +16,7 @@ import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorConte
 import { YamlEditorProvider } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
 import { prettifyNameSingular, prettifyNamePlural } from 'shared/utils/helpers';
 import { Labels } from 'shared/components/Labels/Labels';
-import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
@@ -33,6 +33,7 @@ import { ForceUpdateModalContent } from 'shared/ResourceForm/ForceUpdateModalCon
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { useRecoilState } from 'recoil';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
+import { createPortal } from 'react-dom';
 
 const Injections = React.lazy(() =>
   import('../../../components/Extensibility/ExtensibilityInjections'),
@@ -76,6 +77,7 @@ ResourcesList.propTypes = {
   disableCreate: PropTypes.bool,
   disableEdit: PropTypes.bool,
   disableDelete: PropTypes.bool,
+  disableMargin: PropTypes.bool,
 };
 
 ResourcesList.defaultProps = {
@@ -88,6 +90,7 @@ ResourcesList.defaultProps = {
   disableCreate: false,
   disableEdit: false,
   disableDelete: false,
+  disableMargin: false,
   filterFn: () => true,
 };
 
@@ -96,10 +99,19 @@ export function ResourcesList(props) {
     return <></>; // wait for the context update
   }
 
+  const content = props.resources ? (
+    <ResourceListRenderer
+      resources={(props.resources || []).filter(props.filterFn)}
+      {...props}
+    />
+  ) : (
+    <Resources {...props} />
+  );
+
   return (
     <YamlEditorProvider>
-      {!props.isCompact && (
-        <PageHeader
+      {!props.isCompact ? (
+        <DynamicPageComponent
           title={prettifyNamePlural(props.resourceTitle, props.resourceType)}
           actions={
             <>
@@ -112,15 +124,10 @@ export function ResourcesList(props) {
             </>
           }
           description={props.description}
-        />
-      )}
-      {props.resources ? (
-        <ResourceListRenderer
-          resources={(props.resources || []).filter(props.filterFn)}
-          {...props}
+          content={content}
         />
       ) : (
-        <Resources {...props} />
+        content
       )}
     </YamlEditorProvider>
   );
@@ -187,6 +194,7 @@ export function ResourceListRenderer({
   disableCreate,
   disableEdit,
   disableDelete,
+  disableMargin,
   sortBy = {
     name: nameLocaleSort,
     time: timeSort,
@@ -238,7 +246,7 @@ export function ResourceListRenderer({
       header: t('common.headers.name'),
       value: entry =>
         hasDetailsView ? (
-          <Link className="fd-link" to={linkTo(entry)}>
+          <Link className="bsl-link" to={linkTo(entry)}>
             {nameSelector(entry)}
           </Link>
         ) : (
@@ -341,7 +349,7 @@ export function ResourceListRenderer({
             />
           ),
           actions: (closeModal, defaultCloseButton) => [
-            <Button compact onClick={makeForceUpdateFn(closeModal)}>
+            <Button onClick={makeForceUpdateFn(closeModal)}>
               {t('common.create-form.force-update')}
             </Button>,
             defaultCloseButton(closeModal),
@@ -464,13 +472,12 @@ export function ResourceListRenderer({
   const extraHeaderContent = listHeaderActions || [
     CreateResourceForm && !disableCreate && !isNamespaceAll && (
       <Button
-        glyph="add"
-        option="transparent"
+        icon="add"
+        design="Transparent"
         onClick={() => {
           setActiveResource(undefined);
           setShowEditDialog(true);
         }}
-        iconBeforeText
       >
         {createActionLabel ||
           t('components.resources-list.create', {
@@ -505,7 +512,7 @@ export function ResourceListRenderer({
         opened={showEditDialog}
         confirmText={t('common.buttons.create')}
         id={`add-${resourceType}-modal`}
-        className="modal-size--l create-resource-modal"
+        className="modal-size--l"
         renderForm={props => (
           <ErrorBoundary>
             <CreateResourceForm
@@ -524,12 +531,16 @@ export function ResourceListRenderer({
         modalOpeningComponent={<></>}
         customCloseAction={() => setShowEditDialog(false)}
       />
-      <DeleteMessageBox
-        resource={activeResource}
-        resourceUrl={prepareResourceUrl(resourceUrl, activeResource)}
-      />
+      {createPortal(
+        <DeleteMessageBox
+          resource={activeResource}
+          resourceUrl={prepareResourceUrl(resourceUrl, activeResource)}
+        />,
+        document.body,
+      )}
       {!(error && error.toString().includes('is forbidden')) && (
         <GenericList
+          disableMargin={disableMargin}
           title={showTitle ? title || prettifiedResourceName : null}
           actions={actions}
           entries={resources || []}
@@ -548,14 +559,16 @@ export function ResourceListRenderer({
           }}
         />
       )}
-      {!isCompact && (
-        <YamlUploadDialog
-          show={showAdd}
-          onCancel={() => {
-            setShowAdd(false);
-          }}
-        />
-      )}
+      {!isCompact &&
+        createPortal(
+          <YamlUploadDialog
+            open={showAdd}
+            onCancel={() => {
+              setShowAdd(false);
+            }}
+          />,
+          document.body,
+        )}
     </>
   );
 }

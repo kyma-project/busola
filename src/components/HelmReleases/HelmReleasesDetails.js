@@ -4,18 +4,21 @@ import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNot
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { prettifyNameSingular } from 'shared/utils/helpers';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { HelmReleaseData } from './HelmReleaseData';
 import { Link } from 'react-router-dom';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
 import { OtherReleaseVersions } from './OtherReleaseVersions';
 import { findRecentRelease } from './findRecentRelease';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
+import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
+import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 
 function HelmReleasesDetails({ releaseName }) {
   const { t } = useTranslation();
+  const [showAdd, setShowAdd] = useRecoilState(showYamlUploadDialogState);
   const { namespaceUrl } = useUrl();
 
   const namespace = useRecoilValue(activeNamespaceIdState);
@@ -42,33 +45,51 @@ function HelmReleasesDetails({ releaseName }) {
 
   return (
     <>
-      <PageHeader title={releaseName} breadcrumbItems={breadcrumbItems}>
+      <DynamicPageComponent
+        title={releaseName}
+        breadcrumbItems={breadcrumbItems}
+        content={
+          <>
+            <HelmReleaseData
+              encodedRelease={releaseSecret.data.release}
+              simpleHeader
+            />
+            <OtherReleaseVersions
+              releaseSecret={releaseSecret}
+              secrets={data}
+            />
+          </>
+        }
+      >
         {releaseSecret && (
           <>
-            <PageHeader.Column title={t('secrets.name_singular')}>
+            <DynamicPageComponent.Column title={t('secrets.name_singular')}>
               <Link
-                className="fd-link"
+                className="bsl-link"
                 to={namespaceUrl(`secrets/${releaseSecret.metadata.name}`)}
               >
                 {releaseSecret.metadata.name}
               </Link>
-            </PageHeader.Column>
-            <PageHeader.Column title={t('helm-releases.headers.revision')}>
+            </DynamicPageComponent.Column>
+            <DynamicPageComponent.Column
+              title={t('helm-releases.headers.revision')}
+            >
               {releaseSecret.metadata.labels.version}
-            </PageHeader.Column>
-            <PageHeader.Column title={t('common.headers.status')}>
+            </DynamicPageComponent.Column>
+            <DynamicPageComponent.Column title={t('common.headers.status')}>
               <HelmReleaseStatus
                 status={releaseSecret.metadata.labels.status}
               />
-            </PageHeader.Column>
+            </DynamicPageComponent.Column>
           </>
         )}
-      </PageHeader>
-      <HelmReleaseData
-        encodedRelease={releaseSecret.data.release}
-        simpleHeader
-      />
-      <OtherReleaseVersions releaseSecret={releaseSecret} secrets={data} />
+        <YamlUploadDialog
+          open={showAdd}
+          onCancel={() => {
+            setShowAdd(false);
+          }}
+        />
+      </DynamicPageComponent>
     </>
   );
 }

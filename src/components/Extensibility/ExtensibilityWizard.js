@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useContext } from 'react';
-import { Wizard } from 'fundamental-react';
+import { Wizard, WizardStep } from '@ui5/webcomponents-react';
 import { mapValues } from 'lodash';
 import jsyaml from 'js-yaml';
 import * as jp from 'jsonpath';
@@ -38,6 +38,7 @@ import { prepareRules } from './helpers/prepareRules';
 
 import './ExtensibilityWizard.scss';
 import { useGetWizard } from './useGetWizard';
+import { WizardButtons } from 'shared/components/WizardButtons/WizardButtons';
 
 // TODO extract this as a helper
 const isK8sResource = resource => {
@@ -47,11 +48,7 @@ const isK8sResource = resource => {
 
 // TODO common container
 function FormContainer({ children }) {
-  return (
-    <div className="form-container" container="true">
-      {children}
-    </div>
-  );
+  return <>{children}</>;
 }
 const FormStack = injectPluginStack(FormContainer);
 
@@ -76,6 +73,7 @@ export function ExtensibilityWizardCore({
   const [resourceInitial] = useState(
     JSON.parse(JSON.stringify(initialResource)),
   );
+  const [selected, setSelected] = useState(1);
 
   const [store, setStore] = useState(() => {
     return mapValues(resourceSchema.general.resources, (res, key) => {
@@ -206,42 +204,45 @@ export function ExtensibilityWizardCore({
 
   if (loadingSchemas) return <Spinner />;
 
+  let selectedIndex = 0;
+
   return (
     <UIMetaProvider widgets={widgets}>
-      <Wizard
-        navigationType="tabs"
-        headerSize="md"
-        contentSize="md"
-        className="extensibility-wizard"
-        onCancel={onCancel}
-        onComplete={onComplete}
-      >
-        {resourceSchema.steps.map(step => (
-          <Wizard.Step title={step.name}>
-            <section className="resource-form">
-              <p>{step?.description}</p>
-              <UIStoreProvider
-                store={store[step.resource]}
-                showValidity={true}
-                rootRule={prepareSchemaRules(step.form)}
-                onChange={actions => onChange(actions, step.resource)}
-              >
-                <FormStack
-                  isRoot
-                  schema={schemaMaps[step.resource]}
-                  resource={resources[step.resource]}
-                />
-              </UIStoreProvider>
-            </section>
-          </Wizard.Step>
-        ))}
-        <Wizard.Step
-          title={t('extensibility.wizard.summary')}
-          nextLabel={
-            uploadState === OPERATION_STATE_SUCCEEDED
-              ? t('common.buttons.close')
-              : t('extensibility.wizard.upload')
-          }
+      <Wizard contentLayout="SingleStep" className="extensibility-wizard">
+        {resourceSchema.steps.map(step => {
+          selectedIndex = selectedIndex + 1;
+          return (
+            <WizardStep
+              titleText={step.name}
+              selected={selected === selectedIndex}
+            >
+              <section className="resource-form">
+                <p>{step?.description}</p>
+                <UIStoreProvider
+                  store={store[step.resource]}
+                  showValidity={true}
+                  rootRule={prepareSchemaRules(step.form)}
+                  onChange={actions => onChange(actions, step.resource)}
+                >
+                  <FormStack
+                    isRoot
+                    schema={schemaMaps[step.resource]}
+                    resource={resources[step.resource]}
+                  />
+                </UIStoreProvider>
+              </section>
+              <WizardButtons
+                selected={selected}
+                setSelected={setSelected}
+                firstStep={selectedIndex === 1}
+                onCancel={onCancel}
+              />
+            </WizardStep>
+          );
+        })}
+        <WizardStep
+          titleText={t('extensibility.wizard.summary')}
+          selected={selected === selectedIndex + 1}
         >
           <div className="summary-content">
             <Editor
@@ -256,7 +257,19 @@ export function ExtensibilityWizardCore({
               <YamlResourcesList resourcesData={resourcesWithStatuses} />
             </div>
           </div>
-        </Wizard.Step>
+          <WizardButtons
+            selected={selected}
+            setSelected={setSelected}
+            lastStep={true}
+            customFinish={
+              uploadState === OPERATION_STATE_SUCCEEDED
+                ? t('common.buttons.close')
+                : t('extensibility.wizard.upload')
+            }
+            onCancel={onCancel}
+            onComplete={onComplete}
+          />
+        </WizardStep>
       </Wizard>
     </UIMetaProvider>
   );

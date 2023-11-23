@@ -3,10 +3,12 @@ import jsyaml from 'js-yaml';
 
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import { ResourceForm } from 'shared/ResourceForm';
-import { useGetTranslation } from 'components/Extensibility/helpers';
-
 import { Label } from '../../../shared/ResourceForm/components/Label';
+
+import { useGetTranslation } from 'components/Extensibility/helpers';
 import { useJsonata } from '../hooks/useJsonata';
+
+import { spacing } from '@ui5/webcomponents-react-base';
 
 function getValue(storeKeys, resource) {
   let value = resource;
@@ -91,13 +93,13 @@ export function MonacoRenderer({
       defaultOpen={defaultOpen}
       nestingLevel={nestingLevel}
     >
-      <div className="fd-margin-bottom--sm">
+      <div style={spacing.sapUiTinyMarginBottom}>
         <Label required={required} tooltipContent={tExt(tooltipContent)}>
           {tFromStoreKeys(storeKeys, schema)}
         </Label>
       </div>
 
-      <div className="fd-col fd-col-md--11">
+      <div className="bsl-col bsl-col-md--11">
         <Editor
           autocompletionDisabled
           updateValueOnParentChange

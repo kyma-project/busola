@@ -1,7 +1,5 @@
-import React from 'react';
-import { FormInput } from 'fundamental-react';
-
 import { MultiInput } from './MultiInput';
+import { Input } from '@ui5/webcomponents-react';
 
 export function TextArrayInput({
   defaultOpen,
@@ -16,6 +14,8 @@ export function TextArrayInput({
   ...props
 }) {
   const { validate, ...inputProps } = _inputProps || {};
+  const readOnlyOptions = readOnly ? { readOnly: true } : {};
+
   return (
     <MultiInput
       defaultOpen={defaultOpen}
@@ -24,38 +24,20 @@ export function TextArrayInput({
       sectionTooltipContent={sectionTooltipContent}
       readOnly={readOnly}
       inputs={[
-        ({
-          value,
-          setValue,
-          ref,
-          updateValue,
-          focus,
-          index,
-          internalValue,
-          setMultiValue,
-        }) => (
-          <FormInput
+        ({ value, setValue, ref, updateValue, index }) => (
+          <Input
             placeholder={Math.abs(index) === 1 ? placeholder : ''}
             key={index}
-            compact
             value={value || ''}
             ref={ref}
-            onChange={e => {
+            onInput={e => {
               setValue(e.target.value);
               updateValue();
             }}
-            onKeyDown={e => focus(e)}
-            onBlur={() => {
-              const fieldValue = internalValue?.filter(val => !!val);
-              setMultiValue(
-                typeof customFormatFn === 'function'
-                  ? customFormatFn(fieldValue)
-                  : fieldValue,
-              );
-            }}
-            readOnly={readOnly}
+            className="full-width"
+            {...readOnlyOptions}
             {...inputProps}
-            ariaLabel={ariaLabel}
+            aria-label={ariaLabel}
           />
         ),
       ]}

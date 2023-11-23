@@ -1,8 +1,8 @@
 import React from 'react';
-import { MessageStrip } from 'fundamental-react';
-import { useTranslation } from 'react-i18next';
+import { MessageStrip } from '@ui5/webcomponents-react';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
+import { useTranslation } from 'react-i18next';
 import { useAutocompleteWorker } from './autocompletion/useAutocompleteWorker';
 import { useOnFocus } from './hooks/useOnFocus';
 import { useOnBlur } from './hooks/useOnBlur';
@@ -12,6 +12,7 @@ import { useOnMount } from './hooks/useOnMount';
 import { useOnChange } from './hooks/useOnChange';
 import { useCreateEditor } from './hooks/useCreateEditor';
 
+import { spacing } from '@ui5/webcomponents-react-base';
 import './Editor.scss';
 
 export function Editor({
@@ -85,15 +86,20 @@ export function Editor({
       <div ref={divRef} className="resource-form__editor" />
       <div className="resource-form__legend">
         {error && (
-          <MessageStrip type="error" className="fd-margin--sm break-word">
+          <MessageStrip
+            design="Negative"
+            hideCloseButton
+            className="break-word"
+            style={spacing.sapUiSmallMargin}
+          >
             {t('common.create-form.editor-error', { error })}
           </MessageStrip>
         )}
         {schemaError && (
           <MessageStrip
-            type="warning"
-            className="fd-margin--sm break-word"
-            dismissible
+            design="Warning"
+            className="break-word"
+            style={spacing.sapUiSmallMargin}
           >
             {t('common.create-form.autocomplete-unavailable-error', {
               error: schemaError.error || schemaError.message || schemaError,
@@ -101,19 +107,22 @@ export function Editor({
           </MessageStrip>
         )}
         {warnings.length ? (
-          <div>
-            <MessageStrip type="warning" className="fd-margin--sm break-word">
-              {warnings.map(m => (
-                <span
-                  className="line"
-                  key={`${m.startLineNumber}${m.startColumn}`}
-                >
-                  {t('common.tooltips.line')} {m.startLineNumber},{' '}
-                  {t('common.tooltips.column')} {m.startColumn}: {m.message}
-                </span>
-              ))}
-            </MessageStrip>
-          </div>
+          <MessageStrip
+            design="Warning"
+            hideCloseButton
+            className="break-word"
+            style={spacing.sapUiSmallMargin}
+          >
+            {warnings.map(m => (
+              <span
+                className="line"
+                key={`${m.startLineNumber}${m.startColumn}`}
+              >
+                {t('common.tooltips.line')} {m.startLineNumber},{' '}
+                {t('common.tooltips.column')} {m.startColumn}: {m.message}
+              </span>
+            ))}
+          </MessageStrip>
         ) : null}
       </div>
     </div>

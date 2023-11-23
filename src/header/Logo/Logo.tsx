@@ -1,15 +1,17 @@
-import { useRecoilValue } from 'recoil';
-import { themeState } from 'state/preferences/themeAtom';
+import { FlexBox, Title } from '@ui5/webcomponents-react';
+import { useTranslation } from 'react-i18next';
 
-import './Logo.scss';
-
-export function Logo() {
-  const theme = useRecoilValue(themeState);
+export function Logo(props: any) {
+  const { t } = useTranslation();
 
   return (
-    <img
-      alt="Kyma"
-      src={theme === 'hcw' ? '/assets/logo-black.svg' : '/assets/logo.svg'}
-    />
+    <FlexBox alignItems="Center" slot={props.slot}>
+      <img
+        alt="Kyma"
+        src="https://sap.github.io/ui5-webcomponents/assets/images/sap-logo-svg.svg"
+        style={{ height: '32px' }}
+      />
+      <Title level="H5">{t('common.product-title')}</Title>
+    </FlexBox>
   );
 }

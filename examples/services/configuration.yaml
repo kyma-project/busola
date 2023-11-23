@@ -52,9 +52,9 @@ data:
             sort: true
             widget: Badge
             highlights:
-              positive:
+              success:
                 - 'true'
-              negative:
+              error:
                 - 'false'
       - widget: ResourceList
         source: $apirules()

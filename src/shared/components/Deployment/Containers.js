@@ -1,15 +1,12 @@
-import React from 'react';
 import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 import { K8sNameField } from 'shared/ResourceForm/fields';
 
-import { Button, MessageStrip } from 'fundamental-react';
+import { Button, MessageStrip } from '@ui5/webcomponents-react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { RuntimeResources } from 'shared/ResourceForm/fields';
-
-import './Containers.scss';
 
 function SingleContainerSection({ container, setContainer }) {
   const { t } = useTranslation();
@@ -29,7 +26,6 @@ function SingleContainerSection({ container, setContainer }) {
       />
       <ResourceForm.FormField
         required
-        className="fd-margin-bottom--sm"
         propertyPath="$.image"
         label={t('deployments.create-modal.simple.docker-image')}
         input={Inputs.Text}
@@ -59,7 +55,7 @@ export function Containers({ value: containers, setValue: setContainers }) {
 
   if (!containers.length) {
     return (
-      <MessageStrip type="warning">
+      <MessageStrip design="Warning" hideCloseButton>
         {t('deployments.create-modal.advanced.one-container-required')}
       </MessageStrip>
     );
@@ -86,10 +82,8 @@ export function Containers({ value: containers, setValue: setContainers }) {
       })}
       actions={
         <Button
-          glyph="delete"
-          type="negative"
-          option="transparent"
-          compact
+          icon="delete"
+          design="Transparent"
           onClick={() => removeContainer(i)}
         />
       }

@@ -230,6 +230,7 @@ common:
     save: Save
     submit: Submit
     update: Update
+    upload: Upload
     view-yaml: View YAML
   create-form:
     autocomplete-unavailable-error: Monaco autocompletion unavailable. {{error}}.
@@ -251,7 +252,7 @@ common:
     delete-confirm: Don't ask again
     information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.
     message: Are you sure you want to delete {{type}} {{name}}?
-    title: Delete {{name}}
+    title: Delete {{type}}
   errors:
     couldnt-fetch-resources: Couldn't fetch resources.
     error: Error
@@ -329,6 +330,7 @@ common:
   placeholders:
     secret-ref-name: Select name
     secret-ref-namespace: Select Namespace
+  product-title: Kyma
   protected-resource: Resource protected. Go to Preferences to turn on the modification of protected resources.
   sorting:
     asc: Ascending
@@ -996,6 +998,7 @@ pods:
     type: Type
     volume-name: Volume Name
   labels:
+    logs: Logs
     args: Args
     command: Command
     containers: Containers
@@ -1227,11 +1230,11 @@ schema:
     yaml: YAML
   required: Required
 secrets:
+  secret-not-found: Secret not found
+  secret-empty: Empty Secret
   buttons:
-    collapse: Collapse All
     decode: Decode
     encode: Encode
-    expand: Expand All
   certificates:
     close-expiration: Certificate will expire in less than one day.
     expired: Certificate expired
@@ -1333,16 +1336,16 @@ settings:
   interface:
     description: Appearance, language
     themes:
-      dark:
+      sap_horizon_dark:
         description: Use in dimmed environments
         title: Dark
-      hcb:
+      sap_horizon_hcb:
         description: Optimized contrast and accessibility for bright environments
         title: High-Contrast Black
-      hcw:
+      sap_horizon_hcw:
         description: Optimized contrast and accessibility for dark environments
         title: High-Contrast White
-      light:
+      sap_horizon:
         description: Use in default office environments
         title: Light
       light_dark:

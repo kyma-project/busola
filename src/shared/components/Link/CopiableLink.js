@@ -4,8 +4,8 @@ import { Link } from 'shared/components/Link/Link';
 
 export const CopiableLink = props => {
   return (
-    <CopiableText textToCopy={props.url} compact={true}>
-      <Link className="fd-link" {...props} />
+    <CopiableText textToCopy={props.url}>
+      <Link className="bsl-link" {...props} />
     </CopiableText>
   );
 };

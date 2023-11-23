@@ -1,19 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { saveAs } from 'file-saver';
 import {
   Button,
-  LayoutPanel,
+  Label,
   Switch,
   Select,
-  FormLabel,
-} from 'fundamental-react';
+  Option,
+  Text,
+} from '@ui5/webcomponents-react';
 import { useGetStream } from 'shared/hooks/BackendAPI/useGet';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { SearchInput } from 'shared/components/GenericList/SearchInput';
 import { useTranslation } from 'react-i18next';
 import { useUrl } from 'hooks/useUrl';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import './ContainersLogs.scss';
 
@@ -150,9 +152,11 @@ const ContainersLogs = ({ params }) => {
     if (data.length === 0)
       return (
         <div className="empty-logs">
-          {t('pods.message.no-logs-available', {
-            containerName: containerName,
-          })}
+          <Text>
+            {t('pods.message.no-logs-available', {
+              containerName: containerName,
+            })}
+          </Text>
         </div>
       );
 
@@ -172,66 +176,69 @@ const ContainersLogs = ({ params }) => {
   };
 
   return (
-    <div className="logs-wraper">
-      <div className="logs-header">
-        <PageHeader
-          title={params.containerName}
-          breadcrumbItems={breadcrumbs}
-        />
-      </div>
-      <LayoutPanel className="fd-margin--md logs-panel">
-        <LayoutPanel.Header className="logs-panel-header">
-          <LayoutPanel.Head title="Logs" className="logs-title" />
-          <LayoutPanel.Actions className="logs-actions">
-            <FormLabel htmlFor="context-chooser">
-              {t('pods.labels.filter-timeframe')}
-            </FormLabel>
-            <Select
-              options={logTimeframeOptions}
-              placeholder="all"
-              compact
-              selectedKey={sinceSeconds.toString()}
-              onSelect={(_, { key }) => onLogTimeframeChange(key)}
+    <DynamicPageComponent
+      title={params.containerName}
+      breadcrumbItems={breadcrumbs}
+      content={
+        <UI5Panel
+          title={t('pods.labels.logs')}
+          headerActions={
+            <>
+              <Label for="context-chooser">
+                {t('pods.labels.filter-timeframe')}
+              </Label>
+              <Select
+                onChange={event => {
+                  const selectedTimeFrame = event.detail.selectedOption.value;
+                  onLogTimeframeChange(selectedTimeFrame);
+                }}
+              >
+                {logTimeframeOptions.map(option => (
+                  <Option
+                    value={option.key}
+                    selected={sinceSeconds.toString() === option.key}
+                  >
+                    {option.text}
+                  </Option>
+                ))}
+              </Select>
+              <Label>{t('pods.labels.show-timestamps')}</Label>
+              <Switch
+                disabled={!logsToSave?.length}
+                onChange={onSwitchChange}
+              />
+              <Label>{t('pods.labels.reverse-logs')}</Label>
+              <Switch
+                disabled={!logsToSave?.length}
+                onChange={onReverseChange}
+              />
+              <Button
+                disabled={!logsToSave?.length}
+                className="logs-download"
+                onClick={() => saveToFile(params.podName, params.containerName)}
+              >
+                {t('pods.labels.save-to-file')}
+              </Button>
+              <SearchInput
+                disabled={!logsToSave?.length}
+                title={'Logs'}
+                searchQuery={searchQuery}
+                handleQueryChange={setSearchQuery}
+                showSuggestion={false}
+                onKeyDown={changeSelectedLog}
+              />
+            </>
+          }
+        >
+          <div className="logs-panel-body">
+            <LogsPanel
+              streamData={streamData}
+              containerName={params.containerName}
             />
-            <Switch
-              disabled={!logsToSave?.length}
-              compact
-              onChange={onSwitchChange}
-            >
-              {t('pods.labels.show-timestamps')}
-            </Switch>
-            <Switch
-              disabled={!logsToSave?.length}
-              compact
-              onChange={onReverseChange}
-            >
-              {t('pods.labels.reverse-logs')}
-            </Switch>
-            <Button
-              disabled={!logsToSave?.length}
-              className="logs-download"
-              onClick={() => saveToFile(params.podName, params.containerName)}
-            >
-              {t('pods.labels.save-to-file')}
-            </Button>
-            <SearchInput
-              disabled={!logsToSave?.length}
-              title={'Logs'}
-              searchQuery={searchQuery}
-              handleQueryChange={setSearchQuery}
-              showSuggestion={false}
-              onKeyDown={changeSelectedLog}
-            />
-          </LayoutPanel.Actions>
-        </LayoutPanel.Header>
-        <LayoutPanel.Body className="logs-panel-body">
-          <LogsPanel
-            streamData={streamData}
-            containerName={params.containerName}
-          />
-        </LayoutPanel.Body>
-      </LayoutPanel>
-    </div>
+          </div>
+        </UI5Panel>
+      }
+    />
   );
 };
 

@@ -1,4 +1,3 @@
-import { IconGlyph } from 'fundamental-react/lib/Icon/Icon';
 import { K8sResource } from 'types';
 
 export type Scope = 'namespace' | 'cluster';
@@ -89,7 +88,7 @@ export type ExtGeneral = {
   urlPath: string;
   scope: 'namespace' | 'cluster';
   description?: string;
-  icon?: IconGlyph;
+  icon?: string;
   id?: string;
 };
 
@@ -134,7 +133,7 @@ export type NavNode = {
   requiredFeatures: ConfigFeaturesNames[];
   apiVersion: string;
   apiGroup: string;
-  icon?: IconGlyph;
+  icon?: string;
   topLevelNode?: boolean;
   externalUrl?: string;
   createUrlFn?: (generators: UrlGenerators) => string;

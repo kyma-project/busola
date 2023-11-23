@@ -7,11 +7,11 @@ export const SubscriptionConditionStatus = ({ condition }) => {
   const statusBadgeProperties =
     condition?.status === 'True'
       ? {
-          type: 'success',
+          type: 'Success',
           text: t('common.statuses.ready'),
         }
       : {
-          type: 'error',
+          type: 'Error',
           text: t('common.statuses.error'),
         };
   return (

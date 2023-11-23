@@ -1,5 +1,5 @@
-import React, { useCallback } from 'react';
-import { Button, ComboboxInput } from 'fundamental-react';
+import { useCallback } from 'react';
+import { Button, ComboBox, ComboBoxItem } from '@ui5/webcomponents-react';
 import { isNil } from 'lodash';
 import { languages } from 'monaco-editor';
 import { useTranslation } from 'react-i18next';
@@ -7,6 +7,8 @@ import * as Inputs from 'shared/ResourceForm/inputs';
 import { FormField } from '../../components/FormField';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import { ResourceForm } from 'shared/ResourceForm/components/ResourceForm';
+
+import { spacing } from '@ui5/webcomponents-react-base';
 import './RichEditorSection.scss';
 
 function getAvailableLanguages() {
@@ -30,32 +32,31 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
   const { key, value, language } = item || {};
 
   const languageDropdown = (
-    <ComboboxInput
+    <ComboBox
       id="choose-language-input"
-      ariaLabel="choose-language"
+      aria-label="choose-language"
       disabled={!item}
-      compact
-      showAllEntries
-      searchFullString
-      selectionType="manual"
-      options={getAvailableLanguages()}
-      selectedKey={typeof language === 'string' ? language : undefined}
-      onSelectionChange={(e, { key: language }) => {
-        e?.stopPropagation(); // don't collapse the section
-        onChange({ language });
+      value={typeof language === 'string' ? language : ''}
+      onChange={event => {
+        const selectedOption = getAvailableLanguages().find(
+          o => o.text === event.target.value,
+        );
+        if (selectedOption) onChange(selectedOption.key);
       }}
       placeholder={t('components.rich-editor-data-field.language-placeholder')}
-    />
+    >
+      {getAvailableLanguages().map(language => (
+        <ComboBoxItem id={language.key} text={language.text} />
+      ))}
+    </ComboBox>
   );
 
   const deleteButton = (
     <Button
-      glyph="delete"
+      icon="delete"
       disabled={!item}
-      compact
-      type="negative"
+      design="Transparent"
       onClick={onDelete}
-      option="transparent"
     />
   );
 
@@ -65,7 +66,7 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
       setValue={key => onChange({ key })}
       input={Inputs.Text}
       label={t('components.key-value-form.key')}
-      className="fd-margin-bottom--sm"
+      style={spacing.sapUiSmallMarginBottom}
       placeholder={t('components.key-value-field.enter-key')}
       onBlur={pushValue}
       pattern={'[-._a-zA-Z0-9]+'}
@@ -105,7 +106,7 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
     >
       {keyInput}
       <div className="rich-editor__dropdown-wrapper">
-        <div className={'fd-margin--tiny'}>{languageDropdown}</div>
+        <div style={spacing.sapUiTinyMargin}>{languageDropdown}</div>
       </div>
       {valueInput}
     </ResourceForm.CollapsibleSection>

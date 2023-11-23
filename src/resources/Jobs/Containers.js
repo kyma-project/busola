@@ -43,7 +43,6 @@ export function SingleContainerForm({
       <ResourceForm.FormField
         required
         advanced
-        className="fd-margin-bottom--sm"
         propertyPath="$.imagePullPolicy"
         label={t('jobs.create-modal.labels.image-pull-policy')}
         input={Inputs.Dropdown}

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 import { createPatch } from 'rfc6902';
 import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNotFound';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
@@ -19,7 +19,7 @@ import {
   prettifyNamePlural,
 } from 'shared/utils/helpers';
 import { Labels } from 'shared/components/Labels/Labels';
-import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
@@ -33,6 +33,7 @@ import { Tooltip } from '../Tooltip/Tooltip';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { useRecoilState } from 'recoil';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
+import { createPortal } from 'react-dom';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
@@ -204,30 +205,20 @@ function Resource({
           className="actions-tooltip"
           content={t('common.tooltips.protected-resources-info')}
         >
-          <Button
-            className="fd-margin-end--tiny"
-            onClick={() => openYaml(resource)}
-          >
+          <Button onClick={() => openYaml(resource)}>
             {t('common.buttons.view-yaml')}
           </Button>
         </Tooltip>
       );
     } else if (disableEdit) {
       return (
-        <Button
-          className="fd-margin-end--tiny"
-          onClick={() => openYaml(resource)}
-        >
+        <Button onClick={() => openYaml(resource)}>
           {t('common.buttons.view-yaml')}
         </Button>
       );
     } else if (!CreateResourceForm || !CreateResourceForm?.allowEdit) {
       return (
-        <Button
-          className="fd-margin-end--tiny"
-          onClick={() => openYaml(resource)}
-          option="emphasized"
-        >
+        <Button onClick={() => openYaml(resource)} design="Emphasized">
           {t('common.buttons.edit-yaml')}
         </Button>
       );
@@ -242,7 +233,7 @@ function Resource({
             })
           }
           modalOpeningComponent={
-            <Button className="fd-margin-end--tiny" option="emphasized">
+            <Button design="Emphasized">
               {editActionLabel ||
                 t('components.resource-details.edit', {
                   resourceType: prettifiedResourceKind,
@@ -251,7 +242,7 @@ function Resource({
           }
           confirmText={t('common.buttons.update')}
           id={`edit-${resourceType}-modal`}
-          className="modal-size--l create-resource-modal"
+          className="modal-size--l"
           renderForm={props => (
             <ErrorBoundary>
               <CreateResourceForm
@@ -304,8 +295,7 @@ function Resource({
         <Button
           disabled={protectedResource || disableDelete}
           onClick={() => handleResourceDelete({ resourceUrl })}
-          option="transparent"
-          type="negative"
+          design="Transparent"
         >
           {t('common.buttons.delete')}
         </Button>,
@@ -359,61 +349,80 @@ function Resource({
 
   return (
     <>
-      <PageHeader
+      <DynamicPageComponent
         title={resource.metadata.name}
         actions={actions}
         breadcrumbItems={breadcrumbItems}
+        content={
+          <>
+            {createPortal(
+              <DeleteMessageBox
+                resource={resource}
+                resourceUrl={resourceUrl}
+              />,
+              document.body,
+            )}
+            <Suspense fallback={<Spinner />}>
+              <Injections
+                destination={resourceType}
+                slot="details-top"
+                root={resource}
+              />
+            </Suspense>
+            {(customComponents || []).map(component =>
+              component(resource, resourceUrl),
+            )}
+            {children}
+            {resourceGraphConfig?.[resource.kind] && (
+              <Suspense fallback={<Spinner />}>
+                <ResourceGraph
+                  resource={resource}
+                  config={resourceGraphConfig}
+                />
+              </Suspense>
+            )}
+            <Suspense fallback={<Spinner />}>
+              <Injections
+                destination={resourceType}
+                slot="details-bottom"
+                root={resource}
+              />
+            </Suspense>
+          </>
+        }
       >
-        <PageHeader.Column
+        <DynamicPageComponent.Column
           key="Labels"
           title={t('common.headers.labels')}
           columnSpan="1 / 3"
         >
           <Labels labels={resource.metadata.labels || {}} />
-        </PageHeader.Column>
+        </DynamicPageComponent.Column>
 
-        <PageHeader.Column key="Created" title={t('common.headers.created')}>
+        <DynamicPageComponent.Column
+          key="Created"
+          title={t('common.headers.created')}
+        >
           <ReadableCreationTimestamp
             timestamp={resource.metadata.creationTimestamp}
           />
-        </PageHeader.Column>
+        </DynamicPageComponent.Column>
 
         {customColumns.filter(filterColumns).map(col => (
-          <PageHeader.Column key={col.header} title={col.header}>
+          <DynamicPageComponent.Column key={col.header} title={col.header}>
             {col.value(resource)}
-          </PageHeader.Column>
+          </DynamicPageComponent.Column>
         ))}
-      </PageHeader>
-      <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />
-      <Suspense fallback={<Spinner />}>
-        <Injections
-          destination={resourceType}
-          slot="details-top"
-          root={resource}
-        />
-      </Suspense>
-      {(customComponents || []).map(component =>
-        component(resource, resourceUrl),
-      )}
-      {children}
-      {resourceGraphConfig?.[resource.kind] && (
-        <Suspense fallback={<Spinner />}>
-          <ResourceGraph resource={resource} config={resourceGraphConfig} />
-        </Suspense>
-      )}
-      <Suspense fallback={<Spinner />}>
-        <Injections
-          destination={resourceType}
-          slot="details-bottom"
-          root={resource}
-        />
-      </Suspense>
-      <YamlUploadDialog
-        show={showAdd}
-        onCancel={() => {
-          setShowAdd(false);
-        }}
-      />
+        {createPortal(
+          <YamlUploadDialog
+            open={showAdd}
+            onCancel={() => {
+              setShowAdd(false);
+            }}
+          />,
+          document.body,
+        )}
+      </DynamicPageComponent>
     </>
   );
 }

@@ -1,12 +1,14 @@
 import React from 'react';
-import { FormInput } from 'fundamental-react';
 import { useValidation } from 'shared/hooks/useValidation';
+import { Input } from '@ui5/webcomponents-react';
 
 export function Text(props) {
   return <WrappedText {...props} />;
 }
 
 export function WrappedText({ value, setValue, onChange, inputRef, ...props }) {
+  if (!props.readOnly) delete props.readOnly;
+
   const {
     validationRef,
     internalValue,
@@ -23,10 +25,10 @@ export function WrappedText({ value, setValue, onChange, inputRef, ...props }) {
   });
 
   return (
-    <div className={fullWidth ? '' : 'fd-col fd-col-md--11'}>
-      <FormInput
-        compact
+    <div className={fullWidth ? '' : 'bsl-col bsl-col-md--11'}>
+      <Input
         value={value || ''}
+        onInput={onChange ?? (e => setValue && setValue(e.target.value))}
         {...inputProps}
         {...validationProps}
       />

@@ -15,20 +15,23 @@ context('Test Services', () => {
 
   it('Creates the EXT Services config', () => {
     cy.getLeftNav()
-      .contains('Cluster Details', { includeShadowDom: true })
+      .contains('Cluster Details')
       .click();
 
-    cy.contains('Upload YAML').click();
+    cy.contains('ui5-button', 'Upload YAML').click();
 
     cy.loadFiles('examples/services/configuration.yaml').then(resources => {
       const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
       cy.pasteToMonaco(input);
     });
 
-    cy.contains('Submit').click();
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Upload')
+      .should('be.visible')
+      .click();
 
-    cy.get('.fd-dialog__body')
-      .find('.sap-icon--message-success')
+    cy.get('ui5-dialog')
+      .find('.status-message-success')
       .should('have.length', 1);
 
     cy.loadFiles('examples/services/samples.yaml').then(resources => {
@@ -36,10 +39,13 @@ context('Test Services', () => {
       cy.pasteToMonaco(input);
     });
 
-    cy.contains('Submit').click();
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Upload')
+      .should('be.visible')
+      .click();
 
-    cy.get('.fd-dialog__body')
-      .find('.sap-icon--message-success')
+    cy.get('ui5-dialog')
+      .find('.status-message-success')
       .should('have.length', 1);
   });
 
@@ -47,17 +53,17 @@ context('Test Services', () => {
     cy.loginAndSelectCluster();
 
     cy.getLeftNav()
-      .contains('Namespaces', { includeShadowDom: true })
+      .contains('Namespaces')
       .click();
 
     cy.contains('a', 'services').click();
 
     cy.getLeftNav()
-      .contains('Examples', { includeShadowDom: true })
+      .contains('Examples')
       .click();
 
     cy.getLeftNav()
-      .contains('Custom Services', { includeShadowDom: true })
+      .contains('Custom Services')
       .click();
 
     cy.contains('Type');
@@ -74,7 +80,8 @@ context('Test Services', () => {
 
     cy.contains('Type');
     cy.contains('LoadBalancer');
-    cy.contains('a', 'Custom Services');
+
+    cy.navigateBackTo('example-services', 'Custom Services');
   });
 
   it('Displays the header overridden by translations (on Details)', () => {

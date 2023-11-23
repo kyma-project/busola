@@ -2,22 +2,17 @@ import { useState, useRef } from 'react';
 
 export function useCustomFormValidator() {
   const formElementRef = useRef(null);
-  const [isValid, setValid] = useState(false);
+  const [isValid, setValid] = useState(true);
   const [customValid, setCustomValid] = useState(true);
 
   const revalidate = (cv = customValid) => {
-    // FormContainer: Extensibility = 'div.form-container', otherwise = .firstChild
-    const formContainer =
-      formElementRef.current.querySelector('div.form-container') ??
-      formElementRef.current.firstChild;
+    let formContainer =
+      formElementRef.current?.querySelector('div.simple-form') ??
+      formElementRef.current?.querySelector('div.advanced-form') ??
+      formElementRef.current?.querySelector('div.yaml-form');
 
-    // When formContainer doesn't exist, the form is a single element
-    // Then go with the default form validation
     if (formContainer) {
       setValid(cv && validateElement(formContainer, true).valid);
-    } else {
-      const formValid = formElementRef?.current?.checkValidity() ?? false;
-      setValid(cv && formValid);
     }
   };
 
@@ -37,7 +32,12 @@ export function useCustomFormValidator() {
       if (child.classList.contains('form-field')) {
         // Validates the KeyValuePair
         if (child.classList.contains('multi-input')) {
-          const { valid, filled } = validateInputList(child, isRequired);
+          const { valid, filled } = validateKeyValuePairs(child, isRequired);
+          isValid = isValid && valid;
+          isPartiallyFilled = isPartiallyFilled || filled;
+          isComplete = isComplete && filled;
+        } else if (child.classList.contains('multi-checkbox')) {
+          const { valid, filled } = validateMultiCheckboxes(child, isRequired);
           isValid = isValid && valid;
           isPartiallyFilled = isPartiallyFilled || filled;
           isComplete = isComplete && filled;
@@ -75,7 +75,6 @@ export function useCustomFormValidator() {
             contentParent,
             required,
           );
-          //isValid = isValid && valid && (filled || contentParent.children.length === 0);
           isPartiallyFilled = isPartiallyFilled || filled;
           isComplete = isComplete && complete;
           isValid = isValid && valid && complete;
@@ -101,12 +100,26 @@ export function useCustomFormValidator() {
 
   // Validates the FormField's input
   function validateFormField(formField) {
-    // Input: Extensibility = 'input', otherwise = #select-dropdown
-    const input = formField.querySelector('input');
-    const isValid = input
-      ? input.checkValidity()
-      : formField.querySelector('#select-dropdown')?.textContent !== '';
-    return { valid: isValid, filled: input?.value !== '' };
+    const input =
+      formField.querySelector('ui5-input') ??
+      formField.querySelector('ui5-combobox') ??
+      formField.querySelector('ui5-switch');
+
+    const required = input?.required;
+    const pattern = input?.getAttribute('pattern');
+    const value = input?.value;
+
+    const isValid = !(
+      (required && value === '') ||
+      (pattern && !value.match(pattern))
+    );
+    return { valid: isValid, filled: value !== '' };
+  }
+
+  function validateMultiCheckboxes(formField, isRequired) {
+    const checkboxes = Array.from(formField.querySelectorAll('ui5-checkbox'));
+    const isFilled = checkboxes.some(checkbox => checkbox.checked);
+    return { valid: !isRequired || isFilled, filled: isFilled };
   }
 
   function validateInputList(inputList, isRequired) {
@@ -115,9 +128,28 @@ export function useCustomFormValidator() {
     if (isRequired && items.length < 2) return { valid: false, filled: false };
 
     // Validates the inputs of all the list's child elements
-    const inputs = inputList.querySelectorAll('input');
-    for (let i = 0; i < inputs.length; i++) {
-      if (!inputs[i].checkValidity())
+    const inputs = inputList.querySelectorAll('ui5-input');
+    for (let i = 0; i < inputs.length - 1; i++) {
+      const pattern = inputs[i].getAttribute('pattern');
+      const value = inputs[i].value;
+      if (value === '' || (pattern && !value.match(pattern)))
+        return { valid: false, filled: items.length >= 2 };
+    }
+    return { valid: true, filled: items.length >= 2 };
+  }
+
+  function validateKeyValuePairs(list, isRequired) {
+    // The list is invalid if it has no children
+    const items = list.querySelectorAll('ul > li');
+    if (isRequired && items.length < 2) return { valid: false, filled: false };
+
+    // Validates the inputs (excepct for the last two placeholder inputs)
+    const keyInputs = list.querySelectorAll('ui5-input');
+    for (let i = 0; i < keyInputs.length - 2; i++) {
+      const isKey = keyInputs[i].getAttribute('placeholder') === 'Enter key';
+      const pattern = keyInputs[i].getAttribute('pattern');
+      const value = keyInputs[i].value;
+      if ((isKey && value === '') || (pattern && !value.match(pattern)))
         return { valid: false, filled: items.length >= 2 };
     }
     return { valid: true, filled: items.length >= 2 };

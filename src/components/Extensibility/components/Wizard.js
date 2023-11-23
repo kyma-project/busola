@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Dialog } from 'fundamental-react';
+import { Button, Dialog } from '@ui5/webcomponents-react';
 
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 
@@ -8,16 +8,9 @@ import { useFeature } from 'hooks/useFeature';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 import { useTranslation } from 'react-i18next';
 import { useEventListener } from 'hooks/useEventListener';
+import { createPortal } from 'react-dom';
 
-export function Wizard({
-  value,
-  structure,
-  schema,
-  originalResource,
-  scope,
-  arrayItems,
-  singleRootResource,
-}) {
+export function Wizard({ value, structure, singleRootResource }) {
   const { t: tExt } = useGetTranslation();
   const { t } = useTranslation();
   const [showWizard, setShowWizard] = useState(false);
@@ -41,20 +34,23 @@ export function Wizard({
       <Button onClick={() => setShowWizard(!showWizard)}>
         {tExt(value ?? structure.name)}
       </Button>
-      <Dialog
-        show={showWizard}
-        className="wizard-dialog"
-        title={t('extensibility.wizard.headers.name') + ' ' + wizardName}
-        actions={[]}
-      >
-        <ErrorBoundary onClose={handleCloseModal}>
-          <ExtensibilityWizard
-            onCancel={() => setShowWizard(false)}
-            wizardName={wizardName}
-            singleRootResource={singleRootResource}
-          />
-        </ErrorBoundary>
-      </Dialog>
+      {createPortal(
+        <Dialog
+          open={showWizard}
+          className="wizard-dialog"
+          headerText={t('extensibility.wizard.headers.name') + ' ' + wizardName}
+          onAfterClose={() => setShowWizard(false)}
+        >
+          <ErrorBoundary onClose={handleCloseModal}>
+            <ExtensibilityWizard
+              onCancel={() => setShowWizard(false)}
+              wizardName={wizardName}
+              singleRootResource={singleRootResource}
+            />
+          </ErrorBoundary>
+        </Dialog>,
+        document.body,
+      )}
     </>
   );
 }

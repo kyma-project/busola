@@ -1,7 +1,5 @@
-import React from 'react';
-
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { ComboboxInput } from 'fundamental-react';
+import { ComboBox, ComboBoxItem } from '@ui5/webcomponents-react';
 import { ResourceForm } from 'shared/ResourceForm';
 import { useTranslation } from 'react-i18next';
 import { Dropdown } from 'shared/ResourceForm/inputs';
@@ -49,21 +47,27 @@ export const RoleForm = ({
     text: r.metadata.name,
   }));
 
+  const onChange = (event, props) => {
+    const selectedOption = options.find(o => o.text === event.target.value) ?? {
+      key: event.target._state.filterValue,
+      text: event.target._state.filterValue,
+    };
+    props.setValue(selectedOption.text);
+  };
+
   const roleNameInput = (
     <ResourceForm.FormField
       required
       label={t('role-bindings.create-modal.role')}
       propertyPath="$.roleRef.name"
       input={props => (
-        <div className="fd-col fd-col-md--11">
-          <ComboboxInput
+        <div className="bsl-col bsl-col-md--11">
+          <ComboBox
             id="role"
-            ariaLabel="Role Combobox"
-            arrowLabel="Role Combobox arrow"
-            required
-            compact
-            showAllEntries
-            searchFullString
+            aria-label="Role Combobox"
+            disabled={props.disabled || !options?.length}
+            filter="Contains"
+            inputRef={props.inputRef}
             placeholder={t('common.messages.type-to-select', {
               value: t(
                 binding.roleRef?.kind === 'ClusterRole'
@@ -71,13 +75,16 @@ export const RoleForm = ({
                   : 'roles.name_singular',
               ),
             })}
-            options={options}
-            selectedKey={props.value}
-            typedValue={props.value}
-            selectionType="manual"
-            onSelectionChange={(_, selected) => props.setValue(selected.text)}
-            {...props}
-          />
+            value={
+              options.find(o => o.key === props.value)?.text ?? props.value
+            }
+            onChange={event => onChange(event, props)}
+            onInput={event => onChange(event, props)}
+          >
+            {options.map(option => (
+              <ComboBoxItem id={option.key} text={option.text} />
+            ))}
+          </ComboBox>
         </div>
       )}
     />

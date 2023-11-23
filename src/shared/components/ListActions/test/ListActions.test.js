@@ -11,12 +11,14 @@ describe('ListActions', () => {
       { name: 'action1', handler: jest.fn() },
       { name: 'action2', handler: jest.fn() },
     ];
-    const { queryByLabelText, queryAllByRole } = render(
+    const { queryByText, queryByLabelText } = render(
       <ListActions actions={actions} entry={entry} />,
     );
 
     expect(queryByLabelText('more-actions')).toBeFalsy();
-    expect(queryAllByRole('button')).toHaveLength(2);
+
+    expect(queryByText(actions[0].name)).toBeInTheDocument();
+    expect(queryByText(actions[1].name)).toBeInTheDocument();
 
     actions.forEach(action => {
       const actionButton = queryByLabelText(action.name);
@@ -57,7 +59,7 @@ describe('ListActions', () => {
 
     const actionButton = queryByLabelText(actions[0].name);
     expect(actionButton).toBeInTheDocument();
-    expect(actionButton.querySelector('i')).toHaveClass('sap-icon--edit');
+    expect(actionButton).toHaveAttribute('icon', 'edit');
 
     expect(queryByText(actions[0].name)).not.toBeInTheDocument();
   });
@@ -72,10 +74,10 @@ describe('ListActions', () => {
     );
 
     const editButton = getByLabelText('Edit');
-    expect(editButton.querySelector('i')).toHaveClass('sap-icon--edit');
+    expect(editButton).toHaveAttribute('icon', 'edit');
 
     const deleteButton = getByLabelText('Delete');
-    expect(deleteButton.querySelector('i')).toHaveClass('sap-icon--delete');
+    expect(deleteButton).toHaveAttribute('icon', 'delete');
   });
 
   it('Can override predefined icons', () => {
@@ -88,11 +90,9 @@ describe('ListActions', () => {
     );
 
     const editButton = getByLabelText('Edit');
-    expect(editButton.querySelector('i')).not.toHaveClass('sap-icon--edit');
-    expect(editButton.querySelector('i')).toHaveClass('sap-icon--add');
+    expect(editButton).toHaveAttribute('icon', 'add');
 
     const deleteButton = getByLabelText('Delete');
-    expect(deleteButton.querySelector('i')).not.toHaveClass('sap-icon--delete');
-    expect(deleteButton.querySelector('i')).toHaveClass('sap-icon--minus');
+    expect(deleteButton).toHaveAttribute('icon', 'minus');
   });
 });

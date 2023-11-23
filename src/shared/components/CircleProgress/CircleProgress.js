@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from 'fundamental-react';
+import { Icon } from '@ui5/webcomponents-react';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import classNames from 'classnames';
+
+import { spacing } from '@ui5/webcomponents-react-base';
 import './CircleProgress.scss';
 
 const isInErrorState = (percent, max, reversed) => {
@@ -68,10 +70,10 @@ export const CircleProgress = ({
         <span className="title" style={titleStyle}>
           {isInErrorState(percent, max, reversed) && (
             <Icon
-              size="s"
-              className="fd-margin-end--tiny"
-              glyph="error"
-              ariaLabel="Error state icon"
+              className="bsl-icon-s"
+              style={spacing.sapUiTinyMarginEnd}
+              name="error"
+              aria-label="Error state icon"
             />
           )}
           {title}

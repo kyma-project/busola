@@ -10,10 +10,10 @@ context('Test Cluster Overview', () => {
 
   it('Check Cluster Overview details', () => {
     cy.getLeftNav()
-      .contains('Cluster Details', { includeShadowDom: true })
+      .contains('Cluster Details')
       .click();
 
-    cy.contains('h3', 'Cluster Details').should('be.visible');
+    cy.contains('ui5-title', 'Cluster Details').should('be.visible');
 
     cy.contains('Version')
       .next('.content')
@@ -33,19 +33,19 @@ context('Test Cluster Overview', () => {
 
     cy.loginAndSelectCluster();
 
-    cy.get('.sap-icon--feedback').should('exist');
+    cy.get('[name="feedback"]').should('exist');
 
     cy.setBusolaFeature('FEEDBACK', false);
 
     cy.loginAndSelectCluster();
 
-    cy.get('.sap-icon--feedback').should('not.exist');
+    cy.get('[name="feedback"]').should('not.exist');
   });
 
   it('Go to Node details', () => {
     cy.wait(500);
 
-    cy.get('[data-testid=cluster-nodes]').within(_ => {
+    cy.contains('ui5-panel', 'Nodes').within(_ => {
       cy.get('a')
         .first()
         .click();

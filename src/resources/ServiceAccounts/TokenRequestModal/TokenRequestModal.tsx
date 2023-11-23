@@ -1,15 +1,15 @@
-import { Button, Dialog, MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-
 import { useGenerateTokenRequest } from './useGenerateTokenRequest';
 import { useDownloadKubeconfigWithToken } from '../useDownloadKubeconfigWithToken';
+import { useEventListener } from 'hooks/useEventListener';
+
+import { Button, MessageStrip, Dialog, Bar } from '@ui5/webcomponents-react';
 import { ResourceForm } from 'shared/ResourceForm';
 import { ComboboxInput } from 'shared/ResourceForm/inputs';
 import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 
-import { useEventListener } from 'hooks/useEventListener';
-import './TokenRequestModal.scss';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 const expirationSecondsOptions = [
   {
@@ -41,22 +41,15 @@ const ComboboxInputWithSeconds = ({
     //@ts-ignore
     <ComboboxInput
       id="event-version-combobox"
-      showAllEntries
-      searchFullString
-      selectionType="manual"
       required
+      updatesOnInput={false}
       options={expirationSecondsOptions}
       selectedKey={value}
-      typedValue={value}
       onSelectionChange={(
-        e: React.ChangeEvent<HTMLInputElement>,
+        _: CustomEvent,
         selected: { key: number; text: string },
-      ) => {
-        if (e?.target?.value) {
-          setValue(Number(e.target.value));
-        } else {
-          setValue(selected.key);
-        }
+      ): void => {
+        setValue(selected.key);
       }}
     />
   );
@@ -87,10 +80,6 @@ export function TokenRequestModal({
   const isExpirationSecondsValueANumber = () =>
     !Number(tokenRequest.spec.expirationSeconds);
 
-  const actions = [
-    <Button onClick={handleCloseModal}>{t('common.buttons.close')}</Button>,
-  ];
-
   const handleCloseWithEscape = (e: Event) => {
     if ((e as KeyboardEvent).key === 'Escape') handleCloseModal();
   };
@@ -99,10 +88,21 @@ export function TokenRequestModal({
 
   return (
     <Dialog
-      show
-      title={t('service-accounts.token-request.generate')}
-      actions={actions}
-      className="token-request-modal"
+      open
+      onAfterClose={handleCloseModal}
+      headerText={t('service-accounts.token-request.generate')}
+      footer={
+        <Bar
+          design="Footer"
+          endContent={
+            <>
+              <Button onClick={handleCloseModal}>
+                {t('common.buttons.close')}
+              </Button>
+            </>
+          }
+        />
+      }
     >
       {/*@ts-ignore*/}
       <ResourceForm.Single
@@ -118,30 +118,33 @@ export function TokenRequestModal({
           label={t('service-accounts.token-request.expiration-seconds')}
           input={ComboboxInputWithSeconds}
         />
-        <div className="fd-margin-end--lg fd-margin-begin--lg fd-margin-top--sm">
-          <MessageStrip type="warning">
+        <div style={spacing.sapUiSmallMarginTop}>
+          <MessageStrip design="Warning" hideCloseButton>
             {t('service-accounts.token-request.warning')}
           </MessageStrip>
           <div
-            className="fd-display-flex fd-margin-top--sm fd-margin-bottom--sm"
+            className="bsl-display-flex"
             style={{
               justifyContent: 'flex-end',
+              marginTop: spacing.sapUiSmallMarginTop.marginTop,
+              marginBottom: spacing.sapUiSmallMarginBottom.marginBottom,
             }}
           >
             {/*@ts-ignore*/}
             <CopiableText
               iconOnly
               buttonText={t('common.buttons.copy')}
-              className="fd-margin-end--tiny"
+              style={spacing.sapUiTinyMarginEnd}
               textToCopy={kubeconfigYaml}
               disabled={token === ''}
             />
             <Button
               onClick={() => downloadKubeconfig(serviceAccountName, token)}
               disabled={token === ''}
-              option="transparent"
-              className="fd-margin-end--tiny"
-              glyph="download"
+              design="Transparent"
+              style={spacing.sapUiTinyMarginEnd}
+              icon="download"
+              iconEnd
             >
               {t('service-accounts.headers.download-kubeconfig')}
             </Button>

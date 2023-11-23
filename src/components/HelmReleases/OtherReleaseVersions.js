@@ -24,7 +24,7 @@ export function OtherReleaseVersions({ releaseSecret, secrets }) {
 
   const rowRenderer = ({ metadata }) => [
     <Link
-      className="fd-link"
+      className="bsl-link"
       onClick={namespaceUrl(`secrets/${metadata.name}`)}
     >
       {metadata.name}

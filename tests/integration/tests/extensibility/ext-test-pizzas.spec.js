@@ -20,10 +20,10 @@ context('Test Pizzas', () => {
 
   it('Creates the EXT pizza config', () => {
     cy.getLeftNav()
-      .contains('Cluster Details', { includeShadowDom: true })
+      .contains('Cluster Details')
       .click();
 
-    cy.contains('Upload YAML').click();
+    cy.contains('ui5-button', 'Upload YAML').click();
 
     cy.loadFiles(
       'examples/pizzas/configuration/pizzas-configmap.yaml',
@@ -35,10 +35,13 @@ context('Test Pizzas', () => {
       cy.pasteToMonaco(input);
     });
 
-    cy.contains('Submit').click();
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Upload')
+      .should('be.visible')
+      .click();
 
-    cy.get('.fd-dialog__body')
-      .find('.sap-icon--message-success')
+    cy.get('ui5-dialog')
+      .find('.status-message-success')
       .should('have.length', 4);
 
     cy.loadFiles(
@@ -49,26 +52,31 @@ context('Test Pizzas', () => {
       cy.pasteToMonaco(input);
     });
 
-    cy.contains('Submit').click();
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Upload')
+      .should('be.visible')
+      .click();
 
-    cy.get('.fd-dialog__body')
-      .find('.sap-icon--message-success')
+    cy.get('ui5-dialog')
+      .find('.status-message-success')
       .should('have.length', 6);
   });
 
   it('Displays the Pizza Orders list/detail views from the samples', () => {
     cy.loginAndSelectCluster();
 
-    cy.contains('Namespaces', { includeShadowDom: true }).click();
+    cy.getLeftNav()
+      .contains('Namespaces')
+      .click();
 
     cy.contains('a', 'pizzas').click();
 
     cy.getLeftNav()
-      .contains('Lunch', { includeShadowDom: true })
+      .contains('Lunch')
       .click();
 
     cy.getLeftNav()
-      .contains('Pizza Orders', { includeShadowDom: true })
+      .contains('Pizza Orders')
       .click();
 
     cy.contains('DELIVERY');
@@ -80,13 +88,16 @@ context('Test Pizzas', () => {
 
     cy.contains('paymentMethod: CARD');
     cy.contains('realization=SELF-PICKUP');
-    cy.contains('h3', 'Pizzas');
+    cy.contains('ui5-breadcrumbs', 'Pizza Orders');
   });
 
   it('Edits a Pizza Order', () => {
-    cy.contains('button:visible', 'Edit').click();
+    cy.get('ui5-button')
+      .contains('Edit')
+      .should('be.visible')
+      .click();
 
-    cy.get('[role="document"]').as('form');
+    cy.get('ui5-dialog').as('form');
 
     cy.get('@form').contains('Name');
     cy.get('@form').contains('Labels');
@@ -95,18 +106,22 @@ context('Test Pizzas', () => {
     cy.get('@form')
       .find('[data-testid="spec.status"]:visible')
       .find('input')
-      .type(`{backspace}{backspace}{backspace}{backspace}{backspace}`)
+      .type(`{backspace}{backspace}{backspace}{backspace}{backspace}`, {
+        force: true,
+      })
       .type('Error');
 
     cy.get('@form').contains('Status');
     cy.get('@form').contains('Order Details');
     cy.get('@form').contains('Pizzas');
     cy.get('@form')
-      .find('.fd-form-label--required:visible')
+      .find('ui5-label[required]:visible')
       .should('have.length', 3);
 
     cy.get('@form')
-      .contains('button:visible', 'Update')
+      .get('ui5-button')
+      .contains('Update')
+      .should('be.visible')
       .click();
 
     cy.contains('span', /^READY$/i).should('not.exist');
@@ -122,26 +137,60 @@ context('Test Pizzas', () => {
     cy.contains('Diavola is such a spicy pizza').should('be.visible');
 
     cy.getLeftNav()
-      .contains(/^Pizzas$/, { includeShadowDom: true })
+      .contains(/^Pizzas$/)
       .click();
 
-    cy.get('.fd-table__body')
-      .find('tr')
-      .should('have.length', 2);
+    cy.get('[role=row]').should('have.length', 2);
 
     cy.contains('Margherita is a simple, vegetarian pizza.');
     cy.contains('Toppings price');
   });
 
-  it('Tests the Create Form', () => {
-    cy.contains('Create Pizza').click();
+  it('Test list sort-functionality', () => {
+    cy.get("[role='row']")
+      .eq(0)
+      .should('contain.text', 'margherita');
+    cy.get("[role='row']")
+      .eq(1)
+      .should('contain.text', 'diavola');
 
-    cy.get('[role="document"]').as('form');
+    cy.get('ui5-button[aria-label="open-sort"]').click();
+    cy.get('ui5-radio-button[name="sortOrder"][text="Descending"]').click();
+    cy.get('ui5-button')
+      .contains('OK')
+      .click();
+
+    cy.get("[role='row']")
+      .eq(0)
+      .should('contain.text', 'diavola');
+    cy.get("[role='row']")
+      .eq(1)
+      .should('contain.text', 'margherita');
+
+    cy.get('ui5-button[aria-label="open-sort"]').click();
+    cy.get('ui5-radio-button[name="sortBy"][text="Name"]').click();
+    cy.get('ui5-button')
+      .contains('OK')
+      .click();
+
+    cy.get("[role='row']")
+      .eq(0)
+      .should('contain.text', 'margherita');
+    cy.get("[role='row']")
+      .eq(1)
+      .should('contain.text', 'diavola');
+  });
+
+  it('Tests the Create Form', () => {
+    cy.contains('ui5-button', 'Create Pizza').click();
+
+    cy.get('ui5-dialog').as('form');
 
     cy.get('@form')
       .find('[data-testid="spec.description"]:visible')
-      .clear()
-      .type(PIZZA_DESC);
+      .find('input')
+      .clear({ force: true })
+      .type(PIZZA_DESC, { force: true });
 
     cy.get('@form')
       .find('[data-testid="spec.sauce"]:visible')
@@ -151,19 +200,22 @@ context('Test Pizzas', () => {
 
     cy.get('@form')
       .find('[data-testid="spec.recipeSecret"]:visible')
-      .type(RECIPE);
+      .find('input')
+      .type(RECIPE, { force: true });
 
     cy.get('@form').contains('Owner References');
 
     cy.get('@form')
-      .find('[arialabel="Pizza name"]:visible')
-      .clear()
-      .type(PIZZA_NAME);
+      .find('[aria-label="Pizza name"]:visible')
+      .find('input')
+      .clear({ force: true })
+      .type(PIZZA_NAME, { force: true });
 
     cy.get('@form')
-      .contains('button', 'Create')
+      .contains('ui5-button', 'Create')
+      .should('be.visible')
       .click();
 
-    cy.contains('h3', PIZZA_NAME).should('be.visible');
+    cy.contains('ui5-title', PIZZA_NAME).should('be.visible');
   });
 });

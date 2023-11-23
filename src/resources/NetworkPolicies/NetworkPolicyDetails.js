@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { LayoutPanel } from 'fundamental-react';
 
 import { Tokens } from 'shared/components/Tokens';
 import { Selector } from 'shared/components/Selector/Selector';
@@ -9,6 +8,7 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import { NetworkPolicyPorts } from './Ports';
 import { NetworkPolicyPeers } from './Peers';
 import { NetworkPolicyCreate } from './NetworkPolicyCreate';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 export function NetworkPolicyDetails(props) {
   const { t } = useTranslation();
@@ -24,12 +24,10 @@ export function NetworkPolicyDetails(props) {
     if (!spec.ingress?.length) return null;
 
     return spec.ingress.map((ingress, idx) => (
-      <LayoutPanel className="fd-margin--md" key={idx}>
-        <LayoutPanel.Header>
-          <LayoutPanel.Head
-            title={t('network-policies.headers.ingress') + ` #${idx + 1}`}
-          />
-        </LayoutPanel.Header>
+      <UI5Panel
+        title={t('network-policies.headers.ingress') + ` #${idx + 1}`}
+        key={idx}
+      >
         <NetworkPolicyPeers
           peers={ingress.from}
           title={t('network-policies.headers.policy-peer')}
@@ -38,7 +36,7 @@ export function NetworkPolicyDetails(props) {
           ports={ingress.ports}
           title={t('network-policies.headers.policy-port')}
         />
-      </LayoutPanel>
+      </UI5Panel>
     ));
   };
 
@@ -46,12 +44,10 @@ export function NetworkPolicyDetails(props) {
     if (!spec.egress?.length) return null;
 
     return spec.egress.map((egress, idx) => (
-      <LayoutPanel className="fd-margin--md" key={idx}>
-        <LayoutPanel.Header>
-          <LayoutPanel.Head
-            title={t('network-policies.headers.egress') + ` #${idx + 1}`}
-          />
-        </LayoutPanel.Header>
+      <UI5Panel
+        title={t('network-policies.headers.egress') + ` #${idx + 1}`}
+        key={idx}
+      >
         <NetworkPolicyPeers
           peers={egress.to}
           title={t('network-policies.headers.policy-peer')}
@@ -60,7 +56,7 @@ export function NetworkPolicyDetails(props) {
           ports={egress.ports}
           title={t('network-policies.headers.policy-port')}
         />
-      </LayoutPanel>
+      </UI5Panel>
     ));
   };
 

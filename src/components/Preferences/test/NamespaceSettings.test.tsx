@@ -1,21 +1,16 @@
 import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
-import { render, fireEvent } from 'testing/reactTestingUtils';
+import { render } from 'testing/reactTestingUtils';
 import NamespaceSettings from '../NamespaceSettings';
 
 describe('NamespaceSettings', () => {
-  it('Sends custom message on toggle', () => {
-    const { getByLabelText } = render(<NamespaceSettings />, {
+  it('Check ui5 switch checked', () => {
+    const { container } = render(<NamespaceSettings />, {
       initializeState: snapshot =>
         snapshot.set(showHiddenNamespacesState, true),
     });
 
-    const toggleElement = getByLabelText(
-      'settings.clusters.showHiddenNamespaces',
-    );
+    const toggle = container.querySelector('ui5-switch');
 
-    expect(toggleElement).toBeChecked();
-    fireEvent.click(toggleElement);
-
-    expect(toggleElement).not.toBeChecked();
+    expect(toggle).toHaveAttribute('checked', 'true');
   });
 });

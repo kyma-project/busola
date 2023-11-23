@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { SidebarNavigation } from 'sidebar/SidebarNavigation';
-import { Footer } from './Footer/Footer';
 
 import './Sidebar.scss';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 const noSidebarPathnames = ['/clusters', '/no-permissions', '/gardener-login'];
 
@@ -15,7 +15,12 @@ export const Sidebar = () => {
   if (noSidebarPathnames.includes(pathname)) return null;
 
   return (
-    <aside className="sidebar">
+    <aside
+      style={{
+        ...spacing.sapUiTinyMarginEnd,
+        ...spacing.sapUiTinyMarginTop,
+      }}
+    >
       <section className="sidebar__content">
         <Suspense fallback={<Spinner size="m" />}>
           <ErrorBoundary
@@ -26,7 +31,6 @@ export const Sidebar = () => {
           </ErrorBoundary>
         </Suspense>
       </section>
-      <Footer />
     </aside>
   );
 };

@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ComboboxInput } from 'fundamental-react';
+import { ComboBox, ComboBoxItem } from '@ui5/webcomponents-react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { DataField } from 'shared/ResourceForm/fields';
 
 import { createSecretTemplate, createPresets, getSecretDefs } from './helpers';
 
-import './SecretCreate.scss';
 import { useRecoilValue } from 'recoil';
 import { configurationAtom } from 'state/configuration/configurationAtom';
 
@@ -40,6 +39,7 @@ export function SecretCreate({
   const secretTypes = Array.from(
     new Set(secretDefs.map(secret => secret.type || 'Opaque')),
   );
+  const options = secretTypes.map(type => ({ key: type, text: type }));
 
   useEffect(() => {
     setLockedKeys(currentDef?.data || []);
@@ -55,10 +55,17 @@ export function SecretCreate({
     });
   }, [type]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const onChangeInput = (event, setValue) => {
+    const selectedOption = options.find(o => o.text === event.target.value) ?? {
+      key: event.target._state.filterValue,
+      text: event.target._state.filterValue,
+    };
+    setValue(selectedOption.text);
+  };
+
   return (
     <ResourceForm
       {...props}
-      className="create-secret-form"
       pluralKind="secrets"
       singularName={t('secrets.name_singular')}
       resource={secret}
@@ -76,20 +83,20 @@ export function SecretCreate({
         propertyPath="$.type"
         label={t('secrets.type')}
         input={({ value, setValue }) => (
-          <div className="fd-col fd-col-md--11">
-            <ComboboxInput
+          <div className="bsl-col bsl-col-md--11">
+            <ComboBox
               id="secrets-type-combobox"
-              ariaLabel="Secret's type's Combobox"
-              required
-              compact
-              fullWidth
+              aria-label="Secret's type's Combobox"
               placeholder={t('secrets.placeholders.type')}
-              options={secretTypes.map(type => ({ key: type, text: type }))}
-              selectedKey={value}
-              typedValue={value}
-              onSelect={e => setValue(e.target.value)}
-              disabled={!!initialSecret}
-            />
+              value={options.find(o => o.key === value)?.text ?? value}
+              disabled={!!initialSecret || !options?.length}
+              onChange={event => onChangeInput(event, setValue)}
+              onInput={event => onChangeInput(event, setValue)}
+            >
+              {options.map(option => (
+                <ComboBoxItem id={option.key} text={option.text} />
+              ))}
+            </ComboBox>
           </div>
         )}
       />

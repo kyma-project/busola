@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Dropdown } from 'shared/ResourceForm/inputs';
+import { useEffect, useState } from 'react';
+import { Dropdown } from 'shared/components/Dropdown/Dropdown';
 import { useTranslation } from 'react-i18next';
 import { useCurrentQuery } from './queries';
 import { useFeature } from 'hooks/useFeature';
@@ -34,7 +34,6 @@ export function useMetricsQuery() {
 
   const QueryDropdown = (
     <Dropdown
-      fullWidth={false}
       className="query-dropdown"
       selectedKey={queryType}
       onSelect={(_, { key }) => setQueryType(key)}

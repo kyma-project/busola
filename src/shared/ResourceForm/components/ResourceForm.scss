@@ -1,48 +1,44 @@
+form .resource-form {
+  overflow: auto;
+  flex-grow: 1;
+  order: 2;
+}
+
 .resource-form {
   height: 100%;
   display: flex;
   flex-direction: column;
+  padding: 1rem 2rem;
 
   form {
-    overflow: auto;
+    overflow: hidden;
     flex-grow: 1;
     order: 2;
   }
 
-  &:before {
-    content: '';
+  .advanced-form,
+  .simple-form {
     width: 100%;
-    height: 16px;
-    background: linear-gradient(
-      0,
-      transparent,
-      var(--sapGroup_ContentBackground)
-    );
-    order: 1;
-    margin-top: 16px;
-    margin-bottom: -16px;
-    z-index: 10;
-    min-height: 16px;
-    pointer-events: none;
   }
 
   & > .dropdown {
     width: 100%;
   }
 
-  .fd-row {
-    margin: 0 !important; // override fd's margin: 0 -.25rem;
+  ui5-switch {
+    margin-top: -0.5rem;
   }
 
-  .fd-row + .resource-form__collapsible-section {
-    margin-top: 1rem;
+  .form-field,
+  .simple-list {
+    gap: 10px;
   }
 
-  .fd-switch {
-    margin-top: -1.4rem;
+  .form-field + .resource-form__collapsible-section {
+    padding-top: 16px;
   }
 
-  .fd-col {
+  .bsl-col {
     padding: 4px 0;
   }
 }

@@ -49,70 +49,83 @@ context('Test Protected Resources', () => {
   it('Create a protected resource', () => {
     cy.navigateTo('Configuration', 'Config Maps');
 
-    cy.contains('Create Config Map').click();
+    cy.contains('ui5-button', 'Create Config Map').click();
 
-    cy.get('[ariaLabel="ConfigMap name"]:visible').type(NAME);
+    cy.get('[aria-label="ConfigMap name"]:visible')
+      .find('input')
+      .type(NAME, { force: true });
 
     cy.contains('Advanced').click();
 
-    cy.get('[role=dialog]')
+    cy.get('ui5-dialog')
       .contains('Labels')
       .click();
 
-    cy.get('[placeholder="Enter key"]:visible')
-      .eq(1)
+    cy.get('.multi-input')
+      .find('ui5-input[placeholder="Enter key"][value=""]:visible')
+      .find('input')
+      .click()
       .type('protected');
 
-    cy.get('[placeholder="Enter value"]:visible')
-      .eq(1)
+    cy.get('.multi-input')
+      .find('ui5-input[placeholder="Enter value"][value=""]:visible')
+      .eq(0)
+      .find('input')
+      .click()
       .type('true');
 
-    cy.get('[role=dialog]')
-      .contains('button', 'Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
+      .should('be.visible')
       .click();
   });
 
   it('Protect a resource', () => {
     cy.getLeftNav()
-      .contains('Config Maps', { includeShadowDom: true })
+      .contains('Config Maps')
       .click();
 
-    cy.contains('tr', NAME)
-      .find('[aria-label="Delete"]')
-      .should('be.disabled')
-      .click({ force: true });
+    cy.get('a.bsl-link')
+      .contains(NAME)
+      .click();
 
-    cy.contains(`Delete ${NAME}`).should('not.exist');
+    cy.get('ui5-button[disabled="true"]')
+      .should('contain.text', 'Delete')
+      .should('be.visible');
   });
 
   it('Create a protected Pod controlled by Deployment', () => {
     cy.navigateTo('Workloads', 'Deployments');
 
-    cy.contains('Create Deployment').click();
+    cy.contains('ui5-button', 'Create Deployment').click();
 
-    cy.get('[ariaLabel="Deployment name"]:visible')
+    cy.get('[aria-label="Deployment name"]:visible')
+      .find('input')
+      .click()
       .clear()
       .type(NAME);
 
-    cy.get('[placeholder^="Enter the Docker image"]:visible').type(IMAGE);
+    cy.get('[placeholder^="Enter the Docker image"]:visible')
+      .find('input')
+      .click()
+      .type(IMAGE);
 
-    cy.get('[role=dialog]')
-      .contains('button', 'Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
+      .should('be.visible')
       .click();
   });
 
   it('Check if Pod is protected', () => {
     cy.url().should('match', new RegExp(`\/deployments\/${NAME}$`));
 
-    cy.contains('tr', NAME)
-      .find('[aria-label="Delete"]')
-      .should('be.disabled');
+    cy.contains('ui5-table-row', NAME)
+      .find('[aria-label="Delete"][disabled="true"]')
+      .should('be.visible');
   });
 
   it('Change protection setting', () => {
-    cy.get('[aria-label="topnav-profile-btn"]').click();
-
-    cy.contains('Preferences').click();
+    cy.get('[title="Profile"]').click();
 
     cy.contains('Cluster interaction').click();
 
@@ -120,7 +133,7 @@ context('Test Protected Resources', () => {
       '.preferences-row',
       'Allow for modification of protected resources',
     )
-      .find('.fd-switch')
+      .find('ui5-switch')
       .click();
 
     cy.contains('Close').click();
@@ -128,15 +141,16 @@ context('Test Protected Resources', () => {
 
   it("Don't protect a resource", () => {
     cy.getLeftNav()
-      .contains('Config Maps', { includeShadowDom: true })
+      .contains('Config Maps')
       .click();
 
-    cy.contains('tr', NAME)
-      .find('[aria-label="Delete"]')
+    cy.contains('ui5-table-row', NAME)
+      .find('ui5-button[data-testid="delete"]')
       .click();
 
-    cy.contains(`Delete ${NAME}`).should('exist');
-
-    cy.contains('button', 'Cancel').click();
+    cy.contains(`delete Config Map ${NAME}`);
+    cy.get(`[header-text="Delete Config Map"]`)
+      .find('[data-testid="delete-cancel"]')
+      .click();
   });
 });

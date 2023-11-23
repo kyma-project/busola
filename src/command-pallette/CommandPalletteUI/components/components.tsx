@@ -1,9 +1,11 @@
 import React from 'react';
-import { Token } from 'fundamental-react';
+import { Button, Icon, Token } from '@ui5/webcomponents-react';
 import { Trans, useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import './components.scss';
 import { HelpEntries } from '../types';
+
+import { spacing } from '@ui5/webcomponents-react-base';
+import './components.scss';
 
 export function SuggestedQuery({
   suggestedQuery,
@@ -21,9 +23,9 @@ export function SuggestedQuery({
   return (
     <>
       {t('command-palette.results.did-you-mean')}
-      <button className="button-link" onClick={() => setQuery(suggestedQuery)}>
+      <Button className="button-link" onClick={() => setQuery(suggestedQuery)}>
         {suggestedQuery}
-      </button>
+      </Button>
     </>
   );
 }
@@ -45,13 +47,16 @@ export function NamespaceContextDisplay({
     <div className="namespace-context">
       <span className="namespace-name">{t('namespaces.name_singular')}:</span>
       <Token
-        // @ts-ignore fd-react types are wrong yet again
-        buttonLabel={t('command-palette.search.remove-ns-context')}
-        className="y-fd-token y-fd-token--no-button y-fd-token--gap fd-margin-end--tiny fd-margin-begin--tiny"
-        onClick={() => setNamespaceContext(null)}
-      >
-        {namespaceContext}
-      </Token>
+        style={spacing.sapUiTinyMarginBeginEnd}
+        text={namespaceContext}
+        closeIcon={
+          <Icon
+            name="decline"
+            onClick={() => setNamespaceContext(null)}
+            aria-label={t('command-palette.search.remove-ns-context')}
+          />
+        }
+      />
     </div>
   );
 }
@@ -62,9 +67,9 @@ export function ShortHelpText({ showFullHelp }: { showFullHelp: () => void }) {
   return (
     <p className="short-help help-text">
       {t('command-palette.help.short-help')}
-      <button className="button-link" onClick={showFullHelp}>
+      <Button className="button-link" onClick={showFullHelp}>
         {t('command-palette.item-actions.show-help')}
-      </button>
+      </Button>
     </p>
   );
 }

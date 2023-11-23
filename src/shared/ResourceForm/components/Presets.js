@@ -1,7 +1,6 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
-import './Presets.scss';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 export function Presets({ presets, onSelect, ...otherProps }) {
   const { t } = useTranslation();
@@ -11,13 +10,15 @@ export function Presets({ presets, onSelect, ...otherProps }) {
   }));
 
   return (
-    <div className="fd-margin-bottom--xs">
+    <div
+      className="ui5-content-density-compact"
+      style={spacing.sapUiTinyMarginBottom}
+    >
       <Dropdown
-        className="resource-form__presets"
         placeholder={t('common.create-form.choose-preset')}
-        compact
         options={options}
         selectedKey={''}
+        fullWidth
         onSelect={(e, preset) => {
           e.stopPropagation();
           onSelect(presets.find(p => p.name === preset.key));

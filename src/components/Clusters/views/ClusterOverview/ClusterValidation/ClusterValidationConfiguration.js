@@ -1,4 +1,4 @@
-import { Button, Dialog, FormFieldset } from 'fundamental-react';
+import { Dialog, Button, Bar } from '@ui5/webcomponents-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
@@ -31,21 +31,13 @@ const ListActions = ({ options, setSelected }) => {
   return (
     <>
       <Button
-        compact
-        glyph="add"
+        icon="add"
         onClick={() => setSelected(options.map(({ key }) => key))}
-        option="transparent"
-        iconBeforeText
+        design="Transparent"
       >
         {t('common.buttons.add-all')}
       </Button>
-      <Button
-        compact
-        glyph="less"
-        onClick={() => setSelected([])}
-        option="transparent"
-        iconBeforeText
-      >
+      <Button icon="less" onClick={() => setSelected([])} desgin="Transparent">
         {t('common.buttons.remove-all')}
       </Button>
     </>
@@ -93,7 +85,7 @@ const ConfigurationForm = ({
       initialResource={{}}
       disableDefaultFields
     >
-      <FormFieldset>
+      <div>
         <FormField
           simple
           advanced
@@ -104,7 +96,7 @@ const ConfigurationForm = ({
           defaultValue={description}
           setValue={val => setDescription(val)}
         ></FormField>
-      </FormFieldset>
+      </div>
 
       <CollapsibleSection
         title={t('cluster-validation.scan.configuration.namespaces')}
@@ -116,7 +108,7 @@ const ConfigurationForm = ({
           />
         }
       >
-        <FormFieldset>
+        <div>
           <FormField
             simple
             advanced
@@ -127,7 +119,7 @@ const ConfigurationForm = ({
             setValue={val => setSelectedNamespaces(val)}
             value={selectedNamespaces}
           ></FormField>
-        </FormFieldset>
+        </div>
       </CollapsibleSection>
 
       <CollapsibleSection
@@ -139,7 +131,7 @@ const ConfigurationForm = ({
           />
         }
       >
-        <FormFieldset>
+        <div>
           <FormField
             simple
             advanced
@@ -150,13 +142,13 @@ const ConfigurationForm = ({
             setValue={val => setSelectedPolicies(val)}
             value={selectedPolicies}
           ></FormField>
-        </FormFieldset>
+        </div>
       </CollapsibleSection>
 
       <CollapsibleSection
         title={t('cluster-validation.scan.configuration.parameters')}
       >
-        <FormFieldset>
+        <div>
           <FormField
             simple
             advanced
@@ -178,7 +170,7 @@ const ConfigurationForm = ({
                 : {}
             }
           />
-        </FormFieldset>
+        </div>
       </CollapsibleSection>
     </ResourceForm>
   );
@@ -206,27 +198,36 @@ export function ClusterValidationConfigurationDialog({
 
   return (
     <Dialog
-      show={show}
-      className="yaml-upload-modal"
-      title={t('cluster-validation.scan.configuration.title')}
-      actions={[
-        <Button
-          onClick={() => {
-            onCancel();
-          }}
-          option="transparent"
-        >
-          {t('common.buttons.cancel')}
-        </Button>,
-        <Button
-          onClick={() => {
-            onSubmit(tempConfiguration);
-          }}
-          option="emphasized"
-        >
-          {t('common.buttons.submit')}
-        </Button>,
-      ]}
+      onAfterClose={onCancel}
+      open={show}
+      headerText={t('cluster-validation.scan.configuration.title')}
+      footer={
+        <Bar
+          design="Footer"
+          endContent={
+            <>
+              <Button
+                desgin="Emphasized"
+                onClick={() => {
+                  onSubmit(tempConfiguration);
+                }}
+                aria-label="cluster-validation-submit"
+              >
+                {t('common.buttons.submit')}
+              </Button>
+              <Button
+                design="Transparent"
+                onClick={() => {
+                  onCancel();
+                }}
+              >
+                {t('common.buttons.cancel')}
+              </Button>
+            </>
+          }
+        />
+      }
+      style={{ height: '90vh', width: '125vh' }}
     >
       <ErrorBoundary>
         <ConfigurationForm

@@ -2,13 +2,14 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { prettifyNamePlural } from 'shared/utils/helpers';
-import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { useUrl } from 'hooks/useUrl';
 
 import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
 import { ResourcesUsage } from './ResourcesUsage';
 
 import './NamespaceDetails.scss';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 export function AllNamespacesDetails(props) {
   const { t } = useTranslation();
@@ -24,14 +25,16 @@ export function AllNamespacesDetails(props) {
 
   return (
     <>
-      <PageHeader
+      <DynamicPageComponent
         title={t('navigation.all-namespaces')}
         breadcrumbItems={breadcrumbItems}
+        content={
+          <div className="panel-grid" style={spacing.sapUiMediumMargin}>
+            <NamespaceWorkloads />
+            <ResourcesUsage />
+          </div>
+        }
       />
-      <div className="panel-grid">
-        <NamespaceWorkloads />
-        <ResourcesUsage />
-      </div>
     </>
   );
 }

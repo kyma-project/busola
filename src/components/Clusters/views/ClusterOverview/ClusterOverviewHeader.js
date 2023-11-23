@@ -1,11 +1,11 @@
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 import { useRecoilState } from 'recoil';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 
 import { YamlUploadDialog } from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
-import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { ClusterStorageType } from '../ClusterStorageType';
 import { useGetGardenerProvider } from './useGetGardenerProvider';
 import { useGetVersions } from './useGetVersions';
@@ -19,7 +19,7 @@ const Versions = () => {
   const { loading, kymaVersion, k8sVersion } = useGetVersions();
 
   return (
-    <PageHeader.Column title={t('clusters.overview.version')}>
+    <DynamicPageComponent.Column title={t('clusters.overview.version')}>
       {loading || (
         <>
           <p>
@@ -32,7 +32,7 @@ const Versions = () => {
           )}
         </>
       )}
-    </PageHeader.Column>
+    </DynamicPageComponent.Column>
   );
 };
 
@@ -48,13 +48,13 @@ const GardenerProvider = () => {
   if (!provider) return null;
 
   return (
-    <PageHeader.Column title={t('gardener.headers.provider')}>
+    <DynamicPageComponent.Column title={t('gardener.headers.provider')}>
       <p className="gardener-provider ">{provider}</p>
-    </PageHeader.Column>
+    </DynamicPageComponent.Column>
   );
 };
 
-export function ClusterOverviewHeader() {
+export function ClusterOverviewHeader(content) {
   const { t } = useTranslation();
   const cluster = useRecoilValue(clusterState);
   const { currentCluster } = useClustersInfo();
@@ -63,11 +63,10 @@ export function ClusterOverviewHeader() {
 
   const actions = (
     <Button
-      glyph="add"
+      icon="add"
       onClick={() => {
         setShowAdd(true);
       }}
-      iconBeforeText
     >
       {t('upload-yaml.title')}
     </Button>
@@ -75,21 +74,24 @@ export function ClusterOverviewHeader() {
 
   return (
     <>
-      <PageHeader
+      <DynamicPageComponent
         title={t('clusters.overview.title-current-cluster')}
         actions={actions}
+        content={content?.content}
       >
         <Versions />
-        <PageHeader.Column title={t('clusters.common.api-server-address')}>
+        <DynamicPageComponent.Column
+          title={t('clusters.common.api-server-address')}
+        >
           {cluster?.currentContext?.cluster?.cluster?.server}
-        </PageHeader.Column>
-        <PageHeader.Column title={t('clusters.storage.title')}>
+        </DynamicPageComponent.Column>
+        <DynamicPageComponent.Column title={t('clusters.storage.title')}>
           <ClusterStorageType clusterConfig={config} />
-        </PageHeader.Column>
+        </DynamicPageComponent.Column>
         <GardenerProvider />
-      </PageHeader>
+      </DynamicPageComponent>
       <YamlUploadDialog
-        show={showAdd}
+        open={showAdd}
         onCancel={() => {
           setShowAdd(false);
         }}

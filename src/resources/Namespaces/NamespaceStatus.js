@@ -5,11 +5,11 @@ export function NamespaceStatus({ namespaceStatus }) {
   const badgeType = status => {
     switch (status) {
       case 'Active':
-        return 'success';
+        return 'Success';
       case 'Terminating':
-        return 'info';
+        return 'Information';
       default:
-        return 'error';
+        return 'Error';
     }
   };
 

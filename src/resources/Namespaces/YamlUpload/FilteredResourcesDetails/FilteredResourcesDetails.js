@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
-import { Button, MessageStrip } from 'fundamental-react';
+import { Button, MessageStrip } from '@ui5/webcomponents-react';
 import {
   getExtendedValidateResourceState,
   validateResourcesState,
@@ -11,9 +11,11 @@ import { useValidateResourceBySchema } from 'shared/hooks/useValidateResourceByS
 
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
-import './FilteredResourcesDetails.scss';
 import { validationSchemasEnabledState } from 'state/validationEnabledSchemasAtom';
 import { useLoadingDebounce } from 'shared/hooks/useLoadingDebounce';
+
+import { spacing } from '@ui5/webcomponents-react-base';
+import './FilteredResourcesDetails.scss';
 
 const WarningButton = ({
   handleShowWarnings,
@@ -29,14 +31,15 @@ const WarningButton = ({
     <Button
       onClick={noWarnings ? () => {} : handleShowWarnings}
       className="warning-button"
-      type={noWarnings ? 'positive' : 'attention'}
-      glyph={
+      design={noWarnings ? 'Positive' : 'Attention'}
+      icon={
         noWarnings
           ? 'message-success'
           : areWarningsVisible
           ? 'navigation-up-arrow'
           : 'navigation-down-arrow'
       }
+      iconEnd
     >
       <div>
         <p>
@@ -89,8 +92,9 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
   if (!validationSchema)
     return (
       <MessageStrip
-        type="warning"
-        className="fd-margin-bottom--sm fd-messsage_strip__content"
+        design="Warning"
+        hideCloseButton
+        style={spacing.sapUiSmallMarginBottom}
       >
         <p> {t('common.headers.loading')}</p>
         <Spinner className="warning-spinner" size="s" center={false} />
@@ -98,7 +102,7 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
     );
 
   return (
-    <div>
+    <div style={spacing.sapUiSmallMarginTop}>
       <WarningButton
         handleShowWarnings={() => setVisibleWarnings(prevState => !prevState)}
         areWarningsVisible={areWarningsVisible}
@@ -106,14 +110,18 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
         loading={loading}
       />
       {areWarningsVisible ? (
-        <ul className="warnings-list">
+        <ul>
           {warnings.flat().map((warning, i) => (
             <li
               key={`${resource?.kind}-${
                 resource?.metadata?.name
               }-${warning.key ?? i}`}
             >
-              <MessageStrip type="warning" className="fd-margin-top--sm">
+              <MessageStrip
+                design="Warning"
+                hideCloseButton
+                style={spacing.sapUiSmallMarginTop}
+              >
                 {warning.message}
               </MessageStrip>
             </li>
@@ -134,8 +142,8 @@ export const FilteredResourcesDetails = ({ filteredResources }) => {
     <ul className="resources-list">
       {filteredResources.map(r => (
         <li
-          className="fd-margin-begin--sm fd-margin-end--sm fd-margin-bottom--sm"
-          style={{ listStyle: 'disc' }}
+          className="list-type"
+          style={spacing.sapUiSmallMarginBeginEnd}
           key={`${r?.value?.kind}-${r.value?.metadata?.name}`}
         >
           <p style={{ fontSize: '16px' }}>

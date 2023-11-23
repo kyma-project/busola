@@ -17,7 +17,7 @@ export const CommandPaletteProvider = ({
 
   const setShowDialog = (value: boolean) => {
     const modalPresent = document.querySelector(
-      '[data-focus-lock-disabled=false]',
+      '[accessible-role="Dialog"][open="true"]',
     );
     // disable opening palette if other modal is present
     if (!modalPresent || !value) {
@@ -50,6 +50,7 @@ export const CommandPaletteProvider = ({
     <>
       {showDialog && (
         <CommandPaletteUI
+          showCommandPalette={showDialog}
           hide={hide}
           resourceCache={resourceCache}
           updateResourceCache={updateResourceCache}

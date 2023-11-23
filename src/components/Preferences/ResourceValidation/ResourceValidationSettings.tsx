@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { Button, LayoutPanel, Switch } from 'fundamental-react';
+import { Button, Switch } from '@ui5/webcomponents-react';
 import {
   getExtendedValidateResourceState,
   validateResourcesState,
@@ -9,9 +9,11 @@ import { validationSchemasState } from 'state/validationSchemasAtom';
 import { useMemo } from 'react';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
-import './ResourceValidationSettings.scss';
 import { useFeature } from 'hooks/useFeature';
 import { ValidationFeatureConfig } from 'state/validationEnabledSchemasAtom';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+
+import './ResourceValidationSettings.scss';
 
 export default function ResourceValidationSettings() {
   const { t } = useTranslation();
@@ -92,30 +94,21 @@ export default function ResourceValidationSettings() {
   };
 
   return (
-    <LayoutPanel>
-      <LayoutPanel.Header>
-        <LayoutPanel.Head
-          title={t('settings.clusters.resourcesValidation.validateResources')}
+    <UI5Panel
+      title={t('settings.clusters.resourcesValidation.validateResources')}
+      headerActions={
+        <Switch
+          aria-label={t(
+            'settings.clusters.resourcesValidation.validateResources',
+          )}
+          checked={isEnabled}
+          onChange={toggleVisibility}
         />
-        <LayoutPanel.Actions>
-          <Switch
-            // TypeScript definitions are out of sync here
-            // @ts-ignore
-            localizedText={{
-              switchLabel: t(
-                'settings.clusters.resourcesValidation.validateResources',
-              ),
-            }}
-            className="fd-has-display-inline-block fd-margin-begin--tiny"
-            checked={isEnabled}
-            onChange={toggleVisibility}
-            compact
-          />
-        </LayoutPanel.Actions>
-      </LayoutPanel.Header>
+      }
+    >
       {!isEnabled && (
         <div className="no-validation-info">
-          <span className="fd-has-color-status-4">
+          <span className="bsl-has-color-status-4">
             {t('settings.clusters.resourcesValidation.validation-disabled')}
           </span>
         </div>
@@ -128,7 +121,6 @@ export default function ResourceValidationSettings() {
               title={t(
                 'settings.clusters.resourcesValidation.enabled-policies',
               )}
-              showHeader={false}
               entries={
                 choosePolicies
                   ? policyList
@@ -140,17 +132,12 @@ export default function ResourceValidationSettings() {
                   <span>{entry.text}</span>
                   {choosePolicies && (
                     <Switch
-                      // TypeScript definitions are out of sync here
-                      // @ts-ignore
-                      localizedText={{
-                        switchLabel: t(
-                          'settings.clusters.resourcesValidation.select-policy',
-                          {
-                            name: entry.text,
-                          },
-                        ),
-                      }}
-                      compact
+                      aria-label={t(
+                        'settings.clusters.resourcesValidation.select-policy',
+                        {
+                          name: entry.text,
+                        },
+                      )}
                       checked={entry.selected}
                       onChange={() => {
                         if (entry.selected) deleteSelectedPolicy(entry.key);
@@ -164,9 +151,9 @@ export default function ResourceValidationSettings() {
                 <>
                   {!choosePolicies && (
                     <Button
-                      option="transparent"
-                      glyph="customize"
-                      className="fd-margin-begin--sm"
+                      design="Transparent"
+                      icon="customize"
+                      iconEnd
                       onClick={enablePolicyCustomization}
                     >
                       {t('settings.clusters.resourcesValidation.customize')}
@@ -174,9 +161,9 @@ export default function ResourceValidationSettings() {
                   )}
                   {choosePolicies && (
                     <Button
-                      option="transparent"
-                      glyph="reset"
-                      className="fd-margin-begin--sm"
+                      design="Transparent"
+                      icon="reset"
+                      iconEnd
                       onClick={disablePolicyCustomization}
                     >
                       {t('settings.clusters.resourcesValidation.reset')}
@@ -194,6 +181,6 @@ export default function ResourceValidationSettings() {
             />
           </>
         )}
-    </LayoutPanel>
+    </UI5Panel>
   );
 }

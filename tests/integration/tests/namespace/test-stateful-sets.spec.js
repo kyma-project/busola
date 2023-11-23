@@ -29,7 +29,7 @@ context('Test Stateful Sets', () => {
   it('Create Stateful Set', () => {
     cy.navigateTo('Workloads', 'Stateful Sets');
 
-    cy.contains('Create Stateful Set').click();
+    cy.contains('ui5-button', 'Create Stateful Set').click();
 
     cy.wrap(loadSS(SS_NAME, Cypress.env('NAMESPACE_NAME'), FILE_NAME)).then(
       SS_CONFIG => {
@@ -38,11 +38,12 @@ context('Test Stateful Sets', () => {
       },
     );
 
-    cy.get('[role="dialog"]')
-      .contains('button', 'Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
+      .should('be.visible')
       .click();
 
-    cy.contains('h3', SS_NAME).should('be.visible');
+    cy.contains('ui5-title', SS_NAME).should('be.visible');
   });
 
   it('Inspect details', () => {

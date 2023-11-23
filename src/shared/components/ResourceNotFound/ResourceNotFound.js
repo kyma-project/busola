@@ -1,20 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { LayoutPanel } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
-import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
+import { UI5Panel } from '../UI5Panel/UI5Panel';
 
 export const ResourceNotFound = ({ resource, breadcrumbs, customMessage }) => {
   const { t } = useTranslation();
   return (
     <>
-      <PageHeader title="" breadcrumbItems={breadcrumbs} />
-      <LayoutPanel className="fd-has-padding-regular fd-margin--md">
-        {customMessage
-          ? customMessage
-          : t('components.resource-not-found.messages.not-found', { resource })}
-      </LayoutPanel>
+      <DynamicPageComponent
+        title=""
+        breadcrumbItems={breadcrumbs}
+        content={
+          <UI5Panel
+            title={
+              customMessage
+                ? customMessage
+                : t('components.resource-not-found.messages.not-found', {
+                    resource,
+                  })
+            }
+          />
+        }
+      />
     </>
   );
 };

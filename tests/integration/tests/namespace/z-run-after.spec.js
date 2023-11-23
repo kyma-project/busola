@@ -9,26 +9,31 @@ context('Clean up Namespace', () => {
   });
   it('Delete the Namespace (step 1)', () => {
     cy.getLeftNav()
-      .contains('Namespaces', { includeShadowDom: true })
+      .contains('Namespaces')
       .click();
 
-    cy.get('[role="search"] [aria-label="search-input"]').type(
-      Cypress.env('NAMESPACE_NAME'),
-      {
-        force: true,
-      },
-    ); // use force to skip clicking (the table could re-render between the click and the typing)
+    cy.get('ui5-button[aria-label="open-search"]:visible')
+      .click()
+      .get('ui5-combobox[placeholder="Search"]')
+      .find('input')
+      .click()
+      .type(Cypress.env('NAMESPACE_NAME'));
 
-    cy.get('tbody tr [aria-label="Delete"]').click({ force: true });
+    cy.get('ui5-table-row [aria-label="Delete"]').click({ force: true });
 
-    cy.contains('button', 'Delete')
-      .filter(':visible', { log: false })
-      .click({ force: true });
+    cy.contains(`delete Namespace ${Cypress.env('NAMESPACE_NAME')}`);
+    cy.get(`[header-text="Delete Namespace"]`)
+      .find('[data-testid="delete-confirmation"]')
+      .click();
   });
 
   it('Check if the Namespace is terminated (step 2)', { retries: 3 }, () => {
-    cy.get('[role=row]')
-      .find('[role="status"]')
-      .should('have.text', 'Terminating');
+    cy.get('ui5-table-row')
+      .find('.status-badge')
+      .contains('Terminating');
+
+    cy.get('ui5-table')
+      .contains(Cypress.env('NAMESPACE_NAME'))
+      .should('not.exist');
   });
 });

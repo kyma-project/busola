@@ -1,11 +1,9 @@
 import { useGetTranslation } from 'components/Extensibility/helpers';
 import { useRecoilValue } from 'recoil';
-import { Link } from 'shared/components/Link/Link';
 import { isSidebarCondensedState } from 'state/preferences/isSidebarCondensedAtom';
 import { useGetBusolaVersionDetails } from './useGetBusolaVersion';
 import { useGetLegalLinks } from './useGetLegalLinks';
-
-import './Footer.scss';
+import { SideNavigationItem } from '@ui5/webcomponents-react';
 
 export function Footer() {
   const { t } = useGetTranslation();
@@ -15,26 +13,36 @@ export function Footer() {
   if (isSidebarCondensed) return null;
 
   return (
-    <footer className="footer">
-      <div className="footer__legal-links">
-        {legalLinks.map(legalLink => (
-          <Link
-            key={legalLink.link}
-            url={legalLink.link}
-            text={legalLink.label}
-            className="fd-link"
-          />
-        ))}
-      </div>
-      <div className="fd-margin-top--sm">
-        <p className="footer__kyma-version">{t('common.labels.version')}</p>
-        <Link
-          dataTestId="version-link"
-          url={githubLink}
-          text={busolaVersion}
-          className="fd-link"
+    <>
+      {legalLinks.map(legalLink => (
+        <SideNavigationItem
+          key={legalLink.link}
+          onClick={() => {
+            const newWindow = window.open(
+              legalLink.link,
+              '_blank',
+              'noopener, noreferrer',
+            );
+            if (newWindow) newWindow.opener = null;
+          }}
+          slot="fixedItems"
+          text={legalLink.label}
+          icon="inspect"
         />
-      </div>
-    </footer>
+      ))}
+      <SideNavigationItem
+        onClick={() => {
+          const newWindow = window.open(
+            githubLink,
+            '_blank',
+            'noopener, noreferrer',
+          );
+          if (newWindow) newWindow.opener = null;
+        }}
+        slot="fixedItems"
+        text={`${t('common.labels.version')} ${busolaVersion}`}
+        icon="inspect"
+      />
+    </>
   );
 }

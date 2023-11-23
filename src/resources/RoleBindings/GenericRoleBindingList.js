@@ -31,7 +31,7 @@ export function GenericRoleBindingList({ descriptionKey, ...params }) {
   const getSubjectWithLink = subject => (
     <div key={subject.kind + ' ' + subject.name}>
       <Link
-        className="fd-link"
+        className="bsl-link"
         to={namespaceUrl(`serviceaccounts/${subject.name}`, {
           namespace: subject.namespace,
         })}
@@ -57,7 +57,7 @@ export function GenericRoleBindingList({ descriptionKey, ...params }) {
     {
       header: t('role-bindings.headers.role-ref'),
       value: binding => (
-        <Link className="fd-link" to={navigateToRole(binding.roleRef)}>
+        <Link className="bsl-link" to={navigateToRole(binding.roleRef)}>
           {binding.roleRef.name}
         </Link>
       ),
@@ -81,8 +81,8 @@ export function GenericRoleBindingList({ descriptionKey, ...params }) {
   const description = (
     <Trans i18nKey={descriptionKey}>
       <ReactSharedLink
-        className="fd-link"
-        url="https://kyma-project.io/#/04-operation-guides/security/sec-02-authorization-in-kyma?id=role-binding"
+        className="bsl-link"
+        url="https://kyma-project.io/docs/kyma/latest/04-operation-guides/security/sec-02-authorization-in-kyma/#role-binding"
       />
     </Trans>
   );

@@ -7,43 +7,54 @@ context('Create Namespace', () => {
 
   it('Create Namespace', () => {
     cy.getLeftNav()
-      .contains('Namespaces', { includeShadowDom: true })
+      .contains('Namespaces')
       .click();
 
-    cy.contains('Create Namespace').click();
+    cy.contains('ui5-button', 'Create Namespace').click();
 
     cy.contains('Advanced').click();
 
-    cy.contains('Create Resource Quota').click();
+    cy.get('ui5-checkbox[text="Create Resource Quota"]').click();
 
-    cy.contains('Create Limit Range').click();
+    cy.get('ui5-checkbox[text="Create Limit Range"]').click();
 
     cy.get('[aria-label="expand Apply Total Memory Quotas"]')
-      .contains('Choose preset')
+      .find('ui5-combobox[placeholder="Choose preset"]:visible')
+      .find('ui5-icon[accessible-name="Select Options"]')
       .click();
 
-    cy.contains('XL (limits: 9Gi').click();
+    cy.get('ui5-static-area')
+      .find('ui5-li:visible')
+      .contains('XL (limits: 9Gi, requests: 8.4Gi)')
+      .find('li[role="listitem"]')
+      .click({ force: true });
 
-    cy.get('[role=dialog]')
-      .find('input[ariaLabel="Namespace name"]:visible')
+    cy.get('ui5-dialog')
+      .find('[aria-label="Namespace name"]:visible')
+      .find('input')
       .type(Cypress.env('NAMESPACE_NAME'));
 
-    cy.get('[role=dialog]')
+    cy.get('ui5-dialog')
       .contains('Advanced')
       .click();
 
-    cy.get('[role=dialog]')
-      .contains('button', 'Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
+      .should('be.visible')
       .click();
 
-    cy.contains('[aria-label="title"]', Cypress.env('NAMESPACE_NAME')).should(
+    cy.contains('ui5-title', Cypress.env('NAMESPACE_NAME')).should(
       'be.visible',
     );
 
-    cy.contains('button', 'Edit').click();
+    cy.get('ui5-button')
+      .contains('Edit')
+      .should('be.visible')
+      .click();
 
-    cy.get('[role=dialog]')
-      .contains('button', 'Update')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Update')
+      .should('be.visible')
       .click();
   });
 });

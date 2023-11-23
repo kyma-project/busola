@@ -1,6 +1,8 @@
 import React, { ReactNode } from 'react';
-import { Icon } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
+import { Icon } from '@ui5/webcomponents-react';
+
+import { spacing } from '@ui5/webcomponents-react-base';
 
 type LinkProps = {
   url: string;
@@ -29,10 +31,11 @@ export const Link = ({
     >
       {text || children || url}
       <Icon
-        glyph="action"
-        size="s"
-        className="fd-margin-begin--tiny fd-margin-end--tiny"
-        ariaLabel={t('common.ariaLabel.new-tab-link')}
+        design="Information"
+        name="inspect"
+        className="bsl-icon-s"
+        style={spacing.sapUiTinyMarginBegin}
+        aria-label={t('common.ariaLabel.new-tab-link')}
       />
     </a>
   );

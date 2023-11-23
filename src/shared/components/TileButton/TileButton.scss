@@ -41,3 +41,15 @@
     }
   }
 }
+
+@media (max-width: 768px) {
+  .tile-button {
+    height: 90px;
+
+    button {
+      .tile-button__text {
+        overflow: hidden;
+      }
+    }
+  }
+}

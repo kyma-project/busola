@@ -1,16 +1,17 @@
-import React from 'react';
 import { useUIStore } from '@ui-schema/ui-schema';
 
 import { useJsonata } from '../../hooks/useJsonata';
 import { useVariables } from '../../hooks/useVariables';
+import { useGetTranslation } from 'components/Extensibility/helpers';
+import { useTranslation } from 'react-i18next';
 import { fromJS } from 'immutable';
-import { MessageStrip, Checkbox, Link, Icon } from 'fundamental-react';
+
+import { CheckBox, Icon, Link, MessageStrip } from '@ui5/webcomponents-react';
+import { ResourceForm } from 'shared/ResourceForm';
+import { Dropdown } from 'shared/ResourceForm/inputs';
 
 import './Modules.scss';
-import { useGetTranslation } from 'components/Extensibility/helpers';
-import { ResourceForm } from 'shared/ResourceForm';
-import { useTranslation } from 'react-i18next';
-import { Dropdown } from 'shared/ResourceForm/inputs';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 export function Modules({ storeKeys, resource, onChange, schema, required }) {
   const { t: tExt } = useGetTranslation();
@@ -80,7 +81,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
   const Items = parsedOptions?.name?.map((name, index) => {
     if (!name)
       return (
-        <MessageStrip type={'warning'}>
+        <MessageStrip design="Warning" hideCloseButton>
           {t('extensibility.widgets.modules.no-modules')}
         </MessageStrip>
       );
@@ -138,14 +139,12 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
 
     return (
       <>
-        <div className="gridbox fd-margin-bottom--sm">
-          <div className="fd-align-vertical-center-ignor-checkbox-label">
+        <div className="gridbox ">
+          <div style={spacing.sapUiSmallMarginTop}>
             {index === 0 ? `${sectionName}:` : ''}
           </div>
-          <Checkbox
-            className="fd-align-vertical-center-ignor-checkbox-label"
-            key={name}
-            value={name}
+          <CheckBox
+            style={spacing.sapUiSmallMarginTop}
             checked={isChecked}
             onChange={e => {
               setCheckbox(
@@ -160,12 +159,11 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
                   : index,
               );
             }}
-          >
-            {name}
-          </Checkbox>
+            text={name}
+          />
           <Dropdown
+            style={spacing.sapUiTinyMarginTop}
             label={t('extensibility.widgets.modules.module-channel-label')}
-            compact
             disabled={!isChecked}
             placeholder={t(
               'extensibility.widgets.modules.module-channel-placeholder',
@@ -212,17 +210,24 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
               href={link}
               target="_blank"
               rel="noopener noreferrer"
-              className="fd-align-vertical-center-ignor-checkbox-label"
+              style={spacing.sapUiMediumMarginTop}
             >
               {t('extensibility.widgets.modules.documentation')}
-              <Icon glyph="action" size="s" className="fd-margin-begin--tiny" />
+              <Icon
+                name="inspect"
+                design="Information"
+                className="ui5-icon-s"
+                style={spacing.sapUiTinyMarginBegin}
+              />
             </Link>
           ) : null}
         </div>
         {parsedOptions?.betaAlert && isBeta && isChecked ? (
           <MessageStrip
-            type="warning"
-            className="fd-margin-bottom--sm fd-margin-top--sm alert"
+            design="Warning"
+            hideCloseButton
+            className="alert"
+            style={spacing.sapUiSmallMarginTopBottom}
           >
             {tExt(parsedOptions?.betaAlert)}
           </MessageStrip>

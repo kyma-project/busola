@@ -1,6 +1,5 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import { ComboboxInput } from 'fundamental-react';
+import { ComboBox, ComboBoxItem, Text } from '@ui5/webcomponents-react';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { k8sNamePattern } from 'shared/components/K8sNameInput/K8sNameInput';
 import { useTranslation } from 'react-i18next';
@@ -43,7 +42,6 @@ export function K8sResourceSelect({
   loading,
   error,
   onSelect,
-  onChange,
   resourceType,
   value,
   required,
@@ -61,7 +59,7 @@ export function K8sResourceSelect({
   const getValidationState = () => {
     if (error) {
       return {
-        state: 'error',
+        state: 'Error',
         text: t('common.messages.cannot-load', {
           value: pluralResourceType,
           error: error.message,
@@ -69,12 +67,12 @@ export function K8sResourceSelect({
       };
     } else if (loading) {
       return {
-        state: 'information',
+        state: 'Information',
         text: t('common.headers.loading'),
       };
     } else if (!resourceNames.length) {
       return {
-        state: 'information',
+        state: 'Information',
         text: isNamespaced
           ? t('common.messages.no-instances-found-namespace', {
               value: pluralResourceType,
@@ -86,26 +84,36 @@ export function K8sResourceSelect({
     } else return undefined;
   };
 
+  const onChange = event => {
+    const selectedOption = options.find(o => o.text === event.target.value) ?? {
+      key: event.target._state.filterValue,
+      text: event.target._state.filterValue,
+    };
+    onSelect(selectedOption.text, data);
+  };
+
   return (
-    <div className="combobox--full-width fd-col fd-col-md--11">
-      <ComboboxInput
-        showAllEntries
-        searchFullString
-        selectionType="manual"
-        compact
+    <div className="bsl-col bsl-col-md--11">
+      <ComboBox
         required={required}
+        disabled={props.disabled || !options?.length}
         placeholder={t('common.messages.type-to-select', {
           value: resourceType,
         })}
         id="k8s-resource-dropdown"
-        ariaLabel={t('common.messages.choose', { value: resourceType })}
-        arrowLabel="Combobox input arrow"
-        options={options}
+        data-testid={props['data-testid']}
+        aria-label={t('common.messages.choose', { value: resourceType })}
         onChange={onChange}
-        onSelectionChange={(_, selected) => onSelect(selected.text, data)}
-        validationState={getValidationState()}
-        inputProps={{ pattern: k8sNamePattern, value, ...props }}
-      />
+        onInput={onChange}
+        value={value}
+        valueState={getValidationState()?.state}
+        valueStateMessage={<Text>{getValidationState()?.text}</Text>}
+        pattern={k8sNamePattern}
+      >
+        {options.map(option => (
+          <ComboBoxItem id={option.key} text={option.text} />
+        ))}
+      </ComboBox>
     </div>
   );
 }

@@ -1,13 +1,13 @@
 import React from 'react';
-import { FormLabel } from 'fundamental-react';
+import { Label as UI5Label } from '@ui5/webcomponents-react';
 import './Label.scss';
 
-export function Label({ required, children }) {
+export function Label({ required, forElement, children }) {
   return (
     <>
-      <FormLabel required={required} includeColon>
+      <UI5Label required={required} for={forElement} showColon>
         {children}
-      </FormLabel>
+      </UI5Label>
     </>
   );
 }

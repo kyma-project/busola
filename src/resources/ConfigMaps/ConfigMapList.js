@@ -25,7 +25,7 @@ export function ConfigMapList(props) {
   const description = (
     <Trans i18nKey="config-maps.description">
       <Link
-        className="fd-link"
+        className="bsl-link"
         url="https://kubernetes.io/docs/concepts/configuration/configmap/"
       />
     </Trans>

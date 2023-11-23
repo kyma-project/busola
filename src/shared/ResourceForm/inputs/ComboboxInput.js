@@ -1,6 +1,5 @@
-import React from 'react';
 import classnames from 'classnames';
-import { ComboboxInput as FundamentalComboboxInput } from 'fundamental-react';
+import { ComboBox, ComboBoxItem } from '@ui5/webcomponents-react';
 
 export function ComboboxInput({
   value,
@@ -8,41 +7,52 @@ export function ComboboxInput({
   selectedKey,
   options,
   id,
+  updatesOnInput = true,
   placeholder,
-  typedValue,
   className,
   _ref,
   onSelectionChange,
   fullWidth,
   ...props
 }) {
+  const onChange = event => {
+    const selectedOption = options.find(o => o.text === event.target.value) ?? {
+      key: event.target._state.filterValue,
+      text: event.target._state.filterValue,
+    };
+    if (onSelectionChange) {
+      onSelectionChange(event, selectedOption);
+    } else {
+      setValue(selectedOption.key);
+    }
+  };
+
   return (
     <div
       className={classnames(
-        `fd-col fd-col-md--${fullWidth ? '12' : '11'}`,
+        `bsl-col bsl-col-md--${fullWidth ? '12' : '11'}`,
         className,
       )}
     >
-      <FundamentalComboboxInput
-        ariaLabel="Combobox input"
-        arrowLabel="Combobox input arrow"
+      <ComboBox
+        aria-label="Combobox input"
         id={id || 'combobox-input'}
-        compact
         ref={_ref}
-        showAllEntries
-        searchFullString
-        selectionType="manual"
-        onSelectionChange={
-          onSelectionChange ||
-          ((_, selected) =>
-            setValue(selected.key !== -1 ? selected.key : selected.text))
+        disabled={props.disabled || !options?.length}
+        filter="Contains"
+        onChange={onChange}
+        onInput={updatesOnInput ? onChange : () => {}}
+        value={
+          options.find(o => o.key === value || o.key === selectedKey)?.text ??
+          value
         }
-        typedValue={value ?? typedValue ?? ''}
-        selectedKey={value || selectedKey}
         placeholder={placeholder}
-        options={options}
         {...props}
-      />
+      >
+        {options.map(option => (
+          <ComboBoxItem id={option.key} text={option.text} />
+        ))}
+      </ComboBox>
     </div>
   );
 }

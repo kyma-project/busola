@@ -13,8 +13,11 @@ import * as Inputs from 'shared/ResourceForm/inputs';
 import { AuthenticationTypeDropdown } from 'components/Clusters/views/EditCluster/AuthenticationDropdown';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { authDataState } from 'state/authDataAtom';
+import { Title } from '@ui5/webcomponents-react';
 
 import { addCluster, getContext, deleteCluster } from '../../shared';
+
+import { spacing } from '@ui5/webcomponents-react-base';
 
 function EditClusterComponent({
   formElementRef,
@@ -159,10 +162,15 @@ function EditClusterComponent({
 
   return (
     <>
-      <div className="fd-margin-begin-end--md fd-margin-bottom--md">
-        <h3 className="fd-title fd-title--h5 fd-title--wrap fd-margin-bottom--sm">
+      <div
+        style={{
+          ...spacing.sapUiLargeMarginBeginEnd,
+          ...spacing.sapUiSmallMarginTopBottom,
+        }}
+      >
+        <Title level="H3" style={spacing.sapUiSmallMarginBottom}>
           {t('clusters.storage.choose-storage.label')}
-        </h3>
+        </Title>
         <ChooseStorage
           storage={resource.config?.storage}
           setStorage={type => {
@@ -171,6 +179,7 @@ function EditClusterComponent({
           }}
         />
         <ResourceForm.FormField
+          style={spacing.sapUiMediumMarginTop}
           label={t('common.headers.description')}
           data-testid="cluster-description"
           input={Inputs.Text}

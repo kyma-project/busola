@@ -14,55 +14,74 @@ context('Test Cluster Role Bindings', () => {
   it('Create a ClusterRoleBinding', () => {
     cy.navigateTo('Configuration', 'Cluster Role Bindings');
 
-    cy.contains('Create Cluster Role Binding').click();
+    cy.contains('ui5-button', 'Create Cluster Role Binding').click();
 
     cy.contains('Advanced').click();
 
-    cy.get('[ariaLabel="ClusterRoleBinding name"]').type(CRB_NAME);
+    cy.get('[aria-label="ClusterRoleBinding name"]')
+      .find('input')
+      .type(CRB_NAME);
 
     cy.get(
-      '[placeholder="Start typing to select ClusterRole from the list"]',
-    ).type('admin');
+      'ui5-combobox[placeholder="Start typing to select ClusterRole from the list"]',
+    )
+      .find('input')
+      .click()
+      .type('admin');
 
-    cy.contains('li', 'cluster-admin').click();
+    cy.get('ui5-li:visible')
+      .contains('cluster-admin')
+      .find('li')
+      .click({ force: true });
 
-    cy.get('[ariaLabel="User name"]')
-      .clear()
-      .type(USER_NAME);
+    cy.get('[aria-label="User name"]')
+      .find('input')
+      .type(USER_NAME)
+      .blur({ force: true });
 
-    cy.contains('[role="dialog"] button', 'Create').click();
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
+      .should('be.visible')
+      .click();
   });
 
   it('Checking details', () => {
-    cy.contains(CRB_NAME).should('be.visible');
+    cy.contains('ui5-title', CRB_NAME).should('be.visible');
 
     cy.contains('User').should('be.visible');
 
     cy.contains(USER_NAME).should('be.visible');
 
-    cy.contains('cluster-admin').should('be.visible');
+    cy.contains('a.bsl-link', 'cluster-admin').should('be.visible');
   });
 
   it('Edit', () => {
-    cy.contains('Edit').click();
+    cy.contains('ui5-button', 'Edit').click();
 
     cy.contains('[role="combobox"]', 'User').click();
 
-    cy.contains('ServiceAccount').click();
+    cy.get('ui5-li:visible')
+      .contains('ServiceAccount')
+      .find('li')
+      .click({ force: true });
 
     cy.contains('Service Account Namespace').should('be.visible');
 
     cy.contains('Service Account Name').should('be.visible');
 
-    cy.contains('ServiceAccount').click();
+    cy.contains('[role="combobox"]', 'ServiceAccount').click();
 
     cy.contains('Group').click();
 
-    cy.get('[ariaLabel="Group name"]')
-      .clear()
-      .type('test-group');
+    cy.get('[aria-label="Group name"]')
+      .find('input')
+      .type('test-group')
+      .blur({ force: true });
 
-    cy.contains('[role="dialog"] button', 'Update').click();
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Update')
+      .should('be.visible')
+      .click();
   });
 
   it('Checking updates details', () => {
@@ -72,6 +91,6 @@ context('Test Cluster Role Bindings', () => {
   });
 
   it('Delete Cluster Role Binding', () => {
-    cy.deleteInDetails();
+    cy.deleteInDetails('Cluster Role Binding', CRB_NAME);
   });
 });

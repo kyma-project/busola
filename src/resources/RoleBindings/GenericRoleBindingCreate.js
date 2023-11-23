@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
-import { MessageStrip } from 'fundamental-react';
+import { MessageStrip } from '@ui5/webcomponents-react';
 import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
@@ -18,6 +18,8 @@ import { SingleSubjectForm, SingleSubjectInput } from './SubjectForm';
 import { validateBinding } from './helpers';
 import { RoleForm } from './RoleForm';
 import { useHasPermissionsFor } from 'hooks/useHasPermissionsFor';
+
+import { spacing } from '@ui5/webcomponents-react-base';
 
 export function GenericRoleBindingCreate({
   formElementRef,
@@ -101,7 +103,11 @@ export function GenericRoleBindingCreate({
       {jp.value(binding, '$.subjects.length') ? (
         <SingleSubjectInput simple propertyPath="$.subjects" />
       ) : (
-        <MessageStrip simple type="warning" className="fd-margin-top--sm">
+        <MessageStrip
+          design="Warning"
+          hideCloseButton
+          style={spacing.sapUiSmallMarginTop}
+        >
           {t('role-bindings.create-modal.at-least-one-subject-required', {
             resource: singularName,
           })}

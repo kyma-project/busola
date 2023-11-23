@@ -33,7 +33,7 @@ export function PersistentVolumeClaimList(props) {
   const description = (
     <Trans i18nKey="persistent-volume-claims.description">
       <Link
-        className="fd-link"
+        className="bsl-link"
         url="https://kubernetes.io/docs/concepts/storage/persistent-volumes/"
       />
     </Trans>

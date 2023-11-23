@@ -3,6 +3,8 @@ import React from 'react';
 import { MultiInput } from './MultiInput';
 import * as Inputs from '../inputs';
 
+import { spacing } from '@ui5/webcomponents-react-base';
+
 export function SelectArrayInput({
   title,
   defaultOpen,
@@ -32,14 +34,13 @@ export function SelectArrayInput({
           <Inputs.Dropdown
             key={index}
             placeholder={placeholder}
-            compact
             _ref={ref}
             value={value}
             setValue={setValue}
             options={options}
             onKeyDown={focus}
             onBlur={updateValue}
-            className="fd-margin-end--sm"
+            style={spacing.sapUiSmallMarginEnd}
           />
         ),
       ]}

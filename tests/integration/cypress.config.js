@@ -1,6 +1,7 @@
 const { defineConfig } = require('cypress');
 
 module.exports = defineConfig({
+  includeShadowDom: true,
   defaultCommandTimeout: 10000,
   execTimeout: 10000,
   taskTimeout: 10000,
@@ -12,6 +13,7 @@ module.exports = defineConfig({
   viewportWidth: 1500,
   viewportHeight: 1500,
   videoCompression: false,
+  scrollBehavior: false,
   screenshotsFolder: process?.env?.ARTIFACTS
     ? `${process.env?.ARTIFACTS}/screenshots`
     : 'cypress/screenshots',

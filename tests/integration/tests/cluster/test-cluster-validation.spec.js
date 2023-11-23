@@ -3,7 +3,7 @@
 function containsInShadowDom(selector, content, options) {
   return cy
     .get(selector, options)
-    .contains(content, { includeShadowDom: true })
+    .contains(content)
     .parentsUntil(selector)
     .last()
     .parent();
@@ -23,12 +23,13 @@ function testAndSelectOptions(section, selection) {
   cy.get(`@${section}Header`)
     .contains('Remove all')
     .click();
+
   cy.get(`@${section}FormField`)
     .find('[type="checkbox"]')
     .should('not.be.checked');
 
   cy.get(`@${section}FormField`)
-    .contains(selection)
+    .get(`ui5-checkbox[text="${selection}"][data-testid*="${selection}"]`)
     .click();
 }
 
@@ -60,14 +61,13 @@ context('Test Cluster Validation Scan', () => {
   });
 
   it('Cluster Scan', () => {
-    cy.contains('Cluster Validation').should('be.visible');
+    cy.contains('ui5-title', 'Cluster Validation').should('be.visible');
 
     cy.contains('Scan Progress').should('not.exist');
     cy.contains('Scan Result').should('not.exist');
 
-    cy.contains('.fd-layout-panel', 'Cluster Validation').as(
-      'clusterValidationPanel',
-    );
+    cy.contains('ui5-panel', 'Cluster Validation').as('clusterValidationPanel');
+
     cy.get('@clusterValidationPanel')
       .contains('Configure')
       .click();
@@ -83,31 +83,33 @@ context('Test Cluster Validation Scan', () => {
       .clear()
       .type(1);
 
-    cy.contains('Submit').click();
+    cy.get('ui5-dialog')
+      .find('[aria-label="cluster-validation-submit"]')
+      .should('be.visible')
+      .click();
 
     cy.get('@clusterValidationPanel')
+      .find('ui5-button')
       .contains('Scan')
       .click();
 
     // wait for scan to finish
-    cy.contains('Scan Progress', { includeShadowDom: true }).should(
-      'be.visible',
-    );
+    cy.contains('Scan Progress').should('be.visible');
+
     containsInShadowDom('ui5-card', 'Scan Progress').as('scanProgress');
+
     cy.get('@scanProgress')
-      .contains('100%', { timeout: 30000, includeShadowDom: true })
-      .should('be.visible');
+      .contains('100%', { timeout: 30000 })
+      .should('exist');
 
     // Check items in scan result tree
-    cy.contains('Scan Result', { includeShadowDom: true }).should('be.visible');
+    cy.contains('Scan Result').should('be.visible');
     containsInShadowDom('ui5-card', 'Scan Result').as('scanResult');
 
     cy.get('@scanResult').should('be.visible');
 
     function findTitle(title) {
-      return cy
-        .get('@scanResult')
-        .contains('.ui5-li-title:visible', title, { includeShadowDom: true });
+      return cy.get('@scanResult').contains('.ui5-li-title:visible', title);
     }
 
     function toggleTreeItem(title) {
@@ -115,7 +117,7 @@ context('Test Cluster Validation Scan', () => {
         .parentsUntil('ui5-tree-item')
         .last()
         .parent()
-        .find('.ui5-li-tree-toggle-icon:visible', { includeShadowDom: true })
+        .find('.ui5-li-tree-toggle-icon:visible')
         .click();
     }
 
@@ -124,6 +126,7 @@ context('Test Cluster Validation Scan', () => {
 
     toggleTreeItem('default');
     toggleTreeItem('ConfigMap');
+    cy.get('@scanResult').scrollIntoView();
     toggleTreeItem('kube-root-ca.crt');
     findTitle('This is a test rule').should('be.visible');
 

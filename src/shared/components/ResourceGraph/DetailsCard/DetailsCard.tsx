@@ -1,14 +1,17 @@
-import { Button } from 'fundamental-react';
-import { Labels } from 'shared/components/Labels/Labels';
 import { useTranslation } from 'react-i18next';
-import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
-import './DetailsCard.scss';
-import { K8sResource } from 'types';
 import { useNavigate } from 'react-router-dom';
 import { useUrl } from 'hooks/useUrl';
 import { useRecoilValue } from 'recoil';
+
+import { Button } from '@ui5/webcomponents-react';
+import { Labels } from 'shared/components/Labels/Labels';
+import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
+import { K8sResource } from 'types';
 import { allNodesSelector } from 'state/navigation/allNodesSelector';
 import pluralize from 'pluralize';
+
+import { spacing } from '@ui5/webcomponents-react-base';
+import './DetailsCard.scss';
 
 export function DetailsCard({
   resource,
@@ -44,7 +47,7 @@ export function DetailsCard({
       </section>
       <div className="buttons-wrapper">
         <Button
-          className="fd-margin-end--sm"
+          style={spacing.sapUiSmallMarginEnd}
           onClick={() => {
             const namespacePart = resource.metadata.namespace
               ? `namespaces/${resource.metadata.namespace}/`
@@ -65,7 +68,10 @@ export function DetailsCard({
         >
           {t('resource-graph.buttons.go-to-details')}
         </Button>
-        <Button className="fd-margin-end--sm" onClick={() => handleCloseCard()}>
+        <Button
+          style={spacing.sapUiSmallMarginEnd}
+          onClick={() => handleCloseCard()}
+        >
           {t('common.buttons.close')}
         </Button>
       </div>

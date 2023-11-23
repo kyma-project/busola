@@ -1,10 +1,11 @@
 import React from 'react';
-import { MessageStrip } from 'fundamental-react';
+import { MessageStrip } from '@ui5/webcomponents-react';
 
 import { useCreateResourceDescription } from 'components/Extensibility/helpers';
 
 import { useVariables } from '../hooks/useVariables';
 import { useJsonata } from '../hooks/useJsonata';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 export function AlertRenderer({
   value,
@@ -30,7 +31,16 @@ export function AlertRenderer({
     value,
   });
   const alert = schema.get('alert');
-  const schemaType = schema.get('severity') || 'information';
+  const severity = schema.get('severity');
+
+  let schemaType = 'Information';
+  if (severity === 'warning') {
+    schemaType = 'Warning';
+  } else if (severity === 'error') {
+    schemaType = 'Negative';
+  } else if (severity === 'success') {
+    schemaType = 'Positive';
+  }
 
   function alertJsonata(alertFormula, item) {
     const [value, error] = jsonata(alertFormula, item);
@@ -43,7 +53,11 @@ export function AlertRenderer({
   }
   const alertLink = useCreateResourceDescription(alertJsonata(alert, item));
   return (
-    <MessageStrip type={schemaType} className="fd-margin-top--sm">
+    <MessageStrip
+      design={schemaType}
+      hideCloseButton
+      style={spacing.sapUiTinyMarginTopBottom}
+    >
       {alertLink}
     </MessageStrip>
   );

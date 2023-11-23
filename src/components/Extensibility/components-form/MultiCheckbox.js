@@ -99,6 +99,7 @@ export function MultiCheckbox({
             data: { value },
           });
         }}
+        className="multi-checkbox"
         validate={() => value?.length}
         disabled={readOnly}
         label={tFromStoreKeys(storeKeys, schema)}

@@ -1,33 +1,34 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Labels } from '../Labels/Labels';
 import { ContainersPanel, Volume } from './components';
+import { Title } from '@ui5/webcomponents-react';
+import { UI5Panel } from '../UI5Panel/UI5Panel';
+
+import { spacing } from '@ui5/webcomponents-react-base';
 import './PodTemplate.scss';
 
 export function PodTemplate({ template }) {
   const { t } = useTranslation();
 
   const header = (
-    <LayoutPanel.Header>
-      <LayoutPanel.Head title={t('pods.labels.pod-template')} />
+    <>
+      <Title level="H5">{t('pods.labels.pod-template')}</Title>
       <Labels
-        className="fd-margin-begin--tiny"
+        style={spacing.sapUiTinyMarginBegin}
         labels={template.metadata.labels}
       />
-    </LayoutPanel.Header>
+    </>
   );
 
   const body = (
     <>
-      <LayoutPanel.Body className="fd-has-padding-bottom-none">
-        <LayoutPanelRow
-          name={t('pods.labels.restart-policy')}
-          value={template.spec.restartPolicy}
-        />
-      </LayoutPanel.Body>
+      <LayoutPanelRow
+        name={t('pods.labels.restart-policy')}
+        value={template.spec.restartPolicy}
+      />
       {template.spec.containers && (
         <ContainersPanel
           title={t('pods.labels.containers')}
@@ -42,25 +43,30 @@ export function PodTemplate({ template }) {
       )}
       {template.spec.volumes && (
         <>
-          <LayoutPanel className="fd-margin--md">
-            <LayoutPanel.Header>
-              <LayoutPanel.Head title={t('pods.labels.volumes')} />
-            </LayoutPanel.Header>
-            <LayoutPanel.Body>
-              {template.spec.volumes.map(volume => (
-                <Volume key={volume.name} volume={volume} />
-              ))}
-            </LayoutPanel.Body>
-          </LayoutPanel>
+          <UI5Panel
+            disableMargin
+            title={
+              <>
+                <Title level="H5">{t('pods.labels.volumes')}</Title>
+                <Labels
+                  labels={template.metadata.labels}
+                  style={spacing.sapUiTinyMarginBegin}
+                />
+              </>
+            }
+          >
+            {template.spec.volumes.map(volume => (
+              <Volume key={volume.name} volume={volume} />
+            ))}
+          </UI5Panel>
         </>
       )}
     </>
   );
 
   return (
-    <LayoutPanel className="fd-margin--md" key="pod-template">
-      {header}
+    <UI5Panel key="pod-template" title={header}>
       {body}
-    </LayoutPanel>
+    </UI5Panel>
   );
 }

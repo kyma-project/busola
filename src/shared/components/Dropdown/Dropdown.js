@@ -1,9 +1,7 @@
-import React from 'react';
-import { Select, FormLabel } from 'fundamental-react';
+import { ComboBox, ComboBoxItem } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import classnames from 'classnames';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-import './Dropdown.scss';
+import { Label } from '../../../shared/ResourceForm/components/Label';
 
 export function Dropdown({
   label,
@@ -11,15 +9,15 @@ export function Dropdown({
   selectedKey,
   onSelect,
   inlineHelp = '',
-  fullWidth,
   id,
   disabled = false,
   placeholder,
   _ref,
   emptyListMessage,
   className,
-  ...fdSelectProps
+  ...props
 }) {
+  if (!props.readOnly) delete props.readOnly;
   const { t } = useTranslation();
   if (!options || !options.length) {
     options = [
@@ -33,33 +31,41 @@ export function Dropdown({
   }
   id = id || 'select-dropdown';
 
-  const select = (
-    <Select
+  const onSelectionChange = event => {
+    const selectedOption = options.find(o => o.key === event.detail.item.id);
+    if (selectedOption) onSelect(event, selectedOption);
+  };
+
+  const combobox = (
+    <ComboBox
+      className={className}
       id={id}
       data-testid={id}
       aria-label={label}
-      options={options}
-      selectedKey={selectedKey}
-      onSelect={onSelect}
       placeholder={placeholder || label}
-      disabled={disabled}
+      disabled={disabled || !options?.length}
+      onKeyDown={event => {
+        event.preventDefault();
+      }}
+      onSelectionChange={onSelectionChange}
+      value={options.find(o => o.key === selectedKey)?.text}
       ref={_ref}
-      {...fdSelectProps}
-    />
-  );
-
-  const classNames = classnames(
-    'dropdown',
-    {
-      'dropdown--full-width': fullWidth,
-    },
-    className,
+      {...props}
+    >
+      {options.map(option => (
+        <ComboBoxItem id={option.key} text={option.text} />
+      ))}
+    </ComboBox>
   );
 
   return (
-    <div className={classNames}>
-      {label && <FormLabel htmlFor={id}>{label}</FormLabel>}
-      {inlineHelp ? <Tooltip content={inlineHelp}>{select}</Tooltip> : select}
+    <div>
+      {label && <Label forElement={id}>{label}</Label>}
+      {inlineHelp ? (
+        <Tooltip content={inlineHelp}>{combobox}</Tooltip>
+      ) : (
+        combobox
+      )}
     </div>
   );
 }

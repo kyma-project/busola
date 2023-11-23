@@ -2,10 +2,12 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useFeature } from 'hooks/useFeature';
-import { LayoutPanel } from 'fundamental-react';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useMetricsQuery } from './useMetricsQuery';
 import { CommitmentGraph } from './CommitmentGraph';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { Text } from '@ui5/webcomponents-react';
+
 import './ResourceCommitment.scss';
 
 export function ResourceCommitment() {
@@ -22,18 +24,17 @@ export function ResourceCommitment() {
     if (loading) {
       return <Spinner />;
     } else if (error) {
-      return <p>{t('common.messages.error', { error: error.message })}</p>;
+      return (
+        <Text>{t('common.messages.error', { error: error.message })}</Text>
+      );
     } else {
       return <CommitmentGraph data={data} />;
     }
   };
 
   return (
-    <LayoutPanel className="commitment-graph">
-      <LayoutPanel.Header>
-        <LayoutPanel.Filters>{QueryDropdown}</LayoutPanel.Filters>
-      </LayoutPanel.Header>
-      <LayoutPanel.Body>{content()}</LayoutPanel.Body>
-    </LayoutPanel>
+    <UI5Panel disableMargin title={QueryDropdown} className="commitment-graph">
+      {content()}
+    </UI5Panel>
   );
 }

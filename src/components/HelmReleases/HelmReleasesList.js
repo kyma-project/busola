@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { Labels } from 'shared/components/Labels/Labels';
-import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { Link as ExternalLink } from 'shared/components/Link/Link';
 import { Link } from 'react-router-dom';
@@ -10,13 +10,16 @@ import { decodeHelmRelease } from './decodeHelmRelease';
 import { findRecentRelease } from './findRecentRelease';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
 import { groupBy } from 'lodash';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
+import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
+import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 function HelmReleasesList() {
   const { t } = useTranslation();
   const namespace = useRecoilValue(activeNamespaceIdState);
+  const [showAdd, setShowAdd] = useRecoilState(showYamlUploadDialogState);
   const { namespaceUrl } = useUrl();
 
   const { data, loading, error } = useGetList(
@@ -34,7 +37,7 @@ function HelmReleasesList() {
 
   const rowRenderer = entry => [
     <Link
-      className="fd-link"
+      className="bsl-link"
       to={namespaceUrl(`helm-releases/${entry.releaseName}`)}
     >
       {entry.releaseName}
@@ -63,29 +66,37 @@ function HelmReleasesList() {
 
   return (
     <>
-      <PageHeader
+      <DynamicPageComponent
         title={t('helm-releases.title')}
         description={
           <Trans i18nKey={'helm-releases.description'}>
             <ExternalLink
-              className="fd-link"
+              className="bsl-link"
               url="https://helm.sh/docs/glossary/#release"
             />
           </Trans>
         }
+        content={
+          <GenericList
+            entries={entries}
+            headerRenderer={headerRenderer}
+            rowRenderer={rowRenderer}
+            serverDataLoading={loading}
+            serverDataError={error}
+            allowSlashShortcut
+            sortBy={{
+              name: (a, b) => a.releaseName.localeCompare(b.releaseName),
+            }}
+            searchSettings={{
+              textSearchProperties: ['recentRelease.chart.metadata.name'],
+            }}
+          />
+        }
       />
-      <GenericList
-        entries={entries}
-        headerRenderer={headerRenderer}
-        rowRenderer={rowRenderer}
-        serverDataLoading={loading}
-        serverDataError={error}
-        allowSlashShortcut
-        sortBy={{
-          name: (a, b) => a.releaseName.localeCompare(b.releaseName),
-        }}
-        searchSettings={{
-          textSearchProperties: ['recentRelease.chart.metadata.name'],
+      <YamlUploadDialog
+        open={showAdd}
+        onCancel={() => {
+          setShowAdd(false);
         }}
       />
     </>

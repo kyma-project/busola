@@ -9,7 +9,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { createJobTemplate, createJobPresets } from './templates';
 import { JobSpecSection } from './SpecSection';
 import { ContainerSection, ContainersSection } from './ContainersSection';
-import { MessageStrip } from 'fundamental-react';
+import { MessageStrip } from '@ui5/webcomponents-react';
 
 function isJobValid(job = {}) {
   const isNameValid = jp.value(job, '$.metadata.name');
@@ -76,8 +76,7 @@ export function JobCreate({
         propertyPath="$.spec.template.spec.containers"
         readOnly={!!initialJob}
       />
-
-      <MessageStrip type="information" className="fd-margin-top--sm">
+      <MessageStrip design="Information" hideCloseButton>
         {t('jobs.create-modal.containers-readonly-in-edit')}
       </MessageStrip>
     </ResourceForm>

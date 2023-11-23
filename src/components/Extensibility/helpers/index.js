@@ -183,7 +183,7 @@ export const useCreateResourceDescription = descID => {
           components={matches.map((result, idx) => {
             const url = result.match(/\((.*?)\)/)[1];
 
-            return <Link className="fd-link" url={url} key={idx} />;
+            return <Link className="bsl-link" url={url} key={idx} />;
           })}
         />
       );

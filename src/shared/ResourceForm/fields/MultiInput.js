@@ -1,15 +1,15 @@
-import React, { useEffect, useRef, useState, createRef } from 'react';
-import { Button } from 'fundamental-react';
+import { useEffect, useRef, useState, createRef } from 'react';
+import { Button, Icon, FlexBox } from '@ui5/webcomponents-react';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { Icon } from 'fundamental-react';
 
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 import { ResourceForm } from '..';
+import { useCreateResourceDescription } from 'components/Extensibility/helpers';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 import './MultiInput.scss';
-import { useCreateResourceDescription } from 'components/Extensibility/helpers';
 
 export function MultiInput({
   value,
@@ -100,10 +100,8 @@ export function MultiInput({
   const open = defaultOpen === undefined ? !isAdvanced : defaultOpen;
 
   const listClasses = classnames({
-    'text-array-input__list': true,
-    'fd-col': true,
-    'fd-col-md--8': !fullWidth && (title || label),
-    'fd-col-md--12': fullWidth && !(title || label),
+    'bsl-col-md--8': !fullWidth && (title || label),
+    'bsl-col-md--12': fullWidth && !(title || label),
   });
 
   useEffect(() => {
@@ -166,9 +164,9 @@ export function MultiInput({
       tooltipContent={sectionTooltipContent}
       {...props}
     >
-      <div className="fd-row form-field multi-input">
+      <FlexBox className="form-field multi-input" justifyContent="Center">
         {!fullWidth && (title || label) && (
-          <div className="fd-col fd-col-md--3 form-field__label">
+          <div className="bsl-col-md--3 form-field__label">
             <ResourceForm.Label
               required={required}
               tooltipContent={tooltipContent}
@@ -179,10 +177,10 @@ export function MultiInput({
         )}
         <ul className={listClasses}>
           {internalValue.map((entry, index) => (
-            <li key={index}>
-              <div className="fd-row">
-                <div className="fd-col fd-col-md--11">
-                  <div className="fd-row">
+            <li key={index} style={spacing.sapUiSmallMarginBottom}>
+              <FlexBox alignItems="Baseline">
+                <div className="bsl-col-md--11">
+                  <FlexBox wrap="Wrap" style={{ gap: '10px' }}>
                     {noEdit && !isLast(index) && (
                       <span className="readonly-value">{entry}</span>
                     )}
@@ -191,26 +189,24 @@ export function MultiInput({
                         (input, inputIndex) =>
                           inputComponents[index][inputIndex],
                       )}
-                  </div>
+                  </FlexBox>
                 </div>
-                <div className="fd-col fd-col-md--1 action-button">
+                <div className="bsl-col-md--1">
                   {!isLast(index) && (
                     <Button
                       disabled={readOnly}
-                      compact
-                      option="transparent"
                       className={classnames({
                         hidden: isEntryLocked(entry),
                       })}
-                      glyph="delete"
-                      type="negative"
+                      icon="delete"
+                      design="Transparent"
                       onClick={() => removeValue(index)}
-                      ariaLabel={t('common.buttons.delete')}
+                      aria-label={t('common.buttons.delete')}
                     />
                   )}
                   {isLast(index) && newItemAction}
                 </div>
-              </div>
+              </FlexBox>
             </li>
           ))}
           {inputInfo && (
@@ -219,14 +215,19 @@ export function MultiInput({
             </p>
           )}
         </ul>
-        <div className="fd-col fd-col-md--1 tooltip-column tooltip-column--with-padding">
+        <div className="bsl-col-md--1 tooltip-column tooltip-column--with-padding">
           {tooltipContent && (
             <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
-              <Icon ariaLabel="" size="m" glyph="message-information" />
+              <Icon
+                aria-label=""
+                className="bsl-icon-m"
+                name="message-information"
+                design="Information"
+              />
             </Tooltip>
           )}
         </div>
-      </div>
+      </FlexBox>
     </ResourceForm.CollapsibleSection>
   );
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Button } from 'fundamental-react';
+import { Button } from '@ui5/webcomponents-react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
@@ -94,8 +94,7 @@ export function AdvancedContainersView({
         setResource={setResource}
         actions={setOpen => (
           <Button
-            glyph="add"
-            compact
+            icon="add"
             onClick={() => {
               const path = '$.spec.template.spec.containers';
               const nextContainers = [
@@ -108,8 +107,7 @@ export function AdvancedContainersView({
               onChange(new Event('input', { bubbles: true }));
               setOpen(true);
             }}
-            option="transparent"
-            iconBeforeText
+            design="Transparent"
           >
             {t('deployments.create-modal.advanced.add-container')}
           </Button>

@@ -17,35 +17,40 @@ context('Test Service Accounts', () => {
   it('Create a Service Account', () => {
     cy.navigateTo('Configuration', 'Service Accounts');
 
-    cy.contains('Create Service Account').click();
+    cy.contains('ui5-button', 'Create Service Account').click();
 
     cy.contains('Advanced').click();
 
-    cy.get('[ariaLabel="ServiceAccount name"]')
+    cy.get('[aria-label="ServiceAccount name"]')
+      .find('input')
+      .click()
       .clear()
       .type(SERVICE_NAME);
 
     // Toggle 'Automount Token' switch
-    cy.get('[role="presentation"]')
+    cy.get('ui5-switch')
+      .find('input')
       .eq(0)
-      .click();
+      .click({ force: true });
 
     // Toggle 'Create associated Secret' switch
-    cy.get('[role="presentation"]')
+    cy.get('ui5-switch')
+      .find('input')
       .eq(1)
-      .click();
+      .click({ force: true });
 
     cy.contains('The associated Secret contains long-lived API token').should(
       'be.visible',
     );
 
-    cy.get('[role="dialog"]')
-      .contains('button', 'Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
+      .should('be.visible')
       .click();
   });
 
   it('Checking details', () => {
-    cy.contains(SERVICE_NAME).should('be.visible');
+    cy.contains('ui5-title', SERVICE_NAME).should('be.visible');
 
     cy.contains('enabled').should('be.visible');
 
@@ -53,28 +58,35 @@ context('Test Service Accounts', () => {
   });
 
   it('Edit', () => {
-    cy.contains('Edit').click();
+    cy.get('ui5-button')
+      .contains('Edit')
+      .should('be.visible')
+      .click();
 
-    cy.get('[role="document"]')
+    cy.get('ui5-dialog')
       .contains('Labels')
       .click();
 
     cy.get('[placeholder="Enter key"]:visible')
+      .find('input')
       .filterWithNoValue()
       .type('test.key');
 
     cy.get('[placeholder="Enter value"]:visible')
+      .find('input')
       .filterWithNoValue()
       .first()
       .type('test-value');
 
     // Toggle 'Automount Token' switch
-    cy.get('[role="presentation"]')
+    cy.get('ui5-switch')
+      .find('input')
       .eq(0)
-      .click();
+      .click({ force: true });
 
-    cy.get('[role="dialog"]')
-      .contains('button', 'Update')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Update')
+      .should('be.visible')
       .click();
   });
 
@@ -85,7 +97,7 @@ context('Test Service Accounts', () => {
   });
 
   it('Generate TokenRequest', () => {
-    cy.contains('Generate TokenRequest').click();
+    cy.contains('ui5-button', 'Generate TokenRequest').click();
 
     cy.contains(
       'The TokenRequest allows you to log in with your ServiceAccount credentials.',
@@ -94,12 +106,15 @@ context('Test Service Accounts', () => {
     cy.contains('TokenRequest generated').should('be.visible');
     cy.readFile(filepath).should('not.exist');
 
-    cy.contains('Download Kubeconfig').click();
+    cy.contains('ui5-button', 'Download Kubeconfig').click();
 
     cy.readFile(filepath).should('exist');
     cy.task('removeFile', filepath);
 
-    cy.contains('Close').click();
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Close')
+      .should('be.visible')
+      .click();
   });
 
   it('Inspect list', () => {

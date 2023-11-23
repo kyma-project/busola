@@ -32,13 +32,8 @@
 .resources-list {
   max-height: 60vh;
   overflow-y: auto;
-}
 
-.fd-messsage_strip__content {
-  .fd-message-strip__text {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  .list-type {
+    list-style-type: disc;
   }
 }

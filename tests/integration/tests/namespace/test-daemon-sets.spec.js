@@ -31,7 +31,7 @@ context('Test Daemon Sets', () => {
   it('Create Daemon Set', () => {
     cy.navigateTo('Workloads', 'Daemon Sets');
 
-    cy.contains('Create Daemon Set').click();
+    cy.contains('ui5-button', 'Create Daemon Set').click();
 
     cy.wrap(loadDS(DS_NAME, Cypress.env('NAMESPACE_NAME'), FILE_NAME)).then(
       DS_CONFIG => {
@@ -40,8 +40,9 @@ context('Test Daemon Sets', () => {
       },
     );
 
-    cy.get('[role="dialog"]')
-      .contains('button', 'Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
+      .should('be.visible')
       .click();
   });
 

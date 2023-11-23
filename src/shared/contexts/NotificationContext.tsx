@@ -1,9 +1,11 @@
+import { MessageStrip } from '@ui5/webcomponents-react';
 import { createContext, useContext, useState } from 'react';
 import {
   ErrorModal,
   ErrorModalProps,
   ToastProps,
 } from './ErrorModal/ErrorModal';
+import { createPortal } from 'react-dom';
 
 type NotificationContextProps = {
   children: React.ReactNode;
@@ -64,10 +66,13 @@ export const NotificationProvider = ({
           className="message-toast--wrapper"
           onClick={() => setToastProps(null)}
         >
-          <div className="fd-message-toast">{toastProps.content}</div>
+          <MessageStrip hideIcon hideCloseButton>
+            {toastProps.content}
+          </MessageStrip>
         </div>
       )}
-      {errorProps && <ErrorModal {...errorProps} />}
+      {errorProps &&
+        createPortal(<ErrorModal {...errorProps} />, document.body)}
       {children}
     </NotificationContext.Provider>
   );

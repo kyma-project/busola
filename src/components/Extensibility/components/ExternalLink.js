@@ -2,11 +2,13 @@ import {
   useGetPlaceholder,
   useGetTranslation,
 } from 'components/Extensibility/helpers';
-import { Button, Icon, Link } from 'fundamental-react';
+import { Button, Icon, Link } from '@ui5/webcomponents-react';
 import { isNil } from 'lodash';
-import { useTranslation } from 'react-i18next';
 
+import { useTranslation } from 'react-i18next';
 import { useJsonata } from '../hooks/useJsonata';
+
+import { spacing } from '@ui5/webcomponents-react-base';
 
 const makeHref = ({ jsonata, value, structure }) => {
   const [link, linkError] = jsonata(structure.link);
@@ -52,8 +54,9 @@ export const ExternalLink = ({
   if (structure.type === 'button') {
     return (
       <Button
-        glyph="action"
-        className="fd-margin-begin--sm fd-margin-end--tiny"
+        icon="inspect"
+        iconEnd
+        style={spacing.sapUiTinyMarginBeginEnd}
         onClick={() => {
           const newWindow = window.open(href, '_blank', 'noopener, noreferrer');
           if (newWindow) newWindow.opener = null;
@@ -68,10 +71,11 @@ export const ExternalLink = ({
     <Link href={href} target="_blank" rel="noopener noreferrer">
       {tExt(value)}
       <Icon
-        glyph="action"
-        size="s"
-        className="fd-margin-begin--tiny"
-        ariaLabel={t('common.ariaLabel.new-tab-link')}
+        design="Information"
+        name="inspect"
+        className="bsl-icon-s"
+        style={spacing.sapUiTinyMarginBegin}
+        aria-label={t('common.ariaLabel.new-tab-link')}
         originalResource={originalResource}
       />
     </Link>

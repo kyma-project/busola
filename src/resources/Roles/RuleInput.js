@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, BusyIndicator, MessageStrip } from 'fundamental-react';
+import { BusyIndicator, Button, MessageStrip } from '@ui5/webcomponents-react';
 import * as jp from 'jsonpath';
 import { ResourceForm } from 'shared/ResourceForm';
 import { ComboboxArrayInput, TextArrayInput } from 'shared/ResourceForm/fields';
@@ -15,6 +15,7 @@ import {
 import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { groupVersionState } from 'state/discoverability/groupVersionsSelector';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 const nonResourceUrls = [
   '/healthz/ready',
@@ -121,13 +122,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         defaultOpen
         nestingLevel={2}
         actions={
-          <Button
-            compact
-            glyph="add"
-            onClick={addAllApiGroups}
-            option="transparent"
-            iconBeforeText
-          >
+          <Button icon="add" onClick={addAllApiGroups} design="Transparent">
             {t('common.buttons.add-all')}
           </Button>
         }
@@ -142,15 +137,14 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         nestingLevel={2}
         newItemAction={
           loading ? (
-            <BusyIndicator size="s" show={true} />
+            <BusyIndicator size="Small" active={true} delay="0" />
           ) : (
             <Tooltip content={t('roles.tooltips.load')}>
               <Button
-                compact
-                option="transparent"
+                design="Transparent"
                 onClick={fetchResources}
                 disabled={!loadable}
-                ariaLabel={t('roles.buttons.load')}
+                aria-label={t('roles.buttons.load')}
               >
                 {t('roles.buttons.load-resources')}
               </Button>
@@ -159,21 +153,24 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         }
         actions={[
           <Button
-            compact
-            glyph="add"
-            option="transparent"
+            icon="add"
+            design="Transparent"
             onClick={addAllResources}
             disabled={loading || !apiRules?.length}
-            iconBeforeText
           >
             {t('common.buttons.add-all')}
           </Button>,
         ]}
       />
+
       {loadable && (
         <MessageStrip
-          type="information"
-          className="fd-margin-bottom--sm fd-margin-begin--md"
+          design="Information"
+          hideCloseButton
+          style={{
+            marginBottom: spacing.sapUiSmallMarginBottom.marginBottom,
+            marginLeft: spacing.sapUiMediumMarginBegin.marginLeft,
+          }}
         >
           {t('roles.messages.load-resources')}
         </MessageStrip>
@@ -186,13 +183,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         defaultOpen
         nestingLevel={2}
         actions={[
-          <Button
-            compact
-            glyph="add"
-            onClick={addAllVerbs}
-            option="transparent"
-            iconBeforeText
-          >
+          <Button icon="add" onClick={addAllVerbs} design="Transparent">
             {t('common.buttons.add-all')}
           </Button>,
         ]}

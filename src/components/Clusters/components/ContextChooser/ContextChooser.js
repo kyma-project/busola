@@ -1,9 +1,9 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { MessageStrip, Select } from 'fundamental-react';
+import { MessageStrip, Select, Option } from '@ui5/webcomponents-react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 
+import { spacing } from '@ui5/webcomponents-react-base';
 import './ContextChooser.scss';
 
 export function ContextChooser(params) {
@@ -23,6 +23,11 @@ export function ContextChooser(params) {
     text: t('clusters.wizard.all-contexts'),
   });
 
+  const onChange = (event, setValue) => {
+    const selectedContext = event.detail.selectedOption.value;
+    setValue(selectedContext);
+  };
+
   return (
     <ResourceForm.Wrapper {...params}>
       <ResourceForm.FormField
@@ -33,16 +38,23 @@ export function ContextChooser(params) {
         input={({ value, setValue }) => (
           <Select
             id="context-chooser"
-            selectedKey={value}
-            options={contexts}
-            onSelect={(_, { key }) => setValue(key)}
-          />
+            onChange={event => {
+              onChange(event, setValue);
+            }}
+          >
+            {contexts.map(context => (
+              <Option value={context.key} selected={value === context.key}>
+                {context.text}
+              </Option>
+            ))}
+          </Select>
         )}
       />
       {kubeconfig['current-context'] === '-all-' && (
         <MessageStrip
-          type="information"
-          className="fd-margin-top--sm fd-margin-bottom--sm"
+          design="Information"
+          hideCloseButton
+          style={spacing.sapUiSmallMarginTopBottom}
         >
           {t('clusters.wizard.multi-context-info', {
             context: kubeconfig.contexts[0]?.name,

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'shared/components/Link/Link';
 import { Trans, useTranslation } from 'react-i18next';
 import { createPatch } from 'rfc6902';
-import { LayoutPanel, MessageStrip, Button } from 'fundamental-react';
+import { Button, MessageStrip } from '@ui5/webcomponents-react';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
@@ -18,6 +18,7 @@ import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { extensibilitySchemasState } from 'state/extensibilitySchemasAtom';
 import { useUrl } from 'hooks/useUrl';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 import {
   formatCurrentVersion,
@@ -31,6 +32,7 @@ import { SectionEditor } from './SectionEditor';
 import { BusolaExtensionEdit } from './BusolaExtensionEdit';
 import { SECTIONS } from './helpers';
 import { EXTENSION_VERSION_LABEL } from './constants';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 export function BusolaExtensionDetails(props) {
   const { t } = useTranslation();
@@ -80,7 +82,10 @@ export function BusolaExtensionDetails(props) {
                   section: t(`extensibility.sections.${key}`),
                 })}
                 modalOpeningComponent={
-                  <Button className="fd-margin-end--tiny" option="emphasized">
+                  <Button
+                    style={spacing.sapUiTinyMarginEnd}
+                    design="Emphasized"
+                  >
                     {t('extensibility.edit-section', {
                       section: t(`extensibility.sections.${key}`),
                     })}
@@ -88,7 +93,7 @@ export function BusolaExtensionDetails(props) {
                 }
                 confirmText={t('common.buttons.update')}
                 id={`edit-resource-modal`}
-                className="modal-size--l create-resource-modal"
+                className="modal-size--l"
                 renderForm={props => (
                   <ErrorBoundary>
                     <SectionEditor
@@ -144,22 +149,34 @@ export function BusolaExtensionDetails(props) {
         return null;
       } else if (isSupportedVersion) {
         return (
-          <MessageStrip type="information" className="fd-margin-bottom--sm">
+          <MessageStrip
+            design="Information"
+            hideCloseButton
+            style={spacing.sapUiSmallMarginBottom}
+          >
             {t('extensibility.message.old-version')}
           </MessageStrip>
         );
       } else if (hasMigrationFunction) {
         return (
-          <MessageStrip type="error" className="fd-margin-bottom--sm">
+          <MessageStrip
+            design="Negative"
+            hideCloseButton
+            style={spacing.sapUiSmallMarginBottom}
+          >
             {t('extensibility.message.unsupported-version')}
           </MessageStrip>
         );
       } else {
         return (
-          <MessageStrip type="error" className="fd-margin-bottom--sm">
+          <MessageStrip
+            design="Negative"
+            hideCloseButton
+            style={spacing.sapUiSmallMarginBottom}
+          >
             <Trans i18nKey="extensibility.message.unnown-version">
               <Link
-                className="fd-link"
+                className="bsl-link"
                 url="https://github.com/kyma-project/busola/tree/main/docs/extensibility"
               />
             </Trans>
@@ -168,16 +185,18 @@ export function BusolaExtensionDetails(props) {
       }
     };
     return (
-      <LayoutPanel className="fd-margin--md">
-        <LayoutPanel.Header>
-          <LayoutPanel.Head title={t('extensibility.sections.version')} />
-          <LayoutPanel.Actions>
-            {hasMigrationFunction && (
-              <>
-                {currentVersion && (
+      <UI5Panel
+        key="extensibility-version"
+        title={t('extensibility.sections.version')}
+        headerActions={
+          hasMigrationFunction && (
+            <>
+              {currentVersion && (
+                <>
                   <Button
                     disabled={currentVersion === getLatestVersion()}
-                    glyph="forward" // generate-shortcut journey-arrive journey-change tools-opportunity trend-up
+                    icon="forward"
+                    iconEnd
                     onClick={() => {
                       const newBusolaExtension = migrateToLatest(configmap);
                       updateBusolaExtension(newBusolaExtension, configmap);
@@ -185,23 +204,22 @@ export function BusolaExtensionDetails(props) {
                   >
                     {t('config-maps.buttons.migrate')}
                   </Button>
-                )}
-              </>
-            )}
-          </LayoutPanel.Actions>
-        </LayoutPanel.Header>
-        <LayoutPanel.Body>
-          {showMessage()}
-          <LayoutPanelRow
-            name={t('extensibility.version.current')}
-            value={currentVersion || EMPTY_TEXT_PLACEHOLDER}
-          />
-          <LayoutPanelRow
-            name={t('extensibility.version.latest')}
-            value={getLatestVersion()}
-          />
-        </LayoutPanel.Body>
-      </LayoutPanel>
+                </>
+              )}
+            </>
+          )
+        }
+      >
+        {showMessage()}
+        <LayoutPanelRow
+          name={t('extensibility.version.current')}
+          value={currentVersion || EMPTY_TEXT_PLACEHOLDER}
+        />
+        <LayoutPanelRow
+          name={t('extensibility.version.latest')}
+          value={getLatestVersion()}
+        />
+      </UI5Panel>
     );
   };
 

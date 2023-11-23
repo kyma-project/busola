@@ -1,11 +1,9 @@
-.preferences-dialog {
-  .fd-dialog__body {
-    background: var(--sapBackgroundColor);
-    overflow-y: hidden;
-    width: 70vw;
-    height: 75vh;
-    padding: 0;
-  }
+.preferences-dialog::part(content) {
+  background: var(--sapBackgroundColor);
+  overflow-y: auto;
+  width: 100%;
+  height: 75vh;
+  padding: 0;
 
   .vertical-tabs-wrapper {
     height: 100% !important;
@@ -22,10 +20,6 @@
   & > :first-child {
     text-align: right;
     margin-right: 16px;
-  }
-
-  .fd-form-label {
-    display: none;
   }
 }
 

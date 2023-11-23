@@ -45,7 +45,7 @@ export function PodList(params) {
         header: t('pods.node'),
         value: pod => (
           <Link
-            className="fd-link"
+            className="bsl-link"
             to={clusterUrl(`overview/nodes/${pod.spec.nodeName}`)}
           >
             {pod.spec.nodeName}
@@ -58,7 +58,7 @@ export function PodList(params) {
   const description = (
     <Trans i18nKey="pods.description">
       <ReactSharedLink
-        className="fd-link"
+        className="bsl-link"
         url="https://kubernetes.io/docs/concepts/workloads/pods/"
       />
     </Trans>
@@ -66,6 +66,7 @@ export function PodList(params) {
 
   return (
     <ResourcesList
+      disableMargin={params.disableMargin}
       customColumns={customColumns}
       description={description}
       sortBy={defaultSort => ({

@@ -5,7 +5,11 @@ import { loadFile } from '../../support/loadFile';
 const FILE_NAME = 'test-customresourcedefinisions-namespaced.yaml';
 
 function getQueryInput() {
-  return cy.get('[aria-label=command-palette-search]');
+  return cy.get('[aria-label=command-palette-search]').find('input');
+}
+
+function openSearchWithSlashShortcut() {
+  cy.get('body').type('/', { force: true });
 }
 
 context('Test Custom Resources', () => {
@@ -19,34 +23,41 @@ context('Test Custom Resources', () => {
       `${Cypress.platform === 'darwin' ? '{cmd}k' : '{ctrl}k'}`,
     );
 
-    getQueryInput().type('up');
-
-    cy.contains('Upload YAML').click();
+    getQueryInput().type('up{enter}');
 
     cy.wrap(loadFile(FILE_NAME)).then(CRD_CONFIG => {
       const CRD = JSON.stringify(CRD_CONFIG);
       cy.pasteToMonaco(CRD);
     });
 
-    cy.get('[role="dialog"]')
-      .contains('button', 'Submit')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Upload')
+      .should('be.visible')
       .click();
 
-    cy.get('.fd-dialog__body')
-      .find('.sap-icon--message-success')
+    cy.get('ui5-dialog')
+      .find('.status-message-success')
       .should('have.length', 1);
 
-    cy.get('[role="dialog"]')
-      .contains('button', 'Close')
+    cy.get('ui5-dialog')
+      .find('[aria-label="yaml-upload-close"]')
+      .should('be.visible')
       .click();
   });
 
   it('Check CR groups list', () => {
     cy.navigateTo('Configuration', 'Custom Resources');
 
-    cy.contains('h3', 'Custom Resources').should('be.visible');
+    cy.contains('ui5-title', 'Custom Resources').should('be.visible');
 
-    cy.get('[role="search"] [aria-label="open-search"]').type('cypress');
+    openSearchWithSlashShortcut();
+
+    cy.get('ui5-combobox[placeholder="Search"]')
+      .find('input')
+      .click()
+      .type('cypress', {
+        force: true,
+      });
 
     cy.get('table').should('have.length', 1);
 
@@ -60,15 +71,16 @@ context('Test Custom Resources', () => {
       .contains('Tnamespaces')
       .click();
 
-    cy.get('[aria-label="title"]')
-      .contains('Tnamespaces')
-      .should('be.visible');
+    cy.contains('ui5-title', 'Tnamespaces').should('be.visible');
 
-    cy.contains(/Create Tnamespace/i).should('be.visible');
+    cy.contains('ui5-button', /Create Tnamespace/i).should('be.visible');
 
     cy.url().should('match', /customresources/);
     cy.contains('tnamespace.cypress.example.com').click();
     cy.url().should('match', /customresourcedefinitions/);
-    cy.deleteInDetails();
+    cy.deleteInDetails(
+      'Custom Resource Definition',
+      'tnamespace.cypress.example.com',
+    );
   });
 });

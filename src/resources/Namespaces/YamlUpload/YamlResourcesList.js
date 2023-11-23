@@ -1,6 +1,5 @@
 import React from 'react';
-import { Icon } from 'fundamental-react';
-import { Switch } from 'shared/ResourceForm/inputs';
+import { Icon, Switch } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import {
@@ -15,7 +14,9 @@ import {
   STATE_CREATED,
 } from './useUploadResources';
 import { FilteredResourcesDetails } from './FilteredResourcesDetails/FilteredResourcesDetails';
+
 import './YamlResourcesList.scss';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 export function YamlResourcesList({ resourcesData }) {
   const { t } = useTranslation();
@@ -75,8 +76,8 @@ export function YamlResourcesList({ resourcesData }) {
       return (
         <>
           <div
-            className="fd-display-flex fd-justify-between fd-align-center fd-margin--tiny"
-            style={{ minHeight: '20px' }}
+            className="bsl-display-flex bsl-justify-between bsl-align-center"
+            style={spacing.sapUiTinyMargin}
           >
             <p>
               {t(
@@ -115,13 +116,13 @@ export function YamlResourcesList({ resourcesData }) {
             />
             <div id="upload-progress-bar-label">{getLabel()}</div>
           </div>
-          <ul className="fd-margin-top--tiny">
+          <ul style={spacing.sapUiTinyMarginTop}>
             {filteredResources.map(r => (
               <li key={`${r?.value?.kind}-${r?.value?.metadata?.name}`}>
                 <Icon
                   className={`status status-${getIcon(r?.status)}`}
-                  glyph={getIcon(r?.status)}
-                  ariaLabel="status"
+                  name={getIcon(r?.status)}
+                  aria-label="status"
                 />
                 {String(r?.value?.kind)} {String(r?.value?.metadata?.name)} -{' '}
                 {getStatus(r?.status)}

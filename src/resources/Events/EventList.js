@@ -1,6 +1,4 @@
-import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { Icon } from 'fundamental-react';
 
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
@@ -9,6 +7,7 @@ import { useMessageList } from 'hooks/useMessageList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { useUrl } from 'hooks/useUrl';
+import { Icon, ObjectStatus } from '@ui5/webcomponents-react';
 
 export function EventList({
   defaultType,
@@ -51,20 +50,21 @@ export function EventList({
         <div>
           {e.type === 'Warning' ? (
             <Tooltip content={e.type}>
-              <Icon
-                ariaLabel="Warning"
-                glyph="message-warning"
-                size="s"
-                className="fd-has-color-status-2 has-tooltip"
+              <ObjectStatus
+                aria-label="Warning"
+                icon={<Icon name="message-warning" />}
+                className="has-tooltip"
+                state="Warning"
               />
             </Tooltip>
           ) : (
             <Tooltip content={e.type}>
-              <Icon
-                ariaLabel="Normal"
-                glyph="message-information"
-                size="s"
-                className="has-tooltip"
+              <ObjectStatus
+                aria-label="Normal"
+                name="message-information"
+                design="Information"
+                className="has-tooltip bsl-icon-m"
+                icon={<Icon name="message-information" />}
               />
             </Tooltip>
           )}
@@ -107,7 +107,7 @@ export function EventList({
   const description = (
     <Trans i18nKey="events.description">
       <DescriptionLink
-        className="fd-link"
+        className="bsl-link"
         url="https://kubernetes.io/docs/reference/kubernetes-api/cluster-resources/event-v1/"
       />
     </Trans>

@@ -1,61 +1,11 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  FormItem,
-  FormInput,
-  FormLabel,
-  FormFieldset,
-} from 'fundamental-react';
 import * as jp from 'jsonpath';
-
-import { Dropdown } from 'shared/components/Dropdown/Dropdown';
-
 import { ResourceForm } from '..';
 import * as Inputs from '../inputs';
-
+import { FlexBox } from '@ui5/webcomponents-react';
+import { Label } from '../../../shared/ResourceForm/components/Label';
+import { MemoryInput } from 'resources/Namespaces/MemoryQuotas';
 import './RuntimeResources.scss';
-
-function MemoryInput({ label, propertyPath, container = {}, setContainer }) {
-  const units = ['K', 'Ki', 'M', 'Mi', 'G', 'Gi', 'Ti', 'T'];
-  const options = [
-    { key: '', text: 'B' },
-    ...units.map(e => ({
-      key: e,
-      text: e,
-    })),
-  ];
-
-  const value = jp.value(container, propertyPath)?.toString() || '';
-  const numericValue = value.match(/^\d*(\.\d*)?/)[0];
-  const unit = value.replace(numericValue, '');
-  const selectedUnit = units.includes(unit) ? unit : '';
-
-  const setValue = val => {
-    jp.value(container, propertyPath, val);
-    setContainer(container);
-  };
-
-  return (
-    <FormItem>
-      <FormLabel required>{label}</FormLabel>
-      <div className="memory-input fd-col fd-col-md--11">
-        <FormInput
-          compact
-          type="number"
-          min="0"
-          value={numericValue}
-          onChange={e => setValue(e.target.value + selectedUnit)}
-        />
-        <Dropdown
-          compact
-          options={options}
-          selectedKey={selectedUnit}
-          onSelect={(_, { key }) => setValue(numericValue.toString() + key)}
-        />
-      </div>
-    </FormItem>
-  );
-}
 
 function CpuInput({ label, propertyPath, container = {}, setContainer }) {
   let value = jp.value(container, propertyPath)?.toString() || '';
@@ -72,14 +22,20 @@ function CpuInput({ label, propertyPath, container = {}, setContainer }) {
   };
 
   return (
-    <FormItem>
-      <FormLabel required>{label} (m)</FormLabel>
+    <FlexBox
+      direction="Column"
+      style={{
+        maxWidth: '100%',
+      }}
+    >
+      <Label required>{label} (m)</Label>
       <Inputs.Number
         min="0"
         value={value}
         setValue={value => setValue(value + 'm')}
+        className="full-width"
       />
-    </FormItem>
+    </FlexBox>
   );
 }
 
@@ -123,21 +79,25 @@ export function RuntimeResources({
       }
       {...props}
     >
-      <FormFieldset className="runtime-profile-form">
+      <div className="runtime-profile-form">
         <MemoryInput
           label={t('deployments.create-modal.advanced.memory-requests')}
           propertyPath="$.requests.memory"
           container={value}
           setContainer={setValue}
+          required={true}
+          className="bsl-col bsl-col-md--11"
         />
         <MemoryInput
           label={t('deployments.create-modal.advanced.memory-limits')}
           propertyPath="$.limits.memory"
           container={value}
           setContainer={setValue}
+          required={true}
+          className="bsl-col bsl-col-md--11"
         />
-      </FormFieldset>
-      <FormFieldset className="runtime-profile-form">
+      </div>
+      <div className="runtime-profile-form">
         <CpuInput
           label={t('deployments.create-modal.advanced.cpu-requests')}
           propertyPath="$.requests.cpu"
@@ -150,7 +110,7 @@ export function RuntimeResources({
           container={value}
           setContainer={setValue}
         />
-      </FormFieldset>
+      </div>
     </ResourceForm.CollapsibleSection>
   );
 }

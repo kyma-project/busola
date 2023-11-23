@@ -1,1 +1,6 @@
 @import '@sap-theming/hcw.css';
+
+html,
+#root {
+    height: 100%;
+}

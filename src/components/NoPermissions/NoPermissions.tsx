@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { Button, FormInput, Icon } from 'fundamental-react';
+import { Button, Icon, Input, Text } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import './NoPermissions.scss';
 import { addCluster } from 'components/Clusters/shared';
 import { useRecoilValue } from 'recoil';
 import { clusterState } from 'state/clusterAtom';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { cloneDeep } from 'lodash';
+
+import { spacing } from '@ui5/webcomponents-react-base';
+import './NoPermissions.scss';
 
 function NoPermissions() {
   const { t } = useTranslation();
@@ -31,29 +33,28 @@ function NoPermissions() {
 
   return (
     <section className="no-permissions">
-      <Icon ariaLabel="no-permissions" glyph="locked" />
+      <Icon aria-label="no-permissions" name="locked" />
       <header>{t('common.errors.no-permissions-header')}</header>
-      <p className="fd-margin-top--md">{t('common.errors.no-permissions')}</p>
-      <p>{t('common.errors.no-permissions-message')}</p>
-      <p className="fd-margin-top--md fd-margin-bottom--sm">
+      <Text style={spacing.sapUiMediumMarginTop}>
+        {t('common.errors.no-permissions')}
+      </Text>
+      <Text>{t('common.errors.no-permissions-message')}</Text>
+      <Text style={spacing.sapUiMediumMarginTopBottom}>
         {t('no-permissions.enter-namespace-name')}
-      </p>
-      <form className="fd-display-flex" onSubmit={updateKubeconfig}>
-        <FormInput
-          className="fd-margin-0"
+      </Text>
+      <form className="bsl-display-flex" onSubmit={updateKubeconfig}>
+        <Input
+          style={spacing.sapUiNoMargin}
           placeholder={t('no-permissions.enter-namespace-name-placeholder')}
           value={namespaceName}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setNamespaceName(e.target.value)
-          }
+          onInput={(e: any) => setNamespaceName(e.target.typedInValue)}
         />
         <Button
-          typeAttr="submit"
-          option="emphasized"
+          design="Emphasized"
           className="update-namespace-button"
           disabled={!namespaceName}
         >
-          Save
+          {t('common.buttons.save')}
         </Button>
       </form>
     </section>

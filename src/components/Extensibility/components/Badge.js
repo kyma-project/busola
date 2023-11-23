@@ -1,6 +1,6 @@
-import React from 'react';
 import { isNil } from 'lodash';
 import { useJsonata } from '../hooks/useJsonata';
+import { useTranslation } from 'react-i18next';
 
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import {
@@ -10,12 +10,10 @@ import {
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 import './Badge.scss';
-import { useTranslation } from 'react-i18next';
 
 export function Badge({
   value,
   structure,
-  schema,
   originalResource,
   scope,
   arrayItems,
@@ -63,18 +61,16 @@ export function Badge({
     emptyLeafPlaceholder
   ) : tooltip ? (
     <Tooltip content={tooltip || ''}>
-      <span className="status-badge-wrapper has-tooltip">
+      <span className="has-tooltip">
         <StatusBadge autoResolveType={!type} type={type}>
           {tExt(value)}
         </StatusBadge>
       </span>
     </Tooltip>
   ) : (
-    <span className="status-badge-wrapper">
-      <StatusBadge autoResolveType={!type} type={type}>
-        {tExt(value)}
-      </StatusBadge>
-    </span>
+    <StatusBadge autoResolveType={!type} type={type}>
+      {tExt(value)}
+    </StatusBadge>
   );
 }
 Badge.inline = true;

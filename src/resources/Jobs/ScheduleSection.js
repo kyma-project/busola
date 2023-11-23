@@ -2,10 +2,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { parse } from '@datasert/cronjs-parser';
 import { toString as cRonstrue } from 'cronstrue/i18n';
-import { MessageStrip } from 'fundamental-react';
+import { MessageStrip, Text } from '@ui5/webcomponents-react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 const presets = {
   '@yearly': '0 0 1 1 *',
@@ -54,11 +55,12 @@ function TimeInput({ entries, index, name, setSchedule }) {
             value={entries[index] || ''}
             setValue={setValue}
             placeholder={t('cron-jobs.create-modal.' + name)}
+            className="full-width"
             required
           />
           <p
             style={{ color: 'var(--sapNeutralTextColor)' }}
-            className="fd-col-md--12"
+            className="full-width"
           >
             {t('cron-jobs.create-modal.tooltips.' + name)}
           </p>
@@ -87,16 +89,17 @@ function ScheduleEditor({ schedule, setSchedule }) {
         />
       ))}
       {!isCronExpressionValid(schedule) && (
-        <MessageStrip type="error" className="fd-margin-top--sm">
+        <MessageStrip
+          design="Negative"
+          hideCloseButton
+          style={spacing.sapUiSmallMarginTop}
+        >
           {t('cron-jobs.create-modal.parse-error')}
         </MessageStrip>
       )}
-      <p
-        className="fd-margin-top--sm"
-        style={{ color: 'var(--sapNeutralTextColor)' }}
-      >
+      <Text style={spacing.sapUiSmallMarginTop}>
         {t('cron-jobs.create-modal.schedule-description')}
-      </p>
+      </Text>
     </>
   );
 }

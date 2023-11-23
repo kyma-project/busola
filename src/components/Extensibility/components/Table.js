@@ -35,7 +35,6 @@ const handleTableValue = (value, t) => {
 export function Table({
   value,
   structure,
-  disableMargin,
   schema,
   originalResource,
   scope,
@@ -120,7 +119,8 @@ export function Table({
       cells,
       title: makeTitle(),
       collapseContent: (
-        <td colspan="100%" className={tdClassNames}>
+        // TODO replace once new Table component is available in ui5-webcomponents-react
+        <td colSpan="100%" className={tdClassNames}>
           {structure.collapsible.map(child => (
             <Widget
               {...props}
@@ -165,14 +165,10 @@ export function Table({
     defaultSearch,
   });
 
-  const className = `extensibility-table ${
-    disableMargin ? 'fd-margin--xs' : ''
-  }`;
-
   return (
     <GenericList
-      showHeader={structure?.showHeader}
-      className={className}
+      disableMargin={structure.disablePadding}
+      className={'extensibility-table'}
       title={tExt(structure.name, {
         defaultValue: structure.name || structure.source,
       })}

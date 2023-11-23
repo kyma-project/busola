@@ -10,10 +10,6 @@
     padding: 8px 16px;
     border-top: 1px solid var(--sapList_GroupHeaderBorderColor);
     background: var(--sapNeutralBackground);
-
-    .control-icon {
-      margin-right: 8px;
-    }
   }
 
   &.disabled {
@@ -54,25 +50,12 @@
     }
   }
 
-  .fd-message-strip {
-    min-height: unset;
-    cursor: unset;
-  }
-
-  .fd-message-strip--warning:before {
-    top: 25%;
-  }
-
   &.required > .header .title-content::after {
     content: '*';
     font-size: var(--sapFontSize);
     font-weight: 700;
     color: var(--sapField_RequiredColor);
     margin-left: 4px;
-  }
-
-  .title-content {
-    margin-right: 0.5rem;
   }
 
   .actions {

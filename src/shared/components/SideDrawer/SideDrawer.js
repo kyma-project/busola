@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import jsyaml from 'js-yaml';
-import { Icon } from 'fundamental-react';
+import { Button, Icon } from '@ui5/webcomponents-react';
+import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 
 import './SideDrawer.scss';
-import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 
 const MIN_EDITOR_RATIO = 33; // %
 const MAX_EDITOR_RATIO = 100;
@@ -27,7 +27,7 @@ export const SideDrawer = ({
     textToCopy = jsyaml.dump(children);
     children = (
       <>
-        <h1 className="fd-has-type-4">YAML</h1>
+        <h1 className="bsl-has-type-4">YAML</h1>
         <Editor
           height="90vh"
           autocompletionDisabled
@@ -80,22 +80,26 @@ export const SideDrawer = ({
       style={style}
     >
       {(isOpen || children) && (
-        <button
+        <Button
           className={`open-btn ${!buttonText ? 'open-btn-hidden' : ''}`}
           onClick={() => setOpen(!isOpen)}
         >
           <Icon
-            glyph={isOpen ? 'open-command-field' : 'close-command-field'}
-            size="l"
-            ariaLabel="Open/close the drawer"
+            name={isOpen ? 'open-command-field' : 'close-command-field'}
+            className="bsl-icon-l"
+            aria-label="Open/close the drawer"
           />
           {buttonText}
-        </button>
+        </Button>
       )}
 
       <section className="content">
         <div className="handle" onMouseDown={onResizeStart}>
-          <Icon glyph="vertical-grip" ariaLabel="resize" size="m" />
+          <Icon
+            name="vertical-grip"
+            aria-label="resize"
+            className="bsl-icon-m"
+          />
         </div>
         <div className="content-wrapper">
           {children}

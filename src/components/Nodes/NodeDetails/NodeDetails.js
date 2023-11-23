@@ -1,17 +1,17 @@
 import React from 'react';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useTranslation } from 'react-i18next';
-import { Title } from 'fundamental-react';
 import { useNodeQuery } from '../nodeQueries';
 import { NodeDetailsHeader } from '../NodeDetailsHeader';
 import { MachineInfo } from '../MachineInfo/MachineInfo';
 import { NodeResources } from '../NodeResources/NodeResources';
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
-
-import './NodeDetails.scss';
 import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
 import { useFeature } from 'hooks/useFeature';
+
+import { spacing } from '@ui5/webcomponents-react-base';
+import './NodeDetails.scss';
 
 function NodeDetails({ nodeName }) {
   const { data, error, loading } = useNodeQuery(nodeName);
@@ -34,32 +34,38 @@ function NodeDetails({ nodeName }) {
         node={data?.node}
         error={error}
         loading={loading}
-      />
-      {data && (
-        <>
-          <div
-            className={`panels fd-margin--md  ${
-              isPrometheusEnabled ? 'withPrometheus' : ''
-            }`}
-          >
-            {isPrometheusEnabled ? (
-              <StatsPanel type="node" nodeName={data.node.metadata.name} />
-            ) : (
-              <NodeResources
-                {...data}
-                headerContent={
-                  <Title level={5}>{t('common.headers.resources')}</Title>
-                }
-              />
+        content={
+          <>
+            {data && (
+              <>
+                <div
+                  className={`panels ${
+                    isPrometheusEnabled ? 'withPrometheus' : ''
+                  }`}
+                  style={spacing.sapUiMediumMargin}
+                >
+                  {isPrometheusEnabled ? (
+                    <StatsPanel
+                      type="node"
+                      nodeName={data.node.metadata.name}
+                    />
+                  ) : (
+                    <NodeResources
+                      {...data}
+                      headerContent={t('common.headers.resources')}
+                    />
+                  )}
+                  <MachineInfo
+                    nodeInfo={data.node.status.nodeInfo}
+                    capacity={data.node.status.capacity}
+                  />
+                </div>
+                {Events}
+              </>
             )}
-            <MachineInfo
-              nodeInfo={data.node.status.nodeInfo}
-              capacity={data.node.status.capacity}
-            />
-          </div>
-          {Events}
-        </>
-      )}
+          </>
+        }
+      />
     </div>
   );
 }

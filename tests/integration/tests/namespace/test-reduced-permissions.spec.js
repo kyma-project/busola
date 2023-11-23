@@ -29,9 +29,11 @@ context('Test reduced permissions', () => {
   it('Create Cluster Role with reduced permissions', () => {
     cy.navigateTo('Configuration', 'Cluster Roles');
 
-    cy.contains('Create Cluster Role').type(CR_NAME);
+    cy.contains('ui5-button', 'Create Cluster Role').click();
 
-    cy.get('[ariaLabel="ClusterRole name"]:visible').type(CR_NAME);
+    cy.get('[aria-label="ClusterRole name"]:visible')
+      .find('input')
+      .type(CR_NAME, { force: true });
 
     // api groups
     chooseComboboxOption(
@@ -44,7 +46,8 @@ context('Test reduced permissions', () => {
       'apps',
     );
 
-    cy.get('[ariaLabel="roles.buttons.load"]:visible', { log: false }).click();
+    cy.get('ui5-button[aria-label="roles.buttons.load"]:visible').click();
+    cy.wait(500);
 
     // resources
     chooseComboboxOption(
@@ -68,8 +71,9 @@ context('Test reduced permissions', () => {
       'list',
     );
 
-    cy.get('[role="dialog"]')
-      .contains('button', 'Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
+      .should('be.visible')
       .click();
   });
 
@@ -78,68 +82,87 @@ context('Test reduced permissions', () => {
 
     cy.navigateTo('Configuration', 'Service Accounts');
 
-    cy.contains('Create Service Account').click();
+    cy.contains('ui5-button', 'Create Service Account').click();
 
-    cy.get('[ariaLabel="ServiceAccount name"]:visible').type(SA_NAME);
+    cy.get('[aria-label="ServiceAccount name"]:visible')
+      .find('input')
+      .click()
+      .type(SA_NAME);
 
-    cy.get('[role="dialog"]')
-      .contains('button', 'Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
+      .should('be.visible')
       .click();
   });
 
   it('Create a ClusterRoleBinding for SA and CR', () => {
     cy.navigateTo('Back To Cluster Details', 'Cluster Role Bindings');
 
-    cy.contains('Create Cluster Role Binding').click();
+    cy.contains('ui5-button', 'Create Cluster Role Binding').click();
 
     // subject type - select it first so the list starts loading
-    cy.get('[role=dialog]')
-      .contains('User')
+    cy.get('ui5-dialog')
+      .get('ui5-select:visible')
       .click();
-    cy.get('[role=list]')
+
+    cy.get('ui5-li:visible')
       .contains('ServiceAccount')
-      .click();
+      .find('li')
+      .click({ force: true });
 
     // name
-    cy.get('[ariaLabel="ClusterRoleBinding name"]:visible').type(CRB_NAME);
+    cy.get('ui5-input[aria-label="ClusterRoleBinding name"]:visible')
+      .find('input')
+      .type(CRB_NAME);
 
     // role
-    cy.get(
+    chooseComboboxOption(
       '[placeholder="Start typing to select ClusterRole from the list"]:visible',
-    ).type(CR_NAME);
-    cy.contains(new RegExp(CR_NAME)).click();
+      CR_NAME,
+    );
 
     // service account namespace
     chooseComboboxOption(
-      '[placeholder="Select Namespace"]:visible',
+      '[id="secret-namespace-combobox-0"][aria-label="Secret namespace Combobox"]:visible',
       Cypress.env('NAMESPACE_NAME'),
     );
 
     // service account name
-    chooseComboboxOption('[placeholder="Select name"]:visible', SA_NAME);
+    chooseComboboxOption(
+      '[id="secret-name-combobox-0"][aria-label="Secret name Combobox"]:visible',
+      SA_NAME,
+    );
 
-    cy.get('[role="dialog"]')
-      .contains('button', 'Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
+      .should('be.visible')
       .click();
   });
 
   it('Download kubeconfig for Service Account', () => {
     cy.getLeftNav()
-      .contains('Namespaces', { includeShadowDom: true })
+      .contains('Namespaces')
       .click();
 
     cy.goToNamespaceDetails();
 
     cy.getLeftNav()
-      .contains('Service Accounts', { includeShadowDom: true })
+      .contains('Service Accounts')
       .click();
 
-    cy.contains(SA_NAME).click();
+    cy.get('a.bsl-link')
+      .contains(SA_NAME)
+      .click();
 
-    cy.contains('Generate TokenRequest').click();
-    cy.contains('Download Kubeconfig').click();
+    cy.contains('ui5-button', 'Generate TokenRequest').click();
 
-    cy.contains('Close').click();
+    cy.contains('ui5-button', 'Download Kubeconfig').click();
+
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Close')
+      .should('be.visible')
+      .click();
+
     cy.wait(200);
 
     cy.task('listDownloads', Cypress.config('downloadsFolder')).then(
@@ -181,47 +204,43 @@ context('Test reduced permissions', () => {
 
   it('Inspect reduced permissions view', () => {
     cy.getLeftNav()
-      .contains('Workloads', { includeShadowDom: true })
+      .contains('Workloads')
       .click();
 
     cy.getLeftNav()
-      .contains('Deployments', { includeShadowDom: true })
+      .contains('Deployments')
       .should('be.visible');
 
     cy.getLeftNav()
-      .contains('Back To Cluster Details', { includeShadowDom: true })
+      .contains('Back To Cluster Details')
       .click();
 
     cy.getLeftNav()
-      .contains('Configuration', { includeShadowDom: true })
+      .contains('Configuration')
       .should('not.exist');
   });
 
   it('Cleanup', () => {
-    cy.get('[aria-controls="fd-shellbar-product-popover"]').click();
-
     cy.loginAndSelectCluster({ disableClear: true });
 
     // delete binding
     cy.getLeftNav()
-      .contains('Cluster Role Bindings', { includeShadowDom: true })
+      .contains('Cluster Role Bindings')
       .click();
 
-    cy.deleteFromGenericList(CRB_NAME);
+    cy.deleteFromGenericList('Cluster Role Binding', CRB_NAME);
 
     // delete role
     cy.getLeftNav()
-      .contains('Cluster Roles', { includeShadowDom: true })
+      .contains('Cluster Roles')
       .click();
 
-    cy.deleteFromGenericList(CR_NAME);
+    cy.deleteFromGenericList('Cluster Role', CR_NAME);
 
     // remove cluster
-    cy.get('[aria-controls="fd-shellbar-product-popover"]').click();
+    cy.changeCluster('all-clusters');
 
-    cy.contains('Clusters Overview').click();
-
-    cy.deleteFromGenericList(SA_NAME, true, false);
+    cy.deleteFromGenericList('Cluster', SA_NAME, true, false, false);
 
     cy.contains(/No clusters found/).should('exist');
   });

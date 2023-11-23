@@ -36,7 +36,7 @@ context('Test Persistent Volume Claims', () => {
   it('Create a Persistent Volume Claim', () => {
     cy.navigateTo('Storage', 'Persistent Volume Claims');
 
-    cy.contains('Create Persistent Volume Claim').click();
+    cy.contains('ui5-button', 'Create Persistent Volume Claim').click();
 
     cy.wrap(
       loadPVC(
@@ -50,11 +50,12 @@ context('Test Persistent Volume Claims', () => {
       cy.pasteToMonaco(PVC);
     });
 
-    cy.get('[role="dialog"]')
-      .contains('button', 'Create')
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Create')
+      .should('be.visible')
       .click();
 
-    cy.contains('h3', PVC_NAME).should('be.visible');
+    cy.contains('ui5-title', PVC_NAME).should('be.visible');
   });
 
   it('Check the Persistent Volume Claims details', () => {
@@ -64,16 +65,18 @@ context('Test Persistent Volume Claims', () => {
 
     cy.contains(VOLUME_MODE_VALUE).should('be.visible');
 
-    cy.contains(Cypress.env('STORAGE_CLASS_NAME')).should('be.visible');
+    cy.contains('ui5-panel', Cypress.env('STORAGE_CLASS_NAME')).should(
+      'be.visible',
+    );
 
     cy.contains('Events').should('be.visible');
   });
 
   it('Check the Persistent Volume Claims list and delete', () => {
-    cy.contains('a', 'Persistent Volume Claims').click();
+    cy.navigateBackTo('persistentvolumeclaims', 'Persistent Volume Claims');
 
     cy.contains(CAPACITY_VALUE);
 
-    cy.deleteFromGenericList(PVC_NAME);
+    cy.deleteFromGenericList('Persistent Volume Claim', PVC_NAME);
   });
 });

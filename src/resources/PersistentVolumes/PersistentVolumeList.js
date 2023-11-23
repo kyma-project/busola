@@ -31,7 +31,7 @@ export function PersistentVolumeList(props) {
           ({ metadata }) => metadata.name === pv.spec?.storageClassName,
         ) ? (
           <Link
-            className="fd-link"
+            className="bsl-link"
             to={resourceUrl({
               kind: 'StorageClass',
               metadata: {
@@ -56,7 +56,7 @@ export function PersistentVolumeList(props) {
           ({ metadata }) => metadata.name === pv.spec?.claimRef?.name,
         ) ? (
           <Link
-            className="fd-link"
+            className="bsl-link"
             to={resourceUrl(
               {
                 kind: 'PersistentVolumeClaim',
@@ -86,7 +86,7 @@ export function PersistentVolumeList(props) {
   const description = (
     <Trans i18nKey="pv.description">
       <DescLink
-        className="fd-link"
+        className="bsl-link"
         url="https://kubernetes.io/docs/concepts/storage/persistent-volumes"
       />
     </Trans>
@@ -94,6 +94,7 @@ export function PersistentVolumeList(props) {
 
   return (
     <ResourcesList
+      disableMargin={props.disableMargin}
       resourceTitle={t('pv.title')}
       customColumns={customColumns}
       description={description}
