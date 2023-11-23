@@ -56,6 +56,11 @@ export function useCustomFormValidator() {
         isValid = isValid && valid;
         isPartiallyFilled = isPartiallyFilled || filled;
         isComplete = isComplete && filled;
+      } else if (child.classList.contains('runtime-profile-form')) {
+        const { valid, filled } = validateRuntimeProfile(child, isRequired);
+        isValid = isValid && valid;
+        isPartiallyFilled = isPartiallyFilled || filled;
+        isComplete = isComplete && filled;
       }
       //Validates the CollapsibleSection
       else if (child.classList.contains('resource-form__collapsible-section')) {
@@ -153,6 +158,18 @@ export function useCustomFormValidator() {
         return { valid: false, filled: items.length >= 2 };
     }
     return { valid: true, filled: items.length >= 2 };
+  }
+
+  function validateRuntimeProfile(parent) {
+    const inputs = Array.from(parent.querySelectorAll('ui5-input'));
+
+    const isValid = inputs.every(input => {
+      const isRequired = input.required;
+      const inputValue = input.value;
+      return inputValue !== 'NaN' && (!isRequired || inputValue !== '');
+    });
+
+    return { valid: isValid, filled: true };
   }
 
   return {
