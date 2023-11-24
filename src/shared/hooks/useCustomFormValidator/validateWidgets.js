@@ -10,7 +10,7 @@ export function validateFormField(formField) {
   const value = input?.value;
 
   const isValid = !(
-    (required && value === '') ||
+    (required && (value === '' || value === 'NaN')) ||
     (pattern && !value.match(pattern))
   );
   return { valid: isValid, filled: value !== '' };
