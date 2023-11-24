@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
-import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator';
+import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';
 import { createPortal } from 'react-dom';
 
 export const ModalWithForm = ({
