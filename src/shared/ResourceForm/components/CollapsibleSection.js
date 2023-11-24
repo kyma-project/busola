@@ -24,6 +24,7 @@ export function CollapsibleSection({
   const [open, setOpen] = useState(defaultOpen);
   const actionsRef = useRef();
   const iconGlyph = open ? 'navigation-down-arrow' : 'navigation-right-arrow';
+  required = required === true;
 
   useEffect(() => {
     if (defaultOpen !== undefined) {
@@ -43,7 +44,7 @@ export function CollapsibleSection({
     className,
     {
       collapsed: !open,
-      required,
+      required: required,
       disabled,
     },
   );

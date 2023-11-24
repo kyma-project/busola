@@ -25,7 +25,6 @@ export function Title({
           fontSize: 'var(--sapFontMediumSize)',
         }}
         required={required}
-        showColon
       >
         {title}
       </Label>
