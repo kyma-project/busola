@@ -23,12 +23,12 @@ export function validateMultiCheckboxes(formField, isRequired) {
   return { valid: !isRequired || isFilled, filled: isFilled };
 }
 
-export function validateInputList(inputList, isRequired) {
-  const items = inputList.querySelectorAll('ul > li');
+export function validateInputList(list, isRequired) {
+  const items = list.querySelectorAll('ul > li');
   // The list is invalid if it has no children
   if (isRequired && items.length < 2) return { valid: false, filled: false };
   // Validates the inputs of all the list's child elements
-  const inputs = Array.from(inputList.querySelectorAll('ui5-input'));
+  const inputs = Array.from(list.querySelectorAll('ui5-input')).slice(0, -1);
   const isValid = inputs.every(input => {
     const pattern = input.getAttribute('pattern');
     const value = input.value;

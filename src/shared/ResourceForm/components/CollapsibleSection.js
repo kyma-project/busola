@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 
 import { Title } from './Title';
@@ -63,6 +63,7 @@ export function CollapsibleSection({
             disabled={disabled}
             canChangeState={canChangeState}
             iconGlyph={iconGlyph}
+            required={required}
           />
         }
         <div className="actions" ref={actionsRef}>

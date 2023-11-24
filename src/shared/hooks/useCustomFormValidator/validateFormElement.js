@@ -79,7 +79,7 @@ export function validateFormElement(element, isRequired) {
           continue;
         }
       default:
-        break;
+        continue;
     }
     const { valid, filled } = validationFunction(...args);
     isValid = isValid && valid;
