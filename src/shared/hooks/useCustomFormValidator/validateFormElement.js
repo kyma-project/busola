@@ -51,10 +51,12 @@ export function validateFormElement(element, isRequired) {
       // Validates the CollapsibleSection
       case child.classList.contains('resource-form__collapsible-section'):
         // Finds the children's container and checks if it is required
+        const content = child.querySelector('div.content');
         const gridWrapper = child.querySelector(
           'div.content > .collapsible-renderer__grid-wrapper',
         );
-        const contentParent = gridWrapper || child.querySelector('div.content');
+        const contentParent =
+          gridWrapper?.parentNode === content ? gridWrapper : content;
         const required = child.classList.contains('required');
         // Validates the GenericList
         if (child.querySelector('.actions').innerText === 'Add') {
@@ -86,7 +88,6 @@ export function validateFormElement(element, isRequired) {
     isPartiallyFilled = isPartiallyFilled || filled;
     isComplete = isComplete && filled;
   }
-
   return {
     valid: isValid || (!isRequired && !isPartiallyFilled),
     filled: isPartiallyFilled || isComplete,
