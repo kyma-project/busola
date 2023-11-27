@@ -2,7 +2,9 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   SideNavigation,
   SideNavigationItem,
-  ShellBar,
+  ComboBox,
+  Icon,
+  Label,
 } from '@ui5/webcomponents-react';
 import { sidebarNavigationNodesSelector } from 'state/navigation/sidebarNavigationNodesSelector';
 import { expandedCategoriesSelector } from 'state/navigation/expandedCategories/expandedCategoriesSelector';
@@ -69,26 +71,30 @@ export function SidebarNavigation() {
                 text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}
                 onClick={() => navigate(clusterUrl(`overview`))}
                 selected={isClusterOverviewSelected()}
-              ></SideNavigationItem>
+              />
             </SideNavigation>
             {!isSidebarCondensed && <div className="shadow-overlay"></div>}
-            <ShellBar
-              style={namespace ? {} : { display: 'none' }}
-              menuItems={NamespaceDropdown()}
-              onMenuItemClick={e =>
-                e.detail.item.textContent ===
-                t('namespaces.namespaces-overview')
+            <Label for="NamespaceComboBox">
+              {t('common.headers.namespaces')}
+            </Label>
+            <ComboBox
+              id="NamespaceComboBox"
+              onChange={e =>
+                e.target.value === t('namespaces.namespaces-overview')
                   ? navigate(clusterUrl(`namespaces`))
-                  : e.detail.item.textContent === t('navigation.all-namespaces')
+                  : e.target.value === t('navigation.all-namespaces')
                   ? navigate(namespaceUrl(resourceType, { namespace: '-all-' }))
                   : navigate(
                       namespaceUrl(resourceType, {
-                        namespace: e.detail.item.textContent ?? undefined,
+                        namespace: e.target.value ?? undefined,
                       }),
                     )
               }
-              primaryTitle={getNamespaceLabel()}
-            />
+              icon={<Icon name="dimension" />}
+              value={getNamespaceLabel()}
+            >
+              {NamespaceDropdown()}
+            </ComboBox>
           </>
         }
       >
