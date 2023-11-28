@@ -30,13 +30,11 @@ export function NamespaceChooser() {
     <SideNavigationSubItem
       text={t('namespaces.namespaces-overview')}
       data-key="overview"
-      selected={t('namespaces.namespaces-overview') === getNamespaceLabel()}
       onClick={() => navigate(clusterUrl(`namespaces`))}
     />,
     <SideNavigationSubItem
       text={t('navigation.all-namespaces')}
       data-key="all-namespaces"
-      selected={t('navigation.all-namespaces') === getNamespaceLabel()}
       onClick={() =>
         navigate(namespaceUrl(resourceType, { namespace: '-all-' }))
       }
@@ -48,7 +46,6 @@ export function NamespaceChooser() {
       <SideNavigationSubItem
         text={ns}
         data-key={ns}
-        selected={ns === namespace}
         onClick={e =>
           navigate(
             namespaceUrl(resourceType, {
