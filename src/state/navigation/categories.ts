@@ -31,7 +31,7 @@ export const CATEGORIES: Category[] = [
   },
   {
     key: predefinedCategories['discovery-and-network'],
-    icon: 'instance',
+    icon: 'tnt/network',
     label: 'discovery-and-network.title',
     items: [],
   },
@@ -43,25 +43,25 @@ export const CATEGORIES: Category[] = [
   },
   {
     key: predefinedCategories['service-management'],
-    icon: 'add-coursebook',
+    icon: 'tnt/application-service',
     label: 'service-management.title',
     items: [],
   },
   {
     key: predefinedCategories.storage,
-    icon: 'sap-box',
+    icon: 'shelf',
     label: 'storage.title',
     items: [],
   },
   {
     key: predefinedCategories.apps,
-    icon: 'example',
+    icon: 'tnt/application',
     label: 'apps.title',
     items: [],
   },
   {
     key: predefinedCategories.configuration,
-    icon: 'settings',
+    icon: 'action-settings',
     label: 'configuration.title',
     items: [],
   },

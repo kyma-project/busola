@@ -16,6 +16,9 @@ import { NotificationProvider } from 'shared/contexts/NotificationContext';
 import { ThemeProvider } from '@ui5/webcomponents-react';
 import '@ui5/webcomponents-react/dist/Assets';
 import '@ui5/webcomponents-icons/dist/AllIcons.js';
+import '@ui5/webcomponents-icons-tnt/dist/network.js';
+import '@ui5/webcomponents-icons-tnt/dist/application.js';
+import '@ui5/webcomponents-icons-tnt/dist/application-service.js';
 
 import './styles/reset.css';
 import './styles/sapIllus-Fills.css';
