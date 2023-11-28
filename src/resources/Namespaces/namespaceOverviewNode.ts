@@ -2,10 +2,10 @@ import { NavNode } from 'state/types';
 
 export const namespaceOverviewNode: NavNode = {
   category: '',
-  icon: 'product',
+  icon: 'bbyd-dashboard',
   resourceType: 'namespaces',
   pathSegment: '',
-  label: 'Overview',
+  label: 'Namespace Overview',
   namespaced: true,
   requiredFeatures: [],
   apiGroup: '',
