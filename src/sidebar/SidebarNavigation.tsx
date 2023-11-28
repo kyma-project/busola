@@ -5,6 +5,7 @@ import {
   ComboBox,
   Icon,
   Label,
+  FlexBox,
 } from '@ui5/webcomponents-react';
 import { sidebarNavigationNodesSelector } from 'state/navigation/sidebarNavigationNodesSelector';
 import { expandedCategoriesSelector } from 'state/navigation/expandedCategories/expandedCategoriesSelector';
@@ -17,6 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { useMatch, useNavigate } from 'react-router';
 import { useUrl } from 'hooks/useUrl';
 import { Footer } from './Footer/Footer';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 export function SidebarNavigation() {
   const navigationNodes = useRecoilValue(sidebarNavigationNodesSelector);
@@ -74,27 +76,46 @@ export function SidebarNavigation() {
               />
             </SideNavigation>
             {!isSidebarCondensed && <div className="shadow-overlay"></div>}
-            <Label for="NamespaceComboBox">
-              {t('common.headers.namespaces')}
-            </Label>
-            <ComboBox
-              id="NamespaceComboBox"
-              onChange={e =>
-                e.target.value === t('namespaces.namespaces-overview')
-                  ? navigate(clusterUrl(`namespaces`))
-                  : e.target.value === t('navigation.all-namespaces')
-                  ? navigate(namespaceUrl(resourceType, { namespace: '-all-' }))
-                  : navigate(
-                      namespaceUrl(resourceType, {
-                        namespace: e.target.value ?? undefined,
-                      }),
-                    )
-              }
-              icon={<Icon name="dimension" />}
-              value={getNamespaceLabel()}
-            >
-              {NamespaceDropdown()}
-            </ComboBox>
+            <div style={{ zIndex: '0' }}>
+              <Label
+                for="NamespaceComboBox"
+                style={{
+                  ...spacing.sapUiTinyMarginBottom,
+                  ...spacing.sapUiTinyMarginBegin,
+                }}
+              >
+                {t('common.headers.namespaces')}
+              </Label>
+              <FlexBox
+                alignItems="Center"
+                style={spacing.sapUiSmallMarginBottom}
+              >
+                <Icon
+                  title="Namespaces"
+                  name="dimension"
+                  style={spacing.sapUiTinyMarginBeginEnd}
+                />
+                <ComboBox
+                  id="NamespaceComboBox"
+                  onChange={e =>
+                    e.target.value === t('namespaces.namespaces-overview')
+                      ? navigate(clusterUrl(`namespaces`))
+                      : e.target.value === t('navigation.all-namespaces')
+                      ? navigate(
+                          namespaceUrl(resourceType, { namespace: '-all-' }),
+                        )
+                      : navigate(
+                          namespaceUrl(resourceType, {
+                            namespace: e.target.value ?? undefined,
+                          }),
+                        )
+                  }
+                  value={getNamespaceLabel()}
+                >
+                  {NamespaceDropdown()}
+                </ComboBox>
+              </FlexBox>
+            </div>
           </>
         }
       >
