@@ -97,7 +97,7 @@ export function SidebarNavigation() {
                 />
                 <ComboBox
                   id="NamespaceComboBox"
-                  onChange={e =>
+                  onSelectionChange={e =>
                     e.target.value === t('namespaces.namespaces-overview')
                       ? navigate(clusterUrl(`namespaces`))
                       : e.target.value === t('navigation.all-namespaces')
