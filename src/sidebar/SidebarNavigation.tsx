@@ -19,6 +19,7 @@ import { useMatch, useNavigate } from 'react-router';
 import { useUrl } from 'hooks/useUrl';
 import { Footer } from './Footer/Footer';
 import { spacing } from '@ui5/webcomponents-react-base';
+import { NamespaceChooser } from 'header/NamespaceChooser/NamespaceChooser';
 
 export function SidebarNavigation() {
   const navigationNodes = useRecoilValue(sidebarNavigationNodesSelector);
@@ -76,7 +77,7 @@ export function SidebarNavigation() {
               />
             </SideNavigation>
             {!isSidebarCondensed && <div className="shadow-overlay"></div>}
-            <div style={{ zIndex: '0' }}>
+            <div style={namespace ? { zIndex: '0' } : { display: 'none' }}>
               <Label
                 for="NamespaceComboBox"
                 style={{
@@ -120,12 +121,23 @@ export function SidebarNavigation() {
         }
       >
         {isSidebarCondensed && (
-          <SideNavigationItem
-            icon={namespace ? 'slim-arrow-left' : 'database'}
-            text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}
-            onClick={() => navigate(clusterUrl(`overview`))}
-            selected={isClusterOverviewSelected()}
-          />
+          <>
+            <SideNavigationItem
+              icon={namespace ? 'slim-arrow-left' : 'database'}
+              text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}
+              onClick={() => navigate(clusterUrl(`overview`))}
+              selected={isClusterOverviewSelected()}
+            />
+            {namespace && (
+              <SideNavigationItem
+                icon={'dimension'}
+                text={t('common.headers.namespaces')}
+                selected={false}
+              >
+                <NamespaceChooser />
+              </SideNavigationItem>
+            )}
+          </>
         )}
         {topLevelNodes.map(node =>
           node.items?.map(item => <NavItem node={item} />),
