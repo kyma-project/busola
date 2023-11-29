@@ -5,4 +5,4 @@ export const apiVersion = 'v1';
 
 export const category = '';
 export const topLevelNode = true;
-export const icon = 'message-warning';
+export const icon = 'warning2';
