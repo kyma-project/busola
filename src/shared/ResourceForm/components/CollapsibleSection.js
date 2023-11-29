@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 
 import { Title } from './Title';
@@ -24,6 +24,7 @@ export function CollapsibleSection({
   const [open, setOpen] = useState(defaultOpen);
   const actionsRef = useRef();
   const iconGlyph = open ? 'navigation-down-arrow' : 'navigation-right-arrow';
+  required = required === true;
 
   useEffect(() => {
     if (defaultOpen !== undefined) {
@@ -43,7 +44,7 @@ export function CollapsibleSection({
     className,
     {
       collapsed: !open,
-      required,
+      required: required,
       disabled,
     },
   );
@@ -63,6 +64,7 @@ export function CollapsibleSection({
             disabled={disabled}
             canChangeState={canChangeState}
             iconGlyph={iconGlyph}
+            required={required}
           />
         }
         <div className="actions" ref={actionsRef}>
