@@ -1,10 +1,17 @@
+import React, { useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   Avatar,
+  Menu,
+  MenuItem,
+  Ui5CustomEvent,
+  MenuDomRef,
   ShellBar,
   ShellBarItem,
   StandardListItem,
 } from '@ui5/webcomponents-react';
+import { MenuItemClickEventDetail } from '@ui5/webcomponents/dist/Menu.js';
+
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useFeature } from 'hooks/useFeature';
@@ -22,6 +29,7 @@ import './Header.scss';
 
 export function Header() {
   useAvailableNamespaces();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -52,6 +60,12 @@ export function Header() {
     </StandardListItem>,
   ];
 
+  const handleMenuItemClick = (
+    e: Ui5CustomEvent<MenuDomRef, MenuItemClickEventDetail>,
+  ) => {
+    console.log('clicked', e.detail.text);
+  };
+
   return (
     <>
       <ShellBar
@@ -74,13 +88,25 @@ export function Header() {
             : navigate(`/cluster/${e.detail.item.textContent}`)
         }
         profile={
-          <Avatar
-            icon="customer"
-            colorScheme="Accent10"
-            accessibleName="Preferences"
-          />
+          <>
+            <Avatar
+              icon="customer"
+              colorScheme="Accent6"
+              accessibleName="Preferences"
+              id={'openShellbarMenu'}
+            />
+
+            {/* <Button
+              id={'openMenuBtn'}
+              onClick={() => {
+                setIsMenuOpen(true);
+              }}
+            >
+              Open Action Sheet
+            </Button> */}
+          </>
         }
-        onProfileClick={() => setPreferencesOpen(true)}
+        onProfileClick={() => setIsMenuOpen(true)}
       >
         {window.location.pathname !== '/clusters' &&
           !window.location.pathname.endsWith('/no-permissions') && (
@@ -97,7 +123,81 @@ export function Header() {
             text="Feedback"
           />
         )}
+        {/* <ShellBarItem
+          onClick={(handleShellBarItemClick)} icon="add"
+          text="open MENU"
+        /> */}
       </ShellBar>
+      <Menu
+        open={isMenuOpen}
+        opener={'openShellbarMenu'}
+        onAfterClose={() => {
+          setIsMenuOpen(false);
+        }}
+        onItemClick={handleMenuItemClick}
+      >
+        <MenuItem
+          onClick={() => setPreferencesOpen(true)}
+          key="preferences"
+          text="Preferences"
+          icon="wrench"
+        />
+        <MenuItem
+          onClick={() => {
+            console.log('clicked feedback');
+          }}
+          key="give-feedback"
+          text="Give Feedback"
+          icon="feedback"
+        />
+        <MenuItem
+          onClick={() => {
+            console.log('clicked feedback');
+          }}
+          key="get-help"
+          text="Get Help"
+          icon="sys-help"
+        >
+          <MenuItem
+            onClick={() => {
+              console.log('clicked feedback');
+            }}
+            key="kyma-project-io"
+            text="kyma-project.io"
+          />
+          <MenuItem
+            onClick={() => {
+              console.log('clicked feedback');
+            }}
+            key="help-sap-com"
+            text="help.sap.com"
+          />
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            console.log('clicked feedback');
+          }}
+          key="legal-information"
+          text="Legal Information"
+          icon="official-service"
+        >
+          <MenuItem
+            onClick={() => {
+              console.log('clicked feedback');
+            }}
+            key="kyma-project-io"
+            text="kyma-project.io"
+          />
+          <MenuItem
+            onClick={() => {
+              console.log('clicked feedback');
+            }}
+            key="help-sap-com"
+            text="help.sap.com"
+          />
+        </MenuItem>
+      </Menu>
+      {/* <Popover ref={popoverRef}>Hello there!</Popover> */}
     </>
   );
 }
