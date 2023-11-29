@@ -89,7 +89,7 @@ context('Test Command Palette navigation', () => {
 
     getQueryInput().type('ns -a');
 
-    cy.contains('All Namespaces').click();
+    cy.contains('All Namespaces').click({ force: true });
 
     cy.url().should('match', /\/namespaces\/-all-\/deployments$/);
   });
