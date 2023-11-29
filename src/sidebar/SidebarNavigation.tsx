@@ -70,7 +70,7 @@ export function SidebarNavigation() {
             >
               <SideNavigationItem
                 className="hide-shadow"
-                icon={namespace ? 'slim-arrow-left' : 'database'}
+                icon={namespace ? 'slim-arrow-left' : 'bbyd-dashboard'}
                 text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}
                 onClick={() => navigate(clusterUrl(`overview`))}
                 selected={isClusterOverviewSelected()}
@@ -123,7 +123,7 @@ export function SidebarNavigation() {
         {isSidebarCondensed && (
           <>
             <SideNavigationItem
-              icon={namespace ? 'slim-arrow-left' : 'database'}
+              icon={namespace ? 'slim-arrow-left' : 'bbyd-dashboard'}
               text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}
               onClick={() => navigate(clusterUrl(`overview`))}
               selected={isClusterOverviewSelected()}
