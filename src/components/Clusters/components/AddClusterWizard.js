@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { ResourceForm } from 'shared/ResourceForm';
-import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator';
+import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { configurationAtom } from 'state/configuration/configurationAtom';

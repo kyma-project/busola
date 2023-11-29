@@ -121,6 +121,7 @@ export function ExternalResourceRef({
                 if (selectedOption)
                   setValue({ name: '', namespace: selectedOption.text });
               }}
+              required={required}
               value={value?.namespace || ''}
               valueState={namespaceValid ? null : 'Error'}
               valueStateMessage={
@@ -162,6 +163,7 @@ export function ExternalResourceRef({
                     namespace: value?.namespace,
                   });
               }}
+              required={required}
               value={value?.name || ''}
               valueState={nameValid ? null : 'Error'}
               valueStateMessage={
