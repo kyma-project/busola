@@ -2,4 +2,6 @@ module-name: busola
 protecode: []
 whitesource:
   language: javascript
-  exclude: []
+  exclude:
+    - "backend/config/config.yaml"
+    - "**/tests/**"
