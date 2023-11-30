@@ -1,0 +1,5 @@
+module-name: busola
+protecode: []
+whitesource:
+  language: javascript
+  exclude: []
