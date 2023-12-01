@@ -1,18 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import jsyaml from 'js-yaml';
 import { Button } from '@ui5/webcomponents-react';
 import { Link } from 'react-router-dom';
-import { createPatch } from 'rfc6902';
 import { cloneDeep } from 'lodash';
 import * as jp from 'jsonpath';
-import pluralize from 'pluralize';
 
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
-import { usePut, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
-import { useGetList, useSingleGet } from 'shared/hooks/BackendAPI/useGet';
-import { useNotification } from 'shared/contexts/NotificationContext';
-import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { YamlEditorProvider } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
 import { prettifyNameSingular, prettifyNamePlural } from 'shared/utils/helpers';
 import { Labels } from 'shared/components/Labels/Labels';
@@ -21,15 +15,12 @@ import { GenericList } from 'shared/components/GenericList/GenericList';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
-import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useTranslation } from 'react-i18next';
 import { useUrl } from 'hooks/useUrl';
 import { nameLocaleSort, timeSort } from '../../helpers/sortingfunctions';
 import { useVersionWarning } from 'hooks/useVersionWarning';
-import { HttpError } from 'shared/hooks/BackendAPI/config';
-import { ForceUpdateModalContent } from 'shared/ResourceForm/ForceUpdateModalContent';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { useRecoilState } from 'recoil';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
@@ -208,30 +199,13 @@ export function ResourceListRenderer({
     resourceType,
   });
   const { t } = useTranslation();
-  const { isProtected, protectedResourceWarning } = useProtectedResources();
+  const { protectedResourceWarning } = useProtectedResources();
 
   const [toggleFormFn, getToggleFormFn] = useState(() => {});
 
-  const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
-    resourceTitle,
-    resourceType,
-  });
-
   const [activeResource, setActiveResource] = useState(null);
   const [showEditDialog, setShowEditDialog] = useState(false);
-  const {
-    setEditedYaml: setEditedSpec,
-    closeEditor,
-    currentlyEditedResourceUID,
-  } = useYamlEditor();
-  const notification = useNotification();
-  const getRequest = useSingleGet();
-  const updateResourceMutation = useUpdate(resourceUrl);
-  const putRequest = usePut();
   const { resourceUrl: resourceUrlFn } = useUrl();
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => closeEditor(), [namespace]);
 
   const prettifiedResourceName = prettifyNameSingular(
     resourceTitle,
@@ -294,111 +268,6 @@ export function ResourceListRenderer({
       col => !omitColumnsIds.includes(col.id),
     );
 
-  const handleSaveClick = resourceData => async newYAML => {
-    const showError = e => {
-      console.error(e);
-      notification.notifyError({
-        content: t('components.resources-list.messages.update.failure', {
-          resourceType: prettifiedResourceName,
-          error: e.message,
-        }),
-      });
-    };
-
-    const onSuccess = () => {
-      silentRefetch();
-      notification.notifySuccess({
-        content: t('components.resources-list.messages.update.success', {
-          resourceType: prettifiedResourceName,
-        }),
-      });
-    };
-
-    const modifiedResource = jsyaml.load(newYAML);
-    const diff = createPatch(resourceData, modifiedResource);
-    const url = prepareResourceUrl(resourceUrl, resourceData);
-    try {
-      await updateResourceMutation(url, diff);
-      onSuccess();
-    } catch (e) {
-      const isConflict = e instanceof HttpError && e.code === 409;
-      if (isConflict) {
-        const response = await getRequest(url);
-        const updatedResource = await response.json();
-
-        const makeForceUpdateFn = closeModal => {
-          return async () => {
-            delete modifiedResource?.metadata?.resourceVersion;
-            try {
-              await putRequest(url, modifiedResource);
-              closeModal();
-              onSuccess();
-              if (typeof toggleFormFn === 'function') {
-                toggleFormFn(false);
-              }
-              closeEditor();
-            } catch (e) {
-              showError(e);
-            }
-          };
-        };
-
-        notification.notifyError({
-          content: (
-            <ForceUpdateModalContent
-              error={e}
-              singularName={resourceType}
-              initialResource={updatedResource}
-              modifiedResource={modifiedResource}
-            />
-          ),
-          actions: (closeModal, defaultCloseButton) => [
-            <Button onClick={makeForceUpdateFn(closeModal)}>
-              {t('common.create-form.force-update')}
-            </Button>,
-            defaultCloseButton(closeModal),
-          ],
-          wider: true,
-        });
-      } else {
-        showError(e);
-      }
-      // throw error so that drawer doesn't close
-      throw e;
-    }
-  };
-
-  const handleResourceEdit = resource => {
-    setEditedSpec(
-      resource,
-      nameSelector(resource) + '.yaml',
-      handleSaveClick(resource),
-      isProtected(resource) || disableEdit,
-      isProtected(resource),
-    );
-  };
-
-  const prepareResourceUrl = (resourceUrl, resource) => {
-    const encodedName = encodeURIComponent(resource?.metadata.name);
-    const namespace = resource?.metadata?.namespace;
-    const pluralKind = pluralize((resource?.kind || '').toLowerCase());
-
-    if (!resourceUrlPrefix) {
-      if (window.location.pathname.includes('namespaces/-all-/')) {
-        const url = `${resourceUrl}`.substring(
-          0,
-          `${resourceUrl}`.lastIndexOf('/'),
-        );
-        return `${url}/namespaces/${namespace}/${pluralKind}/${encodedName}`;
-      }
-      return `${resourceUrl}/${encodedName}`;
-    }
-
-    return namespace && namespace !== '-all-'
-      ? `${resourceUrlPrefix}/namespaces/${namespace}/${pluralKind}/${encodedName}`
-      : `${resourceUrlPrefix}/${pluralKind}/${encodedName}`;
-  };
-
   const handleResourceClone = resource => {
     let activeResource = cloneDeep(resource);
     jp.value(activeResource, '$.metadata.name', '');
@@ -431,35 +300,6 @@ export function ResourceListRenderer({
               handler: handleResourceClone,
             }
           : null,
-        {
-          name: t('common.buttons.edit'),
-          tooltip: entry =>
-            isProtected(entry)
-              ? t('common.tooltips.protected-resources-view-yaml')
-              : disableEdit
-              ? t('common.buttons.view-yaml')
-              : t('common.buttons.edit'),
-          icon: entry =>
-            isProtected(entry) || disableEdit ? 'show-edit' : 'edit',
-          handler: handleResourceEdit,
-        },
-        {
-          name: t('common.buttons.delete'),
-          tooltip: entry =>
-            isProtected(entry)
-              ? t('common.tooltips.protected-resources-info')
-              : disableDelete
-              ? null
-              : t('common.buttons.delete'),
-          icon: 'delete',
-          disabledHandler: entry => isProtected(entry) || disableDelete,
-          handler: resource => {
-            handleResourceDelete({
-              resourceUrl: prepareResourceUrl(resourceUrl, resource),
-            });
-            setActiveResource(resource);
-          },
-        },
         ...customListActions,
       ].filter(e => e);
 
@@ -541,13 +381,6 @@ export function ResourceListRenderer({
         modalOpeningComponent={<></>}
         customCloseAction={() => setShowEditDialog(false)}
       />
-      {createPortal(
-        <DeleteMessageBox
-          resource={activeResource}
-          resourceUrl={prepareResourceUrl(resourceUrl, activeResource)}
-        />,
-        document.body,
-      )}
       {!(error && error.toString().includes('is forbidden')) && (
         <GenericList
           disableMargin={disableMargin}
@@ -561,7 +394,6 @@ export function ResourceListRenderer({
           pagination={{ autoHide: true, ...pagination }}
           extraHeaderContent={extraHeaderContent}
           testid={testid}
-          currentlyEditedResourceUID={currentlyEditedResourceUID}
           sortBy={sortBy}
           searchSettings={{
             ...searchSettings,

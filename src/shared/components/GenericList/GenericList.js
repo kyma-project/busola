@@ -50,7 +50,6 @@ export const GenericList = ({
   serverDataError,
   serverDataLoading,
   pagination,
-  currentlyEditedResourceUID,
   sortBy,
   notFoundMessage,
   searchSettings,
@@ -206,10 +205,6 @@ export const GenericList = ({
         entry={e}
         actions={actions}
         rowRenderer={rowRenderer}
-        isBeingEdited={
-          currentlyEditedResourceUID &&
-          e?.metadata?.uid === currentlyEditedResourceUID
-        }
       />
     ));
   };
@@ -284,7 +279,6 @@ GenericList.propTypes = {
   serverDataError: PropTypes.any,
   serverDataLoading: PropTypes.bool,
   pagination: PaginationProps,
-  currentlyEditedResourceUID: PropTypes.string,
   sortBy: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   notFoundMessage: PropTypes.string,
   searchSettings: SearchProps,

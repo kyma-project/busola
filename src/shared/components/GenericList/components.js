@@ -81,12 +81,7 @@ export const RowRenderer = ({
   );
 };
 
-const DefaultRowRenderer = ({
-  entry,
-  actions,
-  rowRenderer,
-  isBeingEdited = false,
-}) => {
+const DefaultRowRenderer = ({ entry, actions, rowRenderer }) => {
   const cells = rowRenderer.map((cell, id) => {
     if (cell?.content) {
       const { content, ...props } = cell;
@@ -105,7 +100,7 @@ const DefaultRowRenderer = ({
     </TableCell>
   );
   return (
-    <TableRow role="row" selected={isBeingEdited}>
+    <TableRow role="row">
       {cells}
       {!!actions.length && actionsCell}
     </TableRow>
