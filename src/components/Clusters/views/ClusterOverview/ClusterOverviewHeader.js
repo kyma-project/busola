@@ -90,11 +90,7 @@ export function ClusterOverviewHeader(content) {
         </DynamicPageComponent.Column>
         <GardenerProvider />
       </DynamicPageComponent>
-      <YamlUploadDialog
-        onCancel={() => {
-          setShowAdd(false);
-        }}
-      />
+      <YamlUploadDialog />
     </>
   );
 }
