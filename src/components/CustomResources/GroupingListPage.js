@@ -11,8 +11,6 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 
 import { SearchInput } from 'shared/components/GenericList/SearchInput';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
-import { useRecoilState } from 'recoil';
-import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 export function GroupingListPage({
@@ -24,7 +22,6 @@ export function GroupingListPage({
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const { t } = useTranslation();
-  const [showAdd, setShowAdd] = useRecoilState(showYamlUploadDialogState);
   useWindowTitle(title);
 
   const resourceUrl = `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`;
@@ -114,12 +111,7 @@ export function GroupingListPage({
         content={<YamlEditorProvider>{lists}</YamlEditorProvider>}
       />
 
-      <YamlUploadDialog
-        open={showAdd}
-        onCancel={() => {
-          setShowAdd(false);
-        }}
-      />
+      <YamlUploadDialog />
     </>
   );
 }
