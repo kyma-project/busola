@@ -29,7 +29,6 @@ function YamlUpload({
 
   const updateYamlContent = useCallback(
     text => {
-      console.log(text);
       try {
         const files = jsyaml.loadAll(text);
 

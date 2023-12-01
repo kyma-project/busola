@@ -9,6 +9,7 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { configurationAtom } from 'state/configuration/configurationAtom';
 import { authDataState } from 'state/authDataAtom';
+import { showAddClusterWizard } from 'state/showAddClusterWizard';
 
 import { addByContext, getUser, hasKubeconfigAuth } from '../shared';
 import { AuthForm } from './AuthForm';
@@ -20,12 +21,7 @@ import { WizardButtons } from 'shared/components/WizardButtons/WizardButtons';
 import { spacing } from '@ui5/webcomponents-react-base';
 import './AddClusterWizard.scss';
 
-export function AddClusterWizard({
-  kubeconfig,
-  setKubeconfig,
-  onCancel,
-  config,
-}) {
+export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
   const busolaClusterParams = useRecoilValue(configurationAtom);
   const { t } = useTranslation();
   const notification = useNotification();
@@ -38,6 +34,7 @@ export function AddClusterWizard({
     busolaClusterParams?.config?.storage || 'sessionStorage',
   );
   const [selected, setSelected] = useState(1);
+  const setShowWizard = useSetRecoilState(showAddClusterWizard);
 
   const {
     isValid: authValid,
@@ -143,7 +140,7 @@ export function AddClusterWizard({
           selected={selected}
           setSelected={setSelected}
           firstStep={true}
-          onCancel={onCancel}
+          onCancel={() => setShowWizard(false)}
           validation={!kubeconfig}
         />
       </WizardStep>
@@ -169,7 +166,7 @@ export function AddClusterWizard({
           <WizardButtons
             selected={selected}
             setSelected={setSelected}
-            onCancel={onCancel}
+            onCancel={() => setShowWizard(false)}
             validation={!authValid}
           />
         </WizardStep>
@@ -196,7 +193,7 @@ export function AddClusterWizard({
           customFinish={t('clusters.buttons.verify-and-add')}
           validation={!storage}
           onComplete={onComplete}
-          onCancel={onCancel}
+          onCancel={() => setShowWizard(false)}
         />
       </WizardStep>
     </Wizard>

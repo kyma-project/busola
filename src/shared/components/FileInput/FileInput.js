@@ -7,6 +7,7 @@ import { useRecoilValue } from 'recoil';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 import './FileInput.scss';
+import { showAddClusterWizard } from 'state/showAddClusterWizard';
 
 FileInput.propTypes = {
   fileInputChanged: PropTypes.func.isRequired,
@@ -25,12 +26,15 @@ export function FileInput({
 }) {
   const [fileNames, setFileNames] = useState([]);
   const openAdd = useRecoilValue(showYamlUploadDialogState);
+  const openAddCluster = useRecoilValue(showAddClusterWizard);
   const [draggingOverCounter, setDraggingCounter] = useState(0);
   const { t } = useTranslation();
 
+  console.log(openAdd, openAddCluster);
+
   useEffect(() => {
-    if (!openAdd) setFileNames([]);
-  }, [openAdd]);
+    if (!openAdd && !openAddCluster) setFileNames([]);
+  }, [openAdd, openAddCluster]);
 
   // needed for onDrag to fire
   function dragOver(e) {
