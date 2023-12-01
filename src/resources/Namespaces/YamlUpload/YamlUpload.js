@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import jsyaml from 'js-yaml';
@@ -23,8 +23,13 @@ function YamlUpload({
     ?.map(y => jsyaml.dump(y, { noRefs: true }) || undefined)
     ?.join('---\n');
 
+  useEffect(() => {
+    if (!yamlContentString && editor) editor.getModel().setValue('');
+  }, [editor, yamlContentString]);
+
   const updateYamlContent = useCallback(
     text => {
+      console.log(text);
       try {
         const files = jsyaml.loadAll(text);
 
@@ -60,7 +65,7 @@ function YamlUpload({
         autocompletionDisabled
         height="60vh"
         language="yaml"
-        value={yamlContentString || ''}
+        value={yamlContentString ?? ''}
         onChange={updateYamlContent}
         onMount={setEditor}
         error={error}

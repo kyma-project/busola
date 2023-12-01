@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@ui5/webcomponents-react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import { useRecoilValue } from 'recoil';
+import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 import './FileInput.scss';
 
@@ -22,8 +24,13 @@ export function FileInput({
   allowMultiple,
 }) {
   const [fileNames, setFileNames] = useState([]);
+  const openAdd = useRecoilValue(showYamlUploadDialogState);
   const [draggingOverCounter, setDraggingCounter] = useState(0);
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (!openAdd) setFileNames([]);
+  }, [openAdd]);
 
   // needed for onDrag to fire
   function dragOver(e) {
