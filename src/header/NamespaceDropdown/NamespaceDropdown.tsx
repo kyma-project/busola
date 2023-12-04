@@ -3,23 +3,25 @@ import { useTranslation } from 'react-i18next';
 
 import { namespacesState } from 'state/namespacesAtom';
 
-import { StandardListItem } from '@ui5/webcomponents-react';
+import { ComboBoxItem } from '@ui5/webcomponents-react';
 
 export function NamespaceDropdown() {
   const { t } = useTranslation();
   const allNamespaces = useRecoilValue(namespacesState);
 
   let namespaces = [
-    <StandardListItem icon="list" data-key="overview">
-      {t('namespaces.namespaces-overview')}
-    </StandardListItem>,
-    <StandardListItem icon="dimension" data-key="all-namespaces">
-      {t('navigation.all-namespaces')}
-    </StandardListItem>,
+    <ComboBoxItem
+      text={t('namespaces.namespaces-overview')}
+      data-key="overview"
+    />,
+    <ComboBoxItem
+      text={t('navigation.all-namespaces')}
+      data-key="all-namespaces"
+    />,
   ];
 
   allNamespaces.map(ns =>
-    namespaces.push(<StandardListItem data-key={ns}>{ns}</StandardListItem>),
+    namespaces.push(<ComboBoxItem text={ns} data-key={ns} />),
   );
 
   return namespaces;
