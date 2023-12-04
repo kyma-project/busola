@@ -24,6 +24,8 @@ import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpen
 import { Logo } from './Logo/Logo';
 import { SidebarSwitcher } from './SidebarSwitcher/SidebarSwitcher';
 import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
+import { useGetLegalLinks, LegalLink } from './SidebarMenu/useGetLegalLinks';
+import { useGetBusolaVersionDetails } from './SidebarMenu/useGetBusolaVersion';
 
 import './Header.scss';
 
@@ -36,6 +38,9 @@ export function Header() {
   const { isEnabled: isFeedbackEnabled, link: feedbackLink } = useFeature(
     'FEEDBACK',
   );
+
+  const { githubLink, busolaVersion } = useGetBusolaVersionDetails();
+  const legalLinks = useGetLegalLinks();
 
   const setPreferencesOpen = useSetRecoilState(isPreferencesOpenState);
   const cluster = useRecoilValue(clusterState);
@@ -60,10 +65,28 @@ export function Header() {
     </StandardListItem>,
   ];
 
+  const openNewWindow = (link: string) => {
+    const newWindow = window.open(link, '_blank', 'noopener, noreferrer');
+    if (newWindow) newWindow.opener = null;
+  };
+
   const handleMenuItemClick = (
     e: Ui5CustomEvent<MenuDomRef, MenuItemClickEventDetail>,
   ) => {
     console.log('clicked', e.detail.text);
+    const legalLinkUsed = legalLinks.find(x => x.label === e.detail.text);
+
+    if (e.detail.text === t('navigation.preferences.title')) {
+      setPreferencesOpen(true);
+    } else if (e.detail.text === t('navigation.menu.give-feedback')) {
+      openNewWindow(feedbackLink);
+    } else if (legalLinkUsed) {
+      openNewWindow(legalLinkUsed.link);
+    } else if (
+      e.detail.text === `${t('common.labels.version')} ${busolaVersion}`
+    ) {
+      openNewWindow(githubLink);
+    }
   };
 
   return (
@@ -95,15 +118,6 @@ export function Header() {
               accessibleName="Preferences"
               id={'openShellbarMenu'}
             />
-
-            {/* <Button
-              id={'openMenuBtn'}
-              onClick={() => {
-                setIsMenuOpen(true);
-              }}
-            >
-              Open Action Sheet
-            </Button> */}
           </>
         }
         onProfileClick={() => setIsMenuOpen(true)}
@@ -113,20 +127,16 @@ export function Header() {
             <ShellBarItem
               onClick={() => setShowAdd(true)}
               icon="add"
-              text="Upload YAML"
+              text={t('navigation.upload-yaml.title')}
             />
           )}
         {isFeedbackEnabled && (
           <ShellBarItem
             onClick={() => window.open(feedbackLink, '_blank')}
             icon="feedback"
-            text="Feedback"
+            text={t('navigation.feedback')}
           />
         )}
-        {/* <ShellBarItem
-          onClick={(handleShellBarItemClick)} icon="add"
-          text="open MENU"
-        /> */}
       </ShellBar>
       <Menu
         open={isMenuOpen}
@@ -139,65 +149,45 @@ export function Header() {
         <MenuItem
           onClick={() => setPreferencesOpen(true)}
           key="preferences"
-          text="Preferences"
+          text={t('navigation.preferences.title')}
           icon="wrench"
         />
         <MenuItem
-          onClick={() => {
-            console.log('clicked feedback');
-          }}
           key="give-feedback"
-          text="Give Feedback"
+          text={t('navigation.menu.give-feedback')}
           icon="feedback"
         />
         <MenuItem
-          onClick={() => {
-            console.log('clicked feedback');
-          }}
           key="get-help"
-          text="Get Help"
+          text={t('navigation.menu.get-help')}
           icon="sys-help"
         >
           <MenuItem
-            onClick={() => {
-              console.log('clicked feedback');
-            }}
             key="kyma-project-io"
             text="kyma-project.io"
+            icon="inspect"
           />
-          <MenuItem
-            onClick={() => {
-              console.log('clicked feedback');
-            }}
-            key="help-sap-com"
-            text="help.sap.com"
-          />
+          <MenuItem key="help-sap-com" text="help.sap.com" icon="inspect" />
         </MenuItem>
         <MenuItem
-          onClick={() => {
-            console.log('clicked feedback');
-          }}
           key="legal-information"
-          text="Legal Information"
+          text={t('navigation.menu.legal-information')}
           icon="official-service"
         >
+          {legalLinks.map((legalLink: LegalLink) => (
+            <MenuItem
+              key={legalLink.link}
+              text={legalLink.label}
+              icon="inspect"
+            />
+          ))}
           <MenuItem
-            onClick={() => {
-              console.log('clicked feedback');
-            }}
-            key="kyma-project-io"
-            text="kyma-project.io"
-          />
-          <MenuItem
-            onClick={() => {
-              console.log('clicked feedback');
-            }}
-            key="help-sap-com"
-            text="help.sap.com"
+            text={`${t('common.labels.version')} ${busolaVersion}`}
+            icon="inspect"
+            startsSection
           />
         </MenuItem>
       </Menu>
-      {/* <Popover ref={popoverRef}>Hello there!</Popover> */}
     </>
   );
 }

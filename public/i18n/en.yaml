@@ -921,6 +921,11 @@ namespaces:
     usage-of-memory-requests: This Namespace uses {{valueText}} of {{maxText}} its memory requests.
 navigation:
   all-namespaces: All Namespaces
+  feedback: Feedback
+  menu:
+    get-help: Get Help
+    give-feedback: Give Feedback
+    legal-information: Legal Information
   preferences:
     title: Preferences
   upload-yaml:
