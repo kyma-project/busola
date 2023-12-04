@@ -30,8 +30,6 @@ export function FileInput({
   const [draggingOverCounter, setDraggingCounter] = useState(0);
   const { t } = useTranslation();
 
-  console.log(openAdd, openAddCluster);
-
   useEffect(() => {
     if (!openAdd && !openAddCluster) setFileNames([]);
   }, [openAdd, openAddCluster]);
