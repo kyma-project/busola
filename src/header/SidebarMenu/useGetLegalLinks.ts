@@ -2,7 +2,7 @@ import { useFeature } from 'hooks/useFeature';
 import { useTranslation } from 'react-i18next';
 import { ConfigFeature } from 'state/types';
 
-type LegalLink = {
+export type LegalLink = {
   label: string;
   link: string;
 };

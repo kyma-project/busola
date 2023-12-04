@@ -14,7 +14,6 @@ import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useTranslation } from 'react-i18next';
 import { useMatch, useNavigate } from 'react-router';
 import { useUrl } from 'hooks/useUrl';
-import { Footer } from './Footer/Footer';
 
 export function SidebarNavigation() {
   const navigationNodes = useRecoilValue(sidebarNavigationNodesSelector);
@@ -56,7 +55,6 @@ export function SidebarNavigation() {
       <SideNavigation
         collapsed={isSidebarCondensed}
         onSelectionChange={e => e.preventDefault()}
-        fixedItems={<Footer />}
         header={
           <>
             <SideNavigation
