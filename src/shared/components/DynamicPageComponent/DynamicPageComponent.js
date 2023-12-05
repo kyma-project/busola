@@ -1,16 +1,20 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Breadcrumbs,
   BreadcrumbsItem,
+  Button,
   DynamicPage,
   DynamicPageHeader,
   DynamicPageTitle,
+  Popover,
   Text,
   Title,
 } from '@ui5/webcomponents-react';
 
 import './DynamicPageComponent.scss';
+import { createPortal } from 'react-dom';
+import { spacing } from '@ui5/webcomponents-react-base';
+import { useState } from 'react';
 
 const Column = ({ title, children, columnSpan, image, style = {} }) => {
   const styleComputed = { gridColumn: columnSpan, ...style };
@@ -34,6 +38,8 @@ export const DynamicPageComponent = ({
   columnWrapperClassName,
   content,
 }) => {
+  const [showTitleDescription, setShowTitleDescription] = useState(false);
+
   return (
     <DynamicPage
       className="page-header"
@@ -60,14 +66,43 @@ export const DynamicPageComponent = ({
               </Breadcrumbs>
             ) : null
           }
-          header={<Title className="ui5-title">{title}</Title>}
+          header={
+            <>
+              <Title className="ui5-title">
+                {title}
+                {description && (
+                  <>
+                    <Button
+                      id="descriptionOpener"
+                      icon="hint"
+                      design="Transparent"
+                      style={spacing.sapUiTinyMargin}
+                      onClick={() => {
+                        setShowTitleDescription(true);
+                      }}
+                    />
+                    {createPortal(
+                      <Popover
+                        opener="descriptionOpener"
+                        open={showTitleDescription}
+                        onAfterClose={() => setShowTitleDescription(false)}
+                        placementType="Right"
+                      >
+                        <Text className="description">{description}</Text>
+                      </Popover>,
+                      document.body,
+                    )}
+                  </>
+                )}
+              </Title>
+            </>
+          }
           actions={actions}
         />
       }
       headerContent={
-        title !== 'Clusters Overview' ? (
+        title !== 'Clusters Overview' && children ? (
           <DynamicPageHeader className="header-wrapper">
-            {description && <Text className="description">{description}</Text>}
             <section
               className={`column-wrapper ${columnWrapperClassName || ''}`}
             >
