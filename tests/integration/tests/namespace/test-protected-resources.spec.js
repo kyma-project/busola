@@ -127,6 +127,11 @@ context('Test Protected Resources', () => {
   it('Change protection setting', () => {
     cy.get('[title="Profile"]').click();
 
+    cy.get('ui5-li:visible')
+      .contains('Preferences')
+      .invoke('show')
+      .click({ force: true });
+
     cy.contains('Cluster interaction').click();
 
     cy.contains(

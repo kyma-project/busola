@@ -36,6 +36,11 @@ context('Test resource validation', () => {
   it('Disables resource validation via preferences', () => {
     cy.get('[title="Profile"]').click();
 
+    cy.get('ui5-li:visible')
+      .contains('Preferences')
+      .invoke('show')
+      .click({ force: true });
+
     cy.contains('Cluster interaction').click();
 
     cy.contains('Resource Validation')
@@ -70,6 +75,11 @@ context('Test resource validation', () => {
 
   it('Customize resource validation policies via preferences', () => {
     cy.get('[title="Profile"]').click();
+
+    cy.get('ui5-li:visible')
+      .contains('Preferences')
+      .invoke('show')
+      .click({ force: true });
 
     cy.contains('Cluster interaction').click();
 
@@ -117,6 +127,11 @@ context('Test resource validation', () => {
     cy.get('[data-testid=yaml-cancel]').click();
 
     cy.get('[title="Profile"]').click();
+
+    cy.get('ui5-li:visible')
+      .contains('Preferences')
+      .invoke('show')
+      .click({ force: true });
 
     cy.contains('Cluster interaction').click();
 

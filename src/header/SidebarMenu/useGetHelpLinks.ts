@@ -20,7 +20,6 @@ export const useGetHelpLinks = (): GetHelpLink[] => {
 
   const getHelpLinks = Object.entries(getHelpLinksConfig).map(
     ([translationLabel, externalLink]) => {
-      console.log('translationLabel', translationLabel);
       const label = t(`get-help.${translationLabel}`);
       const link = externalLink[i18n.language] || externalLink['default'];
       return {
