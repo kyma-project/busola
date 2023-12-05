@@ -1,4 +1,3 @@
-import React from 'react';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
 
@@ -35,10 +34,8 @@ export const ExtensibilityListCore = ({
   const { resource, description, features, filter: generalFilter } =
     resMetaData?.general ?? {};
 
-  const { disableCreate, disableEdit, disableDelete } = features?.actions ?? {
+  const { disableCreate } = features?.actions ?? {
     disableCreate: props.disableCreate,
-    disableEdit: props.disableEdit,
-    disableDelete: props.disableDelete,
   };
 
   const dataSources = resMetaData?.dataSources || {};
@@ -114,8 +111,6 @@ export const ExtensibilityListCore = ({
       {...listProps}
       {...props}
       disableCreate={disableCreate}
-      disableEdit={disableEdit}
-      disableDelete={disableDelete}
       createResourceForm={ExtensibilityCreate}
       sortBy={defaultSortOptions =>
         sortBy(jsonata, sortOptions, t, defaultSortOptions)

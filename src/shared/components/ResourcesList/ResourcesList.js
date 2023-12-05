@@ -64,10 +64,7 @@ ResourcesList.propTypes = {
   customUrl: PropTypes.string,
   testid: PropTypes.string,
   omitColumnsIds: PropTypes.arrayOf(PropTypes.string.isRequired),
-  resourceUrlPrefix: PropTypes.string,
   disableCreate: PropTypes.bool,
-  disableEdit: PropTypes.bool,
-  disableDelete: PropTypes.bool,
   disableMargin: PropTypes.bool,
 };
 
@@ -79,8 +76,6 @@ ResourcesList.defaultProps = {
   listHeaderActions: null,
   readOnly: false,
   disableCreate: false,
-  disableEdit: false,
-  disableDelete: false,
   disableMargin: false,
   filterFn: () => true,
 };
@@ -180,11 +175,8 @@ export function ResourceListRenderer({
   error,
   resources,
   silentRefetch = () => {},
-  resourceUrlPrefix,
   nameSelector = entry => entry?.metadata.name, // overriden for CRDGroupList
   disableCreate,
-  disableEdit,
-  disableDelete,
   disableMargin,
   sortBy = {
     name: nameLocaleSort,

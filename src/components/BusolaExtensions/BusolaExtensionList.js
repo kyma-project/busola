@@ -37,7 +37,6 @@ export function BusolaPluginList(props) {
       createResourceForm={BusolaExtensionCreate}
       resourceType={t('extensibility.title')}
       resourceUrl="/api/v1/configmaps?labelSelector=busola.io/extension=resource"
-      resourceUrlPrefix="/api/v1"
       hasDetailsView={true}
       customUrl={extension =>
         clusterUrl(
