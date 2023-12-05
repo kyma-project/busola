@@ -82,7 +82,21 @@ GARDENER_LOGIN:
   kubeconfig: null
 ```
 
-- **GZIP** – is used to indicate whether a response from the backend server should be compressed or not.
+- **GET_HELP_LINKS** – is used to show or hide helper links. You can find the all available links in the following example.
+  In **config** you can find the unchangeable keys (you cannot use **helpSapCom** instead of **help-sap-com**). The keys include both the default link, which takes you to the default address.
+
+  Example:
+
+  ```yaml
+  GET_HELP_LINKS:
+    config:
+      kyma-project-io:
+        default: https://kyma-project.io
+      help-sap-com:
+        default: https://help.sap.com
+  ```
+
+* **GZIP** – is used to indicate whether a response from the backend server should be compressed or not.
 
 > **NOTE:** It's a backend feature, so it cannot be modified at the cluster's ConfigMap level.
 

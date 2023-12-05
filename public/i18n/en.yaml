@@ -712,6 +712,9 @@ gardener:
     provider: Provider
 generic-list:
   no-entries-found: No entries found
+get-help:
+  kyma-project-io: kyma-project.io
+  help-sap-com: help.sap.com
 graphs:
   capacity: Capacity
   cpu: CPU

@@ -25,6 +25,7 @@ import { Logo } from './Logo/Logo';
 import { SidebarSwitcher } from './SidebarSwitcher/SidebarSwitcher';
 import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
 import { useGetLegalLinks, LegalLink } from './SidebarMenu/useGetLegalLinks';
+import { useGetHelpLinks, GetHelpLink } from './SidebarMenu/useGetHelpLinks';
 import { useGetBusolaVersionDetails } from './SidebarMenu/useGetBusolaVersion';
 
 import './Header.scss';
@@ -41,6 +42,7 @@ export function Header() {
 
   const { githubLink, busolaVersion } = useGetBusolaVersionDetails();
   const legalLinks = useGetLegalLinks();
+  const getHelpLinks = useGetHelpLinks();
 
   const setPreferencesOpen = useSetRecoilState(isPreferencesOpenState);
   const cluster = useRecoilValue(clusterState);
@@ -75,6 +77,7 @@ export function Header() {
   ) => {
     console.log('clicked', e.detail.text);
     const legalLinkUsed = legalLinks.find(x => x.label === e.detail.text);
+    const getHelpLinkUsed = getHelpLinks.find(x => x.label === e.detail.text);
 
     if (e.detail.text === t('navigation.preferences.title')) {
       setPreferencesOpen(true);
@@ -86,6 +89,8 @@ export function Header() {
       e.detail.text === `${t('common.labels.version')} ${busolaVersion}`
     ) {
       openNewWindow(githubLink);
+    } else if (getHelpLinkUsed) {
+      openNewWindow(getHelpLinkUsed.link);
     }
   };
 
@@ -162,12 +167,13 @@ export function Header() {
           text={t('navigation.menu.get-help')}
           icon="sys-help"
         >
-          <MenuItem
-            key="kyma-project-io"
-            text="kyma-project.io"
-            icon="inspect"
-          />
-          <MenuItem key="help-sap-com" text="help.sap.com" icon="inspect" />
+          {getHelpLinks.map((getHelpLint: GetHelpLink) => (
+            <MenuItem
+              key={getHelpLint.link}
+              text={getHelpLint.label}
+              icon="inspect"
+            />
+          ))}
         </MenuItem>
         <MenuItem
           key="legal-information"
