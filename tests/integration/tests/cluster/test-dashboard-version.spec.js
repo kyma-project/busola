@@ -8,7 +8,7 @@ context('Test Kyma Dashboard Version link', () => {
   });
 
   it('Check Kyma Dashboard Version link', () => {
-    cy.get('.ui5-sn-divider')
+    cy.get('.ui5-sn-spacer')
       .next()
       .find('ui5-tree-item')
       .last()
