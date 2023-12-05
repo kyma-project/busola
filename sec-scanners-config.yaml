@@ -3,5 +3,5 @@ protecode: []
 whitesource:
   language: javascript
   exclude:
-    - "**/backend/config/config.yaml"
-    - "**/tests/**"
+    - '**/backend/config/config.yaml'
+    - '**/tests/**'
