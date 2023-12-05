@@ -1,16 +1,19 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { Pagination } from 'shared/components/GenericList/Pagination/Pagination';
+import { ThemeProvider } from '@ui5/webcomponents-react';
 
 describe('Pagination', () => {
   it('Renders valid count of pages', () => {
     const { queryByText } = render(
-      <Pagination
-        itemsTotal={25}
-        itemsPerPage={20}
-        currentPage={1}
-        onChangePage={jest.fn()}
-      />,
+      <ThemeProvider>
+        <Pagination
+          itemsTotal={25}
+          itemsPerPage={20}
+          currentPage={1}
+          onChangePage={jest.fn()}
+        />
+      </ThemeProvider>,
     );
 
     expect(queryByText('1')).toBeInTheDocument();
@@ -20,12 +23,14 @@ describe('Pagination', () => {
 
   it('Renders valid count of pages - custom page size', () => {
     const { queryByText } = render(
-      <Pagination
-        itemsTotal={25}
-        currentPage={0}
-        itemsPerPage={10}
-        onChangePage={jest.fn()}
-      />,
+      <ThemeProvider>
+        <Pagination
+          itemsTotal={25}
+          currentPage={0}
+          itemsPerPage={10}
+          onChangePage={jest.fn()}
+        />
+      </ThemeProvider>,
     );
 
     expect(queryByText('1')).toBeInTheDocument();
@@ -37,12 +42,14 @@ describe('Pagination', () => {
   it('Fire events', () => {
     const callback = jest.fn();
     const { getByText, getByLabelText } = render(
-      <Pagination
-        itemsTotal={200}
-        currentPage={5}
-        itemsPerPage={20}
-        onChangePage={callback}
-      />,
+      <ThemeProvider>
+        <Pagination
+          itemsTotal={200}
+          currentPage={5}
+          itemsPerPage={20}
+          onChangePage={callback}
+        />
+      </ThemeProvider>,
     );
     fireEvent.click(getByText('6'));
     expect(callback).toHaveBeenCalledWith(6);
@@ -56,12 +63,14 @@ describe('Pagination', () => {
 
   it('Disables correct links', () => {
     const { getByText, getByLabelText, rerender } = render(
-      <Pagination
-        itemsTotal={60}
-        itemsPerPage={20}
-        currentPage={1}
-        onChangePage={jest.fn()}
-      />,
+      <ThemeProvider>
+        <Pagination
+          itemsTotal={60}
+          itemsPerPage={20}
+          currentPage={1}
+          onChangePage={jest.fn()}
+        />
+      </ThemeProvider>,
     );
     expect(getByLabelText('Previous page')).toBeDisabled();
     expect(getByText('1')).toBeDisabled();
@@ -70,23 +79,27 @@ describe('Pagination', () => {
     expect(getByLabelText('Next page')).not.toBeDisabled();
 
     rerender(
-      <Pagination
-        itemsTotal={60}
-        itemsPerPage={20}
-        currentPage={3}
-        onChangePage={jest.fn()}
-      />,
+      <ThemeProvider>
+        <Pagination
+          itemsTotal={60}
+          itemsPerPage={20}
+          currentPage={3}
+          onChangePage={jest.fn()}
+        />
+      </ThemeProvider>,
     );
     expect(getByLabelText('Previous page')).not.toBeDisabled();
     expect(getByLabelText('Next page')).toBeDisabled();
 
     rerender(
-      <Pagination
-        itemsTotal={60}
-        itemsPerPage={20}
-        currentPage={2}
-        onChangePage={jest.fn()}
-      />,
+      <ThemeProvider>
+        <Pagination
+          itemsTotal={60}
+          itemsPerPage={20}
+          currentPage={2}
+          onChangePage={jest.fn()}
+        />
+      </ThemeProvider>,
     );
     expect(getByLabelText('Previous page')).not.toBeDisabled();
     expect(getByLabelText('Next page')).not.toBeDisabled();

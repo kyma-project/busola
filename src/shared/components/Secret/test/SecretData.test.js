@@ -63,7 +63,7 @@ describe('SecretData', () => {
 
     await expectInitialState({ getAllByText, queryByText });
 
-    fireEvent.click(await findByText('secrets.buttons.decode'));
+    fireEvent.click(await getAllByText('secrets.buttons.decode')[0]);
     await expectDecodedState({ findByText, queryByText });
 
     fireEvent.click(await getAllByText('secrets.buttons.encode')[0]);
