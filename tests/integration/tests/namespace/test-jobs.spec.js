@@ -184,7 +184,7 @@ context('Test Jobs', () => {
     cy.contains('a=b');
   });
 
-  // it('Inspect list', () => {
-  //   cy.inspectList('Jobs', JOB_NAME);
-  // });
+  it('Inspect list', () => {
+    cy.inspectList('Jobs', JOB_NAME);
+  });
 });
