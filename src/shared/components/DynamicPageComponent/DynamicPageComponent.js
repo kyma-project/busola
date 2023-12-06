@@ -67,35 +67,33 @@ export const DynamicPageComponent = ({
             ) : null
           }
           header={
-            <>
-              <Title className="ui5-title">
-                {title}
-                {description && (
-                  <>
-                    <Button
-                      id="descriptionOpener"
-                      icon="hint"
-                      design="Transparent"
-                      style={spacing.sapUiTinyMargin}
-                      onClick={() => {
-                        setShowTitleDescription(true);
-                      }}
-                    />
-                    {createPortal(
-                      <Popover
-                        opener="descriptionOpener"
-                        open={showTitleDescription}
-                        onAfterClose={() => setShowTitleDescription(false)}
-                        placementType="Right"
-                      >
-                        <Text className="description">{description}</Text>
-                      </Popover>,
-                      document.body,
-                    )}
-                  </>
-                )}
-              </Title>
-            </>
+            <Title className="ui5-title">
+              {title}
+              {description && (
+                <>
+                  <Button
+                    id="descriptionOpener"
+                    icon="hint"
+                    design="Transparent"
+                    style={spacing.sapUiTinyMargin}
+                    onClick={() => {
+                      setShowTitleDescription(true);
+                    }}
+                  />
+                  {createPortal(
+                    <Popover
+                      opener="descriptionOpener"
+                      open={showTitleDescription}
+                      onAfterClose={() => setShowTitleDescription(false)}
+                      placementType="Right"
+                    >
+                      <Text className="description">{description}</Text>
+                    </Popover>,
+                    document.body,
+                  )}
+                </>
+              )}
+            </Title>
           }
           actions={actions}
         />
