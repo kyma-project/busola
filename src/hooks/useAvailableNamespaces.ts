@@ -15,7 +15,7 @@ export function useAvailableNamespaces() {
     '/api/v1/namespaces',
     {
       skip: false,
-      pollingInterval: 0,
+      pollingInterval: 3000,
       onDataReceived: () => {},
     },
   ) as {

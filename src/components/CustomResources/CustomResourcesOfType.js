@@ -8,14 +8,11 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { CustomResources } from 'components/CustomResources/CustomResources';
 import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
-import { useRecoilState } from 'recoil';
-import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 export default function CustomResourcesOfType({ crdName }) {
   const { t } = useTranslation();
   const { clusterUrl } = useUrl();
-  const [showAdd, setShowAdd] = useRecoilState(showYamlUploadDialogState);
   const { data: crd, loading, error } = useGet(
     `/apis/apiextensions.k8s.io/v1/customresourcedefinitions/` + crdName,
   );
@@ -58,12 +55,7 @@ export default function CustomResourcesOfType({ crdName }) {
           </Link>
         </DynamicPageComponent.Column>
       </DynamicPageComponent>
-      <YamlUploadDialog
-        open={showAdd}
-        onCancel={() => {
-          setShowAdd(false);
-        }}
-      />
+      <YamlUploadDialog />
     </>
   );
 }

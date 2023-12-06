@@ -27,6 +27,8 @@ import { createPortal } from 'react-dom';
 
 import { spacing } from '@ui5/webcomponents-react-base';
 import './ClusterList.scss';
+import { useSetRecoilState } from 'recoil';
+import { showAddClusterWizard } from 'state/showAddClusterWizard';
 
 function ClusterList() {
   const gardenerLoginFeature = useFeature('GARDENER_LOGIN');
@@ -43,7 +45,7 @@ function ClusterList() {
   });
 
   const [chosenCluster, setChosenCluster] = useState(null);
-  const [showAdd, setShowAdd] = useState(false);
+  const setShowAdd = useSetRecoilState(showAddClusterWizard);
 
   const [showEdit, setShowEdit] = useState(false);
   const [editedCluster, setEditedCluster] = useState(null);
@@ -158,9 +160,7 @@ function ClusterList() {
     </>
   );
 
-  const addDialog = (
-    <AddClusterDialog show={showAdd} onCancel={() => setShowAdd(false)} />
-  );
+  const addDialog = <AddClusterDialog />;
   const editDialog = (
     <ModalWithForm
       opened={showEdit}
