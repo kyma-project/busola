@@ -114,6 +114,7 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
       });
       console.warn(e);
     }
+    setShowWizard(false);
   };
 
   return (
