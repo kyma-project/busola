@@ -129,7 +129,7 @@ context('Test reduced permissions', () => {
 
     // service account name
     chooseComboboxOption(
-      '[id="secret-name-combobox-0"][aria-label="Secret name Combobox"]:visible',
+      '[id="secret-name-combobox-0"][aria-label="Secret name Combobox"]',
       SA_NAME,
     );
 
