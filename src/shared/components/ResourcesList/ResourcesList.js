@@ -31,8 +31,6 @@ import { useVersionWarning } from 'hooks/useVersionWarning';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
 import { ForceUpdateModalContent } from 'shared/ResourceForm/ForceUpdateModalContent';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
-import { useRecoilState } from 'recoil';
-import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 import { createPortal } from 'react-dom';
 
 const Injections = React.lazy(() =>
@@ -202,7 +200,6 @@ export function ResourceListRenderer({
   searchSettings,
   isCompact,
 }) {
-  const [showAdd, setShowAdd] = useRecoilState(showYamlUploadDialogState);
   useVersionWarning({
     resourceUrl,
     resourceType,
@@ -559,16 +556,7 @@ export function ResourceListRenderer({
           }}
         />
       )}
-      {!isCompact &&
-        createPortal(
-          <YamlUploadDialog
-            open={showAdd}
-            onCancel={() => {
-              setShowAdd(false);
-            }}
-          />,
-          document.body,
-        )}
+      {!isCompact && createPortal(<YamlUploadDialog />, document.body)}
     </>
   );
 }
