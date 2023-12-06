@@ -12,6 +12,7 @@ import { useFeature } from 'hooks/useFeature';
 
 import { spacing } from '@ui5/webcomponents-react-base';
 import './NodeDetails.scss';
+import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 
 function NodeDetails({ nodeName }) {
   const { data, error, loading } = useNodeQuery(nodeName);
@@ -66,6 +67,7 @@ function NodeDetails({ nodeName }) {
           </>
         }
       />
+      <YamlUploadDialog />
     </div>
   );
 }

@@ -60,7 +60,7 @@ export function SearchInput({
   };
 
   const searchInput = document.querySelector('#search-input');
-  const searchInputShadowElement = searchInput?.shadowRoot.querySelector(
+  const searchInputShadowElement = searchInput?.shadowRoot?.querySelector(
     '#ui5-combobox-input',
   );
 
