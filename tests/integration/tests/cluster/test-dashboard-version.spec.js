@@ -10,7 +10,7 @@ context('Test Kyma Dashboard Version link', () => {
   it('Check Kyma Dashboard Version link', () => {
     cy.get('.ui5-sn-spacer')
       .next()
-      .find('ui5-tree-item')
+      .find('[role="treeitem"]')
       .last()
       .should('have.attr', 'title')
       .and('include', 'Kyma Dashboard version:');
