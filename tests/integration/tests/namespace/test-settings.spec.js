@@ -13,7 +13,6 @@ context('Test app settings and preferences', () => {
 
     cy.get('ui5-li:visible')
       .contains('Preferences')
-      .invoke('show')
       .click({ force: true });
 
     cy.contains('Cluster interaction').click();
@@ -58,7 +57,6 @@ context('Test app settings and preferences', () => {
 
     cy.get('ui5-li:visible')
       .contains('Preferences')
-      .invoke('show')
       .click({ force: true });
 
     cy.contains('Cluster interaction').click();
@@ -78,7 +76,6 @@ context('Test app settings and preferences', () => {
 
     cy.get('ui5-li:visible')
       .contains('Preferences')
-      .invoke('show')
       .click({ force: true });
 
     cy.contains('Interface').click();
@@ -104,7 +101,6 @@ context('Test app settings and preferences', () => {
 
     cy.get('ui5-li:visible')
       .contains('Preferences')
-      .invoke('show')
       .click({ force: true });
 
     cy.contains('Cluster interaction').click();

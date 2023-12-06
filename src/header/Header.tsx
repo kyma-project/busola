@@ -75,7 +75,6 @@ export function Header() {
   const handleMenuItemClick = (
     e: Ui5CustomEvent<MenuDomRef, MenuItemClickEventDetail>,
   ) => {
-    console.log('clicked', e.detail.text);
     const legalLinkUsed = legalLinks.find(x => x.label === e.detail.text);
     const getHelpLinkUsed = getHelpLinks.find(x => x.label === e.detail.text);
 
@@ -121,7 +120,7 @@ export function Header() {
               icon="customer"
               colorScheme="Accent6"
               accessibleName="Preferences"
-              id={'openShellbarMenu'}
+              id="openShellbarMenu"
             />
           </>
         }
@@ -145,7 +144,7 @@ export function Header() {
       </ShellBar>
       <Menu
         open={isMenuOpen}
-        opener={'openShellbarMenu'}
+        opener="openShellbarMenu"
         onAfterClose={() => {
           setIsMenuOpen(false);
         }}

@@ -76,7 +76,6 @@ context('Test Cluster configuration', () => {
 
     cy.get('ui5-li:visible')
       .contains('Preferences')
-      .invoke('show')
       .click({ force: true });
 
     cy.contains('Other')

@@ -129,7 +129,6 @@ context('Test Protected Resources', () => {
 
     cy.get('ui5-li:visible')
       .contains('Preferences')
-      .invoke('show')
       .click({ force: true });
 
     cy.contains('Cluster interaction').click();

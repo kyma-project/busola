@@ -13,7 +13,6 @@ context('Test Kyma Dashboard Version link', () => {
     cy.get('.ui5-menu-rp')
       .find('ui5-li:visible')
       .contains('Legal Information')
-      .invoke('show')
       .click({ force: true });
 
     cy.get('ui5-responsive-popover[placement-type="Right"]')
