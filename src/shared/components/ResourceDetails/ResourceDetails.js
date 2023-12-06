@@ -31,8 +31,6 @@ import { useUrl } from 'hooks/useUrl';
 
 import { Tooltip } from '../Tooltip/Tooltip';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
-import { useRecoilState } from 'recoil';
-import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 import { createPortal } from 'react-dom';
 
 // This component is loaded after the page mounts.
@@ -165,7 +163,6 @@ function Resource({
   disableEdit,
   disableDelete,
 }) {
-  const [showAdd, setShowAdd] = useRecoilState(showYamlUploadDialogState);
   useVersionWarning({ resourceUrl, resourceType });
   const { t } = useTranslation();
   const prettifiedResourceKind = prettifyNameSingular(
@@ -413,15 +410,7 @@ function Resource({
             {col.value(resource)}
           </DynamicPageComponent.Column>
         ))}
-        {createPortal(
-          <YamlUploadDialog
-            open={showAdd}
-            onCancel={() => {
-              setShowAdd(false);
-            }}
-          />,
-          document.body,
-        )}
+        {createPortal(<YamlUploadDialog />, document.body)}
       </DynamicPageComponent>
     </>
   );
