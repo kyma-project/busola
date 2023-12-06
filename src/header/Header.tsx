@@ -49,10 +49,17 @@ export function Header() {
   const clusters = useRecoilValue(clustersState);
 
   const setShowAdd = useSetRecoilState(showYamlUploadDialogState);
-
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
     name => name !== cluster?.name,
   );
+
+  const nonBreakableSpaces = (number: int): string => {
+    let spaces = '';
+    for (let i = 0; i < number; i++) {
+      spaces += '\u00a0';
+    }
+    return spaces;
+  };
 
   const clustersList = [
     ...inactiveClusterNames.map((name, index) => {
@@ -176,7 +183,7 @@ export function Header() {
         </MenuItem>
         <MenuItem
           key="legal-information"
-          text={t('navigation.menu.legal-information')}
+          text={t('navigation.menu.legal-information') + nonBreakableSpaces(6)}
           icon="official-service"
         >
           {legalLinks.map((legalLink: LegalLink) => (
@@ -187,7 +194,8 @@ export function Header() {
             />
           ))}
           <MenuItem
-            text={`${t('common.labels.version')} ${busolaVersion}`}
+            text={t('common.labels.version')}
+            additionalText={busolaVersion}
             icon="inspect"
             startsSection
           />
