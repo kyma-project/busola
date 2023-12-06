@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@ui5/webcomponents-react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import { useRecoilValue } from 'recoil';
+import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 import './FileInput.scss';
+import { showAddClusterWizard } from 'state/showAddClusterWizard';
 
 FileInput.propTypes = {
   fileInputChanged: PropTypes.func.isRequired,
@@ -22,8 +25,14 @@ export function FileInput({
   allowMultiple,
 }) {
   const [fileNames, setFileNames] = useState([]);
+  const openAdd = useRecoilValue(showYamlUploadDialogState);
+  const openAddCluster = useRecoilValue(showAddClusterWizard);
   const [draggingOverCounter, setDraggingCounter] = useState(0);
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (!openAdd && !openAddCluster) setFileNames([]);
+  }, [openAdd, openAddCluster]);
 
   // needed for onDrag to fire
   function dragOver(e) {

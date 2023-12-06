@@ -1,6 +1,8 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { MessageStrip, Text } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
+import { useRecoilValue } from 'recoil';
+import { showAddClusterWizard } from 'state/showAddClusterWizard';
 import { KubeconfigFileUpload } from './KubeconfigFileUpload';
 import jsyaml from 'js-yaml';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
@@ -11,6 +13,11 @@ import './KubeconfigUpload.scss';
 export function KubeconfigUpload({ kubeconfig, setKubeconfig }) {
   const [error, setError] = React.useState('');
   const [editor, setEditor] = useState(null);
+  const openAddCluster = useRecoilValue(showAddClusterWizard);
+
+  useEffect(() => {
+    if (!kubeconfig && editor && openAddCluster) editor.getModel().setValue('');
+  }, [editor, kubeconfig, openAddCluster]);
 
   const { t } = useTranslation();
 
@@ -19,7 +26,7 @@ export function KubeconfigUpload({ kubeconfig, setKubeconfig }) {
       try {
         const config = jsyaml.load(text);
 
-        if (typeof config !== 'object') {
+        if (typeof config !== 'object' && editor.getModel().getValue() !== '') {
           setError(t('clusters.wizard.not-an-object'));
         } else {
           setKubeconfig(config);
@@ -31,7 +38,7 @@ export function KubeconfigUpload({ kubeconfig, setKubeconfig }) {
         setError(message.substr(0, message.indexOf('\n')));
       }
     },
-    [t, setError, setKubeconfig],
+    [t, setError, setKubeconfig, editor],
   );
 
   return (
