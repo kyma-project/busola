@@ -1,10 +1,17 @@
+import React, { useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   Avatar,
+  Menu,
+  MenuItem,
+  Ui5CustomEvent,
+  MenuDomRef,
   ShellBar,
   ShellBarItem,
   StandardListItem,
 } from '@ui5/webcomponents-react';
+import { MenuItemClickEventDetail } from '@ui5/webcomponents/dist/Menu.js';
+
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useFeature } from 'hooks/useFeature';
@@ -17,11 +24,15 @@ import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpen
 import { Logo } from './Logo/Logo';
 import { SidebarSwitcher } from './SidebarSwitcher/SidebarSwitcher';
 import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
+import { useGetLegalLinks, LegalLink } from './SidebarMenu/useGetLegalLinks';
+import { useGetHelpLinks, GetHelpLink } from './SidebarMenu/useGetHelpLinks';
+import { useGetBusolaVersionDetails } from './SidebarMenu/useGetBusolaVersion';
 
 import './Header.scss';
 
 export function Header() {
   useAvailableNamespaces();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -29,15 +40,26 @@ export function Header() {
     'FEEDBACK',
   );
 
+  const { githubLink, busolaVersion } = useGetBusolaVersionDetails();
+  const legalLinks = useGetLegalLinks();
+  const getHelpLinks = useGetHelpLinks();
+
   const setPreferencesOpen = useSetRecoilState(isPreferencesOpenState);
   const cluster = useRecoilValue(clusterState);
   const clusters = useRecoilValue(clustersState);
 
   const setShowAdd = useSetRecoilState(showYamlUploadDialogState);
-
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
     name => name !== cluster?.name,
   );
+
+  const nonBreakableSpaces = (number: int): string => {
+    let spaces = '';
+    for (let i = 0; i < number; i++) {
+      spaces += '\u00a0';
+    }
+    return spaces;
+  };
 
   const clustersList = [
     ...inactiveClusterNames.map((name, index) => {
@@ -51,6 +73,32 @@ export function Header() {
       {t('clusters.overview.title-all-clusters')}
     </StandardListItem>,
   ];
+
+  const openNewWindow = (link: string) => {
+    const newWindow = window.open(link, '_blank', 'noopener, noreferrer');
+    if (newWindow) newWindow.opener = null;
+  };
+
+  const handleMenuItemClick = (
+    e: Ui5CustomEvent<MenuDomRef, MenuItemClickEventDetail>,
+  ) => {
+    const legalLinkUsed = legalLinks.find(x => x.label === e.detail.text);
+    const getHelpLinkUsed = getHelpLinks.find(x => x.label === e.detail.text);
+
+    if (e.detail.text === t('navigation.preferences.title')) {
+      setPreferencesOpen(true);
+    } else if (e.detail.text === t('navigation.menu.give-feedback')) {
+      openNewWindow(feedbackLink);
+    } else if (legalLinkUsed) {
+      openNewWindow(legalLinkUsed.link);
+    } else if (
+      e.detail.text === `${t('common.labels.version')} ${busolaVersion}`
+    ) {
+      openNewWindow(githubLink);
+    } else if (getHelpLinkUsed) {
+      openNewWindow(getHelpLinkUsed.link);
+    }
+  };
 
   return (
     <>
@@ -74,30 +122,85 @@ export function Header() {
             : navigate(`/cluster/${e.detail.item.textContent}`)
         }
         profile={
-          <Avatar
-            icon="customer"
-            colorScheme="Accent10"
-            accessibleName="Preferences"
-          />
+          <>
+            <Avatar
+              icon="customer"
+              colorScheme="Accent6"
+              accessibleName="Preferences"
+              id="openShellbarMenu"
+            />
+          </>
         }
-        onProfileClick={() => setPreferencesOpen(true)}
+        onProfileClick={() => setIsMenuOpen(true)}
       >
         {window.location.pathname !== '/clusters' &&
           !window.location.pathname.endsWith('/no-permissions') && (
             <ShellBarItem
               onClick={() => setShowAdd(true)}
               icon="add"
-              text="Upload YAML"
+              text={t('navigation.upload-yaml.title')}
             />
           )}
         {isFeedbackEnabled && (
           <ShellBarItem
             onClick={() => window.open(feedbackLink, '_blank')}
             icon="feedback"
-            text="Feedback"
+            text={t('navigation.feedback')}
           />
         )}
       </ShellBar>
+      <Menu
+        open={isMenuOpen}
+        opener="openShellbarMenu"
+        onAfterClose={() => {
+          setIsMenuOpen(false);
+        }}
+        onItemClick={handleMenuItemClick}
+      >
+        <MenuItem
+          onClick={() => setPreferencesOpen(true)}
+          key="preferences"
+          text={t('navigation.preferences.title')}
+          icon="wrench"
+        />
+        <MenuItem
+          key="give-feedback"
+          text={t('navigation.menu.give-feedback')}
+          icon="feedback"
+        />
+        <MenuItem
+          key="get-help"
+          text={t('navigation.menu.get-help')}
+          icon="sys-help"
+        >
+          {getHelpLinks.map((getHelpLint: GetHelpLink) => (
+            <MenuItem
+              key={getHelpLint.link}
+              text={getHelpLint.label}
+              icon="inspect"
+            />
+          ))}
+        </MenuItem>
+        <MenuItem
+          key="legal-information"
+          text={t('navigation.menu.legal-information') + nonBreakableSpaces(6)}
+          icon="official-service"
+        >
+          {legalLinks.map((legalLink: LegalLink) => (
+            <MenuItem
+              key={legalLink.link}
+              text={legalLink.label}
+              icon="inspect"
+            />
+          ))}
+          <MenuItem
+            text={t('common.labels.version')}
+            additionalText={busolaVersion}
+            icon="inspect"
+            startsSection
+          />
+        </MenuItem>
+      </Menu>
     </>
   );
 }

@@ -74,6 +74,10 @@ context('Test Cluster configuration', () => {
 
     cy.get('[title="Profile"]').click();
 
+    cy.get('ui5-li:visible')
+      .contains('Preferences')
+      .click({ force: true });
+
     cy.contains('Other')
       .parentsUntil('[role=tab]')
       .click({ force: true });
