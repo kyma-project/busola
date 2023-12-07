@@ -82,7 +82,7 @@ GARDENER_LOGIN:
   kubeconfig: null
 ```
 
-- **GET_HELP_LINKS** – is used to show or hide helper links. You can find the all available links in the following example.
+- **GET_HELP_LINKS** – is used to show or hide helper links. You can find all the available links in the following example.
   In **config**, you can find the unchangeable keys (for example, you cannot use **helpSapCom** instead of **help-sap-com**). The keys include the default link, which takes you to the default address.
 
   Example:
