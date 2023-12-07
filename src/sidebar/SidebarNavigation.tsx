@@ -17,7 +17,6 @@ import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useTranslation } from 'react-i18next';
 import { useMatch, useNavigate } from 'react-router';
 import { useUrl } from 'hooks/useUrl';
-import { Footer } from './Footer/Footer';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { NamespaceChooser } from 'header/NamespaceChooser/NamespaceChooser';
 
@@ -61,7 +60,6 @@ export function SidebarNavigation() {
       <SideNavigation
         collapsed={isSidebarCondensed}
         onSelectionChange={e => e.preventDefault()}
-        fixedItems={<Footer />}
         header={
           <>
             <SideNavigation
