@@ -8,11 +8,17 @@ context('Test Kyma Dashboard Version link', () => {
   });
 
   it('Check Kyma Dashboard Version link', () => {
-    cy.get('.ui5-sn-spacer')
-      .next()
-      .find('[role="treeitem"]')
+    cy.get('[title="Profile"]').click();
+
+    cy.get('.ui5-menu-rp')
+      .find('ui5-li:visible')
+      .contains('Legal Information')
+      .click({ force: true });
+
+    cy.get('ui5-responsive-popover[placement-type="Right"]')
+      .get('ui5-li:visible')
       .last()
-      .should('have.attr', 'title')
-      .and('include', 'Kyma Dashboard version:');
+      .invoke('text')
+      .should('contain', 'Kyma Dashboard version:');
   });
 });
