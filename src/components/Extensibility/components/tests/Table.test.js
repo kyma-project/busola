@@ -1,7 +1,7 @@
 import { TranslationBundleContext } from 'components/Extensibility/helpers';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { mount } from 'testing/enzymeUtils';
-import { fireEvent, render, waitFor } from 'testing/reactTestingUtils';
+import { render, waitFor } from 'testing/reactTestingUtils';
 import { Table } from '../Table';
 import { ThemeProvider } from '@ui5/webcomponents-react';
 

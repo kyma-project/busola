@@ -62,10 +62,7 @@ export function SidebarNavigation() {
         onSelectionChange={e => e.preventDefault()}
         header={
           <>
-            <SideNavigation
-              className="nested-navigation"
-              style={{ height: 'auto', width: 'auto' }}
-            >
+            <SideNavigation style={{ height: 'auto', width: 'auto' }}>
               <SideNavigationItem
                 className="hide-shadow"
                 icon={namespace ? 'slim-arrow-left' : 'bbyd-dashboard'}
@@ -80,14 +77,17 @@ export function SidebarNavigation() {
                 for="NamespaceComboBox"
                 style={{
                   ...spacing.sapUiTinyMarginBottom,
-                  ...spacing.sapUiTinyMarginBegin,
+                  ...spacing.sapUiSmallMarginBegin,
                 }}
               >
                 {t('common.headers.namespaces')}
               </Label>
               <FlexBox
                 alignItems="Center"
-                style={spacing.sapUiSmallMarginBottom}
+                style={{
+                  ...spacing.sapUiSmallMarginBottom,
+                  ...spacing.sapUiTinyMarginBeginEnd,
+                }}
               >
                 <Icon
                   title="Namespaces"
