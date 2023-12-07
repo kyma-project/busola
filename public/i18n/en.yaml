@@ -712,6 +712,9 @@ gardener:
     provider: Provider
 generic-list:
   no-entries-found: No entries found
+get-help:
+  kyma-project-io: kyma-project.io
+  help-sap-com: help.sap.com
 graphs:
   capacity: Capacity
   cpu: CPU
@@ -921,6 +924,11 @@ namespaces:
     usage-of-memory-requests: This Namespace uses {{valueText}} of {{maxText}} its memory requests.
 navigation:
   all-namespaces: All Namespaces
+  feedback: Feedback
+  menu:
+    get-help: Get Help
+    give-feedback: Give Feedback
+    legal-information: Legal Information
   preferences:
     title: Preferences
   upload-yaml:

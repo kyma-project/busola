@@ -2,24 +2,25 @@ import { useFeature } from 'hooks/useFeature';
 import { useTranslation } from 'react-i18next';
 import { ConfigFeature } from 'state/types';
 
-type LegalLink = {
+export type GetHelpLink = {
   label: string;
   link: string;
 };
 
-interface LegalLinksFeature extends ConfigFeature {
+interface GetHelpLinksFeature extends ConfigFeature {
   config: Record<string, Record<string, string>>;
 }
 
-export const useGetLegalLinks = (): LegalLink[] => {
+export const useGetHelpLinks = (): GetHelpLink[] => {
   const { t, i18n } = useTranslation();
-  const legalLinksConfig = useFeature<LegalLinksFeature>('LEGAL_LINKS')?.config;
+  const getHelpLinksConfig = useFeature<GetHelpLinksFeature>('GET_HELP_LINKS')
+    ?.config;
 
-  if (!legalLinksConfig) return [];
+  if (!getHelpLinksConfig) return [];
 
-  const legalLinks = Object.entries(legalLinksConfig).map(
+  const getHelpLinks = Object.entries(getHelpLinksConfig).map(
     ([translationLabel, externalLink]) => {
-      const label = t(`legal.${translationLabel}`);
+      const label = t(`get-help.${translationLabel}`);
       const link = externalLink[i18n.language] || externalLink['default'];
       return {
         label,
@@ -28,5 +29,5 @@ export const useGetLegalLinks = (): LegalLink[] => {
     },
   );
 
-  return legalLinks;
+  return getHelpLinks;
 };

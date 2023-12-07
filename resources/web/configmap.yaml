@@ -28,6 +28,16 @@ data:
               }
             }
           },
+          "GET_HELP_LINKS": {
+            "config": {
+              "kyma-project-io": {
+                "default": "https://kyma-project.io"
+              },
+              "help-sap-com": {
+                "default": "https://help.sap.com"
+              }
+            }
+          },
           "SENTRY": {
             "isEnabled": true,
             "selectors": [],

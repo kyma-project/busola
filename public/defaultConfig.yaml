@@ -14,6 +14,12 @@ config:
         trademark:
           default: https://www.sap.com/corporate/en/legal/trademark.html
           de: https://www.sap.com/corporate/de/legal/trademark.html
+    GET_HELP_LINKS:
+      config:
+        kyma-project-io:
+          default: https://kyma-project.io
+        help-sap-com:
+          default: https://help.sap.com
     SSO_LOGIN:
       isEnabled: false
       config:

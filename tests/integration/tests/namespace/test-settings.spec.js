@@ -11,6 +11,10 @@ context('Test app settings and preferences', () => {
   it('Deletes without confirmation', () => {
     cy.get('[title="Profile"]').click();
 
+    cy.get('ui5-li:visible')
+      .contains('Preferences')
+      .click({ force: true });
+
     cy.contains('Cluster interaction').click();
 
     cy.contains('.preferences-row', 'Delete without confirmation')
@@ -51,6 +55,10 @@ context('Test app settings and preferences', () => {
     // disable "deletion without confirmation" to not mess other tests
     cy.get('[title="Profile"]').click();
 
+    cy.get('ui5-li:visible')
+      .contains('Preferences')
+      .click({ force: true });
+
     cy.contains('Cluster interaction').click();
 
     cy.contains('.preferences-row', 'Delete without confirmation')
@@ -65,6 +73,10 @@ context('Test app settings and preferences', () => {
 
   it('Changes application theme', () => {
     cy.get('[title="Profile"]').click();
+
+    cy.get('ui5-li:visible')
+      .contains('Preferences')
+      .click({ force: true });
 
     cy.contains('Interface').click();
 
@@ -86,6 +98,10 @@ context('Test app settings and preferences', () => {
 
   it('Shows hidden namespaces', () => {
     cy.get('[title="Profile"]').click();
+
+    cy.get('ui5-li:visible')
+      .contains('Preferences')
+      .click({ force: true });
 
     cy.contains('Cluster interaction').click();
 
