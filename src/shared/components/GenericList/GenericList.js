@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
-import { Table } from '@ui5/webcomponents-react';
+import { AnalyticalTable, Table } from '@ui5/webcomponents-react';
 
 import {
   BodyFallback,
@@ -217,7 +217,7 @@ export const GenericList = ({
       disableMargin
       style={disableMargin ? {} : spacing.sapUiSmallMargin}
     >
-      <Table
+      {/*<Table
         className={'ui5-generic-list'}
         columns={
           <HeaderRenderer
@@ -228,8 +228,41 @@ export const GenericList = ({
         }
       >
         {renderTableBody()}
-      </Table>
-
+      </Table>*/}
+      <AnalyticalTable
+        columns={[
+          {
+            Header: 'Name',
+            accessor: 'metadata.name',
+            disableResizing: true,
+          },
+          {
+            Header: 'Created',
+            accessor: 'metadata.creationTimestamp',
+            disableResizing: true,
+          },
+          {
+            Header: 'Status',
+            accessor: 'status',
+            disableResizing: true,
+          },
+          {
+            Header: 'Actions',
+            accessor: '.',
+            id: 'actions',
+            minWidth: 100,
+            width: 100,
+            disableResizing: true,
+          },
+        ]}
+        data={entries}
+        selectionMode="SingleSelect"
+        selectionBehavior="RowOnly"
+        renderRowSubComponent={() => (
+          <div data-subcomponent-active-element style={{ height: '50px' }} />
+        )}
+        subComponentsBehavior="Visible"
+      />
       {pagination &&
         (!pagination.autoHide ||
           filteredEntries.length > pagination.itemsPerPage) && (
