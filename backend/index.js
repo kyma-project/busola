@@ -1,13 +1,13 @@
+import { makeHandleRequest, serveStaticApp, serveMonaco } from './common';
+import { handleTracking } from './tracking.js';
+import jsyaml from 'js-yaml';
+//import { requestLogger } from './utils/other'; //uncomment this to log the outgoing traffic
+
 const express = require('express');
 const compression = require('compression');
 const cors = require('cors');
 const fs = require('fs');
 const merge = require('lodash.merge');
-
-import { makeHandleRequest, serveStaticApp, serveMonaco } from './common';
-import { handleTracking } from './tracking.js';
-import jsyaml from 'js-yaml';
-//import { requestLogger } from './utils/other'; //uncomment this to log the outgoing traffic
 
 global.config = {};
 
@@ -19,6 +19,7 @@ try {
   );
 
   // config retrieved from busola's config map
+  // path exist after docker build
   if (fs.existsSync('./config/config.yaml')) {
     const configFromMap = jsyaml.load(fs.readFileSync('./config/config.yaml'));
     global.config = merge(defaultConfig, configFromMap).config;
@@ -55,9 +56,9 @@ if (process.env.NODE_ENV === 'development') {
 let server = null;
 
 if (
-  process.env.BUSOLA_SSL_ENABLED == 1 &&
-  process.env.BUSOLA_SSL_KEY_FILE != '' &&
-  process.env.BUSOLA_SSL_CRT_FILE != ''
+  process.env.BUSOLA_SSL_ENABLED === 1 &&
+  process.env.BUSOLA_SSL_KEY_FILE !== '' &&
+  process.env.BUSOLA_SSL_CRT_FILE !== ''
 ) {
   const https = require('https');
   const options = {

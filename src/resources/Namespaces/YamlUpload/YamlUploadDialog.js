@@ -8,11 +8,12 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 
 import { useTranslation } from 'react-i18next';
 import { useEventListener } from 'hooks/useEventListener';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 import { spacing } from '@ui5/webcomponents-react-base';
 import './YamlUploadDialog.scss';
+import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 export const YamlUpload = React.lazy(() => import('./YamlUpload'));
 
@@ -21,7 +22,7 @@ export const OPERATION_STATE_WAITING = 'WAITING';
 export const OPERATION_STATE_SUCCEEDED = 'SUCCEEDED';
 export const OPERATION_STATE_SOME_FAILED = 'SOME_FAILED';
 
-export function YamlUploadDialog({ open, onCancel }) {
+export function YamlUploadDialog() {
   const { t } = useTranslation();
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const defaultNamespace = namespaceId || 'default';
@@ -35,6 +36,7 @@ export function YamlUploadDialog({ open, onCancel }) {
   const [lastOperationState, setLastOperationState] = useState(
     OPERATION_STATE_INITIAL,
   );
+  const [openAdd, setShowAdd] = useRecoilState(showYamlUploadDialogState);
 
   useEffect(() => {
     if (!initialUnchangedResources?.length && resourcesWithStatuses?.length) {
@@ -53,19 +55,19 @@ export function YamlUploadDialog({ open, onCancel }) {
 
   useEventListener('keydown', ({ key }) => {
     if (key === 'Escape') {
-      onCancel();
+      setShowAdd(false);
     }
   });
 
   useEffect(() => {
-    if (!open) {
+    if (!openAdd) {
       setResourcesData(null);
       setResourcesWithStatuses(null);
       setInitialUnchangedResources(null);
       setLastOperationState(OPERATION_STATE_INITIAL);
       oldYaml.current = null;
     }
-  }, [open]);
+  }, [openAdd]);
 
   const updateYamlContent = yaml => {
     if (isEqual(yaml?.sort(), oldYaml?.current?.sort())) return;
@@ -86,7 +88,7 @@ export function YamlUploadDialog({ open, onCancel }) {
   const actions =
     lastOperationState === OPERATION_STATE_SUCCEEDED ? (
       <Button
-        onClick={onCancel}
+        onClick={() => setShowAdd(false)}
         design="Emphasized"
         aria-label="yaml-upload-close"
       >
@@ -102,7 +104,7 @@ export function YamlUploadDialog({ open, onCancel }) {
           {t('common.buttons.upload')}
         </Button>
         <Button
-          onClick={onCancel}
+          onClick={() => setShowAdd(false)}
           design="Transparent"
           data-testid="yaml-cancel"
         >
@@ -115,8 +117,8 @@ export function YamlUploadDialog({ open, onCancel }) {
 
   return (
     <Dialog
-      open={open}
-      onAfterClose={onCancel}
+      open={openAdd}
+      onAfterClose={() => setShowAdd(false)}
       headerText={t('upload-yaml.title')}
       footer={<Bar design="Footer" endContent={<>{actions}</>} />}
       className="yaml-upload-modal"

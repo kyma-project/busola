@@ -3,36 +3,36 @@ import { Dialog } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { AddClusterWizard } from './AddClusterWizard';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { showAddClusterWizard } from 'state/showAddClusterWizard';
 
-function AddClusterDialogComponent({ show, onCancel }) {
+function AddClusterDialogComponent() {
   const [kubeconfig, setKubeconfig] = useState(undefined);
+  const showWizard = useRecoilValue(showAddClusterWizard);
 
   useEffect(() => {
-    if (show) {
+    if (showWizard) {
       setKubeconfig(undefined);
     }
-  }, [show]);
+  }, [showWizard]);
 
   return (
-    <AddClusterWizard
-      kubeconfig={kubeconfig}
-      setKubeconfig={setKubeconfig}
-      onCancel={onCancel}
-    />
+    <AddClusterWizard kubeconfig={kubeconfig} setKubeconfig={setKubeconfig} />
   );
 }
-export function AddClusterDialog({ show, onCancel }) {
+export function AddClusterDialog() {
   const { t } = useTranslation();
+  const [showWizard, setShowWizard] = useRecoilState(showAddClusterWizard);
 
   return (
     <Dialog
-      open={show}
+      open={showWizard}
       className="wizard-dialog"
       headerText={t('clusters.add.title')}
-      onAfterClose={onCancel}
+      onAfterClose={() => setShowWizard(false)}
     >
       <ErrorBoundary>
-        <AddClusterDialogComponent onCancel={onCancel} show={show} />
+        <AddClusterDialogComponent />
       </ErrorBoundary>
     </Dialog>
   );

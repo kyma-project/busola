@@ -1,5 +1,5 @@
 import { Button } from '@ui5/webcomponents-react';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 
@@ -59,7 +59,7 @@ export function ClusterOverviewHeader(content) {
   const cluster = useRecoilValue(clusterState);
   const { currentCluster } = useClustersInfo();
   const config = currentCluster?.config;
-  const [showAdd, setShowAdd] = useRecoilState(showYamlUploadDialogState);
+  const setShowAdd = useSetRecoilState(showYamlUploadDialogState);
 
   const actions = (
     <Button
@@ -90,12 +90,7 @@ export function ClusterOverviewHeader(content) {
         </DynamicPageComponent.Column>
         <GardenerProvider />
       </DynamicPageComponent>
-      <YamlUploadDialog
-        open={showAdd}
-        onCancel={() => {
-          setShowAdd(false);
-        }}
-      />
+      <YamlUploadDialog />
     </>
   );
 }
