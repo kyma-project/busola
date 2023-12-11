@@ -977,8 +977,6 @@ nodes:
   name_singular: Node
   title: Nodes
   title_details: Node {{nodeName}}
-observability:
-  title: Observability
 persistent-volume-claims:
   description: <0>PersistentVolumeClaim (PVC)</0> is a request for the PersistentVolume resources.
   headers:
