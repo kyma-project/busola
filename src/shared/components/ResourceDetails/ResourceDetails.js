@@ -26,6 +26,7 @@ import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
+import { EditResource } from 'shared/components/DynamicPageComponent/EditResource';
 import { useVersionWarning } from 'hooks/useVersionWarning';
 import { useUrl } from 'hooks/useUrl';
 
@@ -387,6 +388,43 @@ function Resource({
             </Suspense>
           </>
         }
+        inlineEditForm={() => (
+          <EditResource
+            getToggleFormFn={getToggleFormFn}
+            title={
+              editActionLabel ||
+              t('components.resource-details.edit', {
+                resourceType: prettifiedResourceKind,
+              })
+            }
+            modalOpeningComponent={
+              <Button design="Emphasized">
+                {editActionLabel ||
+                  t('components.resource-details.edit', {
+                    resourceType: prettifiedResourceKind,
+                  })}
+              </Button>
+            }
+            confirmText={t('common.buttons.update')}
+            id={`edit-${resourceType}-modal`}
+            className="modal-size--l"
+            renderForm={props => (
+              <ErrorBoundary>
+                <CreateResourceForm
+                  resource={resource}
+                  resourceType={resourceType}
+                  resourceUrl={resourceUrl}
+                  namespace={namespace}
+                  refetchList={silentRefetch}
+                  toggleFormFn={toggleFormFn}
+                  resourceSchema={resourceSchema}
+                  editMode={true}
+                  {...props}
+                />
+              </ErrorBoundary>
+            )}
+          />
+        )}
       >
         <DynamicPageComponent.Column
           key="Labels"

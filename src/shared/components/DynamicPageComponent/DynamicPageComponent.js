@@ -6,6 +6,8 @@ import {
   DynamicPage,
   DynamicPageHeader,
   DynamicPageTitle,
+  ObjectPage,
+  ObjectPageSection,
   Text,
   Title,
 } from '@ui5/webcomponents-react';
@@ -33,49 +35,82 @@ export const DynamicPageComponent = ({
   children,
   columnWrapperClassName,
   content,
+  inlineEditForm,
 }) => {
+  const headerTitle = (
+    <DynamicPageTitle
+      style={title === 'Clusters Overview' ? { display: 'none' } : null}
+      breadcrumbs={
+        breadcrumbItems.length ? (
+          <Breadcrumbs design="NoCurrentPage">
+            {breadcrumbItems.map(item => {
+              return (
+                <BreadcrumbsItem
+                  aria-label="breadcrumb-item"
+                  key={item.name}
+                  href={item.url}
+                >
+                  {item.name}
+                </BreadcrumbsItem>
+              );
+            })}
+          </Breadcrumbs>
+        ) : null
+      }
+      header={<Title className="ui5-title"> {title}</Title>}
+      actions={actions}
+    />
+  );
+
+  const headerContent =
+    title !== 'Clusters Overview' ? (
+      <DynamicPageHeader className="header-wrapper">
+        {description && <Text className="description">{description}</Text>}
+        <section className={`column-wrapper ${columnWrapperClassName || ''}`}>
+          {children}
+        </section>
+      </DynamicPageHeader>
+    ) : null;
+
+  if (inlineEditForm) {
+    return (
+      <ObjectPage
+        mode="IconTabBar"
+        className="page-header"
+        alwaysShowContentHeader
+        showHideHeaderButton={false}
+        headerContentPinnable={false}
+        headerTitle={headerTitle}
+        headerContent={headerContent}
+      >
+        <ObjectPageSection
+          aria-label="View"
+          hideTitleText
+          id="view"
+          titleText="View"
+        >
+          {content}
+        </ObjectPageSection>
+
+        <ObjectPageSection
+          aria-label="Edit"
+          hideTitleText
+          id="edit"
+          titleText="Edit"
+        >
+          {inlineEditForm()}
+        </ObjectPageSection>
+      </ObjectPage>
+    );
+  }
   return (
     <DynamicPage
       className="page-header"
       alwaysShowContentHeader
       showHideHeaderButton={false}
       headerContentPinnable={false}
-      headerTitle={
-        <DynamicPageTitle
-          style={title === 'Clusters Overview' ? { display: 'none' } : null}
-          breadcrumbs={
-            breadcrumbItems.length ? (
-              <Breadcrumbs design="NoCurrentPage">
-                {breadcrumbItems.map(item => {
-                  return (
-                    <BreadcrumbsItem
-                      aria-label="breadcrumb-item"
-                      key={item.name}
-                      href={item.url}
-                    >
-                      {item.name}
-                    </BreadcrumbsItem>
-                  );
-                })}
-              </Breadcrumbs>
-            ) : null
-          }
-          header={<Title className="ui5-title">{title}</Title>}
-          actions={actions}
-        />
-      }
-      headerContent={
-        title !== 'Clusters Overview' ? (
-          <DynamicPageHeader className="header-wrapper">
-            {description && <Text className="description">{description}</Text>}
-            <section
-              className={`column-wrapper ${columnWrapperClassName || ''}`}
-            >
-              {children}
-            </section>
-          </DynamicPageHeader>
-        ) : null
-      }
+      headerTitle={headerTitle}
+      headerContent={headerContent}
     >
       {content}
     </DynamicPage>
