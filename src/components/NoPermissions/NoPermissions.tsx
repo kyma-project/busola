@@ -42,7 +42,7 @@ function NoPermissions() {
       <Text style={spacing.sapUiMediumMarginTopBottom}>
         {t('no-permissions.enter-namespace-name')}
       </Text>
-      <form className="bsl-display-flex" onSubmit={updateKubeconfig}>
+      <form className="bsl-display-flex">
         <Input
           style={spacing.sapUiNoMargin}
           placeholder={t('no-permissions.enter-namespace-name-placeholder')}
@@ -53,6 +53,7 @@ function NoPermissions() {
           design="Emphasized"
           className="update-namespace-button"
           disabled={!namespaceName}
+          onClick={() => updateKubeconfig()}
         >
           {t('common.buttons.save')}
         </Button>
