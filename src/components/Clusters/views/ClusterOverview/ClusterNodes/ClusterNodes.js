@@ -1,12 +1,8 @@
-import React from 'react';
 import { ErrorPanel } from 'shared/components/ErrorPanel/ErrorPanel';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import {
-  useNodesQuery,
-  usePrometheusNodesQuery,
-} from 'components/Nodes/nodeQueries';
+import { useNodesQuery } from 'components/Nodes/nodeQueries';
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
@@ -14,7 +10,6 @@ import { ResourceCommitment } from './ResourceCommitment/ResourceCommitment';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { ProgressBar } from 'shared/components/ProgressBar/ProgressBar';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
-import { useFeature } from 'hooks/useFeature';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
@@ -35,25 +30,15 @@ const NodeHeader = ({ nodeName }) => {
 export function ClusterNodes() {
   const { t } = useTranslation();
 
-  const prometheus = useFeature('PROMETHEUS');
-  const usePrometheusQueries = prometheus?.isEnabled;
-
-  const {
-    data: prometheusData,
-    error: prometheusDataError,
-    loading: prometheusDataLoading,
-  } = usePrometheusNodesQuery(!usePrometheusQueries);
   const {
     nodes,
     error: nodesDataError,
     loading: nodesDataLoading,
-  } = useNodesQuery(usePrometheusQueries === undefined || usePrometheusQueries);
+  } = useNodesQuery();
 
-  const data = usePrometheusQueries ? prometheusData : nodes;
-  const error = usePrometheusQueries ? prometheusDataError : nodesDataError;
-  const loading = usePrometheusQueries
-    ? prometheusDataLoading
-    : nodesDataLoading;
+  const data = nodes;
+  const error = nodesDataError;
+  const loading = nodesDataLoading;
 
   const getStatusType = status => {
     if (status === 'Ready') return 'success';
@@ -150,10 +135,8 @@ export function ClusterNodes() {
           entries={data || []}
           headerRenderer={headerRenderer}
           rowRenderer={rowRenderer}
-          serverDataError={usePrometheusQueries ? prometheusDataError : error}
-          serverDataLoading={
-            !data && (usePrometheusQueries ? prometheusDataLoading : loading)
-          }
+          serverDataError={error}
+          serverDataLoading={!data && loading}
           pagination={{ autoHide: true }}
           testid="cluster-nodes"
           searchSettings={{
