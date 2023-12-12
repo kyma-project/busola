@@ -1,4 +1,10 @@
-.custom-header::part(header) {
-  padding-right: 0;
-  padding-left: 0;
+.custom-header {
+  &::part(header) {
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  &::part(content) {
+    padding: 0;
+  }
 }
