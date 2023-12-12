@@ -136,19 +136,23 @@ export const EditResource = ({
         onError: handleFormError,
         onCompleted: handleFormSuccess,
         performManualSubmit: handleFormSubmit,
+        actions: (
+          <>
+            {renderConfirmButton()}
+            <Button onClick={resetFormFn} design="Transparent">
+              {t('common.buttons.reset')}
+            </Button>
+            <Button
+              onClick={() => {
+                setOpenStatus(false);
+              }}
+              design="Transparent"
+            >
+              {t('common.buttons.cancel')}
+            </Button>
+          </>
+        ),
       })}
-      {renderConfirmButton()}
-      <Button onClick={resetFormFn} design="Transparent">
-        {t('common.buttons.reset')}
-      </Button>
-      <Button
-        onClick={() => {
-          setOpenStatus(false);
-        }}
-        design="Transparent"
-      >
-        {t('common.buttons.cancel')}
-      </Button>
     </>
   );
 };

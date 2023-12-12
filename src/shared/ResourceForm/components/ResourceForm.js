@@ -47,6 +47,7 @@ export function ResourceForm({
   onModeChange,
   urlPath,
   handleSetResetFormFn = () => {},
+  actions,
 }) {
   // readonly schema ID, set only once
   const resourceSchemaId = useMemo(
@@ -160,19 +161,32 @@ export function ResourceForm({
       <UI5Panel
         key={`edit-panel-${singularName}`}
         style={spacing.sapUiMediumMarginTopBottom}
+        headerActions={
+          <>
+            {/* TODO STYLE IT */}
+            {mode === ModeSelector.MODE_YAML && (
+              <div
+                className="yaml-form"
+                // style={{ width: '100%', height: '100%' }}
+              >
+                <EditorActions
+                  val={convertedResource}
+                  editor={actionsEditor}
+                  title={`${resource?.metadata?.name || singularName}.yaml`}
+                  saveHidden
+                />
+              </div>
+            )}
+            {mode === ModeSelector.MODE_ADVANCED && actions}
+          </>
+        }
       >
         <form ref={formElementRef} onSubmit={onSubmit || createResource}>
           {mode === ModeSelector.MODE_YAML && (
             <div
               className="yaml-form"
-              style={{ width: '100%', height: '100%' }}
+              style={{ width: '100%', height: '100%', minHeight: '300px' }}
             >
-              <EditorActions
-                val={convertedResource}
-                editor={actionsEditor}
-                title={`${resource?.metadata?.name || singularName}.yaml`}
-                saveHidden
-              />
               {editor}
             </div>
           )}

@@ -8,6 +8,7 @@ import {
 } from '@ui5/webcomponents-react';
 
 import { spacing } from '@ui5/webcomponents-react-base';
+import './UI5Panel.scss';
 
 export const UI5Panel = ({
   fixed = true,
@@ -25,7 +26,7 @@ export const UI5Panel = ({
     <Panel
       fixed={fixed}
       key={key}
-      className={`${className}`}
+      className={`${className} custom-header`}
       style={style ? style : !disableMargin ? spacing.sapUiMediumMargin : null}
       header={
         <>
@@ -34,6 +35,8 @@ export const UI5Panel = ({
               height: '100%',
               paddingTop: '10px',
               paddingBottom: '10px',
+              paddingLeft: '10px',
+              paddingRight: '10px',
             }}
           >
             {icon && icon}
