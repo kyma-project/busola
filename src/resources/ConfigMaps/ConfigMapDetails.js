@@ -8,6 +8,7 @@ import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 import { ConfigMapCreate } from './ConfigMapCreate';
 
 export function ConfigMapDetails(props) {
+  console.log(props);
   const { t } = useTranslation();
 
   const ConfigMapEditor = resource => {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
-import { Button } from '@ui5/webcomponents-react';
+import { Button, FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { Link } from 'react-router-dom';
 import { createPatch } from 'rfc6902';
 import { cloneDeep } from 'lodash';
@@ -32,6 +32,8 @@ import { HttpError } from 'shared/hooks/BackendAPI/config';
 import { ForceUpdateModalContent } from 'shared/ResourceForm/ForceUpdateModalContent';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { createPortal } from 'react-dom';
+import { ResourceDetails } from '../ResourceDetails/ResourceDetails';
+import ConfigMapDetails from 'resources/ConfigMaps/ConfigMapDetails';
 
 const Injections = React.lazy(() =>
   import('../../../components/Extensibility/ExtensibilityInjections'),
@@ -93,6 +95,10 @@ ResourcesList.defaultProps = {
 };
 
 export function ResourcesList(props) {
+  const [details, setDetails] = useState(false);
+
+  console.log(details);
+
   if (!props.resourceUrl) {
     return <></>; // wait for the context update
   }
@@ -100,34 +106,59 @@ export function ResourcesList(props) {
   const content = props.resources ? (
     <ResourceListRenderer
       resources={(props.resources || []).filter(props.filterFn)}
+      setDetails={setDetails}
       {...props}
     />
   ) : (
-    <Resources {...props} />
+    <Resources setDetails={setDetails} {...props} />
   );
 
   return (
-    <YamlEditorProvider>
-      {!props.isCompact ? (
-        <DynamicPageComponent
-          title={prettifyNamePlural(props.resourceTitle, props.resourceType)}
-          actions={
-            <>
-              <Injections
-                destination={props.resourceType}
-                slot="list-header"
-                root={props.resources}
+    <FlexibleColumnLayout
+      style={{ height: '100%' }}
+      layout={details ? 'TwoColumnsStartExpanded' : 'OneColumn'}
+      startColumn={
+        <div slot="startColumn">
+          <YamlEditorProvider>
+            {!props.isCompact ? (
+              <DynamicPageComponent
+                title={prettifyNamePlural(
+                  props.resourceTitle,
+                  props.resourceType,
+                )}
+                actions={
+                  <>
+                    <Injections
+                      destination={props.resourceType}
+                      slot="list-header"
+                      root={props.resources}
+                    />
+                    {props.customHeaderActions}
+                  </>
+                }
+                description={props.description}
+                content={content}
               />
-              {props.customHeaderActions}
-            </>
-          }
-          description={props.description}
-          content={content}
-        />
-      ) : (
-        content
-      )}
-    </YamlEditorProvider>
+            ) : (
+              content
+            )}
+          </YamlEditorProvider>
+        </div>
+      }
+      midColumn={
+        <div slot="midColumn">
+          <ConfigMapDetails
+            resourceName={'kube-root-ca.crt'}
+            namespace={'default'}
+            resourceUrl={
+              '/api/v1/namespaces/default/configmaps/kube-root-ca.crt'
+            }
+            resourceType={'ConfigMaps'}
+            hasDetailsView={true}
+          />
+        </div>
+      }
+    />
   );
 }
 
@@ -164,6 +195,7 @@ function Resources(props) {
 }
 
 export function ResourceListRenderer({
+  setDetails,
   resourceUrl,
   resourceType,
   resourceTitle,
@@ -237,15 +269,15 @@ export function ResourceListRenderer({
 
   const linkTo = entry =>
     customUrl ? customUrl(entry) : resourceUrlFn(entry, { resourceType });
-
+  console.log(setDetails);
   const defaultColumns = [
     {
       header: t('common.headers.name'),
       value: entry =>
         hasDetailsView ? (
-          <Link className="bsl-link" to={linkTo(entry)}>
+          <p className="bsl-link" onClick={() => setDetails(true)}>
             {nameSelector(entry)}
-          </Link>
+          </p>
         ) : (
           <b>{nameSelector(entry)}</b>
         ),

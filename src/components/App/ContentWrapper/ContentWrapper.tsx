@@ -6,6 +6,7 @@ type ContentWrapperProps = {
 };
 
 export const ContentWrapper = ({ children }: ContentWrapperProps) => {
+  console.log(children);
   return (
     <div id="content-wrap" style={spacing.sapUiTinyMarginTop}>
       <div className="content-scroll">{children}</div>

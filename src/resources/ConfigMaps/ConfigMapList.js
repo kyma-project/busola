@@ -4,10 +4,12 @@ import { useTranslation, Trans } from 'react-i18next';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { Link } from 'shared/components/Link/Link';
+import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 
 import { ConfigMapCreate } from './ConfigMapCreate';
 
 export function ConfigMapList(props) {
+  console.log(props);
   const { t } = useTranslation();
 
   const customColumns = [
