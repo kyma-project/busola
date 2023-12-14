@@ -1,5 +1,7 @@
 module-name: busola
-protecode: []
+protecode:
+  - europe-docker.pkg.dev/kyma-project/prod/busola-backend:latest
+  - europe-docker.pkg.dev/kyma-project/prod/busola-web:latest
 whitesource:
   language: javascript
   exclude:

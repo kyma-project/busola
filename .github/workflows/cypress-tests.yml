@@ -1,0 +1,65 @@
+# fragments shamelessly stolen from https://github.com/kyma-project/api-gateway/tree/main/.github
+name: Cypress PoC
+on: workflow_dispatch
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    # environment:
+    #     name: release
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - name: Create Single Cluster
+        uses: AbsaOSS/k3d-action@4e8b3239042be1dc0aed6c5eb80c13b18200fc79 #v2.4.0
+        with:
+          cluster-name: "k3dCluster"
+          args: >-
+            --agents 1
+            --port 80:80@loadbalancer
+            --port 443:443@loadbalancer
+            --wait
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 16
+      - name: setup_busola
+        shell: bash
+        run: |
+            set -e
+            npm ci
+            npm run build
+            npm i -g serve
+      - name: run_tests
+        shell: bash
+        run: |
+          k3d kubeconfig get k3dCluster > tests/integration/fixtures/kubeconfig.yaml
+          export CYPRESS_DOMAIN=http://localhost:3000
+          serve -s build > busola.log &
+
+          pushd backend
+          npm start > backend.log &
+          popd
+          
+          echo "waiting for server to be up..."
+          while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' "$CYPRESS_DOMAIN")" != "200" ]]; do sleep 5; done
+          sleep 10
+          
+          cd tests/integration
+          npm ci && npm run "test:namespace"
+      - name: Uploads artifacts
+        uses: actions/upload-artifact@v3
+        if: ${{ always() }}
+        with:
+          name: cypress-${{ github.job }}
+          path: tests/integration/cypress/
+          retention-days: 90
+      - name: Upload Busola logs
+        uses: actions/upload-artifact@v3
+        if: ${{ always() }}
+        with:
+          name: busola-logs-${{ github.job }}
+          path: |
+            backend/backend.log
+            busola.log
+          retention-days: 90
