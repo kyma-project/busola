@@ -2,7 +2,7 @@
 FROM alpine:3.19.0 AS builder
 ARG TAG_default_tag
 
-RUN apk add nodejs=16.20.2-r0 npm=8.10.0-r0 --repository http://dl-cdn.alpinelinux.org/alpine/v3.16/main
+RUN apk add nodejs=16.20.2-r0 npm --repository http://dl-cdn.alpinelinux.org/alpine/v3.16/main
 
 WORKDIR /app
 
