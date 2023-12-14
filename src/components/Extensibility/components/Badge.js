@@ -37,7 +37,6 @@ export function Badge({
   let type = null;
   if (structure?.highlights) {
     const match = Object.entries(structure.highlights).find(([key, rule]) => {
-      console.log(value, rule, rule.includes(value));
       if (Array.isArray(rule)) {
         return rule.includes(value);
       } else {
