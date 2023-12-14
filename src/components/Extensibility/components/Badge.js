@@ -37,6 +37,7 @@ export function Badge({
   let type = null;
   if (structure?.highlights) {
     const match = Object.entries(structure.highlights).find(([key, rule]) => {
+      console.log(value, rule, rule.includes(value));
       if (Array.isArray(rule)) {
         return rule.includes(value);
       } else {
@@ -56,6 +57,11 @@ export function Badge({
       type = match[0];
     }
   }
+
+  if (type === 'negative') type = 'warning';
+  else if (type === 'informative') type = 'information';
+  else if (type === 'positive') type = 'success';
+  else if (type === 'critical') type = 'error';
 
   return isNil(value) ? (
     emptyLeafPlaceholder

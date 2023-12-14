@@ -211,7 +211,7 @@ Badge widgets render texts as a status badge, using a set of predefined rules to
 
 - **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
   If the **translations** section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
-- **highlights** - an optional map of highlight rules. Key refers to the type of highlight, while the rule can just be a plain array of values or a string containing a [JSONata](jsonata.md) rule. Allowed keys are `information`, `success`, `warning` and `error`.
+- **highlights** - an optional map of highlight rules. Key refers to the type of highlight, while the rule can just be a plain array of values or a string containing a [JSONata](jsonata.md) rule. Allowed keys are `informative`, `positive`, `warning` and `critical`.
 - **description** - a [JSONata](jsonata.md) expression used to fetch additional information that will be displayed in a tooltip when hovering over the badge.
 - **copyable** - an optional flag to display a **Copy to clipboard** button next to the widget. By default set to `false`.
 
@@ -219,10 +219,10 @@ Badge widgets render texts as a status badge, using a set of predefined rules to
 
 When no highlights are provided, the following values are automatically handled:
 
-- rendered as information: `initial`, `pending`, `available`, `released`.
-- rendered as success: `ready`, `bound`, `running`, `success`, `succeeded`, `ok`.
+- rendered as informative: `initial`, `pending`, `available`, `released`.
+- rendered as positive: `ready`, `bound`, `running`, `success`, `succeeded`, `ok`.
 - rendered as warning: `unknown`, `warning`.
-- rendered as error: `error`, `failure`, `invalid`.
+- rendered as critical: `error`, `failure`, `invalid`.
 
 #### Example
 
