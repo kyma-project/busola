@@ -11,7 +11,7 @@ const isK8sResource = resource => {
   return resource.apiVersion && resource.kind && resource.metadata;
 };
 
-function YamlUpload({
+export function YamlUpload({
   resourcesData,
   setResourcesData,
   setLastOperationState,
@@ -72,4 +72,3 @@ function YamlUpload({
     </div>
   );
 }
-export default YamlUpload;
