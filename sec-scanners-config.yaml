@@ -1,6 +1,5 @@
 module-name: busola
 protecode:
-  - europe-docker.pkg.dev/kyma-project/prod/busola:latest
   - europe-docker.pkg.dev/kyma-project/prod/busola-backend:latest
   - europe-docker.pkg.dev/kyma-project/prod/busola-web:latest
 whitesource:
