@@ -57,29 +57,31 @@ describe('ResourceDetails', () => {
 
     it('Column visibility', async () => {
       const { queryByText } = render(
-        <Suspense fallback="loading">
-          <ResourceDetails
-            resourceUrl="test-resource-url"
-            resourceType="test-resource-type"
-            customColumns={[
-              {
-                header: 'some-header--hidden',
-                value: () => 'should not be visible',
-                visibility: () => ({ visible: false }),
-              },
-              {
-                header: 'some-header--visible',
-                value: () => 'should be visible',
-                visibility: () => ({ visible: true }),
-              },
-              {
-                header: 'some-header--with-error',
-                value: () => 'will be ignored',
-                visibility: () => ({ error: 'error!' }),
-              },
-            ]}
-          />
-        </Suspense>,
+        <ThemeProvider>
+          <Suspense fallback="loading">
+            <ResourceDetails
+              resourceUrl="test-resource-url"
+              resourceType="test-resource-type"
+              customColumns={[
+                {
+                  header: 'some-header--hidden',
+                  value: () => 'should not be visible',
+                  visibility: () => ({ visible: false }),
+                },
+                {
+                  header: 'some-header--visible',
+                  value: () => 'should be visible',
+                  visibility: () => ({ visible: true }),
+                },
+                {
+                  header: 'some-header--with-error',
+                  value: () => 'will be ignored',
+                  visibility: () => ({ error: 'error!' }),
+                },
+              ]}
+            />
+          </Suspense>
+        </ThemeProvider>,
       );
 
       await waitFor(() => {
