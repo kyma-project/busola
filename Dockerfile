@@ -1,8 +1,8 @@
 # ---- Base Alpine with Node ----
-FROM alpine:3.16.8 AS builder
+FROM alpine:3.19.0 AS builder
 ARG TAG_default_tag
 
-RUN apk add --update nodejs npm
+RUN apk add nodejs=16.20.2-r0 npm=8.10.0-r0 --repository http://dl-cdn.alpinelinux.org/alpine/v3.16/main
 
 WORKDIR /app
 
