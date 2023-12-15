@@ -13,6 +13,8 @@ k3d kubeconfig get k3dCluster > tests/integration/fixtures/kubeconfig.yaml
 }
 
 function build_and_run_busola() {
+echo node -v
+echo npm -v
 npm ci
 npm run build
 
