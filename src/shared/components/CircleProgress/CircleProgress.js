@@ -67,7 +67,10 @@ export const CircleProgress = ({
   return (
     <TooltipWrapper tooltipProps={tooltip}>
       <div className={circleProgressClasses} onClick={onClick}>
-        <span className="title" style={titleStyle}>
+        <span
+          className="title"
+          style={{ ...titleStyle, ...spacing.sapUiSmallMarginBottom }}
+        >
           {isInErrorState(percent, max, reversed) && (
             <Icon
               className="bsl-icon-s"

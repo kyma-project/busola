@@ -155,7 +155,7 @@ export function ClusterNodes() {
         )}
       <div
         className="cluster-overview__graphs-wrapper"
-        style={spacing.sapUiMediumMargin}
+        style={spacing.sapUiSmallMargin}
       >
         <StatsPanel type="cluster" disableMargin />
         <ResourceCommitment />
