@@ -20,15 +20,15 @@ export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = s
   get: ({ get }) => {
     const navNodes: NavNode[] = get(clusterAndNsNodesSelector);
     const activeNamespaceId = get(activeNamespaceIdState);
-    const observabilityNodes = get(externalNodesSelector);
+    const externalNodes = get(externalNodesSelector);
     const configuration = get(configurationAtom);
     const features = configuration?.features;
 
     const scope: Scope = activeNamespaceId ? 'namespace' : 'cluster';
-    if (!navNodes || !observabilityNodes) {
+    if (!navNodes || !externalNodes) {
       return [];
     }
-    let allNodes = [...navNodes, ...observabilityNodes];
+    let allNodes = [...navNodes, ...externalNodes];
 
     const extResources = get(extensionsState);
     const isExtensibilityOn = features?.EXTENSIBILITY?.isEnabled;
