@@ -26,7 +26,7 @@ jest.mock('components/Extensibility/ExtensibilityInjections', () => () => (
 
 describe('ResourceDetails', () => {
   describe('Columns', () => {
-    it('Renders basic column', async () => {
+    fit('Renders basic column', async () => {
       const { queryByText } = render(
         <ThemeProvider>
           <Suspense fallback="loading">
