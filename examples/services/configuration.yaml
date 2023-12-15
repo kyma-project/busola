@@ -54,7 +54,7 @@ data:
             highlights:
               success:
                 - 'true'
-              error:
+              critical:
                 - 'false'
       - widget: ResourceList
         source: $apirules()

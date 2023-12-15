@@ -22,7 +22,7 @@ injections: |-
         highlights: 
           success:
             - 'OK'
-          error:
+          critical:
             - 'ERROR'
             - 'SKIPPED'
         source: 'status.APIRuleStatus.code ? status.APIRuleStatus.code : "UNKNOWN"'

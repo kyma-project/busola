@@ -234,7 +234,7 @@ When no highlights are provided, the following values are automatically handled:
     success:
       - Running
       - ok
-    error: $item < 0
+    critical: $item < 0
   description: status.message
 ```
 
@@ -837,7 +837,7 @@ injections: |-
         highlights:
           success:
             - 'OK'
-          error:
+          critical:
             - 'ERROR'
             - 'SKIPPED'
         source: 'status.APIRuleStatus.code ? status.APIRuleStatus.code : "UNKNOWN"'

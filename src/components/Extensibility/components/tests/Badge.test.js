@@ -44,14 +44,14 @@ describe('Badge', () => {
     const value = -2;
     const structure = {
       highlights: {
-        Error: 'data < 0',
+        critical: 'data < 0',
       },
     };
 
     const wrapper = shallow(<Badge value={value} structure={structure} />);
     const status = wrapper.find(StatusBadge);
     const badgeProps = status.props();
-    expect(badgeProps.type).toEqual('Error');
+    expect(badgeProps.type).toEqual('critical');
     expect(badgeProps.autoResolveType).toEqual(false);
     expect(status).toHaveLength(1);
   });
