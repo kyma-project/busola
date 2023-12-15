@@ -45,18 +45,6 @@ data:
               "dsn": ""
             }
           },
-          "OBSERVABILITY": {
-            "isEnabled": true,
-            "stage": "SECONDARY",
-            "config": {
-              "links": [
-                {
-                  "label": "Grafana",
-                  "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/monitoring-grafana"
-                }
-              ]
-            }
-          },
           "KUBECONFIG_ID": {
             "config": {
               "kubeconfigUrl": "/kubeconfig"

@@ -1,18 +1,16 @@
 import { RecoilValueReadOnly, selector } from 'recoil';
 import { configurationAtom } from '../configuration/configurationAtom';
-import { predefinedCategories } from './categories';
 import { ConfigFeature, configFeaturesNames, NavNode } from '../types';
 import { getFetchFn } from '../utils/getFetchFn';
-import { FetchFn } from '../../shared/hooks/BackendAPI/useFetch';
 
 const createExternalNode = (
   url: string,
   label: string,
-  category?: string,
+  category: string,
   icon?: string,
 ): NavNode => ({
   resourceType: '',
-  category: category || predefinedCategories.observability,
+  category: category,
   icon: icon,
   namespaced: false,
   label: label,
@@ -22,30 +20,6 @@ const createExternalNode = (
   apiGroup: '',
   externalUrl: url.startsWith('http') ? url : `https://${url}`,
 });
-
-const getObservabilityNodes = async (
-  fetchFn: FetchFn,
-  observabilityFeature: ConfigFeature | undefined,
-): Promise<NavNode[]> => {
-  if (!observabilityFeature?.isEnabled) {
-    return [];
-  }
-
-  const links = observabilityFeature!.config?.links || [];
-
-  return await Promise.all(
-    links.map(async ({ label, path }: { label: string; path: string }) => {
-      try {
-        const url = await fetchObservabilityHost(fetchFn, path);
-        return createExternalNode(url, label);
-      } catch (e) {
-        //this error is caught to not reach the ErrorBoundary component
-        console.error('Cannot fetch an observability link: ', e);
-        return null;
-      }
-    }),
-  );
-};
 
 const getExternalNodes = (
   externalNodesFeature: ConfigFeature | undefined,
@@ -86,25 +60,10 @@ export const externalNodesSelector: RecoilValueReadOnly<
       return [];
     }
 
-    const observabilityNodes = await getObservabilityNodes(
-      fetchFn,
-      features[configFeaturesNames.OBSERVABILITY],
-    );
     const externalNodes = getExternalNodes(
       features[configFeaturesNames.EXTERNAL_NODES],
     );
 
-    return [
-      ...observabilityNodes.filter(n => n),
-      ...externalNodes.filter(n => n),
-    ];
+    return [...externalNodes.filter(n => n)];
   },
 });
-
-async function fetchObservabilityHost(fetchFn: FetchFn, vsPath: string) {
-  const res = await fetchFn({
-    relativeUrl: '/' + vsPath,
-    init: {},
-  });
-  return (await res.json()).spec.hosts[0];
-}
