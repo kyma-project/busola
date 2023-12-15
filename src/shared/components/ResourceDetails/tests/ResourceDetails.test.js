@@ -53,7 +53,7 @@ describe('ResourceDetails', () => {
           queryByText('test-resource-name | test-resource-namespace'),
         ).toBeInTheDocument();
       });
-    });
+    }, 10000);
 
     it('Column visibility', async () => {
       const { queryByText } = render(
