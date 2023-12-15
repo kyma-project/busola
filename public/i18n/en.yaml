@@ -1144,9 +1144,14 @@ resource-graph:
   title: Resource Graph
 resource-quotas:
   headers:
-    limits: Limits
-    requests: Requests
+    limits:
+      memory: Memory Limits
+      cpu: CPU Limits
+    requests:
+      memory: Memory requests
+      cpu: CPU request
   title: Resource Quotas
+  name_singular: Resource Quota
 role-bindings:
   create-modal:
     api-group: API Group
