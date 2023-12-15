@@ -13,8 +13,6 @@ k3d kubeconfig get k3dCluster > tests/integration/fixtures/kubeconfig.yaml
 }
 
 function build_and_run_busola() {
-echo node -v
-echo npm -v
 npm ci
 npm run build
 
@@ -29,6 +27,9 @@ echo "waiting for server to be up..."
 while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' "$CYPRESS_DOMAIN")" != "200" ]]; do sleep 5; done
 sleep 10
 }
+
+echo node -v
+echo npm -v
 
 deploy_k3d  &> $ARTIFACTS/k3d-deploy.log &
 build_and_run_busola  &> $ARTIFACTS/busola-build.log &
