@@ -173,20 +173,6 @@ HIDDEN_NAMESPACES:
 
   The link under the given key is selected based on your language code (de, en, pl, etc.). If the code is not available, the default link is used.
 
-* **OBSERVABILITY** – is used to render nodes in the navigation. The **label** parameter shows the name of the given service. The **path** parameter is used by Busola during the bootstrapping. Busola sends a request to the cluster address. The **path** value and the cluster must return the VirtualService object. If the object is found, you receive an address to which the node in the navigation leads.
-
-  Defualt settings:
-
-  ```yaml
-  OBSERVABILITY:
-    isEnabled: true
-    config:
-      links:
-        - label: Grafana
-          path: >-
-            apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/monitoring-grafana
-  ```
-
 * **PROTECTED_RESOURCES** – is used to block the edit and delete functions based on the determined rules. If the resource meets the rule requirements, the resource becomes protected and cannot be edited/deleted.
 
   Each resource requires the **match** field, which includes a list of key-value pairs. The proper rule description is when the definition given in the key matches the value.
