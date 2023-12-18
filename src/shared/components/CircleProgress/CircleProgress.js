@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@ui5/webcomponents-react';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
@@ -69,7 +68,7 @@ export const CircleProgress = ({
       <div className={circleProgressClasses} onClick={onClick}>
         <span
           className="title"
-          style={{ ...titleStyle, ...spacing.sapUiSmallMarginBottom }}
+          style={{ ...titleStyle, ...spacing.sapUiTinyMarginBottom }}
         >
           {isInErrorState(percent, max, reversed) && (
             <Icon

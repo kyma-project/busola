@@ -5,8 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { useNodesQuery } from 'components/Nodes/nodeQueries';
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
-import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
-import { ResourceCommitment } from './ResourceCommitment/ResourceCommitment';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { ProgressBar } from 'shared/components/ProgressBar/ProgressBar';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
@@ -17,6 +15,8 @@ import { useUrl } from 'hooks/useUrl';
 
 import { spacing } from '@ui5/webcomponents-react-base';
 import './ClusterNodes.scss';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { CircleProgress } from 'shared/components/CircleProgress/CircleProgress';
 
 const NodeHeader = ({ nodeName }) => {
   const { clusterUrl } = useUrl();
@@ -126,6 +126,9 @@ export function ClusterNodes() {
     data?.[0]?.status?.nodeInfo?.kubeletVersion,
   );
 
+  const cpu = { usage: 5, capacity: 10 };
+  const memory = { usage: 6, capacity: 9 };
+
   return (
     <>
       {!(error && error.toString().includes('Error: nodes is forbidden')) && (
@@ -157,8 +160,33 @@ export function ClusterNodes() {
         className="cluster-overview__graphs-wrapper"
         style={spacing.sapUiSmallMargin}
       >
-        <StatsPanel type="cluster" disableMargin />
-        <ResourceCommitment />
+        <UI5Panel disableMargin title="CPU Usage">
+          <CircleProgress
+            color="var(--sapIndicationColor_7)"
+            value={cpu.usage}
+            max={cpu.capacity}
+            title={t('machine-info.cpu-m')}
+            reversed={true}
+            tooltip={{
+              content: `${t('machine-info.cpu-usage')} ${cpu.percentage}`,
+              position: 'right',
+            }}
+          />
+        </UI5Panel>
+        <UI5Panel disableMargin title="Memory Usage">
+          <CircleProgress
+            color="var(--sapIndicationColor_6)"
+            value={memory.usage}
+            max={memory.capacity}
+            title={t('machine-info.memory-gib')}
+            reversed={true}
+            tooltip={{
+              content: `${t('machine-info.memory-usage')} ${memory.percentage}`,
+              position: 'right',
+            }}
+          />
+        </UI5Panel>
+        <UI5Panel disableMargin title="Test"></UI5Panel>
       </div>
       {Events}
     </>

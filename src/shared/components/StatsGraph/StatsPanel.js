@@ -1,5 +1,5 @@
 import { zip } from 'lodash';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   BusyIndicator,
   SegmentedButton,
@@ -7,11 +7,9 @@ import {
 } from '@ui5/webcomponents-react';
 
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
-import { useFeature } from 'hooks/useFeature';
 import { getErrorMessage } from 'shared/utils/helpers';
 import { useTranslation } from 'react-i18next';
 
-import { usePrometheus } from 'shared/hooks/usePrometheus';
 import { StatsGraph } from 'shared/components/StatsGraph';
 import { GraphLegend } from 'shared/components/GraphLegend/GraphLegend';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
@@ -22,24 +20,7 @@ const DATA_POINTS = 60;
 
 export function SingleGraph({ type, mode, timeSpan, metric, ...props }) {
   const { t } = useTranslation();
-  const {
-    data,
-    binary,
-    unit,
-    error,
-    loading,
-    startDate,
-    endDate,
-  } = usePrometheus({
-    type,
-    mode,
-    metricId: metric,
-    additionalProps: {
-      items: DATA_POINTS,
-      timeSpan,
-      ...props,
-    },
-  });
+  const { data, binary, unit, error, loading, startDate, endDate } = {};
 
   return (
     <>
@@ -78,26 +59,8 @@ export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
     loading: loading1,
     startDate,
     endDate,
-  } = usePrometheus({
-    type,
-    mode: 'single',
-    metricId: metric1,
-    additionalProps: {
-      items: DATA_POINTS,
-      timeSpan,
-      ...props,
-    },
-  });
-  const { data: data2, error: error2, loading: loading2 } = usePrometheus({
-    type,
-    mode: 'single',
-    metricId: metric2,
-    additionalProps: {
-      items: DATA_POINTS,
-      timeSpan,
-      ...props,
-    },
-  });
+  } = {};
+  const { data: data2, error: error2, loading: loading2 } = {};
 
   return (
     <>
@@ -149,16 +112,7 @@ export function SingleMetricMultipeGraph({
     loading,
     startDate,
     endDate,
-  } = usePrometheus({
-    type,
-    mode,
-    metricId: metric,
-    additionalProps: {
-      items: DATA_POINTS,
-      timeSpan,
-      ...props,
-    },
-  });
+  } = {};
 
   const legendValues = (labels || defaultLabels)
     .map(l => {
@@ -276,12 +230,6 @@ export function StatsPanel({
   const [timeSpan, setTimeSpan] = useState(visibleTimeSpans[0]);
   const { t } = useTranslation();
 
-  const prometheus = useFeature('PROMETHEUS');
-
-  if (!prometheus?.isEnabled) {
-    return '';
-  }
-
   const graphOptions = getGraphOptions(type);
   return (
     <UI5Panel
@@ -292,7 +240,7 @@ export function StatsPanel({
         ) : (
           <Dropdown
             selectedKey={metric}
-            onSelect={(e, val) => {
+            onSelect={(_, val) => {
               setMetric(val.key);
               setTimeSpan(getTimeSpansByMetric(val.key)[0]);
             }}
