@@ -20,7 +20,7 @@ injections: |-
       - name: status
         widget: Badge
         highlights: 
-          success:
+          positive:
             - 'OK'
           critical:
             - 'ERROR'

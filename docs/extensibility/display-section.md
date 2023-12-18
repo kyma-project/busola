@@ -231,7 +231,7 @@ When no highlights are provided, the following values are automatically handled:
   widget: Badge
   placeholder: '-'
   highlights:
-    success:
+    positive:
       - Running
       - ok
     critical: $item < 0
@@ -835,7 +835,7 @@ injections: |-
       - name: status
         widget: Badge
         highlights:
-          success:
+          positive:
             - 'OK'
           critical:
             - 'ERROR'

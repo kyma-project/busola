@@ -52,7 +52,7 @@ data:
             sort: true
             widget: Badge
             highlights:
-              success:
+              positive:
                 - 'true'
               critical:
                 - 'false'
