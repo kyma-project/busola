@@ -1,6 +1,12 @@
 export function createResourceQuotaTemplate({
-  limits = '3Gi',
-  requests = '2.8Gi',
+  limits = {
+    memory: '3Gi',
+    cpu: '4',
+  },
+  requests = {
+    memory: '2.8Gi',
+    cpu: '2',
+  },
   name = '',
   namespaceName = '',
 }) {
@@ -13,8 +19,10 @@ export function createResourceQuotaTemplate({
     },
     spec: {
       hard: {
-        'limits.memory': limits,
-        'requests.memory': requests,
+        'limits.memory': limits.memory,
+        'limits.cpu': limits.cpu,
+        'requests.memory': requests.memory,
+        'requests.cpu': requests.cpu,
       },
     },
   };
