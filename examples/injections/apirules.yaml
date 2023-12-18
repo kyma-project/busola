@@ -20,9 +20,9 @@ injections: |-
       - name: status
         widget: Badge
         highlights: 
-          success:
+          positive:
             - 'OK'
-          error:
+          critical:
             - 'ERROR'
             - 'SKIPPED'
         source: 'status.APIRuleStatus.code ? status.APIRuleStatus.code : "UNKNOWN"'

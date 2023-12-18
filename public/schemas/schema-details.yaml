@@ -119,7 +119,7 @@ $widgets:
           type: object
           widget: FormGroup
           properties:
-            information:
+            informative:
               type: [string, array]
               widget: MultiType
               widgets:
@@ -127,7 +127,7 @@ $widgets:
                 array: SimpleList
               items:
                 type: string
-            success:
+            positive:
               type: [string, array]
               widget: MultiType
               widgets:
@@ -135,7 +135,15 @@ $widgets:
                 array: SimpleList
               items:
                 type: string
-            error:
+            negative:
+              type: [string, array]
+              widget: MultiType
+              widgets:
+                string: Jsonata
+                array: SimpleList
+              items:
+                type: string
+            critical:
               type: [string, array]
               widget: MultiType
               widgets:
