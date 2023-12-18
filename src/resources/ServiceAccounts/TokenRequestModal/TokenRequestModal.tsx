@@ -10,6 +10,7 @@ import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 
 import { spacing } from '@ui5/webcomponents-react-base';
+import { createPortal } from 'react-dom';
 
 const expirationSecondsOptions = [
   {
@@ -87,86 +88,91 @@ export function TokenRequestModal({
   useEventListener('keydown', handleCloseWithEscape);
 
   return (
-    <Dialog
-      open
-      onAfterClose={handleCloseModal}
-      headerText={t('service-accounts.token-request.generate')}
-      footer={
-        <Bar
-          design="Footer"
-          endContent={
-            <>
-              <Button onClick={handleCloseModal}>
-                {t('common.buttons.close')}
-              </Button>
-            </>
+    <>
+      {createPortal(
+        <Dialog
+          open
+          onAfterClose={handleCloseModal}
+          headerText={t('service-accounts.token-request.generate')}
+          footer={
+            <Bar
+              design="Footer"
+              endContent={
+                <>
+                  <Button onClick={handleCloseModal}>
+                    {t('common.buttons.close')}
+                  </Button>
+                </>
+              }
+            />
           }
-        />
-      }
-    >
-      {/*@ts-ignore*/}
-      <ResourceForm.Single
-        resource={tokenRequest}
-        setResource={setTokenRequest}
-      >
-        {/*@ts-ignore*/}
-        <ResourceForm.FormField
-          simple
-          required
-          propertyPath="$.spec.expirationSeconds"
-          inputInfo={t('service-accounts.token-request.input-info')}
-          label={t('service-accounts.token-request.expiration-seconds')}
-          input={ComboboxInputWithSeconds}
-        />
-        <div style={spacing.sapUiSmallMarginTop}>
-          <MessageStrip design="Warning" hideCloseButton>
-            {t('service-accounts.token-request.warning')}
-          </MessageStrip>
-          <div
-            className="bsl-display-flex"
-            style={{
-              justifyContent: 'flex-end',
-              marginTop: spacing.sapUiSmallMarginTop.marginTop,
-              marginBottom: spacing.sapUiSmallMarginBottom.marginBottom,
-            }}
+        >
+          {/*@ts-ignore*/}
+          <ResourceForm.Single
+            resource={tokenRequest}
+            setResource={setTokenRequest}
           >
             {/*@ts-ignore*/}
-            <CopiableText
-              iconOnly
-              buttonText={t('common.buttons.copy')}
-              style={spacing.sapUiTinyMarginEnd}
-              textToCopy={kubeconfigYaml}
-              disabled={token === ''}
+            <ResourceForm.FormField
+              simple
+              required
+              propertyPath="$.spec.expirationSeconds"
+              inputInfo={t('service-accounts.token-request.input-info')}
+              label={t('service-accounts.token-request.expiration-seconds')}
+              input={ComboboxInputWithSeconds}
             />
-            <Button
-              onClick={() => downloadKubeconfig(serviceAccountName, token)}
-              disabled={token === ''}
-              design="Transparent"
-              style={spacing.sapUiTinyMarginEnd}
-              icon="download"
-              iconEnd
-            >
-              {t('service-accounts.headers.download-kubeconfig')}
-            </Button>
-            <Button
-              onClick={generateTokenRequest}
-              disabled={isExpirationSecondsValueANumber()}
-            >
-              {t('common.buttons.generate-name')}
-            </Button>
-          </div>
-          {/*@ts-ignore*/}
-          <Editor
-            value={kubeconfigYaml}
-            updateValueOnParentChange
-            readOnly
-            autocompletionDisabled
-            height="50vh"
-            language="yaml"
-          />
-        </div>
-        {/*@ts-ignore*/}
-      </ResourceForm.Single>
-    </Dialog>
+            <div style={spacing.sapUiSmallMarginTop}>
+              <MessageStrip design="Warning" hideCloseButton>
+                {t('service-accounts.token-request.warning')}
+              </MessageStrip>
+              <div
+                className="bsl-display-flex"
+                style={{
+                  justifyContent: 'flex-end',
+                  marginTop: spacing.sapUiSmallMarginTop.marginTop,
+                  marginBottom: spacing.sapUiSmallMarginBottom.marginBottom,
+                }}
+              >
+                {/*@ts-ignore*/}
+                <CopiableText
+                  iconOnly
+                  buttonText={t('common.buttons.copy')}
+                  style={spacing.sapUiTinyMarginEnd}
+                  textToCopy={kubeconfigYaml}
+                  disabled={token === ''}
+                />
+                <Button
+                  onClick={() => downloadKubeconfig(serviceAccountName, token)}
+                  disabled={token === ''}
+                  design="Transparent"
+                  style={spacing.sapUiTinyMarginEnd}
+                  icon="download"
+                  iconEnd
+                >
+                  {t('service-accounts.headers.download-kubeconfig')}
+                </Button>
+                <Button
+                  onClick={generateTokenRequest}
+                  disabled={isExpirationSecondsValueANumber()}
+                >
+                  {t('common.buttons.generate-name')}
+                </Button>
+              </div>
+              {/*@ts-ignore*/}
+              <Editor
+                value={kubeconfigYaml}
+                updateValueOnParentChange
+                readOnly
+                autocompletionDisabled
+                height="50vh"
+                language="yaml"
+              />
+            </div>
+            {/*@ts-ignore*/}
+          </ResourceForm.Single>
+        </Dialog>,
+        document.body,
+      )}
+    </>
   );
 }
