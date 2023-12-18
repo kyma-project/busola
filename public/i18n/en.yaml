@@ -1148,8 +1148,8 @@ resource-quotas:
       memory: Memory Limits
       cpu: CPU Limits
     requests:
-      memory: Memory requests
-      cpu: CPU request
+      memory: Memory Requests
+      cpu: CPU Requests
   title: Resource Quotas
   name_singular: Resource Quota
 role-bindings:
