@@ -17,15 +17,15 @@ injections: |-
       - name: header.status
         widget: Badge
         highlights:
-          success:
+          positive:
             - RUNNING
-          error:
+          negative:
             - FAILED
             - ERROR
             - DEPLOYING
             - BUILDING
             - PENDING
-          information:
+          informative:
             - INITIALIZING
         source: >-
           ($.status = undefined or $.status.conditions = undefined or
