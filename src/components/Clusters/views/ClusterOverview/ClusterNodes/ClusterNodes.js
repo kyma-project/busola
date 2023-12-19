@@ -29,16 +29,7 @@ const NodeHeader = ({ nodeName }) => {
 
 export function ClusterNodes() {
   const { t } = useTranslation();
-
-  const {
-    nodes,
-    error: nodesDataError,
-    loading: nodesDataLoading,
-  } = useNodesQuery();
-
-  const data = nodes;
-  const error = nodesDataError;
-  const loading = nodesDataLoading;
+  const { nodes: data, error, loading } = useNodesQuery();
 
   const getStatusType = status => {
     if (status === 'Ready') return 'success';

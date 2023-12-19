@@ -1,9 +1,7 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@ui5/webcomponents-react';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { LimitRangeList } from 'resources/LimitRanges/LimitRangeList';
@@ -93,7 +91,6 @@ export function NamespaceDetails(props) {
         <NamespaceWorkloads namespace={props.resourceName} />
         <ResourcesUsage namespace={props.resourceName} />
       </div>
-      <StatsPanel type="pod" namespace={props.resourceName} />
       {LimitrangesList}
       {ResourceQuotasList}
       {Events}
