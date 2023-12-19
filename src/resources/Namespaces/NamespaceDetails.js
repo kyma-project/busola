@@ -87,7 +87,7 @@ export function NamespaceDetails(props) {
       customColumns={customColumns}
       headerActions={headerActions}
     >
-      <div className="panel-grid" style={spacing.sapUiMediumMargin}>
+      <div className="panel-grid" style={spacing.sapUiSmallMargin}>
         <NamespaceWorkloads namespace={props.resourceName} />
         <ResourcesUsage namespace={props.resourceName} />
       </div>
