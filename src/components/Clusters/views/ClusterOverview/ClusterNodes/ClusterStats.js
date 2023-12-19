@@ -6,8 +6,8 @@ import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 export default function ClusterStats({ data }) {
   const { t } = useTranslation();
 
-  let cpu = { usage: 0, capacity: 0 };
-  let memory = { usage: 0, capacity: 0 };
+  let cpu = { usage: 0, capacity: 0, percentage: 0 };
+  let memory = { usage: 0, capacity: 0, percentage: 0 };
 
   for (const node of data) {
     cpu.usage += node.metrics.cpu.usage;
@@ -15,39 +15,52 @@ export default function ClusterStats({ data }) {
     memory.usage += node.metrics.memory.usage;
     memory.capacity += node.metrics.memory.capacity;
   }
+  cpu.percentage = roundDecimals((cpu.usage / cpu.capacity) * 100);
+  memory.percentage = roundDecimals((memory.usage / memory.capacity) * 100);
 
   return (
     <div
       className="cluster-overview__graphs-wrapper"
       style={spacing.sapUiSmallMargin}
     >
-      <UI5Panel disableMargin title="CPU Usage">
+      <UI5Panel
+        disableMargin
+        title={t('cluster-overview.statistics.cpu-usage-m')}
+      >
         <CircleProgress
           color="var(--sapIndicationColor_7)"
-          value={cpu.usage}
-          max={cpu.capacity}
-          title={t('machine-info.cpu-m')}
+          value={roundDecimals(cpu.usage)}
+          max={roundDecimals(cpu.capacity)}
           reversed={true}
           tooltip={{
-            content: `${t('machine-info.cpu-usage')} ${cpu.percentage}`,
-            position: 'right',
+            content: t('cluster-overview.tooltips.cpu-used', {
+              percentage: `${cpu.percentage}%`,
+            }),
+            position: 'bottom',
           }}
         />
       </UI5Panel>
-      <UI5Panel disableMargin title="Memory Usage">
+      <UI5Panel
+        disableMargin
+        title={t('cluster-overview.statistics.memory-usage-gib')}
+      >
         <CircleProgress
           color="var(--sapIndicationColor_6)"
-          value={memory.usage}
-          max={memory.capacity}
-          title={t('machine-info.memory-gib')}
+          value={roundDecimals(memory.usage)}
+          max={roundDecimals(memory.capacity)}
           reversed={true}
           tooltip={{
-            content: `${t('machine-info.memory-usage')} ${memory.percentage}`,
-            position: 'right',
+            content: t('cluster-overview.tooltips.memory-used', {
+              percentage: `${memory.percentage}%`,
+            }),
+            position: 'bottom',
           }}
         />
       </UI5Panel>
-      <UI5Panel disableMargin title="Test"></UI5Panel>
     </div>
   );
+}
+
+function roundDecimals(number) {
+  return parseFloat(number.toFixed(2));
 }

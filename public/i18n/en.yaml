@@ -9,6 +9,9 @@ cluster-overview:
     memory: Memory
     metrics: Metrics
     nodes: Nodes
+  statistics:
+    cpu-usage-m: 'CPU Usage (m)'
+    memory-usage-gib: 'Memory Usage (GiB)'
   tooltips:
     cpu-used: 'CPU Used: {{percentage}}'
     memory-used: 'Memory Used: {{percentage}}'
