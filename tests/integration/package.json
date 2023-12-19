@@ -2,8 +2,8 @@
   "name": "ui-integration-tests",
   "description": "UI Integration tests for Busola",
   "scripts": {
-    "start": "$(npm bin)/cypress open",
-    "start:local": "CYPRESS_LOCAL_DEV=true $(npm bin)/cypress open",
+    "start": "cypress open",
+    "start:local": "CYPRESS_LOCAL_DEV=true cypress open",
     "test:cluster": "cypress run --spec \"tests/cluster/*.spec.js,tests/extensibility/*.spec.js\" --browser chromium",
     "test:namespace": "cypress run --spec \"tests/namespace/*.spec.js\" --browser chromium",
     "test:cluster:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/cluster/*.spec.js,tests/extensibility/*.spec.js\" --browser chrome",
@@ -17,6 +17,6 @@
     "js-yaml": "^4.1.0"
   },
   "optionalDependencies": {
-    "cypress": "^12.3.0"
+    "cypress": "^13.6.1"
   }
 }
