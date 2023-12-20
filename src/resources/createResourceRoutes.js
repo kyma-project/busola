@@ -51,8 +51,10 @@ const DetailsWrapper = ({ children, ...props }) => {
 };
 
 const ColumnLayoutWraper = ({ children, details, ...props }) => {
-  const child = React.cloneElement(children, props);
-  // return child;
+  const child = React.cloneElement(children, {
+    ...props,
+    enableColumnLayout: true,
+  });
   return (
     <FlexibleColumnLayout
       style={{ height: '100%' }}

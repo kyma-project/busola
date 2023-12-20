@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
-import { Button } from '@ui5/webcomponents-react';
-import { Link } from 'react-router-dom';
+import { Button, Link } from '@ui5/webcomponents-react';
 import { createPatch } from 'rfc6902';
 import { cloneDeep } from 'lodash';
 import * as jp from 'jsonpath';
@@ -76,6 +75,7 @@ ResourcesList.propTypes = {
   disableEdit: PropTypes.bool,
   disableDelete: PropTypes.bool,
   disableMargin: PropTypes.bool,
+  enableColumnLayout: PropTypes.bool,
 };
 
 ResourcesList.defaultProps = {
@@ -89,6 +89,7 @@ ResourcesList.defaultProps = {
   disableEdit: false,
   disableDelete: false,
   disableMargin: false,
+  enableColumnLayout: false,
   filterFn: () => true,
 };
 
@@ -193,6 +194,7 @@ export function ResourceListRenderer({
   disableEdit,
   disableDelete,
   disableMargin,
+  enableColumnLayout,
   sortBy = {
     name: nameLocaleSort,
     time: timeSort,
@@ -243,13 +245,30 @@ export function ResourceListRenderer({
       header: t('common.headers.name'),
       value: entry =>
         hasDetailsView ? (
-          <Link
-            className="bsl-link"
-            style={{ fontWeight: 'bold' }}
-            to={linkTo(entry)}
-          >
-            {nameSelector(entry)}
-          </Link>
+          enableColumnLayout ? (
+            <>
+              <Link
+                style={{ fontWeight: 'bold' }}
+                onClick={() =>
+                  console.log(
+                    'lololo',
+                    window.history.replaceState(
+                      window.history.state,
+                      '',
+                      linkTo(entry),
+                    ),
+                    window.history.state,
+                  )
+                }
+              >
+                {nameSelector(entry)}
+              </Link>
+            </>
+          ) : (
+            <Link style={{ fontWeight: 'bold' }} href={linkTo(entry)}>
+              {nameSelector(entry)}
+            </Link>
+          )
         ) : (
           <b>{nameSelector(entry)}</b>
         ),
