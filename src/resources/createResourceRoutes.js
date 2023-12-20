@@ -55,6 +55,7 @@ const ColumnLayoutWraper = ({ children, details, ...props }) => {
     ...props,
     enableColumnLayout: true,
   });
+  console.log('ColumnLayoutWraper', { ...props, enableColumnLayout: true });
   return (
     <FlexibleColumnLayout
       style={{ height: '100%' }}
