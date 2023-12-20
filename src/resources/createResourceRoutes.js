@@ -1,4 +1,8 @@
-import React, { Suspense } from 'react';
+import React, { useEffect, Suspense } from 'react';
+import { useRecoilValue } from 'recoil';
+
+import { columnLayoutState } from 'state/columnLayoutAtom';
+
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { usePrepareDetailsProps, usePrepareListProps } from './helpers';
 import { Route } from 'react-router-dom';
@@ -51,17 +55,25 @@ const DetailsWrapper = ({ children, ...props }) => {
 };
 
 const ColumnLayoutWraper = ({ children, details, ...props }) => {
+  const ddd = useRecoilValue(columnLayoutState);
+  console.log('columnLayoutState', ddd);
   const child = React.cloneElement(children, {
     ...props,
     enableColumnLayout: true,
   });
-  console.log('ColumnLayoutWraper', { ...props, enableColumnLayout: true });
+
+  // It does not see changes in location.pathname
+  // const location = useLocation();
+  // React.useEffect(() => {
+  //   console.log('window.location.pathname', window.location.pathname, 'location', location)
+  // }, [location.pathname]);
+
   return (
     <FlexibleColumnLayout
       style={{ height: '100%' }}
       layout={true ? 'TwoColumnsStartExpanded' : 'OneColumn'}
       startColumn={<div slot="">{child}</div>}
-      midColumn={<div>{details}</div>}
+      // midColumn={<div>{details}</div>}
     />
   );
 };
@@ -80,7 +92,7 @@ export const createResourceRoutes = ({
   const detailsPath = Details
     ? createPath({ pathSegment, detailsView: true })
     : '';
-
+  console.log('detailsPath', detailsPath);
   return (
     <React.Fragment key={listPath}>
       <Route

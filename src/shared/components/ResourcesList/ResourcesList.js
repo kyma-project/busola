@@ -6,7 +6,9 @@ import { createPatch } from 'rfc6902';
 import { cloneDeep } from 'lodash';
 import * as jp from 'jsonpath';
 import pluralize from 'pluralize';
+import { useSetRecoilState } from 'recoil';
 
+import { columnLayoutState } from 'state/columnLayoutAtom';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { usePut, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useGetList, useSingleGet } from 'shared/hooks/BackendAPI/useGet';
@@ -208,6 +210,7 @@ export function ResourceListRenderer({
   });
   const { t } = useTranslation();
   const { isProtected, protectedResourceWarning } = useProtectedResources();
+  const setColumnLayoutState = useSetRecoilState(columnLayoutState);
 
   const [toggleFormFn, getToggleFormFn] = useState(() => {});
 
@@ -249,17 +252,21 @@ export function ResourceListRenderer({
             <>
               <Link
                 style={{ fontWeight: 'bold' }}
-                onClick={() =>
-                  console.log(
-                    'lololo',
-                    window.history.replaceState(
-                      window.history.state,
-                      '',
-                      linkTo(entry),
-                    ),
+                onClick={() => {
+                  console.log('entry', entry);
+                  // TODO: This is hardcoded, make it pretty
+                  setColumnLayoutState({
+                    resourceName: 'ak',
+                    resourceType: resourceType,
+                    url: linkTo(entry),
+                    namespaceId: null,
+                  });
+                  window.history.pushState(
                     window.history.state,
-                  )
-                }
+                    '',
+                    linkTo(entry),
+                  );
+                }}
               >
                 {nameSelector(entry)}
               </Link>
