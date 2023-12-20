@@ -3,6 +3,7 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { usePrepareDetailsProps, usePrepareListProps } from './helpers';
 import { Route } from 'react-router-dom';
 import pluralize from 'pluralize';
+import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 
 export const createPath = (
   config = { detailsView: false, pathSegment: '' },
@@ -49,6 +50,19 @@ const DetailsWrapper = ({ children, ...props }) => {
   return React.cloneElement(children, elementProps);
 };
 
+const ColumnLayoutWraper = ({ children, details, ...props }) => {
+  const child = React.cloneElement(children, props);
+  // return child;
+  return (
+    <FlexibleColumnLayout
+      style={{ height: '100%' }}
+      layout={true ? 'TwoColumnsStartExpanded' : 'OneColumn'}
+      startColumn={<div slot="">{child}</div>}
+      midColumn={<div>{details}</div>}
+    />
+  );
+};
+
 export const createResourceRoutes = ({
   List = null,
   Details = null,
@@ -77,7 +91,19 @@ export const createResourceRoutes = ({
               hasDetailsView={!!Details}
               {...props}
             >
-              <List allowSlashShortcut />
+              <ColumnLayoutWraper
+                details={
+                  <DetailsWrapper
+                    resourceType={resourceType}
+                    resourceI18Key={resourceI18Key}
+                    {...props}
+                  >
+                    <Details />
+                  </DetailsWrapper>
+                }
+              >
+                <List allowSlashShortcut />
+              </ColumnLayoutWraper>
             </ListWrapper>
           </Suspense>
         }
