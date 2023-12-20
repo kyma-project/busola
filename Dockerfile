@@ -22,7 +22,7 @@ RUN sed -i "s/version: dev/version: ${TAG_default_tag}/" public/version.yaml && 
 RUN npm test 2>&1 && npm run build:docker
 
 # ---- Serve ----
-FROM nginxinc/nginx-unprivileged:1.21
+FROM nginxinc/nginx-unprivileged:1.25
 WORKDIR /app
 
 # apps
