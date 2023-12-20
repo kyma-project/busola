@@ -57,6 +57,11 @@ export function Badge({
     }
   }
 
+  if (type === 'negative') type = 'warning';
+  else if (type === 'informative') type = 'information';
+  else if (type === 'positive') type = 'success';
+  else if (type === 'critical') type = 'error';
+
   return isNil(value) ? (
     emptyLeafPlaceholder
   ) : tooltip ? (

@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import pluralize from 'pluralize';
@@ -12,7 +11,6 @@ import { filterByResource } from 'hooks/useMessageList';
 import { PodStatus } from './PodStatus';
 import ContainersData from './ContainersData';
 import { PodCreate } from './PodCreate';
-import { PodStatsGraph } from './PodStatsGraph';
 import { useUrl } from 'hooks/useUrl';
 
 export function PodDetails(props) {
@@ -101,13 +99,7 @@ export function PodDetails(props) {
 
   return (
     <ResourceDetails
-      customComponents={[
-        PodStatsGraph,
-        VolumesList,
-        Containers,
-        InitContainers,
-        Events,
-      ]}
+      customComponents={[VolumesList, Containers, InitContainers, Events]}
       customColumns={customColumns}
       createResourceForm={PodCreate}
       {...props}

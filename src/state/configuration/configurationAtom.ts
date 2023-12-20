@@ -8,7 +8,6 @@ import { authDataState } from '../authDataAtom';
 import { getFetchFn } from '../utils/getFetchFn';
 import { ConfigFeatureList } from '../types';
 import { apiGroupState } from '..//discoverability/apiGroupsSelector';
-import { getPrometheusConfig } from './prometheusFeature';
 import { getFeatures } from './getFeatures';
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 
@@ -89,9 +88,6 @@ export const useGetConfiguration = () => {
   useEffect(() => {
     const setClusterConfig = async () => {
       const configs = await getConfigs(fetchFn);
-      if (configs?.features) {
-        configs.features.PROMETHEUS = getPrometheusConfig(auth, apis, fetchFn);
-      }
       const updatedFeatures = await getFeatures(configs?.features);
       setConfig({ ...configs, features: updatedFeatures });
     };

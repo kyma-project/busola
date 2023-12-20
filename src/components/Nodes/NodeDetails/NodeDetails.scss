@@ -20,14 +20,6 @@
         width: 100%;
         margin: 0;
       }
-
-      //& > :first-child {
-      //  margin-right: 0;
-      //}
-
-      &.withPrometheus {
-        grid-template-columns: 2fr 1fr;
-      }
     }
   }
 }

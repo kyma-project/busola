@@ -94,6 +94,6 @@ process.on('SIGINT', function() {
   process.exit();
 });
 
-server.listen(port, address, () => {
+server.listen(port, '0.0.0.0', address, () => {
   console.log(`Busola backend server started @ ${port}!`);
 });

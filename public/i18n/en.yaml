@@ -9,6 +9,9 @@ cluster-overview:
     memory: Memory
     metrics: Metrics
     nodes: Nodes
+  statistics:
+    cpu-usage-m: 'CPU Usage (m)'
+    memory-usage-gib: 'Memory Usage (GiB)'
   tooltips:
     cpu-used: 'CPU Used: {{percentage}}'
     memory-used: 'Memory Used: {{percentage}}'
@@ -977,8 +980,6 @@ nodes:
   name_singular: Node
   title: Nodes
   title_details: Node {{nodeName}}
-observability:
-  title: Observability
 persistent-volume-claims:
   description: <0>PersistentVolumeClaim (PVC)</0> is a request for the PersistentVolume resources.
   headers:
@@ -1146,9 +1147,14 @@ resource-graph:
   title: Resource Graph
 resource-quotas:
   headers:
-    limits: Limits
-    requests: Requests
+    limits:
+      memory: Memory Limits
+      cpu: CPU Limits
+    requests:
+      memory: Memory Requests
+      cpu: CPU Requests
   title: Resource Quotas
+  name_singular: Resource Quota
 role-bindings:
   create-modal:
     api-group: API Group

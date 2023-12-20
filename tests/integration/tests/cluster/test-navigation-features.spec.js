@@ -19,7 +19,6 @@ context('Test navigation features', () => {
 
   before(() => {
     mockFeatures({
-      PROMETHEUS: null,
       VISUAL_RESOURCES: { isEnabled: false },
       HIDDEN_NAMESPACES: {
         isEnabled: false,

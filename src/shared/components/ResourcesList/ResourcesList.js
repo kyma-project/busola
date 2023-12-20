@@ -488,15 +488,21 @@ export function ResourceListRenderer({
         ...customListActions,
       ].filter(e => e);
 
-  const headerRenderer = () => [
-    ...customColumns.map(col => col.header || null),
-    '',
-  ];
+  const nameColIndex = customColumns.findIndex(col => col.id === 'name');
 
-  const rowRenderer = entry => [
-    ...customColumns.map(col => (col.value ? col.value(entry) : null)),
-    protectedResourceWarning(entry),
-  ];
+  const headerRenderer = () => {
+    const rowColumns = customColumns.map(col => col.header || null);
+    rowColumns.splice(nameColIndex + 1, 0, '');
+    return rowColumns;
+  };
+
+  const rowRenderer = entry => {
+    const rowColumns = customColumns.map(col =>
+      col.value ? col.value(entry) : null,
+    );
+    rowColumns.splice(nameColIndex + 1, 0, protectedResourceWarning(entry));
+    return rowColumns;
+  };
 
   const extraHeaderContent = listHeaderActions || [
     CreateResourceForm && !disableCreate && !isNamespaceAll && (

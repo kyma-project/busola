@@ -17,7 +17,6 @@ export const configFeaturesNames = {
   GET_HELP_LINKS: 'GET_HELP_LINKS',
   SENTRY: 'SENTRY',
   KUBECONFIG_ID: 'KUBECONFIG_ID',
-  OBSERVABILITY: 'OBSERVABILITY',
   HIDDEN_NAMESPACES: 'HIDDEN_NAMESPACES',
   VISUAL_RESOURCES: 'VISUAL_RESOURCES',
   EXTENSIBILITY: 'EXTENSIBILITY',
@@ -26,7 +25,6 @@ export const configFeaturesNames = {
   TRACKING: 'TRACKING',
   PROTECTED_RESOURCES: 'PROTECTED_RESOURCES',
   EXTERNAL_NODES: 'EXTERNAL_NODES',
-  PROMETHEUS: 'PROMETHEUS',
   GARDENER_LOGIN: 'GARDENER_LOGIN',
   RESOURCE_VALIDATION: 'RESOURCE_VALIDATION',
   CLUSTER_VALIDATION: 'CLUSTER_VALIDATION',
@@ -35,14 +33,6 @@ export const configFeaturesNames = {
 
 export type ConfigFeatureList = {
   [key in ConfigFeaturesNames]?: ConfigFeature;
-};
-
-export type LazyConfigFeaturesNames = typeof lazyConfigFeaturesNames[keyof typeof lazyConfigFeaturesNames];
-export const lazyConfigFeaturesNames = {
-  PROMETHEUS: 'PROMETHEUS',
-} as const;
-export type LazyConfigFeatureList = {
-  [key in LazyConfigFeaturesNames]?: ConfigFeature;
 };
 
 export type ExtInjection = {
