@@ -45,39 +45,37 @@ export const createKubernetesUrl = ({
   return `${apiPrefix}${apiGroup}/${apiVersion}/${namespaceSegment}${resourceType}/${details}`;
 };
 
-const ListWrapper = ({ children, ...props }) => {
-  const elementProps = usePrepareListProps(props);
-  return React.cloneElement(children, { detailsProps: props, ...elementProps });
-};
-const DetailsWrapper = ({ children, ...props }) => {
-  const elementProps = usePrepareDetailsProps(props);
-  return React.cloneElement(children, elementProps);
-};
+const ListWrapper = ({ children, details, ...props }) => {
+  const layoutState = useRecoilValue(columnLayoutState);
 
-const ColumnLayoutWraper = ({ children, details, detailsProps, ...props }) => {
-  const detailsColumn = useRecoilValue(columnLayoutState);
-
-  const elementProps = usePrepareDetailsProps({
-    ...detailsProps,
-    customResourceName: detailsColumn?.resourceName,
-    customNamespaceId: detailsColumn.namespaceId,
-  });
-  const child = React.cloneElement(children, {
+  const elementListProps = usePrepareListProps(props);
+  const elementDetailsProps = usePrepareDetailsProps({
     ...props,
+    customResourceName: layoutState?.resourceName,
+    customNamespaceId: layoutState.namespaceId,
+  });
+
+  const listComponent = React.cloneElement(children, {
+    ...elementListProps,
     enableColumnLayout: true,
   });
-  const detailsWithProps = React.cloneElement(details, {
-    ...elementProps,
+  const detailsComponent = React.cloneElement(details, {
+    ...elementDetailsProps,
   });
 
   return (
     <FlexibleColumnLayout
       style={{ height: '100%' }}
-      layout={detailsColumn.layout}
-      startColumn={<div slot="">{child}</div>}
-      midColumn={<div slot="">{detailsWithProps}</div>}
+      layout={layoutState?.layout || 'OneColumn'}
+      startColumn={<div slot="">{listComponent}</div>}
+      midColumn={<div slot="">{detailsComponent}</div>}
     />
   );
+};
+
+const DetailsWrapper = ({ children, ...props }) => {
+  const elementProps = usePrepareDetailsProps(props);
+  return React.cloneElement(children, elementProps);
 };
 
 export const createResourceRoutes = ({
@@ -106,11 +104,10 @@ export const createResourceRoutes = ({
               resourceType={resourceType}
               resourceI18Key={resourceI18Key}
               hasDetailsView={!!Details}
+              details={<Details />}
               {...props}
             >
-              <ColumnLayoutWraper details={<Details />}>
-                <List allowSlashShortcut />
-              </ColumnLayoutWraper>
+              <List allowSlashShortcut />
             </ListWrapper>
           </Suspense>
         }
