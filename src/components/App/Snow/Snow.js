@@ -1,7 +1,6 @@
 import Snowfall from 'react-snowfall';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { themeState } from '../../../state/preferences/themeAtom';
-import { configurationAtom } from '../../../state/configuration/configurationAtom';
 import { useFeature } from '../../../hooks/useFeature';
 
 function Snow() {
