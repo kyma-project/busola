@@ -25,6 +25,7 @@ import './styles/sapIllus-Fills.css';
 import './styles/sapIllus-Layout.css';
 import './styles/index.scss';
 import './styles/fiori-helpers.scss';
+import Snow from './components/App/Snow/Snow';
 
 i18next
   .use(initReactI18next)
@@ -62,6 +63,7 @@ ReactDOM.render(
           <NotificationProvider>
             <CommandPaletteProvider>
               <App />
+              <Snow />
             </CommandPaletteProvider>
           </NotificationProvider>
         </Suspense>
