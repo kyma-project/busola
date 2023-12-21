@@ -1,7 +1,8 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, waitFor, act } from '@testing-library/react';
 import { Pagination } from 'shared/components/GenericList/Pagination/Pagination';
 import { ThemeProvider } from '@ui5/webcomponents-react';
+import '@ui5/webcomponents-icons/dist/AllIcons.js';
 
 describe('Pagination', () => {
   it('Renders valid count of pages', () => {
@@ -39,7 +40,7 @@ describe('Pagination', () => {
     expect(queryByText('4')).not.toBeInTheDocument();
   });
 
-  it('Fire events', () => {
+  it('Fire events', async () => {
     const callback = jest.fn();
     const { getByText, getByLabelText } = render(
       <ThemeProvider>
@@ -51,14 +52,19 @@ describe('Pagination', () => {
         />
       </ThemeProvider>,
     );
-    fireEvent.click(getByText('6'));
-    expect(callback).toHaveBeenCalledWith(6);
 
-    fireEvent.click(getByLabelText('Next page'));
-    expect(callback).toHaveBeenCalledWith(6);
+    await waitFor(async () => {
+      await act(async () => {
+        fireEvent.click(getByText('6'));
+        expect(callback).toHaveBeenCalledWith(6);
 
-    fireEvent.click(getByLabelText('Previous page'));
-    expect(callback).toHaveBeenCalledWith(4);
+        fireEvent.click(getByLabelText('Next page'));
+        expect(callback).toHaveBeenCalledWith(6);
+
+        fireEvent.click(getByLabelText('Previous page'));
+        expect(callback).toHaveBeenCalledWith(4);
+      });
+    });
   });
 
   it('Disables correct links', () => {
