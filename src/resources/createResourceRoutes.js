@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
@@ -47,33 +47,35 @@ export const createKubernetesUrl = ({
 
 const ListWrapper = ({ children, ...props }) => {
   const elementProps = usePrepareListProps(props);
-  return React.cloneElement(children, elementProps);
+  return React.cloneElement(children, { detailsProps: props, ...elementProps });
 };
 const DetailsWrapper = ({ children, ...props }) => {
   const elementProps = usePrepareDetailsProps(props);
   return React.cloneElement(children, elementProps);
 };
 
-const ColumnLayoutWraper = ({ children, details, ...props }) => {
-  const ddd = useRecoilValue(columnLayoutState);
-  console.log('columnLayoutState', ddd);
+const ColumnLayoutWraper = ({ children, details, detailsProps, ...props }) => {
+  const detailsColumn = useRecoilValue(columnLayoutState);
+
+  const elementProps = usePrepareDetailsProps({
+    ...detailsProps,
+    customResourceName: detailsColumn?.resourceName,
+    customNamespaceId: detailsColumn.namespaceId,
+  });
   const child = React.cloneElement(children, {
     ...props,
     enableColumnLayout: true,
   });
-
-  // It does not see changes in location.pathname
-  // const location = useLocation();
-  // React.useEffect(() => {
-  //   console.log('window.location.pathname', window.location.pathname, 'location', location)
-  // }, [location.pathname]);
+  const detailsWithProps = React.cloneElement(details, {
+    ...elementProps,
+  });
 
   return (
     <FlexibleColumnLayout
       style={{ height: '100%' }}
-      layout={true ? 'TwoColumnsStartExpanded' : 'OneColumn'}
+      layout={detailsColumn.layout}
       startColumn={<div slot="">{child}</div>}
-      // midColumn={<div>{details}</div>}
+      midColumn={<div slot="">{detailsWithProps}</div>}
     />
   );
 };
@@ -92,7 +94,7 @@ export const createResourceRoutes = ({
   const detailsPath = Details
     ? createPath({ pathSegment, detailsView: true })
     : '';
-  console.log('detailsPath', detailsPath);
+
   return (
     <React.Fragment key={listPath}>
       <Route
@@ -106,17 +108,7 @@ export const createResourceRoutes = ({
               hasDetailsView={!!Details}
               {...props}
             >
-              <ColumnLayoutWraper
-                details={
-                  <DetailsWrapper
-                    resourceType={resourceType}
-                    resourceI18Key={resourceI18Key}
-                    {...props}
-                  >
-                    <Details />
-                  </DetailsWrapper>
-                }
-              >
+              <ColumnLayoutWraper details={<Details />}>
                 <List allowSlashShortcut />
               </ColumnLayoutWraper>
             </ListWrapper>

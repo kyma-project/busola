@@ -253,13 +253,12 @@ export function ResourceListRenderer({
               <Link
                 style={{ fontWeight: 'bold' }}
                 onClick={() => {
-                  console.log('entry', entry);
-                  // TODO: This is hardcoded, make it pretty
                   setColumnLayoutState({
-                    resourceName: 'ak',
+                    resourceName: entry?.metadata?.name,
                     resourceType: resourceType,
                     url: linkTo(entry),
-                    namespaceId: null,
+                    namespaceId: entry?.metadata?.namespace,
+                    layout: 'TwoColumnsMidExpanded',
                   });
                   window.history.pushState(
                     window.history.state,

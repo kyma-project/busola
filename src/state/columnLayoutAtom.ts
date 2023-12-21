@@ -5,6 +5,7 @@ type ColumnLayoutState = {
   resourceType: null | string;
   url: null | string;
   namespaceId: null | string;
+  layout: string;
 };
 
 //empty value here would mean '[*]' - all namespaces
@@ -14,6 +15,7 @@ const defaultValue = {
   resourceType: null,
   url: null,
   namespaceId: null,
+  layout: 'OneColumn',
 };
 
 export const columnLayoutState: RecoilState<ColumnLayoutState> = atom<

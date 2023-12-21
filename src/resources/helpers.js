@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import pluralize from 'pluralize';
@@ -57,8 +58,22 @@ export const usePrepareDetailsProps = ({
   resourceI18Key,
   apiGroup,
   apiVersion,
+  customResourceName = null,
+  customNamespaceId = null,
 }) => {
-  const { resourceName, namespaceId } = useParams();
+  const {
+    resourceName: resourceNameFromParams,
+    namespaceId: namespaceIdFromParams,
+  } = useParams();
+  const resourceName = useMemo(
+    () => customResourceName ?? resourceNameFromParams,
+    [customResourceName, resourceNameFromParams],
+  );
+  const namespaceId = useMemo(
+    () => customNamespaceId ?? namespaceIdFromParams,
+    [customNamespaceId, namespaceIdFromParams],
+  );
+
   const encodedResourceName = encodeURIComponent(resourceName);
   const queryParams = new URLSearchParams(window.location.search);
   const { i18n, t } = useTranslation();
