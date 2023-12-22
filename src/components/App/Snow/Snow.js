@@ -20,6 +20,10 @@ function Snow() {
     case 'sap_horizon_hcb':
       snowColor = WHITE_SNOW;
       break;
+    case 'sap_horizon':
+    case 'sap_horizon_hcw': {
+      break;
+    }
     default: {
       if (isSystemThemeDark()) {
         snowColor = WHITE_SNOW;
