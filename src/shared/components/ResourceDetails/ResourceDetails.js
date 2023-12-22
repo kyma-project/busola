@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useState } from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
 import pluralize from 'pluralize';
@@ -169,6 +169,7 @@ function Resource({
     resourceTitle,
     resource.kind,
   );
+  const [toggleFormFn, getToggleFormFn] = useState(() => {});
 
   const pluralizedResourceKind = pluralize(prettifiedResourceKind);
   useWindowTitle(windowTitle || pluralizedResourceKind);
@@ -221,6 +222,7 @@ function Resource({
     } else {
       return (
         <ModalWithForm
+          getToggleFormFn={getToggleFormFn}
           title={
             editActionLabel ||
             t('components.resource-details.edit', {
@@ -246,6 +248,7 @@ function Resource({
                 resourceUrl={resourceUrl}
                 namespace={namespace}
                 refetchList={silentRefetch}
+                toggleFormFn={toggleFormFn}
                 resourceSchema={resourceSchema}
                 editMode={true}
                 {...props}

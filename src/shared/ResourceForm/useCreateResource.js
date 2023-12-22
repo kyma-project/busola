@@ -87,14 +87,11 @@ export function useCreateResource({
           createUrl,
           createPatch(initialUnchangedResource, resource),
         );
-        if (typeof toggleFormFn === 'function') {
-          toggleFormFn(false);
-        }
       } else {
         await postRequest(createUrl, resource);
-        if (typeof toggleFormFn === 'function') {
-          toggleFormFn(false);
-        }
+      }
+      if (typeof toggleFormFn === 'function') {
+        toggleFormFn(false);
       }
 
       onSuccess();

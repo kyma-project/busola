@@ -44,6 +44,18 @@ export const ModalWithForm = ({
   };
 
   useEffect(() => {
+    console.log('1 - mount');
+
+    return () => {
+      console.log('1 - unmount');
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log(isOpen);
+  }, [isOpen]);
+
+  useEffect(() => {
     if (getToggleFormFn) {
       // If getToggleFormFn is defined, the function that toggles form modal on/off is passed to parent. The modal will not be closed automatically
       // after clicking on the submit button. You must call toggleFormFn(false) to close the modal at the moment you prefer.
@@ -132,7 +144,7 @@ export const ModalWithForm = ({
     );
 
   return (
-    <>
+    <div onClick={event => event.preventDefault}>
       {renderModalOpeningComponent()}
       {createPortal(
         <Dialog
@@ -180,7 +192,7 @@ export const ModalWithForm = ({
         </Dialog>,
         document.body,
       )}
-    </>
+    </div>
   );
 };
 

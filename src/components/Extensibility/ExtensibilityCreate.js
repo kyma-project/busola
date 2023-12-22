@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, useContext } from 'react';
+import React, { useCallback, useMemo, useState, useContext } from 'react';
 import Immutable from 'immutable';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
@@ -35,6 +35,7 @@ export function ExtensibilityCreateCore({
   resourceUrl,
   resource: initialResource,
   resourceSchema: createResource,
+  toggleFormFn,
   resourceName,
   editMode = false,
   ...props
@@ -89,6 +90,7 @@ export function ExtensibilityCreateCore({
         ),
       });
     }
+    toggleFormFn(false);
   };
 
   const {

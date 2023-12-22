@@ -6,7 +6,7 @@ import { useCustomResourceUrl } from 'resources/CustomResourceDefinitions/useCus
 
 import { createTemplate } from './templates';
 
-function CRCreate({ onChange, formElementRef, crd }) {
+function CRCreate({ onChange, formElementRef, crd, toggleFormFn }) {
   const [cr, setCr] = useState(createTemplate(crd));
   const customUrl = useCustomResourceUrl(crd);
   const navigate = useNavigate();
@@ -31,6 +31,7 @@ function CRCreate({ onChange, formElementRef, crd }) {
       onlyYaml
       afterCreatedFn={() => {
         navigate(customUrl(cr));
+        toggleFormFn();
       }}
     />
   );

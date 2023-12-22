@@ -527,6 +527,7 @@ export function ResourceListRenderer({
               resourceUrl={resourceUrl}
               namespace={namespace}
               refetchList={silentRefetch}
+              toggleFormFn={toggleFormFn}
               {...props}
               {...createFormProps}
             />
