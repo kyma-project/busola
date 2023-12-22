@@ -3,6 +3,9 @@ import { useRecoilState } from 'recoil';
 import { themeState } from '../../../state/preferences/themeAtom';
 import { useFeature } from '../../../hooks/useFeature';
 
+const WHITE_SNOW = 'white';
+const LIGHT_BLUE_SNOW = '#4db1ff';
+
 function Snow() {
   const [theme] = useRecoilState(themeState);
   const feature = useFeature('SNOW') || {};
@@ -11,17 +14,18 @@ function Snow() {
     return null;
   }
 
-  let snowColor = '#0060df';
+  let snowColor = LIGHT_BLUE_SNOW;
   switch (theme) {
     case 'sap_horizon_dark':
     case 'sap_horizon_hcb':
-      snowColor = 'white';
+      snowColor = WHITE_SNOW;
       break;
-    case 'light_dark':
+    default: {
       if (isSystemThemeDark()) {
-        snowColor = 'white';
+        snowColor = WHITE_SNOW;
       }
       break;
+    }
   }
 
   return <Snowfall color={snowColor} />;
