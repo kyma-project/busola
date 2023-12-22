@@ -3,10 +3,12 @@ aliases:
     - akucharska
     - mrCherry97
     - valentinvieriu
+    - chriskari
     default-approvers:
     - akucharska
     - mrCherry97
     - valentinvieriu
+    - chriskari
     documentation-reviewers:
     - grego952
     - NHingerl
