@@ -47,7 +47,7 @@ function ClusterList() {
   const [chosenCluster, setChosenCluster] = useState(null);
   const setShowAdd = useSetRecoilState(showAddClusterWizard);
 
-  const [showEdit, setShowEdit] = useState(false);
+  const [toggleFormFn, getToggleFormFn] = useState(() => {});
   const [editedCluster, setEditedCluster] = useState(null);
 
   const { clusters, currentCluster } = clustersInfo;
@@ -117,7 +117,7 @@ function ClusterList() {
       tooltip: t('clusters.edit-cluster'),
       handler: cluster => {
         setEditedCluster(cluster);
-        setShowEdit(true);
+        toggleFormFn(true);
       },
     },
     {
@@ -163,7 +163,7 @@ function ClusterList() {
   const addDialog = <AddClusterDialog />;
   const editDialog = (
     <ModalWithForm
-      opened={showEdit}
+      getToggleFormFn={getToggleFormFn}
       className="modal-size--l"
       title={t('clusters.edit-cluster')}
       id="edit-cluster"
@@ -171,7 +171,6 @@ function ClusterList() {
         <EditCluster {...props} editedCluster={editedCluster} />
       )}
       modalOpeningComponent={<></>}
-      customCloseAction={() => setShowEdit(false)}
       confirmText={t('common.buttons.update')}
     />
   );
