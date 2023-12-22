@@ -4,7 +4,7 @@ import { themeState } from '../../../state/preferences/themeAtom';
 import { useFeature } from '../../../hooks/useFeature';
 
 const WHITE_SNOW = 'white';
-const LIGHT_BLUE_SNOW = '#4db1ff';
+const LIGHT_BLUE_SNOW = '#d4e8ff';
 
 function Snow() {
   const [theme] = useRecoilState(themeState);
