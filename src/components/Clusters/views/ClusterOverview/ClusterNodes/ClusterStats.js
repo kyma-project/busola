@@ -1,13 +1,13 @@
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useTranslation } from 'react-i18next';
-import { CircleProgress } from 'shared/components/CircleProgress/CircleProgress';
+import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 export default function ClusterStats({ data }) {
   const { t } = useTranslation();
 
-  let cpu = { usage: 0, capacity: 0, percentage: 0 };
-  let memory = { usage: 0, capacity: 0, percentage: 0 };
+  let cpu = { usage: 0, capacity: 0 };
+  let memory = { usage: 0, capacity: 0 };
 
   for (const node of data) {
     cpu.usage += node.metrics.cpu?.usage ?? 0;
@@ -15,8 +15,6 @@ export default function ClusterStats({ data }) {
     memory.usage += node.metrics.memory?.usage ?? 0;
     memory.capacity += node.metrics.memory?.capacity ?? 0;
   }
-  cpu.percentage = roundDecimals((cpu.usage / cpu.capacity) * 100);
-  memory.percentage = roundDecimals((memory.usage / memory.capacity) * 100);
 
   return (
     <div
@@ -27,14 +25,14 @@ export default function ClusterStats({ data }) {
         disableMargin
         title={t('cluster-overview.statistics.cpu-usage-m')}
       >
-        <CircleProgress
+        <UI5RadialChart
           color="var(--sapIndicationColor_7)"
           value={roundDecimals(cpu.usage)}
           max={roundDecimals(cpu.capacity)}
-          reversed={true}
           tooltip={{
             content: t('cluster-overview.tooltips.cpu-used', {
-              percentage: `${cpu.percentage}%`,
+              value: roundDecimals(cpu.usage),
+              max: roundDecimals(cpu.capacity),
             }),
             position: 'bottom',
           }}
@@ -44,14 +42,14 @@ export default function ClusterStats({ data }) {
         disableMargin
         title={t('cluster-overview.statistics.memory-usage-gib')}
       >
-        <CircleProgress
+        <UI5RadialChart
           color="var(--sapIndicationColor_6)"
           value={roundDecimals(memory.usage)}
           max={roundDecimals(memory.capacity)}
-          reversed={true}
           tooltip={{
             content: t('cluster-overview.tooltips.memory-used', {
-              percentage: `${memory.percentage}%`,
+              value: roundDecimals(memory.usage),
+              max: roundDecimals(memory.capacity),
             }),
             position: 'bottom',
           }}

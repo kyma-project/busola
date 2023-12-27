@@ -1,0 +1,13 @@
+.radial-chart {
+  .title {
+    white-space: nowrap;
+  }
+
+  display: grid;
+  grid-template-columns: 1;
+  justify-items: center;
+  justify-content: center;
+  grid-gap: 3%;
+  color: var(--sapNeutralColor);
+  font-size: 1.2em;
+}

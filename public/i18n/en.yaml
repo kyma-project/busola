@@ -10,11 +10,11 @@ cluster-overview:
     metrics: Metrics
     nodes: Nodes
   statistics:
-    cpu-usage-m: 'CPU Usage (m)'
-    memory-usage-gib: 'Memory Usage (GiB)'
+    cpu-usage-m: 'CPU Usage'
+    memory-usage-gib: 'Memory Usage'
   tooltips:
-    cpu-used: 'CPU Used: {{percentage}}'
-    memory-used: 'Memory Used: {{percentage}}'
+    cpu-used: 'CPU (m) used: {{value}}/{{max}}'
+    memory-used: 'Memory (GiB) used: {{value}}/{{max}}'
 cluster-role-bindings:
   description: <0>ClusterRoleBinding</0> assigns the permissions defined in a ClusterRole to a user.
   name_singular: ClusterRoleBinding
@@ -865,15 +865,15 @@ limit-ranges:
   title: Limit Ranges
 machine-info:
   architecture-cpus: Architecture and CPUs
-  cpu-m: CPU (m)
-  cpu-usage: 'CPU usage:'
+  cpu-m: 'CPU (m):'
+  cpu-usage: CPU Usage
   cpus: CPUs
   gib: GiB
   kube-proxy-version: Kube proxy version
   kubelet-version: Kubelet version
   memory: Memory
-  memory-gib: Memory (GiB)
-  memory-usage: 'Memory usage:'
+  memory-gib: 'Memory (GiB):'
+  memory-usage: Memory Usage
   operating-system: Operating system
   pods-capacity: Pods capacity
   title: Machine info
