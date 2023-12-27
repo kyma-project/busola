@@ -8,6 +8,7 @@ import { usePrepareDetailsProps, usePrepareListProps } from './helpers';
 import { Route } from 'react-router-dom';
 import pluralize from 'pluralize';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
+import { useFeature } from 'hooks/useFeature';
 
 export const createPath = (
   config = { detailsView: false, pathSegment: '' },
@@ -46,6 +47,7 @@ export const createKubernetesUrl = ({
 };
 
 const ListWrapper = ({ children, details, ...props }) => {
+  const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   const layoutState = useRecoilValue(columnLayoutState);
 
   const elementListProps = usePrepareListProps(props);
@@ -57,7 +59,7 @@ const ListWrapper = ({ children, details, ...props }) => {
 
   const listComponent = React.cloneElement(children, {
     ...elementListProps,
-    enableColumnLayout: true,
+    enableColumnLayout: isColumnLeyoutEnabled,
   });
   const detailsComponent = React.cloneElement(details, {
     ...elementDetailsProps,
