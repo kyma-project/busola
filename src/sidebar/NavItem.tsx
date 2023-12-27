@@ -2,9 +2,11 @@ import { useTranslation } from 'react-i18next';
 import { NavNode } from 'state/types';
 import { useUrl } from 'hooks/useUrl';
 
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { clusterState } from 'state/clusterAtom';
+import { columnLayoutState } from 'state/columnLayoutAtom';
+
 import {
   SideNavigationSubItem,
   SideNavigationItem,
@@ -20,6 +22,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   const { t } = useTranslation();
   const urlGenerators = useUrl();
   const navigate = useNavigate();
+  const setColumnLayoutState = useSetRecoilState(columnLayoutState);
 
   const { scopedUrl } = urlGenerators;
   const namespaceId = useRecoilValue(activeNamespaceIdState);
@@ -55,6 +58,11 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
         );
         if (newWindow) newWindow.opener = null;
       } else {
+        setColumnLayoutState({
+          midColumn: null,
+          endColumn: null,
+          layout: 'OneColumn',
+        });
         navigate(
           node.createUrlFn
             ? node.createUrlFn(urlGenerators)

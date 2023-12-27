@@ -254,10 +254,13 @@ export function ResourceListRenderer({
                 style={{ fontWeight: 'bold' }}
                 onClick={() => {
                   setColumnLayoutState({
-                    resourceName: entry?.metadata?.name,
-                    resourceType: resourceType,
-                    url: linkTo(entry),
-                    namespaceId: entry?.metadata?.namespace,
+                    midColumn: {
+                      resourceName: entry?.metadata?.name,
+                      resourceType: resourceType,
+                      url: linkTo(entry),
+                      namespaceId: entry?.metadata?.namespace,
+                    },
+                    endColumn: null,
                     layout: 'TwoColumnsMidExpanded',
                   });
                   window.history.pushState(

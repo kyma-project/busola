@@ -1,21 +1,24 @@
 import { atom, RecoilState } from 'recoil';
 
-type ColumnLayoutState = {
+type ColumnState = {
   resourceName: null | string;
   resourceType: null | string;
   url: null | string;
   namespaceId: null | string;
+};
+
+type ColumnLayoutState = {
+  midColumn: null | ColumnState;
+  endColumn: null | ColumnState;
   layout: string;
 };
 
 //empty value here would mean '[*]' - all namespaces
 
 const defaultValue = {
-  resourceName: null,
-  resourceType: null,
-  url: null,
-  namespaceId: null,
   layout: 'OneColumn',
+  midColumn: null,
+  endColumn: null,
 };
 
 export const columnLayoutState: RecoilState<ColumnLayoutState> = atom<

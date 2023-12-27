@@ -51,8 +51,8 @@ const ListWrapper = ({ children, details, ...props }) => {
   const elementListProps = usePrepareListProps(props);
   const elementDetailsProps = usePrepareDetailsProps({
     ...props,
-    customResourceName: layoutState?.resourceName,
-    customNamespaceId: layoutState.namespaceId,
+    customResourceName: layoutState?.midColumn?.resourceName,
+    customNamespaceId: layoutState.midColumn?.namespaceId,
   });
 
   const listComponent = React.cloneElement(children, {
