@@ -59,7 +59,10 @@ const ListWrapper = ({ children, details, ...props }) => {
 
   const listComponent = React.cloneElement(children, {
     ...elementListProps,
-    enableColumnLayout: isColumnLeyoutEnabled,
+    enableColumnLayout:
+      elementListProps.resourceType !== 'Namespaces'
+        ? isColumnLeyoutEnabled
+        : false,
   });
   const detailsComponent = React.cloneElement(details, {
     ...elementDetailsProps,

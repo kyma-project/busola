@@ -288,7 +288,7 @@ export function ResourceListRenderer({
             </>
           ) : (
             <Link style={{ fontWeight: 'bold' }} href={linkTo(entry)}>
-              {nameSelector(entry)}cc
+              {nameSelector(entry)}
             </Link>
           )
         ) : (
