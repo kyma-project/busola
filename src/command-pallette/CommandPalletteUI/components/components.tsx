@@ -66,10 +66,9 @@ export function ShortHelpText({ showFullHelp }: { showFullHelp: () => void }) {
 
   return (
     <p className="short-help help-text">
-      {t('command-palette.help.short-help')}
-      <Button className="button-link" onClick={showFullHelp}>
-        {t('command-palette.item-actions.show-help')}
-      </Button>
+      <Trans i18nKey="command-palette.help.short-help">
+        <pre className="key"></pre>
+      </Trans>
     </p>
   );
 }
@@ -89,6 +88,7 @@ export function CommandPalletteHelp({
         </Trans>
       </div>
       <h1 className="help-header">{t('command-palette.help.navigation')}</h1>
+      <br className="help-divider" />
       <table className="help-text">
         <thead>
           <tr>
@@ -110,31 +110,31 @@ export function CommandPalletteHelp({
       <h1 className="help-header">
         {t('command-palette.help.resource-aliases')}
       </h1>
-      <table className="help-text">
-        <tbody>
-          {helpEntries.navigation.map(({ name, aliases }) => (
-            <tr key={name}>
-              <td>{name}</td>
-              <td>{aliases?.join(', ') || EMPTY_TEXT_PLACEHOLDER}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <br className="help-divider" />
+      <div className="help-text">
+        {helpEntries.navigation.map(({ name, aliases }) => (
+          <p key={name}>
+            <div className="help-text__name">{name}</div>
+            <pre className="key">
+              {aliases?.join(', ') || EMPTY_TEXT_PLACEHOLDER}
+            </pre>
+          </p>
+        ))}
+      </div>
       {helpEntries.crds.length ? (
         <>
           <h1 className="help-header">
             {t('command-palette.help.crd-aliases')}
           </h1>
-          <table className="help-text">
-            <tbody>
-              {helpEntries.crds.map(({ name, shortNames }) => (
-                <tr key={name}>
-                  <td>{name}</td>
-                  <td>{shortNames?.join(', ')}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <br className="help-divider" />
+          <div className="help-text">
+            {helpEntries.crds.map(({ name, shortNames }) => (
+              <p key={name}>
+                <div className="help-text__name">{name}</div>
+                <pre className="key">{shortNames?.join(', ')}</pre>
+              </p>
+            ))}
+          </div>
         </>
       ) : null}
     </div>

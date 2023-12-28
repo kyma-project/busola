@@ -165,7 +165,7 @@ function getSuggestion({
       n => n.metadata.name,
     );
     const suggestedName = makeSuggestion(name, resourceNames);
-    return `${suggestedType || type} ${suggestedName || name}`;
+    return `${suggestedType || type}/${suggestedName || name}`;
   } else {
     return suggestedType;
   }
@@ -243,7 +243,7 @@ function makeListItem({
 
   return {
     label: name,
-    query: `${crd.spec.names.plural} ${name}`,
+    query: `${crd.spec.names.plural}/${name}`,
     category,
     onActivate: () =>
       navigateTo({
@@ -270,6 +270,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
     navigate,
     activeClusterName,
   } = context;
+  const [, delimiter, name] = tokens;
 
   const crd = getCRAliases(
     resourceCache['customresourcedefinitions'] as CustomResourceDefinition[],
@@ -283,7 +284,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
   const isNamespaced = crd.spec.scope === 'Namespaced';
 
   const matchingNode = findMatchingNode(crd, context);
-
+  console.log(matchingNode);
   const defaultCategory = isNamespaced
     ? t('command-palette.crs.namespaced')
     : t('command-palette.crs.cluster');
@@ -312,13 +313,21 @@ function createResults(context: CommandPaletteContext): Result[] | null {
     query: '',
     onActivate: () => {},
   };
-
+  console.log(linkToList);
   const resources = resourceCache[getResourceKey(crd, namespace)];
   const listItems = resources
     ? resources.map(item => makeListItem({ crd, item, category, context }))
     : [notFound];
 
-  return [linkToList, ...listItems];
+  if (name) {
+    return resources
+      .filter(item => item.metadata.name.includes(name))
+      .map(item => makeListItem({ crd, item, category, context }));
+  } else if (delimiter) {
+    return [...listItems];
+  } else {
+    return [linkToList];
+  }
 }
 
 function getCRsHelp({ resourceCache }: CommandPaletteContext) {

@@ -1,0 +1,17 @@
+.result {
+  display: flex;
+  align-items: center;
+
+  .bsl-has-color-status-4 {
+    font-size: var(--sapFontSize);
+
+    .key {
+      display: inline;
+      background: var(--sapNeutralBackground);
+      padding-right: 4px;
+      padding-left: 3px;
+      border-radius: 2px;
+      color: var(--sapList_TextColor);
+    }
+  }
+}

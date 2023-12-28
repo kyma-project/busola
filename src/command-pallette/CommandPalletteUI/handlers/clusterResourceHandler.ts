@@ -6,6 +6,7 @@ import {
   extractShortNames,
   findNavigationNode,
   getApiPathForQuery,
+  toFullResourceTypeList,
 } from './helpers';
 import {
   clusterNativeResourceTypes,
@@ -38,11 +39,12 @@ function getSuggestion({
   tokens,
   resourceCache,
 }: CommandPaletteContext): string {
-  const [type, name] = tokens;
+  const [type, , name] = tokens;
   const suggestedType = makeSuggestion(
     type,
     resourceTypes.flatMap(n => n.aliases),
   );
+
   if (name) {
     const fullResourceType = toFullResourceType(
       suggestedType || type,
@@ -74,7 +76,7 @@ function makeListItem(
 
   return {
     label: name,
-    query: `${resourceType} ${name}`,
+    query: `${resourceType}/${name}`,
     // some resources have no category
     category: category ? category + ' > ' + resourceTypeText : resourceTypeText,
     onActivate: () => {
@@ -187,8 +189,27 @@ function createResults(context: CommandPaletteContext): Result[] {
     activeClusterName,
     navigate,
   } = context;
-  const [type, name] = tokens;
+  const [type, delimiter, name] = tokens;
+
+  if (!type) {
+    return clusterNodes.map(clusterNode => {
+      return {
+        ...clusterNode,
+        query: clusterNode.resourceType,
+        onActivate: () => {
+          const pathname = `/cluster/${activeClusterName}/${clusterNode.pathSegment}`;
+          navigate(pathname);
+        },
+      };
+    });
+  }
+  const resourceTypeList = toFullResourceTypeList(type, resourceTypes);
+  console.log(resourceTypeList);
   const resourceType = toFullResourceType(type, resourceTypes);
+  const matchedNodes = resourceTypeList.map(res =>
+    findNavigationNode(res, clusterNodes),
+  );
+  console.log(matchedNodes);
   const matchedNode = findNavigationNode(resourceType, clusterNodes);
   if (!matchedNode) {
     return [];
@@ -212,7 +233,7 @@ function createResults(context: CommandPaletteContext): Result[] {
       navigate(pathname);
     },
   };
-
+  console.log(linkToList);
   if (resourceType === 'namespaces' && ['-a', '*', 'all'].includes(name)) {
     if (window.location.pathname.includes('namespaces')) {
       return [
@@ -273,11 +294,12 @@ function createResults(context: CommandPaletteContext): Result[] {
     return matchedResources?.map(item =>
       makeListItem(item, matchedNode, context),
     );
-  } else {
+  } else if (delimiter) {
     return [
-      linkToList,
       ...resources?.map(item => makeListItem(item, matchedNode, context)),
     ];
+  } else {
+    return [linkToList];
   }
 }
 

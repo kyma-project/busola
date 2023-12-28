@@ -12,3 +12,7 @@ ui5-shellbar.header::part(root) {
     0 0.5rem 1rem 0
       color-mix(in srgb, var(--sapContent_ShadowColor) 16%, transparent);
 }
+
+.header-search {
+  border-radius: 2rem;
+}

@@ -13,7 +13,7 @@ import './CommandPaletteUI.scss';
 import { K8sResource } from 'types';
 import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
-import { Input } from '@ui5/webcomponents-react';
+import { Icon, Input } from '@ui5/webcomponents-react';
 
 function Background({
   hide,
@@ -82,15 +82,29 @@ export function CommandPaletteUI({
 
   const commandPaletteInput = document.getElementById('command-palette-search');
 
-  const keyDownInHistoryMode = (key: string) => {
+  const handleQuerySelection = () => {
+    const innerInput = commandPaletteInput?.shadowRoot?.querySelector(
+      '.ui5-input-inner',
+    ) as HTMLInputElement;
+    if (innerInput.selectionEnd === innerInput.selectionStart) {
+      innerInput?.focus();
+      const startIndex = query.lastIndexOf('/', query.lastIndexOf('/') - 1) + 1;
+      setTimeout(() =>
+        innerInput.setSelectionRange(startIndex, query.lastIndexOf('/') + 1),
+      );
+    }
+  };
+
+  const keyDownInHistoryMode = (key: string, e: Event) => {
     const historyEntries = getHistoryEntries();
     if (key === 'Enter' && results[0]) {
       // choose current entry
       addHistoryEntry(results[0].query);
       results[0].onActivate();
     } else if (key === 'Tab') {
+      e.preventDefault();
       // fill search with active history entry
-      setQuery(historyEntries[historyIndex]);
+      setQuery(historyEntries[historyIndex] + '/');
       setActiveResultIndex(0);
       setHistoryMode(false);
     } else if (key === 'ArrowUp') {
@@ -120,18 +134,19 @@ export function CommandPaletteUI({
     }
   };
 
-  const keyDownInDropdownMode = (key: string) => {
+  const keyDownInDropdownMode = (key: string, e: Event) => {
     if (key === 'Tab') {
+      e.preventDefault();
       if (autocompletePhrase) {
-        setQuery(autocompletePhrase);
-      } else if (suggestedQuery) {
-        setQuery(suggestedQuery);
+        setQuery(autocompletePhrase + '/');
+      } else if (suggestedQuery && !query.endsWith('/')) {
+        setQuery(suggestedQuery + '/');
       } else if (
         results?.[activeResultIndex] // && todo
         // results[activeResultIndex] !== LOADING_INDICATOR
       ) {
         // fill search with active result
-        setQuery(results[activeResultIndex].query || '');
+        setQuery(results[activeResultIndex].query + '/' || '');
       }
     } else if (key === 'ArrowUp') {
       const historyEntries = getHistoryEntries();
@@ -142,6 +157,8 @@ export function CommandPaletteUI({
         setHistoryMode(true);
         setHistoryIndex(0);
       }
+    } else if (key === 'Backspace' && query.includes('/')) {
+      handleQuerySelection();
     }
   };
 
@@ -151,11 +168,12 @@ export function CommandPaletteUI({
     (e: Event) => {
       const { key } = e as KeyboardEvent;
       return !isHistoryMode
-        ? keyDownInDropdownMode(key)
-        : keyDownInHistoryMode(key);
+        ? keyDownInDropdownMode(key, e)
+        : keyDownInHistoryMode(key, e);
     },
-    [isHistoryMode],
+    [isHistoryMode, activeResultIndex, query],
   );
+
   return (
     <Background hide={hide}>
       <div className="command-palette-ui__wrapper" role="dialog">
@@ -172,15 +190,8 @@ export function CommandPaletteUI({
             onInput={(e: any) => setQuery((e.target as HTMLInputElement).value)}
             showClearIcon
             className="search-with-magnifying-glass full-width"
+            icon={<Icon name="slim-arrow-right" />}
           />
-          {!showHelp && !query && (
-            <ShortHelpText
-              showFullHelp={() => {
-                setQuery('help');
-                commandPaletteInput?.focus();
-              }}
-            />
-          )}
           {!showHelp && query && (
             <ResultsList
               results={results}
@@ -199,6 +210,14 @@ export function CommandPaletteUI({
             />
           )}
           {showHelp && <CommandPalletteHelp helpEntries={helpEntries} />}
+          {!showHelp && (
+            <ShortHelpText
+              showFullHelp={() => {
+                setQuery('help');
+                commandPaletteInput?.focus();
+              }}
+            />
+          )}
         </div>
       </div>
     </Background>

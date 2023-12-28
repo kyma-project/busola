@@ -46,7 +46,7 @@ function makeListItem(item: K8sResource, context: CommandPaletteContext) {
     label: name,
     category:
       t('configuration.title') + ' > ' + t('custom-resource-definitions.title'),
-    query: `crds ${name}`,
+    query: `crds/${name}`,
     onActivate: () => {
       const pathname = `/cluster/${activeClusterName}/customresourcedefinitions/${name}`;
       navigate(pathname);
@@ -102,7 +102,7 @@ function createResults(context: CommandPaletteContext): Result[] {
     return [linkToList, { type: LOADING_INDICATOR }];
   }
 
-  const name = tokens[1];
+  const [, delimiter, name] = tokens;
   if (name) {
     const matchedByName = crds.filter(item =>
       item.metadata.name.includes(name),
@@ -111,8 +111,10 @@ function createResults(context: CommandPaletteContext): Result[] {
       return matchedByName.map(item => makeListItem(item, context));
     }
     return [];
+  } else if (delimiter) {
+    return [...crds.map(item => makeListItem(item, context))];
   } else {
-    return [linkToList, ...crds.map(item => makeListItem(item, context))];
+    return [linkToList];
   }
 }
 

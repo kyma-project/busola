@@ -70,9 +70,6 @@ export async function fetchResources(
 }
 
 export function createResults(context: CommandPaletteContext): Result[] {
-  if (!context.query) {
-    return [];
-  }
   return allHandlers
     .flatMap(handler => handler.createResults(context))
     .filter(h => h !== null) as Result[];

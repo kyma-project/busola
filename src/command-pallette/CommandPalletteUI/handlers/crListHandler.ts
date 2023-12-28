@@ -13,7 +13,7 @@ function getAutocompleteEntries({
         return ['customresources '];
       }
       return [];
-    case 2: // name
+    case 3: // name
       const crdNames = (resourceCache['customresources'] || []).map(
         n => n.metadata.name,
       );
@@ -51,7 +51,7 @@ function createResults(context: CommandPaletteContext): Result[] {
   const listLabel = t('command-palette.results.list-of', {
     resourceType: t('command-palette.crs.name-short_plural'),
   });
-
+  console.log(listLabel);
   return [
     {
       label: listLabel,

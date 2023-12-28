@@ -9,6 +9,8 @@ import {
   ShellBar,
   ShellBarItem,
   StandardListItem,
+  Input,
+  Icon,
 } from '@ui5/webcomponents-react';
 import { MenuItemClickEventDetail } from '@ui5/webcomponents/dist/Menu.js';
 
@@ -29,11 +31,15 @@ import { useGetHelpLinks, GetHelpLink } from './SidebarMenu/useGetHelpLinks';
 import { useGetBusolaVersionDetails } from './SidebarMenu/useGetBusolaVersion';
 
 import './Header.scss';
+import { K8sResource } from 'types';
+import { useObjectState } from 'shared/useObjectState';
 
 export function Header() {
   useAvailableNamespaces();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const [resourceCache, updateResourceCache] = useObjectState<
+    Record<string, K8sResource[]>
+  >();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { isEnabled: isFeedbackEnabled, link: feedbackLink } = useFeature(
@@ -132,6 +138,16 @@ export function Header() {
           </>
         }
         onProfileClick={() => setIsMenuOpen(true)}
+        searchField={
+          <Input
+            id="header-search"
+            className="header-search"
+            icon={<Icon interactive name="slim-arrow-right" />}
+            showClearIcon
+            placeholder=""
+          />
+        }
+        showSearchField
       >
         {window.location.pathname !== '/clusters' &&
           !window.location.pathname.endsWith('/no-permissions') && (

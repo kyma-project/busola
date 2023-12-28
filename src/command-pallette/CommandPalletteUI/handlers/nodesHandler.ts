@@ -51,7 +51,7 @@ function makeListItem(
     label: name,
     category:
       t('clusters.overview.title-current-cluster') + ' > ' + t('nodes.title'),
-    query: `node ${name}`,
+    query: `node/${name}`,
     onActivate: () =>
       navigate(`/cluster/${activeClusterName}/overview/nodes/${name}`),
   };
@@ -89,7 +89,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
     ];
   }
 
-  const name = tokens[1];
+  const name = tokens[2];
   if (name) {
     const matchedByName = nodes.filter(item =>
       item.metadata.name.includes(name),

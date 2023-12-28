@@ -5,6 +5,8 @@ import {
   extractShortNames,
   findNavigationNode,
   getApiPathForQuery,
+  toFullResourceTypeList,
+  getShortAliases,
 } from './helpers';
 import { namespaceNativeResourceTypes as resourceTypes } from 'shared/constants';
 import {
@@ -36,7 +38,8 @@ function getSuggestion({
   namespace,
   resourceCache,
 }: CommandPaletteContext) {
-  const [type, name] = tokens;
+  const [type, , name] = tokens;
+
   const suggestedType = makeSuggestion(
     type,
     resourceTypes.flatMap(n => n.aliases),
@@ -50,7 +53,7 @@ function getSuggestion({
       resourceCache[`${namespace}/${resourceType}`] || []
     ).map(n => n.metadata.name);
     const suggestedName = makeSuggestion(name, resourceNames);
-    return `${suggestedType || type} ${suggestedName || name}`;
+    return `${suggestedType || type}/${suggestedName || name}`;
   } else {
     return suggestedType;
   }
@@ -69,7 +72,7 @@ function makeListItem(
 
   return {
     label: name,
-    query: `${matchedNode.resourceType} ${name}`,
+    query: `${matchedNode.resourceType}/${name}`,
     category:
       matchedNode.category +
       ' > ' +
@@ -127,9 +130,27 @@ function createResults(context: CommandPaletteContext): Result[] | null {
     t,
   } = context;
 
-  const [type, name] = tokens;
+  const [type, delimiter, name] = tokens;
+
+  if (!type) {
+    return namespaceNodes.map(namespaceNode => {
+      return {
+        ...namespaceNode,
+        query: namespaceNode.resourceType,
+        onActivate: () => {
+          const pathname = `/cluster/${activeClusterName}/namespaces/${namespace}/${namespaceNode.pathSegment}`;
+          navigate(pathname);
+        },
+      };
+    });
+  }
+  const resourceTypeList = toFullResourceTypeList(type, resourceTypes);
+  console.log(resourceTypeList);
   const resourceType = toFullResourceType(type, resourceTypes);
+  console.log(resourceType);
   const matchedNode = findNavigationNode(resourceType, namespaceNodes);
+  console.log(matchedNode);
+
   if (!matchedNode) {
     return null;
   }
@@ -149,6 +170,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
       const pathname = `/cluster/${activeClusterName}/namespaces/${namespace}/${matchedNode.pathSegment}`;
       navigate(pathname);
     },
+    aliases: getShortAliases(resourceType, resourceTypes, namespaceNodes),
   };
 
   const resources = resourceCache[`${namespace}/${resourceType}`];
@@ -163,10 +185,12 @@ function createResults(context: CommandPaletteContext): Result[] | null {
     return resources
       .filter(item => item.metadata.name.includes(name))
       .map(item => makeListItem(item, matchedNode, context));
+  } else if (delimiter) {
+    return [...resources.map(item => makeListItem(item, matchedNode, context))];
   } else {
     return [
       linkToList,
-      ...resources.map(item => makeListItem(item, matchedNode, context)),
+      //...resources.map(item => makeListItem(item, matchedNode, context)),
     ];
   }
 }

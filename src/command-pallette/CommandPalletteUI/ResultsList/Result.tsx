@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
+import './Result.scss';
 
 type ResultProps = {
   label: string;
@@ -9,6 +10,7 @@ type ResultProps = {
   activeIndex: number;
   setActiveIndex: (index: number) => void;
   onItemClick: () => void;
+  aliases?: string[];
 };
 
 export function Result({
@@ -19,6 +21,7 @@ export function Result({
   activeIndex,
   setActiveIndex,
   onItemClick,
+  aliases,
 }: ResultProps) {
   const resultRef = useRef<HTMLLIElement | null>(null);
   const { t } = useTranslation();
@@ -37,9 +40,14 @@ export function Result({
   }, [index, activeIndex, setActiveIndex]);
 
   const actionText =
-    typeof customActionText === 'string'
-      ? customActionText
-      : t('command-palette.item-actions.navigate');
+    typeof customActionText === 'string' ? (
+      customActionText
+    ) : (
+      <Trans i18nKey="command-palette.item-actions.navigate">
+        <pre className="key"></pre>
+        <pre className="key"></pre>
+      </Trans>
+    );
 
   return (
     <li
@@ -50,6 +58,10 @@ export function Result({
       <div className="result">
         <div>
           <p className="label">{label}</p>
+          {aliases?.map(alias => (
+            <p className="key">{alias}</p>
+          ))}
+
           <p className="description">{category}</p>
         </div>
         {activeIndex === index && (

@@ -55,6 +55,7 @@ export type Result = {
   onActivate: () => boolean | void;
   customActionText?: string;
   type?: 'LOADING_INDICATOR';
+  aliases?: string[];
 };
 
 export type Handler = {

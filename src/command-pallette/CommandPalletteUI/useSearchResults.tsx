@@ -57,7 +57,7 @@ export function useSearchResults({
     clusterNames: Object.keys(clusters || {}),
     activeClusterName: cluster?.name,
     query: preprocessedQuery,
-    tokens: preprocessedQuery.split(/\s+/).filter(Boolean),
+    tokens: preprocessedQuery.split(/(\/+)/).filter(Boolean),
     clusterNodes: availableNodes.filter(n => !n.namespaced),
     namespaceNodes: availableNodes.filter(n => n.namespaced),
     hiddenNamespaces,
@@ -72,9 +72,7 @@ export function useSearchResults({
   };
 
   useEffect(() => {
-    if (query) {
-      handlers.fetchResources(context);
-    }
+    handlers.fetchResources(context);
   }, [query, namespaceContext]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {

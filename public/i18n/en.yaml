@@ -169,10 +169,10 @@ command-palette:
     open-upload-yaml: Open Upload YAML
     open-preferences: Open Preferences
     resource-aliases: Built-in Resource Aliases
-    short-help: Type to search, e.g. "ns default" or "pod nginx"
+    short-help: Type <0>?</0> for help
     all-namespaces: List resources from all Namespaces
   item-actions:
-    navigate: Navigate
+    navigate: <0>Enter</0> to navigate <0>Tab</0> to autocomplete
     open: Open
     show-help: Show available commands
     switch: Switch context

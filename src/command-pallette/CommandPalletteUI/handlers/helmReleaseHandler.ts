@@ -24,7 +24,7 @@ function getAutocompleteEntries({
         return [helmReleaseResourceType];
       }
       return [];
-    case 2: // name
+    case 3: // name
       const helmReleaseNames = (
         resourceCache[`${namespace}/helmreleases`] || []
       ).map(n => n.metadata.name);
@@ -54,7 +54,7 @@ function makeListItem(item: K8sResource, context: CommandPaletteContext) {
   return {
     label: name,
     category: t('configuration.title') + ' > ' + t('helm-releases.title'),
-    query: `helmreleases ${name}`,
+    query: `helmreleases/${name}`,
     onActivate: () => {
       const pathname = `/cluster/${activeClusterName}/namespaces/${namespace}/helm-releases/${name}`;
       navigate(pathname);
@@ -121,7 +121,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
     return [linkToList, { type: LOADING_INDICATOR }];
   }
 
-  const name = tokens[1];
+  const [, delimiter, name] = tokens;
   if (name) {
     const matchedByName = helmReleases.filter(item =>
       item.metadata.name.includes(name),
@@ -130,11 +130,10 @@ function createResults(context: CommandPaletteContext): Result[] | null {
       return matchedByName.map(item => makeListItem(item, context));
     }
     return null;
+  } else if (delimiter) {
+    return [...helmReleases.map(item => makeListItem(item, context))];
   } else {
-    return [
-      linkToList,
-      ...helmReleases.map(item => makeListItem(item, context)),
-    ];
+    return [linkToList];
   }
 }
 
