@@ -58,6 +58,15 @@ export function CustomResources({
   // CRD can have infinite number of additionalPrinterColumns what would be impossible to fit into the table
   if (customColumns?.length > 5) customColumns.length = 5;
 
+  const customColumnLayout = resource => {
+    return {
+      resourceName: resource?.metadata?.name,
+      resourceType: crd?.metadata?.name,
+      url: customUrl(resource),
+      namespaceId: resource?.metadata?.namespace,
+    };
+  };
+
   const params = {
     hasDetailsView: true,
     customUrl,
@@ -77,7 +86,9 @@ export function CustomResources({
       allowSlashShortcut: true,
     },
     namespace,
+    enableColumnLayout: true,
+    columnLayout: 'ThreeColumnsEndExpanded',
+    customColumnLayout,
   };
-
   return <ResourcesList {...params} />;
 }

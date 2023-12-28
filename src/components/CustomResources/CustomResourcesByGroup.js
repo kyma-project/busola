@@ -6,7 +6,7 @@ import pluralize from 'pluralize';
 import { GroupingListPage } from './GroupingListPage';
 import { useUrl } from 'hooks/useUrl';
 
-export default function CustomResourcesByGroup() {
+export default function CustomResourcesByGroup({ enableColumnLayout }) {
   const { t } = useTranslation();
   const { namespace, clusterUrl, scopedUrl } = useUrl();
   const description = (
@@ -32,6 +32,7 @@ export default function CustomResourcesByGroup() {
         nameSelector: entry => pluralize(entry?.spec.names.kind || ''),
         readOnly: true,
       }}
+      enableColumnLayout={enableColumnLayout}
     />
   );
 }

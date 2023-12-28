@@ -6,7 +6,7 @@ import { createPatch } from 'rfc6902';
 import { cloneDeep } from 'lodash';
 import * as jp from 'jsonpath';
 import pluralize from 'pluralize';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
@@ -197,6 +197,8 @@ export function ResourceListRenderer({
   disableDelete,
   disableMargin,
   enableColumnLayout,
+  columnLayout,
+  customColumnLayout,
   sortBy = {
     name: nameLocaleSort,
     time: timeSort,
@@ -210,7 +212,7 @@ export function ResourceListRenderer({
   });
   const { t } = useTranslation();
   const { isProtected, protectedResourceWarning } = useProtectedResources();
-  const setColumnLayoutState = useSetRecoilState(columnLayoutState);
+  const [layoutState, setColumnLayoutState] = useRecoilState(columnLayoutState);
 
   const [toggleFormFn, getToggleFormFn] = useState(() => {});
 
@@ -253,16 +255,24 @@ export function ResourceListRenderer({
               <Link
                 style={{ fontWeight: 'bold' }}
                 onClick={() => {
-                  setColumnLayoutState({
-                    midColumn: {
-                      resourceName: entry?.metadata?.name,
-                      resourceType: resourceType,
-                      url: linkTo(entry),
-                      namespaceId: entry?.metadata?.namespace,
-                    },
-                    endColumn: null,
-                    layout: 'TwoColumnsMidExpanded',
-                  });
+                  setColumnLayoutState(
+                    columnLayout
+                      ? {
+                          midColumn: layoutState.midColumn,
+                          endColumn: customColumnLayout(entry),
+                          layout: columnLayout,
+                        }
+                      : {
+                          midColumn: {
+                            resourceName: entry?.metadata?.name,
+                            resourceType: resourceType,
+                            url: linkTo(entry),
+                            namespaceId: entry?.metadata?.namespace,
+                          },
+                          endColumn: null,
+                          layout: 'TwoColumnsMidExpanded',
+                        },
+                  );
                   window.history.pushState(
                     window.history.state,
                     '',
@@ -278,7 +288,7 @@ export function ResourceListRenderer({
             </>
           ) : (
             <Link style={{ fontWeight: 'bold' }} href={linkTo(entry)}>
-              {nameSelector(entry)}
+              {nameSelector(entry)}cc
             </Link>
           )
         ) : (
