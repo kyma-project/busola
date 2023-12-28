@@ -15,6 +15,8 @@ import './DynamicPageComponent.scss';
 import { createPortal } from 'react-dom';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 const Column = ({ title, children, columnSpan, image, style = {} }) => {
   const styleComputed = { gridColumn: columnSpan, ...style };
@@ -37,8 +39,12 @@ export const DynamicPageComponent = ({
   children,
   columnWrapperClassName,
   content,
+  layoutNumber,
 }) => {
   const [showTitleDescription, setShowTitleDescription] = useState(false);
+  const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
+
+  console.log(layoutColumn);
 
   return (
     <DynamicPage
@@ -48,6 +54,62 @@ export const DynamicPageComponent = ({
       headerContentPinnable={false}
       headerTitle={
         <DynamicPageTitle
+          navigationActions={
+            layoutColumn.layout !== 'OneColumn' ? (
+              layoutNumber !== 'StartColumn' ? (
+                <>
+                  {layoutColumn.layout === 'TwoColumnsMidExpanded' ||
+                  layoutColumn.layout === 'ThreeColumnsMidExpanded' ||
+                  layoutColumn.layout === 'ThreeColumnsEndExpanded' ? (
+                    <Button
+                      design="Transparent"
+                      icon="full-screen"
+                      onClick={() =>
+                        setLayoutColumn({
+                          ...layoutColumn,
+                          layout:
+                            layoutNumber === 'MidColumn'
+                              ? 'MidColumnFullScreen'
+                              : 'EndColumnFullScreen',
+                        })
+                      }
+                    />
+                  ) : null}
+                  {layoutColumn.layout === 'MidColumnFullScreen' ||
+                  layoutColumn.layout === 'EndColumnFullScreen' ? (
+                    <Button
+                      design="Transparent"
+                      icon="exit-full-screen"
+                      onClick={() =>
+                        setLayoutColumn({
+                          ...layoutColumn,
+                          layout:
+                            layoutNumber === 'MidColumn'
+                              ? layoutColumn.endColumn === null
+                                ? 'TwoColumnsMidExpanded'
+                                : 'ThreeColumnsMidExpanded'
+                              : 'ThreeColumnsEndExpanded',
+                        })
+                      }
+                    />
+                  ) : null}
+                  <Button
+                    design="Transparent"
+                    icon="decline"
+                    onClick={() =>
+                      setLayoutColumn({
+                        ...layoutColumn,
+                        layout:
+                          layoutNumber === 'MidColumn'
+                            ? 'OneColumn'
+                            : 'TwoColumnsMidExpanded',
+                      })
+                    }
+                  />
+                </>
+              ) : null
+            ) : null
+          }
           style={title === 'Clusters Overview' ? { display: 'none' } : null}
           breadcrumbs={
             breadcrumbItems.length ? (

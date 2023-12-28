@@ -111,6 +111,7 @@ export function GroupingListPage({
           />
         }
         content={<YamlEditorProvider>{lists}</YamlEditorProvider>}
+        layoutNumber="StartColumn"
       />
 
       <YamlUploadDialog />

@@ -113,6 +113,7 @@ export function ResourcesList(props) {
     <YamlEditorProvider>
       {!props.isCompact ? (
         <DynamicPageComponent
+          layoutNumber="StartColumn"
           title={prettifyNamePlural(props.resourceTitle, props.resourceType)}
           actions={
             <>
