@@ -1,19 +1,23 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { act, render, waitFor } from '@testing-library/react';
 import PodRestarts from '../PodRestarts';
 import { ThemeProvider } from '@ui5/webcomponents-react';
 
 describe('PodRestarts', () => {
-  it('Shows 0 for no statuses', () => {
+  it('Shows 0 for no statuses', async () => {
     const { queryByRole } = render(
       <ThemeProvider>
         <PodRestarts statuses={[]} />
       </ThemeProvider>,
     );
-    expect(queryByRole('status')).toHaveTextContent('0');
+    await waitFor(async () => {
+      await act(async () => {
+        expect(queryByRole('status')).toHaveTextContent('0');
+      });
+    });
   });
 
-  it('Sums up restart statuses', () => {
+  it('Sums up restart statuses', async () => {
     const statuses = [
       { name: 'container-1', restartCount: 10 },
       { name: 'container-2', restartCount: 3 },
@@ -24,6 +28,10 @@ describe('PodRestarts', () => {
         <PodRestarts statuses={statuses} />
       </ThemeProvider>,
     );
-    expect(queryByRole('status')).toHaveTextContent('13');
+    await waitFor(async () => {
+      await act(async () => {
+        expect(queryByRole('status')).toHaveTextContent('13');
+      });
+    });
   });
 });

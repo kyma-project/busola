@@ -1,4 +1,10 @@
-import { render, fireEvent, queryByText } from 'testing/reactTestingUtils';
+import {
+  render,
+  fireEvent,
+  queryByText,
+  waitFor,
+  act,
+} from 'testing/reactTestingUtils';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { ThemeProvider } from '@ui5/webcomponents-react';
 
@@ -40,7 +46,11 @@ describe('GenericList', () => {
         />
       </ThemeProvider>,
     );
-    expect(await getByText(defaultNotFoundText)).toBeInTheDocument();
+    await waitFor(async () => {
+      await act(async () => {
+        expect(getByText(defaultNotFoundText)).toBeInTheDocument();
+      });
+    });
   });
 
   it('Renders custom notFoundMessage props', async () => {
@@ -56,7 +66,11 @@ describe('GenericList', () => {
         />
       </ThemeProvider>,
     );
-    expect(await getByText(notFoundMessage)).toBeInTheDocument();
+    await waitFor(async () => {
+      await act(async () => {
+        expect(getByText(notFoundMessage)).toBeInTheDocument();
+      });
+    });
   });
 
   it('Renders title', async () => {
@@ -71,11 +85,15 @@ describe('GenericList', () => {
         />
       </ThemeProvider>,
     );
-    expect(await getByText(title)).toBeInTheDocument();
+    await waitFor(async () => {
+      await act(async () => {
+        expect(getByText(title)).toBeInTheDocument();
+      });
+    });
   });
 
   describe('Actions', () => {
-    it("Renders actions button when 'actions' prop is provided", () => {
+    it("Renders actions button when 'actions' prop is provided", async () => {
       const actions = [{ name: 'testaction', handler: () => {} }];
       const { getAllByLabelText } = render(
         <ThemeProvider>
@@ -87,11 +105,15 @@ describe('GenericList', () => {
           />
         </ThemeProvider>,
       );
-      const actionButtons = getAllByLabelText(actions[0].name);
-      expect(actionButtons.length).toBe(mockEntries.length);
+      await waitFor(async () => {
+        await act(async () => {
+          const actionButtons = getAllByLabelText(actions[0].name);
+          expect(actionButtons.length).toBe(mockEntries.length);
+        });
+      });
     });
 
-    it("Skips rendering actions when 'actions' prop passes skipAction() call", () => {
+    it("Skips rendering actions when 'actions' prop passes skipAction() call", async () => {
       const actions = [
         { name: 'skip it', handler: () => {}, skipAction: () => true },
         {
@@ -110,11 +132,15 @@ describe('GenericList', () => {
           />
         </ThemeProvider>,
       );
-      expect(queryByLabelText(actions[0].name)).toBeNull();
-      expect(queryByLabelText(actions[1].name)).toBeTruthy();
+      await waitFor(async () => {
+        await act(async () => {
+          expect(queryByLabelText(actions[0].name)).toBeNull();
+          expect(queryByLabelText(actions[1].name)).toBeTruthy();
+        });
+      });
     });
 
-    it('Renders extra column in header when only actions are set', () => {
+    it('Renders extra column in header when only actions are set', async () => {
       const actions = [{ name: 'testaction', handler: () => {} }];
       const { queryByLabelText, rerender } = render(
         <ThemeProvider>
@@ -128,16 +154,19 @@ describe('GenericList', () => {
       );
 
       expect(queryByLabelText('actions-column')).toBeInTheDocument();
-
-      rerender(
-        <ThemeProvider>
-          <GenericList
-            headerRenderer={() => []}
-            rowRenderer={() => []}
-            entries={mockEntries}
-          />
-        </ThemeProvider>,
-      );
+      await waitFor(async () => {
+        await act(async () => {
+          rerender(
+            <ThemeProvider>
+              <GenericList
+                headerRenderer={() => []}
+                rowRenderer={() => []}
+                entries={mockEntries}
+              />
+            </ThemeProvider>,
+          );
+        });
+      });
 
       expect(queryByLabelText('actions-column')).not.toBeInTheDocument();
     });
@@ -153,12 +182,15 @@ describe('GenericList', () => {
         />
       </ThemeProvider>,
     );
-
-    mockEntries.forEach(entry =>
-      Object.keys(entry)
-        .filter(key => key !== 'metadata')
-        .forEach(key => getByText(entry[key])),
-    );
+    await waitFor(async () => {
+      await act(async () => {
+        mockEntries.forEach(entry =>
+          Object.keys(entry)
+            .filter(key => key !== 'metadata')
+            .forEach(key => getByText(entry[key])),
+        );
+      });
+    });
   });
 
   it('Renders custom data using custom entryRenderer', async () => {
@@ -173,8 +205,11 @@ describe('GenericList', () => {
         />
       </ThemeProvider>,
     );
-
-    expect(await queryByText(mockEntries[0].name)).toBeInTheDocument();
+    await waitFor(async () => {
+      await act(async () => {
+        expect(queryByText(mockEntries[0].name)).toBeInTheDocument();
+      });
+    });
   });
 
   it('Renders collapse entries with collapse control', async () => {
@@ -200,18 +235,21 @@ describe('GenericList', () => {
         .forEach(key => getByText(entry[key])),
     );
 
-    let foundCollapseButtons = await getAllByTestId('collapse-button-close');
+    let foundCollapseButtons = getAllByTestId('collapse-button-close');
     expect(foundCollapseButtons).toHaveLength(2);
+    await waitFor(async () => {
+      await act(async () => {
+        fireEvent.click(foundCollapseButtons[0]);
 
-    fireEvent.click(foundCollapseButtons[0]);
+        foundCollapseButtons = getAllByTestId('collapse-button-close');
+        expect(foundCollapseButtons).toHaveLength(1);
+        foundCollapseButtons = getAllByTestId('collapse-button-open');
+        expect(foundCollapseButtons).toHaveLength(1);
 
-    foundCollapseButtons = await getAllByTestId('collapse-button-close');
-    expect(foundCollapseButtons).toHaveLength(1);
-    foundCollapseButtons = await getAllByTestId('collapse-button-open');
-    expect(foundCollapseButtons).toHaveLength(1);
-
-    const foundCollapseContents = await getAllByTestId('collapse-content');
-    expect(foundCollapseContents).toHaveLength(1);
+        const foundCollapseContents = getAllByTestId('collapse-content');
+        expect(foundCollapseContents).toHaveLength(1);
+      });
+    });
   });
 
   it('Renders collapse entries without collapse control', async () => {
@@ -230,14 +268,17 @@ describe('GenericList', () => {
         />
       </ThemeProvider>,
     );
+    await waitFor(async () => {
+      await act(async () => {
+        let foundCollapseButtons = queryAllByTestId('collapse-button-close');
+        expect(foundCollapseButtons).toHaveLength(0);
+        foundCollapseButtons = queryAllByTestId('collapse-button-open');
+        expect(foundCollapseButtons).toHaveLength(0);
 
-    let foundCollapseButtons = await queryAllByTestId('collapse-button-close');
-    expect(foundCollapseButtons).toHaveLength(0);
-    foundCollapseButtons = await queryAllByTestId('collapse-button-open');
-    expect(foundCollapseButtons).toHaveLength(0);
-
-    const foundCollapseContents = await getAllByTestId('collapse-content');
-    expect(foundCollapseContents).toHaveLength(3);
+        const foundCollapseContents = getAllByTestId('collapse-content');
+        expect(foundCollapseContents).toHaveLength(3);
+      });
+    });
   });
 
   it('Renders headers', async () => {
@@ -250,8 +291,11 @@ describe('GenericList', () => {
         />
       </ThemeProvider>,
     );
-
-    mockHeaderRenderer().forEach(async header => await getByText(header));
+    await waitFor(async () => {
+      await act(async () => {
+        mockHeaderRenderer().forEach(async header => getByText(header));
+      });
+    });
   });
 
   it("Doesn't render header with showHeader set to false", async () => {
@@ -265,9 +309,15 @@ describe('GenericList', () => {
         />
       </ThemeProvider>,
     );
-    const foundRows = queryAllByRole('row');
-    expect(foundRows).toHaveLength(1);
-    expect(queryByText(foundRows[0], defaultNotFoundText)).toBeInTheDocument();
+    await waitFor(async () => {
+      await act(async () => {
+        const foundRows = queryAllByRole('row');
+        expect(foundRows).toHaveLength(1);
+        expect(
+          queryByText(foundRows[0], defaultNotFoundText),
+        ).toBeInTheDocument();
+      });
+    });
   });
 
   it('Renders extreaHeaderContent', async () => {
@@ -282,8 +332,11 @@ describe('GenericList', () => {
         />
       </ThemeProvider>,
     );
-
-    expect(await getByText(content)).toBeInTheDocument();
+    await waitFor(async () => {
+      await act(async () => {
+        expect(getByText(content)).toBeInTheDocument();
+      });
+    });
   });
 
   describe('Search', () => {
@@ -297,8 +350,11 @@ describe('GenericList', () => {
           />
         </ThemeProvider>,
       );
-
-      expect(await getByRole('search')).toBeInTheDocument();
+      await waitFor(async () => {
+        await act(async () => {
+          expect(getByRole('search')).toBeInTheDocument();
+        });
+      });
     });
 
     it("Doesn't show search field when showSearchField is set to false", async () => {
@@ -314,8 +370,11 @@ describe('GenericList', () => {
           />
         </ThemeProvider>,
       );
-
-      expect(await queryByRole('search')).toBeNull();
+      await waitFor(async () => {
+        await act(async () => {
+          expect(queryByRole('search')).toBeNull();
+        });
+      });
     });
 
     it('Shows server error message if dataError prop is true', async () => {
@@ -335,10 +394,14 @@ describe('GenericList', () => {
         </ThemeProvider>,
       );
 
-      expect(await queryAllByRole('row')).toHaveLength(1);
-      expect(
-        await getByText(new RegExp(serverErrorMessage.message, 'i')),
-      ).toBeInTheDocument();
+      await waitFor(async () => {
+        await act(async () => {
+          expect(queryAllByRole('row')).toHaveLength(1);
+          expect(
+            getByText(new RegExp(serverErrorMessage.message, 'i')),
+          ).toBeInTheDocument();
+        });
+      });
     });
 
     it('Shows Spinner if dataLoading prop is true', async () => {
@@ -352,8 +415,11 @@ describe('GenericList', () => {
           />
         </ThemeProvider>,
       );
-
-      expect(await getByLabelText('Loading')).toBeInTheDocument();
+      await waitFor(async () => {
+        await act(async () => {
+          expect(getByLabelText('Loading')).toBeInTheDocument();
+        });
+      });
     });
   });
 });

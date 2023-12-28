@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react';
 import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 import copyToClipboard from 'copy-to-clipboard';
+import '@ui5/webcomponents-icons/dist/AllIcons.js';
 
 jest.mock('copy-to-clipboard');
 

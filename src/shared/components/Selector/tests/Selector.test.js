@@ -1,4 +1,4 @@
-import { render } from 'testing/reactTestingUtils';
+import { act, render, waitFor } from 'testing/reactTestingUtils';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Selector } from '../Selector';
@@ -10,16 +10,20 @@ jest.mock('../../RelatedPods.js', () => ({
 
 describe('Selector tests', () => {
   describe('Selector tests for Kubernetes resources', () => {
-    it('Does not render Selector when selector is null', () => {
+    it('Does not render Selector when selector is null', async () => {
       const { queryByText } = render(
         <ThemeProvider>
           <Selector selector={null} />
         </ThemeProvider>,
       );
-      expect(queryByText('selector.title')).not.toBeInTheDocument();
+      await waitFor(async () => {
+        await act(async () => {
+          expect(queryByText('selector.title')).not.toBeInTheDocument();
+        });
+      });
     });
 
-    it('Renders default message when selector labels are null', () => {
+    it('Renders default message when selector labels are null', async () => {
       const mockedSelector = {};
 
       const { getByText } = render(
@@ -27,10 +31,16 @@ describe('Selector tests', () => {
           <Selector selector={mockedSelector} />
         </ThemeProvider>,
       );
-      expect(getByText('selector.message.empty-selector')).toBeInTheDocument();
+      await waitFor(async () => {
+        await act(async () => {
+          expect(
+            getByText('selector.message.empty-selector'),
+          ).toBeInTheDocument();
+        });
+      });
     });
 
-    it('Renders Selector with labels and pods list', () => {
+    it('Renders Selector with labels and pods list', async () => {
       const mockedSelector = {
         matchLabels: {
           test: 'test',
@@ -46,12 +56,19 @@ describe('Selector tests', () => {
           />
         </ThemeProvider>,
       );
-
-      expect(getByText('Related Pods for test-namespace')).toBeInTheDocument();
-      expect(container.querySelector("[text='test=test']")).toBeInTheDocument(); // selector labels
+      await waitFor(async () => {
+        await act(async () => {
+          expect(
+            getByText('Related Pods for test-namespace'),
+          ).toBeInTheDocument();
+          expect(
+            container.querySelector("[text='test=test']"),
+          ).toBeInTheDocument(); // selector labels
+        });
+      });
     });
 
-    it('Renders Selector with matchExpressions and without pods list', () => {
+    it('Renders Selector with matchExpressions and without pods list', async () => {
       const mockedSelector = {
         matchLabels: {
           test: 'test',
@@ -71,17 +88,22 @@ describe('Selector tests', () => {
           />
         </ThemeProvider>,
       );
-
-      expect(getByText('match-expressions.title')).toBeInTheDocument(); //title of the matchExpressions table
-      expect(container.querySelector("[text='test=test']")).toBeInTheDocument();
-      expect(getByText('test-key')).toBeInTheDocument(); // matchExpressions elements
-      expect(getByText('In')).toBeInTheDocument();
-      expect(
-        container.querySelector("[text='test-value']"),
-      ).toBeInTheDocument();
+      await waitFor(async () => {
+        await act(async () => {
+          expect(getByText('match-expressions.title')).toBeInTheDocument(); //title of the matchExpressions table
+          expect(
+            container.querySelector("[text='test=test']"),
+          ).toBeInTheDocument();
+          expect(getByText('test-key')).toBeInTheDocument(); // matchExpressions elements
+          expect(getByText('In')).toBeInTheDocument();
+          expect(
+            container.querySelector("[text='test-value']"),
+          ).toBeInTheDocument();
+        });
+      });
     });
 
-    it('Renders custom message when selector labels are null ', () => {
+    it('Renders custom message when selector labels are null ', async () => {
       const mockedSelector = {};
       const { t } = useTranslation();
       const { getByText } = render(
@@ -92,13 +114,16 @@ describe('Selector tests', () => {
           />
         </ThemeProvider>,
       );
-
-      expect(
-        getByText('persistent-volume-claims.message.empty-selector'),
-      ).toBeInTheDocument();
+      await waitFor(async () => {
+        await act(async () => {
+          expect(
+            getByText('persistent-volume-claims.message.empty-selector'),
+          ).toBeInTheDocument();
+        });
+      });
     });
 
-    it('Renders Selector with custom RelatedResources', () => {
+    it('Renders Selector with custom RelatedResources', async () => {
       const mockedSelector = {
         matchLabels: {
           test: 'test',
@@ -114,22 +139,31 @@ describe('Selector tests', () => {
           />
         </ThemeProvider>,
       );
-
-      expect(getByText('Persistent Volumes')).toBeInTheDocument();
+      await waitFor(async () => {
+        await act(async () => {
+          expect(getByText('Persistent Volumes')).toBeInTheDocument();
+        });
+      });
     });
   });
 
   describe('Selector tests for Istio resources', () => {
-    it('Renders message when selector is null', () => {
+    it('Renders message when selector is null', async () => {
       const { getByText } = render(
         <ThemeProvider>
           <Selector selector={null} isIstioSelector />
         </ThemeProvider>,
       );
-      expect(getByText('selector.message.empty-selector')).toBeInTheDocument();
+      await waitFor(async () => {
+        await act(async () => {
+          expect(
+            getByText('selector.message.empty-selector'),
+          ).toBeInTheDocument();
+        });
+      });
     });
 
-    it('Renders Selector with custom title', () => {
+    it('Renders Selector with custom title', async () => {
       const { t } = useTranslation();
 
       const { getByText } = render(
@@ -141,10 +175,14 @@ describe('Selector tests', () => {
           />
         </ThemeProvider>,
       );
-      expect(getByText('workload-selector-title')).toBeInTheDocument();
+      await waitFor(async () => {
+        await act(async () => {
+          expect(getByText('workload-selector-title')).toBeInTheDocument();
+        });
+      });
     });
 
-    it('Renders Selector with non-empty labels', () => {
+    it('Renders Selector with non-empty labels', async () => {
       const mockedSelector = {
         matchLabels: {
           test: 'test',
@@ -162,9 +200,14 @@ describe('Selector tests', () => {
           />
         </ThemeProvider>,
       );
-
-      expect(getByText('Custom Resources')).toBeInTheDocument();
-      expect(container.querySelector("[text='test=test']")).toBeInTheDocument();
+      await waitFor(async () => {
+        await act(async () => {
+          expect(getByText('Custom Resources')).toBeInTheDocument();
+          expect(
+            container.querySelector("[text='test=test']"),
+          ).toBeInTheDocument();
+        });
+      });
     });
   });
 });
