@@ -347,6 +347,7 @@ function Resource({
   return (
     <>
       <DynamicPageComponent
+        layoutNumber="MidColumn"
         title={resource.metadata.name}
         actions={actions}
         breadcrumbItems={breadcrumbItems}
