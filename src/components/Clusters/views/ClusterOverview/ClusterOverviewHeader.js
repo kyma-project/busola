@@ -49,7 +49,7 @@ const GardenerProvider = () => {
 
   return (
     <DynamicPageComponent.Column title={t('gardener.headers.provider')}>
-      <p className="gardener-provider ">{provider}</p>
+      <p style={{ textTransform: 'uppercase' }}>{provider}</p>
     </DynamicPageComponent.Column>
   );
 };
