@@ -23,14 +23,15 @@ export default function ClusterStats({ data }) {
         level="H4"
         style={{
           ...spacing.sapUiMediumMarginBegin,
-          ...spacing.sapUiMediumMarginTopBottom,
+          ...spacing.sapUiMediumMarginTop,
+          ...spacing.sapUiSmallMarginBottom,
         }}
       >
-        {t('cluster-overview.headers.monitoring-and-health')}
+        {t('cluster-overview.statistics.title')}
       </Title>
       <div
         className="cluster-overview__graphs-wrapper"
-        style={spacing.sapUiSmallMargin}
+        style={spacing.sapUiSmallMarginBeginEnd}
       >
         <UI5Panel
           disableMargin

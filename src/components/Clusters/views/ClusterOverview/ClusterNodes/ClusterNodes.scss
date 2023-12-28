@@ -18,13 +18,9 @@
   .cluster-overview__graphs-wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
-
+    gap: 16px;
     & > :first-child {
-      margin-right: 12px;
       margin-bottom: unset;
-    }
-    & > :last-child {
-      margin-left: 20px;
     }
   }
 }

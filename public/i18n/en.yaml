@@ -5,13 +5,15 @@ apps:
   title: Apps
 cluster-overview:
   headers:
-    resource-details: Resource Details
-    monitoring-and-health: Monitoring and Health
     cpu: CPU
     memory: Memory
     metrics: Metrics
     nodes: Nodes
+  resource-details: 
+    title: Resource Details
+    metadata: Metadata
   statistics:
+    title:  Monitoring and Health
     cpu-usage-m: 'CPU Usage'
     memory-usage-gib: 'Memory Usage'
   tooltips:
@@ -107,7 +109,9 @@ clusters:
     title-all-clusters: Clusters Overview
     title-current-cluster: Cluster Details
     title-no-clusters-available: No clusters available
-    version: Version
+    kyma-version: Kyma Version
+    kubernetes-version: Kubernetes Version
+    resource-type: Resource Type
   statuses:
     inmemory: In Memory
     localstorage: Local Storage
