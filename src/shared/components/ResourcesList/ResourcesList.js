@@ -215,7 +215,6 @@ export function ResourceListRenderer({
   });
 
   const [activeResource, setActiveResource] = useState(null);
-  const [showEditDialog, setShowEditDialog] = useState(false);
   const {
     setEditedYaml: setEditedSpec,
     closeEditor,
@@ -414,7 +413,7 @@ export function ResourceListRenderer({
       activeResource = CreateResourceForm.sanitizeClone(activeResource);
     }
     setActiveResource(activeResource);
-    setShowEditDialog(true);
+    toggleFormFn(true);
   };
 
   const actions = readOnly
@@ -483,7 +482,7 @@ export function ResourceListRenderer({
         design="Transparent"
         onClick={() => {
           setActiveResource(undefined);
-          setShowEditDialog(true);
+          toggleFormFn(true);
         }}
       >
         {createActionLabel ||
@@ -516,7 +515,6 @@ export function ResourceListRenderer({
           })
         }
         getToggleFormFn={getToggleFormFn}
-        opened={showEditDialog}
         confirmText={t('common.buttons.create')}
         id={`add-${resourceType}-modal`}
         className="modal-size--l"
@@ -536,7 +534,6 @@ export function ResourceListRenderer({
           </ErrorBoundary>
         )}
         modalOpeningComponent={<></>}
-        customCloseAction={() => setShowEditDialog(false)}
       />
       {createPortal(
         <DeleteMessageBox
