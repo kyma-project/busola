@@ -7,7 +7,6 @@ import { useGetGardenerProvider } from './useGetGardenerProvider';
 import { useGetVersions } from './useGetVersions';
 import { useFeature } from 'hooks/useFeature';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
-import { useClustersInfo } from 'state/utils/getClustersInfo';
 
 const GardenerProvider = () => {
   const { t } = useTranslation();
@@ -27,10 +26,9 @@ const GardenerProvider = () => {
   );
 };
 
-export default function ClusterDetails() {
+export default function ClusterDetails({ currentCluster }) {
   const { t } = useTranslation();
   const { loading, kymaVersion, k8sVersion } = useGetVersions();
-  const { currentCluster } = useClustersInfo();
   const config = currentCluster?.config;
 
   return (
