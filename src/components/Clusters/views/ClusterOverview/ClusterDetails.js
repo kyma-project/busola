@@ -60,7 +60,7 @@ export default function ClusterDetails({ currentCluster }) {
             >
               {t('clusters.overview.cluster')}
             </DynamicPageComponent.Column>
-            {!loading && (
+            {!loading && k8sVersion && (
               <DynamicPageComponent.Column
                 title={t('clusters.overview.kubernetes-version') + ':'}
               >
