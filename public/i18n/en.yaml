@@ -14,15 +14,13 @@ cluster-overview:
     metadata: Metadata
   statistics:
     title:  Monitoring and Health
-    cpu-usage-m: 'CPU Usage'
-    memory-usage-gib: 'Memory Usage'
+    cpu-usage: 'CPU Usage'
+    memory-usage: 'Memory Usage'
   tooltips:
-    percentage:
-      cpu-used: 'CPU used: {{percentage}}'
-      memory-used: 'Memory used: {{percentage}}'
-    units:
-      cpu-used: 'CPU (m) used: {{value}}/{{max}}'
-      memory-used: 'Memory (GiB) used: {{value}}/{{max}}'
+      cpu-used-percentage: 'CPU used: {{percentage}}'
+      memory-used-percentage: 'Memory used: {{percentage}}'
+      cpu-used-m: 'CPU (m) used: {{value}}/{{max}}'
+      memory-used-gib: 'Memory (GiB) used: {{value}}/{{max}}'
 cluster-role-bindings:
   description: <0>ClusterRoleBinding</0> assigns the permissions defined in a ClusterRole to a user.
   name_singular: ClusterRoleBinding

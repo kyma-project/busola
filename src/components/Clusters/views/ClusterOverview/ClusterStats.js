@@ -35,14 +35,14 @@ export default function ClusterStats({ data }) {
       >
         <UI5Panel
           disableMargin
-          title={t('cluster-overview.statistics.cpu-usage-m')}
+          title={t('cluster-overview.statistics.cpu-usage')}
         >
           <UI5RadialChart
             color="var(--sapIndicationColor_7)"
             value={roundDecimals(cpu.usage)}
             max={roundDecimals(cpu.capacity)}
             tooltip={{
-              content: t('cluster-overview.tooltips.units.cpu-used', {
+              content: t('cluster-overview.tooltips.cpu-used-m', {
                 value: roundDecimals(cpu.usage),
                 max: roundDecimals(cpu.capacity),
               }),
@@ -52,14 +52,14 @@ export default function ClusterStats({ data }) {
         </UI5Panel>
         <UI5Panel
           disableMargin
-          title={t('cluster-overview.statistics.memory-usage-gib')}
+          title={t('cluster-overview.statistics.memory-usage')}
         >
           <UI5RadialChart
             color="var(--sapIndicationColor_6)"
             value={roundDecimals(memory.usage)}
             max={roundDecimals(memory.capacity)}
             tooltip={{
-              content: t('cluster-overview.tooltips.units.memory-used', {
+              content: t('cluster-overview.tooltips.memory-used-gib', {
                 value: roundDecimals(memory.usage),
                 max: roundDecimals(memory.capacity),
               }),

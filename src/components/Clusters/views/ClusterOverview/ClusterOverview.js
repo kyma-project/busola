@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@ui5/webcomponents-react';
-import { ClusterNodes } from './ClusterNodes/ClusterNodes';
+import { ClusterNodes } from './ClusterNodes';
 import { ClusterValidation } from './ClusterValidation/ClusterValidation';
 import { useFeature } from 'hooks/useFeature';
 import { useNodesQuery } from 'components/Nodes/nodeQueries';
@@ -15,6 +15,7 @@ import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useNavigate } from 'react-router-dom';
 import { deleteCluster } from 'components/Clusters/shared';
+import './ClusterOverview.scss';
 
 const Injections = React.lazy(() =>
   import('../../../Extensibility/ExtensibilityInjections'),

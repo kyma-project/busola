@@ -11,7 +11,6 @@ import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTim
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useUrl } from 'hooks/useUrl';
-import './ClusterNodes.scss';
 
 const NodeHeader = ({ nodeName }) => {
   const { clusterUrl } = useUrl();
@@ -68,7 +67,7 @@ export function ClusterNodes({ data, error, loading }) {
         <ProgressBar
           percentage={cpu.percentage}
           tooltip={{
-            content: t('cluster-overview.tooltips.percentage.cpu-used', {
+            content: t('cluster-overview.tooltips.cpu-used-percentage', {
               percentage: cpu.percentage,
             }),
             position: 'bottom',
@@ -82,7 +81,7 @@ export function ClusterNodes({ data, error, loading }) {
         <ProgressBar
           percentage={memory.percentage}
           tooltip={{
-            content: t('cluster-overview.tooltips.percentage.memory-used', {
+            content: t('cluster-overview.tooltips.memory-used-percentage', {
               percentage: memory.percentage,
             }),
             position: 'bottom',

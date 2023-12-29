@@ -1,0 +1,11 @@
+.cluster-overview__graphs-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 1100px) {
+  .cluster-overview__graphs-wrapper {
+    grid-template-columns: 1fr 1fr;
+  }
+}
