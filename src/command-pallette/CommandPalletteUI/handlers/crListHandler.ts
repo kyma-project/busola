@@ -51,7 +51,7 @@ function createResults(context: CommandPaletteContext): Result[] {
   const listLabel = t('command-palette.results.list-of', {
     resourceType: t('command-palette.crs.name-short_plural'),
   });
-  console.log(listLabel);
+
   return [
     {
       label: listLabel,

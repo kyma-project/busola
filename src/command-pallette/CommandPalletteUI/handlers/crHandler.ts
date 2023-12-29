@@ -12,6 +12,7 @@ import {
 import {
   autocompleteForResources,
   findNavigationNode,
+  getShortAliases,
   makeSuggestion,
 } from './helpers';
 
@@ -284,7 +285,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
   const isNamespaced = crd.spec.scope === 'Namespaced';
 
   const matchingNode = findMatchingNode(crd, context);
-  console.log(matchingNode);
+
   const defaultCategory = isNamespaced
     ? t('command-palette.crs.namespaced')
     : t('command-palette.crs.cluster');
@@ -313,7 +314,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
     query: '',
     onActivate: () => {},
   };
-  console.log(linkToList);
+
   const resources = resourceCache[getResourceKey(crd, namespace)];
   const listItems = resources
     ? resources.map(item => makeListItem({ crd, item, category, context }))

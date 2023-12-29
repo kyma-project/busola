@@ -2,7 +2,7 @@ import { addCluster } from 'components/Clusters/shared';
 import { CommandPaletteContext, Handler, Result } from '../types';
 import { makeSuggestion } from './helpers';
 
-function createNonResourceOptions({
+export function createNonResourceOptions({
   activeClusterName,
 }: {
   activeClusterName: string | undefined;
@@ -50,21 +50,22 @@ function createResults(context: CommandPaletteContext): Result[] | null {
   const options = createNonResourceOptions(context);
 
   const option = options.find(o => o.names.includes(context.tokens[0]));
+
+  const {
+    activeClusterName,
+    clusterNames,
+    clustersInfo,
+    t,
+    navigate,
+  } = context;
   if (option) {
-    const {
-      activeClusterName,
-      clusterNames,
-      clustersInfo,
-      t,
-      navigate,
-    } = context;
     switch (option.type) {
       case 'clusters':
         return clusterNames.map(clusterName => ({
           label: t('command-palette.resource-names.cluster', {
             name: clusterName,
           }),
-          query: `cluster ${clusterName}`,
+          query: `cluster/${clusterName}`,
           onActivate: () => {
             const cluster = {
               name: clusterName,
@@ -123,7 +124,42 @@ function createResults(context: CommandPaletteContext): Result[] | null {
         return null;
     }
   }
-  return null;
+
+  const allResources = [
+    {
+      label: t('navigation.upload-yaml.title'),
+      query: 'upload',
+      onActivate: () => {
+        context.setShowYamlUpload(true);
+      },
+      customActionText: t('command-palette.help.open-upload-yaml'),
+      aliases: ['up'],
+    },
+    {
+      label: t('navigation.preferences.title'),
+      query: 'preferences',
+      onActivate: () => {
+        context.setOpenPreferencesModal(true);
+      },
+      customActionText: t('command-palette.help.open-preferences'),
+      aliases: ['prefs'],
+    },
+  ];
+
+  if (activeClusterName) {
+    allResources.push({
+      label: t('clusters.overview.title-current-cluster'),
+      query: 'overview',
+      onActivate: () => {
+        const pathname = `/cluster/${activeClusterName}/overview`;
+        navigate(pathname);
+      },
+      customActionText: '',
+      aliases: ['ov'],
+    });
+  }
+
+  return null; ////////////////////
 }
 
 export const nonResourceHandler: Handler = {

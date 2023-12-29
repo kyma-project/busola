@@ -10,6 +10,7 @@ import {
 import { getSuggestionForSingleResource } from './helpers';
 
 const helmReleaseResourceType = 'helmreleases';
+const helmReleaseAliases = ['helmr'];
 
 function getAutocompleteEntries({
   tokens,
@@ -63,7 +64,10 @@ function makeListItem(item: K8sResource, context: CommandPaletteContext) {
 }
 
 function concernsHelmReleases({ tokens }: CommandPaletteContext) {
-  return tokens[0] === helmReleaseResourceType;
+  return (
+    tokens[0] === helmReleaseResourceType ||
+    helmReleaseAliases.includes(tokens[0])
+  );
 }
 
 async function fetchHelmReleases(context: CommandPaletteContext) {
@@ -114,6 +118,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
       const pathname = `/cluster/${activeClusterName}/namespaces/${namespace}/helm-releases`;
       navigate(pathname);
     },
+    aliases: helmReleaseAliases,
   };
 
   if (typeof helmReleases !== 'object') {
@@ -142,5 +147,7 @@ export const helmReleaseHandler: Handler = {
   getSuggestion,
   fetchResources: fetchHelmReleases,
   createResults,
-  getNavigationHelp: () => [{ name: 'helmreleases', aliases: ['helmr'] }],
+  getNavigationHelp: () => [
+    { name: 'helmreleases', aliases: helmReleaseAliases },
+  ],
 };

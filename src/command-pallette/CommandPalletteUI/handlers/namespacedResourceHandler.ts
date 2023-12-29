@@ -17,6 +17,7 @@ import {
 } from '../types';
 import { K8sResource } from 'types';
 import { NavNode } from 'state/types';
+import { limitedWidgets } from 'components/Extensibility/components-form';
 
 function getAutocompleteEntries({
   tokens,
@@ -119,21 +120,12 @@ async function fetchNamespacedResource(context: CommandPaletteContext) {
   }
 }
 
-function createResults(context: CommandPaletteContext): Result[] | null {
-  const {
-    tokens,
-    namespace,
-    resourceCache,
-    namespaceNodes,
-    activeClusterName,
-    navigate,
-    t,
-  } = context;
+function createAllResults(context: CommandPaletteContext) {
+  const { namespace, namespaceNodes, activeClusterName, navigate } = context;
 
-  const [type, delimiter, name] = tokens;
-
-  if (!type) {
-    return namespaceNodes.map(namespaceNode => {
+  return namespaceNodes
+    .filter((currentValue, index, arr) => arr.indexOf(currentValue) === index)
+    .map(namespaceNode => {
       return {
         ...namespaceNode,
         query: namespaceNode.resourceType,
@@ -141,19 +133,21 @@ function createResults(context: CommandPaletteContext): Result[] | null {
           const pathname = `/cluster/${activeClusterName}/namespaces/${namespace}/${namespaceNode.pathSegment}`;
           navigate(pathname);
         },
+        aliases: getShortAliases(
+          namespaceNode.resourceType,
+          resourceTypes,
+          namespaceNodes,
+        ),
       };
     });
-  }
-  const resourceTypeList = toFullResourceTypeList(type, resourceTypes);
-  console.log(resourceTypeList);
-  const resourceType = toFullResourceType(type, resourceTypes);
-  console.log(resourceType);
-  const matchedNode = findNavigationNode(resourceType, namespaceNodes);
-  console.log(matchedNode);
+}
 
-  if (!matchedNode) {
-    return null;
-  }
+function createSingleResult(
+  context: CommandPaletteContext,
+  resourceType: string,
+  matchedNode: NavNode,
+): Result {
+  const { namespace, namespaceNodes, activeClusterName, navigate, t } = context;
 
   const resourceTypeText = t([
     `${resourceType}.title`,
@@ -173,7 +167,47 @@ function createResults(context: CommandPaletteContext): Result[] | null {
     aliases: getShortAliases(resourceType, resourceTypes, namespaceNodes),
   };
 
+  return linkToList;
+}
+
+function createResults(context: CommandPaletteContext): Result[] | null {
+  const { tokens, namespace, resourceCache, namespaceNodes } = context;
+
+  const [type, delimiter, name] = tokens;
+
+  //return all when no query
+  if (!type) {
+    return createAllResults(context);
+  }
+
+  if (!delimiter) {
+    const resourceTypeList = toFullResourceTypeList(type, resourceTypes);
+
+    const results = resourceTypeList
+      .map(resourceType => {
+        const matchedNode = findNavigationNode(resourceType, namespaceNodes);
+        ////////////
+        return matchedNode
+          ? createSingleResult(context, resourceType, matchedNode)
+          : null;
+      })
+      .filter(r => r !== null) as Result[];
+
+    if (!results) return null;
+
+    return results;
+  }
+
+  const resourceType = toFullResourceType(type, resourceTypes);
+  const matchedNode = findNavigationNode(resourceType, namespaceNodes);
+
+  if (!matchedNode) {
+    return null;
+  }
+
+  const linkToList = createSingleResult(context, resourceType, matchedNode);
   const resources = resourceCache[`${namespace}/${resourceType}`];
+
   if (typeof resources !== 'object') {
     return [
       linkToList,
@@ -188,10 +222,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
   } else if (delimiter) {
     return [...resources.map(item => makeListItem(item, matchedNode, context))];
   } else {
-    return [
-      linkToList,
-      //...resources.map(item => makeListItem(item, matchedNode, context)),
-    ];
+    return [linkToList];
   }
 }
 

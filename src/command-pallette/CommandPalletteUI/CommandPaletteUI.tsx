@@ -88,10 +88,15 @@ export function CommandPaletteUI({
     ) as HTMLInputElement;
     if (innerInput.selectionEnd === innerInput.selectionStart) {
       innerInput?.focus();
-      const startIndex = query.lastIndexOf('/', query.lastIndexOf('/') - 1) + 1;
-      setTimeout(() =>
-        innerInput.setSelectionRange(startIndex, query.lastIndexOf('/') + 1),
-      );
+      let startIndex = 0;
+
+      if (query.lastIndexOf('/') === query.length - 1) {
+        startIndex = query.lastIndexOf('/', query.lastIndexOf('/') - 1) + 1;
+      } else {
+        startIndex = query.lastIndexOf('/') + 1;
+      }
+
+      setTimeout(() => innerInput.setSelectionRange(startIndex, query.length));
     }
   };
 
@@ -173,7 +178,7 @@ export function CommandPaletteUI({
     },
     [isHistoryMode, activeResultIndex, query],
   );
-
+  console.log(results);
   return (
     <Background hide={hide}>
       <div className="command-palette-ui__wrapper" role="dialog">
@@ -193,6 +198,23 @@ export function CommandPaletteUI({
             icon={<Icon name="slim-arrow-right" />}
           />
           {!showHelp && query && (
+            <ResultsList
+              results={results}
+              isHistoryMode={isHistoryMode}
+              suggestion={
+                <SuggestedQuery
+                  suggestedQuery={suggestedQuery}
+                  setQuery={(query: string) => {
+                    setQuery(query);
+                    commandPaletteInput?.focus();
+                  }}
+                />
+              }
+              activeIndex={activeResultIndex}
+              setActiveIndex={setActiveResultIndex}
+            />
+          )}
+          {!showHelp && !query && (
             <ResultsList
               results={results}
               isHistoryMode={isHistoryMode}

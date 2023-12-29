@@ -7,6 +7,7 @@ import {
   findNavigationNode,
   getApiPathForQuery,
   toFullResourceTypeList,
+  getShortAliases,
 } from './helpers';
 import {
   clusterNativeResourceTypes,
@@ -178,21 +179,12 @@ function makeSingleNamespaceLinks(
   }
 }
 
-function createResults(context: CommandPaletteContext): Result[] {
-  const {
-    tokens,
-    clusterNodes,
-    t,
-    resourceCache,
-    showHiddenNamespaces,
-    hiddenNamespaces,
-    activeClusterName,
-    navigate,
-  } = context;
-  const [type, delimiter, name] = tokens;
+function createAllResults(context: CommandPaletteContext) {
+  const { clusterNodes, activeClusterName, navigate } = context;
 
-  if (!type) {
-    return clusterNodes.map(clusterNode => {
+  return clusterNodes
+    .filter((currentValue, index, arr) => arr.indexOf(currentValue) === index)
+    .map(clusterNode => {
       return {
         ...clusterNode,
         query: clusterNode.resourceType,
@@ -200,20 +192,21 @@ function createResults(context: CommandPaletteContext): Result[] {
           const pathname = `/cluster/${activeClusterName}/${clusterNode.pathSegment}`;
           navigate(pathname);
         },
+        aliases: getShortAliases(
+          clusterNode.resourceType,
+          resourceTypes,
+          clusterNodes,
+        ),
       };
     });
-  }
-  const resourceTypeList = toFullResourceTypeList(type, resourceTypes);
-  console.log(resourceTypeList);
-  const resourceType = toFullResourceType(type, resourceTypes);
-  const matchedNodes = resourceTypeList.map(res =>
-    findNavigationNode(res, clusterNodes),
-  );
-  console.log(matchedNodes);
-  const matchedNode = findNavigationNode(resourceType, clusterNodes);
-  if (!matchedNode) {
-    return [];
-  }
+}
+
+function createSingleResult(
+  context: CommandPaletteContext,
+  resourceType: string,
+  matchedNode: NavNode,
+): Result {
+  const { clusterNodes, activeClusterName, navigate, t } = context;
 
   const resourceTypeText = t([
     `${resourceType}.title`,
@@ -232,8 +225,61 @@ function createResults(context: CommandPaletteContext): Result[] {
       const pathname = `/cluster/${activeClusterName}/${matchedNode.pathSegment}`;
       navigate(pathname);
     },
+    aliases: getShortAliases(resourceType, resourceTypes, clusterNodes),
   };
-  console.log(linkToList);
+
+  return linkToList;
+}
+
+function createResults(context: CommandPaletteContext): Result[] {
+  const {
+    tokens,
+    clusterNodes,
+    t,
+    resourceCache,
+    showHiddenNamespaces,
+    hiddenNamespaces,
+    activeClusterName,
+    navigate,
+  } = context;
+  const [type, delimiter, name] = tokens;
+
+  //return all when no query
+  if (!type) {
+    return createAllResults(context);
+  }
+
+  if (!delimiter) {
+    const resourceTypeList = toFullResourceTypeList(type, resourceTypes);
+
+    const results = resourceTypeList
+      .map(resourceType => {
+        const matchedNode = findNavigationNode(resourceType, clusterNodes);
+
+        return matchedNode
+          ? createSingleResult(context, resourceType, matchedNode)
+          : null;
+      })
+      .filter(r => r !== null) as Result[];
+
+    if (!results) return [];
+
+    return results;
+  }
+
+  const resourceType = toFullResourceType(type, resourceTypes);
+  const matchedNode = findNavigationNode(resourceType, clusterNodes);
+
+  if (!matchedNode) {
+    return [];
+  }
+
+  const resourceTypeText = t([
+    `${resourceType}.title`,
+    `command-palette.resource-names.${resourceType}`,
+  ]);
+  const linkToList = createSingleResult(context, resourceType, matchedNode);
+
   if (resourceType === 'namespaces' && ['-a', '*', 'all'].includes(name)) {
     if (window.location.pathname.includes('namespaces')) {
       return [
@@ -254,7 +300,6 @@ function createResults(context: CommandPaletteContext): Result[] {
             navigate(pathname);
           },
         },
-        linkToList,
       ];
     } else {
       return [
@@ -267,12 +312,12 @@ function createResults(context: CommandPaletteContext): Result[] {
             navigate(pathname);
           },
         },
-        linkToList,
       ];
     }
   }
 
   let resources = resourceCache[resourceType];
+
   if (typeof resources !== 'object') {
     //@ts-ignore  TODO: handle typein Result
     return [linkToList, { type: LOADING_INDICATOR }];

@@ -4,14 +4,19 @@
 
   .bsl-has-color-status-4 {
     font-size: var(--sapFontSize);
+    color: var(--sapList_TextColor);
+  }
 
-    .key {
-      display: inline;
-      background: var(--sapNeutralBackground);
-      padding-right: 4px;
-      padding-left: 3px;
-      border-radius: 2px;
-      color: var(--sapList_TextColor);
-    }
+  .label {
+    display: inline-block;
+  }
+
+  .key {
+    display: inline;
+    background: var(--sapNeutralBackground);
+    padding-right: 4px;
+    padding-left: 3px;
+    margin-left: 0.5rem;
+    border-radius: 2px;
   }
 }
