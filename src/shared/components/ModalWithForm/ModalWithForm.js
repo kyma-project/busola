@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Dialog, Button, Bar } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
@@ -11,24 +11,19 @@ import { createPortal } from 'react-dom';
 
 export const ModalWithForm = ({
   performRefetch,
-  sendNotification,
   title,
   button,
   renderForm,
-  opened,
-  customCloseAction,
   item,
   modalOpeningComponent,
   confirmText,
   invalidPopupMessage,
   className,
-  onModalOpenStateChange,
-  alwaysOpen,
   getToggleFormFn,
   ...props
 }) => {
   const { t } = useTranslation();
-  const [isOpen, setOpen] = useState(alwaysOpen || false);
+  const [isOpen, setOpen] = useState(false);
   const [resetFormFn, setResetFormFn] = useState(() => () => {});
 
   const {
@@ -41,19 +36,9 @@ export const ModalWithForm = ({
 
   confirmText = confirmText || t('common.buttons.create');
 
-  useEffect(() => {
-    if (!alwaysOpen) setOpenStatus(opened); // if alwaysOpen===true we can ignore the 'opened' prop
-  }, [opened]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    if (isOpen !== undefined) onModalOpenStateChange(isOpen);
-  }, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
-
   const setOpenStatus = status => {
     if (status) {
       setTimeout(() => revalidate());
-    } else {
-      if (customCloseAction) customCloseAction();
     }
     setOpen(status);
   };
@@ -148,7 +133,7 @@ export const ModalWithForm = ({
 
   return (
     <>
-      {alwaysOpen ? null : renderModalOpeningComponent()}
+      {renderModalOpeningComponent()}
       {createPortal(
         <Dialog
           className={`${className}`}
@@ -203,21 +188,15 @@ ModalWithForm.propTypes = {
   performRefetch: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   renderForm: PropTypes.func.isRequired,
-  opened: PropTypes.bool,
-  customCloseAction: PropTypes.func,
   item: PropTypes.object,
   modalOpeningComponent: PropTypes.node,
   confirmText: PropTypes.string,
   invalidPopupMessage: PropTypes.string,
   button: CustomPropTypes.button,
   className: PropTypes.string,
-  onModalOpenStateChange: PropTypes.func,
-  alwaysOpen: PropTypes.bool, // set this to true if you want to control the modal by rendering and un-rendering it instead of the open/closed state
 };
 
 ModalWithForm.defaultProps = {
   performRefetch: () => {},
   invalidPopupMessage: '',
-  onModalOpenStateChange: () => {},
-  alwaysOpen: false,
 };

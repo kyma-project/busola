@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { render, waitFor } from 'testing/reactTestingUtils';
 import { ResourceDetails } from '../ResourceDetails';
 import { ThemeProvider } from '@ui5/webcomponents-react';
+import '@ui5/webcomponents-icons/dist/AllIcons.js';
 
 jest.mock('shared/hooks/BackendAPI/useGet', () => ({
   useGet: () => {
