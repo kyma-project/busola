@@ -25,6 +25,7 @@ export function ClusterOverview() {
   const { t } = useTranslation();
   const clusterValidation = useFeature('CLUSTER_VALIDATION');
   const clustersInfo = useClustersInfo();
+  const currentCluster = clustersInfo?.currentCluster;
   const notification = useNotification();
   const navigate = useNavigate();
   const { nodes: data, error, loading } = useNodesQuery();
@@ -54,7 +55,7 @@ export function ClusterOverview() {
   return (
     <>
       <DynamicPageComponent
-        title={t('clusters.overview.title-current-cluster')}
+        title={currentCluster.currentContext.cluster.name}
         actions={actions}
         content={
           <>
@@ -63,7 +64,7 @@ export function ClusterOverview() {
               slot="details-top"
               root=""
             />
-            <ClusterDetails currentCluster={clustersInfo?.currentCluster} />
+            <ClusterDetails currentCluster={currentCluster} />
             {data && <ClusterStats data={data} />}
             <ClusterNodes data={data} error={error} loading={loading} />
             {clusterValidation?.isEnabled && <ClusterValidation />}
@@ -74,11 +75,9 @@ export function ClusterOverview() {
       <YamlUploadDialog />
       {createPortal(
         <DeleteMessageBox
-          resource={clustersInfo?.currentCluster}
+          resource={currentCluster}
           resourceIsCluster={true}
-          resourceTitle={
-            clustersInfo?.currentCluster?.kubeconfig['current-context']
-          }
+          resourceTitle={currentCluster?.kubeconfig['current-context']}
           deleteFn={e => {
             deleteCluster(e.name, clustersInfo);
             notification.notifySuccess({

@@ -40,7 +40,7 @@ export default function ClusterDetails({ currentCluster }) {
           ...spacing.sapUiSmallMarginBottom,
         }}
       >
-        {t('cluster-overview.resource-details.title')}
+        {t('cluster-overview.headers.cluster-details')}
       </Title>
       <div
         className="cluster-overview__details-wrapper"
@@ -48,20 +48,13 @@ export default function ClusterDetails({ currentCluster }) {
       >
         <Card
           header={
-            <CardHeader
-              titleText={t('cluster-overview.resource-details.metadata')}
-            />
+            <CardHeader titleText={t('cluster-overview.headers.metadata')} />
           }
         >
           <div
             className="cluster-overview__details-grid"
             style={spacing.sapUiSmallMargin}
           >
-            <DynamicPageComponent.Column
-              title={t('clusters.overview.resource-type') + ':'}
-            >
-              {t('clusters.overview.cluster')}
-            </DynamicPageComponent.Column>
             {!loading && k8sVersion && (
               <DynamicPageComponent.Column
                 title={t('clusters.overview.kubernetes-version') + ':'}
@@ -69,11 +62,6 @@ export default function ClusterDetails({ currentCluster }) {
                 {k8sVersion}
               </DynamicPageComponent.Column>
             )}
-            <DynamicPageComponent.Column
-              title={t('clusters.storage.title') + ':'}
-            >
-              <ClusterStorageType clusterConfig={config} />
-            </DynamicPageComponent.Column>
             {!loading && kymaVersion && (
               <DynamicPageComponent.Column
                 title={t('clusters.overview.kyma-version') + ':'}
@@ -81,6 +69,11 @@ export default function ClusterDetails({ currentCluster }) {
                 {kymaVersion}
               </DynamicPageComponent.Column>
             )}
+            <DynamicPageComponent.Column
+              title={t('clusters.storage.title') + ':'}
+            >
+              <ClusterStorageType clusterConfig={config} />
+            </DynamicPageComponent.Column>
             <DynamicPageComponent.Column
               title={t('clusters.common.api-server-address') + ':'}
             >

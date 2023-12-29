@@ -9,8 +9,7 @@ cluster-overview:
     memory: Memory
     metrics: Metrics
     nodes: Nodes
-  resource-details: 
-    title: Resource Details
+    cluster-details: Cluster Details
     metadata: Metadata
   statistics:
     title:  Monitoring and Health
@@ -109,8 +108,6 @@ clusters:
     title-no-clusters-available: No clusters available
     kyma-version: Kyma Version
     kubernetes-version: Kubernetes Version
-    resource-type: Resource Type
-    cluster: Cluster
   statuses:
     inmemory: In Memory
     localstorage: Local Storage
