@@ -31,6 +31,7 @@ export function useCustomResourceUrl(crd) {
     } else {
       return namespaceUrl(
         `customresources/${crd.metadata.name}/${cr.metadata.name}`,
+        { namespace: cr.metadata.namespace },
       );
     }
   };

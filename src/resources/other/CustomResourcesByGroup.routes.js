@@ -49,6 +49,7 @@ const ColumnWrapper = ({ children, details, ...props }) => {
                 customResourceDefinitionName:
                   layoutState?.endColumn?.resourceType,
                 resourceName: layoutState?.endColumn?.resourceName,
+                resourceNamespace: layoutState?.endColumn?.namespaceId,
               }}
             />
           </div>

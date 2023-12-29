@@ -19,6 +19,7 @@ function CustomResource({ params }) {
     customResourceDefinitionName,
     resourceVersion,
     resourceName,
+    resourceNamespace,
   } = params;
   const { data, loading } = useGet(
     `/apis/apiextensions.k8s.io/v1/customresourcedefinitions/${customResourceDefinitionName}`,
@@ -37,7 +38,11 @@ function CustomResource({ params }) {
   const crdName = customResourceDefinitionName.split('.')[0];
   const crdGroup = customResourceDefinitionName.replace(`${crdName}.`, '');
   const resourceUrl = `/apis/${crdGroup}/${version.name}/${
-    namespace ? `namespaces/${namespace}/` : ''
+    resourceNamespace
+      ? `namespaces/${resourceNamespace}/`
+      : namespace
+      ? `namespaces/${namespace}/`
+      : ''
   }${crdName}/${resourceName}`;
 
   const breadcrumbs = [
