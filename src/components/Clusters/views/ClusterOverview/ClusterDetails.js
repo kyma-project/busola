@@ -1,7 +1,6 @@
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useTranslation } from 'react-i18next';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
-import { Title } from '@ui5/webcomponents-react';
+import { Card, CardHeader, Title } from '@ui5/webcomponents-react';
 import { ClusterStorageType } from '../ClusterStorageType';
 import { useGetGardenerProvider } from './useGetGardenerProvider';
 import { useGetVersions } from './useGetVersions';
@@ -47,13 +46,16 @@ export default function ClusterDetails({ currentCluster }) {
         className="cluster-overview__details-wrapper"
         style={spacing.sapUiSmallMarginBeginEnd}
       >
-        <UI5Panel
-          disableMargin
-          title={t('cluster-overview.resource-details.metadata')}
+        <Card
+          header={
+            <CardHeader
+              titleText={t('cluster-overview.resource-details.metadata')}
+            />
+          }
         >
           <div
             className="cluster-overview__details-grid"
-            style={spacing.sapUiTinyMargin}
+            style={spacing.sapUiSmallMargin}
           >
             <DynamicPageComponent.Column
               title={t('clusters.overview.resource-type') + ':'}
@@ -86,7 +88,7 @@ export default function ClusterDetails({ currentCluster }) {
             </DynamicPageComponent.Column>
             <GardenerProvider />
           </div>
-        </UI5Panel>
+        </Card>
       </div>
     </>
   );

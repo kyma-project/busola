@@ -1,8 +1,7 @@
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useTranslation } from 'react-i18next';
 import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
-import { Title } from '@ui5/webcomponents-react';
+import { Card, CardHeader, Title } from '@ui5/webcomponents-react';
 
 export default function ClusterStats({ data }) {
   const { t } = useTranslation();
@@ -33,9 +32,12 @@ export default function ClusterStats({ data }) {
         className="cluster-overview__graphs-wrapper"
         style={spacing.sapUiSmallMarginBeginEnd}
       >
-        <UI5Panel
-          disableMargin
-          title={t('cluster-overview.statistics.cpu-usage')}
+        <Card
+          header={
+            <CardHeader
+              titleText={t('cluster-overview.statistics.cpu-usage')}
+            />
+          }
         >
           <UI5RadialChart
             color="var(--sapIndicationColor_7)"
@@ -49,10 +51,13 @@ export default function ClusterStats({ data }) {
               position: 'bottom',
             }}
           />
-        </UI5Panel>
-        <UI5Panel
-          disableMargin
-          title={t('cluster-overview.statistics.memory-usage')}
+        </Card>
+        <Card
+          header={
+            <CardHeader
+              titleText={t('cluster-overview.statistics.memory-usage')}
+            />
+          }
         >
           <UI5RadialChart
             color="var(--sapIndicationColor_6)"
@@ -66,7 +71,7 @@ export default function ClusterStats({ data }) {
               position: 'bottom',
             }}
           />
-        </UI5Panel>
+        </Card>
       </div>
     </>
   );
