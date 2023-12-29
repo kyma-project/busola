@@ -110,6 +110,7 @@ clusters:
     kyma-version: Kyma Version
     kubernetes-version: Kubernetes Version
     resource-type: Resource Type
+    cluster: Cluster
   statuses:
     inmemory: In Memory
     localstorage: Local Storage

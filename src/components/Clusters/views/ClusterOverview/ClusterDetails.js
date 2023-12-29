@@ -21,7 +21,7 @@ const GardenerProvider = () => {
 
   return (
     <DynamicPageComponent.Column title={t('gardener.headers.provider') + ':'}>
-      <p style={{ textTransform: 'uppercase' }}>{provider}</p>
+      <p className="gardener-provider">{provider}</p>
     </DynamicPageComponent.Column>
   );
 };
@@ -44,29 +44,21 @@ export default function ClusterDetails({ currentCluster }) {
         {t('cluster-overview.resource-details.title')}
       </Title>
       <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '2fr 1fr',
-          ...spacing.sapUiSmallMarginBegin,
-        }}
+        className="cluster-overview__details-wrapper"
+        style={spacing.sapUiSmallMarginBeginEnd}
       >
         <UI5Panel
           disableMargin
           title={t('cluster-overview.resource-details.metadata')}
         >
           <div
-            style={{
-              ...spacing.sapUiTinyMargin,
-              display: 'grid',
-              gridTemplateColumns: 'repeat(2, 1fr)',
-              gridTempllateRows: 'repeat(3, 1fr)',
-              gridGap: '25px',
-            }}
+            className="cluster-overview__details-grid"
+            style={spacing.sapUiTinyMargin}
           >
             <DynamicPageComponent.Column
               title={t('clusters.overview.resource-type') + ':'}
             >
-              Cluster
+              {t('clusters.overview.cluster')}
             </DynamicPageComponent.Column>
             {!loading && (
               <DynamicPageComponent.Column
