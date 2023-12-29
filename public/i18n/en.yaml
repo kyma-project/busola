@@ -231,6 +231,7 @@ common:
     copy: Copy
     create: Create
     delete: Delete
+    disconnect: Disconnect
     edit: Edit
     edit-yaml: Edit YAML
     generate-name: Generate
@@ -263,8 +264,10 @@ common:
   delete-dialog:
     delete-confirm: Don't ask again
     information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.
-    message: Are you sure you want to delete {{type}} {{name}}?
-    title: Delete {{type}}
+    delete-message: Are you sure you want to delete {{type}} {{name}}?
+    delete-title: Delete {{type}}
+    disconnect-message: Are you sure you want to disconnect {{type}} {{name}}?
+    disconnect-title: Disconnect {{type}}
   errors:
     couldnt-fetch-resources: Couldn't fetch resources.
     error: Error

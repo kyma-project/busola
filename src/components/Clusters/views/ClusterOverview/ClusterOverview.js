@@ -47,7 +47,7 @@ export function ClusterOverview() {
         });
       }}
     >
-      {t('common.buttons.delete')}
+      {t('common.buttons.disconnect')}
     </Button>
   );
 
@@ -75,6 +75,7 @@ export function ClusterOverview() {
       {createPortal(
         <DeleteMessageBox
           resource={clustersInfo?.currentCluster}
+          resourceIsCluster={true}
           resourceTitle={
             clustersInfo?.currentCluster?.kubeconfig['current-context']
           }
