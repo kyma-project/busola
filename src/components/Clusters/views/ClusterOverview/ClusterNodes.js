@@ -2,7 +2,6 @@ import { ErrorPanel } from 'shared/components/ErrorPanel/ErrorPanel';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { useNodesQuery } from 'components/Nodes/nodeQueries';
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { GenericList } from 'shared/components/GenericList/GenericList';
@@ -12,8 +11,6 @@ import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTim
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useUrl } from 'hooks/useUrl';
-import './ClusterNodes.scss';
-import ClusterStats from './ClusterStats';
 
 const NodeHeader = ({ nodeName }) => {
   const { clusterUrl } = useUrl();
@@ -24,9 +21,8 @@ const NodeHeader = ({ nodeName }) => {
   );
 };
 
-export function ClusterNodes() {
+export function ClusterNodes({ data, error, loading }) {
   const { t } = useTranslation();
-  const { nodes: data, error, loading } = useNodesQuery();
 
   const getStatusType = status => {
     if (status === 'Ready') return 'success';
@@ -71,7 +67,7 @@ export function ClusterNodes() {
         <ProgressBar
           percentage={cpu.percentage}
           tooltip={{
-            content: t('cluster-overview.tooltips.cpu-used', {
+            content: t('cluster-overview.tooltips.cpu-used-percentage', {
               percentage: cpu.percentage,
             }),
             position: 'bottom',
@@ -85,7 +81,7 @@ export function ClusterNodes() {
         <ProgressBar
           percentage={memory.percentage}
           tooltip={{
-            content: t('cluster-overview.tooltips.memory-used', {
+            content: t('cluster-overview.tooltips.memory-used-percentage', {
               percentage: memory.percentage,
             }),
             position: 'bottom',
@@ -141,7 +137,6 @@ export function ClusterNodes() {
             title={t('cluster-overview.headers.metrics')}
           />
         )}
-      {data && <ClusterStats data={data} />}
       {Events}
     </>
   );
