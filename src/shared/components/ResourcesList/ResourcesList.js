@@ -276,7 +276,8 @@ export function ResourceListRenderer({
                   window.history.pushState(
                     window.history.state,
                     '',
-                    linkTo(entry),
+                    `${linkTo(entry)}?layout=${columnLayout ||
+                      'TwoColumnsMidExpanded'}`,
                   );
                 }}
               >

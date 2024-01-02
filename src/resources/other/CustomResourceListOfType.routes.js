@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Route, useParams } from 'react-router-dom';
+import { Route, useParams, useSearchParams } from 'react-router-dom';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
 const CustomResourcesOfType = React.lazy(() =>
@@ -8,7 +8,8 @@ const CustomResourcesOfType = React.lazy(() =>
 
 function RoutedCustomResourcesOfType() {
   const { crdName } = useParams();
-
+  let [searchParams, setSearchParams] = useSearchParams();
+  console.log('searchParams', searchParams.get('layout'));
   return (
     <Suspense fallback={<Spinner />}>
       <CustomResourcesOfType crdName={crdName} />
