@@ -94,15 +94,15 @@ export const DynamicPageComponent = ({
                   <Button
                     design="Transparent"
                     icon="decline"
-                    onClick={() =>
+                    onClick={() => {
                       setLayoutColumn({
                         ...layoutColumn,
                         layout:
                           layoutNumber === 'MidColumn'
                             ? 'OneColumn'
                             : 'TwoColumnsMidExpanded',
-                      })
-                    }
+                      });
+                    }}
                   />
                 </>
               ) : null

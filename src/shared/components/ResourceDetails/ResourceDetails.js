@@ -141,6 +141,7 @@ function ResourceDetailsRenderer(props) {
 }
 
 function Resource({
+  layoutNumber,
   breadcrumbs,
   children,
   createResourceForm: CreateResourceForm,
@@ -347,7 +348,7 @@ function Resource({
   return (
     <>
       <DynamicPageComponent
-        layoutNumber="MidColumn"
+        layoutNumber={layoutNumber ?? 'MidColumn'}
         title={resource.metadata.name}
         actions={actions}
         breadcrumbItems={breadcrumbItems}

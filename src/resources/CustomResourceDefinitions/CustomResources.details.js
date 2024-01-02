@@ -67,6 +67,7 @@ function CustomResource({ params }) {
 
   return (
     <ResourceDetails
+      layoutNumber="EndColumn"
       resourceUrl={resourceUrl}
       resourceType={crdName}
       resourceName={resourceName}
