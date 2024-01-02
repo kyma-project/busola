@@ -10,10 +10,10 @@ export default function ClusterStats({ data }) {
   let memory = { usage: 0, capacity: 0, percentage: 0 };
 
   for (const node of data) {
-    cpu.usage += node.metrics.cpu.usage;
-    cpu.capacity += node.metrics.cpu.capacity;
-    memory.usage += node.metrics.memory.usage;
-    memory.capacity += node.metrics.memory.capacity;
+    cpu.usage += node.metrics.cpu?.usage ?? 0;
+    cpu.capacity += node.metrics.cpu?.capacity ?? 0;
+    memory.usage += node.metrics.memory?.usage ?? 0;
+    memory.capacity += node.metrics.memory?.capacity ?? 0;
   }
   cpu.percentage = roundDecimals((cpu.usage / cpu.capacity) * 100);
   memory.percentage = roundDecimals((memory.usage / memory.capacity) * 100);

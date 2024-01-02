@@ -1,11 +1,11 @@
-import React from 'react';
 import ListActions from 'shared/components/ListActions/ListActions';
+import '@ui5/webcomponents-icons/dist/AllIcons.js';
 
 import 'core-js/es/array/flat-map';
-import { render } from '@testing-library/react';
+import { act, render, waitFor } from '@testing-library/react';
 
 describe('ListActions', () => {
-  it('Renders only standalone buttons', () => {
+  it('Renders only standalone buttons', async () => {
     const entry = { id: '123' };
     const actions = [
       { name: 'action1', handler: jest.fn() },
@@ -15,22 +15,26 @@ describe('ListActions', () => {
       <ListActions actions={actions} entry={entry} />,
     );
 
-    expect(queryByLabelText('more-actions')).toBeFalsy();
+    await waitFor(async () => {
+      await act(async () => {
+        expect(queryByLabelText('more-actions')).toBeFalsy();
 
-    expect(queryByText(actions[0].name)).toBeInTheDocument();
-    expect(queryByText(actions[1].name)).toBeInTheDocument();
+        expect(queryByText(actions[0].name)).toBeInTheDocument();
+        expect(queryByText(actions[1].name)).toBeInTheDocument();
 
-    actions.forEach(action => {
-      const actionButton = queryByLabelText(action.name);
-      expect(actionButton).toBeTruthy();
+        actions.forEach(action => {
+          const actionButton = queryByLabelText(action.name);
+          expect(actionButton).toBeTruthy();
 
-      actionButton.click();
+          actionButton.click();
 
-      expect(action.handler).toHaveBeenCalledWith(entry);
+          expect(action.handler).toHaveBeenCalledWith(entry);
+        });
+      });
     });
   });
 
-  it('Renders more actions dropdown', () => {
+  it('Renders more actions dropdown', async () => {
     const actions = [
       { name: 'action1', handler: jest.fn() },
       { name: 'action2', handler: jest.fn() },
@@ -41,14 +45,18 @@ describe('ListActions', () => {
       <ListActions actions={actions} entry={{}} />,
     );
 
-    const moreActionsButton = queryByLabelText('more-actions');
-    expect(moreActionsButton).toBeInTheDocument();
-    expect(queryByText(actions[0].name)).toBeInTheDocument();
-    expect(queryByText(actions[3].name)).not.toBeInTheDocument();
+    await waitFor(async () => {
+      await act(async () => {
+        const moreActionsButton = queryByLabelText('more-actions');
+        expect(moreActionsButton).toBeInTheDocument();
+        expect(queryByText(actions[0].name)).toBeInTheDocument();
+        expect(queryByText(actions[3].name)).not.toBeInTheDocument();
 
-    moreActionsButton.click();
+        moreActionsButton.click();
 
-    expect(queryByText(actions[1].name)).toBeInTheDocument();
+        expect(queryByText(actions[1].name)).toBeInTheDocument();
+      });
+    });
   });
 
   it('Renders icon for standalone button', () => {
@@ -83,7 +91,7 @@ describe('ListActions', () => {
   it('Can override predefined icons', () => {
     const actions = [
       { name: 'Edit', handler: jest.fn(), icon: 'add' },
-      { name: 'Delete', handler: jest.fn(), icon: 'minus' },
+      { name: 'Delete', handler: jest.fn(), icon: 'delete' },
     ];
     const { getByLabelText } = render(
       <ListActions actions={actions} entry={{}} />,
@@ -93,6 +101,6 @@ describe('ListActions', () => {
     expect(editButton).toHaveAttribute('icon', 'add');
 
     const deleteButton = getByLabelText('Delete');
-    expect(deleteButton).toHaveAttribute('icon', 'minus');
+    expect(deleteButton).toHaveAttribute('icon', 'delete');
   });
 });

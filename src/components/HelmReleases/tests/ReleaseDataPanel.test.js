@@ -1,10 +1,9 @@
-import React from 'react';
-import { render } from 'testing/reactTestingUtils';
+import { act, render, waitFor } from 'testing/reactTestingUtils';
 import { ReleaseDataPanel } from '../ReleaseDataPanel';
 import { ThemeProvider } from '@ui5/webcomponents-react';
 
 describe('ReleaseDataPanel', () => {
-  it('Renders release data', () => {
+  it('Renders release data', async () => {
     const release = {
       name: 'mock-release',
       version: '8',
@@ -25,9 +24,12 @@ describe('ReleaseDataPanel', () => {
         <ReleaseDataPanel release={release} />
       </ThemeProvider>,
     );
-
-    expect(queryByText('mock-chart-name')).toBeInTheDocument();
-    expect(queryByText('mock-chart-description')).toBeInTheDocument();
-    expect(queryByText('mock-chart-version')).toBeInTheDocument();
+    await waitFor(async () => {
+      await act(async () => {
+        expect(queryByText('mock-chart-name')).toBeInTheDocument();
+        expect(queryByText('mock-chart-description')).toBeInTheDocument();
+        expect(queryByText('mock-chart-version')).toBeInTheDocument();
+      });
+    });
   });
 });

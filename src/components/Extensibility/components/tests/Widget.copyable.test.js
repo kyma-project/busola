@@ -1,6 +1,7 @@
 import copyToClipboard from 'copy-to-clipboard';
 import { act, render, waitFor } from 'testing/reactTestingUtils';
 import { ExtensibilityTestWrapper } from './helpers';
+import '@ui5/webcomponents-icons/dist/AllIcons.js';
 
 // those tests are in separate file as we need to mock the `widgets` collection from `./../index.js`...
 // ... which originals in turn are required in other `Widget.test.js`
