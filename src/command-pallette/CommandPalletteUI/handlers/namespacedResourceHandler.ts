@@ -17,7 +17,6 @@ import {
 } from '../types';
 import { K8sResource } from 'types';
 import { NavNode } from 'state/types';
-import { limitedWidgets } from 'components/Extensibility/components-form';
 
 function getAutocompleteEntries({
   tokens,
@@ -172,7 +171,6 @@ function createSingleResult(
 
 function createResults(context: CommandPaletteContext): Result[] | null {
   const { tokens, namespace, resourceCache, namespaceNodes } = context;
-
   const [type, delimiter, name] = tokens;
 
   //return all when no query
@@ -182,7 +180,6 @@ function createResults(context: CommandPaletteContext): Result[] | null {
 
   if (!delimiter) {
     const resourceTypeList = toFullResourceTypeList(type, resourceTypes);
-
     const results = resourceTypeList
       .map(resourceType => {
         const matchedNode = findNavigationNode(resourceType, namespaceNodes);

@@ -26,7 +26,7 @@ export function toFullResourceTypeList(
     r.aliases.some(a => a.startsWith(resourceType)),
   );
   const fullResourceTypeList = matchingResources.map(r => r.resourceType);
-  return fullResourceTypeList || [resourceType];
+  return fullResourceTypeList.length ? fullResourceTypeList : [resourceType];
 }
 
 export function getSuggestionForSingleResource({

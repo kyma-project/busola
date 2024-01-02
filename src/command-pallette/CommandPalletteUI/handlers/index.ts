@@ -70,9 +70,12 @@ export async function fetchResources(
 }
 
 export function createResults(context: CommandPaletteContext): Result[] {
-  return allHandlers
+  const results = allHandlers
     .flatMap(handler => handler.createResults(context))
     .filter(h => h !== null) as Result[];
+  return results.filter(
+    (currentValue, index, arr) => arr.indexOf(currentValue) === index,
+  );
 }
 
 export function getHelpEntries(context: CommandPaletteContext): HelpEntries {

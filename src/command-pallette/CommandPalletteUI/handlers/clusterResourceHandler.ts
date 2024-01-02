@@ -146,7 +146,7 @@ function makeSingleNamespaceLinks(
   const category = t('namespaces.title');
   const label = namespace.metadata.name;
   const name = namespace.metadata.name;
-  const query = `namespaces ${name}`;
+  const query = `namespaces/${name}`;
 
   const switchContextNode = {
     label,

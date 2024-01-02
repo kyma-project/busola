@@ -144,14 +144,17 @@ export function CommandPaletteUI({
       e.preventDefault();
       if (autocompletePhrase) {
         setQuery(autocompletePhrase + '/');
-      } else if (suggestedQuery && !query.endsWith('/')) {
-        setQuery(suggestedQuery + '/');
+        setActiveResultIndex(0);
       } else if (
         results?.[activeResultIndex] // && todo
         // results[activeResultIndex] !== LOADING_INDICATOR
       ) {
         // fill search with active result
-        setQuery(results[activeResultIndex].query + '/' || '');
+        setQuery(results[activeResultIndex]?.query + '/' || '');
+        setActiveResultIndex(0);
+      } else if (suggestedQuery) {
+        setQuery(suggestedQuery);
+        setActiveResultIndex(0);
       }
     } else if (key === 'ArrowUp') {
       const historyEntries = getHistoryEntries();
@@ -176,9 +179,9 @@ export function CommandPaletteUI({
         ? keyDownInDropdownMode(key, e)
         : keyDownInHistoryMode(key, e);
     },
-    [isHistoryMode, activeResultIndex, query],
+    [isHistoryMode, activeResultIndex, query, results],
   );
-  console.log(results);
+
   return (
     <Background hide={hide}>
       <div className="command-palette-ui__wrapper" role="dialog">
@@ -197,24 +200,7 @@ export function CommandPaletteUI({
             className="search-with-magnifying-glass full-width"
             icon={<Icon name="slim-arrow-right" />}
           />
-          {!showHelp && query && (
-            <ResultsList
-              results={results}
-              isHistoryMode={isHistoryMode}
-              suggestion={
-                <SuggestedQuery
-                  suggestedQuery={suggestedQuery}
-                  setQuery={(query: string) => {
-                    setQuery(query);
-                    commandPaletteInput?.focus();
-                  }}
-                />
-              }
-              activeIndex={activeResultIndex}
-              setActiveIndex={setActiveResultIndex}
-            />
-          )}
-          {!showHelp && !query && (
+          {!showHelp && (
             <ResultsList
               results={results}
               isHistoryMode={isHistoryMode}

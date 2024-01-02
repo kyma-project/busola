@@ -147,7 +147,7 @@ function getSuggestion({
       'customresourcedefinitions'
     ] as CustomResourceDefinition[]) || [];
 
-  const [type, name] = tokens;
+  const [type, , name] = tokens;
 
   const crdAliases = getCRAliases(crds);
   const suggestedALias = makeSuggestion(

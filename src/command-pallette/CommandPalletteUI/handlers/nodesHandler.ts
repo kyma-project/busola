@@ -20,7 +20,7 @@ function getAutocompleteEntries(
         return ['nodes '];
       }
       return null;
-    case 2: // name
+    case 3: // name
       const nodeNames = (resourceCache['nodes'] || []).map(
         n => n.metadata.name,
       );
