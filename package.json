@@ -65,6 +65,7 @@
     "@ui5/webcomponents-icons-tnt": "^1.20.0",
     "@ui5/webcomponents-react": "~1.23.0",
     "@ui5/webcomponents-react-base": "^1.23.0",
+    "@ui5/webcomponents-react-charts": "^1.23.0",
     "buffer": "^6.0.3",
     "classnames": "^2.2.6",
     "copy-to-clipboard": "^3.2.0",

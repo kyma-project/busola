@@ -11,7 +11,7 @@ import { ThemeProvider } from '@ui5/webcomponents-react';
 describe('GenericList', () => {
   const defaultNotFoundText = 'components.generic-list.messages.not-found';
 
-  const mockHeaderRenderer = entries => ['Id', 'Name', 'description'];
+  const mockHeaderRenderer = () => ['Id', 'Name', 'description'];
   const mockEntryRenderer = entry => [entry.id, entry.name, entry.description];
 
   const mockEntries = [
