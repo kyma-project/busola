@@ -19,7 +19,7 @@ const CustomResource = React.lazy(() =>
   import('../CustomResourceDefinitions/CustomResources.details'),
 );
 
-const ColumnWrapper = ({ children, details, ...props }) => {
+const ColumnWrapper = ({ details, ...props }) => {
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   const layoutState = useRecoilValue(columnLayoutState);
 
@@ -71,24 +71,3 @@ export default (
     }
   />
 );
-
-// export default function Sth() {
-//   const layoutState = useRecoilValue(columnLayoutState);
-
-//   return (<Route
-//     path="customresources"
-//     element={
-//       <Suspense fallback={<Spinner />}>
-
-//         <FlexibleColumnLayout
-//           style={{ height: '100%' }}
-//           layout={layoutState?.layout || 'OneColumn'}
-//           startColumn={<div slot=""><CustomResourcesByGroup /></div>}
-//           midColumn={<div slot=""></div>}
-//         />
-//         <CustomResourcesByGroup />
-//       </Suspense>
-//     }
-//   />
-//   )
-// };
