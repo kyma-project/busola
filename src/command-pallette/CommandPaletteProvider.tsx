@@ -44,15 +44,7 @@ export const CommandPaletteProvider = ({
     }
   };
 
-  const onSearchFocus = (e: Event) => {
-    if (document.activeElement === document.getElementById('header-search')) {
-      setShowDialog(true);
-    }
-  };
-
   useEventListener('keydown', onKeyPress, [showDialog]);
-
-  useEventListener('click', onSearchFocus, [showDialog]);
 
   return (
     <>
