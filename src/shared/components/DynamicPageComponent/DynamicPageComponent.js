@@ -95,6 +95,18 @@ export const DynamicPageComponent = ({
                     design="Transparent"
                     icon="decline"
                     onClick={() => {
+                      window.history.pushState(
+                        window.history.state,
+                        '',
+                        `${window.location.pathname.slice(
+                          0,
+                          window.location.pathname.lastIndexOf('/'),
+                        )}${
+                          layoutNumber === 'MidColumn'
+                            ? ''
+                            : '?layout=TwoColumnsMidExpanded'
+                        }`,
+                      );
                       setLayoutColumn({
                         ...layoutColumn,
                         layout:

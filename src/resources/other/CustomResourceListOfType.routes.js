@@ -9,7 +9,7 @@ const CustomResourcesOfType = React.lazy(() =>
 function RoutedCustomResourcesOfType() {
   const { crdName } = useParams();
   let [searchParams, setSearchParams] = useSearchParams();
-  console.log('searchParams', searchParams.get('layout'));
+
   return (
     <Suspense fallback={<Spinner />}>
       <CustomResourcesOfType crdName={crdName} />
