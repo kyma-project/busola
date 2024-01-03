@@ -284,7 +284,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
   const matchingNode = findMatchingNode(crd, context);
 
   const defaultCategory = isNamespaced
-    ? t('command-palette.crs.namespaced-short')
+    ? t('command-palette.crs.namespace-short')
     : t('command-palette.crs.cluster-short');
   const category =
     (matchingNode?.category || defaultCategory) +

@@ -111,12 +111,12 @@ export function CommandPalletteHelp({
       <br className="help-divider" />
       <div className="help-text">
         {helpEntries.navigation.map(({ name, aliases }) => (
-          <p key={name}>
-            <div className="help-text__name">{name}</div>
+          <div key={name}>
+            <p className="help-text__name">{name}</p>
             <pre className="key">
               {aliases?.join(', ') || EMPTY_TEXT_PLACEHOLDER}
             </pre>
-          </p>
+          </div>
         ))}
       </div>
       {helpEntries.crds.length ? (
@@ -127,10 +127,10 @@ export function CommandPalletteHelp({
           <br className="help-divider" />
           <div className="help-text">
             {helpEntries.crds.map(({ name, shortNames }) => (
-              <p key={name}>
-                <div className="help-text__name">{name}</div>
+              <div key={name}>
+                <p className="help-text__name">{name}</p>
                 <pre className="key">{shortNames?.join(', ')}</pre>
-              </p>
+              </div>
             ))}
           </div>
         </>

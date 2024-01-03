@@ -61,11 +61,11 @@ function createResults(context: CommandPaletteContext): Result[] {
       aliases: ['crs'],
     },
     {
-      label: t('command-palette.crs.namespaced'),
+      label: t('command-palette.crs.namespace'),
       category:
         t('configuration.title') +
         ' > ' +
-        t('command-palette.crs.namespaced-short'),
+        t('command-palette.crs.namespace-short'),
       query: 'crds',
       onActivate: () => {
         const pathname = `/cluster/${activeClusterName}/namespaces/${namespace}/customResources`;

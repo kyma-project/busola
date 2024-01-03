@@ -85,13 +85,13 @@ export function extractShortNames({
   aliases: string[];
 }): string[] {
   const singularResourceType = pluralize(pluralResourceType, 1);
-  return aliases.filter(
+  return aliases?.filter(
     alias => alias !== singularResourceType && alias !== pluralResourceType,
   );
 }
 
 export function findNavigationNode(resourceType: string, navNodes: NavNode[]) {
-  return navNodes.find(
+  return navNodes?.find(
     n => pluralize(n.resourceType) === pluralize(resourceType),
   );
 }

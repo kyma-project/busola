@@ -1,3 +1,13 @@
+@mixin key($margin-left: 0.5rem, $margin-right: 0.5rem) {
+  display: inline;
+  background: var(--sapNeutralBackground);
+  padding-right: 4px;
+  padding-left: 3px;
+  margin-left: $margin-left;
+  margin-right: $margin-right;
+  border-radius: 2px;
+}
+
 .result {
   display: flex;
   align-items: center;
@@ -5,6 +15,10 @@
   .bsl-has-color-status-4 {
     font-size: var(--sapFontSize);
     color: var(--sapList_TextColor);
+
+    .key {
+      @include key(0.1rem, 0.1rem);
+    }
   }
 
   .label {
@@ -12,11 +26,6 @@
   }
 
   .key {
-    display: inline;
-    background: var(--sapNeutralBackground);
-    padding-right: 4px;
-    padding-left: 3px;
-    margin-left: 0.5rem;
-    border-radius: 2px;
+    @include key(0.5rem, 0rem);
   }
 }

@@ -58,13 +58,15 @@ export function Result({
         <div>
           <p className="label">{label}</p>
           {aliases?.map(alias => (
-            <p className="key">{alias}</p>
+            <p className="key" key={alias}>
+              {alias}
+            </p>
           ))}
 
           <p className="description">{category}</p>
         </div>
         {activeIndex === index && (
-          <p className="bsl-has-color-status-4 ">{actionText}</p>
+          <div className="bsl-has-color-status-4 ">{actionText}</div>
         )}
       </div>
     </li>

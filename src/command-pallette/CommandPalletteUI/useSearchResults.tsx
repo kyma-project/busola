@@ -72,7 +72,9 @@ export function useSearchResults({
   };
 
   useEffect(() => {
-    handlers.fetchResources(context);
+    if (query) {
+      handlers.fetchResources(context);
+    }
   }, [query, namespaceContext]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const results = handlers.createResults(context).map(result => ({
