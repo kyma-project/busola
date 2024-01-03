@@ -62,8 +62,6 @@ export function NamespaceContextDisplay({
 }
 
 export function ShortHelpText({ showFullHelp }: { showFullHelp: () => void }) {
-  const { t } = useTranslation();
-
   return (
     <p className="short-help help-text">
       <Trans i18nKey="command-palette.help.short-help">

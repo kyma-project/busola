@@ -12,7 +12,6 @@ import {
 import {
   autocompleteForResources,
   findNavigationNode,
-  getShortAliases,
   makeSuggestion,
 } from './helpers';
 

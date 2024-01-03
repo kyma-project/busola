@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 import './Result.scss';
 
 type ResultProps = {
@@ -24,7 +24,6 @@ export function Result({
   aliases,
 }: ResultProps) {
   const resultRef = useRef<HTMLLIElement | null>(null);
-  const { t } = useTranslation();
 
   const onMouseOver = useCallback(() => {
     if (index !== activeIndex) {
