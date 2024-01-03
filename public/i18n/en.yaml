@@ -9,12 +9,17 @@ cluster-overview:
     memory: Memory
     metrics: Metrics
     nodes: Nodes
+    cluster-details: Cluster Details
+    metadata: Metadata
   statistics:
-    cpu-usage-m: 'CPU Usage (m)'
-    memory-usage-gib: 'Memory Usage (GiB)'
+    title:  Monitoring and Health
+    cpu-usage: 'CPU Usage'
+    memory-usage: 'Memory Usage'
   tooltips:
-    cpu-used: 'CPU Used: {{percentage}}'
-    memory-used: 'Memory Used: {{percentage}}'
+      cpu-used-percentage: 'CPU used: {{percentage}}'
+      memory-used-percentage: 'Memory used: {{percentage}}'
+      cpu-used-m: 'CPU (m) used: {{value}}/{{max}}'
+      memory-used-gib: 'Memory (GiB) used: {{value}}/{{max}}'
 cluster-role-bindings:
   description: <0>ClusterRoleBinding</0> assigns the permissions defined in a ClusterRole to a user.
   name_singular: ClusterRoleBinding
@@ -101,7 +106,8 @@ clusters:
     title-all-clusters: Clusters Overview
     title-current-cluster: Cluster Details
     title-no-clusters-available: No clusters available
-    version: Version
+    kyma-version: Kyma Version
+    kubernetes-version: Kubernetes Version
   statuses:
     inmemory: In Memory
     localstorage: Local Storage
@@ -224,6 +230,7 @@ common:
     copy: Copy
     create: Create
     delete: Delete
+    disconnect: Disconnect
     edit: Edit
     edit-yaml: Edit YAML
     generate-name: Generate
@@ -256,8 +263,10 @@ common:
   delete-dialog:
     delete-confirm: Don't ask again
     information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.
-    message: Are you sure you want to delete {{type}} {{name}}?
-    title: Delete {{type}}
+    delete-message: Are you sure you want to delete {{type}} {{name}}?
+    delete-title: Delete {{type}}
+    disconnect-message: Are you sure you want to disconnect {{type}} {{name}}?
+    disconnect-title: Disconnect {{type}}
   errors:
     couldnt-fetch-resources: Couldn't fetch resources.
     error: Error
@@ -867,15 +876,15 @@ limit-ranges:
   title: Limit Ranges
 machine-info:
   architecture-cpus: Architecture and CPUs
-  cpu-m: CPU (m)
-  cpu-usage: 'CPU usage:'
+  cpu-m: 'CPU (m):'
+  cpu-usage: CPU Usage
   cpus: CPUs
   gib: GiB
   kube-proxy-version: Kube proxy version
   kubelet-version: Kubelet version
   memory: Memory
-  memory-gib: Memory (GiB)
-  memory-usage: 'Memory usage:'
+  memory-gib: 'Memory (GiB):'
+  memory-usage: Memory Usage
   operating-system: Operating system
   pods-capacity: Pods capacity
   title: Machine info
