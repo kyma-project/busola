@@ -138,16 +138,6 @@ export function Header() {
           </>
         }
         onProfileClick={() => setIsMenuOpen(true)}
-        searchField={
-          <Input
-            id="header-search"
-            className="header-search"
-            icon={<Icon interactive name="slim-arrow-right" />}
-            showClearIcon
-            placeholder=""
-          />
-        }
-        showSearchField
       >
         {window.location.pathname !== '/clusters' &&
           !window.location.pathname.endsWith('/no-permissions') && (

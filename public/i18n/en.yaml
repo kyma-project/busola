@@ -157,10 +157,12 @@ command-palette:
     name-short: CRD
     name-short_plural: CRDs
   crs:
-    cluster: Cluster CRs
+    cluster-short: Cluster CRs
     name-short: CR
     name-short_plural: CRs
-    namespaced: Namespaced CRs
+    namespaced-short: Namespaced CRs
+    cluster: Custom Resources (Cluster)
+    namespaced: Custom Resources (Namespaced)
   help:
     choose-cluster: Choose Cluster
     crd-aliases: CRD Aliases

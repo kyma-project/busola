@@ -75,16 +75,28 @@ export function useSearchResults({
     handlers.fetchResources(context);
   }, [query, namespaceContext]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const results = handlers.createResults(context).map(result => ({
+    ...result,
+    onActivate: () => {
+      // entry can explicitly prevent hiding of command palette by returning false
+      if ('onActivate' in result && result.onActivate() !== false) {
+        hideCommandPalette();
+      }
+    },
+  }));
+
+  const matchedResult =
+    results?.find((result: any) => result.aliases?.includes(query)) ??
+    results.find((result: any) => result.query === query);
+
+  if (matchedResult) {
+    const index = results.indexOf(matchedResult);
+    results.splice(index, 1);
+    results.unshift(matchedResult);
+  }
+
   return {
-    results: handlers.createResults(context).map(result => ({
-      ...result,
-      onActivate: () => {
-        // entry can explicitly prevent hiding of command palette by returning false
-        if ('onActivate' in result && result.onActivate() !== false) {
-          hideCommandPalette();
-        }
-      },
-    })),
+    results: results,
     suggestedQuery: handlers.getSuggestions(context)[0],
     autocompletePhrase: handlers.getAutocompleteEntries(context),
     helpEntries: handlers.getHelpEntries(context),

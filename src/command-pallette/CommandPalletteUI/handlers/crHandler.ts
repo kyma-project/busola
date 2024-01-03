@@ -278,17 +278,15 @@ function createResults(context: CommandPaletteContext): Result[] | null {
   ).find(c => c.aliases.find(alias => alias === tokens[0]))?.crd;
   if (!crd) return null;
 
-  const listLabel = t('command-palette.results.list-of', {
-    resourceType: pluralize(prettifyKind(crd.spec.names.kind)),
-  });
+  const listLabel = pluralize(prettifyKind(crd.spec.names.kind));
 
   const isNamespaced = crd.spec.scope === 'Namespaced';
 
   const matchingNode = findMatchingNode(crd, context);
 
   const defaultCategory = isNamespaced
-    ? t('command-palette.crs.namespaced')
-    : t('command-palette.crs.cluster');
+    ? t('command-palette.crs.namespaced-short')
+    : t('command-palette.crs.cluster-short');
   const category =
     (matchingNode?.category || defaultCategory) +
     ' > ' +

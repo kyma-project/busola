@@ -1,15 +1,9 @@
 import { Result } from './../types';
 import { CommandPaletteContext, Handler, LOADING_INDICATOR } from '../types';
-import { getShortAliases, getSuggestionForSingleResource } from './helpers';
+import { getSuggestionForSingleResource } from './helpers';
 import { K8sResource } from 'types';
 
-const crdResourceTypes = [
-  'customresourcedefinitions',
-  'crd',
-  'crds',
-  'c',
-  'cr',
-];
+const crdResourceTypes = ['customresourcedefinitions', 'crd', 'crds'];
 const crdResourceAliases = ['crd', 'crds'];
 
 function getAutocompleteEntries({
@@ -62,7 +56,7 @@ function makeListItem(item: K8sResource, context: CommandPaletteContext) {
 }
 
 function concernsCRDs({ tokens }: CommandPaletteContext) {
-  return crdResourceTypes.includes(tokens[0]);
+  return crdResourceTypes.some(crt => crt.startsWith(tokens[0]));
 }
 
 async function fetchCRDs(context: CommandPaletteContext) {
@@ -89,9 +83,7 @@ function createResults(context: CommandPaletteContext): Result[] {
 
   const { resourceCache, tokens, t, navigate, activeClusterName } = context;
 
-  const listLabel = t('command-palette.results.list-of', {
-    resourceType: t('command-palette.crds.name-short_plural'),
-  });
+  const listLabel = t('custom-resource-definitions.title');
 
   const linkToList = {
     label: listLabel,

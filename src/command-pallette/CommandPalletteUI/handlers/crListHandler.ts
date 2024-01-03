@@ -2,6 +2,8 @@ import { Handler, Result } from './../types';
 import { CommandPaletteContext } from '../types';
 import { getSuggestionForSingleResource } from './helpers';
 
+const customResourcesAliases = ['customresource', 'customresources', 'crs'];
+
 function getAutocompleteEntries({
   tokens,
   resourceCache,
@@ -34,44 +36,42 @@ function getSuggestion({ tokens, resourceCache }: CommandPaletteContext) {
 }
 
 function concernsCRDs({ tokens }: CommandPaletteContext) {
-  return (
-    tokens[0] === 'customresource' ||
-    tokens[0] === 'customresources' ||
-    tokens[0] === 'crs'
-  );
+  return customResourcesAliases.some(cra => cra.startsWith(tokens[0]));
 }
 
 function createResults(context: CommandPaletteContext): Result[] {
-  if (!concernsCRDs(context)) {
+  const { namespace, t, navigate, activeClusterName, query } = context;
+
+  if (!concernsCRDs(context) && query) {
     return [];
   }
 
-  const { namespace, t, navigate, activeClusterName } = context;
-
-  const listLabel = t('command-palette.results.list-of', {
-    resourceType: t('command-palette.crs.name-short_plural'),
-  });
-
   return [
     {
-      label: listLabel,
+      label: t('command-palette.crs.cluster'),
       category:
-        t('configuration.title') + ' > ' + t('command-palette.crs.cluster'),
+        t('configuration.title') +
+        ' > ' +
+        t('command-palette.crs.cluster-short'),
       query: 'crs',
       onActivate: () => {
         const pathname = `/cluster/${activeClusterName}/customResources`;
         navigate(pathname);
       },
+      aliases: ['crs'],
     },
     {
-      label: listLabel,
+      label: t('command-palette.crs.namespaced'),
       category:
-        t('configuration.title') + ' > ' + t('command-palette.crs.namespaced'),
+        t('configuration.title') +
+        ' > ' +
+        t('command-palette.crs.namespaced-short'),
       query: 'crds',
       onActivate: () => {
         const pathname = `/cluster/${activeClusterName}/namespaces/${namespace}/customResources`;
         navigate(pathname);
       },
+      aliases: ['crs'],
     },
   ];
 }

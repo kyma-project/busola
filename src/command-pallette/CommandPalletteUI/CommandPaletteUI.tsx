@@ -197,35 +197,35 @@ export function CommandPaletteUI({
             placeholder={!isHistoryMode ? '' : query}
             onInput={(e: any) => setQuery((e.target as HTMLInputElement).value)}
             showClearIcon
-            className="search-with-magnifying-glass full-width"
+            className="search-with-display-more full-width"
             icon={<Icon name="slim-arrow-right" />}
           />
           {!showHelp && (
-            <ResultsList
-              results={results}
-              isHistoryMode={isHistoryMode}
-              suggestion={
-                <SuggestedQuery
-                  suggestedQuery={suggestedQuery}
-                  setQuery={(query: string) => {
-                    setQuery(query);
-                    commandPaletteInput?.focus();
-                  }}
-                />
-              }
-              activeIndex={activeResultIndex}
-              setActiveIndex={setActiveResultIndex}
-            />
+            <>
+              <ResultsList
+                results={results}
+                isHistoryMode={isHistoryMode}
+                suggestion={
+                  <SuggestedQuery
+                    suggestedQuery={suggestedQuery}
+                    setQuery={(query: string) => {
+                      setQuery(query);
+                      commandPaletteInput?.focus();
+                    }}
+                  />
+                }
+                activeIndex={activeResultIndex}
+                setActiveIndex={setActiveResultIndex}
+              />
+              <ShortHelpText
+                showFullHelp={() => {
+                  setQuery('help');
+                  commandPaletteInput?.focus();
+                }}
+              />
+            </>
           )}
           {showHelp && <CommandPalletteHelp helpEntries={helpEntries} />}
-          {!showHelp && (
-            <ShortHelpText
-              showFullHelp={() => {
-                setQuery('help');
-                commandPaletteInput?.focus();
-              }}
-            />
-          )}
         </div>
       </div>
     </Background>

@@ -154,9 +154,7 @@ function createSingleResult(
   ]);
 
   const linkToList = {
-    label: t('command-palette.results.list-of', {
-      resourceType: resourceTypeText,
-    }),
+    label: resourceTypeText,
     category: matchedNode.category + ' > ' + resourceTypeText,
     query: matchedNode.resourceType,
     onActivate: () => {

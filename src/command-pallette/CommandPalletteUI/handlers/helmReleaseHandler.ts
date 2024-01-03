@@ -65,8 +65,8 @@ function makeListItem(item: K8sResource, context: CommandPaletteContext) {
 
 function concernsHelmReleases({ tokens }: CommandPaletteContext) {
   return (
-    tokens[0] === helmReleaseResourceType ||
-    helmReleaseAliases.includes(tokens[0])
+    helmReleaseAliases.some(hra => hra.startsWith(tokens[0])) ||
+    tokens[0] === helmReleaseResourceType
   );
 }
 
@@ -109,9 +109,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
   const helmReleases = resourceCache[`${namespace}/helmreleases`];
 
   const linkToList = {
-    label: t('command-palette.results.list-of', {
-      resourceType: t('helm-releases.title'),
-    }),
+    label: t('helm-releases.title'),
     category: t('configuration.title') + ' > ' + t('helm-releases.title'),
     query: 'helmReleases',
     onActivate: () => {
