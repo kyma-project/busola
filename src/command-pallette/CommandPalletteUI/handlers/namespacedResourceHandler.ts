@@ -181,7 +181,6 @@ function createResults(context: CommandPaletteContext): Result[] | null {
     const results = resourceTypeList
       .map(resourceType => {
         const matchedNode = findNavigationNode(resourceType, namespaceNodes);
-        ////////////
         return matchedNode
           ? createSingleResult(context, resourceType, matchedNode)
           : null;

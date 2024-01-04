@@ -62,7 +62,6 @@ export function Result({
               {alias}
             </p>
           ))}
-
           <p className="description">{category}</p>
         </div>
         {activeIndex === index && (

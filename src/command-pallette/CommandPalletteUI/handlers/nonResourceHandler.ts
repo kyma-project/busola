@@ -51,14 +51,15 @@ function createResults(context: CommandPaletteContext): Result[] | null {
 
   const option = options.find(o => o.names.includes(context.tokens[0]));
 
-  const {
-    activeClusterName,
-    clusterNames,
-    clustersInfo,
-    t,
-    navigate,
-  } = context;
   if (option) {
+    const {
+      activeClusterName,
+      clusterNames,
+      clustersInfo,
+      t,
+      navigate,
+      query,
+    } = context;
     switch (option.type) {
       case 'clusters':
         return clusterNames.map(clusterName => ({
@@ -92,6 +93,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
               context.setShowYamlUpload(true);
             },
             customActionText: t('command-palette.help.open-upload-yaml'),
+            aliases: ['up'],
           },
         ];
       case 'preferences':
@@ -103,6 +105,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
               context.setOpenPreferencesModal(true);
             },
             customActionText: t('command-palette.help.open-preferences'),
+            aliases: ['prefs'],
           },
         ];
       case 'overview':
@@ -115,6 +118,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
                 const pathname = `/cluster/${activeClusterName}/overview`;
                 navigate(pathname);
               },
+              aliases: ['ov'],
             },
           ];
         } else {
@@ -125,41 +129,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
     }
   }
 
-  const allResources = [
-    {
-      label: t('navigation.upload-yaml.title'),
-      query: 'upload',
-      onActivate: () => {
-        context.setShowYamlUpload(true);
-      },
-      customActionText: t('command-palette.help.open-upload-yaml'),
-      aliases: ['up'],
-    },
-    {
-      label: t('navigation.preferences.title'),
-      query: 'preferences',
-      onActivate: () => {
-        context.setOpenPreferencesModal(true);
-      },
-      customActionText: t('command-palette.help.open-preferences'),
-      aliases: ['prefs'],
-    },
-  ];
-
-  if (activeClusterName) {
-    allResources.push({
-      label: t('clusters.overview.title-current-cluster'),
-      query: 'overview',
-      onActivate: () => {
-        const pathname = `/cluster/${activeClusterName}/overview`;
-        navigate(pathname);
-      },
-      customActionText: '',
-      aliases: ['ov'],
-    });
-  }
-
-  return null; ////////////////////
+  return null;
 }
 
 export const nonResourceHandler: Handler = {
