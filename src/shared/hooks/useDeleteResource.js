@@ -19,6 +19,7 @@ import { dontConfirmDeleteState } from 'state/preferences/dontConfirmDeleteAtom'
 import { useUrl } from 'hooks/useUrl';
 
 import { clusterState } from 'state/clusterAtom';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 export function useDeleteResource({
   resourceTitle,
@@ -36,6 +37,7 @@ export function useDeleteResource({
   const navigate = useNavigate();
   const { resourceListUrl } = useUrl();
   const cluster = useRecoilValue(clusterState);
+  const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
 
   const prettifiedResourceName = prettifyNameSingular(
     resourceTitle,
@@ -57,11 +59,40 @@ export function useDeleteResource({
           }),
         });
         if (navigateToListAfterDelete) {
-          if (window.location.pathname.includes('busolaextensions')) {
-            navigate(`/cluster/${cluster.contextName}/busolaextensions`);
-          } else {
-            navigate(resourceListUrl(resource, { resourceType }));
-          }
+          if (window.location.search.includes('layout')) {
+            if (window.location.pathname.includes('busolaextensions')) {
+              navigate(`/cluster/${cluster.contextName}/busolaextensions`);
+            } else {
+              window.history.pushState(
+                window.history.state,
+                '',
+                `${window.location.pathname.slice(
+                  0,
+                  window.location.pathname.lastIndexOf('/'),
+                )}${
+                  layoutColumn.endColumn === null
+                    ? ''
+                    : '?layout=TwoColumnsMidExpanded'
+                }`,
+              );
+              setLayoutColumn({
+                ...layoutColumn,
+                layout:
+                  layoutColumn.endColumn === null
+                    ? 'OneColumn'
+                    : 'TwoColumnsMidExpanded',
+              });
+              navigate(resourceListUrl(resource, { resourceType }));
+            }
+
+            setLayoutColumn({
+              ...layoutColumn,
+              layout:
+                layoutColumn.endColumn === null
+                  ? 'OneColumn'
+                  : 'TwoColumnsMidExpanded',
+            });
+          } else navigate(resourceListUrl(resource, { resourceType }));
         }
       }
     } catch (e) {

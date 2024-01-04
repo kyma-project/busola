@@ -45,18 +45,32 @@ context('Test Cluster Role Bindings', () => {
       .click();
   });
 
-  it('Checking details', () => {
+  it('Checking details using column layout', () => {
     cy.contains('ui5-title', CRB_NAME).should('be.visible');
 
-    cy.contains('User').should('be.visible');
+    cy.inspectList('Cluster Role Bindings', CRB_NAME);
 
-    cy.contains(USER_NAME).should('be.visible');
+    cy.contains('ui5-link', CRB_NAME).click();
 
-    cy.contains('a.bsl-link', 'cluster-admin').should('be.visible');
+    cy.get('div[slot="midColumn"]')
+      .contains('User')
+      .should('be.visible');
+
+    cy.get('div[slot="midColumn"]')
+      .contains(USER_NAME)
+      .should('be.visible');
+
+    cy.get('div[slot="midColumn"]')
+      .contains('a.bsl-link', 'cluster-admin')
+      .should('be.visible');
   });
 
   it('Edit', () => {
-    cy.contains('ui5-button', 'Edit').click();
+    cy.wait(500);
+
+    cy.get('div[slot="midColumn"]')
+      .contains('ui5-button', 'Edit')
+      .click();
 
     cy.contains('[role="combobox"]', 'User').click();
 
@@ -85,12 +99,16 @@ context('Test Cluster Role Bindings', () => {
   });
 
   it('Checking updates details', () => {
-    cy.contains('Group').should('be.visible');
+    cy.get('div[slot="midColumn"]')
+      .contains('Group')
+      .should('be.visible');
 
-    cy.contains('test-group').should('be.visible');
+    cy.get('div[slot="midColumn"]')
+      .contains('test-group')
+      .should('be.visible');
   });
 
   it('Delete Cluster Role Binding', () => {
-    cy.deleteInDetails('Cluster Role Binding', CRB_NAME);
+    cy.deleteInDetails('Cluster Role Binding', CRB_NAME, true);
   });
 });

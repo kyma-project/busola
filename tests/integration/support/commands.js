@@ -109,19 +109,30 @@ Cypress.Commands.add('getLeftNav', () => {
   return cy.get('aside');
 });
 
-Cypress.Commands.add('deleteInDetails', (resourceType, resourceName) => {
-  cy.get('ui5-button')
-    .contains('Delete')
-    .should('be.visible')
-    .click();
+Cypress.Commands.add(
+  'deleteInDetails',
+  (resourceType, resourceName, columnLayout = false) => {
+    if (columnLayout) {
+      cy.get('div[slot="midColumn"]')
+        .contains('ui5-button', 'Delete')
+        .should('be.visible')
+        .click();
+    } else {
+      cy.get('ui5-button')
+        .contains('Delete')
+        .should('be.visible')
+        .click();
+    }
 
-  cy.contains(`delete ${resourceType} ${resourceName}`);
-  cy.get(`[header-text="Delete ${resourceType}"]`)
-    .find('[data-testid="delete-confirmation"]')
-    .click();
+    cy.contains(`delete ${resourceType} ${resourceName}`);
 
-  cy.contains(/deleted/).should('be.visible');
-});
+    cy.get(`[header-text="Delete ${resourceType}"]`)
+      .find('[data-testid="delete-confirmation"]')
+      .click();
+
+    cy.contains(/deleted/).should('be.visible');
+  },
+);
 
 Cypress.Commands.add(
   'deleteFromGenericList',
