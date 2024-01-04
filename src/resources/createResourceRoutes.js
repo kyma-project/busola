@@ -108,7 +108,11 @@ const DetailsWrapper = ({ children, list, ...props }) => {
     ...props,
     hasDetailsView: true,
   });
-  const elementDetailsProps = usePrepareDetailsProps(props);
+  const elementDetailsProps = usePrepareDetailsProps({
+    ...props,
+    customResourceName: layoutState?.midColumn?.resourceName,
+    customNamespaceId: layoutState.midColumn?.namespaceId,
+  });
 
   const listComponent = React.cloneElement(list, {
     ...elementListProps,
@@ -121,14 +125,17 @@ const DetailsWrapper = ({ children, list, ...props }) => {
     ...elementDetailsProps,
   });
 
-  return (
-    <FlexibleColumnLayout
-      style={{ height: '100%' }}
-      layout={layoutState?.layout || 'OneColumn'}
-      startColumn={<div slot="">{listComponent}</div>}
-      midColumn={<div slot="">{detailsComponent}</div>}
-    />
-  );
+  if (layout) {
+    return (
+      <FlexibleColumnLayout
+        style={{ height: '100%' }}
+        layout={layoutState?.layout || 'OneColumn'}
+        startColumn={<div slot="">{listComponent}</div>}
+        midColumn={<div slot="">{detailsComponent}</div>}
+      />
+    );
+  }
+  if (!layout) return detailsComponent;
 };
 
 export const createResourceRoutes = ({
