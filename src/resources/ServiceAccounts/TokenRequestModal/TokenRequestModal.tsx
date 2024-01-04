@@ -33,9 +33,11 @@ const expirationSecondsOptions = [
 const ComboboxInputWithSeconds = ({
   value,
   setValue,
+  generateTokenRequest,
 }: {
   value: number;
   setValue: (value: number) => void;
+  generateTokenRequest: () => void;
 }) => {
   return (
     //@ts-ignore
@@ -50,6 +52,7 @@ const ComboboxInputWithSeconds = ({
         selected: { key: number; text: string },
       ): void => {
         setValue(selected.key);
+        generateTokenRequest();
       }}
     />
   );
@@ -86,6 +89,12 @@ export function TokenRequestModal({
 
   useEventListener('keydown', handleCloseWithEscape);
 
+  const handleGenerateTokenRequest = () => {
+    if (!isExpirationSecondsValueANumber()) {
+      generateTokenRequest();
+    }
+  };
+
   return (
     <Dialog
       open
@@ -116,7 +125,18 @@ export function TokenRequestModal({
           propertyPath="$.spec.expirationSeconds"
           inputInfo={t('service-accounts.token-request.input-info')}
           label={t('service-accounts.token-request.expiration-seconds')}
-          input={ComboboxInputWithSeconds}
+          input={(
+            props: JSX.IntrinsicAttributes & {
+              value: number;
+              setValue: (value: number) => void;
+              generateTokenRequest: () => void;
+            },
+          ) => (
+            <ComboboxInputWithSeconds
+              {...props}
+              generateTokenRequest={handleGenerateTokenRequest}
+            />
+          )}
         />
         <div style={spacing.sapUiSmallMarginTop}>
           <MessageStrip design="Warning" hideCloseButton>
@@ -147,12 +167,6 @@ export function TokenRequestModal({
               iconEnd
             >
               {t('service-accounts.headers.download-kubeconfig')}
-            </Button>
-            <Button
-              onClick={generateTokenRequest}
-              disabled={isExpirationSecondsValueANumber()}
-            >
-              {t('common.buttons.generate-name')}
             </Button>
           </div>
           {/*@ts-ignore*/}
