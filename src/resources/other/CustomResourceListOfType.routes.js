@@ -13,7 +13,7 @@ const CustomResourcesOfType = React.lazy(() =>
 function RoutedCustomResourcesOfType() {
   const { crdName } = useParams();
 
-  const setColumnLayoutState = useSetRecoilState(columnLayoutState);
+  const setLayoutColumn = useSetRecoilState(columnLayoutState);
 
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
@@ -32,7 +32,7 @@ function RoutedCustomResourcesOfType() {
 
   useEffect(() => {
     if (layout) {
-      setColumnLayoutState(initialLayoutState);
+      setLayoutColumn(initialLayoutState);
     }
   }, [layout]); // eslint-disable-line react-hooks/exhaustive-deps
 

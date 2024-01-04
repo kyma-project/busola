@@ -62,15 +62,21 @@ export const DynamicPageComponent = ({
                     <Button
                       design="Transparent"
                       icon="full-screen"
-                      onClick={() =>
+                      onClick={() => {
+                        const newLayout =
+                          layoutNumber === 'MidColumn'
+                            ? 'MidColumnFullScreen'
+                            : 'EndColumnFullScreen';
                         setLayoutColumn({
                           ...layoutColumn,
-                          layout:
-                            layoutNumber === 'MidColumn'
-                              ? 'MidColumnFullScreen'
-                              : 'EndColumnFullScreen',
-                        })
-                      }
+                          layout: newLayout,
+                        });
+                        window.history.pushState(
+                          window.history.state,
+                          '',
+                          `${window.location.pathname}?layout=${newLayout}`,
+                        );
+                      }}
                     />
                   ) : null}
                   {layoutColumn.layout === 'MidColumnFullScreen' ||
@@ -78,17 +84,23 @@ export const DynamicPageComponent = ({
                     <Button
                       design="Transparent"
                       icon="exit-full-screen"
-                      onClick={() =>
+                      onClick={() => {
+                        const newLayout =
+                          layoutNumber === 'MidColumn'
+                            ? layoutColumn.endColumn === null
+                              ? 'TwoColumnsMidExpanded'
+                              : 'ThreeColumnsMidExpanded'
+                            : 'ThreeColumnsEndExpanded';
                         setLayoutColumn({
                           ...layoutColumn,
-                          layout:
-                            layoutNumber === 'MidColumn'
-                              ? layoutColumn.endColumn === null
-                                ? 'TwoColumnsMidExpanded'
-                                : 'ThreeColumnsMidExpanded'
-                              : 'ThreeColumnsEndExpanded',
-                        })
-                      }
+                          layout: newLayout,
+                        });
+                        window.history.pushState(
+                          window.history.state,
+                          '',
+                          `${window.location.pathname}?layout=${newLayout}`,
+                        );
+                      }}
                     />
                   ) : null}
                   <Button

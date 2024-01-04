@@ -15,7 +15,7 @@ function RoutedCRDDetails() {
   const { crdName, crName } = useParams();
   const { namespace } = useUrl();
 
-  const setColumnLayoutState = useSetRecoilState(columnLayoutState);
+  const setLayoutColumn = useSetRecoilState(columnLayoutState);
 
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
@@ -38,7 +38,7 @@ function RoutedCRDDetails() {
 
   useEffect(() => {
     if (layout) {
-      setColumnLayoutState(initialLayoutState);
+      setLayoutColumn(initialLayoutState);
     }
   }, [layout]); // eslint-disable-line react-hooks/exhaustive-deps
 

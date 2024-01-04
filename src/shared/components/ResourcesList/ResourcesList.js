@@ -213,7 +213,7 @@ export function ResourceListRenderer({
   });
   const { t } = useTranslation();
   const { isProtected, protectedResourceWarning } = useProtectedResources();
-  const [layoutState, setColumnLayoutState] = useRecoilState(columnLayoutState);
+  const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
 
   const [toggleFormFn, getToggleFormFn] = useState(() => {});
 
@@ -254,7 +254,7 @@ export function ResourceListRenderer({
               <Link
                 style={{ fontWeight: 'bold' }}
                 onClick={() => {
-                  setColumnLayoutState(
+                  setLayoutColumn(
                     columnLayout
                       ? {
                           midColumn: layoutState.midColumn,

@@ -28,7 +28,7 @@ export function SidebarNavigation() {
   const namespace = useRecoilValue(activeNamespaceIdState);
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const setColumnLayoutState = useSetRecoilState(columnLayoutState);
+  const setLayoutColumn = useSetRecoilState(columnLayoutState);
 
   const { clusterUrl, namespaceUrl } = useUrl();
   const { resourceType = '' } =
@@ -60,7 +60,7 @@ export function SidebarNavigation() {
   };
 
   const setDefaultColumnLayout = () => {
-    setColumnLayoutState({
+    setLayoutColumn({
       midColumn: null,
       endColumn: null,
       layout: 'OneColumn',

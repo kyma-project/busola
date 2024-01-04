@@ -81,7 +81,7 @@ const ListWrapper = ({ children, details, ...props }) => {
 
 const DetailsWrapper = ({ children, list, ...props }) => {
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
-  const [layoutState, setColumnLayoutState] = useRecoilState(columnLayoutState);
+  const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
 
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
@@ -100,7 +100,7 @@ const DetailsWrapper = ({ children, list, ...props }) => {
 
   useEffect(() => {
     if (layout) {
-      setColumnLayoutState(initialLayoutState);
+      setLayoutColumn(initialLayoutState);
     }
   }, [layout]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -124,7 +124,7 @@ const DetailsWrapper = ({ children, list, ...props }) => {
   return (
     <FlexibleColumnLayout
       style={{ height: '100%' }}
-      layout={layout || layoutState?.layout || 'OneColumn'}
+      layout={layoutState?.layout || 'OneColumn'}
       startColumn={<div slot="">{listComponent}</div>}
       midColumn={<div slot="">{detailsComponent}</div>}
     />

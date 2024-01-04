@@ -22,7 +22,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   const { t } = useTranslation();
   const urlGenerators = useUrl();
   const navigate = useNavigate();
-  const setColumnLayoutState = useSetRecoilState(columnLayoutState);
+  const setLayoutColumn = useSetRecoilState(columnLayoutState);
 
   const { scopedUrl } = urlGenerators;
   const namespaceId = useRecoilValue(activeNamespaceIdState);
@@ -58,7 +58,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
         );
         if (newWindow) newWindow.opener = null;
       } else {
-        setColumnLayoutState({
+        setLayoutColumn({
           midColumn: null,
           endColumn: null,
           layout: 'OneColumn',
