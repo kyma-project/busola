@@ -282,9 +282,6 @@ export function ResourceListRenderer({
               >
                 {nameSelector(entry)}
               </Link>
-              <Link style={{ fontWeight: 'bold' }} href={linkTo(entry)}>
-                - (Temp link to {nameSelector(entry)})
-              </Link>
             </>
           ) : (
             <Link style={{ fontWeight: 'bold' }} href={linkTo(entry)}>
