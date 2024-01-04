@@ -62,7 +62,6 @@ export function CustomResources({
     return {
       resourceName: resource?.metadata?.name,
       resourceType: crd?.metadata?.name,
-      url: customUrl(resource),
       namespaceId: resource?.metadata?.namespace,
     };
   };

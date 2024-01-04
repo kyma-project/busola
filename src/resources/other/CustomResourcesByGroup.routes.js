@@ -19,7 +19,7 @@ const CustomResource = React.lazy(() =>
   import('../CustomResourceDefinitions/CustomResources.details'),
 );
 
-const ColumnWrapper = ({ details, ...props }) => {
+export const ColumnWrapper = () => {
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   const layoutState = useRecoilValue(columnLayoutState);
 

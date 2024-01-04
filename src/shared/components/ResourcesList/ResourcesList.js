@@ -244,7 +244,6 @@ export function ResourceListRenderer({
 
   const linkTo = entry =>
     customUrl ? customUrl(entry) : resourceUrlFn(entry, { resourceType });
-
   const defaultColumns = [
     {
       header: t('common.headers.name'),
@@ -266,13 +265,13 @@ export function ResourceListRenderer({
                           midColumn: {
                             resourceName: entry?.metadata?.name,
                             resourceType: resourceType,
-                            url: linkTo(entry),
                             namespaceId: entry?.metadata?.namespace,
                           },
                           endColumn: null,
                           layout: 'TwoColumnsMidExpanded',
                         },
                   );
+
                   window.history.pushState(
                     window.history.state,
                     '',

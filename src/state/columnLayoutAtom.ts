@@ -3,7 +3,6 @@ import { atom, RecoilState } from 'recoil';
 type ColumnState = {
   resourceName: null | string;
   resourceType: null | string;
-  url: null | string;
   namespaceId: null | string;
 };
 
