@@ -58,7 +58,6 @@ function createResults(context: CommandPaletteContext): Result[] | null {
       clustersInfo,
       t,
       navigate,
-      query,
     } = context;
     switch (option.type) {
       case 'clusters':
