@@ -260,9 +260,7 @@ function createResults(context: CommandPaletteContext): Result[] {
       })
       .filter(r => r !== null) as Result[];
 
-    if (!results) return [];
-
-    return results;
+    return results ?? [];
   }
 
   const resourceType = toFullResourceType(type, resourceTypes);

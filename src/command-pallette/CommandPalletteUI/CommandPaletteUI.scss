@@ -21,11 +21,6 @@
     display: flex;
     flex-direction: column;
     background: var(--sapList_Background);
-    box-shadow: 0 0 0.125rem 0
-        color-mix(in srgb, var(--sapContent_ShadowColor) 16%, transparent),
-      0 0.5rem 1rem 0
-        color-mix(in srgb, var(--sapContent_ShadowColor) 16%, transparent);
-
     padding: 10px;
     border-radius: 10px;
   }

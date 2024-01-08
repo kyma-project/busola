@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Icon, Token } from '@ui5/webcomponents-react';
+import { Button, Icon, Title, Token } from '@ui5/webcomponents-react';
 import { Trans, useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { HelpEntries } from '../types';
@@ -61,7 +61,7 @@ export function NamespaceContextDisplay({
   );
 }
 
-export function ShortHelpText({ showFullHelp }: { showFullHelp: () => void }) {
+export function ShortHelpText() {
   return (
     <p className="short-help help-text">
       <Trans i18nKey="command-palette.help.short-help">
@@ -85,7 +85,9 @@ export function CommandPalletteHelp({
           <pre className="key"></pre>
         </Trans>
       </div>
-      <h1 className="help-header">{t('command-palette.help.navigation')}</h1>
+      <Title level="H5" className="help-header">
+        {t('command-palette.help.navigation')}
+      </Title>
       <br className="help-divider" />
       <table className="help-text">
         <thead>
@@ -105,9 +107,9 @@ export function CommandPalletteHelp({
           ))}
         </tbody>
       </table>
-      <h1 className="help-header">
+      <Title level="H5" className="help-header">
         {t('command-palette.help.resource-aliases')}
-      </h1>
+      </Title>
       <br className="help-divider" />
       <div className="help-text">
         {helpEntries.navigation.map(({ name, aliases }) => (
@@ -121,9 +123,9 @@ export function CommandPalletteHelp({
       </div>
       {helpEntries.crds.length ? (
         <>
-          <h1 className="help-header">
+          <Title level="H5" className="help-header">
             {t('command-palette.help.crd-aliases')}
-          </h1>
+          </Title>
           <br className="help-divider" />
           <div className="help-text">
             {helpEntries.crds.map(({ name, shortNames }) => (

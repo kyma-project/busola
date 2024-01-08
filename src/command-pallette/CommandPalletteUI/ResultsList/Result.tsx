@@ -52,22 +52,20 @@ export function Result({
     <li
       ref={resultRef}
       onClick={onItemClick}
-      className={index === activeIndex ? 'active' : ''}
+      className={`result ${index === activeIndex ? 'active' : ''}`}
     >
-      <div className="result">
-        <div>
-          <p className="label">{label}</p>
-          {aliases?.map(alias => (
-            <p className="key" key={alias}>
-              {alias}
-            </p>
-          ))}
-          <p className="description">{category}</p>
-        </div>
-        {activeIndex === index && (
-          <div className="bsl-has-color-status-4 ">{actionText}</div>
-        )}
+      <div>
+        <p className="label">{label}</p>
+        {aliases?.map(alias => (
+          <p className="key" key={alias}>
+            {alias}
+          </p>
+        ))}
+        <p className="description">{category}</p>
       </div>
+      {activeIndex === index && (
+        <div className="bsl-has-color-status-4 ">{actionText}</div>
+      )}
     </li>
   );
 }

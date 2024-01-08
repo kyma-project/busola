@@ -90,7 +90,7 @@ export function CommandPaletteUI({
       innerInput?.focus();
       let startIndex = 0;
 
-      if (query.lastIndexOf('/') === query.length - 1) {
+      if (query.endsWith('/')) {
         startIndex = query.lastIndexOf('/', query.lastIndexOf('/') - 1) + 1;
       } else {
         startIndex = query.lastIndexOf('/') + 1;
@@ -144,18 +144,13 @@ export function CommandPaletteUI({
       e.preventDefault();
       if (autocompletePhrase) {
         setQuery(autocompletePhrase + '/');
-        setActiveResultIndex(0);
-      } else if (
-        results?.[activeResultIndex] // && todo
-        // results[activeResultIndex] !== LOADING_INDICATOR
-      ) {
+      } else if (results?.[activeResultIndex]) {
         // fill search with active result
         setQuery(results[activeResultIndex]?.query + '/' || '');
-        setActiveResultIndex(0);
       } else if (suggestedQuery) {
         setQuery(suggestedQuery);
-        setActiveResultIndex(0);
       }
+      setActiveResultIndex(0);
     } else if (key === 'ArrowUp') {
       const historyEntries = getHistoryEntries();
       if (activeResultIndex === 0 && historyEntries.length) {
@@ -217,12 +212,7 @@ export function CommandPaletteUI({
                 activeIndex={activeResultIndex}
                 setActiveIndex={setActiveResultIndex}
               />
-              <ShortHelpText
-                showFullHelp={() => {
-                  setQuery('help');
-                  commandPaletteInput?.focus();
-                }}
-              />
+              <ShortHelpText />
             </>
           )}
           {showHelp && <CommandPalletteHelp helpEntries={helpEntries} />}
