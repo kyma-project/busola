@@ -40,6 +40,7 @@ export const DynamicPageComponent = ({
   columnWrapperClassName,
   content,
   layoutNumber,
+  layoutCloseUrl,
 }) => {
   const [showTitleDescription, setShowTitleDescription] = useState(false);
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
@@ -110,14 +111,16 @@ export const DynamicPageComponent = ({
                       window.history.pushState(
                         window.history.state,
                         '',
-                        `${window.location.pathname.slice(
-                          0,
-                          window.location.pathname.lastIndexOf('/'),
-                        )}${
-                          layoutNumber === 'MidColumn'
-                            ? ''
-                            : '?layout=TwoColumnsMidExpanded'
-                        }`,
+                        layoutCloseUrl
+                          ? layoutCloseUrl
+                          : `${window.location.pathname.slice(
+                              0,
+                              window.location.pathname.lastIndexOf('/'),
+                            )}${
+                              layoutNumber === 'MidColumn'
+                                ? ''
+                                : '?layout=TwoColumnsMidExpanded'
+                            }`,
                       );
                       setLayoutColumn({
                         ...layoutColumn,
