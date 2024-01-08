@@ -40,7 +40,7 @@ export default function ClusterStats({ data }) {
           }
         >
           <UI5RadialChart
-            color="var(--sapIndicationColor_7)"
+            color="var(--sapChart_Bad)"
             value={roundDecimals(cpu.usage)}
             max={roundDecimals(cpu.capacity)}
             tooltip={{
@@ -60,7 +60,7 @@ export default function ClusterStats({ data }) {
           }
         >
           <UI5RadialChart
-            color="var(--sapIndicationColor_6)"
+            color="var(--sapChart_Good)"
             value={roundDecimals(memory.usage)}
             max={roundDecimals(memory.capacity)}
             tooltip={{
