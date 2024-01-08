@@ -13,7 +13,7 @@ const BusolaExtensionDetails = React.lazy(() =>
   import('components/BusolaExtensions/BusolaExtensionDetails'),
 );
 
-export const ColumnWrapper = () => {
+const ColumnWrapper = () => {
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   const { namespace, name } = useParams();
 

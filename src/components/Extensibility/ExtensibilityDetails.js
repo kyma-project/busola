@@ -16,7 +16,11 @@ import { ExtensibilityCreate } from './ExtensibilityCreate';
 import { useGetTranslation, TranslationBundleContext } from './helpers';
 import { useJsonata } from './hooks/useJsonata';
 
-export const ExtensibilityDetailsCore = ({ resMetaData }) => {
+export const ExtensibilityDetailsCore = ({
+  resMetaData,
+  customResourceName,
+  customNamespaceId,
+}) => {
   const { t, widgetT, exists } = useGetTranslation();
 
   const { urlPath, resource, features } = resMetaData?.general ?? {};
@@ -35,6 +39,8 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
     resourceI18Key: 'name',
     apiGroup: resource?.group,
     apiVersion: resource?.version,
+    customResourceName: customResourceName,
+    customNamespaceId: customNamespaceId,
   });
 
   // there may be a moment when `resMetaData` is undefined (e.g. when switching the namespace)
@@ -123,7 +129,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   );
 };
 
-const ExtensibilityDetails = () => {
+const ExtensibilityDetails = ({ customResourceName, customNamespaceId }) => {
   const resMetaData = useGetCRbyPath();
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
   return (
@@ -135,7 +141,11 @@ const ExtensibilityDetails = () => {
     >
       <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
         <ExtensibilityErrBoundary>
-          <ExtensibilityDetailsCore resMetaData={resMetaData} />
+          <ExtensibilityDetailsCore
+            resMetaData={resMetaData}
+            customResourceName={customResourceName}
+            customNamespaceId={customNamespaceId}
+          />
         </ExtensibilityErrBoundary>
       </DataSourcesContextProvider>
     </TranslationBundleContext.Provider>
