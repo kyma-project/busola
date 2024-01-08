@@ -34,10 +34,10 @@ import { SECTIONS } from './helpers';
 import { EXTENSION_VERSION_LABEL } from './constants';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
-export function BusolaExtensionDetails(props) {
+export function BusolaExtensionDetails({ name, namespace }) {
   const { t } = useTranslation();
   const extensibilitySchemas = useRecoilValue(extensibilitySchemasState);
-  const { namespace, name } = useParams();
+
   const { clusterUrl } = useUrl();
 
   const resourceUrl = `/api/v1/namespaces/${namespace}/configmaps/${name}`;
