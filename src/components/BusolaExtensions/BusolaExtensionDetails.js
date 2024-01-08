@@ -3,7 +3,6 @@ import { Link } from 'shared/components/Link/Link';
 import { Trans, useTranslation } from 'react-i18next';
 import { createPatch } from 'rfc6902';
 import { Button, MessageStrip } from '@ui5/webcomponents-react';
-import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
