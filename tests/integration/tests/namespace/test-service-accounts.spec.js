@@ -106,6 +106,17 @@ context('Test Service Accounts', () => {
     cy.contains('TokenRequest generated').should('be.visible');
     cy.readFile(filepath).should('not.exist');
 
+    //check if TokenRequest is being generated after value change
+    cy.get('.form-field')
+      .find('ui5-icon')
+      .click()
+      .get('ui5-list')
+      .contains('21600s (6h)')
+      .click();
+
+    cy.contains('TokenRequest generated').should('be.visible');
+    cy.readFile(filepath).should('not.exist');
+
     cy.contains('ui5-button', 'Download Kubeconfig').click();
 
     cy.readFile(filepath).should('exist');
