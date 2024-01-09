@@ -7,7 +7,7 @@ import { useUrl } from 'hooks/useUrl';
 
 import { BusolaExtensionCreate } from './BusolaExtensionCreate';
 
-export function BusolaPluginList(props) {
+export function BusolaPluginList({ enableColumnLayout }) {
   const { t } = useTranslation();
   const { clusterUrl } = useUrl();
 
@@ -32,6 +32,7 @@ export function BusolaPluginList(props) {
       searchSettings={{
         textSearchProperties: ['metadata.namespace'],
       }}
+      enableColumnLayout={enableColumnLayout}
       customColumns={customColumns}
       description={description}
       createResourceForm={BusolaExtensionCreate}

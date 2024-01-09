@@ -63,6 +63,7 @@ ResourceDetails.propTypes = {
   resourceSchema: PropTypes.object,
   disableEdit: PropTypes.bool,
   disableDelete: PropTypes.bool,
+  layoutCloseUrl: PropTypes.string,
 };
 
 ResourceDetails.defaultProps = {
@@ -142,6 +143,7 @@ function ResourceDetailsRenderer(props) {
 
 function Resource({
   layoutNumber,
+  layoutCloseUrl,
   breadcrumbs,
   children,
   createResourceForm: CreateResourceForm,
@@ -349,6 +351,7 @@ function Resource({
     <>
       <DynamicPageComponent
         layoutNumber={layoutNumber ?? 'MidColumn'}
+        layoutCloseUrl={layoutCloseUrl}
         title={resource.metadata.name}
         actions={actions}
         breadcrumbItems={breadcrumbItems}
