@@ -98,7 +98,7 @@ function ResourceGraph({
   return (
     <Panel
       fixed
-      style={spacing.sapUiMediumMargin}
+      style={spacing.sapUiSmallMargin}
       ref={(node: any) => setGraphEl(node)}
       header={
         <Toolbar>
