@@ -4,6 +4,7 @@ import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { Label } from '../../../shared/ResourceForm/components/Label';
 
 export function Dropdown({
+  accessibleName,
   label,
   options,
   selectedKey,
@@ -41,7 +42,7 @@ export function Dropdown({
       className={className}
       id={id}
       data-testid={id}
-      aria-label={label}
+      accessibleName={accessibleName || label}
       placeholder={placeholder || label}
       disabled={disabled || !options?.length}
       onKeyDown={event => {
