@@ -110,7 +110,13 @@ context('Test Cluster Role Bindings', () => {
       .should('be.visible');
   });
 
+  it('Test column layout functionality', () => {
+    cy.testMidColumnLayout(CRB_NAME);
+  });
+
   it('Delete Cluster Role Binding', () => {
+    cy.contains('ui5-link', CRB_NAME).click();
+
     cy.deleteInDetails('Cluster Role Binding', CRB_NAME, true);
   });
 });

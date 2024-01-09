@@ -82,13 +82,12 @@ context('Test Services', () => {
   it('Displays the EXT Services detail view', () => {
     cy.contains('ui5-link', 'test-service').click();
 
-    cy.getMidColmn().contains('Type');
-    cy.getMidColmn().contains('LoadBalancer');
-
-    cy.navigateBackTo('example-services', 'Custom Services');
+    cy.getMidColumn().contains('Type');
+    cy.getMidColumn().contains('LoadBalancer');
+    cy.getMidColumn().contains('Cluster IP override');
   });
 
-  it('Displays the header overridden by translations (on Details)', () => {
-    cy.contains('Cluster IP override');
+  it('Test column layout functionallity', () => {
+    cy.testMidColumnLayout('test-service');
   });
 });

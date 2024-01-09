@@ -139,6 +139,8 @@ Cypress.Commands.add(
       .click();
 
     cy.contains(/deleted/).should('be.visible');
+
+    cy.getMidColumn().should('not.be.visible');
   },
 );
 
@@ -197,4 +199,28 @@ Cypress.Commands.add('changeCluster', clusterName => {
     .find(`[aria-label="${clusterName}"]:visible`)
     .find('span[part="title"]')
     .click({ force: true });
+});
+
+Cypress.Commands.add('testMidColumnLayout', resourceName => {
+  cy.getMidColumn()
+    .find('ui5-button[aria-label="full-screen"]')
+    .click();
+
+  cy.contains('ui5-link', resourceName).should('not.be.visible');
+
+  cy.getMidColumn()
+    .find('ui5-button[aria-label="close-full-screen"]')
+    .click();
+
+  cy.contains('ui5-link', resourceName).should('be.visible');
+
+  cy.getMidColumn()
+    .find('ui5-button[aria-label="close-column"]')
+    .click();
+
+  cy.getMidColumn().should('not.be.visible');
+
+  cy.getMidColumn()
+    .contains('ui5-title', resourceName)
+    .should('not.be.visible');
 });
