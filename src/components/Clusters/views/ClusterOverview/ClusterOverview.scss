@@ -15,6 +15,12 @@
   gap: 16px;
 }
 
+.cluster-overview__cards-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
 .gardener-provider {
   text-transform: uppercase;
 }
@@ -25,7 +31,11 @@
   }
 
   .cluster-overview__graphs-wrapper {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .cluster-overview__cards-wrapper {
+    grid-template-columns: repeat(5, 1fr);
   }
 
   .cluster-overview__details-grid {
