@@ -52,15 +52,15 @@ context('Test Cluster Role Bindings', () => {
 
     cy.contains('ui5-link', CRB_NAME).click();
 
-    cy.get('div[slot="midColumn"]')
+    cy.getMidColumn()
       .contains('User')
       .should('be.visible');
 
-    cy.get('div[slot="midColumn"]')
+    cy.getMidColumn()
       .contains(USER_NAME)
       .should('be.visible');
 
-    cy.get('div[slot="midColumn"]')
+    cy.getMidColumn()
       .contains('a.bsl-link', 'cluster-admin')
       .should('be.visible');
   });
@@ -68,7 +68,7 @@ context('Test Cluster Role Bindings', () => {
   it('Edit', () => {
     cy.wait(500);
 
-    cy.get('div[slot="midColumn"]')
+    cy.getMidColumn()
       .contains('ui5-button', 'Edit')
       .click();
 
@@ -99,11 +99,11 @@ context('Test Cluster Role Bindings', () => {
   });
 
   it('Checking updates details', () => {
-    cy.get('div[slot="midColumn"]')
+    cy.getMidColumn()
       .contains('Group')
       .should('be.visible');
 
-    cy.get('div[slot="midColumn"]')
+    cy.getMidColumn()
       .contains('test-group')
       .should('be.visible');
   });

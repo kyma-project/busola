@@ -109,11 +109,19 @@ Cypress.Commands.add('getLeftNav', () => {
   return cy.get('aside');
 });
 
+Cypress.Commands.add('getMidColumn', () => {
+  return cy.get('div[slot="midColumn"]');
+});
+
+Cypress.Commands.add('getEndColumn', () => {
+  return cy.get('div[slot="endColumn"]');
+});
+
 Cypress.Commands.add(
   'deleteInDetails',
   (resourceType, resourceName, columnLayout = false) => {
     if (columnLayout) {
-      cy.get('div[slot="midColumn"]')
+      cy.getMidColumn()
         .contains('ui5-button', 'Delete')
         .should('be.visible')
         .click();
