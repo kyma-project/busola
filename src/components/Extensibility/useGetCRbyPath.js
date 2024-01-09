@@ -18,7 +18,6 @@ export const useGetCRbyPath = () => {
 
     const crPath = window.location.pathname
       .replace(`/cluster/${clusterName}/`, '')
-      .replace(`namespaces/${namespaceId}/`, '')
       .replace(/namespaces\/([A-Za-z0-9.][-A-Za-z0-9_.]*)?[A-Za-z0-9]\//, '')
       .replace('namespaces/-all-/', '')
       .replace('core-ui/', '');
