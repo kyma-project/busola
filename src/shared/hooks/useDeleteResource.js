@@ -82,7 +82,6 @@ export function useDeleteResource({
                     ? 'OneColumn'
                     : 'TwoColumnsMidExpanded',
               });
-              navigate(resourceListUrl(resource, { resourceType }));
             }
 
             setLayoutColumn({
