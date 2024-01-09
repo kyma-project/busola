@@ -1,0 +1,5 @@
+apiVersion: cypress.example.com/v1
+kind: Tcluster
+metadata:
+  name: tcluster-test
+spec: {}

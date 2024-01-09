@@ -61,6 +61,7 @@ export const DynamicPageComponent = ({
                   layoutColumn.layout === 'ThreeColumnsMidExpanded' ||
                   layoutColumn.layout === 'ThreeColumnsEndExpanded' ? (
                     <Button
+                      aria-label="full-screen"
                       design="Transparent"
                       icon="full-screen"
                       onClick={() => {
@@ -83,6 +84,7 @@ export const DynamicPageComponent = ({
                   {layoutColumn.layout === 'MidColumnFullScreen' ||
                   layoutColumn.layout === 'EndColumnFullScreen' ? (
                     <Button
+                      aria-label="close-full-screen"
                       design="Transparent"
                       icon="exit-full-screen"
                       onClick={() => {
@@ -105,6 +107,7 @@ export const DynamicPageComponent = ({
                     />
                   ) : null}
                   <Button
+                    aria-label="close-column"
                     design="Transparent"
                     icon="decline"
                     onClick={() => {
