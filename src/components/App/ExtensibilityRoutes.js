@@ -47,10 +47,10 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
       layout={layoutState?.layout || 'OneColumn'}
       startColumn={
         <div slot="">
-          {defaultColumn == 'list' && (
+          {defaultColumn === 'list' && (
             <List enableColumnLayout={isColumnLeyoutEnabled} />
           )}
-          {defaultColumn == 'details' && (
+          {defaultColumn === 'details' && (
             <Details
               customResourceName={layoutState?.midColumn?.resourceName}
               customNamespaceId={layoutState.midColumn?.namespaceId}
