@@ -177,7 +177,7 @@ export const StatusBadge = ({
 StatusBadge.propTypes = {
   additionalContent: PropTypes.node,
   tooltipContent: PropTypes.node,
-  type: PropTypes.oneOf(['information', 'success', 'error', 'warning', 'none']),
+  type: PropTypes.oneOf(['Information', 'Success', 'Error', 'Warning', 'None']),
   autoResolveType: PropTypes.bool,
   noTooltip: PropTypes.bool,
   resourceKind: PropTypes.string,
