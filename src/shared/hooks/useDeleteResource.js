@@ -121,14 +121,20 @@ export function useDeleteResource({
   const DeleteMessageBox = ({
     resource,
     resourceTitle,
+    resourceIsCluster = false,
     resourceUrl,
     deleteFn,
   }) => (
     <MessageBox
       type="Warning"
-      titleText={t('common.delete-dialog.title', {
-        type: prettifiedResourceName,
-      })}
+      titleText={t(
+        resourceIsCluster
+          ? 'common.delete-dialog.disconnect-title'
+          : 'common.delete-dialog.delete-title',
+        {
+          type: prettifiedResourceName,
+        },
+      )}
       open={showDeleteDialog}
       className="ui5-content-density-compact"
       actions={[
@@ -137,7 +143,11 @@ export function useDeleteResource({
           design="Emphasized"
           onClick={() => performDelete(resource, resourceUrl, deleteFn)}
         >
-          {t('common.buttons.delete')}
+          {t(
+            resourceIsCluster
+              ? 'common.buttons.disconnect'
+              : 'common.buttons.delete',
+          )}
         </Button>,
         <Button
           data-testid="delete-cancel"
@@ -156,10 +166,15 @@ export function useDeleteResource({
         }}
       >
         <Text style={{ paddingLeft: '7.5px' }}>
-          {t('common.delete-dialog.message', {
-            type: prettifiedResourceName,
-            name: resourceTitle || resource?.metadata?.name,
-          })}
+          {t(
+            resourceIsCluster
+              ? 'common.delete-dialog.disconnect-message'
+              : 'common.delete-dialog.delete-message',
+            {
+              type: prettifiedResourceName,
+              name: resourceTitle || resource?.metadata?.name,
+            },
+          )}
         </Text>
         <CheckBox
           checked={dontConfirmDelete}

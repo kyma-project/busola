@@ -1,9 +1,8 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import { CircleProgress } from 'shared/components/CircleProgress/CircleProgress';
+import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useUrl } from 'hooks/useUrl';
@@ -56,7 +55,7 @@ const ResourceCircle = ({
   }
 
   return (
-    <CircleProgress
+    <UI5RadialChart
       onClick={onClick}
       color={color}
       value={counter(data)}

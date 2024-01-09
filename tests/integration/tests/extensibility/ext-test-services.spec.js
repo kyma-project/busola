@@ -20,7 +20,7 @@ context('Test Services', () => {
       .contains('Cluster Details')
       .click();
 
-    cy.contains('ui5-button', 'Upload YAML').click();
+    cy.get('ui5-button.ui5-shellbar-button[icon="add"]').click();
 
     cy.loadFiles('examples/services/configuration.yaml').then(resources => {
       const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');

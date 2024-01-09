@@ -1,5 +1,4 @@
-import React from 'react';
-import { CircleProgress } from 'shared/components/CircleProgress/CircleProgress';
+import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useTranslation } from 'react-i18next';
@@ -77,14 +76,11 @@ const MemoryRequestsCircle = ({ resourceQuotas, isLoading }) => {
   const maxText = bytesToHumanReadable(totalRequests);
 
   return (
-    <CircleProgress
+    <UI5RadialChart
       color="var(--sapIndicationColor_7)"
       value={totalUsage}
-      valueText={valueText}
       max={totalRequests}
-      maxText={maxText}
       title={t('namespaces.overview.resources.requests')}
-      reversed={true}
       tooltip={{
         content: t('namespaces.tooltips.usage-of-memory-requests', {
           valueText: valueText,
@@ -118,14 +114,11 @@ const MemoryLimitsCircle = ({ resourceQuotas, isLoading }) => {
   const maxText = bytesToHumanReadable(totalLimits);
 
   return (
-    <CircleProgress
+    <UI5RadialChart
       color="var(--sapIndicationColor_8)"
       value={totalUsage}
-      valueText={valueText}
       max={totalLimits}
-      maxText={maxText}
       title={t('namespaces.overview.resources.limits')}
-      reversed={true}
       tooltip={{
         content: t('namespaces.tooltips.usage-of-memory-limits', {
           valueText: valueText,

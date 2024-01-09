@@ -28,7 +28,7 @@ context('Test resource upload', () => {
       .contains('Cluster Details')
       .click();
 
-    cy.contains('ui5-button', 'Upload YAML').click();
+    cy.get('ui5-button.ui5-shellbar-button[icon="add"]').click();
 
     cy.wrap(loadValidResources(Cypress.env('NAMESPACE_NAME'))).then(
       resources => {
