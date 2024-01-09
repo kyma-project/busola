@@ -34,7 +34,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
         endColumn: null,
       }
     : null;
-
+  console.log('initialLayoutState', initialLayoutState, layout, layoutState);
   useEffect(() => {
     if (layout) {
       setLayoutColumn(initialLayoutState);
@@ -47,10 +47,10 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
       layout={layoutState?.layout || 'OneColumn'}
       startColumn={
         <div slot="">
-          {defaultColumn === 'list' && (
+          {(layout || defaultColumn === 'list') && (
             <List enableColumnLayout={isColumnLeyoutEnabled} />
           )}
-          {defaultColumn === 'details' && (
+          {!layout && defaultColumn === 'details' && (
             <Details
               customResourceName={layoutState?.midColumn?.resourceName}
               customNamespaceId={layoutState.midColumn?.namespaceId}
