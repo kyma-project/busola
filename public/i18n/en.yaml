@@ -15,11 +15,19 @@ cluster-overview:
     title:  Monitoring and Health
     cpu-usage: 'CPU Usage'
     memory-usage: 'Memory Usage'
+    namespaces-health: 'Namespaces Health'
+    healthy-pods: 'Healthy Pods'
+    healthy-deployments: 'Healthy Deployments'
+    nodes: 'Nodes'
+    pods: 'Pods'
+    deployments: 'Deployments'
   tooltips:
       cpu-used-percentage: 'CPU used: {{percentage}}'
       memory-used-percentage: 'Memory used: {{percentage}}'
       cpu-used-m: 'CPU (m) used: {{value}}/{{max}}'
       memory-used-gib: 'Memory (GiB) used: {{value}}/{{max}}'
+      healthy-pods: 'Healthy pods: {{value}}/{{max}}'
+      healthy-deployments: 'Healthy deployments: {{value}}/{{max}}'
 cluster-role-bindings:
   description: <0>ClusterRoleBinding</0> assigns the permissions defined in a ClusterRole to a user.
   name_singular: ClusterRoleBinding

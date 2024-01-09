@@ -17,7 +17,7 @@ export const CountingCard = ({ value, title }: CountingCardProps) => {
         <p className="counting-card__value">{value}</p>
         <p
           className="counting-card__title"
-          style={{ ...spacing.sapUiTinyMarginTopBottom }}
+          style={{ ...spacing.sapUiTinyMarginTop }}
         >
           {title}
         </p>
