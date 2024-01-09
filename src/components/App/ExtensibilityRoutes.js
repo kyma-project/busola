@@ -15,12 +15,11 @@ const Details = React.lazy(() =>
   import('../Extensibility/ExtensibilityDetails'),
 );
 
-const ColumnWrapper = () => {
+const ColumnWrapper = ({ defaultColumn = 'list' }) => {
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   const { namespace, name } = useParams();
 
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
-
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
 
@@ -35,7 +34,7 @@ const ColumnWrapper = () => {
         endColumn: null,
       }
     : null;
-
+  console.log('initialLayoutState', initialLayoutState, layout, layoutState);
   useEffect(() => {
     if (layout) {
       setLayoutColumn(initialLayoutState);
@@ -48,7 +47,15 @@ const ColumnWrapper = () => {
       layout={layoutState?.layout || 'OneColumn'}
       startColumn={
         <div slot="">
-          <List enableColumnLayout={isColumnLeyoutEnabled} />
+          {(layout || defaultColumn === 'list') && (
+            <List enableColumnLayout={isColumnLeyoutEnabled} />
+          )}
+          {!layout && defaultColumn === 'details' && (
+            <Details
+              customResourceName={layoutState?.midColumn?.resourceName}
+              customNamespaceId={layoutState.midColumn?.namespaceId}
+            />
+          )}
         </div>
       }
       midColumn={
@@ -93,7 +100,7 @@ export const createExtensibilityRoutes = (cr, language) => {
           exact
           element={
             <Suspense fallback={<Spinner />}>
-              <ColumnWrapper />
+              <ColumnWrapper defaultColumn="details" />
             </Suspense>
           }
         />
