@@ -36,7 +36,7 @@ test('Busola Lighthouse audit', async () => {
   });
 
   // add a cluster
-  await page.locator('ui5-button:has-text("Connect cluster")').click();
+  await page.locator('ui5-button:has-text("Connect cluster"):visible').click();
 
   await page
     .locator('input[id="file-upload"]')
@@ -46,15 +46,17 @@ test('Busola Lighthouse audit', async () => {
 
   await page
     .locator(
-      'text=Local storage: Cluster data is persisted between browser reloads.',
+      'ui5-radio-button:has-text("Local storage: Cluster data is persisted between browser reloads.")',
     )
     .click();
 
   await page
-    .locator('[aria-label="last-step"] ui5-button:has-text("Connect cluster")')
+    .locator('ui5-button[aria-label="last-step"]:has-text("Connect cluster")')
     .click();
 
-  await expect(page.locator('h3:text("Cluster Details")')).toBeVisible();
+  await expect(
+    page.locator('ui5-title[level="H4"]:has-text("Cluster Details")'),
+  ).toBeVisible();
 
   console.log('Running audit on cluster details...');
   await playAudit({
