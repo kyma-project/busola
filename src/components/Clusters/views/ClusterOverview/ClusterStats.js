@@ -83,43 +83,16 @@ export default function ClusterStats({ data }) {
           }}
           icon={'sys-help'}
         >
-          <ProgressIndicatorWithPercentage
-            title={'Something 1'}
-            tooltip={{
-              content: t('cluster-overview.tooltips.memory-used-percentage', {
-                percentage: 50,
-              }),
-              position: 'bottom',
-            }}
-            value={50}
-          />
-          <ProgressIndicatorWithPercentage
-            title={'Something 2'}
-            tooltip={{
-              content: t('cluster-overview.tooltips.memory-used-percentage', {
-                percentage: 34,
-              }),
-              position: 'bottom',
-            }}
-            value={34}
-          />
-          <ProgressIndicatorWithPercentage
-            title={'Something 3'}
-            tooltip={{
-              content: t('cluster-overview.tooltips.memory-used-percentage', {
-                percentage: 71,
-              }),
-              position: 'bottom',
-            }}
-            value={71}
-          />
+          <ProgressIndicatorWithPercentage title={'Something 1'} value={50} />
+          <ProgressIndicatorWithPercentage title={'Something 2'} value={34} />
+          <ProgressIndicatorWithPercentage title={'Something 3'} value={71} />
         </CardWithTooltip>
       </div>
       <div
         className="cluster-overview__cards-wrapper"
         style={spacing.sapUiSmallMargin}
       >
-        <CountingCard value={60} title="Something" />
+        <CountingCard value={data.length} title="Nodes" />
         <CountingCard value={71} title="Something 2" />
         <CountingCard value={45} title="Something 3" />
         <CountingCard value={67} title="Something 4" />
