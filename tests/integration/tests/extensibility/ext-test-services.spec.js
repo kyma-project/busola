@@ -2,6 +2,8 @@
 import 'cypress-file-upload';
 import jsyaml from 'js-yaml';
 
+// Also column layout test
+
 context('Test Services', () => {
   Cypress.skipAfterFail();
 
@@ -56,7 +58,9 @@ context('Test Services', () => {
       .contains('Namespaces')
       .click();
 
-    cy.contains('a', 'services').click();
+    cy.get('ui5-link[accessible-role="link"]')
+      .contains('services')
+      .click();
 
     cy.getLeftNav()
       .contains('Examples')
@@ -76,10 +80,10 @@ context('Test Services', () => {
   });
 
   it('Displays the EXT Services detail view', () => {
-    cy.contains('a', 'test-service').click({ force: true });
+    cy.contains('ui5-link', 'test-service').click();
 
-    cy.contains('Type');
-    cy.contains('LoadBalancer');
+    cy.getMidColmn().contains('Type');
+    cy.getMidColmn().contains('LoadBalancer');
 
     cy.navigateBackTo('example-services', 'Custom Services');
   });
