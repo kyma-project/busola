@@ -78,7 +78,9 @@ export function CustomResources({
     testid: 'crd-custom-resources',
     omitColumnsIds,
     hideCreateOption,
-    createResourceForm: props => <CRCreate {...props} crd={crd} />,
+    createResourceForm: props => (
+      <CRCreate {...props} crd={crd} layoutNumber="MidColumn" />
+    ),
     resourceUrlPrefix: `/apis/${group}/${version.name}`,
     searchSettings: {
       textSearchProperties: ['metadata.namespace'],
@@ -88,6 +90,7 @@ export function CustomResources({
     enableColumnLayout: true,
     columnLayout: 'ThreeColumnsEndExpanded',
     customColumnLayout,
+    layoutNumber: 'MidColumn',
   };
   return <ResourcesList {...params} />;
 }

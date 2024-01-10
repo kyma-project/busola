@@ -2,14 +2,23 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ResourceForm } from 'shared/ResourceForm';
+import { usePrepareNextLayout } from 'shared/hooks/usePrepareLayout';
+
 import { useCustomResourceUrl } from 'resources/CustomResourceDefinitions/useCustomResourceUrl';
 
 import { createTemplate } from './templates';
 
-function CRCreate({ onChange, formElementRef, crd, toggleFormFn }) {
+function CRCreate({
+  onChange,
+  formElementRef,
+  crd,
+  toggleFormFn,
+  layoutNumber,
+}) {
   const [cr, setCr] = useState(createTemplate(crd));
   const customUrl = useCustomResourceUrl(crd);
   const navigate = useNavigate();
+  const nextLayout = usePrepareNextLayout(layoutNumber);
 
   const currentVersion = crd.spec.versions.find(ver => ver.storage).name;
   const namespace =
@@ -29,8 +38,9 @@ function CRCreate({ onChange, formElementRef, crd, toggleFormFn }) {
       formElementRef={formElementRef}
       createUrl={createUrl}
       onlyYaml
+      layoutNumber={layoutNumber}
       afterCreatedFn={() => {
-        navigate(customUrl(cr));
+        navigate(`${customUrl(cr)}${nextLayout}`);
         toggleFormFn();
       }}
     />

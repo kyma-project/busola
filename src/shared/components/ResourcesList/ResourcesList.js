@@ -78,6 +78,7 @@ ResourcesList.propTypes = {
   disableDelete: PropTypes.bool,
   disableMargin: PropTypes.bool,
   enableColumnLayout: PropTypes.bool,
+  layoutNumber: PropTypes.string,
 };
 
 ResourcesList.defaultProps = {
@@ -92,6 +93,7 @@ ResourcesList.defaultProps = {
   disableDelete: false,
   disableMargin: false,
   enableColumnLayout: false,
+  layoutNumber: 'StartColumn',
   filterFn: () => true,
 };
 
@@ -113,7 +115,7 @@ export function ResourcesList(props) {
     <YamlEditorProvider>
       {!props.isCompact ? (
         <DynamicPageComponent
-          layoutNumber="StartColumn"
+          layoutNumber={props.layoutNumber}
           title={prettifyNamePlural(props.resourceTitle, props.resourceType)}
           actions={
             <>
@@ -200,6 +202,7 @@ export function ResourceListRenderer({
   enableColumnLayout,
   columnLayout,
   customColumnLayout,
+  layoutNumber = 'StartColumn',
   sortBy = {
     name: nameLocaleSort,
     time: timeSort,
@@ -567,6 +570,7 @@ export function ResourceListRenderer({
               namespace={namespace}
               refetchList={silentRefetch}
               toggleFormFn={toggleFormFn}
+              layoutNumber={layoutNumber}
               {...props}
               {...createFormProps}
             />

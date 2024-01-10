@@ -1,5 +1,7 @@
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { createPatch } from 'rfc6902';
@@ -8,7 +10,7 @@ import { HttpError } from 'shared/hooks/BackendAPI/config';
 import { Button } from '@ui5/webcomponents-react';
 import { ForceUpdateModalContent } from './ForceUpdateModalContent';
 import { useUrl } from 'hooks/useUrl';
-import { useNavigate } from 'react-router-dom';
+import { usePrepareNextLayout } from 'shared/hooks/usePrepareLayout';
 
 export function useCreateResource({
   singularName,
@@ -20,6 +22,7 @@ export function useCreateResource({
   afterCreatedFn,
   toggleFormFn,
   urlPath,
+  layoutNumber,
 }) {
   const { t } = useTranslation();
   const notification = useNotification();
@@ -28,6 +31,8 @@ export function useCreateResource({
   const patchRequest = useUpdate();
   const { scopedUrl } = useUrl();
   const navigate = useNavigate();
+
+  const nextLayout = usePrepareNextLayout(layoutNumber);
 
   const isEdit = !!initialResource?.metadata?.name;
 
@@ -44,11 +49,11 @@ export function useCreateResource({
     });
     if (!isEdit) {
       navigate(
-        scopedUrl(
+        `${scopedUrl(
           `${urlPath || pluralKind.toLowerCase()}/${encodeURIComponent(
             resource.metadata.name,
           )}`,
-        ),
+        )}${nextLayout}`,
       );
     }
   };
