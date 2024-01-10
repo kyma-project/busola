@@ -103,13 +103,16 @@ context('Test Cluster Validation Scan', () => {
       .should('exist');
 
     // Check items in scan result tree
-    cy.contains('Scan Result').should('be.visible');
-    containsInShadowDom('ui5-card', 'Scan Result').as('scanResult');
-
+    containsInShadowDom('ui5-card', 'Scan Result')
+      .as('scanResult')
+      .scrollIntoView();
     cy.get('@scanResult').should('be.visible');
 
     function findTitle(title) {
-      return cy.get('@scanResult').contains('.ui5-li-title:visible', title);
+      return cy
+        .get('@scanResult')
+        .scrollIntoView()
+        .contains('.ui5-li-title:visible', title);
     }
 
     function toggleTreeItem(title) {
@@ -126,7 +129,6 @@ context('Test Cluster Validation Scan', () => {
 
     toggleTreeItem('default');
     toggleTreeItem('ConfigMap');
-    cy.get('@scanResult').scrollIntoView();
     toggleTreeItem('kube-root-ca.crt');
     findTitle('This is a test rule').should('be.visible');
 
