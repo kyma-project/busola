@@ -170,17 +170,18 @@ command-palette:
     cluster: Custom Resources (Cluster)
     namespace: Custom Resources (Namespace)
   help:
-    choose-cluster: Choose Cluster
+    choose-cluster: Choose cluster
     crd-aliases: CRD Aliases
     full: Use <0>↑</0> and <0>↓</0> to navigate between results, <0>⏎</0> to choose, <0>Tab</0> to autocomplete.
     navigation: Navigation
-    open-upload-yaml: Open Upload YAML
-    open-preferences: Open Preferences
-    resource-aliases: Built-in Resource Aliases
+    open-upload-yaml: Open upload YAML
+    open-preferences: Open preferences
+    resource-aliases: Built-in resource aliases
     short-help: Type <0>?</0> for help
-    all-namespaces: List resources from all Namespaces
+    all-namespaces: List resources from all namespaces
+    cluster-details: Cluster details
   item-actions:
-    navigate: <0>Enter</0> to navigate <0>Tab</0> to autocomplete
+    navigate: Use <0>Enter</0> to navigate <0>Tab</0> to autocomplete
     open: Open
     show-help: Show available commands
     switch: Switch context
