@@ -24,18 +24,11 @@ export default function ClusterStats({ data }) {
     memory.capacity += node.metrics.memory?.capacity ?? 0;
   }
 
-  const { data: podsData, error, loading = true } = useGetList()(
-    `/api/v1/pods`,
-    {
-      pollingInterval: 3200,
-    },
-  );
+  const { data: podsData } = useGetList()(`/api/v1/podss`, {
+    pollingInterval: 3200,
+  });
 
-  const {
-    data: deploymentsData,
-    error: deploymentsError,
-    loading: deploymentsLoading = true,
-  } = useGetList()('/apis/apps/v1/deployments', {
+  const { data: deploymentsData } = useGetList()('/apis/apps/v1/deployments', {
     pollingInterval: 3200,
   });
 
@@ -105,58 +98,68 @@ export default function ClusterStats({ data }) {
         <CardWithTooltip
           title={t('cluster-overview.statistics.namespaces-health')}
           tooltip={{
-            content: 'Info',
+            content: t('cluster-overview.tooltips.namespaces-health-info'),
             position: 'bottom',
           }}
           icon={'sys-help'}
         >
-          <ProgressIndicatorWithPercentage
-            title={t('cluster-overview.statistics.healthy-pods')}
-            value={calculatePercents(healthyPods, podsData?.length)}
-            dataBarColor={'var(--sapIndicationColor_8)'}
-            remainingBarColor={'var(--sapIndicationColor_8b)'}
-            tooltip={{
-              content: t('cluster-overview.tooltips.healthy-pods', {
-                value: healthyPods,
-                max: podsData?.length,
-              }),
-              position: 'bottom',
-            }}
-          />
-          <ProgressIndicatorWithPercentage
-            title={t('cluster-overview.statistics.healthy-deployments')}
-            value={calculatePercents(
-              healthyDeployments,
-              deploymentsData?.length,
-            )}
-            dataBarColor={'var(--sapIndicationColor_6)'}
-            remainingBarColor={'var(--sapIndicationColor_6b)'}
-            tooltip={{
-              content: t('cluster-overview.tooltips.healthy-deployments', {
-                value: healthyDeployments,
-                max: deploymentsData?.length,
-              }),
-              position: 'bottom',
-            }}
-          />
+          {podsData && (
+            <ProgressIndicatorWithPercentage
+              title={t('cluster-overview.statistics.healthy-pods')}
+              value={calculatePercents(healthyPods, podsData?.length)}
+              dataBarColor={'var(--sapIndicationColor_8)'}
+              remainingBarColor={'var(--sapIndicationColor_8b)'}
+              tooltip={{
+                content: t('cluster-overview.tooltips.healthy-pods', {
+                  value: healthyPods,
+                  max: podsData?.length,
+                }),
+                position: 'bottom',
+              }}
+            />
+          )}
+          {deploymentsData && (
+            <ProgressIndicatorWithPercentage
+              title={t('cluster-overview.statistics.healthy-deployments')}
+              value={calculatePercents(
+                healthyDeployments,
+                deploymentsData?.length,
+              )}
+              dataBarColor={'var(--sapIndicationColor_6)'}
+              remainingBarColor={'var(--sapIndicationColor_6b)'}
+              tooltip={{
+                content: t('cluster-overview.tooltips.healthy-deployments', {
+                  value: healthyDeployments,
+                  max: deploymentsData?.length,
+                }),
+                position: 'bottom',
+              }}
+            />
+          )}
         </CardWithTooltip>
       </div>
       <div
         className="cluster-overview__cards-wrapper"
         style={spacing.sapUiSmallMargin}
       >
-        <CountingCard
-          value={data?.length}
-          title={t('cluster-overview.statistics.nodes')}
-        />
-        <CountingCard
-          value={podsData?.length}
-          title={t('cluster-overview.statistics.pods')}
-        />
-        <CountingCard
-          value={deploymentsData?.length}
-          title={t('cluster-overview.statistics.deployments')}
-        />
+        {data && (
+          <CountingCard
+            value={data?.length}
+            title={t('cluster-overview.statistics.nodes')}
+          />
+        )}
+        {podsData && (
+          <CountingCard
+            value={podsData?.length}
+            title={t('cluster-overview.statistics.pods')}
+          />
+        )}
+        {deploymentsData && (
+          <CountingCard
+            value={deploymentsData?.length}
+            title={t('cluster-overview.statistics.deployments')}
+          />
+        )}
       </div>
     </>
   );

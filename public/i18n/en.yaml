@@ -28,6 +28,7 @@ cluster-overview:
       memory-used-gib: 'Memory (GiB) used: {{value}}/{{max}}'
       healthy-pods: 'Healthy pods: {{value}}/{{max}}'
       healthy-deployments: 'Healthy deployments: {{value}}/{{max}}'
+      namespaces-health-info: 'This chart is about pods and deployments from all namespaces.'
 cluster-role-bindings:
   description: <0>ClusterRoleBinding</0> assigns the permissions defined in a ClusterRole to a user.
   name_singular: ClusterRoleBinding
