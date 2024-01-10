@@ -21,6 +21,7 @@ export default function LanguageSettings() {
         {AVAILABLE_LANGUAGES.map(available_language => (
           <Option
             value={available_language.key}
+            key={available_language.key}
             selected={i18n.language === available_language.key}
           >
             {available_language.text}

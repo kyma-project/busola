@@ -122,14 +122,12 @@ export function Header() {
             : navigate(`/cluster/${e.detail.item.textContent}`)
         }
         profile={
-          <>
-            <Avatar
-              icon="customer"
-              colorScheme="Accent6"
-              accessibleName="Preferences"
-              id="openShellbarMenu"
-            />
-          </>
+          <Avatar
+            icon="customer"
+            colorScheme="Accent6"
+            accessibleName="Preferences"
+            id="openShellbarMenu"
+          />
         }
         onProfileClick={() => setIsMenuOpen(true)}
       >

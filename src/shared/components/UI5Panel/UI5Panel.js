@@ -28,34 +28,32 @@ export const UI5Panel = ({
       className={`${className}`}
       style={style ? style : !disableMargin ? spacing.sapUiSmallMargin : null}
       header={
-        <>
-          <Toolbar
-            style={{
-              height: '100%',
-              paddingTop: '10px',
-              paddingBottom: '10px',
-            }}
-          >
-            {icon && icon}
-            {typeof title === 'string' ? (
-              <Title level="H5">{title}</Title>
-            ) : (
-              title
-            )}
-            {description && (
-              <>
-                <ToolbarSeparator />
-                <Text>{description}</Text>
-              </>
-            )}
-            {headerActions && (
-              <>
-                <ToolbarSpacer />
-                {headerActions}
-              </>
-            )}
-          </Toolbar>
-        </>
+        <Toolbar
+          style={{
+            height: '100%',
+            paddingTop: '10px',
+            paddingBottom: '10px',
+          }}
+        >
+          {icon && icon}
+          {typeof title === 'string' ? (
+            <Title level="H5">{title}</Title>
+          ) : (
+            title
+          )}
+          {description && (
+            <>
+              <ToolbarSeparator />
+              <Text>{description}</Text>
+            </>
+          )}
+          {headerActions && (
+            <>
+              <ToolbarSpacer />
+              {headerActions}
+            </>
+          )}
+        </Toolbar>
       }
     >
       {children}
