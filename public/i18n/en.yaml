@@ -181,7 +181,7 @@ command-palette:
     all-namespaces: List resources from all namespaces
     cluster-details: Cluster details
   item-actions:
-    navigate: Use <0>Enter</0> to navigate <0>Tab</0> to autocomplete
+    navigate: Use <0>Enter</0> to navigate, <0>Tab</0> to autocomplete
     open: Open
     show-help: Show available commands
     switch: Switch context
