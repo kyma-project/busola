@@ -64,7 +64,7 @@ context('Test extensibility variables', () => {
       .contains('Namespaces')
       .click();
 
-    cy.contains('a', NAMESPACE).click();
+    cy.contains('ui5-link', NAMESPACE).click();
 
     cy.getLeftNav()
       .contains('Testin')
@@ -280,8 +280,14 @@ context('Test extensibility variables', () => {
       .click();
 
     // check arrayOfStrings
-    cy.contains('ui5-title', NAME).should('be.visible');
-    cy.contains('value_1, value_3').should('exist');
-    cy.contains('value_2').should('not.exist');
+    cy.getMidColumn()
+      .contains('ui5-title', NAME)
+      .should('be.visible');
+    cy.getMidColumn()
+      .contains('value_1, value_3')
+      .should('exist');
+    cy.getMidColumn()
+      .contains('value_2')
+      .should('not.exist');
   });
 });

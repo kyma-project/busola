@@ -35,19 +35,25 @@ context('Test Storage Classes', () => {
   });
 
   it('Checking details', () => {
-    cy.contains('ui5-title', Cypress.env('STORAGE_CLASS_NAME')).should(
-      'be.visible',
-    );
+    cy.getMidColumn()
+      .contains('ui5-title', Cypress.env('STORAGE_CLASS_NAME'))
+      .should('be.visible');
 
-    cy.contains('pd.csi.storage.gke.io').should('be.visible');
+    cy.getMidColumn()
+      .contains('pd.csi.storage.gke.io')
+      .should('be.visible');
 
-    cy.contains('pd-ssd').should('be.visible');
+    cy.getMidColumn()
+      .contains('pd-ssd')
+      .should('be.visible');
 
-    cy.contains('Retain').should('be.visible');
+    cy.getMidColumn()
+      .contains('Retain')
+      .should('be.visible');
   });
 
   it('Checking list and delete', () => {
-    cy.navigateBackTo('storageclasses', 'Storage Classes');
+    cy.closeMidColumn();
 
     cy.deleteFromGenericList(
       'Storage Class',

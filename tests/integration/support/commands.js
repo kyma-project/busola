@@ -155,12 +155,12 @@ Cypress.Commands.add(
   ) => {
     cy.get('[aria-label="open-search"]:visible').click();
 
-    cy.get('ui5-combobox[placeholder="Search"]')
+    cy.get('ui5-combobox[placeholder="Search"]:visible')
       .find('input')
       .click()
       .type(resourceName);
 
-    cy.contains('a', resourceName).should('be.visible');
+    cy.contains('ui5-link', resourceName).should('be.visible');
 
     cy.contains('ui5-message-strip', /created/).should('not.exist');
 
@@ -168,7 +168,8 @@ Cypress.Commands.add(
 
     if (confirmationEnabled) {
       cy.contains(`delete ${resourceType} ${resourceName}`);
-      cy.get(`[header-text="Delete ${resourceType}"]`)
+
+      cy.get(`[header-text="Delete ${resourceType}"]:visible`)
         .find('[data-testid="delete-confirmation"]')
         .click();
 
@@ -177,7 +178,7 @@ Cypress.Commands.add(
       }
 
       if (clearSearch) {
-        cy.get('ui5-combobox[placeholder="Search"]')
+        cy.get('ui5-combobox[placeholder="Search"]:visible')
           .find('input')
           .click()
           .clear();
@@ -214,11 +215,7 @@ Cypress.Commands.add('testMidColumnLayout', resourceName => {
 
   cy.contains('ui5-link', resourceName).should('be.visible');
 
-  cy.getMidColumn()
-    .find('ui5-button[aria-label="close-column"]')
-    .click();
-
-  cy.getMidColumn().should('not.be.visible');
+  cy.closeMidColumn();
 
   cy.getMidColumn()
     .contains('ui5-title', resourceName)
@@ -247,4 +244,20 @@ Cypress.Commands.add('testEndColumnLayout', resourceName => {
   cy.getEndColumn()
     .contains('ui5-title', resourceName)
     .should('not.be.visible');
+});
+
+Cypress.Commands.add('closeMidColumn', () => {
+  cy.getMidColumn()
+    .find('ui5-button[aria-label="close-column"]')
+    .click();
+
+  cy.getMidColumn().should('not.be.visible');
+});
+
+Cypress.Commands.add('closeEndColumn', () => {
+  cy.getEndColumn()
+    .find('ui5-button[aria-label="close-column"]')
+    .click();
+
+  cy.getEndColumn().should('not.be.visible');
 });
