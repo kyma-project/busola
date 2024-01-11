@@ -40,7 +40,7 @@ function RoutedCRDDetails() {
     if (layout) {
       setLayoutColumn(initialLayoutState);
     }
-  }, [layout]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [layout, crdName, crName]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Suspense fallback={<Spinner />}>

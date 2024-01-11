@@ -102,7 +102,7 @@ const DetailsWrapper = ({ children, list, ...props }) => {
     if (layout) {
       setLayoutColumn(initialLayoutState);
     }
-  }, [layout]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [layout, props.resourceName, props.resourceType, props.namespaceId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const elementListProps = usePrepareListProps({
     ...props,
