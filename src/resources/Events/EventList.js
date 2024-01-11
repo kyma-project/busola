@@ -115,7 +115,7 @@ export function EventList({
 
   return (
     <ResourcesList
-      listHeaderActions={[MessageSelector]}
+      listHeaderActions={MessageSelector}
       customColumns={customColumns}
       omitColumnsIds={['namespace', 'labels', 'created']}
       sortBy={sortByFn}
