@@ -54,6 +54,7 @@ function makeListItem(
     query: `node/${name}`,
     onActivate: () =>
       navigate(`/cluster/${activeClusterName}/overview/nodes/${name}`),
+    customActionText: 'command-palette.item-actions.navigate',
   };
 }
 

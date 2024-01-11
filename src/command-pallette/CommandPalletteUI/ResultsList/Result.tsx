@@ -40,9 +40,15 @@ export function Result({
 
   const actionText =
     typeof customActionText === 'string' ? (
-      customActionText
+      customActionText.includes('command-palette') ? (
+        <Trans i18nKey={customActionText}>
+          <pre className="key"></pre>
+        </Trans>
+      ) : (
+        customActionText
+      )
     ) : (
-      <Trans i18nKey="command-palette.item-actions.navigate">
+      <Trans i18nKey="command-palette.item-actions.navigate-autocomplete">
         <pre className="key"></pre>
         <pre className="key"></pre>
       </Trans>

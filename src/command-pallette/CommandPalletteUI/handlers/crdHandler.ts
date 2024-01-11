@@ -52,6 +52,7 @@ function makeListItem(item: K8sResource, context: CommandPaletteContext) {
       const pathname = `/cluster/${activeClusterName}/customresourcedefinitions/${name}`;
       navigate(pathname);
     },
+    customActionText: 'command-palette.item-actions.navigate',
   };
 }
 

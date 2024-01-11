@@ -254,6 +254,7 @@ function makeListItem({
         crd,
         crName: name,
       }),
+    customActionText: 'command-palette.item-actions.navigate',
   };
 }
 

@@ -65,6 +65,7 @@ function makeListItem(
   item: K8sResource,
   matchedNode: NavNode,
   context: CommandPaletteContext,
+  customActionText: boolean,
 ) {
   const { t, activeClusterName, navigate } = context;
   const name = item.metadata.name;
@@ -84,6 +85,9 @@ function makeListItem(
       const pathname = `/cluster/${activeClusterName}/${pathSegment}/${name}`;
       navigate(pathname);
     },
+    customActionText: customActionText
+      ? 'command-palette.item-actions.navigate'
+      : undefined,
   };
 }
 
@@ -165,6 +169,7 @@ function makeSingleNamespaceLinks(
       const pathname = `/cluster/${activeClusterName}/namespaces/${name}`;
       navigate(pathname);
     },
+    customActionText: 'command-palette.item-actions.navigate',
   };
 
   // don't rely on currentNamespace, as it defaults to "default"
@@ -324,20 +329,39 @@ function createResults(context: CommandPaletteContext): Result[] {
     );
   }
 
+  const pathElements = window.location.pathname
+    .split('/')
+    .filter(e => e !== '');
+  const namespacesOverviewCase =
+    window.location.pathname.includes('namespaces') &&
+    pathElements.indexOf('namespaces') + 2 <= pathElements.length - 1;
+
   if (name) {
     const matchedResources = resources.filter(item =>
       item.metadata.name.includes(name),
     );
     // special case for a single namespace
-    if (resourceType === 'namespaces' && matchedResources.length === 1) {
+    if (
+      resourceType === 'namespaces' &&
+      matchedResources.length === 1 &&
+      namespacesOverviewCase
+    ) {
       return makeSingleNamespaceLinks(matchedResources[0], context);
     }
     return matchedResources?.map(item =>
-      makeListItem(item, matchedNode, context),
+      makeListItem(item, matchedNode, context, true),
     );
   } else if (delimiter) {
+    //special case for namespace overview
+    if (resourceType === 'namespaces' && namespacesOverviewCase) {
+      return [
+        ...resources?.map(item =>
+          makeListItem(item, matchedNode, context, false),
+        ),
+      ];
+    }
     return [
-      ...resources?.map(item => makeListItem(item, matchedNode, context)),
+      ...resources?.map(item => makeListItem(item, matchedNode, context, true)),
     ];
   } else {
     return [linkToList];

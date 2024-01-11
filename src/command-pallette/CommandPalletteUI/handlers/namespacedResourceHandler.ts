@@ -84,6 +84,7 @@ function makeListItem(
       const pathname = `/cluster/${activeClusterName}/${link}`;
       navigate(pathname);
     },
+    customActionText: 'command-palette.item-actions.navigate',
   };
 }
 
@@ -201,6 +202,10 @@ function createResults(context: CommandPaletteContext): Result[] | null {
 
   const linkToList = createSingleResult(context, resourceType, matchedNode);
   const resources = resourceCache[`${namespace}/${resourceType}`];
+
+  if (!resources) {
+    return [];
+  }
 
   if (typeof resources !== 'object') {
     return [

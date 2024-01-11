@@ -60,6 +60,7 @@ function makeListItem(item: K8sResource, context: CommandPaletteContext) {
       const pathname = `/cluster/${activeClusterName}/namespaces/${namespace}/helm-releases/${name}`;
       navigate(pathname);
     },
+    customActionText: 'command-palette.item-actions.navigate',
   };
 }
 
