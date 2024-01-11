@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ResourceForm } from 'shared/ResourceForm';
-import { usePrepareNextLayout } from 'shared/hooks/usePrepareLayout';
+import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 
 import { useCustomResourceUrl } from 'resources/CustomResourceDefinitions/useCustomResourceUrl';
 
@@ -18,7 +18,7 @@ function CRCreate({
   const [cr, setCr] = useState(createTemplate(crd));
   const customUrl = useCustomResourceUrl(crd);
   const navigate = useNavigate();
-  const nextLayout = usePrepareNextLayout(layoutNumber);
+  const { nextLayout } = usePrepareLayout(layoutNumber);
 
   const currentVersion = crd.spec.versions.find(ver => ver.storage).name;
   const namespace =

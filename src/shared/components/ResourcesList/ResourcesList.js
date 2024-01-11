@@ -223,6 +223,8 @@ export function ResourceListRenderer({
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     resourceTitle,
     resourceType,
+    layoutNumber,
+    redirectBack: false,
   });
 
   const [activeResource, setActiveResource] = useState(null);

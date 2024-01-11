@@ -182,6 +182,7 @@ function Resource({
     resourceTitle,
     resourceType,
     navigateToListAfterDelete: true,
+    layoutNumber,
   });
 
   const { setEditedYaml: setEditedSpec } = useYamlEditor();
