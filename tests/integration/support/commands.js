@@ -51,7 +51,9 @@ Cypress.Commands.add('goToNamespaceDetails', () => {
     .click();
 
   cy.get('[role=row]')
-    .contains('a', Cypress.env('NAMESPACE_NAME'))
+    .find('ui5-link[accessible-role="link"]')
+    .contains('ui5-link', Cypress.env('NAMESPACE_NAME'))
+    .find('a[role="link"]')
     .click();
 
   return cy.end();
@@ -152,6 +154,7 @@ Cypress.Commands.add(
     confirmationEnabled = true,
     deletedVisible = true,
     clearSearch = true,
+    isUI5Link = true,
   ) => {
     cy.get('[aria-label="open-search"]:visible').click();
 
@@ -160,7 +163,11 @@ Cypress.Commands.add(
       .click()
       .type(resourceName);
 
-    cy.contains('ui5-link', resourceName).should('be.visible');
+    if (isUI5Link) {
+      cy.contains('ui5-link', resourceName).should('be.visible');
+    } else {
+      cy.contains('a', resourceName).should('be.visible');
+    }
 
     cy.contains('ui5-message-strip', /created/).should('not.exist');
 

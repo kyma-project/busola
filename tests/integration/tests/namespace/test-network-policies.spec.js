@@ -43,11 +43,17 @@ context('Test Network Policy', () => {
   });
 
   it('Check Network Policy details', () => {
-    cy.contains('ui5-title', NAME).should('be.visible');
+    cy.getMidColumn()
+      .contains('ui5-title', NAME)
+      .should('be.visible');
 
-    cy.contains(/CIDR/i).should('be.visible');
+    cy.getMidColumn()
+      .contains(/CIDR/i)
+      .should('be.visible');
 
-    cy.contains(/Protocol/i).should('be.visible');
+    cy.getMidColumn()
+      .contains(/Protocol/i)
+      .should('be.visible');
   });
 
   it('Check Network Policy list', () => {
