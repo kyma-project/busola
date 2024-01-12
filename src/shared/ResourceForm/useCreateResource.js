@@ -10,7 +10,7 @@ import { HttpError } from 'shared/hooks/BackendAPI/config';
 import { Button } from '@ui5/webcomponents-react';
 import { ForceUpdateModalContent } from './ForceUpdateModalContent';
 import { useUrl } from 'hooks/useUrl';
-import { usePrepareNextLayout } from 'shared/hooks/usePrepareLayout';
+import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 
 export function useCreateResource({
   singularName,
@@ -32,7 +32,7 @@ export function useCreateResource({
   const { scopedUrl } = useUrl();
   const navigate = useNavigate();
 
-  const nextLayout = usePrepareNextLayout(layoutNumber);
+  const { nextLayout } = usePrepareLayout(layoutNumber);
 
   const isEdit = !!initialResource?.metadata?.name;
 

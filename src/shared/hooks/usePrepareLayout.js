@@ -1,26 +1,66 @@
 import { useFeature } from 'hooks/useFeature';
 
-const switchToNextLayout = layout => {
+const switchToPrevLayout = layout => {
   switch (layout) {
-    case 'StartColumn':
-      return '?layout=TwoColumnsMidExpanded';
-    case 'MidColumn':
     case 'EndColumn':
+      return 'TwoColumnsMidExpanded';
+    case 'MidColumn':
+    case 'StartColumn':
     default:
-      return '?layout=ThreeColumnsEndExpanded';
+      return '';
   }
 };
 
-export function usePrepareNextLayout(layoutNumber) {
+const switchToCurrentLayout = layout => {
+  switch (layout) {
+    case 'StartColumn':
+      return 'OneColumn';
+    case 'MidColumn':
+      return 'TwoColumnsMidExpanded';
+    case 'EndColumn':
+    default:
+      return 'ThreeColumnsEndExpanded';
+  }
+};
+
+const switchToNextLayout = layout => {
+  switch (layout) {
+    case 'StartColumn': {
+      return 'TwoColumnsMidExpanded';
+    }
+    case 'MidColumn':
+    case 'EndColumn':
+    default: {
+      return 'ThreeColumnsEndExpanded';
+    }
+  }
+};
+
+export function usePrepareLayout(layoutNumber) {
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
 
-  if (!isColumnLeyoutEnabled) {
-    return '';
+  if (!isColumnLeyoutEnabled || !layoutNumber) {
+    return null;
   }
 
-  if (layoutNumber) {
-    return switchToNextLayout(layoutNumber);
-  }
-
-  return '';
+  const prevLayout = switchToPrevLayout(layoutNumber);
+  const currentLayout = switchToCurrentLayout(layoutNumber);
+  const nextLayout = switchToNextLayout(layoutNumber);
+  return {
+    prevLayout,
+    currentLayout,
+    nextLayout,
+    prevQuery:
+      prevLayout !== '' || prevLayout !== 'OneColumn'
+        ? `?layout=${prevLayout}`
+        : '',
+    currentQuery:
+      currentLayout !== '' || currentLayout !== 'OneColumn'
+        ? `?layout=${currentLayout}`
+        : '',
+    nextQuery:
+      nextLayout !== '' || nextLayout !== 'OneColumn'
+        ? `?layout=${nextLayout}`
+        : '',
+  };
 }

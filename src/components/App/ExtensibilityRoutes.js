@@ -34,12 +34,12 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
         endColumn: null,
       }
     : null;
-  console.log('initialLayoutState', initialLayoutState, layout, layoutState);
+
   useEffect(() => {
     if (layout) {
       setLayoutColumn(initialLayoutState);
     }
-  }, [layout]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [layout, namespace, name]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <FlexibleColumnLayout

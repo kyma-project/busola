@@ -20,11 +20,14 @@ import { useUrl } from 'hooks/useUrl';
 
 import { clusterState } from 'state/clusterAtom';
 import { columnLayoutState } from 'state/columnLayoutAtom';
+import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 
 export function useDeleteResource({
   resourceTitle,
   resourceType,
   navigateToListAfterDelete = false,
+  layoutNumber,
+  redirectBack = true,
 }) {
   const { t } = useTranslation();
 
@@ -43,6 +46,15 @@ export function useDeleteResource({
     resourceTitle,
     resourceType,
   );
+  const {
+    prevLayout,
+    prevQuery,
+    currentLayout,
+    currentQuery,
+  } = usePrepareLayout(layoutNumber);
+
+  const goToLayout = redirectBack ? prevLayout : currentLayout;
+  const goToLayoutQuery = redirectBack ? prevQuery : currentQuery;
 
   const performDelete = async (resource, resourceUrl, deleteFn) => {
     const withoutQueryString = path => path?.split('?')?.[0];
@@ -69,27 +81,17 @@ export function useDeleteResource({
                 `${window.location.pathname.slice(
                   0,
                   window.location.pathname.lastIndexOf('/'),
-                )}${
-                  layoutColumn.endColumn === null
-                    ? ''
-                    : '?layout=TwoColumnsMidExpanded'
-                }`,
+                )}${goToLayoutQuery}`,
               );
               setLayoutColumn({
                 ...layoutColumn,
-                layout:
-                  layoutColumn.endColumn === null
-                    ? 'OneColumn'
-                    : 'TwoColumnsMidExpanded',
+                layout: goToLayout,
               });
             }
 
             setLayoutColumn({
               ...layoutColumn,
-              layout:
-                layoutColumn.endColumn === null
-                  ? 'OneColumn'
-                  : 'TwoColumnsMidExpanded',
+              layout: goToLayout,
             });
           } else navigate(resourceListUrl(resource, { resourceType }));
         }
