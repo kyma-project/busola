@@ -48,13 +48,13 @@ export function useDeleteResource({
   );
   const {
     prevLayout,
-    prevLayoutQuery,
+    prevQuery,
     currentLayout,
     currentQuery,
   } = usePrepareLayout(layoutNumber);
 
   const goToLayout = redirectBack ? prevLayout : currentLayout;
-  const goToLayoutQuery = redirectBack ? prevLayoutQuery : currentQuery;
+  const goToLayoutQuery = redirectBack ? prevQuery : currentQuery;
 
   const performDelete = async (resource, resourceUrl, deleteFn) => {
     const withoutQueryString = path => path?.split('?')?.[0];

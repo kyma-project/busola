@@ -25,12 +25,14 @@ const switchToCurrentLayout = layout => {
 
 const switchToNextLayout = layout => {
   switch (layout) {
-    case 'StartColumn':
+    case 'StartColumn': {
       return 'TwoColumnsMidExpanded';
+    }
     case 'MidColumn':
     case 'EndColumn':
-    default:
+    default: {
       return 'ThreeColumnsEndExpanded';
+    }
   }
 };
 
