@@ -18,7 +18,6 @@ const Details = React.lazy(() =>
 const ColumnWrapper = ({ defaultColumn = 'list', resourceType }) => {
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   const { namespaceId, resourceName } = useParams();
-  const sth = useParams();
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
