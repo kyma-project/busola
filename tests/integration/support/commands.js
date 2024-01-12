@@ -40,6 +40,15 @@ Cypress.Commands.add(
   },
 );
 
+Cypress.Commands.add('clickGenericListLink', resourceName => {
+  cy.get('ui5-table-row')
+    .find('ui5-table-cell')
+    .find('ui5-link')
+    .contains(resourceName)
+    .find('a.ui5-link-root')
+    .click({ force: true });
+});
+
 Cypress.Commands.add('filterWithNoValue', { prevSubject: true }, $elements =>
   $elements.filter((_, e) => !e.value),
 );
@@ -50,12 +59,7 @@ Cypress.Commands.add('goToNamespaceDetails', () => {
     .contains('Namespaces')
     .click();
 
-  cy.get('ui5-table-row')
-    .find('ui5-table-cell')
-    .find('ui5-link')
-    .contains(Cypress.env('NAMESPACE_NAME'))
-    .find('a.ui5-link-root')
-    .click({ force: true });
+  cy.clickGenericListLink(Cypress.env('NAMESPACE_NAME'));
 
   return cy.end();
 });
