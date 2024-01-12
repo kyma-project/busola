@@ -61,13 +61,13 @@ context('Test Custom Resources', () => {
 
     cy.get('table').should('have.length', 1);
 
-    cy.get('[role=row]')
+    cy.get('ui5-table-row')
       .contains('Tnamespaces')
       .should('be.visible');
   });
 
   it('Check single CR list', () => {
-    cy.get('[role=row]')
+    cy.get('ui5-table-row')
       .contains('ui5-link', 'Tnamespaces')
       .click();
 

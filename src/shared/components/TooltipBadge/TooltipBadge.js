@@ -38,7 +38,7 @@ export const TooltipBadge = ({
 
 TooltipBadge.propTypes = {
   tooltipContent: PropTypes.node,
-  type: PropTypes.oneOf(['Success', 'Error', 'None', 'Information']),
+  type: PropTypes.oneOf(['Information', 'Success', 'Error', 'Warning', 'None']),
   tooltipProps: PropTypes.object,
   className: PropTypes.string,
 };

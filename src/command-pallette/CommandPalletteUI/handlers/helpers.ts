@@ -18,6 +18,17 @@ export function toFullResourceType(
   return fullResourceType || resourceType;
 }
 
+export function toFullResourceTypeList(
+  resourceType: string,
+  resources: ResourceTypeWithAliases[],
+) {
+  const matchingResources = resources.filter(r =>
+    r.aliases.some(a => a.startsWith(resourceType)),
+  );
+  const fullResourceTypeList = matchingResources.map(r => r.resourceType);
+  return fullResourceTypeList.length ? fullResourceTypeList : [resourceType];
+}
+
 export function getSuggestionForSingleResource({
   tokens,
   resources,
@@ -56,7 +67,7 @@ export function autocompleteForResources({
       return resourceTypes
         .flatMap(rT => rT.aliases)
         .filter(alias => alias.startsWith(type));
-    case 2: // name
+    case 3: // name
       const resourceNames = resources.map(n => n.metadata.name);
       return resourceNames
         .filter(name => name.startsWith(tokenToAutocomplete))
@@ -74,13 +85,13 @@ export function extractShortNames({
   aliases: string[];
 }): string[] {
   const singularResourceType = pluralize(pluralResourceType, 1);
-  return aliases.filter(
+  return aliases?.filter(
     alias => alias !== singularResourceType && alias !== pluralResourceType,
   );
 }
 
 export function findNavigationNode(resourceType: string, navNodes: NavNode[]) {
-  return navNodes.find(
+  return navNodes?.find(
     n => pluralize(n.resourceType) === pluralize(resourceType),
   );
 }
@@ -100,4 +111,21 @@ export function getApiPathForQuery(
   } else {
     return `/api/${navNode.apiVersion}`;
   }
+}
+
+export function getShortAliases(
+  resourceType: string,
+  resources: ResourceTypeWithAliases[],
+  namespaceNodes: NavNode[],
+) {
+  const aliases = resources
+    .filter(rT => findNavigationNode(rT.resourceType, namespaceNodes))
+    .find(rT => rT.resourceType === resourceType)?.aliases;
+
+  const shortAliases = extractShortNames({
+    resourceType: resourceType,
+    aliases: aliases ?? [],
+  });
+
+  return shortAliases;
 }

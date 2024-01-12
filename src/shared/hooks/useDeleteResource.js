@@ -141,6 +141,7 @@ export function useDeleteResource({
       className="ui5-content-density-compact"
       actions={[
         <Button
+          key="delete-confirmation"
           data-testid="delete-confirmation"
           design="Emphasized"
           onClick={() => performDelete(resource, resourceUrl, deleteFn)}
@@ -152,6 +153,7 @@ export function useDeleteResource({
           )}
         </Button>,
         <Button
+          key="delete-cancel"
           data-testid="delete-cancel"
           onClick={() => setShowDeleteDialog(false)}
         >

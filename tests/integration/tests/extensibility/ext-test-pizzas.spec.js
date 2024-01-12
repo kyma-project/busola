@@ -149,18 +149,18 @@ context('Test Pizzas', () => {
       .contains(/^Pizzas$/)
       .click();
 
-    cy.get('[role=row]').should('have.length', 2);
+    cy.get('ui5-table-row').should('have.length', 2);
 
     cy.contains('Margherita is a simple, vegetarian pizza.');
     cy.contains('Toppings price');
   });
 
   it('Test list sort-functionality', () => {
-    cy.get("[role='row']")
+    cy.get('ui5-table-row')
       .eq(0)
       .should('contain.text', 'margherita');
 
-    cy.get("[role='row']")
+    cy.get('ui5-table-row')
       .eq(1)
       .should('contain.text', 'diavola');
 
@@ -172,11 +172,11 @@ context('Test Pizzas', () => {
       .contains('OK')
       .click();
 
-    cy.get("[role='row']")
+    cy.get('ui5-table-row')
       .eq(0)
       .should('contain.text', 'diavola');
 
-    cy.get("[role='row']")
+    cy.get('ui5-table-row')
       .eq(1)
       .should('contain.text', 'margherita');
 
@@ -188,11 +188,11 @@ context('Test Pizzas', () => {
       .contains('OK')
       .click();
 
-    cy.get("[role='row']")
+    cy.get('ui5-table-row')
       .eq(0)
       .should('contain.text', 'margherita');
 
-    cy.get("[role='row']")
+    cy.get('ui5-table-row')
       .eq(1)
       .should('contain.text', 'diavola');
   });

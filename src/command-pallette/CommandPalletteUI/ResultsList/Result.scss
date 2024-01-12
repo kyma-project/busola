@@ -1,0 +1,47 @@
+@mixin key($margin-left: 0.5rem, $margin-right: 0.5rem) {
+  display: inline;
+  background: var(--sapNeutralBackground);
+  padding-right: 4px;
+  padding-left: 3px;
+  margin-left: $margin-left;
+  margin-right: $margin-right;
+  border-radius: 2px;
+}
+
+.result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+
+  &--disabled {
+    cursor: default;
+  }
+
+  .bsl-has-color-status-4 {
+    font-size: var(--sapFontSize);
+    color: var(--sapList_TextColor);
+
+    .key {
+      @include key(0.1rem, 0.1rem);
+    }
+  }
+
+  .description {
+    margin-top: 2px;
+    font-size: 90%;
+    color: var(--sapContent_LabelColor);
+    opacity: 0.7;
+  }
+
+  .label {
+    display: inline-block;
+    color: var(--sapList_TextColor);
+  }
+
+  .key {
+    @include key(0.5rem, 0rem);
+  }
+}

@@ -78,6 +78,7 @@ export const useMessageList = (defaultType = EVENT_MESSAGE_TYPE.ALL) => {
 
   const MessageSelector = (
     <Dropdown
+      accessibleName="message-type"
       options={Object.values(EVENT_MESSAGE_TYPE).map(el => ({
         key: el.key,
         text: t(`node-details.${el.text}`),

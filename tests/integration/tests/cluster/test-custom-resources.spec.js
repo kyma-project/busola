@@ -50,13 +50,13 @@ context('Test Custom Resources', () => {
 
     cy.get('table').should('have.length', 1);
 
-    cy.get('[role=row]')
+    cy.get('ui5-table-row')
       .contains('Tclusters')
       .should('be.visible');
   });
 
   it('Check single CR list', () => {
-    cy.get('[role=row]')
+    cy.get('ui5-table-row')
       .contains('Tclusters')
       .click();
 
