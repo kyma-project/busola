@@ -14,11 +14,16 @@ export function NamespaceDropdown() {
       text={t('namespaces.namespaces-overview')}
       data-key="overview"
     />,
-    <ComboBoxItem
-      text={t('navigation.all-namespaces')}
-      data-key="all-namespaces"
-    />,
   ];
+
+  if (allNamespaces.length > 0) {
+    namespaces.push(
+      <ComboBoxItem
+        text={t('navigation.all-namespaces')}
+        data-key="all-namespaces"
+      />,
+    );
+  }
 
   allNamespaces.map(ns =>
     namespaces.push(<ComboBoxItem text={ns} data-key={ns} />),

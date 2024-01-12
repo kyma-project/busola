@@ -7,11 +7,17 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { Link } from 'shared/components/Link/Link';
 import { NamespaceCreate } from './NamespaceCreate';
 import { NamespaceStatus } from './NamespaceStatus';
+import { useNavigate } from 'react-router-dom';
+import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
+import { clusterState } from 'state/clusterAtom';
 
 export function NamespaceList(props) {
   const { t } = useTranslation();
   const showHiddenNamespaces = useRecoilValue(showHiddenNamespacesState);
+  const cluster = useRecoilValue(clusterState);
   const hiddenNamespaces = useGetHiddenNamespaces();
+  const { namespaces } = useAvailableNamespaces();
+  const navigate = useNavigate();
 
   const customColumns = [
     {
@@ -36,6 +42,10 @@ export function NamespaceList(props) {
       />
     </Trans>
   );
+
+  if (namespaces.length === 0) {
+    navigate(`/cluster/${cluster.name}/no-permissions`);
+  }
 
   return (
     <ResourcesList
