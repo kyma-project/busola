@@ -14,30 +14,38 @@ context('Test Events', () => {
       .contains('Events')
       .click();
 
-    cy.get('ui5-table-cell a')
+    cy.get('ui5-table-cell ui5-link')
       .first()
       .click({ force: true });
   });
 
   it('Check details', () => {
-    cy.contains('Involved Object')
+    cy.getMidColumn()
+      .contains('Involved Object')
       .next('.content')
       .should('not.be.empty');
 
-    cy.contains('Source')
+    cy.getMidColumn()
+      .contains('Source')
       .next('.content')
       .should('not.be.empty');
 
-    cy.contains('Type')
+    cy.getMidColumn()
+      .contains('Type')
       .next('.content')
       .should('not.be.empty');
 
-    cy.contains('Count')
+    cy.getMidColumn()
+      .contains('Count')
       .next('.content')
       .should('not.be.empty');
 
-    cy.contains('Message').should('be.visible');
+    cy.getMidColumn()
+      .contains('Message')
+      .should('be.visible');
 
-    cy.contains('Reason').should('be.visible');
+    cy.getMidColumn()
+      .contains('Reason')
+      .should('be.visible');
   });
 });

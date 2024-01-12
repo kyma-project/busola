@@ -48,39 +48,55 @@ context('Test Secrets', () => {
       .filter(':visible')
       .click();
 
-    cy.contains(btoa(SECRET_VALUE));
+    cy.contains(window.btoa(SECRET_VALUE));
 
     cy.get('ui5-dialog')
       .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
 
-    cy.url().should('match', new RegExp(`/secrets/${SECRET_NAME}$`));
+    cy.url().should('match', new RegExp(`/secrets/${SECRET_NAME}`));
   });
 
   it('Checking a secret details', () => {
-    cy.contains(SECRET_NAME);
+    cy.getMidColumn().contains(SECRET_NAME);
 
-    cy.contains('.layout-panel-row', SECRET2_KEY).contains('*****');
+    cy.getMidColumn()
+      .contains('.layout-panel-row', SECRET2_KEY)
+      .contains('*****');
 
-    cy.contains('.layout-panel-row', SECRET_KEY).contains('*****');
+    cy.getMidColumn()
+      .contains('.layout-panel-row', SECRET_KEY)
+      .contains('*****');
 
-    cy.contains('Decode').click();
+    cy.getMidColumn()
+      .contains('Decode')
+      .click();
 
-    cy.contains('.layout-panel-row', SECRET2_KEY).contains(SECRET2_VALUE);
+    cy.getMidColumn()
+      .contains('.layout-panel-row', SECRET2_KEY)
+      .contains(SECRET2_VALUE);
 
-    cy.contains('.layout-panel-row', SECRET_KEY).contains(SECRET_VALUE);
+    cy.getMidColumn()
+      .contains('.layout-panel-row', SECRET_KEY)
+      .contains(SECRET_VALUE);
 
-    cy.contains('ui5-button', 'Encode').click();
+    cy.getMidColumn()
+      .contains('ui5-button', 'Encode')
+      .click();
 
-    cy.contains('.layout-panel-row', SECRET2_KEY).contains(btoa(SECRET2_VALUE));
+    cy.getMidColumn()
+      .contains('.layout-panel-row', SECRET2_KEY)
+      .contains(btoa(SECRET2_VALUE));
 
-    cy.contains('.layout-panel-row', SECRET_KEY).contains(btoa(SECRET_VALUE));
+    cy.getMidColumn()
+      .contains('.layout-panel-row', SECRET_KEY)
+      .contains(btoa(SECRET_VALUE));
   });
 
   it('Edit a secret', () => {
-    cy.get('ui5-button')
-      .contains('Edit')
+    cy.getMidColumn()
+      .contains('ui5-button', 'Edit')
       .should('be.visible')
       .click();
 

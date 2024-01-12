@@ -60,6 +60,7 @@ context('Test Services', () => {
 
     cy.get('ui5-link[accessible-role="link"]')
       .contains('services')
+      .find('a[role="link"]')
       .click();
 
     cy.getLeftNav()
