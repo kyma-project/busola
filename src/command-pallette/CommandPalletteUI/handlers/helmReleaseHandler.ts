@@ -10,6 +10,7 @@ import {
 import { getSuggestionForSingleResource } from './helpers';
 
 const helmReleaseResourceType = 'helmreleases';
+const helmReleaseAliases = ['helmr'];
 
 function getAutocompleteEntries({
   tokens,
@@ -24,7 +25,7 @@ function getAutocompleteEntries({
         return [helmReleaseResourceType];
       }
       return [];
-    case 2: // name
+    case 3: // name
       const helmReleaseNames = (
         resourceCache[`${namespace}/helmreleases`] || []
       ).map(n => n.metadata.name);
@@ -54,16 +55,20 @@ function makeListItem(item: K8sResource, context: CommandPaletteContext) {
   return {
     label: name,
     category: t('configuration.title') + ' > ' + t('helm-releases.title'),
-    query: `helmreleases ${name}`,
+    query: `helmreleases/${name}`,
     onActivate: () => {
       const pathname = `/cluster/${activeClusterName}/namespaces/${namespace}/helm-releases/${name}`;
       navigate(pathname);
     },
+    customActionText: 'command-palette.item-actions.navigate',
   };
 }
 
 function concernsHelmReleases({ tokens }: CommandPaletteContext) {
-  return tokens[0] === helmReleaseResourceType;
+  return (
+    helmReleaseAliases.some(hra => hra.startsWith(tokens[0])) ||
+    tokens[0] === helmReleaseResourceType
+  );
 }
 
 async function fetchHelmReleases(context: CommandPaletteContext) {
@@ -105,15 +110,14 @@ function createResults(context: CommandPaletteContext): Result[] | null {
   const helmReleases = resourceCache[`${namespace}/helmreleases`];
 
   const linkToList = {
-    label: t('command-palette.results.list-of', {
-      resourceType: t('helm-releases.title'),
-    }),
+    label: t('helm-releases.title'),
     category: t('configuration.title') + ' > ' + t('helm-releases.title'),
     query: 'helmReleases',
     onActivate: () => {
       const pathname = `/cluster/${activeClusterName}/namespaces/${namespace}/helm-releases`;
       navigate(pathname);
     },
+    aliases: helmReleaseAliases,
   };
 
   if (typeof helmReleases !== 'object') {
@@ -121,7 +125,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
     return [linkToList, { type: LOADING_INDICATOR }];
   }
 
-  const name = tokens[1];
+  const [, delimiter, name] = tokens;
   if (name) {
     const matchedByName = helmReleases.filter(item =>
       item.metadata.name.includes(name),
@@ -130,11 +134,10 @@ function createResults(context: CommandPaletteContext): Result[] | null {
       return matchedByName.map(item => makeListItem(item, context));
     }
     return null;
+  } else if (delimiter) {
+    return [...helmReleases.map(item => makeListItem(item, context))];
   } else {
-    return [
-      linkToList,
-      ...helmReleases.map(item => makeListItem(item, context)),
-    ];
+    return [linkToList];
   }
 }
 
@@ -143,5 +146,7 @@ export const helmReleaseHandler: Handler = {
   getSuggestion,
   fetchResources: fetchHelmReleases,
   createResults,
-  getNavigationHelp: () => [{ name: 'helmreleases', aliases: ['helmr'] }],
+  getNavigationHelp: () => [
+    { name: 'helmreleases', aliases: helmReleaseAliases },
+  ],
 };

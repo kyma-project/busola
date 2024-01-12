@@ -6,6 +6,8 @@ import {
   extractShortNames,
   findNavigationNode,
   getApiPathForQuery,
+  toFullResourceTypeList,
+  getShortAliases,
 } from './helpers';
 import {
   clusterNativeResourceTypes,
@@ -38,11 +40,12 @@ function getSuggestion({
   tokens,
   resourceCache,
 }: CommandPaletteContext): string {
-  const [type, name] = tokens;
+  const [type, , name] = tokens;
   const suggestedType = makeSuggestion(
     type,
     resourceTypes.flatMap(n => n.aliases),
   );
+
   if (name) {
     const fullResourceType = toFullResourceType(
       suggestedType || type,
@@ -62,6 +65,7 @@ function makeListItem(
   item: K8sResource,
   matchedNode: NavNode,
   context: CommandPaletteContext,
+  customActionText: boolean,
 ) {
   const { t, activeClusterName, navigate } = context;
   const name = item.metadata.name;
@@ -74,13 +78,16 @@ function makeListItem(
 
   return {
     label: name,
-    query: `${resourceType} ${name}`,
+    query: `${resourceType}/${name}`,
     // some resources have no category
     category: category ? category + ' > ' + resourceTypeText : resourceTypeText,
     onActivate: () => {
       const pathname = `/cluster/${activeClusterName}/${pathSegment}/${name}`;
       navigate(pathname);
     },
+    customActionText: customActionText
+      ? 'command-palette.item-actions.navigate'
+      : undefined,
   };
 }
 
@@ -143,7 +150,7 @@ function makeSingleNamespaceLinks(
   const category = t('namespaces.title');
   const label = namespace.metadata.name;
   const name = namespace.metadata.name;
-  const query = `namespaces ${name}`;
+  const query = `namespaces/${name}`;
 
   const switchContextNode = {
     label,
@@ -162,6 +169,7 @@ function makeSingleNamespaceLinks(
       const pathname = `/cluster/${activeClusterName}/namespaces/${name}`;
       navigate(pathname);
     },
+    customActionText: 'command-palette.item-actions.navigate',
   };
 
   // don't rely on currentNamespace, as it defaults to "default"
@@ -176,6 +184,56 @@ function makeSingleNamespaceLinks(
   }
 }
 
+function createAllResults(context: CommandPaletteContext) {
+  const { clusterNodes, activeClusterName, navigate } = context;
+
+  return clusterNodes
+    .filter((currentValue, index, arr) => arr.indexOf(currentValue) === index)
+    .map(clusterNode => {
+      return {
+        ...clusterNode,
+        query: clusterNode.resourceType,
+        onActivate: () => {
+          const pathname = `/cluster/${activeClusterName}/${clusterNode.pathSegment}`;
+          navigate(pathname);
+        },
+        aliases: getShortAliases(
+          clusterNode.resourceType,
+          resourceTypes,
+          clusterNodes,
+        ),
+      };
+    });
+}
+
+function createSingleResult(
+  context: CommandPaletteContext,
+  resourceType: string,
+  matchedNode: NavNode,
+): Result {
+  const { clusterNodes, activeClusterName, navigate, t } = context;
+
+  const resourceTypeText = t([
+    `${resourceType}.title`,
+    `command-palette.resource-names.${resourceType}`,
+  ]);
+
+  const linkToList = {
+    label: resourceTypeText,
+    category: matchedNode.category
+      ? matchedNode.category + ' > ' + resourceTypeText
+      : resourceTypeText,
+    query: matchedNode.resourceType,
+    onActivate: () => {
+      const pathname = `/cluster/${activeClusterName}/${matchedNode.pathSegment}`;
+      navigate(pathname);
+    },
+    aliases: getShortAliases(resourceType, resourceTypes, clusterNodes),
+  };
+
+  return linkToList;
+}
+
 function createResults(context: CommandPaletteContext): Result[] {
   const {
     tokens,
@@ -187,9 +245,32 @@ function createResults(context: CommandPaletteContext): Result[] {
     activeClusterName,
     navigate,
   } = context;
-  const [type, name] = tokens;
+  const [type, delimiter, name] = tokens;
+
+  //return all when no query
+  if (!type) {
+    return createAllResults(context);
+  }
+
+  if (!delimiter) {
+    const resourceTypeList = toFullResourceTypeList(type, resourceTypes);
+
+    const results = resourceTypeList
+      .map(resourceType => {
+        const matchedNode = findNavigationNode(resourceType, clusterNodes);
+
+        return matchedNode
+          ? createSingleResult(context, resourceType, matchedNode)
+          : null;
+      })
+      .filter(r => r !== null) as Result[];
+
+    return results ?? [];
+  }
+
   const resourceType = toFullResourceType(type, resourceTypes);
   const matchedNode = findNavigationNode(resourceType, clusterNodes);
+
   if (!matchedNode) {
     return [];
   }
@@ -198,20 +279,7 @@ function createResults(context: CommandPaletteContext): Result[] {
     `${resourceType}.title`,
     `command-palette.resource-names.${resourceType}`,
   ]);
-
-  const linkToList = {
-    label: t('command-palette.results.list-of', {
-      resourceType: resourceTypeText,
-    }),
-    category: matchedNode.category
-      ? matchedNode.category + ' > ' + resourceTypeText
-      : resourceTypeText,
-    query: matchedNode.resourceType,
-    onActivate: () => {
-      const pathname = `/cluster/${activeClusterName}/${matchedNode.pathSegment}`;
-      navigate(pathname);
-    },
-  };
+  const linkToList = createSingleResult(context, resourceType, matchedNode);
 
   if (resourceType === 'namespaces' && ['-a', '*', 'all'].includes(name)) {
     if (window.location.pathname.includes('namespaces')) {
@@ -233,7 +301,6 @@ function createResults(context: CommandPaletteContext): Result[] {
             navigate(pathname);
           },
         },
-        linkToList,
       ];
     } else {
       return [
@@ -246,12 +313,12 @@ function createResults(context: CommandPaletteContext): Result[] {
             navigate(pathname);
           },
         },
-        linkToList,
       ];
     }
   }
 
   let resources = resourceCache[resourceType];
+
   if (typeof resources !== 'object') {
     //@ts-ignore  TODO: handle typein Result
     return [linkToList, { type: LOADING_INDICATOR }];
@@ -262,22 +329,42 @@ function createResults(context: CommandPaletteContext): Result[] {
     );
   }
 
+  const pathElements = window.location.pathname
+    .split('/')
+    .filter(e => e !== '');
+  const namespacesOverviewCase =
+    window.location.pathname.includes('namespaces') &&
+    pathElements.indexOf('namespaces') + 2 <= pathElements.length - 1;
+
   if (name) {
     const matchedResources = resources.filter(item =>
       item.metadata.name.includes(name),
     );
     // special case for a single namespace
-    if (resourceType === 'namespaces' && matchedResources.length === 1) {
+    if (
+      resourceType === 'namespaces' &&
+      matchedResources.length === 1 &&
+      namespacesOverviewCase
+    ) {
       return makeSingleNamespaceLinks(matchedResources[0], context);
     }
     return matchedResources?.map(item =>
-      makeListItem(item, matchedNode, context),
+      makeListItem(item, matchedNode, context, true),
     );
-  } else {
+  } else if (delimiter) {
+    //special case for namespace overview
+    if (resourceType === 'namespaces' && namespacesOverviewCase) {
+      return [
+        ...resources?.map(item =>
+          makeListItem(item, matchedNode, context, false),
+        ),
+      ];
+    }
     return [
-      linkToList,
-      ...resources?.map(item => makeListItem(item, matchedNode, context)),
+      ...resources?.map(item => makeListItem(item, matchedNode, context, true)),
     ];
+  } else {
+    return [linkToList];
   }
 }
 
