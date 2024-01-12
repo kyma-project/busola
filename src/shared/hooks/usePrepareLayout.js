@@ -40,7 +40,7 @@ export function usePrepareLayout(layoutNumber) {
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
 
   if (!isColumnLeyoutEnabled || !layoutNumber) {
-    return null;
+    return '';
   }
 
   const prevLayout = switchToPrevLayout(layoutNumber);

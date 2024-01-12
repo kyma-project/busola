@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
 import { Button, Link } from '@ui5/webcomponents-react';
@@ -234,6 +236,8 @@ export function ResourceListRenderer({
     currentlyEditedResourceUID,
   } = useYamlEditor();
   const notification = useNotification();
+  const navigate = useNavigate();
+
   const getRequest = useSingleGet();
   const updateResourceMutation = useUpdate(resourceUrl);
   const putRequest = usePut();
@@ -289,7 +293,18 @@ export function ResourceListRenderer({
               </Link>
             </>
           ) : (
-            <Link style={{ fontWeight: 'bold' }} href={linkTo(entry)}>
+            <Link
+              style={{ fontWeight: 'bold' }}
+              onClick={() => {
+                setLayoutColumn({
+                  midColumn: null,
+                  endColumn: null,
+                  layout: 'OneColumn',
+                });
+
+                navigate(linkTo(entry));
+              }}
+            >
               {nameSelector(entry)}
             </Link>
           )
