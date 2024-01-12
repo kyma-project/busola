@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 const path = require('path');
 
-const SERVICE_NAME = 'test-sa-name';
+const SERVICE_NAME = `test-sa-name-${Math.floor(Math.random() * 9999) + 1000}`;
 const DOWNLOADS_FOLDER = Cypress.config('downloadsFolder');
 
 const filepath = path.join(DOWNLOADS_FOLDER, `${SERVICE_NAME}.yaml`);
@@ -50,16 +50,22 @@ context('Test Service Accounts', () => {
   });
 
   it('Checking details', () => {
-    cy.contains('ui5-title', SERVICE_NAME).should('be.visible');
+    cy.getMidColumn()
+      .contains('ui5-title', SERVICE_NAME)
+      .should('be.visible');
 
-    cy.contains('enabled').should('be.visible');
+    cy.getMidColumn()
+      .contains('enabled')
+      .should('be.visible');
 
-    cy.contains('kubernetes.io/service-account-token').should('be.visible');
+    cy.getMidColumn()
+      .contains('kubernetes.io/service-account-token')
+      .should('be.visible');
   });
 
   it('Edit', () => {
-    cy.get('ui5-button')
-      .contains('Edit')
+    cy.getMidColumn()
+      .contains('ui5-button', 'Edit')
       .should('be.visible')
       .click();
 
@@ -79,7 +85,7 @@ context('Test Service Accounts', () => {
       .type('test-value');
 
     // Toggle 'Automount Token' switch
-    cy.get('ui5-switch')
+    cy.get('ui5-switch:visible')
       .find('input')
       .eq(0)
       .click({ force: true });
@@ -91,13 +97,23 @@ context('Test Service Accounts', () => {
   });
 
   it('Checking updated details', () => {
-    cy.contains('disabled').should('be.visible');
+    cy.getMidColumn()
+      .contains('disabled')
+      .should('be.visible');
 
-    cy.contains('test.key=test-value').should('be.visible');
+    cy.getMidColumn()
+      .contains('test.key=test-value')
+      .should('be.visible');
   });
 
   it('Generate TokenRequest', () => {
-    cy.contains('ui5-button', 'Generate TokenRequest').click();
+    cy.getMidColumn()
+      .find('[accessible-name="Show More"]')
+      .click();
+    cy.getMidColumn()
+      .get('ui5-popover[accessible-role="Dialog"]')
+      .contains('ui5-button', 'Generate TokenRequest')
+      .click();
 
     cy.contains(
       'The TokenRequest allows you to log in with your ServiceAccount credentials.',

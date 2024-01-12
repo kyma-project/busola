@@ -50,11 +50,12 @@ Cypress.Commands.add('goToNamespaceDetails', () => {
     .contains('Namespaces')
     .click();
 
-  cy.get('[role=row]')
-    .find('ui5-link[accessible-role="link"]')
-    .contains('ui5-link', Cypress.env('NAMESPACE_NAME'))
-    .find('a[role="link"]')
-    .click();
+  cy.get('ui5-table-row')
+    .find('ui5-table-cell')
+    .find('ui5-link')
+    .contains(Cypress.env('NAMESPACE_NAME'))
+    .find('a.ui5-link-root')
+    .click({ force: true });
 
   return cy.end();
 });
