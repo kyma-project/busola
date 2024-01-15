@@ -69,7 +69,7 @@ context('Test Cluster configuration', () => {
     cy.navigateTo('Configuration', 'Cluster Roles');
 
     cy.get('ui5-table')
-      .find('[role=row]')
+      .find('ui5-table-row')
       .should('have.length', 20);
 
     cy.get('[title="Profile"]').click();
@@ -92,6 +92,6 @@ context('Test Cluster configuration', () => {
 
     cy.contains('Close').click();
 
-    cy.get('[role=row]').should('have.length', 10);
+    cy.get('ui5-table-row').should('have.length', 10);
   });
 });

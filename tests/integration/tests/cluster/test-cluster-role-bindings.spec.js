@@ -68,7 +68,7 @@ context('Test Cluster Role Bindings', () => {
   });
 
   it('Edit', () => {
-    cy.wait(500);
+    cy.wait(1000);
 
     cy.getMidColumn()
       .contains('ui5-button', 'Edit')

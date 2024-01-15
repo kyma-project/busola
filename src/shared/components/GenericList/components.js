@@ -96,7 +96,7 @@ const DefaultRowRenderer = ({
         </TableCell>
       );
     } else {
-      return <TableCell key={id}> {cell}</TableCell>;
+      return <TableCell key={id}>{cell}</TableCell>;
     }
   });
   const actionsCell = (
@@ -105,7 +105,7 @@ const DefaultRowRenderer = ({
     </TableCell>
   );
   return (
-    <TableRow role="row" selected={isBeingEdited}>
+    <TableRow selected={isBeingEdited}>
       {cells}
       {!!actions.length && actionsCell}
     </TableRow>

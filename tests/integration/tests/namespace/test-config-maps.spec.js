@@ -39,7 +39,7 @@ context('Test Config Maps', () => {
       .should('be.visible')
       .click();
 
-    cy.url().should('match', new RegExp(`/configmaps/${CONFIG_MAP_NAME}$`));
+    cy.url().should('match', new RegExp(`/configmaps/${CONFIG_MAP_NAME}`));
   });
 
   it('Inspect the Config Map', () => {
@@ -47,8 +47,10 @@ context('Test Config Maps', () => {
   });
 
   it('Edit the Config Map', () => {
-    cy.get('ui5-button')
-      .contains('Edit')
+    cy.wait(1000);
+
+    cy.getMidColumn()
+      .contains('ui5-button', 'Edit')
       .should('be.visible')
       .click();
 
@@ -68,7 +70,9 @@ context('Test Config Maps', () => {
   });
 
   it('Inspect the updated Config Map', () => {
-    cy.contains('ui5-panel', ENTRY_KEY2).contains(ENTRY_VALUE2);
+    cy.getMidColumn()
+      .contains('ui5-panel', ENTRY_KEY2)
+      .contains(ENTRY_VALUE2);
   });
 
   it('Inspect list', () => {
@@ -97,10 +101,14 @@ context('Test Config Maps', () => {
   });
 
   it('Inspect the clone', () => {
-    cy.contains(CLONE_NAME);
+    cy.getMidColumn().contains(CLONE_NAME);
 
-    cy.contains('ui5-panel', ENTRY_KEY).contains(ENTRY_VALUE);
+    cy.getMidColumn()
+      .contains('ui5-panel', ENTRY_KEY)
+      .contains(ENTRY_VALUE);
 
-    cy.contains('ui5-panel', ENTRY_KEY2).contains(ENTRY_VALUE2);
+    cy.getMidColumn()
+      .contains('ui5-panel', ENTRY_KEY2)
+      .contains(ENTRY_VALUE2);
   });
 });

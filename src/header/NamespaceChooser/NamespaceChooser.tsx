@@ -20,11 +20,13 @@ export function NamespaceChooser() {
 
   let namespaces = [
     <SideNavigationSubItem
+      key="namespaces-overview"
       text={t('namespaces.namespaces-overview')}
       data-key="overview"
       onClick={() => navigate(clusterUrl(`namespaces`))}
     />,
     <SideNavigationSubItem
+      key="all-namespaces"
       text={t('navigation.all-namespaces')}
       data-key="all-namespaces"
       onClick={() =>
@@ -37,6 +39,7 @@ export function NamespaceChooser() {
     namespaces.push(
       <SideNavigationSubItem
         text={ns}
+        key={ns}
         data-key={ns}
         onClick={e =>
           navigate(

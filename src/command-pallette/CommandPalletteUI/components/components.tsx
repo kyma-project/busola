@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Icon, Token } from '@ui5/webcomponents-react';
+import { Button, Icon, Title, Token } from '@ui5/webcomponents-react';
 import { Trans, useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { HelpEntries } from '../types';
@@ -61,15 +61,12 @@ export function NamespaceContextDisplay({
   );
 }
 
-export function ShortHelpText({ showFullHelp }: { showFullHelp: () => void }) {
-  const { t } = useTranslation();
-
+export function ShortHelpText() {
   return (
     <p className="short-help help-text">
-      {t('command-palette.help.short-help')}
-      <Button className="button-link" onClick={showFullHelp}>
-        {t('command-palette.item-actions.show-help')}
-      </Button>
+      <Trans i18nKey="command-palette.help.short-help">
+        <pre className="key"></pre>
+      </Trans>
     </p>
   );
 }
@@ -88,7 +85,10 @@ export function CommandPalletteHelp({
           <pre className="key"></pre>
         </Trans>
       </div>
-      <h1 className="help-header">{t('command-palette.help.navigation')}</h1>
+      <Title level="H5" className="help-header">
+        {t('command-palette.help.navigation')}
+      </Title>
+      <br className="help-divider" />
       <table className="help-text">
         <thead>
           <tr>
@@ -107,34 +107,34 @@ export function CommandPalletteHelp({
           ))}
         </tbody>
       </table>
-      <h1 className="help-header">
+      <Title level="H5" className="help-header">
         {t('command-palette.help.resource-aliases')}
-      </h1>
-      <table className="help-text">
-        <tbody>
-          {helpEntries.navigation.map(({ name, aliases }) => (
-            <tr key={name}>
-              <td>{name}</td>
-              <td>{aliases?.join(', ') || EMPTY_TEXT_PLACEHOLDER}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      </Title>
+      <br className="help-divider" />
+      <div className="help-text">
+        {helpEntries.navigation.map(({ name, aliases }) => (
+          <div key={name}>
+            <p className="help-text__name">{name}</p>
+            <pre className="key">
+              {aliases?.join(', ') || EMPTY_TEXT_PLACEHOLDER}
+            </pre>
+          </div>
+        ))}
+      </div>
       {helpEntries.crds.length ? (
         <>
-          <h1 className="help-header">
+          <Title level="H5" className="help-header">
             {t('command-palette.help.crd-aliases')}
-          </h1>
-          <table className="help-text">
-            <tbody>
-              {helpEntries.crds.map(({ name, shortNames }) => (
-                <tr key={name}>
-                  <td>{name}</td>
-                  <td>{shortNames?.join(', ')}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          </Title>
+          <br className="help-divider" />
+          <div className="help-text">
+            {helpEntries.crds.map(({ name, shortNames }) => (
+              <div key={name}>
+                <p className="help-text__name">{name}</p>
+                <pre className="key">{shortNames?.join(', ')}</pre>
+              </div>
+            ))}
+          </div>
         </>
       ) : null}
     </div>

@@ -46,17 +46,26 @@ context('Test Ingresses', () => {
   });
 
   it('Check Ingress details', () => {
-    cy.contains('ui5-title', NAME).should('be.visible');
+    cy.getMidColumn()
+      .contains('ui5-title', NAME)
+      .should('be.visible');
 
-    cy.get('#content-wrap')
+    cy.getMidColumn()
+      .get('#content-wrap')
       .contains(/rules/i)
       .should('be.visible');
 
-    cy.contains(/default backend/i).should('be.visible');
+    cy.getMidColumn()
+      .contains(/default backend/i)
+      .should('be.visible');
 
-    cy.contains(/paths/i).should('be.visible');
+    cy.getMidColumn()
+      .contains(/paths/i)
+      .should('be.visible');
 
-    cy.contains(/web:8080/i).should('be.visible');
+    cy.getMidColumn()
+      .contains(/web:8080/i)
+      .should('be.visible');
   });
 
   it('Check Ingresses list', () => {

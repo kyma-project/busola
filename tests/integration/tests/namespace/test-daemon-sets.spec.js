@@ -48,17 +48,17 @@ context('Test Daemon Sets', () => {
 
   it('Inspect details', () => {
     // name
-    cy.contains(DS_NAME);
+    cy.getMidColumn().contains(DS_NAME);
     // tolerations
-    cy.contains('node-role.kubernetes.io/control-plane');
-    cy.contains('node-role.kubernetes.io/master');
+    cy.getMidColumn().contains('node-role.kubernetes.io/control-plane');
+    cy.getMidColumn().contains('node-role.kubernetes.io/master');
     // selector
-    cy.contains('name=fluentd-elasticsearch');
+    cy.getMidColumn().contains('name=fluentd-elasticsearch');
     // pod
-    cy.contains('quay.io/fluentd_elasticsearch/fluentd:v2.5.2');
-    cy.contains('/var/log');
-    cy.contains('varlog');
-    cy.contains('hostPath');
+    cy.getMidColumn().contains('quay.io/fluentd_elasticsearch/fluentd:v2.5.2');
+    cy.getMidColumn().contains('/var/log');
+    cy.getMidColumn().contains('varlog');
+    cy.getMidColumn().contains('hostPath');
   });
 
   it('Inspect list', () => {

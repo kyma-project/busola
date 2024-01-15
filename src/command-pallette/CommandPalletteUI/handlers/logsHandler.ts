@@ -72,6 +72,7 @@ function makeListItem(
         const pathname = `/cluster/${activeClusterName}/${namespacePart}/pods/${podName}/containers/${containerName}`;
         navigate(pathname);
       },
+      customActionText: 'command-palette.item-actions.navigate',
     };
   });
 }
