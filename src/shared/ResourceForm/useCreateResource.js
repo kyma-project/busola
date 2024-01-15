@@ -32,7 +32,7 @@ export function useCreateResource({
   const { scopedUrl } = useUrl();
   const navigate = useNavigate();
 
-  const { nextLayout } = usePrepareLayout(layoutNumber);
+  const { nextQuery } = usePrepareLayout(layoutNumber);
 
   const isEdit = !!initialResource?.metadata?.name;
 
@@ -53,7 +53,7 @@ export function useCreateResource({
           `${urlPath || pluralKind.toLowerCase()}/${encodeURIComponent(
             resource.metadata.name,
           )}`,
-        )}${nextLayout}`,
+        )}${nextQuery}`,
       );
     }
   };
