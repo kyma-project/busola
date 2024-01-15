@@ -52,7 +52,6 @@ export function useDeleteResource({
     currentLayout,
     currentQuery,
   } = usePrepareLayout(layoutNumber);
-
   const goToLayout = redirectBack ? prevLayout : currentLayout;
   const goToLayoutQuery = redirectBack ? prevQuery : currentQuery;
 
@@ -70,6 +69,7 @@ export function useDeleteResource({
             resourceType: prettifiedResourceName,
           }),
         });
+
         if (navigateToListAfterDelete) {
           if (window.location.search.includes('layout')) {
             if (window.location.pathname.includes('busolaextensions')) {

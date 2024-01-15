@@ -64,6 +64,7 @@ ResourceDetails.propTypes = {
   disableEdit: PropTypes.bool,
   disableDelete: PropTypes.bool,
   layoutCloseUrl: PropTypes.string,
+  layoutNumber: PropTypes.string,
 };
 
 ResourceDetails.defaultProps = {
@@ -74,6 +75,7 @@ ResourceDetails.defaultProps = {
   readOnly: false,
   disableEdit: false,
   disableDelete: false,
+  layoutNumber: 'MidColumn',
 };
 
 export function ResourceDetails(props) {

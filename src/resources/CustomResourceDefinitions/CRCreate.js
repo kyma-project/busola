@@ -18,7 +18,10 @@ function CRCreate({
   const [cr, setCr] = useState(createTemplate(crd));
   const customUrl = useCustomResourceUrl(crd);
   const navigate = useNavigate();
-  const { nextLayout } = usePrepareLayout(layoutNumber);
+  const { nextQuery, currentQuery } = usePrepareLayout(layoutNumber);
+  const goToLayoutQuery = customUrl(cr).includes('customresources/')
+    ? nextQuery
+    : currentQuery;
 
   const currentVersion = crd.spec.versions.find(ver => ver.storage).name;
   const namespace =
@@ -40,7 +43,7 @@ function CRCreate({
       onlyYaml
       layoutNumber={layoutNumber}
       afterCreatedFn={() => {
-        navigate(`${customUrl(cr)}${nextLayout}`);
+        navigate(`${customUrl(cr)}${goToLayoutQuery}`);
         toggleFormFn();
       }}
     />

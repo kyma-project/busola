@@ -6,8 +6,9 @@ const switchToPrevLayout = layout => {
       return 'TwoColumnsMidExpanded';
     case 'MidColumn':
     case 'StartColumn':
-    default:
+    default: {
       return '';
+    }
   }
 };
 
@@ -18,8 +19,9 @@ const switchToCurrentLayout = layout => {
     case 'MidColumn':
       return 'TwoColumnsMidExpanded';
     case 'EndColumn':
-    default:
+    default: {
       return 'ThreeColumnsEndExpanded';
+    }
   }
 };
 
@@ -40,26 +42,34 @@ export function usePrepareLayout(layoutNumber) {
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
 
   if (!isColumnLeyoutEnabled || !layoutNumber) {
-    return '';
+    return {
+      prevLayout: 'OneColumn',
+      currentLayout: 'OneColumn',
+      nextLayout: 'OneColumn',
+      prevQuery: '',
+      currentQuery: '',
+      nextQuery: '',
+    };
   }
 
   const prevLayout = switchToPrevLayout(layoutNumber);
   const currentLayout = switchToCurrentLayout(layoutNumber);
   const nextLayout = switchToNextLayout(layoutNumber);
+
   return {
     prevLayout,
     currentLayout,
     nextLayout,
     prevQuery:
-      prevLayout !== '' || prevLayout !== 'OneColumn'
+      prevLayout !== '' && prevLayout !== 'OneColumn'
         ? `?layout=${prevLayout}`
         : '',
     currentQuery:
-      currentLayout !== '' || currentLayout !== 'OneColumn'
+      currentLayout !== '' && currentLayout !== 'OneColumn'
         ? `?layout=${currentLayout}`
         : '',
     nextQuery:
-      nextLayout !== '' || nextLayout !== 'OneColumn'
+      nextLayout !== '' && nextLayout !== 'OneColumn'
         ? `?layout=${nextLayout}`
         : '',
   };
