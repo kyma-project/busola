@@ -12,8 +12,8 @@ module.exports = defineConfig({
   chromeWebSecurity: false,
   viewportWidth: 1500,
   viewportHeight: 1500,
-  videoCompression: false,
   scrollBehavior: false,
+  video: true,
   screenshotsFolder: process?.env?.ARTIFACTS
     ? `${process.env?.ARTIFACTS}/screenshots`
     : 'cypress/screenshots',
