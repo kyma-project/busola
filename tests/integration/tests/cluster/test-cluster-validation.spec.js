@@ -61,12 +61,13 @@ context('Test Cluster Validation Scan', () => {
   });
 
   it('Cluster Scan', () => {
+    cy.contains('ui5-panel', 'Cluster Validation').as('clusterValidationPanel');
+
+    cy.get('.page-header').scrollTo('bottomLeft');
     cy.contains('ui5-title', 'Cluster Validation').should('be.visible');
 
     cy.contains('Scan Progress').should('not.exist');
     cy.contains('Scan Result').should('not.exist');
-
-    cy.contains('ui5-panel', 'Cluster Validation').as('clusterValidationPanel');
 
     cy.get('@clusterValidationPanel')
       .contains('Configure')

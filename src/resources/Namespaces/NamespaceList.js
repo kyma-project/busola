@@ -10,7 +10,6 @@ import { NamespaceStatus } from './NamespaceStatus';
 import { useNavigate } from 'react-router-dom';
 import { clusterState } from 'state/clusterAtom';
 import { useHasPermissionsFor } from 'hooks/useHasPermissionsFor';
-import { DEFAULT_APIGROUP } from 'resources/RoleBindings/templates';
 
 export function NamespaceList(props) {
   const { t } = useTranslation();
@@ -18,9 +17,7 @@ export function NamespaceList(props) {
   const cluster = useRecoilValue(clusterState);
   const hiddenNamespaces = useGetHiddenNamespaces();
   const navigate = useNavigate();
-  const [hasPermissions] = useHasPermissionsFor([
-    [DEFAULT_APIGROUP, 'namespaces', 'list'],
-  ]);
+  const [hasPermissions] = useHasPermissionsFor([['', 'namespaces', ['list']]]);
 
   const customColumns = [
     {
