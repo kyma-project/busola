@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
+import './Result.scss';
 
 type ResultProps = {
   label: string;
@@ -9,6 +10,7 @@ type ResultProps = {
   activeIndex: number;
   setActiveIndex: (index: number) => void;
   onItemClick: () => void;
+  aliases?: string[];
 };
 
 export function Result({
@@ -19,9 +21,9 @@ export function Result({
   activeIndex,
   setActiveIndex,
   onItemClick,
+  aliases,
 }: ResultProps) {
   const resultRef = useRef<HTMLLIElement | null>(null);
-  const { t } = useTranslation();
 
   const onMouseOver = useCallback(() => {
     if (index !== activeIndex) {
@@ -37,25 +39,39 @@ export function Result({
   }, [index, activeIndex, setActiveIndex]);
 
   const actionText =
-    typeof customActionText === 'string'
-      ? customActionText
-      : t('command-palette.item-actions.navigate');
+    typeof customActionText === 'string' ? (
+      customActionText.includes('command-palette') ? (
+        <Trans i18nKey={customActionText}>
+          <pre className="key"></pre>
+        </Trans>
+      ) : (
+        customActionText
+      )
+    ) : (
+      <Trans i18nKey="command-palette.item-actions.navigate-autocomplete">
+        <pre className="key"></pre>
+        <pre className="key"></pre>
+      </Trans>
+    );
 
   return (
     <li
       ref={resultRef}
       onClick={onItemClick}
-      className={index === activeIndex ? 'active' : ''}
+      className={`result ${index === activeIndex ? 'active' : ''}`}
     >
-      <div className="result">
-        <div>
-          <p className="label">{label}</p>
-          <p className="description">{category}</p>
-        </div>
-        {activeIndex === index && (
-          <p className="bsl-has-color-status-4 ">{actionText}</p>
-        )}
+      <div>
+        <p className="label">{label}</p>
+        {aliases?.map(alias => (
+          <p className="key" key={alias}>
+            {alias}
+          </p>
+        ))}
+        <p className="description">{category}</p>
       </div>
+      {activeIndex === index && (
+        <div className="bsl-has-color-status-4 ">{actionText}</div>
+      )}
     </li>
   );
 }

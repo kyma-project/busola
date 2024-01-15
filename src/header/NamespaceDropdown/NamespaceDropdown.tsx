@@ -11,6 +11,7 @@ export function NamespaceDropdown() {
 
   let namespaces = [
     <ComboBoxItem
+      key="namespaces-overview"
       text={t('namespaces.namespaces-overview')}
       data-key="overview"
     />,
@@ -26,7 +27,7 @@ export function NamespaceDropdown() {
   }
 
   allNamespaces.map(ns =>
-    namespaces.push(<ComboBoxItem text={ns} data-key={ns} />),
+    namespaces.push(<ComboBoxItem text={ns} key={ns} data-key={ns} />),
   );
 
   return namespaces;

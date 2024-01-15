@@ -48,7 +48,7 @@ context('Test Command Palette navigation', () => {
 
     cy.get('[aria-label="Remove Namespace context"]').should('not.exist');
 
-    getQueryInput().type('ns default');
+    getQueryInput().type('ns/default');
 
     cy.contains('default').click();
 
@@ -61,7 +61,7 @@ context('Test Command Palette navigation', () => {
 
     getQueryInput().type('crb');
 
-    cy.contains('List of Cluster Role Bindings').click();
+    cy.contains('Cluster Role Bindings').click();
 
     cy.url().should('match', new RegExp(`/clusterrolebindings`));
 
@@ -87,7 +87,7 @@ context('Test Command Palette navigation', () => {
 
     openCommandPalette();
 
-    getQueryInput().type('ns -a');
+    getQueryInput().type('ns/-a');
 
     cy.get('li')
       .contains('All Namespaces')
@@ -137,13 +137,13 @@ context('Test Command Palette navigation', () => {
 
     cy.contains('Did you mean: pod').should('be.visible');
 
-    cy.contains('List of Pods').should('not.exist');
+    cy.contains('Pods').should('not.exist');
 
     cy.contains('p', 'Did you mean:')
       .find('ui5-button')
       .click();
 
-    cy.contains('List of Pods').should('be.visible');
+    cy.contains('Pods').should('be.visible');
     closeCommandPalette();
   });
 

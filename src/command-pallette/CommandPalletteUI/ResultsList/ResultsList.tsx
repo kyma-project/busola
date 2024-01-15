@@ -67,7 +67,7 @@ export function ResultsList({
       {results?.length ? (
         results.map((result: any /*todo*/, i: number) => (
           <Result
-            key={`${result.label}|${result.category}|${result.customActionText}`}
+            key={`${result.label}|${result.category}|${result.customActionText}|${i}`}
             {...result}
             index={i}
             activeIndex={activeIndex}
