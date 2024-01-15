@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import { useTranslation, Trans } from 'react-i18next';
 import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
@@ -8,16 +8,19 @@ import { Link } from 'shared/components/Link/Link';
 import { NamespaceCreate } from './NamespaceCreate';
 import { NamespaceStatus } from './NamespaceStatus';
 import { useNavigate } from 'react-router-dom';
-import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
 import { clusterState } from 'state/clusterAtom';
+import { useHasPermissionsFor } from 'hooks/useHasPermissionsFor';
+import { DEFAULT_APIGROUP } from 'resources/RoleBindings/templates';
 
 export function NamespaceList(props) {
   const { t } = useTranslation();
   const showHiddenNamespaces = useRecoilValue(showHiddenNamespacesState);
   const cluster = useRecoilValue(clusterState);
   const hiddenNamespaces = useGetHiddenNamespaces();
-  const { namespaces } = useAvailableNamespaces();
   const navigate = useNavigate();
+  const [hasPermissions] = useHasPermissionsFor([
+    [DEFAULT_APIGROUP, 'namespaces', 'list'],
+  ]);
 
   const customColumns = [
     {
@@ -43,9 +46,11 @@ export function NamespaceList(props) {
     </Trans>
   );
 
-  if (namespaces.length === 0) {
-    navigate(`/cluster/${cluster.name}/no-permissions`);
-  }
+  useEffect(() => {
+    if (!hasPermissions) {
+      navigate(`/cluster/${cluster.name}/no-permissions`);
+    }
+  }, [cluster.name, hasPermissions, navigate]);
 
   return (
     <ResourcesList
