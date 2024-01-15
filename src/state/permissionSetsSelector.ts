@@ -49,7 +49,7 @@ export async function getPermissionResourceRules(
   };
 
   const permissions = await postFn(path, ssrr, {});
-  console.log(permissions);
+
   const resourceRules: PermissionSetState = permissions.status.resourceRules;
   return resourceRules;
 }
@@ -86,7 +86,6 @@ export const permissionSetsSelector: RecoilValue<PermissionSetState> = selector<
           window.location.href =
             window.origin + `/cluster/${cluster?.contextName}/no-permissions`;
         }
-        console.log(resourceRules);
         return resourceRules;
       } catch (e) {
         return [];
