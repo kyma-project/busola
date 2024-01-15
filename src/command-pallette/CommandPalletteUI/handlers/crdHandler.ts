@@ -4,7 +4,7 @@ import { getSuggestionForSingleResource } from './helpers';
 import { K8sResource } from 'types';
 
 const crdResourceTypes = ['customresourcedefinitions', 'crd', 'crds'];
-const crdResourceAliases = ['crd', 'crds'];
+const crdResourceAliases = ['crds'];
 
 function getAutocompleteEntries({
   tokens,

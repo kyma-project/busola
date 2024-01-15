@@ -73,6 +73,10 @@ export const namespaceNativeResourceTypes: ResourceTypeWithAliases[] = [
     resourceType: 'controllerrevisions',
     aliases: ['controllerrevision', 'controllerrevisions'],
   },
+  {
+    resourceType: 'events',
+    aliases: ['ev', 'events'],
+  },
 ];
 
 export const clusterNativeResourceTypes: ResourceTypeWithAliases[] = [
@@ -92,6 +96,10 @@ export const clusterNativeResourceTypes: ResourceTypeWithAliases[] = [
   {
     resourceType: 'storageclasses',
     aliases: ['sc', 'storageclass', 'storageclasses'],
+  },
+  {
+    resourceType: 'events',
+    aliases: ['ev', 'events'],
   },
   // we don't have nodes for those resources, but let's keep them here
   {
