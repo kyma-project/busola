@@ -139,7 +139,7 @@ context('Test Pizzas', () => {
 
   it('Displays the Pizzas list/detail views from the samples', () => {
     cy.getMidColumn()
-      .contains('a', 'pizzas/diavola')
+      .contains('ui5-link', 'pizzas/diavola')
       .click({ force: true });
 
     cy.contains('Hot salami, Pickled jalapeños, Cheese').should('be.visible');
