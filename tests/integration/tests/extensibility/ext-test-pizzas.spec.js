@@ -94,6 +94,8 @@ context('Test Pizzas', () => {
   });
 
   it('Edits a Pizza Order', () => {
+    cy.wait(1000);
+
     cy.getMidColumn()
       .contains('ui5-button', 'Edit')
       .should('be.visible')
