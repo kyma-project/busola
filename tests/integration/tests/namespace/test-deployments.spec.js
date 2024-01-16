@@ -101,9 +101,17 @@ context('Test Deployments', () => {
   });
 
   it('Edit a deployment', () => {
-    cy.get('[data-testid="has-tooltip"]').contains('span', '1 / 1', {
-      timeout: 60 * 1000,
-    });
+    cy.getLeftNav()
+      .contains('Deployments')
+      .click();
+
+    cy.contains('ui5-link', DEPLOYMENT_NAME).click();
+
+    cy.getMidColumn()
+      .get('[data-testid="has-tooltip"]')
+      .contains('span', '1 / 1', {
+        timeout: 60 * 1000,
+      });
 
     cy.get('ui5-button')
       .contains('Edit')
