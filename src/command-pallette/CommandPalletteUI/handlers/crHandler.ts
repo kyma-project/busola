@@ -86,7 +86,7 @@ function navigateTo({
 }: {
   matchingNode?: NavNode;
   namespace: string | null;
-  navigate: NavigateFunction;
+  navigate: Function;
   activeClusterName: string;
   crd: CustomResourceDefinition;
   crName?: string;

@@ -23,7 +23,7 @@ export type CommandPaletteContext = {
   setOpenPreferencesModal: (open: boolean) => void;
   setShowYamlUpload: (show: boolean) => void;
   clustersInfo: useClustersInfoType;
-  navigate: NavigateFunction;
+  navigate: Function;
 };
 
 type CRHelpEntries = {
