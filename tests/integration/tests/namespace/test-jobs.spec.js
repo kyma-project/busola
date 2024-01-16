@@ -101,7 +101,13 @@ context('Test Jobs', () => {
     cy.getMidColumn().contains(JOB_NAME);
 
     // created pod
-    cy.clickGenericListLink(JOB_NAME);
+    cy.getMidColumn()
+      .get('ui5-table-row')
+      .find('ui5-table-cell')
+      .find('ui5-link')
+      .contains(JOB_NAME)
+      .find('a.ui5-link-root')
+      .click({ force: true });
 
     cy.wait(1000);
 
