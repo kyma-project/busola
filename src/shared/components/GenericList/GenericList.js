@@ -24,6 +24,7 @@ import { pageSizeState } from 'state/preferences/pageSizeAtom';
 import './GenericList.scss';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
 import { spacing } from '@ui5/webcomponents-react-base';
+import { EmptyListComponent } from '../EmptyListComponent/EmptyListComponent';
 
 const defaultSort = {
   name: nameLocaleSort,
@@ -55,6 +56,7 @@ export const GenericList = ({
   notFoundMessage,
   searchSettings,
   disableMargin,
+  emptyListProps = null,
 }) => {
   searchSettings = { ...defaultSearch, ...searchSettings };
 
@@ -182,11 +184,20 @@ export const GenericList = ({
       }
       return (
         <BodyFallback>
-          <p>
-            {i18n.exists(notFoundMessage)
-              ? t(notFoundMessage)
-              : notFoundMessage}
-          </p>
+          {emptyListProps ? (
+            <EmptyListComponent
+              titleText={emptyListProps.titleText}
+              subtitleText={emptyListProps.subtitleText}
+              buttonText={emptyListProps.buttonText}
+              url={emptyListProps.url}
+            />
+          ) : (
+            <p>
+              {i18n.exists(notFoundMessage)
+                ? t(notFoundMessage)
+                : notFoundMessage}
+            </p>
+          )}
         </BodyFallback>
       );
     }

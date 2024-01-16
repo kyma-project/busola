@@ -199,6 +199,7 @@ export function ResourceListRenderer({
   },
   searchSettings,
   isCompact,
+  emptyListProps = null,
 }) {
   useVersionWarning({
     resourceUrl,
@@ -561,6 +562,7 @@ export function ResourceListRenderer({
             ...searchSettings,
             textSearchProperties: textSearchProperties(),
           }}
+          emptyListProps={emptyListProps}
         />
       )}
       {!isCompact && createPortal(<YamlUploadDialog />, document.body)}
