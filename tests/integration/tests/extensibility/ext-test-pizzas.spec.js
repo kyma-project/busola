@@ -94,8 +94,11 @@ context('Test Pizzas', () => {
   });
 
   it('Edits a Pizza Order', () => {
+    cy.wait(1000);
+
     cy.getMidColumn()
       .contains('ui5-button', 'Edit')
+      .should('be.visible')
       .click();
 
     cy.get('ui5-dialog').as('form');
@@ -138,7 +141,7 @@ context('Test Pizzas', () => {
 
   it('Displays the Pizzas list/detail views from the samples', () => {
     cy.getMidColumn()
-      .contains('a', 'pizzas/diavola')
+      .contains('ui5-link', 'pizzas/diavola')
       .click({ force: true });
 
     cy.contains('Hot salami, Pickled jalapeños, Cheese').should('be.visible');
