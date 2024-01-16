@@ -67,7 +67,7 @@ export function ExternalResourceRef({
       text: ns.metadata.name,
     }));
 
-  if (loading || namespacesLoading) return <Spinner compact={true} />;
+  if (loading || namespacesLoading) return <Spinner />;
   if (error)
     return (
       <MessageStrip design="Information" hideCloseButton>

@@ -22,7 +22,7 @@ export const Sidebar = () => {
       }}
     >
       <section className="sidebar__content">
-        <Suspense fallback={<Spinner size="m" />}>
+        <Suspense fallback={<Spinner />}>
           <ErrorBoundary
             customMessage={t('navigation.errors.sidebar')}
             displayButton={false}
