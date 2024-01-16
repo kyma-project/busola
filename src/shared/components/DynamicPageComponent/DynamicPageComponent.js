@@ -51,6 +51,7 @@ export const DynamicPageComponent = ({
       alwaysShowContentHeader
       showHideHeaderButton={false}
       headerContentPinnable={false}
+      backgroundDesign="Transparent"
       headerTitle={
         <DynamicPageTitle
           navigationActions={
