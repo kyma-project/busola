@@ -108,8 +108,9 @@ context('Test Service Accounts', () => {
 
   it('Generate TokenRequest', () => {
     cy.getMidColumn()
-      .find('[accessible-name="Show More"]')
+      .find('ui5-toggle-button[accessible-name="Show More"]')
       .click();
+
     cy.getMidColumn()
       .get('ui5-popover[accessible-role="Dialog"]')
       .contains('ui5-button', 'Generate TokenRequest')
