@@ -228,12 +228,13 @@ describe('GenericList', () => {
         />
       </ThemeProvider>,
     );
-
-    mockEntries.forEach(entry =>
-      Object.keys(entry)
-        .filter(key => key !== 'metadata')
-        .forEach(key => getByText(entry[key])),
-    );
+    await waitFor(async () => {
+      mockEntries.forEach(entry =>
+        Object.keys(entry)
+          .filter(key => key !== 'metadata')
+          .forEach(key => getByText(entry[key])),
+      );
+    });
 
     let foundCollapseButtons = getAllByTestId('collapse-button-close');
     expect(foundCollapseButtons).toHaveLength(2);
