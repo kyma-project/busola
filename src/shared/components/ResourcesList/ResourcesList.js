@@ -564,6 +564,10 @@ export function ResourceListRenderer({
           }}
           emptyListProps={{
             ...emptyListProps,
+            titleText: `No ${prettifyNamePlural(
+              resourceTitle,
+              resourceType,
+            ).toLowerCase()}`,
             onClick: () => {
               setActiveResource(undefined);
               toggleFormFn(true);

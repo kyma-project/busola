@@ -56,6 +56,12 @@ export function NamespaceList(props) {
       filter={namespaceFilter}
       {...props}
       createResourceForm={NamespaceCreate}
+      emptyListProps={{
+        subtitleText: t('namespaces.description'),
+        url:
+          'https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces',
+        buttonText: 'Connect',
+      }}
     />
   );
 }

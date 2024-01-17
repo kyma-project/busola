@@ -63,10 +63,7 @@ export function DeploymentList(props) {
       {...props}
       createResourceForm={DeploymentCreate}
       emptyListProps={{
-        titleText: 'No deployments',
-        subtitleText:
-          'Deployments represent replicated applications running on your cluster.',
-        buttonText: 'Create',
+        subtitleText: t('deployments.description'),
         url:
           'https://kubernetes.io/docs/concepts/workloads/controllers/deployment/',
       }}

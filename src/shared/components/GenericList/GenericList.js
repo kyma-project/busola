@@ -188,6 +188,7 @@ export const GenericList = ({
             <EmptyListComponent
               titleText={emptyListProps.titleText}
               subtitleText={emptyListProps.subtitleText}
+              showButton={emptyListProps.showButton}
               buttonText={emptyListProps.buttonText}
               url={emptyListProps.url}
               onClick={emptyListProps.onClick}

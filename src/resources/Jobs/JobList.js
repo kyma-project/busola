@@ -38,6 +38,10 @@ export const JobList = props => {
       description={description}
       {...props}
       createResourceForm={JobCreate}
+      emptyListProps={{
+        subtitleText: t('jobs.description'),
+        url: 'https://kubernetes.io/docs/concepts/workloads/controllers/job/',
+      }}
     />
   );
 };

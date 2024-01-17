@@ -100,6 +100,10 @@ export function PersistentVolumeList(props) {
       description={description}
       {...props}
       createResourceForm={PersistentVolumeCreate}
+      emptyListProps={{
+        subtitleText: t('pv.description'),
+        url: 'https://kubernetes.io/docs/concepts/storage/persistent-volumes',
+      }}
     />
   );
 }

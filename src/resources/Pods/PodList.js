@@ -79,10 +79,7 @@ export function PodList(params) {
       {...params}
       createResourceForm={PodCreate}
       emptyListProps={{
-        titleText: 'No pods',
-        subtitleText:
-          'Pods represent a set of containers running on your cluster.',
-        buttonText: 'Create',
+        subtitleText: t('pods.description'),
         url: 'https://kubernetes.io/docs/concepts/workloads/pods/',
       }}
     />

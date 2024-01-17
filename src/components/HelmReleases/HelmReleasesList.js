@@ -88,6 +88,13 @@ function HelmReleasesList() {
             searchSettings={{
               textSearchProperties: ['recentRelease.chart.metadata.name'],
             }}
+            emptyListProps={{
+              titleText: t('helm-releases.title'),
+              subtitleText: t('helm-releases.description'),
+              url:
+                'https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces',
+              buttonText: t('common.buttons.connect'),
+            }}
           />
         }
       />
