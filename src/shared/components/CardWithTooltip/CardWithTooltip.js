@@ -35,4 +35,6 @@ export const CardWithTooltip = ({ title, tooltip, children, icon }) => {
 CardWithTooltip.propTypes = {
   title: PropTypes.string,
   tooltip: PropTypes.object,
+  children: PropTypes.node,
+  icon: PropTypes.string,
 };

@@ -46,6 +46,7 @@ export const ProgressIndicatorWithPercentage = ({
 ProgressIndicatorWithPercentage.propTypes = {
   title: PropTypes.string,
   value: PropTypes.number,
-  color: PropTypes.string,
+  dataBarColor: PropTypes.string,
+  remainingBarColor: PropTypes.string,
   tooltip: PropTypes.object,
 };
