@@ -24,7 +24,7 @@ export default function ClusterStats({ data }) {
     memory.capacity += node.metrics.memory?.capacity ?? 0;
   }
 
-  const { data: podsData } = useGetList()(`/api/v1/podss`, {
+  const { data: podsData } = useGetList()(`/api/v1/pods`, {
     pollingInterval: 3200,
   });
 
