@@ -108,6 +108,7 @@ context('Test Service Accounts', () => {
 
   it('Generate TokenRequest', () => {
     cy.getMidColumn()
+      .find('[data-component-name="DynamicPageTitleMiddleSection"]')
       .find('ui5-toggle-button[accessible-name="Show More"]')
       .click();
 
