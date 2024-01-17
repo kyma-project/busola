@@ -190,6 +190,7 @@ export const GenericList = ({
               subtitleText={emptyListProps.subtitleText}
               buttonText={emptyListProps.buttonText}
               url={emptyListProps.url}
+              onClick={emptyListProps.onClick}
             />
           ) : (
             <p>

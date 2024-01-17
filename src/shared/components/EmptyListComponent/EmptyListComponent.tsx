@@ -8,6 +8,7 @@ type EmptyListComponentProps = {
   subtitleText: string;
   buttonText: string;
   url: string;
+  onClick: () => null;
 };
 
 export const EmptyListComponent = ({
@@ -15,6 +16,7 @@ export const EmptyListComponent = ({
   subtitleText,
   buttonText,
   url,
+  onClick,
 }: EmptyListComponentProps) => {
   return (
     <>
@@ -22,10 +24,14 @@ export const EmptyListComponent = ({
         name="TntNoApplications"
         size="Scene"
         titleText={titleText}
-        subtitleText={subtitleText}
+        subtitle={
+          <p className="emptyListComponent__subtitle">{subtitleText}</p>
+        }
       >
         <div className="emptyListComponent__buttons">
-          <Button design="Emphasized">{buttonText}</Button>
+          <Button design="Emphasized" onClick={onClick}>
+            {buttonText}
+          </Button>
           <Link
             className="emptyListComponent__link"
             text="Learn More"

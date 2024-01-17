@@ -562,7 +562,13 @@ export function ResourceListRenderer({
             ...searchSettings,
             textSearchProperties: textSearchProperties(),
           }}
-          emptyListProps={emptyListProps}
+          emptyListProps={{
+            ...emptyListProps,
+            onClick: () => {
+              setActiveResource(undefined);
+              toggleFormFn(true);
+            },
+          }}
         />
       )}
       {!isCompact && createPortal(<YamlUploadDialog />, document.body)}
