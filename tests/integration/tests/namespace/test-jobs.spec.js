@@ -102,7 +102,8 @@ context('Test Jobs', () => {
 
     // created pod
     cy.getMidColumn()
-      .get('ui5-table-row')
+      .find('ui5-panel')
+      .find('ui5-table-row')
       .find('ui5-table-cell')
       .find('ui5-link')
       .contains(JOB_NAME)
