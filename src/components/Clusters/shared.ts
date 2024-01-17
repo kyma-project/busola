@@ -19,7 +19,6 @@ function addCurrentCluster(
   clustersInfo: useClustersInfoType,
 ) {
   const { setCurrentCluster } = clustersInfo;
-  setCurrentCluster(params);
 
   if (params.currentContext.namespace) {
     clustersInfo.navigate(
@@ -28,6 +27,8 @@ function addCurrentCluster(
   } else {
     clustersInfo.navigate(`/cluster/${params.contextName}`);
   }
+
+  setCurrentCluster(params);
 }
 
 export function addCluster(

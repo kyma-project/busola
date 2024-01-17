@@ -197,11 +197,13 @@ function createAllResults(context: CommandPaletteContext) {
           const pathname = `/cluster/${activeClusterName}/${clusterNode.pathSegment}`;
           navigate(pathname);
         },
-        aliases: getShortAliases(
-          clusterNode.resourceType,
-          resourceTypes,
-          clusterNodes,
-        ),
+        aliases:
+          clusterNode.aliases ??
+          getShortAliases(
+            clusterNode.resourceType,
+            resourceTypes,
+            clusterNodes,
+          ),
       };
     });
 }
@@ -228,7 +230,9 @@ function createSingleResult(
       const pathname = `/cluster/${activeClusterName}/${matchedNode.pathSegment}`;
       navigate(pathname);
     },
-    aliases: getShortAliases(resourceType, resourceTypes, clusterNodes),
+    aliases:
+      matchedNode.aliases ??
+      getShortAliases(resourceType, resourceTypes, clusterNodes),
   };
 
   return linkToList;

@@ -28,6 +28,13 @@ export const shouldNodeBeVisible = (
     permissionSet,
   );
 
+  if (
+    navNode.resourceType === 'namespaces' &&
+    nodeFeaturesEnabledInConfig &&
+    nodeResourceExist
+  )
+    return nodeFeaturesEnabledInConfig && nodeResourceExist;
+
   return (
     nodeFeaturesEnabledInConfig &&
     nodeResourceExist &&
