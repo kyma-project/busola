@@ -2,7 +2,7 @@ import { addCluster } from 'components/Clusters/shared';
 import { CommandPaletteContext, Handler, Result } from '../types';
 import { makeSuggestion } from './helpers';
 
-function createNonResourceOptions({
+export function createNonResourceOptions({
   activeClusterName,
 }: {
   activeClusterName: string | undefined;
@@ -50,6 +50,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
   const options = createNonResourceOptions(context);
 
   const option = options.find(o => o.names.includes(context.tokens[0]));
+
   if (option) {
     const {
       activeClusterName,
@@ -64,7 +65,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
           label: t('command-palette.resource-names.cluster', {
             name: clusterName,
           }),
-          query: `cluster ${clusterName}`,
+          query: `cluster/${clusterName}`,
           onActivate: () => {
             const cluster = {
               name: clusterName,
@@ -91,6 +92,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
               context.setShowYamlUpload(true);
             },
             customActionText: t('command-palette.help.open-upload-yaml'),
+            aliases: ['up'],
           },
         ];
       case 'preferences':
@@ -102,6 +104,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
               context.setOpenPreferencesModal(true);
             },
             customActionText: t('command-palette.help.open-preferences'),
+            aliases: ['prefs'],
           },
         ];
       case 'overview':
@@ -114,6 +117,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
                 const pathname = `/cluster/${activeClusterName}/overview`;
                 navigate(pathname);
               },
+              aliases: ['ov'],
             },
           ];
         } else {
@@ -123,6 +127,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
         return null;
     }
   }
+
   return null;
 }
 
@@ -144,7 +149,7 @@ export const nonResourceHandler: Handler = {
     {
       name: 'overview',
       alias: 'ov',
-      description: t('clusters.overview.title-current-cluster'),
+      description: t('command-palette.help.cluster-details'),
     },
     {
       name: 'preferences',

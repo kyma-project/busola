@@ -11,6 +11,7 @@ export function SidebarSwitcher(props: any) {
       onClick={() => setSidebarCondensed(prevState => !prevState)}
       icon="menu2"
       design="Transparent"
+      accessibleName="collapse-sidebar"
     />
   );
 }

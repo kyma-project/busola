@@ -4,6 +4,7 @@ import { getSuggestionForSingleResource } from './helpers';
 import { K8sResource } from 'types';
 
 const crdResourceTypes = ['customresourcedefinitions', 'crd', 'crds'];
+const crdResourceAliases = ['crds'];
 
 function getAutocompleteEntries({
   tokens,
@@ -18,7 +19,7 @@ function getAutocompleteEntries({
         return ['crds'];
       }
       return [];
-    case 2: // name
+    case 3: // name
       const crdNames = (resourceCache['customresourcedefinitions'] || []).map(
         n => n.metadata.name,
       );
@@ -46,16 +47,17 @@ function makeListItem(item: K8sResource, context: CommandPaletteContext) {
     label: name,
     category:
       t('configuration.title') + ' > ' + t('custom-resource-definitions.title'),
-    query: `crds ${name}`,
+    query: `crds/${name}`,
     onActivate: () => {
       const pathname = `/cluster/${activeClusterName}/customresourcedefinitions/${name}`;
       navigate(pathname);
     },
+    customActionText: 'command-palette.item-actions.navigate',
   };
 }
 
 function concernsCRDs({ tokens }: CommandPaletteContext) {
-  return crdResourceTypes.includes(tokens[0]);
+  return crdResourceTypes.some(crt => crt.startsWith(tokens[0]));
 }
 
 async function fetchCRDs(context: CommandPaletteContext) {
@@ -82,9 +84,8 @@ function createResults(context: CommandPaletteContext): Result[] {
 
   const { resourceCache, tokens, t, navigate, activeClusterName } = context;
 
-  const listLabel = t('command-palette.results.list-of', {
-    resourceType: t('command-palette.crds.name-short_plural'),
-  });
+  const listLabel = t('custom-resource-definitions.title');
+
   const linkToList = {
     label: listLabel,
     category:
@@ -94,6 +95,7 @@ function createResults(context: CommandPaletteContext): Result[] {
       const pathname = `/cluster/${activeClusterName}/customresourcedefinitions`;
       navigate(pathname);
     },
+    aliases: crdResourceAliases,
   };
 
   const crds = resourceCache['customresourcedefinitions'];
@@ -102,7 +104,7 @@ function createResults(context: CommandPaletteContext): Result[] {
     return [linkToList, { type: LOADING_INDICATOR }];
   }
 
-  const name = tokens[1];
+  const [, delimiter, name] = tokens;
   if (name) {
     const matchedByName = crds.filter(item =>
       item.metadata.name.includes(name),
@@ -111,8 +113,10 @@ function createResults(context: CommandPaletteContext): Result[] {
       return matchedByName.map(item => makeListItem(item, context));
     }
     return [];
+  } else if (delimiter) {
+    return [...crds.map(item => makeListItem(item, context))];
   } else {
-    return [linkToList, ...crds.map(item => makeListItem(item, context))];
+    return [linkToList];
   }
 }
 

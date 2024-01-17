@@ -20,7 +20,7 @@ function getAutocompleteEntries(
         return ['nodes '];
       }
       return null;
-    case 2: // name
+    case 3: // name
       const nodeNames = (resourceCache['nodes'] || []).map(
         n => n.metadata.name,
       );
@@ -51,9 +51,10 @@ function makeListItem(
     label: name,
     category:
       t('clusters.overview.title-current-cluster') + ' > ' + t('nodes.title'),
-    query: `node ${name}`,
+    query: `node/${name}`,
     onActivate: () =>
       navigate(`/cluster/${activeClusterName}/overview/nodes/${name}`),
+    customActionText: 'command-palette.item-actions.navigate',
   };
 }
 
@@ -89,7 +90,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
     ];
   }
 
-  const name = tokens[1];
+  const name = tokens[2];
   if (name) {
     const matchedByName = nodes.filter(item =>
       item.metadata.name.includes(name),

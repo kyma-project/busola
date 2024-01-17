@@ -50,7 +50,7 @@ Cypress.Commands.add('goToNamespaceDetails', () => {
     .contains('Namespaces')
     .click();
 
-  cy.get('[role=row]')
+  cy.get('ui5-table-row')
     .contains('a', Cypress.env('NAMESPACE_NAME'))
     .click();
 

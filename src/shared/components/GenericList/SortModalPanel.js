@@ -66,6 +66,7 @@ export const SortModalPanel = ({ sortBy, sort, setSort, disabled = false }) => {
               <RadioButton
                 name="sortBy"
                 value={value}
+                key={value}
                 checked={name === value}
                 text={
                   i18n.exists(`common.sorting.${value}`)
