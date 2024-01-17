@@ -1,5 +1,4 @@
 import pluralize from 'pluralize';
-import { NavigateFunction } from 'react-router-dom';
 import { prettifyKind } from 'shared/utils/helpers';
 import { NavNode } from 'state/types';
 import { K8sResource } from 'types';
