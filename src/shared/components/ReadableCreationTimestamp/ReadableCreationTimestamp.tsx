@@ -1,5 +1,4 @@
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { Tooltip } from '../Tooltip/Tooltip';
 
 const options: Intl.DateTimeFormatOptions = {
   month: 'short',
@@ -7,11 +6,10 @@ const options: Intl.DateTimeFormatOptions = {
   year: 'numeric',
 };
 
-const TooltipWrapper = ({ tooltipProps, children }: any) => {
-  if (tooltipProps?.content) {
-    return <Tooltip {...tooltipProps}>{children}</Tooltip>;
-  }
-  return children;
+const withTimeOptions: Intl.DateTimeFormatOptions = {
+  dateStyle: 'short',
+  timeStyle: 'medium',
+  hour12: false,
 };
 
 export const getReadableTimestamp = (timestamp: string): string => {
@@ -21,11 +19,18 @@ export const getReadableTimestamp = (timestamp: string): string => {
   return formattedDate;
 };
 
-export const getReadableTimestampWithTime = (timestamp: string): string => {
+export const getReadableTimestampWithTime = (timestamp: string) => {
   if (!timestamp) return EMPTY_TEXT_PLACEHOLDER;
   const timestampAsDate = new Date(timestamp);
-  const formattedDate = timestampAsDate.toLocaleTimeString('en-US', options);
-  return formattedDate;
+  const [formattedDate, formattedTime] = timestampAsDate
+    .toLocaleString('de-DE', withTimeOptions)
+    .split(',');
+  return (
+    <>
+      <p>{formattedDate}</p>
+      <p>{formattedTime}</p>
+    </>
+  );
 };
 
 export const ReadableCreationTimestamp = ({
@@ -33,37 +38,5 @@ export const ReadableCreationTimestamp = ({
 }: {
   timestamp: string;
 }): JSX.Element => {
-  return (
-    <>
-      <TooltipWrapper
-        tooltipProps={{
-          content: getReadableTimestampWithTime(timestamp),
-          position: 'bottom',
-        }}
-      >
-        {getReadableTimestamp(timestamp)}
-      </TooltipWrapper>
-    </>
-  );
+  return <>{getReadableTimestampWithTime(timestamp)}</>;
 };
-
-/*
-  <>
-    {getReadableTimestampWithTime(timestamp)}
-  </>
-*/
-
-/*
-export const getReadableTimestampWithTime = (timestamp: string) => {
-  if (!timestamp) return EMPTY_TEXT_PLACEHOLDER;
-  const timestampAsDate = new Date(timestamp);
-  const formattedDate = timestampAsDate.toLocaleTimeString('en-US', options);
-  const [date, year, time] = formattedDate.split(',');
-  return (
-    <>
-      <p>{`${date}, ${year}`}</p>
-      <p>{time}</p>
-    </>
-  );
-};
-*/
