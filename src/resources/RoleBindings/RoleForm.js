@@ -16,7 +16,7 @@ export const RoleForm = ({
 }) => {
   const { t } = useTranslation();
 
-  if (loading) return <Spinner compact={true} />;
+  if (loading) return <Spinner />;
   if (error) return error.message;
 
   const roleTypeDropdown = (

@@ -50,11 +50,7 @@ const WarningButton = ({
             : t('upload-yaml.buttons.show-warnings')}
         </p>
         {loading ? (
-          <Spinner
-            className={noWarnings ? 'positive-spinner' : 'warning-spinner'}
-            size="s"
-            center={false}
-          />
+          <Spinner size="Small" center={false} />
         ) : (
           <p>{warningsNumber}</p>
         )}
@@ -97,7 +93,7 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
         style={spacing.sapUiSmallMarginBottom}
       >
         <p> {t('common.headers.loading')}</p>
-        <Spinner className="warning-spinner" size="s" center={false} />
+        <Spinner size="Small" center={false} />
       </MessageStrip>
     );
 

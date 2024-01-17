@@ -19,5 +19,6 @@ export const mapBusolaResourceToNavNode = (resource: PartialNavNode) => {
   node.apiVersion = resource.apiVersion || '';
   node.icon = resource.icon;
   node.topLevelNode = resource.topLevelNode || false;
+  node.aliases = resource.aliases || undefined;
   return node;
 };
