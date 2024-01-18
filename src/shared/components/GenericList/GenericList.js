@@ -152,7 +152,7 @@ export const GenericList = ({
   const headerActionsEmpty =
     !searchSettings?.showSearchField &&
     !(sortBy && !isEmpty(sortBy)) &&
-    !extraHeaderContent;
+    !(extraHeaderContent && !isEmpty(extraHeaderContent));
 
   const renderTableBody = () => {
     if (serverDataError) {
