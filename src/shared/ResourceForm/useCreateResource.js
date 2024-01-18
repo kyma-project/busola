@@ -1,6 +1,7 @@
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
@@ -11,6 +12,7 @@ import { Button } from '@ui5/webcomponents-react';
 import { ForceUpdateModalContent } from './ForceUpdateModalContent';
 import { useUrl } from 'hooks/useUrl';
 import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 export function useCreateResource({
   singularName,
@@ -31,8 +33,9 @@ export function useCreateResource({
   const patchRequest = useUpdate();
   const { scopedUrl } = useUrl();
   const navigate = useNavigate();
+  const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
 
-  const { nextQuery } = usePrepareLayout(layoutNumber);
+  const { nextQuery, nextLayout } = usePrepareLayout(layoutNumber);
 
   const isEdit = !!initialResource?.metadata?.name;
 
@@ -48,6 +51,28 @@ export function useCreateResource({
       ),
     });
     if (!isEdit) {
+      setLayoutColumn(
+        nextLayout === 'TwoColumnsMidExpanded'
+          ? {
+              layout: nextLayout,
+              midColumn: {
+                resourceName: resource.metadata.name,
+                resourceType: resource.kind,
+                namespaceId: resource.metadata.namespace,
+              },
+              endColumn: null,
+            }
+          : {
+              ...layoutColumn,
+              layout: nextLayout,
+              endColumn: {
+                resourceName: resource.metadata.name,
+                resourceType: resource.kind,
+                namespaceId: resource.metadata.namespace,
+              },
+            },
+      );
+
       navigate(
         `${scopedUrl(
           `${urlPath || pluralKind.toLowerCase()}/${encodeURIComponent(
