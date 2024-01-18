@@ -1,22 +1,26 @@
-.template-table {
-  margin-bottom: 10px;
-
-  tr {
-    text-align: left;
-    border-bottom: 2px solid var(--sapGroup_ContentBorderColor, #d9d9d9);
-  }
-
-  th {
-    background-color: var(--sapNeutralBackground);
-  }
-
-  th,
-  td {
-    padding: 5px 0px 0px 5px;
-    width: 50%;
-  }
-}
-
 .code-block {
   font-family: monospace;
+}
+
+.pod-template-row {
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+  grid-auto-flow: row;
+  gap: 40px;
+}
+
+.pod-template-row-label {
+  text-align: end;
+}
+
+@media (max-width: 650px) {
+  .pod-template-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+
+  .pod-template-row-label {
+    text-align: start;
+  }
 }

@@ -32,6 +32,7 @@ import { useUrl } from 'hooks/useUrl';
 import { Tooltip } from '../Tooltip/Tooltip';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { createPortal } from 'react-dom';
+import ResourceDetailsCard from './ResourceDetailsCard';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
@@ -359,6 +360,35 @@ function Resource({
               />,
               document.body,
             )}
+            <ResourceDetailsCard
+              content={
+                <>
+                  <DynamicPageComponent.Column
+                    key="Created"
+                    title={t('common.headers.created')}
+                  >
+                    <ReadableCreationTimestamp
+                      timestamp={resource.metadata.creationTimestamp}
+                    />
+                  </DynamicPageComponent.Column>
+                  {customColumns.filter(filterColumns).map(col => (
+                    <DynamicPageComponent.Column
+                      key={col.header}
+                      title={col.header}
+                    >
+                      {col.value(resource)}
+                    </DynamicPageComponent.Column>
+                  ))}
+                  <DynamicPageComponent.Column
+                    key="Labels"
+                    title={t('common.headers.labels')}
+                    columnSpan="1 / 3"
+                  >
+                    <Labels labels={resource.metadata.labels || {}} />
+                  </DynamicPageComponent.Column>
+                </>
+              }
+            />
             <Suspense fallback={<Spinner />}>
               <Injections
                 destination={resourceType}
@@ -388,28 +418,6 @@ function Resource({
           </>
         }
       >
-        <DynamicPageComponent.Column
-          key="Labels"
-          title={t('common.headers.labels')}
-          columnSpan="1 / 3"
-        >
-          <Labels labels={resource.metadata.labels || {}} />
-        </DynamicPageComponent.Column>
-
-        <DynamicPageComponent.Column
-          key="Created"
-          title={t('common.headers.created')}
-        >
-          <ReadableCreationTimestamp
-            timestamp={resource.metadata.creationTimestamp}
-          />
-        </DynamicPageComponent.Column>
-
-        {customColumns.filter(filterColumns).map(col => (
-          <DynamicPageComponent.Column key={col.header} title={col.header}>
-            {col.value(resource)}
-          </DynamicPageComponent.Column>
-        ))}
         {createPortal(<YamlUploadDialog />, document.body)}
       </DynamicPageComponent>
     </>

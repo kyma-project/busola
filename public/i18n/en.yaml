@@ -296,6 +296,7 @@ common:
     policies: Policies
     region: Region
     resource: Resource
+    resource-details: Resource Details
     resources: Resources
     status: Status
     value: Value
