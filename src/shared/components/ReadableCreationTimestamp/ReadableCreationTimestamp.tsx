@@ -22,15 +22,11 @@ export const getReadableTimestamp = (timestamp: string): string => {
 export const getReadableTimestampWithTime = (timestamp: string) => {
   if (!timestamp) return EMPTY_TEXT_PLACEHOLDER;
   const timestampAsDate = new Date(timestamp);
-  const [formattedDate, formattedTime] = timestampAsDate
-    .toLocaleString('de-DE', withTimeOptions)
-    .split(',');
-  return (
-    <>
-      <p>{formattedDate}</p>
-      <p>{formattedTime}</p>
-    </>
+  const formattedDate = timestampAsDate.toLocaleString(
+    'de-DE',
+    withTimeOptions,
   );
+  return formattedDate;
 };
 
 export const ReadableCreationTimestamp = ({
