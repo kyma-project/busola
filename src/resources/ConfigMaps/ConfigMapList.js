@@ -37,6 +37,10 @@ export function ConfigMapList(props) {
       description={description}
       {...props}
       createResourceForm={ConfigMapCreate}
+      emptyListProps={{
+        subtitleText: t('config-maps.description'),
+        url: 'https://kubernetes.io/docs/concepts/configuration/configmap/',
+      }}
     />
   );
 }

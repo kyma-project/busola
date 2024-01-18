@@ -4,6 +4,7 @@ import { Button, IllustratedMessage } from '@ui5/webcomponents-react';
 import '@ui5/webcomponents-fiori/dist/illustrations/tnt/NoApplications.js';
 import { Link } from 'shared/components/Link/Link';
 import './EmptyListComponent.scss';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 type EmptyListComponentProps = {
   titleText: string;
@@ -37,7 +38,14 @@ export const EmptyListComponent = ({
         name="TntNoApplications"
         size="Scene"
         titleText={titleText}
-        subtitle={<p className="emptyListComponent__subtitle">{subtitle}</p>}
+        subtitle={
+          <p
+            className="emptyListComponent__subtitle"
+            style={spacing.sapUiSmallMarginTop}
+          >
+            {subtitle}
+          </p>
+        }
       >
         <div className="emptyListComponent__buttons">
           {showButton && (
@@ -45,11 +53,13 @@ export const EmptyListComponent = ({
               {buttonText}
             </Button>
           )}
-          <Link
-            className="emptyListComponent__link"
-            text="Learn More"
-            url={url}
-          />
+          {url && (
+            <Link
+              className="emptyListComponent__link"
+              text="Learn More"
+              url={url}
+            />
+          )}
         </div>
         {children}
       </IllustratedMessage>

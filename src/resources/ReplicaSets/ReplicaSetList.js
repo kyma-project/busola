@@ -59,6 +59,11 @@ export function ReplicaSetList(params) {
       description={description}
       {...params}
       createResourceForm={ReplicaSetCreate}
+      emptyListProps={{
+        subtitleText: t('replica-sets.description'),
+        url:
+          'https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/',
+      }}
     />
   );
 }

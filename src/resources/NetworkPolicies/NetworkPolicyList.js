@@ -21,6 +21,11 @@ export function NetworkPolicyList(props) {
       description={description}
       {...props}
       createResourceForm={NetworkPolicyCreate}
+      emptyListProps={{
+        subtitleText: 'network-policies.description',
+        url:
+          'https://kubernetes.io/docs/concepts/services-networking/network-policies/',
+      }}
     />
   );
 }

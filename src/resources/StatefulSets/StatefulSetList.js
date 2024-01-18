@@ -43,6 +43,11 @@ export function StatefulSetList(props) {
       customListActions={[restartAction]}
       {...props}
       createResourceForm={StatefulSetCreate}
+      emptyListProps={{
+        subtitleText: t('stateful-sets.description'),
+        url:
+          'https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/',
+      }}
     />
   );
 }

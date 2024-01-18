@@ -56,6 +56,11 @@ export function DaemonSetList(props) {
       customListActions={[restartAction]}
       {...props}
       createResourceForm={DaemonSetCreate}
+      emptyListProps={{
+        subtitleText: t('daemon-sets.description'),
+        url:
+          'https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/',
+      }}
     />
   );
 }
