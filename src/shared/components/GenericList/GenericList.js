@@ -35,7 +35,7 @@ const defaultSearch = {
   textSearchProperties: ['name', 'description'],
   showSearchControl: true,
   showSearchSuggestion: true,
-  allowSlashShortcut: true,
+  allowSlashShortcut: false,
   noSearchResultMessage: 'components.generic-list.messages.no-search-results',
 };
 
