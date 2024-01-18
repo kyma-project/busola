@@ -128,6 +128,7 @@ export type NavNode = {
   topLevelNode?: boolean;
   externalUrl?: string;
   createUrlFn?: (generators: UrlGenerators) => string;
+  aliases?: string[];
 };
 
 export type ClusterStorage = 'localStorage' | 'sessionStorage' | string;

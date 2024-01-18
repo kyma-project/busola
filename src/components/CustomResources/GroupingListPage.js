@@ -29,11 +29,7 @@ export function GroupingListPage({
   const crdsByGroup = groupBy(data, e => e.spec.group);
 
   if (loading) {
-    return (
-      <div style={{ width: '100%' }}>
-        <Spinner />
-      </div>
-    );
+    return <Spinner />;
   }
 
   if (error) {
