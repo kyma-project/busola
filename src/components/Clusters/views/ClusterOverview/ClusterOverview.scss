@@ -31,7 +31,8 @@
   }
 
   .cluster-overview__graphs-wrapper {
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-direction: row;
   }
 
   .cluster-overview__cards-wrapper {

@@ -95,48 +95,50 @@ export default function ClusterStats({ data }) {
             }}
           />
         </Card>
-        <CardWithTooltip
-          title={t('cluster-overview.statistics.namespaces-health')}
-          tooltip={{
-            content: t('cluster-overview.tooltips.namespaces-health-info'),
-            position: 'bottom',
-          }}
-          icon={'sys-help'}
-        >
-          {podsData && (
-            <ProgressIndicatorWithPercentage
-              title={t('cluster-overview.statistics.healthy-pods')}
-              value={calculatePercents(healthyPods, podsData?.length)}
-              dataBarColor={'var(--sapIndicationColor_8)'}
-              remainingBarColor={'var(--sapIndicationColor_8b)'}
-              tooltip={{
-                content: t('cluster-overview.tooltips.healthy-pods', {
-                  value: healthyPods,
-                  max: podsData?.length,
-                }),
-                position: 'bottom',
-              }}
-            />
-          )}
-          {deploymentsData && (
-            <ProgressIndicatorWithPercentage
-              title={t('cluster-overview.statistics.healthy-deployments')}
-              value={calculatePercents(
-                healthyDeployments,
-                deploymentsData?.length,
-              )}
-              dataBarColor={'var(--sapIndicationColor_6)'}
-              remainingBarColor={'var(--sapIndicationColor_6b)'}
-              tooltip={{
-                content: t('cluster-overview.tooltips.healthy-deployments', {
-                  value: healthyDeployments,
-                  max: deploymentsData?.length,
-                }),
-                position: 'bottom',
-              }}
-            />
-          )}
-        </CardWithTooltip>
+        {(podsData || deploymentsData) && (
+          <CardWithTooltip
+            title={t('cluster-overview.statistics.namespaces-health')}
+            tooltip={{
+              content: t('cluster-overview.tooltips.namespaces-health-info'),
+              position: 'bottom',
+            }}
+            icon={'sys-help'}
+          >
+            {podsData && (
+              <ProgressIndicatorWithPercentage
+                title={t('cluster-overview.statistics.healthy-pods')}
+                value={calculatePercents(healthyPods, podsData?.length)}
+                dataBarColor={'var(--sapIndicationColor_8)'}
+                remainingBarColor={'var(--sapIndicationColor_8b)'}
+                tooltip={{
+                  content: t('cluster-overview.tooltips.healthy-pods', {
+                    value: healthyPods,
+                    max: podsData?.length,
+                  }),
+                  position: 'bottom',
+                }}
+              />
+            )}
+            {deploymentsData && (
+              <ProgressIndicatorWithPercentage
+                title={t('cluster-overview.statistics.healthy-deployments')}
+                value={calculatePercents(
+                  healthyDeployments,
+                  deploymentsData?.length,
+                )}
+                dataBarColor={'var(--sapIndicationColor_6)'}
+                remainingBarColor={'var(--sapIndicationColor_6b)'}
+                tooltip={{
+                  content: t('cluster-overview.tooltips.healthy-deployments', {
+                    value: healthyDeployments,
+                    max: deploymentsData?.length,
+                  }),
+                  position: 'bottom',
+                }}
+              />
+            )}
+          </CardWithTooltip>
+        )}
       </div>
       <div
         className="cluster-overview__cards-wrapper"
