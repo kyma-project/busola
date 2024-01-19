@@ -7,6 +7,7 @@ import { useCustomResourceUrl } from 'resources/CustomResourceDefinitions/useCus
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { CRCreate } from 'resources/CustomResourceDefinitions/CRCreate';
 import { useUrl } from 'hooks/useUrl';
+import { useFeature } from 'hooks/useFeature';
 
 export function CustomResources({
   crd,
@@ -15,6 +16,8 @@ export function CustomResources({
   omitColumnsIds,
   hideCreateOption,
 }) {
+  const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
+
   const { group, names } = crd.spec;
   const name = names.plural;
   const customUrl = useCustomResourceUrl(crd);
@@ -87,10 +90,11 @@ export function CustomResources({
       allowSlashShortcut: true,
     },
     namespace,
-    enableColumnLayout: true,
+    enableColumnLayout: isColumnLeyoutEnabled,
     columnLayout: 'ThreeColumnsEndExpanded',
     customColumnLayout,
     layoutNumber: 'MidColumn',
+    parentCrdName: crd.metadata.name,
   };
   return <ResourcesList {...params} />;
 }

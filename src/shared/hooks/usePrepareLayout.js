@@ -7,7 +7,7 @@ const switchToPrevLayout = layout => {
     case 'MidColumn':
     case 'StartColumn':
     default: {
-      return '';
+      return 'OneColumn';
     }
   }
 };

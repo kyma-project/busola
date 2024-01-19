@@ -5,6 +5,7 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { ColumnWrapper } from './CustomResourcesByGroup.routes';
+import { useFeature } from 'hooks/useFeature';
 
 const CustomResourcesOfType = React.lazy(() =>
   import('../../components/CustomResources/CustomResourcesOfType'),
@@ -12,6 +13,7 @@ const CustomResourcesOfType = React.lazy(() =>
 
 function RoutedCustomResourcesOfType() {
   const { crdName } = useParams();
+  const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
 
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
 
@@ -20,7 +22,7 @@ function RoutedCustomResourcesOfType() {
 
   const initialLayoutState = layout
     ? {
-        layout: layout,
+        layout: isColumnLeyoutEnabled ? layout : 'OneColumn',
         midColumn: {
           resourceName: crdName,
           resourceType: 'CustomResourceDefinition',
@@ -38,8 +40,10 @@ function RoutedCustomResourcesOfType() {
 
   return (
     <Suspense fallback={<Spinner />}>
-      {layout && <ColumnWrapper />}
-      {!layout && <CustomResourcesOfType crdName={crdName} />}
+      {layout && isColumnLeyoutEnabled && <ColumnWrapper />}
+      {(!layout || !isColumnLeyoutEnabled) && (
+        <CustomResourcesOfType crdName={crdName} />
+      )}
     </Suspense>
   );
 }

@@ -24,7 +24,7 @@ const ColumnWrapper = () => {
 
   const initialLayoutState = layout
     ? {
-        layout: layout,
+        layout: isColumnLeyoutEnabled ? layout : 'OneColumn',
         midColumn: {
           resourceName: name,
           resourceType: 'Extensions',

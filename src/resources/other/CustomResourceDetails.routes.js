@@ -2,6 +2,7 @@ import React, { Suspense, useEffect } from 'react';
 import { Route, useParams, useSearchParams } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { useUrl } from 'hooks/useUrl';
+import { useFeature } from 'hooks/useFeature';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { Spinner } from 'shared/components/Spinner/Spinner';
@@ -14,6 +15,7 @@ const CustomResource = React.lazy(() =>
 function RoutedCRDDetails() {
   const { crdName, crName } = useParams();
   const { namespace } = useUrl();
+  const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
 
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
 
@@ -22,7 +24,7 @@ function RoutedCRDDetails() {
 
   const initialLayoutState = layout
     ? {
-        layout: layout,
+        layout: isColumnLeyoutEnabled ? layout : 'OneColumn',
         midColumn: {
           resourceName: crdName,
           resourceType: 'CustomResourceDefinition',
@@ -35,7 +37,6 @@ function RoutedCRDDetails() {
         },
       }
     : null;
-
   useEffect(() => {
     if (layout) {
       setLayoutColumn(initialLayoutState);
@@ -44,9 +45,9 @@ function RoutedCRDDetails() {
 
   return (
     <Suspense fallback={<Spinner />}>
-      {layout && <ColumnWrapper />}
+      {layout && isColumnLeyoutEnabled && <ColumnWrapper />}
 
-      {!layout && (
+      {(!layout || !isColumnLeyoutEnabled) && (
         <CustomResource
           params={{
             customResourceDefinitionName: crdName,

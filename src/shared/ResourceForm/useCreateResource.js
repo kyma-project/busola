@@ -13,6 +13,7 @@ import { ForceUpdateModalContent } from './ForceUpdateModalContent';
 import { useUrl } from 'hooks/useUrl';
 import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 import { columnLayoutState } from 'state/columnLayoutAtom';
+import { useFeature } from 'hooks/useFeature';
 
 export function useCreateResource({
   singularName,
@@ -34,6 +35,7 @@ export function useCreateResource({
   const { scopedUrl } = useUrl();
   const navigate = useNavigate();
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
+  const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
 
   const { nextQuery, nextLayout } = usePrepareLayout(layoutNumber);
 
@@ -51,35 +53,46 @@ export function useCreateResource({
       ),
     });
     if (!isEdit) {
-      setLayoutColumn(
-        nextLayout === 'TwoColumnsMidExpanded'
-          ? {
-              layout: nextLayout,
-              midColumn: {
-                resourceName: resource.metadata.name,
-                resourceType: resource.kind,
-                namespaceId: resource.metadata.namespace,
+      if (isColumnLeyoutEnabled) {
+        setLayoutColumn(
+          nextLayout === 'TwoColumnsMidExpanded'
+            ? {
+                layout: nextLayout,
+                midColumn: {
+                  resourceName: resource.metadata.name,
+                  resourceType: resource.kind,
+                  namespaceId: resource.metadata.namespace,
+                },
+                endColumn: null,
+              }
+            : {
+                ...layoutColumn,
+                layout: nextLayout,
+                endColumn: {
+                  resourceName: resource.metadata.name,
+                  resourceType: resource.kind,
+                  namespaceId: resource.metadata.namespace,
+                },
               },
-              endColumn: null,
-            }
-          : {
-              ...layoutColumn,
-              layout: nextLayout,
-              endColumn: {
-                resourceName: resource.metadata.name,
-                resourceType: resource.kind,
-                namespaceId: resource.metadata.namespace,
-              },
-            },
-      );
-
-      navigate(
-        `${scopedUrl(
-          `${urlPath || pluralKind.toLowerCase()}/${encodeURIComponent(
-            resource.metadata.name,
+        );
+        window.history.pushState(
+          window.history.state,
+          '',
+          `${scopedUrl(
+            `${urlPath || pluralKind.toLowerCase()}/${encodeURIComponent(
+              resource.metadata.name,
+            )}`,
+          )}${nextQuery}`,
+        );
+      } else {
+        navigate(
+          `${scopedUrl(
+            `${urlPath || pluralKind.toLowerCase()}/${encodeURIComponent(
+              resource.metadata.name,
+            )}`,
           )}`,
-        )}${nextQuery}`,
-      );
+        );
+      }
     }
   };
 

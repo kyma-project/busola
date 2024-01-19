@@ -9,7 +9,7 @@ import {
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -17,6 +17,7 @@ import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
 import { prettifyNameSingular } from 'shared/utils/helpers';
 import { dontConfirmDeleteState } from 'state/preferences/dontConfirmDeleteAtom';
 import { useUrl } from 'hooks/useUrl';
+import { useFeature } from 'hooks/useFeature';
 
 import { clusterState } from 'state/clusterAtom';
 import { columnLayoutState } from 'state/columnLayoutAtom';
@@ -28,8 +29,10 @@ export function useDeleteResource({
   navigateToListAfterDelete = false,
   layoutNumber,
   redirectBack = true,
+  parentCrdName,
 }) {
   const { t } = useTranslation();
+  const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const deleteResourceMutation = useDelete();
@@ -42,22 +45,43 @@ export function useDeleteResource({
   const cluster = useRecoilValue(clusterState);
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
 
+  const [searchParams] = useSearchParams();
+  const layout = searchParams.get('layout');
+
   const prettifiedResourceName = prettifyNameSingular(
     resourceTitle,
     resourceType,
   );
+
   const {
     prevLayout,
     prevQuery,
     currentLayout,
     currentQuery,
   } = usePrepareLayout(layoutNumber);
-  const goToLayout = redirectBack ? prevLayout : currentLayout;
-  const goToLayoutQuery = redirectBack ? prevQuery : currentQuery;
 
   const performDelete = async (resource, resourceUrl, deleteFn) => {
     const withoutQueryString = path => path?.split('?')?.[0];
     const url = withoutQueryString(resourceUrl);
+
+    const forceRedirect =
+      ((layoutColumn.midColumn?.resourceType === resource?.kind ||
+        layoutColumn.midColumn?.resourceType === parentCrdName) &&
+        layoutColumn.midColumn?.resourceName === resource?.metadata?.name &&
+        layoutColumn.midColumn?.namespaceId ===
+          resource?.metadata?.namespace) ||
+      ((layoutColumn.endColumn?.resourceType === resource?.kind ||
+        layoutColumn.endColumn?.resourceType === parentCrdName) &&
+        layoutColumn.endColumn?.resourceName === resource?.metadata?.name &&
+        layoutColumn.endColumn?.namespaceId === resource?.metadata?.namespace);
+    const goToLayout =
+      redirectBack || (forceRedirect && layoutNumber !== 'MidColumn')
+        ? prevLayout
+        : currentLayout;
+    const goToLayoutQuery =
+      redirectBack || (forceRedirect && layoutNumber !== 'MidColumn')
+        ? prevQuery
+        : currentQuery;
 
     try {
       if (deleteFn) {
@@ -70,8 +94,11 @@ export function useDeleteResource({
           }),
         });
 
-        if (navigateToListAfterDelete) {
-          if (window.location.search.includes('layout')) {
+        if (navigateToListAfterDelete || forceRedirect) {
+          if (
+            window.location.search.includes('layout') &&
+            isColumnLeyoutEnabled
+          ) {
             if (window.location.pathname.includes('busolaextensions')) {
               navigate(`/cluster/${cluster.contextName}/busolaextensions`);
             } else {
@@ -83,10 +110,6 @@ export function useDeleteResource({
                   window.location.pathname.lastIndexOf('/'),
                 )}${goToLayoutQuery}`,
               );
-              setLayoutColumn({
-                ...layoutColumn,
-                layout: goToLayout,
-              });
             }
 
             setLayoutColumn({

@@ -88,7 +88,7 @@ const DetailsWrapper = ({ children, list, ...props }) => {
 
   const initialLayoutState = layout
     ? {
-        layout: layout,
+        layout: isColumnLeyoutEnabled ? layout : 'OneColumn',
         midColumn: {
           resourceName: props.resourceName,
           resourceType: props.resourceType,
@@ -99,7 +99,7 @@ const DetailsWrapper = ({ children, list, ...props }) => {
     : null;
 
   useEffect(() => {
-    if (layout) {
+    if (layout && props.resourceName && props.resourceType) {
       setLayoutColumn(initialLayoutState);
     }
   }, [layout, props.resourceName, props.resourceType, props.namespaceId]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -125,7 +125,7 @@ const DetailsWrapper = ({ children, list, ...props }) => {
     ...elementDetailsProps,
   });
 
-  if (layout) {
+  if (layout && isColumnLeyoutEnabled) {
     return (
       <FlexibleColumnLayout
         style={{ height: '100%' }}
@@ -135,7 +135,7 @@ const DetailsWrapper = ({ children, list, ...props }) => {
       />
     );
   }
-  if (!layout) return detailsComponent;
+  if (!layout || !isColumnLeyoutEnabled) return detailsComponent;
 };
 
 export const createResourceRoutes = ({

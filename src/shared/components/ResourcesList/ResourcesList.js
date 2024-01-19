@@ -211,6 +211,7 @@ export function ResourceListRenderer({
   },
   searchSettings,
   isCompact,
+  parentCrdName,
 }) {
   useVersionWarning({
     resourceUrl,
@@ -227,6 +228,7 @@ export function ResourceListRenderer({
     resourceType,
     layoutNumber,
     redirectBack: false,
+    parentCrdName,
   });
 
   const [activeResource, setActiveResource] = useState(null);
