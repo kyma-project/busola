@@ -13,7 +13,7 @@
   text-align: end;
 }
 
-@media (max-width: 650px) {
+@container (max-width: 650px) {
   .pod-template-row {
     display: grid;
     grid-template-columns: 1fr;
