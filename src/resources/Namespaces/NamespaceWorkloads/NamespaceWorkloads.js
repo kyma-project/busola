@@ -13,6 +13,9 @@ import {
 } from './NamespaceWorkloadsHelpers';
 import { Icon } from '@ui5/webcomponents-react';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { CardWithTooltip } from 'shared/components/CardWithTooltip/CardWithTooltip';
+import { ProgressIndicatorWithPercentage } from 'shared/components/ProgressIndicatorWithPercentage/ProgressIndicatorWithPercentage';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 NamespaceWorkloads.propTypes = { namespace: PropTypes.string.isRequired };
 
@@ -120,6 +123,22 @@ const DeploymentsCircle = ({ namespace }) => {
 
 export function NamespaceWorkloads({ namespace }) {
   const { t } = useTranslation();
+
+  const { data: podsData } = useGetList()(`/api/v1/pods`, {
+    pollingInterval: 3200,
+  });
+
+  const { data: deploymentsData } = useGetList()('/apis/apps/v1/deployments', {
+    pollingInterval: 3200,
+  });
+
+  const healthyPods = getHealthyStatusesCount(podsData);
+  const healthyDeployments = getHealthyReplicasCount(deploymentsData);
+
+  const calculatePercents = (value, max) => {
+    return parseFloat(((value / max) * 100).toFixed(2));
+  };
+
   return (
     <UI5Panel
       disableMargin
@@ -132,9 +151,48 @@ export function NamespaceWorkloads({ namespace }) {
       }
       title={t('namespaces.overview.workloads.title')}
     >
-      <div className="namespace-workloads__body">
-        <PodsCircle namespace={namespace} />
-        <DeploymentsCircle namespace={namespace} />
+      <div
+        className="namespaceWorkloads_content"
+        style={{
+          ...spacing.sapUiTinyMarginTop,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '5px',
+        }}
+      >
+        {podsData && (
+          <ProgressIndicatorWithPercentage
+            title={t('cluster-overview.statistics.healthy-pods')}
+            value={calculatePercents(healthyPods, podsData?.length)}
+            dataBarColor={'var(--sapIndicationColor_8)'}
+            remainingBarColor={'var(--sapIndicationColor_8b)'}
+            tooltip={{
+              content: t('cluster-overview.tooltips.healthy-pods', {
+                value: healthyPods,
+                max: podsData?.length,
+              }),
+              position: 'bottom',
+            }}
+          />
+        )}
+        {deploymentsData && (
+          <ProgressIndicatorWithPercentage
+            title={t('cluster-overview.statistics.healthy-deployments')}
+            value={calculatePercents(
+              healthyDeployments,
+              deploymentsData?.length,
+            )}
+            dataBarColor={'var(--sapIndicationColor_6)'}
+            remainingBarColor={'var(--sapIndicationColor_6b)'}
+            tooltip={{
+              content: t('cluster-overview.tooltips.healthy-deployments', {
+                value: healthyDeployments,
+                max: deploymentsData?.length,
+              }),
+              position: 'bottom',
+            }}
+          />
+        )}
       </div>
     </UI5Panel>
   );
