@@ -55,7 +55,7 @@ export const EmptyListComponent = ({
           )}
           {url && (
             <Link
-              className="emptyListComponent__link"
+              className="emptyListComponent__link bsl-link"
               text="Learn More"
               url={url}
             />
