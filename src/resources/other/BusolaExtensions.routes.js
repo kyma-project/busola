@@ -13,7 +13,7 @@ const BusolaExtensionDetails = React.lazy(() =>
   import('components/BusolaExtensions/BusolaExtensionDetails'),
 );
 
-const ColumnWrapper = () => {
+const ColumnWrapper = details => {
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   const { namespace, name } = useParams();
 
@@ -39,6 +39,10 @@ const ColumnWrapper = () => {
       setLayoutColumn(initialLayoutState);
     }
   }, [layout, namespace, name]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (!isColumnLeyoutEnabled && details) {
+    return <BusolaExtensionDetails name={name} namespace={namespace} />;
+  }
 
   return (
     <FlexibleColumnLayout
@@ -67,7 +71,7 @@ export default (
     <Route path="busolaextensions" element={<ColumnWrapper />} />
     <Route
       path="busolaextensions/:namespace/:name"
-      element={<ColumnWrapper />}
+      element={<ColumnWrapper details={true} />}
     />
   </>
 );

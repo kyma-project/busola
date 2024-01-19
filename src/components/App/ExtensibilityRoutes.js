@@ -40,6 +40,14 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType }) => {
     }
   }, [layout, namespaceId, resourceName, resourceType]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  if (!isColumnLeyoutEnabled && defaultColumn === 'details') {
+    return (
+      <Details
+        customResourceName={resourceName}
+        customNamespaceId={namespaceId}
+      />
+    );
+  }
   return (
     <FlexibleColumnLayout
       style={{ height: '100%' }}
