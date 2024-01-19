@@ -137,7 +137,7 @@ context('Test Command Palette navigation', () => {
 
     cy.contains('Did you mean: pod').should('be.visible');
 
-    cy.contains('Pods').should('not.exist');
+    cy.contains('Workloads > Pods').should('not.exist');
 
     cy.contains('p', 'Did you mean:')
       .find('ui5-button')
