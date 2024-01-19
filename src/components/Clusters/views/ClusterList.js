@@ -3,7 +3,6 @@ import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@ui5/webcomponents-react';
-import '@ui5/webcomponents-fiori/dist/illustrations/NoEntries';
 import { Link } from 'react-router-dom';
 
 import { useClustersInfo } from 'state/utils/getClustersInfo';
