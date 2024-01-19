@@ -228,6 +228,7 @@ describe('GenericList', () => {
         />
       </ThemeProvider>,
     );
+
     await waitFor(async () => {
       mockEntries.forEach(entry =>
         Object.keys(entry)
