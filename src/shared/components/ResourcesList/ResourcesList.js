@@ -505,6 +505,8 @@ export function ResourceListRenderer({
     ];
   };
 
+  console.log('is detail view:', hasDetailsView);
+
   return (
     <>
       <ModalWithForm
@@ -560,6 +562,7 @@ export function ResourceListRenderer({
           searchSettings={{
             ...searchSettings,
             textSearchProperties: textSearchProperties(),
+            allowSlashShortcut: hasDetailsView,
           }}
         />
       )}
