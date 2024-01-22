@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Button, ComboBox, ComboBoxItem } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
@@ -10,6 +10,7 @@ import { MESSAGES } from 'shared/components/GenericList/constants';
 import { getEntryMatches } from 'shared/components/GenericList/helpers';
 import { Tooltip } from '../Tooltip/Tooltip';
 import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
+import { ResourceDetailContext } from '../ResourceDetails/ResourceDetails';
 
 SearchInput.propTypes = {
   searchQuery: PropTypes.string,
@@ -43,6 +44,7 @@ export function SearchInput({
   const { t } = useTranslation();
   const [isSearchHidden, setSearchHidden] = React.useState(true);
   const { isOpen: isSideDrawerOpened } = useYamlEditor();
+  const isDetailsView = useContext(ResourceDetailContext);
 
   const onKeyPress = e => {
     const { key } = e;
@@ -56,6 +58,8 @@ export function SearchInput({
       '[accessible-role="Dialog"][open="true"]',
     );
     if (isModalOpen) return;
+
+    if (isDetailsView) return;
 
     if (key === '/' && !disabled && allowSlashShortcut && !isSideDrawerOpened) {
       openSearchList();
