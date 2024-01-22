@@ -918,6 +918,7 @@ namespaces:
     memory-quotas: Memory Quotas
   description: <0>Namespace</0> helps to maintain and divide resources in a cluster.
   name_singular: Namespace
+  namespace-details: Namespace Details
   namespaces-overview: Namespaces Overview
   no-namespaces-found: No Namespaces fetched
   overview:

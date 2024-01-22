@@ -156,6 +156,7 @@ function Resource({
   resourceType,
   resourceUrl,
   silentRefetch,
+  title,
   updateResourceMutation,
   windowTitle,
   resourceTitle,
@@ -361,7 +362,7 @@ function Resource({
               document.body,
             )}
             <ResourceDetailsCard
-              title={t('common.headers.resource-details')}
+              title={title ?? t('common.headers.resource-details')}
               content={
                 <>
                   <DynamicPageComponent.Column
