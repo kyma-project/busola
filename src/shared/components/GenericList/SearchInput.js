@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, ComboBox, ComboBoxItem } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
@@ -51,6 +51,11 @@ export function SearchInput({
       '#command-palette-background',
     );
     if (isCommandPalleteOpen) return;
+
+    const isModalOpen = document.querySelector(
+      '[accessible-role="Dialog"][open="true"]',
+    );
+    if (isModalOpen) return;
 
     if (key === '/' && !disabled && allowSlashShortcut && !isSideDrawerOpened) {
       openSearchList();
