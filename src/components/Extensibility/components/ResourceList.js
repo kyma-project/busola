@@ -1,5 +1,5 @@
 import pluralize from 'pluralize';
-import React, { Suspense } from 'react';
+import React, { Suspense, useState } from 'react';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { prettifyKind } from 'shared/utils/helpers';
 import { resources } from 'resources';
@@ -123,6 +123,7 @@ export function ResourceList({
         searchSettings={{
           textSearchProperties: defaultSortOptions =>
             textSearchProperties(defaultSortOptions),
+          allowSlashShortcut: false,
         }}
         {...structure}
         {...props}
