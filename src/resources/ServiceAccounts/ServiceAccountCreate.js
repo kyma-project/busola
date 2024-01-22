@@ -84,7 +84,6 @@ export const ServiceAccountCreate = ({
       return;
     }
 
-    navigate(namespaceUrl(`serviceaccounts/${serviceAccount.metadata.name}`));
     const secretCreationResult = await createSecretResource();
     defaultAfterCreateFn();
     if (secretCreationResult === false) {
