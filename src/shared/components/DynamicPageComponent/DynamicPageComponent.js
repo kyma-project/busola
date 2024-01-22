@@ -17,6 +17,7 @@ import { spacing } from '@ui5/webcomponents-react-base';
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
+import { useFeature } from 'hooks/useFeature';
 
 const Column = ({ title, children, columnSpan, image, style = {} }) => {
   const styleComputed = { gridColumn: columnSpan, ...style };
@@ -44,7 +45,7 @@ export const DynamicPageComponent = ({
 }) => {
   const [showTitleDescription, setShowTitleDescription] = useState(false);
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
-
+  const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   return (
     <DynamicPage
       className="page-header"
@@ -55,87 +56,90 @@ export const DynamicPageComponent = ({
       headerTitle={
         <DynamicPageTitle
           navigationActions={
-            layoutColumn.layout !== 'OneColumn' ? (
-              layoutNumber !== 'StartColumn' ? (
-                <>
-                  {layoutColumn.layout === 'TwoColumnsMidExpanded' ||
-                  layoutColumn.layout === 'ThreeColumnsMidExpanded' ||
-                  layoutColumn.layout === 'ThreeColumnsEndExpanded' ? (
+            window.location.search.includes('layout') &&
+            isColumnLeyoutEnabled ? (
+              layoutColumn.layout !== 'OneColumn' ? (
+                layoutNumber !== 'StartColumn' ? (
+                  <>
+                    {layoutColumn.layout === 'TwoColumnsMidExpanded' ||
+                    layoutColumn.layout === 'ThreeColumnsMidExpanded' ||
+                    layoutColumn.layout === 'ThreeColumnsEndExpanded' ? (
+                      <Button
+                        aria-label="full-screen"
+                        design="Transparent"
+                        icon="full-screen"
+                        onClick={() => {
+                          const newLayout =
+                            layoutNumber === 'MidColumn'
+                              ? 'MidColumnFullScreen'
+                              : 'EndColumnFullScreen';
+                          setLayoutColumn({
+                            ...layoutColumn,
+                            layout: newLayout,
+                          });
+                          window.history.pushState(
+                            window.history.state,
+                            '',
+                            `${window.location.pathname}?layout=${newLayout}`,
+                          );
+                        }}
+                      />
+                    ) : null}
+                    {layoutColumn.layout === 'MidColumnFullScreen' ||
+                    layoutColumn.layout === 'EndColumnFullScreen' ? (
+                      <Button
+                        aria-label="close-full-screen"
+                        design="Transparent"
+                        icon="exit-full-screen"
+                        onClick={() => {
+                          const newLayout =
+                            layoutNumber === 'MidColumn'
+                              ? layoutColumn.endColumn === null
+                                ? 'TwoColumnsMidExpanded'
+                                : 'ThreeColumnsMidExpanded'
+                              : 'ThreeColumnsEndExpanded';
+                          setLayoutColumn({
+                            ...layoutColumn,
+                            layout: newLayout,
+                          });
+                          window.history.pushState(
+                            window.history.state,
+                            '',
+                            `${window.location.pathname}?layout=${newLayout}`,
+                          );
+                        }}
+                      />
+                    ) : null}
                     <Button
-                      aria-label="full-screen"
+                      aria-label="close-column"
                       design="Transparent"
-                      icon="full-screen"
+                      icon="decline"
                       onClick={() => {
-                        const newLayout =
-                          layoutNumber === 'MidColumn'
-                            ? 'MidColumnFullScreen'
-                            : 'EndColumnFullScreen';
-                        setLayoutColumn({
-                          ...layoutColumn,
-                          layout: newLayout,
-                        });
                         window.history.pushState(
                           window.history.state,
                           '',
-                          `${window.location.pathname}?layout=${newLayout}`,
+                          layoutCloseUrl
+                            ? layoutCloseUrl
+                            : `${window.location.pathname.slice(
+                                0,
+                                window.location.pathname.lastIndexOf('/'),
+                              )}${
+                                layoutNumber === 'MidColumn'
+                                  ? ''
+                                  : '?layout=TwoColumnsMidExpanded'
+                              }`,
                         );
-                      }}
-                    />
-                  ) : null}
-                  {layoutColumn.layout === 'MidColumnFullScreen' ||
-                  layoutColumn.layout === 'EndColumnFullScreen' ? (
-                    <Button
-                      aria-label="close-full-screen"
-                      design="Transparent"
-                      icon="exit-full-screen"
-                      onClick={() => {
-                        const newLayout =
-                          layoutNumber === 'MidColumn'
-                            ? layoutColumn.endColumn === null
-                              ? 'TwoColumnsMidExpanded'
-                              : 'ThreeColumnsMidExpanded'
-                            : 'ThreeColumnsEndExpanded';
                         setLayoutColumn({
                           ...layoutColumn,
-                          layout: newLayout,
+                          layout:
+                            layoutNumber === 'MidColumn'
+                              ? 'OneColumn'
+                              : 'TwoColumnsMidExpanded',
                         });
-                        window.history.pushState(
-                          window.history.state,
-                          '',
-                          `${window.location.pathname}?layout=${newLayout}`,
-                        );
                       }}
                     />
-                  ) : null}
-                  <Button
-                    aria-label="close-column"
-                    design="Transparent"
-                    icon="decline"
-                    onClick={() => {
-                      window.history.pushState(
-                        window.history.state,
-                        '',
-                        layoutCloseUrl
-                          ? layoutCloseUrl
-                          : `${window.location.pathname.slice(
-                              0,
-                              window.location.pathname.lastIndexOf('/'),
-                            )}${
-                              layoutNumber === 'MidColumn'
-                                ? ''
-                                : '?layout=TwoColumnsMidExpanded'
-                            }`,
-                      );
-                      setLayoutColumn({
-                        ...layoutColumn,
-                        layout:
-                          layoutNumber === 'MidColumn'
-                            ? 'OneColumn'
-                            : 'TwoColumnsMidExpanded',
-                      });
-                    }}
-                  />
-                </>
+                  </>
+                ) : null
               ) : null
             ) : null
           }
