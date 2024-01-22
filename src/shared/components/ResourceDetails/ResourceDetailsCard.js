@@ -1,8 +1,13 @@
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useTranslation } from 'react-i18next';
 import { Card, CardHeader, Title } from '@ui5/webcomponents-react';
+import './ResourceDetails.scss';
 
-export default function ResourceDetailsCard({ content }) {
+export default function ResourceDetailsCard({
+  title,
+  content,
+  wrapperClassname,
+}) {
   const { t } = useTranslation();
 
   return (
@@ -14,15 +19,23 @@ export default function ResourceDetailsCard({ content }) {
           ...spacing.sapUiMediumMarginTopBottom,
         }}
       >
-        {t('common.headers.resource-details')}
+        {title}
       </Title>
-      <div style={spacing.sapUiSmallMarginBeginEnd}>
+      <div
+        style={spacing.sapUiSmallMarginBeginEnd}
+        className={wrapperClassname}
+      >
         <Card
           header={
             <CardHeader titleText={t('cluster-overview.headers.metadata')} />
           }
         >
-          <div style={spacing.sapUiSmallMargin}>{content}</div>
+          <div
+            style={spacing.sapUiSmallMargin}
+            className="cluster-overview__details-grid"
+          >
+            {content}
+          </div>
         </Card>
       </div>
     </>

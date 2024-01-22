@@ -1,11 +1,10 @@
-import { spacing } from '@ui5/webcomponents-react-base';
 import { useTranslation } from 'react-i18next';
-import { Card, CardHeader, Title } from '@ui5/webcomponents-react';
 import { ClusterStorageType } from '../ClusterStorageType';
 import { useGetGardenerProvider } from './useGetGardenerProvider';
 import { useGetVersions } from './useGetVersions';
 import { useFeature } from 'hooks/useFeature';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
+import ResourceDetailsCard from 'shared/components/ResourceDetails/ResourceDetailsCard';
 
 const GardenerProvider = () => {
   const { t } = useTranslation();
@@ -31,58 +30,38 @@ export default function ClusterDetails({ currentCluster }) {
   const config = currentCluster?.config;
 
   return (
-    <>
-      <Title
-        level="H4"
-        style={{
-          ...spacing.sapUiMediumMarginBegin,
-          ...spacing.sapUiMediumMarginTop,
-          ...spacing.sapUiSmallMarginBottom,
-        }}
-      >
-        {t('cluster-overview.headers.cluster-details')}
-      </Title>
-      <div
-        className="cluster-overview__details-wrapper"
-        style={spacing.sapUiSmallMarginBeginEnd}
-      >
-        <Card
-          header={
-            <CardHeader titleText={t('cluster-overview.headers.metadata')} />
-          }
-        >
-          <div
-            className="cluster-overview__details-grid"
-            style={spacing.sapUiSmallMargin}
+    <ResourceDetailsCard
+      title={t('cluster-overview.headers.cluster-details')}
+      wrapperClassname="cluster-overview__details-wrapper"
+      content={
+        <>
+          {!loading && k8sVersion && (
+            <DynamicPageComponent.Column
+              title={t('clusters.overview.kubernetes-version') + ':'}
+            >
+              {k8sVersion}
+            </DynamicPageComponent.Column>
+          )}
+          {!loading && kymaVersion && (
+            <DynamicPageComponent.Column
+              title={t('clusters.overview.kyma-version') + ':'}
+            >
+              {kymaVersion}
+            </DynamicPageComponent.Column>
+          )}
+          <DynamicPageComponent.Column
+            title={t('clusters.storage.title') + ':'}
           >
-            {!loading && k8sVersion && (
-              <DynamicPageComponent.Column
-                title={t('clusters.overview.kubernetes-version') + ':'}
-              >
-                {k8sVersion}
-              </DynamicPageComponent.Column>
-            )}
-            {!loading && kymaVersion && (
-              <DynamicPageComponent.Column
-                title={t('clusters.overview.kyma-version') + ':'}
-              >
-                {kymaVersion}
-              </DynamicPageComponent.Column>
-            )}
-            <DynamicPageComponent.Column
-              title={t('clusters.storage.title') + ':'}
-            >
-              <ClusterStorageType clusterConfig={config} />
-            </DynamicPageComponent.Column>
-            <DynamicPageComponent.Column
-              title={t('clusters.common.api-server-address') + ':'}
-            >
-              {currentCluster?.currentContext?.cluster?.cluster?.server}
-            </DynamicPageComponent.Column>
-            <GardenerProvider />
-          </div>
-        </Card>
-      </div>
-    </>
+            <ClusterStorageType clusterConfig={config} />
+          </DynamicPageComponent.Column>
+          <DynamicPageComponent.Column
+            title={t('clusters.common.api-server-address') + ':'}
+          >
+            {currentCluster?.currentContext?.cluster?.cluster?.server}
+          </DynamicPageComponent.Column>
+          <GardenerProvider />
+        </>
+      }
+    />
   );
 }

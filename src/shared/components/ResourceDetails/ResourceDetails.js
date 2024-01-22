@@ -361,6 +361,7 @@ function Resource({
               document.body,
             )}
             <ResourceDetailsCard
+              title={t('common.headers.resource-details')}
               content={
                 <>
                   <DynamicPageComponent.Column
