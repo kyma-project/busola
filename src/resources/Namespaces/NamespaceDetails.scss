@@ -6,6 +6,15 @@
 .resources-usage__body {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.namespace-details,
+.all-namespaces-details {
+  &.panel-grid {
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+  }
 }
 
 @media (max-width: 500px) {

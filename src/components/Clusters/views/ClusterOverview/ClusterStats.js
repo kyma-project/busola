@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
 import { Card, CardHeader, Title } from '@ui5/webcomponents-react';
 import { CountingCard } from 'shared/components/CountingCard/CountingCard';
-import { CardWithTooltip } from 'shared/components/CardWithTooltip/CardWithTooltip';
 import { ProgressIndicatorWithPercentage } from 'shared/components/ProgressIndicatorWithPercentage/ProgressIndicatorWithPercentage';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import {
@@ -96,48 +95,52 @@ export default function ClusterStats({ data }) {
           />
         </Card>
         {(podsData || deploymentsData) && (
-          <CardWithTooltip
-            title={t('cluster-overview.statistics.namespaces-health')}
-            tooltip={{
-              content: t('cluster-overview.tooltips.namespaces-health-info'),
-              position: 'bottom',
-            }}
-            icon={'sys-help'}
+          <Card
+            header={
+              <CardHeader
+                titleText={t('cluster-overview.statistics.namespaces-health')}
+              />
+            }
           >
-            {podsData && (
-              <ProgressIndicatorWithPercentage
-                title={t('cluster-overview.statistics.healthy-pods')}
-                value={calculatePercents(healthyPods, podsData?.length)}
-                dataBarColor={'var(--sapIndicationColor_8)'}
-                remainingBarColor={'var(--sapIndicationColor_8b)'}
-                tooltip={{
-                  content: t('cluster-overview.tooltips.healthy-pods', {
-                    value: healthyPods,
-                    max: podsData?.length,
-                  }),
-                  position: 'bottom',
-                }}
-              />
-            )}
-            {deploymentsData && (
-              <ProgressIndicatorWithPercentage
-                title={t('cluster-overview.statistics.healthy-deployments')}
-                value={calculatePercents(
-                  healthyDeployments,
-                  deploymentsData?.length,
-                )}
-                dataBarColor={'var(--sapIndicationColor_6)'}
-                remainingBarColor={'var(--sapIndicationColor_6b)'}
-                tooltip={{
-                  content: t('cluster-overview.tooltips.healthy-deployments', {
-                    value: healthyDeployments,
-                    max: deploymentsData?.length,
-                  }),
-                  position: 'bottom',
-                }}
-              />
-            )}
-          </CardWithTooltip>
+            <div style={spacing.sapUiSmallMargin}>
+              {podsData && (
+                <ProgressIndicatorWithPercentage
+                  title={t('cluster-overview.statistics.healthy-pods')}
+                  value={calculatePercents(healthyPods, podsData?.length)}
+                  dataBarColor={'var(--sapIndicationColor_8)'}
+                  remainingBarColor={'var(--sapIndicationColor_8b)'}
+                  tooltip={{
+                    content: t('cluster-overview.tooltips.healthy-pods', {
+                      value: healthyPods,
+                      max: podsData?.length,
+                    }),
+                    position: 'bottom',
+                  }}
+                />
+              )}
+              {deploymentsData && (
+                <ProgressIndicatorWithPercentage
+                  title={t('cluster-overview.statistics.healthy-deployments')}
+                  value={calculatePercents(
+                    healthyDeployments,
+                    deploymentsData?.length,
+                  )}
+                  dataBarColor={'var(--sapIndicationColor_6)'}
+                  remainingBarColor={'var(--sapIndicationColor_6b)'}
+                  tooltip={{
+                    content: t(
+                      'cluster-overview.tooltips.healthy-deployments',
+                      {
+                        value: healthyDeployments,
+                        max: deploymentsData?.length,
+                      },
+                    ),
+                    position: 'bottom',
+                  }}
+                />
+              )}
+            </div>
+          </Card>
         )}
       </div>
       <div
