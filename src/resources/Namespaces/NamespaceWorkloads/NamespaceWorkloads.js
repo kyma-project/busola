@@ -48,6 +48,7 @@ export function NamespaceWorkloads({ namespace }) {
               titleText={t('cluster-overview.statistics.namespaces-health')}
             />
           }
+          className="namespace-workloads__body"
         >
           <div style={spacing.sapUiSmallMargin}>
             {podsData && (

@@ -1,32 +1,18 @@
-.namespace-workloads__body {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-
-.resources-usage__body {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
 .namespace-details,
 .all-namespaces-details {
   &.panel-grid {
-    grid-template-columns: 2fr 1fr;
+    display: grid;
+    grid-template-columns: 1fr;
     gap: 20px;
   }
 }
 
-@media (max-width: 500px) {
-  .namespace-workloads__body {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .resources-usage__body {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+@media (min-width: 950px) {
+  .namespace-details,
+  .all-namespaces-details {
+    &.panel-grid {
+      display: flex;
+      flex-direction: row;
+    }
   }
 }
