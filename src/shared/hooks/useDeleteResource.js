@@ -113,7 +113,13 @@ export function useDeleteResource({
               ...layoutColumn,
               layout: goToLayout,
             });
-          } else navigate(resourceListUrl(resource, { resourceType }));
+          } else {
+            navigate(resourceListUrl(resource, { resourceType }));
+            setLayoutColumn({
+              ...layoutColumn,
+              layout: 'OneColumn',
+            });
+          }
         }
       }
     } catch (e) {

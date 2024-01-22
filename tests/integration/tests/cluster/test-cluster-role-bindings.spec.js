@@ -48,6 +48,7 @@ context('Test Cluster Role Bindings', () => {
   });
 
   it('Checking details using column layout', () => {
+    cy.wait(3000); // wait for the resource to be refeched and displayed in the list
     cy.contains('ui5-title', CRB_NAME).should('be.visible');
 
     cy.inspectList('Cluster Role Bindings', CRB_NAME);
