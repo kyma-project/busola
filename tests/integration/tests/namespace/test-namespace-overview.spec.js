@@ -21,9 +21,11 @@ context(
 
       cy.contains('b', QUOTA_NAME).should('be.visible');
 
-      cy.contains('Healthy Resources').should('be.visible');
+      cy.contains('Namespaces Health').should('be.visible');
 
-      cy.contains('Resource Consumption').should('be.visible');
+      cy.contains('Memory Requests').should('be.visible');
+
+      cy.contains('Memory Limits').should('be.visible');
 
       cy.contains('Events').should('be.visible');
     });
