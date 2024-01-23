@@ -19,13 +19,16 @@ export const ProgressIndicatorWithPercentage = ({
   tooltip,
 }) => {
   const progressRef = useRef(null);
-  const dataBar = progressRef.current?.shadowRoot?.childNodes[1].childNodes[0];
-  const remainingBar =
-    progressRef.current?.shadowRoot?.childNodes[1].childNodes[1];
+  const dataBar = progressRef.current?.shadowRoot?.querySelector(
+    '.ui5-progress-indicator-bar',
+  );
+  const remainingBar = progressRef.current?.shadowRoot?.querySelector(
+    '.ui5-progress-indicator-remaining-bar',
+  );
 
   if (dataBar && remainingBar) {
-    dataBar.style.backgroundColor = dataBarColor;
-    remainingBar.style.backgroundColor = remainingBarColor;
+    dataBar.style['background-color'] = dataBarColor;
+    remainingBar.style['background-color'] = remainingBarColor;
   }
 
   return (
