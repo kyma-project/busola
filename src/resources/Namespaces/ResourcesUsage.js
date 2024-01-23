@@ -4,8 +4,7 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useTranslation } from 'react-i18next';
 
 import { getSIPrefix } from 'shared/helpers/siPrefixes';
-import { Icon } from '@ui5/webcomponents-react';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { Card, CardHeader } from '@ui5/webcomponents-react';
 
 const MEMORY_SUFFIX_POWER = {
   // must be sorted from the smallest to the largest; it is case sensitive; more info: https://medium.com/swlh/understanding-kubernetes-resource-cpu-and-memory-units-30284b3cc866
@@ -77,10 +76,9 @@ const MemoryRequestsCircle = ({ resourceQuotas, isLoading }) => {
 
   return (
     <UI5RadialChart
-      color="var(--sapIndicationColor_7)"
+      color="var(--sapChart_Bad)"
       value={totalUsage}
       max={totalRequests}
-      title={t('namespaces.overview.resources.requests')}
       tooltip={{
         content: t('namespaces.tooltips.usage-of-memory-requests', {
           valueText: valueText,
@@ -115,10 +113,9 @@ const MemoryLimitsCircle = ({ resourceQuotas, isLoading }) => {
 
   return (
     <UI5RadialChart
-      color="var(--sapIndicationColor_8)"
+      color="var(--sapChart_Good)"
       value={totalUsage}
       max={totalLimits}
-      title={t('namespaces.overview.resources.limits')}
       tooltip={{
         content: t('namespaces.tooltips.usage-of-memory-limits', {
           valueText: valueText,
@@ -142,27 +139,27 @@ export const ResourcesUsage = ({ namespace }) => {
   );
 
   return (
-    <UI5Panel
-      disableMargin
-      icon={
-        <Icon
-          className="bsl-icon-m"
-          name="it-host"
-          aria-label="Resource icon"
-        />
-      }
-      title={t('namespaces.overview.resources.title')}
-    >
-      <div className="resources-usage__body">
+    <>
+      <Card
+        header={
+          <CardHeader titleText={t('namespaces.overview.resources.requests')} />
+        }
+      >
         <MemoryRequestsCircle
           resourceQuotas={resourceQuotas}
           isLoading={loading}
         />
+      </Card>
+      <Card
+        header={
+          <CardHeader titleText={t('namespaces.overview.resources.limits')} />
+        }
+      >
         <MemoryLimitsCircle
           resourceQuotas={resourceQuotas}
           isLoading={loading}
         />
-      </div>
-    </UI5Panel>
+      </Card>
+    </>
   );
 };
