@@ -34,7 +34,9 @@ export const ProgressIndicatorWithPercentage = ({
   return (
     <TooltipWrapper tooltipProps={tooltip}>
       <div className="progress-indicator-percentage">
-        <p className="progress-indicator-percentage__percents">{value}%</p>
+        <p className="progress-indicator-percentage__percents">
+          {!isNaN(value) ? value : 0}%
+        </p>
         <ProgressIndicator
           displayValue={title}
           value={value}
