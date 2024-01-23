@@ -63,48 +63,48 @@ context('Test Service Accounts', () => {
       .should('be.visible');
   });
 
-  // it('Edit', () => {
-  //   cy.getMidColumn()
-  //     .contains('ui5-button', 'Edit')
-  //     .should('be.visible')
-  //     .click();
+  it('Edit', () => {
+    cy.getMidColumn()
+      .contains('ui5-button', 'Edit')
+      .should('be.visible')
+      .click();
 
-  //   cy.get('ui5-dialog')
-  //     .contains('Labels')
-  //     .click();
+    cy.get('ui5-dialog')
+      .contains('Labels')
+      .click();
 
-  //   cy.get('[placeholder="Enter key"]:visible')
-  //     .find('input')
-  //     .filterWithNoValue()
-  //     .type('test.key');
+    cy.get('[placeholder="Enter key"]:visible')
+      .find('input')
+      .filterWithNoValue()
+      .type('test.key');
 
-  //   cy.get('[placeholder="Enter value"]:visible')
-  //     .find('input')
-  //     .filterWithNoValue()
-  //     .first()
-  //     .type('test-value');
+    cy.get('[placeholder="Enter value"]:visible')
+      .find('input')
+      .filterWithNoValue()
+      .first()
+      .type('test-value');
 
-  //   // Toggle 'Automount Token' switch
-  //   cy.get('ui5-switch:visible')
-  //     .find('input')
-  //     .eq(0)
-  //     .click({ force: true });
+    // Toggle 'Automount Token' switch
+    cy.get('ui5-switch:visible')
+      .find('input')
+      .eq(0)
+      .click({ force: true });
 
-  //   cy.get('ui5-dialog')
-  //     .contains('ui5-button', 'Update')
-  //     .should('be.visible')
-  //     .click();
-  // });
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Update')
+      .should('be.visible')
+      .click();
+  });
 
-  // it('Checking updated details', () => {
-  //   cy.getMidColumn()
-  //     .contains('disabled')
-  //     .should('be.visible');
+  it('Checking updated details', () => {
+    cy.getMidColumn()
+      .contains('disabled')
+      .should('be.visible');
 
-  //   cy.getMidColumn()
-  //     .contains('test.key=test-value')
-  //     .should('be.visible');
-  // });
+    cy.getMidColumn()
+      .contains('test.key=test-value')
+      .should('be.visible');
+  });
 
   it('Generate TokenRequest', () => {
     cy.getMidColumn()
