@@ -62,6 +62,7 @@ export function SearchInput({
     if (isDetailsView) return;
 
     if (key === '/' && !disabled && allowSlashShortcut && !isSideDrawerOpened) {
+      // Prevent firefox native quick find panel open
       e.preventDefault();
       openSearchList();
     }
