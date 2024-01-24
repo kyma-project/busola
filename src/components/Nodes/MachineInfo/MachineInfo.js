@@ -4,7 +4,6 @@ import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow'
 
 import './MachineInfo.scss';
 import { Card, CardHeader } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 export function MachineInfo({ nodeInfo, capacity }) {
   const formattedMemory =
