@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GenericSecrets } from './GenericSecrets';
 import { ServiceAccountTokenStatus } from 'shared/components/ServiceAccountTokenStatus';
@@ -55,7 +55,7 @@ const ServiceAccountImagePullSecrets = serviceAccount => {
   ) : null;
 };
 
-export function ServiceAccountDetails(props) {
+export default function ServiceAccountDetails(props) {
   const { t } = useTranslation();
   const [isTokenModalOpen, setTokenModalOpen] = useState(false);
   const customColumns = [
@@ -87,16 +87,12 @@ export function ServiceAccountDetails(props) {
         headerActions={headerActions}
         {...props}
       />
-      {isTokenModalOpen ? (
-        <TokenRequestModal
-          isModalOpen={isTokenModalOpen}
-          handleCloseModal={() => setTokenModalOpen(false)}
-          namespace={props.namespace}
-          serviceAccountName={props.resourceName}
-        />
-      ) : null}
+      <TokenRequestModal
+        isModalOpen={isTokenModalOpen}
+        handleCloseModal={() => setTokenModalOpen(false)}
+        namespace={props.namespace}
+        serviceAccountName={props.resourceName}
+      />
     </>
   );
 }
-
-export default ServiceAccountDetails;
