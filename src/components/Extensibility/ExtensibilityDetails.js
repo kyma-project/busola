@@ -99,11 +99,12 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
             }))
           : []
       }
-      customComponents={
+      tabs={
         Array.isArray(body)
           ? [
-              (resource, i) => (
+              (extraContent, resource, i) => (
                 <Widget
+                  extraContent={extraContent}
                   key={i}
                   value={resource}
                   structure={body}

@@ -12,7 +12,7 @@ export function Columns({ structure, inlineContext, ...props }) {
   const classNames = inline ? 'inline-display' : 'panel-grid';
 
   return (
-    <div className={classNames} style={spacing.sapUiMediumMargin}>
+    <div className={classNames} style={spacing.sapUiSmallMargin}>
       {(structure.children || []).map(child => (
         <Widget
           structure={child}
