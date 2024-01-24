@@ -45,6 +45,11 @@ export function BusolaPluginList({ enableColumnLayout }) {
           `busolaextensions/${extension.metadata.namespace}/${extension.metadata.name}`,
         )
       }
+      emptyListProps={{
+        subtitleText: t('extensibility.description'),
+        url:
+          'https://github.com/kyma-project/busola/tree/main/docs/extensibility',
+      }}
     />
   );
 }
