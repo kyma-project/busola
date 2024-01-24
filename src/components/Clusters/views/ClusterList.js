@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
-import { Button, IllustratedMessage } from '@ui5/webcomponents-react';
-import '@ui5/webcomponents-fiori/dist/illustrations/NoEntries';
+import { Button } from '@ui5/webcomponents-react';
 import { Link } from 'react-router-dom';
 
 import { useClustersInfo } from 'state/utils/getClustersInfo';
@@ -29,6 +28,7 @@ import { spacing } from '@ui5/webcomponents-react-base';
 import './ClusterList.scss';
 import { useSetRecoilState } from 'recoil';
 import { showAddClusterWizard } from 'state/showAddClusterWizard';
+import { EmptyListComponent } from 'shared/components/EmptyListComponent/EmptyListComponent';
 
 function ClusterList() {
   const gardenerLoginFeature = useFeature('GARDENER_LOGIN');
@@ -199,23 +199,17 @@ function ClusterList() {
     return (
       <>
         {addDialog}
-        <IllustratedMessage
-          name="NoEntries"
-          size="Scene"
+        <EmptyListComponent
           className="empty-cluster-list"
           titleText={t('clusters.empty.title')}
           subtitleText={t('clusters.empty.subtitle')}
+          buttonText={t('common.buttons.connect')}
+          url={'https://kubernetes.io/docs/concepts/overview/components/'}
+          onClick={() => setShowAdd(true)}
         >
-          <Button
-            onClick={() => setShowAdd(true)}
-            style={spacing.sapUiTinyMarginBeginEnd}
-            design="Emphasized"
-          >
-            {t('clusters.add.title')}
-          </Button>
           {gardenerLoginButton}
           {loadDefaultClusterButton}
-        </IllustratedMessage>
+        </EmptyListComponent>
       </>
     );
   }

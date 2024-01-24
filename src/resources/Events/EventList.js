@@ -143,6 +143,11 @@ export function EventList({
           namespace: event.metadata.namespace,
         })
       }
+      emptyListProps={{
+        showButton: false,
+        subtitleText: t('events.description'),
+        url: 'https://kubernetes.io/docs/concepts/workloads/controllers/job/',
+      }}
     />
   );
 }

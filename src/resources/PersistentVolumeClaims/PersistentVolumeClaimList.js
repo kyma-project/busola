@@ -44,6 +44,10 @@ export function PersistentVolumeClaimList(props) {
       customColumns={customColumns}
       {...props}
       createResourceForm={PersistentVolumeClaimCreate}
+      emptyListProps={{
+        subtitleText: t('persistent-volume-claims.description'),
+        url: 'https://kubernetes.io/docs/concepts/storage/persistent-volumes/',
+      }}
     />
   );
 }

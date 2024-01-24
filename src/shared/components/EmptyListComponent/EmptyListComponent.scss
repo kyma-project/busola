@@ -1,0 +1,13 @@
+.emptyListComponent {
+  &__buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+  }
+
+  &__link {
+    font-size: var(--sapFontSize);
+    text-decoration: none;
+  }
+}
