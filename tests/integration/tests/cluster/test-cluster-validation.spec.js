@@ -90,6 +90,8 @@ context('Test Cluster Validation Scan', () => {
       .should('be.visible')
       .click();
 
+    cy.get('@clusterValidationPanel').scrollIntoView();
+
     cy.get('@clusterValidationPanel')
       .find('ui5-button')
       .contains('Scan')
@@ -114,27 +116,30 @@ context('Test Cluster Validation Scan', () => {
       return cy
         .get('@scanResult')
         .scrollIntoView()
-        .contains('.ui5-li-title:visible', title);
+        .get(`ui5-tree-item[text="${title}"]:visible`);
     }
 
     function toggleTreeItem(title) {
       findTitle(title)
-        .parentsUntil('ui5-tree-item')
-        .last()
-        .parent()
         .find('.ui5-li-tree-toggle-icon:visible')
+        .eq(0)
         .click();
     }
 
-    findTitle('Cluster').should('be.visible');
-    findTitle('Namespace').should('be.visible');
+    findTitle('Cluster Resources');
+    findTitle('Namespaces');
 
     toggleTreeItem('default');
     toggleTreeItem('ConfigMap');
     toggleTreeItem('kube-root-ca.crt');
     findTitle('This is a test rule').should('be.visible');
 
+    toggleTreeItem('kube-root-ca.crt');
+    toggleTreeItem('ConfigMap');
+    toggleTreeItem('default');
+
     cy.get('@clusterValidationPanel')
+      .get('ui5-button')
       .contains('Clear')
       .click();
 
