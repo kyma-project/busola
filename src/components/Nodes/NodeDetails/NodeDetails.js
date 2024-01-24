@@ -45,16 +45,13 @@ function NodeDetails({ nodeName }) {
                     ...spacing.sapUiSmallMarginBottom,
                   }}
                 >
-                  {'Node Info'}
+                  {t('common.headers.nodeInfo')}
                 </Title>
                 <div
                   className="panels"
                   style={spacing.sapUiSmallMarginBeginEnd}
                 >
-                  <NodeResources
-                    {...data}
-                    headerContent={t('common.headers.resources')}
-                  />
+                  <NodeResources {...data} />
                   <MachineInfo
                     nodeInfo={data.node.status.nodeInfo}
                     capacity={data.node.status.capacity}

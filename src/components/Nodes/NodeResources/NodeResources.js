@@ -1,11 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
 import './NodeResources.scss';
-import { Card, CardHeader, Title } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { Card, CardHeader } from '@ui5/webcomponents-react';
 
-export function NodeResources({ metrics, headerContent }) {
+export function NodeResources({ metrics }) {
   const { t } = useTranslation();
   const { cpu, memory } = metrics || {};
 

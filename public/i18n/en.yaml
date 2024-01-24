@@ -307,6 +307,7 @@ common:
     region: Region
     resource: Resource
     resources: Resources
+    nodeInfo: Node Info
     status: Status
     value: Value
     version: Version
