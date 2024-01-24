@@ -36,7 +36,7 @@ test('Busola Lighthouse audit', async () => {
   });
 
   // add a cluster
-  await page.locator('ui5-button:has-text("Connect cluster"):visible').click();
+  await page.locator('ui5-button:has-text("Connect"):visible').click();
 
   await page
     .locator('input[id="file-upload"]')

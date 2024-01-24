@@ -62,6 +62,11 @@ export function DeploymentList(props) {
       customListActions={[restartAction]}
       {...props}
       createResourceForm={DeploymentCreate}
+      emptyListProps={{
+        subtitleText: t('deployments.description'),
+        url:
+          'https://kubernetes.io/docs/concepts/workloads/controllers/deployment/',
+      }}
     />
   );
 }

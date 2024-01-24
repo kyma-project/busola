@@ -14,5 +14,15 @@ export function GenericRoleList({ descriptionKey, ...otherParams }) {
     </Trans>
   );
 
-  return <ResourcesList description={description} {...otherParams} />;
+  return (
+    <ResourcesList
+      description={description}
+      {...otherParams}
+      emptyListProps={{
+        subtitleText: descriptionKey,
+        url:
+          'https://kyma-project.io/docs/kyma/latest/04-operation-guides/security/sec-02-authorization-in-kyma/#user-authorization',
+      }}
+    />
+  );
 }

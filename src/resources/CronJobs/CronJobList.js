@@ -41,6 +41,11 @@ export function CronJobList(props) {
       description={description}
       {...props}
       createResourceForm={CronJobCreate}
+      emptyListProps={{
+        subtitleText: t('cron-jobs.description'),
+        url:
+          'https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/',
+      }}
     />
   );
 }

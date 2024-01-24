@@ -21,6 +21,10 @@ export function StorageClassList(props) {
       {...props}
       description={description}
       createResourceForm={StorageClassCreate}
+      emptyListProps={{
+        subtitleText: 'storage-classes.description',
+        url: 'https://kubernetes.io/docs/concepts/storage/storage-classes/',
+      }}
     />
   );
 }

@@ -19,19 +19,24 @@ export const ProgressIndicatorWithPercentage = ({
   tooltip,
 }) => {
   const progressRef = useRef(null);
-  const dataBar = progressRef.current?.shadowRoot?.childNodes[1].childNodes[0];
-  const remainingBar =
-    progressRef.current?.shadowRoot?.childNodes[1].childNodes[1];
+  const dataBar = progressRef.current?.shadowRoot?.querySelector(
+    '.ui5-progress-indicator-bar',
+  );
+  const remainingBar = progressRef.current?.shadowRoot?.querySelector(
+    '.ui5-progress-indicator-remaining-bar',
+  );
 
   if (dataBar && remainingBar) {
-    dataBar.style.backgroundColor = dataBarColor;
-    remainingBar.style.backgroundColor = remainingBarColor;
+    dataBar.style['background-color'] = dataBarColor;
+    remainingBar.style['background-color'] = remainingBarColor;
   }
 
   return (
     <TooltipWrapper tooltipProps={tooltip}>
       <div className="progress-indicator-percentage">
-        <p className="progress-indicator-percentage__percents">{value}%</p>
+        <p className="progress-indicator-percentage__percents">
+          {!isNaN(value) ? value : 0}%
+        </p>
         <ProgressIndicator
           displayValue={title}
           value={value}

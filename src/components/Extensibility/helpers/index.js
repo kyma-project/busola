@@ -153,31 +153,43 @@ export const getObjectValueWorkaround = (
   }
 };
 
+const processTranslation = trans => {
+  const i18VarRegex = /{{.*?}}/g;
+  const matchesIterator = trans?.matchAll(i18VarRegex);
+  const matches = matchesIterator ? [...matchesIterator].flat() : null;
+
+  if (matches?.length) {
+    matches.forEach((link, index) => {
+      const linkReplacement = processLink(link, index);
+      trans = trans.replace(link, linkReplacement);
+    });
+    return { matches: matches, trans: trans };
+  } else return { matches: [], trans: trans };
+};
+
+const processLink = (link, index) => {
+  let linkText;
+  if (link.match(/\[(.*?)]/)) {
+    linkText = link.match(/\[(.*?)]/)[1];
+  } else {
+    linkText = link.match(/\((.*?)\)/)[1];
+  }
+  return `<${index}>${linkText}</${index}>`;
+};
+
 export const useCreateResourceDescription = descID => {
   const { t, i18n } = useGetTranslation();
-  let linkText;
   if (!descID) return;
 
   const helmBracketsRegex = /{{"(.*?)"}}/g;
-  let trans = t(descID.replace(helmBracketsRegex, '$1'));
+  const trans = t(descID.replace(helmBracketsRegex, '$1'));
 
   if (typeof trans === 'string') {
-    const i18VarRegex = /{{.*?}}/g;
-    const matchesIterator = trans?.matchAll(i18VarRegex);
-    const matches = matchesIterator ? [...matchesIterator].flat() : null;
-
+    const { matches, trans: processedTrans } = processTranslation(trans);
     if (matches.length) {
-      matches.forEach((link, inx) => {
-        if (link.match(/\[(.*?)]/)) {
-          linkText = link.match(/\[(.*?)]/)[1];
-        } else {
-          linkText = link.match(/\((.*?)\)/)[1];
-        }
-        trans = trans.replace(link, `<${inx}>${linkText}</${inx}>`);
-      });
       return (
         <Trans
-          i18nKey={trans}
+          i18nKey={processedTrans}
           i18n={i18n}
           t={t}
           components={matches.map((result, idx) => {
@@ -188,7 +200,33 @@ export const useCreateResourceDescription = descID => {
         />
       );
     } else {
-      return trans;
+      return processedTrans;
+    }
+  }
+};
+
+export const getResourceDescAndUrl = descID => {
+  if (!descID)
+    return {
+      description: null,
+      url: null,
+    };
+
+  const helmBracketsRegex = /{{"(.*?)"}}/g;
+  let trans = descID.replace(helmBracketsRegex, '$1');
+
+  if (typeof trans === 'string') {
+    const { matches, trans: processedTrans } = processTranslation(trans);
+    if (matches.length) {
+      return {
+        description: processedTrans,
+        url: matches.map(result => result.match(/\((.*?)\)/)[1]),
+      };
+    } else {
+      return {
+        description: processedTrans,
+        url: null,
+      };
     }
   }
 };

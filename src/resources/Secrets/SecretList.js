@@ -43,6 +43,10 @@ export function SecretList(props) {
       description={description}
       {...props}
       createResourceForm={SecretCreate}
+      emptyListProps={{
+        subtitleText: t('secrets.description'),
+        url: 'https://kubernetes.io/docs/concepts/configuration/secret/',
+      }}
     />
   );
 }
