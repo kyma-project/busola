@@ -5,6 +5,11 @@ export CYPRESS_DOMAIN=http://localhost:3000
 export NO_COLOR=1
 export KUBECONFIG="$GARDENER_KYMA_PROW_KUBECONFIG"
 
+function replace_busola_image () {
+  PR_IMAGE="europe-docker.pkg.dev\/kyma-project\/dev\/busola-web:PR-${PULL_NUMBER}"
+  sed -i -e "s/europe-docker.pkg.dev\/kyma-project\/prod\/busola:latest/${PR_IMAGE}/g" ../../../resources/web/deployment.yaml
+}
+
 function deploy_k3d (){
 echo "Provisioning k3d cluster"
 k3d cluster create k3dCluster
@@ -30,6 +35,9 @@ sleep 10
 
 echo $(node -v)
 echo $(npm -v)
+
+replace_busola_image
+exit 0
 
 deploy_k3d  &> $ARTIFACTS/k3d-deploy.log &
 build_and_run_busola  &> $ARTIFACTS/busola-build.log &
