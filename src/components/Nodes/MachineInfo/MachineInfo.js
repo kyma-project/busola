@@ -11,39 +11,35 @@ export function MachineInfo({ nodeInfo, capacity }) {
   const { t } = useTranslation();
 
   return (
-    <>
-      <div className="cluster-overview__graphs-wrapper">
-        <Card header={<CardHeader titleText={t('machine-info.title')} />}>
-          <div className="machine-info__body">
-            <LayoutPanelRow
-              name={t('machine-info.operating-system')}
-              value={`${nodeInfo.operatingSystem} (${nodeInfo.osImage})`}
-            />
-            <LayoutPanelRow
-              name={t('machine-info.architecture-cpus')}
-              value={`${nodeInfo.architecture}, ${capacity.cpu} ${t(
-                'machine-info.cpus',
-              )}`}
-            />
-            <LayoutPanelRow
-              name={t('machine-info.pods-capacity')}
-              value={capacity.pods}
-            />
-            <LayoutPanelRow
-              name={t('machine-info.memory')}
-              value={`${formattedMemory} ${t('machine-info.gib')}`}
-            />
-            <LayoutPanelRow
-              name={t('machine-info.kube-proxy-version')}
-              value={nodeInfo.kubeProxyVersion}
-            />
-            <LayoutPanelRow
-              name={t('machine-info.kubelet-version')}
-              value={nodeInfo.kubeletVersion}
-            />
-          </div>
-        </Card>
+    <Card header={<CardHeader titleText={t('machine-info.title')} />}>
+      <div className="machine-info__body">
+        <LayoutPanelRow
+          name={t('machine-info.operating-system')}
+          value={`${nodeInfo.operatingSystem} (${nodeInfo.osImage})`}
+        />
+        <LayoutPanelRow
+          name={t('machine-info.architecture-cpus')}
+          value={`${nodeInfo.architecture}, ${capacity.cpu} ${t(
+            'machine-info.cpus',
+          )}`}
+        />
+        <LayoutPanelRow
+          name={t('machine-info.pods-capacity')}
+          value={capacity.pods}
+        />
+        <LayoutPanelRow
+          name={t('machine-info.memory')}
+          value={`${formattedMemory} ${t('machine-info.gib')}`}
+        />
+        <LayoutPanelRow
+          name={t('machine-info.kube-proxy-version')}
+          value={nodeInfo.kubeProxyVersion}
+        />
+        <LayoutPanelRow
+          name={t('machine-info.kubelet-version')}
+          value={nodeInfo.kubeletVersion}
+        />
       </div>
-    </>
+    </Card>
   );
 }
