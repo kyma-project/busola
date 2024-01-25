@@ -5,14 +5,12 @@ import { useTranslation } from 'react-i18next';
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { ProgressBar } from 'shared/components/ProgressBar/ProgressBar';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useUrl } from 'hooks/useUrl';
 import { ProgressIndicatorWithPercentage } from '../../../../shared/components/ProgressIndicatorWithPercentage/ProgressIndicatorWithPercentage';
-import { toNumber } from 'lodash';
 
 const NodeHeader = ({ nodeName }) => {
   const { clusterUrl } = useUrl();

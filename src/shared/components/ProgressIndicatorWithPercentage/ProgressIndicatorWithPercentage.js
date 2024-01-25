@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import React, { useRef } from 'react';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import './ProgressIndicatorWithPercentage.scss';
-import { isNumber } from 'lodash';
 
 const TooltipWrapper = ({ tooltipProps, children }) => {
   if (tooltipProps?.content) {
