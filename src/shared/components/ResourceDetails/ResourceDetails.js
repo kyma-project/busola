@@ -49,7 +49,7 @@ ResourceDetails.propTypes = {
   customColumns: CustomPropTypes.customColumnsType,
   children: PropTypes.node,
   customComponents: PropTypes.arrayOf(PropTypes.func),
-  tabs: PropTypes.arrayOf(PropTypes.func),
+  hasTabs: PropTypes.bool,
   resourceUrl: PropTypes.string.isRequired,
   resourceType: PropTypes.string.isRequired,
   resourceName: PropTypes.string,
@@ -70,6 +70,7 @@ ResourceDetails.propTypes = {
 ResourceDetails.defaultProps = {
   customColumns: [],
   customComponents: [],
+  hasTabs: false,
   headerActions: null,
   resourceHeaderActions: [],
   readOnly: false,
@@ -148,7 +149,7 @@ function Resource({
   createResourceForm: CreateResourceForm,
   customColumns,
   customComponents,
-  tabs,
+  hasTabs,
   editActionLabel,
   headerActions,
   namespace,
@@ -389,7 +390,7 @@ function Resource({
             <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />,
             document.body,
           )}
-          {!tabs && resourceDetailsCard}
+          {!hasTabs && resourceDetailsCard}
           <Suspense fallback={<Spinner />}>
             <Injections
               destination={resourceType}
@@ -397,11 +398,8 @@ function Resource({
               root={resource}
             />
           </Suspense>
-          {(tabs || []).map(tab =>
-            tab(resourceDetailsCard, resource, resourceUrl),
-          )}
           {(customComponents || []).map(component =>
-            component(resource, resourceUrl),
+            component(resource, resourceUrl, resourceDetailsCard),
           )}
           {children}
           {resourceGraphConfig?.[resource.kind] && (

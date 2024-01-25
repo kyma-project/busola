@@ -99,10 +99,10 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
             }))
           : []
       }
-      tabs={
+      customComponents={
         Array.isArray(body)
           ? [
-              (extraContent, resource, i) => (
+              (resource, i, extraContent) => (
                 <Widget
                   extraContent={extraContent}
                   key={i}
@@ -115,6 +115,9 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
               ),
             ]
           : []
+      }
+      hasTabs={
+        Array.isArray(body) ? body.some(obj => obj.widget === 'Tabs') : false
       }
       breadcrumbs={breadcrumbs}
       createResourceForm={ExtensibilityCreate}
