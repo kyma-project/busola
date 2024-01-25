@@ -29,6 +29,8 @@ export const configFeaturesNames = {
   RESOURCE_VALIDATION: 'RESOURCE_VALIDATION',
   CLUSTER_VALIDATION: 'CLUSTER_VALIDATION',
   FEEDBACK: 'FEEDBACK',
+  COLUMN_LAYOUT: 'COLUMN_LAYOUT',
+  SNOW: 'SNOW',
 } as const;
 
 export type ConfigFeatureList = {

@@ -33,6 +33,7 @@ export default function CustomResourcesOfType({ crdName }) {
   return (
     <>
       <DynamicPageComponent
+        layoutNumber="MidColumn"
         title={pluralize(crd.spec.names.kind)}
         breadcrumbItems={breadcrumbItems}
         content={

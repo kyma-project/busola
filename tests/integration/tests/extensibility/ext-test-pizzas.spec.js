@@ -69,7 +69,9 @@ context('Test Pizzas', () => {
       .contains('Namespaces')
       .click();
 
-    cy.contains('a', 'pizzas').click();
+    cy.get('ui5-link[accessible-role="link"]')
+      .contains('pizzas')
+      .click();
 
     cy.getLeftNav()
       .contains('Lunch')
@@ -82,9 +84,9 @@ context('Test Pizzas', () => {
     cy.contains('DELIVERY');
     cy.contains('CASH');
     cy.contains('a', 'extensibility docs');
-    cy.contains('a', 'margherita-order').should('be.visible');
+    cy.contains('ui5-link', 'margherita-order').should('be.visible');
 
-    cy.contains('a', 'diavola-order').click({ force: true });
+    cy.contains('ui5-link', 'diavola-order').click({ force: true });
 
     cy.contains('paymentMethod: CARD');
     cy.contains('realization: SELF-PICKUP');
@@ -92,8 +94,10 @@ context('Test Pizzas', () => {
   });
 
   it('Edits a Pizza Order', () => {
-    cy.get('ui5-button')
-      .contains('Edit')
+    cy.wait(1000);
+
+    cy.getMidColumn()
+      .contains('ui5-button', 'Edit')
       .should('be.visible')
       .click();
 
@@ -103,9 +107,11 @@ context('Test Pizzas', () => {
     cy.get('@form').contains('Labels');
     cy.get('@form').contains('Annotations');
     cy.get('@form').contains('Description');
+
     cy.get('@form')
       .find('[data-testid="spec.status"]:visible')
       .find('input')
+      .click()
       .type(`{backspace}{backspace}{backspace}{backspace}{backspace}`, {
         force: true,
       })
@@ -124,13 +130,19 @@ context('Test Pizzas', () => {
       .should('be.visible')
       .click();
 
-    cy.contains('span', /^READY$/i).should('not.exist');
+    cy.getMidColumn()
+      .contains('span', /^READY$/i)
+      .should('not.exist');
 
-    cy.contains('span', /^ERROR$/i).should('be.visible');
+    cy.getMidColumn()
+      .contains('span', /^ERROR$/i)
+      .should('be.visible');
   });
 
   it('Displays the Pizzas list/detail views from the samples', () => {
-    cy.contains('a', 'pizzas/diavola').click({ force: true });
+    cy.getMidColumn()
+      .contains('ui5-link', 'pizzas/diavola')
+      .click({ force: true });
 
     cy.contains('Hot salami, Pickled jalapeños, Cheese').should('be.visible');
 
@@ -150,12 +162,15 @@ context('Test Pizzas', () => {
     cy.get('ui5-table-row')
       .eq(0)
       .should('contain.text', 'margherita');
+
     cy.get('ui5-table-row')
       .eq(1)
       .should('contain.text', 'diavola');
 
     cy.get('ui5-button[aria-label="open-sort"]').click();
+
     cy.get('ui5-radio-button[name="sortOrder"][text="Descending"]').click();
+
     cy.get('ui5-button')
       .contains('OK')
       .click();
@@ -163,12 +178,15 @@ context('Test Pizzas', () => {
     cy.get('ui5-table-row')
       .eq(0)
       .should('contain.text', 'diavola');
+
     cy.get('ui5-table-row')
       .eq(1)
       .should('contain.text', 'margherita');
 
     cy.get('ui5-button[aria-label="open-sort"]').click();
+
     cy.get('ui5-radio-button[name="sortBy"][text="Name"]').click();
+
     cy.get('ui5-button')
       .contains('OK')
       .click();
@@ -176,6 +194,7 @@ context('Test Pizzas', () => {
     cy.get('ui5-table-row')
       .eq(0)
       .should('contain.text', 'margherita');
+
     cy.get('ui5-table-row')
       .eq(1)
       .should('contain.text', 'diavola');
@@ -216,6 +235,8 @@ context('Test Pizzas', () => {
       .should('be.visible')
       .click();
 
-    cy.contains('ui5-title', PIZZA_NAME).should('be.visible');
+    cy.getMidColumn()
+      .contains('ui5-title', PIZZA_NAME)
+      .should('be.visible');
   });
 });

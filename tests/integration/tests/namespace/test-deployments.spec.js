@@ -88,11 +88,14 @@ context('Test Deployments', () => {
   });
 
   it('Check if deployment and pod exist', () => {
-    cy.url().should('match', new RegExp(`\/deployments\/${DEPLOYMENT_NAME}$`));
+    cy.url().should('match', new RegExp(`\/deployments\/${DEPLOYMENT_NAME}`));
 
-    cy.contains('ui5-title', DEPLOYMENT_NAME).should('be.visible');
+    cy.getMidColumn()
+      .contains('ui5-title', DEPLOYMENT_NAME)
+      .should('be.visible');
 
-    cy.contains('ui5-table-cell', DEPLOYMENT_NAME)
+    cy.getMidColumn()
+      .contains('ui5-table-cell', DEPLOYMENT_NAME)
       .should('be.visible')
       .click();
   });
@@ -102,13 +105,13 @@ context('Test Deployments', () => {
       .contains('Deployments')
       .click();
 
-    cy.get('ui5-table-row')
-      .contains('a', DEPLOYMENT_NAME)
-      .click();
+    cy.contains('ui5-link', DEPLOYMENT_NAME).click();
 
-    cy.get('[data-testid="has-tooltip"]').contains('span', '1 / 1', {
-      timeout: 60 * 1000,
-    });
+    cy.getMidColumn()
+      .get('[data-testid="has-tooltip"]')
+      .contains('span', '1 / 1', {
+        timeout: 60 * 1000,
+      });
 
     cy.get('ui5-button')
       .contains('Edit')
@@ -133,6 +136,6 @@ context('Test Deployments', () => {
       .should('be.visible')
       .click();
 
-    cy.contains('label-key=label-value');
+    cy.getMidColumn().contains('label-key=label-value');
   });
 });

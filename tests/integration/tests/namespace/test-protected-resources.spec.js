@@ -85,7 +85,7 @@ context('Test Protected Resources', () => {
       .contains('Config Maps')
       .click();
 
-    cy.get('a.bsl-link')
+    cy.get('ui5-link')
       .contains(NAME)
       .click();
 
@@ -117,11 +117,12 @@ context('Test Protected Resources', () => {
   });
 
   it('Check if Pod is protected', () => {
-    cy.url().should('match', new RegExp(`\/deployments\/${NAME}$`));
+    cy.url().should('match', new RegExp(`\/deployments\/${NAME}`));
 
-    cy.contains('ui5-table-row', NAME)
+    cy.getMidColumn()
+      .contains('ui5-table-row', NAME)
       .find('[aria-label="Delete"][disabled="true"]')
-      .should('be.visible');
+      .should('exist');
   });
 
   it('Change protection setting', () => {

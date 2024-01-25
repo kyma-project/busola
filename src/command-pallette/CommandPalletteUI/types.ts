@@ -1,5 +1,4 @@
 import { TFunction } from 'react-i18next';
-import { NavigateFunction } from 'react-router-dom';
 import { NavNode } from 'state/types';
 import { useClustersInfoType } from 'state/utils/getClustersInfo';
 import { K8sResource } from 'types';
@@ -23,7 +22,7 @@ export type CommandPaletteContext = {
   setOpenPreferencesModal: (open: boolean) => void;
   setShowYamlUpload: (show: boolean) => void;
   clustersInfo: useClustersInfoType;
-  navigate: NavigateFunction;
+  navigate: Function;
 };
 
 type CRHelpEntries = {

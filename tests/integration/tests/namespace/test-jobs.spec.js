@@ -46,6 +46,7 @@ context('Test Jobs', () => {
     cy.get('[placeholder^="Command to run"]:visible')
       .find('input')
       .type('/bin/sh', { force: true });
+
     cy.get('[placeholder^="Command to run"]:visible')
       .parentsUntil('ul')
       .next()
@@ -97,12 +98,19 @@ context('Test Jobs', () => {
 
   it('Inspect details and created Pods', () => {
     // name
-    cy.contains(JOB_NAME);
+    cy.getMidColumn().contains(JOB_NAME);
 
     // created pod
-    cy.get('ui5-table-cell')
-      .contains('a', JOB_NAME + '-')
-      .click();
+    cy.getMidColumn()
+      .find('ui5-panel')
+      .find('ui5-table-row')
+      .find('ui5-table-cell')
+      .find('ui5-link')
+      .contains(JOB_NAME)
+      .find('a.ui5-link-root')
+      .click({ force: true });
+
+    cy.wait(1000);
 
     // images for both containers
     cy.contains(/Imagebusybox/);
@@ -115,7 +123,7 @@ context('Test Jobs', () => {
       .should('exist');
 
     // status
-    cy.get('[role="status"]', { timeout: 75 * 1000 })
+    cy.get('[aria-label="Status"]', { timeout: 75 * 1000 })
       .first()
       .contains('Completed');
 
@@ -140,6 +148,8 @@ context('Test Jobs', () => {
   });
 
   it('Edit Job', () => {
+    cy.wait(1000);
+
     cy.get('ui5-button')
       .contains('Edit')
       .should('be.visible')
@@ -185,6 +195,10 @@ context('Test Jobs', () => {
   });
 
   it('Inspect list', () => {
-    cy.inspectList('Jobs', JOB_NAME);
+    cy.getLeftNav()
+      .contains(/^Jobs/)
+      .click();
+
+    cy.contains(JOB_NAME).should('be.visible');
   });
 });

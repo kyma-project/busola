@@ -1,10 +1,13 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
-import { useUrl } from 'hooks/useUrl';
+import { Link } from '@ui5/webcomponents-react';
+import { useSetRecoilState } from 'recoil';
 
+import { useUrl } from 'hooks/useUrl';
 import { useGetPlaceholder, useGetTranslation } from '../helpers';
 import { useJsonata } from '../hooks/useJsonata';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 export function ResourceLink({
   value,
@@ -19,6 +22,9 @@ export function ResourceLink({
   const { t: tExt } = useGetTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
   const { resourceUrl } = useUrl();
+  const navigate = useNavigate();
+
+  const setLayoutColumn = useSetRecoilState(columnLayoutState);
 
   const jsonata = useJsonata({
     resource: originalResource,
@@ -45,16 +51,25 @@ export function ResourceLink({
 
   return (
     <Link
-      className="bsl-link"
-      to={resourceUrl(
-        {
-          kind,
-          metadata: {
-            name,
-          },
-        },
-        { namespace },
-      )}
+      onClick={() => {
+        setLayoutColumn({
+          midColumn: null,
+          endColumn: null,
+          layout: 'OneColumn',
+        });
+
+        navigate(
+          resourceUrl(
+            {
+              kind,
+              metadata: {
+                name,
+              },
+            },
+            { namespace },
+          ),
+        );
+      }}
     >
       {tExt(value)}
     </Link>

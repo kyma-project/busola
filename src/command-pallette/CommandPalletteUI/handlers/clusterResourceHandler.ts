@@ -20,7 +20,7 @@ import {
   Result,
 } from '../types';
 import { K8sResource } from 'types';
-import { matchPath, NavigateFunction } from 'react-router-dom';
+import { matchPath } from 'react-router-dom';
 
 function getAutocompleteEntries({
   tokens,
@@ -121,7 +121,7 @@ async function fetchClusterResources(context: CommandPaletteContext) {
 function sendNamespaceSwitchMessage(
   newNamespace: string,
   activeClusterName: string,
-  navigate: NavigateFunction,
+  navigate: Function,
 ) {
   const matchedRoute =
     matchPath(

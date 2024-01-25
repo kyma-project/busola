@@ -1,6 +1,10 @@
+:root {
+  --solidBg: var(--_ui5-v1-20-0_fcl_solid_bg);
+}
+
 #content-wrap {
   width: 100%;
-  background: var(--sapBackgroundColor);
+  background: var(--solidBg);
   border-radius: 0.5rem 0.5rem 0 0;
   overflow-y: auto;
 }

@@ -16,6 +16,7 @@ const createTokenRequestTemplate = () => {
 };
 
 export const useGenerateTokenRequest = (
+  generate: boolean,
   namespace: string,
   serviceAccountName: string,
 ) => {
@@ -33,6 +34,7 @@ export const useGenerateTokenRequest = (
   }, [createKubeconfig, serviceAccountName, token]);
 
   const generateTokenRequest = async () => {
+    if (!generate) return;
     try {
       const response = await post(
         `/api/v1/namespaces/${namespace}/serviceaccounts/${serviceAccountName}/token`,
@@ -53,9 +55,8 @@ export const useGenerateTokenRequest = (
   };
   useEffect(() => {
     generateTokenRequest();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [generate]);
 
   return {
     kubeconfigYaml,

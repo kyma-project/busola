@@ -1,14 +1,20 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { Link } from '@ui5/webcomponents-react';
+import { useSetRecoilState } from 'recoil';
 
 import { useGetTranslation } from '../helpers';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { useTranslation } from 'react-i18next';
 import { useUrl } from 'hooks/useUrl';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 export function ResourceRefs({ value, structure, schema, disableMargin }) {
   const { t } = useTranslation();
   const { resourceUrl } = useUrl();
+  const navigate = useNavigate();
+
+  const setLayoutColumn = useSetRecoilState(columnLayoutState);
 
   const { widgetT } = useGetTranslation();
   const resourceType = structure.kind;
@@ -24,14 +30,24 @@ export function ResourceRefs({ value, structure, schema, disableMargin }) {
 
   const rowRenderer = ({ name, namespace }) => [
     <Link
-      className="bsl-link"
-      to={resourceUrl({
-        kind: resourceType,
-        metadata: {
-          name,
-          namespace,
-        },
-      })}
+      style={{ fontWeight: 'bold' }}
+      onClick={() => {
+        setLayoutColumn({
+          midColumn: null,
+          endColumn: null,
+          layout: 'OneColumn',
+        });
+
+        navigate(
+          resourceUrl({
+            kind: resourceType,
+            metadata: {
+              name,
+              namespace,
+            },
+          }),
+        );
+      }}
     >
       {namespace}/{name}
     </Link>,

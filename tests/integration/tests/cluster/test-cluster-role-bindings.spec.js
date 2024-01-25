@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 
+// Also column layout test
+
 const random = Math.floor(Math.random() * 9999) + 1000;
 const CRB_NAME = `test-###-crb-${random}`;
 const USER_NAME = 'test@kyma.eu';
@@ -45,18 +47,33 @@ context('Test Cluster Role Bindings', () => {
       .click();
   });
 
-  it('Checking details', () => {
+  it('Checking details using column layout', () => {
+    cy.wait(3000); // wait for the resource to be refeched and displayed in the list
     cy.contains('ui5-title', CRB_NAME).should('be.visible');
 
-    cy.contains('User').should('be.visible');
+    cy.inspectList('Cluster Role Bindings', CRB_NAME);
 
-    cy.contains(USER_NAME).should('be.visible');
+    cy.contains('ui5-link', CRB_NAME).click();
 
-    cy.contains('a.bsl-link', 'cluster-admin').should('be.visible');
+    cy.getMidColumn()
+      .contains('User')
+      .should('be.visible');
+
+    cy.getMidColumn()
+      .contains(USER_NAME)
+      .should('be.visible');
+
+    cy.getMidColumn()
+      .contains('a.bsl-link', 'cluster-admin')
+      .should('be.visible');
   });
 
   it('Edit', () => {
-    cy.contains('ui5-button', 'Edit').click();
+    cy.wait(1000);
+
+    cy.getMidColumn()
+      .contains('ui5-button', 'Edit')
+      .click();
 
     cy.contains('[role="combobox"]', 'User').click();
 
@@ -85,12 +102,22 @@ context('Test Cluster Role Bindings', () => {
   });
 
   it('Checking updates details', () => {
-    cy.contains('Group').should('be.visible');
+    cy.getMidColumn()
+      .contains('Group')
+      .should('be.visible');
 
-    cy.contains('test-group').should('be.visible');
+    cy.getMidColumn()
+      .contains('test-group')
+      .should('be.visible');
+  });
+
+  it('Test column layout functionality', () => {
+    cy.testMidColumnLayout(CRB_NAME);
   });
 
   it('Delete Cluster Role Binding', () => {
-    cy.deleteInDetails('Cluster Role Binding', CRB_NAME);
+    cy.contains('ui5-link', CRB_NAME).click();
+
+    cy.deleteInDetails('Cluster Role Binding', CRB_NAME, true);
   });
 });
