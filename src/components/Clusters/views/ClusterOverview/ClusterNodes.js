@@ -11,6 +11,8 @@ import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTim
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useUrl } from 'hooks/useUrl';
+import { ProgressIndicatorWithPercentage } from '../../../../shared/components/ProgressIndicatorWithPercentage/ProgressIndicatorWithPercentage';
+import { toNumber } from 'lodash';
 
 const NodeHeader = ({ nodeName }) => {
   const { clusterUrl } = useUrl();
@@ -64,29 +66,33 @@ export function ClusterNodes({ data, error, loading }) {
     return [
       <NodeHeader nodeName={entry.metadata?.name} />,
       cpu ? (
-        <ProgressBar
-          percentage={cpu.percentage}
-          tooltip={{
-            content: t('cluster-overview.tooltips.cpu-used-percentage', {
-              percentage: cpu.percentage,
-            }),
-            position: 'bottom',
-          }}
-          color="var(--sapIndicationColor_7)"
-        />
+        <>
+          <ProgressIndicatorWithPercentage
+            dataBarColor="var(--sapChart_Bad)"
+            leftTitle={cpu.percentage}
+            value={cpu.percentageValue}
+            tooltip={{
+              content: t('cluster-overview.tooltips.cpu-used-percentage', {
+                percentage: cpu.percentage,
+              }),
+              position: 'bottom',
+            }}
+          />
+        </>
       ) : (
         EMPTY_TEXT_PLACEHOLDER
       ),
       memory ? (
-        <ProgressBar
-          percentage={memory.percentage}
+        <ProgressIndicatorWithPercentage
+          leftTitle={memory.percentage}
+          value={memory.percentageValue}
           tooltip={{
             content: t('cluster-overview.tooltips.memory-used-percentage', {
               percentage: memory.percentage,
             }),
             position: 'bottom',
           }}
-          color="var(--sapIndicationColor_6)"
+          dataBarColor="var(--sapChart_Good)"
         />
       ) : (
         EMPTY_TEXT_PLACEHOLDER
