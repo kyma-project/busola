@@ -359,7 +359,8 @@ function Resource({
       <ResourceDetailContext.Provider value={true}>
         <DynamicPageComponent
           layoutNumber={layoutNumber ?? 'MidColumn'}
-        layoutCloseUrl={layoutCloseUrl}title={resource.metadata.name}
+          layoutCloseUrl={layoutCloseUrl}
+          title={resource.metadata.name}
           actions={actions}
           breadcrumbItems={breadcrumbItems}
           content={
