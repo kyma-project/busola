@@ -48,14 +48,14 @@ context('Test Stateful Sets', () => {
 
   it('Inspect details', () => {
     // name
-    cy.contains(SS_NAME);
+    cy.getMidColumn().contains(SS_NAME);
     // selector
-    cy.contains('app=nginx');
+    cy.getMidColumn().contains('app=nginx');
     // pod
-    cy.contains(`${SS_NAME}-0`);
-    cy.contains('registry.k8s.io/nginx-slim:0.8');
-    cy.contains('/usr/share/nginx/html');
-    cy.contains('web:80/TCP');
+    cy.getMidColumn().contains(`${SS_NAME}-0`);
+    cy.getMidColumn().contains('registry.k8s.io/nginx-slim:0.8');
+    cy.getMidColumn().contains('/usr/share/nginx/html');
+    cy.getMidColumn().contains('web:80/TCP');
   });
 
   it('Inspect list', () => {

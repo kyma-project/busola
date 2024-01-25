@@ -7,6 +7,7 @@ import { useCustomResourceUrl } from 'resources/CustomResourceDefinitions/useCus
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { CRCreate } from 'resources/CustomResourceDefinitions/CRCreate';
 import { useUrl } from 'hooks/useUrl';
+import { useFeature } from 'hooks/useFeature';
 
 export function CustomResources({
   crd,
@@ -15,6 +16,8 @@ export function CustomResources({
   omitColumnsIds,
   hideCreateOption,
 }) {
+  const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
+
   const { group, names } = crd.spec;
   const name = names.plural;
   const customUrl = useCustomResourceUrl(crd);
@@ -58,6 +61,14 @@ export function CustomResources({
   // CRD can have infinite number of additionalPrinterColumns what would be impossible to fit into the table
   if (customColumns?.length > 5) customColumns.length = 5;
 
+  const customColumnLayout = resource => {
+    return {
+      resourceName: resource?.metadata?.name,
+      resourceType: crd?.metadata?.name,
+      namespaceId: resource?.metadata?.namespace,
+    };
+  };
+
   const params = {
     hasDetailsView: true,
     customUrl,
@@ -70,14 +81,20 @@ export function CustomResources({
     testid: 'crd-custom-resources',
     omitColumnsIds,
     hideCreateOption,
-    createResourceForm: props => <CRCreate {...props} crd={crd} />,
+    createResourceForm: props => (
+      <CRCreate {...props} crd={crd} layoutNumber="MidColumn" />
+    ),
     resourceUrlPrefix: `/apis/${group}/${version.name}`,
     searchSettings: {
       textSearchProperties: ['metadata.namespace'],
       allowSlashShortcut: true,
     },
     namespace,
+    enableColumnLayout: isColumnLeyoutEnabled,
+    columnLayout: 'ThreeColumnsEndExpanded',
+    customColumnLayout,
+    layoutNumber: 'MidColumn',
+    parentCrdName: crd.metadata.name,
   };
-
   return <ResourcesList {...params} />;
 }

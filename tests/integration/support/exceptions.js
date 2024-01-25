@@ -23,6 +23,9 @@ Cypress.Commands.add('handleExceptions', () => {
       err.message.includes('No available data to authenticate the request.') ||
       err.message.includes(
         "Cannot read properties of null (reading 'querySelector')",
+      ) ||
+      err.message.includes(
+        "Cannot read properties of undefined (reading 'hasAttribute')",
       )
     )
       return false;

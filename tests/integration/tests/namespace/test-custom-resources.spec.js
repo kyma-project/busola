@@ -68,15 +68,22 @@ context('Test Custom Resources', () => {
 
   it('Check single CR list', () => {
     cy.get('ui5-table-row')
-      .contains('Tnamespaces')
+      .contains('ui5-link', 'Tnamespaces')
       .click();
 
-    cy.contains('ui5-title', 'Tnamespaces').should('be.visible');
+    cy.getMidColumn()
+      .contains('ui5-title', 'Tnamespaces')
+      .should('be.visible');
 
-    cy.contains('ui5-button', /Create Tnamespace/i).should('be.visible');
+    cy.getMidColumn()
+      .contains('ui5-button', /Create Tnamespace/i)
+      .should('be.visible');
 
     cy.url().should('match', /customresources/);
-    cy.contains('tnamespace.cypress.example.com').click();
+    cy.getMidColumn()
+      .contains('tnamespace.cypress.example.com')
+      .click();
+
     cy.url().should('match', /customresourcedefinitions/);
     cy.deleteInDetails(
       'Custom Resource Definition',

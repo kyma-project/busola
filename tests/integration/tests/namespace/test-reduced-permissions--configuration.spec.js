@@ -88,9 +88,7 @@ context('Test reduced permissions 2', () => {
       .click()
       .type('kube-public');
 
-    cy.get('a.bsl-link')
-      .contains('kube-public')
-      .click();
+    cy.contains('ui5-link', 'kube-public').click();
 
     cy.getLeftNav()
       .contains('Pods')

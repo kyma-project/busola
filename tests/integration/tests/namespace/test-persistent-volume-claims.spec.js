@@ -59,21 +59,31 @@ context('Test Persistent Volume Claims', () => {
   });
 
   it('Check the Persistent Volume Claims details', () => {
-    cy.contains(CAPACITY_VALUE).should('be.visible');
+    cy.getMidColumn()
+      .contains(CAPACITY_VALUE)
+      .should('be.visible');
 
-    cy.contains(ACCESS_MODES_VALUE).should('be.visible');
+    cy.getMidColumn()
+      .contains(ACCESS_MODES_VALUE)
+      .should('be.visible');
 
-    cy.contains(VOLUME_MODE_VALUE).should('be.visible');
+    cy.getMidColumn()
+      .contains(VOLUME_MODE_VALUE)
+      .should('be.visible');
 
-    cy.contains('ui5-panel', Cypress.env('STORAGE_CLASS_NAME')).should(
-      'be.visible',
-    );
+    cy.getMidColumn()
+      .contains('ui5-panel', Cypress.env('STORAGE_CLASS_NAME'))
+      .should('be.visible');
 
-    cy.contains('Events').should('be.visible');
+    cy.getMidColumn()
+      .contains('Events')
+      .should('be.visible');
   });
 
   it('Check the Persistent Volume Claims list and delete', () => {
-    cy.navigateBackTo('persistentvolumeclaims', 'Persistent Volume Claims');
+    cy.getLeftNav()
+      .contains('Persistent Volume Claims')
+      .click();
 
     cy.contains(CAPACITY_VALUE);
 

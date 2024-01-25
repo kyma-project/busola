@@ -63,6 +63,8 @@ ResourceDetails.propTypes = {
   resourceSchema: PropTypes.object,
   disableEdit: PropTypes.bool,
   disableDelete: PropTypes.bool,
+  layoutCloseUrl: PropTypes.string,
+  layoutNumber: PropTypes.string,
 };
 
 ResourceDetails.defaultProps = {
@@ -73,6 +75,7 @@ ResourceDetails.defaultProps = {
   readOnly: false,
   disableEdit: false,
   disableDelete: false,
+  layoutNumber: 'MidColumn',
 };
 
 export function ResourceDetails(props) {
@@ -141,6 +144,8 @@ function ResourceDetailsRenderer(props) {
 }
 
 function Resource({
+  layoutNumber,
+  layoutCloseUrl,
   breadcrumbs,
   children,
   createResourceForm: CreateResourceForm,
@@ -179,6 +184,7 @@ function Resource({
     resourceTitle,
     resourceType,
     navigateToListAfterDelete: true,
+    layoutNumber,
   });
 
   const { setEditedYaml: setEditedSpec } = useYamlEditor();
@@ -347,6 +353,8 @@ function Resource({
   return (
     <>
       <DynamicPageComponent
+        layoutNumber={layoutNumber ?? 'MidColumn'}
+        layoutCloseUrl={layoutCloseUrl}
         title={resource.metadata.name}
         actions={actions}
         breadcrumbItems={breadcrumbItems}

@@ -40,6 +40,15 @@ Cypress.Commands.add(
   },
 );
 
+Cypress.Commands.add('clickGenericListLink', resourceName => {
+  cy.get('ui5-table-row')
+    .find('ui5-table-cell')
+    .find('ui5-link')
+    .contains(resourceName)
+    .find('a.ui5-link-root')
+    .click({ force: true });
+});
+
 Cypress.Commands.add('filterWithNoValue', { prevSubject: true }, $elements =>
   $elements.filter((_, e) => !e.value),
 );
@@ -50,9 +59,7 @@ Cypress.Commands.add('goToNamespaceDetails', () => {
     .contains('Namespaces')
     .click();
 
-  cy.get('ui5-table-row')
-    .contains('a', Cypress.env('NAMESPACE_NAME'))
-    .click();
+  cy.clickGenericListLink(Cypress.env('NAMESPACE_NAME'));
 
   return cy.end();
 });
@@ -109,19 +116,40 @@ Cypress.Commands.add('getLeftNav', () => {
   return cy.get('aside');
 });
 
-Cypress.Commands.add('deleteInDetails', (resourceType, resourceName) => {
-  cy.get('ui5-button')
-    .contains('Delete')
-    .should('be.visible')
-    .click();
-
-  cy.contains(`delete ${resourceType} ${resourceName}`);
-  cy.get(`[header-text="Delete ${resourceType}"]`)
-    .find('[data-testid="delete-confirmation"]')
-    .click();
-
-  cy.contains(/deleted/).should('be.visible');
+Cypress.Commands.add('getMidColumn', () => {
+  return cy.get('div[slot="midColumn"]');
 });
+
+Cypress.Commands.add('getEndColumn', () => {
+  return cy.get('div[slot="endColumn"]');
+});
+
+Cypress.Commands.add(
+  'deleteInDetails',
+  (resourceType, resourceName, columnLayout = false) => {
+    if (columnLayout) {
+      cy.getMidColumn()
+        .contains('ui5-button', 'Delete')
+        .should('be.visible')
+        .click();
+    } else {
+      cy.get('ui5-button')
+        .contains('Delete')
+        .should('be.visible')
+        .click();
+    }
+
+    cy.contains(`delete ${resourceType} ${resourceName}`);
+
+    cy.get(`[header-text="Delete ${resourceType}"]:visible`)
+      .find('[data-testid="delete-confirmation"]')
+      .click();
+
+    cy.contains(/deleted/).should('be.visible');
+
+    cy.getMidColumn().should('not.be.visible');
+  },
+);
 
 Cypress.Commands.add(
   'deleteFromGenericList',
@@ -131,15 +159,20 @@ Cypress.Commands.add(
     confirmationEnabled = true,
     deletedVisible = true,
     clearSearch = true,
+    isUI5Link = true,
   ) => {
     cy.get('[aria-label="open-search"]:visible').click();
 
-    cy.get('ui5-combobox[placeholder="Search"]')
+    cy.get('ui5-combobox[placeholder="Search"]:visible')
       .find('input')
       .click()
       .type(resourceName);
 
-    cy.contains('a', resourceName).should('be.visible');
+    if (isUI5Link) {
+      cy.contains('ui5-link', resourceName).should('be.visible');
+    } else {
+      cy.contains('a', resourceName).should('be.visible');
+    }
 
     cy.contains('ui5-message-strip', /created/).should('not.exist');
 
@@ -147,7 +180,8 @@ Cypress.Commands.add(
 
     if (confirmationEnabled) {
       cy.contains(`delete ${resourceType} ${resourceName}`);
-      cy.get(`[header-text="Delete ${resourceType}"]`)
+
+      cy.get(`[header-text="Delete ${resourceType}"]:visible`)
         .find('[data-testid="delete-confirmation"]')
         .click();
 
@@ -156,7 +190,7 @@ Cypress.Commands.add(
       }
 
       if (clearSearch) {
-        cy.get('ui5-combobox[placeholder="Search"]')
+        cy.get('ui5-combobox[placeholder="Search"]:visible')
           .find('input')
           .click()
           .clear();
@@ -178,4 +212,64 @@ Cypress.Commands.add('changeCluster', clusterName => {
     .find(`[aria-label="${clusterName}"]:visible`)
     .find('span[part="title"]')
     .click({ force: true });
+});
+
+Cypress.Commands.add('testMidColumnLayout', resourceName => {
+  cy.getMidColumn()
+    .find('ui5-button[aria-label="full-screen"]')
+    .click();
+
+  cy.contains('ui5-link', resourceName).should('not.be.visible');
+
+  cy.getMidColumn()
+    .find('ui5-button[aria-label="close-full-screen"]')
+    .click();
+
+  cy.contains('ui5-link', resourceName).should('be.visible');
+
+  cy.closeMidColumn();
+
+  cy.getMidColumn()
+    .contains('ui5-title', resourceName)
+    .should('not.be.visible');
+});
+
+Cypress.Commands.add('testEndColumnLayout', resourceName => {
+  cy.getEndColumn()
+    .find('ui5-button[aria-label="full-screen"]')
+    .click();
+
+  cy.contains('ui5-link', resourceName).should('not.be.visible');
+
+  cy.getEndColumn()
+    .find('ui5-button[aria-label="close-full-screen"]')
+    .click();
+
+  cy.contains('ui5-link', resourceName).should('be.visible');
+
+  cy.getEndColumn()
+    .find('ui5-button[aria-label="close-column"]')
+    .click();
+
+  cy.getEndColumn().should('not.be.visible');
+
+  cy.getEndColumn()
+    .contains('ui5-title', resourceName)
+    .should('not.be.visible');
+});
+
+Cypress.Commands.add('closeMidColumn', () => {
+  cy.getMidColumn()
+    .find('ui5-button[aria-label="close-column"]')
+    .click();
+
+  cy.getMidColumn().should('not.be.visible');
+});
+
+Cypress.Commands.add('closeEndColumn', () => {
+  cy.getEndColumn()
+    .find('ui5-button[aria-label="close-column"]')
+    .click();
+
+  cy.getEndColumn().should('not.be.visible');
 });
