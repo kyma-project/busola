@@ -62,8 +62,9 @@ export const DynamicPageComponent = ({
                 layoutNumber !== 'StartColumn' ? (
                   <>
                     {layoutColumn.layout === 'TwoColumnsMidExpanded' ||
-                    layoutColumn.layout === 'ThreeColumnsMidExpanded' ||
-                    layoutColumn.layout === 'ThreeColumnsEndExpanded' ? (
+                    ((layoutColumn.layout === 'ThreeColumnsMidExpanded' ||
+                      layoutColumn.layout === 'ThreeColumnsEndExpanded') &&
+                      layoutNumber !== 'MidColumn') ? (
                       <Button
                         aria-label="full-screen"
                         design="Transparent"
