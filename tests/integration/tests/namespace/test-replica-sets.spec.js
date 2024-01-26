@@ -50,7 +50,8 @@ context('Test Replica Sets', () => {
   it('Checks the details view', () => {
     cy.getMidColumn()
       .contains(`${REPLICA_SET_NAME}-`)
-      .click();
+      .should('be.visible')
+      .click({ force: true });
 
     cy.contains(REPLICA_SET_NAME);
 
