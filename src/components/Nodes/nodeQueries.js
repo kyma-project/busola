@@ -8,7 +8,7 @@ const getPercentageFromUsage = (value, total) => {
   if (total === 0) {
     return 'Unknown';
   }
-  return Math.round((100 * value) / total) + '%';
+  return Math.round((100 * value) / total);
 };
 
 const formatCpu = cpuStr => Math.ceil(parseInt(cpuStr || '0') / 1000_000);
@@ -25,12 +25,14 @@ const createUsageMetrics = (node, metricsForNode) => {
     cpu: {
       usage: cpuUsage,
       capacity: cpuCapacity,
-      percentage: getPercentageFromUsage(cpuUsage, cpuCapacity),
+      percentage: getPercentageFromUsage(cpuUsage, cpuCapacity) + '%',
+      percentageValue: getPercentageFromUsage(cpuUsage, cpuCapacity),
     },
     memory: {
       usage: memoryUsage,
       capacity: memoryCapacity,
-      percentage: getPercentageFromUsage(memoryUsage, memoryCapacity),
+      percentage: getPercentageFromUsage(memoryUsage, memoryCapacity) + '%',
+      percentageValue: getPercentageFromUsage(memoryUsage, memoryCapacity),
     },
   };
 };

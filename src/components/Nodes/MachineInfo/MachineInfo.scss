@@ -1,6 +1,6 @@
 .machine-info__body > * {
   grid-template-columns: 1fr 1fr !important;
-
+  padding-left: 1rem;
   & > :first-child {
     color: var(--sapNeutralColor) !important;
   }

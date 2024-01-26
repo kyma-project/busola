@@ -12,11 +12,12 @@ const TooltipWrapper = ({ tooltipProps, children }) => {
 };
 
 export const ProgressIndicatorWithPercentage = ({
-  title,
   value,
   dataBarColor,
   remainingBarColor,
   tooltip,
+  leftTitle,
+  rightTitle,
 }) => {
   const progressRef = useRef(null);
   const dataBar = progressRef.current?.shadowRoot?.querySelector(
@@ -34,11 +35,13 @@ export const ProgressIndicatorWithPercentage = ({
   return (
     <TooltipWrapper tooltipProps={tooltip}>
       <div className="progress-indicator-percentage">
-        <p className="progress-indicator-percentage__percents">
-          {!isNaN(value) ? value : 0}%
-        </p>
+        {rightTitle && (
+          <p className="progress-indicator-percentage__percents">
+            {rightTitle}
+          </p>
+        )}
         <ProgressIndicator
-          displayValue={title}
+          displayValue={leftTitle}
           value={value}
           ref={progressRef}
           className="progress-indicator"
@@ -54,4 +57,6 @@ ProgressIndicatorWithPercentage.propTypes = {
   dataBarColor: PropTypes.string,
   remainingBarColor: PropTypes.string,
   tooltip: PropTypes.object,
+  leftTitle: PropTypes.string,
+  rightTitle: PropTypes.string,
 };
