@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from 'react';
+import React, { createContext, Suspense, useState } from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
 import pluralize from 'pluralize';
@@ -11,12 +11,14 @@ import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { useDelete, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
-import { YamlEditorProvider } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
+import {
+  useYamlEditor,
+  YamlEditorProvider,
+} from 'shared/contexts/YamlEditorContext/YamlEditorContext';
 import {
   getErrorMessage,
-  prettifyNameSingular,
   prettifyNamePlural,
+  prettifyNameSingular,
 } from 'shared/utils/helpers';
 import { Labels } from 'shared/components/Labels/Labels';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
@@ -85,6 +87,8 @@ export function ResourceDetails(props) {
     return <ResourceDetailsRenderer {...props} />;
   }
 }
+
+export const ResourceDetailContext = createContext(false);
 
 function ResourceDetailsRenderer(props) {
   const {
@@ -352,74 +356,76 @@ function Resource({
 
   return (
     <>
-      <DynamicPageComponent
-        layoutNumber={layoutNumber ?? 'MidColumn'}
-        layoutCloseUrl={layoutCloseUrl}
-        title={resource.metadata.name}
-        actions={actions}
-        breadcrumbItems={breadcrumbItems}
-        content={
-          <>
-            {createPortal(
-              <DeleteMessageBox
-                resource={resource}
-                resourceUrl={resourceUrl}
-              />,
-              document.body,
-            )}
-            <Suspense fallback={<Spinner />}>
-              <Injections
-                destination={resourceType}
-                slot="details-top"
-                root={resource}
-              />
-            </Suspense>
-            {(customComponents || []).map(component =>
-              component(resource, resourceUrl),
-            )}
-            {children}
-            {resourceGraphConfig?.[resource.kind] && (
-              <Suspense fallback={<Spinner />}>
-                <ResourceGraph
+      <ResourceDetailContext.Provider value={true}>
+        <DynamicPageComponent
+          layoutNumber={layoutNumber ?? 'MidColumn'}
+          layoutCloseUrl={layoutCloseUrl}
+          title={resource.metadata.name}
+          actions={actions}
+          breadcrumbItems={breadcrumbItems}
+          content={
+            <>
+              {createPortal(
+                <DeleteMessageBox
                   resource={resource}
-                  config={resourceGraphConfig}
+                  resourceUrl={resourceUrl}
+                />,
+                document.body,
+              )}
+              <Suspense fallback={<Spinner />}>
+                <Injections
+                  destination={resourceType}
+                  slot="details-top"
+                  root={resource}
                 />
               </Suspense>
-            )}
-            <Suspense fallback={<Spinner />}>
-              <Injections
-                destination={resourceType}
-                slot="details-bottom"
-                root={resource}
-              />
-            </Suspense>
-          </>
-        }
-      >
-        <DynamicPageComponent.Column
-          key="Labels"
-          title={t('common.headers.labels')}
-          columnSpan="1 / 3"
+              {(customComponents || []).map(component =>
+                component(resource, resourceUrl),
+              )}
+              {children}
+              {resourceGraphConfig?.[resource.kind] && (
+                <Suspense fallback={<Spinner />}>
+                  <ResourceGraph
+                    resource={resource}
+                    config={resourceGraphConfig}
+                  />
+                </Suspense>
+              )}
+              <Suspense fallback={<Spinner />}>
+                <Injections
+                  destination={resourceType}
+                  slot="details-bottom"
+                  root={resource}
+                />
+              </Suspense>
+            </>
+          }
         >
-          <Labels labels={resource.metadata.labels || {}} />
-        </DynamicPageComponent.Column>
-
-        <DynamicPageComponent.Column
-          key="Created"
-          title={t('common.headers.created')}
-        >
-          <ReadableCreationTimestamp
-            timestamp={resource.metadata.creationTimestamp}
-          />
-        </DynamicPageComponent.Column>
-
-        {customColumns.filter(filterColumns).map(col => (
-          <DynamicPageComponent.Column key={col.header} title={col.header}>
-            {col.value(resource)}
+          <DynamicPageComponent.Column
+            key="Labels"
+            title={t('common.headers.labels')}
+            columnSpan="1 / 3"
+          >
+            <Labels labels={resource.metadata.labels || {}} />
           </DynamicPageComponent.Column>
-        ))}
-        {createPortal(<YamlUploadDialog />, document.body)}
-      </DynamicPageComponent>
+
+          <DynamicPageComponent.Column
+            key="Created"
+            title={t('common.headers.created')}
+          >
+            <ReadableCreationTimestamp
+              timestamp={resource.metadata.creationTimestamp}
+            />
+          </DynamicPageComponent.Column>
+
+          {customColumns.filter(filterColumns).map(col => (
+            <DynamicPageComponent.Column key={col.header} title={col.header}>
+              {col.value(resource)}
+            </DynamicPageComponent.Column>
+          ))}
+          {createPortal(<YamlUploadDialog />, document.body)}
+        </DynamicPageComponent>
+      </ResourceDetailContext.Provider>
     </>
   );
 }
