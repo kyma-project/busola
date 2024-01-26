@@ -83,6 +83,7 @@ export function NamespaceDetails(props) {
     <ResourceDetails
       createResourceForm={NamespaceCreate}
       {...props}
+      title={t('namespaces.namespace-details')}
       windowTitle={t('namespaces.overview.title')}
       customColumns={customColumns}
       headerActions={headerActions}

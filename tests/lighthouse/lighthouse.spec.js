@@ -55,7 +55,7 @@ test('Busola Lighthouse audit', async () => {
     .click();
 
   await expect(
-    page.locator('ui5-title[level="H4"]:has-text("Cluster Details")'),
+    page.locator('ui5-title[level="H3"]:has-text("Cluster Details")'),
   ).toBeVisible();
 
   console.log('Running audit on cluster details...');

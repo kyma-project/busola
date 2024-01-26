@@ -89,6 +89,7 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
 }
 
 export function Widget({
+  extraContent,
   structure,
   value,
   arrayItems = [],
@@ -148,6 +149,7 @@ export function Widget({
   if (Array.isArray(structure)) {
     return (
       <Plain
+        extraContent={extraContent}
         value={value}
         structure={{ children: structure }}
         originalResource={originalResource}
@@ -183,6 +185,7 @@ export function Widget({
   ) : (
     <SingleWidget
       {...props}
+      extraContent={extraContent}
       inlineRenderer={inlineRenderer}
       Renderer={Renderer}
       value={sanitizedValue}

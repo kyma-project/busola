@@ -1,30 +1,48 @@
-import { LayoutPanelRow } from '../LayoutPanelRow/LayoutPanelRow';
 import { useTranslation } from 'react-i18next';
 import { getPorts } from '../GetContainersPorts';
 import { Link } from 'react-router-dom';
 import { useUrl } from 'hooks/useUrl';
-import { UI5Panel } from '../UI5Panel/UI5Panel';
+import {
+  List,
+  Label,
+  GroupHeaderListItem,
+  Table as UI5Table,
+  TableColumn,
+  TableRow,
+  TableCell,
+  Text,
+  Title,
+} from '@ui5/webcomponents-react';
+import { Labels } from '../Labels/Labels';
+import { PodTemplateRow } from './PodTemplateRow';
 
-function Table({ items, headers, rowRenderer }) {
+function Table({ items, columns, rowRenderer }) {
   if (!items?.length) {
-    return null;
+    return <></>;
   }
 
   return (
-    <table className="template-table">
-      <thead>
-        <tr>
-          {headers.map(header => (
-            <th key={header}>{header}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {items.map((item, i) => {
-          return <tr key={i}>{rowRenderer(item)}</tr>;
-        })}
-      </tbody>
-    </table>
+    <UI5Table
+      columns={columns.map(column => (
+        <TableColumn style={{ width: '50%' }}>
+          <Title level="H5">{column}</Title>
+        </TableColumn>
+      ))}
+    >
+      {items.map(item => (
+        <TableRow>{rowRenderer(item)}</TableRow>
+      ))}
+    </UI5Table>
+  );
+}
+
+export function ContainersPanel({ title, containers }) {
+  return (
+    <List headerText={title}>
+      {containers?.map(container => (
+        <ContainerComponent key={container.name} container={container} />
+      ))}
+    </List>
   );
 }
 
@@ -32,29 +50,45 @@ function ContainerComponent({ container }) {
   const { t } = useTranslation();
 
   return (
-    <UI5Panel disableMargin title={container.name}>
-      <LayoutPanelRow name={t('pods.labels.image')} value={container.image} />
-      <LayoutPanelRow
-        name={t('pods.labels.image-pull-policy')}
-        value={container.imagePullPolicy || 'Always'}
+    <>
+      <GroupHeaderListItem>{container.name}</GroupHeaderListItem>
+      <PodTemplateRow
+        label={t('pods.labels.image')}
+        component={
+          <Text
+            style={{
+              overflow: 'hidden',
+            }}
+          >
+            {container.image}
+          </Text>
+        }
       />
-      <LayoutPanelRow
-        name={t('pods.labels.ports')}
-        value={getPorts(container.ports)}
+      <PodTemplateRow
+        label={t('pods.labels.image-pull-policy')}
+        component={<Text>{container.imagePullPolicy || 'Always'}</Text>}
+      />
+      <PodTemplateRow
+        label={t('pods.labels.ports')}
+        component={<Text>{getPorts(container.ports)}</Text>}
       />
       {container.env && (
-        <LayoutPanelRow
-          name={t('pods.labels.env')}
-          value={
+        <PodTemplateRow
+          label={t('pods.labels.env')}
+          component={
             <Table
               items={container.env}
-              headers={[t('common.headers.name'), t('common.headers.value')]}
+              columns={[t('common.headers.name'), t('common.headers.value')]}
               rowRenderer={env => (
                 <>
-                  <td>{env.name}</td>
-                  <td>
-                    {env.value || env?.valueFrom?.secretKeyRef?.name || ''}
-                  </td>
+                  <TableCell>
+                    <Label>{env.name}</Label>
+                  </TableCell>
+                  <TableCell>
+                    <Label>
+                      {env.value || env?.valueFrom?.secretKeyRef?.name || ''}
+                    </Label>
+                  </TableCell>
                 </>
               )}
             />
@@ -62,16 +96,20 @@ function ContainerComponent({ container }) {
         />
       )}
       {container.volumeMounts && (
-        <LayoutPanelRow
-          name={t('pods.labels.volume-mounts')}
-          value={
+        <PodTemplateRow
+          label={t('pods.labels.volume-mounts')}
+          component={
             <Table
               items={container.volumeMounts}
-              headers={[t('common.headers.name'), t('pods.labels.mount-path')]}
+              columns={[t('common.headers.name'), t('pods.labels.mount-path')]}
               rowRenderer={mount => (
                 <>
-                  <td>{mount.name}</td>
-                  <td>{mount?.mountPath}</td>
+                  <TableCell>
+                    <Label>{mount.name}</Label>
+                  </TableCell>
+                  <TableCell>
+                    <Label>{mount?.mountPath}</Label>
+                  </TableCell>
                 </>
               )}
             />
@@ -79,34 +117,39 @@ function ContainerComponent({ container }) {
         />
       )}
       {container.command && (
-        <LayoutPanelRow
-          name={t('pods.labels.command')}
-          value={<p className="code-block">{container.command.join(' ')}</p>}
+        <PodTemplateRow
+          label={t('pods.labels.command')}
+          component={
+            <p className="code-block">{container.command.join(' ')}</p>
+          }
         />
       )}
       {container.args && (
-        <LayoutPanelRow
-          name={t('pods.labels.args')}
-          value={<p className="code-block">{container.args.join(' ')}</p>}
+        <PodTemplateRow
+          label={t('pods.labels.args')}
+          component={<p className="code-block">{container.args.join(' ')}</p>}
         />
       )}
-    </UI5Panel>
-  );
-}
-
-export function ContainersPanel({ title, containers }) {
-  return (
-    <>
-      <UI5Panel title={title} disableMargin>
-        {containers?.map(container => (
-          <ContainerComponent key={container.name} container={container} />
-        ))}
-      </UI5Panel>
     </>
   );
 }
 
-export function Volume({ volume }) {
+export function VolumesPanel({ title, labels, volumes }) {
+  const { t } = useTranslation();
+  return (
+    <List headerText={title}>
+      <PodTemplateRow
+        label={t('common.headers.labels')}
+        component={<Labels labels={labels} />}
+      />
+      {volumes.map(volume => (
+        <VolumeComponent key={volume.name} volume={volume} />
+      ))}
+    </List>
+  );
+}
+
+function VolumeComponent({ volume }) {
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();
   const { name, configMap, secret } = volume;
@@ -128,12 +171,13 @@ export function Volume({ volume }) {
   const k8sResourceName = configMap?.name || secret?.secretName;
 
   return (
-    <UI5Panel disableMargin title={name}>
-      <LayoutPanelRow name="Type" value={typeLabel} />
+    <>
+      <GroupHeaderListItem>{name}</GroupHeaderListItem>
+      <PodTemplateRow label="Type" component={<Text>{typeLabel}</Text>} />
       {k8sResource && (
-        <LayoutPanelRow
-          name={t('common.headers.resource')}
-          value={
+        <PodTemplateRow
+          label={t('common.headers.resource')}
+          component={
             <Link
               className="bsl-link"
               to={namespaceUrl(
@@ -146,22 +190,26 @@ export function Volume({ volume }) {
         />
       )}
       {k8sResource?.items && (
-        <LayoutPanelRow
-          name={t('common.headers.items')}
-          value={
+        <PodTemplateRow
+          label={t('common.headers.items')}
+          component={
             <Table
               items={k8sResource.items}
-              headers={[t('common.headers.key'), t('common.labels.path')]}
+              columns={[t('common.headers.key'), t('common.labels.path')]}
               rowRenderer={mount => (
                 <>
-                  <td>{mount.key}</td>
-                  <td>{mount.path}</td>
+                  <TableCell>
+                    <Label>{mount.key}</Label>
+                  </TableCell>
+                  <TableCell>
+                    <Label>{mount.path}</Label>
+                  </TableCell>
                 </>
               )}
             />
           }
         />
       )}
-    </UI5Panel>
+    </>
   );
 }
