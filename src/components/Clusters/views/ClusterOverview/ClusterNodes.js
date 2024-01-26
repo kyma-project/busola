@@ -10,7 +10,7 @@ import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTim
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useUrl } from 'hooks/useUrl';
-import { ProgressIndicatorWithPercentage } from '../../../../shared/components/ProgressIndicatorWithPercentage/ProgressIndicatorWithPercentage';
+import { ProgressIndicatorWithPercentage } from 'shared/components/ProgressIndicatorWithPercentage/ProgressIndicatorWithPercentage';
 
 const NodeHeader = ({ nodeName }) => {
   const { clusterUrl } = useUrl();
