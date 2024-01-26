@@ -10,6 +10,8 @@ Each pull request to the repository triggers CI/CD jobs that verify the Busola c
 - `pull-busola-integration-cluster-k3d` - Performs integration testing for the Busola related to cluster level functionallities using k3d cluster.
 - `pull-busola-integration-namespace-k3d` - Performs integration testing for the Busola related to namespace level functionallities using k3d cluster.
 - `pull-busola-lighthouse` - Performs performance testing for the Busola.
+- `Lint Markdown Links PR / markdown-link-check` - Code quality static code check.
+- `CodeQL / Analyze (javascript)` - Code quality static code check.
 
 After the pull request is merged, the following CI/CD jobs are executed:
 
