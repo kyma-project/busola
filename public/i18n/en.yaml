@@ -921,7 +921,6 @@ namespaces:
   name_singular: Namespace
   namespace-details: Namespace Details
   namespaces-overview: Namespaces Overview
-  no-namespaces-found: No Namespaces fetched
   overview:
     resources:
       error: Error while loading memory consumption data
