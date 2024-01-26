@@ -89,7 +89,7 @@ context('Test Pizzas', () => {
     cy.contains('ui5-link', 'diavola-order').click({ force: true });
 
     cy.contains('paymentMethod: CARD');
-    cy.contains('realization=SELF-PICKUP');
+    cy.contains('realization: SELF-PICKUP');
     cy.contains('ui5-breadcrumbs', 'Pizza Orders');
   });
 

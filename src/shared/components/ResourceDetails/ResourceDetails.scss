@@ -1,0 +1,20 @@
+.cluster-overview__details-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.cluster-overview__details-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 25px;
+}
+
+@container (min-width: 650px) {
+  .cluster-overview__details-wrapper {
+    grid-template-columns: 2fr 1fr;
+  }
+
+  .cluster-overview__details-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

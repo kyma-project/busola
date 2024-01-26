@@ -306,6 +306,7 @@ common:
     policies: Policies
     region: Region
     resource: Resource
+    resource-details: Resource Details
     resources: Resources
     status: Status
     value: Value
@@ -918,8 +919,8 @@ namespaces:
     memory-quotas: Memory Quotas
   description: <0>Namespace</0> helps to maintain and divide resources in a cluster.
   name_singular: Namespace
+  namespace-details: Namespace Details
   namespaces-overview: Namespaces Overview
-  no-namespaces-found: No Namespaces fetched
   overview:
     resources:
       error: Error while loading memory consumption data
