@@ -5,12 +5,12 @@ import { useTranslation } from 'react-i18next';
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { ProgressBar } from 'shared/components/ProgressBar/ProgressBar';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useUrl } from 'hooks/useUrl';
+import { ProgressIndicatorWithPercentage } from 'shared/components/ProgressIndicatorWithPercentage/ProgressIndicatorWithPercentage';
 
 const NodeHeader = ({ nodeName }) => {
   const { clusterUrl } = useUrl();
@@ -64,29 +64,33 @@ export function ClusterNodes({ data, error, loading }) {
     return [
       <NodeHeader nodeName={entry.metadata?.name} />,
       cpu ? (
-        <ProgressBar
-          percentage={cpu.percentage}
-          tooltip={{
-            content: t('cluster-overview.tooltips.cpu-used-percentage', {
-              percentage: cpu.percentage,
-            }),
-            position: 'bottom',
-          }}
-          color="var(--sapIndicationColor_7)"
-        />
+        <>
+          <ProgressIndicatorWithPercentage
+            dataBarColor="var(--sapChart_Bad)"
+            leftTitle={cpu.percentage}
+            value={cpu.percentageValue}
+            tooltip={{
+              content: t('cluster-overview.tooltips.cpu-used-percentage', {
+                percentage: cpu.percentage,
+              }),
+              position: 'bottom',
+            }}
+          />
+        </>
       ) : (
         EMPTY_TEXT_PLACEHOLDER
       ),
       memory ? (
-        <ProgressBar
-          percentage={memory.percentage}
+        <ProgressIndicatorWithPercentage
+          leftTitle={memory.percentage}
+          value={memory.percentageValue}
           tooltip={{
             content: t('cluster-overview.tooltips.memory-used-percentage', {
               percentage: memory.percentage,
             }),
             position: 'bottom',
           }}
-          color="var(--sapIndicationColor_6)"
+          dataBarColor="var(--sapChart_Good)"
         />
       ) : (
         EMPTY_TEXT_PLACEHOLDER

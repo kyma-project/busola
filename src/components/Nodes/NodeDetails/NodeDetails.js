@@ -10,6 +10,7 @@ import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { spacing } from '@ui5/webcomponents-react-base';
 import './NodeDetails.scss';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
+import { Title } from '@ui5/webcomponents-react';
 
 function NodeDetails({ nodeName }) {
   const { data, error, loading } = useNodeQuery(nodeName);
@@ -23,7 +24,6 @@ function NodeDetails({ nodeName }) {
       defaultType={EVENT_MESSAGE_TYPE.WARNING}
     />
   );
-
   return (
     <div className="node-details">
       <NodeDetailsHeader
@@ -35,11 +35,21 @@ function NodeDetails({ nodeName }) {
           <>
             {data && (
               <>
-                <div className="panels" style={spacing.sapUiSmallMargin}>
-                  <NodeResources
-                    {...data}
-                    headerContent={t('common.headers.resources')}
-                  />
+                <Title
+                  level="H4"
+                  style={{
+                    ...spacing.sapUiMediumMarginBegin,
+                    ...spacing.sapUiMediumMarginTop,
+                    ...spacing.sapUiSmallMarginBottom,
+                  }}
+                >
+                  {t('common.headers.nodeInfo')}
+                </Title>
+                <div
+                  className="panels"
+                  style={spacing.sapUiSmallMarginBeginEnd}
+                >
+                  <NodeResources {...data} />
                   <MachineInfo
                     nodeInfo={data.node.status.nodeInfo}
                     capacity={data.node.status.capacity}
