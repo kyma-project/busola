@@ -74,7 +74,7 @@ context('Test Custom Resources', () => {
       .contains('Custom Resources')
       .click();
 
-    cy.contains('ui5-link', 'Tclusters').click();
+    cy.contains('ui5-link', 'Tclusters').click({ force: true });
 
     cy.contains('ui5-button', 'Create Tcluster').click();
 
@@ -94,7 +94,7 @@ context('Test Custom Resources', () => {
       .contains('Custom Resources')
       .click();
 
-    cy.contains('ui5-link', 'Tclusters').click();
+    cy.contains('ui5-link', 'Tclusters').click({ force: true });
 
     cy.testMidColumnLayout('Tclusters');
 
@@ -109,6 +109,10 @@ context('Test Custom Resources', () => {
     cy.getMidColumn()
       .contains('ui5-link', 'tcluster-test')
       .click();
+
+    cy.getMidColumn()
+      .find('ui5-button[aria-label="full-screen"]')
+      .should('not.exist');
 
     cy.getEndColumn()
       .contains('ui5-button', 'Delete')
