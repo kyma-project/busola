@@ -55,12 +55,9 @@ export default function ClusterStats({ data }) {
       >
         {t('cluster-overview.statistics.title')}
       </Title>
-      <div
-        className="cluster-overview__graphs-wrapper"
-        style={spacing.sapUiSmallMarginBeginEnd}
-      >
+      <div className="flexwrap" style={spacing.sapUiSmallMarginBeginEnd}>
         <Card
-          className="cluster-overview__radial-chart-container"
+          className="radial-chart-card"
           header={
             <CardHeader
               titleText={t('cluster-overview.statistics.cpu-usage')}
@@ -68,7 +65,6 @@ export default function ClusterStats({ data }) {
           }
         >
           <UI5RadialChart
-            className="cluster-overview__radial-chart"
             color="var(--sapChart_Bad)"
             value={roundDecimals(cpu.usage)}
             max={roundDecimals(cpu.capacity)}
@@ -82,7 +78,7 @@ export default function ClusterStats({ data }) {
           />
         </Card>
         <Card
-          className="cluster-overview__radial-chart-container"
+          className="radial-chart-card"
           header={
             <CardHeader
               titleText={t('cluster-overview.statistics.memory-usage')}
@@ -90,7 +86,6 @@ export default function ClusterStats({ data }) {
           }
         >
           <UI5RadialChart
-            className="cluster-overview__radial-chart"
             color="var(--sapChart_Good)"
             value={roundDecimals(memory.usage)}
             max={roundDecimals(memory.capacity)}
@@ -105,7 +100,7 @@ export default function ClusterStats({ data }) {
         </Card>
         {(podsData || deploymentsData) && (
           <Card
-            className="cluster-overview__prograss-chart"
+            className="progress-chart-card"
             header={
               <CardHeader
                 titleText={t('cluster-overview.statistics.namespaces-health')}
@@ -154,10 +149,7 @@ export default function ClusterStats({ data }) {
           </Card>
         )}
       </div>
-      <div
-        className="cluster-overview__graphs-wrapper"
-        style={spacing.sapUiSmallMargin}
-      >
+      <div className="flexwrap" style={spacing.sapUiSmallMargin}>
         {data && (
           <CountingCard
             value={data?.length}

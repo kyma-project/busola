@@ -131,6 +131,12 @@ ui5-tabcontainer::part(content) {
   bottom: 50px;
 }
 
+.flexwrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
 .is-emphasized {
   font-style: italic;
 }

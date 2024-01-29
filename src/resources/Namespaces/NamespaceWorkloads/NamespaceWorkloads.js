@@ -49,12 +49,12 @@ export function NamespaceWorkloads({ namespace }) {
     <>
       {(podsData || deploymentsData) && (
         <Card
+          className="progress-chart-card"
           header={
             <CardHeader
               titleText={t('cluster-overview.statistics.namespaces-health')}
             />
           }
-          className="namespace-workloads__body"
         >
           <div style={spacing.sapUiSmallMargin}>
             {podsData && (

@@ -141,6 +141,7 @@ export const ResourcesUsage = ({ namespace }) => {
   return (
     <>
       <Card
+        className="radial-chart-card"
         header={
           <CardHeader titleText={t('namespaces.overview.resources.requests')} />
         }
@@ -151,6 +152,7 @@ export const ResourcesUsage = ({ namespace }) => {
         />
       </Card>
       <Card
+        className="radial-chart-card"
         header={
           <CardHeader titleText={t('namespaces.overview.resources.limits')} />
         }

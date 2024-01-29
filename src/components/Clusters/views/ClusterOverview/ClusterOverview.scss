@@ -1,29 +1,3 @@
-.cluster-overview__graphs-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-.cluster-overview__radial-chart-container {
-  max-width: 225px;
-  height: 250px;
-}
-
-.cluster-overview__radial-chart {
-  height: 200px;
-}
-
-.cluster-overview__prograss-chart {
-  max-width: 450px;
-  max-height: 200px;
-}
-
-.cluster-overview__cards-wrapper {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
 .gardener-provider {
   text-transform: uppercase;
 }
