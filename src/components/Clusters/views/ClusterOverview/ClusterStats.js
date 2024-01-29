@@ -60,6 +60,7 @@ export default function ClusterStats({ data }) {
         style={spacing.sapUiSmallMarginBeginEnd}
       >
         <Card
+          className="cluster-overview__radial-chart-container"
           header={
             <CardHeader
               titleText={t('cluster-overview.statistics.cpu-usage')}
@@ -67,6 +68,7 @@ export default function ClusterStats({ data }) {
           }
         >
           <UI5RadialChart
+            className="cluster-overview__radial-chart"
             color="var(--sapChart_Bad)"
             value={roundDecimals(cpu.usage)}
             max={roundDecimals(cpu.capacity)}
@@ -80,6 +82,7 @@ export default function ClusterStats({ data }) {
           />
         </Card>
         <Card
+          className="cluster-overview__radial-chart-container"
           header={
             <CardHeader
               titleText={t('cluster-overview.statistics.memory-usage')}
@@ -87,6 +90,7 @@ export default function ClusterStats({ data }) {
           }
         >
           <UI5RadialChart
+            className="cluster-overview__radial-chart"
             color="var(--sapChart_Good)"
             value={roundDecimals(memory.usage)}
             max={roundDecimals(memory.capacity)}
@@ -101,6 +105,7 @@ export default function ClusterStats({ data }) {
         </Card>
         {(podsData || deploymentsData) && (
           <Card
+            className="cluster-overview__prograss-chart"
             header={
               <CardHeader
                 titleText={t('cluster-overview.statistics.namespaces-health')}
@@ -150,7 +155,7 @@ export default function ClusterStats({ data }) {
         )}
       </div>
       <div
-        className="cluster-overview__cards-wrapper"
+        className="cluster-overview__graphs-wrapper"
         style={spacing.sapUiSmallMargin}
       >
         {data && (

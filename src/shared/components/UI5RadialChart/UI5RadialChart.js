@@ -17,22 +17,21 @@ export const UI5RadialChart = ({
   value,
   max,
   color = 'var(--sapBrandColor)',
+  className,
   onClick,
-  title,
   tooltip,
 }) => {
   const percent = max && value ? Math.round((value * 100) / max) : 0;
   const text = percent + '%';
   const textSize = size / Math.max(4, text.length) + 'px';
 
-  const classnames = classNames(`radial-chart`, {
+  const classnames = classNames(`radial-chart`, className, {
     'cursor-pointer': onClick,
   });
 
   return (
     <TooltipWrapper tooltipProps={tooltip}>
       <div className={classnames} onClick={onClick}>
-        {title && <span className="title">{title}</span>}
         <RadialChart
           displayValue={text}
           displayValueStyle={{
