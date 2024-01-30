@@ -7,6 +7,12 @@ jobs:
     # environment:
     #     name: release
     steps:
+      - uses: gardenlinux/workflow-telemetry-action@6f19ac2411a52a120abb74c812592b44f165d05c # pin@v1
+        with:
+          metric_frequency: 1
+          proc_trace_min_duration: 10
+          proc_trace_chart_max_count: 50
+          comment_on_pr: false
       - uses: actions/checkout@v4
         with:
           # ref: ${{ github.event.pull_request.head.sha }}
