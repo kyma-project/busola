@@ -160,12 +160,14 @@ export default function ClusterStats({ data }) {
           <CountingCard
             value={podsData?.length}
             title={t('cluster-overview.statistics.pods')}
+            resourceUrl="pods"
           />
         )}
         {deploymentsData && (
           <CountingCard
             value={deploymentsData?.length}
             title={t('cluster-overview.statistics.deployments')}
+            resourceUrl="deployments"
           />
         )}
       </div>

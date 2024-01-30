@@ -246,6 +246,7 @@ common:
     edit: Edit
     edit-yaml: Edit YAML
     generate-name: Generate
+    learn-more: Learn More
     load: Load
     ok: OK
     remove-all: Remove all
