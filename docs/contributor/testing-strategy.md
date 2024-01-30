@@ -2,7 +2,7 @@
 
 Each pull request to the repository triggers CI/CD jobs that verify the Busola configuration, build and run integration tests.
 
-- `pre-busola-web-deployment-check` - Checks if busola web image in deployment is bumped correctly.
+- `pre-busola-web-deployment-check` - Checks if the Busola web image in deployment is bumped correctly.
 - `pre-busola-backend-deployment-check` - Checks if busola backend image in deployment is bumped correctly. (runs only when changes affect backend)
 - `pull-busola-web-build` - Unit tests of busola, eslint code quality check and build web docker image.
 - `pull-busola-local-build` - Unit tests of busola, eslint code quality and build web and backend docker image.
