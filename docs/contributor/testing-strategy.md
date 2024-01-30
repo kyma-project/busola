@@ -17,4 +17,4 @@ After the pull request is merged, the following CI/CD jobs are executed:
 
 - `post-busola-web-build` - Performs Busola unit tests and builds the web Docker image.
 - `post-busola-local-build` - Performs Busola unit tests and builds the web and backend Docker image.
-- `post-busola-backend-build` - Builds backend docker image.
+- `post-busola-backend-build` - Builds the backend Docker image.
