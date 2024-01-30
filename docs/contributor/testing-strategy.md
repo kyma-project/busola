@@ -1,6 +1,6 @@
 # Testing Strategy
 
-Each pull request to the repository triggers CI/CD jobs that verify the Busola configuration, build and run integration tests.
+Each pull request (PR) to the repository triggers CI/CD jobs that verify the Busola configuration, build and run integration tests.
 
 - `pre-busola-web-deployment-check` - Checks if the Busola web image in deployment is bumped correctly.
 - `pre-busola-backend-deployment-check` - Checks if the Busola backend image in deployment is bumped correctly. The check runs only when PR changes affect the backend.
