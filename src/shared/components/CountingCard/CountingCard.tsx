@@ -3,36 +3,61 @@ import { spacing } from '@ui5/webcomponents-react-base';
 import { Link } from 'react-router-dom';
 import { useUrl } from 'hooks/useUrl';
 import { useTranslation } from 'react-i18next';
+import { DynamicPageComponent } from '../DynamicPageComponent/DynamicPageComponent';
 import './CountingCard.scss';
 
 type CountingCardProps = {
   value: number;
+  extraInfo: any;
   title: string;
+  subTitle: string;
   resourceUrl: string;
 };
 
 export const CountingCard = ({
   value,
+  extraInfo,
   title,
+  subTitle,
   resourceUrl,
 }: CountingCardProps) => {
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();
 
   return (
-    <Card className="counting-card" header={<CardHeader titleText={title} />}>
+    <Card
+      className="counting-card"
+      style={{ maxWidth: extraInfo ? '325px' : '175px' }}
+      header={<CardHeader titleText={title} subtitleText={subTitle} />}
+    >
       <div
         style={{
           ...spacing.sapUiSmallMarginBeginEnd,
           ...spacing.sapUiSmallMarginBottom,
         }}
       >
-        <p
-          className="counting-card__value learn-more-link"
-          style={spacing.sapUiSmallMarginBottom}
+        <div
+          className="counting-card__content"
+          style={{
+            ...spacing.sapUiSmallMarginBottom,
+            marginTop: !subTitle ? '17.5px' : '0px',
+          }}
         >
-          {value ?? ' '}
-        </p>
+          <p className="counting-card__value">{value}</p>
+          {extraInfo && (
+            <div className="counting-card__extra-content">
+              {extraInfo.map((info: any) => (
+                <DynamicPageComponent.Column
+                  title={info.title}
+                  columnSpan={null}
+                  image={null}
+                >
+                  {info.value}
+                </DynamicPageComponent.Column>
+              ))}
+            </div>
+          )}
+        </div>
         {resourceUrl && (
           <Link
             className="bsl-link learn-more-link"

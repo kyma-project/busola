@@ -159,8 +159,19 @@ export default function ClusterStats({ data }) {
         {podsData && (
           <CountingCard
             value={podsData?.length}
-            title={t('cluster-overview.statistics.pods')}
+            title={t('cluster-overview.statistics.pods-overview')}
+            subTitle={t('cluster-overview.statistics.total-pods')}
             resourceUrl="pods"
+            extraInfo={[
+              {
+                title: t('cluster-overview.statistics.healthy-pods'),
+                value: healthyPods,
+              },
+              {
+                title: t('cluster-overview.statistics.failing-pods'),
+                value: podsData.length - healthyPods,
+              },
+            ]}
           />
         )}
         {deploymentsData && (

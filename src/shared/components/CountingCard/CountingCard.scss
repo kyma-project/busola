@@ -1,8 +1,17 @@
 .counting-card {
-  max-width: 200px;
-
   &__value {
     color: var(--sapContent_LabelColor);
     font-size: 2.85rem;
+  }
+
+  &__content {
+    display: flex;
+    min-height: 45px;
+  }
+
+  &__extra-content {
+    margin-left: 50px;
+    display: flex;
+    gap: 10px;
   }
 }
