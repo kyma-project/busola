@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { MessageStrip, Text } from '@ui5/webcomponents-react';
+import { MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 import { showAddClusterWizard } from 'state/showAddClusterWizard';
@@ -48,13 +48,14 @@ export function KubeconfigUpload({ kubeconfig, setKubeconfig }) {
           editor.getModel().setValue(text);
         }}
       />
-      <Text className="editor-label" style={spacing.sapUiSmallMarginTopBottom}>
-        {t('clusters.wizard.editor-label')}
-      </Text>
       <Editor
         autocompletionDisabled
         language="yaml"
-        value={kubeconfig ? jsyaml.dump(kubeconfig) : ''}
+        value={
+          kubeconfig
+            ? jsyaml.dump(kubeconfig)
+            : t('clusters.wizard.editor-label')
+        }
         onMount={setEditor}
         onChange={updateKubeconfig}
       />

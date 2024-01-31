@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MessageStrip, Switch } from '@ui5/webcomponents-react';
+import { MessageStrip, Switch, Title } from '@ui5/webcomponents-react';
 import * as jp from 'jsonpath';
 import { createLoginCommand, tryParseOIDCparams } from './oidc-params';
 
@@ -116,6 +116,7 @@ export function AuthForm({
       setResource={setResource}
       {...props}
     >
+      <Title level="H5">{t('clusters.wizard.update')}</Title>
       <MessageStrip
         design="Warning"
         hideCloseButton
@@ -130,13 +131,9 @@ export function AuthForm({
       </MessageStrip>
       {!useOidc && <TokenForm />}
       {!useOidc && (
-        <MessageStrip
-          design="Information"
-          hideCloseButton
-          style={spacing.sapUiSmallMarginTopBottom}
-        >
+        <p className="cluster-wizard__token-info">
           {t('clusters.wizard.token-info')}
-        </MessageStrip>
+        </p>
       )}
       <ResourceForm.FormField
         label={t('clusters.wizard.auth.using-oidc')}

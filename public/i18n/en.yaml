@@ -132,7 +132,7 @@ clusters:
       sessionStorage: Cluster data is cleared when the page session ends.
       unknown: Unknown storage type
     info: |
-      You can choose where to store your cluster configuration. Based on your kubeconfig type, we recommend the pre-selected storage mode. You can choose whatever you prefer for convenience and security. None of the options stores information on the server.
+      You can choose where to store your cluster configuration. However, we recommend the pre-selected storage mode based on your kubeconfig file type. None of the options stores information on the server.
     labels:
       inMemory: In memory
       localStorage: Local storage
@@ -153,7 +153,7 @@ clusters:
       issuer-url: Issuer URL
       scopes: Scopes
       token: Token
-      using-oidc: I'm using an OIDC provider instead
+      using-oidc: OIDC provider
     context: Context to connect
     editor-label: 'or paste your kubeconfig here:'
     incomplete: We couldn't find enough authentication information for {{context}} in your kubeconfig. You can enter it manually.
@@ -167,6 +167,7 @@ clusters:
       You can choose your privacy options in the last step.
     token-info: If you don't know how to get your token, ask your authentication provider.
     update: Provide Authentication
+    authentication: Authentication
 command-palette:
   crds:
     name-short: CRD
@@ -425,7 +426,8 @@ components:
   error-panel:
     error: An error occured. The component cannot be rendered.
   file-input:
-    drag-file: Drag your file here or click to upload
+    drag-file-upload: Drag your file here or click to upload
+    drag-file-replace: Drag your file here or click to replace
   generic-list:
     messages:
       no-search-results: Couldn't find resources matching this query.

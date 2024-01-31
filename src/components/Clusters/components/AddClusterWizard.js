@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { MessageStrip, Wizard, WizardStep } from '@ui5/webcomponents-react';
+import { Wizard, WizardStep } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -18,7 +18,6 @@ import { ContextChooser } from './ContextChooser/ContextChooser';
 import { ChooseStorage } from './ChooseStorage';
 import { WizardButtons } from 'shared/components/WizardButtons/WizardButtons';
 
-import { spacing } from '@ui5/webcomponents-react-base';
 import './AddClusterWizard.scss';
 
 export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
@@ -42,7 +41,7 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
     setCustomValid,
     revalidate,
   } = useCustomFormValidator();
-
+  //console.log(authValid)
   useEffect(() => {
     if (Array.isArray(kubeconfig?.contexts)) {
       if (getUser(kubeconfig)?.token) {
@@ -120,19 +119,10 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
   return (
     <Wizard contentLayout="SingleStep">
       <WizardStep
-        titleText={t('clusters.wizard.kubeconfig')}
+        titleText={t('configuration.title')}
         branching={!kubeconfig}
         selected={selected === 1}
       >
-        <p>{t('clusters.wizard.intro')}</p>
-        <MessageStrip
-          design="Information"
-          hideCloseButton
-          className="add-cluster__kubeconfig-info"
-          style={spacing.sapUiSmallMarginTopBottom}
-        >
-          {t('clusters.wizard.storage-info')}
-        </MessageStrip>
         <KubeconfigUpload
           kubeconfig={kubeconfig}
           setKubeconfig={updateKubeconfig}
@@ -143,12 +133,13 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
           firstStep={true}
           onCancel={() => setShowWizard(false)}
           validation={!kubeconfig}
+          className="cluster-wizard__buttons"
         />
       </WizardStep>
 
       {kubeconfig && (!hasAuth || !hasOneContext) && (
         <WizardStep
-          titleText={t('clusters.wizard.update')}
+          titleText={t('clusters.wizard.authentication')}
           selected={selected === 2}
           disabled={selected !== 2}
         >
@@ -169,12 +160,13 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
             setSelected={setSelected}
             onCancel={() => setShowWizard(false)}
             validation={!authValid}
+            className="cluster-wizard__buttons"
           />
         </WizardStep>
       )}
 
       <WizardStep
-        title={t('clusters.wizard.storage')}
+        titleText={'Privacy'} ///////////////////////////////////////
         selected={
           kubeconfig && (!hasAuth || !hasOneContext)
             ? selected === 3
@@ -195,6 +187,7 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
           validation={!storage}
           onComplete={onComplete}
           onCancel={() => setShowWizard(false)}
+          className="cluster-wizard__buttons"
         />
       </WizardStep>
     </Wizard>

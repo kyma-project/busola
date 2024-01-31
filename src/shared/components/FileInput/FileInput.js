@@ -8,6 +8,7 @@ import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 import './FileInput.scss';
 import { showAddClusterWizard } from 'state/showAddClusterWizard';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 FileInput.propTypes = {
   fileInputChanged: PropTypes.func.isRequired,
@@ -67,9 +68,6 @@ export function FileInput({
       onDragLeave={() => setDraggingCounter(draggingOverCounter - 1)}
       onDragOver={dragOver}
     >
-      {!!fileNames.length && (
-        <p className="file-input__secondary">{fileNames.join(', ')}</p>
-      )}
       <input
         ref={inputRef}
         type="file"
@@ -81,10 +79,24 @@ export function FileInput({
         multiple={allowMultiple}
       />
       <div>
-        <Icon name="upload" aria-label="file upload" design="Information" />
-        <p>{t('components.file-input.drag-file')}</p>
+        <Icon
+          name="upload"
+          aria-label="file upload"
+          design="Information"
+          className="file-input__icon"
+        />
+        <p style={spacing.sapUiSmallMarginTopBottom}>
+          {fileNames.length
+            ? t('components.file-input.drag-file-replace')
+            : t('components.file-input.drag-file-upload')}
+        </p>
         {availableFormatsMessage && (
           <p className="file-input__secondary">{availableFormatsMessage}</p>
+        )}
+        {!!fileNames.length && (
+          <p className="file-input__secondary">
+            {fileNames.join(', ') + ' uploaded'}
+          </p> ///////////////////////////////////
         )}
       </div>
     </label>

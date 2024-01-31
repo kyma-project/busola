@@ -5,4 +5,43 @@
 ui5-wizard {
   height: 90vh;
   min-width: 80vw;
+
+  .cluster-wizard {
+    &__buttons {
+      position: absolute;
+      bottom: 15px;
+      left: 0;
+      display: flex;
+      justify-content: end;
+      box-sizing: border-box;
+      width: calc(100% - 20px);
+      margin: 0 10px;
+      padding: 7px;
+      border-radius: var(--sapElement_BorderCornerRadius);
+      background-color: var(--sapGroup_TitleBackground);
+      box-shadow: 0 0 0.125rem 0
+          color-mix(in srgb, var(--sapContent_ShadowColor) 16%, transparent),
+        0 0.5rem 1rem 0
+          color-mix(in srgb, var(--sapContent_ShadowColor) 16%, transparent);
+    }
+    &__token-info,
+    &__storage-preference {
+      color: var(--sapContent_LabelColor);
+      font-size: var(--sapFontSize);
+    }
+  }
+
+  /*.resource-form {
+    .form-field {
+      justify-content: start;
+
+      &__label {
+        min-width: unset;
+        max-width: unset;
+        width: 100%;
+        justify-content: flex-start;
+      flex-grow: 3;
+    }
+    }
+  }*/
 }

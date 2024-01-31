@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { MessageStrip, Select, Option } from '@ui5/webcomponents-react';
+import { MessageStrip, Select, Option, Title } from '@ui5/webcomponents-react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 
@@ -29,7 +29,8 @@ export function ContextChooser(params) {
   };
 
   return (
-    <ResourceForm.Wrapper {...params}>
+    <ResourceForm.Wrapper {...params} style={spacing.sapUiMediumMarginBottom}>
+      <Title level="H5">{'Provide Context'}</Title>
       <ResourceForm.FormField
         required
         propertyPath='$["current-context"]'
