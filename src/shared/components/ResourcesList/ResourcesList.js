@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
-import { Button } from '@ui5/webcomponents-react';
-import { Link } from 'react-router-dom';
+import { Button, Link } from '@ui5/webcomponents-react';
 import { createPatch } from 'rfc6902';
 import { cloneDeep } from 'lodash';
 import * as jp from 'jsonpath';
 import pluralize from 'pluralize';
+import { useRecoilState } from 'recoil';
 
+import { columnLayoutState } from 'state/columnLayoutAtom';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { usePut, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useGetList, useSingleGet } from 'shared/hooks/BackendAPI/useGet';
@@ -76,6 +79,8 @@ ResourcesList.propTypes = {
   disableEdit: PropTypes.bool,
   disableDelete: PropTypes.bool,
   disableMargin: PropTypes.bool,
+  enableColumnLayout: PropTypes.bool,
+  layoutNumber: PropTypes.string,
 };
 
 ResourcesList.defaultProps = {
@@ -89,6 +94,8 @@ ResourcesList.defaultProps = {
   disableEdit: false,
   disableDelete: false,
   disableMargin: false,
+  enableColumnLayout: false,
+  layoutNumber: 'StartColumn',
   filterFn: () => true,
 };
 
@@ -110,6 +117,7 @@ export function ResourcesList(props) {
     <YamlEditorProvider>
       {!props.isCompact ? (
         <DynamicPageComponent
+          layoutNumber={props.layoutNumber}
           title={prettifyNamePlural(props.resourceTitle, props.resourceType)}
           actions={
             <>
@@ -193,12 +201,18 @@ export function ResourceListRenderer({
   disableEdit,
   disableDelete,
   disableMargin,
+  enableColumnLayout,
+  columnLayout,
+  customColumnLayout,
+  layoutNumber = 'StartColumn',
   sortBy = {
     name: nameLocaleSort,
     time: timeSort,
   },
   searchSettings,
   isCompact,
+  parentCrdName,
+  emptyListProps = null,
 }) {
   useVersionWarning({
     resourceUrl,
@@ -206,12 +220,16 @@ export function ResourceListRenderer({
   });
   const { t } = useTranslation();
   const { isProtected, protectedResourceWarning } = useProtectedResources();
+  const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
 
   const [toggleFormFn, getToggleFormFn] = useState(() => {});
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     resourceTitle,
     resourceType,
+    layoutNumber,
+    redirectBack: false,
+    parentCrdName,
   });
 
   const [activeResource, setActiveResource] = useState(null);
@@ -221,6 +239,8 @@ export function ResourceListRenderer({
     currentlyEditedResourceUID,
   } = useYamlEditor();
   const notification = useNotification();
+  const navigate = useNavigate();
+
   const getRequest = useSingleGet();
   const updateResourceMutation = useUpdate(resourceUrl);
   const putRequest = usePut();
@@ -236,19 +256,61 @@ export function ResourceListRenderer({
 
   const linkTo = entry =>
     customUrl ? customUrl(entry) : resourceUrlFn(entry, { resourceType });
-
   const defaultColumns = [
     {
       header: t('common.headers.name'),
       value: entry =>
         hasDetailsView ? (
-          <Link
-            className="bsl-link"
-            style={{ fontWeight: 'bold' }}
-            to={linkTo(entry)}
-          >
-            {nameSelector(entry)}
-          </Link>
+          enableColumnLayout ? (
+            <>
+              <Link
+                style={{ fontWeight: 'bold' }}
+                onClick={() => {
+                  setLayoutColumn(
+                    columnLayout
+                      ? {
+                          midColumn: layoutState.midColumn,
+                          endColumn: customColumnLayout(entry),
+                          layout: columnLayout,
+                        }
+                      : {
+                          midColumn: {
+                            resourceName: entry?.metadata?.name,
+                            resourceType: resourceType,
+                            namespaceId: entry?.metadata?.namespace,
+                          },
+                          endColumn: null,
+                          layout: 'TwoColumnsMidExpanded',
+                        },
+                  );
+
+                  window.history.pushState(
+                    window.history.state,
+                    '',
+                    `${linkTo(entry)}?layout=${columnLayout ||
+                      'TwoColumnsMidExpanded'}`,
+                  );
+                }}
+              >
+                {nameSelector(entry)}
+              </Link>
+            </>
+          ) : (
+            <Link
+              style={{ fontWeight: 'bold' }}
+              onClick={() => {
+                setLayoutColumn({
+                  midColumn: null,
+                  endColumn: null,
+                  layout: 'OneColumn',
+                });
+
+                navigate(linkTo(entry));
+              }}
+            >
+              {nameSelector(entry)}
+            </Link>
+          )
         ) : (
           <b>{nameSelector(entry)}</b>
         ),
@@ -505,6 +567,28 @@ export function ResourceListRenderer({
     ];
   };
 
+  const processTitle = title => {
+    const words = title.split(' ');
+    let uppercaseCount = 0;
+
+    const processedWords = words?.map(word => {
+      for (let i = 0; i < word.length; i++) {
+        if (word[i] === word[i].toUpperCase()) {
+          uppercaseCount++;
+
+          if (uppercaseCount > 1) {
+            uppercaseCount = 0;
+            return word;
+          }
+        }
+      }
+      uppercaseCount = 0;
+      return word.toLowerCase();
+    });
+
+    return processedWords.join(' ');
+  };
+
   return (
     <>
       <ModalWithForm
@@ -528,6 +612,7 @@ export function ResourceListRenderer({
               namespace={namespace}
               refetchList={silentRefetch}
               toggleFormFn={toggleFormFn}
+              layoutNumber={layoutNumber}
               {...props}
               {...createFormProps}
             />
@@ -560,6 +645,16 @@ export function ResourceListRenderer({
           searchSettings={{
             ...searchSettings,
             textSearchProperties: textSearchProperties(),
+          }}
+          emptyListProps={{
+            ...emptyListProps,
+            titleText: `${t('common.labels.no')} ${processTitle(
+              prettifyNamePlural(resourceTitle, resourceType),
+            )}`,
+            onClick: () => {
+              setActiveResource(undefined);
+              toggleFormFn(true);
+            },
           }}
         />
       )}

@@ -150,8 +150,10 @@ context('Test reduced permissions', () => {
       .contains('Service Accounts')
       .click();
 
-    cy.get('a.bsl-link')
-      .contains(SA_NAME)
+    cy.contains('ui5-link', SA_NAME).click();
+
+    cy.getMidColumn()
+      .find('ui5-button[aria-label="full-screen"]')
       .click();
 
     cy.contains('ui5-button', 'Generate TokenRequest').click();
@@ -240,7 +242,7 @@ context('Test reduced permissions', () => {
     // remove cluster
     cy.changeCluster('all-clusters');
 
-    cy.deleteFromGenericList('Cluster', SA_NAME, true, false, false);
+    cy.deleteFromGenericList('Cluster', SA_NAME, true, false, false, false);
 
     cy.contains(/No clusters found/).should('exist');
   });

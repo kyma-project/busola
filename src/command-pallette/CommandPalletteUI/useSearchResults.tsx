@@ -4,6 +4,8 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
+import { columnLayoutState } from 'state/columnLayoutAtom';
+
 import * as handlers from './handlers';
 import { useGetHiddenNamespaces } from 'shared/hooks/useGetHiddenNamespaces';
 import { K8sResource } from 'types';
@@ -12,7 +14,7 @@ import { clusterState } from 'state/clusterAtom';
 import { availableNodesSelector } from 'state/navigation/availableNodesSelector';
 import { CommandPaletteContext, HelpEntries, Result } from './types';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, To } from 'react-router-dom';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 type useSearchResultsProps = {
@@ -40,6 +42,7 @@ export function useSearchResults({
   const clusters = useRecoilValue(clustersState);
   const cluster = useRecoilValue(clusterState);
   const availableNodes = useRecoilValue(availableNodesSelector);
+  const setLayoutColumn = useSetRecoilState(columnLayoutState);
 
   const hiddenNamespaces = useGetHiddenNamespaces();
   const showHiddenNamespaces = useRecoilValue(showHiddenNamespacesState);
@@ -49,6 +52,15 @@ export function useSearchResults({
   const setShowYamlUpload = useSetRecoilState(showYamlUploadDialogState);
   const clustersInfo = useClustersInfo();
   const navigate = useNavigate();
+
+  const navigateAndCloseColumns = (to: To) => {
+    setLayoutColumn({
+      layout: 'OneColumn',
+      midColumn: null,
+      endColumn: null,
+    });
+    navigate(to);
+  };
 
   const preprocessedQuery = query.trim().toLowerCase();
   const context: CommandPaletteContext = {
@@ -68,7 +80,7 @@ export function useSearchResults({
     setOpenPreferencesModal,
     setShowYamlUpload,
     clustersInfo,
-    navigate,
+    navigate: navigateAndCloseColumns,
   };
 
   useEffect(() => {

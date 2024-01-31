@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Widget, InlineWidget } from './Widget';
 import { useGetTranslation } from '../helpers';
 import { TabContainer, Tab } from '@ui5/webcomponents-react';
@@ -9,6 +7,7 @@ export function Tabs({
   structure,
   schema,
   disableMargin = false,
+  extraContent,
   ...props
 }) {
   const { widgetT } = useGetTranslation();
@@ -19,6 +18,7 @@ export function Tabs({
         <TabContainer tabLayout="Inline" contentBackgroundDesign="Transparent">
           {structure.children.map((child, idx) => (
             <Tab key={`tab-wrapper-${idx}`} text={widgetT(child)}>
+              {extraContent}
               {Array.isArray(child?.children) &&
                 child.children.map((def, idx) => (
                   <Widget

@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from 'react';
+import React, { createContext, Suspense, useState } from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
 import pluralize from 'pluralize';
@@ -11,12 +11,14 @@ import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { useDelete, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
-import { YamlEditorProvider } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
+import {
+  useYamlEditor,
+  YamlEditorProvider,
+} from 'shared/contexts/YamlEditorContext/YamlEditorContext';
 import {
   getErrorMessage,
-  prettifyNameSingular,
   prettifyNamePlural,
+  prettifyNameSingular,
 } from 'shared/utils/helpers';
 import { Labels } from 'shared/components/Labels/Labels';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
@@ -32,6 +34,7 @@ import { useUrl } from 'hooks/useUrl';
 import { Tooltip } from '../Tooltip/Tooltip';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { createPortal } from 'react-dom';
+import ResourceDetailsCard from './ResourceDetailsCard';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
@@ -48,6 +51,7 @@ ResourceDetails.propTypes = {
   customColumns: CustomPropTypes.customColumnsType,
   children: PropTypes.node,
   customComponents: PropTypes.arrayOf(PropTypes.func),
+  hasTabs: PropTypes.bool,
   resourceUrl: PropTypes.string.isRequired,
   resourceType: PropTypes.string.isRequired,
   resourceName: PropTypes.string,
@@ -63,16 +67,20 @@ ResourceDetails.propTypes = {
   resourceSchema: PropTypes.object,
   disableEdit: PropTypes.bool,
   disableDelete: PropTypes.bool,
+  layoutCloseUrl: PropTypes.string,
+  layoutNumber: PropTypes.string,
 };
 
 ResourceDetails.defaultProps = {
   customColumns: [],
   customComponents: [],
+  hasTabs: false,
   headerActions: null,
   resourceHeaderActions: [],
   readOnly: false,
   disableEdit: false,
   disableDelete: false,
+  layoutNumber: 'MidColumn',
 };
 
 export function ResourceDetails(props) {
@@ -82,6 +90,8 @@ export function ResourceDetails(props) {
     return <ResourceDetailsRenderer {...props} />;
   }
 }
+
+export const ResourceDetailContext = createContext(false);
 
 function ResourceDetailsRenderer(props) {
   const {
@@ -141,11 +151,14 @@ function ResourceDetailsRenderer(props) {
 }
 
 function Resource({
+  layoutNumber,
+  layoutCloseUrl,
   breadcrumbs,
   children,
   createResourceForm: CreateResourceForm,
   customColumns,
   customComponents,
+  hasTabs,
   editActionLabel,
   headerActions,
   namespace,
@@ -155,6 +168,7 @@ function Resource({
   resourceType,
   resourceUrl,
   silentRefetch,
+  title,
   updateResourceMutation,
   windowTitle,
   resourceTitle,
@@ -179,6 +193,7 @@ function Resource({
     resourceTitle,
     resourceType,
     navigateToListAfterDelete: true,
+    layoutNumber,
   });
 
   const { setEditedYaml: setEditedSpec } = useYamlEditor();
@@ -344,9 +359,41 @@ function Resource({
     return visible;
   };
 
+  const resourceDetailsCard = (
+    <ResourceDetailsCard
+      title={title ?? t('common.headers.resource-details')}
+      content={
+        <>
+          <DynamicPageComponent.Column
+            key="Created"
+            title={t('common.headers.created')}
+          >
+            <ReadableCreationTimestamp
+              timestamp={resource.metadata.creationTimestamp}
+            />
+          </DynamicPageComponent.Column>
+          {customColumns.filter(filterColumns).map(col => (
+            <DynamicPageComponent.Column key={col.header} title={col.header}>
+              {col.value(resource)}
+            </DynamicPageComponent.Column>
+          ))}
+          <DynamicPageComponent.Column
+            key="Labels"
+            title={t('common.headers.labels')}
+            columnSpan="1 / 3"
+          >
+            <Labels labels={resource.metadata.labels || {}} />
+          </DynamicPageComponent.Column>
+        </>
+      }
+    />
+  );
+
   return (
-    <>
+    <ResourceDetailContext.Provider value={true}>
       <DynamicPageComponent
+        layoutNumber={layoutNumber ?? 'MidColumn'}
+        layoutCloseUrl={layoutCloseUrl}
         title={resource.metadata.name}
         actions={actions}
         breadcrumbItems={breadcrumbItems}
@@ -359,6 +406,7 @@ function Resource({
               />,
               document.body,
             )}
+            {!hasTabs && resourceDetailsCard}
             <Suspense fallback={<Spinner />}>
               <Injections
                 destination={resourceType}
@@ -367,7 +415,7 @@ function Resource({
               />
             </Suspense>
             {(customComponents || []).map(component =>
-              component(resource, resourceUrl),
+              component(resource, resourceUrl, resourceDetailsCard),
             )}
             {children}
             {resourceGraphConfig?.[resource.kind] && (
@@ -388,30 +436,8 @@ function Resource({
           </>
         }
       >
-        <DynamicPageComponent.Column
-          key="Labels"
-          title={t('common.headers.labels')}
-          columnSpan="1 / 3"
-        >
-          <Labels labels={resource.metadata.labels || {}} />
-        </DynamicPageComponent.Column>
-
-        <DynamicPageComponent.Column
-          key="Created"
-          title={t('common.headers.created')}
-        >
-          <ReadableCreationTimestamp
-            timestamp={resource.metadata.creationTimestamp}
-          />
-        </DynamicPageComponent.Column>
-
-        {customColumns.filter(filterColumns).map(col => (
-          <DynamicPageComponent.Column key={col.header} title={col.header}>
-            {col.value(resource)}
-          </DynamicPageComponent.Column>
-        ))}
         {createPortal(<YamlUploadDialog />, document.body)}
       </DynamicPageComponent>
-    </>
+    </ResourceDetailContext.Provider>
   );
 }

@@ -17,6 +17,7 @@ import {
   useGetTranslation,
   applyFormula,
   getTextSearchProperties,
+  getResourceDescAndUrl,
 } from './helpers';
 import { sortBy } from './helpers/sortBy';
 import { Widget } from './components/Widget';
@@ -109,6 +110,11 @@ export const ExtensibilityListCore = ({
     defaultSearch: true,
   });
 
+  const {
+    description: subtitleText,
+    url: emptyListUrl,
+  } = getResourceDescAndUrl(description);
+
   return (
     <ResourcesList
       {...listProps}
@@ -123,6 +129,10 @@ export const ExtensibilityListCore = ({
       searchSettings={{
         textSearchProperties: defaultSearchProperties =>
           textSearchProperties(defaultSearchProperties),
+      }}
+      emptyListProps={{
+        subtitleText: subtitleText,
+        url: emptyListUrl,
       }}
     />
   );

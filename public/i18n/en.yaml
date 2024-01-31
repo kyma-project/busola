@@ -83,7 +83,7 @@ clusters:
   edit-cluster: Edit Cluster
   empty:
     go-to-btp-cockpit: To view your clusters, go to
-    subtitle: Let's add one now!
+    subtitle: Connect one to use the Kyma dashboard.
     title: There are no clusters yet
   gardener:
     error: 'Connecting clusters failed: {{message}}.'
@@ -239,6 +239,7 @@ common:
     cancel: Cancel
     clone: Clone
     close: Close
+    connect: Connect
     copy: Copy
     create: Create
     delete: Delete
@@ -306,7 +307,9 @@ common:
     policies: Policies
     region: Region
     resource: Resource
+    resource-details: Resource Details
     resources: Resources
+    nodeInfo: Node Info
     status: Status
     value: Value
     version: Version
@@ -919,8 +922,8 @@ namespaces:
     memory-quotas: Memory Quotas
   description: <0>Namespace</0> helps to maintain and divide resources in a cluster.
   name_singular: Namespace
+  namespace-details: Namespace Details
   namespaces-overview: Namespaces Overview
-  no-namespaces-found: No Namespaces fetched
   overview:
     resources:
       error: Error while loading memory consumption data

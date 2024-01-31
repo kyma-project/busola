@@ -1,4 +1,4 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   SideNavigation,
   SideNavigationItem,
@@ -14,6 +14,8 @@ import { NavItem } from './NavItem';
 import { isSidebarCondensedState } from 'state/preferences/isSidebarCondensedAtom';
 import { NamespaceDropdown } from 'header/NamespaceDropdown/NamespaceDropdown';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { columnLayoutState } from 'state/columnLayoutAtom';
+
 import { useTranslation } from 'react-i18next';
 import { useMatch, useNavigate } from 'react-router';
 import { useUrl } from 'hooks/useUrl';
@@ -26,6 +28,8 @@ export function SidebarNavigation() {
   const namespace = useRecoilValue(activeNamespaceIdState);
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const setLayoutColumn = useSetRecoilState(columnLayoutState);
+
   const { clusterUrl, namespaceUrl } = useUrl();
   const { resourceType = '' } =
     useMatch({
@@ -55,6 +59,14 @@ export function SidebarNavigation() {
     else return false;
   };
 
+  const setDefaultColumnLayout = () => {
+    setLayoutColumn({
+      midColumn: null,
+      endColumn: null,
+      layout: 'OneColumn',
+    });
+  };
+
   return (
     <SideNavigation
       collapsed={isSidebarCondensed}
@@ -66,7 +78,10 @@ export function SidebarNavigation() {
               className="hide-shadow"
               icon={namespace ? 'slim-arrow-left' : 'bbyd-dashboard'}
               text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}
-              onClick={() => navigate(clusterUrl(`overview`))}
+              onClick={() => {
+                setDefaultColumnLayout();
+                return navigate(clusterUrl(`overview`));
+              }}
               selected={isClusterOverviewSelected()}
             />
           </SideNavigation>
@@ -95,8 +110,9 @@ export function SidebarNavigation() {
               />
               <ComboBox
                 id="NamespaceComboBox"
-                onSelectionChange={e =>
-                  e.target.value === t('namespaces.namespaces-overview')
+                onSelectionChange={e => {
+                  setDefaultColumnLayout();
+                  return e.target.value === t('namespaces.namespaces-overview')
                     ? navigate(clusterUrl(`namespaces`))
                     : e.target.value === t('navigation.all-namespaces')
                     ? navigate(
@@ -106,8 +122,8 @@ export function SidebarNavigation() {
                         namespaceUrl(resourceType, {
                           namespace: e.target.value ?? undefined,
                         }),
-                      )
-                }
+                      );
+                }}
                 value={getNamespaceLabel()}
               >
                 {NamespaceDropdown()}

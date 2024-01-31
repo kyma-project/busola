@@ -48,7 +48,10 @@ context('Test Replica Sets', () => {
   });
 
   it('Checks the details view', () => {
-    cy.contains(`${REPLICA_SET_NAME}-`).click();
+    cy.getMidColumn()
+      .contains(`${REPLICA_SET_NAME}-`)
+      .should('be.visible')
+      .click({ force: true });
 
     cy.contains(REPLICA_SET_NAME);
 
@@ -62,14 +65,14 @@ context('Test Replica Sets', () => {
       .contains('Replica Sets')
       .click();
 
-    cy.get('a.bsl-link')
-      .contains(REPLICA_SET_NAME)
-      .click();
+    cy.contains('ui5-link', REPLICA_SET_NAME).click();
 
-    cy.contains(REPLICA_SET_NAME);
+    cy.getMidColumn().contains(REPLICA_SET_NAME);
   });
 
   it('Edits the Docker image and Replicas amount in the Replica set', () => {
+    cy.wait(1000);
+
     cy.get('ui5-button')
       .contains('Edit')
       .should('be.visible')
@@ -95,17 +98,16 @@ context('Test Replica Sets', () => {
       .click();
   });
 
-  it('Checks the new Docker image', () => {
-    cy.navigateBackTo('replicasets', 'Replica Sets');
+  it('Checks the new amout of Replicas and the new Docker image', () => {
+    cy.getMidColumn().contains(
+      `${EDITED_REPLICAS_AMOUNT} / ${EDITED_REPLICAS_AMOUNT}`,
+      {
+        timeout: 15 * 1000,
+      },
+    );
+
+    cy.closeMidColumn();
 
     cy.contains(EDITED_DOCKER_IMAGE_TAG);
-  });
-
-  it('Checks the new amout of Replicas', () => {
-    cy.contains(REPLICA_SET_NAME).click();
-
-    cy.contains(`${EDITED_REPLICAS_AMOUNT} / ${EDITED_REPLICAS_AMOUNT}`, {
-      timeout: 15 * 1000,
-    });
   });
 });

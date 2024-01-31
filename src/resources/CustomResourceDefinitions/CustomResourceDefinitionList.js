@@ -44,6 +44,11 @@ export function CustomResourceDefinitionList(props) {
       searchSettings={{
         textSearchProperties: ['spec.names.categories'],
       }}
+      emptyListProps={{
+        subtitleText: t('custom-resource-definitions.description'),
+        url:
+          'https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/',
+      }}
     />
   );
 }

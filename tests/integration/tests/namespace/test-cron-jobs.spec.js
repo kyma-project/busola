@@ -93,18 +93,25 @@ context('Test Cron Jobs', () => {
   });
 
   it('Checking details', () => {
-    cy.get('ui5-breadcrumbs')
+    cy.getMidColumn()
+      .find('ui5-breadcrumbs')
       .find(`ui5-link[href*=${'cronjob'}]`)
       .scrollIntoView();
 
-    cy.contains('ui5-title', CRON_JOB_NAME).should('be.visible');
+    cy.getMidColumn()
+      .contains('ui5-title', CRON_JOB_NAME)
+      .should('be.visible');
 
-    cy.contains('0 0 1 * *').should('be.visible');
+    cy.getMidColumn()
+      .contains('0 0 1 * *')
+      .should('be.visible');
   });
 
   it('Edit Cron Job', () => {
-    cy.get('ui5-button')
-      .contains('Edit')
+    cy.wait(1000);
+
+    cy.getMidColumn()
+      .contains('ui5-button', 'Edit')
       .should('be.visible')
       .click();
 
@@ -163,13 +170,18 @@ context('Test Cron Jobs', () => {
   });
 
   it('Checking updates details', () => {
-    cy.get('ui5-breadcrumbs')
+    cy.getMidColumn()
+      .get('ui5-breadcrumbs')
       .find(`ui5-link[href*=${'cronjob'}]`)
       .scrollIntoView();
 
-    cy.contains('ui5-title', CRON_JOB_NAME).should('be.visible');
+    cy.getMidColumn()
+      .contains('ui5-title', CRON_JOB_NAME)
+      .should('be.visible');
 
-    cy.contains('0 * * * *').should('be.visible');
+    cy.getMidColumn()
+      .contains('0 * * * *')
+      .should('be.visible');
   });
 
   it('Inspect list', () => {

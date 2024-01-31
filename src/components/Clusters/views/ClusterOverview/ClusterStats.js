@@ -6,8 +6,8 @@ import { CountingCard } from 'shared/components/CountingCard/CountingCard';
 import { ProgressIndicatorWithPercentage } from 'shared/components/ProgressIndicatorWithPercentage/ProgressIndicatorWithPercentage';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import {
-  getHealthyStatusesCount,
   getHealthyReplicasCount,
+  getHealthyStatusesCount,
 } from 'resources/Namespaces/NamespaceWorkloads/NamespaceWorkloadsHelpers';
 
 export default function ClusterStats({ data }) {
@@ -35,9 +35,14 @@ export default function ClusterStats({ data }) {
   const healthyDeployments = getHealthyReplicasCount(deploymentsData);
 
   const calculatePercents = (value, max) => {
-    return roundDecimals((value / max) * 100);
+    return max !== 0 ? parseFloat(((value / max) * 100).toFixed(2)) : 0.0;
   };
 
+  const healthyPodsPercent = calculatePercents(healthyPods, podsData?.length);
+  const healthyDeploymentsPercent = calculatePercents(
+    healthyDeployments,
+    deploymentsData?.length,
+  );
   return (
     <>
       <Title
@@ -105,8 +110,9 @@ export default function ClusterStats({ data }) {
             <div style={spacing.sapUiSmallMargin}>
               {podsData && (
                 <ProgressIndicatorWithPercentage
-                  title={t('cluster-overview.statistics.healthy-pods')}
-                  value={calculatePercents(healthyPods, podsData?.length)}
+                  leftTitle={t('cluster-overview.statistics.healthy-pods')}
+                  rightTitle={String(healthyPodsPercent) + '%'}
+                  value={healthyPodsPercent}
                   dataBarColor={'var(--sapIndicationColor_8)'}
                   remainingBarColor={'var(--sapIndicationColor_8b)'}
                   tooltip={{
@@ -120,11 +126,11 @@ export default function ClusterStats({ data }) {
               )}
               {deploymentsData && (
                 <ProgressIndicatorWithPercentage
-                  title={t('cluster-overview.statistics.healthy-deployments')}
-                  value={calculatePercents(
-                    healthyDeployments,
-                    deploymentsData?.length,
+                  leftTitle={t(
+                    'cluster-overview.statistics.healthy-deployments',
                   )}
+                  rightTitle={String(healthyDeploymentsPercent) + '%'}
+                  value={healthyDeploymentsPercent}
                   dataBarColor={'var(--sapIndicationColor_6)'}
                   remainingBarColor={'var(--sapIndicationColor_6b)'}
                   tooltip={{

@@ -45,7 +45,7 @@ context('Test multiple context kubeconfig', () => {
     cy.wrap(loadMultipleContextKubeconfig()).then(kubeconfig => {
       cy.visit(`${config.clusterAddress}/clusters`)
         .get('ui5-button:visible')
-        .contains('Connect cluster')
+        .contains('Connect')
         .click();
 
       cy.contains('Drag your file here or click to upload').attachFile(

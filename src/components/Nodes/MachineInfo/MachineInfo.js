@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
 import './MachineInfo.scss';
+import { Card, CardHeader } from '@ui5/webcomponents-react';
 
 export function MachineInfo({ nodeInfo, capacity }) {
   const formattedMemory =
@@ -11,7 +11,7 @@ export function MachineInfo({ nodeInfo, capacity }) {
   const { t } = useTranslation();
 
   return (
-    <UI5Panel title={t('machine-info.title')} disableMargin>
+    <Card header={<CardHeader titleText={t('machine-info.title')} />}>
       <div className="machine-info__body">
         <LayoutPanelRow
           name={t('machine-info.operating-system')}
@@ -40,6 +40,6 @@ export function MachineInfo({ nodeInfo, capacity }) {
           value={nodeInfo.kubeletVersion}
         />
       </div>
-    </UI5Panel>
+    </Card>
   );
 }

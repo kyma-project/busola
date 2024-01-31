@@ -19,6 +19,7 @@ export function GroupingListPage({
   filter,
   resourceListProps,
   showCrdScope,
+  enableColumnLayout,
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const { t } = useTranslation();
@@ -62,6 +63,7 @@ export function GroupingListPage({
               resourceType="CustomResourceDefinition"
               resourceTitle="customresourcedefinition"
               hasDetailsView={true}
+              enableColumnLayout={enableColumnLayout}
               showTitle={true}
               title={group}
               resources={crds}
@@ -105,6 +107,7 @@ export function GroupingListPage({
           />
         }
         content={<YamlEditorProvider>{lists}</YamlEditorProvider>}
+        layoutNumber="StartColumn"
       />
 
       <YamlUploadDialog />

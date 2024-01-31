@@ -9,7 +9,7 @@ spec:
       protocol: TCP
       port: 80
       targetPort: 8080
-      nodePort: 32735
+      nodePort: 32736
   selector:
     app: frontend
   type: LoadBalancer

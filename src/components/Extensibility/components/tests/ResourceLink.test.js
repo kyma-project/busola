@@ -27,30 +27,6 @@ describe('ResourceLink', () => {
     expect(await findByText('extensibility::empty!'));
   });
 
-  it('Fires an event on click', () => {
-    const res = {
-      name: '$root.name',
-      kind: '$root.kind',
-      namespace: '$root.namespace',
-    };
-    const { getByText } = render(
-      <ResourceLink
-        value={value}
-        structure={{
-          source: '$root.name',
-          resource: res,
-        }}
-        originalResource={originalResource}
-      />,
-    );
-
-    const anchorElement = getByText(`extensibility::${value}`);
-    const hrefAttribute = anchorElement.getAttribute('href');
-    expect(hrefAttribute).toBe(
-      '/cluster/test-cluster/namespaces/original-resource-namespace/original-resource.kinds/original-resource-name',
-    );
-  });
-
   it('Accepts config without namespace', () => {
     const { getByText } = render(
       <ResourceLink

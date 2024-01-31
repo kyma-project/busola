@@ -34,6 +34,11 @@ export function ServiceAccountList(props) {
       resourceTitle={t('service-accounts.title')}
       {...props}
       createResourceForm={ServiceAccountCreate}
+      emptyListProps={{
+        subtitleText: t('service-accounts.description'),
+        url:
+          'https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/',
+      }}
     />
   );
 }

@@ -78,6 +78,10 @@ export function PodList(params) {
       })}
       {...params}
       createResourceForm={PodCreate}
+      emptyListProps={{
+        subtitleText: t('pods.description'),
+        url: 'https://kubernetes.io/docs/concepts/workloads/pods/',
+      }}
     />
   );
 }

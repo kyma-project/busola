@@ -40,13 +40,17 @@ context('Test Persistent Volumes', () => {
   });
 
   it('Check PV details', () => {
-    cy.contains('ReadWriteOnce').should('be.visible');
+    cy.getMidColumn()
+      .contains('ReadWriteOnce')
+      .should('be.visible');
 
-    cy.contains('Events').should('be.visible');
+    cy.getMidColumn()
+      .contains('Events')
+      .should('be.visible');
   });
 
   it('Check PV list and delete', () => {
-    cy.navigateBackTo('persistentvolumes', 'Persistent Volumes');
+    cy.closeMidColumn();
 
     cy.deleteFromGenericList('Persistent Volume', PV_NAME);
   });

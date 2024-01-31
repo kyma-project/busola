@@ -10,8 +10,6 @@ import { ComboboxArrayInput } from 'shared/ResourceForm/fields';
 import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
 import { createServiceAccountTemplate } from './templates';
 import { validateServiceAccount } from './helpers';
-import { useNavigate } from 'react-router-dom';
-import { useUrl } from 'hooks/useUrl';
 import { MessageStrip } from '@ui5/webcomponents-react';
 
 const createDefaultSecret = serviceAccountName => {
@@ -42,8 +40,6 @@ export const ServiceAccountCreate = ({
   ...props
 }) => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const { namespaceUrl } = useUrl();
   const [serviceAccount, setServiceAccount] = useState(
     cloneDeep(initialServiceAccount) || createServiceAccountTemplate(namespace),
   );
@@ -84,7 +80,6 @@ export const ServiceAccountCreate = ({
       return;
     }
 
-    navigate(namespaceUrl(`serviceaccounts/${serviceAccount.metadata.name}`));
     const secretCreationResult = await createSecretResource();
     defaultAfterCreateFn();
     if (secretCreationResult === false) {

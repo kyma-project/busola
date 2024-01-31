@@ -59,12 +59,14 @@ const ComboboxInputWithSeconds = ({
 };
 
 type TokenRequestModalProps = {
+  isModalOpen: boolean;
   handleCloseModal: VoidFunction;
   namespace: string;
   serviceAccountName: string;
 };
 
 export function TokenRequestModal({
+  isModalOpen,
   handleCloseModal,
   namespace,
   serviceAccountName,
@@ -78,7 +80,7 @@ export function TokenRequestModal({
     generateTokenRequest,
     tokenRequest,
     setTokenRequest,
-  } = useGenerateTokenRequest(namespace, serviceAccountName);
+  } = useGenerateTokenRequest(isModalOpen, namespace, serviceAccountName);
 
   const isExpirationSecondsValueANumber = () =>
     !Number(tokenRequest.spec.expirationSeconds);
@@ -97,7 +99,7 @@ export function TokenRequestModal({
 
   return (
     <Dialog
-      open
+      open={isModalOpen}
       onAfterClose={handleCloseModal}
       headerText={t('service-accounts.token-request.generate')}
       footer={

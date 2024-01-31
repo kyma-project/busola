@@ -16,7 +16,7 @@ context('Test Kyma Dashboard Version link', () => {
       .click({ force: true });
 
     cy.get('ui5-responsive-popover[placement-type="Right"]')
-      .get('ui5-li:visible')
+      .find('ui5-li:visible')
       .last()
       .invoke('text')
       .should('contain', 'Kyma Dashboard version:');

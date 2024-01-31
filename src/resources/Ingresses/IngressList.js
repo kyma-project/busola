@@ -42,6 +42,10 @@ export function IngressList(props) {
       description={description}
       {...props}
       createResourceForm={IngressCreate}
+      emptyListProps={{
+        subtitleText: t('ingresses.description'),
+        url: 'https://kubernetes.io/docs/concepts/services-networking/ingress/',
+      }}
     />
   );
 }

@@ -1,5 +1,4 @@
 import pluralize from 'pluralize';
-import { NavigateFunction } from 'react-router-dom';
 import { prettifyKind } from 'shared/utils/helpers';
 import { NavNode } from 'state/types';
 import { K8sResource } from 'types';
@@ -86,7 +85,7 @@ function navigateTo({
 }: {
   matchingNode?: NavNode;
   namespace: string | null;
-  navigate: NavigateFunction;
+  navigate: Function;
   activeClusterName: string;
   crd: CustomResourceDefinition;
   crName?: string;
