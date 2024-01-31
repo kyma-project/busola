@@ -14,7 +14,6 @@ import { ResourcesUsage } from './ResourcesUsage';
 import { NamespaceCreate } from './NamespaceCreate';
 import { AllNamespacesDetails } from './AllNamespacesDetails';
 
-import './NamespaceDetails.scss';
 import { useSetRecoilState } from 'recoil';
 import { spacing } from '@ui5/webcomponents-react-base';
 
@@ -88,10 +87,7 @@ export function NamespaceDetails(props) {
       customColumns={customColumns}
       headerActions={headerActions}
     >
-      <div
-        className="namespace-details panel-grid"
-        style={spacing.sapUiSmallMargin}
-      >
+      <div className="flexwrap" style={spacing.sapUiSmallMargin}>
         <ResourcesUsage namespace={props.resourceName} />
         <NamespaceWorkloads namespace={props.resourceName} />
       </div>
