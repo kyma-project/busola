@@ -37,6 +37,10 @@ export const HeaderRenderer = ({ slot, actions, headerRenderer }) => {
           <TableColumn
             slot={`${slot}-${index}`}
             key={typeof h === 'object' ? index : h}
+            popinDisplay="Inline"
+            demandPopin={h === 'Labels' ? true : false}
+            minWidth={h === 'Labels' ? '15000' : index * 100}
+            // popinText="Labels"
           >
             <Label>{h}</Label>
           </TableColumn>
@@ -87,6 +91,7 @@ const DefaultRowRenderer = ({
   rowRenderer,
   isBeingEdited = false,
 }) => {
+  // console.log(entry, rowRenderer);
   const cells = rowRenderer.map((cell, id) => {
     if (cell?.content) {
       const { content, ...props } = cell;
@@ -104,8 +109,15 @@ const DefaultRowRenderer = ({
       <ListActions actions={actions} entry={entry} />
     </TableCell>
   );
+  // console.log(window.location.pathname, entry?.metadata?.name);
   return (
-    <TableRow selected={isBeingEdited}>
+    <TableRow
+      type="Active"
+      selected={
+        isBeingEdited ??
+        window.location.pathname.includes(entry?.metadata?.name)
+      }
+    >
       {cells}
       {!!actions.length && actionsCell}
     </TableRow>

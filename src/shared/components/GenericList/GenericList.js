@@ -2,7 +2,7 @@ import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { Table } from '@ui5/webcomponents-react';
 
 import {
@@ -25,6 +25,8 @@ import './GenericList.scss';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { EmptyListComponent } from '../EmptyListComponent/EmptyListComponent';
+import { useUrl } from 'hooks/useUrl';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 const defaultSort = {
   name: nameLocaleSort,
@@ -57,6 +59,7 @@ export const GenericList = ({
   searchSettings,
   disableMargin,
   emptyListProps = null,
+  layoutNumber = 'StartColumn',
 }) => {
   searchSettings = { ...defaultSearch, ...searchSettings };
 
@@ -226,6 +229,20 @@ export const GenericList = ({
       />
     ));
   };
+  const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
+  // const { resourceUrl: resourceUrlFn } = useUrl();
+  // const linkTo = entry =>
+  //   resourceUrlFn(
+  //     entry,
+  //     window.location.pathname.slice(
+  //       window.location.pathname.lastIndexOf('/') + 1,
+  //     ),
+  //   );
+  // console.log(
+  //   window.location.pathname.slice(
+  //     window.location.pathname.lastIndexOf('/') + 1,
+  //   ),
+  // );
 
   return (
     <UI5Panel
@@ -237,6 +254,38 @@ export const GenericList = ({
     >
       <Table
         className={'ui5-generic-list'}
+        onRowClick={e => {
+          console.log(e.target.children[0].innerText);
+
+          setLayoutColumn(
+            layoutNumber === 'StartColumn'
+              ? {
+                  midColumn: {
+                    resourceName: e.target.children[0].innerText,
+                    resourceType: window.location.pathname.slice(
+                      window.location.pathname.lastIndexOf('/') + 1,
+                    ),
+                    namespaceId: 'kyma-system',
+                  },
+                  endColumn: null,
+                  layout: 'TwoColumnsMidExpanded',
+                }
+              : null,
+          );
+
+          window.history.pushState(
+            window.history.state,
+            '',
+            `${window.location.pathname.slice(
+              window.location.pathname.lastIndexOf('/') + 1,
+            ) +
+              '/' +
+              e.target.children[0]
+                .innerText}?layout=${'TwoColumnsMidExpanded'}`,
+          );
+
+          console.log(e);
+        }}
         columns={
           <HeaderRenderer
             entries={entries}

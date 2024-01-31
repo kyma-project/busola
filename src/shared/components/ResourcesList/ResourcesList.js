@@ -254,8 +254,11 @@ export function ResourceListRenderer({
     resourceType,
   );
 
-  const linkTo = entry =>
+  const linkTo = entry => {
+    console.log(customUrl, resourceUrlFn, resourceType, entry);
     customUrl ? customUrl(entry) : resourceUrlFn(entry, { resourceType });
+  };
+
   const defaultColumns = [
     {
       header: t('common.headers.name'),
