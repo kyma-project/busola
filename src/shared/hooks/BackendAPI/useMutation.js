@@ -31,7 +31,5 @@ const useMutation = (method, headers) => {
 export const useUpdate = useMutation('PATCH', {
   'Content-Type': 'application/json-patch+json',
 });
-export const usePut = useMutation('PUT', {
-  'Content-Type': 'application/json',
-});
+
 export const useDelete = useMutation('DELETE');
