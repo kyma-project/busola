@@ -461,6 +461,7 @@ export function ResourceListRenderer({
       )}
       {!(error && error.toString().includes('is forbidden')) && (
         <GenericList
+          hasDetailsView={hasDetailsView}
           customUrl={customUrl}
           resourceType={resourceType}
           customColumnLayout={customColumnLayout}

@@ -65,6 +65,7 @@ export const GenericList = ({
   enableColumnLayout,
   resourceType = '',
   customUrl,
+  hasDetailsView,
 }) => {
   const navigate = useNavigate();
   searchSettings = { ...defaultSearch, ...searchSettings };
@@ -255,10 +256,11 @@ export const GenericList = ({
       <Table
         className={'ui5-generic-list'}
         onRowClick={e => {
+          if (!hasDetailsView) return;
           const selectedEntry = entries.find(entry => {
             return (
               entry.metadata.name === e.target.children[0].innerText ||
-              pluralize(entry.spec.names.kind) ===
+              pluralize(entry?.spec?.names?.kind ?? '') ===
                 e.target.children[0].innerText
             );
           });
@@ -368,6 +370,7 @@ GenericList.propTypes = {
   disableMargin: PropTypes.bool,
   enableColumnLayout: PropTypes.bool,
   customUrl: PropTypes.func,
+  hasDetailsView: PropTypes.bool,
 };
 
 GenericList.defaultProps = {
