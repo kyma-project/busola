@@ -11,7 +11,10 @@ export function MachineInfo({ nodeInfo, capacity }) {
   const { t } = useTranslation();
 
   return (
-    <Card header={<CardHeader titleText={t('machine-info.title')} />}>
+    <Card
+      className="machine-info__card"
+      header={<CardHeader titleText={t('machine-info.title')} />}
+    >
       <div className="machine-info__body">
         <LayoutPanelRow
           name={t('machine-info.operating-system')}

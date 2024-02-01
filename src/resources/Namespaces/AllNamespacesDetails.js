@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { prettifyNamePlural } from 'shared/utils/helpers';
@@ -8,7 +7,6 @@ import { useUrl } from 'hooks/useUrl';
 import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
 import { ResourcesUsage } from './ResourcesUsage';
 
-import './NamespaceDetails.scss';
 import { spacing } from '@ui5/webcomponents-react-base';
 
 export function AllNamespacesDetails(props) {
@@ -29,10 +27,7 @@ export function AllNamespacesDetails(props) {
         title={t('navigation.all-namespaces')}
         breadcrumbItems={breadcrumbItems}
         content={
-          <div
-            className="all-namespaces-details panel-grid"
-            style={{ ...spacing.sapUiMediumMargin }}
-          >
+          <div className="flexwrap" style={{ ...spacing.sapUiMediumMargin }}>
             <ResourcesUsage />
             <NamespaceWorkloads />
           </div>

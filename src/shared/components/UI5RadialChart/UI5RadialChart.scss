@@ -1,13 +1,11 @@
 .radial-chart {
-  .title {
-    white-space: nowrap;
-  }
-
-  display: grid;
-  grid-template-columns: 1;
-  justify-items: center;
+  display: flex;
   justify-content: center;
-  grid-gap: 3%;
-  color: var(--sapNeutralColor);
-  font-size: 1.2em;
+  align-items: center;
+  height: 200px;
+}
+
+.radial-chart-card {
+  max-width: 225px;
+  height: 250px;
 }
