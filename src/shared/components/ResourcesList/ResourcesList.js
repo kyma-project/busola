@@ -236,18 +236,9 @@ export function ResourceListRenderer({
       header: t('common.headers.name'),
       value: entry =>
         hasDetailsView ? (
-          enableColumnLayout ? (
-            <>
-              <Text style={{ fontWeight: 'bold' }}>{nameSelector(entry)}</Text>
-            </>
-          ) : (
-            <Text
-              style={{ fontWeight: 'bold', color: 'blue' }}
-              className="bsl-link"
-            >
-              {nameSelector(entry)}
-            </Text>
-          )
+          <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
+            {nameSelector(entry)}
+          </Text>
         ) : (
           <b>{nameSelector(entry)}</b>
         ),
