@@ -81,7 +81,7 @@ export function validateFormElement(element, isRequired) {
     isPartiallyFilled = isPartiallyFilled || filled;
     isComplete = isComplete && filled;
   }
-  console.log(isValid);
+
   return {
     valid: isValid || (!isRequired && !isPartiallyFilled),
     filled: isPartiallyFilled || isComplete,

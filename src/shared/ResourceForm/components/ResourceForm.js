@@ -97,6 +97,7 @@ export function ResourceForm({
   };
 
   const [mode, setMode] = React.useState(handleInitialMode);
+  console.log(mode);
   const [actionsEditor, setActionsEditor] = React.useState(null);
   const validationRef = useRef(true);
 
@@ -129,9 +130,9 @@ export function ResourceForm({
       }}
     />
   );
+
   let editor = (
     <EditorWrapper
-      height="86.5%"
       value={resource}
       onChange={setResource}
       onMount={setActionsEditor}

@@ -19,52 +19,43 @@ import { addCluster, getContext, deleteCluster } from '../../shared';
 
 import { spacing } from '@ui5/webcomponents-react-base';
 
-function EditClusterComponent({
-  formElementRef,
+export const ClusterDataForm = ({
+  kubeconfig,
+  setResource,
   onChange,
+  onSubmit,
   resourceUrl,
-  editedCluster,
-}) {
-  const clustersInfo = useClustersInfo();
-  const setAuth = useSetRecoilState(authDataState);
-  const [resource, setResource] = useState(cloneDeep(editedCluster));
-  const [authenticationType, setAuthenticationType] = useState(
-    resource?.kubeconfig?.users?.[0]?.user?.exec ? 'oidc' : 'token',
-  );
-  const notification = useNotification();
-
-  const { kubeconfig, config } = resource;
-
-  const originalName = useRef(resource?.kubeconfig?.['current-context'] || '');
-
-  const onComplete = () => {
-    try {
-      if (originalName.current !== resource?.kubeconfig?.['current-context']) {
-        deleteCluster(originalName.current, clustersInfo);
-      }
-      const contextName = kubeconfig['current-context'];
-      setAuth(null);
-
-      addCluster(
-        {
-          kubeconfig,
-          config: { ...(config || {}), config },
-          contextName: resource?.kubeconfig?.['current-context'],
-          currentContext: getContext(kubeconfig, contextName),
-          name: resource?.kubeconfig?.['current-context'],
-        },
-        clustersInfo,
-      );
-    } catch (e) {
-      notification.notifyError({
-        title: t('clusters.messages.wrong-configuration'),
-        content: t('common.tooltips.error') + e.message,
-      });
-      console.warn(e);
-    }
-  };
+  formElementRef,
+  onlyYaml,
+}) => {
+  if (!kubeconfig) {
+    kubeconfig = {};
+  }
 
   const { t } = useTranslation();
+  const [authenticationType, setAuthenticationType] = useState(
+    kubeconfig?.users?.[0]?.user?.exec ? 'oidc' : 'token',
+  );
+
+  const findInitialValue = id => {
+    if (kubeconfig?.users?.[0]?.user?.exec?.args) {
+      const elementWithId = kubeconfig?.users?.[0]?.user?.exec?.args.find(el =>
+        el.includes(id),
+      );
+      const regex = new RegExp(`${id}=(?<value>.*)`);
+      return regex.exec(elementWithId)?.groups?.value || '';
+    }
+    return '';
+  };
+
+  const [issuerUrl, setIssuerUrl] = useState(
+    findInitialValue('oidc-issuer-url'),
+  );
+  const [clientId, setClientId] = useState(findInitialValue('oidc-client-id'));
+  const [clientSecret, setClientSecret] = useState(
+    findInitialValue('oidc-client-secret'),
+  );
+  const [scopes, setScopes] = useState(findInitialValue('oidc-extra-scope'));
 
   const tokenFields = (
     <ResourceForm.FormField
@@ -76,24 +67,6 @@ function EditClusterComponent({
     />
   );
 
-  const findInitialValue = id => {
-    if (resource?.kubeconfig?.users?.[0]?.user?.exec?.args) {
-      const elementWithId = resource.kubeconfig?.users?.[0]?.user?.exec?.args.find(
-        el => el.includes(id),
-      );
-      const regex = new RegExp(`${id}=(?<value>.*)`);
-      return regex.exec(elementWithId)?.groups?.value || '';
-    }
-    return '';
-  };
-  const [issuerUrl, setIssuerUrl] = useState(
-    findInitialValue('oidc-issuer-url'),
-  );
-  const [clientId, setClientId] = useState(findInitialValue('oidc-client-id'));
-  const [clientSecret, setClientSecret] = useState(
-    findInitialValue('oidc-client-secret'),
-  );
-  const [scopes, setScopes] = useState(findInitialValue('oidc-extra-scope'));
   const createOIDC = (type = '', val = '') => {
     const config = { issuerUrl, clientId, clientSecret, scopes, [type]: val };
     const exec = {
@@ -109,9 +82,10 @@ function EditClusterComponent({
         '--grant-type=auto',
       ],
     };
-    jp.value(resource, '$.kubeconfig.users[0].user.exec', exec);
-    setResource({ ...resource });
+    jp.value(kubeconfig, '$.users[0].user.exec', exec);
+    setResource({ ...kubeconfig });
   };
+
   const OIDCFields = (
     <>
       <ResourceForm.FormField
@@ -161,6 +135,106 @@ function EditClusterComponent({
   );
 
   return (
+    <ResourceForm
+      pluralKind="clusters"
+      singularName={t(`clusters.name_singular`)}
+      resource={kubeconfig}
+      setResource={setResource}
+      initialResource={kubeconfig}
+      onChange={onChange}
+      formElementRef={formElementRef}
+      createUrl={resourceUrl}
+      onSubmit={onSubmit}
+      autocompletionDisabled
+      disableDefaultFields={true}
+      onlyYaml={onlyYaml}
+    >
+      <K8sNameField
+        kind={t('clusters.name_singular')}
+        date-testid="cluster-name"
+        value={jp.value(kubeconfig, '$["current-context"]')}
+        setValue={name => {
+          jp.value(kubeconfig, '$["current-context"]', name);
+          jp.value(kubeconfig, '$.contexts[0].name', name);
+
+          setResource({ ...kubeconfig });
+        }}
+      />
+      <ResourceForm.FormField
+        label={t('clusters.auth-type')}
+        key={t('clusters.auth-type')}
+        required
+        advanced
+        value={authenticationType}
+        setValue={type => {
+          if (type === 'token') {
+            delete kubeconfig?.users?.[0]?.user?.exec;
+            jp.value(kubeconfig, '$.users[0].user.token', null);
+          } else {
+            delete kubeconfig.users?.[0]?.user?.token;
+            createOIDC();
+          }
+          setResource({ ...kubeconfig });
+          setAuthenticationType(type);
+        }}
+        input={({ value, setValue }) => (
+          <AuthenticationTypeDropdown type={value} setType={setValue} />
+        )}
+      />
+      {authenticationType === 'token' ? tokenFields : OIDCFields}
+    </ResourceForm>
+  );
+};
+
+function EditClusterComponent({
+  formElementRef,
+  onChange,
+  resourceUrl,
+  editedCluster,
+}) {
+  const [resource, setResource] = useState(cloneDeep(editedCluster));
+  const { kubeconfig, config } = resource;
+
+  const { t } = useTranslation();
+  const notification = useNotification();
+
+  const clustersInfo = useClustersInfo();
+  const setAuth = useSetRecoilState(authDataState);
+  const originalName = useRef(kubeconfig?.['current-context'] || '');
+
+  const setWholeResource = newKubeconfig => {
+    jp.value(resource, '$.kubeconfig', newKubeconfig);
+    setResource({ ...resource });
+  };
+
+  const onComplete = () => {
+    try {
+      if (originalName.current !== kubeconfig?.['current-context']) {
+        deleteCluster(originalName.current, clustersInfo);
+      }
+      const contextName = kubeconfig['current-context'];
+      setAuth(null);
+
+      addCluster(
+        {
+          kubeconfig,
+          config: { ...(config || {}), config },
+          contextName: kubeconfig?.['current-context'],
+          currentContext: getContext(kubeconfig, contextName),
+          name: kubeconfig?.['current-context'],
+        },
+        clustersInfo,
+      );
+    } catch (e) {
+      notification.notifyError({
+        title: t('clusters.messages.wrong-configuration'),
+        content: t('common.tooltips.error') + e.message,
+      });
+      console.warn(e);
+    }
+  };
+
+  return (
     <>
       <div
         style={{
@@ -192,56 +266,14 @@ function EditClusterComponent({
         />
       </div>
 
-      <ResourceForm
-        pluralKind="clusters"
-        singularName={t(`clusters.name_singular`)}
-        resource={resource.kubeconfig}
-        setResource={modified => {
-          jp.value(resource, '$.kubeconfig', modified);
-          setResource({ ...resource });
-        }}
-        initialResource={resource.kubeconfig}
+      <ClusterDataForm
         onChange={onChange}
-        formElementRef={formElementRef}
-        createUrl={resourceUrl}
+        kubeconfig={kubeconfig}
+        setResource={setWholeResource}
         onSubmit={onComplete}
-        autocompletionDisabled
-        disableDefaultFields={true}
-      >
-        <K8sNameField
-          kind={t('clusters.name_singular')}
-          date-testid="cluster-name"
-          value={jp.value(resource, '$.kubeconfig["current-context"]')}
-          setValue={name => {
-            jp.value(resource, '$.kubeconfig["current-context"]', name);
-            jp.value(resource, '$.kubeconfig.contexts[0].name', name);
-
-            setResource({ ...resource });
-          }}
-        />
-        <ResourceForm.FormField
-          label={t('clusters.auth-type')}
-          key={t('clusters.auth-type')}
-          required
-          advanced
-          value={authenticationType}
-          setValue={type => {
-            if (type === 'token') {
-              delete resource?.kubeconfig?.users?.[0]?.user?.exec;
-              jp.value(resource, '$.kubeconfig.users[0].user.token', '');
-            } else {
-              delete resource?.kubeconfig.users?.[0]?.user?.token;
-              createOIDC();
-            }
-            setResource({ ...resource });
-            setAuthenticationType(type);
-          }}
-          input={({ value, setValue }) => (
-            <AuthenticationTypeDropdown type={value} setType={setValue} />
-          )}
-        />
-        {authenticationType === 'token' ? tokenFields : OIDCFields}
-      </ResourceForm>
+        formElementRef={formElementRef}
+        resourceUrl={resourceUrl}
+      />
     </>
   );
 }

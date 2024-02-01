@@ -69,6 +69,7 @@ const OIDCform = ({ resource, setResource, ...props }) => {
 const TokenForm = ({ resource, ...props }) => {
   const { t } = useTranslation();
   const userIndex = getUserIndex(resource);
+
   return (
     <ResourceForm.Wrapper resource={resource} {...props}>
       <ResourceForm.FormField

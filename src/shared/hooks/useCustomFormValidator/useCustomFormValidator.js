@@ -10,8 +10,7 @@ export function useCustomFormValidator() {
     let formContainer =
       formElementRef.current?.querySelector('div.simple-form') ??
       formElementRef.current?.querySelector('div.advanced-form') ??
-      formElementRef.current?.querySelector('div.yaml-form') ??
-      formElementRef.current;
+      formElementRef.current?.querySelector('div.yaml-form');
     if (formContainer) {
       setValid(cv && validateFormElement(formContainer, true).valid);
     }

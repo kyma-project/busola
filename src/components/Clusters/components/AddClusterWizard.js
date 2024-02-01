@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Wizard, WizardStep } from '@ui5/webcomponents-react';
+import {
+  Wizard,
+  WizardStep,
+  Title,
+  Button,
+  Popover,
+  Text,
+} from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -19,6 +26,9 @@ import { ChooseStorage } from './ChooseStorage';
 import { WizardButtons } from 'shared/components/WizardButtons/WizardButtons';
 
 import './AddClusterWizard.scss';
+import { ClusterPreview } from './ClusterPreview';
+import { createPortal } from 'react-dom';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
   const busolaClusterParams = useRecoilValue(configurationAtom);
@@ -34,6 +44,7 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
   );
   const [selected, setSelected] = useState(1);
   const setShowWizard = useSetRecoilState(showAddClusterWizard);
+  const [showTitleDescription, setShowTitleDescription] = useState(false);
 
   const {
     isValid: authValid,
@@ -41,7 +52,7 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
     setCustomValid,
     revalidate,
   } = useCustomFormValidator();
-  //console.log(authValid)
+
   useEffect(() => {
     if (Array.isArray(kubeconfig?.contexts)) {
       if (getUser(kubeconfig)?.token) {
@@ -125,7 +136,9 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
       >
         <KubeconfigUpload
           kubeconfig={kubeconfig}
+          config={config}
           setKubeconfig={updateKubeconfig}
+          formRef={authFormRef}
         />
         <WizardButtons
           selected={selected}
@@ -178,15 +191,68 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
             : selected !== 2
         }
       >
+        <Title level="H4">
+          Storage type configuration
+          <>
+            <Button
+              id="descriptionOpener"
+              icon="hint"
+              design="Transparent"
+              style={spacing.sapUiTinyMargin}
+              onClick={() => {
+                setShowTitleDescription(true);
+              }}
+            />
+            {createPortal(
+              <Popover
+                opener="descriptionOpener"
+                open={showTitleDescription}
+                onAfterClose={() => setShowTitleDescription(false)}
+                placementType="Right"
+              >
+                <Text className="description">
+                  {'fdgfgdf' + t('clusters.storage.info')}
+                </Text>
+              </Popover>,
+              document.body,
+            )}
+          </>
+        </Title>
         <ChooseStorage storage={storage} setStorage={setStorage} />
+        <WizardButtons
+          selected={selected}
+          setSelected={setSelected}
+          validation={!storage}
+          onCancel={() => setShowWizard(false)}
+          className="cluster-wizard__buttons"
+        />
+      </WizardStep>
+      <WizardStep
+        titleText={'Preview'} ///////////////////////////////////////
+        selected={
+          kubeconfig && (!hasAuth || !hasOneContext)
+            ? selected === 4
+            : selected === 3
+        }
+        disabled={
+          kubeconfig && (!hasAuth || !hasOneContext)
+            ? selected !== 4
+            : selected !== 3
+        }
+      >
+        <ClusterPreview
+          storage={storage}
+          kubeconfig={kubeconfig}
+          token={hasAuth ? hasKubeconfigAuth(kubeconfig) : null}
+        />
         <WizardButtons
           selected={selected}
           setSelected={setSelected}
           lastStep={true}
           customFinish={t('clusters.buttons.verify-and-add')}
-          validation={!storage}
           onComplete={onComplete}
           onCancel={() => setShowWizard(false)}
+          validation={!storage}
           className="cluster-wizard__buttons"
         />
       </WizardStep>

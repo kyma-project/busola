@@ -28,6 +28,7 @@ export function WizardButtons({
     <div style={spacing.sapUiSmallMarginTop} className={className}>
       {!firstStep && (
         <Button
+          design="Transparent"
           onClick={goToPreviousStep}
           style={spacing.sapUiTinyMarginEnd}
           aria-label="previous-step"
