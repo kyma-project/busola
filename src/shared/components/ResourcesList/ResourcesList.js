@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
-import { Button, Link } from '@ui5/webcomponents-react';
+import { Button, Text } from '@ui5/webcomponents-react';
 import { createPatch } from 'rfc6902';
 import { cloneDeep } from 'lodash';
 import * as jp from 'jsonpath';
 import pluralize from 'pluralize';
-import { useRecoilState } from 'recoil';
 
-import { columnLayoutState } from 'state/columnLayoutAtom';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { usePut, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useGetList, useSingleGet } from 'shared/hooks/BackendAPI/useGet';
@@ -28,7 +25,6 @@ import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useTranslation } from 'react-i18next';
-import { useUrl } from 'hooks/useUrl';
 import { nameLocaleSort, timeSort } from '../../helpers/sortingfunctions';
 import { useVersionWarning } from 'hooks/useVersionWarning';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
@@ -220,7 +216,6 @@ export function ResourceListRenderer({
   });
   const { t } = useTranslation();
   const { isProtected, protectedResourceWarning } = useProtectedResources();
-  const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
 
   const [toggleFormFn, getToggleFormFn] = useState(() => {});
 
@@ -239,12 +234,10 @@ export function ResourceListRenderer({
     currentlyEditedResourceUID,
   } = useYamlEditor();
   const notification = useNotification();
-  const navigate = useNavigate();
 
   const getRequest = useSingleGet();
   const updateResourceMutation = useUpdate(resourceUrl);
   const putRequest = usePut();
-  const { resourceUrl: resourceUrlFn } = useUrl();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => closeEditor(), [namespace]);
@@ -254,11 +247,6 @@ export function ResourceListRenderer({
     resourceType,
   );
 
-  const linkTo = entry => {
-    console.log(customUrl, resourceUrlFn, resourceType, entry);
-    customUrl ? customUrl(entry) : resourceUrlFn(entry, { resourceType });
-  };
-
   const defaultColumns = [
     {
       header: t('common.headers.name'),
@@ -266,53 +254,15 @@ export function ResourceListRenderer({
         hasDetailsView ? (
           enableColumnLayout ? (
             <>
-              <Link
-                style={{ fontWeight: 'bold' }}
-                onClick={() => {
-                  setLayoutColumn(
-                    columnLayout
-                      ? {
-                          midColumn: layoutState.midColumn,
-                          endColumn: customColumnLayout(entry),
-                          layout: columnLayout,
-                        }
-                      : {
-                          midColumn: {
-                            resourceName: entry?.metadata?.name,
-                            resourceType: resourceType,
-                            namespaceId: entry?.metadata?.namespace,
-                          },
-                          endColumn: null,
-                          layout: 'TwoColumnsMidExpanded',
-                        },
-                  );
-
-                  window.history.pushState(
-                    window.history.state,
-                    '',
-                    `${linkTo(entry)}?layout=${columnLayout ||
-                      'TwoColumnsMidExpanded'}`,
-                  );
-                }}
-              >
-                {nameSelector(entry)}
-              </Link>
+              <Text style={{ fontWeight: 'bold' }}>{nameSelector(entry)}</Text>
             </>
           ) : (
-            <Link
-              style={{ fontWeight: 'bold' }}
-              onClick={() => {
-                setLayoutColumn({
-                  midColumn: null,
-                  endColumn: null,
-                  layout: 'OneColumn',
-                });
-
-                navigate(linkTo(entry));
-              }}
+            <Text
+              style={{ fontWeight: 'bold', color: 'blue' }}
+              className="bsl-link"
             >
               {nameSelector(entry)}
-            </Link>
+            </Text>
           )
         ) : (
           <b>{nameSelector(entry)}</b>
@@ -632,6 +582,11 @@ export function ResourceListRenderer({
       )}
       {!(error && error.toString().includes('is forbidden')) && (
         <GenericList
+          customUrl={customUrl}
+          resourceType={resourceType}
+          customColumnLayout={customColumnLayout}
+          columnLayout={columnLayout}
+          enableColumnLayout={enableColumnLayout}
           disableMargin={disableMargin}
           title={showTitle ? title || prettifiedResourceName : null}
           actions={actions}

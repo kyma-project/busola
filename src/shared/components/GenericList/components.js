@@ -90,8 +90,8 @@ const DefaultRowRenderer = ({
   actions,
   rowRenderer,
   isBeingEdited = false,
+  isSelected = false,
 }) => {
-  // console.log(entry, rowRenderer);
   const cells = rowRenderer.map((cell, id) => {
     if (cell?.content) {
       const { content, ...props } = cell;
@@ -109,15 +109,9 @@ const DefaultRowRenderer = ({
       <ListActions actions={actions} entry={entry} />
     </TableCell>
   );
-  // console.log(window.location.pathname, entry?.metadata?.name);
+
   return (
-    <TableRow
-      type="Active"
-      selected={
-        isBeingEdited ??
-        window.location.pathname.includes(entry?.metadata?.name)
-      }
-    >
+    <TableRow type="Active" selected={isBeingEdited ?? isSelected}>
       {cells}
       {!!actions.length && actionsCell}
     </TableRow>

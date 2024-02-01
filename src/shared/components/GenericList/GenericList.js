@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { Table } from '@ui5/webcomponents-react';
-
+import { useNavigate } from 'react-router-dom';
 import {
   BodyFallback,
   HeaderRenderer,
@@ -27,6 +27,7 @@ import { spacing } from '@ui5/webcomponents-react-base';
 import { EmptyListComponent } from '../EmptyListComponent/EmptyListComponent';
 import { useUrl } from 'hooks/useUrl';
 import { columnLayoutState } from 'state/columnLayoutAtom';
+import pluralize from 'pluralize';
 
 const defaultSort = {
   name: nameLocaleSort,
@@ -59,10 +60,15 @@ export const GenericList = ({
   searchSettings,
   disableMargin,
   emptyListProps = null,
-  layoutNumber = 'StartColumn',
+  columnLayout = null,
+  customColumnLayout = null,
+  enableColumnLayout,
+  resourceType = '',
+  customUrl,
 }) => {
+  const navigate = useNavigate();
   searchSettings = { ...defaultSearch, ...searchSettings };
-
+  const [entrySelected, setEntrySelected] = useState('');
   if (typeof sortBy === 'function') sortBy = sortBy(defaultSort);
 
   const [sort, setSort] = useState({
@@ -217,6 +223,7 @@ export const GenericList = ({
 
     return pagedItems.map((e, index) => (
       <RowRenderer
+        isSelected={entrySelected === e.metadata?.name}
         index={index}
         key={e.metadata?.uid || e.name || e.metadata?.name || index}
         entry={e}
@@ -230,19 +237,12 @@ export const GenericList = ({
     ));
   };
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
-  // const { resourceUrl: resourceUrlFn } = useUrl();
-  // const linkTo = entry =>
-  //   resourceUrlFn(
-  //     entry,
-  //     window.location.pathname.slice(
-  //       window.location.pathname.lastIndexOf('/') + 1,
-  //     ),
-  //   );
-  // console.log(
-  //   window.location.pathname.slice(
-  //     window.location.pathname.lastIndexOf('/') + 1,
-  //   ),
-  // );
+  const { resourceUrl: resourceUrlFn } = useUrl();
+  const linkTo = entry => {
+    return customUrl
+      ? customUrl(entry)
+      : resourceUrlFn(entry, { resourceType });
+  };
 
   return (
     <UI5Panel
@@ -255,36 +255,51 @@ export const GenericList = ({
       <Table
         className={'ui5-generic-list'}
         onRowClick={e => {
-          console.log(e.target.children[0].innerText);
+          const selectedEntry = entries.find(entry => {
+            return (
+              entry.metadata.name === e.target.children[0].innerText ||
+              pluralize(entry.spec.names.kind) ===
+                e.target.children[0].innerText
+            );
+          });
+          setEntrySelected(
+            selectedEntry?.metadata?.name ?? e.target.children[0].innerText,
+          );
+          if (!enableColumnLayout) {
+            setLayoutColumn({
+              midColumn: null,
+              endColumn: null,
+              layout: 'OneColumn',
+            });
 
-          setLayoutColumn(
-            layoutNumber === 'StartColumn'
-              ? {
-                  midColumn: {
-                    resourceName: e.target.children[0].innerText,
-                    resourceType: window.location.pathname.slice(
-                      window.location.pathname.lastIndexOf('/') + 1,
-                    ),
-                    namespaceId: 'kyma-system',
+            navigate(linkTo(selectedEntry));
+          } else {
+            setLayoutColumn(
+              columnLayout
+                ? {
+                    midColumn: layoutState.midColumn,
+                    endColumn: customColumnLayout(selectedEntry),
+                    layout: columnLayout,
+                  }
+                : {
+                    midColumn: {
+                      resourceName:
+                        selectedEntry?.metadata?.name ??
+                        e.target.children[0].innerText,
+                      resourceType: resourceType,
+                      namespaceId: selectedEntry?.metadata?.namespace,
+                    },
+                    endColumn: null,
+                    layout: 'TwoColumnsMidExpanded',
                   },
-                  endColumn: null,
-                  layout: 'TwoColumnsMidExpanded',
-                }
-              : null,
-          );
+            );
 
-          window.history.pushState(
-            window.history.state,
-            '',
-            `${window.location.pathname.slice(
-              window.location.pathname.lastIndexOf('/') + 1,
-            ) +
-              '/' +
-              e.target.children[0]
-                .innerText}?layout=${'TwoColumnsMidExpanded'}`,
-          );
-
-          console.log(e);
+            window.history.pushState(
+              window.history.state,
+              '',
+              `${linkTo(selectedEntry)}?layout=${'TwoColumnsMidExpanded'}`,
+            );
+          }
         }}
         columns={
           <HeaderRenderer
@@ -351,6 +366,8 @@ GenericList.propTypes = {
   notFoundMessage: PropTypes.string,
   searchSettings: SearchProps,
   disableMargin: PropTypes.bool,
+  enableColumnLayout: PropTypes.bool,
+  customUrl: PropTypes.func,
 };
 
 GenericList.defaultProps = {
