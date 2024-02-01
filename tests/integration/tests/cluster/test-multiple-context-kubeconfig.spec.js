@@ -72,6 +72,10 @@ context('Test multiple context kubeconfig', () => {
 
       cy.contains('Next').click({ force: true });
 
+      cy.get('ui5-button:visible')
+        .contains('Next step')
+        .click();
+
       cy.get(`[aria-label="last-step"]:visible`)
         .contains('Connect cluster')
         .click({ force: true });

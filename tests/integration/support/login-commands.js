@@ -125,6 +125,11 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
         .parent('ui5-radio-button')
         .click();
     }
+
+    cy.get('ui5-button:visible')
+      .contains('Next step')
+      .click();
+
     cy.get(`[aria-label="last-step"]:visible`)
       .contains('Connect cluster')
       .click({ force: true });

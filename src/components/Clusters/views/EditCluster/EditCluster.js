@@ -138,7 +138,7 @@ export const ClusterDataForm = ({
     <ResourceForm
       pluralKind="clusters"
       singularName={t(`clusters.name_singular`)}
-      resource={kubeconfig}
+      resource={Object.keys(kubeconfig).length ? kubeconfig : null}
       setResource={setResource}
       initialResource={kubeconfig}
       onChange={onChange}
