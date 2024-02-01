@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
-import jsyaml from 'js-yaml';
 import { Button, Text } from '@ui5/webcomponents-react';
-import { createPatch } from 'rfc6902';
 import { cloneDeep } from 'lodash';
 import * as jp from 'jsonpath';
 import pluralize from 'pluralize';
 
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
-import { usePut, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
-import { useGetList, useSingleGet } from 'shared/hooks/BackendAPI/useGet';
-import { useNotification } from 'shared/contexts/NotificationContext';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
 import { YamlEditorProvider } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
 import { prettifyNameSingular, prettifyNamePlural } from 'shared/utils/helpers';
@@ -27,8 +23,6 @@ import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useTranslation } from 'react-i18next';
 import { nameLocaleSort, timeSort } from '../../helpers/sortingfunctions';
 import { useVersionWarning } from 'hooks/useVersionWarning';
-import { HttpError } from 'shared/hooks/BackendAPI/config';
-import { ForceUpdateModalContent } from 'shared/ResourceForm/ForceUpdateModalContent';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { createPortal } from 'react-dom';
 
@@ -194,7 +188,6 @@ export function ResourceListRenderer({
   resourceUrlPrefix,
   nameSelector = entry => entry?.metadata.name, // overriden for CRDGroupList
   disableCreate,
-  disableEdit,
   disableDelete,
   disableMargin,
   enableColumnLayout,
@@ -228,16 +221,7 @@ export function ResourceListRenderer({
   });
 
   const [activeResource, setActiveResource] = useState(null);
-  const {
-    setEditedYaml: setEditedSpec,
-    closeEditor,
-    currentlyEditedResourceUID,
-  } = useYamlEditor();
-  const notification = useNotification();
-
-  const getRequest = useSingleGet();
-  const updateResourceMutation = useUpdate(resourceUrl);
-  const putRequest = usePut();
+  const { closeEditor, currentlyEditedResourceUID } = useYamlEditor();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => closeEditor(), [namespace]);
@@ -305,90 +289,6 @@ export function ResourceListRenderer({
       col => !omitColumnsIds.includes(col.id),
     );
 
-  const handleSaveClick = resourceData => async newYAML => {
-    const showError = e => {
-      console.error(e);
-      notification.notifyError({
-        content: t('components.resources-list.messages.update.failure', {
-          resourceType: prettifiedResourceName,
-          error: e.message,
-        }),
-      });
-    };
-
-    const onSuccess = () => {
-      silentRefetch();
-      notification.notifySuccess({
-        content: t('components.resources-list.messages.update.success', {
-          resourceType: prettifiedResourceName,
-        }),
-      });
-    };
-
-    const modifiedResource = jsyaml.load(newYAML);
-    const diff = createPatch(resourceData, modifiedResource);
-    const url = prepareResourceUrl(resourceUrl, resourceData);
-    try {
-      await updateResourceMutation(url, diff);
-      onSuccess();
-    } catch (e) {
-      const isConflict = e instanceof HttpError && e.code === 409;
-      if (isConflict) {
-        const response = await getRequest(url);
-        const updatedResource = await response.json();
-
-        const makeForceUpdateFn = closeModal => {
-          return async () => {
-            delete modifiedResource?.metadata?.resourceVersion;
-            try {
-              await putRequest(url, modifiedResource);
-              closeModal();
-              onSuccess();
-              if (typeof toggleFormFn === 'function') {
-                toggleFormFn(false);
-              }
-              closeEditor();
-            } catch (e) {
-              showError(e);
-            }
-          };
-        };
-
-        notification.notifyError({
-          content: (
-            <ForceUpdateModalContent
-              error={e}
-              singularName={resourceType}
-              initialResource={updatedResource}
-              modifiedResource={modifiedResource}
-            />
-          ),
-          actions: (closeModal, defaultCloseButton) => [
-            <Button onClick={makeForceUpdateFn(closeModal)}>
-              {t('common.create-form.force-update')}
-            </Button>,
-            defaultCloseButton(closeModal),
-          ],
-          wider: true,
-        });
-      } else {
-        showError(e);
-      }
-      // throw error so that drawer doesn't close
-      throw e;
-    }
-  };
-
-  const handleResourceEdit = resource => {
-    setEditedSpec(
-      resource,
-      nameSelector(resource) + '.yaml',
-      handleSaveClick(resource),
-      isProtected(resource) || disableEdit,
-      isProtected(resource),
-    );
-  };
-
   const prepareResourceUrl = (resourceUrl, resource) => {
     const encodedName = encodeURIComponent(resource?.metadata.name);
     const namespace = resource?.metadata?.namespace;
@@ -442,18 +342,6 @@ export function ResourceListRenderer({
               handler: handleResourceClone,
             }
           : null,
-        {
-          name: t('common.buttons.edit'),
-          tooltip: entry =>
-            isProtected(entry)
-              ? t('common.tooltips.protected-resources-view-yaml')
-              : disableEdit
-              ? t('common.buttons.view-yaml')
-              : t('common.buttons.edit'),
-          icon: entry =>
-            isProtected(entry) || disableEdit ? 'show-edit' : 'edit',
-          handler: handleResourceEdit,
-        },
         {
           name: t('common.buttons.delete'),
           tooltip: entry =>
