@@ -5,7 +5,7 @@ import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespace
 import { useGetHiddenNamespaces } from 'shared/hooks/useGetHiddenNamespaces';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { Link } from 'shared/components/Link/Link';
-import { NamespaceCreate } from './NamespaceCreate';
+import NamespaceCreate from './NamespaceCreate';
 import { NamespaceStatus } from './NamespaceStatus';
 import { useNavigate } from 'react-router-dom';
 import { clusterState } from 'state/clusterAtom';

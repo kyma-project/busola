@@ -11,7 +11,7 @@ import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 import { NamespaceStatus } from './NamespaceStatus';
 import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
 import { ResourcesUsage } from './ResourcesUsage';
-import { NamespaceCreate } from './NamespaceCreate';
+import NamespaceCreate from './NamespaceCreate';
 import { AllNamespacesDetails } from './AllNamespacesDetails';
 
 import './NamespaceDetails.scss';
