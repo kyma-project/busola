@@ -30,7 +30,12 @@ import { ClusterPreview } from './ClusterPreview';
 import { createPortal } from 'react-dom';
 import { spacing } from '@ui5/webcomponents-react-base';
 
-export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
+export function AddClusterWizard({
+  kubeconfig,
+  setKubeconfig,
+  config,
+  showWizard,
+}) {
   const busolaClusterParams = useRecoilValue(configurationAtom);
   const { t } = useTranslation();
   const notification = useNotification();
@@ -45,13 +50,22 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
   const [selected, setSelected] = useState(1);
   const setShowWizard = useSetRecoilState(showAddClusterWizard);
   const [showTitleDescription, setShowTitleDescription] = useState(false);
-
+  console.log(selected);
+  console.log(kubeconfig);
   const {
     isValid: authValid,
     formElementRef: authFormRef,
     setCustomValid,
     revalidate,
   } = useCustomFormValidator();
+
+  useEffect(() => {
+    if (!showWizard) {
+      setHasAuth(false);
+      setHasOneContext(false);
+      setSelected(1);
+    }
+  }, [showWizard]);
 
   useEffect(() => {
     if (Array.isArray(kubeconfig?.contexts)) {
@@ -65,7 +79,7 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
 
   const updateKubeconfig = kubeconfig => {
     if (!kubeconfig) {
-      setKubeconfig(null);
+      setKubeconfig(undefined);
       return;
     }
 
@@ -179,7 +193,7 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
       )}
 
       <WizardStep
-        titleText={'Privacy'} ///////////////////////////////////////
+        titleText={t('clusters.wizard.storage')}
         selected={
           kubeconfig && (!hasAuth || !hasOneContext)
             ? selected === 3
@@ -228,7 +242,7 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
         />
       </WizardStep>
       <WizardStep
-        titleText={'Preview'} ///////////////////////////////////////
+        titleText={t('clusters.wizard.review')}
         selected={
           kubeconfig && (!hasAuth || !hasOneContext)
             ? selected === 4

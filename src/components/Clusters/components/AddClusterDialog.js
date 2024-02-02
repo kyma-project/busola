@@ -11,13 +11,17 @@ function AddClusterDialogComponent() {
   const showWizard = useRecoilValue(showAddClusterWizard);
 
   useEffect(() => {
-    if (showWizard) {
+    if (!showWizard) {
       setKubeconfig(undefined);
     }
   }, [showWizard]);
 
   return (
-    <AddClusterWizard kubeconfig={kubeconfig} setKubeconfig={setKubeconfig} />
+    <AddClusterWizard
+      kubeconfig={kubeconfig}
+      setKubeconfig={setKubeconfig}
+      showWizard={showWizard}
+    />
   );
 }
 export function AddClusterDialog() {

@@ -50,7 +50,7 @@ export function ResourceForm({
 }) {
   // readonly schema ID, set only once
   const resourceSchemaId = useMemo(
-    () => resource?.apiVersion + '/' + resource?.kind,
+    () => resource.apiVersion + '/' + resource.kind,
     [], // eslint-disable-line react-hooks/exhaustive-deps
   );
   const resourceRef = useRef(null);

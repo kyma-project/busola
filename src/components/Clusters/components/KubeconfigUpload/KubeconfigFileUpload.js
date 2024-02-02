@@ -18,7 +18,9 @@ export function KubeconfigFileUpload({ onKubeconfigTextAdded }) {
   };
 
   const onKubeconfigFileUploaded = async files => {
+    console.log('PRZED');
     const fileContent = await readFile(files[0]);
+    console.log('PO');
     onKubeconfigTextAdded(fileContent);
   };
 

@@ -129,6 +129,7 @@ clusters:
     changed-message: The chosen storage type has been overwritten by the cluster configuration from {{originalStorage}} to {{targetStorage}}.
     choose-storage:
       label: Storage type configuration
+    storage-preference: Storage preference
     descriptions:
       inMemory: Cluster data is cleared when you leave or refresh the page.
       localStorage: Cluster data is persisted between browser reloads.
@@ -164,13 +165,14 @@ clusters:
     kubeconfig: Provide Kubeconfig
     multi-context-info: All contexts will be connected. Be aware that only {{context}} is validated. The remaining contexts are connected without validation.
     not-an-object: kubeconfig is not an object
-    storage: Privacy Options
+    storage: Privacy
     storage-info: |
       Don't worry, we don't store your kubeconfig file on the server. The information stays in your browser.
       You can choose your privacy options in the last step.
     token-info: If you don't know how to get your token, ask your authentication provider.
     update: Provide Authentication
     authentication: Authentication
+    review: Review
 command-palette:
   crds:
     name-short: CRD

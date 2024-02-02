@@ -43,11 +43,11 @@ export function KubeconfigUpload({ kubeconfig, setKubeconfig, formRef }) {
       <ClusterDataForm
         kubeconfig={kubeconfig}
         setResource={modified => {
-          setKubeconfig({ ...modified });
+          if (modified) setKubeconfig({ ...modified });
         }}
         onChange={updateKubeconfig}
         formElementRef={formRef}
-        onlyYaml={!!!kubeconfig}
+        onlyYaml={kubeconfig ? !Object.keys(kubeconfig)?.length : !!!kubeconfig}
       />
       {error && (
         <MessageStrip

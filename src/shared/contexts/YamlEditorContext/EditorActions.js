@@ -118,9 +118,9 @@ export function EditorActions({
 
   return (
     <section
+      className="editor-actions"
       style={{
-        ...spacing.sapUiSmallMarginTopBottom,
-        ...spacing.sapUiMediumMarginBegin,
+        ...spacing.sapUiSmallMarginTop,
       }}
     >
       <ButtonWithTooltip

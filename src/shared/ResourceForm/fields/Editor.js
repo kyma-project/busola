@@ -16,9 +16,6 @@ export function Editor({
   const [error, setError] = useState('');
 
   const parsedValue = React.useMemo(() => {
-    if (!value) {
-      return;
-    }
     if (!convert) {
       return value;
     } else if (language === 'yaml') {
