@@ -14,8 +14,10 @@ export function Editor({
 }) {
   const { t } = useTranslation();
   const [error, setError] = useState('');
-
   const parsedValue = React.useMemo(() => {
+    if (!value) {
+      return undefined;
+    }
     if (!convert) {
       return value;
     } else if (language === 'yaml') {
@@ -29,6 +31,9 @@ export function Editor({
 
   const handleChange = useCallback(
     text => {
+      if (!value) {
+        return;
+      }
       if (!convert) {
         setValue(text);
         return;

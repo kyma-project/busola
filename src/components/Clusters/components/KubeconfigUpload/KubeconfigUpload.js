@@ -17,7 +17,7 @@ export function KubeconfigUpload({ kubeconfig, setKubeconfig, formRef }) {
     text => {
       try {
         const config = jsyaml.load(text);
-
+        console.log(config);
         if (typeof config !== 'object') {
           setError(t('clusters.wizard.not-an-object'));
         } else {
@@ -32,7 +32,7 @@ export function KubeconfigUpload({ kubeconfig, setKubeconfig, formRef }) {
     },
     [t, setError, setKubeconfig],
   );
-
+  console.log(kubeconfig);
   return (
     <div className="kubeconfig-upload">
       <KubeconfigFileUpload

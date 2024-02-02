@@ -28,10 +28,6 @@ export const ClusterDataForm = ({
   formElementRef,
   onlyYaml,
 }) => {
-  if (!kubeconfig) {
-    kubeconfig = {};
-  }
-
   const { t } = useTranslation();
   const [authenticationType, setAuthenticationType] = useState(
     kubeconfig?.users?.[0]?.user?.exec ? 'oidc' : 'token',
@@ -133,7 +129,7 @@ export const ClusterDataForm = ({
       />
     </>
   );
-
+  console.log(kubeconfig);
   return (
     <ResourceForm
       pluralKind="clusters"
@@ -152,12 +148,16 @@ export const ClusterDataForm = ({
       <K8sNameField
         kind={t('clusters.name_singular')}
         date-testid="cluster-name"
-        value={jp.value(kubeconfig, '$["current-context"]')}
+        value={
+          kubeconfig ? jp.value(kubeconfig, '$["current-context"]') : kubeconfig
+        }
         setValue={name => {
-          jp.value(kubeconfig, '$["current-context"]', name);
-          jp.value(kubeconfig, '$.contexts[0].name', name);
+          if (kubeconfig) {
+            jp.value(kubeconfig, '$["current-context"]', name);
+            jp.value(kubeconfig, '$.contexts[0].name', name);
 
-          setResource({ ...kubeconfig });
+            setResource({ ...kubeconfig });
+          }
         }}
       />
       <ResourceForm.FormField
@@ -265,7 +265,6 @@ function EditClusterComponent({
           }}
         />
       </div>
-
       <ClusterDataForm
         onChange={onChange}
         kubeconfig={kubeconfig}
