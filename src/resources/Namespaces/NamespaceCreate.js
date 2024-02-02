@@ -24,7 +24,7 @@ const ISTIO_INJECTION_LABEL = 'istio-injection';
 const ISTIO_INJECTION_ENABLED = 'enabled';
 const ISTIO_INJECTION_DISABLED = 'disabled';
 
-export function NamespaceCreate({
+export default function NamespaceCreate({
   formElementRef,
   onChange,
   resource: initialNamespace,

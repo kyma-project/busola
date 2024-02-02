@@ -3,11 +3,18 @@ import { useRecoilValue, useRecoilState } from 'recoil';
 import { Route, useSearchParams } from 'react-router-dom';
 import pluralize from 'pluralize';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
+import { useTranslation } from 'react-i18next';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { usePrepareDetailsProps, usePrepareListProps } from './helpers';
+import {
+  usePrepareCreateProps,
+  usePrepareDetailsProps,
+  usePrepareListProps,
+} from './helpers';
+import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
+import { EditResource } from 'shared/components/DynamicPageComponent/EditResource';
 
 import { useFeature } from 'hooks/useFeature';
 
@@ -47,15 +54,21 @@ export const createKubernetesUrl = ({
   return `${apiPrefix}${apiGroup}/${apiVersion}/${namespaceSegment}${resourceType}/${details}`;
 };
 
-const ListWrapper = ({ children, details, ...props }) => {
+const ListWrapper = ({ children, details, create, ...props }) => {
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   const layoutState = useRecoilValue(columnLayoutState);
+  const { t } = useTranslation();
+  console.log('!Create', create, 'resourceType', props.resourceType);
 
   const elementListProps = usePrepareListProps(props);
   const elementDetailsProps = usePrepareDetailsProps({
     ...props,
     customResourceName: layoutState?.midColumn?.resourceName,
     customNamespaceId: layoutState.midColumn?.namespaceId,
+  });
+
+  const elementCreateProps = usePrepareCreateProps({
+    ...props,
   });
 
   const listComponent = React.cloneElement(children, {
@@ -69,12 +82,45 @@ const ListWrapper = ({ children, details, ...props }) => {
     ...elementDetailsProps,
   });
 
+  console.log('elementCreateProps', elementCreateProps);
+  let midColumnComponent = null;
+  if (layoutState?.showCreate?.resourceType && create?.type !== null) {
+    midColumnComponent = (
+      <EditResource
+        title={
+          // createActionLabel ||
+          t('components.resources-list.create', {
+            resourceType: elementCreateProps.resourceTitle,
+          })
+        }
+        confirmText={t('common.buttons.update')}
+        renderForm={renderProps => {
+          const createComponent =
+            create?.type !== null &&
+            layoutState?.showCreate?.resourceType &&
+            React.cloneElement(create, {
+              ...elementCreateProps,
+              ...renderProps,
+              enableColumnLayout: true,
+            });
+          return <ErrorBoundary>{createComponent}</ErrorBoundary>;
+        }}
+      />
+    );
+    // midColumnComponent = createComponent;
+  }
+  if (!layoutState?.showCreate && layoutState?.midColumn) {
+    midColumnComponent = detailsComponent;
+  }
+  console.log('layoutState', layoutState);
   return (
     <FlexibleColumnLayout
       style={{ height: '100%' }}
-      layout={layoutState?.layout || 'OneColumn'}
+      layout={
+        !midColumnComponent ? 'OneColumn' : layoutState?.layout || 'OneColumn'
+      }
       startColumn={<div slot="">{listComponent}</div>}
-      midColumn={<div slot="">{detailsComponent}</div>}
+      midColumn={<div slot="">{midColumnComponent}</div>}
     />
   );
 };
@@ -141,6 +187,7 @@ const DetailsWrapper = ({ children, list, ...props }) => {
 export const createResourceRoutes = ({
   List = null,
   Details = null,
+  Create = null,
   namespaced = true,
   resourceType = '',
   resourceI18Key = '',
@@ -165,6 +212,7 @@ export const createResourceRoutes = ({
               resourceI18Key={resourceI18Key}
               hasDetailsView={!!Details}
               details={<Details />}
+              create={<Create />}
               {...props}
             >
               <List allowSlashShortcut />
@@ -181,6 +229,7 @@ export const createResourceRoutes = ({
                 resourceType={resourceType}
                 resourceI18Key={resourceI18Key}
                 list={<List />}
+                create={<Create />}
                 {...props}
               >
                 <Details />

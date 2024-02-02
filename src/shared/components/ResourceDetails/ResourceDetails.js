@@ -438,24 +438,13 @@ function Resource({
         }
         inlineEditForm={() => (
           <EditResource
-            getToggleFormFn={getToggleFormFn}
             title={
               editActionLabel ||
               t('components.resource-details.edit', {
                 resourceType: prettifiedResourceKind,
               })
             }
-            modalOpeningComponent={
-              <Button design="Emphasized">
-                {editActionLabel ||
-                  t('components.resource-details.edit', {
-                    resourceType: prettifiedResourceKind,
-                  })}
-              </Button>
-            }
             confirmText={t('common.buttons.update')}
-            id={`edit-${resourceType}-modal`}
-            className="modal-size--l"
             renderForm={props => (
               <ErrorBoundary>
                 <CreateResourceForm
@@ -463,7 +452,7 @@ function Resource({
                   resourceType={resourceType}
                   resourceUrl={resourceUrl}
                   namespace={namespace}
-                  refetchList={silentRefetch}
+                  // refetchList={silentRefetch}
                   toggleFormFn={toggleFormFn}
                   resourceSchema={resourceSchema}
                   editMode={true}

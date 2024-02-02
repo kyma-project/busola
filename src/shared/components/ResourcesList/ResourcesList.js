@@ -544,7 +544,23 @@ export function ResourceListRenderer({
         design="Transparent"
         onClick={() => {
           setActiveResource(undefined);
-          toggleFormFn(true);
+          // toggleFormFn(true);
+
+          setLayoutColumn({
+            midColumn: null,
+            endColumn: null,
+            showCreate: {
+              resourceType: resourceType,
+              namespaceId: namespace,
+            },
+            layout: 'TwoColumnsMidExpanded',
+          });
+
+          window.history.pushState(
+            window.history.state,
+            '',
+            `${window.location.pathname}`,
+          );
         }}
       >
         {createActionLabel ||

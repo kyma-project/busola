@@ -9,6 +9,7 @@ import {
 } from 'shared/components/ResourceGraph/getResourceGraphConfig';
 import { useRecoilValue } from 'recoil';
 import { extensionsState } from 'state/navigation/extensionsAtom';
+import { prettifyNameSingular } from 'shared/utils/helpers';
 
 export const usePrepareResourceUrl = ({
   apiGroup,
@@ -95,6 +96,43 @@ export const usePrepareDetailsProps = ({
     namespace: namespaceId,
     readOnly: queryParams.get('readOnly') === 'true',
     resourceGraphConfig: getResourceGraphConfig(extensions, addStyle),
+    i18n,
+  };
+};
+
+export const usePrepareCreateProps = ({
+  resourceCustomType,
+  resourceType,
+  resourceI18Key,
+  apiGroup,
+  apiVersion,
+}) => {
+  console.log('usePrepareCreateProps', {
+    resourceCustomType,
+    resourceType,
+    resourceI18Key,
+    apiGroup,
+    apiVersion,
+  });
+  const { namespaceId } = useParams();
+  const { i18n, t } = useTranslation();
+
+  const api = apiGroup ? `apis/${apiGroup}/${apiVersion}` : `api/${apiVersion}`;
+  const resourceUrl =
+    namespaceId && namespaceId !== '-all-'
+      ? `/${api}/namespaces/${namespaceId}/${resourceType?.toLowerCase()}`
+      : `/${api}/${resourceType?.toLowerCase()}`;
+
+  return {
+    resourceUrl,
+    resourceType: resourceCustomType || pluralize(resourceType || ''),
+    resourceTitle: t('components.resources-list.create', {
+      resourceType: prettifyNameSingular(
+        '',
+        resourceCustomType || resourceType,
+      ),
+    }),
+    namespace: namespaceId,
     i18n,
   };
 };

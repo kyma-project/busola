@@ -35,7 +35,6 @@ export function ExtensibilityCreateCore({
   resourceUrl,
   resource: initialResource,
   resourceSchema: createResource,
-  toggleFormFn,
   resourceName,
   editMode = false,
   ...props
@@ -90,7 +89,6 @@ export function ExtensibilityCreateCore({
         ),
       });
     }
-    toggleFormFn(false);
   };
 
   const {

@@ -16,15 +16,28 @@ export const EditResource = ({
   renderForm,
   opened,
   customCloseAction,
-  modalOpeningComponent,
   confirmText,
   invalidPopupMessage,
   className,
   onModalOpenStateChange,
   alwaysOpen,
-  getToggleFormFn,
   ...props
 }) => {
+  console.log('!!!!', {
+    performRefetch,
+    sendNotification,
+    title,
+    button,
+    renderForm,
+    opened,
+    customCloseAction,
+    confirmText,
+    invalidPopupMessage,
+    className,
+    onModalOpenStateChange,
+    alwaysOpen,
+    ...props,
+  });
   const { t } = useTranslation();
   const [isOpen, setOpen] = useState(alwaysOpen || false);
   const [resetFormFn, setResetFormFn] = useState(() => () => {});
@@ -55,15 +68,6 @@ export const EditResource = ({
     setOpen(status);
   };
 
-  useEffect(() => {
-    if (getToggleFormFn) {
-      // If getToggleFormFn is defined, the function that toggles form modal on/off is passed to parent. The modal will not be closed automatically
-      // after clicking on the submit button. You must call toggleFormFn(false) to close the modal at the moment you prefer.
-      getToggleFormFn(() => setOpenStatus);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getToggleFormFn]);
-
   function handleFormChanged() {
     setTimeout(() => revalidate());
   }
@@ -89,9 +93,6 @@ export const EditResource = ({
       formElementRef.current.dispatchEvent(
         new Event('submit', { bubbles: true, cancelable: true }),
       );
-      if (!getToggleFormFn) {
-        setOpenStatus(false);
-      }
     }
   }
 
@@ -163,7 +164,6 @@ EditResource.propTypes = {
   renderForm: PropTypes.func.isRequired,
   opened: PropTypes.bool,
   customCloseAction: PropTypes.func,
-  modalOpeningComponent: PropTypes.node,
   confirmText: PropTypes.string,
   invalidPopupMessage: PropTypes.string,
   button: CustomPropTypes.button,
