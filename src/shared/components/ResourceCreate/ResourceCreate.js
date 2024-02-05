@@ -4,11 +4,12 @@ import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
+import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';
 
-export const EditResource = ({
+export const ResourceCreate = ({
   performRefetch,
   sendNotification,
   title,
@@ -21,9 +22,10 @@ export const EditResource = ({
   className,
   onModalOpenStateChange,
   alwaysOpen,
+  isEdit,
   ...props
 }) => {
-  console.log('!!!!', {
+  console.log('!!!! ResourceCreate', {
     performRefetch,
     sendNotification,
     title,
@@ -128,37 +130,69 @@ export const EditResource = ({
 
   return (
     <>
-      {renderForm({
-        handleSetResetFormFn: setResetFormFn,
-        formElementRef,
-        isValid,
-        setCustomValid,
-        onChange: handleFormChanged,
-        onError: handleFormError,
-        onCompleted: handleFormSuccess,
-        performManualSubmit: handleFormSubmit,
-        actions: (
-          <>
-            {renderConfirmButton()}
-            <Button onClick={resetFormFn} design="Transparent">
-              {t('common.buttons.reset')}
-            </Button>
-            <Button
-              onClick={() => {
-                setOpenStatus(false);
-              }}
-              design="Transparent"
-            >
-              {t('common.buttons.cancel')}
-            </Button>
-          </>
-        ),
-      })}
+      {!isEdit && (
+        <DynamicPageComponent
+          title={title}
+          content={renderForm({
+            handleSetResetFormFn: setResetFormFn,
+            formElementRef,
+            isValid,
+            setCustomValid,
+            onChange: handleFormChanged,
+            onError: handleFormError,
+            onCompleted: handleFormSuccess,
+            performManualSubmit: handleFormSubmit,
+            actions: (
+              <>
+                {renderConfirmButton()}
+                <Button onClick={resetFormFn} design="Transparent">
+                  {t('common.buttons.reset')}
+                </Button>
+                <Button
+                  onClick={() => {
+                    setOpenStatus(false);
+                  }}
+                  design="Transparent"
+                >
+                  {t('common.buttons.cancel')}
+                </Button>
+              </>
+            ),
+          })}
+        />
+      )}
+      {isEdit &&
+        renderForm({
+          handleSetResetFormFn: setResetFormFn,
+          formElementRef,
+          isValid,
+          setCustomValid,
+          onChange: handleFormChanged,
+          onError: handleFormError,
+          onCompleted: handleFormSuccess,
+          performManualSubmit: handleFormSubmit,
+          actions: (
+            <>
+              {renderConfirmButton()}
+              <Button onClick={resetFormFn} design="Transparent">
+                {t('common.buttons.reset')}
+              </Button>
+              <Button
+                onClick={() => {
+                  setOpenStatus(false);
+                }}
+                design="Transparent"
+              >
+                {t('common.buttons.cancel')}
+              </Button>
+            </>
+          ),
+        })}
     </>
   );
 };
 
-EditResource.propTypes = {
+ResourceCreate.propTypes = {
   performRefetch: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   renderForm: PropTypes.func.isRequired,
@@ -170,11 +204,13 @@ EditResource.propTypes = {
   className: PropTypes.string,
   onModalOpenStateChange: PropTypes.func,
   alwaysOpen: PropTypes.bool, // set this to true if you want to control the modal by rendering and un-rendering it instead of the open/closed state
+  isEdit: PropTypes.bool,
 };
 
-EditResource.defaultProps = {
+ResourceCreate.defaultProps = {
   performRefetch: () => {},
   invalidPopupMessage: '',
   onModalOpenStateChange: () => {},
   alwaysOpen: false,
+  isEdit: false,
 };

@@ -14,7 +14,7 @@ import {
   usePrepareListProps,
 } from './helpers';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
-import { EditResource } from 'shared/components/DynamicPageComponent/EditResource';
+import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 
 import { useFeature } from 'hooks/useFeature';
 
@@ -86,13 +86,8 @@ const ListWrapper = ({ children, details, create, ...props }) => {
   let midColumnComponent = null;
   if (layoutState?.showCreate?.resourceType && create?.type !== null) {
     midColumnComponent = (
-      <EditResource
-        title={
-          // createActionLabel ||
-          t('components.resources-list.create', {
-            resourceType: elementCreateProps.resourceTitle,
-          })
-        }
+      <ResourceCreate
+        title={elementCreateProps.resourceTitle}
         confirmText={t('common.buttons.update')}
         renderForm={renderProps => {
           const createComponent =
@@ -107,7 +102,6 @@ const ListWrapper = ({ children, details, create, ...props }) => {
         }}
       />
     );
-    // midColumnComponent = createComponent;
   }
   if (!layoutState?.showCreate && layoutState?.midColumn) {
     midColumnComponent = detailsComponent;

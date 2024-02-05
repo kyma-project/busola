@@ -28,7 +28,7 @@ import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
-import { EditResource } from 'shared/components/DynamicPageComponent/EditResource';
+import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 import { useVersionWarning } from 'hooks/useVersionWarning';
 import { useUrl } from 'hooks/useUrl';
 
@@ -437,13 +437,14 @@ function Resource({
           </>
         }
         inlineEditForm={() => (
-          <EditResource
+          <ResourceCreate
             title={
               editActionLabel ||
               t('components.resource-details.edit', {
                 resourceType: prettifiedResourceKind,
               })
             }
+            isEdit={true}
             confirmText={t('common.buttons.update')}
             renderForm={props => (
               <ErrorBoundary>
