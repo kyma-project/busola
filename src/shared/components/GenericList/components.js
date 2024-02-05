@@ -40,7 +40,6 @@ export const HeaderRenderer = ({ slot, actions, headerRenderer }) => {
             popinDisplay="Inline"
             demandPopin={h === 'Labels' ? true : false}
             minWidth={h === 'Labels' ? '15000' : index * 100}
-            // popinText="Labels"
           >
             <Label>{h}</Label>
           </TableColumn>
@@ -111,7 +110,11 @@ const DefaultRowRenderer = ({
   );
 
   return (
-    <TableRow type="Active" selected={isBeingEdited ?? isSelected}>
+    <TableRow
+      type="Active"
+      selected={isBeingEdited ?? isSelected}
+      navigated={isBeingEdited ?? isSelected}
+    >
       {cells}
       {!!actions.length && actionsCell}
     </TableRow>
