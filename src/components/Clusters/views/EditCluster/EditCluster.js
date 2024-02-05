@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import * as jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -16,7 +16,6 @@ import { authDataState } from 'state/authDataAtom';
 import { Title } from '@ui5/webcomponents-react';
 
 import { addCluster, getContext, deleteCluster } from '../../shared';
-
 import { spacing } from '@ui5/webcomponents-react-base';
 
 export const ClusterDataForm = ({
@@ -27,22 +26,29 @@ export const ClusterDataForm = ({
   resourceUrl,
   formElementRef,
   onlyYaml,
+  className = '',
+  modeSelectorDisabled = false,
+  noAdvancedMode = false,
+  initialMode,
 }) => {
   const { t } = useTranslation();
   const [authenticationType, setAuthenticationType] = useState(
     kubeconfig?.users?.[0]?.user?.exec ? 'oidc' : 'token',
   );
 
-  const findInitialValue = id => {
-    if (kubeconfig?.users?.[0]?.user?.exec?.args) {
-      const elementWithId = kubeconfig?.users?.[0]?.user?.exec?.args.find(el =>
-        el.includes(id),
-      );
-      const regex = new RegExp(`${id}=(?<value>.*)`);
-      return regex.exec(elementWithId)?.groups?.value || '';
-    }
-    return '';
-  };
+  const findInitialValue = useCallback(
+    id => {
+      if (kubeconfig?.users?.[0]?.user?.exec?.args) {
+        const elementWithId = kubeconfig?.users?.[0]?.user?.exec?.args.find(
+          el => el.includes(id),
+        );
+        const regex = new RegExp(`${id}=(?<value>.*)`);
+        return regex.exec(elementWithId)?.groups?.value || '';
+      }
+      return '';
+    },
+    [kubeconfig?.users],
+  );
 
   const [issuerUrl, setIssuerUrl] = useState(
     findInitialValue('oidc-issuer-url'),
@@ -53,6 +59,16 @@ export const ClusterDataForm = ({
   );
   const [scopes, setScopes] = useState(findInitialValue('oidc-extra-scope'));
 
+  useEffect(() => {
+    setAuthenticationType(
+      kubeconfig?.users?.[0]?.user?.exec ? 'oidc' : 'token',
+    );
+    setIssuerUrl(findInitialValue('oidc-issuer-url'));
+    setClientId(findInitialValue('oidc-client-id'));
+    setClientSecret(findInitialValue('oidc-client-secret'));
+    setScopes(findInitialValue('oidc-extra-scope'));
+  }, [findInitialValue, kubeconfig]);
+
   const tokenFields = (
     <ResourceForm.FormField
       label={t('clusters.token')}
@@ -60,6 +76,7 @@ export const ClusterDataForm = ({
       advanced
       required
       propertyPath="$.users[0].user.token"
+      //value={kubeconfig?.users[0]?.user?.token}
     />
   );
 
@@ -129,7 +146,7 @@ export const ClusterDataForm = ({
       />
     </>
   );
-  console.log(kubeconfig);
+
   return (
     <ResourceForm
       pluralKind="clusters"
@@ -144,44 +161,51 @@ export const ClusterDataForm = ({
       autocompletionDisabled
       disableDefaultFields={true}
       onlyYaml={onlyYaml}
+      modeSelectorDisabled={modeSelectorDisabled}
+      noAdvancedMode={noAdvancedMode}
+      initialMode={initialMode}
     >
-      <K8sNameField
-        kind={t('clusters.name_singular')}
-        date-testid="cluster-name"
-        value={
-          kubeconfig ? jp.value(kubeconfig, '$["current-context"]') : kubeconfig
-        }
-        setValue={name => {
-          if (kubeconfig) {
-            jp.value(kubeconfig, '$["current-context"]', name);
-            jp.value(kubeconfig, '$.contexts[0].name', name);
+      <div className={className}>
+        <K8sNameField
+          kind={t('clusters.name_singular')}
+          date-testid="cluster-name"
+          value={
+            kubeconfig
+              ? jp.value(kubeconfig, '$["current-context"]')
+              : kubeconfig
+          }
+          setValue={name => {
+            if (kubeconfig) {
+              jp.value(kubeconfig, '$["current-context"]', name);
+              jp.value(kubeconfig, '$.contexts[0].name', name);
 
+              setResource({ ...kubeconfig });
+            }
+          }}
+        />
+        <ResourceForm.FormField
+          label={t('clusters.auth-type')}
+          key={t('clusters.auth-type')}
+          required
+          advanced
+          value={authenticationType}
+          setValue={type => {
+            if (type === 'token') {
+              delete kubeconfig?.users?.[0]?.user?.exec;
+              jp.value(kubeconfig, '$.users[0].user.token', null);
+            } else {
+              delete kubeconfig.users?.[0]?.user?.token;
+              createOIDC();
+            }
             setResource({ ...kubeconfig });
-          }
-        }}
-      />
-      <ResourceForm.FormField
-        label={t('clusters.auth-type')}
-        key={t('clusters.auth-type')}
-        required
-        advanced
-        value={authenticationType}
-        setValue={type => {
-          if (type === 'token') {
-            delete kubeconfig?.users?.[0]?.user?.exec;
-            jp.value(kubeconfig, '$.users[0].user.token', null);
-          } else {
-            delete kubeconfig.users?.[0]?.user?.token;
-            createOIDC();
-          }
-          setResource({ ...kubeconfig });
-          setAuthenticationType(type);
-        }}
-        input={({ value, setValue }) => (
-          <AuthenticationTypeDropdown type={value} setType={setValue} />
-        )}
-      />
-      {authenticationType === 'token' ? tokenFields : OIDCFields}
+            setAuthenticationType(type);
+          }}
+          input={({ value, setValue }) => (
+            <AuthenticationTypeDropdown type={value} setType={setValue} />
+          )}
+        />
+        {authenticationType === 'token' ? tokenFields : OIDCFields}
+      </div>
     </ResourceForm>
   );
 };
@@ -272,6 +296,7 @@ function EditClusterComponent({
         onSubmit={onComplete}
         formElementRef={formElementRef}
         resourceUrl={resourceUrl}
+        //initialMode={'MODE_YAML'}
       />
     </>
   );

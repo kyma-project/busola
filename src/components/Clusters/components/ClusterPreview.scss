@@ -1,4 +1,8 @@
 .cluster-preview {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: calc(90vh - 10rem);
+
   &__subtitle {
     padding-bottom: 1rem;
     border-bottom: 1px solid var(--sapList_BorderColor);
@@ -10,7 +14,6 @@
     align-items: end;
     justify-content: start;
     gap: 30px;
-
     width: 100%;
   }
 

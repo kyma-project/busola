@@ -77,6 +77,7 @@ const TokenForm = ({ resource, ...props }) => {
         propertyPath={`$.users[${userIndex || 0}].user.token`}
         label={t('clusters.wizard.auth.token')}
         input={Inputs.Text}
+        inputInfo={t('clusters.wizard.token-info')}
       />
     </ResourceForm.Wrapper>
   );
@@ -117,30 +118,30 @@ export function AuthForm({
       setResource={setResource}
       {...props}
     >
-      <Title level="H5">{t('clusters.wizard.update')}</Title>
-      <MessageStrip
-        design="Warning"
-        hideCloseButton
-        style={spacing.sapUiSmallMarginTopBottom}
-      >
-        {t('clusters.wizard.incomplete', {
-          context:
-            resource['current-context'] === '-all-'
-              ? resource.contexts[0]?.name
-              : resource['current-context'],
-        })}
-      </MessageStrip>
-      {!useOidc && <TokenForm />}
-      {!useOidc && (
-        <p className="cluster-wizard__token-info">
-          {t('clusters.wizard.token-info')}
-        </p>
-      )}
-      <ResourceForm.FormField
-        label={t('clusters.wizard.auth.using-oidc')}
-        input={() => <Switch checked={useOidc} onChange={switchAuthVariant} />}
-      />
-      {useOidc && <OIDCform />}
+      <div className="add-cluster__content-container">
+        <Title level="H5">{t('clusters.wizard.update')}</Title>
+        <MessageStrip
+          design="Warning"
+          hideCloseButton
+          style={spacing.sapUiSmallMarginTopBottom}
+        >
+          {t('clusters.wizard.incomplete', {
+            context:
+              resource['current-context'] === '-all-'
+                ? resource.contexts[0]?.name
+                : resource['current-context'],
+          })}
+        </MessageStrip>
+        {!useOidc && <TokenForm />}
+        <ResourceForm.FormField
+          label={t('clusters.wizard.auth.using-oidc')}
+          input={() => (
+            <Switch checked={useOidc} onChange={switchAuthVariant} />
+          )}
+          className="oidc-switch"
+        />
+        {useOidc && <OIDCform />}
+      </div>
     </ResourceForm.Wrapper>
   );
 }

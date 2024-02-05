@@ -30,38 +30,43 @@ export function ContextChooser(params) {
 
   return (
     <ResourceForm.Wrapper {...params} style={spacing.sapUiMediumMarginBottom}>
-      <Title level="H5">{'Provide Context'}</Title>
-      <ResourceForm.FormField
-        required
-        propertyPath='$["current-context"]'
-        label={t('clusters.wizard.context')}
-        validate={value => !!value}
-        input={({ value, setValue }) => (
-          <Select
-            id="context-chooser"
-            onChange={event => {
-              onChange(event, setValue);
-            }}
+      <div
+        className="add-cluster__content-container"
+        style={spacing.sapUiMediumMarginBottom}
+      >
+        <Title level="H5">{'Provide Context'}</Title>
+        <ResourceForm.FormField
+          required
+          propertyPath='$["current-context"]'
+          label={t('clusters.wizard.context')}
+          validate={value => !!value}
+          input={({ value, setValue }) => (
+            <Select
+              id="context-chooser"
+              onChange={event => {
+                onChange(event, setValue);
+              }}
+            >
+              {contexts.map(context => (
+                <Option value={context.key} selected={value === context.key}>
+                  {context.text}
+                </Option>
+              ))}
+            </Select>
+          )}
+        />
+        {kubeconfig['current-context'] === '-all-' && (
+          <MessageStrip
+            design="Information"
+            hideCloseButton
+            style={spacing.sapUiSmallMarginTopBottom}
           >
-            {contexts.map(context => (
-              <Option value={context.key} selected={value === context.key}>
-                {context.text}
-              </Option>
-            ))}
-          </Select>
+            {t('clusters.wizard.multi-context-info', {
+              context: kubeconfig.contexts[0]?.name,
+            })}
+          </MessageStrip>
         )}
-      />
-      {kubeconfig['current-context'] === '-all-' && (
-        <MessageStrip
-          design="Information"
-          hideCloseButton
-          style={spacing.sapUiSmallMarginTopBottom}
-        >
-          {t('clusters.wizard.multi-context-info', {
-            context: kubeconfig.contexts[0]?.name,
-          })}
-        </MessageStrip>
-      )}
+      </div>
     </ResourceForm.Wrapper>
   );
 }

@@ -12,6 +12,8 @@ export function Editor({
   schemaId,
   ...props
 }) {
+  console.log('editor');
+  console.log(value);
   const { t } = useTranslation();
   const [error, setError] = useState('');
   const parsedValue = React.useMemo(() => {
@@ -31,9 +33,7 @@ export function Editor({
 
   const handleChange = useCallback(
     text => {
-      if (!value) {
-        return;
-      }
+      console.log(value);
       if (!convert) {
         setValue(text);
         return;

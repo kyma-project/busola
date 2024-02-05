@@ -18,15 +18,13 @@ export function KubeconfigFileUpload({ onKubeconfigTextAdded }) {
   };
 
   const onKubeconfigFileUploaded = async files => {
-    console.log('PRZED');
     const fileContent = await readFile(files[0]);
-    console.log('PO');
     onKubeconfigTextAdded(fileContent);
   };
 
   return (
     <div>
-      <Title level="H4">
+      <Title level="H5">
         {t('clusters.wizard.kubeconfig')}
         <>
           <Button

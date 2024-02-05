@@ -8,7 +8,7 @@ export function ChooseStorage({ storage, setStorage }) {
   return (
     <>
       <p className="cluster-wizard__storage-preference">
-        {t('clusters.storage.storage-preference')}
+        {`${t('clusters.storage.storage-preference')}:`}
       </p>
       <FlexBox direction="Column">
         <RadioButton

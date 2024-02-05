@@ -1,5 +1,13 @@
-.add-cluster__kubeconfig-info {
-  white-space: pre-line;
+.add-cluster {
+  &__content-container {
+    background-color: var(--sapGroup_TitleBackground);
+    border-radius: var(--sapElement_BorderCornerRadius);
+    padding: 1rem;
+  }
+
+  &__kubeconfig-info {
+    white-space: pre-line;
+  }
 }
 
 ui5-wizard {
@@ -9,7 +17,7 @@ ui5-wizard {
   .cluster-wizard {
     &__buttons {
       position: absolute;
-      bottom: 15px;
+      bottom: 1rem;
       left: 0;
       display: flex;
       justify-content: flex-end;
@@ -17,6 +25,7 @@ ui5-wizard {
       width: calc(100% - 20px);
       margin: 0 10px;
       padding: 7px;
+      //border: 1px solid gray;
       border-radius: var(--sapElement_BorderCornerRadius);
       background-color: var(--sapGroup_TitleBackground);
       box-shadow: 0 0 0.125rem 0
@@ -24,6 +33,7 @@ ui5-wizard {
         0 0.5rem 1rem 0
           color-mix(in srgb, var(--sapContent_ShadowColor) 16%, transparent);
     }
+
     &__token-info,
     &__storage-preference {
       color: var(--sapContent_LabelColor);
@@ -31,17 +41,40 @@ ui5-wizard {
     }
   }
 
-  /*.resource-form {
+  .resource-form {
+    padding: 1rem 0;
+
+    .ui5-content-density-compact {
+      display: flex;
+      justify-content: center;
+
+      ui5-segmented-button {
+        width: 150px;
+        margin: 1rem 0;
+      }
+    }
+
     .form-field {
       justify-content: start;
+      flex-flow: row wrap;
+      gap: 0;
+      margin-bottom: 1rem;
 
       &__label {
-        min-width: unset;
+        min-width: 100%;
         max-width: unset;
-        width: 100%;
         justify-content: flex-start;
-      flex-grow: 3;
+        width: 100%;
+        padding: 12px 0 5px 0 !important;
+      }
     }
+
+    .oidc-switch {
+      .form-field__label {
+        width: fit-content;
+        min-width: fit-content;
+        margin-top: -0.25rem;
+      }
     }
-  }*/
+  }
 }

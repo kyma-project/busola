@@ -50,8 +50,19 @@ export function AddClusterWizard({
   const [selected, setSelected] = useState(1);
   const setShowWizard = useSetRecoilState(showAddClusterWizard);
   const [showTitleDescription, setShowTitleDescription] = useState(false);
-  console.log(selected);
-  console.log(kubeconfig);
+
+  useEffect(() => {
+    const contentContainer = document
+      .getElementsByTagName('ui5-wizard')[0]
+      ?.shadowRoot?.querySelectorAll('.ui5-wiz-content-item-wrapper')[
+      selected - 1
+    ];
+    if (contentContainer) {
+      contentContainer.style['background-color'] = 'transparent';
+      contentContainer.style['padding'] = '0';
+    }
+  }, [selected, showWizard]);
+
   const {
     isValid: authValid,
     formElementRef: authFormRef,
@@ -205,41 +216,43 @@ export function AddClusterWizard({
             : selected !== 2
         }
       >
-        <Title level="H4">
-          Storage type configuration
-          <>
-            <Button
-              id="descriptionOpener"
-              icon="hint"
-              design="Transparent"
-              style={spacing.sapUiTinyMargin}
-              onClick={() => {
-                setShowTitleDescription(true);
-              }}
-            />
-            {createPortal(
-              <Popover
-                opener="descriptionOpener"
-                open={showTitleDescription}
-                onAfterClose={() => setShowTitleDescription(false)}
-                placementType="Right"
-              >
-                <Text className="description">
-                  {'fdgfgdf' + t('clusters.storage.info')}
-                </Text>
-              </Popover>,
-              document.body,
-            )}
-          </>
-        </Title>
-        <ChooseStorage storage={storage} setStorage={setStorage} />
-        <WizardButtons
-          selected={selected}
-          setSelected={setSelected}
-          validation={!storage}
-          onCancel={() => setShowWizard(false)}
-          className="cluster-wizard__buttons"
-        />
+        <div className="add-cluster__content-container">
+          <Title level="H5">
+            {t('clusters.storage.choose-storage.label')}
+            <>
+              <Button
+                id="descriptionOpener"
+                icon="hint"
+                design="Transparent"
+                style={spacing.sapUiTinyMargin}
+                onClick={() => {
+                  setShowTitleDescription(true);
+                }}
+              />
+              {createPortal(
+                <Popover
+                  opener="descriptionOpener"
+                  open={showTitleDescription}
+                  onAfterClose={() => setShowTitleDescription(false)}
+                  placementType="Right"
+                >
+                  <Text className="description">
+                    {'fdgfgdf' + t('clusters.storage.info')}
+                  </Text>
+                </Popover>,
+                document.body,
+              )}
+            </>
+          </Title>
+          <ChooseStorage storage={storage} setStorage={setStorage} />
+          <WizardButtons
+            selected={selected}
+            setSelected={setSelected}
+            validation={!storage}
+            onCancel={() => setShowWizard(false)}
+            className="cluster-wizard__buttons"
+          />
+        </div>
       </WizardStep>
       <WizardStep
         titleText={t('clusters.wizard.review')}
@@ -258,6 +271,8 @@ export function AddClusterWizard({
           storage={storage}
           kubeconfig={kubeconfig}
           token={hasAuth ? hasKubeconfigAuth(kubeconfig) : null}
+          setSelected={setSelected}
+          hasAuth={hasAuth}
         />
         <WizardButtons
           selected={selected}

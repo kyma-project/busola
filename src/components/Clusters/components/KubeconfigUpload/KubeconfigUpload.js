@@ -18,6 +18,7 @@ export function KubeconfigUpload({ kubeconfig, setKubeconfig, formRef }) {
       try {
         const config = jsyaml.load(text);
         console.log(config);
+
         if (typeof config !== 'object') {
           setError(t('clusters.wizard.not-an-object'));
         } else {
@@ -32,14 +33,16 @@ export function KubeconfigUpload({ kubeconfig, setKubeconfig, formRef }) {
     },
     [t, setError, setKubeconfig],
   );
-  console.log(kubeconfig);
+
   return (
     <div className="kubeconfig-upload">
-      <KubeconfigFileUpload
-        onKubeconfigTextAdded={text => {
-          updateKubeconfig(text);
-        }}
-      />
+      <div className="add-cluster__content-container">
+        <KubeconfigFileUpload
+          onKubeconfigTextAdded={text => {
+            updateKubeconfig(text);
+          }}
+        />
+      </div>
       <ClusterDataForm
         kubeconfig={kubeconfig}
         setResource={modified => {
@@ -47,7 +50,13 @@ export function KubeconfigUpload({ kubeconfig, setKubeconfig, formRef }) {
         }}
         onChange={updateKubeconfig}
         formElementRef={formRef}
-        onlyYaml={kubeconfig ? !Object.keys(kubeconfig)?.length : !!!kubeconfig}
+        //onlyYaml={kubeconfig ? !Object.keys(kubeconfig)?.length : !!!kubeconfig}
+        modeSelectorDisabled={
+          kubeconfig ? !Object.keys(kubeconfig)?.length : !!!kubeconfig
+        }
+        //noAdvancedMode={true}
+        initialMode={'MODE_YAML'}
+        className="kubeconfig-upload__form add-cluster__content-container"
       />
       {error && (
         <MessageStrip

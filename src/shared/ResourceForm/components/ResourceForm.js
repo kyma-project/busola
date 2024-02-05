@@ -47,6 +47,9 @@ export function ResourceForm({
   urlPath,
   handleSetResetFormFn = () => {},
   layoutNumber,
+  modeSelectorDisabled = false,
+  noAdvancedMode = false,
+  initialMode,
 }) {
   // readonly schema ID, set only once
   const resourceSchemaId = useMemo(
@@ -89,6 +92,18 @@ export function ResourceForm({
   });
 
   const handleInitialMode = () => {
+    if (initialMode) {
+      switch (initialMode) {
+        case 'MODE_YAML':
+          return ModeSelector.MODE_YAML;
+        case 'MODE_SIMPLE':
+          return ModeSelector.MODE_SIMPLE;
+        case 'MODE_ADVANCED':
+          return ModeSelector.MODE_ADVANCED;
+        default:
+          return ModeSelector.MODE_SIMPLE;
+      }
+    }
     if (onlyYaml) return ModeSelector.MODE_YAML;
 
     if (!!initialResource) return ModeSelector.MODE_ADVANCED;
@@ -129,11 +144,14 @@ export function ResourceForm({
       }}
     />
   );
-  console.log(resource);
+
   let editor = (
     <EditorWrapper
       value={resource}
-      onChange={setResource}
+      onChange={resource => {
+        console.log('fdgfdgd');
+        setResource(resource);
+      }}
       onMount={setActionsEditor}
       autocompletionDisabled={autocompletionDisabled}
       readOnly={readOnly}
@@ -156,6 +174,8 @@ export function ResourceForm({
             if (onModeChange) onModeChange(mode, newMode);
           }}
           isEditing={!!initialResource}
+          isDisabled={modeSelectorDisabled}
+          noAdvancedMode={noAdvancedMode}
         />
       )}
       <form ref={formElementRef} onSubmit={onSubmit || createResource}>
