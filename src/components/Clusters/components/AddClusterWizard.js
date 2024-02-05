@@ -30,12 +30,7 @@ import { ClusterPreview } from './ClusterPreview';
 import { createPortal } from 'react-dom';
 import { spacing } from '@ui5/webcomponents-react-base';
 
-export function AddClusterWizard({
-  kubeconfig,
-  setKubeconfig,
-  config,
-  showWizard,
-}) {
+export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
   const busolaClusterParams = useRecoilValue(configurationAtom);
   const { t } = useTranslation();
   const notification = useNotification();
@@ -50,7 +45,7 @@ export function AddClusterWizard({
   const [selected, setSelected] = useState(1);
   const setShowWizard = useSetRecoilState(showAddClusterWizard);
   const [showTitleDescription, setShowTitleDescription] = useState(false);
-
+  console.log(kubeconfig);
   useEffect(() => {
     const contentContainer = document
       .getElementsByTagName('ui5-wizard')[0]
@@ -61,7 +56,7 @@ export function AddClusterWizard({
       contentContainer.style['background-color'] = 'transparent';
       contentContainer.style['padding'] = '0';
     }
-  }, [selected, showWizard]);
+  }, [selected]);
 
   const {
     isValid: authValid,
@@ -69,14 +64,6 @@ export function AddClusterWizard({
     setCustomValid,
     revalidate,
   } = useCustomFormValidator();
-
-  useEffect(() => {
-    if (!showWizard) {
-      setHasAuth(false);
-      setHasOneContext(false);
-      setSelected(1);
-    }
-  }, [showWizard]);
 
   useEffect(() => {
     if (Array.isArray(kubeconfig?.contexts)) {
@@ -90,7 +77,7 @@ export function AddClusterWizard({
 
   const updateKubeconfig = kubeconfig => {
     if (!kubeconfig) {
-      setKubeconfig(undefined);
+      setKubeconfig(null);
       return;
     }
 

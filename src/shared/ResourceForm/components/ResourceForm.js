@@ -149,7 +149,6 @@ export function ResourceForm({
     <EditorWrapper
       value={resource}
       onChange={resource => {
-        console.log('fdgfdgd');
         setResource(resource);
       }}
       onMount={setActionsEditor}

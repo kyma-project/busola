@@ -161,8 +161,8 @@ export const ClusterDataForm = ({
       autocompletionDisabled
       disableDefaultFields={true}
       onlyYaml={onlyYaml}
-      modeSelectorDisabled={modeSelectorDisabled}
-      noAdvancedMode={noAdvancedMode}
+      //modeSelectorDisabled={modeSelectorDisabled}
+      //noAdvancedMode={noAdvancedMode}
       initialMode={initialMode}
     >
       <div className={className}>
@@ -296,7 +296,7 @@ function EditClusterComponent({
         onSubmit={onComplete}
         formElementRef={formElementRef}
         resourceUrl={resourceUrl}
-        //initialMode={'MODE_YAML'}
+        initialMode={'MODE_YAML'}
       />
     </>
   );

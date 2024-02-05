@@ -42,4 +42,13 @@ form .resource-form {
   .bsl-col {
     padding: 4px 0;
   }
+
+  .mode-selector {
+    display: flex;
+    justify-content: center;
+
+    &__content {
+      width: fit-content;
+    }
+  }
 }

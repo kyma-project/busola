@@ -16,13 +16,9 @@ function AddClusterDialogComponent() {
     }
   }, [showWizard]);
 
-  return (
-    <AddClusterWizard
-      kubeconfig={kubeconfig}
-      setKubeconfig={setKubeconfig}
-      showWizard={showWizard}
-    />
-  );
+  return showWizard ? (
+    <AddClusterWizard kubeconfig={kubeconfig} setKubeconfig={setKubeconfig} />
+  ) : null;
 }
 export function AddClusterDialog() {
   const { t } = useTranslation();

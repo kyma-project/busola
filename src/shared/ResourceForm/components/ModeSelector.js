@@ -34,8 +34,8 @@ export function ModeSelector({
     isEditing || noAdvancedMode ? editModeButtons : createModeButtons;
 
   return (
-    <div className="ui5-content-density-compact">
-      <SegmentedButton className="full-width">
+    <div className="ui5-content-density-compact mode-selector">
+      <SegmentedButton className="mode-selector__content">
         {buttonsToDisplay.map(button => (
           <SegmentedButtonItem
             key={button.mode}
