@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import * as jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +18,17 @@ import { Title } from '@ui5/webcomponents-react';
 import { addCluster, getContext, deleteCluster } from '../../shared';
 import { spacing } from '@ui5/webcomponents-react-base';
 
+export const findInitialValue = (kubeconfig, id) => {
+  if (kubeconfig?.users?.[0]?.user?.exec?.args) {
+    const elementWithId = kubeconfig?.users?.[0]?.user?.exec?.args.find(el =>
+      el.includes(id),
+    );
+    const regex = new RegExp(`${id}=(?<value>.*)`);
+    return regex.exec(elementWithId)?.groups?.value || '';
+  }
+  return '';
+};
+
 export const ClusterDataForm = ({
   kubeconfig,
   setResource,
@@ -36,38 +47,28 @@ export const ClusterDataForm = ({
     kubeconfig?.users?.[0]?.user?.exec ? 'oidc' : 'token',
   );
 
-  const findInitialValue = useCallback(
-    id => {
-      if (kubeconfig?.users?.[0]?.user?.exec?.args) {
-        const elementWithId = kubeconfig?.users?.[0]?.user?.exec?.args.find(
-          el => el.includes(id),
-        );
-        const regex = new RegExp(`${id}=(?<value>.*)`);
-        return regex.exec(elementWithId)?.groups?.value || '';
-      }
-      return '';
-    },
-    [kubeconfig?.users],
-  );
-
   const [issuerUrl, setIssuerUrl] = useState(
-    findInitialValue('oidc-issuer-url'),
+    findInitialValue(kubeconfig, 'oidc-issuer-url'),
   );
-  const [clientId, setClientId] = useState(findInitialValue('oidc-client-id'));
+  const [clientId, setClientId] = useState(
+    findInitialValue(kubeconfig, 'oidc-client-id'),
+  );
   const [clientSecret, setClientSecret] = useState(
-    findInitialValue('oidc-client-secret'),
+    findInitialValue(kubeconfig, 'oidc-client-secret'),
   );
-  const [scopes, setScopes] = useState(findInitialValue('oidc-extra-scope'));
+  const [scopes, setScopes] = useState(
+    findInitialValue(kubeconfig, 'oidc-extra-scope'),
+  );
 
   useEffect(() => {
     setAuthenticationType(
       kubeconfig?.users?.[0]?.user?.exec ? 'oidc' : 'token',
     );
-    setIssuerUrl(findInitialValue('oidc-issuer-url'));
-    setClientId(findInitialValue('oidc-client-id'));
-    setClientSecret(findInitialValue('oidc-client-secret'));
-    setScopes(findInitialValue('oidc-extra-scope'));
-  }, [findInitialValue, kubeconfig]);
+    setIssuerUrl(findInitialValue(kubeconfig, 'oidc-issuer-url'));
+    setClientId(findInitialValue(kubeconfig, 'oidc-client-id'));
+    setClientSecret(findInitialValue(kubeconfig, 'oidc-client-secret'));
+    setScopes(findInitialValue(kubeconfig, 'oidc-extra-scope'));
+  }, [kubeconfig]);
 
   const tokenFields = (
     <ResourceForm.FormField
@@ -76,7 +77,6 @@ export const ClusterDataForm = ({
       advanced
       required
       propertyPath="$.users[0].user.token"
-      //value={kubeconfig?.users[0]?.user?.token}
     />
   );
 
@@ -160,9 +160,8 @@ export const ClusterDataForm = ({
       onSubmit={onSubmit}
       autocompletionDisabled
       disableDefaultFields={true}
-      onlyYaml={onlyYaml}
-      //modeSelectorDisabled={modeSelectorDisabled}
-      //noAdvancedMode={noAdvancedMode}
+      modeSelectorDisabled={modeSelectorDisabled}
+      noAdvancedMode={noAdvancedMode}
       initialMode={initialMode}
     >
       <div className={className}>
@@ -170,9 +169,7 @@ export const ClusterDataForm = ({
           kind={t('clusters.name_singular')}
           date-testid="cluster-name"
           value={
-            kubeconfig
-              ? jp.value(kubeconfig, '$["current-context"]')
-              : kubeconfig
+            kubeconfig ? jp.value(kubeconfig, '$["current-context"]') : null
           }
           setValue={name => {
             if (kubeconfig) {

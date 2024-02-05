@@ -48,7 +48,11 @@ export function ContextChooser(params) {
               }}
             >
               {contexts.map(context => (
-                <Option value={context.key} selected={value === context.key}>
+                <Option
+                  key={context.key}
+                  value={context.key}
+                  selected={value === context.key}
+                >
                   {context.text}
                 </Option>
               ))}

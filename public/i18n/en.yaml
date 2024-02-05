@@ -136,7 +136,9 @@ clusters:
       sessionStorage: Cluster data is cleared when the page session ends.
       unknown: Unknown storage type
     info: |
-      You can choose where to store your cluster configuration. However, we recommend the pre-selected storage mode based on your kubeconfig file type. None of the options stores information on the server.
+      You can choose where to store your cluster configuration. 
+      However, we recommend the pre-selected storage mode based on your kubeconfig file type. 
+      None of the options stores information on the server.
     labels:
       inMemory: In memory
       localStorage: Local storage

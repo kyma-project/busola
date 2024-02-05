@@ -1,7 +1,9 @@
+import React, { useEffect, useState } from 'react';
 import { Button, FlexBox, RadioButton, Title } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import './ClusterPreview.scss';
 import { spacing } from '@ui5/webcomponents-react-base';
+import { findInitialValue } from '../views/EditCluster/EditCluster';
 
 export function ClusterPreview({
   token,
@@ -11,31 +13,100 @@ export function ClusterPreview({
   hasAuth,
 }) {
   const { t } = useTranslation();
-  /*const radioButtons = document.getElementsByClassName(
-    'cluster-preview__storage',
+  const [authenticationType, setAuthenticationType] = useState(
+    kubeconfig?.users?.[0]?.user?.exec ? 'oidc' : 'token',
   );
 
-  for (let i = 0; i < radioButtons?.length; i++) {
-    const element = radioButtons[i]?.shadowRoot?.querySelector(
-      '.ui5-radio-root',
+  useEffect(() => {
+    setAuthenticationType(
+      kubeconfig?.users?.[0]?.user?.exec ? 'oidc' : 'token',
     );
+  }, [kubeconfig]);
 
-    if (element) {
-      element.style['opacity'] = '0.7';
+  const OidcData = () => {
+    const issuerUrl = findInitialValue(kubeconfig, 'oidc-issuer-url');
+    const clientId = findInitialValue(kubeconfig, 'oidc-client-id');
+    const clientSecret = findInitialValue(kubeconfig, 'oidc-client-secret');
+    const extraScope = findInitialValue(kubeconfig, 'oidc-extra-scope');
+    return (
+      <>
+        {issuerUrl && (
+          <>
+            <p
+              className="cluster-preview__data-header"
+              style={{
+                ...spacing.sapUiSmallMarginTop,
+                ...spacing.sapUiTinyMarginBottom,
+              }}
+            >
+              {t('clusters.labels.issuer-url')}:
+            </p>
+            <div>{issuerUrl}</div>
+          </>
+        )}
+        {clientId && (
+          <>
+            <p
+              className="cluster-preview__data-header"
+              style={{
+                ...spacing.sapUiSmallMarginTop,
+                ...spacing.sapUiTinyMarginBottom,
+              }}
+            >
+              {t('clusters.labels.client-id')}:
+            </p>
+            <div>{clientId}</div>
+          </>
+        )}
+        {clientSecret && (
+          <>
+            <p
+              className="cluster-preview__data-header"
+              style={{
+                ...spacing.sapUiSmallMarginTop,
+                ...spacing.sapUiTinyMarginBottom,
+              }}
+            >
+              {t('clusters.labels.client-secret')}:
+            </p>
+            <div>{clientSecret}</div>
+          </>
+        )}
+        {extraScope && (
+          <>
+            <p
+              className="cluster-preview__data-header"
+              style={{
+                ...spacing.sapUiSmallMarginTop,
+                ...spacing.sapUiTinyMarginBottom,
+              }}
+            >
+              {t('clusters.labels.scopes')}:
+            </p>
+            <div>{extraScope}</div>
+          </>
+        )}
+      </>
+    );
+  };
 
-     /* const circle = element.querySelector('.ui5-radio-svg-outer');
-      if (circle) {
-        circle.style['fill'] = 'var(--sapButton_Lite_Hover_Background)';
-      }
-
-      const checkedCircle = element.querySelector(
-        ':host([checked]) .ui5-radio-svg-inner',
-      );
-      if (checkedCircle) {
-        checkedCircle.style['fill'] = 'var(--sapList_TextColor)';
-      }
-    }
-  }*/
+  const TokenData = () => {
+    const token = kubeconfig?.users[0]?.user?.token;
+    return (
+      <>
+        <p
+          className="cluster-preview__data-header"
+          style={{
+            ...spacing.sapUiSmallMarginTop,
+            ...spacing.sapUiTinyMarginBottom,
+          }}
+        >
+          {`${t('clusters.token')}:`}
+        </p>
+        {token && <div>{token}</div>}
+      </>
+    );
+  };
 
   return (
     <div className="cluster-preview add-cluster__content-container">
@@ -47,26 +118,14 @@ export function ClusterPreview({
         className="cluster-preview__subtitle"
         style={spacing.sapUiSmallMarginTopBottom}
       >{`1. ${t('configuration.title')}`}</Title>
-      <p className="cluster-wizard__storage-preference">Kubeconfig:</p>
-      <div
-        className="cluster-preview__content"
+      <p
+        className="cluster-preview__data-header"
         style={{
-          ...spacing.sapUiMediumMarginBottom,
-          ...spacing.sapUiTinyMarginTop,
+          ...spacing.sapUiSmallMarginTop,
+          ...spacing.sapUiTinyMarginBottom,
         }}
       >
-        <div>{kubeconfig?.['current-context']}</div>
-        <Button design="Transparent" onClick={() => setSelected(1)}>
-          Edit
-        </Button>
-      </div>
-      <Title
-        level="H5"
-        className="cluster-preview__subtitle"
-        style={spacing.sapUiSmallMarginTopBottom}
-      >{`2. ${t('clusters.wizard.authentication')}`}</Title>
-      <p className="cluster-wizard__storage-preference">
-        {`${t('clusters.token')}:`}
+        {t('clusters.name_singular')}:
       </p>
       <div
         className="cluster-preview__content"
@@ -75,14 +134,37 @@ export function ClusterPreview({
           ...spacing.sapUiTinyMarginTop,
         }}
       >
-        <div className="cluster-preview__token">
-          {typeof token === 'string' ? token : 'None'}
+        <div>{kubeconfig?.['current-context']}</div>
+        <Button
+          design="Transparent"
+          onClick={() => setSelected(1)}
+          className="cluster-preview__edit-button"
+        >
+          {t('common.buttons.edit')}
+        </Button>
+      </div>
+      <Title
+        level="H5"
+        className="cluster-preview__subtitle"
+        style={spacing.sapUiSmallMarginTopBottom}
+      >{`2. ${t('clusters.wizard.authentication')}`}</Title>
+
+      <div
+        className="cluster-preview__content"
+        style={{
+          ...spacing.sapUiMediumMarginBottom,
+          ...spacing.sapUiTinyMarginTop,
+        }}
+      >
+        <div className="cluster-preview__auth">
+          {authenticationType === 'token' ? <TokenData /> : <OidcData />}
         </div>
         <Button
           design="Transparent"
           onClick={() => (hasAuth ? setSelected(1) : setSelected(2))}
+          className="cluster-preview__edit-button"
         >
-          Edit
+          {t('common.buttons.edit')}
         </Button>
       </div>
       <Title
@@ -90,7 +172,13 @@ export function ClusterPreview({
         className="cluster-preview__subtitle"
         style={spacing.sapUiSmallMarginTopBottom}
       >{`3. ${t('clusters.wizard.storage')}`}</Title>
-      <p className="cluster-wizard__storage-preference">
+      <p
+        className="cluster-preview__data-header"
+        style={{
+          ...spacing.sapUiSmallMarginTop,
+          ...spacing.sapUiTinyMarginBottom,
+        }}
+      >
         {`${t('clusters.storage.storage-preference')}:`}
       </p>
       <div
@@ -131,8 +219,9 @@ export function ClusterPreview({
           onClick={() => {
             hasAuth ? setSelected(2) : setSelected(3);
           }}
+          className="cluster-preview__edit-button"
         >
-          Edit
+          {t('common.buttons.edit')}
         </Button>
       </div>
     </div>

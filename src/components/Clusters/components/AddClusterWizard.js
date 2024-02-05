@@ -45,7 +45,7 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
   const [selected, setSelected] = useState(1);
   const setShowWizard = useSetRecoilState(showAddClusterWizard);
   const [showTitleDescription, setShowTitleDescription] = useState(false);
-  console.log(kubeconfig);
+
   useEffect(() => {
     const contentContainer = document
       .getElementsByTagName('ui5-wizard')[0]
@@ -56,7 +56,7 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
       contentContainer.style['background-color'] = 'transparent';
       contentContainer.style['padding'] = '0';
     }
-  }, [selected]);
+  });
 
   const {
     isValid: authValid,
@@ -73,6 +73,11 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
         setStorage('localStorage');
       }
     }
+
+    const hasOneContext = kubeconfig?.contexts?.length === 1;
+    const hasAuth = hasKubeconfigAuth(kubeconfig);
+    setHasOneContext(hasOneContext);
+    setHasAuth(hasAuth);
   }, [kubeconfig]);
 
   const updateKubeconfig = kubeconfig => {
@@ -80,11 +85,6 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
       setKubeconfig(null);
       return;
     }
-
-    const hasOneContext = kubeconfig?.contexts?.length === 1;
-    const hasAuth = hasKubeconfigAuth(kubeconfig);
-    setHasOneContext(hasOneContext);
-    setHasAuth(hasAuth);
 
     setKubeconfig(kubeconfig);
   };
@@ -139,12 +139,18 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
     setShowWizard(false);
   };
 
+  const handleStepChange = e => {
+    setSelected(Number(e.detail.step.dataset.step));
+  };
+
+  console.log(selected);
   return (
-    <Wizard contentLayout="SingleStep">
+    <Wizard contentLayout="SingleStep" onStepChange={handleStepChange}>
       <WizardStep
         titleText={t('configuration.title')}
         branching={!kubeconfig}
         selected={selected === 1}
+        data-step={'1'}
       >
         <KubeconfigUpload
           kubeconfig={kubeconfig}
@@ -167,6 +173,7 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
           titleText={t('clusters.wizard.authentication')}
           selected={selected === 2}
           disabled={selected !== 2}
+          data-step={'2'}
         >
           <ResourceForm.Single
             formElementRef={authFormRef}
@@ -202,29 +209,28 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
             ? selected !== 3
             : selected !== 2
         }
+        data-step={!hasAuth || !hasOneContext ? '3' : '2'}
       >
         <div className="add-cluster__content-container">
           <Title level="H5">
             {t('clusters.storage.choose-storage.label')}
             <>
               <Button
-                id="descriptionOpener"
+                id="storageDescriptionOpener"
                 icon="hint"
                 design="Transparent"
                 style={spacing.sapUiTinyMargin}
-                onClick={() => {
-                  setShowTitleDescription(true);
-                }}
+                onClick={() => setShowTitleDescription(true)}
               />
               {createPortal(
                 <Popover
-                  opener="descriptionOpener"
+                  opener="storageDescriptionOpener"
                   open={showTitleDescription}
                   onAfterClose={() => setShowTitleDescription(false)}
                   placementType="Right"
                 >
                   <Text className="description">
-                    {'fdgfgdf' + t('clusters.storage.info')}
+                    {t('clusters.storage.info')}
                   </Text>
                 </Popover>,
                 document.body,
@@ -253,6 +259,7 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
             ? selected !== 4
             : selected !== 3
         }
+        data-step={!hasAuth || !hasOneContext ? '4' : '3'}
       >
         <ClusterPreview
           storage={storage}
