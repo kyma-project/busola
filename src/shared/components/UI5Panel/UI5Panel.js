@@ -8,6 +8,7 @@ import {
 } from '@ui5/webcomponents-react';
 
 import { spacing } from '@ui5/webcomponents-react-base';
+import './UI5Panel.scss';
 
 export const UI5Panel = ({
   fixed = true,
@@ -25,14 +26,15 @@ export const UI5Panel = ({
     <Panel
       fixed={fixed}
       key={key}
-      className={`${className}`}
+      className={`${className} bsl-panel-header`}
       style={style ? style : !disableMargin ? spacing.sapUiSmallMargin : null}
       header={
         <Toolbar
           style={{
             height: '100%',
-            paddingTop: '10px',
-            paddingBottom: '10px',
+            paddingTop: '0.5rem',
+            paddingBottom: '0.5rem',
+            paddingLeft: '1rem',
           }}
         >
           {icon && icon}
