@@ -12,6 +12,7 @@ export const category = predefinedCategories.workloads;
 
 export const List = React.lazy(() => import('./DeploymentList'));
 export const Details = React.lazy(() => import('./DeploymentDetails'));
+export const Create = React.lazy(() => import('./DeploymentCreate'));
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowKind: true,

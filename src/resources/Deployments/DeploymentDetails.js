@@ -7,7 +7,7 @@ import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 import { HPASubcomponent } from 'resources/HorizontalPodAutoscalers/HPASubcomponent';
 
 import { DeploymentStatus } from './DeploymentStatus';
-import { DeploymentCreate } from './DeploymentCreate';
+import DeploymentCreate from './DeploymentCreate';
 
 export function DeploymentDetails(props) {
   const { t } = useTranslation();

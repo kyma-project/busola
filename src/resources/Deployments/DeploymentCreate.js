@@ -20,7 +20,7 @@ const ISTIO_INJECTION_LABEL = 'sidecar.istio.io/inject';
 const ISTIO_INJECTION_ENABLED = 'true';
 const ISTIO_INJECTION_DISABLED = 'false';
 
-export function DeploymentCreate({
+export default function DeploymentCreate({
   formElementRef,
   namespace,
   onChange,

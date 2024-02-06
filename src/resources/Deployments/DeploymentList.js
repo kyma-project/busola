@@ -6,7 +6,7 @@ import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { Link } from 'shared/components/Link/Link';
 import { useRestartAction } from 'shared/hooks/useRestartResource';
 
-import { DeploymentCreate } from './DeploymentCreate';
+import DeploymentCreate from './DeploymentCreate';
 import { DeploymentStatus } from './DeploymentStatus';
 
 const getImages = deployment => {
