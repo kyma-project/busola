@@ -5,7 +5,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 
 import { createStorageClassTemplate } from './templates';
 
-export function StorageClassCreate({
+export default function StorageClassCreate({
   onChange,
   formElementRef,
   resourceUrl,

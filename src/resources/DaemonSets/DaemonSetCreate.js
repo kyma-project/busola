@@ -7,7 +7,7 @@ import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 import { createDaemonSetTemplate } from './templates';
 
-export function DaemonSetCreate({
+export default function DaemonSetCreate({
   formElementRef,
   onChange,
   setCustomValid,

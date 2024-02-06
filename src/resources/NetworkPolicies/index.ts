@@ -12,6 +12,7 @@ export const category = predefinedCategories['discovery-and-network'];
 
 export const List = React.lazy(() => import('./NetworkPolicyList'));
 export const Details = React.lazy(() => import('./NetworkPolicyDetails'));
+export const Create = React.lazy(() => import('./NetworkPolicyCreate'));
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowKind: true,

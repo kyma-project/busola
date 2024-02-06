@@ -10,7 +10,7 @@ import { filterByResource } from 'hooks/useMessageList';
 
 import { PersistentVolumesList } from './PersistentVolumesList';
 import { PersistentVolumeClaimsList } from './PersistentVolumeClaimsList';
-import { StorageClassCreate } from './StorageClassCreate';
+import StorageClassCreate from './StorageClassCreate';
 import { Text } from '@ui5/webcomponents-react';
 
 export function StorageClassDetails(props) {

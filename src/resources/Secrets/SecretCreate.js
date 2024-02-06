@@ -10,7 +10,7 @@ import { createSecretTemplate, createPresets, getSecretDefs } from './helpers';
 import { useRecoilValue } from 'recoil';
 import { configurationAtom } from 'state/configuration/configurationAtom';
 
-export function SecretCreate({
+export default function SecretCreate({
   namespace,
   formElementRef,
   onChange,

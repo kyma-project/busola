@@ -9,6 +9,7 @@ export const category = predefinedCategories.configuration;
 
 export const List = React.lazy(() => import('./SecretList'));
 export const Details = React.lazy(() => import('./SecretDetails'));
+export const Create = React.lazy(() => import('./SecretCreate'));
 
 export const secrets = () => [
   {

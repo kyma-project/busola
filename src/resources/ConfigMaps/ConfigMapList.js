@@ -5,7 +5,7 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { Link } from 'shared/components/Link/Link';
 
-import { ConfigMapCreate } from './ConfigMapCreate';
+import ConfigMapCreate from './ConfigMapCreate';
 
 export function ConfigMapList(props) {
   const { t } = useTranslation();

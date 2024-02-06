@@ -10,6 +10,7 @@ export const category = predefinedCategories.configuration;
 
 export const List = React.lazy(() => import('./ServiceAccountList'));
 export const Details = React.lazy(() => import('./ServiceAccountDetails'));
+export const Create = React.lazy(() => import('./ServiceAccountCreate'));
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   depth: 2,

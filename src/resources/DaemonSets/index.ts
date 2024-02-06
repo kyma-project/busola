@@ -12,6 +12,7 @@ export const category = predefinedCategories.workloads;
 
 export const List = React.lazy(() => import('./DaemonSetList'));
 export const Details = React.lazy(() => import('./DaemonSetDetails'));
+export const Create = React.lazy(() => import('./DaemonSetCreate'));
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowKind: true,

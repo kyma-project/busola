@@ -6,7 +6,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 import { Rules } from './Rules';
 import { DefaultBackendPanel } from './DefaultBackendPanel';
-import { IngressCreate } from './IngressCreate';
+import IngressCreate from './IngressCreate';
 
 export function IngressDetails(props) {
   const { t } = useTranslation();

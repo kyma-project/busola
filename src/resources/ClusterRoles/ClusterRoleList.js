@@ -1,6 +1,6 @@
 import React from 'react';
 import { GenericRoleList } from 'resources/Roles/GenericRoleList';
-import { ClusterRoleCreate } from './ClusterRoleCreate';
+import ClusterRoleCreate from './ClusterRoleCreate';
 
 export function ClusterList(props) {
   return (

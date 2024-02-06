@@ -7,7 +7,7 @@ import { createClusterRoleTemplate, createClusterRolePresets } from './helpers';
 import { useRecoilValue } from 'recoil';
 import { groupVersionState } from 'state/discoverability/groupVersionsSelector';
 
-export function ClusterRoleCreate(props) {
+export default function ClusterRoleCreate(props) {
   const { t } = useTranslation();
   const groupVersions = useRecoilValue(groupVersionState);
   return (

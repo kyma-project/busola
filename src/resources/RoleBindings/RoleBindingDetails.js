@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { RoleBindingCreate } from './RoleBindingCreate';
+import RoleBindingCreate from './RoleBindingCreate';
 import { GenericRoleBindingDetails } from './GenericRoleBindingDetails';
 
 export function RoleBindingsDetails(props) {

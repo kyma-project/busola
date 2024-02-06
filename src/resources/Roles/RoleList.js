@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { GenericRoleList } from './GenericRoleList';
-import { RoleCreate } from './RoleCreate';
+import RoleCreate from './RoleCreate';
 
 export function RoleList(props) {
   return (

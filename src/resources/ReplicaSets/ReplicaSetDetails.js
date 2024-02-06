@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { HPASubcomponent } from 'resources/HorizontalPodAutoscalers/HPASubcomponent';
 import { ReplicaSetStatus } from './ReplicaSetStatus';
 import { Selector } from 'shared/components/Selector/Selector';
-import { ReplicaSetCreate } from './ReplicaSetCreate';
+import ReplicaSetCreate from './ReplicaSetCreate';
 import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 
 export function ReplicasetsDetails(props) {

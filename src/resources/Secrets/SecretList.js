@@ -5,7 +5,7 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { Link } from 'shared/components/Link/Link';
 
-import { SecretCreate } from './SecretCreate';
+import SecretCreate from './SecretCreate';
 
 export function SecretList(props) {
   const { t } = useTranslation();

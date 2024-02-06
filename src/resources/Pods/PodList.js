@@ -7,7 +7,7 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { Link as ReactSharedLink } from 'shared/components/Link/Link';
 
-import { PodCreate } from './PodCreate';
+import PodCreate from './PodCreate';
 import { PodStatus, calculatePodState } from './PodStatus';
 import PodRestarts from './PodRestarts';
 

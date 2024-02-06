@@ -7,7 +7,7 @@ import { Selector } from 'shared/components/Selector/Selector';
 import { HPASubcomponent } from 'resources/HorizontalPodAutoscalers/HPASubcomponent';
 
 import { StatefulSetPods } from './StatefulSetPods';
-import { StatefulSetCreate } from './StatefulSetCreate';
+import StatefulSetCreate from './StatefulSetCreate';
 import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 
 export function StatefulSetDetails(props) {

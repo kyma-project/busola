@@ -21,7 +21,7 @@ function isJobValid(job = {}) {
   return isNameValid && areContainersValid;
 }
 
-export function JobCreate({
+export default function JobCreate({
   formElementRef,
   namespace,
   onChange,

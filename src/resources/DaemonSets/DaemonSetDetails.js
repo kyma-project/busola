@@ -7,7 +7,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { Selector } from 'shared/components/Selector/Selector';
 import { DaemonSetStatus } from './DaemonSetStatus';
-import { DaemonSetCreate } from './DaemonSetCreate';
+import DaemonSetCreate from './DaemonSetCreate';
 import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 
 const Tolerations = resource => {

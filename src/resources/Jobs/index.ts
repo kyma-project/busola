@@ -11,6 +11,7 @@ export const category = predefinedCategories.workloads;
 
 export const List = React.lazy(() => import('./JobList'));
 export const Details = React.lazy(() => import('./JobDetails'));
+export const Create = React.lazy(() => import('./JobCreate'));
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowKind: true,

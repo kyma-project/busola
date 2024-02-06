@@ -7,7 +7,7 @@ import { Labels } from 'shared/components/Labels/Labels';
 import { Link } from 'shared/components/Link/Link';
 import { useRestartAction } from 'shared/hooks/useRestartResource';
 
-import { DaemonSetCreate } from './DaemonSetCreate';
+import DaemonSetCreate from './DaemonSetCreate';
 import { DaemonSetStatus } from './DaemonSetStatus';
 
 export function DaemonSetList(props) {

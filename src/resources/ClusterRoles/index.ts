@@ -10,6 +10,7 @@ export const category = predefinedCategories.configuration;
 
 export const List = React.lazy(() => import('./ClusterRoleList'));
 export const Details = React.lazy(() => import('./ClusterRoleDetails'));
+export const Create = React.lazy(() => import('./ClusterRoleCreate'));
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   depth: 2,

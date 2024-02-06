@@ -10,6 +10,7 @@ export const category = predefinedCategories.workloads;
 
 export const List = React.lazy(() => import('./CronJobList'));
 export const Details = React.lazy(() => import('./CronJobDetails'));
+export const Create = React.lazy(() => import('./CronJobCreate'));
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowKind: true,

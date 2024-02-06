@@ -36,6 +36,7 @@ export const category = predefinedCategories.workloads;
 
 export const List = React.lazy(() => import('./PodList'));
 export const Details = React.lazy(() => import('./PodDetails'));
+export const Create = React.lazy(() => import('./PodCreate'));
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowKind: true,

@@ -6,7 +6,7 @@ import { Link } from 'shared/components/Link/Link';
 import { PersistentVolumeClaimStatus } from 'shared/components/PersistentVolumeClaimStatus';
 import { Tokens } from 'shared/components/Tokens';
 
-import { PersistentVolumeClaimCreate } from './PersistentVolumeClaimCreate';
+import PersistentVolumeClaimCreate from './PersistentVolumeClaimCreate';
 
 export function PersistentVolumeClaimList(props) {
   const { t } = useTranslation();

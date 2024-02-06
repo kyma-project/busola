@@ -6,7 +6,7 @@ import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { Link } from 'shared/components/Link/Link';
 
 import { useRestartAction } from 'shared/hooks/useRestartResource';
-import { StatefulSetCreate } from './StatefulSetCreate';
+import StatefulSetCreate from './StatefulSetCreate';
 import { StatefulSetPods } from './StatefulSetPods';
 
 export function StatefulSetList(props) {

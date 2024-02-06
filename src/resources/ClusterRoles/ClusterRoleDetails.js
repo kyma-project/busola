@@ -3,7 +3,7 @@ import React from 'react';
 import { Rules } from 'resources/Roles/Rules';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 
-import { ClusterRoleCreate } from './ClusterRoleCreate';
+import ClusterRoleCreate from './ClusterRoleCreate';
 
 const ClusterRolesDetails = props => {
   return (

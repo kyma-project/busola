@@ -7,7 +7,7 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 
 import { NetworkPolicyPorts } from './Ports';
 import { NetworkPolicyPeers } from './Peers';
-import { NetworkPolicyCreate } from './NetworkPolicyCreate';
+import NetworkPolicyCreate from './NetworkPolicyCreate';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 export function NetworkPolicyDetails(props) {

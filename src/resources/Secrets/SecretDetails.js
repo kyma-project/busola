@@ -7,7 +7,7 @@ import SecretData from 'shared/components/Secret/SecretData';
 import { HelmReleaseData } from 'components/HelmReleases/HelmReleaseData';
 
 import { CertificateData } from './CertificateData';
-import { SecretCreate } from './SecretCreate';
+import SecretCreate from './SecretCreate';
 
 function HelmReleaseDataWrapper(secret) {
   if (secret.type !== 'helm.sh/release.v1') {

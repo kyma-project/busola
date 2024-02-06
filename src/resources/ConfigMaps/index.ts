@@ -10,6 +10,7 @@ export const category = predefinedCategories.configuration;
 
 export const List = React.lazy(() => import('./ConfigMapList'));
 export const Details = React.lazy(() => import('./ConfigMapDetails'));
+export const Create = React.lazy(() => import('./ConfigMapCreate'));
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   depth: 1,

@@ -12,6 +12,7 @@ export const category = predefinedCategories.workloads;
 
 export const List = React.lazy(() => import('./StatefulSetList'));
 export const Details = React.lazy(() => import('./StatefulSetDetails'));
+export const Create = React.lazy(() => import('./StatefulSetCreate'));
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowKind: true,

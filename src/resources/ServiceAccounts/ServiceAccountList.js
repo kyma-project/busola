@@ -3,7 +3,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { ServiceAccountTokenStatus } from 'shared/components/ServiceAccountTokenStatus';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { Link } from 'shared/components/Link/Link';
-import { ServiceAccountCreate } from './ServiceAccountCreate';
+import ServiceAccountCreate from './ServiceAccountCreate';
 
 export function ServiceAccountList(props) {
   const { t } = useTranslation();

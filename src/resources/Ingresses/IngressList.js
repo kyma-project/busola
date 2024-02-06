@@ -5,7 +5,7 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Link } from 'shared/components/Link/Link';
 
-import { IngressCreate } from './IngressCreate';
+import IngressCreate from './IngressCreate';
 
 export function IngressList(props) {
   const { t } = useTranslation();

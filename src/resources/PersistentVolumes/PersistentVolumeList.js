@@ -8,7 +8,7 @@ import { Link as DescLink } from 'shared/components/Link/Link';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 
 import { PersistentVolumeStatus } from './PersistentVolumeStatus';
-import { PersistentVolumeCreate } from './PersistentVolumeCreate';
+import PersistentVolumeCreate from './PersistentVolumeCreate';
 import { useUrl } from 'hooks/useUrl';
 
 export function PersistentVolumeList(props) {

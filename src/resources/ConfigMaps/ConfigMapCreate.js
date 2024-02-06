@@ -7,7 +7,7 @@ import { RichEditorDataField } from 'shared/ResourceForm/fields';
 
 import { createConfigMapTemplate, createPresets } from './helpers';
 
-export function ConfigMapCreate({
+export default function ConfigMapCreate({
   namespace,
   formElementRef,
   onChange,
