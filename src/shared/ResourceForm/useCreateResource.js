@@ -52,12 +52,14 @@ export function useCreateResource({
         },
       ),
     });
+
     if (!isEdit) {
       if (isColumnLeyoutEnabled) {
         setLayoutColumn(
           nextLayout === 'TwoColumnsMidExpanded'
             ? {
                 layout: nextLayout,
+                showCreate: null,
                 midColumn: {
                   resourceName: resource.metadata.name,
                   resourceType: resource.kind,
@@ -68,6 +70,7 @@ export function useCreateResource({
             : {
                 ...layoutColumn,
                 layout: nextLayout,
+                showCreate: null,
                 endColumn: {
                   resourceName: resource.metadata.name,
                   resourceType: resource.kind,
