@@ -39,6 +39,17 @@ ui5-wizard {
       color: var(--sapContent_LabelColor);
       font-size: var(--sapFontSize);
     }
+
+    &__auth-container {
+      display: flex;
+      flex-flow: column;
+      overflow: auto;
+      height: calc(90vh - 8rem);
+
+      .cluster-wizard__auth-form {
+        height: unset;
+      }
+    }
   }
 
   .resource-form {

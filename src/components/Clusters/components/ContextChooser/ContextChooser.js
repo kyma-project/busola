@@ -29,11 +29,11 @@ export function ContextChooser(params) {
   };
 
   return (
-    <ResourceForm.Wrapper {...params} style={spacing.sapUiMediumMarginBottom}>
-      <div
-        className="add-cluster__content-container"
-        style={spacing.sapUiMediumMarginBottom}
-      >
+    <div
+      className="add-cluster__content-container"
+      style={spacing.sapUiMediumMarginBottom}
+    >
+      <ResourceForm.Wrapper {...params} style={spacing.sapUiMediumMarginBottom}>
         <Title level="H5">{'Provide Context'}</Title>
         <ResourceForm.FormField
           required
@@ -70,7 +70,7 @@ export function ContextChooser(params) {
             })}
           </MessageStrip>
         )}
-      </div>
-    </ResourceForm.Wrapper>
+      </ResourceForm.Wrapper>
+    </div>
   );
 }

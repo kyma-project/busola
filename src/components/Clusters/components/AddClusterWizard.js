@@ -143,7 +143,6 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
     setSelected(Number(e.detail.step.dataset.step));
   };
 
-  console.log(selected);
   return (
     <Wizard contentLayout="SingleStep" onStepChange={handleStepChange}>
       <WizardStep
@@ -175,18 +174,21 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
           disabled={selected !== 2}
           data-step={'2'}
         >
-          <ResourceForm.Single
-            formElementRef={authFormRef}
-            resource={kubeconfig}
-            setResource={setKubeconfig}
-            setCustomValid={setCustomValid}
-            createResource={e => {
-              e.preventDefault();
-            }}
-          >
-            {!hasOneContext && <ContextChooser />}
-            {!hasAuth && <AuthForm revalidate={revalidate} />}
-          </ResourceForm.Single>
+          <div className="cluster-wizard__auth-container">
+            <ResourceForm.Single
+              formElementRef={authFormRef}
+              resource={kubeconfig}
+              setResource={setKubeconfig}
+              setCustomValid={setCustomValid}
+              createResource={e => {
+                e.preventDefault();
+              }}
+              className="cluster-wizard__auth-form"
+            >
+              {!hasOneContext && <ContextChooser />}
+              {!hasAuth && <AuthForm revalidate={revalidate} />}
+            </ResourceForm.Single>
+          </div>
           <WizardButtons
             selected={selected}
             setSelected={setSelected}

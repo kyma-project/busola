@@ -18,7 +18,7 @@ context('Test invalid kubeconfig', () => {
       .should('be.visible');
 
     cy.get('ui5-message-strip[design="Negative"]').shouldHaveTrimmedText(
-      'Parse error: kubeconfig is not an object, previous valid input will be used',
+      'Parse error: An object is required, previous valid input will be used',
     );
   });
 
