@@ -25,7 +25,7 @@ ui5-wizard {
       width: calc(100% - 20px);
       margin: 0 10px;
       padding: 7px;
-      //border: 1px solid gray;
+      border: 1px solid var(--sapGroup_TitleBorderColor);
       border-radius: var(--sapElement_BorderCornerRadius);
       background-color: var(--sapGroup_TitleBackground);
       box-shadow: 0 0 0.125rem 0
