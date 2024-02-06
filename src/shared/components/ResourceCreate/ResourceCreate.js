@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@ui5/webcomponents-react';
+import { Bar, Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -25,21 +25,6 @@ export const ResourceCreate = ({
   isEdit,
   ...props
 }) => {
-  console.log('!!!! ResourceCreate', {
-    performRefetch,
-    sendNotification,
-    title,
-    button,
-    renderForm,
-    opened,
-    customCloseAction,
-    confirmText,
-    invalidPopupMessage,
-    className,
-    onModalOpenStateChange,
-    alwaysOpen,
-    ...props,
-  });
   const { t } = useTranslation();
   const [isOpen, setOpen] = useState(alwaysOpen || false);
   const [resetFormFn, setResetFormFn] = useState(() => () => {});
@@ -133,6 +118,29 @@ export const ResourceCreate = ({
       {!isEdit && (
         <DynamicPageComponent
           title={title}
+          layoutNumber="MidColumn"
+          layoutCloseUrl={window.location.pathname}
+          footer={
+            <Bar
+              design="FloatingFooter"
+              endContent={
+                <>
+                  {renderConfirmButton()}
+                  <Button onClick={resetFormFn} design="Transparent">
+                    {t('common.buttons.reset')}
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      setOpenStatus(false);
+                    }}
+                    design="Transparent"
+                  >
+                    {t('common.buttons.cancel')}
+                  </Button>
+                </>
+              }
+            />
+          }
           content={renderForm({
             handleSetResetFormFn: setResetFormFn,
             formElementRef,

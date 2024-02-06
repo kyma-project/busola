@@ -42,6 +42,7 @@ export const DynamicPageComponent = ({
   children,
   columnWrapperClassName,
   content,
+  footer,
   layoutNumber,
   layoutCloseUrl,
   inlineEditForm,
@@ -53,7 +54,9 @@ export const DynamicPageComponent = ({
   const headerTitle = (
     <DynamicPageTitle
       navigationActions={
-        window.location.search.includes('layout') && isColumnLeyoutEnabled ? (
+        (window.location.search.includes('layout') && isColumnLeyoutEnabled) ||
+        (!window.location.search.includes('layout') &&
+          layoutColumn?.showCreate?.resourceType) ? (
           layoutColumn.layout !== 'OneColumn' ? (
             layoutNumber !== 'StartColumn' ? (
               <>
@@ -77,7 +80,11 @@ export const DynamicPageComponent = ({
                       window.history.pushState(
                         window.history.state,
                         '',
-                        `${window.location.pathname}?layout=${newLayout}`,
+                        `${window.location.pathname}${
+                          layoutColumn?.showCreate?.resourceType
+                            ? ''
+                            : '?layout=' + newLayout
+                        }`,
                       );
                     }}
                   />
@@ -102,7 +109,11 @@ export const DynamicPageComponent = ({
                       window.history.pushState(
                         window.history.state,
                         '',
-                        `${window.location.pathname}?layout=${newLayout}`,
+                        `${window.location.pathname}${
+                          layoutColumn?.showCreate?.resourceType
+                            ? ''
+                            : '?layout=' + newLayout
+                        }`,
                       );
                     }}
                   />
@@ -121,7 +132,8 @@ export const DynamicPageComponent = ({
                             0,
                             window.location.pathname.lastIndexOf('/'),
                           )}${
-                            layoutNumber === 'MidColumn'
+                            layoutNumber === 'MidColumn' ||
+                            layoutColumn?.showCreate?.resourceType
                               ? ''
                               : '?layout=TwoColumnsMidExpanded'
                           }`,
@@ -241,6 +253,7 @@ export const DynamicPageComponent = ({
       backgroundDesign="Transparent"
       headerTitle={headerTitle}
       headerContent={headerContent}
+      footer={footer}
     >
       {content}
     </DynamicPage>
