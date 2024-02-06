@@ -33,4 +33,9 @@
     align-self: flex-end;
     width: 80%;
   }
+
+  &__storage-container {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }

@@ -103,7 +103,7 @@ export function ClusterPreview({
         >
           {`${t('clusters.token')}:`}
         </p>
-        {token && <div>{token}</div>}
+        {token && <div className="cluster-preview__token">{token}</div>}
       </>
     );
   };
@@ -188,7 +188,10 @@ export function ClusterPreview({
           ...spacing.sapUiTinyMarginTop,
         }}
       >
-        <FlexBox direction="Column">
+        <FlexBox
+          direction="Column"
+          className="cluster-preview__storage-container"
+        >
           <RadioButton
             checked={storage === 'localStorage'}
             text={`${t('clusters.storage.labels.localStorage')}: ${t(

@@ -60,6 +60,8 @@ export const ClusterDataForm = ({
     findInitialValue(kubeconfig, 'oidc-extra-scope'),
   );
 
+  const [token, setToken] = useState(kubeconfig?.users[0]?.user?.token);
+
   useEffect(() => {
     setAuthenticationType(
       kubeconfig?.users?.[0]?.user?.exec ? 'oidc' : 'token',
@@ -68,6 +70,7 @@ export const ClusterDataForm = ({
     setClientId(findInitialValue(kubeconfig, 'oidc-client-id'));
     setClientSecret(findInitialValue(kubeconfig, 'oidc-client-secret'));
     setScopes(findInitialValue(kubeconfig, 'oidc-extra-scope'));
+    setToken(kubeconfig?.users[0]?.user?.token);
   }, [kubeconfig]);
 
   const tokenFields = (
@@ -76,7 +79,11 @@ export const ClusterDataForm = ({
       input={Inputs.Text}
       advanced
       required
-      propertyPath="$.users[0].user.token"
+      value={token}
+      setValue={val => {
+        setToken(val);
+        jp.value(kubeconfig, '$.users[0].user.token', token);
+      }}
     />
   );
 
