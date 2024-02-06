@@ -103,17 +103,10 @@ export const usePrepareDetailsProps = ({
 export const usePrepareCreateProps = ({
   resourceCustomType,
   resourceType,
-  resourceI18Key,
+  resourceI18Key, // TO DO: check if needed for custom resources
   apiGroup,
   apiVersion,
 }) => {
-  console.log('usePrepareCreateProps', {
-    resourceCustomType,
-    resourceType,
-    resourceI18Key,
-    apiGroup,
-    apiVersion,
-  });
   const { namespaceId } = useParams();
   const { i18n, t } = useTranslation();
 

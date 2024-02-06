@@ -117,12 +117,7 @@ export function EditorActions({
   const { t } = useTranslation();
 
   return (
-    <section
-      style={{
-        ...spacing.sapUiSmallMarginTopBottom,
-        ...spacing.sapUiMediumMarginBegin,
-      }}
-    >
+    <section>
       <ButtonWithTooltip
         tooltipContent={
           visible ? t('common.tooltips.hide') : t('common.tooltips.show')

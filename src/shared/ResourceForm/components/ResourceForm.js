@@ -11,7 +11,7 @@ import { Presets } from './Presets';
 import { useCreateResource } from '../useCreateResource';
 import { KeyValueField, K8sNameField } from '../fields';
 import * as jp from 'jsonpath';
-import { Form, FormItem } from '@ui5/webcomponents-react';
+import { Card, Form, FormItem } from '@ui5/webcomponents-react';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import { spacing } from '@ui5/webcomponents-react-base';
@@ -245,10 +245,10 @@ export function ResourceForm({
         />
       )}
 
-      {!!initialResource && (
+      <Card style={spacing.sapUiSmallMarginTopBottom}>
         <UI5Panel
           key={`edit-panel-${singularName}`}
-          style={spacing.sapUiMediumMarginTopBottom}
+          disableMargin
           headerActions={
             <>
               {/* TODO STYLE IT */}
@@ -265,7 +265,9 @@ export function ResourceForm({
                   />
                 </div>
               )}
-              {mode === ModeSelector.MODE_ADVANCED && actions}
+              {!!initialResource &&
+                mode === ModeSelector.MODE_ADVANCED &&
+                actions}
             </>
           }
         >
@@ -281,27 +283,7 @@ export function ResourceForm({
             {formContent}
           </form>
         </UI5Panel>
-      )}
-
-      {!initialResource && (
-        <form ref={formElementRef} onSubmit={onSubmit || createResource}>
-          {mode === ModeSelector.MODE_YAML && (
-            <div
-              className="yaml-form"
-              style={{ width: '100%', height: '100%' }}
-            >
-              <EditorActions
-                val={convertedResource}
-                editor={actionsEditor}
-                title={`${resource?.metadata?.name || singularName}.yaml`}
-                saveHidden
-              />
-              {editor}
-            </div>
-          )}
-          {formContent}
-        </form>
-      )}
+      </Card>
     </section>
   );
 }
