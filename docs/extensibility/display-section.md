@@ -19,7 +19,7 @@
   - [CodeViewer](#codeviewer)
   - [Columns](#columns)
   - [EventList](#eventlist)
-  - [MessagePanel](#messagepanel)
+  - [FeaturedCard](#featuredcard)
   - [Panel](#panel)
   - [Plain](#plain)
   - [ResourceList](#resourcelist)
@@ -529,25 +529,24 @@ EventList widget renders a list of Events.
 
 <img src="./assets/display-widgets/EventListHiddenField.png" alt="Example of a EventList widget with hidden involved objects" style="border: 1px solid #D2D5D9">
 
-### MessagePanel
+### FeaturedCard
 
-MessagePanel widgets render an object as a panel with its own title and subtitle, and widgets provided in the children section.
+FeaturedCard widgets render a promotional banner with its own title, description, call-to-action-button and helpful-link-button.
+It is important to select a unique ID for each FeatureCard, since these components will be display/hidden based on their ID.
 
 #### Example
 
 ```yaml
-- widget: MessagePanel
+- widget: FeaturedCard
+  id: modules
   source: $
-  title: Seems that you don't have any Kyma Modules configured
-  subtitle: Add at least one Kyma Module. Add your module under "kyma-system -> Kyma"
-  children:
-    - widget: Wizard
-      name: Add Module
-      wizard: module-wizard
-      visibility: $not($exists($item.spec.modules.channel))
+  title: Introducing Modules
+  description: Modules add functionalities to your cluster. Consume SAP BTP services, monitor your cluster, build serverless applications and more.
+  helpfulLink:
+    url: https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-s-modular-approach
 ```
 
-<img src="./assets/display-widgets/MessagePanel.png" alt="Example of a message panel widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/FeaturedCard.png" alt="Example of a FeaturedCard widget" style="border: 1px solid #D2D5D9">
 
 #### Widget-specific parameters
 
