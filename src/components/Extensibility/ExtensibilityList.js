@@ -1,4 +1,3 @@
-import React from 'react';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
 

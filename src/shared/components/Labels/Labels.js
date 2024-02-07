@@ -1,10 +1,11 @@
 import React from 'react';
 import classNames from 'classnames';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { Token, Label } from '@ui5/webcomponents-react';
+import { Badge, Label } from '@ui5/webcomponents-react';
 
 import { spacing } from '@ui5/webcomponents-react-base';
 import './Labels.scss';
+import { useTranslation } from 'react-i18next';
 
 const SHORTENING_TRESHOLD = 60;
 
@@ -15,33 +16,48 @@ export const Labels = ({
   style = null,
   displayLabelForLabels = false,
 }) => {
+  const { t } = useTranslation();
   if (!labels || Object.keys(labels).length === 0) {
-    return <span>{EMPTY_TEXT_PLACEHOLDER}</span>;
+    return (
+      <>
+        {displayLabelForLabels ? (
+          <Label showColon={true} style={spacing.sapUiTinyMarginBottom}>
+            {t('common.headers.labels')}
+          </Label>
+        ) : null}
+        <div>{EMPTY_TEXT_PLACEHOLDER}</div>
+      </>
+    );
   }
   const separatedLabels = [];
   for (const key in labels) {
     separatedLabels.push(`${key}=${labels[key]}`);
   }
 
+  const shortenLabel = label => label.slice(0, SHORTENING_TRESHOLD) + '...';
+
   return (
     <>
-      {displayLabelForLabels ? <Label showColon={true}>Labels</Label> : null}
+      {displayLabelForLabels ? (
+        <Label showColon={true} style={spacing.sapUiTinyMarginBottom}>
+          {t('common.headers.labels')}
+        </Label>
+      ) : null}
       <div className={classNames('labels', className)} style={style}>
         {separatedLabels.map((label, id) => (
-          <Token
+          <Badge
             aria-label={label}
             key={id}
-            className="token"
-            style={spacing.sapUiTinyMarginEnd}
-            readOnly
-            text={label}
-            title={
-              (shortenLongLabels &&
-                label.length > SHORTENING_TRESHOLD &&
-                label) ||
-              undefined
-            }
-          />
+            colorScheme="10"
+            style={{
+              ...spacing.sapUiTinyMarginEnd,
+              ...spacing.sapUiTinyMarginBottom,
+            }}
+          >
+            {shortenLongLabels && label.length > SHORTENING_TRESHOLD
+              ? shortenLabel(label)
+              : label}
+          </Badge>
         ))}
       </div>
     </>
