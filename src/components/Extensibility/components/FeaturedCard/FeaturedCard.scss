@@ -1,0 +1,55 @@
+.outer-container {
+  background: linear-gradient(to right, #d1efff, #9b76ff);
+  height: 225px;
+  width: 100%;
+  position: relative;
+  display: flex;
+  gap: 50px;
+
+  .inner-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 16px;
+    width: 50%;
+
+    .button-container {
+      display: flex;
+      gap: 16px;
+    }
+  }
+
+  .decline-button {
+    position: absolute;
+    top: 12.5px;
+    right: 17.5px;
+  }
+
+  .illustration {
+    position: absolute;
+    max-height: 100%;
+    width: 42.5%;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 2.5%;
+  }
+
+  .background-shape {
+    position: absolute;
+    bottom: 0;
+    left: -5%;
+    right: -5%;
+    width: 110%;
+    mix-blend-mode: color-burn;
+  }
+}
+
+.foreground {
+  z-index: 0;
+}
+
+@container (max-width: 650px) {
+  .illustration {
+    width: 150px;
+  }
+}

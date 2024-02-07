@@ -17,7 +17,7 @@ import { Alert } from './Alert';
 import { ExternalLink } from './ExternalLink';
 import { Tabs } from './Tabs';
 import { Wizard } from './Wizard';
-import { MessagePanel } from './MessagePage';
+import { FeaturedCard } from './FeaturedCard/FeaturedCard';
 
 import { APIRuleHost } from './APIRules/APIRuleHost';
 
@@ -45,7 +45,7 @@ export const widgets = {
   Tabs,
   Text,
   Wizard,
-  MessagePanel,
+  FeaturedCard,
 };
 
 export const valuePreprocessors = {
