@@ -3,6 +3,11 @@
   flex-wrap: wrap;
 }
 
+.labels-less {
+  max-height: 4rem;
+  overflow: hidden;
+}
+
 .token {
   margin-top: 4px;
   margin-bottom: 4px;

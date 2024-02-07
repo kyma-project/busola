@@ -119,6 +119,7 @@ export const ExtensibilityListCore = ({
     <ResourcesList
       {...listProps}
       {...props}
+      displayLabelForLabels={props.displayLabelForLabels ?? true}
       disableCreate={disableCreate}
       disableEdit={disableEdit}
       disableDelete={disableDelete}
