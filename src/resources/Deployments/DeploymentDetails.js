@@ -24,6 +24,26 @@ export function DeploymentDetails(props) {
     },
   ];
 
+  const customStatusColumns = [
+    {
+      header: 'Available Replicas',
+      value: deployment => <div>{deployment?.status?.availableReplicas}</div>,
+    },
+    {
+      header: 'Replicas',
+      value: deployment => <div>{deployment?.status?.replicas}</div>,
+    },
+  ];
+
+  const statusConditions = deployment => {
+    return deployment?.status?.conditions?.map(condition => {
+      return {
+        header: { titleText: condition.type, status: condition.status },
+        message: condition.message,
+      };
+    });
+  };
+
   const MatchSelector = deployment => (
     <Selector
       key="match-selector"
@@ -43,6 +63,9 @@ export function DeploymentDetails(props) {
       customComponents={[HPASubcomponent, MatchSelector, DeploymentPodTemplate]}
       customColumns={customColumns}
       createResourceForm={DeploymentCreate}
+      statusBadge={deployment => <DeploymentStatus deployment={deployment} />}
+      customStatusColumns={customStatusColumns}
+      statusConditions={statusConditions}
       {...props}
     />
   );

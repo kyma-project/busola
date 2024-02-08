@@ -18,3 +18,14 @@
     grid-template-columns: 1fr 1fr;
   }
 }
+
+.resource-details-container {
+  display: flex;
+  flex-direction: column;
+}
+
+@container (min-width: 700px) {
+  .resource-details-container {
+    flex-direction: row;
+  }
+}

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@ui5/webcomponents-react';
+import { Button, Title } from '@ui5/webcomponents-react';
 import { createPatch } from 'rfc6902';
 import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNotFound';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
@@ -35,6 +35,8 @@ import { Tooltip } from '../Tooltip/Tooltip';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { createPortal } from 'react-dom';
 import ResourceDetailsCard from './ResourceDetailsCard';
+import { ResourceStatusCard } from '../ResourceStatusCard/ResourceStatusCard';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
@@ -176,6 +178,9 @@ function Resource({
   resourceSchema,
   disableEdit,
   disableDelete,
+  statusBadge,
+  customStatusColumns,
+  statusConditions,
 }) {
   useVersionWarning({ resourceUrl, resourceType });
   const { t } = useTranslation();
@@ -361,7 +366,7 @@ function Resource({
 
   const resourceDetailsCard = (
     <ResourceDetailsCard
-      title={title ?? t('common.headers.resource-details')}
+      //title={title ?? t('common.headers.resource-details')}
       content={
         <>
           <DynamicPageComponent.Column
@@ -388,6 +393,22 @@ function Resource({
       }
     />
   );
+  console.log(statusConditions);
+  const resourceStatusCard = customStatusColumns ? (
+    <ResourceStatusCard
+      statusBadge={statusBadge ? statusBadge(resource) : null}
+      customColumns={
+        <>
+          {customStatusColumns?.filter(filterColumns)?.map(col => (
+            <DynamicPageComponent.Column key={col.header} title={col.header}>
+              {col.value(resource)}
+            </DynamicPageComponent.Column>
+          ))}
+        </>
+      }
+      conditions={statusConditions ? statusConditions(resource) : null}
+    />
+  ) : null;
 
   return (
     <ResourceDetailContext.Provider value={true}>
@@ -406,7 +427,19 @@ function Resource({
               />,
               document.body,
             )}
-            {!hasTabs && resourceDetailsCard}
+            <Title
+              level="H3"
+              style={{
+                ...spacing.sapUiMediumMarginBegin,
+                ...spacing.sapUiMediumMarginTopBottom,
+              }}
+            >
+              {title ?? t('common.headers.resource-details')}
+            </Title>
+            <div className="resource-details-container">
+              {!hasTabs && resourceDetailsCard}
+              {resourceStatusCard && resourceStatusCard}
+            </div>
             <Suspense fallback={<Spinner />}>
               <Injections
                 destination={resourceType}
