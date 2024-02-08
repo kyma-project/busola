@@ -1,22 +1,17 @@
 .counting-card {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &__container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-
   &__value {
     color: var(--sapContent_LabelColor);
-    font-size: 2.75rem;
+    font-size: 2.85rem;
   }
 
-  &__title {
-    color: var(--sapContent_LabelColor);
-    font-size: var(--sapFontSize);
+  &__content {
+    display: flex;
+    min-height: 45px;
+  }
+
+  &__extra-content {
+    margin-left: 50px;
+    display: flex;
+    gap: 10px;
   }
 }

@@ -55,11 +55,9 @@ export default function ClusterStats({ data }) {
       >
         {t('cluster-overview.statistics.title')}
       </Title>
-      <div
-        className="cluster-overview__graphs-wrapper"
-        style={spacing.sapUiSmallMarginBeginEnd}
-      >
+      <div className="flexwrap" style={spacing.sapUiSmallMarginBeginEnd}>
         <Card
+          className="radial-chart-card"
           header={
             <CardHeader
               titleText={t('cluster-overview.statistics.cpu-usage')}
@@ -80,6 +78,7 @@ export default function ClusterStats({ data }) {
           />
         </Card>
         <Card
+          className="radial-chart-card"
           header={
             <CardHeader
               titleText={t('cluster-overview.statistics.memory-usage')}
@@ -101,6 +100,7 @@ export default function ClusterStats({ data }) {
         </Card>
         {(podsData || deploymentsData) && (
           <Card
+            className="progress-chart-card"
             header={
               <CardHeader
                 titleText={t('cluster-overview.statistics.namespaces-health')}
@@ -149,10 +149,7 @@ export default function ClusterStats({ data }) {
           </Card>
         )}
       </div>
-      <div
-        className="cluster-overview__cards-wrapper"
-        style={spacing.sapUiSmallMargin}
-      >
+      <div className="flexwrap" style={spacing.sapUiSmallMargin}>
         {data && (
           <CountingCard
             value={data?.length}
@@ -162,13 +159,26 @@ export default function ClusterStats({ data }) {
         {podsData && (
           <CountingCard
             value={podsData?.length}
-            title={t('cluster-overview.statistics.pods')}
+            title={t('cluster-overview.statistics.pods-overview')}
+            subTitle={t('cluster-overview.statistics.total-pods')}
+            resourceUrl="pods"
+            extraInfo={[
+              {
+                title: t('cluster-overview.statistics.healthy-pods'),
+                value: healthyPods,
+              },
+              {
+                title: t('cluster-overview.statistics.failing-pods'),
+                value: podsData.length - healthyPods,
+              },
+            ]}
           />
         )}
         {deploymentsData && (
           <CountingCard
             value={deploymentsData?.length}
             title={t('cluster-overview.statistics.deployments')}
+            resourceUrl="deployments"
           />
         )}
       </div>

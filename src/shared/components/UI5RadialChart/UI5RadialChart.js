@@ -18,7 +18,6 @@ export const UI5RadialChart = ({
   max,
   color = 'var(--sapBrandColor)',
   onClick,
-  title,
   tooltip,
 }) => {
   const percent = max && value ? Math.round((value * 100) / max) : 0;
@@ -32,7 +31,6 @@ export const UI5RadialChart = ({
   return (
     <TooltipWrapper tooltipProps={tooltip}>
       <div className={classnames} onClick={onClick}>
-        {title && <span className="title">{title}</span>}
         <RadialChart
           displayValue={text}
           displayValueStyle={{
