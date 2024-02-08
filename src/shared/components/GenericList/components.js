@@ -25,7 +25,12 @@ export const HeaderRenderer = ({ slot, actions, headerRenderer }) => {
   let emptyColumn = null;
   if (actions.length) {
     emptyColumn = (
-      <TableColumn slot={slot} key="actions-column" aria-label="actions-column">
+      <TableColumn
+        slot={slot}
+        key="actions-column"
+        aria-label="actions-column"
+        minWidth={850}
+      >
         <Label />
       </TableColumn>
     );
@@ -33,13 +38,16 @@ export const HeaderRenderer = ({ slot, actions, headerRenderer }) => {
   const Header = (
     <>
       {headerRenderer().map((h, index) => {
+        console.log(h);
         return (
           <TableColumn
             slot={`${slot}-${index}`}
             key={typeof h === 'object' ? index : h}
             popinDisplay="Inline"
             demandPopin={h === 'Labels' ? true : false}
-            minWidth={h === 'Labels' ? '15000' : h !== 'Name' ? 1100 : ''}
+            minWidth={
+              h === 'Labels' ? '15000' : h !== 'Name' && h !== '' ? 850 : ''
+            }
           >
             <Label>{h}</Label>
           </TableColumn>
