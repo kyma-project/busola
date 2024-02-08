@@ -1,6 +1,7 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useMemo } from 'react';
+
 import { useRecoilState } from 'recoil';
-import { Route, useSearchParams } from 'react-router-dom';
+import { Route, useSearchParams, useParams } from 'react-router-dom';
 import pluralize from 'pluralize';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
@@ -63,35 +64,55 @@ const ColumnWrapper = ({
 }) => {
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
-
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
 
   const { t } = useTranslation();
 
+  const {
+    resourceName: resourceNameFromParams,
+    namespaceId: namespaceIdFromParams,
+  } = useParams();
+
+  const resourceName = useMemo(
+    () => props.resourceName ?? resourceNameFromParams,
+    [props.resourceName, resourceNameFromParams],
+  );
+
+  const namespaceId = useMemo(
+    () => props.namespaceId ?? namespaceIdFromParams,
+    [props.namespaceId, namespaceIdFromParams],
+  );
+
   const initialLayoutState = layout
     ? {
-        layout: isColumnLeyoutEnabled ? layout : 'OneColumn',
+        layout: isColumnLeyoutEnabled && layout ? layout : layoutState?.layout,
         midColumn: {
-          resourceName: props.resourceName,
+          resourceName: resourceName,
           resourceType: props.resourceType,
-          namespaceId: props.namespaceId,
+          namespaceId: namespaceId,
         },
         endColumn: null,
       }
     : null;
 
   useEffect(() => {
-    if (layout && props.resourceName && props.resourceType) {
+    if (layout && resourceName && props.resourceType) {
       setLayoutColumn(initialLayoutState);
     }
-  }, [layout, props.resourceName, props.resourceType, props.namespaceId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [
+    layout,
+    isColumnLeyoutEnabled,
+    resourceName,
+    props.resourceType,
+    namespaceId,
+  ]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const elementListProps = usePrepareListProps(props);
   const elementDetailsProps = usePrepareDetailsProps({
     ...props,
-    customResourceName: layoutState?.midColumn?.resourceName,
-    customNamespaceId: layoutState.midColumn?.namespaceId,
+    resourceName: layoutState?.midColumn?.resourceName,
+    namespaceId: layoutState.midColumn?.namespaceId,
   });
 
   const elementCreateProps = usePrepareCreateProps({
@@ -110,11 +131,11 @@ const ColumnWrapper = ({
   });
 
   let startColumnComponent = null;
-  if (layout || defaultColumn === 'list') {
-    startColumnComponent = listComponent;
-  }
+
   if (!layout && defaultColumn === 'details') {
     startColumnComponent = detailsComponent;
+  } else {
+    startColumnComponent = listComponent;
   }
 
   let midColumnComponent = null;

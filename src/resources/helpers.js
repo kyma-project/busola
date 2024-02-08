@@ -59,22 +59,9 @@ export const usePrepareDetailsProps = ({
   resourceI18Key,
   apiGroup,
   apiVersion,
-  customResourceName = null,
-  customNamespaceId = null,
+  resourceName,
+  namespaceId,
 }) => {
-  const {
-    resourceName: resourceNameFromParams,
-    namespaceId: namespaceIdFromParams,
-  } = useParams();
-  const resourceName = useMemo(
-    () => customResourceName ?? resourceNameFromParams,
-    [customResourceName, resourceNameFromParams],
-  );
-  const namespaceId = useMemo(
-    () => customNamespaceId ?? namespaceIdFromParams,
-    [customNamespaceId, namespaceIdFromParams],
-  );
-
   const encodedResourceName = encodeURIComponent(resourceName);
   const queryParams = new URLSearchParams(window.location.search);
   const { i18n, t } = useTranslation();
