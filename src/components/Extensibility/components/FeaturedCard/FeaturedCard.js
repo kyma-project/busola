@@ -2,13 +2,29 @@ import { Button, Card, Text, Title } from '@ui5/webcomponents-react';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
-import busolaModuleCardIllustration from './assets/busolaModuleCardIllustration.svg';
-import busolaModuleCardShape from './assets/busolaModuleCardShape.svg';
+import cardIllustration from './assets/cardIllustration.svg';
+import cardIllustrationHC from './assets/cardIllustrationHC.svg';
+import { Widget, InlineWidget } from '../Widget';
+import { useRecoilValue } from 'recoil';
+import { themeState } from 'state/preferences/themeAtom';
 import './FeaturedCard.scss';
 
-export function FeaturedCard({ structure }) {
-  const { t } = useTranslation();
+const getIllustration = theme => {
+  switch (theme) {
+    case 'sap_horizon_hcw':
+    case 'sap_horizon_hcb':
+      return cardIllustrationHC;
+    case 'sap_horizon':
+    case 'sap_horizon_dark':
+    case 'light_dark':
+    default:
+      return cardIllustration;
+  }
+};
 
+export function FeaturedCard({ value, structure, schema, ...props }) {
+  const { t } = useTranslation();
+  const theme = useRecoilValue(themeState);
   const [hideBanner, setHideBanner] = useState(false);
   const hideBannerKey = `hideBanner${structure?.id}`;
 
@@ -36,12 +52,7 @@ export function FeaturedCard({ structure }) {
             onClick={handleToggle}
           />
           <img
-            src={busolaModuleCardShape}
-            alt="FeaturedCard background shape"
-            className="background-shape"
-          />
-          <img
-            src={busolaModuleCardIllustration}
+            src={getIllustration(theme)}
             alt="FeaturedCard Illustration"
             className="illustration"
           />
@@ -49,17 +60,24 @@ export function FeaturedCard({ structure }) {
             <Title level="H1">{structure?.title}</Title>
             <Text>{structure?.description}</Text>
             <div
-              className="button-container"
+              className="button-container foreground"
               style={spacing.sapUiSmallMarginTop}
             >
-              <Button design="Emphasized" className="foreground">
-                Add Modules
-              </Button>
+              {structure.children.map((def, idx) => (
+                <Widget
+                  key={idx}
+                  value={value}
+                  structure={def}
+                  schema={schema}
+                  inlineRenderer={InlineWidget}
+                  inlineContext={true}
+                  {...props}
+                />
+              ))}
               {structure?.helpfulLink && (
                 <Button
                   icon="inspect"
                   iconEnd
-                  className="foreground"
                   onClick={() => {
                     window.open(structure.helpfulLink?.url, '_blank');
                   }}

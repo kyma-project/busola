@@ -1,5 +1,9 @@
 .outer-container {
-  background: linear-gradient(to right, #d1efff, #9b76ff);
+  background: linear-gradient(
+    to right,
+    var(--sapLegendBackgroundColor6),
+    var(--sapLegendBackgroundColor5)
+  );
   height: 225px;
   width: 100%;
   position: relative;
@@ -32,15 +36,6 @@
     top: 50%;
     transform: translateY(-50%);
     right: 2.5%;
-  }
-
-  .background-shape {
-    position: absolute;
-    bottom: 0;
-    left: -5%;
-    right: -5%;
-    width: 110%;
-    mix-blend-mode: color-burn;
   }
 }
 

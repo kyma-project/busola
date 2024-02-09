@@ -531,8 +531,9 @@ EventList widget renders a list of Events.
 
 ### FeaturedCard
 
-FeaturedCard widgets render a promotional banner with its own title, description, call-to-action-button and helpful-link-button.
-It is important to select a unique ID for each FeatureCard, since these components will be display/hidden based on their ID.
+FeaturedCard widgets render a promotional banner with its own title, description, and a maximum of 2 additional children.
+The FeaturedCard can be closed in the top right corner.
+It is important to select a unique ID for each FeatureCard, since it will be displayed/hidden based on their ID.
 
 #### Example
 
