@@ -1,4 +1,4 @@
-.feature-card-background {
+.feature-card {
   background: linear-gradient(
     to right,
     var(--sapLegendBackgroundColor6),
@@ -42,7 +42,7 @@
 }
 
 @container (max-width: 950px) {
-  .feature-card-background {
+  .feature-card {
     .illustration {
       margin-right: 0%;
     }
@@ -50,7 +50,7 @@
 }
 
 @container (max-width: 625px) {
-  .feature-card-background {
+  .feature-card {
     .outer-container {
       flex-direction: column-reverse;
     }

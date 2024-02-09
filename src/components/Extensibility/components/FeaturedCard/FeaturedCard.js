@@ -38,11 +38,10 @@ export function FeaturedCard({ value, structure, schema, ...props }) {
     localStorage.setItem(hideBannerKey, updatedBoolean);
   };
 
-  if (!structure?.id) return <></>;
-  return !hideBanner ? (
+  return structure?.id && !hideBanner ? (
     <div style={spacing.sapUiSmallMargin}>
       <Card>
-        <div className="feature-card-background">
+        <div className="feature-card">
           <Button
             design="Transparent"
             icon="decline"
