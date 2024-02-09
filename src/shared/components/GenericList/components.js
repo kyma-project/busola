@@ -96,7 +96,6 @@ const DefaultRowRenderer = ({
   entry,
   actions,
   rowRenderer,
-  isBeingEdited = false,
   isSelected = false,
 }) => {
   const cells = rowRenderer.map((cell, id) => {
@@ -118,11 +117,7 @@ const DefaultRowRenderer = ({
   );
 
   return (
-    <TableRow
-      type="Active"
-      selected={isBeingEdited ?? isSelected}
-      navigated={isBeingEdited ?? isSelected}
-    >
+    <TableRow type="Active" navigated={isSelected}>
       {cells}
       {!!actions.length && actionsCell}
     </TableRow>

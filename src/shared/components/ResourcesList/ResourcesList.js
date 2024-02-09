@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 import { Button, Text } from '@ui5/webcomponents-react';
@@ -8,8 +8,6 @@ import pluralize from 'pluralize';
 
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
-import { YamlEditorProvider } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
 import { prettifyNameSingular, prettifyNamePlural } from 'shared/utils/helpers';
 import { Labels } from 'shared/components/Labels/Labels';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
@@ -105,7 +103,7 @@ export function ResourcesList(props) {
   );
 
   return (
-    <YamlEditorProvider>
+    <>
       {!props.isCompact ? (
         <DynamicPageComponent
           layoutNumber={props.layoutNumber}
@@ -126,7 +124,7 @@ export function ResourcesList(props) {
       ) : (
         content
       )}
-    </YamlEditorProvider>
+    </>
   );
 }
 
@@ -223,10 +221,6 @@ export function ResourceListRenderer({
   });
 
   const [activeResource, setActiveResource] = useState(null);
-  const { closeEditor, currentlyEditedResourceUID } = useYamlEditor();
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => closeEditor(), [namespace]);
 
   const prettifiedResourceName = prettifyNameSingular(
     resourceTitle,
@@ -482,7 +476,6 @@ export function ResourceListRenderer({
           pagination={{ autoHide: true, ...pagination }}
           extraHeaderContent={extraHeaderContent}
           testid={testid}
-          currentlyEditedResourceUID={currentlyEditedResourceUID}
           sortBy={sortBy}
           searchSettings={{
             ...searchSettings,
