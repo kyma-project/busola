@@ -1,21 +1,25 @@
-.outer-container {
+.feature-card-background {
   background: linear-gradient(
     to right,
     var(--sapLegendBackgroundColor6),
     var(--sapLegendBackgroundColor5)
   );
-  height: 225px;
-  width: 100%;
   position: relative;
   display: flex;
-  gap: 50px;
+
+  .outer-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
 
   .inner-container {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
     gap: 16px;
-    width: 50%;
+    width: 100%;
 
     .button-container {
       display: flex;
@@ -31,21 +35,24 @@
   }
 
   .illustration {
-    position: absolute;
-    max-height: 100%;
-    width: 42.5%;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 2.5%;
+    max-height: 200px;
+    max-width: 100%;
+    margin-right: 3.5%;
   }
 }
 
-.foreground {
-  z-index: 0;
+@container (max-width: 950px) {
+  .feature-card-background {
+    .illustration {
+      margin-right: 0%;
+    }
+  }
 }
 
-@container (max-width: 650px) {
-  .illustration {
-    width: 150px;
+@container (max-width: 625px) {
+  .feature-card-background {
+    .outer-container {
+      flex-direction: column-reverse;
+    }
   }
 }

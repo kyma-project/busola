@@ -42,37 +42,41 @@ export function FeaturedCard({ value, structure, schema, ...props }) {
   return !hideBanner ? (
     <div style={spacing.sapUiSmallMargin}>
       <Card>
-        <div className="outer-container">
+        <div className="feature-card-background">
           <Button
             design="Transparent"
             icon="decline"
             className="decline-button"
             onClick={handleToggle}
           />
-          <img
-            src={getIllustration(theme)}
-            alt="FeaturedCard Illustration"
-            className="illustration"
-          />
-          <div className="inner-container" style={spacing.sapUiMediumMargin}>
-            <Title level="H1">{structure?.title}</Title>
-            <Text>{structure?.description}</Text>
-            <div
-              className="button-container foreground"
-              style={spacing.sapUiSmallMarginTop}
-            >
-              {structure.children.slice(0, 2).map((def, idx) => (
-                <Widget
-                  key={idx}
-                  value={value}
-                  structure={def}
-                  schema={schema}
-                  inlineRenderer={InlineWidget}
-                  inlineContext={true}
-                  {...props}
-                />
-              ))}
+          <div className="outer-container" style={spacing.sapUiMediumMargin}>
+            <div className="inner-container">
+              <Title level="H1" wrappingType="Normal">
+                {structure?.title}
+              </Title>
+              <Text>{structure?.description}</Text>
+              <div
+                className="button-container"
+                style={spacing.sapUiSmallMarginTop}
+              >
+                {structure.children.slice(0, 2).map((def, idx) => (
+                  <Widget
+                    key={idx}
+                    value={value}
+                    structure={def}
+                    schema={schema}
+                    inlineRenderer={InlineWidget}
+                    inlineContext={true}
+                    {...props}
+                  />
+                ))}
+              </div>
             </div>
+            <img
+              src={getIllustration(theme)}
+              alt="FeaturedCard Illustration"
+              className="illustration"
+            />
           </div>
         </div>
       </Card>
