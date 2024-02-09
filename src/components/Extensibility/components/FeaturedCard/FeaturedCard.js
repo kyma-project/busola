@@ -1,6 +1,5 @@
 import { Button, Card, Text, Title } from '@ui5/webcomponents-react';
 import { spacing } from '@ui5/webcomponents-react-base';
-import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import cardIllustration from './assets/cardIllustration.svg';
 import cardIllustrationHC from './assets/cardIllustrationHC.svg';
@@ -23,7 +22,6 @@ const getIllustration = theme => {
 };
 
 export function FeaturedCard({ value, structure, schema, ...props }) {
-  const { t } = useTranslation();
   const theme = useRecoilValue(themeState);
   const [hideBanner, setHideBanner] = useState(false);
   const hideBannerKey = `hideBanner${structure?.id}`;
@@ -63,7 +61,7 @@ export function FeaturedCard({ value, structure, schema, ...props }) {
               className="button-container foreground"
               style={spacing.sapUiSmallMarginTop}
             >
-              {structure.children.map((def, idx) => (
+              {structure.children.slice(0, 2).map((def, idx) => (
                 <Widget
                   key={idx}
                   value={value}
@@ -74,17 +72,6 @@ export function FeaturedCard({ value, structure, schema, ...props }) {
                   {...props}
                 />
               ))}
-              {structure?.helpfulLink && (
-                <Button
-                  icon="inspect"
-                  iconEnd
-                  onClick={() => {
-                    window.open(structure.helpfulLink?.url, '_blank');
-                  }}
-                >
-                  {t('common.buttons.learn-more')}
-                </Button>
-              )}
             </div>
           </div>
         </div>

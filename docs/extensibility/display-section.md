@@ -9,6 +9,7 @@
   - [Badge](#badge)
   - [ControlledBy](#controlledby)
   - [ExternalLink](#externallink)
+  - [ExternalLinkButton](#externallinkbutton)
   - [JoinedArray](#joinedarray)
   - [Labels](#labels)
   - [ResourceButton](#resourcebutton)
@@ -306,6 +307,24 @@ ExternalLink widgets render the link to an external page.
 ```
 
 <img src="./assets/display-widgets/ExternalLink2.png" alt="Example of a ExternalLink widget without linkFormula and textFormula" width="50%" style="border: 1px solid #D2D5D9">
+
+### ExternalLinkButton
+
+ExternalLinkButton widgets render the link to an external page using a button.
+
+#### Widget-specific parameters
+
+- **link** - a required flag to set the target URL.
+- **name** - an optional flag. Default value is `Learn More`.
+
+#### Examples
+
+```yaml
+- widget: ExternalLinkButton
+  link: https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-s-modular-approach
+```
+
+<img src="./assets/display-widgets/ExternalLinkButton.png" alt="Example of a ExternalLinkButton widget" width="50%" style="border: 1px solid #D2D5D9">
 
 ### JoinedArray
 

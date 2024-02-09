@@ -10,6 +10,7 @@ import { ControlledBy } from './ControlledBy';
 import { JoinedArray } from './JoinedArray';
 import { ResourceList } from './ResourceList';
 import { ResourceButton } from './ResourceButton';
+import { ExternalLinkButton } from './ExternalLinkButton';
 import { EventList } from './EventList';
 import { ResourceLink } from './ResourceLink.js';
 import { Labels } from './Labels';
@@ -38,6 +39,7 @@ export const widgets = {
   Panel,
   Plain,
   ResourceButton,
+  ExternalLinkButton,
   ResourceLink,
   ResourceList,
   ResourceRefs,
