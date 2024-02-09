@@ -552,18 +552,21 @@ EventList widget renders a list of Events.
 
 FeaturedCard widgets render a promotional banner with its own title, description, and a maximum of 2 additional children.
 The FeaturedCard can be closed in the top right corner.
-It is important to select a unique ID for each FeatureCard, since it will be displayed/hidden based on their ID.
+It is important to select a unique ID for each FeaturedCard, since it will be displayed/hidden based on its ID.
 
 #### Example
 
 ```yaml
-- widget: FeaturedCard
-  id: modules
-  source: $
-  title: Introducing Modules
+- title: Introducing Modules
   description: Modules add functionalities to your cluster. Consume SAP BTP services, monitor your cluster, build serverless applications and more.
-  helpfulLink:
-    url: https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-s-modular-approach
+  widget: FeaturedCard
+  id: ModulesBanner
+  children:
+    - widget: Wizard
+      name: Add Modules
+      wizard: module-wizard
+    - widget: ExternalLinkButton
+      link: https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-s-modular-approach
 ```
 
 <img src="./assets/display-widgets/FeaturedCard.png" alt="Example of a FeaturedCard widget" style="border: 1px solid #D2D5D9">
