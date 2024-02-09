@@ -111,8 +111,8 @@ const ColumnWrapper = ({
   const elementListProps = usePrepareListProps(props);
   const elementDetailsProps = usePrepareDetailsProps({
     ...props,
-    resourceName: layoutState?.midColumn?.resourceName,
-    namespaceId: layoutState.midColumn?.namespaceId,
+    resourceName: layoutState?.midColumn?.resourceName ?? resourceName,
+    namespaceId: layoutState?.midColumn?.namespaceId ?? namespaceId,
   });
 
   const elementCreateProps = usePrepareCreateProps({
