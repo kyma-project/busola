@@ -100,13 +100,14 @@ const ColumnWrapper = ({
     if (layout && resourceName && props.resourceType) {
       setLayoutColumn(initialLayoutState);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     layout,
     isColumnLeyoutEnabled,
+    namespaceId,
     resourceName,
     props.resourceType,
-    namespaceId,
-  ]); // eslint-disable-line react-hooks/exhaustive-deps
+  ]);
 
   const elementListProps = usePrepareListProps(props);
   const elementDetailsProps = usePrepareDetailsProps({
@@ -132,7 +133,7 @@ const ColumnWrapper = ({
 
   let startColumnComponent = null;
 
-  if (!layout && defaultColumn === 'details') {
+  if ((!layout || !isColumnLeyoutEnabled) && defaultColumn === 'details') {
     startColumnComponent = detailsComponent;
   } else {
     startColumnComponent = listComponent;
