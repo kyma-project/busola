@@ -366,7 +366,6 @@ function Resource({
 
   const resourceDetailsCard = (
     <ResourceDetailsCard
-      //title={title ?? t('common.headers.resource-details')}
       content={
         <>
           <DynamicPageComponent.Column
@@ -393,7 +392,7 @@ function Resource({
       }
     />
   );
-  console.log(statusConditions);
+
   const resourceStatusCard = customStatusColumns ? (
     <ResourceStatusCard
       statusBadge={statusBadge ? statusBadge(resource) : null}
@@ -436,7 +435,10 @@ function Resource({
             >
               {title ?? t('common.headers.resource-details')}
             </Title>
-            <div className="resource-details-container">
+            <div
+              className="resource-details-container"
+              style={{ display: resourceStatusCard ? 'flex' : 'block' }}
+            >
               {!hasTabs && resourceDetailsCard}
               {resourceStatusCard && resourceStatusCard}
             </div>

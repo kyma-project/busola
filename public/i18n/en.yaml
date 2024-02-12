@@ -317,6 +317,8 @@ common:
     value: Value
     version: Version
     zone: Zone
+    conditions: Conditions
+    message: Message
   labels:
     category: Category
     data: Data
@@ -657,6 +659,9 @@ deployments:
     pods: $t(pods.title)
   name_singular: Deployment
   title: Deployments
+  status: 
+    available-replicas: Available Replicas
+    replicas: Replicas
 discovery-and-network:
   title: Discovery and Network
 domains:

@@ -26,11 +26,11 @@ export function DeploymentDetails(props) {
 
   const customStatusColumns = [
     {
-      header: 'Available Replicas',
+      header: t('deployments.status.available-replicas') + ':',
       value: deployment => <div>{deployment?.status?.availableReplicas}</div>,
     },
     {
-      header: 'Replicas',
+      header: t('deployments.status.replicas') + ':',
       value: deployment => <div>{deployment?.status?.replicas}</div>,
     },
   ];

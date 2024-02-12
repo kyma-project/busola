@@ -9,6 +9,12 @@
   gap: 25px;
 }
 
+.resource-details-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 @container (min-width: 650px) {
   .cluster-overview__details-wrapper {
     grid-template-columns: 2fr 1fr;
@@ -19,13 +25,9 @@
   }
 }
 
-.resource-details-container {
-  display: flex;
-  flex-direction: column;
-}
-
-@container (min-width: 700px) {
+@container (min-width: 900px) {
   .resource-details-container {
     flex-direction: row;
+    gap: 0;
   }
 }

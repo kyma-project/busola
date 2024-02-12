@@ -156,7 +156,7 @@ export const StatusBadge = ({
         state={type}
         className={classes}
         data-testid="no-tooltip"
-        showDefaultIcon
+        showDefaultIcon={type !== 'Information'}
       >
         {badgeContent}
       </ObjectStatus>
