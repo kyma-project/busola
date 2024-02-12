@@ -38,7 +38,6 @@ export const HeaderRenderer = ({ slot, actions, headerRenderer }) => {
   const Header = (
     <>
       {headerRenderer().map((h, index) => {
-        console.log(h);
         return (
           <TableColumn
             slot={`${slot}-${index}`}

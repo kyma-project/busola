@@ -146,6 +146,7 @@ export const GenericList = ({
           disabled={!entries.length}
         />
       )}
+      {extraHeaderContent}
       {sortBy && !isEmpty(sortBy) && (
         <SortModalPanel
           sortBy={sortBy}
@@ -154,7 +155,6 @@ export const GenericList = ({
           disabled={!entries.length}
         />
       )}
-      {extraHeaderContent}
     </>
   );
 

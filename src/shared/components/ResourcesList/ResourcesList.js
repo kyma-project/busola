@@ -370,17 +370,13 @@ export function ResourceListRenderer({
   const extraHeaderContent = listHeaderActions || [
     CreateResourceForm && !disableCreate && !isNamespaceAll && (
       <Button
-        icon="add"
-        design="Transparent"
+        design="Emphasized"
         onClick={() => {
           setActiveResource(undefined);
           toggleFormFn(true);
         }}
       >
-        {createActionLabel ||
-          t('components.resources-list.create', {
-            resourceType: prettifiedResourceName,
-          })}
+        {createActionLabel || t('components.resources-list.create')}
       </Button>
     ),
   ];

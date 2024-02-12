@@ -39,7 +39,11 @@ export const Labels = ({
   return (
     <>
       {displayLabelForLabels ? (
-        <Label showColon={true} style={spacing.sapUiTinyMarginBottom}>
+        <Label
+          showColon={true}
+          style={spacing.sapUiTinyMarginBottom}
+          className="bsl-has-color-status-4"
+        >
           {t('common.headers.labels')}
         </Label>
       ) : null}

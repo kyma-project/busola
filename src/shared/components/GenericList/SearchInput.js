@@ -1,14 +1,11 @@
-import React, { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { Button, ComboBox, ComboBoxItem } from '@ui5/webcomponents-react';
+import { ComboBox, ComboBoxItem } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useEventListener } from 'hooks/useEventListener';
 
-import 'core-js/es/array/flat-map';
-
 import { MESSAGES } from 'shared/components/GenericList/constants';
 import { getEntryMatches } from 'shared/components/GenericList/helpers';
-import { Tooltip } from '../Tooltip/Tooltip';
 import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
 import { ResourceDetailContext } from '../ResourceDetails/ResourceDetails';
 
@@ -42,7 +39,6 @@ export function SearchInput({
   allowSlashShortcut,
 }) {
   const { t } = useTranslation();
-  const [isSearchHidden, setSearchHidden] = React.useState(true);
   const { isOpen: isSideDrawerOpened } = useYamlEditor();
   const isDetailsView = useContext(ResourceDetailContext);
 
@@ -74,19 +70,6 @@ export function SearchInput({
   const searchInputShadowElement = searchInput?.shadowRoot?.querySelector(
     '#ui5-combobox-input',
   );
-
-  searchInputShadowElement?.addEventListener('blur', () =>
-    setSearchHidden(true),
-  );
-  searchInputShadowElement?.addEventListener('focus', () =>
-    setSearchHidden(false),
-  );
-
-  useEffect(() => {
-    if (!isSearchHidden) {
-      openSearchList();
-    }
-  }, [isSearchHidden]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEventListener('keydown', onKeyPress, [
     disabled,
@@ -121,22 +104,16 @@ export function SearchInput({
   };
 
   const openSearchList = () => {
-    setSearchHidden(false);
     setTimeout(() => {
       searchInputShadowElement?.focus();
     });
   };
 
   const handleOnKeyDown = e => {
-    if (e.key === 'Enter') {
-      setSearchHidden(true);
-    }
     if (onKeyDown) {
       onKeyDown(e);
     }
   };
-
-  const showControl = showSearchControl && isSearchHidden && !searchQuery;
 
   return (
     <section
@@ -144,33 +121,21 @@ export function SearchInput({
       aria-label={`search-${entriesKind}`}
       role="search"
     >
-      <div
-        style={{ display: showControl ? 'none' : 'initial' }}
-        aria-expanded={!showControl}
-      >
-        <ComboBox
-          id="search-input"
-          aria-label="search-input"
-          placeholder={t('common.tooltips.search')}
-          value={searchQuery}
-          onInput={e => handleQueryChange(e.target.value)}
-          onChange={() => setSearchHidden(true)}
-          className="search-with-magnifying-glass"
-        >
-          {!!searchQuery && showSuggestion && renderSearchList(filteredEntries)}
-        </ComboBox>
-      </div>
-
-      {showControl && (
-        <Tooltip content={t('common.tooltips.search')}>
-          <Button
-            disabled={disabled}
-            design="Transparent"
-            icon="search"
-            onClick={openSearchList}
-            aria-label="open-search"
-          />
-        </Tooltip>
+      {showSearchControl && (
+        <div aria-expanded={showSearchControl}>
+          <ComboBox
+            id="search-input"
+            aria-label="search-input"
+            placeholder={t('common.tooltips.search')}
+            value={searchQuery}
+            onInput={e => handleQueryChange(e.target.value)}
+            className="search-with-magnifying-glass"
+          >
+            {!!searchQuery &&
+              showSuggestion &&
+              renderSearchList(filteredEntries)}
+          </ComboBox>
+        </div>
       )}
     </section>
   );

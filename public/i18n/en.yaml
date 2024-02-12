@@ -462,7 +462,7 @@ components:
     messages:
       not-found: Such {{resource}} doesn't exist
   resources-list:
-    create: Create {{resourceType}}
+    create: Create
     messages:
       delete:
         failure: 'Failed to delete the {{resourceType}}: {{error}}'
