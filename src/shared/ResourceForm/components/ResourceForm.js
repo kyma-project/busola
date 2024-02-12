@@ -50,6 +50,7 @@ export function ResourceForm({
   modeSelectorDisabled = false,
   noAdvancedMode = false,
   initialMode,
+  yamlSearchHidden,
 }) {
   // readonly schema ID, set only once
   const resourceSchemaId = useMemo(
@@ -185,6 +186,8 @@ export function ResourceForm({
               editor={actionsEditor}
               title={`${resource?.metadata?.name || singularName}.yaml`}
               saveHidden
+              onReset={onReset}
+              searchHidden={yamlSearchHidden}
             />
             {editor}
           </div>

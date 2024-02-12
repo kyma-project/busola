@@ -24,6 +24,7 @@ export function FileInput({
   inputRef,
   required,
   allowMultiple,
+  customMessage,
 }) {
   const [fileNames, setFileNames] = useState([]);
   const openAdd = useRecoilValue(showYamlUploadDialogState);
@@ -59,6 +60,18 @@ export function FileInput({
     'file-input--drag-over': draggingOverCounter !== 0,
   });
 
+  const message = customMessage
+    ? `${customMessage} ${
+        fileNames.length
+          ? t('components.file-input.replace')
+          : t('components.file-input.upload')
+      }`
+    : `${t('components.file-input.drag-file-upload')} ${
+        fileNames.length
+          ? t('components.file-input.replace')
+          : t('components.file-input.upload')
+      }`;
+
   return (
     <label
       htmlFor="file-upload"
@@ -85,18 +98,14 @@ export function FileInput({
           design="Information"
           className="file-input__icon"
         />
-        <p style={spacing.sapUiSmallMarginTopBottom}>
-          {fileNames.length
-            ? t('components.file-input.drag-file-replace')
-            : t('components.file-input.drag-file-upload')}
-        </p>
+        <p style={spacing.sapUiSmallMarginTopBottom}>{message}</p>
         {availableFormatsMessage && (
           <p className="file-input__secondary">{availableFormatsMessage}</p>
         )}
         {!!fileNames.length && (
           <p className="file-input__secondary">
-            {fileNames.join(', ') + ' uploaded'}
-          </p> ///////////////////////////////////
+            {`${fileNames.join(', ')} ${t('components.file-input.uploaded')}`}
+          </p>
         )}
       </div>
     </label>

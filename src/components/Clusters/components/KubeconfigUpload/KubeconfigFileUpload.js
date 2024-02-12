@@ -52,6 +52,7 @@ export function KubeconfigFileUpload({ onKubeconfigTextAdded }) {
       <FileInput
         fileInputChanged={onKubeconfigFileUploaded}
         acceptedFileFormats=".yaml,.yml"
+        customMessage={t('clusters.wizard.kubeconfig-upload')}
       />
     </div>
   );

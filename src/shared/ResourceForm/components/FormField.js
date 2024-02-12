@@ -55,6 +55,7 @@ export function FormField({
             <Label
               wrappingType="Normal"
               style={{ color: 'var(--sapNeutralTextColor)' }}
+              showColon={false}
             >
               {inputInfoLink}
             </Label>

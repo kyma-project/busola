@@ -45,6 +45,18 @@
   }
 }
 
+.resource-form__placeholder {
+  position: absolute;
+  top: 2px;
+  width: 100%;
+  left: 65px;
+  max-height: 50%;
+  overflow-y: auto;
+  font-size: var(--sapFontSize);
+  color: var(--sapContent_LabelColor);
+  font-style: italic;
+}
+
 .monaco-hover-content .hover-contents p:last-of-type {
   display: none;
 }

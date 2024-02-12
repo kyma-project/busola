@@ -69,12 +69,17 @@ const OIDCform = ({ resource, setResource, ...props }) => {
 const TokenForm = ({ resource, ...props }) => {
   const { t } = useTranslation();
   const userIndex = getUserIndex(resource);
+  const [token, setToken] = useState(resource?.users?.[0]?.user?.token);
 
   return (
     <ResourceForm.Wrapper resource={resource} {...props}>
       <ResourceForm.FormField
         required
-        propertyPath={`$.users[${userIndex || 0}].user.token`}
+        value={token}
+        setValue={val => {
+          setToken(val);
+          jp.value(resource, `$.users[${userIndex}].user.token`, val);
+        }}
         label={t('clusters.wizard.auth.token')}
         input={Inputs.Text}
         inputInfo={t('clusters.wizard.token-info')}
@@ -92,9 +97,7 @@ export function AuthForm({
 }) {
   const { t } = useTranslation();
 
-  const [useOidc, setUseOidc] = useState(
-    getUser(resource)?.exec?.args?.[0] === 'oidc-login',
-  );
+  const [useOidc, setUseOidc] = useState(!!getUser(resource)?.exec);
 
   useEffect(() => {
     revalidate();
@@ -132,7 +135,7 @@ export function AuthForm({
                 : resource['current-context'],
           })}
         </MessageStrip>
-        {!useOidc && <TokenForm />}
+        {!useOidc && <TokenForm resource={resource} />}
         <ResourceForm.FormField
           label={t('clusters.wizard.auth.using-oidc')}
           input={() => (
@@ -140,7 +143,7 @@ export function AuthForm({
           )}
           className="oidc-switch"
         />
-        {useOidc && <OIDCform />}
+        {useOidc && <OIDCform resource={resource} setResource={setResource} />}
       </div>
     </ResourceForm.Wrapper>
   );

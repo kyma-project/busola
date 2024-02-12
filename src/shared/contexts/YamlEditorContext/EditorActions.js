@@ -39,6 +39,8 @@ export function EditorActions({
   saveDisabled,
   saveHidden,
   isProtected,
+  onReset,
+  searchHidden = false,
 }) {
   const [visible, setVisible] = useState(
     localStorage.getItem(EDITOR_VISIBILITY) !== 'false',
@@ -114,6 +116,10 @@ export function EditorActions({
     saveAs(blob, title || 'spec.yaml');
   };
 
+  const reset = () => {
+    if (onReset) onReset();
+  };
+
   const { t } = useTranslation();
 
   return (
@@ -123,6 +129,7 @@ export function EditorActions({
         ...spacing.sapUiSmallMarginTop,
       }}
     >
+      {onReset && <Button onClick={reset}>Reset</Button>}
       <ButtonWithTooltip
         tooltipContent={
           visible ? t('common.tooltips.hide') : t('common.tooltips.show')
@@ -131,12 +138,14 @@ export function EditorActions({
         onClick={visible ? hideReadOnlyLines : showReadOnlyLines}
         disabled={!editor}
       />
-      <ButtonWithTooltip
-        tooltipContent={t('common.tooltips.search')}
-        icon="search"
-        onClick={openSearch}
-        disabled={!editor}
-      />
+      {!searchHidden && (
+        <ButtonWithTooltip
+          tooltipContent={t('common.tooltips.search')}
+          icon="search"
+          onClick={openSearch}
+          disabled={!editor}
+        />
+      )}
       {!saveHidden && (
         <ButtonWithTooltip
           tooltipContent={

@@ -17,6 +17,7 @@ import { Title } from '@ui5/webcomponents-react';
 
 import { addCluster, getContext, deleteCluster } from '../../shared';
 import { spacing } from '@ui5/webcomponents-react-base';
+import { getUserIndex } from '../../shared';
 
 export const findInitialValue = (kubeconfig, id) => {
   if (kubeconfig?.users?.[0]?.user?.exec?.args) {
@@ -36,15 +37,17 @@ export const ClusterDataForm = ({
   onSubmit,
   resourceUrl,
   formElementRef,
-  onlyYaml,
   className = '',
   modeSelectorDisabled = false,
   noAdvancedMode = false,
   initialMode,
+  yamlSearchHidden,
+  onReset,
 }) => {
   const { t } = useTranslation();
+  const userIndex = getUserIndex(kubeconfig);
   const [authenticationType, setAuthenticationType] = useState(
-    kubeconfig?.users?.[0]?.user?.exec ? 'oidc' : 'token',
+    kubeconfig?.users?.[userIndex]?.user?.exec ? 'oidc' : 'token',
   );
 
   const [issuerUrl, setIssuerUrl] = useState(
@@ -60,7 +63,9 @@ export const ClusterDataForm = ({
     findInitialValue(kubeconfig, 'oidc-extra-scope'),
   );
 
-  const [token, setToken] = useState(kubeconfig?.users[0]?.user?.token);
+  const [token, setToken] = useState(
+    kubeconfig?.users?.[userIndex]?.user?.token,
+  );
 
   useEffect(() => {
     setAuthenticationType(
@@ -70,8 +75,8 @@ export const ClusterDataForm = ({
     setClientId(findInitialValue(kubeconfig, 'oidc-client-id'));
     setClientSecret(findInitialValue(kubeconfig, 'oidc-client-secret'));
     setScopes(findInitialValue(kubeconfig, 'oidc-extra-scope'));
-    setToken(kubeconfig?.users[0]?.user?.token);
-  }, [kubeconfig]);
+    setToken(kubeconfig?.users?.[userIndex]?.user?.token);
+  }, [kubeconfig, userIndex]);
 
   const tokenFields = (
     <ResourceForm.FormField
@@ -82,7 +87,7 @@ export const ClusterDataForm = ({
       value={token}
       setValue={val => {
         setToken(val);
-        jp.value(kubeconfig, '$.users[0].user.token', token);
+        jp.value(kubeconfig, `$.users[${userIndex}].user.token`, token);
       }}
     />
   );
@@ -102,7 +107,7 @@ export const ClusterDataForm = ({
         '--grant-type=auto',
       ],
     };
-    jp.value(kubeconfig, '$.users[0].user.exec', exec);
+    jp.value(kubeconfig, `$.users[${userIndex}].user.exec`, exec);
     setResource({ ...kubeconfig });
   };
 
@@ -170,6 +175,8 @@ export const ClusterDataForm = ({
       modeSelectorDisabled={modeSelectorDisabled}
       noAdvancedMode={noAdvancedMode}
       initialMode={initialMode}
+      yamlSearchHidden={yamlSearchHidden}
+      onReset={onReset}
     >
       <div className={className}>
         <K8sNameField
@@ -181,7 +188,7 @@ export const ClusterDataForm = ({
           setValue={name => {
             if (kubeconfig) {
               jp.value(kubeconfig, '$["current-context"]', name);
-              jp.value(kubeconfig, '$.contexts[0].name', name);
+              jp.value(kubeconfig, `$.contexts[${userIndex}].name`, name);
 
               setResource({ ...kubeconfig });
             }
@@ -195,10 +202,10 @@ export const ClusterDataForm = ({
           value={authenticationType}
           setValue={type => {
             if (type === 'token') {
-              delete kubeconfig?.users?.[0]?.user?.exec;
-              jp.value(kubeconfig, '$.users[0].user.token', null);
+              delete kubeconfig?.users[userIndex]?.user?.exec;
+              jp.value(kubeconfig, `$.users[${userIndex}].user.token`, null);
             } else {
-              delete kubeconfig.users?.[0]?.user?.token;
+              delete kubeconfig.users[userIndex]?.user?.token;
               createOIDC();
             }
             setResource({ ...kubeconfig });

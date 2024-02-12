@@ -31,6 +31,17 @@ export function Editor({
 
   const handleChange = useCallback(
     text => {
+      const placeholer = document.getElementsByClassName(
+        'resource-form__placeholder',
+      )[0];
+      if (placeholer) {
+        if (text) {
+          placeholer.style['display'] = 'none';
+        } else {
+          placeholer.style['display'] = 'block';
+        }
+      }
+
       if (!convert) {
         setValue(text);
         return;
@@ -56,8 +67,9 @@ export function Editor({
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [setError, t, language],
+    [setError, t, language, value],
   );
+
   return (
     <MonacoEditor
       {...props}
@@ -66,6 +78,7 @@ export function Editor({
       onChange={handleChange}
       error={error}
       schemaId={schemaId}
+      placeholder={t('clusters.wizard.editor-placeholedr')}
     />
   );
 }

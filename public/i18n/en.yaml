@@ -161,7 +161,8 @@ clusters:
       token: Token
       using-oidc: OIDC provider
     context: Context to connect
-    editor-label: 'or paste your kubeconfig here:'
+    kubeconfig-upload: Drop a .kubeconfig file or click to 
+    editor-placeholedr: Paste .kubeconfig here
     incomplete: We couldn't find enough authentication information for {{context}} in your kubeconfig. You can enter it manually.
     intro: To connect a cluster, you have to provide the cluster configuration – called “kubeconfig” in the Kubernetes world.
     kubeconfig: Provide Kubeconfig
@@ -279,7 +280,7 @@ common:
     modes:
       advanced: Advanced
       simple: Simple
-      ui-form: UI Form
+      ui-form: Form
     object-required: An object is required
   delete-dialog:
     delete-confirm: Don't ask again
@@ -437,8 +438,10 @@ components:
   error-panel:
     error: An error occured. The component cannot be rendered.
   file-input:
-    drag-file-upload: Drag your file here or click to upload
-    drag-file-replace: Drag your file here or click to replace
+    drag-file-upload: Drag your file here or click to
+    upload: upload
+    replace: replace
+    uploaded: uploaded
   generic-list:
     messages:
       no-search-results: Couldn't find resources matching this query.

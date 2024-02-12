@@ -33,6 +33,10 @@ export function KubeconfigUpload({ kubeconfig, setKubeconfig, formRef }) {
     [t, setError, setKubeconfig],
   );
 
+  const onReset = () => {
+    setKubeconfig(null);
+  };
+
   return (
     <div className="kubeconfig-upload">
       <div className="add-cluster__content-container">
@@ -55,6 +59,8 @@ export function KubeconfigUpload({ kubeconfig, setKubeconfig, formRef }) {
         noAdvancedMode={true}
         initialMode={'MODE_YAML'}
         className="kubeconfig-upload__form add-cluster__content-container"
+        yamlSearchHidden={true}
+        onReset={onReset}
       />
       {error && (
         <MessageStrip

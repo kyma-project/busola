@@ -91,7 +91,7 @@ export function ClusterPreview({
   };
 
   const TokenData = () => {
-    const token = kubeconfig?.users[0]?.user?.token;
+    const token = kubeconfig?.users?.[0]?.user?.token;
     return (
       <>
         <p
