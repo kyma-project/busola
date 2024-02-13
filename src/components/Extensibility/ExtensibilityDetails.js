@@ -132,12 +132,6 @@ export const ExtensibilityDetailsCore = ({
   );
 };
 const ExtensibilityDetails = ({ resourceName, namespaceId }) => {
-  console.log(
-    'customResourceName',
-    resourceName,
-    'customNamespaceId',
-    namespaceId,
-  );
   const resMetaData = useGetCRbyPath();
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
   return (

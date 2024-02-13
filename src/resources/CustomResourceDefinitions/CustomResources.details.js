@@ -9,6 +9,7 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
+import CRCreate from 'resources/CustomResourceDefinitions/CRCreate';
 
 function CustomResource({ params }) {
   const { t } = useTranslation();
@@ -21,6 +22,7 @@ function CustomResource({ params }) {
     resourceName,
     resourceNamespace,
   } = params;
+
   const { data, loading } = useGet(
     `/apis/apiextensions.k8s.io/v1/customresourcedefinitions/${customResourceDefinitionName}`,
     {
@@ -64,7 +66,6 @@ function CustomResource({ params }) {
       editorProps={{ language: 'yaml', height: '500px' }}
     />
   );
-
   return (
     <ResourceDetails
       layoutNumber="EndColumn"
@@ -73,6 +74,9 @@ function CustomResource({ params }) {
       resourceName={resourceName}
       namespace={namespace}
       breadcrumbs={breadcrumbs}
+      createResourceForm={props => (
+        <CRCreate {...props} crd={data} layoutNumber="MidColumn" />
+      )}
       customComponents={[yamlPreview]}
     />
   );

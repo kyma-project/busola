@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
@@ -14,8 +15,14 @@ function CRCreate({
   crd,
   toggleFormFn,
   layoutNumber,
+  resource: initialCustomResource,
+  ...props
 }) {
-  const [cr, setCr] = useState(createTemplate(crd));
+  const [cr, setCr] = useState(
+    cloneDeep(initialCustomResource) || createTemplate(crd),
+  );
+  const [initialUnchangedResource] = useState(initialCustomResource);
+
   const customUrl = useCustomResourceUrl(crd);
   const navigate = useNavigate();
   const { nextQuery, currentQuery } = usePrepareLayout(layoutNumber);
@@ -36,6 +43,8 @@ function CRCreate({
       pluralKind={crd.spec.names.plural}
       singularName={crd.spec.names.kind}
       resource={cr}
+      initialResource={initialCustomResource}
+      initialUnchangedResource={initialUnchangedResource}
       setResource={setCr}
       onChange={onChange}
       formElementRef={formElementRef}
