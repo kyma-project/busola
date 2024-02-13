@@ -23,6 +23,7 @@ export const ResourceCreate = ({
   onModalOpenStateChange,
   alwaysOpen,
   isEdit,
+  layoutNumber = 'MidColumn',
   ...props
 }) => {
   const { t } = useTranslation();
@@ -118,8 +119,10 @@ export const ResourceCreate = ({
       {!isEdit && (
         <DynamicPageComponent
           title={title}
-          layoutNumber="MidColumn"
-          layoutCloseUrl={window.location.pathname}
+          layoutNumber={layoutNumber}
+          layoutCloseUrl={`${window.location.pathname}${
+            layoutNumber === 'EndColumn' ? '?layout=TwoColumnsMidExpanded' : ''
+          }`}
           footer={
             <Bar
               design="FloatingFooter"

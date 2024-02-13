@@ -34,16 +34,6 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
 
   const { crdName, crName } = useParams();
   const { namespace } = useUrl();
-  console.log(
-    'defaultColumn',
-    defaultColumn,
-    'namespace',
-    namespace,
-    'crdName',
-    crdName,
-    'crName',
-    crName,
-  );
 
   const initialLayoutState = layout
     ? {
@@ -72,7 +62,6 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
     }
   }, [layout, isColumnLeyoutEnabled, crdName, crName, namespace]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  console.log('initialLayoutState', initialLayoutState);
   // <CRCreate {...props} crd={crd} layoutNumber="MidColumn" />
 
   let startColumnComponent = null;
@@ -89,15 +78,10 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
         />
       );
     } else if (defaultColumn === 'listOfType') {
-      console.log(
-        'layoutState?.midColumn?.resourceName',
-        layoutState?.midColumn?.resourceName,
-        'layoutState',
-        layoutState,
-      );
       startColumnComponent = (
         <CustomResourcesOfType
           crdName={layoutState?.midColumn?.resourceName ?? crdName}
+          enableColumnLayout={false}
         />
       );
     } else {
@@ -112,21 +96,31 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
   }
 
   let midColumnComponent = null;
-  if (layout && isColumnLeyoutEnabled && layoutState?.midColumn?.resourceName) {
+  if (!layoutState?.midColumn && layoutState?.showCreate?.resourceType) {
+    midColumnComponent = (
+      <ResourceCreate
+        title={'sth'}
+        confirmText={t('common.buttons.update')}
+        renderForm={renderProps => <div>lll</div>}
+      />
+    );
+  } else if (layoutState?.midColumn?.resourceName) {
     midColumnComponent = (
       <CustomResourcesOfType
         crdName={layoutState?.midColumn?.resourceName ?? crdName}
+        enableColumnLayout={isColumnLeyoutEnabled}
       />
     );
   }
 
   let endColumnComponent = null;
-  if (layoutState?.showCreate?.resourceType) {
+  if (layoutState?.showCreate?.resourceType && layoutState?.midColumn) {
     endColumnComponent = (
       <ResourceCreate
         title={'sth'}
         confirmText={t('common.buttons.update')}
-        renderForm={renderProps => <div>lll</div>}
+        layoutNumber="EndColumn"
+        renderForm={renderProps => <div> lll</div>}
       />
     );
 

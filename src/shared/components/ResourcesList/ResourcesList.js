@@ -544,17 +544,10 @@ export function ResourceListRenderer({
         design="Transparent"
         onClick={() => {
           setActiveResource(undefined);
-          // toggleFormFn(true);
-          console.log('layoutNumber', layoutNumber);
-
           setLayoutColumn(
-            layoutNumber === 'MidColumn'
+            layoutNumber === 'MidColumn' && enableColumnLayout
               ? {
-                  midColumn: {
-                    resourceName: resourceType,
-                    resourceType: resourceType,
-                    namespaceId: null,
-                  },
+                  midColumn: layoutState?.midColumn,
                   endColumn: null,
                   showCreate: {
                     resourceType: resourceType,
