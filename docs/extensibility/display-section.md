@@ -9,6 +9,7 @@
   - [Badge](#badge)
   - [ControlledBy](#controlledby)
   - [ExternalLink](#externallink)
+  - [ExternalLinkButton](#externallinkbutton)
   - [JoinedArray](#joinedarray)
   - [Labels](#labels)
   - [ResourceButton](#resourcebutton)
@@ -19,7 +20,7 @@
   - [CodeViewer](#codeviewer)
   - [Columns](#columns)
   - [EventList](#eventlist)
-  - [MessagePanel](#messagepanel)
+  - [FeaturedCard](#featuredcard)
   - [Panel](#panel)
   - [Plain](#plain)
   - [ResourceList](#resourcelist)
@@ -307,6 +308,24 @@ ExternalLink widgets render the link to an external page.
 
 <img src="./assets/display-widgets/ExternalLink2.png" alt="Example of a ExternalLink widget without linkFormula and textFormula" width="50%" style="border: 1px solid #D2D5D9">
 
+### ExternalLinkButton
+
+ExternalLinkButton widgets render the link to an external page using a button.
+
+#### Widget-specific parameters
+
+- **link** - a required flag to set the target URL.
+- **name** - an optional flag. Default value is `Learn More`.
+
+#### Examples
+
+```yaml
+- widget: ExternalLinkButton
+  link: https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-s-modular-approach
+```
+
+<img src="./assets/display-widgets/ExternalLinkButton.png" alt="Example of a ExternalLinkButton widget" width="50%" style="border: 1px solid #D2D5D9">
+
 ### JoinedArray
 
 JoinedArray widgets render all the values of an array of strings as a comma-separated list.
@@ -529,25 +548,28 @@ EventList widget renders a list of Events.
 
 <img src="./assets/display-widgets/EventListHiddenField.png" alt="Example of a EventList widget with hidden involved objects" style="border: 1px solid #D2D5D9">
 
-### MessagePanel
+### FeaturedCard
 
-MessagePanel widgets render an object as a panel with its own title and subtitle, and widgets provided in the children section.
+FeaturedCard widgets render a promotional banner with its own title, description, and a maximum of 2 additional children.
+The FeaturedCard can be closed in the top right corner.
+It is important to select a unique ID for each FeaturedCard, since it will be displayed/hidden based on its ID.
 
 #### Example
 
 ```yaml
-- widget: MessagePanel
-  source: $
-  title: Seems that you don't have any Kyma Modules configured
-  subtitle: Add at least one Kyma Module. Add your module under "kyma-system -> Kyma"
+- title: Introducing Modules
+  description: Modules add functionalities to your cluster. Consume SAP BTP services, monitor your cluster, build serverless applications and more.
+  widget: FeaturedCard
+  id: ModulesBanner
   children:
     - widget: Wizard
-      name: Add Module
+      name: Add Modules
       wizard: module-wizard
-      visibility: $not($exists($item.spec.modules.channel))
+    - widget: ExternalLinkButton
+      link: https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-s-modular-approach
 ```
 
-<img src="./assets/display-widgets/MessagePanel.png" alt="Example of a message panel widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/FeaturedCard.png" alt="Example of a FeaturedCard widget" style="border: 1px solid #D2D5D9">
 
 #### Widget-specific parameters
 
