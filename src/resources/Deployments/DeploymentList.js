@@ -1,13 +1,13 @@
 import React from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
-import { Link } from 'shared/components/Link/Link';
 import { useRestartAction } from 'shared/hooks/useRestartResource';
 
 import { DeploymentCreate } from './DeploymentCreate';
 import { DeploymentStatus } from './DeploymentStatus';
+import { referenceDescription } from './DeploymentConsts';
 
 const getImages = deployment => {
   const images = deployment.spec.template.spec.containers?.map(
@@ -46,19 +46,10 @@ export function DeploymentList(props) {
     },
   ];
 
-  const description = (
-    <Trans i18nKey="deployments.description">
-      <Link
-        className="bsl-link"
-        url="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/"
-      />
-    </Trans>
-  );
-
   return (
     <ResourcesList
       customColumns={customColumns}
-      description={description}
+      description={referenceDescription}
       customListActions={[restartAction]}
       {...props}
       createResourceForm={DeploymentCreate}
@@ -70,4 +61,5 @@ export function DeploymentList(props) {
     />
   );
 }
+
 export default DeploymentList;

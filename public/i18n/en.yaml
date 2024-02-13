@@ -292,8 +292,10 @@ common:
     no-permissions-message: Contact your administrator to grant you access.
     no-permissions-no-role: You have no role assigned.
   headers:
+    age: Age
     annotations: Annotations
     created: Created
+    last-update: Last Update
     description: Description
     items: Items
     key: Key
@@ -310,6 +312,7 @@ common:
     policies: Policies
     region: Region
     resource: Resource
+    resource-type: Resource Type
     resource-details: Resource Details
     resources: Resources
     nodeInfo: Node Info

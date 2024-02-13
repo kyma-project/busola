@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@ui5/webcomponents-react';
+import { spacing } from '@ui5/webcomponents-react-base';
+
+import { Button, Popover, Text } from '@ui5/webcomponents-react';
 import { createPatch } from 'rfc6902';
 import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNotFound';
-import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { useDelete, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
@@ -35,6 +36,9 @@ import { Tooltip } from '../Tooltip/Tooltip';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { createPortal } from 'react-dom';
 import ResourceDetailsCard from './ResourceDetailsCard';
+import { EMPTY_TEXT_PLACEHOLDER } from '../../constants';
+import { ReadableElapsedTimeFromNow } from '../ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
+import { HintButton } from '../DescriptionHint/DescriptionHint';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
@@ -158,6 +162,7 @@ function Resource({
   createResourceForm: CreateResourceForm,
   customColumns,
   customComponents,
+  description,
   hasTabs,
   editActionLabel,
   headerActions,
@@ -184,6 +189,7 @@ function Resource({
     resource.kind,
   );
   const [toggleFormFn, getToggleFormFn] = useState(() => {});
+  const [showTitleDescription, setShowTitleDescription] = useState(false);
 
   const pluralizedResourceKind = pluralize(prettifiedResourceKind);
   useWindowTitle(windowTitle || pluralizedResourceKind);
@@ -359,30 +365,74 @@ function Resource({
     return visible;
   };
 
+  // https://stackoverflow.com/questions/70330862/how-to-get-the-latest-change-time-of-a-resource-instance-in-k8s
+  let lastUpdate;
+  const managedFields = resource.metadata?.managedFields;
+  if (managedFields && Array.isArray(managedFields)) {
+    const lastOp = managedFields[managedFields.length - 1];
+    lastUpdate = lastOp.time;
+  }
+
+  const renderUpdateDate = lastUpdate => {
+    if (lastUpdate) {
+      return <ReadableElapsedTimeFromNow timestamp={lastUpdate} />;
+    }
+    return EMPTY_TEXT_PLACEHOLDER;
+  };
+
   const resourceDetailsCard = (
     <ResourceDetailsCard
       title={title ?? t('common.headers.resource-details')}
       content={
         <>
           <DynamicPageComponent.Column
-            key="Created"
-            title={t('common.headers.created')}
+            key="Resource Type"
+            title={t('common.headers.resource-type')}
           >
-            <ReadableCreationTimestamp
+            {resource.kind}
+            {description &&
+              HintButton(
+                setShowTitleDescription,
+                showTitleDescription,
+                description,
+                spacing.sapUiTinyMarginBegin,
+              )}
+          </DynamicPageComponent.Column>
+
+          <DynamicPageComponent.Column
+            key="Age"
+            title={t('common.headers.age')}
+          >
+            <ReadableElapsedTimeFromNow
               timestamp={resource.metadata.creationTimestamp}
             />
           </DynamicPageComponent.Column>
+
+          <DynamicPageComponent.Column
+            key="Last Update"
+            title={t('common.headers.last-update')}
+          >
+            {renderUpdateDate(lastUpdate)}
+          </DynamicPageComponent.Column>
+
           {customColumns.filter(filterColumns).map(col => (
             <DynamicPageComponent.Column key={col.header} title={col.header}>
               {col.value(resource)}
             </DynamicPageComponent.Column>
           ))}
+
           <DynamicPageComponent.Column
             key="Labels"
             title={t('common.headers.labels')}
-            columnSpan="1 / 3"
           >
             <Labels labels={resource.metadata.labels || {}} />
+          </DynamicPageComponent.Column>
+
+          <DynamicPageComponent.Column
+            key="Annotations"
+            title={t('common.headers.annotations')}
+          >
+            <Labels labels={resource.metadata.annotations || {}} />
           </DynamicPageComponent.Column>
         </>
       }

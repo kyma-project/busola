@@ -3,6 +3,8 @@ import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 
 import { matchByOwnerReference, matchBySelector } from 'shared/utils/helpers';
 import { predefinedCategories } from 'state/navigation/categories';
+import { Trans } from 'react-i18next';
+import { Link } from '../../shared/components/Link/Link';
 
 export const resourceType = 'Deployments';
 export const namespaced = true;
