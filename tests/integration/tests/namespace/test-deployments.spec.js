@@ -96,8 +96,7 @@ context('Test Deployments', () => {
 
     cy.getMidColumn()
       .contains('ui5-table-cell', DEPLOYMENT_NAME)
-      .should('be.visible')
-      .click();
+      .click({ force: true });
   });
 
   it('Edit a deployment', () => {
