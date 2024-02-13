@@ -10,6 +10,7 @@ import { ControlledBy } from './ControlledBy';
 import { JoinedArray } from './JoinedArray';
 import { ResourceList } from './ResourceList';
 import { ResourceButton } from './ResourceButton';
+import { ExternalLinkButton } from './ExternalLinkButton';
 import { EventList } from './EventList';
 import { ResourceLink } from './ResourceLink.js';
 import { Labels } from './Labels';
@@ -17,7 +18,7 @@ import { Alert } from './Alert';
 import { ExternalLink } from './ExternalLink';
 import { Tabs } from './Tabs';
 import { Wizard } from './Wizard';
-import { MessagePanel } from './MessagePage';
+import { FeaturedCard } from './FeaturedCard/FeaturedCard';
 
 import { APIRuleHost } from './APIRules/APIRuleHost';
 
@@ -38,6 +39,7 @@ export const widgets = {
   Panel,
   Plain,
   ResourceButton,
+  ExternalLinkButton,
   ResourceLink,
   ResourceList,
   ResourceRefs,
@@ -45,7 +47,7 @@ export const widgets = {
   Tabs,
   Text,
   Wizard,
-  MessagePanel,
+  FeaturedCard,
 };
 
 export const valuePreprocessors = {
