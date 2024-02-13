@@ -110,9 +110,12 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
       .contains('Connect')
       .click();
 
-    cy.contains('Drag your file here or click to upload').attachFile(fileName, {
-      subjectType: 'drag-n-drop',
-    });
+    cy.contains('Drop a .kubeconfig file or click to upload').attachFile(
+      fileName,
+      {
+        subjectType: 'drag-n-drop',
+      },
+    );
 
     cy.contains('Next').click();
 

@@ -21,10 +21,6 @@ const OIDCform = ({ resource, setResource, ...props }) => {
 
   const userIndex = getUserIndex(resource);
 
-  useEffect(() => {
-    setAuth(tryParseOIDCparams(getUser(resource)) || {});
-  }, [resource]);
-
   return (
     <ResourceForm.Wrapper
       resource={auth}
@@ -35,7 +31,6 @@ const OIDCform = ({ resource, setResource, ...props }) => {
           createLoginCommand(auth, resource?.users?.[userIndex]?.user?.exec),
         );
         setAuth(auth);
-        setResource({ ...resource });
       }}
       {...props}
     >

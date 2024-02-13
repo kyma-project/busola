@@ -29,7 +29,7 @@ context('Test invalid kubeconfig', () => {
       .click();
 
     cy.contains(
-      'Drag your file here or click to upload',
+      'Drop a .kubeconfig file or click to upload',
     ).attachFile('kubeconfig--invalid.txt', { subjectType: 'drag-n-drop' });
 
     cy.get('ui5-message-strip[design="Negative"]').should(

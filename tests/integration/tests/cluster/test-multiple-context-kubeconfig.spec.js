@@ -48,7 +48,7 @@ context('Test multiple context kubeconfig', () => {
         .contains('Connect')
         .click();
 
-      cy.contains('Drag your file here or click to upload').attachFile(
+      cy.contains('Drop a .kubeconfig file or click to upload').attachFile(
         {
           fileContent: jsyaml.dump(kubeconfig),
           filePath: 'kubeconfig.yaml',
