@@ -18,10 +18,6 @@ export function DeploymentDetails(props) {
         <ControlledBy ownerReferences={deployment.metadata.ownerReferences} />
       ),
     },
-    {
-      header: t('common.headers.pods'),
-      value: deployment => <DeploymentStatus deployment={deployment} />,
-    },
   ];
 
   const customStatusColumns = [
