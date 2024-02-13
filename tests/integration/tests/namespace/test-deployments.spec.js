@@ -112,6 +112,8 @@ context('Test Deployments', () => {
         timeout: 60 * 1000,
       });
 
+    cy.wait(1000);
+
     cy.get('ui5-button')
       .contains('Edit')
       .should('be.visible')
