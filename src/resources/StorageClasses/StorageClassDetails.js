@@ -22,7 +22,7 @@ export function StorageClassDetails(props) {
     return (
       <UI5Panel
         fixed
-        key={'storageclass-parameters'}
+        keyComponent={'storageclass-parameters'}
         title={t('storage-classes.headers.parameters')}
       >
         {Object.keys(parameters).length > 0 ? (

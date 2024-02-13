@@ -26,7 +26,7 @@ export function NetworkPolicyDetails(props) {
     return spec.ingress.map((ingress, idx) => (
       <UI5Panel
         title={t('network-policies.headers.ingress') + ` #${idx + 1}`}
-        key={idx}
+        keyComponent={idx}
       >
         <NetworkPolicyPeers
           peers={ingress.from}
@@ -46,7 +46,7 @@ export function NetworkPolicyDetails(props) {
     return spec.egress.map((egress, idx) => (
       <UI5Panel
         title={t('network-policies.headers.egress') + ` #${idx + 1}`}
-        key={idx}
+        keyComponent={idx}
       >
         <NetworkPolicyPeers
           peers={egress.to}
