@@ -50,4 +50,4 @@ function CRCreate({
   );
 }
 
-export { CRCreate };
+export default CRCreate;

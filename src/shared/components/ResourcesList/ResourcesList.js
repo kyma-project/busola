@@ -545,21 +545,42 @@ export function ResourceListRenderer({
         onClick={() => {
           setActiveResource(undefined);
           // toggleFormFn(true);
+          console.log('layoutNumber', layoutNumber);
 
-          setLayoutColumn({
-            midColumn: null,
-            endColumn: null,
-            showCreate: {
-              resourceType: resourceType,
-              namespaceId: namespace,
-            },
-            layout: 'TwoColumnsMidExpanded',
-          });
+          setLayoutColumn(
+            layoutNumber === 'MidColumn'
+              ? {
+                  midColumn: {
+                    resourceName: resourceType,
+                    resourceType: resourceType,
+                    namespaceId: null,
+                  },
+                  endColumn: null,
+                  showCreate: {
+                    resourceType: resourceType,
+                    namespaceId: namespace,
+                  },
+                  layout: 'ThreeColumnsEndExpanded',
+                }
+              : {
+                  midColumn: null,
+                  endColumn: null,
+                  showCreate: {
+                    resourceType: resourceType,
+                    namespaceId: namespace,
+                  },
+                  layout: 'TwoColumnsMidExpanded',
+                },
+          );
 
           window.history.pushState(
             window.history.state,
             '',
-            `${window.location.pathname}`,
+            `${window.location.pathname}${
+              layoutNumber === 'MidColumn'
+                ? '?layout=TwoColumnsMidExpanded'
+                : ''
+            }`,
           );
         }}
       >
