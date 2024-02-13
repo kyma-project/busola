@@ -133,7 +133,7 @@ export function ResourceForm({
   );
   let editor = (
     <EditorWrapper
-      height="86.5%"
+      height="300px" //TODO: fix height
       value={resource}
       onChange={setResource}
       onMount={setActionsEditor}
@@ -253,10 +253,7 @@ export function ResourceForm({
             <>
               {/* TODO STYLE IT */}
               {mode === ModeSelector.MODE_YAML && (
-                <div
-                  className="yaml-form"
-                  // style={{ width: '100%', height: '100%' }}
-                >
+                <div className="yaml-form-actions">
                   <EditorActions
                     val={convertedResource}
                     editor={actionsEditor}

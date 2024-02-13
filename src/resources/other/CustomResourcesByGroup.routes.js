@@ -1,11 +1,14 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useMemo } from 'react';
 import { Route, useParams, useSearchParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
+import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
+import { usePrepareCreateProps } from 'resources/helpers';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useUrl } from 'hooks/useUrl';
@@ -62,7 +65,29 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
     }
   }, [layout, isColumnLeyoutEnabled, crdName, crName, namespace]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // <CRCreate {...props} crd={crd} layoutNumber="MidColumn" />
+  const crdResourceName = useMemo(
+    () =>
+      layoutState?.endColumn?.resourceName ??
+      layoutState?.midColumn?.resourceName ?? crdName,
+    [
+      layoutState?.endColumn?.resourceName,
+      layoutState?.midColumn?.resourceName,
+    ],
+  );
+
+  const { data: crd } = useGet(
+    `/apis/apiextensions.k8s.io/v1/customresourcedefinitions/${crdResourceName}`,
+    {
+      pollingInterval: null,
+      skip: !crdResourceName,
+    },
+  );
+
+  const elementCreateProps = usePrepareCreateProps({
+    resourceType: crdResourceName,
+    apiGroup: 'apiextensions.k8s.io',
+    apiVersion: 'v1',
+  });
 
   let startColumnComponent = null;
   if (!layout || !isColumnLeyoutEnabled) {
@@ -99,9 +124,20 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
   if (!layoutState?.midColumn && layoutState?.showCreate?.resourceType) {
     midColumnComponent = (
       <ResourceCreate
-        title={'sth'}
-        confirmText={t('common.buttons.update')}
-        renderForm={renderProps => <div>lll</div>}
+        title={elementCreateProps.resourceTitle}
+        confirmText={t('common.buttons.create')}
+        renderForm={renderProps => {
+          const createComponent = layoutState?.showCreate?.resourceType && (
+            <CRCreate
+              {...renderProps}
+              {...elementCreateProps}
+              crd={crd}
+              layoutNumber="MidColumn"
+            />
+          );
+
+          return <ErrorBoundary>{createComponent}</ErrorBoundary>;
+        }}
       />
     );
   } else if (layoutState?.midColumn?.resourceName) {
@@ -117,32 +153,42 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
   if (layoutState?.showCreate?.resourceType && layoutState?.midColumn) {
     endColumnComponent = (
       <ResourceCreate
-        title={'sth'}
-        confirmText={t('common.buttons.update')}
+        title={elementCreateProps.resourceTitle}
+        confirmText={t('common.buttons.create')}
         layoutNumber="EndColumn"
-        renderForm={renderProps => <div> lll</div>}
+        renderForm={renderProps => {
+          const createComponent = layoutState?.showCreate?.resourceType && (
+            <CRCreate
+              {...renderProps}
+              {...elementCreateProps}
+              crd={crd}
+              layoutNumber="MidColumn"
+            />
+          );
+
+          return <ErrorBoundary>{createComponent}</ErrorBoundary>;
+        }}
       />
     );
-
-    // endColumnComponent = (
-    //   <ResourceCreate
-    //     title={elementCreateProps.resourceTitle}
-    //     confirmText={t('common.buttons.update')}
-    //     renderForm={renderProps => {
-    //       const createComponent = layoutState?.showCreate?.resourceType && (
-    //         <Create
-    //           resourceSchema={cr}
-    //           layoutNumber="StartColumn"
-    //           {...elementCreateProps}
-    //           {...renderProps}
-    //         />
-    //       );
-
-    //       return <ErrorBoundary>{createComponent}</ErrorBoundary>;
-    //     }}
-    //   />
-    // );
   }
+  // endColumnComponent = (
+  //   <ResourceCreate
+  //     title={elementCreateProps.resourceTitle}
+  //     confirmText={t('common.buttons.update')}
+  //     renderForm={renderProps => {
+  //       const createComponent = layoutState?.showCreate?.resourceType && (
+  //         <Create
+  //           resourceSchema={cr}
+  //           layoutNumber="StartColumn"
+  //           {...elementCreateProps}
+  //           {...renderProps}
+  //         />
+  //       );
+
+  //       return <ErrorBoundary>{createComponent}</ErrorBoundary>;
+  //     }}
+  //   />
+  // );
 
   if (!layoutState?.showCreate && layoutState?.endColumn) {
     endColumnComponent = (

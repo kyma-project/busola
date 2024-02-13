@@ -6,7 +6,7 @@ type ColumnState = {
   namespaceId: null | string;
 };
 type ShowCreate = {
-  resourceName: null | string;
+  resourceType: null | string;
   namespaceId: null | string;
 };
 
