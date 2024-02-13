@@ -31,7 +31,7 @@ export function Wizard({ value, structure, singleRootResource }) {
 
   return (
     <>
-      <Button onClick={() => setShowWizard(!showWizard)}>
+      <Button design="Emphasized" onClick={() => setShowWizard(!showWizard)}>
         {tExt(value ?? structure.name)}
       </Button>
       {createPortal(
