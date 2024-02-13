@@ -4,6 +4,10 @@ import config from '../../config';
 context('Test invalid kubeconfig', () => {
   Cypress.skipAfterFail();
 
+  before(() => {
+    cy.handleExceptions();
+  });
+
   it('Use wrong kubeconfig - textfield', () => {
     cy.visit(`${config.clusterAddress}/clusters`)
       .get('ui5-button:visible')

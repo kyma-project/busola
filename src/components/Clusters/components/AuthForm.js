@@ -21,6 +21,10 @@ const OIDCform = ({ resource, setResource, ...props }) => {
 
   const userIndex = getUserIndex(resource);
 
+  useEffect(() => {
+    setAuth(tryParseOIDCparams(getUser(resource)) || {});
+  }, [resource]);
+
   return (
     <ResourceForm.Wrapper
       resource={auth}
