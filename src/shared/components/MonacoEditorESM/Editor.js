@@ -69,7 +69,6 @@ export function Editor({
   // update editor when was error
   useEffect(() => {
     if (prevValueRef.current !== value && editorInstance && error) {
-      console.log('vjhfjh');
       editorInstance.setValue(value);
       prevValueRef.current = value;
     }

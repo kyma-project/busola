@@ -19,11 +19,11 @@ import { addCluster, getContext, deleteCluster } from '../../shared';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { getUserIndex } from '../../shared';
 
-export const findInitialValue = (kubeconfig, id) => {
-  if (kubeconfig?.users?.[0]?.user?.exec?.args) {
-    const elementWithId = kubeconfig?.users?.[0]?.user?.exec?.args.find(el =>
-      el.includes(id),
-    );
+export const findInitialValue = (kubeconfig, id, userIndex = 0) => {
+  if (kubeconfig?.users?.[userIndex]?.user?.exec?.args) {
+    const elementWithId = kubeconfig?.users?.[
+      userIndex
+    ]?.user?.exec?.args.find(el => el.includes(id));
     const regex = new RegExp(`${id}=(?<value>.*)`);
     return regex.exec(elementWithId)?.groups?.value || '';
   }
@@ -42,7 +42,6 @@ export const ClusterDataForm = ({
   noAdvancedMode = false,
   initialMode,
   yamlSearchHidden,
-  onReset,
 }) => {
   const { t } = useTranslation();
   const userIndex = getUserIndex(kubeconfig);
@@ -51,16 +50,16 @@ export const ClusterDataForm = ({
   );
 
   const [issuerUrl, setIssuerUrl] = useState(
-    findInitialValue(kubeconfig, 'oidc-issuer-url'),
+    findInitialValue(kubeconfig, 'oidc-issuer-url', userIndex),
   );
   const [clientId, setClientId] = useState(
-    findInitialValue(kubeconfig, 'oidc-client-id'),
+    findInitialValue(kubeconfig, 'oidc-client-id', userIndex),
   );
   const [clientSecret, setClientSecret] = useState(
-    findInitialValue(kubeconfig, 'oidc-client-secret'),
+    findInitialValue(kubeconfig, 'oidc-client-secret', userIndex),
   );
   const [scopes, setScopes] = useState(
-    findInitialValue(kubeconfig, 'oidc-extra-scope'),
+    findInitialValue(kubeconfig, 'oidc-extra-scope', userIndex),
   );
 
   const [token, setToken] = useState(
@@ -69,12 +68,14 @@ export const ClusterDataForm = ({
 
   useEffect(() => {
     setAuthenticationType(
-      kubeconfig?.users?.[0]?.user?.exec ? 'oidc' : 'token',
+      kubeconfig?.users?.[userIndex]?.user?.exec ? 'oidc' : 'token',
     );
-    setIssuerUrl(findInitialValue(kubeconfig, 'oidc-issuer-url'));
-    setClientId(findInitialValue(kubeconfig, 'oidc-client-id'));
-    setClientSecret(findInitialValue(kubeconfig, 'oidc-client-secret'));
-    setScopes(findInitialValue(kubeconfig, 'oidc-extra-scope'));
+    setIssuerUrl(findInitialValue(kubeconfig, 'oidc-issuer-url', userIndex));
+    setClientId(findInitialValue(kubeconfig, 'oidc-client-id', userIndex));
+    setClientSecret(
+      findInitialValue(kubeconfig, 'oidc-client-secret', userIndex),
+    );
+    setScopes(findInitialValue(kubeconfig, 'oidc-extra-scope', userIndex));
     setToken(kubeconfig?.users?.[userIndex]?.user?.token);
   }, [kubeconfig, userIndex]);
 
@@ -95,6 +96,7 @@ export const ClusterDataForm = ({
   const createOIDC = (type = '', val = '') => {
     const config = { issuerUrl, clientId, clientSecret, scopes, [type]: val };
     const exec = {
+      ...kubeconfig?.users?.[userIndex]?.user?.exec,
       apiVersion: 'client.authentication.k8s.io/v1beta1',
       command: 'kubectl',
       args: [
@@ -103,7 +105,9 @@ export const ClusterDataForm = ({
         `--oidc-issuer-url=${config.issuerUrl}`,
         `--oidc-client-id=${config.clientId}`,
         `--oidc-client-secret=${config.clientSecret}`,
-        `--oidc-extra-scope=openid ${config.scopes}`,
+        findInitialValue(kubeconfig, 'oidc-extra-scope', userIndex)
+          ? `--oidc-extra-scope=${config.scopes}`
+          : `--oidc-extra-scope=openid ${config.scopes}`,
         '--grant-type=auto',
       ],
     };
@@ -176,7 +180,6 @@ export const ClusterDataForm = ({
       noAdvancedMode={noAdvancedMode}
       initialMode={initialMode}
       yamlSearchHidden={yamlSearchHidden}
-      onReset={onReset}
     >
       <div className={className}>
         <K8sNameField

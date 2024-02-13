@@ -39,7 +39,6 @@ export function EditorActions({
   saveDisabled,
   saveHidden,
   isProtected,
-  onReset,
   searchHidden = false,
 }) {
   const [visible, setVisible] = useState(
@@ -116,10 +115,6 @@ export function EditorActions({
     saveAs(blob, title || 'spec.yaml');
   };
 
-  const reset = () => {
-    if (onReset) onReset();
-  };
-
   const { t } = useTranslation();
 
   return (
@@ -129,7 +124,6 @@ export function EditorActions({
         ...spacing.sapUiSmallMarginTop,
       }}
     >
-      {onReset && <Button onClick={reset}>Reset</Button>}
       <ButtonWithTooltip
         tooltipContent={
           visible ? t('common.tooltips.hide') : t('common.tooltips.show')
