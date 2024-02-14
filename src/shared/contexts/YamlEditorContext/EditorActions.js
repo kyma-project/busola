@@ -5,7 +5,6 @@ import copyToCliboard from 'copy-to-clipboard';
 import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
 
-import { spacing } from '@ui5/webcomponents-react-base';
 import 'shared/contexts/YamlEditorContext/EditorActions.scss';
 
 const EDITOR_VISIBILITY = 'editor-visibility';

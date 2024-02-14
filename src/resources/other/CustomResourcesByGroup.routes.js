@@ -68,10 +68,12 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
   const crdResourceName = useMemo(
     () =>
       layoutState?.endColumn?.resourceName ??
-      layoutState?.midColumn?.resourceName ?? crdName,
+      layoutState?.midColumn?.resourceName ??
+      crdName,
     [
       layoutState?.endColumn?.resourceName,
       layoutState?.midColumn?.resourceName,
+      crdName,
     ],
   );
 
