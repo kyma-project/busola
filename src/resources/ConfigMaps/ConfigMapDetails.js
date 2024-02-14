@@ -6,6 +6,7 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 
 import { ConfigMapCreate } from './ConfigMapCreate';
+import { description } from './ConfigMapDescription';
 
 export function ConfigMapDetails(props) {
   const { t } = useTranslation();
@@ -34,6 +35,7 @@ export function ConfigMapDetails(props) {
     <ResourceDetails
       customComponents={[ConfigMapEditor]}
       customColumns={customColumns}
+      description={description}
       createResourceForm={ConfigMapCreate}
       {...props}
     />

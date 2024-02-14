@@ -5,11 +5,7 @@ import { GenericRoleBindingList } from './GenericRoleBindingList';
 
 export function RoleBindingList(props) {
   return (
-    <GenericRoleBindingList
-      {...props}
-      descriptionKey={'role-bindings.description'}
-      createResourceForm={RoleBindingCreate}
-    />
+    <GenericRoleBindingList {...props} createResourceForm={RoleBindingCreate} />
   );
 }
 export default RoleBindingList;

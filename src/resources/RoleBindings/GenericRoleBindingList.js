@@ -1,13 +1,13 @@
 import React from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-import { Link as ReactSharedLink } from 'shared/components/Link/Link';
 import { useUrl } from 'hooks/useUrl';
+import { description, descriptionKey } from './RoleBindingDescription';
 
-export function GenericRoleBindingList({ descriptionKey, ...params }) {
+export function GenericRoleBindingList(props) {
   const { t } = useTranslation();
   const { clusterUrl, namespaceUrl } = useUrl();
 
@@ -78,15 +78,6 @@ export function GenericRoleBindingList({ descriptionKey, ...params }) {
     },
   ];
 
-  const description = (
-    <Trans i18nKey={descriptionKey}>
-      <ReactSharedLink
-        className="bsl-link"
-        url="https://kyma-project.io/docs/kyma/latest/04-operation-guides/security/sec-02-authorization-in-kyma/#role-binding"
-      />
-    </Trans>
-  );
-
   return (
     <ResourcesList
       customColumns={customColumns}
@@ -94,7 +85,7 @@ export function GenericRoleBindingList({ descriptionKey, ...params }) {
       searchSettings={{
         textSearchProperties,
       }}
-      {...params}
+      {...props}
       emptyListProps={{
         subtitleText: descriptionKey,
         url:

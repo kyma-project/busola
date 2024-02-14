@@ -4,6 +4,7 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 
 import { Rules } from './Rules';
 import { RoleCreate } from './RoleCreate';
+import { description } from './RoleDescription';
 
 export function RoleDetails(props) {
   return (
@@ -11,6 +12,7 @@ export function RoleDetails(props) {
       {...props}
       customComponents={[Rules]}
       createResourceForm={RoleCreate}
+      description={description}
     />
   );
 }

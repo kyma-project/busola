@@ -4,6 +4,7 @@ import { Rules } from 'resources/Roles/Rules';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 
 import { ClusterRoleCreate } from './ClusterRoleCreate';
+import { description } from './ClusterRoleDescription';
 
 const ClusterRolesDetails = props => {
   return (
@@ -11,6 +12,7 @@ const ClusterRolesDetails = props => {
       {...props}
       customComponents={[Rules]}
       createResourceForm={ClusterRoleCreate}
+      description={description}
     />
   );
 };

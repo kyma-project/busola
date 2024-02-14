@@ -8,6 +8,7 @@ import { HelmReleaseData } from 'components/HelmReleases/HelmReleaseData';
 
 import { CertificateData } from './CertificateData';
 import { SecretCreate } from './SecretCreate';
+import { description } from './SecretDescription';
 
 function HelmReleaseDataWrapper(secret) {
   if (secret.type !== 'helm.sh/release.v1') {
@@ -45,9 +46,11 @@ export function SecretDetails(props) {
     <ResourceDetails
       customComponents={[Secret, CertificateData, HelmReleaseDataWrapper]}
       customColumns={customColumns}
+      description={description}
       createResourceForm={SecretCreate}
       {...props}
     />
   );
 }
+
 export default SecretDetails;
