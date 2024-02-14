@@ -55,6 +55,7 @@ ResourceDetails.propTypes = {
   customColumns: CustomPropTypes.customColumnsType,
   children: PropTypes.node,
   customComponents: PropTypes.arrayOf(PropTypes.func),
+  description: PropTypes.object,
   hasTabs: PropTypes.bool,
   resourceUrl: PropTypes.string.isRequired,
   resourceType: PropTypes.string.isRequired,
