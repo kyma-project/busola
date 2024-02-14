@@ -13,7 +13,7 @@ import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 import { JobCreate } from './JobCreate';
 import { JobCompletions } from './JobCompletions';
 import { JobConditions } from './JobConditions';
-import { description } from './Job';
+import { description } from './JobDescription';
 
 export function JobDetails(props) {
   const { t } = useTranslation();

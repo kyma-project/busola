@@ -6,7 +6,7 @@ import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 
 import { JobCompletions } from './JobCompletions';
 import { JobCreate } from './JobCreate';
-import { description } from './Job';
+import { description } from './JobDescription';
 
 export const JobList = props => {
   const { t } = useTranslation();
