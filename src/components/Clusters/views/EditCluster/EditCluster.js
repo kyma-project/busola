@@ -49,34 +49,19 @@ export const ClusterDataForm = ({
     kubeconfig?.users?.[userIndex]?.user?.exec ? 'oidc' : 'token',
   );
 
-  const [issuerUrl, setIssuerUrl] = useState(
-    findInitialValue(kubeconfig, 'oidc-issuer-url', userIndex),
+  const issuerUrl = findInitialValue(kubeconfig, 'oidc-issuer-url', userIndex);
+  const clientId = findInitialValue(kubeconfig, 'oidc-client-id', userIndex);
+  const clientSecret = findInitialValue(
+    kubeconfig,
+    'oidc-client-secret',
+    userIndex,
   );
-  const [clientId, setClientId] = useState(
-    findInitialValue(kubeconfig, 'oidc-client-id', userIndex),
-  );
-  const [clientSecret, setClientSecret] = useState(
-    findInitialValue(kubeconfig, 'oidc-client-secret', userIndex),
-  );
-  const [scopes, setScopes] = useState(
-    findInitialValue(kubeconfig, 'oidc-extra-scope', userIndex),
-  );
-
-  const [token, setToken] = useState(
-    kubeconfig?.users?.[userIndex]?.user?.token,
-  );
+  const scopes = findInitialValue(kubeconfig, 'oidc-extra-scope', userIndex);
 
   useEffect(() => {
     setAuthenticationType(
       kubeconfig?.users?.[userIndex]?.user?.exec ? 'oidc' : 'token',
     );
-    setIssuerUrl(findInitialValue(kubeconfig, 'oidc-issuer-url', userIndex));
-    setClientId(findInitialValue(kubeconfig, 'oidc-client-id', userIndex));
-    setClientSecret(
-      findInitialValue(kubeconfig, 'oidc-client-secret', userIndex),
-    );
-    setScopes(findInitialValue(kubeconfig, 'oidc-extra-scope', userIndex));
-    setToken(kubeconfig?.users?.[userIndex]?.user?.token);
   }, [kubeconfig, userIndex]);
 
   const tokenFields = (
@@ -85,9 +70,8 @@ export const ClusterDataForm = ({
       input={Inputs.Text}
       advanced
       required
-      value={token}
+      value={kubeconfig?.users?.[userIndex]?.user?.token}
       setValue={val => {
-        setToken(val);
         jp.value(kubeconfig, `$.users[${userIndex}].user.token`, val);
         setResource({ ...kubeconfig });
       }}
@@ -125,7 +109,6 @@ export const ClusterDataForm = ({
         required
         value={issuerUrl}
         setValue={val => {
-          setIssuerUrl(val);
           createOIDC('issuerUrl', val);
         }}
       />
@@ -136,7 +119,6 @@ export const ClusterDataForm = ({
         required
         value={clientId}
         setValue={val => {
-          setClientId(val);
           createOIDC('clientId', val);
         }}
       />
@@ -146,7 +128,6 @@ export const ClusterDataForm = ({
         advanced
         value={clientSecret}
         setValue={val => {
-          setClientSecret(val);
           createOIDC('clientSecret', val);
         }}
       />
@@ -157,7 +138,6 @@ export const ClusterDataForm = ({
         required
         value={scopes}
         setValue={val => {
-          setScopes(val);
           createOIDC('scopes', val);
         }}
       />

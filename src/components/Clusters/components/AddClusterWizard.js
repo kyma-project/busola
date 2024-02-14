@@ -268,7 +268,6 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
           kubeconfig={kubeconfig}
           token={hasAuth ? hasKubeconfigAuth(kubeconfig) : null}
           setSelected={setSelected}
-          selected={selected}
           hasAuth={hasAuth}
         />
         <WizardButtons

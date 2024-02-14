@@ -34,7 +34,6 @@ const OIDCform = ({ resource, setResource, ...props }) => {
           createLoginCommand(auth, resource?.users?.[userIndex]?.user?.exec),
         );
         setAuth(auth);
-        //setResource({ ...resource });
       }}
       {...props}
     >
@@ -86,7 +85,6 @@ const TokenForm = ({ resource, setResource, ...props }) => {
         setValue={val => {
           setToken(val);
           jp.value(resource, `$.users[${userIndex}].user.token`, val);
-          //setResource({ ...resource });
         }}
         label={t('clusters.wizard.auth.token')}
         input={Inputs.Text}
@@ -106,6 +104,10 @@ export function AuthForm({
   const { t } = useTranslation();
 
   const [useOidc, setUseOidc] = useState(!!getUser(resource)?.exec);
+
+  useEffect(() => {
+    revalidate();
+  }, [useOidc, revalidate]);
 
   const userIndex = getUserIndex(resource);
 

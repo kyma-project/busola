@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Button, FlexBox, RadioButton, Title } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import './ClusterPreview.scss';
@@ -6,24 +6,12 @@ import { spacing } from '@ui5/webcomponents-react-base';
 import { findInitialValue } from '../views/EditCluster/EditCluster';
 import { getUserIndex } from '../shared';
 
-export function ClusterPreview({
-  kubeconfig,
-  storage,
-  setSelected,
-  hasAuth,
-  selected,
-}) {
+export function ClusterPreview({ kubeconfig, storage, setSelected, hasAuth }) {
   const { t } = useTranslation();
   const userIndex = getUserIndex(kubeconfig);
-  const [authenticationType, setAuthenticationType] = useState(
-    kubeconfig?.users?.[userIndex]?.user?.exec ? 'oidc' : 'token',
-  );
-
-  useEffect(() => {
-    setAuthenticationType(
-      kubeconfig?.users?.[userIndex]?.user?.exec ? 'oidc' : 'token',
-    );
-  }, [kubeconfig?.users, userIndex, selected]);
+  const authenticationType = kubeconfig?.users?.[userIndex]?.user?.exec
+    ? 'oidc'
+    : 'token';
 
   const OidcData = () => {
     const issuerUrl = findInitialValue(
