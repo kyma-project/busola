@@ -57,15 +57,15 @@ describe('ResourceDetails visibility', () => {
 
     await waitFor(() => {
       // hidden
-      expect(queryByText('some-header--hidden')).not.toBeInTheDocument();
+      expect(queryByText('some-header--hidden:')).not.toBeInTheDocument();
       expect(queryByText('should not be visible')).not.toBeInTheDocument();
 
       // visible
-      expect(queryByText('some-header--visible')).toBeInTheDocument();
+      expect(queryByText('some-header--visible:')).toBeInTheDocument();
       expect(queryByText('should be visible')).toBeInTheDocument();
 
       // with error
-      expect(queryByText('some-header--with-error')).toBeInTheDocument();
+      expect(queryByText('some-header--with-error:')).toBeInTheDocument();
       expect(queryByText('will be ignored')).not.toBeInTheDocument();
       expect(queryByText('common.messages.error')).toBeInTheDocument();
     });
