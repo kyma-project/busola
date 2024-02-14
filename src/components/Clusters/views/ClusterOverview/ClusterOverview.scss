@@ -1,26 +1,3 @@
-.cluster-overview__graphs-wrapper {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-}
-
-.cluster-overview__cards-wrapper {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
 .gardener-provider {
   text-transform: uppercase;
-}
-
-@container (min-width: 650px) {
-  .cluster-overview__graphs-wrapper {
-    display: flex;
-    flex-direction: row;
-  }
-
-  .cluster-overview__cards-wrapper {
-    grid-template-columns: repeat(5, 1fr);
-  }
 }

@@ -8,11 +8,10 @@ import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 
 import { spacing } from '@ui5/webcomponents-react-base';
-import './NodeDetails.scss';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { Title } from '@ui5/webcomponents-react';
 
-function NodeDetails({ nodeName }) {
+export default function NodeDetails({ nodeName }) {
   const { data, error, loading } = useNodeQuery(nodeName);
   const { t } = useTranslation();
   useWindowTitle(t('nodes.title_details', { nodeName }));
@@ -46,7 +45,7 @@ function NodeDetails({ nodeName }) {
                   {t('common.headers.nodeInfo')}
                 </Title>
                 <div
-                  className="panels"
+                  className="flexwrap"
                   style={spacing.sapUiSmallMarginBeginEnd}
                 >
                   <NodeResources {...data} />
@@ -65,5 +64,3 @@ function NodeDetails({ nodeName }) {
     </div>
   );
 }
-
-export default NodeDetails;
