@@ -43,7 +43,7 @@ export const DynamicPageComponent = ({
 }) => {
   const [showTitleDescription, setShowTitleDescription] = useState(false);
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
+  const { isEnabled: isColumnLayoutEnabled } = useFeature('COLUMN_LAYOUT');
   return (
     <DynamicPage
       className="page-header"
@@ -55,7 +55,7 @@ export const DynamicPageComponent = ({
         <DynamicPageTitle
           navigationActions={
             window.location.search.includes('layout') &&
-            isColumnLeyoutEnabled ? (
+            isColumnLayoutEnabled ? (
               layoutColumn.layout !== 'OneColumn' ? (
                 layoutNumber !== 'StartColumn' ? (
                   <>
