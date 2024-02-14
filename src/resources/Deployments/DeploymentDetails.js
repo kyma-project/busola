@@ -8,7 +8,6 @@ import { HPASubcomponent } from 'resources/HorizontalPodAutoscalers/HPASubcompon
 
 import { DeploymentStatus } from './DeploymentStatus';
 import { DeploymentCreate } from './DeploymentCreate';
-import React from 'react';
 import { referenceDescription } from './DeploymentConsts';
 
 export function DeploymentDetails(props) {

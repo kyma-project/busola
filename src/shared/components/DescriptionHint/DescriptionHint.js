@@ -1,6 +1,5 @@
 import { Button, Popover, Text } from '@ui5/webcomponents-react';
 import { createPortal } from 'react-dom';
-import React from 'react';
 
 export function HintButton({
   setShowTitleDescription,
