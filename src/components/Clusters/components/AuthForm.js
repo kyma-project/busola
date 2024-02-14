@@ -18,7 +18,6 @@ const OIDCform = ({ resource, setResource, ...props }) => {
   const { t } = useTranslation();
 
   const [auth, setAuth] = useState(tryParseOIDCparams(getUser(resource)) || {});
-
   const userIndex = getUserIndex(resource);
 
   useEffect(() => {
@@ -35,6 +34,7 @@ const OIDCform = ({ resource, setResource, ...props }) => {
           createLoginCommand(auth, resource?.users?.[userIndex]?.user?.exec),
         );
         setAuth(auth);
+        //setResource({ ...resource });
       }}
       {...props}
     >
@@ -69,10 +69,14 @@ const OIDCform = ({ resource, setResource, ...props }) => {
   );
 };
 
-const TokenForm = ({ resource, ...props }) => {
+const TokenForm = ({ resource, setResource, ...props }) => {
   const { t } = useTranslation();
   const userIndex = getUserIndex(resource);
-  const [token, setToken] = useState(resource?.users?.[0]?.user?.token);
+  const [token, setToken] = useState(resource?.users?.[userIndex]?.user?.token);
+
+  useEffect(() => {
+    setToken(resource?.users?.[userIndex]?.user?.token);
+  }, [resource, userIndex]);
 
   return (
     <ResourceForm.Wrapper resource={resource} {...props}>
@@ -82,6 +86,7 @@ const TokenForm = ({ resource, ...props }) => {
         setValue={val => {
           setToken(val);
           jp.value(resource, `$.users[${userIndex}].user.token`, val);
+          //setResource({ ...resource });
         }}
         label={t('clusters.wizard.auth.token')}
         input={Inputs.Text}
@@ -101,10 +106,6 @@ export function AuthForm({
   const { t } = useTranslation();
 
   const [useOidc, setUseOidc] = useState(!!getUser(resource)?.exec);
-
-  useEffect(() => {
-    revalidate();
-  }, [useOidc, revalidate]);
 
   const userIndex = getUserIndex(resource);
 
@@ -138,7 +139,9 @@ export function AuthForm({
                 : resource['current-context'],
           })}
         </MessageStrip>
-        {!useOidc && <TokenForm resource={resource} />}
+        {!useOidc && (
+          <TokenForm resource={resource} setResource={setResource} />
+        )}
         <ResourceForm.FormField
           label={t('clusters.wizard.auth.using-oidc')}
           input={() => (

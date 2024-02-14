@@ -88,7 +88,8 @@ export const ClusterDataForm = ({
       value={token}
       setValue={val => {
         setToken(val);
-        jp.value(kubeconfig, `$.users[${userIndex}].user.token`, token);
+        jp.value(kubeconfig, `$.users[${userIndex}].user.token`, val);
+        setResource({ ...kubeconfig });
       }}
     />
   );

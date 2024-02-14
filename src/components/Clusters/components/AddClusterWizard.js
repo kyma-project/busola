@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Wizard,
   WizardStep,
@@ -24,11 +25,10 @@ import { KubeconfigUpload } from './KubeconfigUpload/KubeconfigUpload';
 import { ContextChooser } from './ContextChooser/ContextChooser';
 import { ChooseStorage } from './ChooseStorage';
 import { WizardButtons } from 'shared/components/WizardButtons/WizardButtons';
-
-import './AddClusterWizard.scss';
 import { ClusterPreview } from './ClusterPreview';
-import { createPortal } from 'react-dom';
+
 import { spacing } from '@ui5/webcomponents-react-base';
+import './AddClusterWizard.scss';
 
 export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
   const busolaClusterParams = useRecoilValue(configurationAtom);
@@ -73,11 +73,6 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
         setStorage('localStorage');
       }
     }
-
-    const hasOneContext = kubeconfig?.contexts?.length === 1;
-    const hasAuth = hasKubeconfigAuth(kubeconfig);
-    setHasOneContext(hasOneContext);
-    setHasAuth(hasAuth);
   }, [kubeconfig]);
 
   const updateKubeconfig = kubeconfig => {
@@ -85,6 +80,11 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
       setKubeconfig(null);
       return;
     }
+
+    const hasOneContext = kubeconfig?.contexts?.length === 1;
+    const hasAuth = hasKubeconfigAuth(kubeconfig);
+    setHasOneContext(hasOneContext);
+    setHasAuth(hasAuth);
 
     setKubeconfig(kubeconfig);
   };
@@ -268,6 +268,7 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
           kubeconfig={kubeconfig}
           token={hasAuth ? hasKubeconfigAuth(kubeconfig) : null}
           setSelected={setSelected}
+          selected={selected}
           hasAuth={hasAuth}
         />
         <WizardButtons

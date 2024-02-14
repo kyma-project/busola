@@ -4,30 +4,45 @@ import { useTranslation } from 'react-i18next';
 import './ClusterPreview.scss';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { findInitialValue } from '../views/EditCluster/EditCluster';
+import { getUserIndex } from '../shared';
 
 export function ClusterPreview({
-  token,
   kubeconfig,
   storage,
   setSelected,
   hasAuth,
+  selected,
 }) {
   const { t } = useTranslation();
+  const userIndex = getUserIndex(kubeconfig);
   const [authenticationType, setAuthenticationType] = useState(
-    kubeconfig?.users?.[0]?.user?.exec ? 'oidc' : 'token',
+    kubeconfig?.users?.[userIndex]?.user?.exec ? 'oidc' : 'token',
   );
 
   useEffect(() => {
     setAuthenticationType(
-      kubeconfig?.users?.[0]?.user?.exec ? 'oidc' : 'token',
+      kubeconfig?.users?.[userIndex]?.user?.exec ? 'oidc' : 'token',
     );
-  }, [kubeconfig]);
+  }, [kubeconfig?.users, userIndex, selected]);
 
   const OidcData = () => {
-    const issuerUrl = findInitialValue(kubeconfig, 'oidc-issuer-url');
-    const clientId = findInitialValue(kubeconfig, 'oidc-client-id');
-    const clientSecret = findInitialValue(kubeconfig, 'oidc-client-secret');
-    const extraScope = findInitialValue(kubeconfig, 'oidc-extra-scope');
+    const issuerUrl = findInitialValue(
+      kubeconfig,
+      'oidc-issuer-url',
+      userIndex,
+    );
+    const clientId = findInitialValue(kubeconfig, 'oidc-client-id', userIndex);
+    const clientSecret = findInitialValue(
+      kubeconfig,
+      'oidc-client-secret',
+      userIndex,
+    );
+    const extraScope = findInitialValue(
+      kubeconfig,
+      'oidc-extra-scope',
+      userIndex,
+    );
+
     return (
       <>
         {issuerUrl && (
@@ -91,7 +106,7 @@ export function ClusterPreview({
   };
 
   const TokenData = () => {
-    const token = kubeconfig?.users?.[0]?.user?.token;
+    const token = kubeconfig?.users?.[userIndex]?.user?.token;
     return (
       <>
         <p

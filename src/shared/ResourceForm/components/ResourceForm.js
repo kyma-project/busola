@@ -149,9 +149,7 @@ export function ResourceForm({
   let editor = (
     <EditorWrapper
       value={resource}
-      onChange={resource => {
-        setResource(resource);
-      }}
+      onChange={setResource}
       onMount={setActionsEditor}
       autocompletionDisabled={autocompletionDisabled}
       readOnly={readOnly}

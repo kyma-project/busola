@@ -12,7 +12,7 @@ export function WizardButtons({
   onComplete,
   onCancel,
   validation,
-  className = null,
+  className,
 }) {
   const { t } = useTranslation();
 
