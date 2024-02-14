@@ -9,7 +9,7 @@ import { EventsList } from 'shared/components/EventsList';
 
 import { CurrentCRDVersion } from './CurrentCRDVersion';
 import { RelatedCRDsList } from './RelatedCRDsList';
-import { CustomResourceDefinitionCreate } from './CustomResourceDefinitionCreate';
+import CustomResourceDefinitionCreate from './CustomResourceDefinitionCreate';
 
 export function CustomResourceDefinitionDetails(props) {
   const { t } = useTranslation();

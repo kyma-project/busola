@@ -5,7 +5,7 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { Link } from 'shared/components/Link/Link';
 import { Tokens } from 'shared/components/Tokens';
 
-import { CustomResourceDefinitionCreate } from './CustomResourceDefinitionCreate';
+import CustomResourceDefinitionCreate from './CustomResourceDefinitionCreate';
 
 export function CustomResourceDefinitionList(props) {
   const { t } = useTranslation();
