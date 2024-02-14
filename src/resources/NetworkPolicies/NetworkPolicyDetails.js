@@ -9,6 +9,7 @@ import { NetworkPolicyPorts } from './Ports';
 import { NetworkPolicyPeers } from './Peers';
 import { NetworkPolicyCreate } from './NetworkPolicyCreate';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { description } from './NetoworkPolicyDescription';
 
 export function NetworkPolicyDetails(props) {
   const { t } = useTranslation();
@@ -80,6 +81,7 @@ export function NetworkPolicyDetails(props) {
     <ResourceDetails
       customColumns={customColumns}
       customComponents={customComponents}
+      description={description}
       createResourceForm={NetworkPolicyCreate}
       {...props}
     />

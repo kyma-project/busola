@@ -8,6 +8,7 @@ import { Link } from 'shared/components/Link/Link';
 import { useRestartAction } from 'shared/hooks/useRestartResource';
 import { StatefulSetCreate } from './StatefulSetCreate';
 import { StatefulSetPods } from './StatefulSetPods';
+import { description } from './StatefulSetDescription';
 
 export function StatefulSetList(props) {
   const { t } = useTranslation();
@@ -25,15 +26,6 @@ export function StatefulSetList(props) {
       value: set => <StatefulSetPods key="replicas" set={set} />,
     },
   ];
-
-  const description = (
-    <Trans i18nKey="stateful-sets.description">
-      <Link
-        className="bsl-link"
-        url="https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/"
-      />
-    </Trans>
-  );
 
   return (
     <ResourcesList

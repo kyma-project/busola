@@ -14,6 +14,7 @@ import { useUrl } from 'hooks/useUrl';
 import { PersistentVolumeStatus } from './PersistentVolumeStatus';
 import { PersistentVolumeCreate } from './PersistentVolumeCreate';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { description } from './PersistentVolumeDescription';
 
 export function PersistentVolumeDetails(props) {
   const { t } = useTranslation();
@@ -130,6 +131,7 @@ export function PersistentVolumeDetails(props) {
     <ResourceDetails
       customColumns={customColumns}
       customComponents={[PvDetails, Events]}
+      description={description}
       createResourceForm={PersistentVolumeCreate}
       {...props}
     />

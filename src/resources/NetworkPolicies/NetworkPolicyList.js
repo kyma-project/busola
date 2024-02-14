@@ -5,17 +5,9 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { Link } from 'shared/components/Link/Link';
 
 import { NetworkPolicyCreate } from './NetworkPolicyCreate';
+import { description } from './NetoworkPolicyDescription';
 
 export function NetworkPolicyList(props) {
-  const description = (
-    <Trans i18nKey="network-policies.description">
-      <Link
-        className="bsl-link"
-        url="https://kubernetes.io/docs/concepts/services-networking/network-policies/"
-      />
-    </Trans>
-  );
-
   return (
     <ResourcesList
       description={description}

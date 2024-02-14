@@ -1,10 +1,9 @@
 import React from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { Labels } from 'shared/components/Labels/Labels';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { Link as ExternalLink } from 'shared/components/Link/Link';
 import { Link } from 'react-router-dom';
 import { decodeHelmRelease } from './decodeHelmRelease';
 import { findRecentRelease } from './findRecentRelease';
@@ -14,6 +13,7 @@ import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
+import { description } from './HelmReleaseDescription';
 
 function HelmReleasesList() {
   const { t } = useTranslation();
@@ -66,14 +66,7 @@ function HelmReleasesList() {
     <>
       <DynamicPageComponent
         title={t('helm-releases.title')}
-        description={
-          <Trans i18nKey={'helm-releases.description'}>
-            <ExternalLink
-              className="bsl-link"
-              url="https://helm.sh/docs/glossary/#release"
-            />
-          </Trans>
-        }
+        description={description}
         content={
           <GenericList
             entries={entries}
@@ -104,4 +97,5 @@ function HelmReleasesList() {
     </>
   );
 }
+
 export default HelmReleasesList;

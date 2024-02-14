@@ -14,6 +14,7 @@ import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
+import { description } from './HelmReleaseDescription';
 
 function HelmReleasesDetails({ releaseName }) {
   const { t } = useTranslation();
@@ -46,6 +47,7 @@ function HelmReleasesDetails({ releaseName }) {
       <DynamicPageComponent
         title={releaseName}
         breadcrumbItems={breadcrumbItems}
+        description={description}
         content={
           <>
             <HelmReleaseData

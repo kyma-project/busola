@@ -9,6 +9,7 @@ import { HPASubcomponent } from 'resources/HorizontalPodAutoscalers/HPASubcompon
 import { StatefulSetPods } from './StatefulSetPods';
 import { StatefulSetCreate } from './StatefulSetCreate';
 import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
+import { description } from './StatefulSetDescription';
 
 export function StatefulSetDetails(props) {
   const { t } = useTranslation();
@@ -47,6 +48,7 @@ export function StatefulSetDetails(props) {
         MatchSelector,
         StatefulSetPodTemplate,
       ]}
+      description={description}
       createResourceForm={StatefulSetCreate}
       {...props}
     />

@@ -6,6 +6,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Link } from 'shared/components/Link/Link';
 
 import { IngressCreate } from './IngressCreate';
+import { description } from './IngressDescription';
 
 export function IngressList(props) {
   const { t } = useTranslation();
@@ -26,15 +27,6 @@ export function IngressList(props) {
       value: getLoadBalancer,
     },
   ];
-
-  const description = (
-    <Trans i18nKey="ingresses.description">
-      <Link
-        className="bsl-link"
-        url="https://kubernetes.io/docs/concepts/services-networking/ingress/"
-      />
-    </Trans>
-  );
 
   return (
     <ResourcesList

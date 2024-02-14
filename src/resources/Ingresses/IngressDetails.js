@@ -7,6 +7,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Rules } from './Rules';
 import { DefaultBackendPanel } from './DefaultBackendPanel';
 import { IngressCreate } from './IngressCreate';
+import { description } from './IngressDescription';
 
 export function IngressDetails(props) {
   const { t } = useTranslation();
@@ -50,6 +51,7 @@ export function IngressDetails(props) {
     <ResourceDetails
       customColumns={customColumns}
       customComponents={customComponents}
+      description={description}
       createResourceForm={IngressCreate}
       {...props}
     />

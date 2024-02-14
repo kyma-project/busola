@@ -7,6 +7,7 @@ import { Link } from 'shared/components/Link/Link';
 
 import { ReplicaSetCreate } from './ReplicaSetCreate';
 import { ReplicaSetStatus } from './ReplicaSetStatus';
+import { description } from './ReplicaSetDescription';
 
 const getImages = replicaSet => {
   const images =
@@ -42,15 +43,6 @@ export function ReplicaSetList(params) {
       value: replicaSet => <ReplicaSetStatus replicaSet={replicaSet} />,
     },
   ];
-
-  const description = (
-    <Trans i18nKey="replica-sets.description">
-      <Link
-        className="bsl-link"
-        url="https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/"
-      />
-    </Trans>
-  );
 
   return (
     <ResourcesList

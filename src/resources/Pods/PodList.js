@@ -10,6 +10,7 @@ import { Link as ReactSharedLink } from 'shared/components/Link/Link';
 import { PodCreate } from './PodCreate';
 import { PodStatus, calculatePodState } from './PodStatus';
 import PodRestarts from './PodRestarts';
+import { description } from './PodDescription';
 
 export function PodList(params) {
   const { showNodeName } = params;
@@ -54,15 +55,6 @@ export function PodList(params) {
       },
     ];
   }
-
-  const description = (
-    <Trans i18nKey="pods.description">
-      <ReactSharedLink
-        className="bsl-link"
-        url="https://kubernetes.io/docs/concepts/workloads/pods/"
-      />
-    </Trans>
-  );
 
   return (
     <ResourcesList
