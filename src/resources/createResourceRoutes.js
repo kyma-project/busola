@@ -205,7 +205,7 @@ export const createResourceRoutes = ({
               hasDetailsView={!!Details}
               list={<List allowSlashShortcut />}
               details={<Details />}
-              create={<Create />}
+              create={Create ?? null}
               {...props}
             >
               <List allowSlashShortcut />
@@ -224,7 +224,7 @@ export const createResourceRoutes = ({
                 hasDetailsView={true}
                 list={<List />}
                 details={<Details />}
-                create={<Create />}
+                create={Create ?? null}
                 defaultColumn="details"
                 {...props}
               >

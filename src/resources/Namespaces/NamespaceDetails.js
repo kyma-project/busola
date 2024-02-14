@@ -32,6 +32,7 @@ export function NamespaceDetails(props) {
     namespace: props.resourceName,
     isCompact: true,
     showTitle: true,
+    disableCreate: true,
   };
 
   const LimitrangesList = <LimitRangeList {...limitRangesParams} />;
@@ -43,6 +44,7 @@ export function NamespaceDetails(props) {
     namespace: props.resourceName,
     isCompact: true,
     showTitle: true,
+    disableCreate: true,
   };
 
   const ResourceQuotasList = (
