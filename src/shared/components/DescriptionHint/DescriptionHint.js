@@ -6,11 +6,12 @@ export function HintButton({
   showTitleDescription,
   description,
   style,
+  context,
 }) {
   return (
     <>
       <Button
-        id="descriptionOpener"
+        id={`descriptionOpener-${context}`}
         icon="hint"
         design="Transparent"
         style={style}
@@ -20,7 +21,7 @@ export function HintButton({
       />
       {createPortal(
         <Popover
-          opener="descriptionOpener"
+          opener={`descriptionOpener-${context}`}
           open={showTitleDescription}
           onAfterClose={() => setShowTitleDescription(false)}
           placementType="Right"
