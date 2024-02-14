@@ -9,6 +9,7 @@ import { useRestartAction } from 'shared/hooks/useRestartResource';
 
 import { DaemonSetCreate } from './DaemonSetCreate';
 import { DaemonSetStatus } from './DaemonSetStatus';
+import { description } from './DaemonSet';
 
 export function DaemonSetList(props) {
   const { t } = useTranslation();
@@ -38,15 +39,6 @@ export function DaemonSetList(props) {
       value: resource => <DaemonSetStatus daemonSet={resource} />,
     },
   ];
-
-  const description = (
-    <Trans i18nKey="daemon-sets.description">
-      <Link
-        className="bsl-link"
-        url="https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/"
-      />
-    </Trans>
-  );
 
   return (
     <ResourcesList
