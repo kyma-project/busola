@@ -163,13 +163,14 @@ export const DynamicPageComponent = ({
           header={
             <Title className="ui5-title">
               {title}
-              {description &&
-                HintButton(
-                  setShowTitleDescription,
-                  showTitleDescription,
-                  description,
-                  spacing.sapUiTinyMargin,
-                )}
+              {description && (
+                <HintButton
+                  style={spacing.sapUiTinyMargin}
+                  setShowTitleDescription={setShowTitleDescription}
+                  showTitleDescription={showTitleDescription}
+                  description={description}
+                />
+              )}
             </Title>
           }
           actions={actions}

@@ -5,7 +5,7 @@ import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
 import { spacing } from '@ui5/webcomponents-react-base';
 
-import { Button, Popover, Text } from '@ui5/webcomponents-react';
+import { Button } from '@ui5/webcomponents-react';
 import { createPatch } from 'rfc6902';
 import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNotFound';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
@@ -391,13 +391,14 @@ function Resource({
             title={t('common.headers.resource-type')}
           >
             {resource.kind}
-            {description &&
-              HintButton(
-                setShowTitleDescription,
-                showTitleDescription,
-                description,
-                spacing.sapUiTinyMarginBegin,
-              )}
+            {description && (
+              <HintButton
+                style={spacing.sapUiTinyMarginBegin}
+                setShowTitleDescription={setShowTitleDescription}
+                showTitleDescription={showTitleDescription}
+                description={description}
+              />
+            )}
           </DynamicPageComponent.Column>
 
           <DynamicPageComponent.Column
