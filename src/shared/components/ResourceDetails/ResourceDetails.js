@@ -423,10 +423,10 @@ function Resource({
               {col.value(resource)}
             </DynamicPageComponent.Column>
           ))}
-
           <DynamicPageComponent.Column
             key="Labels"
             title={t('common.headers.labels')}
+            columnSpan="1/1"
           >
             <Labels labels={resource.metadata.labels || {}} />
           </DynamicPageComponent.Column>
@@ -434,6 +434,7 @@ function Resource({
           <DynamicPageComponent.Column
             key="Annotations"
             title={t('common.headers.annotations')}
+            columnSpan="2/2"
           >
             <Labels labels={resource.metadata.annotations || {}} />
           </DynamicPageComponent.Column>
