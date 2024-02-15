@@ -58,6 +58,7 @@ export const HeaderRenderer = ({
                 ? 850
                 : ''
             }
+            aria-label={`${typeof h === 'object' ? index : h}-column`}
           >
             <Label>{h}</Label>
           </TableColumn>

@@ -54,7 +54,7 @@ context('Test Cluster Role Bindings', () => {
 
     cy.inspectList('Cluster Role Bindings', CRB_NAME);
 
-    cy.contains('ui5-table', CRB_NAME).click();
+    cy.clickGenericListLink(CRB_NAME);
 
     cy.getMidColumn()
       .contains('User')
@@ -117,7 +117,7 @@ context('Test Cluster Role Bindings', () => {
   });
 
   it('Delete Cluster Role Binding', () => {
-    cy.contains('ui5-table', CRB_NAME).click();
+    cy.clickGenericListLink(CRB_NAME);
 
     cy.deleteInDetails('Cluster Role Binding', CRB_NAME, true);
   });

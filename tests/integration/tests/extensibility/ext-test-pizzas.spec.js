@@ -69,9 +69,7 @@ context('Test Pizzas', () => {
       .contains('Namespaces')
       .click();
 
-    cy.get('ui5-link[accessible-role="link"]')
-      .contains('pizzas')
-      .click();
+    cy.clickGenericListLink('pizzas');
 
     cy.getLeftNav()
       .contains('Lunch')
@@ -84,9 +82,9 @@ context('Test Pizzas', () => {
     cy.contains('DELIVERY');
     cy.contains('CASH');
     cy.contains('a', 'extensibility docs');
-    cy.contains('ui5-link', 'margherita-order').should('be.visible');
+    cy.checkItemOnGenericListLink('margherita-order');
 
-    cy.contains('ui5-link', 'diavola-order').click({ force: true });
+    cy.clickGenericListLink('diavola-order');
 
     cy.contains('paymentMethod: CARD');
     cy.contains('realization: SELF-PICKUP');
@@ -201,7 +199,7 @@ context('Test Pizzas', () => {
   });
 
   it('Tests the Create Form', () => {
-    cy.contains('ui5-button', 'Create Pizza').click();
+    cy.contains('ui5-button', 'Create').click();
 
     cy.get('ui5-dialog').as('form');
 

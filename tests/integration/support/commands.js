@@ -40,12 +40,17 @@ Cypress.Commands.add(
   },
 );
 
+Cypress.Commands.add('checkItemOnGenericListLink', resourceName => {
+  cy.get('ui5-table-row')
+    .find('ui5-table-cell')
+    .contains('span', resourceName)
+    .should('be.visible');
+});
+
 Cypress.Commands.add('clickGenericListLink', resourceName => {
   cy.get('ui5-table-row')
     .find('ui5-table-cell')
-    .find('ui5-link')
-    .contains(resourceName)
-    .find('a.ui5-link-root')
+    .contains('span', resourceName)
     .click({ force: true });
 });
 
@@ -167,7 +172,7 @@ Cypress.Commands.add(
       .type(resourceName);
 
     if (isUI5Link) {
-      cy.contains('ui5-table', resourceName).should('be.visible');
+      cy.checkItemOnGenericListLink(resourceName);
     } else {
       cy.contains('a', resourceName).should('be.visible');
     }
