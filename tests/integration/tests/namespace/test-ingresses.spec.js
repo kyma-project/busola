@@ -30,7 +30,7 @@ context('Test Ingresses', () => {
   it('Create an Ingress', () => {
     cy.navigateTo('Discovery and Network', 'Ingress');
 
-    cy.contains('ui5-button', 'Create Ingress').click();
+    cy.contains('ui5-button', 'Create').click();
 
     cy.wrap(loadIngress(NAME, Cypress.env('NAMESPACE_NAME'))).then(
       INGRESS_CONFIG => {
@@ -69,6 +69,7 @@ context('Test Ingresses', () => {
   });
 
   it('Check Ingresses list', () => {
+    cy.wait(3000); // wait for the resource to be refeched and displayed in the list
     cy.inspectList('Ingresses', NAME);
   });
 });

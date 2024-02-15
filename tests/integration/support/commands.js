@@ -51,7 +51,7 @@ Cypress.Commands.add('clickGenericListLink', resourceName => {
   cy.get('ui5-table-row')
     .find('ui5-table-cell')
     .contains('span', resourceName)
-    .click({ force: true });
+    .click();
 });
 
 Cypress.Commands.add('filterWithNoValue', { prevSubject: true }, $elements =>
@@ -165,6 +165,7 @@ Cypress.Commands.add(
     deletedVisible = true,
     clearSearch = true,
     isUI5Link = true,
+    checkIfResourceIsRemoved = true,
   ) => {
     cy.get('ui5-combobox[placeholder="Search"]:visible')
       .find('input')
@@ -199,9 +200,11 @@ Cypress.Commands.add(
           .clear();
       }
 
-      cy.get('ui5-table')
-        .contains(resourceName)
-        .should('not.exist');
+      if (checkIfResourceIsRemoved) {
+        cy.get('ui5-table')
+          .contains(resourceName)
+          .should('not.exist');
+      }
     }
   },
 );

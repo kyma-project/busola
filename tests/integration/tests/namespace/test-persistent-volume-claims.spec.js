@@ -36,7 +36,7 @@ context('Test Persistent Volume Claims', () => {
   it('Create a Persistent Volume Claim', () => {
     cy.navigateTo('Storage', 'Persistent Volume Claims');
 
-    cy.contains('ui5-button', 'Create Persistent Volume Claim').click();
+    cy.contains('ui5-button', 'Create').click();
 
     cy.wrap(
       loadPVC(

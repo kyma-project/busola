@@ -81,14 +81,12 @@ context('Test reduced permissions 2', () => {
       .contains('Namespaces')
       .click();
 
-    cy.get('[aria-label="open-search"]').click();
-
     cy.get('ui5-combobox[placeholder="Search"]')
       .find('input')
       .click()
       .type('kube-public');
 
-    cy.contains('ui5-link', 'kube-public').click();
+    cy.clickGenericListLink('kube-public');
 
     cy.getLeftNav()
       .contains('Pods')

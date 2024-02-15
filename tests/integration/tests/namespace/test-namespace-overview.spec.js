@@ -31,7 +31,7 @@ context(
     });
 
     it('Add a new limit range', () => {
-      cy.contains('ui5-button', 'Create Limit Range').click();
+      cy.get('[data-testid="create-LimitRanges"]').click();
 
       cy.wrap(loadFile('test-limit-ranges.yaml')).then(LR_CONFIG => {
         const LR = JSON.stringify(LR_CONFIG);

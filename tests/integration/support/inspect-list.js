@@ -1,4 +1,4 @@
-Cypress.Commands.add('inspectList', (resource, resourceName) => {
+Cypress.Commands.add('inspectList', resourceName => {
   cy.closeMidColumn();
 
   cy.get('ui5-combobox[placeholder="Search"]:visible')

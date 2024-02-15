@@ -371,6 +371,7 @@ export function ResourceListRenderer({
   const extraHeaderContent = listHeaderActions || [
     CreateResourceForm && !disableCreate && !isNamespaceAll && (
       <Button
+        data-testid={`create-${resourceType}`}
         design="Emphasized"
         onClick={() => {
           setActiveResource(undefined);
@@ -419,12 +420,7 @@ export function ResourceListRenderer({
   return (
     <>
       <ModalWithForm
-        title={
-          createActionLabel ||
-          t('components.resources-list.create', {
-            resourceType: prettifiedResourceName,
-          })
-        }
+        title={createActionLabel || t('components.resources-list.create')}
         getToggleFormFn={getToggleFormFn}
         confirmText={t('common.buttons.create')}
         id={`add-${resourceType}-modal`}

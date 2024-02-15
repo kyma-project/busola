@@ -19,7 +19,7 @@ context('Test Config Maps', () => {
   it('Create a Config Map', () => {
     cy.navigateTo('Configuration', 'Config Maps');
 
-    cy.contains('ui5-button', 'Create Config Map').click();
+    cy.contains('ui5-button', 'Create').click();
 
     cy.get('[aria-label="ConfigMap name"]:visible')
       .find('input')

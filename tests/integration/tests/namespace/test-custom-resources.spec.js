@@ -67,16 +67,14 @@ context('Test Custom Resources', () => {
   });
 
   it('Check single CR list', () => {
-    cy.get('ui5-table-row')
-      .contains('ui5-link', 'Tnamespaces')
-      .click();
+    cy.clickGenericListLink('Tnamespaces');
 
     cy.getMidColumn()
       .contains('ui5-title', 'Tnamespaces')
       .should('be.visible');
 
     cy.getMidColumn()
-      .contains('ui5-button', /Create Tnamespace/i)
+      .contains('ui5-button', /Create/i)
       .should('be.visible');
 
     cy.url().should('match', /customresources/);

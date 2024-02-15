@@ -17,7 +17,7 @@ context('Test Service Accounts', () => {
   it('Create a Service Account', () => {
     cy.navigateTo('Configuration', 'Service Accounts');
 
-    cy.contains('ui5-button', 'Create Service Account').click();
+    cy.contains('ui5-button', 'Create').click();
 
     cy.contains('Advanced').click();
 
@@ -148,6 +148,6 @@ context('Test Service Accounts', () => {
   });
 
   it('Inspect list', () => {
-    cy.inspectList('Service Accounts', SERVICE_NAME);
+    cy.inspectList(SERVICE_NAME);
   });
 });

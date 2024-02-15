@@ -31,7 +31,7 @@ context('Test Daemon Sets', () => {
   it('Create Daemon Set', () => {
     cy.navigateTo('Workloads', 'Daemon Sets');
 
-    cy.contains('ui5-button', 'Create Daemon Set').click();
+    cy.contains('ui5-button', 'Create').click();
 
     cy.wrap(loadDS(DS_NAME, Cypress.env('NAMESPACE_NAME'), FILE_NAME)).then(
       DS_CONFIG => {
@@ -62,6 +62,7 @@ context('Test Daemon Sets', () => {
   });
 
   it('Inspect list', () => {
+    cy.wait(3000); // wait for the resource to be refeched and displayed in the list
     cy.inspectList('Daemon Sets', DS_NAME);
   });
 });
