@@ -94,6 +94,7 @@ export function PersistentVolumeList(props) {
 
   return (
     <ResourcesList
+      displayArrow={false}
       disableHiding={true}
       disableMargin={props.disableMargin}
       resourceTitle={t('pv.title')}

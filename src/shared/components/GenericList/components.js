@@ -26,7 +26,9 @@ export const HeaderRenderer = ({
   actions,
   headerRenderer,
   disableHiding = true,
+  displayArrow = false,
 }) => {
+  console.log(displayArrow);
   let emptyColumn = null;
   if (actions.length) {
     emptyColumn = (
@@ -65,6 +67,11 @@ export const HeaderRenderer = ({
         );
       })}
       {emptyColumn}
+      {displayArrow && (
+        <TableColumn slot={slot} key="arrow-column" aria-label="arrow-column">
+          <Label />
+        </TableColumn>
+      )}
     </>
   );
 
@@ -108,6 +115,7 @@ const DefaultRowRenderer = ({
   actions,
   rowRenderer,
   isSelected = false,
+  displayArrow = false,
 }) => {
   const cells = rowRenderer.map((cell, id) => {
     if (cell?.content) {
@@ -131,6 +139,11 @@ const DefaultRowRenderer = ({
     <TableRow type="Active" navigated={isSelected}>
       {cells}
       {!!actions.length && actionsCell}
+      {displayArrow && (
+        <TableCell style={{ padding: 0 }}>
+          <Icon name="slim-arrow-right" />
+        </TableCell>
+      )}
     </TableRow>
   );
 };

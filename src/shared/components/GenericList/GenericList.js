@@ -66,6 +66,7 @@ export const GenericList = ({
   customUrl,
   hasDetailsView,
   disableHiding = true,
+  displayArrow = false,
 }) => {
   const navigate = useNavigate();
   searchSettings = { ...defaultSearch, ...searchSettings };
@@ -230,6 +231,7 @@ export const GenericList = ({
         entry={e}
         actions={actions}
         rowRenderer={rowRenderer}
+        displayArrow={displayArrow}
       />
     ));
   };
@@ -305,6 +307,7 @@ export const GenericList = ({
             actions={actions}
             headerRenderer={headerRenderer}
             disableHiding={disableHiding}
+            displayArrow={displayArrow}
           />
         }
       >
