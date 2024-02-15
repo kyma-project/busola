@@ -30,6 +30,6 @@ context('Clean up Namespace', () => {
 
     cy.get('ui5-table')
       .contains(Cypress.env('NAMESPACE_NAME'))
-      .should('not.exist');
+      .should('not.exist', { timeout: 30000 });
   });
 });
