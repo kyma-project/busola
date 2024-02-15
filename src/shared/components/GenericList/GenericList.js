@@ -65,6 +65,7 @@ export const GenericList = ({
   resourceType = '',
   customUrl,
   hasDetailsView,
+  disableHiding = true,
 }) => {
   const navigate = useNavigate();
   searchSettings = { ...defaultSearch, ...searchSettings };
@@ -303,6 +304,7 @@ export const GenericList = ({
             entries={entries}
             actions={actions}
             headerRenderer={headerRenderer}
+            disableHiding={disableHiding}
           />
         }
       >

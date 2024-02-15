@@ -202,6 +202,7 @@ export function ResourceListRenderer({
   parentCrdName,
   emptyListProps = null,
   displayLabelForLabels,
+  disableHiding,
 }) {
   useVersionWarning({
     resourceUrl,
@@ -455,6 +456,7 @@ export function ResourceListRenderer({
       )}
       {!(error && error.toString().includes('is forbidden')) && (
         <GenericList
+          disableHiding={disableHiding ?? false}
           hasDetailsView={hasDetailsView}
           customUrl={customUrl}
           resourceType={resourceType}

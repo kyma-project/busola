@@ -21,7 +21,12 @@ export const BodyFallback = ({ children }) => (
   </tr>
 );
 
-export const HeaderRenderer = ({ slot, actions, headerRenderer }) => {
+export const HeaderRenderer = ({
+  slot,
+  actions,
+  headerRenderer,
+  disableHiding = true,
+}) => {
   let emptyColumn = null;
   if (actions.length) {
     emptyColumn = (
@@ -45,7 +50,13 @@ export const HeaderRenderer = ({ slot, actions, headerRenderer }) => {
             popinDisplay="Inline"
             demandPopin={h === 'Labels' ? true : false}
             minWidth={
-              h === 'Labels' ? '15000' : h !== 'Name' && h !== '' ? 850 : ''
+              h === 'Labels'
+                ? '15000'
+                : disableHiding
+                ? ''
+                : h !== 'Name' && h !== ''
+                ? 850
+                : ''
             }
           >
             <Label>{h}</Label>

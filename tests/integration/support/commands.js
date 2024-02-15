@@ -161,15 +161,13 @@ Cypress.Commands.add(
     clearSearch = true,
     isUI5Link = true,
   ) => {
-    cy.get('[aria-label="open-search"]:visible').click();
-
     cy.get('ui5-combobox[placeholder="Search"]:visible')
       .find('input')
       .click()
       .type(resourceName);
 
     if (isUI5Link) {
-      cy.contains('ui5-link', resourceName).should('be.visible');
+      cy.contains('ui5-table', resourceName).should('be.visible');
     } else {
       cy.contains('a', resourceName).should('be.visible');
     }
@@ -219,13 +217,13 @@ Cypress.Commands.add('testMidColumnLayout', resourceName => {
     .find('ui5-button[aria-label="full-screen"]')
     .click();
 
-  cy.contains('ui5-link', resourceName).should('not.be.visible');
+  cy.contains('ui5-table', resourceName).should('not.be.visible');
 
   cy.getMidColumn()
     .find('ui5-button[aria-label="close-full-screen"]')
     .click();
 
-  cy.contains('ui5-link', resourceName).should('be.visible');
+  cy.contains('ui5-table', resourceName).should('be.visible');
 
   cy.closeMidColumn();
 
@@ -239,13 +237,13 @@ Cypress.Commands.add('testEndColumnLayout', resourceName => {
     .find('ui5-button[aria-label="full-screen"]')
     .click();
 
-  cy.contains('ui5-link', resourceName).should('not.be.visible');
+  cy.contains('ui5-table', resourceName).should('not.be.visible');
 
   cy.getEndColumn()
     .find('ui5-button[aria-label="close-full-screen"]')
     .click();
 
-  cy.contains('ui5-link', resourceName).should('be.visible');
+  cy.contains('ui5-table', resourceName).should('be.visible');
 
   cy.getEndColumn()
     .find('ui5-button[aria-label="close-column"]')

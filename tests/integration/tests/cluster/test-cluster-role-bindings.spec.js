@@ -16,12 +16,13 @@ context('Test Cluster Role Bindings', () => {
   it('Create a ClusterRoleBinding', () => {
     cy.navigateTo('Configuration', 'Cluster Role Bindings');
 
-    cy.contains('ui5-button', 'Create Cluster Role Binding').click();
+    cy.contains('ui5-button', 'Create').click();
 
     cy.contains('Advanced').click();
 
     cy.get('[aria-label="ClusterRoleBinding name"]')
       .find('input')
+      .click()
       .type(CRB_NAME);
 
     cy.get(
@@ -53,7 +54,7 @@ context('Test Cluster Role Bindings', () => {
 
     cy.inspectList('Cluster Role Bindings', CRB_NAME);
 
-    cy.contains('ui5-link', CRB_NAME).click();
+    cy.contains('ui5-table', CRB_NAME).click();
 
     cy.getMidColumn()
       .contains('User')
@@ -116,7 +117,7 @@ context('Test Cluster Role Bindings', () => {
   });
 
   it('Delete Cluster Role Binding', () => {
-    cy.contains('ui5-link', CRB_NAME).click();
+    cy.contains('ui5-table', CRB_NAME).click();
 
     cy.deleteInDetails('Cluster Role Binding', CRB_NAME, true);
   });

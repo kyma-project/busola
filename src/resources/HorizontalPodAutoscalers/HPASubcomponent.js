@@ -34,6 +34,7 @@ export const HPASubcomponent = props => {
     return (
       <Suspense fallback={<Spinner />}>
         <ExtensibilityList
+          disableHiding={true}
           filterFunction={hpaFilter}
           overrideResMetadata={extensibilityHPAs}
           isCompact
@@ -48,6 +49,7 @@ export const HPASubcomponent = props => {
 
   return (
     <ResourcesList
+      disableHiding={true}
       key="horizontal-pod-autoscalers"
       hasDetailsView
       resourceUrl={url}

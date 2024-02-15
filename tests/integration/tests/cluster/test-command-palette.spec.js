@@ -147,26 +147,27 @@ context('Test Command Palette navigation', () => {
     closeCommandPalette();
   });
 
-  // TAB IS NOT WORKING
-  // it('Autocompletion', () => {
-  //   openCommandPalette();
+  it('Autocompletion', () => {
+    openCommandPalette();
 
-  //   getQueryInput().type('pref');
+    getQueryInput().type('pref');
 
-  //   // autocomplete
-  //   getQueryInput().tab().type('{enter}');
+    // autocomplete
+    cy.get('body')
+      .tab()
+      .type('{enter}');
 
-  //   cy.contains('Cluster interaction').should('be.visible');
+    cy.contains('Cluster interaction').should('be.visible');
 
-  //   cy.contains('Close').click();
-  // });
+    cy.contains('Close').click();
+  });
 
   it('Disables Command Palette if a modal is present', () => {
     openCommandPalette();
 
     getQueryInput().type('deploy{enter}');
 
-    cy.contains('ui5-button', 'Create Deployment').click();
+    cy.contains('ui5-button', 'Create').click();
 
     cy.get('[aria-label="Deployment name"]:visible')
       .find('input')
