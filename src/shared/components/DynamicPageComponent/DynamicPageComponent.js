@@ -130,13 +130,17 @@ export const DynamicPageComponent = ({
                                   : '?layout=TwoColumnsMidExpanded'
                               }`,
                         );
-                        setLayoutColumn({
-                          ...layoutColumn,
-                          layout:
-                            layoutNumber === 'MidColumn'
-                              ? 'OneColumn'
-                              : 'TwoColumnsMidExpanded',
-                        });
+                        layoutNumber === 'MidColumn'
+                          ? setLayoutColumn({
+                              ...layoutColumn,
+                              midColumn: null,
+                              layout: 'OneColumn',
+                            })
+                          : setLayoutColumn({
+                              ...layoutColumn,
+                              endColumn: null,
+                              layout: 'TwoColumnsMidExpanded',
+                            });
                       }}
                     />
                   </>

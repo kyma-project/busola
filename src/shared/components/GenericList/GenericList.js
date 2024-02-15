@@ -225,7 +225,11 @@ export const GenericList = ({
 
     return pagedItems.map((e, index) => (
       <RowRenderer
-        isSelected={entrySelected === e.metadata?.name}
+        isSelected={
+          (layoutState?.midColumn?.resourceName === e.metadata?.name ||
+            layoutState?.endColumn?.resourceName === e.metadata?.name) &&
+          entrySelected === e.metadata?.name
+        }
         index={index}
         key={e.metadata?.uid || e.name || e.metadata?.name || index}
         entry={e}
