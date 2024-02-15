@@ -655,6 +655,7 @@ export function ResourceListRenderer({
               setActiveResource(undefined);
               toggleFormFn(true);
             },
+            showButton: namespace !== '-all-',
           }}
         />
       )}
