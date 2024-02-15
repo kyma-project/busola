@@ -63,6 +63,6 @@ context('Test Daemon Sets', () => {
 
   it('Inspect list', () => {
     cy.wait(3000); // wait for the resource to be refeched and displayed in the list
-    cy.inspectList('Daemon Sets', DS_NAME);
+    cy.inspectList(DS_NAME);
   });
 });

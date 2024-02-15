@@ -76,7 +76,7 @@ context('Test Config Maps', () => {
   });
 
   it('Inspect list', () => {
-    cy.inspectList('Config Maps', CONFIG_MAP_NAME);
+    cy.inspectList(CONFIG_MAP_NAME);
   });
 
   it('Clone the secret', () => {
