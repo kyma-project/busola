@@ -28,7 +28,6 @@ export const HeaderRenderer = ({
   disableHiding = true,
   displayArrow = false,
 }) => {
-  console.log(displayArrow);
   let emptyColumn = null;
   if (actions.length) {
     emptyColumn = (
@@ -116,6 +115,7 @@ const DefaultRowRenderer = ({
   rowRenderer,
   isSelected = false,
   displayArrow = false,
+  hasDetailsView,
 }) => {
   const cells = rowRenderer.map((cell, id) => {
     if (cell?.content) {
@@ -136,7 +136,10 @@ const DefaultRowRenderer = ({
   );
 
   return (
-    <TableRow type="Active" navigated={isSelected}>
+    <TableRow
+      type={hasDetailsView ? 'Active' : 'Inactive'}
+      navigated={isSelected}
+    >
       {cells}
       {!!actions.length && actionsCell}
       {displayArrow && (

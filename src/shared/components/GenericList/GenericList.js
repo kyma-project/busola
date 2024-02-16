@@ -236,6 +236,7 @@ export const GenericList = ({
         actions={actions}
         rowRenderer={rowRenderer}
         displayArrow={displayArrow}
+        hasDetailsView={hasDetailsView}
       />
     ));
   };
@@ -256,7 +257,7 @@ export const GenericList = ({
       style={disableMargin ? {} : spacing.sapUiSmallMargin}
     >
       <Table
-        className={'ui5-generic-list'}
+        className={`ui5-generic-list ${hasDetailsView ? 'cursor-pointer' : ''}`}
         onRowClick={e => {
           if (!hasDetailsView) return;
           const selectedEntry = entries.find(entry => {
