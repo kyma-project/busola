@@ -5,7 +5,7 @@ import { CronJobLastScheduleTime } from 'shared/components/CronJob/CronJobLastSc
 import { CronJobSchedule } from 'shared/components/CronJob/CronJobSchedule';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { CronJobCreate } from './CronJobCreate';
-import { description } from './CronJob';
+import { description } from './CronJobDescription';
 
 export function CronJobList(props) {
   const { t } = useTranslation();

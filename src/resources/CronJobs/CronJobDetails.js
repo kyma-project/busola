@@ -14,7 +14,7 @@ import { CronJobConcurrencyPolicy } from './CronJobConcurrencyPolicy';
 import { CronJobCreate } from './CronJobCreate';
 import { CronJobJobs } from './CronJobJobs';
 
-import { description } from './CronJob';
+import { description } from './CronJobDescription';
 
 export function CronJobDetails(props) {
   const { t } = useTranslation();
