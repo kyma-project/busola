@@ -8,7 +8,7 @@ import { useRestartAction } from 'shared/hooks/useRestartResource';
 
 import { DaemonSetCreate } from './DaemonSetCreate';
 import { DaemonSetStatus } from './DaemonSetStatus';
-import { description } from './DaemonSet';
+import { description } from './DaemonSetDescription';
 
 export function DaemonSetList(props) {
   const { t } = useTranslation();

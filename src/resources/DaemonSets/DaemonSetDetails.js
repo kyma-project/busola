@@ -9,7 +9,7 @@ import { Selector } from 'shared/components/Selector/Selector';
 import { DaemonSetStatus } from './DaemonSetStatus';
 import { DaemonSetCreate } from './DaemonSetCreate';
 import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
-import { description } from './DaemonSet';
+import { description } from './DaemonSetDescription';
 
 const Tolerations = resource => {
   const { t } = useTranslation();
