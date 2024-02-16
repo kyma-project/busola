@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { useUpsert } from 'shared/hooks/BackendAPI/useUpsert';
@@ -13,13 +13,24 @@ import { createExtensibilityTemplate, createConfigmap } from './helpers';
 import { ColumnsInput } from './ColumnsInput';
 import './ExtensibilityStarterForm.scss';
 import { clusterState } from 'state/clusterAtom';
+import { useFeature } from 'hooks/useFeature';
+import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
-export function BusolaExtensionCreate({ formElementRef, onChange }) {
+export default function BusolaExtensionCreate({
+  formElementRef,
+  onChange,
+  layoutNumber,
+}) {
   const { t } = useTranslation();
   const notificationManager = useNotification();
   const upsert = useUpsert();
   const navigate = useNavigate();
   const cluster = useRecoilValue(clusterState);
+  const setLayoutColumn = useSetRecoilState(columnLayoutState);
+  const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
+
+  const { nextQuery, nextLayout } = usePrepareLayout(layoutNumber);
 
   const { data: crds } = useGetList()(
     '/apis/apiextensions.k8s.io/v1/customresourcedefinitions',
@@ -47,9 +58,28 @@ export function BusolaExtensionCreate({ formElementRef, onChange }) {
             notificationManager.notifySuccess({
               content: t('extensibility.starter-modal.messages.success'),
             });
-            navigate(
-              `/cluster/${cluster.contextName}/busolaextensions/kube-public/${crd.metadata.name}`,
-            );
+
+            if (isColumnLeyoutEnabled) {
+              setLayoutColumn({
+                layout: nextLayout,
+                showCreate: null,
+                midColumn: {
+                  resourceName: crd.metadata.name,
+                  resourceType: 'Extensions',
+                  namespaceId: 'kube-public',
+                },
+                endColumn: null,
+              });
+              window.history.pushState(
+                window.history.state,
+                '',
+                `/cluster/${cluster.contextName}/busolaextensions/kube-public/${crd.metadata.name}${nextQuery}`,
+              );
+            } else {
+              navigate(
+                `/cluster/${cluster.contextName}/busolaextensions/kube-public/${crd.metadata.name}`,
+              );
+            }
           };
 
           const configmap = createConfigmap(crd, state);

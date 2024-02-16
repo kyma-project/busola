@@ -5,7 +5,7 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { Link } from 'shared/components/Link/Link';
 import { useUrl } from 'hooks/useUrl';
 
-import { BusolaExtensionCreate } from './BusolaExtensionCreate';
+import BusolaExtensionCreate from './BusolaExtensionCreate';
 
 export function BusolaPluginList({ enableColumnLayout }) {
   const { t } = useTranslation();

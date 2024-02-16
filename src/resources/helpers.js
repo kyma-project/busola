@@ -89,7 +89,7 @@ export const usePrepareDetailsProps = ({
 export const usePrepareCreateProps = ({
   resourceCustomType,
   resourceType,
-  resourceI18Key, // TO DO: check if needed for custom resources
+  resourceTypeForTitle,
   apiGroup,
   apiVersion,
 }) => {
@@ -108,7 +108,7 @@ export const usePrepareCreateProps = ({
     resourceTitle: t('components.resources-list.create', {
       resourceType: prettifyNameSingular(
         '',
-        resourceCustomType || resourceType,
+        resourceTypeForTitle ?? resourceCustomType ?? resourceType,
       ),
     }),
     namespace: namespaceId,

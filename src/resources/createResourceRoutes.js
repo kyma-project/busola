@@ -148,7 +148,7 @@ const ColumnWrapper = ({
     midColumnComponent = (
       <ResourceCreate
         title={elementCreateProps.resourceTitle}
-        confirmText={t('common.buttons.update')}
+        confirmText={t('common.buttons.create')}
         renderForm={renderProps => {
           const createComponent =
             create &&
@@ -210,7 +210,7 @@ export const createResourceRoutes = ({
               hasDetailsView={!!Details}
               list={<List allowSlashShortcut />}
               details={<Details />}
-              create={<Create />}
+              create={Create ? <Create /> : null}
               {...props}
             >
               <List allowSlashShortcut />
@@ -229,7 +229,7 @@ export const createResourceRoutes = ({
                 hasDetailsView={true}
                 list={<List />}
                 details={<Details />}
-                create={<Create />}
+                create={Create ? <Create /> : null}
                 defaultColumn="details"
                 {...props}
               >
