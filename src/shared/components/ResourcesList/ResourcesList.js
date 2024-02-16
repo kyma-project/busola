@@ -647,7 +647,6 @@ export function ResourceListRenderer({
             textSearchProperties: textSearchProperties(),
           }}
           emptyListProps={{
-            ...emptyListProps,
             titleText: `${t('common.labels.no')} ${processTitle(
               prettifyNamePlural(resourceTitle, resourceType),
             )}`,
@@ -655,7 +654,8 @@ export function ResourceListRenderer({
               setActiveResource(undefined);
               toggleFormFn(true);
             },
-            showButton: namespace !== '-all-',
+            showButton: !disableCreate && namespace !== '-all-',
+            ...emptyListProps,
           }}
         />
       )}
