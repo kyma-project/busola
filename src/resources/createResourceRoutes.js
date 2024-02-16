@@ -140,13 +140,18 @@ const ColumnWrapper = ({
   }
 
   let midColumnComponent = null;
-  if (layoutState?.showCreate?.resourceType && create?.type !== null) {
+  if (
+    layoutState?.showCreate?.resourceType &&
+    create &&
+    create?.type !== null
+  ) {
     midColumnComponent = (
       <ResourceCreate
         title={elementCreateProps.resourceTitle}
         confirmText={t('common.buttons.update')}
         renderForm={renderProps => {
           const createComponent =
+            create &&
             create?.type !== null &&
             layoutState?.showCreate?.resourceType &&
             React.cloneElement(create, {
@@ -205,7 +210,7 @@ export const createResourceRoutes = ({
               hasDetailsView={!!Details}
               list={<List allowSlashShortcut />}
               details={<Details />}
-              create={Create ?? null}
+              create={<Create />}
               {...props}
             >
               <List allowSlashShortcut />
@@ -224,7 +229,7 @@ export const createResourceRoutes = ({
                 hasDetailsView={true}
                 list={<List />}
                 details={<Details />}
-                create={Create ?? null}
+                create={<Create />}
                 defaultColumn="details"
                 {...props}
               >
