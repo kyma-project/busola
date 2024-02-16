@@ -201,8 +201,9 @@ Cypress.Commands.add(
       }
 
       if (checkIfResourceIsRemoved) {
-        cy.get('ui5-table')
-          .contains(resourceName)
+        cy.get('ui5-table-row')
+          .find('ui5-table-cell')
+          .contains('span', resourceName)
           .should('not.exist');
       }
     }
@@ -225,13 +226,16 @@ Cypress.Commands.add('testMidColumnLayout', resourceName => {
     .find('ui5-button[aria-label="full-screen"]')
     .click();
 
-  cy.contains('ui5-table', resourceName).should('not.be.visible');
+  cy.get('ui5-table-row')
+    .find('ui5-table-cell')
+    .contains('span', resourceName)
+    .should('not.be.visible');
 
   cy.getMidColumn()
     .find('ui5-button[aria-label="close-full-screen"]')
     .click();
 
-  cy.contains('ui5-table', resourceName).should('be.visible');
+  cy.checkItemOnGenericListLink(resourceName);
 
   cy.closeMidColumn();
 });
@@ -241,13 +245,16 @@ Cypress.Commands.add('testEndColumnLayout', resourceName => {
     .find('ui5-button[aria-label="full-screen"]')
     .click();
 
-  cy.contains('ui5-table', resourceName).should('not.be.visible');
+  cy.get('ui5-table-row')
+    .find('ui5-table-cell')
+    .contains('span', resourceName)
+    .should('not.be.visible');
 
   cy.getEndColumn()
     .find('ui5-button[aria-label="close-full-screen"]')
     .click();
 
-  cy.contains('ui5-table', resourceName).should('be.visible');
+  cy.checkItemOnGenericListLink(resourceName);
 
   cy.getEndColumn()
     .find('ui5-button[aria-label="close-column"]')
@@ -261,7 +268,7 @@ Cypress.Commands.add('closeMidColumn', () => {
     .find('ui5-button[aria-label="close-column"]')
     .click();
 
-  cy.getMidColumn().should('not.exist');
+  cy.getMidColumn().should('not.be.visible');
 });
 
 Cypress.Commands.add('closeEndColumn', () => {
@@ -269,5 +276,5 @@ Cypress.Commands.add('closeEndColumn', () => {
     .find('ui5-button[aria-label="close-column"]')
     .click();
 
-  cy.getEndColumn().should('not.exist');
+  cy.getEndColumn().should('not.be.visible');
 });
