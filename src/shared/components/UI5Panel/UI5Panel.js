@@ -37,6 +37,7 @@ export const UI5Panel = ({
             paddingLeft: '1rem',
           }}
         >
+          ddd
           {icon && icon}
           {typeof title === 'string' ? (
             <Title level="H5">{title}</Title>

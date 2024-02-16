@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 import { Title } from './Title';
 import { ResourceFormWrapper } from './Wrapper';
@@ -54,7 +55,9 @@ export function CollapsibleSection({
       <header
         onClick={toggle}
         aria-label={`expand ${title}`}
-        style={{ marginLeft: `${nestingLevel * 16}px` }}
+        style={{
+          marginLeft: `calc(${nestingLevel} * ${spacing.sapUiSmallMarginBegin.marginLeft})`,
+        }}
         className="header"
       >
         {
@@ -74,6 +77,9 @@ export function CollapsibleSection({
 
       <div
         className={open ? 'content content--open' : 'content content--closed'}
+        style={{
+          marginLeft: `calc(${nestingLevel} * ${spacing.sapUiSmallMarginBegin.marginLeft})`,
+        }}
       >
         <ResourceFormWrapper
           resource={resource}
