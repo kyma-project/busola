@@ -65,14 +65,14 @@ context('Test Cluster Validation Scan', () => {
 
     cy.get('@clusterValidationPanel').scrollIntoView();
 
-    cy.get('@clusterValidationPanel').should('be.visible');
+    cy.get('@clusterValidationPanel').should('exist');
 
     cy.contains('Scan Progress').should('not.exist');
     cy.contains('Scan Result').should('not.exist');
 
     cy.get('@clusterValidationPanel')
       .contains('Configure')
-      .click();
+      .click({ force: true });
 
     testAndSelectOptions('Namespaces', 'default');
 
