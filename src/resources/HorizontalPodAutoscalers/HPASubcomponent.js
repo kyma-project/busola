@@ -56,7 +56,7 @@ export const HPASubcomponent = props => {
       hasDetailsView
       resourceUrl={url}
       title={t('horizontal-pod-autoscalers')}
-      resourceType={'horizontalpodautoscalers'}
+      resourceType={'horizontalPodAutoscalers'}
       namespace={namespace}
       isCompact
       showTitle

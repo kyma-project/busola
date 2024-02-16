@@ -19,7 +19,7 @@ type EmptyListComponentProps = {
 export const EmptyListComponent = ({
   titleText,
   subtitleText,
-  showButton = true,
+  showButton,
   buttonText,
   url,
   onClick,
@@ -27,6 +27,10 @@ export const EmptyListComponent = ({
 }: EmptyListComponentProps) => {
   const { t } = useTranslation();
   const subtitle = <Trans i18nKey={subtitleText}></Trans>;
+
+  if (showButton === undefined) {
+    showButton = typeof onClick === 'function';
+  }
 
   if (!buttonText) {
     buttonText = t('common.buttons.create');
