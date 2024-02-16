@@ -22,7 +22,11 @@ function HelmReleasesList() {
 
   const { data, loading, error } = useGetList(
     s => s.type === 'helm.sh/release.v1',
-  )(`/api/v1/namespaces/${namespace}/secrets`);
+  )(
+    namespace === '-all-'
+      ? `/api/v1/secrets`
+      : `/api/v1/namespaces/${namespace}/secrets`,
+  );
 
   const headerRenderer = () => [
     t('common.headers.name'),
