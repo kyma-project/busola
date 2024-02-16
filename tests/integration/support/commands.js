@@ -237,7 +237,7 @@ Cypress.Commands.add('testMidColumnLayout', resourceName => {
 
   cy.checkItemOnGenericListLink(resourceName);
 
-  cy.closeMidColumn();
+  cy.closeMidColumn(true);
 });
 
 Cypress.Commands.add('testEndColumnLayout', resourceName => {
@@ -263,18 +263,20 @@ Cypress.Commands.add('testEndColumnLayout', resourceName => {
   cy.getEndColumn().should('not.exist');
 });
 
-Cypress.Commands.add('closeMidColumn', () => {
+Cypress.Commands.add('closeMidColumn', (checkIfNotExist = false) => {
   cy.getMidColumn()
     .find('ui5-button[aria-label="close-column"]')
     .click();
 
-  cy.getMidColumn().should('not.be.visible');
+  if (checkIfNotExist) cy.getMidColumn().should('not.exist');
+  else cy.getMidColumn().should('not.be.visible');
 });
 
-Cypress.Commands.add('closeEndColumn', () => {
+Cypress.Commands.add('closeEndColumn', (checkIfNotExist = false) => {
   cy.getEndColumn()
     .find('ui5-button[aria-label="close-column"]')
     .click();
 
-  cy.getEndColumn().should('not.be.visible');
+  if (checkIfNotExist) cy.getEndColumn().should('not.exist');
+  else cy.getEndColumn().should('not.be.visible');
 });

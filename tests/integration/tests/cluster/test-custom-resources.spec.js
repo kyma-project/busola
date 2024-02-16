@@ -131,7 +131,7 @@ context('Test Custom Resources', () => {
 
     cy.contains(/deleted/).should('be.visible');
 
-    cy.getEndColumn().should('not.be.visible');
+    cy.getEndColumn().should('not.exist');
 
     cy.getMidColumn()
       .contains('tcluster.cypress.example.com')
