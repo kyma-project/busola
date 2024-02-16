@@ -320,6 +320,9 @@ common:
     value: Value
     version: Version
     zone: Zone
+  valueUnits:
+    days-ago: days ago
+    days: days
   labels:
     category: Category
     data: Data

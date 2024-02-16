@@ -75,10 +75,7 @@ context('Test Persistent Volume Claims', () => {
       .contains('ui5-panel', Cypress.env('STORAGE_CLASS_NAME'))
       .should('be.visible');
 
-    cy.getMidColumn()
-      .get('ui5-title')
-      .contains('Events')
-      .scrollIntoView();
+    cy.scrollMidColumnToButtom();
 
     cy.getMidColumn()
       .contains('Events')
