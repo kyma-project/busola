@@ -76,6 +76,11 @@ context('Test Persistent Volume Claims', () => {
       .should('be.visible');
 
     cy.getMidColumn()
+      .get('ui5-title')
+      .contains('Events')
+      .scrollIntoView();
+
+    cy.getMidColumn()
       .contains('Events')
       .should('be.visible');
   });
