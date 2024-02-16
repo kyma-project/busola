@@ -74,7 +74,7 @@ context('Test Custom Resources', () => {
       .contains('Custom Resources')
       .click();
 
-    cy.contains('ui5-table', 'Tclusters').click();
+    cy.clickGenericListLink('Tclusters');
 
     cy.contains('ui5-button', 'Create').click();
 
@@ -94,20 +94,24 @@ context('Test Custom Resources', () => {
       .contains('Custom Resources')
       .click();
 
-    cy.contains('ui5-table', 'Tclusters').click();
+    cy.clickGenericListLink('Tclusters');
 
     cy.testMidColumnLayout('Tclusters');
 
-    cy.contains('ui5-table', 'Tclusters').click();
+    cy.clickGenericListLink('Tclusters');
 
     cy.getMidColumn()
-      .contains('ui5-table', 'tcluster-test')
+      .get('ui5-table-row')
+      .find('ui5-table-cell')
+      .contains('span', 'tcluster-test')
       .click();
 
     cy.testEndColumnLayout('tcluster-test');
 
     cy.getMidColumn()
-      .contains('ui5-table', 'tcluster-test')
+      .get('ui5-table-row')
+      .find('ui5-table-cell')
+      .contains('span', 'tcluster-test')
       .click();
 
     cy.getMidColumn()

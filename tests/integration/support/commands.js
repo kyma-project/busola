@@ -234,10 +234,6 @@ Cypress.Commands.add('testMidColumnLayout', resourceName => {
   cy.contains('ui5-table', resourceName).should('be.visible');
 
   cy.closeMidColumn();
-
-  cy.getMidColumn()
-    .contains('ui5-title', resourceName)
-    .should('not.be.visible');
 });
 
 Cypress.Commands.add('testEndColumnLayout', resourceName => {
@@ -257,11 +253,7 @@ Cypress.Commands.add('testEndColumnLayout', resourceName => {
     .find('ui5-button[aria-label="close-column"]')
     .click();
 
-  cy.getEndColumn().should('not.be.visible');
-
-  cy.getEndColumn()
-    .contains('ui5-title', resourceName)
-    .should('not.be.visible');
+  cy.getEndColumn().should('not.exist');
 });
 
 Cypress.Commands.add('closeMidColumn', () => {
@@ -269,7 +261,7 @@ Cypress.Commands.add('closeMidColumn', () => {
     .find('ui5-button[aria-label="close-column"]')
     .click();
 
-  cy.getMidColumn().should('not.be.visible');
+  cy.getMidColumn().should('not.exist');
 });
 
 Cypress.Commands.add('closeEndColumn', () => {
@@ -277,5 +269,5 @@ Cypress.Commands.add('closeEndColumn', () => {
     .find('ui5-button[aria-label="close-column"]')
     .click();
 
-  cy.getEndColumn().should('not.be.visible');
+  cy.getEndColumn().should('not.exist');
 });
