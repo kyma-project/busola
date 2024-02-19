@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useFeature } from 'hooks/useFeature';
+import { useUrl } from 'hooks/useUrl';
 
 import { usePrepareCreateProps } from 'resources/helpers';
 import { Spinner } from 'shared/components/Spinner/Spinner';
@@ -25,6 +26,7 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType, cr }) => {
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
+  const { resourceListUrl } = useUrl();
 
   const { t } = useTranslation();
 
@@ -48,6 +50,13 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType, cr }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [layout, isColumnLeyoutEnabled, namespaceId, resourceName, resourceType]);
 
+  const layoutCloseUrl = resourceListUrl({
+    kind: resourceType,
+    metadata: {
+      namespace: layoutState?.midColumn?.namespaceId ?? namespaceId,
+    },
+  });
+
   let startColumnComponent = null;
   if ((!layout || !isColumnLeyoutEnabled) && defaultColumn === 'details') {
     startColumnComponent = (
@@ -68,7 +77,8 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType, cr }) => {
     midColumnComponent = (
       <ResourceCreate
         title={elementCreateProps.resourceTitle}
-        confirmText={t('common.buttons.update')}
+        confirmText={t('common.buttons.save')}
+        layoutCloseUrl={layoutCloseUrl}
         renderForm={renderProps => {
           const createComponent = layoutState?.showCreate?.resourceType && (
             <Create

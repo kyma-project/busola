@@ -252,6 +252,7 @@ export function ResourceForm({
           headerActions={
             <>
               {/* TODO STYLE IT */}
+              {!!initialResource && actions}
               {mode === ModeSelector.MODE_YAML && (
                 <div className="yaml-form-actions">
                   <EditorActions
@@ -262,9 +263,6 @@ export function ResourceForm({
                   />
                 </div>
               )}
-              {!!initialResource &&
-                mode === ModeSelector.MODE_ADVANCED &&
-                actions}
             </>
           }
         >

@@ -10,6 +10,7 @@ import { usePrepareCreateProps } from 'resources/helpers';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useFeature } from 'hooks/useFeature';
+import { useUrl } from 'hooks/useUrl';
 
 const BusolaExtensionList = React.lazy(() =>
   import('components/BusolaExtensions/BusolaExtensionList'),
@@ -27,6 +28,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
+  const { clusterUrl } = useUrl();
 
   const { t } = useTranslation();
 
@@ -78,6 +80,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
       <ResourceCreate
         title={elementCreateProps.resourceTitle}
         confirmText={t('common.buttons.create')}
+        layoutCloseUrl={clusterUrl('busolaextensions')}
         renderForm={renderProps => {
           const createComponent = layoutState?.showCreate?.resourceType && (
             <BusolaExtensionCreate

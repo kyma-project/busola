@@ -140,6 +140,7 @@ export const DynamicPageComponent = ({
                     );
                     setLayoutColumn({
                       ...layoutColumn,
+                      showCreate: null,
                       layout:
                         layoutNumber === 'MidColumn'
                           ? 'OneColumn'

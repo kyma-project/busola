@@ -90,7 +90,7 @@ export function BusolaExtensionDetails({ name, namespace }) {
                     })}
                   </Button>
                 }
-                confirmText={t('common.buttons.update')}
+                confirmText={t('common.buttons.save')}
                 id={`edit-resource-modal`}
                 className="modal-size--l"
                 renderForm={props => (

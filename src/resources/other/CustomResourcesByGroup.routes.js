@@ -36,7 +36,7 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
   const { t } = useTranslation();
 
   const { crdName, crName } = useParams();
-  const { namespace } = useUrl();
+  const { namespace, scopedUrl } = useUrl();
 
   const initialLayoutState = layout
     ? {
@@ -64,6 +64,10 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
       setLayoutColumn(initialLayoutState);
     }
   }, [layout, isColumnLeyoutEnabled, crdName, crName, namespace]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const layoutCloseUrl = scopedUrl(
+    `customresources/${layoutState?.midColumn?.resourceName ?? crdName}`,
+  );
 
   const crdResourceName = useMemo(
     () =>
@@ -128,6 +132,7 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
       <ResourceCreate
         title={elementCreateProps.resourceTitle}
         confirmText={t('common.buttons.create')}
+        layoutCloseUrl={layoutCloseUrl}
         renderForm={renderProps => {
           const createComponent = layoutState?.showCreate?.resourceType && (
             <CRCreate
@@ -158,6 +163,7 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
         title={elementCreateProps.resourceTitle}
         confirmText={t('common.buttons.create')}
         layoutNumber="EndColumn"
+        layoutCloseUrl={layoutCloseUrl}
         renderForm={renderProps => {
           const createComponent = layoutState?.showCreate?.resourceType && (
             <CRCreate
@@ -173,24 +179,6 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
       />
     );
   }
-  // endColumnComponent = (
-  //   <ResourceCreate
-  //     title={elementCreateProps.resourceTitle}
-  //     confirmText={t('common.buttons.update')}
-  //     renderForm={renderProps => {
-  //       const createComponent = layoutState?.showCreate?.resourceType && (
-  //         <Create
-  //           resourceSchema={cr}
-  //           layoutNumber="StartColumn"
-  //           {...elementCreateProps}
-  //           {...renderProps}
-  //         />
-  //       );
-
-  //       return <ErrorBoundary>{createComponent}</ErrorBoundary>;
-  //     }}
-  //   />
-  // );
 
   if (!layoutState?.showCreate && layoutState?.endColumn) {
     endColumnComponent = (

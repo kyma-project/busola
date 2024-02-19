@@ -16,6 +16,7 @@ import {
 } from './helpers';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
+import { useUrl } from 'hooks/useUrl';
 
 import { useFeature } from 'hooks/useFeature';
 
@@ -66,6 +67,7 @@ const ColumnWrapper = ({
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
+  const { resourceListUrl } = useUrl();
 
   const { t } = useTranslation();
 
@@ -78,7 +80,6 @@ const ColumnWrapper = ({
     () => props.resourceName ?? resourceNameFromParams,
     [props.resourceName, resourceNameFromParams],
   );
-
   const namespaceId = useMemo(
     () => props.namespaceId ?? namespaceIdFromParams,
     [props.namespaceId, namespaceIdFromParams],
@@ -108,6 +109,13 @@ const ColumnWrapper = ({
     resourceName,
     props.resourceType,
   ]);
+
+  const layoutCloseUrl = resourceListUrl({
+    kind: props.resourceType,
+    metadata: {
+      namespace: layoutState?.midColumn?.namespaceId ?? namespaceId,
+    },
+  });
 
   const elementListProps = usePrepareListProps(props);
   const elementDetailsProps = usePrepareDetailsProps({
@@ -149,6 +157,7 @@ const ColumnWrapper = ({
       <ResourceCreate
         title={elementCreateProps.resourceTitle}
         confirmText={t('common.buttons.create')}
+        layoutCloseUrl={layoutCloseUrl}
         renderForm={renderProps => {
           const createComponent =
             create &&

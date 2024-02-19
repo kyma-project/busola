@@ -15,19 +15,15 @@ export const ResourceCreate = ({
   title,
   button,
   renderForm,
-  opened,
-  customCloseAction,
   confirmText,
   invalidPopupMessage,
   className,
-  onModalOpenStateChange,
-  alwaysOpen,
   isEdit,
+  layoutCloseUrl,
   layoutNumber = 'MidColumn',
   ...props
 }) => {
   const { t } = useTranslation();
-  const [isOpen, setOpen] = useState(alwaysOpen || false);
   const [resetFormFn, setResetFormFn] = useState(() => () => {});
   const {
     isValid,
@@ -38,23 +34,6 @@ export const ResourceCreate = ({
   const notificationManager = useNotification();
 
   confirmText = confirmText || t('common.buttons.create');
-
-  useEffect(() => {
-    if (!alwaysOpen) setOpenStatus(opened); // if alwaysOpen===true we can ignore the 'opened' prop
-  }, [opened]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    if (isOpen !== undefined) onModalOpenStateChange(isOpen);
-  }, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const setOpenStatus = status => {
-    if (status) {
-      setTimeout(() => revalidate());
-    } else {
-      if (customCloseAction) customCloseAction();
-    }
-    setOpen(status);
-  };
 
   function handleFormChanged() {
     setTimeout(() => revalidate());
@@ -120,7 +99,7 @@ export const ResourceCreate = ({
         <DynamicPageComponent
           title={title}
           layoutNumber={layoutNumber}
-          layoutCloseUrl={`${window.location.pathname}${
+          layoutCloseUrl={`${layoutCloseUrl}${
             layoutNumber === 'EndColumn' ? '?layout=TwoColumnsMidExpanded' : ''
           }`}
           footer={
@@ -134,7 +113,7 @@ export const ResourceCreate = ({
                   </Button>
                   <Button
                     onClick={() => {
-                      setOpenStatus(false);
+                      // setOpenStatus(false);
                     }}
                     design="Transparent"
                   >
@@ -161,7 +140,7 @@ export const ResourceCreate = ({
                 </Button>
                 <Button
                   onClick={() => {
-                    setOpenStatus(false);
+                    // setOpenStatus(false);
                   }}
                   design="Transparent"
                 >
@@ -188,14 +167,6 @@ export const ResourceCreate = ({
               <Button onClick={resetFormFn} design="Transparent">
                 {t('common.buttons.reset')}
               </Button>
-              <Button
-                onClick={() => {
-                  setOpenStatus(false);
-                }}
-                design="Transparent"
-              >
-                {t('common.buttons.cancel')}
-              </Button>
             </>
           ),
         })}
@@ -207,21 +178,16 @@ ResourceCreate.propTypes = {
   performRefetch: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   renderForm: PropTypes.func.isRequired,
-  opened: PropTypes.bool,
-  customCloseAction: PropTypes.func,
   confirmText: PropTypes.string,
   invalidPopupMessage: PropTypes.string,
   button: CustomPropTypes.button,
   className: PropTypes.string,
-  onModalOpenStateChange: PropTypes.func,
-  alwaysOpen: PropTypes.bool, // set this to true if you want to control the modal by rendering and un-rendering it instead of the open/closed state
   isEdit: PropTypes.bool,
+  layoutCloseUrl: PropTypes.bool,
 };
 
 ResourceCreate.defaultProps = {
   performRefetch: () => {},
   invalidPopupMessage: '',
-  onModalOpenStateChange: () => {},
-  alwaysOpen: false,
   isEdit: false,
 };
