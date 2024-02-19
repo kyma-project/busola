@@ -1,5 +1,3 @@
-import { t } from 'i18next';
-
 const toSeconds = 1000;
 const toMinutes = 60;
 const toHours = 60;
