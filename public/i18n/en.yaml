@@ -320,7 +320,7 @@ common:
     value: Value
     version: Version
     zone: Zone
-  valueUnits:
+  value-units:
     days-ago: days ago
     days: days
   labels:

@@ -413,7 +413,7 @@ function Resource({
           >
             <ReadableElapsedTimeFromNow
               timestamp={resource.metadata.creationTimestamp}
-              valueUnit={t('common.valueUnits.days')}
+              valueUnit={t('common.value-units.days')}
             />
           </DynamicPageComponent.Column>
 
@@ -421,7 +421,7 @@ function Resource({
             key="Last Update"
             title={t('common.headers.last-update')}
           >
-            {renderUpdateDate(lastUpdate, t('common.valueUnits.days-ago'))}
+            {renderUpdateDate(lastUpdate, t('common.value-units.days-ago'))}
           </DynamicPageComponent.Column>
 
           {customColumns.filter(filterColumns).map(col => (
