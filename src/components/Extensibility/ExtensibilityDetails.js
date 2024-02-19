@@ -13,7 +13,11 @@ import { DataSourcesContextProvider } from './contexts/DataSources';
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { Widget } from './components/Widget';
 import { ExtensibilityCreate } from './ExtensibilityCreate';
-import { useGetTranslation, TranslationBundleContext } from './helpers';
+import {
+  useGetTranslation,
+  TranslationBundleContext,
+  useCreateResourceDescription,
+} from './helpers';
 import { useJsonata } from './hooks/useJsonata';
 
 export const ExtensibilityDetailsCore = ({
@@ -23,7 +27,8 @@ export const ExtensibilityDetailsCore = ({
 }) => {
   const { t, widgetT, exists } = useGetTranslation();
 
-  const { urlPath, resource, features } = resMetaData?.general ?? {};
+  const { urlPath, resource, features, description: resourceDescription } =
+    resMetaData?.general ?? {};
   const { disableEdit, disableDelete } = features?.actions || {};
   const { scopedUrl } = useUrl();
 
@@ -32,6 +37,8 @@ export const ExtensibilityDetailsCore = ({
   });
 
   const jsonata = useJsonata({});
+
+  const description = useCreateResourceDescription(resourceDescription);
 
   const detailsProps = usePrepareDetailsProps({
     resourceCustomType: getExtensibilityPath(resMetaData?.general),
@@ -125,6 +132,7 @@ export const ExtensibilityDetailsCore = ({
       hasTabs={
         Array.isArray(body) ? body.some(obj => obj.widget === 'Tabs') : false
       }
+      description={description}
       breadcrumbs={breadcrumbs}
       createResourceForm={ExtensibilityCreate}
       resourceSchema={resMetaData}
