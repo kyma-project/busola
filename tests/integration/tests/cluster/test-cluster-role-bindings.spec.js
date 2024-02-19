@@ -113,7 +113,7 @@ context('Test Cluster Role Bindings', () => {
   });
 
   it('Test column layout functionality', () => {
-    cy.testMidColumnLayout(CRB_NAME);
+    cy.testMidColumnLayout(CRB_NAME, false);
   });
 
   it('Delete Cluster Role Binding', () => {
