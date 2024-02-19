@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Bar, Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
@@ -24,7 +23,6 @@ export const ResourceCreate = ({
   ...props
 }) => {
   const { t } = useTranslation();
-  const [resetFormFn, setResetFormFn] = useState(() => () => {});
   const {
     isValid,
     formElementRef,
@@ -105,26 +103,10 @@ export const ResourceCreate = ({
           footer={
             <Bar
               design="FloatingFooter"
-              endContent={
-                <>
-                  {renderConfirmButton()}
-                  <Button onClick={resetFormFn} design="Transparent">
-                    {t('common.buttons.reset')}
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      // setOpenStatus(false);
-                    }}
-                    design="Transparent"
-                  >
-                    {t('common.buttons.cancel')}
-                  </Button>
-                </>
-              }
+              endContent={<>{renderConfirmButton()}</>}
             />
           }
           content={renderForm({
-            handleSetResetFormFn: setResetFormFn,
             formElementRef,
             isValid,
             setCustomValid,
@@ -132,28 +114,12 @@ export const ResourceCreate = ({
             onError: handleFormError,
             onCompleted: handleFormSuccess,
             performManualSubmit: handleFormSubmit,
-            actions: (
-              <>
-                {renderConfirmButton()}
-                <Button onClick={resetFormFn} design="Transparent">
-                  {t('common.buttons.reset')}
-                </Button>
-                <Button
-                  onClick={() => {
-                    // setOpenStatus(false);
-                  }}
-                  design="Transparent"
-                >
-                  {t('common.buttons.cancel')}
-                </Button>
-              </>
-            ),
+            actions: <>{renderConfirmButton()}</>,
           })}
         />
       )}
       {isEdit &&
         renderForm({
-          handleSetResetFormFn: setResetFormFn,
           formElementRef,
           isValid,
           setCustomValid,
@@ -161,14 +127,7 @@ export const ResourceCreate = ({
           onError: handleFormError,
           onCompleted: handleFormSuccess,
           performManualSubmit: handleFormSubmit,
-          actions: (
-            <>
-              {renderConfirmButton()}
-              <Button onClick={resetFormFn} design="Transparent">
-                {t('common.buttons.reset')}
-              </Button>
-            </>
-          ),
+          actions: <>{renderConfirmButton()}</>,
         })}
     </>
   );

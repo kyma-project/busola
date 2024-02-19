@@ -46,7 +46,6 @@ export function ResourceForm({
   disableDefaultFields,
   onModeChange,
   urlPath,
-  handleSetResetFormFn = () => {},
   layoutNumber,
   actions,
 }) {
@@ -55,7 +54,6 @@ export function ResourceForm({
     () => resource.apiVersion + '/' + resource.kind,
     [], // eslint-disable-line react-hooks/exhaustive-deps
   );
-  const resourceRef = useRef(null);
 
   if (!handleNameChange) {
     handleNameChange = name => {
@@ -65,16 +63,6 @@ export function ResourceForm({
       setResource({ ...resource });
     };
   }
-
-  useEffect(() => {
-    if (!resourceRef.current) {
-      resourceRef.current = JSON.stringify(resource);
-      handleSetResetFormFn(() => () => {
-        setResource(JSON.parse(resourceRef.current));
-        if (onReset) onReset();
-      });
-    }
-  }, [handleSetResetFormFn, onReset, resource, resourceRef, setResource]);
 
   const { t } = useTranslation();
   const createResource = useCreateResource({

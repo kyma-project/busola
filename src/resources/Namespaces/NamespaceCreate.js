@@ -32,7 +32,6 @@ export default function NamespaceCreate({
   onCompleted,
   onError,
   setCustomValid,
-  handleSetResetFormFn,
   ...props
 }) {
   const { t } = useTranslation();
@@ -101,32 +100,6 @@ export default function NamespaceCreate({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [namespace.metadata?.name]);
-
-  useEffect(() => {
-    const resetFunction = () => {
-      setNamespace(
-        initialNamespace
-          ? cloneDeep(initialNamespace)
-          : createNamespaceTemplate(),
-      );
-
-      if (!initialNamespace) {
-        setWithLimits(false);
-        setLimits(createLimitRangeTemplate({}));
-        setWithMemory(false);
-
-        setMemory(createResourceQuotaTemplate({}));
-        jp.value(namespace, `metadata.labels`, {
-          [ISTIO_INJECTION_LABEL]: ISTIO_INJECTION_DISABLED,
-        });
-        jp.value(namespace, 'metadata.name', '');
-        setNamespace({ ...namespace });
-      }
-    };
-
-    handleSetResetFormFn(() => resetFunction);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   async function afterNamespaceCreated() {
     if (!initialNamespace) {
@@ -217,7 +190,6 @@ export default function NamespaceCreate({
         lockedKeys: [ISTIO_INJECTION_LABEL],
         lockedValues: [ISTIO_INJECTION_LABEL],
       }}
-      handleSetResetFormFn={handleSetResetFormFn}
     >
       {isIstioFeatureOn ? (
         <ResourceForm.FormField
