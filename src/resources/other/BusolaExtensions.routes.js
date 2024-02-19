@@ -13,7 +13,7 @@ const BusolaExtensionDetails = React.lazy(() =>
   import('components/BusolaExtensions/BusolaExtensionDetails'),
 );
 
-const ColumnWrapper = details => {
+const ColumnWrapper = ({ details }) => {
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   const { namespace, name } = useParams();
 
@@ -40,8 +40,9 @@ const ColumnWrapper = details => {
     }
   }, [layout, namespace, name]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!isColumnLeyoutEnabled && details) {
-    return <BusolaExtensionDetails name={name} namespace={namespace} />;
+  if (!isColumnLeyoutEnabled) {
+    if (details === true)
+      return <BusolaExtensionDetails name={name} namespace={namespace} />;
   }
 
   return (
