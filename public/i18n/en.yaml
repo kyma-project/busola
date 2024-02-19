@@ -661,7 +661,7 @@ deployments:
   title: Deployments
   status: 
     available-replicas: Available Replicas
-    replicas: Replicas
+    desired-replicas: Desired Replicas
 discovery-and-network:
   title: Discovery and Network
 domains:

@@ -5,6 +5,7 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import { Selector } from 'shared/components/Selector/Selector.js';
 import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 import { HPASubcomponent } from 'resources/HorizontalPodAutoscalers/HPASubcomponent';
+import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 
 import { DeploymentStatus } from './DeploymentStatus';
 import { DeploymentCreate } from './DeploymentCreate';
@@ -22,12 +23,34 @@ export function DeploymentDetails(props) {
 
   const customStatusColumns = [
     {
-      header: t('deployments.status.available-replicas') + ':',
-      value: deployment => <div>{deployment?.status?.availableReplicas}</div>,
+      header: 'Last Scale Time' + ':',
+      value: deployment => (
+        <ReadableCreationTimestamp
+          timestamp={deployment?.status?.conditions?.[1]?.lastUpdateTime}
+        />
+      ),
     },
     {
-      header: t('deployments.status.replicas') + ':',
+      header: 'Current Replicas' + ':',
       value: deployment => <div>{deployment?.status?.replicas}</div>,
+    },
+    {
+      header: 'Updated Replicas' + ':',
+      value: deployment => (
+        <div>{deployment?.status?.updatedReplicas ?? 0}</div>
+      ),
+    },
+    {
+      header: t('deployments.status.available-replicas') + ':',
+      value: deployment => (
+        <div>{deployment?.status?.availableReplicas ?? 0}</div>
+      ),
+    },
+    {
+      header: 'Un' + t('deployments.status.available-replicas') + ':',
+      value: deployment => (
+        <div>{deployment?.status?.unavailableReplicas ?? 0}</div>
+      ),
     },
   ];
 

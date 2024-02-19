@@ -13,11 +13,6 @@ import './ResourceStatusCard.scss';
 
 export function ResourceStatusCard({ statusBadge, customColumns, conditions }) {
   const { t } = useTranslation();
-  const [expandedPanel, setExpandedPanel] = useState(null);
-
-  const togglePanel = number => {
-    setExpandedPanel(expandedPanel === number ? null : number);
-  };
 
   return (
     <div style={spacing.sapUiSmallMarginBeginEnd}>
@@ -50,50 +45,12 @@ export function ResourceStatusCard({ statusBadge, customColumns, conditions }) {
             >
               {`${t('common.headers.conditions')}:`}
             </div>
-            {conditions?.map((cond, number) => (
-              <>
-                <StandardListItem
-                  onClick={() => togglePanel(number)}
-                  className="conditions-element"
-                >
-                  <div className="conditions-header">
-                    {expandedPanel === number ? (
-                      <Icon
-                        name="slim-arrow-down"
-                        design="Information"
-                        style={spacing.sapUiTinyMarginEnd}
-                      />
-                    ) : (
-                      <Icon
-                        name="slim-arrow-right"
-                        design="Information"
-                        style={spacing.sapUiTinyMarginEnd}
-                      />
-                    )}
-                    {cond.header.titleText}
-                    <StatusBadge
-                      type={cond.header.status ? 'Success' : 'Error'}
-                      className={'conditions-header__status-badge'}
-                    >
-                      {cond.header.status}
-                    </StatusBadge>
-                  </div>
-                </StandardListItem>
-                {expandedPanel === number && (
-                  <div
-                    className="conditions-message"
-                    style={{
-                      ...spacing.sapUiSmallMarginBeginEnd,
-                      ...spacing.sapUiTinyMarginTopBottom,
-                    }}
-                  >
-                    <div className="title bsl-has-color-status-4 ">
-                      {`${t('common.headers.message')}:`}
-                    </div>
-                    {cond.message}
-                  </div>
-                )}
-              </>
+            {conditions?.map(cond => (
+              <ExpandableListItem
+                header={cond.header?.titleText}
+                status={cond.header?.status}
+                content={cond.message}
+              />
             ))}
           </List>
         )}
@@ -101,3 +58,54 @@ export function ResourceStatusCard({ statusBadge, customColumns, conditions }) {
     </div>
   );
 }
+
+const ExpandableListItem = ({ header, status, content }) => {
+  const { t } = useTranslation();
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <>
+      <StandardListItem
+        onClick={() => setExpanded(!expanded)}
+        className="conditions-element"
+      >
+        <div className="conditions-header">
+          {expanded ? (
+            <Icon
+              name="slim-arrow-down"
+              design="Information"
+              style={spacing.sapUiTinyMarginEnd}
+            />
+          ) : (
+            <Icon
+              name="slim-arrow-right"
+              design="Information"
+              style={spacing.sapUiTinyMarginEnd}
+            />
+          )}
+          {header}
+          <StatusBadge
+            type={status === 'True' ? 'Success' : 'Error'}
+            className={'conditions-header__status-badge'}
+          >
+            {status}
+          </StatusBadge>
+        </div>
+      </StandardListItem>
+      {expanded && (
+        <div
+          className="conditions-message"
+          style={{
+            ...spacing.sapUiSmallMarginBeginEnd,
+            ...spacing.sapUiTinyMarginTopBottom,
+          }}
+        >
+          <div className="title bsl-has-color-status-4 ">
+            {`${t('common.headers.message')}:`}
+          </div>
+          {content}
+        </div>
+      )}
+    </>
+  );
+};
