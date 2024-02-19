@@ -11,7 +11,6 @@ import pluralize from 'pluralize';
 import { useRecoilState } from 'recoil';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { usePut, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useGetList, useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -22,7 +21,6 @@ import { Labels } from 'shared/components/Labels/Labels';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
-import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
@@ -222,8 +220,6 @@ export function ResourceListRenderer({
   const { isProtected, protectedResourceWarning } = useProtectedResources();
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
 
-  const [toggleFormFn, getToggleFormFn] = useState(() => {});
-
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     resourceTitle,
     resourceType,
@@ -391,9 +387,6 @@ export function ResourceListRenderer({
               await putRequest(url, modifiedResource);
               closeModal();
               onSuccess();
-              if (typeof toggleFormFn === 'function') {
-                toggleFormFn(false);
-              }
               closeEditor();
             } catch (e) {
               showError(e);
@@ -475,7 +468,6 @@ export function ResourceListRenderer({
       activeResource = CreateResourceForm.sanitizeClone(activeResource);
     }
     setActiveResource(activeResource);
-    toggleFormFn(true);
   };
 
   const actions = readOnly
@@ -621,35 +613,6 @@ export function ResourceListRenderer({
 
   return (
     <>
-      <ModalWithForm
-        title={
-          createActionLabel ||
-          t('components.resources-list.create', {
-            resourceType: prettifiedResourceName,
-          })
-        }
-        getToggleFormFn={getToggleFormFn}
-        confirmText={t('common.buttons.create')}
-        id={`add-${resourceType}-modal`}
-        className="modal-size--l"
-        renderForm={props => (
-          <ErrorBoundary>
-            <CreateResourceForm
-              resource={activeResource}
-              resourceType={resourceType}
-              resourceTitle={resourceTitle}
-              resourceUrl={resourceUrl}
-              namespace={namespace}
-              refetchList={silentRefetch}
-              toggleFormFn={toggleFormFn}
-              layoutNumber={layoutNumber}
-              {...props}
-              {...createFormProps}
-            />
-          </ErrorBoundary>
-        )}
-        modalOpeningComponent={<></>}
-      />
       {createPortal(
         <DeleteMessageBox
           resource={activeResource}
@@ -683,7 +646,6 @@ export function ResourceListRenderer({
             )}`,
             onClick: () => {
               setActiveResource(undefined);
-              toggleFormFn(true);
             },
           }}
         />

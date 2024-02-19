@@ -23,7 +23,6 @@ export function useCreateResource({
   initialUnchangedResource,
   createUrl,
   afterCreatedFn,
-  toggleFormFn,
   urlPath,
   layoutNumber,
 }) {
@@ -136,9 +135,6 @@ export function useCreateResource({
       } else {
         await postRequest(createUrl, resource);
       }
-      if (typeof toggleFormFn === 'function') {
-        toggleFormFn(false);
-      }
 
       onSuccess();
     } catch (e) {
@@ -158,9 +154,6 @@ export function useCreateResource({
               );
               closeModal();
               onSuccess();
-              if (typeof toggleFormFn === 'function') {
-                toggleFormFn(false);
-              }
             } catch (e) {
               showError(e);
             }

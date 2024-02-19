@@ -37,7 +37,6 @@ export function ResourceForm({
   afterCreatedFn,
   className,
   onlyYaml = false,
-  toggleFormFn,
   autocompletionDisabled,
   readOnly,
   handleNameChange,
@@ -73,7 +72,6 @@ export function ResourceForm({
     initialUnchangedResource,
     createUrl,
     afterCreatedFn,
-    toggleFormFn,
     urlPath,
     layoutNumber,
   });

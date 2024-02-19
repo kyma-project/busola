@@ -1,4 +1,4 @@
-import React, { createContext, Suspense, useState } from 'react';
+import React, { createContext, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
 import pluralize from 'pluralize';
@@ -27,7 +27,6 @@ import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
-import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 import { useVersionWarning } from 'hooks/useVersionWarning';
 import { useUrl } from 'hooks/useUrl';
@@ -184,7 +183,6 @@ function Resource({
     resourceTitle,
     resource.kind,
   );
-  const [toggleFormFn, getToggleFormFn] = useState(() => {});
 
   const pluralizedResourceKind = pluralize(prettifiedResourceKind);
   useWindowTitle(windowTitle || pluralizedResourceKind);
@@ -234,44 +232,6 @@ function Resource({
         <Button onClick={() => openYaml(resource)} design="Emphasized">
           {t('common.buttons.edit-yaml')}
         </Button>
-      );
-    } else {
-      return (
-        <ModalWithForm
-          getToggleFormFn={getToggleFormFn}
-          title={
-            editActionLabel ||
-            t('components.resource-details.edit', {
-              resourceType: prettifiedResourceKind,
-            })
-          }
-          modalOpeningComponent={
-            <Button design="Emphasized">
-              {editActionLabel ||
-                t('components.resource-details.edit', {
-                  resourceType: prettifiedResourceKind,
-                })}
-            </Button>
-          }
-          confirmText={t('common.buttons.save')}
-          id={`edit-${resourceType}-modal`}
-          className="modal-size--l"
-          renderForm={props => (
-            <ErrorBoundary>
-              <CreateResourceForm
-                resource={resource}
-                resourceType={resourceType}
-                resourceUrl={resourceUrl}
-                namespace={namespace}
-                refetchList={silentRefetch}
-                toggleFormFn={toggleFormFn}
-                resourceSchema={resourceSchema}
-                editMode={true}
-                {...props}
-              />
-            </ErrorBoundary>
-          )}
-        />
       );
     }
   };
@@ -453,8 +413,6 @@ function Resource({
                   resourceType={resourceType}
                   resourceUrl={resourceUrl}
                   namespace={namespace}
-                  // refetchList={silentRefetch}
-                  toggleFormFn={toggleFormFn}
                   resourceSchema={resourceSchema}
                   editMode={true}
                   {...props}

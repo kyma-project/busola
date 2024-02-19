@@ -13,7 +13,6 @@ function CRCreate({
   onChange,
   formElementRef,
   crd,
-  toggleFormFn,
   layoutNumber,
   resource: initialCustomResource,
   ...props
@@ -53,7 +52,6 @@ function CRCreate({
       layoutNumber={layoutNumber}
       afterCreatedFn={() => {
         navigate(`${customUrl(cr)}${goToLayoutQuery}`);
-        toggleFormFn();
       }}
     />
   );
