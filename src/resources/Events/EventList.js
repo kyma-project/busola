@@ -1,13 +1,13 @@
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-import { Link as DescriptionLink } from 'shared/components/Link/Link';
 import { useMessageList } from 'hooks/useMessageList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { useUrl } from 'hooks/useUrl';
 import { Icon, ObjectStatus } from '@ui5/webcomponents-react';
+import { description } from 'resources/Events/EventsDescription';
 
 export function EventList({
   defaultType,
@@ -103,15 +103,6 @@ export function EventList({
       count: (a, b) => a.count - b.count,
     };
   };
-
-  const description = (
-    <Trans i18nKey="events.description">
-      <DescriptionLink
-        className="bsl-link"
-        url="https://kubernetes.io/docs/reference/kubernetes-api/cluster-resources/event-v1/"
-      />
-    </Trans>
-  );
 
   return (
     <ResourcesList
