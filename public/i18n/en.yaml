@@ -129,13 +129,16 @@ clusters:
     changed-message: The chosen storage type has been overwritten by the cluster configuration from {{originalStorage}} to {{targetStorage}}.
     choose-storage:
       label: Storage type configuration
+    storage-preference: Storage preference
     descriptions:
       inMemory: Cluster data is cleared when you leave or refresh the page.
       localStorage: Cluster data is persisted between browser reloads.
       sessionStorage: Cluster data is cleared when the page session ends.
       unknown: Unknown storage type
     info: |
-      You can choose where to store your cluster configuration. Based on your kubeconfig type, we recommend the pre-selected storage mode. You can choose whatever you prefer for convenience and security. None of the options stores information on the server.
+      You can choose where to store your cluster configuration. 
+      However, we recommend the pre-selected storage mode based on your kubeconfig file type. 
+      None of the options stores information on the server.
     labels:
       inMemory: In memory
       localStorage: Local storage
@@ -156,20 +159,23 @@ clusters:
       issuer-url: Issuer URL
       scopes: Scopes
       token: Token
-      using-oidc: I'm using an OIDC provider instead
+      using-oidc: OIDC provider
     context: Context to connect
-    editor-label: 'or paste your kubeconfig here:'
+    kubeconfig-upload: Drop a .kubeconfig file or click to 
+    editor-placeholedr: Paste .kubeconfig here
     incomplete: We couldn't find enough authentication information for {{context}} in your kubeconfig. You can enter it manually.
     intro: To connect a cluster, you have to provide the cluster configuration – called “kubeconfig” in the Kubernetes world.
     kubeconfig: Provide Kubeconfig
     multi-context-info: All contexts will be connected. Be aware that only {{context}} is validated. The remaining contexts are connected without validation.
     not-an-object: kubeconfig is not an object
-    storage: Privacy Options
+    storage: Privacy
     storage-info: |
       Don't worry, we don't store your kubeconfig file on the server. The information stays in your browser.
       You can choose your privacy options in the last step.
     token-info: If you don't know how to get your token, ask your authentication provider.
     update: Provide Authentication
+    authentication: Authentication
+    review: Review
 command-palette:
   crds:
     name-short: CRD
@@ -274,7 +280,7 @@ common:
     modes:
       advanced: Advanced
       simple: Simple
-      ui-form: UI Form
+      ui-form: Form
     object-required: An object is required
   delete-dialog:
     delete-confirm: Don't ask again
@@ -438,7 +444,10 @@ components:
   error-panel:
     error: An error occured. The component cannot be rendered.
   file-input:
-    drag-file: Drag your file here or click to upload
+    drag-file-upload: Drag your file here or click to
+    upload: upload
+    replace: replace
+    uploaded: uploaded
   generic-list:
     messages:
       no-search-results: Couldn't find resources matching this query.

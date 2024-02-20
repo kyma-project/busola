@@ -1,7 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { SegmentedButton, SegmentedButtonItem } from '@ui5/webcomponents-react';
 
-export function ModeSelector({ mode, isEditing, setMode }) {
+export function ModeSelector({
+  mode,
+  isEditing,
+  setMode,
+  isDisabled = false,
+  noAdvancedMode = false,
+}) {
   const { t } = useTranslation();
 
   const createModeButtons = [
@@ -24,16 +30,18 @@ export function ModeSelector({ mode, isEditing, setMode }) {
     { mode: ModeSelector.MODE_YAML, label: 'YAML' },
   ];
 
-  const buttonsToDisplay = isEditing ? editModeButtons : createModeButtons;
+  const buttonsToDisplay =
+    isEditing || noAdvancedMode ? editModeButtons : createModeButtons;
 
   return (
-    <div className="ui5-content-density-compact">
-      <SegmentedButton className="full-width">
+    <div className="ui5-content-density-compact mode-selector">
+      <SegmentedButton className="mode-selector__content">
         {buttonsToDisplay.map(button => (
           <SegmentedButtonItem
             key={button.mode}
             pressed={mode === button.mode}
             onClick={() => setMode(button.mode)}
+            disabled={isDisabled}
           >
             {button.label}
           </SegmentedButtonItem>

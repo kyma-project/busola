@@ -39,6 +39,7 @@ export function EditorActions({
   saveDisabled,
   saveHidden,
   isProtected,
+  searchHidden = false,
 }) {
   const [visible, setVisible] = useState(
     localStorage.getItem(EDITOR_VISIBILITY) !== 'false',
@@ -118,9 +119,9 @@ export function EditorActions({
 
   return (
     <section
+      className="editor-actions"
       style={{
-        ...spacing.sapUiSmallMarginTopBottom,
-        ...spacing.sapUiMediumMarginBegin,
+        ...spacing.sapUiSmallMarginTop,
       }}
     >
       <ButtonWithTooltip
@@ -131,12 +132,14 @@ export function EditorActions({
         onClick={visible ? hideReadOnlyLines : showReadOnlyLines}
         disabled={!editor}
       />
-      <ButtonWithTooltip
-        tooltipContent={t('common.tooltips.search')}
-        icon="search"
-        onClick={openSearch}
-        disabled={!editor}
-      />
+      {!searchHidden && (
+        <ButtonWithTooltip
+          tooltipContent={t('common.tooltips.search')}
+          icon="search"
+          onClick={openSearch}
+          disabled={!editor}
+        />
+      )}
       {!saveHidden && (
         <ButtonWithTooltip
           tooltipContent={

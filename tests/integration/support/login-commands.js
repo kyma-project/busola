@@ -110,9 +110,12 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
       .contains('Connect')
       .click();
 
-    cy.contains('Drag your file here or click to upload').attachFile(fileName, {
-      subjectType: 'drag-n-drop',
-    });
+    cy.contains('Drop a .kubeconfig file or click to upload').attachFile(
+      fileName,
+      {
+        subjectType: 'drag-n-drop',
+      },
+    );
 
     cy.contains('Next').click();
 
@@ -125,6 +128,11 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
         .parent('ui5-radio-button')
         .click();
     }
+
+    cy.get('ui5-button:visible')
+      .contains('Next step')
+      .click();
+
     cy.get(`[aria-label="last-step"]:visible`)
       .contains('Connect cluster')
       .click({ force: true });

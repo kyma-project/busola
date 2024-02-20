@@ -4,6 +4,10 @@ import config from '../../config';
 context('Test invalid kubeconfig', () => {
   Cypress.skipAfterFail();
 
+  before(() => {
+    cy.handleExceptions();
+  });
+
   it('Use wrong kubeconfig - textfield', () => {
     cy.visit(`${config.clusterAddress}/clusters`)
       .get('ui5-button:visible')
@@ -18,7 +22,7 @@ context('Test invalid kubeconfig', () => {
       .should('be.visible');
 
     cy.get('ui5-message-strip[design="Negative"]').shouldHaveTrimmedText(
-      'Parse error: kubeconfig is not an object, previous valid input will be used',
+      'Parse error: An object is required, previous valid input will be used',
     );
   });
 
@@ -29,7 +33,7 @@ context('Test invalid kubeconfig', () => {
       .click();
 
     cy.contains(
-      'Drag your file here or click to upload',
+      'Drop a .kubeconfig file or click to upload',
     ).attachFile('kubeconfig--invalid.txt', { subjectType: 'drag-n-drop' });
 
     cy.get('ui5-message-strip[design="Negative"]').should(
