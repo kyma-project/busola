@@ -676,7 +676,9 @@ deployments:
   title: Deployments
   status: 
     available-replicas: Available Replicas
-    desired-replicas: Desired Replicas
+    current-replicas: Current Replicas
+    updated-replicas: Updated Replicas
+    last-scale: Last Scale Time
 discovery-and-network:
   title: Discovery and Network
 domains:

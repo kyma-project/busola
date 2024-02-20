@@ -5,11 +5,11 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import { Selector } from 'shared/components/Selector/Selector.js';
 import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 import { HPASubcomponent } from 'resources/HorizontalPodAutoscalers/HPASubcomponent';
-import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
-
 import { DeploymentStatus } from './DeploymentStatus';
 import { DeploymentCreate } from './DeploymentCreate';
 import { description } from './DeploymentDescription';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { ReadableElapsedTimeFromNow } from 'shared/components/ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
 
 export function DeploymentDetails(props) {
   const { t } = useTranslation();
@@ -24,33 +24,30 @@ export function DeploymentDetails(props) {
 
   const customStatusColumns = [
     {
-      header: 'Last Scale Time' + ':',
+      header: t('deployments.status.last-scale'),
       value: deployment => (
-        <ReadableCreationTimestamp
+        <ReadableElapsedTimeFromNow
           timestamp={deployment?.status?.conditions?.[1]?.lastUpdateTime}
+          valueUnit="days ago"
         />
       ),
     },
     {
-      header: 'Current Replicas' + ':',
-      value: deployment => <div>{deployment?.status?.replicas}</div>,
+      header: t('deployments.status.current-replicas'),
+      value: deployment => <div>{deployment?.status?.replicas ?? 0}</div>,
     },
     {
-      header: 'Updated Replicas' + ':',
+      header: t('deployments.status.updated-replicas'),
       value: deployment => (
         <div>{deployment?.status?.updatedReplicas ?? 0}</div>
       ),
     },
     {
-      header: t('deployments.status.available-replicas') + ':',
+      header: t('deployments.status.available-replicas'),
       value: deployment => (
-        <div>{deployment?.status?.availableReplicas ?? 0}</div>
-      ),
-    },
-    {
-      header: 'Un' + t('deployments.status.available-replicas') + ':',
-      value: deployment => (
-        <div>{deployment?.status?.unavailableReplicas ?? 0}</div>
+        <div>
+          {deployment?.status?.availableReplicas ?? EMPTY_TEXT_PLACEHOLDER}
+        </div>
       ),
     },
   ];

@@ -19,24 +19,6 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-
-    .conditions-element {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .conditions-header {
-      display: grid;
-      grid-template-columns: max-content 1fr 1fr;
-      align-items: center;
-      width: 100%;
-      height: 100%;
-      font-size: var(--sapFontSize);
-
-      &__status-badge {
-        justify-self: end;
-      }
-    }
   }
 }
 

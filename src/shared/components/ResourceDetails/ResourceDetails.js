@@ -496,7 +496,7 @@ function Resource({
             </Title>
             <div
               className="resource-details-container"
-              style={{ display: resourceStatusCard ? 'flex' : 'block' }}
+              style={{ gridTemplateColumns: resourceStatusCard ? '' : '0.5fr' }}
             >
               {!hasTabs && resourceDetailsCard}
               {resourceStatusCard && resourceStatusCard}

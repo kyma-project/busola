@@ -10,14 +10,14 @@
 }
 
 .resource-details-container {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 100%;
   gap: 1rem;
 }
 
 @container (min-width: 650px) {
   .cluster-overview__details-wrapper {
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 0.5fr;
   }
 
   .cluster-overview__details-grid {
@@ -27,7 +27,7 @@
 
 @container (min-width: 950px) {
   .resource-details-container {
-    flex-direction: row;
+    grid-template-columns: 1fr 432px;
     gap: 0;
   }
 }
