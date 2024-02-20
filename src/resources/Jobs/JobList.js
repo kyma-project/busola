@@ -1,11 +1,11 @@
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
-import { Link } from 'shared/components/Link/Link';
 
 import { JobCompletions } from './JobCompletions';
 import { JobCreate } from './JobCreate';
+import { description } from './JobDescription';
 
 export const JobList = props => {
   const { t } = useTranslation();
@@ -21,15 +21,6 @@ export const JobList = props => {
       ),
     },
   ];
-
-  const description = (
-    <Trans i18nKey="jobs.description">
-      <Link
-        className="bsl-link"
-        url="https://kubernetes.io/docs/concepts/workloads/controllers/job/"
-      />
-    </Trans>
-  );
 
   return (
     <ResourcesList

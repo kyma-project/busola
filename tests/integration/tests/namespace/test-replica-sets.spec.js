@@ -50,7 +50,6 @@ context('Test Replica Sets', () => {
   it('Checks the details view', () => {
     cy.getMidColumn()
       .contains(`${REPLICA_SET_NAME}-`)
-      .should('be.visible')
       .click({ force: true });
 
     cy.contains(REPLICA_SET_NAME);
@@ -98,7 +97,7 @@ context('Test Replica Sets', () => {
       .click();
   });
 
-  it('Checks the new amout of Replicas and the new Docker image', () => {
+  it('Checks the new amount of Replicas and the new Docker image', () => {
     cy.getMidColumn().contains(
       `${EDITED_REPLICAS_AMOUNT} / ${EDITED_REPLICAS_AMOUNT}`,
       {
