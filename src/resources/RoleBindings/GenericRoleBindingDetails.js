@@ -4,9 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { RoleSubjects } from './RoleSubjects.js';
 import { RoleRef } from './RoleRef';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import { description } from './RoleBindingDescription';
 
-export function GenericRoleBindingDetails({ DefaultRenderer, ...otherParams }) {
+export function GenericRoleBindingDetails({
+  DefaultRenderer,
+  description,
+  ...otherParams
+}) {
   const { t } = useTranslation();
 
   const customColumns = [

@@ -5,9 +5,12 @@ import { Link } from 'react-router-dom';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { useUrl } from 'hooks/useUrl';
-import { description, descriptionKey } from './RoleBindingDescription';
 
-export function GenericRoleBindingList(props) {
+export function GenericRoleBindingList({
+  description,
+  descriptionKey,
+  ...props
+}) {
   const { t } = useTranslation();
   const { clusterUrl, namespaceUrl } = useUrl();
 
