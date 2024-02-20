@@ -48,7 +48,7 @@ export const HeaderRenderer = ({
           <TableColumn
             slot={`${slot}-${index}`}
             key={typeof h === 'object' ? index : h}
-            popinDisplay="Inline"
+            popinDisplay="Block"
             demandPopin={h === 'Labels' ? true : false}
             minWidth={
               h === 'Labels'
