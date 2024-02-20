@@ -80,18 +80,17 @@ export function SearchInput({
   const renderSearchList = entries => {
     const suggestions = getSearchSuggestions(entries);
 
-    if (!suggestions.length) {
+    if (suggestions.length === 0) {
       return (
         <ComboBoxItem
           text={MESSAGES.NO_SEARCH_RESULT}
           id={MESSAGES.NO_SEARCH_RESULT}
         />
       );
-    }
-
-    return suggestions.map(suggestion => (
-      <ComboBoxItem id={suggestion} text={suggestion} />
-    ));
+    } else
+      return suggestions.map(suggestion => (
+        <ComboBoxItem id={suggestion} text={suggestion} />
+      ));
   };
 
   const getSearchSuggestions = entries => {
@@ -134,6 +133,12 @@ export function SearchInput({
             {!!searchQuery &&
               showSuggestion &&
               renderSearchList(filteredEntries)}
+            {searchQuery === '' && showSuggestion && (
+              <ComboBoxItem
+                text={MESSAGES.NO_SEARCH_RESULT}
+                id={MESSAGES.NO_SEARCH_RESULT}
+              />
+            )}
           </ComboBox>
         </div>
       )}
