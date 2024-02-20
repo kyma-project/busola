@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { MessageStrip, Wizard, WizardStep } from '@ui5/webcomponents-react';
+import { createPortal } from 'react-dom';
+import {
+  Wizard,
+  WizardStep,
+  Title,
+  Button,
+  Popover,
+  Text,
+} from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -17,6 +25,7 @@ import { KubeconfigUpload } from './KubeconfigUpload/KubeconfigUpload';
 import { ContextChooser } from './ContextChooser/ContextChooser';
 import { ChooseStorage } from './ChooseStorage';
 import { WizardButtons } from 'shared/components/WizardButtons/WizardButtons';
+import { ClusterPreview } from './ClusterPreview';
 
 import { spacing } from '@ui5/webcomponents-react-base';
 import './AddClusterWizard.scss';
@@ -35,6 +44,19 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
   );
   const [selected, setSelected] = useState(1);
   const setShowWizard = useSetRecoilState(showAddClusterWizard);
+  const [showTitleDescription, setShowTitleDescription] = useState(false);
+
+  useEffect(() => {
+    const contentContainer = document
+      .getElementsByTagName('ui5-wizard')[0]
+      ?.shadowRoot?.querySelectorAll('.ui5-wiz-content-item-wrapper')[
+      selected - 1
+    ];
+    if (contentContainer) {
+      contentContainer.style['background-color'] = 'transparent';
+      contentContainer.style['padding'] = '0';
+    }
+  });
 
   const {
     isValid: authValid,
@@ -117,25 +139,23 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
     setShowWizard(false);
   };
 
+  const handleStepChange = e => {
+    setSelected(Number(e.detail.step.dataset.step));
+  };
+
   return (
-    <Wizard contentLayout="SingleStep">
+    <Wizard contentLayout="SingleStep" onStepChange={handleStepChange}>
       <WizardStep
-        titleText={t('clusters.wizard.kubeconfig')}
+        titleText={t('configuration.title')}
         branching={!kubeconfig}
         selected={selected === 1}
+        data-step={'1'}
       >
-        <p>{t('clusters.wizard.intro')}</p>
-        <MessageStrip
-          design="Information"
-          hideCloseButton
-          className="add-cluster__kubeconfig-info"
-          style={spacing.sapUiSmallMarginTopBottom}
-        >
-          {t('clusters.wizard.storage-info')}
-        </MessageStrip>
         <KubeconfigUpload
           kubeconfig={kubeconfig}
+          config={config}
           setKubeconfig={updateKubeconfig}
+          formRef={authFormRef}
         />
         <WizardButtons
           selected={selected}
@@ -143,38 +163,44 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
           firstStep={true}
           onCancel={() => setShowWizard(false)}
           validation={!kubeconfig}
+          className="cluster-wizard__buttons"
         />
       </WizardStep>
 
       {kubeconfig && (!hasAuth || !hasOneContext) && (
         <WizardStep
-          titleText={t('clusters.wizard.update')}
+          titleText={t('clusters.wizard.authentication')}
           selected={selected === 2}
           disabled={selected !== 2}
+          data-step={'2'}
         >
-          <ResourceForm.Single
-            formElementRef={authFormRef}
-            resource={kubeconfig}
-            setResource={setKubeconfig}
-            setCustomValid={setCustomValid}
-            createResource={e => {
-              e.preventDefault();
-            }}
-          >
-            {!hasOneContext && <ContextChooser />}
-            {!hasAuth && <AuthForm revalidate={revalidate} />}
-          </ResourceForm.Single>
+          <div className="cluster-wizard__auth-container">
+            <ResourceForm.Single
+              formElementRef={authFormRef}
+              resource={kubeconfig}
+              setResource={setKubeconfig}
+              setCustomValid={setCustomValid}
+              createResource={e => {
+                e.preventDefault();
+              }}
+              className="cluster-wizard__auth-form"
+            >
+              {!hasOneContext && <ContextChooser />}
+              {!hasAuth && <AuthForm revalidate={revalidate} />}
+            </ResourceForm.Single>
+          </div>
           <WizardButtons
             selected={selected}
             setSelected={setSelected}
             onCancel={() => setShowWizard(false)}
             validation={!authValid}
+            className="cluster-wizard__buttons"
           />
         </WizardStep>
       )}
 
       <WizardStep
-        title={t('clusters.wizard.storage')}
+        titleText={t('clusters.wizard.storage')}
         selected={
           kubeconfig && (!hasAuth || !hasOneContext)
             ? selected === 3
@@ -185,16 +211,74 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
             ? selected !== 3
             : selected !== 2
         }
+        data-step={!hasAuth || !hasOneContext ? '3' : '2'}
       >
-        <ChooseStorage storage={storage} setStorage={setStorage} />
+        <div className="add-cluster__content-container">
+          <Title level="H5">
+            {t('clusters.storage.choose-storage.label')}
+            <>
+              <Button
+                id="storageDescriptionOpener"
+                icon="hint"
+                design="Transparent"
+                style={spacing.sapUiTinyMargin}
+                onClick={() => setShowTitleDescription(true)}
+              />
+              {createPortal(
+                <Popover
+                  opener="storageDescriptionOpener"
+                  open={showTitleDescription}
+                  onAfterClose={() => setShowTitleDescription(false)}
+                  placementType="Right"
+                >
+                  <Text className="description">
+                    {t('clusters.storage.info')}
+                  </Text>
+                </Popover>,
+                document.body,
+              )}
+            </>
+          </Title>
+          <ChooseStorage storage={storage} setStorage={setStorage} />
+          <WizardButtons
+            selected={selected}
+            setSelected={setSelected}
+            validation={!storage}
+            onCancel={() => setShowWizard(false)}
+            className="cluster-wizard__buttons"
+          />
+        </div>
+      </WizardStep>
+      <WizardStep
+        titleText={t('clusters.wizard.review')}
+        selected={
+          kubeconfig && (!hasAuth || !hasOneContext)
+            ? selected === 4
+            : selected === 3
+        }
+        disabled={
+          kubeconfig && (!hasAuth || !hasOneContext)
+            ? selected !== 4
+            : selected !== 3
+        }
+        data-step={!hasAuth || !hasOneContext ? '4' : '3'}
+      >
+        <ClusterPreview
+          storage={storage}
+          kubeconfig={kubeconfig}
+          token={hasAuth ? hasKubeconfigAuth(kubeconfig) : null}
+          setSelected={setSelected}
+          hasAuth={hasAuth}
+        />
         <WizardButtons
           selected={selected}
           setSelected={setSelected}
           lastStep={true}
           customFinish={t('clusters.buttons.verify-and-add')}
-          validation={!storage}
           onComplete={onComplete}
           onCancel={() => setShowWizard(false)}
+          validation={!storage}
+          className="cluster-wizard__buttons"
         />
       </WizardStep>
     </Wizard>

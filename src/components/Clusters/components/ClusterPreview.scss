@@ -1,0 +1,42 @@
+.cluster-preview {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 100%;
+  max-height: calc(90vh - 12rem);
+
+  &__subtitle {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--sapList_BorderColor);
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: 1fr 100px;
+    justify-content: start;
+    gap: 30px;
+    width: 100%;
+  }
+
+  &__token {
+    display: flex;
+    width: 100%;
+    overflow-wrap: break-word;
+    word-break: break-all;
+    font-size: var(--sapFontSize);
+  }
+
+  &__data-header {
+    color: var(--sapContent_LabelColor);
+    font-size: var(--sapFontSize);
+  }
+
+  &__edit-button {
+    align-self: flex-end;
+    width: 80%;
+  }
+
+  &__storage-container {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

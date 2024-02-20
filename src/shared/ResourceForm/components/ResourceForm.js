@@ -47,10 +47,14 @@ export function ResourceForm({
   urlPath,
   handleSetResetFormFn = () => {},
   layoutNumber,
+  modeSelectorDisabled = false,
+  noAdvancedMode = false,
+  initialMode,
+  yamlSearchHidden,
 }) {
   // readonly schema ID, set only once
   const resourceSchemaId = useMemo(
-    () => resource.apiVersion + '/' + resource.kind,
+    () => resource?.apiVersion + '/' + resource?.kind,
     [], // eslint-disable-line react-hooks/exhaustive-deps
   );
   const resourceRef = useRef(null);
@@ -89,6 +93,18 @@ export function ResourceForm({
   });
 
   const handleInitialMode = () => {
+    if (initialMode) {
+      switch (initialMode) {
+        case 'MODE_YAML':
+          return ModeSelector.MODE_YAML;
+        case 'MODE_SIMPLE':
+          return ModeSelector.MODE_SIMPLE;
+        case 'MODE_ADVANCED':
+          return ModeSelector.MODE_ADVANCED;
+        default:
+          return ModeSelector.MODE_SIMPLE;
+      }
+    }
     if (onlyYaml) return ModeSelector.MODE_YAML;
 
     if (!!initialResource) return ModeSelector.MODE_ADVANCED;
@@ -129,9 +145,9 @@ export function ResourceForm({
       }}
     />
   );
+
   let editor = (
     <EditorWrapper
-      height="86.5%"
       value={resource}
       onChange={setResource}
       onMount={setActionsEditor}
@@ -156,6 +172,8 @@ export function ResourceForm({
             if (onModeChange) onModeChange(mode, newMode);
           }}
           isEditing={!!initialResource}
+          isDisabled={modeSelectorDisabled}
+          noAdvancedMode={noAdvancedMode}
         />
       )}
       <form ref={formElementRef} onSubmit={onSubmit || createResource}>
@@ -166,6 +184,7 @@ export function ResourceForm({
               editor={actionsEditor}
               title={`${resource?.metadata?.name || singularName}.yaml`}
               saveHidden
+              searchHidden={yamlSearchHidden}
             />
             {editor}
           </div>

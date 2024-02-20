@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
@@ -29,9 +29,11 @@ export function Editor({
   onBlur,
   onFocus,
   options = {}, // IEditorOptions, check Monaco API for the list of options
+  placeholder = null,
   ...rest
 }) {
   const { t } = useTranslation();
+  const prevValueRef = useRef(value);
 
   // prepare autocompletion
   const {
@@ -64,6 +66,14 @@ export function Editor({
   useOnMount({ editorInstance, onMount });
   useOnChange({ editorInstance, onChange });
 
+  // update editor when was error
+  useEffect(() => {
+    if (prevValueRef.current !== value && editorInstance && error) {
+      editorInstance.setValue(value);
+      prevValueRef.current = value;
+    }
+  }, [value, editorInstance, error]);
+
   useUpdateValueOnParentChange({
     updateValueOnParentChange,
     editorInstance,
@@ -84,6 +94,9 @@ export function Editor({
         </div>
       ) : null}
       <div ref={divRef} className="resource-form__editor" />
+      {placeholder && !!!value && (
+        <div className="resource-form__placeholder">{placeholder}</div>
+      )}
       <div className="resource-form__legend">
         {error && (
           <MessageStrip

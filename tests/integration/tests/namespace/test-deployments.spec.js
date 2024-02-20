@@ -111,6 +111,7 @@ context('Test Deployments', () => {
       .contains('span', '1 / 1', {
         timeout: 60 * 1000,
       });
+    cy.wait(1000);
 
     cy.wait(1000);
 

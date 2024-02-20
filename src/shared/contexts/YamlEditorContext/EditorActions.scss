@@ -1,3 +1,15 @@
+.editor-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  border-radius: 0.5rem 0.5rem 0 0;
+  background-color: var(--sapTile_Background);
+  box-shadow: 0 0 0.125rem 0
+    color-mix(in srgb, var(--sapContent_ShadowColor) 16%, transparent);
+  border: 1px solid var(--sapNeutralBackground);
+  border-bottom: none;
+}
+
 .circle-button {
   border-radius: 50%;
   margin-right: 4px;

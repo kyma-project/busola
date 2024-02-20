@@ -45,6 +45,18 @@
   }
 }
 
+.resource-form__placeholder {
+  position: absolute;
+  top: 3px;
+  padding-right: 1rem;
+  left: 65px;
+  overflow-y: hidden;
+  font-size: var(--sapFontSize);
+  color: var(--sapContent_LabelColor);
+  font-style: italic;
+  pointer-events: none;
+}
+
 .monaco-hover-content .hover-contents p:last-of-type {
   display: none;
 }

@@ -9,6 +9,7 @@ import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTim
 
 import { DeploymentStatus } from './DeploymentStatus';
 import { DeploymentCreate } from './DeploymentCreate';
+import { description } from './DeploymentDescription';
 
 export function DeploymentDetails(props) {
   const { t } = useTranslation();
@@ -85,8 +86,10 @@ export function DeploymentDetails(props) {
       statusBadge={deployment => <DeploymentStatus deployment={deployment} />}
       customStatusColumns={customStatusColumns}
       statusConditions={statusConditions}
+      description={description}
       {...props}
     />
   );
 }
+
 export default DeploymentDetails;
