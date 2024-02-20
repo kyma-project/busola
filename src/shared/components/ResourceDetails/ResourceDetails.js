@@ -206,7 +206,7 @@ function Resource({
     layoutNumber,
   });
 
-  const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
+  const [layoutColumn] = useRecoilState(columnLayoutState);
   const { isEnabled: isColumnLayoutEnabled } = useFeature('COLUMN_LAYOUT');
 
   const { setEditedYaml: setEditedSpec } = useYamlEditor();
