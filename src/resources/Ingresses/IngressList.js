@@ -1,9 +1,8 @@
 import React from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { Link } from 'shared/components/Link/Link';
 
 import { IngressCreate } from './IngressCreate';
 import { description } from './IngressDescription';

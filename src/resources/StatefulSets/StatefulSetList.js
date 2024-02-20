@@ -1,9 +1,8 @@
 import React from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
-import { Link } from 'shared/components/Link/Link';
 
 import { useRestartAction } from 'shared/hooks/useRestartResource';
 import { StatefulSetCreate } from './StatefulSetCreate';
@@ -43,4 +42,5 @@ export function StatefulSetList(props) {
     />
   );
 }
+
 export default StatefulSetList;
