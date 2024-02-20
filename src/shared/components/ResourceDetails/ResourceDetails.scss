@@ -18,3 +18,14 @@
     grid-template-columns: 1fr 1fr;
   }
 }
+
+.resource-overview__details-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@container (min-width: 650px) {
+  .resource-overview__details-wrapper {
+    grid-template-columns: 2fr 1fr;
+  }
+}
