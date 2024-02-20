@@ -118,6 +118,16 @@ export function EditorActions({
   return (
     <section>
       <ButtonWithTooltip
+        tooltipContent={t('common.tooltips.download')}
+        icon="download"
+        onClick={download}
+      />
+      <ButtonWithTooltip
+        tooltipContent={t('common.tooltips.copy-to-clipboard')}
+        icon="copy"
+        onClick={() => copyToCliboard(val)}
+      />
+      <ButtonWithTooltip
         tooltipContent={
           visible ? t('common.tooltips.hide') : t('common.tooltips.show')
         }
@@ -143,18 +153,6 @@ export function EditorActions({
           disabled={saveDisabled || !editor}
         />
       )}
-      <ButtonWithTooltip
-        tooltipContent={t('common.tooltips.copy-to-clipboard')}
-        icon="copy"
-        onClick={() => copyToCliboard(val)}
-        disabled={!editor}
-      />
-      <ButtonWithTooltip
-        tooltipContent={t('common.tooltips.download')}
-        icon="download"
-        onClick={download}
-        disabled={!editor}
-      />
       {readOnly && (
         <span style={{ color: 'var(--sapNeutralTextColor,#6a6d70)' }}>
           {t('common.labels.read-only')}

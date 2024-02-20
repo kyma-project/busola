@@ -78,10 +78,7 @@ export function ResourceForm({
 
   const handleInitialMode = () => {
     if (onlyYaml) return ModeSelector.MODE_YAML;
-
-    if (!!initialResource) return ModeSelector.MODE_ADVANCED;
-
-    return ModeSelector.MODE_SIMPLE;
+    return ModeSelector.MODE_FORM;
   };
 
   const [mode, setMode] = React.useState(handleInitialMode);
@@ -92,7 +89,6 @@ export function ResourceForm({
     if (setCustomValid) {
       if (mode === ModeSelector.MODE_YAML) {
         setCustomValid(true);
-      } else {
         setCustomValid(validationRef.current);
       }
     }
@@ -149,34 +145,12 @@ export function ResourceForm({
       labelSpanXL={0}
       as="div"
     >
-      {mode === ModeSelector.MODE_SIMPLE && (
-        <FormItem>
-          <div onChange={onChange} className="simple-form">
-            <ResourceFormWrapper
-              resource={resource}
-              setResource={setResource}
-              isAdvanced={false}
-            >
-              {!disableDefaultFields && (
-                <K8sNameField
-                  propertyPath="$.metadata.name"
-                  kind={singularName}
-                  readOnly={readOnly || !!initialResource}
-                  setValue={handleNameChange}
-                  {...nameProps}
-                />
-              )}
-              {children}
-            </ResourceFormWrapper>
-          </div>
-        </FormItem>
-      )}
-      {mode === ModeSelector.MODE_ADVANCED && (
+      {mode === ModeSelector.MODE_FORM && (
         <FormItem>
           <div
             className="advanced-form"
             onChange={onChange}
-            hidden={mode !== ModeSelector.MODE_ADVANCED}
+            hidden={mode !== ModeSelector.MODE_FORM}
           >
             <ResourceFormWrapper
               resource={resource}
@@ -220,16 +194,6 @@ export function ResourceForm({
   return (
     <section className={classnames('resource-form', className)}>
       {presetsSelector}
-      {onlyYaml ? null : (
-        <ModeSelector
-          mode={mode}
-          setMode={newMode => {
-            setMode(newMode);
-            if (onModeChange) onModeChange(mode, newMode);
-          }}
-          isEditing={!!initialResource}
-        />
-      )}
 
       <Card style={spacing.sapUiSmallMarginTopBottom}>
         <UI5Panel
@@ -239,15 +203,27 @@ export function ResourceForm({
             <>
               {/* TODO STYLE IT */}
               {!!initialResource && actions}
-              {mode === ModeSelector.MODE_YAML && (
-                <div className="yaml-form-actions">
-                  <EditorActions
-                    val={convertedResource}
-                    editor={actionsEditor}
-                    title={`${resource?.metadata?.name || singularName}.yaml`}
-                    saveHidden
-                  />
-                </div>
+              <div className="yaml-form-actions">
+                <EditorActions
+                  val={convertedResource}
+                  editor={actionsEditor}
+                  title={`${resource?.metadata?.name || singularName}.yaml`}
+                  saveHidden
+                />
+              </div>
+            </>
+          }
+          modeActions={
+            <>
+              {onlyYaml ? null : (
+                <ModeSelector
+                  mode={mode}
+                  setMode={newMode => {
+                    setMode(newMode);
+                    if (onModeChange) onModeChange(mode, newMode);
+                  }}
+                  isEditing={!!initialResource}
+                />
               )}
             </>
           }

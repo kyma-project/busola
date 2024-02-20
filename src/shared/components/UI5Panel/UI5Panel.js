@@ -15,6 +15,7 @@ export const UI5Panel = ({
   icon = undefined,
   title,
   headerActions,
+  modeActions = null,
   key = 'UI5Panel',
   disableMargin = false,
   className = '',
@@ -47,6 +48,12 @@ export const UI5Panel = ({
             <>
               <ToolbarSeparator />
               <Text>{description}</Text>
+            </>
+          )}
+          {modeActions && (
+            <>
+              <ToolbarSpacer />
+              {modeActions}
             </>
           )}
           {headerActions && (
