@@ -396,9 +396,11 @@ function Resource({
     <ResourceDetailsCard
       title={title ?? t('common.headers.resource-details')}
       wrapperClassname={
-        isColumnLayoutEnabled && layoutColumn.layout === 'MidColumnFullScreen'
-          ? 'resource-overview__details-wrapper'
-          : null
+        isColumnLayoutEnabled
+          ? layoutColumn.layout === 'MidColumnFullScreen'
+            ? 'resource-overview__details-wrapper'
+            : null
+          : 'resource-overview__details-wrapper'
       }
       content={
         <>
