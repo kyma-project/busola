@@ -8,6 +8,7 @@
     "start": "concurrently -c cyan,green npm:busola npm:backend",
     "busola": "npm run copy-themes; PORT=8080 BROWSER=none GENERATE_SOURCEMAP=false react-app-rewired start",
     "backend": "cd backend && npm run start",
+    "eslint-check": "eslint src/ backend/",
     "lint-check": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
     "lint-fix": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
     "lint-staged": "lint-staged --concurrent=false",
