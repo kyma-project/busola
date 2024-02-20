@@ -39,9 +39,9 @@ import ResourceDetailsCard from './ResourceDetailsCard';
 import { EMPTY_TEXT_PLACEHOLDER } from '../../constants';
 import { ReadableElapsedTimeFromNow } from '../ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
 import { HintButton } from '../DescriptionHint/DescriptionHint';
-import { useRecoilState } from 'recoil';
-import { columnLayoutState } from '../../../state/columnLayoutAtom';
-import { useFeature } from '../../../hooks/useFeature';
+import { useRecoilValue } from 'recoil';
+import { useFeature } from 'hooks/useFeature';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
@@ -206,7 +206,7 @@ function Resource({
     layoutNumber,
   });
 
-  const [layoutColumn] = useRecoilState(columnLayoutState);
+  const layoutColumn = useRecoilValue(columnLayoutState);
   const { isEnabled: isColumnLayoutEnabled } = useFeature('COLUMN_LAYOUT');
 
   const { setEditedYaml: setEditedSpec } = useYamlEditor();
