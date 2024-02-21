@@ -211,11 +211,12 @@ function Resource({
   });
 
   const layoutColumn = useRecoilValue(columnLayoutState);
-  const { isEnabled: isColumnLayoutEnabled } = useFeature('COLUMN_LAYOUT');
 
   const { setEditedYaml: setEditedSpec } = useYamlEditor();
   const notification = useNotification();
   const { resourceListUrl } = useUrl();
+
+  const { isEnabled: isColumnLayoutEnabled } = useFeature('COLUMN_LAYOUT');
 
   const breadcrumbItems = breadcrumbs || [
     {
@@ -399,13 +400,7 @@ function Resource({
   const resourceDetailsCard = (
     <ResourceDetailsCard
       title={title ?? t('common.headers.resource-details')}
-      wrapperClassname={
-        isColumnLayoutEnabled
-          ? layoutColumn.layout === 'MidColumnFullScreen'
-            ? 'resource-overview__details-wrapper'
-            : null
-          : 'resource-overview__details-wrapper'
-      }
+      wrapperClassname={'resource-overview__details-wrapper'}
       content={
         <>
           <DynamicPageComponent.Column
@@ -449,17 +444,21 @@ function Resource({
           <DynamicPageComponent.Column
             key="Labels"
             title={t('common.headers.labels')}
-            columnSpan="1/1"
           >
-            <Labels labels={resource.metadata.labels || {}} />
+            <Labels
+              labels={resource.metadata.labels || {}}
+              shortenLongLabels={true}
+            />
           </DynamicPageComponent.Column>
 
           <DynamicPageComponent.Column
             key="Annotations"
             title={t('common.headers.annotations')}
-            columnSpan="2/2"
           >
-            <Labels labels={resource.metadata.annotations || {}} />
+            <Labels
+              labels={resource.metadata.annotations || {}}
+              shortenLongLabels={true}
+            />
           </DynamicPageComponent.Column>
         </>
       }
@@ -509,7 +508,13 @@ function Resource({
               {title ?? t('common.headers.resource-details')}
             </Title>
             <div
-              className="resource-details-container"
+              className={
+                isColumnLayoutEnabled
+                  ? layoutColumn.layout === 'MidColumnFullScreen'
+                    ? 'resource-details-container'
+                    : 'resource-details-container column-view'
+                  : 'resource-details-container'
+              }
               style={{ gridTemplateColumns: resourceStatusCard ? '' : '0.5fr' }}
             >
               {!hasTabs && resourceDetailsCard}

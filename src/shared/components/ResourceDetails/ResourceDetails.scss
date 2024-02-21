@@ -5,7 +5,7 @@
 
 .cluster-overview__details-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(1, 1fr);
   gap: 25px;
 }
 
@@ -16,29 +16,31 @@
 }
 
 .resource-overview__details-wrapper {
-  //display: grid;
-  //grid-template-columns: 1fr;
+  min-width: 200px;
 }
 
 @container (min-width: 650px) {
   .cluster-overview__details-wrapper {
-    grid-template-columns: 0.5fr; //0.5fr
+    grid-template-columns: 0.5fr;
   }
 
   .cluster-overview__details-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 50% 50%;
   }
-}
 
-@container (min-width: 650px) {
   .resource-overview__details-wrapper {
-    //grid-template-columns: 2fr 1fr;
+    max-width: min-content;
   }
 }
 
-@container (min-width: 950px) {
+@container (min-width: 850px) {
   .resource-details-container {
-    grid-template-columns: 0.5fr 432px;
+    grid-template-columns: max-content 452px;
     gap: 0;
+
+    &.column-view {
+      grid-template-columns: 100%;
+      gap: 1rem;
+    }
   }
 }

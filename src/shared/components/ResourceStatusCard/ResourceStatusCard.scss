@@ -1,6 +1,6 @@
 .resource-status-card {
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
 
   &__header {
     display: flex;
@@ -24,6 +24,6 @@
 
 @container (min-width: 800px) {
   .resource-status-card {
-    width: 400px;
+    width: 420px;
   }
 }

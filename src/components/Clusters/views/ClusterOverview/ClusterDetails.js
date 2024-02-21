@@ -36,25 +36,23 @@ export default function ClusterDetails({ currentCluster }) {
         <>
           {!loading && k8sVersion && (
             <DynamicPageComponent.Column
-              title={t('clusters.overview.kubernetes-version') + ':'}
+              title={t('clusters.overview.kubernetes-version')}
             >
               {k8sVersion}
             </DynamicPageComponent.Column>
           )}
           {!loading && kymaVersion && (
             <DynamicPageComponent.Column
-              title={t('clusters.overview.kyma-version') + ':'}
+              title={t('clusters.overview.kyma-version')}
             >
               {kymaVersion}
             </DynamicPageComponent.Column>
           )}
-          <DynamicPageComponent.Column
-            title={t('clusters.storage.title') + ':'}
-          >
+          <DynamicPageComponent.Column title={t('clusters.storage.title')}>
             <ClusterStorageType clusterConfig={config} />
           </DynamicPageComponent.Column>
           <DynamicPageComponent.Column
-            title={t('clusters.common.api-server-address') + ':'}
+            title={t('clusters.common.api-server-address')}
           >
             {currentCluster?.currentContext?.cluster?.cluster?.server}
           </DynamicPageComponent.Column>
