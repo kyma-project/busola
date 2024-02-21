@@ -13,8 +13,11 @@ import { useUrl } from 'hooks/useUrl';
 import { CronJobConcurrencyPolicy } from './CronJobConcurrencyPolicy';
 import { CronJobCreate } from './CronJobCreate';
 import { CronJobJobs } from './CronJobJobs';
-
-import { description } from './CronJobDescription';
+import { Description } from 'shared/components/Description/Description';
+import {
+  cronJobDocsURL,
+  cronJobI18nDescriptionKey,
+} from 'resources/CronJobs/index';
 
 export function CronJobDetails(props) {
   const { t } = useTranslation();
@@ -75,7 +78,9 @@ export function CronJobDetails(props) {
       customComponents={[CronJobJobs, Events, CronJobPodTemplate]}
       customColumns={customColumns}
       createResourceForm={CronJobCreate}
-      description={description}
+      description={
+        <Description i18nKey={cronJobI18nDescriptionKey} url={cronJobDocsURL} />
+      }
       {...props}
     />
   );

@@ -6,7 +6,8 @@ import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 
 import { JobCompletions } from './JobCompletions';
 import { JobCreate } from './JobCreate';
-import { description } from './JobDescription';
+import { Description } from 'shared/components/Description/Description';
+import { jobDocsURL, jobI18nDescriptionKey } from 'resources/Jobs/index';
 
 export const JobList = props => {
   const { t } = useTranslation();
@@ -26,7 +27,9 @@ export const JobList = props => {
   return (
     <ResourcesList
       customColumns={customColumns}
-      description={description}
+      description={
+        <Description i18nKey={jobI18nDescriptionKey} url={jobDocsURL} />
+      }
       {...props}
       createResourceForm={JobCreate}
       emptyListProps={{

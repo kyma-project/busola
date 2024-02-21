@@ -6,7 +6,11 @@ import { PersistentVolumeClaimStatus } from 'shared/components/PersistentVolumeC
 import { Tokens } from 'shared/components/Tokens';
 
 import { PersistentVolumeClaimCreate } from './PersistentVolumeClaimCreate';
-import { description } from './PersistentVolumeClaimDescription';
+import { Description } from 'shared/components/Description/Description';
+import {
+  persistentVolumeClaimDocsURL,
+  persistentVolumeClaimI18nDescriptionKey,
+} from 'resources/PersistentVolumeClaims/index';
 
 export function PersistentVolumeClaimList(props) {
   const { t } = useTranslation();
@@ -32,7 +36,12 @@ export function PersistentVolumeClaimList(props) {
 
   return (
     <ResourcesList
-      description={description}
+      description={
+        <Description
+          i18nKey={persistentVolumeClaimI18nDescriptionKey}
+          url={persistentVolumeClaimDocsURL}
+        />
+      }
       customColumns={customColumns}
       {...props}
       createResourceForm={PersistentVolumeClaimCreate}
@@ -43,4 +52,5 @@ export function PersistentVolumeClaimList(props) {
     />
   );
 }
+
 export default PersistentVolumeClaimList;

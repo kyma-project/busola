@@ -8,6 +8,10 @@ export const apiGroup = '';
 export const apiVersion = 'v1';
 export const category = predefinedCategories.configuration;
 
+export const serviceAccountI18nDescriptionKey = 'service-accounts.description';
+export const serviceAccountDocsURL =
+  'https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/';
+
 export const List = React.lazy(() => import('./ServiceAccountList'));
 export const Details = React.lazy(() => import('./ServiceAccountDetails'));
 

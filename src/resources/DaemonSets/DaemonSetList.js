@@ -8,7 +8,11 @@ import { useRestartAction } from 'shared/hooks/useRestartResource';
 
 import { DaemonSetCreate } from './DaemonSetCreate';
 import { DaemonSetStatus } from './DaemonSetStatus';
-import { description } from './DaemonSetDescription';
+import { Description } from 'shared/components/Description/Description';
+import {
+  daemonSetDocsURL,
+  daemonSetI18nDescriptionKey,
+} from 'resources/DaemonSets/index';
 
 export function DaemonSetList(props) {
   const { t } = useTranslation();
@@ -43,7 +47,12 @@ export function DaemonSetList(props) {
     <ResourcesList
       customColumns={customColumns}
       resourceTitle={t('daemon-sets.title')}
-      description={description}
+      description={
+        <Description
+          i18nKey={daemonSetI18nDescriptionKey}
+          url={daemonSetDocsURL}
+        />
+      }
       customListActions={[restartAction]}
       {...props}
       createResourceForm={DaemonSetCreate}

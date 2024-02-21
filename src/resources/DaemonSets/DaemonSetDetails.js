@@ -9,7 +9,11 @@ import { Selector } from 'shared/components/Selector/Selector';
 import { DaemonSetStatus } from './DaemonSetStatus';
 import { DaemonSetCreate } from './DaemonSetCreate';
 import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
-import { description } from './DaemonSetDescription';
+import { Description } from 'shared/components/Description/Description';
+import {
+  daemonSetDocsURL,
+  daemonSetI18nDescriptionKey,
+} from 'resources/DaemonSets/index';
 
 const Tolerations = resource => {
   const { t } = useTranslation();
@@ -80,9 +84,15 @@ export function DaemonSetDetails(props) {
       customComponents={[Tolerations, MatchSelector, DaemonSetPodTemplate]}
       customColumns={customColumns}
       createResourceForm={DaemonSetCreate}
-      description={description}
+      description={
+        <Description
+          i18nKey={daemonSetI18nDescriptionKey}
+          url={daemonSetDocsURL}
+        />
+      }
       {...props}
     />
   );
 }
+
 export default DaemonSetDetails;

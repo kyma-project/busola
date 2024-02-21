@@ -34,6 +34,9 @@ export const apiGroup = '';
 export const apiVersion = 'v1';
 export const category = predefinedCategories.workloads;
 
+export const podI18nDescriptionKey = 'pods.description';
+export const podDocsURL = 'https://kubernetes.io/docs/concepts/workloads/pods/';
+
 export const List = React.lazy(() => import('./PodList'));
 export const Details = React.lazy(() => import('./PodDetails'));
 

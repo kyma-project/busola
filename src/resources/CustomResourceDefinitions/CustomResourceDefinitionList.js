@@ -5,7 +5,11 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { Tokens } from 'shared/components/Tokens';
 
 import { CustomResourceDefinitionCreate } from './CustomResourceDefinitionCreate';
-import { description } from './CustomResourceDefinitionDescription';
+import { Description } from 'shared/components/Description/Description';
+import {
+  customResourceDefinitionDocsURL,
+  customResourceDefinitionI18nDescriptionKey,
+} from 'resources/CustomResourceDefinitions/index';
 
 export function CustomResourceDefinitionList(props) {
   const { t } = useTranslation();
@@ -26,7 +30,12 @@ export function CustomResourceDefinitionList(props) {
 
   return (
     <ResourcesList
-      description={description}
+      description={
+        <Description
+          i18nKey={customResourceDefinitionI18nDescriptionKey}
+          url={customResourceDefinitionDocsURL}
+        />
+      }
       customColumns={customColumns}
       {...props}
       createResourceForm={

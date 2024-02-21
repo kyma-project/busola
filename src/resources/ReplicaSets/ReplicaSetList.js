@@ -6,7 +6,11 @@ import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 
 import { ReplicaSetCreate } from './ReplicaSetCreate';
 import { ReplicaSetStatus } from './ReplicaSetStatus';
-import { description } from './ReplicaSetDescription';
+import { Description } from 'shared/components/Description/Description';
+import {
+  replicaSetDocsURL,
+  replicaSetI18nDescriptionKey,
+} from 'resources/ReplicaSets/index';
 
 const getImages = replicaSet => {
   const images =
@@ -47,7 +51,12 @@ export function ReplicaSetList(params) {
     <ResourcesList
       customColumns={customColumns}
       resourceTitle={t('replica-sets.title')}
-      description={description}
+      description={
+        <Description
+          i18nKey={replicaSetI18nDescriptionKey}
+          url={replicaSetDocsURL}
+        />
+      }
       {...params}
       createResourceForm={ReplicaSetCreate}
       emptyListProps={{

@@ -3,7 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { ServiceAccountTokenStatus } from 'shared/components/ServiceAccountTokenStatus';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ServiceAccountCreate } from './ServiceAccountCreate';
-import { description } from './ServiceAccountDescription';
+import { Description } from 'shared/components/Description/Description';
+import {
+  serviceAccountDocsURL,
+  serviceAccountI18nDescriptionKey,
+} from 'resources/ServiceAccounts/index';
 
 export function ServiceAccountList(props) {
   const { t } = useTranslation();
@@ -21,7 +25,12 @@ export function ServiceAccountList(props) {
   return (
     <ResourcesList
       customColumns={customColumns}
-      description={description}
+      description={
+        <Description
+          i18nKey={serviceAccountI18nDescriptionKey}
+          url={serviceAccountDocsURL}
+        />
+      }
       resourceTitle={t('service-accounts.title')}
       {...props}
       createResourceForm={ServiceAccountCreate}

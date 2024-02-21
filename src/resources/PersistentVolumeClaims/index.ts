@@ -13,6 +13,11 @@ export const Details = React.lazy(() =>
   import('./PersistentVolumeClaimDetails'),
 );
 
+export const persistentVolumeClaimI18nDescriptionKey =
+  'persistent-volume-claims.description';
+export const persistentVolumeClaimDocsURL =
+  'https://kubernetes.io/docs/concepts/storage/persistent-volumes/';
+
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   depth: 1,
   networkFlowLevel: 1,

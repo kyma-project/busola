@@ -4,7 +4,8 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 
 import { Rules } from './Rules';
 import { RoleCreate } from './RoleCreate';
-import { description } from './RoleDescription';
+import { Description } from 'shared/components/Description/Description';
+import { roleDocsURL, roleI18DescriptionKey } from 'resources/Roles/index';
 
 export function RoleDetails(props) {
   return (
@@ -12,7 +13,9 @@ export function RoleDetails(props) {
       {...props}
       customComponents={[Rules]}
       createResourceForm={RoleCreate}
-      description={description}
+      description={
+        <Description i18nKey={roleI18DescriptionKey} url={roleDocsURL} />
+      }
     />
   );
 }

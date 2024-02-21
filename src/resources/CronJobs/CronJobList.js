@@ -5,7 +5,11 @@ import { CronJobLastScheduleTime } from 'shared/components/CronJob/CronJobLastSc
 import { CronJobSchedule } from 'shared/components/CronJob/CronJobSchedule';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { CronJobCreate } from './CronJobCreate';
-import { description } from './CronJobDescription';
+import { Description } from 'shared/components/Description/Description';
+import {
+  cronJobDocsURL,
+  cronJobI18nDescriptionKey,
+} from 'resources/CronJobs/index';
 
 export function CronJobList(props) {
   const { t } = useTranslation();
@@ -29,11 +33,13 @@ export function CronJobList(props) {
     <ResourcesList
       customColumns={customColumns}
       resourceTitle={t('cron-jobs.title')}
-      description={description}
+      description={
+        <Description i18nKey={cronJobI18nDescriptionKey} url={cronJobDocsURL} />
+      }
       {...props}
       createResourceForm={CronJobCreate}
       emptyListProps={{
-        subtitleText: t('cron-jobs.description'),
+        subtitleText: t(cronJobI18nDescriptionKey),
         url:
           'https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/',
       }}

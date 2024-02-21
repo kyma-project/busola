@@ -6,7 +6,11 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 
 import { ConfigMapCreate } from './ConfigMapCreate';
-import { description } from './ConfigMapDescription';
+import { Description } from 'shared/components/Description/Description';
+import {
+  configMapDocsURL,
+  configMapI18nDescriptionKey,
+} from 'resources/ConfigMaps/index';
 
 export function ConfigMapDetails(props) {
   const { t } = useTranslation();
@@ -35,7 +39,12 @@ export function ConfigMapDetails(props) {
     <ResourceDetails
       customComponents={[ConfigMapEditor]}
       customColumns={customColumns}
-      description={description}
+      description={
+        <Description
+          i18nKey={configMapI18nDescriptionKey}
+          url={configMapDocsURL}
+        />
+      }
       createResourceForm={ConfigMapCreate}
       {...props}
     />

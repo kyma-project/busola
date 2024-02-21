@@ -9,7 +9,9 @@ import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { PersistentVolumeStatus } from './PersistentVolumeStatus';
 import { PersistentVolumeCreate } from './PersistentVolumeCreate';
 import { useUrl } from 'hooks/useUrl';
-import { description } from './PersistentVolumeDescription';
+import { Description } from 'shared/components/Description/Description';
+import { persistentVolumeI18nDescriptionKey } from 'resources/PersistentVolumes/index';
+import { persistentVolumeClaimDocsURL } from 'resources/PersistentVolumeClaims';
 
 export function PersistentVolumeList(props) {
   const { t } = useTranslation();
@@ -88,7 +90,12 @@ export function PersistentVolumeList(props) {
       disableMargin={props.disableMargin}
       resourceTitle={t('pv.title')}
       customColumns={customColumns}
-      description={description}
+      description={
+        <Description
+          i18nKey={persistentVolumeI18nDescriptionKey}
+          url={persistentVolumeClaimDocsURL}
+        />
+      }
       {...props}
       createResourceForm={PersistentVolumeCreate}
       emptyListProps={{
@@ -98,4 +105,5 @@ export function PersistentVolumeList(props) {
     />
   );
 }
+
 export default PersistentVolumeList;

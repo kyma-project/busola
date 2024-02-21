@@ -12,6 +12,10 @@ export const category = predefinedCategories.workloads;
 export const List = React.lazy(() => import('./JobList'));
 export const Details = React.lazy(() => import('./JobDetails'));
 
+export const jobI18nDescriptionKey = 'jobs.description';
+export const jobDocsURL =
+  'https://kubernetes.io/docs/concepts/workloads/controllers/job/';
+
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowKind: true,
   networkFlowLevel: -1,

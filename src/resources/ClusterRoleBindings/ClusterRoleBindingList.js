@@ -3,16 +3,22 @@ import React from 'react';
 import { GenericRoleBindingList } from 'resources/RoleBindings/GenericRoleBindingList';
 
 import { ClusterRoleBindingCreate } from './ClusterRoleBindingCreate';
+import { Description } from 'shared/components/Description/Description';
 import {
-  description,
-  descriptionKey,
-} from 'resources/ClusterRoleBindings/ClusterRoleBindingDescription';
+  clusterRoleBindingDocsURL,
+  clusterRoleBindingI18nDescriptionKey,
+} from 'resources/ClusterRoleBindings/index';
 
 export function ClusterRoleBindingList(props) {
   return (
     <GenericRoleBindingList
-      description={description}
-      descriptionKey={descriptionKey}
+      description={
+        <Description
+          i18nKey={clusterRoleBindingI18nDescriptionKey}
+          url={clusterRoleBindingDocsURL}
+        />
+      }
+      descriptionKey={clusterRoleBindingI18nDescriptionKey}
       {...props}
       createResourceForm={ClusterRoleBindingCreate}
     />

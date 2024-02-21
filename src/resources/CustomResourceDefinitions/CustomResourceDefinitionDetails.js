@@ -10,7 +10,11 @@ import { EventsList } from 'shared/components/EventsList';
 import { CurrentCRDVersion } from './CurrentCRDVersion';
 import { RelatedCRDsList } from './RelatedCRDsList';
 import { CustomResourceDefinitionCreate } from './CustomResourceDefinitionCreate';
-import { description } from './CustomResourceDefinitionDescription';
+import { Description } from 'shared/components/Description/Description';
+import {
+  customResourceDefinitionDocsURL,
+  customResourceDefinitionI18nDescriptionKey,
+} from 'resources/CustomResourceDefinitions/index';
 
 export function CustomResourceDefinitionDetails(props) {
   const { t } = useTranslation();
@@ -77,7 +81,12 @@ export function CustomResourceDefinitionDetails(props) {
         RelatedCRDsList,
         Events,
       ]}
-      description={description}
+      description={
+        <Description
+          i18nKey={customResourceDefinitionI18nDescriptionKey}
+          url={customResourceDefinitionDocsURL}
+        />
+      }
       createResourceForm={CustomResourceDefinitionCreate}
       {...props}
     />

@@ -7,6 +7,10 @@ export const apiGroup = '';
 export const apiVersion = 'v1';
 export const category = predefinedCategories.configuration;
 
+export const secretI18nDescriptionKey = 'secrets.description';
+export const secretDocsURL =
+  'https://kubernetes.io/docs/concepts/configuration/secret/';
+
 export const List = React.lazy(() => import('./SecretList'));
 export const Details = React.lazy(() => import('./SecretDetails'));
 

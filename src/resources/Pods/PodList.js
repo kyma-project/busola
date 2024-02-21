@@ -9,7 +9,8 @@ import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { PodCreate } from './PodCreate';
 import { calculatePodState, PodStatus } from './PodStatus';
 import PodRestarts from './PodRestarts';
-import { description } from './PodDescription';
+import { Description } from 'shared/components/Description/Description';
+import { podDocsURL, podI18nDescriptionKey } from 'resources/Pods/index';
 
 export function PodList(params) {
   const { showNodeName } = params;
@@ -59,7 +60,9 @@ export function PodList(params) {
     <ResourcesList
       disableMargin={params.disableMargin}
       customColumns={customColumns}
-      description={description}
+      description={
+        <Description i18nKey={podI18nDescriptionKey} url={podDocsURL} />
+      }
       sortBy={defaultSort => ({
         ...defaultSort,
         status: (a, b) =>

@@ -10,6 +10,10 @@ export const apiGroup = 'apps';
 export const apiVersion = 'v1';
 export const category = predefinedCategories.workloads;
 
+export const statefulSetI18nDescriptionKey = 'stateful-sets.description';
+export const statefulSetDocsURL =
+  'https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/';
+
 export const List = React.lazy(() => import('./StatefulSetList'));
 export const Details = React.lazy(() => import('./StatefulSetDetails'));
 

@@ -13,7 +13,8 @@ import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 import { JobCreate } from './JobCreate';
 import { JobCompletions } from './JobCompletions';
 import { JobConditions } from './JobConditions';
-import { description } from './JobDescription';
+import { Description } from 'shared/components/Description/Description';
+import { jobDocsURL, jobI18nDescriptionKey } from 'resources/Jobs/index';
 
 export function JobDetails(props) {
   const { t } = useTranslation();
@@ -86,7 +87,9 @@ export function JobDetails(props) {
       customColumns={customColumns}
       customComponents={customComponents}
       createResourceForm={JobCreate}
-      description={description}
+      description={
+        <Description i18nKey={jobI18nDescriptionKey} url={jobDocsURL} />
+      }
       {...props}
     />
   );

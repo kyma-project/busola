@@ -3,12 +3,21 @@ import React from 'react';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 
 import { NetworkPolicyCreate } from './NetworkPolicyCreate';
-import { description } from './NetoworkPolicyDescription';
+import { Description } from 'shared/components/Description/Description';
+import {
+  networkPoliciesDocsURL,
+  networkPoliciesI18nDescriptionKey,
+} from 'resources/NetworkPolicies/index';
 
 export function NetworkPolicyList(props) {
   return (
     <ResourcesList
-      description={description}
+      description={
+        <Description
+          i18nKey={networkPoliciesI18nDescriptionKey}
+          url={networkPoliciesDocsURL}
+        />
+      }
       {...props}
       createResourceForm={NetworkPolicyCreate}
       emptyListProps={{

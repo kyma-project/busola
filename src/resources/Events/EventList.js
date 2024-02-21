@@ -7,7 +7,8 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { useUrl } from 'hooks/useUrl';
 import { Icon, ObjectStatus } from '@ui5/webcomponents-react';
-import { description } from 'resources/Events/EventsDescription';
+import { Description } from 'shared/components/Description/Description';
+import { eventDocsURL, eventI18nDescriptionKey } from 'resources/Events/index';
 
 export function EventList({
   defaultType,
@@ -110,7 +111,9 @@ export function EventList({
       customColumns={customColumns}
       omitColumnsIds={['namespace', 'labels', 'created']}
       sortBy={sortByFn}
-      description={description}
+      description={
+        <Description i18nKey={eventI18nDescriptionKey} url={eventDocsURL} />
+      }
       showTitle={isCompact}
       title={t('events.title')}
       {...props}

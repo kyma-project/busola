@@ -8,6 +8,10 @@ export const apiGroup = 'batch';
 export const apiVersion = 'v1';
 export const category = predefinedCategories.workloads;
 
+export const cronJobI18nDescriptionKey = 'cron-jobs.description';
+export const cronJobDocsURL =
+  'https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/';
+
 export const List = React.lazy(() => import('./CronJobList'));
 export const Details = React.lazy(() => import('./CronJobDetails'));
 

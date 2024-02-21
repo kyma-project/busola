@@ -7,7 +7,11 @@ import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { useRestartAction } from 'shared/hooks/useRestartResource';
 import { StatefulSetCreate } from './StatefulSetCreate';
 import { StatefulSetPods } from './StatefulSetPods';
-import { description } from './StatefulSetDescription';
+import { Description } from 'shared/components/Description/Description';
+import {
+  statefulSetDocsURL,
+  statefulSetI18nDescriptionKey,
+} from 'resources/StatefulSets/index';
 
 export function StatefulSetList(props) {
   const { t } = useTranslation();
@@ -30,7 +34,12 @@ export function StatefulSetList(props) {
     <ResourcesList
       resourceTitle={t('stateful-sets.title')}
       customColumns={customColumns}
-      description={description}
+      description={
+        <Description
+          i18nKey={statefulSetI18nDescriptionKey}
+          url={statefulSetDocsURL}
+        />
+      }
       customListActions={[restartAction]}
       {...props}
       createResourceForm={StatefulSetCreate}

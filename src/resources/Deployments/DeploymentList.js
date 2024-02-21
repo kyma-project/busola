@@ -7,7 +7,11 @@ import { useRestartAction } from 'shared/hooks/useRestartResource';
 
 import { DeploymentCreate } from './DeploymentCreate';
 import { DeploymentStatus } from './DeploymentStatus';
-import { description } from './DeploymentDescription';
+import { Description } from 'shared/components/Description/Description';
+import {
+  deploymentDocsURL,
+  deploymentI18nDescriptionKey,
+} from 'resources/Deployments/index';
 
 const getImages = deployment => {
   const images = deployment.spec.template.spec.containers?.map(
@@ -49,7 +53,12 @@ export function DeploymentList(props) {
   return (
     <ResourcesList
       customColumns={customColumns}
-      description={description}
+      description={
+        <Description
+          i18nKey={deploymentI18nDescriptionKey}
+          url={deploymentDocsURL}
+        />
+      }
       customListActions={[restartAction]}
       {...props}
       createResourceForm={DeploymentCreate}

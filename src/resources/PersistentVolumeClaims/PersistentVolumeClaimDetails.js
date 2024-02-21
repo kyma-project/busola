@@ -17,7 +17,11 @@ import { useUrl } from 'hooks/useUrl';
 import PersistentVolumesList from 'resources/PersistentVolumes/PersistentVolumeList';
 import { PersistentVolumeClaimCreate } from './PersistentVolumeClaimCreate';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
-import { description } from './PersistentVolumeClaimDescription';
+import { Description } from 'shared/components/Description/Description';
+import {
+  persistentVolumeClaimDocsURL,
+  persistentVolumeClaimI18nDescriptionKey,
+} from 'resources/PersistentVolumeClaims/index';
 
 const RelatedVolumes = ({ labels }) => {
   const PVParams = {
@@ -172,7 +176,12 @@ export function PersistentVolumeClaimDetails(props) {
         Events,
       ]}
       customColumns={customColumns}
-      description={description}
+      description={
+        <Description
+          i18nKey={persistentVolumeClaimI18nDescriptionKey}
+          url={persistentVolumeClaimDocsURL}
+        />
+      }
       singularName={t('persistent-volume-claims.name_singular')}
       createResourceForm={PersistentVolumeClaimCreate}
       {...props}

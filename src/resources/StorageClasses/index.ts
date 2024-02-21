@@ -11,6 +11,10 @@ export const apiGroup = 'storage.k8s.io';
 export const apiVersion = 'v1';
 export const category = predefinedCategories.storage;
 
+export const storageClassI18nDescriptionKey = 'storage-classes.description';
+export const storageClassDocsURL =
+  'https://kubernetes.io/docs/concepts/storage/storage-classes/';
+
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowLevel: 2,
   relations: [

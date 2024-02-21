@@ -8,5 +8,9 @@ export const category = '';
 export const icon = 'warning2';
 export const topLevelNode = true;
 
+export const eventI18nDescriptionKey = 'events.description';
+export const eventDocsURL =
+  'https://kubernetes.io/docs/reference/kubernetes-api/cluster-resources/event-v1/';
+
 export const List = React.lazy(() => import('./EventList'));
 export const Details = React.lazy(() => import('./EventDetails'));

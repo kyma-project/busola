@@ -11,7 +11,8 @@ import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow'
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Icon, ObjectStatus } from '@ui5/webcomponents-react';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
-import { description } from 'resources/Events/EventsDescription';
+import { Description } from 'shared/components/Description/Description';
+import { eventDocsURL, eventI18nDescriptionKey } from 'resources/Events/index';
 
 const RowComponent = ({ name, value }) =>
   value ? <LayoutPanelRow name={name} value={value} /> : null;
@@ -103,7 +104,9 @@ export function EventDetails(props) {
     <ResourceDetails
       customComponents={[Message]}
       customColumns={customColumns}
-      description={description}
+      description={
+        <Description i18nKey={eventI18nDescriptionKey} url={eventDocsURL} />
+      }
       {...props}
       readOnly={true}
     />

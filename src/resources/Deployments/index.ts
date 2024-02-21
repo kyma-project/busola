@@ -13,6 +13,10 @@ export const category = predefinedCategories.workloads;
 export const List = React.lazy(() => import('./DeploymentList'));
 export const Details = React.lazy(() => import('./DeploymentDetails'));
 
+export const deploymentI18nDescriptionKey = 'deployments.description';
+export const deploymentDocsURL =
+  'https://kubernetes.io/docs/concepts/workloads/controllers/deployment/';
+
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowKind: true,
   networkFlowLevel: -2,

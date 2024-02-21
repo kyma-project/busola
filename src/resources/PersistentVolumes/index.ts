@@ -8,6 +8,10 @@ export const apiGroup = '';
 export const apiVersion = 'v1';
 export const category = predefinedCategories.storage;
 
+export const persistentVolumeI18nDescriptionKey = 'pv.description';
+export const persistentVolumeDocsURL =
+  'https://kubernetes.io/docs/concepts/storage/persistent-volumes';
+
 export const List = React.lazy(() => import('./PersistentVolumeList'));
 export const Details = React.lazy(() => import('./PersistentVolumeDetails'));
 

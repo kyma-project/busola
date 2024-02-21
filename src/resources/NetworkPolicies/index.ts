@@ -10,6 +10,10 @@ export const apiGroup = 'networking.k8s.io';
 export const apiVersion = 'v1';
 export const category = predefinedCategories['discovery-and-network'];
 
+export const networkPoliciesI18nDescriptionKey = 'network-policies.description';
+export const networkPoliciesDocsURL =
+  'https://kubernetes.io/docs/concepts/services-networking/network-policies/';
+
 export const List = React.lazy(() => import('./NetworkPolicyList'));
 export const Details = React.lazy(() => import('./NetworkPolicyDetails'));
 

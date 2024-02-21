@@ -11,6 +11,10 @@ export const category = predefinedCategories['discovery-and-network'];
 export const List = React.lazy(() => import('./IngressList'));
 export const Details = React.lazy(() => import('./IngressDetails'));
 
+export const ingressI18nDescriptionKey = 'ingresses.description';
+export const ingressDocsURL =
+  'https://kubernetes.io/docs/concepts/services-networking/ingress/';
+
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowLevel: 0,
   networkFlowKind: true,

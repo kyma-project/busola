@@ -12,7 +12,11 @@ import { PersistentVolumesList } from './PersistentVolumesList';
 import { PersistentVolumeClaimsList } from './PersistentVolumeClaimsList';
 import { StorageClassCreate } from './StorageClassCreate';
 import { Text } from '@ui5/webcomponents-react';
-import { description } from 'resources/StorageClasses/StorageClassDescription';
+import { Description } from 'shared/components/Description/Description';
+import {
+  storageClassDocsURL,
+  storageClassI18nDescriptionKey,
+} from 'resources/StorageClasses/index';
 
 export function StorageClassDetails(props) {
   const { t } = useTranslation();
@@ -75,7 +79,12 @@ export function StorageClassDetails(props) {
         Events,
       ]}
       customColumns={customColumns}
-      description={description}
+      description={
+        <Description
+          i18nKey={storageClassI18nDescriptionKey}
+          url={storageClassDocsURL}
+        />
+      }
       resourceTitle={t('storage-classes.title')}
       singularName={t('storage-classes.name_singular')}
       createResourceForm={StorageClassCreate}

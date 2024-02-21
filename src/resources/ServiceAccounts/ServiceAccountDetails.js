@@ -6,7 +6,11 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import { ServiceAccountCreate } from './ServiceAccountCreate';
 import { Button } from '@ui5/webcomponents-react';
 import { TokenRequestModal } from './TokenRequestModal/TokenRequestModal';
-import { description } from './ServiceAccountDescription';
+import { Description } from 'shared/components/Description/Description';
+import {
+  serviceAccountDocsURL,
+  serviceAccountI18nDescriptionKey,
+} from 'resources/ServiceAccounts/index';
 
 const ServiceAccountSecrets = serviceAccount => {
   const namespace = serviceAccount.metadata.namespace;
@@ -85,7 +89,12 @@ export default function ServiceAccountDetails(props) {
         ]}
         customColumns={customColumns}
         createResourceForm={ServiceAccountCreate}
-        description={description}
+        description={
+          <Description
+            i18nKey={serviceAccountI18nDescriptionKey}
+            url={serviceAccountDocsURL}
+          />
+        }
         headerActions={headerActions}
         {...props}
       />

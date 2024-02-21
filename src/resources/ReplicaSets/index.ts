@@ -8,6 +8,10 @@ export const apiGroup = 'apps';
 export const apiVersion = 'v1';
 export const category = predefinedCategories.workloads;
 
+export const replicaSetI18nDescriptionKey = 'replica-sets.description';
+export const replicaSetDocsURL =
+  'https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/';
+
 export const List = React.lazy(() => import('./ReplicaSetList'));
 export const Details = React.lazy(() => import('./ReplicaSetDetails'));
 

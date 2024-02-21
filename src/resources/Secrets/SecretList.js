@@ -5,7 +5,11 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 
 import { SecretCreate } from './SecretCreate';
-import { description } from './SecretDescription';
+import { Description } from 'shared/components/Description/Description';
+import {
+  secretDocsURL,
+  secretI18nDescriptionKey,
+} from 'resources/Secrets/index';
 
 export function SecretList(props) {
   const { t } = useTranslation();
@@ -31,7 +35,9 @@ export function SecretList(props) {
   return (
     <ResourcesList
       customColumns={customColumns}
-      description={description}
+      description={
+        <Description i18nKey={secretI18nDescriptionKey} url={secretDocsURL} />
+      }
       {...props}
       createResourceForm={SecretCreate}
       emptyListProps={{

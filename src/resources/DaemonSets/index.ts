@@ -10,6 +10,10 @@ export const apiGroup = 'apps';
 export const apiVersion = 'v1';
 export const category = predefinedCategories.workloads;
 
+export const daemonSetI18nDescriptionKey = 'daemon-sets.description';
+export const daemonSetDocsURL =
+  'https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/';
+
 export const List = React.lazy(() => import('./DaemonSetList'));
 export const Details = React.lazy(() => import('./DaemonSetDetails'));
 

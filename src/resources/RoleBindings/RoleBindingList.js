@@ -2,16 +2,22 @@ import React from 'react';
 
 import { RoleBindingCreate } from './RoleBindingCreate';
 import { GenericRoleBindingList } from './GenericRoleBindingList';
+import { Description } from 'shared/components/Description/Description';
 import {
-  description,
-  descriptionKey,
-} from 'resources/RoleBindings/RoleBindingDescription';
+  roleBindingDocsURL,
+  roleBindingI18nDescriptionKey,
+} from 'resources/RoleBindings/index';
 
 export function RoleBindingList(props) {
   return (
     <GenericRoleBindingList
-      description={description}
-      descriptionKey={descriptionKey}
+      description={
+        <Description
+          i18nKey={roleBindingI18nDescriptionKey}
+          url={roleBindingDocsURL}
+        />
+      }
+      descriptionKey={roleBindingI18nDescriptionKey}
       {...props}
       createResourceForm={RoleBindingCreate}
     />

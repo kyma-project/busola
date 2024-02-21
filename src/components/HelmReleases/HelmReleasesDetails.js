@@ -14,7 +14,7 @@ import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
-import { Description } from '/shared/components/Description/Description';
+import { Description } from 'shared/components/Description/Description';
 import {
   HelmReleaseDocsURL,
   HelmReleaseI18nDescriptionKey,

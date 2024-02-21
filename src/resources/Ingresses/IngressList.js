@@ -5,7 +5,11 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 import { IngressCreate } from './IngressCreate';
-import { description } from './IngressDescription';
+import { Description } from 'shared/components/Description/Description';
+import {
+  ingressDocsURL,
+  ingressI18nDescriptionKey,
+} from 'resources/Ingresses/index';
 
 export function IngressList(props) {
   const { t } = useTranslation();
@@ -30,7 +34,9 @@ export function IngressList(props) {
   return (
     <ResourcesList
       customColumns={customColumns}
-      description={description}
+      description={
+        <Description i18nKey={ingressI18nDescriptionKey} url={ingressDocsURL} />
+      }
       {...props}
       createResourceForm={IngressCreate}
       emptyListProps={{

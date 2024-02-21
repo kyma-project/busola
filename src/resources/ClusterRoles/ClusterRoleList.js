@@ -1,13 +1,22 @@
 import React from 'react';
 import { GenericRoleList } from 'resources/Roles/GenericRoleList';
 import { ClusterRoleCreate } from './ClusterRoleCreate';
-import { description, descriptionKey } from './ClusterRoleDescription';
+import { Description } from 'shared/components/Description/Description';
+import {
+  clusterRoleDocsURL,
+  clusterRoleI18nDescriptionKey,
+} from 'resources/ClusterRoles/index';
 
 export function ClusterList(props) {
   return (
     <GenericRoleList
-      description={description}
-      descriptionKey={descriptionKey}
+      description={
+        <Description
+          i18nKey={clusterRoleI18nDescriptionKey}
+          url={clusterRoleDocsURL}
+        />
+      }
+      descriptionKey={clusterRoleI18nDescriptionKey}
       {...props}
       createResourceForm={ClusterRoleCreate}
     />

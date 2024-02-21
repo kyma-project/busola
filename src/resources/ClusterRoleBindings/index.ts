@@ -8,6 +8,11 @@ export const apiGroup = 'rbac.authorization.k8s.io';
 export const apiVersion = 'v1';
 export const category = predefinedCategories.configuration;
 
+export const clusterRoleBindingI18nDescriptionKey =
+  'cluster-role-bindings.description';
+export const clusterRoleBindingDocsURL =
+  'https://kyma-project.io/docs/kyma/latest/04-operation-guides/security/sec-02-authorization-in-kyma/#role-binding';
+
 export const List = React.lazy(() => import('./ClusterRoleBindingList'));
 export const Details = React.lazy(() => import('./ClusterRoleBindingDetails'));
 
