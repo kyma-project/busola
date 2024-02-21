@@ -1,13 +1,12 @@
-import React from 'react';
 import { CopiableText } from 'shared/components/CopiableText/CopiableText';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 
 export const CopiableLink = props => {
   return (
     <CopiableText textToCopy={props.url}>
-      <Link className="bsl-link" {...props} />
+      <ExternalLink className="bsl-link" {...props} />
     </CopiableText>
   );
 };
 
-CopiableLink.propTypes = Link.propTypes;
+CopiableLink.propTypes = ExternalLink.propTypes;

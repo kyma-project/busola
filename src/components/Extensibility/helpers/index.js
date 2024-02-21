@@ -1,10 +1,10 @@
-import React, { createContext, useContext } from 'react';
+import { createContext, useContext } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { OrderedMap } from 'immutable';
 import { last, merge } from 'lodash';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { prettifyNamePlural } from 'shared/utils/helpers';
 
 import { jsonataWrapper } from './jsonataWrapper';
@@ -195,7 +195,7 @@ export const useCreateResourceDescription = descID => {
           components={matches.map((result, idx) => {
             const url = result.match(/\((.*?)\)/)[1];
 
-            return <Link className="bsl-link" url={url} key={idx} />;
+            return <ExternalLink className="bsl-link" url={url} key={idx} />;
           })}
         />
       );

@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import { useTranslation, Trans } from 'react-i18next';
 import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
 import { useGetHiddenNamespaces } from 'shared/hooks/useGetHiddenNamespaces';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { NamespaceCreate } from './NamespaceCreate';
 import { NamespaceStatus } from './NamespaceStatus';
 import { useNavigate } from 'react-router-dom';
@@ -36,7 +36,7 @@ export function NamespaceList(props) {
 
   const description = (
     <Trans i18nKey="namespaces.description">
-      <Link
+      <ExternalLink
         className="bsl-link"
         url="https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces"
       />

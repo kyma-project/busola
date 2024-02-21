@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Icon } from '@ui5/webcomponents-react';
 
@@ -12,7 +12,7 @@ type LinkProps = {
   dataTestId?: string;
 };
 
-export const Link = ({
+export const ExternalLink = ({
   url,
   text,
   className,

@@ -1,11 +1,10 @@
-import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { useUrl } from 'hooks/useUrl';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
-import { Link as ReactSharedLink } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 
 import { PodCreate } from './PodCreate';
 import { PodStatus, calculatePodState } from './PodStatus';
@@ -57,7 +56,7 @@ export function PodList(params) {
 
   const description = (
     <Trans i18nKey="pods.description">
-      <ReactSharedLink
+      <ExternalLink
         className="bsl-link"
         url="https://kubernetes.io/docs/concepts/workloads/pods/"
       />

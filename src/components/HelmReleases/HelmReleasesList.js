@@ -4,7 +4,7 @@ import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { Labels } from 'shared/components/Labels/Labels';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { Link as ExternalLink } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { Link } from 'react-router-dom';
 import { decodeHelmRelease } from './decodeHelmRelease';
 import { findRecentRelease } from './findRecentRelease';

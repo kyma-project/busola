@@ -1,10 +1,9 @@
-import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { Link as DescLink } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 
 import { PersistentVolumeStatus } from './PersistentVolumeStatus';
@@ -85,7 +84,7 @@ export function PersistentVolumeList(props) {
 
   const description = (
     <Trans i18nKey="pv.description">
-      <DescLink
+      <ExternalLink
         className="bsl-link"
         url="https://kubernetes.io/docs/concepts/storage/persistent-volumes"
       />

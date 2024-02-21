@@ -1,9 +1,8 @@
-import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 
 import { SecretCreate } from './SecretCreate';
 
@@ -30,7 +29,7 @@ export function SecretList(props) {
 
   const description = (
     <Trans i18nKey="secrets.description">
-      <Link
+      <ExternalLink
         className="bsl-link"
         url="https://kubernetes.io/docs/concepts/configuration/secret/"
       />

@@ -1,10 +1,9 @@
 import { Trans } from 'react-i18next';
-import { Link } from '../../shared/components/Link/Link';
-import React from 'react';
+import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 
 export const description = (
   <Trans i18nKey="jobs.description">
-    <Link
+    <ExternalLink
       className="bsl-link"
       url="https://kubernetes.io/docs/concepts/workloads/controllers/job/"
     />

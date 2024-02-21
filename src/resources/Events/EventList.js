@@ -2,7 +2,7 @@ import { useTranslation, Trans } from 'react-i18next';
 
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-import { Link as DescriptionLink } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { useMessageList } from 'hooks/useMessageList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
@@ -106,7 +106,7 @@ export function EventList({
 
   const description = (
     <Trans i18nKey="events.description">
-      <DescriptionLink
+      <ExternalLink
         className="bsl-link"
         url="https://kubernetes.io/docs/reference/kubernetes-api/cluster-resources/event-v1/"
       />

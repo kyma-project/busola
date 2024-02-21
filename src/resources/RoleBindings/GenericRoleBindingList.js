@@ -1,10 +1,9 @@
-import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-import { Link as ReactSharedLink } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { useUrl } from 'hooks/useUrl';
 
 export function GenericRoleBindingList({ descriptionKey, ...params }) {
@@ -57,9 +56,9 @@ export function GenericRoleBindingList({ descriptionKey, ...params }) {
     {
       header: t('role-bindings.headers.role-ref'),
       value: binding => (
-        <Link className="bsl-link" to={navigateToRole(binding.roleRef)}>
+        <ExternalLink className="bsl-link" to={navigateToRole(binding.roleRef)}>
           {binding.roleRef.name}
-        </Link>
+        </ExternalLink>
       ),
     },
     {
@@ -80,7 +79,7 @@ export function GenericRoleBindingList({ descriptionKey, ...params }) {
 
   const description = (
     <Trans i18nKey={descriptionKey}>
-      <ReactSharedLink
+      <ExternalLink
         className="bsl-link"
         url="https://kyma-project.io/docs/kyma/latest/04-operation-guides/security/sec-02-authorization-in-kyma/#role-binding"
       />

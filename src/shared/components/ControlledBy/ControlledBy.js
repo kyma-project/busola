@@ -4,11 +4,12 @@ import { Link } from 'react-router-dom';
 import './ControlledBy.scss';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { extensionsState } from 'state/navigation/extensionsAtom';
 import { resources } from 'resources';
 import { useUrl } from 'hooks/useUrl';
 import { getExtensibilityPath } from 'components/Extensibility/helpers/getExtensibilityPath';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 export const GoToDetailsLink = ({
   kind,
@@ -18,6 +19,7 @@ export const GoToDetailsLink = ({
 }) => {
   const extensions = useRecoilValue(extensionsState);
   const { namespaceUrl, clusterUrl } = useUrl();
+  const setLayoutState = useSetRecoilState(columnLayoutState);
 
   let path = null;
   const resource = resources.find(res => res.resourceType === pluralize(kind));
@@ -45,7 +47,17 @@ export const GoToDetailsLink = ({
     return <>{noBrackets ? name : `(${name})`}</>;
   } else {
     return (
-      <Link className="bsl-link" to={path}>
+      <Link
+        className="bsl-link"
+        to={path}
+        onClick={() =>
+          setLayoutState({
+            midColumn: null,
+            endColumn: null,
+            layout: 'OneColumn',
+          })
+        }
+      >
         {noBrackets ? name : `(${name})`}
       </Link>
     );

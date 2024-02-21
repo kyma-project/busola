@@ -1,5 +1,4 @@
-import React from 'react';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { Trans, useTranslation } from 'react-i18next';
 import { createPatch } from 'rfc6902';
 import { Button, MessageStrip } from '@ui5/webcomponents-react';
@@ -174,7 +173,7 @@ export function BusolaExtensionDetails({ name, namespace }) {
             style={spacing.sapUiSmallMarginBottom}
           >
             <Trans i18nKey="extensibility.message.unnown-version">
-              <Link
+              <ExternalLink
                 className="bsl-link"
                 url="https://github.com/kyma-project/busola/tree/main/docs/extensibility"
               />

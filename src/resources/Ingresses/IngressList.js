@@ -1,9 +1,8 @@
-import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 
 import { IngressCreate } from './IngressCreate';
 
@@ -29,7 +28,7 @@ export function IngressList(props) {
 
   const description = (
     <Trans i18nKey="ingresses.description">
-      <Link
+      <ExternalLink
         className="bsl-link"
         url="https://kubernetes.io/docs/concepts/services-networking/ingress/"
       />
