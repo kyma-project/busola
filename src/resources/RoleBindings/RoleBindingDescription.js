@@ -1,5 +1,5 @@
 import { Trans } from 'react-i18next';
-import { Link as ReactSharedLink } from '../../shared/components/Link/Link';
+import { Link as ReactSharedLink } from 'shared/components/Link/Link';
 import React from 'react';
 
 export const descriptionKey = 'role-bindings.description';
