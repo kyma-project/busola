@@ -40,6 +40,9 @@ import { ResourceStatusCard } from '../ResourceStatusCard/ResourceStatusCard';
 import { EMPTY_TEXT_PLACEHOLDER } from '../../constants';
 import { ReadableElapsedTimeFromNow } from '../ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
 import { HintButton } from '../DescriptionHint/DescriptionHint';
+import { useRecoilValue } from 'recoil';
+import { useFeature } from 'hooks/useFeature';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
@@ -206,6 +209,9 @@ function Resource({
     navigateToListAfterDelete: true,
     layoutNumber,
   });
+
+  const layoutColumn = useRecoilValue(columnLayoutState);
+  const { isEnabled: isColumnLayoutEnabled } = useFeature('COLUMN_LAYOUT');
 
   const { setEditedYaml: setEditedSpec } = useYamlEditor();
   const notification = useNotification();
@@ -392,6 +398,14 @@ function Resource({
 
   const resourceDetailsCard = (
     <ResourceDetailsCard
+      title={title ?? t('common.headers.resource-details')}
+      wrapperClassname={
+        isColumnLayoutEnabled
+          ? layoutColumn.layout === 'MidColumnFullScreen'
+            ? 'resource-overview__details-wrapper'
+            : null
+          : 'resource-overview__details-wrapper'
+      }
       content={
         <>
           <DynamicPageComponent.Column

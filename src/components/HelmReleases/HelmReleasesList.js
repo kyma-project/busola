@@ -19,13 +19,28 @@ function HelmReleasesList() {
   const { t } = useTranslation();
   const namespace = useRecoilValue(activeNamespaceIdState);
   const { namespaceUrl } = useUrl();
+  const resourceUrl = entry => {
+    const currentUrl = window.location.pathname;
+    const urlPrefix = currentUrl.includes('namespaces/-all-/')
+      ? currentUrl.substring(0, currentUrl.indexOf('-all-') - 1)
+      : '';
+
+    return urlPrefix
+      ? `${urlPrefix}/${entry.namespace}/helm-releases/${entry.releaseName}`
+      : namespaceUrl(`helm-releases/${entry.releaseName}`);
+  };
 
   const { data, loading, error } = useGetList(
     s => s.type === 'helm.sh/release.v1',
-  )(`/api/v1/namespaces/${namespace}/secrets`);
+  )(
+    namespace === '-all-'
+      ? `/api/v1/secrets`
+      : `/api/v1/namespaces/${namespace}/secrets`,
+  );
 
   const headerRenderer = () => [
     t('common.headers.name'),
+    namespace === '-all-' ? t('common.headers.namespace') : null,
     t('common.headers.labels'),
     t('helm-releases.headers.chart'),
     t('helm-releases.headers.revision'),
@@ -34,12 +49,10 @@ function HelmReleasesList() {
   ];
 
   const rowRenderer = entry => [
-    <Link
-      className="bsl-link"
-      to={namespaceUrl(`helm-releases/${entry.releaseName}`)}
-    >
+    <Link className="bsl-link" to={resourceUrl(entry)}>
       {entry.releaseName}
     </Link>,
+    namespace === '-all-' ? entry.namespace : null,
     <div style={{ maxWidth: '36rem' }}>
       <Labels labels={entry.recentRelease?.labels || {}} shortenLongLabels />
     </div>,
@@ -59,6 +72,7 @@ function HelmReleasesList() {
       recentRelease: decodeHelmRelease(recentRelease?.data.release),
       revision: releases.length,
       status: recentRelease?.metadata.labels.status || 'unknown',
+      namespace: recentRelease?.metadata.namespace,
     };
   });
 

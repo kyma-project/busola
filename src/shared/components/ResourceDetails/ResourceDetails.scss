@@ -15,9 +15,14 @@
   gap: 1rem;
 }
 
+.resource-overview__details-wrapper {
+  //display: grid;
+  //grid-template-columns: 1fr;
+}
+
 @container (min-width: 650px) {
   .cluster-overview__details-wrapper {
-    grid-template-columns: 0.5fr;
+    grid-template-columns: 0.5fr; //0.5fr
   }
 
   .cluster-overview__details-grid {
@@ -25,9 +30,15 @@
   }
 }
 
+@container (min-width: 650px) {
+  .resource-overview__details-wrapper {
+    //grid-template-columns: 2fr 1fr;
+  }
+}
+
 @container (min-width: 950px) {
   .resource-details-container {
-    grid-template-columns: 1fr 432px;
+    grid-template-columns: 0.5fr 432px;
     gap: 0;
   }
 }
