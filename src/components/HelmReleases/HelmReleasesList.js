@@ -13,7 +13,11 @@ import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
-import { description } from './HelmReleaseDescription';
+import { Description } from 'shared/components/Description/Description';
+import {
+  HelmReleaseDocsURL,
+  HelmReleaseI18nDescriptionKey,
+} from 'components/HelmReleases/index';
 
 function HelmReleasesList() {
   const { t } = useTranslation();
@@ -66,7 +70,12 @@ function HelmReleasesList() {
     <>
       <DynamicPageComponent
         title={t('helm-releases.title')}
-        description={description}
+        description={
+          <Description
+            i18nKey={HelmReleaseI18nDescriptionKey}
+            url={HelmReleaseDocsURL}
+          />
+        }
         content={
           <GenericList
             entries={entries}
