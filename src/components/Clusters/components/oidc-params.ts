@@ -31,22 +31,28 @@ export function tryParseOIDCparams(kubeconfigUser: KubeconfigOIDCAuth) {
   }
 }
 
-export function createLoginCommand(oidcConfig: {
-  issuerUrl: string;
-  clientId: string;
-  clientSecret?: string;
-  scope: string;
-}): LoginCommand {
+export function createLoginCommand(
+  oidcConfig: {
+    issuerUrl: string;
+    clientId: string;
+    clientSecret?: string;
+    scope: string;
+  },
+  execRest: object,
+): LoginCommand {
   return {
+    ...execRest,
     apiVersion: 'client.authentication.k8s.io/v1beta1',
     command: 'kubectl',
     args: [
       'oidc-login',
       'get-token',
-      `--oidc-issuer-url=${oidcConfig.issuerUrl}`,
-      `--oidc-client-id=${oidcConfig.clientId}`,
+      `--oidc-issuer-url=${oidcConfig.issuerUrl || ''}`,
+      `--oidc-client-id=${oidcConfig.clientId || ''}`,
       `--oidc-client-secret=${oidcConfig.clientSecret || ''}`,
-      `--oidc-extra-scope=openid ${oidcConfig.scope}`,
+      oidcConfig.scope
+        ? `--oidc-extra-scope=${oidcConfig.scope || ''}`
+        : `--oidc-extra-scope=openid ${oidcConfig.scope || ''}`,
       '--grant-type=auto',
     ],
   };

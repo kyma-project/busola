@@ -12,6 +12,7 @@ export function WizardButtons({
   onComplete,
   onCancel,
   validation,
+  className,
 }) {
   const { t } = useTranslation();
 
@@ -24,9 +25,10 @@ export function WizardButtons({
   };
 
   return (
-    <div style={spacing.sapUiSmallMarginTop}>
+    <div style={spacing.sapUiSmallMarginTop} className={className}>
       {!firstStep && (
         <Button
+          design="Transparent"
           onClick={goToPreviousStep}
           style={spacing.sapUiTinyMarginEnd}
           aria-label="previous-step"

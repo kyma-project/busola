@@ -44,9 +44,8 @@ describe('ResourceDetails Columns', () => {
         </Suspense>
       </ThemeProvider>,
     );
-
     await waitFor(() => {
-      expect(queryByText('some-header')).toBeInTheDocument();
+      expect(queryByText('some-header:')).toBeInTheDocument();
       expect(
         queryByText('test-resource-name | test-resource-namespace'),
       ).toBeInTheDocument();

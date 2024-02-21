@@ -8,18 +8,16 @@ import {
   DynamicPageTitle,
   ObjectPage,
   ObjectPageSection,
-  Popover,
-  Text,
   Title,
 } from '@ui5/webcomponents-react';
 
 import './DynamicPageComponent.scss';
-import { createPortal } from 'react-dom';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useFeature } from 'hooks/useFeature';
+import { HintButton } from '../DescriptionHint/DescriptionHint';
 
 const Column = ({ title, children, columnSpan, image, style = {} }) => {
   const styleComputed = { gridColumn: columnSpan, ...style };
@@ -27,7 +25,7 @@ const Column = ({ title, children, columnSpan, image, style = {} }) => {
     <div className="page-header__column" style={styleComputed}>
       {image && <div className="image">{image}</div>}
       <div className="content-container">
-        <div className="title bsl-has-color-status-4 ">{title}</div>
+        <div className="title bsl-has-color-status-4 ">{title}:</div>
         <span className="content bsl-has-color-text-1">{children}</span>
       </div>
     </div>
@@ -175,28 +173,13 @@ export const DynamicPageComponent = ({
         <Title className="ui5-title">
           {title}
           {description && (
-            <>
-              <Button
-                id="descriptionOpener"
-                icon="hint"
-                design="Transparent"
-                style={spacing.sapUiTinyMargin}
-                onClick={() => {
-                  setShowTitleDescription(true);
-                }}
-              />
-              {createPortal(
-                <Popover
-                  opener="descriptionOpener"
-                  open={showTitleDescription}
-                  onAfterClose={() => setShowTitleDescription(false)}
-                  placementType="Right"
-                >
-                  <Text className="description">{description}</Text>
-                </Popover>,
-                document.body,
-              )}
-            </>
+            <HintButton
+              style={spacing.sapUiTinyMargin}
+              setShowTitleDescription={setShowTitleDescription}
+              showTitleDescription={showTitleDescription}
+              description={description}
+              context="dynamic"
+            />
           )}
         </Title>
       }

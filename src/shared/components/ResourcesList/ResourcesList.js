@@ -640,13 +640,14 @@ export function ResourceListRenderer({
             textSearchProperties: textSearchProperties(),
           }}
           emptyListProps={{
-            ...emptyListProps,
             titleText: `${t('common.labels.no')} ${processTitle(
               prettifyNamePlural(resourceTitle, resourceType),
             )}`,
             onClick: () => {
               setActiveResource(undefined);
             },
+            showButton: !disableCreate && namespace !== '-all-',
+            ...emptyListProps,
           }}
         />
       )}

@@ -123,8 +123,11 @@ export function hasKubeconfigAuth(kubeconfig: Kubeconfig) {
     if ('client-certificate-data' in user) {
       return user['client-certificate-data'] && !!user['client-key-data'];
     }
+    const oidcData = tryParseOIDCparams(user as KubeconfigOIDCAuth);
 
-    return tryParseOIDCparams(user as KubeconfigOIDCAuth);
+    if (oidcData?.issuerUrl && oidcData?.clientId && oidcData?.scope) {
+      return oidcData;
+    }
   } catch (e) {
     console.warn(e);
     return false;

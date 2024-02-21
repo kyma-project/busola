@@ -38,6 +38,8 @@ export function EditorActions({
   saveDisabled,
   saveHidden,
   isProtected,
+  searchDisabled = false,
+  hideDisabled = false,
 }) {
   const [visible, setVisible] = useState(
     localStorage.getItem(EDITOR_VISIBILITY) !== 'false',
@@ -133,14 +135,16 @@ export function EditorActions({
         }
         icon={visible ? 'hide' : 'show'}
         onClick={visible ? hideReadOnlyLines : showReadOnlyLines}
-        disabled={!editor}
+        disabled={!editor || hideDisabled}
       />
+
       <ButtonWithTooltip
         tooltipContent={t('common.tooltips.search')}
         icon="search"
         onClick={openSearch}
-        disabled={!editor}
+        disabled={!editor || searchDisabled}
       />
+
       {!saveHidden && (
         <ButtonWithTooltip
           tooltipContent={

@@ -1,14 +1,12 @@
 .file-input {
   display: grid;
-  font-size: var(--sapFontSmallSize, 0.875rem);
+  font-size: var(--sapFontHeader4Size, 0.875rem);
   place-items: center;
-  max-width: 40vh;
   height: 80px;
   border-radius: 8px;
   background: var(--sapButton_Background);
-  margin: 0 auto;
-  padding: 0 25px;
-  border: 1px dashed var(--sapNeutralBorderColor);
+  padding: 45px 25px;
+  border: 2px dashed var(--sapList_BorderColor);
   color: #0a6ed1;
 
   &,
@@ -32,11 +30,18 @@
   }
 
   &__secondary {
-    color: gray;
-    margin-top: 4px;
+    color: var(--sapTextColor);
+    font-size: var(--sapFontSize);
+    margin-top: 10px;
   }
 
   &--drag-over {
     border: 1px solid var(--sapBrandColor, #0a6ed1);
+  }
+
+  &__icon {
+    border-radius: 4px;
+    padding: 7px 15px;
+    border: 2px dashed var(--sapBrandColor);
   }
 }

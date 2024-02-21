@@ -42,13 +42,15 @@ test('Busola Lighthouse audit', async () => {
     .locator('input[id="file-upload"]')
     .setInputFiles('./fixtures/kubeconfig.yaml');
 
-  await page.locator('ui5-button:has-text("Next Step")').click();
+  await page.locator('ui5-button:has-text("Next Step"):visible').click();
 
   await page
     .locator(
-      'ui5-radio-button:has-text("Local storage: Cluster data is persisted between browser reloads.")',
+      'ui5-radio-button:has-text("Local storage: Cluster data is persisted between browser reloads."):visible',
     )
     .click();
+
+  await page.locator('ui5-button:has-text("Next Step"):visible').click();
 
   await page
     .locator('ui5-button[aria-label="last-step"]:has-text("Connect cluster")')

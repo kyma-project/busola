@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MessageStrip, Switch } from '@ui5/webcomponents-react';
+import { MessageStrip, Switch, Title } from '@ui5/webcomponents-react';
 import * as jp from 'jsonpath';
 import { createLoginCommand, tryParseOIDCparams } from './oidc-params';
 
@@ -18,8 +18,11 @@ const OIDCform = ({ resource, setResource, ...props }) => {
   const { t } = useTranslation();
 
   const [auth, setAuth] = useState(tryParseOIDCparams(getUser(resource)) || {});
-
   const userIndex = getUserIndex(resource);
+
+  useEffect(() => {
+    setAuth(tryParseOIDCparams(getUser(resource)) || {});
+  }, [resource]);
 
   return (
     <ResourceForm.Wrapper
@@ -28,10 +31,9 @@ const OIDCform = ({ resource, setResource, ...props }) => {
         jp.value(
           resource,
           `$.users[${userIndex}].user.exec`,
-          createLoginCommand(auth),
+          createLoginCommand(auth, resource?.users?.[userIndex]?.user?.exec),
         );
         setAuth(auth);
-        setResource({ ...resource });
       }}
       {...props}
     >
@@ -66,16 +68,27 @@ const OIDCform = ({ resource, setResource, ...props }) => {
   );
 };
 
-const TokenForm = ({ resource, ...props }) => {
+const TokenForm = ({ resource, setResource, ...props }) => {
   const { t } = useTranslation();
   const userIndex = getUserIndex(resource);
+  const [token, setToken] = useState(resource?.users?.[userIndex]?.user?.token);
+
+  useEffect(() => {
+    setToken(resource?.users?.[userIndex]?.user?.token);
+  }, [resource, userIndex]);
+
   return (
     <ResourceForm.Wrapper resource={resource} {...props}>
       <ResourceForm.FormField
         required
-        propertyPath={`$.users[${userIndex || 0}].user.token`}
+        value={token}
+        setValue={val => {
+          setToken(val);
+          jp.value(resource, `$.users[${userIndex}].user.token`, val);
+        }}
         label={t('clusters.wizard.auth.token')}
         input={Inputs.Text}
+        inputInfo={t('clusters.wizard.token-info')}
       />
     </ResourceForm.Wrapper>
   );
@@ -90,9 +103,7 @@ export function AuthForm({
 }) {
   const { t } = useTranslation();
 
-  const [useOidc, setUseOidc] = useState(
-    getUser(resource)?.exec?.args?.[0] === 'oidc-login',
-  );
+  const [useOidc, setUseOidc] = useState(!!getUser(resource)?.exec);
 
   useEffect(() => {
     revalidate();
@@ -116,33 +127,32 @@ export function AuthForm({
       setResource={setResource}
       {...props}
     >
-      <MessageStrip
-        design="Warning"
-        hideCloseButton
-        style={spacing.sapUiSmallMarginTopBottom}
-      >
-        {t('clusters.wizard.incomplete', {
-          context:
-            resource['current-context'] === '-all-'
-              ? resource.contexts[0]?.name
-              : resource['current-context'],
-        })}
-      </MessageStrip>
-      {!useOidc && <TokenForm />}
-      {!useOidc && (
+      <div className="add-cluster__content-container">
+        <Title level="H5">{t('clusters.wizard.update')}</Title>
         <MessageStrip
-          design="Information"
+          design="Warning"
           hideCloseButton
           style={spacing.sapUiSmallMarginTopBottom}
         >
-          {t('clusters.wizard.token-info')}
+          {t('clusters.wizard.incomplete', {
+            context:
+              resource['current-context'] === '-all-'
+                ? resource.contexts[0]?.name
+                : resource['current-context'],
+          })}
         </MessageStrip>
-      )}
-      <ResourceForm.FormField
-        label={t('clusters.wizard.auth.using-oidc')}
-        input={() => <Switch checked={useOidc} onChange={switchAuthVariant} />}
-      />
-      {useOidc && <OIDCform />}
+        {!useOidc && (
+          <TokenForm resource={resource} setResource={setResource} />
+        )}
+        <ResourceForm.FormField
+          label={t('clusters.wizard.auth.using-oidc')}
+          input={() => (
+            <Switch checked={useOidc} onChange={switchAuthVariant} />
+          )}
+          className="oidc-switch"
+        />
+        {useOidc && <OIDCform resource={resource} setResource={setResource} />}
+      </div>
     </ResourceForm.Wrapper>
   );
 }

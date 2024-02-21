@@ -1,23 +1,15 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { MessageStrip, Text } from '@ui5/webcomponents-react';
+import React, { useCallback } from 'react';
+import { MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
-import { showAddClusterWizard } from 'state/showAddClusterWizard';
 import { KubeconfigFileUpload } from './KubeconfigFileUpload';
 import jsyaml from 'js-yaml';
-import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 
 import { spacing } from '@ui5/webcomponents-react-base';
 import './KubeconfigUpload.scss';
+import { ClusterDataForm } from 'components/Clusters/views/EditCluster/EditCluster';
 
-export function KubeconfigUpload({ kubeconfig, setKubeconfig }) {
+export function KubeconfigUpload({ kubeconfig, setKubeconfig, formRef }) {
   const [error, setError] = React.useState('');
-  const [editor, setEditor] = useState(null);
-  const openAddCluster = useRecoilValue(showAddClusterWizard);
-
-  useEffect(() => {
-    if (!kubeconfig && editor && openAddCluster) editor.getModel().setValue('');
-  }, [editor, kubeconfig, openAddCluster]);
 
   const { t } = useTranslation();
 
@@ -26,7 +18,7 @@ export function KubeconfigUpload({ kubeconfig, setKubeconfig }) {
       try {
         const config = jsyaml.load(text);
 
-        if (typeof config !== 'object' && editor.getModel().getValue() !== '') {
+        if (typeof config !== 'object') {
           setError(t('clusters.wizard.not-an-object'));
         } else {
           setKubeconfig(config);
@@ -38,25 +30,32 @@ export function KubeconfigUpload({ kubeconfig, setKubeconfig }) {
         setError(message.substr(0, message.indexOf('\n')));
       }
     },
-    [t, setError, setKubeconfig, editor],
+    [t, setError, setKubeconfig],
   );
 
   return (
     <div className="kubeconfig-upload">
-      <KubeconfigFileUpload
-        onKubeconfigTextAdded={text => {
-          editor.getModel().setValue(text);
+      <div className="add-cluster__content-container">
+        <KubeconfigFileUpload
+          onKubeconfigTextAdded={text => {
+            updateKubeconfig(text);
+          }}
+        />
+      </div>
+      <ClusterDataForm
+        kubeconfig={kubeconfig}
+        setResource={modified => {
+          if (modified) setKubeconfig({ ...modified });
         }}
-      />
-      <Text className="editor-label" style={spacing.sapUiSmallMarginTopBottom}>
-        {t('clusters.wizard.editor-label')}
-      </Text>
-      <Editor
-        autocompletionDisabled
-        language="yaml"
-        value={kubeconfig ? jsyaml.dump(kubeconfig) : ''}
-        onMount={setEditor}
         onChange={updateKubeconfig}
+        formElementRef={formRef}
+        modeSelectorDisabled={
+          kubeconfig ? !Object.keys(kubeconfig)?.length : !!!kubeconfig
+        }
+        initialMode={'MODE_YAML'}
+        className="kubeconfig-upload__form add-cluster__content-container"
+        yamlSearchDisabled={true}
+        yamlHideDisabled={true}
       />
       {error && (
         <MessageStrip

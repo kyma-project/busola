@@ -1,8 +1,82 @@
-.add-cluster__kubeconfig-info {
-  white-space: pre-line;
+.add-cluster {
+  &__content-container {
+    background-color: var(--sapGroup_TitleBackground);
+    border-radius: var(--sapElement_BorderCornerRadius);
+    padding: 1rem;
+  }
+
+  &__kubeconfig-info {
+    white-space: pre-line;
+  }
 }
 
 ui5-wizard {
   height: 90vh;
   min-width: 80vw;
+
+  .cluster-wizard {
+    &__buttons {
+      position: absolute;
+      bottom: 1rem;
+      left: 0;
+      display: flex;
+      justify-content: flex-end;
+      box-sizing: border-box;
+      width: calc(100% - 20px);
+      margin: 0 10px;
+      padding: 7px;
+      border: 1px solid var(--sapGroup_TitleBorderColor);
+      border-radius: var(--sapElement_BorderCornerRadius);
+      background-color: var(--sapGroup_TitleBackground);
+      box-shadow: 0 0 0.125rem 0
+          color-mix(in srgb, var(--sapContent_ShadowColor) 16%, transparent),
+        0 0.5rem 1rem 0
+          color-mix(in srgb, var(--sapContent_ShadowColor) 16%, transparent);
+    }
+
+    &__token-info,
+    &__storage-preference {
+      color: var(--sapContent_LabelColor);
+      font-size: var(--sapFontSize);
+    }
+
+    &__auth-container {
+      display: flex;
+      flex-flow: column;
+      overflow: auto;
+      height: calc(90vh - 8rem);
+
+      .cluster-wizard__auth-form {
+        height: unset;
+      }
+    }
+  }
+
+  .resource-form {
+    padding: 1rem 0;
+
+    .form-field {
+      justify-content: start;
+      flex-flow: row wrap;
+      gap: 0;
+      margin-bottom: 1rem;
+      width: 100%;
+
+      &__label {
+        min-width: 100%;
+        max-width: unset;
+        justify-content: flex-start;
+        width: 100%;
+        padding: 12px 0 5px 0 !important;
+      }
+    }
+
+    .oidc-switch {
+      .form-field__label {
+        width: fit-content;
+        min-width: fit-content;
+        margin-top: -0.25rem;
+      }
+    }
+  }
 }

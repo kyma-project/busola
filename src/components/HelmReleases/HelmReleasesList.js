@@ -26,13 +26,28 @@ function HelmReleasesList({ enableColumnLayout }) {
   const { namespaceUrl } = useUrl();
   const navigate = useNavigate();
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
+  const resourceUrl = entry => {
+    const currentUrl = window.location.pathname;
+    const urlPrefix = currentUrl.includes('namespaces/-all-/')
+      ? currentUrl.substring(0, currentUrl.indexOf('-all-') - 1)
+      : '';
+
+    return urlPrefix
+      ? `${urlPrefix}/${entry.namespace}/helm-releases/${entry.releaseName}`
+      : namespaceUrl(`helm-releases/${entry.releaseName}`);
+  };
 
   const { data, loading, error } = useGetList(
     s => s.type === 'helm.sh/release.v1',
-  )(`/api/v1/namespaces/${namespace}/secrets`);
+  )(
+    namespace === '-all-'
+      ? `/api/v1/secrets`
+      : `/api/v1/namespaces/${namespace}/secrets`,
+  );
 
   const headerRenderer = () => [
     t('common.headers.name'),
+    namespace === '-all-' ? t('common.headers.namespace') : null,
     t('common.headers.labels'),
     t('helm-releases.headers.chart'),
     t('helm-releases.headers.revision'),
@@ -40,8 +55,6 @@ function HelmReleasesList({ enableColumnLayout }) {
     t('common.headers.status'),
   ];
 
-  const helmDetailsURL = releaseName =>
-    namespaceUrl(`helm-releases/${releaseName}`);
   const rowRenderer = entry => [
     enableColumnLayout ? (
       <>
@@ -61,9 +74,7 @@ function HelmReleasesList({ enableColumnLayout }) {
             window.history.pushState(
               window.history.state,
               '',
-              `${helmDetailsURL(
-                entry.releaseName,
-              )}?layout=TwoColumnsMidExpanded`,
+              `${resourceUrl(entry)}?layout=TwoColumnsMidExpanded`,
             );
           }}
         >
@@ -80,12 +91,13 @@ function HelmReleasesList({ enableColumnLayout }) {
             layout: 'OneColumn',
           });
 
-          navigate(helmDetailsURL(entry.releaseName));
+          navigate(resourceUrl(entry));
         }}
       >
         {entry.releaseName}
       </Link>
     ),
+    namespace === '-all-' ? entry.namespace : null,
     <div style={{ maxWidth: '36rem' }}>
       <Labels labels={entry.recentRelease?.labels || {}} shortenLongLabels />
     </div>,
@@ -105,6 +117,7 @@ function HelmReleasesList({ enableColumnLayout }) {
       recentRelease: decodeHelmRelease(recentRelease?.data.release),
       revision: releases.length,
       status: recentRelease?.metadata.labels.status || 'unknown',
+      namespace: recentRelease?.metadata.namespace,
     };
   });
 

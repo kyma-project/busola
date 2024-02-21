@@ -14,6 +14,8 @@ import { CronJobConcurrencyPolicy } from './CronJobConcurrencyPolicy';
 import CronJobCreate from './CronJobCreate';
 import { CronJobJobs } from './CronJobJobs';
 
+import { description } from './CronJobDescription';
+
 export function CronJobDetails(props) {
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();
@@ -73,6 +75,7 @@ export function CronJobDetails(props) {
       customComponents={[CronJobJobs, Events, CronJobPodTemplate]}
       customColumns={customColumns}
       createResourceForm={CronJobCreate}
+      description={description}
       {...props}
     />
   );
