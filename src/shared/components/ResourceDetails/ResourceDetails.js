@@ -442,7 +442,10 @@ function Resource({
             title={t('common.headers.annotations')}
             columnSpan="2/2"
           >
-            <Labels labels={resource.metadata.annotations || {}} />
+            <Labels
+              labels={resource.metadata.annotations || {}}
+              shortenLongLabels={true}
+            />
           </DynamicPageComponent.Column>
         </>
       }
