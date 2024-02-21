@@ -1,24 +1,31 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
+
 import { useTranslation, Trans } from 'react-i18next';
+import { Link } from '@ui5/webcomponents-react';
+import { groupBy } from 'lodash';
+
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { Labels } from 'shared/components/Labels/Labels';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { Link as ExternalLink } from 'shared/components/Link/Link';
-import { Link } from 'react-router-dom';
+
 import { decodeHelmRelease } from './decodeHelmRelease';
 import { findRecentRelease } from './findRecentRelease';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
-import { groupBy } from 'lodash';
-import { useRecoilValue } from 'recoil';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 
-function HelmReleasesList() {
+function HelmReleasesList({ enableColumnLayout }) {
   const { t } = useTranslation();
   const namespace = useRecoilValue(activeNamespaceIdState);
   const { namespaceUrl } = useUrl();
+  const navigate = useNavigate();
+  const setLayoutColumn = useSetRecoilState(columnLayoutState);
 
   const { data, loading, error } = useGetList(
     s => s.type === 'helm.sh/release.v1',
@@ -33,13 +40,52 @@ function HelmReleasesList() {
     t('common.headers.status'),
   ];
 
+  const helmDetailsURL = releaseName =>
+    namespaceUrl(`helm-releases/${releaseName}`);
   const rowRenderer = entry => [
-    <Link
-      className="bsl-link"
-      to={namespaceUrl(`helm-releases/${entry.releaseName}`)}
-    >
-      {entry.releaseName}
-    </Link>,
+    enableColumnLayout ? (
+      <>
+        <Link
+          style={{ fontWeight: 'bold' }}
+          onClick={() => {
+            setLayoutColumn({
+              midColumn: {
+                resourceName: entry.releaseName,
+                resourceType: 'HelmReleases',
+                namespaceId: namespace,
+              },
+              endColumn: null,
+              layout: 'TwoColumnsMidExpanded',
+            });
+
+            window.history.pushState(
+              window.history.state,
+              '',
+              `${helmDetailsURL(
+                entry.releaseName,
+              )}?layout=TwoColumnsMidExpanded`,
+            );
+          }}
+        >
+          {entry.releaseName}
+        </Link>
+      </>
+    ) : (
+      <Link
+        style={{ fontWeight: 'bold' }}
+        onClick={() => {
+          setLayoutColumn({
+            midColumn: null,
+            endColumn: null,
+            layout: 'OneColumn',
+          });
+
+          navigate(helmDetailsURL(entry.releaseName));
+        }}
+      >
+        {entry.releaseName}
+      </Link>
+    ),
     <div style={{ maxWidth: '36rem' }}>
       <Labels labels={entry.recentRelease?.labels || {}} shortenLongLabels />
     </div>,
