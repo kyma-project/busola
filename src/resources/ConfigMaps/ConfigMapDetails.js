@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
@@ -6,7 +5,6 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 
 import { ConfigMapCreate } from './ConfigMapCreate';
-// import { Description } from 'shared/components/Description/Description';
 import { ResourceDescription } from 'resources/ConfigMaps/index';
 
 export function ConfigMapDetails(props) {
