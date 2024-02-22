@@ -416,7 +416,9 @@ function Resource({
   const resourceDetailsCard = (
     <ResourceDetailsCard
       title={title ?? t('common.headers.resource-details')}
-      wrapperClassname={'resource-overview__details-wrapper'}
+      wrapperClassname={`resource-overview__details-wrapper  ${
+        hasTabs ? 'tabs' : ''
+      }`}
       content={
         <>
           <DynamicPageComponent.Column
@@ -511,13 +513,14 @@ function Resource({
               className={`resource-details-container ${
                 isColumnLayoutEnabled &&
                 (layoutColumn.layout === 'MidColumnFullScreen' ||
+                  layoutColumn.layout === 'EndColumnFullScreen' ||
                   layoutColumn.layout === 'OneColumn')
                   ? ''
                   : 'column-view'
               }`}
             >
               {!hasTabs && resourceDetailsCard}
-              {resourceStatusCard && resourceStatusCard}
+              {!hasTabs && resourceStatusCard && resourceStatusCard}
             </div>
             <Suspense fallback={<Spinner />}>
               <Injections

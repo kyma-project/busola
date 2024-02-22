@@ -31,6 +31,13 @@
   .cluster-overview__details-grid {
     grid-template-columns: 50% calc(50% - 13.5px);
   }
+
+  .resource-overview__details-wrapper {
+    &.tabs {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+    }
+  }
 }
 
 @container (min-width: 900px) {
