@@ -463,10 +463,7 @@ function Resource({
             key="Labels"
             title={t('common.headers.labels')}
           >
-            <Labels
-              labels={resource.metadata.labels || {}}
-              shortenLongLabels={true}
-            />
+            <Labels labels={resource.metadata.labels || {}} shortenLongLabels />
           </DynamicPageComponent.Column>
 
           <DynamicPageComponent.Column
@@ -475,7 +472,7 @@ function Resource({
           >
             <Labels
               labels={resource.metadata.annotations || {}}
-              shortenLongLabels={true}
+              shortenLongLabels
             />
           </DynamicPageComponent.Column>
         </>
