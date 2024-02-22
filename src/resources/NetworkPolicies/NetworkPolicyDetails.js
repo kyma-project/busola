@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Tokens } from 'shared/components/Tokens';
@@ -9,6 +8,7 @@ import { NetworkPolicyPorts } from './Ports';
 import { NetworkPolicyPeers } from './Peers';
 import { NetworkPolicyCreate } from './NetworkPolicyCreate';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { ResourceDescription } from 'resources/NetworkPolicies';
 
 export function NetworkPolicyDetails(props) {
   const { t } = useTranslation();
@@ -80,6 +80,7 @@ export function NetworkPolicyDetails(props) {
     <ResourceDetails
       customColumns={customColumns}
       customComponents={customComponents}
+      description={ResourceDescription}
       createResourceForm={NetworkPolicyCreate}
       {...props}
     />

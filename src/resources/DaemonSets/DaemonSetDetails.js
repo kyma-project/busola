@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
@@ -9,7 +8,7 @@ import { Selector } from 'shared/components/Selector/Selector';
 import { DaemonSetStatus } from './DaemonSetStatus';
 import { DaemonSetCreate } from './DaemonSetCreate';
 import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
-import { description } from './DaemonSetDescription';
+import { ResourceDescription } from 'resources/DaemonSets';
 
 const Tolerations = resource => {
   const { t } = useTranslation();
@@ -80,9 +79,10 @@ export function DaemonSetDetails(props) {
       customComponents={[Tolerations, MatchSelector, DaemonSetPodTemplate]}
       customColumns={customColumns}
       createResourceForm={DaemonSetCreate}
-      description={description}
+      description={ResourceDescription}
       {...props}
     />
   );
 }
+
 export default DaemonSetDetails;

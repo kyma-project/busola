@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
@@ -10,6 +9,7 @@ import { EventsList } from 'shared/components/EventsList';
 import { CurrentCRDVersion } from './CurrentCRDVersion';
 import { RelatedCRDsList } from './RelatedCRDsList';
 import { CustomResourceDefinitionCreate } from './CustomResourceDefinitionCreate';
+import { ResourceDescription } from 'resources/CustomResourceDefinitions';
 
 export function CustomResourceDefinitionDetails(props) {
   const { t } = useTranslation();
@@ -76,6 +76,7 @@ export function CustomResourceDefinitionDetails(props) {
         RelatedCRDsList,
         Events,
       ]}
+      description={ResourceDescription}
       createResourceForm={CustomResourceDefinitionCreate}
       {...props}
     />

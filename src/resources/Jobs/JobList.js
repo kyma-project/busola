@@ -5,7 +5,11 @@ import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 
 import { JobCompletions } from './JobCompletions';
 import { JobCreate } from './JobCreate';
-import { description } from './JobDescription';
+import {
+  ResourceDescription,
+  i18nDescriptionKey,
+  docsURL,
+} from 'resources/Jobs';
 
 export const JobList = props => {
   const { t } = useTranslation();
@@ -25,12 +29,12 @@ export const JobList = props => {
   return (
     <ResourcesList
       customColumns={customColumns}
-      description={description}
+      description={ResourceDescription}
       {...props}
       createResourceForm={JobCreate}
       emptyListProps={{
-        subtitleText: t('jobs.description'),
-        url: 'https://kubernetes.io/docs/concepts/workloads/controllers/job/',
+        subtitleText: i18nDescriptionKey,
+        url: docsURL,
       }}
     />
   );

@@ -12,6 +12,7 @@ import { PodStatus } from './PodStatus';
 import ContainersData from './ContainersData';
 import { PodCreate } from './PodCreate';
 import { useUrl } from 'hooks/useUrl';
+import { ResourceDescription } from 'resources/Pods';
 
 export function PodDetails(props) {
   const { t } = useTranslation();
@@ -101,9 +102,11 @@ export function PodDetails(props) {
     <ResourceDetails
       customComponents={[VolumesList, Containers, InitContainers, Events]}
       customColumns={customColumns}
+      description={ResourceDescription}
       createResourceForm={PodCreate}
       {...props}
     />
   );
 }
+
 export default PodDetails;

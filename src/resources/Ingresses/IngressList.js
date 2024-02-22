@@ -1,11 +1,14 @@
-import React from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { Link } from 'shared/components/Link/Link';
 
 import { IngressCreate } from './IngressCreate';
+import {
+  ResourceDescription,
+  i18nDescriptionKey,
+  docsURL,
+} from 'resources/Ingresses';
 
 export function IngressList(props) {
   const { t } = useTranslation();
@@ -27,24 +30,15 @@ export function IngressList(props) {
     },
   ];
 
-  const description = (
-    <Trans i18nKey="ingresses.description">
-      <Link
-        className="bsl-link"
-        url="https://kubernetes.io/docs/concepts/services-networking/ingress/"
-      />
-    </Trans>
-  );
-
   return (
     <ResourcesList
       customColumns={customColumns}
-      description={description}
+      description={ResourceDescription}
       {...props}
       createResourceForm={IngressCreate}
       emptyListProps={{
-        subtitleText: t('ingresses.description'),
-        url: 'https://kubernetes.io/docs/concepts/services-networking/ingress/',
+        subtitleText: i18nDescriptionKey,
+        url: docsURL,
       }}
     />
   );
