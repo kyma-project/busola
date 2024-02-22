@@ -5,11 +5,8 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 
 import { ConfigMapCreate } from './ConfigMapCreate';
-import { Description } from 'shared/components/Description/Description';
-import {
-  configMapDocsURL,
-  configMapI18nDescriptionKey,
-} from 'resources/ConfigMaps/index';
+
+import { ResourceDescription } from 'resources/ConfigMaps/index';
 
 export function ConfigMapList(props) {
   const { t } = useTranslation();
@@ -29,12 +26,7 @@ export function ConfigMapList(props) {
   return (
     <ResourcesList
       customColumns={customColumns}
-      description={
-        <Description
-          i18nKey={configMapI18nDescriptionKey}
-          url={configMapDocsURL}
-        />
-      }
+      description={ResourceDescription}
       {...props}
       createResourceForm={ConfigMapCreate}
       emptyListProps={{
