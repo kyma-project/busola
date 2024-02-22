@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
@@ -6,10 +5,10 @@ import { PersistentVolumeClaimStatus } from 'shared/components/PersistentVolumeC
 import { Tokens } from 'shared/components/Tokens';
 
 import { PersistentVolumeClaimCreate } from './PersistentVolumeClaimCreate';
-import { Description } from 'shared/components/Description/Description';
 import {
-  persistentVolumeClaimDocsURL,
-  persistentVolumeClaimI18nDescriptionKey,
+  ResourceDescription,
+  i18nDescriptionKey,
+  docsURL,
 } from 'resources/PersistentVolumeClaims/index';
 
 export function PersistentVolumeClaimList(props) {
@@ -36,18 +35,13 @@ export function PersistentVolumeClaimList(props) {
 
   return (
     <ResourcesList
-      description={
-        <Description
-          i18nKey={persistentVolumeClaimI18nDescriptionKey}
-          url={persistentVolumeClaimDocsURL}
-        />
-      }
+      description={ResourceDescription}
       customColumns={customColumns}
       {...props}
       createResourceForm={PersistentVolumeClaimCreate}
       emptyListProps={{
-        subtitleText: t('persistent-volume-claims.description'),
-        url: 'https://kubernetes.io/docs/concepts/storage/persistent-volumes/',
+        subtitleText: i18nDescriptionKey,
+        url: docsURL,
       }}
     />
   );

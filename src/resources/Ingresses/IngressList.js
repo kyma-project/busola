@@ -1,14 +1,13 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 import { IngressCreate } from './IngressCreate';
-import { Description } from 'shared/components/Description/Description';
 import {
-  ingressDocsURL,
-  ingressI18nDescriptionKey,
+  ResourceDescription,
+  i18nDescriptionKey,
+  docsURL,
 } from 'resources/Ingresses/index';
 
 export function IngressList(props) {
@@ -34,14 +33,12 @@ export function IngressList(props) {
   return (
     <ResourcesList
       customColumns={customColumns}
-      description={
-        <Description i18nKey={ingressI18nDescriptionKey} url={ingressDocsURL} />
-      }
+      description={ResourceDescription}
       {...props}
       createResourceForm={IngressCreate}
       emptyListProps={{
-        subtitleText: t('ingresses.description'),
-        url: 'https://kubernetes.io/docs/concepts/services-networking/ingress/',
+        subtitleText: i18nDescriptionKey,
+        url: docsURL,
       }}
     />
   );

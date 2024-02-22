@@ -26,7 +26,7 @@ export const EmptyListComponent = ({
   children,
 }: EmptyListComponentProps) => {
   const { t } = useTranslation();
-  const subtitle = <Trans i18nKey={subtitleText}></Trans>;
+  const subtitle = <Trans i18nKey={subtitleText} />;
 
   if (showButton === undefined) {
     showButton = typeof onClick === 'function';

@@ -3,27 +3,21 @@ import React from 'react';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 
 import { NetworkPolicyCreate } from './NetworkPolicyCreate';
-import { Description } from 'shared/components/Description/Description';
 import {
-  networkPoliciesDocsURL,
-  networkPoliciesI18nDescriptionKey,
+  ResourceDescription,
+  i18nDescriptionKey,
+  docsURL,
 } from 'resources/NetworkPolicies/index';
 
 export function NetworkPolicyList(props) {
   return (
     <ResourcesList
-      description={
-        <Description
-          i18nKey={networkPoliciesI18nDescriptionKey}
-          url={networkPoliciesDocsURL}
-        />
-      }
+      description={ResourceDescription}
       {...props}
       createResourceForm={NetworkPolicyCreate}
       emptyListProps={{
-        subtitleText: 'network-policies.description',
-        url:
-          'https://kubernetes.io/docs/concepts/services-networking/network-policies/',
+        subtitleText: i18nDescriptionKey,
+        url: docsURL,
       }}
     />
   );

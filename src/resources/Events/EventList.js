@@ -7,8 +7,11 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { useUrl } from 'hooks/useUrl';
 import { Icon, ObjectStatus } from '@ui5/webcomponents-react';
-import { Description } from 'shared/components/Description/Description';
-import { eventDocsURL, eventI18nDescriptionKey } from 'resources/Events/index';
+import {
+  ResourceDescription,
+  docsURL,
+  i18nDescriptionKey,
+} from 'resources/Events/index';
 
 export function EventList({
   defaultType,
@@ -111,9 +114,7 @@ export function EventList({
       customColumns={customColumns}
       omitColumnsIds={['namespace', 'labels', 'created']}
       sortBy={sortByFn}
-      description={
-        <Description i18nKey={eventI18nDescriptionKey} url={eventDocsURL} />
-      }
+      description={ResourceDescription}
       showTitle={isCompact}
       title={t('events.title')}
       {...props}
@@ -139,8 +140,8 @@ export function EventList({
       }
       emptyListProps={{
         showButton: false,
-        subtitleText: t('events.description'),
-        url: 'https://kubernetes.io/docs/concepts/workloads/controllers/job/',
+        subtitleText: i18nDescriptionKey,
+        url: docsURL,
       }}
     />
   );

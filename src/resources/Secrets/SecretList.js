@@ -1,14 +1,12 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
-
 import { SecretCreate } from './SecretCreate';
-import { Description } from 'shared/components/Description/Description';
 import {
-  secretDocsURL,
-  secretI18nDescriptionKey,
+  ResourceDescription,
+  i18nDescriptionKey,
+  docsURL,
 } from 'resources/Secrets/index';
 
 export function SecretList(props) {
@@ -35,14 +33,12 @@ export function SecretList(props) {
   return (
     <ResourcesList
       customColumns={customColumns}
-      description={
-        <Description i18nKey={secretI18nDescriptionKey} url={secretDocsURL} />
-      }
+      description={ResourceDescription}
       {...props}
       createResourceForm={SecretCreate}
       emptyListProps={{
-        subtitleText: t('secrets.description'),
-        url: 'https://kubernetes.io/docs/concepts/configuration/secret/',
+        subtitleText: i18nDescriptionKey,
+        url: docsURL,
       }}
     />
   );

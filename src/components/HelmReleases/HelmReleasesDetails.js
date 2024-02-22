@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNotFound';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
@@ -14,11 +13,7 @@ import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
-import { Description } from 'shared/components/Description/Description';
-import {
-  HelmReleaseDocsURL,
-  HelmReleaseI18nDescriptionKey,
-} from 'components/HelmReleases/index';
+import { ResourceDescription } from 'components/HelmReleases/index';
 
 function HelmReleasesDetails({ releaseName }) {
   const { t } = useTranslation();
@@ -51,12 +46,7 @@ function HelmReleasesDetails({ releaseName }) {
       <DynamicPageComponent
         title={releaseName}
         breadcrumbItems={breadcrumbItems}
-        description={
-          <Description
-            i18nKey={HelmReleaseI18nDescriptionKey}
-            url={HelmReleaseDocsURL}
-          />
-        }
+        description={ResourceDescription}
         content={
           <>
             <HelmReleaseData

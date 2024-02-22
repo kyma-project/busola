@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
@@ -6,8 +5,11 @@ import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 
 import { JobCompletions } from './JobCompletions';
 import { JobCreate } from './JobCreate';
-import { Description } from 'shared/components/Description/Description';
-import { jobDocsURL, jobI18nDescriptionKey } from 'resources/Jobs/index';
+import {
+  ResourceDescription,
+  i18nDescriptionKey,
+  docsURL,
+} from 'resources/Jobs/index';
 
 export const JobList = props => {
   const { t } = useTranslation();
@@ -27,14 +29,12 @@ export const JobList = props => {
   return (
     <ResourcesList
       customColumns={customColumns}
-      description={
-        <Description i18nKey={jobI18nDescriptionKey} url={jobDocsURL} />
-      }
+      description={ResourceDescription}
       {...props}
       createResourceForm={JobCreate}
       emptyListProps={{
-        subtitleText: t('jobs.description'),
-        url: 'https://kubernetes.io/docs/concepts/workloads/controllers/job/',
+        subtitleText: i18nDescriptionKey,
+        url: docsURL,
       }}
     />
   );

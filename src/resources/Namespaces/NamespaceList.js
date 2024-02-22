@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import { useTranslation } from 'react-i18next';
 import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
@@ -10,10 +10,10 @@ import { useNavigate } from 'react-router-dom';
 import { clusterState } from 'state/clusterAtom';
 import { useHasPermissionsFor } from 'hooks/useHasPermissionsFor';
 import {
-  namespaceDocsURL,
-  namespaceI18nDescriptionKey,
+  ResourceDescription,
+  i18nDescriptionKey,
+  docsURL,
 } from 'resources/Namespaces/index';
-import { Description } from 'shared/components/Description/Description';
 
 export function NamespaceList(props) {
   const { t } = useTranslation();
@@ -47,19 +47,13 @@ export function NamespaceList(props) {
   return (
     <ResourcesList
       customColumns={customColumns}
-      description={
-        <Description
-          i18nKey={namespaceI18nDescriptionKey}
-          url={namespaceDocsURL}
-        />
-      }
+      description={ResourceDescription}
       filter={namespaceFilter}
       {...props}
       createResourceForm={NamespaceCreate}
       emptyListProps={{
-        subtitleText: t('namespaces.description'),
-        url:
-          'https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces',
+        subtitleText: i18nDescriptionKey,
+        url: docsURL,
         buttonText: 'Connect',
       }}
     />

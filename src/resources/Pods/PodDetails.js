@@ -12,9 +12,7 @@ import { PodStatus } from './PodStatus';
 import ContainersData from './ContainersData';
 import { PodCreate } from './PodCreate';
 import { useUrl } from 'hooks/useUrl';
-import { Description } from 'shared/components/Description/Description';
-import { podDocsURL, podI18nDescriptionKey } from 'resources/Pods/index';
-import React from 'react';
+import { ResourceDescription } from 'resources/Pods/index';
 
 export function PodDetails(props) {
   const { t } = useTranslation();
@@ -104,9 +102,7 @@ export function PodDetails(props) {
     <ResourceDetails
       customComponents={[VolumesList, Containers, InitContainers, Events]}
       customColumns={customColumns}
-      description={
-        <Description i18nKey={podI18nDescriptionKey} url={podDocsURL} />
-      }
+      description={ResourceDescription}
       createResourceForm={PodCreate}
       {...props}
     />

@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
@@ -6,10 +5,10 @@ import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 
 import { ReplicaSetCreate } from './ReplicaSetCreate';
 import { ReplicaSetStatus } from './ReplicaSetStatus';
-import { Description } from 'shared/components/Description/Description';
 import {
-  replicaSetDocsURL,
-  replicaSetI18nDescriptionKey,
+  ResourceDescription,
+  i18nDescriptionKey,
+  docsURL,
 } from 'resources/ReplicaSets/index';
 
 const getImages = replicaSet => {
@@ -51,18 +50,12 @@ export function ReplicaSetList(params) {
     <ResourcesList
       customColumns={customColumns}
       resourceTitle={t('replica-sets.title')}
-      description={
-        <Description
-          i18nKey={replicaSetI18nDescriptionKey}
-          url={replicaSetDocsURL}
-        />
-      }
+      description={ResourceDescription}
       {...params}
       createResourceForm={ReplicaSetCreate}
       emptyListProps={{
-        subtitleText: t('replica-sets.description'),
-        url:
-          'https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/',
+        subtitleText: i18nDescriptionKey,
+        url: docsURL,
       }}
     />
   );

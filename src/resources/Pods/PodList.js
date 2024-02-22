@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
@@ -9,8 +8,11 @@ import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { PodCreate } from './PodCreate';
 import { calculatePodState, PodStatus } from './PodStatus';
 import PodRestarts from './PodRestarts';
-import { Description } from 'shared/components/Description/Description';
-import { podDocsURL, podI18nDescriptionKey } from 'resources/Pods/index';
+import {
+  ResourceDescription,
+  i18nDescriptionKey,
+  docsURL,
+} from 'resources/Pods/index';
 
 export function PodList(params) {
   const { showNodeName } = params;
@@ -60,9 +62,7 @@ export function PodList(params) {
     <ResourcesList
       disableMargin={params.disableMargin}
       customColumns={customColumns}
-      description={
-        <Description i18nKey={podI18nDescriptionKey} url={podDocsURL} />
-      }
+      description={ResourceDescription}
       sortBy={defaultSort => ({
         ...defaultSort,
         status: (a, b) =>
@@ -73,8 +73,8 @@ export function PodList(params) {
       {...params}
       createResourceForm={PodCreate}
       emptyListProps={{
-        subtitleText: t('pods.description'),
-        url: 'https://kubernetes.io/docs/concepts/workloads/pods/',
+        subtitleText: i18nDescriptionKey,
+        url: docsURL,
       }}
     />
   );

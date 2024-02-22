@@ -1,6 +1,7 @@
 import React from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { predefinedCategories } from 'state/navigation/categories';
+import { Description } from 'shared/components/Description/Description';
 
 export const resourceType = 'Ingresses';
 export const namespaced = true;
@@ -11,9 +12,13 @@ export const category = predefinedCategories['discovery-and-network'];
 export const List = React.lazy(() => import('./IngressList'));
 export const Details = React.lazy(() => import('./IngressDetails'));
 
-export const ingressI18nDescriptionKey = 'ingresses.description';
-export const ingressDocsURL =
+export const i18nDescriptionKey = 'ingresses.description';
+export const docsURL =
   'https://kubernetes.io/docs/concepts/services-networking/ingress/';
+
+export const ResourceDescription = (
+  <Description i18nKey={i18nDescriptionKey} url={docsURL} />
+);
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowLevel: 0,

@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
@@ -11,8 +10,7 @@ import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow'
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Icon, ObjectStatus } from '@ui5/webcomponents-react';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
-import { Description } from 'shared/components/Description/Description';
-import { eventDocsURL, eventI18nDescriptionKey } from 'resources/Events/index';
+import { ResourceDescription } from 'resources/Events/index';
 
 const RowComponent = ({ name, value }) =>
   value ? <LayoutPanelRow name={name} value={value} /> : null;
@@ -104,9 +102,7 @@ export function EventDetails(props) {
     <ResourceDetails
       customComponents={[Message]}
       customColumns={customColumns}
-      description={
-        <Description i18nKey={eventI18nDescriptionKey} url={eventDocsURL} />
-      }
+      description={ResourceDescription}
       {...props}
       readOnly={true}
     />

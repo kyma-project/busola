@@ -1,12 +1,11 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ServiceAccountTokenStatus } from 'shared/components/ServiceAccountTokenStatus';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ServiceAccountCreate } from './ServiceAccountCreate';
-import { Description } from 'shared/components/Description/Description';
 import {
-  serviceAccountDocsURL,
-  serviceAccountI18nDescriptionKey,
+  ResourceDescription,
+  i18nDescriptionKey,
+  docsURL,
 } from 'resources/ServiceAccounts/index';
 
 export function ServiceAccountList(props) {
@@ -25,19 +24,13 @@ export function ServiceAccountList(props) {
   return (
     <ResourcesList
       customColumns={customColumns}
-      description={
-        <Description
-          i18nKey={serviceAccountI18nDescriptionKey}
-          url={serviceAccountDocsURL}
-        />
-      }
+      description={ResourceDescription}
       resourceTitle={t('service-accounts.title')}
       {...props}
       createResourceForm={ServiceAccountCreate}
       emptyListProps={{
-        subtitleText: t('service-accounts.description'),
-        url:
-          'https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/',
+        subtitleText: i18nDescriptionKey,
+        url: docsURL,
       }}
     />
   );

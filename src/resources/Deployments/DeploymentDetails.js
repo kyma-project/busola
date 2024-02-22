@@ -8,12 +8,7 @@ import { HPASubcomponent } from 'resources/HorizontalPodAutoscalers/HPASubcompon
 
 import { DeploymentStatus } from './DeploymentStatus';
 import { DeploymentCreate } from './DeploymentCreate';
-import { Description } from 'shared/components/Description/Description';
-import {
-  deploymentDocsURL,
-  deploymentI18nDescriptionKey,
-} from 'resources/Deployments/index';
-import React from 'react';
+import { ResourceDescription } from 'resources/Deployments/index';
 
 export function DeploymentDetails(props) {
   const { t } = useTranslation();
@@ -49,12 +44,7 @@ export function DeploymentDetails(props) {
       customComponents={[HPASubcomponent, MatchSelector, DeploymentPodTemplate]}
       customColumns={customColumns}
       createResourceForm={DeploymentCreate}
-      description={
-        <Description
-          i18nKey={deploymentI18nDescriptionKey}
-          url={deploymentDocsURL}
-        />
-      }
+      description={ResourceDescription}
       {...props}
     />
   );

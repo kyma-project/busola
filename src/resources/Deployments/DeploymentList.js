@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
@@ -7,10 +6,10 @@ import { useRestartAction } from 'shared/hooks/useRestartResource';
 
 import { DeploymentCreate } from './DeploymentCreate';
 import { DeploymentStatus } from './DeploymentStatus';
-import { Description } from 'shared/components/Description/Description';
 import {
-  deploymentDocsURL,
-  deploymentI18nDescriptionKey,
+  ResourceDescription,
+  i18nDescriptionKey,
+  docsURL,
 } from 'resources/Deployments/index';
 
 const getImages = deployment => {
@@ -53,19 +52,13 @@ export function DeploymentList(props) {
   return (
     <ResourcesList
       customColumns={customColumns}
-      description={
-        <Description
-          i18nKey={deploymentI18nDescriptionKey}
-          url={deploymentDocsURL}
-        />
-      }
+      description={ResourceDescription}
       customListActions={[restartAction]}
       {...props}
       createResourceForm={DeploymentCreate}
       emptyListProps={{
-        subtitleText: t('deployments.description'),
-        url:
-          'https://kubernetes.io/docs/concepts/workloads/controllers/deployment/',
+        subtitleText: i18nDescriptionKey,
+        url: docsURL,
       }}
     />
   );

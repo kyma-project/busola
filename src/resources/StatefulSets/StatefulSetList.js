@@ -1,16 +1,14 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
-
 import { useRestartAction } from 'shared/hooks/useRestartResource';
 import { StatefulSetCreate } from './StatefulSetCreate';
 import { StatefulSetPods } from './StatefulSetPods';
-import { Description } from 'shared/components/Description/Description';
 import {
-  statefulSetDocsURL,
-  statefulSetI18nDescriptionKey,
+  ResourceDescription,
+  i18nDescriptionKey,
+  docsURL,
 } from 'resources/StatefulSets/index';
 
 export function StatefulSetList(props) {
@@ -34,19 +32,13 @@ export function StatefulSetList(props) {
     <ResourcesList
       resourceTitle={t('stateful-sets.title')}
       customColumns={customColumns}
-      description={
-        <Description
-          i18nKey={statefulSetI18nDescriptionKey}
-          url={statefulSetDocsURL}
-        />
-      }
+      description={ResourceDescription}
       customListActions={[restartAction]}
       {...props}
       createResourceForm={StatefulSetCreate}
       emptyListProps={{
-        subtitleText: t('stateful-sets.description'),
-        url:
-          'https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/',
+        subtitleText: i18nDescriptionKey,
+        url: docsURL,
       }}
     />
   );

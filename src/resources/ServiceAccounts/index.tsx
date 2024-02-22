@@ -1,6 +1,7 @@
 import React from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { predefinedCategories } from 'state/navigation/categories';
+import { Description } from 'shared/components/Description/Description';
 
 export const resourceType = 'ServiceAccounts';
 export const namespaced = true;
@@ -8,9 +9,13 @@ export const apiGroup = '';
 export const apiVersion = 'v1';
 export const category = predefinedCategories.configuration;
 
-export const serviceAccountI18nDescriptionKey = 'service-accounts.description';
-export const serviceAccountDocsURL =
+export const i18nDescriptionKey = 'service-accounts.description';
+export const docsURL =
   'https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/';
+
+export const ResourceDescription = (
+  <Description i18nKey={i18nDescriptionKey} url={docsURL} />
+);
 
 export const List = React.lazy(() => import('./ServiceAccountList'));
 export const Details = React.lazy(() => import('./ServiceAccountDetails'));

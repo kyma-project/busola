@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
@@ -6,7 +5,11 @@ import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 
 import { ConfigMapCreate } from './ConfigMapCreate';
 
-import { ResourceDescription } from 'resources/ConfigMaps/index';
+import {
+  ResourceDescription,
+  i18nDescriptionKey,
+  docsURL,
+} from 'resources/ConfigMaps/index';
 
 export function ConfigMapList(props) {
   const { t } = useTranslation();
@@ -30,8 +33,8 @@ export function ConfigMapList(props) {
       {...props}
       createResourceForm={ConfigMapCreate}
       emptyListProps={{
-        subtitleText: t('config-maps.description'),
-        url: 'https://kubernetes.io/docs/concepts/configuration/configmap/',
+        subtitleText: i18nDescriptionKey,
+        url: docsURL,
       }}
     />
   );

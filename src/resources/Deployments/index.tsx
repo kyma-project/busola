@@ -1,6 +1,6 @@
 import React from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
-
+import { Description } from 'shared/components/Description/Description';
 import { matchByOwnerReference, matchBySelector } from 'shared/utils/helpers';
 import { predefinedCategories } from 'state/navigation/categories';
 
@@ -13,9 +13,13 @@ export const category = predefinedCategories.workloads;
 export const List = React.lazy(() => import('./DeploymentList'));
 export const Details = React.lazy(() => import('./DeploymentDetails'));
 
-export const deploymentI18nDescriptionKey = 'deployments.description';
-export const deploymentDocsURL =
+export const i18nDescriptionKey = 'deployments.description';
+export const docsURL =
   'https://kubernetes.io/docs/concepts/workloads/controllers/deployment/';
+
+export const ResourceDescription = (
+  <Description i18nKey={i18nDescriptionKey} url={docsURL} />
+);
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowKind: true,
