@@ -7,12 +7,12 @@ import { spacing } from '@ui5/webcomponents-react-base';
 import './Labels.scss';
 import { useTranslation } from 'react-i18next';
 
-const SHORTENING_TRESHOLD = 60;
+const SHORTENING_TRESHOLD = 50;
 
 export const Labels = ({
   labels,
   className = '',
-  shortenLongLabels = false,
+  shortenLongLabels = true,
   style = null,
   displayLabelForLabels = false,
 }) => {

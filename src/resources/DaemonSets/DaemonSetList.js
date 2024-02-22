@@ -27,10 +27,7 @@ export function DaemonSetList(props) {
     {
       header: t('daemon-sets.node-selector'),
       value: resource => (
-        <Labels
-          labels={resource.spec.template.spec.nodeSelector}
-          shortenLongLabels
-        />
+        <Labels labels={resource.spec.template.spec.nodeSelector} />
       ),
     },
     {

@@ -54,7 +54,7 @@ function HelmReleasesList() {
     </Link>,
     namespace === '-all-' ? entry.namespace : null,
     <div style={{ maxWidth: '36rem' }}>
-      <Labels labels={entry.recentRelease?.labels || {}} shortenLongLabels />
+      <Labels labels={entry.recentRelease?.labels || {}} />
     </div>,
     entry.recentRelease?.chart.metadata.name || t('common.statuses.unknown'),
     entry.revision,

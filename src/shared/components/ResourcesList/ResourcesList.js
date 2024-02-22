@@ -261,7 +261,6 @@ export function ResourceListRenderer({
       value: entry => (
         <Labels
           labels={entry.metadata.labels}
-          shortenLongLabels
           displayLabelForLabels={displayLabelForLabels ?? true}
         />
       ),
