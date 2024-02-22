@@ -7,7 +7,7 @@ import {
   ResourceDescription,
   i18nDescriptionKey,
   docsURL,
-} from 'resources/Secrets/index';
+} from 'resources/Secrets';
 
 export function SecretList(props) {
   const { t } = useTranslation();

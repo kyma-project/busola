@@ -10,7 +10,7 @@ import {
   ResourceDescription,
   i18nDescriptionKey,
   docsURL,
-} from 'resources/Deployments/index';
+} from 'resources/Deployments';
 
 const getImages = deployment => {
   const images = deployment.spec.template.spec.containers?.map(

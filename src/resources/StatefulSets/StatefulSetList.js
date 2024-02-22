@@ -9,7 +9,7 @@ import {
   ResourceDescription,
   i18nDescriptionKey,
   docsURL,
-} from 'resources/StatefulSets/index';
+} from 'resources/StatefulSets';
 
 export function StatefulSetList(props) {
   const { t } = useTranslation();

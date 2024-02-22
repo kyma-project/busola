@@ -11,7 +11,7 @@ import {
   ResourceDescription,
   docsURL,
   i18nDescriptionKey,
-} from 'resources/Events/index';
+} from 'resources/Events';
 
 export function EventList({
   defaultType,

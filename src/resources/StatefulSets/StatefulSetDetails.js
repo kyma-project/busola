@@ -7,7 +7,7 @@ import { HPASubcomponent } from 'resources/HorizontalPodAutoscalers/HPASubcompon
 import { StatefulSetPods } from './StatefulSetPods';
 import { StatefulSetCreate } from './StatefulSetCreate';
 import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
-import { ResourceDescription } from 'resources/StatefulSets/index';
+import { ResourceDescription } from 'resources/StatefulSets';
 
 export function StatefulSetDetails(props) {
   const { t } = useTranslation();

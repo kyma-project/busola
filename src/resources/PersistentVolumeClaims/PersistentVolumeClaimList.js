@@ -9,7 +9,7 @@ import {
   ResourceDescription,
   i18nDescriptionKey,
   docsURL,
-} from 'resources/PersistentVolumeClaims/index';
+} from 'resources/PersistentVolumeClaims';
 
 export function PersistentVolumeClaimList(props) {
   const { t } = useTranslation();

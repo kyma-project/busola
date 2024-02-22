@@ -8,7 +8,7 @@ import { HPASubcomponent } from 'resources/HorizontalPodAutoscalers/HPASubcompon
 
 import { DeploymentStatus } from './DeploymentStatus';
 import { DeploymentCreate } from './DeploymentCreate';
-import { ResourceDescription } from 'resources/Deployments/index';
+import { ResourceDescription } from 'resources/Deployments';
 
 export function DeploymentDetails(props) {
   const { t } = useTranslation();

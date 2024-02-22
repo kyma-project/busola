@@ -13,7 +13,7 @@ import {
   ResourceDescription,
   i18nDescriptionKey,
   docsURL,
-} from 'resources/Namespaces/index';
+} from 'resources/Namespaces';
 
 export function NamespaceList(props) {
   const { t } = useTranslation();

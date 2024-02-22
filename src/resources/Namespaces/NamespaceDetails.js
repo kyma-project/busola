@@ -16,7 +16,7 @@ import { AllNamespacesDetails } from './AllNamespacesDetails';
 
 import { useSetRecoilState } from 'recoil';
 import { spacing } from '@ui5/webcomponents-react-base';
-import { ResourceDescription } from 'resources/Namespaces/index';
+import { ResourceDescription } from 'resources/Namespaces';
 
 export function NamespaceDetails(props) {
   const { t } = useTranslation();

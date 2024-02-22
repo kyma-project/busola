@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 
 import { NetworkPolicyCreate } from './NetworkPolicyCreate';
@@ -7,7 +5,7 @@ import {
   ResourceDescription,
   i18nDescriptionKey,
   docsURL,
-} from 'resources/NetworkPolicies/index';
+} from 'resources/NetworkPolicies';
 
 export function NetworkPolicyList(props) {
   return (

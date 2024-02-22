@@ -5,7 +5,7 @@ import { GenericRoleBindingList } from './GenericRoleBindingList';
 import {
   ResourceDescription,
   i18nDescriptionKey,
-} from 'resources/RoleBindings/index';
+} from 'resources/RoleBindings';
 
 export function RoleBindingList(props) {
   return (

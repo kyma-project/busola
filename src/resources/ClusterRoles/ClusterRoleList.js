@@ -3,7 +3,7 @@ import { ClusterRoleCreate } from './ClusterRoleCreate';
 import {
   ResourceDescription,
   i18nDescriptionKey,
-} from 'resources/ClusterRoles/index';
+} from 'resources/ClusterRoles';
 
 export function ClusterList(props) {
   return (

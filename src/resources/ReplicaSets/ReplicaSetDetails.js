@@ -8,7 +8,7 @@ import { ReplicaSetStatus } from './ReplicaSetStatus';
 import { Selector } from 'shared/components/Selector/Selector';
 import { ReplicaSetCreate } from './ReplicaSetCreate';
 import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
-import { ResourceDescription } from 'resources/ReplicaSets/index';
+import { ResourceDescription } from 'resources/ReplicaSets';
 
 export function ReplicasetsDetails(props) {
   const { t } = useTranslation();

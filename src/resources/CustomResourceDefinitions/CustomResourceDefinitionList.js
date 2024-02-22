@@ -8,7 +8,7 @@ import {
   ResourceDescription,
   i18nDescriptionKey,
   docsURL,
-} from 'resources/CustomResourceDefinitions/index';
+} from 'resources/CustomResourceDefinitions';
 
 export function CustomResourceDefinitionList(props) {
   const { t } = useTranslation();

@@ -4,7 +4,7 @@ import { ClusterRoleBindingCreate } from './ClusterRoleBindingCreate';
 import {
   ResourceDescription,
   i18nDescriptionKey,
-} from 'resources/ClusterRoleBindings/index';
+} from 'resources/ClusterRoleBindings';
 
 export function ClusterRoleBindingList(props) {
   return (

@@ -13,7 +13,7 @@ import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
-import { ResourceDescription } from 'components/HelmReleases/index';
+import { ResourceDescription } from 'components/HelmReleases';
 
 function HelmReleasesDetails({ releaseName }) {
   const { t } = useTranslation();

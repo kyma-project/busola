@@ -12,7 +12,7 @@ import {
   ResourceDescription,
   i18nDescriptionKey,
   docsURL,
-} from 'resources/PersistentVolumes/index';
+} from 'resources/PersistentVolumes';
 
 export function PersistentVolumeList(props) {
   const { t } = useTranslation();

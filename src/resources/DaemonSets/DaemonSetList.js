@@ -11,7 +11,7 @@ import {
   ResourceDescription,
   i18nDescriptionKey,
   docsURL,
-} from 'resources/DaemonSets/index';
+} from 'resources/DaemonSets';
 
 export function DaemonSetList(props) {
   const { t } = useTranslation();

@@ -8,7 +8,7 @@ import { NetworkPolicyPorts } from './Ports';
 import { NetworkPolicyPeers } from './Peers';
 import { NetworkPolicyCreate } from './NetworkPolicyCreate';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
-import { ResourceDescription } from 'resources/NetworkPolicies/index';
+import { ResourceDescription } from 'resources/NetworkPolicies';
 
 export function NetworkPolicyDetails(props) {
   const { t } = useTranslation();

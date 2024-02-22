@@ -2,7 +2,7 @@ import { Rules } from 'resources/Roles/Rules';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 
 import { ClusterRoleCreate } from './ClusterRoleCreate';
-import { ResourceDescription } from 'resources/ClusterRoles/index';
+import { ResourceDescription } from 'resources/ClusterRoles';
 
 const ClusterRolesDetails = props => {
   return (

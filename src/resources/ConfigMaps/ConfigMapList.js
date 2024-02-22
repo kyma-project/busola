@@ -9,7 +9,7 @@ import {
   ResourceDescription,
   i18nDescriptionKey,
   docsURL,
-} from 'resources/ConfigMaps/index';
+} from 'resources/ConfigMaps';
 
 export function ConfigMapList(props) {
   const { t } = useTranslation();

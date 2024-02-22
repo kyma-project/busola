@@ -17,7 +17,7 @@ import { useUrl } from 'hooks/useUrl';
 import PersistentVolumesList from 'resources/PersistentVolumes/PersistentVolumeList';
 import { PersistentVolumeClaimCreate } from './PersistentVolumeClaimCreate';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
-import { ResourceDescription } from 'resources/PersistentVolumeClaims/index';
+import { ResourceDescription } from 'resources/PersistentVolumeClaims';
 
 const RelatedVolumes = ({ labels }) => {
   const PVParams = {

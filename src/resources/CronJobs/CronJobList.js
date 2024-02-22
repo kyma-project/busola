@@ -8,7 +8,7 @@ import {
   ResourceDescription,
   i18nDescriptionKey,
   docsURL,
-} from 'resources/CronJobs/index';
+} from 'resources/CronJobs';
 
 export function CronJobList(props) {
   const { t } = useTranslation();

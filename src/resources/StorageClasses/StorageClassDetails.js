@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
@@ -12,11 +11,7 @@ import { PersistentVolumesList } from './PersistentVolumesList';
 import { PersistentVolumeClaimsList } from './PersistentVolumeClaimsList';
 import { StorageClassCreate } from './StorageClassCreate';
 import { Text } from '@ui5/webcomponents-react';
-import { Description } from 'shared/components/Description/Description';
-import {
-  storageClassDocsURL,
-  storageClassI18nDescriptionKey,
-} from 'resources/StorageClasses/index';
+import { ResourceDescription } from 'resources/StorageClasses';
 
 export function StorageClassDetails(props) {
   const { t } = useTranslation();
@@ -79,12 +74,7 @@ export function StorageClassDetails(props) {
         Events,
       ]}
       customColumns={customColumns}
-      description={
-        <Description
-          i18nKey={storageClassI18nDescriptionKey}
-          url={storageClassDocsURL}
-        />
-      }
+      description={ResourceDescription}
       resourceTitle={t('storage-classes.title')}
       singularName={t('storage-classes.name_singular')}
       createResourceForm={StorageClassCreate}

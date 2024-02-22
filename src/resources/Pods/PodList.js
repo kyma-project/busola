@@ -12,7 +12,7 @@ import {
   ResourceDescription,
   i18nDescriptionKey,
   docsURL,
-} from 'resources/Pods/index';
+} from 'resources/Pods';
 
 export function PodList(params) {
   const { showNodeName } = params;

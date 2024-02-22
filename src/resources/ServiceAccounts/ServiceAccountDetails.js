@@ -6,7 +6,7 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import { ServiceAccountCreate } from './ServiceAccountCreate';
 import { Button } from '@ui5/webcomponents-react';
 import { TokenRequestModal } from './TokenRequestModal/TokenRequestModal';
-import { ResourceDescription } from 'resources/ServiceAccounts/index';
+import { ResourceDescription } from 'resources/ServiceAccounts';
 
 const ServiceAccountSecrets = serviceAccount => {
   const namespace = serviceAccount.metadata.namespace;

@@ -6,7 +6,7 @@ import SecretData from 'shared/components/Secret/SecretData';
 import { HelmReleaseData } from 'components/HelmReleases/HelmReleaseData';
 import { CertificateData } from './CertificateData';
 import { SecretCreate } from './SecretCreate';
-import { ResourceDescription } from 'resources/Secrets/index';
+import { ResourceDescription } from 'resources/Secrets';
 
 function HelmReleaseDataWrapper(secret) {
   if (secret.type !== 'helm.sh/release.v1') {

@@ -9,7 +9,7 @@ import {
   ResourceDescription,
   i18nDescriptionKey,
   docsURL,
-} from 'resources/Jobs/index';
+} from 'resources/Jobs';
 
 export const JobList = props => {
   const { t } = useTranslation();

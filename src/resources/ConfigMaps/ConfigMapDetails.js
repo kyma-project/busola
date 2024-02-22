@@ -5,7 +5,7 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 
 import { ConfigMapCreate } from './ConfigMapCreate';
-import { ResourceDescription } from 'resources/ConfigMaps/index';
+import { ResourceDescription } from 'resources/ConfigMaps';
 
 export function ConfigMapDetails(props) {
   const { t } = useTranslation();

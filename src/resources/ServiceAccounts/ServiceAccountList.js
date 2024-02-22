@@ -6,7 +6,7 @@ import {
   ResourceDescription,
   i18nDescriptionKey,
   docsURL,
-} from 'resources/ServiceAccounts/index';
+} from 'resources/ServiceAccounts';
 
 export function ServiceAccountList(props) {
   const { t } = useTranslation();

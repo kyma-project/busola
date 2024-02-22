@@ -12,7 +12,7 @@ import { PodStatus } from './PodStatus';
 import ContainersData from './ContainersData';
 import { PodCreate } from './PodCreate';
 import { useUrl } from 'hooks/useUrl';
-import { ResourceDescription } from 'resources/Pods/index';
+import { ResourceDescription } from 'resources/Pods';
 
 export function PodDetails(props) {
   const { t } = useTranslation();

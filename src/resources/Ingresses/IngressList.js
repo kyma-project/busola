@@ -8,7 +8,7 @@ import {
   ResourceDescription,
   i18nDescriptionKey,
   docsURL,
-} from 'resources/Ingresses/index';
+} from 'resources/Ingresses';
 
 export function IngressList(props) {
   const { t } = useTranslation();

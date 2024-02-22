@@ -9,7 +9,7 @@ import {
   ResourceDescription,
   i18nDescriptionKey,
   docsURL,
-} from 'resources/ReplicaSets/index';
+} from 'resources/ReplicaSets';
 
 const getImages = replicaSet => {
   const images =
