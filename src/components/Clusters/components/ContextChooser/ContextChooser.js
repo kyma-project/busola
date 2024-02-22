@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { MessageStrip, Select, Option } from '@ui5/webcomponents-react';
+import { MessageStrip, Select, Option, Title } from '@ui5/webcomponents-react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 
@@ -29,38 +29,48 @@ export function ContextChooser(params) {
   };
 
   return (
-    <ResourceForm.Wrapper {...params}>
-      <ResourceForm.FormField
-        required
-        propertyPath='$["current-context"]'
-        label={t('clusters.wizard.context')}
-        validate={value => !!value}
-        input={({ value, setValue }) => (
-          <Select
-            id="context-chooser"
-            onChange={event => {
-              onChange(event, setValue);
-            }}
+    <div
+      className="add-cluster__content-container"
+      style={spacing.sapUiMediumMarginBottom}
+    >
+      <ResourceForm.Wrapper {...params} style={spacing.sapUiMediumMarginBottom}>
+        <Title level="H5">{'Provide Context'}</Title>
+        <ResourceForm.FormField
+          required
+          propertyPath='$["current-context"]'
+          label={t('clusters.wizard.context')}
+          validate={value => !!value}
+          input={({ value, setValue }) => (
+            <Select
+              id="context-chooser"
+              onChange={event => {
+                onChange(event, setValue);
+              }}
+            >
+              {contexts.map(context => (
+                <Option
+                  key={context.key}
+                  value={context.key}
+                  selected={value === context.key}
+                >
+                  {context.text}
+                </Option>
+              ))}
+            </Select>
+          )}
+        />
+        {kubeconfig['current-context'] === '-all-' && (
+          <MessageStrip
+            design="Information"
+            hideCloseButton
+            style={spacing.sapUiSmallMarginTopBottom}
           >
-            {contexts.map(context => (
-              <Option value={context.key} selected={value === context.key}>
-                {context.text}
-              </Option>
-            ))}
-          </Select>
+            {t('clusters.wizard.multi-context-info', {
+              context: kubeconfig.contexts[0]?.name,
+            })}
+          </MessageStrip>
         )}
-      />
-      {kubeconfig['current-context'] === '-all-' && (
-        <MessageStrip
-          design="Information"
-          hideCloseButton
-          style={spacing.sapUiSmallMarginTopBottom}
-        >
-          {t('clusters.wizard.multi-context-info', {
-            context: kubeconfig.contexts[0]?.name,
-          })}
-        </MessageStrip>
-      )}
-    </ResourceForm.Wrapper>
+      </ResourceForm.Wrapper>
+    </div>
   );
 }
