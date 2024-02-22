@@ -7,9 +7,9 @@ import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 import { HPASubcomponent } from 'resources/HorizontalPodAutoscalers/HPASubcomponent';
 import { DeploymentStatus } from './DeploymentStatus';
 import { DeploymentCreate } from './DeploymentCreate';
-import { description } from './DeploymentDescription';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ReadableElapsedTimeFromNow } from 'shared/components/ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
+import { ResourceDescription } from 'resources/Deployments';
 
 export function DeploymentDetails(props) {
   const { t } = useTranslation();
@@ -83,7 +83,7 @@ export function DeploymentDetails(props) {
       statusBadge={deployment => <DeploymentStatus deployment={deployment} />}
       customStatusColumns={customStatusColumns}
       statusConditions={statusConditions}
-      description={description}
+      description={ResourceDescription}
       {...props}
     />
   );

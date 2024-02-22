@@ -18,14 +18,12 @@ export const Labels = ({
     return <span>{EMPTY_TEXT_PLACEHOLDER}</span>;
   }
   const separatedLabels = [];
-  /* eslint-disable no-unused-vars */
   for (const key in labels) {
     separatedLabels.push(`${key}=${labels[key]}`);
   }
 
   const shortenLabel = label => label.slice(0, SHORTENING_TRESHOLD) + '...';
 
-  /* eslint-enable no-unused-vars */
   return (
     <div className={classNames('labels', className)} style={style}>
       {separatedLabels.map((label, id) => (

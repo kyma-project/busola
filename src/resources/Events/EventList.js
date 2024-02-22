@@ -1,13 +1,17 @@
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-import { Link as DescriptionLink } from 'shared/components/Link/Link';
 import { useMessageList } from 'hooks/useMessageList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { useUrl } from 'hooks/useUrl';
 import { Icon, ObjectStatus } from '@ui5/webcomponents-react';
+import {
+  ResourceDescription,
+  docsURL,
+  i18nDescriptionKey,
+} from 'resources/Events';
 
 export function EventList({
   defaultType,
@@ -104,22 +108,13 @@ export function EventList({
     };
   };
 
-  const description = (
-    <Trans i18nKey="events.description">
-      <DescriptionLink
-        className="bsl-link"
-        url="https://kubernetes.io/docs/reference/kubernetes-api/cluster-resources/event-v1/"
-      />
-    </Trans>
-  );
-
   return (
     <ResourcesList
       listHeaderActions={MessageSelector}
       customColumns={customColumns}
       omitColumnsIds={['namespace', 'labels', 'created']}
       sortBy={sortByFn}
-      description={description}
+      description={ResourceDescription}
       showTitle={isCompact}
       title={t('events.title')}
       {...props}
@@ -145,8 +140,8 @@ export function EventList({
       }
       emptyListProps={{
         showButton: false,
-        subtitleText: t('events.description'),
-        url: 'https://kubernetes.io/docs/concepts/workloads/controllers/job/',
+        subtitleText: i18nDescriptionKey,
+        url: docsURL,
       }}
     />
   );
