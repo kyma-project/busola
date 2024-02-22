@@ -1,12 +1,26 @@
-.cluster-overview__details-wrapper {
+.cluster-overview__details-wrapper,
+.cluster-overview__details-grid {
   display: grid;
+  gap: 25px;
+}
+
+.cluster-overview__details-wrapper {
   grid-template-columns: 1fr;
+  min-width: 200px;
 }
 
 .cluster-overview__details-grid {
-  display: grid;
   grid-template-columns: 1fr;
-  gap: 25px;
+}
+
+.resource-details-container {
+  display: grid;
+  grid-template-columns: 100%;
+  gap: 1rem;
+}
+
+.resource-overview__details-wrapper {
+  min-width: 200px;
 }
 
 @container (min-width: 650px) {
@@ -15,17 +29,25 @@
   }
 
   .cluster-overview__details-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 50% calc(50% - 13.5px);
+  }
+
+  .resource-overview__details-wrapper {
+    &.tabs {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+    }
   }
 }
 
-.resource-overview__details-wrapper {
-  display: grid;
-  grid-template-columns: 1fr;
-}
-
-@container (min-width: 650px) {
-  .resource-overview__details-wrapper {
+@container (min-width: 900px) {
+  .resource-details-container {
     grid-template-columns: 2fr 1fr;
+    gap: 0;
+
+    &.column-view {
+      grid-template-columns: 100%;
+      gap: 1rem;
+    }
   }
 }

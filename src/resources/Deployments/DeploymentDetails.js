@@ -5,9 +5,10 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import { Selector } from 'shared/components/Selector/Selector.js';
 import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 import { HPASubcomponent } from 'resources/HorizontalPodAutoscalers/HPASubcomponent';
-
 import { DeploymentStatus } from './DeploymentStatus';
 import { DeploymentCreate } from './DeploymentCreate';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { ReadableElapsedTimeFromNow } from 'shared/components/ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
 import { ResourceDescription } from 'resources/Deployments';
 
 export function DeploymentDetails(props) {
@@ -19,11 +20,46 @@ export function DeploymentDetails(props) {
         <ControlledBy ownerReferences={deployment.metadata.ownerReferences} />
       ),
     },
+  ];
+
+  const customStatusColumns = [
     {
-      header: t('common.headers.pods'),
-      value: deployment => <DeploymentStatus deployment={deployment} />,
+      header: t('deployments.status.last-scale'),
+      value: deployment => (
+        <ReadableElapsedTimeFromNow
+          timestamp={deployment?.status?.conditions?.[1]?.lastUpdateTime}
+          valueUnit="days ago"
+        />
+      ),
+    },
+    {
+      header: t('deployments.status.current-replicas'),
+      value: deployment => <div>{deployment?.status?.replicas ?? 0}</div>,
+    },
+    {
+      header: t('deployments.status.updated-replicas'),
+      value: deployment => (
+        <div>{deployment?.status?.updatedReplicas ?? 0}</div>
+      ),
+    },
+    {
+      header: t('deployments.status.available-replicas'),
+      value: deployment => (
+        <div>
+          {deployment?.status?.availableReplicas ?? EMPTY_TEXT_PLACEHOLDER}
+        </div>
+      ),
     },
   ];
+
+  const statusConditions = deployment => {
+    return deployment?.status?.conditions?.map(condition => {
+      return {
+        header: { titleText: condition.type, status: condition.status },
+        message: condition.message,
+      };
+    });
+  };
 
   const MatchSelector = deployment => (
     <Selector
@@ -44,6 +80,9 @@ export function DeploymentDetails(props) {
       customComponents={[HPASubcomponent, MatchSelector, DeploymentPodTemplate]}
       customColumns={customColumns}
       createResourceForm={DeploymentCreate}
+      statusBadge={deployment => <DeploymentStatus deployment={deployment} />}
+      customStatusColumns={customStatusColumns}
+      statusConditions={statusConditions}
       description={ResourceDescription}
       {...props}
     />
