@@ -1,10 +1,10 @@
 import { Trans } from 'react-i18next';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 
 export function Description({ i18nKey, url }) {
   return (
     <Trans i18nKey={i18nKey}>
-      <Link className="bsl-link" url={url} />
+      <ExternalLink url={url} />
     </Trans>
   );
 }

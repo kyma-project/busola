@@ -1,8 +1,7 @@
-import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { useUrl } from 'hooks/useUrl';
 
 import { BusolaExtensionCreate } from './BusolaExtensionCreate';
@@ -20,10 +19,7 @@ export function BusolaPluginList({ enableColumnLayout }) {
 
   const description = (
     <Trans i18nKey="extensibility.description">
-      <Link
-        className="bsl-link"
-        url="https://github.com/kyma-project/busola/tree/main/docs/extensibility"
-      />
+      <ExternalLink url="https://github.com/kyma-project/busola/tree/main/docs/extensibility" />
     </Trans>
   );
 
