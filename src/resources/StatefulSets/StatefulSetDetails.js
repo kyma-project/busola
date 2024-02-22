@@ -1,19 +1,13 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { Selector } from 'shared/components/Selector/Selector';
 import { HPASubcomponent } from 'resources/HorizontalPodAutoscalers/HPASubcomponent';
-
 import { StatefulSetPods } from './StatefulSetPods';
 import { StatefulSetCreate } from './StatefulSetCreate';
 import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
-import { Description } from 'shared/components/Description/Description';
-import {
-  statefulSetDocsURL,
-  statefulSetI18nDescriptionKey,
-} from 'resources/StatefulSets/index';
+import { ResourceDescription } from 'resources/StatefulSets/index';
 
 export function StatefulSetDetails(props) {
   const { t } = useTranslation();
@@ -52,12 +46,7 @@ export function StatefulSetDetails(props) {
         MatchSelector,
         StatefulSetPodTemplate,
       ]}
-      description={
-        <Description
-          i18nKey={statefulSetI18nDescriptionKey}
-          url={statefulSetDocsURL}
-        />
-      }
+      description={ResourceDescription}
       createResourceForm={StatefulSetCreate}
       {...props}
     />

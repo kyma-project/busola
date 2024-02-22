@@ -8,11 +8,7 @@ import { ReplicaSetStatus } from './ReplicaSetStatus';
 import { Selector } from 'shared/components/Selector/Selector';
 import { ReplicaSetCreate } from './ReplicaSetCreate';
 import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
-import { Description } from 'shared/components/Description/Description';
-import {
-  replicaSetDocsURL,
-  replicaSetI18nDescriptionKey,
-} from 'resources/ReplicaSets/index';
+import { ResourceDescription } from 'resources/ReplicaSets/index';
 
 export function ReplicasetsDetails(props) {
   const { t } = useTranslation();
@@ -84,12 +80,7 @@ export function ReplicasetsDetails(props) {
     <ResourceDetails
       customColumns={customColumns}
       customComponents={[HPASubcomponent, MatchSelector, ReplicaSetPodTemplate]}
-      description={
-        <Description
-          i18nKey={replicaSetI18nDescriptionKey}
-          url={replicaSetDocsURL}
-        />
-      }
+      description={ResourceDescription}
       createResourceForm={ReplicaSetCreate}
       {...props}
     />
