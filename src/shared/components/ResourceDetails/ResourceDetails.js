@@ -397,6 +397,22 @@ function Resource({
     return EMPTY_TEXT_PLACEHOLDER;
   };
 
+  const resourceStatusCard = customStatusColumns ? (
+    <ResourceStatusCard
+      statusBadge={statusBadge ? statusBadge(resource) : null}
+      customColumns={
+        <>
+          {customStatusColumns?.filter(filterColumns)?.map(col => (
+            <DynamicPageComponent.Column key={col.header} title={col.header}>
+              {col.value(resource)}
+            </DynamicPageComponent.Column>
+          ))}
+        </>
+      }
+      conditions={statusConditions ? statusConditions(resource) : null}
+    />
+  ) : null;
+
   const resourceDetailsCard = (
     <ResourceDetailsCard
       title={title ?? t('common.headers.resource-details')}
@@ -465,22 +481,6 @@ function Resource({
     />
   );
 
-  const resourceStatusCard = customStatusColumns ? (
-    <ResourceStatusCard
-      statusBadge={statusBadge ? statusBadge(resource) : null}
-      customColumns={
-        <>
-          {customStatusColumns?.filter(filterColumns)?.map(col => (
-            <DynamicPageComponent.Column key={col.header} title={col.header}>
-              {col.value(resource)}
-            </DynamicPageComponent.Column>
-          ))}
-        </>
-      }
-      conditions={statusConditions ? statusConditions(resource) : null}
-    />
-  ) : null;
-
   return (
     <ResourceDetailContext.Provider value={true}>
       <DynamicPageComponent
@@ -508,14 +508,13 @@ function Resource({
               {title ?? t('common.headers.resource-details')}
             </Title>
             <div
-              className={
-                isColumnLayoutEnabled
-                  ? layoutColumn.layout === 'MidColumnFullScreen'
-                    ? 'resource-details-container'
-                    : 'resource-details-container column-view'
-                  : 'resource-details-container'
-              }
-              style={{ gridTemplateColumns: resourceStatusCard ? '' : '0.5fr' }}
+              className={`resource-details-container ${
+                isColumnLayoutEnabled &&
+                (layoutColumn.layout === 'MidColumnFullScreen' ||
+                  layoutColumn.layout === 'OneColumn')
+                  ? ''
+                  : 'column-view'
+              }`}
             >
               {!hasTabs && resourceDetailsCard}
               {resourceStatusCard && resourceStatusCard}

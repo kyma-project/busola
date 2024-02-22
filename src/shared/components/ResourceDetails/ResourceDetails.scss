@@ -1,12 +1,16 @@
-.cluster-overview__details-wrapper {
+.cluster-overview__details-wrapper,
+.cluster-overview__details-grid {
   display: grid;
+  gap: 25px;
+}
+
+.cluster-overview__details-wrapper {
   grid-template-columns: 1fr;
+  min-width: 200px;
 }
 
 .cluster-overview__details-grid {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  gap: 25px;
+  grid-template-columns: 1fr;
 }
 
 .resource-details-container {
@@ -21,21 +25,17 @@
 
 @container (min-width: 650px) {
   .cluster-overview__details-wrapper {
-    grid-template-columns: 0.5fr;
+    grid-template-columns: 2fr 1fr;
   }
 
   .cluster-overview__details-grid {
-    grid-template-columns: 50% 50%;
-  }
-
-  .resource-overview__details-wrapper {
-    max-width: min-content;
+    grid-template-columns: 50% calc(50% - 13.5px);
   }
 }
 
-@container (min-width: 850px) {
+@container (min-width: 900px) {
   .resource-details-container {
-    grid-template-columns: max-content 452px;
+    grid-template-columns: 2fr 1fr;
     gap: 0;
 
     &.column-view {
