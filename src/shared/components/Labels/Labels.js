@@ -18,12 +18,12 @@ export const Labels = ({
     return <span>{EMPTY_TEXT_PLACEHOLDER}</span>;
   }
   const separatedLabels = [];
-  /* eslint-disable no-unused-vars */
   for (const key in labels) {
     separatedLabels.push(`${key}=${labels[key]}`);
   }
 
-  /* eslint-enable no-unused-vars */
+  const shortenLabel = label => label.slice(0, SHORTENING_TRESHOLD) + '...';
+
   return (
     <div className={classNames('labels', className)} style={style}>
       {separatedLabels.map((label, id) => (
@@ -33,7 +33,11 @@ export const Labels = ({
           className="token"
           style={spacing.sapUiTinyMarginEnd}
           readOnly
-          text={label}
+          text={
+            shortenLongLabels && label.length > SHORTENING_TRESHOLD
+              ? shortenLabel(label)
+              : label
+          }
           title={
             (shortenLongLabels &&
               label.length > SHORTENING_TRESHOLD &&

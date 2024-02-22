@@ -16,6 +16,7 @@ import { AllNamespacesDetails } from './AllNamespacesDetails';
 
 import { useSetRecoilState } from 'recoil';
 import { spacing } from '@ui5/webcomponents-react-base';
+import { ResourceDescription } from 'resources/Namespaces';
 
 export function NamespaceDetails(props) {
   const { t } = useTranslation();
@@ -81,6 +82,7 @@ export function NamespaceDetails(props) {
   return (
     <ResourceDetails
       createResourceForm={NamespaceCreate}
+      description={ResourceDescription}
       {...props}
       title={t('namespaces.namespace-details')}
       windowTitle={t('namespaces.overview.title')}
@@ -97,4 +99,5 @@ export function NamespaceDetails(props) {
     </ResourceDetails>
   );
 }
+
 export default NamespaceDetails;

@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
@@ -8,7 +7,11 @@ import { useRestartAction } from 'shared/hooks/useRestartResource';
 
 import { DaemonSetCreate } from './DaemonSetCreate';
 import { DaemonSetStatus } from './DaemonSetStatus';
-import { description } from './DaemonSetDescription';
+import {
+  ResourceDescription,
+  i18nDescriptionKey,
+  docsURL,
+} from 'resources/DaemonSets';
 
 export function DaemonSetList(props) {
   const { t } = useTranslation();
@@ -43,14 +46,13 @@ export function DaemonSetList(props) {
     <ResourcesList
       customColumns={customColumns}
       resourceTitle={t('daemon-sets.title')}
-      description={description}
+      description={ResourceDescription}
       customListActions={[restartAction]}
       {...props}
       createResourceForm={DaemonSetCreate}
       emptyListProps={{
-        subtitleText: t('daemon-sets.description'),
-        url:
-          'https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/',
+        subtitleText: i18nDescriptionKey,
+        url: docsURL,
       }}
     />
   );

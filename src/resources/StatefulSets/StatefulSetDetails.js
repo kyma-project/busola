@@ -1,14 +1,13 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { Selector } from 'shared/components/Selector/Selector';
 import { HPASubcomponent } from 'resources/HorizontalPodAutoscalers/HPASubcomponent';
-
 import { StatefulSetPods } from './StatefulSetPods';
 import { StatefulSetCreate } from './StatefulSetCreate';
 import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
+import { ResourceDescription } from 'resources/StatefulSets';
 
 export function StatefulSetDetails(props) {
   const { t } = useTranslation();
@@ -47,9 +46,11 @@ export function StatefulSetDetails(props) {
         MatchSelector,
         StatefulSetPodTemplate,
       ]}
+      description={ResourceDescription}
       createResourceForm={StatefulSetCreate}
       {...props}
     />
   );
 }
+
 export default StatefulSetDetails;

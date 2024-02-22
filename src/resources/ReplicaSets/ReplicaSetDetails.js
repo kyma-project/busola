@@ -8,6 +8,7 @@ import { ReplicaSetStatus } from './ReplicaSetStatus';
 import { Selector } from 'shared/components/Selector/Selector';
 import { ReplicaSetCreate } from './ReplicaSetCreate';
 import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
+import { ResourceDescription } from 'resources/ReplicaSets';
 
 export function ReplicasetsDetails(props) {
   const { t } = useTranslation();
@@ -31,6 +32,7 @@ export function ReplicasetsDetails(props) {
                 <br />
                 {t('replica-sets.memory')}: {c.resources?.limits?.memory}
                 <br />
+                description
               </React.Fragment>
             ))}
           </React.Fragment>
@@ -78,9 +80,11 @@ export function ReplicasetsDetails(props) {
     <ResourceDetails
       customColumns={customColumns}
       customComponents={[HPASubcomponent, MatchSelector, ReplicaSetPodTemplate]}
+      description={ResourceDescription}
       createResourceForm={ReplicaSetCreate}
       {...props}
     />
   );
 }
+
 export default ReplicasetsDetails;

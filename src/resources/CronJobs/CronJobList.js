@@ -1,11 +1,14 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { CronJobLastScheduleTime } from 'shared/components/CronJob/CronJobLastScheduleTime';
 import { CronJobSchedule } from 'shared/components/CronJob/CronJobSchedule';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { CronJobCreate } from './CronJobCreate';
-import { description } from './CronJobDescription';
+import {
+  ResourceDescription,
+  i18nDescriptionKey,
+  docsURL,
+} from 'resources/CronJobs';
 
 export function CronJobList(props) {
   const { t } = useTranslation();
@@ -29,13 +32,12 @@ export function CronJobList(props) {
     <ResourcesList
       customColumns={customColumns}
       resourceTitle={t('cron-jobs.title')}
-      description={description}
+      description={ResourceDescription}
       {...props}
       createResourceForm={CronJobCreate}
       emptyListProps={{
-        subtitleText: t('cron-jobs.description'),
-        url:
-          'https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/',
+        subtitleText: i18nDescriptionKey,
+        url: docsURL,
       }}
     />
   );
