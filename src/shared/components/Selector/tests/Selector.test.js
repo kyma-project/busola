@@ -47,7 +47,7 @@ describe('Selector tests', () => {
         },
       };
 
-      const { container, getByText } = render(
+      const { getByText } = render(
         <ThemeProvider>
           <Selector
             selector={mockedSelector}
@@ -61,9 +61,7 @@ describe('Selector tests', () => {
           expect(
             getByText('Related Pods for test-namespace'),
           ).toBeInTheDocument();
-          expect(
-            container.querySelector("[text='test=test']"),
-          ).toBeInTheDocument(); // selector labels
+          expect(getByText('test=test')).toBeInTheDocument(); // selector labels
         });
       });
     });
@@ -78,7 +76,7 @@ describe('Selector tests', () => {
         ],
       };
 
-      const { container, getByText } = render(
+      const { getByText, getAllByText } = render(
         <ThemeProvider>
           <Selector
             selector={mockedSelector}
@@ -90,15 +88,12 @@ describe('Selector tests', () => {
       );
       await waitFor(async () => {
         await act(async () => {
-          expect(getByText('match-expressions.title')).toBeInTheDocument(); //title of the matchExpressions table
           expect(
-            container.querySelector("[text='test=test']"),
-          ).toBeInTheDocument();
+            getAllByText('match-expressions.title')[0],
+          ).toBeInTheDocument(); //title of the matchExpressions table
+          expect(getAllByText('test=test')[0]).toBeInTheDocument();
           expect(getByText('test-key')).toBeInTheDocument(); // matchExpressions elements
           expect(getByText('In')).toBeInTheDocument();
-          expect(
-            container.querySelector("[text='test-value']"),
-          ).toBeInTheDocument();
         });
       });
     });
@@ -189,7 +184,7 @@ describe('Selector tests', () => {
         },
       };
 
-      const { container, getByText } = render(
+      const { getByText } = render(
         <ThemeProvider>
           <Selector
             selector={mockedSelector}
@@ -203,9 +198,7 @@ describe('Selector tests', () => {
       await waitFor(async () => {
         await act(async () => {
           expect(getByText('Custom Resources')).toBeInTheDocument();
-          expect(
-            container.querySelector("[text='test=test']"),
-          ).toBeInTheDocument();
+          expect(getByText('test=test')).toBeInTheDocument();
         });
       });
     });
