@@ -56,7 +56,7 @@ context('Test Replica Sets', () => {
 
     cy.contains('Always');
 
-    cy.contains(`Image${DOCKER_IMAGE_TAG}`);
+    cy.contains(`${DOCKER_IMAGE_TAG}`);
   });
 
   it('Checks the list view', () => {
