@@ -1,21 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
-import jsyaml from 'js-yaml';
-import { Button, Link } from '@ui5/webcomponents-react';
-import { createPatch } from 'rfc6902';
+import { Button, Text } from '@ui5/webcomponents-react';
 import { cloneDeep } from 'lodash';
 import * as jp from 'jsonpath';
 import pluralize from 'pluralize';
 import { useRecoilState } from 'recoil';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import { usePut, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
-import { useGetList, useSingleGet } from 'shared/hooks/BackendAPI/useGet';
-import { useNotification } from 'shared/contexts/NotificationContext';
-import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
-import { YamlEditorProvider } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
+
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { prettifyNameSingular, prettifyNamePlural } from 'shared/utils/helpers';
 import { Labels } from 'shared/components/Labels/Labels';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
@@ -26,11 +20,8 @@ import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useTranslation } from 'react-i18next';
-import { useUrl } from 'hooks/useUrl';
 import { nameLocaleSort, timeSort } from '../../helpers/sortingfunctions';
 import { useVersionWarning } from 'hooks/useVersionWarning';
-import { HttpError } from 'shared/hooks/BackendAPI/config';
-import { ForceUpdateModalContent } from 'shared/ResourceForm/ForceUpdateModalContent';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { createPortal } from 'react-dom';
 
@@ -112,7 +103,7 @@ export function ResourcesList(props) {
   );
 
   return (
-    <YamlEditorProvider>
+    <>
       {!props.isCompact ? (
         <DynamicPageComponent
           layoutNumber={props.layoutNumber}
@@ -133,7 +124,7 @@ export function ResourcesList(props) {
       ) : (
         content
       )}
-    </YamlEditorProvider>
+    </>
   );
 }
 
@@ -196,7 +187,6 @@ export function ResourceListRenderer({
   resourceUrlPrefix,
   nameSelector = entry => entry?.metadata.name, // overriden for CRDGroupList
   disableCreate,
-  disableEdit,
   disableDelete,
   disableMargin,
   enableColumnLayout,
@@ -211,6 +201,8 @@ export function ResourceListRenderer({
   isCompact,
   parentCrdName,
   emptyListProps = null,
+  disableHiding,
+  displayArrow,
 }) {
   useVersionWarning({
     resourceUrl,
@@ -229,84 +221,20 @@ export function ResourceListRenderer({
   });
 
   const [activeResource, setActiveResource] = useState(null);
-  const {
-    setEditedYaml: setEditedSpec,
-    closeEditor,
-    currentlyEditedResourceUID,
-  } = useYamlEditor();
-  const notification = useNotification();
-  const navigate = useNavigate();
-
-  const getRequest = useSingleGet();
-  const updateResourceMutation = useUpdate(resourceUrl);
-  const putRequest = usePut();
-  const { resourceUrl: resourceUrlFn } = useUrl();
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => closeEditor(), [namespace]);
 
   const prettifiedResourceName = prettifyNameSingular(
     resourceTitle,
     resourceType,
   );
 
-  const linkTo = entry =>
-    customUrl ? customUrl(entry) : resourceUrlFn(entry, { resourceType });
   const defaultColumns = [
     {
       header: t('common.headers.name'),
       value: entry =>
         hasDetailsView ? (
-          enableColumnLayout ? (
-            <>
-              <Link
-                style={{ fontWeight: 'bold' }}
-                onClick={() => {
-                  setLayoutColumn(
-                    columnLayout
-                      ? {
-                          midColumn: layoutState.midColumn,
-                          endColumn: customColumnLayout(entry),
-                          layout: columnLayout,
-                        }
-                      : {
-                          midColumn: {
-                            resourceName: entry?.metadata?.name,
-                            resourceType: resourceType,
-                            namespaceId: entry?.metadata?.namespace,
-                          },
-                          endColumn: null,
-                          layout: 'TwoColumnsMidExpanded',
-                        },
-                  );
-
-                  window.history.pushState(
-                    window.history.state,
-                    '',
-                    `${linkTo(entry)}?layout=${columnLayout ||
-                      'TwoColumnsMidExpanded'}`,
-                  );
-                }}
-              >
-                {nameSelector(entry)}
-              </Link>
-            </>
-          ) : (
-            <Link
-              style={{ fontWeight: 'bold' }}
-              onClick={() => {
-                setLayoutColumn({
-                  midColumn: null,
-                  endColumn: null,
-                  layout: 'OneColumn',
-                });
-
-                navigate(linkTo(entry));
-              }}
-            >
-              {nameSelector(entry)}
-            </Link>
-          )
+          <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
+            {nameSelector(entry)}
+          </Text>
         ) : (
           <b>{nameSelector(entry)}</b>
         ),
@@ -329,9 +257,7 @@ export function ResourceListRenderer({
     {
       header: t('common.headers.labels'),
       value: entry => (
-        <div style={{ maxWidth: '36rem' }}>
-          <Labels labels={entry.metadata.labels} shortenLongLabels />
-        </div>
+        <Labels labels={entry.metadata.labels} displayLabelForLabels />
       ),
       id: 'labels',
     },
@@ -347,87 +273,6 @@ export function ResourceListRenderer({
     [...defaultColumns, ...customColumns].filter(
       col => !omitColumnsIds.includes(col.id),
     );
-
-  const handleSaveClick = resourceData => async newYAML => {
-    const showError = e => {
-      console.error(e);
-      notification.notifyError({
-        content: t('components.resources-list.messages.update.failure', {
-          resourceType: prettifiedResourceName,
-          error: e.message,
-        }),
-      });
-    };
-
-    const onSuccess = () => {
-      silentRefetch();
-      notification.notifySuccess({
-        content: t('components.resources-list.messages.update.success', {
-          resourceType: prettifiedResourceName,
-        }),
-      });
-    };
-
-    const modifiedResource = jsyaml.load(newYAML);
-    const diff = createPatch(resourceData, modifiedResource);
-    const url = prepareResourceUrl(resourceUrl, resourceData);
-    try {
-      await updateResourceMutation(url, diff);
-      onSuccess();
-    } catch (e) {
-      const isConflict = e instanceof HttpError && e.code === 409;
-      if (isConflict) {
-        const response = await getRequest(url);
-        const updatedResource = await response.json();
-
-        const makeForceUpdateFn = closeModal => {
-          return async () => {
-            delete modifiedResource?.metadata?.resourceVersion;
-            try {
-              await putRequest(url, modifiedResource);
-              closeModal();
-              onSuccess();
-              closeEditor();
-            } catch (e) {
-              showError(e);
-            }
-          };
-        };
-
-        notification.notifyError({
-          content: (
-            <ForceUpdateModalContent
-              error={e}
-              singularName={resourceType}
-              initialResource={updatedResource}
-              modifiedResource={modifiedResource}
-            />
-          ),
-          actions: (closeModal, defaultCloseButton) => [
-            <Button onClick={makeForceUpdateFn(closeModal)}>
-              {t('common.create-form.force-update')}
-            </Button>,
-            defaultCloseButton(closeModal),
-          ],
-          wider: true,
-        });
-      } else {
-        showError(e);
-      }
-      // throw error so that drawer doesn't close
-      throw e;
-    }
-  };
-
-  const handleResourceEdit = resource => {
-    setEditedSpec(
-      resource,
-      nameSelector(resource) + '.yaml',
-      handleSaveClick(resource),
-      isProtected(resource) || disableEdit,
-      isProtected(resource),
-    );
-  };
 
   const prepareResourceUrl = (resourceUrl, resource) => {
     const encodedName = encodeURIComponent(resource?.metadata.name);
@@ -482,18 +327,6 @@ export function ResourceListRenderer({
             }
           : null,
         {
-          name: t('common.buttons.edit'),
-          tooltip: entry =>
-            isProtected(entry)
-              ? t('common.tooltips.protected-resources-view-yaml')
-              : disableEdit
-              ? t('common.buttons.view-yaml')
-              : t('common.buttons.edit'),
-          icon: entry =>
-            isProtected(entry) || disableEdit ? 'show-edit' : 'edit',
-          handler: handleResourceEdit,
-        },
-        {
           name: t('common.buttons.delete'),
           tooltip: entry =>
             isProtected(entry)
@@ -532,8 +365,8 @@ export function ResourceListRenderer({
   const extraHeaderContent = listHeaderActions || [
     CreateResourceForm && !disableCreate && !isNamespaceAll && (
       <Button
-        icon="add"
-        design="Transparent"
+        data-testid={`create-${resourceType}`}
+        design="Emphasized"
         onClick={() => {
           setActiveResource(undefined);
           setLayoutColumn(
@@ -569,10 +402,7 @@ export function ResourceListRenderer({
           );
         }}
       >
-        {createActionLabel ||
-          t('components.resources-list.create', {
-            resourceType: prettifiedResourceName,
-          })}
+        {createActionLabel || t('components.resources-list.create')}
       </Button>
     ),
   ];
@@ -622,6 +452,14 @@ export function ResourceListRenderer({
       )}
       {!(error && error.toString().includes('is forbidden')) && (
         <GenericList
+          displayArrow={displayArrow ?? true}
+          disableHiding={disableHiding ?? false}
+          hasDetailsView={hasDetailsView}
+          customUrl={customUrl}
+          resourceType={resourceType}
+          customColumnLayout={customColumnLayout}
+          columnLayout={columnLayout}
+          enableColumnLayout={enableColumnLayout}
           disableMargin={disableMargin}
           title={showTitle ? title || prettifiedResourceName : null}
           actions={actions}
@@ -633,7 +471,6 @@ export function ResourceListRenderer({
           pagination={{ autoHide: true, ...pagination }}
           extraHeaderContent={extraHeaderContent}
           testid={testid}
-          currentlyEditedResourceUID={currentlyEditedResourceUID}
           sortBy={sortBy}
           searchSettings={{
             ...searchSettings,

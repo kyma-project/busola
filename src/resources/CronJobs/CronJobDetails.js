@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -13,8 +12,7 @@ import { useUrl } from 'hooks/useUrl';
 import { CronJobConcurrencyPolicy } from './CronJobConcurrencyPolicy';
 import CronJobCreate from './CronJobCreate';
 import { CronJobJobs } from './CronJobJobs';
-
-import { description } from './CronJobDescription';
+import { ResourceDescription } from 'resources/CronJobs';
 
 export function CronJobDetails(props) {
   const { t } = useTranslation();
@@ -75,7 +73,7 @@ export function CronJobDetails(props) {
       customComponents={[CronJobJobs, Events, CronJobPodTemplate]}
       customColumns={customColumns}
       createResourceForm={CronJobCreate}
-      description={description}
+      description={ResourceDescription}
       {...props}
     />
   );

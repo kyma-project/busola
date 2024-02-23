@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
@@ -12,6 +11,7 @@ import { PersistentVolumesList } from './PersistentVolumesList';
 import { PersistentVolumeClaimsList } from './PersistentVolumeClaimsList';
 import StorageClassCreate from './StorageClassCreate';
 import { Text } from '@ui5/webcomponents-react';
+import { ResourceDescription } from 'resources/StorageClasses';
 
 export function StorageClassDetails(props) {
   const { t } = useTranslation();
@@ -22,7 +22,7 @@ export function StorageClassDetails(props) {
     return (
       <UI5Panel
         fixed
-        key={'storageclass-parameters'}
+        keyComponent={'storageclass-parameters'}
         title={t('storage-classes.headers.parameters')}
       >
         {Object.keys(parameters).length > 0 ? (
@@ -74,6 +74,7 @@ export function StorageClassDetails(props) {
         Events,
       ]}
       customColumns={customColumns}
+      description={ResourceDescription}
       resourceTitle={t('storage-classes.title')}
       singularName={t('storage-classes.name_singular')}
       createResourceForm={StorageClassCreate}
@@ -81,4 +82,5 @@ export function StorageClassDetails(props) {
     />
   );
 }
+
 export default StorageClassDetails;

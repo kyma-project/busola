@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
@@ -13,7 +12,7 @@ import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 import JobCreate from './JobCreate';
 import { JobCompletions } from './JobCompletions';
 import { JobConditions } from './JobConditions';
-import { description } from './JobDescription';
+import { ResourceDescription } from 'resources/Jobs';
 
 export function JobDetails(props) {
   const { t } = useTranslation();
@@ -86,7 +85,7 @@ export function JobDetails(props) {
       customColumns={customColumns}
       customComponents={customComponents}
       createResourceForm={JobCreate}
-      description={description}
+      description={ResourceDescription}
       {...props}
     />
   );

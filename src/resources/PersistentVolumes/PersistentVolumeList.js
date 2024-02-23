@@ -1,15 +1,18 @@
-import React from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { Link as DescLink } from 'shared/components/Link/Link';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 
 import { PersistentVolumeStatus } from './PersistentVolumeStatus';
 import PersistentVolumeCreate from './PersistentVolumeCreate';
 import { useUrl } from 'hooks/useUrl';
+import {
+  ResourceDescription,
+  i18nDescriptionKey,
+  docsURL,
+} from 'resources/PersistentVolumes';
 
 export function PersistentVolumeList(props) {
   const { t } = useTranslation();
@@ -83,28 +86,20 @@ export function PersistentVolumeList(props) {
     },
   ];
 
-  const description = (
-    <Trans i18nKey="pv.description">
-      <DescLink
-        className="bsl-link"
-        url="https://kubernetes.io/docs/concepts/storage/persistent-volumes"
-      />
-    </Trans>
-  );
-
   return (
     <ResourcesList
       disableMargin={props.disableMargin}
       resourceTitle={t('pv.title')}
       customColumns={customColumns}
-      description={description}
+      description={ResourceDescription}
       {...props}
       createResourceForm={PersistentVolumeCreate}
       emptyListProps={{
-        subtitleText: t('pv.description'),
-        url: 'https://kubernetes.io/docs/concepts/storage/persistent-volumes',
+        subtitleText: i18nDescriptionKey,
+        url: docsURL,
       }}
     />
   );
 }
+
 export default PersistentVolumeList;

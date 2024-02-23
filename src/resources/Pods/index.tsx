@@ -1,6 +1,6 @@
 import React from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
-
+import { Description } from 'shared/components/Description/Description';
 import { matchByOwnerReference, matchBySelector } from 'shared/utils/helpers';
 import { predefinedCategories } from 'state/navigation/categories';
 
@@ -33,6 +33,13 @@ export const namespaced = true;
 export const apiGroup = '';
 export const apiVersion = 'v1';
 export const category = predefinedCategories.workloads;
+
+export const i18nDescriptionKey = 'pods.description';
+export const docsURL = 'https://kubernetes.io/docs/concepts/workloads/pods/';
+
+export const ResourceDescription = (
+  <Description i18nKey={i18nDescriptionKey} url={docsURL} />
+);
 
 export const List = React.lazy(() => import('./PodList'));
 export const Details = React.lazy(() => import('./PodDetails'));

@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
@@ -7,6 +6,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Rules } from './Rules';
 import { DefaultBackendPanel } from './DefaultBackendPanel';
 import IngressCreate from './IngressCreate';
+import { ResourceDescription } from 'resources/Ingresses';
 
 export function IngressDetails(props) {
   const { t } = useTranslation();
@@ -50,6 +50,7 @@ export function IngressDetails(props) {
     <ResourceDetails
       customColumns={customColumns}
       customComponents={customComponents}
+      description={ResourceDescription}
       createResourceForm={IngressCreate}
       {...props}
     />

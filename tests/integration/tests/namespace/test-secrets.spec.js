@@ -21,7 +21,7 @@ context('Test Secrets', () => {
   it('Create a secret', () => {
     cy.navigateTo('Configuration', 'Secrets');
 
-    cy.contains('ui5-button', 'Create Secret').click();
+    cy.contains('ui5-button', 'Create').click();
 
     cy.get('[aria-label="Secret name"]:visible')
       .find('input')
@@ -29,7 +29,7 @@ context('Test Secrets', () => {
 
     cy.get('[placeholder="Enter key"]:visible')
       .find('input')
-      .type(`${SECRET_KEY}`);
+      .type(`${SECRET_KEY}`, { force: true });
 
     cy.get('[placeholder="Enter value"]:visible')
       .first()
@@ -38,7 +38,7 @@ context('Test Secrets', () => {
     cy.get('[placeholder="Enter key"]:visible')
       .find('input')
       .last()
-      .type(`${SECRET2_KEY}`);
+      .type(`${SECRET2_KEY}`, { force: true });
 
     cy.get('[placeholder="Enter value"]:visible')
       .eq(1)
@@ -95,6 +95,7 @@ context('Test Secrets', () => {
   });
 
   it('Edit a secret', () => {
+    cy.wait(500);
     cy.getMidColumn()
       .contains('ui5-button', 'Edit')
       .should('be.visible')
@@ -138,6 +139,6 @@ context('Test Secrets', () => {
   });
 
   it('Check list', () => {
-    cy.inspectList('Secrets', SECRET_NAME);
+    cy.inspectList(SECRET_NAME);
   });
 });

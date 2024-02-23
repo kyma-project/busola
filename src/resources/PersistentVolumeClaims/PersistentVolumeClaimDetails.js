@@ -17,6 +17,7 @@ import { useUrl } from 'hooks/useUrl';
 import PersistentVolumesList from 'resources/PersistentVolumes/PersistentVolumeList';
 import PersistentVolumeClaimCreate from './PersistentVolumeClaimCreate';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { ResourceDescription } from 'resources/PersistentVolumeClaims';
 
 const RelatedVolumes = ({ labels }) => {
   const PVParams = {
@@ -67,7 +68,7 @@ export const PVCConfiguration = pvc => {
   return (
     <UI5Panel
       title={t('persistent-volume-claims.headers.configuration')}
-      key={'pvc-configuration'}
+      keyComponent={'pvc-configuration'}
     >
       <LayoutPanelRow
         key={pvc.spec?.volumeMode}
@@ -171,6 +172,7 @@ export function PersistentVolumeClaimDetails(props) {
         Events,
       ]}
       customColumns={customColumns}
+      description={ResourceDescription}
       singularName={t('persistent-volume-claims.name_singular')}
       createResourceForm={PersistentVolumeClaimCreate}
       {...props}

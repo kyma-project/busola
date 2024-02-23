@@ -1,11 +1,15 @@
-import React from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
-import { Link } from 'shared/components/Link/Link';
 
 import ConfigMapCreate from './ConfigMapCreate';
+
+import {
+  ResourceDescription,
+  i18nDescriptionKey,
+  docsURL,
+} from 'resources/ConfigMaps';
 
 export function ConfigMapList(props) {
   const { t } = useTranslation();
@@ -22,26 +26,18 @@ export function ConfigMapList(props) {
     },
   ];
 
-  const description = (
-    <Trans i18nKey="config-maps.description">
-      <Link
-        className="bsl-link"
-        url="https://kubernetes.io/docs/concepts/configuration/configmap/"
-      />
-    </Trans>
-  );
-
   return (
     <ResourcesList
       customColumns={customColumns}
-      description={description}
+      description={ResourceDescription}
       {...props}
       createResourceForm={ConfigMapCreate}
       emptyListProps={{
-        subtitleText: t('config-maps.description'),
-        url: 'https://kubernetes.io/docs/concepts/configuration/configmap/',
+        subtitleText: i18nDescriptionKey,
+        url: docsURL,
       }}
     />
   );
 }
+
 export default ConfigMapList;

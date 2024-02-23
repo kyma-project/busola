@@ -185,7 +185,7 @@ export function BusolaExtensionDetails({ name, namespace }) {
     };
     return (
       <UI5Panel
-        key="extensibility-version"
+        keyComponent="extensibility-version"
         title={t('extensibility.sections.version')}
         headerActions={
           hasMigrationFunction && (

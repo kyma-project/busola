@@ -1,8 +1,7 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Link } from '@ui5/webcomponents-react';
 import { groupBy } from 'lodash';
 
@@ -19,6 +18,7 @@ import { columnLayoutState } from 'state/columnLayoutAtom';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
+import { ResourceDescription } from 'components/HelmReleases';
 
 function HelmReleasesList({ enableColumnLayout }) {
   const { t } = useTranslation();
@@ -99,7 +99,7 @@ function HelmReleasesList({ enableColumnLayout }) {
     ),
     namespace === '-all-' ? entry.namespace : null,
     <div style={{ maxWidth: '36rem' }}>
-      <Labels labels={entry.recentRelease?.labels || {}} shortenLongLabels />
+      <Labels labels={entry.recentRelease?.labels || {}} />
     </div>,
     entry.recentRelease?.chart.metadata.name || t('common.statuses.unknown'),
     entry.revision,
@@ -125,14 +125,7 @@ function HelmReleasesList({ enableColumnLayout }) {
     <>
       <DynamicPageComponent
         title={t('helm-releases.title')}
-        description={
-          <Trans i18nKey={'helm-releases.description'}>
-            <ExternalLink
-              className="bsl-link"
-              url="https://helm.sh/docs/glossary/#release"
-            />
-          </Trans>
-        }
+        description={ResourceDescription}
         content={
           <GenericList
             entries={entries}
@@ -163,4 +156,5 @@ function HelmReleasesList({ enableColumnLayout }) {
     </>
   );
 }
+
 export default HelmReleasesList;

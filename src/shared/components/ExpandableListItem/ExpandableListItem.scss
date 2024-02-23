@@ -1,0 +1,17 @@
+.expandable-item {
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    display: grid;
+    grid-template-columns: max-content 1fr 1fr;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    font-size: var(--sapFontSize);
+
+    .header__status-badge {
+      justify-self: end;
+    }
+  }
+}

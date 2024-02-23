@@ -28,7 +28,7 @@ context('Test Jobs', () => {
   it('Create Job', () => {
     cy.navigateTo('Workloads', /^Jobs/);
 
-    cy.contains('ui5-button', 'Create Job').click();
+    cy.contains('ui5-button', 'Create').click();
 
     // job name
     cy.get('[aria-label="Job name"]:visible')
@@ -105,10 +105,8 @@ context('Test Jobs', () => {
       .find('ui5-panel')
       .find('ui5-table-row')
       .find('ui5-table-cell')
-      .find('ui5-link')
-      .contains(JOB_NAME)
-      .find('a.ui5-link-root')
-      .click({ force: true });
+      .contains('span', JOB_NAME)
+      .click();
 
     cy.wait(1000);
 

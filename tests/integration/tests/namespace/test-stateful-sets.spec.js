@@ -29,7 +29,7 @@ context('Test Stateful Sets', () => {
   it('Create Stateful Set', () => {
     cy.navigateTo('Workloads', 'Stateful Sets');
 
-    cy.contains('ui5-button', 'Create Stateful Set').click();
+    cy.contains('ui5-button', 'Create').click();
 
     cy.wrap(loadSS(SS_NAME, Cypress.env('NAMESPACE_NAME'), FILE_NAME)).then(
       SS_CONFIG => {
@@ -59,6 +59,7 @@ context('Test Stateful Sets', () => {
   });
 
   it('Inspect list', () => {
-    cy.inspectList('Stateful Sets', SS_NAME);
+    cy.wait(3000); // wait for the resource to be refeched and displayed in the list
+    cy.inspectList(SS_NAME);
   });
 });

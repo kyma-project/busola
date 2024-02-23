@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@ui5/webcomponents-react';
+import { Button, Title } from '@ui5/webcomponents-react';
 import { ClusterNodes } from './ClusterNodes';
 import { ClusterValidation } from './ClusterValidation/ClusterValidation';
 import { useFeature } from 'hooks/useFeature';
@@ -15,6 +15,7 @@ import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useNavigate } from 'react-router-dom';
 import { deleteCluster } from 'components/Clusters/shared';
+import { spacing } from '@ui5/webcomponents-react-base';
 import './ClusterOverview.scss';
 
 const Injections = React.lazy(() =>
@@ -64,6 +65,15 @@ export function ClusterOverview() {
               slot="details-top"
               root=""
             />
+            <Title
+              level="H3"
+              style={{
+                ...spacing.sapUiMediumMarginBegin,
+                ...spacing.sapUiMediumMarginTopBottom,
+              }}
+            >
+              {t('cluster-overview.headers.cluster-details')}
+            </Title>
             <ClusterDetails currentCluster={currentCluster} />
             {data && <ClusterStats data={data} />}
             <ClusterNodes data={data} error={error} loading={loading} />

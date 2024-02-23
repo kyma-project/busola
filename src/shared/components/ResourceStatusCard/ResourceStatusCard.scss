@@ -1,0 +1,29 @@
+.resource-status-card {
+  width: 100%;
+  max-width: 420px;
+
+  &__header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  &__details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 25px;
+    row-gap: 0.5rem;
+  }
+
+  &__conditions {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+}
+
+@container (min-width: 800px) {
+  .resource-status-card {
+    width: 420px;
+  }
+}

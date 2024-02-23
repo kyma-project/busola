@@ -58,10 +58,7 @@ context('Test Services', () => {
       .contains('Namespaces')
       .click();
 
-    cy.get('ui5-link[accessible-role="link"]')
-      .contains('services')
-      .find('a[role="link"]')
-      .click();
+    cy.clickGenericListLink('services');
 
     cy.getLeftNav()
       .contains('Examples')
@@ -73,7 +70,7 @@ context('Test Services', () => {
 
     cy.contains('Type');
     cy.contains('LoadBalancer');
-    cy.contains('Create Custom Service');
+    cy.contains('Create');
   });
 
   it('Displays the header overridden by translations (on List)', () => {
@@ -81,7 +78,7 @@ context('Test Services', () => {
   });
 
   it('Displays the EXT Services detail view', () => {
-    cy.contains('ui5-link', 'test-service').click();
+    cy.clickGenericListLink('test-service');
 
     cy.getMidColumn().contains('Type');
     cy.getMidColumn().contains('LoadBalancer');

@@ -1,12 +1,12 @@
-import React from 'react';
-
 import { GenericRoleList } from './GenericRoleList';
 import RoleCreate from './RoleCreate';
+import { ResourceDescription, i18nDescriptionKey } from 'resources/Roles';
 
 export function RoleList(props) {
   return (
     <GenericRoleList
-      descriptionKey={'roles.description'}
+      description={ResourceDescription}
+      descriptionKey={i18nDescriptionKey}
       {...props}
       createResourceForm={RoleCreate}
     />

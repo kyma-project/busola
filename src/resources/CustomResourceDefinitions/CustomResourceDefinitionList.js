@@ -1,11 +1,14 @@
-import React from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { Link } from 'shared/components/Link/Link';
 import { Tokens } from 'shared/components/Tokens';
 
 import CustomResourceDefinitionCreate from './CustomResourceDefinitionCreate';
+import {
+  ResourceDescription,
+  i18nDescriptionKey,
+  docsURL,
+} from 'resources/CustomResourceDefinitions';
 
 export function CustomResourceDefinitionList(props) {
   const { t } = useTranslation();
@@ -24,18 +27,9 @@ export function CustomResourceDefinitionList(props) {
     },
   ];
 
-  const description = (
-    <Trans i18nKey="custom-resource-definitions.description">
-      <Link
-        className="bsl-link"
-        url="https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/"
-      />
-    </Trans>
-  );
-
   return (
     <ResourcesList
-      description={description}
+      description={ResourceDescription}
       customColumns={customColumns}
       {...props}
       createResourceForm={
@@ -45,9 +39,8 @@ export function CustomResourceDefinitionList(props) {
         textSearchProperties: ['spec.names.categories'],
       }}
       emptyListProps={{
-        subtitleText: t('custom-resource-definitions.description'),
-        url:
-          'https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/',
+        subtitleText: i18nDescriptionKey,
+        url: docsURL,
       }}
     />
   );

@@ -1,15 +1,18 @@
-import React from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { useUrl } from 'hooks/useUrl';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
-import { Link as ReactSharedLink } from 'shared/components/Link/Link';
 
 import PodCreate from './PodCreate';
-import { PodStatus, calculatePodState } from './PodStatus';
+import { calculatePodState, PodStatus } from './PodStatus';
 import PodRestarts from './PodRestarts';
+import {
+  ResourceDescription,
+  i18nDescriptionKey,
+  docsURL,
+} from 'resources/Pods';
 
 export function PodList(params) {
   const { showNodeName } = params;
@@ -55,20 +58,11 @@ export function PodList(params) {
     ];
   }
 
-  const description = (
-    <Trans i18nKey="pods.description">
-      <ReactSharedLink
-        className="bsl-link"
-        url="https://kubernetes.io/docs/concepts/workloads/pods/"
-      />
-    </Trans>
-  );
-
   return (
     <ResourcesList
       disableMargin={params.disableMargin}
       customColumns={customColumns}
-      description={description}
+      description={ResourceDescription}
       sortBy={defaultSort => ({
         ...defaultSort,
         status: (a, b) =>
@@ -79,8 +73,8 @@ export function PodList(params) {
       {...params}
       createResourceForm={PodCreate}
       emptyListProps={{
-        subtitleText: t('pods.description'),
-        url: 'https://kubernetes.io/docs/concepts/workloads/pods/',
+        subtitleText: i18nDescriptionKey,
+        url: docsURL,
       }}
     />
   );

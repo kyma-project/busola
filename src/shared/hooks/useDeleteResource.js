@@ -109,14 +109,23 @@ export function useDeleteResource({
               );
             }
 
-            setLayoutColumn({
-              ...layoutColumn,
-              layout: goToLayout,
-            });
+            goToLayout === 'TwoColumnsMidExpanded'
+              ? setLayoutColumn({
+                  ...layoutColumn,
+                  endColumn: null,
+                  layout: goToLayout,
+                })
+              : setLayoutColumn({
+                  ...layoutColumn,
+                  midColumn: null,
+                  layout: goToLayout,
+                });
           } else {
             navigate(resourceListUrl(resource, { resourceType }));
             setLayoutColumn({
               ...layoutColumn,
+              midColumn: null,
+              endColumn: null,
               layout: 'OneColumn',
             });
           }

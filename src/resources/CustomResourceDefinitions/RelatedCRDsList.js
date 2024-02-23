@@ -18,6 +18,8 @@ export function RelatedCRDsList(resource) {
   return (
     <CustomResourceDefinitionList
       {...{
+        disableHiding: true,
+        displayArrow: false,
         hasDetailsView: true,
         resourceUrl,
         resourceType: 'customresourcedefinitions',

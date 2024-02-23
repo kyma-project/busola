@@ -1,9 +1,12 @@
-import React from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { ServiceAccountTokenStatus } from 'shared/components/ServiceAccountTokenStatus';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { Link } from 'shared/components/Link/Link';
 import ServiceAccountCreate from './ServiceAccountCreate';
+import {
+  ResourceDescription,
+  i18nDescriptionKey,
+  docsURL,
+} from 'resources/ServiceAccounts';
 
 export function ServiceAccountList(props) {
   const { t } = useTranslation();
@@ -18,26 +21,16 @@ export function ServiceAccountList(props) {
     },
   ];
 
-  const description = (
-    <Trans i18nKey="service-accounts.description">
-      <Link
-        className="bsl-link"
-        url="https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/"
-      />
-    </Trans>
-  );
-
   return (
     <ResourcesList
       customColumns={customColumns}
-      description={description}
+      description={ResourceDescription}
       resourceTitle={t('service-accounts.title')}
       {...props}
       createResourceForm={ServiceAccountCreate}
       emptyListProps={{
-        subtitleText: t('service-accounts.description'),
-        url:
-          'https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/',
+        subtitleText: i18nDescriptionKey,
+        url: docsURL,
       }}
     />
   );

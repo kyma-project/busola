@@ -14,7 +14,7 @@ context('Test Cron Jobs', () => {
   it('Create Cron Job', () => {
     cy.navigateTo('Workloads', 'Cron Jobs');
 
-    cy.contains('ui5-button', 'Create Cron Job').click();
+    cy.contains('ui5-button', 'Create').click();
 
     cy.contains('Advanced').click();
 
@@ -185,6 +185,6 @@ context('Test Cron Jobs', () => {
   });
 
   it('Inspect list', () => {
-    cy.inspectList('Cron Jobs', CRON_JOB_NAME);
+    cy.inspectList(CRON_JOB_NAME);
   });
 });

@@ -1,13 +1,15 @@
-import React from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
-import { Link } from 'shared/components/Link/Link';
-
 import { useRestartAction } from 'shared/hooks/useRestartResource';
 import StatefulSetCreate from './StatefulSetCreate';
 import { StatefulSetPods } from './StatefulSetPods';
+import {
+  ResourceDescription,
+  i18nDescriptionKey,
+  docsURL,
+} from 'resources/StatefulSets';
 
 export function StatefulSetList(props) {
   const { t } = useTranslation();
@@ -26,29 +28,20 @@ export function StatefulSetList(props) {
     },
   ];
 
-  const description = (
-    <Trans i18nKey="stateful-sets.description">
-      <Link
-        className="bsl-link"
-        url="https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/"
-      />
-    </Trans>
-  );
-
   return (
     <ResourcesList
       resourceTitle={t('stateful-sets.title')}
       customColumns={customColumns}
-      description={description}
+      description={ResourceDescription}
       customListActions={[restartAction]}
       {...props}
       createResourceForm={StatefulSetCreate}
       emptyListProps={{
-        subtitleText: t('stateful-sets.description'),
-        url:
-          'https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/',
+        subtitleText: i18nDescriptionKey,
+        url: docsURL,
       }}
     />
   );
 }
+
 export default StatefulSetList;
