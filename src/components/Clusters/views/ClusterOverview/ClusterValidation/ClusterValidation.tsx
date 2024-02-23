@@ -149,7 +149,7 @@ export const ClusterValidation = () => {
 
   return (
     <UI5Panel
-      key="cluster-validation"
+      keyComponent="cluster-validation"
       title={t('cluster-validation.title')}
       headerActions={
         <>

@@ -7,6 +7,8 @@ export const RelatedPods = ({
   disableMargin = false,
 }) => {
   const podListParams = {
+    disableHiding: true,
+    displayArrow: false,
     hasDetailsView: true,
     resourceUrl: `/api/v1/namespaces/${namespace}/pods`,
     resourceType: 'pods',

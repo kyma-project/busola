@@ -49,7 +49,7 @@ context('Test Protected Resources', () => {
   it('Create a protected resource', () => {
     cy.navigateTo('Configuration', 'Config Maps');
 
-    cy.contains('ui5-button', 'Create Config Map').click();
+    cy.contains('ui5-button', 'Create').click();
 
     cy.get('[aria-label="ConfigMap name"]:visible')
       .find('input')
@@ -85,9 +85,7 @@ context('Test Protected Resources', () => {
       .contains('Config Maps')
       .click();
 
-    cy.get('ui5-link')
-      .contains(NAME)
-      .click();
+    cy.clickGenericListLink(NAME);
 
     cy.get('ui5-button[disabled="true"]')
       .should('contain.text', 'Delete')
@@ -97,7 +95,7 @@ context('Test Protected Resources', () => {
   it('Create a protected Pod controlled by Deployment', () => {
     cy.navigateTo('Workloads', 'Deployments');
 
-    cy.contains('ui5-button', 'Create Deployment').click();
+    cy.contains('ui5-button', 'Create').click();
 
     cy.get('[aria-label="Deployment name"]:visible')
       .find('input')

@@ -16,7 +16,7 @@ export function SchemaViewer({ name, schema }) {
   return (
     <UI5Panel
       title={t('custom-resource-definitions.subtitle.schema')}
-      key={`crd-schema-${name}`}
+      keyComponent={`crd-schema-${name}`}
       headerActions={
         <>
           <SegmentedButton>

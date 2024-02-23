@@ -19,7 +19,10 @@ const Message = event => {
   const { t } = useTranslation();
 
   return (
-    <UI5Panel title={t('events.headers.message')} key="specification-panel">
+    <UI5Panel
+      title={t('events.headers.message')}
+      keyComponent="specification-panel"
+    >
       {event.message && (
         <RowComponent
           name={t('events.headers.message')}

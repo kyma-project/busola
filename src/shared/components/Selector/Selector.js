@@ -74,7 +74,7 @@ export const Selector = ({
           {selectorLabels ? <Labels labels={selectorLabels} /> : null}
         </>
       }
-      key="workload-selector"
+      keyComponent="workload-selector"
       data-test-id="workload-selector"
     >
       {isSelectorDefinedOrEmpty ? (

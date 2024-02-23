@@ -40,13 +40,18 @@ Cypress.Commands.add(
   },
 );
 
+Cypress.Commands.add('checkItemOnGenericListLink', resourceName => {
+  cy.get('ui5-table-row')
+    .find('ui5-table-cell')
+    .contains('span', resourceName)
+    .should('be.visible');
+});
+
 Cypress.Commands.add('clickGenericListLink', resourceName => {
   cy.get('ui5-table-row')
     .find('ui5-table-cell')
-    .find('ui5-link')
-    .contains(resourceName)
-    .find('a.ui5-link-root')
-    .click({ force: true });
+    .contains('span', resourceName)
+    .click();
 });
 
 Cypress.Commands.add('filterWithNoValue', { prevSubject: true }, $elements =>
@@ -167,16 +172,15 @@ Cypress.Commands.add(
     deletedVisible = true,
     clearSearch = true,
     isUI5Link = true,
+    checkIfResourceIsRemoved = true,
   ) => {
-    cy.get('[aria-label="open-search"]:visible').click();
-
     cy.get('ui5-combobox[placeholder="Search"]:visible')
       .find('input')
       .click()
       .type(resourceName);
 
     if (isUI5Link) {
-      cy.contains('ui5-link', resourceName).should('be.visible');
+      cy.checkItemOnGenericListLink(resourceName);
     } else {
       cy.contains('a', resourceName).should('be.visible');
     }
@@ -203,9 +207,11 @@ Cypress.Commands.add(
           .clear();
       }
 
-      cy.get('ui5-table')
-        .contains(resourceName)
-        .should('not.exist');
+      if (checkIfResourceIsRemoved) {
+        cy.get('ui5-table')
+          .contains(resourceName)
+          .should('not.exist');
+      }
     }
   },
 );
@@ -221,62 +227,65 @@ Cypress.Commands.add('changeCluster', clusterName => {
     .click({ force: true });
 });
 
-Cypress.Commands.add('testMidColumnLayout', resourceName => {
-  cy.getMidColumn()
-    .find('ui5-button[aria-label="full-screen"]')
-    .click();
+Cypress.Commands.add(
+  'testMidColumnLayout',
+  (resourceName, checkIfNotExist = true) => {
+    cy.getMidColumn()
+      .find('ui5-button[aria-label="full-screen"]')
+      .click();
 
-  cy.contains('ui5-link', resourceName).should('not.be.visible');
+    cy.get('ui5-table-row')
+      .find('ui5-table-cell')
+      .contains('span', resourceName)
+      .should('not.be.visible');
 
-  cy.getMidColumn()
-    .find('ui5-button[aria-label="close-full-screen"]')
-    .click();
+    cy.getMidColumn()
+      .find('ui5-button[aria-label="close-full-screen"]')
+      .click();
 
-  cy.contains('ui5-link', resourceName).should('be.visible');
+    cy.checkItemOnGenericListLink(resourceName);
 
-  cy.closeMidColumn();
-
-  cy.getMidColumn()
-    .contains('ui5-title', resourceName)
-    .should('not.be.visible');
-});
+    cy.closeMidColumn(checkIfNotExist);
+  },
+);
 
 Cypress.Commands.add('testEndColumnLayout', resourceName => {
   cy.getEndColumn()
     .find('ui5-button[aria-label="full-screen"]')
     .click();
 
-  cy.contains('ui5-link', resourceName).should('not.be.visible');
+  cy.get('ui5-table-row')
+    .find('ui5-table-cell')
+    .contains('span', resourceName)
+    .should('not.be.visible');
 
   cy.getEndColumn()
     .find('ui5-button[aria-label="close-full-screen"]')
     .click();
 
-  cy.contains('ui5-link', resourceName).should('be.visible');
+  cy.checkItemOnGenericListLink(resourceName);
 
   cy.getEndColumn()
     .find('ui5-button[aria-label="close-column"]')
     .click();
 
-  cy.getEndColumn().should('not.be.visible');
-
-  cy.getEndColumn()
-    .contains('ui5-title', resourceName)
-    .should('not.be.visible');
+  cy.getEndColumn().should('not.exist');
 });
 
-Cypress.Commands.add('closeMidColumn', () => {
+Cypress.Commands.add('closeMidColumn', (checkIfNotExist = false) => {
   cy.getMidColumn()
     .find('ui5-button[aria-label="close-column"]')
     .click();
 
-  cy.getMidColumn().should('not.be.visible');
+  if (checkIfNotExist) cy.getMidColumn().should('not.exist');
+  else cy.getMidColumn().should('not.be.visible');
 });
 
-Cypress.Commands.add('closeEndColumn', () => {
+Cypress.Commands.add('closeEndColumn', (checkIfNotExist = false) => {
   cy.getEndColumn()
     .find('ui5-button[aria-label="close-column"]')
     .click();
 
-  cy.getEndColumn().should('not.be.visible');
+  if (checkIfNotExist) cy.getEndColumn().should('not.exist');
+  else cy.getEndColumn().should('not.be.visible');
 });

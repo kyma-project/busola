@@ -28,7 +28,7 @@ context('Test app settings and preferences', () => {
 
     cy.navigateTo('Configuration', 'Config Maps');
 
-    cy.contains('ui5-button', 'Create Config Map').click();
+    cy.contains('ui5-button', 'Create').click();
 
     cy.get('[aria-label="ConfigMap name"]:visible')
       .find('input')
@@ -129,7 +129,9 @@ context('Test app settings and preferences', () => {
       .contains('Namespaces')
       .click();
 
-    cy.contains('a', /^kube-system/).should('not.exist');
+    cy.get('ui5-table-row')
+      .contains(/^kube-system/)
+      .should('not.exist');
 
     cy.goToNamespaceDetails();
   });

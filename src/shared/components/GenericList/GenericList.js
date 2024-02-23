@@ -2,9 +2,9 @@ import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { Table } from '@ui5/webcomponents-react';
-
+import { useNavigate } from 'react-router-dom';
 import {
   BodyFallback,
   HeaderRenderer,
@@ -25,6 +25,9 @@ import './GenericList.scss';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { EmptyListComponent } from '../EmptyListComponent/EmptyListComponent';
+import { useUrl } from 'hooks/useUrl';
+import { columnLayoutState } from 'state/columnLayoutAtom';
+import pluralize from 'pluralize';
 
 const defaultSort = {
   name: nameLocaleSort,
@@ -51,15 +54,23 @@ export const GenericList = ({
   serverDataError,
   serverDataLoading,
   pagination,
-  currentlyEditedResourceUID,
   sortBy,
   notFoundMessage,
   searchSettings,
   disableMargin,
   emptyListProps = null,
+  columnLayout = null,
+  customColumnLayout = null,
+  enableColumnLayout,
+  resourceType = '',
+  customUrl,
+  hasDetailsView,
+  disableHiding = true,
+  displayArrow = false,
 }) => {
+  const navigate = useNavigate();
   searchSettings = { ...defaultSearch, ...searchSettings };
-
+  const [entrySelected, setEntrySelected] = useState('');
   if (typeof sortBy === 'function') sortBy = sortBy(defaultSort);
 
   const [sort, setSort] = useState({
@@ -137,6 +148,7 @@ export const GenericList = ({
           disabled={!entries.length}
         />
       )}
+      {extraHeaderContent}
       {sortBy && !isEmpty(sortBy) && (
         <SortModalPanel
           sortBy={sortBy}
@@ -145,7 +157,6 @@ export const GenericList = ({
           disabled={!entries.length}
         />
       )}
-      {extraHeaderContent}
     </>
   );
 
@@ -214,17 +225,27 @@ export const GenericList = ({
 
     return pagedItems.map((e, index) => (
       <RowRenderer
+        isSelected={
+          (layoutState?.midColumn?.resourceName === e.metadata?.name ||
+            layoutState?.endColumn?.resourceName === e.metadata?.name) &&
+          entrySelected === e.metadata?.name
+        }
         index={index}
         key={e.metadata?.uid || e.name || e.metadata?.name || index}
         entry={e}
         actions={actions}
         rowRenderer={rowRenderer}
-        isBeingEdited={
-          currentlyEditedResourceUID &&
-          e?.metadata?.uid === currentlyEditedResourceUID
-        }
+        displayArrow={displayArrow}
+        hasDetailsView={hasDetailsView}
       />
     ));
+  };
+  const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
+  const { resourceUrl: resourceUrlFn } = useUrl();
+  const linkTo = entry => {
+    return customUrl
+      ? customUrl(entry)
+      : resourceUrlFn(entry, { resourceType });
   };
 
   return (
@@ -236,12 +257,62 @@ export const GenericList = ({
       style={disableMargin ? {} : spacing.sapUiSmallMargin}
     >
       <Table
-        className={'ui5-generic-list'}
+        className={`ui5-generic-list ${hasDetailsView ? 'cursor-pointer' : ''}`}
+        onRowClick={e => {
+          if (!hasDetailsView) return;
+          const selectedEntry = entries.find(entry => {
+            return (
+              entry.metadata.name === e.target.children[0].innerText ||
+              pluralize(entry?.spec?.names?.kind ?? '') ===
+                e.target.children[0].innerText
+            );
+          });
+          setEntrySelected(
+            selectedEntry?.metadata?.name ?? e.target.children[0].innerText,
+          );
+          if (!enableColumnLayout) {
+            setLayoutColumn({
+              midColumn: null,
+              endColumn: null,
+              layout: 'OneColumn',
+            });
+
+            navigate(linkTo(selectedEntry));
+          } else {
+            setLayoutColumn(
+              columnLayout
+                ? {
+                    midColumn: layoutState.midColumn,
+                    endColumn: customColumnLayout(selectedEntry),
+                    layout: columnLayout,
+                  }
+                : {
+                    midColumn: {
+                      resourceName:
+                        selectedEntry?.metadata?.name ??
+                        e.target.children[0].innerText,
+                      resourceType: resourceType,
+                      namespaceId: selectedEntry?.metadata?.namespace,
+                    },
+                    endColumn: null,
+                    layout: 'TwoColumnsMidExpanded',
+                  },
+            );
+
+            window.history.pushState(
+              window.history.state,
+              '',
+              `${linkTo(selectedEntry)}?layout=${'TwoColumnsMidExpanded'}`,
+            );
+          }
+        }}
         columns={
           <HeaderRenderer
             entries={entries}
             actions={actions}
             headerRenderer={headerRenderer}
+            disableHiding={disableHiding}
+            displayArrow={displayArrow}
           />
         }
       >
@@ -297,11 +368,13 @@ GenericList.propTypes = {
   serverDataError: PropTypes.any,
   serverDataLoading: PropTypes.bool,
   pagination: PaginationProps,
-  currentlyEditedResourceUID: PropTypes.string,
   sortBy: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   notFoundMessage: PropTypes.string,
   searchSettings: SearchProps,
   disableMargin: PropTypes.bool,
+  enableColumnLayout: PropTypes.bool,
+  customUrl: PropTypes.func,
+  hasDetailsView: PropTypes.bool,
 };
 
 GenericList.defaultProps = {

@@ -5,7 +5,6 @@ import { Tokens } from 'shared/components/Tokens';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import { YamlEditorProvider } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
 import { ResourceListRenderer } from 'shared/components/ResourcesList/ResourcesList';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
@@ -106,7 +105,7 @@ export function GroupingListPage({
             allowSlashShortcut
           />
         }
-        content={<YamlEditorProvider>{lists}</YamlEditorProvider>}
+        content={lists}
         layoutNumber="StartColumn"
       />
 

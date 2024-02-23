@@ -64,7 +64,7 @@ context('Test extensibility variables', () => {
       .contains('Namespaces')
       .click();
 
-    cy.contains('ui5-link', NAMESPACE).click();
+    cy.clickGenericListLink(NAMESPACE);
 
     cy.getLeftNav()
       .contains('Testin')
@@ -74,7 +74,7 @@ context('Test extensibility variables', () => {
       .contains(/^Test Resources$/)
       .click();
 
-    cy.contains('ui5-button', 'Create Test Resource').click();
+    cy.contains('ui5-button', 'Create').click();
   });
 
   it('Tests variables', () => {

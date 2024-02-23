@@ -479,7 +479,7 @@ components:
     messages:
       not-found: Such {{resource}} doesn't exist
   resources-list:
-    create: Create {{resourceType}}
+    create: Create
     messages:
       delete:
         failure: 'Failed to delete the {{resourceType}}: {{error}}'
@@ -1078,7 +1078,7 @@ pods:
     volumes: Volumes
   message:
     failed-to-download: Failed to download the logs
-    no-logs-available: No logs avaliable for the '{{containerName}}' container
+    no-logs-available: No logs available for the '{{containerName}}' container
     type-not-found: '{{type}} not found'
   name_singular: Pod
   node: Node

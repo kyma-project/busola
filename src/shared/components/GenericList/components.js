@@ -21,11 +21,22 @@ export const BodyFallback = ({ children }) => (
   </tr>
 );
 
-export const HeaderRenderer = ({ slot, actions, headerRenderer }) => {
+export const HeaderRenderer = ({
+  slot,
+  actions,
+  headerRenderer,
+  disableHiding = true,
+  displayArrow = false,
+}) => {
   let emptyColumn = null;
   if (actions.length) {
     emptyColumn = (
-      <TableColumn slot={slot} key="actions-column" aria-label="actions-column">
+      <TableColumn
+        slot={slot}
+        key="actions-column"
+        aria-label="actions-column"
+        minWidth={850}
+      >
         <Label />
       </TableColumn>
     );
@@ -37,12 +48,29 @@ export const HeaderRenderer = ({ slot, actions, headerRenderer }) => {
           <TableColumn
             slot={`${slot}-${index}`}
             key={typeof h === 'object' ? index : h}
+            popinDisplay="Block"
+            demandPopin={h === 'Labels' ? true : false}
+            minWidth={
+              h === 'Labels'
+                ? '15000'
+                : disableHiding
+                ? ''
+                : h !== 'Name' && h !== ''
+                ? 850
+                : ''
+            }
+            aria-label={`${typeof h === 'object' ? index : h}-column`}
           >
             <Label>{h}</Label>
           </TableColumn>
         );
       })}
       {emptyColumn}
+      {displayArrow && (
+        <TableColumn slot={slot} key="arrow-column" aria-label="arrow-column">
+          <Label />
+        </TableColumn>
+      )}
     </>
   );
 
@@ -85,7 +113,9 @@ const DefaultRowRenderer = ({
   entry,
   actions,
   rowRenderer,
-  isBeingEdited = false,
+  isSelected = false,
+  displayArrow = false,
+  hasDetailsView,
 }) => {
   const cells = rowRenderer.map((cell, id) => {
     if (cell?.content) {
@@ -104,10 +134,19 @@ const DefaultRowRenderer = ({
       <ListActions actions={actions} entry={entry} />
     </TableCell>
   );
+
   return (
-    <TableRow selected={isBeingEdited}>
+    <TableRow
+      type={hasDetailsView ? 'Active' : 'Inactive'}
+      navigated={isSelected}
+    >
       {cells}
       {!!actions.length && actionsCell}
+      {displayArrow && (
+        <TableCell style={{ padding: 0 }}>
+          <Icon name="slim-arrow-right" design="Neutral" />
+        </TableCell>
+      )}
     </TableRow>
   );
 };

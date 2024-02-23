@@ -14,7 +14,7 @@ export const UI5Panel = ({
   icon = undefined,
   title,
   headerActions,
-  key = 'UI5Panel',
+  keyComponent = 'UI5Panel',
   disableMargin = false,
   className = '',
   children,
@@ -24,7 +24,7 @@ export const UI5Panel = ({
   return (
     <Panel
       fixed={fixed}
-      key={key}
+      key={keyComponent}
       className={`${className}`}
       style={style ? style : !disableMargin ? spacing.sapUiSmallMargin : null}
       header={

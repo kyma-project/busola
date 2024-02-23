@@ -31,8 +31,6 @@ context('Test navigation features', () => {
     // visual resources
     cy.navigateTo('Configuration', 'Cluster Role Bindings');
 
-    cy.get('[aria-label="open-search"]').click();
-
     cy.get('ui5-combobox[placeholder="Search"]')
       .find('input')
       .click()

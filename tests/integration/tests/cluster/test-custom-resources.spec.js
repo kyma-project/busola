@@ -19,7 +19,7 @@ context('Test Custom Resources', () => {
 
     cy.navigateTo('Configuration', 'Custom Resource Definitions');
 
-    cy.contains('ui5-button', 'Create Custom Resource Definition').click();
+    cy.contains('ui5-button', 'Create').click();
 
     cy.wrap(loadFile(FILE_NAME)).then(CRD_CONFIG => {
       const CRD = JSON.stringify(CRD_CONFIG);
@@ -62,7 +62,7 @@ context('Test Custom Resources', () => {
 
     cy.contains('ui5-title', 'Tclusters').should('be.visible');
 
-    cy.contains('ui5-button', /Create Tcluster/i).should('be.visible');
+    cy.contains('ui5-button', /Create/i).should('be.visible');
 
     cy.url().should('match', /customresources/);
     cy.contains('tcluster.cypress.example.com').click();
@@ -74,9 +74,9 @@ context('Test Custom Resources', () => {
       .contains('Custom Resources')
       .click();
 
-    cy.contains('ui5-link', 'Tclusters').click({ force: true });
+    cy.clickGenericListLink('Tclusters');
 
-    cy.contains('ui5-button', 'Create Tcluster').click();
+    cy.contains('ui5-button', 'Create').click();
 
     cy.wrap(loadFile(TCLUSTER_FILE_NAME)).then(TC_CONFIG => {
       const TC = JSON.stringify(TC_CONFIG);
@@ -94,20 +94,24 @@ context('Test Custom Resources', () => {
       .contains('Custom Resources')
       .click();
 
-    cy.contains('ui5-link', 'Tclusters').click({ force: true });
+    cy.clickGenericListLink('Tclusters');
 
     cy.testMidColumnLayout('Tclusters');
 
-    cy.contains('ui5-link', 'Tclusters').click();
+    cy.clickGenericListLink('Tclusters');
 
     cy.getMidColumn()
-      .contains('ui5-link', 'tcluster-test')
+      .get('ui5-table-row')
+      .find('ui5-table-cell')
+      .contains('span', 'tcluster-test')
       .click();
 
     cy.testEndColumnLayout('tcluster-test');
 
     cy.getMidColumn()
-      .contains('ui5-link', 'tcluster-test')
+      .get('ui5-table-row')
+      .find('ui5-table-cell')
+      .contains('span', 'tcluster-test')
       .click();
 
     cy.getMidColumn()
@@ -127,7 +131,7 @@ context('Test Custom Resources', () => {
 
     cy.contains(/deleted/).should('be.visible');
 
-    cy.getEndColumn().should('not.be.visible');
+    cy.getEndColumn().should('not.exist');
 
     cy.getMidColumn()
       .contains('tcluster.cypress.example.com')

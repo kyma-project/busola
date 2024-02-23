@@ -4,6 +4,8 @@ import PersistentVolumeClaimsListComponent from 'resources/PersistentVolumeClaim
 
 export function PersistentVolumeClaimsList(storageclass) {
   const params = {
+    displayArrow: false,
+    disableHiding: true,
     hasDetailsView: true,
     resourceUrl: `/api/v1/persistentvolumeclaims`,
     resourceType: 'PersistentVolumeClaims',

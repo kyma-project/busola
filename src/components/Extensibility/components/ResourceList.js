@@ -64,6 +64,8 @@ export function ResourceList({
     return (
       <Suspense fallback={<Spinner />}>
         <ExtensibilityList
+          disableHiding={true}
+          displayArrow={false}
           overrideResMetadata={extensibilityResourceSchema || {}}
           isCompact
           resourceUrl={resourceUrl}
@@ -100,6 +102,8 @@ export function ResourceList({
   return (
     <Suspense fallback={<Spinner />}>
       <ListRenderer
+        disableHiding={true}
+        displayArrow={false}
         skipDataLoading={true}
         loading={value?.loading}
         error={value?.error}

@@ -27,7 +27,7 @@ context('Test Network Policy', () => {
   it('Create a Network Policy', () => {
     cy.navigateTo('Discovery and Network', 'Network Policies');
 
-    cy.contains('ui5-button', 'Create Network Policy').click();
+    cy.contains('ui5-button', 'Create').click();
 
     cy.wrap(loadNetworkPolicy(NAME, Cypress.env('NAMESPACE_NAME'))).then(
       NP_CONFIG => {
@@ -57,6 +57,7 @@ context('Test Network Policy', () => {
   });
 
   it('Check Network Policy list', () => {
-    cy.inspectList('Network Policies', NAME);
+    cy.wait(3000); // wait for the resource to be refeched and displayed in the list
+    cy.inspectList(NAME);
   });
 });
