@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
+import { Button, Title } from '@ui5/webcomponents-react';
 import { spacing } from '@ui5/webcomponents-react-base';
 
-import { Button } from '@ui5/webcomponents-react';
 import { createPatch } from 'rfc6902';
 import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNotFound';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
@@ -36,6 +36,7 @@ import { Tooltip } from '../Tooltip/Tooltip';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { createPortal } from 'react-dom';
 import ResourceDetailsCard from './ResourceDetailsCard';
+import { ResourceStatusCard } from '../ResourceStatusCard/ResourceStatusCard';
 import { EMPTY_TEXT_PLACEHOLDER } from '../../constants';
 import { ReadableElapsedTimeFromNow } from '../ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
 import { HintButton } from '../DescriptionHint/DescriptionHint';
@@ -185,6 +186,9 @@ function Resource({
   resourceSchema,
   disableEdit,
   disableDelete,
+  statusBadge,
+  customStatusColumns,
+  statusConditions,
 }) {
   useVersionWarning({ resourceUrl, resourceType });
   const { t } = useTranslation();
@@ -207,11 +211,12 @@ function Resource({
   });
 
   const layoutColumn = useRecoilValue(columnLayoutState);
-  const { isEnabled: isColumnLayoutEnabled } = useFeature('COLUMN_LAYOUT');
 
   const { setEditedYaml: setEditedSpec } = useYamlEditor();
   const notification = useNotification();
   const { resourceListUrl } = useUrl();
+
+  const { isEnabled: isColumnLayoutEnabled } = useFeature('COLUMN_LAYOUT');
 
   const breadcrumbItems = breadcrumbs || [
     {
@@ -392,16 +397,28 @@ function Resource({
     return EMPTY_TEXT_PLACEHOLDER;
   };
 
+  const resourceStatusCard = customStatusColumns ? (
+    <ResourceStatusCard
+      statusBadge={statusBadge ? statusBadge(resource) : null}
+      customColumns={
+        <>
+          {customStatusColumns?.filter(filterColumns)?.map(col => (
+            <DynamicPageComponent.Column key={col.header} title={col.header}>
+              {col.value(resource)}
+            </DynamicPageComponent.Column>
+          ))}
+        </>
+      }
+      conditions={statusConditions ? statusConditions(resource) : null}
+    />
+  ) : null;
+
   const resourceDetailsCard = (
     <ResourceDetailsCard
       title={title ?? t('common.headers.resource-details')}
-      wrapperClassname={
-        isColumnLayoutEnabled
-          ? layoutColumn.layout === 'MidColumnFullScreen'
-            ? 'resource-overview__details-wrapper'
-            : null
-          : 'resource-overview__details-wrapper'
-      }
+      wrapperClassname={`resource-overview__details-wrapper  ${
+        hasTabs ? 'tabs' : ''
+      }`}
       content={
         <>
           <DynamicPageComponent.Column
@@ -453,7 +470,6 @@ function Resource({
           <DynamicPageComponent.Column
             key="Annotations"
             title={t('common.headers.annotations')}
-            columnSpan="2/2"
           >
             <Labels
               labels={resource.metadata.annotations || {}}
@@ -482,7 +498,28 @@ function Resource({
               />,
               document.body,
             )}
-            {!hasTabs && resourceDetailsCard}
+            <Title
+              level="H3"
+              style={{
+                ...spacing.sapUiMediumMarginBegin,
+                ...spacing.sapUiMediumMarginTopBottom,
+              }}
+            >
+              {title ?? t('common.headers.resource-details')}
+            </Title>
+            <div
+              className={`resource-details-container ${
+                isColumnLayoutEnabled &&
+                (layoutColumn.layout === 'MidColumnFullScreen' ||
+                  layoutColumn.layout === 'EndColumnFullScreen' ||
+                  layoutColumn.layout === 'OneColumn')
+                  ? ''
+                  : 'column-view'
+              }`}
+            >
+              {!hasTabs && resourceDetailsCard}
+              {!hasTabs && resourceStatusCard && resourceStatusCard}
+            </div>
             <Suspense fallback={<Spinner />}>
               <Injections
                 destination={resourceType}

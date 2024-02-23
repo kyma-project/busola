@@ -58,7 +58,7 @@ export function FeaturedCard({ value, structure, schema, ...props }) {
                 className="button-container"
                 style={spacing.sapUiSmallMarginTop}
               >
-                {structure.children.slice(0, 2).map((def, idx) => (
+                {structure.children?.slice(0, 2).map((def, idx) => (
                   <Widget
                     key={idx}
                     value={value}

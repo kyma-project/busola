@@ -24,6 +24,7 @@ export const TooltipBadge = ({
       state={type}
       className={classes}
       data-testid={'has-tooltip'}
+      showDefaultIcon={type !== 'Information'}
     >
       {children}
     </ObjectStatus>
