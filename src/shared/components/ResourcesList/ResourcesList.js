@@ -69,7 +69,6 @@ ResourcesList.propTypes = {
   disableMargin: PropTypes.bool,
   enableColumnLayout: PropTypes.bool,
   layoutNumber: PropTypes.string,
-  displayLabelForLabels: PropTypes.bool,
 };
 
 ResourcesList.defaultProps = {
@@ -201,7 +200,6 @@ export function ResourceListRenderer({
   isCompact,
   parentCrdName,
   emptyListProps = null,
-  displayLabelForLabels,
   disableHiding,
   displayArrow,
 }) {
@@ -259,10 +257,7 @@ export function ResourceListRenderer({
     {
       header: t('common.headers.labels'),
       value: entry => (
-        <Labels
-          labels={entry.metadata.labels}
-          displayLabelForLabels={displayLabelForLabels ?? true}
-        />
+        <Labels labels={entry.metadata.labels} displayLabelForLabels />
       ),
       id: 'labels',
     },
