@@ -140,6 +140,8 @@ Cypress.Commands.add(
   'deleteInDetails',
   (resourceType, resourceName, columnLayout = false) => {
     if (columnLayout) {
+      cy.wait(500); //wait for button
+
       cy.getMidColumn()
         .contains('ui5-button', 'Delete')
         .should('be.visible')
