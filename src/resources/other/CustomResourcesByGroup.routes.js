@@ -65,7 +65,7 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
     }
   }, [layout, isColumnLeyoutEnabled, crdName, crName, namespace]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const layoutCloseUrl = scopedUrl(
+  const layoutCloseCreateUrl = scopedUrl(
     `customresources/${layoutState?.midColumn?.resourceName ?? crdName}`,
   );
 
@@ -113,6 +113,7 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
         <CustomResourcesOfType
           crdName={layoutState?.midColumn?.resourceName ?? crdName}
           enableColumnLayout={false}
+          layoutCloseCreateUrl={layoutCloseCreateUrl}
         />
       );
     } else {
@@ -132,7 +133,7 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
       <ResourceCreate
         title={elementCreateProps.resourceTitle}
         confirmText={t('common.buttons.create')}
-        layoutCloseUrl={layoutCloseUrl}
+        layoutCloseCreateUrl={layoutCloseCreateUrl}
         renderForm={renderProps => {
           const createComponent = layoutState?.showCreate?.resourceType && (
             <CRCreate
@@ -152,6 +153,7 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
       <CustomResourcesOfType
         crdName={layoutState?.midColumn?.resourceName ?? crdName}
         enableColumnLayout={isColumnLeyoutEnabled}
+        layoutCloseCreateUrl={layoutCloseCreateUrl}
       />
     );
   }
@@ -163,7 +165,7 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
         title={elementCreateProps.resourceTitle}
         confirmText={t('common.buttons.create')}
         layoutNumber="EndColumn"
-        layoutCloseUrl={layoutCloseUrl}
+        layoutCloseCreateUrl={layoutCloseCreateUrl}
         renderForm={renderProps => {
           const createComponent = layoutState?.showCreate?.resourceType && (
             <CRCreate

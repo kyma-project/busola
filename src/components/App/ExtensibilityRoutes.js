@@ -50,7 +50,7 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType, cr }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [layout, isColumnLeyoutEnabled, namespaceId, resourceName, resourceType]);
 
-  const layoutCloseUrl = resourceListUrl({
+  const layoutCloseCreateUrl = resourceListUrl({
     kind: resourceType,
     metadata: {
       namespace: layoutState?.midColumn?.namespaceId ?? namespaceId,
@@ -63,7 +63,12 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType, cr }) => {
       <Details resourceName={resourceName} namespaceId={namespaceId} />
     );
   } else {
-    startColumnComponent = <List enableColumnLayout={isColumnLeyoutEnabled} />;
+    startColumnComponent = (
+      <List
+        enableColumnLayout={isColumnLeyoutEnabled}
+        layoutCloseCreateUrl={layoutCloseCreateUrl}
+      />
+    );
   }
 
   const elementCreateProps = usePrepareCreateProps({
@@ -78,7 +83,7 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType, cr }) => {
       <ResourceCreate
         title={elementCreateProps.resourceTitle}
         confirmText={t('common.buttons.save')}
-        layoutCloseUrl={layoutCloseUrl}
+        layoutCloseCreateUrl={layoutCloseCreateUrl}
         renderForm={renderProps => {
           const createComponent = layoutState?.showCreate?.resourceType && (
             <Create

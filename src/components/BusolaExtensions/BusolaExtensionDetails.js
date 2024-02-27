@@ -240,7 +240,7 @@ export function BusolaExtensionDetails({ name, namespace }) {
       resourceName={t('extensibility.title')}
       resourceType="ConfigMaps"
       resourceUrl={resourceUrl}
-      layoutCloseUrl={clusterUrl('busolaextensions')}
+      layoutCloseCreateUrl={clusterUrl('busolaextensions')}
       breadcrumbs={[
         {
           name: t('extensibility.title'),

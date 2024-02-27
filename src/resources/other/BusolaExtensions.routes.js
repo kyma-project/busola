@@ -70,7 +70,10 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
     );
   } else {
     startColumnComponent = (
-      <BusolaExtensionList enableColumnLayout={isColumnLeyoutEnabled} />
+      <BusolaExtensionList
+        enableColumnLayout={isColumnLeyoutEnabled}
+        layoutCloseCreateUrl={clusterUrl('busolaextensions')}
+      />
     );
   }
 
@@ -80,7 +83,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
       <ResourceCreate
         title={elementCreateProps.resourceTitle}
         confirmText={t('common.buttons.create')}
-        layoutCloseUrl={clusterUrl('busolaextensions')}
+        layoutCloseCreateUrl={clusterUrl('busolaextensions')}
         renderForm={renderProps => {
           const createComponent = layoutState?.showCreate?.resourceType && (
             <BusolaExtensionCreate

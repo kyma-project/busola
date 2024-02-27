@@ -178,12 +178,10 @@ export function ResourceListRenderer({
   testid,
   omitColumnsIds = ['namespace'],
   customListActions = [],
-  createFormProps,
   pagination,
   loading,
   error,
   resources,
-  silentRefetch = () => {},
   resourceUrlPrefix,
   nameSelector = entry => entry?.metadata.name, // overriden for CRDGroupList
   disableCreate,
@@ -192,6 +190,7 @@ export function ResourceListRenderer({
   enableColumnLayout,
   columnLayout,
   customColumnLayout,
+  layoutCloseCreateUrl,
   layoutNumber = 'StartColumn',
   sortBy = {
     name: nameLocaleSort,
@@ -361,6 +360,7 @@ export function ResourceListRenderer({
     rowColumns.splice(nameColIndex + 1, 0, protectedResourceWarning(entry));
     return rowColumns;
   };
+
   const handleShowCreate = () => {
     setActiveResource(undefined);
     setLayoutColumn(
@@ -388,9 +388,9 @@ export function ResourceListRenderer({
     window.history.pushState(
       window.history.state,
       '',
-      `${window.location.pathname}${
-        layoutNumber === 'MidColumn' ? '?layout=TwoColumnsMidExpanded' : ''
-      }`,
+      `${
+        layoutCloseCreateUrl ? layoutCloseCreateUrl : window.location.pathname
+      }${layoutNumber === 'MidColumn' ? '?layout=TwoColumnsMidExpanded' : ''}`,
     );
   };
 

@@ -110,14 +110,16 @@ const ColumnWrapper = ({
     props.resourceType,
   ]);
 
-  const layoutCloseUrl = resourceListUrl({
+  const layoutCloseCreateUrl = resourceListUrl({
     kind: props.resourceType,
     metadata: {
       namespace: layoutState?.midColumn?.namespaceId ?? namespaceId,
     },
   });
 
-  const elementListProps = usePrepareListProps(props);
+  const elementListProps = usePrepareListProps({
+    ...props,
+  });
   const elementDetailsProps = usePrepareDetailsProps({
     ...props,
     resourceName: layoutState?.midColumn?.resourceName ?? resourceName,
@@ -130,6 +132,7 @@ const ColumnWrapper = ({
 
   const listComponent = React.cloneElement(list, {
     ...elementListProps,
+    layoutCloseCreateUrl,
     enableColumnLayout:
       elementListProps.resourceType !== 'Namespaces'
         ? isColumnLeyoutEnabled
@@ -157,7 +160,7 @@ const ColumnWrapper = ({
       <ResourceCreate
         title={elementCreateProps.resourceTitle}
         confirmText={t('common.buttons.create')}
-        layoutCloseUrl={layoutCloseUrl}
+        layoutCloseCreateUrl={layoutCloseCreateUrl}
         renderForm={renderProps => {
           const createComponent =
             create &&

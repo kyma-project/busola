@@ -18,7 +18,7 @@ export const ResourceCreate = ({
   invalidPopupMessage,
   className,
   isEdit,
-  layoutCloseUrl,
+  layoutCloseCreateUrl,
   layoutNumber = 'MidColumn',
   ...props
 }) => {
@@ -97,7 +97,7 @@ export const ResourceCreate = ({
         <DynamicPageComponent
           title={title}
           layoutNumber={layoutNumber}
-          layoutCloseUrl={`${layoutCloseUrl}${
+          layoutCloseUrl={`${layoutCloseCreateUrl}${
             layoutNumber === 'EndColumn' ? '?layout=TwoColumnsMidExpanded' : ''
           }`}
           footer={
@@ -142,7 +142,7 @@ ResourceCreate.propTypes = {
   button: CustomPropTypes.button,
   className: PropTypes.string,
   isEdit: PropTypes.bool,
-  layoutCloseUrl: PropTypes.bool,
+  layoutCloseCreateUrl: PropTypes.bool,
 };
 
 ResourceCreate.defaultProps = {

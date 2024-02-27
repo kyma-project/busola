@@ -15,6 +15,7 @@ export function CustomResources({
   omitColumnsIds,
   hideCreateOption,
   enableColumnLayout,
+  layoutCloseCreateUrl,
 }) {
   const { group, names } = crd.spec;
   const name = names.plural;
@@ -89,6 +90,7 @@ export function CustomResources({
     },
     namespace,
     enableColumnLayout: enableColumnLayout,
+    layoutCloseCreateUrl: layoutCloseCreateUrl,
     columnLayout: 'ThreeColumnsEndExpanded',
     customColumnLayout,
     layoutNumber: 'MidColumn',
