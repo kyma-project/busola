@@ -175,6 +175,8 @@ export function ResourceForm({
               isAdvanced={true}
               validationRef={validationRef}
             >
+              {presetsSelector}
+
               {!disableDefaultFields && (
                 <>
                   <K8sNameField
@@ -210,8 +212,6 @@ export function ResourceForm({
 
   return (
     <section className={classnames('resource-form', className)}>
-      {presetsSelector}
-
       <Card style={spacing.sapUiSmallMarginTopBottom}>
         <UI5Panel
           key={`edit-panel-${singularName}`}
