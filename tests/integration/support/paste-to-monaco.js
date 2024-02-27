@@ -12,7 +12,7 @@ Cypress.Commands.add(
 Cypress.Commands.add(
   'pasteToMonaco',
   { prevSubject: false },
-  (content, monacoCount = 0) => {
+  (content, monacoCount) => {
     // Ignore Cypress issue with Monaco on CI
     cy.handleExceptions();
 

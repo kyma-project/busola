@@ -70,6 +70,8 @@ Cypress.Commands.add('goToNamespaceDetails', () => {
 });
 
 Cypress.Commands.add('clearInput', { prevSubject: true }, element => {
+  cy.wait(500);
+
   return cy
     .wrap(element)
     .click()
