@@ -361,46 +361,45 @@ export function ResourceListRenderer({
     rowColumns.splice(nameColIndex + 1, 0, protectedResourceWarning(entry));
     return rowColumns;
   };
+  const handleShowCreate = () => {
+    setActiveResource(undefined);
+    setLayoutColumn(
+      layoutNumber === 'MidColumn' && enableColumnLayout
+        ? {
+            midColumn: layoutState?.midColumn,
+            endColumn: null,
+            showCreate: {
+              resourceType: resourceType,
+              namespaceId: namespace,
+            },
+            layout: 'ThreeColumnsEndExpanded',
+          }
+        : {
+            midColumn: null,
+            endColumn: null,
+            showCreate: {
+              resourceType: resourceType,
+              namespaceId: namespace,
+            },
+            layout: 'TwoColumnsMidExpanded',
+          },
+    );
+
+    window.history.pushState(
+      window.history.state,
+      '',
+      `${window.location.pathname}${
+        layoutNumber === 'MidColumn' ? '?layout=TwoColumnsMidExpanded' : ''
+      }`,
+    );
+  };
 
   const extraHeaderContent = listHeaderActions || [
     CreateResourceForm && !disableCreate && !isNamespaceAll && (
       <Button
         data-testid={`create-${resourceType}`}
         design="Emphasized"
-        onClick={() => {
-          setActiveResource(undefined);
-          setLayoutColumn(
-            layoutNumber === 'MidColumn' && enableColumnLayout
-              ? {
-                  midColumn: layoutState?.midColumn,
-                  endColumn: null,
-                  showCreate: {
-                    resourceType: resourceType,
-                    namespaceId: namespace,
-                  },
-                  layout: 'ThreeColumnsEndExpanded',
-                }
-              : {
-                  midColumn: null,
-                  endColumn: null,
-                  showCreate: {
-                    resourceType: resourceType,
-                    namespaceId: namespace,
-                  },
-                  layout: 'TwoColumnsMidExpanded',
-                },
-          );
-
-          window.history.pushState(
-            window.history.state,
-            '',
-            `${window.location.pathname}${
-              layoutNumber === 'MidColumn'
-                ? '?layout=TwoColumnsMidExpanded'
-                : ''
-            }`,
-          );
-        }}
+        onClick={handleShowCreate}
       >
         {createActionLabel || t('components.resources-list.create')}
       </Button>
@@ -480,9 +479,7 @@ export function ResourceListRenderer({
             titleText: `${t('common.labels.no')} ${processTitle(
               prettifyNamePlural(resourceTitle, resourceType),
             )}`,
-            onClick: () => {
-              setActiveResource(undefined);
-            },
+            onClick: handleShowCreate,
             showButton: !disableCreate && namespace !== '-all-',
             ...emptyListProps,
           }}
