@@ -18,7 +18,10 @@ Cypress.Commands.add(
 
     cy.findMonaco(monacoCount)
       .click()
-      .clearInput()
+      .clearInput();
+
+    cy.findMonaco(monacoCount)
+      .click()
       .paste({ pastePayload: content });
   },
 );
