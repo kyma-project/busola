@@ -105,12 +105,12 @@ export const usePrepareCreateProps = ({
   return {
     resourceUrl,
     resourceType: resourceCustomType || pluralize(resourceType || ''),
-    resourceTitle: t('components.resources-list.create', {
-      resourceType: prettifyNameSingular(
-        '',
-        resourceTypeForTitle ?? resourceCustomType ?? resourceType,
-      ),
-    }),
+    resourceTitle: `${t(
+      'components.resources-list.create',
+    )} ${prettifyNameSingular(
+      '',
+      resourceTypeForTitle ?? resourceCustomType ?? resourceType,
+    )}`,
     namespace: namespaceId,
     i18n,
   };
