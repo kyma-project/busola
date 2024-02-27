@@ -12,6 +12,8 @@ export function EventsList({
     : '/api/v1/events';
 
   const eventsParams = {
+    disableHiding: true,
+    displayArrow: false,
     namespace: namespace,
     resourceUrl: resourceUrl,
     resourceType: 'Events',

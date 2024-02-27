@@ -8,3 +8,4 @@ import './inspect-list';
 import './createNamespace';
 import './loadFile';
 import './mockConfig';
+require('cypress-plugin-tab');

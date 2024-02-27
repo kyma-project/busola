@@ -29,7 +29,7 @@ context('Test reduced permissions', () => {
   it('Create Cluster Role with reduced permissions', () => {
     cy.navigateTo('Configuration', 'Cluster Roles');
 
-    cy.contains('ui5-button', 'Create Cluster Role').click();
+    cy.contains('ui5-button', 'Create').click();
 
     cy.get('[aria-label="ClusterRole name"]:visible')
       .find('input')
@@ -82,7 +82,7 @@ context('Test reduced permissions', () => {
 
     cy.navigateTo('Configuration', 'Service Accounts');
 
-    cy.contains('ui5-button', 'Create Service Account').click();
+    cy.contains('ui5-button', 'Create').click();
 
     cy.get('[aria-label="ServiceAccount name"]:visible')
       .find('input')
@@ -98,7 +98,7 @@ context('Test reduced permissions', () => {
   it('Create a ClusterRoleBinding for SA and CR', () => {
     cy.navigateTo('Back To Cluster Details', 'Cluster Role Bindings');
 
-    cy.contains('ui5-button', 'Create Cluster Role Binding').click();
+    cy.contains('ui5-button', 'Create').click();
 
     // subject type - select it first so the list starts loading
     cy.get('ui5-dialog')
@@ -150,7 +150,7 @@ context('Test reduced permissions', () => {
       .contains('Service Accounts')
       .click();
 
-    cy.contains('ui5-link', SA_NAME).click();
+    cy.clickGenericListLink(SA_NAME);
 
     cy.getMidColumn()
       .find('ui5-button[aria-label="full-screen"]')

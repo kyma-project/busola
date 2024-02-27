@@ -5,7 +5,7 @@ Cypress.Commands.add('createNamespace', namespaceName => {
     .contains('Namespaces')
     .click();
 
-  cy.contains('ui5-button', 'Create Namespace').click();
+  cy.contains('ui5-button', 'Create').click();
 
   cy.contains('Simple').click();
 

@@ -16,7 +16,7 @@ export function HelmReleaseData({ encodedRelease, simpleHeader }) {
     return (
       <UI5Panel
         title={t('helm-releases.messages.cannot-decode')}
-        key="helm-release-data"
+        keyComponent="helm-release-data"
       />
     );
   }

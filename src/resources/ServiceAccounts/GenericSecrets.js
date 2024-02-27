@@ -37,6 +37,8 @@ export const GenericSecrets = ({
   return (
     <SecretList
       {...{
+        displayArrow: false,
+        disableHiding: true,
         name: title,
         hasDetailsView: true,
         resourceUrl: secretsUrl,

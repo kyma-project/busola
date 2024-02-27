@@ -14,9 +14,10 @@ context('Test Events', () => {
       .contains('Events')
       .click();
 
-    cy.get('ui5-table-cell ui5-link')
+    cy.get('ui5-table-row')
+      .find('ui5-table-cell')
       .first()
-      .click({ force: true });
+      .click();
   });
 
   it('Check details', () => {

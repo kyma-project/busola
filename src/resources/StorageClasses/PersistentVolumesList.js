@@ -4,6 +4,8 @@ import PersistentVolumesListComponent from 'resources/PersistentVolumes/Persiste
 
 export function PersistentVolumesList(storageclass) {
   const params = {
+    disableHiding: true,
+    displayArrow: false,
     hasDetailsView: true,
     resourceUrl: `/api/v1/persistentvolumes`,
     resourceType: 'PersistentVolumes',

@@ -15,7 +15,7 @@ context('Test Deployments', () => {
   it('Create a Deployment', () => {
     cy.navigateTo('Workloads', 'Deployments');
 
-    cy.contains('ui5-button', 'Create Deployment').click();
+    cy.contains('ui5-button', 'Create').click();
 
     cy.get('[aria-label="Deployment name"]:visible')
       .find('input')
@@ -104,13 +104,15 @@ context('Test Deployments', () => {
       .contains('Deployments')
       .click();
 
-    cy.contains('ui5-link', DEPLOYMENT_NAME).click();
+    cy.clickGenericListLink(DEPLOYMENT_NAME);
 
     cy.getMidColumn()
       .get('[data-testid="has-tooltip"]')
       .contains('span', '1 / 1', {
         timeout: 60 * 1000,
       });
+    cy.wait(1000);
+
     cy.wait(1000);
 
     cy.get('ui5-button')

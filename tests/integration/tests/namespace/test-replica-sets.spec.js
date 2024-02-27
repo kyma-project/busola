@@ -18,7 +18,7 @@ context('Test Replica Sets', () => {
   it('Creates a Replica Set', () => {
     cy.navigateTo('Workloads', 'Replica Sets');
 
-    cy.contains('ui5-button', 'Create Replica Set').click();
+    cy.contains('ui5-button', 'Create').click();
 
     cy.contains('Advanced').click();
 
@@ -56,7 +56,7 @@ context('Test Replica Sets', () => {
 
     cy.contains('Always');
 
-    cy.contains(`Image${DOCKER_IMAGE_TAG}`);
+    cy.contains(`${DOCKER_IMAGE_TAG}`);
   });
 
   it('Checks the list view', () => {
@@ -64,7 +64,7 @@ context('Test Replica Sets', () => {
       .contains('Replica Sets')
       .click();
 
-    cy.contains('ui5-link', REPLICA_SET_NAME).click();
+    cy.clickGenericListLink(REPLICA_SET_NAME);
 
     cy.getMidColumn().contains(REPLICA_SET_NAME);
   });

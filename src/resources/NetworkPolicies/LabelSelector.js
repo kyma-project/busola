@@ -16,7 +16,7 @@ export const LabelSelector = ({ selector, title }) => {
     return (
       <UI5Panel
         title={title || t('network-policies.headers.pod-selector')}
-        key="policy-types"
+        keyComponent="policy-types"
       >
         <LayoutPanelRow
           name={t('network-policies.headers.match-labels')}
@@ -63,7 +63,7 @@ export const LabelSelector = ({ selector, title }) => {
   return (
     <UI5Panel
       title={title || t('network-policies.headers.pod-selector')}
-      key="policy-types"
+      keyComponent="policy-types"
     >
       {t('network-policies.present-but-empty')}
     </UI5Panel>

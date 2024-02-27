@@ -1,4 +1,3 @@
-import React from 'react';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
 
@@ -119,6 +118,7 @@ export const ExtensibilityListCore = ({
     <ResourcesList
       {...listProps}
       {...props}
+      displayLabelForLabels
       disableCreate={disableCreate}
       disableEdit={disableEdit}
       disableDelete={disableDelete}
