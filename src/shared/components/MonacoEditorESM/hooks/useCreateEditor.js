@@ -7,9 +7,9 @@ import { themeState } from 'state/preferences/themeAtom';
 
 export const getEditorTheme = theme => {
   switch (theme) {
-    case 'dark':
+    case 'sap_horizon_dark':
       return 'vs-dark';
-    case 'hcb':
+    case 'sap_horizon_hcb':
       return 'hc-black';
     case 'light_dark':
       return window.matchMedia &&
