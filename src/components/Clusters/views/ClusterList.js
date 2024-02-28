@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@ui5/webcomponents-react';
-import { Link } from 'react-router-dom';
 
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 
@@ -29,6 +28,7 @@ import './ClusterList.scss';
 import { useSetRecoilState } from 'recoil';
 import { showAddClusterWizard } from 'state/showAddClusterWizard';
 import { EmptyListComponent } from 'shared/components/EmptyListComponent/EmptyListComponent';
+import { Link } from 'shared/components/Link/Link';
 
 function ClusterList() {
   const gardenerLoginFeature = useFeature('GARDENER_LOGIN');
@@ -52,11 +52,11 @@ function ClusterList() {
 
   const { clusters, currentCluster } = clustersInfo;
 
-  const styleActiveCluster = entry => {
+  const isClusterActive = entry => {
     return entry?.kubeconfig?.['current-context'] ===
       currentCluster?.contextName
-      ? { fontWeight: 'bolder' }
-      : {};
+      ? true
+      : false;
   };
 
   const downloadKubeconfig = entry => {
@@ -99,9 +99,9 @@ function ClusterList() {
 
   const rowRenderer = entry => [
     <Link
-      className="bsl-link"
-      to={`/cluster/${entry.contextName}`}
-      style={styleActiveCluster(entry)}
+      design={isClusterActive(entry) ? 'Emphasized' : 'Default'}
+      url={`/cluster/${entry.contextName}`}
+      resetLayout={false}
     >
       {entry.name}
     </Link>,
