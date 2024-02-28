@@ -187,8 +187,8 @@ const ColumnWrapper = ({
       layout={
         !midColumnComponent ? 'OneColumn' : layoutState?.layout || 'OneColumn'
       }
-      startColumn={<div slot="">{startColumnComponent}</div>}
-      midColumn={<div slot="">{midColumnComponent}</div>}
+      startColumn={<div>{startColumnComponent}</div>}
+      midColumn={<div>{midColumnComponent}</div>}
     />
   );
 };

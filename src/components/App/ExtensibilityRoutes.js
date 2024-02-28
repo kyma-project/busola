@@ -21,7 +21,7 @@ const Details = React.lazy(() =>
 );
 const Create = React.lazy(() => import('../Extensibility/ExtensibilityCreate'));
 
-const ColumnWrapper = ({ defaultColumn = 'list', resourceType, cr }) => {
+const ColumnWrapper = ({ defaultColumn = 'list', resourceType, extension }) => {
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const [searchParams] = useSearchParams();
@@ -73,8 +73,8 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType, cr }) => {
 
   const elementCreateProps = usePrepareCreateProps({
     resourceType,
-    apiGroup: cr?.general.resource.group,
-    apiVersion: cr?.general.resource.version,
+    apiGroup: extension?.general.resource.group,
+    apiVersion: extension?.general.resource.version,
   });
 
   let midColumnComponent = null;
@@ -87,7 +87,7 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType, cr }) => {
         renderForm={renderProps => {
           const createComponent = layoutState?.showCreate?.resourceType && (
             <Create
-              resourceSchema={cr}
+              resourceSchema={extension}
               layoutNumber="StartColumn"
               {...elementCreateProps}
               {...renderProps}
@@ -115,22 +115,22 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType, cr }) => {
       layout={
         !midColumnComponent ? 'OneColumn' : layoutState?.layout || 'OneColumn'
       }
-      startColumn={<div slot="">{startColumnComponent}</div>}
-      midColumn={<div slot="">{midColumnComponent}</div>}
+      startColumn={<div>{startColumnComponent}</div>}
+      midColumn={<div>{midColumnComponent}</div>}
     />
   );
 };
 
-export const createExtensibilityRoutes = (cr, language, ...props) => {
+export const createExtensibilityRoutes = (extension, language, ...props) => {
   const urlPath =
-    cr?.general?.urlPath ||
-    pluralize(cr?.general?.resource?.kind?.toLowerCase() || '');
+    extension?.general?.urlPath ||
+    pluralize(extension?.general?.resource?.kind?.toLowerCase() || '');
 
   const translationBundle = urlPath || 'extensibility';
   i18next.addResourceBundle(
     language,
     translationBundle,
-    cr?.translations?.[language] || {},
+    extension?.translations?.[language] || {},
   );
 
   return (
@@ -140,11 +140,11 @@ export const createExtensibilityRoutes = (cr, language, ...props) => {
         exact
         element={
           <Suspense fallback={<Spinner />}>
-            <ColumnWrapper resourceType={urlPath} cr={cr} />
+            <ColumnWrapper resourceType={urlPath} extension={extension} />
           </Suspense>
         }
       />
-      {cr.details && (
+      {extension.details && (
         <Route
           path={`${urlPath}/:resourceName`}
           exact

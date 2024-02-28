@@ -15,7 +15,6 @@ function CRCreate({
   crd,
   layoutNumber,
   resource: initialCustomResource,
-  ...props
 }) {
   const [cr, setCr] = useState(
     cloneDeep(initialCustomResource) || createTemplate(crd),
