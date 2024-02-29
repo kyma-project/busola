@@ -1,8 +1,8 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense } from 'react';
 import pluralize from 'pluralize';
 import i18next from 'i18next';
-import { Route, useParams, useSearchParams } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { Route, useParams } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
@@ -15,30 +15,10 @@ const Details = React.lazy(() =>
   import('../Extensibility/ExtensibilityDetails'),
 );
 
-const ColumnWrapper = ({ defaultColumn = 'list', resourceType }) => {
+const ColumnWrapper = ({ defaultColumn = 'list' }) => {
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   const { namespaceId, resourceName } = useParams();
-  const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const [searchParams] = useSearchParams();
-  const layout = searchParams.get('layout');
-
-  const initialLayoutState = layout
-    ? {
-        layout: layout,
-        midColumn: {
-          resourceName: resourceName,
-          resourceType: resourceType,
-          namespaceId: namespaceId,
-        },
-        endColumn: null,
-      }
-    : null;
-
-  useEffect(() => {
-    if (layout) {
-      setLayoutColumn(initialLayoutState);
-    }
-  }, [layout, namespaceId, resourceName, resourceType]); // eslint-disable-line react-hooks/exhaustive-deps
+  const layoutState = useRecoilValue(columnLayoutState);
 
   if (!isColumnLeyoutEnabled && defaultColumn === 'details') {
     return (
@@ -54,26 +34,16 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType }) => {
       layout={layoutState?.layout || 'OneColumn'}
       startColumn={
         <div slot="">
-          {(layout || defaultColumn === 'list') && (
-            <List enableColumnLayout={isColumnLeyoutEnabled} />
-          )}
-          {!layout && defaultColumn === 'details' && (
-            <Details
-              customResourceName={layoutState?.midColumn?.resourceName}
-              customNamespaceId={layoutState.midColumn?.namespaceId}
-            />
-          )}
+          <List enableColumnLayout={isColumnLeyoutEnabled} />
         </div>
       }
       midColumn={
-        layoutState?.midColumn && (
-          <div slot="">
-            <Details
-              customResourceName={layoutState?.midColumn?.resourceName}
-              customNamespaceId={layoutState.midColumn?.namespaceId}
-            />
-          </div>
-        )
+        <div slot="">
+          <Details
+            customResourceName={layoutState?.midColumn?.resourceName}
+            customNamespaceId={layoutState.midColumn?.namespaceId}
+          />
+        </div>
       }
     />
   );
