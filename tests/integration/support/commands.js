@@ -70,11 +70,9 @@ Cypress.Commands.add('goToNamespaceDetails', () => {
 });
 
 Cypress.Commands.add('clearInput', { prevSubject: true }, element => {
-  cy.wait(500);
-
   return cy
     .wrap(element)
-    .click()
+
     .type(
       `${Cypress.platform === 'darwin' ? '{cmd}a' : '{ctrl}a'} {backspace}`,
     );
@@ -107,7 +105,7 @@ Cypress.Commands.add(
 function paste(subject, { pastePayload }) {
   // https://developer.mozilla.org/en-US/docs/Web/API/Element/paste_event
   const pasteEvent = Object.assign(
-    new Event('paste', { bubbles: true, cancelable: true }),
+    new Event('paste', { bubbles: true, cancelable: false }),
     {
       clipboardData: {
         getData: (type = 'text') => pastePayload,
