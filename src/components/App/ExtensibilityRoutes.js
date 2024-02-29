@@ -15,7 +15,7 @@ const Details = React.lazy(() =>
   import('../Extensibility/ExtensibilityDetails'),
 );
 
-const ColumnWrapper = ({ defaultColumn = 'list', resourceType }) => {
+const ColumnWrapper = ({ defaultColumn = 'list', resourceType, extension }) => {
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   const { namespaceId, resourceName } = useParams();
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
@@ -24,7 +24,7 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType }) => {
 
   const initialLayoutState = layout
     ? {
-        layout: layout,
+        layout: isColumnLeyoutEnabled && layout ? layout : layoutState?.layout,
         midColumn: {
           resourceName: resourceName,
           resourceType: resourceType,
@@ -35,46 +35,40 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType }) => {
     : null;
 
   useEffect(() => {
-    if (layout) {
+    if (layout && resourceName && resourceType) {
       setLayoutColumn(initialLayoutState);
     }
-  }, [layout, namespaceId, resourceName, resourceType]); // eslint-disable-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [layout, isColumnLeyoutEnabled, namespaceId, resourceName, resourceType]);
 
-  if (!isColumnLeyoutEnabled && defaultColumn === 'details') {
-    return (
+  let startColumnComponent = null;
+  if ((!layout || !isColumnLeyoutEnabled) && defaultColumn === 'details') {
+    startColumnComponent = (
+      <Details resourceName={resourceName} namespaceId={namespaceId} />
+    );
+  } else {
+    startColumnComponent = <List enableColumnLayout={isColumnLeyoutEnabled} />;
+  }
+
+  let midColumnComponent = null;
+
+  if (layoutState?.midColumn) {
+    midColumnComponent = (
       <Details
-        customResourceName={resourceName}
-        customNamespaceId={namespaceId}
+        resourceName={layoutState?.midColumn?.resourceName ?? resourceName}
+        namespaceId={layoutState.midColumn?.namespaceId ?? namespaceId}
       />
     );
   }
+
   return (
     <FlexibleColumnLayout
       style={{ height: '100%' }}
-      layout={layoutState?.layout || 'OneColumn'}
-      startColumn={
-        <div slot="">
-          {(layout || defaultColumn === 'list') && (
-            <List enableColumnLayout={isColumnLeyoutEnabled} />
-          )}
-          {!layout && defaultColumn === 'details' && (
-            <Details
-              customResourceName={layoutState?.midColumn?.resourceName}
-              customNamespaceId={layoutState.midColumn?.namespaceId}
-            />
-          )}
-        </div>
+      layout={
+        !midColumnComponent ? 'OneColumn' : layoutState?.layout || 'OneColumn'
       }
-      midColumn={
-        layoutState?.midColumn && (
-          <div slot="">
-            <Details
-              customResourceName={layoutState?.midColumn?.resourceName}
-              customNamespaceId={layoutState.midColumn?.namespaceId}
-            />
-          </div>
-        )
-      }
+      startColumn={<div>{startColumnComponent}</div>}
+      midColumn={<div>{midColumnComponent}</div>}
     />
   );
 };
