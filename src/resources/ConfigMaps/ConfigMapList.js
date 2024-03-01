@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 
-import { ConfigMapCreate } from './ConfigMapCreate';
+import ConfigMapCreate from './ConfigMapCreate';
 
 import {
   ResourceDescription,

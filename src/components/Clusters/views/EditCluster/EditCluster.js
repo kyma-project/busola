@@ -39,9 +39,9 @@ export const ClusterDataForm = ({
   formElementRef,
   className = '',
   modeSelectorDisabled = false,
-  noAdvancedMode = false,
   initialMode,
-  yamlSearchHidden,
+  yamlSearchDisabled,
+  yamlHideDisabled,
 }) => {
   const { t } = useTranslation();
   const userIndex = getUserIndex(kubeconfig);
@@ -158,9 +158,9 @@ export const ClusterDataForm = ({
       autocompletionDisabled
       disableDefaultFields={true}
       modeSelectorDisabled={modeSelectorDisabled}
-      noAdvancedMode={noAdvancedMode}
       initialMode={initialMode}
-      yamlSearchHidden={yamlSearchHidden}
+      yamlSearchDisabled={yamlSearchDisabled}
+      yamlHideDisabled={yamlHideDisabled}
     >
       <div className={className}>
         <K8sNameField

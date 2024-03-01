@@ -4,7 +4,7 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { useRestartAction } from 'shared/hooks/useRestartResource';
 
-import { DeploymentCreate } from './DeploymentCreate';
+import DeploymentCreate from './DeploymentCreate';
 import { DeploymentStatus } from './DeploymentStatus';
 import {
   ResourceDescription,

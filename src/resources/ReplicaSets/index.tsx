@@ -19,6 +19,7 @@ export const ResourceDescription = (
 
 export const List = React.lazy(() => import('./ReplicaSetList'));
 export const Details = React.lazy(() => import('./ReplicaSetDetails'));
+export const Create = React.lazy(() => import('./ReplicaSetCreate'));
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowKind: true,

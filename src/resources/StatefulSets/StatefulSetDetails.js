@@ -5,7 +5,7 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import { Selector } from 'shared/components/Selector/Selector';
 import { HPASubcomponent } from 'resources/HorizontalPodAutoscalers/HPASubcomponent';
 import { StatefulSetPods } from './StatefulSetPods';
-import { StatefulSetCreate } from './StatefulSetCreate';
+import StatefulSetCreate from './StatefulSetCreate';
 import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 import { ResourceDescription } from 'resources/StatefulSets';
 

@@ -5,7 +5,7 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import SecretData from 'shared/components/Secret/SecretData';
 import { HelmReleaseData } from 'components/HelmReleases/HelmReleaseData';
 import { CertificateData } from './CertificateData';
-import { SecretCreate } from './SecretCreate';
+import SecretCreate from './SecretCreate';
 import { ResourceDescription } from 'resources/Secrets';
 
 function HelmReleaseDataWrapper(secret) {

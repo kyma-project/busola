@@ -5,7 +5,7 @@ import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { Labels } from 'shared/components/Labels/Labels';
 import { useRestartAction } from 'shared/hooks/useRestartResource';
 
-import { DaemonSetCreate } from './DaemonSetCreate';
+import DaemonSetCreate from './DaemonSetCreate';
 import { DaemonSetStatus } from './DaemonSetStatus';
 import {
   ResourceDescription,

@@ -4,9 +4,9 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { Link } from 'shared/components/Link/Link';
 import { useUrl } from 'hooks/useUrl';
 
-import { BusolaExtensionCreate } from './BusolaExtensionCreate';
+import BusolaExtensionCreate from './BusolaExtensionCreate';
 
-export function BusolaPluginList({ enableColumnLayout }) {
+export function BusolaPluginList({ enableColumnLayout, layoutCloseCreateUrl }) {
   const { t } = useTranslation();
   const { clusterUrl } = useUrl();
 
@@ -39,6 +39,7 @@ export function BusolaPluginList({ enableColumnLayout }) {
       resourceUrl="/api/v1/configmaps?labelSelector=busola.io/extension=resource"
       resourceUrlPrefix="/api/v1"
       hasDetailsView={true}
+      layoutCloseCreateUrl={layoutCloseCreateUrl}
       customUrl={extension =>
         clusterUrl(
           `busolaextensions/${extension.metadata.namespace}/${extension.metadata.name}`,

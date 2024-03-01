@@ -9,7 +9,7 @@ import { filterByResource } from 'hooks/useMessageList';
 import { Selector } from 'shared/components/Selector/Selector';
 import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 
-import { JobCreate } from './JobCreate';
+import JobCreate from './JobCreate';
 import { JobCompletions } from './JobCompletions';
 import { JobConditions } from './JobConditions';
 import { ResourceDescription } from 'resources/Jobs';

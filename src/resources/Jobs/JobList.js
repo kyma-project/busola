@@ -4,7 +4,7 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 
 import { JobCompletions } from './JobCompletions';
-import { JobCreate } from './JobCreate';
+import JobCreate from './JobCreate';
 import {
   ResourceDescription,
   i18nDescriptionKey,

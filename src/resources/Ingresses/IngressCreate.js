@@ -5,7 +5,7 @@ import { createIngressTemplate } from './templates';
 import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
-export function IngressCreate({
+export default function IngressCreate({
   formElementRef,
   onChange,
   setCustomValid,

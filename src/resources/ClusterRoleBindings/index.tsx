@@ -19,6 +19,7 @@ export const ResourceDescription = (
 
 export const List = React.lazy(() => import('./ClusterRoleBindingList'));
 export const Details = React.lazy(() => import('./ClusterRoleBindingDetails'));
+export const Create = React.lazy(() => import('./ClusterRoleBindingCreate'));
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   relations: [

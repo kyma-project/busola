@@ -28,7 +28,7 @@ import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
-import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
+import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 import { useVersionWarning } from 'hooks/useVersionWarning';
 import { useUrl } from 'hooks/useUrl';
 
@@ -76,7 +76,7 @@ ResourceDetails.propTypes = {
   resourceSchema: PropTypes.object,
   disableEdit: PropTypes.bool,
   disableDelete: PropTypes.bool,
-  layoutCloseUrl: PropTypes.string,
+  layoutCloseCreateUrl: PropTypes.string,
   layoutNumber: PropTypes.string,
 };
 
@@ -161,7 +161,7 @@ function ResourceDetailsRenderer(props) {
 
 function Resource({
   layoutNumber,
-  layoutCloseUrl,
+  layoutCloseCreateUrl,
   breadcrumbs,
   children,
   createResourceForm: CreateResourceForm,
@@ -196,7 +196,6 @@ function Resource({
     resourceTitle,
     resource.kind,
   );
-  const [toggleFormFn, getToggleFormFn] = useState(() => {});
   const [showTitleDescription, setShowTitleDescription] = useState(false);
 
   const pluralizedResourceKind = pluralize(prettifiedResourceKind);
@@ -251,44 +250,6 @@ function Resource({
         <Button onClick={() => openYaml(resource)} design="Emphasized">
           {t('common.buttons.edit-yaml')}
         </Button>
-      );
-    } else {
-      return (
-        <ModalWithForm
-          getToggleFormFn={getToggleFormFn}
-          title={
-            editActionLabel ||
-            t('components.resource-details.edit', {
-              resourceType: prettifiedResourceKind,
-            })
-          }
-          modalOpeningComponent={
-            <Button design="Emphasized">
-              {editActionLabel ||
-                t('components.resource-details.edit', {
-                  resourceType: prettifiedResourceKind,
-                })}
-            </Button>
-          }
-          confirmText={t('common.buttons.update')}
-          id={`edit-${resourceType}-modal`}
-          className="modal-size--l"
-          renderForm={props => (
-            <ErrorBoundary>
-              <CreateResourceForm
-                resource={resource}
-                resourceType={resourceType}
-                resourceUrl={resourceUrl}
-                namespace={namespace}
-                refetchList={silentRefetch}
-                toggleFormFn={toggleFormFn}
-                resourceSchema={resourceSchema}
-                editMode={true}
-                {...props}
-              />
-            </ErrorBoundary>
-          )}
-        />
       );
     }
   };
@@ -485,7 +446,7 @@ function Resource({
     <ResourceDetailContext.Provider value={true}>
       <DynamicPageComponent
         layoutNumber={layoutNumber ?? 'MidColumn'}
-        layoutCloseUrl={layoutCloseUrl}
+        layoutCloseUrl={layoutCloseCreateUrl}
         title={resource.metadata.name}
         actions={actions}
         breadcrumbItems={breadcrumbItems}
@@ -548,6 +509,31 @@ function Resource({
             </Suspense>
           </>
         }
+        inlineEditForm={() => (
+          <ResourceCreate
+            title={
+              editActionLabel ||
+              t('components.resource-details.edit', {
+                resourceType: prettifiedResourceKind,
+              })
+            }
+            isEdit={true}
+            confirmText={t('common.buttons.save')}
+            renderForm={props => (
+              <ErrorBoundary>
+                <CreateResourceForm
+                  resource={resource}
+                  resourceType={resourceType}
+                  resourceUrl={resourceUrl}
+                  namespace={namespace}
+                  resourceSchema={resourceSchema}
+                  editMode={true}
+                  {...props}
+                />
+              </ErrorBoundary>
+            )}
+          />
+        )}
       >
         {createPortal(<YamlUploadDialog />, document.body)}
       </DynamicPageComponent>

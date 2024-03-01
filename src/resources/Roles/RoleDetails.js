@@ -1,7 +1,7 @@
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 
 import { Rules } from './Rules';
-import { RoleCreate } from './RoleCreate';
+import RoleCreate from './RoleCreate';
 import { ResourceDescription } from 'resources/Roles';
 
 export function RoleDetails(props) {

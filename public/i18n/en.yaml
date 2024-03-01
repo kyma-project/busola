@@ -278,10 +278,10 @@ common:
       patch-failure: 'Failed to update the {{resourceType}}: {{error}}.'
       patch-success: '{{resourceType}} updated'
     modes:
-      advanced: Advanced
-      simple: Simple
-      ui-form: Form
+      form: Form
+      yaml: YAML
     object-required: An object is required
+    template: Template
   delete-dialog:
     delete-confirm: Don't ask again
     information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.

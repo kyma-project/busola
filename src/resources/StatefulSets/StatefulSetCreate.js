@@ -7,7 +7,7 @@ import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 import { createStatefulSetTemplate } from './templates';
 
-export function StatefulSetCreate({
+export default function StatefulSetCreate({
   formElementRef,
   onChange,
   setCustomValid,

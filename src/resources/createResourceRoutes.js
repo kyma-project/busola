@@ -1,13 +1,22 @@
-import React, { Suspense, useEffect } from 'react';
-import { useRecoilValue, useRecoilState } from 'recoil';
-import { Route, useSearchParams } from 'react-router-dom';
+import React, { Suspense, useEffect, useMemo } from 'react';
+
+import { useRecoilState } from 'recoil';
+import { Route, useSearchParams, useParams } from 'react-router-dom';
 import pluralize from 'pluralize';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
+import { useTranslation } from 'react-i18next';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { usePrepareDetailsProps, usePrepareListProps } from './helpers';
+import {
+  usePrepareCreateProps,
+  usePrepareDetailsProps,
+  usePrepareListProps,
+} from './helpers';
+import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
+import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
+import { useUrl } from 'hooks/useUrl';
 
 import { useFeature } from 'hooks/useFeature';
 
@@ -47,19 +56,83 @@ export const createKubernetesUrl = ({
   return `${apiPrefix}${apiGroup}/${apiVersion}/${namespaceSegment}${resourceType}/${details}`;
 };
 
-const ListWrapper = ({ children, details, ...props }) => {
+const ColumnWrapper = ({
+  defaultColumn = 'list',
+  list,
+  details,
+  create,
+  ...props
+}) => {
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
-  const layoutState = useRecoilValue(columnLayoutState);
+  const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
+  const [searchParams] = useSearchParams();
+  const layout = searchParams.get('layout');
+  const { resourceListUrl } = useUrl();
 
-  const elementListProps = usePrepareListProps(props);
-  const elementDetailsProps = usePrepareDetailsProps({
-    ...props,
-    customResourceName: layoutState?.midColumn?.resourceName,
-    customNamespaceId: layoutState.midColumn?.namespaceId,
+  const { t } = useTranslation();
+
+  const {
+    resourceName: resourceNameFromParams,
+    namespaceId: namespaceIdFromParams,
+  } = useParams();
+
+  const resourceName = useMemo(
+    () => props.resourceName ?? resourceNameFromParams,
+    [props.resourceName, resourceNameFromParams],
+  );
+  const namespaceId = useMemo(
+    () => props.namespaceId ?? namespaceIdFromParams,
+    [props.namespaceId, namespaceIdFromParams],
+  );
+
+  const initialLayoutState = layout
+    ? {
+        layout: isColumnLeyoutEnabled && layout ? layout : layoutState?.layout,
+        midColumn: {
+          resourceName: resourceName,
+          resourceType: props.resourceType,
+          namespaceId: namespaceId,
+        },
+        endColumn: null,
+      }
+    : null;
+
+  useEffect(() => {
+    if (layout && resourceName && props.resourceType) {
+      setLayoutColumn(initialLayoutState);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    layout,
+    isColumnLeyoutEnabled,
+    namespaceId,
+    resourceName,
+    props.resourceType,
+  ]);
+
+  const layoutCloseCreateUrl = resourceListUrl({
+    kind: props.resourceType,
+    metadata: {
+      namespace: layoutState?.midColumn?.namespaceId ?? namespaceId,
+    },
   });
 
-  const listComponent = React.cloneElement(children, {
+  const elementListProps = usePrepareListProps({
+    ...props,
+  });
+  const elementDetailsProps = usePrepareDetailsProps({
+    ...props,
+    resourceName: layoutState?.midColumn?.resourceName ?? resourceName,
+    namespaceId: layoutState?.midColumn?.namespaceId ?? namespaceId,
+  });
+
+  const elementCreateProps = usePrepareCreateProps({
+    ...props,
+  });
+
+  const listComponent = React.cloneElement(list, {
     ...elementListProps,
+    layoutCloseCreateUrl,
     enableColumnLayout:
       elementListProps.resourceType !== 'Namespaces'
         ? isColumnLeyoutEnabled
@@ -69,78 +142,61 @@ const ListWrapper = ({ children, details, ...props }) => {
     ...elementDetailsProps,
   });
 
-  return (
-    <FlexibleColumnLayout
-      style={{ height: '100%' }}
-      layout={layoutState?.layout || 'OneColumn'}
-      startColumn={<div slot="">{listComponent}</div>}
-      midColumn={<div slot="">{detailsComponent}</div>}
-    />
-  );
-};
+  let startColumnComponent = null;
 
-const DetailsWrapper = ({ children, list, ...props }) => {
-  const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
-  const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
+  if ((!layout || !isColumnLeyoutEnabled) && defaultColumn === 'details') {
+    startColumnComponent = detailsComponent;
+  } else {
+    startColumnComponent = listComponent;
+  }
 
-  const [searchParams] = useSearchParams();
-  const layout = searchParams.get('layout');
-
-  const initialLayoutState = layout
-    ? {
-        layout: isColumnLeyoutEnabled ? layout : 'OneColumn',
-        midColumn: {
-          resourceName: props.resourceName,
-          resourceType: props.resourceType,
-          namespaceId: props.namespaceId,
-        },
-        endColumn: null,
-      }
-    : null;
-
-  useEffect(() => {
-    if (layout && props.resourceName && props.resourceType) {
-      setLayoutColumn(initialLayoutState);
-    }
-  }, [layout, props.resourceName, props.resourceType, props.namespaceId]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const elementListProps = usePrepareListProps({
-    ...props,
-    hasDetailsView: true,
-  });
-  const elementDetailsProps = usePrepareDetailsProps({
-    ...props,
-    customResourceName: layoutState?.midColumn?.resourceName,
-    customNamespaceId: layoutState.midColumn?.namespaceId,
-  });
-
-  const listComponent = React.cloneElement(list, {
-    ...elementListProps,
-    enableColumnLayout:
-      elementListProps.resourceType !== 'Namespaces'
-        ? isColumnLeyoutEnabled
-        : false,
-  });
-  const detailsComponent = React.cloneElement(children, {
-    ...elementDetailsProps,
-  });
-
-  if (layout && isColumnLeyoutEnabled) {
-    return (
-      <FlexibleColumnLayout
-        style={{ height: '100%' }}
-        layout={layoutState?.layout || 'OneColumn'}
-        startColumn={<div slot="">{listComponent}</div>}
-        midColumn={<div slot="">{detailsComponent}</div>}
+  let midColumnComponent = null;
+  if (
+    layoutState?.showCreate?.resourceType &&
+    create &&
+    create?.type !== null
+  ) {
+    midColumnComponent = (
+      <ResourceCreate
+        title={elementCreateProps.resourceTitle}
+        confirmText={t('common.buttons.create')}
+        layoutCloseCreateUrl={layoutCloseCreateUrl}
+        renderForm={renderProps => {
+          const createComponent =
+            create &&
+            create?.type !== null &&
+            layoutState?.showCreate?.resourceType &&
+            React.cloneElement(create, {
+              ...elementCreateProps,
+              ...renderProps,
+              enableColumnLayout: true,
+              layoutNumber: 'StartColumn', // For ResourceCreate we want to set layoutNumber to previous column so detail are opened instead of create
+            });
+          return <ErrorBoundary>{createComponent}</ErrorBoundary>;
+        }}
       />
     );
   }
-  if (!layout || !isColumnLeyoutEnabled) return detailsComponent;
+  if (!layoutState?.showCreate && layoutState?.midColumn) {
+    midColumnComponent = detailsComponent;
+  }
+
+  return (
+    <FlexibleColumnLayout
+      style={{ height: '100%' }}
+      layout={
+        !midColumnComponent ? 'OneColumn' : layoutState?.layout || 'OneColumn'
+      }
+      startColumn={<div>{startColumnComponent}</div>}
+      midColumn={<div>{midColumnComponent}</div>}
+    />
+  );
 };
 
 export const createResourceRoutes = ({
   List = null,
   Details = null,
+  Create = null,
   namespaced = true,
   resourceType = '',
   resourceI18Key = '',
@@ -160,15 +216,17 @@ export const createResourceRoutes = ({
         exact
         element={
           <Suspense fallback={<Spinner />}>
-            <ListWrapper
+            <ColumnWrapper
               resourceType={resourceType}
               resourceI18Key={resourceI18Key}
               hasDetailsView={!!Details}
+              list={<List allowSlashShortcut />}
               details={<Details />}
+              create={Create ? <Create /> : null}
               {...props}
             >
               <List allowSlashShortcut />
-            </ListWrapper>
+            </ColumnWrapper>
           </Suspense>
         }
       />
@@ -177,14 +235,18 @@ export const createResourceRoutes = ({
           path={detailsPath}
           element={
             <Suspense fallback={<Spinner />}>
-              <DetailsWrapper
+              <ColumnWrapper
                 resourceType={resourceType}
                 resourceI18Key={resourceI18Key}
+                hasDetailsView={true}
                 list={<List />}
+                details={<Details />}
+                create={Create ? <Create /> : null}
+                defaultColumn="details"
                 {...props}
               >
                 <Details />
-              </DetailsWrapper>
+              </ColumnWrapper>
             </Suspense>
           }
         />

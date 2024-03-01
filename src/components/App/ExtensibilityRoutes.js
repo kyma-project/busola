@@ -4,27 +4,36 @@ import i18next from 'i18next';
 import { Route, useParams, useSearchParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
+import { useTranslation } from 'react-i18next';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useFeature } from 'hooks/useFeature';
+import { useUrl } from 'hooks/useUrl';
 
+import { usePrepareCreateProps } from 'resources/helpers';
 import { Spinner } from 'shared/components/Spinner/Spinner';
+import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
+import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 
 const List = React.lazy(() => import('../Extensibility/ExtensibilityList'));
 const Details = React.lazy(() =>
   import('../Extensibility/ExtensibilityDetails'),
 );
+const Create = React.lazy(() => import('../Extensibility/ExtensibilityCreate'));
 
-const ColumnWrapper = ({ defaultColumn = 'list', resourceType }) => {
+const ColumnWrapper = ({ defaultColumn = 'list', resourceType, extension }) => {
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
-  const { namespaceId, resourceName } = useParams();
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
+  const { resourceListUrl } = useUrl();
 
+  const { t } = useTranslation();
+
+  const { namespaceId, resourceName } = useParams();
   const initialLayoutState = layout
     ? {
-        layout: layout,
+        layout: isColumnLeyoutEnabled && layout ? layout : layoutState?.layout,
         midColumn: {
           resourceName: resourceName,
           resourceType: resourceType,
@@ -35,59 +44,93 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType }) => {
     : null;
 
   useEffect(() => {
-    if (layout) {
+    if (layout && resourceName && resourceType) {
       setLayoutColumn(initialLayoutState);
     }
-  }, [layout, namespaceId, resourceName, resourceType]); // eslint-disable-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [layout, isColumnLeyoutEnabled, namespaceId, resourceName, resourceType]);
 
-  if (!isColumnLeyoutEnabled && defaultColumn === 'details') {
-    return (
-      <Details
-        customResourceName={resourceName}
-        customNamespaceId={namespaceId}
+  const layoutCloseCreateUrl = resourceListUrl({
+    kind: resourceType,
+    metadata: {
+      namespace: layoutState?.midColumn?.namespaceId ?? namespaceId,
+    },
+  });
+
+  let startColumnComponent = null;
+  if ((!layout || !isColumnLeyoutEnabled) && defaultColumn === 'details') {
+    startColumnComponent = (
+      <Details resourceName={resourceName} namespaceId={namespaceId} />
+    );
+  } else {
+    startColumnComponent = (
+      <List
+        enableColumnLayout={isColumnLeyoutEnabled}
+        layoutCloseCreateUrl={layoutCloseCreateUrl}
       />
     );
   }
+
+  const elementCreateProps = usePrepareCreateProps({
+    resourceType,
+    apiGroup: extension?.general.resource.group,
+    apiVersion: extension?.general.resource.version,
+  });
+
+  let midColumnComponent = null;
+  if (layoutState?.showCreate?.resourceType) {
+    midColumnComponent = (
+      <ResourceCreate
+        title={elementCreateProps.resourceTitle}
+        confirmText={t('common.buttons.save')}
+        layoutCloseCreateUrl={layoutCloseCreateUrl}
+        renderForm={renderProps => {
+          const createComponent = layoutState?.showCreate?.resourceType && (
+            <Create
+              resourceSchema={extension}
+              layoutNumber="StartColumn"
+              {...elementCreateProps}
+              {...renderProps}
+            />
+          );
+
+          return <ErrorBoundary>{createComponent}</ErrorBoundary>;
+        }}
+      />
+    );
+  }
+
+  if (!layoutState?.showCreate && layoutState?.midColumn) {
+    midColumnComponent = (
+      <Details
+        resourceName={layoutState?.midColumn?.resourceName ?? resourceName}
+        namespaceId={layoutState.midColumn?.namespaceId ?? namespaceId}
+      />
+    );
+  }
+
   return (
     <FlexibleColumnLayout
       style={{ height: '100%' }}
-      layout={layoutState?.layout || 'OneColumn'}
-      startColumn={
-        <div slot="">
-          {(layout || defaultColumn === 'list') && (
-            <List enableColumnLayout={isColumnLeyoutEnabled} />
-          )}
-          {!layout && defaultColumn === 'details' && (
-            <Details
-              customResourceName={layoutState?.midColumn?.resourceName}
-              customNamespaceId={layoutState.midColumn?.namespaceId}
-            />
-          )}
-        </div>
+      layout={
+        !midColumnComponent ? 'OneColumn' : layoutState?.layout || 'OneColumn'
       }
-      midColumn={
-        layoutState?.midColumn && (
-          <div slot="">
-            <Details
-              customResourceName={layoutState?.midColumn?.resourceName}
-              customNamespaceId={layoutState.midColumn?.namespaceId}
-            />
-          </div>
-        )
-      }
+      startColumn={<div>{startColumnComponent}</div>}
+      midColumn={<div>{midColumnComponent}</div>}
     />
   );
 };
-export const createExtensibilityRoutes = (cr, language) => {
+
+export const createExtensibilityRoutes = (extension, language, ...props) => {
   const urlPath =
-    cr?.general?.urlPath ||
-    pluralize(cr?.general?.resource?.kind?.toLowerCase() || '');
+    extension?.general?.urlPath ||
+    pluralize(extension?.general?.resource?.kind?.toLowerCase() || '');
 
   const translationBundle = urlPath || 'extensibility';
   i18next.addResourceBundle(
     language,
     translationBundle,
-    cr?.translations?.[language] || {},
+    extension?.translations?.[language] || {},
   );
 
   return (
@@ -97,11 +140,11 @@ export const createExtensibilityRoutes = (cr, language) => {
         exact
         element={
           <Suspense fallback={<Spinner />}>
-            <ColumnWrapper resourceType={urlPath} />
+            <ColumnWrapper resourceType={urlPath} extension={extension} />
           </Suspense>
         }
       />
-      {cr.details && (
+      {extension.details && (
         <Route
           path={`${urlPath}/:resourceName`}
           exact

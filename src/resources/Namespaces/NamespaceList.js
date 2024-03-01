@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
 import { useGetHiddenNamespaces } from 'shared/hooks/useGetHiddenNamespaces';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { NamespaceCreate } from './NamespaceCreate';
+import NamespaceCreate from './NamespaceCreate';
 import { NamespaceStatus } from './NamespaceStatus';
 import { useNavigate } from 'react-router-dom';
 import { clusterState } from 'state/clusterAtom';

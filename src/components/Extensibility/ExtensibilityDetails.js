@@ -12,7 +12,7 @@ import { useUrl } from 'hooks/useUrl';
 import { DataSourcesContextProvider } from './contexts/DataSources';
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { Widget } from './components/Widget';
-import { ExtensibilityCreate } from './ExtensibilityCreate';
+import ExtensibilityCreate from './ExtensibilityCreate';
 import {
   useGetTranslation,
   TranslationBundleContext,
@@ -22,8 +22,8 @@ import { useJsonata } from './hooks/useJsonata';
 
 export const ExtensibilityDetailsCore = ({
   resMetaData,
-  customResourceName,
-  customNamespaceId,
+  resourceName,
+  namespaceId,
 }) => {
   const { t, widgetT, exists } = useGetTranslation();
 
@@ -46,8 +46,8 @@ export const ExtensibilityDetailsCore = ({
     resourceI18Key: 'name',
     apiGroup: resource?.group,
     apiVersion: resource?.version,
-    customResourceName: customResourceName,
-    customNamespaceId: customNamespaceId,
+    resourceName,
+    namespaceId,
   });
 
   // there may be a moment when `resMetaData` is undefined (e.g. when switching the namespace)
@@ -55,7 +55,6 @@ export const ExtensibilityDetailsCore = ({
     return null;
   }
 
-  const resourceName = resMetaData?.general?.name;
   const resourceTitle = exists('name')
     ? t('name')
     : resourceName || prettifyKind(resource?.kind || '');
@@ -140,8 +139,7 @@ export const ExtensibilityDetailsCore = ({
     />
   );
 };
-
-const ExtensibilityDetails = ({ customResourceName, customNamespaceId }) => {
+const ExtensibilityDetails = ({ resourceName, namespaceId }) => {
   const resMetaData = useGetCRbyPath();
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
   return (
@@ -155,8 +153,8 @@ const ExtensibilityDetails = ({ customResourceName, customNamespaceId }) => {
         <ExtensibilityErrBoundary>
           <ExtensibilityDetailsCore
             resMetaData={resMetaData}
-            customResourceName={customResourceName}
-            customNamespaceId={customNamespaceId}
+            resourceName={resourceName}
+            namespaceId={namespaceId}
           />
         </ExtensibilityErrBoundary>
       </DataSourcesContextProvider>

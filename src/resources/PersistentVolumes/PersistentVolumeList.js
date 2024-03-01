@@ -6,7 +6,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 
 import { PersistentVolumeStatus } from './PersistentVolumeStatus';
-import { PersistentVolumeCreate } from './PersistentVolumeCreate';
+import PersistentVolumeCreate from './PersistentVolumeCreate';
 import { useUrl } from 'hooks/useUrl';
 import {
   ResourceDescription,

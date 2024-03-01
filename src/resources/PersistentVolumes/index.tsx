@@ -19,6 +19,7 @@ export const ResourceDescription = (
 
 export const List = React.lazy(() => import('./PersistentVolumeList'));
 export const Details = React.lazy(() => import('./PersistentVolumeDetails'));
+export const Create = React.lazy(() => import('./PersistentVolumeCreate'));
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   depth: 1,

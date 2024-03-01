@@ -12,7 +12,7 @@ import {
 
 import { createContainerTemplate, createReplicaSetTemplate } from './templates';
 
-export function ReplicaSetCreate({
+export default function ReplicaSetCreate({
   resourceUrl,
   resource: initialReplicaSet,
   formElementRef,

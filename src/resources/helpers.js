@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import pluralize from 'pluralize';
@@ -9,6 +8,7 @@ import {
 } from 'shared/components/ResourceGraph/getResourceGraphConfig';
 import { useRecoilValue } from 'recoil';
 import { extensionsState } from 'state/navigation/extensionsAtom';
+import { prettifyNameSingular } from 'shared/utils/helpers';
 
 export const usePrepareResourceUrl = ({
   apiGroup,
@@ -58,22 +58,9 @@ export const usePrepareDetailsProps = ({
   resourceI18Key,
   apiGroup,
   apiVersion,
-  customResourceName = null,
-  customNamespaceId = null,
+  resourceName,
+  namespaceId,
 }) => {
-  const {
-    resourceName: resourceNameFromParams,
-    namespaceId: namespaceIdFromParams,
-  } = useParams();
-  const resourceName = useMemo(
-    () => customResourceName ?? resourceNameFromParams,
-    [customResourceName, resourceNameFromParams],
-  );
-  const namespaceId = useMemo(
-    () => customNamespaceId ?? namespaceIdFromParams,
-    [customNamespaceId, namespaceIdFromParams],
-  );
-
   const encodedResourceName = encodeURIComponent(resourceName);
   const queryParams = new URLSearchParams(window.location.search);
   const { i18n, t } = useTranslation();
@@ -95,6 +82,36 @@ export const usePrepareDetailsProps = ({
     namespace: namespaceId,
     readOnly: queryParams.get('readOnly') === 'true',
     resourceGraphConfig: getResourceGraphConfig(extensions, addStyle),
+    i18n,
+  };
+};
+
+export const usePrepareCreateProps = ({
+  resourceCustomType,
+  resourceType,
+  resourceTypeForTitle,
+  apiGroup,
+  apiVersion,
+}) => {
+  const { namespaceId } = useParams();
+  const { i18n, t } = useTranslation();
+
+  const api = apiGroup ? `apis/${apiGroup}/${apiVersion}` : `api/${apiVersion}`;
+  const resourceUrl =
+    namespaceId && namespaceId !== '-all-'
+      ? `/${api}/namespaces/${namespaceId}/${resourceType?.toLowerCase()}`
+      : `/${api}/${resourceType?.toLowerCase()}`;
+
+  return {
+    resourceUrl,
+    resourceType: resourceCustomType || pluralize(resourceType || ''),
+    resourceTitle: `${t(
+      'components.resources-list.create',
+    )} ${prettifyNameSingular(
+      '',
+      resourceTypeForTitle ?? resourceCustomType ?? resourceType,
+    )}`,
+    namespace: namespaceId,
     i18n,
   };
 };

@@ -5,7 +5,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 
 import { createPersistentVolumeClaimTemplate } from './templates';
 
-export function PersistentVolumeClaimCreate({
+export default function PersistentVolumeClaimCreate({
   namespace,
   formElementRef,
   onChange,

@@ -7,7 +7,7 @@ import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 import { createPodTemplate } from './templates';
 
-export function PodCreate({
+export default function PodCreate({
   formElementRef,
   onChange,
   setCustomValid,

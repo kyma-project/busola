@@ -7,7 +7,7 @@ import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 import { createNetworkPolicyTemplate } from './templates';
 
-export function NetworkPolicyCreate({
+export default function NetworkPolicyCreate({
   formElementRef,
   onChange,
   setCustomValid,

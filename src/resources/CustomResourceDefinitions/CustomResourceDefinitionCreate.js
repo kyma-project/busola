@@ -5,7 +5,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 
 import { createCustomResourceDefinitionsTemplate } from './templates';
 
-export function CustomResourceDefinitionCreate({
+export default function CustomResourceDefinitionCreate({
   namespace,
   formElementRef,
   onChange,

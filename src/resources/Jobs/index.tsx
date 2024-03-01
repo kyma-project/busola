@@ -12,6 +12,7 @@ export const category = predefinedCategories.workloads;
 
 export const List = React.lazy(() => import('./JobList'));
 export const Details = React.lazy(() => import('./JobDetails'));
+export const Create = React.lazy(() => import('./JobCreate'));
 
 export const i18nDescriptionKey = 'jobs.description';
 export const docsURL =

@@ -5,7 +5,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 
 import { createPersistentVolumeTemplate } from './templates';
 
-export function PersistentVolumeCreate({
+export default function PersistentVolumeCreate({
   formElementRef,
   onChange,
   setCustomValid,

@@ -5,7 +5,6 @@ import copyToCliboard from 'copy-to-clipboard';
 import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
 
-import { spacing } from '@ui5/webcomponents-react-base';
 import 'shared/contexts/YamlEditorContext/EditorActions.scss';
 
 const EDITOR_VISIBILITY = 'editor-visibility';
@@ -39,7 +38,8 @@ export function EditorActions({
   saveDisabled,
   saveHidden,
   isProtected,
-  searchHidden = false,
+  searchDisabled = false,
+  hideDisabled = false,
 }) {
   const [visible, setVisible] = useState(
     localStorage.getItem(EDITOR_VISIBILITY) !== 'false',
@@ -118,28 +118,33 @@ export function EditorActions({
   const { t } = useTranslation();
 
   return (
-    <section
-      className="editor-actions"
-      style={{
-        ...spacing.sapUiSmallMarginTop,
-      }}
-    >
+    <section>
+      <ButtonWithTooltip
+        tooltipContent={t('common.tooltips.download')}
+        icon="download"
+        onClick={download}
+      />
+      <ButtonWithTooltip
+        tooltipContent={t('common.tooltips.copy-to-clipboard')}
+        icon="copy"
+        onClick={() => copyToCliboard(val)}
+      />
       <ButtonWithTooltip
         tooltipContent={
           visible ? t('common.tooltips.hide') : t('common.tooltips.show')
         }
         icon={visible ? 'hide' : 'show'}
         onClick={visible ? hideReadOnlyLines : showReadOnlyLines}
-        disabled={!editor}
+        disabled={!editor || hideDisabled}
       />
-      {!searchHidden && (
-        <ButtonWithTooltip
-          tooltipContent={t('common.tooltips.search')}
-          icon="search"
-          onClick={openSearch}
-          disabled={!editor}
-        />
-      )}
+
+      <ButtonWithTooltip
+        tooltipContent={t('common.tooltips.search')}
+        icon="search"
+        onClick={openSearch}
+        disabled={!editor || searchDisabled}
+      />
+
       {!saveHidden && (
         <ButtonWithTooltip
           tooltipContent={
@@ -152,18 +157,6 @@ export function EditorActions({
           disabled={saveDisabled || !editor}
         />
       )}
-      <ButtonWithTooltip
-        tooltipContent={t('common.tooltips.copy-to-clipboard')}
-        icon="copy"
-        onClick={() => copyToCliboard(val)}
-        disabled={!editor}
-      />
-      <ButtonWithTooltip
-        tooltipContent={t('common.tooltips.download')}
-        icon="download"
-        onClick={download}
-        disabled={!editor}
-      />
       {readOnly && (
         <span style={{ color: 'var(--sapNeutralTextColor,#6a6d70)' }}>
           {t('common.labels.read-only')}

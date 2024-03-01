@@ -27,7 +27,7 @@ function isCronJobValid(cronJob) {
   return areContainersValid && isCronExpressionValid(cronJob?.spec?.schedule);
 }
 
-export function CronJobCreate({
+export default function CronJobCreate({
   formElementRef,
   resource: initialCronJob,
   namespace,

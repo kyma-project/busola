@@ -6,6 +6,8 @@ import {
   DynamicPage,
   DynamicPageHeader,
   DynamicPageTitle,
+  ObjectPage,
+  ObjectPageSection,
   Title,
 } from '@ui5/webcomponents-react';
 
@@ -38,12 +40,197 @@ export const DynamicPageComponent = ({
   children,
   columnWrapperClassName,
   content,
+  footer,
   layoutNumber,
   layoutCloseUrl,
+  inlineEditForm,
 }) => {
   const [showTitleDescription, setShowTitleDescription] = useState(false);
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const { isEnabled: isColumnLayoutEnabled } = useFeature('COLUMN_LAYOUT');
+  const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
+
+  const headerTitle = (
+    <DynamicPageTitle
+      navigationActions={
+        (window.location.search.includes('layout') && isColumnLeyoutEnabled) ||
+        (!window.location.search.includes('layout') &&
+          layoutColumn?.showCreate?.resourceType) ? (
+          layoutColumn.layout !== 'OneColumn' ? (
+            layoutNumber !== 'StartColumn' ? (
+              <>
+                {layoutColumn.layout === 'TwoColumnsMidExpanded' ||
+                ((layoutColumn.layout === 'ThreeColumnsMidExpanded' ||
+                  layoutColumn.layout === 'ThreeColumnsEndExpanded') &&
+                  layoutNumber !== 'MidColumn') ? (
+                  <Button
+                    aria-label="full-screen"
+                    design="Transparent"
+                    icon="full-screen"
+                    onClick={() => {
+                      const newLayout =
+                        layoutNumber === 'MidColumn'
+                          ? 'MidColumnFullScreen'
+                          : 'EndColumnFullScreen';
+                      setLayoutColumn({
+                        ...layoutColumn,
+                        layout: newLayout,
+                      });
+                      window.history.pushState(
+                        window.history.state,
+                        '',
+                        `${window.location.pathname}${
+                          layoutColumn?.showCreate?.resourceType
+                            ? ''
+                            : '?layout=' + newLayout
+                        }`,
+                      );
+                    }}
+                  />
+                ) : null}
+                {layoutColumn.layout === 'MidColumnFullScreen' ||
+                layoutColumn.layout === 'EndColumnFullScreen' ? (
+                  <Button
+                    aria-label="close-full-screen"
+                    design="Transparent"
+                    icon="exit-full-screen"
+                    onClick={() => {
+                      const newLayout =
+                        layoutNumber === 'MidColumn'
+                          ? layoutColumn.endColumn === null
+                            ? 'TwoColumnsMidExpanded'
+                            : 'ThreeColumnsMidExpanded'
+                          : 'ThreeColumnsEndExpanded';
+                      setLayoutColumn({
+                        ...layoutColumn,
+                        layout: newLayout,
+                      });
+                      window.history.pushState(
+                        window.history.state,
+                        '',
+                        `${window.location.pathname}${
+                          layoutColumn?.showCreate?.resourceType
+                            ? ''
+                            : '?layout=' + newLayout
+                        }`,
+                      );
+                    }}
+                  />
+                ) : null}
+                <Button
+                  aria-label="close-column"
+                  design="Transparent"
+                  icon="decline"
+                  onClick={() => {
+                    window.history.pushState(
+                      window.history.state,
+                      '',
+                      layoutCloseUrl
+                        ? layoutCloseUrl
+                        : `${window.location.pathname.slice(
+                            0,
+                            window.location.pathname.lastIndexOf('/'),
+                          )}${
+                            layoutNumber === 'MidColumn' ||
+                            layoutColumn?.showCreate?.resourceType
+                              ? ''
+                              : '?layout=TwoColumnsMidExpanded'
+                          }`,
+                    );
+                    layoutNumber === 'MidColumn'
+                      ? setLayoutColumn({
+                          ...layoutColumn,
+                          midColumn: null,
+                          layout: 'OneColumn',
+                        })
+                      : setLayoutColumn({
+                          ...layoutColumn,
+                          endColumn: null,
+                          layout: 'TwoColumnsMidExpanded',
+                        });
+                  }}
+                />
+              </>
+            ) : null
+          ) : null
+        ) : null
+      }
+      style={title === 'Clusters Overview' ? { display: 'none' } : null}
+      breadcrumbs={
+        breadcrumbItems.length ? (
+          <Breadcrumbs design="NoCurrentPage">
+            {breadcrumbItems.map(item => {
+              return (
+                <BreadcrumbsItem
+                  aria-label="breadcrumb-item"
+                  key={item.name}
+                  href={item.url}
+                >
+                  {item.name}
+                </BreadcrumbsItem>
+              );
+            })}
+          </Breadcrumbs>
+        ) : null
+      }
+      header={
+        <Title className="ui5-title">
+          {title}
+          {description && (
+            <HintButton
+              style={spacing.sapUiTinyMargin}
+              setShowTitleDescription={setShowTitleDescription}
+              showTitleDescription={showTitleDescription}
+              description={description}
+              context="dynamic"
+            />
+          )}
+        </Title>
+      }
+      actions={actions}
+    />
+  );
+
+  const headerContent =
+    title !== 'Clusters Overview' && children ? (
+      <DynamicPageHeader className="header-wrapper">
+        <section className={`column-wrapper ${columnWrapperClassName || ''}`}>
+          {children}
+        </section>
+      </DynamicPageHeader>
+    ) : null;
+
+  if (inlineEditForm) {
+    return (
+      <ObjectPage
+        mode="IconTabBar"
+        className="page-header"
+        alwaysShowContentHeader
+        showHideHeaderButton={false}
+        headerContentPinnable={false}
+        headerTitle={headerTitle}
+        headerContent={headerContent}
+      >
+        <ObjectPageSection
+          aria-label="View"
+          hideTitleText
+          id="view"
+          titleText="View"
+        >
+          {content}
+        </ObjectPageSection>
+
+        <ObjectPageSection
+          aria-label="Edit"
+          hideTitleText
+          id="edit"
+          titleText="Edit"
+        >
+          {inlineEditForm()}
+        </ObjectPageSection>
+      </ObjectPage>
+    );
+  }
+
   return (
     <DynamicPage
       className="page-header"
@@ -51,147 +238,9 @@ export const DynamicPageComponent = ({
       showHideHeaderButton={false}
       headerContentPinnable={false}
       backgroundDesign="Transparent"
-      headerTitle={
-        <DynamicPageTitle
-          navigationActions={
-            window.location.search.includes('layout') &&
-            isColumnLayoutEnabled ? (
-              layoutColumn.layout !== 'OneColumn' ? (
-                layoutNumber !== 'StartColumn' ? (
-                  <>
-                    {layoutColumn.layout === 'TwoColumnsMidExpanded' ||
-                    ((layoutColumn.layout === 'ThreeColumnsMidExpanded' ||
-                      layoutColumn.layout === 'ThreeColumnsEndExpanded') &&
-                      layoutNumber !== 'MidColumn') ? (
-                      <Button
-                        aria-label="full-screen"
-                        design="Transparent"
-                        icon="full-screen"
-                        onClick={() => {
-                          const newLayout =
-                            layoutNumber === 'MidColumn'
-                              ? 'MidColumnFullScreen'
-                              : 'EndColumnFullScreen';
-                          setLayoutColumn({
-                            ...layoutColumn,
-                            layout: newLayout,
-                          });
-                          window.history.pushState(
-                            window.history.state,
-                            '',
-                            `${window.location.pathname}?layout=${newLayout}`,
-                          );
-                        }}
-                      />
-                    ) : null}
-                    {layoutColumn.layout === 'MidColumnFullScreen' ||
-                    layoutColumn.layout === 'EndColumnFullScreen' ? (
-                      <Button
-                        aria-label="close-full-screen"
-                        design="Transparent"
-                        icon="exit-full-screen"
-                        onClick={() => {
-                          const newLayout =
-                            layoutNumber === 'MidColumn'
-                              ? layoutColumn.endColumn === null
-                                ? 'TwoColumnsMidExpanded'
-                                : 'ThreeColumnsMidExpanded'
-                              : 'ThreeColumnsEndExpanded';
-                          setLayoutColumn({
-                            ...layoutColumn,
-                            layout: newLayout,
-                          });
-                          window.history.pushState(
-                            window.history.state,
-                            '',
-                            `${window.location.pathname}?layout=${newLayout}`,
-                          );
-                        }}
-                      />
-                    ) : null}
-                    <Button
-                      aria-label="close-column"
-                      design="Transparent"
-                      icon="decline"
-                      onClick={() => {
-                        window.history.pushState(
-                          window.history.state,
-                          '',
-                          layoutCloseUrl
-                            ? layoutCloseUrl
-                            : `${window.location.pathname.slice(
-                                0,
-                                window.location.pathname.lastIndexOf('/'),
-                              )}${
-                                layoutNumber === 'MidColumn'
-                                  ? ''
-                                  : '?layout=TwoColumnsMidExpanded'
-                              }`,
-                        );
-                        layoutNumber === 'MidColumn'
-                          ? setLayoutColumn({
-                              ...layoutColumn,
-                              midColumn: null,
-                              layout: 'OneColumn',
-                            })
-                          : setLayoutColumn({
-                              ...layoutColumn,
-                              endColumn: null,
-                              layout: 'TwoColumnsMidExpanded',
-                            });
-                      }}
-                    />
-                  </>
-                ) : null
-              ) : null
-            ) : null
-          }
-          style={title === 'Clusters Overview' ? { display: 'none' } : null}
-          breadcrumbs={
-            breadcrumbItems.length ? (
-              <Breadcrumbs design="NoCurrentPage">
-                {breadcrumbItems.map(item => {
-                  return (
-                    <BreadcrumbsItem
-                      aria-label="breadcrumb-item"
-                      key={item.name}
-                      href={item.url}
-                    >
-                      {item.name}
-                    </BreadcrumbsItem>
-                  );
-                })}
-              </Breadcrumbs>
-            ) : null
-          }
-          header={
-            <Title className="ui5-title">
-              {title}
-              {description && (
-                <HintButton
-                  style={spacing.sapUiTinyMargin}
-                  setShowTitleDescription={setShowTitleDescription}
-                  showTitleDescription={showTitleDescription}
-                  description={description}
-                  context="dynamic"
-                />
-              )}
-            </Title>
-          }
-          actions={actions}
-        />
-      }
-      headerContent={
-        title !== 'Clusters Overview' && children ? (
-          <DynamicPageHeader className="header-wrapper">
-            <section
-              className={`column-wrapper ${columnWrapperClassName || ''}`}
-            >
-              {children}
-            </section>
-          </DynamicPageHeader>
-        ) : null
-      }
+      headerTitle={headerTitle}
+      headerContent={headerContent}
+      footer={footer}
     >
       {content}
     </DynamicPage>

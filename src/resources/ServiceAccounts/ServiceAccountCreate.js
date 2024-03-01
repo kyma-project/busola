@@ -28,7 +28,7 @@ const createDefaultSecret = serviceAccountName => {
   };
 };
 
-export const ServiceAccountCreate = ({
+export default function ServiceAccountCreate({
   formElementRef,
   namespace,
   onChange,
@@ -38,7 +38,7 @@ export const ServiceAccountCreate = ({
   onCompleted,
   resourceUrl,
   ...props
-}) => {
+}) {
   const { t } = useTranslation();
   const [serviceAccount, setServiceAccount] = useState(
     cloneDeep(initialServiceAccount) || createServiceAccountTemplate(namespace),
@@ -161,5 +161,5 @@ export const ServiceAccountCreate = ({
       )}
     </ResourceForm>
   );
-};
+}
 ServiceAccountCreate.allowEdit = true;
