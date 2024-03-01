@@ -33,18 +33,14 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType }) => {
         endColumn: null,
       }
     : null;
-  console.log(initialLayoutState);
+
   useEffect(() => {
     if (layout && resourceName && resourceType) {
       setLayoutColumn(initialLayoutState);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [layout, isColumnLeyoutEnabled, namespaceId, resourceName, resourceType]);
-  console.log(layout);
-  console.log(isColumnLeyoutEnabled);
-  console.log(layoutState);
-  console.log(layoutState?.midColumn);
-  console.log(defaultColumn);
+
   let startColumnComponent = null;
   if ((!layout || !isColumnLeyoutEnabled) && defaultColumn === 'details') {
     startColumnComponent = (
@@ -58,9 +54,7 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType }) => {
   }
 
   let midColumnComponent = null;
-
   if (layoutState?.midColumn || isColumnLeyoutEnabled) {
-    console.log('in');
     midColumnComponent = (
       <Details
         customResourceName={
@@ -70,7 +64,7 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType }) => {
       />
     );
   }
-  console.log(midColumnComponent, 'midColumn');
+
   return (
     <FlexibleColumnLayout
       style={{ height: '100%' }}
@@ -82,6 +76,7 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType }) => {
     />
   );
 };
+
 export const createExtensibilityRoutes = (cr, language) => {
   const urlPath =
     cr?.general?.urlPath ||

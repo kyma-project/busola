@@ -23,38 +23,24 @@ export const ColumnWrapper = () => {
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   const layoutState = useRecoilValue(columnLayoutState);
 
-  let startColumnComponent = null;
+  const startColumnComponent = (
+    <CustomResourcesByGroup enableColumnLayout={isColumnLeyoutEnabled} />
+  );
 
-  if (layoutState?.startColumn || isColumnLeyoutEnabled) {
-    startColumnComponent = (
-      <CustomResourcesByGroup enableColumnLayout={isColumnLeyoutEnabled} />
-    );
-  }
+  const midColumnComponent = (
+    <CustomResourcesOfType crdName={layoutState?.midColumn?.resourceName} />
+  );
 
-  let midColumnComponent = null;
+  const endColumnComponent = (
+    <CustomResource
+      params={{
+        customResourceDefinitionName: layoutState?.endColumn?.resourceType,
+        resourceName: layoutState?.endColumn?.resourceName,
+        resourceNamespace: layoutState?.endColumn?.namespaceId,
+      }}
+    />
+  );
 
-  if (layoutState?.midColumn || isColumnLeyoutEnabled) {
-    console.log('in');
-    midColumnComponent = (
-      <CustomResourcesOfType crdName={layoutState?.midColumn?.resourceName} />
-    );
-  }
-
-  let endColumnComponent = null;
-  if (layoutState?.endColumn || isColumnLeyoutEnabled) {
-    console.log('in');
-    endColumnComponent = (
-      <CustomResource
-        params={{
-          customResourceDefinitionName: layoutState?.endColumn?.resourceType,
-          resourceName: layoutState?.endColumn?.resourceName,
-          resourceNamespace: layoutState?.endColumn?.namespaceId,
-        }}
-      />
-    );
-  }
-
-  console.log(midColumnComponent, 'midColumn');
   return (
     <FlexibleColumnLayout
       style={{ height: '100%' }}
