@@ -17,8 +17,15 @@ Cypress.Commands.add(
     cy.handleExceptions();
 
     cy.findMonaco(monacoCount)
-      .click()
-      .clearInput()
-      .paste({ pastePayload: content });
+      .should('be.visible')
+      .then($input => {
+        cy.wait(1000);
+
+        cy.wrap($input)
+          .click()
+          .should('have.focus')
+          .clearInput()
+          .paste({ pastePayload: content });
+      });
   },
 );

@@ -118,6 +118,8 @@ context('Test Custom Resources', () => {
       .find('ui5-button[aria-label="full-screen"]')
       .should('not.exist');
 
+    cy.wait(1000); //wait for button
+
     cy.getEndColumn()
       .contains('ui5-button', 'Delete')
       .should('be.visible')
