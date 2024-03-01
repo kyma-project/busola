@@ -54,7 +54,10 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType }) => {
   }
 
   let midColumnComponent = null;
-  if (layoutState?.midColumn || isColumnLeyoutEnabled) {
+  if (
+    (layoutState?.midColumn || isColumnLeyoutEnabled) &&
+    defaultColumn === 'list'
+  ) {
     midColumnComponent = (
       <Details
         customResourceName={

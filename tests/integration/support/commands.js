@@ -251,28 +251,27 @@ Cypress.Commands.add(
   },
 );
 
-Cypress.Commands.add('testEndColumnLayout', resourceName => {
-  cy.getEndColumn()
-    .find('ui5-button[aria-label="full-screen"]')
-    .click();
+Cypress.Commands.add(
+  'testEndColumnLayout',
+  (resourceName, checkIfNotExist = true) => {
+    cy.getEndColumn()
+      .find('ui5-button[aria-label="full-screen"]')
+      .click();
 
-  cy.get('ui5-table-row')
-    .find('ui5-table-cell')
-    .contains('span', resourceName)
-    .should('not.be.visible');
+    cy.get('ui5-table-row')
+      .find('ui5-table-cell')
+      .contains('span', resourceName)
+      .should('not.be.visible');
 
-  cy.getEndColumn()
-    .find('ui5-button[aria-label="close-full-screen"]')
-    .click();
+    cy.getEndColumn()
+      .find('ui5-button[aria-label="close-full-screen"]')
+      .click();
 
-  cy.checkItemOnGenericListLink(resourceName);
+    cy.checkItemOnGenericListLink(resourceName);
 
-  cy.getEndColumn()
-    .find('ui5-button[aria-label="close-column"]')
-    .click();
-
-  cy.getEndColumn().should('not.exist');
-});
+    cy.closeEndColumn(checkIfNotExist);
+  },
+);
 
 Cypress.Commands.add('closeMidColumn', (checkIfNotExist = false) => {
   cy.getMidColumn()
