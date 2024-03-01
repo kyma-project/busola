@@ -24,7 +24,7 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType }) => {
 
   const initialLayoutState = layout
     ? {
-        layout: layout,
+        layout: isColumnLeyoutEnabled && layout ? layout : layoutState?.layout,
         midColumn: {
           resourceName: resourceName,
           resourceType: resourceType,
@@ -33,48 +33,52 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType }) => {
         endColumn: null,
       }
     : null;
-
+  console.log(initialLayoutState);
   useEffect(() => {
-    if (layout) {
+    if (layout && resourceName && resourceType) {
       setLayoutColumn(initialLayoutState);
     }
-  }, [layout, namespaceId, resourceName, resourceType]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  if (!isColumnLeyoutEnabled && defaultColumn === 'details') {
-    return (
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [layout, isColumnLeyoutEnabled, namespaceId, resourceName, resourceType]);
+  console.log(layout);
+  console.log(isColumnLeyoutEnabled);
+  console.log(layoutState);
+  console.log(layoutState?.midColumn);
+  console.log(defaultColumn);
+  let startColumnComponent = null;
+  if ((!layout || !isColumnLeyoutEnabled) && defaultColumn === 'details') {
+    startColumnComponent = (
       <Details
         customResourceName={resourceName}
         customNamespaceId={namespaceId}
       />
     );
+  } else {
+    startColumnComponent = <List enableColumnLayout={isColumnLeyoutEnabled} />;
   }
+
+  let midColumnComponent = null;
+
+  if (layoutState?.midColumn || isColumnLeyoutEnabled) {
+    console.log('in');
+    midColumnComponent = (
+      <Details
+        customResourceName={
+          layoutState?.midColumn?.resourceName ?? resourceName
+        }
+        customNamespaceId={layoutState.midColumn?.namespaceId ?? namespaceId}
+      />
+    );
+  }
+  console.log(midColumnComponent, 'midColumn');
   return (
     <FlexibleColumnLayout
       style={{ height: '100%' }}
-      layout={layoutState?.layout || 'OneColumn'}
-      startColumn={
-        <div slot="">
-          {(layout || defaultColumn === 'list') && (
-            <List enableColumnLayout={isColumnLeyoutEnabled} />
-          )}
-          {!layout && defaultColumn === 'details' && (
-            <Details
-              customResourceName={layoutState?.midColumn?.resourceName}
-              customNamespaceId={layoutState.midColumn?.namespaceId}
-            />
-          )}
-        </div>
+      layout={
+        !midColumnComponent ? 'OneColumn' : layoutState?.layout || 'OneColumn'
       }
-      midColumn={
-        layoutState?.midColumn && (
-          <div slot="">
-            <Details
-              customResourceName={layoutState?.midColumn?.resourceName}
-              customNamespaceId={layoutState.midColumn?.namespaceId}
-            />
-          </div>
-        )
-      }
+      startColumn={<div>{startColumnComponent}</div>}
+      midColumn={<div>{midColumnComponent}</div>}
     />
   );
 };

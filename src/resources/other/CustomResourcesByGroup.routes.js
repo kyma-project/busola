@@ -23,38 +23,45 @@ export const ColumnWrapper = () => {
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   const layoutState = useRecoilValue(columnLayoutState);
 
+  let startColumnComponent = null;
+
+  if (layoutState?.startColumn || isColumnLeyoutEnabled) {
+    startColumnComponent = (
+      <CustomResourcesByGroup enableColumnLayout={isColumnLeyoutEnabled} />
+    );
+  }
+
+  let midColumnComponent = null;
+
+  if (layoutState?.midColumn || isColumnLeyoutEnabled) {
+    console.log('in');
+    midColumnComponent = (
+      <CustomResourcesOfType crdName={layoutState?.midColumn?.resourceName} />
+    );
+  }
+
+  let endColumnComponent = null;
+  if (layoutState?.endColumn || isColumnLeyoutEnabled) {
+    console.log('in');
+    endColumnComponent = (
+      <CustomResource
+        params={{
+          customResourceDefinitionName: layoutState?.endColumn?.resourceType,
+          resourceName: layoutState?.endColumn?.resourceName,
+          resourceNamespace: layoutState?.endColumn?.namespaceId,
+        }}
+      />
+    );
+  }
+
+  console.log(midColumnComponent, 'midColumn');
   return (
     <FlexibleColumnLayout
       style={{ height: '100%' }}
       layout={layoutState?.layout || 'OneColumn'}
-      startColumn={
-        <div slot="">
-          <CustomResourcesByGroup enableColumnLayout={isColumnLeyoutEnabled} />
-        </div>
-      }
-      midColumn={
-        layoutState?.midColumn && (
-          <div slot="">
-            <CustomResourcesOfType
-              crdName={layoutState?.midColumn?.resourceName}
-            />
-          </div>
-        )
-      }
-      endColumn={
-        layoutState?.endColumn && (
-          <div slot="">
-            <CustomResource
-              params={{
-                customResourceDefinitionName:
-                  layoutState?.endColumn?.resourceType,
-                resourceName: layoutState?.endColumn?.resourceName,
-                resourceNamespace: layoutState?.endColumn?.namespaceId,
-              }}
-            />
-          </div>
-        )
-      }
+      startColumn={<div slot="">{startColumnComponent}</div>}
+      midColumn={<div slot="">{midColumnComponent}</div>}
+      endColumn={<div slot="">{endColumnComponent}</div>}
     />
   );
 };
