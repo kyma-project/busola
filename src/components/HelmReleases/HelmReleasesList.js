@@ -3,7 +3,6 @@ import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { Labels } from 'shared/components/Labels/Labels';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { Link } from 'react-router-dom';
 import { decodeHelmRelease } from './decodeHelmRelease';
 import { findRecentRelease } from './findRecentRelease';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
@@ -13,6 +12,7 @@ import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { ResourceDescription } from 'components/HelmReleases';
+import { Link } from 'shared/components/Link/Link';
 
 function HelmReleasesList() {
   const { t } = useTranslation();
@@ -48,7 +48,7 @@ function HelmReleasesList() {
   ];
 
   const rowRenderer = entry => [
-    <Link className="bsl-link" to={resourceUrl(entry)}>
+    <Link url={resourceUrl(entry)} resetLayout={false}>
       {entry.releaseName}
     </Link>,
     namespace === '-all-' ? entry.namespace : null,

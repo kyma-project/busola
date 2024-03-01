@@ -3,6 +3,7 @@ import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@ui5/webcomponents-react';
+import { Link } from 'shared/components/Link/Link';
 
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 
@@ -28,7 +29,6 @@ import './ClusterList.scss';
 import { useSetRecoilState } from 'recoil';
 import { showAddClusterWizard } from 'state/showAddClusterWizard';
 import { EmptyListComponent } from 'shared/components/EmptyListComponent/EmptyListComponent';
-import { Link } from 'shared/components/Link/Link';
 
 function ClusterList() {
   const gardenerLoginFeature = useFeature('GARDENER_LOGIN');

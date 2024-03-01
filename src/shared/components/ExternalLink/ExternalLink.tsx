@@ -10,6 +10,7 @@ type LinkProps = {
   className?: string;
   children?: ReactNode;
   dataTestId?: string;
+  style?: React.CSSProperties;
 };
 
 export const ExternalLink = ({
@@ -18,6 +19,7 @@ export const ExternalLink = ({
   className,
   children,
   dataTestId,
+  style,
 }: LinkProps) => {
   const { t } = useTranslation();
 
@@ -28,6 +30,7 @@ export const ExternalLink = ({
       target="_blank"
       rel="noopener noreferrer"
       data-test-id={dataTestId}
+      style={style}
     >
       {text || children || url}
       <Icon

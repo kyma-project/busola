@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
@@ -14,6 +13,7 @@ import { PersistentVolumeStatus } from './PersistentVolumeStatus';
 import { PersistentVolumeCreate } from './PersistentVolumeCreate';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ResourceDescription } from 'resources/PersistentVolumes';
+import { Link } from 'shared/components/Link/Link';
 
 export function PersistentVolumeDetails(props) {
   const { t } = useTranslation();
@@ -64,8 +64,7 @@ export function PersistentVolumeDetails(props) {
               ({ metadata }) => metadata.name === spec?.storageClassName,
             ) ? (
               <Link
-                className="bsl-link"
-                to={resourceUrl({
+                url={resourceUrl({
                   kind: 'StorageClass',
                   metadata: {
                     name: spec?.storageClassName,
@@ -86,8 +85,7 @@ export function PersistentVolumeDetails(props) {
               ({ metadata }) => metadata.name === spec?.claimRef?.name,
             ) ? (
               <Link
-                className="bsl-link"
-                to={resourceUrl(
+                url={resourceUrl(
                   {
                     kind: 'PersistentVolumeClaim',
                     metadata: {

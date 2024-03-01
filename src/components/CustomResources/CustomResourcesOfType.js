@@ -1,5 +1,3 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
@@ -9,6 +7,7 @@ import { CustomResources } from 'components/CustomResources/CustomResources';
 import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { Link } from 'shared/components/Link/Link';
 
 export default function CustomResourcesOfType({ crdName }) {
   const { t } = useTranslation();
@@ -49,8 +48,7 @@ export default function CustomResourcesOfType({ crdName }) {
           title={t('custom-resource-definitions.name_singular')}
         >
           <Link
-            className="bsl-link"
-            to={clusterUrl(`customresourcedefinitions/${crd.metadata.name}`)}
+            url={clusterUrl(`customresourcedefinitions/${crd.metadata.name}`)}
           >
             {crd.metadata.name}
           </Link>
