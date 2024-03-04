@@ -20,7 +20,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
   const { namespaceId, releaseName } = useParams();
-  console.log('namespace', namespaceId);
+
   const initialLayoutState = layout
     ? {
         layout: isColumnLeyoutEnabled && layout ? layout : layoutState?.layout,

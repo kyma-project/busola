@@ -11,7 +11,6 @@ export default function HelmReleasesYaml({
   resourceUrl,
   ...props
 }) {
-  console.log('HelmReleasesYaml', showYamlTab);
   return (
     <ResourceForm
       {...props}
