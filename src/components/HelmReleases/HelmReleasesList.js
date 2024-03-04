@@ -26,14 +26,9 @@ function HelmReleasesList({ enableColumnLayout }) {
   const navigate = useNavigate();
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const resourceUrl = entry => {
-    const currentUrl = window.location.pathname;
-    const urlPrefix = currentUrl.includes('namespaces/-all-/')
-      ? currentUrl.substring(0, currentUrl.indexOf('-all-') - 1)
-      : '';
-
-    return urlPrefix
-      ? `${urlPrefix}/${entry.namespace}/helm-releases/${entry.releaseName}`
-      : namespaceUrl(`helm-releases/${entry.releaseName}`);
+    return namespaceUrl(`helm-releases/${entry.releaseName}`, {
+      namespace: entry.namespace,
+    });
   };
 
   const { data, loading, error } = useGetList(
@@ -64,7 +59,7 @@ function HelmReleasesList({ enableColumnLayout }) {
               midColumn: {
                 resourceName: entry.releaseName,
                 resourceType: 'HelmReleases',
-                namespaceId: namespace,
+                namespaceId: entry.namespace,
               },
               endColumn: null,
               layout: 'TwoColumnsMidExpanded',

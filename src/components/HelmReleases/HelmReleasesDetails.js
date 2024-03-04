@@ -10,16 +10,14 @@ import { HelmReleaseStatus } from './HelmReleaseStatus';
 import { OtherReleaseVersions } from './OtherReleaseVersions';
 import { findRecentRelease } from './findRecentRelease';
 import { useRecoilValue } from 'recoil';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { ResourceDescription } from 'components/HelmReleases';
 
-function HelmReleasesDetails({ releaseName }) {
+function HelmReleasesDetails({ releaseName, namespace }) {
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();
 
-  const namespace = useRecoilValue(activeNamespaceIdState);
   const breadcrumbItems = [
     { name: t('helm-releases.title'), url: namespaceUrl('helm-releases') },
     { name: '' },

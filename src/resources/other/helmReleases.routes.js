@@ -45,6 +45,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
     startColumnComponent = (
       <HelmReleaseDetails
         releaseName={layoutState?.midColumn?.resourceName || releaseName}
+        namespace={layoutState?.midColumn?.namespaceId || namespace}
       />
     );
   } else {
@@ -58,6 +59,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
     midColumnComponent = (
       <HelmReleaseDetails
         releaseName={layoutState?.midColumn?.resourceName || releaseName}
+        namespace={layoutState?.midColumn?.namespaceId || namespace}
       />
     );
   }
