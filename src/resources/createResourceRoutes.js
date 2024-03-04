@@ -79,7 +79,7 @@ const ColumnWrapper = ({ defaultColumn = 'list', list, details, ...props }) => {
         endColumn: null,
       }
     : null;
-  console.log(initialLayoutState);
+
   useEffect(() => {
     if (layout && resourceName && props.resourceType) {
       setLayoutColumn(initialLayoutState);
@@ -96,6 +96,7 @@ const ColumnWrapper = ({ defaultColumn = 'list', list, details, ...props }) => {
   const elementListProps = usePrepareListProps({
     ...props,
   });
+
   const elementDetailsProps = usePrepareDetailsProps({
     ...props,
     customResourceName: layoutState?.midColumn?.resourceName ?? resourceName,
