@@ -138,7 +138,7 @@ context('Test Jobs', () => {
     // back to job
     cy.get('.page-header__column')
       .contains(`Job (${JOB_NAME})`)
-      .contains('a', JOB_NAME)
+      .contains('ui5-link', JOB_NAME)
       .click();
 
     // pod status

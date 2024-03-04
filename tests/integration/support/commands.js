@@ -184,7 +184,7 @@ Cypress.Commands.add(
     if (isUI5Link) {
       cy.checkItemOnGenericListLink(resourceName);
     } else {
-      cy.contains('a', resourceName).should('be.visible');
+      cy.contains('ui5-link', resourceName).should('be.visible');
     }
 
     cy.contains('ui5-message-strip', /created/).should('not.exist');
