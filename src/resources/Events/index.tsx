@@ -21,4 +21,4 @@ export const ResourceDescription = (
 
 export const List = React.lazy(() => import('./EventList'));
 export const Details = React.lazy(() => import('./EventDetails'));
-export const Create = React.lazy(() => import('./EventCreate'));
+export const Create = React.lazy(() => import('./EventYaml'));
