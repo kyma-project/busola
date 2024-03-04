@@ -53,10 +53,9 @@ function ClusterList() {
   const { clusters, currentCluster } = clustersInfo;
 
   const isClusterActive = entry => {
-    return entry?.kubeconfig?.['current-context'] ===
-      currentCluster?.contextName
-      ? true
-      : false;
+    return (
+      entry?.kubeconfig?.['current-context'] === currentCluster?.contextName
+    );
   };
 
   const downloadKubeconfig = entry => {

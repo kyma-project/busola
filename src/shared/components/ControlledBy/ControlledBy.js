@@ -38,7 +38,11 @@ export const GoToDetailsLink = ({ kind, name, noBrackets = false }) => {
   if (!path) {
     return <>{noBrackets ? name : `(${name})`}</>;
   } else {
-    return <Link url={path}>{noBrackets ? name : `(${name})`}</Link>;
+    return (
+      <Link design="Default" url={path}>
+        {noBrackets ? name : `(${name})`}
+      </Link>
+    );
   }
 };
 

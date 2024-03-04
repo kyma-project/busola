@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { DynamicPageComponent } from '../DynamicPageComponent/DynamicPageComponent';
 import { Link } from '../Link/Link';
 
+import './CountingCard.scss';
+
 type CountingCardProps = {
   value: number;
   extraInfo: any;
