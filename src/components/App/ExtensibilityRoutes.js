@@ -56,9 +56,10 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType }) => {
 
   let midColumnComponent = null;
 
+  //we have to set it ahead of time for the columns to not jump, but cannot render two Details components when we are directly on details page
   if (
     (layoutState?.midColumn || isColumnLeyoutEnabled) &&
-    defaultColumn === 'list'
+    !(layoutState?.layout === 'OneColumn' && defaultColumn === 'details')
   ) {
     midColumnComponent = (
       <Details
