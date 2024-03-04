@@ -45,5 +45,4 @@ export default function ConfigMapCreate({
     </ResourceForm>
   );
 }
-ConfigMapCreate.allowEdit = true;
 ConfigMapCreate.allowClone = true;

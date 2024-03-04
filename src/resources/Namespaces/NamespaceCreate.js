@@ -303,5 +303,3 @@ export default function NamespaceCreate({
     </ResourceForm>
   );
 }
-
-NamespaceCreate.allowEdit = true;

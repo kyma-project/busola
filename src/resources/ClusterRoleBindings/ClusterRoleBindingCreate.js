@@ -12,4 +12,3 @@ export default function ClusterRoleBindingCreate(props) {
     />
   );
 }
-ClusterRoleBindingCreate.allowEdit = true;

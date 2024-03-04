@@ -10,17 +10,18 @@ import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useC
 
 export const ResourceCreate = ({
   performRefetch,
-  sendNotification,
   title,
-  button,
   renderForm,
   confirmText,
   invalidPopupMessage,
-  className,
   isEdit,
+  readOnly,
+  disableEdit,
   layoutCloseCreateUrl,
   layoutNumber = 'MidColumn',
-  ...props
+  onlyYaml = false,
+  protectedResource = false,
+  protectedResourceWarning = null,
 }) => {
   const { t } = useTranslation();
   const {
@@ -62,11 +63,14 @@ export const ResourceCreate = ({
   }
 
   function renderConfirmButton() {
+    if (protectedResource) return protectedResourceWarning;
+
     const disabled = !isValid;
+
     const button = (
       <Button
-        disabled={disabled}
-        aria-disabled={disabled}
+        disabled={disabled || readOnly || disableEdit}
+        aria-disabled={disabled || readOnly || disableEdit}
         onClick={handleFormSubmit}
         design="Emphasized"
       >
@@ -88,6 +92,7 @@ export const ResourceCreate = ({
         </Tooltip>
       );
     }
+
     return button;
   }
 
@@ -106,6 +111,7 @@ export const ResourceCreate = ({
               endContent={<>{renderConfirmButton()}</>}
             />
           }
+          showYamlTab={disableEdit && onlyYaml}
           content={renderForm({
             formElementRef,
             isValid,
@@ -142,6 +148,8 @@ ResourceCreate.propTypes = {
   button: CustomPropTypes.button,
   className: PropTypes.string,
   isEdit: PropTypes.bool,
+  readOnly: PropTypes.bool,
+  disableEdit: PropTypes.bool,
   layoutCloseCreateUrl: PropTypes.bool,
 };
 
@@ -149,4 +157,6 @@ ResourceCreate.defaultProps = {
   performRefetch: () => {},
   invalidPopupMessage: '',
   isEdit: false,
+  readOnly: false,
+  disableEdit: false,
 };

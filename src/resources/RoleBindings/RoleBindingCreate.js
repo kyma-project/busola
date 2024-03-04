@@ -13,4 +13,3 @@ export default function RoleBindingCreate(props) {
     />
   );
 }
-RoleBindingCreate.allowEdit = true;

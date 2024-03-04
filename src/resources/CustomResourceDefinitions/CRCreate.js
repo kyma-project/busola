@@ -15,6 +15,7 @@ function CRCreate({
   crd,
   layoutNumber,
   resource: initialCustomResource,
+  ...props
 }) {
   const [cr, setCr] = useState(
     cloneDeep(initialCustomResource) || createTemplate(crd),
@@ -38,6 +39,7 @@ function CRCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind={crd.spec.names.plural}
       singularName={crd.spec.names.kind}
       resource={cr}

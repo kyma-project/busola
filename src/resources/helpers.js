@@ -60,6 +60,7 @@ export const usePrepareDetailsProps = ({
   apiVersion,
   resourceName,
   namespaceId,
+  showYamlTab,
 }) => {
   const encodedResourceName = encodeURIComponent(resourceName);
   const queryParams = new URLSearchParams(window.location.search);
@@ -81,6 +82,7 @@ export const usePrepareDetailsProps = ({
     resourceName: resourceName,
     namespace: namespaceId,
     readOnly: queryParams.get('readOnly') === 'true',
+    showYamlTab,
     resourceGraphConfig: getResourceGraphConfig(extensions, addStyle),
     i18n,
   };
