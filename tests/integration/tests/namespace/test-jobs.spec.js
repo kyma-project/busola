@@ -117,7 +117,7 @@ context('Test Jobs', () => {
     // controlled-by
     cy.contains('div', 'Controlled By')
       .next()
-      .find(`div:contains("Job") a.bsl-link:contains("${JOB_NAME}")`)
+      .find(`div:contains("Job") ui5-link:contains("${JOB_NAME}")`)
       .should('exist');
 
     // status
