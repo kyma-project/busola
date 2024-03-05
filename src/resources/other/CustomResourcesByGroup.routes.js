@@ -91,7 +91,7 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
   let midColumnComponent = null;
   if (
     (layoutState?.midColumn?.resourceName || isColumnLeyoutEnabled) &&
-    defaultColumn === 'list'
+    !(layoutState?.layout === 'OneColumn' && defaultColumn === 'listOfType')
   ) {
     midColumnComponent = (
       <CustomResourcesOfType
@@ -105,7 +105,7 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
 
   if (
     (layoutState?.endColumn || isColumnLeyoutEnabled) &&
-    defaultColumn === 'list'
+    !(layoutState?.layout === 'OneColumn' && defaultColumn === 'details')
   ) {
     endColumnComponent = (
       <CustomResource
