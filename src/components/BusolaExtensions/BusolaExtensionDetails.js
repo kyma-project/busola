@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'shared/components/Link/Link';
 import { Trans, useTranslation } from 'react-i18next';
 import { createPatch } from 'rfc6902';
@@ -241,13 +240,6 @@ export function BusolaExtensionDetails({ name, namespace }) {
       resourceType="ConfigMaps"
       resourceUrl={resourceUrl}
       layoutCloseCreateUrl={clusterUrl('busolaextensions')}
-      breadcrumbs={[
-        {
-          name: t('extensibility.title'),
-          url: clusterUrl('busolaextensions'),
-        },
-        { name: '' },
-      ]}
     />
   );
 }

@@ -1,7 +1,5 @@
 import PropTypes from 'prop-types';
 import {
-  Breadcrumbs,
-  BreadcrumbsItem,
   Button,
   DynamicPage,
   DynamicPageHeader,
@@ -35,7 +33,6 @@ const Column = ({ title, children, columnSpan, image, style = {} }) => {
 export const DynamicPageComponent = ({
   title,
   description,
-  breadcrumbItems,
   actions,
   children,
   columnWrapperClassName,
@@ -155,23 +152,6 @@ export const DynamicPageComponent = ({
         ) : null
       }
       style={title === 'Clusters Overview' ? { display: 'none' } : null}
-      breadcrumbs={
-        breadcrumbItems.length ? (
-          <Breadcrumbs design="NoCurrentPage">
-            {breadcrumbItems.map(item => {
-              return (
-                <BreadcrumbsItem
-                  aria-label="breadcrumb-item"
-                  key={item.name}
-                  href={item.url}
-                >
-                  {item.name}
-                </BreadcrumbsItem>
-              );
-            })}
-          </Breadcrumbs>
-        ) : null
-      }
       header={
         <Title className="ui5-title">
           {title}
@@ -251,19 +231,8 @@ DynamicPageComponent.Column = Column;
 DynamicPageComponent.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.node,
-  breadcrumbItems: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      path: PropTypes.string,
-      params: PropTypes.object,
-      fromContext: PropTypes.string,
-      fromAbsolutePath: PropTypes.bool,
-      onClick: PropTypes.func,
-    }),
-  ),
 };
 
 DynamicPageComponent.defaultProps = {
-  breadcrumbItems: [],
   description: '',
 };
