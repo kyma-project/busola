@@ -21,8 +21,9 @@ Cypress.Commands.add(
       .then($input => {
         cy.wait(1000);
 
+        cy.wrap($input).click();
+
         cy.wrap($input)
-          .click()
           .should('have.focus')
           .clearInput()
           .paste({ pastePayload: content });
