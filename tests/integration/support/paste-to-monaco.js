@@ -21,7 +21,7 @@ Cypress.Commands.add(
       .then($input => {
         cy.wait(1000);
 
-        cy.wrap($input).click();
+        cy.wrap($input).click({ force: true });
 
         cy.wrap($input)
           .should('have.focus')
