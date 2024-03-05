@@ -62,9 +62,11 @@ export const ResourceCreate = ({
     }
   }
 
-  function renderConfirmButton() {
+  function renderProtectedResourceButton() {
     if (protectedResource) return protectedResourceWarning;
+  }
 
+  function renderConfirmButton() {
     const disabled = !isValid;
 
     const button = (
@@ -77,7 +79,6 @@ export const ResourceCreate = ({
         {confirmText}
       </Button>
     );
-
     if (invalidPopupMessage && disabled) {
       return (
         <Tooltip
@@ -120,7 +121,6 @@ export const ResourceCreate = ({
             onError: handleFormError,
             onCompleted: handleFormSuccess,
             performManualSubmit: handleFormSubmit,
-            actions: <>{renderConfirmButton()}</>,
           })}
         />
       )}
@@ -133,7 +133,12 @@ export const ResourceCreate = ({
           onError: handleFormError,
           onCompleted: handleFormSuccess,
           performManualSubmit: handleFormSubmit,
-          actions: <>{renderConfirmButton()}</>,
+          actions: (
+            <>
+              {renderProtectedResourceButton()}
+              {renderConfirmButton()}
+            </>
+          ),
         })}
     </>
   );
