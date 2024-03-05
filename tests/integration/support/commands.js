@@ -176,7 +176,7 @@ Cypress.Commands.add(
     isUI5Link = true,
     checkIfResourceIsRemoved = true,
   ) => {
-    cy.get('ui5-combobox[placeholder="Search"]:visible')
+    cy.get('ui5-input[placeholder="Search"]:visible')
       .find('input')
       .click()
       .type(resourceName);
@@ -203,7 +203,7 @@ Cypress.Commands.add(
       }
 
       if (clearSearch) {
-        cy.get('ui5-combobox[placeholder="Search"]:visible')
+        cy.get('ui5-input[placeholder="Search"]:visible')
           .find('input')
           .click()
           .clear();

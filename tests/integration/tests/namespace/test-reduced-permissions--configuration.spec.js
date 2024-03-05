@@ -81,7 +81,7 @@ context('Test reduced permissions 2', () => {
       .contains('Namespaces')
       .click();
 
-    cy.get('ui5-combobox[placeholder="Search"]')
+    cy.get('ui5-input[placeholder="Search"]')
       .find('input')
       .click()
       .type('kube-public');
