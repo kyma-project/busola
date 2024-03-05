@@ -16,17 +16,15 @@ Cypress.Commands.add(
     // Ignore Cypress issue with Monaco on CI
     cy.handleExceptions();
 
+    cy.findMonaco(monacoCount).should('be.visible');
+
+    cy.wait(1000);
+
+    cy.findMonaco(monacoCount).click({ force: true });
+
     cy.findMonaco(monacoCount)
-      .should('be.visible')
-      .then($input => {
-        cy.wait(1000);
-
-        cy.wrap($input).click({ force: true });
-
-        cy.wrap($input)
-          .should('have.focus')
-          .clearInput()
-          .paste({ pastePayload: content });
-      });
+      .should('have.focus')
+      .clearInput()
+      .paste({ pastePayload: content });
   },
 );
