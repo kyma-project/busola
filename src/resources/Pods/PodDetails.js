@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import pluralize from 'pluralize';
 
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
@@ -13,6 +12,7 @@ import ContainersData from './ContainersData';
 import { PodCreate } from './PodCreate';
 import { useUrl } from 'hooks/useUrl';
 import { ResourceDescription } from 'resources/Pods';
+import { Link } from 'shared/components/Link/Link';
 
 export function PodDetails(props) {
   const { t } = useTranslation();
@@ -55,8 +55,7 @@ export function PodDetails(props) {
         volume.name,
         volumeType,
         <Link
-          className="bsl-link"
-          to={namespaceUrl(
+          url={namespaceUrl(
             `${pluralize(volumeType.toLowerCase() || '')}/${volume[volumeType]
               .name ||
               volume[volumeType].secretName ||

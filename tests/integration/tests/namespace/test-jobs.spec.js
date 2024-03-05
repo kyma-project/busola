@@ -117,7 +117,7 @@ context('Test Jobs', () => {
     // controlled-by
     cy.contains('div', 'Controlled By')
       .next()
-      .find(`div:contains("Job") a.bsl-link:contains("${JOB_NAME}")`)
+      .find(`div:contains("Job") ui5-link:contains("${JOB_NAME}")`)
       .should('exist');
 
     // status
@@ -138,7 +138,7 @@ context('Test Jobs', () => {
     // back to job
     cy.get('.page-header__column')
       .contains(`Job (${JOB_NAME})`)
-      .contains('a', JOB_NAME)
+      .contains('ui5-link', JOB_NAME)
       .click();
 
     // pod status

@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { Button, IllustratedMessage } from '@ui5/webcomponents-react';
 import '@ui5/webcomponents-fiori/dist/illustrations/AllIllustrations';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import './EmptyListComponent.scss';
 import { spacing } from '@ui5/webcomponents-react-base';
 
@@ -37,36 +37,34 @@ export const EmptyListComponent = ({
   }
 
   return (
-    <>
-      <IllustratedMessage
-        name="TntNoApplications"
-        size="Scene"
-        titleText={titleText}
-        subtitle={
-          <p
-            className="emptyListComponent__subtitle"
-            style={spacing.sapUiSmallMarginTop}
-          >
-            {subtitle}
-          </p>
-        }
-      >
-        <div className="emptyListComponent__buttons">
-          {showButton && (
-            <Button design="Emphasized" onClick={onClick}>
-              {buttonText}
-            </Button>
-          )}
-          {url && (
-            <Link
-              className="emptyListComponent__link bsl-link"
-              text="Learn More"
-              url={url}
-            />
-          )}
-        </div>
-        {children}
-      </IllustratedMessage>
-    </>
+    <IllustratedMessage
+      name="TntNoApplications"
+      size="Scene"
+      titleText={titleText}
+      subtitle={
+        <p
+          className="emptyListComponent__subtitle"
+          style={spacing.sapUiSmallMarginTop}
+        >
+          {subtitle}
+        </p>
+      }
+    >
+      <div className="emptyListComponent__buttons">
+        {showButton && (
+          <Button design="Emphasized" onClick={onClick}>
+            {buttonText}
+          </Button>
+        )}
+        {url && (
+          <ExternalLink
+            className="emptyListComponent__link"
+            text="Learn More"
+            url={url}
+          />
+        )}
+      </div>
+      {children}
+    </IllustratedMessage>
   );
 };

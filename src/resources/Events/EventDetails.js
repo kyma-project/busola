@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 
 import { useUrl } from 'hooks/useUrl';
 import { FormatInvolvedObject, FormatSourceObject } from 'hooks/useMessageList';
@@ -11,6 +10,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Icon, ObjectStatus } from '@ui5/webcomponents-react';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ResourceDescription } from 'resources/Events';
+import { Link } from 'shared/components/Link/Link';
 
 const RowComponent = ({ name, value }) =>
   value ? <LayoutPanelRow name={name} value={value} /> : null;
@@ -54,9 +54,8 @@ export function EventDetails(props) {
       header: t('common.labels.namespace'),
       value: event => (
         <Link
-          className="bsl-link"
           data-testid="details-link"
-          to={clusterUrl(`namespaces/${event.metadata.namespace}`)}
+          url={clusterUrl(`namespaces/${event.metadata.namespace}`)}
         >
           {event.metadata.namespace}
         </Link>

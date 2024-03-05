@@ -5,7 +5,6 @@ import { prettifyNameSingular } from 'shared/utils/helpers';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { HelmReleaseData } from './HelmReleaseData';
-import { Link } from 'react-router-dom';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
 import { OtherReleaseVersions } from './OtherReleaseVersions';
 import { findRecentRelease } from './findRecentRelease';
@@ -14,6 +13,7 @@ import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { ResourceDescription } from 'components/HelmReleases';
+import { Link } from 'shared/components/Link/Link';
 
 function HelmReleasesDetails({ releaseName }) {
   const { t } = useTranslation();
@@ -64,8 +64,7 @@ function HelmReleasesDetails({ releaseName }) {
           <>
             <DynamicPageComponent.Column title={t('secrets.name_singular')}>
               <Link
-                className="bsl-link"
-                to={namespaceUrl(`secrets/${releaseSecret.metadata.name}`)}
+                url={namespaceUrl(`secrets/${releaseSecret.metadata.name}`)}
               >
                 {releaseSecret.metadata.name}
               </Link>

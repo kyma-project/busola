@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { useUrl } from 'hooks/useUrl';
+import { Link } from 'shared/components/Link/Link';
 
 export function GenericRoleBindingList({
   description,
@@ -33,8 +33,7 @@ export function GenericRoleBindingList({
   const getSubjectWithLink = subject => (
     <div key={subject.kind + ' ' + subject.name}>
       <Link
-        className="bsl-link"
-        to={namespaceUrl(`serviceaccounts/${subject.name}`, {
+        url={namespaceUrl(`serviceaccounts/${subject.name}`, {
           namespace: subject.namespace,
         })}
       >
@@ -59,7 +58,7 @@ export function GenericRoleBindingList({
     {
       header: t('role-bindings.headers.role-ref'),
       value: binding => (
-        <Link className="bsl-link" to={navigateToRole(binding.roleRef)}>
+        <Link url={navigateToRole(binding.roleRef)}>
           {binding.roleRef.name}
         </Link>
       ),

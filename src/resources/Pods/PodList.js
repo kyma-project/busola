@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 
 import { useUrl } from 'hooks/useUrl';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
@@ -13,6 +12,7 @@ import {
   i18nDescriptionKey,
   docsURL,
 } from 'resources/Pods';
+import { Link } from 'shared/components/Link/Link';
 
 export function PodList(params) {
   const { showNodeName } = params;
@@ -47,10 +47,7 @@ export function PodList(params) {
       {
         header: t('pods.node'),
         value: pod => (
-          <Link
-            className="bsl-link"
-            to={clusterUrl(`overview/nodes/${pod.spec.nodeName}`)}
-          >
+          <Link url={clusterUrl(`overview/nodes/${pod.spec.nodeName}`)}>
             {pod.spec.nodeName}
           </Link>
         ),

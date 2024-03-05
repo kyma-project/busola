@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
@@ -13,6 +12,7 @@ import {
   i18nDescriptionKey,
   docsURL,
 } from 'resources/PersistentVolumes';
+import { Link } from 'shared/components/Link/Link';
 
 export function PersistentVolumeList(props) {
   const { t } = useTranslation();
@@ -34,8 +34,7 @@ export function PersistentVolumeList(props) {
           ({ metadata }) => metadata.name === pv.spec?.storageClassName,
         ) ? (
           <Link
-            className="bsl-link"
-            to={resourceUrl({
+            url={resourceUrl({
               kind: 'StorageClass',
               metadata: {
                 name: pv.spec?.storageClassName,
@@ -59,8 +58,7 @@ export function PersistentVolumeList(props) {
           ({ metadata }) => metadata.name === pv.spec?.claimRef?.name,
         ) ? (
           <Link
-            className="bsl-link"
-            to={resourceUrl(
+            url={resourceUrl(
               {
                 kind: 'PersistentVolumeClaim',
                 metadata: {
