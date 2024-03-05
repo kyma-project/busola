@@ -167,7 +167,7 @@ export const createResourceRoutes = ({
               details={<Details />}
               {...props}
             >
-              <List allowSlashShortcut />
+              <List />
             </ListWrapper>
           </Suspense>
         }
