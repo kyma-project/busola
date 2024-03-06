@@ -12,32 +12,33 @@ export function Tabs({
 }) {
   const { widgetT } = useGetTranslation();
 
-  return (
-    <>
-      {Array.isArray(structure?.children) && (
-        <TabContainer
-          tabLayout="Inline"
-          contentBackgroundDesign="Transparent"
-          style={spacing.sapUiMediumMarginTop}
-        >
-          {structure.children.map((child, idx) => (
-            <Tab key={`tab-wrapper-${idx}`} text={widgetT(child)}>
-              {Array.isArray(child?.children) &&
-                child.children.map((def, idx) => (
-                  <Widget
-                    key={`tab-content-${idx}`}
-                    value={value}
-                    structure={def}
-                    schema={schema}
-                    inlineRenderer={InlineWidget}
-                    inlineContext={true}
-                    {...props}
-                  />
-                ))}
-            </Tab>
-          ))}
-        </TabContainer>
-      )}
-    </>
+  return Array.isArray(structure?.children) ? (
+    <div
+      style={{
+        ...spacing.sapUiMediumMarginTop,
+        ...spacing.sapUiSmallMarginBeginEnd,
+      }}
+    >
+      <TabContainer tabLayout="Inline" contentBackgroundDesign="Transparent">
+        {structure.children.map((child, idx) => (
+          <Tab key={`tab-wrapper-${idx}`} text={widgetT(child)}>
+            {Array.isArray(child?.children) &&
+              child.children.map((def, idx) => (
+                <Widget
+                  key={`tab-content-${idx}`}
+                  value={value}
+                  structure={def}
+                  schema={schema}
+                  inlineRenderer={InlineWidget}
+                  inlineContext={true}
+                  {...props}
+                />
+              ))}
+          </Tab>
+        ))}
+      </TabContainer>
+    </div>
+  ) : (
+    <></>
   );
 }
