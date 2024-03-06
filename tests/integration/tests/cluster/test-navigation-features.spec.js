@@ -36,6 +36,10 @@ context('Test navigation features', () => {
       .click()
       .type('cronjob-controller');
 
+    cy.get('ui5-li-suggestion-item:visible')
+      .contains('cronjob-controller')
+      .click();
+
     cy.contains('cronjob-controller (SA)') // link wrapper
       .contains('cronjob-controller') // link itself
       .click();

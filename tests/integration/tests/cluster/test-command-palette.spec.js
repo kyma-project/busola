@@ -50,7 +50,7 @@ context('Test Command Palette navigation', () => {
 
     getQueryInput().type('ns/default');
 
-    cy.contains('default').click();
+    cy.contains('li.result', 'default').click();
 
     cy.url().should('match', new RegExp('namespaces/default'));
 
