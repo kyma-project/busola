@@ -83,7 +83,6 @@ context('Test reduced permissions 2', () => {
 
     cy.get('ui5-input[placeholder="Search"]')
       .find('input')
-      .click()
       .type('kube-public');
 
     cy.clickGenericListLink('kube-public');

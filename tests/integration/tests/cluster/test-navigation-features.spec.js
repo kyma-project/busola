@@ -33,7 +33,6 @@ context('Test navigation features', () => {
 
     cy.get('ui5-input[placeholder="Search"]')
       .find('input')
-      .click()
       .type('cronjob-controller');
 
     cy.get('ui5-li-suggestion-item:visible')
