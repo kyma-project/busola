@@ -121,7 +121,7 @@ export const ResourceCreate = ({
                 onCompleted: handleFormSuccess,
                 performManualSubmit: handleFormSubmit,
               })}
-              <div style={spacing.sapUiTinyMarginBeginEnd}>
+              <div style={spacing.sapUiSmallMarginBeginEnd}>
                 <Bar
                   design="FloatingFooter"
                   endContent={<>{renderConfirmButton()}</>}
