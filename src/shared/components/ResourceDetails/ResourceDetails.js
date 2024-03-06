@@ -10,11 +10,7 @@ import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { useDelete, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { YamlEditorProvider } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
-import {
-  getErrorMessage,
-  prettifyNamePlural,
-  prettifyNameSingular,
-} from 'shared/utils/helpers';
+import { getErrorMessage, prettifyNameSingular } from 'shared/utils/helpers';
 import { Labels } from 'shared/components/Labels/Labels';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { Spinner } from 'shared/components/Spinner/Spinner';
@@ -24,7 +20,6 @@ import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 import { useVersionWarning } from 'hooks/useVersionWarning';
-import { useUrl } from 'hooks/useUrl';
 
 import { Tooltip } from '../Tooltip/Tooltip';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
@@ -63,7 +58,6 @@ ResourceDetails.propTypes = {
   headerActions: PropTypes.node,
   resourceHeaderActions: PropTypes.arrayOf(PropTypes.func),
   readOnly: PropTypes.bool,
-  breadcrumbs: PropTypes.array,
   editActionLabel: PropTypes.string,
   windowTitle: PropTypes.string,
   resourceGraphConfig: PropTypes.object,
@@ -108,17 +102,9 @@ function ResourceDetailsRenderer(props) {
 
   const updateResourceMutation = useUpdate(props.resourceUrl);
   const deleteResourceMutation = useDelete(props.resourceUrl);
-  const { resourceListUrl } = useUrl();
 
   if (loading) return <Spinner />;
   if (error) {
-    const breadcrumbItems = props.breadcrumbs || [
-      {
-        name: prettifyNamePlural(props.resourceTitle, props.resourceType),
-        url: resourceListUrl(resource, { resourceType: props.resourceType }),
-      },
-      { name: '' },
-    ];
     if (error.code === 404) {
       return (
         <ResourceNotFound
@@ -126,14 +112,12 @@ function ResourceDetailsRenderer(props) {
             props.resourceTitle,
             props.resourceType,
           )}
-          breadcrumbs={breadcrumbItems}
         />
       );
     }
     return (
       <ResourceNotFound
         resource={prettifyNameSingular(props.resourceTitle, props.resourceType)}
-        breadcrumbs={breadcrumbItems}
         customMessage={getErrorMessage(error)}
       />
     );
@@ -158,7 +142,6 @@ function ResourceDetailsRenderer(props) {
 function Resource({
   layoutNumber,
   layoutCloseCreateUrl,
-  breadcrumbs,
   children,
   createResourceForm: CreateResourceForm,
   customColumns,
@@ -205,18 +188,7 @@ function Resource({
   });
 
   const layoutColumn = useRecoilValue(columnLayoutState);
-
-  const { resourceListUrl } = useUrl();
-
   const { isEnabled: isColumnLayoutEnabled } = useFeature('COLUMN_LAYOUT');
-
-  const breadcrumbItems = breadcrumbs || [
-    {
-      name: pluralizedResourceKind,
-      url: resourceListUrl(resource, { resourceType }),
-    },
-    { name: '' },
-  ];
 
   const protectedResource = isProtected(resource);
 
@@ -382,7 +354,6 @@ function Resource({
         actions={actions}
         protectedResource={protectedResource}
         protectedResourceWarning={protectedResourceWarning(resource)}
-        breadcrumbItems={breadcrumbItems}
         content={
           <>
             {createPortal(

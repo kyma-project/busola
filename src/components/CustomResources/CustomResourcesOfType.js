@@ -25,20 +25,11 @@ export default function CustomResourcesOfType({
     return <UI5Panel title={error.message} />;
   }
 
-  const breadcrumbItems = [
-    {
-      name: t('custom-resources.title'),
-      url: clusterUrl('customresources'),
-    },
-    { name: '' },
-  ];
-
   return (
     <>
       <DynamicPageComponent
         layoutNumber="MidColumn"
         title={pluralize(crd.spec.names.kind)}
-        breadcrumbItems={breadcrumbItems}
         content={
           <CustomResources
             crd={crd}

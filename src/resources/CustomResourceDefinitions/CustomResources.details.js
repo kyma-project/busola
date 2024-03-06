@@ -1,20 +1,14 @@
-import React from 'react';
 import jsyaml from 'js-yaml';
 import { useRecoilValue } from 'recoil';
-import { useTranslation } from 'react-i18next';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
-import { useUrl } from 'hooks/useUrl';
 import CRCreate from 'resources/CustomResourceDefinitions/CRCreate';
 
-function CustomResource({ params }) {
-  const { t } = useTranslation();
-  const { scopedUrl } = useUrl();
-
+export default function CustomResource({ params }) {
   const namespace = useRecoilValue(activeNamespaceIdState);
   const {
     customResourceDefinitionName,
@@ -47,18 +41,6 @@ function CustomResource({ params }) {
       : ''
   }${crdName}/${resourceName}`;
 
-  const breadcrumbs = [
-    {
-      name: t('custom-resources.title'),
-      url: scopedUrl('customresources'),
-    },
-    {
-      name: customResourceDefinitionName,
-      url: scopedUrl(`customresources/${customResourceDefinitionName}`),
-    },
-    { name: '' },
-  ];
-
   const yamlPreview = resource => (
     <ReadonlyEditorPanel
       title="YAML"
@@ -73,7 +55,6 @@ function CustomResource({ params }) {
       resourceType={crdName}
       resourceName={resourceName}
       namespace={namespace}
-      breadcrumbs={breadcrumbs}
       createResourceForm={props => (
         <CRCreate {...props} crd={data} layoutNumber="MidColumn" />
       )}
@@ -81,4 +62,3 @@ function CustomResource({ params }) {
     />
   );
 }
-export default CustomResource;

@@ -21,11 +21,6 @@ function HelmReleasesDetails({ releaseName, namespace }) {
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();
 
-  const breadcrumbItems = [
-    { name: t('helm-releases.title'), url: namespaceUrl('helm-releases') },
-    { name: '' },
-  ];
-
   const { data, loading } = useGetList(s => s.type === 'helm.sh/release.v1')(
     `/api/v1/namespaces/${namespace}/secrets?labelSelector=name==${releaseName}`,
   );
@@ -37,7 +32,6 @@ function HelmReleasesDetails({ releaseName, namespace }) {
     return (
       <ResourceNotFound
         resource={prettifyNameSingular(undefined, t('helm-releases.title'))}
-        breadcrumbs={breadcrumbItems}
       />
     );
   }
@@ -46,7 +40,6 @@ function HelmReleasesDetails({ releaseName, namespace }) {
     <>
       <DynamicPageComponent
         title={releaseName}
-        breadcrumbItems={breadcrumbItems}
         description={ResourceDescription}
         showYamlTab={showYamlTab}
         inlineEditForm={() => (
