@@ -69,6 +69,7 @@
   }
 }
 
-[data-component-name='DynamicPageContent'] {
+[data-component-name='DynamicPageContent'],
+[data-component-name='ObjectPageContent'] {
   padding: 0 !important;
 }

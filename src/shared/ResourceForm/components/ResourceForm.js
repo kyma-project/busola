@@ -162,6 +162,7 @@ export function ResourceForm({
       labelSpanS={0}
       labelSpanXL={0}
       as="div"
+      style={{ overflowX: 'hidden' }}
     >
       {mode === ModeSelector.MODE_FORM && (
         <FormItem>
