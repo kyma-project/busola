@@ -58,7 +58,7 @@ export function SearchInput({
   useEventListener('keydown', onKeyPress, [disabled, isSideDrawerOpened]);
 
   const renderSearchList = entries => {
-    if (!entries) return;
+    if (!entries || !showSuggestion) return <></>;
     const suggestions = getSearchSuggestions(entries);
 
     if (suggestions.length === 0) {
