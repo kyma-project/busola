@@ -35,9 +35,9 @@ function CustomResource({ params }) {
     versions?.find(version => version.name === resourceVersion) ||
     versions?.find(version => version.storage);
 
-  const crdName = customResourceDefinitionName.split('.')[0];
-  const crdGroup = customResourceDefinitionName.replace(`${crdName}.`, '');
-  const resourceUrl = `/apis/${crdGroup}/${version.name}/${
+  const crdName = customResourceDefinitionName?.split('.')[0];
+  const crdGroup = customResourceDefinitionName?.replace(`${crdName}.`, '');
+  const resourceUrl = `/apis/${crdGroup}/${version?.name}/${
     resourceNamespace
       ? `namespaces/${resourceNamespace}/`
       : namespace

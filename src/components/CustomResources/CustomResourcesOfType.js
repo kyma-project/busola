@@ -9,7 +9,7 @@ import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { Link } from 'shared/components/Link/Link';
 
-export default function CustomResourcesOfType({ crdName }) {
+export default function CustomResourcesOfType({ crdName, enableColumnLayout }) {
   const { t } = useTranslation();
   const { clusterUrl } = useUrl();
   const { data: crd, loading, error } = useGet(
@@ -41,6 +41,7 @@ export default function CustomResourcesOfType({ crdName }) {
             version={crd.spec.versions.find(v => v.served)}
             showTitle={false}
             showNamespace={false}
+            enableColumnLayout={enableColumnLayout}
           />
         }
       >
