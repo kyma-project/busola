@@ -36,6 +36,10 @@ body {
   }
 }
 
+.column-content {
+  height: 100%;
+}
+
 .panel-grid {
   display: grid;
   grid-template-columns: 2fr 2fr;
