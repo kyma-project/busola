@@ -23,6 +23,7 @@ import { FeaturedCard } from './FeaturedCard/FeaturedCard';
 import { APIRuleHost } from './APIRules/APIRuleHost';
 
 import { PendingWrapper } from './PendingWrapper';
+import { CustomCode } from './CustomCode/CustomCodeRenderer';
 
 export const widgets = {
   Null: () => '',
@@ -48,6 +49,7 @@ export const widgets = {
   Text,
   Wizard,
   FeaturedCard,
+  CustomCode,
 };
 
 export const valuePreprocessors = {

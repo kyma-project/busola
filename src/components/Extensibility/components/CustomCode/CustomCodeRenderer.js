@@ -1,6 +1,6 @@
 import DynamicGitHubComponent from './DynamicGitHubComponent';
 
-export function Panel({
+export function CustomCode({
   value,
   structure,
   schema,
@@ -9,7 +9,7 @@ export function Panel({
   ...props
 }) {
   const githubUrl =
-    'https://raw.githubusercontent.com/user/repo/branch/path/to/your/component.js';
+    'https://raw.githubusercontent.com/mrCherry97/busola/custom-code-babel/CustomComponent.js';
 
   return (
     <div>
