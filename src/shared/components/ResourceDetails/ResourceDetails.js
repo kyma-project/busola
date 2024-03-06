@@ -49,7 +49,6 @@ ResourceDetails.propTypes = {
   children: PropTypes.node,
   customComponents: PropTypes.arrayOf(PropTypes.func),
   description: PropTypes.object,
-  hasTabs: PropTypes.bool,
   resourceUrl: PropTypes.string.isRequired,
   resourceType: PropTypes.string.isRequired,
   resourceName: PropTypes.string,
@@ -72,7 +71,6 @@ ResourceDetails.propTypes = {
 ResourceDetails.defaultProps = {
   customColumns: [],
   customComponents: [],
-  hasTabs: false,
   headerActions: null,
   resourceHeaderActions: [],
   readOnly: false,
@@ -147,7 +145,6 @@ function Resource({
   customColumns,
   customComponents,
   description,
-  hasTabs,
   editActionLabel,
   headerActions,
   namespace,
@@ -279,9 +276,7 @@ function Resource({
   const resourceDetailsCard = (
     <ResourceDetailsCard
       title={title ?? t('common.headers.resource-details')}
-      wrapperClassname={`resource-overview__details-wrapper  ${
-        hasTabs ? 'tabs' : ''
-      }`}
+      wrapperClassname="resource-overview__details-wrapper"
       content={
         <>
           <DynamicPageComponent.Column
@@ -382,8 +377,8 @@ function Resource({
                   : 'column-view'
               }`}
             >
-              {!hasTabs && resourceDetailsCard}
-              {!hasTabs && resourceStatusCard && resourceStatusCard}
+              {resourceDetailsCard}
+              {resourceStatusCard && resourceStatusCard}
             </div>
             <Suspense fallback={<Spinner />}>
               <Injections
@@ -393,7 +388,7 @@ function Resource({
               />
             </Suspense>
             {(customComponents || []).map(component =>
-              component(resource, resourceUrl, resourceDetailsCard),
+              component(resource, resourceUrl),
             )}
             {children}
             {resourceGraphConfig?.[resource.kind] && (
