@@ -86,7 +86,6 @@ export function ResourceForm({
   });
 
   const handleInitialMode = () => {
-    console.log(initialMode);
     if (initialMode) {
       switch (initialMode) {
         case 'MODE_YAML':
@@ -99,7 +98,7 @@ export function ResourceForm({
           return ModeSelector.MODE_SIMPLE;
       }
     }
-    console.log(onlyYaml);
+
     if (onlyYaml) return ModeSelector.MODE_YAML;
 
     return editView.preferencesViewType === 'MODE_DEFAULT'
@@ -112,7 +111,7 @@ export function ResourceForm({
   const [mode, setMode] = React.useState(handleInitialMode);
   const [actionsEditor, setActionsEditor] = React.useState(null);
   const validationRef = useRef(true);
-  console.log(mode);
+
   useEffect(() => {
     if (setCustomValid) {
       if (mode === ModeSelector.MODE_YAML) {

@@ -3,7 +3,7 @@ import { localStorageEffect } from '../utils/effects';
 
 export type EditViewTypes = {
   preferencesViewType: 'MODE_YAML' | 'MODE_FORM' | 'MODE_DEFAULT' | string;
-  dynamicViewType: 'MODE_YAML' | 'MODE_FORM' | null | string;
+  dynamicViewType: 'MODE_YAML' | 'MODE_FORM' | null;
 };
 
 export type EditView = string | EditViewTypes;
@@ -18,7 +18,6 @@ export const editViewState: RecoilState<EditView> = atom<EditView>({
 });
 
 export const getEditViewState = (editView: EditView): EditViewTypes => {
-  console.log(editView);
   if (typeof editView === 'string') {
     return {
       preferencesViewType: 'MODE_DEFAULT',
