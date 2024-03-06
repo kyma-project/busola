@@ -5,7 +5,6 @@ import '@ui5/webcomponents/dist/features/InputSuggestions.js';
 import { useTranslation } from 'react-i18next';
 import { useEventListener } from 'hooks/useEventListener';
 
-import { MESSAGES } from 'shared/components/GenericList/constants';
 import { getEntryMatches } from 'shared/components/GenericList/helpers';
 import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
 import { ResourceDetailContext } from '../ResourceDetails/ResourceDetails';
@@ -61,17 +60,9 @@ export function SearchInput({
     if (!entries || !showSuggestion) return <></>;
     const suggestions = getSearchSuggestions(entries);
 
-    if (suggestions.length === 0) {
-      return (
-        <SuggestionItem
-          id={MESSAGES.NO_SEARCH_RESULT}
-          text={MESSAGES.NO_SEARCH_RESULT}
-        />
-      );
-    } else
-      return suggestions.map(suggestion => (
-        <SuggestionItem id={suggestion} text={suggestion} />
-      ));
+    return suggestions.map(suggestion => (
+      <SuggestionItem id={suggestion} text={suggestion} />
+    ));
   };
 
   const getSearchSuggestions = entries => {
