@@ -19,7 +19,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
-  const { namespace, releaseName } = useParams();
+  const { namespaceId, releaseName } = useParams();
 
   const initialLayoutState = layout
     ? {
@@ -27,7 +27,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
         midColumn: {
           resourceName: releaseName,
           resourceType: 'HelmReleases',
-          namespaceId: namespace,
+          namespaceId,
         },
         endColumn: null,
       }
@@ -37,7 +37,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
     if (layout) {
       setLayoutColumn(initialLayoutState);
     }
-  }, [layout, isColumnLeyoutEnabled, namespace, releaseName]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [layout, isColumnLeyoutEnabled, namespaceId, releaseName]); // eslint-disable-line react-hooks/exhaustive-deps
 
   let startColumnComponent = null;
 
@@ -45,6 +45,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
     startColumnComponent = (
       <HelmReleaseDetails
         releaseName={layoutState?.midColumn?.resourceName || releaseName}
+        namespace={layoutState?.midColumn?.namespaceId || namespaceId}
       />
     );
   } else {
@@ -58,6 +59,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
     midColumnComponent = (
       <HelmReleaseDetails
         releaseName={layoutState?.midColumn?.resourceName || releaseName}
+        namespace={layoutState?.midColumn?.namespaceId || namespaceId}
       />
     );
   }

@@ -6,6 +6,7 @@ import {
   DynamicPage,
   DynamicPageHeader,
   DynamicPageTitle,
+  FlexBox,
   ObjectPage,
   ObjectPageSection,
   Title,
@@ -14,6 +15,7 @@ import {
 import './DynamicPageComponent.scss';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useFeature } from 'hooks/useFeature';
@@ -44,10 +46,14 @@ export const DynamicPageComponent = ({
   layoutNumber,
   layoutCloseUrl,
   inlineEditForm,
+  showYamlTab,
+  protectedResource,
+  protectedResourceWarning,
 }) => {
   const [showTitleDescription, setShowTitleDescription] = useState(false);
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
+  const { t } = useTranslation();
 
   const headerTitle = (
     <DynamicPageTitle
@@ -174,16 +180,23 @@ export const DynamicPageComponent = ({
       }
       header={
         <Title className="ui5-title">
-          {title}
-          {description && (
-            <HintButton
-              style={spacing.sapUiTinyMargin}
-              setShowTitleDescription={setShowTitleDescription}
-              showTitleDescription={showTitleDescription}
-              description={description}
-              context="dynamic"
-            />
-          )}
+          <FlexBox alignItems="Center">
+            {title}
+            {protectedResource && (
+              <span style={spacing.sapUiTinyMarginBegin}>
+                {protectedResourceWarning}
+              </span>
+            )}
+            {description && (
+              <HintButton
+                style={spacing.sapUiTinyMargin}
+                setShowTitleDescription={setShowTitleDescription}
+                showTitleDescription={showTitleDescription}
+                description={description}
+                context="dynamic"
+              />
+            )}
+          </FlexBox>
         </Title>
       }
       actions={actions}
@@ -214,7 +227,7 @@ export const DynamicPageComponent = ({
           aria-label="View"
           hideTitleText
           id="view"
-          titleText="View"
+          titleText={t('common.tabs.view')}
         >
           {content}
         </ObjectPageSection>
@@ -223,7 +236,9 @@ export const DynamicPageComponent = ({
           aria-label="Edit"
           hideTitleText
           id="edit"
-          titleText="Edit"
+          titleText={
+            showYamlTab ? t('common.tabs.yaml') : t('common.tabs.edit')
+          }
         >
           {inlineEditForm()}
         </ObjectPageSection>

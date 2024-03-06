@@ -100,4 +100,3 @@ export default function ReplicaSetCreate({
     </ResourceForm>
   );
 }
-ReplicaSetCreate.allowEdit = true;

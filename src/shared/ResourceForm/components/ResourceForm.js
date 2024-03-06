@@ -51,6 +51,7 @@ export function ResourceForm({
   initialMode,
   yamlSearchDisabled,
   yamlHideDisabled,
+  isEdit,
 }) {
   // readonly schema ID, set only once
   const resourceSchemaId = useMemo(
@@ -219,7 +220,7 @@ export function ResourceForm({
           headerActions={
             <>
               {/* TODO STYLE IT */}
-              {!!initialResource && actions}
+              {actions}
               <div className="yaml-form-actions">
                 <EditorActions
                   val={convertedResource}
@@ -241,7 +242,7 @@ export function ResourceForm({
                     setMode(newMode);
                     if (onModeChange) onModeChange(mode, newMode);
                   }}
-                  isEditing={!!initialResource}
+                  isEditing={!!isEdit}
                   isDisabled={modeSelectorDisabled}
                 />
               )}

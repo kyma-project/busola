@@ -22,5 +22,4 @@ export default function RoleCreate(props) {
     />
   );
 }
-RoleCreate.allowEdit = true;
 RoleCreate.allowClone = true;

@@ -81,4 +81,3 @@ export function BusolaExtensionEdit({
     </ResourceForm>
   );
 }
-BusolaExtensionEdit.allowEdit = true;

@@ -82,4 +82,3 @@ export default function JobCreate({
     </ResourceForm>
   );
 }
-JobCreate.allowEdit = true;

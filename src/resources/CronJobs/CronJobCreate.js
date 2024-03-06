@@ -79,4 +79,3 @@ export default function CronJobCreate({
     </ResourceForm>
   );
 }
-CronJobCreate.allowEdit = true;

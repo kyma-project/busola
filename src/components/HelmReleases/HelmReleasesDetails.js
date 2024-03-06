@@ -9,17 +9,18 @@ import { Link } from 'react-router-dom';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
 import { OtherReleaseVersions } from './OtherReleaseVersions';
 import { findRecentRelease } from './findRecentRelease';
-import { useRecoilValue } from 'recoil';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { ResourceDescription } from 'components/HelmReleases';
+import HelmReleasesYaml from './HelmReleasesYaml';
+import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
+import { showYamlTab } from './index';
 
-function HelmReleasesDetails({ releaseName }) {
+function HelmReleasesDetails({ releaseName, namespace }) {
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();
 
-  const namespace = useRecoilValue(activeNamespaceIdState);
   const breadcrumbItems = [
     { name: t('helm-releases.title'), url: namespaceUrl('helm-releases') },
     { name: '' },
@@ -47,6 +48,24 @@ function HelmReleasesDetails({ releaseName }) {
         title={releaseName}
         breadcrumbItems={breadcrumbItems}
         description={ResourceDescription}
+        showYamlTab={showYamlTab}
+        inlineEditForm={() => (
+          <ResourceCreate
+            title={'HelmRelease'}
+            isEdit={true}
+            confirmText={t('common.buttons.save')}
+            disableEdit={true}
+            renderForm={props => (
+              <ErrorBoundary>
+                <HelmReleasesYaml
+                  resource={releaseSecret}
+                  editMode={true}
+                  {...props}
+                />
+              </ErrorBoundary>
+            )}
+          />
+        )}
         content={
           <>
             <HelmReleaseData
