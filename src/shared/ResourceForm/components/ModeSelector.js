@@ -31,7 +31,7 @@ export function ModeSelector({ mode, setMode, isDisabled = false }) {
             pressed={mode === button.mode}
             onClick={() => {
               setMode(button.mode);
-              if (preferencesViewType === 'auto') {
+              if (preferencesViewType === 'MODE_DEFAULT') {
                 setEditView({
                   preferencesViewType: preferencesViewType,
                   dynamicViewType: button.mode,

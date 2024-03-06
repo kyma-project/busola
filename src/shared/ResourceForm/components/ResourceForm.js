@@ -102,21 +102,11 @@ export function ResourceForm({
     console.log(onlyYaml);
     if (onlyYaml) return ModeSelector.MODE_YAML;
 
-    switch (editView.preferencesViewType) {
-      case 'YAML':
-        return ModeSelector.MODE_YAML;
-      case 'form':
-        return ModeSelector.MODE_FORM;
-      case 'auto':
-        if (editView.dynamicViewType === ModeSelector.MODE_FORM) {
-          return ModeSelector.MODE_FORM;
-        } else if (editView.dynamicViewType === ModeSelector.MODE_YAML) {
-          return ModeSelector.MODE_YAML;
-        }
-        break;
-      default:
-        return ModeSelector.MODE_FORM;
-    }
+    return editView.preferencesViewType === 'MODE_DEFAULT'
+      ? editView.dynamicViewType === ModeSelector.MODE_FORM
+        ? ModeSelector.MODE_FORM
+        : ModeSelector.MODE_YAML
+      : editView.preferencesViewType ?? ModeSelector.MODE_FORM;
   };
 
   const [mode, setMode] = React.useState(handleInitialMode);

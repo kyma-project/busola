@@ -43,7 +43,6 @@ import { HintButton } from '../DescriptionHint/DescriptionHint';
 import { useRecoilValue } from 'recoil';
 import { useFeature } from 'hooks/useFeature';
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import { editViewState } from 'state/preferences/editViewAtom';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
