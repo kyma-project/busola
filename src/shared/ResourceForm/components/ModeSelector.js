@@ -2,14 +2,14 @@ import { useTranslation } from 'react-i18next';
 import { SegmentedButton, SegmentedButtonItem } from '@ui5/webcomponents-react';
 import { useRecoilState } from 'recoil';
 import {
-  editViewState,
-  getEditViewState,
-} from 'state/preferences/editViewAtom';
+  editViewModeState,
+  getEditViewModeState,
+} from 'state/preferences/editViewModeAtom';
 
 export function ModeSelector({ mode, setMode, isDisabled = false }) {
   const { t } = useTranslation();
-  const [editView, setEditView] = useRecoilState(editViewState);
-  const { preferencesViewType } = getEditViewState(editView);
+  const [editViewMode, setEditViewMode] = useRecoilState(editViewModeState);
+  const { preferencesViewType } = getEditViewModeState(editViewMode);
 
   const buttonsToDisplay = [
     {
@@ -32,7 +32,7 @@ export function ModeSelector({ mode, setMode, isDisabled = false }) {
             onClick={() => {
               setMode(button.mode);
               if (preferencesViewType === 'MODE_DEFAULT') {
-                setEditView({
+                setEditViewMode({
                   preferencesViewType: preferencesViewType,
                   dynamicViewType: button.mode,
                 });

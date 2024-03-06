@@ -1,11 +1,10 @@
-import { Label, Option, Select } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { Option, Select } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import {
-  editViewState,
-  getEditViewState,
-} from 'state/preferences/editViewAtom';
+  editViewModeState,
+  getEditViewModeState,
+} from 'state/preferences/editViewModeAtom';
 
 const AVAILABLE_EDIT_VIEW_OPTIONS = [
   { key: 'MODE_YAML', text: 'always-yaml' },
@@ -15,9 +14,9 @@ const AVAILABLE_EDIT_VIEW_OPTIONS = [
 
 export default function EditViewSettings() {
   const { t } = useTranslation();
-  const [editView, setEditView] = useRecoilState(editViewState);
+  const [editViewMode, setEditViewMode] = useRecoilState(editViewModeState);
 
-  const { preferencesViewType } = getEditViewState(editView);
+  const { preferencesViewType } = getEditViewModeState(editViewMode);
 
   return (
     <>
@@ -28,7 +27,7 @@ export default function EditViewSettings() {
         <Select
           id="editTypeComboBox"
           onChange={e => {
-            setEditView({
+            setEditViewMode({
               preferencesViewType: e.target.value ?? 'MODE_DEFAULT',
               dynamicViewType:
                 e.target.value === 'MODE_DEFAULT' ? 'MODE_FORM' : null,

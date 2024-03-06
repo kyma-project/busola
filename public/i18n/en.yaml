@@ -1388,7 +1388,7 @@ settings:
     showHiddenNamespaces: Show hidden Namespaces
     title: Clusters
     edit-view: 
-      choose: Choose default resource edit view
+      choose: Select default view for resource edit
       default: Default (last one used)
       always-yaml: Always YAML
       always-form: Always form 
