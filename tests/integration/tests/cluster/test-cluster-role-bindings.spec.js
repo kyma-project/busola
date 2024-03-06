@@ -65,7 +65,7 @@ context('Test Cluster Role Bindings', () => {
       .should('be.visible');
 
     cy.getMidColumn()
-      .contains('a.bsl-link', 'cluster-admin')
+      .contains('ui5-link', 'cluster-admin')
       .should('be.visible');
   });
 

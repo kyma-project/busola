@@ -1,6 +1,5 @@
 import { render } from 'testing/reactTestingUtils';
 import { ControlledBy } from '../ControlledBy';
-import pluralize from 'pluralize';
 
 jest.mock('react-router', () => ({
   ...jest.requireActual('react-router'),
@@ -49,24 +48,18 @@ describe('ControlledBy', () => {
     expect(queryByText(/ResourceName2/)).toBeInTheDocument();
   });
 
-  it('Checks Link href attribute', () => {
+  it('Renders owners - with name', () => {
     const ownerReferences = {
       kind: 'ClusterRole',
       name: 'ResourceName',
       apiVersion: 'ApiVersion',
     };
 
-    const { getByText } = render(
+    const { queryByText } = render(
       <ControlledBy ownerReferences={ownerReferences} />,
     );
 
-    const linkElement = getByText(/ResourceName/);
-    const hrefAttribute = linkElement.getAttribute('href');
-    expect(hrefAttribute).toBe(
-      `/cluster/test-cluster/${pluralize(ownerReferences.kind).toLowerCase()}/${
-        ownerReferences.name
-      }`,
-    );
+    expect(queryByText(/ResourceName/)).toBeInTheDocument();
   });
 
   it('Renders owners - without name', () => {

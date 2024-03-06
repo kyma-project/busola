@@ -1,15 +1,14 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { GoToDetailsLink } from 'shared/components/ControlledBy/ControlledBy';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import { Link } from 'react-router-dom';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { Link } from 'shared/components/Link/Link';
 
 const Port = ({ serviceName, port, services }) => {
   const { namespaceUrl } = useUrl();
@@ -17,7 +16,7 @@ const Port = ({ serviceName, port, services }) => {
   const serviceLink = services?.find(
     ({ metadata }) => metadata.name === serviceName,
   ) ? (
-    <Link to={namespaceUrl(`services/${serviceName}`)}>{serviceName}</Link>
+    <Link url={namespaceUrl(`services/${serviceName}`)}>{serviceName}</Link>
   ) : (
     <span>{serviceName || EMPTY_TEXT_PLACEHOLDER}</span>
   );

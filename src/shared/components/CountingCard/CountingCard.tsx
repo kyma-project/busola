@@ -1,9 +1,10 @@
 import { Card, CardHeader } from '@ui5/webcomponents-react';
 import { spacing } from '@ui5/webcomponents-react-base';
-import { Link } from 'react-router-dom';
 import { useUrl } from 'hooks/useUrl';
 import { useTranslation } from 'react-i18next';
 import { DynamicPageComponent } from '../DynamicPageComponent/DynamicPageComponent';
+import { Link } from '../Link/Link';
+
 import './CountingCard.scss';
 
 type CountingCardProps = {
@@ -60,8 +61,8 @@ export const CountingCard = ({
         </div>
         {resourceUrl && (
           <Link
-            className="bsl-link learn-more-link"
-            to={namespaceUrl(resourceUrl, {
+            design="Default"
+            url={namespaceUrl(resourceUrl, {
               namespace: '-all-',
             })}
           >

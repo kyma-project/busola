@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { getPorts } from '../GetContainersPorts';
-import { Link } from 'react-router-dom';
 import { useUrl } from 'hooks/useUrl';
 import {
   List,
@@ -15,6 +14,7 @@ import {
 } from '@ui5/webcomponents-react';
 import { Labels } from '../Labels/Labels';
 import { PodTemplateRow } from './PodTemplateRow';
+import { Link } from '../Link/Link';
 
 function Table({ items, columns, rowRenderer }) {
   if (!items?.length) {
@@ -179,8 +179,7 @@ function VolumeComponent({ volume }) {
           label={t('common.headers.resource')}
           component={
             <Link
-              className="bsl-link"
-              to={namespaceUrl(
+              url={namespaceUrl(
                 `${configMap ? 'configmaps' : 'secrets'}/${k8sResourceName}`,
               )}
             >

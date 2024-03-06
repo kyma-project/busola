@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { isEqual } from 'lodash';
-import { Link } from 'react-router-dom';
 
 import { PersistentVolumeClaimStatus } from 'shared/components/PersistentVolumeClaimStatus';
 import { EventsList } from 'shared/components/EventsList';
@@ -18,6 +17,7 @@ import PersistentVolumesList from 'resources/PersistentVolumes/PersistentVolumeL
 import PersistentVolumeClaimCreate from './PersistentVolumeClaimCreate';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ResourceDescription } from 'resources/PersistentVolumeClaims';
+import { Link } from 'shared/components/Link/Link';
 
 const RelatedVolumes = ({ labels }) => {
   const PVParams = {
@@ -85,10 +85,7 @@ export const PVCConfiguration = pvc => {
         name={t('persistent-volume-claims.headers.volume-name')}
         value={
           pvc.spec?.volumeName ? (
-            <Link
-              className="bsl-link"
-              to={clusterUrl(`persistentvolumes/${pvc.spec?.volumeName}`)}
-            >
+            <Link url={clusterUrl(`persistentvolumes/${pvc.spec?.volumeName}`)}>
               {pvc.spec?.volumeName}
             </Link>
           ) : (
@@ -104,8 +101,7 @@ export const PVCConfiguration = pvc => {
             ({ metadata }) => metadata.name === pvc.spec?.storageClassName,
           ) ? (
             <Link
-              className="bsl-link"
-              to={clusterUrl(`storageclasses/${pvc.spec?.storageClassName}`)}
+              url={clusterUrl(`storageclasses/${pvc.spec?.storageClassName}`)}
             >
               {pvc.spec?.storageClassName}
             </Link>

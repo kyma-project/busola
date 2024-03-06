@@ -1,24 +1,17 @@
-import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { Link } from 'shared/components/Link/Link';
-import { Link as RRLink } from 'react-router-dom';
+import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import pluralize from 'pluralize';
 import { GroupingListPage } from './GroupingListPage';
 import { useUrl } from 'hooks/useUrl';
+import { Link } from 'shared/components/Link/Link';
 
 export default function CustomResourcesByGroup({ enableColumnLayout }) {
   const { t } = useTranslation();
   const { namespace, clusterUrl, scopedUrl } = useUrl();
   const description = (
     <Trans i18nKey="custom-resources.description">
-      <Link
-        className="bsl-link"
-        url="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/"
-      />
-      <RRLink
-        className="bsl-link"
-        to={clusterUrl(`customresourcedefinitions`)}
-      />
+      <ExternalLink url="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/" />
+      <Link url={clusterUrl(`customresourcedefinitions`)} />
     </Trans>
   );
 

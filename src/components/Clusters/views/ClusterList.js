@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@ui5/webcomponents-react';
-import { Link } from 'react-router-dom';
+import { Link } from 'shared/components/Link/Link';
 
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 
@@ -52,11 +52,10 @@ function ClusterList() {
 
   const { clusters, currentCluster } = clustersInfo;
 
-  const styleActiveCluster = entry => {
-    return entry?.kubeconfig?.['current-context'] ===
-      currentCluster?.contextName
-      ? { fontWeight: 'bolder' }
-      : {};
+  const isClusterActive = entry => {
+    return (
+      entry?.kubeconfig?.['current-context'] === currentCluster?.contextName
+    );
   };
 
   const downloadKubeconfig = entry => {
@@ -99,9 +98,9 @@ function ClusterList() {
 
   const rowRenderer = entry => [
     <Link
-      className="bsl-link"
-      to={`/cluster/${entry.contextName}`}
-      style={styleActiveCluster(entry)}
+      design={isClusterActive(entry) ? 'Emphasized' : 'Default'}
+      url={`/cluster/${entry.contextName}`}
+      resetLayout={false}
     >
       {entry.name}
     </Link>,

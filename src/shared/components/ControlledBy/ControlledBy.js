@@ -1,6 +1,4 @@
-import React from 'react';
 import pluralize from 'pluralize';
-import { Link } from 'react-router-dom';
 import './ControlledBy.scss';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
@@ -9,13 +7,9 @@ import { extensionsState } from 'state/navigation/extensionsAtom';
 import { resources } from 'resources';
 import { useUrl } from 'hooks/useUrl';
 import { getExtensibilityPath } from 'components/Extensibility/helpers/getExtensibilityPath';
+import { Link } from '../Link/Link';
 
-export const GoToDetailsLink = ({
-  kind,
-  name,
-  apiVersion,
-  noBrackets = false,
-}) => {
+export const GoToDetailsLink = ({ kind, name, noBrackets = false }) => {
   const extensions = useRecoilValue(extensionsState);
   const { namespaceUrl, clusterUrl } = useUrl();
 
@@ -45,7 +39,7 @@ export const GoToDetailsLink = ({
     return <>{noBrackets ? name : `(${name})`}</>;
   } else {
     return (
-      <Link className="bsl-link" to={path}>
+      <Link design="Default" url={path}>
         {noBrackets ? name : `(${name})`}
       </Link>
     );
