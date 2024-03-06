@@ -179,7 +179,6 @@ Cypress.Commands.add(
 
     cy.get('ui5-input[placeholder="Search"]:visible')
       .find('input')
-      .click()
       .type(resourceName);
 
     if (selectSearchResult) {
@@ -212,7 +211,6 @@ Cypress.Commands.add(
       if (clearSearch) {
         cy.get('ui5-input[placeholder="Search"]:visible')
           .find('input')
-          .click()
           .clear();
       }
 
