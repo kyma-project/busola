@@ -72,7 +72,7 @@ Cypress.Commands.add('goToNamespaceDetails', () => {
 Cypress.Commands.add('clearInput', { prevSubject: true }, element => {
   return cy
     .wrap(element)
-    .click()
+
     .type(
       `${Cypress.platform === 'darwin' ? '{cmd}a' : '{ctrl}a'} {backspace}`,
     );
@@ -105,7 +105,7 @@ Cypress.Commands.add(
 function paste(subject, { pastePayload }) {
   // https://developer.mozilla.org/en-US/docs/Web/API/Element/paste_event
   const pasteEvent = Object.assign(
-    new Event('paste', { bubbles: true, cancelable: true }),
+    new Event('paste', { bubbles: true, cancelable: false }),
     {
       clipboardData: {
         getData: (type = 'text') => pastePayload,
@@ -140,6 +140,8 @@ Cypress.Commands.add(
   'deleteInDetails',
   (resourceType, resourceName, columnLayout = false) => {
     if (columnLayout) {
+      cy.wait(1000); //wait for button
+
       cy.getMidColumn()
         .contains('ui5-button', 'Delete')
         .should('be.visible')
@@ -182,7 +184,7 @@ Cypress.Commands.add(
     if (isUI5Link) {
       cy.checkItemOnGenericListLink(resourceName);
     } else {
-      cy.contains('a', resourceName).should('be.visible');
+      cy.contains('ui5-link', resourceName).should('be.visible');
     }
 
     cy.contains('ui5-message-strip', /created/).should('not.exist');

@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useTranslation } from 'react-i18next';
 import { useUrl } from 'hooks/useUrl';
+import { Link } from 'shared/components/Link/Link';
 
 export const EVENT_MESSAGE_TYPE = {
   ALL: { key: 'All', text: 'all' },
@@ -52,9 +52,7 @@ export const FormatInvolvedObject = obj => {
   const { scopedUrl } = useUrl();
   const path = `${RESOURCE_PATH[obj.kind]}/${obj.name}`;
   return isLink ? (
-    <Link className="bsl-link" to={scopedUrl(path, namespaceOverride)}>
-      {text}
-    </Link>
+    <Link url={scopedUrl(path, namespaceOverride)}>{text}</Link>
   ) : (
     text
   );
@@ -64,9 +62,7 @@ export const FormatSourceObject = obj => {
   const { clusterUrl } = useUrl();
   if (!obj || Object.keys(obj).length === 0) return EMPTY_TEXT_PLACEHOLDER;
   return obj.host ? (
-    <Link className="bsl-link" to={clusterUrl(`overview/nodes/${obj.host}`)}>
-      {obj.host}
-    </Link>
+    <Link url={clusterUrl(`overview/nodes/${obj.host}`)}>{obj.host}</Link>
   ) : (
     obj.component
   );

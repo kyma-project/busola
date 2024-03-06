@@ -9,7 +9,6 @@ import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { Labels } from 'shared/components/Labels/Labels';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-
 import { decodeHelmRelease } from './decodeHelmRelease';
 import { findRecentRelease } from './findRecentRelease';
 import { HelmReleaseStatus } from './HelmReleaseStatus';

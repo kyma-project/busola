@@ -1,5 +1,5 @@
 import { ErrorPanel } from 'shared/components/ErrorPanel/ErrorPanel';
-import { Link } from 'react-router-dom';
+import { Link } from 'shared/components/Link/Link';
 import { useTranslation } from 'react-i18next';
 
 import { EventsList } from 'shared/components/EventsList';
@@ -15,7 +15,7 @@ import { ProgressIndicatorWithPercentage } from 'shared/components/ProgressIndic
 const NodeHeader = ({ nodeName }) => {
   const { clusterUrl } = useUrl();
   return (
-    <Link className="bsl-link" to={clusterUrl(`overview/nodes/${nodeName}`)}>
+    <Link url={clusterUrl(`overview/nodes/${nodeName}`)} resetLayout={false}>
       {nodeName}
     </Link>
   );
