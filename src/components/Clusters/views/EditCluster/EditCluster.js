@@ -291,7 +291,6 @@ function EditClusterComponent({
         onSubmit={onComplete}
         formElementRef={formElementRef}
         resourceUrl={resourceUrl}
-        initialMode={'MODE_YAML'}
       />
     </>
   );
