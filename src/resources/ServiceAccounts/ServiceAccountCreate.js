@@ -162,4 +162,3 @@ export default function ServiceAccountCreate({
     </ResourceForm>
   );
 }
-ServiceAccountCreate.allowEdit = true;

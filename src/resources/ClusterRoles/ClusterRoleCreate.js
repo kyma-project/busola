@@ -20,5 +20,4 @@ export default function ClusterRoleCreate(props) {
     />
   );
 }
-ClusterRoleCreate.allowEdit = true;
 ClusterRoleCreate.allowClone = true;

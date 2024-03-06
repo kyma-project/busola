@@ -109,4 +109,3 @@ export default function SecretCreate({
     </ResourceForm>
   );
 }
-SecretCreate.allowEdit = true;
