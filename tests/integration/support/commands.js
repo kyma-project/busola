@@ -167,19 +167,26 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
   'deleteFromGenericList',
-  (
-    resourceType,
-    resourceName,
-    confirmationEnabled = true,
-    deletedVisible = true,
-    clearSearch = true,
-    isUI5Link = true,
-    checkIfResourceIsRemoved = true,
-  ) => {
+  (resourceType, resourceName, options = {}) => {
+    const {
+      confirmationEnabled = true,
+      deletedVisible = true,
+      clearSearch = true,
+      isUI5Link = true,
+      checkIfResourceIsRemoved = true,
+      selectSearchResult = false,
+    } = options;
+
     cy.get('ui5-input[placeholder="Search"]:visible')
       .find('input')
       .click()
       .type(resourceName);
+
+    if (selectSearchResult) {
+      cy.get('ui5-li-suggestion-item:visible')
+        .contains(resourceName)
+        .click();
+    }
 
     if (isUI5Link) {
       cy.checkItemOnGenericListLink(resourceName);
