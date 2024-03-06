@@ -16,6 +16,8 @@ import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import { spacing } from '@ui5/webcomponents-react-base';
 import './ResourceForm.scss';
+import { useRecoilValue } from 'recoil';
+import { editViewState } from 'state/preferences/editViewAtom';
 
 export function ResourceForm({
   pluralKind, // used for the request path
@@ -67,6 +69,9 @@ export function ResourceForm({
     };
   }
 
+  const editView = useRecoilValue(editViewState);
+  console.log(editView);
+
   const { t } = useTranslation();
   const createResource = useCreateResource({
     singularName,
@@ -81,6 +86,7 @@ export function ResourceForm({
   });
 
   const handleInitialMode = () => {
+    console.log(initialMode);
     if (initialMode) {
       switch (initialMode) {
         case 'MODE_YAML':
@@ -93,14 +99,30 @@ export function ResourceForm({
           return ModeSelector.MODE_SIMPLE;
       }
     }
+    console.log(onlyYaml);
     if (onlyYaml) return ModeSelector.MODE_YAML;
-    return ModeSelector.MODE_FORM;
+
+    switch (editView.preferencesViewType) {
+      case 'YAML':
+        return ModeSelector.MODE_YAML;
+      case 'form':
+        return ModeSelector.MODE_FORM;
+      case 'auto':
+        if (editView.dynamicViewType === ModeSelector.MODE_FORM) {
+          return ModeSelector.MODE_FORM;
+        } else if (editView.dynamicViewType === ModeSelector.MODE_YAML) {
+          return ModeSelector.MODE_YAML;
+        }
+        break;
+      default:
+        return ModeSelector.MODE_FORM;
+    }
   };
 
   const [mode, setMode] = React.useState(handleInitialMode);
   const [actionsEditor, setActionsEditor] = React.useState(null);
   const validationRef = useRef(true);
-
+  console.log(mode);
   useEffect(() => {
     if (setCustomValid) {
       if (mode === ModeSelector.MODE_YAML) {
