@@ -14,7 +14,6 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { SearchInput } from 'shared/components/GenericList/SearchInput';
 import { useTranslation } from 'react-i18next';
-import { useUrl } from 'hooks/useUrl';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import './ContainersLogs.scss';
@@ -34,7 +33,6 @@ const ContainersLogs = ({ params }) => {
   const [logsToSave, setLogsToSave] = useState([]);
   const [sinceSeconds, setSinceSeconds] = useState(String(DEFAULT_TIMEFRAME));
   const selectedLogIndex = useRef(0);
-  const { namespaceUrl } = useUrl();
 
   const logTimeframeOptions = [
     { text: '1 hour', key: String(HOUR_IN_SECONDS) },
@@ -42,18 +40,6 @@ const ContainersLogs = ({ params }) => {
     { text: '6 hours', key: String(6 * HOUR_IN_SECONDS) },
     { text: '1 day', key: String(24 * HOUR_IN_SECONDS) },
     { text: 'all', key: String(MAX_TIMEFRAME_IN_SECONDS) },
-  ];
-
-  const breadcrumbs = [
-    {
-      name: 'Pods',
-      url: namespaceUrl('pods'),
-    },
-    {
-      name: params.podName,
-      url: namespaceUrl(`pods/${params.podName}`),
-    },
-    { name: '' },
   ];
 
   const url = `/api/v1/namespaces/${params.namespace}/pods/${params.podName}/log?container=${params.containerName}&follow=true&tailLines=1000&timestamps=true&sinceSeconds=${sinceSeconds}`;
@@ -178,7 +164,6 @@ const ContainersLogs = ({ params }) => {
   return (
     <DynamicPageComponent
       title={params.containerName}
-      breadcrumbItems={breadcrumbs}
       content={
         <UI5Panel
           title={t('pods.labels.logs')}

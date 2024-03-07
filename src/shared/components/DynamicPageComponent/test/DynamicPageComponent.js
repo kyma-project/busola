@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button } from '@ui5/webcomponents-react';
 import { render } from 'testing/reactTestingUtils';
 
@@ -27,23 +26,5 @@ describe('DynamicPageComponent', () => {
     );
 
     expect(getByLabelText('abc')).toBeInTheDocument();
-  });
-
-  it('Renders one breadcrumbItem with link', () => {
-    const breadcrumbItems = [{ name: 'item1', url: 'path1' }];
-    const { getByText } = render(
-      <ThemeProvider>
-        <DynamicPageComponent
-          title="page title"
-          breadcrumbItems={breadcrumbItems}
-        />
-      </ThemeProvider>,
-    );
-
-    const anchorElement = getByText('item1');
-    expect(anchorElement).toBeInTheDocument();
-
-    const hrefAttribute = anchorElement.getAttribute('href');
-    expect(hrefAttribute).toBe(breadcrumbItems[0].url);
   });
 });

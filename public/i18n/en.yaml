@@ -377,7 +377,8 @@ common:
     secret-ref-name: Select name
     secret-ref-namespace: Select Namespace
   product-title: Kyma
-  protected-resource: Resource protected. Go to Preferences to turn on the modification of protected resources.
+  protected-resource-description: Resource protected. Go to Preferences to turn on the modification of protected resources.
+  protected-resource: Protected resource 
   sorting:
     asc: Ascending
     count: Count
@@ -402,6 +403,10 @@ common:
     ready: Ready
     'true': 'true'
     unknown: Unknown
+  tabs:
+    edit: Edit
+    view: View
+    yaml: YAML
   tooltips:
     at: at
     column: Col
@@ -702,6 +707,7 @@ events:
     reason: Reason
     source: Source
     type: Type
+  name_singular: Event
   title: Events
 extensibility:
   configuration-error: 'Configuration error: {{error}}'

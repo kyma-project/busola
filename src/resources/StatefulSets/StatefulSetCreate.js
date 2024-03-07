@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
+import * as _ from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
@@ -11,12 +12,13 @@ export default function StatefulSetCreate({
   formElementRef,
   onChange,
   setCustomValid,
+  resource: initialStatefulSet,
   resourceUrl,
   ...props
 }) {
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const [statefulSet, setStatefulSet] = useState(
-    createStatefulSetTemplate(namespaceId),
+    _.cloneDeep(initialStatefulSet) || createStatefulSetTemplate(namespaceId),
   );
   const { t } = useTranslation();
 
@@ -26,6 +28,7 @@ export default function StatefulSetCreate({
       pluralKind="statefulsets"
       singularName={t('stateful-sets.name_singular')}
       resource={statefulSet}
+      initialResource={initialStatefulSet}
       setResource={setStatefulSet}
       onChange={onChange}
       formElementRef={formElementRef}

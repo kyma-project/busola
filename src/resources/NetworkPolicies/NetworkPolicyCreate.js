@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
+import * as _ from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
@@ -12,11 +13,13 @@ export default function NetworkPolicyCreate({
   onChange,
   setCustomValid,
   resourceUrl,
+  resource: initialNetworkPolicy,
   ...props
 }) {
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const [networkPolicy, setNetworkPolicy] = useState(
-    createNetworkPolicyTemplate(namespaceId),
+    _.cloneDeep(initialNetworkPolicy) ||
+      createNetworkPolicyTemplate(namespaceId),
   );
   const { t } = useTranslation();
 
@@ -26,6 +29,7 @@ export default function NetworkPolicyCreate({
       pluralKind="networkpolicies"
       singularName={t('network-policies.name_singular')}
       resource={networkPolicy}
+      initialResource={initialNetworkPolicy}
       setResource={setNetworkPolicy}
       onlyYaml
       onChange={onChange}

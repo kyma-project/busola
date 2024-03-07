@@ -1,26 +1,16 @@
 import React, { createContext, Suspense, useState } from 'react';
 import PropTypes from 'prop-types';
-import jsyaml from 'js-yaml';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
 import { Button, Title } from '@ui5/webcomponents-react';
 import { spacing } from '@ui5/webcomponents-react-base';
 
-import { createPatch } from 'rfc6902';
 import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNotFound';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { useDelete, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
-import { useNotification } from 'shared/contexts/NotificationContext';
-import {
-  useYamlEditor,
-  YamlEditorProvider,
-} from 'shared/contexts/YamlEditorContext/YamlEditorContext';
-import {
-  getErrorMessage,
-  prettifyNamePlural,
-  prettifyNameSingular,
-} from 'shared/utils/helpers';
+import { YamlEditorProvider } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
+import { getErrorMessage, prettifyNameSingular } from 'shared/utils/helpers';
 import { Labels } from 'shared/components/Labels/Labels';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { Spinner } from 'shared/components/Spinner/Spinner';
@@ -30,7 +20,6 @@ import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 import { useVersionWarning } from 'hooks/useVersionWarning';
-import { useUrl } from 'hooks/useUrl';
 
 import { Tooltip } from '../Tooltip/Tooltip';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
@@ -69,13 +58,13 @@ ResourceDetails.propTypes = {
   headerActions: PropTypes.node,
   resourceHeaderActions: PropTypes.arrayOf(PropTypes.func),
   readOnly: PropTypes.bool,
-  breadcrumbs: PropTypes.array,
   editActionLabel: PropTypes.string,
   windowTitle: PropTypes.string,
   resourceGraphConfig: PropTypes.object,
   resourceSchema: PropTypes.object,
   disableEdit: PropTypes.bool,
   disableDelete: PropTypes.bool,
+  showYamlTab: PropTypes.bool,
   layoutCloseCreateUrl: PropTypes.string,
   layoutNumber: PropTypes.string,
 };
@@ -89,6 +78,7 @@ ResourceDetails.defaultProps = {
   readOnly: false,
   disableEdit: false,
   disableDelete: false,
+  showYamlTab: false,
   layoutNumber: 'MidColumn',
 };
 
@@ -112,17 +102,9 @@ function ResourceDetailsRenderer(props) {
 
   const updateResourceMutation = useUpdate(props.resourceUrl);
   const deleteResourceMutation = useDelete(props.resourceUrl);
-  const { resourceListUrl } = useUrl();
 
   if (loading) return <Spinner />;
   if (error) {
-    const breadcrumbItems = props.breadcrumbs || [
-      {
-        name: prettifyNamePlural(props.resourceTitle, props.resourceType),
-        url: resourceListUrl(resource, { resourceType: props.resourceType }),
-      },
-      { name: '' },
-    ];
     if (error.code === 404) {
       return (
         <ResourceNotFound
@@ -130,14 +112,12 @@ function ResourceDetailsRenderer(props) {
             props.resourceTitle,
             props.resourceType,
           )}
-          breadcrumbs={breadcrumbItems}
         />
       );
     }
     return (
       <ResourceNotFound
         resource={prettifyNameSingular(props.resourceTitle, props.resourceType)}
-        breadcrumbs={breadcrumbItems}
         customMessage={getErrorMessage(error)}
       />
     );
@@ -162,7 +142,6 @@ function ResourceDetailsRenderer(props) {
 function Resource({
   layoutNumber,
   layoutCloseCreateUrl,
-  breadcrumbs,
   children,
   createResourceForm: CreateResourceForm,
   customColumns,
@@ -177,14 +156,13 @@ function Resource({
   resourceHeaderActions,
   resourceType,
   resourceUrl,
-  silentRefetch,
   title,
-  updateResourceMutation,
   windowTitle,
   resourceTitle,
   resourceGraphConfig,
   resourceSchema,
   disableEdit,
+  showYamlTab,
   disableDelete,
   statusBadge,
   customStatusColumns,
@@ -210,49 +188,9 @@ function Resource({
   });
 
   const layoutColumn = useRecoilValue(columnLayoutState);
-
-  const { setEditedYaml: setEditedSpec } = useYamlEditor();
-  const notification = useNotification();
-  const { resourceListUrl } = useUrl();
-
   const { isEnabled: isColumnLayoutEnabled } = useFeature('COLUMN_LAYOUT');
 
-  const breadcrumbItems = breadcrumbs || [
-    {
-      name: pluralizedResourceKind,
-      url: resourceListUrl(resource, { resourceType }),
-    },
-    { name: '' },
-  ];
-
   const protectedResource = isProtected(resource);
-
-  const editAction = () => {
-    if (protectedResource) {
-      return (
-        <Tooltip
-          className="actions-tooltip"
-          content={t('common.tooltips.protected-resources-info')}
-        >
-          <Button onClick={() => openYaml(resource)}>
-            {t('common.buttons.view-yaml')}
-          </Button>
-        </Tooltip>
-      );
-    } else if (disableEdit) {
-      return (
-        <Button onClick={() => openYaml(resource)}>
-          {t('common.buttons.view-yaml')}
-        </Button>
-      );
-    } else if (!CreateResourceForm || !CreateResourceForm?.allowEdit) {
-      return (
-        <Button onClick={() => openYaml(resource)} design="Emphasized">
-          {t('common.buttons.edit-yaml')}
-        </Button>
-      );
-    }
-  };
 
   const deleteButtonWrapper = children => {
     if (protectedResource) {
@@ -268,7 +206,6 @@ function Resource({
       return children;
     }
   };
-
   const actions = readOnly ? null : (
     <>
       <Suspense fallback={<Spinner />}>
@@ -278,8 +215,6 @@ function Resource({
           root={resource}
         />
       </Suspense>
-      {protectedResourceWarning(resource)}
-      {editAction()}
       {headerActions}
       {resourceHeaderActions.map(resourceAction => resourceAction(resource))}
       {deleteButtonWrapper(
@@ -293,39 +228,6 @@ function Resource({
       )}
     </>
   );
-
-  const openYaml = resource => {
-    setEditedSpec(
-      resource,
-      resource.metadata.name + '.yaml',
-      handleSaveClick(resource),
-      protectedResource || disableEdit,
-      protectedResource,
-    );
-  };
-
-  const handleSaveClick = resourceData => async newYAML => {
-    try {
-      const diff = createPatch(resourceData, jsyaml.load(newYAML));
-
-      await updateResourceMutation(resourceUrl, diff);
-      silentRefetch();
-      notification.notifySuccess({
-        content: t('components.resource-details.messages.success', {
-          resourceType: prettifiedResourceKind,
-        }),
-      });
-    } catch (e) {
-      console.error(e);
-      notification.notifyError({
-        content: t('components.resource-details.messages.failure', {
-          resourceType: prettifiedResourceKind,
-          error: e.message,
-        }),
-      });
-      throw e;
-    }
-  };
 
   const filterColumns = col => {
     const { visible, error } = col.visibility?.(resource) || {
@@ -445,11 +347,13 @@ function Resource({
   return (
     <ResourceDetailContext.Provider value={true}>
       <DynamicPageComponent
+        showYamlTab={showYamlTab || disableEdit}
         layoutNumber={layoutNumber ?? 'MidColumn'}
         layoutCloseUrl={layoutCloseCreateUrl}
         title={resource.metadata.name}
         actions={actions}
-        breadcrumbItems={breadcrumbItems}
+        protectedResource={protectedResource}
+        protectedResourceWarning={protectedResourceWarning(resource)}
         content={
           <>
             {createPortal(
@@ -519,6 +423,10 @@ function Resource({
             }
             isEdit={true}
             confirmText={t('common.buttons.save')}
+            protectedResource={protectedResource}
+            protectedResourceWarning={protectedResourceWarning(resource, true)}
+            readOnly={readOnly}
+            disableEdit={disableEdit}
             renderForm={props => (
               <ErrorBoundary>
                 <CreateResourceForm

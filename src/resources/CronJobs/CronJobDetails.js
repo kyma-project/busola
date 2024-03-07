@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { CronJobSchedule } from 'shared/components/CronJob/CronJobSchedule';
@@ -13,6 +12,7 @@ import { CronJobConcurrencyPolicy } from './CronJobConcurrencyPolicy';
 import CronJobCreate from './CronJobCreate';
 import { CronJobJobs } from './CronJobJobs';
 import { ResourceDescription } from 'resources/CronJobs';
+import { Link } from 'shared/components/Link/Link';
 
 export function CronJobDetails(props) {
   const { t } = useTranslation();
@@ -47,11 +47,7 @@ export function CronJobDetails(props) {
 
         const jobName =
           resource.status.active[resource.status.active.length - 1].name;
-        return (
-          <Link className="bsl-link" to={namespaceUrl(`jobs/${jobName}`)}>
-            {jobName}
-          </Link>
-        );
+        return <Link url={namespaceUrl(`jobs/${jobName}`)}>{jobName}</Link>;
       },
     },
   ];

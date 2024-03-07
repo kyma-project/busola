@@ -117,10 +117,14 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
       },
     );
 
-    cy.contains('Next').click();
+    cy.get('ui5-button:visible')
+      .contains('Next step')
+      .click();
 
     if (staticToken) {
-      cy.contains('Next').click();
+      cy.get('ui5-button:visible')
+        .contains('Next step')
+        .click();
     }
 
     if (storage) {

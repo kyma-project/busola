@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
-import { CopiableLink } from 'shared/components/Link/CopiableLink';
+import { CopiableLink } from 'shared/components/ExternalLink/CopiableLink';
 
 function getGatewayHost(gateway) {
   if (!gateway || !gateway.spec) return null;

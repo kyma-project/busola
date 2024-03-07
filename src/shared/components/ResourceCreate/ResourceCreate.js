@@ -10,17 +10,18 @@ import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useC
 
 export const ResourceCreate = ({
   performRefetch,
-  sendNotification,
   title,
-  button,
   renderForm,
   confirmText,
   invalidPopupMessage,
-  className,
   isEdit,
+  readOnly,
+  disableEdit,
   layoutCloseCreateUrl,
   layoutNumber = 'MidColumn',
-  ...props
+  onlyYaml = false,
+  protectedResource = false,
+  protectedResourceWarning = null,
 }) => {
   const { t } = useTranslation();
   const {
@@ -61,19 +62,23 @@ export const ResourceCreate = ({
     }
   }
 
+  function renderProtectedResourceButton() {
+    if (protectedResource) return protectedResourceWarning;
+  }
+
   function renderConfirmButton() {
     const disabled = !isValid;
+
     const button = (
       <Button
-        disabled={disabled}
-        aria-disabled={disabled}
+        disabled={disabled || readOnly || disableEdit}
+        aria-disabled={disabled || readOnly || disableEdit}
         onClick={handleFormSubmit}
         design="Emphasized"
       >
         {confirmText}
       </Button>
     );
-
     if (invalidPopupMessage && disabled) {
       return (
         <Tooltip
@@ -88,6 +93,7 @@ export const ResourceCreate = ({
         </Tooltip>
       );
     }
+
     return button;
   }
 
@@ -106,6 +112,7 @@ export const ResourceCreate = ({
               endContent={<>{renderConfirmButton()}</>}
             />
           }
+          showYamlTab={disableEdit && onlyYaml}
           content={renderForm({
             formElementRef,
             isValid,
@@ -114,7 +121,6 @@ export const ResourceCreate = ({
             onError: handleFormError,
             onCompleted: handleFormSuccess,
             performManualSubmit: handleFormSubmit,
-            actions: <>{renderConfirmButton()}</>,
           })}
         />
       )}
@@ -127,7 +133,12 @@ export const ResourceCreate = ({
           onError: handleFormError,
           onCompleted: handleFormSuccess,
           performManualSubmit: handleFormSubmit,
-          actions: <>{renderConfirmButton()}</>,
+          actions: (
+            <>
+              {renderProtectedResourceButton()}
+              {renderConfirmButton()}
+            </>
+          ),
         })}
     </>
   );
@@ -142,6 +153,8 @@ ResourceCreate.propTypes = {
   button: CustomPropTypes.button,
   className: PropTypes.string,
   isEdit: PropTypes.bool,
+  readOnly: PropTypes.bool,
+  disableEdit: PropTypes.bool,
   layoutCloseCreateUrl: PropTypes.bool,
 };
 
@@ -149,4 +162,6 @@ ResourceCreate.defaultProps = {
   performRefetch: () => {},
   invalidPopupMessage: '',
   isEdit: false,
+  readOnly: false,
+  disableEdit: false,
 };

@@ -4,12 +4,12 @@ import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTim
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { HelmReleaseStatus } from 'components/HelmReleases/HelmReleaseStatus';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import { useUrl } from 'hooks/useUrl';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import './HelmReleaseDataPanel.scss';
 import { spacing } from '@ui5/webcomponents-react-base';
+import { Link } from 'shared/components/Link/Link';
 
 export function ReleaseDataPanel({ release, simpleHeader }) {
   const { t } = useTranslation();
@@ -25,8 +25,8 @@ export function ReleaseDataPanel({ release, simpleHeader }) {
         ) : (
           <>
             <Link
-              className="bsl-link release-link"
-              to={namespaceUrl(`helm-releases/${name}`)}
+              className="release-link"
+              url={namespaceUrl(`helm-releases/${name}`)}
             >
               {name}
             </Link>

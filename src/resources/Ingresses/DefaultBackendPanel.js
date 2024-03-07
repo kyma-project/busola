@@ -1,5 +1,3 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { GoToDetailsLink } from 'shared/components/ControlledBy/ControlledBy';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
@@ -7,6 +5,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { useUrl } from 'hooks/useUrl';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { Link } from 'shared/components/Link/Link';
 
 export const DefaultBackendPanel = ({ backend, namespace }) => {
   const { t } = useTranslation();
@@ -26,7 +25,7 @@ export const DefaultBackendPanel = ({ backend, namespace }) => {
                 services?.find(
                   ({ metadata }) => metadata.name === backend?.service.name,
                 ) ? (
-                  <Link to={namespaceUrl(`services/${backend?.service.name}`)}>
+                  <Link url={namespaceUrl(`services/${backend?.service.name}`)}>
                     {backend?.service.name}
                   </Link>
                 ) : (

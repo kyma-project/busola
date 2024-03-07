@@ -1,11 +1,10 @@
 import PropTypes from 'prop-types';
 import {
-  Breadcrumbs,
-  BreadcrumbsItem,
   Button,
   DynamicPage,
   DynamicPageHeader,
   DynamicPageTitle,
+  FlexBox,
   ObjectPage,
   ObjectPageSection,
   Title,
@@ -14,6 +13,7 @@ import {
 import './DynamicPageComponent.scss';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useFeature } from 'hooks/useFeature';
@@ -35,7 +35,6 @@ const Column = ({ title, children, columnSpan, image, style = {} }) => {
 export const DynamicPageComponent = ({
   title,
   description,
-  breadcrumbItems,
   actions,
   children,
   columnWrapperClassName,
@@ -44,10 +43,14 @@ export const DynamicPageComponent = ({
   layoutNumber,
   layoutCloseUrl,
   inlineEditForm,
+  showYamlTab,
+  protectedResource,
+  protectedResourceWarning,
 }) => {
   const [showTitleDescription, setShowTitleDescription] = useState(false);
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
+  const { t } = useTranslation();
 
   const headerTitle = (
     <DynamicPageTitle
@@ -155,35 +158,25 @@ export const DynamicPageComponent = ({
         ) : null
       }
       style={title === 'Clusters Overview' ? { display: 'none' } : null}
-      breadcrumbs={
-        breadcrumbItems.length ? (
-          <Breadcrumbs design="NoCurrentPage">
-            {breadcrumbItems.map(item => {
-              return (
-                <BreadcrumbsItem
-                  aria-label="breadcrumb-item"
-                  key={item.name}
-                  href={item.url}
-                >
-                  {item.name}
-                </BreadcrumbsItem>
-              );
-            })}
-          </Breadcrumbs>
-        ) : null
-      }
       header={
         <Title className="ui5-title">
-          {title}
-          {description && (
-            <HintButton
-              style={spacing.sapUiTinyMargin}
-              setShowTitleDescription={setShowTitleDescription}
-              showTitleDescription={showTitleDescription}
-              description={description}
-              context="dynamic"
-            />
-          )}
+          <FlexBox alignItems="Center">
+            {title}
+            {protectedResource && (
+              <span style={spacing.sapUiTinyMarginBegin}>
+                {protectedResourceWarning}
+              </span>
+            )}
+            {description && (
+              <HintButton
+                style={spacing.sapUiTinyMargin}
+                setShowTitleDescription={setShowTitleDescription}
+                showTitleDescription={showTitleDescription}
+                description={description}
+                context="dynamic"
+              />
+            )}
+          </FlexBox>
         </Title>
       }
       actions={actions}
@@ -214,7 +207,7 @@ export const DynamicPageComponent = ({
           aria-label="View"
           hideTitleText
           id="view"
-          titleText="View"
+          titleText={t('common.tabs.view')}
         >
           {content}
         </ObjectPageSection>
@@ -223,7 +216,9 @@ export const DynamicPageComponent = ({
           aria-label="Edit"
           hideTitleText
           id="edit"
-          titleText="Edit"
+          titleText={
+            showYamlTab ? t('common.tabs.yaml') : t('common.tabs.edit')
+          }
         >
           {inlineEditForm()}
         </ObjectPageSection>
@@ -251,19 +246,8 @@ DynamicPageComponent.Column = Column;
 DynamicPageComponent.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.node,
-  breadcrumbItems: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      path: PropTypes.string,
-      params: PropTypes.object,
-      fromContext: PropTypes.string,
-      fromAbsolutePath: PropTypes.bool,
-      onClick: PropTypes.func,
-    }),
-  ),
 };
 
 DynamicPageComponent.defaultProps = {
-  breadcrumbItems: [],
   description: '',
 };

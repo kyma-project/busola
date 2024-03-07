@@ -1,9 +1,8 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { GenericList } from 'shared/components/GenericList/GenericList';
-import { Link } from 'react-router-dom';
-import { HelmReleaseStatus } from './HelmReleaseStatus';
 import { useUrl } from 'hooks/useUrl';
+import { GenericList } from 'shared/components/GenericList/GenericList';
+import { HelmReleaseStatus } from './HelmReleaseStatus';
+import { Link } from 'shared/components/Link/Link';
 
 export function OtherReleaseVersions({ releaseSecret, secrets }) {
   const { t } = useTranslation();
@@ -23,12 +22,7 @@ export function OtherReleaseVersions({ releaseSecret, secrets }) {
   ];
 
   const rowRenderer = ({ metadata }) => [
-    <Link
-      className="bsl-link"
-      onClick={namespaceUrl(`secrets/${metadata.name}`)}
-    >
-      {metadata.name}
-    </Link>,
+    <Link url={namespaceUrl(`secrets/${metadata.name}`)}>{metadata.name}</Link>,
     metadata.labels.version,
     <HelmReleaseStatus status={metadata.labels.status} />,
   ];

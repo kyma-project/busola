@@ -1,6 +1,6 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
 import { useUrl } from 'hooks/useUrl';
+import { Link } from 'shared/components/Link/Link';
+
 export function SubjectLink({ subject }) {
   const { namespaceUrl } = useUrl();
 
@@ -9,11 +9,7 @@ export function SubjectLink({ subject }) {
   });
 
   if (subject.kind === 'ServiceAccount') {
-    return (
-      <Link className="bsl-link" to={path}>
-        {subject.name}
-      </Link>
-    );
+    return <Link url={path}>{subject.name}</Link>;
   } else {
     return subject.name;
   }

@@ -5,25 +5,21 @@ import { prettifyNameSingular } from 'shared/utils/helpers';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { HelmReleaseData } from './HelmReleaseData';
-import { Link } from 'react-router-dom';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
 import { OtherReleaseVersions } from './OtherReleaseVersions';
 import { findRecentRelease } from './findRecentRelease';
-import { useRecoilValue } from 'recoil';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { ResourceDescription } from 'components/HelmReleases';
+import HelmReleasesYaml from './HelmReleasesYaml';
+import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
+import { showYamlTab } from './index';
+import { Link } from 'shared/components/Link/Link';
 
-function HelmReleasesDetails({ releaseName }) {
+function HelmReleasesDetails({ releaseName, namespace }) {
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();
-
-  const namespace = useRecoilValue(activeNamespaceIdState);
-  const breadcrumbItems = [
-    { name: t('helm-releases.title'), url: namespaceUrl('helm-releases') },
-    { name: '' },
-  ];
 
   const { data, loading } = useGetList(s => s.type === 'helm.sh/release.v1')(
     `/api/v1/namespaces/${namespace}/secrets?labelSelector=name==${releaseName}`,
@@ -36,7 +32,6 @@ function HelmReleasesDetails({ releaseName }) {
     return (
       <ResourceNotFound
         resource={prettifyNameSingular(undefined, t('helm-releases.title'))}
-        breadcrumbs={breadcrumbItems}
       />
     );
   }
@@ -45,8 +40,25 @@ function HelmReleasesDetails({ releaseName }) {
     <>
       <DynamicPageComponent
         title={releaseName}
-        breadcrumbItems={breadcrumbItems}
         description={ResourceDescription}
+        showYamlTab={showYamlTab}
+        inlineEditForm={() => (
+          <ResourceCreate
+            title={'HelmRelease'}
+            isEdit={true}
+            confirmText={t('common.buttons.save')}
+            disableEdit={true}
+            renderForm={props => (
+              <ErrorBoundary>
+                <HelmReleasesYaml
+                  resource={releaseSecret}
+                  editMode={true}
+                  {...props}
+                />
+              </ErrorBoundary>
+            )}
+          />
+        )}
         content={
           <>
             <HelmReleaseData
@@ -64,8 +76,7 @@ function HelmReleasesDetails({ releaseName }) {
           <>
             <DynamicPageComponent.Column title={t('secrets.name_singular')}>
               <Link
-                className="bsl-link"
-                to={namespaceUrl(`secrets/${releaseSecret.metadata.name}`)}
+                url={namespaceUrl(`secrets/${releaseSecret.metadata.name}`)}
               >
                 {releaseSecret.metadata.name}
               </Link>

@@ -220,6 +220,4 @@ export function ExtensibilityCreate(props) {
   );
 }
 
-ExtensibilityCreate.allowEdit = true;
-
 export default ExtensibilityCreate;
