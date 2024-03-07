@@ -43,6 +43,7 @@ context('Test Custom Resources', () => {
 
     cy.get('ui5-input[placeholder="Search"]')
       .find('input')
+      .wait(1000)
       .type('cypress', {
         force: true,
       });

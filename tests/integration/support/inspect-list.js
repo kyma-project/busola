@@ -3,7 +3,8 @@ Cypress.Commands.add('inspectList', resourceName => {
 
   cy.get('ui5-input[placeholder="Search"]:visible')
     .find('input')
+    .wait(1000)
     .type(resourceName);
 
-  cy.contains(resourceName).should('be.visible');
+  cy.contains('span', resourceName).should('be.visible');
 });
