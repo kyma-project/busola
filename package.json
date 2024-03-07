@@ -99,7 +99,9 @@
     "recoil": "^0.7.5",
     "resize-observer-polyfill": "^1.5.1",
     "rfc6902": "^5.0.1",
-    "url": "^0.11.0"
+    "url": "^0.11.0",
+    "webpack": "^5.90.3",
+    "webpack-cli": "^5.1.4"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.2",
