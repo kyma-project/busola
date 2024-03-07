@@ -179,7 +179,10 @@ Cypress.Commands.add(
 
     cy.get('ui5-input[placeholder="Search"]:visible')
       .find('input')
+      .wait(1000)
       .type(resourceName);
+
+    cy.wait(1000);
 
     if (selectSearchResult) {
       cy.get('ui5-li-suggestion-item:visible')
@@ -211,6 +214,7 @@ Cypress.Commands.add(
       if (clearSearch) {
         cy.get('ui5-input[placeholder="Search"]:visible')
           .find('input')
+          .wait(1000)
           .clear();
       }
 
