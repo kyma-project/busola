@@ -60,7 +60,7 @@ export function SearchInput({
     const suggestions = getSearchSuggestions(entries);
 
     return suggestions.map(suggestion => (
-      <SuggestionItem id={suggestion} text={suggestion} waitForDefine={true} />
+      <SuggestionItem id={suggestion} text={suggestion} />
     ));
   };
 
@@ -85,7 +85,6 @@ export function SearchInput({
       value={searchQuery}
       onInput={e => handleQueryChange(e.target.value)}
       showSuggestions={showSuggestion}
-      waitForDefine={true}
     >
       {showSuggestion && renderSearchList(filteredEntries)}
     </Input>
