@@ -101,8 +101,6 @@ export function ResourceForm({
 
     if (onlyYaml) return ModeSelector.MODE_YAML;
 
-    if (!initialResource) return ModeSelector.MODE_FORM;
-
     return editViewMode.preferencesViewType === 'MODE_DEFAULT'
       ? editViewMode.dynamicViewType === ModeSelector.MODE_FORM
         ? ModeSelector.MODE_FORM
