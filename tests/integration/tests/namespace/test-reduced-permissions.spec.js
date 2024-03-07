@@ -230,7 +230,9 @@ context('Test reduced permissions', () => {
       .contains('Cluster Role Bindings')
       .click();
 
-    cy.deleteFromGenericList('Cluster Role Binding', CRB_NAME);
+    cy.deleteFromGenericList('Cluster Role Binding', CRB_NAME, {
+      selectSearchResult: true,
+    });
 
     // delete role
     cy.getLeftNav()
@@ -249,6 +251,7 @@ context('Test reduced permissions', () => {
       deletedVisible: false,
       clearSearch: false,
       isUI5Link: false,
+      selectSearchResult: true,
     });
 
     cy.contains(/No clusters found/).should('exist');
