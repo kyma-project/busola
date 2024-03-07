@@ -65,6 +65,7 @@ export function SearchInput({
   };
 
   const getSearchSuggestions = entries => {
+    if (!entries) return [];
     const suggestions = entries
       .flatMap(entry =>
         getEntryMatches(entry, searchQuery, suggestionProperties),
