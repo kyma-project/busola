@@ -251,7 +251,6 @@ context('Test reduced permissions', () => {
       deletedVisible: false,
       clearSearch: false,
       isUI5Link: false,
-      selectSearchResult: true,
     });
 
     cy.contains(/No clusters found/).should('exist');

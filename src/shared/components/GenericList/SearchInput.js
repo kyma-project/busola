@@ -57,11 +57,10 @@ export function SearchInput({
   useEventListener('keydown', onKeyPress, [disabled, isSideDrawerOpened]);
 
   const renderSearchList = entries => {
-    if (!entries || !showSuggestion) return <></>;
     const suggestions = getSearchSuggestions(entries);
 
     return suggestions.map(suggestion => (
-      <SuggestionItem id={suggestion} text={suggestion} />
+      <SuggestionItem id={suggestion} text={suggestion} waitForDefine={true} />
     ));
   };
 
@@ -85,8 +84,9 @@ export function SearchInput({
       value={searchQuery}
       onInput={e => handleQueryChange(e.target.value)}
       showSuggestions={showSuggestion}
+      waitForDefine={true}
     >
-      {renderSearchList(filteredEntries)}
+      {showSuggestion && renderSearchList(filteredEntries)}
     </Input>
   );
 }
