@@ -1393,6 +1393,11 @@ settings:
     dontConfirmDelete: Delete without confirmation
     showHiddenNamespaces: Show hidden Namespaces
     title: Clusters
+    edit-view: 
+      choose: Select default view for resource edit
+      default: Default (last one used)
+      always-yaml: Always YAML
+      always-form: Always form 
     resourcesValidation:
       title: Resource Validation
       validateResources: Validate Resources
