@@ -14,7 +14,7 @@ export function Presets({ presets, onSelect, ...otherProps }) {
     <div
       className="ui5-content-density-compact preset-separator"
       style={{
-        ...spacing.sapUiTinyMarginBottom,
+        ...spacing.sapUiTinyMarginTopBottom,
         paddingBottom: spacing.sapUiContentPadding.padding,
       }}
     >
