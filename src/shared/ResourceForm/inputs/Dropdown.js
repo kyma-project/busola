@@ -1,4 +1,4 @@
-import { Dropdown as BusolaDropown } from 'shared/components/Dropdown/Dropdown';
+import { Dropdown as BusolaDropdown } from 'shared/components/Dropdown/Dropdown';
 import { useTranslation } from 'react-i18next';
 
 export function Dropdown({ value, setValue, error, loading, ...props }) {
@@ -28,8 +28,8 @@ export function Dropdown({ value, setValue, error, loading, ...props }) {
     ...dropdownProps
   } = props;
   return (
-    <div className="bsl-col bsl-col-md--11">
-      <BusolaDropown
+    <div className="bsl-col bsl-col-md--12">
+      <BusolaDropdown
         selectedKey={value}
         onSelect={(_, selected) => setValue(selected.key, selected)}
         validationState={getValidationState()}

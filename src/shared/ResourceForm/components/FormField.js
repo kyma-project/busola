@@ -36,27 +36,9 @@ export function FormField({
       direction="Column"
       style={{ ...style }}
     >
-      {!isListItem && <Label required={required && !disabled}>{label}</Label>}
-      <FlexBox wrap="Wrap" alignItems="Center">
-        {messageStrip
-          ? messageStrip
-          : input({
-              updatesOnInput,
-              required,
-              disabled,
-              className: 'full-width',
-              ...inputProps,
-            })}
-        {inputInfo && (
-          <Label
-            wrappingType="Normal"
-            style={{ color: 'var(--sapNeutralTextColor)' }}
-            showColon={false}
-          >
-            {inputInfoLink}
-          </Label>
-        )}
-        <div className="bsl-col-md--1 tooltip-column tooltip-column--with-padding">
+      <FlexBox wrap="Wrap" alignItems="Center" className="bsl-col-md--12">
+        {!isListItem && <Label required={required && !disabled}>{label}</Label>}
+        <div className="bsl-col-md--1 tooltip-column">
           {tooltipContent && (
             <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
               <Icon
@@ -67,6 +49,26 @@ export function FormField({
               />
             </Tooltip>
           )}
+        </div>
+      </FlexBox>
+      <FlexBox wrap="Wrap" alignItems="Center">
+        <div className="bsl-col-md--12">
+          <FlexBox wrap="Wrap" alignItems="Center">
+            {messageStrip
+              ? messageStrip
+              : input({
+                  updatesOnInput,
+                  required,
+                  disabled,
+                  className: 'full-width',
+                  ...inputProps,
+                })}
+            {inputInfo && (
+              <Label wrappingType="Normal" style={{ marginTop: '5px' }}>
+                {inputInfoLink}
+              </Label>
+            )}
+          </FlexBox>
         </div>
       </FlexBox>
     </FlexBox>

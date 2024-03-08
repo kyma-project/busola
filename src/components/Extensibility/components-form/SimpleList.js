@@ -149,7 +149,7 @@ export function SimpleList({
           </ul>
         </div>
         {tooltipContent && (
-          <div className="bsl-col-md--1 tooltip-column tooltip-column--with-padding">
+          <div className="bsl-col-md--1 tooltip-column">
             <Tooltip
               className="has-tooltip"
               delay={0}

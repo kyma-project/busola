@@ -1,5 +1,5 @@
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-import { CheckBox, Icon } from '@ui5/webcomponents-react';
+import { CheckBox, FlexBox, Icon } from '@ui5/webcomponents-react';
 
 export function Checkboxes({
   value = [],
@@ -20,7 +20,7 @@ export function Checkboxes({
   return (
     <>
       {options.map(({ key, text, description }) => (
-        <div key={key}>
+        <FlexBox wrap="Wrap" alignItems="Center" key={key}>
           <CheckBox
             data-testid={`${dataTestID}.${key}`}
             checked={value?.includes(key)}
@@ -38,7 +38,7 @@ export function Checkboxes({
               </Tooltip>
             )}
           </div>
-        </div>
+        </FlexBox>
       ))}
     </>
   );

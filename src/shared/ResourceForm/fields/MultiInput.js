@@ -215,7 +215,7 @@ export function MultiInput({
             </p>
           )}
         </ul>
-        <div className="bsl-col-md--1 tooltip-column tooltip-column--with-padding">
+        <div className="bsl-col-md--1 tooltip-column">
           {tooltipContent && (
             <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
               <Icon

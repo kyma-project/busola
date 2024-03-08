@@ -56,7 +56,11 @@ export function CollapsibleSection({
         onClick={toggle}
         aria-label={`expand ${title}`}
         style={{
-          marginLeft: `calc(${nestingLevel} * ${spacing.sapUiSmallMarginBegin.marginLeft})`,
+          marginRight: '-1rem',
+          marginLeft: `-1rem`,
+          paddingLeft: `calc(${nestingLevel + 1} * ${
+            spacing.sapUiSmallMarginBegin.marginLeft
+          })`,
         }}
         className="header"
       >
@@ -77,9 +81,6 @@ export function CollapsibleSection({
 
       <div
         className={open ? 'content content--open' : 'content content--closed'}
-        style={{
-          marginLeft: `calc(${nestingLevel} * ${spacing.sapUiSmallMarginBegin.marginLeft})`,
-        }}
       >
         <ResourceFormWrapper
           resource={resource}

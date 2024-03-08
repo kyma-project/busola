@@ -1,4 +1,3 @@
-import { randomNamesGenerator } from 'shared/utils/randomNamesGenerator/randomNamesGenerator';
 import pluralize from 'pluralize';
 
 // ownerSelector should be a subset of labels
@@ -74,14 +73,6 @@ export function formatMessage(message = '', variables = {}) {
   }
 
   return message;
-}
-
-export function randomNameGenerator(functionNames = []) {
-  let name = '';
-  do {
-    name = randomNamesGenerator();
-  } while (functionNames.includes(name));
-  return name;
 }
 
 export function isPrimitive(type = null) {
