@@ -8,10 +8,6 @@ function getQueryInput() {
   return cy.get('[aria-label=command-palette-search]').find('input');
 }
 
-function openSearchWithSlashShortcut() {
-  cy.get('body').type('/', { force: true });
-}
-
 context('Test Custom Resources', () => {
   Cypress.skipAfterFail();
 
@@ -49,8 +45,6 @@ context('Test Custom Resources', () => {
     cy.navigateTo('Configuration', 'Custom Resources');
 
     cy.contains('ui5-title', 'Custom Resources').should('be.visible');
-
-    openSearchWithSlashShortcut();
 
     cy.get('ui5-input[placeholder="Search"]')
       .find('input')
