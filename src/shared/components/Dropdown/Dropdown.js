@@ -1,4 +1,4 @@
-import { ComboBox, ComboBoxItem } from '@ui5/webcomponents-react';
+import { ComboBox, ComboBoxItem, FlexBox } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { Label } from '../../../shared/ResourceForm/components/Label';
@@ -60,13 +60,18 @@ export function Dropdown({
   );
 
   return (
-    <div>
+    <FlexBox
+      className="flexbox-gap"
+      justifyContent="Center"
+      direction="Column"
+      className="flexbox-gap"
+    >
       {label && <Label forElement={id}>{label}</Label>}
       {inlineHelp ? (
         <Tooltip content={inlineHelp}>{combobox}</Tooltip>
       ) : (
         combobox
       )}
-    </div>
+    </FlexBox>
   );
 }

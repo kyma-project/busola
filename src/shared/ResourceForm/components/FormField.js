@@ -33,47 +33,42 @@ export function FormField({
     <FlexBox
       className={classnames('form-field', className)}
       justifyContent="Center"
-      style={style}
+      direction="Column"
+      style={{ ...style }}
     >
-      {!isListItem && (
-        <div className="bsl-col-md--3 form-field__label">
-          <Label required={required && !disabled}>{label}</Label>
-        </div>
-      )}
-      <div className="bsl-col-md--8">
-        <FlexBox wrap="Wrap">
-          {messageStrip
-            ? messageStrip
-            : input({
-                updatesOnInput,
-                required,
-                disabled,
-                className: 'full-width',
-                ...inputProps,
-              })}
-          {inputInfo && (
-            <Label
-              wrappingType="Normal"
-              style={{ color: 'var(--sapNeutralTextColor)' }}
-              showColon={false}
-            >
-              {inputInfoLink}
-            </Label>
-          )}
-        </FlexBox>
-      </div>
-      <div className="bsl-col-md--1 tooltip-column tooltip-column--with-padding">
-        {tooltipContent && (
-          <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
-            <Icon
-              aria-label=""
-              className="bsl-icon-m"
-              name="message-information"
-              design="Information"
-            />
-          </Tooltip>
+      {!isListItem && <Label required={required && !disabled}>{label}</Label>}
+      <FlexBox wrap="Wrap" alignItems="Center">
+        {messageStrip
+          ? messageStrip
+          : input({
+              updatesOnInput,
+              required,
+              disabled,
+              className: 'full-width',
+              ...inputProps,
+            })}
+        {inputInfo && (
+          <Label
+            wrappingType="Normal"
+            style={{ color: 'var(--sapNeutralTextColor)' }}
+            showColon={false}
+          >
+            {inputInfoLink}
+          </Label>
         )}
-      </div>
+        <div className="bsl-col-md--1 tooltip-column tooltip-column--with-padding">
+          {tooltipContent && (
+            <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
+              <Icon
+                aria-label=""
+                className="bsl-icon-m"
+                name="message-information"
+                design="Information"
+              />
+            </Tooltip>
+          )}
+        </div>
+      </FlexBox>
     </FlexBox>
   );
 }

@@ -31,8 +31,9 @@ form .resource-form {
   }
 
   .form-field,
-  .simple-list {
-    gap: 10px;
+  .simple-list,
+  .flexbox-gap {
+    gap: 5px 10px;
   }
 
   .form-field + .resource-form__collapsible-section {
@@ -51,4 +52,9 @@ form .resource-form {
       width: fit-content;
     }
   }
+}
+
+.resource-form--panel,
+.resource-form--panel::part(content) {
+  height: 100%;
 }
