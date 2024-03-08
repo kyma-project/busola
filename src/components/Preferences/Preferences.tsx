@@ -17,6 +17,7 @@ import ProtectedSettings from './ProtectedSettings';
 import ThemeChooser from './ThemeChooser';
 
 import './Preferences.scss';
+import EditViewSettings from './EditViewSettings';
 
 export function Preferences() {
   const { t } = useTranslation();
@@ -116,6 +117,7 @@ export function Preferences() {
                 <NamespaceSettings />
                 <ConfirmationSettings />
                 <ProtectedSettings />
+                <EditViewSettings />
               </div>
             </Tab>
             <Tab

@@ -16,6 +16,8 @@ import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import { spacing } from '@ui5/webcomponents-react-base';
 import './ResourceForm.scss';
+import { useRecoilValue } from 'recoil';
+import { editViewModeState } from 'state/preferences/editViewModeAtom';
 
 export function ResourceForm({
   pluralKind, // used for the request path
@@ -68,6 +70,8 @@ export function ResourceForm({
     };
   }
 
+  const editViewMode = useRecoilValue(editViewModeState);
+
   const { t } = useTranslation();
   const createResource = useCreateResource({
     singularName,
@@ -94,8 +98,14 @@ export function ResourceForm({
           return ModeSelector.MODE_SIMPLE;
       }
     }
+
     if (onlyYaml) return ModeSelector.MODE_YAML;
-    return ModeSelector.MODE_FORM;
+
+    return editViewMode.preferencesViewType === 'MODE_DEFAULT'
+      ? editViewMode.dynamicViewType === ModeSelector.MODE_FORM
+        ? ModeSelector.MODE_FORM
+        : ModeSelector.MODE_YAML
+      : editViewMode.preferencesViewType ?? ModeSelector.MODE_FORM;
   };
 
   const [mode, setMode] = React.useState(handleInitialMode);
