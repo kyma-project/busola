@@ -86,6 +86,6 @@ context('Test Services', () => {
   });
 
   it('Test column layout functionallity', () => {
-    cy.testMidColumnLayout('test-service');
+    cy.testMidColumnLayout('test-service', false);
   });
 });

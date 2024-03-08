@@ -63,6 +63,7 @@ export function useProtectedResources() {
             icon={<Icon name="locked" />}
             showDefaultIcon
             state="Warning"
+            style={{ textOverflow: 'ellipsis' }}
           >
             {t('common.protected-resource')}
           </ObjectStatus>

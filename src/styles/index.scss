@@ -3,6 +3,13 @@
 
 @import './wizard-dialog.scss';
 
+:root {
+  --card-box-shadow: var(--_ui5-v1-20-0_card_box_shadow);
+  --card-border: var(--_ui5-v1-20-0_card_border);
+  --card-border-radius: var(--_ui5-v1-20-0_card_border-radius);
+  --card-border: var(--_ui5-v1-20-0_card_border);
+}
+
 html {
   font-size: 16px;
   background: color-mix(in srgb, black 4%, var(--sapBackgroundColor));
@@ -34,6 +41,18 @@ body {
   &.no-border {
     border: none;
   }
+}
+
+.column-content {
+  height: 100%;
+}
+
+.card-shadow {
+  box-shadow: var(--card-box-shadow);
+  border: var(--card-border);
+  border-radius: var(--card-border-radius);
+  border: var(--card-border);
+  overflow: hidden;
 }
 
 .panel-grid {

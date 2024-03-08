@@ -198,9 +198,9 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
     <FlexibleColumnLayout
       style={{ height: '100%' }}
       layout={layoutState?.layout || 'OneColumn'}
-      startColumn={<div>{startColumnComponent}</div>}
-      midColumn={<div>{midColumnComponent}</div>}
-      endColumn={<div>{endColumnComponent}</div>}
+      startColumn={<div className="column-content">{startColumnComponent}</div>}
+      midColumn={<div className="column-content">{midColumnComponent}</div>}
+      endColumn={<div className="column-content">{endColumnComponent}</div>}
     />
   );
 };

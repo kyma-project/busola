@@ -115,8 +115,8 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType, extension }) => {
       layout={
         !midColumnComponent ? 'OneColumn' : layoutState?.layout || 'OneColumn'
       }
-      startColumn={<div>{startColumnComponent}</div>}
-      midColumn={<div>{midColumnComponent}</div>}
+      startColumn={<div className="column-content">{startColumnComponent}</div>}
+      midColumn={<div className="column-content">{midColumnComponent}</div>}
     />
   );
 };

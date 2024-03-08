@@ -120,6 +120,7 @@ const ColumnWrapper = ({
   const elementListProps = usePrepareListProps({
     ...props,
   });
+
   const elementDetailsProps = usePrepareDetailsProps({
     ...props,
     resourceName: layoutState?.midColumn?.resourceName ?? resourceName,
@@ -187,8 +188,8 @@ const ColumnWrapper = ({
       layout={
         !midColumnComponent ? 'OneColumn' : layoutState?.layout || 'OneColumn'
       }
-      startColumn={<div>{startColumnComponent}</div>}
-      midColumn={<div>{midColumnComponent}</div>}
+      startColumn={<div className="column-content">{startColumnComponent}</div>}
+      midColumn={<div className="column-content">{midColumnComponent}</div>}
     />
   );
 };

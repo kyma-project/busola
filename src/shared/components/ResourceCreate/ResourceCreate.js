@@ -7,6 +7,9 @@ import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/Dyn
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';
+import { spacing } from '@ui5/webcomponents-react-base';
+
+import './ResourceCreate.scss';
 
 export const ResourceCreate = ({
   performRefetch,
@@ -106,14 +109,31 @@ export const ResourceCreate = ({
           layoutCloseUrl={`${layoutCloseCreateUrl}${
             layoutNumber === 'EndColumn' ? '?layout=TwoColumnsMidExpanded' : ''
           }`}
-          footer={
-            <Bar
-              design="FloatingFooter"
-              endContent={<>{renderConfirmButton()}</>}
-            />
-          }
           showYamlTab={disableEdit && onlyYaml}
-          content={renderForm({
+          content={
+            <div className="create-form">
+              {renderForm({
+                formElementRef,
+                isValid,
+                setCustomValid,
+                onChange: handleFormChanged,
+                onError: handleFormError,
+                onCompleted: handleFormSuccess,
+                performManualSubmit: handleFormSubmit,
+              })}
+              <div style={spacing.sapUiSmallMarginBeginEnd}>
+                <Bar
+                  design="FloatingFooter"
+                  endContent={<>{renderConfirmButton()}</>}
+                />
+              </div>
+            </div>
+          }
+        />
+      )}
+      {isEdit && (
+        <div className="edit-form">
+          {renderForm({
             formElementRef,
             isValid,
             setCustomValid,
@@ -121,25 +141,15 @@ export const ResourceCreate = ({
             onError: handleFormError,
             onCompleted: handleFormSuccess,
             performManualSubmit: handleFormSubmit,
+            actions: (
+              <>
+                {renderProtectedResourceButton()}
+                {renderConfirmButton()}
+              </>
+            ),
           })}
-        />
+        </div>
       )}
-      {isEdit &&
-        renderForm({
-          formElementRef,
-          isValid,
-          setCustomValid,
-          onChange: handleFormChanged,
-          onError: handleFormError,
-          onCompleted: handleFormSuccess,
-          performManualSubmit: handleFormSubmit,
-          actions: (
-            <>
-              {renderProtectedResourceButton()}
-              {renderConfirmButton()}
-            </>
-          ),
-        })}
     </>
   );
 };
