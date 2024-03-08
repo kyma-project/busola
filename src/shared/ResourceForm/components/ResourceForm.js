@@ -11,7 +11,7 @@ import { Presets } from './Presets';
 import { useCreateResource } from '../useCreateResource';
 import { KeyValueField, K8sNameField } from '../fields';
 import * as jp from 'jsonpath';
-import { Card, Form, FormItem } from '@ui5/webcomponents-react';
+import { Form, FormItem } from '@ui5/webcomponents-react';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import { spacing } from '@ui5/webcomponents-react-base';
@@ -143,7 +143,7 @@ export function ResourceForm({
 
   let editor = (
     <EditorWrapper
-      height="300px" //TODO: fix height
+      height="100%"
       value={resource}
       onChange={setResource}
       onMount={setActionsEditor}
@@ -172,6 +172,7 @@ export function ResourceForm({
       labelSpanS={0}
       labelSpanXL={0}
       as="div"
+      style={{ overflowX: 'hidden' }}
     >
       {mode === ModeSelector.MODE_FORM && (
         <FormItem>
@@ -223,55 +224,59 @@ export function ResourceForm({
 
   return (
     <section className={classnames('resource-form', className)}>
-      <Card style={spacing.sapUiSmallMarginTopBottom}>
-        <UI5Panel
-          key={`edit-panel-${singularName}`}
-          disableMargin
-          headerActions={
-            <>
-              {/* TODO STYLE IT */}
-              {actions}
-              <div className="yaml-form-actions">
-                <EditorActions
-                  val={convertedResource}
-                  editor={actionsEditor}
-                  title={`${resource?.metadata?.name || singularName}.yaml`}
-                  saveHidden
-                  searchDisabled={yamlSearchDisabled}
-                  hideDisabled={yamlHideDisabled}
-                />
-              </div>
-            </>
-          }
-          modeActions={
-            <>
-              {onlyYaml ? null : (
-                <ModeSelector
-                  mode={mode}
-                  setMode={newMode => {
-                    setMode(newMode);
-                    if (onModeChange) onModeChange(mode, newMode);
-                  }}
-                  isEditing={!!isEdit}
-                  isDisabled={modeSelectorDisabled}
-                />
-              )}
-            </>
-          }
-        >
-          <form ref={formElementRef} onSubmit={onSubmit || createResource}>
-            {mode === ModeSelector.MODE_YAML && (
-              <div
-                className="yaml-form"
-                style={{ width: '100%', height: '100%', minHeight: '300px' }}
-              >
-                {editor}
-              </div>
+      <UI5Panel
+        key={`edit-panel-${singularName}`}
+        className="resource-form--panel card-shadow"
+        style={spacing.sapUiSmallMarginTopBottom}
+        disableMargin
+        headerActions={
+          <>
+            {/* TODO STYLE IT */}
+            {actions}
+            <div className="yaml-form-actions">
+              <EditorActions
+                val={convertedResource}
+                editor={actionsEditor}
+                title={`${resource?.metadata?.name || singularName}.yaml`}
+                saveHidden
+                searchDisabled={yamlSearchDisabled}
+                hideDisabled={yamlHideDisabled}
+              />
+            </div>
+          </>
+        }
+        modeActions={
+          <>
+            {onlyYaml ? null : (
+              <ModeSelector
+                mode={mode}
+                setMode={newMode => {
+                  setMode(newMode);
+                  if (onModeChange) onModeChange(mode, newMode);
+                }}
+                isEditing={!!isEdit}
+                isDisabled={modeSelectorDisabled}
+              />
             )}
-            {formContent}
-          </form>
-        </UI5Panel>
-      </Card>
+          </>
+        }
+      >
+        <form
+          ref={formElementRef}
+          onSubmit={onSubmit || createResource}
+          style={{ height: '100%' }}
+        >
+          {mode === ModeSelector.MODE_YAML && (
+            <div
+              className="yaml-form"
+              style={{ width: '100%', height: '100%', minHeight: '300px' }}
+            >
+              {editor}
+            </div>
+          )}
+          {formContent}
+        </form>
+      </UI5Panel>
     </section>
   );
 }

@@ -9,7 +9,7 @@ form .resource-form {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  padding: 1rem 2rem;
+  padding: 0 1rem;
 
   form {
     overflow: hidden;
@@ -51,4 +51,9 @@ form .resource-form {
       width: fit-content;
     }
   }
+}
+
+.resource-form--panel,
+.resource-form--panel::part(content) {
+  height: 100%;
 }
