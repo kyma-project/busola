@@ -15,7 +15,7 @@ export function Tabs({
   return Array.isArray(structure?.children) ? (
     <div
       style={{
-        ...spacing.sapUiMediumMarginTop,
+        ...spacing.sapUiSmallMarginTop,
         ...spacing.sapUiSmallMarginBeginEnd,
       }}
     >
