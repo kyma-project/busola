@@ -287,6 +287,7 @@ Cypress.Commands.add('closeMidColumn', (checkIfNotExist = false) => {
     .find('ui5-button[aria-label="close-column"]')
     .click();
 
+  cy.wait(1000);
   if (checkIfNotExist) cy.getMidColumn().should('not.exist');
   else cy.getMidColumn().should('not.be.visible');
 });
