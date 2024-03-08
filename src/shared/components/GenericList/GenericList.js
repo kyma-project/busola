@@ -298,11 +298,11 @@ export const GenericList = ({
                     layout: 'TwoColumnsMidExpanded',
                   },
             );
-
             window.history.pushState(
               window.history.state,
               '',
-              `${linkTo(selectedEntry)}?layout=${'TwoColumnsMidExpanded'}`,
+              `${linkTo(selectedEntry)}?layout=${columnLayout ??
+                'TwoColumnsMidExpanded'}`,
             );
           }
         }}

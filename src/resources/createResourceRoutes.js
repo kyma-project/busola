@@ -120,6 +120,7 @@ const ColumnWrapper = ({
   const elementListProps = usePrepareListProps({
     ...props,
   });
+
   const elementDetailsProps = usePrepareDetailsProps({
     ...props,
     resourceName: layoutState?.midColumn?.resourceName ?? resourceName,

@@ -96,7 +96,7 @@ context('Test Custom Resources', () => {
 
     cy.clickGenericListLink('Tclusters');
 
-    cy.testMidColumnLayout('Tclusters');
+    cy.testMidColumnLayout('Tclusters', false);
 
     cy.clickGenericListLink('Tclusters');
 
@@ -106,7 +106,7 @@ context('Test Custom Resources', () => {
       .contains('span', 'tcluster-test')
       .click();
 
-    cy.testEndColumnLayout('tcluster-test');
+    cy.testEndColumnLayout('tcluster-test', false);
 
     cy.getMidColumn()
       .get('ui5-table-row')
@@ -133,7 +133,7 @@ context('Test Custom Resources', () => {
 
     cy.contains(/deleted/).should('be.visible');
 
-    cy.getEndColumn().should('not.exist');
+    cy.getEndColumn().should('not.be.visible');
 
     cy.getMidColumn()
       .contains('tcluster.cypress.example.com')
