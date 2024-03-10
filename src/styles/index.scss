@@ -249,6 +249,11 @@ ui5-tabcontainer::part(content) {
   min-width: 25%;
 }
 
+.bsl-col-md--4 {
+  max-width: 33.33333%;
+  min-width: 33.33333%;
+}
+
 .bsl-col-md--5 {
   max-width: 41.66667%;
   min-width: 41.66667%;

@@ -178,6 +178,7 @@ export function ResourceForm({
         <FormItem>
           <div
             className="advanced-form"
+            style={spacing.sapUiTinyMarginBottom}
             onChange={onChange}
             hidden={mode !== ModeSelector.MODE_FORM}
           >

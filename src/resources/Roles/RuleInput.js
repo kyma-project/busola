@@ -169,7 +169,6 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
           hideCloseButton
           style={{
             marginBottom: spacing.sapUiSmallMarginBottom.marginBottom,
-            marginLeft: spacing.sapUiMediumMarginBegin.marginLeft,
           }}
         >
           {t('roles.messages.load-resources')}

@@ -36,6 +36,10 @@ form .resource-form {
     gap: 5px 10px;
   }
 
+  .simple-list {
+    margin: -3px 0;
+  }
+
   .form-field + .resource-form__collapsible-section {
     padding-top: 16px;
   }

@@ -7,7 +7,6 @@ export function DataField({ title, ...props }) {
   const { t } = useTranslation();
   return (
     <KeyValueField
-      fullWidth
       readableFromFile
       title={title || t('common.labels.data')}
       keyProps={{

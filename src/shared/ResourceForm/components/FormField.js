@@ -2,6 +2,7 @@ import classnames from 'classnames';
 import { FlexBox, Icon } from '@ui5/webcomponents-react';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { Label } from '../../../shared/ResourceForm/components/Label';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 import { useCreateResourceDescription } from 'components/Extensibility/helpers';
 
@@ -38,7 +39,7 @@ export function FormField({
     >
       <FlexBox wrap="Wrap" alignItems="Center" className="bsl-col-md--12">
         {!isListItem && <Label required={required && !disabled}>{label}</Label>}
-        <div className="bsl-col-md--1 tooltip-column">
+        <div className="tooltip-column">
           {tooltipContent && (
             <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
               <Icon
@@ -46,6 +47,7 @@ export function FormField({
                 className="bsl-icon-m"
                 name="message-information"
                 design="Information"
+                style={spacing.sapUiTinyMarginBegin}
               />
             </Tooltip>
           )}

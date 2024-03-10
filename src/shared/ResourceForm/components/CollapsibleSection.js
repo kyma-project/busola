@@ -64,16 +64,15 @@ export function CollapsibleSection({
         }}
         className="header"
       >
-        {
-          <Title
-            tooltipContent={tooltipContent}
-            title={title}
-            disabled={disabled}
-            canChangeState={canChangeState}
-            iconGlyph={iconGlyph}
-            required={required}
-          />
-        }
+        <Title
+          tooltipContent={tooltipContent}
+          title={title}
+          disabled={disabled}
+          canChangeState={canChangeState}
+          iconGlyph={iconGlyph}
+          required={required}
+        />
+
         <div className="actions" ref={actionsRef}>
           {typeof actions === 'function' ? actions(setOpen) : actions}
         </div>

@@ -31,6 +31,7 @@ export const LimitPresets = ({
     <Presets
       presets={mappedPresets}
       onSelect={preset => setValue(preset.value)}
+      inlinePresets={true}
       {...otherProps}
     />
   ) : null;
@@ -63,6 +64,7 @@ export const MemoryPresets = ({
     <Presets
       presets={mappedPresets}
       onSelect={preset => setValue(preset.value)}
+      inlinePresets={true}
       {...otherProps}
     />
   ) : null;
