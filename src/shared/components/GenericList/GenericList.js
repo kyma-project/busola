@@ -134,6 +134,17 @@ export const GenericList = ({
 
   React.useEffect(() => setCurrentPage(1), [searchQuery]);
 
+  useEffect(() => {
+    const selected = entries.find(entry => {
+      const name = entry?.metadata?.name;
+      return name && window.location.href.includes(name);
+    })?.metadata?.name;
+
+    if (selected) {
+      setEntrySelected(selected);
+    }
+  }, [entries]);
+
   const headerActions = (
     <>
       {searchSettings?.showSearchField && (
@@ -273,6 +284,7 @@ export const GenericList = ({
           );
           if (handleRedirect) {
             handleRedirect(linkTo(selectedEntry));
+            return;
           }
           if (!enableColumnLayout) {
             setLayoutColumn({
