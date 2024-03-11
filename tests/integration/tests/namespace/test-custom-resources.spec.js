@@ -8,10 +8,6 @@ function getQueryInput() {
   return cy.get('[aria-label=command-palette-search]').find('input');
 }
 
-function openSearchWithSlashShortcut() {
-  cy.get('body').type('/', { force: true });
-}
-
 context('Test Custom Resources', () => {
   Cypress.skipAfterFail();
 
@@ -50,11 +46,9 @@ context('Test Custom Resources', () => {
 
     cy.contains('ui5-title', 'Custom Resources').should('be.visible');
 
-    openSearchWithSlashShortcut();
-
-    cy.get('ui5-combobox[placeholder="Search"]')
+    cy.get('ui5-input[placeholder="Search"]:visible')
       .find('input')
-      .click()
+      .wait(1000)
       .type('cypress', {
         force: true,
       });

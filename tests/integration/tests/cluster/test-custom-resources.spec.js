@@ -7,10 +7,6 @@ import { loadFile } from '../../support/loadFile';
 const FILE_NAME = 'test-customresourcedefinisions-cluster.yaml';
 const TCLUSTER_FILE_NAME = 'test-Tcluster.yaml';
 
-function openSearchWithSlashShortcut() {
-  cy.get('body').type('/', { force: true });
-}
-
 context('Test Custom Resources', () => {
   Cypress.skipAfterFail();
 
@@ -32,22 +28,17 @@ context('Test Custom Resources', () => {
       .click();
   });
 
-  it('Check CR groups list with slash shortcut', () => {
+  it('Check CR groups list', () => {
     cy.getLeftNav()
       .contains('Custom Resources')
       .click();
 
     cy.contains('ui5-title', 'Custom Resources').should('be.visible');
 
-    openSearchWithSlashShortcut();
-
-    cy.get('ui5-combobox[placeholder="Search"]')
+    cy.get('ui5-input[placeholder="Search"]:visible')
       .find('input')
-      .click()
-      .type('cypress', {
-        force: true,
-      });
-
+      .wait(1000)
+      .type('cypress');
     cy.get('table').should('have.length', 1);
 
     cy.get('ui5-table-row')
@@ -74,6 +65,10 @@ context('Test Custom Resources', () => {
       .contains('Custom Resources')
       .click();
 
+    cy.get('ui5-input[placeholder="Search"]:visible')
+      .find('input')
+      .wait(1000)
+      .type('cypress');
     cy.clickGenericListLink('Tclusters');
 
     cy.contains('ui5-button', 'Create').click();
@@ -94,10 +89,18 @@ context('Test Custom Resources', () => {
       .contains('Custom Resources')
       .click();
 
+    cy.get('ui5-input[placeholder="Search"]:visible')
+      .find('input')
+      .wait(1000)
+      .type('cypress');
     cy.clickGenericListLink('Tclusters');
 
     cy.testMidColumnLayout('Tclusters', false);
 
+    cy.get('ui5-input[placeholder="Search"]:visible')
+      .find('input')
+      .wait(1000)
+      .type('cypress');
     cy.clickGenericListLink('Tclusters');
 
     cy.getMidColumn()

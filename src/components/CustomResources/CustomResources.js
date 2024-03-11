@@ -85,7 +85,6 @@ export function CustomResources({
     resourceUrlPrefix: `/apis/${group}/${version.name}`,
     searchSettings: {
       textSearchProperties: ['metadata.namespace'],
-      allowSlashShortcut: true,
     },
     namespace,
     enableColumnLayout: enableColumnLayout,

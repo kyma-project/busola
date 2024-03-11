@@ -31,10 +31,14 @@ context('Test navigation features', () => {
     // visual resources
     cy.navigateTo('Configuration', 'Cluster Role Bindings');
 
-    cy.get('ui5-combobox[placeholder="Search"]')
+    cy.get('ui5-input[placeholder="Search"]:visible')
       .find('input')
-      .click()
+      .wait(1000)
       .type('cronjob-controller');
+
+    cy.get('ui5-li-suggestion-item:visible')
+      .contains('cronjob-controller')
+      .click();
 
     cy.contains('cronjob-controller (SA)') // link wrapper
       .contains('cronjob-controller') // link itself
