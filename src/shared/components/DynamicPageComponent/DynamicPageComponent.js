@@ -144,11 +144,13 @@ export const DynamicPageComponent = ({
                           ...layoutColumn,
                           midColumn: null,
                           layout: 'OneColumn',
+                          showCreate: null,
                         })
                       : setLayoutColumn({
                           ...layoutColumn,
                           endColumn: null,
                           layout: 'TwoColumnsMidExpanded',
+                          showCreate: null,
                         });
                   }}
                 />
