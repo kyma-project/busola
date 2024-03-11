@@ -70,6 +70,7 @@ ResourcesList.propTypes = {
   disableMargin: PropTypes.bool,
   enableColumnLayout: PropTypes.bool,
   layoutNumber: PropTypes.string,
+  handleRedirect: PropTypes.func,
 };
 
 ResourcesList.defaultProps = {
@@ -202,6 +203,7 @@ export function ResourceListRenderer({
   emptyListProps = null,
   disableHiding,
   displayArrow,
+  handleRedirect,
 }) {
   useVersionWarning({
     resourceUrl,
@@ -483,6 +485,7 @@ export function ResourceListRenderer({
             showButton: !disableCreate && namespace !== '-all-',
             ...emptyListProps,
           }}
+          handleRedirect={handleRedirect}
         />
       )}
       {!isCompact && createPortal(<YamlUploadDialog />, document.body)}

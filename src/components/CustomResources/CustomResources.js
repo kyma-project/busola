@@ -7,6 +7,9 @@ import { useCustomResourceUrl } from 'resources/CustomResourceDefinitions/useCus
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import CRCreate from 'resources/CustomResourceDefinitions/CRCreate';
 import { useUrl } from 'hooks/useUrl';
+import { useRecoilValue } from 'recoil';
+import { allNodesSelector } from 'state/navigation/allNodesSelector';
+import { useNavigate } from 'react-router-dom';
 
 export function CustomResources({
   crd,
@@ -19,7 +22,7 @@ export function CustomResources({
 }) {
   const { group, names } = crd.spec;
   const name = names.plural;
-  const customUrl = useCustomResourceUrl(crd, true);
+  const customUrl = useCustomResourceUrl(crd);
   const { namespace } = useUrl();
   const resourceUrl =
     namespace && namespace !== '-all-'
@@ -68,6 +71,30 @@ export function CustomResources({
     };
   };
 
+  const clusterNodes = useRecoilValue(allNodesSelector).filter(
+    node => !node.namespaced,
+  );
+  const namespaceNodes = useRecoilValue(allNodesSelector).filter(
+    node => node.namespaced,
+  );
+  const navigate = useNavigate();
+
+  const handleRedirect = link => {
+    const crdNamePlural = crd.spec.names.plural;
+    const clusterNode = clusterNodes.find(
+      res => res.resourceType === crdNamePlural,
+    );
+    const namespaceNode = namespaceNodes.find(
+      res => res.resourceType === crdNamePlural,
+    );
+
+    if (clusterNode || namespaceNode) {
+      navigate(`${link}?layout=${'TwoColumnsMidExpanded'}`);
+    }
+
+    return;
+  };
+
   const params = {
     hasDetailsView: true,
     customUrl,
@@ -95,6 +122,7 @@ export function CustomResources({
     customColumnLayout,
     layoutNumber: 'MidColumn',
     parentCrdName: crd.metadata.name,
+    handleRedirect,
   };
   return <ResourcesList {...params} />;
 }

@@ -67,6 +67,7 @@ export const GenericList = ({
   hasDetailsView,
   disableHiding = true,
   displayArrow = false,
+  handleRedirect = null,
 }) => {
   const navigate = useNavigate();
   searchSettings = { ...defaultSearch, ...searchSettings };
@@ -247,6 +248,7 @@ export const GenericList = ({
       ? customUrl(entry)
       : resourceUrlFn(entry, { resourceType });
   };
+  console.log(layoutState);
 
   return (
     <UI5Panel
@@ -270,6 +272,9 @@ export const GenericList = ({
           setEntrySelected(
             selectedEntry?.metadata?.name ?? e.target.children[0].innerText,
           );
+          if (handleRedirect) {
+            handleRedirect(linkTo(selectedEntry));
+          }
           if (!enableColumnLayout) {
             setLayoutColumn({
               midColumn: null,
