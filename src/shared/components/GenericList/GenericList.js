@@ -284,7 +284,6 @@ export const GenericList = ({
           );
           if (handleRedirect) {
             handleRedirect(linkTo(selectedEntry));
-            return;
           }
           if (!enableColumnLayout) {
             setLayoutColumn({
@@ -314,11 +313,15 @@ export const GenericList = ({
                     layout: 'TwoColumnsMidExpanded',
                   },
             );
+
             window.history.pushState(
               window.history.state,
               '',
-              `${linkTo(selectedEntry)}?layout=${columnLayout ??
-                'TwoColumnsMidExpanded'}`,
+              `${linkTo(selectedEntry)}?layout=${
+                columnLayout && handleRedirect
+                  ? 'TwoColumnsMidExpanded'
+                  : columnLayout || 'TwoColumnsMidExpanded'
+              }`,
             );
           }
         }}
