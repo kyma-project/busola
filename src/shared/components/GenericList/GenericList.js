@@ -248,7 +248,6 @@ export const GenericList = ({
       ? customUrl(entry)
       : resourceUrlFn(entry, { resourceType });
   };
-  console.log(layoutState);
 
   return (
     <UI5Panel
