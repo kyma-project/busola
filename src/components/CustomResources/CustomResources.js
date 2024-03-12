@@ -90,6 +90,7 @@ export function CustomResources({
 
     if (clusterNode || namespaceNode) {
       navigate(`${link}?layout=${'TwoColumnsMidExpanded'}`);
+      return true;
     }
 
     return;

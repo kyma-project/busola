@@ -282,8 +282,8 @@ export const GenericList = ({
           setEntrySelected(
             selectedEntry?.metadata?.name ?? e.target.children[0].innerText,
           );
-          if (handleRedirect) {
-            handleRedirect(linkTo(selectedEntry));
+          if (handleRedirect && handleRedirect(linkTo(selectedEntry))) {
+            return;
           }
           if (!enableColumnLayout) {
             setLayoutColumn({
@@ -317,11 +317,8 @@ export const GenericList = ({
             window.history.pushState(
               window.history.state,
               '',
-              `${linkTo(selectedEntry)}?layout=${
-                columnLayout && handleRedirect
-                  ? 'TwoColumnsMidExpanded'
-                  : columnLayout || 'TwoColumnsMidExpanded'
-              }`,
+              `${linkTo(selectedEntry)}?layout=${columnLayout ??
+                'TwoColumnsMidExpanded'}`,
             );
           }
         }}
