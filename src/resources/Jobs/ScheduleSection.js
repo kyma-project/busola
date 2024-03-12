@@ -134,6 +134,7 @@ export function ScheduleSection({ value: schedule, setValue: setSchedule }) {
     <ResourceForm.Presets
       onSelect={({ value }) => setSchedule(value)}
       presets={schedulePresets}
+      inlinePresets={true}
     />
   );
 

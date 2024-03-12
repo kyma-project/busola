@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState, createRef } from 'react';
-import { Button, Icon, FlexBox } from '@ui5/webcomponents-react';
+import { Button, FlexBox } from '@ui5/webcomponents-react';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
-
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
+import { Label } from '../../../shared/ResourceForm/components/Label';
 
 import { ResourceForm } from '..';
 import { useCreateResourceDescription } from 'components/Extensibility/helpers';
@@ -25,7 +24,6 @@ export function MultiInput({
   className,
   isAdvanced,
   defaultOpen,
-  fullWidth = false,
   isEntryLocked = () => false,
   readOnly,
   noEdit,
@@ -99,11 +97,6 @@ export function MultiInput({
   };
   const open = defaultOpen === undefined ? !isAdvanced : defaultOpen;
 
-  const listClasses = classnames({
-    'bsl-col-md--8': !fullWidth && (title || label),
-    'bsl-col-md--12': fullWidth && !(title || label),
-  });
-
   useEffect(() => {
     internalValue.forEach((entry, index) => {
       const isValid = child => child.props.validate(entry) ?? true;
@@ -161,36 +154,21 @@ export function MultiInput({
       className={className}
       required={required}
       defaultOpen={open}
-      tooltipContent={sectionTooltipContent}
+      tooltipContent={sectionTooltipContent || tooltipContent}
       {...props}
     >
-      <FlexBox className="form-field multi-input" justifyContent="Center">
-        {!fullWidth && (title || label) && (
-          <div className="bsl-col-md--3 form-field__label">
-            <ResourceForm.Label
-              required={required}
-              tooltipContent={tooltipContent}
-            >
-              {title || label}
-            </ResourceForm.Label>
-          </div>
-        )}
-        <ul className={listClasses}>
+      <div className="lololo form-field multi-input" justifyContent="Center">
+        <ul className="bsl-col-md--12">
           {internalValue.map((entry, index) => (
-            <li key={index} style={spacing.sapUiSmallMarginBottom}>
-              <FlexBox alignItems="Baseline">
-                <div className="bsl-col-md--11">
-                  <FlexBox wrap="Wrap" style={{ gap: '10px' }}>
-                    {noEdit && !isLast(index) && (
-                      <span className="readonly-value">{entry}</span>
-                    )}
-                    {(!noEdit || isLast(index)) &&
-                      inputs.map(
-                        (input, inputIndex) =>
-                          inputComponents[index][inputIndex],
-                      )}
-                  </FlexBox>
-                </div>
+            <li key={index} style={spacing.sapUiTinyMarginBottom}>
+              <FlexBox style={{ gap: '10px' }}>
+                {noEdit && !isLast(index) && (
+                  <span className="readonly-value">{entry}</span>
+                )}
+                {(!noEdit || isLast(index)) &&
+                  inputs.map(
+                    (input, inputIndex) => inputComponents[index][inputIndex],
+                  )}
                 <div className="bsl-col-md--1">
                   {!isLast(index) && (
                     <Button
@@ -210,24 +188,12 @@ export function MultiInput({
             </li>
           ))}
           {inputInfo && (
-            <p style={{ color: 'var(--sapNeutralTextColor)' }}>
+            <Label wrappingType="Normal" style={{ marginTop: '5px' }}>
               {inputInfoLink}
-            </p>
+            </Label>
           )}
         </ul>
-        <div className="bsl-col-md--1 tooltip-column tooltip-column--with-padding">
-          {tooltipContent && (
-            <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
-              <Icon
-                aria-label=""
-                className="bsl-icon-m"
-                name="message-information"
-                design="Information"
-              />
-            </Tooltip>
-          )}
-        </div>
-      </FlexBox>
+      </div>
     </ResourceForm.CollapsibleSection>
   );
 }
