@@ -279,12 +279,21 @@ export const GenericList = ({
                 e.target.children[0].innerText
             );
           });
+          if (handleRedirect) {
+            const redirectLayout = handleRedirect(selectedEntry, resourceType);
+            if (redirectLayout) {
+              setLayoutColumn({
+                ...redirectLayout,
+              });
+              navigate(
+                `${linkTo(selectedEntry)}?layout=${redirectLayout.layout}`,
+              );
+              return;
+            }
+          }
           setEntrySelected(
             selectedEntry?.metadata?.name ?? e.target.children[0].innerText,
           );
-          if (handleRedirect && handleRedirect(linkTo(selectedEntry))) {
-            return;
-          }
           if (!enableColumnLayout) {
             setLayoutColumn({
               midColumn: null,
@@ -313,7 +322,6 @@ export const GenericList = ({
                     layout: 'TwoColumnsMidExpanded',
                   },
             );
-
             window.history.pushState(
               window.history.state,
               '',

@@ -9,7 +9,6 @@ import CRCreate from 'resources/CustomResourceDefinitions/CRCreate';
 import { useUrl } from 'hooks/useUrl';
 import { useRecoilValue } from 'recoil';
 import { allNodesSelector } from 'state/navigation/allNodesSelector';
-import { useNavigate } from 'react-router-dom';
 
 export function CustomResources({
   crd,
@@ -77,9 +76,8 @@ export function CustomResources({
   const namespaceNodes = useRecoilValue(allNodesSelector).filter(
     node => node.namespaced,
   );
-  const navigate = useNavigate();
 
-  const handleRedirect = link => {
+  const handleRedirect = (selectedEntry, resourceType) => {
     const crdNamePlural = crd.spec.names.plural;
     const clusterNode = clusterNodes.find(
       res => res.resourceType === crdNamePlural,
@@ -89,8 +87,15 @@ export function CustomResources({
     );
 
     if (clusterNode || namespaceNode) {
-      navigate(`${link}?layout=${'TwoColumnsMidExpanded'}`);
-      return true;
+      return {
+        midColumn: {
+          resourceName: selectedEntry?.metadata?.name,
+          resourceType: resourceType,
+          namespaceId: selectedEntry?.metadata?.namespace,
+        },
+        endColumn: null,
+        layout: 'TwoColumnsMidExpanded',
+      };
     }
 
     return;
