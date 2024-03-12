@@ -25,7 +25,7 @@ export function WrappedText({ value, setValue, onChange, inputRef, ...props }) {
   });
 
   return (
-    <div className={fullWidth ? '' : 'bsl-col bsl-col-md--12'}>
+    <div className={fullWidth ? '' : 'bsl-col-md--12'}>
       <Input
         value={value || ''}
         onInput={onChange ?? (e => setValue && setValue(e.target.value))}

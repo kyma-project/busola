@@ -34,7 +34,7 @@ export function K8sNameField({
       input={() => {
         return (
           <>
-            <div className="bsl-col bsl-col-md--12">
+            <div className="bsl-col-md--12">
               <K8sNameInput
                 kind={kind}
                 compact

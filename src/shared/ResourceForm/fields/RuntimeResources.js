@@ -88,7 +88,7 @@ export function RuntimeResources({
           container={value}
           setContainer={setValue}
           required={true}
-          className="bsl-col bsl-col-md--12"
+          className="bsl-col-md--12"
         />
         <MemoryInput
           label={t('deployments.create-modal.advanced.memory-limits')}
@@ -96,7 +96,7 @@ export function RuntimeResources({
           container={value}
           setContainer={setValue}
           required={true}
-          className="bsl-col bsl-col-md--12"
+          className="bsl-col-md--12"
         />
       </div>
       <div className="runtime-profile-form" style={spacing.sapUiTinyMarginTop}>

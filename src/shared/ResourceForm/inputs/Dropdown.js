@@ -28,7 +28,7 @@ export function Dropdown({ value, setValue, error, loading, ...props }) {
     ...dropdownProps
   } = props;
   return (
-    <div className="bsl-col bsl-col-md--12">
+    <div className="bsl-col-md--12">
       <BusolaDropdown
         selectedKey={value}
         onSelect={(_, selected) => setValue(selected.key, selected)}
