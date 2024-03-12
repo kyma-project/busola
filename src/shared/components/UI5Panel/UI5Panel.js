@@ -50,12 +50,7 @@ export const UI5Panel = ({
               <Text>{description}</Text>
             </>
           )}
-          {modeActions && (
-            <>
-              <ToolbarSpacer />
-              {modeActions}
-            </>
-          )}
+          {modeActions && modeActions}
           {headerActions && (
             <>
               <ToolbarSpacer />
