@@ -12,11 +12,15 @@ context('Create Namespace', () => {
 
     cy.contains('ui5-button', 'Create').click();
 
-    cy.contains('Advanced').click();
+    cy.get('.create-form')
+      .find('ui5-checkbox[text="Create Resource Quota"]:visible')
+      .find('[role="checkbox"]')
+      .click();
 
-    cy.get('ui5-checkbox[text="Create Resource Quota"]').click();
-
-    cy.get('ui5-checkbox[text="Create Limit Range"]').click();
+    cy.get('.create-form')
+      .find('ui5-checkbox[text="Create Limit Range"]:visible')
+      .find('[role="checkbox"]')
+      .click();
 
     cy.get('[aria-label="expand Apply Total Memory Quotas"]')
       .find('ui5-combobox[placeholder="Choose preset"]:visible')
@@ -29,16 +33,12 @@ context('Create Namespace', () => {
       .find('li[role="listitem"]')
       .click({ force: true });
 
-    cy.get('ui5-dialog')
+    cy.get('.create-form')
       .find('[aria-label="Namespace name"]:visible')
       .find('input')
       .type(Cypress.env('NAMESPACE_NAME'));
 
-    cy.get('ui5-dialog')
-      .contains('Advanced')
-      .click();
-
-    cy.get('ui5-dialog')
+    cy.get('.create-form')
       .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
@@ -47,13 +47,14 @@ context('Create Namespace', () => {
       'be.visible',
     );
 
-    cy.get('ui5-button')
+    cy.get('ui5-tabcontainer')
+      .find('[role="tablist"]')
+      .find('[role="tab"]')
       .contains('Edit')
-      .should('be.visible')
       .click();
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Update')
+    cy.get('.edit-form')
+      .contains('ui5-button', 'Save')
       .should('be.visible')
       .click();
   });
