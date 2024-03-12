@@ -56,20 +56,23 @@ export function CollapsibleSection({
         onClick={toggle}
         aria-label={`expand ${title}`}
         style={{
-          marginLeft: `calc(${nestingLevel} * ${spacing.sapUiSmallMarginBegin.marginLeft})`,
+          marginRight: '-1rem',
+          marginLeft: `-1rem`,
+          paddingLeft: `calc(${nestingLevel + 1} * ${
+            spacing.sapUiSmallMarginBegin.marginLeft
+          })`,
         }}
         className="header"
       >
-        {
-          <Title
-            tooltipContent={tooltipContent}
-            title={title}
-            disabled={disabled}
-            canChangeState={canChangeState}
-            iconGlyph={iconGlyph}
-            required={required}
-          />
-        }
+        <Title
+          tooltipContent={tooltipContent}
+          title={title}
+          disabled={disabled}
+          canChangeState={canChangeState}
+          iconGlyph={iconGlyph}
+          required={required}
+        />
+
         <div className="actions" ref={actionsRef}>
           {typeof actions === 'function' ? actions(setOpen) : actions}
         </div>
@@ -77,9 +80,6 @@ export function CollapsibleSection({
 
       <div
         className={open ? 'content content--open' : 'content content--closed'}
-        style={{
-          marginLeft: `calc(${nestingLevel} * ${spacing.sapUiSmallMarginBegin.marginLeft})`,
-        }}
       >
         <ResourceFormWrapper
           resource={resource}

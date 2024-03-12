@@ -31,16 +31,17 @@ form .resource-form {
   }
 
   .form-field,
+  .simple-list,
+  .flexbox-gap {
+    gap: 5px 10px;
+  }
+
   .simple-list {
-    gap: 10px;
+    margin: -3px 0;
   }
 
   .form-field + .resource-form__collapsible-section {
     padding-top: 16px;
-  }
-
-  .bsl-col {
-    padding: 4px 0;
   }
 
   .mode-selector {

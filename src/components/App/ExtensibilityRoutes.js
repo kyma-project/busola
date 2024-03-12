@@ -73,6 +73,7 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType, extension }) => {
 
   const elementCreateProps = usePrepareCreateProps({
     resourceType,
+    resourceTypeForTitle: extension?.general?.name,
     apiGroup: extension?.general.resource.group,
     apiVersion: extension?.general.resource.version,
   });

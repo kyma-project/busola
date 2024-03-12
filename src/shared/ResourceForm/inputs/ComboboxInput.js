@@ -28,12 +28,7 @@ export function ComboboxInput({
   };
 
   return (
-    <div
-      className={classnames(
-        `bsl-col bsl-col-md--${fullWidth ? '12' : '11'}`,
-        className,
-      )}
-    >
+    <div className={classnames(`bsl-col-md--12`, className)}>
       <ComboBox
         aria-label="Combobox input"
         id={id || 'combobox-input'}
