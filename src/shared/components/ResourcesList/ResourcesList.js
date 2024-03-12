@@ -312,6 +312,38 @@ export function ResourceListRenderer({
       activeResource = CreateResourceForm.sanitizeClone(activeResource);
     }
     setActiveResource(activeResource);
+
+    setLayoutColumn(
+      layoutNumber === 'MidColumn' && enableColumnLayout
+        ? {
+            midColumn: layoutState?.midColumn,
+            endColumn: null,
+            showCreate: {
+              resourceType: resourceType,
+              namespaceId: namespace,
+              resource: activeResource,
+            },
+            layout: 'ThreeColumnsEndExpanded',
+          }
+        : {
+            midColumn: null,
+            endColumn: null,
+            showCreate: {
+              resourceType: resourceType,
+              namespaceId: namespace,
+              resource: activeResource,
+            },
+            layout: 'TwoColumnsMidExpanded',
+          },
+    );
+
+    window.history.pushState(
+      window.history.state,
+      '',
+      `${
+        layoutCloseCreateUrl ? layoutCloseCreateUrl : window.location.pathname
+      }${layoutNumber === 'MidColumn' ? '?layout=TwoColumnsMidExpanded' : ''}`,
+    );
   };
 
   const actions = readOnly
