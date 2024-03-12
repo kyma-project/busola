@@ -99,7 +99,7 @@ export function ExtensibilityCreateCore({
     resource: api,
   });
 
-  const { simpleRules, advancedRules } = useMemo(() => {
+  const { advancedRules } = useMemo(() => {
     const fullSchemaRules = prepareRules(
       createResource?.form ?? [],
       editMode,
@@ -111,10 +111,6 @@ export function ExtensibilityCreateCore({
     setTimeout(() => triggers.trigger('init', []));
 
     return {
-      simpleRules: prepareSchemaRules(
-        fullSchemaRules,
-        item => item.simple ?? false,
-      ),
       advancedRules: prepareSchemaRules(
         fullSchemaRules,
         item => item.advanced ?? true,
@@ -179,18 +175,6 @@ export function ExtensibilityCreateCore({
       urlPath={general?.urlPath}
       disableDefaultFields
     >
-      <ResourceSchema
-        simple
-        key={api.version}
-        schema={errorOpenApi ? {} : schema}
-        schemaRules={simpleRules}
-        resource={resource}
-        store={store}
-        setStore={setStore}
-        onSubmit={() => {}}
-        path={general?.urlPath || ''}
-        editMode={editMode}
-      />
       <ResourceSchema
         advanced
         key={api.version}
