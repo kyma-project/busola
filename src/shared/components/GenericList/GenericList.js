@@ -286,7 +286,9 @@ export const GenericList = ({
                 ...redirectLayout,
               });
               navigate(
-                `${linkTo(selectedEntry)}?layout=${redirectLayout.layout}`,
+                redirectLayout.layout === 'OneColumn'
+                  ? linkTo(selectedEntry)
+                  : `${linkTo(selectedEntry)}?layout=${redirectLayout.layout}`,
               );
               return;
             }
