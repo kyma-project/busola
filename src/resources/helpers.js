@@ -110,8 +110,8 @@ export const usePrepareCreateProps = ({
     resourceTitle: `${t(
       'components.resources-list.create',
     )} ${prettifyNameSingular(
-      '',
-      resourceTypeForTitle ?? resourceCustomType ?? resourceType,
+      resourceTypeForTitle,
+      resourceCustomType ?? resourceType,
     )}`,
     namespace: namespaceId,
     i18n,

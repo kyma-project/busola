@@ -35,7 +35,7 @@ export function FormField({
       className={classnames('form-field', className)}
       justifyContent="Center"
       direction="Column"
-      style={{ ...style }}
+      style={style}
     >
       <FlexBox wrap="Wrap" alignItems="Center" className="bsl-col-md--12">
         {!isListItem && <Label required={required && !disabled}>{label}</Label>}
