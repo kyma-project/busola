@@ -28,6 +28,7 @@ export function MultiInput({
   readOnly,
   noEdit,
   newItemAction,
+  newItemActionWidth = 1,
   inputInfo,
   ...props
 }) {
@@ -157,36 +158,56 @@ export function MultiInput({
       tooltipContent={sectionTooltipContent || tooltipContent}
       {...props}
     >
-      <div className="lololo form-field multi-input" justifyContent="Center">
+      <div className="form-field multi-input" justifyContent="Center">
         <ul className="bsl-col-md--12">
-          {internalValue.map((entry, index) => (
-            <li key={index} style={spacing.sapUiTinyMarginBottom}>
-              <FlexBox style={{ gap: '10px' }}>
-                {noEdit && !isLast(index) && (
-                  <span className="readonly-value">{entry}</span>
-                )}
-                {(!noEdit || isLast(index)) &&
-                  inputs.map(
-                    (input, inputIndex) => inputComponents[index][inputIndex],
+          {internalValue.map((entry, index) => {
+            const fieldWidth =
+              isLast(index) && newItemAction
+                ? `bsl-col-md--${12 - newItemActionWidth}`
+                : 'bsl-col-md--11';
+
+            return (
+              <li key={index} style={spacing.sapUiTinyMarginBottom}>
+                <FlexBox style={{ gap: '10px' }} alignItems="Center">
+                  {noEdit && !isLast(index) && (
+                    <span className="readonly-value">{entry}</span>
                   )}
-                <div className="bsl-col-md--1">
+
+                  {(!noEdit || isLast(index)) && (
+                    <div className={fieldWidth}>
+                      <FlexBox style={{ gap: '10px' }} alignItems="Center">
+                        {inputs.map(
+                          (input, inputIndex) =>
+                            inputComponents[index][inputIndex],
+                        )}
+                      </FlexBox>
+                    </div>
+                  )}
+
                   {!isLast(index) && (
-                    <Button
-                      disabled={readOnly}
-                      className={classnames({
-                        hidden: isEntryLocked(entry),
-                      })}
-                      icon="delete"
-                      design="Transparent"
-                      onClick={() => removeValue(index)}
-                      aria-label={t('common.buttons.delete')}
-                    />
+                    <div className="bsl-col-md--1">
+                      <Button
+                        disabled={readOnly}
+                        className={classnames({
+                          hidden: isEntryLocked(entry),
+                        })}
+                        icon="delete"
+                        design="Transparent"
+                        onClick={() => removeValue(index)}
+                        aria-label={t('common.buttons.delete')}
+                      />
+                    </div>
                   )}
-                  {isLast(index) && newItemAction}
-                </div>
-              </FlexBox>
-            </li>
-          ))}
+
+                  {isLast(index) && newItemAction && (
+                    <div className={`bsl-col-md--${newItemActionWidth}`}>
+                      {newItemAction}
+                    </div>
+                  )}
+                </FlexBox>
+              </li>
+            );
+          })}
           {inputInfo && (
             <Label wrappingType="Normal" style={{ marginTop: '5px' }}>
               {inputInfoLink}
