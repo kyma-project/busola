@@ -27,6 +27,8 @@ import { merge } from 'lodash';
 import { TriggerContext, TriggerContextProvider } from './contexts/Trigger';
 import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { useGetCRbyPath } from './useGetCRbyPath';
+import { TranslationBundleContext } from './helpers';
 
 export function ExtensibilityCreateCore({
   formElementRef,
@@ -99,7 +101,7 @@ export function ExtensibilityCreateCore({
     resource: api,
   });
 
-  const { simpleRules, advancedRules } = useMemo(() => {
+  const { advancedRules } = useMemo(() => {
     const fullSchemaRules = prepareRules(
       createResource?.form ?? [],
       editMode,
@@ -111,10 +113,6 @@ export function ExtensibilityCreateCore({
     setTimeout(() => triggers.trigger('init', []));
 
     return {
-      simpleRules: prepareSchemaRules(
-        fullSchemaRules,
-        item => item.simple ?? false,
-      ),
       advancedRules: prepareSchemaRules(
         fullSchemaRules,
         item => item.advanced ?? true,
@@ -180,18 +178,6 @@ export function ExtensibilityCreateCore({
       disableDefaultFields
     >
       <ResourceSchema
-        simple
-        key={api.version}
-        schema={errorOpenApi ? {} : schema}
-        schemaRules={simpleRules}
-        resource={resource}
-        store={store}
-        setStore={setStore}
-        onSubmit={() => {}}
-        path={general?.urlPath || ''}
-        editMode={editMode}
-      />
-      <ResourceSchema
         advanced
         key={api.version}
         schema={errorOpenApi ? {} : schema}
@@ -207,16 +193,26 @@ export function ExtensibilityCreateCore({
 }
 
 export function ExtensibilityCreate(props) {
+  const resMetaData = useGetCRbyPath();
+  const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
+
   return (
-    <DataSourcesContextProvider
-      dataSources={props.resourceSchema?.dataSources || {}}
+    <TranslationBundleContext.Provider
+      value={{
+        translationBundle: urlPath || 'extensibility',
+        defaultResourcePlaceholder: defaultPlaceholder,
+      }}
     >
-      <TriggerContextProvider>
-        <VarStoreContextProvider>
-          <ExtensibilityCreateCore {...props} />
-        </VarStoreContextProvider>
-      </TriggerContextProvider>
-    </DataSourcesContextProvider>
+      <DataSourcesContextProvider
+        dataSources={props.resourceSchema?.dataSources || {}}
+      >
+        <TriggerContextProvider>
+          <VarStoreContextProvider>
+            <ExtensibilityCreateCore {...props} />
+          </VarStoreContextProvider>
+        </TriggerContextProvider>
+      </DataSourcesContextProvider>
+    </TranslationBundleContext.Provider>
   );
 }
 
