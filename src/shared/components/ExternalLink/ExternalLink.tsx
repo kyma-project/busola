@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Icon } from '@ui5/webcomponents-react';
+import { Icon, Link } from '@ui5/webcomponents-react';
 
 import { spacing } from '@ui5/webcomponents-react-base';
 
@@ -9,6 +9,7 @@ type LinkProps = {
   text?: string;
   className?: string;
   children?: ReactNode;
+  design?: 'Default' | 'Subtle' | 'Emphasized';
   dataTestId?: string;
   style?: React.CSSProperties;
 };
@@ -16,21 +17,22 @@ type LinkProps = {
 export const ExternalLink = ({
   url,
   text,
-  className,
+  className = '',
   children,
+  design = 'Emphasized',
   dataTestId,
   style,
 }: LinkProps) => {
   const { t } = useTranslation();
+  console.log(className, design, style);
 
   return (
-    <a
-      className={`bsl-link ${className}`}
+    <Link
+      design={design}
+      className={className}
       href={url}
       target="_blank"
-      rel="noopener noreferrer"
       data-test-id={dataTestId}
-      style={style}
     >
       {text || children || url}
       <Icon
@@ -40,6 +42,6 @@ export const ExternalLink = ({
         style={spacing.sapUiTinyMarginBegin}
         aria-label={t('common.ariaLabel.new-tab-link')}
       />
-    </a>
+    </Link>
   );
 };
