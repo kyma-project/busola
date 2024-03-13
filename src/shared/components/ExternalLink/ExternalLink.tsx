@@ -21,10 +21,9 @@ export const ExternalLink = ({
   children,
   design = 'Emphasized',
   dataTestId,
-  style,
+  style = spacing.sapUiTinyMarginBegin,
 }: LinkProps) => {
   const { t } = useTranslation();
-  console.log(className, design, style);
 
   return (
     <Link
@@ -39,7 +38,7 @@ export const ExternalLink = ({
         design="Information"
         name="inspect"
         className="bsl-icon-s"
-        style={spacing.sapUiTinyMarginBegin}
+        style={style}
         aria-label={t('common.ariaLabel.new-tab-link')}
       />
     </Link>
