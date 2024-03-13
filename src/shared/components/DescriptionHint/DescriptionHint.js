@@ -25,7 +25,7 @@ export function HintButton({
       {createPortal(
         <Popover
           opener={`descriptionOpener-${context}`}
-          //Point initial focus to component with id removes the focus from the link in description
+          //Point initial focus to other component removes the focus from the link in description
           onAfterOpen={() => {
             descBtnRef.current.focus();
           }}
