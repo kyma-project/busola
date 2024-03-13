@@ -105,6 +105,7 @@ function HelmReleasesList({ enableColumnLayout }) {
   ).map(([releaseName, releases]) => {
     const recentRelease = findRecentRelease(releases);
     return {
+      name: releaseName,
       releaseName,
       recentReleaseName: recentRelease?.metadata.name,
       recentRelease: decodeHelmRelease(recentRelease?.data.release),
@@ -127,6 +128,11 @@ function HelmReleasesList({ enableColumnLayout }) {
             serverDataLoading={loading}
             serverDataError={error}
             allowSlashShortcut
+            hasDetailsView
+            displayArrow
+            enableColumnLayout
+            customUrl={resourceUrl}
+            resourceType="HelmReleases"
             sortBy={{
               name: (a, b) => a.releaseName.localeCompare(b.releaseName),
             }}

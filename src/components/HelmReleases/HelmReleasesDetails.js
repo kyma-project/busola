@@ -42,6 +42,7 @@ function HelmReleasesDetails({ releaseName, namespace }) {
         title={releaseName}
         description={ResourceDescription}
         showYamlTab={showYamlTab}
+        layoutNumber="MidColumn"
         inlineEditForm={() => (
           <ResourceCreate
             title={'HelmRelease'}

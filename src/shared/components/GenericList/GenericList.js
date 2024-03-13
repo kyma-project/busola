@@ -240,6 +240,7 @@ export const GenericList = ({
       />
     ));
   };
+
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const { resourceUrl: resourceUrlFn } = useUrl();
   const linkTo = entry => {
@@ -262,9 +263,10 @@ export const GenericList = ({
           if (!hasDetailsView) return;
           const selectedEntry = entries.find(entry => {
             return (
-              entry.metadata.name === e.target.children[0].innerText ||
+              entry?.metadata?.name === e.target.children[0].innerText ||
               pluralize(entry?.spec?.names?.kind ?? '') ===
-                e.target.children[0].innerText
+                e.target.children[0].innerText ||
+              entry?.name === e.target.children[0].innerText
             );
           });
           setEntrySelected(
