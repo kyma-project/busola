@@ -50,7 +50,7 @@ context('Test Secrets', () => {
 
     cy.contains(window.btoa(SECRET_VALUE));
 
-    cy.get('ui5-dialog')
+    cy.get('.create-form')
       .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
@@ -120,9 +120,9 @@ context('Test Secrets', () => {
       .eq(1)
       .click();
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Update')
-      .should('be.visible')
+    cy.get('.edit-form')
+      .find('.header-actions')
+      .contains('ui5-button:visible', 'Save')
       .click();
   });
 

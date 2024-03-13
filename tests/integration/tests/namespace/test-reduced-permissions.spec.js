@@ -71,7 +71,7 @@ context('Test reduced permissions', () => {
       'list',
     );
 
-    cy.get('ui5-dialog')
+    cy.get('.create-form')
       .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
@@ -89,7 +89,7 @@ context('Test reduced permissions', () => {
       .click()
       .type(SA_NAME);
 
-    cy.get('ui5-dialog')
+    cy.get('.create-form')
       .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
@@ -133,7 +133,7 @@ context('Test reduced permissions', () => {
       SA_NAME,
     );
 
-    cy.get('ui5-dialog')
+    cy.get('.create-form')
       .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();

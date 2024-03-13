@@ -19,8 +19,6 @@ context('Test Service Accounts', () => {
 
     cy.contains('ui5-button', 'Create').click();
 
-    cy.contains('Advanced').click();
-
     cy.get('[aria-label="ServiceAccount name"]')
       .find('input')
       .click()
@@ -43,7 +41,7 @@ context('Test Service Accounts', () => {
       'be.visible',
     );
 
-    cy.get('ui5-dialog')
+    cy.get('.create-form')
       .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
@@ -90,9 +88,9 @@ context('Test Service Accounts', () => {
       .eq(0)
       .click({ force: true });
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Update')
-      .should('be.visible')
+    cy.get('.edit-form')
+      .find('.header-actions')
+      .contains('ui5-button:visible', 'Save')
       .click();
   });
 

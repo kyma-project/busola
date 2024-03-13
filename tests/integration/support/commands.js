@@ -121,13 +121,6 @@ Cypress.Commands.add('getLeftNav', () => {
   return cy.get('aside');
 });
 
-Cypress.Commands.add('scrollMidColumnToButtom', () => {
-  return cy
-    .getMidColumn()
-    .get('.ui5-fcl-column--middle')
-    .scrollTo('bottom');
-});
-
 Cypress.Commands.add('getMidColumn', () => {
   return cy.get('div[slot="midColumn"]');
 });

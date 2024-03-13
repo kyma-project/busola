@@ -23,8 +23,6 @@ context('Test Deployments', () => {
       .clear()
       .type(DEPLOYMENT_NAME, { force: true });
 
-    cy.contains('Advanced').click();
-
     cy.get('[aria-label="expand Labels"]').click();
 
     cy.get('[placeholder="Enter key"]:visible')
@@ -53,8 +51,6 @@ context('Test Deployments', () => {
       .find('input')
       .type(DOCKER_IMAGE);
 
-    cy.contains('Advanced').click();
-
     cy.contains('ui5-label', 'Memory Requests')
       .next()
       .find('ui5-input')
@@ -81,7 +77,7 @@ context('Test Deployments', () => {
       .clear()
       .type('20');
 
-    cy.get('ui5-dialog')
+    cy.get('.create-form')
       .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
@@ -115,9 +111,11 @@ context('Test Deployments', () => {
 
     cy.wait(1000);
 
-    cy.get('ui5-button')
+    cy.getMidColumn()
+      .find('ui5-tabcontainer')
+      .find('[role="tablist"]')
+      .find('[role="tab"]')
       .contains('Edit')
-      .should('be.visible')
       .click();
 
     cy.get('[aria-label="expand Labels"]').click();
@@ -133,9 +131,16 @@ context('Test Deployments', () => {
       .first()
       .type('label-value');
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Update')
-      .should('be.visible')
+    cy.get('.edit-form')
+      .find('.header-actions')
+      .contains('ui5-button:visible', 'Save')
+      .click();
+
+    cy.getMidColumn()
+      .find('ui5-tabcontainer')
+      .find('[role="tablist"]')
+      .find('[role="tab"]')
+      .contains('View')
       .click();
 
     cy.getMidColumn().contains('label-key=label-value');

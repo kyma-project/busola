@@ -55,9 +55,7 @@ context('Test Protected Resources', () => {
       .find('input')
       .type(NAME, { force: true });
 
-    cy.contains('Advanced').click();
-
-    cy.get('ui5-dialog')
+    cy.get('.create-form')
       .contains('Labels')
       .click();
 
@@ -74,7 +72,7 @@ context('Test Protected Resources', () => {
       .click()
       .type('true');
 
-    cy.get('ui5-dialog')
+    cy.get('.create-form')
       .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
@@ -108,7 +106,7 @@ context('Test Protected Resources', () => {
       .click()
       .type(IMAGE);
 
-    cy.get('ui5-dialog')
+    cy.get('.create-form')
       .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();

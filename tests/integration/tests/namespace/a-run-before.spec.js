@@ -23,7 +23,7 @@ context('Create Namespace', () => {
       .click();
 
     cy.get('[aria-label="expand Apply Total Memory Quotas"]')
-      .find('ui5-combobox[placeholder="Choose preset"]:visible')
+      .find('ui5-combobox[placeholder="Choose template"]:visible')
       .find('ui5-icon[accessible-name="Select Options"]')
       .click();
 
@@ -54,8 +54,8 @@ context('Create Namespace', () => {
       .click();
 
     cy.get('.edit-form')
-      .contains('ui5-button', 'Save')
-      .should('be.visible')
+      .find('.header-actions')
+      .contains('ui5-button:visible', 'Save')
       .click();
   });
 });

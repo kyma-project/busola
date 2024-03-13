@@ -30,11 +30,9 @@ context('Test Config Maps', () => {
       .find('input')
       .type(ENTRY_KEY);
 
-    cy.findMonaco()
-      .first()
-      .type(ENTRY_VALUE);
+    cy.findMonaco().type(ENTRY_VALUE);
 
-    cy.get('ui5-dialog')
+    cy.get('.create-form')
       .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
@@ -50,8 +48,10 @@ context('Test Config Maps', () => {
     cy.wait(1000);
 
     cy.getMidColumn()
-      .contains('ui5-button', 'Edit')
-      .should('be.visible')
+      .find('ui5-tabcontainer')
+      .find('[role="tablist"]')
+      .find('[role="tab"]')
+      .contains('Edit')
       .click();
 
     // hide first entry so Cypress doesn't get confuused
@@ -61,11 +61,11 @@ context('Test Config Maps', () => {
       .find('input')
       .type(ENTRY_KEY2);
 
-    cy.findMonaco(1).type(ENTRY_VALUE2);
+    cy.findMonaco().type(ENTRY_VALUE2);
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Update')
-      .should('be.visible')
+    cy.get('.edit-form')
+      .find('.header-actions')
+      .contains('ui5-button:visible', 'Save')
       .click();
   });
 
@@ -94,7 +94,7 @@ context('Test Config Maps', () => {
       .type(CLONE_NAME)
       .click();
 
-    cy.get('ui5-dialog')
+    cy.get('.create-form')
       .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();

@@ -49,7 +49,7 @@ context('Test Roles', () => {
       'create',
     );
 
-    cy.get('ui5-dialog')
+    cy.get('.create-form')
       .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
@@ -90,9 +90,9 @@ context('Test Roles', () => {
       .click()
       .type('watch');
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Update')
-      .should('be.visible')
+    cy.get('.edit-form')
+      .find('.header-actions')
+      .contains('ui5-button:visible', 'Save')
       .click();
   });
 
@@ -135,7 +135,7 @@ context('Test Roles', () => {
       .click()
       .type(CLONE_NAME);
 
-    cy.get('ui5-dialog')
+    cy.get('.create-form')
       .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();

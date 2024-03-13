@@ -16,8 +16,6 @@ context('Test Cron Jobs', () => {
 
     cy.contains('ui5-button', 'Create').click();
 
-    cy.contains('Advanced').click();
-
     cy.get('[aria-label="CronJob name"]')
       .find('input')
       .type(CRON_JOB_NAME, { force: true });
@@ -86,18 +84,13 @@ context('Test Cron Jobs', () => {
       .contains('Always')
       .click();
 
-    cy.get('ui5-dialog')
+    cy.get('.create-form')
       .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
   });
 
   it('Checking details', () => {
-    cy.getMidColumn()
-      .find('ui5-breadcrumbs')
-      .find(`ui5-link[href*=${'cronjob'}]`)
-      .scrollIntoView();
-
     cy.getMidColumn()
       .contains('ui5-title', CRON_JOB_NAME)
       .should('be.visible');
@@ -111,8 +104,10 @@ context('Test Cron Jobs', () => {
     cy.wait(1000);
 
     cy.getMidColumn()
-      .contains('ui5-button', 'Edit')
-      .should('be.visible')
+      .find('ui5-tabcontainer')
+      .find('[role="tablist"]')
+      .find('[role="tab"]')
+      .contains('Edit')
       .click();
 
     cy.get('[placeholder="Hour"]')
@@ -163,17 +158,19 @@ context('Test Cron Jobs', () => {
       .contains('Never')
       .click();
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Update')
-      .should('be.visible')
+    cy.get('.edit-form')
+      .find('.header-actions')
+      .contains('ui5-button:visible', 'Save')
       .click();
   });
 
   it('Checking updates details', () => {
     cy.getMidColumn()
-      .get('ui5-breadcrumbs')
-      .find(`ui5-link[href*=${'cronjob'}]`)
-      .scrollIntoView();
+      .find('ui5-tabcontainer')
+      .find('[role="tablist"]')
+      .find('[role="tab"]')
+      .contains('View')
+      .click();
 
     cy.getMidColumn()
       .contains('ui5-title', CRON_JOB_NAME)

@@ -1,7 +1,6 @@
 import './exceptions';
 import './commands';
 import './login-commands';
-import './navigate-back-to';
 import './navigate-to';
 import './paste-to-monaco';
 import './inspect-list';

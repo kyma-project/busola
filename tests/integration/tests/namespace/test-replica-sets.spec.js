@@ -20,8 +20,6 @@ context('Test Replica Sets', () => {
 
     cy.contains('ui5-button', 'Create').click();
 
-    cy.contains('Advanced').click();
-
     cy.get('[aria-label="ReplicaSet name"]')
       .find('input')
       .clear()
@@ -41,7 +39,7 @@ context('Test Replica Sets', () => {
       .type(DOCKER_IMAGE_TAG)
       .should('have.value', DOCKER_IMAGE_TAG);
 
-    cy.get('ui5-dialog')
+    cy.get('.create-form')
       .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
@@ -91,9 +89,9 @@ context('Test Replica Sets', () => {
       .type(EDITED_REPLICAS_AMOUNT)
       .should('have.value', EDITED_REPLICAS_AMOUNT);
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Update')
-      .should('be.visible')
+    cy.get('.edit-form')
+      .find('.header-actions')
+      .contains('ui5-button:visible', 'Save')
       .click();
   });
 
