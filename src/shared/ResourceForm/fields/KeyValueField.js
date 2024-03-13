@@ -84,7 +84,7 @@ export function KeyValueField({
       }
       inputs={[
         ({ value, setValue, ref, updateValue, focus }) => (
-          <div className={readableFromFile ? 'bsl-col-md--4' : 'bsl-col-md--5'}>
+          <div className={readableFromFile ? 'bsl-col-md--4' : 'bsl-col-md--6'}>
             {input.key({
               fullWidth: true,
               className: 'full-width',
@@ -105,7 +105,7 @@ export function KeyValueField({
           </div>
         ),
         ({ focus, value, setValue, updateValue, ...props }) => (
-          <div className={readableFromFile ? 'bsl-col-md--4' : 'bsl-col-md--6'}>
+          <div className={readableFromFile ? 'bsl-col-md--5' : 'bsl-col-md--6'}>
             {input.value({
               fullWidth: true,
               className: 'value-input full-width',
