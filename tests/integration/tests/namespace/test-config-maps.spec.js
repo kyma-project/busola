@@ -80,10 +80,7 @@ context('Test Config Maps', () => {
   });
 
   it('Clone the secret', () => {
-    cy.getLeftNav()
-      .contains('Config Maps')
-      .click();
-
+    cy.wait(2000);
     cy.contains('ui5-table-row', CONFIG_MAP_NAME)
       .find('ui5-button[data-testid="clone"]')
       .click();

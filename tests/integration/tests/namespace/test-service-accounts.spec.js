@@ -62,12 +62,13 @@ context('Test Service Accounts', () => {
   });
 
   it('Edit', () => {
-    cy.getMidColumn()
-      .contains('ui5-button', 'Edit')
-      .should('be.visible')
+    cy.get('ui5-tabcontainer')
+      .find('[role="tablist"]')
+      .find('[role="tab"]')
+      .contains('Edit')
       .click();
 
-    cy.get('ui5-dialog')
+    cy.get('.edit-form')
       .contains('Labels')
       .click();
 
@@ -95,6 +96,12 @@ context('Test Service Accounts', () => {
   });
 
   it('Checking updated details', () => {
+    cy.get('ui5-tabcontainer')
+      .find('[role="tablist"]')
+      .find('[role="tab"]')
+      .contains('View')
+      .click();
+
     cy.getMidColumn()
       .contains('disabled')
       .should('be.visible');
@@ -106,13 +113,6 @@ context('Test Service Accounts', () => {
 
   it('Generate TokenRequest', () => {
     cy.getMidColumn()
-      .find('[data-component-name="DynamicPageTitleMiddleSection"]')
-      .find('ui5-toggle-button')
-      .find('button')
-      .click();
-
-    cy.getMidColumn()
-      .get('ui5-popover[accessible-role="Dialog"]')
       .contains('ui5-button', 'Generate TokenRequest')
       .click();
 

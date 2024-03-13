@@ -79,9 +79,10 @@ context('Test Roles', () => {
   it('Edit the Role', () => {
     cy.wait(1000);
 
-    cy.get('ui5-button')
+    cy.get('ui5-tabcontainer')
+      .find('[role="tablist"]')
+      .find('[role="tab"]')
       .contains('Edit')
-      .should('be.visible')
       .click();
 
     cy.get(`ui5-combobox[placeholder^="Start typing to select Verbs"]:visible`)
@@ -97,6 +98,12 @@ context('Test Roles', () => {
   });
 
   it('Check the Role details after edit', () => {
+    cy.get('ui5-tabcontainer')
+      .find('[role="tablist"]')
+      .find('[role="tab"]')
+      .contains('View')
+      .click();
+
     cy.getMidColumn()
       .contains('ui5-title', ROLE_NAME)
       .should('be.visible');

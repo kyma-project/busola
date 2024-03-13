@@ -70,9 +70,10 @@ context('Test Replica Sets', () => {
   it('Edits the Docker image and Replicas amount in the Replica set', () => {
     cy.wait(1000);
 
-    cy.get('ui5-button')
+    cy.get('ui5-tabcontainer')
+      .find('[role="tablist"]')
+      .find('[role="tab"]')
       .contains('Edit')
-      .should('be.visible')
       .click();
 
     cy.get(
@@ -96,6 +97,12 @@ context('Test Replica Sets', () => {
   });
 
   it('Checks the new amount of Replicas and the new Docker image', () => {
+    cy.get('ui5-tabcontainer')
+      .find('[role="tablist"]')
+      .find('[role="tab"]')
+      .contains('View')
+      .click();
+
     cy.getMidColumn().contains(
       `${EDITED_REPLICAS_AMOUNT} / ${EDITED_REPLICAS_AMOUNT}`,
       {

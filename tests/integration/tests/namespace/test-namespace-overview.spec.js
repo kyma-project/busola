@@ -17,17 +17,25 @@ context(
     });
 
     it('Check sections of namespace details', () => {
-      cy.contains('b', LIMIT_NAME).should('be.visible');
+      cy.contains('b', LIMIT_NAME)
+        .scrollIntoView()
+        .should('be.visible');
 
-      cy.contains('b', QUOTA_NAME).should('be.visible');
+      cy.contains('b', QUOTA_NAME)
+        .scrollIntoView()
+        .should('be.visible');
 
-      cy.contains('Namespaces Health').should('be.visible');
+      cy.contains('Namespaces Health')
+        .scrollIntoView()
+        .should('be.visible');
 
       cy.contains('Memory Requests').should('be.visible');
 
       cy.contains('Memory Limits').should('be.visible');
 
-      cy.contains('Events').should('be.visible');
+      cy.contains('Events')
+        .scrollIntoView()
+        .should('be.visible');
     });
 
     it('Add a new limit range', () => {

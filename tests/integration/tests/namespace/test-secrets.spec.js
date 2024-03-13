@@ -96,9 +96,10 @@ context('Test Secrets', () => {
 
   it('Edit a secret', () => {
     cy.wait(500);
-    cy.getMidColumn()
-      .contains('ui5-button', 'Edit')
-      .should('be.visible')
+    cy.get('ui5-tabcontainer')
+      .find('[role="tablist"]')
+      .find('[role="tab"]')
+      .contains('Edit')
       .click();
 
     cy.get('ui5-textarea[placeholder="Enter value"]:visible')
@@ -128,6 +129,11 @@ context('Test Secrets', () => {
 
   it('Checking an updated secret', () => {
     cy.wait(1000);
+    cy.get('ui5-tabcontainer')
+      .find('[role="tablist"]')
+      .find('[role="tab"]')
+      .contains('View')
+      .click();
 
     cy.contains('ui5-button', 'Decode').click();
 
