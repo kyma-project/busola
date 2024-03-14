@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 
 import { useTranslation } from 'react-i18next';
-import { Link } from '@ui5/webcomponents-react';
+import { Link, Text } from '@ui5/webcomponents-react';
 import { groupBy } from 'lodash';
 
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
@@ -51,28 +51,9 @@ function HelmReleasesList({ enableColumnLayout }) {
   const rowRenderer = entry => [
     enableColumnLayout ? (
       <>
-        <Link
-          style={{ fontWeight: 'bold' }}
-          onClick={() => {
-            setLayoutColumn({
-              midColumn: {
-                resourceName: entry.releaseName,
-                resourceType: 'HelmReleases',
-                namespaceId: entry.namespace,
-              },
-              endColumn: null,
-              layout: 'TwoColumnsMidExpanded',
-            });
-
-            window.history.pushState(
-              window.history.state,
-              '',
-              `${resourceUrl(entry)}?layout=TwoColumnsMidExpanded`,
-            );
-          }}
-        >
+        <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
           {entry.releaseName}
-        </Link>
+        </Text>
       </>
     ) : (
       <Link
