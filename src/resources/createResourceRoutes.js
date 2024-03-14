@@ -179,7 +179,11 @@ const ColumnWrapper = ({
       />
     );
   }
-  if (!layoutState?.showCreate && layoutState?.midColumn) {
+  if (
+    !layoutState?.showCreate &&
+    (layoutState?.midColumn || isColumnLeyoutEnabled) &&
+    !(layoutState?.layout === 'OneColumn' && defaultColumn === 'details')
+  ) {
     midColumnComponent = detailsComponent;
   }
 
@@ -222,12 +226,12 @@ export const createResourceRoutes = ({
               resourceType={resourceType}
               resourceI18Key={resourceI18Key}
               hasDetailsView={!!Details}
-              list={<List allowSlashShortcut />}
+              list={<List />}
               details={<Details />}
               create={Create ? <Create /> : null}
               {...props}
             >
-              <List allowSlashShortcut />
+              <List />
             </ColumnWrapper>
           </Suspense>
         }

@@ -79,6 +79,7 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType, extension }) => {
   });
 
   let midColumnComponent = null;
+
   if (layoutState?.showCreate?.resourceType) {
     midColumnComponent = (
       <ResourceCreate
@@ -101,7 +102,11 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType, extension }) => {
     );
   }
 
-  if (!layoutState?.showCreate && layoutState?.midColumn) {
+  if (
+    !layoutState?.showCreate &&
+    (layoutState?.midColumn || isColumnLeyoutEnabled) &&
+    !(layoutState?.layout === 'OneColumn' && defaultColumn === 'details')
+  ) {
     midColumnComponent = (
       <Details
         resourceName={layoutState?.midColumn?.resourceName ?? resourceName}

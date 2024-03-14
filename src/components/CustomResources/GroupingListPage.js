@@ -99,11 +99,7 @@ export function GroupingListPage({
         title={title}
         description={description}
         actions={
-          <SearchInput
-            value={searchQuery}
-            handleQueryChange={setSearchQuery}
-            allowSlashShortcut
-          />
+          <SearchInput value={searchQuery} handleQueryChange={setSearchQuery} />
         }
         content={lists}
         layoutNumber="StartColumn"

@@ -197,6 +197,6 @@ context('Test Jobs', () => {
       .contains(/^Jobs/)
       .click();
 
-    cy.contains(JOB_NAME).should('be.visible');
+    cy.contains('span', JOB_NAME).should('be.visible');
   });
 });
