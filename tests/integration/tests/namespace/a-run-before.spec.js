@@ -47,11 +47,7 @@ context('Create Namespace', () => {
       'be.visible',
     );
 
-    cy.get('ui5-tabcontainer')
-      .find('[role="tablist"]')
-      .find('[role="tab"]')
-      .contains('Edit')
-      .click();
+    cy.inspectTab('Edit');
 
     cy.get('.edit-form')
       .find('.header-actions')

@@ -47,12 +47,7 @@ context('Test Config Maps', () => {
   it('Edit the Config Map', () => {
     cy.wait(1000);
 
-    cy.getMidColumn()
-      .find('ui5-tabcontainer')
-      .find('[role="tablist"]')
-      .find('[role="tab"]')
-      .contains('Edit')
-      .click();
+    cy.inspectTab('Edit');
 
     // hide first entry so Cypress doesn't get confuused
     cy.get('[aria-label="expand config-map-key"]').click();
@@ -70,12 +65,7 @@ context('Test Config Maps', () => {
   });
 
   it('Inspect the updated Config Map', () => {
-    cy.getMidColumn()
-      .find('ui5-tabcontainer')
-      .find('[role="tablist"]')
-      .find('[role="tab"]')
-      .contains('View')
-      .click();
+    cy.getMidColumn().inspectTab('View');
 
     cy.getMidColumn()
       .contains('ui5-panel', ENTRY_KEY2)

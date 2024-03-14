@@ -103,12 +103,7 @@ context('Test Cron Jobs', () => {
   it('Edit Cron Job', () => {
     cy.wait(1000);
 
-    cy.getMidColumn()
-      .find('ui5-tabcontainer')
-      .find('[role="tablist"]')
-      .find('[role="tab"]')
-      .contains('Edit')
-      .click();
+    cy.getMidColumn().inspectTab('Edit');
 
     cy.get('[placeholder="Hour"]')
       .find('input')
@@ -165,12 +160,7 @@ context('Test Cron Jobs', () => {
   });
 
   it('Checking updates details', () => {
-    cy.getMidColumn()
-      .find('ui5-tabcontainer')
-      .find('[role="tablist"]')
-      .find('[role="tab"]')
-      .contains('View')
-      .click();
+    cy.getMidColumn().inspectTab('View');
 
     cy.getMidColumn()
       .contains('ui5-title', CRON_JOB_NAME)

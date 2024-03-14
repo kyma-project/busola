@@ -153,11 +153,7 @@ context('Test Jobs', () => {
   it('Edit Job', () => {
     cy.wait(1000);
 
-    cy.get('ui5-tabcontainer')
-      .find('[role="tablist"]')
-      .find('[role="tab"]')
-      .contains('Edit')
-      .click();
+    cy.inspectTab('Edit');
 
     // containers section should be readonly
     cy.contains('After a Job is created, the containers are read-only.');
@@ -188,11 +184,7 @@ context('Test Jobs', () => {
       .contains('ui5-button:visible', 'Save')
       .click();
 
-    cy.get('ui5-tabcontainer')
-      .find('[role="tablist"]')
-      .find('[role="tab"]')
-      .contains('View')
-      .click();
+    cy.inspectTab('View');
 
     cy.contains('a=b');
   });

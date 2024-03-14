@@ -62,11 +62,7 @@ context('Test Service Accounts', () => {
   });
 
   it('Edit', () => {
-    cy.get('ui5-tabcontainer')
-      .find('[role="tablist"]')
-      .find('[role="tab"]')
-      .contains('Edit')
-      .click();
+    cy.inspectTab('Edit');
 
     cy.get('.edit-form')
       .contains('Labels')
@@ -96,11 +92,7 @@ context('Test Service Accounts', () => {
   });
 
   it('Checking updated details', () => {
-    cy.get('ui5-tabcontainer')
-      .find('[role="tablist"]')
-      .find('[role="tab"]')
-      .contains('View')
-      .click();
+    cy.inspectTab('View');
 
     cy.getMidColumn()
       .contains('disabled')
