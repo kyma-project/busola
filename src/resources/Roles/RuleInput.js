@@ -135,6 +135,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         options={availableResources.map(i => ({ key: i, text: i }))}
         defaultOpen
         nestingLevel={2}
+        newItemActionWidth={2}
         newItemAction={
           loading ? (
             <BusyIndicator size="Small" active={true} delay="0" />

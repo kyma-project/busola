@@ -67,6 +67,7 @@ export const GenericList = ({
   hasDetailsView,
   disableHiding = true,
   displayArrow = false,
+  handleRedirect = null,
 }) => {
   const navigate = useNavigate();
   searchSettings = { ...defaultSearch, ...searchSettings };
@@ -132,6 +133,17 @@ export const GenericList = ({
   ]);
 
   React.useEffect(() => setCurrentPage(1), [searchQuery]);
+
+  useEffect(() => {
+    const selected = entries.find(entry => {
+      const name = entry?.metadata?.name;
+      return name && window.location.href.includes(name);
+    })?.metadata?.name;
+
+    if (selected) {
+      setEntrySelected(selected);
+    }
+  }, [entries]);
 
   const headerActions = (
     <>
@@ -269,6 +281,20 @@ export const GenericList = ({
               entry?.name === e.target.children[0].innerText
             );
           });
+          if (handleRedirect) {
+            const redirectLayout = handleRedirect(selectedEntry, resourceType);
+            if (redirectLayout) {
+              setLayoutColumn({
+                ...redirectLayout,
+              });
+              navigate(
+                redirectLayout.layout === 'OneColumn'
+                  ? linkTo(selectedEntry)
+                  : `${linkTo(selectedEntry)}?layout=${redirectLayout.layout}`,
+              );
+              return;
+            }
+          }
           setEntrySelected(
             selectedEntry?.metadata?.name ?? e.target.children[0].innerText,
           );
