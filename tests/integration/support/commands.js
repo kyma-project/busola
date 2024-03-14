@@ -167,19 +167,28 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
   'deleteFromGenericList',
-  (
-    resourceType,
-    resourceName,
-    confirmationEnabled = true,
-    deletedVisible = true,
-    clearSearch = true,
-    isUI5Link = true,
-    checkIfResourceIsRemoved = true,
-  ) => {
-    cy.get('ui5-combobox[placeholder="Search"]:visible')
+  (resourceType, resourceName, options = {}) => {
+    const {
+      confirmationEnabled = true,
+      deletedVisible = true,
+      clearSearch = true,
+      isUI5Link = true,
+      checkIfResourceIsRemoved = true,
+      selectSearchResult = false,
+    } = options;
+
+    cy.get('ui5-input[placeholder="Search"]:visible')
       .find('input')
-      .click()
+      .wait(1000)
       .type(resourceName);
+
+    cy.wait(1000);
+
+    if (selectSearchResult) {
+      cy.get('ui5-li-suggestion-item:visible')
+        .contains(resourceName)
+        .click();
+    }
 
     if (isUI5Link) {
       cy.checkItemOnGenericListLink(resourceName);
@@ -203,9 +212,9 @@ Cypress.Commands.add(
       }
 
       if (clearSearch) {
-        cy.get('ui5-combobox[placeholder="Search"]:visible')
+        cy.get('ui5-input[placeholder="Search"]:visible')
           .find('input')
-          .click()
+          .wait(1000)
           .clear();
       }
 
@@ -278,6 +287,7 @@ Cypress.Commands.add('closeMidColumn', (checkIfNotExist = false) => {
     .find('ui5-button[aria-label="close-column"]')
     .click();
 
+  cy.wait(1000);
   if (checkIfNotExist) cy.getMidColumn().should('not.exist');
   else cy.getMidColumn().should('not.be.visible');
 });

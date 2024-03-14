@@ -107,6 +107,8 @@ context('Test resource upload', () => {
 
     cy.navigateTo('Storage', 'Storage Classes');
 
-    cy.deleteFromGenericList('Storage Class', SC_NAME);
+    cy.deleteFromGenericList('Storage Class', SC_NAME, {
+      selectSearchResult: true,
+    });
   });
 });

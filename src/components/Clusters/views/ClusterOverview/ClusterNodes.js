@@ -129,7 +129,6 @@ export function ClusterNodes({ data, error, loading }) {
           testid="cluster-nodes"
           searchSettings={{
             showSearchField: false,
-            allowSlashShortcut: false,
           }}
         />
       )}

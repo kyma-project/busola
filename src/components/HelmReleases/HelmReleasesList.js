@@ -126,7 +126,6 @@ function HelmReleasesList({ enableColumnLayout }) {
             rowRenderer={rowRenderer}
             serverDataLoading={loading}
             serverDataError={error}
-            allowSlashShortcut
             sortBy={{
               name: (a, b) => a.releaseName.localeCompare(b.releaseName),
             }}
