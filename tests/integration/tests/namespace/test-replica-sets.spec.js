@@ -18,7 +18,7 @@ context('Test Replica Sets', () => {
   it('Creates a Replica Set', () => {
     cy.navigateTo('Workloads', 'Replica Sets');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.get('[aria-label="ReplicaSet name"]')
       .find('input')
@@ -39,10 +39,7 @@ context('Test Replica Sets', () => {
       .type(DOCKER_IMAGE_TAG)
       .should('have.value', DOCKER_IMAGE_TAG);
 
-    cy.get('.create-form')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.createResource();
   });
 
   it('Checks the details view', () => {

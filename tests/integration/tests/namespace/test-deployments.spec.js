@@ -15,7 +15,7 @@ context('Test Deployments', () => {
   it('Create a Deployment', () => {
     cy.navigateTo('Workloads', 'Deployments');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.get('[aria-label="Deployment name"]:visible')
       .find('input')
@@ -77,10 +77,7 @@ context('Test Deployments', () => {
       .clear()
       .type('20');
 
-    cy.get('.create-form')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.createResource();
   });
 
   it('Check if deployment and pod exist', () => {

@@ -30,7 +30,7 @@ context('Test Ingresses', () => {
   it('Create an Ingress', () => {
     cy.navigateTo('Discovery and Network', 'Ingress');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.wrap(loadIngress(NAME, Cypress.env('NAMESPACE_NAME'))).then(
       INGRESS_CONFIG => {
@@ -39,10 +39,7 @@ context('Test Ingresses', () => {
       },
     );
 
-    cy.get('.create-form')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.createResource();
   });
 
   it('Check Ingress details', () => {

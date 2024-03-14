@@ -10,7 +10,7 @@ context('Create Namespace', () => {
       .contains('Namespaces')
       .click();
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.get('.create-form')
       .find('ui5-checkbox[text="Create Resource Quota"]:visible')
@@ -38,10 +38,7 @@ context('Create Namespace', () => {
       .find('input')
       .type(Cypress.env('NAMESPACE_NAME'));
 
-    cy.get('.create-form')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.createResource();
 
     cy.contains('ui5-title', Cypress.env('NAMESPACE_NAME')).should(
       'be.visible',

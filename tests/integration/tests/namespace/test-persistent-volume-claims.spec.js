@@ -36,7 +36,7 @@ context('Test Persistent Volume Claims', () => {
   it('Create a Persistent Volume Claim', () => {
     cy.navigateTo('Storage', 'Persistent Volume Claims');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.wrap(
       loadPVC(
@@ -50,10 +50,7 @@ context('Test Persistent Volume Claims', () => {
       cy.pasteToMonaco(PVC);
     });
 
-    cy.get('.create-form')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.createResource();
 
     cy.contains('ui5-title', PVC_NAME).should('be.visible');
   });

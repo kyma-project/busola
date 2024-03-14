@@ -31,7 +31,7 @@ context('Test Daemon Sets', () => {
   it('Create Daemon Set', () => {
     cy.navigateTo('Workloads', 'Daemon Sets');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.wrap(loadDS(DS_NAME, Cypress.env('NAMESPACE_NAME'), FILE_NAME)).then(
       DS_CONFIG => {
@@ -40,10 +40,7 @@ context('Test Daemon Sets', () => {
       },
     );
 
-    cy.get('.create-form')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.createResource();
   });
 
   it('Inspect details', () => {

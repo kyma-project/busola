@@ -14,7 +14,7 @@ context('Test Cron Jobs', () => {
   it('Create Cron Job', () => {
     cy.navigateTo('Workloads', 'Cron Jobs');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.get('[aria-label="CronJob name"]')
       .find('input')
@@ -84,10 +84,7 @@ context('Test Cron Jobs', () => {
       .contains('Always')
       .click();
 
-    cy.get('.create-form')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.createResource();
   });
 
   it('Checking details', () => {

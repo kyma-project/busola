@@ -21,7 +21,7 @@ context('Test Secrets', () => {
   it('Create a secret', () => {
     cy.navigateTo('Configuration', 'Secrets');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.get('[aria-label="Secret name"]:visible')
       .find('input')
@@ -50,10 +50,7 @@ context('Test Secrets', () => {
 
     cy.contains(window.btoa(SECRET_VALUE));
 
-    cy.get('.create-form')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.createResource();
 
     cy.url().should('match', new RegExp(`/secrets/${SECRET_NAME}`));
   });

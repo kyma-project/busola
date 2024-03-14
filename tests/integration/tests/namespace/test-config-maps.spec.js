@@ -19,7 +19,7 @@ context('Test Config Maps', () => {
   it('Create a Config Map', () => {
     cy.navigateTo('Configuration', 'Config Maps');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.get('[aria-label="ConfigMap name"]:visible')
       .find('input')
@@ -32,10 +32,7 @@ context('Test Config Maps', () => {
 
     cy.findMonaco().type(ENTRY_VALUE);
 
-    cy.get('.create-form')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.createResource();
 
     cy.url().should('match', new RegExp(`/configmaps/${CONFIG_MAP_NAME}`));
   });
@@ -84,10 +81,7 @@ context('Test Config Maps', () => {
       .type(CLONE_NAME)
       .click();
 
-    cy.get('.create-form')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.createResource();
   });
 
   it('Inspect the clone', () => {

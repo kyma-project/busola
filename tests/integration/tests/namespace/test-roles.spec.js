@@ -20,7 +20,7 @@ context('Test Roles', () => {
 
     cy.contains(ROLE_NAME).should('not.exist');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.get('ui5-input[aria-label="Role name"]:visible', { log: false })
       .find('input')
@@ -49,10 +49,7 @@ context('Test Roles', () => {
       'create',
     );
 
-    cy.get('.create-form')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.createResource();
   });
 
   it('Check the Role details', () => {
@@ -131,10 +128,7 @@ context('Test Roles', () => {
       .click()
       .type(CLONE_NAME);
 
-    cy.get('.create-form')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.createResource();
   });
 
   it('Check the clone details', () => {

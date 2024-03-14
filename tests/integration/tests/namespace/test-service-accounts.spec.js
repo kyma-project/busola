@@ -17,7 +17,7 @@ context('Test Service Accounts', () => {
   it('Create a Service Account', () => {
     cy.navigateTo('Configuration', 'Service Accounts');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.get('[aria-label="ServiceAccount name"]')
       .find('input')
@@ -41,10 +41,7 @@ context('Test Service Accounts', () => {
       'be.visible',
     );
 
-    cy.get('.create-form')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.createResource();
   });
 
   it('Checking details', () => {

@@ -28,17 +28,14 @@ context('Test app settings and preferences', () => {
 
     cy.navigateTo('Configuration', 'Config Maps');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.get('[aria-label="ConfigMap name"]:visible')
       .find('input')
       .type(NAME, { force: true })
       .click();
 
-    cy.get('.create-form')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.createResource();
 
     cy.contains('ui5-title', NAME).should('be.visible');
 

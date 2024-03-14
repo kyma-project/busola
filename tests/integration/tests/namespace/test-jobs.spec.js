@@ -34,7 +34,7 @@ context('Test Jobs', () => {
   it('Create Job', () => {
     cy.navigateTo('Workloads', /^Jobs/);
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     // job name
     cy.get('[aria-label="Job name"]:visible')
@@ -95,10 +95,7 @@ context('Test Jobs', () => {
       .find('input')
       .type('node:14-alpine', { force: true });
 
-    cy.get('.create-form')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.createResource();
   });
 
   it('Inspect details and created Pods', () => {
