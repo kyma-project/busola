@@ -148,7 +148,10 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
         }}
       />
     );
-  } else if (layoutState?.midColumn?.resourceName) {
+  } else if (
+    (layoutState?.midColumn?.resourceName || isColumnLeyoutEnabled) &&
+    !(layoutState?.layout === 'OneColumn' && defaultColumn === 'listOfType')
+  ) {
     midColumnComponent = (
       <CustomResourcesOfType
         crdName={layoutState?.midColumn?.resourceName ?? crdName}
@@ -182,7 +185,11 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
     );
   }
 
-  if (!layoutState?.showCreate && layoutState?.endColumn) {
+  if (
+    !layoutState?.showCreate &&
+    (layoutState?.endColumn || isColumnLeyoutEnabled) &&
+    !(layoutState?.layout === 'OneColumn' && defaultColumn === 'details')
+  ) {
     endColumnComponent = (
       <CustomResource
         params={{

@@ -179,7 +179,11 @@ const ColumnWrapper = ({
       />
     );
   }
-  if (!layoutState?.showCreate && layoutState?.midColumn) {
+  if (
+    !layoutState?.showCreate &&
+    (layoutState?.midColumn || isColumnLeyoutEnabled) &&
+    !(layoutState?.layout === 'OneColumn' && defaultColumn === 'details')
+  ) {
     midColumnComponent = detailsComponent;
   }
 
