@@ -230,19 +230,28 @@ context('Test reduced permissions', () => {
       .contains('Cluster Role Bindings')
       .click();
 
-    cy.deleteFromGenericList('Cluster Role Binding', CRB_NAME);
+    cy.deleteFromGenericList('Cluster Role Binding', CRB_NAME, {
+      selectSearchResult: true,
+    });
 
     // delete role
     cy.getLeftNav()
       .contains('Cluster Roles')
       .click();
 
-    cy.deleteFromGenericList('Cluster Role', CR_NAME);
+    cy.deleteFromGenericList('Cluster Role', CR_NAME, {
+      selectSearchResult: true,
+    });
 
     // remove cluster
     cy.changeCluster('all-clusters');
 
-    cy.deleteFromGenericList('Cluster', SA_NAME, true, false, false, false);
+    cy.deleteFromGenericList('Cluster', SA_NAME, {
+      confirmationEnabled: true,
+      deletedVisible: false,
+      clearSearch: false,
+      isUI5Link: false,
+    });
 
     cy.contains(/No clusters found/).should('exist');
   });

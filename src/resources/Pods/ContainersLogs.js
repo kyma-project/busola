@@ -199,7 +199,6 @@ const ContainersLogs = ({ params }) => {
               />
               <Button
                 disabled={!logsToSave?.length}
-                className="logs-download"
                 onClick={() => saveToFile(params.podName, params.containerName)}
               >
                 {t('pods.labels.save-to-file')}
