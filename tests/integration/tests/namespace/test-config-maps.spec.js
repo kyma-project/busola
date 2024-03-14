@@ -71,6 +71,13 @@ context('Test Config Maps', () => {
 
   it('Inspect the updated Config Map', () => {
     cy.getMidColumn()
+      .find('ui5-tabcontainer')
+      .find('[role="tablist"]')
+      .find('[role="tab"]')
+      .contains('View')
+      .click();
+
+    cy.getMidColumn()
       .contains('ui5-panel', ENTRY_KEY2)
       .contains(ENTRY_VALUE2);
   });
@@ -80,7 +87,6 @@ context('Test Config Maps', () => {
   });
 
   it('Clone the secret', () => {
-    cy.wait(2000);
     cy.contains('ui5-table-row', CONFIG_MAP_NAME)
       .find('ui5-button[data-testid="clone"]')
       .click();
