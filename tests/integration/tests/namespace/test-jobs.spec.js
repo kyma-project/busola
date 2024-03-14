@@ -179,10 +179,7 @@ context('Test Jobs', () => {
       .first()
       .type('b', { force: true });
 
-    cy.get('.edit-form')
-      .find('.header-actions')
-      .contains('ui5-button:visible', 'Save')
-      .click();
+    cy.saveEdit();
 
     cy.inspectTab('View');
 

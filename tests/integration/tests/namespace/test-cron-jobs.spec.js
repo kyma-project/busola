@@ -153,10 +153,7 @@ context('Test Cron Jobs', () => {
       .contains('Never')
       .click();
 
-    cy.get('.edit-form')
-      .find('.header-actions')
-      .contains('ui5-button:visible', 'Save')
-      .click();
+    cy.saveEdit();
   });
 
   it('Checking updates details', () => {

@@ -58,10 +58,7 @@ context('Test Config Maps', () => {
 
     cy.findMonaco().type(ENTRY_VALUE2);
 
-    cy.get('.edit-form')
-      .find('.header-actions')
-      .contains('ui5-button:visible', 'Save')
-      .click();
+    cy.saveEdit();
   });
 
   it('Inspect the updated Config Map', () => {

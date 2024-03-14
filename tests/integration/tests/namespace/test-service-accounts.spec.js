@@ -85,10 +85,7 @@ context('Test Service Accounts', () => {
       .eq(0)
       .click({ force: true });
 
-    cy.get('.edit-form')
-      .find('.header-actions')
-      .contains('ui5-button:visible', 'Save')
-      .click();
+    cy.saveEdit();
   });
 
   it('Checking updated details', () => {

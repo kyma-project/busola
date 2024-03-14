@@ -117,10 +117,7 @@ context('Test Secrets', () => {
       .eq(1)
       .click();
 
-    cy.get('.edit-form')
-      .find('.header-actions')
-      .contains('ui5-button:visible', 'Save')
-      .click();
+    cy.saveEdit();
   });
 
   it('Checking an updated secret', () => {

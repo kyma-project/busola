@@ -49,9 +49,6 @@ context('Create Namespace', () => {
 
     cy.inspectTab('Edit');
 
-    cy.get('.edit-form')
-      .find('.header-actions')
-      .contains('ui5-button:visible', 'Save')
-      .click();
+    cy.saveEdit();
   });
 });

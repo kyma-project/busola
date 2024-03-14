@@ -86,10 +86,7 @@ context('Test Replica Sets', () => {
       .type(EDITED_REPLICAS_AMOUNT)
       .should('have.value', EDITED_REPLICAS_AMOUNT);
 
-    cy.get('.edit-form')
-      .find('.header-actions')
-      .contains('ui5-button:visible', 'Save')
-      .click();
+    cy.saveEdit();
   });
 
   it('Checks the new amount of Replicas and the new Docker image', () => {

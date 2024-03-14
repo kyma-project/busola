@@ -87,10 +87,7 @@ context('Test Roles', () => {
       .click()
       .type('watch');
 
-    cy.get('.edit-form')
-      .find('.header-actions')
-      .contains('ui5-button:visible', 'Save')
-      .click();
+    cy.saveEdit();
   });
 
   it('Check the Role details after edit', () => {
