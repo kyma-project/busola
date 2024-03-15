@@ -101,6 +101,7 @@ function HelmReleasesList({ enableColumnLayout }) {
       <DynamicPageComponent
         title={t('helm-releases.title')}
         description={ResourceDescription}
+        layoutNumber={'StartColumn'}
         content={
           <GenericList
             entries={entries}
@@ -108,7 +109,6 @@ function HelmReleasesList({ enableColumnLayout }) {
             rowRenderer={rowRenderer}
             serverDataLoading={loading}
             serverDataError={error}
-            allowSlashShortcut
             hasDetailsView
             displayArrow
             enableColumnLayout
