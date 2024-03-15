@@ -656,20 +656,20 @@ daemon-sets:
     toleration-seconds: Seconds
 deployments:
   create-modal:
-      add-container: Add Container
-      container-header: Container {{name}}
-      containers: Containers
-      cpu-limits: CPU Limits
-      cpu-requests: CPU Requests
-      image: Image
-      memory-limits: Memory Limits
-      memory-requests: Memory Requests
-      one-container-required: Provide at least one container.
-      runtime-profile: Runtime Profile
-      docker-image: Docker Image
-      docker-image-placeholder: Enter the Docker image tag, for example, bitnami/nginx
-      image-pull-secret: Image Pull Secret
-      image-pull-secret-tooltip: The secret for authorization to the private Docker repository.
+    add-container: Add Container
+    container-header: Container {{name}}
+    containers: Containers
+    cpu-limits: CPU Limits
+    cpu-requests: CPU Requests
+    image: Image
+    memory-limits: Memory Limits
+    memory-requests: Memory Requests
+    one-container-required: Provide at least one container.
+    runtime-profile: Runtime Profile
+    docker-image: Docker Image
+    docker-image-placeholder: Enter the Docker image tag, for example, bitnami/nginx
+    image-pull-secret: Image Pull Secret
+    image-pull-secret-tooltip: The secret for authorization to the private Docker repository.
     title: Create Deployment
   description: <0>Deployment</0> is a Kubernetes object that represents a replicated application running on your cluster.
   headers:

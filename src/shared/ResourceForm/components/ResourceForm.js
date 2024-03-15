@@ -173,6 +173,7 @@ export function ResourceForm({
       {mode === ModeSelector.MODE_FORM && (
         <FormItem>
           <div
+            className="full-width"
             style={spacing.sapUiTinyMarginBottom}
             onChange={onChange}
             hidden={mode !== ModeSelector.MODE_FORM}
