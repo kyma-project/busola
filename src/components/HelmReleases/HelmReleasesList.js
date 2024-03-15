@@ -118,7 +118,10 @@ function HelmReleasesList({ enableColumnLayout }) {
               name: (a, b) => a.releaseName.localeCompare(b.releaseName),
             }}
             searchSettings={{
-              textSearchProperties: ['recentRelease.chart.metadata.name'],
+              textSearchProperties: [
+                'recentRelease.chart.metadata.name',
+                'releaseName',
+              ],
             }}
             emptyListProps={{
               titleText: `${t('common.labels.no')} ${t(
