@@ -111,7 +111,7 @@ function HelmReleasesList({ enableColumnLayout }) {
             serverDataError={error}
             hasDetailsView
             displayArrow
-            enableColumnLayout
+            enableColumnLayout={enableColumnLayout}
             customUrl={resourceUrl}
             resourceType="HelmReleases"
             sortBy={{
