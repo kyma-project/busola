@@ -26,7 +26,7 @@ import { NumberRenderer } from './NumberRenderer';
 import { SwitchRenderer } from './SwitchRenderer';
 import { NameRenderer } from './NameRenderer';
 import { KeyValuePairRenderer } from './KeyValuePairRenderer';
-import { CollapsibleRenderer } from './CollapsibleRenderer';
+import { FormGroup } from './FormGroup';
 import { GenericList } from './GenericList';
 import { MonacoRenderer } from './MonacoRenderer';
 import { ResourceRenderer } from './ResourceRenderer';
@@ -97,7 +97,7 @@ export const widgets = {
     Name: NameRenderer,
     KeyValuePair: KeyValuePairRenderer,
     CodeEditor: MonacoRenderer,
-    FormGroup: CollapsibleRenderer,
+    FormGroup,
     ResourceRef: ResourceRefRender,
     Resource: ResourceRenderer,
     Alert: AlertRenderer,
