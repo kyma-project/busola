@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { Button } from '@ui5/webcomponents-react';
 import copyToCliboard from 'copy-to-clipboard';
 import { saveAs } from 'file-saver';
@@ -9,26 +8,6 @@ import 'shared/contexts/YamlEditorContext/EditorActions.scss';
 
 const EDITOR_VISIBILITY = 'editor-visibility';
 const READONLY_FIELDS = ['^ *managedFields:$', '^status:$'];
-
-const ButtonWithTooltip = ({
-  tooltipContent,
-  icon,
-  onClick,
-  className,
-  disabled = false,
-}) => {
-  return (
-    <Tooltip className={className} content={tooltipContent} position="top">
-      <Button
-        design="Transparent"
-        icon={icon}
-        onClick={onClick}
-        disabled={disabled}
-        className="circle-button"
-      />
-    </Tooltip>
-  );
-};
 
 export function EditorActions({
   val,
@@ -119,41 +98,49 @@ export function EditorActions({
 
   return (
     <section>
-      <ButtonWithTooltip
-        tooltipContent={t('common.tooltips.download')}
+      <Button
+        design="Transparent"
         icon="download"
         onClick={download}
+        className="circle-button"
+        tooltip={t('common.tooltips.download')}
       />
-      <ButtonWithTooltip
-        tooltipContent={t('common.tooltips.copy-to-clipboard')}
+      <Button
+        design="Transparent"
         icon="copy"
         onClick={() => copyToCliboard(val)}
+        className="circle-button"
+        tooltip={t('common.tooltips.copy-to-clipboard')}
       />
-      <ButtonWithTooltip
-        tooltipContent={
-          visible ? t('common.tooltips.hide') : t('common.tooltips.show')
-        }
+      <Button
+        design="Transparent"
         icon={visible ? 'hide' : 'show'}
         onClick={visible ? hideReadOnlyLines : showReadOnlyLines}
-        disabled={!editor || hideDisabled}
+        className="circle-button"
+        tooltip={
+          visible ? t('common.tooltips.hide') : t('common.tooltips.show')
+        }
+        disabled={hideDisabled}
       />
-
-      <ButtonWithTooltip
-        tooltipContent={t('common.tooltips.search')}
+      <Button
+        design="Transparent"
         icon="search"
         onClick={openSearch}
-        disabled={!editor || searchDisabled}
+        className="circle-button"
+        tooltip={t('common.tooltips.search')}
+        disabled={searchDisabled}
       />
-
       {!saveHidden && (
-        <ButtonWithTooltip
-          tooltipContent={
+        <Button
+          design="Transparent"
+          icon="save"
+          onClick={onSave}
+          className="circle-button"
+          tooltip={
             isProtected
               ? t('common.tooltips.protected-resources-info')
               : t('common.tooltips.save')
           }
-          icon="save"
-          onClick={onSave}
           disabled={saveDisabled || !editor}
         />
       )}

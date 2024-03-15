@@ -1,4 +1,10 @@
 .circle-button {
   border-radius: 50%;
   margin-right: 4px;
+
+  &::part(button) {
+    &::after {
+      border-radius: 50%;
+    }
+  }
 }

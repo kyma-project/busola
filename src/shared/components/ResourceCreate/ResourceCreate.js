@@ -121,12 +121,14 @@ export const ResourceCreate = ({
                 onCompleted: handleFormSuccess,
                 performManualSubmit: handleFormSubmit,
               })}
-              <div style={spacing.sapUiSmallMarginBeginEnd}>
-                <Bar
-                  design="FloatingFooter"
-                  endContent={<>{renderConfirmButton()}</>}
-                />
-              </div>
+            </div>
+          }
+          footer={
+            <div style={spacing.sapUiSmallMarginBeginEnd}>
+              <Bar
+                design="FloatingFooter"
+                endContent={<>{renderConfirmButton()}</>}
+              />
             </div>
           }
         />
