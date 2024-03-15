@@ -114,7 +114,6 @@ export function GenericRoleBindingCreate({
         </MessageStrip>
       )}
       <ItemArray
-        advanced
         defaultOpen
         propertyPath="$.subjects"
         listTitle={t('role-bindings.create-modal.subjects')}

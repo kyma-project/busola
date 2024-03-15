@@ -29,13 +29,6 @@ $defs:
       name:
         description: Name of component used for dispaying translations
         type: string
-      simple:
-        description: Display in simple form
-        type: boolean
-      advanced:
-        description: Display in advanced form
-        type: boolean
-        default: true
       widget:
         description: Name of a widget that should be used for displaying data defined by path
         type: string

@@ -1,8 +1,5 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { Button } from '@ui5/webcomponents-react';
-
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
@@ -10,14 +7,7 @@ import { Containers } from './Containers';
 
 import * as jp from 'jsonpath';
 
-export function SimpleContainersView({
-  resource,
-  setResource,
-  onChange,
-  namespace,
-  createContainerTemplate,
-  props,
-}) {
+export function SimpleContainersView({ resource, setResource }) {
   const { t } = useTranslation();
 
   return (
@@ -42,18 +32,11 @@ export function AdvancedContainersView({
   onChange,
   namespace,
   createContainerTemplate,
-  isAdvanced,
-  ...props
 }) {
   const { t } = useTranslation();
   return (
-    <ResourceForm.Wrapper
-      isAdvanced={isAdvanced}
-      resource={resource}
-      setResource={setResource}
-    >
+    <ResourceForm.Wrapper resource={resource} setResource={setResource}>
       <ResourceForm.CollapsibleSection
-        advanced
         title={t('deployments.create-modal.simple.image-pull-secret')}
         resource={resource}
         setResource={setResource}
@@ -87,8 +70,7 @@ export function AdvancedContainersView({
       </ResourceForm.CollapsibleSection>
 
       <ResourceForm.CollapsibleSection
-        advanced
-        title={t('deployments.create-modal.advanced.containers')}
+        title={t('deployments.create-modal.containers')}
         defaultOpen
         resource={resource}
         setResource={setResource}
@@ -109,7 +91,7 @@ export function AdvancedContainersView({
             }}
             design="Transparent"
           >
-            {t('deployments.create-modal.advanced.add-container')}
+            {t('deployments.create-modal.add-container')}
           </Button>
         )}
       >

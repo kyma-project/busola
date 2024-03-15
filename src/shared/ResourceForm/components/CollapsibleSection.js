@@ -10,7 +10,6 @@ import './CollapsibleSection.scss';
 export function CollapsibleSection({
   disabled = false,
   defaultOpen = undefined,
-  isAdvanced,
   canChangeState = true,
   title,
   actions,
@@ -84,7 +83,6 @@ export function CollapsibleSection({
         <ResourceFormWrapper
           resource={resource}
           setResource={setResource}
-          isAdvanced={isAdvanced}
           nestingLevel={nestingLevel + 1}
           required={required}
         >

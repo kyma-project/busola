@@ -108,7 +108,6 @@ export default function ServiceAccountCreate({
       afterCreatedFn={afterServiceAccountCreate}
     >
       <ComboboxArrayInput
-        advanced
         title={t('service-accounts.headers.image-pull-secrets')}
         tooltipContent={t(
           'service-accounts.create-modal.tooltips.image-pull-secrets',
@@ -122,7 +121,6 @@ export default function ServiceAccountCreate({
         }))}
       />
       <ResourceForm.FormField
-        advanced
         label={t('service-accounts.headers.auto-mount-token')}
         tooltipContent={t(
           'service-accounts.create-modal.tooltips.auto-mount-token',
@@ -143,7 +141,6 @@ export default function ServiceAccountCreate({
         checked={jp.value(serviceAccount, '$.automountServiceAccountToken')}
       />
       <ResourceForm.FormField
-        advanced
         label={t('service-accounts.associated-secret.label')}
         tooltipContent={t(
           t('service-accounts.create-modal.tooltips.associated-secret'),

@@ -656,7 +656,6 @@ daemon-sets:
     toleration-seconds: Seconds
 deployments:
   create-modal:
-    advanced:
       add-container: Add Container
       container-header: Container {{name}}
       containers: Containers
@@ -667,7 +666,6 @@ deployments:
       memory-requests: Memory Requests
       one-container-required: Provide at least one container.
       runtime-profile: Runtime Profile
-    simple:
       docker-image: Docker Image
       docker-image-placeholder: Enter the Docker image tag, for example, bitnami/nginx
       image-pull-secret: Image Pull Secret

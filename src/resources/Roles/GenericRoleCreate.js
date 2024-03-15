@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep } from 'lodash';
 
@@ -49,13 +49,8 @@ export function GenericRoleCreate({
         listTitle={t('roles.headers.rules')}
         entryTitle={(rule, i) => <RuleTitle rule={rule} i={i} />}
         nameSingular={t('roles.headers.rule')}
-        itemRenderer={({ item, values, setValues, isAdvanced }) => (
-          <RuleInput
-            rule={item}
-            rules={values}
-            setRules={setValues}
-            isAdvanced={isAdvanced}
-          />
+        itemRenderer={({ item, values, setValues }) => (
+          <RuleInput rule={item} rules={values} setRules={setValues} />
         )}
         newResourceTemplateFn={createRuleTemplate}
         defaultOpen

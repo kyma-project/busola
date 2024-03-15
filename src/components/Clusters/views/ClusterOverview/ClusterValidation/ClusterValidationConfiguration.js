@@ -87,11 +87,8 @@ const ConfigurationForm = ({
     >
       <div>
         <FormField
-          simple
-          advanced
           label={t('common.headers.description')}
           input={Inputs.Text}
-          isAdvanced={true}
           value={description}
           defaultValue={description}
           setValue={val => setDescription(val)}
@@ -110,12 +107,9 @@ const ConfigurationForm = ({
       >
         <div>
           <FormField
-            simple
-            advanced
             label={t('common.headers.namespaces')}
             input={Inputs.Checkboxes}
             options={namespaceOptions ?? []}
-            isAdvanced={true}
             setValue={val => setSelectedNamespaces(val)}
             value={selectedNamespaces}
           ></FormField>
@@ -133,12 +127,9 @@ const ConfigurationForm = ({
       >
         <div>
           <FormField
-            simple
-            advanced
             label={t('common.headers.policies')}
             input={Inputs.Checkboxes}
             options={policyOptions ?? []}
-            isAdvanced={true}
             setValue={val => setSelectedPolicies(val)}
             value={selectedPolicies}
           ></FormField>
@@ -150,11 +141,8 @@ const ConfigurationForm = ({
       >
         <div>
           <FormField
-            simple
-            advanced
             label={t('cluster-validation.scan.configuration.parallel-requests')}
             input={Inputs.Number}
-            isAdvanced={true}
             setValue={val =>
               setParallelRequests(Number.isInteger(val) ? val : undefined)
             }

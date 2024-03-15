@@ -20,7 +20,7 @@ export function K8sNameField({
   ...props
 }) {
   const { t } = useTranslation();
-  const { isAdvanced, propertyPath, validate, readOnly, ...inputProps } = props;
+  const { propertyPath, validate, readOnly, ...inputProps } = props;
   const inputInfoLink = useCreateResourceDescription(inputInfo);
 
   return (

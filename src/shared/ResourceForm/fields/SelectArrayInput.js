@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { MultiInput } from './MultiInput';
 import * as Inputs from '../inputs';
 
@@ -10,7 +8,6 @@ export function SelectArrayInput({
   defaultOpen,
   placeholder,
   inputProps,
-  isAdvanced,
   tooltipContent,
   sectionTooltipContent,
   options,
@@ -24,7 +21,6 @@ export function SelectArrayInput({
     <MultiInput
       title={title}
       defaultOpen={defaultOpen}
-      isAdvanced={isAdvanced}
       toInternal={toInternal}
       toExternal={toExternal}
       tooltipContent={tooltipContent}

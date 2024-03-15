@@ -64,7 +64,7 @@ export default function JobCreate({
       }
       createUrl={resourceUrl}
     >
-      <JobSpecSection advanced propertyPath="$.spec" readOnly={!!initialJob} />
+      <JobSpecSection propertyPath="$.spec" readOnly={!!initialJob} />
       <ContainerSection
         simple
         propertyPath="$.spec.template.spec.containers"
@@ -72,7 +72,6 @@ export default function JobCreate({
         prefix={prefix}
       />
       <ContainersSection
-        advanced
         propertyPath="$.spec.template.spec.containers"
         readOnly={!!initialJob}
       />

@@ -1,4 +1,3 @@
-import React from 'react';
 import { last } from 'lodash';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 import { List, fromJS } from 'immutable';
