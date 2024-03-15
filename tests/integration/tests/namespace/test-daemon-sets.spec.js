@@ -40,7 +40,7 @@ context('Test Daemon Sets', () => {
       },
     );
 
-    cy.createResource();
+    cy.saveChanges('Create');
   });
 
   it('Inspect details', () => {

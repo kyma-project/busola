@@ -72,7 +72,7 @@ context('Test Protected Resources', () => {
       .click()
       .type('true');
 
-    cy.createResource();
+    cy.saveChanges('Create');
   });
 
   it('Protect a resource', () => {
@@ -103,7 +103,7 @@ context('Test Protected Resources', () => {
       .click()
       .type(IMAGE);
 
-    cy.createResource();
+    cy.saveChanges('Create');
   });
 
   it('Check if Pod is protected', () => {

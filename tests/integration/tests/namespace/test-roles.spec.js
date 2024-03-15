@@ -49,7 +49,7 @@ context('Test Roles', () => {
       'create',
     );
 
-    cy.createResource();
+    cy.saveChanges('Create');
   });
 
   it('Check the Role details', () => {
@@ -84,7 +84,7 @@ context('Test Roles', () => {
       .click()
       .type('watch');
 
-    cy.saveEdit();
+    cy.saveChanges('Edit');
   });
 
   it('Check the Role details after edit', () => {
@@ -128,7 +128,7 @@ context('Test Roles', () => {
       .click()
       .type(CLONE_NAME);
 
-    cy.createResource();
+    cy.saveChanges('Create');
   });
 
   it('Check the clone details', () => {

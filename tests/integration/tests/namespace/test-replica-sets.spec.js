@@ -39,7 +39,7 @@ context('Test Replica Sets', () => {
       .type(DOCKER_IMAGE_TAG)
       .should('have.value', DOCKER_IMAGE_TAG);
 
-    cy.createResource();
+    cy.saveChanges('Create');
   });
 
   it('Checks the details view', () => {
@@ -83,7 +83,7 @@ context('Test Replica Sets', () => {
       .type(EDITED_REPLICAS_AMOUNT)
       .should('have.value', EDITED_REPLICAS_AMOUNT);
 
-    cy.saveEdit();
+    cy.saveChanges('Edit');
   });
 
   it('Checks the new amount of Replicas and the new Docker image', () => {

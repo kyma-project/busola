@@ -84,7 +84,7 @@ context('Test Cron Jobs', () => {
       .contains('Always')
       .click();
 
-    cy.createResource();
+    cy.saveChanges('Create');
   });
 
   it('Checking details', () => {
@@ -150,7 +150,7 @@ context('Test Cron Jobs', () => {
       .contains('Never')
       .click();
 
-    cy.saveEdit();
+    cy.saveChanges('Edit');
   });
 
   it('Checking updates details', () => {

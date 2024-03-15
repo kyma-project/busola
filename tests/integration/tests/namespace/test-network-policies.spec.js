@@ -36,7 +36,7 @@ context('Test Network Policy', () => {
       },
     );
 
-    cy.createResource();
+    cy.saveChanges('Create');
   });
 
   it('Check Network Policy details', () => {

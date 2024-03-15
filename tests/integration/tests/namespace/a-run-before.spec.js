@@ -38,7 +38,7 @@ context('Create Namespace', () => {
       .find('input')
       .type(Cypress.env('NAMESPACE_NAME'));
 
-    cy.createResource();
+    cy.saveChanges('Create');
 
     cy.contains('ui5-title', Cypress.env('NAMESPACE_NAME')).should(
       'be.visible',
@@ -46,6 +46,6 @@ context('Create Namespace', () => {
 
     cy.inspectTab('Edit');
 
-    cy.saveEdit();
+    cy.saveChanges('Edit');
   });
 });

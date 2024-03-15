@@ -32,7 +32,7 @@ context('Test Config Maps', () => {
 
     cy.findMonaco().type(ENTRY_VALUE);
 
-    cy.createResource();
+    cy.saveChanges('Create');
 
     cy.url().should('match', new RegExp(`/configmaps/${CONFIG_MAP_NAME}`));
   });
@@ -55,7 +55,7 @@ context('Test Config Maps', () => {
 
     cy.findMonaco().type(ENTRY_VALUE2);
 
-    cy.saveEdit();
+    cy.saveChanges('Edit');
   });
 
   it('Inspect the updated Config Map', () => {
@@ -81,7 +81,7 @@ context('Test Config Maps', () => {
       .type(CLONE_NAME)
       .click();
 
-    cy.createResource();
+    cy.saveChanges('Create');
   });
 
   it('Inspect the clone', () => {

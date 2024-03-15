@@ -41,7 +41,7 @@ context('Test Service Accounts', () => {
       'be.visible',
     );
 
-    cy.createResource();
+    cy.saveChanges('Create');
   });
 
   it('Checking details', () => {
@@ -82,7 +82,7 @@ context('Test Service Accounts', () => {
       .eq(0)
       .click({ force: true });
 
-    cy.saveEdit();
+    cy.saveChanges('Edit');
   });
 
   it('Checking updated details', () => {

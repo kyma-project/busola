@@ -1,6 +1,6 @@
 import './exceptions';
 import './commands';
-import './create';
+import './create-edit-support';
 import './login-commands';
 import './navigate-to';
 import './paste-to-monaco';
@@ -9,5 +9,4 @@ import './inspectTab';
 import './createNamespace';
 import './loadFile';
 import './mockConfig';
-import './saveEdit';
 require('cypress-plugin-tab');

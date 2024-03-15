@@ -71,7 +71,7 @@ context('Test reduced permissions', () => {
       'list',
     );
 
-    cy.createResource();
+    cy.saveChanges('Create');
   });
 
   it('Create Service Account', () => {
@@ -86,7 +86,7 @@ context('Test reduced permissions', () => {
       .click()
       .type(SA_NAME);
 
-    cy.createResource();
+    cy.saveChanges('Create');
   });
 
   it('Create a ClusterRoleBinding for SA and CR', () => {
@@ -127,7 +127,7 @@ context('Test reduced permissions', () => {
       SA_NAME,
     );
 
-    cy.createResource();
+    cy.saveChanges('Create');
   });
 
   it('Download kubeconfig for Service Account', () => {

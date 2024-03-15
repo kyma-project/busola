@@ -50,7 +50,7 @@ context('Test Secrets', () => {
 
     cy.contains(window.btoa(SECRET_VALUE));
 
-    cy.createResource();
+    cy.saveChanges('Create');
 
     cy.url().should('match', new RegExp(`/secrets/${SECRET_NAME}`));
   });
@@ -114,7 +114,7 @@ context('Test Secrets', () => {
       .eq(1)
       .click();
 
-    cy.saveEdit();
+    cy.saveChanges('Edit');
   });
 
   it('Checking an updated secret', () => {

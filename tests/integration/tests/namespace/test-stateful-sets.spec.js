@@ -38,7 +38,7 @@ context('Test Stateful Sets', () => {
       },
     );
 
-    cy.createResource();
+    cy.saveChanges('Create');
 
     cy.contains('ui5-title', SS_NAME).should('be.visible');
   });

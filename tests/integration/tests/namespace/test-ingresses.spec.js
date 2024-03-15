@@ -39,7 +39,7 @@ context('Test Ingresses', () => {
       },
     );
 
-    cy.createResource();
+    cy.saveChanges('Create');
   });
 
   it('Check Ingress details', () => {

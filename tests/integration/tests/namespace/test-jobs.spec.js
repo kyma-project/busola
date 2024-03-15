@@ -95,7 +95,7 @@ context('Test Jobs', () => {
       .find('input')
       .type('node:14-alpine', { force: true });
 
-    cy.createResource();
+    cy.saveChanges('Create');
   });
 
   it('Inspect details and created Pods', () => {
@@ -176,7 +176,7 @@ context('Test Jobs', () => {
       .first()
       .type('b', { force: true });
 
-    cy.saveEdit();
+    cy.saveChanges('Edit');
 
     cy.inspectTab('View');
 

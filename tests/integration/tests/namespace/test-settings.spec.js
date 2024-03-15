@@ -35,7 +35,7 @@ context('Test app settings and preferences', () => {
       .type(NAME, { force: true })
       .click();
 
-    cy.createResource();
+    cy.saveChanges('Create');
 
     cy.contains('ui5-title', NAME).should('be.visible');
 

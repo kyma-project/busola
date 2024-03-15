@@ -77,7 +77,7 @@ context('Test Deployments', () => {
       .clear()
       .type('20');
 
-    cy.createResource();
+    cy.saveChanges('Create');
   });
 
   it('Check if deployment and pod exist', () => {
@@ -123,7 +123,7 @@ context('Test Deployments', () => {
       .first()
       .type('label-value');
 
-    cy.saveEdit();
+    cy.saveChanges('Edit');
 
     cy.getMidColumn().inspectTab('View');
 

@@ -50,7 +50,7 @@ context('Test Persistent Volume Claims', () => {
       cy.pasteToMonaco(PVC);
     });
 
-    cy.createResource();
+    cy.saveChanges('Create');
 
     cy.contains('ui5-title', PVC_NAME).should('be.visible');
   });
