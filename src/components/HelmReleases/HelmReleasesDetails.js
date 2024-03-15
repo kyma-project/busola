@@ -79,7 +79,9 @@ function HelmReleasesDetails({ releaseName, namespace }) {
           <>
             <DynamicPageComponent.Column title={t('secrets.name_singular')}>
               <Link
-                url={namespaceUrl(`secrets/${releaseSecret.metadata.name}`)}
+                url={namespaceUrl(`secrets/${releaseSecret.metadata.name}`, {
+                  namespace: releaseSecret.metadata.namespace,
+                })}
               >
                 {releaseSecret.metadata.name}
               </Link>
