@@ -22,7 +22,9 @@ function HelmReleasesDetails({ releaseName, namespace }) {
   const { namespaceUrl } = useUrl();
 
   const { data, loading } = useGetList(s => s.type === 'helm.sh/release.v1')(
-    `/api/v1/namespaces/${namespace}/secrets?labelSelector=name==${releaseName}`,
+    namespace === '-all-'
+      ? `/api/v1/secrets?labelSelector=name==${releaseName}`
+      : `/api/v1/namespaces/${namespace}/secrets?labelSelector=name==${releaseName}`,
   );
 
   if (loading) return <Spinner />;
@@ -42,6 +44,7 @@ function HelmReleasesDetails({ releaseName, namespace }) {
         title={releaseName}
         description={ResourceDescription}
         showYamlTab={showYamlTab}
+        layoutNumber="MidColumn"
         inlineEditForm={() => (
           <ResourceCreate
             title={'HelmRelease'}
@@ -76,7 +79,9 @@ function HelmReleasesDetails({ releaseName, namespace }) {
           <>
             <DynamicPageComponent.Column title={t('secrets.name_singular')}>
               <Link
-                url={namespaceUrl(`secrets/${releaseSecret.metadata.name}`)}
+                url={namespaceUrl(`secrets/${releaseSecret.metadata.name}`, {
+                  namespace: releaseSecret.metadata.namespace,
+                })}
               >
                 {releaseSecret.metadata.name}
               </Link>
