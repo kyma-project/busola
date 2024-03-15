@@ -66,7 +66,6 @@ export default function JobCreate({
     >
       <JobSpecSection propertyPath="$.spec" readOnly={!!initialJob} />
       <ContainerSection
-        simple
         propertyPath="$.spec.template.spec.containers"
         readOnly={!!initialJob}
         prefix={prefix}

@@ -39,8 +39,7 @@ data:
       form:
         - path: metadata.name
           widget: Name
-        - simple: true
-          type: string
+        - type: string
           name: Language
           var: language
           required: true
@@ -50,8 +49,7 @@ data:
             spec.runtime in ['nodejs14', 'nodejs16'] ? 'nodejs' :
             spec.runtime in ['python39'] ? 'python' :
             ''
-        - simple: true
-          path: spec.runtime
+        - path: spec.runtime
           placeholder: placeholders.spec.runtime
           enum: |
             $language = 'nodejs' ? ['nodejs14', 'nodejs16'] :
@@ -76,11 +74,9 @@ data:
           trigger: [sourceType]
         - path: spec.source.inline
           visibility: $sourceType = 'Inline'
-          simple: true
           children:
             - path: source
               widget: CodeEditor
-              simple: true
               language: '$contains($root.spec.runtime, "node") ? "javascript" : "python"'
               defaultExpanded: true
               subscribe:
@@ -176,8 +172,7 @@ data:
           name: Service Port
         - path: spec.host
           name: Host
-        - simple: true
-          required: true
+        - required: true
           path: spec.rules 
           name: Rules 
           widget: GenericList 
@@ -189,13 +184,11 @@ data:
             accessStrategies:
               - handler: 'allow'
           children:
-            - simple: true
-              required: true
+            - required: true
               path: '[].path'
               name: Path
               inputInfo: "Path can contain alphanumeric characters and '/', '.', '*', '?', '!', '-', '(', and ')'."
             - required: true
-              simple: true
               path: '[].accessStrategies'
               name: Access Strategies 
               widget: GenericList
@@ -204,7 +197,6 @@ data:
                 handler: 'allow'
               children:
                 - required: true
-                  simple: true
                   path: '[].handler'
                   name: Handler
                   enum:
@@ -213,7 +205,6 @@ data:
                     - jwt
                     - oauth2_introspection
                 - path: '[].config'
-                  simple: true
                   name: Config
                   type: object
                   properties:
@@ -235,31 +226,24 @@ data:
                     - path: jwks_urls
                       name: JWKS URLs
                       inputInfo: "JWKS URLs must start with 'https://' or 'file://'"
-                      simple: true
                       widget: SimpleList
                       visibility: '$item.handler="jwt"'
                       children:
                         - path: '[]'
-                          simple: true
                     - path: trusted_issuers
                       name: Trusted Issuers
                       inputInfo: "Trusted Issuers must start with 'https://' or 'file://'"
-                      simple: true
                       widget: SimpleList
                       visibility: '$item.handler="jwt"'
                       children:
                         - path: '[]'
-                          simple: true
                     - path: required_scope
                       name: Required Scope
-                      simple: true
                       widget: SimpleList
                       visibility: '$item.handler="oauth2_introspection" or $item.handler="oauth2_client_credentials" or $item.handler="jwt"'
                       children:
                         - path: '[]'
-                          simple: true
             - required: true
-              simple: true
               path: '[].methods'
               name: Methods 
               widget: MultiCheckbox
@@ -281,12 +265,10 @@ data:
                   path: '[].handler'
                   name: Handler
             - path: '[].service' 
-              simple: true
               name: Service 
               widget: FormGroup
               children:
-                - simple: true
-                  required: false
+                - required: false
                   path: name
                   name: Service Name
                   widget: Resource
@@ -295,8 +277,7 @@ data:
                     version: v1
                     scope: namespace
                   trigger: [accessStrategyPort]
-                - simple: true
-                  required: false
+                - required: false
                   path: port 
                   name: Port
                   subscribe:

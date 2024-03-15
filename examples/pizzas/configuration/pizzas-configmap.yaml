@@ -90,45 +90,32 @@ data:
   form: |-
     - path: spec.description
       widget: Text
-      simple: true
     - path: spec.sauce
       widget: Text
-      simple: true
       placeholder: Type or choose from the dropdown.
       inputInfo: Supported options are GARLIC and TOMATO.
     - path: spec.toppings
       widget: GenericList
-      simple: true
       children:
         - path: '[].name'
-          simple: true
         - path: '[].price'
-          simple: true
         - path: '[].quantity'
-          simple: true
     - path: spec.comments
       widget: SimpleList
-      simple: true
       children:
         - path: '[]'
-          simple: true
     - path: spec.recipeSecret
       widget: Resource
       resource:
         kind: Secret
         scope: namespace
         version: v1
-      simple: true
     - path: spec.ownerReferences
       widget: GenericList
-      simple: true
       children:
         - path: '[].apiVersion'
-          simple: true
         - path: '[].kind'
-          simple: true
         - path: '[].name'
-          simple: true
   list: |-
     - name: Description
       search: true

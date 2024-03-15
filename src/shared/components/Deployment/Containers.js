@@ -27,11 +27,9 @@ function SingleContainerSection({ container, setContainer }) {
       <ResourceForm.FormField
         required
         propertyPath="$.image"
-        label={t('deployments.create-modal.simple.docker-image')}
+        label={t('deployments.create-modal.docker-image')}
         input={Inputs.Text}
-        placeholder={t(
-          'deployments.create-modal.simple.docker-image-placeholder',
-        )}
+        placeholder={t('deployments.create-modal.docker-image-placeholder')}
       />
       <RuntimeResources
         title={t('deployments.create-modal.runtime-profile')}

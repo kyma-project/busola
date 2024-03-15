@@ -101,7 +101,7 @@ export function GenericRoleBindingCreate({
         setBinding={setBinding}
       />
       {jp.value(binding, '$.subjects.length') ? (
-        <SingleSubjectInput simple propertyPath="$.subjects" />
+        <SingleSubjectInput propertyPath="$.subjects" />
       ) : (
         <MessageStrip
           design="Warning"

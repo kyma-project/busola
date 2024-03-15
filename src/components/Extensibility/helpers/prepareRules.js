@@ -7,7 +7,6 @@ export function prepareRules(schemaRules, disableOnEdit, t) {
 
   const defaultNameField = {
     path: 'metadata.name',
-    simple: true,
     widget: 'Name',
     required: true,
     disableOnEdit,

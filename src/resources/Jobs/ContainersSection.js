@@ -39,7 +39,7 @@ export const ContainerSection = ({ readOnly, ...props }) => {
   const { value = [], setValue } = props;
 
   return value?.length ? (
-    <SingleContainerInput simple readOnly={readOnly} {...props} />
+    <SingleContainerInput readOnly={readOnly} {...props} />
   ) : (
     <MessageStrip
       design="Warning"
