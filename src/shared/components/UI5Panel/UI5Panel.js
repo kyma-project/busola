@@ -35,7 +35,7 @@ export const UI5Panel = ({
             height: '100%',
             paddingTop: '0.5rem',
             paddingBottom: '0.5rem',
-            paddingLeft: '1rem',
+            paddingLeft: modeActions ? 0 : '1rem',
           }}
         >
           {icon && icon}
@@ -50,13 +50,16 @@ export const UI5Panel = ({
               <Text>{description}</Text>
             </>
           )}
-          {modeActions && (
+          {headerActions && modeActions && (
             <>
+              <div className="header-actions invisible">{headerActions}</div>
               <ToolbarSpacer />
               {modeActions}
+              <ToolbarSpacer className="toolbar-spacer" />
+              <div className="header-actions">{headerActions}</div>
             </>
           )}
-          {headerActions && (
+          {headerActions && !modeActions && (
             <>
               <ToolbarSpacer />
               {headerActions}

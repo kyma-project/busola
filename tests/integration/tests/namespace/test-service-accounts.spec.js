@@ -17,9 +17,7 @@ context('Test Service Accounts', () => {
   it('Create a Service Account', () => {
     cy.navigateTo('Configuration', 'Service Accounts');
 
-    cy.contains('ui5-button', 'Create').click();
-
-    cy.contains('Advanced').click();
+    cy.openCreate();
 
     cy.get('[aria-label="ServiceAccount name"]')
       .find('input')
@@ -43,10 +41,7 @@ context('Test Service Accounts', () => {
       'be.visible',
     );
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Create');
   });
 
   it('Checking details', () => {
@@ -64,12 +59,9 @@ context('Test Service Accounts', () => {
   });
 
   it('Edit', () => {
-    cy.getMidColumn()
-      .contains('ui5-button', 'Edit')
-      .should('be.visible')
-      .click();
+    cy.inspectTab('Edit');
 
-    cy.get('ui5-dialog')
+    cy.get('.edit-form')
       .contains('Labels')
       .click();
 
@@ -90,13 +82,12 @@ context('Test Service Accounts', () => {
       .eq(0)
       .click({ force: true });
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Update')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Edit');
   });
 
   it('Checking updated details', () => {
+    cy.inspectTab('View');
+
     cy.getMidColumn()
       .contains('disabled')
       .should('be.visible');
@@ -108,13 +99,6 @@ context('Test Service Accounts', () => {
 
   it('Generate TokenRequest', () => {
     cy.getMidColumn()
-      .find('[data-component-name="DynamicPageTitleMiddleSection"]')
-      .find('ui5-toggle-button')
-      .find('button')
-      .click();
-
-    cy.getMidColumn()
-      .get('ui5-popover[accessible-role="Dialog"]')
       .contains('ui5-button', 'Generate TokenRequest')
       .click();
 

@@ -29,7 +29,7 @@ context('Test reduced permissions', () => {
   it('Create Cluster Role with reduced permissions', () => {
     cy.navigateTo('Configuration', 'Cluster Roles');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.get('[aria-label="ClusterRole name"]:visible')
       .find('input')
@@ -71,10 +71,7 @@ context('Test reduced permissions', () => {
       'list',
     );
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Create');
   });
 
   it('Create Service Account', () => {
@@ -82,23 +79,20 @@ context('Test reduced permissions', () => {
 
     cy.navigateTo('Configuration', 'Service Accounts');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.get('[aria-label="ServiceAccount name"]:visible')
       .find('input')
       .click()
       .type(SA_NAME);
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Create');
   });
 
   it('Create a ClusterRoleBinding for SA and CR', () => {
     cy.navigateTo('Back To Cluster Details', 'Cluster Role Bindings');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     // subject type - select it first so the list starts loading
     cy.get('ui5-dialog')
@@ -133,10 +127,7 @@ context('Test reduced permissions', () => {
       SA_NAME,
     );
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Create');
   });
 
   it('Download kubeconfig for Service Account', () => {

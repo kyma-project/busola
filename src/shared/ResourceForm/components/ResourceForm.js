@@ -33,7 +33,6 @@ export function ResourceForm({
   createUrl,
   presets,
   onPresetSelected,
-  onReset,
   renderEditor,
   onSubmit,
   afterCreatedFn,
@@ -232,18 +231,15 @@ export function ResourceForm({
         disableMargin
         headerActions={
           <>
-            {/* TODO STYLE IT */}
             {actions}
-            <div className="yaml-form-actions">
-              <EditorActions
-                val={convertedResource}
-                editor={actionsEditor}
-                title={`${resource?.metadata?.name || singularName}.yaml`}
-                saveHidden
-                searchDisabled={yamlSearchDisabled}
-                hideDisabled={yamlHideDisabled}
-              />
-            </div>
+            <EditorActions
+              val={convertedResource}
+              editor={actionsEditor}
+              title={`${resource?.metadata?.name || singularName}.yaml`}
+              saveHidden
+              searchDisabled={yamlSearchDisabled}
+              hideDisabled={yamlHideDisabled}
+            />
           </>
         }
         modeActions={

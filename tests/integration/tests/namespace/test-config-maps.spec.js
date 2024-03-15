@@ -19,7 +19,7 @@ context('Test Config Maps', () => {
   it('Create a Config Map', () => {
     cy.navigateTo('Configuration', 'Config Maps');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.get('[aria-label="ConfigMap name"]:visible')
       .find('input')
@@ -30,14 +30,9 @@ context('Test Config Maps', () => {
       .find('input')
       .type(ENTRY_KEY);
 
-    cy.findMonaco()
-      .first()
-      .type(ENTRY_VALUE);
+    cy.findMonaco().type(ENTRY_VALUE);
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Create');
 
     cy.url().should('match', new RegExp(`/configmaps/${CONFIG_MAP_NAME}`));
   });
@@ -49,10 +44,7 @@ context('Test Config Maps', () => {
   it('Edit the Config Map', () => {
     cy.wait(1000);
 
-    cy.getMidColumn()
-      .contains('ui5-button', 'Edit')
-      .should('be.visible')
-      .click();
+    cy.inspectTab('Edit');
 
     // hide first entry so Cypress doesn't get confuused
     cy.get('[aria-label="expand config-map-key"]').click();
@@ -61,15 +53,14 @@ context('Test Config Maps', () => {
       .find('input')
       .type(ENTRY_KEY2);
 
-    cy.findMonaco(1).type(ENTRY_VALUE2);
+    cy.findMonaco().type(ENTRY_VALUE2);
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Update')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Edit');
   });
 
   it('Inspect the updated Config Map', () => {
+    cy.getMidColumn().inspectTab('View');
+
     cy.getMidColumn()
       .contains('ui5-panel', ENTRY_KEY2)
       .contains(ENTRY_VALUE2);
@@ -80,10 +71,6 @@ context('Test Config Maps', () => {
   });
 
   it('Clone the secret', () => {
-    cy.getLeftNav()
-      .contains('Config Maps')
-      .click();
-
     cy.contains('ui5-table-row', CONFIG_MAP_NAME)
       .find('ui5-button[data-testid="clone"]')
       .click();
@@ -94,10 +81,7 @@ context('Test Config Maps', () => {
       .type(CLONE_NAME)
       .click();
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Create');
   });
 
   it('Inspect the clone', () => {
