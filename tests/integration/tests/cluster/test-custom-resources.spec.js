@@ -22,7 +22,7 @@ context('Test Custom Resources', () => {
       cy.pasteToMonaco(CRD);
     });
 
-    cy.get('ui5-dialog')
+    cy.get('.create-form')
       .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
@@ -78,7 +78,7 @@ context('Test Custom Resources', () => {
       cy.pasteToMonaco(TC);
     });
 
-    cy.get('ui5-dialog:visible')
+    cy.get('.create-form')
       .contains('ui5-button', 'Create')
       .should('be.visible')
       .click();
