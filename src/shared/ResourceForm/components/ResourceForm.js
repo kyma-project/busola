@@ -237,8 +237,8 @@ export function ResourceForm({
               editor={actionsEditor}
               title={`${resource?.metadata?.name || singularName}.yaml`}
               saveHidden
-              searchDisabled={yamlSearchDisabled}
-              hideDisabled={yamlHideDisabled}
+              searchDisabled={yamlSearchDisabled || mode === 'MODE_FORM'}
+              hideDisabled={yamlHideDisabled || mode === 'MODE_FORM'}
             />
           </>
         }
