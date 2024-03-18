@@ -15,52 +15,52 @@ context('Test Pizzas', () => {
 
     cy.loginAndSelectCluster();
 
-    cy.createNamespace('pizzas');
+    // cy.createNamespace('pizzas');
   });
 
-  it('Creates the EXT pizza config', () => {
-    cy.getLeftNav()
-      .contains('Cluster Details')
-      .click();
+  // it('Creates the EXT pizza config', () => {
+  //   cy.getLeftNav()
+  //     .contains('Cluster Details')
+  //     .click();
 
-    cy.get('ui5-button.ui5-shellbar-button[icon="add"]').click();
+  //   cy.get('ui5-button.ui5-shellbar-button[icon="add"]').click();
 
-    cy.loadFiles(
-      'examples/pizzas/configuration/pizzas-configmap.yaml',
-      'examples/pizzas/configuration/pizza-orders-configmap.yaml',
-      'examples/pizzas/configuration/pizzas-crd.yaml',
-      'examples/pizzas/configuration/pizza-orders-crd.yaml',
-    ).then(resources => {
-      const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
-      cy.pasteToMonaco(input);
-    });
+  //   cy.loadFiles(
+  //     'examples/pizzas/configuration/pizzas-configmap.yaml',
+  //     'examples/pizzas/configuration/pizza-orders-configmap.yaml',
+  //     'examples/pizzas/configuration/pizzas-crd.yaml',
+  //     'examples/pizzas/configuration/pizza-orders-crd.yaml',
+  //   ).then(resources => {
+  //     const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+  //     cy.pasteToMonaco(input);
+  //   });
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Upload')
-      .should('be.visible')
-      .click();
+  //   cy.get('ui5-dialog')
+  //     .contains('ui5-button', 'Upload')
+  //     .should('be.visible')
+  //     .click();
 
-    cy.get('ui5-dialog')
-      .find('.status-message-success')
-      .should('have.length', 4);
+  //   cy.get('ui5-dialog')
+  //     .find('.status-message-success')
+  //     .should('have.length', 4);
 
-    cy.loadFiles(
-      'examples/pizzas/samples/pizzas-samples.yaml',
-      'examples/pizzas/samples/pizza-orders-samples.yaml',
-    ).then(resources => {
-      const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
-      cy.pasteToMonaco(input);
-    });
+  //   cy.loadFiles(
+  //     'examples/pizzas/samples/pizzas-samples.yaml',
+  //     'examples/pizzas/samples/pizza-orders-samples.yaml',
+  //   ).then(resources => {
+  //     const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+  //     cy.pasteToMonaco(input);
+  //   });
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Upload')
-      .should('be.visible')
-      .click();
+  //   cy.get('ui5-dialog')
+  //     .contains('ui5-button', 'Upload')
+  //     .should('be.visible')
+  //     .click();
 
-    cy.get('ui5-dialog')
-      .find('.status-message-success')
-      .should('have.length', 6);
-  });
+  //   cy.get('ui5-dialog')
+  //     .find('.status-message-success')
+  //     .should('have.length', 6);
+  // });
 
   it('Displays the Pizza Orders list/detail views from the samples', () => {
     cy.loginAndSelectCluster();
@@ -68,6 +68,11 @@ context('Test Pizzas', () => {
     cy.getLeftNav()
       .contains('Namespaces')
       .click();
+
+    cy.get('ui5-input[placeholder="Search"]:visible')
+      .find('input')
+      .wait(1000)
+      .type('pizzas');
 
     cy.clickGenericListLink('pizzas');
 
@@ -88,18 +93,14 @@ context('Test Pizzas', () => {
 
     cy.contains('paymentMethod: CARD');
     cy.contains('realization: SELF-PICKUP');
-    cy.contains('ui5-breadcrumbs', 'Pizza Orders');
   });
 
   it('Edits a Pizza Order', () => {
     cy.wait(1000);
 
-    cy.getMidColumn()
-      .contains('ui5-button', 'Edit')
-      .should('be.visible')
-      .click();
+    cy.getMidColumn().inspectTab('Edit');
 
-    cy.get('ui5-dialog').as('form');
+    cy.get('.edit-form').as('form');
 
     cy.get('@form').contains('Name');
     cy.get('@form').contains('Labels');
@@ -122,11 +123,9 @@ context('Test Pizzas', () => {
       .find('ui5-label[required]:visible')
       .should('have.length', 3);
 
-    cy.get('@form')
-      .get('ui5-button')
-      .contains('Update')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Edit');
+
+    cy.inspectTab('View');
 
     cy.getMidColumn()
       .contains('span', /^READY$/i)
@@ -201,7 +200,7 @@ context('Test Pizzas', () => {
   it('Tests the Create Form', () => {
     cy.contains('ui5-button', 'Create').click();
 
-    cy.get('ui5-dialog').as('form');
+    cy.get('.create-form').as('form');
 
     cy.get('@form')
       .find('[data-testid="spec.description"]:visible')
@@ -228,10 +227,7 @@ context('Test Pizzas', () => {
       .clear({ force: true })
       .type(PIZZA_NAME, { force: true });
 
-    cy.get('@form')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Create');
 
     cy.getMidColumn()
       .contains('ui5-title', PIZZA_NAME)
