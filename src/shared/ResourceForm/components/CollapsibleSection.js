@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
-import { spacing } from '@ui5/webcomponents-react-base';
-
-import { Title } from './Title';
 import { ResourceFormWrapper } from './Wrapper';
-
+import { Panel, Toolbar, ToolbarSpacer } from '@ui5/webcomponents-react';
+import { Title } from './Title';
 import './CollapsibleSection.scss';
 
 export function CollapsibleSection({
@@ -23,7 +21,6 @@ export function CollapsibleSection({
 }) {
   const [open, setOpen] = useState(defaultOpen);
   const actionsRef = useRef();
-  const iconGlyph = open ? 'navigation-down-arrow' : 'navigation-right-arrow';
   required = required === true;
 
   useEffect(() => {
@@ -33,7 +30,7 @@ export function CollapsibleSection({
   }, [defaultOpen]);
 
   const toggle = e => {
-    // ignore events from actions
+    e.stopPropagation();
     if (!canChangeState) return;
     if (disabled) return;
     if (!actionsRef.current?.contains(e.target)) setOpen(!open);
@@ -50,33 +47,37 @@ export function CollapsibleSection({
   );
 
   return (
-    <div className={classNames}>
-      <header
-        onClick={toggle}
-        aria-label={`expand ${title}`}
-        style={{
-          marginRight: '-1rem',
-          marginLeft: `-1rem`,
-          paddingLeft: `calc(${nestingLevel + 1} * ${
-            spacing.sapUiSmallMarginBegin.marginLeft
-          })`,
-        }}
-        className="header"
-      >
-        <Title
-          tooltipContent={tooltipContent}
-          title={title}
-          disabled={disabled}
-          canChangeState={canChangeState}
-          iconGlyph={iconGlyph}
-          required={required}
-        />
-
-        <div className="actions" ref={actionsRef}>
-          {typeof actions === 'function' ? actions(setOpen) : actions}
-        </div>
-      </header>
-
+    <Panel
+      accessibleRole="Form"
+      collapsed={!open}
+      noAnimation
+      className={classNames}
+      onToggle={toggle}
+      header={
+        <Toolbar
+          active={!disabled}
+          toolbarStyle="Clear"
+          onClick={toggle}
+          aria-label={`expand ${title}`}
+        >
+          <Title
+            tooltipContent={tooltipContent}
+            title={title}
+            disabled={disabled}
+            canChangeState={canChangeState}
+            required={required}
+          />
+          {actions && (
+            <>
+              <ToolbarSpacer />
+              <div className="actions" ref={actionsRef}>
+                {typeof actions === 'function' ? actions(setOpen) : actions}
+              </div>
+            </>
+          )}
+        </Toolbar>
+      }
+    >
       <div
         className={open ? 'content content--open' : 'content content--closed'}
       >
@@ -89,6 +90,6 @@ export function CollapsibleSection({
           {children}
         </ResourceFormWrapper>
       </div>
-    </div>
+    </Panel>
   );
 }
