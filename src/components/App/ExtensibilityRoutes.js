@@ -84,7 +84,7 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType, extension }) => {
     midColumnComponent = (
       <ResourceCreate
         title={elementCreateProps.resourceTitle}
-        confirmText={t('common.buttons.save')}
+        confirmText={t('common.buttons.create')}
         layoutCloseCreateUrl={layoutCloseCreateUrl}
         renderForm={renderProps => {
           const createComponent = layoutState?.showCreate?.resourceType && (
