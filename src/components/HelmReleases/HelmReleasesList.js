@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 
 import { useTranslation } from 'react-i18next';
-import { Link } from '@ui5/webcomponents-react';
+import { Link, Text } from '@ui5/webcomponents-react';
 import { groupBy } from 'lodash';
 
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
@@ -51,28 +51,9 @@ function HelmReleasesList({ enableColumnLayout }) {
   const rowRenderer = entry => [
     enableColumnLayout ? (
       <>
-        <Link
-          style={{ fontWeight: 'bold' }}
-          onClick={() => {
-            setLayoutColumn({
-              midColumn: {
-                resourceName: entry.releaseName,
-                resourceType: 'HelmReleases',
-                namespaceId: entry.namespace,
-              },
-              endColumn: null,
-              layout: 'TwoColumnsMidExpanded',
-            });
-
-            window.history.pushState(
-              window.history.state,
-              '',
-              `${resourceUrl(entry)}?layout=TwoColumnsMidExpanded`,
-            );
-          }}
-        >
+        <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
           {entry.releaseName}
-        </Link>
+        </Text>
       </>
     ) : (
       <Link
@@ -105,6 +86,7 @@ function HelmReleasesList({ enableColumnLayout }) {
   ).map(([releaseName, releases]) => {
     const recentRelease = findRecentRelease(releases);
     return {
+      name: releaseName,
       releaseName,
       recentReleaseName: recentRelease?.metadata.name,
       recentRelease: decodeHelmRelease(recentRelease?.data.release),
@@ -119,6 +101,7 @@ function HelmReleasesList({ enableColumnLayout }) {
       <DynamicPageComponent
         title={t('helm-releases.title')}
         description={ResourceDescription}
+        layoutNumber={'StartColumn'}
         content={
           <GenericList
             entries={entries}
@@ -126,11 +109,19 @@ function HelmReleasesList({ enableColumnLayout }) {
             rowRenderer={rowRenderer}
             serverDataLoading={loading}
             serverDataError={error}
+            hasDetailsView
+            displayArrow
+            enableColumnLayout={enableColumnLayout}
+            customUrl={resourceUrl}
+            resourceType="HelmReleases"
             sortBy={{
               name: (a, b) => a.releaseName.localeCompare(b.releaseName),
             }}
             searchSettings={{
-              textSearchProperties: ['recentRelease.chart.metadata.name'],
+              textSearchProperties: [
+                'recentRelease.chart.metadata.name',
+                'releaseName',
+              ],
             }}
             emptyListProps={{
               titleText: `${t('common.labels.no')} ${t(

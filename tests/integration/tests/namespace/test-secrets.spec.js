@@ -21,7 +21,7 @@ context('Test Secrets', () => {
   it('Create a secret', () => {
     cy.navigateTo('Configuration', 'Secrets');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.get('[aria-label="Secret name"]:visible')
       .find('input')
@@ -50,10 +50,7 @@ context('Test Secrets', () => {
 
     cy.contains(window.btoa(SECRET_VALUE));
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Create');
 
     cy.url().should('match', new RegExp(`/secrets/${SECRET_NAME}`));
   });
@@ -96,10 +93,7 @@ context('Test Secrets', () => {
 
   it('Edit a secret', () => {
     cy.wait(500);
-    cy.getMidColumn()
-      .contains('ui5-button', 'Edit')
-      .should('be.visible')
-      .click();
+    cy.inspectTab('Edit');
 
     cy.get('ui5-textarea[placeholder="Enter value"]:visible')
       .eq(0)
@@ -120,14 +114,12 @@ context('Test Secrets', () => {
       .eq(1)
       .click();
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Update')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Edit');
   });
 
   it('Checking an updated secret', () => {
     cy.wait(1000);
+    cy.inspectTab('View');
 
     cy.contains('ui5-button', 'Decode').click();
 

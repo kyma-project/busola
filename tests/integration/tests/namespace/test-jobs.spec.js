@@ -14,7 +14,13 @@ function checkJobLogs({ showLogsSelector, expectedLogs }) {
 
   cy.contains(expectedLogs);
 
-  cy.navigateBackTo(JOB_NAME, JOB_NAME);
+  cy.go('back');
+  cy.getMidColumn()
+    .find('ui5-panel')
+    .find('ui5-table-row')
+    .find('ui5-table-cell')
+    .contains('span', JOB_NAME)
+    .click();
 }
 
 context('Test Jobs', () => {
@@ -28,7 +34,7 @@ context('Test Jobs', () => {
   it('Create Job', () => {
     cy.navigateTo('Workloads', /^Jobs/);
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     // job name
     cy.get('[aria-label="Job name"]:visible')
@@ -38,11 +44,13 @@ context('Test Jobs', () => {
       .type(JOB_NAME, { force: true });
 
     // job container name
+    cy.get('[aria-label="expand Containers"]').click();
     cy.get('[aria-label="Container name"]:visible')
       .find('input')
       .type(JOB_NAME, { force: true });
 
     // job command
+    cy.get('[aria-label="expand Command"]').click();
     cy.get('[placeholder^="Command to run"]:visible')
       .find('input')
       .type('/bin/sh', { force: true });
@@ -63,8 +71,6 @@ context('Test Jobs', () => {
       .type('busybox', { force: true });
 
     // we can't edit Job's template, so we add 2 containers now
-    cy.contains('Advanced').click();
-
     cy.contains('Add Container').click();
     cy.contains('Container 2').click();
 
@@ -89,11 +95,7 @@ context('Test Jobs', () => {
       .find('input')
       .type('node:14-alpine', { force: true });
 
-    // create
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Create');
   });
 
   it('Inspect details and created Pods', () => {
@@ -148,29 +150,19 @@ context('Test Jobs', () => {
   it('Edit Job', () => {
     cy.wait(1000);
 
-    cy.get('ui5-button')
-      .contains('Edit')
-      .should('be.visible')
-      .click();
-
-    // workaround: open modal again, because it's disapears after clicking Edit
-    cy.get('ui5-button')
-      .contains('Edit')
-      .should('be.visible')
-      .click();
+    cy.inspectTab('Edit');
 
     // containers section should be readonly
     cy.contains('After a Job is created, the containers are read-only.');
 
-    cy.get('ui5-dialog')
+    cy.get('.edit-form')
       .get('ui5-button[icon="add"][disabled="true"]')
       .contains('Add Container')
       .should('be.visible');
 
     // edit labels
-    cy.get('ui5-dialog')
+    cy.get('.edit-form')
       .contains('Labels')
-      .filter(':visible', { log: false })
       .click();
 
     cy.get('[placeholder="Enter key"]:visible')
@@ -184,10 +176,9 @@ context('Test Jobs', () => {
       .first()
       .type('b', { force: true });
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Update')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Edit');
+
+    cy.inspectTab('View');
 
     cy.contains('a=b');
   });

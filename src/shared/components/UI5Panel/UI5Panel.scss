@@ -8,3 +8,19 @@
     padding: 0;
   }
 }
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.invisible {
+  visibility: hidden;
+}
+
+@container (max-width: 625px) {
+  .invisible,
+  .toolbar-spacer {
+    display: none;
+  }
+}
