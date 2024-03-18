@@ -92,10 +92,7 @@ context('Test Cluster Role Bindings', () => {
       .type('test-group')
       .blur({ force: true });
 
-    cy.get('.edit-form')
-      .find('.header-actions')
-      .contains('ui5-button:visible', 'Save')
-      .click();
+    cy.saveChanges('Edit');
   });
 
   it('Checking updates details', () => {
