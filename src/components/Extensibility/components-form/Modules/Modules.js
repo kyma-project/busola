@@ -207,14 +207,8 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
           />
 
           {link ? (
-            <ExternalLink url={link} style={spacing.sapUiMediumMarginTop}>
+            <ExternalLink url={link} iconStyle={spacing.sapUiMediumMarginTop}>
               {t('extensibility.widgets.modules.documentation')}
-              <Icon
-                name="inspect"
-                design="Information"
-                className="ui5-icon-s"
-                style={spacing.sapUiTinyMarginBegin}
-              />
             </ExternalLink>
           ) : null}
         </div>

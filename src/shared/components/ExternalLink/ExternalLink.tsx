@@ -10,8 +10,7 @@ type LinkProps = {
   className?: string;
   children?: ReactNode;
   design?: 'Default' | 'Subtle' | 'Emphasized';
-  dataTestId?: string;
-  style?: React.CSSProperties;
+  iconStyle?: React.CSSProperties;
 };
 
 export const ExternalLink = ({
@@ -19,26 +18,19 @@ export const ExternalLink = ({
   text,
   className = '',
   children,
-  design = 'Emphasized',
-  dataTestId,
-  style = spacing.sapUiTinyMarginBegin,
+  design = 'Default',
+  iconStyle,
 }: LinkProps) => {
   const { t } = useTranslation();
 
   return (
-    <Link
-      design={design}
-      className={className}
-      href={url}
-      target="_blank"
-      data-test-id={dataTestId}
-    >
+    <Link design={design} className={className} href={url} target="_blank">
       {text || children || url}
       <Icon
         design="Information"
         name="inspect"
         className="bsl-icon-s"
-        style={style}
+        style={{ ...spacing.sapUiTinyMarginBegin, ...(iconStyle || {}) }}
         aria-label={t('common.ariaLabel.new-tab-link')}
       />
     </Link>
