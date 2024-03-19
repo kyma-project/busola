@@ -3,6 +3,13 @@ horizontal-pod-autoscalers: Horizontal Pod Autoscalers
 subscriptions: Subscriptions
 apps:
   title: Apps
+ai-assistant:
+  name: Joule
+  introduction1: Hello there,
+  introduction2: How can I help you?
+  tabs:
+    chat: Chat
+    page-insights: Page Insights
 cluster-overview:
   headers:
     cpu: CPU

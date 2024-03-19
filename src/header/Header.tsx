@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useState } from 'react';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   Avatar,
   Menu,
@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useFeature } from 'hooks/useFeature';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
+import { showAIassistantState } from 'components/AIassistant/state/showAIassistantAtom';
 
 import { clustersState } from 'state/clustersAtom';
 import { clusterState } from 'state/clusterAtom';
@@ -47,6 +48,9 @@ export function Header() {
   const setPreferencesOpen = useSetRecoilState(isPreferencesOpenState);
   const cluster = useRecoilValue(clusterState);
   const clusters = useRecoilValue(clustersState);
+  const [assistantOpen, setOpenAssistant] = useRecoilState(
+    showAIassistantState,
+  );
 
   const setShowAdd = useSetRecoilState(showYamlUploadDialogState);
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
@@ -131,6 +135,13 @@ export function Header() {
         }
         onProfileClick={() => setIsMenuOpen(true)}
       >
+        <ShellBarItem
+          onClick={() => {
+            setOpenAssistant(!assistantOpen);
+          }}
+          icon="da"
+          text={t('ai-assistant.name')}
+        />
         {window.location.pathname !== '/clusters' &&
           !window.location.pathname.endsWith('/no-permissions') && (
             <ShellBarItem
