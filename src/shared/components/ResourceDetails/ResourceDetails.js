@@ -438,7 +438,7 @@ function Resource({
           />
         )}
       >
-        {createPortal(<YamlUploadDialog />, document.body)}
+        {/*createPortal(<YamlUploadDialog />, document.body)*/}
       </DynamicPageComponent>
     </ResourceDetailContext.Provider>
   );

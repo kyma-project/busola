@@ -1,10 +1,4 @@
 .circle-button {
-  border-radius: 50%;
+  border-radius: var(--sapButton_BorderCornerRadius);
   margin-right: 4px;
-
-  &::part(button) {
-    &::after {
-      border-radius: 50%;
-    }
-  }
 }

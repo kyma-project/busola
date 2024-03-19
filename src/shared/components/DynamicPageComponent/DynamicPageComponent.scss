@@ -19,6 +19,21 @@
   &::-webkit-scrollbar {
     display: none;
   }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+
+    &::after {
+      content: '';
+      display: inline-block;
+      width: 1px;
+      height: 90%;
+      margin-left: 5px;
+      background-color: var(--sapList_BorderColor);
+      border-radius: 5px;
+    }
+  }
 }
 
 .header-wrapper {

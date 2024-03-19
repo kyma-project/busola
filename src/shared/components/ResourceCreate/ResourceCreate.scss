@@ -1,22 +1,14 @@
 .create-form,
 .edit-form {
-  display: grid;
+  display: flex;
+  flex-flow: column;
   align-items: stretch;
 }
 
 .create-form {
-  grid-template-rows: 1fr 45px;
-  min-height: calc(100vh - 10.5rem);
-  .floating-footer {
-    position: sticky;
-    left: 0;
-    right: 0;
-    bottom: 0.5rem;
-    margin: 0 0.5rem;
-  }
+  height: calc(100vh - 14rem);
 }
 
 .edit-form {
-  grid-template-rows: 1fr;
-  min-height: calc(100vh - 17.5rem);
+  height: calc(100vh - 17.5rem);
 }
