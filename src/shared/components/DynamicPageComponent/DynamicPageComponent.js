@@ -78,7 +78,17 @@ export const DynamicPageComponent = ({
       }
       actions={
         <>
-          <div className="page-header__actions">{actions}</div>
+          {actions && (
+            <div className="page-header__actions">
+              {actions}
+              {(window.location.search.includes('layout') &&
+                isColumnLeyoutEnabled) ||
+              (!window.location.search.includes('layout') &&
+                layoutColumn?.showCreate?.resourceType) ? (
+                <span className="separator" />
+              ) : null}
+            </div>
+          )}
           {(window.location.search.includes('layout') &&
             isColumnLeyoutEnabled) ||
           (!window.location.search.includes('layout') &&
