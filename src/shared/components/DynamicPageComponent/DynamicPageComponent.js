@@ -247,7 +247,7 @@ export const DynamicPageComponent = ({
       alwaysShowContentHeader
       showHideHeaderButton={false}
       headerContentPinnable={false}
-      backgroundDesign="Transparent"
+      backgroundDesign="Solid"
       headerTitle={headerTitle}
       headerContent={headerContent}
       footer={footer}
