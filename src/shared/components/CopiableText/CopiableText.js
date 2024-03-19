@@ -15,13 +15,7 @@ CopiableText.propTypes = {
   iconOnly: PropTypes.bool,
 };
 
-export function CopiableText({
-  textToCopy,
-  buttonText,
-  children,
-  iconOnly,
-  ...buttonProps
-}) {
+export function CopiableText({ textToCopy, buttonText, children, iconOnly }) {
   const { t } = useTranslation();
   return (
     <div className="copiable-text">
@@ -33,7 +27,6 @@ export function CopiableText({
           design="Transparent"
           style={spacing.sapUiTinyMarginBegin}
           onClick={() => copyToCliboard(textToCopy)}
-          {...buttonProps}
         >
           {buttonText ? buttonText : null}
         </Button>

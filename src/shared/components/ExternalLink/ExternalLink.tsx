@@ -4,7 +4,7 @@ import { Icon, Link } from '@ui5/webcomponents-react';
 
 import { spacing } from '@ui5/webcomponents-react-base';
 
-type LinkProps = {
+export type LinkProps = {
   url: string;
   text?: string;
   className?: string;
@@ -16,7 +16,6 @@ type LinkProps = {
 export const ExternalLink = ({
   url,
   text,
-  className = '',
   children,
   design = 'Default',
   iconStyle,
@@ -24,7 +23,7 @@ export const ExternalLink = ({
   const { t } = useTranslation();
 
   return (
-    <Link design={design} className={className} href={url} target="_blank">
+    <Link design={design} href={url} target="_blank">
       {text || children || url}
       <Icon
         design="Information"

@@ -56,13 +56,7 @@ export const EmptyListComponent = ({
             {buttonText}
           </Button>
         )}
-        {url && (
-          <ExternalLink
-            className="emptyListComponent__link"
-            text="Learn More"
-            url={url}
-          />
-        )}
+        {url && <ExternalLink text="Learn More" url={url} />}
       </div>
       {children}
     </IllustratedMessage>
