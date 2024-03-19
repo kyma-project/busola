@@ -81,7 +81,7 @@ context('Test Pizzas', () => {
 
     cy.contains('DELIVERY');
     cy.contains('CASH');
-    cy.contains('a', 'extensibility docs');
+    cy.contains('ui5-link', 'extensibility docs');
     cy.checkItemOnGenericListLink('margherita-order');
 
     cy.clickGenericListLink('diavola-order');

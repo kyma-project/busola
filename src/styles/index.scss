@@ -22,20 +22,6 @@ body {
   cursor: pointer;
 }
 
-.bsl-link {
-  color: var(--sapLinkColor);
-  cursor: pointer;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-
-  &.no-border {
-    border: none;
-  }
-}
-
 .panel-grid {
   display: grid;
   grid-template-columns: 2fr 2fr;
