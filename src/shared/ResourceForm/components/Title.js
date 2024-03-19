@@ -13,7 +13,7 @@ export function Title({
   return (
     <div className="title">
       <FlexBox alignItems="Center">
-        {!disabled && canChangeState && (
+        {!disabled && canChangeState && iconGlyph && (
           <Icon
             style={spacing.sapUiSmallMarginEnd}
             aria-hidden

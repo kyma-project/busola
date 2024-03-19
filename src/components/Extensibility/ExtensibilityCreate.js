@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState, useContext } from 'react';
+import { useCallback, useMemo, useState, useContext } from 'react';
 import Immutable from 'immutable';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
@@ -101,7 +101,7 @@ export function ExtensibilityCreateCore({
     resource: api,
   });
 
-  const { advancedRules } = useMemo(() => {
+  const formRules = useMemo(() => {
     const fullSchemaRules = prepareRules(
       createResource?.form ?? [],
       editMode,
@@ -112,12 +112,7 @@ export function ExtensibilityCreateCore({
     readVars(resource);
     setTimeout(() => triggers.trigger('init', []));
 
-    return {
-      advancedRules: prepareSchemaRules(
-        fullSchemaRules,
-        item => item.advanced ?? true,
-      ),
-    };
+    return prepareSchemaRules(fullSchemaRules);
   }, [createResource]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleNameChange = useCallback(
@@ -178,10 +173,9 @@ export function ExtensibilityCreateCore({
       disableDefaultFields
     >
       <ResourceSchema
-        advanced
         key={api.version}
         schema={errorOpenApi ? {} : schema}
-        schemaRules={advancedRules}
+        schemaRules={formRules}
         resource={resource}
         store={store}
         setStore={setStore}

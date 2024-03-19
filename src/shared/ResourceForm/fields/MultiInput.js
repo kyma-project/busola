@@ -22,7 +22,6 @@ export function MultiInput({
   toExternal,
   inputs,
   className,
-  isAdvanced,
   defaultOpen,
   isEntryLocked = () => false,
   readOnly,
@@ -96,7 +95,7 @@ export function MultiInput({
       ref.current.focus();
     }
   };
-  const open = defaultOpen === undefined ? !isAdvanced : defaultOpen;
+  const open = defaultOpen ?? false;
 
   useEffect(() => {
     internalValue.forEach((entry, index) => {

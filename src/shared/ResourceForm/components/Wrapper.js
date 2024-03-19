@@ -6,7 +6,6 @@ export function ResourceFormWrapper({
   resource,
   setResource,
   children,
-  isAdvanced,
   setCustomValid,
   validationRef,
   ...props
@@ -83,23 +82,17 @@ export function ResourceFormWrapper({
           <ResourceFormWrapper
             resource={resource}
             setResource={setResource}
-            isAdvanced={isAdvanced}
             validationRef={validationRef}
           >
             {child.props.children}
           </ResourceFormWrapper>
         );
-      } else if (child.props.simple && isAdvanced) {
-        return null;
-      } else if (child.props.advanced && !isAdvanced) {
-        return null;
       } else if (!child.props.propertyPath) {
         if (typeof child.type === 'function') {
           return React.cloneElement(child, {
             resource: child.props.resource || resource,
             setResource: child.props.setResource || setResource,
             validationRef,
-            isAdvanced,
             inputRef: inputRefs[index],
             ...props,
           });
@@ -123,7 +116,6 @@ export function ResourceFormWrapper({
           : valueSetter;
 
         return React.cloneElement(child, {
-          isAdvanced,
           value,
           setValue,
           inputRef: inputRefs[index],

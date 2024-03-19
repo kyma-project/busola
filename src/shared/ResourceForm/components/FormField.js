@@ -9,8 +9,6 @@ import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 import { useState } from 'react';
 
 export function FormField({
-  simple,
-  advanced,
   propertyPath,
   label,
   input,
@@ -18,7 +16,6 @@ export function FormField({
   required,
   disabled,
   tooltipContent,
-  isAdvanced,
   isListItem,
   defaultValue,
   messageStrip,

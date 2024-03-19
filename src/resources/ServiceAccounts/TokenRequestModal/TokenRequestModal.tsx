@@ -122,7 +122,6 @@ export function TokenRequestModal({
       >
         {/*@ts-ignore*/}
         <ResourceForm.FormField
-          simple
           required
           propertyPath="$.spec.expirationSeconds"
           inputInfo={t('service-accounts.token-request.input-info')}

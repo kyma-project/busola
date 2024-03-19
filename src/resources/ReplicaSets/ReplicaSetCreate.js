@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import * as _ from 'lodash';
@@ -70,7 +70,6 @@ export default function ReplicaSetCreate({
       />
 
       <ResourceForm.FormField
-        advanced
         propertyPath="$.spec.minReadySeconds"
         label={t('replica-sets.create-modal.labels.min-ready-seconds')}
         input={Inputs.Number}
@@ -83,14 +82,9 @@ export default function ReplicaSetCreate({
         min={0}
       />
 
-      <SimpleContainersView
-        simple
-        resource={replicaset}
-        setResource={setReplicaSet}
-      />
+      <SimpleContainersView resource={replicaset} setResource={setReplicaSet} />
 
       <AdvancedContainersView
-        advanced
         resource={replicaset}
         setResource={setReplicaSet}
         onChange={onChange}

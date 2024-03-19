@@ -1,4 +1,3 @@
-import React from 'react';
 import { render } from '@testing-library/react';
 import { HelmReleaseData } from '../HelmReleaseData';
 
@@ -24,7 +23,7 @@ describe.skip('HelmReleaseData', () => {
 
     const release = null;
     const { queryByText } = render(
-      <HelmReleaseData encodedRelease={release} simpleHeader={false} />,
+      <HelmReleaseData encodedRelease={release} />,
     );
 
     expect(queryByText(PANEL_TITLE)).not.toBeInTheDocument();
@@ -43,7 +42,7 @@ describe.skip('HelmReleaseData', () => {
 
     const release = {};
     const { queryByText } = render(
-      <HelmReleaseData encodedRelease={release} simpleHeader={false} />,
+      <HelmReleaseData encodedRelease={release} />,
     );
 
     expect(queryByText(PANEL_TITLE)).toBeInTheDocument();
