@@ -41,7 +41,6 @@ If you target elements of an array rather than the array itself, you can use the
 
 ```yaml
 - path: spec.priority
-  simple: true
 - path: spec.items[]
   children:
     - path: name
@@ -178,8 +177,7 @@ Alert widgets display values using predefined types.
 #### Example
 
 ```yaml
-- simple: true
-  widget: Alert
+- widget: Alert
   severity: warning
   alert: "'alert.tls.https'"
   visibility: "$value.port.protocol = 'HTTPS'"
@@ -227,7 +225,6 @@ Text widgets render a field as a text field. They are used by default for all st
 
 ```yaml
 - path: protocol
-  simple: true
   enum:
     - HTTP
     - HTTPS
@@ -361,7 +358,6 @@ MultiCheckbox widgets render checkboxes that are saved into one path as an array
 ```yaml
 - widget: MultiCheckbox
   path: spec.methods
-  simple: true
   options:
     - key: GET
       name: Get

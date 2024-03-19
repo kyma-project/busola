@@ -11,16 +11,13 @@ export function SimpleContainersView({ resource, setResource }) {
   const { t } = useTranslation();
 
   return (
-    <ResourceForm.Wrapper simple resource={resource} setResource={setResource}>
+    <ResourceForm.Wrapper resource={resource} setResource={setResource}>
       <ResourceForm.FormField
         required
-        simple
         propertyPath="$.spec.template.spec.containers[0].image"
-        label={t('deployments.create-modal.simple.docker-image')}
+        label={t('deployments.create-modal.docker-image')}
         input={Inputs.Text}
-        placeholder={t(
-          'deployments.create-modal.simple.docker-image-placeholder',
-        )}
+        placeholder={t('deployments.create-modal.docker-image-placeholder')}
       />
     </ResourceForm.Wrapper>
   );
@@ -37,15 +34,15 @@ export function AdvancedContainersView({
   return (
     <ResourceForm.Wrapper resource={resource} setResource={setResource}>
       <ResourceForm.CollapsibleSection
-        title={t('deployments.create-modal.simple.image-pull-secret')}
+        title={t('deployments.create-modal.image-pull-secret')}
         resource={resource}
         setResource={setResource}
       >
         <ResourceForm.FormField
           tooltipContent={t(
-            'deployments.create-modal.simple.image-pull-secret-tooltip',
+            'deployments.create-modal.image-pull-secret-tooltip',
           )}
-          label={t('deployments.create-modal.simple.image-pull-secret')}
+          label={t('deployments.create-modal.image-pull-secret')}
           input={() => (
             <K8sResourceSelectWithUseGetList
               url={`/api/v1/namespaces/${namespace}/secrets`}

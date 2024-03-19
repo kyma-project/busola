@@ -82,11 +82,7 @@ export default function ReplicaSetCreate({
         min={0}
       />
 
-      <SimpleContainersView
-        simple
-        resource={replicaset}
-        setResource={setReplicaSet}
-      />
+      <SimpleContainersView resource={replicaset} setResource={setReplicaSet} />
 
       <AdvancedContainersView
         resource={replicaset}
