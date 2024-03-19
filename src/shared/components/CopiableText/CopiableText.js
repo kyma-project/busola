@@ -13,6 +13,7 @@ CopiableText.propTypes = {
   buttonText: PropTypes.string,
   children: PropTypes.node,
   iconOnly: PropTypes.bool,
+  disabled: PropTypes.bool,
 };
 
 export function CopiableText({ textToCopy, buttonText, children, iconOnly }) {

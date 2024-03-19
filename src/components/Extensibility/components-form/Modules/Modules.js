@@ -6,7 +6,7 @@ import { useGetTranslation } from 'components/Extensibility/helpers';
 import { useTranslation } from 'react-i18next';
 import { fromJS } from 'immutable';
 
-import { CheckBox, Icon, MessageStrip } from '@ui5/webcomponents-react';
+import { CheckBox, MessageStrip } from '@ui5/webcomponents-react';
 import { ResourceForm } from 'shared/ResourceForm';
 import { Dropdown } from 'shared/ResourceForm/inputs';
 
