@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -8,6 +7,8 @@ import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow'
 import { ContainerStatus } from './ContainerStatus';
 import { getPorts } from 'shared/components/GetContainersPorts';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { useSetRecoilState } from 'recoil';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 ContainersData.propTypes = {
   containers: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -16,6 +17,7 @@ ContainersData.propTypes = {
 export default function ContainersData({ type, containers, statuses }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const setLayout = useSetRecoilState(columnLayoutState);
 
   const ContainerComponent = ({ container, status }) => (
     <UI5Panel
@@ -25,7 +27,17 @@ export default function ContainersData({ type, containers, statuses }) {
         <Button
           aria-label={'view-logs-for-' + container.name}
           onClick={() => {
-            navigate(`containers/${container.name}`, { replace: true });
+            setLayout({
+              midColumn: null,
+              endColumn: null,
+              layout: 'OneColumn',
+            });
+            navigate(
+              `${window.location.pathname.replace(
+                window.location.search,
+                '',
+              )}/containers/${container.name}`,
+            );
           }}
         >
           {t('pods.buttons.view-logs')}
