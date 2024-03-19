@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useFeature } from 'hooks/useFeature';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
-import { showAIassistantState } from 'state/showAIassistantAtom';
+import { showAIassistantState } from 'components/AIassistant/state/showAIassistantAtom';
 
 import { clustersState } from 'state/clustersAtom';
 import { clusterState } from 'state/clusterAtom';

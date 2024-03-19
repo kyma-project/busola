@@ -1,0 +1,40 @@
+.intro-box {
+  height: 240px;
+  width: 100%;
+  background: linear-gradient(to bottom, rgb(85, 68, 245), rgb(119, 71, 243));
+
+  .illustration {
+    height: 175px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .joule-icon {
+      color: white;
+      width: 75px;
+      height: 75px;
+    }
+  }
+
+  .introduction {
+    height: 65px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    gap: 0.5rem;
+
+    .text {
+      color: white;
+      font-weight: lighter;
+    }
+
+    #text1 {
+      font-size: 16px;
+    }
+
+    #text2 {
+      font-size: 28px;
+    }
+  }
+}

@@ -35,8 +35,8 @@ import { useAfterInitHook } from 'state/useAfterInitHook';
 import useSidebarCondensed from 'sidebar/useSidebarCondensed';
 import { useGetValidationEnabledSchemas } from 'state/validationEnabledSchemasAtom';
 import { SplitterElement, SplitterLayout } from '@ui5/webcomponents-react';
-import { showAIassistantState } from 'state/showAIassistantAtom';
-import AIassistant from 'components/AIassistant/AIassistant';
+import { showAIassistantState } from 'components/AIassistant/state/showAIassistantAtom';
+import AIassistant from 'components/AIassistant/components/AIassistant';
 
 export default function App() {
   const { t, i18n } = useTranslation();
@@ -114,7 +114,7 @@ export default function App() {
         </div>
       </SplitterElement>
       {assistantOpen ? (
-        <SplitterElement resizable={false} size="20%" minSize={300}>
+        <SplitterElement resizable={false} size="20%" minSize={325}>
           <div id="assistant_wrapper">
             <AIassistant />
           </div>
