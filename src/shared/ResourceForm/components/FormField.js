@@ -7,6 +7,7 @@ import { useCreateResourceDescription } from 'components/Extensibility/helpers';
 import './FormField.scss';
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 import { useState } from 'react';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 export function FormField({
   propertyPath,
@@ -44,6 +45,7 @@ export function FormField({
               showTitleDescription={openPopover}
               description={tooltipContent}
               context={label}
+              style={spacing.sapUiTinyMarginBegin}
             />
           )}
         </div>

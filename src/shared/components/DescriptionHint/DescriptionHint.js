@@ -15,7 +15,8 @@ export function HintButton({
         icon="hint"
         design="Transparent"
         style={style}
-        onClick={() => {
+        onClick={e => {
+          e.stopPropagation();
           setShowTitleDescription(true);
         }}
       />
@@ -23,7 +24,10 @@ export function HintButton({
         <Popover
           opener={`descriptionOpener-${context}`}
           open={showTitleDescription}
-          onAfterClose={() => setShowTitleDescription(false)}
+          onAfterClose={e => {
+            e.stopPropagation();
+            setShowTitleDescription(false);
+          }}
           placementType="Right"
         >
           <Text className="description">{description}</Text>

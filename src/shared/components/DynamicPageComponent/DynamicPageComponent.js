@@ -56,25 +56,23 @@ export const DynamicPageComponent = ({
     <DynamicPageTitle
       style={title === 'Clusters Overview' ? { display: 'none' } : null}
       header={
-        <Title className="ui5-title">
-          <FlexBox alignItems="Center">
-            {title}
-            {protectedResource && (
-              <span style={spacing.sapUiTinyMarginBegin}>
-                {protectedResourceWarning}
-              </span>
-            )}
-            {description && (
-              <HintButton
-                style={spacing.sapUiTinyMargin}
-                setShowTitleDescription={setShowTitleDescription}
-                showTitleDescription={showTitleDescription}
-                description={description}
-                context="dynamic"
-              />
-            )}
-          </FlexBox>
-        </Title>
+        <FlexBox alignItems="Center">
+          <Title className="ui5-title">{title}</Title>
+          {protectedResource && (
+            <span style={spacing.sapUiTinyMarginBegin}>
+              {protectedResourceWarning}
+            </span>
+          )}
+          {description && (
+            <HintButton
+              style={spacing.sapUiTinyMargin}
+              setShowTitleDescription={setShowTitleDescription}
+              showTitleDescription={showTitleDescription}
+              description={description}
+              context="dynamic"
+            />
+          )}
+        </FlexBox>
       }
       actions={
         <>

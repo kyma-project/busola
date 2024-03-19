@@ -1,6 +1,7 @@
 import { FlexBox, Icon, Label } from '@ui5/webcomponents-react';
 import { spacing } from '@ui5/webcomponents-react-base';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
+import { useState } from 'react';
+import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 
 export function Title({
   tooltipContent,
@@ -10,6 +11,8 @@ export function Title({
   iconGlyph,
   required,
 }) {
+  const [openPopover, setOpenPopover] = useState(false);
+
   return (
     <div className="title">
       <FlexBox alignItems="Center">
@@ -30,13 +33,13 @@ export function Title({
           {title}
         </Label>
         {tooltipContent && (
-          <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
-            <Icon
-              name="question-mark"
-              design="Information"
-              style={spacing.sapUiTinyMarginBegin}
-            />
-          </Tooltip>
+          <HintButton
+            setShowTitleDescription={setOpenPopover}
+            showTitleDescription={openPopover}
+            description={tooltipContent}
+            context={title}
+            style={spacing.sapUiTinyMarginBegin}
+          />
         )}
       </FlexBox>
     </div>
