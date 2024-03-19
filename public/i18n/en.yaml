@@ -3,6 +3,8 @@ horizontal-pod-autoscalers: Horizontal Pod Autoscalers
 subscriptions: Subscriptions
 apps:
   title: Apps
+ai-assistant:
+  name: Joule
 cluster-overview:
   headers:
     cpu: CPU
