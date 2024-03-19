@@ -25,7 +25,6 @@ export function ExternalResourceRef({
   tooltipContent,
   actions,
   className,
-  isAdvanced,
   setValue,
   required = false,
   defaultOpen = undefined,
@@ -193,7 +192,6 @@ export function ExternalResourceRef({
       actions={actions}
       className={classnames('external-resource-ref', className)}
       defaultOpen={defaultOpen}
-      isAdvanced={isAdvanced}
       required={required}
       nestingLevel={nestingLevel}
     >

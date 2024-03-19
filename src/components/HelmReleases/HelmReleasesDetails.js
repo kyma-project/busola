@@ -64,10 +64,7 @@ function HelmReleasesDetails({ releaseName, namespace }) {
         )}
         content={
           <>
-            <HelmReleaseData
-              encodedRelease={releaseSecret.data.release}
-              simpleHeader
-            />
+            <HelmReleaseData encodedRelease={releaseSecret.data.release} />
             <OtherReleaseVersions
               releaseSecret={releaseSecret}
               secrets={data}

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button, MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
@@ -14,9 +13,6 @@ export function ItemArray({
   allowEmpty = false,
   itemRenderer,
   newResourceTemplateFn,
-  simple,
-  advanced,
-  isAdvanced,
   readOnly,
   nestingLevel = 0,
   ...props
@@ -39,7 +35,6 @@ export function ItemArray({
       values,
       setValues,
       index,
-      isAdvanced,
       nestingLevel: nestingLevel + 1,
     });
 
@@ -90,7 +85,6 @@ export function ItemArray({
           {t('common.buttons.add')} {nameSingular}
         </Button>
       )}
-      isAdvanced={isAdvanced}
       {...props}
     >
       {content}

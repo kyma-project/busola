@@ -89,12 +89,9 @@ export function ResourceForm({
       switch (initialMode) {
         case 'MODE_YAML':
           return ModeSelector.MODE_YAML;
-        case 'MODE_SIMPLE':
-          return ModeSelector.MODE_SIMPLE;
-        case 'MODE_ADVANCED':
-          return ModeSelector.MODE_ADVANCED;
+        case 'MODE_FORM':
         default:
-          return ModeSelector.MODE_SIMPLE;
+          return ModeSelector.MODE_FORM;
       }
     }
 
@@ -176,7 +173,7 @@ export function ResourceForm({
       {mode === ModeSelector.MODE_FORM && (
         <FormItem>
           <div
-            className="advanced-form"
+            className="full-width"
             style={spacing.sapUiTinyMarginBottom}
             onChange={onChange}
             hidden={mode !== ModeSelector.MODE_FORM}
@@ -184,7 +181,6 @@ export function ResourceForm({
             <ResourceFormWrapper
               resource={resource}
               setResource={setResource}
-              isAdvanced={true}
               validationRef={validationRef}
             >
               {presetsSelector}
@@ -199,7 +195,6 @@ export function ResourceForm({
                     {...nameProps}
                   />
                   <KeyValueField
-                    advanced
                     propertyPath="$.metadata.labels"
                     title={t('common.headers.labels')}
                     style={spacing.sapUiSmallMarginTop}
@@ -207,7 +202,6 @@ export function ResourceForm({
                     {...labelsProps}
                   />
                   <KeyValueField
-                    advanced
                     propertyPath="$.metadata.annotations"
                     title={t('common.headers.annotations')}
                     inputInfo={t('common.tooltips.key-value')}

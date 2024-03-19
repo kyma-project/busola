@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm';
@@ -111,7 +110,6 @@ export function SingleSubjectForm({
 
       {subject.kind === 'ServiceAccount' && (
         <ServiceAccountRef
-          advanced
           title={t('service-accounts.service-account')}
           value={{
             name: subject.name || '',

@@ -133,7 +133,7 @@ export function createConfigmap(crd, data) {
 
   data.form = (data.form ?? [])
     .filter(e => e.isSelected)
-    .map(e => ({ simple: true, path: e.path, required: e.required }));
+    .map(e => ({ path: e.path, required: e.required }));
 
   return {
     kind: 'ConfigMap',

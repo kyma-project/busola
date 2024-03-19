@@ -101,7 +101,7 @@ export function GenericRoleBindingCreate({
         setBinding={setBinding}
       />
       {jp.value(binding, '$.subjects.length') ? (
-        <SingleSubjectInput simple propertyPath="$.subjects" />
+        <SingleSubjectInput propertyPath="$.subjects" />
       ) : (
         <MessageStrip
           design="Warning"
@@ -114,7 +114,6 @@ export function GenericRoleBindingCreate({
         </MessageStrip>
       )}
       <ItemArray
-        advanced
         defaultOpen
         propertyPath="$.subjects"
         listTitle={t('role-bindings.create-modal.subjects')}

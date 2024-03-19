@@ -9,8 +9,6 @@ import { useCreateResourceDescription } from 'components/Extensibility/helpers';
 import './FormField.scss';
 
 export function FormField({
-  simple,
-  advanced,
   propertyPath,
   label,
   input,
@@ -18,7 +16,6 @@ export function FormField({
   required,
   disabled,
   tooltipContent,
-  isAdvanced,
   isListItem,
   defaultValue,
   messageStrip,

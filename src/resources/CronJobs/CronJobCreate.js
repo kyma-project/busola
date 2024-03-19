@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep } from 'lodash';
@@ -61,18 +61,16 @@ export default function CronJobCreate({
       presets={!initialCronJob && createCronJobPresets(namespace)}
       createUrl={resourceUrl}
     >
-      <CronJobSpecSection advanced propertyPath="$.spec" />
+      <CronJobSpecSection propertyPath="$.spec" />
 
       <ScheduleSection propertyPath="$.spec.schedule" />
 
       <ContainerSection
-        simple
         defaultOpen
         propertyPath="$.spec.jobTemplate.spec.template.spec.containers"
       />
 
       <ContainersSection
-        advanced
         defaultOpen
         propertyPath="$.spec.jobTemplate.spec.template.spec.containers"
       />

@@ -1,4 +1,3 @@
-import React from 'react';
 import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 import { Button, MessageStrip } from '@ui5/webcomponents-react';
@@ -14,19 +13,17 @@ export const ContainersSection = ({ readOnly, ...props }) => {
 
   return (
     <ItemArray
-      advanced
       listTitle={t('jobs.create-modal.containers')}
       nameSingular={t('jobs.create-modal.container')}
       entryTitle={container => container?.name}
       atLeastOneRequiredMessage={t(
         'jobs.create-modal.at-least-one-container-required',
       )}
-      itemRenderer={({ item, values, setValues, isAdvanced }) => (
+      itemRenderer={({ item, values, setValues }) => (
         <SingleContainerForm
           container={item}
           containers={values}
           setContainers={setValues}
-          isAdvanced={isAdvanced}
           readOnly={readOnly}
         />
       )}
@@ -42,7 +39,7 @@ export const ContainerSection = ({ readOnly, ...props }) => {
   const { value = [], setValue } = props;
 
   return value?.length ? (
-    <SingleContainerInput simple readOnly={readOnly} {...props} />
+    <SingleContainerInput readOnly={readOnly} {...props} />
   ) : (
     <MessageStrip
       design="Warning"
@@ -60,7 +57,7 @@ export const ContainerSection = ({ readOnly, ...props }) => {
         }}
         design="Transparent"
       >
-        {t('deployment.create-modal.advanced.add-container')}
+        {t('deployment.create-modal.add-container')}
       </Button>
     </MessageStrip>
   );

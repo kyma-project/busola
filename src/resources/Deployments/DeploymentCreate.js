@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import * as _ from 'lodash';
@@ -100,14 +100,9 @@ export default function DeploymentCreate({
         />
       ) : null}
 
-      <SimpleContainersView
-        simple
-        resource={deployment}
-        setResource={setDeployment}
-      />
+      <SimpleContainersView resource={deployment} setResource={setDeployment} />
 
       <AdvancedContainersView
-        advanced
         resource={deployment}
         setResource={setDeployment}
         onChange={onChange}

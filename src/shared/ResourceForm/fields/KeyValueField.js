@@ -14,7 +14,6 @@ export function KeyValueField({
   actions = [],
   encodable = false,
   defaultOpen,
-  isAdvanced,
   input = {},
   keyProps = {
     pattern: '([A-Za-z0-9][-A-Za-z0-9_./]*)?[A-Za-z0-9]',
@@ -73,7 +72,6 @@ export function KeyValueField({
   return (
     <MultiInput
       defaultOpen={defaultOpen}
-      isAdvanced={isAdvanced}
       toInternal={value =>
         Object.entries(value || {}).map(([key, val]) => ({ key, val }))
       }

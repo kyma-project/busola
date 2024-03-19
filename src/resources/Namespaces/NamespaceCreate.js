@@ -205,7 +205,6 @@ export default function NamespaceCreate({
 
       {!initialNamespace ? (
         <ResourceForm.CollapsibleSection
-          advanced
           title={t('namespaces.create-modal.apply-memory-quotas')}
           actions={() => (
             <div className="additional-resource">
@@ -226,7 +225,7 @@ export default function NamespaceCreate({
             </div>
           )}
         >
-          <FlexBox className="container-limits" advanced>
+          <FlexBox className="container-limits">
             <MemoryInput
               label={t('namespaces.create-modal.memory-limits')}
               container={memory}
@@ -248,7 +247,6 @@ export default function NamespaceCreate({
       ) : null}
       {!initialNamespace ? (
         <ResourceForm.CollapsibleSection
-          advanced
           title={t('namespaces.create-modal.apply-limits')}
           actions={() => (
             <div className="additional-resource">
@@ -269,7 +267,7 @@ export default function NamespaceCreate({
             </div>
           )}
         >
-          <FlexBox className="container-limits" advanced>
+          <FlexBox className="container-limits">
             <MemoryInput
               label={t('limit-ranges.headers.max')}
               container={limits}

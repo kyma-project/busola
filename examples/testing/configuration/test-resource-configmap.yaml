@@ -26,90 +26,73 @@ data:
   form: |-
     - var: enumVar
       name: Simple / Advanced
-      simple: true
       type: string
       enum:
         - simple
         - advanced
     - path: spec.name
       name: Simple name
-      simple: true
       visibility: $enumVar = 'simple'
     - path: spec.advancedName
       name: Advanced
-      simple: true
       widget: FormGroup
       visibility: $enumVar = 'advanced'
       children:
         - path: name
-          simple: true
           name: Name
         - path: type
-          simple: true
           name: Type
 
     - var: varWithDefaultValue
       name: varWithDefaultValue
       type: string
-      simple: true
       widget: Text
       defaultValue: 'default'
 
     - var: varWithDynamicValue
       name: varWithDynamicValue
-      simple: true
       widget: Text
       dynamicValue: '$root.metadata.name = "resource-name" ? "dynamic name" : "unnamed"'
 
     - path: spec.prefix
       name: Prefix
-      simple: true
       trigger: [combined]
 
     - var: anotherName
       name: anotherName
-      simple: true
       widget: Text
       trigger: [combined]
 
     - path: spec.suffix
       name: Suffix
-      simple: true
       trigger: [combined]
 
     - path: spec.combined
       name: Combined
-      simple: true
       subscribe:        
         combined: "spec.prefix & $anotherName & spec.suffix"
 
-    - simple: true
-      path: spec.trigger
+    - path: spec.trigger
       name: Trigger
       trigger: [testTrigger]
 
-    - simple: true
-      path: spec.existingResources
+    - path: spec.existingResources
       name: Existing resources
       subscribe:        
         testTrigger: "$string($otherTestResources().items.metadata.name)"
 
     - widget: GenericList
       path: spec.arrayOfObjects
-      simple: true
       children:
         - path: '[].withValue'
           name: withValue
-          simple: true
         - path: '[].withoutValue'
           name: withoutValue
-          simple: true
       template:
         withValue: 'template value'
       
     - widget: MultiCheckbox
       path: spec.arrayOfStrings
-      simple: true
       options:
         - key: value_1
           name: Value 1
