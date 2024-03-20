@@ -123,20 +123,3 @@ export function SingleSubjectForm({
     </div>
   );
 }
-
-export function SingleSubjectInput({ value: subjects, setValue: setSubjects }) {
-  const { t } = useTranslation();
-  return (
-    <ResourceForm.CollapsibleSection
-      title={t('role-bindings.create-modal.subject')}
-      defaultOpen
-    >
-      <SingleSubjectForm
-        subject={subjects?.[0]}
-        subjects={subjects}
-        setSubjects={setSubjects}
-        index={0}
-      />
-    </ResourceForm.CollapsibleSection>
-  );
-}
