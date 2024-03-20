@@ -15,52 +15,52 @@ context('Test Pizzas', () => {
 
     cy.loginAndSelectCluster();
 
-    // cy.createNamespace('pizzas');
+    cy.createNamespace('pizzas');
   });
 
-  // it('Creates the EXT pizza config', () => {
-  //   cy.getLeftNav()
-  //     .contains('Cluster Details')
-  //     .click();
+  it('Creates the EXT pizza config', () => {
+    cy.getLeftNav()
+      .contains('Cluster Details')
+      .click();
 
-  //   cy.get('ui5-button.ui5-shellbar-button[icon="add"]').click();
+    cy.get('ui5-button.ui5-shellbar-button[icon="add"]').click();
 
-  //   cy.loadFiles(
-  //     'examples/pizzas/configuration/pizzas-configmap.yaml',
-  //     'examples/pizzas/configuration/pizza-orders-configmap.yaml',
-  //     'examples/pizzas/configuration/pizzas-crd.yaml',
-  //     'examples/pizzas/configuration/pizza-orders-crd.yaml',
-  //   ).then(resources => {
-  //     const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
-  //     cy.pasteToMonaco(input);
-  //   });
+    cy.loadFiles(
+      'examples/pizzas/configuration/pizzas-configmap.yaml',
+      'examples/pizzas/configuration/pizza-orders-configmap.yaml',
+      'examples/pizzas/configuration/pizzas-crd.yaml',
+      'examples/pizzas/configuration/pizza-orders-crd.yaml',
+    ).then(resources => {
+      const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+      cy.pasteToMonaco(input);
+    });
 
-  //   cy.get('ui5-dialog')
-  //     .contains('ui5-button', 'Upload')
-  //     .should('be.visible')
-  //     .click();
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Upload')
+      .should('be.visible')
+      .click();
 
-  //   cy.get('ui5-dialog')
-  //     .find('.status-message-success')
-  //     .should('have.length', 4);
+    cy.get('ui5-dialog')
+      .find('.status-message-success')
+      .should('have.length', 4);
 
-  //   cy.loadFiles(
-  //     'examples/pizzas/samples/pizzas-samples.yaml',
-  //     'examples/pizzas/samples/pizza-orders-samples.yaml',
-  //   ).then(resources => {
-  //     const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
-  //     cy.pasteToMonaco(input);
-  //   });
+    cy.loadFiles(
+      'examples/pizzas/samples/pizzas-samples.yaml',
+      'examples/pizzas/samples/pizza-orders-samples.yaml',
+    ).then(resources => {
+      const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+      cy.pasteToMonaco(input);
+    });
 
-  //   cy.get('ui5-dialog')
-  //     .contains('ui5-button', 'Upload')
-  //     .should('be.visible')
-  //     .click();
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Upload')
+      .should('be.visible')
+      .click();
 
-  //   cy.get('ui5-dialog')
-  //     .find('.status-message-success')
-  //     .should('have.length', 6);
-  // });
+    cy.get('ui5-dialog')
+      .find('.status-message-success')
+      .should('have.length', 6);
+  });
 
   it('Displays the Pizza Orders list/detail views from the samples', () => {
     cy.loginAndSelectCluster();
