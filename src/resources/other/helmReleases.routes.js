@@ -55,7 +55,10 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
   }
 
   let midColumnComponent = null;
-  if (layoutState?.midColumn?.resourceName) {
+  if (
+    (layoutState?.midColumn?.resourceName || isColumnLeyoutEnabled) &&
+    !(layoutState?.layout === 'OneColumn' && defaultColumn === 'details')
+  ) {
     midColumnComponent = (
       <HelmReleaseDetails
         releaseName={layoutState?.midColumn?.resourceName || releaseName}

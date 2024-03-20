@@ -1,12 +1,13 @@
 import classnames from 'classnames';
-import { FlexBox, Icon } from '@ui5/webcomponents-react';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
+import { FlexBox } from '@ui5/webcomponents-react';
 import { Label } from '../../../shared/ResourceForm/components/Label';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 import { useCreateResourceDescription } from 'components/Extensibility/helpers';
 
 import './FormField.scss';
+import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
+import { useState } from 'react';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 export function FormField({
   propertyPath,
@@ -26,6 +27,7 @@ export function FormField({
 }) {
   const { validate, ...inputProps } = props;
   const inputInfoLink = useCreateResourceDescription(inputInfo);
+  const [openPopover, setOpenPopover] = useState(false);
 
   return (
     <FlexBox
@@ -38,15 +40,13 @@ export function FormField({
         {!isListItem && <Label required={required && !disabled}>{label}</Label>}
         <div className="tooltip-column">
           {tooltipContent && (
-            <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
-              <Icon
-                aria-label=""
-                className="bsl-icon-m"
-                name="message-information"
-                design="Information"
-                style={spacing.sapUiTinyMarginBegin}
-              />
-            </Tooltip>
+            <HintButton
+              setShowTitleDescription={setOpenPopover}
+              showTitleDescription={openPopover}
+              description={tooltipContent}
+              context={label}
+              style={spacing.sapUiTinyMarginBegin}
+            />
           )}
         </div>
       </FlexBox>

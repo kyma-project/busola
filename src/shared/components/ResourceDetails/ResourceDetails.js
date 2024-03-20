@@ -223,6 +223,7 @@ function Resource({
           {t('common.buttons.delete')}
         </Button>,
       )}
+      {createPortal(<YamlUploadDialog />, document.body)}
     </>
   );
 
@@ -437,9 +438,7 @@ function Resource({
             )}
           />
         )}
-      >
-        {createPortal(<YamlUploadDialog />, document.body)}
-      </DynamicPageComponent>
+      ></DynamicPageComponent>
     </ResourceDetailContext.Provider>
   );
 }
