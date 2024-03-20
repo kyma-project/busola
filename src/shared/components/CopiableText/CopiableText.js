@@ -13,6 +13,7 @@ CopiableText.propTypes = {
   buttonText: PropTypes.string,
   children: PropTypes.node,
   iconOnly: PropTypes.bool,
+  disabled: PropTypes.bool,
 };
 
 export function CopiableText({
@@ -20,7 +21,7 @@ export function CopiableText({
   buttonText,
   children,
   iconOnly,
-  ...buttonProps
+  disabled,
 }) {
   const { t } = useTranslation();
   return (
@@ -32,8 +33,8 @@ export function CopiableText({
           iconEnd
           design="Transparent"
           style={spacing.sapUiTinyMarginBegin}
+          disabled={disabled}
           onClick={() => copyToCliboard(textToCopy)}
-          {...buttonProps}
         >
           {buttonText ? buttonText : null}
         </Button>
