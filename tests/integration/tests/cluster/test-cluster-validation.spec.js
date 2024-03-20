@@ -97,6 +97,8 @@ context('Test Cluster Validation Scan', () => {
       .contains('Scan')
       .click();
 
+    cy.get('@clusterValidationPanel').scrollIntoView();
+
     // wait for scan to finish
     cy.contains('Scan Progress').should('be.visible');
 
