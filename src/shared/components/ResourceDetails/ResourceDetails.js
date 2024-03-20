@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
-import { Button, Title } from '@ui5/webcomponents-react';
+import { Button, FlexBox, Title } from '@ui5/webcomponents-react';
 import { spacing } from '@ui5/webcomponents-react-base';
 
 import { createPatch } from 'rfc6902';
@@ -40,9 +40,10 @@ import { ResourceStatusCard } from '../ResourceStatusCard/ResourceStatusCard';
 import { EMPTY_TEXT_PLACEHOLDER } from '../../constants';
 import { ReadableElapsedTimeFromNow } from '../ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
 import { HintButton } from '../DescriptionHint/DescriptionHint';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useFeature } from 'hooks/useFeature';
 import { columnLayoutState } from 'state/columnLayoutAtom';
+import { showAIassistantState } from 'components/AIassistant/state/showAIassistantAtom';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
@@ -198,6 +199,7 @@ function Resource({
   );
   const [toggleFormFn, getToggleFormFn] = useState(() => {});
   const [showTitleDescription, setShowTitleDescription] = useState(false);
+  const setOpenAssistant = useSetRecoilState(showAIassistantState);
 
   const pluralizedResourceKind = pluralize(prettifiedResourceKind);
   useWindowTitle(windowTitle || pluralizedResourceKind);
@@ -415,7 +417,6 @@ function Resource({
 
   const resourceDetailsCard = (
     <ResourceDetailsCard
-      title={title ?? t('common.headers.resource-details')}
       wrapperClassname={`resource-overview__details-wrapper  ${
         hasTabs ? 'tabs' : ''
       }`}
@@ -498,15 +499,22 @@ function Resource({
               />,
               document.body,
             )}
-            <Title
-              level="H3"
-              style={{
-                ...spacing.sapUiMediumMarginBegin,
-                ...spacing.sapUiMediumMarginTopBottom,
-              }}
+            <FlexBox
+              alignItems="Center"
+              justifyContent="SpaceBetween"
+              style={spacing.sapUiMediumMargin}
             >
-              {title ?? t('common.headers.resource-details')}
-            </Title>
+              <Title level="H3">
+                {title ?? t('common.headers.resource-details')}
+              </Title>
+              <Button
+                icon="ai"
+                onClick={() => setOpenAssistant(true)}
+                className="ai-button"
+              >
+                {t('ai-assistant.use-ai')}
+              </Button>
+            </FlexBox>
             <div
               className={`resource-details-container ${
                 isColumnLayoutEnabled &&

@@ -3,7 +3,7 @@
   width: 100%;
 
   &__header {
-    background-color: rgb(85, 68, 245);
+    background-color: var(--sapContent_Illustrative_Color1);
     min-height: 60px;
     padding-left: 8px;
     padding-right: 8px;
@@ -17,5 +17,9 @@
       color: white;
       background: transparent;
     }
+  }
+
+  .tab-container {
+    height: calc(100vh - 60px - 1.4rem);
   }
 }

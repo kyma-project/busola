@@ -8,17 +8,20 @@ import { HelmReleaseData } from './HelmReleaseData';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
 import { OtherReleaseVersions } from './OtherReleaseVersions';
 import { findRecentRelease } from './findRecentRelease';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { ResourceDescription } from 'components/HelmReleases';
 import { Link } from 'shared/components/Link/Link';
+import { Button } from '@ui5/webcomponents-react';
+import { showAIassistantState } from 'components/AIassistant/state/showAIassistantAtom';
 
 function HelmReleasesDetails({ releaseName }) {
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();
 
+  const setOpenAssistant = useSetRecoilState(showAIassistantState);
   const namespace = useRecoilValue(activeNamespaceIdState);
   const breadcrumbItems = [
     { name: t('helm-releases.title'), url: namespaceUrl('helm-releases') },
@@ -78,6 +81,15 @@ function HelmReleasesDetails({ releaseName }) {
               <HelmReleaseStatus
                 status={releaseSecret.metadata.labels.status}
               />
+            </DynamicPageComponent.Column>
+            <DynamicPageComponent.Column>
+              <Button
+                icon="ai"
+                onClick={() => setOpenAssistant(true)}
+                className="ai-button"
+              >
+                {t('ai-assistant.use-ai')}
+              </Button>
             </DynamicPageComponent.Column>
           </>
         )}

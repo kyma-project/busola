@@ -11,9 +11,8 @@ import {
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useSetRecoilState } from 'recoil';
 import { showAIassistantState } from 'components/AIassistant/state/showAIassistantAtom';
-import IntroBox from './IntroBox';
-import Chat from './Chat';
-import PageInsights from './PageInsights';
+import Chat from './Chat/Chat';
+import PageInsights from './PageInsights/PageInsights';
 import './AIassistant.scss';
 
 export default function AIassistant() {
@@ -48,8 +47,11 @@ export default function AIassistant() {
         </Toolbar>
       }
     >
-      <IntroBox />
-      <TabContainer fixed>
+      <TabContainer
+        fixed
+        contentBackgroundDesign="Transparent"
+        className="tab-container"
+      >
         <Tab selected text={t('ai-assistant.tabs.chat')}>
           <Chat />
         </Tab>
