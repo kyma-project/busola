@@ -13,5 +13,5 @@ Cypress.Commands.add('createNamespace', namespaceName => {
     .type(namespaceName, { force: true })
     .click();
 
-  cy.createResource();
+  cy.saveChanges('Create');
 });

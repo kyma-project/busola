@@ -31,10 +31,7 @@ context('Test Persistent Volumes', () => {
       cy.pasteToMonaco(PV);
     });
 
-    cy.get('.create-form')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Create');
 
     cy.contains('ui5-title', PV_NAME).should('be.visible');
   });

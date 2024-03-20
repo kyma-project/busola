@@ -40,10 +40,7 @@ context('Test Cluster Role Bindings', () => {
       .type(USER_NAME)
       .blur({ force: true });
 
-    cy.get('.create-form')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Create');
   });
 
   it('Checking details using column layout', () => {

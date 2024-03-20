@@ -22,10 +22,7 @@ context('Test Custom Resources', () => {
       cy.pasteToMonaco(CRD);
     });
 
-    cy.get('.create-form')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Create');
   });
 
   it('Check CR groups list', () => {
@@ -78,10 +75,7 @@ context('Test Custom Resources', () => {
       cy.pasteToMonaco(TC);
     });
 
-    cy.get('.create-form')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Create');
   });
 
   it('Test column layout and remove CRD', () => {
