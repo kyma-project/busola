@@ -155,7 +155,6 @@ export function TokenRequestModal({
             <CopiableText
               iconOnly
               buttonText={t('common.buttons.copy')}
-              style={spacing.sapUiTinyMarginEnd}
               textToCopy={kubeconfigYaml}
               disabled={token === ''}
             />

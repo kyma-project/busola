@@ -25,24 +25,6 @@ body {
   }
 }
 
-.cursor-pointer {
-  cursor: pointer;
-}
-
-.bsl-link {
-  color: var(--sapLinkColor);
-  cursor: pointer;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-
-  &.no-border {
-    border: none;
-  }
-}
-
 .column-content {
   height: 100%;
 }
