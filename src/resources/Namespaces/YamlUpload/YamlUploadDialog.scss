@@ -1,8 +1,16 @@
 .yaml-upload-modal {
   &__layout {
-    overflow: hidden;
-    width: 100%;
+    //overflow: hidden;
     display: grid;
     grid-template-columns: 1fr 1fr;
+    padding: 12px;
+    background-color: var(--sapContent_ForegroundColor);
+  }
+
+  &__info {
+    padding: 12px;
+    background-color: var(--sapGroup_ContentBackground);
+    border-radius: var(--sapElement_BorderCornerRadius);
+    margin: 0 0 0 12px;
   }
 }

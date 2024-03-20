@@ -47,12 +47,12 @@ const WarningButton = ({
             ? t('upload-yaml.messages.no-warnings-found')
             : areWarningsVisible
             ? t('upload-yaml.buttons.hide-warnings')
-            : t('upload-yaml.buttons.show-warnings')}
+            : t('upload-yaml.buttons.show-warnings') + ': '}
         </p>
         {loading ? (
           <Spinner size="Small" center={false} />
         ) : (
-          <p>{warningsNumber}</p>
+          <p>{warningsNumber || ''}</p>
         )}
       </div>
     </Button>
@@ -98,7 +98,7 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
     );
 
   return (
-    <div style={spacing.sapUiSmallMarginTop}>
+    <div style={spacing.sapUiTinyMarginTopBottom}>
       <WarningButton
         handleShowWarnings={() => setVisibleWarnings(prevState => !prevState)}
         areWarningsVisible={areWarningsVisible}

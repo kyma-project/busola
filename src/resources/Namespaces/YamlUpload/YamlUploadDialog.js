@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, Suspense } from 'react';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
 import { Bar, Button, Dialog } from '@ui5/webcomponents-react';
 import { isEqual } from 'lodash';
 
@@ -130,7 +130,7 @@ export function YamlUploadDialog() {
             setResourcesData={updateYamlContent}
             setLastOperationState={setLastOperationState}
           />
-          <div>
+          <div className={'yaml-upload-modal__info'}>
             <p style={spacing.sapUiTinyMarginBegin}>
               {t('upload-yaml.info', { namespace: defaultNamespace })}
             </p>
