@@ -82,7 +82,7 @@ export function ClusterOverview() {
           </>
         }
       />
-      <YamlUploadDialog />
+      {createPortal(<YamlUploadDialog />, document.body)}
       {createPortal(
         <DeleteMessageBox
           resource={currentCluster}

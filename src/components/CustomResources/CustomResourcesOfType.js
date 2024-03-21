@@ -8,6 +8,7 @@ import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { Link } from 'shared/components/Link/Link';
+import { createPortal } from 'react-dom';
 
 export default function CustomResourcesOfType({ crdName, enableColumnLayout }) {
   const { t } = useTranslation();
@@ -55,7 +56,7 @@ export default function CustomResourcesOfType({ crdName, enableColumnLayout }) {
           </Link>
         </DynamicPageComponent.Column>
       </DynamicPageComponent>
-      <YamlUploadDialog />
+      {createPortal(<YamlUploadDialog />, document.body)}
     </>
   );
 }

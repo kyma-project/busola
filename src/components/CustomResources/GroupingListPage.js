@@ -11,6 +11,7 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { SearchInput } from 'shared/components/GenericList/SearchInput';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { createPortal } from 'react-dom';
 
 export function GroupingListPage({
   title,
@@ -105,7 +106,7 @@ export function GroupingListPage({
         layoutNumber="StartColumn"
       />
 
-      <YamlUploadDialog />
+      {createPortal(<YamlUploadDialog />, document.body)}
     </>
   );
 }
