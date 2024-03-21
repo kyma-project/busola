@@ -33,32 +33,3 @@ export const ContainersSection = ({ readOnly, ...props }) => {
     />
   );
 };
-
-export const ContainerSection = ({ readOnly, ...props }) => {
-  const { t } = useTranslation();
-  const { value = [], setValue } = props;
-
-  return value?.length ? (
-    <SingleContainerInput readOnly={readOnly} {...props} />
-  ) : (
-    <MessageStrip
-      design="Warning"
-      hideCloseButton
-      style={spacing.sapUiSmallMarginTop}
-    >
-      {t('jobs.create-modal.at-least-one-container-required')}
-      <Button
-        icon="add"
-        iconEnd
-        disabled={readOnly}
-        onClick={() => {
-          jp.value(value, '$[0]', createContainerTemplate());
-          setValue(value);
-        }}
-        design="Transparent"
-      >
-        {t('deployment.create-modal.add-container')}
-      </Button>
-    </MessageStrip>
-  );
-};

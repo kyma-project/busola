@@ -8,7 +8,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 
 import { createJobTemplate, createJobPresets } from './templates';
 import { JobSpecSection } from './SpecSection';
-import { ContainerSection, ContainersSection } from './ContainersSection';
+import { ContainersSection } from './ContainersSection';
 import { MessageStrip } from '@ui5/webcomponents-react';
 
 function isJobValid(job = {}) {
@@ -65,11 +65,6 @@ export default function JobCreate({
       createUrl={resourceUrl}
     >
       <JobSpecSection propertyPath="$.spec" readOnly={!!initialJob} />
-      <ContainerSection
-        propertyPath="$.spec.template.spec.containers"
-        readOnly={!!initialJob}
-        prefix={prefix}
-      />
       <ContainersSection
         propertyPath="$.spec.template.spec.containers"
         readOnly={!!initialJob}
