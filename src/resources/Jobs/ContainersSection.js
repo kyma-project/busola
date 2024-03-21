@@ -1,12 +1,8 @@
-import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
-import { Button, MessageStrip } from '@ui5/webcomponents-react';
 
 import { ItemArray } from 'shared/ResourceForm/fields';
 import { createContainerTemplate } from './templates';
-import { SingleContainerForm, SingleContainerInput } from './Containers';
-
-import { spacing } from '@ui5/webcomponents-react-base';
+import { SingleContainerForm } from './Containers';
 
 export const ContainersSection = ({ readOnly, ...props }) => {
   const { t } = useTranslation();
