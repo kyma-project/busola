@@ -4,10 +4,7 @@ import * as jp from 'jsonpath';
 import * as _ from 'lodash';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { ResourceForm } from 'shared/ResourceForm';
-import {
-  SimpleContainersView,
-  AdvancedContainersView,
-} from 'shared/components/Deployment/ContainersViews';
+import { AdvancedContainersView } from 'shared/components/Deployment/ContainersViews';
 import { useSidecar } from 'shared/hooks/useSidecarInjection';
 
 import {
@@ -99,8 +96,6 @@ export default function DeploymentCreate({
           }}
         />
       ) : null}
-
-      <SimpleContainersView resource={deployment} setResource={setDeployment} />
 
       <AdvancedContainersView
         resource={deployment}
