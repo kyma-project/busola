@@ -1453,7 +1453,7 @@ upload-yaml:
   buttons:
     hide-warnings: Hide warnings
     show-warnings: Show warnings
-  info: You can upload multiple resources, separated in YAML by '---'. If a resource already exists, it will be updated, otherwise a new one will be created. If the Namespace is not given, the '{{namespace}}' one will be used.
+  info: You can upload multiple resources, separated in YAML by "---". If a resource already exists, it will be updated, otherwise a new one will be created. If the Namespace is not given, the '{{namespace}}' one will be used.
   labels:
     validate-resources: Validate resources
   messages:

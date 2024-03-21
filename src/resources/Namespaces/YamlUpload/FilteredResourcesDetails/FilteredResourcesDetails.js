@@ -1,7 +1,14 @@
-import { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
-import { Button, MessageStrip } from '@ui5/webcomponents-react';
+import {
+  MessageStrip,
+  ObjectStatus,
+  Panel,
+  Toolbar,
+  ToolbarSpacer,
+  ValueState,
+} from '@ui5/webcomponents-react';
 import {
   getExtendedValidateResourceState,
   validateResourcesState,
@@ -16,48 +23,6 @@ import { useLoadingDebounce } from 'shared/hooks/useLoadingDebounce';
 
 import { spacing } from '@ui5/webcomponents-react-base';
 import './FilteredResourcesDetails.scss';
-
-const WarningButton = ({
-  handleShowWarnings,
-  areWarningsVisible,
-  warningsNumber,
-  loading,
-}) => {
-  const { t } = useTranslation();
-
-  const noWarnings = warningsNumber === 0;
-
-  return (
-    <Button
-      onClick={noWarnings ? () => {} : handleShowWarnings}
-      className="warning-button"
-      design={noWarnings ? 'Positive' : 'Attention'}
-      icon={
-        noWarnings
-          ? 'message-success'
-          : areWarningsVisible
-          ? 'navigation-up-arrow'
-          : 'navigation-down-arrow'
-      }
-      iconEnd
-    >
-      <div>
-        <p>
-          {noWarnings
-            ? t('upload-yaml.messages.no-warnings-found')
-            : areWarningsVisible
-            ? t('upload-yaml.buttons.hide-warnings')
-            : t('upload-yaml.buttons.show-warnings') + ': '}
-        </p>
-        {loading ? (
-          <Spinner size="Small" center={false} />
-        ) : (
-          <p>{warningsNumber || ''}</p>
-        )}
-      </div>
-    </Button>
-  );
-};
 
 const useNamespaceWarning = resource => {
   const { t } = useTranslation();
@@ -75,7 +40,6 @@ const useNamespaceWarning = resource => {
 
 const ValidationWarnings = ({ resource, validationSchema }) => {
   const { t } = useTranslation();
-  const [areWarningsVisible, setVisibleWarnings] = useState(false);
 
   const { debounced, loading } = useLoadingDebounce(resource, 500);
 
@@ -99,60 +63,71 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
 
   return (
     <div style={spacing.sapUiTinyMarginTopBottom}>
-      <WarningButton
-        handleShowWarnings={() => setVisibleWarnings(prevState => !prevState)}
-        areWarningsVisible={areWarningsVisible}
-        warningsNumber={warnings.flat().length}
-        loading={loading}
-      />
-      {areWarningsVisible ? (
-        <ul>
-          {warnings.flat().map((warning, i) => (
-            <li
-              key={`${resource?.kind}-${
-                resource?.metadata?.name
-              }-${warning.key ?? i}`}
+      <ul>
+        {warnings.flat().map((warning, i) => (
+          <li
+            key={`${resource?.kind}-${resource?.metadata?.name}-${warning.key ??
+              i}`}
+          >
+            <MessageStrip
+              design="Warning"
+              hideCloseButton
+              style={spacing.sapUiSmallMarginTop}
             >
-              <MessageStrip
-                design="Warning"
-                hideCloseButton
-                style={spacing.sapUiSmallMarginTop}
-              >
-                {warning.message}
-              </MessageStrip>
-            </li>
-          ))}
-        </ul>
-      ) : null}
+              {warning.message}
+            </MessageStrip>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
 
-export const FilteredResourcesDetails = ({ filteredResources }) => {
+const ValidationResult = ({ resource }) => {
   const validateResources = getExtendedValidateResourceState(
     useRecoilValue(validateResourcesState),
   );
   const validationSchemas = useRecoilValue(validationSchemasEnabledState);
+  const { debounced, loading } = useLoadingDebounce(resource, 500);
+  const warnings = [
+    useValidateResourceBySchema(debounced, validationSchemas),
+    useNamespaceWarning(debounced),
+  ];
+  const statusIcon =
+    warnings.flat().length !== 0 ? (
+      <ObjectStatus showDefaultIcon state={ValueState.Warning} />
+    ) : (
+      <ObjectStatus showDefaultIcon />
+    );
 
   return (
-    <ul className="resources-list">
-      {filteredResources.map(r => (
-        <li
-          className="list-type"
-          style={spacing.sapUiSmallMarginBeginEnd}
-          key={`${r?.value?.kind}-${r.value?.metadata?.name}`}
-        >
-          <p style={{ fontSize: '16px' }}>
-            {String(r?.value?.kind)} {String(r?.value?.metadata?.name)}
-          </p>
-          {validateResources.isEnabled && (
-            <ValidationWarnings
-              resource={r?.value}
-              validationSchema={validationSchemas}
-            />
-          )}
-        </li>
-      ))}
-    </ul>
+    <>
+      <Panel
+        accessibleRole="Form"
+        collapsed={true}
+        header={
+          <Toolbar>
+            {resource?.kind + ' ' + resource?.metadata?.name}
+            <ToolbarSpacer />
+            {statusIcon}
+          </Toolbar>
+        }
+      >
+        {validateResources.isEnabled && (
+          <ValidationWarnings
+            resource={resource}
+            validationSchema={validationSchemas}
+          />
+        )}
+      </Panel>
+    </>
   );
+};
+
+export const FilteredResourcesDetails = ({ filteredResources }) => {
+  return filteredResources.map(r => (
+    <>
+      <ValidationResult resource={r.value} />
+    </>
+  ));
 };

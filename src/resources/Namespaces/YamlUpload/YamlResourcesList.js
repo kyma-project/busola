@@ -8,10 +8,10 @@ import {
 } from 'state/preferences/validateResourcesAtom';
 
 import {
-  STATE_ERROR,
-  STATE_WAITING,
-  STATE_UPDATED,
   STATE_CREATED,
+  STATE_ERROR,
+  STATE_UPDATED,
+  STATE_WAITING,
 } from './useUploadResources';
 import { FilteredResourcesDetails } from './FilteredResourcesDetails/FilteredResourcesDetails';
 
