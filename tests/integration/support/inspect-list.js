@@ -1,5 +1,5 @@
-Cypress.Commands.add('inspectList', resourceName => {
-  cy.closeMidColumn();
+Cypress.Commands.add('inspectList', (resourceName, hiddenButtons = false) => {
+  cy.closeMidColumn(false, hiddenButtons);
 
   cy.get('ui5-input[placeholder="Search"]:visible')
     .find('input')
