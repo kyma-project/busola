@@ -10,7 +10,7 @@ function containsInShadowDom(selector, content, options) {
 }
 
 function testAndSelectOptions(section, selection) {
-  cy.contains('.header', section).as(`${section}Header`);
+  cy.contains('ui5-panel', section).as(`${section}Header`);
   cy.contains('.form-field', section).as(`${section}FormField`);
 
   cy.get(`@${section}Header`)
