@@ -10,6 +10,7 @@ import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { spacing } from '@ui5/webcomponents-react-base';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { Title } from '@ui5/webcomponents-react';
+import { createPortal } from 'react-dom';
 
 export default function NodeDetails({ nodeName }) {
   const { data, error, loading } = useNodeQuery(nodeName);
@@ -60,7 +61,7 @@ export default function NodeDetails({ nodeName }) {
           </>
         }
       />
-      <YamlUploadDialog />
+      {createPortal(<YamlUploadDialog />, document.body)}
     </div>
   );
 }

@@ -14,6 +14,7 @@ import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { ResourceDescription } from 'components/HelmReleases';
 import { Link } from 'shared/components/Link/Link';
+import { createPortal } from 'react-dom';
 
 function HelmReleasesDetails({ releaseName }) {
   const { t } = useTranslation();
@@ -81,7 +82,7 @@ function HelmReleasesDetails({ releaseName }) {
             </DynamicPageComponent.Column>
           </>
         )}
-        <YamlUploadDialog />
+        {createPortal(<YamlUploadDialog />, document.body)}
       </DynamicPageComponent>
     </>
   );

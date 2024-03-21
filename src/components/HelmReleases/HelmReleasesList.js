@@ -13,6 +13,7 @@ import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { ResourceDescription } from 'components/HelmReleases';
 import { Link } from 'shared/components/Link/Link';
+import { createPortal } from 'react-dom';
 
 function HelmReleasesList() {
   const { t } = useTranslation();
@@ -105,7 +106,7 @@ function HelmReleasesList() {
           />
         }
       />
-      <YamlUploadDialog />
+      {createPortal(<YamlUploadDialog />, document.body)}
     </>
   );
 }
