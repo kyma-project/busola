@@ -5,10 +5,7 @@ import * as _ from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
-import {
-  SimpleContainersView,
-  AdvancedContainersView,
-} from 'shared/components/Deployment/ContainersViews';
+import { AdvancedContainersView } from 'shared/components/Deployment/ContainersViews';
 
 import { createContainerTemplate, createReplicaSetTemplate } from './templates';
 
@@ -81,8 +78,6 @@ export default function ReplicaSetCreate({
         )}
         min={0}
       />
-
-      <SimpleContainersView resource={replicaset} setResource={setReplicaSet} />
 
       <AdvancedContainersView
         resource={replicaset}

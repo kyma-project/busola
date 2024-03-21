@@ -144,6 +144,10 @@ context('Test reduced permissions', () => {
     cy.clickGenericListLink(SA_NAME);
 
     cy.getMidColumn()
+      .find('ui5-toggle-button')
+      .click();
+
+    cy.get('[data-component-name="ToolbarOverflowPopoverContent"]')
       .find('ui5-button[aria-label="full-screen"]')
       .click();
 

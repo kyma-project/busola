@@ -1,27 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@ui5/webcomponents-react';
 import { ResourceForm } from 'shared/ResourceForm';
-import * as Inputs from 'shared/ResourceForm/inputs';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 import { Containers } from './Containers';
 
 import * as jp from 'jsonpath';
-
-export function SimpleContainersView({ resource, setResource }) {
-  const { t } = useTranslation();
-
-  return (
-    <ResourceForm.Wrapper resource={resource} setResource={setResource}>
-      <ResourceForm.FormField
-        required
-        propertyPath="$.spec.template.spec.containers[0].image"
-        label={t('deployments.create-modal.docker-image')}
-        input={Inputs.Text}
-        placeholder={t('deployments.create-modal.docker-image-placeholder')}
-      />
-    </ResourceForm.Wrapper>
-  );
-}
 
 export function AdvancedContainersView({
   resource,

@@ -9,10 +9,7 @@ import {
   isCronExpressionValid,
   ScheduleSection,
 } from 'resources/Jobs/ScheduleSection';
-import {
-  ContainerSection,
-  ContainersSection,
-} from 'resources/Jobs/ContainersSection';
+import { ContainersSection } from 'resources/Jobs/ContainersSection';
 import {
   createCronJobTemplate,
   createCronJobPresets,
@@ -64,12 +61,6 @@ export default function CronJobCreate({
       <CronJobSpecSection propertyPath="$.spec" />
 
       <ScheduleSection propertyPath="$.spec.schedule" />
-
-      <ContainerSection
-        defaultOpen
-        propertyPath="$.spec.jobTemplate.spec.template.spec.containers"
-      />
-
       <ContainersSection
         defaultOpen
         propertyPath="$.spec.jobTemplate.spec.template.spec.containers"

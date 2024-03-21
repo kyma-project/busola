@@ -275,15 +275,27 @@ Cypress.Commands.add(
   },
 );
 
-Cypress.Commands.add('closeMidColumn', (checkIfNotExist = false) => {
-  cy.getMidColumn()
-    .find('ui5-button[aria-label="close-column"]')
-    .click();
+Cypress.Commands.add(
+  'closeMidColumn',
+  (checkIfNotExist = false, hiddenButtons = false) => {
+    if (hiddenButtons) {
+      cy.getMidColumn()
+        .find('ui5-toggle-button')
+        .click();
 
-  cy.wait(1000);
-  if (checkIfNotExist) cy.getMidColumn().should('not.exist');
-  else cy.getMidColumn().should('not.be.visible');
-});
+      cy.get('[data-component-name="ToolbarOverflowPopoverContent"]')
+        .find('ui5-button[aria-label="close-column"]')
+        .click();
+    } else
+      cy.getMidColumn()
+        .find('ui5-button[aria-label="close-column"]')
+        .click();
+
+    cy.wait(1000);
+    if (checkIfNotExist) cy.getMidColumn().should('not.exist');
+    else cy.getMidColumn().should('not.be.visible');
+  },
+);
 
 Cypress.Commands.add('closeEndColumn', (checkIfNotExist = false) => {
   cy.getEndColumn()
