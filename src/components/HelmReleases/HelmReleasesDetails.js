@@ -16,6 +16,7 @@ import HelmReleasesYaml from './HelmReleasesYaml';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { showYamlTab } from './index';
 import { Link } from 'shared/components/Link/Link';
+import { createPortal } from 'react-dom';
 
 function HelmReleasesDetails({ releaseName, namespace }) {
   const { t } = useTranslation();
@@ -95,7 +96,7 @@ function HelmReleasesDetails({ releaseName, namespace }) {
             </DynamicPageComponent.Column>
           </>
         )}
-        <YamlUploadDialog />
+        {createPortal(<YamlUploadDialog />, document.body)}
       </DynamicPageComponent>
     </>
   );
