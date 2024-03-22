@@ -144,6 +144,7 @@ context('Test reduced permissions', () => {
     cy.clickGenericListLink(SA_NAME);
 
     cy.getMidColumn()
+      .find('header')
       .find('ui5-toggle-button:visible')
       .click();
 

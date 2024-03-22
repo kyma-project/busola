@@ -99,6 +99,7 @@ context('Test Service Accounts', () => {
 
   it('Generate TokenRequest', () => {
     cy.getMidColumn()
+      .find('header')
       .find('ui5-toggle-button:visible')
       .click();
 
