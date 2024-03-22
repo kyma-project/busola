@@ -16,7 +16,7 @@ context('Test Service Accounts', () => {
 
   it('Create a Service Account', () => {
     cy.navigateTo('Configuration', 'Service Accounts');
-
+    cy.wait(1000);
     cy.openCreate();
 
     cy.get('[aria-label="ServiceAccount name"]')
