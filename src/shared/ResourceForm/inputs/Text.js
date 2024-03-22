@@ -1,4 +1,3 @@
-import React from 'react';
 import { useValidation } from 'shared/hooks/useValidation';
 import { Input } from '@ui5/webcomponents-react';
 

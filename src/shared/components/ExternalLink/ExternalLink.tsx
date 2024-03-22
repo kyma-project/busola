@@ -29,7 +29,11 @@ export const ExternalLink = ({
         design="Information"
         name="inspect"
         className="bsl-icon-s"
-        style={{ ...spacing.sapUiTinyMarginBegin, ...(iconStyle || {}) }}
+        style={{
+          ...spacing.sapUiTinyMarginBegin,
+          marginRight: '0.25rem',
+          ...(iconStyle || {}),
+        }}
         aria-label={t('common.ariaLabel.new-tab-link')}
       />
     </Link>

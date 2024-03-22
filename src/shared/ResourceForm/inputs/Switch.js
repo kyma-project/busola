@@ -1,4 +1,3 @@
-import React from 'react';
 import { Switch as UI5Switch } from '@ui5/webcomponents-react';
 
 export function Switch({ value, setValue, ...props }) {
