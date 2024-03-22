@@ -99,7 +99,7 @@ context('Test Service Accounts', () => {
 
   it('Generate TokenRequest', () => {
     cy.getMidColumn()
-      .find('ui5-toggle-button')
+      .find('ui5-toggle-button:visible')
       .click();
 
     cy.get('[data-component-name="ToolbarOverflowPopoverContent"]')
@@ -119,6 +119,7 @@ context('Test Service Accounts', () => {
       .click()
       .get('ui5-list')
       .contains('21600s (6h)')
+      .wait(100)
       .click();
 
     cy.contains('TokenRequest generated').should('be.visible');

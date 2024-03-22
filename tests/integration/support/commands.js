@@ -280,7 +280,7 @@ Cypress.Commands.add(
   (checkIfNotExist = false, hiddenButtons = false) => {
     if (hiddenButtons) {
       cy.getMidColumn()
-        .find('ui5-toggle-button')
+        .find('ui5-toggle-button:visible')
         .click();
 
       cy.get('[data-component-name="ToolbarOverflowPopoverContent"]')

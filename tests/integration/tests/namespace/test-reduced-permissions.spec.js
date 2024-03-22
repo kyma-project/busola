@@ -144,7 +144,7 @@ context('Test reduced permissions', () => {
     cy.clickGenericListLink(SA_NAME);
 
     cy.getMidColumn()
-      .find('ui5-toggle-button')
+      .find('ui5-toggle-button:visible')
       .click();
 
     cy.get('[data-component-name="ToolbarOverflowPopoverContent"]')
