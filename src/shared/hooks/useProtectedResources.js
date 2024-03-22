@@ -1,4 +1,4 @@
-import { Icon } from '@ui5/webcomponents-react';
+import { Icon, ObjectStatus } from '@ui5/webcomponents-react';
 import { useFeature } from 'hooks/useFeature';
 import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
@@ -32,7 +32,7 @@ export function useProtectedResources() {
   const isProtected = entry =>
     !disableResourceProtection && !!getEntryProtection(entry).length;
 
-  const protectedResourceWarning = entry => {
+  const protectedResourceWarning = (entry, withText) => {
     const matchedRules = getEntryProtection(entry);
 
     if (disableResourceProtection || !matchedRules.length) {
@@ -46,7 +46,7 @@ export function useProtectedResources() {
         } else if (rule.messageSrc) {
           return jp.value(entry, rule.messageSrc);
         } else {
-          return t('common.protected-resource');
+          return t('common.protected-resource-description');
         }
       })
       .join('\n');
@@ -57,7 +57,17 @@ export function useProtectedResources() {
         content={message}
         delay={0}
       >
-        <Icon design="Critical" name="locked" />
+        {!withText && <Icon design="Critical" name="locked" />}
+        {withText && (
+          <ObjectStatus
+            icon={<Icon name="locked" />}
+            showDefaultIcon
+            state="Warning"
+            style={{ textOverflow: 'ellipsis' }}
+          >
+            {t('common.protected-resource')}
+          </ObjectStatus>
+        )}
       </Tooltip>
     );
   };

@@ -1,26 +1,16 @@
 import React, { createContext, Suspense, useState } from 'react';
 import PropTypes from 'prop-types';
-import jsyaml from 'js-yaml';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
 import { Button, Title } from '@ui5/webcomponents-react';
 import { spacing } from '@ui5/webcomponents-react-base';
 
-import { createPatch } from 'rfc6902';
 import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNotFound';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { useDelete, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
-import { useNotification } from 'shared/contexts/NotificationContext';
-import {
-  useYamlEditor,
-  YamlEditorProvider,
-} from 'shared/contexts/YamlEditorContext/YamlEditorContext';
-import {
-  getErrorMessage,
-  prettifyNamePlural,
-  prettifyNameSingular,
-} from 'shared/utils/helpers';
+import { YamlEditorProvider } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
+import { getErrorMessage, prettifyNameSingular } from 'shared/utils/helpers';
 import { Labels } from 'shared/components/Labels/Labels';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { Spinner } from 'shared/components/Spinner/Spinner';
@@ -28,9 +18,8 @@ import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
-import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
+import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 import { useVersionWarning } from 'hooks/useVersionWarning';
-import { useUrl } from 'hooks/useUrl';
 
 import { Tooltip } from '../Tooltip/Tooltip';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
@@ -60,7 +49,6 @@ ResourceDetails.propTypes = {
   children: PropTypes.node,
   customComponents: PropTypes.arrayOf(PropTypes.func),
   description: PropTypes.object,
-  hasTabs: PropTypes.bool,
   resourceUrl: PropTypes.string.isRequired,
   resourceType: PropTypes.string.isRequired,
   resourceName: PropTypes.string,
@@ -69,26 +57,26 @@ ResourceDetails.propTypes = {
   headerActions: PropTypes.node,
   resourceHeaderActions: PropTypes.arrayOf(PropTypes.func),
   readOnly: PropTypes.bool,
-  breadcrumbs: PropTypes.array,
   editActionLabel: PropTypes.string,
   windowTitle: PropTypes.string,
   resourceGraphConfig: PropTypes.object,
   resourceSchema: PropTypes.object,
   disableEdit: PropTypes.bool,
   disableDelete: PropTypes.bool,
-  layoutCloseUrl: PropTypes.string,
+  showYamlTab: PropTypes.bool,
+  layoutCloseCreateUrl: PropTypes.string,
   layoutNumber: PropTypes.string,
 };
 
 ResourceDetails.defaultProps = {
   customColumns: [],
   customComponents: [],
-  hasTabs: false,
   headerActions: null,
   resourceHeaderActions: [],
   readOnly: false,
   disableEdit: false,
   disableDelete: false,
+  showYamlTab: false,
   layoutNumber: 'MidColumn',
 };
 
@@ -112,17 +100,9 @@ function ResourceDetailsRenderer(props) {
 
   const updateResourceMutation = useUpdate(props.resourceUrl);
   const deleteResourceMutation = useDelete(props.resourceUrl);
-  const { resourceListUrl } = useUrl();
 
   if (loading) return <Spinner />;
   if (error) {
-    const breadcrumbItems = props.breadcrumbs || [
-      {
-        name: prettifyNamePlural(props.resourceTitle, props.resourceType),
-        url: resourceListUrl(resource, { resourceType: props.resourceType }),
-      },
-      { name: '' },
-    ];
     if (error.code === 404) {
       return (
         <ResourceNotFound
@@ -130,14 +110,12 @@ function ResourceDetailsRenderer(props) {
             props.resourceTitle,
             props.resourceType,
           )}
-          breadcrumbs={breadcrumbItems}
         />
       );
     }
     return (
       <ResourceNotFound
         resource={prettifyNameSingular(props.resourceTitle, props.resourceType)}
-        breadcrumbs={breadcrumbItems}
         customMessage={getErrorMessage(error)}
       />
     );
@@ -161,14 +139,12 @@ function ResourceDetailsRenderer(props) {
 
 function Resource({
   layoutNumber,
-  layoutCloseUrl,
-  breadcrumbs,
+  layoutCloseCreateUrl,
   children,
   createResourceForm: CreateResourceForm,
   customColumns,
   customComponents,
   description,
-  hasTabs,
   editActionLabel,
   headerActions,
   namespace,
@@ -177,14 +153,13 @@ function Resource({
   resourceHeaderActions,
   resourceType,
   resourceUrl,
-  silentRefetch,
   title,
-  updateResourceMutation,
   windowTitle,
   resourceTitle,
   resourceGraphConfig,
   resourceSchema,
   disableEdit,
+  showYamlTab,
   disableDelete,
   statusBadge,
   customStatusColumns,
@@ -196,7 +171,6 @@ function Resource({
     resourceTitle,
     resource.kind,
   );
-  const [toggleFormFn, getToggleFormFn] = useState(() => {});
   const [showTitleDescription, setShowTitleDescription] = useState(false);
 
   const pluralizedResourceKind = pluralize(prettifiedResourceKind);
@@ -211,87 +185,9 @@ function Resource({
   });
 
   const layoutColumn = useRecoilValue(columnLayoutState);
-
-  const { setEditedYaml: setEditedSpec } = useYamlEditor();
-  const notification = useNotification();
-  const { resourceListUrl } = useUrl();
-
   const { isEnabled: isColumnLayoutEnabled } = useFeature('COLUMN_LAYOUT');
 
-  const breadcrumbItems = breadcrumbs || [
-    {
-      name: pluralizedResourceKind,
-      url: resourceListUrl(resource, { resourceType }),
-    },
-    { name: '' },
-  ];
-
   const protectedResource = isProtected(resource);
-
-  const editAction = () => {
-    if (protectedResource) {
-      return (
-        <Tooltip
-          className="actions-tooltip"
-          content={t('common.tooltips.protected-resources-info')}
-        >
-          <Button onClick={() => openYaml(resource)}>
-            {t('common.buttons.view-yaml')}
-          </Button>
-        </Tooltip>
-      );
-    } else if (disableEdit) {
-      return (
-        <Button onClick={() => openYaml(resource)}>
-          {t('common.buttons.view-yaml')}
-        </Button>
-      );
-    } else if (!CreateResourceForm || !CreateResourceForm?.allowEdit) {
-      return (
-        <Button onClick={() => openYaml(resource)} design="Emphasized">
-          {t('common.buttons.edit-yaml')}
-        </Button>
-      );
-    } else {
-      return (
-        <ModalWithForm
-          getToggleFormFn={getToggleFormFn}
-          title={
-            editActionLabel ||
-            t('components.resource-details.edit', {
-              resourceType: prettifiedResourceKind,
-            })
-          }
-          modalOpeningComponent={
-            <Button design="Emphasized">
-              {editActionLabel ||
-                t('components.resource-details.edit', {
-                  resourceType: prettifiedResourceKind,
-                })}
-            </Button>
-          }
-          confirmText={t('common.buttons.update')}
-          id={`edit-${resourceType}-modal`}
-          className="modal-size--l"
-          renderForm={props => (
-            <ErrorBoundary>
-              <CreateResourceForm
-                resource={resource}
-                resourceType={resourceType}
-                resourceUrl={resourceUrl}
-                namespace={namespace}
-                refetchList={silentRefetch}
-                toggleFormFn={toggleFormFn}
-                resourceSchema={resourceSchema}
-                editMode={true}
-                {...props}
-              />
-            </ErrorBoundary>
-          )}
-        />
-      );
-    }
-  };
 
   const deleteButtonWrapper = children => {
     if (protectedResource) {
@@ -307,7 +203,6 @@ function Resource({
       return children;
     }
   };
-
   const actions = readOnly ? null : (
     <>
       <Suspense fallback={<Spinner />}>
@@ -317,8 +212,6 @@ function Resource({
           root={resource}
         />
       </Suspense>
-      {protectedResourceWarning(resource)}
-      {editAction()}
       {headerActions}
       {resourceHeaderActions.map(resourceAction => resourceAction(resource))}
       {deleteButtonWrapper(
@@ -330,41 +223,9 @@ function Resource({
           {t('common.buttons.delete')}
         </Button>,
       )}
+      {createPortal(<YamlUploadDialog />, document.body)}
     </>
   );
-
-  const openYaml = resource => {
-    setEditedSpec(
-      resource,
-      resource.metadata.name + '.yaml',
-      handleSaveClick(resource),
-      protectedResource || disableEdit,
-      protectedResource,
-    );
-  };
-
-  const handleSaveClick = resourceData => async newYAML => {
-    try {
-      const diff = createPatch(resourceData, jsyaml.load(newYAML));
-
-      await updateResourceMutation(resourceUrl, diff);
-      silentRefetch();
-      notification.notifySuccess({
-        content: t('components.resource-details.messages.success', {
-          resourceType: prettifiedResourceKind,
-        }),
-      });
-    } catch (e) {
-      console.error(e);
-      notification.notifyError({
-        content: t('components.resource-details.messages.failure', {
-          resourceType: prettifiedResourceKind,
-          error: e.message,
-        }),
-      });
-      throw e;
-    }
-  };
 
   const filterColumns = col => {
     const { visible, error } = col.visibility?.(resource) || {
@@ -416,9 +277,7 @@ function Resource({
   const resourceDetailsCard = (
     <ResourceDetailsCard
       title={title ?? t('common.headers.resource-details')}
-      wrapperClassname={`resource-overview__details-wrapper  ${
-        hasTabs ? 'tabs' : ''
-      }`}
+      wrapperClassname="resource-overview__details-wrapper"
       content={
         <>
           <DynamicPageComponent.Column
@@ -484,11 +343,13 @@ function Resource({
   return (
     <ResourceDetailContext.Provider value={true}>
       <DynamicPageComponent
+        showYamlTab={showYamlTab || disableEdit}
         layoutNumber={layoutNumber ?? 'MidColumn'}
-        layoutCloseUrl={layoutCloseUrl}
+        layoutCloseUrl={layoutCloseCreateUrl}
         title={resource.metadata.name}
         actions={actions}
-        breadcrumbItems={breadcrumbItems}
+        protectedResource={protectedResource}
+        protectedResourceWarning={protectedResourceWarning(resource)}
         content={
           <>
             {createPortal(
@@ -517,8 +378,8 @@ function Resource({
                   : 'column-view'
               }`}
             >
-              {!hasTabs && resourceDetailsCard}
-              {!hasTabs && resourceStatusCard && resourceStatusCard}
+              {resourceDetailsCard}
+              {resourceStatusCard && resourceStatusCard}
             </div>
             <Suspense fallback={<Spinner />}>
               <Injections
@@ -528,7 +389,7 @@ function Resource({
               />
             </Suspense>
             {(customComponents || []).map(component =>
-              component(resource, resourceUrl, resourceDetailsCard),
+              component(resource, resourceUrl),
             )}
             {children}
             {resourceGraphConfig?.[resource.kind] && (
@@ -548,9 +409,36 @@ function Resource({
             </Suspense>
           </>
         }
-      >
-        {createPortal(<YamlUploadDialog />, document.body)}
-      </DynamicPageComponent>
+        inlineEditForm={() => (
+          <ResourceCreate
+            title={
+              editActionLabel ||
+              t('components.resource-details.edit', {
+                resourceType: prettifiedResourceKind,
+              })
+            }
+            isEdit={true}
+            confirmText={t('common.buttons.save')}
+            protectedResource={protectedResource}
+            protectedResourceWarning={protectedResourceWarning(resource, true)}
+            readOnly={readOnly}
+            disableEdit={disableEdit}
+            renderForm={props => (
+              <ErrorBoundary>
+                <CreateResourceForm
+                  resource={resource}
+                  resourceType={resourceType}
+                  resourceUrl={resourceUrl}
+                  namespace={namespace}
+                  resourceSchema={resourceSchema}
+                  editMode={true}
+                  {...props}
+                />
+              </ErrorBoundary>
+            )}
+          />
+        )}
+      ></DynamicPageComponent>
     </ResourceDetailContext.Provider>
   );
 }

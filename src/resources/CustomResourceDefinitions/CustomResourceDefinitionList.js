@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { Tokens } from 'shared/components/Tokens';
 
-import { CustomResourceDefinitionCreate } from './CustomResourceDefinitionCreate';
+import CustomResourceDefinitionCreate from './CustomResourceDefinitionCreate';
 import {
   ResourceDescription,
   i18nDescriptionKey,

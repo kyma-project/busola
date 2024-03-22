@@ -18,8 +18,6 @@ context('Test Cluster Role Bindings', () => {
 
     cy.contains('ui5-button', 'Create').click();
 
-    cy.contains('Advanced').click();
-
     cy.get('[aria-label="ClusterRoleBinding name"]')
       .find('input')
       .click()
@@ -35,17 +33,14 @@ context('Test Cluster Role Bindings', () => {
     cy.get('ui5-li:visible')
       .contains('cluster-admin')
       .find('li')
-      .click({ force: true });
+      .click();
 
     cy.get('[aria-label="User name"]')
       .find('input')
       .type(USER_NAME)
       .blur({ force: true });
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Create');
   });
 
   it('Checking details using column layout', () => {
@@ -72,9 +67,7 @@ context('Test Cluster Role Bindings', () => {
   it('Edit', () => {
     cy.wait(1000);
 
-    cy.getMidColumn()
-      .contains('ui5-button', 'Edit')
-      .click();
+    cy.getMidColumn().inspectTab('Edit');
 
     cy.contains('[role="combobox"]', 'User').click();
 
@@ -96,13 +89,12 @@ context('Test Cluster Role Bindings', () => {
       .type('test-group')
       .blur({ force: true });
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Update')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Edit');
   });
 
   it('Checking updates details', () => {
+    cy.inspectTab('View');
+
     cy.getMidColumn()
       .contains('Group')
       .should('be.visible');

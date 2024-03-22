@@ -69,6 +69,11 @@ context('Test Pizzas', () => {
       .contains('Namespaces')
       .click();
 
+    cy.get('ui5-input[placeholder="Search"]:visible')
+      .find('input')
+      .wait(1000)
+      .type('pizzas');
+
     cy.clickGenericListLink('pizzas');
 
     cy.getLeftNav()
@@ -88,18 +93,14 @@ context('Test Pizzas', () => {
 
     cy.contains('paymentMethod: CARD');
     cy.contains('realization: SELF-PICKUP');
-    cy.contains('ui5-breadcrumbs', 'Pizza Orders');
   });
 
   it('Edits a Pizza Order', () => {
     cy.wait(1000);
 
-    cy.getMidColumn()
-      .contains('ui5-button', 'Edit')
-      .should('be.visible')
-      .click();
+    cy.getMidColumn().inspectTab('Edit');
 
-    cy.get('ui5-dialog').as('form');
+    cy.get('.edit-form').as('form');
 
     cy.get('@form').contains('Name');
     cy.get('@form').contains('Labels');
@@ -122,11 +123,9 @@ context('Test Pizzas', () => {
       .find('ui5-label[required]:visible')
       .should('have.length', 3);
 
-    cy.get('@form')
-      .get('ui5-button')
-      .contains('Update')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Edit');
+
+    cy.inspectTab('View');
 
     cy.getMidColumn()
       .contains('span', /^READY$/i)
@@ -201,7 +200,7 @@ context('Test Pizzas', () => {
   it('Tests the Create Form', () => {
     cy.contains('ui5-button', 'Create').click();
 
-    cy.get('ui5-dialog').as('form');
+    cy.get('.create-form').as('form');
 
     cy.get('@form')
       .find('[data-testid="spec.description"]:visible')
@@ -228,10 +227,7 @@ context('Test Pizzas', () => {
       .clear({ force: true })
       .type(PIZZA_NAME, { force: true });
 
-    cy.get('@form')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Create');
 
     cy.getMidColumn()
       .contains('ui5-title', PIZZA_NAME)

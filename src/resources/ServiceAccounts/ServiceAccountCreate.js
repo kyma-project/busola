@@ -28,7 +28,7 @@ const createDefaultSecret = serviceAccountName => {
   };
 };
 
-export const ServiceAccountCreate = ({
+export default function ServiceAccountCreate({
   formElementRef,
   namespace,
   onChange,
@@ -38,7 +38,7 @@ export const ServiceAccountCreate = ({
   onCompleted,
   resourceUrl,
   ...props
-}) => {
+}) {
   const { t } = useTranslation();
   const [serviceAccount, setServiceAccount] = useState(
     cloneDeep(initialServiceAccount) || createServiceAccountTemplate(namespace),
@@ -108,7 +108,6 @@ export const ServiceAccountCreate = ({
       afterCreatedFn={afterServiceAccountCreate}
     >
       <ComboboxArrayInput
-        advanced
         title={t('service-accounts.headers.image-pull-secrets')}
         tooltipContent={t(
           'service-accounts.create-modal.tooltips.image-pull-secrets',
@@ -122,7 +121,6 @@ export const ServiceAccountCreate = ({
         }))}
       />
       <ResourceForm.FormField
-        advanced
         label={t('service-accounts.headers.auto-mount-token')}
         tooltipContent={t(
           'service-accounts.create-modal.tooltips.auto-mount-token',
@@ -143,7 +141,6 @@ export const ServiceAccountCreate = ({
         checked={jp.value(serviceAccount, '$.automountServiceAccountToken')}
       />
       <ResourceForm.FormField
-        advanced
         label={t('service-accounts.associated-secret.label')}
         tooltipContent={t(
           t('service-accounts.create-modal.tooltips.associated-secret'),
@@ -161,5 +158,4 @@ export const ServiceAccountCreate = ({
       )}
     </ResourceForm>
   );
-};
-ServiceAccountCreate.allowEdit = true;
+}

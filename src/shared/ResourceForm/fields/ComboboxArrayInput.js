@@ -9,7 +9,6 @@ export function ComboboxArrayInput({
   defaultOpen,
   placeholder,
   inputProps,
-  isAdvanced,
   tooltipContent,
   sectionTooltipContent,
   options,
@@ -44,7 +43,6 @@ export function ComboboxArrayInput({
       title={title}
       noEdit={noEdit}
       defaultOpen={defaultOpen}
-      isAdvanced={isAdvanced}
       toInternal={toInternal}
       toExternal={toExternal}
       tooltipContent={tooltipContent}

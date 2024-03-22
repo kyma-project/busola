@@ -1,12 +1,9 @@
-import React, { useEffect } from 'react';
-import { Button } from '@ui5/webcomponents-react';
+import { Label } from '../../../shared/ResourceForm/components/Label';
 import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm/components/ResourceForm';
 import { K8sNameInput } from 'shared/components/K8sNameInput/K8sNameInput';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-import { randomNamesGenerator } from 'shared/utils/randomNamesGenerator/randomNamesGenerator';
-import './K8sNameField.scss';
+
 import { useCreateResourceDescription } from 'components/Extensibility/helpers';
 
 export function K8sNameField({
@@ -23,17 +20,8 @@ export function K8sNameField({
   ...props
 }) {
   const { t } = useTranslation();
-  const { isAdvanced, propertyPath, validate, readOnly, ...inputProps } = props;
+  const { propertyPath, validate, readOnly, ...inputProps } = props;
   const inputInfoLink = useCreateResourceDescription(inputInfo);
-  const generateName = () => {
-    const name = randomNamesGenerator();
-    setValue(prefix ? `${prefix}-${name}` : name);
-  };
-
-  useEffect(() => {
-    if (prefix) generateName();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <ResourceForm.FormField
@@ -46,7 +34,7 @@ export function K8sNameField({
       input={() => {
         return (
           <>
-            <div className="bsl-col bsl-col-md--11">
+            <div className="bsl-col-md--12">
               <K8sNameInput
                 kind={kind}
                 compact
@@ -60,22 +48,10 @@ export function K8sNameField({
                 {...inputProps}
               />
             </div>
-            <div className="bsl-col bsl-col-md--1 generate-button">
-              <Tooltip content={t('common.tooltips.generate-name')}>
-                <Button
-                  design="Transparent"
-                  onClick={generateName}
-                  aria-label="Generate name button"
-                  disabled={readOnly}
-                >
-                  {t('common.buttons.generate-name')}
-                </Button>
-              </Tooltip>
-            </div>
             {showHelp && inputInfo === undefined ? (
-              <p style={{ color: 'var(--sapNeutralTextColor)' }}>
+              <Label wrappingType="Normal" style={{ marginTop: '5px' }}>
                 {t('common.tooltips.k8s-name-input')}
-              </p>
+              </Label>
             ) : null}
           </>
         );

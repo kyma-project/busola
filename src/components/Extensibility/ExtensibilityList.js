@@ -9,7 +9,7 @@ import { useGetSchema } from 'hooks/useGetSchema';
 import { getExtensibilityPath } from 'components/Extensibility/helpers/getExtensibilityPath';
 
 import { useGetCRbyPath } from './useGetCRbyPath';
-import { ExtensibilityCreate } from './ExtensibilityCreate';
+import ExtensibilityCreate from './ExtensibilityCreate';
 import {
   useCreateResourceDescription,
   TranslationBundleContext,

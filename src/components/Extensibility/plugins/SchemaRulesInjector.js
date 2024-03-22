@@ -1,4 +1,3 @@
-import React from 'react';
 import { last } from 'lodash';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 import { List, fromJS } from 'immutable';
@@ -20,7 +19,7 @@ export function SchemaRulesInjector({
   const nextPluginIndex = currentPluginIndex + 1;
   const Plugin = getNextPlugin(nextPluginIndex, props.widgets);
 
-  const { simple, advanced, path: myPath, children: childRules, ...itemRule } =
+  const { path: myPath, children: childRules, ...itemRule } =
     schema.get('schemaRule') ?? rootRule;
 
   let newSchema = schema.mergeDeep(itemRule);

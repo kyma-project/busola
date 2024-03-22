@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState, createRef } from 'react';
-import { Button, Icon, FlexBox } from '@ui5/webcomponents-react';
+import { Button, FlexBox } from '@ui5/webcomponents-react';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
-
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
+import { Label } from '../../../shared/ResourceForm/components/Label';
 
 import { ResourceForm } from '..';
 import { useCreateResourceDescription } from 'components/Extensibility/helpers';
@@ -23,13 +22,12 @@ export function MultiInput({
   toExternal,
   inputs,
   className,
-  isAdvanced,
   defaultOpen,
-  fullWidth = false,
   isEntryLocked = () => false,
   readOnly,
   noEdit,
   newItemAction,
+  newItemActionWidth = 1,
   inputInfo,
   ...props
 }) {
@@ -97,12 +95,7 @@ export function MultiInput({
       ref.current.focus();
     }
   };
-  const open = defaultOpen === undefined ? !isAdvanced : defaultOpen;
-
-  const listClasses = classnames({
-    'bsl-col-md--8': !fullWidth && (title || label),
-    'bsl-col-md--12': fullWidth && !(title || label),
-  });
+  const open = defaultOpen ?? false;
 
   useEffect(() => {
     internalValue.forEach((entry, index) => {
@@ -161,73 +154,66 @@ export function MultiInput({
       className={className}
       required={required}
       defaultOpen={open}
-      tooltipContent={sectionTooltipContent}
+      tooltipContent={sectionTooltipContent || tooltipContent}
       {...props}
     >
-      <FlexBox className="form-field multi-input" justifyContent="Center">
-        {!fullWidth && (title || label) && (
-          <div className="bsl-col-md--3 form-field__label">
-            <ResourceForm.Label
-              required={required}
-              tooltipContent={tooltipContent}
-            >
-              {title || label}
-            </ResourceForm.Label>
-          </div>
-        )}
-        <ul className={listClasses}>
-          {internalValue.map((entry, index) => (
-            <li key={index} style={spacing.sapUiSmallMarginBottom}>
-              <FlexBox alignItems="Baseline">
-                <div className="bsl-col-md--11">
-                  <FlexBox wrap="Wrap" style={{ gap: '10px' }}>
-                    {noEdit && !isLast(index) && (
-                      <span className="readonly-value">{entry}</span>
-                    )}
-                    {(!noEdit || isLast(index)) &&
-                      inputs.map(
-                        (input, inputIndex) =>
-                          inputComponents[index][inputIndex],
-                      )}
-                  </FlexBox>
-                </div>
-                <div className="bsl-col-md--1">
-                  {!isLast(index) && (
-                    <Button
-                      disabled={readOnly}
-                      className={classnames({
-                        hidden: isEntryLocked(entry),
-                      })}
-                      icon="delete"
-                      design="Transparent"
-                      onClick={() => removeValue(index)}
-                      aria-label={t('common.buttons.delete')}
-                    />
+      <div className="form-field multi-input" justifyContent="Center">
+        <ul className="bsl-col-md--12">
+          {internalValue.map((entry, index) => {
+            const fieldWidth =
+              isLast(index) && newItemAction
+                ? `bsl-col-md--${12 - newItemActionWidth}`
+                : 'bsl-col-md--11';
+
+            return (
+              <li key={index} style={spacing.sapUiTinyMarginBottom}>
+                <FlexBox style={{ gap: '10px' }} alignItems="Center">
+                  {noEdit && !isLast(index) && (
+                    <span className="readonly-value">{entry}</span>
                   )}
-                  {isLast(index) && newItemAction}
-                </div>
-              </FlexBox>
-            </li>
-          ))}
+
+                  {(!noEdit || isLast(index)) && (
+                    <div className={fieldWidth}>
+                      <FlexBox style={{ gap: '10px' }} alignItems="Center">
+                        {inputs.map(
+                          (input, inputIndex) =>
+                            inputComponents[index][inputIndex],
+                        )}
+                      </FlexBox>
+                    </div>
+                  )}
+
+                  {!isLast(index) && (
+                    <div className="bsl-col-md--1">
+                      <Button
+                        disabled={readOnly}
+                        className={classnames({
+                          hidden: isEntryLocked(entry),
+                        })}
+                        icon="delete"
+                        design="Transparent"
+                        onClick={() => removeValue(index)}
+                        aria-label={t('common.buttons.delete')}
+                      />
+                    </div>
+                  )}
+
+                  {isLast(index) && newItemAction && (
+                    <div className={`bsl-col-md--${newItemActionWidth}`}>
+                      {newItemAction}
+                    </div>
+                  )}
+                </FlexBox>
+              </li>
+            );
+          })}
           {inputInfo && (
-            <p style={{ color: 'var(--sapNeutralTextColor)' }}>
+            <Label wrappingType="Normal" style={{ marginTop: '5px' }}>
               {inputInfoLink}
-            </p>
+            </Label>
           )}
         </ul>
-        <div className="bsl-col-md--1 tooltip-column tooltip-column--with-padding">
-          {tooltipContent && (
-            <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
-              <Icon
-                aria-label=""
-                className="bsl-icon-m"
-                name="message-information"
-                design="Information"
-              />
-            </Tooltip>
-          )}
-        </div>
-      </FlexBox>
+      </div>
     </ResourceForm.CollapsibleSection>
   );
 }

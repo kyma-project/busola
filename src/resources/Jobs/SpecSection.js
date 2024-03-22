@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm';
@@ -20,7 +19,6 @@ export const CronJobSpecSection = ({ value, setValue, ...props }) => {
   return (
     <ResourceForm.Wrapper resource={value} setResource={setValue} {...props}>
       <ResourceForm.FormField
-        advanced
         propertyPath="$.startingDeadlineSeconds"
         label={t('jobs.create-modal.labels.starting-deadline')}
         input={Inputs.Number}
@@ -30,7 +28,6 @@ export const CronJobSpecSection = ({ value, setValue, ...props }) => {
       />
 
       <ResourceForm.FormField
-        advanced
         propertyPath="$.suspend"
         label={t('jobs.create-modal.labels.suspend')}
         input={Inputs.Switch}
@@ -38,7 +35,6 @@ export const CronJobSpecSection = ({ value, setValue, ...props }) => {
       />
 
       <ResourceForm.FormField
-        advanced
         propertyPath="$.successfulJobsHistoryLimit"
         label={t('jobs.create-modal.labels.successful-jobs-history-limit')}
         input={Inputs.Number}
@@ -49,7 +45,6 @@ export const CronJobSpecSection = ({ value, setValue, ...props }) => {
       />
 
       <ResourceForm.FormField
-        advanced
         propertyPath="$.failedJobsHistoryLimit"
         label={t('jobs.create-modal.labels.failed-jobs-history-limit')}
         input={Inputs.Number}
@@ -60,7 +55,6 @@ export const CronJobSpecSection = ({ value, setValue, ...props }) => {
       />
 
       <ResourceForm.FormField
-        advanced
         propertyPath="$.jobTemplate.spec.template.spec.restartPolicy"
         label={t('pods.labels.restart-policy')}
         input={Inputs.Dropdown}
@@ -68,7 +62,6 @@ export const CronJobSpecSection = ({ value, setValue, ...props }) => {
       />
 
       <ResourceForm.FormField
-        advanced
         propertyPath="$.concurrencyPolicy"
         label={t('cron-jobs.create-modal.labels.concurrency-policy')}
         input={Inputs.Dropdown}
@@ -92,7 +85,6 @@ export const JobSpecSection = ({
   return (
     <ResourceForm.Wrapper resource={value} setResource={setValue} {...props}>
       <ResourceForm.FormField
-        advanced
         propertyPath="$.parallelism"
         label={t('jobs.create-modal.labels.parallelism')}
         input={Inputs.Number}
@@ -101,7 +93,6 @@ export const JobSpecSection = ({
       />
 
       <ResourceForm.FormField
-        advanced
         propertyPath="$.suspend"
         label={t('jobs.create-modal.labels.suspend')}
         input={Inputs.Switch}
@@ -109,7 +100,6 @@ export const JobSpecSection = ({
       />
 
       <ResourceForm.FormField
-        advanced
         propertyPath="$.template.spec.restartPolicy"
         label={t('pods.labels.restart-policy')}
         input={Inputs.Dropdown}

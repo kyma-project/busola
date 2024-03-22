@@ -19,3 +19,4 @@ export const ResourceDescription = (
 
 export const List = React.lazy(() => import('./NamespaceList'));
 export const Details = React.lazy(() => import('./NamespaceDetails'));
+export const Create = React.lazy(() => import('./NamespaceCreate'));

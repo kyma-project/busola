@@ -12,9 +12,12 @@ import { useCreateResource } from '../useCreateResource';
 import { KeyValueField, K8sNameField } from '../fields';
 import * as jp from 'jsonpath';
 import { Form, FormItem } from '@ui5/webcomponents-react';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import { spacing } from '@ui5/webcomponents-react-base';
 import './ResourceForm.scss';
+import { useRecoilValue } from 'recoil';
+import { editViewModeState } from 'state/preferences/editViewModeAtom';
 
 export function ResourceForm({
   pluralKind, // used for the request path
@@ -30,13 +33,11 @@ export function ResourceForm({
   createUrl,
   presets,
   onPresetSelected,
-  onReset,
   renderEditor,
   onSubmit,
   afterCreatedFn,
   className,
   onlyYaml = false,
-  toggleFormFn,
   autocompletionDisabled,
   readOnly,
   handleNameChange,
@@ -45,19 +46,19 @@ export function ResourceForm({
   disableDefaultFields,
   onModeChange,
   urlPath,
-  handleSetResetFormFn = () => {},
   layoutNumber,
+  actions,
   modeSelectorDisabled = false,
-  noAdvancedMode = false,
   initialMode,
-  yamlSearchHidden,
+  yamlSearchDisabled,
+  yamlHideDisabled,
+  isEdit,
 }) {
   // readonly schema ID, set only once
   const resourceSchemaId = useMemo(
     () => resource?.apiVersion + '/' + resource?.kind,
     [], // eslint-disable-line react-hooks/exhaustive-deps
   );
-  const resourceRef = useRef(null);
 
   if (!handleNameChange) {
     handleNameChange = name => {
@@ -68,15 +69,7 @@ export function ResourceForm({
     };
   }
 
-  useEffect(() => {
-    if (!resourceRef.current) {
-      resourceRef.current = JSON.stringify(resource);
-      handleSetResetFormFn(() => () => {
-        setResource(JSON.parse(resourceRef.current));
-        if (onReset) onReset();
-      });
-    }
-  }, [handleSetResetFormFn, onReset, resource, resourceRef, setResource]);
+  const editViewMode = useRecoilValue(editViewModeState);
 
   const { t } = useTranslation();
   const createResource = useCreateResource({
@@ -87,7 +80,6 @@ export function ResourceForm({
     initialUnchangedResource,
     createUrl,
     afterCreatedFn,
-    toggleFormFn,
     urlPath,
     layoutNumber,
   });
@@ -97,19 +89,19 @@ export function ResourceForm({
       switch (initialMode) {
         case 'MODE_YAML':
           return ModeSelector.MODE_YAML;
-        case 'MODE_SIMPLE':
-          return ModeSelector.MODE_SIMPLE;
-        case 'MODE_ADVANCED':
-          return ModeSelector.MODE_ADVANCED;
+        case 'MODE_FORM':
         default:
-          return ModeSelector.MODE_SIMPLE;
+          return ModeSelector.MODE_FORM;
       }
     }
+
     if (onlyYaml) return ModeSelector.MODE_YAML;
 
-    if (!!initialResource) return ModeSelector.MODE_ADVANCED;
-
-    return ModeSelector.MODE_SIMPLE;
+    return editViewMode.preferencesViewType === 'MODE_DEFAULT'
+      ? editViewMode.dynamicViewType === ModeSelector.MODE_FORM
+        ? ModeSelector.MODE_FORM
+        : ModeSelector.MODE_YAML
+      : editViewMode.preferencesViewType ?? ModeSelector.MODE_FORM;
   };
 
   const [mode, setMode] = React.useState(handleInitialMode);
@@ -120,7 +112,6 @@ export function ResourceForm({
     if (setCustomValid) {
       if (mode === ModeSelector.MODE_YAML) {
         setCustomValid(true);
-      } else {
         setCustomValid(validationRef.current);
       }
     }
@@ -148,6 +139,7 @@ export function ResourceForm({
 
   let editor = (
     <EditorWrapper
+      height="100%"
       value={resource}
       onChange={setResource}
       onMount={setActionsEditor}
@@ -161,116 +153,121 @@ export function ResourceForm({
     ? renderEditor({ defaultEditor: editor, Editor: EditorWrapper })
     : editor;
 
+  const formContent = (
+    <Form
+      className={classnames(
+        'resource-form ui5-content-density-compact',
+        className,
+      )}
+      columnsL={1}
+      columnsM={1}
+      columnsS={1}
+      columnsXL={1}
+      labelSpanL={0}
+      labelSpanM={0}
+      labelSpanS={0}
+      labelSpanXL={0}
+      as="div"
+      style={{ overflowX: 'hidden' }}
+    >
+      {mode === ModeSelector.MODE_FORM && (
+        <FormItem>
+          <div
+            className="full-width"
+            style={spacing.sapUiTinyMarginBottom}
+            onChange={onChange}
+            hidden={mode !== ModeSelector.MODE_FORM}
+          >
+            <ResourceFormWrapper
+              resource={resource}
+              setResource={setResource}
+              validationRef={validationRef}
+            >
+              {presetsSelector}
+
+              {!disableDefaultFields && (
+                <>
+                  <K8sNameField
+                    propertyPath="$.metadata.name"
+                    kind={singularName}
+                    readOnly={readOnly || !!initialResource}
+                    setValue={handleNameChange}
+                    {...nameProps}
+                  />
+                  <KeyValueField
+                    propertyPath="$.metadata.labels"
+                    title={t('common.headers.labels')}
+                    style={spacing.sapUiSmallMarginTop}
+                    inputInfo={t('common.tooltips.key-value')}
+                    {...labelsProps}
+                  />
+                  <KeyValueField
+                    propertyPath="$.metadata.annotations"
+                    title={t('common.headers.annotations')}
+                    inputInfo={t('common.tooltips.key-value')}
+                  />
+                </>
+              )}
+              {children}
+            </ResourceFormWrapper>
+          </div>
+        </FormItem>
+      )}
+    </Form>
+  );
+
   return (
     <section className={classnames('resource-form', className)}>
-      {presetsSelector}
-      {onlyYaml ? null : (
-        <ModeSelector
-          mode={mode}
-          setMode={newMode => {
-            setMode(newMode);
-            if (onModeChange) onModeChange(mode, newMode);
-          }}
-          isEditing={!!initialResource}
-          isDisabled={modeSelectorDisabled}
-          noAdvancedMode={noAdvancedMode}
-        />
-      )}
-      <form ref={formElementRef} onSubmit={onSubmit || createResource}>
-        {mode === ModeSelector.MODE_YAML && (
-          <div className="yaml-form" style={{ width: '100%', height: '100%' }}>
+      <UI5Panel
+        key={`edit-panel-${singularName}`}
+        className="resource-form--panel card-shadow"
+        style={spacing.sapUiSmallMarginTopBottom}
+        disableMargin
+        headerActions={
+          <>
+            {actions}
             <EditorActions
               val={convertedResource}
               editor={actionsEditor}
               title={`${resource?.metadata?.name || singularName}.yaml`}
               saveHidden
-              searchHidden={yamlSearchHidden}
+              searchDisabled={yamlSearchDisabled || mode === 'MODE_FORM'}
+              hideDisabled={yamlHideDisabled || mode === 'MODE_FORM'}
             />
-            {editor}
-          </div>
-        )}
-        <Form
-          className={classnames(
-            'resource-form ui5-content-density-compact',
-            className,
-          )}
-          columnsL={1}
-          columnsM={1}
-          columnsS={1}
-          columnsXL={1}
-          labelSpanL={0}
-          labelSpanM={0}
-          labelSpanS={0}
-          labelSpanXL={0}
-          as="div"
+          </>
+        }
+        modeActions={
+          <>
+            {onlyYaml ? null : (
+              <ModeSelector
+                mode={mode}
+                setMode={newMode => {
+                  setMode(newMode);
+                  if (onModeChange) onModeChange(mode, newMode);
+                }}
+                isEditing={!!isEdit}
+                isDisabled={modeSelectorDisabled}
+              />
+            )}
+          </>
+        }
+      >
+        <form
+          ref={formElementRef}
+          onSubmit={onSubmit || createResource}
+          style={{ height: '100%' }}
         >
-          {mode === ModeSelector.MODE_SIMPLE && (
-            <FormItem>
-              <div onChange={onChange} className="simple-form">
-                <ResourceFormWrapper
-                  resource={resource}
-                  setResource={setResource}
-                  isAdvanced={false}
-                >
-                  {!disableDefaultFields && (
-                    <K8sNameField
-                      propertyPath="$.metadata.name"
-                      kind={singularName}
-                      readOnly={readOnly || !!initialResource}
-                      setValue={handleNameChange}
-                      {...nameProps}
-                    />
-                  )}
-                  {children}
-                </ResourceFormWrapper>
-              </div>
-            </FormItem>
+          {mode === ModeSelector.MODE_YAML && (
+            <div
+              className="yaml-form"
+              style={{ width: '100%', height: '100%', minHeight: '300px' }}
+            >
+              {editor}
+            </div>
           )}
-          {mode === ModeSelector.MODE_ADVANCED && (
-            <FormItem>
-              <div
-                className="advanced-form"
-                onChange={onChange}
-                hidden={mode !== ModeSelector.MODE_ADVANCED}
-              >
-                <ResourceFormWrapper
-                  resource={resource}
-                  setResource={setResource}
-                  isAdvanced={true}
-                  validationRef={validationRef}
-                >
-                  {!disableDefaultFields && (
-                    <>
-                      <K8sNameField
-                        propertyPath="$.metadata.name"
-                        kind={singularName}
-                        readOnly={readOnly || !!initialResource}
-                        setValue={handleNameChange}
-                        {...nameProps}
-                      />
-                      <KeyValueField
-                        advanced
-                        propertyPath="$.metadata.labels"
-                        title={t('common.headers.labels')}
-                        style={spacing.sapUiSmallMarginTop}
-                        inputInfo={t('common.tooltips.key-value')}
-                        {...labelsProps}
-                      />
-                      <KeyValueField
-                        advanced
-                        propertyPath="$.metadata.annotations"
-                        title={t('common.headers.annotations')}
-                        inputInfo={t('common.tooltips.key-value')}
-                      />
-                    </>
-                  )}
-                  {children}
-                </ResourceFormWrapper>
-              </div>
-            </FormItem>
-          )}
-        </Form>
-      </form>
+          {formContent}
+        </form>
+      </UI5Panel>
     </section>
   );
 }

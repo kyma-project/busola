@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { ServiceAccountTokenStatus } from 'shared/components/ServiceAccountTokenStatus';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { ServiceAccountCreate } from './ServiceAccountCreate';
+import ServiceAccountCreate from './ServiceAccountCreate';
 import {
   ResourceDescription,
   i18nDescriptionKey,

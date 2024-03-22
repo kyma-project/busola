@@ -73,10 +73,6 @@ context('Test Command Palette navigation', () => {
     cy.contains('Cluster Details > Nodes')
       .first()
       .click();
-
-    cy.get('ui5-breadcrumbs')
-      .should('contain.text', 'Cluster Details - Nodes')
-      .should('be.visible');
   });
 
   it('All namespaces', () => {
@@ -155,7 +151,7 @@ context('Test Command Palette navigation', () => {
     // autocomplete
     cy.get('body')
       .tab()
-      .type('{enter}');
+      .type('{enter}', { force: true });
 
     cy.contains('Cluster interaction').should('be.visible');
 
@@ -163,14 +159,11 @@ context('Test Command Palette navigation', () => {
   });
 
   it('Disables Command Palette if a modal is present', () => {
-    openCommandPalette();
+    cy.get('ui5-button.ui5-shellbar-button[icon="add"]').click();
 
-    getQueryInput().type('deploy{enter}');
-
-    cy.contains('ui5-button', 'Create').click();
-
-    cy.get('[aria-label="Deployment name"]:visible')
+    cy.get('.yaml-upload-modal__layout:visible')
       .find('input')
+      .first()
       .type(`${Cypress.platform === 'darwin' ? '{cmd}k' : '{ctrl}k'}`, {
         force: true,
       });

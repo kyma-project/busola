@@ -10,7 +10,10 @@ export function LayoutPanelRow({ name, value }) {
   return (
     <div
       className="break-word layout-panel-row"
-      style={spacing.sapUiTinyMarginBottom}
+      style={{
+        ...spacing.sapUiTinyMarginTopBottom,
+        ...spacing.sapUiSmallMarginBeginEnd,
+      }}
     >
       <Text style={spacing.sapUiTinyMarginBottom}>{name}</Text>
       <Text>{sanitizedValue}</Text>

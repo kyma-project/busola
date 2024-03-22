@@ -8,7 +8,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 
 import { createJobTemplate, createJobPresets } from './templates';
 import { JobSpecSection } from './SpecSection';
-import { ContainerSection, ContainersSection } from './ContainersSection';
+import { ContainersSection } from './ContainersSection';
 import { MessageStrip } from '@ui5/webcomponents-react';
 
 function isJobValid(job = {}) {
@@ -21,7 +21,7 @@ function isJobValid(job = {}) {
   return isNameValid && areContainersValid;
 }
 
-export function JobCreate({
+export default function JobCreate({
   formElementRef,
   namespace,
   onChange,
@@ -64,15 +64,8 @@ export function JobCreate({
       }
       createUrl={resourceUrl}
     >
-      <JobSpecSection advanced propertyPath="$.spec" readOnly={!!initialJob} />
-      <ContainerSection
-        simple
-        propertyPath="$.spec.template.spec.containers"
-        readOnly={!!initialJob}
-        prefix={prefix}
-      />
+      <JobSpecSection propertyPath="$.spec" readOnly={!!initialJob} />
       <ContainersSection
-        advanced
         propertyPath="$.spec.template.spec.containers"
         readOnly={!!initialJob}
       />
@@ -82,4 +75,3 @@ export function JobCreate({
     </ResourceForm>
   );
 }
-JobCreate.allowEdit = true;

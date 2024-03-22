@@ -4,7 +4,7 @@ import { useUrl } from 'hooks/useUrl';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 
-import { PodCreate } from './PodCreate';
+import PodCreate from './PodCreate';
 import { calculatePodState, PodStatus } from './PodStatus';
 import PodRestarts from './PodRestarts';
 import {

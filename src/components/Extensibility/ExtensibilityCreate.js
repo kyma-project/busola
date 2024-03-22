@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState, useContext } from 'react';
+import { useCallback, useMemo, useState, useContext } from 'react';
 import Immutable from 'immutable';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
@@ -27,6 +27,8 @@ import { merge } from 'lodash';
 import { TriggerContext, TriggerContextProvider } from './contexts/Trigger';
 import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { useGetCRbyPath } from './useGetCRbyPath';
+import { TranslationBundleContext } from './helpers';
 
 export function ExtensibilityCreateCore({
   formElementRef,
@@ -35,7 +37,6 @@ export function ExtensibilityCreateCore({
   resourceUrl,
   resource: initialResource,
   resourceSchema: createResource,
-  toggleFormFn,
   resourceName,
   editMode = false,
   ...props
@@ -90,7 +91,6 @@ export function ExtensibilityCreateCore({
         ),
       });
     }
-    toggleFormFn(false);
   };
 
   const {
@@ -101,7 +101,7 @@ export function ExtensibilityCreateCore({
     resource: api,
   });
 
-  const { simpleRules, advancedRules } = useMemo(() => {
+  const formRules = useMemo(() => {
     const fullSchemaRules = prepareRules(
       createResource?.form ?? [],
       editMode,
@@ -112,16 +112,7 @@ export function ExtensibilityCreateCore({
     readVars(resource);
     setTimeout(() => triggers.trigger('init', []));
 
-    return {
-      simpleRules: prepareSchemaRules(
-        fullSchemaRules,
-        item => item.simple ?? false,
-      ),
-      advancedRules: prepareSchemaRules(
-        fullSchemaRules,
-        item => item.advanced ?? true,
-      ),
-    };
+    return prepareSchemaRules(fullSchemaRules);
   }, [createResource]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleNameChange = useCallback(
@@ -182,22 +173,9 @@ export function ExtensibilityCreateCore({
       disableDefaultFields
     >
       <ResourceSchema
-        simple
         key={api.version}
         schema={errorOpenApi ? {} : schema}
-        schemaRules={simpleRules}
-        resource={resource}
-        store={store}
-        setStore={setStore}
-        onSubmit={() => {}}
-        path={general?.urlPath || ''}
-        editMode={editMode}
-      />
-      <ResourceSchema
-        advanced
-        key={api.version}
-        schema={errorOpenApi ? {} : schema}
-        schemaRules={advancedRules}
+        schemaRules={formRules}
         resource={resource}
         store={store}
         setStore={setStore}
@@ -209,17 +187,27 @@ export function ExtensibilityCreateCore({
 }
 
 export function ExtensibilityCreate(props) {
+  const resMetaData = useGetCRbyPath();
+  const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
+
   return (
-    <DataSourcesContextProvider
-      dataSources={props.resourceSchema?.dataSources || {}}
+    <TranslationBundleContext.Provider
+      value={{
+        translationBundle: urlPath || 'extensibility',
+        defaultResourcePlaceholder: defaultPlaceholder,
+      }}
     >
-      <TriggerContextProvider>
-        <VarStoreContextProvider>
-          <ExtensibilityCreateCore {...props} />
-        </VarStoreContextProvider>
-      </TriggerContextProvider>
-    </DataSourcesContextProvider>
+      <DataSourcesContextProvider
+        dataSources={props.resourceSchema?.dataSources || {}}
+      >
+        <TriggerContextProvider>
+          <VarStoreContextProvider>
+            <ExtensibilityCreateCore {...props} />
+          </VarStoreContextProvider>
+        </TriggerContextProvider>
+      </DataSourcesContextProvider>
+    </TranslationBundleContext.Provider>
   );
 }
 
-ExtensibilityCreate.allowEdit = true;
+export default ExtensibilityCreate;

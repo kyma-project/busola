@@ -9,7 +9,7 @@ import { filterByResource } from 'hooks/useMessageList';
 
 import { PodStatus } from './PodStatus';
 import ContainersData from './ContainersData';
-import { PodCreate } from './PodCreate';
+import PodCreate from './PodCreate';
 import { useUrl } from 'hooks/useUrl';
 import { ResourceDescription } from 'resources/Pods';
 import { Link } from 'shared/components/Link/Link';

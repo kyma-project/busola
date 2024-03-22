@@ -3,6 +3,13 @@
 
 @import './wizard-dialog.scss';
 
+:root {
+  --card-box-shadow: var(--_ui5-v1-20-0_card_box_shadow);
+  --card-border: var(--_ui5-v1-20-0_card_border);
+  --card-border-radius: var(--_ui5-v1-20-0_card_border-radius);
+  --card-border: var(--_ui5-v1-20-0_card_border);
+}
+
 html {
   font-size: 16px;
   background: color-mix(in srgb, black 4%, var(--sapBackgroundColor));
@@ -18,8 +25,16 @@ body {
   }
 }
 
-.cursor-pointer {
-  cursor: pointer;
+.column-content {
+  height: 100%;
+}
+
+.card-shadow {
+  box-shadow: var(--card-box-shadow);
+  border: var(--card-border);
+  border-radius: var(--card-border-radius);
+  border: var(--card-border);
+  overflow: hidden;
 }
 
 .panel-grid {
@@ -216,6 +231,11 @@ ui5-tabcontainer::part(content) {
   min-width: 25%;
 }
 
+.bsl-col-md--4 {
+  max-width: 33.33333%;
+  min-width: 33.33333%;
+}
+
 .bsl-col-md--5 {
   max-width: 41.66667%;
   min-width: 41.66667%;
@@ -234,6 +254,11 @@ ui5-tabcontainer::part(content) {
 .bsl-col-md--9 {
   max-width: 75%;
   min-width: 75%;
+}
+
+.bsl-col-md--10 {
+  max-width: 83.33333%;
+  min-width: 83.33333%;
 }
 
 .bsl-col-md--11 {

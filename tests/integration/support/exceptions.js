@@ -26,6 +26,9 @@ Cypress.Commands.add('handleExceptions', () => {
       ) ||
       err.message.includes(
         "Cannot read properties of undefined (reading 'hasAttribute')",
+      ) ||
+      err.message.includes(
+        "Cannot read properties of null (reading 'getBoundingClientRect')",
       )
     )
       return false;

@@ -25,7 +25,6 @@ export function ExternalResourceRef({
   tooltipContent,
   actions,
   className,
-  isAdvanced,
   setValue,
   required = false,
   defaultOpen = undefined,
@@ -109,7 +108,7 @@ export function ExternalResourceRef({
           resource: labelPrefix,
         })}
         input={() => (
-          <div className="bsl-col bsl-col-md--11">
+          <div className="bsl-col-md--12">
             <ComboBox
               id={`secret-namespace-combobox-${index}`}
               aria-label="Secret namespace Combobox"
@@ -147,7 +146,7 @@ export function ExternalResourceRef({
           resource: labelPrefix,
         })}
         input={() => (
-          <div className="bsl-col bsl-col-md--11">
+          <div className="bsl-col-md--12">
             <ComboBox
               id={`secret-name-combobox-${index}`}
               aria-label="Secret name Combobox"
@@ -193,7 +192,6 @@ export function ExternalResourceRef({
       actions={actions}
       className={classnames('external-resource-ref', className)}
       defaultOpen={defaultOpen}
-      isAdvanced={isAdvanced}
       required={required}
       nestingLevel={nestingLevel}
     >

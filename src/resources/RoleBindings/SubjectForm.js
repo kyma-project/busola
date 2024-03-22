@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm';
@@ -66,7 +65,7 @@ export function SingleSubjectForm({
         tooltipContent={t('role-bindings.create-modal.tooltips.kind')}
         label={t('role-bindings.create-modal.kind')}
         input={() => (
-          <Select onChange={onChange} className="bsl-col bsl-col-md--11">
+          <Select onChange={onChange} className="bsl-col-md--11">
             {SUBJECT_KINDS.map(kind => (
               <Option value={kind} selected={(subject.kind || '') === kind}>
                 {kind}
@@ -111,7 +110,6 @@ export function SingleSubjectForm({
 
       {subject.kind === 'ServiceAccount' && (
         <ServiceAccountRef
-          advanced
           title={t('service-accounts.service-account')}
           value={{
             name: subject.name || '',
@@ -123,22 +121,5 @@ export function SingleSubjectForm({
         />
       )}
     </div>
-  );
-}
-
-export function SingleSubjectInput({ value: subjects, setValue: setSubjects }) {
-  const { t } = useTranslation();
-  return (
-    <ResourceForm.CollapsibleSection
-      title={t('role-bindings.create-modal.subject')}
-      defaultOpen
-    >
-      <SingleSubjectForm
-        subject={subjects?.[0]}
-        subjects={subjects}
-        setSubjects={setSubjects}
-        index={0}
-      />
-    </ResourceForm.CollapsibleSection>
   );
 }

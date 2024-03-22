@@ -1,18 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import * as _ from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
-import {
-  SimpleContainersView,
-  AdvancedContainersView,
-} from 'shared/components/Deployment/ContainersViews';
+import { AdvancedContainersView } from 'shared/components/Deployment/ContainersViews';
 
 import { createContainerTemplate, createReplicaSetTemplate } from './templates';
 
-export function ReplicaSetCreate({
+export default function ReplicaSetCreate({
   resourceUrl,
   resource: initialReplicaSet,
   formElementRef,
@@ -70,7 +67,6 @@ export function ReplicaSetCreate({
       />
 
       <ResourceForm.FormField
-        advanced
         propertyPath="$.spec.minReadySeconds"
         label={t('replica-sets.create-modal.labels.min-ready-seconds')}
         input={Inputs.Number}
@@ -83,14 +79,7 @@ export function ReplicaSetCreate({
         min={0}
       />
 
-      <SimpleContainersView
-        simple
-        resource={replicaset}
-        setResource={setReplicaSet}
-      />
-
       <AdvancedContainersView
-        advanced
         resource={replicaset}
         setResource={setReplicaSet}
         onChange={onChange}
@@ -100,4 +89,3 @@ export function ReplicaSetCreate({
     </ResourceForm>
   );
 }
-ReplicaSetCreate.allowEdit = true;

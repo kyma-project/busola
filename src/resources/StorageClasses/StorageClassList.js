@@ -1,6 +1,6 @@
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 
-import { StorageClassCreate } from './StorageClassCreate';
+import StorageClassCreate from './StorageClassCreate';
 import {
   ResourceDescription,
   i18nDescriptionKey,

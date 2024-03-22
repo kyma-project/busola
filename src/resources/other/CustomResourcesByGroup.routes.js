@@ -1,13 +1,19 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useMemo } from 'react';
 import { Route, useParams, useSearchParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
+import { useTranslation } from 'react-i18next';
 
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
+import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { Spinner } from 'shared/components/Spinner/Spinner';
+import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
+import { usePrepareCreateProps } from 'resources/helpers';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useUrl } from 'hooks/useUrl';
 import { useFeature } from 'hooks/useFeature';
+import CRCreate from '../CustomResourceDefinitions/CRCreate';
 
 const CustomResourcesByGroup = React.lazy(() =>
   import('../../components/CustomResources/CustomResourcesByGroup'),
@@ -27,8 +33,10 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
 
+  const { t } = useTranslation();
+
   const { crdName, crName } = useParams();
-  const { namespace } = useUrl();
+  const { namespace, scopedUrl } = useUrl();
 
   const initialLayoutState = layout
     ? {
@@ -57,6 +65,36 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
     }
   }, [layout, isColumnLeyoutEnabled, crdName, crName, namespace]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const layoutCloseCreateUrl = scopedUrl(
+    `customresources/${layoutState?.midColumn?.resourceName ?? crdName}`,
+  );
+
+  const crdResourceName = useMemo(
+    () =>
+      layoutState?.endColumn?.resourceName ??
+      layoutState?.midColumn?.resourceName ??
+      crdName,
+    [
+      layoutState?.endColumn?.resourceName,
+      layoutState?.midColumn?.resourceName,
+      crdName,
+    ],
+  );
+
+  const { data: crd } = useGet(
+    `/apis/apiextensions.k8s.io/v1/customresourcedefinitions/${crdResourceName}`,
+    {
+      pollingInterval: null,
+      skip: !crdResourceName,
+    },
+  );
+
+  const elementCreateProps = usePrepareCreateProps({
+    resourceType: crdResourceName,
+    apiGroup: 'apiextensions.k8s.io',
+    apiVersion: 'v1',
+  });
+
   let startColumnComponent = null;
   if (!layout || !isColumnLeyoutEnabled) {
     if (defaultColumn === 'details') {
@@ -75,6 +113,7 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
         <CustomResourcesOfType
           crdName={layoutState?.midColumn?.resourceName ?? crdName}
           enableColumnLayout={false}
+          layoutCloseCreateUrl={layoutCloseCreateUrl}
         />
       );
     } else {
@@ -89,7 +128,27 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
   }
 
   let midColumnComponent = null;
-  if (
+  if (!layoutState?.midColumn && layoutState?.showCreate?.resourceType) {
+    midColumnComponent = (
+      <ResourceCreate
+        title={elementCreateProps.resourceTitle}
+        confirmText={t('common.buttons.create')}
+        layoutCloseCreateUrl={layoutCloseCreateUrl}
+        renderForm={renderProps => {
+          const createComponent = layoutState?.showCreate?.resourceType && (
+            <CRCreate
+              {...renderProps}
+              {...elementCreateProps}
+              crd={crd}
+              layoutNumber="MidColumn"
+            />
+          );
+
+          return <ErrorBoundary>{createComponent}</ErrorBoundary>;
+        }}
+      />
+    );
+  } else if (
     (layoutState?.midColumn?.resourceName || isColumnLeyoutEnabled) &&
     !(layoutState?.layout === 'OneColumn' && defaultColumn === 'listOfType')
   ) {
@@ -97,13 +156,37 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
       <CustomResourcesOfType
         crdName={layoutState?.midColumn?.resourceName ?? crdName}
         enableColumnLayout={isColumnLeyoutEnabled}
+        layoutCloseCreateUrl={layoutCloseCreateUrl}
       />
     );
   }
 
   let endColumnComponent = null;
+  if (layoutState?.showCreate?.resourceType && layoutState?.midColumn) {
+    endColumnComponent = (
+      <ResourceCreate
+        title={elementCreateProps.resourceTitle}
+        confirmText={t('common.buttons.create')}
+        layoutNumber="EndColumn"
+        layoutCloseCreateUrl={layoutCloseCreateUrl}
+        renderForm={renderProps => {
+          const createComponent = layoutState?.showCreate?.resourceType && (
+            <CRCreate
+              {...renderProps}
+              {...elementCreateProps}
+              crd={crd}
+              layoutNumber="MidColumn"
+            />
+          );
+
+          return <ErrorBoundary>{createComponent}</ErrorBoundary>;
+        }}
+      />
+    );
+  }
 
   if (
+    !layoutState?.showCreate &&
     (layoutState?.endColumn || isColumnLeyoutEnabled) &&
     !(layoutState?.layout === 'OneColumn' && defaultColumn === 'details')
   ) {
@@ -118,14 +201,13 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
       />
     );
   }
-
   return (
     <FlexibleColumnLayout
       style={{ height: '100%' }}
       layout={layoutState?.layout || 'OneColumn'}
-      startColumn={<div>{startColumnComponent}</div>}
-      midColumn={<div>{midColumnComponent}</div>}
-      endColumn={<div>{endColumnComponent}</div>}
+      startColumn={<div className="column-content">{startColumnComponent}</div>}
+      midColumn={<div className="column-content">{midColumnComponent}</div>}
+      endColumn={<div className="column-content">{endColumnComponent}</div>}
     />
   );
 };

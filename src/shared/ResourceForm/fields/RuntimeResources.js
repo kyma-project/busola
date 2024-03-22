@@ -6,6 +6,7 @@ import { FlexBox } from '@ui5/webcomponents-react';
 import { Label } from '../../../shared/ResourceForm/components/Label';
 import { MemoryInput } from 'resources/Namespaces/MemoryQuotas';
 import './RuntimeResources.scss';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 function CpuInput({ label, propertyPath, container = {}, setContainer }) {
   let value = jp.value(container, propertyPath)?.toString() || '';
@@ -80,33 +81,33 @@ export function RuntimeResources({
       }
       {...props}
     >
-      <div className="runtime-profile-form">
+      <div className="runtime-profile-form" style={spacing.sapUiTinyMarginTop}>
         <MemoryInput
-          label={t('deployments.create-modal.advanced.memory-requests')}
+          label={t('deployments.create-modal.memory-requests')}
           propertyPath="$.requests.memory"
           container={value}
           setContainer={setValue}
           required={true}
-          className="bsl-col bsl-col-md--11"
+          className="bsl-col-md--12"
         />
         <MemoryInput
-          label={t('deployments.create-modal.advanced.memory-limits')}
+          label={t('deployments.create-modal.memory-limits')}
           propertyPath="$.limits.memory"
           container={value}
           setContainer={setValue}
           required={true}
-          className="bsl-col bsl-col-md--11"
+          className="bsl-col-md--12"
         />
       </div>
-      <div className="runtime-profile-form">
+      <div className="runtime-profile-form" style={spacing.sapUiTinyMarginTop}>
         <CpuInput
-          label={t('deployments.create-modal.advanced.cpu-requests')}
+          label={t('deployments.create-modal.cpu-requests')}
           propertyPath="$.requests.cpu"
           container={value}
           setContainer={setValue}
         />
         <CpuInput
-          label={t('deployments.create-modal.advanced.cpu-limits')}
+          label={t('deployments.create-modal.cpu-limits')}
           propertyPath="$.limits.cpu"
           container={value}
           setContainer={setValue}

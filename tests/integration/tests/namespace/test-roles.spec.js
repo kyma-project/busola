@@ -20,7 +20,7 @@ context('Test Roles', () => {
 
     cy.contains(ROLE_NAME).should('not.exist');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.get('ui5-input[aria-label="Role name"]:visible', { log: false })
       .find('input')
@@ -49,10 +49,7 @@ context('Test Roles', () => {
       'create',
     );
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Create');
   });
 
   it('Check the Role details', () => {
@@ -79,10 +76,7 @@ context('Test Roles', () => {
   it('Edit the Role', () => {
     cy.wait(1000);
 
-    cy.get('ui5-button')
-      .contains('Edit')
-      .should('be.visible')
-      .click();
+    cy.inspectTab('Edit');
 
     cy.get(`ui5-combobox[placeholder^="Start typing to select Verbs"]:visible`)
       .find('input')
@@ -90,13 +84,12 @@ context('Test Roles', () => {
       .click()
       .type('watch');
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Update')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Edit');
   });
 
   it('Check the Role details after edit', () => {
+    cy.inspectTab('View');
+
     cy.getMidColumn()
       .contains('ui5-title', ROLE_NAME)
       .should('be.visible');
@@ -135,10 +128,7 @@ context('Test Roles', () => {
       .click()
       .type(CLONE_NAME);
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Create');
   });
 
   it('Check the clone details', () => {

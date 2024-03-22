@@ -1,4 +1,3 @@
-import React from 'react';
 import pluralize from 'pluralize';
 
 import { usePrepareDetailsProps } from 'resources/helpers';
@@ -7,12 +6,11 @@ import { prettifyKind } from 'shared/utils/helpers';
 import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
 import { useGetSchema } from 'hooks/useGetSchema';
 import { getExtensibilityPath } from 'components/Extensibility/helpers/getExtensibilityPath';
-import { useUrl } from 'hooks/useUrl';
 
 import { DataSourcesContextProvider } from './contexts/DataSources';
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { Widget } from './components/Widget';
-import { ExtensibilityCreate } from './ExtensibilityCreate';
+import ExtensibilityCreate from './ExtensibilityCreate';
 import {
   useGetTranslation,
   TranslationBundleContext,
@@ -22,15 +20,14 @@ import { useJsonata } from './hooks/useJsonata';
 
 export const ExtensibilityDetailsCore = ({
   resMetaData,
-  customResourceName,
-  customNamespaceId,
+  resourceName,
+  namespaceId,
 }) => {
   const { t, widgetT, exists } = useGetTranslation();
 
   const { urlPath, resource, features, description: resourceDescription } =
     resMetaData?.general ?? {};
   const { disableEdit, disableDelete } = features?.actions || {};
-  const { scopedUrl } = useUrl();
 
   const { schema } = useGetSchema({
     resource,
@@ -46,8 +43,8 @@ export const ExtensibilityDetailsCore = ({
     resourceI18Key: 'name',
     apiGroup: resource?.group,
     apiVersion: resource?.version,
-    customResourceName: customResourceName,
-    customNamespaceId: customNamespaceId,
+    resourceName,
+    namespaceId,
   });
 
   // there may be a moment when `resMetaData` is undefined (e.g. when switching the namespace)
@@ -55,7 +52,6 @@ export const ExtensibilityDetailsCore = ({
     return null;
   }
 
-  const resourceName = resMetaData?.general?.name;
   const resourceTitle = exists('name')
     ? t('name')
     : resourceName || prettifyKind(resource?.kind || '');
@@ -72,14 +68,6 @@ export const ExtensibilityDetailsCore = ({
   const header = resMetaData?.details?.header || [];
   const body = resMetaData?.details?.body || [];
   const dataSources = resMetaData?.dataSources || {};
-
-  const breadcrumbs = [
-    {
-      name: resourceTitle,
-      url: scopedUrl(getExtensibilityPath(resMetaData?.general)),
-    },
-    { name: '' },
-  ];
 
   return (
     <ResourceDetails
@@ -115,9 +103,8 @@ export const ExtensibilityDetailsCore = ({
       customComponents={
         Array.isArray(body)
           ? [
-              (resource, i, extraContent) => (
+              (resource, i) => (
                 <Widget
-                  extraContent={extraContent}
                   key={i}
                   value={resource}
                   structure={body}
@@ -129,19 +116,14 @@ export const ExtensibilityDetailsCore = ({
             ]
           : []
       }
-      hasTabs={
-        Array.isArray(body) ? body.some(obj => obj.widget === 'Tabs') : false
-      }
       description={description}
-      breadcrumbs={breadcrumbs}
       createResourceForm={ExtensibilityCreate}
       resourceSchema={resMetaData}
       {...detailsProps}
     />
   );
 };
-
-const ExtensibilityDetails = ({ customResourceName, customNamespaceId }) => {
+const ExtensibilityDetails = ({ resourceName, namespaceId }) => {
   const resMetaData = useGetCRbyPath();
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
   return (
@@ -155,8 +137,8 @@ const ExtensibilityDetails = ({ customResourceName, customNamespaceId }) => {
         <ExtensibilityErrBoundary>
           <ExtensibilityDetailsCore
             resMetaData={resMetaData}
-            customResourceName={customResourceName}
-            customNamespaceId={customNamespaceId}
+            resourceName={resourceName}
+            namespaceId={namespaceId}
           />
         </ExtensibilityErrBoundary>
       </DataSourcesContextProvider>

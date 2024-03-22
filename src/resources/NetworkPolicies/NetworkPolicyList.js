@@ -1,6 +1,6 @@
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 
-import { NetworkPolicyCreate } from './NetworkPolicyCreate';
+import NetworkPolicyCreate from './NetworkPolicyCreate';
 import {
   ResourceDescription,
   i18nDescriptionKey,

@@ -15,15 +15,13 @@ context('Test Deployments', () => {
   it('Create a Deployment', () => {
     cy.navigateTo('Workloads', 'Deployments');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.get('[aria-label="Deployment name"]:visible')
       .find('input')
       .click()
       .clear()
       .type(DEPLOYMENT_NAME, { force: true });
-
-    cy.contains('Advanced').click();
 
     cy.get('[aria-label="expand Labels"]').click();
 
@@ -53,8 +51,6 @@ context('Test Deployments', () => {
       .find('input')
       .type(DOCKER_IMAGE);
 
-    cy.contains('Advanced').click();
-
     cy.contains('ui5-label', 'Memory Requests')
       .next()
       .find('ui5-input')
@@ -81,10 +77,7 @@ context('Test Deployments', () => {
       .clear()
       .type('20');
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Create');
   });
 
   it('Check if deployment and pod exist', () => {
@@ -115,10 +108,7 @@ context('Test Deployments', () => {
 
     cy.wait(1000);
 
-    cy.get('ui5-button')
-      .contains('Edit')
-      .should('be.visible')
-      .click();
+    cy.getMidColumn().inspectTab('Edit');
 
     cy.get('[aria-label="expand Labels"]').click();
 
@@ -133,10 +123,9 @@ context('Test Deployments', () => {
       .first()
       .type('label-value');
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Update')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Edit');
+
+    cy.getMidColumn().inspectTab('View');
 
     cy.getMidColumn().contains('label-key=label-value');
   });

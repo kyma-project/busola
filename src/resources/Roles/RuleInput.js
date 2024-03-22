@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BusyIndicator, Button, MessageStrip } from '@ui5/webcomponents-react';
 import * as jp from 'jsonpath';
@@ -44,7 +43,7 @@ const verbs = [
   '*',
 ];
 
-export function RuleInput({ rule, rules, setRules, isAdvanced }) {
+export function RuleInput({ rule, rules, setRules }) {
   const groupVersions = useRecoilValue(groupVersionState);
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const { t } = useTranslation();
@@ -108,7 +107,6 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
 
   return (
     <ResourceForm.Wrapper
-      isAdvanced={isAdvanced}
       resource={rule}
       setResource={() => setRules([...rules])}
     >
@@ -135,6 +133,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         options={availableResources.map(i => ({ key: i, text: i }))}
         defaultOpen
         nestingLevel={2}
+        newItemActionWidth={2}
         newItemAction={
           loading ? (
             <BusyIndicator size="Small" active={true} delay="0" />
@@ -169,7 +168,6 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
           hideCloseButton
           style={{
             marginBottom: spacing.sapUiSmallMarginBottom.marginBottom,
-            marginLeft: spacing.sapUiMediumMarginBegin.marginLeft,
           }}
         >
           {t('roles.messages.load-resources')}
@@ -188,14 +186,12 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
           </Button>,
         ]}
       />
-      {isAdvanced && (
-        <TextArrayInput
-          title={t('roles.headers.resource-names')}
-          propertyPath="$.resourceNames"
-          nestingLevel={2}
-        />
-      )}
-      {isAdvanced && !namespaceId && (
+      <TextArrayInput
+        title={t('roles.headers.resource-names')}
+        propertyPath="$.resourceNames"
+        nestingLevel={2}
+      />
+      {!namespaceId && (
         <ComboboxArrayInput
           title={t('roles.headers.non-resource-urls')}
           propertyPath="$.nonResourceURLs"

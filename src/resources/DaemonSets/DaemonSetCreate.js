@@ -4,19 +4,21 @@ import { useRecoilValue } from 'recoil';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import * as _ from 'lodash';
 
 import { createDaemonSetTemplate } from './templates';
 
-export function DaemonSetCreate({
+export default function DaemonSetCreate({
   formElementRef,
   onChange,
   setCustomValid,
   resourceUrl,
+  resource: initialDaemonSet,
   ...props
 }) {
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const [daemonSet, setDaemonSet] = useState(
-    createDaemonSetTemplate(namespaceId),
+    _.cloneDeep(initialDaemonSet) || createDaemonSetTemplate(namespaceId),
   );
   const { t } = useTranslation();
 
@@ -26,6 +28,7 @@ export function DaemonSetCreate({
       pluralKind="daemonsets"
       singularName={t('daemon-sets.name_singular')}
       resource={daemonSet}
+      initialResource={initialDaemonSet}
       setResource={setDaemonSet}
       onChange={onChange}
       formElementRef={formElementRef}

@@ -36,7 +36,7 @@ context('Test Persistent Volume Claims', () => {
   it('Create a Persistent Volume Claim', () => {
     cy.navigateTo('Storage', 'Persistent Volume Claims');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.wrap(
       loadPVC(
@@ -50,10 +50,7 @@ context('Test Persistent Volume Claims', () => {
       cy.pasteToMonaco(PVC);
     });
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Create');
 
     cy.contains('ui5-title', PVC_NAME).should('be.visible');
   });
@@ -75,10 +72,9 @@ context('Test Persistent Volume Claims', () => {
       .contains('ui5-panel', Cypress.env('STORAGE_CLASS_NAME'))
       .should('be.visible');
 
-    cy.scrollMidColumnToButtom();
-
     cy.getMidColumn()
       .contains('Events')
+      .scrollIntoView()
       .should('be.visible');
   });
 

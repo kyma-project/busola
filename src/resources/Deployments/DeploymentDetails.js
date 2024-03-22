@@ -6,7 +6,7 @@ import { Selector } from 'shared/components/Selector/Selector.js';
 import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 import { HPASubcomponent } from 'resources/HorizontalPodAutoscalers/HPASubcomponent';
 import { DeploymentStatus } from './DeploymentStatus';
-import { DeploymentCreate } from './DeploymentCreate';
+import DeploymentCreate from './DeploymentCreate';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ReadableElapsedTimeFromNow } from 'shared/components/ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
 import { ResourceDescription } from 'resources/Deployments';

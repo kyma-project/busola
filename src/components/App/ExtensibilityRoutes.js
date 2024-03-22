@@ -4,24 +4,33 @@ import i18next from 'i18next';
 import { Route, useParams, useSearchParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
+import { useTranslation } from 'react-i18next';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useFeature } from 'hooks/useFeature';
+import { useUrl } from 'hooks/useUrl';
 
+import { usePrepareCreateProps } from 'resources/helpers';
 import { Spinner } from 'shared/components/Spinner/Spinner';
+import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
+import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 
 const List = React.lazy(() => import('../Extensibility/ExtensibilityList'));
 const Details = React.lazy(() =>
   import('../Extensibility/ExtensibilityDetails'),
 );
+const Create = React.lazy(() => import('../Extensibility/ExtensibilityCreate'));
 
-const ColumnWrapper = ({ defaultColumn = 'list', resourceType }) => {
+const ColumnWrapper = ({ defaultColumn = 'list', resourceType, extension }) => {
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
-  const { namespaceId, resourceName } = useParams();
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
+  const { resourceListUrl } = useUrl();
 
+  const { t } = useTranslation();
+
+  const { namespaceId, resourceName } = useParams();
   const initialLayoutState = layout
     ? {
         layout: isColumnLeyoutEnabled && layout ? layout : layoutState?.layout,
@@ -41,32 +50,67 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [layout, isColumnLeyoutEnabled, namespaceId, resourceName, resourceType]);
 
-  let startColumnComponent = null;
+  const layoutCloseCreateUrl = resourceListUrl({
+    kind: resourceType,
+    metadata: {
+      namespace: layoutState?.midColumn?.namespaceId ?? namespaceId,
+    },
+  });
 
+  let startColumnComponent = null;
   if ((!layout || !isColumnLeyoutEnabled) && defaultColumn === 'details') {
     startColumnComponent = (
-      <Details
-        customResourceName={resourceName}
-        customNamespaceId={namespaceId}
-      />
+      <Details resourceName={resourceName} namespaceId={namespaceId} />
     );
   } else {
-    startColumnComponent = <List enableColumnLayout={isColumnLeyoutEnabled} />;
+    startColumnComponent = (
+      <List
+        enableColumnLayout={isColumnLeyoutEnabled}
+        layoutCloseCreateUrl={layoutCloseCreateUrl}
+      />
+    );
   }
+
+  const elementCreateProps = usePrepareCreateProps({
+    resourceType,
+    resourceTypeForTitle: extension?.general?.name,
+    apiGroup: extension?.general.resource.group,
+    apiVersion: extension?.general.resource.version,
+  });
 
   let midColumnComponent = null;
 
-  //we have to set it ahead of time for the columns to not jump, but cannot render two Details components when we are directly on details page
+  if (layoutState?.showCreate?.resourceType) {
+    midColumnComponent = (
+      <ResourceCreate
+        title={elementCreateProps.resourceTitle}
+        confirmText={t('common.buttons.create')}
+        layoutCloseCreateUrl={layoutCloseCreateUrl}
+        renderForm={renderProps => {
+          const createComponent = layoutState?.showCreate?.resourceType && (
+            <Create
+              resourceSchema={extension}
+              layoutNumber="StartColumn"
+              {...elementCreateProps}
+              {...renderProps}
+            />
+          );
+
+          return <ErrorBoundary>{createComponent}</ErrorBoundary>;
+        }}
+      />
+    );
+  }
+
   if (
+    !layoutState?.showCreate &&
     (layoutState?.midColumn || isColumnLeyoutEnabled) &&
     !(layoutState?.layout === 'OneColumn' && defaultColumn === 'details')
   ) {
     midColumnComponent = (
       <Details
-        customResourceName={
-          layoutState?.midColumn?.resourceName ?? resourceName
-        }
-        customNamespaceId={layoutState.midColumn?.namespaceId ?? namespaceId}
+        resourceName={layoutState?.midColumn?.resourceName ?? resourceName}
+        namespaceId={layoutState.midColumn?.namespaceId ?? namespaceId}
       />
     );
   }
@@ -77,22 +121,22 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType }) => {
       layout={
         !midColumnComponent ? 'OneColumn' : layoutState?.layout || 'OneColumn'
       }
-      startColumn={<div>{startColumnComponent}</div>}
-      midColumn={<div>{midColumnComponent}</div>}
+      startColumn={<div className="column-content">{startColumnComponent}</div>}
+      midColumn={<div className="column-content">{midColumnComponent}</div>}
     />
   );
 };
 
-export const createExtensibilityRoutes = (cr, language) => {
+export const createExtensibilityRoutes = (extension, language, ...props) => {
   const urlPath =
-    cr?.general?.urlPath ||
-    pluralize(cr?.general?.resource?.kind?.toLowerCase() || '');
+    extension?.general?.urlPath ||
+    pluralize(extension?.general?.resource?.kind?.toLowerCase() || '');
 
   const translationBundle = urlPath || 'extensibility';
   i18next.addResourceBundle(
     language,
     translationBundle,
-    cr?.translations?.[language] || {},
+    extension?.translations?.[language] || {},
   );
 
   return (
@@ -102,11 +146,11 @@ export const createExtensibilityRoutes = (cr, language) => {
         exact
         element={
           <Suspense fallback={<Spinner />}>
-            <ColumnWrapper resourceType={urlPath} />
+            <ColumnWrapper resourceType={urlPath} extension={extension} />
           </Suspense>
         }
       />
-      {cr.details && (
+      {extension.details && (
         <Route
           path={`${urlPath}/:resourceName`}
           exact

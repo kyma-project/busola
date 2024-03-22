@@ -89,7 +89,7 @@ export function BusolaExtensionDetails({ name, namespace }) {
                     })}
                   </Button>
                 }
-                confirmText={t('common.buttons.update')}
+                confirmText={t('common.buttons.save')}
                 id={`edit-resource-modal`}
                 className="modal-size--l"
                 renderForm={props => (
@@ -236,14 +236,7 @@ export function BusolaExtensionDetails({ name, namespace }) {
       resourceName={t('extensibility.title')}
       resourceType="ConfigMaps"
       resourceUrl={resourceUrl}
-      layoutCloseUrl={clusterUrl('busolaextensions')}
-      breadcrumbs={[
-        {
-          name: t('extensibility.title'),
-          url: clusterUrl('busolaextensions'),
-        },
-        { name: '' },
-      ]}
+      layoutCloseCreateUrl={clusterUrl('busolaextensions')}
     />
   );
 }

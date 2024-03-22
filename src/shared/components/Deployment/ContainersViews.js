@@ -1,40 +1,10 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { Button } from '@ui5/webcomponents-react';
-
 import { ResourceForm } from 'shared/ResourceForm';
-import * as Inputs from 'shared/ResourceForm/inputs';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 import { Containers } from './Containers';
 
 import * as jp from 'jsonpath';
-
-export function SimpleContainersView({
-  resource,
-  setResource,
-  onChange,
-  namespace,
-  createContainerTemplate,
-  props,
-}) {
-  const { t } = useTranslation();
-
-  return (
-    <ResourceForm.Wrapper simple resource={resource} setResource={setResource}>
-      <ResourceForm.FormField
-        required
-        simple
-        propertyPath="$.spec.template.spec.containers[0].image"
-        label={t('deployments.create-modal.simple.docker-image')}
-        input={Inputs.Text}
-        placeholder={t(
-          'deployments.create-modal.simple.docker-image-placeholder',
-        )}
-      />
-    </ResourceForm.Wrapper>
-  );
-}
 
 export function AdvancedContainersView({
   resource,
@@ -42,27 +12,20 @@ export function AdvancedContainersView({
   onChange,
   namespace,
   createContainerTemplate,
-  isAdvanced,
-  ...props
 }) {
   const { t } = useTranslation();
   return (
-    <ResourceForm.Wrapper
-      isAdvanced={isAdvanced}
-      resource={resource}
-      setResource={setResource}
-    >
+    <ResourceForm.Wrapper resource={resource} setResource={setResource}>
       <ResourceForm.CollapsibleSection
-        advanced
-        title={t('deployments.create-modal.simple.image-pull-secret')}
+        title={t('deployments.create-modal.image-pull-secret')}
         resource={resource}
         setResource={setResource}
       >
         <ResourceForm.FormField
           tooltipContent={t(
-            'deployments.create-modal.simple.image-pull-secret-tooltip',
+            'deployments.create-modal.image-pull-secret-tooltip',
           )}
-          label={t('deployments.create-modal.simple.image-pull-secret')}
+          label={t('deployments.create-modal.image-pull-secret')}
           input={() => (
             <K8sResourceSelectWithUseGetList
               url={`/api/v1/namespaces/${namespace}/secrets`}
@@ -87,8 +50,7 @@ export function AdvancedContainersView({
       </ResourceForm.CollapsibleSection>
 
       <ResourceForm.CollapsibleSection
-        advanced
-        title={t('deployments.create-modal.advanced.containers')}
+        title={t('deployments.create-modal.containers')}
         defaultOpen
         resource={resource}
         setResource={setResource}
@@ -109,7 +71,7 @@ export function AdvancedContainersView({
             }}
             design="Transparent"
           >
-            {t('deployments.create-modal.advanced.add-container')}
+            {t('deployments.create-modal.add-container')}
           </Button>
         )}
       >

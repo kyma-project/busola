@@ -20,21 +20,19 @@ function SingleContainerSection({ container, setContainer }) {
           setContainer(container);
         }}
         required
-        kind={t('deployments.create-modal.advanced.image')}
+        kind={t('deployments.create-modal.image')}
         pattern=".*"
         showHelp={false}
       />
       <ResourceForm.FormField
         required
         propertyPath="$.image"
-        label={t('deployments.create-modal.simple.docker-image')}
+        label={t('deployments.create-modal.docker-image')}
         input={Inputs.Text}
-        placeholder={t(
-          'deployments.create-modal.simple.docker-image-placeholder',
-        )}
+        placeholder={t('deployments.create-modal.docker-image-placeholder')}
       />
       <RuntimeResources
-        title={t('deployments.create-modal.advanced.runtime-profile')}
+        title={t('deployments.create-modal.runtime-profile')}
         propertyPath="$.resources"
         canChangeState={false}
         nestingLevel={1}
@@ -56,7 +54,7 @@ export function Containers({ value: containers, setValue: setContainers }) {
   if (!containers.length) {
     return (
       <MessageStrip design="Warning" hideCloseButton>
-        {t('deployments.create-modal.advanced.one-container-required')}
+        {t('deployments.create-modal.one-container-required')}
       </MessageStrip>
     );
   }
@@ -77,7 +75,7 @@ export function Containers({ value: containers, setValue: setContainers }) {
     <ResourceForm.CollapsibleSection
       nestingLevel={1}
       key={i}
-      title={t('deployments.create-modal.advanced.container-header', {
+      title={t('deployments.create-modal.container-header', {
         name: container?.name || i + 1,
       })}
       actions={

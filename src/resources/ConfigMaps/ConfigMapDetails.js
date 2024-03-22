@@ -4,7 +4,7 @@ import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 
-import { ConfigMapCreate } from './ConfigMapCreate';
+import ConfigMapCreate from './ConfigMapCreate';
 import { ResourceDescription } from 'resources/ConfigMaps';
 
 export function ConfigMapDetails(props) {

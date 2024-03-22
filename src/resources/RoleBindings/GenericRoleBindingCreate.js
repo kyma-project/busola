@@ -14,7 +14,7 @@ import {
   newSubject,
   DEFAULT_APIGROUP,
 } from './templates';
-import { SingleSubjectForm, SingleSubjectInput } from './SubjectForm';
+import { SingleSubjectForm } from './SubjectForm';
 import { validateBinding } from './helpers';
 import { RoleForm } from './RoleForm';
 import { useHasPermissionsFor } from 'hooks/useHasPermissionsFor';
@@ -100,9 +100,7 @@ export function GenericRoleBindingCreate({
         binding={binding}
         setBinding={setBinding}
       />
-      {jp.value(binding, '$.subjects.length') ? (
-        <SingleSubjectInput simple propertyPath="$.subjects" />
-      ) : (
+      {!jp.value(binding, '$.subjects.length') && (
         <MessageStrip
           design="Warning"
           hideCloseButton
@@ -114,7 +112,6 @@ export function GenericRoleBindingCreate({
         </MessageStrip>
       )}
       <ItemArray
-        advanced
         defaultOpen
         propertyPath="$.subjects"
         listTitle={t('role-bindings.create-modal.subjects')}

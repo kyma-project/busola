@@ -1,10 +1,8 @@
-import React from 'react';
-import './CollapsibleRenderer.scss';
-
 import { ResourceForm } from 'shared/ResourceForm';
 import { useGetTranslation } from 'components/Extensibility/helpers';
+import './FormGroup.scss';
 
-export function CollapsibleRenderer({
+export function FormGroup({
   schema,
   storeKeys,
   widgets,
@@ -29,10 +27,7 @@ export function CollapsibleRenderer({
       nestingLevel={nestingLevel}
       required={schemaRequired}
     >
-      <div
-        className="collapsible-renderer__grid-wrapper"
-        style={{ gridTemplateColumns }}
-      >
+      <div className="form-group__grid-wrapper" style={{ gridTemplateColumns }}>
         <WidgetRenderer
           {...props}
           storeKeys={storeKeys}

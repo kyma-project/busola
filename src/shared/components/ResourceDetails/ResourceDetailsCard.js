@@ -3,11 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Card, CardHeader } from '@ui5/webcomponents-react';
 import './ResourceDetails.scss';
 
-export default function ResourceDetailsCard({
-  title,
-  content,
-  wrapperClassname,
-}) {
+export default function ResourceDetailsCard({ content, wrapperClassname }) {
   const { t } = useTranslation();
 
   return (

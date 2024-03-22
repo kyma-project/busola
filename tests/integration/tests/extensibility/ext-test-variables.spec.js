@@ -64,6 +64,11 @@ context('Test extensibility variables', () => {
       .contains('Namespaces')
       .click();
 
+    cy.get('ui5-input[placeholder="Search"]:visible')
+      .find('input')
+      .wait(1000)
+      .type(NAMESPACE);
+
     cy.clickGenericListLink(NAMESPACE);
 
     cy.getLeftNav()
@@ -78,7 +83,7 @@ context('Test extensibility variables', () => {
   });
 
   it('Tests variables', () => {
-    cy.get('ui5-dialog').as('form');
+    cy.get('.create-form').as('form');
 
     // test vars with no default value
     cy.get('@form')
@@ -149,7 +154,7 @@ context('Test extensibility variables', () => {
   });
 
   it('Tests presets', () => {
-    cy.get('ui5-dialog').as('form');
+    cy.get('.create-form').as('form');
     // test default preset
     cy.get('@form')
       .find('[aria-label="TestResource name"]:visible')
@@ -157,7 +162,7 @@ context('Test extensibility variables', () => {
 
     // test presets
     cy.get('@form')
-      .get('ui5-combobox[placeholder="Choose preset"]')
+      .get('ui5-combobox[placeholder="Choose template"]:visible')
       .find('ui5-icon[accessible-name="Select Options"]')
       .click();
 
@@ -195,7 +200,7 @@ context('Test extensibility variables', () => {
   });
 
   it('Tests data sources and triggers', () => {
-    cy.get('ui5-dialog').as('form');
+    cy.get('.create-form').as('form');
 
     // test if trigger / subscribe works
     cy.get('@form')
@@ -254,7 +259,7 @@ context('Test extensibility variables', () => {
   });
 
   it('Tests MultiCheckbox', () => {
-    cy.get('ui5-dialog').as('form');
+    cy.get('.create-form').as('form');
 
     cy.get('@form')
       .get('ui5-checkbox[data-testid="spec.arrayOfStrings.value_1"]:visible')
@@ -273,11 +278,11 @@ context('Test extensibility variables', () => {
       .type(NAME)
       .click();
 
-    // create resource
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
+    cy.get('@form')
+      .contains('ui5-segmented-button-item:visible', 'YAML')
       .click();
+
+    cy.saveChanges('Create');
 
     // check arrayOfStrings
     cy.getMidColumn()

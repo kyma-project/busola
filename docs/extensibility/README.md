@@ -28,7 +28,7 @@ To create your CRD ConfigMap, follow these steps:
 
 2. Click **Create Config Map +** and enter the name of your ConfigMap.
 3. Under **Data**, add the required fields to define how to handle your CRD.
-4. Go to the **Advanced** tab and in the **Labels** form enter `busola.io/extension` as a key, and `resource` as a value.
+4. In the **Labels** form enter `busola.io/extension` as a key, and `resource` as a value.
 
 > **NOTE:** Do not overwrite the existing name label.
 

@@ -9,17 +9,12 @@ form .resource-form {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  padding: 1rem 2rem;
+  padding: 0 1rem;
 
   form {
     overflow: hidden;
     flex-grow: 1;
     order: 2;
-  }
-
-  .advanced-form,
-  .simple-form {
-    width: 100%;
   }
 
   & > .dropdown {
@@ -31,16 +26,17 @@ form .resource-form {
   }
 
   .form-field,
+  .simple-list,
+  .flexbox-gap {
+    gap: 5px 10px;
+  }
+
   .simple-list {
-    gap: 10px;
+    margin: -3px 0;
   }
 
   .form-field + .resource-form__collapsible-section {
     padding-top: 16px;
-  }
-
-  .bsl-col {
-    padding: 4px 0;
   }
 
   .mode-selector {
@@ -51,4 +47,9 @@ form .resource-form {
       width: fit-content;
     }
   }
+}
+
+.resource-form--panel,
+.resource-form--panel::part(content) {
+  height: 100%;
 }

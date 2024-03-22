@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm';
@@ -9,7 +8,6 @@ export function SingleContainerForm({
   container,
   containers,
   setContainers,
-  isAdvanced,
   readOnly,
   prefix,
 }) {
@@ -24,7 +22,6 @@ export function SingleContainerForm({
     <ResourceForm.Wrapper
       resource={container}
       setResource={() => setContainers([...containers])}
-      isAdvanced={isAdvanced}
     >
       <K8sNameField
         propertyPath="$.name"
@@ -42,7 +39,6 @@ export function SingleContainerForm({
       />
       <ResourceForm.FormField
         required
-        advanced
         propertyPath="$.imagePullPolicy"
         label={t('jobs.create-modal.labels.image-pull-policy')}
         input={Inputs.Dropdown}
@@ -57,7 +53,6 @@ export function SingleContainerForm({
         readOnly={readOnly}
       />
       <TextArrayInput
-        advanced
         propertyPath="$.args"
         title={t('jobs.create-modal.labels.args')}
         placeholder={t('jobs.create-modal.placeholders.args')}

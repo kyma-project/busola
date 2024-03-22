@@ -52,10 +52,10 @@ export function KubeconfigUpload({ kubeconfig, setKubeconfig, formRef }) {
         modeSelectorDisabled={
           kubeconfig ? !Object.keys(kubeconfig)?.length : !!!kubeconfig
         }
-        noAdvancedMode={true}
         initialMode={'MODE_YAML'}
         className="kubeconfig-upload__form add-cluster__content-container"
-        yamlSearchHidden={true}
+        yamlSearchDisabled
+        yamlHideDisabled
       />
       {error && (
         <MessageStrip
