@@ -73,18 +73,20 @@ export function SidebarNavigation() {
       onSelectionChange={e => e.preventDefault()}
       header={
         <>
-          <SideNavigation style={{ height: 'auto', width: 'auto' }}>
-            <SideNavigationItem
-              className="hide-shadow"
-              icon={namespace ? 'slim-arrow-left' : 'bbyd-dashboard'}
-              text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}
-              onClick={() => {
-                setDefaultColumnLayout();
-                return navigate(clusterUrl(`overview`));
-              }}
-              selected={isClusterOverviewSelected()}
-            />
-          </SideNavigation>
+          {namespace && (
+            <SideNavigation style={{ height: 'auto', width: 'auto' }}>
+              <SideNavigationItem
+                className="hide-shadow"
+                icon={'slim-arrow-left'}
+                text={'Back To Cluster Details'}
+                onClick={() => {
+                  setDefaultColumnLayout();
+                  return navigate(clusterUrl(`overview`));
+                }}
+                selected={isClusterOverviewSelected()}
+              />
+            </SideNavigation>
+          )}
           {!isSidebarCondensed && <div className="shadow-overlay"></div>}
           <div style={namespace ? { zIndex: '0' } : { display: 'none' }}>
             <Label
@@ -112,9 +114,7 @@ export function SidebarNavigation() {
                 id="NamespaceComboBox"
                 onSelectionChange={e => {
                   setDefaultColumnLayout();
-                  return e.target.value === t('namespaces.namespaces-overview')
-                    ? navigate(clusterUrl(`namespaces`))
-                    : e.target.value === t('navigation.all-namespaces')
+                  return e.target.value === t('navigation.all-namespaces')
                     ? navigate(
                         namespaceUrl(resourceType, { namespace: '-all-' }),
                       )
@@ -151,6 +151,18 @@ export function SidebarNavigation() {
             </SideNavigationItem>
           )}
         </>
+      )}
+      {!namespace && (
+        <SideNavigationItem
+          className="hide-shadow"
+          icon={'bbyd-dashboard'}
+          text={'Cluster Details'}
+          onClick={() => {
+            setDefaultColumnLayout();
+            return navigate(clusterUrl(`overview`));
+          }}
+          selected={isClusterOverviewSelected()}
+        />
       )}
       {topLevelNodes.map(node =>
         node.items?.map((item, index) => <NavItem node={item} key={index} />),
