@@ -1,11 +1,9 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ObjectStatus } from '@ui5/webcomponents-react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import './StatusBadge.scss';
-import { TooltipBadge } from 'shared/components/TooltipBadge/TooltipBadge';
 import { PopoverBadge } from '../PopoverBadge/PopoverBadge';
 
 const resolveType = status => {
@@ -73,10 +71,8 @@ export const StatusBadge = ({
   resourceKind = 'common',
   children: value = '',
   autoResolveType = false,
-  tooltipProps = {},
   noTooltip = false,
   className,
-  isTooltip = false,
 }) => {
   const { t, i18n } = useTranslation();
   if (autoResolveType) type = resolveType(value);
@@ -139,18 +135,6 @@ export const StatusBadge = ({
 
   // tooltipContent is DEPRECATED. Use the TooltipBadge component if a Badge with a simple Tooltip is needed.
   if (tooltipContent) {
-    if (isTooltip) {
-      return (
-        <TooltipBadge
-          tooltipContent={tooltipContent}
-          type={type}
-          tooltipProps={tooltipProps}
-          className={classes}
-        >
-          {badgeContent}
-        </TooltipBadge>
-      );
-    }
     return (
       <PopoverBadge
         tooltipContent={tooltipContent}
@@ -175,18 +159,6 @@ export const StatusBadge = ({
       </ObjectStatus>
     );
   } else {
-    if (isTooltip) {
-      return (
-        <TooltipBadge
-          tooltipContent={content}
-          type={type}
-          tooltipProps={tooltipProps}
-          className={classes}
-        >
-          {badgeContent}
-        </TooltipBadge>
-      );
-    }
     return (
       <PopoverBadge tooltipContent={content} type={type} className={classes}>
         {badgeContent}
