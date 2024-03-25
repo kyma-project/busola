@@ -31,7 +31,7 @@ export const ExternalLink = ({
         className="bsl-icon-s"
         style={{
           ...spacing.sapUiTinyMarginBegin,
-          marginRight: '0.25rem',
+          marginRight: '0.15rem',
           ...(iconStyle || {}),
         }}
         aria-label={t('common.ariaLabel.new-tab-link')}
