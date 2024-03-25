@@ -7,10 +7,8 @@ import {
   useGetPlaceholder,
   useGetTranslation,
 } from 'components/Extensibility/helpers';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 import './Badge.scss';
-import { Popover } from '@ui5/webcomponents-react';
 
 export function Badge({
   value,
