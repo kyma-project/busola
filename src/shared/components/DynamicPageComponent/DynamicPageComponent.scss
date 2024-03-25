@@ -26,6 +26,12 @@
     display: flex;
     align-items: center;
 
+    ui5-button {
+      &:not(:last-of-type) {
+        margin-right: 0.5rem;
+      }
+    }
+
     .separator {
       display: inline-block;
       width: 1px;
