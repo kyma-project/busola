@@ -10,6 +10,7 @@ import {
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 import './Badge.scss';
+import { Popover } from '@ui5/webcomponents-react';
 
 export function Badge({
   value,
@@ -65,13 +66,9 @@ export function Badge({
   return isNil(value) ? (
     emptyLeafPlaceholder
   ) : tooltip ? (
-    <Tooltip content={tooltip || ''}>
-      <span className="has-tooltip">
-        <StatusBadge autoResolveType={!type} type={type}>
-          {tExt(value)}
-        </StatusBadge>
-      </span>
-    </Tooltip>
+    <StatusBadge autoResolveType={!type} type={type} tooltipContent={tooltip}>
+      {tExt(value)}
+    </StatusBadge>
   ) : (
     <StatusBadge autoResolveType={!type} type={type}>
       {tExt(value)}

@@ -3,7 +3,6 @@ import {
   SideNavigation,
   SideNavigationItem,
   ComboBox,
-  Icon,
   Label,
   FlexBox,
 } from '@ui5/webcomponents-react';
@@ -105,13 +104,9 @@ export function SidebarNavigation() {
                 ...spacing.sapUiTinyMarginBeginEnd,
               }}
             >
-              <Icon
-                title="Namespaces"
-                name="dimension"
-                style={spacing.sapUiTinyMarginBeginEnd}
-              />
               <ComboBox
                 id="NamespaceComboBox"
+                className="combobox-with-dimension-icon"
                 onSelectionChange={e => {
                   setDefaultColumnLayout();
                   return e.target.value === t('navigation.all-namespaces')
