@@ -1,10 +1,11 @@
 .yaml-upload-modal {
+  &__background {
+    background-color: var(--sapContent_ForegroundColor);
+  }
+
   &__layout {
-    //overflow: hidden;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    padding: 12px;
-    background-color: var(--sapContent_ForegroundColor);
   }
 
   &__info {

@@ -79,7 +79,7 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
     <>
       {warnings.flat().map(warning => (
         <>
-          <FlexBox style={spacing.sapUiTinyMarginTopBottom}>
+          <FlexBox>
             <ObjectStatus
               showDefaultIcon
               state={ValueState.Warning}
@@ -87,7 +87,7 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
             />
             <ValidationWarning warning={warning.message} />
           </FlexBox>
-          <hr />
+          <hr className={'yaml_resource_list__separation-line'} />
         </>
       ))}
     </>

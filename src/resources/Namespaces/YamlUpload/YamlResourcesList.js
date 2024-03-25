@@ -77,11 +77,11 @@ export function YamlResourcesList({ resourcesData }) {
         <>
           <FlexBox direction={'Column'}>
             <Title level="H4" style={spacing.sapUiSmallMargin}>
-              Uploaded Resources
+              {t('upload-yaml.uploaded-resources')}
             </Title>
-            <hr style={{ width: '100%' }} />
+            <hr className={'yaml_resource_list__separation-line'} />
             <div
-              style={spacing.sapUiSmallMargin}
+              style={spacing.sapUiSmallMarginBegin}
               className="validate-resources"
             >
               <p>{t('upload-yaml.labels.validate-resources')}</p>
@@ -120,7 +120,10 @@ export function YamlResourcesList({ resourcesData }) {
           </div>
           <ul style={spacing.sapUiTinyMarginTop}>
             {filteredResources.map(r => (
-              <li key={`${r?.value?.kind}-${r?.value?.metadata?.name}`}>
+              <li
+                key={`${r?.value?.kind}-${r?.value?.metadata?.name}`}
+                style={spacing.sapUiTinyMarginBegin}
+              >
                 <Icon
                   className={`status status-${getIcon(r?.status)}`}
                   name={getIcon(r?.status)}

@@ -1450,11 +1450,12 @@ top-nav:
   profile:
     preferences: $t(navigation.preferences.title)
 upload-yaml:
+  uploaded-resources: Uploaded Resources
   info: You can upload multiple resources, separated in YAML by "---".
     If a resource already exists, it will be updated, otherwise a new one will be created.
     If the Namespace is not given, the "<0>{{namespace}}</0>" one will be used.
   labels:
-    validate-resources: Validate resources
+    validate-resources: 'Validate resources:'
   messages:
     no-warnings-found: No warnings found
     not-a-k8s-resource: Not a Kubernetes resource!

@@ -121,7 +121,7 @@ export function YamlUploadDialog() {
       onAfterClose={() => setShowAdd(false)}
       headerText={t('upload-yaml.title')}
       footer={<Bar design="Footer" endContent={<>{actions}</>} />}
-      className="yaml-upload-modal"
+      className="yaml-upload-modal__background"
     >
       <Suspense fallback={<Spinner />}>
         <div className="yaml-upload-modal__layout">
@@ -130,7 +130,10 @@ export function YamlUploadDialog() {
             setResourcesData={updateYamlContent}
             setLastOperationState={setLastOperationState}
           />
-          <div className={'yaml-upload-modal__info'}>
+          <div
+            className={'yaml-upload-modal__info'}
+            style={spacing.sapUiTinyMarginBegin}
+          >
             <p className="description" style={spacing.sapUiSmallMargin}>
               <Trans
                 i18nKey={'upload-yaml.info'}
