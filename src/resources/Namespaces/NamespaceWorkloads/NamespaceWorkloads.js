@@ -7,7 +7,6 @@ import {
   getHealthyReplicasCount,
   getHealthyStatusesCount,
 } from './NamespaceWorkloadsHelpers';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { CountingCard } from 'shared/components/CountingCard/CountingCard';
 
 NamespaceWorkloads.propTypes = { namespace: PropTypes.string.isRequired };

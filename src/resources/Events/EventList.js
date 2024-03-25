@@ -6,7 +6,7 @@ import { useMessageList } from 'hooks/useMessageList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { useUrl } from 'hooks/useUrl';
-import { Icon, ObjectStatus } from '@ui5/webcomponents-react';
+import { Icon, ObjectStatus, Text } from '@ui5/webcomponents-react';
 import {
   ResourceDescription,
   docsURL,
@@ -56,9 +56,9 @@ export function EventList({
             <Tooltip content={e.type}>
               <ObjectStatus
                 aria-label="Warning"
-                icon={<Icon name="message-warning" />}
+                icon={<Icon name="error" />}
                 className="has-tooltip"
-                state="Warning"
+                state="Error"
               />
             </Tooltip>
           ) : (
@@ -68,7 +68,8 @@ export function EventList({
                 name="message-information"
                 design="Information"
                 className="has-tooltip bsl-icon-m"
-                icon={<Icon name="message-information" />}
+                icon={<Icon name="information" />}
+                state="Information"
               />
             </Tooltip>
           )}
@@ -80,8 +81,18 @@ export function EventList({
       value: e => <p>{e.message}</p>,
     },
     {
+      header: t('common.headers.name'),
+      value: entry => (
+        <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
+          {entry.metadata?.name}
+        </Text>
+      ),
+      id: 'name',
+    },
+    {
       ...involvedObject,
     },
+
     {
       header: t('events.headers.source'),
       value: e => FormatSourceObject(e.source),
@@ -111,7 +122,7 @@ export function EventList({
   return (
     <ResourcesList
       listHeaderActions={MessageSelector}
-      customColumns={customColumns}
+      columns={customColumns}
       omitColumnsIds={['namespace', 'labels', 'created']}
       sortBy={sortByFn}
       description={ResourceDescription}
@@ -143,6 +154,7 @@ export function EventList({
         subtitleText: i18nDescriptionKey,
         url: docsURL,
       }}
+      showDefaultColumns={false}
     />
   );
 }
