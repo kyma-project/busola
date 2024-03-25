@@ -66,10 +66,11 @@ export function ClusterOverview() {
               root=""
             />
             <Title
-              level="H3"
+              level="H4"
               style={{
                 ...spacing.sapUiMediumMarginBegin,
-                ...spacing.sapUiMediumMarginTopBottom,
+                ...spacing.sapUiMediumMarginTop,
+                ...spacing.sapUiSmallMarginBottom,
               }}
             >
               {t('cluster-overview.headers.cluster-details')}

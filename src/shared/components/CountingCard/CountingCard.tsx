@@ -40,7 +40,6 @@ export const CountingCard = ({
         <div
           className="counting-card__content"
           style={{
-            ...spacing.sapUiSmallMarginBottom,
             marginTop: !subTitle ? '17.5px' : '0px',
           }}
         >

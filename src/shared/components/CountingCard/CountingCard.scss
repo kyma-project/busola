@@ -1,7 +1,7 @@
 .counting-card {
   &__value {
-    color: var(--sapContent_LabelColor);
-    font-size: 2.85rem;
+    color: var(--sapNeutralTextColor);
+    font-size: 2.5rem;
   }
 
   &__content {
@@ -10,8 +10,8 @@
   }
 
   &__extra-content {
-    margin-left: 50px;
+    margin-left: 60px;
     display: flex;
-    gap: 10px;
+    gap: 20px;
   }
 }
