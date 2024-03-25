@@ -55,7 +55,7 @@ const ValidationWarning = ({ warning }) => {
 const ValidationWarnings = ({ resource, validationSchema }) => {
   const { t } = useTranslation();
 
-  const { debounced, loading } = useLoadingDebounce(resource, 500);
+  const { debounced } = useLoadingDebounce(resource, 500);
 
   const warnings = [
     useValidateResourceBySchema(debounced, validationSchema),
@@ -99,7 +99,7 @@ const ValidationResult = ({ resource }) => {
     useRecoilValue(validateResourcesState),
   );
   const validationSchemas = useRecoilValue(validationSchemasEnabledState);
-  const { debounced, loading } = useLoadingDebounce(resource, 500);
+  const { debounced } = useLoadingDebounce(resource, 500);
   const warnings = [
     useValidateResourceBySchema(debounced, validationSchemas),
     useNamespaceWarning(debounced),
