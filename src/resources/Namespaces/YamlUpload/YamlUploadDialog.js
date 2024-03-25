@@ -6,7 +6,7 @@ import { YamlResourcesList } from './YamlResourcesList';
 import { useUploadResources } from './useUploadResources';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useEventListener } from 'hooks/useEventListener';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
@@ -131,8 +131,13 @@ export function YamlUploadDialog() {
             setLastOperationState={setLastOperationState}
           />
           <div className={'yaml-upload-modal__info'}>
-            <p style={spacing.sapUiTinyMarginBegin}>
-              {t('upload-yaml.info', { namespace: defaultNamespace })}
+            <p className="description" style={spacing.sapUiSmallMargin}>
+              <Trans
+                i18nKey={'upload-yaml.info'}
+                values={{ namespace: defaultNamespace }}
+              >
+                <span style={{ fontWeight: 'bold' }}></span>
+              </Trans>
             </p>
             <YamlResourcesList
               resourcesData={resourcesWithStatuses}

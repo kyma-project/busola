@@ -1,6 +1,6 @@
 import React from 'react';
-import { Icon, Switch } from '@ui5/webcomponents-react';
-import { useTranslation } from 'react-i18next';
+import { FlexBox, Icon, Switch, Title } from '@ui5/webcomponents-react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import {
   getExtendedValidateResourceState,
@@ -75,21 +75,15 @@ export function YamlResourcesList({ resourcesData }) {
     if (showResourcesToUpload()) {
       return (
         <>
-          <div
-            className="bsl-display-flex bsl-justify-between bsl-align-center"
-            style={spacing.sapUiTinyMargin}
-          >
-            <p>
-              {t(
-                filteredResources.length === 1
-                  ? 'upload-yaml.you-will-create_one'
-                  : 'upload-yaml.you-will-create_other',
-                {
-                  count: filteredResources.length || 0,
-                },
-              )}
-            </p>
-            <div className="validate-resources">
+          <FlexBox direction={'Column'}>
+            <Title level="H4" style={spacing.sapUiSmallMargin}>
+              Uploaded Resources
+            </Title>
+            <hr style={{ width: '100%' }} />
+            <div
+              style={spacing.sapUiSmallMargin}
+              className="validate-resources"
+            >
               <p>{t('upload-yaml.labels.validate-resources')}</p>
               <Switch
                 onChange={() =>
@@ -102,8 +96,16 @@ export function YamlResourcesList({ resourcesData }) {
                 checked={isEnabled}
               />
             </div>
-          </div>
-          <FilteredResourcesDetails filteredResources={filteredResources} />
+            <p style={spacing.sapUiSmallMargin}>
+              <Trans
+                i18nKey={'upload-yaml.you-will-create'}
+                values={{ count: filteredResources.length }}
+              >
+                <span style={{ fontWeight: 'bold' }}></span>
+              </Trans>
+            </p>
+            <FilteredResourcesDetails filteredResources={filteredResources} />
+          </FlexBox>
         </>
       );
     } else {

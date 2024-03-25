@@ -1450,10 +1450,9 @@ top-nav:
   profile:
     preferences: $t(navigation.preferences.title)
 upload-yaml:
-  buttons:
-    hide-warnings: Hide warnings
-    show-warnings: Show warnings
-  info: You can upload multiple resources, separated in YAML by "---". If a resource already exists, it will be updated, otherwise a new one will be created. If the Namespace is not given, the '{{namespace}}' one will be used.
+  info: You can upload multiple resources, separated in YAML by "---".
+    If a resource already exists, it will be updated, otherwise a new one will be created.
+    If the Namespace is not given, the "<0>{{namespace}}</0>" one will be used.
   labels:
     validate-resources: Validate resources
   messages:
@@ -1469,8 +1468,7 @@ upload-yaml:
   warnings:
     different-namespace: This resource will be uploaded to the '{{namespace}}' Namespace.
     incorrect-namespace: The cluster-wide resources shouldn't have a Namespace.
-  you-will-create_one: 'You will create 1 resource:'
-  you-will-create_other: 'You will create {{count}} resources:'
+  you-will-create: <0>{{count}} resources</0> will be created.
 workload-selector:
   title: Workload Selector
 workloads:

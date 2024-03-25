@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 import {
+  FlexBox,
   MessageStrip,
   ObjectStatus,
   Panel,
@@ -38,6 +39,19 @@ const useNamespaceWarning = resource => {
       ];
 };
 
+const ValidationWarning = ({ warning }) => {
+  const [where, reason] = warning.split(' - ');
+  return (
+    <>
+      <div>
+        <p>{where}</p>
+        <br />
+        <p>{reason}</p>
+      </div>
+    </>
+  );
+};
+
 const ValidationWarnings = ({ resource, validationSchema }) => {
   const { t } = useTranslation();
 
@@ -62,24 +76,21 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
     );
 
   return (
-    <div style={spacing.sapUiTinyMarginTopBottom}>
-      <ul>
-        {warnings.flat().map((warning, i) => (
-          <li
-            key={`${resource?.kind}-${resource?.metadata?.name}-${warning.key ??
-              i}`}
-          >
-            <MessageStrip
-              design="Warning"
-              hideCloseButton
-              style={spacing.sapUiSmallMarginTop}
-            >
-              {warning.message}
-            </MessageStrip>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      {warnings.flat().map(warning => (
+        <>
+          <FlexBox style={spacing.sapUiTinyMarginTopBottom}>
+            <ObjectStatus
+              showDefaultIcon
+              state={ValueState.Warning}
+              style={spacing.sapUiSmallMarginEnd}
+            />
+            <ValidationWarning warning={warning.message} />
+          </FlexBox>
+          <hr />
+        </>
+      ))}
+    </>
   );
 };
 
@@ -97,13 +108,12 @@ const ValidationResult = ({ resource }) => {
     warnings.flat().length !== 0 ? (
       <ObjectStatus showDefaultIcon state={ValueState.Warning} />
     ) : (
-      <ObjectStatus showDefaultIcon />
+      <ObjectStatus showDefaultIcon state={ValueState.Success} />
     );
 
   return (
     <>
       <Panel
-        accessibleRole="Form"
         collapsed={true}
         header={
           <Toolbar>
