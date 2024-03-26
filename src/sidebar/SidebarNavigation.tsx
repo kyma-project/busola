@@ -100,7 +100,7 @@ export function SidebarNavigation() {
             <FlexBox
               alignItems="Center"
               style={{
-                ...spacing.sapUiSmallMarginBottom,
+                ...spacing.sapUiTinyMarginBottom,
                 ...spacing.sapUiTinyMarginBeginEnd,
               }}
             >
