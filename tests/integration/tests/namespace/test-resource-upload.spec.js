@@ -102,7 +102,7 @@ context('Test resource upload', () => {
 
   it('Cleanup', () => {
     // close
-    cy.get('ui5-dialog.yaml-upload-modal')
+    cy.get('ui5-dialog.yaml-upload-modal__dialog')
       .contains('ui5-button', 'Close')
       .should('be.visible')
       .click();
