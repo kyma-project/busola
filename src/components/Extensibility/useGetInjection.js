@@ -8,8 +8,8 @@ export const useGetInjections = (location, slot) => {
   (injections || []).forEach(injection => {
     const target = injection.injection.targets.find(
       t =>
-        t.location.toLowerCase() === location?.toLowerCase() &&
-        t.slot.toLowerCase() === slot?.toLowerCase(),
+        t.location?.toLowerCase() === location?.toLowerCase() &&
+        t.slot?.toLowerCase() === slot?.toLowerCase(),
     );
     if (target) {
       filteredInjections.push({
