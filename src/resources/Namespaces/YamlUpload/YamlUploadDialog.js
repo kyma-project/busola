@@ -121,7 +121,7 @@ export function YamlUploadDialog() {
       onAfterClose={() => setShowAdd(false)}
       headerText={t('upload-yaml.title')}
       footer={<Bar design="Footer" endContent={<>{actions}</>} />}
-      className="yaml-upload-modal__background"
+      className="yaml-upload-modal__dialog"
     >
       <Suspense fallback={<Spinner />}>
         <div className="yaml-upload-modal__layout">
