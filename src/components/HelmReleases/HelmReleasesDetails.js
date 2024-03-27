@@ -8,6 +8,7 @@ import { HelmReleaseData } from './HelmReleaseData';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
 import { OtherReleaseVersions } from './OtherReleaseVersions';
 import { findRecentRelease } from './findRecentRelease';
+import { useSetRecoilState } from 'recoil';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
@@ -16,11 +17,15 @@ import HelmReleasesYaml from './HelmReleasesYaml';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { showYamlTab } from './index';
 import { Link } from 'shared/components/Link/Link';
+import { Button } from '@ui5/webcomponents-react';
+import { showAIassistantState } from 'components/AIassistant/state/showAIassistantAtom';
 import { createPortal } from 'react-dom';
 
 function HelmReleasesDetails({ releaseName, namespace }) {
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();
+
+  const setOpenAssistant = useSetRecoilState(showAIassistantState);
 
   const { data, loading } = useGetList(s => s.type === 'helm.sh/release.v1')(
     namespace === '-all-'
@@ -93,6 +98,15 @@ function HelmReleasesDetails({ releaseName, namespace }) {
               <HelmReleaseStatus
                 status={releaseSecret.metadata.labels.status}
               />
+            </DynamicPageComponent.Column>
+            <DynamicPageComponent.Column>
+              <Button
+                icon="ai"
+                onClick={() => setOpenAssistant(true)}
+                className="ai-button"
+              >
+                {t('ai-assistant.use-ai')}
+              </Button>
             </DynamicPageComponent.Column>
           </>
         )}
