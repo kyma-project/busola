@@ -1,0 +1,15 @@
+.message-with-list {
+  max-width: 225px;
+  padding: 12px;
+
+  .list-item-content {
+    width: 100%;
+
+    .text {
+      max-width: 85%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}

@@ -5,11 +5,16 @@ apps:
   title: Apps
 ai-assistant:
   name: Joule
+  error:
+    title: Service is interrupted
+    subtitle: A temporary interruption occured. Please try again.
   introduction1: Hello there,
   introduction2: How can I help you?
+  placeholder: Type something
   tabs:
     chat: Chat
     page-insights: Page Insights
+  use-ai: Use AI
 cluster-overview:
   headers:
     cpu: CPU

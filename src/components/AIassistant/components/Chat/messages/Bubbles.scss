@@ -1,0 +1,14 @@
+.bubbles-container {
+  max-width: 275px;
+  gap: 8px;
+
+  .bubble-button {
+    align-self: flex-start;
+    color: var(--sapContent_Illustrative_Color1);
+  }
+
+  .bubble-button:hover {
+    background-color: var(--sapBackgroundColor1);
+    border-color: var(--sapContent_Illustrative_Color1);
+  }
+}
