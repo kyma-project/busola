@@ -14,7 +14,7 @@ context('Test resource validation', () => {
   });
 
   it('Check for default policies', () => {
-    cy.get('ui5-button.ui5-shellbar-button[icon="add"]').click();
+    cy.contains('ui5-button', 'Upload YAML').click();
 
     cy.fixture('examples/resource-validation/pod.yaml').then(podConfig => {
       cy.pasteToMonaco(podConfig);
@@ -55,7 +55,7 @@ context('Test resource validation', () => {
       .should('be.visible')
       .click();
 
-    cy.get('ui5-button.ui5-shellbar-button[icon="add"]').click();
+    cy.contains('ui5-button', 'Upload YAML').click();
 
     cy.fixture('examples/resource-validation/pod.yaml').then(podConfig => {
       cy.pasteToMonaco(podConfig);
@@ -104,7 +104,7 @@ context('Test resource validation', () => {
       .should('be.visible')
       .click();
 
-    cy.get('ui5-button.ui5-shellbar-button[icon="add"]').click();
+    cy.contains('ui5-button', 'Upload YAML').click();
 
     cy.fixture('examples/resource-validation/pod.yaml').then(podConfig => {
       cy.pasteToMonaco(podConfig);
@@ -156,7 +156,7 @@ context('Test resource validation', () => {
 
     cy.loginAndSelectCluster();
 
-    cy.get('ui5-button.ui5-shellbar-button[icon="add"]').click();
+    cy.contains('ui5-button', 'Upload YAML').click();
 
     cy.fixture('examples/resource-validation/pod.yaml').then(podConfig => {
       cy.pasteToMonaco(podConfig);

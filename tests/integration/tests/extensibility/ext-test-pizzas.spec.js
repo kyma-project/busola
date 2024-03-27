@@ -23,7 +23,7 @@ context('Test Pizzas', () => {
       .contains('Cluster Details')
       .click();
 
-    cy.get('ui5-button.ui5-shellbar-button[icon="add"]').click();
+    cy.contains('ui5-button', 'Upload YAML').click();
 
     cy.loadFiles(
       'examples/pizzas/configuration/pizzas-configmap.yaml',
