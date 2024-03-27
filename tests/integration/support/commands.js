@@ -280,6 +280,7 @@ Cypress.Commands.add(
   (checkIfNotExist = false, hiddenButtons = false) => {
     if (hiddenButtons) {
       cy.getMidColumn()
+        .find('header')
         .find('ui5-toggle-button:visible')
         .click();
 
