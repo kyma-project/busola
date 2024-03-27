@@ -23,7 +23,6 @@ context('Test resource validation', () => {
     cy.contains('nginx:latest').should('be.visible');
 
     const statusPanel = 'status-panel';
-    //TODO: find panel and save it then chekc if contains warning icon and find the button then click on it.
     cy.get('[class="yaml-upload-modal__info"]')
       .contains('ui5-panel', 'Pod')
       .as(statusPanel)
@@ -121,9 +120,9 @@ context('Test resource validation', () => {
 
     cy.contains('nginx:latest').should('be.visible');
 
-    cy.contains('Show warnings')
-      .should('be.visible')
-      .click();
+    cy.get('[class="yaml-upload-modal__info"]')
+      .contains('ui5-panel', 'Pod')
+      .get('ui5-icon[name="alert"]');
 
     cy.contains(
       'refrain from using insecure capabilities to prevent access to sensitive components',
