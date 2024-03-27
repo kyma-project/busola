@@ -1,6 +1,6 @@
 import React from 'react';
-import { Icon, Switch } from '@ui5/webcomponents-react';
-import { useTranslation } from 'react-i18next';
+import { FlexBox, Icon, Switch, Title } from '@ui5/webcomponents-react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import {
   getExtendedValidateResourceState,
@@ -8,10 +8,10 @@ import {
 } from 'state/preferences/validateResourcesAtom';
 
 import {
-  STATE_ERROR,
-  STATE_WAITING,
-  STATE_UPDATED,
   STATE_CREATED,
+  STATE_ERROR,
+  STATE_UPDATED,
+  STATE_WAITING,
 } from './useUploadResources';
 import { FilteredResourcesDetails } from './FilteredResourcesDetails/FilteredResourcesDetails';
 
@@ -75,21 +75,15 @@ export function YamlResourcesList({ resourcesData }) {
     if (showResourcesToUpload()) {
       return (
         <>
-          <div
-            className="bsl-display-flex bsl-justify-between bsl-align-center"
-            style={spacing.sapUiTinyMargin}
-          >
-            <p>
-              {t(
-                filteredResources.length === 1
-                  ? 'upload-yaml.you-will-create_one'
-                  : 'upload-yaml.you-will-create_other',
-                {
-                  count: filteredResources.length || 0,
-                },
-              )}
-            </p>
-            <div className="validate-resources">
+          <FlexBox direction={'Column'}>
+            <Title level="H4" style={spacing.sapUiSmallMargin}>
+              {t('upload-yaml.uploaded-resources')}
+            </Title>
+            <hr className={'yaml_resource_list__separation-line'} />
+            <div
+              style={spacing.sapUiSmallMarginBegin}
+              className="validate-resources"
+            >
               <p>{t('upload-yaml.labels.validate-resources')}</p>
               <Switch
                 onChange={() =>
@@ -102,8 +96,16 @@ export function YamlResourcesList({ resourcesData }) {
                 checked={isEnabled}
               />
             </div>
-          </div>
-          <FilteredResourcesDetails filteredResources={filteredResources} />
+            <p style={spacing.sapUiSmallMargin}>
+              <Trans
+                i18nKey={'upload-yaml.you-will-create'}
+                values={{ count: filteredResources.length }}
+              >
+                <span style={{ fontWeight: 'bold' }}></span>
+              </Trans>
+            </p>
+            <FilteredResourcesDetails filteredResources={filteredResources} />
+          </FlexBox>
         </>
       );
     } else {
@@ -118,7 +120,10 @@ export function YamlResourcesList({ resourcesData }) {
           </div>
           <ul style={spacing.sapUiTinyMarginTop}>
             {filteredResources.map(r => (
-              <li key={`${r?.value?.kind}-${r?.value?.metadata?.name}`}>
+              <li
+                key={`${r?.value?.kind}-${r?.value?.metadata?.name}`}
+                style={spacing.sapUiTinyMarginBegin}
+              >
                 <Icon
                   className={`status status-${getIcon(r?.status)}`}
                   name={getIcon(r?.status)}

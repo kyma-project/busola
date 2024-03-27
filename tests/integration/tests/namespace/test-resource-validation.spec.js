@@ -22,8 +22,10 @@ context('Test resource validation', () => {
 
     cy.contains('nginx:latest').should('be.visible');
 
-    cy.contains('Show warnings')
-      .should('be.visible')
+    cy.get('[class="yaml-upload-modal__info"]').get('ui5-icon[name="alert"]');
+
+    cy.get('[class="yaml-upload-modal__info"]')
+      .get('button[title="Expand/Collapse"]')
       .click();
 
     cy.contains(
@@ -112,8 +114,10 @@ context('Test resource validation', () => {
 
     cy.contains('nginx:latest').should('be.visible');
 
-    cy.contains('Show warnings')
-      .should('be.visible')
+    cy.get('[class="yaml-upload-modal__info"]').get('ui5-icon[name="alert"]');
+
+    cy.get('[class="yaml-upload-modal__info"]')
+      .get('button[title="Expand/Collapse"]')
       .click();
 
     cy.contains(
@@ -164,13 +168,19 @@ context('Test resource validation', () => {
 
     cy.contains('nginx:latest').should('be.visible');
 
-    cy.contains('Show warnings')
-      .should('be.visible')
+    cy.get('[class="yaml-upload-modal__info"]')
+      .get('ui5-icon[name="alert"]')
+      .should('be.visible');
+
+    cy.get('[class="yaml-upload-modal__info"]')
+      .get('button[title="Expand/Collapse"]')
       .click();
 
-    cy.get('ui5-message-strip[design="Warning"]').contains(
-      'Incorrect or missing values for `capabilities.drop` - must contain ALL',
+    cy.get('[class="yaml-upload-modal__info"]').contains(
+      'Incorrect or missing values for `capabilities.drop`',
     );
+
+    cy.get('[class="yaml-upload-modal__info"]').contains('must contain ALL');
 
     cy.get('[data-testid=yaml-cancel]').click();
   });

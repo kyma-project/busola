@@ -6,6 +6,7 @@ import jsyaml from 'js-yaml';
 import { YamlFileUploader } from './YamlFileUploader';
 import { OPERATION_STATE_INITIAL } from './YamlUploadDialog';
 import { spacing } from '@ui5/webcomponents-react-base';
+
 const isK8sResource = resource => {
   if (!resource) return true;
   return resource.apiVersion && resource.kind && resource.metadata;
