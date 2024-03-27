@@ -1,4 +1,5 @@
 /// <reference types="cypress" />
+import { left } from 'cli-color/move';
 import 'cypress-file-upload';
 import jsyaml from 'js-yaml';
 
@@ -182,7 +183,7 @@ context('Test Pizzas', () => {
 
     cy.get('ui5-button[aria-label="open-sort"]').click();
 
-    cy.get('ui5-radio-button[name="sortBy"][text="Name"]').click();
+    cy.get('ui5-radio-button[name="sortBy"][text="Name"]').click('left');
 
     cy.get('ui5-button')
       .contains('OK')
