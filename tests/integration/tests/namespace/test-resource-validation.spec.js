@@ -124,9 +124,15 @@ context('Test resource validation', () => {
       .contains('ui5-panel', 'Pod')
       .get('ui5-icon[name="alert"]');
 
-    cy.contains(
-      'refrain from using insecure capabilities to prevent access to sensitive components',
-    ).should('be.visible');
+    cy.get('[class="yaml-upload-modal__info"]')
+      .get('button[title="Expand/Collapse"]')
+      .click();
+
+    cy.get('[class="yaml-upload-modal__info"]')
+      .contains(
+        'refrain from using insecure capabilities to prevent access to sensitive components',
+      )
+      .should('be.visible');
 
     cy.contains('This is a test rule').should('be.visible');
 
@@ -172,13 +178,19 @@ context('Test resource validation', () => {
 
     cy.contains('nginx:latest').should('be.visible');
 
-    cy.contains('Show warnings')
-      .should('be.visible')
+    cy.get('[class="yaml-upload-modal__info"]')
+      .get('ui5-icon[name="alert"]')
+      .should('be.visible');
+
+    cy.get('[class="yaml-upload-modal__info"]')
+      .get('button[title="Expand/Collapse"]')
       .click();
 
-    cy.get('ui5-message-strip[design="Warning"]').contains(
-      'Incorrect or missing values for `capabilities.drop` - must contain ALL',
+    cy.get('[class="yaml-upload-modal__info"]').contains(
+      'Incorrect or missing values for `capabilities.drop`',
     );
+
+    cy.get('[class="yaml-upload-modal__info"]').contains('must contain ALL');
 
     cy.get('[data-testid=yaml-cancel]').click();
   });
