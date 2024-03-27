@@ -2,6 +2,7 @@
   .ui5-title {
     font-size: var(--sapFontHeader3Size);
     font-family: var(--sapObjectHeader_Title_FontFamily);
+    line-height: calc(var(--sapFontHeader3Size) + 3px);
   }
 
   .description {
@@ -24,6 +25,12 @@
   &__actions {
     display: flex;
     align-items: center;
+
+    ui5-button {
+      &:not(:last-of-type) {
+        margin-right: 0.5rem;
+      }
+    }
 
     .separator {
       display: inline-block;

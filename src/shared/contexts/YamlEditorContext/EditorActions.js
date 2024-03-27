@@ -102,21 +102,21 @@ export function EditorActions({
         design="Transparent"
         icon="download"
         onClick={download}
-        className="circle-button"
+        className="action-button"
         tooltip={t('common.tooltips.download')}
       />
       <Button
         design="Transparent"
         icon="copy"
         onClick={() => copyToCliboard(val)}
-        className="circle-button"
+        className="action-button"
         tooltip={t('common.tooltips.copy-to-clipboard')}
       />
       <Button
         design="Transparent"
         icon={visible ? 'hide' : 'show'}
         onClick={visible ? hideReadOnlyLines : showReadOnlyLines}
-        className="circle-button"
+        className="action-button"
         tooltip={
           visible ? t('common.tooltips.hide') : t('common.tooltips.show')
         }
@@ -126,7 +126,7 @@ export function EditorActions({
         design="Transparent"
         icon="search"
         onClick={openSearch}
-        className="circle-button"
+        className="action-button"
         tooltip={t('common.tooltips.search')}
         disabled={searchDisabled}
       />
@@ -135,7 +135,7 @@ export function EditorActions({
           design="Transparent"
           icon="save"
           onClick={onSave}
-          className="circle-button"
+          className="action-button"
           tooltip={
             isProtected
               ? t('common.tooltips.protected-resources-info')

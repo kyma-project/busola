@@ -45,6 +45,7 @@ export const ProgressIndicatorWithPercentage = ({
           value={value}
           ref={progressRef}
           className="progress-indicator"
+          style={{ position: 'relative', zIndex: '0' }}
         />
       </div>
     </TooltipWrapper>

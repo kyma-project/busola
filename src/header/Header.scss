@@ -7,8 +7,5 @@ ui5-shellbar.header::part(root) {
   padding-inline-start: 0.75rem;
   padding-inline-end: 1.25rem;
   border-radius: 0.5rem;
-  box-shadow: 0 0 0.125rem 0
-      color-mix(in srgb, var(--sapContent_ShadowColor) 16%, transparent),
-    0 0.5rem 1rem 0
-      color-mix(in srgb, var(--sapContent_ShadowColor) 16%, transparent);
+  box-shadow: var(--sapContainer_Shadow1);
 }
