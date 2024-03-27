@@ -22,15 +22,9 @@ context('Test resource validation', () => {
 
     cy.contains('nginx:latest').should('be.visible');
 
-    const statusPanel = 'status-panel';
+    cy.get('[class="yaml-upload-modal__info"]').get('ui5-icon[name="alert"]');
+
     cy.get('[class="yaml-upload-modal__info"]')
-      .contains('ui5-panel', 'Pod')
-      .as(statusPanel)
-      .should('be.visible');
-
-    cy.get('@' + statusPanel).get('ui5-icon[name="alert"]');
-
-    cy.get('@' + statusPanel)
       .get('button[title="Expand/Collapse"]')
       .click();
 
@@ -120,19 +114,15 @@ context('Test resource validation', () => {
 
     cy.contains('nginx:latest').should('be.visible');
 
-    cy.get('[class="yaml-upload-modal__info"]')
-      .contains('ui5-panel', 'Pod')
-      .get('ui5-icon[name="alert"]');
+    cy.get('[class="yaml-upload-modal__info"]').get('ui5-icon[name="alert"]');
 
     cy.get('[class="yaml-upload-modal__info"]')
       .get('button[title="Expand/Collapse"]')
       .click();
 
-    cy.get('[class="yaml-upload-modal__info"]')
-      .contains(
-        'refrain from using insecure capabilities to prevent access to sensitive components',
-      )
-      .should('be.visible');
+    cy.contains(
+      'refrain from using insecure capabilities to prevent access to sensitive components',
+    ).should('be.visible');
 
     cy.contains('This is a test rule').should('be.visible');
 
