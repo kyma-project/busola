@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import * as jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -39,9 +39,9 @@ export const ClusterDataForm = ({
   formElementRef,
   className = '',
   modeSelectorDisabled = false,
-  noAdvancedMode = false,
   initialMode,
-  yamlSearchHidden,
+  yamlSearchDisabled,
+  yamlHideDisabled,
 }) => {
   const { t } = useTranslation();
   const userIndex = getUserIndex(kubeconfig);
@@ -68,7 +68,6 @@ export const ClusterDataForm = ({
     <ResourceForm.FormField
       label={t('clusters.token')}
       input={Inputs.Text}
-      advanced
       required
       value={kubeconfig?.users?.[userIndex]?.user?.token}
       setValue={val => {
@@ -105,7 +104,6 @@ export const ClusterDataForm = ({
       <ResourceForm.FormField
         label={t('clusters.labels.issuer-url')}
         input={Inputs.Text}
-        advanced
         required
         value={issuerUrl}
         setValue={val => {
@@ -115,7 +113,6 @@ export const ClusterDataForm = ({
       <ResourceForm.FormField
         label={t('clusters.labels.client-id')}
         input={Inputs.Text}
-        advanced
         required
         value={clientId}
         setValue={val => {
@@ -125,7 +122,6 @@ export const ClusterDataForm = ({
       <ResourceForm.FormField
         label={t('clusters.labels.client-secret')}
         input={Inputs.Text}
-        advanced
         value={clientSecret}
         setValue={val => {
           createOIDC('clientSecret', val);
@@ -134,7 +130,6 @@ export const ClusterDataForm = ({
       <ResourceForm.FormField
         label={t('clusters.labels.scopes')}
         input={Inputs.Text}
-        advanced
         required
         value={scopes}
         setValue={val => {
@@ -158,9 +153,9 @@ export const ClusterDataForm = ({
       autocompletionDisabled
       disableDefaultFields={true}
       modeSelectorDisabled={modeSelectorDisabled}
-      noAdvancedMode={noAdvancedMode}
       initialMode={initialMode}
-      yamlSearchHidden={yamlSearchHidden}
+      yamlSearchDisabled={yamlSearchDisabled}
+      yamlHideDisabled={yamlHideDisabled}
     >
       <div className={className}>
         <K8sNameField
@@ -182,7 +177,6 @@ export const ClusterDataForm = ({
           label={t('clusters.auth-type')}
           key={t('clusters.auth-type')}
           required
-          advanced
           value={authenticationType}
           setValue={type => {
             if (type === 'token') {
@@ -291,7 +285,6 @@ function EditClusterComponent({
         onSubmit={onComplete}
         formElementRef={formElementRef}
         resourceUrl={resourceUrl}
-        initialMode={'MODE_YAML'}
       />
     </>
   );

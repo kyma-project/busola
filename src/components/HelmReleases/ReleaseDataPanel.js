@@ -1,4 +1,3 @@
-import React from 'react';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
@@ -11,7 +10,7 @@ import './HelmReleaseDataPanel.scss';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { Link } from 'shared/components/Link/Link';
 
-export function ReleaseDataPanel({ release, simpleHeader }) {
+export function ReleaseDataPanel({ release }) {
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();
 

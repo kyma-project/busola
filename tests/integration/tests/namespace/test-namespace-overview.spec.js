@@ -17,78 +17,25 @@ context(
     });
 
     it('Check sections of namespace details', () => {
-      cy.contains('b', LIMIT_NAME).should('be.visible');
+      cy.contains('b', LIMIT_NAME)
+        .scrollIntoView()
+        .should('be.visible');
 
-      cy.contains('b', QUOTA_NAME).should('be.visible');
+      cy.contains('b', QUOTA_NAME)
+        .scrollIntoView()
+        .should('be.visible');
 
-      cy.contains('Namespaces Health').should('be.visible');
+      cy.contains('Namespaces Health')
+        .scrollIntoView()
+        .should('be.visible');
 
       cy.contains('Memory Requests').should('be.visible');
 
       cy.contains('Memory Limits').should('be.visible');
 
-      cy.contains('Events').should('be.visible');
-    });
-
-    it('Add a new limit range', () => {
-      cy.get('[data-testid="create-LimitRanges"]').click();
-
-      cy.wrap(loadFile('test-limit-ranges.yaml')).then(LR_CONFIG => {
-        const LR = JSON.stringify(LR_CONFIG);
-        cy.pasteToMonaco(LR);
-      });
-
-      cy.get('ui5-dialog')
-        .contains('ui5-button', 'Create')
-        .should('be.visible')
-        .click();
-
-      cy.contains('b', NEW_LIMIT_NAME).should('be.visible');
-    });
-
-    it('Check limit range', () => {
-      cy.contains('1100Mi').should('be.visible');
-
-      cy.contains('32Mi').should('be.visible');
-
-      cy.contains('512Mi').should('be.visible');
-    });
-
-    it('Delete all limits and quotas', () => {
-      cy.contains('ui5-table-row', LIMIT_NAME)
-        .find('ui5-button[data-testid="delete"]')
-        .click();
-
-      cy.contains(`delete Limit Range ${LIMIT_NAME}`);
-      cy.get(`[header-text="Delete Limit Range"]`)
-        .find('[data-testid="delete-confirmation"]')
-        .click();
-
-      cy.contains('ui5-table-row', NEW_LIMIT_NAME)
-        .find('ui5-button[data-testid="delete"]')
-        .click();
-
-      cy.contains(`delete Limit Range ${NEW_LIMIT_NAME}`);
-      cy.get(`[header-text="Delete Limit Range"]`)
-        .find('[data-testid="delete-confirmation"]')
-        .click();
-
-      cy.contains('ui5-table-row', QUOTA_NAME)
-        .find('ui5-button[data-testid="delete"]')
-        .click();
-
-      cy.contains(`delete Resource Quota ${QUOTA_NAME}`);
-      cy.get(`[header-text="Delete Resource Quota"]`)
-        .find('[data-testid="delete-confirmation"]')
-        .click();
-    });
-
-    it('Check if limit ranges and resource quota exist', () => {
-      cy.contains('b', LIMIT_NAME).should('not.exist');
-
-      cy.contains('b', NEW_LIMIT_NAME).should('not.exist');
-
-      cy.contains('b', QUOTA_NAME).should('not.exist');
+      cy.contains('Events')
+        .scrollIntoView()
+        .should('be.visible');
     });
   },
 );

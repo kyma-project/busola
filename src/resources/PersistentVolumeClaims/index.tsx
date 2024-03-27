@@ -13,6 +13,7 @@ export const List = React.lazy(() => import('./PersistentVolumeClaimList'));
 export const Details = React.lazy(() =>
   import('./PersistentVolumeClaimDetails'),
 );
+export const Create = React.lazy(() => import('./PersistentVolumeClaimCreate'));
 
 export const i18nDescriptionKey = 'persistent-volume-claims.description';
 export const docsURL =

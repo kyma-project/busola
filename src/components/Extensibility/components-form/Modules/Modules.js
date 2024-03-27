@@ -6,7 +6,7 @@ import { useGetTranslation } from 'components/Extensibility/helpers';
 import { useTranslation } from 'react-i18next';
 import { fromJS } from 'immutable';
 
-import { CheckBox, Icon, MessageStrip } from '@ui5/webcomponents-react';
+import { CheckBox, MessageStrip } from '@ui5/webcomponents-react';
 import { ResourceForm } from 'shared/ResourceForm';
 import { Dropdown } from 'shared/ResourceForm/inputs';
 
@@ -207,14 +207,8 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
           />
 
           {link ? (
-            <ExternalLink url={link} style={spacing.sapUiMediumMarginTop}>
+            <ExternalLink url={link} iconStyle={spacing.sapUiMediumMarginTop}>
               {t('extensibility.widgets.modules.documentation')}
-              <Icon
-                name="inspect"
-                design="Information"
-                className="ui5-icon-s"
-                style={spacing.sapUiTinyMarginBegin}
-              />
             </ExternalLink>
           ) : null}
         </div>

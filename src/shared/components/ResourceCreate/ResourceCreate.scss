@@ -1,0 +1,14 @@
+.create-form,
+.edit-form {
+  display: flex;
+  flex-flow: column;
+  align-items: stretch;
+}
+
+.create-form {
+  height: calc(100vh - 12rem);
+}
+
+.edit-form {
+  height: calc(100vh - 12.5rem);
+}

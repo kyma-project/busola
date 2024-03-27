@@ -14,7 +14,7 @@ import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { useUrl } from 'hooks/useUrl';
 
 import PersistentVolumesList from 'resources/PersistentVolumes/PersistentVolumeList';
-import { PersistentVolumeClaimCreate } from './PersistentVolumeClaimCreate';
+import PersistentVolumeClaimCreate from './PersistentVolumeClaimCreate';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ResourceDescription } from 'resources/PersistentVolumeClaims';
 import { Link } from 'shared/components/Link/Link';

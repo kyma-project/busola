@@ -27,7 +27,7 @@ context('Test Network Policy', () => {
   it('Create a Network Policy', () => {
     cy.navigateTo('Discovery and Network', 'Network Policies');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.wrap(loadNetworkPolicy(NAME, Cypress.env('NAMESPACE_NAME'))).then(
       NP_CONFIG => {
@@ -36,10 +36,7 @@ context('Test Network Policy', () => {
       },
     );
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Create');
   });
 
   it('Check Network Policy details', () => {

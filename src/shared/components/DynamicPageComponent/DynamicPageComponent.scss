@@ -1,6 +1,7 @@
 .page-header {
   .ui5-title {
     font-size: var(--sapFontHeader3Size);
+    font-family: var(--sapObjectHeader_Title_FontFamily);
   }
 
   .description {
@@ -18,6 +19,20 @@
 
   &::-webkit-scrollbar {
     display: none;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+
+    .separator {
+      display: inline-block;
+      width: 1px;
+      height: 90%;
+      margin-left: 5px;
+      background-color: var(--sapList_BorderColor);
+      border-radius: 5px;
+    }
   }
 }
 
@@ -69,6 +84,7 @@
   }
 }
 
-[data-component-name='DynamicPageContent'] {
+[data-component-name='DynamicPageContent'],
+[data-component-name='ObjectPageContent'] {
   padding: 0 !important;
 }

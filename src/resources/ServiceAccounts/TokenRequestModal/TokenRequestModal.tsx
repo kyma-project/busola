@@ -122,7 +122,6 @@ export function TokenRequestModal({
       >
         {/*@ts-ignore*/}
         <ResourceForm.FormField
-          simple
           required
           propertyPath="$.spec.expirationSeconds"
           inputInfo={t('service-accounts.token-request.input-info')}
@@ -156,7 +155,6 @@ export function TokenRequestModal({
             <CopiableText
               iconOnly
               buttonText={t('common.buttons.copy')}
-              style={spacing.sapUiTinyMarginEnd}
               textToCopy={kubeconfigYaml}
               disabled={token === ''}
             />

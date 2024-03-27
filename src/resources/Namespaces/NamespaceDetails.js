@@ -11,7 +11,7 @@ import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 import { NamespaceStatus } from './NamespaceStatus';
 import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
 import { ResourcesUsage } from './ResourcesUsage';
-import { NamespaceCreate } from './NamespaceCreate';
+import NamespaceCreate from './NamespaceCreate';
 import { AllNamespacesDetails } from './AllNamespacesDetails';
 
 import { useSetRecoilState } from 'recoil';
@@ -33,6 +33,7 @@ export function NamespaceDetails(props) {
     namespace: props.resourceName,
     isCompact: true,
     showTitle: true,
+    disableCreate: true,
   };
 
   const LimitrangesList = <LimitRangeList {...limitRangesParams} />;
@@ -44,6 +45,7 @@ export function NamespaceDetails(props) {
     namespace: props.resourceName,
     isCompact: true,
     showTitle: true,
+    disableCreate: true,
   };
 
   const ResourceQuotasList = (

@@ -24,7 +24,7 @@ const ISTIO_INJECTION_LABEL = 'istio-injection';
 const ISTIO_INJECTION_ENABLED = 'enabled';
 const ISTIO_INJECTION_DISABLED = 'disabled';
 
-export function NamespaceCreate({
+export default function NamespaceCreate({
   formElementRef,
   onChange,
   resource: initialNamespace,
@@ -32,7 +32,6 @@ export function NamespaceCreate({
   onCompleted,
   onError,
   setCustomValid,
-  handleSetResetFormFn,
   ...props
 }) {
   const { t } = useTranslation();
@@ -101,32 +100,6 @@ export function NamespaceCreate({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [namespace.metadata?.name]);
-
-  useEffect(() => {
-    const resetFunction = () => {
-      setNamespace(
-        initialNamespace
-          ? cloneDeep(initialNamespace)
-          : createNamespaceTemplate(),
-      );
-
-      if (!initialNamespace) {
-        setWithLimits(false);
-        setLimits(createLimitRangeTemplate({}));
-        setWithMemory(false);
-
-        setMemory(createResourceQuotaTemplate({}));
-        jp.value(namespace, `metadata.labels`, {
-          [ISTIO_INJECTION_LABEL]: ISTIO_INJECTION_DISABLED,
-        });
-        jp.value(namespace, 'metadata.name', '');
-        setNamespace({ ...namespace });
-      }
-    };
-
-    handleSetResetFormFn(() => resetFunction);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   async function afterNamespaceCreated() {
     if (!initialNamespace) {
@@ -217,7 +190,6 @@ export function NamespaceCreate({
         lockedKeys: [ISTIO_INJECTION_LABEL],
         lockedValues: [ISTIO_INJECTION_LABEL],
       }}
-      handleSetResetFormFn={handleSetResetFormFn}
     >
       {isIstioFeatureOn ? (
         <ResourceForm.FormField
@@ -233,7 +205,6 @@ export function NamespaceCreate({
 
       {!initialNamespace ? (
         <ResourceForm.CollapsibleSection
-          advanced
           title={t('namespaces.create-modal.apply-memory-quotas')}
           actions={() => (
             <div className="additional-resource">
@@ -254,7 +225,7 @@ export function NamespaceCreate({
             </div>
           )}
         >
-          <FlexBox className="container-limits" advanced>
+          <FlexBox className="container-limits">
             <MemoryInput
               label={t('namespaces.create-modal.memory-limits')}
               container={memory}
@@ -276,7 +247,6 @@ export function NamespaceCreate({
       ) : null}
       {!initialNamespace ? (
         <ResourceForm.CollapsibleSection
-          advanced
           title={t('namespaces.create-modal.apply-limits')}
           actions={() => (
             <div className="additional-resource">
@@ -297,7 +267,7 @@ export function NamespaceCreate({
             </div>
           )}
         >
-          <FlexBox className="container-limits" advanced>
+          <FlexBox className="container-limits">
             <MemoryInput
               label={t('limit-ranges.headers.max')}
               container={limits}
@@ -331,5 +301,3 @@ export function NamespaceCreate({
     </ResourceForm>
   );
 }
-
-NamespaceCreate.allowEdit = true;

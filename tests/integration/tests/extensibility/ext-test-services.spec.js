@@ -58,6 +58,11 @@ context('Test Services', () => {
       .contains('Namespaces')
       .click();
 
+    cy.get('ui5-input[placeholder="Search"]:visible')
+      .find('input')
+      .wait(1000)
+      .type('services');
+
     cy.clickGenericListLink('services');
 
     cy.getLeftNav()

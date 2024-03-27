@@ -8,28 +8,29 @@ import { HelmReleaseData } from './HelmReleaseData';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
 import { OtherReleaseVersions } from './OtherReleaseVersions';
 import { findRecentRelease } from './findRecentRelease';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { useSetRecoilState } from 'recoil';
+import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { ResourceDescription } from 'components/HelmReleases';
+import HelmReleasesYaml from './HelmReleasesYaml';
+import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
+import { showYamlTab } from './index';
 import { Link } from 'shared/components/Link/Link';
 import { Button } from '@ui5/webcomponents-react';
 import { showAIassistantState } from 'components/AIassistant/state/showAIassistantAtom';
+import { createPortal } from 'react-dom';
 
-function HelmReleasesDetails({ releaseName }) {
+function HelmReleasesDetails({ releaseName, namespace }) {
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();
 
   const setOpenAssistant = useSetRecoilState(showAIassistantState);
-  const namespace = useRecoilValue(activeNamespaceIdState);
-  const breadcrumbItems = [
-    { name: t('helm-releases.title'), url: namespaceUrl('helm-releases') },
-    { name: '' },
-  ];
 
   const { data, loading } = useGetList(s => s.type === 'helm.sh/release.v1')(
-    `/api/v1/namespaces/${namespace}/secrets?labelSelector=name==${releaseName}`,
+    namespace === '-all-'
+      ? `/api/v1/secrets?labelSelector=name==${releaseName}`
+      : `/api/v1/namespaces/${namespace}/secrets?labelSelector=name==${releaseName}`,
   );
 
   if (loading) return <Spinner />;
@@ -39,7 +40,6 @@ function HelmReleasesDetails({ releaseName }) {
     return (
       <ResourceNotFound
         resource={prettifyNameSingular(undefined, t('helm-releases.title'))}
-        breadcrumbs={breadcrumbItems}
       />
     );
   }
@@ -48,14 +48,29 @@ function HelmReleasesDetails({ releaseName }) {
     <>
       <DynamicPageComponent
         title={releaseName}
-        breadcrumbItems={breadcrumbItems}
         description={ResourceDescription}
+        showYamlTab={showYamlTab}
+        layoutNumber="MidColumn"
+        inlineEditForm={() => (
+          <ResourceCreate
+            title={'HelmRelease'}
+            isEdit={true}
+            confirmText={t('common.buttons.save')}
+            disableEdit={true}
+            renderForm={props => (
+              <ErrorBoundary>
+                <HelmReleasesYaml
+                  resource={releaseSecret}
+                  editMode={true}
+                  {...props}
+                />
+              </ErrorBoundary>
+            )}
+          />
+        )}
         content={
           <>
-            <HelmReleaseData
-              encodedRelease={releaseSecret.data.release}
-              simpleHeader
-            />
+            <HelmReleaseData encodedRelease={releaseSecret.data.release} />
             <OtherReleaseVersions
               releaseSecret={releaseSecret}
               secrets={data}
@@ -67,7 +82,9 @@ function HelmReleasesDetails({ releaseName }) {
           <>
             <DynamicPageComponent.Column title={t('secrets.name_singular')}>
               <Link
-                url={namespaceUrl(`secrets/${releaseSecret.metadata.name}`)}
+                url={namespaceUrl(`secrets/${releaseSecret.metadata.name}`, {
+                  namespace: releaseSecret.metadata.namespace,
+                })}
               >
                 {releaseSecret.metadata.name}
               </Link>
@@ -93,7 +110,7 @@ function HelmReleasesDetails({ releaseName }) {
             </DynamicPageComponent.Column>
           </>
         )}
-        <YamlUploadDialog />
+        {createPortal(<YamlUploadDialog />, document.body)}
       </DynamicPageComponent>
     </>
   );

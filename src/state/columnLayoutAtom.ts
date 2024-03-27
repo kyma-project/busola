@@ -5,10 +5,15 @@ type ColumnState = {
   resourceType: null | string;
   namespaceId: null | string;
 };
+type ShowCreate = {
+  resourceType: null | string;
+  namespaceId: null | string;
+};
 
 type ColumnLayoutState = {
   midColumn: null | ColumnState;
   endColumn: null | ColumnState;
+  showCreate?: null | ShowCreate;
   layout: string;
 };
 
@@ -18,6 +23,7 @@ const defaultValue = {
   layout: 'OneColumn',
   midColumn: null,
   endColumn: null,
+  showCreate: null,
 };
 
 export const columnLayoutState: RecoilState<ColumnLayoutState> = atom<

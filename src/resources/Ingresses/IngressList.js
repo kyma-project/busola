@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
-import { IngressCreate } from './IngressCreate';
+import IngressCreate from './IngressCreate';
 import {
   ResourceDescription,
   i18nDescriptionKey,

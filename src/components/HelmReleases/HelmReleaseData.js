@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import jsyaml from 'js-yaml';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
-export function HelmReleaseData({ encodedRelease, simpleHeader }) {
+export function HelmReleaseData({ encodedRelease }) {
   const { t } = useTranslation();
 
   const release = decodeHelmRelease(encodedRelease);
@@ -23,7 +23,7 @@ export function HelmReleaseData({ encodedRelease, simpleHeader }) {
 
   return (
     <React.Fragment key="helm-release-data">
-      <ReleaseDataPanel release={release} simpleHeader={simpleHeader} />
+      <ReleaseDataPanel release={release} />
       <ReadonlyEditorPanel
         title={t('helm-releases.headers.release-data')}
         value={jsyaml.dump(release.config)}

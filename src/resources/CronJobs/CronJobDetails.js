@@ -9,7 +9,7 @@ import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 import { useUrl } from 'hooks/useUrl';
 
 import { CronJobConcurrencyPolicy } from './CronJobConcurrencyPolicy';
-import { CronJobCreate } from './CronJobCreate';
+import CronJobCreate from './CronJobCreate';
 import { CronJobJobs } from './CronJobJobs';
 import { ResourceDescription } from 'resources/CronJobs';
 import { Link } from 'shared/components/Link/Link';

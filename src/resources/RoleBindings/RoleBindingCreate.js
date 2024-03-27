@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { GenericRoleBindingCreate } from './GenericRoleBindingCreate';
 
-export function RoleBindingCreate(props) {
+export default function RoleBindingCreate(props) {
   const { t } = useTranslation();
   return (
     <GenericRoleBindingCreate
@@ -13,4 +13,3 @@ export function RoleBindingCreate(props) {
     />
   );
 }
-RoleBindingCreate.allowEdit = true;

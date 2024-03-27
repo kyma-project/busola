@@ -33,10 +33,7 @@
   }
 
   .resource-overview__details-wrapper {
-    &.tabs {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-    }
+    grid-template-columns: 2fr 1fr;
   }
 }
 

@@ -1,5 +1,5 @@
 import { GenericRoleList } from 'resources/Roles/GenericRoleList';
-import { ClusterRoleCreate } from './ClusterRoleCreate';
+import ClusterRoleCreate from './ClusterRoleCreate';
 import {
   ResourceDescription,
   i18nDescriptionKey,

@@ -10,6 +10,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Icon, ObjectStatus } from '@ui5/webcomponents-react';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ResourceDescription } from 'resources/Events';
+import EventCreate from './EventYaml';
 import { Link } from 'shared/components/Link/Link';
 
 const RowComponent = ({ name, value }) =>
@@ -105,8 +106,10 @@ export function EventDetails(props) {
       customComponents={[Message]}
       customColumns={customColumns}
       description={ResourceDescription}
+      createResourceForm={EventCreate}
       {...props}
       readOnly={true}
+      disableEdit={true}
     />
   );
 }

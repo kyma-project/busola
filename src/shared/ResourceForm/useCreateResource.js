@@ -23,7 +23,6 @@ export function useCreateResource({
   initialUnchangedResource,
   createUrl,
   afterCreatedFn,
-  toggleFormFn,
   urlPath,
   layoutNumber,
 }) {
@@ -52,12 +51,14 @@ export function useCreateResource({
         },
       ),
     });
+
     if (!isEdit) {
       if (isColumnLeyoutEnabled) {
         setLayoutColumn(
           nextLayout === 'TwoColumnsMidExpanded'
             ? {
                 layout: nextLayout,
+                showCreate: null,
                 midColumn: {
                   resourceName: resource.metadata.name,
                   resourceType: resource.kind,
@@ -68,6 +69,7 @@ export function useCreateResource({
             : {
                 ...layoutColumn,
                 layout: nextLayout,
+                showCreate: null,
                 endColumn: {
                   resourceName: resource.metadata.name,
                   resourceType: resource.kind,
@@ -133,9 +135,6 @@ export function useCreateResource({
       } else {
         await postRequest(createUrl, resource);
       }
-      if (typeof toggleFormFn === 'function') {
-        toggleFormFn(false);
-      }
 
       onSuccess();
     } catch (e) {
@@ -155,9 +154,6 @@ export function useCreateResource({
               );
               closeModal();
               onSuccess();
-              if (typeof toggleFormFn === 'function') {
-                toggleFormFn(false);
-              }
             } catch (e) {
               showError(e);
             }

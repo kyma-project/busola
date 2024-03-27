@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { CronJobLastScheduleTime } from 'shared/components/CronJob/CronJobLastScheduleTime';
 import { CronJobSchedule } from 'shared/components/CronJob/CronJobSchedule';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { CronJobCreate } from './CronJobCreate';
+import CronJobCreate from './CronJobCreate';
 import {
   ResourceDescription,
   i18nDescriptionKey,

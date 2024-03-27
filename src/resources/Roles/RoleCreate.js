@@ -7,7 +7,7 @@ import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { groupVersionState } from 'state/discoverability/groupVersionsSelector';
 
-export function RoleCreate(props) {
+export default function RoleCreate(props) {
   const { t } = useTranslation();
   const groupVersions = useRecoilValue(groupVersionState) || [];
   const namespace = useRecoilValue(activeNamespaceIdState);
@@ -22,5 +22,4 @@ export function RoleCreate(props) {
     />
   );
 }
-RoleCreate.allowEdit = true;
 RoleCreate.allowClone = true;

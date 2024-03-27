@@ -7,8 +7,7 @@ import clusterList from './other/clusters.routes';
 import busolaExtensions from './other/BusolaExtensions.routes';
 
 import containerDetails from './other/containerDetails.routes';
-import helmReleasesList from './other/helmReleasesList.routes';
-import helmReleaseDetails from './other/helmReleaseDetails.routes';
+import helmReleases from './other/helmReleases.routes';
 
 export const otherRoutes = (
   <>
@@ -28,7 +27,6 @@ export const otherRoutesNamespaced = (
     {customResourceDetails}
     {customResourceListOfType}
     {customResourcesByGroup}
-    {helmReleasesList}
-    {helmReleaseDetails}
+    {helmReleases}
   </>
 );

@@ -11,6 +11,7 @@ export const category = predefinedCategories['discovery-and-network'];
 
 export const List = React.lazy(() => import('./IngressList'));
 export const Details = React.lazy(() => import('./IngressDetails'));
+export const Create = React.lazy(() => import('./IngressCreate'));
 
 export const i18nDescriptionKey = 'ingresses.description';
 export const docsURL =

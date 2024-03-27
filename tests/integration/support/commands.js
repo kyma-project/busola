@@ -121,13 +121,6 @@ Cypress.Commands.add('getLeftNav', () => {
   return cy.get('aside');
 });
 
-Cypress.Commands.add('scrollMidColumnToButtom', () => {
-  return cy
-    .getMidColumn()
-    .get('.ui5-fcl-column--middle')
-    .scrollTo('bottom');
-});
-
 Cypress.Commands.add('getMidColumn', () => {
   return cy.get('div[slot="midColumn"]');
 });
@@ -282,15 +275,28 @@ Cypress.Commands.add(
   },
 );
 
-Cypress.Commands.add('closeMidColumn', (checkIfNotExist = false) => {
-  cy.getMidColumn()
-    .find('ui5-button[aria-label="close-column"]')
-    .click();
+Cypress.Commands.add(
+  'closeMidColumn',
+  (checkIfNotExist = false, hiddenButtons = false) => {
+    if (hiddenButtons) {
+      cy.getMidColumn()
+        .find('header')
+        .find('ui5-toggle-button:visible')
+        .click();
 
-  cy.wait(1000);
-  if (checkIfNotExist) cy.getMidColumn().should('not.exist');
-  else cy.getMidColumn().should('not.be.visible');
-});
+      cy.get('[data-component-name="ToolbarOverflowPopoverContent"]')
+        .find('ui5-button[aria-label="close-column"]')
+        .click();
+    } else
+      cy.getMidColumn()
+        .find('ui5-button[aria-label="close-column"]')
+        .click();
+
+    cy.wait(1000);
+    if (checkIfNotExist) cy.getMidColumn().should('not.exist');
+    else cy.getMidColumn().should('not.be.visible');
+  },
+);
 
 Cypress.Commands.add('closeEndColumn', (checkIfNotExist = false) => {
   cy.getEndColumn()

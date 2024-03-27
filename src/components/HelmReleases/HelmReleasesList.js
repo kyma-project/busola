@@ -1,4 +1,10 @@
+import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
+
 import { useTranslation } from 'react-i18next';
+import { Link, Text } from '@ui5/webcomponents-react';
+import { groupBy } from 'lodash';
+
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { Labels } from 'shared/components/Labels/Labels';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
@@ -6,27 +12,23 @@ import { GenericList } from 'shared/components/GenericList/GenericList';
 import { decodeHelmRelease } from './decodeHelmRelease';
 import { findRecentRelease } from './findRecentRelease';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
-import { groupBy } from 'lodash';
-import { useRecoilValue } from 'recoil';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { ResourceDescription } from 'components/HelmReleases';
-import { Link } from 'shared/components/Link/Link';
+import { createPortal } from 'react-dom';
 
-function HelmReleasesList() {
+function HelmReleasesList({ enableColumnLayout }) {
   const { t } = useTranslation();
   const namespace = useRecoilValue(activeNamespaceIdState);
   const { namespaceUrl } = useUrl();
+  const navigate = useNavigate();
+  const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const resourceUrl = entry => {
-    const currentUrl = window.location.pathname;
-    const urlPrefix = currentUrl.includes('namespaces/-all-/')
-      ? currentUrl.substring(0, currentUrl.indexOf('-all-') - 1)
-      : '';
-
-    return urlPrefix
-      ? `${urlPrefix}/${entry.namespace}/helm-releases/${entry.releaseName}`
-      : namespaceUrl(`helm-releases/${entry.releaseName}`);
+    return namespaceUrl(`helm-releases/${entry.releaseName}`, {
+      namespace: entry.namespace,
+    });
   };
 
   const { data, loading, error } = useGetList(
@@ -48,9 +50,28 @@ function HelmReleasesList() {
   ];
 
   const rowRenderer = entry => [
-    <Link url={resourceUrl(entry)} resetLayout={false}>
-      {entry.releaseName}
-    </Link>,
+    enableColumnLayout ? (
+      <>
+        <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
+          {entry.releaseName}
+        </Text>
+      </>
+    ) : (
+      <Link
+        style={{ fontWeight: 'bold' }}
+        onClick={() => {
+          setLayoutColumn({
+            midColumn: null,
+            endColumn: null,
+            layout: 'OneColumn',
+          });
+
+          navigate(resourceUrl(entry));
+        }}
+      >
+        {entry.releaseName}
+      </Link>
+    ),
     namespace === '-all-' ? entry.namespace : null,
     <div style={{ maxWidth: '36rem' }}>
       <Labels labels={entry.recentRelease?.labels || {}} />
@@ -66,6 +87,7 @@ function HelmReleasesList() {
   ).map(([releaseName, releases]) => {
     const recentRelease = findRecentRelease(releases);
     return {
+      name: releaseName,
       releaseName,
       recentReleaseName: recentRelease?.metadata.name,
       recentRelease: decodeHelmRelease(recentRelease?.data.release),
@@ -80,6 +102,7 @@ function HelmReleasesList() {
       <DynamicPageComponent
         title={t('helm-releases.title')}
         description={ResourceDescription}
+        layoutNumber={'StartColumn'}
         content={
           <GenericList
             entries={entries}
@@ -87,11 +110,19 @@ function HelmReleasesList() {
             rowRenderer={rowRenderer}
             serverDataLoading={loading}
             serverDataError={error}
+            hasDetailsView
+            displayArrow
+            enableColumnLayout={enableColumnLayout}
+            customUrl={resourceUrl}
+            resourceType="HelmReleases"
             sortBy={{
               name: (a, b) => a.releaseName.localeCompare(b.releaseName),
             }}
             searchSettings={{
-              textSearchProperties: ['recentRelease.chart.metadata.name'],
+              textSearchProperties: [
+                'recentRelease.chart.metadata.name',
+                'releaseName',
+              ],
             }}
             emptyListProps={{
               titleText: `${t('common.labels.no')} ${t(
@@ -105,7 +136,7 @@ function HelmReleasesList() {
           />
         }
       />
-      <YamlUploadDialog />
+      {createPortal(<YamlUploadDialog />, document.body)}
     </>
   );
 }

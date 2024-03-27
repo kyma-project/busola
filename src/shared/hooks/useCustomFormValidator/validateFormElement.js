@@ -26,7 +26,7 @@ export function validateFormElement(element, isRequired) {
         const required = child.classList.contains('required');
         const content = child.querySelector('div.content');
         const contentWrapper = child.querySelector(
-          'div.content > .collapsible-renderer__grid-wrapper',
+          'div.content > .form-group__grid-wrapper',
         );
         const contentParent =
           contentWrapper?.parentNode === content ? contentWrapper : content;

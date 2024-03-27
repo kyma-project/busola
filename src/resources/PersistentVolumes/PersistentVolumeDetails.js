@@ -10,7 +10,7 @@ import { filterByResource } from 'hooks/useMessageList';
 import { useUrl } from 'hooks/useUrl';
 
 import { PersistentVolumeStatus } from './PersistentVolumeStatus';
-import { PersistentVolumeCreate } from './PersistentVolumeCreate';
+import PersistentVolumeCreate from './PersistentVolumeCreate';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ResourceDescription } from 'resources/PersistentVolumes';
 import { Link } from 'shared/components/Link/Link';

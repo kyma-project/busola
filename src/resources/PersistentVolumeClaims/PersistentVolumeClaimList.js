@@ -4,7 +4,7 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { PersistentVolumeClaimStatus } from 'shared/components/PersistentVolumeClaimStatus';
 import { Tokens } from 'shared/components/Tokens';
 
-import { PersistentVolumeClaimCreate } from './PersistentVolumeClaimCreate';
+import PersistentVolumeClaimCreate from './PersistentVolumeClaimCreate';
 import {
   ResourceDescription,
   i18nDescriptionKey,

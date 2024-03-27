@@ -1,6 +1,6 @@
 import { GenericRoleBindingList } from 'resources/RoleBindings/GenericRoleBindingList';
 
-import { ClusterRoleBindingCreate } from './ClusterRoleBindingCreate';
+import ClusterRoleBindingCreate from './ClusterRoleBindingCreate';
 import {
   ResourceDescription,
   i18nDescriptionKey,

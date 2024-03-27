@@ -8,6 +8,8 @@ export const namespaced = true;
 
 export const List = React.lazy(() => import('./RoleList'));
 export const Details = React.lazy(() => import('./RoleDetails'));
+export const Create = React.lazy(() => import('./RoleCreate'));
+
 export const apiGroup = 'rbac.authorization.k8s.io';
 export const apiVersion = 'v1';
 export const category = predefinedCategories.configuration;

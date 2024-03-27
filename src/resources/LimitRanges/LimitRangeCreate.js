@@ -4,6 +4,7 @@ import { useRecoilValue } from 'recoil';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import * as _ from 'lodash';
 
 import { createLimitRangeTemplate } from './templates';
 
@@ -12,11 +13,13 @@ export function LimitRangeCreate({
   onChange,
   setCustomValid,
   resourceUrl,
+  resource: initialLimitRange,
   ...props
 }) {
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const [limitRange, setLimitRange] = useState(
-    createLimitRangeTemplate({ namespaceName: namespaceId }),
+    _.cloneDeep(initialLimitRange) ||
+      createLimitRangeTemplate({ namespaceName: namespaceId }),
   );
   const { t } = useTranslation();
 
@@ -26,6 +29,7 @@ export function LimitRangeCreate({
       pluralKind="limitRanges"
       singularName={t('limit-ranges.name_singular')}
       resource={limitRange}
+      initialResource={initialLimitRange}
       setResource={setLimitRange}
       onChange={onChange}
       formElementRef={formElementRef}

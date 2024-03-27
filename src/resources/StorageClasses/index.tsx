@@ -8,6 +8,8 @@ export const namespaced = false;
 
 export const List = React.lazy(() => import('./StorageClassList'));
 export const Details = React.lazy(() => import('./StorageClassDetails'));
+export const Create = React.lazy(() => import('./StorageClassCreate'));
+
 export const apiGroup = 'storage.k8s.io';
 export const apiVersion = 'v1';
 export const category = predefinedCategories.storage;

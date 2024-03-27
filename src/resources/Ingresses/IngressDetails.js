@@ -5,7 +5,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 import { Rules } from './Rules';
 import { DefaultBackendPanel } from './DefaultBackendPanel';
-import { IngressCreate } from './IngressCreate';
+import IngressCreate from './IngressCreate';
 import { ResourceDescription } from 'resources/Ingresses';
 
 export function IngressDetails(props) {

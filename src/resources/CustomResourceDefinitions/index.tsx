@@ -21,3 +21,6 @@ export const List = React.lazy(() => import('./CustomResourceDefinitionList'));
 export const Details = React.lazy(() =>
   import('./CustomResourceDefinitionDetails'),
 );
+export const Create = React.lazy(() =>
+  import('./CustomResourceDefinitionCreate'),
+);

@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import * as _ from 'lodash';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { ResourceForm } from 'shared/ResourceForm';
-import {
-  SimpleContainersView,
-  AdvancedContainersView,
-} from 'shared/components/Deployment/ContainersViews';
+import { AdvancedContainersView } from 'shared/components/Deployment/ContainersViews';
 import { useSidecar } from 'shared/hooks/useSidecarInjection';
 
 import {
@@ -20,7 +17,7 @@ const ISTIO_INJECTION_LABEL = 'sidecar.istio.io/inject';
 const ISTIO_INJECTION_ENABLED = 'true';
 const ISTIO_INJECTION_DISABLED = 'false';
 
-export function DeploymentCreate({
+export default function DeploymentCreate({
   formElementRef,
   namespace,
   onChange,
@@ -100,14 +97,7 @@ export function DeploymentCreate({
         />
       ) : null}
 
-      <SimpleContainersView
-        simple
-        resource={deployment}
-        setResource={setDeployment}
-      />
-
       <AdvancedContainersView
-        advanced
         resource={deployment}
         setResource={setDeployment}
         onChange={onChange}
@@ -117,4 +107,3 @@ export function DeploymentCreate({
     </ResourceForm>
   );
 }
-DeploymentCreate.allowEdit = true;

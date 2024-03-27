@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { GenericRoleBindingCreate } from 'resources/RoleBindings/GenericRoleBindingCreate';
 
-export function ClusterRoleBindingCreate(props) {
+export default function ClusterRoleBindingCreate(props) {
   const { t } = useTranslation();
   return (
     <GenericRoleBindingCreate
@@ -12,4 +12,3 @@ export function ClusterRoleBindingCreate(props) {
     />
   );
 }
-ClusterRoleBindingCreate.allowEdit = true;

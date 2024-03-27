@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
+import * as _ from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
@@ -12,11 +13,14 @@ export function ResourceQuotaCreate({
   onChange,
   setCustomValid,
   resourceUrl,
+  resource: initialResourceQuota,
+
   ...props
 }) {
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const [resourceQuota, setResourceQuota] = useState(
-    createResourceQuotaTemplate({ namespaceName: namespaceId }),
+    _.cloneDeep(initialResourceQuota) ||
+      createResourceQuotaTemplate({ namespaceName: namespaceId }),
   );
   const { t } = useTranslation();
 
@@ -26,6 +30,7 @@ export function ResourceQuotaCreate({
       pluralKind="resourceQuotas"
       singularName={t('resource-quotas.name_singular')}
       resource={resourceQuota}
+      initialResource={initialResourceQuota}
       setResource={setResourceQuota}
       onChange={onChange}
       formElementRef={formElementRef}

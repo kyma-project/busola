@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep } from 'lodash';
@@ -9,10 +9,7 @@ import {
   isCronExpressionValid,
   ScheduleSection,
 } from 'resources/Jobs/ScheduleSection';
-import {
-  ContainerSection,
-  ContainersSection,
-} from 'resources/Jobs/ContainersSection';
+import { ContainersSection } from 'resources/Jobs/ContainersSection';
 import {
   createCronJobTemplate,
   createCronJobPresets,
@@ -27,7 +24,7 @@ function isCronJobValid(cronJob) {
   return areContainersValid && isCronExpressionValid(cronJob?.spec?.schedule);
 }
 
-export function CronJobCreate({
+export default function CronJobCreate({
   formElementRef,
   resource: initialCronJob,
   namespace,
@@ -61,22 +58,13 @@ export function CronJobCreate({
       presets={!initialCronJob && createCronJobPresets(namespace)}
       createUrl={resourceUrl}
     >
-      <CronJobSpecSection advanced propertyPath="$.spec" />
+      <CronJobSpecSection propertyPath="$.spec" />
 
       <ScheduleSection propertyPath="$.spec.schedule" />
-
-      <ContainerSection
-        simple
-        defaultOpen
-        propertyPath="$.spec.jobTemplate.spec.template.spec.containers"
-      />
-
       <ContainersSection
-        advanced
         defaultOpen
         propertyPath="$.spec.jobTemplate.spec.template.spec.containers"
       />
     </ResourceForm>
   );
 }
-CronJobCreate.allowEdit = true;

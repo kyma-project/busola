@@ -4,11 +4,19 @@ import { useRecoilState } from 'recoil';
 import { Route, useSearchParams, useParams } from 'react-router-dom';
 import pluralize from 'pluralize';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
+import { useTranslation } from 'react-i18next';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { usePrepareDetailsProps, usePrepareListProps } from './helpers';
+import {
+  usePrepareCreateProps,
+  usePrepareDetailsProps,
+  usePrepareListProps,
+} from './helpers';
+import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
+import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
+import { useUrl } from 'hooks/useUrl';
 
 import { useFeature } from 'hooks/useFeature';
 
@@ -48,11 +56,20 @@ export const createKubernetesUrl = ({
   return `${apiPrefix}${apiGroup}/${apiVersion}/${namespaceSegment}${resourceType}/${details}`;
 };
 
-const ColumnWrapper = ({ defaultColumn = 'list', list, details, ...props }) => {
+const ColumnWrapper = ({
+  defaultColumn = 'list',
+  list,
+  details,
+  create,
+  ...props
+}) => {
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
+  const { resourceListUrl } = useUrl();
+
+  const { t } = useTranslation();
 
   const {
     resourceName: resourceNameFromParams,
@@ -93,24 +110,35 @@ const ColumnWrapper = ({ defaultColumn = 'list', list, details, ...props }) => {
     props.resourceType,
   ]);
 
+  const layoutCloseCreateUrl = resourceListUrl({
+    kind: props.resourceType,
+    metadata: {
+      namespace: layoutState?.midColumn?.namespaceId ?? namespaceId,
+    },
+  });
+
   const elementListProps = usePrepareListProps({
     ...props,
   });
 
   const elementDetailsProps = usePrepareDetailsProps({
     ...props,
-    customResourceName: layoutState?.midColumn?.resourceName ?? resourceName,
-    customNamespaceId: layoutState?.midColumn?.namespaceId ?? namespaceId,
+    resourceName: layoutState?.midColumn?.resourceName ?? resourceName,
+    namespaceId: layoutState?.midColumn?.namespaceId ?? namespaceId,
+  });
+
+  const elementCreateProps = usePrepareCreateProps({
+    ...props,
   });
 
   const listComponent = React.cloneElement(list, {
     ...elementListProps,
+    layoutCloseCreateUrl,
     enableColumnLayout:
       elementListProps.resourceType !== 'Namespaces'
         ? isColumnLeyoutEnabled
         : false,
   });
-
   const detailsComponent = React.cloneElement(details, {
     ...elementDetailsProps,
   });
@@ -124,9 +152,35 @@ const ColumnWrapper = ({ defaultColumn = 'list', list, details, ...props }) => {
   }
 
   let midColumnComponent = null;
-
-  //we have to set it ahead of time for the columns to not jump, but cannot render two Details components when we are directly on details page
   if (
+    layoutState?.showCreate?.resourceType &&
+    create &&
+    create?.type !== null
+  ) {
+    midColumnComponent = (
+      <ResourceCreate
+        title={elementCreateProps.resourceTitle}
+        confirmText={t('common.buttons.create')}
+        layoutCloseCreateUrl={layoutCloseCreateUrl}
+        renderForm={renderProps => {
+          const createComponent =
+            create &&
+            create?.type !== null &&
+            layoutState?.showCreate?.resourceType &&
+            React.cloneElement(create, {
+              ...elementCreateProps,
+              ...renderProps,
+              enableColumnLayout: true,
+              layoutNumber: 'StartColumn',
+              resource: layoutState?.showCreate?.resource, // For ResourceCreate we want to set layoutNumber to previous column so detail are opened instead of create
+            });
+          return <ErrorBoundary>{createComponent}</ErrorBoundary>;
+        }}
+      />
+    );
+  }
+  if (
+    !layoutState?.showCreate &&
     (layoutState?.midColumn || isColumnLeyoutEnabled) &&
     !(layoutState?.layout === 'OneColumn' && defaultColumn === 'details')
   ) {
@@ -139,8 +193,8 @@ const ColumnWrapper = ({ defaultColumn = 'list', list, details, ...props }) => {
       layout={
         !midColumnComponent ? 'OneColumn' : layoutState?.layout || 'OneColumn'
       }
-      startColumn={<div>{startColumnComponent}</div>}
-      midColumn={<div>{midColumnComponent}</div>}
+      startColumn={<div className="column-content">{startColumnComponent}</div>}
+      midColumn={<div className="column-content">{midColumnComponent}</div>}
     />
   );
 };
@@ -148,6 +202,7 @@ const ColumnWrapper = ({ defaultColumn = 'list', list, details, ...props }) => {
 export const createResourceRoutes = ({
   List = null,
   Details = null,
+  Create = null,
   namespaced = true,
   resourceType = '',
   resourceI18Key = '',
@@ -173,6 +228,7 @@ export const createResourceRoutes = ({
               hasDetailsView={!!Details}
               list={<List />}
               details={<Details />}
+              create={Create ? <Create /> : null}
               {...props}
             >
               <List />
@@ -191,6 +247,7 @@ export const createResourceRoutes = ({
                 hasDetailsView={true}
                 list={<List />}
                 details={<Details />}
+                create={Create ? <Create /> : null}
                 defaultColumn="details"
                 {...props}
               >

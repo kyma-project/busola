@@ -24,7 +24,6 @@ export const ModalWithForm = ({
 }) => {
   const { t } = useTranslation();
   const [isOpen, setOpen] = useState(false);
-  const [resetFormFn, setResetFormFn] = useState(() => () => {});
 
   const {
     isValid,
@@ -146,9 +145,6 @@ export const ModalWithForm = ({
               endContent={
                 <>
                   {renderConfirmButton()}
-                  <Button onClick={resetFormFn} design="Transparent">
-                    {t('common.buttons.reset')}
-                  </Button>
                   <Button
                     onClick={() => {
                       setOpenStatus(false);
@@ -168,7 +164,6 @@ export const ModalWithForm = ({
         >
           {isOpen &&
             renderForm({
-              handleSetResetFormFn: setResetFormFn,
               formElementRef,
               isValid,
               setCustomValid,

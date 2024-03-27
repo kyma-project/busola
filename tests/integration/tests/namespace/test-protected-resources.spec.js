@@ -49,15 +49,13 @@ context('Test Protected Resources', () => {
   it('Create a protected resource', () => {
     cy.navigateTo('Configuration', 'Config Maps');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.get('[aria-label="ConfigMap name"]:visible')
       .find('input')
       .type(NAME, { force: true });
 
-    cy.contains('Advanced').click();
-
-    cy.get('ui5-dialog')
+    cy.get('.create-form')
       .contains('Labels')
       .click();
 
@@ -74,10 +72,7 @@ context('Test Protected Resources', () => {
       .click()
       .type('true');
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Create');
   });
 
   it('Protect a resource', () => {
@@ -95,7 +90,7 @@ context('Test Protected Resources', () => {
   it('Create a protected Pod controlled by Deployment', () => {
     cy.navigateTo('Workloads', 'Deployments');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.get('[aria-label="Deployment name"]:visible')
       .find('input')
@@ -108,10 +103,7 @@ context('Test Protected Resources', () => {
       .click()
       .type(IMAGE);
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Create')
-      .should('be.visible')
-      .click();
+    cy.saveChanges('Create');
   });
 
   it('Check if Pod is protected', () => {

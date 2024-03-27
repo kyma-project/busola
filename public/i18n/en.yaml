@@ -280,7 +280,7 @@ common:
     view-yaml: View YAML
   create-form:
     autocomplete-unavailable-error: Monaco autocompletion unavailable. {{error}}.
-    choose-preset: Choose preset
+    choose-template: Choose template
     editor-error: 'Parse error: {{error}}, previous valid input will be used'
     force-update: Force update
     messages:
@@ -290,10 +290,10 @@ common:
       patch-failure: 'Failed to update the {{resourceType}}: {{error}}.'
       patch-success: '{{resourceType}} updated'
     modes:
-      advanced: Advanced
-      simple: Simple
-      ui-form: Form
+      form: Form
+      yaml: YAML
     object-required: An object is required
+    template: Template
   delete-dialog:
     delete-confirm: Don't ask again
     information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.
@@ -389,7 +389,8 @@ common:
     secret-ref-name: Select name
     secret-ref-namespace: Select Namespace
   product-title: Kyma
-  protected-resource: Resource protected. Go to Preferences to turn on the modification of protected resources.
+  protected-resource-description: Resource protected. Go to Preferences to turn on the modification of protected resources.
+  protected-resource: Protected resource 
   sorting:
     asc: Ascending
     count: Count
@@ -414,6 +415,10 @@ common:
     ready: Ready
     'true': 'true'
     unknown: Unknown
+  tabs:
+    edit: Edit
+    view: View
+    yaml: YAML
   tooltips:
     at: at
     column: Col
@@ -663,22 +668,20 @@ daemon-sets:
     toleration-seconds: Seconds
 deployments:
   create-modal:
-    advanced:
-      add-container: Add Container
-      container-header: Container {{name}}
-      containers: Containers
-      cpu-limits: CPU Limits
-      cpu-requests: CPU Requests
-      image: Image
-      memory-limits: Memory Limits
-      memory-requests: Memory Requests
-      one-container-required: Provide at least one container.
-      runtime-profile: Runtime Profile
-    simple:
-      docker-image: Docker Image
-      docker-image-placeholder: Enter the Docker image tag, for example, bitnami/nginx
-      image-pull-secret: Image Pull Secret
-      image-pull-secret-tooltip: The secret for authorization to the private Docker repository.
+    add-container: Add Container
+    container-header: Container {{name}}
+    containers: Containers
+    cpu-limits: CPU Limits
+    cpu-requests: CPU Requests
+    image: Image
+    memory-limits: Memory Limits
+    memory-requests: Memory Requests
+    one-container-required: Provide at least one container.
+    runtime-profile: Runtime Profile
+    docker-image: Docker Image
+    docker-image-placeholder: Enter the Docker image tag, for example, bitnami/nginx
+    image-pull-secret: Image Pull Secret
+    image-pull-secret-tooltip: The secret for authorization to the private Docker repository.
     title: Create Deployment
   description: <0>Deployment</0> is a Kubernetes object that represents a replicated application running on your cluster.
   headers:
@@ -714,6 +717,7 @@ events:
     reason: Reason
     source: Source
     type: Type
+  name_singular: Event
   title: Events
 extensibility:
   configuration-error: 'Configuration error: {{error}}'
@@ -1399,6 +1403,11 @@ settings:
     dontConfirmDelete: Delete without confirmation
     showHiddenNamespaces: Show hidden Namespaces
     title: Clusters
+    edit-view: 
+      choose: Select default view for resource edit
+      default: Default (last one used)
+      always-yaml: Always YAML
+      always-form: Always form 
     resourcesValidation:
       title: Resource Validation
       validateResources: Validate Resources

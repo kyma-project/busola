@@ -5,15 +5,16 @@ import { Button, Text } from '@ui5/webcomponents-react';
 import { cloneDeep } from 'lodash';
 import * as jp from 'jsonpath';
 import pluralize from 'pluralize';
+import { useRecoilState } from 'recoil';
 
-import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
+import { columnLayoutState } from 'state/columnLayoutAtom';
+
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { prettifyNameSingular, prettifyNamePlural } from 'shared/utils/helpers';
 import { Labels } from 'shared/components/Labels/Labels';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
-import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
@@ -69,6 +70,7 @@ ResourcesList.propTypes = {
   disableMargin: PropTypes.bool,
   enableColumnLayout: PropTypes.bool,
   layoutNumber: PropTypes.string,
+  handleRedirect: PropTypes.func,
 };
 
 ResourcesList.defaultProps = {
@@ -177,12 +179,10 @@ export function ResourceListRenderer({
   testid,
   omitColumnsIds = ['namespace'],
   customListActions = [],
-  createFormProps,
   pagination,
   loading,
   error,
   resources,
-  silentRefetch = () => {},
   resourceUrlPrefix,
   nameSelector = entry => entry?.metadata.name, // overriden for CRDGroupList
   disableCreate,
@@ -191,6 +191,7 @@ export function ResourceListRenderer({
   enableColumnLayout,
   columnLayout,
   customColumnLayout,
+  layoutCloseCreateUrl,
   layoutNumber = 'StartColumn',
   sortBy = {
     name: nameLocaleSort,
@@ -202,6 +203,7 @@ export function ResourceListRenderer({
   emptyListProps = null,
   disableHiding,
   displayArrow,
+  handleRedirect,
 }) {
   useVersionWarning({
     resourceUrl,
@@ -209,8 +211,7 @@ export function ResourceListRenderer({
   });
   const { t } = useTranslation();
   const { isProtected, protectedResourceWarning } = useProtectedResources();
-
-  const [toggleFormFn, getToggleFormFn] = useState(() => {});
+  const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     resourceTitle,
@@ -313,7 +314,38 @@ export function ResourceListRenderer({
       activeResource = CreateResourceForm.sanitizeClone(activeResource);
     }
     setActiveResource(activeResource);
-    toggleFormFn(true);
+
+    setLayoutColumn(
+      layoutNumber === 'MidColumn' && enableColumnLayout
+        ? {
+            midColumn: layoutState?.midColumn,
+            endColumn: null,
+            showCreate: {
+              resourceType: resourceType,
+              namespaceId: namespace,
+              resource: activeResource,
+            },
+            layout: 'ThreeColumnsEndExpanded',
+          }
+        : {
+            midColumn: null,
+            endColumn: null,
+            showCreate: {
+              resourceType: resourceType,
+              namespaceId: namespace,
+              resource: activeResource,
+            },
+            layout: 'TwoColumnsMidExpanded',
+          },
+    );
+
+    window.history.pushState(
+      window.history.state,
+      '',
+      `${
+        layoutCloseCreateUrl ? layoutCloseCreateUrl : window.location.pathname
+      }${layoutNumber === 'MidColumn' ? '?layout=TwoColumnsMidExpanded' : ''}`,
+    );
   };
 
   const actions = readOnly
@@ -363,15 +395,45 @@ export function ResourceListRenderer({
     return rowColumns;
   };
 
+  const handleShowCreate = () => {
+    setActiveResource(undefined);
+    setLayoutColumn(
+      layoutNumber === 'MidColumn' && enableColumnLayout
+        ? {
+            midColumn: layoutState?.midColumn,
+            endColumn: null,
+            showCreate: {
+              resourceType: resourceType,
+              namespaceId: namespace,
+            },
+            layout: 'ThreeColumnsEndExpanded',
+          }
+        : {
+            midColumn: null,
+            endColumn: null,
+            showCreate: {
+              resourceType: resourceType,
+              namespaceId: namespace,
+            },
+            layout: 'TwoColumnsMidExpanded',
+          },
+    );
+
+    window.history.pushState(
+      window.history.state,
+      '',
+      `${
+        layoutCloseCreateUrl ? layoutCloseCreateUrl : window.location.pathname
+      }${layoutNumber === 'MidColumn' ? '?layout=TwoColumnsMidExpanded' : ''}`,
+    );
+  };
+
   const extraHeaderContent = listHeaderActions || [
     CreateResourceForm && !disableCreate && !isNamespaceAll && (
       <Button
         data-testid={`create-${resourceType}`}
         design="Emphasized"
-        onClick={() => {
-          setActiveResource(undefined);
-          toggleFormFn(true);
-        }}
+        onClick={handleShowCreate}
       >
         {createActionLabel || t('components.resources-list.create')}
       </Button>
@@ -414,30 +476,6 @@ export function ResourceListRenderer({
 
   return (
     <>
-      <ModalWithForm
-        title={createActionLabel || t('components.resources-list.create')}
-        getToggleFormFn={getToggleFormFn}
-        confirmText={t('common.buttons.create')}
-        id={`add-${resourceType}-modal`}
-        className="modal-size--l"
-        renderForm={props => (
-          <ErrorBoundary>
-            <CreateResourceForm
-              resource={activeResource}
-              resourceType={resourceType}
-              resourceTitle={resourceTitle}
-              resourceUrl={resourceUrl}
-              namespace={namespace}
-              refetchList={silentRefetch}
-              toggleFormFn={toggleFormFn}
-              layoutNumber={layoutNumber}
-              {...props}
-              {...createFormProps}
-            />
-          </ErrorBoundary>
-        )}
-        modalOpeningComponent={<></>}
-      />
       {createPortal(
         <DeleteMessageBox
           resource={activeResource}
@@ -475,13 +513,11 @@ export function ResourceListRenderer({
             titleText: `${t('common.labels.no')} ${processTitle(
               prettifyNamePlural(resourceTitle, resourceType),
             )}`,
-            onClick: () => {
-              setActiveResource(undefined);
-              toggleFormFn(true);
-            },
+            onClick: handleShowCreate,
             showButton: !disableCreate && namespace !== '-all-',
             ...emptyListProps,
           }}
+          handleRedirect={handleRedirect}
         />
       )}
       {!isCompact && createPortal(<YamlUploadDialog />, document.body)}

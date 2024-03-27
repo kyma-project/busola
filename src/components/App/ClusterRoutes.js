@@ -73,7 +73,9 @@ export default function ClusterRoutes() {
       />
 
       {/* extensibility routes should go first, so if someone overwrites the default view, the new one should have a higher priority */}
-      {extensions?.map(cr => createExtensibilityRoutes(cr, language))}
+      {extensions?.map(extension =>
+        createExtensibilityRoutes(extension, language),
+      )}
       {resourceRoutes}
       {otherRoutes}
       <Route path="namespaces/:namespaceId/*" element={<NamespaceRoutes />} />

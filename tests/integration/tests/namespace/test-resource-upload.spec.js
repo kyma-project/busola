@@ -48,7 +48,9 @@ context('Test resource upload', () => {
 
     cy.contains('2/2').should('be.visible');
 
-    cy.contains('Close').should('be.visible');
+    cy.get('ui5-dialog.yaml-upload-modal')
+      .contains('ui5-button', 'Close')
+      .should('be.visible');
 
     cy.contains('Deployment echo-server-upload-yaml - Created').should(
       'be.visible',
@@ -100,7 +102,7 @@ context('Test resource upload', () => {
 
   it('Cleanup', () => {
     // close
-    cy.get('ui5-dialog')
+    cy.get('ui5-dialog.yaml-upload-modal')
       .contains('ui5-button', 'Close')
       .should('be.visible')
       .click();

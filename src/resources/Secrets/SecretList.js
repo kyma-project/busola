@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
-import { SecretCreate } from './SecretCreate';
+import SecretCreate from './SecretCreate';
 import {
   ResourceDescription,
   i18nDescriptionKey,

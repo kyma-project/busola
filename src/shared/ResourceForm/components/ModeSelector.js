@@ -1,37 +1,26 @@
 import { useTranslation } from 'react-i18next';
 import { SegmentedButton, SegmentedButtonItem } from '@ui5/webcomponents-react';
+import { useRecoilState } from 'recoil';
+import {
+  editViewModeState,
+  getEditViewModeState,
+} from 'state/preferences/editViewModeAtom';
 
-export function ModeSelector({
-  mode,
-  isEditing,
-  setMode,
-  isDisabled = false,
-  noAdvancedMode = false,
-}) {
+export function ModeSelector({ mode, setMode, isDisabled = false }) {
   const { t } = useTranslation();
+  const [editViewMode, setEditViewMode] = useRecoilState(editViewModeState);
+  const { preferencesViewType } = getEditViewModeState(editViewMode);
 
-  const createModeButtons = [
+  const buttonsToDisplay = [
     {
-      mode: ModeSelector.MODE_SIMPLE,
-      label: t('common.create-form.modes.simple'),
+      mode: ModeSelector.MODE_FORM,
+      label: t('common.create-form.modes.form'),
     },
     {
-      mode: ModeSelector.MODE_ADVANCED,
-      label: t('common.create-form.modes.advanced'),
+      mode: ModeSelector.MODE_YAML,
+      label: t('common.create-form.modes.yaml'),
     },
-    { mode: ModeSelector.MODE_YAML, label: 'YAML' },
   ];
-
-  const editModeButtons = [
-    {
-      mode: ModeSelector.MODE_ADVANCED,
-      label: t('common.create-form.modes.ui-form'),
-    },
-    { mode: ModeSelector.MODE_YAML, label: 'YAML' },
-  ];
-
-  const buttonsToDisplay =
-    isEditing || noAdvancedMode ? editModeButtons : createModeButtons;
 
   return (
     <div className="ui5-content-density-compact mode-selector">
@@ -40,7 +29,15 @@ export function ModeSelector({
           <SegmentedButtonItem
             key={button.mode}
             pressed={mode === button.mode}
-            onClick={() => setMode(button.mode)}
+            onClick={() => {
+              setMode(button.mode);
+              if (preferencesViewType === 'MODE_DEFAULT') {
+                setEditViewMode({
+                  preferencesViewType: preferencesViewType,
+                  dynamicViewType: button.mode,
+                });
+              }
+            }}
             disabled={isDisabled}
           >
             {button.label}
@@ -51,6 +48,5 @@ export function ModeSelector({
   );
 }
 
-ModeSelector.MODE_SIMPLE = 'MODE_SIMPLE';
-ModeSelector.MODE_ADVANCED = 'MODE_ADVANCED';
+ModeSelector.MODE_FORM = 'MODE_FORM';
 ModeSelector.MODE_YAML = 'MODE_YAML';

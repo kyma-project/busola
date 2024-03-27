@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { useRestartAction } from 'shared/hooks/useRestartResource';
-import { StatefulSetCreate } from './StatefulSetCreate';
+import StatefulSetCreate from './StatefulSetCreate';
 import { StatefulSetPods } from './StatefulSetPods';
 import {
   ResourceDescription,

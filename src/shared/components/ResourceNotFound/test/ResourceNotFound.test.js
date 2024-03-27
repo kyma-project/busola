@@ -1,19 +1,13 @@
-import React from 'react';
 import { act, render, waitFor } from 'testing/reactTestingUtils';
 
 import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNotFound';
 import { ThemeProvider } from '@ui5/webcomponents-react';
 
-const breadcrumbs = [
-  { name: 'test-1', url: '/' },
-  { name: 'test-2', url: '/test' },
-];
-
 describe('ResourceNotFound', () => {
-  it('Renders resource type and breadcrumb', async () => {
+  it('Renders resource type', async () => {
     const { queryByText } = render(
       <ThemeProvider>
-        <ResourceNotFound resource="Resource" breadcrumbs={breadcrumbs} />
+        <ResourceNotFound resource="Resource" />
       </ThemeProvider>,
     );
     await waitFor(async () => {
@@ -21,9 +15,6 @@ describe('ResourceNotFound', () => {
         expect(
           queryByText('components.resource-not-found.messages.not-found'),
         ).toBeInTheDocument();
-
-        expect(queryByText(breadcrumbs[0].name)).toBeInTheDocument();
-        expect(queryByText(breadcrumbs[1].name)).toBeInTheDocument();
       });
     });
   });
@@ -33,11 +24,7 @@ describe('ResourceNotFound', () => {
 
     const { queryByText } = render(
       <ThemeProvider>
-        <ResourceNotFound
-          resource="Resource"
-          breadcrumbs={breadcrumbs}
-          customMessage={message}
-        />
+        <ResourceNotFound resource="Resource" customMessage={message} />
       </ThemeProvider>,
     );
     await waitFor(async () => {

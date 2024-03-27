@@ -10,7 +10,7 @@ function containsInShadowDom(selector, content, options) {
 }
 
 function testAndSelectOptions(section, selection) {
-  cy.contains('.header', section).as(`${section}Header`);
+  cy.contains('ui5-panel', section).as(`${section}Header`);
   cy.contains('.form-field', section).as(`${section}FormField`);
 
   cy.get(`@${section}Header`)
@@ -96,6 +96,8 @@ context('Test Cluster Validation Scan', () => {
       .find('ui5-button')
       .contains('Scan')
       .click();
+
+    cy.get('@clusterValidationPanel').scrollIntoView();
 
     // wait for scan to finish
     cy.contains('Scan Progress').should('be.visible');

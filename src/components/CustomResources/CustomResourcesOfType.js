@@ -8,8 +8,13 @@ import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { Link } from 'shared/components/Link/Link';
+import { createPortal } from 'react-dom';
 
-export default function CustomResourcesOfType({ crdName, enableColumnLayout }) {
+export default function CustomResourcesOfType({
+  crdName,
+  enableColumnLayout,
+  layoutCloseCreateUrl,
+}) {
   const { t } = useTranslation();
   const { clusterUrl } = useUrl();
   const { data: crd, loading, error } = useGet(
@@ -21,20 +26,11 @@ export default function CustomResourcesOfType({ crdName, enableColumnLayout }) {
     return <UI5Panel title={error.message} />;
   }
 
-  const breadcrumbItems = [
-    {
-      name: t('custom-resources.title'),
-      url: clusterUrl('customresources'),
-    },
-    { name: '' },
-  ];
-
   return (
     <>
       <DynamicPageComponent
         layoutNumber="MidColumn"
         title={pluralize(crd.spec.names.kind)}
-        breadcrumbItems={breadcrumbItems}
         content={
           <CustomResources
             crd={crd}
@@ -42,6 +38,7 @@ export default function CustomResourcesOfType({ crdName, enableColumnLayout }) {
             showTitle={false}
             showNamespace={false}
             enableColumnLayout={enableColumnLayout}
+            layoutCloseCreateUrl={layoutCloseCreateUrl}
           />
         }
       >
@@ -55,7 +52,7 @@ export default function CustomResourcesOfType({ crdName, enableColumnLayout }) {
           </Link>
         </DynamicPageComponent.Column>
       </DynamicPageComponent>
-      <YamlUploadDialog />
+      {createPortal(<YamlUploadDialog />, document.body)}
     </>
   );
 }
