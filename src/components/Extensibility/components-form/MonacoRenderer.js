@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import jsyaml from 'js-yaml';
 
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
@@ -17,8 +17,8 @@ function getValue(storeKeys, resource) {
   return value;
 }
 
-function formatValue(value, language) {
-  if (language === 'json') {
+function formatValue(value, language, omitJson = false) {
+  if (language === 'json' && !omitJson) {
     return JSON.stringify(value, null, 2);
   } else if (language === 'yaml') {
     return typeof value === 'undefined' ? '' : jsyaml.dump(value);
@@ -53,14 +53,16 @@ export function MonacoRenderer({
     value,
   });
 
+  const isFuncDependencies =
+    schema.get('schemaRule')?.path[3] === 'dependencies' ?? false;
   const language = getLanguage(jsonata, schema);
-  const formattedValue = formatValue(value, language);
+  const formattedValue = formatValue(value, language, isFuncDependencies);
   const defaultOpen = schema.get('defaultExpanded') ?? false;
 
   const handleChange = useCallback(
     value => {
       let parsedValue = value;
-      if (language === 'json') {
+      if (language === 'json' && !isFuncDependencies) {
         try {
           parsedValue = JSON.parse(value);
         } catch (e) {}
