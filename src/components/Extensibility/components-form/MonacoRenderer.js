@@ -17,10 +17,8 @@ function getValue(storeKeys, resource) {
   return value;
 }
 
-function formatValue(value, language, omitJson = false) {
-  if (language === 'json' && !omitJson) {
-    return JSON.stringify(value, null, 2);
-  } else if (language === 'yaml') {
+function formatValue(value, language) {
+  if (language === 'yaml') {
     return typeof value === 'undefined' ? '' : jsyaml.dump(value);
   } else {
     return value;
@@ -53,20 +51,14 @@ export function MonacoRenderer({
     value,
   });
 
-  const isFuncDependencies =
-    schema.get('schemaRule')?.path[3] === 'dependencies' ?? false;
   const language = getLanguage(jsonata, schema);
-  const formattedValue = formatValue(value, language, isFuncDependencies);
+  const formattedValue = formatValue(value, language);
   const defaultOpen = schema.get('defaultExpanded') ?? false;
 
   const handleChange = useCallback(
     value => {
       let parsedValue = value;
-      if (language === 'json' && !isFuncDependencies) {
-        try {
-          parsedValue = JSON.parse(value);
-        } catch (e) {}
-      } else if (language === 'yaml') {
+      if (language === 'yaml') {
         try {
           parsedValue = jsyaml.load(value);
         } catch (e) {}
