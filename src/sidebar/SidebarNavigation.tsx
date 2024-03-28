@@ -73,7 +73,9 @@ export function SidebarNavigation() {
       header={
         <>
           {namespace && (
-            <SideNavigation style={{ height: 'auto', width: 'auto' }}>
+            <SideNavigation
+              style={{ height: 'auto', width: 'auto', marginTop: '1rem' }}
+            >
               <SideNavigationItem
                 className="hide-shadow"
                 icon={'slim-arrow-left'}
@@ -86,7 +88,8 @@ export function SidebarNavigation() {
               />
             </SideNavigation>
           )}
-          {!isSidebarCondensed && <div className="shadow-overlay"></div>}
+          {!isSidebarCondensed && <div className="shadow-overlay-top"></div>}
+          {!isSidebarCondensed && <div className="shadow-overlay-bottom"></div>}
           <div style={namespace ? { zIndex: '0' } : { display: 'none' }}>
             <Label
               for="NamespaceComboBox"
