@@ -4,7 +4,7 @@
 }
 
 .ui5-content-density-compact {
-  --_ui5-v1-20-0_side_navigation_padding: 0rem 0.7rem 0.75rem 0.75rem !important;
+  --_ui5-v1-20-0_side_navigation_padding: 0.2rem 0.7rem 0.75rem 0.75rem !important;
 }
 
 .sidebar__content {
@@ -12,6 +12,10 @@
   flex-direction: column;
   flex-grow: 1;
   height: 100%;
+
+  .space-top {
+    height: 1.3rem;
+  }
 }
 
 @mixin shadow-overlay($top, $height) {
@@ -28,7 +32,7 @@
 }
 
 .shadow-overlay-bottom {
-  @include shadow-overlay(calc(56px + (2 * var(--sidebar-padding))), 100%);
+  @include shadow-overlay(calc(62px + (2 * var(--sidebar-padding))), 100%);
 }
 
 .shadow-overlay-top {
