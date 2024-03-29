@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ObjectStatus } from '@ui5/webcomponents-react';
 import PropTypes from 'prop-types';

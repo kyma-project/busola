@@ -21,7 +21,7 @@ export function EventList({
   ...props
 }) {
   const { t } = useTranslation();
-  const { namespaceUrl } = useUrl();
+  const { namespaceUrl, namespace } = useUrl();
   const resourceType = props.resourceType.toLowerCase();
   const {
     EVENT_MESSAGE_TYPE,
@@ -89,10 +89,16 @@ export function EventList({
       ),
       id: 'name',
     },
+    namespace === '-all-'
+      ? {
+          header: t('common.headers.namespace'),
+          value: entry => entry.metadata.namespace,
+          id: 'namespace',
+        }
+      : null,
     {
       ...involvedObject,
     },
-
     {
       header: t('events.headers.source'),
       value: e => FormatSourceObject(e.source),
@@ -123,7 +129,6 @@ export function EventList({
     <ResourcesList
       listHeaderActions={MessageSelector}
       columns={customColumns}
-      omitColumnsIds={['namespace', 'labels', 'created']}
       sortBy={sortByFn}
       description={ResourceDescription}
       showTitle={isCompact}

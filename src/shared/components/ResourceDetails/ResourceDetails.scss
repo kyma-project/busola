@@ -7,6 +7,7 @@
 .cluster-overview__details-wrapper {
   grid-template-columns: 1fr;
   min-width: 200px;
+  width: fit-content;
 }
 
 .cluster-overview__details-grid {
@@ -33,17 +34,18 @@
   }
 
   .resource-overview__details-wrapper {
-    grid-template-columns: 2fr 1fr;
+    max-width: fit-content;
+    min-width: 450px;
   }
 }
 
 @container (min-width: 900px) {
   .resource-details-container {
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: min-content 1fr;
     gap: 0;
 
     &.column-view {
-      grid-template-columns: 100%;
+      grid-template-columns: repeat(auto-fill, 100%);
       gap: 1rem;
     }
   }
