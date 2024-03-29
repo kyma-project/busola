@@ -30,18 +30,18 @@
   }
 
   .cluster-overview__details-grid {
-    grid-template-columns: 50% calc(50% - 13.5px);
+    grid-template-columns: repeat(2, minmax(175px, min-content));
   }
 
   .resource-overview__details-wrapper {
     max-width: fit-content;
-    min-width: 450px;
+    min-width: 300px;
   }
 }
 
 @container (min-width: 900px) {
   .resource-details-container {
-    grid-template-columns: min-content 1fr;
+    grid-template-columns: 2fr 1fr;
     gap: 0;
 
     &.column-view {
