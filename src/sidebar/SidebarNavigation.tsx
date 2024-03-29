@@ -73,7 +73,9 @@ export function SidebarNavigation() {
       header={
         <>
           {namespace && (
-            <SideNavigation style={{ height: 'auto', width: 'auto' }}>
+            <SideNavigation
+              style={{ height: 'auto', width: 'auto', marginTop: '1.3rem' }}
+            >
               <SideNavigationItem
                 className="hide-shadow"
                 icon={'slim-arrow-left'}
@@ -86,7 +88,11 @@ export function SidebarNavigation() {
               />
             </SideNavigation>
           )}
-          {!isSidebarCondensed && <div className="shadow-overlay"></div>}
+          {(!namespace || isSidebarCondensed) && (
+            <div className="space-top"></div>
+          )}
+          {!isSidebarCondensed && <div className="shadow-overlay-top"></div>}
+          {!isSidebarCondensed && <div className="shadow-overlay-bottom"></div>}
           <div style={namespace ? { zIndex: '0' } : { display: 'none' }}>
             <Label
               for="NamespaceComboBox"
@@ -100,7 +106,7 @@ export function SidebarNavigation() {
             <FlexBox
               alignItems="Center"
               style={{
-                ...spacing.sapUiTinyMarginBottom,
+                ...spacing.sapUiSmallMarginBottom,
                 ...spacing.sapUiTinyMarginBeginEnd,
               }}
             >
@@ -130,6 +136,7 @@ export function SidebarNavigation() {
     >
       {isSidebarCondensed && (
         <>
+          <div className="space-top"></div>
           <SideNavigationItem
             icon={namespace ? 'slim-arrow-left' : 'bbyd-dashboard'}
             text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}
@@ -147,7 +154,7 @@ export function SidebarNavigation() {
           )}
         </>
       )}
-      {!namespace && (
+      {!namespace && !isSidebarCondensed && (
         <SideNavigationItem
           className="hide-shadow"
           icon={'bbyd-dashboard'}
