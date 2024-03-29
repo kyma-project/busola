@@ -11,6 +11,7 @@ import { namespaceOverviewNode } from 'resources/Namespaces/namespaceOverviewNod
 import * as secretMetadata from 'resources/Secrets';
 import * as crdMetadata from 'resources/CustomResourceDefinitions';
 import * as cmMetadata from 'resources/ConfigMaps';
+import { kymaModulesNavNode } from 'components/KymaModules/kymaModulesNode';
 
 export const addAdditionalNodes = (
   navNodes: NavNode[],
@@ -30,6 +31,7 @@ export const addAdditionalNodes = (
   const cmIndex = findResourceIndex(cm, navNodes) + 1;
   if (isExtEnabled && cmIndex && scope === 'cluster') {
     addResource(extensionsNavNode, extNavList.length, extNavList);
+    addResource(kymaModulesNavNode, extNavList.length, extNavList);
   }
 
   const crdIndex = findResourceIndex(crd, navNodes) + 1;
