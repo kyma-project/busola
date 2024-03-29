@@ -1,6 +1,5 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { TooltipBadge } from 'shared/components/TooltipBadge/TooltipBadge';
+import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 
 export function JobCompletions({ job }) {
   const { t } = useTranslation();
@@ -10,13 +9,13 @@ export function JobCompletions({ job }) {
   const statusType = succeeded === completions ? 'Success' : 'Information';
 
   return (
-    <TooltipBadge
+    <StatusBadge
       type={statusType}
       tooltipContent={
         succeeded === completions
           ? t('jobs.tooltips.complete')
           : t('jobs.tooltips.not-complete')
       }
-    >{`${succeeded} / ${completions}`}</TooltipBadge>
+    >{`${succeeded} / ${completions}`}</StatusBadge>
   );
 }

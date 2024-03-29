@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import jsyaml from 'js-yaml';
 
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
@@ -18,9 +18,7 @@ function getValue(storeKeys, resource) {
 }
 
 function formatValue(value, language) {
-  if (language === 'json') {
-    return JSON.stringify(value, null, 2);
-  } else if (language === 'yaml') {
+  if (language === 'yaml') {
     return typeof value === 'undefined' ? '' : jsyaml.dump(value);
   } else {
     return value;
@@ -60,11 +58,7 @@ export function MonacoRenderer({
   const handleChange = useCallback(
     value => {
       let parsedValue = value;
-      if (language === 'json') {
-        try {
-          parsedValue = JSON.parse(value);
-        } catch (e) {}
-      } else if (language === 'yaml') {
+      if (language === 'yaml') {
         try {
           parsedValue = jsyaml.load(value);
         } catch (e) {}

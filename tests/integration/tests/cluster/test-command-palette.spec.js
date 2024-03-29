@@ -159,7 +159,7 @@ context('Test Command Palette navigation', () => {
   });
 
   it('Disables Command Palette if a modal is present', () => {
-    cy.get('ui5-button.ui5-shellbar-button[icon="add"]').click();
+    cy.contains('ui5-button', 'Upload YAML').click();
 
     cy.get('.yaml-upload-modal__layout:visible')
       .find('input')

@@ -32,6 +32,7 @@
   &-message-success {
     color: var(--sapPositiveColor);
   }
+
   &-error {
     color: var(--sapNegativeColor);
   }
@@ -41,4 +42,11 @@
   display: flex;
   align-items: center;
   min-height: 20px;
+}
+
+.yaml_resource_list {
+  &__separation-line {
+    width: 99%;
+    color: var(--sapList_BorderColor);
+  }
 }

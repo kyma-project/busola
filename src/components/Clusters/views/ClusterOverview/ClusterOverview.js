@@ -17,6 +17,8 @@ import { useNavigate } from 'react-router-dom';
 import { deleteCluster } from 'components/Clusters/shared';
 import { spacing } from '@ui5/webcomponents-react-base';
 import './ClusterOverview.scss';
+import { useSetRecoilState } from 'recoil';
+import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 const Injections = React.lazy(() =>
   import('../../../Extensibility/ExtensibilityInjections'),
@@ -33,8 +35,17 @@ export function ClusterOverview() {
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     resourceType: t('clusters.labels.name'),
   });
+  const setShowAdd = useSetRecoilState(showYamlUploadDialogState);
 
-  const actions = (
+  const actions = [
+    <Button
+      icon="add"
+      onClick={() => {
+        setShowAdd(true);
+      }}
+    >
+      {t('upload-yaml.title')}
+    </Button>,
     <Button
       design="Transparent"
       onClick={() => {
@@ -50,8 +61,8 @@ export function ClusterOverview() {
       }}
     >
       {t('common.buttons.disconnect')}
-    </Button>
-  );
+    </Button>,
+  ];
 
   return (
     <>

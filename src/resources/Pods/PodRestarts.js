@@ -1,5 +1,5 @@
-import { TooltipBadge } from 'shared/components/TooltipBadge/TooltipBadge';
 import { useTranslation } from 'react-i18next';
+import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 
 export default function PodRestarts({ statuses }) {
   const { t } = useTranslation();
@@ -19,8 +19,8 @@ export default function PodRestarts({ statuses }) {
   };
 
   return (
-    <TooltipBadge type={type} tooltipContent={getTooltipContent()}>
+    <StatusBadge type={type} tooltipContent={getTooltipContent()}>
       {(restartCount || 0).toString()}
-    </TooltipBadge>
+    </StatusBadge>
   );
 }
