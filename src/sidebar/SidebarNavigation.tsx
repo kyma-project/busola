@@ -74,7 +74,7 @@ export function SidebarNavigation() {
         <>
           {namespace && (
             <SideNavigation
-              style={{ height: 'auto', width: 'auto', marginTop: '1rem' }}
+              style={{ height: 'auto', width: 'auto', marginTop: '1.5rem' }}
             >
               <SideNavigationItem
                 className="hide-shadow"
@@ -103,7 +103,7 @@ export function SidebarNavigation() {
             <FlexBox
               alignItems="Center"
               style={{
-                ...spacing.sapUiTinyMarginBottom,
+                ...spacing.sapUiSmallMarginBottom,
                 ...spacing.sapUiTinyMarginBeginEnd,
               }}
             >
