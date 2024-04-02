@@ -26,7 +26,7 @@
 
 @container (min-width: 650px) {
   .cluster-overview__details-wrapper {
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: max-content max-content;
   }
 
   .cluster-overview__details-grid {
@@ -41,7 +41,7 @@
 
 @container (min-width: 900px) {
   .resource-details-container {
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: max-content max-content;
     gap: 0;
 
     &.column-view {
