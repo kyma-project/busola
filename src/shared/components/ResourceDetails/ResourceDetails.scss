@@ -30,7 +30,7 @@
   }
 
   .cluster-overview__details-grid {
-    grid-template-columns: repeat(2, minmax(175px, min-content));
+    grid-template-columns: repeat(2, minmax(200px, max-content));
   }
 
   .resource-overview__details-wrapper {
