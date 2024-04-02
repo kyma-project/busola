@@ -25,7 +25,7 @@ cluster-overview:
     failing-deployments: 'Failing Deployments'
     nodes: 'Nodes'
     pods: 'Pods'
-    deployments: 'Deployments'
+    deployments-overview: 'Deployments Overview'
   tooltips:
       cpu-used-percentage: 'CPU used: {{percentage}}'
       memory-used-percentage: 'Memory used: {{percentage}}'

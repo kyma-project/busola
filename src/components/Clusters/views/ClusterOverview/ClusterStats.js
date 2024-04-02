@@ -66,7 +66,7 @@ export default function ClusterStats({ data }) {
               }),
               position: 'bottom',
             }}
-            additionalInfo={`${roundDecimals(cpu.usage)}m/${roundDecimals(
+            additionalInfo={`${roundDecimals(cpu.usage)}m / ${roundDecimals(
               cpu.capacity,
             )}m`}
           />
@@ -90,9 +90,9 @@ export default function ClusterStats({ data }) {
               }),
               position: 'bottom',
             }}
-            additionalInfo={`${roundDecimals(memory.usage)}GiB/${roundDecimals(
-              memory.capacity,
-            )}GiB`}
+            additionalInfo={`${roundDecimals(
+              memory.usage,
+            )}GiB / ${roundDecimals(memory.capacity)}GiB`}
           />
         </Card>
         <div className="counting-cards-container">
@@ -117,7 +117,7 @@ export default function ClusterStats({ data }) {
           {deploymentsData && (
             <CountingCard
               value={deploymentsData?.length}
-              title={t('cluster-overview.statistics.deployments')}
+              title={t('cluster-overview.statistics.deployments-overview')}
               subTitle={t('cluster-overview.statistics.total-deployments')}
               resourceUrl="deployments"
               extraInfo={[

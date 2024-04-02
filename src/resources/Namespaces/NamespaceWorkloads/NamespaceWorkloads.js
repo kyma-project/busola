@@ -58,7 +58,7 @@ export function NamespaceWorkloads({ namespace }) {
           {deploymentsData && (
             <CountingCard
               value={deploymentsData?.length}
-              title={t('cluster-overview.statistics.deployments')}
+              title={t('cluster-overview.statistics.deployments-overview')}
               subTitle={t('cluster-overview.statistics.total-deployments')}
               resourceUrl="deployments"
               extraInfo={[
