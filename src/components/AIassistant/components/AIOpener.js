@@ -12,7 +12,7 @@ import {
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { showAIassistantState } from 'components/AIassistant/state/showAIassistantAtom';
 import { initialPromptState } from '../state/initalPromptAtom';
 import getPromptSuggestions from 'components/AIassistant/utils/getPromptSuggestions';
@@ -20,12 +20,14 @@ import './AIOpener.scss';
 
 export default function AIOpener() {
   const { t } = useTranslation();
-  const setOpenAssistant = useSetRecoilState(showAIassistantState);
+  const [assistantOpen, setOpenAssistant] = useRecoilState(
+    showAIassistantState,
+  );
   const setInitialPrompt = useSetRecoilState(initialPromptState);
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
 
-  return (
+  return !assistantOpen ? (
     <>
       <Button
         icon="ai"
@@ -66,7 +68,6 @@ export default function AIOpener() {
                 key={index}
                 onClick={() => {
                   setInitialPrompt(suggestion);
-                  setPopoverOpen(false);
                   setOpenAssistant(true);
                 }}
               >
@@ -84,5 +85,7 @@ export default function AIOpener() {
         </FlexBox>
       </Popover>
     </>
+  ) : (
+    <></>
   );
 }

@@ -17,9 +17,11 @@ export default function Chat() {
   const [chatHistory, setChatHistory] = useState([]);
   const [errorOccured, setErrorOccured] = useState(false);
   const initialPrompt = useRecoilValue(initialPromptState);
+
   const addMessage = (author, message, isLoading) => {
     setChatHistory(prevItems => [...prevItems, { author, message, isLoading }]);
   };
+
   const handleSuccess = response => {
     setChatHistory(prevItems => {
       const newArray = [...prevItems];
@@ -31,17 +33,21 @@ export default function Chat() {
       return newArray;
     });
   };
+
   const handleError = () => {
     setErrorOccured(true);
     setChatHistory(prevItems => prevItems.slice(0, -2));
   };
+
   const onSendPrompt = prompt => {
     setErrorOccured(false);
     addMessage('user', prompt, false);
     getChatResponse(prompt, handleSuccess, handleError);
     addMessage('ai', null, true);
   };
+
   const onSubmitInput = () => {
+    if (inputValue.length === 0) return;
     const prompt = inputValue;
     setInputValue('');
     onSendPrompt(prompt);
@@ -67,12 +73,6 @@ export default function Chat() {
     }, delay);
   }, [chatHistory, errorOccured]);
 
-  const test_suggestions = [
-    'test123123123123123xyzxyzuwquxzytsabcde123456',
-    'Throw an error',
-    'What is your favorite football team?',
-  ];
-
   return (
     <FlexBox
       direction="Column"
@@ -97,7 +97,13 @@ export default function Chat() {
                 <Bubbles
                   key={index + '.2'}
                   onClick={onSendPrompt}
-                  suggestions={message.suggestions ?? test_suggestions}
+                  suggestions={
+                    message.suggestions ?? [
+                      'test123123123123123xyzxyzuwquxzytsabcde123456',
+                      'Throw an error',
+                      'What is your favorite football team?',
+                    ]
+                  }
                 />
               )}
             </>
@@ -114,13 +120,14 @@ export default function Chat() {
       <div style={spacing.sapUiTinyMarginBeginEnd}>
         <Input
           className="full-width"
-          icon={<Icon name="paper-plane" onClick={onSubmitInput} />}
+          disabled={chatHistory[chatHistory.length - 1]?.isLoading}
+          placeholder={t('ai-assistant.placeholder')}
           value={inputValue}
+          icon={<Icon name="paper-plane" onClick={onSubmitInput} />}
           onKeyDown={e => {
-            if (e.key === 'Enter' && inputValue.length > 0) onSubmitInput();
+            if (e.key === 'Enter') onSubmitInput();
           }}
           onInput={e => setInputValue(e.target.value)}
-          placeholder={t('ai-assistant.placeholder')}
         />
       </div>
     </FlexBox>
