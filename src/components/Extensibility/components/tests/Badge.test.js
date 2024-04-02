@@ -1,9 +1,9 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import { render } from '@testing-library/react';
+import { mount, shallow } from 'enzyme';
+import { act, render } from '@testing-library/react';
 import { Badge } from '../Badge';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
+import { PopoverBadge } from 'shared/components/PopoverBadge/PopoverBadge';
+import { ThemeProvider } from '@ui5/webcomponents-react';
 
 jest.mock('../../hooks/useJsonata', () => ({
   useJsonata: () => {
@@ -74,18 +74,26 @@ describe('Badge', () => {
     expect(getByText('-')).toBeVisible();
   });
 
-  it('Renders a badge with a tooltip', () => {
+  it('Renders a badge with a popover', () => {
     const value = 'yes';
     const structure = {
-      description: 'tooltip',
+      description: 'popover',
     };
 
-    const wrapper = shallow(<Badge value={value} structure={structure} />);
+    let wrapper;
+    act(() => {
+      wrapper = mount(
+        <ThemeProvider>
+          <Badge value={value} structure={structure} />
+        </ThemeProvider>,
+      );
+    });
     const status = wrapper.find(StatusBadge);
-    const tooltip = wrapper.find(Tooltip);
-    const tooltipProps = tooltip.props();
-    expect(tooltipProps.content).toEqual('tooltip');
+    const popoverBadge = status.find(PopoverBadge);
+    const popoverProps = popoverBadge.props();
+
+    expect(popoverProps.tooltipContent).toEqual('popover');
     expect(status).toHaveLength(1);
-    expect(tooltip).toHaveLength(1);
+    expect(popoverBadge).toHaveLength(1);
   });
 });

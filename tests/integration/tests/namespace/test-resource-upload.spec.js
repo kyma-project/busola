@@ -28,7 +28,7 @@ context('Test resource upload', () => {
       .contains('Cluster Details')
       .click();
 
-    cy.get('ui5-button.ui5-shellbar-button[icon="add"]').click();
+    cy.contains('ui5-button', 'Upload YAML').click();
 
     cy.wrap(loadValidResources(Cypress.env('NAMESPACE_NAME'))).then(
       resources => {
@@ -37,7 +37,7 @@ context('Test resource upload', () => {
       },
     );
 
-    cy.contains('You will create 2 resources:').should('be.visible');
+    cy.contains('2 resources will be created.').should('be.visible');
     cy.contains('Deployment echo-server-upload-yaml').should('be.visible');
     cy.contains('StorageClass ' + SC_NAME).should('be.visible');
 
@@ -48,7 +48,7 @@ context('Test resource upload', () => {
 
     cy.contains('2/2').should('be.visible');
 
-    cy.get('ui5-dialog.yaml-upload-modal')
+    cy.get('ui5-dialog.yaml-upload-modal__dialog')
       .contains('ui5-button', 'Close')
       .should('be.visible');
 
@@ -102,7 +102,7 @@ context('Test resource upload', () => {
 
   it('Cleanup', () => {
     // close
-    cy.get('ui5-dialog.yaml-upload-modal')
+    cy.get('ui5-dialog.yaml-upload-modal__dialog')
       .contains('ui5-button', 'Close')
       .should('be.visible')
       .click();

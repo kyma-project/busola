@@ -9,13 +9,7 @@ export function NamespaceDropdown() {
   const { t } = useTranslation();
   const allNamespaces = useRecoilValue(namespacesState);
 
-  let namespaces = [
-    <ComboBoxItem
-      key="namespaces-overview"
-      text={t('namespaces.namespaces-overview')}
-      data-key="overview"
-    />,
-  ];
+  let namespaces = [];
 
   if (allNamespaces.length > 0) {
     namespaces.push(

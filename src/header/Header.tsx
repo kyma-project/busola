@@ -15,7 +15,6 @@ import { MenuItemClickEventDetail } from '@ui5/webcomponents/dist/Menu.js';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useFeature } from 'hooks/useFeature';
-import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 import { clustersState } from 'state/clustersAtom';
 import { clusterState } from 'state/clusterAtom';
@@ -48,7 +47,6 @@ export function Header() {
   const cluster = useRecoilValue(clusterState);
   const clusters = useRecoilValue(clustersState);
 
-  const setShowAdd = useSetRecoilState(showYamlUploadDialogState);
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
     name => name !== cluster?.name,
   );
@@ -131,14 +129,6 @@ export function Header() {
         }
         onProfileClick={() => setIsMenuOpen(true)}
       >
-        {window.location.pathname !== '/clusters' &&
-          !window.location.pathname.endsWith('/no-permissions') && (
-            <ShellBarItem
-              onClick={() => setShowAdd(true)}
-              icon="add"
-              text={t('navigation.upload-yaml.title')}
-            />
-          )}
         {isFeedbackEnabled && (
           <ShellBarItem
             onClick={() => window.open(feedbackLink, '_blank')}

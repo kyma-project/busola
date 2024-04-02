@@ -1,6 +1,5 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { TooltipBadge } from 'shared/components/TooltipBadge/TooltipBadge';
+import { StatusBadge } from './StatusBadge/StatusBadge';
 
 export function RunningPodsStatus({ running, expected }) {
   const { t } = useTranslation();
@@ -11,9 +10,9 @@ export function RunningPodsStatus({ running, expected }) {
   const statusType = running === expected ? 'Success' : 'Error';
 
   return (
-    <TooltipBadge
+    <StatusBadge
       type={statusType}
       tooltipContent={tooltip}
-    >{`${running} / ${expected}`}</TooltipBadge>
+    >{`${running} / ${expected}`}</StatusBadge>
   );
 }

@@ -1,0 +1,17 @@
+.popover-badge {
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.badge-wrap {
+  width: fit-content;
+  height: fit-content;
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+.has-tooltip {
+  cursor: help;
+}

@@ -7,7 +7,6 @@ import {
   useGetPlaceholder,
   useGetTranslation,
 } from 'components/Extensibility/helpers';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 import './Badge.scss';
 
@@ -65,13 +64,9 @@ export function Badge({
   return isNil(value) ? (
     emptyLeafPlaceholder
   ) : tooltip ? (
-    <Tooltip content={tooltip || ''}>
-      <span className="has-tooltip">
-        <StatusBadge autoResolveType={!type} type={type}>
-          {tExt(value)}
-        </StatusBadge>
-      </span>
-    </Tooltip>
+    <StatusBadge autoResolveType={!type} type={type} tooltipContent={tooltip}>
+      {tExt(value)}
+    </StatusBadge>
   ) : (
     <StatusBadge autoResolveType={!type} type={type}>
       {tExt(value)}

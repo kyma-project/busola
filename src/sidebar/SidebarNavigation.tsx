@@ -3,7 +3,6 @@ import {
   SideNavigation,
   SideNavigationItem,
   ComboBox,
-  Icon,
   Label,
   FlexBox,
 } from '@ui5/webcomponents-react';
@@ -73,19 +72,27 @@ export function SidebarNavigation() {
       onSelectionChange={e => e.preventDefault()}
       header={
         <>
-          <SideNavigation style={{ height: 'auto', width: 'auto' }}>
-            <SideNavigationItem
-              className="hide-shadow"
-              icon={namespace ? 'slim-arrow-left' : 'bbyd-dashboard'}
-              text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}
-              onClick={() => {
-                setDefaultColumnLayout();
-                return navigate(clusterUrl(`overview`));
-              }}
-              selected={isClusterOverviewSelected()}
-            />
-          </SideNavigation>
-          {!isSidebarCondensed && <div className="shadow-overlay"></div>}
+          {namespace && (
+            <SideNavigation
+              style={{ height: 'auto', width: 'auto', marginTop: '1.3rem' }}
+            >
+              <SideNavigationItem
+                className="hide-shadow"
+                icon={'slim-arrow-left'}
+                text={'Back To Cluster Details'}
+                onClick={() => {
+                  setDefaultColumnLayout();
+                  return navigate(clusterUrl(`overview`));
+                }}
+                selected={isClusterOverviewSelected()}
+              />
+            </SideNavigation>
+          )}
+          {(!namespace || isSidebarCondensed) && (
+            <div className="space-top"></div>
+          )}
+          {!isSidebarCondensed && <div className="shadow-overlay-top"></div>}
+          {!isSidebarCondensed && <div className="shadow-overlay-bottom"></div>}
           <div style={namespace ? { zIndex: '0' } : { display: 'none' }}>
             <Label
               for="NamespaceComboBox"
@@ -103,18 +110,12 @@ export function SidebarNavigation() {
                 ...spacing.sapUiTinyMarginBeginEnd,
               }}
             >
-              <Icon
-                title="Namespaces"
-                name="dimension"
-                style={spacing.sapUiTinyMarginBeginEnd}
-              />
               <ComboBox
                 id="NamespaceComboBox"
+                className="combobox-with-dimension-icon"
                 onSelectionChange={e => {
                   setDefaultColumnLayout();
-                  return e.target.value === t('namespaces.namespaces-overview')
-                    ? navigate(clusterUrl(`namespaces`))
-                    : e.target.value === t('navigation.all-namespaces')
+                  return e.target.value === t('navigation.all-namespaces')
                     ? navigate(
                         namespaceUrl(resourceType, { namespace: '-all-' }),
                       )
@@ -135,6 +136,7 @@ export function SidebarNavigation() {
     >
       {isSidebarCondensed && (
         <>
+          <div className="space-top"></div>
           <SideNavigationItem
             icon={namespace ? 'slim-arrow-left' : 'bbyd-dashboard'}
             text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}
@@ -151,6 +153,18 @@ export function SidebarNavigation() {
             </SideNavigationItem>
           )}
         </>
+      )}
+      {!namespace && !isSidebarCondensed && (
+        <SideNavigationItem
+          className="hide-shadow"
+          icon={'bbyd-dashboard'}
+          text={'Cluster Details'}
+          onClick={() => {
+            setDefaultColumnLayout();
+            return navigate(clusterUrl(`overview`));
+          }}
+          selected={isClusterOverviewSelected()}
+        />
       )}
       {topLevelNodes.map(node =>
         node.items?.map((item, index) => <NavItem node={item} key={index} />),
