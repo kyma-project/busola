@@ -38,6 +38,7 @@ export const CountingCard = ({
           subtitleText={subTitle}
           value={value.toString()}
           style={{ paddingBottom: '0px' }}
+          aria-level={6}
         >
           {extraInfo?.map((info: any) => (
             <NumericSideIndicator

@@ -37,11 +37,10 @@ export default function ClusterStats({ data }) {
   return (
     <>
       <Title
-        level="H4"
+        level="H3"
         style={{
           ...spacing.sapUiMediumMarginBegin,
-          ...spacing.sapUiMediumMarginTop,
-          ...spacing.sapUiSmallMarginBottom,
+          ...spacing.sapUiMediumMarginTopBottom,
         }}
       >
         {t('cluster-overview.statistics.title')}
