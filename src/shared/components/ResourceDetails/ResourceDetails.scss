@@ -45,8 +45,14 @@
     gap: 0;
 
     &.column-view {
-      grid-template-columns: repeat(auto-fill, 100%);
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
       gap: 1rem;
+
+      & > * {
+        flex-grow: 1;
+      }
     }
   }
 }
