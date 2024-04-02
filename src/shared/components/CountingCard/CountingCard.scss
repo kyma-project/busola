@@ -1,28 +1,4 @@
 .counting-card {
-  &__value {
-    color: var(--sapNeutralTextColor);
-    font-size: 2.5rem;
-  }
-
-  &__content {
-    display: flex;
-    min-height: 45px;
-  }
-
-  &__extra-content {
-    margin-left: 10px;
-    display: flex;
-    gap: 10px;
-  }
-
-  &__subtitle {
-    color: var(--sapTile_TextColor);
-    width: max-content;
-    position: relative;
-    top: -6px;
-    margin-bottom: 0.5rem;
-  }
-
   &__link {
     margin-top: -0.5rem;
   }
