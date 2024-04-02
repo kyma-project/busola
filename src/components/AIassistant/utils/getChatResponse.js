@@ -39,10 +39,8 @@ export default async function getChatResponse(
       },
     ).then(result => result.json());
     handleSuccess(response);
-    return true;
   } catch (error) {
     handleError();
     console.error('Error fetching data:', error);
-    return false;
   }
 }

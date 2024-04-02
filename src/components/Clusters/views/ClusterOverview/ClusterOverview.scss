@@ -1,14 +1,3 @@
 .gardener-provider {
   text-transform: uppercase;
 }
-
-.list-item-content {
-  width: 100%;
-
-  .text {
-    max-width: 85%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-}

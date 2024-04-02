@@ -23,16 +23,16 @@ import { useVersionWarning } from 'hooks/useVersionWarning';
 
 import { Tooltip } from '../Tooltip/Tooltip';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
+import AIOpener from 'components/AIassistant/components/AIOpener';
 import { createPortal } from 'react-dom';
 import ResourceDetailsCard from './ResourceDetailsCard';
 import { ResourceStatusCard } from '../ResourceStatusCard/ResourceStatusCard';
 import { EMPTY_TEXT_PLACEHOLDER } from '../../constants';
 import { ReadableElapsedTimeFromNow } from '../ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
 import { HintButton } from '../DescriptionHint/DescriptionHint';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { useFeature } from 'hooks/useFeature';
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import { showAIassistantState } from 'components/AIassistant/state/showAIassistantAtom';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
@@ -173,7 +173,6 @@ function Resource({
     resource.kind,
   );
   const [showTitleDescription, setShowTitleDescription] = useState(false);
-  const setOpenAssistant = useSetRecoilState(showAIassistantState);
 
   const pluralizedResourceKind = pluralize(prettifiedResourceKind);
   useWindowTitle(windowTitle || pluralizedResourceKind);
@@ -368,13 +367,7 @@ function Resource({
               <Title level="H3">
                 {title ?? t('common.headers.resource-details')}
               </Title>
-              <Button
-                icon="ai"
-                onClick={() => setOpenAssistant(true)}
-                className="ai-button"
-              >
-                {t('ai-assistant.use-ai')}
-              </Button>
+              <AIOpener />
             </FlexBox>
             <div
               className={`resource-details-container ${

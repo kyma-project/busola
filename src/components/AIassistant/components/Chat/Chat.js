@@ -1,10 +1,12 @@
+import { useTranslation } from 'react-i18next';
 import { useEffect, useRef, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import { FlexBox, Icon, Input } from '@ui5/webcomponents-react';
 import { spacing } from '@ui5/webcomponents-react-base';
+import { initialPromptState } from 'components/AIassistant/state/initalPromptAtom';
 import PlainMessage from './messages/PlainMessage';
 import Bubbles from './messages/Bubbles';
 import ErrorMessage from './messages/ErrorMessage';
-import { useTranslation } from 'react-i18next';
 import getChatResponse from 'components/AIassistant/utils/getChatResponse';
 import './Chat.scss';
 
@@ -14,27 +16,35 @@ export default function Chat() {
   const [inputValue, setInputValue] = useState('');
   const [chatHistory, setChatHistory] = useState([]);
   const [errorOccured, setErrorOccured] = useState(false);
-  const addMessage = (author, message) => {
-    setChatHistory(prevItems => [...prevItems, { author, message }]);
+  const initialPrompt = useRecoilValue(initialPromptState);
+  const addMessage = (author, message, isLoading) => {
+    setChatHistory(prevItems => [...prevItems, { author, message, isLoading }]);
   };
   const handleSuccess = response => {
-    addMessage('ai', response);
+    setChatHistory(prevItems => {
+      const newArray = [...prevItems];
+      newArray[newArray.length - 1] = {
+        author: 'ai',
+        message: response,
+        isLoading: false,
+      };
+      return newArray;
+    });
   };
   const handleError = () => {
     setErrorOccured(true);
-    setChatHistory(prevItems => prevItems.slice(0, -1));
+    setChatHistory(prevItems => prevItems.slice(0, -2));
   };
-  const onClickBubble = prompt => {
+  const onSendPrompt = prompt => {
     setErrorOccured(false);
-    addMessage('user', prompt);
-    return getChatResponse(prompt, handleSuccess, handleError);
+    addMessage('user', prompt, false);
+    getChatResponse(prompt, handleSuccess, handleError);
+    addMessage('ai', null, true);
   };
   const onSubmitInput = () => {
     const prompt = inputValue;
     setInputValue('');
-    setErrorOccured(false);
-    addMessage('user', prompt);
-    return getChatResponse(prompt, handleSuccess, handleError);
+    onSendPrompt(prompt);
   };
 
   const scrollToBottom = () => {
@@ -46,11 +56,22 @@ export default function Chat() {
   };
 
   useEffect(() => {
+    if (chatHistory.length === 0) onSendPrompt(initialPrompt);
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
     const delay = errorOccured ? 500 : 0;
     setTimeout(() => {
       scrollToBottom();
     }, delay);
   }, [chatHistory, errorOccured]);
+
+  const test_suggestions = [
+    'test123123123123123xyzxyzuwquxzytsabcde123456',
+    'Throw an error',
+    'What is your favorite football team?',
+  ];
 
   return (
     <FlexBox
@@ -63,32 +84,22 @@ export default function Chat() {
         style={spacing.sapUiTinyMargin}
         ref={containerRef}
       >
-        <Bubbles
-          key="bubbles"
-          onClick={onClickBubble}
-          suggestions={[
-            'test123123123123123xyzxyzuwquxzytsabcde123456',
-            'Throw an error',
-            'What is your favorite football team?',
-          ]}
-        />
         {chatHistory.map((message, index) => {
           return message.author === 'ai' ? (
             <>
               <PlainMessage
-                key={index + '.1'}
+                key={index}
                 className="left-aligned"
                 message={message.message}
+                isLoading={message.isLoading}
               />
-              <Bubbles
-                key={index + '.2'}
-                onClick={onClickBubble}
-                suggestions={[
-                  'test123123123123123xyzxyzuwquxzytsabcde123456',
-                  'Throw an error',
-                  'What is your favorite football team?',
-                ]}
-              />
+              {index === chatHistory.length - 1 && !message.isLoading && (
+                <Bubbles
+                  key={index + '.2'}
+                  onClick={onSendPrompt}
+                  suggestions={message.suggestions ?? test_suggestions}
+                />
+              )}
             </>
           ) : (
             <PlainMessage

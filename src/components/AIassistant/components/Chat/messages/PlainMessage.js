@@ -1,10 +1,11 @@
-import { Text } from '@ui5/webcomponents-react';
+import { BusyIndicator, Text } from '@ui5/webcomponents-react';
 import './PlainMessage.scss';
 
-export default function PlainMessage({ className, message }) {
+export default function PlainMessage({ className, message, isLoading }) {
   return (
     <div className={'plain-message ' + className}>
-      <Text className="text">{message}</Text>
+      {isLoading && <BusyIndicator active size="Medium" delay={0} />}
+      {message && <Text className="text">{message}</Text>}
     </div>
   );
 }

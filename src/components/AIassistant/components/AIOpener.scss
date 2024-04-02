@@ -1,0 +1,14 @@
+.ai-button {
+  color: var(--sapContent_Illustrative_Color1);
+}
+
+.list-item-content {
+  width: 100%;
+
+  .text {
+    max-width: 85%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
