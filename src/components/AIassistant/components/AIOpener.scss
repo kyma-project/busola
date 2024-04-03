@@ -1,14 +1,24 @@
 .ai-button {
   color: var(--sapContent_Illustrative_Color1);
 }
+.suggestions-popover::part(content) {
+  padding: 0.5rem;
+}
 
-.list-item-content {
-  width: 100%;
+.suggestions-popover {
+  .popover-input {
+    min-width: 250px;
+  }
 
-  .text {
-    max-width: 85%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  .custom-list-item::part(native-li) {
+    padding: 0.5rem;
+  }
+
+  .list-item-content {
+    width: 100%;
+
+    .text {
+      width: 90%;
+    }
   }
 }

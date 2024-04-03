@@ -5,6 +5,7 @@ import {
   Icon,
   Input,
   List,
+  Loader,
   Popover,
   Text,
   Title,
@@ -26,50 +27,75 @@ export default function AIOpener() {
   const setInitialPrompt = useSetRecoilState(initialPromptState);
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
+  const [inputValue, setInputValue] = useState('');
 
-  return !assistantOpen ? (
+  const onSubmitInput = () => {
+    if (inputValue.length === 0) return;
+    const prompt = inputValue;
+    setInputValue('');
+    setInitialPrompt(prompt);
+    setPopoverOpen(false);
+    setOpenAssistant(true);
+  };
+
+  return (
     <>
       <Button
         icon="ai"
         className="ai-button"
         id="openPopoverBtn"
+        disabled={assistantOpen}
         onClick={async () => {
-          const suggestions = await getPromptSuggestions();
-          setSuggestions(suggestions);
           setPopoverOpen(true);
+          if (suggestions.length === 0) {
+            const suggestions = await getPromptSuggestions();
+            setSuggestions(suggestions);
+          }
         }}
       >
-        {t('ai-assistant.use-ai')}
+        {t('ai-assistant.opener.use-ai')}
       </Button>
       <Popover
+        className="suggestions-popover"
         open={popoverOpen}
-        header={
-          <Input
-            icon={<Icon name="paper-plane" onClick={() => {}} />}
-            value={''}
-            onKeyDown={e => {}}
-            onInput={e => {}}
-            placeholder="Ask about this cluster"
-          />
-        }
         onAfterClose={() => setPopoverOpen(false)}
         opener="openPopoverBtn"
         placementType="Bottom"
         horizontalAlign="Right"
       >
-        <Title level="H5">{'Suggestions'}</Title>
-        <FlexBox
-          direction="Column"
-          style={{ gap: '8px', ...spacing.sapUiSmallMarginTopBottom }}
-        >
-          <List>
+        <Input
+          icon={<Icon name="paper-plane" onClick={onSubmitInput} />}
+          value={inputValue}
+          onKeyDown={e => {
+            if (e.key === 'Enter') onSubmitInput();
+          }}
+          onInput={e => setInputValue(e.target.value)}
+          placeholder={t('ai-assistant.opener.input-placeholder')}
+          className="popover-input"
+        />
+        <Title level="H5" style={spacing.sapUiTinyMargin}>
+          {t('ai-assistant.opener.suggestions')}
+        </Title>
+        {suggestions.length === 0 ? (
+          <div
+            style={{
+              ...spacing.sapUiTinyMargin,
+              ...spacing.sapUiSmallMarginTop,
+            }}
+          >
+            <Loader progress="60%" />
+          </div>
+        ) : (
+          <List style={spacing.sapUiTinyMarginTop}>
             {suggestions.map((suggestion, index) => (
               <CustomListItem
                 key={index}
                 onClick={() => {
                   setInitialPrompt(suggestion);
+                  setPopoverOpen(false);
                   setOpenAssistant(true);
                 }}
+                className="custom-list-item"
               >
                 <FlexBox
                   justifyContent="SpaceBetween"
@@ -82,10 +108,8 @@ export default function AIOpener() {
               </CustomListItem>
             ))}
           </List>
-        </FlexBox>
+        )}
       </Popover>
     </>
-  ) : (
-    <></>
   );
 }
