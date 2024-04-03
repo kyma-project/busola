@@ -1,18 +1,9 @@
-function delay() {
-  return new Promise(resolve => setTimeout(resolve, 3000));
-}
-
 export default async function getChatResponse(
   prompt,
   handleSuccess,
   handleError,
 ) {
   try {
-    if (prompt === 'Throw an error') {
-      await delay();
-      throw new Error('This is a custom error message.');
-    }
-
     const { response } = await fetch(
       'https://api-backend.c-5cb6076.stage.kyma.ondemand.com/api/v1/llm',
       {

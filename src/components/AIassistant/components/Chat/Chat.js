@@ -7,7 +7,7 @@ import { initialPromptState } from 'components/AIassistant/state/initalPromptAto
 import PlainMessage from './messages/PlainMessage';
 import Bubbles from './messages/Bubbles';
 import ErrorMessage from './messages/ErrorMessage';
-import getChatResponse from 'components/AIassistant/utils/getChatResponse';
+import getChatResponse from 'components/AIassistant/api/getChatResponse';
 import './Chat.scss';
 
 export default function Chat() {
@@ -39,7 +39,7 @@ export default function Chat() {
     setChatHistory(prevItems => prevItems.slice(0, -2));
   };
 
-  const onSendPrompt = prompt => {
+  const sendPrompt = prompt => {
     setErrorOccured(false);
     addMessage('user', prompt, false);
     getChatResponse(prompt, handleSuccess, handleError);
@@ -50,7 +50,7 @@ export default function Chat() {
     if (inputValue.length === 0) return;
     const prompt = inputValue;
     setInputValue('');
-    onSendPrompt(prompt);
+    sendPrompt(prompt);
   };
 
   const scrollToBottom = () => {
@@ -62,7 +62,7 @@ export default function Chat() {
   };
 
   useEffect(() => {
-    if (chatHistory.length === 0) onSendPrompt(initialPrompt);
+    if (chatHistory.length === 0) sendPrompt(initialPrompt);
     // eslint-disable-next-line
   }, []);
 
@@ -96,7 +96,7 @@ export default function Chat() {
               {index === chatHistory.length - 1 && !message.isLoading && (
                 <Bubbles
                   key={index + '.2'}
-                  onClick={onSendPrompt}
+                  onClick={sendPrompt}
                   suggestions={
                     message.suggestions ?? [
                       'test123123123123123xyzxyzuwquxzytsabcde123456',
@@ -124,9 +124,7 @@ export default function Chat() {
           placeholder={t('ai-assistant.placeholder')}
           value={inputValue}
           icon={<Icon name="paper-plane" onClick={onSubmitInput} />}
-          onKeyDown={e => {
-            if (e.key === 'Enter') onSubmitInput();
-          }}
+          onKeyDown={e => e.key === 'Enter' && onSubmitInput()}
           onInput={e => setInputValue(e.target.value)}
         />
       </div>

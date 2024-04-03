@@ -9,6 +9,7 @@ ai-assistant:
     use-ai: Use AI
     suggestions: Suggestions
     input-placeholder: Ask about this resource
+    error-message: Couldn't fetch suggestions. Please try again.
   error:
     title: Service is interrupted
     subtitle: A temporary interruption occured. Please try again.
@@ -276,6 +277,7 @@ common:
     remove-all: Remove all
     reset: Reset
     restart: Restart
+    retry: Retry
     save: Save
     submit: Submit
     update: Update
