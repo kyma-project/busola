@@ -66,9 +66,11 @@ export const usePrepareDetailsProps = ({
   const queryParams = new URLSearchParams(window.location.search);
   const { i18n, t } = useTranslation();
   const api = apiGroup ? `apis/${apiGroup}/${apiVersion}` : `api/${apiVersion}`;
-  const resourceUrl = namespaceId
-    ? `/${api}/namespaces/${namespaceId}/${resourceType?.toLowerCase()}/${encodedResourceName}`
-    : `/${api}/${resourceType?.toLowerCase()}/${encodedResourceName}`;
+  const resourceUrl = resourceName
+    ? namespaceId
+      ? `/${api}/namespaces/${namespaceId}/${resourceType?.toLowerCase()}/${encodedResourceName}`
+      : `/${api}/${resourceType?.toLowerCase()}/${encodedResourceName}`
+    : undefined;
 
   const extensions = useRecoilValue(extensionsState);
   const addStyle = useAddStyle({ styleId: 'graph-styles' });

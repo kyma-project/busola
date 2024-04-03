@@ -65,7 +65,7 @@ export function EventDetails(props) {
     {
       header: t('events.headers.type'),
       value: event => (
-        <p>
+        <div>
           {event.type}{' '}
           {event.type === 'Warning' ? (
             <Tooltip content={event.type}>
@@ -86,7 +86,7 @@ export function EventDetails(props) {
               />
             </Tooltip>
           )}
-        </p>
+        </div>
       ),
     },
     {

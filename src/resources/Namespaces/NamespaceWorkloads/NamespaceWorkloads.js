@@ -11,7 +11,7 @@ import { ProgressIndicatorWithPercentage } from 'shared/components/ProgressIndic
 import { Card, CardHeader } from '@ui5/webcomponents-react';
 import { spacing } from '@ui5/webcomponents-react-base';
 
-NamespaceWorkloads.propTypes = { namespace: PropTypes.string.isRequired };
+NamespaceWorkloads.propTypes = { namespace: PropTypes.string };
 
 export function NamespaceWorkloads({ namespace }) {
   const { t } = useTranslation();
