@@ -70,7 +70,7 @@ export const usePrepareDetailsProps = ({
     ? namespaceId
       ? `/${api}/namespaces/${namespaceId}/${resourceType?.toLowerCase()}/${encodedResourceName}`
       : `/${api}/${resourceType?.toLowerCase()}/${encodedResourceName}`
-    : undefined;
+    : '';
 
   const extensions = useRecoilValue(extensionsState);
   const addStyle = useAddStyle({ styleId: 'graph-styles' });

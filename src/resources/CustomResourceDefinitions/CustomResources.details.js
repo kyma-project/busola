@@ -33,14 +33,16 @@ export default function CustomResource({ params }) {
 
   const crdName = customResourceDefinitionName?.split('.')[0];
   const crdGroup = customResourceDefinitionName?.replace(`${crdName}.`, '');
-  const resourceUrl = `/apis/${crdGroup}/${version?.name}/${
-    resourceNamespace
-      ? `namespaces/${resourceNamespace}/`
-      : namespace
-      ? `namespaces/${namespace}/`
-      : ''
-  }${crdName}/${resourceName}`;
-
+  const resourceUrl = resourceName
+    ? `/apis/${crdGroup}/${version?.name}/${
+        resourceNamespace
+          ? `namespaces/${resourceNamespace}/`
+          : namespace
+          ? `namespaces/${namespace}/`
+          : ''
+      }${crdName}/${resourceName}`
+    : '';
+  console.log(resourceUrl);
   const yamlPreview = resource => (
     <ReadonlyEditorPanel
       title="YAML"
