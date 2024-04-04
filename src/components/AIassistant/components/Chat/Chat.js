@@ -42,7 +42,7 @@ export default function Chat() {
   const sendPrompt = prompt => {
     setErrorOccured(false);
     addMessage('user', prompt, false);
-    getChatResponse(prompt, handleSuccess, handleError);
+    getChatResponse({ prompt, handleSuccess, handleError });
     addMessage('ai', null, true);
   };
 

@@ -1,8 +1,8 @@
-export default async function getPromptSuggestions(
+export default async function getPromptSuggestions({
   pageType = 'statefulsets.apps',
-  namespace = 'kyma-system',
+  namespace,
   nodeName = '',
-) {
+}) {
   try {
     let { results } = await fetch(
       'https://api-backend.c-5cb6076.stage.kyma.ondemand.com/api/v1/llm/init',

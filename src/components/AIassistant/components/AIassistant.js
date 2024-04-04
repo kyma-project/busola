@@ -34,6 +34,7 @@ export default function AIassistant() {
               design="Transparent"
               icon="full-screen"
               className="action"
+              disabled
             />
             <Button
               design="Transparent"

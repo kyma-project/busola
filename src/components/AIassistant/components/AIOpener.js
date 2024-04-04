@@ -10,6 +10,7 @@ import {
   Text,
   Title,
 } from '@ui5/webcomponents-react';
+import { useUrl } from 'hooks/useUrl';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
@@ -24,6 +25,7 @@ export default function AIOpener() {
   const [assistantOpen, setOpenAssistant] = useRecoilState(
     showAIassistantState,
   );
+  const { namespace } = useUrl();
   const setInitialPrompt = useSetRecoilState(initialPromptState);
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
@@ -34,7 +36,7 @@ export default function AIOpener() {
     setErrorOccured(false);
     setPopoverOpen(true);
     if (suggestions.length === 0) {
-      const promptSuggestions = await getPromptSuggestions();
+      const promptSuggestions = await getPromptSuggestions({ namespace });
       if (!promptSuggestions) {
         setErrorOccured(true);
       } else {
@@ -95,7 +97,7 @@ export default function AIOpener() {
             <Text style={spacing.sapUiTinyMargin}>
               {t('ai-assistant.opener.error-message')}
             </Text>
-            <Button onClick={fetchSuggestions()}>
+            <Button onClick={fetchSuggestions}>
               {t('common.buttons.retry')}
             </Button>
           </FlexBox>
