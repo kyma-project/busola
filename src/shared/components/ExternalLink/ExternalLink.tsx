@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Icon, Link } from '@ui5/webcomponents-react';
+import { Button, Icon, Link } from '@ui5/webcomponents-react';
 
 import { spacing } from '@ui5/webcomponents-react-base';
 
@@ -11,6 +11,7 @@ type LinkProps = {
   children?: ReactNode;
   design?: 'Default' | 'Subtle' | 'Emphasized';
   iconStyle?: React.CSSProperties;
+  type?: 'link' | 'button';
 };
 
 export const ExternalLink = ({
@@ -19,8 +20,25 @@ export const ExternalLink = ({
   children,
   design = 'Default',
   iconStyle,
+  type = 'link',
 }: LinkProps) => {
   const { t } = useTranslation();
+
+  if (type === 'button') {
+    return (
+      <Button
+        icon="inspect"
+        iconEnd
+        style={spacing.sapUiTinyMarginBeginEnd}
+        onClick={() => {
+          const newWindow = window.open(url, '_blank', 'noopener, noreferrer');
+          if (newWindow) newWindow.opener = null;
+        }}
+      >
+        {text || children || url}
+      </Button>
+    );
+  }
 
   return (
     <Link design={design} href={url} target="_blank">
