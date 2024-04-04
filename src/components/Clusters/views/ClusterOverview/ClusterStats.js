@@ -45,7 +45,10 @@ export default function ClusterStats({ data }) {
       >
         {t('cluster-overview.statistics.title')}
       </Title>
-      <div className="flexwrap" style={spacing.sapUiSmallMarginBeginEnd}>
+      <div
+        className="flexwrap cluster-stats"
+        style={spacing.sapUiSmallMarginBeginEnd}
+      >
         <Card
           className="radial-chart-card"
           header={
@@ -131,6 +134,8 @@ export default function ClusterStats({ data }) {
               ]}
             />
           )}
+        </div>
+        <div className="counting-cards-container">
           {data && (
             <CountingCard
               value={data?.length}

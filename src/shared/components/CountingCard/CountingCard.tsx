@@ -31,7 +31,10 @@ export const CountingCard = ({
   return (
     <Card
       className="counting-card"
-      style={{ maxWidth: extraInfo ? '325px' : '175px' }}
+      style={{
+        maxWidth: extraInfo ? '325px' : '175px',
+        maxHeight: extraInfo ? '' : '136px',
+      }}
       header={
         <AnalyticalCardHeader
           titleText={title}
