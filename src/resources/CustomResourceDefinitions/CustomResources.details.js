@@ -21,10 +21,12 @@ export default function CustomResource({ params }) {
     `/apis/apiextensions.k8s.io/v1/customresourcedefinitions/${customResourceDefinitionName}`,
     {
       pollingInterval: null,
+      skip: !customResourceDefinitionName,
     },
   );
 
   if (loading) return <Spinner />;
+  if (!data) return null;
 
   const versions = data?.spec?.versions;
   const version =
@@ -42,7 +44,7 @@ export default function CustomResource({ params }) {
           : ''
       }${crdName}/${resourceName}`
     : '';
-  console.log(resourceUrl);
+
   const yamlPreview = resource => (
     <ReadonlyEditorPanel
       title="YAML"
