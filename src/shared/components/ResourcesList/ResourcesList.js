@@ -382,14 +382,14 @@ export function ResourceListRenderer({
   const nameColIndex = customColumns.findIndex(col => col.id === 'name');
 
   const headerRenderer = () => {
-    const rowColumns = customColumns.map(col => col.header || null);
+    const rowColumns = customColumns?.map(col => col?.header || null);
     rowColumns.splice(nameColIndex + 1, 0, '');
     return rowColumns;
   };
 
   const rowRenderer = entry => {
-    const rowColumns = customColumns.map(col =>
-      col.value ? col.value(entry) : null,
+    const rowColumns = customColumns?.map(col =>
+      col?.value ? col.value(entry) : null,
     );
     rowColumns.splice(nameColIndex + 1, 0, protectedResourceWarning(entry));
     return rowColumns;
@@ -518,6 +518,7 @@ export function ResourceListRenderer({
             ...emptyListProps,
           }}
           handleRedirect={handleRedirect}
+          nameColIndex={nameColIndex}
         />
       )}
       {!isCompact && createPortal(<YamlUploadDialog />, document.body)}
