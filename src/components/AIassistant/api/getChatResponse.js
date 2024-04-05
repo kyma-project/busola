@@ -9,24 +9,10 @@ export default async function getChatResponse({
       {
         headers: {
           accept: 'application/json, text/plain, */*',
-          'accept-language': 'de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7',
-          'cache-control': 'no-cache',
           'content-type': 'application/json',
-          pragma: 'no-cache',
-          'sec-ch-ua':
-            '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"',
-          'sec-ch-ua-mobile': '?0',
-          'sec-ch-ua-platform': '"macOS"',
-          'sec-fetch-dest': 'empty',
-          'sec-fetch-mode': 'cors',
-          'sec-fetch-site': 'cross-site',
         },
-        referrer: 'https://ai.kyma.dev.sap/',
-        referrerPolicy: 'strict-origin-when-cross-origin',
         body: `{"question":"${prompt}"}`,
         method: 'POST',
-        mode: 'cors',
-        credentials: 'omit',
       },
     ).then(result => result.json());
     handleSuccess(response);

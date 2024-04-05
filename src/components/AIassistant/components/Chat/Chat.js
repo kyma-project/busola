@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil';
 import { FlexBox, Icon, Input } from '@ui5/webcomponents-react';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { initialPromptState } from 'components/AIassistant/state/initalPromptAtom';
-import PlainMessage from './messages/PlainMessage';
+import Message from './messages/Message';
 import Bubbles from './messages/Bubbles';
 import ErrorMessage from './messages/ErrorMessage';
 import getChatResponse from 'components/AIassistant/api/getChatResponse';
@@ -87,7 +87,7 @@ export default function Chat() {
         {chatHistory.map((message, index) => {
           return message.author === 'ai' ? (
             <>
-              <PlainMessage
+              <Message
                 key={index}
                 className="left-aligned"
                 message={message.message}
@@ -108,7 +108,7 @@ export default function Chat() {
               )}
             </>
           ) : (
-            <PlainMessage
+            <Message
               key={index}
               className="right-aligned"
               message={message.message}
