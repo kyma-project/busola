@@ -39,7 +39,7 @@ export const EmptyListComponent = ({
   return (
     <IllustratedMessage
       name="TntNoApplications"
-      size="Scene"
+      size="Auto"
       titleText={titleText}
       subtitle={
         <p

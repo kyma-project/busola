@@ -201,6 +201,7 @@ export function ResourceListRenderer({
   isCompact,
   parentCrdName,
   emptyListProps = null,
+  simpleEmptyListMessage = false,
   disableHiding,
   displayArrow,
   handleRedirect,
@@ -509,14 +510,18 @@ export function ResourceListRenderer({
             ...searchSettings,
             textSearchProperties: textSearchProperties(),
           }}
-          emptyListProps={{
-            titleText: `${t('common.labels.no')} ${processTitle(
-              prettifyNamePlural(resourceTitle, resourceType),
-            )}`,
-            onClick: handleShowCreate,
-            showButton: !disableCreate && namespace !== '-all-',
-            ...emptyListProps,
-          }}
+          emptyListProps={
+            simpleEmptyListMessage
+              ? null
+              : {
+                  titleText: `${t('common.labels.no')} ${processTitle(
+                    prettifyNamePlural(resourceTitle, resourceType),
+                  )}`,
+                  onClick: handleShowCreate,
+                  showButton: !disableCreate && namespace !== '-all-',
+                  ...emptyListProps,
+                }
+          }
           handleRedirect={handleRedirect}
         />
       )}
