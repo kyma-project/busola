@@ -12,6 +12,7 @@ import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ResourceDescription } from 'resources/Events';
 import EventCreate from './EventYaml';
 import { Link } from 'shared/components/Link/Link';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 const RowComponent = ({ name, value }) =>
   value ? <LayoutPanelRow name={name} value={value} /> : null;
@@ -65,7 +66,7 @@ export function EventDetails(props) {
     {
       header: t('events.headers.type'),
       value: event => (
-        <p>
+        <p style={{ display: 'flex', alignItems: 'center' }}>
           {event.type}{' '}
           {event.type === 'Warning' ? (
             <Tooltip content={event.type}>
@@ -74,6 +75,7 @@ export function EventDetails(props) {
                 icon={<Icon name="message-warning" />}
                 className="has-tooltip"
                 state="Warning"
+                style={spacing.sapUiTinyMarginBegin}
               />
             </Tooltip>
           ) : (
@@ -83,6 +85,7 @@ export function EventDetails(props) {
                 icon={<Icon name="message-information" />}
                 className="has-tooltip"
                 state="Information"
+                style={spacing.sapUiTinyMarginBegin}
               />
             </Tooltip>
           )}
