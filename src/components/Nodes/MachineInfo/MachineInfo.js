@@ -1,8 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import './MachineInfo.scss';
-import { Card, CardHeader } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
+import ResourceDetailsCard from 'shared/components/ResourceDetails/ResourceDetailsCard';
 
 export function MachineInfo({ nodeInfo, capacity }) {
   const formattedMemory =
@@ -10,12 +9,11 @@ export function MachineInfo({ nodeInfo, capacity }) {
   const { t } = useTranslation();
 
   return (
-    <div style={spacing.sapUiSmallMarginBeginEnd}>
-      <Card
-        className="machine-info__card"
-        header={<CardHeader titleText={t('machine-info.title')} />}
-      >
-        <div style={spacing.sapUiSmallMargin} className="machine-info__body">
+    <ResourceDetailsCard
+      className="machine-info__card"
+      titleText={t('machine-info.title')}
+      content={
+        <>
           <DynamicPageComponent.Column
             title={t('machine-info.operating-system')}
           >
@@ -44,8 +42,8 @@ export function MachineInfo({ nodeInfo, capacity }) {
           >
             {nodeInfo.kubeletVersion}
           </DynamicPageComponent.Column>
-        </div>
-      </Card>
-    </div>
+        </>
+      }
+    />
   );
 }

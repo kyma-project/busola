@@ -14,6 +14,7 @@ export function NodeDetailsCard({ node, loading, error }) {
 
   return (
     <ResourceDetailsCard
+      titleText={t('cluster-overview.headers.metadata')}
       content={
         <>
           {loading && t('common.headers.loading')}

@@ -2,22 +2,10 @@
   max-width: 650px;
 }
 
-.machine-info__body {
-  display: grid;
-  gap: 25px;
-  grid-template-columns: 1fr;
-}
-
 .node-details-container {
   display: grid;
   grid-template-columns: 100%;
   gap: 1rem;
-}
-
-@container (min-width: 650px) {
-  .machine-info__body {
-    grid-template-columns: repeat(2, minmax(200px, max-content));
-  }
 }
 
 @container (min-width: 900px) {
