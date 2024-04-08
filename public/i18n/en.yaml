@@ -322,6 +322,7 @@ common:
     resource-details: Resource Details
     resources: Resources
     nodeInfo: Node Info
+    node-details: Node Details
     status: Status
     value: Value
     version: Version

@@ -1,11 +1,28 @@
-.machine-info__body > * {
-  grid-template-columns: 1fr 1fr !important;
-  padding-left: 1rem;
-  & > :first-child {
-    color: var(--sapNeutralColor) !important;
+.machine-info__card {
+  max-width: 650px;
+}
+
+.machine-info__body {
+  display: grid;
+  gap: 25px;
+  grid-template-columns: 1fr;
+}
+
+.node-details-container {
+  display: grid;
+  grid-template-columns: 100%;
+  gap: 1rem;
+}
+
+@container (min-width: 650px) {
+  .machine-info__body {
+    grid-template-columns: repeat(2, minmax(200px, max-content));
   }
 }
 
-.machine-info__card {
-  max-width: 650px;
+@container (min-width: 900px) {
+  .node-details-container {
+    grid-template-columns: fit-content(100%) fit-content(100%);
+    gap: 0;
+  }
 }
