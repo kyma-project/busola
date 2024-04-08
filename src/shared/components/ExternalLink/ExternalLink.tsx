@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Icon, Link } from '@ui5/webcomponents-react';
+import { Button, Icon, Link } from '@ui5/webcomponents-react';
 
 import { spacing } from '@ui5/webcomponents-react-base';
 
@@ -10,7 +10,15 @@ type LinkProps = {
   className?: string;
   children?: ReactNode;
   design?: 'Default' | 'Subtle' | 'Emphasized';
+  buttonDesign?:
+    | 'Positive'
+    | 'Negative'
+    | 'Transparent'
+    | 'Default'
+    | 'Emphasized'
+    | 'Attention';
   iconStyle?: React.CSSProperties;
+  type?: 'link' | 'button';
 };
 
 export const ExternalLink = ({
@@ -18,9 +26,28 @@ export const ExternalLink = ({
   text,
   children,
   design = 'Default',
+  buttonDesign = 'Transparent',
   iconStyle,
+  type = 'link',
 }: LinkProps) => {
   const { t } = useTranslation();
+
+  if (type === 'button') {
+    return (
+      <Button
+        icon="inspect"
+        design={buttonDesign}
+        iconEnd
+        style={spacing.sapUiTinyMarginBeginEnd}
+        onClick={() => {
+          const newWindow = window.open(url, '_blank', 'noopener, noreferrer');
+          if (newWindow) newWindow.opener = null;
+        }}
+      >
+        {text || children || url}
+      </Button>
+    );
+  }
 
   return (
     <Link design={design} href={url} target="_blank">

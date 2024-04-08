@@ -98,6 +98,7 @@ function ResourceGraph({
   return (
     <Panel
       fixed
+      className="card-shadow"
       style={spacing.sapUiSmallMargin}
       ref={(node: any) => setGraphEl(node)}
       header={

@@ -9,7 +9,7 @@ import {
 } from './NamespaceWorkloadsHelpers';
 import { CountingCard } from 'shared/components/CountingCard/CountingCard';
 
-NamespaceWorkloads.propTypes = { namespace: PropTypes.string.isRequired };
+NamespaceWorkloads.propTypes = { namespace: PropTypes.string };
 
 export function NamespaceWorkloads({ namespace }) {
   const { t } = useTranslation();

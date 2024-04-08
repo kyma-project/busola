@@ -36,6 +36,7 @@ export function LimitRangeList(props) {
   return (
     <ResourcesList
       disableHiding={true}
+      simpleEmptyListMessage={true}
       displayArrow={false}
       resourceTitle={t('limit-ranges.title')}
       customColumns={customColumns}

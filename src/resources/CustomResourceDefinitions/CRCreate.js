@@ -34,8 +34,14 @@ function CRCreate({
     crd.spec.scope === 'Namespaced'
       ? `/namespaces/${cr.metadata?.namespace || ''}`
       : '';
+  const createUrlResourceName = !!initialCustomResource?.metadata?.name
+    ? '/' + initialCustomResource.metadata.name
+    : '';
+
   const createUrl = `/apis/${crd.spec?.group ||
-    ''}/${currentVersion}${namespace}/${crd.spec.names.plural}`;
+    ''}/${currentVersion}${namespace}/${
+    crd.spec.names.plural
+  }${createUrlResourceName}`;
 
   return (
     <ResourceForm
