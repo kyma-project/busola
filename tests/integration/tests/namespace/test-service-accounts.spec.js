@@ -115,7 +115,8 @@ context('Test Service Accounts', () => {
     cy.readFile(filepath).should('not.exist');
 
     //check if TokenRequest is being generated after value change
-    cy.get('.form-field')
+    cy.get('ui5-dialog[header-text="Generate TokenRequest"]')
+      .get('.form-field')
       .find('ui5-icon')
       .click()
       .get('ui5-list')

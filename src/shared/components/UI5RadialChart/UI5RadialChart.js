@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { RadialChart } from '@ui5/webcomponents-react-charts';
 import { spacing } from '@ui5/webcomponents-react-base';
 import './UI5RadialChart.scss';
+import { Text } from '@ui5/webcomponents-react';
 
 const TooltipWrapper = ({ tooltipProps, children }) => {
   if (tooltipProps?.content) {
@@ -13,16 +14,17 @@ const TooltipWrapper = ({ tooltipProps, children }) => {
 };
 
 export const UI5RadialChart = ({
-  size = 150,
+  size = 200,
   value,
   max,
   color = 'var(--sapBrandColor)',
   onClick,
   tooltip,
+  additionalInfo = '',
 }) => {
   const percent = max && value ? Math.round((value * 100) / max) : 0;
   const text = percent + '%';
-  const textSize = size / Math.max(4, text.length) + 'px';
+  const textSize = size / Math.max(3.5, text.length) + 'px';
 
   const classnames = classNames(`radial-chart`, {
     'cursor-pointer': onClick,
@@ -46,9 +48,14 @@ export const UI5RadialChart = ({
             ...spacing.sapUiTinyMarginTopBottom,
           }}
           chartConfig={{
-            innerRadius: '100%',
+            innerRadius: '99%',
+            outerRadius: '99%',
+            barSize: 12,
           }}
         />
+        {additionalInfo && (
+          <Text className="additional-info">{additionalInfo}</Text>
+        )}
       </div>
     </TooltipWrapper>
   );

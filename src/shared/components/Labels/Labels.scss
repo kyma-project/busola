@@ -1,6 +1,6 @@
 .labels {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  justify-items: start;
 }
 
 .token {

@@ -1,11 +1,22 @@
 .radial-chart {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 200px;
+  padding-top: 20px;
+
+  .additional-info {
+    position: absolute;
+    bottom: 55px;
+    color: var(--sapNeutralColor);
+  }
 }
 
 .radial-chart-card {
-  max-width: 225px;
-  height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 230px;
+  height: 300px;
 }
