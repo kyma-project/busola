@@ -31,10 +31,15 @@ body {
 
 .card-shadow {
   box-shadow: var(--card-box-shadow);
-  border: var(--card-border);
   border-radius: var(--card-border-radius);
   border: var(--card-border);
   overflow: hidden;
+}
+
+.card-shadow .card-shadow {
+  box-shadow: none;
+  border-radius: none;
+  border: none;
 }
 
 .panel-grid {

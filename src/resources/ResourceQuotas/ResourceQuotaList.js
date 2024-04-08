@@ -37,6 +37,7 @@ export function ResourceQuotaList(props) {
   return (
     <ResourcesList
       disableHiding={true}
+      simpleEmptyListMessage={true}
       displayArrow={false}
       resourceTitle={t('resource-quotas.title')}
       customColumns={customColumns}

@@ -71,7 +71,9 @@ export const Selector = ({
       title={
         <>
           <Title level="H5">{title || t('selector.title')}</Title>
-          {selectorLabels ? <Labels labels={selectorLabels} /> : null}
+          {selectorLabels ? (
+            <Labels labels={selectorLabels} disableMarginBottom={true} />
+          ) : null}
         </>
       }
       keyComponent="workload-selector"
