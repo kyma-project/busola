@@ -32,7 +32,7 @@ export default function Message({ className, message, isLoading }) {
 
 function formatText(text) {
   if (!text) return [];
-  const regex = /(\*\*(.*?)\*\*)|(```([\s\S]*?)```)|(`(.*?)`)|[^*`]+/g;
+  const regex = /(\*\*(.*?)\*\*)|(```([\s\S]*?)```\s)|(`(.*?)`)|[^*`]+/g;
   return text.match(regex).map(segment => {
     if (segment.startsWith('**')) {
       return {

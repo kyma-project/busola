@@ -21,6 +21,7 @@ export default function CodePanel({ text }) {
 function parseCodeText(text) {
   const lines = text.split('\n');
   const language = lines.shift();
-  const code = lines.join('\n');
+  const nonEmptyLines = lines.filter(line => line.trim() !== '');
+  const code = nonEmptyLines.join('\n');
   return { language, code };
 }
