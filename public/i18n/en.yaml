@@ -36,10 +36,12 @@ cluster-overview:
     total-pods: 'Total Pods'
     healthy-pods: 'Healthy Pods'
     failing-pods: 'Failing Pods'
+    total-deployments: 'Total Deployments'
     healthy-deployments: 'Healthy Deployments'
+    failing-deployments: 'Failing Deployments'
     nodes: 'Nodes'
     pods: 'Pods'
-    deployments: 'Deployments'
+    deployments-overview: 'Deployments Overview'
   tooltips:
       cpu-used-percentage: 'CPU used: {{percentage}}'
       memory-used-percentage: 'Memory used: {{percentage}}'

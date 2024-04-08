@@ -9,7 +9,7 @@ import { SideNavigationSubItem } from '@ui5/webcomponents-react';
 export function NamespaceChooser() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { clusterUrl, namespaceUrl } = useUrl();
+  const { namespaceUrl } = useUrl();
   const allNamespaces = useRecoilValue(namespacesState);
 
   const { resourceType = '' } =
@@ -19,12 +19,6 @@ export function NamespaceChooser() {
     })?.params ?? {};
 
   let namespaces = [
-    <SideNavigationSubItem
-      key="namespaces-overview"
-      text={t('namespaces.namespaces-overview')}
-      data-key="overview"
-      onClick={() => navigate(clusterUrl(`namespaces`))}
-    />,
     <SideNavigationSubItem
       key="all-namespaces"
       text={t('navigation.all-namespaces')}
