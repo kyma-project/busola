@@ -127,7 +127,7 @@ context('Test Service Accounts', () => {
     cy.contains('TokenRequest generated').should('be.visible');
     cy.readFile(filepath).should('not.exist');
 
-    cy.contains('ui5-button', 'Download Kubeconfig').click();
+    cy.contains('ui5-button', 'Download Kubeconfig').click({ force: true });
 
     cy.readFile(filepath).should('exist');
     cy.task('removeFile', filepath);
