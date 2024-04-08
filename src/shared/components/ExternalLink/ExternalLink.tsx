@@ -10,6 +10,13 @@ type LinkProps = {
   className?: string;
   children?: ReactNode;
   design?: 'Default' | 'Subtle' | 'Emphasized';
+  buttonDesign?:
+    | 'Positive'
+    | 'Negative'
+    | 'Transparent'
+    | 'Default'
+    | 'Emphasized'
+    | 'Attention';
   iconStyle?: React.CSSProperties;
   type?: 'link' | 'button';
 };
@@ -19,6 +26,7 @@ export const ExternalLink = ({
   text,
   children,
   design = 'Default',
+  buttonDesign = 'Transparent',
   iconStyle,
   type = 'link',
 }: LinkProps) => {
@@ -28,6 +36,7 @@ export const ExternalLink = ({
     return (
       <Button
         icon="inspect"
+        design={buttonDesign}
         iconEnd
         style={spacing.sapUiTinyMarginBeginEnd}
         onClick={() => {

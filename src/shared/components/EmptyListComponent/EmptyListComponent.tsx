@@ -56,7 +56,14 @@ export const EmptyListComponent = ({
             {buttonText}
           </Button>
         )}
-        {url && <ExternalLink text="Learn More" url={url} type="button" />}
+        {url && (
+          <ExternalLink
+            text="Learn More"
+            url={url}
+            buttonDesign="Transparent"
+            type="button"
+          />
+        )}
       </div>
       {children}
     </IllustratedMessage>
