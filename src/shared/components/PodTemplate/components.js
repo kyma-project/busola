@@ -77,6 +77,7 @@ function ContainerComponent({ container }) {
           label={t('pods.labels.env')}
           component={
             <Table
+              className="card-shadow"
               items={container.env}
               columns={[t('common.headers.name'), t('common.headers.value')]}
               rowRenderer={env => (
