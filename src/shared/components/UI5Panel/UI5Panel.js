@@ -27,7 +27,7 @@ export const UI5Panel = ({
     <Panel
       fixed={fixed}
       key={keyComponent}
-      className={`${className} bsl-panel-header`}
+      className={`${className} bsl-panel-header card-shadow`}
       style={style ? style : !disableMargin ? spacing.sapUiSmallMargin : null}
       header={
         <Toolbar

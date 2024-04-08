@@ -15,6 +15,7 @@ export const Labels = ({
   shortenLongLabels = true,
   style = null,
   displayLabelForLabels = false,
+  disableMarginBottom = false,
 }) => {
   const { t } = useTranslation();
   if (!labels || Object.keys(labels).length === 0) {
@@ -35,6 +36,7 @@ export const Labels = ({
   }
 
   const shortenLabel = label => label.slice(0, SHORTENING_TRESHOLD) + '...';
+  const bottomMargin = disableMarginBottom ? {} : spacing.sapUiTinyMarginBottom;
 
   return (
     <>
@@ -55,7 +57,7 @@ export const Labels = ({
             colorScheme="10"
             style={{
               ...spacing.sapUiTinyMarginEnd,
-              ...spacing.sapUiTinyMarginBottom,
+              ...bottomMargin,
             }}
           >
             {shortenLongLabels && label.length > SHORTENING_TRESHOLD
