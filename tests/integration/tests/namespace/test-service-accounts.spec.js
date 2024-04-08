@@ -122,7 +122,7 @@ context('Test Service Accounts', () => {
       .get('ui5-list')
       .contains('21600s (6h)')
       .wait(100)
-      .click();
+      .click({ force: true });
 
     cy.contains('TokenRequest generated').should('be.visible');
     cy.readFile(filepath).should('not.exist');
