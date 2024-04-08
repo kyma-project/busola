@@ -128,9 +128,10 @@ export function useCreateResource({
 
     try {
       if (isEdit) {
+        const diff = createPatch(initialUnchangedResource, resource);
         await patchRequest(
-          createUrl,
-          createPatch(initialUnchangedResource, resource),
+          `${createUrl}/${initialResource.metadata.name}`,
+          diff,
         );
       } else {
         await postRequest(createUrl, resource);
