@@ -1,9 +1,10 @@
 import { BusyIndicator, Text } from '@ui5/webcomponents-react';
+import { segmentMarkdownText } from 'components/AIassistant/utils/formatMarkdown';
 import CodePanel from './CodePanel';
 import './Message.scss';
 
 export default function Message({ className, message, isLoading }) {
-  const segmentedText = formatText(message);
+  const segmentedText = segmentMarkdownText(message);
   return (
     <div className={'message ' + className}>
       {isLoading && <BusyIndicator active size="Medium" delay={0} />}
@@ -28,32 +29,4 @@ export default function Message({ className, message, isLoading }) {
       )}
     </div>
   );
-}
-
-function formatText(text) {
-  if (!text) return [];
-  const regex = /(\*\*(.*?)\*\*)|(```([\s\S]*?)```\s)|(`(.*?)`)|[^*`]+/g;
-  return text.match(regex).map(segment => {
-    if (segment.startsWith('**')) {
-      return {
-        type: 'bold',
-        content: segment.replace(/\*\*/g, ''),
-      };
-    } else if (segment.startsWith('```')) {
-      return {
-        type: 'code',
-        content: segment.replace(/```/g, ''),
-      };
-    } else if (segment.startsWith('`')) {
-      return {
-        type: 'highlighted',
-        content: segment.replace(/`/g, ''),
-      };
-    } else {
-      return {
-        type: 'normal',
-        content: segment,
-      };
-    }
-  });
 }

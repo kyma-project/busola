@@ -1,7 +1,7 @@
 export default async function getPromptSuggestions({
-  pageType = 'statefulsets.apps',
-  namespace,
-  nodeName = '',
+  namespace = '',
+  resourceType = '',
+  resourceName = '',
 }) {
   try {
     let { results } = await fetch(
@@ -11,7 +11,7 @@ export default async function getPromptSuggestions({
           accept: 'application/json, text/plain, */*',
           'content-type': 'application/json',
         },
-        body: `{"page_type":"${pageType}","namespace":"${namespace}","node_name":"${nodeName}"}`,
+        body: `{"resource_type":"${resourceType}","resource_name":"${resourceName}","namespace":"${namespace}"}`,
         method: 'POST',
       },
     ).then(result => result.json());

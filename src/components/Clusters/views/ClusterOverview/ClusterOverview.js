@@ -85,7 +85,10 @@ export function ClusterOverview() {
               <Title level="H3">
                 {t('cluster-overview.headers.cluster-details')}
               </Title>
-              <AIOpener />
+              <AIOpener
+                resourceType="cluster"
+                resourceName={currentCluster.currentContext.cluster.name}
+              />
             </FlexBox>
             <ClusterDetails currentCluster={currentCluster} />
             {data && <ClusterStats data={data} />}

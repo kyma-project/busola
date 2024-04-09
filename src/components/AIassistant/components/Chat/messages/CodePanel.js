@@ -1,8 +1,9 @@
 import { Text, Panel } from '@ui5/webcomponents-react';
+import { formatCodeSegment } from 'components/AIassistant/utils/formatMarkdown';
 import './CodePanel.scss';
 
 export default function CodePanel({ text }) {
-  const { language, code } = parseCodeText(text);
+  const { language, code } = formatCodeSegment(text);
   return !language ? (
     <div className="code-response">
       <Text className="text" renderWhitespace>
@@ -16,12 +17,4 @@ export default function CodePanel({ text }) {
       </Text>
     </Panel>
   );
-}
-
-function parseCodeText(text) {
-  const lines = text.split('\n');
-  const language = lines.shift();
-  const nonEmptyLines = lines.filter(line => line.trim() !== '');
-  const code = nonEmptyLines.join('\n');
-  return { language, code };
 }

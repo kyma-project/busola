@@ -369,7 +369,11 @@ function Resource({
               <Title level="H3">
                 {title ?? t('common.headers.resource-details')}
               </Title>
-              <AIOpener />
+              <AIOpener
+                namespace={resource?.metadata?.namespace}
+                resourceType={resource?.kind}
+                resourceName={resource?.metadata?.name}
+              />
             </FlexBox>
             <div
               className={`resource-details-container ${

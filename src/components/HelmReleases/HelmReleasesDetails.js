@@ -96,7 +96,11 @@ function HelmReleasesDetails({ releaseName, namespace }) {
               />
             </DynamicPageComponent.Column>
             <DynamicPageComponent.Column>
-              <AIOpener />
+              <AIOpener
+                namespace={releaseSecret?.metadata?.namespace}
+                resourceType={releaseSecret?.kind}
+                resourceName={releaseSecret?.metadata?.name}
+              />
             </DynamicPageComponent.Column>
           </>
         )}
