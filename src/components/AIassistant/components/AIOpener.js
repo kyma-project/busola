@@ -12,7 +12,7 @@ import {
 } from '@ui5/webcomponents-react';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { showAIassistantState } from 'components/AIassistant/state/showAIassistantAtom';
 import { initialPromptState } from '../state/initalPromptAtom';
@@ -30,6 +30,13 @@ export default function AIOpener({ namespace, resourceType, resourceName }) {
   const [suggestions, setSuggestions] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [errorOccured, setErrorOccured] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      setOpenAssistant(false);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const fetchSuggestions = async () => {
     setErrorOccured(false);
