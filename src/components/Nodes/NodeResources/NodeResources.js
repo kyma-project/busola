@@ -16,7 +16,7 @@ export function NodeResources({ metrics }) {
         }
       >
         <UI5RadialChart
-          color="var(--sapChart_Bad)"
+          color="var(--sapChart_OrderedColor_5)"
           value={cpu.usage}
           max={cpu.capacity}
           tooltip={{
@@ -34,7 +34,7 @@ export function NodeResources({ metrics }) {
         }
       >
         <UI5RadialChart
-          color="var(--sapChart_Good)"
+          color="var(--sapChart_OrderedColor_6)"
           value={memory.usage}
           max={memory.capacity}
           tooltip={{
