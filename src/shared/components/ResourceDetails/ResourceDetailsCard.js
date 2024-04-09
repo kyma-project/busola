@@ -6,10 +6,11 @@ export default function ResourceDetailsCard({
   content,
   wrapperClassname,
   titleText,
+  className = '',
 }) {
   return (
     <div style={spacing.sapUiSmallMarginBeginEnd} className={wrapperClassname}>
-      <Card header={<CardHeader titleText={titleText} />}>
+      <Card className={className} header={<CardHeader titleText={titleText} />}>
         <div
           style={spacing.sapUiSmallMargin}
           className="cluster-overview__details-grid"

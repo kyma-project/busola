@@ -1,5 +1,9 @@
 .machine-info__card {
   max-width: 650px;
+
+  .cluster-overview__details-grid {
+    grid-template-columns: repeat(2, minmax(170px, max-content));
+  }
 }
 
 .node-details-container {
