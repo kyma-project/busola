@@ -201,6 +201,7 @@ export function ResourceListRenderer({
   isCompact,
   parentCrdName,
   emptyListProps = null,
+  simpleEmptyListMessage = false,
   disableHiding,
   displayArrow,
   handleRedirect,
@@ -382,14 +383,14 @@ export function ResourceListRenderer({
   const nameColIndex = customColumns.findIndex(col => col.id === 'name');
 
   const headerRenderer = () => {
-    const rowColumns = customColumns.map(col => col.header || null);
+    const rowColumns = customColumns?.map(col => col?.header || null);
     rowColumns.splice(nameColIndex + 1, 0, '');
     return rowColumns;
   };
 
   const rowRenderer = entry => {
-    const rowColumns = customColumns.map(col =>
-      col.value ? col.value(entry) : null,
+    const rowColumns = customColumns?.map(col =>
+      col?.value ? col.value(entry) : null,
     );
     rowColumns.splice(nameColIndex + 1, 0, protectedResourceWarning(entry));
     return rowColumns;
@@ -509,15 +510,20 @@ export function ResourceListRenderer({
             ...searchSettings,
             textSearchProperties: textSearchProperties(),
           }}
-          emptyListProps={{
-            titleText: `${t('common.labels.no')} ${processTitle(
-              prettifyNamePlural(resourceTitle, resourceType),
-            )}`,
-            onClick: handleShowCreate,
-            showButton: !disableCreate && namespace !== '-all-',
-            ...emptyListProps,
-          }}
+          emptyListProps={
+            simpleEmptyListMessage
+              ? null
+              : {
+                  titleText: `${t('common.labels.no')} ${processTitle(
+                    prettifyNamePlural(resourceTitle, resourceType),
+                  )}`,
+                  onClick: handleShowCreate,
+                  showButton: !disableCreate && namespace !== '-all-',
+                  ...emptyListProps,
+                }
+          }
           handleRedirect={handleRedirect}
+          nameColIndex={nameColIndex}
         />
       )}
       {!isCompact && createPortal(<YamlUploadDialog />, document.body)}

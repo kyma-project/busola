@@ -287,16 +287,18 @@ function Resource({
             key="Resource Type"
             title={t('common.headers.resource-type')}
           >
-            {resource.kind}
-            {description && (
-              <HintButton
-                style={spacing.sapUiTinyMarginBegin}
-                setShowTitleDescription={setShowTitleDescription}
-                showTitleDescription={showTitleDescription}
-                description={description}
-                context="details"
-              />
-            )}
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              {resource.kind}
+              {description && (
+                <HintButton
+                  style={spacing.sapUiTinyMarginBegin}
+                  setShowTitleDescription={setShowTitleDescription}
+                  showTitleDescription={showTitleDescription}
+                  description={description}
+                  context="details"
+                />
+              )}
+            </div>
           </DynamicPageComponent.Column>
 
           <DynamicPageComponent.Column

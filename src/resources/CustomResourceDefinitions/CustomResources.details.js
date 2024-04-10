@@ -21,10 +21,12 @@ export default function CustomResource({ params }) {
     `/apis/apiextensions.k8s.io/v1/customresourcedefinitions/${customResourceDefinitionName}`,
     {
       pollingInterval: null,
+      skip: !customResourceDefinitionName,
     },
   );
 
   if (loading) return <Spinner />;
+  if (!data) return null;
 
   const versions = data?.spec?.versions;
   const version =
@@ -33,13 +35,15 @@ export default function CustomResource({ params }) {
 
   const crdName = customResourceDefinitionName?.split('.')[0];
   const crdGroup = customResourceDefinitionName?.replace(`${crdName}.`, '');
-  const resourceUrl = `/apis/${crdGroup}/${version?.name}/${
-    resourceNamespace
-      ? `namespaces/${resourceNamespace}/`
-      : namespace
-      ? `namespaces/${namespace}/`
-      : ''
-  }${crdName}/${resourceName}`;
+  const resourceUrl = resourceName
+    ? `/apis/${crdGroup}/${version?.name}/${
+        resourceNamespace
+          ? `namespaces/${resourceNamespace}/`
+          : namespace
+          ? `namespaces/${namespace}/`
+          : ''
+      }${crdName}/${resourceName}`
+    : '';
 
   const yamlPreview = resource => (
     <ReadonlyEditorPanel

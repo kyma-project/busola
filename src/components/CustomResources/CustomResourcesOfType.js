@@ -19,11 +19,17 @@ export default function CustomResourcesOfType({
   const { clusterUrl } = useUrl();
   const { data: crd, loading, error } = useGet(
     `/apis/apiextensions.k8s.io/v1/customresourcedefinitions/` + crdName,
+    {
+      skip: !crdName,
+    },
   );
 
   if (loading) return <Spinner />;
   if (error) {
     return <UI5Panel title={error.message} />;
+  }
+  if (!crd) {
+    return null;
   }
 
   return (

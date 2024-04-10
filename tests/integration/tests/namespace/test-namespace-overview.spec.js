@@ -25,7 +25,11 @@ context(
         .scrollIntoView()
         .should('be.visible');
 
-      cy.contains('Namespaces Health')
+      cy.contains('Pods Overview')
+        .scrollIntoView()
+        .should('be.visible');
+
+      cy.contains('Deployments Overview')
         .scrollIntoView()
         .should('be.visible');
 

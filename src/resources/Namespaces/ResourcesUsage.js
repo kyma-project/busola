@@ -86,6 +86,7 @@ const MemoryRequestsCircle = ({ resourceQuotas, isLoading }) => {
         }),
         position: 'bottom',
       }}
+      additionalInfo={`${valueText} / ${maxText}`}
     />
   );
 };
@@ -123,6 +124,7 @@ const MemoryLimitsCircle = ({ resourceQuotas, isLoading }) => {
         }),
         position: 'bottom',
       }}
+      additionalInfo={`${valueText} / ${maxText}`}
     />
   );
 };

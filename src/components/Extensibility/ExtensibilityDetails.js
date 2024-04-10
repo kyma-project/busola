@@ -59,7 +59,7 @@ export const ExtensibilityDetailsCore = ({
   detailsProps.resourceTitle = resourceTitle;
 
   if (resource?.kind) {
-    detailsProps.resourceUrl = detailsProps.resourceUrl.replace(
+    detailsProps.resourceUrl = detailsProps.resourceUrl?.replace(
       urlPath,
       pluralize(resource.kind).toLowerCase(),
     );

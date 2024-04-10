@@ -19,11 +19,16 @@ export default function NamespaceRoutes() {
   const language = useRecoilValue(languageAtom);
   const extensions = useRecoilValue(extensionsState);
 
-  const { error } = useGet(`/api/v1/namespaces/${namespaceId}`, {
-    skip: false,
-    pollingInterval: 0,
-    onDataReceived: () => {},
-  });
+  const { error } = useGet(
+    namespaceId === '-all-'
+      ? `/api/v1/namespaces`
+      : `/api/v1/namespaces/${namespaceId}`,
+    {
+      skip: false,
+      pollingInterval: 0,
+      onDataReceived: () => {},
+    },
+  );
   const hasAccessToNamespace =
     JSON.parse(JSON.stringify(error)) === null ||
     JSON.parse(JSON.stringify(error))?.code === 403;

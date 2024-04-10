@@ -3,7 +3,7 @@ import {
   Button,
   FlexBox,
   Icon,
-  Label,
+  Text,
   TableCell,
   TableColumn,
   TableRow,
@@ -37,7 +37,7 @@ export const HeaderRenderer = ({
         aria-label="actions-column"
         minWidth={850}
       >
-        <Label />
+        <Text />
       </TableColumn>
     );
   }
@@ -61,14 +61,14 @@ export const HeaderRenderer = ({
             }
             aria-label={`${typeof h === 'object' ? index : h}-column`}
           >
-            <Label>{h}</Label>
+            <Text>{h}</Text>
           </TableColumn>
         );
       })}
       {emptyColumn}
       {displayArrow && (
         <TableColumn slot={slot} key="arrow-column" aria-label="arrow-column">
-          <Label />
+          <Text />
         </TableColumn>
       )}
     </>

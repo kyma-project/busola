@@ -60,7 +60,7 @@ export const ExtensibilityListCore = ({
     : resourceTitle || pluralize(prettifyKind(resource?.kind || ''));
 
   if (resource?.kind) {
-    listProps.resourceUrl = listProps.resourceUrl.replace(
+    listProps.resourceUrl = listProps.resourceUrl?.replace(
       /[a-z0-9-]+\/?$/,
       pluralize(resource.kind).toLowerCase(),
     );

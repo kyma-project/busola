@@ -115,18 +115,19 @@ context('Test Service Accounts', () => {
     cy.readFile(filepath).should('not.exist');
 
     //check if TokenRequest is being generated after value change
-    cy.get('.form-field')
+    cy.get('ui5-dialog[header-text="Generate TokenRequest"]')
+      .get('.form-field')
       .find('ui5-icon')
       .click()
       .get('ui5-list')
       .contains('21600s (6h)')
       .wait(100)
-      .click();
+      .click({ force: true });
 
     cy.contains('TokenRequest generated').should('be.visible');
     cy.readFile(filepath).should('not.exist');
 
-    cy.contains('ui5-button', 'Download Kubeconfig').click();
+    cy.contains('ui5-button', 'Download Kubeconfig').click({ force: true });
 
     cy.readFile(filepath).should('exist');
     cy.task('removeFile', filepath);

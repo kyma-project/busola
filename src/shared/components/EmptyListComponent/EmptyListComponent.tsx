@@ -39,7 +39,7 @@ export const EmptyListComponent = ({
   return (
     <IllustratedMessage
       name="TntNoApplications"
-      size="Scene"
+      size="Auto"
       titleText={titleText}
       subtitle={
         <p
@@ -56,7 +56,14 @@ export const EmptyListComponent = ({
             {buttonText}
           </Button>
         )}
-        {url && <ExternalLink text="Learn More" url={url} />}
+        {url && (
+          <ExternalLink
+            text="Learn More"
+            url={url}
+            buttonDesign="Transparent"
+            type="button"
+          />
+        )}
       </div>
       {children}
     </IllustratedMessage>
