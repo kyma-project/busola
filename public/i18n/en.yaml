@@ -908,6 +908,7 @@ kubeconfig-id:
   error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 kyma-modules:
+  description: <0>Kyma Modules</0> are LEGO blocks.
   release-channel: Release channel
   kyma: Kyma
   title: Modules

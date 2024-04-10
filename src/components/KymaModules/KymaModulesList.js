@@ -2,7 +2,6 @@ import { useTranslation } from 'react-i18next';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { Label, DynamicPageHeader, Button } from '@ui5/webcomponents-react';
-import { Description } from 'shared/components/Description/Description';
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useState } from 'react';
@@ -12,24 +11,19 @@ import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import KymaModulesCreate from './KymaModulesCreate';
+import {
+  ResourceDescription,
+  resourceType,
+  apiGroup,
+  apiVersion,
+} from 'components/KymaModules';
 
 export function KymaModulesList(props) {
   const [showTitleDescription, setShowTitleDescription] = useState(false);
   const resourceUrl =
     '/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas/default';
-  const resourceType = 'kymas';
   const resourceName = 'default';
   const namespace = 'kyma-system';
-  const apiGroup = 'operator.kyma-project.io';
-  const apiVersion = 'v1beta2';
-  const description = (
-    <Description
-      i18nKey={'cron-jobs.description'}
-      url={
-        'https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-s-modular-approach?locale=en-US&state=DRAFT&version=Cloud'
-      }
-    />
-  );
 
   const modulesResourceUrl = `/apis/operator.kyma-project.io/v1beta2/moduletemplates`;
 
@@ -144,7 +138,6 @@ export function KymaModulesList(props) {
       customComponents={[ModulesList]}
       apiGroup={apiGroup}
       apiVersion={apiVersion}
-      description={description}
       resourceUrl={resourceUrl}
       resourceType={resourceType}
       resourceName={resourceName}
@@ -157,7 +150,7 @@ export function KymaModulesList(props) {
               style={spacing.sapUiTinyMarginBegin}
               setShowTitleDescription={setShowTitleDescription}
               showTitleDescription={showTitleDescription}
-              description={description}
+              description={ResourceDescription}
               context="details"
             />
           }
