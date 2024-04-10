@@ -906,6 +906,8 @@ kubeconfig-id:
   error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 kyma-modules:
+  release-channel: Release channel
+  kyma: Kyma
   title: Modules
   namespaces: Namespace
   channel: Channel

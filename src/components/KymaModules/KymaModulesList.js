@@ -11,6 +11,7 @@ import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
+import KymaModulesCreate from './KymaModulesCreate';
 
 export function KymaModulesList(props) {
   const [showTitleDescription, setShowTitleDescription] = useState(false);
@@ -135,7 +136,9 @@ export function KymaModulesList(props) {
     <ResourceDetails
       headerContent={
         <DynamicPageHeader>
-          <Label>Release channel: {kymaResource?.spec.channel}</Label>
+          <Label showColon>{t('kyma-modules.release-channel')}</Label>
+          <Label>{kymaResource?.spec.channel}</Label>
+          <HintButton />
         </DynamicPageHeader>
       }
       customComponents={[ModulesList]}
@@ -160,6 +163,7 @@ export function KymaModulesList(props) {
           }
         </>
       }
+      createResourceForm={KymaModulesCreate}
       disableEdit
       disableResourceDetailsCard
       disableDelete
