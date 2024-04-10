@@ -1,8 +1,11 @@
-import { IllustratedMessage } from '@ui5/webcomponents-react';
+import { Button, IllustratedMessage } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { spacing } from '@ui5/webcomponents-react-base';
 
-export default function ErrorMessage() {
+export default function ErrorMessage({
+  errorOnInitialMessage,
+  resendInitialPrompt,
+}) {
   const { t } = useTranslation();
 
   return (
@@ -12,6 +15,12 @@ export default function ErrorMessage() {
       titleText={t('ai-assistant.error.title')}
       subtitleText={t('ai-assistant.error.subtitle')}
       style={{ ...spacing.sapUiSmallMarginTop, padding: 0 }}
-    />
+    >
+      {errorOnInitialMessage && (
+        <Button onClick={resendInitialPrompt}>
+          {t('common.buttons.retry')}
+        </Button>
+      )}
+    </IllustratedMessage>
   );
 }

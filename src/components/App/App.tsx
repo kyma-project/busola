@@ -71,16 +71,20 @@ export default function App() {
   useAppTracking();
   useAfterInitHook(kubeconfigIdState);
 
-  const assistantOpen = useRecoilValue(showAIassistantState);
+  const showAssistant = useRecoilValue(showAIassistantState);
 
   return (
-    <SplitterLayout
-      style={{
-        height: '100vh',
-        width: '100%',
-      }}
-    >
-      <SplitterElement resizable={false} size={assistantOpen ? '80%' : '100%'}>
+    <SplitterLayout id="splitter-layout">
+      <SplitterElement
+        resizable={false}
+        size={
+          showAssistant.show
+            ? showAssistant.fullScreen
+              ? '0%'
+              : '80%'
+            : '100%'
+        }
+      >
         <div id="html-wrap">
           <Header />
           <div id="page-wrap">
@@ -113,8 +117,12 @@ export default function App() {
           </div>
         </div>
       </SplitterElement>
-      {assistantOpen ? (
-        <SplitterElement resizable={false} size="20%" minSize={325}>
+      {showAssistant.show ? (
+        <SplitterElement
+          resizable={false}
+          size={showAssistant.fullScreen ? '100%' : '20%'}
+          minSize={325}
+        >
           <div id="assistant_wrapper">
             <AIassistant />
           </div>

@@ -9,7 +9,7 @@ import {
   ToolbarSpacer,
 } from '@ui5/webcomponents-react';
 import { spacing } from '@ui5/webcomponents-react-base';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { showAIassistantState } from 'components/AIassistant/state/showAIassistantAtom';
 import Chat from './Chat/Chat';
 import PageInsights from './PageInsights/PageInsights';
@@ -17,7 +17,9 @@ import './AIassistant.scss';
 
 export default function AIassistant() {
   const { t } = useTranslation();
-  const setOpenAssistant = useSetRecoilState(showAIassistantState);
+  const [showAssistant, setShowAssistant] = useRecoilState(
+    showAIassistantState,
+  );
 
   return (
     <Card
@@ -32,17 +34,24 @@ export default function AIassistant() {
           <div>
             <Button
               design="Transparent"
-              icon="full-screen"
+              icon={
+                showAssistant.fullScreen ? 'exit-full-screen' : 'full-screen'
+              }
               className="action"
-              disabled
+              onClick={() =>
+                setShowAssistant({
+                  show: true,
+                  fullScreen: !showAssistant.fullScreen,
+                })
+              }
             />
             <Button
               design="Transparent"
               icon="decline"
               className="action"
-              onClick={() => {
-                setOpenAssistant(false);
-              }}
+              onClick={() =>
+                setShowAssistant({ show: false, fullScreen: false })
+              }
             />
           </div>
         </Toolbar>

@@ -22,7 +22,7 @@ import './AIOpener.scss';
 
 export default function AIOpener({ namespace, resourceType, resourceName }) {
   const { t } = useTranslation();
-  const [assistantOpen, setOpenAssistant] = useRecoilState(
+  const [showAssistant, setShowAssistant] = useRecoilState(
     showAIassistantState,
   );
   const setInitialPrompt = useSetRecoilState(initialPromptState);
@@ -30,10 +30,11 @@ export default function AIOpener({ namespace, resourceType, resourceName }) {
   const [suggestions, setSuggestions] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [errorOccured, setErrorOccured] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     return () => {
-      setOpenAssistant(false);
+      setShowAssistant({ show: false, fullScreen: false });
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -42,11 +43,13 @@ export default function AIOpener({ namespace, resourceType, resourceName }) {
     setErrorOccured(false);
     setPopoverOpen(true);
     if (suggestions.length === 0) {
+      setIsLoading(true);
       const promptSuggestions = await getPromptSuggestions({
         namespace,
         resourceType,
         resourceName,
       });
+      setIsLoading(false);
       if (!promptSuggestions) {
         setErrorOccured(true);
       } else {
@@ -58,7 +61,10 @@ export default function AIOpener({ namespace, resourceType, resourceName }) {
   const sendInitialPrompt = prompt => {
     setInitialPrompt(prompt);
     setPopoverOpen(false);
-    setOpenAssistant(true);
+    setShowAssistant({
+      show: true,
+      fullScreen: false,
+    });
   };
 
   const onSubmitInput = () => {
@@ -74,7 +80,7 @@ export default function AIOpener({ namespace, resourceType, resourceName }) {
         icon="ai"
         className="ai-button"
         id="openPopoverBtn"
-        disabled={assistantOpen}
+        disabled={showAssistant.show}
         onClick={fetchSuggestions}
       >
         {t('ai-assistant.opener.use-ai')}
@@ -99,7 +105,7 @@ export default function AIOpener({ namespace, resourceType, resourceName }) {
           <Title level="H5" style={spacing.sapUiTinyMargin}>
             {t('ai-assistant.opener.suggestions')}
           </Title>
-          {errorOccured ? (
+          {errorOccured || (!isLoading && suggestions.length === 0) ? (
             <FlexBox
               alignItems="Center"
               direction="Column"
@@ -112,7 +118,7 @@ export default function AIOpener({ namespace, resourceType, resourceName }) {
                 {t('common.buttons.retry')}
               </Button>
             </FlexBox>
-          ) : suggestions.length === 0 ? (
+          ) : isLoading ? (
             <div
               style={{
                 ...spacing.sapUiTinyMargin,

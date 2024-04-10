@@ -115,7 +115,12 @@ export default function Chat() {
             />
           );
         })}
-        {errorOccured && <ErrorMessage />}
+        {errorOccured && (
+          <ErrorMessage
+            errorOnInitialMessage={chatHistory.length === 0}
+            resendInitialPrompt={() => sendPrompt(initialPrompt)}
+          />
+        )}
       </div>
       <div style={spacing.sapUiTinyMarginBeginEnd}>
         <Input
