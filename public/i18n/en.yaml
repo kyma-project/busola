@@ -905,6 +905,13 @@ jobs:
 kubeconfig-id:
   error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
+kyma-modules:
+  title: Modules
+  namespaces: Namespace
+  channel: Channel
+  version: Version 
+  state: State
+  documentation: Documentation
 legal:
   copyright: Copyright
   legal-disclosure: Legal Disclosure
