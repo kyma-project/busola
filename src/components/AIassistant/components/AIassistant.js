@@ -22,53 +22,54 @@ export default function AIassistant() {
   );
 
   return (
-    <Card
-      style={spacing.sapUiTinyMargin}
-      className="ai_assistant"
-      header={
-        <Toolbar toolbarStyle="Clear" className="ai_assistant__header">
-          <Title level="H4" className="title">
-            {t('ai-assistant.name')}
-          </Title>
-          <ToolbarSpacer />
-          <div>
-            <Button
-              design="Transparent"
-              icon={
-                showAssistant.fullScreen ? 'exit-full-screen' : 'full-screen'
-              }
-              className="action"
-              onClick={() =>
-                setShowAssistant({
-                  show: true,
-                  fullScreen: !showAssistant.fullScreen,
-                })
-              }
-            />
-            <Button
-              design="Transparent"
-              icon="decline"
-              className="action"
-              onClick={() =>
-                setShowAssistant({ show: false, fullScreen: false })
-              }
-            />
-          </div>
-        </Toolbar>
-      }
-    >
-      <TabContainer
-        fixed
-        contentBackgroundDesign="Transparent"
-        className="tab-container"
+    <div id="assistant_wrapper" style={spacing.sapUiTinyMargin}>
+      <Card
+        className="ai_assistant"
+        header={
+          <Toolbar toolbarStyle="Clear" className="ai_assistant__header">
+            <Title level="H4" className="title">
+              {t('ai-assistant.name')}
+            </Title>
+            <ToolbarSpacer />
+            <div>
+              <Button
+                design="Transparent"
+                icon={
+                  showAssistant.fullScreen ? 'exit-full-screen' : 'full-screen'
+                }
+                className="action"
+                onClick={() =>
+                  setShowAssistant({
+                    show: true,
+                    fullScreen: !showAssistant.fullScreen,
+                  })
+                }
+              />
+              <Button
+                design="Transparent"
+                icon="decline"
+                className="action"
+                onClick={() =>
+                  setShowAssistant({ show: false, fullScreen: false })
+                }
+              />
+            </div>
+          </Toolbar>
+        }
       >
-        <Tab selected text={t('ai-assistant.tabs.chat')}>
-          <Chat />
-        </Tab>
-        <Tab text={t('ai-assistant.tabs.page-insights')}>
-          <PageInsights />
-        </Tab>
-      </TabContainer>
-    </Card>
+        <TabContainer
+          fixed
+          contentBackgroundDesign="Transparent"
+          className="tab-container"
+        >
+          <Tab selected text={t('ai-assistant.tabs.chat')}>
+            <Chat />
+          </Tab>
+          <Tab text={t('ai-assistant.tabs.page-insights')}>
+            <PageInsights />
+          </Tab>
+        </TabContainer>
+      </Card>
+    </div>
   );
 }

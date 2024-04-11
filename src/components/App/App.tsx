@@ -123,9 +123,7 @@ export default function App() {
           size={showAssistant.fullScreen ? '100%' : '20%'}
           minSize={325}
         >
-          <div id="assistant_wrapper">
-            <AIassistant />
-          </div>
+          <AIassistant />
         </SplitterElement>
       ) : (
         <></>

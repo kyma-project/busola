@@ -1,25 +1,28 @@
-.ai_assistant {
-  height: 100%;
+#assistant_wrapper {
   width: 100%;
 
-  &__header {
-    background-color: var(--sapContent_Illustrative_Color1);
-    min-height: 60px;
-    padding-left: 8px;
-    padding-right: 8px;
+  .ai_assistant {
+    height: 100%;
+    width: 100%;
 
-    .title {
-      color: white;
-      text-shadow: none;
+    &__header {
+      background-color: var(--sapContent_Illustrative_Color1);
+      min-height: 60px;
+      padding: 0.5rem;
+
+      .title {
+        color: white;
+        text-shadow: none;
+      }
+
+      .action {
+        color: white;
+        background: transparent;
+      }
     }
 
-    .action {
-      color: white;
-      background: transparent;
+    .tab-container {
+      height: calc(100vh - 60px - 1.4rem);
     }
-  }
-
-  .tab-container {
-    height: calc(100vh - 60px - 1.4rem);
   }
 }
