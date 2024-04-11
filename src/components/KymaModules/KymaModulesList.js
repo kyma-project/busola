@@ -17,9 +17,15 @@ import {
   apiGroup,
   apiVersion,
 } from 'components/KymaModules';
+import { useRecoilState } from 'recoil';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 export function KymaModulesList(props) {
+  const { t } = useTranslation();
+
   const [showTitleDescription, setShowTitleDescription] = useState(false);
+  const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
+
   const resourceUrl =
     '/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas/default';
   const resourceName = 'default';
@@ -35,7 +41,13 @@ export function KymaModulesList(props) {
     pollingInterval: 3000,
   });
 
-  const { t } = useTranslation();
+  const handleShowAddModule = () => {
+    setLayoutColumn({
+      midColumn: null,
+      endColumn: null,
+      layout: 'TwoColumnsMidExpanded',
+    });
+  };
 
   const ModulesList = resource => {
     const findModule = (moduleName, channel) => {
@@ -114,7 +126,9 @@ export function KymaModulesList(props) {
     return (
       <GenericList
         extraHeaderContent={[
-          <Button design="Emphasized">{t('common.buttons.add')}</Button>,
+          <Button design="Emphasized" onClick={handleShowAddModule}>
+            {t('common.buttons.add')}
+          </Button>,
         ]}
         entries={resource.spec.modules}
         headerRenderer={headerRenderer}
