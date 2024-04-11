@@ -80,9 +80,9 @@ export const DataSourcesContextProvider: FC<Props> = ({
   // refetch intervals
   const intervals = useRef<ReturnType<typeof setTimeout>[]>([]);
 
-  // clear timeouts on component unmount
+  // clear timeouts on component unmount and resource change
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => () => intervals.current.forEach(clearInterval), []);
+  useEffect(() => () => intervals.current.forEach(clearInterval), [children]);
 
   const buildUrl = (
     dataSource: DataSource,
@@ -170,15 +170,19 @@ export const DataSourcesContextProvider: FC<Props> = ({
       path.startsWith('$' + dataSourceName),
     );
   };
+  console.log(intervals);
 
   const requestRelatedResource = (resource: any, dataSourceName: string) => {
     const dataSource = dataSources[dataSourceName];
-
+    console.log(resource);
+    console.log(dataSource);
+    console.log(dataSourcesDict.current[dataSourceName]);
+    console.log(intervals);
     if (
       !dataSourcesDict.current[dataSourceName] ||
-      (dataSourcesDict.current[dataSourceName].rootName !==
-        resource?.metadata?.name &&
-        dataSourcesDict.current[dataSourceName]?.filter !== dataSource?.filter)
+      dataSourcesDict.current[dataSourceName].rootName !==
+        resource?.metadata?.name ||
+        dataSourcesDict.current[dataSourceName]?.filter !== dataSource?.filter
     ) {
       // mark dataSource as fetched
       dataSourcesDict.current[dataSourceName] = {
@@ -192,19 +196,22 @@ export const DataSourcesContextProvider: FC<Props> = ({
         data: { loading: true },
         firstFetch,
       });
-
+      console.log(dataSourceName);
       const REFETCH_INTERVAL = 6000;
+      //intervals.current.forEach(clearInterval)
       intervals.current.push(
         setInterval(
           () => fetchResource(dataSource, dataSourceName, resource),
           REFETCH_INTERVAL,
         ),
       );
-
+      console.log(firstFetch);
       return firstFetch;
     } else if (store?.[dataSourceName]?.loading) {
+      console.log(store?.[dataSourceName]?.firstFetch);
       return store?.[dataSourceName]?.firstFetch;
     } else {
+      console.log(Promise.resolve(store?.[dataSourceName]?.data));
       return Promise.resolve(store?.[dataSourceName]?.data);
     }
   };
