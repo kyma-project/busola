@@ -13,12 +13,16 @@ import { spacing } from '@ui5/webcomponents-react-base';
 function getValue(storeKeys, resource) {
   let value = resource;
   const keys = storeKeys.toJS();
-  keys.forEach(key => (value = value?.[key]));
+  keys.forEach(key => {
+    return (value = value?.[key]);
+  });
   return value;
 }
 
-function formatValue(value, language) {
-  if (language === 'yaml') {
+function formatValue(value, language, formatAsString) {
+  if (language === 'json' && !formatAsString) {
+    return JSON.stringify(value, null, 2);
+  } else if (language === 'yaml') {
     return typeof value === 'undefined' ? '' : jsyaml.dump(value);
   } else {
     return value;
@@ -52,13 +56,18 @@ export function MonacoRenderer({
   });
 
   const language = getLanguage(jsonata, schema);
-  const formattedValue = formatValue(value, language);
+  const formatAsString = schema.get('formatAsString') ?? false;
+  const formattedValue = formatValue(value, language, formatAsString);
   const defaultOpen = schema.get('defaultExpanded') ?? false;
 
   const handleChange = useCallback(
     value => {
       let parsedValue = value;
-      if (language === 'yaml') {
+      if (language === 'json' && !formatAsString) {
+        try {
+          parsedValue = JSON.parse(value);
+        } catch (e) {}
+      } else if (language === 'yaml') {
         try {
           parsedValue = jsyaml.load(value);
         } catch (e) {}
