@@ -1,15 +1,19 @@
 .machine-info__card {
   max-width: 650px;
-
-  .cluster-overview__details-grid {
-    grid-template-columns: repeat(2, minmax(170px, max-content));
-  }
 }
 
 .node-details-container {
   display: grid;
   grid-template-columns: 100%;
   gap: 1rem;
+}
+
+@container (min-width: 600px) {
+  .machine-info__card {
+    .cluster-overview__details-grid {
+      grid-template-columns: repeat(2, minmax(170px, max-content));
+    }
+  }
 }
 
 @container (min-width: 900px) {
