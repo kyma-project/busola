@@ -13,6 +13,10 @@ const KymaModulesCreate = React.lazy(() =>
   import('../../components/KymaModules/KymaModulesCreate'),
 );
 
+const KymaModulesAddModule = React.lazy(() =>
+  import('../../components/KymaModules/KymaModulesAddModule'),
+);
+
 const ColumnWraper = () => {
   const layoutState = useRecoilValue(columnLayoutState);
 
@@ -21,7 +25,9 @@ const ColumnWraper = () => {
       style={{ height: '100%' }}
       layout={layoutState?.layout || 'OneColumn'}
       startColumn={<div className="column-content">{<KymaModulesList />}</div>}
-      midColumn={<div className="column-content">{<KymaModulesCreate />}</div>}
+      midColumn={
+        <div className="column-content">{<KymaModulesAddModule />}</div>
+      }
     />
   );
 };
