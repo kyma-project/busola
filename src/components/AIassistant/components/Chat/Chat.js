@@ -41,7 +41,7 @@ export default function Chat() {
 
   const sendPrompt = prompt => {
     setErrorOccured(false);
-    addMessage('user', prompt, false);
+    addMessage('user', { step: 'output', result: prompt }, false);
     getChatResponse({ prompt, handleSuccess, handleError });
     addMessage('ai', null, true);
   };
@@ -100,7 +100,7 @@ export default function Chat() {
                   suggestions={
                     message.suggestions ?? [
                       'test123123123123123xyzxyzuwquxzytsabcde123456',
-                      'Throw an error',
+                      "Hey, how's it going?",
                       'What is your favorite football team?',
                     ]
                   }

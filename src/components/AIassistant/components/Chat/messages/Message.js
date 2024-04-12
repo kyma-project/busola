@@ -4,6 +4,12 @@ import CodePanel from './CodePanel';
 import './Message.scss';
 
 export default function Message({ className, message, isLoading }) {
+  if (typeof message === 'string') {
+    const jsonMessage = JSON.parse(message);
+    message = jsonMessage;
+  }
+
+  message = message?.result;
   const segmentedText = segmentMarkdownText(message);
   return (
     <div className={'message ' + className}>

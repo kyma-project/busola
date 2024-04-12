@@ -42,7 +42,7 @@ export default function AIOpener({ namespace, resourceType, resourceName }) {
   const fetchSuggestions = async () => {
     setErrorOccured(false);
     setPopoverOpen(true);
-    if (suggestions.length === 0) {
+    if (!isLoading && suggestions.length === 0) {
       setIsLoading(true);
       const promptSuggestions = await getPromptSuggestions({
         namespace,
