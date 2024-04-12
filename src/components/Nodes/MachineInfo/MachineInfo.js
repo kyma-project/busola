@@ -1,9 +1,7 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-
 import './MachineInfo.scss';
-import { Card, CardHeader } from '@ui5/webcomponents-react';
+import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
+import ResourceDetailsCard from 'shared/components/ResourceDetails/ResourceDetailsCard';
 
 export function MachineInfo({ nodeInfo, capacity }) {
   const formattedMemory =
@@ -11,38 +9,42 @@ export function MachineInfo({ nodeInfo, capacity }) {
   const { t } = useTranslation();
 
   return (
-    <Card
-      className="machine-info__card"
-      header={<CardHeader titleText={t('machine-info.title')} />}
-    >
-      <div className="machine-info__body">
-        <LayoutPanelRow
-          name={t('machine-info.operating-system')}
-          value={`${nodeInfo.operatingSystem} (${nodeInfo.osImage})`}
-        />
-        <LayoutPanelRow
-          name={t('machine-info.architecture-cpus')}
-          value={`${nodeInfo.architecture}, ${capacity.cpu} ${t(
-            'machine-info.cpus',
-          )}`}
-        />
-        <LayoutPanelRow
-          name={t('machine-info.pods-capacity')}
-          value={capacity.pods}
-        />
-        <LayoutPanelRow
-          name={t('machine-info.memory')}
-          value={`${formattedMemory} ${t('machine-info.gib')}`}
-        />
-        <LayoutPanelRow
-          name={t('machine-info.kube-proxy-version')}
-          value={nodeInfo.kubeProxyVersion}
-        />
-        <LayoutPanelRow
-          name={t('machine-info.kubelet-version')}
-          value={nodeInfo.kubeletVersion}
-        />
-      </div>
-    </Card>
+    <ResourceDetailsCard
+      wrapperClassname="resource-overview__details-wrapper"
+      className="machine-info__card "
+      titleText={t('machine-info.title')}
+      content={
+        <>
+          <DynamicPageComponent.Column
+            title={t('machine-info.operating-system')}
+          >
+            {`${nodeInfo.operatingSystem} (${nodeInfo.osImage})`}
+          </DynamicPageComponent.Column>
+          <DynamicPageComponent.Column
+            title={t('machine-info.architecture-cpus')}
+          >
+            {`${nodeInfo.architecture}, ${capacity.cpu} ${t(
+              'machine-info.cpus',
+            )}`}
+          </DynamicPageComponent.Column>
+          <DynamicPageComponent.Column title={t('machine-info.pods-capacity')}>
+            {capacity.pods}
+          </DynamicPageComponent.Column>
+          <DynamicPageComponent.Column title={t('machine-info.memory')}>
+            {`${formattedMemory} ${t('machine-info.gib')}`}
+          </DynamicPageComponent.Column>
+          <DynamicPageComponent.Column
+            title={t('machine-info.kube-proxy-version')}
+          >
+            {nodeInfo.kubeProxyVersion}
+          </DynamicPageComponent.Column>
+          <DynamicPageComponent.Column
+            title={t('machine-info.kubelet-version')}
+          >
+            {nodeInfo.kubeletVersion}
+          </DynamicPageComponent.Column>
+        </>
+      }
+    />
   );
 }

@@ -1,11 +1,12 @@
-.machine-info__body > * {
-  grid-template-columns: 1fr 1fr !important;
-  padding-left: 1rem;
-  & > :first-child {
-    color: var(--sapNeutralColor) !important;
-  }
+.node-details-container {
+  display: grid;
+  grid-template-columns: 100%;
+  gap: 1rem;
 }
 
-.machine-info__card {
-  max-width: 650px;
+@container (min-width: 900px) {
+  .node-details-container {
+    grid-template-columns: fit-content(100%) fit-content(100%);
+    gap: 0;
+  }
 }
