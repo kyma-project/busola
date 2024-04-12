@@ -195,7 +195,6 @@ export const DataSourcesContextProvider: FC<Props> = ({
 
       const REFETCH_INTERVAL = 6000;
       intervals.current.forEach(clearInterval);
-      console.log('CLEAR');
       intervals.current.push(
         setInterval(
           () => fetchResource(dataSource, dataSourceName, resource),
