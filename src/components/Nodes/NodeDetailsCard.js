@@ -14,6 +14,7 @@ export function NodeDetailsCard({ node, loading, error }) {
 
   return (
     <ResourceDetailsCard
+      wrapperClassname="resource-overview__details-wrapper"
       titleText={t('cluster-overview.headers.metadata')}
       content={
         <>
