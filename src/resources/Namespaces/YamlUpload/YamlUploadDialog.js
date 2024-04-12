@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useRef, useState } from 'react';
-import { Bar, Button, Dialog } from '@ui5/webcomponents-react';
+import { Bar, Button, Dialog, FlexBox } from '@ui5/webcomponents-react';
 import { isEqual } from 'lodash';
 
 import { YamlResourcesList } from './YamlResourcesList';
@@ -124,30 +124,17 @@ export function YamlUploadDialog() {
       className="yaml-upload-modal__dialog"
     >
       <Suspense fallback={<Spinner />}>
-        <div className="yaml-upload-modal__layout">
+        <FlexBox>
           <YamlUpload
             resourcesData={resourcesData}
             setResourcesData={updateYamlContent}
             setLastOperationState={setLastOperationState}
           />
-          <div
-            className={'yaml-upload-modal__info'}
-            style={spacing.sapUiTinyMarginBegin}
-          >
-            <p className="description" style={spacing.sapUiSmallMargin}>
-              <Trans
-                i18nKey={'upload-yaml.info'}
-                values={{ namespace: defaultNamespace }}
-              >
-                <span style={{ fontWeight: 'bold' }}></span>
-              </Trans>
-            </p>
-            <YamlResourcesList
-              resourcesData={resourcesWithStatuses}
-              namespace={namespaceId}
-            />
-          </div>
-        </div>
+          <YamlResourcesList
+            resourcesData={resourcesWithStatuses}
+            namespace={namespaceId}
+          />
+        </FlexBox>
       </Suspense>
     </Dialog>
   );
