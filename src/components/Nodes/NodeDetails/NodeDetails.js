@@ -1,7 +1,7 @@
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useTranslation } from 'react-i18next';
 import { useNodeQuery } from '../nodeQueries';
-import { NodeDetailsHeader } from '../NodeDetailsHeader';
+import { NodeDetailsCard } from '../NodeDetailsCard';
 import { MachineInfo } from '../MachineInfo/MachineInfo';
 import { NodeResources } from '../NodeResources/NodeResources';
 import { EventsList } from 'shared/components/EventsList';
@@ -11,6 +11,7 @@ import { spacing } from '@ui5/webcomponents-react-base';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { Title } from '@ui5/webcomponents-react';
 import { createPortal } from 'react-dom';
+import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 
 export default function NodeDetails({ nodeName }) {
   const { data, error, loading } = useNodeQuery(nodeName);
@@ -25,18 +26,37 @@ export default function NodeDetails({ nodeName }) {
     />
   );
   return (
-    <div className="node-details">
-      <NodeDetailsHeader
-        nodeName={nodeName}
-        node={data?.node}
-        error={error}
-        loading={loading}
+    <>
+      <DynamicPageComponent
+        title={nodeName}
+        className="node-details"
         content={
           <>
             {data && (
               <>
                 <Title
-                  level="H4"
+                  level="H3"
+                  style={{
+                    ...spacing.sapUiMediumMarginBegin,
+                    ...spacing.sapUiMediumMarginTopBottom,
+                  }}
+                >
+                  {t('common.headers.node-details')}
+                </Title>
+                <div className={'node-details-container'}>
+                  <NodeDetailsCard
+                    nodeName={nodeName}
+                    node={data?.node}
+                    error={error}
+                    loading={loading}
+                  />
+                  <MachineInfo
+                    nodeInfo={data.node.status.nodeInfo}
+                    capacity={data.node.status.capacity}
+                  />
+                </div>
+                <Title
+                  level="H3"
                   style={{
                     ...spacing.sapUiMediumMarginBegin,
                     ...spacing.sapUiMediumMarginTop,
@@ -50,10 +70,6 @@ export default function NodeDetails({ nodeName }) {
                   style={spacing.sapUiSmallMarginBeginEnd}
                 >
                   <NodeResources {...data} />
-                  <MachineInfo
-                    nodeInfo={data.node.status.nodeInfo}
-                    capacity={data.node.status.capacity}
-                  />
                 </div>
                 {Events}
               </>
@@ -62,6 +78,6 @@ export default function NodeDetails({ nodeName }) {
         }
       />
       {createPortal(<YamlUploadDialog />, document.body)}
-    </div>
+    </>
   );
 }

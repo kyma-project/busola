@@ -277,6 +277,7 @@ function Resource({
 
   const resourceDetailsCard = (
     <ResourceDetailsCard
+      titleText={t('cluster-overview.headers.metadata')}
       wrapperClassname="resource-overview__details-wrapper"
       content={
         <>
