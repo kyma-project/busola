@@ -36,8 +36,7 @@ function readChunk(reader, decoder, handleSuccess, handleError) {
       if (done) {
         return;
       }
-      const chunk = decoder.decode(value, { stream: true });
-      console.log(chunk);
+      const chunk = JSON.parse(decoder.decode(value, { stream: true }));
       handleSuccess(chunk);
       readChunk(reader, decoder, handleSuccess, handleError);
     })

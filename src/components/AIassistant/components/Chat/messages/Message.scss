@@ -2,6 +2,27 @@
   max-width: 240px;
   padding: 12px;
 
+  &.loading {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .loading-item {
+      gap: 8px;
+
+      .text {
+        flex-grow: 1;
+      }
+
+      .loading-status {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 35px;
+      }
+    }
+  }
+
   .bold {
     font-weight: bold;
     font-size: 1rem;

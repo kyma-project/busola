@@ -18,19 +18,20 @@ export default function Chat() {
   const [errorOccured, setErrorOccured] = useState(false);
   const initialPrompt = useRecoilValue(initialPromptState);
 
-  const addMessage = (author, message, isLoading) => {
-    setChatHistory(prevItems => [...prevItems, { author, message, isLoading }]);
+  const addMessage = (author, messageChunks, isLoading) => {
+    setChatHistory(prevItems =>
+      prevItems.concat({ author, messageChunks, isLoading }),
+    );
   };
 
   const handleSuccess = response => {
-    setChatHistory(prevItems => {
-      const newArray = [...prevItems];
-      newArray[newArray.length - 1] = {
+    setChatHistory(prevMessages => {
+      const [latestMessage] = prevMessages.slice(-1);
+      return prevMessages.slice(0, -1).concat({
         author: 'ai',
-        message: response,
-        isLoading: false,
-      };
-      return newArray;
+        messageChunks: latestMessage.messageChunks.concat(response),
+        isLoading: response?.step !== 'output',
+      });
     });
   };
 
@@ -41,9 +42,9 @@ export default function Chat() {
 
   const sendPrompt = prompt => {
     setErrorOccured(false);
-    addMessage('user', { step: 'output', result: prompt }, false);
+    addMessage('user', [{ step: 'output', result: prompt }], false);
     getChatResponse({ prompt, handleSuccess, handleError });
-    addMessage('ai', null, true);
+    addMessage('ai', [], true);
   };
 
   const onSubmitInput = () => {
@@ -90,7 +91,7 @@ export default function Chat() {
               <Message
                 key={index}
                 className="left-aligned"
-                message={message.message}
+                messageChunks={message.messageChunks}
                 isLoading={message.isLoading}
               />
               {index === chatHistory.length - 1 && !message.isLoading && (
@@ -111,7 +112,7 @@ export default function Chat() {
             <Message
               key={index}
               className="right-aligned"
-              message={message.message}
+              messageChunks={message.messageChunks}
             />
           );
         })}

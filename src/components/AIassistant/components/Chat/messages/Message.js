@@ -1,19 +1,45 @@
-import { BusyIndicator, Text } from '@ui5/webcomponents-react';
+import {
+  BusyIndicator,
+  FlexBox,
+  ObjectStatus,
+  Text,
+} from '@ui5/webcomponents-react';
 import { segmentMarkdownText } from 'components/AIassistant/utils/formatMarkdown';
 import CodePanel from './CodePanel';
 import './Message.scss';
 
-export default function Message({ className, message, isLoading }) {
-  if (typeof message === 'string') {
-    const jsonMessage = JSON.parse(message);
-    message = jsonMessage;
+export default function Message({ className, messageChunks, isLoading }) {
+  if (isLoading) {
+    return (
+      <div className={'message loading ' + className}>
+        {messageChunks.length > 0 ? (
+          messageChunks.map((chunk, index) => (
+            <FlexBox
+              justifyContent="SpaceBetween"
+              alignItems="Center"
+              className="loading-item"
+              key={index}
+            >
+              <Text className="text">{chunk?.result}</Text>
+              <div className="loading-status">
+                {index !== messageChunks.length - 1 ? (
+                  <ObjectStatus state="Success" showDefaultIcon />
+                ) : (
+                  <BusyIndicator active size="Small" delay={0} />
+                )}
+              </div>
+            </FlexBox>
+          ))
+        ) : (
+          <BusyIndicator active size="Medium" delay={0} />
+        )}
+      </div>
+    );
   }
 
-  message = message?.result;
-  const segmentedText = segmentMarkdownText(message);
+  const segmentedText = segmentMarkdownText(messageChunks.slice(-1)[0]?.result);
   return (
     <div className={'message ' + className}>
-      {isLoading && <BusyIndicator active size="Medium" delay={0} />}
       {segmentedText && (
         <Text className="text" renderWhitespace hyphenated>
           {segmentedText.map((segment, index) =>
