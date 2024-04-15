@@ -19,6 +19,8 @@ import { useUrl } from 'hooks/useUrl';
 import { useNavigate } from 'react-router-dom';
 
 import './NamespaceCreate.scss';
+import { useSetRecoilState } from 'recoil';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 const ISTIO_INJECTION_LABEL = 'istio-injection';
 const ISTIO_INJECTION_ENABLED = 'enabled';
@@ -65,6 +67,8 @@ export default function NamespaceCreate({
   const [withMemory, setWithMemory] = useState(false);
   const [memory, setMemory] = useState(createResourceQuotaTemplate({}));
 
+  const setLayoutColumn = useSetRecoilState(columnLayoutState);
+
   const createLimitResource = useCreateResource({
     singularName: 'LimitRange',
     pluralKind: 'LimitRanges',
@@ -102,6 +106,13 @@ export default function NamespaceCreate({
   }, [namespace.metadata?.name]);
 
   async function afterNamespaceCreated() {
+    setLayoutColumn({
+      layout: 'OneColumn',
+      showCreate: null,
+      midColumn: null,
+      endColumn: null,
+    });
+
     if (!initialNamespace) {
       navigate(clusterUrl(`namespaces/${namespace.metadata?.name}`));
     }
