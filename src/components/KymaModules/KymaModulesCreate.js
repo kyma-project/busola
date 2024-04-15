@@ -12,7 +12,6 @@ export default function KymaModulesCreate({ resource, ...props }) {
       resource={resource}
       initialResource={resource}
       onlyYaml
-      readOnly
-    ></ResourceForm>
+    />
   );
 }

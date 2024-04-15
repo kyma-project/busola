@@ -198,7 +198,6 @@ export function KymaModulesList(props) {
         </>
       }
       createResourceForm={KymaModulesCreate}
-      disableEdit
       disableResourceDetailsCard
       disableDelete
       {...props}
