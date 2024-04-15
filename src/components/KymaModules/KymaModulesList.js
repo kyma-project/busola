@@ -19,12 +19,16 @@ import {
 } from 'components/KymaModules';
 import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
+import { useUrl } from 'hooks/useUrl';
+import pluralize from 'pluralize';
+import { Link } from 'shared/components/Link/Link';
 
 export function KymaModulesList(props) {
   const { t } = useTranslation();
 
   const [showTitleDescription, setShowTitleDescription] = useState(false);
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
+  const { namespaceUrl, clusterUrl } = useUrl();
 
   const resourceUrl =
     '/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas/default';
@@ -84,10 +88,29 @@ export function KymaModulesList(props) {
       t('kyma-modules.state'),
       t('kyma-modules.documentation'),
     ];
+
     const rowRenderer = resource => {
+      const path = findStatus(resource.name)?.resource?.metadata?.namespace
+        ? clusterUrl(
+            `namespaces/${
+              findStatus(resource.name)?.resource?.metadata?.namespace
+            }/${pluralize(
+              findStatus(resource.name)?.resource?.kind,
+            ).toLowerCase()}/${
+              findStatus(resource.name)?.resource?.metadata?.name
+            }`,
+          )
+        : clusterUrl(
+            `${pluralize(
+              findStatus(resource.name)?.resource?.kind,
+            ).toLowerCase()}/${
+              findStatus(resource.name)?.resource?.metadata?.name
+            }`,
+          );
+
       return [
         // Name
-        resource.name,
+        <Link url={path}>{resource.name}</Link>,
         // Beta
         checkBeta(
           findModule(
