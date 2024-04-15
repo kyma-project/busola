@@ -20,6 +20,24 @@
   margin-top: 10px;
 }
 
+.namespace-create {
+  .namespaces-name-yaml {
+    .resource-form__wrapper {
+      min-height: 350px !important;
+    }
+  }
+
+  .yaml-form {
+    overflow: auto;
+
+    ui5-panel {
+      &:last-of-type {
+        padding-bottom: 1px;
+      }
+    }
+  }
+}
+
 @media (min-width: 700px) {
   .additional-resource {
     display: grid;

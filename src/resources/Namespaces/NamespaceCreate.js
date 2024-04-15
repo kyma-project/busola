@@ -152,6 +152,7 @@ export default function NamespaceCreate({
         defaultOpen
         resource={namespace}
         setResource={setNamespace}
+        className="namespaces-name-yaml"
       >
         {defaultEditor}
       </ResourceForm.CollapsibleSection>
@@ -201,6 +202,7 @@ export default function NamespaceCreate({
         lockedKeys: [ISTIO_INJECTION_LABEL],
         lockedValues: [ISTIO_INJECTION_LABEL],
       }}
+      className="namespace-create"
     >
       {isIstioFeatureOn ? (
         <ResourceForm.FormField
