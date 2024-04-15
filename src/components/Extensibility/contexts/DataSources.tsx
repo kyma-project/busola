@@ -176,9 +176,9 @@ export const DataSourcesContextProvider: FC<Props> = ({
 
     if (
       !dataSourcesDict.current[dataSourceName] ||
-      (dataSourcesDict.current[dataSourceName].rootName !==
-        resource?.metadata?.name &&
-        dataSourcesDict.current[dataSourceName]?.filter !== dataSource?.filter)
+      dataSourcesDict.current[dataSourceName].rootName !==
+        resource?.metadata?.name ||
+      dataSourcesDict.current[dataSourceName]?.filter !== dataSource?.filter
     ) {
       // mark dataSource as fetched
       dataSourcesDict.current[dataSourceName] = {
@@ -194,6 +194,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
       });
 
       const REFETCH_INTERVAL = 6000;
+      intervals.current.forEach(clearInterval);
       intervals.current.push(
         setInterval(
           () => fetchResource(dataSource, dataSourceName, resource),
