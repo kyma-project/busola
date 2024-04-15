@@ -24,5 +24,17 @@
     .tab-container {
       height: calc(100vh - 60px - 1.4rem);
     }
+
+    .tab-container::part(content) {
+      width: 100%;
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    .tab-container.fullscreen::part(content) {
+      width: 60%;
+      margin-left: 20%;
+      margin-right: 20%;
+    }
   }
 }

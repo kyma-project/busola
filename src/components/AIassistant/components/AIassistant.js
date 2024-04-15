@@ -60,10 +60,12 @@ export default function AIassistant() {
         <TabContainer
           fixed
           contentBackgroundDesign="Transparent"
-          className="tab-container"
+          className={`tab-container${
+            showAssistant.fullScreen ? ' fullscreen' : ''
+          }`}
         >
           <Tab selected text={t('ai-assistant.tabs.chat')}>
-            <Chat />
+            <Chat isFullScreen={showAssistant.fullScreen} />
           </Tab>
           <Tab text={t('ai-assistant.tabs.page-insights')}>
             <PageInsights />

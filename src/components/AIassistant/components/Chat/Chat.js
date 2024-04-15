@@ -10,7 +10,7 @@ import ErrorMessage from './messages/ErrorMessage';
 import getChatResponse from 'components/AIassistant/api/getChatResponse';
 import './Chat.scss';
 
-export default function Chat() {
+export default function Chat({ isFullScreen }) {
   const { t } = useTranslation();
   const containerRef = useRef(null);
   const [inputValue, setInputValue] = useState('');
@@ -90,13 +90,14 @@ export default function Chat() {
             <>
               <Message
                 key={index}
-                className="left-aligned"
+                className={`left-aligned${isFullScreen ? ' fullscreen' : ''}`}
                 messageChunks={message.messageChunks}
                 isLoading={message.isLoading}
               />
               {index === chatHistory.length - 1 && !message.isLoading && (
                 <Bubbles
                   key={index + '.2'}
+                  className={isFullScreen ? 'fullscreen' : ''}
                   onClick={sendPrompt}
                   suggestions={
                     message.suggestions ?? [
@@ -111,7 +112,7 @@ export default function Chat() {
           ) : (
             <Message
               key={index}
-              className="right-aligned"
+              className={`right-aligned${isFullScreen ? ' fullscreen' : ''}`}
               messageChunks={message.messageChunks}
             />
           );
