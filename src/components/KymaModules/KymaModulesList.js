@@ -17,7 +17,7 @@ import {
   apiGroup,
   apiVersion,
 } from 'components/KymaModules';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useUrl } from 'hooks/useUrl';
 import pluralize from 'pluralize';
@@ -27,8 +27,8 @@ export function KymaModulesList(props) {
   const { t } = useTranslation();
 
   const [showTitleDescription, setShowTitleDescription] = useState(false);
-  const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const { namespaceUrl, clusterUrl } = useUrl();
+  const setLayoutColumn = useSetRecoilState(columnLayoutState);
+  const { clusterUrl } = useUrl();
 
   const resourceUrl =
     '/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas/default';
@@ -169,6 +169,7 @@ export function KymaModulesList(props) {
 
   return (
     <ResourceDetails
+      layoutNumber="StartColumn"
       headerContent={
         <DynamicPageHeader>
           <Label showColon>{t('kyma-modules.release-channel')}</Label>
