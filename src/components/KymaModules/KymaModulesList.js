@@ -163,6 +163,9 @@ export function KymaModulesList(props) {
         disableHiding={true}
         displayArrow={false}
         title={'Modules'}
+        sortBy={{
+          name: (a, b) => a.name?.localeCompare(b.name),
+        }}
       />
     );
   };
