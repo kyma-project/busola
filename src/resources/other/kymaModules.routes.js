@@ -6,6 +6,7 @@ import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { columnLayoutState } from 'state/columnLayoutAtom';
+import { useUrl } from 'hooks/useUrl';
 
 const KymaModulesList = React.lazy(() =>
   import('../../components/KymaModules/KymaModulesList'),
@@ -17,6 +18,7 @@ const KymaModulesAddModule = React.lazy(() =>
 
 const ColumnWraper = () => {
   const layoutState = useRecoilValue(columnLayoutState);
+  const { clusterUrl } = useUrl();
 
   return (
     <FlexibleColumnLayout
@@ -29,6 +31,7 @@ const ColumnWraper = () => {
             <ResourceCreate
               title={'Add Modules'}
               confirmText={'Save'}
+              layoutCloseCreateUrl={clusterUrl('kymamodules')}
               renderForm={renderProps => {
                 return (
                   <ErrorBoundary>
