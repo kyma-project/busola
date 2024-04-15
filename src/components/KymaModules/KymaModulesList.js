@@ -46,6 +46,10 @@ export function KymaModulesList(props) {
       midColumn: null,
       endColumn: null,
       layout: 'TwoColumnsMidExpanded',
+      showCreate: {
+        resourceType: 'kymamodules',
+        resourceUrl: resourceUrl,
+      },
     });
   };
 

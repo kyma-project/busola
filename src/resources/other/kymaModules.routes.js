@@ -2,15 +2,13 @@ import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import React, { Suspense } from 'react';
 import { Route } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
+import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
+import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
 const KymaModulesList = React.lazy(() =>
   import('../../components/KymaModules/KymaModulesList'),
-);
-
-const KymaModulesCreate = React.lazy(() =>
-  import('../../components/KymaModules/KymaModulesCreate'),
 );
 
 const KymaModulesAddModule = React.lazy(() =>
@@ -26,7 +24,21 @@ const ColumnWraper = () => {
       layout={layoutState?.layout || 'OneColumn'}
       startColumn={<div className="column-content">{<KymaModulesList />}</div>}
       midColumn={
-        <div className="column-content">{<KymaModulesAddModule />}</div>
+        <div className="column-content">
+          {
+            <ResourceCreate
+              title={'Add Modules'}
+              confirmText={'Save'}
+              renderForm={renderProps => {
+                return (
+                  <ErrorBoundary>
+                    <KymaModulesAddModule {...renderProps} />
+                  </ErrorBoundary>
+                );
+              }}
+            />
+          }
+        </div>
       }
     />
   );
