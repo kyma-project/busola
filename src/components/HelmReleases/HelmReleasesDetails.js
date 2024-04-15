@@ -99,6 +99,7 @@ function HelmReleasesDetails({ releaseName, namespace }) {
               <AIOpener
                 namespace={releaseSecret?.metadata?.namespace}
                 resourceType={releaseSecret?.kind}
+                groupVersion={releaseSecret?.apiVersion}
                 resourceName={releaseSecret?.metadata?.name}
               />
             </DynamicPageComponent.Column>

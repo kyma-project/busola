@@ -4,7 +4,7 @@ export default async function getChatResponse({
   handleError,
 }) {
   const url =
-    'https://api-backend.c-5cb6076.stage.kyma.ondemand.com/api/v1/chat'; /*'http://127.0.0.1:5000/api/v1/chat';*/
+    'https://api-backend.c-5cb6076.stage.kyma.ondemand.com/api/v1/chat';
   const payload = { question: prompt, session_id: 'abcdef12345' };
 
   fetch(url, {

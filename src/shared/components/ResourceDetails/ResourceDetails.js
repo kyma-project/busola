@@ -373,6 +373,7 @@ function Resource({
               <AIOpener
                 namespace={resource?.metadata?.namespace}
                 resourceType={resource?.kind}
+                groupVersion={resource?.apiVersion}
                 resourceName={resource?.metadata?.name}
               />
             </FlexBox>

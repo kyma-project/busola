@@ -20,7 +20,12 @@ import getPromptSuggestions from 'components/AIassistant/api/getPromptSuggestion
 import { createPortal } from 'react-dom';
 import './AIOpener.scss';
 
-export default function AIOpener({ namespace, resourceType, resourceName }) {
+export default function AIOpener({
+  namespace,
+  resourceType,
+  groupVersion,
+  resourceName,
+}) {
   const { t } = useTranslation();
   const [showAssistant, setShowAssistant] = useRecoilState(
     showAIassistantState,
@@ -47,6 +52,7 @@ export default function AIOpener({ namespace, resourceType, resourceName }) {
       const promptSuggestions = await getPromptSuggestions({
         namespace,
         resourceType,
+        groupVersion,
         resourceName,
       });
       setIsLoading(false);

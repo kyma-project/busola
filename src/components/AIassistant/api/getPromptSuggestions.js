@@ -1,16 +1,20 @@
+import { extractApiGroup } from 'resources/Roles/helpers';
+
 export default async function getPromptSuggestions({
   namespace = '',
   resourceType = '',
+  groupVersion = '',
   resourceName = '',
 }) {
   try {
     const url =
-      'https://api-backend.c-5cb6076.stage.kyma.ondemand.com/api/v1/llm/init'; /*'http://127.0.0.1:5000/api/v1/llm/init';*/
-    const payload = {
-      page_type: 'deployments.apps',
-      session_id: 'abcdef12345',
-      namespace: namespace,
-    }; //`{"resource_type":"${resourceType}","resource_name":"${resourceName}","namespace":"${namespace}"}`
+      'https://api-backend.c-5cb6076.stage.kyma.ondemand.com/api/v1/llm/init';
+    const apiGroup = extractApiGroup(groupVersion);
+    const payload = JSON.parse(
+      `{"resource_type":"${resourceType.toLowerCase()}${
+        apiGroup.length ? `.${apiGroup}` : ''
+      }","resource_name":"${resourceName}","namespace":"${namespace}","session_id":"abcdef12345"}`,
+    );
 
     let { results } = await fetch(url, {
       headers: {
