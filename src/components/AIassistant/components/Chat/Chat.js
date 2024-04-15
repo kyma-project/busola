@@ -101,9 +101,9 @@ export default function Chat({ isFullScreen }) {
                   onClick={sendPrompt}
                   suggestions={
                     message.suggestions ?? [
-                      'test123123123123123xyzxyzuwquxzytsabcde123456',
-                      "Hey, how's it going?",
-                      'What is your favorite football team?',
+                      'What is the meaning of life?',
+                      'Where to buy cheap bitcoins?',
+                      'What should I do next?',
                     ]
                   }
                 />
