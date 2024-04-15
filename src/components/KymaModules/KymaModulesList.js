@@ -95,14 +95,14 @@ export function KymaModulesList(props) {
             `namespaces/${
               findStatus(resource.name)?.resource?.metadata?.namespace
             }/${pluralize(
-              findStatus(resource.name)?.resource?.kind,
+              findStatus(resource.name)?.resource?.kind || '',
             ).toLowerCase()}/${
               findStatus(resource.name)?.resource?.metadata?.name
             }`,
           )
         : clusterUrl(
             `${pluralize(
-              findStatus(resource.name)?.resource?.kind,
+              findStatus(resource.name)?.resource?.kind || '',
             ).toLowerCase()}/${
               findStatus(resource.name)?.resource?.metadata?.name
             }`,
