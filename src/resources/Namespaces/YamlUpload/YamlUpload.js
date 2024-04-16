@@ -6,6 +6,7 @@ import jsyaml from 'js-yaml';
 import { YamlFileUploader } from './YamlFileUploader';
 import { OPERATION_STATE_INITIAL } from './YamlUploadDialog';
 import { spacing } from '@ui5/webcomponents-react-base';
+import { FlexBox } from '@ui5/webcomponents-react';
 
 const isK8sResource = resource => {
   if (!resource) return true;
@@ -52,8 +53,7 @@ function YamlUpload({
   );
 
   return (
-    //when using 99%, the Monaco is more responsive.
-    <div style={{ width: '99%' }}>
+    <FlexBox style={{ gap: '1rem' }} direction={'Column'}>
       <YamlFileUploader
         onYamlContentAdded={val => {
           updateYamlContent(val);
@@ -61,16 +61,23 @@ function YamlUpload({
         }}
       />
       <p style={spacing.sapUiTinyMargin}>{t('upload-yaml.or-paste-here')}</p>
-      <Editor
-        autocompletionDisabled
-        height="60vh"
-        language="yaml"
-        value={yamlContentString ?? ''}
-        onChange={updateYamlContent}
-        onMount={setEditor}
-        error={error}
-      />
-    </div>
+      <div
+        className={'yaml-upload-modal__content'}
+        style={{
+          padding: '0.5rem',
+        }}
+      >
+        <Editor
+          autocompletionDisabled
+          height="60vh"
+          language="yaml"
+          value={yamlContentString ?? ''}
+          onChange={updateYamlContent}
+          onMount={setEditor}
+          error={error}
+        />
+      </div>
+    </FlexBox>
   );
 }
 

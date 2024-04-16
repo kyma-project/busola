@@ -70,7 +70,7 @@ export function YamlResourcesList({ resourcesData }) {
       return (
         <>
           <div
-            className={'yaml-upload-modal__info'}
+            className={'yaml-upload-modal__content'}
             style={spacing.sapUiTinyMarginBegin}
           >
             <FlexBox
@@ -109,7 +109,7 @@ export function YamlResourcesList({ resourcesData }) {
       return (
         <>
           <div
-            className={'yaml-upload-modal__info'}
+            className={'yaml-upload-modal__content'}
             style={spacing.sapUiTinyMarginBegin}
           >
             <FlexBox
