@@ -37,8 +37,8 @@ export function ResourceButton({
   const [name, nameError] = jsonata(structure.resource?.name);
   const [namespace, namespaceError] = jsonata(structure.resource?.namespace);
   const [kind, kindError] = jsonata(structure.resource?.kind);
-  const url = structure.resource?.url;
-
+  const customUrl = structure.resource?.customUrl;
+  console.log(customUrl);
   const jsonataError = nameError || namespaceError || kindError;
   if (jsonataError) {
     return t('extensibility.configuration-error', {
@@ -54,8 +54,8 @@ export function ResourceButton({
       inline={true}
       onClick={() =>
         navigate(
-          url
-            ? clusterUrl(url)
+          customUrl
+            ? clusterUrl(customUrl)
             : resourceUrl(
                 {
                   kind,
