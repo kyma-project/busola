@@ -1453,9 +1453,10 @@ top-nav:
     preferences: $t(navigation.preferences.title)
 upload-yaml:
   uploaded-resources: Uploaded Resources
-  info: You can upload multiple resources, separated in YAML by "---".
-    If a resource already exists, it will be updated, otherwise a new one will be created.
-    If the Namespace is not given, the "<0>{{namespace}}</0>" one will be used.
+  info: You can upload multiple resources, separated by “---” in your YAML file. 
+    If the resource already exists, it will be updated. 
+    Otherwise, a new one is created. 
+    If you don’t specify a namespace, the "<0>{{namespace}}</0>" is used.
   labels:
     validate-resources: 'Validate resources:'
   messages:

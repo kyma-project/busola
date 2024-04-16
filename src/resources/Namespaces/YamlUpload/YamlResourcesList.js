@@ -1,11 +1,7 @@
 import React from 'react';
-import { FlexBox, Icon, Switch, Text, Title } from '@ui5/webcomponents-react';
+import { FlexBox, Icon, Title } from '@ui5/webcomponents-react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import {
-  getExtendedValidateResourceState,
-  validateResourcesState,
-} from 'state/preferences/validateResourcesAtom';
+import { useRecoilValue } from 'recoil';
 
 import {
   STATE_CREATED,
@@ -18,20 +14,14 @@ import { FilteredResourcesDetails } from './FilteredResourcesDetails/FilteredRes
 import './YamlResourcesList.scss';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { activeNamespaceIdState } from '../../../state/activeNamespaceIdAtom';
+import { SeparatorLine } from './SeparatorLine';
+import { ValidationSwitch } from './ValidationSwitch';
 
 export function YamlResourcesList({ resourcesData }) {
   const { t } = useTranslation();
-  const [validateResources, setValidateResources] = useRecoilState(
-    validateResourcesState,
-  );
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const defaultNamespace = namespaceId || 'default';
 
-  const {
-    isEnabled,
-    choosePolicies,
-    policies: selectedPolicies = [],
-  } = getExtendedValidateResourceState(validateResources);
   const filteredResources = resourcesData?.filter(
     resource => resource !== null,
   );
@@ -79,72 +69,74 @@ export function YamlResourcesList({ resourcesData }) {
     if (showResourcesToUpload()) {
       return (
         <>
-          <FlexBox
-            style={spacing.sapUiSmallMarginBeginEnd}
-            direction={'Column'}
+          <div
+            className={'yaml-upload-modal__info'}
+            style={spacing.sapUiTinyMarginBegin}
           >
-            <Text className="additional-info">
-              <Trans
-                i18nKey={'upload-yaml.info'}
-                values={{ namespace: defaultNamespace }}
-              >
-                <span style={{ fontWeight: 'bold' }}></span>
-              </Trans>
-            </Text>
-            <Title level="H4">{t('upload-yaml.uploaded-resources')}</Title>
-            <hr className={'yaml_resource_list__separation-line'} />
-            <div className="validate-resources">
-              <p>{t('upload-yaml.labels.validate-resources')}</p>
-              <Switch
-                onChange={() =>
-                  setValidateResources({
-                    isEnabled: !isEnabled,
-                    choosePolicies,
-                    policies: selectedPolicies,
-                  })
-                }
-                checked={isEnabled}
-              />
-            </div>
-            <p>
-              <Trans
-                i18nKey={'upload-yaml.you-will-create'}
-                values={{ count: filteredResources.length }}
-              >
-                <span style={{ fontWeight: 'bold' }}></span>
-              </Trans>
-            </p>
-            <FilteredResourcesDetails filteredResources={filteredResources} />
-          </FlexBox>
+            <FlexBox
+              direction={'Column'}
+              justifyContent={'SpaceBetween'}
+              style={{
+                gap: '1rem',
+                ...spacing.sapUiSmallMargin,
+              }}
+            >
+              <p>
+                <Trans
+                  i18nKey={'upload-yaml.info'}
+                  values={{ namespace: defaultNamespace }}
+                >
+                  <span style={{ fontWeight: 'bold' }}></span>
+                </Trans>
+              </p>
+              <Title level="H4">{t('upload-yaml.uploaded-resources')}</Title>
+              <SeparatorLine />
+              <ValidationSwitch />
+              <p>
+                <Trans
+                  i18nKey={'upload-yaml.you-will-create'}
+                  values={{ count: filteredResources.length }}
+                >
+                  <span style={{ fontWeight: 'bold' }}></span>
+                </Trans>
+              </p>
+              <FilteredResourcesDetails filteredResources={filteredResources} />
+            </FlexBox>
+          </div>
         </>
       );
     } else {
       return (
         <>
-          <div id="upload-progress-bar-container">
-            <div
-              id="upload-progress-bar"
-              style={{ width: `${getPercentage()}%` }}
-            />
-            <div id="upload-progress-bar-label">{getLabel()}</div>
+          <div
+            className={'yaml-upload-modal__info'}
+            style={spacing.sapUiTinyMarginBegin}
+          >
+            <div id="upload-progress-bar-container">
+              <div
+                id="upload-progress-bar"
+                style={{ width: `${getPercentage()}%` }}
+              />
+              <div id="upload-progress-bar-label">{getLabel()}</div>
+            </div>
+            <ul style={spacing.sapUiTinyMarginTop}>
+              {filteredResources.map(r => (
+                <li
+                  key={`${r?.value?.kind}-${r?.value?.metadata?.name}`}
+                  style={spacing.sapUiTinyMarginBegin}
+                >
+                  <Icon
+                    className={`status status-${getIcon(r?.status)}`}
+                    name={getIcon(r?.status)}
+                    aria-label="status"
+                  />
+                  {String(r?.value?.kind)} {String(r?.value?.metadata?.name)} -{' '}
+                  {getStatus(r?.status)}
+                  <p>{r?.message}</p>
+                </li>
+              ))}
+            </ul>
           </div>
-          <ul style={spacing.sapUiTinyMarginTop}>
-            {filteredResources.map(r => (
-              <li
-                key={`${r?.value?.kind}-${r?.value?.metadata?.name}`}
-                style={spacing.sapUiTinyMarginBegin}
-              >
-                <Icon
-                  className={`status status-${getIcon(r?.status)}`}
-                  name={getIcon(r?.status)}
-                  aria-label="status"
-                />
-                {String(r?.value?.kind)} {String(r?.value?.metadata?.name)} -{' '}
-                {getStatus(r?.status)}
-                <p>{r?.message}</p>
-              </li>
-            ))}
-          </ul>
         </>
       );
     }

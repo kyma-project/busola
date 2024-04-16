@@ -24,6 +24,7 @@ import { useLoadingDebounce } from 'shared/hooks/useLoadingDebounce';
 
 import { spacing } from '@ui5/webcomponents-react-base';
 import './FilteredResourcesDetails.scss';
+import { SeparatorLine } from '../SeparatorLine';
 
 const useNamespaceWarning = resource => {
   const { t } = useTranslation();
@@ -87,7 +88,7 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
             />
             <ValidationWarning warning={warning.message} />
           </FlexBox>
-          <hr className={'yaml_resource_list__separation-line'} />
+          <SeparatorLine />
         </>
       ))}
     </>
@@ -104,19 +105,23 @@ const ValidationResult = ({ resource }) => {
     useValidateResourceBySchema(debounced, validationSchemas),
     useNamespaceWarning(debounced),
   ];
-  const statusIcon =
+  const statusIcon = validateResources.isEnabled ? (
     warnings.flat().length !== 0 ? (
       <ObjectStatus showDefaultIcon state={ValueState.Warning} />
     ) : (
       <ObjectStatus showDefaultIcon state={ValueState.Success} />
-    );
+    )
+  ) : (
+    <div></div>
+  ); //empty div to overwrite overflow button
 
   return (
     <>
       <Panel
         collapsed={true}
+        fixed={!validateResources.isEnabled}
         header={
-          <Toolbar>
+          <Toolbar toolbarStyle={'Clear'}>
             {resource?.kind + ' ' + resource?.metadata?.name}
             <ToolbarSpacer />
             {statusIcon}
