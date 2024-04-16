@@ -44,7 +44,9 @@ export default function AIOpener({
 
   useEffect(() => {
     if (authData) {
-      setSessionID(CryptoJS.SHA256(authData).toString(CryptoJS.enc.Hex));
+      setSessionID(
+        CryptoJS.SHA256(JSON.stringify(authData)).toString(CryptoJS.enc.Hex),
+      );
     }
   }, [authData, sessionID, setSessionID]);
 
