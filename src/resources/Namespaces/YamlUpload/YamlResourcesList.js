@@ -112,30 +112,39 @@ export function YamlResourcesList({ resourcesData }) {
             className={'yaml-upload-modal__info'}
             style={spacing.sapUiTinyMarginBegin}
           >
-            <div id="upload-progress-bar-container">
-              <div
-                id="upload-progress-bar"
-                style={{ width: `${getPercentage()}%` }}
-              />
-              <div id="upload-progress-bar-label">{getLabel()}</div>
-            </div>
-            <ul style={spacing.sapUiTinyMarginTop}>
-              {filteredResources.map(r => (
-                <li
-                  key={`${r?.value?.kind}-${r?.value?.metadata?.name}`}
-                  style={spacing.sapUiTinyMarginBegin}
-                >
-                  <Icon
-                    className={`status status-${getIcon(r?.status)}`}
-                    name={getIcon(r?.status)}
-                    aria-label="status"
-                  />
-                  {String(r?.value?.kind)} {String(r?.value?.metadata?.name)} -{' '}
-                  {getStatus(r?.status)}
-                  <p>{r?.message}</p>
-                </li>
-              ))}
-            </ul>
+            <FlexBox
+              direction={'Column'}
+              justifyContent={'SpaceBetween'}
+              style={{
+                gap: '1rem',
+                ...spacing.sapUiSmallMargin,
+              }}
+            >
+              <div id="upload-progress-bar-container">
+                <div
+                  id="upload-progress-bar"
+                  style={{ width: `${getPercentage()}%` }}
+                />
+                <div id="upload-progress-bar-label">{getLabel()}</div>
+              </div>
+              <ul style={spacing.sapUiTinyMarginTop}>
+                {filteredResources.map(r => (
+                  <li
+                    key={`${r?.value?.kind}-${r?.value?.metadata?.name}`}
+                    style={spacing.sapUiTinyMarginBegin}
+                  >
+                    <Icon
+                      className={`status status-${getIcon(r?.status)}`}
+                      name={getIcon(r?.status)}
+                      aria-label="status"
+                    />
+                    {String(r?.value?.kind)} {String(r?.value?.metadata?.name)}{' '}
+                    - {getStatus(r?.status)}
+                    <p>{r?.message}</p>
+                  </li>
+                ))}
+              </ul>
+            </FlexBox>
           </div>
         </>
       );
