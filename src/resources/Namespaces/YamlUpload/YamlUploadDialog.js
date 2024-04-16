@@ -1,17 +1,15 @@
 import React, { Suspense, useEffect, useRef, useState } from 'react';
-import { Bar, Button, Dialog, FlexBox, Grid } from '@ui5/webcomponents-react';
+import { Bar, Button, Dialog } from '@ui5/webcomponents-react';
 import { isEqual } from 'lodash';
 
 import { YamlResourcesList } from './YamlResourcesList';
 import { useUploadResources } from './useUploadResources';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useEventListener } from 'hooks/useEventListener';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
-
-import { spacing } from '@ui5/webcomponents-react-base';
 import './YamlUploadDialog.scss';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
