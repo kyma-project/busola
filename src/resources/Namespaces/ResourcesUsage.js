@@ -76,7 +76,7 @@ const MemoryRequestsCircle = ({ resourceQuotas, isLoading }) => {
 
   return (
     <UI5RadialChart
-      color="var(--sapChart_Bad)"
+      color="var(--sapChart_OrderedColor_5)"
       value={totalUsage}
       max={totalRequests}
       tooltip={{
@@ -114,7 +114,7 @@ const MemoryLimitsCircle = ({ resourceQuotas, isLoading }) => {
 
   return (
     <UI5RadialChart
-      color="var(--sapChart_Good)"
+      color="var(--sapChart_OrderedColor_6)"
       value={totalUsage}
       max={totalLimits}
       tooltip={{

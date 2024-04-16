@@ -31,6 +31,7 @@ export default function ClusterDetails({ currentCluster }) {
 
   return (
     <ResourceDetailsCard
+      titleText={t('cluster-overview.headers.metadata')}
       wrapperClassname="cluster-overview__details-wrapper"
       content={
         <>

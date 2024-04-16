@@ -1,4 +1,3 @@
-import React from 'react';
 import { PodList } from 'resources/Pods/PodList';
 
 export const RelatedPods = ({

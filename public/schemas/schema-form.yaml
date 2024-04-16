@@ -110,6 +110,10 @@ $widgets:
         language:
           type: string
           widget: Jsonata
+        formatAsString:
+          type: boolean
+          description: a boolean which specifies if field is saved as string.
+          default: false
         defaultExpanded:
           $ref: "#/$defs/defaultExpanded"
   FormGroup:
