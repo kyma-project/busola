@@ -13,12 +13,15 @@ import {
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { showAIassistantState } from 'components/AIassistant/state/showAIassistantAtom';
 import { initialPromptState } from '../state/initalPromptAtom';
 import getPromptSuggestions from 'components/AIassistant/api/getPromptSuggestions';
 import { createPortal } from 'react-dom';
 import './AIOpener.scss';
+import CryptoJS from 'crypto-js';
+import { authDataState } from 'state/authDataAtom';
+import { sessionIDState } from '../state/sessionIDAtom';
 
 export default function AIOpener({
   namespace,
@@ -36,6 +39,14 @@ export default function AIOpener({
   const [inputValue, setInputValue] = useState('');
   const [errorOccured, setErrorOccured] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const authData = useRecoilValue(authDataState);
+  const [sessionID, setSessionID] = useRecoilState(sessionIDState);
+
+  useEffect(() => {
+    if (authData) {
+      setSessionID(CryptoJS.SHA256(authData).toString(CryptoJS.enc.Hex));
+    }
+  }, [authData, sessionID, setSessionID]);
 
   useEffect(() => {
     return () => {
@@ -54,6 +65,7 @@ export default function AIOpener({
         resourceType,
         groupVersion,
         resourceName,
+        sessionID,
       });
       setIsLoading(false);
       if (!promptSuggestions) {
@@ -86,7 +98,7 @@ export default function AIOpener({
         icon="ai"
         className="ai-button"
         id="openPopoverBtn"
-        disabled={showAssistant.show}
+        disabled={showAssistant.show || !sessionID}
         onClick={fetchSuggestions}
       >
         {t('ai-assistant.opener.use-ai')}

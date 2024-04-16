@@ -5,6 +5,7 @@ export default async function getPromptSuggestions({
   resourceType = '',
   groupVersion = '',
   resourceName = '',
+  sessionID = '',
 }) {
   try {
     const url =
@@ -13,7 +14,7 @@ export default async function getPromptSuggestions({
     const payload = JSON.parse(
       `{"resource_type":"${resourceType.toLowerCase()}${
         apiGroup.length ? `.${apiGroup}` : ''
-      }","resource_name":"${resourceName}","namespace":"${namespace}","session_id":"abcdef12345"}`,
+      }","resource_name":"${resourceName}","namespace":"${namespace}","session_id":"${sessionID}"}`,
     );
 
     let { results } = await fetch(url, {

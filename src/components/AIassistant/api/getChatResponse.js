@@ -2,10 +2,11 @@ export default async function getChatResponse({
   prompt,
   handleSuccess,
   handleError,
+  sessionID,
 }) {
   const url =
     'https://api-backend.c-5cb6076.stage.kyma.ondemand.com/api/v1/chat';
-  const payload = { question: prompt, session_id: 'abcdef12345' };
+  const payload = { question: prompt, session_id: sessionID };
 
   fetch(url, {
     headers: {

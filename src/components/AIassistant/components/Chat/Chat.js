@@ -9,6 +9,7 @@ import Bubbles from './messages/Bubbles';
 import ErrorMessage from './messages/ErrorMessage';
 import getChatResponse from 'components/AIassistant/api/getChatResponse';
 import './Chat.scss';
+import { sessionIDState } from 'components/AIassistant/state/sessionIDAtom';
 
 export default function Chat({ isFullScreen }) {
   const { t } = useTranslation();
@@ -17,6 +18,7 @@ export default function Chat({ isFullScreen }) {
   const [chatHistory, setChatHistory] = useState([]);
   const [errorOccured, setErrorOccured] = useState(false);
   const initialPrompt = useRecoilValue(initialPromptState);
+  const sessionID = useRecoilValue(sessionIDState);
 
   const addMessage = (author, messageChunks, isLoading) => {
     setChatHistory(prevItems =>
@@ -43,7 +45,7 @@ export default function Chat({ isFullScreen }) {
   const sendPrompt = prompt => {
     setErrorOccured(false);
     addMessage('user', [{ step: 'output', result: prompt }], false);
-    getChatResponse({ prompt, handleSuccess, handleError });
+    getChatResponse({ prompt, handleSuccess, handleError, sessionID });
     addMessage('ai', [], true);
   };
 
