@@ -19,9 +19,9 @@ import { initialPromptState } from '../state/initalPromptAtom';
 import getPromptSuggestions from 'components/AIassistant/api/getPromptSuggestions';
 import { createPortal } from 'react-dom';
 import './AIOpener.scss';
-import CryptoJS from 'crypto-js';
 import { authDataState } from 'state/authDataAtom';
 import { sessionIDState } from '../state/sessionIDAtom';
+import generateSessionID from '../utils/generateSesssionID';
 
 export default function AIOpener({
   namespace,
@@ -40,15 +40,7 @@ export default function AIOpener({
   const [errorOccured, setErrorOccured] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const authData = useRecoilValue(authDataState);
-  const [sessionID, setSessionID] = useRecoilState(sessionIDState);
-
-  useEffect(() => {
-    if (authData) {
-      setSessionID(
-        CryptoJS.SHA256(JSON.stringify(authData)).toString(CryptoJS.enc.Hex),
-      );
-    }
-  }, [authData, sessionID, setSessionID]);
+  const setSessionID = useSetRecoilState(sessionIDState);
 
   useEffect(() => {
     return () => {
@@ -62,6 +54,8 @@ export default function AIOpener({
     setPopoverOpen(true);
     if (!isLoading && suggestions.length === 0) {
       setIsLoading(true);
+      const sessionID = await generateSessionID(authData);
+      setSessionID(sessionID);
       const promptSuggestions = await getPromptSuggestions({
         namespace,
         resourceType,
@@ -100,7 +94,7 @@ export default function AIOpener({
         icon="ai"
         className="ai-button"
         id="openPopoverBtn"
-        disabled={showAssistant.show || !sessionID}
+        disabled={showAssistant.show}
         onClick={fetchSuggestions}
       >
         {t('ai-assistant.opener.use-ai')}
