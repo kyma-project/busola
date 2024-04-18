@@ -1,8 +1,10 @@
+import { useState, useEffect } from 'react';
 import { CheckBox, MessageStrip } from '@ui5/webcomponents-react';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useTranslation } from 'react-i18next';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
+import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { Dropdown } from 'shared/ResourceForm/inputs';
@@ -19,9 +21,22 @@ export default function KymaModulesAddModule(onChange) {
     pollingInterval: 3000,
   });
 
-  const { data: kymaResource } = useGet(kymaResourceUrl, {
+  const { data: initialKymaResource, loading } = useGet(kymaResourceUrl, {
     pollingInterval: 3000,
   });
+
+  const [kymaResource, setKymaResource] = useState(
+    cloneDeep(initialKymaResource),
+  );
+  const [selectedModules, setSelectedModules] = useState(
+    initialKymaResource?.spec?.modules,
+  );
+
+  useEffect(() => {
+    setKymaResource(cloneDeep(initialKymaResource));
+    setSelectedModules(initialKymaResource?.spec?.modules);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading]);
 
   const modulesAddData = modules?.items.reduce((acc, module) => {
     const name = module.metadata.labels['operator.kyma-project.io/module-name'];
@@ -57,18 +72,36 @@ export default function KymaModulesAddModule(onChange) {
       : false;
   };
 
+  const setCheckbox = (module, checked, index) => {
+    if (checked) {
+      selectedModules.push({ name: module.name });
+    } else {
+      selectedModules.splice(index, 1);
+    }
+
+    setKymaResource({
+      ...kymaResource,
+      spec: {
+        modules: selectedModules,
+      },
+    });
+  };
+
   return (
     <ResourceForm
       pluralKind={'kymas'}
       singularName={'Kyma'}
       resource={kymaResource}
       setResource={() => {}}
-      initialResource={kymaResource}
+      initialResource={initialKymaResource}
       afterCreatedFn={() => {}}
       disableDefaultFields
       onChange={onChange}
     >
       {modulesAddData?.map(module => {
+        const index = selectedModules.findIndex(kymaResourceModule => {
+          return kymaResourceModule.name === module?.name;
+        });
         return (
           <>
             <div className="gridbox">
@@ -76,19 +109,9 @@ export default function KymaModulesAddModule(onChange) {
               <CheckBox
                 style={spacing.sapUiSmallMarginTop}
                 checked={isChecked(module.name)}
-                // onChange={e => {
-                //   setCheckbox(
-                //     value,
-                //     'name',
-                //     name,
-                //     e.target.checked,
-                //     resource?.spec?.modules
-                //       ? resource?.spec?.modules.findIndex(module => {
-                //           return module.name === name;
-                //         })
-                //       : index,
-                //   );
-                // }}
+                onChange={e => {
+                  setCheckbox(module, e.target.checked, index);
+                }}
                 text={module.name}
               />
               <Dropdown
@@ -104,35 +127,29 @@ export default function KymaModulesAddModule(onChange) {
                     key: option.channel,
                   };
                 })}
-                // selectedKey={
-                //   resource?.spec?.modules
-                //     ? resource?.spec?.modules[
-                //         resource?.spec?.modules.findIndex(module => {
-                //           return module.name === name;
-                //         })
-                //       ]?.channel
-                //     : ''
-                // }
-                // onSelect={(_, selected) => {
-                //   if (selected.key !== -1) {
-                //     onChange({
-                //       storeKeys: storeKeys
-                //         .push(
-                //           resource?.spec?.modules
-                //             ? resource?.spec?.modules.findIndex(module => {
-                //                 return module.name === name;
-                //               })
-                //             : index,
-                //         )
-                //         .push('channel'),
-                //       scopes: ['value'],
-                //       type: 'set',
-                //       schema,
-                //       data: { value: selected.key },
-                //       required,
-                //     });
-                //   }
-                // }}
+                selectedKey={
+                  selectedModules ? selectedModules[index]?.channel : ''
+                }
+                onSelect={(_, selected) => {
+                  if (selected.key !== -1) {
+                    const index = selectedModules.findIndex(
+                      kymaResourceModule => {
+                        return kymaResourceModule.name === module?.name;
+                      },
+                    );
+                    selectedModules[index] = {
+                      ...selectedModules[index],
+                      channel: selected.key,
+                    };
+
+                    setKymaResource({
+                      ...kymaResource,
+                      spec: {
+                        modules: selectedModules,
+                      },
+                    });
+                  }
+                }}
               />
 
               {module.docsUrl ? (
