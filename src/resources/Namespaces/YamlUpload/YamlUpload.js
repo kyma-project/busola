@@ -53,7 +53,13 @@ function YamlUpload({
   );
 
   return (
-    <FlexBox style={{ gap: '1rem' }} direction={'Column'}>
+    <FlexBox
+      style={{
+        gap: '1rem',
+        width: '98%', //when using less than 100%, the Monaco is able to shrink.
+      }}
+      direction={'Column'}
+    >
       <YamlFileUploader
         onYamlContentAdded={val => {
           updateYamlContent(val);
@@ -65,11 +71,12 @@ function YamlUpload({
         className={'yaml-upload-modal__content'}
         style={{
           padding: '0.5rem',
+          height: '100%',
         }}
       >
         <Editor
           autocompletionDisabled
-          height="60vh"
+          height="100%"
           language="yaml"
           value={yamlContentString ?? ''}
           onChange={updateYamlContent}

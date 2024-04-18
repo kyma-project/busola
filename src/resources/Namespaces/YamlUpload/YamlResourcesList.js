@@ -71,8 +71,11 @@ export function YamlResourcesList({ resourcesData }) {
         <>
           <div
             className={'yaml-upload-modal__content'}
-            style={spacing.sapUiSmallMarginBegin}
             data-testID={'yaml-upload-modal__validation-result'}
+            style={{
+              overflowY: 'auto',
+              // ...spacing.sapUiSmallMarginBegin,
+            }}
           >
             <FlexBox
               direction={'Column'}

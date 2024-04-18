@@ -120,11 +120,16 @@ export function YamlUploadDialog() {
       headerText={t('upload-yaml.title')}
       footer={<Bar design="Footer" endContent={<>{actions}</>} />}
       className="yaml-upload-modal__dialog"
-      resizable={false}
-      stretch={true}
     >
       <Suspense fallback={<Spinner />}>
-        <div className={'yaml-upload-modal__layout'}>
+        <div
+          className={'yaml-upload-modal__layout'}
+          style={{
+            overflowY: 'hidden',
+            height: '80vh',
+            width: '80vw',
+          }}
+        >
           <YamlUpload
             resourcesData={resourcesData}
             setResourcesData={updateYamlContent}
