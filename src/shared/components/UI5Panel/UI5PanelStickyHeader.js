@@ -8,9 +8,9 @@ import {
 } from '@ui5/webcomponents-react';
 
 import { spacing } from '@ui5/webcomponents-react-base';
-import './UI5Panel.scss';
+import './UI5PanelStickyHeader.scss';
 
-export const UI5Panel = ({
+export const UI5PanelStickyHeader = ({
   fixed = true,
   icon = undefined,
   title,
@@ -27,9 +27,9 @@ export const UI5Panel = ({
     <Panel
       fixed={fixed}
       key={keyComponent}
-      className={`${className} bsl-panel-header card-shadow`}
+      className={`${className} bsl-panel-header-sticky card-shadow`}
       style={style ? style : !disableMargin ? spacing.sapUiSmallMargin : null}
-      //style={{marginBottom: '50px'}}
+      //stickyHeader={true}
       header={
         <Toolbar
           style={{

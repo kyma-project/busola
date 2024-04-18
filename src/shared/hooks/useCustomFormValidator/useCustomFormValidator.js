@@ -10,7 +10,7 @@ export function useCustomFormValidator() {
     let formContainer = formElementRef.current?.querySelector(
       'div.resource-form',
     );
-
+    console.log('validate');
     if (formContainer) {
       setValid(cv && validateFormElement(formContainer, true).valid);
     }

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useMemo } from 'react';
+import React, { useRef, useEffect, useMemo, useState } from 'react';
 import classnames from 'classnames';
 import jsyaml from 'js-yaml';
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
@@ -18,6 +18,7 @@ import { spacing } from '@ui5/webcomponents-react-base';
 import './ResourceForm.scss';
 import { useRecoilValue } from 'recoil';
 import { editViewModeState } from 'state/preferences/editViewModeAtom';
+import { UI5PanelStickyHeader } from 'shared/components/UI5Panel/UI5PanelStickyHeader';
 
 export function ResourceForm({
   pluralKind, // used for the request path
@@ -53,6 +54,8 @@ export function ResourceForm({
   yamlSearchDisabled,
   yamlHideDisabled,
   isEdit,
+  setIsEdited,
+  isEdited,
 }) {
   // readonly schema ID, set only once
   const resourceSchemaId = useMemo(
@@ -70,6 +73,17 @@ export function ResourceForm({
   }
 
   const editViewMode = useRecoilValue(editViewModeState);
+
+  useEffect(() => {
+    if (
+      !isEdited &&
+      JSON.stringify(resource) !== JSON.stringify(initialUnchangedResource) &&
+      setIsEdited
+    ) {
+      console.log('EDITED');
+      setIsEdited(true);
+    }
+  }, [isEdited, resource, setIsEdited, initialUnchangedResource]);
 
   const { t } = useTranslation();
   const createResource = useCreateResource({
@@ -111,6 +125,7 @@ export function ResourceForm({
   useEffect(() => {
     if (setCustomValid) {
       if (mode === ModeSelector.MODE_YAML) {
+        console.log('custom');
         setCustomValid(true);
         setCustomValid(validationRef.current);
       }
@@ -152,6 +167,7 @@ export function ResourceForm({
   editor = renderEditor
     ? renderEditor({ defaultEditor: editor, Editor: EditorWrapper })
     : editor;
+  //console.log(onChange);
 
   const formContent = (
     <Form
@@ -169,13 +185,13 @@ export function ResourceForm({
       labelSpanXL={0}
       as="div"
       style={{ overflowX: 'hidden' }}
+      onChange={onChange}
     >
       {mode === ModeSelector.MODE_FORM && (
         <FormItem>
           <div
             className="full-width"
             style={spacing.sapUiTinyMarginBottom}
-            onChange={onChange}
             hidden={mode !== ModeSelector.MODE_FORM}
           >
             <ResourceFormWrapper
@@ -192,6 +208,7 @@ export function ResourceForm({
                     kind={singularName}
                     readOnly={readOnly || !!initialResource}
                     setValue={handleNameChange}
+                    //onChange={onChange}
                     {...nameProps}
                   />
                   <KeyValueField
@@ -218,7 +235,7 @@ export function ResourceForm({
 
   return (
     <section className={classnames('resource-form', className)}>
-      <UI5Panel
+      <UI5PanelStickyHeader
         key={`edit-panel-${singularName}`}
         className="resource-form--panel card-shadow"
         style={spacing.sapUiSmallMarginTopBottom}
@@ -256,6 +273,7 @@ export function ResourceForm({
           ref={formElementRef}
           onSubmit={onSubmit || createResource}
           style={{ height: '100%' }}
+          onChange={onChange}
         >
           {mode === ModeSelector.MODE_YAML && (
             <div
@@ -267,7 +285,7 @@ export function ResourceForm({
           )}
           {formContent}
         </form>
-      </UI5Panel>
+      </UI5PanelStickyHeader>
     </section>
   );
 }

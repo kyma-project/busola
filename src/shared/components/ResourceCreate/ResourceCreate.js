@@ -10,6 +10,10 @@ import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useC
 import { spacing } from '@ui5/webcomponents-react-base';
 
 import './ResourceCreate.scss';
+import { useRecoilState } from 'recoil';
+import { columnLayoutState } from 'state/columnLayoutAtom';
+import { useState } from 'react';
+import { CancelMessageBox } from '../CancelMessageBox/CancelMessageBox';
 
 export const ResourceCreate = ({
   performRefetch,
@@ -34,11 +38,17 @@ export const ResourceCreate = ({
     revalidate,
   } = useCustomFormValidator();
   const notificationManager = useNotification();
+  const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
+  const [isEdited, setIsEdited] = useState(false);
+  const [warningOpen, setWarningOpen] = useState(false);
 
   confirmText = confirmText || t('common.buttons.create');
 
   function handleFormChanged() {
-    setTimeout(() => revalidate());
+    console.log('ON CHANGE');
+    setTimeout(() => {
+      revalidate();
+    });
   }
 
   function handleFormError(title, message, isWarning) {
@@ -67,6 +77,37 @@ export const ResourceCreate = ({
 
   function renderProtectedResourceButton() {
     if (protectedResource) return protectedResourceWarning;
+  }
+
+  function navigateAfterClose() {
+    window.history.pushState(
+      window.history.state,
+      '',
+      layoutCloseCreateUrl
+        ? layoutCloseCreateUrl
+        : `${window.location.pathname.slice(
+            0,
+            window.location.pathname.lastIndexOf('/'),
+          )}${
+            layoutNumber === 'MidColumn' ||
+            layoutCloseCreateUrl?.showCreate?.resourceType
+              ? ''
+              : '?layout=TwoColumnsMidExpanded'
+          }`,
+    );
+    layoutNumber === 'MidColumn'
+      ? setLayoutColumn({
+          ...layoutColumn,
+          midColumn: null,
+          layout: 'OneColumn',
+          showCreate: null,
+        })
+      : setLayoutColumn({
+          ...layoutColumn,
+          endColumn: null,
+          layout: 'TwoColumnsMidExpanded',
+          showCreate: null,
+        });
   }
 
   function renderConfirmButton() {
@@ -99,6 +140,26 @@ export const ResourceCreate = ({
 
     return button;
   }
+  console.log(isEdited);
+  console.log(warningOpen);
+  const renderCancelButton = () => {
+    return (
+      <Button
+        onClick={() => {
+          if (isEdited) {
+            console.log(isEdited);
+            console.log('CANCEL');
+            setWarningOpen(true);
+            return;
+          }
+          navigateAfterClose();
+        }}
+        design="Transparent"
+      >
+        {'Cancel'}
+      </Button>
+    );
+  };
 
   return (
     <>
@@ -120,11 +181,24 @@ export const ResourceCreate = ({
                 onError: handleFormError,
                 onCompleted: handleFormSuccess,
                 performManualSubmit: handleFormSubmit,
+                isEdited,
+                setIsEdited,
               })}
-              <div style={spacing.sapUiSmallMarginBeginEnd}>
+              <div
+                style={{
+                  ...spacing.sapUiSmallMarginBeginEnd,
+                  position: 'sticky',
+                  bottom: '0.5rem',
+                }}
+              >
                 <Bar
                   design="FloatingFooter"
-                  endContent={<>{renderConfirmButton()}</>}
+                  endContent={
+                    <>
+                      {renderConfirmButton()}
+                      {renderCancelButton()}
+                    </>
+                  }
                 />
               </div>
             </div>
@@ -150,6 +224,11 @@ export const ResourceCreate = ({
           })}
         </div>
       )}
+      <CancelMessageBox
+        open={warningOpen}
+        setOpen={setWarningOpen}
+        proceedButtonAction={navigateAfterClose}
+      />
     </>
   );
 };

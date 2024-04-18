@@ -47,9 +47,13 @@ form .resource-form {
       width: fit-content;
     }
   }
+
+  .card-shadow {
+    overflow: visible;
+  }
 }
 
 .resource-form--panel,
 .resource-form--panel::part(content) {
-  height: 100%;
+  //height: 100%;
 }
