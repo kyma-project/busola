@@ -40,9 +40,12 @@ export function KymaModulesList(props) {
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const { clusterUrl } = useUrl();
 
-  const resourceUrl =
-    '/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas/default';
-  const resourceName = 'default';
+  const { data: kymaResources } = useGet(
+    '/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas',
+  );
+
+  const resourceName = kymaResources?.items[0].metadata.name;
+  const resourceUrl = `/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas/${resourceName}`;
   const namespace = 'kyma-system';
 
   const modulesResourceUrl = `/apis/operator.kyma-project.io/v1beta2/moduletemplates`;
@@ -235,15 +238,17 @@ export function KymaModulesList(props) {
           name: (a, b) => a.name?.localeCompare(b.name),
         }}
         // TODO
-        // emptyListProps={{
-        //   titleText: `${t('common.labels.no')} ${t(
-        //     'helm-releases.title',
-        //   ).toLocaleLowerCase()}`,
-        //   subtitleText: t('helm-releases.description'),
-        //   url:
-        //     'https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces',
-        //   buttonText: t('common.buttons.connect'),
-        // }}
+        emptyListProps={{
+          titleText: `${t('common.labels.no')} ${t(
+            'kyma-modules.title',
+          ).toLocaleLowerCase()}`,
+          subtitleText: t('kyma-modules.no-modules-description'),
+          url:
+            'https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-s-modular-approach?locale=en-US&state=DRAFT&version=Cloud',
+          buttonText: t('common.buttons.add'),
+          showButton: true,
+          onClick: handleShowAddModule,
+        }}
       />
     );
   };
