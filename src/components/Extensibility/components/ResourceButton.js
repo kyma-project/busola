@@ -38,7 +38,7 @@ export function ResourceButton({
   const [namespace, namespaceError] = jsonata(structure.resource?.namespace);
   const [kind, kindError] = jsonata(structure.resource?.kind);
   const customUrl = structure.resource?.customUrl;
-  console.log(customUrl);
+
   const jsonataError = nameError || namespaceError || kindError;
   if (jsonataError) {
     return t('extensibility.configuration-error', {

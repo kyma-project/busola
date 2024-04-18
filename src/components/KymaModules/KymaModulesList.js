@@ -1,7 +1,12 @@
 import { useTranslation } from 'react-i18next';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import { Label, DynamicPageHeader, Button } from '@ui5/webcomponents-react';
+import {
+  Label,
+  DynamicPageHeader,
+  Button,
+  Text,
+} from '@ui5/webcomponents-react';
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useState } from 'react';
@@ -92,7 +97,7 @@ export function KymaModulesList(props) {
     const rowRenderer = resource => {
       const path = findStatus(resource.name)?.resource?.metadata?.namespace
         ? clusterUrl(
-            `namespaces/${
+            `kymamodules/namespaces/${
               findStatus(resource.name)?.resource?.metadata?.namespace
             }/${pluralize(
               findStatus(resource.name)?.resource?.kind || '',
@@ -101,7 +106,7 @@ export function KymaModulesList(props) {
             }`,
           )
         : clusterUrl(
-            `${pluralize(
+            `kymamodules/${pluralize(
               findStatus(resource.name)?.resource?.kind || '',
             ).toLowerCase()}/${
               findStatus(resource.name)?.resource?.metadata?.name
@@ -110,7 +115,34 @@ export function KymaModulesList(props) {
 
       return [
         // Name
-        <Link url={path}>{resource.name}</Link>,
+        <Link
+          url={path}
+          onClick={() => {
+            setLayoutColumn({
+              midColumn: {
+                resourceType: pluralize(
+                  findStatus(resource.name)?.resource?.kind || '',
+                ).toLowerCase(),
+                resourceName: findStatus(resource.name)?.resource?.metadata
+                  ?.name,
+                namespaceId:
+                  findStatus(resource.name)?.resource?.metadata.namespace || '',
+              },
+              layout: 'TwoColumnsMidExpanded',
+              endColumn: null,
+            });
+            window.history.pushState(
+              window.history.state,
+              '',
+              `${path}?layout=TwoColumnsMidExpanded`,
+            );
+          }}
+        >
+          {resource.name}
+        </Link>,
+        // <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
+        //   {resource.name}
+        // </Text>,
         // Beta
         checkBeta(
           findModule(
@@ -149,7 +181,16 @@ export function KymaModulesList(props) {
         </ExternalLink>,
       ];
     };
-
+    const customColumnLayout = resource => {
+      return {
+        resourceName: resource?.name,
+        resourceType: pluralize(
+          findStatus(resource.name)?.resource?.kind || '',
+        ),
+        namespaceId:
+          findStatus(resource.name)?.resource?.metadata?.namespace || '',
+      };
+    };
     return (
       <GenericList
         extraHeaderContent={[
@@ -157,6 +198,28 @@ export function KymaModulesList(props) {
             {t('common.buttons.add')}
           </Button>,
         ]}
+        // customUrl={resource =>
+        //   findStatus(resource.name)?.resource?.metadata?.namespace
+        //     ? clusterUrl(
+        //         `kymamodules/${
+        //           findStatus(resource.name)?.resource?.metadata?.namespace
+        //         }/${pluralize(
+        //           findStatus(resource.name)?.resource?.kind || '',
+        //         ).toLowerCase()}/${
+        //           findStatus(resource.name)?.resource?.metadata?.name
+        //         }?layout=TwoColumnsMidExpanded`,
+        //       )
+        //     : clusterUrl(
+        //         `kymamodules/${pluralize(
+        //           findStatus(resource.name)?.resource?.kind || '',
+        //         ).toLowerCase()}/${
+        //           findStatus(resource.name)?.resource?.metadata?.name
+        //         }?layout=TwoColumnsMidExpanded`,
+        //       )
+        // }
+        customColumnLayout={customColumnLayout}
+        // hasDetailsView
+        enableColumnLayout
         entries={resource.spec.modules}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
@@ -166,6 +229,16 @@ export function KymaModulesList(props) {
         sortBy={{
           name: (a, b) => a.name?.localeCompare(b.name),
         }}
+        // TODO
+        // emptyListProps={{
+        //   titleText: `${t('common.labels.no')} ${t(
+        //     'helm-releases.title',
+        //   ).toLocaleLowerCase()}`,
+        //   subtitleText: t('helm-releases.description'),
+        //   url:
+        //     'https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces',
+        //   buttonText: t('common.buttons.connect'),
+        // }}
       />
     );
   };

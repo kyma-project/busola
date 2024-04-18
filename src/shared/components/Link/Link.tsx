@@ -11,6 +11,7 @@ type LinkProps = {
   dataTestId?: string;
   design?: 'Default' | 'Subtle' | 'Emphasized';
   resetLayout?: boolean;
+  onClick?: any;
 };
 
 export const Link = ({
@@ -20,6 +21,7 @@ export const Link = ({
   dataTestId,
   design = 'Emphasized',
   resetLayout = true,
+  onClick,
 }: LinkProps) => {
   const setLayout = useSetRecoilState(columnLayoutState);
   const navigate = useNavigate();
@@ -39,7 +41,7 @@ export const Link = ({
       design={design}
       className={className}
       data-testid={dataTestId}
-      onClick={() => handleOnlick(resetLayout, url)}
+      onClick={() => (onClick ? onClick() : handleOnlick(resetLayout, url))}
     >
       {children}
     </UI5Link>

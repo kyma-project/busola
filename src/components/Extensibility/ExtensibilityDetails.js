@@ -22,6 +22,7 @@ export const ExtensibilityDetailsCore = ({
   resMetaData,
   resourceName,
   namespaceId,
+  layoutCloseCreateUrl,
 }) => {
   const { t, widgetT, exists } = useGetTranslation();
 
@@ -71,6 +72,7 @@ export const ExtensibilityDetailsCore = ({
 
   return (
     <ResourceDetails
+      layoutCloseCreateUrl={layoutCloseCreateUrl}
       disableEdit={disableEdit}
       disableDelete={disableDelete}
       resourceTitle={resourceTitle}
@@ -123,9 +125,14 @@ export const ExtensibilityDetailsCore = ({
     />
   );
 };
-const ExtensibilityDetails = ({ resourceName, namespaceId }) => {
-  const resMetaData = useGetCRbyPath();
+const ExtensibilityDetails = ({
+  resourceName,
+  namespaceId,
+  layoutCloseCreateUrl,
+}) => {
+  const resMetaData = useGetCRbyPath(resourceName, namespaceId);
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
+
   return (
     <TranslationBundleContext.Provider
       value={{
@@ -139,6 +146,7 @@ const ExtensibilityDetails = ({ resourceName, namespaceId }) => {
             resMetaData={resMetaData}
             resourceName={resourceName}
             namespaceId={namespaceId}
+            layoutCloseCreateUrl={layoutCloseCreateUrl}
           />
         </ExtensibilityErrBoundary>
       </DataSourcesContextProvider>
