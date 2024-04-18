@@ -17,3 +17,12 @@ export const ResourceDescription = (
     }
   />
 );
+
+export const ReleaseChannelDescription = (
+  <Description
+    i18nKey={'kyma-modules.release-channel-description'}
+    url={
+      'https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-s-modular-approach?locale=en-US#kyma-release-channels'
+    }
+  />
+);

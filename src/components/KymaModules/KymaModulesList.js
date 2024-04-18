@@ -17,6 +17,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import KymaModulesCreate from './KymaModulesCreate';
 import {
+  ReleaseChannelDescription,
   ResourceDescription,
   resourceType,
   apiGroup,
@@ -32,6 +33,10 @@ export function KymaModulesList(props) {
   const { t } = useTranslation();
 
   const [showTitleDescription, setShowTitleDescription] = useState(false);
+  const [
+    showReleaseChannelTitleDescription,
+    setShowReleaseChannelTitleDescription,
+  ] = useState(false);
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const { clusterUrl } = useUrl();
 
@@ -250,7 +255,13 @@ export function KymaModulesList(props) {
         <DynamicPageHeader>
           <Label showColon>{t('kyma-modules.release-channel')}</Label>
           <Label>{kymaResource?.spec.channel}</Label>
-          <HintButton />
+          <HintButton
+            style={spacing.sapUiTinyMarginBegin}
+            setShowTitleDescription={setShowReleaseChannelTitleDescription}
+            showTitleDescription={showReleaseChannelTitleDescription}
+            description={ReleaseChannelDescription}
+            context="details-release-channel"
+          />
         </DynamicPageHeader>
       }
       customComponents={[ModulesList]}
