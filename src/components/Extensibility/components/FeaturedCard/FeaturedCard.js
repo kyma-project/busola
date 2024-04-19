@@ -77,13 +77,7 @@ export function FeaturedCard({ value, structure, schema, ...props }) {
   };
 
   return structure?.id && !hideBanner ? (
-    <div
-      style={{
-        ...spacing.sapUiTinyMarginBeginEnd,
-        ...spacing.sapUiSmallMarginTopBottom,
-        width: '100%',
-      }}
-    >
+    <div style={spacing.sapUiSmallMargin}>
       <Card>
         <div
           className="feature-card"

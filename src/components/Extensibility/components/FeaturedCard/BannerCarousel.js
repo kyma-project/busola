@@ -34,6 +34,7 @@ export default function BannerCarousel({ children }) {
 
   return (
     <Carousel
+      className="banner-carousel"
       arrowsPlacement="Content"
       backgroundDesign="Transparent"
       pageIndicatorBackgroundDesign="Transparent"
