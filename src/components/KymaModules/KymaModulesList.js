@@ -200,7 +200,7 @@ export function KymaModulesList(props) {
         ]}
         customColumnLayout={customColumnLayout}
         enableColumnLayout
-        entries={resource.spec.modules}
+        entries={resource.status.modules}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
         disableHiding={true}
