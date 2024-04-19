@@ -81,6 +81,7 @@ export function FeaturedCard({ value, structure, schema, ...props }) {
       style={{
         ...spacing.sapUiTinyMarginBeginEnd,
         ...spacing.sapUiSmallMarginTopBottom,
+        width: '100%',
       }}
     >
       <Card>
