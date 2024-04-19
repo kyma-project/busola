@@ -25,6 +25,7 @@ export function useCreateResource({
   afterCreatedFn,
   urlPath,
   layoutNumber,
+  resetLayout,
 }) {
   const { t } = useTranslation();
   const notification = useNotification();
@@ -51,41 +52,51 @@ export function useCreateResource({
         },
       ),
     });
-
-    if (!isEdit) {
+    console.log(resetLayout);
+    if (!isEdit || resetLayout) {
       if (isColumnLeyoutEnabled) {
-        setLayoutColumn(
-          nextLayout === 'TwoColumnsMidExpanded'
-            ? {
-                layout: nextLayout,
-                showCreate: null,
-                midColumn: {
-                  resourceName: resource.metadata.name,
-                  resourceType: resource.kind,
-                  namespaceId: resource.metadata.namespace,
+        if (resetLayout) {
+          console.log('first');
+          setLayoutColumn({
+            layout: 'OneColumn',
+            midColumn: null,
+            endColumn: null,
+            showCreate: null,
+          });
+        } else {
+          setLayoutColumn(
+            nextLayout === 'TwoColumnsMidExpanded'
+              ? {
+                  layout: nextLayout,
+                  showCreate: null,
+                  midColumn: {
+                    resourceName: resource.metadata.name,
+                    resourceType: resource.kind,
+                    namespaceId: resource.metadata.namespace,
+                  },
+                  endColumn: null,
+                }
+              : {
+                  ...layoutColumn,
+                  layout: nextLayout,
+                  showCreate: null,
+                  endColumn: {
+                    resourceName: resource.metadata.name,
+                    resourceType: resource.kind,
+                    namespaceId: resource.metadata.namespace,
+                  },
                 },
-                endColumn: null,
-              }
-            : {
-                ...layoutColumn,
-                layout: nextLayout,
-                showCreate: null,
-                endColumn: {
-                  resourceName: resource.metadata.name,
-                  resourceType: resource.kind,
-                  namespaceId: resource.metadata.namespace,
-                },
-              },
-        );
-        window.history.pushState(
-          window.history.state,
-          '',
-          `${scopedUrl(
-            `${urlPath || pluralKind.toLowerCase()}/${encodeURIComponent(
-              resource.metadata.name,
-            )}`,
-          )}${nextQuery}`,
-        );
+          );
+          window.history.pushState(
+            window.history.state,
+            '',
+            `${scopedUrl(
+              `${urlPath || pluralKind.toLowerCase()}/${encodeURIComponent(
+                resource.metadata.name,
+              )}`,
+            )}${nextQuery}`,
+          );
+        }
       } else {
         navigate(
           `${scopedUrl(

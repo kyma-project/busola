@@ -25,12 +25,12 @@ export const useGetCRbyPath = (resourceName, namespace) => {
       .replace(/namespaces\/([A-Za-z0-9.][-A-Za-z0-9_.]*)?[A-Za-z0-9]\//, '')
       .replace('namespaces/-all-/', '')
       .replace('core-ui/', '')
-      .replace('kymamodules/', '')
-      .replace(`/${resourceName}`, '');
+      .replace('kymamodules/', '');
 
-    return layoutState?.midColumn?.resourceType
-      ? layoutState?.midColumn?.resourceType === extensionPath
-      : crPath.split('/')[0] === extensionPath;
+    return (
+      layoutState?.midColumn?.resourceType === extensionPath ||
+      crPath.split('/')[0] === extensionPath
+    );
   });
 
   return resource;

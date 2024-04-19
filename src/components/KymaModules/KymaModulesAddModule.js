@@ -11,7 +11,7 @@ import { Dropdown } from 'shared/ResourceForm/inputs';
 
 import './KymaModulesAddModule.scss';
 
-export default function KymaModulesAddModule(onChange) {
+export default function KymaModulesAddModule(props) {
   const { t } = useTranslation();
   const modulesResourceUrl = `/apis/operator.kyma-project.io/v1beta2/moduletemplates`;
   const kymaResourceUrl =
@@ -74,7 +74,9 @@ export default function KymaModulesAddModule(onChange) {
 
   const setCheckbox = (module, checked, index) => {
     if (checked) {
-      selectedModules.push({ name: module.name });
+      selectedModules.push({
+        name: module.name,
+      });
     } else {
       selectedModules.splice(index, 1);
     }
@@ -82,6 +84,7 @@ export default function KymaModulesAddModule(onChange) {
     setKymaResource({
       ...kymaResource,
       spec: {
+        ...kymaResource.spec,
         modules: selectedModules,
       },
     });
@@ -89,14 +92,18 @@ export default function KymaModulesAddModule(onChange) {
 
   return (
     <ResourceForm
+      {...props}
+      createUrl={kymaResourceUrl}
       pluralKind={'kymas'}
       singularName={'Kyma'}
       resource={kymaResource}
-      setResource={() => {}}
+      setResource={setKymaResource}
       initialResource={initialKymaResource}
-      afterCreatedFn={() => {}}
       disableDefaultFields
-      onChange={onChange}
+      formElementRef={props.formElementRef}
+      onChange={props.onChange}
+      layoutNumber={'StartColumn'}
+      resetLayout
     >
       {modulesAddData?.length !== 0 ? (
         modulesAddData?.map(module => {
@@ -105,7 +112,7 @@ export default function KymaModulesAddModule(onChange) {
           });
           return (
             <>
-              <div className="gridbox">
+              <div className="gridbox" key={module.name}>
                 <div></div>
                 <CheckBox
                   style={spacing.sapUiSmallMarginTop}
@@ -148,6 +155,7 @@ export default function KymaModulesAddModule(onChange) {
                       setKymaResource({
                         ...kymaResource,
                         spec: {
+                          ...kymaResource.spec,
                           modules: selectedModules,
                         },
                       });

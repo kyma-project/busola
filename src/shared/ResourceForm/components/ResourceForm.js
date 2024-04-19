@@ -53,6 +53,7 @@ export function ResourceForm({
   yamlSearchDisabled,
   yamlHideDisabled,
   isEdit,
+  resetLayout,
 }) {
   // readonly schema ID, set only once
   const resourceSchemaId = useMemo(
@@ -82,6 +83,7 @@ export function ResourceForm({
     afterCreatedFn,
     urlPath,
     layoutNumber,
+    resetLayout,
   });
 
   const handleInitialMode = () => {
@@ -260,7 +262,11 @@ export function ResourceForm({
           {mode === ModeSelector.MODE_YAML && (
             <div
               className="yaml-form"
-              style={{ width: '100%', height: '100%', minHeight: '300px' }}
+              style={{
+                width: '100%',
+                height: '100%',
+                minHeight: '300px',
+              }}
             >
               {editor}
             </div>

@@ -1,12 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import {
-  Label,
-  DynamicPageHeader,
-  Button,
-  Text,
-} from '@ui5/webcomponents-react';
+import { Label, DynamicPageHeader, Button } from '@ui5/webcomponents-react';
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useState } from 'react';
@@ -148,9 +143,6 @@ export function KymaModulesList(props) {
         >
           {resource.name}
         </Link>,
-        // <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
-        //   {resource.name}
-        // </Text>,
         // Beta
         checkBeta(
           findModule(
@@ -171,7 +163,7 @@ export function KymaModulesList(props) {
           type={
             findStatus(resource.name)?.state === 'Ready'
               ? 'Success'
-              : findStatus(resource.name)?.state
+              : findStatus(resource.name)?.state || 'UNKNOWN'
           }
         >
           {findStatus(resource.name)?.state}
@@ -206,27 +198,7 @@ export function KymaModulesList(props) {
             {t('common.buttons.add')}
           </Button>,
         ]}
-        // customUrl={resource =>
-        //   findStatus(resource.name)?.resource?.metadata?.namespace
-        //     ? clusterUrl(
-        //         `kymamodules/${
-        //           findStatus(resource.name)?.resource?.metadata?.namespace
-        //         }/${pluralize(
-        //           findStatus(resource.name)?.resource?.kind || '',
-        //         ).toLowerCase()}/${
-        //           findStatus(resource.name)?.resource?.metadata?.name
-        //         }?layout=TwoColumnsMidExpanded`,
-        //       )
-        //     : clusterUrl(
-        //         `kymamodules/${pluralize(
-        //           findStatus(resource.name)?.resource?.kind || '',
-        //         ).toLowerCase()}/${
-        //           findStatus(resource.name)?.resource?.metadata?.name
-        //         }?layout=TwoColumnsMidExpanded`,
-        //       )
-        // }
         customColumnLayout={customColumnLayout}
-        // hasDetailsView
         enableColumnLayout
         entries={resource.spec.modules}
         headerRenderer={headerRenderer}
@@ -237,8 +209,8 @@ export function KymaModulesList(props) {
         sortBy={{
           name: (a, b) => a.name?.localeCompare(b.name),
         }}
-        // TODO
         emptyListProps={{
+          image: 'TntComponents',
           titleText: `${t('common.labels.no')} ${t(
             'kyma-modules.title',
           ).toLocaleLowerCase()}`,
