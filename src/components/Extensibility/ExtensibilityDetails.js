@@ -130,7 +130,7 @@ const ExtensibilityDetails = ({
   namespaceId,
   layoutCloseCreateUrl,
 }) => {
-  const resMetaData = useGetCRbyPath(resourceName, namespaceId);
+  const resMetaData = useGetCRbyPath(namespaceId);
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
 
   return (
