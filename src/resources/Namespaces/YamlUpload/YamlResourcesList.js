@@ -1,5 +1,15 @@
 import React from 'react';
-import { FlexBox, Icon, Title } from '@ui5/webcomponents-react';
+import {
+  Card,
+  CardHeader,
+  CustomListItem,
+  FlexBox,
+  Icon,
+  List,
+  ProgressIndicator,
+  Text,
+  Title,
+} from '@ui5/webcomponents-react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 
@@ -30,11 +40,9 @@ export function YamlResourcesList({ resourcesData }) {
     return !filteredResources?.filter(r => r.status)?.length;
   };
 
-  const getLabel = () => {
-    return `${filteredResources?.filter(
-      r => r.status && r.status !== STATE_WAITING,
-    )?.length || 0}/${filteredResources?.length || 0}`;
-  };
+  const uploadedResources = filteredResources?.filter(
+    r => r.status && r.status !== STATE_WAITING,
+  );
 
   const getPercentage = () => {
     return (
@@ -121,30 +129,49 @@ export function YamlResourcesList({ resourcesData }) {
                 ...spacing.sapUiSmallMargin,
               }}
             >
-              <div id="upload-progress-bar-container">
-                <div
-                  id="upload-progress-bar"
-                  style={{ width: `${getPercentage()}%` }}
+              <Card
+                header={
+                  <CardHeader
+                    titleText={t('upload-yaml.upload-progress')}
+                    status={
+                      filteredResources?.length +
+                      '/' +
+                      uploadedResources?.length
+                    }
+                  />
+                }
+              >
+                <ProgressIndicator
+                  value={getPercentage()}
+                  valueState={
+                    filteredResources?.length === uploadedResources?.length
+                      ? 'Success'
+                      : 'None'
+                  }
+                  style={{
+                    width: '95%',
+                    ...spacing.sapUiSmallMarginBeginEnd,
+                  }}
                 />
-                <div id="upload-progress-bar-label">{getLabel()}</div>
-              </div>
-              <ul style={spacing.sapUiTinyMarginTop}>
+              </Card>
+              <List>
                 {filteredResources.map(r => (
-                  <li
-                    key={`${r?.value?.kind}-${r?.value?.metadata?.name}`}
-                    style={spacing.sapUiTinyMarginBegin}
-                  >
-                    <Icon
-                      className={`status status-${getIcon(r?.status)}`}
-                      name={getIcon(r?.status)}
-                      aria-label="status"
-                    />
-                    {String(r?.value?.kind)} {String(r?.value?.metadata?.name)}{' '}
-                    - {getStatus(r?.status)}
-                    <p>{r?.message}</p>
-                  </li>
+                  <CustomListItem type={'Inactive'}>
+                    <FlexBox alignItems={'Center'}>
+                      <Icon
+                        className={`status status-${getIcon(r?.status)}`}
+                        name={getIcon(r?.status)}
+                        aria-label="status"
+                      />
+                      <Text>
+                        {String(r?.value?.kind)}{' '}
+                        {String(r?.value?.metadata?.name)} -{' '}
+                        {getStatus(r?.status)}
+                      </Text>
+                    </FlexBox>
+                  </CustomListItem>
                 ))}
-              </ul>
+              </List>
             </FlexBox>
           </div>
         </>

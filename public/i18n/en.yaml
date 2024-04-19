@@ -1469,6 +1469,7 @@ upload-yaml:
     updated: Updated
     waiting: Waiting
   title: Upload YAML
+  upload-progress: 'Upload progress'
   warnings:
     different-namespace: This resource will be uploaded to the '{{namespace}}' Namespace.
     incorrect-namespace: The cluster-wide resources shouldn't have a Namespace.
