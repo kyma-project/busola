@@ -1,6 +1,9 @@
-import React from 'react';
 import { useRecoilState } from 'recoil';
-import { Theme, themeState } from 'state/preferences/themeAtom';
+import {
+  Theme,
+  isSystemThemeDark,
+  themeState,
+} from 'state/preferences/themeAtom';
 import { setTheme } from '@ui5/webcomponents-base/dist/config/Theme';
 import { TileButton } from 'shared/components/TileButton/TileButton';
 import { ThemePreview } from './ThemePreview/ThemePreview';
@@ -17,9 +20,6 @@ const AVAILABLE_THEMES: Theme[] = [
 export default function ThemeChooser() {
   const { t } = useTranslation();
   const [theme, setUsedTheme] = useRecoilState(themeState);
-
-  const isSystemThemeDark = () =>
-    window.matchMedia('(prefers-color-scheme: dark)').matches;
 
   return (
     <>
