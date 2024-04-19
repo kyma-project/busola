@@ -5,7 +5,7 @@ import pluralize from 'pluralize';
 import { extensionsState } from 'state/navigation/extensionsAtom';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
-export const useGetCRbyPath = (resourceName, namespace) => {
+export const useGetCRbyPath = namespace => {
   const { namespaceId } = useParams();
   const extensions = useRecoilValue(extensionsState);
   const { name: clusterName } = useRecoilValue(clusterState) || {};
