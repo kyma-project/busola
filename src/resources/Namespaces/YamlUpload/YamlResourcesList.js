@@ -13,6 +13,8 @@ import {
 import { Trans, useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 
+import './YamlResourceList.scss';
+
 import {
   STATE_CREATED,
   STATE_ERROR,
@@ -21,7 +23,6 @@ import {
 } from './useUploadResources';
 import { ResourceValidationResult } from './ResourceValidationResult';
 
-import './ValidationSwitch.scss';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { activeNamespaceIdState } from '../../../state/activeNamespaceIdAtom';
 import { SeparatorLine } from './SeparatorLine';

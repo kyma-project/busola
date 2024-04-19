@@ -6,7 +6,7 @@ import {
   validateResourcesState,
 } from '../../../state/preferences/validateResourcesAtom';
 import { useRecoilState } from 'recoil';
-
+import './ValidationSwitch.scss';
 export const ValidationSwitch = () => {
   const [validateResources, setValidateResources] = useRecoilState(
     validateResourcesState,

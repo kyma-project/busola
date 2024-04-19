@@ -1,5 +1,6 @@
 import React from 'react';
+import './SeparatorLine.scss';
 
 export const SeparatorLine = ({ style }) => {
-  return <hr className="yaml_resource_list__separation-line" style={style} />;
+  return <hr className="separation-line" style={style} />;
 };
