@@ -2,7 +2,6 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 import {
-  Button,
   FlexBox,
   MessageStrip,
   ObjectStatus,
@@ -24,7 +23,7 @@ import { validationSchemasEnabledState } from 'state/validationEnabledSchemasAto
 import { useLoadingDebounce } from 'shared/hooks/useLoadingDebounce';
 
 import { spacing } from '@ui5/webcomponents-react-base';
-import { SeparatorLine } from '../SeparatorLine';
+import { SeparatorLine } from './SeparatorLine';
 
 const useNamespaceWarning = resource => {
   const { t } = useTranslation();
@@ -95,7 +94,7 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
   );
 };
 
-const ValidationResult = ({ resource }) => {
+export const ResourceValidationResult = ({ resource }) => {
   const validateResources = getExtendedValidateResourceState(
     useRecoilValue(validateResourcesState),
   );
@@ -139,12 +138,4 @@ const ValidationResult = ({ resource }) => {
       </Panel>
     </>
   );
-};
-
-export const FilteredResourcesDetails = ({ filteredResources }) => {
-  return filteredResources.map(r => (
-    <>
-      <ValidationResult resource={r.value} />
-    </>
-  ));
 };

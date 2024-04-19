@@ -19,9 +19,9 @@ import {
   STATE_UPDATED,
   STATE_WAITING,
 } from './useUploadResources';
-import { FilteredResourcesDetails } from './FilteredResourcesDetails/FilteredResourcesDetails';
+import { ResourceValidationResult } from './ResourceValidationResult';
 
-import './YamlResourcesList.scss';
+import './ValidationSwitch.scss';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { activeNamespaceIdState } from '../../../state/activeNamespaceIdAtom';
 import { SeparatorLine } from './SeparatorLine';
@@ -32,23 +32,21 @@ export function YamlResourcesList({ resourcesData }) {
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const defaultNamespace = namespaceId || 'default';
 
-  const filteredResources = resourcesData?.filter(
-    resource => resource !== null,
-  );
+  const resources = resourcesData?.filter(resource => resource !== null);
 
   const showResourcesToUpload = () => {
-    return !filteredResources?.filter(r => r.status)?.length;
+    return !resources?.filter(r => r.status)?.length;
   };
 
-  const uploadedResources = filteredResources?.filter(
+  const uploadedResources = resources?.filter(
     r => r.status && r.status !== STATE_WAITING,
   );
 
   const getPercentage = () => {
     return (
-      ((filteredResources?.filter(r => r.status && r.status !== STATE_WAITING)
+      ((resources?.filter(r => r.status && r.status !== STATE_WAITING)
         ?.length || 0) /
-        (filteredResources?.length || 0)) *
+        (resources?.length || 0)) *
       100
     );
   };
@@ -71,7 +69,7 @@ export function YamlResourcesList({ resourcesData }) {
     return t(`upload-yaml.statuses.${status.toLowerCase()}`);
   };
 
-  if (!filteredResources) {
+  if (!resources) {
     return null;
   } else {
     if (showResourcesToUpload()) {
@@ -104,12 +102,14 @@ export function YamlResourcesList({ resourcesData }) {
               <p>
                 <Trans
                   i18nKey={'upload-yaml.you-will-create'}
-                  values={{ count: filteredResources.length }}
+                  values={{ count: resources.length }}
                 >
                   <span style={{ fontWeight: 'bold' }}></span>
                 </Trans>
               </p>
-              <FilteredResourcesDetails filteredResources={filteredResources} />
+              {resources.map(r => (
+                <ResourceValidationResult resource={r.value} />
+              ))}
             </FlexBox>
           </div>
         </>
@@ -133,18 +133,14 @@ export function YamlResourcesList({ resourcesData }) {
                 header={
                   <CardHeader
                     titleText={t('upload-yaml.upload-progress')}
-                    status={
-                      filteredResources?.length +
-                      '/' +
-                      uploadedResources?.length
-                    }
+                    status={resources?.length + '/' + uploadedResources?.length}
                   />
                 }
               >
                 <ProgressIndicator
                   value={getPercentage()}
                   valueState={
-                    filteredResources?.length === uploadedResources?.length
+                    resources?.length === uploadedResources?.length
                       ? 'Success'
                       : 'None'
                   }
@@ -155,7 +151,7 @@ export function YamlResourcesList({ resourcesData }) {
                 />
               </Card>
               <List>
-                {filteredResources.map(r => (
+                {resources.map(r => (
                   <CustomListItem type={'Inactive'}>
                     <FlexBox alignItems={'Center'}>
                       <Icon
