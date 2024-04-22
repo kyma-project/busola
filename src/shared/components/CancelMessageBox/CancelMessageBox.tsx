@@ -5,19 +5,40 @@ import {
   MessageBox,
   WithWebComponentPropTypes,
 } from '@ui5/webcomponents-react';
-import { ForwardRefExoticComponent, RefAttributes } from 'react';
+import {
+  ForwardRefExoticComponent,
+  RefAttributes,
+  useEffect,
+  useState,
+} from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 type CancelMessageBoxProps = {
-  open: boolean;
-  setOpen: Function;
+  isEdited: boolean;
+  //setOpen: Function;
   proceedButtonAction: Function;
 };
 
 export function CancelMessageBox({
-  open,
-  setOpen,
+  isEdited,
+  //setOpen,
   proceedButtonAction,
 }: CancelMessageBoxProps) {
+  const [open, setOpen] = useState(false);
+  const [layoutState] = useRecoilState(columnLayoutState);
+  const [searchParams] = useSearchParams();
+  const layout = searchParams.get('layout');
+
+  useEffect(() => {
+    if (isEdited && layoutState?.layout !== 'TwoColumnsMidExpanded') {
+      setOpen(true);
+    }
+  }, [layoutState, isEdited, layout]);
+  console.log(isEdited);
+  console.log(open);
+  console.log(layoutState);
   const handleClose = (event: {
     detail: {
       action:

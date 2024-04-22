@@ -14,6 +14,7 @@ import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useState } from 'react';
 import { CancelMessageBox } from '../CancelMessageBox/CancelMessageBox';
+import { createPortal } from 'react-dom';
 
 export const ResourceCreate = ({
   performRefetch,
@@ -144,10 +145,6 @@ export const ResourceCreate = ({
     return (
       <Button
         onClick={() => {
-          if (isEdited) {
-            setWarningOpen(true);
-            return;
-          }
           navigateAfterClose();
         }}
         design="Transparent"
@@ -180,6 +177,7 @@ export const ResourceCreate = ({
                 isEdited,
                 setIsEdited,
                 stickyHeaderHeight,
+                navigateAfterClose,
               })}
               <div
                 style={{
@@ -221,12 +219,6 @@ export const ResourceCreate = ({
           })}
         </div>
       )}
-
-      <CancelMessageBox
-        open={warningOpen}
-        setOpen={setWarningOpen}
-        proceedButtonAction={navigateAfterClose}
-      />
     </>
   );
 };

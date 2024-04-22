@@ -18,6 +18,8 @@ import { spacing } from '@ui5/webcomponents-react-base';
 import './ResourceForm.scss';
 import { useRecoilValue } from 'recoil';
 import { editViewModeState } from 'state/preferences/editViewModeAtom';
+import { createPortal } from 'react-dom';
+import { CancelMessageBox } from 'shared/components/CancelMessageBox/CancelMessageBox';
 
 const excludeStatus = resource => {
   const modifiedResource = { ...resource };
@@ -62,6 +64,7 @@ export function ResourceForm({
   setIsEdited,
   isEdited,
   stickyHeaderHeight,
+  navigateAfterClose,
 }) {
   // readonly schema ID, set only once
   const resourceSchemaId = useMemo(
@@ -81,6 +84,20 @@ export function ResourceForm({
   const editViewMode = useRecoilValue(editViewModeState);
 
   console.log(excludeStatus(resource));
+
+  useEffect(() => {
+    const handleClickOutside = e => {
+      console.log(e.target);
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    };
+
+    window.addEventListener('click', handleClickOutside);
+
+    return () => window.removeEventListener('click', handleClickOutside);
+  }, []);
+
   useEffect(() => {
     if (setIsEdited) {
       if (
@@ -293,7 +310,11 @@ export function ResourceForm({
           {mode === ModeSelector.MODE_YAML && (
             <div
               className="yaml-form"
-              style={{ width: '100%', height: '100%', minHeight: '300px' }}
+              style={{
+                width: '100%',
+                height: 'calc(100vh - 19rem)',
+                minHeight: '300px',
+              }}
             >
               {editor}
             </div>
@@ -301,6 +322,14 @@ export function ResourceForm({
           {formContent}
         </form>
       </UI5Panel>
+      {createPortal(
+        <CancelMessageBox
+          isEdited={isEdited}
+          //setOpen={setWarningOpen}
+          proceedButtonAction={navigateAfterClose}
+        />,
+        document.body,
+      )}
     </section>
   );
 }
