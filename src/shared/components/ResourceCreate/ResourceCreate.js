@@ -29,7 +29,6 @@ export const ResourceCreate = ({
   onlyYaml = false,
   protectedResource = false,
   protectedResourceWarning = null,
-  stickyHeaderHeight,
 }) => {
   const { t } = useTranslation();
   const {
@@ -46,7 +45,6 @@ export const ResourceCreate = ({
   confirmText = confirmText || t('common.buttons.create');
 
   function handleFormChanged() {
-    console.log('ON CHANGE');
     setTimeout(() => {
       revalidate();
     });
@@ -141,15 +139,12 @@ export const ResourceCreate = ({
 
     return button;
   }
-  console.log(isEdited);
-  console.log(warningOpen);
+
   const renderCancelButton = () => {
     return (
       <Button
         onClick={() => {
           if (isEdited) {
-            console.log(isEdited);
-            console.log('CANCEL');
             setWarningOpen(true);
             return;
           }
@@ -226,6 +221,7 @@ export const ResourceCreate = ({
           })}
         </div>
       )}
+
       <CancelMessageBox
         open={warningOpen}
         setOpen={setWarningOpen}

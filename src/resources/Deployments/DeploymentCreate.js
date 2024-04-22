@@ -34,13 +34,18 @@ export default function DeploymentCreate({
       : createDeploymentTemplate(namespace),
   );
   const [initialUnchangedResource] = useState(initialDeployment);
+
+  if (!initialDeployment) {
+    initialDeployment = createDeploymentTemplate(namespace);
+  }
+
   const {
     isIstioFeatureOn,
     isSidecarEnabled,
     setSidecarEnabled,
     setIsChanged,
   } = useSidecar({
-    initialRes: initialDeployment,
+    initialRes: initialUnchangedResource,
     res: deployment,
     setRes: setDeployment,
     path: '$.spec.template.metadata.labels',
@@ -53,11 +58,10 @@ export default function DeploymentCreate({
     const hasAnyContainers = !!(
       jp.value(deployment, '$.spec.template.spec.containers') || []
     ).length;
-    //console.log('depl');
+
     setCustomValid(hasAnyContainers);
   }, [deployment, setCustomValid]);
-  console.log(deployment);
-  console.log(initialDeployment);
+
   const handleNameChange = name => {
     jp.value(deployment, '$.metadata.name', name);
     jp.value(deployment, "$.metadata.labels['app.kubernetes.io/name']", name);
@@ -66,7 +70,7 @@ export default function DeploymentCreate({
     jp.value(deployment, '$.spec.template.metadata.labels.app', name); // pod labels
     setDeployment({ ...deployment });
   };
-  console.log(props);
+
   return (
     <ResourceForm
       {...props}
@@ -76,7 +80,7 @@ export default function DeploymentCreate({
       setResource={setDeployment}
       onChange={onChange}
       formElementRef={formElementRef}
-      presets={!initialDeployment && createPresets(namespace, t)}
+      presets={!initialUnchangedResource && createPresets(namespace, t)}
       onPresetSelected={value => {
         setDeployment(value.deployment);
       }}

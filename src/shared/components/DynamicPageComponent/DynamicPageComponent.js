@@ -12,7 +12,7 @@ import {
 
 import './DynamicPageComponent.scss';
 import { spacing } from '@ui5/webcomponents-react-base';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
@@ -206,13 +206,21 @@ export const DynamicPageComponent = ({
       </DynamicPageHeader>
     ) : null;
 
-  if (inlineEditForm) {
-    const stickyHeaderHeight =
-      (document.querySelector('.page-header')?.querySelector('header')
-        ?.clientHeight ?? 0) +
-      (document.querySelector('.page-header')?.querySelector('ui5-tabcontainer')
-        ?.clientHeight ?? 0);
+  const [stickyHeaderHeight, setStickyHeaderHeight] = useState(0);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setStickyHeaderHeight(
+        (document.querySelector('.page-header')?.querySelector('header')
+          ?.clientHeight ?? 0) +
+          (document
+            .querySelector('.page-header')
+            ?.querySelector('ui5-tabcontainer')?.clientHeight ?? 0),
+      );
+    });
+  }, []);
+
+  if (inlineEditForm) {
     return (
       <ObjectPage
         mode="IconTabBar"

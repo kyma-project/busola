@@ -19,6 +19,12 @@ import './ResourceForm.scss';
 import { useRecoilValue } from 'recoil';
 import { editViewModeState } from 'state/preferences/editViewModeAtom';
 
+const excludeStatus = resource => {
+  const modifiedResource = { ...resource };
+  delete modifiedResource.status;
+  return modifiedResource;
+};
+
 export function ResourceForm({
   pluralKind, // used for the request path
   singularName,
@@ -74,16 +80,26 @@ export function ResourceForm({
 
   const editViewMode = useRecoilValue(editViewModeState);
 
+  console.log(excludeStatus(resource));
   useEffect(() => {
-    if (
-      !isEdited &&
-      JSON.stringify(resource) !== JSON.stringify(initialResource) &&
-      setIsEdited
-    ) {
-      console.log('EDITED');
-      setIsEdited(true);
+    if (setIsEdited) {
+      if (
+        !isEdited &&
+        JSON.stringify(excludeStatus(resource)) !==
+          JSON.stringify(excludeStatus(initialResource))
+      ) {
+        console.log('EDITED');
+        setIsEdited(true);
+      }
+
+      if (
+        isEdited &&
+        JSON.stringify(resource) === JSON.stringify(initialResource)
+      ) {
+        setIsEdited(false);
+      }
     }
-  }, [isEdited, resource, setIsEdited, initialResource]);
+  }, [initialResource, isEdited, resource, setIsEdited]);
 
   const { t } = useTranslation();
   const createResource = useCreateResource({
@@ -125,7 +141,6 @@ export function ResourceForm({
   useEffect(() => {
     if (setCustomValid) {
       if (mode === ModeSelector.MODE_YAML) {
-        console.log('custom');
         setCustomValid(true);
         setCustomValid(validationRef.current);
       }
@@ -167,7 +182,6 @@ export function ResourceForm({
   editor = renderEditor
     ? renderEditor({ defaultEditor: editor, Editor: EditorWrapper })
     : editor;
-  //console.log(onChange);
 
   const formContent = (
     <Form
@@ -206,9 +220,8 @@ export function ResourceForm({
                   <K8sNameField
                     propertyPath="$.metadata.name"
                     kind={singularName}
-                    readOnly={readOnly || !!initialResource}
+                    readOnly={readOnly || !!initialUnchangedResource}
                     setValue={handleNameChange}
-                    //onChange={onChange}
                     {...nameProps}
                   />
                   <KeyValueField
@@ -232,7 +245,7 @@ export function ResourceForm({
       )}
     </Form>
   );
-  console.log(stickyHeaderHeight);
+  console.log(resource);
   return (
     <section className={classnames('resource-form', className)}>
       <UI5Panel
