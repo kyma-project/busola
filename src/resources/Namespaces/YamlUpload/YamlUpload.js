@@ -56,7 +56,10 @@ function YamlUpload({
     <FlexBox
       style={{
         gap: '1rem',
-        width: '98%', //when using less than 100%, the Monaco is able to shrink.
+        // when using solution from: https://github.com/microsoft/monaco-editor/issues/3393
+        // the Monaco is able to decrease it's size after enlarging
+        minWidth: 0, // https://github.com/microsoft/monaco-editor/issues/3393
+        minHeight: 0,
       }}
       direction={'Column'}
     >
@@ -76,7 +79,6 @@ function YamlUpload({
       >
         <Editor
           autocompletionDisabled
-          height="100%"
           language="yaml"
           value={yamlContentString ?? ''}
           onChange={updateYamlContent}
