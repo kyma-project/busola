@@ -10,6 +10,8 @@ import AiIllustrationHCdark from './assets/AI/AiIllustrationHCdark.svg';
 import { Widget, InlineWidget } from '../Widget';
 import { useRecoilValue } from 'recoil';
 import { isSystemThemeDark, themeState } from 'state/preferences/themeAtom';
+import { authDataState } from 'state/authDataAtom';
+import { jwtDecode } from 'jwt-decode';
 import './FeaturedCard.scss';
 
 const getIllustration = (illustration, theme) => {
@@ -63,6 +65,7 @@ export function FeaturedCard({ value, structure, schema, ...props }) {
   const theme = useRecoilValue(themeState);
   const [hideBanner, setHideBanner] = useState(false);
   const hideBannerKey = `hideBanner${structure?.id}`;
+  const authData = useRecoilValue(authDataState);
 
   useEffect(() => {
     if (!structure?.id) return;
@@ -76,7 +79,24 @@ export function FeaturedCard({ value, structure, schema, ...props }) {
     localStorage.setItem(hideBannerKey, updatedBoolean);
   };
 
-  return structure?.id && !hideBanner ? (
+  const isSAPuser = token => {
+    try {
+      const decoded = jwtDecode(token);
+      return decoded?.sub?.includes('@sap.com');
+    } catch (error) {
+      return false;
+    }
+  };
+
+  if (
+    !structure?.id ||
+    hideBanner ||
+    (structure?.visibility === 'isSAPuser' && !isSAPuser(authData?.token))
+  ) {
+    return <></>;
+  }
+
+  return (
     <div style={spacing.sapUiSmallMargin}>
       <Card>
         <div
@@ -121,7 +141,5 @@ export function FeaturedCard({ value, structure, schema, ...props }) {
         </div>
       </Card>
     </div>
-  ) : (
-    <></>
   );
 }
