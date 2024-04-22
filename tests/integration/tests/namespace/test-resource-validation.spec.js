@@ -178,6 +178,7 @@ context('Test resource validation', () => {
 
     cy.get('[data-testID="yaml-upload-modal__validation-result"]')
       .get('button[title="Expand/Collapse"]')
+      .first()
       .click();
 
     cy.get('[data-testID="yaml-upload-modal__validation-result"]').contains(

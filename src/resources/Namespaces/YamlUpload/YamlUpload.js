@@ -60,6 +60,7 @@ function YamlUpload({
         // the Monaco is able to decrease it's size after enlarging
         minWidth: 0, // https://github.com/microsoft/monaco-editor/issues/3393
         minHeight: 0,
+        ...spacing.sapUiSmallMarginEnd,
       }}
       direction={'Column'}
     >
