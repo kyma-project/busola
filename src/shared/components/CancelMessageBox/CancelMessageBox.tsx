@@ -18,7 +18,6 @@ export function CancelMessageBox({
   setOpen,
   proceedButtonAction,
 }: CancelMessageBoxProps) {
-  console.log(open);
   const handleClose = (event: {
     detail: {
       action:
@@ -30,8 +29,6 @@ export function CancelMessageBox({
           >;
     };
   }) => {
-    console.log(event.detail.action);
-    console.log(typeof event.detail.action);
     if (event.detail.action === '0: custom action') {
       proceedButtonAction();
     } else if (event.detail.action === 'Cancel') {

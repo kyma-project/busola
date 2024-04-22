@@ -33,9 +33,7 @@ export default function DeploymentCreate({
       ? _.cloneDeep(initialDeployment)
       : createDeploymentTemplate(namespace),
   );
-  const [initialUnchangedResource] = useState(
-    initialDeployment || createDeploymentTemplate(namespace),
-  );
+  const [initialUnchangedResource] = useState(initialDeployment);
   const {
     isIstioFeatureOn,
     isSidecarEnabled,
@@ -59,6 +57,7 @@ export default function DeploymentCreate({
     setCustomValid(hasAnyContainers);
   }, [deployment, setCustomValid]);
   console.log(deployment);
+  console.log(initialDeployment);
   const handleNameChange = name => {
     jp.value(deployment, '$.metadata.name', name);
     jp.value(deployment, "$.metadata.labels['app.kubernetes.io/name']", name);
@@ -67,7 +66,7 @@ export default function DeploymentCreate({
     jp.value(deployment, '$.spec.template.metadata.labels.app', name); // pod labels
     setDeployment({ ...deployment });
   };
-  //console.log(onChange);
+  console.log(props);
   return (
     <ResourceForm
       {...props}

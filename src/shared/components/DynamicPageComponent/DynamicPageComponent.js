@@ -207,6 +207,12 @@ export const DynamicPageComponent = ({
     ) : null;
 
   if (inlineEditForm) {
+    const stickyHeaderHeight =
+      (document.querySelector('.page-header')?.querySelector('header')
+        ?.clientHeight ?? 0) +
+      (document.querySelector('.page-header')?.querySelector('ui5-tabcontainer')
+        ?.clientHeight ?? 0);
+
     return (
       <ObjectPage
         mode="IconTabBar"
@@ -234,7 +240,7 @@ export const DynamicPageComponent = ({
             showYamlTab ? t('common.tabs.yaml') : t('common.tabs.edit')
           }
         >
-          {inlineEditForm()}
+          {inlineEditForm(stickyHeaderHeight)}
         </ObjectPageSection>
       </ObjectPage>
     );
@@ -251,7 +257,11 @@ export const DynamicPageComponent = ({
       headerContent={headerContent}
       footer={footer}
     >
-      {content}
+      {({ stickyHeaderHeight }) => {
+        return typeof content === 'function'
+          ? content(stickyHeaderHeight)
+          : content;
+      }}
     </DynamicPage>
   );
 };

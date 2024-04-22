@@ -9,6 +9,7 @@ import {
 
 import { spacing } from '@ui5/webcomponents-react-base';
 import './UI5Panel.scss';
+import { useEffect } from 'react';
 
 export const UI5Panel = ({
   fixed = true,
@@ -22,14 +23,32 @@ export const UI5Panel = ({
   children,
   description = '',
   style = null,
+  stickyHeader = false,
+  headerTop = '0',
 }) => {
+  useEffect(() => {
+    if (headerTop !== '0')
+      setTimeout(() => {
+        const stickyHeader = document
+          .querySelector('ui5-panel')
+          ?.shadowRoot?.querySelector('.ui5-panel-root')
+          ?.querySelector(
+            '.ui5-panel-heading-wrapper.ui5-panel-heading-wrapper-sticky',
+          );
+
+        if (stickyHeader) {
+          stickyHeader.style['top'] = headerTop;
+        }
+      });
+  });
+
   return (
     <Panel
       fixed={fixed}
       key={keyComponent}
       className={`${className} bsl-panel-header card-shadow`}
       style={style ? style : !disableMargin ? spacing.sapUiSmallMargin : null}
-      //style={{marginBottom: '50px'}}
+      stickyHeader={stickyHeader}
       header={
         <Toolbar
           style={{

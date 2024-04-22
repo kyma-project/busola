@@ -29,6 +29,7 @@ export const ResourceCreate = ({
   onlyYaml = false,
   protectedResource = false,
   protectedResourceWarning = null,
+  stickyHeaderHeight,
 }) => {
   const { t } = useTranslation();
   const {
@@ -171,7 +172,7 @@ export const ResourceCreate = ({
             layoutNumber === 'EndColumn' ? '?layout=TwoColumnsMidExpanded' : ''
           }`}
           showYamlTab={disableEdit && onlyYaml}
-          content={
+          content={stickyHeaderHeight => (
             <div className="create-form">
               {renderForm({
                 formElementRef,
@@ -183,6 +184,7 @@ export const ResourceCreate = ({
                 performManualSubmit: handleFormSubmit,
                 isEdited,
                 setIsEdited,
+                stickyHeaderHeight,
               })}
               <div
                 style={{
@@ -202,7 +204,7 @@ export const ResourceCreate = ({
                 />
               </div>
             </div>
-          }
+          )}
         />
       )}
       {isEdit && (

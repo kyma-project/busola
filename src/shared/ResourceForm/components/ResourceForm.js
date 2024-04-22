@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useMemo, useState } from 'react';
+import React, { useRef, useEffect, useMemo } from 'react';
 import classnames from 'classnames';
 import jsyaml from 'js-yaml';
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
@@ -18,7 +18,6 @@ import { spacing } from '@ui5/webcomponents-react-base';
 import './ResourceForm.scss';
 import { useRecoilValue } from 'recoil';
 import { editViewModeState } from 'state/preferences/editViewModeAtom';
-import { UI5PanelStickyHeader } from 'shared/components/UI5Panel/UI5PanelStickyHeader';
 
 export function ResourceForm({
   pluralKind, // used for the request path
@@ -56,6 +55,7 @@ export function ResourceForm({
   isEdit,
   setIsEdited,
   isEdited,
+  stickyHeaderHeight,
 }) {
   // readonly schema ID, set only once
   const resourceSchemaId = useMemo(
@@ -77,13 +77,13 @@ export function ResourceForm({
   useEffect(() => {
     if (
       !isEdited &&
-      JSON.stringify(resource) !== JSON.stringify(initialUnchangedResource) &&
+      JSON.stringify(resource) !== JSON.stringify(initialResource) &&
       setIsEdited
     ) {
       console.log('EDITED');
       setIsEdited(true);
     }
-  }, [isEdited, resource, setIsEdited, initialUnchangedResource]);
+  }, [isEdited, resource, setIsEdited, initialResource]);
 
   const { t } = useTranslation();
   const createResource = useCreateResource({
@@ -232,14 +232,16 @@ export function ResourceForm({
       )}
     </Form>
   );
-
+  console.log(stickyHeaderHeight);
   return (
     <section className={classnames('resource-form', className)}>
-      <UI5PanelStickyHeader
+      <UI5Panel
         key={`edit-panel-${singularName}`}
         className="resource-form--panel card-shadow"
         style={spacing.sapUiSmallMarginTopBottom}
         disableMargin
+        stickyHeader={true}
+        headerTop={stickyHeaderHeight + 'px'}
         headerActions={
           <>
             {actions}
@@ -285,7 +287,7 @@ export function ResourceForm({
           )}
           {formContent}
         </form>
-      </UI5PanelStickyHeader>
+      </UI5Panel>
     </section>
   );
 }
