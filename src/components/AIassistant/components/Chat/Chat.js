@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { FlexBox, Icon, Input } from '@ui5/webcomponents-react';
 import { spacing } from '@ui5/webcomponents-react-base';
@@ -103,25 +103,23 @@ export default function Chat() {
       >
         {chatHistory.map((message, index) => {
           return message.author === 'ai' ? (
-            <>
+            <React.Fragment key={index}>
               <Message
-                key={index}
-                className={`left-aligned`}
+                className="left-aligned"
                 messageChunks={message.messageChunks}
                 isLoading={message.isLoading}
               />
               {index === chatHistory.length - 1 && !message.isLoading && (
                 <Bubbles
-                  key={index + '.2'}
                   onClick={sendPrompt}
                   suggestions={message.suggestions}
                 />
               )}
-            </>
+            </React.Fragment>
           ) : (
             <Message
               key={index}
-              className={`right-aligned`}
+              className="right-aligned"
               messageChunks={message.messageChunks}
             />
           );
