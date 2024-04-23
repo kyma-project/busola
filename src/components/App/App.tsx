@@ -76,7 +76,7 @@ export default function App() {
   return (
     <SplitterLayout id="splitter-layout">
       <SplitterElement
-        resizable={true}
+        resizable={showAssistant.show}
         size={
           showAssistant.show
             ? showAssistant.fullScreen
@@ -119,9 +119,9 @@ export default function App() {
       </SplitterElement>
       {showAssistant.show ? (
         <SplitterElement
-          resizable={true}
+          resizable={!showAssistant.fullScreen}
           size={showAssistant.fullScreen ? '100%' : '20%'}
-          minSize={325}
+          minSize={350}
         >
           <AIassistant />
         </SplitterElement>
