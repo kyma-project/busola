@@ -52,11 +52,10 @@ export function useCreateResource({
         },
       ),
     });
-    console.log(resetLayout);
+
     if (!isEdit || resetLayout) {
       if (isColumnLeyoutEnabled) {
         if (resetLayout) {
-          console.log('first');
           setLayoutColumn({
             layout: 'OneColumn',
             midColumn: null,

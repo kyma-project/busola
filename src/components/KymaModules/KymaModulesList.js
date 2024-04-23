@@ -151,7 +151,7 @@ export function KymaModulesList(props) {
           ),
         ),
         // Namespace
-        findStatus(resource.name)?.resource.metadata.namespace ||
+        findStatus(resource.name)?.resource?.metadata?.namespace ||
           EMPTY_TEXT_PLACEHOLDER,
         // Channel
         findStatus(resource.name)?.channel || EMPTY_TEXT_PLACEHOLDER,

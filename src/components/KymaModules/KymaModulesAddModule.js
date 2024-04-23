@@ -14,18 +14,27 @@ import './KymaModulesAddModule.scss';
 export default function KymaModulesAddModule(props) {
   const { t } = useTranslation();
   const modulesResourceUrl = `/apis/operator.kyma-project.io/v1beta2/moduletemplates`;
-  const kymaResourceUrl =
-    '/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas/default';
 
+  const { data: kymaResources } = useGet(
+    '/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas',
+  );
+
+  const resourceName = kymaResources?.items[0].metadata.name;
+  const kymaResourceUrl = `/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas/${resourceName}`;
   const { data: modules } = useGet(modulesResourceUrl, {
     pollingInterval: 3000,
+    skip: !resourceName,
   });
 
   const { data: initialKymaResource, loading } = useGet(kymaResourceUrl, {
     pollingInterval: 3000,
+    skip: !resourceName,
   });
 
   const [kymaResource, setKymaResource] = useState(
+    cloneDeep(initialKymaResource),
+  );
+  const [initialUnchangedResource, setInitialUnchangedResource] = useState(
     cloneDeep(initialKymaResource),
   );
   const [selectedModules, setSelectedModules] = useState(
@@ -33,6 +42,7 @@ export default function KymaModulesAddModule(props) {
   );
 
   useEffect(() => {
+    setInitialUnchangedResource(cloneDeep(initialKymaResource));
     setKymaResource(cloneDeep(initialKymaResource));
     setSelectedModules(initialKymaResource?.spec?.modules);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -104,6 +114,7 @@ export default function KymaModulesAddModule(props) {
       onChange={props.onChange}
       layoutNumber={'StartColumn'}
       resetLayout
+      initialUnchangedResource={initialUnchangedResource}
     >
       {modulesAddData?.length !== 0 ? (
         modulesAddData?.map(module => {

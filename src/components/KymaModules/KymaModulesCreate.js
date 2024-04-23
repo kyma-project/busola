@@ -13,8 +13,8 @@ export default function KymaModulesCreate({ resource, ...props }) {
       {...props}
       pluralKind="kymas"
       singularName={t('kyma-modules.kyma')}
-      resource={resource}
-      initialResource={kymaResource}
+      resource={kymaResource}
+      initialResource={resource}
       setResource={setKymaResource}
       createUrl={props.resourceUrl}
       onlyYaml
