@@ -79,15 +79,24 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
     <>
       {warnings.flat().map(warning => (
         <>
-          <FlexBox alignItems={'Center'}>
+          <FlexBox alignItems={'Begin'}>
             <ObjectStatus
               showDefaultIcon
               state={ValueState.Warning}
-              style={spacing.sapUiSmallMarginEnd}
+              style={{
+                marginLeft: '-0.3125rem', //set icon in one line with expand arrow. The value from class `--_ui5-v1-20-0_panel_content_padding1` is divided by 2
+                ...spacing.sapUiSmallMarginEnd,
+              }}
             />
             <ValidationWarning warning={warning.message} />
           </FlexBox>
-          <SeparatorLine style={spacing.sapUiSmallMarginTopBottom} />
+          <SeparatorLine
+            style={{
+              ...spacing.sapUiSmallMarginTopBottom,
+              marginLeft: '-1rem',
+              marginRight: '-1rem',
+            }}
+          />
         </>
       ))}
     </>
@@ -121,6 +130,13 @@ export const ResourceValidationResult = ({ resource }) => {
         hideCloseButton={true}
         hidden={!validateResources.isEnabled}
         fixed={!validateResources.isEnabled}
+        style={{
+          padding: 0,
+          paddingLeft: 0,
+          paddingRight: 0,
+          marginLeft: '-1rem',
+          marginRight: '-1rem',
+        }}
         header={
           <Toolbar toolbarStyle={'Clear'}>
             {resource?.kind + ' ' + resource?.metadata?.name}

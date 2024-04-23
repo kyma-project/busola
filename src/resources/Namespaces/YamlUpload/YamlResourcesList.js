@@ -89,7 +89,14 @@ export function YamlResourcesList({ resourcesData }) {
                 ...spacing.sapUiSmallMargin,
               }}
             >
-              <p>
+              <p
+                style={{
+                  font: 'var(--sapFontFamily)',
+                  fontSize: `var(--sapFontSize)`,
+                  lineHeight: 'var(--sapContent_LineHeight)',
+                  color: 'var(--sapTextColor)',
+                }}
+              >
                 <Trans
                   i18nKey={'upload-yaml.info'}
                   values={{ namespace: defaultNamespace }}
@@ -97,17 +104,19 @@ export function YamlResourcesList({ resourcesData }) {
                   <span style={{ fontWeight: 'bold' }}></span>
                 </Trans>
               </p>
-              <Title level="H4">{t('upload-yaml.uploaded-resources')}</Title>
-              <SeparatorLine />
+              <Title level="H4" style={spacing.sapUiSmallMarginTop}>
+                {t('upload-yaml.uploaded-resources')}
+              </Title>
+              <SeparatorLine style={{ margin: '0rem -1rem' }} />
               <ValidationSwitch />
-              <p>
+              <Text>
                 <Trans
                   i18nKey={'upload-yaml.you-will-create'}
                   values={{ count: resources.length }}
                 >
                   <span style={{ fontWeight: 'bold' }}></span>
                 </Trans>
-              </p>
+              </Text>
               {resources.map(r => (
                 <ResourceValidationResult resource={r.value} />
               ))}
