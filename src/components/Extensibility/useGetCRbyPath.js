@@ -2,12 +2,12 @@ import { useRecoilValue } from 'recoil';
 import { useParams } from 'react-router-dom';
 import { clusterState } from 'state/clusterAtom';
 import pluralize from 'pluralize';
-import { extensionsState } from 'state/navigation/extensionsAtom';
+import { allExtensionsState } from 'state/navigation/extensionsAtom';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
-export const useGetCRbyPath = namespace => {
+export const useGetCRbyPath = resourceType => {
   const { namespaceId } = useParams();
-  const extensions = useRecoilValue(extensionsState);
+  const extensions = useRecoilValue(allExtensionsState);
   const { name: clusterName } = useRecoilValue(clusterState) || {};
   const layoutState = useRecoilValue(columnLayoutState);
 
@@ -16,8 +16,10 @@ export const useGetCRbyPath = namespace => {
     const extensionPath = urlPath || pluralize(resource?.kind?.toLowerCase());
 
     const hasCorrectScope =
-      (scope?.toLowerCase() === 'namespace') === !!namespaceId ||
-      (scope?.toLowerCase() === 'namespace') === !!namespace;
+      (scope?.toLowerCase() === 'namespace') ===
+        !!layoutState?.midColumn?.namespaceId ||
+      (scope?.toLowerCase() === 'namespace') === !!namespaceId;
+
     if (!hasCorrectScope) return false;
 
     const crPath = window.location.pathname
@@ -27,10 +29,9 @@ export const useGetCRbyPath = namespace => {
       .replace('core-ui/', '')
       .replace('kymamodules/', '');
 
-    return (
-      layoutState?.midColumn?.resourceType === extensionPath ||
-      crPath.split('/')[0] === extensionPath
-    );
+    return resourceType
+      ? resourceType == extensionPath
+      : crPath.split('/')[0] === extensionPath;
   });
 
   return resource;

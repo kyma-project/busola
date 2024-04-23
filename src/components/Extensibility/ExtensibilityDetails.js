@@ -1,4 +1,5 @@
 import pluralize from 'pluralize';
+import { useRecoilValue } from 'recoil';
 
 import { usePrepareDetailsProps } from 'resources/helpers';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
@@ -17,14 +18,15 @@ import {
   useCreateResourceDescription,
 } from './helpers';
 import { useJsonata } from './hooks/useJsonata';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 export const ExtensibilityDetailsCore = ({
   resMetaData,
   resourceName,
-  namespaceId,
   layoutCloseCreateUrl,
 }) => {
   const { t, widgetT, exists } = useGetTranslation();
+  const layoutState = useRecoilValue(columnLayoutState);
 
   const { urlPath, resource, features, description: resourceDescription } =
     resMetaData?.general ?? {};
@@ -45,13 +47,8 @@ export const ExtensibilityDetailsCore = ({
     apiGroup: resource?.group,
     apiVersion: resource?.version,
     resourceName,
-    namespaceId,
+    namespaceId: layoutState?.midColumn?.namespaceId,
   });
-
-  // there may be a moment when `resMetaData` is undefined (e.g. when switching the namespace)
-  if (!resource) {
-    return null;
-  }
 
   const resourceTitle = exists('name')
     ? t('name')
@@ -127,11 +124,12 @@ export const ExtensibilityDetailsCore = ({
 };
 const ExtensibilityDetails = ({
   resourceName,
-  namespaceId,
+  resourceType,
   layoutCloseCreateUrl,
 }) => {
-  const resMetaData = useGetCRbyPath(namespaceId);
+  const resMetaData = useGetCRbyPath(resourceType);
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
+  if (!resMetaData) return null;
 
   return (
     <TranslationBundleContext.Provider
@@ -145,7 +143,6 @@ const ExtensibilityDetails = ({
           <ExtensibilityDetailsCore
             resMetaData={resMetaData}
             resourceName={resourceName}
-            namespaceId={namespaceId}
             layoutCloseCreateUrl={layoutCloseCreateUrl}
           />
         </ExtensibilityErrBoundary>
