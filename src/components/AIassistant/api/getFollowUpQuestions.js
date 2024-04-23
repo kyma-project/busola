@@ -9,8 +9,9 @@ export default async function getFollowUpQuestions({
 
     let { results } = await fetch(url, {
       headers: {
-        accept: 'application/json, text/plain, */*',
+        accept: 'application/json',
         'content-type': 'application/json',
+        'x-user': sessionID,
       },
       body: JSON.stringify(payload),
       method: 'POST',

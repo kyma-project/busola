@@ -18,10 +18,10 @@ import { showAIassistantState } from 'components/AIassistant/state/showAIassista
 import { initialPromptState } from '../state/initalPromptAtom';
 import getPromptSuggestions from 'components/AIassistant/api/getPromptSuggestions';
 import { createPortal } from 'react-dom';
-import './AIOpener.scss';
 import { authDataState } from 'state/authDataAtom';
 import { sessionIDState } from '../state/sessionIDAtom';
 import generateSessionID from '../utils/generateSesssionID';
+import './AIOpener.scss';
 
 export default function AIOpener({
   namespace,

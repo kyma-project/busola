@@ -12,6 +12,7 @@ export default async function getChatResponse({
     headers: {
       accept: 'application/json',
       'content-type': 'application/json',
+      'x-user': sessionID,
     },
     body: JSON.stringify(payload),
     method: 'POST',
@@ -43,8 +44,16 @@ function readChunk(
       if (done) {
         return;
       }
-      const chunk = JSON.parse(decoder.decode(value, { stream: true }));
-      handleChatResponse(chunk);
+      // Also handles the rare case of two chunks being sent at once
+      const receivedString = decoder.decode(value, { stream: true });
+      const chunks = receivedString.match(/{[^{}]*}/g);
+      chunks.forEach(chunk => {
+        const jsonChunk = JSON.parse(chunk);
+        if ('error' in jsonChunk) {
+          throw new Error(jsonChunk.error);
+        }
+        handleChatResponse(jsonChunk);
+      });
       readChunk(reader, decoder, handleChatResponse, handleError, sessionID);
     })
     .catch(error => {
