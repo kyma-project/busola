@@ -8,8 +8,9 @@ import Message from './messages/Message';
 import Bubbles from './messages/Bubbles';
 import ErrorMessage from './messages/ErrorMessage';
 import getChatResponse from 'components/AIassistant/api/getChatResponse';
-import './Chat.scss';
 import { sessionIDState } from 'components/AIassistant/state/sessionIDAtom';
+import getFollowUpQuestions from 'components/AIassistant/api/getFollowUpQuestions';
+import './Chat.scss';
 
 export default function Chat({ isFullScreen }) {
   const { t } = useTranslation();
@@ -26,14 +27,27 @@ export default function Chat({ isFullScreen }) {
     );
   };
 
-  const handleSuccess = response => {
+  const handleChatResponse = response => {
+    const isLoading = response?.step !== 'output';
+    if (!isLoading) {
+      getFollowUpQuestions({ sessionID, handleFollowUpQuestions });
+    }
     setChatHistory(prevMessages => {
       const [latestMessage] = prevMessages.slice(-1);
       return prevMessages.slice(0, -1).concat({
         author: 'ai',
         messageChunks: latestMessage.messageChunks.concat(response),
-        isLoading: response?.step !== 'output',
+        isLoading,
       });
+    });
+  };
+
+  const handleFollowUpQuestions = questions => {
+    setChatHistory(prevMessages => {
+      const [latestMessage] = prevMessages.slice(-1);
+      return prevMessages
+        .slice(0, -1)
+        .concat({ ...latestMessage, suggestions: questions });
     });
   };
 
@@ -45,7 +59,7 @@ export default function Chat({ isFullScreen }) {
   const sendPrompt = prompt => {
     setErrorOccured(false);
     addMessage('user', [{ step: 'output', result: prompt }], false);
-    getChatResponse({ prompt, handleSuccess, handleError, sessionID });
+    getChatResponse({ prompt, handleChatResponse, handleError, sessionID });
     addMessage('ai', [], true);
   };
 
@@ -101,13 +115,7 @@ export default function Chat({ isFullScreen }) {
                   key={index + '.2'}
                   className={isFullScreen ? 'fullscreen' : ''}
                   onClick={sendPrompt}
-                  suggestions={
-                    message.suggestions ?? [
-                      'What is the meaning of life?',
-                      'Where to buy cheap bitcoins?',
-                      'What should I do next?',
-                    ]
-                  }
+                  suggestions={message.suggestions}
                 />
               )}
             </>

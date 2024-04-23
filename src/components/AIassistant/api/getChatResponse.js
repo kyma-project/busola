@@ -1,6 +1,6 @@
 export default async function getChatResponse({
   prompt,
-  handleSuccess,
+  handleChatResponse,
   handleError,
   sessionID,
 }) {
@@ -22,7 +22,7 @@ export default async function getChatResponse({
       }
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
-      readChunk(reader, decoder, handleSuccess, handleError);
+      readChunk(reader, decoder, handleChatResponse, handleError, sessionID);
     })
     .catch(error => {
       handleError();
@@ -30,7 +30,13 @@ export default async function getChatResponse({
     });
 }
 
-function readChunk(reader, decoder, handleSuccess, handleError) {
+function readChunk(
+  reader,
+  decoder,
+  handleChatResponse,
+  handleError,
+  sessionID,
+) {
   reader
     .read()
     .then(({ done, value }) => {
@@ -38,8 +44,8 @@ function readChunk(reader, decoder, handleSuccess, handleError) {
         return;
       }
       const chunk = JSON.parse(decoder.decode(value, { stream: true }));
-      handleSuccess(chunk);
-      readChunk(reader, decoder, handleSuccess, handleError);
+      handleChatResponse(chunk);
+      readChunk(reader, decoder, handleChatResponse, handleError, sessionID);
     })
     .catch(error => {
       handleError();

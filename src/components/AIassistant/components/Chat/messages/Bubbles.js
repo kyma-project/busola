@@ -2,7 +2,7 @@ import { Button, FlexBox } from '@ui5/webcomponents-react';
 import './Bubbles.scss';
 
 export default function Bubbles({ suggestions, onClick, className }) {
-  return (
+  return suggestions ? (
     <FlexBox
       wrap="Wrap"
       justifyContent="Start"
@@ -19,5 +19,7 @@ export default function Bubbles({ suggestions, onClick, className }) {
         </Button>
       ))}
     </FlexBox>
+  ) : (
+    <></>
   );
 }
