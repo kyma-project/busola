@@ -1,13 +1,9 @@
 import { Button, FlexBox } from '@ui5/webcomponents-react';
 import './Bubbles.scss';
 
-export default function Bubbles({ suggestions, onClick, className }) {
+export default function Bubbles({ suggestions, onClick }) {
   return suggestions ? (
-    <FlexBox
-      wrap="Wrap"
-      justifyContent="Start"
-      className={'bubbles-container ' + className}
-    >
+    <FlexBox wrap="Wrap" justifyContent="Start" className={'bubbles-container'}>
       {suggestions.map((suggestion, index) => (
         <Button
           key={index}

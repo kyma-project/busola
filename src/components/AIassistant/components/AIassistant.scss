@@ -24,17 +24,21 @@
     .tab-container {
       height: calc(100vh - 60px - 1.4rem);
     }
+  }
+}
 
-    .tab-container::part(content) {
-      width: 100%;
-      margin-left: 0;
-      margin-right: 0;
-    }
+@container (max-width: 950px) {
+  .tab-container::part(content) {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
 
-    .tab-container.fullscreen::part(content) {
-      width: 60%;
-      margin-left: 20%;
-      margin-right: 20%;
-    }
+@container (min-width: 950px) {
+  .tab-container::part(content) {
+    width: 70%;
+    margin-left: 15%;
+    margin-right: 15%;
   }
 }

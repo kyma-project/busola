@@ -1,5 +1,5 @@
 .message {
-  max-width: 240px;
+  max-width: 80%;
   padding: 12px;
 
   &.loading {
@@ -37,10 +37,6 @@
   }
 
   .text {
-    line-height: 1.25;
+    line-height: 1.35;
   }
-}
-
-.message.fullscreen {
-  max-width: 60%;
 }

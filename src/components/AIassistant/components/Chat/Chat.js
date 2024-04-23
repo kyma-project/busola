@@ -12,7 +12,7 @@ import { sessionIDState } from 'components/AIassistant/state/sessionIDAtom';
 import getFollowUpQuestions from 'components/AIassistant/api/getFollowUpQuestions';
 import './Chat.scss';
 
-export default function Chat({ isFullScreen }) {
+export default function Chat() {
   const { t } = useTranslation();
   const containerRef = useRef(null);
   const [inputValue, setInputValue] = useState('');
@@ -106,14 +106,13 @@ export default function Chat({ isFullScreen }) {
             <>
               <Message
                 key={index}
-                className={`left-aligned${isFullScreen ? ' fullscreen' : ''}`}
+                className={`left-aligned`}
                 messageChunks={message.messageChunks}
                 isLoading={message.isLoading}
               />
               {index === chatHistory.length - 1 && !message.isLoading && (
                 <Bubbles
                   key={index + '.2'}
-                  className={isFullScreen ? 'fullscreen' : ''}
                   onClick={sendPrompt}
                   suggestions={message.suggestions}
                 />
@@ -122,7 +121,7 @@ export default function Chat({ isFullScreen }) {
           ) : (
             <Message
               key={index}
-              className={`right-aligned${isFullScreen ? ' fullscreen' : ''}`}
+              className={`right-aligned`}
               messageChunks={message.messageChunks}
             />
           );

@@ -12,7 +12,7 @@ import { spacing } from '@ui5/webcomponents-react-base';
 import { useRecoilState } from 'recoil';
 import { showAIassistantState } from 'components/AIassistant/state/showAIassistantAtom';
 import Chat from './Chat/Chat';
-import PageInsights from './PageInsights/PageInsights';
+//import PageInsights from './PageInsights/PageInsights';
 import './AIassistant.scss';
 
 export default function AIassistant() {
@@ -60,16 +60,14 @@ export default function AIassistant() {
         <TabContainer
           fixed
           contentBackgroundDesign="Transparent"
-          className={`tab-container${
-            showAssistant.fullScreen ? ' fullscreen' : ''
-          }`}
+          className={`tab-container`}
         >
           <Tab selected text={t('ai-assistant.tabs.chat')}>
-            <Chat isFullScreen={showAssistant.fullScreen} />
+            <Chat />
           </Tab>
-          <Tab text={t('ai-assistant.tabs.page-insights')}>
+          {/*<Tab text={t('ai-assistant.tabs.page-insights')}>
             <PageInsights />
-          </Tab>
+          </Tab>*/}
         </TabContainer>
       </Card>
     </div>

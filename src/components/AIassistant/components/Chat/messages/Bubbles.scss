@@ -1,5 +1,5 @@
 .bubbles-container {
-  max-width: 275px;
+  max-width: 90%;
   gap: 8px;
 
   .bubble-button {
@@ -11,8 +11,4 @@
     background-color: var(--sapBackgroundColor1);
     border-color: var(--sapChart_OrderedColor_5);
   }
-}
-
-.bubbles-container.fullscreen {
-  max-width: 65%;
 }

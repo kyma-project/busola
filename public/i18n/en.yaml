@@ -6,7 +6,7 @@ apps:
 ai-assistant:
   name: Joule
   opener:
-    use-ai: Use AI
+    use-ai: AI Companion
     suggestions: Suggestions
     input-placeholder: Ask about this resource
     error-message: Couldn't fetch suggestions. Please try again.
