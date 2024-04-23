@@ -395,7 +395,7 @@ export function ResourceListRenderer({
     rowColumns.splice(nameColIndex + 1, 0, protectedResourceWarning(entry));
     return rowColumns;
   };
-  console.log(columnLayout);
+
   const handleShowCreate = () => {
     setActiveResource(undefined);
     setLayoutColumn(

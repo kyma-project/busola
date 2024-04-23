@@ -5,40 +5,26 @@ import {
   MessageBox,
   WithWebComponentPropTypes,
 } from '@ui5/webcomponents-react';
-import {
-  ForwardRefExoticComponent,
-  RefAttributes,
-  useEffect,
-  useState,
-} from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useGetTranslation } from 'components/Extensibility/helpers';
+import { ForwardRefExoticComponent, RefAttributes } from 'react';
 import { useRecoilState } from 'recoil';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { isResourceEditedState } from 'state/resourceEditedAtom';
 
 type CancelMessageBoxProps = {
   isEdited: boolean;
-  //setOpen: Function;
+  isOpen?: boolean;
   proceedButtonAction: Function;
 };
 
 export function CancelMessageBox({
-  isEdited,
-  //setOpen,
   proceedButtonAction,
+  isOpen,
 }: CancelMessageBoxProps) {
-  const [open, setOpen] = useState(false);
-  const [layoutState] = useRecoilState(columnLayoutState);
-  const [searchParams] = useSearchParams();
-  const layout = searchParams.get('layout');
+  const { t } = useGetTranslation();
+  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
+    isResourceEditedState,
+  );
 
-  useEffect(() => {
-    if (isEdited && layoutState?.layout !== 'TwoColumnsMidExpanded') {
-      setOpen(true);
-    }
-  }, [layoutState, isEdited, layout]);
-  console.log(isEdited);
-  console.log(open);
-  console.log(layoutState);
   const handleClose = (event: {
     detail: {
       action:
@@ -53,20 +39,23 @@ export function CancelMessageBox({
     if (event.detail.action === '0: custom action') {
       proceedButtonAction();
     } else if (event.detail.action === 'Cancel') {
-      setOpen(false);
+      setIsResourceEdited({ isEdited: true, warningOpen: false });
     }
-    setOpen(false);
+    setIsResourceEdited({ isEdited: false, warningOpen: false });
   };
 
   return (
     <MessageBox
       type="Warning"
-      open={open}
+      open={isOpen ?? isResourceEdited.warningOpen}
       onClose={handleClose}
       titleText="Discard Changes"
-      actions={[<Button design="Emphasized">Discard</Button>, 'Cancel']}
+      actions={[
+        <Button design="Emphasized">{t('common.buttons.discard')}</Button>,
+        `${t('common.buttons.cancel')}`,
+      ]}
     >
-      You haven't saved your changes. Navigating out will discard them.
+      {t('common.messages.discard-changes-warning')}
     </MessageBox>
   );
 }

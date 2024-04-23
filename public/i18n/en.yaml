@@ -253,6 +253,7 @@ common:
     copy: Copy
     create: Create
     delete: Delete
+    discard: Discard
     disconnect: Disconnect
     edit: Edit
     edit-yaml: Edit YAML
@@ -361,6 +362,7 @@ common:
     cannot-load: 'Cannot load {{value}}: {{error.message}}.'
     choose: Choose {{value}}
     click-to-select: Select {{value}} from the list
+    discard-changes-warning: You haven't saved your changes. Navigating out will discard them.
     doesnt-exist: doesn't exist
     entry-not-found: Entry not found
     error: 'Error: {{error}}'

@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { NavNode } from 'state/types';
 import { useUrl } from 'hooks/useUrl';
 
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { clusterState } from 'state/clusterAtom';
 import { columnLayoutState } from 'state/columnLayoutAtom';
@@ -12,6 +12,7 @@ import {
   SideNavigationItem,
 } from '@ui5/webcomponents-react';
 import { useNavigate } from 'react-router-dom';
+import { isResourceEditedState } from 'state/resourceEditedAtom';
 
 type NavItemProps = {
   node: NavNode;
@@ -23,6 +24,9 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   const urlGenerators = useUrl();
   const navigate = useNavigate();
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
+  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
+    isResourceEditedState,
+  );
 
   const { scopedUrl } = urlGenerators;
   const namespaceId = useRecoilValue(activeNamespaceIdState);
@@ -58,6 +62,10 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
         );
         if (newWindow) newWindow.opener = null;
       } else {
+        if (isResourceEdited.isEdited) {
+          setIsResourceEdited({ ...isResourceEdited, warningOpen: true });
+          return;
+        }
         setLayoutColumn({
           midColumn: null,
           endColumn: null,

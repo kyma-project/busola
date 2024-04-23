@@ -28,6 +28,7 @@ import { EmptyListComponent } from '../EmptyListComponent/EmptyListComponent';
 import { useUrl } from 'hooks/useUrl';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import pluralize from 'pluralize';
+import { isResourceEditedState } from 'state/resourceEditedAtom';
 
 const defaultSort = {
   name: nameLocaleSort,
@@ -231,7 +232,7 @@ export const GenericList = ({
         currentPage * pagination.itemsPerPage,
       );
     }
-
+    console.log(actions);
     return pagedItems.map((e, index) => (
       <RowRenderer
         isSelected={
@@ -251,6 +252,9 @@ export const GenericList = ({
   };
 
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
+  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
+    isResourceEditedState,
+  );
   const { resourceUrl: resourceUrlFn } = useUrl();
   const linkTo = entry => {
     return customUrl
@@ -270,6 +274,12 @@ export const GenericList = ({
         className={`ui5-generic-list ${hasDetailsView ? 'cursor-pointer' : ''}`}
         onRowClick={e => {
           if (!hasDetailsView) return;
+
+          if (isResourceEdited.isEdited) {
+            setIsResourceEdited({ ...isResourceEdited, warningOpen: true });
+            return;
+          }
+
           const selectedEntry = entries.find(entry => {
             return (
               entry?.metadata?.name ===

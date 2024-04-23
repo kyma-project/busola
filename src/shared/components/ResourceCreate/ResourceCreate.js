@@ -12,9 +12,9 @@ import { spacing } from '@ui5/webcomponents-react-base';
 import './ResourceCreate.scss';
 import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import { useState } from 'react';
 import { CancelMessageBox } from '../CancelMessageBox/CancelMessageBox';
 import { createPortal } from 'react-dom';
+import { isResourceEditedState } from 'state/resourceEditedAtom';
 
 export const ResourceCreate = ({
   performRefetch,
@@ -40,8 +40,9 @@ export const ResourceCreate = ({
   } = useCustomFormValidator();
   const notificationManager = useNotification();
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const [isEdited, setIsEdited] = useState(false);
-  const [warningOpen, setWarningOpen] = useState(false);
+  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
+    isResourceEditedState,
+  );
 
   confirmText = confirmText || t('common.buttons.create');
 
@@ -80,6 +81,7 @@ export const ResourceCreate = ({
   }
 
   function navigateAfterClose() {
+    setIsResourceEdited({ isEdited: false, warningOpen: false });
     window.history.pushState(
       window.history.state,
       '',
@@ -145,7 +147,10 @@ export const ResourceCreate = ({
     return (
       <Button
         onClick={() => {
-          navigateAfterClose();
+          if (isResourceEdited.isEdited) {
+            setIsResourceEdited({ ...isResourceEdited, warningOpen: true });
+            return;
+          }
         }}
         design="Transparent"
       >
@@ -174,10 +179,7 @@ export const ResourceCreate = ({
                 onError: handleFormError,
                 onCompleted: handleFormSuccess,
                 performManualSubmit: handleFormSubmit,
-                isEdited,
-                setIsEdited,
                 stickyHeaderHeight,
-                navigateAfterClose,
               })}
               <div
                 style={{
@@ -218,6 +220,10 @@ export const ResourceCreate = ({
             ),
           })}
         </div>
+      )}
+      {createPortal(
+        <CancelMessageBox proceedButtonAction={navigateAfterClose} />,
+        document.body,
       )}
     </>
   );

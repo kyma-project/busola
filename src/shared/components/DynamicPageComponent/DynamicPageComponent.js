@@ -7,6 +7,7 @@ import {
   FlexBox,
   ObjectPage,
   ObjectPageSection,
+  ObjectPageSubSection,
   Title,
 } from '@ui5/webcomponents-react';
 
@@ -18,6 +19,7 @@ import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useFeature } from 'hooks/useFeature';
 import { HintButton } from '../DescriptionHint/DescriptionHint';
+import { isResourceEditedState } from 'state/resourceEditedAtom';
 
 const Column = ({ title, children, columnSpan, image, style = {} }) => {
   const styleComputed = { gridColumn: columnSpan, ...style };
@@ -51,6 +53,9 @@ export const DynamicPageComponent = ({
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   const { t } = useTranslation();
+  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
+    isResourceEditedState,
+  );
 
   const headerTitle = (
     <DynamicPageTitle
@@ -158,6 +163,13 @@ export const DynamicPageComponent = ({
                     design="Transparent"
                     icon="decline"
                     onClick={() => {
+                      if (isResourceEdited.isEdited) {
+                        setIsResourceEdited({
+                          ...isResourceEdited,
+                          warningOpen: true,
+                        });
+                        return;
+                      }
                       window.history.pushState(
                         window.history.state,
                         '',
@@ -219,7 +231,10 @@ export const DynamicPageComponent = ({
       );
     });
   }, []);
-
+  console.log(isResourceEdited);
+  const test = () => {
+    console.log('TEST2');
+  };
   if (inlineEditForm) {
     return (
       <ObjectPage
@@ -230,6 +245,7 @@ export const DynamicPageComponent = ({
         headerContentPinnable={false}
         headerTitle={headerTitle}
         headerContent={headerContent}
+        onBeforeNavigate={test}
       >
         <ObjectPageSection
           aria-label="View"

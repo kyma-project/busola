@@ -16,10 +16,9 @@ import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import { spacing } from '@ui5/webcomponents-react-base';
 import './ResourceForm.scss';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { editViewModeState } from 'state/preferences/editViewModeAtom';
-import { createPortal } from 'react-dom';
-import { CancelMessageBox } from 'shared/components/CancelMessageBox/CancelMessageBox';
+import { isResourceEditedState } from 'state/resourceEditedAtom';
 
 const excludeStatus = resource => {
   const modifiedResource = { ...resource };
@@ -61,8 +60,6 @@ export function ResourceForm({
   yamlSearchDisabled,
   yamlHideDisabled,
   isEdit,
-  setIsEdited,
-  isEdited,
   stickyHeaderHeight,
   navigateAfterClose,
 }) {
@@ -82,41 +79,26 @@ export function ResourceForm({
   }
 
   const editViewMode = useRecoilValue(editViewModeState);
-
-  console.log(excludeStatus(resource));
-
-  useEffect(() => {
-    const handleClickOutside = e => {
-      console.log(e.target);
-      e.preventDefault();
-      e.stopPropagation();
-      return;
-    };
-
-    window.addEventListener('click', handleClickOutside);
-
-    return () => window.removeEventListener('click', handleClickOutside);
-  }, []);
+  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
+    isResourceEditedState,
+  );
 
   useEffect(() => {
-    if (setIsEdited) {
-      if (
-        !isEdited &&
-        JSON.stringify(excludeStatus(resource)) !==
-          JSON.stringify(excludeStatus(initialResource))
-      ) {
-        console.log('EDITED');
-        setIsEdited(true);
-      }
-
-      if (
-        isEdited &&
-        JSON.stringify(resource) === JSON.stringify(initialResource)
-      ) {
-        setIsEdited(false);
-      }
+    if (
+      !isResourceEdited.isEdited &&
+      JSON.stringify(excludeStatus(resource)) !==
+        JSON.stringify(excludeStatus(initialResource))
+    ) {
+      setIsResourceEdited({ ...isResourceEdited, isEdited: true });
     }
-  }, [initialResource, isEdited, resource, setIsEdited]);
+
+    if (
+      isResourceEdited.isEdited &&
+      JSON.stringify(resource) === JSON.stringify(initialResource)
+    ) {
+      setIsResourceEdited({ ...isResourceEdited, isEdited: false });
+    }
+  }, [initialResource, isResourceEdited, resource, setIsResourceEdited]);
 
   const { t } = useTranslation();
   const createResource = useCreateResource({
@@ -262,7 +244,7 @@ export function ResourceForm({
       )}
     </Form>
   );
-  console.log(resource);
+
   return (
     <section className={classnames('resource-form', className)}>
       <UI5Panel
@@ -322,14 +304,6 @@ export function ResourceForm({
           {formContent}
         </form>
       </UI5Panel>
-      {createPortal(
-        <CancelMessageBox
-          isEdited={isEdited}
-          //setOpen={setWarningOpen}
-          proceedButtonAction={navigateAfterClose}
-        />,
-        document.body,
-      )}
     </section>
   );
 }

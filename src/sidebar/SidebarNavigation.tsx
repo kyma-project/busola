@@ -20,6 +20,7 @@ import { useMatch, useNavigate } from 'react-router';
 import { useUrl } from 'hooks/useUrl';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { NamespaceChooser } from 'header/NamespaceChooser/NamespaceChooser';
+import { isResourceEditedState } from 'state/resourceEditedAtom';
 
 export function SidebarNavigation() {
   const navigationNodes = useRecoilValue(sidebarNavigationNodesSelector);
@@ -28,6 +29,9 @@ export function SidebarNavigation() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
+  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
+    isResourceEditedState,
+  );
 
   const { clusterUrl, namespaceUrl } = useUrl();
   const { resourceType = '' } =
@@ -81,6 +85,13 @@ export function SidebarNavigation() {
                 icon={'slim-arrow-left'}
                 text={'Back To Cluster Details'}
                 onClick={() => {
+                  if (isResourceEdited.isEdited) {
+                    setIsResourceEdited({
+                      ...isResourceEdited,
+                      warningOpen: true,
+                    });
+                    return;
+                  }
                   setDefaultColumnLayout();
                   return navigate(clusterUrl(`overview`));
                 }}
@@ -114,6 +125,13 @@ export function SidebarNavigation() {
                 id="NamespaceComboBox"
                 className="combobox-with-dimension-icon"
                 onSelectionChange={e => {
+                  if (isResourceEdited.isEdited) {
+                    setIsResourceEdited({
+                      ...isResourceEdited,
+                      warningOpen: true,
+                    });
+                    return;
+                  }
                   setDefaultColumnLayout();
                   return e.target.value === t('navigation.all-namespaces')
                     ? navigate(
