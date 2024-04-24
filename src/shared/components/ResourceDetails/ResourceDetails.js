@@ -1,4 +1,4 @@
-import React, { createContext, Suspense, useState } from 'react';
+import React, { createContext, Suspense, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
@@ -30,9 +30,10 @@ import { ResourceStatusCard } from '../ResourceStatusCard/ResourceStatusCard';
 import { EMPTY_TEXT_PLACEHOLDER } from '../../constants';
 import { ReadableElapsedTimeFromNow } from '../ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
 import { HintButton } from '../DescriptionHint/DescriptionHint';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useFeature } from 'hooks/useFeature';
 import { columnLayoutState } from 'state/columnLayoutAtom';
+import { showAIassistantState } from 'components/AIassistant/state/showAIassistantAtom';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
@@ -173,6 +174,7 @@ function Resource({
     resource.kind,
   );
   const [showTitleDescription, setShowTitleDescription] = useState(false);
+  const setShowAssistant = useSetRecoilState(showAIassistantState);
 
   const pluralizedResourceKind = pluralize(prettifiedResourceKind);
   useWindowTitle(windowTitle || pluralizedResourceKind);
@@ -189,6 +191,13 @@ function Resource({
   const { isEnabled: isColumnLayoutEnabled } = useFeature('COLUMN_LAYOUT');
 
   const protectedResource = isProtected(resource);
+
+  useEffect(() => {
+    return () => {
+      setShowAssistant({ show: false, fullScreen: false });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const deleteButtonWrapper = children => {
     if (protectedResource) {

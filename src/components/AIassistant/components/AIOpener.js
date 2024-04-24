@@ -12,7 +12,7 @@ import {
 } from '@ui5/webcomponents-react';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { showAIassistantState } from 'components/AIassistant/state/showAIassistantAtom';
 import { initialPromptState } from '../state/initalPromptAtom';
@@ -41,13 +41,6 @@ export default function AIOpener({
   const [isLoading, setIsLoading] = useState(false);
   const authData = useRecoilValue(authDataState);
   const setSessionID = useSetRecoilState(sessionIDState);
-
-  useEffect(() => {
-    return () => {
-      setShowAssistant({ show: false, fullScreen: false });
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const fetchSuggestions = async () => {
     setErrorOccured(false);

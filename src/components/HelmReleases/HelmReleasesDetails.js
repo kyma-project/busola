@@ -18,10 +18,21 @@ import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { showYamlTab } from './index';
 import { Link } from 'shared/components/Link/Link';
 import { createPortal } from 'react-dom';
+import { useSetRecoilState } from 'recoil';
+import { showAIassistantState } from 'components/AIassistant/state/showAIassistantAtom';
+import { useEffect } from 'react';
 
 function HelmReleasesDetails({ releaseName, namespace }) {
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();
+  const setShowAssistant = useSetRecoilState(showAIassistantState);
+
+  useEffect(() => {
+    return () => {
+      setShowAssistant({ show: false, fullScreen: false });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const { data, loading } = useGetList(s => s.type === 'helm.sh/release.v1')(
     namespace === '-all-'

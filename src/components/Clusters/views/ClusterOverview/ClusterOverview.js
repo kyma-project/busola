@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, FlexBox, Title } from '@ui5/webcomponents-react';
 import { ClusterNodes } from './ClusterNodes';
 import { ClusterValidation } from './ClusterValidation/ClusterValidation';
@@ -16,10 +16,11 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { useNavigate } from 'react-router-dom';
 import { deleteCluster } from 'components/Clusters/shared';
 import { spacing } from '@ui5/webcomponents-react-base';
-import './ClusterOverview.scss';
 import AIOpener from 'components/AIassistant/components/AIOpener';
 import { useSetRecoilState } from 'recoil';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
+import { showAIassistantState } from 'components/AIassistant/state/showAIassistantAtom';
+import './ClusterOverview.scss';
 
 const Injections = React.lazy(() =>
   import('../../../Extensibility/ExtensibilityInjections'),
@@ -37,6 +38,14 @@ export function ClusterOverview() {
     resourceType: t('clusters.labels.name'),
   });
   const setShowAdd = useSetRecoilState(showYamlUploadDialogState);
+  const setShowAssistant = useSetRecoilState(showAIassistantState);
+
+  useEffect(() => {
+    return () => {
+      setShowAssistant({ show: false, fullScreen: false });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const actions = [
     <Button
