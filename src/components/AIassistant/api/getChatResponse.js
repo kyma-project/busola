@@ -46,13 +46,14 @@ function readChunk(
       }
       // Also handles the rare case of two chunks being sent at once
       const receivedString = decoder.decode(value, { stream: true });
-      const chunks = receivedString.match(/{[^{}]*}/g);
+      const chunks = receivedString.match(/{[^{}]*}/g).map(chunk => {
+        return JSON.parse(chunk);
+      });
       chunks.forEach(chunk => {
-        const jsonChunk = JSON.parse(chunk);
-        if ('error' in jsonChunk) {
-          throw new Error(jsonChunk.error);
+        if ('error' in chunk) {
+          throw new Error(chunk.error);
         }
-        handleChatResponse(jsonChunk);
+        handleChatResponse(chunk);
       });
       readChunk(reader, decoder, handleChatResponse, handleError, sessionID);
     })

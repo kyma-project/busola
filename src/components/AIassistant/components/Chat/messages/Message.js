@@ -1,6 +1,7 @@
 import {
   BusyIndicator,
   FlexBox,
+  Link,
   ObjectStatus,
   Text,
 } from '@ui5/webcomponents-react';
@@ -53,6 +54,10 @@ export default function Message({ className, messageChunks, isLoading }) {
               <Text key={index} className="text highlighted" renderWhitespace>
                 {segment.content}
               </Text>
+            ) : segment.type === 'link' ? (
+              <Link key={index} href={segment.content.address} target="_blank">
+                {segment.content.name}
+              </Link>
             ) : (
               segment.content
             ),

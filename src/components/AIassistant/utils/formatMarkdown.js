@@ -1,6 +1,6 @@
 export function segmentMarkdownText(text) {
   if (!text) return [];
-  const regex = /(\*\*(.*?)\*\*)|(```([\s\S]*?)```\s)|(`(.*?)`)|[^*`]+/g;
+  const regex = /(\*\*(.*?)\*\*)|(```([\s\S]*?)```\s)|(`(.*?)`)|\[(.*?)\]\((.*?)\)|[^[\]*`]+/g;
   return text.match(regex).map(segment => {
     if (segment.startsWith('**')) {
       return {
@@ -16,6 +16,14 @@ export function segmentMarkdownText(text) {
       return {
         type: 'highlighted',
         content: segment.replace(/`/g, ''),
+      };
+    } else if (segment.startsWith('[') && segment.endsWith(')')) {
+      return {
+        type: 'link',
+        content: {
+          name: segment.match(/\[(.*?)\]/)[0].replace(/^\[|\]$/g, ''),
+          address: segment.match(/\((.*?)\)/)[0].replace(/^\(|\)$/g, ''),
+        },
       };
     } else {
       return {
