@@ -89,6 +89,10 @@ export function SidebarNavigation() {
                     setIsResourceEdited({
                       ...isResourceEdited,
                       warningOpen: true,
+                      discardAction: () => {
+                        setDefaultColumnLayout();
+                        return navigate(clusterUrl(`overview`));
+                      },
                     });
                     return;
                   }
@@ -129,6 +133,20 @@ export function SidebarNavigation() {
                     setIsResourceEdited({
                       ...isResourceEdited,
                       warningOpen: true,
+                      discardAction: () => {
+                        setDefaultColumnLayout();
+                        return e.target.value === t('navigation.all-namespaces')
+                          ? navigate(
+                              namespaceUrl(resourceType, {
+                                namespace: '-all-',
+                              }),
+                            )
+                          : navigate(
+                              namespaceUrl(resourceType, {
+                                namespace: e.target.value ?? undefined,
+                              }),
+                            );
+                      },
                     });
                     return;
                   }

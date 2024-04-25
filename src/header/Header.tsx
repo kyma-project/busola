@@ -111,7 +111,11 @@ export function Header() {
         }
         onLogoClick={() => {
           if (isResourceEdited.isEdited) {
-            setIsResourceEdited({ ...isResourceEdited, warningOpen: true });
+            setIsResourceEdited({
+              ...isResourceEdited,
+              warningOpen: true,
+              discardAction: () => navigate('/clusters'),
+            });
             return;
           }
           navigate('/clusters');
@@ -125,7 +129,16 @@ export function Header() {
         menuItems={window.location.pathname !== '/clusters' ? clustersList : []}
         onMenuItemClick={e => {
           if (isResourceEdited.isEdited) {
-            setIsResourceEdited({ ...isResourceEdited, warningOpen: true });
+            setIsResourceEdited({
+              ...isResourceEdited,
+              warningOpen: true,
+              discardAction: () => {
+                e.detail.item.textContent ===
+                t('clusters.overview.title-all-clusters')
+                  ? navigate('/clusters')
+                  : navigate(`/cluster/${e.detail.item.textContent}`);
+              },
+            });
             return;
           }
           e.detail.item.textContent ===

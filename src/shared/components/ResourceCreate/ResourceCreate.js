@@ -11,7 +11,6 @@ import { spacing } from '@ui5/webcomponents-react-base';
 
 import './ResourceCreate.scss';
 import { useRecoilState } from 'recoil';
-import { columnLayoutState } from 'state/columnLayoutAtom';
 import { CancelMessageBox } from '../CancelMessageBox/CancelMessageBox';
 import { createPortal } from 'react-dom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
@@ -39,7 +38,6 @@ export const ResourceCreate = ({
     revalidate,
   } = useCustomFormValidator();
   const notificationManager = useNotification();
-  const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
@@ -78,38 +76,6 @@ export const ResourceCreate = ({
 
   function renderProtectedResourceButton() {
     if (protectedResource) return protectedResourceWarning;
-  }
-
-  function navigateAfterClose() {
-    setIsResourceEdited({ isEdited: false, warningOpen: false });
-    window.history.pushState(
-      window.history.state,
-      '',
-      layoutCloseCreateUrl
-        ? layoutCloseCreateUrl
-        : `${window.location.pathname.slice(
-            0,
-            window.location.pathname.lastIndexOf('/'),
-          )}${
-            layoutNumber === 'MidColumn' ||
-            layoutCloseCreateUrl?.showCreate?.resourceType
-              ? ''
-              : '?layout=TwoColumnsMidExpanded'
-          }`,
-    );
-    layoutNumber === 'MidColumn'
-      ? setLayoutColumn({
-          ...layoutColumn,
-          midColumn: null,
-          layout: 'OneColumn',
-          showCreate: null,
-        })
-      : setLayoutColumn({
-          ...layoutColumn,
-          endColumn: null,
-          layout: 'TwoColumnsMidExpanded',
-          showCreate: null,
-        });
   }
 
   function renderConfirmButton() {
@@ -154,7 +120,7 @@ export const ResourceCreate = ({
         }}
         design="Transparent"
       >
-        {'Cancel'}
+        {t('common.buttons.cancel')}
       </Button>
     );
   };
@@ -221,10 +187,7 @@ export const ResourceCreate = ({
           })}
         </div>
       )}
-      {createPortal(
-        <CancelMessageBox proceedButtonAction={navigateAfterClose} />,
-        document.body,
-      )}
+      {createPortal(<CancelMessageBox />, document.body)}
     </>
   );
 };

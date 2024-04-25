@@ -29,7 +29,12 @@ export function NamespaceChooser() {
       data-key="all-namespaces"
       onClick={() => {
         if (isResourceEdited.isEdited) {
-          setIsResourceEdited({ ...isResourceEdited, warningOpen: true });
+          setIsResourceEdited({
+            ...isResourceEdited,
+            warningOpen: true,
+            discardAction: () =>
+              navigate(namespaceUrl(resourceType, { namespace: '-all-' })),
+          });
           return;
         }
         navigate(namespaceUrl(resourceType, { namespace: '-all-' }));
@@ -45,7 +50,16 @@ export function NamespaceChooser() {
         data-key={ns}
         onClick={e => {
           if (isResourceEdited.isEdited) {
-            setIsResourceEdited({ ...isResourceEdited, warningOpen: true });
+            setIsResourceEdited({
+              ...isResourceEdited,
+              warningOpen: true,
+              discardAction: () =>
+                navigate(
+                  namespaceUrl(resourceType, {
+                    namespace: e.target.dataset.key ?? undefined,
+                  }),
+                ),
+            });
             return;
           }
           navigate(

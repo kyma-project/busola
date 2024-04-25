@@ -7,7 +7,6 @@ import {
   FlexBox,
   ObjectPage,
   ObjectPageSection,
-  ObjectPageSubSection,
   Title,
 } from '@ui5/webcomponents-react';
 
@@ -56,6 +55,37 @@ export const DynamicPageComponent = ({
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
+
+  const handleColumnClose = () => {
+    window.history.pushState(
+      window.history.state,
+      '',
+      layoutCloseUrl
+        ? layoutCloseUrl
+        : `${window.location.pathname.slice(
+            0,
+            window.location.pathname.lastIndexOf('/'),
+          )}${
+            layoutNumber === 'MidColumn' ||
+            layoutColumn?.showCreate?.resourceType
+              ? ''
+              : '?layout=TwoColumnsMidExpanded'
+          }`,
+    );
+    layoutNumber === 'MidColumn'
+      ? setLayoutColumn({
+          ...layoutColumn,
+          midColumn: null,
+          layout: 'OneColumn',
+          showCreate: null,
+        })
+      : setLayoutColumn({
+          ...layoutColumn,
+          endColumn: null,
+          layout: 'TwoColumnsMidExpanded',
+          showCreate: null,
+        });
+  };
 
   const headerTitle = (
     <DynamicPageTitle
@@ -167,37 +197,13 @@ export const DynamicPageComponent = ({
                         setIsResourceEdited({
                           ...isResourceEdited,
                           warningOpen: true,
+                          discardAction: () => {
+                            handleColumnClose();
+                          },
                         });
                         return;
                       }
-                      window.history.pushState(
-                        window.history.state,
-                        '',
-                        layoutCloseUrl
-                          ? layoutCloseUrl
-                          : `${window.location.pathname.slice(
-                              0,
-                              window.location.pathname.lastIndexOf('/'),
-                            )}${
-                              layoutNumber === 'MidColumn' ||
-                              layoutColumn?.showCreate?.resourceType
-                                ? ''
-                                : '?layout=TwoColumnsMidExpanded'
-                            }`,
-                      );
-                      layoutNumber === 'MidColumn'
-                        ? setLayoutColumn({
-                            ...layoutColumn,
-                            midColumn: null,
-                            layout: 'OneColumn',
-                            showCreate: null,
-                          })
-                        : setLayoutColumn({
-                            ...layoutColumn,
-                            endColumn: null,
-                            layout: 'TwoColumnsMidExpanded',
-                            showCreate: null,
-                          });
+                      handleColumnClose();
                     }}
                   />
                 </>

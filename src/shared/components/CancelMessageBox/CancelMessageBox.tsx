@@ -37,7 +37,9 @@ export function CancelMessageBox({
     };
   }) => {
     if (event.detail.action === '0: custom action') {
-      proceedButtonAction();
+      if (isResourceEdited.discardAction) {
+        isResourceEdited.discardAction();
+      }
     } else if (event.detail.action === 'Cancel') {
       setIsResourceEdited({ isEdited: true, warningOpen: false });
     }

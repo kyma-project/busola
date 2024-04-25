@@ -63,7 +63,22 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
         if (newWindow) newWindow.opener = null;
       } else {
         if (isResourceEdited.isEdited) {
-          setIsResourceEdited({ ...isResourceEdited, warningOpen: true });
+          setIsResourceEdited({
+            ...isResourceEdited,
+            warningOpen: true,
+            discardAction: () => {
+              setLayoutColumn({
+                midColumn: null,
+                endColumn: null,
+                layout: 'OneColumn',
+              });
+              navigate(
+                node.createUrlFn
+                  ? node.createUrlFn(urlGenerators)
+                  : scopedUrl(node.pathSegment),
+              );
+            },
+          });
           return;
         }
         setLayoutColumn({
