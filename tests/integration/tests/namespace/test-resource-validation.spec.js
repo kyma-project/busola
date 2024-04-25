@@ -22,9 +22,11 @@ context('Test resource validation', () => {
 
     cy.contains('nginx:latest').should('be.visible');
 
-    cy.get('[class="yaml-upload-modal__info"]').get('ui5-icon[name="alert"]');
+    cy.get('[data-testID="yaml-upload-modal__validation-result"]').get(
+      'ui5-icon[name="alert"]',
+    );
 
-    cy.get('[class="yaml-upload-modal__info"]')
+    cy.get('[data-testID="yaml-upload-modal__validation-result"]')
       .get('button[title="Expand/Collapse"]')
       .click();
 
@@ -114,9 +116,11 @@ context('Test resource validation', () => {
 
     cy.contains('nginx:latest').should('be.visible');
 
-    cy.get('[class="yaml-upload-modal__info"]').get('ui5-icon[name="alert"]');
+    cy.get('[data-testID="yaml-upload-modal__validation-result"]').get(
+      'ui5-icon[name="alert"]',
+    );
 
-    cy.get('[class="yaml-upload-modal__info"]')
+    cy.get('[data-testID="yaml-upload-modal__validation-result"]')
       .get('button[title="Expand/Collapse"]')
       .click();
 
@@ -168,19 +172,22 @@ context('Test resource validation', () => {
 
     cy.contains('nginx:latest').should('be.visible');
 
-    cy.get('[class="yaml-upload-modal__info"]')
+    cy.get('[data-testID="yaml-upload-modal__validation-result"]')
       .get('ui5-icon[name="alert"]')
       .should('be.visible');
 
-    cy.get('[class="yaml-upload-modal__info"]')
+    cy.get('[data-testID="yaml-upload-modal__validation-result"]')
       .get('button[title="Expand/Collapse"]')
+      .first()
       .click();
 
-    cy.get('[class="yaml-upload-modal__info"]').contains(
+    cy.get('[data-testID="yaml-upload-modal__validation-result"]').contains(
       'Incorrect or missing values for `capabilities.drop`',
     );
 
-    cy.get('[class="yaml-upload-modal__info"]').contains('must contain ALL');
+    cy.get('[data-testID="yaml-upload-modal__validation-result"]').contains(
+      'must contain ALL',
+    );
 
     cy.get('[data-testid=yaml-cancel]').click();
   });
