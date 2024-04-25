@@ -19,12 +19,14 @@ import { spacing } from '@ui5/webcomponents-react-base';
 import './ClusterOverview.scss';
 import { useSetRecoilState } from 'recoil';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
+import { useGetKymaResources } from 'state/kymaResourcesAtom';
 
 const Injections = React.lazy(() =>
   import('../../../Extensibility/ExtensibilityInjections'),
 );
 
 export function ClusterOverview() {
+  useGetKymaResources();
   const { t } = useTranslation();
   const clusterValidation = useFeature('CLUSTER_VALIDATION');
   const clustersInfo = useClustersInfo();
