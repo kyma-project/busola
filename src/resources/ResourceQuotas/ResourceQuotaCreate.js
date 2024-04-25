@@ -24,6 +24,12 @@ export function ResourceQuotaCreate({
   );
   const { t } = useTranslation();
 
+  if (!initialResourceQuota) {
+    initialResourceQuota = createResourceQuotaTemplate({
+      namespaceName: namespaceId,
+    });
+  }
+
   return (
     <ResourceForm
       {...props}

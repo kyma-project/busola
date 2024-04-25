@@ -25,6 +25,10 @@ export default function ConfigMapCreate({
 
   const { t } = useTranslation();
 
+  if (!initialConfigMap) {
+    initialConfigMap = createConfigMapTemplate(namespace || '');
+  }
+
   return (
     <ResourceForm
       {...props}

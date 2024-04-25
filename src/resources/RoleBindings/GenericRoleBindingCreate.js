@@ -72,6 +72,10 @@ export function GenericRoleBindingCreate({
     (!namespace ? false : namespaceRolesLoading) || clusterRolesLoading;
   const rolesError = namespaceRolesError || clusterRolesError;
 
+  if (!initialRoleBinding) {
+    createBindingTemplate(namespace);
+  }
+
   return (
     <ResourceForm
       {...props}

@@ -84,6 +84,7 @@ export function ResourceForm({
   );
 
   useEffect(() => {
+    console.log('changed');
     if (
       !isResourceEdited.isEdited &&
       JSON.stringify(excludeStatus(resource)) !==
@@ -91,7 +92,9 @@ export function ResourceForm({
     ) {
       setIsResourceEdited({ ...isResourceEdited, isEdited: true });
     }
-
+    console.log(JSON.stringify(resource) === JSON.stringify(initialResource));
+    console.log(JSON.stringify(resource));
+    console.log(JSON.stringify(initialResource));
     if (
       isResourceEdited.isEdited &&
       JSON.stringify(resource) === JSON.stringify(initialResource)

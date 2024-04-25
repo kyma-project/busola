@@ -130,6 +130,10 @@ export function ExtensibilityCreateCore({
 
   if (loadingOpenAPISchema) return <Spinner />;
 
+  if (!initialResource) {
+    initialResource = defaultPreset?.value || emptyTemplate;
+  }
+
   return (
     <ResourceForm
       {...props}

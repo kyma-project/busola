@@ -43,6 +43,10 @@ function CRCreate({
     crd.spec.names.plural
   }${createUrlResourceName}`;
 
+  if (!initialCustomResource) {
+    initialCustomResource = createTemplate(crd);
+  }
+
   return (
     <ResourceForm
       {...props}

@@ -93,6 +93,10 @@ export default function ServiceAccountCreate({
     }
   }
 
+  if (!initialServiceAccount) {
+    initialServiceAccount = createServiceAccountTemplate(namespace);
+  }
+
   return (
     <ResourceForm
       {...props}
@@ -146,7 +150,7 @@ export default function ServiceAccountCreate({
           t('service-accounts.create-modal.tooltips.associated-secret'),
         )}
         input={Inputs.Switch}
-        disabled={!!initialServiceAccount}
+        disabled={!!initialUnchangedResource}
         onChange={() =>
           setShouldCreateSecret(shouldCreateSecret => !shouldCreateSecret)
         }

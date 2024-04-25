@@ -63,6 +63,10 @@ export default function SecretCreate({
     setValue(selectedOption.text);
   };
 
+  if (!initialSecret) {
+    initialSecret = createSecretTemplate(namespace || '');
+  }
+
   return (
     <ResourceForm
       {...props}
@@ -75,7 +79,10 @@ export default function SecretCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
-      presets={!initialSecret && createPresets(secretDefs, namespace || '', t)}
+      presets={
+        !initialUnchangedResource &&
+        createPresets(secretDefs, namespace || '', t)
+      }
       setCustomValid={setCustomValid}
     >
       <ResourceForm.FormField
@@ -89,7 +96,7 @@ export default function SecretCreate({
               aria-label="Secret's type's Combobox"
               placeholder={t('secrets.placeholders.type')}
               value={options.find(o => o.key === value)?.text ?? value}
-              disabled={!!initialSecret || !options?.length}
+              disabled={!!initialUnchangedResource || !options?.length}
               onChange={event => onChangeInput(event, setValue)}
               onInput={event => onChangeInput(event, setValue)}
             >
