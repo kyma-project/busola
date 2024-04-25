@@ -8,6 +8,7 @@ export function ExternalLinkButton({ structure }) {
     <Button
       icon="inspect"
       iconEnd
+      design={structure?.emphasized ? 'Emphasized' : 'Default'}
       inline={true}
       onClick={() => {
         window.open(structure?.link, '_blank');

@@ -83,6 +83,7 @@
     "jsonata": "^1.8.6",
     "jsonpath": "^1.1.1",
     "jsonschema": "^1.4.1",
+    "jwt-decode": "^4.0.0",
     "lodash": "^4.17.19",
     "monaco-editor": "^0.33.0",
     "monaco-yaml": "^4.0.4",

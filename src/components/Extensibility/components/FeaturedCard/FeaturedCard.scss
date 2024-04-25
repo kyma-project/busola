@@ -1,9 +1,9 @@
+.banner-carousel > * {
+  width: 100%;
+  margin-left: 0.25rem !important;
+  margin-right: 0.25rem !important;
+}
 .feature-card {
-  background: linear-gradient(
-    to right,
-    var(--sapLegendBackgroundColor6),
-    var(--sapLegendBackgroundColor5)
-  );
   position: relative;
   display: flex;
 
@@ -12,7 +12,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
+    gap: 50px;
   }
 
   .inner-container {
@@ -35,13 +35,13 @@
   }
 
   .illustration {
-    max-height: 185px;
+    max-height: 180px;
     max-width: 100%;
-    margin-right: 5%;
+    margin-right: 4%;
   }
 }
 
-@container (max-width: 950px) {
+@container (max-width: 850px) {
   .feature-card {
     .illustration {
       margin-right: 0%;
@@ -53,6 +53,7 @@
   .feature-card {
     .outer-container {
       flex-direction: column-reverse;
+      gap: 16px;
     }
   }
 }

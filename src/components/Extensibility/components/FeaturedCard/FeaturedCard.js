@@ -1,23 +1,61 @@
 import { Button, Card, Text, Title } from '@ui5/webcomponents-react';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useEffect, useState } from 'react';
-import cardIllustration from './assets/cardIllustration.svg';
-import cardIllustrationHC from './assets/cardIllustrationHC.svg';
+import modulesIllustration from './assets/Modules/modulesIllustration.svg';
+import modulesIllustrationHC from './assets/Modules/modulesIllustrationHC.svg';
+import AiIllustrationLight from './assets/AI/AiIllustrationLight.svg';
+import AiIllustrationDark from './assets/AI/AiIllustrationDark.svg';
+import AiIllustrationHClight from './assets/AI/AiIllustrationHClight.svg';
+import AiIllustrationHCdark from './assets/AI/AiIllustrationHCdark.svg';
 import { Widget, InlineWidget } from '../Widget';
 import { useRecoilValue } from 'recoil';
-import { themeState } from 'state/preferences/themeAtom';
+import { isSystemThemeDark, themeState } from 'state/preferences/themeAtom';
 import './FeaturedCard.scss';
 
-const getIllustration = theme => {
-  switch (theme) {
-    case 'sap_horizon_hcw':
-    case 'sap_horizon_hcb':
-      return cardIllustrationHC;
-    case 'sap_horizon':
-    case 'sap_horizon_dark':
-    case 'light_dark':
+const getIllustration = (illustration, theme) => {
+  switch (illustration) {
+    case 'AI':
+      switch (theme) {
+        case 'sap_horizon_hcw':
+          return AiIllustrationHClight;
+        case 'sap_horizon_hcb':
+          return AiIllustrationHCdark;
+        case 'sap_horizon':
+          return AiIllustrationLight;
+        case 'sap_horizon_dark':
+          return AiIllustrationDark;
+        case 'light_dark':
+        default:
+          return isSystemThemeDark() ? AiIllustrationDark : AiIllustrationLight;
+      }
+    case 'Modules':
     default:
-      return cardIllustration;
+      switch (theme) {
+        case 'sap_horizon_hcw':
+        case 'sap_horizon_hcb':
+          return modulesIllustrationHC;
+        case 'sap_horizon':
+        case 'sap_horizon_dark':
+        case 'light_dark':
+        default:
+          return modulesIllustration;
+      }
+  }
+};
+
+const getBackgroundStyle = design => {
+  switch (design) {
+    case 'information-1':
+      return {
+        background:
+          'linear-gradient(to right, var(--sapLegendBackgroundColor6), var(--sapLegendBackgroundColor5))',
+      };
+    case 'information-2':
+    default:
+      return {
+        background:
+          'linear-gradient(to right, var(--sapLegendBackgroundColor20), var(--sapLegendBackgroundColor5))',
+      };
   }
 };
 
@@ -38,17 +76,24 @@ export function FeaturedCard({ value, structure, schema, ...props }) {
     localStorage.setItem(hideBannerKey, updatedBoolean);
   };
 
-  return structure?.id && !hideBanner ? (
+  if (!structure?.id || hideBanner) {
+    return <></>;
+  }
+
+  return (
     <div style={spacing.sapUiSmallMargin}>
       <Card>
-        <div className="feature-card">
+        <div
+          className="feature-card"
+          style={getBackgroundStyle(structure?.design)}
+        >
           <Button
             design="Transparent"
             icon="decline"
             className="decline-button"
             onClick={handleToggle}
           />
-          <div className="outer-container" style={spacing.sapUiMediumMargin}>
+          <div className="outer-container" style={{ margin: '2rem 2.5rem' }}>
             <div className="inner-container">
               <Title level="H1" wrappingType="Normal">
                 {structure?.title}
@@ -72,7 +117,7 @@ export function FeaturedCard({ value, structure, schema, ...props }) {
               </div>
             </div>
             <img
-              src={getIllustration(theme)}
+              src={getIllustration(structure?.illustration, theme)}
               alt="FeaturedCard Illustration"
               className="illustration"
             />
@@ -80,7 +125,5 @@ export function FeaturedCard({ value, structure, schema, ...props }) {
         </div>
       </Card>
     </div>
-  ) : (
-    <></>
   );
 }
