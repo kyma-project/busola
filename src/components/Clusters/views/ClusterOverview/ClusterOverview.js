@@ -26,7 +26,6 @@ const Injections = React.lazy(() =>
 );
 
 export function ClusterOverview() {
-  useGetKymaResources();
   const { t } = useTranslation();
   const clusterValidation = useFeature('CLUSTER_VALIDATION');
   const clustersInfo = useClustersInfo();
