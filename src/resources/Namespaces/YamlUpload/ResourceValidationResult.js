@@ -23,7 +23,7 @@ import { validationSchemasEnabledState } from 'state/validationEnabledSchemasAto
 import { useLoadingDebounce } from 'shared/hooks/useLoadingDebounce';
 
 import { spacing } from '@ui5/webcomponents-react-base';
-import './FilteredResourcesDetails.scss';
+import { SeparatorLine } from './SeparatorLine';
 
 const useNamespaceWarning = resource => {
   const { t } = useTranslation();
@@ -79,22 +79,31 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
     <>
       {warnings.flat().map(warning => (
         <>
-          <FlexBox>
+          <FlexBox alignItems={'Begin'}>
             <ObjectStatus
               showDefaultIcon
               state={ValueState.Warning}
-              style={spacing.sapUiSmallMarginEnd}
+              style={{
+                marginLeft: '-0.3125rem', //set icon in one line with expand arrow. The value from class `--_ui5-v1-20-0_panel_content_padding1` is divided by 2
+                ...spacing.sapUiSmallMarginEnd,
+              }}
             />
             <ValidationWarning warning={warning.message} />
           </FlexBox>
-          <hr className={'yaml_resource_list__separation-line'} />
+          <SeparatorLine
+            style={{
+              ...spacing.sapUiSmallMarginTopBottom,
+              marginLeft: '-1rem',
+              marginRight: '-1rem',
+            }}
+          />
         </>
       ))}
     </>
   );
 };
 
-const ValidationResult = ({ resource }) => {
+export const ResourceValidationResult = ({ resource }) => {
   const validateResources = getExtendedValidateResourceState(
     useRecoilValue(validateResourcesState),
   );
@@ -104,19 +113,32 @@ const ValidationResult = ({ resource }) => {
     useValidateResourceBySchema(debounced, validationSchemas),
     useNamespaceWarning(debounced),
   ];
-  const statusIcon =
+  const statusIcon = validateResources.isEnabled ? (
     warnings.flat().length !== 0 ? (
       <ObjectStatus showDefaultIcon state={ValueState.Warning} />
     ) : (
       <ObjectStatus showDefaultIcon state={ValueState.Success} />
-    );
+    )
+  ) : (
+    <div></div>
+  ); //empty div to overwrite overflow button
 
   return (
     <>
       <Panel
         collapsed={true}
+        hideCloseButton={true}
+        hidden={!validateResources.isEnabled}
+        fixed={!validateResources.isEnabled}
+        style={{
+          padding: 0,
+          paddingLeft: 0,
+          paddingRight: 0,
+          marginLeft: '-1rem',
+          marginRight: '-1rem',
+        }}
         header={
-          <Toolbar>
+          <Toolbar toolbarStyle={'Clear'}>
             {resource?.kind + ' ' + resource?.metadata?.name}
             <ToolbarSpacer />
             {statusIcon}
@@ -132,12 +154,4 @@ const ValidationResult = ({ resource }) => {
       </Panel>
     </>
   );
-};
-
-export const FilteredResourcesDetails = ({ filteredResources }) => {
-  return filteredResources.map(r => (
-    <>
-      <ValidationResult resource={r.value} />
-    </>
-  ));
 };

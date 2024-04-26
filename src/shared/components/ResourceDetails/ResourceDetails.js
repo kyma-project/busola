@@ -34,6 +34,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useFeature } from 'hooks/useFeature';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { showAIassistantState } from 'components/AIassistant/state/showAIassistantAtom';
+import BannerCarousel from 'components/Extensibility/components/FeaturedCard/BannerCarousel';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
@@ -216,6 +217,15 @@ function Resource({
   const actions = readOnly ? null : (
     <>
       <Suspense fallback={<Spinner />}>
+        <BannerCarousel
+          children={
+            <Injections
+              destination={resourceType}
+              slot="banner"
+              root={resource}
+            />
+          }
+        />
         <Injections
           destination={resourceType}
           slot="details-header"

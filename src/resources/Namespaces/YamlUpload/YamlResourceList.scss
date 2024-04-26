@@ -1,0 +1,12 @@
+.status {
+  color: var(--sapNeutralColor);
+  padding-right: 5px;
+
+  &-message-success {
+    color: var(--sapPositiveColor);
+  }
+
+  &-error {
+    color: var(--sapNegativeColor);
+  }
+}
