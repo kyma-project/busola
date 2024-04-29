@@ -61,7 +61,6 @@ export function ResourceForm({
   yamlHideDisabled,
   isEdit,
   stickyHeaderHeight,
-  navigateAfterClose,
 }) {
   // readonly schema ID, set only once
   const resourceSchemaId = useMemo(

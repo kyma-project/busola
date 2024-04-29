@@ -368,6 +368,7 @@ common:
     error: 'Error: {{error}}'
     fill-required-data: Fill the remaining required data.
     loading-name: Loading name...
+    must-fill-required: You must fill in all required data.
     no-entries-found: No entries found
     no-instances-found: No matching {{value}} found
     no-instances-found-namespace: No matching {{value}} found in this Namespace

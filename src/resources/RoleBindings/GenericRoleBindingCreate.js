@@ -73,7 +73,7 @@ export function GenericRoleBindingCreate({
   const rolesError = namespaceRolesError || clusterRolesError;
 
   if (!initialRoleBinding) {
-    createBindingTemplate(namespace);
+    initialRoleBinding = createBindingTemplate(namespace);
   }
 
   return (

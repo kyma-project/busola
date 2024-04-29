@@ -84,7 +84,7 @@ const ColumnWrapper = ({
     () => props.namespaceId ?? namespaceIdFromParams,
     [props.namespaceId, namespaceIdFromParams],
   );
-  console.log(layoutState);
+
   const initialLayoutState = layout
     ? {
         layout: isColumnLeyoutEnabled && layout ? layout : layoutState?.layout,

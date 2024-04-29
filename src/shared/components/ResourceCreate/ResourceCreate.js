@@ -14,6 +14,7 @@ import { useRecoilState } from 'recoil';
 import { CancelMessageBox } from '../CancelMessageBox/CancelMessageBox';
 import { createPortal } from 'react-dom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 export const ResourceCreate = ({
   performRefetch,
@@ -38,6 +39,7 @@ export const ResourceCreate = ({
     revalidate,
   } = useCustomFormValidator();
   const notificationManager = useNotification();
+  const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
@@ -67,31 +69,66 @@ export const ResourceCreate = ({
   }
 
   function handleFormSubmit() {
-    if (isValid) {
-      formElementRef.current.dispatchEvent(
-        new Event('submit', { bubbles: true, cancelable: true }),
-      );
-    }
+    //if (isValid) {
+    formElementRef.current.dispatchEvent(
+      new Event('submit', { bubbles: true, cancelable: true }),
+    );
+    /*} else {
+      notificationManager.notifyError({
+        content:t('common.messages.must-fill-required'),
+        type: 'error',
+       });
+    }*/
   }
 
   function renderProtectedResourceButton() {
     if (protectedResource) return protectedResourceWarning;
   }
 
-  function renderConfirmButton() {
-    const disabled = !isValid;
+  function navigateAfterClose() {
+    setIsResourceEdited({ isEdited: false, warningOpen: false });
+    window.history.pushState(
+      window.history.state,
+      '',
+      layoutCloseCreateUrl
+        ? layoutCloseCreateUrl
+        : `${window.location.pathname.slice(
+            0,
+            window.location.pathname.lastIndexOf('/'),
+          )}${
+            layoutNumber === 'MidColumn' ||
+            layoutCloseCreateUrl?.showCreate?.resourceType
+              ? ''
+              : '?layout=TwoColumnsMidExpanded'
+          }`,
+    );
+    layoutNumber === 'MidColumn'
+      ? setLayoutColumn({
+          ...layoutColumn,
+          midColumn: null,
+          layout: 'OneColumn',
+          showCreate: null,
+        })
+      : setLayoutColumn({
+          ...layoutColumn,
+          endColumn: null,
+          layout: 'TwoColumnsMidExpanded',
+          showCreate: null,
+        });
+  }
 
+  function renderConfirmButton() {
     const button = (
       <Button
-        disabled={disabled || readOnly || disableEdit}
-        aria-disabled={disabled || readOnly || disableEdit}
+        disabled={readOnly || disableEdit}
+        aria-disabled={readOnly || disableEdit}
         onClick={handleFormSubmit}
         design="Emphasized"
       >
         {confirmText}
       </Button>
     );
-    if (invalidPopupMessage && disabled) {
+    if (invalidPopupMessage) {
       return (
         <Tooltip
           content={invalidPopupMessage}
@@ -114,9 +151,14 @@ export const ResourceCreate = ({
       <Button
         onClick={() => {
           if (isResourceEdited.isEdited) {
-            setIsResourceEdited({ ...isResourceEdited, warningOpen: true });
+            setIsResourceEdited({
+              ...isResourceEdited,
+              warningOpen: true,
+              discardAction: () => navigateAfterClose(),
+            });
             return;
           }
+          navigateAfterClose();
         }}
         design="Transparent"
       >

@@ -39,7 +39,13 @@ export default function BusolaExtensionCreate({
   const [state, setState] = useState({});
 
   return (
-    <div style={{ overflow: 'auto', height: '100%' }}>
+    <div
+      style={{
+        overflow: 'auto',
+        height: '100%',
+        minHeight: 'calc(100vh - 14.5rem)',
+      }}
+    >
       <ResourceForm.Single
         formElementRef={formElementRef}
         onChange={onChange}

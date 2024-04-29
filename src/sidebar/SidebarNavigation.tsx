@@ -176,7 +176,19 @@ export function SidebarNavigation() {
           <SideNavigationItem
             icon={namespace ? 'slim-arrow-left' : 'bbyd-dashboard'}
             text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}
-            onClick={() => navigate(clusterUrl(`overview`))}
+            onClick={() => {
+              if (isResourceEdited.isEdited) {
+                setIsResourceEdited({
+                  ...isResourceEdited,
+                  warningOpen: true,
+                  discardAction: () => {
+                    navigate(clusterUrl(`overview`));
+                  },
+                });
+                return;
+              }
+              navigate(clusterUrl(`overview`));
+            }}
             selected={isClusterOverviewSelected()}
           />
           {namespace && (
@@ -196,6 +208,17 @@ export function SidebarNavigation() {
           icon={'bbyd-dashboard'}
           text={'Cluster Details'}
           onClick={() => {
+            if (isResourceEdited.isEdited) {
+              setIsResourceEdited({
+                ...isResourceEdited,
+                warningOpen: true,
+                discardAction: () => {
+                  setDefaultColumnLayout();
+                  return navigate(clusterUrl(`overview`));
+                },
+              });
+              return;
+            }
             setDefaultColumnLayout();
             return navigate(clusterUrl(`overview`));
           }}
