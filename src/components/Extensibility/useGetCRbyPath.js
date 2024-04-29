@@ -30,7 +30,7 @@ export const useGetCRbyPath = resourceType => {
       .replace('kymamodules/', '');
 
     return resourceType
-      ? resourceType == extensionPath
+      ? resourceType === extensionPath
       : crPath.split('/')[0] === extensionPath;
   });
 
