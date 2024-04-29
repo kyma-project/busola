@@ -1,11 +1,19 @@
 import React from 'react';
-import { FlexBox, Icon, Switch, Title } from '@ui5/webcomponents-react';
-import { Trans, useTranslation } from 'react-i18next';
-import { useRecoilState } from 'recoil';
 import {
-  getExtendedValidateResourceState,
-  validateResourcesState,
-} from 'state/preferences/validateResourcesAtom';
+  Card,
+  CardHeader,
+  CustomListItem,
+  FlexBox,
+  Icon,
+  List,
+  ProgressIndicator,
+  Text,
+  Title,
+} from '@ui5/webcomponents-react';
+import { Trans, useTranslation } from 'react-i18next';
+import { useRecoilValue } from 'recoil';
+
+import './YamlResourceList.scss';
 
 import {
   STATE_CREATED,
@@ -13,40 +21,33 @@ import {
   STATE_UPDATED,
   STATE_WAITING,
 } from './useUploadResources';
-import { FilteredResourcesDetails } from './FilteredResourcesDetails/FilteredResourcesDetails';
+import { ResourceValidationResult } from './ResourceValidationResult';
 
-import './YamlResourcesList.scss';
 import { spacing } from '@ui5/webcomponents-react-base';
+import { activeNamespaceIdState } from '../../../state/activeNamespaceIdAtom';
+import { SeparatorLine } from './SeparatorLine';
+import { ValidationSwitch } from './ValidationSwitch';
 
 export function YamlResourcesList({ resourcesData }) {
   const { t } = useTranslation();
-  const [validateResources, setValidateResources] = useRecoilState(
-    validateResourcesState,
-  );
-  const {
-    isEnabled,
-    choosePolicies,
-    policies: selectedPolicies = [],
-  } = getExtendedValidateResourceState(validateResources);
-  const filteredResources = resourcesData?.filter(
-    resource => resource !== null,
-  );
+  const namespaceId = useRecoilValue(activeNamespaceIdState);
+  const defaultNamespace = namespaceId || 'default';
+
+  const resources = resourcesData?.filter(resource => resource !== null);
 
   const showResourcesToUpload = () => {
-    return !filteredResources?.filter(r => r.status)?.length;
+    return !resources?.filter(r => r.status)?.length;
   };
 
-  const getLabel = () => {
-    return `${filteredResources?.filter(
-      r => r.status && r.status !== STATE_WAITING,
-    )?.length || 0}/${filteredResources?.length || 0}`;
-  };
+  const uploadedResources = resources?.filter(
+    r => r.status && r.status !== STATE_WAITING,
+  );
 
   const getPercentage = () => {
     return (
-      ((filteredResources?.filter(r => r.status && r.status !== STATE_WAITING)
+      ((resources?.filter(r => r.status && r.status !== STATE_WAITING)
         ?.length || 0) /
-        (filteredResources?.length || 0)) *
+        (resources?.length || 0)) *
       100
     );
   };
@@ -69,72 +70,116 @@ export function YamlResourcesList({ resourcesData }) {
     return t(`upload-yaml.statuses.${status.toLowerCase()}`);
   };
 
-  if (!filteredResources) {
+  if (!resources) {
     return null;
   } else {
     if (showResourcesToUpload()) {
       return (
         <>
-          <FlexBox direction={'Column'}>
-            <Title level="H4" style={spacing.sapUiSmallMargin}>
-              {t('upload-yaml.uploaded-resources')}
-            </Title>
-            <hr className={'yaml_resource_list__separation-line'} />
-            <div
-              style={spacing.sapUiSmallMarginBegin}
-              className="validate-resources"
+          <div
+            className={'yaml-upload-modal__content'}
+            data-testID={'yaml-upload-modal__validation-result'}
+            style={{ overflowY: 'auto' }}
+          >
+            <FlexBox
+              direction={'Column'}
+              justifyContent={'SpaceBetween'}
+              style={{
+                gap: '1rem',
+                ...spacing.sapUiSmallMargin,
+              }}
             >
-              <p>{t('upload-yaml.labels.validate-resources')}</p>
-              <Switch
-                onChange={() =>
-                  setValidateResources({
-                    isEnabled: !isEnabled,
-                    choosePolicies,
-                    policies: selectedPolicies,
-                  })
-                }
-                checked={isEnabled}
-              />
-            </div>
-            <p style={spacing.sapUiSmallMargin}>
-              <Trans
-                i18nKey={'upload-yaml.you-will-create'}
-                values={{ count: filteredResources.length }}
+              <p
+                style={{
+                  font: 'var(--sapFontFamily)',
+                  fontSize: `var(--sapFontSize)`,
+                  lineHeight: 'var(--sapContent_LineHeight)',
+                  color: 'var(--sapTextColor)',
+                }}
               >
-                <span style={{ fontWeight: 'bold' }}></span>
-              </Trans>
-            </p>
-            <FilteredResourcesDetails filteredResources={filteredResources} />
-          </FlexBox>
+                <Trans
+                  i18nKey={'upload-yaml.info'}
+                  values={{ namespace: defaultNamespace }}
+                >
+                  <span style={{ fontWeight: 'bold' }}></span>
+                </Trans>
+              </p>
+              <Title level="H4" style={spacing.sapUiSmallMarginTop}>
+                {t('upload-yaml.uploaded-resources')}
+              </Title>
+              <SeparatorLine style={{ margin: '0rem -1rem' }} />
+              <ValidationSwitch />
+              <Text>
+                <Trans
+                  i18nKey={'upload-yaml.you-will-create'}
+                  values={{ count: resources.length }}
+                >
+                  <span style={{ fontWeight: 'bold' }}></span>
+                </Trans>
+              </Text>
+              {resources.map(r => (
+                <ResourceValidationResult resource={r.value} />
+              ))}
+            </FlexBox>
+          </div>
         </>
       );
     } else {
       return (
         <>
-          <div id="upload-progress-bar-container">
-            <div
-              id="upload-progress-bar"
-              style={{ width: `${getPercentage()}%` }}
-            />
-            <div id="upload-progress-bar-label">{getLabel()}</div>
-          </div>
-          <ul style={spacing.sapUiTinyMarginTop}>
-            {filteredResources.map(r => (
-              <li
-                key={`${r?.value?.kind}-${r?.value?.metadata?.name}`}
-                style={spacing.sapUiTinyMarginBegin}
+          <div
+            className={'yaml-upload-modal__content'}
+            style={spacing.sapUiTinyMarginBegin}
+          >
+            <FlexBox
+              direction={'Column'}
+              justifyContent={'SpaceBetween'}
+              style={{
+                gap: '1rem',
+                ...spacing.sapUiSmallMargin,
+              }}
+            >
+              <Card
+                header={
+                  <CardHeader
+                    titleText={t('upload-yaml.upload-progress')}
+                    status={resources?.length + '/' + uploadedResources?.length}
+                  />
+                }
               >
-                <Icon
-                  className={`status status-${getIcon(r?.status)}`}
-                  name={getIcon(r?.status)}
-                  aria-label="status"
+                <ProgressIndicator
+                  value={getPercentage()}
+                  valueState={
+                    resources?.length === uploadedResources?.length
+                      ? 'Success'
+                      : 'None'
+                  }
+                  style={{
+                    width: '95%',
+                    ...spacing.sapUiSmallMarginBeginEnd,
+                  }}
                 />
-                {String(r?.value?.kind)} {String(r?.value?.metadata?.name)} -{' '}
-                {getStatus(r?.status)}
-                <p>{r?.message}</p>
-              </li>
-            ))}
-          </ul>
+              </Card>
+              <List>
+                {resources.map(r => (
+                  <CustomListItem type={'Inactive'}>
+                    <FlexBox alignItems={'Center'}>
+                      <Icon
+                        className={`status status-${getIcon(r?.status)}`}
+                        name={getIcon(r?.status)}
+                        aria-label="status"
+                      />
+                      <Text>
+                        {String(r?.value?.kind)}{' '}
+                        {String(r?.value?.metadata?.name)} -{' '}
+                        {getStatus(r?.status)}
+                      </Text>
+                    </FlexBox>
+                  </CustomListItem>
+                ))}
+              </List>
+            </FlexBox>
+          </div>
         </>
       );
     }

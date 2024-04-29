@@ -20,6 +20,7 @@ import './ClusterOverview.scss';
 import { useSetRecoilState } from 'recoil';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 import { useGetKymaResources } from 'state/kymaResourcesAtom';
+import BannerCarousel from 'components/Extensibility/components/FeaturedCard/BannerCarousel';
 
 const Injections = React.lazy(() =>
   import('../../../Extensibility/ExtensibilityInjections'),
@@ -72,6 +73,15 @@ export function ClusterOverview() {
         actions={actions}
         content={
           <>
+            <BannerCarousel
+              children={
+                <Injections
+                  destination="ClusterOverview"
+                  slot="banner"
+                  root=""
+                />
+              }
+            />
             <Injections
               destination="ClusterOverview"
               slot="details-top"

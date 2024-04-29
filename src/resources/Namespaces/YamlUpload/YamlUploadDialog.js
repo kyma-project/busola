@@ -6,12 +6,10 @@ import { YamlResourcesList } from './YamlResourcesList';
 import { useUploadResources } from './useUploadResources';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useEventListener } from 'hooks/useEventListener';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
-
-import { spacing } from '@ui5/webcomponents-react-base';
 import './YamlUploadDialog.scss';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
@@ -124,29 +122,23 @@ export function YamlUploadDialog() {
       className="yaml-upload-modal__dialog"
     >
       <Suspense fallback={<Spinner />}>
-        <div className="yaml-upload-modal__layout">
+        <div
+          className={'yaml-upload-modal__layout'}
+          style={{
+            overflowY: 'hidden',
+            height: '80vh',
+            width: '80vw',
+          }}
+        >
           <YamlUpload
             resourcesData={resourcesData}
             setResourcesData={updateYamlContent}
             setLastOperationState={setLastOperationState}
           />
-          <div
-            className={'yaml-upload-modal__info'}
-            style={spacing.sapUiTinyMarginBegin}
-          >
-            <p className="description" style={spacing.sapUiSmallMargin}>
-              <Trans
-                i18nKey={'upload-yaml.info'}
-                values={{ namespace: defaultNamespace }}
-              >
-                <span style={{ fontWeight: 'bold' }}></span>
-              </Trans>
-            </p>
-            <YamlResourcesList
-              resourcesData={resourcesWithStatuses}
-              namespace={namespaceId}
-            />
-          </div>
+          <YamlResourcesList
+            resourcesData={resourcesWithStatuses}
+            namespace={namespaceId}
+          />
         </div>
       </Suspense>
     </Dialog>
