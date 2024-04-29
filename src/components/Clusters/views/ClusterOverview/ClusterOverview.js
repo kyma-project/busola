@@ -19,7 +19,6 @@ import { spacing } from '@ui5/webcomponents-react-base';
 import './ClusterOverview.scss';
 import { useSetRecoilState } from 'recoil';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
-import { useGetKymaResources } from 'state/kymaResourcesAtom';
 import BannerCarousel from 'components/Extensibility/components/FeaturedCard/BannerCarousel';
 
 const Injections = React.lazy(() =>
