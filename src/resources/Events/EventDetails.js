@@ -72,7 +72,7 @@ export function EventDetails(props) {
             <Tooltip content={event.type}>
               <ObjectStatus
                 aria-label="Warning"
-                icon={<Icon name="message-warning" />}
+                icon={<Icon name="warning" />}
                 className="has-tooltip"
                 state="Warning"
                 style={spacing.sapUiTinyMarginBegin}
@@ -82,7 +82,7 @@ export function EventDetails(props) {
             <Tooltip content={event.type}>
               <ObjectStatus
                 aria-label="Normal"
-                icon={<Icon name="message-information" />}
+                icon={<Icon name="information" />}
                 className="has-tooltip"
                 state="Information"
                 style={spacing.sapUiTinyMarginBegin}
