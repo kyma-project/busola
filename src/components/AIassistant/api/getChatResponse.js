@@ -1,18 +1,27 @@
+import { getClusterConfig } from 'state/utils/getBackendInfo';
+
 export default async function getChatResponse({
   prompt,
   handleChatResponse,
   handleError,
   sessionID,
+  clusterUrl,
+  token,
+  certificateAuthorityData,
 }) {
-  const url =
-    'https://api-backend.c-5cb6076.stage.kyma.ondemand.com/api/v1/chat';
+  const { backendAddress } = getClusterConfig();
+  const url = `${backendAddress}/api/v1/namespaces/ai-core/services/http:ai-backend-clusterip:5000/proxy/api/v1/chat`;
   const payload = { question: prompt, session_id: sessionID };
+  const k8sAuthorization = `Bearer ${token}`;
 
   fetch(url, {
     headers: {
       accept: 'application/json',
       'content-type': 'application/json',
-      'x-user': sessionID,
+      'X-Cluster-Certificate-Authority-Data': certificateAuthorityData,
+      'X-Cluster-Url': clusterUrl,
+      'X-K8s-Authorization': k8sAuthorization,
+      'X-User': sessionID,
     },
     body: JSON.stringify(payload),
     method: 'POST',

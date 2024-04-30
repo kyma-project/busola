@@ -22,6 +22,7 @@ import { authDataState } from 'state/authDataAtom';
 import { sessionIDState } from '../state/sessionIDAtom';
 import generateSessionID from '../utils/generateSesssionID';
 import './AIOpener.scss';
+import { clusterState } from 'state/clusterAtom';
 
 export default function AIOpener({
   namespace,
@@ -41,6 +42,7 @@ export default function AIOpener({
   const [isLoading, setIsLoading] = useState(false);
   const authData = useRecoilValue(authDataState);
   const setSessionID = useSetRecoilState(sessionIDState);
+  const cluster = useRecoilValue(clusterState);
 
   const fetchSuggestions = async () => {
     setErrorOccured(false);
@@ -55,6 +57,10 @@ export default function AIOpener({
         groupVersion,
         resourceName,
         sessionID,
+        clusterUrl: cluster.currentContext.cluster.cluster.server,
+        token: cluster.currentContext.user.user.token,
+        certificateAuthorityData:
+          cluster.currentContext.cluster.cluster['certificate-authority-data'],
       });
       setIsLoading(false);
       if (!promptSuggestions) {

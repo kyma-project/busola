@@ -10,6 +10,7 @@ import ErrorMessage from './messages/ErrorMessage';
 import getChatResponse from 'components/AIassistant/api/getChatResponse';
 import { sessionIDState } from 'components/AIassistant/state/sessionIDAtom';
 import getFollowUpQuestions from 'components/AIassistant/api/getFollowUpQuestions';
+import { clusterState } from 'state/clusterAtom';
 import './Chat.scss';
 
 export default function Chat() {
@@ -20,6 +21,7 @@ export default function Chat() {
   const [errorOccured, setErrorOccured] = useState(false);
   const initialPrompt = useRecoilValue(initialPromptState);
   const sessionID = useRecoilValue(sessionIDState);
+  const cluster = useRecoilValue(clusterState);
 
   const addMessage = (author, messageChunks, isLoading) => {
     setChatHistory(prevItems =>
@@ -30,7 +32,14 @@ export default function Chat() {
   const handleChatResponse = response => {
     const isLoading = response?.step !== 'output';
     if (!isLoading) {
-      getFollowUpQuestions({ sessionID, handleFollowUpQuestions });
+      getFollowUpQuestions({
+        sessionID,
+        handleFollowUpQuestions,
+        clusterUrl: cluster.currentContext.cluster.cluster.server,
+        token: cluster.currentContext.user.user.token,
+        certificateAuthorityData:
+          cluster.currentContext.cluster.cluster['certificate-authority-data'],
+      });
     }
     setChatHistory(prevMessages => {
       const [latestMessage] = prevMessages.slice(-1);
@@ -59,7 +68,16 @@ export default function Chat() {
   const sendPrompt = prompt => {
     setErrorOccured(false);
     addMessage('user', [{ step: 'output', result: prompt }], false);
-    getChatResponse({ prompt, handleChatResponse, handleError, sessionID });
+    getChatResponse({
+      prompt,
+      handleChatResponse,
+      handleError,
+      sessionID,
+      clusterUrl: cluster.currentContext.cluster.cluster.server,
+      token: cluster.currentContext.user.user.token,
+      certificateAuthorityData:
+        cluster.currentContext.cluster.cluster['certificate-authority-data'],
+    });
     addMessage('ai', [], true);
   };
 
