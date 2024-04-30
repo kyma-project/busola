@@ -78,7 +78,7 @@ export function ClusterOverview() {
   return (
     <>
       <DynamicPageComponent
-        title={currentCluster.currentContext.cluster.name}
+        title={currentCluster?.currentContext?.cluster?.name ?? ''}
         actions={actions}
         content={
           <>
