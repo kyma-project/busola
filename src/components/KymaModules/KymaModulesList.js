@@ -23,6 +23,7 @@ import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useUrl } from 'hooks/useUrl';
 import pluralize from 'pluralize';
 import { Link } from 'shared/components/Link/Link';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 
 export function KymaModulesList(props) {
   const { t } = useTranslation();
@@ -35,7 +36,7 @@ export function KymaModulesList(props) {
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const { clusterUrl } = useUrl();
 
-  const { data: kymaResources } = useGet(
+  const { data: kymaResources, loading: kymaResourcesLoading } = useGet(
     '/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas',
   );
 
@@ -45,13 +46,23 @@ export function KymaModulesList(props) {
 
   const modulesResourceUrl = `/apis/operator.kyma-project.io/v1beta2/moduletemplates`;
 
-  const { data: modules } = useGet(modulesResourceUrl, {
-    pollingInterval: 3000,
-  });
+  const { data: modules, loading: modulesLoading } = useGet(
+    modulesResourceUrl,
+    {
+      pollingInterval: 3000,
+    },
+  );
 
-  const { data: kymaResource } = useGet(resourceUrl, {
-    pollingInterval: 3000,
-  });
+  const { data: kymaResource, loading: kymaResourceLoading } = useGet(
+    resourceUrl,
+    {
+      pollingInterval: 3000,
+    },
+  );
+
+  if (kymaResourcesLoading || modulesLoading || kymaResourceLoading) {
+    return <Spinner />;
+  }
 
   const handleShowAddModule = () => {
     setLayoutColumn({
