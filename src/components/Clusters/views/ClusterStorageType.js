@@ -12,7 +12,7 @@ export function ClusterStorageType({ clusterConfig }) {
 
   return (
     <div style={{ display: 'flex', alignItems: 'center' }}>
-      {t(`clusters.statuses.${storage.toLowerCase()}`) ||
+      {t(`clusters.statuses.${storage?.toLowerCase()}`) ||
         t('clusters.statuses.unknown')}
       <HintButton
         style={spacing.sapUiTinyMarginBegin}
