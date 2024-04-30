@@ -11,16 +11,17 @@ const BUSOLA_GITHUB_LINKS = {
 function createGithubLink(version: string): string {
   const unknownVersion = 'Unknown';
   const devVersion = 'dev';
-
-  if (version !== devVersion && version !== unknownVersion) {
-    if (version.toString().startsWith('PR-')) {
-      return `${BUSOLA_GITHUB_LINKS.PULLS}/${version.slice(3)}`;
-    } else if (version.toString().startsWith('v20')) {
-      return `${BUSOLA_GITHUB_LINKS.COMMITS}/${version.substring(
-        version.length - 8,
-      )}`;
+  if (version) {
+    if (version !== devVersion && version !== unknownVersion) {
+      if (version.toString().startsWith('PR-')) {
+        return `${BUSOLA_GITHUB_LINKS.PULLS}/${version.slice(3)}`;
+      } else if (version.toString().startsWith('v20')) {
+        return `${BUSOLA_GITHUB_LINKS.COMMITS}/${version.substring(
+          version.length - 8,
+        )}`;
+      }
+      return `${BUSOLA_GITHUB_LINKS.COMMITS}/${version}`;
     }
-    return `${BUSOLA_GITHUB_LINKS.COMMITS}/${version}`;
   }
 
   return BUSOLA_GITHUB_LINKS.REPOSITORY;
