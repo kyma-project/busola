@@ -6,7 +6,7 @@ import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useState } from 'react';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { useGet } from 'shared/hooks/BackendAPI/useGet';
+import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
@@ -60,6 +60,17 @@ export function KymaModulesList(props) {
     },
   );
 
+  const crdUrl = `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`;
+  const { data: crds } = useGet(crdUrl, {
+    pollingInterval: 5000,
+  });
+
+  const { data: kymaExt } = useGetList(
+    ext => ext.metadata.labels['app.kubernetes.io/part-of'] === 'Kyma',
+  )('/api/v1/configmaps?labelSelector=busola.io/extension=resource', {
+    pollingInterval: 5000,
+  });
+
   if (kymaResourcesLoading || modulesLoading || kymaResourceLoading) {
     return <Spinner />;
   }
@@ -98,6 +109,13 @@ export function KymaModulesList(props) {
         : EMPTY_TEXT_PLACEHOLDER;
     };
 
+    const findCrd = moduleName =>
+      crds?.items?.find(crd =>
+        crd.metadata.name
+          .toLocaleLowerCase()
+          .includes(pluralize(moduleName.replace('-', '').toLocaleLowerCase())),
+      );
+
     const headerRenderer = () => [
       t('common.headers.name'),
       '',
@@ -109,21 +127,37 @@ export function KymaModulesList(props) {
     ];
 
     const rowRenderer = resource => {
+      const isExtension = !!kymaExt?.find(ext =>
+        ext.metadata.name.includes(resource.name),
+      );
+
       const path = findStatus(resource.name)?.resource?.metadata?.namespace
         ? clusterUrl(
             `kymamodules/namespaces/${
               findStatus(resource.name)?.resource?.metadata?.namespace
-            }/${pluralize(
-              findStatus(resource.name)?.resource?.kind || '',
-            ).toLowerCase()}/${
-              findStatus(resource.name)?.resource?.metadata?.name
+            }/${
+              isExtension
+                ? `${pluralize(
+                    findStatus(resource.name)?.resource?.kind || '',
+                  ).toLowerCase()}/${
+                    findStatus(resource.name)?.resource?.metadata?.name
+                  }`
+                : `${findCrd(resource.name)?.metadata?.name}/${
+                    findStatus(resource.name)?.resource?.metadata?.name
+                  }`
             }`,
           )
         : clusterUrl(
-            `kymamodules/${pluralize(
-              findStatus(resource.name)?.resource?.kind || '',
-            ).toLowerCase()}/${
-              findStatus(resource.name)?.resource?.metadata?.name
+            `kymamodules/${
+              isExtension
+                ? `${pluralize(
+                    findStatus(resource.name)?.resource?.kind || '',
+                  ).toLowerCase()}/${
+                    findStatus(resource.name)?.resource?.metadata?.name
+                  }`
+                : `${findCrd(resource.name)?.metadata?.name}/${
+                    findStatus(resource.name)?.resource?.metadata?.name
+                  }`
             }`,
           );
 
@@ -132,19 +166,40 @@ export function KymaModulesList(props) {
         <Link
           url={path}
           onClick={() => {
-            setLayoutColumn({
-              midColumn: {
-                resourceType: pluralize(
-                  findStatus(resource.name)?.resource?.kind || '',
-                ).toLowerCase(),
-                resourceName: findStatus(resource.name)?.resource?.metadata
-                  ?.name,
-                namespaceId:
-                  findStatus(resource.name)?.resource?.metadata.namespace || '',
-              },
-              layout: 'TwoColumnsMidExpanded',
-              endColumn: null,
-            });
+            if (!isExtension) {
+              setLayoutColumn({
+                midColumn: {
+                  resourceType: findCrd(resource.name)?.metadata?.name,
+                  resourceName: findStatus(resource.name)?.resource?.metadata
+                    ?.name,
+                  namespaceId:
+                    findStatus(resource.name)?.resource?.metadata.namespace ||
+                    '',
+                },
+                layout: 'TwoColumnsMidExpanded',
+                endColumn: null,
+              });
+              window.history.pushState(
+                window.history.state,
+                '',
+                `${path}?layout=TwoColumnsMidExpanded`,
+              );
+            } else {
+              setLayoutColumn({
+                midColumn: {
+                  resourceType: pluralize(
+                    findStatus(resource.name)?.resource?.kind || '',
+                  ).toLowerCase(),
+                  resourceName: findStatus(resource.name)?.resource?.metadata
+                    ?.name,
+                  namespaceId:
+                    findStatus(resource.name)?.resource?.metadata.namespace ||
+                    '',
+                },
+                layout: 'TwoColumnsMidExpanded',
+                endColumn: null,
+              });
+            }
             window.history.pushState(
               window.history.state,
               '',

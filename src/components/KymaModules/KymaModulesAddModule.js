@@ -118,7 +118,7 @@ export default function KymaModulesAddModule(props) {
     >
       {modulesAddData?.length !== 0 ? (
         modulesAddData?.map(module => {
-          const index = selectedModules.findIndex(kymaResourceModule => {
+          const index = selectedModules?.findIndex(kymaResourceModule => {
             return kymaResourceModule.name === module?.name;
           });
           return (
@@ -153,7 +153,7 @@ export default function KymaModulesAddModule(props) {
                   }
                   onSelect={(_, selected) => {
                     if (selected.key !== -1) {
-                      const index = selectedModules.findIndex(
+                      const index = selectedModules?.findIndex(
                         kymaResourceModule => {
                           return kymaResourceModule.name === module?.name;
                         },

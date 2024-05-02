@@ -1,4 +1,3 @@
-import React from 'react';
 import * as jp from 'jsonpath';
 import pluralize from 'pluralize';
 
