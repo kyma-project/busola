@@ -50,6 +50,11 @@ export const ExtensibilityDetailsCore = ({
     namespaceId: layoutState?.midColumn?.namespaceId,
   });
 
+  // there may be a moment when `resMetaData` is undefined (e.g. when switching the namespace)
+  if (!resource) {
+    return null;
+  }
+
   const resourceTitle = exists('name')
     ? t('name')
     : resourceName || prettifyKind(resource?.kind || '');
