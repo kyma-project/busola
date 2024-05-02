@@ -19,6 +19,7 @@ import {
 } from './helpers';
 import { useJsonata } from './hooks/useJsonata';
 import { columnLayoutState } from 'state/columnLayoutAtom';
+import CustomResource from 'resources/CustomResourceDefinitions/CustomResources.details';
 
 export const ExtensibilityDetailsCore = ({
   resMetaData,
@@ -126,10 +127,24 @@ const ExtensibilityDetails = ({
   resourceName,
   resourceType,
   layoutCloseCreateUrl,
+  namespaceId,
 }) => {
   const resMetaData = useGetCRbyPath(resourceType);
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
-  if (!resMetaData) return null;
+
+  if (!resMetaData) {
+    return (
+      <CustomResource
+        params={{
+          customResourceDefinitionName: resourceType,
+          resourceName: resourceName,
+          resourceNamespace: namespaceId,
+          layoutCloseCreateUrl: layoutCloseCreateUrl,
+          layoutNumber: 'MidColumn',
+        }}
+      />
+    );
+  }
 
   return (
     <TranslationBundleContext.Provider
