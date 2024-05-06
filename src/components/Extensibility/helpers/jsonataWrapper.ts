@@ -68,6 +68,7 @@ export function jsonataWrapper(expression: string) {
         return decoded?.sub?.includes('@sap.com');
       }
     } catch (error) {
+      console.error('Error while checking if user is SAP user', error);
       return false;
     }
     return false;
