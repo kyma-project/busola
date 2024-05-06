@@ -93,7 +93,6 @@ export function CustomResources({
     customColumnLayout,
     layoutNumber: 'MidColumn',
     parentCrdName: crd.metadata.name,
-    //handleRedirect,
   };
   return <ResourcesList {...params} />;
 }
