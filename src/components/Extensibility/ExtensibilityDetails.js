@@ -1,5 +1,4 @@
 import pluralize from 'pluralize';
-import { useRecoilValue } from 'recoil';
 
 import { usePrepareDetailsProps } from 'resources/helpers';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
@@ -18,16 +17,15 @@ import {
   useCreateResourceDescription,
 } from './helpers';
 import { useJsonata } from './hooks/useJsonata';
-import { columnLayoutState } from 'state/columnLayoutAtom';
 import CustomResource from 'resources/CustomResourceDefinitions/CustomResources.details';
 
 export const ExtensibilityDetailsCore = ({
   resMetaData,
   resourceName,
   layoutCloseCreateUrl,
+  namespaceId,
 }) => {
   const { t, widgetT, exists } = useGetTranslation();
-  const layoutState = useRecoilValue(columnLayoutState);
 
   const { urlPath, resource, features, description: resourceDescription } =
     resMetaData?.general ?? {};
@@ -48,7 +46,7 @@ export const ExtensibilityDetailsCore = ({
     apiGroup: resource?.group,
     apiVersion: resource?.version,
     resourceName,
-    namespaceId: layoutState?.midColumn?.namespaceId,
+    namespaceId: namespaceId,
   });
 
   // there may be a moment when `resMetaData` is undefined (e.g. when switching the namespace)
@@ -164,6 +162,7 @@ const ExtensibilityDetails = ({
             resMetaData={resMetaData}
             resourceName={resourceName}
             layoutCloseCreateUrl={layoutCloseCreateUrl}
+            namespaceId={namespaceId}
           />
         </ExtensibilityErrBoundary>
       </DataSourcesContextProvider>
