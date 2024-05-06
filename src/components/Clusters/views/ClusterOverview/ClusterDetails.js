@@ -18,7 +18,7 @@ const GardenerProvider = () => {
   if (!provider) return null;
 
   return (
-    <DynamicPageComponent.Column title={t('gardener.headers.provider') + ':'}>
+    <DynamicPageComponent.Column title={t('gardener.headers.provider')}>
       <p className="gardener-provider">{provider}</p>
     </DynamicPageComponent.Column>
   );
