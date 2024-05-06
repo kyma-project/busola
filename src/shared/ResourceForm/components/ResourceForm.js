@@ -23,6 +23,8 @@ import { isResourceEditedState } from 'state/resourceEditedAtom';
 const excludeStatus = resource => {
   const modifiedResource = { ...resource };
   delete modifiedResource.status;
+  delete modifiedResource.metadata?.resourceVersion;
+  delete modifiedResource.metadata?.managedFields;
   return modifiedResource;
 };
 
@@ -85,6 +87,7 @@ export function ResourceForm({
   useEffect(() => {
     if (
       !isResourceEdited.isEdited &&
+      !isResourceEdited.isSaved &&
       JSON.stringify(excludeStatus(resource)) !==
         JSON.stringify(excludeStatus(initialResource))
     ) {
@@ -92,10 +95,11 @@ export function ResourceForm({
     }
 
     if (
-      isResourceEdited.isEdited &&
-      JSON.stringify(resource) === JSON.stringify(initialResource)
+      JSON.stringify(excludeStatus(resource)) ===
+        JSON.stringify(excludeStatus(initialResource)) &&
+      (isResourceEdited.isEdited || isResourceEdited.isSaved)
     ) {
-      setIsResourceEdited({ ...isResourceEdited, isEdited: false });
+      setIsResourceEdited({ isEdited: false, warningOpen: false });
     }
   }, [initialResource, isResourceEdited, resource, setIsResourceEdited]);
 
@@ -110,6 +114,7 @@ export function ResourceForm({
     afterCreatedFn,
     urlPath,
     layoutNumber,
+    setResource,
   });
 
   const handleInitialMode = () => {
@@ -289,16 +294,7 @@ export function ResourceForm({
           onChange={onChange}
         >
           {mode === ModeSelector.MODE_YAML && (
-            <div
-              className="yaml-form"
-              style={{
-                width: '100%',
-                height: 'calc(100vh - 19rem)',
-                minHeight: '300px',
-              }}
-            >
-              {editor}
-            </div>
+            <div className="yaml-form">{editor}</div>
           )}
           {formContent}
         </form>

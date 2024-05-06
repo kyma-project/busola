@@ -36,7 +36,6 @@ export function GenericRoleBindingCreate({
   const [hasPermissionsForClusterRoles] = useHasPermissionsFor([
     [DEFAULT_APIGROUP, 'clusterroles'],
   ]);
-
   const [binding, setBinding] = useState(
     cloneDeep(initialRoleBinding) || createBindingTemplate(namespace),
   );

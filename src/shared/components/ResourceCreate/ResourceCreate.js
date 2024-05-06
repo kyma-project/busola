@@ -69,16 +69,16 @@ export const ResourceCreate = ({
   }
 
   function handleFormSubmit() {
-    //if (isValid) {
-    formElementRef.current.dispatchEvent(
-      new Event('submit', { bubbles: true, cancelable: true }),
-    );
-    /*} else {
+    if (isValid) {
+      formElementRef.current.dispatchEvent(
+        new Event('submit', { bubbles: true, cancelable: true }),
+      );
+    } else {
       notificationManager.notifyError({
-        content:t('common.messages.must-fill-required'),
+        content: t('common.messages.must-fill-required'),
         type: 'error',
-       });
-    }*/
+      });
+    }
   }
 
   function renderProtectedResourceButton() {

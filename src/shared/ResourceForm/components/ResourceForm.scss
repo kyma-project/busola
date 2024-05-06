@@ -17,6 +17,12 @@ form .resource-form {
     order: 2;
   }
 
+  .yaml-form {
+    width: 100%;
+    height: calc(100vh - 19rem);
+    min-height: 300px;
+  }
+
   & > .dropdown {
     width: 100%;
   }

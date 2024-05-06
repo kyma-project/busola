@@ -4,6 +4,7 @@ export interface IsResourceEditedState {
   isEdited: boolean;
   warningOpen: boolean;
   discardAction?: Function;
+  isSaved?: boolean;
 }
 
 const defaultValue = { isEdited: false, warningOpen: false };
