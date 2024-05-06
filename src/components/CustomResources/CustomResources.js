@@ -1,4 +1,3 @@
-import React from 'react';
 import * as jp from 'jsonpath';
 import pluralize from 'pluralize';
 
@@ -7,8 +6,6 @@ import { useCustomResourceUrl } from 'resources/CustomResourceDefinitions/useCus
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import CRCreate from 'resources/CustomResourceDefinitions/CRCreate';
 import { useUrl } from 'hooks/useUrl';
-import { useRecoilValue } from 'recoil';
-import { allNodesSelector } from 'state/navigation/allNodesSelector';
 
 export function CustomResources({
   crd,
@@ -21,7 +18,7 @@ export function CustomResources({
 }) {
   const { group, names } = crd.spec;
   const name = names.plural;
-  const customUrl = useCustomResourceUrl(crd);
+  const customUrl = useCustomResourceUrl(crd, true);
   const { namespace } = useUrl();
   const resourceUrl =
     namespace && namespace !== '-all-'
@@ -70,37 +67,6 @@ export function CustomResources({
     };
   };
 
-  const clusterNodes = useRecoilValue(allNodesSelector).filter(
-    node => !node.namespaced,
-  );
-  const namespaceNodes = useRecoilValue(allNodesSelector).filter(
-    node => node.namespaced,
-  );
-
-  const handleRedirect = (selectedEntry, resourceType) => {
-    const crdNamePlural = crd.spec.names.plural;
-    const clusterNode = clusterNodes.find(
-      res => res.resourceType === crdNamePlural,
-    );
-    const namespaceNode = namespaceNodes.find(
-      res => res.resourceType === crdNamePlural,
-    );
-
-    if (clusterNode || namespaceNode) {
-      return {
-        midColumn: {
-          resourceName: selectedEntry?.metadata?.name,
-          resourceType: resourceType,
-          namespaceId: selectedEntry?.metadata?.namespace,
-        },
-        endColumn: null,
-        layout: 'TwoColumnsMidExpanded',
-      };
-    }
-
-    return;
-  };
-
   const params = {
     hasDetailsView: true,
     customUrl,
@@ -127,7 +93,6 @@ export function CustomResources({
     customColumnLayout,
     layoutNumber: 'MidColumn',
     parentCrdName: crd.metadata.name,
-    handleRedirect,
   };
   return <ResourcesList {...params} />;
 }
