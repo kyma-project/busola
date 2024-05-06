@@ -16,10 +16,7 @@ type CancelMessageBoxProps = {
   proceedButtonAction: Function;
 };
 
-export function CancelMessageBox({
-  proceedButtonAction,
-  isOpen,
-}: CancelMessageBoxProps) {
+export function CancelMessageBox({ isOpen }: CancelMessageBoxProps) {
   const { t } = useGetTranslation();
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,

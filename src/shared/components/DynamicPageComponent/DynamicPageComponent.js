@@ -12,7 +12,7 @@ import {
 
 import './DynamicPageComponent.scss';
 import { spacing } from '@ui5/webcomponents-react-base';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
@@ -55,6 +55,7 @@ export const DynamicPageComponent = ({
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
+  const [selectedSectionIdState, setSelectedSectionIdState] = useState('view');
 
   const handleColumnClose = () => {
     window.history.pushState(
@@ -237,10 +238,7 @@ export const DynamicPageComponent = ({
       );
     });
   }, []);
-  console.log(isResourceEdited);
-  const test = () => {
-    console.log('TEST2');
-  };
+
   if (inlineEditForm) {
     return (
       <ObjectPage
@@ -251,7 +249,25 @@ export const DynamicPageComponent = ({
         headerContentPinnable={false}
         headerTitle={headerTitle}
         headerContent={headerContent}
-        onBeforeNavigate={test}
+        selectedSectionId={selectedSectionIdState}
+        onBeforeNavigate={e => {
+          if (isResourceEdited.isEdited) {
+            e.preventDefault();
+            setIsResourceEdited({
+              ...isResourceEdited,
+              warningOpen: true,
+              discardAction: () => {
+                setSelectedSectionIdState(e.detail.sectionId);
+                setIsResourceEdited({
+                  isEdited: false,
+                  warningOpen: false,
+                });
+              },
+            });
+            return;
+          }
+          setSelectedSectionIdState(e.detail.sectionId);
+        }}
       >
         <ObjectPageSection
           aria-label="View"
