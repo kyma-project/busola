@@ -12,33 +12,6 @@
   flex-direction: column;
   flex-grow: 1;
   height: 100%;
-
-  .space-top {
-    height: 1.3rem;
-  }
-}
-
-@mixin shadow-overlay($top, $height) {
-  margin: calc(-1 * var(--sidebar-padding));
-  padding: var(--sidebar-padding);
-  background: var(--sapList_Background);
-  position: absolute;
-  top: $top;
-  left: 0.5rem;
-  height: $height;
-  width: var(--sidebar-width);
-  box-sizing: border-box;
-  z-index: 0;
-}
-
-.shadow-overlay-bottom {
-  @include shadow-overlay(calc(62px + (2 * var(--sidebar-padding))), 100%);
-}
-
-.shadow-overlay-top {
-  @include shadow-overlay(1.5rem, 5px);
-
-  border-radius: var(--_ui5-v1-20-0_side_navigation_border_radius);
 }
 
 ui5-side-navigation.hide-shadow {
