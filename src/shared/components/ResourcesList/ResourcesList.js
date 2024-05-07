@@ -376,7 +376,7 @@ export function ResourceListRenderer({
             isProtected(entry)
               ? t('common.tooltips.protected-resources-info')
               : disableDelete
-              ? null
+              ? t('common.buttons.button-disabled')
               : t('common.buttons.delete'),
           icon: 'delete',
           disabledHandler: entry => isProtected(entry) || disableDelete,
