@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Input, SuggestionItem } from '@ui5/webcomponents-react';
 import '@ui5/webcomponents/dist/features/InputSuggestions.js';
@@ -40,10 +40,10 @@ export function SearchInput({
   const { t } = useTranslation();
   const { isOpen: isSideDrawerOpened } = useYamlEditor();
   const isDetailsView = useContext(ResourceDetailContext);
+  const searchInputRef = useRef(null);
 
   const onKeyPress = e => {
     const { key } = e;
-    if (!onKeyDown) return;
     if (isDetailsView) return;
     const isCommandPalleteOpen = document.querySelector(
       '#command-palette-background',
@@ -58,13 +58,10 @@ export function SearchInput({
       e.preventDefault();
       openSearchList();
     }
-    onKeyDown(key);
+    if (onKeyDown) {
+      onKeyDown(key);
+    }
   };
-
-  const searchInput = document.querySelector('#search-input');
-  const searchInputShadowElement = searchInput?.shadowRoot?.querySelector(
-    'input[placeholder="Search"]',
-  );
 
   useEventListener('keydown', onKeyPress, [
     disabled,
@@ -92,7 +89,7 @@ export function SearchInput({
 
   const openSearchList = () => {
     setTimeout(() => {
-      searchInputShadowElement?.focus();
+      searchInputRef.current?.focus();
     });
   };
 
@@ -102,6 +99,7 @@ export function SearchInput({
       aria-label={`search-${entriesKind}`}
       role="search"
       type="Text"
+      ref={searchInputRef}
       placeholder={t('common.tooltips.search')}
       className="search-with-magnifying-glass"
       value={searchQuery}
