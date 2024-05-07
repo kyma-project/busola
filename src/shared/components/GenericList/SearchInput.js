@@ -21,6 +21,7 @@ SearchInput.propTypes = {
     ]),
   ),
   showSuggestion: PropTypes.bool,
+  allowSlashShortcut: PropTypes.bool,
   disabled: PropTypes.bool,
   onKeyDown: PropTypes.func,
 };
@@ -34,6 +35,7 @@ export function SearchInput({
   showSuggestion = true,
   disabled = false,
   onKeyDown,
+  allowSlashShortcut,
 }) {
   const { t } = useTranslation();
   const { isOpen: isSideDrawerOpened } = useYamlEditor();
@@ -51,10 +53,24 @@ export function SearchInput({
       '[accessible-role="Dialog"][open="true"]',
     );
     if (isModalOpen) return;
+    if (key === '/' && !disabled && allowSlashShortcut && !isSideDrawerOpened) {
+      // Prevent firefox native quick find panel open
+      e.preventDefault();
+      openSearchList();
+    }
     onKeyDown(key);
   };
 
-  useEventListener('keydown', onKeyPress, [disabled, isSideDrawerOpened]);
+  const searchInput = document.querySelector('#search-input');
+  const searchInputShadowElement = searchInput?.shadowRoot?.querySelector(
+    'input[placeholder="Search"]',
+  );
+
+  useEventListener('keydown', onKeyPress, [
+    disabled,
+    allowSlashShortcut,
+    isSideDrawerOpened,
+  ]);
 
   const renderSearchList = entries => {
     const suggestions = getSearchSuggestions(entries);
@@ -72,6 +88,12 @@ export function SearchInput({
       )
       .filter(suggestion => suggestion);
     return Array.from(new Set(suggestions));
+  };
+
+  const openSearchList = () => {
+    setTimeout(() => {
+      searchInputShadowElement?.focus();
+    });
   };
 
   return (

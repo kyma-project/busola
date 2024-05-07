@@ -110,6 +110,7 @@ function HelmReleasesList({ enableColumnLayout }) {
             rowRenderer={rowRenderer}
             serverDataLoading={loading}
             serverDataError={error}
+            allowSlashShortcut
             hasDetailsView
             displayArrow
             enableColumnLayout={enableColumnLayout}
