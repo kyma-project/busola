@@ -6,11 +6,7 @@ export function Logo(props: any) {
 
   return (
     <FlexBox alignItems="Center" slot={props.slot}>
-      <img
-        alt="SAP"
-        src="..\..\assets\sap-logo.svg"
-        style={{ height: '32px' }}
-      />
+      <img alt="SAP" src="\assets\sap-logo.svg" style={{ height: '32px' }} />
       <Title level="H5">{t('common.product-title')}</Title>
     </FlexBox>
   );
