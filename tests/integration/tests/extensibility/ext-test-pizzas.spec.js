@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import { left } from 'cli-color/move';
+
 import 'cypress-file-upload';
 import jsyaml from 'js-yaml';
 

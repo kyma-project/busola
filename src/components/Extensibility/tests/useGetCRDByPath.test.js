@@ -1,5 +1,4 @@
-import React from 'react';
-import { extensionsState } from 'state/navigation/extensionsAtom';
+import { allExtensionsState } from 'state/navigation/extensionsAtom';
 import { render } from 'testing/reactTestingUtils';
 import { useGetCRbyPath } from '../useGetCRbyPath.js';
 
@@ -21,7 +20,7 @@ function TestComponent() {
 describe('useGetCRbyPath', () => {
   it('Returns nothing for an empty list', () => {
     const { queryByTestId } = render(<TestComponent />, {
-      initializeState: snapshot => snapshot.set(extensionsState, []),
+      initializeState: snapshot => snapshot.set(allExtensionsState, []),
     });
 
     expect(queryByTestId('value')).toHaveTextContent('');
@@ -50,7 +49,7 @@ describe('useGetCRbyPath', () => {
 
     const { queryByTestId } = render(<TestComponent />, {
       initializeState: snapshot => {
-        snapshot.set(extensionsState, mockCrds);
+        snapshot.set(allExtensionsState, mockCrds);
       },
     });
     expect(queryByTestId('value')).toHaveTextContent(
@@ -82,7 +81,7 @@ describe('useGetCRbyPath', () => {
 
     const { queryByTestId } = render(<TestComponent />, {
       initializeState: snapshot => {
-        snapshot.set(extensionsState, mockCrds);
+        snapshot.set(allExtensionsState, mockCrds);
       },
     });
     expect(queryByTestId('value')).toHaveTextContent(
@@ -113,7 +112,7 @@ describe('useGetCRbyPath', () => {
 
     const { queryByTestId } = render(<TestComponent />, {
       initializeState: snapshot => {
-        snapshot.set(extensionsState, mockCrds);
+        snapshot.set(allExtensionsState, mockCrds);
       },
     });
     expect(queryByTestId('value')).toHaveTextContent(

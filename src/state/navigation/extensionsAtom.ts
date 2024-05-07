@@ -378,6 +378,7 @@ export const useGetExtensions = () => {
   const cluster = useRecoilValue(clusterState);
   const auth = useRecoilValue(authDataState);
   const setExtensions = useSetRecoilState(extensionsState);
+  const setAllExtensions = useSetRecoilState(allExtensionsState);
   const setInjections = useSetRecoilState(injectionsState);
   const setWizard = useSetRecoilState(wizardState);
   const fetchFn = getFetchFn(useRecoilValue);
@@ -397,6 +398,7 @@ export const useGetExtensions = () => {
     const manageExtensions = async () => {
       if (!cluster) {
         setExtensions([]);
+        setAllExtensions([]);
         setInjections([]);
         setWizard([]);
         return;
@@ -433,6 +435,7 @@ export const useGetExtensions = () => {
       let filteredConfigs: ExtResource[] = [];
       if (!configs) {
         setExtensions([]);
+        setAllExtensions([]);
       } else {
         const configSet = {
           configFeatures: features!,
@@ -452,6 +455,7 @@ export const useGetExtensions = () => {
         );
 
         setExtensions(filteredConfigs);
+        setAllExtensions(configs);
       }
 
       if (!filteredConfigs && !statics) {
@@ -496,6 +500,13 @@ export const extensionsState: RecoilState<ExtResource[] | null> = atom<
   ExtResource[] | null
 >({
   key: 'extensionsState',
+  default: defaultValue,
+});
+
+export const allExtensionsState: RecoilState<ExtResource[] | null> = atom<
+  ExtResource[] | null
+>({
+  key: 'allExtensionsState',
   default: defaultValue,
 });
 

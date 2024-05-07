@@ -139,6 +139,8 @@ function ResourceDetailsRenderer(props) {
 }
 
 function Resource({
+  customTitle,
+  disableResourceDetailsCard = false,
   layoutNumber,
   layoutCloseCreateUrl,
   children,
@@ -165,6 +167,7 @@ function Resource({
   statusBadge,
   customStatusColumns,
   statusConditions,
+  headerContent,
 }) {
   useVersionWarning({ resourceUrl, resourceType });
   const { t } = useTranslation();
@@ -355,10 +358,11 @@ function Resource({
   return (
     <ResourceDetailContext.Provider value={true}>
       <DynamicPageComponent
+        headerContent={headerContent}
         showYamlTab={showYamlTab || disableEdit}
         layoutNumber={layoutNumber ?? 'MidColumn'}
         layoutCloseUrl={layoutCloseCreateUrl}
-        title={resource.metadata.name}
+        title={customTitle ?? resource.metadata.name}
         actions={actions}
         protectedResource={protectedResource}
         protectedResourceWarning={protectedResourceWarning(resource)}
@@ -371,28 +375,32 @@ function Resource({
               />,
               document.body,
             )}
-            <Title
-              level="H3"
-              style={{
-                ...spacing.sapUiMediumMarginBegin,
-                ...spacing.sapUiMediumMarginTopBottom,
-              }}
-            >
-              {title ?? t('common.headers.resource-details')}
-            </Title>
-            <div
-              className={`resource-details-container ${
-                isColumnLayoutEnabled &&
-                (layoutColumn.layout === 'MidColumnFullScreen' ||
-                  layoutColumn.layout === 'EndColumnFullScreen' ||
-                  layoutColumn.layout === 'OneColumn')
-                  ? ''
-                  : 'column-view'
-              }`}
-            >
-              {resourceDetailsCard}
-              {resourceStatusCard && resourceStatusCard}
-            </div>
+            {!disableResourceDetailsCard && (
+              <>
+                <Title
+                  level="H3"
+                  style={{
+                    ...spacing.sapUiMediumMarginBegin,
+                    ...spacing.sapUiMediumMarginTopBottom,
+                  }}
+                >
+                  {title ?? t('common.headers.resource-details')}
+                </Title>
+                <div
+                  className={`resource-details-container ${
+                    isColumnLayoutEnabled &&
+                    (layoutColumn.layout === 'MidColumnFullScreen' ||
+                      layoutColumn.layout === 'EndColumnFullScreen' ||
+                      layoutColumn.layout === 'OneColumn')
+                      ? ''
+                      : 'column-view'
+                  }`}
+                >
+                  {resourceDetailsCard}
+                  {resourceStatusCard && resourceStatusCard}
+                </div>
+              </>
+            )}
             <Suspense fallback={<Spinner />}>
               <Injections
                 destination={resourceType}

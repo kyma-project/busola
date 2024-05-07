@@ -212,6 +212,7 @@ export const GenericList = ({
               buttonText={emptyListProps.buttonText}
               url={emptyListProps.url}
               onClick={emptyListProps.onClick}
+              image={emptyListProps?.image}
             />
           ) : (
             <p>
