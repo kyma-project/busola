@@ -118,7 +118,7 @@ context('Test Protected Resources', () => {
   it('Change protection setting', () => {
     cy.get('[title="Profile"]').click();
 
-    cy.get('ui5-li:visible')
+    cy.get('ui5-menu-li:visible')
       .contains('Preferences')
       .click({ force: true });
 
