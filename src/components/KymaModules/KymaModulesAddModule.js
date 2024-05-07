@@ -1,5 +1,10 @@
 import { useState, useEffect } from 'react';
-import { CheckBox, MessageStrip } from '@ui5/webcomponents-react';
+import {
+  Card,
+  CardHeader,
+  CheckBox,
+  MessageStrip,
+} from '@ui5/webcomponents-react';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useTranslation } from 'react-i18next';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
@@ -117,85 +122,91 @@ export default function KymaModulesAddModule(props) {
       initialUnchangedResource={initialUnchangedResource}
     >
       {modulesAddData?.length !== 0 ? (
-        modulesAddData?.map(module => {
-          const index = selectedModules?.findIndex(kymaResourceModule => {
-            return kymaResourceModule.name === module?.name;
-          });
-          return (
-            <>
-              <div className="gridbox" key={module.name}>
-                <div></div>
-                <CheckBox
-                  style={spacing.sapUiSmallMarginTop}
-                  checked={isChecked(module.name)}
-                  onChange={e => {
-                    setCheckbox(module, e.target.checked, index);
-                  }}
-                  text={module.name}
-                />
-                <Dropdown
-                  style={spacing.sapUiTinyMarginTop}
-                  label={t(
-                    'extensibility.widgets.modules.module-channel-label',
-                  )}
-                  disabled={!isChecked(module.name)}
-                  placeholder={t(
-                    'extensibility.widgets.modules.module-channel-placeholder',
-                  )}
-                  options={module.channels.map(option => {
-                    return {
-                      text: `${option.channel} (version: ${option.version})`,
-                      key: option.channel,
-                    };
-                  })}
-                  selectedKey={
-                    selectedModules ? selectedModules[index]?.channel : ''
+        <div className="gridbox" key={module.name}>
+          {modulesAddData?.map(module => {
+            const index = selectedModules?.findIndex(kymaResourceModule => {
+              return kymaResourceModule.name === module?.name;
+            });
+            return (
+              <>
+                <Card
+                  header={
+                    <>
+                      <CardHeader
+                        onClick={e =>
+                          setCheckbox(module, e.target._state.titleText, index)
+                        }
+                        interactive
+                        avatar={<CheckBox checked={isChecked(module.name)} />}
+                        titleText={module.name}
+                      ></CardHeader>
+                    </>
                   }
-                  onSelect={(_, selected) => {
-                    if (selected.key !== -1) {
-                      const index = selectedModules?.findIndex(
-                        kymaResourceModule => {
-                          return kymaResourceModule.name === module?.name;
-                        },
-                      );
-                      selectedModules[index] = {
-                        ...selectedModules[index],
-                        channel: selected.key,
-                      };
-
-                      setKymaResource({
-                        ...kymaResource,
-                        spec: {
-                          ...kymaResource.spec,
-                          modules: selectedModules,
-                        },
-                      });
-                    }
-                  }}
-                />
-
-                {module.docsUrl ? (
-                  <ExternalLink
-                    url={module.docsUrl}
-                    iconStyle={spacing.sapUiMediumMarginTop}
-                  >
-                    {t('extensibility.widgets.modules.documentation')}
-                  </ExternalLink>
-                ) : null}
-              </div>
-              {module?.isBeta ? (
-                <MessageStrip
-                  design="Warning"
-                  hideCloseButton
-                  className="alert"
-                  style={spacing.sapUiSmallMarginTopBottom}
+                  style={spacing.sapUiSmallMarginBottom}
                 >
-                  {'t(parsedOptions?.betaAlert)'}
-                </MessageStrip>
-              ) : null}
-            </>
-          );
-        })
+                  <Dropdown
+                    label={t(
+                      'extensibility.widgets.modules.module-channel-label',
+                    )}
+                    disabled={!isChecked(module.name)}
+                    placeholder={t(
+                      'extensibility.widgets.modules.module-channel-placeholder',
+                    )}
+                    options={module.channels.map(option => {
+                      return {
+                        text: `${option.channel} (version: ${option.version})`,
+                        key: option.channel,
+                      };
+                    })}
+                    selectedKey={
+                      selectedModules ? selectedModules[index]?.channel : ''
+                    }
+                    onSelect={(_, selected) => {
+                      if (selected.key !== -1) {
+                        const index = selectedModules?.findIndex(
+                          kymaResourceModule => {
+                            return kymaResourceModule.name === module?.name;
+                          },
+                        );
+                        selectedModules[index] = {
+                          ...selectedModules[index],
+                          channel: selected.key,
+                        };
+
+                        setKymaResource({
+                          ...kymaResource,
+                          spec: {
+                            ...kymaResource.spec,
+                            modules: selectedModules,
+                          },
+                        });
+                      }
+                    }}
+                  />
+
+                  {module.docsUrl ? (
+                    <ExternalLink
+                      url={module.docsUrl}
+                      iconStyle={spacing.sapUiMediumMarginTop}
+                    >
+                      {'Learn more'}
+                    </ExternalLink>
+                  ) : null}
+                </Card>
+                {module?.isBeta ? (
+                  <MessageStrip
+                    design="Warning"
+                    hideCloseButton
+                    className="alert"
+                    style={spacing.sapUiSmallMarginTopBottom}
+                  >
+                    {'t(parsedOptions?.betaAlert)'}
+                  </MessageStrip>
+                ) : null}
+              </>
+            );
+          })}
+        </div>
       ) : (
         <MessageStrip design="Warning" hideCloseButton>
           {t('extensibility.widgets.modules.no-modules')}
