@@ -246,6 +246,7 @@ common:
     add: Add
     add-all: Add all
     add-new: Add New
+    button-disabled: Disabled
     cancel: Cancel
     clone: Clone
     close: Close
