@@ -8,6 +8,8 @@ import { useEventListener } from 'hooks/useEventListener';
 import { getEntryMatches } from 'shared/components/GenericList/helpers';
 import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
 import { ResourceDetailContext } from '../ResourceDetails/ResourceDetails';
+import { useRecoilValue } from 'recoil';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 SearchInput.propTypes = {
   searchQuery: PropTypes.string,
@@ -41,6 +43,7 @@ export function SearchInput({
   const { isOpen: isSideDrawerOpened } = useYamlEditor();
   const isDetailsView = useContext(ResourceDetailContext);
   const searchInputRef = useRef(null);
+  const columnLayout = useRecoilValue(columnLayoutState);
 
   const onKeyPress = e => {
     const { key } = e;
@@ -53,7 +56,13 @@ export function SearchInput({
       '[accessible-role="Dialog"][open="true"]',
     );
     if (isModalOpen) return;
-    if (key === '/' && !disabled && allowSlashShortcut && !isSideDrawerOpened) {
+    if (
+      key === '/' &&
+      !disabled &&
+      allowSlashShortcut &&
+      !isSideDrawerOpened &&
+      columnLayout.layout === 'OneColumn'
+    ) {
       // Prevent firefox native quick find panel open
       e.preventDefault();
       openSearchList();
