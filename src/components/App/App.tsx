@@ -37,12 +37,15 @@ import { useGetValidationEnabledSchemas } from 'state/validationEnabledSchemasAt
 import { useGetKymaResources } from 'state/kymaResourcesAtom';
 
 export default function App() {
-  const { t, i18n } = useTranslation();
   const language = useRecoilValue(languageAtom);
   const cluster = useRecoilValue(clusterState);
   const setNamespace = useSetRecoilState(activeNamespaceIdState);
   const { namespace } = useUrl();
   const makeGardenerLoginRoute = useMakeGardenerLoginRoute();
+
+  useInitTheme();
+
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     setNamespace(namespace);
@@ -53,7 +56,6 @@ export default function App() {
   useResourceSchemas();
   useSidebarCondensed();
 
-  useInitTheme();
   useAuthHandler();
   useGetConfiguration();
   useGetExtensions();
