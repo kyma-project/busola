@@ -260,16 +260,7 @@ export function ResourceForm({
           style={{ height: '100%' }}
         >
           {mode === ModeSelector.MODE_YAML && (
-            <div
-              className="yaml-form"
-              style={{
-                width: '100%',
-                height: '100%',
-                minHeight: '300px',
-              }}
-            >
-              {editor}
-            </div>
+            <div className="yaml-form">{editor}</div>
           )}
           {formContent}
         </form>

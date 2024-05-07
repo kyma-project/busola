@@ -240,7 +240,7 @@ export function KymaModulesList(props) {
             findModule(
               resource.name,
               resource.channel || kymaResource?.spec.channel,
-            )?.metadata
+            )?.metadata?.annotations['operator.kyma-project.io/doc-url']
           }
         >
           {t('common.headers.link')}
