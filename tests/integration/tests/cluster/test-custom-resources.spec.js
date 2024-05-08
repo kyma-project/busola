@@ -7,6 +7,10 @@ import { loadFile } from '../../support/loadFile';
 const FILE_NAME = 'test-customresourcedefinisions-cluster.yaml';
 const TCLUSTER_FILE_NAME = 'test-Tcluster.yaml';
 
+function openSearchWithSlashShortcut() {
+  cy.get('body').type('/', { force: true });
+}
+
 context('Test Custom Resources', () => {
   Cypress.skipAfterFail();
 
@@ -25,17 +29,22 @@ context('Test Custom Resources', () => {
     cy.saveChanges('Create');
   });
 
-  it('Check CR groups list', () => {
+  it('Check CR groups list with slash shortcut', () => {
     cy.getLeftNav()
       .contains('Custom Resources')
       .click();
 
     cy.contains('ui5-title', 'Custom Resources').should('be.visible');
 
+    openSearchWithSlashShortcut();
+
     cy.get('ui5-input[placeholder="Search"]:visible')
       .find('input')
-      .wait(1000)
-      .type('cypress');
+      .click()
+      .type('cypress', {
+        force: true,
+      });
+
     cy.get('table').should('have.length', 1);
 
     cy.get('ui5-table-row')
