@@ -140,7 +140,13 @@ export default function KymaModulesAddModule(props) {
                   header={
                     <CardHeader
                       onClick={e =>
-                        setCheckbox(module, e.target._state.titleText, index)
+                        isChecked(module.name)
+                          ? setCheckbox(module, undefined, index)
+                          : setCheckbox(
+                              module,
+                              e.target._state.titleText,
+                              index,
+                            )
                       }
                       interactive
                       avatar={<CheckBox checked={isChecked(module.name)} />}
