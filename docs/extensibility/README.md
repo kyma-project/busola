@@ -37,18 +37,26 @@ For more information about extensibility in Busola, see [Config Map for resource
 
 ## Create a CRD ConfigMap Manually
 
-To create your CRD ConfigMap, follow these steps:
+1. In Kyma dashboard, choose a namespace.
+2. Go to **Configuration** > **Config Maps** and click **Create**.
+3. Enter the Config Map **Name**.
+4. In the **Labels** section, enter two labels:
+   * `busola.io/extension` as the key, and `resource` as a value
+   * `busola.io/extension-version`as the key, `'0.5'`
+5. Under **Data**, add the following required fields for your module's UI configuration:
 
-1. Go to the `kube-public` Namespace and choose **Configuration > Config Maps**.
+   ```yaml
+   general:
+     resource: 
+       kind:
+       version:
+       group:
+     name:
+     category:
+     scope:
+     urlPath:
+   ```
 
-   > **NOTE:** You can choose your Namespace, but the `kube-public` Namespace is recommended.
-
-2. Click **Create Config Map +** and enter the name of your ConfigMap.
-3. Under **Data**, add the required fields to define how to handle your CRD.
-4. In the **Labels** form enter `busola.io/extension` as a key, and `resource` as a value.
-
-   > **NOTE:** Do not overwrite the existing name label.
-
-5. Click **Create**.
+6. Click **Create**.
 
 To see an exemplary configuration of the Busola extensibility feature, see the [Pizza example](examples/../../../examples/pizzas/README.md).
