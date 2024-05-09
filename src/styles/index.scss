@@ -31,6 +31,7 @@ body {
 
 .card-shadow {
   box-shadow: var(--card-box-shadow);
+  border-radius: var(--card-border-radius);
   border: var(--card-border);
   overflow: hidden;
 }
