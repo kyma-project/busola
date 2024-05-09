@@ -226,12 +226,12 @@ export const createResourceRoutes = ({
               resourceType={resourceType}
               resourceI18Key={resourceI18Key}
               hasDetailsView={!!Details}
-              list={<List />}
+              list={<List allowSlashShortcut />}
               details={<Details />}
               create={Create ? <Create /> : null}
               {...props}
             >
-              <List />
+              <List allowSlashShortcut />
             </ColumnWrapper>
           </Suspense>
         }
