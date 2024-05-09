@@ -24,6 +24,7 @@ import { nameLocaleSort, timeSort } from '../../helpers/sortingfunctions';
 import { useVersionWarning } from 'hooks/useVersionWarning';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { createPortal } from 'react-dom';
+import BannerCarousel from 'components/Extensibility/components/FeaturedCard/BannerCarousel';
 
 const Injections = React.lazy(() =>
   import('../../../components/Extensibility/ExtensibilityInjections'),
@@ -111,6 +112,15 @@ export function ResourcesList(props) {
           title={prettifyNamePlural(props.resourceTitle, props.resourceType)}
           actions={
             <>
+              <BannerCarousel
+                children={
+                  <Injections
+                    destination={props.resourceType}
+                    slot="banner"
+                    root={props.resources}
+                  />
+                }
+              />
               <Injections
                 destination={props.resourceType}
                 slot="list-header"
@@ -366,7 +376,7 @@ export function ResourceListRenderer({
             isProtected(entry)
               ? t('common.tooltips.protected-resources-info')
               : disableDelete
-              ? null
+              ? t('common.buttons.button-disabled')
               : t('common.buttons.delete'),
           icon: 'delete',
           disabledHandler: entry => isProtected(entry) || disableDelete,

@@ -19,6 +19,7 @@ import { spacing } from '@ui5/webcomponents-react-base';
 import './ClusterOverview.scss';
 import { useSetRecoilState } from 'recoil';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
+import BannerCarousel from 'components/Extensibility/components/FeaturedCard/BannerCarousel';
 
 const Injections = React.lazy(() =>
   import('../../../Extensibility/ExtensibilityInjections'),
@@ -67,10 +68,19 @@ export function ClusterOverview() {
   return (
     <>
       <DynamicPageComponent
-        title={currentCluster.currentContext.cluster.name}
+        title={currentCluster?.currentContext?.cluster?.name ?? ''}
         actions={actions}
         content={
           <>
+            <BannerCarousel
+              children={
+                <Injections
+                  destination="ClusterOverview"
+                  slot="banner"
+                  root=""
+                />
+              }
+            />
             <Injections
               destination="ClusterOverview"
               slot="details-top"

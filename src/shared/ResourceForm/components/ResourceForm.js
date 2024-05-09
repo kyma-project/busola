@@ -63,6 +63,7 @@ export function ResourceForm({
   yamlHideDisabled,
   isEdit,
   stickyHeaderHeight,
+  resetLayout,
 }) {
   // readonly schema ID, set only once
   const resourceSchemaId = useMemo(
@@ -115,6 +116,7 @@ export function ResourceForm({
     urlPath,
     layoutNumber,
     setResource,
+    resetLayout,
   });
 
   const handleInitialMode = () => {

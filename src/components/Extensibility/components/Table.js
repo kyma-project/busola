@@ -181,6 +181,7 @@ export function Table({
       sortBy={() => sortBy(jsonata, sortOptions, tExt, {}, originalResource)}
       searchSettings={{
         showSearchField: searchOptions.length > 0,
+        allowSlashShortcut: false,
         textSearchProperties: textSearchProperties(),
       }}
     />

@@ -121,7 +121,11 @@ export function useDeleteResource({
                   layout: goToLayout,
                 });
           } else {
-            navigate(resourceListUrl(resource, { resourceType }));
+            if (window.location.pathname.includes('busolaextensions')) {
+              navigate(`/cluster/${cluster.contextName}/busolaextensions`);
+            } else {
+              navigate(resourceListUrl(resource, { resourceType }));
+            }
             setLayoutColumn({
               ...layoutColumn,
               midColumn: null,

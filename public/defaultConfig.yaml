@@ -19,7 +19,7 @@ config:
         kyma-project-io:
           default: https://kyma-project.io
         help-sap-com:
-          default: https://help.sap.com
+          default: https://help.sap.com/docs/btp/sap-business-technology-platform/btp-basic-platform-concepts?locale=en-US&profile=20054071
     SSO_LOGIN:
       isEnabled: false
       config:

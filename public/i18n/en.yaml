@@ -246,6 +246,7 @@ common:
     add: Add
     add-all: Add all
     add-new: Add New
+    button-disabled: Disabled
     cancel: Cancel
     clone: Clone
     close: Close
@@ -911,6 +912,19 @@ jobs:
 kubeconfig-id:
   error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
+kyma-modules:
+  add-module: Add Modules
+  no-modules-description: Customize your cluster by adding the modules you need.
+  description: With <0>Kyma’s modular approach</0>, you can install just the modules you need, instead of a predefined set of components.
+  release-channel-description: According to the <0>Kyma modules` release cycle</0>, we first release a new module’s major or minor version in the fast channel. After approximately two weeks, we promote the release to the regular channel.
+  release-channel: Release channel
+  kyma: Kyma
+  title: Modules
+  namespaces: Namespace
+  channel: Channel
+  version: Version 
+  state: State
+  documentation: Documentation
 legal:
   copyright: Copyright
   legal-disclosure: Legal Disclosure
@@ -1457,9 +1471,10 @@ top-nav:
     preferences: $t(navigation.preferences.title)
 upload-yaml:
   uploaded-resources: Uploaded Resources
-  info: You can upload multiple resources, separated in YAML by "---".
-    If a resource already exists, it will be updated, otherwise a new one will be created.
-    If the Namespace is not given, the "<0>{{namespace}}</0>" one will be used.
+  info: You can upload multiple resources, separated by “---” in your YAML file. 
+    If the resource already exists, it will be updated. 
+    Otherwise, a new one is created. 
+    If you don’t specify a namespace, the "<0>{{namespace}}</0>" is used.
   labels:
     validate-resources: 'Validate resources:'
   messages:
@@ -1472,6 +1487,7 @@ upload-yaml:
     updated: Updated
     waiting: Waiting
   title: Upload YAML
+  upload-progress: 'Upload progress'
   warnings:
     different-namespace: This resource will be uploaded to the '{{namespace}}' Namespace.
     incorrect-namespace: The cluster-wide resources shouldn't have a Namespace.

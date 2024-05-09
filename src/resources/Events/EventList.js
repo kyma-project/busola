@@ -56,9 +56,9 @@ export function EventList({
             <Tooltip content={e.type}>
               <ObjectStatus
                 aria-label="Warning"
-                icon={<Icon name="error" />}
+                icon={<Icon name="warning" />}
                 className="has-tooltip"
-                state="Error"
+                state="Warning"
               />
             </Tooltip>
           ) : (

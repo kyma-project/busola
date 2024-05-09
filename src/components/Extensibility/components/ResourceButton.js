@@ -18,7 +18,7 @@ export function ResourceButton({
   const { t } = useTranslation();
   const { t: tExt } = useGetTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
-  const { resourceUrl } = useUrl();
+  const { resourceUrl, clusterUrl } = useUrl();
   const navigate = useNavigate();
 
   const jsonata = useJsonata({
@@ -37,6 +37,8 @@ export function ResourceButton({
   const [name, nameError] = jsonata(structure.resource?.name);
   const [namespace, namespaceError] = jsonata(structure.resource?.namespace);
   const [kind, kindError] = jsonata(structure.resource?.kind);
+  const customUrl = structure.resource?.customUrl;
+
   const jsonataError = nameError || namespaceError || kindError;
   if (jsonataError) {
     return t('extensibility.configuration-error', {
@@ -52,15 +54,17 @@ export function ResourceButton({
       inline={true}
       onClick={() =>
         navigate(
-          resourceUrl(
-            {
-              kind,
-              metadata: {
-                name,
-              },
-            },
-            { namespace },
-          ),
+          customUrl
+            ? clusterUrl(customUrl)
+            : resourceUrl(
+                {
+                  kind,
+                  metadata: {
+                    name,
+                  },
+                },
+                { namespace },
+              ),
         )
       }
     >

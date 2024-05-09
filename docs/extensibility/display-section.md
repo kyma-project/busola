@@ -316,6 +316,7 @@ ExternalLinkButton widgets render the link to an external page using a button.
 
 - **link** - a required flag to set the target URL.
 - **name** - an optional flag. Default value is `Learn More`.
+- **emphasized** - an optional flag, defining the visual appearence of the button. Can be `true` or `false` (default).
 
 #### Examples
 
@@ -550,31 +551,45 @@ EventList widget renders a list of Events.
 
 ### FeaturedCard
 
-FeaturedCard widgets render a promotional banner with its own title, description, and a maximum of 2 additional children.
+FeaturedCard widgets render a promotional banner with its own title, description, illustration, and a maximum of 2 additional children.
 The FeaturedCard can be closed in the top right corner.
 It is important to select a unique ID for each FeaturedCard, since it will be displayed/hidden based on its ID.
+
+It is **recommended** to use the FeatureCard-widget via [injections](#widget-injections-overview) (**slot: banner**). This will turn all FeatureCards at the top of a section into a carousel-component.
+Nevertheless, it is also possible to use it as a regular widget.
 
 #### Example
 
 ```yaml
-- title: Introducing Modules
-  description: Modules add functionalities to your cluster. Consume SAP BTP services, monitor your cluster, build serverless applications and more.
-  widget: FeaturedCard
-  id: ModulesBanner
-  children:
-    - widget: Wizard
-      name: Add Modules
-      wizard: module-wizard
-    - widget: ExternalLinkButton
-      link: https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-s-modular-approach
+injections: |-
+  - title: Introducing Modules
+    description: Modules add functionalities to your cluster. Consume SAP BTP services, monitor your cluster, build serverless applications and more.
+    widget: FeaturedCard
+    id: ModulesBanner
+    illustration: Modules
+    design: information-1
+    children:
+      - widget: Wizard
+        name: Add Modules
+        wizard: module-wizard
+      - widget: ExternalLinkButton
+        link: https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-s-modular-approach
+    order: 0
+    targets:
+      - slot: details-banner
+        location: ClusterOverview
 ```
 
 <img src="./assets/display-widgets/FeaturedCard.png" alt="Example of a FeaturedCard widget" style="border: 1px solid #D2D5D9">
 
 #### Widget-specific parameters
 
-- **title** - an optional string that renders a title after an image.
-- **subtitle** - an optional string that renders a subtitle.
+- **title** - a string that renders the title.
+- **description** - a string that renders the description.
+- **id** - a string that defines the banner's **(unique!)** identifier
+- **children** - an array of a maximum of 2 objects that defines the banner's children and will be displayed below the description. It is recommended to use button-like components here.
+- **illustration** - defines the illustration displayed on the right. Can be one of the following: `Modules` (default), `AI`
+- **design** - defines the background color-gradient of the banner. Can be one of the following: `information-1` (default), `information-2`
 
 ### Panel
 

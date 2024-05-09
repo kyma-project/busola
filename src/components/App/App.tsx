@@ -34,6 +34,7 @@ import './App.scss';
 import { useAfterInitHook } from 'state/useAfterInitHook';
 import useSidebarCondensed from 'sidebar/useSidebarCondensed';
 import { useGetValidationEnabledSchemas } from 'state/validationEnabledSchemasAtom';
+import { useGetKymaResources } from 'state/kymaResourcesAtom';
 
 export default function App() {
   const { t, i18n } = useTranslation();
@@ -67,6 +68,7 @@ export default function App() {
   useSentry();
   useAppTracking();
   useAfterInitHook(kubeconfigIdState);
+  useGetKymaResources();
 
   return (
     <div id="html-wrap">

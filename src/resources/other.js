@@ -8,6 +8,7 @@ import busolaExtensions from './other/BusolaExtensions.routes';
 
 import containerDetails from './other/containerDetails.routes';
 import helmReleases from './other/helmReleases.routes';
+import kymaModules from './other/kymaModules.routes';
 
 export const otherRoutes = (
   <>
@@ -18,6 +19,7 @@ export const otherRoutes = (
     {nodeOverview}
     {clusterList}
     {busolaExtensions}
+    {kymaModules}
   </>
 );
 

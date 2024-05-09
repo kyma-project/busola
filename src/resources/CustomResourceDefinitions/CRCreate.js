@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { cloneDeep } from 'lodash';
 
@@ -21,8 +21,13 @@ function CRCreate({
     cloneDeep(initialCustomResource) || createTemplate(crd),
   );
   const [initialUnchangedResource] = useState(initialCustomResource);
+  const currUrl = window.location.href;
 
-  const customUrl = useCustomResourceUrl(crd);
+  const customUrl = useCustomResourceUrl(
+    crd,
+    currUrl.includes('customresources/'),
+  );
+
   const navigate = useNavigate();
   const { nextQuery, currentQuery } = usePrepareLayout(layoutNumber);
   const goToLayoutQuery = customUrl(cr).includes('customresources/')
