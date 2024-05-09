@@ -35,7 +35,7 @@ For more information about extensibility in Busola, see [Config Map for resource
 
 4. Click **Create**.
 
-## Create a CRD ConfigMap Manually
+### Create a CRD ConfigMap Manually
 
 1. In Kyma dashboard, choose a namespace.
 2. Go to **Configuration** > **Config Maps** and click **Create**.
