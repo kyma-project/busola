@@ -74,7 +74,12 @@ export function SidebarNavigation() {
         <>
           {namespace && (
             <SideNavigation
-              style={{ height: 'auto', width: 'auto', boxShadow: 'none' }}
+              style={{
+                height: 'auto',
+                width: 'auto',
+                boxShadow: 'none',
+                marginTop: '0.75rem',
+              }}
             >
               <SideNavigationItem
                 className="hide-shadow"
@@ -87,6 +92,9 @@ export function SidebarNavigation() {
                 selected={isClusterOverviewSelected()}
               />
             </SideNavigation>
+          )}
+          {(!namespace || isSidebarCondensed) && (
+            <div className="space-top"></div>
           )}
           <div style={namespace ? { zIndex: '0' } : { display: 'none' }}>
             <Label
@@ -101,6 +109,7 @@ export function SidebarNavigation() {
             <FlexBox
               alignItems="Center"
               style={{
+                ...spacing.sapUiSmallMarginBottom,
                 ...spacing.sapUiTinyMarginBeginEnd,
               }}
             >
@@ -130,6 +139,7 @@ export function SidebarNavigation() {
     >
       {isSidebarCondensed && (
         <>
+          <SideNavigationItem className="space-top disable-effects" />
           <SideNavigationItem
             icon={namespace ? 'slim-arrow-left' : 'bbyd-dashboard'}
             text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}

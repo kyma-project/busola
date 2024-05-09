@@ -4,7 +4,7 @@
 }
 
 .ui5-content-density-compact {
-  --_ui5-v1-20-0_side_navigation_padding: 0.2rem 0.7rem 0.75rem 0.75rem !important;
+  --_ui5-v1-24-0_side_navigation_padding: 0.2rem 0.7rem 0.75rem 0.75rem !important;
 }
 
 .sidebar__content {
@@ -12,6 +12,14 @@
   flex-direction: column;
   flex-grow: 1;
   height: 100%;
+
+  .space-top {
+    height: 0.75rem;
+  }
+
+  .disable-effects {
+    pointer-events: none;
+  }
 }
 
 ui5-side-navigation.hide-shadow {
