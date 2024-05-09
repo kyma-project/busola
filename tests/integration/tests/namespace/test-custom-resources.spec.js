@@ -77,6 +77,9 @@ context('Test Custom Resources', () => {
       .click();
 
     cy.url().should('match', /customresourcedefinitions/);
+
+    cy.wait(500);
+
     cy.deleteInDetails(
       'Custom Resource Definition',
       'tnamespace.cypress.example.com',
