@@ -12,9 +12,13 @@ The `samples` directory includes YAML files with examples of the above CRDs.
 
 To test the extensibility feature using the Pizzas example, upload all the YAML files from the `configuration` and `samples` directories to your cluster. You can use the following commands:
 
-1. In the terminal, go to `/busola/examples/pizzas`.
+1. Access your cluster using kubectl. Download kubeconfig.yaml from the SAP BTP cockpit and export it in your terminal:
 
-2. Access your cluster by applying the kubeconfig file.
+   ```bash
+   export KUBECONFIG={KUBECONFIG_FILE_PATH}
+   ```
+
+2. In the terminal, go to `/busola/examples/pizzas`.
 
 3. Create the `pizzas` namespace and apply the ConfigMaps and CRDs:
 
