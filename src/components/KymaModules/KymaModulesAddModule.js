@@ -128,70 +128,87 @@ export default function KymaModulesAddModule(props) {
       initialUnchangedResource={initialUnchangedResource}
     >
       {modulesAddData?.length !== 0 ? (
-        <div className="gridbox-addModule" key={module.name}>
-          {modulesAddData?.map(module => {
-            const index = selectedModules?.findIndex(kymaResourceModule => {
-              return kymaResourceModule.name === module?.name;
-            });
+        <>
+          {modulesAddData?.find(module => module?.isBeta) ? (
+            <MessageStrip
+              design="Warning"
+              hideCloseButton
+              style={{
+                ...spacing.sapUiTinyMarginTopBottom,
+                ...spacing.sapUiTinyMarginBegin,
+                width: 'calc(100% - 1rem)',
+              }}
+            >
+              {t('kyma-modules.beta')}
+            </MessageStrip>
+          ) : null}
+          <div className="gridbox-addModule" key={module.name}>
+            {modulesAddData?.map(module => {
+              const index = selectedModules?.findIndex(kymaResourceModule => {
+                return kymaResourceModule.name === module?.name;
+              });
 
-            return (
-              <>
-                <Card
-                  header={
-                    <CardHeader
-                      onClick={e =>
-                        isChecked(module.name)
-                          ? setCheckbox(module, undefined, index)
-                          : setCheckbox(
-                              module,
-                              e.target._state.titleText,
-                              index,
-                            )
-                      }
-                      interactive
-                      avatar={<CheckBox checked={isChecked(module.name)} />}
-                      titleText={module.name}
-                      subtitleText={
-                        isChecked(module.name)
-                          ? `v${findStatus(module.name)?.version}`
-                          : `v${
-                              module.channels.find(
-                                channel =>
-                                  kymaResource?.spec?.channel ===
-                                  channel.channel,
-                              )?.version
-                            }`
-                      }
-                    />
-                  }
-                  style={spacing.sapUiSmallMarginBottom}
-                >
-                  {module.docsUrl ? (
-                    <ExternalLink
-                      url={module.docsUrl}
-                      linkStyle={spacing.sapUiLargeMarginBegin}
-                    >
-                      {'Learn more'}
-                    </ExternalLink>
-                  ) : null}
-                  {module?.isBeta ? (
-                    <MessageStrip
-                      design="Warning"
-                      hideCloseButton
-                      style={{
-                        ...spacing.sapUiTinyMarginTopBottom,
-                        ...spacing.sapUiTinyMarginBegin,
-                        width: 'calc(100% - 1rem)',
-                      }}
-                    >
-                      {t('kyma-modules.beta')}
-                    </MessageStrip>
-                  ) : null}
-                </Card>
-              </>
-            );
-          })}
-        </div>
+              return (
+                <>
+                  <Card
+                    className="addModuleCard"
+                    header={
+                      <CardHeader
+                        onClick={e =>
+                          isChecked(module.name)
+                            ? setCheckbox(module, undefined, index)
+                            : setCheckbox(
+                                module,
+                                e.target._state.titleText,
+                                index,
+                              )
+                        }
+                        action={
+                          <img
+                            alt="SAP"
+                            src="\assets\sap-logo.svg"
+                            style={{ height: '32px' }}
+                          />
+                        }
+                        interactive
+                        avatar={<CheckBox checked={isChecked(module.name)} />}
+                        titleText={module.name}
+                        subtitleText={
+                          isChecked(module.name)
+                            ? `v${findStatus(module.name)?.version} ${
+                                module?.isBeta ? '(Beta)' : ''
+                              }`
+                            : `v${
+                                module.channels.find(
+                                  channel =>
+                                    kymaResource?.spec?.channel ===
+                                    channel.channel,
+                                )?.version
+                              } ${module?.isBeta ? '(Beta)' : ''}`
+                        }
+                      />
+                    }
+                    style={spacing.sapUiSmallMarginBottom}
+                  >
+                    {module.docsUrl ? (
+                      <ExternalLink
+                        url={module.docsUrl}
+                        linkStyle={{
+                          ...spacing.sapUiLargeMarginBegin,
+                          ...spacing.sapUiSmallMarginBottom,
+                        }}
+                      >
+                        {'Learn more'}
+                      </ExternalLink>
+                    ) : (
+                      <div></div>
+                    )}
+                  </Card>
+                </>
+              );
+            })}
+          </div>
+        </>
       ) : (
         <MessageStrip design="Warning" hideCloseButton>
           {t('extensibility.widgets.modules.no-modules')}
