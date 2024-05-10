@@ -133,11 +133,7 @@ export default function KymaModulesAddModule(props) {
             <MessageStrip
               design="Warning"
               hideCloseButton
-              style={{
-                ...spacing.sapUiTinyMarginTopBottom,
-                ...spacing.sapUiTinyMarginBegin,
-                width: 'calc(100% - 1rem)',
-              }}
+              style={spacing.sapUiSmallMarginTopBottom}
             >
               {t('kyma-modules.beta')}
             </MessageStrip>
