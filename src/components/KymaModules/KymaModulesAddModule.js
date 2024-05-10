@@ -145,68 +145,70 @@ export default function KymaModulesAddModule(props) {
               });
 
               return (
-                <>
-                  <Card
-                    className="addModuleCard"
-                    header={
-                      <CardHeader
-                        onClick={e =>
-                          isChecked(module.name)
-                            ? setCheckbox(module, undefined, index)
-                            : setCheckbox(
-                                module,
-                                e.target._state.titleText,
-                                index,
-                              )
-                        }
-                        action={
-                          <img
-                            alt="SAP"
-                            src="\assets\sap-logo.svg"
-                            style={{ height: '32px' }}
-                          />
-                        }
-                        interactive
-                        avatar={<CheckBox checked={isChecked(module.name)} />}
-                        titleText={module.name}
-                        subtitleText={
-                          isChecked(module.name)
-                            ? `v${findStatus(module.name)?.version} ${
-                                module?.isBeta ? '(Beta)' : ''
-                              }`
-                            : `v${
-                                module.channels.find(
-                                  channel =>
-                                    kymaResource?.spec?.channel ===
-                                    channel.channel,
-                                )?.version
-                              } ${module?.isBeta ? '(Beta)' : ''}`
-                        }
-                      />
-                    }
-                    style={spacing.sapUiSmallMarginBottom}
-                  >
-                    {module.docsUrl ? (
-                      <ExternalLink
-                        url={module.docsUrl}
-                        linkStyle={{
-                          ...spacing.sapUiLargeMarginBegin,
-                          ...spacing.sapUiSmallMarginBottom,
-                        }}
-                      >
-                        {'Learn more'}
-                      </ExternalLink>
-                    ) : (
-                      <div></div>
-                    )}
-                  </Card>
-                </>
+                <Card
+                  className="addModuleCard"
+                  header={
+                    <CardHeader
+                      onClick={e =>
+                        isChecked(module.name)
+                          ? setCheckbox(module, undefined, index)
+                          : setCheckbox(
+                              module,
+                              e.target._state.titleText,
+                              index,
+                            )
+                      }
+                      action={
+                        <img
+                          alt="SAP"
+                          src="\assets\sap-logo.svg"
+                          style={{ height: '32px' }}
+                        />
+                      }
+                      interactive
+                      avatar={<CheckBox checked={isChecked(module.name)} />}
+                      titleText={module.name}
+                      subtitleText={
+                        isChecked(module.name)
+                          ? `v${findStatus(module.name)?.version} ${
+                              module?.isBeta ? '(Beta)' : ''
+                            }`
+                          : `v${
+                              module.channels.find(
+                                channel =>
+                                  kymaResource?.spec?.channel ===
+                                  channel.channel,
+                              )?.version
+                            } ${module?.isBeta ? '(Beta)' : ''}`
+                      }
+                    />
+                  }
+                  style={spacing.sapUiSmallMarginBottom}
+                >
+                  {module.docsUrl ? (
+                    <ExternalLink
+                      url={module.docsUrl}
+                      linkStyle={{
+                        ...spacing.sapUiLargeMarginBegin,
+                        ...spacing.sapUiSmallMarginBottom,
+                      }}
+                    >
+                      {'Learn more'}
+                    </ExternalLink>
+                  ) : (
+                    <div></div>
+                  )}
+                </Card>
               );
             })}
           </div>
         </>
       ) : (
-        <MessageStrip design="Warning" hideCloseButton>
+        <MessageStrip
+          design="Warning"
+          hideCloseButton
+          style={spacing.sapUiSmallMarginTop}
+        >
           {t('extensibility.widgets.modules.no-modules')}
         </MessageStrip>
       )}
