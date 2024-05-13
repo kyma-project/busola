@@ -78,7 +78,7 @@ export function YamlResourcesList({ resourcesData }) {
         <>
           <div
             className={'yaml-upload-modal__content'}
-            data-testID={'yaml-upload-modal__validation-result'}
+            data-testid={'yaml-upload-modal__validation-result'}
             style={{ overflowY: 'auto' }}
           >
             <FlexBox

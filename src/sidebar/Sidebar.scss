@@ -1,10 +1,10 @@
 :root {
-  --sidebar-padding: var(--_ui5-v1-20-0_side_navigation_padding);
-  --sidebar-width: var(--_ui5-v1-20-0_side_navigation_width);
+  --sidebar-padding: var(--_ui5-v1-24-0_side_navigation_padding);
+  --sidebar-width: var(--_ui5-v1-24-0_side_navigation_width);
 }
 
 .ui5-content-density-compact {
-  --_ui5-v1-20-0_side_navigation_padding: 0.2rem 0.7rem 0.75rem 0.75rem !important;
+  --_ui5-v1-24-0_side_navigation_padding: 0.2rem 0.7rem 0.75rem 0.75rem !important;
 }
 
 .sidebar__content {
@@ -16,29 +16,10 @@
   .space-top {
     height: 0.75rem;
   }
-}
 
-@mixin shadow-overlay($top, $height) {
-  margin: calc(-1 * var(--sidebar-padding));
-  padding: var(--sidebar-padding);
-  background: var(--sapList_Background);
-  position: absolute;
-  top: $top;
-  left: 0.5rem;
-  height: $height;
-  width: var(--sidebar-width);
-  box-sizing: border-box;
-  z-index: 0;
-}
-
-.shadow-overlay-bottom {
-  @include shadow-overlay(calc(62px + (2 * var(--sidebar-padding))), 100%);
-}
-
-.shadow-overlay-top {
-  @include shadow-overlay(1.5rem, 5px);
-
-  border-radius: var(--_ui5-v1-20-0_side_navigation_border_radius);
+  .disable-effects {
+    pointer-events: none;
+  }
 }
 
 ui5-side-navigation.hide-shadow {

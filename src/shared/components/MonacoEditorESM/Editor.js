@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
