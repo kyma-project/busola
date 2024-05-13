@@ -5,7 +5,7 @@ import {
   MessageBox,
   WithWebComponentPropTypes,
 } from '@ui5/webcomponents-react';
-import { useGetTranslation } from 'components/Extensibility/helpers';
+import { useTranslation } from 'react-i18next';
 import { ForwardRefExoticComponent, RefAttributes } from 'react';
 import { useRecoilState } from 'recoil';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
@@ -17,7 +17,7 @@ type CancelMessageBoxProps = {
 };
 
 export function CancelMessageBox({ isOpen }: CancelMessageBoxProps) {
-  const { t } = useGetTranslation();
+  const { t } = useTranslation();
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
@@ -48,7 +48,7 @@ export function CancelMessageBox({ isOpen }: CancelMessageBoxProps) {
       type="Warning"
       open={isOpen ?? isResourceEdited.warningOpen}
       onClose={handleClose}
-      titleText="Discard Changes"
+      titleText={t('common.headers.discard-changes')}
       actions={[
         <Button design="Emphasized">{t('common.buttons.discard')}</Button>,
         `${t('common.buttons.cancel')}`,

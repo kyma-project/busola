@@ -124,6 +124,8 @@ context('Test Pizzas', () => {
       .find('ui5-label[required]:visible')
       .should('have.length', 3);
 
+    cy.checkUnsavedDialog();
+
     cy.saveChanges('Edit');
 
     cy.inspectTab('View');
@@ -227,6 +229,8 @@ context('Test Pizzas', () => {
       .find('input')
       .clear({ force: true })
       .type(PIZZA_NAME, { force: true });
+
+    cy.checkUnsavedDialog();
 
     cy.saveChanges('Create');
 

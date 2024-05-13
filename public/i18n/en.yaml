@@ -307,6 +307,7 @@ common:
     created: Created
     last-update: Last Update
     description: Description
+    discard-changes: Discard Changes
     items: Items
     key: Key
     kind: Kind
