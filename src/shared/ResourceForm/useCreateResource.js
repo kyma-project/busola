@@ -133,15 +133,11 @@ export function useCreateResource({
     } else {
       defaultAfterCreatedFn();
     }
-    if (isEdit) {
-      setIsResourceEdited({
-        ...isResourceEdited,
-        isEdited: false,
-        isSaved: true,
-      });
-    } else {
-      setIsResourceEdited({ ...isResourceEdited, isEdited: false });
-    }
+    setIsResourceEdited({
+      ...isResourceEdited,
+      isEdited: false,
+      isSaved: true,
+    });
   };
 
   return async e => {

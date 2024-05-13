@@ -75,7 +75,7 @@ export default function ServiceAccountCreate({
   };
 
   async function afterServiceAccountCreate(defaultAfterCreateFn) {
-    if (initialServiceAccount || !shouldCreateSecret) {
+    if (initialUnchangedResource || !shouldCreateSecret) {
       defaultAfterCreateFn();
       return;
     }

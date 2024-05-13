@@ -168,7 +168,11 @@ export function ExtensibilityCreateCore({
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
       onlyYaml={!schema}
-      presets={!initialResource && presets}
+      presets={
+        (initialResource === defaultPreset?.value ||
+          initialResource === emptyTemplate) &&
+        presets
+      }
       initialResource={initialResource}
       initialUnchangedResource={initialUnchangedResource}
       afterCreatedFn={afterCreatedFn}
