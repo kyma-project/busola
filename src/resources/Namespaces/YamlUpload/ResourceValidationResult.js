@@ -84,7 +84,7 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
               showDefaultIcon
               state={ValueState.Warning}
               style={{
-                marginLeft: '-0.3125rem', //set icon in one line with expand arrow. The value from class `--_ui5-v1-20-0_panel_content_padding1` is divided by 2
+                marginLeft: '-0.3125rem', //set icon in one line with expand arrow. The value from class `--_ui5-v1-24-0_panel_content_padding` is divided by 2
                 ...spacing.sapUiSmallMarginEnd,
               }}
             />

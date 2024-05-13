@@ -66,7 +66,7 @@ test('Busola Lighthouse audit', async () => {
     port: 9222,
     thresholds: {
       accessibility: 80,
-      'best-practices': 85, //best-practices dropped after bumping lighthouse version - it detects Monaco is preventing pasting
+      'best-practices': 85, //best-practices were reduced after the bump of lighthouse version - it detects Monaco which prevents passing
     },
   });
 
