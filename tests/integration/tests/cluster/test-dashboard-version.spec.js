@@ -11,13 +11,13 @@ context('Test Kyma Dashboard Version link', () => {
     cy.get('[title="Profile"]').click();
 
     cy.get('.ui5-menu-rp')
-      .find('ui5-li:visible')
-      .last()
-      .trigger('mouseover');
+      .find('ui5-menu-li:visible')
+      .contains('Legal Information')
+      .click({ force: true });
 
     cy.get('ui5-responsive-popover[placement-type="Right"]')
-      .find('ui5-li:visible')
-      .last()
-      .should('contain', 'Kyma Dashboard version:');
+      .find('ui5-menu-li:visible')
+      .contains('Kyma Dashboard version:')
+      .should('be.visible');
   });
 });
