@@ -385,32 +385,23 @@ function Resource({
               />,
               document.body,
             )}
-            <FlexBox
-              alignItems="Center"
-              justifyContent="SpaceBetween"
-              style={spacing.sapUiMediumMargin}
-            >
-              <Title level="H3">
-                {title ?? t('common.headers.resource-details')}
-              </Title>
-              <AIOpener
-                namespace={resource?.metadata?.namespace}
-                resourceType={resource?.kind}
-                groupVersion={resource?.apiVersion}
-                resourceName={resource?.metadata?.name}
-              />
-            </FlexBox>
             {!disableResourceDetailsCard && (
               <>
-                <Title
-                  level="H3"
-                  style={{
-                    ...spacing.sapUiMediumMarginBegin,
-                    ...spacing.sapUiMediumMarginTopBottom,
-                  }}
+                <FlexBox
+                  alignItems="Center"
+                  justifyContent="SpaceBetween"
+                  style={spacing.sapUiMediumMargin}
                 >
-                  {title ?? t('common.headers.resource-details')}
-                </Title>
+                  <Title level="H3">
+                    {title ?? t('common.headers.resource-details')}
+                  </Title>
+                  <AIOpener
+                    namespace={resource?.metadata?.namespace}
+                    resourceType={resource?.kind}
+                    groupVersion={resource?.apiVersion}
+                    resourceName={resource?.metadata?.name}
+                  />
+                </FlexBox>
                 <div
                   className={`resource-details-container ${
                     isColumnLayoutEnabled &&
