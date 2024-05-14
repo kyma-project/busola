@@ -261,7 +261,9 @@ export function KymaModulesList(props) {
       <GenericList
         extraHeaderContent={[
           <Button design="Emphasized" onClick={handleShowAddModule}>
-            {t('common.buttons.add')}
+            {resource.status.modules
+              ? t('kyma-modules.modify')
+              : t('common.buttons.add')}
           </Button>,
         ]}
         customColumnLayout={customColumnLayout}

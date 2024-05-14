@@ -912,6 +912,7 @@ kubeconfig-id:
 kyma-modules:
   learn-more: Learn more
   add-module: Add Modules
+  modify: Modify 
   no-modules-description: Customize your cluster by adding the modules you need.
   description: With <0>Kyma’s modular approach</0>, you can install just the modules you need, instead of a predefined set of components.
   release-channel-description: According to the <0>Kyma modules` release cycle</0>, we first release a new module’s major or minor version in the fast channel. After approximately two weeks, we promote the release to the regular channel.
