@@ -69,6 +69,7 @@ export const GenericList = ({
   displayArrow = false,
   handleRedirect = null,
   nameColIndex = 0,
+  noHideFields,
 }) => {
   const navigate = useNavigate();
   searchSettings = { ...defaultSearch, ...searchSettings };
@@ -359,6 +360,7 @@ export const GenericList = ({
             headerRenderer={headerRenderer}
             disableHiding={disableHiding}
             displayArrow={displayArrow}
+            noHideFields={noHideFields}
           />
         }
       >
@@ -420,6 +422,7 @@ GenericList.propTypes = {
   enableColumnLayout: PropTypes.bool,
   customUrl: PropTypes.func,
   hasDetailsView: PropTypes.bool,
+  noHideFields: PropTypes.arrayOf(PropTypes.string),
 };
 
 GenericList.defaultProps = {

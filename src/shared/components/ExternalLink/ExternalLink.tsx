@@ -19,6 +19,7 @@ type LinkProps = {
     | 'Attention';
   iconStyle?: React.CSSProperties;
   type?: 'link' | 'button';
+  linkStyle?: React.CSSProperties;
 };
 
 export const ExternalLink = ({
@@ -29,6 +30,7 @@ export const ExternalLink = ({
   buttonDesign = 'Transparent',
   iconStyle,
   type = 'link',
+  linkStyle,
 }: LinkProps) => {
   const { t } = useTranslation();
 
@@ -50,7 +52,7 @@ export const ExternalLink = ({
   }
 
   return (
-    <Link design={design} href={url} target="_blank">
+    <Link design={design} href={url} target="_blank" style={linkStyle}>
       {text || children || url}
       <Icon
         design="Information"
