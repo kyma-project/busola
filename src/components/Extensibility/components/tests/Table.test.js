@@ -145,7 +145,7 @@ describe('Table', () => {
           children: [{ source: 'key', search: true }],
         };
 
-        const component = render(
+        const { queryByLabelText, queryByText } = render(
           <ThemeProvider>
             <Table value={elements} structure={structure} />
           </ThemeProvider>,
@@ -153,8 +153,8 @@ describe('Table', () => {
 
         await waitFor(async () => {
           await act(async () => {
-            expect(component.findByLabelText('search-input'));
-            expect(component.findByText('extensibility::first'));
+            expect(queryByLabelText('search-input'));
+            expect(queryByText('extensibility::first'));
           });
         });
       });
