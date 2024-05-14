@@ -58,7 +58,7 @@ export default function AIOpener({
         resourceName,
         sessionID,
         clusterUrl: cluster.currentContext.cluster.cluster.server,
-        token: cluster.currentContext.user.user.token,
+        token: authData.token,
         certificateAuthorityData:
           cluster.currentContext.cluster.cluster['certificate-authority-data'],
       });
