@@ -35,4 +35,4 @@ wait -n
 echo "Second process finished"
 
 cd tests/lighthouse
-npm ci && npm run "test"
+npm ci && npx playwright install --with-deps && npm run "test"

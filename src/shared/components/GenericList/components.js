@@ -144,6 +144,7 @@ const DefaultRowRenderer = ({
     <TableRow
       type={hasDetailsView ? 'Active' : 'Inactive'}
       navigated={isSelected}
+      selected={isSelected}
     >
       {cells}
       {!!actions.length && actionsCell}

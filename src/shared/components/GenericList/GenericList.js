@@ -38,6 +38,7 @@ const defaultSearch = {
   showSearchField: true,
   textSearchProperties: ['name', 'description'],
   showSearchSuggestion: true,
+  allowSlashShortcut: true,
   noSearchResultMessage: 'components.generic-list.messages.no-search-results',
 };
 
@@ -155,6 +156,7 @@ export const GenericList = ({
           handleQueryChange={setSearchQuery}
           suggestionProperties={searchSettings?.textSearchProperties}
           showSuggestion={searchSettings?.showSearchSuggestion}
+          allowSlashShortcut={searchSettings?.allowSlashShortcut}
           disabled={!entries.length}
         />
       )}
@@ -380,6 +382,7 @@ const SearchProps = PropTypes.shape({
     ]),
   ),
   showSearchSuggestion: PropTypes.bool,
+  allowSlashShortcut: PropTypes.bool,
   noSearchResultMessage: PropTypes.string,
 });
 

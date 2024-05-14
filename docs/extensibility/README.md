@@ -2,36 +2,61 @@
 
 ## Overview
 
-With Busola's extensibility feature, you can create a separate dedicated user interface (UI) page for your CustomResourceDefinition (CRD). It enables you to add navigation nodes, on cluster or Namespace level, and to configure your [UI display](display-section.md), for example, a resource list page, and details pages. You can also [create and edit forms](form-section.md).
+With Busola's extensibility feature, you can create a dedicated user interface (UI) page for your CustomResourceDefinition (CRD). It enables you to add navigation nodes, on cluster or namespace level, and to configure your [UI display](display-section.md), for example, a resource list page, and details pages. You can also [create and edit forms](form-section.md). To create a UI component, you need a ConfigMap.
 
-For more information about extensibility in Busola, visit [Config Map for resource-based extensions](resources.md).
+## Create a ConfigMap for Your UI
 
-## CRD ConfigMap wizard
+To create a ConfigMap with your CRD's UI configuration, you can either use the Extensions feature or do it manually.
 
-To automatically add the UI page for your CRD, follow these steps:
+For more information about extensibility in Busola, see [Config Map for resource-based extensions](resources.md).
 
-1.  In the **Cluster Details** view, go to **Configuration > Extensions**.
-2.  Click **Create Extension +**, and select your resource from the list.
-3.  Optionally, you can uncheck the UI elements that are not necessary.
+### Create a CRD ConfigMap Using the Extentions Feature
 
-> **NOTE:** The UI elements visible in this form are only suggestions. You can change the configuration later in your ConfigMap.
+> [!NOTE]
+> Using the Extensions feature, you can't change the namespace where the UI component is created or edit the ConfigMap's name. If you want to create the ConfigMap in a different namespace, create the ConfigMap manually.
 
-4.  Click **Create**.
+1. In Kyma dashboard, in the cluster view, choose **Configuration > Extensions** and click **Create**.
 
-## Create a custom CRD ConfigMap
+2. Complete the following fields:
 
-To create your CRD ConfigMap, follow these steps:
+   * **Resource** - choose your module's resource from the list of resources existing in the cluster
+   * **Name** - enter the UI component name displayed in the Kyma dashboard navigation
+   * **Category** - enter the UI component category displayed in the Kyma dashboard navigation
 
-1. Go to the `kube-public` Namespace and choose **Configuration > Config Maps**.
+3. The CustomResourceDefinition (CRD) of the chosen resource predefines the details that appear in the following sections:
+   * **Form Fields** - defines fields visible in the edit and create pages.
+   * **List Columns** - defines columns visible on the UI component's entry page, also known as the list page. The **Name** and **Created** columns are added by default.
+   * **Details Summary** - defines fields visible in the body of the details page of specific CRs. You can access the details page by clicking on a specific resource on the list page.
 
-> **NOTE:** You can choose your Namespace, but the `kube-public` Namespace is recommended.
+   You can delete those parameters that you find irrelevant to your use case.
 
-2. Click **Create Config Map +** and enter the name of your ConfigMap.
-3. Under **Data**, add the required fields to define how to handle your CRD.
-4. In the **Labels** form enter `busola.io/extension` as a key, and `resource` as a value.
+   > [!NOTE]
+   > Not all of the predefined CRD parameters are used during the ConfigMap creation.
 
-> **NOTE:** Do not overwrite the existing name label.
+4. Click **Create**.
 
-5. Click **Create**.
+### Create a CRD ConfigMap Manually
 
-To see an exemplary configuration of the Busola extensibility feature, see the [Pizza example](examples/../../../examples/pizzas/README.md).
+1. In Kyma dashboard, choose a namespace.
+2. Go to **Configuration** > **Config Maps** and click **Create**.
+3. Enter the Config Map's **Name**.
+4. In the **Labels** section, enter two labels:
+   * `busola.io/extension` as the key, and `resource` as the value
+   * `busola.io/extension-version`as the key, and `'0.5'` as the value
+5. Under **Data**, add the following required fields for your module's UI configuration:
+
+   ```yaml
+   general:
+     resource: 
+       kind:
+       version:
+       group:
+     name:
+     category:
+     scope:
+     urlPath:
+   ```
+
+6. Click **Create**.
+
+To see an exemplary configuration of the Busola extensibility feature, check the [Pizza example](examples/../../../examples/pizzas/README.md).
