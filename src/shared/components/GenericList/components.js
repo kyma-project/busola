@@ -52,7 +52,7 @@ export const HeaderRenderer = ({
             popinDisplay="Block"
             demandPopin={h === 'Labels' ? true : false}
             minWidth={
-              noHideFields
+              Array.isArray(noHideFields) && noHideFields.length !== 0
                 ? noHideFields.find(field => field === h)
                   ? ''
                   : 850
