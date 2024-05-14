@@ -11,7 +11,7 @@ import { spacing } from '@ui5/webcomponents-react-base';
 
 import './ResourceCreate.scss';
 import { useRecoilState } from 'recoil';
-import { CancelMessageBox } from '../CancelMessageBox/CancelMessageBox';
+import { UnsavedMessageBox } from '../UnsavedMessageBox/UnsavedMessageBox';
 import { createPortal } from 'react-dom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { columnLayoutState } from 'state/columnLayoutAtom';
@@ -229,7 +229,7 @@ export const ResourceCreate = ({
           })}
         </div>
       )}
-      {createPortal(<CancelMessageBox />, document.body)}
+      {createPortal(<UnsavedMessageBox />, document.body)}
     </>
   );
 };

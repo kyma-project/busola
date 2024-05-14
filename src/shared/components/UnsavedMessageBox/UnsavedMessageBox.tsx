@@ -10,13 +10,13 @@ import { ForwardRefExoticComponent, RefAttributes } from 'react';
 import { useRecoilState } from 'recoil';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 
-type CancelMessageBoxProps = {
+type UnsavedMessageBoxProps = {
   isEdited: boolean;
   isOpen?: boolean;
   proceedButtonAction: Function;
 };
 
-export function CancelMessageBox({ isOpen }: CancelMessageBoxProps) {
+export function UnsavedMessageBox({ isOpen }: UnsavedMessageBoxProps) {
   const { t } = useTranslation();
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
