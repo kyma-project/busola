@@ -229,10 +229,12 @@ export function KymaModulesList(props) {
           type={
             findStatus(resource.name)?.state === 'Ready'
               ? 'Success'
-              : findStatus(resource.name)?.state || 'UNKNOWN'
+              : findStatus(resource.name)?.state === 'Processing'
+              ? 'None'
+              : findStatus(resource.name)?.state || 'None'
           }
         >
-          {findStatus(resource.name)?.state}
+          {findStatus(resource.name)?.state || 'UNKNOWN'}
         </StatusBadge>,
         // Documentation
         <ExternalLink
