@@ -169,17 +169,22 @@ export default function KymaModulesAddModule(props) {
                       avatar={<CheckBox checked={isChecked(module.name)} />}
                       titleText={module.name}
                       subtitleText={
-                        isChecked(module.name)
+                        findStatus(module.name)?.version
                           ? `v${findStatus(module.name)?.version} ${
                               module?.isBeta ? '(Beta)' : ''
                             }`
-                          : `v${
+                          : module.channels.find(
+                              channel =>
+                                kymaResource?.spec?.channel === channel.channel,
+                            )?.version
+                          ? `v${
                               module.channels.find(
                                 channel =>
                                   kymaResource?.spec?.channel ===
                                   channel.channel,
                               )?.version
                             } ${module?.isBeta ? '(Beta)' : ''}`
+                          : t('kyma-modules.no-version')
                       }
                     />
                   }
@@ -193,7 +198,7 @@ export default function KymaModulesAddModule(props) {
                         ...spacing.sapUiSmallMarginBottom,
                       }}
                     >
-                      {'Learn more'}
+                      {t('kyma-modules.learn-more')}
                     </ExternalLink>
                   ) : (
                     <div></div>
