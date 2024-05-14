@@ -43,10 +43,11 @@ export const CountingCard = ({
           style={{ paddingBottom: '0px' }}
           aria-level={6}
         >
-          {extraInfo?.map((info: any) => (
+          {extraInfo?.map((info: any, index: number) => (
             <NumericSideIndicator
               number={info?.value}
               titleText={info?.title}
+              key={index}
             />
           ))}
         </AnalyticalCardHeader>

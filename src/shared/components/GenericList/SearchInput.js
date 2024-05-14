@@ -81,8 +81,8 @@ export function SearchInput({
   const renderSearchList = entries => {
     const suggestions = getSearchSuggestions(entries);
 
-    return suggestions.map(suggestion => (
-      <SuggestionItem id={suggestion} text={suggestion} />
+    return suggestions.map((suggestion, index) => (
+      <SuggestionItem key={index} id={suggestion} text={suggestion} />
     ));
   };
 

@@ -260,7 +260,11 @@ export function KymaModulesList(props) {
     return (
       <GenericList
         extraHeaderContent={[
-          <Button design="Emphasized" onClick={handleShowAddModule}>
+          <Button
+            key="add-module"
+            design="Emphasized"
+            onClick={handleShowAddModule}
+          >
             {t('common.buttons.add')}
           </Button>,
         ]}
