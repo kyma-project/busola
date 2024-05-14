@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { isNil } from 'lodash';
 import classNames from 'classnames';
@@ -95,10 +94,11 @@ export function Table({
       }
     };
 
-    const cells = (structure.children || []).map(column => {
+    const cells = (structure.children || []).map((column, cellIndex) => {
       return (
         <Widget
           {...props}
+          key={cellIndex}
           value={entry}
           scope={entry}
           arrayItems={[...arrayItems, entry]}
@@ -121,9 +121,10 @@ export function Table({
       collapseContent: (
         // TODO replace once new Table component is available in ui5-webcomponents-react
         <td colSpan="100%" className={tdClassNames}>
-          {structure.collapsible.map(child => (
+          {structure.collapsible.map((child, cellIndex) => (
             <Widget
               {...props}
+              key={cellIndex}
               value={entry}
               scope={entry}
               arrayItems={[...arrayItems, entry]}
@@ -145,11 +146,11 @@ export function Table({
   const { searchOptions, defaultSearch } = getSearchDetails(structure);
 
   const extraHeaderContent = (structure.extraHeaderContent || []).map(
-    content => {
+    (content, index) => {
       return (
         <Widget
           {...props}
-          {...props}
+          key={index}
           value={value}
           structure={content}
           schema={schema}

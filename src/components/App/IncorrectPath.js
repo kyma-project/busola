@@ -68,7 +68,7 @@ export function IncorrectPath({ to, title = '', message = '' }) {
       titleText={title}
       className="ui5-content-density-compact"
       actions={[
-        <Button design="Attention" onClick={() => navigate(to)}>
+        <Button key="ok" design="Attention" onClick={() => navigate(to)}>
           {t('common.buttons.ok')}
         </Button>,
       ]}

@@ -67,6 +67,7 @@ export const PVCConfiguration = pvc => {
   );
   return (
     <UI5Panel
+      key="pvc-configuration"
       title={t('persistent-volume-claims.headers.configuration')}
       keyComponent={'pvc-configuration'}
     >

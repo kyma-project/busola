@@ -37,13 +37,16 @@ export function IngressDetails(props) {
   customComponents.push(resource =>
     resource.spec.defaultBackend ? (
       <DefaultBackendPanel
+        key="default-backend"
         backend={resource.spec.defaultBackend}
         namespace={resource.metadata.namespace}
       />
     ) : null,
   );
   customComponents.push(resource =>
-    resource.spec.rules ? <Rules rules={resource.spec.rules} /> : null,
+    resource.spec.rules ? (
+      <Rules key="rules" rules={resource.spec.rules} />
+    ) : null,
   );
 
   return (
