@@ -11,6 +11,7 @@ import getChatResponse from 'components/AIassistant/api/getChatResponse';
 import { sessionIDState } from 'components/AIassistant/state/sessionIDAtom';
 import getFollowUpQuestions from 'components/AIassistant/api/getFollowUpQuestions';
 import { clusterState } from 'state/clusterAtom';
+import { authDataState } from 'state/authDataAtom';
 import './Chat.scss';
 
 export default function Chat() {
@@ -22,6 +23,7 @@ export default function Chat() {
   const initialPrompt = useRecoilValue(initialPromptState);
   const sessionID = useRecoilValue(sessionIDState);
   const cluster = useRecoilValue(clusterState);
+  const authData = useRecoilValue(authDataState);
 
   const addMessage = (author, messageChunks, isLoading) => {
     setChatHistory(prevItems =>
@@ -36,7 +38,7 @@ export default function Chat() {
         sessionID,
         handleFollowUpQuestions,
         clusterUrl: cluster.currentContext.cluster.cluster.server,
-        token: cluster.currentContext.user.user.token,
+        token: authData.token,
         certificateAuthorityData:
           cluster.currentContext.cluster.cluster['certificate-authority-data'],
       });
@@ -74,7 +76,7 @@ export default function Chat() {
       handleError,
       sessionID,
       clusterUrl: cluster.currentContext.cluster.cluster.server,
-      token: cluster.currentContext.user.user.token,
+      token: authData.token,
       certificateAuthorityData:
         cluster.currentContext.cluster.cluster['certificate-authority-data'],
     });
