@@ -229,10 +229,12 @@ export function KymaModulesList(props) {
           type={
             findStatus(resource.name)?.state === 'Ready'
               ? 'Success'
-              : findStatus(resource.name)?.state || 'UNKNOWN'
+              : findStatus(resource.name)?.state === 'Processing'
+              ? 'None'
+              : findStatus(resource.name)?.state || 'None'
           }
         >
-          {findStatus(resource.name)?.state}
+          {findStatus(resource.name)?.state || 'UNKNOWN'}
         </StatusBadge>,
         // Documentation
         <ExternalLink
@@ -265,7 +267,9 @@ export function KymaModulesList(props) {
             design="Emphasized"
             onClick={handleShowAddModule}
           >
-            {t('common.buttons.add')}
+            {resource.status.modules
+              ? t('kyma-modules.modify')
+              : t('common.buttons.add')}
           </Button>,
         ]}
         customColumnLayout={customColumnLayout}
@@ -273,7 +277,8 @@ export function KymaModulesList(props) {
         entries={resource.status.modules}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
-        disableHiding={true}
+        disableHiding={false}
+        noHideFields={['Name', '', 'Namespace']}
         displayArrow={false}
         title={'Modules'}
         sortBy={{

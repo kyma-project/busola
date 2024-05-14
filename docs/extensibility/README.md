@@ -19,14 +19,15 @@ For more information about extensibility in Busola, see [Config Map for resource
 
 2. Complete the following fields:
 
-   * **Resource** - choose your module's resource from the list of resources existing in the cluster
-   * **Name** - enter the UI component name displayed in the Kyma dashboard navigation
-   * **Category** - enter the UI component category displayed in the Kyma dashboard navigation
+   - **Resource** - choose your module's resource from the list of resources existing in the cluster
+   - **Name** - enter the UI component name displayed in the Kyma dashboard navigation
+   - **Category** - enter the UI component category displayed in the Kyma dashboard navigation
 
 3. The CustomResourceDefinition (CRD) of the chosen resource predefines the details that appear in the following sections:
-   * **Form Fields** - defines fields visible in the edit and create pages.
-   * **List Columns** - defines columns visible on the UI component's entry page, also known as the list page. The **Name** and **Created** columns are added by default.
-   * **Details Summary** - defines fields visible in the body of the details page of specific CRs. You can access the details page by clicking on a specific resource on the list page.
+
+   - **Form Fields** - defines fields visible in the edit and create pages.
+   - **List Columns** - defines columns visible on the UI component's entry page, also known as the list page. The **Name** and **Created** columns are added by default.
+   - **Details Summary** - defines fields visible in the body of the details page of specific CRs. You can access the details page by clicking on a specific resource on the list page.
 
    You can delete those parameters that you find irrelevant to your use case.
 
@@ -41,13 +42,13 @@ For more information about extensibility in Busola, see [Config Map for resource
 2. Go to **Configuration** > **Config Maps** and click **Create**.
 3. Enter the Config Map's **Name**.
 4. In the **Labels** section, enter two labels:
-   * `busola.io/extension` as the key, and `resource` as the value
-   * `busola.io/extension-version`as the key, and `'0.5'` as the value
+   - `busola.io/extension` as the key, and `resource` as the value
+   - `busola.io/extension-version`as the key, and `'0.5'` as the value
 5. Under **Data**, add the following required fields for your module's UI configuration:
 
    ```yaml
    general:
-     resource: 
+     resource:
        kind:
        version:
        group:

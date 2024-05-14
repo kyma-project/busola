@@ -27,6 +27,7 @@ export const HeaderRenderer = ({
   headerRenderer,
   disableHiding = true,
   displayArrow = false,
+  noHideFields,
 }) => {
   let emptyColumn = null;
   if (actions.length) {
@@ -51,7 +52,11 @@ export const HeaderRenderer = ({
             popinDisplay="Block"
             demandPopin={h === 'Labels' ? true : false}
             minWidth={
-              h === 'Labels'
+              Array.isArray(noHideFields) && noHideFields.length !== 0
+                ? noHideFields.find(field => field === h)
+                  ? ''
+                  : 850
+                : h === 'Labels'
                 ? '15000'
                 : disableHiding
                 ? ''
