@@ -44,8 +44,8 @@ export function ComboboxInput({
         placeholder={placeholder}
         {...props}
       >
-        {options.map(option => (
-          <ComboBoxItem id={option.key} text={option.text} />
+        {options.map((option, index) => (
+          <ComboBoxItem key={index} id={option.key} text={option.text} />
         ))}
       </ComboBox>
     </div>

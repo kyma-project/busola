@@ -28,7 +28,7 @@ describe('Badge', () => {
     const value = 'yes';
     const structure = {
       highlights: {
-        Success: ['yes', 'ok'],
+        success: ['yes', 'ok'],
       },
     };
 
