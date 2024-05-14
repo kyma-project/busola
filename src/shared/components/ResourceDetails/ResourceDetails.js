@@ -400,19 +400,6 @@ function Resource({
                 resourceName={resource?.metadata?.name}
               />
             </FlexBox>
-            <div
-              className={`resource-details-container ${
-                isColumnLayoutEnabled &&
-                (layoutColumn.layout === 'MidColumnFullScreen' ||
-                  layoutColumn.layout === 'EndColumnFullScreen' ||
-                  layoutColumn.layout === 'OneColumn')
-                  ? ''
-                  : 'column-view'
-              }`}
-            >
-              {resourceDetailsCard}
-              {resourceStatusCard && resourceStatusCard}
-            </div>
             {!disableResourceDetailsCard && (
               <>
                 <Title
