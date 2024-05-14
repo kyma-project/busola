@@ -37,14 +37,18 @@ import { useGetValidationEnabledSchemas } from 'state/validationEnabledSchemasAt
 import { SplitterElement, SplitterLayout } from '@ui5/webcomponents-react';
 import { showAIassistantState } from 'components/AIassistant/state/showAIassistantAtom';
 import AIassistant from 'components/AIassistant/components/AIassistant';
+import { useGetKymaResources } from 'state/kymaResourcesAtom';
 
 export default function App() {
-  const { t, i18n } = useTranslation();
   const language = useRecoilValue(languageAtom);
   const cluster = useRecoilValue(clusterState);
   const setNamespace = useSetRecoilState(activeNamespaceIdState);
   const { namespace } = useUrl();
   const makeGardenerLoginRoute = useMakeGardenerLoginRoute();
+
+  useInitTheme();
+
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     setNamespace(namespace);
@@ -55,7 +59,6 @@ export default function App() {
   useResourceSchemas();
   useSidebarCondensed();
 
-  useInitTheme();
   useAuthHandler();
   useGetConfiguration();
   useGetExtensions();
@@ -70,6 +73,7 @@ export default function App() {
   useSentry();
   useAppTracking();
   useAfterInitHook(kubeconfigIdState);
+  useGetKymaResources();
 
   const showAssistant = useRecoilValue(showAIassistantState);
 

@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Input, SuggestionItem } from '@ui5/webcomponents-react';
 import '@ui5/webcomponents/dist/features/InputSuggestions.js';
@@ -8,6 +8,8 @@ import { useEventListener } from 'hooks/useEventListener';
 import { getEntryMatches } from 'shared/components/GenericList/helpers';
 import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
 import { ResourceDetailContext } from '../ResourceDetails/ResourceDetails';
+import { useRecoilValue } from 'recoil';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 SearchInput.propTypes = {
   searchQuery: PropTypes.string,
@@ -21,6 +23,7 @@ SearchInput.propTypes = {
     ]),
   ),
   showSuggestion: PropTypes.bool,
+  allowSlashShortcut: PropTypes.bool,
   disabled: PropTypes.bool,
   onKeyDown: PropTypes.func,
 };
@@ -34,14 +37,16 @@ export function SearchInput({
   showSuggestion = true,
   disabled = false,
   onKeyDown,
+  allowSlashShortcut,
 }) {
   const { t } = useTranslation();
   const { isOpen: isSideDrawerOpened } = useYamlEditor();
   const isDetailsView = useContext(ResourceDetailContext);
+  const searchInputRef = useRef(null);
+  const columnLayout = useRecoilValue(columnLayoutState);
 
   const onKeyPress = e => {
     const { key } = e;
-    if (!onKeyDown) return;
     if (isDetailsView) return;
     const isCommandPalleteOpen = document.querySelector(
       '#command-palette-background',
@@ -51,10 +56,27 @@ export function SearchInput({
       '[accessible-role="Dialog"][open="true"]',
     );
     if (isModalOpen) return;
-    onKeyDown(key);
+    if (
+      key === '/' &&
+      !disabled &&
+      allowSlashShortcut &&
+      !isSideDrawerOpened &&
+      columnLayout.layout === 'OneColumn'
+    ) {
+      // Prevent firefox native quick find panel open
+      e.preventDefault();
+      openSearchList();
+    }
+    if (onKeyDown) {
+      onKeyDown(key);
+    }
   };
 
-  useEventListener('keydown', onKeyPress, [disabled, isSideDrawerOpened]);
+  useEventListener('keydown', onKeyPress, [
+    disabled,
+    allowSlashShortcut,
+    isSideDrawerOpened,
+  ]);
 
   const renderSearchList = entries => {
     const suggestions = getSearchSuggestions(entries);
@@ -74,12 +96,19 @@ export function SearchInput({
     return Array.from(new Set(suggestions));
   };
 
+  const openSearchList = () => {
+    setTimeout(() => {
+      searchInputRef.current?.focus();
+    });
+  };
+
   return (
     <Input
       id="search-input"
       aria-label={`search-${entriesKind}`}
       role="search"
       type="Text"
+      ref={searchInputRef}
       placeholder={t('common.tooltips.search')}
       className="search-with-magnifying-glass"
       value={searchQuery}

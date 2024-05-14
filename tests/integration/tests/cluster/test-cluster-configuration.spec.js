@@ -74,7 +74,7 @@ context('Test Cluster configuration', () => {
 
     cy.get('[title="Profile"]').click();
 
-    cy.get('ui5-li:visible')
+    cy.get('ui5-menu-li:visible')
       .contains('Preferences')
       .click({ force: true });
 

@@ -262,6 +262,7 @@ common:
     add: Add
     add-all: Add all
     add-new: Add New
+    button-disabled: Disabled
     cancel: Cancel
     clone: Clone
     close: Close
@@ -925,6 +926,19 @@ jobs:
 kubeconfig-id:
   error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
+kyma-modules:
+  add-module: Add Modules
+  no-modules-description: Customize your cluster by adding the modules you need.
+  description: With <0>Kyma’s modular approach</0>, you can install just the modules you need, instead of a predefined set of components.
+  release-channel-description: According to the <0>Kyma modules` release cycle</0>, we first release a new module’s major or minor version in the fast channel. After approximately two weeks, we promote the release to the regular channel.
+  release-channel: Release channel
+  kyma: Kyma
+  title: Modules
+  namespaces: Namespace
+  channel: Channel
+  version: Version 
+  state: State
+  documentation: Documentation
 legal:
   copyright: Copyright
   legal-disclosure: Legal Disclosure

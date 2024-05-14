@@ -35,6 +35,7 @@ const Column = ({ title, children, columnSpan, image, style = {} }) => {
 };
 
 export const DynamicPageComponent = ({
+  headerContent: customHeaderContent,
   title,
   description,
   actions,
@@ -217,7 +218,7 @@ export const DynamicPageComponent = ({
         showHideHeaderButton={false}
         headerContentPinnable={false}
         headerTitle={headerTitle}
-        headerContent={headerContent}
+        headerContent={customHeaderContent ?? headerContent}
       >
         <ObjectPageSection
           aria-label="View"

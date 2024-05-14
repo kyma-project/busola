@@ -54,7 +54,7 @@ export default function CustomResource({ params }) {
   );
   return (
     <ResourceDetails
-      layoutNumber="EndColumn"
+      layoutNumber={params.layoutNumber ?? 'EndColumn'}
       resourceUrl={resourceUrl}
       resourceType={crdName}
       resourceName={resourceName}
@@ -63,6 +63,7 @@ export default function CustomResource({ params }) {
         <CRCreate {...props} crd={data} layoutNumber="MidColumn" />
       )}
       customComponents={[yamlPreview]}
+      layoutCloseCreateUrl={params.layoutCloseCreateUrl}
     />
   );
 }

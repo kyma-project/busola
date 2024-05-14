@@ -17,10 +17,12 @@ import {
   useCreateResourceDescription,
 } from './helpers';
 import { useJsonata } from './hooks/useJsonata';
+import CustomResource from 'resources/CustomResourceDefinitions/CustomResources.details';
 
 export const ExtensibilityDetailsCore = ({
   resMetaData,
   resourceName,
+  layoutCloseCreateUrl,
   namespaceId,
 }) => {
   const { t, widgetT, exists } = useGetTranslation();
@@ -44,7 +46,7 @@ export const ExtensibilityDetailsCore = ({
     apiGroup: resource?.group,
     apiVersion: resource?.version,
     resourceName,
-    namespaceId,
+    namespaceId: namespaceId,
   });
 
   // there may be a moment when `resMetaData` is undefined (e.g. when switching the namespace)
@@ -71,6 +73,7 @@ export const ExtensibilityDetailsCore = ({
 
   return (
     <ResourceDetails
+      layoutCloseCreateUrl={layoutCloseCreateUrl}
       disableEdit={disableEdit}
       disableDelete={disableDelete}
       resourceTitle={resourceTitle}
@@ -123,9 +126,29 @@ export const ExtensibilityDetailsCore = ({
     />
   );
 };
-const ExtensibilityDetails = ({ resourceName, namespaceId }) => {
-  const resMetaData = useGetCRbyPath();
+const ExtensibilityDetails = ({
+  resourceName,
+  resourceType,
+  layoutCloseCreateUrl,
+  namespaceId,
+}) => {
+  const resMetaData = useGetCRbyPath(resourceType);
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
+
+  if (!resMetaData) {
+    return (
+      <CustomResource
+        params={{
+          customResourceDefinitionName: resourceType,
+          resourceName: resourceName,
+          resourceNamespace: namespaceId,
+          layoutCloseCreateUrl: layoutCloseCreateUrl,
+          layoutNumber: 'MidColumn',
+        }}
+      />
+    );
+  }
+
   return (
     <TranslationBundleContext.Provider
       value={{
@@ -138,6 +161,7 @@ const ExtensibilityDetails = ({ resourceName, namespaceId }) => {
           <ExtensibilityDetailsCore
             resMetaData={resMetaData}
             resourceName={resourceName}
+            layoutCloseCreateUrl={layoutCloseCreateUrl}
             namespaceId={namespaceId}
           />
         </ExtensibilityErrBoundary>

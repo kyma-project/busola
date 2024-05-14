@@ -222,7 +222,7 @@ Cypress.Commands.add(
 
 Cypress.Commands.add('changeCluster', clusterName => {
   cy.get('header')
-    .find('[aria-haspopup="menu"]:visible')
+    .find('button[aria-haspopup="menu"][data-ui5-stable="menu"]:visible')
     .click({ force: true });
 
   cy.get('ui5-list')

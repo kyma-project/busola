@@ -14,6 +14,7 @@ type EmptyListComponentProps = {
   url: string;
   onClick: () => null;
   children?: ReactNode;
+  image?: 'TntNoApplications' | 'TntComponents';
 };
 
 export const EmptyListComponent = ({
@@ -24,6 +25,7 @@ export const EmptyListComponent = ({
   url,
   onClick,
   children,
+  image = 'TntNoApplications',
 }: EmptyListComponentProps) => {
   const { t } = useTranslation();
   const subtitle = <Trans i18nKey={subtitleText} />;
@@ -38,7 +40,7 @@ export const EmptyListComponent = ({
 
   return (
     <IllustratedMessage
-      name="TntNoApplications"
+      name={image}
       size="Auto"
       titleText={titleText}
       subtitle={
