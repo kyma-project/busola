@@ -43,7 +43,7 @@ export function useCreateResource({
 
   const { nextQuery, nextLayout } = usePrepareLayout(layoutNumber);
 
-  const isEdit = !!initialResource?.metadata?.name;
+  const isEdit = !!initialUnchangedResource?.metadata?.name;
 
   const defaultAfterCreatedFn = () => {
     notification.notifySuccess({

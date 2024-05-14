@@ -66,9 +66,7 @@ export function ExtensibilityCreateCore({
 
   const presets = usePreparePresets(createResource?.presets, emptyTemplate);
   const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
-  const [initialUnchangedResource] = useState(
-    initialResource || defaultPreset?.value || emptyTemplate,
-  );
+  const [initialUnchangedResource] = useState(initialResource);
 
   const updateStore = res => {
     readVars(res);
@@ -82,7 +80,7 @@ export function ExtensibilityCreateCore({
     } else {
       notification.notifySuccess({
         content: t(
-          initialResource
+          initialUnchangedResource
             ? 'common.create-form.messages.patch-success'
             : 'common.create-form.messages.create-success',
           {
