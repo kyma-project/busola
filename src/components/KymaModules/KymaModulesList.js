@@ -269,7 +269,8 @@ export function KymaModulesList(props) {
         entries={resource.status.modules}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
-        disableHiding={true}
+        disableHiding={false}
+        noHideFields={['Name', '', 'Namespace']}
         displayArrow={false}
         title={'Modules'}
         sortBy={{
