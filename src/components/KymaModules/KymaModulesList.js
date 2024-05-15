@@ -41,11 +41,8 @@ export function KymaModulesList(props) {
   );
 
   const resourceName =
-    kymaResources?.items.find(
-      kymaResource =>
-        kymaResource.metadata.name === 'default' ||
-        kymaResource.metadata.name === 'default-kyma',
-    )?.metadata.name || kymaResources?.items[0].metadata.name;
+    kymaResources?.items.find(kymaResource => kymaResource?.status)?.metadata
+      .name || kymaResources?.items[0].metadata.name;
   const resourceUrl = `/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas/${resourceName}`;
   const namespace = 'kyma-system';
 
