@@ -40,7 +40,12 @@ export function KymaModulesList(props) {
     '/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas',
   );
 
-  const resourceName = kymaResources?.items[0].metadata.name;
+  const resourceName =
+    kymaResources?.items.find(
+      kymaResource =>
+        kymaResource.metadata.name === 'default' ||
+        kymaResource.metadata.name === 'default-kyma',
+    )?.metadata.name || kymaResources?.items[0].metadata.name;
   const resourceUrl = `/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas/${resourceName}`;
   const namespace = 'kyma-system';
 
@@ -263,14 +268,14 @@ export function KymaModulesList(props) {
       <GenericList
         extraHeaderContent={[
           <Button design="Emphasized" onClick={handleShowAddModule}>
-            {resource.status.modules
+            {resource?.status?.modules
               ? t('kyma-modules.modify')
               : t('common.buttons.add')}
           </Button>,
         ]}
         customColumnLayout={customColumnLayout}
         enableColumnLayout
-        entries={resource.status.modules}
+        entries={resource?.status?.modules}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
         disableHiding={false}
