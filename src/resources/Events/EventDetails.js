@@ -22,6 +22,7 @@ const Message = event => {
 
   return (
     <UI5Panel
+      key="message"
       title={t('events.headers.message')}
       keyComponent="specification-panel"
     >

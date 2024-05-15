@@ -25,6 +25,10 @@ jest.mock('components/Extensibility/ExtensibilityInjections', () => () => (
   <div />
 ));
 
+jest.mock('resources/Namespaces/YamlUpload/YamlUploadDialog', () => () => (
+  <div />
+));
+
 describe('ResourceDetails Columns', () => {
   it('Renders basic column', async () => {
     const { queryByText } = render(

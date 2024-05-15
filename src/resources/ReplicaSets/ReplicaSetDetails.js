@@ -65,6 +65,7 @@ export function ReplicasetsDetails(props) {
 
   const MatchSelector = replicaset => (
     <Selector
+      key="match-selector"
       namespace={replicaset.metadata.namespace}
       labels={replicaset.spec?.selector?.matchLabels}
       expressions={replicaset.spec?.selector?.matchExpressions}
@@ -73,7 +74,7 @@ export function ReplicasetsDetails(props) {
   );
 
   const ReplicaSetPodTemplate = replicaset => (
-    <PodTemplate template={replicaset.spec.template} />
+    <PodTemplate key="pod-template" template={replicaset.spec.template} />
   );
 
   return (

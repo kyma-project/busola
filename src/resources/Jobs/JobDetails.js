@@ -56,6 +56,7 @@ export function JobDetails(props) {
 
   const Events = () => (
     <EventsList
+      key="events"
       namespace={props.namespace}
       filter={filterByResource('Job', props.resourceName)}
       hideInvolvedObjects={true}
@@ -64,6 +65,7 @@ export function JobDetails(props) {
 
   const MatchSelector = job => (
     <Selector
+      key="match-selector"
       namespace={job?.metadata?.namespace}
       labels={job.spec?.selector?.matchLabels}
       expressions={job.spec?.selector?.matchExpressions}
@@ -71,7 +73,9 @@ export function JobDetails(props) {
     />
   );
 
-  const JobPodTemplate = job => <PodTemplate template={job.spec?.template} />;
+  const JobPodTemplate = job => (
+    <PodTemplate key="pod-template" template={job.spec?.template} />
+  );
 
   const customComponents = [
     JobConditions,

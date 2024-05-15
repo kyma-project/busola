@@ -15,6 +15,7 @@ export function NamespaceDropdown() {
     namespaces.push(
       <ComboBoxItem
         text={t('navigation.all-namespaces')}
+        key="all-namespaces"
         data-key="all-namespaces"
       />,
     );

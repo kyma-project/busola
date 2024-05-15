@@ -10,6 +10,13 @@ import {
 
 import './Badge.scss';
 
+const TYPE_FALLBACK = new Map([
+  ['success', 'Success'],
+  ['warning', 'Warning'],
+  ['error', 'Error'],
+  ['info', 'Information'],
+]);
+
 export function Badge({
   value,
   structure,
@@ -60,6 +67,8 @@ export function Badge({
   else if (type === 'informative') type = 'Information';
   else if (type === 'positive') type = 'Success';
   else if (type === 'critical') type = 'Error';
+
+  type = TYPE_FALLBACK.get(type) || type;
 
   return isNil(value) ? (
     emptyLeafPlaceholder
