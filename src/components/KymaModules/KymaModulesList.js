@@ -45,9 +45,9 @@ export function KymaModulesList(props) {
     pollingInterval: 5000,
   });
 
-  const resourceName = kymaResources?.items.find(
-    kymaResource => kymaResource?.status,
-  )?.metadata.name;
+  const resourceName =
+    kymaResources?.items.find(kymaResource => kymaResource?.status)?.metadata
+      .name || kymaResources?.items[0]?.metadata?.name;
   const resourceUrl = `/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas/${resourceName}`;
   const namespace = 'kyma-system';
 
