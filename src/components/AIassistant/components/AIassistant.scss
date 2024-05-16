@@ -23,6 +23,7 @@
 
     .tab-container {
       height: calc(100vh - 60px - 1.4rem);
+      container-type: inline-size;
     }
   }
 }
