@@ -1079,7 +1079,6 @@ pods:
     view-logs: View Logs
   description: <0>Pod</0> is the smallest and simplest Kubernetes object that represents a set of containers running on your cluster.
   headers:
-    pod-ip: Pod IP
     type: Type
     volume-name: Volume Name
   labels:
@@ -1108,6 +1107,16 @@ pods:
   name_singular: Pod
   node: Node
   restarts: Restarts
+  status:
+    container-statuses: Container Statuses
+    ephemeral-container-statuses: Ephemeral Container Statuses
+    host-ip: Host IP
+    init-container-statuses: Init Container Statuses
+    last-scale: Last Scale Time
+    nominated-node-name: Nominated Node Name
+    pod-ip: Pod IP
+    pod-ips: Pod IPs
+    qos-class: QoS Class
   statuses:
     completed: Completed
     containercreating: Pending
