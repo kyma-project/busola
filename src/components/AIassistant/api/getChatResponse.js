@@ -1,5 +1,5 @@
 import { getClusterConfig } from 'state/utils/getBackendInfo';
-import { parseNestedBrackets } from '../utils/parseNestedBrackets';
+import { parseWithNestedBrackets } from '../utils/parseNestedBrackets';
 
 export default async function getChatResponse({
   prompt,
@@ -56,7 +56,7 @@ function readChunk(
       }
       // Also handles the rare case of two chunks being sent at once
       const receivedString = decoder.decode(value, { stream: true });
-      const chunks = parseNestedBrackets(receivedString).map(chunk => {
+      const chunks = parseWithNestedBrackets(receivedString).map(chunk => {
         return JSON.parse(chunk);
       });
       chunks.forEach(chunk => {

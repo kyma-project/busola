@@ -1,6 +1,6 @@
 // input:   "{sample}{string {with}}{multiple {nested{braces}}}"
 // output:  ["{sample}", "{string {with}}", "{multiple {nested{braces}}}"]
-export function parseNestedBrackets(text) {
+export function parseWithNestedBrackets(text) {
   const output = [];
   let openBraces = 0;
   let startIndex = 0;
