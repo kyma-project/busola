@@ -33,6 +33,7 @@ const Tolerations = resource => {
   ];
   return (
     <GenericList
+      key="tolerations"
       title={t('daemon-sets.tolerations.title')}
       entries={resource.spec.template.spec.tolerations || []}
       headerRenderer={headerRenderer}
@@ -63,6 +64,7 @@ export function DaemonSetDetails(props) {
 
   const MatchSelector = daemonSet => (
     <Selector
+      key="match-selector"
       namespace={daemonSet.metadata.namespace}
       labels={daemonSet.spec?.selector?.matchLabels}
       expressions={daemonSet.spec?.selector?.matchExpressions}
@@ -71,7 +73,7 @@ export function DaemonSetDetails(props) {
   );
 
   const DaemonSetPodTemplate = daemonSet => (
-    <PodTemplate template={daemonSet.spec.template} />
+    <PodTemplate key="pod-template" template={daemonSet.spec.template} />
   );
 
   return (

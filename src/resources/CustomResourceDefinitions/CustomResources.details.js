@@ -47,6 +47,7 @@ export default function CustomResource({ params }) {
 
   const yamlPreview = resource => (
     <ReadonlyEditorPanel
+      key="editor"
       title="YAML"
       value={jsyaml.dump(resource)}
       editorProps={{ language: 'yaml', height: '500px' }}

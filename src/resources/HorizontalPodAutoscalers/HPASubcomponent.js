@@ -32,7 +32,7 @@ export const HPASubcomponent = props => {
 
   if (extensibilityHPAs)
     return (
-      <Suspense fallback={<Spinner />}>
+      <Suspense key="horizontal-pod-autoscalers" fallback={<Spinner />}>
         <ExtensibilityList
           displayArrow={false}
           disableHiding={true}

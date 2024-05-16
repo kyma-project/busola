@@ -442,6 +442,7 @@ export function ResourceListRenderer({
   const extraHeaderContent = listHeaderActions || [
     CreateResourceForm && !disableCreate && !isNamespaceAll && (
       <Button
+        key={`create-${resourceType}`}
         data-testid={`create-${resourceType}`}
         design="Emphasized"
         onClick={handleShowCreate}

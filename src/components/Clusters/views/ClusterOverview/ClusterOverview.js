@@ -40,6 +40,7 @@ export function ClusterOverview() {
 
   const actions = [
     <Button
+      key="upload-yaml"
       icon="add"
       onClick={() => {
         setShowAdd(true);
@@ -48,6 +49,7 @@ export function ClusterOverview() {
       {t('upload-yaml.title')}
     </Button>,
     <Button
+      key="disconnect"
       design="Transparent"
       onClick={() => {
         handleResourceDelete({

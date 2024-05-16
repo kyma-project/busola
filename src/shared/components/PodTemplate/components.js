@@ -29,8 +29,8 @@ function Table({ items, columns, rowRenderer }) {
         </TableColumn>
       ))}
     >
-      {items.map(item => (
-        <TableRow>{rowRenderer(item)}</TableRow>
+      {items.map((item, index) => (
+        <TableRow key={index}>{rowRenderer(item)}</TableRow>
       ))}
     </UI5Table>
   );

@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, waitFor, act } from 'testing/reactTestingUtils';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { authDataState } from 'state/authDataAtom';

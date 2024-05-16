@@ -93,9 +93,7 @@ export function SidebarNavigation() {
               />
             </SideNavigation>
           )}
-          {(!namespace || isSidebarCondensed) && (
-            <div className="space-top"></div>
-          )}
+          {(!namespace || isSidebarCondensed) && <div className="space-top" />}
           <div style={namespace ? { zIndex: '0' } : { display: 'none' }}>
             <Label
               for="NamespaceComboBox"
