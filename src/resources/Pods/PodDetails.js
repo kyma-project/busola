@@ -20,6 +20,7 @@ export function PodDetails(props) {
 
   const Events = () => (
     <EventsList
+      key="events"
       namespace={props.namespace}
       filter={filterByResource('Pod', props.resourceName)}
       hideInvolvedObjects={true}

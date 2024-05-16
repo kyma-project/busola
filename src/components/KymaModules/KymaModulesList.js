@@ -39,8 +39,15 @@ export function KymaModulesList(props) {
   const { data: kymaResources, loading: kymaResourcesLoading } = useGet(
     '/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas',
   );
+  const { data: kymaExt } = useGetList(
+    ext => ext.metadata.labels['app.kubernetes.io/part-of'] === 'Kyma',
+  )('/api/v1/configmaps?labelSelector=busola.io/extension=resource', {
+    pollingInterval: 5000,
+  });
 
-  const resourceName = kymaResources?.items[0].metadata.name;
+  const resourceName =
+    kymaResources?.items.find(kymaResource => kymaResource?.status)?.metadata
+      .name || kymaResources?.items[0]?.metadata?.name;
   const resourceUrl = `/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas/${resourceName}`;
   const namespace = 'kyma-system';
 
@@ -62,12 +69,6 @@ export function KymaModulesList(props) {
 
   const crdUrl = `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`;
   const { data: crds } = useGet(crdUrl, {
-    pollingInterval: 5000,
-  });
-
-  const { data: kymaExt } = useGetList(
-    ext => ext.metadata.labels['app.kubernetes.io/part-of'] === 'Kyma',
-  )('/api/v1/configmaps?labelSelector=busola.io/extension=resource', {
     pollingInterval: 5000,
   });
 
@@ -213,7 +214,7 @@ export function KymaModulesList(props) {
         checkBeta(
           findModule(
             resource.name,
-            resource.channel || kymaResource?.spec.channel,
+            resource?.channel || kymaResource?.spec?.channel,
           ),
         ),
         // Namespace
@@ -229,10 +230,12 @@ export function KymaModulesList(props) {
           type={
             findStatus(resource.name)?.state === 'Ready'
               ? 'Success'
-              : findStatus(resource.name)?.state || 'UNKNOWN'
+              : findStatus(resource.name)?.state === 'Processing'
+              ? 'None'
+              : findStatus(resource.name)?.state || 'None'
           }
         >
-          {findStatus(resource.name)?.state}
+          {findStatus(resource.name)?.state || 'UNKNOWN'}
         </StatusBadge>,
         // Documentation
         <ExternalLink
@@ -260,16 +263,23 @@ export function KymaModulesList(props) {
     return (
       <GenericList
         extraHeaderContent={[
-          <Button design="Emphasized" onClick={handleShowAddModule}>
-            {t('common.buttons.add')}
+          <Button
+            key="add-module"
+            design="Emphasized"
+            onClick={handleShowAddModule}
+          >
+            {resource?.status?.modules
+              ? t('kyma-modules.modify')
+              : t('common.buttons.add')}
           </Button>,
         ]}
         customColumnLayout={customColumnLayout}
         enableColumnLayout
-        entries={resource.status.modules}
+        entries={resource?.status?.modules}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
-        disableHiding={true}
+        disableHiding={false}
+        noHideFields={['Name', '', 'Namespace']}
         displayArrow={false}
         title={'Modules'}
         sortBy={{

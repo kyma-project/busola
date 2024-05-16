@@ -42,6 +42,7 @@ export function CustomResourceDefinitionDetails(props) {
     ];
     return (
       <GenericList
+        key="crd-names"
         title={t('custom-resource-definitions.subtitle.names')}
         entries={resource.spec.names ? [resource.spec.names] : []}
         headerRenderer={headerRenderer}
@@ -61,6 +62,7 @@ export function CustomResourceDefinitionDetails(props) {
 
     return (
       <EventsList
+        key="events"
         namespace={props?.namespace}
         filter={eventFilter(spec?.names?.kind)}
       />

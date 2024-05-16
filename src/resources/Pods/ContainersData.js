@@ -19,6 +19,10 @@ export default function ContainersData({ type, containers, statuses }) {
   const navigate = useNavigate();
   const setLayout = useSetRecoilState(columnLayoutState);
 
+  if (!containers) {
+    return null;
+  }
+
   const ContainerComponent = ({ container, status }) => (
     <UI5Panel
       disableMargin
@@ -65,10 +69,6 @@ export default function ContainersData({ type, containers, statuses }) {
       )}
     </UI5Panel>
   );
-
-  if (!containers) {
-    return null;
-  }
 
   return (
     <UI5Panel title={type}>

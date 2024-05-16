@@ -35,7 +35,7 @@ describe('Badge', () => {
     const wrapper = shallow(<Badge value={value} structure={structure} />);
     const status = wrapper.find(StatusBadge);
     const badgeProps = status.props();
-    expect(badgeProps.type).toEqual('success');
+    expect(badgeProps.type).toEqual('Success');
     expect(badgeProps.autoResolveType).toEqual(false);
     expect(status).toHaveLength(1);
   });

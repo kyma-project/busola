@@ -27,6 +27,7 @@ export function StatefulSetDetails(props) {
 
   const MatchSelector = statefulset => (
     <Selector
+      key="match-selector"
       namespace={statefulset.metadata.namespace}
       labels={statefulset.spec?.selector?.matchLabels}
       selector={statefulset.spec?.selector}
@@ -35,7 +36,7 @@ export function StatefulSetDetails(props) {
   );
 
   const StatefulSetPodTemplate = statefulset => (
-    <PodTemplate template={statefulset.spec.template} />
+    <PodTemplate key="pod-template" template={statefulset.spec.template} />
   );
 
   return (

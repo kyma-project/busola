@@ -76,10 +76,8 @@ export const StatusBadge = ({
 }) => {
   const { t, i18n } = useTranslation();
   if (autoResolveType) type = resolveType(value);
-  else
-    for (const key of TYPE_FALLBACK.keys()) {
-      if (type === key) type = TYPE_FALLBACK.get(key);
-    }
+  else type = TYPE_FALLBACK.get(type) || type;
+
   const i18nFullVariableName = prepareTranslationPath(
     resourceKind,
     value,

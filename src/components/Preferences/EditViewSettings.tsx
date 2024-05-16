@@ -34,8 +34,9 @@ export default function EditViewSettings() {
             });
           }}
         >
-          {AVAILABLE_EDIT_VIEW_OPTIONS.map(available_option => (
+          {AVAILABLE_EDIT_VIEW_OPTIONS.map((available_option, index) => (
             <Option
+              key={index}
               value={available_option.key}
               selected={preferencesViewType === available_option.key}
             >

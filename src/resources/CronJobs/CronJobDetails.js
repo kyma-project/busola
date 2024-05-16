@@ -54,6 +54,7 @@ export function CronJobDetails(props) {
 
   const Events = () => (
     <EventsList
+      key="events"
       namespace={props.namespace}
       filter={filterByResource('CronJob', props.resourceName)}
       hideInvolvedObjects={true}
@@ -61,7 +62,10 @@ export function CronJobDetails(props) {
   );
 
   const CronJobPodTemplate = cronjob => (
-    <PodTemplate template={cronjob.spec.jobTemplate.spec.template} />
+    <PodTemplate
+      key="pod-template"
+      template={cronjob.spec.jobTemplate.spec.template}
+    />
   );
 
   return (

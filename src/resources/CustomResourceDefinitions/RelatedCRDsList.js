@@ -17,6 +17,7 @@ export function RelatedCRDsList(resource) {
   };
   return (
     <CustomResourceDefinitionList
+      key="crds"
       {...{
         disableHiding: true,
         displayArrow: false,

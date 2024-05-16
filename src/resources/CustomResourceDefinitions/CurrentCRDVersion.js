@@ -50,6 +50,7 @@ export const CurrentCRDVersion = resource => {
 
   return (
     <UI5Panel
+      key="crd-version"
       title={
         <>
           <Title level="H4">{`${t(
