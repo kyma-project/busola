@@ -2,15 +2,15 @@
 
 ## Overview
 
-The `pizzas` example showcases the Busola's extensibility feature.
+The `pizzas` example showcases Busola's extensibility feature.
 
-The `configuration` directory consists of two CustomResourceDefinitions (CRDs) and two ConfigMaps that store the information about the extensibility configuration.
+The [`configuration`](https://github.com/kyma-project/busola/tree/main/examples/pizzas/configuration) directory consists of two CustomResourceDefinitions (CRDs) and two ConfigMaps that store the information about the extensibility configuration.
 
-The `samples` directory includes YAML files with examples of the above CRDs.
+The [`samples`](https://github.com/kyma-project/busola/tree/main/examples/pizzas/configuration) directory includes YAML files with examples of the above CRDs.
 
 ## Installation
 
-To test the extensibility feature using the Pizzas example, upload all the YAML files from the `configuration` and `samples` directories to your cluster. You can use the following commands:
+To test the extensibility feature using the Pizzas example, upload all the YAML files from the `configuration` and `samples` directories to your cluster. Follow the steps:
 
 1. Access your cluster using kubectl. Download kubeconfig.yaml from the SAP BTP cockpit and export it in your terminal:
 
