@@ -11,9 +11,7 @@ import { useRecoilState } from 'recoil';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 
 type UnsavedMessageBoxProps = {
-  isEdited: boolean;
   isOpen?: boolean;
-  proceedButtonAction: Function;
 };
 
 export function UnsavedMessageBox({ isOpen }: UnsavedMessageBoxProps) {
@@ -37,7 +35,7 @@ export function UnsavedMessageBox({ isOpen }: UnsavedMessageBoxProps) {
       if (isResourceEdited.discardAction) {
         isResourceEdited.discardAction();
       }
-    } else if (event.detail.action === 'Cancel') {
+    } else if (event.detail.action === '1: custom action') {
       setIsResourceEdited({ isEdited: true, warningOpen: false });
     }
     setIsResourceEdited({ isEdited: false, warningOpen: false });
@@ -51,7 +49,7 @@ export function UnsavedMessageBox({ isOpen }: UnsavedMessageBoxProps) {
       titleText={t('common.headers.discard-changes')}
       actions={[
         <Button design="Emphasized">{t('common.buttons.discard')}</Button>,
-        `${t('common.buttons.cancel')}`,
+        <Button design="Transparent">{`${t('common.buttons.cancel')}`}</Button>,
       ]}
     >
       {t('common.messages.discard-changes-warning')}
