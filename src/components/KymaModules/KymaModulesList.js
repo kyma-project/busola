@@ -213,7 +213,7 @@ export function KymaModulesList(props) {
             handleActonIfResourceEdited(
               isResourceEdited,
               setIsResourceEdited,
-              handleClickResource(),
+              () => handleClickResource(),
             );
           }}
         >
