@@ -10,6 +10,12 @@ import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useC
 import { spacing } from '@ui5/webcomponents-react-base';
 
 import './ResourceCreate.scss';
+import { useRecoilState } from 'recoil';
+import { UnsavedMessageBox } from '../UnsavedMessageBox/UnsavedMessageBox';
+import { createPortal } from 'react-dom';
+import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { columnLayoutState } from 'state/columnLayoutAtom';
+import { handleActionIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
 
 export const ResourceCreate = ({
   performRefetch,
@@ -34,11 +40,17 @@ export const ResourceCreate = ({
     revalidate,
   } = useCustomFormValidator();
   const notificationManager = useNotification();
+  const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
+  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
+    isResourceEditedState,
+  );
 
   confirmText = confirmText || t('common.buttons.create');
 
   function handleFormChanged() {
-    setTimeout(() => revalidate());
+    setTimeout(() => {
+      revalidate();
+    });
   }
 
   function handleFormError(title, message, isWarning) {
@@ -62,6 +74,11 @@ export const ResourceCreate = ({
       formElementRef.current.dispatchEvent(
         new Event('submit', { bubbles: true, cancelable: true }),
       );
+    } else {
+      notificationManager.notifyError({
+        content: t('common.messages.must-fill-required'),
+        type: 'error',
+      });
     }
   }
 
@@ -69,20 +86,50 @@ export const ResourceCreate = ({
     if (protectedResource) return protectedResourceWarning;
   }
 
-  function renderConfirmButton() {
-    const disabled = !isValid;
+  function navigateAfterClose() {
+    setIsResourceEdited({ isEdited: false, warningOpen: false });
+    window.history.pushState(
+      window.history.state,
+      '',
+      layoutCloseCreateUrl
+        ? layoutCloseCreateUrl
+        : `${window.location.pathname.slice(
+            0,
+            window.location.pathname.lastIndexOf('/'),
+          )}${
+            layoutNumber === 'MidColumn' ||
+            layoutCloseCreateUrl?.showCreate?.resourceType
+              ? ''
+              : '?layout=TwoColumnsMidExpanded'
+          }`,
+    );
+    layoutNumber === 'MidColumn'
+      ? setLayoutColumn({
+          ...layoutColumn,
+          midColumn: null,
+          layout: 'OneColumn',
+          showCreate: null,
+        })
+      : setLayoutColumn({
+          ...layoutColumn,
+          endColumn: null,
+          layout: 'TwoColumnsMidExpanded',
+          showCreate: null,
+        });
+  }
 
+  function renderConfirmButton() {
     const button = (
       <Button
-        disabled={disabled || readOnly || disableEdit}
-        aria-disabled={disabled || readOnly || disableEdit}
+        disabled={readOnly || disableEdit}
+        aria-disabled={readOnly || disableEdit}
         onClick={handleFormSubmit}
         design="Emphasized"
       >
         {confirmText}
       </Button>
     );
-    if (invalidPopupMessage && disabled) {
+    if (invalidPopupMessage) {
       return (
         <Tooltip
           content={invalidPopupMessage}
@@ -100,6 +147,23 @@ export const ResourceCreate = ({
     return button;
   }
 
+  const renderCancelButton = () => {
+    return (
+      <Button
+        onClick={() => {
+          handleActionIfResourceEdited(
+            isResourceEdited,
+            setIsResourceEdited,
+            () => navigateAfterClose(),
+          );
+        }}
+        design="Transparent"
+      >
+        {t('common.buttons.cancel')}
+      </Button>
+    );
+  };
+
   return (
     <>
       {!isEdit && (
@@ -110,7 +174,7 @@ export const ResourceCreate = ({
             layoutNumber === 'EndColumn' ? '?layout=TwoColumnsMidExpanded' : ''
           }`}
           showYamlTab={disableEdit && onlyYaml}
-          content={
+          content={stickyHeaderHeight => (
             <div className="create-form">
               {renderForm({
                 formElementRef,
@@ -120,15 +184,27 @@ export const ResourceCreate = ({
                 onError: handleFormError,
                 onCompleted: handleFormSuccess,
                 performManualSubmit: handleFormSubmit,
+                stickyHeaderHeight,
               })}
-              <div style={spacing.sapUiSmallMarginBeginEnd}>
+              <div
+                style={{
+                  ...spacing.sapUiSmallMarginBeginEnd,
+                  position: 'sticky',
+                  bottom: '0.5rem',
+                }}
+              >
                 <Bar
                   design="FloatingFooter"
-                  endContent={<>{renderConfirmButton()}</>}
+                  endContent={
+                    <>
+                      {renderConfirmButton()}
+                      {renderCancelButton()}
+                    </>
+                  }
                 />
               </div>
             </div>
-          }
+          )}
         />
       )}
       {isEdit && (
@@ -150,6 +226,7 @@ export const ResourceCreate = ({
           })}
         </div>
       )}
+      {createPortal(<UnsavedMessageBox />, document.body)}
     </>
   );
 };

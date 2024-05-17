@@ -23,6 +23,12 @@ export function LimitRangeCreate({
   );
   const { t } = useTranslation();
 
+  if (!initialLimitRange) {
+    initialLimitRange = createLimitRangeTemplate({
+      namespaceName: namespaceId,
+    });
+  }
+
   return (
     <ResourceForm
       {...props}

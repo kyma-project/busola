@@ -426,7 +426,7 @@ function Resource({
             </Suspense>
           </>
         }
-        inlineEditForm={() => (
+        inlineEditForm={stickyHeaderHeight => (
           <ResourceCreate
             title={
               editActionLabel ||
@@ -449,6 +449,7 @@ function Resource({
                   namespace={namespace}
                   resourceSchema={resourceSchema}
                   editMode={true}
+                  stickyHeaderHeight={stickyHeaderHeight}
                   {...props}
                 />
               </ErrorBoundary>

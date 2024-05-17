@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as _ from 'lodash';
 
@@ -18,6 +18,10 @@ export default function StorageClassCreate({
   const [storageClass, setStorageClass] = useState(
     _.cloneDeep(initialStorageClass) || createStorageClassTemplate(),
   );
+
+  if (!initialStorageClass) {
+    initialStorageClass = createStorageClassTemplate();
+  }
 
   return (
     <ResourceForm

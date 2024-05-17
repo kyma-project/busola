@@ -75,7 +75,7 @@ export default function ServiceAccountCreate({
   };
 
   async function afterServiceAccountCreate(defaultAfterCreateFn) {
-    if (initialServiceAccount || !shouldCreateSecret) {
+    if (initialUnchangedResource || !shouldCreateSecret) {
       defaultAfterCreateFn();
       return;
     }
@@ -91,6 +91,10 @@ export default function ServiceAccountCreate({
     } else {
       onCompleted(`ServiceAccount ${serviceAccount.metadata.name} created`);
     }
+  }
+
+  if (!initialServiceAccount) {
+    initialServiceAccount = createServiceAccountTemplate(namespace);
   }
 
   return (
@@ -146,7 +150,7 @@ export default function ServiceAccountCreate({
           t('service-accounts.create-modal.tooltips.associated-secret'),
         )}
         input={Inputs.Switch}
-        disabled={!!initialServiceAccount}
+        disabled={!!initialUnchangedResource}
         onChange={() =>
           setShouldCreateSecret(shouldCreateSecret => !shouldCreateSecret)
         }

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useState } from 'react';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   Avatar,
   Menu,
@@ -28,6 +28,8 @@ import { useGetHelpLinks, GetHelpLink } from './SidebarMenu/useGetHelpLinks';
 import { useGetBusolaVersionDetails } from './SidebarMenu/useGetBusolaVersion';
 
 import './Header.scss';
+import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { handleActionIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
 
 export function Header() {
   useAvailableNamespaces();
@@ -46,6 +48,9 @@ export function Header() {
   const setPreferencesOpen = useSetRecoilState(isPreferencesOpenState);
   const cluster = useRecoilValue(clusterState);
   const clusters = useRecoilValue(clustersState);
+  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
+    isResourceEditedState,
+  );
 
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
     name => name !== cluster?.name,
@@ -105,7 +110,13 @@ export function Header() {
         startButton={
           window.location.pathname !== '/clusters' && <SidebarSwitcher />
         }
-        onLogoClick={() => navigate('/clusters')}
+        onLogoClick={() => {
+          handleActionIfResourceEdited(
+            isResourceEdited,
+            setIsResourceEdited,
+            () => navigate('/clusters'),
+          );
+        }}
         logo={<Logo />}
         primaryTitle={
           window.location.pathname !== '/clusters'
@@ -113,12 +124,18 @@ export function Header() {
             : ''
         }
         menuItems={window.location.pathname !== '/clusters' ? clustersList : []}
-        onMenuItemClick={e =>
-          e.detail.item.textContent ===
-          t('clusters.overview.title-all-clusters')
-            ? navigate('/clusters')
-            : navigate(`/cluster/${e.detail.item.textContent}`)
-        }
+        onMenuItemClick={e => {
+          handleActionIfResourceEdited(
+            isResourceEdited,
+            setIsResourceEdited,
+            () => {
+              e.detail.item.textContent ===
+              t('clusters.overview.title-all-clusters')
+                ? navigate('/clusters')
+                : navigate(`/cluster/${e.detail.item.textContent}`);
+            },
+          );
+        }}
         profile={
           <Avatar
             icon="customer"
