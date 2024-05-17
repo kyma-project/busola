@@ -1,27 +1,41 @@
-# Pizza
+# Pizzas
 
 ## Overview
 
-The `pizzas` example showcases the Busola's extensibility feature.
+The `pizzas` example showcases Busola's extensibility feature.
 
-The `configuration` directory consists of two CustomResourceDefinitions (CRD) and two ConfigMaps that store the information about the extensibility configuration.
+The [`configuration`](https://github.com/kyma-project/busola/tree/main/examples/pizzas/configuration) directory consists of two CustomResourceDefinitions (CRDs) and two ConfigMaps that store the information about the extensibility configuration.
 
-The `samples.yaml` file includes the examples of the above CRDs.
+The [`samples`](https://github.com/kyma-project/busola/tree/main/examples/pizzas/samples) directory includes YAML files with examples of the above CRDs.
 
 ## Installation
 
-To test the extensibility feature using the Pizza example, simply upload all the YAML files from the `configuration` directory and the `samples.yaml` file to your cluster or use the following commands:
+To test the extensibility feature using the Pizzas example, upload all the YAML files from the `configuration` and `samples` directories to your cluster. Follow the steps:
 
-1. Create a `pizzas` Namespace and apply the ConfigMaps and CRDs:
+1. Access your cluster using kubectl. Download kubeconfig.yaml from the SAP BTP cockpit and export it in your terminal:
 
-```bash
-kubectl create namespace pizzas && kubectl apply -f configuration/ --recursive
-```
+   ```bash
+   export KUBECONFIG={KUBECONFIG_FILE_PATH}
+   ```
 
-2. Apply the samples:
+2. In the terminal, go to `/busola/examples/pizzas`.
 
-```bash
-kubectl apply -f samples/ --recursive
-```
+3. Create the `pizzas` namespace and apply the ConfigMaps and CRDs:
 
-After uploading the files, refresh the browser. You should see new items in the left-side navigation.
+   ```bash
+   kubectl create namespace pizzas && kubectl apply -f configuration/ --recursive
+   ```
+
+4. Apply the samples:
+
+   ```bash
+   kubectl apply -f samples/ --recursive
+   ```
+
+## Result
+
+After uploading the files, refresh the browser. You should see the new items in the left-side navigation.
+
+On the cluster level, in the **Extensions** section, you can find the two applied ConfigMaps, `pizzaorders` and `pizzas`. You can see the configuration details in the General, Form Fields, List Columns, Details View, Data Sources, or Translation sections taken from the `configuration` directory.
+
+Go to **Namespaces** to find the newly created `pizzas` namespace. Go into the namespace and in the left-side navigation, in the **Lunch** category, check out two UI components: **Pizza Orders** and **Pizzas** with all the details taken from the `samples` directory.
