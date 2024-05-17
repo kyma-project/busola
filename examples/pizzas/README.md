@@ -6,7 +6,7 @@ The `pizzas` example showcases Busola's extensibility feature.
 
 The [`configuration`](https://github.com/kyma-project/busola/tree/main/examples/pizzas/configuration) directory consists of two CustomResourceDefinitions (CRDs) and two ConfigMaps that store the information about the extensibility configuration.
 
-The [`samples`](https://github.com/kyma-project/busola/tree/main/examples/pizzas/configuration) directory includes YAML files with examples of the above CRDs.
+The [`samples`](https://github.com/kyma-project/busola/tree/main/examples/pizzas/samples) directory includes YAML files with examples of the above CRDs.
 
 ## Installation
 
@@ -38,4 +38,4 @@ After uploading the files, refresh the browser. You should see the new items in 
 
 On the cluster level, in the **Extensions** section, you can find the two applied ConfigMaps, `pizzaorders` and `pizzas`. You can see the configuration details in the General, Form Fields, List Columns, Details View, Data Sources, or Translation sections taken from the `configuration` directory.
 
-Go to **Namespaces** to find the newly created `pizzas` namespace. Go into the namespace and in the left-side navigation, in the **Lunch** category, see the details of two UI components: **Pizza Orders** and **Pizzas** with all the details taken from the `samples` directory.
+Go to **Namespaces** to find the newly created `pizzas` namespace. Go into the namespace and in the left-side navigation, in the **Lunch** category, check out two UI components: **Pizza Orders** and **Pizzas** with all the details taken from the `samples` directory.
