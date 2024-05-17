@@ -236,6 +236,10 @@ function Resource({
           {t('common.buttons.delete')}
         </Button>,
       )}
+      {createPortal(
+        <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />,
+        document.body,
+      )}
       {createPortal(<YamlUploadDialog />, document.body)}
     </>
   );
@@ -368,13 +372,6 @@ function Resource({
         protectedResourceWarning={protectedResourceWarning(resource)}
         content={
           <>
-            {createPortal(
-              <DeleteMessageBox
-                resource={resource}
-                resourceUrl={resourceUrl}
-              />,
-              document.body,
-            )}
             {!disableResourceDetailsCard && (
               <>
                 <Title
