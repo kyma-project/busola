@@ -9,9 +9,20 @@ import { Selector } from 'shared/components/Selector/Selector';
 import ReplicaSetCreate from './ReplicaSetCreate';
 import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 import { ResourceDescription } from 'resources/ReplicaSets';
+import { EventsList } from '../../shared/components/EventsList';
+import { filterByResource } from '../../hooks/useMessageList';
 
 export function ReplicasetsDetails(props) {
   const { t } = useTranslation();
+
+  const Events = () => (
+    <EventsList
+      key="events"
+      namespace={props.namespace}
+      filter={filterByResource('ReplicaSet', props.resourceName)}
+      hideInvolvedObjects={true}
+    />
+  );
 
   const customColumns = [
     {
@@ -32,7 +43,6 @@ export function ReplicasetsDetails(props) {
                 <br />
                 {t('replica-sets.memory')}: {c.resources?.limits?.memory}
                 <br />
-                description
               </React.Fragment>
             ))}
           </React.Fragment>
@@ -57,11 +67,47 @@ export function ReplicasetsDetails(props) {
         );
       },
     },
+  ];
+
+  const customStatusColumns = [
     {
       header: t('common.headers.pods'),
       value: resource => <ReplicaSetStatus replicaSet={resource} />,
     },
+    {
+      header: t('replica-sets.status.availableReplicas'),
+      value: resource => <div>{resource?.status?.availableReplicas ?? 0} </div>,
+    },
+    {
+      header: t('replica-sets.status.fullyLabeledReplicas'),
+      value: resource => (
+        <div>{resource?.status?.fullyLabeledReplicas ?? 0} </div>
+      ),
+    },
+    {
+      header: t('replica-sets.status.observedGeneration'),
+      value: resource => (
+        <div>{resource?.status?.observedGeneration ?? 0} </div>
+      ),
+    },
+    {
+      header: t('replica-sets.status.readyReplicas'),
+      value: resource => <div>{resource?.status?.readyReplicas ?? 0} </div>,
+    },
+    {
+      header: t('replica-sets.status.replicas'),
+      value: resource => <div>{resource?.status?.replicas ?? 0} </div>,
+    },
   ];
+
+  const statusConditions = resource => {
+    return resource?.status?.conditions?.map(condition => {
+      return {
+        header: { titleText: condition.type, status: condition.status },
+        message: condition.message,
+      };
+    });
+  };
 
   const MatchSelector = replicaset => (
     <Selector
@@ -80,7 +126,14 @@ export function ReplicasetsDetails(props) {
   return (
     <ResourceDetails
       customColumns={customColumns}
-      customComponents={[HPASubcomponent, MatchSelector, ReplicaSetPodTemplate]}
+      customComponents={[
+        HPASubcomponent,
+        MatchSelector,
+        ReplicaSetPodTemplate,
+        Events,
+      ]}
+      customStatusColumns={customStatusColumns}
+      statusConditions={statusConditions}
       description={ResourceDescription}
       createResourceForm={ReplicaSetCreate}
       {...props}
