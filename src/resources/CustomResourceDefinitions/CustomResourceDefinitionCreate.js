@@ -21,6 +21,12 @@ export default function CustomResourceDefinitionCreate({
       createCustomResourceDefinitionsTemplate(namespace),
   );
 
+  if (!initialCustomResourceDefinition) {
+    initialCustomResourceDefinition = createCustomResourceDefinitionsTemplate(
+      namespace,
+    );
+  }
+
   return (
     <ResourceForm
       {...props}

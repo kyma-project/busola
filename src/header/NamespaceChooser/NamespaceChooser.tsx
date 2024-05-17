@@ -1,16 +1,21 @@
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { useTranslation } from 'react-i18next';
 import { useUrl } from 'hooks/useUrl';
 import { useMatch, useNavigate } from 'react-router-dom';
 import { namespacesState } from 'state/namespacesAtom';
 
 import { SideNavigationSubItem } from '@ui5/webcomponents-react';
+import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { handleActionIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
 
 export function NamespaceChooser() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { namespaceUrl } = useUrl();
   const allNamespaces = useRecoilValue(namespacesState);
+  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
+    isResourceEditedState,
+  );
 
   const { resourceType = '' } =
     useMatch({
@@ -23,9 +28,13 @@ export function NamespaceChooser() {
       key="all-namespaces"
       text={t('navigation.all-namespaces')}
       data-key="all-namespaces"
-      onClick={() =>
-        navigate(namespaceUrl(resourceType, { namespace: '-all-' }))
-      }
+      onClick={() => {
+        handleActionIfResourceEdited(
+          isResourceEdited,
+          setIsResourceEdited,
+          () => navigate(namespaceUrl(resourceType, { namespace: '-all-' })),
+        );
+      }}
     />,
   ];
 
@@ -35,13 +44,18 @@ export function NamespaceChooser() {
         text={ns}
         key={ns}
         data-key={ns}
-        onClick={e =>
-          navigate(
-            namespaceUrl(resourceType, {
-              namespace: e.target.dataset.key ?? undefined,
-            }),
-          )
-        }
+        onClick={e => {
+          handleActionIfResourceEdited(
+            isResourceEdited,
+            setIsResourceEdited,
+            () =>
+              navigate(
+                namespaceUrl(resourceType, {
+                  namespace: e.target.dataset.key ?? undefined,
+                }),
+              ),
+          );
+        }}
       />,
     ),
   );

@@ -28,6 +28,8 @@ import { EmptyListComponent } from '../EmptyListComponent/EmptyListComponent';
 import { useUrl } from 'hooks/useUrl';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import pluralize from 'pluralize';
+import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { handleActionIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
 
 const defaultSort = {
   name: nameLocaleSort,
@@ -255,11 +257,78 @@ export const GenericList = ({
   };
 
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
+  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
+    isResourceEditedState,
+  );
   const { resourceUrl: resourceUrlFn } = useUrl();
   const linkTo = entry => {
     return customUrl
       ? customUrl(entry)
       : resourceUrlFn(entry, { resourceType });
+  };
+
+  const handleRowClick = e => {
+    const selectedEntry = entries.find(entry => {
+      return (
+        entry?.metadata?.name === e.target.children[nameColIndex].innerText ||
+        pluralize(entry?.spec?.names?.kind ?? '') ===
+          e.target.children[nameColIndex].innerText ||
+        entry?.name === e.target.children[nameColIndex].innerText
+      );
+    });
+
+    if (handleRedirect) {
+      const redirectLayout = handleRedirect(selectedEntry, resourceType);
+      if (redirectLayout) {
+        setLayoutColumn({
+          ...redirectLayout,
+        });
+        navigate(
+          redirectLayout.layout === 'OneColumn'
+            ? linkTo(selectedEntry)
+            : `${linkTo(selectedEntry)}?layout=${redirectLayout.layout}`,
+        );
+        return;
+      }
+    }
+    setEntrySelected(
+      selectedEntry?.metadata?.name ?? e.target.children[0].innerText,
+    );
+    if (!enableColumnLayout) {
+      setLayoutColumn({
+        midColumn: null,
+        endColumn: null,
+        layout: 'OneColumn',
+      });
+
+      navigate(linkTo(selectedEntry));
+    } else {
+      setLayoutColumn(
+        columnLayout
+          ? {
+              midColumn: layoutState.midColumn,
+              endColumn: customColumnLayout(selectedEntry),
+              layout: columnLayout,
+            }
+          : {
+              midColumn: {
+                resourceName:
+                  selectedEntry?.metadata?.name ??
+                  e.target.children[0].innerText,
+                resourceType: resourceType,
+                namespaceId: selectedEntry?.metadata?.namespace,
+              },
+              endColumn: null,
+              layout: 'TwoColumnsMidExpanded',
+            },
+      );
+      window.history.pushState(
+        window.history.state,
+        '',
+        `${linkTo(selectedEntry)}?layout=${columnLayout ??
+          'TwoColumnsMidExpanded'}`,
+      );
+    }
   };
 
   return (
@@ -274,68 +343,11 @@ export const GenericList = ({
         className={`ui5-generic-list ${hasDetailsView ? 'cursor-pointer' : ''}`}
         onRowClick={e => {
           if (!hasDetailsView) return;
-          const selectedEntry = entries.find(entry => {
-            return (
-              entry?.metadata?.name ===
-                e.target.children[nameColIndex].innerText ||
-              pluralize(entry?.spec?.names?.kind ?? '') ===
-                e.target.children[nameColIndex].innerText ||
-              entry?.name === e.target.children[nameColIndex].innerText
-            );
-          });
-
-          if (handleRedirect) {
-            const redirectLayout = handleRedirect(selectedEntry, resourceType);
-            if (redirectLayout) {
-              setLayoutColumn({
-                ...redirectLayout,
-              });
-              navigate(
-                redirectLayout.layout === 'OneColumn'
-                  ? linkTo(selectedEntry)
-                  : `${linkTo(selectedEntry)}?layout=${redirectLayout.layout}`,
-              );
-              return;
-            }
-          }
-          setEntrySelected(
-            selectedEntry?.metadata?.name ?? e.target.children[0].innerText,
+          handleActionIfResourceEdited(
+            isResourceEdited,
+            setIsResourceEdited,
+            () => handleRowClick(e),
           );
-          if (!enableColumnLayout) {
-            setLayoutColumn({
-              midColumn: null,
-              endColumn: null,
-              layout: 'OneColumn',
-            });
-
-            navigate(linkTo(selectedEntry));
-          } else {
-            setLayoutColumn(
-              columnLayout
-                ? {
-                    midColumn: layoutState.midColumn,
-                    endColumn: customColumnLayout(selectedEntry),
-                    layout: columnLayout,
-                  }
-                : {
-                    midColumn: {
-                      resourceName:
-                        selectedEntry?.metadata?.name ??
-                        e.target.children[0].innerText,
-                      resourceType: resourceType,
-                      namespaceId: selectedEntry?.metadata?.namespace,
-                    },
-                    endColumn: null,
-                    layout: 'TwoColumnsMidExpanded',
-                  },
-            );
-            window.history.pushState(
-              window.history.state,
-              '',
-              `${linkTo(selectedEntry)}?layout=${columnLayout ??
-                'TwoColumnsMidExpanded'}`,
-            );
-          }
         }}
         columns={
           <HeaderRenderer

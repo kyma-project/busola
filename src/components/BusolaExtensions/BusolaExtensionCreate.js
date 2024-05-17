@@ -39,7 +39,7 @@ export default function BusolaExtensionCreate({
   const [state, setState] = useState({});
 
   return (
-    <div style={{ overflow: 'auto', height: '100%' }}>
+    <div className="extension-create-container">
       <ResourceForm.Single
         formElementRef={formElementRef}
         onChange={onChange}

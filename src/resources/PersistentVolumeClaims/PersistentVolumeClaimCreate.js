@@ -21,6 +21,12 @@ export default function PersistentVolumeClaimCreate({
       createPersistentVolumeClaimTemplate(namespace),
   );
 
+  if (!initialPersistentVolumeClaim) {
+    initialPersistentVolumeClaim = createPersistentVolumeClaimTemplate(
+      namespace,
+    );
+  }
+
   return (
     <ResourceForm
       {...props}
