@@ -48,6 +48,8 @@ export function Editor({
     language,
   });
 
+  console.log(schemaError);
+  console.log(schemaId);
   // set autocompletion global context to the current editor and initialize an editor instance
   const { editorInstance, divRef, descriptor } = useCreateEditor({
     value,

@@ -70,7 +70,9 @@ export function ResourceForm({
     () => resource?.apiVersion + '/' + resource?.kind,
     [], // eslint-disable-line react-hooks/exhaustive-deps
   );
-
+  console.log(resourceSchemaId);
+  console.log(resource?.apiVersion);
+  console.log(resource?.kind);
   if (!handleNameChange) {
     handleNameChange = name => {
       jp.value(resource, '$.metadata.name', name);
@@ -184,6 +186,7 @@ export function ResourceForm({
       updateValueOnParentChange={true}
     />
   );
+
   editor = renderEditor
     ? renderEditor({ defaultEditor: editor, Editor: EditorWrapper })
     : editor;
