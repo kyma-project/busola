@@ -13,7 +13,7 @@ import {
 } from '@ui5/webcomponents-react';
 import { useNavigate } from 'react-router-dom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { handleActonIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
+import { handleActionIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
 
 type NavItemProps = {
   node: NavNode;
@@ -63,7 +63,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
         );
         if (newWindow) newWindow.opener = null;
       } else {
-        handleActonIfResourceEdited(
+        handleActionIfResourceEdited(
           isResourceEdited,
           setIsResourceEdited,
           () => {

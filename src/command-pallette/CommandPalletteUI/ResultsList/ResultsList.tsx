@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { LOADING_INDICATOR } from '../types';
 import { useRecoilState } from 'recoil';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { handleActonIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
+import { handleActionIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
 
 function scrollInto(element: Element) {
   element.scrollIntoView({
@@ -61,7 +61,7 @@ export function ResultsList({
         setActiveIndex(activeIndex - 1);
         scrollInto(listRef.current!.children[activeIndex - 1]);
       } else if (key === 'Enter' && results?.[activeIndex]) {
-        handleActonIfResourceEdited(
+        handleActionIfResourceEdited(
           isResourceEdited,
           setIsResourceEdited,
           () => {
@@ -85,7 +85,7 @@ export function ResultsList({
             activeIndex={activeIndex}
             setActiveIndex={setActiveIndex}
             onItemClick={() => {
-              handleActonIfResourceEdited(
+              handleActionIfResourceEdited(
                 isResourceEdited,
                 setIsResourceEdited,
                 () => {

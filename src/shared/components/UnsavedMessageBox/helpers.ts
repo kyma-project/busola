@@ -1,7 +1,7 @@
 import { IsResourceEditedState } from 'state/resourceEditedAtom';
 import { SetterOrUpdater } from 'recoil';
 
-export function handleActonIfResourceEdited(
+export function handleActionIfResourceEdited(
   isResourceEdited: IsResourceEditedState,
   setIsResourceEdited: SetterOrUpdater<IsResourceEditedState>,
   action: Function,

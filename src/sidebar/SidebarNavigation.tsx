@@ -21,7 +21,7 @@ import { useUrl } from 'hooks/useUrl';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { NamespaceChooser } from 'header/NamespaceChooser/NamespaceChooser';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { handleActonIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
+import { handleActionIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
 
 export function SidebarNavigation() {
   const navigationNodes = useRecoilValue(sidebarNavigationNodesSelector);
@@ -91,7 +91,7 @@ export function SidebarNavigation() {
                 icon={'slim-arrow-left'}
                 text={'Back To Cluster Details'}
                 onClick={() => {
-                  handleActonIfResourceEdited(
+                  handleActionIfResourceEdited(
                     isResourceEdited,
                     setIsResourceEdited,
                     () => {
@@ -128,7 +128,7 @@ export function SidebarNavigation() {
                 id="NamespaceComboBox"
                 className="combobox-with-dimension-icon"
                 onSelectionChange={e => {
-                  handleActonIfResourceEdited(
+                  handleActionIfResourceEdited(
                     isResourceEdited,
                     setIsResourceEdited,
                     () => {
@@ -163,7 +163,7 @@ export function SidebarNavigation() {
             icon={namespace ? 'slim-arrow-left' : 'bbyd-dashboard'}
             text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}
             onClick={() => {
-              handleActonIfResourceEdited(
+              handleActionIfResourceEdited(
                 isResourceEdited,
                 setIsResourceEdited,
                 () => navigate(clusterUrl(`overview`)),
@@ -188,7 +188,7 @@ export function SidebarNavigation() {
           icon={'bbyd-dashboard'}
           text={'Cluster Details'}
           onClick={() => {
-            handleActonIfResourceEdited(
+            handleActionIfResourceEdited(
               isResourceEdited,
               setIsResourceEdited,
               () => {

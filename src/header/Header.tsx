@@ -29,7 +29,7 @@ import { useGetBusolaVersionDetails } from './SidebarMenu/useGetBusolaVersion';
 
 import './Header.scss';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { handleActonIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
+import { handleActionIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
 
 export function Header() {
   useAvailableNamespaces();
@@ -111,7 +111,7 @@ export function Header() {
           window.location.pathname !== '/clusters' && <SidebarSwitcher />
         }
         onLogoClick={() => {
-          handleActonIfResourceEdited(
+          handleActionIfResourceEdited(
             isResourceEdited,
             setIsResourceEdited,
             () => navigate('/clusters'),
@@ -125,7 +125,7 @@ export function Header() {
         }
         menuItems={window.location.pathname !== '/clusters' ? clustersList : []}
         onMenuItemClick={e => {
-          handleActonIfResourceEdited(
+          handleActionIfResourceEdited(
             isResourceEdited,
             setIsResourceEdited,
             () => {

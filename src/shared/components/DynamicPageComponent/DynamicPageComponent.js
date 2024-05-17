@@ -19,7 +19,7 @@ import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useFeature } from 'hooks/useFeature';
 import { HintButton } from '../DescriptionHint/DescriptionHint';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { handleActonIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
+import { handleActionIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
 
 const Column = ({ title, children, columnSpan, image, style = {} }) => {
   const styleComputed = { gridColumn: columnSpan, ...style };
@@ -196,7 +196,7 @@ export const DynamicPageComponent = ({
                     design="Transparent"
                     icon="decline"
                     onClick={() => {
-                      handleActonIfResourceEdited(
+                      handleActionIfResourceEdited(
                         isResourceEdited,
                         setIsResourceEdited,
                         () => handleColumnClose(),

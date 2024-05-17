@@ -6,7 +6,7 @@ import { namespacesState } from 'state/namespacesAtom';
 
 import { SideNavigationSubItem } from '@ui5/webcomponents-react';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { handleActonIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
+import { handleActionIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
 
 export function NamespaceChooser() {
   const { t } = useTranslation();
@@ -29,8 +29,10 @@ export function NamespaceChooser() {
       text={t('navigation.all-namespaces')}
       data-key="all-namespaces"
       onClick={() => {
-        handleActonIfResourceEdited(isResourceEdited, setIsResourceEdited, () =>
-          navigate(namespaceUrl(resourceType, { namespace: '-all-' })),
+        handleActionIfResourceEdited(
+          isResourceEdited,
+          setIsResourceEdited,
+          () => navigate(namespaceUrl(resourceType, { namespace: '-all-' })),
         );
       }}
     />,
@@ -43,7 +45,7 @@ export function NamespaceChooser() {
         key={ns}
         data-key={ns}
         onClick={e => {
-          handleActonIfResourceEdited(
+          handleActionIfResourceEdited(
             isResourceEdited,
             setIsResourceEdited,
             () =>
