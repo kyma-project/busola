@@ -21,6 +21,7 @@ import { useUrl } from 'hooks/useUrl';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { NamespaceChooser } from 'header/NamespaceChooser/NamespaceChooser';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { handleActonIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
 
 export function SidebarNavigation() {
   const navigationNodes = useRecoilValue(sidebarNavigationNodesSelector);
@@ -90,19 +91,14 @@ export function SidebarNavigation() {
                 icon={'slim-arrow-left'}
                 text={'Back To Cluster Details'}
                 onClick={() => {
-                  if (isResourceEdited.isEdited) {
-                    setIsResourceEdited({
-                      ...isResourceEdited,
-                      warningOpen: true,
-                      discardAction: () => {
-                        setDefaultColumnLayout();
-                        return navigate(clusterUrl(`overview`));
-                      },
-                    });
-                    return;
-                  }
-                  setDefaultColumnLayout();
-                  return navigate(clusterUrl(`overview`));
+                  handleActonIfResourceEdited(
+                    isResourceEdited,
+                    setIsResourceEdited,
+                    () => {
+                      setDefaultColumnLayout();
+                      return navigate(clusterUrl(`overview`));
+                    },
+                  );
                 }}
                 selected={isClusterOverviewSelected()}
               />
@@ -132,37 +128,24 @@ export function SidebarNavigation() {
                 id="NamespaceComboBox"
                 className="combobox-with-dimension-icon"
                 onSelectionChange={e => {
-                  if (isResourceEdited.isEdited) {
-                    setIsResourceEdited({
-                      ...isResourceEdited,
-                      warningOpen: true,
-                      discardAction: () => {
-                        setDefaultColumnLayout();
-                        return e.target.value === t('navigation.all-namespaces')
-                          ? navigate(
-                              namespaceUrl(resourceType, {
-                                namespace: '-all-',
-                              }),
-                            )
-                          : navigate(
-                              namespaceUrl(resourceType, {
-                                namespace: e.target.value ?? undefined,
-                              }),
-                            );
-                      },
-                    });
-                    return;
-                  }
-                  setDefaultColumnLayout();
-                  return e.target.value === t('navigation.all-namespaces')
-                    ? navigate(
-                        namespaceUrl(resourceType, { namespace: '-all-' }),
-                      )
-                    : navigate(
-                        namespaceUrl(resourceType, {
-                          namespace: e.target.value ?? undefined,
-                        }),
-                      );
+                  handleActonIfResourceEdited(
+                    isResourceEdited,
+                    setIsResourceEdited,
+                    () => {
+                      setDefaultColumnLayout();
+                      return e.target.value === t('navigation.all-namespaces')
+                        ? navigate(
+                            namespaceUrl(resourceType, {
+                              namespace: '-all-',
+                            }),
+                          )
+                        : navigate(
+                            namespaceUrl(resourceType, {
+                              namespace: e.target.value ?? undefined,
+                            }),
+                          );
+                    },
+                  );
                 }}
                 value={getNamespaceLabel()}
               >
@@ -180,17 +163,11 @@ export function SidebarNavigation() {
             icon={namespace ? 'slim-arrow-left' : 'bbyd-dashboard'}
             text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}
             onClick={() => {
-              if (isResourceEdited.isEdited) {
-                setIsResourceEdited({
-                  ...isResourceEdited,
-                  warningOpen: true,
-                  discardAction: () => {
-                    navigate(clusterUrl(`overview`));
-                  },
-                });
-                return;
-              }
-              navigate(clusterUrl(`overview`));
+              handleActonIfResourceEdited(
+                isResourceEdited,
+                setIsResourceEdited,
+                () => navigate(clusterUrl(`overview`)),
+              );
             }}
             selected={isClusterOverviewSelected()}
           />
@@ -211,19 +188,14 @@ export function SidebarNavigation() {
           icon={'bbyd-dashboard'}
           text={'Cluster Details'}
           onClick={() => {
-            if (isResourceEdited.isEdited) {
-              setIsResourceEdited({
-                ...isResourceEdited,
-                warningOpen: true,
-                discardAction: () => {
-                  setDefaultColumnLayout();
-                  return navigate(clusterUrl(`overview`));
-                },
-              });
-              return;
-            }
-            setDefaultColumnLayout();
-            return navigate(clusterUrl(`overview`));
+            handleActonIfResourceEdited(
+              isResourceEdited,
+              setIsResourceEdited,
+              () => {
+                setDefaultColumnLayout();
+                return navigate(clusterUrl(`overview`));
+              },
+            );
           }}
           selected={isClusterOverviewSelected()}
         />

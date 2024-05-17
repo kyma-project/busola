@@ -13,6 +13,7 @@ import {
 } from '@ui5/webcomponents-react';
 import { useNavigate } from 'react-router-dom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { handleActonIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
 
 type NavItemProps = {
   node: NavNode;
@@ -62,34 +63,21 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
         );
         if (newWindow) newWindow.opener = null;
       } else {
-        if (isResourceEdited.isEdited) {
-          setIsResourceEdited({
-            ...isResourceEdited,
-            warningOpen: true,
-            discardAction: () => {
-              setLayoutColumn({
-                midColumn: null,
-                endColumn: null,
-                layout: 'OneColumn',
-              });
-              navigate(
-                node.createUrlFn
-                  ? node.createUrlFn(urlGenerators)
-                  : scopedUrl(node.pathSegment),
-              );
-            },
-          });
-          return;
-        }
-        setLayoutColumn({
-          midColumn: null,
-          endColumn: null,
-          layout: 'OneColumn',
-        });
-        navigate(
-          node.createUrlFn
-            ? node.createUrlFn(urlGenerators)
-            : scopedUrl(node.pathSegment),
+        handleActonIfResourceEdited(
+          isResourceEdited,
+          setIsResourceEdited,
+          () => {
+            setLayoutColumn({
+              midColumn: null,
+              endColumn: null,
+              layout: 'OneColumn',
+            });
+            navigate(
+              node.createUrlFn
+                ? node.createUrlFn(urlGenerators)
+                : scopedUrl(node.pathSegment),
+            );
+          },
         );
       }
     },

@@ -15,6 +15,7 @@ import { UnsavedMessageBox } from '../UnsavedMessageBox/UnsavedMessageBox';
 import { createPortal } from 'react-dom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { columnLayoutState } from 'state/columnLayoutAtom';
+import { handleActonIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
 
 export const ResourceCreate = ({
   performRefetch,
@@ -150,15 +151,11 @@ export const ResourceCreate = ({
     return (
       <Button
         onClick={() => {
-          if (isResourceEdited.isEdited) {
-            setIsResourceEdited({
-              ...isResourceEdited,
-              warningOpen: true,
-              discardAction: () => navigateAfterClose(),
-            });
-            return;
-          }
-          navigateAfterClose();
+          handleActonIfResourceEdited(
+            isResourceEdited,
+            setIsResourceEdited,
+            () => navigateAfterClose(),
+          );
         }}
         design="Transparent"
       >

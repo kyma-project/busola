@@ -29,6 +29,7 @@ import { useUrl } from 'hooks/useUrl';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import pluralize from 'pluralize';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { handleActonIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
 
 const defaultSort = {
   name: nameLocaleSort,
@@ -342,16 +343,11 @@ export const GenericList = ({
         className={`ui5-generic-list ${hasDetailsView ? 'cursor-pointer' : ''}`}
         onRowClick={e => {
           if (!hasDetailsView) return;
-
-          if (isResourceEdited.isEdited) {
-            setIsResourceEdited({
-              ...isResourceEdited,
-              warningOpen: true,
-              discardAction: () => handleRowClick(e),
-            });
-            return;
-          }
-          handleRowClick(e);
+          handleActonIfResourceEdited(
+            isResourceEdited,
+            setIsResourceEdited,
+            () => handleRowClick(e),
+          );
         }}
         columns={
           <HeaderRenderer

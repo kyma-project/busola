@@ -25,6 +25,7 @@ import pluralize from 'pluralize';
 import { Link } from 'shared/components/Link/Link';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { handleActonIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
 
 export function KymaModulesList(props) {
   const { t } = useTranslation();
@@ -209,15 +210,11 @@ export function KymaModulesList(props) {
         <Link
           url={path}
           onClick={() => {
-            if (isResourceEdited.isEdited) {
-              setIsResourceEdited({
-                ...isResourceEdited,
-                warningOpen: true,
-                discardAction: () => handleClickResource(),
-              });
-              return;
-            }
-            handleClickResource();
+            handleActonIfResourceEdited(
+              isResourceEdited,
+              setIsResourceEdited,
+              handleClickResource(),
+            );
           }}
         >
           {resource.name}

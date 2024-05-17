@@ -29,6 +29,7 @@ import { useGetBusolaVersionDetails } from './SidebarMenu/useGetBusolaVersion';
 
 import './Header.scss';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { handleActonIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
 
 export function Header() {
   useAvailableNamespaces();
@@ -110,15 +111,11 @@ export function Header() {
           window.location.pathname !== '/clusters' && <SidebarSwitcher />
         }
         onLogoClick={() => {
-          if (isResourceEdited.isEdited) {
-            setIsResourceEdited({
-              ...isResourceEdited,
-              warningOpen: true,
-              discardAction: () => navigate('/clusters'),
-            });
-            return;
-          }
-          navigate('/clusters');
+          handleActonIfResourceEdited(
+            isResourceEdited,
+            setIsResourceEdited,
+            () => navigate('/clusters'),
+          );
         }}
         logo={<Logo />}
         primaryTitle={
@@ -128,23 +125,16 @@ export function Header() {
         }
         menuItems={window.location.pathname !== '/clusters' ? clustersList : []}
         onMenuItemClick={e => {
-          if (isResourceEdited.isEdited) {
-            setIsResourceEdited({
-              ...isResourceEdited,
-              warningOpen: true,
-              discardAction: () => {
-                e.detail.item.textContent ===
-                t('clusters.overview.title-all-clusters')
-                  ? navigate('/clusters')
-                  : navigate(`/cluster/${e.detail.item.textContent}`);
-              },
-            });
-            return;
-          }
-          e.detail.item.textContent ===
-          t('clusters.overview.title-all-clusters')
-            ? navigate('/clusters')
-            : navigate(`/cluster/${e.detail.item.textContent}`);
+          handleActonIfResourceEdited(
+            isResourceEdited,
+            setIsResourceEdited,
+            () => {
+              e.detail.item.textContent ===
+              t('clusters.overview.title-all-clusters')
+                ? navigate('/clusters')
+                : navigate(`/cluster/${e.detail.item.textContent}`);
+            },
+          );
         }}
         profile={
           <Avatar
