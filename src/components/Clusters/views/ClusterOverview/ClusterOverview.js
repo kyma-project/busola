@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button, Title } from '@ui5/webcomponents-react';
+import React, { useEffect } from 'react';
+import { Button, FlexBox, Title } from '@ui5/webcomponents-react';
 import { ClusterNodes } from './ClusterNodes';
 import { ClusterValidation } from './ClusterValidation/ClusterValidation';
 import { useFeature } from 'hooks/useFeature';
@@ -16,9 +16,11 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { useNavigate } from 'react-router-dom';
 import { deleteCluster } from 'components/Clusters/shared';
 import { spacing } from '@ui5/webcomponents-react-base';
-import './ClusterOverview.scss';
+import AIOpener from 'components/AIassistant/components/AIOpener';
 import { useSetRecoilState } from 'recoil';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
+import { showAIassistantState } from 'components/AIassistant/state/showAIassistantAtom';
+import './ClusterOverview.scss';
 import BannerCarousel from 'components/Extensibility/components/FeaturedCard/BannerCarousel';
 
 const Injections = React.lazy(() =>
@@ -37,6 +39,14 @@ export function ClusterOverview() {
     resourceType: t('clusters.labels.name'),
   });
   const setShowAdd = useSetRecoilState(showYamlUploadDialogState);
+  const setShowAssistant = useSetRecoilState(showAIassistantState);
+
+  useEffect(() => {
+    return () => {
+      setShowAssistant({ show: false, fullScreen: false });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const actions = [
     <Button
@@ -88,15 +98,19 @@ export function ClusterOverview() {
               slot="details-top"
               root=""
             />
-            <Title
-              level="H3"
-              style={{
-                ...spacing.sapUiMediumMarginBegin,
-                ...spacing.sapUiMediumMarginTopBottom,
-              }}
+            <FlexBox
+              alignItems="Center"
+              justifyContent="SpaceBetween"
+              style={spacing.sapUiMediumMargin}
             >
-              {t('cluster-overview.headers.cluster-details')}
-            </Title>
+              <Title level="H3">
+                {t('cluster-overview.headers.cluster-details')}
+              </Title>
+              <AIOpener
+                resourceType="cluster"
+                resourceName={currentCluster.currentContext.cluster.name}
+              />
+            </FlexBox>
             <ClusterDetails currentCluster={currentCluster} />
             {data && <ClusterStats data={data} />}
             <ClusterNodes data={data} error={error} loading={loading} />

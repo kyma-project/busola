@@ -11,16 +11,28 @@ import { findRecentRelease } from './findRecentRelease';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
+import AIOpener from 'components/AIassistant/components/AIOpener';
 import { ResourceDescription } from 'components/HelmReleases';
 import HelmReleasesYaml from './HelmReleasesYaml';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { showYamlTab } from './index';
 import { Link } from 'shared/components/Link/Link';
 import { createPortal } from 'react-dom';
+import { useSetRecoilState } from 'recoil';
+import { showAIassistantState } from 'components/AIassistant/state/showAIassistantAtom';
+import { useEffect } from 'react';
 
 function HelmReleasesDetails({ releaseName, namespace }) {
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();
+  const setShowAssistant = useSetRecoilState(showAIassistantState);
+
+  useEffect(() => {
+    return () => {
+      setShowAssistant({ show: false, fullScreen: false });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const { data, loading } = useGetList(s => s.type === 'helm.sh/release.v1')(
     namespace === '-all-'
@@ -92,6 +104,14 @@ function HelmReleasesDetails({ releaseName, namespace }) {
             <DynamicPageComponent.Column title={t('common.headers.status')}>
               <HelmReleaseStatus
                 status={releaseSecret.metadata.labels.status}
+              />
+            </DynamicPageComponent.Column>
+            <DynamicPageComponent.Column>
+              <AIOpener
+                namespace={releaseSecret?.metadata?.namespace}
+                resourceType={releaseSecret?.kind}
+                groupVersion={releaseSecret?.apiVersion}
+                resourceName={releaseSecret?.metadata?.name}
               />
             </DynamicPageComponent.Column>
           </>

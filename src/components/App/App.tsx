@@ -34,6 +34,9 @@ import './App.scss';
 import { useAfterInitHook } from 'state/useAfterInitHook';
 import useSidebarCondensed from 'sidebar/useSidebarCondensed';
 import { useGetValidationEnabledSchemas } from 'state/validationEnabledSchemasAtom';
+import { SplitterElement, SplitterLayout } from '@ui5/webcomponents-react';
+import { showAIassistantState } from 'components/AIassistant/state/showAIassistantAtom';
+import AIassistant from 'components/AIassistant/components/AIassistant';
 import { useGetKymaResources } from 'state/kymaResourcesAtom';
 
 export default function App() {
@@ -72,37 +75,63 @@ export default function App() {
   useAfterInitHook(kubeconfigIdState);
   useGetKymaResources();
 
+  const showAssistant = useRecoilValue(showAIassistantState);
+
   return (
-    <div id="html-wrap">
-      <Header />
-      <div id="page-wrap">
-        <Sidebar key={cluster?.name} />
-        <ContentWrapper>
-          <Routes key={cluster?.name}>
-            <Route
-              path="*"
-              element={
-                <IncorrectPath
-                  to="clusters"
-                  message={t('components.incorrect-path.message.clusters')}
+    <SplitterLayout id="splitter-layout">
+      <SplitterElement
+        resizable={showAssistant.show}
+        size={
+          showAssistant.show
+            ? showAssistant.fullScreen
+              ? '0%'
+              : '80%'
+            : '100%'
+        }
+      >
+        <div id="html-wrap">
+          <Header />
+          <div id="page-wrap">
+            <Sidebar key={cluster?.name} />
+            <ContentWrapper>
+              <Routes key={cluster?.name}>
+                <Route
+                  path="*"
+                  element={
+                    <IncorrectPath
+                      to="clusters"
+                      message={t('components.incorrect-path.message.clusters')}
+                    />
+                  }
                 />
-              }
-            />
-            <Route path="/" />
-            <Route path="clusters" element={<ClusterList />} />
-            <Route
-              path="cluster/:currentClusterName"
-              element={<Navigate to="overview" />}
-            />
-            <Route
-              path="cluster/:currentClusterName/*"
-              element={<ClusterRoutes />}
-            />
-            {makeGardenerLoginRoute()}
-          </Routes>
-          <Preferences />
-        </ContentWrapper>
-      </div>
-    </div>
+                <Route path="/" />
+                <Route path="clusters" element={<ClusterList />} />
+                <Route
+                  path="cluster/:currentClusterName"
+                  element={<Navigate to="overview" />}
+                />
+                <Route
+                  path="cluster/:currentClusterName/*"
+                  element={<ClusterRoutes />}
+                />
+                {makeGardenerLoginRoute()}
+              </Routes>
+              <Preferences />
+            </ContentWrapper>
+          </div>
+        </div>
+      </SplitterElement>
+      {showAssistant.show ? (
+        <SplitterElement
+          resizable={!showAssistant.fullScreen}
+          size={showAssistant.fullScreen ? '100%' : '20%'}
+          minSize={350}
+        >
+          <AIassistant />
+        </SplitterElement>
+      ) : (
+        <></>
+      )}
+    </SplitterLayout>
   );
 }
