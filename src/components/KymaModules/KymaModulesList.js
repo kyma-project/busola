@@ -260,6 +260,7 @@ export function KymaModulesList(props) {
         </ExternalLink>,
       ];
     };
+
     const customColumnLayout = resource => {
       return {
         resourceName: resource?.name,
@@ -270,6 +271,7 @@ export function KymaModulesList(props) {
           findStatus(resource.name)?.resource?.metadata?.namespace || '',
       };
     };
+
     return (
       <GenericList
         extraHeaderContent={[

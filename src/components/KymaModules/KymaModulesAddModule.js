@@ -14,17 +14,19 @@ import { cloneDeep } from 'lodash';
 import { ResourceForm } from 'shared/ResourceForm';
 
 import './KymaModulesAddModule.scss';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 
 export default function KymaModulesAddModule(props) {
   const { t } = useTranslation();
   const modulesResourceUrl = `/apis/operator.kyma-project.io/v1beta2/moduletemplates`;
 
-  const { data: kymaResources } = useGet(
+  const { data: kymaResources, loading: loadingKymaResources } = useGet(
     '/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas',
   );
 
   const resourceName = kymaResources?.items[0].metadata.name;
   const kymaResourceUrl = `/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas/${resourceName}`;
+
   const { data: modules } = useGet(modulesResourceUrl, {
     pollingInterval: 3000,
     skip: !resourceName,
@@ -51,6 +53,14 @@ export default function KymaModulesAddModule(props) {
     setSelectedModules(initialKymaResource?.spec?.modules);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
+
+  if (loading || loadingKymaResources || !kymaResource) {
+    return (
+      <div style={{ height: 'calc(100vh - 14rem)' }}>
+        <Spinner />
+      </div>
+    );
+  }
 
   const modulesAddData = modules?.items.reduce((acc, module) => {
     const name = module.metadata.labels['operator.kyma-project.io/module-name'];
