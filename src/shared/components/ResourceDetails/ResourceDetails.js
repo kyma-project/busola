@@ -357,7 +357,7 @@ function Resource({
     />
   );
 
-  const customOverviewCard = customOverview(resource);
+  const customOverviewCard = customOverview && customOverview(resource);
 
   return (
     <ResourceDetailContext.Provider value={true}>

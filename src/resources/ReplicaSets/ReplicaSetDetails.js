@@ -109,8 +109,6 @@ export function ReplicasetsDetails(props) {
     <PodTemplate key="pod-template" template={replicaset.spec.template} />
   );
 
-  // const healthyPods = getHealthyStatusesCount(podsData);
-
   const customOverview = resource => {
     return (
       <div
