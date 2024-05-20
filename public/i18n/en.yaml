@@ -254,7 +254,6 @@ common:
     copy: Copy
     create: Create
     delete: Delete
-    discard: Discard
     disconnect: Disconnect
     edit: Edit
     edit-yaml: Edit YAML
@@ -307,7 +306,6 @@ common:
     created: Created
     last-update: Last Update
     description: Description
-    discard-changes: Discard Changes
     items: Items
     key: Key
     kind: Kind
@@ -319,6 +317,7 @@ common:
     namespace: Namespace
     namespaces: Namespaces
     owner: Controlled By
+    overview: Overview
     pods: Pods
     policies: Policies
     region: Region
@@ -1216,6 +1215,10 @@ replica-sets:
   memory: Memory
   name_singular: ReplicaSet
   title: Replica Sets
+  overview:
+    replicas: Replicas
+    readyReplicas: Ready replicas
+    availableReplicas: Available Replicas
   tooltips:
     error: At least one of the Pods has failed.
     running: All the Pods are running correctly.

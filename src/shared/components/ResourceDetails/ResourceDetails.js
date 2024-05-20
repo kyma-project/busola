@@ -67,6 +67,7 @@ ResourceDetails.propTypes = {
   showYamlTab: PropTypes.bool,
   layoutCloseCreateUrl: PropTypes.string,
   layoutNumber: PropTypes.string,
+  customOverviewCard: PropTypes.node,
 };
 
 ResourceDetails.defaultProps = {
@@ -166,6 +167,7 @@ function Resource({
   disableDelete,
   statusBadge,
   customStatusColumns,
+  customOverview,
   statusConditions,
   headerContent,
 }) {
@@ -355,6 +357,8 @@ function Resource({
     />
   );
 
+  const customOverviewCard = customOverview(resource);
+
   return (
     <ResourceDetailContext.Provider value={true}>
       <DynamicPageComponent
@@ -398,6 +402,7 @@ function Resource({
                 >
                   {resourceDetailsCard}
                   {resourceStatusCard && resourceStatusCard}
+                  {customOverviewCard && customOverviewCard}
                 </div>
               </>
             )}

@@ -11,6 +11,8 @@ import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 import { ResourceDescription } from 'resources/ReplicaSets';
 import { EventsList } from '../../shared/components/EventsList';
 import { filterByResource } from '../../hooks/useMessageList';
+import { CountingCard } from '../../shared/components/CountingCard/CountingCard';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 export function ReplicasetsDetails(props) {
   const { t } = useTranslation();
@@ -71,14 +73,6 @@ export function ReplicasetsDetails(props) {
 
   const customStatusColumns = [
     {
-      header: t('common.headers.pods'),
-      value: resource => <ReplicaSetStatus replicaSet={resource} />,
-    },
-    {
-      header: t('replica-sets.status.availableReplicas'),
-      value: resource => <div>{resource?.status?.availableReplicas ?? 0} </div>,
-    },
-    {
       header: t('replica-sets.status.fullyLabeledReplicas'),
       value: resource => (
         <div>{resource?.status?.fullyLabeledReplicas ?? 0} </div>
@@ -89,14 +83,6 @@ export function ReplicasetsDetails(props) {
       value: resource => (
         <div>{resource?.status?.observedGeneration ?? 0} </div>
       ),
-    },
-    {
-      header: t('replica-sets.status.readyReplicas'),
-      value: resource => <div>{resource?.status?.readyReplicas ?? 0} </div>,
-    },
-    {
-      header: t('replica-sets.status.replicas'),
-      value: resource => <div>{resource?.status?.replicas ?? 0} </div>,
     },
   ];
 
@@ -123,6 +109,33 @@ export function ReplicasetsDetails(props) {
     <PodTemplate key="pod-template" template={replicaset.spec.template} />
   );
 
+  // const healthyPods = getHealthyStatusesCount(podsData);
+
+  const customOverview = resource => {
+    return (
+      <div
+        className="counting-cards-container"
+        style={spacing.sapUiSmallMarginBegin}
+      >
+        <CountingCard
+          value={resource?.status?.replicas ?? 0}
+          title={t('common.headers.overview')}
+          subTitle={t('replica-sets.overview.replicas')}
+          extraInfo={[
+            {
+              title: t('replica-sets.overview.readyReplicas'),
+              value: resource?.status?.readyReplicas ?? 0,
+            },
+            {
+              title: t('replica-sets.overview.availableReplicas'),
+              value: resource?.status?.availableReplicas ?? 0,
+            },
+          ]}
+        />
+      </div>
+    );
+  };
+
   return (
     <ResourceDetails
       customColumns={customColumns}
@@ -132,10 +145,12 @@ export function ReplicasetsDetails(props) {
         ReplicaSetPodTemplate,
         Events,
       ]}
+      statusBadge={replicaSet => <ReplicaSetStatus replicaSet={replicaSet} />}
       customStatusColumns={customStatusColumns}
       statusConditions={statusConditions}
       description={ResourceDescription}
       createResourceForm={ReplicaSetCreate}
+      customOverview={customOverview}
       {...props}
     />
   );
