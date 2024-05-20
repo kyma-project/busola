@@ -53,9 +53,13 @@ export default function KymaModulesAddModule(props) {
     setSelectedModules(initialKymaResource?.spec?.modules);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
-  console.log(initialKymaResource);
+
   if (loading || loadingKymaResources || !kymaResource) {
-    return <Spinner />;
+    return (
+      <div style={{ height: 'calc(100vh - 14rem)' }}>
+        <Spinner />
+      </div>
+    );
   }
 
   const modulesAddData = modules?.items.reduce((acc, module) => {
@@ -116,7 +120,7 @@ export default function KymaModulesAddModule(props) {
       module => moduleName === module.name,
     );
   };
-  console.log(kymaResource);
+
   return (
     <ResourceForm
       {...props}

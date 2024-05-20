@@ -82,7 +82,6 @@ ResourceDetails.defaultProps = {
 };
 
 export function ResourceDetails(props) {
-  console.log(props.resourceUrl);
   if (!props.resourceUrl) {
     return <></>; // wait for the context update
   } else {
@@ -177,7 +176,7 @@ function Resource({
     resource.kind,
   );
   const [showTitleDescription, setShowTitleDescription] = useState(false);
-  console.log(resourceSchema);
+
   const pluralizedResourceKind = pluralize(prettifiedResourceKind);
   useWindowTitle(windowTitle || pluralizedResourceKind);
   const { isProtected, protectedResourceWarning } = useProtectedResources();

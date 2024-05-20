@@ -271,7 +271,7 @@ export function KymaModulesList(props) {
           findStatus(resource.name)?.resource?.metadata?.namespace || '',
       };
     };
-    console.log(props);
+
     return (
       <GenericList
         extraHeaderContent={[

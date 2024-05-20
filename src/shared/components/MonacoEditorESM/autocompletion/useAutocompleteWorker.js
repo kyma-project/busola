@@ -54,7 +54,7 @@ export function useAutocompleteWorker({
     );
     autocompletionDisabled = true;
   }
-  console.log(schemaId);
+
   const { schema, loading, error } = useGetSchema({
     schemaId,
     skip: autocompletionDisabled,
