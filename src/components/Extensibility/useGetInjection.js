@@ -23,7 +23,7 @@ export const useGetInjections = (location, slot) => {
   });
   if (filteredInjections.length !== 0) {
     filteredInjections.sort((a, b) => {
-      if (a.injection?.order && b.injection?.order)
+      if (a.injection?.order != null && b.injection?.order != null)
         return a.injection?.order - b.injection?.order;
       else if (a.injection.name && b.injection.name)
         return a.injection.name.localeCompare(b.injection.name);
