@@ -254,6 +254,7 @@ common:
     copy: Copy
     create: Create
     delete: Delete
+    discard: Discard
     disconnect: Disconnect
     edit: Edit
     edit-yaml: Edit YAML
@@ -306,6 +307,7 @@ common:
     created: Created
     last-update: Last Update
     description: Description
+    discard-changes: Discard Changes
     items: Items
     key: Key
     kind: Kind
@@ -1223,12 +1225,9 @@ replica-sets:
     error: At least one of the Pods has failed.
     running: All the Pods are running correctly.
   status:
-    availableReplicas: Available Replicas
     conditions: Conditions
     fullyLabeledReplicas: Fully Labeled Replicas
     observedGeneration: Observed Generation
-    readyReplicas: Ready Replicas
-    replicas: Replicas
 resource-graph:
   buttons:
     go-to-details: Go to details
