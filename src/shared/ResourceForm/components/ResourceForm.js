@@ -184,7 +184,6 @@ export function ResourceForm({
       updateValueOnParentChange={true}
     />
   );
-
   editor = renderEditor
     ? renderEditor({ defaultEditor: editor, Editor: EditorWrapper })
     : editor;
