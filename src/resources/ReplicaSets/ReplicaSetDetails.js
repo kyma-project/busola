@@ -14,7 +14,7 @@ import { filterByResource } from '../../hooks/useMessageList';
 import { CountingCard } from '../../shared/components/CountingCard/CountingCard';
 import { spacing } from '@ui5/webcomponents-react-base';
 
-export function ReplicasetsDetails(props) {
+export function ReplicaSetsDetails(props) {
   const { t } = useTranslation();
 
   const Events = () => (
@@ -154,4 +154,4 @@ export function ReplicasetsDetails(props) {
   );
 }
 
-export default ReplicasetsDetails;
+export default ReplicaSetsDetails;
