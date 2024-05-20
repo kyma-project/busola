@@ -50,6 +50,7 @@ export const GenericSecrets = ({
         customListActions,
         title,
         readOnly: true,
+        disableCreate: true,
         createFormProps: { prefix },
       }}
     />
