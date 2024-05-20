@@ -2,24 +2,32 @@
 
 You can use list and details widgets in the lists and details pages in the user interface component of your resource. You can distinguish the following widget types:
 
-* [inline widgets](#inline-widgets) for simple values in **data.list**, **data.details.header**, and **data.detail.bodies**
-* [block widgets](#block-widgets) for more complex layouts used only in **data.details.body**
+* [Inline widgets](#inline-widgets) for simple values in **data.list**, **data.details.header**, and **data.detail.bodies**
+  * [`Bagde`](#badge)
+  * [`ControlledBy`](#controlledby)
+  * [`ExternalLink`](#externallink)
+  * [`ExternalLinkButton`](#externallinkbutton)
+  * [`JoinedArray`](#joinedarray)
+  * [`Labels`](#labels)
+  * [`ResourceButton`](#resourcebutton)
+  * [`ResourceLink`](#resourcelink)
+  * [`Text`](#text)
+* [Block widgets](#block-widgets) for more complex layouts used only in **data.details.body**
+  * [`Alert`](#alert)
+  * [`CodeViewer`](#codeviewer)
+  * [`Columns`](#columns)
+  * [`EventList`](#eventlist)
+  * [`FeatureCard`](#featuredcard)
+  * [`Panel`](#panel)
+  * [`Plain`](#plain)
+  * [`ResourceList`](#resourcelist)
+  * [`ResourceRefs`](#resourcerefs)
+  * [`Table`](#table)
+  * [`Tabs`](#tabs)
 
 ## Inline Widgets
 
 Use inline widgets for simple values in **data.list**, **data.details.header**, and **data.detail.bodies**.
-
-These are the available inline widgets:
-
-* [`Bagde`](#badge)
-* [`ControlledBy`](#controlledby)
-* [`ExternalLink`](#externallink)
-* [`ExternalLinkButton`](#externallinkbutton)
-* [`JoinedArray`](#joinedarray)
-* [`Labels`](#labels)
-* [`ResourceButton`](#resourcebutton)
-* [`ResourceLink`](#resourcelink)
-* [`Text`](#text)
 
 ### `Badge`
 
@@ -261,20 +269,6 @@ See the following example:
 ## Block Widgets
 
 Block widgets are more complex layouts and you must use them only in the details body.
-
-These are the available inline widgets:
-
-* [`Alert`](#alert)
-* [`CodeViewer`](#codeviewer)
-* [`Columns`](#columns)
-* [`EventList`](#eventlist)
-* [`FeatureCard`](#featuredcard)
-* [`Panel`](#panel)
-* [`Plain`](#plain)
-* [`ResourceList`](#resourcelist)
-* [`ResourceRefs`](#resourcerefs)
-* [`Table`](#table)
-* [`Tabs`](#tabs)
 
 ### `Alert`
 

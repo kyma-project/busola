@@ -18,7 +18,7 @@ This table lists the available parameters of the **data.list** section in your r
 | **search** | No | boolean | A serach option. If set to `true`, it allows you to search the resource list by this value. Defaults to false. It can also be set to an object with the following property: |
 |**search.searchFunction** | No |[JSONata](jsonata.md) search function |  It allows you to use `$input` variable to get the search input's value that can be used to search for more complex data. |
 
-## Example
+See the following example:
 
 ```yaml
 - source: spec.url
@@ -41,4 +41,4 @@ This table lists the available parameters of the **data.list** section in your r
 
 ## Related Links
 
-- [Widgets available for the list and details pages](./list-and-details-widgets.md)
+- [Widgets available for the list and details pages](./40-list-and-details-widgets.md)

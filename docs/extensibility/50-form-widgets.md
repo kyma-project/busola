@@ -2,20 +2,24 @@
 
 You can use form widgets in the create and/or edit pages in the user interface component of your resource. You can distinguish the following widget types:
 
-* [simple widgets](#simple-widgets) that represent a single scalar value
-* [complex widgets](#complex-widgets) that handle more advanced data structures such as arrays or objects
-* [presentation widgets](#presentation-widgets) that group content into a more readable form
+* [Simple widgets](#simple-widgets) that represent a single scalar value
+  * [`Text`](#text)
+  * [`Name`](#name)
+  * [`CodeEditor`](#codeeditor)
+  * [`Resource`](#resource)
+  * [`MultiCheckbox`](#multicheckbox)
+* [Complex widgets](#complex-widgets) that handle more advanced data structures such as arrays or objects
+  * [`Alert`](#alert)
+  * [`KeyValuePair`](#keyvaluepair)
+  * [`ResourceRef`](#resourceref)
+* [Presentation widgets](#presentation-widgets) that group content into a more readable form
+  * [`FormGroup`](#formgroup)
+  * [`GenericList`](#genericlist)
+  * [`SimpleList`](#simplelist)
 
 ## Simple widgets
 
 Simple widgets represent a single scalar value.
-
-These are the available simple widgets:
-
-* [`Text](#text)
-* [`Name`](#name)
-* [`CodeEditor`](#codeeditor)
-* [`Resource`](#resource)
 
 ### `Text`
 
@@ -209,7 +213,7 @@ These are the available complex widgets:
 * [`KeyValuePair`](#keyvaluepair)
 * [`ResourceRef`](#resourceref)
 
-### Alert
+### `Alert`
 
 The `Alert` widgets display values using predefined types.
 
