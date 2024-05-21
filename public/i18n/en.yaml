@@ -1219,14 +1219,14 @@ replica-sets:
   title: Replica Sets
   overview:
     replicas: Replicas
-    readyReplicas: Ready replicas
+    readyReplicas: Ready Replicas
     availableReplicas: Available Replicas
+    fullyLabeledReplicas: Fully Labeled Replicas
   tooltips:
     error: At least one of the Pods has failed.
     running: All the Pods are running correctly.
   status:
     conditions: Conditions
-    fullyLabeledReplicas: Fully Labeled Replicas
     observedGeneration: Observed Generation
 resource-graph:
   buttons:

@@ -72,12 +72,6 @@ export function ReplicaSetsDetails(props) {
 
   const customStatusColumns = [
     {
-      header: t('replica-sets.status.fullyLabeledReplicas'),
-      value: resource => (
-        <div>{resource?.status?.fullyLabeledReplicas ?? 0} </div>
-      ),
-    },
-    {
       header: t('replica-sets.status.observedGeneration'),
       value: resource => (
         <div>{resource?.status?.observedGeneration ?? 0} </div>
@@ -122,6 +116,10 @@ export function ReplicaSetsDetails(props) {
           {
             title: t('replica-sets.overview.availableReplicas'),
             value: resource?.status?.availableReplicas ?? 0,
+          },
+          {
+            title: t('replica-sets.overview.fullyLabeledReplicas'),
+            value: resource?.status?.fullyLabeledReplicas ?? 0,
           },
         ]}
       />
