@@ -42,11 +42,8 @@ export function PodDetails(props) {
   const customStatusColumns = [
     {
       header: t('common.labels.last-scale'),
-      value: pod => {
-        return getLastScaleTime(pod?.status?.conditions);
-      },
+      value: pod => getLastScaleTime(pod?.status?.conditions),
     },
-
     {
       header: t('pods.status.host-ip'),
       value: pod => pod.status?.hostIP ?? EMPTY_TEXT_PLACEHOLDER,

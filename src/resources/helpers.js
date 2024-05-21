@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import pluralize from 'pluralize';
 import { cloneDeep } from 'lodash';
 import { ReadableElapsedTimeFromNow } from 'shared/components/ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 import {
   getResourceGraphConfig,
@@ -121,17 +122,22 @@ export const usePrepareCreateProps = ({
     i18n,
   };
 };
-export const getLastScaleTime = ({
+
+export const getLastScaleTime = (
   conditions,
   keyValue = 'lastTransitionTime',
-}) => {
+) => {
+  console.log('conditions', conditions);
+  if (!conditions) {
+    return EMPTY_TEXT_PLACEHOLDER;
+  }
   const clonedConditions = cloneDeep(conditions);
   clonedConditions.sort(
     (a, b) => new Date(a[keyValue]).getTime() - new Date(b[keyValue]).getTime(),
   );
   return (
     <ReadableElapsedTimeFromNow
-      timestamp={clonedConditions[0]?.[[keyValue]]}
+      timestamp={clonedConditions[0] ? clonedConditions[0][[keyValue]] : null}
       valueUnit="days ago"
     />
   );
