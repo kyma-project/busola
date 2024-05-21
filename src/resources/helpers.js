@@ -127,14 +127,16 @@ export const getLastScaleTime = (
   conditions,
   keyValue = 'lastTransitionTime',
 ) => {
-  console.log('conditions', conditions);
   if (!conditions) {
     return EMPTY_TEXT_PLACEHOLDER;
   }
+
   const clonedConditions = cloneDeep(conditions);
+
   clonedConditions.sort(
     (a, b) => new Date(a[keyValue]).getTime() - new Date(b[keyValue]).getTime(),
   );
+
   return (
     <ReadableElapsedTimeFromNow
       timestamp={clonedConditions[0] ? clonedConditions[0][[keyValue]] : null}
