@@ -106,7 +106,7 @@ export function ReplicaSetsDetails(props) {
     return (
       <CountingCard
         value={resource?.status?.replicas ?? 0}
-        title={t('common.headers.overview')}
+        title={t('replica-sets.overview.header')}
         subTitle={t('replica-sets.overview.replicas')}
         extraInfo={[
           {

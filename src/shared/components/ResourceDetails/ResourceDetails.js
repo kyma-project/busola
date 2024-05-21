@@ -279,7 +279,11 @@ function Resource({
       customColumns={
         <>
           {customStatusColumns?.filter(filterColumns)?.map(col => (
-            <DynamicPageComponent.Column key={col.header} title={col.header}>
+            <DynamicPageComponent.Column
+              key={col.header}
+              title={col.header}
+              style={spacing.sapUiSmallMarginBottom}
+            >
               {col.value(resource)}
             </DynamicPageComponent.Column>
           ))}

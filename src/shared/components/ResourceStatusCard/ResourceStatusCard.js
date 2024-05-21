@@ -40,14 +40,16 @@ export function ResourceStatusCard({ statusBadge, customColumns, conditions }) {
             >
               {`${t('common.headers.conditions')}:`}
             </div>
-            {conditions?.map((cond, index) => (
-              <ExpandableListItem
-                key={index}
-                header={cond.header?.titleText}
-                status={cond.header?.status}
-                content={cond.message}
-              />
-            ))}
+            <div style={spacing.sapUiSmallMarginBottom}>
+              {conditions?.map((cond, index) => (
+                <ExpandableListItem
+                  key={index}
+                  header={cond.header?.titleText}
+                  status={cond.header?.status}
+                  content={cond.message}
+                />
+              ))}
+            </div>
           </List>
         )}
       </Card>

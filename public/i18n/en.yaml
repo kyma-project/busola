@@ -319,7 +319,6 @@ common:
     namespace: Namespace
     namespaces: Namespaces
     owner: Controlled By
-    overview: Overview
     pods: Pods
     policies: Policies
     region: Region
@@ -1218,6 +1217,7 @@ replica-sets:
   name_singular: ReplicaSet
   title: Replica Sets
   overview:
+    header: Replicas Overview
     replicas: Replicas
     readyReplicas: Ready Replicas
     availableReplicas: Available Replicas
