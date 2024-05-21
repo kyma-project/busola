@@ -111,26 +111,21 @@ export function ReplicaSetsDetails(props) {
 
   const customOverview = resource => {
     return (
-      <div
-        className="counting-cards-container"
-        style={spacing.sapUiSmallMarginBegin}
-      >
-        <CountingCard
-          value={resource?.status?.replicas ?? 0}
-          title={t('common.headers.overview')}
-          subTitle={t('replica-sets.overview.replicas')}
-          extraInfo={[
-            {
-              title: t('replica-sets.overview.readyReplicas'),
-              value: resource?.status?.readyReplicas ?? 0,
-            },
-            {
-              title: t('replica-sets.overview.availableReplicas'),
-              value: resource?.status?.availableReplicas ?? 0,
-            },
-          ]}
-        />
-      </div>
+      <CountingCard
+        value={resource?.status?.replicas ?? 0}
+        title={t('common.headers.overview')}
+        subTitle={t('replica-sets.overview.replicas')}
+        extraInfo={[
+          {
+            title: t('replica-sets.overview.readyReplicas'),
+            value: resource?.status?.readyReplicas ?? 0,
+          },
+          {
+            title: t('replica-sets.overview.availableReplicas'),
+            value: resource?.status?.availableReplicas ?? 0,
+          },
+        ]}
+      />
     );
   };
 

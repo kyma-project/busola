@@ -402,6 +402,8 @@ function Resource({
                 >
                   {resourceDetailsCard}
                   {resourceStatusCard && resourceStatusCard}
+                </div>
+                <div className="flexwrap" style={spacing.sapUiSmallMargin}>
                   {customOverviewCard && customOverviewCard}
                 </div>
               </>
