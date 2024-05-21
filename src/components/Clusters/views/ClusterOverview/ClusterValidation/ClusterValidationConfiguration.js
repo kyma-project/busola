@@ -82,7 +82,7 @@ const ConfigurationForm = ({
       setResource={val => {
         setConfiguration(val);
       }}
-      initialResource={{}}
+      initialResource={configuration}
       disableDefaultFields
     >
       <div>
