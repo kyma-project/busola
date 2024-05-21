@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import pluralize from 'pluralize';
+import { cloneDeep } from 'lodash';
+import { ReadableElapsedTimeFromNow } from 'shared/components/ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
 
 import {
   getResourceGraphConfig,
@@ -118,4 +120,19 @@ export const usePrepareCreateProps = ({
     namespace: namespaceId,
     i18n,
   };
+};
+export const getLastScaleTime = ({
+  conditions,
+  keyValue = 'lastTransitionTime',
+}) => {
+  const clonedConditions = cloneDeep(conditions);
+  clonedConditions.sort(
+    (a, b) => new Date(a[keyValue]).getTime() - new Date(b[keyValue]).getTime(),
+  );
+  return (
+    <ReadableElapsedTimeFromNow
+      timestamp={clonedConditions[0]?.[[keyValue]]}
+      valueUnit="days ago"
+    />
+  );
 };

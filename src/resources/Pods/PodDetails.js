@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next';
 import pluralize from 'pluralize';
+import { getLastScaleTime } from 'resources/helpers';
 
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { EventsList } from 'shared/components/EventsList';
-import { ReadableElapsedTimeFromNow } from 'shared/components/ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
 
 import { filterByResource } from 'hooks/useMessageList';
 
@@ -15,7 +15,6 @@ import PodCreate from './PodCreate';
 import { useUrl } from 'hooks/useUrl';
 import { ResourceDescription } from 'resources/Pods';
 import { Link } from 'shared/components/Link/Link';
-import { cloneDeep } from 'lodash';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 export function PodDetails(props) {
@@ -42,20 +41,9 @@ export function PodDetails(props) {
 
   const customStatusColumns = [
     {
-      header: t('deployments.status.last-scale'),
+      header: t('common.labels.last-scale'),
       value: pod => {
-        const conditions = cloneDeep(pod?.status?.conditions);
-        conditions.sort(
-          (a, b) =>
-            new Date(a.lastTransitionTime).getTime() -
-            new Date(b.lastTransitionTime).getTime(),
-        );
-        return (
-          <ReadableElapsedTimeFromNow
-            timestamp={conditions[0]?.lastTransitionTime}
-            valueUnit="days ago"
-          />
-        );
+        return getLastScaleTime(pod?.status?.conditions);
       },
     },
 
@@ -70,7 +58,7 @@ export function PodDetails(props) {
     {
       header: t('pods.status.pod-ips'),
       value: pod =>
-        pod.status?.podIPs.map(ip => ip.ip).join(', ') ??
+        pod.status?.podIPs?.map(ip => ip.ip).join(', ') ??
         EMPTY_TEXT_PLACEHOLDER,
     },
     {

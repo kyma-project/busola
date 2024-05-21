@@ -342,6 +342,7 @@ common:
     issuer: Issuer
     kubernetes: Kubernetes
     kyma: Kyma
+    last-scale: Last Scale Time
     name: Name
     namespace: Namespace
     new-entry: New Entry
@@ -1112,7 +1113,6 @@ pods:
     ephemeral-container-statuses: Ephemeral Container Statuses
     host-ip: Host IP
     init-container-statuses: Init Container Statuses
-    last-scale: Last Scale Time
     nominated-node-name: Nominated Node Name
     pod-ip: Pod IP
     pod-ips: Pod IPs
