@@ -254,6 +254,7 @@ common:
     copy: Copy
     create: Create
     delete: Delete
+    discard: Discard
     disconnect: Disconnect
     edit: Edit
     edit-yaml: Edit YAML
@@ -306,6 +307,7 @@ common:
     created: Created
     last-update: Last Update
     description: Description
+    discard-changes: Discard Changes
     items: Items
     key: Key
     kind: Kind
@@ -364,11 +366,13 @@ common:
     cannot-load: 'Cannot load {{value}}: {{error.message}}.'
     choose: Choose {{value}}
     click-to-select: Select {{value}} from the list
+    discard-changes-warning: You haven't saved your changes. Navigating out will discard them.
     doesnt-exist: doesn't exist
     entry-not-found: Entry not found
     error: 'Error: {{error}}'
     fill-required-data: Fill the remaining required data.
     loading-name: Loading name...
+    must-fill-required: You must fill in all required data.
     no-entries-found: No entries found
     no-instances-found: No matching {{value}} found
     no-instances-found-namespace: No matching {{value}} found in this Namespace

@@ -17,6 +17,7 @@ import { resourceRoutes } from 'resources';
 import NamespaceRoutes from './NamespaceRoutes';
 import { createExtensibilityRoutes } from './ExtensibilityRoutes';
 import { IncorrectPath } from './IncorrectPath';
+import { removePreviousPath } from 'state/useAfterInitHook';
 
 export default function ClusterRoutes() {
   let { currentClusterName } = useParams() || {};
@@ -35,6 +36,7 @@ export default function ClusterRoutes() {
     const currentCluster = clusters?.[currentClusterName];
     const kubeconfigId = search.get('kubeconfigID');
     if (!currentCluster && !kubeconfigId) {
+      removePreviousPath();
       alert("Such cluster doesn't exist");
       navigate('/clusters');
       return;

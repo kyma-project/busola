@@ -6,9 +6,9 @@
 }
 
 .create-form {
-  height: calc(100vh - 12rem);
+  min-height: calc(100vh - 12rem);
 }
 
 .edit-form {
-  height: calc(100vh - 12.5rem);
+  min-height: calc(100vh - 12.5rem);
 }

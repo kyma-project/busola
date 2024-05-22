@@ -28,6 +28,10 @@ export function GenericRoleCreate({
     setCustomValid(validateRole(role));
   }, [role, setRole, setCustomValid]);
 
+  if (!initialRole) {
+    initialRole = createTemplate();
+  }
+
   return (
     <ResourceForm
       {...props}
@@ -41,7 +45,7 @@ export function GenericRoleCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
-      presets={!initialRole && presets}
+      presets={!initialUnchangedResource && presets}
       nameProps={{ readOnly: !!initialRole?.metadata?.name }}
     >
       <ItemArray

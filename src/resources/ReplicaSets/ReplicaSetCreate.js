@@ -42,6 +42,10 @@ export default function ReplicaSetCreate({
     setReplicaSet({ ...replicaset });
   };
 
+  if (!initialReplicaSet) {
+    initialReplicaSet = createReplicaSetTemplate(namespace);
+  }
+
   return (
     <ResourceForm
       {...props}

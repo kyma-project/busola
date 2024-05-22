@@ -236,6 +236,10 @@ function Resource({
           {t('common.buttons.delete')}
         </Button>,
       )}
+      {createPortal(
+        <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />,
+        document.body,
+      )}
       {createPortal(<YamlUploadDialog />, document.body)}
     </>
   );
@@ -368,13 +372,6 @@ function Resource({
         protectedResourceWarning={protectedResourceWarning(resource)}
         content={
           <>
-            {createPortal(
-              <DeleteMessageBox
-                resource={resource}
-                resourceUrl={resourceUrl}
-              />,
-              document.body,
-            )}
             {!disableResourceDetailsCard && (
               <>
                 <Title
@@ -429,7 +426,7 @@ function Resource({
             </Suspense>
           </>
         }
-        inlineEditForm={() => (
+        inlineEditForm={stickyHeaderHeight => (
           <ResourceCreate
             title={
               editActionLabel ||
@@ -452,6 +449,7 @@ function Resource({
                   namespace={namespace}
                   resourceSchema={resourceSchema}
                   editMode={true}
+                  stickyHeaderHeight={stickyHeaderHeight}
                   {...props}
                 />
               </ErrorBoundary>

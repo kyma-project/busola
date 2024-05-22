@@ -16,8 +16,17 @@ import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import { spacing } from '@ui5/webcomponents-react-base';
 import './ResourceForm.scss';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { editViewModeState } from 'state/preferences/editViewModeAtom';
+import { isResourceEditedState } from 'state/resourceEditedAtom';
+
+const excludeStatus = resource => {
+  const modifiedResource = { ...resource };
+  delete modifiedResource.status;
+  delete modifiedResource.metadata?.resourceVersion;
+  delete modifiedResource.metadata?.managedFields;
+  return modifiedResource;
+};
 
 export function ResourceForm({
   pluralKind, // used for the request path
@@ -53,6 +62,7 @@ export function ResourceForm({
   yamlSearchDisabled,
   yamlHideDisabled,
   isEdit,
+  stickyHeaderHeight,
   resetLayout,
 }) {
   // readonly schema ID, set only once
@@ -71,6 +81,28 @@ export function ResourceForm({
   }
 
   const editViewMode = useRecoilValue(editViewModeState);
+  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
+    isResourceEditedState,
+  );
+
+  useEffect(() => {
+    if (
+      !isResourceEdited.isEdited &&
+      !isResourceEdited.isSaved &&
+      JSON.stringify(excludeStatus(resource)) !==
+        JSON.stringify(excludeStatus(initialResource))
+    ) {
+      setIsResourceEdited({ ...isResourceEdited, isEdited: true });
+    }
+
+    if (
+      JSON.stringify(excludeStatus(resource)) ===
+        JSON.stringify(excludeStatus(initialResource)) &&
+      (isResourceEdited.isEdited || isResourceEdited.isSaved)
+    ) {
+      setIsResourceEdited({ isEdited: false, warningOpen: false });
+    }
+  }, [initialResource, isResourceEdited, resource, setIsResourceEdited]);
 
   const { t } = useTranslation();
   const createResource = useCreateResource({
@@ -83,6 +115,7 @@ export function ResourceForm({
     afterCreatedFn,
     urlPath,
     layoutNumber,
+    setResource,
     resetLayout,
   });
 
@@ -171,13 +204,13 @@ export function ResourceForm({
       labelSpanXL={0}
       as="div"
       style={{ overflowX: 'hidden' }}
+      onChange={onChange}
     >
       {mode === ModeSelector.MODE_FORM && (
         <FormItem>
           <div
             className="full-width"
             style={spacing.sapUiTinyMarginBottom}
-            onChange={onChange}
             hidden={mode !== ModeSelector.MODE_FORM}
           >
             <ResourceFormWrapper
@@ -192,7 +225,7 @@ export function ResourceForm({
                   <K8sNameField
                     propertyPath="$.metadata.name"
                     kind={singularName}
-                    readOnly={readOnly || !!initialResource}
+                    readOnly={readOnly || !!initialUnchangedResource}
                     setValue={handleNameChange}
                     {...nameProps}
                   />
@@ -225,6 +258,8 @@ export function ResourceForm({
         className="resource-form--panel card-shadow"
         style={spacing.sapUiSmallMarginTopBottom}
         disableMargin
+        stickyHeader={true}
+        headerTop={stickyHeaderHeight + 'px'}
         headerActions={
           <>
             {actions}
@@ -258,6 +293,7 @@ export function ResourceForm({
           ref={formElementRef}
           onSubmit={onSubmit || createResource}
           style={{ height: '100%' }}
+          onChange={onChange}
         >
           {mode === ModeSelector.MODE_YAML && (
             <div className="yaml-form">{editor}</div>

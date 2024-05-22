@@ -48,6 +48,10 @@ export default function JobCreate({
     setCustomValid(isJobValid(job));
   }, [job, setCustomValid]);
 
+  if (!initialJob) {
+    initialJob = createJobTemplate(namespace, defaultSidecarAnnotations);
+  }
+
   return (
     <ResourceForm
       {...props}
@@ -60,14 +64,18 @@ export default function JobCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       presets={
-        !initialJob && createJobPresets(namespace, t, defaultSidecarAnnotations)
+        !initialUnchangedResource &&
+        createJobPresets(namespace, t, defaultSidecarAnnotations)
       }
       createUrl={resourceUrl}
     >
-      <JobSpecSection propertyPath="$.spec" readOnly={!!initialJob} />
+      <JobSpecSection
+        propertyPath="$.spec"
+        readOnly={!!initialUnchangedResource}
+      />
       <ContainersSection
         propertyPath="$.spec.template.spec.containers"
-        readOnly={!!initialJob}
+        readOnly={!!initialUnchangedResource}
       />
       <MessageStrip design="Information" hideCloseButton>
         {t('jobs.create-modal.containers-readonly-in-edit')}
