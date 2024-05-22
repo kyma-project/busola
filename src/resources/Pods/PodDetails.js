@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import pluralize from 'pluralize';
-import { getLastScaleTime } from 'resources/helpers';
+import { getLastTransitionTime } from 'resources/helpers';
 
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
@@ -41,8 +41,8 @@ export function PodDetails(props) {
 
   const customStatusColumns = [
     {
-      header: t('common.labels.last-scale'),
-      value: pod => getLastScaleTime(pod?.status?.conditions),
+      header: t('common.labels.last-transition'),
+      value: pod => getLastTransitionTime(pod?.status?.conditions),
     },
     {
       header: t('pods.status.host-ip'),

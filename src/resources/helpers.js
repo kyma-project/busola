@@ -123,7 +123,7 @@ export const usePrepareCreateProps = ({
   };
 };
 
-export const getLastScaleTime = (
+export const getLastTransitionTime = (
   conditions,
   keyValue = 'lastTransitionTime',
 ) => {

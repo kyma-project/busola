@@ -345,7 +345,7 @@ common:
     issuer: Issuer
     kubernetes: Kubernetes
     kyma: Kyma
-    last-scale: Last Scale Time
+    last-transition: Last Transition Time
     name: Name
     namespace: Namespace
     new-entry: New Entry

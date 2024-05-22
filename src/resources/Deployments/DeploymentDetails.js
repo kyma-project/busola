@@ -8,7 +8,7 @@ import { HPASubcomponent } from 'resources/HorizontalPodAutoscalers/HPASubcompon
 import { DeploymentStatus } from './DeploymentStatus';
 import DeploymentCreate from './DeploymentCreate';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { getLastScaleTime } from 'resources/helpers';
+import { getLastTransitionTime } from 'resources/helpers';
 import { ResourceDescription } from 'resources/Deployments';
 
 export function DeploymentDetails(props) {
@@ -26,7 +26,7 @@ export function DeploymentDetails(props) {
     {
       header: t('deployments.status.last-scale'),
       value: deployment =>
-        getLastScaleTime(deployment?.status?.conditions, 'lastUpdateTime'),
+        getLastTransitionTime(deployment?.status?.conditions),
     },
     {
       header: t('deployments.status.current-replicas'),
