@@ -5,6 +5,7 @@ import { useGetVersions } from './useGetVersions';
 import { useFeature } from 'hooks/useFeature';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import ResourceDetailsCard from 'shared/components/ResourceDetails/ResourceDetailsCard';
+import { Text } from '@ui5/webcomponents-react';
 
 const GardenerProvider = () => {
   const { t } = useTranslation();
@@ -55,7 +56,9 @@ export default function ClusterDetails({ currentCluster }) {
           <DynamicPageComponent.Column
             title={t('clusters.common.api-server-address')}
           >
-            {currentCluster?.currentContext?.cluster?.cluster?.server}
+            <Text>
+              {currentCluster?.currentContext?.cluster?.cluster?.server}
+            </Text>
           </DynamicPageComponent.Column>
           <GardenerProvider />
         </>
