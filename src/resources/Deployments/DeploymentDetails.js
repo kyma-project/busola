@@ -8,7 +8,7 @@ import { HPASubcomponent } from 'resources/HorizontalPodAutoscalers/HPASubcompon
 import { DeploymentStatus } from './DeploymentStatus';
 import DeploymentCreate from './DeploymentCreate';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { ReadableElapsedTimeFromNow } from 'shared/components/ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
+import { getLastScaleTime } from 'resources/helpers';
 import { ResourceDescription } from 'resources/Deployments';
 
 export function DeploymentDetails(props) {
@@ -25,12 +25,8 @@ export function DeploymentDetails(props) {
   const customStatusColumns = [
     {
       header: t('deployments.status.last-scale'),
-      value: deployment => (
-        <ReadableElapsedTimeFromNow
-          timestamp={deployment?.status?.conditions?.[1]?.lastUpdateTime}
-          valueUnit="days ago"
-        />
-      ),
+      value: deployment =>
+        getLastScaleTime(deployment?.status?.conditions, 'lastUpdateTime'),
     },
     {
       header: t('deployments.status.current-replicas'),
