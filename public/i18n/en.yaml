@@ -691,7 +691,6 @@ deployments:
     available-replicas: Available Replicas
     current-replicas: Current Replicas
     updated-replicas: Updated Replicas
-    last-scale: Last Scale Time
 discovery-and-network:
   title: Discovery and Network
 domains:

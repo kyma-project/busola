@@ -24,7 +24,7 @@ export function DeploymentDetails(props) {
 
   const customStatusColumns = [
     {
-      header: t('deployments.status.last-scale'),
+      header: t('common.labels.last-transition'),
       value: deployment =>
         getLastTransitionTime(deployment?.status?.conditions),
     },
