@@ -8,7 +8,6 @@ import { ContainerStatus } from './ContainerStatus';
 import { getPorts } from 'shared/components/GetContainersPorts';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ReadableElapsedTimeFromNow } from 'shared/components/ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 import { useSetRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
@@ -64,7 +63,7 @@ export default function ContainersData({ type, containers, statuses }) {
           name={t('common.headers.started-at')}
           value={
             <ReadableElapsedTimeFromNow
-              timestamp={state?.startedAt || EMPTY_TEXT_PLACEHOLDER}
+              timestamp={state?.startedAt}
               valueUnit={t('common.value-units.days-ago')}
             />
           }
