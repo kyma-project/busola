@@ -35,7 +35,7 @@ export function ExtensibilityCreateCore({
   setCustomValid,
   resourceType,
   resourceUrl,
-  resource: initialResource,
+  resource: initialExtensibilityResource,
   resourceSchema: createResource,
   resourceName,
   editMode = false,
@@ -60,14 +60,15 @@ export function ExtensibilityCreateCore({
 
   const [store, setStore] = useState(
     getUIStoreFromResourceObj(
-      initialResource || defaultPreset?.value || emptyTemplate,
+      initialExtensibilityResource || defaultPreset?.value || emptyTemplate,
     ),
   );
 
   const presets = usePreparePresets(createResource?.presets, emptyTemplate);
   const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
-  const [initialUnchangedResource] = useState(
-    initialResource || defaultPreset?.value || emptyTemplate,
+  const [initialUnchangedResource] = useState(initialExtensibilityResource);
+  const [initialResource] = useState(
+    initialExtensibilityResource || defaultPreset?.value || emptyTemplate,
   );
 
   const updateStore = res => {
