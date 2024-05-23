@@ -37,6 +37,9 @@ export default function JobCreate({
     ? initialJob?.spec?.template?.metadata?.annotations
     : {};
   const [initialUnchangedResource] = useState(initialJob);
+  const [initialResource] = useState(
+    initialJob || createJobTemplate(namespace, defaultSidecarAnnotations),
+  );
 
   const [job, setJob] = useState(
     initialJob
@@ -48,10 +51,6 @@ export default function JobCreate({
     setCustomValid(isJobValid(job));
   }, [job, setCustomValid]);
 
-  if (!initialJob) {
-    initialJob = createJobTemplate(namespace, defaultSidecarAnnotations);
-  }
-
   return (
     <ResourceForm
       {...props}
@@ -59,7 +58,7 @@ export default function JobCreate({
       singularName={t(`jobs.name_singular`)}
       resource={job}
       setResource={setJob}
-      initialResource={initialJob}
+      initialResource={initialResource}
       initialUnchangedResource={initialUnchangedResource}
       onChange={onChange}
       formElementRef={formElementRef}

@@ -23,14 +23,11 @@ export function GenericRoleCreate({
   const { t } = useTranslation();
   const [role, setRole] = useState(cloneDeep(initialRole) || createTemplate());
   const [initialUnchangedResource] = useState(initialRole);
+  const [initialResource] = useState(initialRole || createTemplate());
 
   useEffect(() => {
     setCustomValid(validateRole(role));
   }, [role, setRole, setCustomValid]);
-
-  if (!initialRole) {
-    initialRole = createTemplate();
-  }
 
   return (
     <ResourceForm
@@ -38,7 +35,7 @@ export function GenericRoleCreate({
       pluralKind={pluralKind}
       singularName={singularName}
       resource={role}
-      initialResource={initialRole}
+      initialResource={initialResource}
       initialUnchangedResource={initialUnchangedResource}
       setResource={setRole}
       onChange={onChange}

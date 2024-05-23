@@ -22,12 +22,7 @@ export function LimitRangeCreate({
       createLimitRangeTemplate({ namespaceName: namespaceId }),
   );
   const { t } = useTranslation();
-
-  if (!initialLimitRange) {
-    initialLimitRange = createLimitRangeTemplate({
-      namespaceName: namespaceId,
-    });
-  }
+  const [initialUnchangedResource] = useState(initialLimitRange);
 
   return (
     <ResourceForm
@@ -35,7 +30,7 @@ export function LimitRangeCreate({
       pluralKind="limitRanges"
       singularName={t('limit-ranges.name_singular')}
       resource={limitRange}
-      initialResource={initialLimitRange}
+      initialResource={initialUnchangedResource}
       setResource={setLimitRange}
       onChange={onChange}
       formElementRef={formElementRef}
