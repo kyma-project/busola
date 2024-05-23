@@ -11,10 +11,7 @@ export function ResourceStatusCard({ statusBadge, customColumns, conditions }) {
     <div style={spacing.sapUiSmallMarginBeginEnd}>
       <Card
         header={
-          <div
-            className="resource-status-card__header"
-            style={spacing.sapUiTinyMarginTop}
-          >
+          <div className="resource-status-card__header">
             <CardHeader titleText={t('common.headers.status')} />
             <div className="header__status-badge">{statusBadge}</div>
           </div>
@@ -24,8 +21,8 @@ export function ResourceStatusCard({ statusBadge, customColumns, conditions }) {
         {customColumns && (
           <div
             style={{
-              ...spacing.sapUiTinyMarginTopBottom,
-              ...spacing.sapUiSmallMarginBeginEnd,
+              ...spacing.sapUiSmallMargin,
+              ...spacing.sapUiTinyMarginTop,
             }}
             className="resource-status-card__details-grid"
           >
