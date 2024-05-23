@@ -282,7 +282,7 @@ function Resource({
             <DynamicPageComponent.Column
               key={col.header}
               title={col.header}
-              style={spacing.sapUiSmallMarginBottom}
+              style={spacing.sapUiTinyMarginTopBottom}
             >
               {col.value(resource)}
             </DynamicPageComponent.Column>
