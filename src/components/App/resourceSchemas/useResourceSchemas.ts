@@ -36,6 +36,11 @@ export const useResourceSchemas = () => {
   const [lastFetched, setLastFetched] = useRecoilState(openapiLastFetchedState);
 
   useEffect(() => {
+    console.log(authData);
+    console.log(activeClusterName);
+    console.log(cluster?.contextName);
+    console.log(openApi?.state);
+    console.log(isClusterList);
     if (
       authData &&
       activeClusterName === cluster?.contextName &&

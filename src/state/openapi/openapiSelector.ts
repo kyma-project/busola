@@ -15,6 +15,7 @@ export const openapiState: RecoilValue<OpenapiState> = selector<OpenapiState>({
 
     const response = await fetchFn({ relativeUrl: '/openapi/v2' });
     const json = await response.json();
+    console.log(json);
     return json;
   },
 });

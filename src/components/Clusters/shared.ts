@@ -13,6 +13,7 @@ import { hasNonOidcAuth } from 'state/authDataAtom';
 import { createUserManager } from 'state/authDataAtom';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
+import { removePreviousPath } from 'state/useAfterInitHook';
 
 function addCurrentCluster(
   params: NonNullable<ActiveClusterState>,
@@ -28,6 +29,7 @@ function addCurrentCluster(
     clustersInfo.navigate(`/cluster/${params.contextName}`);
   }
 
+  removePreviousPath();
   setCurrentCluster(params);
 }
 

@@ -61,6 +61,8 @@ const loadKubeconfigIdCluster = async (
   clusterInfo: useClustersInfoType,
   t: TFunction,
 ) => {
+  console.log(kubeconfigId);
+  console.log(clusterInfo);
   try {
     const kubeconfig = await loadKubeconfigById(
       kubeconfigId,
@@ -82,7 +84,7 @@ const loadKubeconfigIdCluster = async (
 
     const shouldRedirectToCluster = (name: string) =>
       !showClustersOverview && (isOnlyOneCluster || isK8CurrentCluster(name));
-
+    console.log(kubeconfig);
     // add the clusters
     kubeconfig.contexts.forEach(context => {
       const previousStorageMethod: ClusterStorage =
@@ -127,7 +129,7 @@ export function useLoginWithKubeconfigID() {
   const [handledKubeconfigId, setHandledKubeconfigId] = useState<
     KubeconfigIdHandleState
   >('not started');
-
+  console.log(clusters);
   useEffect(() => {
     const dependenciesReady = !!configuration?.features && !!clusters;
     const flowStarted = handledKubeconfigId !== 'not started';
@@ -136,6 +138,7 @@ export function useLoginWithKubeconfigID() {
     }
 
     const kubeconfigId = search.get('kubeconfigID');
+    console.log(kubeconfigId);
     if (!kubeconfigId || !kubeconfigIdFeature?.isEnabled) {
       setHandledKubeconfigId('done');
       return;
