@@ -14,7 +14,6 @@ import { useUrl } from 'hooks/useUrl';
 import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useFeature } from 'hooks/useFeature';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
 
 export function useCreateResource({
   singularName,
@@ -37,13 +36,10 @@ export function useCreateResource({
   const navigate = useNavigate();
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
-  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
-    isResourceEditedState,
-  );
 
   const { nextQuery, nextLayout } = usePrepareLayout(layoutNumber);
 
-  const isEdit = !!initialUnchangedResource?.metadata?.name;
+  const isEdit = !!initialResource?.metadata?.name;
 
   const defaultAfterCreatedFn = () => {
     notification.notifySuccess({
@@ -133,11 +129,6 @@ export function useCreateResource({
     } else {
       defaultAfterCreatedFn();
     }
-    setIsResourceEdited({
-      ...isResourceEdited,
-      isEdited: false,
-      isSaved: true,
-    });
   };
 
   return async e => {

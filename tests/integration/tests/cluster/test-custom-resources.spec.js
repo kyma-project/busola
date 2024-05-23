@@ -26,8 +26,6 @@ context('Test Custom Resources', () => {
       cy.pasteToMonaco(CRD);
     });
 
-    cy.checkUnsavedDialog();
-
     cy.saveChanges('Create');
   });
 
@@ -85,8 +83,6 @@ context('Test Custom Resources', () => {
       const TC = JSON.stringify(TC_CONFIG);
       cy.pasteToMonaco(TC);
     });
-
-    cy.checkUnsavedDialog();
 
     cy.saveChanges('Create');
   });

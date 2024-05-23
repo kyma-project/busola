@@ -44,10 +44,6 @@ export default function CronJobCreate({
     setCustomValid(isCronJobValid(cronJob));
   }, [cronJob, setCustomValid]);
 
-  if (!initialCronJob) {
-    initialCronJob = createCronJobTemplate(namespace);
-  }
-
   return (
     <ResourceForm
       {...props}
@@ -59,7 +55,7 @@ export default function CronJobCreate({
       setResource={setCronJob}
       onChange={onChange}
       formElementRef={formElementRef}
-      presets={!initialUnchangedResource && createCronJobPresets(namespace)}
+      presets={!initialCronJob && createCronJobPresets(namespace)}
       createUrl={resourceUrl}
     >
       <CronJobSpecSection propertyPath="$.spec" />

@@ -34,18 +34,13 @@ export default function DeploymentCreate({
       : createDeploymentTemplate(namespace),
   );
   const [initialUnchangedResource] = useState(initialDeployment);
-
-  if (!initialDeployment) {
-    initialDeployment = createDeploymentTemplate(namespace);
-  }
-
   const {
     isIstioFeatureOn,
     isSidecarEnabled,
     setSidecarEnabled,
     setIsChanged,
   } = useSidecar({
-    initialRes: initialUnchangedResource,
+    initialRes: initialDeployment,
     res: deployment,
     setRes: setDeployment,
     path: '$.spec.template.metadata.labels',
@@ -80,7 +75,7 @@ export default function DeploymentCreate({
       setResource={setDeployment}
       onChange={onChange}
       formElementRef={formElementRef}
-      presets={!initialUnchangedResource && createPresets(namespace, t)}
+      presets={!initialDeployment && createPresets(namespace, t)}
       onPresetSelected={value => {
         setDeployment(value.deployment);
       }}

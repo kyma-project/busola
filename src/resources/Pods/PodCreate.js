@@ -22,10 +22,6 @@ export default function PodCreate({
   );
   const { t } = useTranslation();
 
-  if (!initialPod) {
-    initialPod = createPodTemplate(namespaceId);
-  }
-
   return (
     <ResourceForm
       {...props}

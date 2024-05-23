@@ -36,6 +36,7 @@ export function GenericRoleBindingCreate({
   const [hasPermissionsForClusterRoles] = useHasPermissionsFor([
     [DEFAULT_APIGROUP, 'clusterroles'],
   ]);
+
   const [binding, setBinding] = useState(
     cloneDeep(initialRoleBinding) || createBindingTemplate(namespace),
   );
@@ -70,10 +71,6 @@ export function GenericRoleBindingCreate({
   const rolesLoading =
     (!namespace ? false : namespaceRolesLoading) || clusterRolesLoading;
   const rolesError = namespaceRolesError || clusterRolesError;
-
-  if (!initialRoleBinding) {
-    initialRoleBinding = createBindingTemplate(namespace);
-  }
 
   return (
     <ResourceForm

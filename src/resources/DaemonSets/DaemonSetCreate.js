@@ -22,10 +22,6 @@ export default function DaemonSetCreate({
   );
   const { t } = useTranslation();
 
-  if (!initialDaemonSet) {
-    initialDaemonSet = createDaemonSetTemplate(namespaceId);
-  }
-
   return (
     <ResourceForm
       {...props}

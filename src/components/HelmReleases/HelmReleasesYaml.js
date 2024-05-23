@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { ResourceForm } from 'shared/ResourceForm';
 import { showYamlTab } from './index';
 

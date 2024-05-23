@@ -23,10 +23,6 @@ export default function NetworkPolicyCreate({
   );
   const { t } = useTranslation();
 
-  if (!initialNetworkPolicy) {
-    initialNetworkPolicy = createNetworkPolicyTemplate(namespaceId);
-  }
-
   return (
     <ResourceForm
       {...props}

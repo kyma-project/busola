@@ -21,10 +21,6 @@ export default function IngressCreate({
   );
   const { t } = useTranslation();
 
-  if (!initialIngress) {
-    initialIngress = createIngressTemplate(namespaceId);
-  }
-
   return (
     <ResourceForm
       {...props}

@@ -12,14 +12,12 @@ import {
 
 import './DynamicPageComponent.scss';
 import { spacing } from '@ui5/webcomponents-react-base';
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useFeature } from 'hooks/useFeature';
 import { HintButton } from '../DescriptionHint/DescriptionHint';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { handleActionIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
 
 const Column = ({ title, children, columnSpan, image, style = {} }) => {
   const styleComputed = { gridColumn: columnSpan, ...style };
@@ -54,41 +52,6 @@ export const DynamicPageComponent = ({
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   const { t } = useTranslation();
-  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
-    isResourceEditedState,
-  );
-  const [selectedSectionIdState, setSelectedSectionIdState] = useState('view');
-
-  const handleColumnClose = () => {
-    window.history.pushState(
-      window.history.state,
-      '',
-      layoutCloseUrl
-        ? layoutCloseUrl
-        : `${window.location.pathname.slice(
-            0,
-            window.location.pathname.lastIndexOf('/'),
-          )}${
-            layoutNumber === 'MidColumn' ||
-            layoutColumn?.showCreate?.resourceType
-              ? ''
-              : '?layout=TwoColumnsMidExpanded'
-          }`,
-    );
-    layoutNumber === 'MidColumn'
-      ? setLayoutColumn({
-          ...layoutColumn,
-          midColumn: null,
-          layout: 'OneColumn',
-          showCreate: null,
-        })
-      : setLayoutColumn({
-          ...layoutColumn,
-          endColumn: null,
-          layout: 'TwoColumnsMidExpanded',
-          showCreate: null,
-        });
-  };
 
   const headerTitle = (
     <DynamicPageTitle
@@ -196,11 +159,34 @@ export const DynamicPageComponent = ({
                     design="Transparent"
                     icon="decline"
                     onClick={() => {
-                      handleActionIfResourceEdited(
-                        isResourceEdited,
-                        setIsResourceEdited,
-                        () => handleColumnClose(),
+                      window.history.pushState(
+                        window.history.state,
+                        '',
+                        layoutCloseUrl
+                          ? layoutCloseUrl
+                          : `${window.location.pathname.slice(
+                              0,
+                              window.location.pathname.lastIndexOf('/'),
+                            )}${
+                              layoutNumber === 'MidColumn' ||
+                              layoutColumn?.showCreate?.resourceType
+                                ? ''
+                                : '?layout=TwoColumnsMidExpanded'
+                            }`,
                       );
+                      layoutNumber === 'MidColumn'
+                        ? setLayoutColumn({
+                            ...layoutColumn,
+                            midColumn: null,
+                            layout: 'OneColumn',
+                            showCreate: null,
+                          })
+                        : setLayoutColumn({
+                            ...layoutColumn,
+                            endColumn: null,
+                            layout: 'TwoColumnsMidExpanded',
+                            showCreate: null,
+                          });
                     }}
                   />
                 </>
@@ -221,20 +207,6 @@ export const DynamicPageComponent = ({
       </DynamicPageHeader>
     ) : null;
 
-  const [stickyHeaderHeight, setStickyHeaderHeight] = useState(0);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setStickyHeaderHeight(
-        (document.querySelector('.page-header')?.querySelector('header')
-          ?.clientHeight ?? 0) +
-          (document
-            .querySelector('.page-header')
-            ?.querySelector('ui5-tabcontainer')?.clientHeight ?? 0),
-      );
-    });
-  }, []);
-
   if (inlineEditForm) {
     return (
       <ObjectPage
@@ -245,25 +217,6 @@ export const DynamicPageComponent = ({
         headerContentPinnable={false}
         headerTitle={headerTitle}
         headerContent={customHeaderContent ?? headerContent}
-        selectedSectionId={selectedSectionIdState}
-        onBeforeNavigate={e => {
-          if (isResourceEdited.isEdited) {
-            e.preventDefault();
-            setIsResourceEdited({
-              ...isResourceEdited,
-              warningOpen: true,
-              discardAction: () => {
-                setSelectedSectionIdState(e.detail.sectionId);
-                setIsResourceEdited({
-                  isEdited: false,
-                  warningOpen: false,
-                });
-              },
-            });
-            return;
-          }
-          setSelectedSectionIdState(e.detail.sectionId);
-        }}
       >
         <ObjectPageSection
           aria-label="View"
@@ -282,7 +235,7 @@ export const DynamicPageComponent = ({
             showYamlTab ? t('common.tabs.yaml') : t('common.tabs.edit')
           }
         >
-          {inlineEditForm(stickyHeaderHeight)}
+          {inlineEditForm()}
         </ObjectPageSection>
       </ObjectPage>
     );
@@ -299,11 +252,7 @@ export const DynamicPageComponent = ({
       headerContent={headerContent}
       footer={footer}
     >
-      {({ stickyHeaderHeight }) => {
-        return typeof content === 'function'
-          ? content(stickyHeaderHeight)
-          : content;
-      }}
+      {content}
     </DynamicPage>
   );
 };

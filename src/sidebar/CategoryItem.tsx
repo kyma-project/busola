@@ -25,7 +25,6 @@ export function CategoryItem({
 
   const handleAddExpandedCategory = (e: Ui5CustomEvent) => {
     e.preventDefault();
-
     if (!isSidebarCondensed) {
       if (categoryName === e.target.parentElement?.getAttribute('text')) {
       } else if (expanded) {

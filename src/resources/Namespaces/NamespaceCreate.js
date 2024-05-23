@@ -51,7 +51,7 @@ export default function NamespaceCreate({
     setSidecarEnabled,
     setIsChanged,
   } = useSidecar({
-    initialRes: initialUnchangedResource,
+    initialRes: initialNamespace,
     res: namespace,
     setRes: setNamespace,
     path: '$.metadata.labels',
@@ -113,7 +113,7 @@ export default function NamespaceCreate({
       endColumn: null,
     });
 
-    if (!initialUnchangedResource) {
+    if (!initialNamespace) {
       navigate(clusterUrl(`namespaces/${namespace.metadata?.name}`));
     }
 
@@ -133,7 +133,7 @@ export default function NamespaceCreate({
     if (!rejectedRequest) {
       onCompleted(
         `Namespace ${namespace.metadata.name} ${
-          initialUnchangedResource ? 'edited' : 'created'
+          initialNamespace ? 'edited' : 'created'
         }`,
       );
     } else {
@@ -143,10 +143,6 @@ export default function NamespaceCreate({
         true,
       );
     }
-  }
-
-  if (!initialNamespace) {
-    initialNamespace = createNamespaceTemplate();
   }
 
   const renderEditor = ({ defaultEditor, Editor }) => (
@@ -160,7 +156,7 @@ export default function NamespaceCreate({
       >
         {defaultEditor}
       </ResourceForm.CollapsibleSection>
-      {!initialUnchangedResource && withLimits ? (
+      {!initialNamespace && withLimits ? (
         <ResourceForm.CollapsibleSection
           title={t('namespaces.create-modal.container-limits')}
         >
@@ -172,7 +168,7 @@ export default function NamespaceCreate({
           />
         </ResourceForm.CollapsibleSection>
       ) : null}
-      {!initialUnchangedResource && withMemory ? (
+      {!initialNamespace && withMemory ? (
         <ResourceForm.CollapsibleSection
           title={t('namespaces.create-modal.memory-quotas')}
         >
@@ -192,7 +188,7 @@ export default function NamespaceCreate({
       {...props}
       pluralKind="namespaces"
       singularName={t('namespaces.name_singular')}
-      renderEditor={!initialUnchangedResource ? renderEditor : null}
+      renderEditor={!initialNamespace ? renderEditor : null}
       resource={namespace}
       setResource={setNamespace}
       onChange={onChange}
@@ -220,7 +216,7 @@ export default function NamespaceCreate({
         />
       ) : null}
 
-      {!initialUnchangedResource ? (
+      {!initialNamespace ? (
         <ResourceForm.CollapsibleSection
           title={t('namespaces.create-modal.apply-memory-quotas')}
           actions={() => (
@@ -262,7 +258,7 @@ export default function NamespaceCreate({
           </FlexBox>
         </ResourceForm.CollapsibleSection>
       ) : null}
-      {!initialUnchangedResource ? (
+      {!initialNamespace ? (
         <ResourceForm.CollapsibleSection
           title={t('namespaces.create-modal.apply-limits')}
           actions={() => (

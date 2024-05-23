@@ -19,10 +19,6 @@ export default function PersistentVolumeCreate({
   );
   const { t } = useTranslation();
 
-  if (!initialPersistentVolume) {
-    initialPersistentVolume = createPersistentVolumeTemplate();
-  }
-
   return (
     <ResourceForm
       {...props}

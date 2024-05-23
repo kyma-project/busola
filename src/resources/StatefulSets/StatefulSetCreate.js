@@ -22,10 +22,6 @@ export default function StatefulSetCreate({
   );
   const { t } = useTranslation();
 
-  if (!initialStatefulSet) {
-    initialStatefulSet = createStatefulSetTemplate(namespaceId);
-  }
-
   return (
     <ResourceForm
       {...props}

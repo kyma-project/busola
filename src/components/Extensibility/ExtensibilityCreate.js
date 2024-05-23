@@ -66,7 +66,9 @@ export function ExtensibilityCreateCore({
 
   const presets = usePreparePresets(createResource?.presets, emptyTemplate);
   const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
-  const [initialUnchangedResource] = useState(initialResource);
+  const [initialUnchangedResource] = useState(
+    initialResource || defaultPreset?.value || emptyTemplate,
+  );
 
   const updateStore = res => {
     readVars(res);
@@ -80,7 +82,7 @@ export function ExtensibilityCreateCore({
     } else {
       notification.notifySuccess({
         content: t(
-          initialUnchangedResource
+          initialResource
             ? 'common.create-form.messages.patch-success'
             : 'common.create-form.messages.create-success',
           {
@@ -128,10 +130,6 @@ export function ExtensibilityCreateCore({
 
   if (loadingOpenAPISchema) return <Spinner />;
 
-  if (!initialResource) {
-    initialResource = defaultPreset?.value || emptyTemplate;
-  }
-
   return (
     <ResourceForm
       {...props}
@@ -166,11 +164,7 @@ export function ExtensibilityCreateCore({
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
       onlyYaml={!schema}
-      presets={
-        (initialResource === defaultPreset?.value ||
-          initialResource === emptyTemplate) &&
-        presets
-      }
+      presets={!initialResource && presets}
       initialResource={initialResource}
       initialUnchangedResource={initialUnchangedResource}
       afterCreatedFn={afterCreatedFn}

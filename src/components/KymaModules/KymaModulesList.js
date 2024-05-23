@@ -18,14 +18,12 @@ import {
   apiGroup,
   apiVersion,
 } from 'components/KymaModules';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useUrl } from 'hooks/useUrl';
 import pluralize from 'pluralize';
 import { Link } from 'shared/components/Link/Link';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { handleActionIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
 
 export function KymaModulesList(props) {
   const { t } = useTranslation();
@@ -36,9 +34,6 @@ export function KymaModulesList(props) {
     setShowReleaseChannelTitleDescription,
   ] = useState(false);
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
-  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
-    isResourceEditedState,
-  );
   const { clusterUrl } = useUrl();
 
   const { data: kymaResources, loading: kymaResourcesLoading } = useGet(
@@ -167,54 +162,49 @@ export function KymaModulesList(props) {
             }`,
           );
 
-      const handleClickResource = () => {
-        if (!isExtension) {
-          setLayoutColumn({
-            midColumn: {
-              resourceType: findCrd(resource.name)?.metadata?.name,
-              resourceName: findStatus(resource.name)?.resource?.metadata?.name,
-              namespaceId:
-                findStatus(resource.name)?.resource?.metadata.namespace || '',
-            },
-            layout: 'TwoColumnsMidExpanded',
-            endColumn: null,
-          });
-          window.history.pushState(
-            window.history.state,
-            '',
-            `${path}?layout=TwoColumnsMidExpanded`,
-          );
-        } else {
-          setLayoutColumn({
-            midColumn: {
-              resourceType: pluralize(
-                findStatus(resource.name)?.resource?.kind || '',
-              ).toLowerCase(),
-              resourceName: findStatus(resource.name)?.resource?.metadata?.name,
-              namespaceId:
-                findStatus(resource.name)?.resource?.metadata.namespace || '',
-            },
-            layout: 'TwoColumnsMidExpanded',
-            endColumn: null,
-          });
-        }
-
-        window.history.pushState(
-          window.history.state,
-          '',
-          `${path}?layout=TwoColumnsMidExpanded`,
-        );
-      };
-
       return [
         // Name
         <Link
           url={path}
           onClick={() => {
-            handleActionIfResourceEdited(
-              isResourceEdited,
-              setIsResourceEdited,
-              () => handleClickResource(),
+            if (!isExtension) {
+              setLayoutColumn({
+                midColumn: {
+                  resourceType: findCrd(resource.name)?.metadata?.name,
+                  resourceName: findStatus(resource.name)?.resource?.metadata
+                    ?.name,
+                  namespaceId:
+                    findStatus(resource.name)?.resource?.metadata.namespace ||
+                    '',
+                },
+                layout: 'TwoColumnsMidExpanded',
+                endColumn: null,
+              });
+              window.history.pushState(
+                window.history.state,
+                '',
+                `${path}?layout=TwoColumnsMidExpanded`,
+              );
+            } else {
+              setLayoutColumn({
+                midColumn: {
+                  resourceType: pluralize(
+                    findStatus(resource.name)?.resource?.kind || '',
+                  ).toLowerCase(),
+                  resourceName: findStatus(resource.name)?.resource?.metadata
+                    ?.name,
+                  namespaceId:
+                    findStatus(resource.name)?.resource?.metadata.namespace ||
+                    '',
+                },
+                layout: 'TwoColumnsMidExpanded',
+                endColumn: null,
+              });
+            }
+            window.history.pushState(
+              window.history.state,
+              '',
+              `${path}?layout=TwoColumnsMidExpanded`,
             );
           }}
         >

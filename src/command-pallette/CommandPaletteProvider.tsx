@@ -1,28 +1,19 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { CommandPaletteUI } from './CommandPalletteUI/CommandPaletteUI';
 import { useEventListener } from 'hooks/useEventListener';
 import { K8sResource } from 'types';
 import { useObjectState } from 'shared/useObjectState';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { useRecoilValue } from 'recoil';
 
 export const CommandPaletteProvider = ({
   children,
 }: {
   children: ReactNode;
 }) => {
-  const isResourceEdited = useRecoilValue(isResourceEditedState);
   const [showDialog, _setShowDialog] = useState(false);
   const hide = () => setShowDialog(false);
   const [resourceCache, updateResourceCache] = useObjectState<
     Record<string, K8sResource[]>
   >();
-
-  useEffect(() => {
-    if (isResourceEdited.warningOpen) {
-      setShowDialog(false);
-    }
-  }, [isResourceEdited]);
 
   const setShowDialog = (value: boolean) => {
     const modalPresent = document.querySelector('ui5-dialog[open="true"]');

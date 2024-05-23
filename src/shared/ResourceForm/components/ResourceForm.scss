@@ -19,7 +19,7 @@ form .resource-form {
 
   .yaml-form {
     width: 100%;
-    height: calc(100vh - 19rem);
+    height: 100%;
     min-height: 300px;
   }
 
@@ -53,14 +53,9 @@ form .resource-form {
       width: fit-content;
     }
   }
-
-  .card-shadow {
-    overflow: visible;
-  }
 }
 
 .resource-form--panel,
 .resource-form--panel::part(content) {
-  min-height: calc(100vh - 19rem);
   height: 100%;
 }

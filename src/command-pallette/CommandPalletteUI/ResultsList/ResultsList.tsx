@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useEventListener } from 'hooks/useEventListener';
 import { Result } from './Result';
 import { Spinner } from 'shared/components/Spinner/Spinner';
@@ -6,9 +6,6 @@ import { addHistoryEntry } from '../search-history';
 import './ResultsList.scss';
 import { useTranslation } from 'react-i18next';
 import { LOADING_INDICATOR } from '../types';
-import { useRecoilState } from 'recoil';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { handleActionIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
 
 function scrollInto(element: Element) {
   element.scrollIntoView({
@@ -35,9 +32,6 @@ export function ResultsList({
 }: ResultsListProps) {
   const listRef = useRef<HTMLUListElement | null>(null);
   const { t } = useTranslation();
-  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
-    isResourceEditedState,
-  );
 
   //todo 2
   const isLoading = results.find((r: any) => r.type === LOADING_INDICATOR);
@@ -61,14 +55,8 @@ export function ResultsList({
         setActiveIndex(activeIndex - 1);
         scrollInto(listRef.current!.children[activeIndex - 1]);
       } else if (key === 'Enter' && results?.[activeIndex]) {
-        handleActionIfResourceEdited(
-          isResourceEdited,
-          setIsResourceEdited,
-          () => {
-            addHistoryEntry(results[activeIndex].query);
-            results[activeIndex].onActivate();
-          },
-        );
+        addHistoryEntry(results[activeIndex].query);
+        results[activeIndex].onActivate();
       }
     },
     [activeIndex, results, isHistoryMode],
@@ -85,14 +73,8 @@ export function ResultsList({
             activeIndex={activeIndex}
             setActiveIndex={setActiveIndex}
             onItemClick={() => {
-              handleActionIfResourceEdited(
-                isResourceEdited,
-                setIsResourceEdited,
-                () => {
-                  addHistoryEntry(result.query);
-                  result.onActivate();
-                },
-              );
+              addHistoryEntry(result.query);
+              result.onActivate();
             }}
           />
         ))
