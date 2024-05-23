@@ -21,7 +21,7 @@ export const CommandPaletteProvider = ({
   const setShowDialog = (value: boolean) => {
     const modalPresent = document.querySelector('ui5-dialog[open="true"]');
     // disable opening palette if other modal is present
-    if (!modalPresent || !value || !isResourceEdited.warningOpen) {
+    if (!modalPresent || !value || isResourceEdited.warningOpen) {
       _setShowDialog(value);
     }
   };
