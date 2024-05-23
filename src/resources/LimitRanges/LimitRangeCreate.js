@@ -22,7 +22,12 @@ export function LimitRangeCreate({
       createLimitRangeTemplate({ namespaceName: namespaceId }),
   );
   const { t } = useTranslation();
-  const [initialUnchangedResource] = useState(initialLimitRange);
+  const [initialUnchangedResource] = useState(
+    initialLimitRange ||
+      createLimitRangeTemplate({
+        namespaceName: namespaceId,
+      }),
+  );
 
   return (
     <ResourceForm
