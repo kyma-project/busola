@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useMemo, useState } from 'react';
+import React, { useRef, useEffect, useMemo } from 'react';
 import classnames from 'classnames';
 import jsyaml from 'js-yaml';
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
@@ -84,8 +84,7 @@ export function ResourceForm({
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
-  const [isEdited] = useState(!isResourceEdited.isEdited);
-  const [isSaved] = useState(!isResourceEdited.isSaved);
+  const { isEdited, isSaved } = isResourceEdited;
   useEffect(() => {
     if (
       !isEdited &&
@@ -93,7 +92,7 @@ export function ResourceForm({
       JSON.stringify(excludeStatus(resource)) !==
         JSON.stringify(excludeStatus(initialResource))
     ) {
-      setIsResourceEdited({ ...isResourceEdited, isEdited: true });
+      setIsResourceEdited({ isEdited: true });
     }
 
     if (
@@ -103,14 +102,7 @@ export function ResourceForm({
     ) {
       setIsResourceEdited({ isEdited: false, warningOpen: false });
     }
-  }, [
-    initialResource,
-    isEdited,
-    isResourceEdited,
-    isSaved,
-    resource,
-    setIsResourceEdited,
-  ]);
+  }, [initialResource, isEdited, isSaved, resource, setIsResourceEdited]);
 
   const { t } = useTranslation();
   const createResource = useCreateResource({
