@@ -21,15 +21,18 @@ function addCurrentCluster(
 ) {
   const { setCurrentCluster } = clustersInfo;
 
+  removePreviousPath();
+
   if (params.currentContext.namespace) {
+    console.log('REDIRECT TO NEW CLUSTER');
     clustersInfo.navigate(
       `/cluster/${params.contextName}/namespaces/${params.currentContext.namespace}`,
     );
   } else {
+    console.log('REDIRECT TO NEW CLUSTER');
     clustersInfo.navigate(`/cluster/${params.contextName}`);
   }
 
-  removePreviousPath();
   setCurrentCluster(params);
 }
 

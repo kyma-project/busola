@@ -41,7 +41,6 @@ export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
   console.log(handledKubeconfigId);
   useEffect(() => {
     console.log(search.get('kubeconfigID'));
-    console.log(window.location.pathname);
 
     if (initDone.current === true) {
       return;
