@@ -23,32 +23,13 @@ export const UI5Panel = ({
   children,
   description = '',
   style = null,
-  stickyHeader = false,
-  headerTop = '0',
 }) => {
-  useEffect(() => {
-    if (headerTop !== '0')
-      setTimeout(() => {
-        const stickyHeader = document
-          .querySelector('ui5-panel')
-          ?.shadowRoot?.querySelector('.ui5-panel-root')
-          ?.querySelector(
-            '.ui5-panel-heading-wrapper.ui5-panel-heading-wrapper-sticky',
-          );
-
-        if (stickyHeader) {
-          stickyHeader.style['top'] = headerTop;
-        }
-      });
-  });
-
   return (
     <Panel
       fixed={fixed}
       key={keyComponent}
       className={`${className} bsl-panel-header card-shadow`}
       style={style ? style : !disableMargin ? spacing.sapUiSmallMargin : null}
-      stickyHeader={stickyHeader}
       header={
         <Toolbar
           style={{

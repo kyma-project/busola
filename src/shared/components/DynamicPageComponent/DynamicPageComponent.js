@@ -221,20 +221,6 @@ export const DynamicPageComponent = ({
       </DynamicPageHeader>
     ) : null;
 
-  const [stickyHeaderHeight, setStickyHeaderHeight] = useState(0);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setStickyHeaderHeight(
-        (document.querySelector('.page-header')?.querySelector('header')
-          ?.clientHeight ?? 0) +
-          (document
-            .querySelector('.page-header')
-            ?.querySelector('ui5-tabcontainer')?.clientHeight ?? 0),
-      );
-    });
-  }, []);
-
   if (inlineEditForm) {
     return (
       <ObjectPage
@@ -282,7 +268,7 @@ export const DynamicPageComponent = ({
             showYamlTab ? t('common.tabs.yaml') : t('common.tabs.edit')
           }
         >
-          {inlineEditForm(stickyHeaderHeight)}
+          {inlineEditForm()}
         </ObjectPageSection>
       </ObjectPage>
     );
@@ -299,11 +285,7 @@ export const DynamicPageComponent = ({
       headerContent={headerContent}
       footer={footer}
     >
-      {({ stickyHeaderHeight }) => {
-        return typeof content === 'function'
-          ? content(stickyHeaderHeight)
-          : content;
-      }}
+      {content}
     </DynamicPage>
   );
 };

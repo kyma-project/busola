@@ -62,7 +62,6 @@ export function ResourceForm({
   yamlSearchDisabled,
   yamlHideDisabled,
   isEdit,
-  stickyHeaderHeight,
   resetLayout,
 }) {
   // readonly schema ID, set only once
@@ -258,8 +257,6 @@ export function ResourceForm({
         className="resource-form--panel card-shadow"
         style={spacing.sapUiSmallMarginTopBottom}
         disableMargin
-        stickyHeader={true}
-        headerTop={stickyHeaderHeight + 'px'}
         headerActions={
           <>
             {actions}
