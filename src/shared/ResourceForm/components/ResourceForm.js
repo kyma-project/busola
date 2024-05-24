@@ -103,7 +103,6 @@ export function ResourceForm({
           JSON.stringify(excludeStatus(initialResource)) &&
         (isResourceEdited.isEdited || isResourceEdited.isSaved)
       ) {
-        setHasChanged(true);
         setIsResourceEdited({ isEdited: false, warningOpen: false });
       }
     }
