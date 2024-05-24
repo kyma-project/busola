@@ -20,11 +20,10 @@ export default function PodCreate({
   const [pod, setPod] = useState(
     _.cloneDeep(initialPod) || createPodTemplate(namespaceId),
   );
+  const [initialResource] = useState(
+    initialPod || createPodTemplate(namespaceId),
+  );
   const { t } = useTranslation();
-
-  if (!initialPod) {
-    initialPod = createPodTemplate(namespaceId);
-  }
 
   return (
     <ResourceForm
@@ -32,7 +31,7 @@ export default function PodCreate({
       pluralKind="pods"
       singularName={t('pods.name_singular')}
       resource={pod}
-      initialResource={initialPod}
+      initialResource={initialResource}
       setResource={setPod}
       onChange={onChange}
       formElementRef={formElementRef}

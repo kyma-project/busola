@@ -44,6 +44,9 @@ export default function ServiceAccountCreate({
     cloneDeep(initialServiceAccount) || createServiceAccountTemplate(namespace),
   );
   const [initialUnchangedResource] = useState(initialServiceAccount);
+  const [initialResource] = useState(
+    initialServiceAccount || createServiceAccountTemplate(namespace),
+  );
 
   const [shouldCreateSecret, setShouldCreateSecret] = useState(false);
 
@@ -93,10 +96,6 @@ export default function ServiceAccountCreate({
     }
   }
 
-  if (!initialServiceAccount) {
-    initialServiceAccount = createServiceAccountTemplate(namespace);
-  }
-
   return (
     <ResourceForm
       {...props}
@@ -107,7 +106,7 @@ export default function ServiceAccountCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
-      initialResource={initialServiceAccount}
+      initialResource={initialResource}
       initialUnchangedResource={initialUnchangedResource}
       afterCreatedFn={afterServiceAccountCreate}
     >

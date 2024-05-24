@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { CommandPaletteUI } from './CommandPalletteUI/CommandPaletteUI';
 import { useEventListener } from 'hooks/useEventListener';
 import { K8sResource } from 'types';
@@ -18,16 +18,10 @@ export const CommandPaletteProvider = ({
     Record<string, K8sResource[]>
   >();
 
-  useEffect(() => {
-    if (isResourceEdited.warningOpen) {
-      setShowDialog(false);
-    }
-  }, [isResourceEdited]);
-
   const setShowDialog = (value: boolean) => {
     const modalPresent = document.querySelector('ui5-dialog[open="true"]');
     // disable opening palette if other modal is present
-    if (!modalPresent || !value) {
+    if (!modalPresent || !value || isResourceEdited.warningOpen) {
       _setShowDialog(value);
     }
   };

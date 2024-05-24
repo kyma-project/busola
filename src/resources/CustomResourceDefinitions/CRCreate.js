@@ -21,6 +21,9 @@ function CRCreate({
     cloneDeep(initialCustomResource) || createTemplate(crd),
   );
   const [initialUnchangedResource] = useState(initialCustomResource);
+  const [initialResource] = useState(
+    initialCustomResource || createTemplate(crd),
+  );
   const currUrl = window.location.href;
 
   const customUrl = useCustomResourceUrl(
@@ -48,17 +51,13 @@ function CRCreate({
     crd.spec.names.plural
   }${createUrlResourceName}`;
 
-  if (!initialCustomResource) {
-    initialCustomResource = createTemplate(crd);
-  }
-
   return (
     <ResourceForm
       {...props}
       pluralKind={crd.spec.names.plural}
       singularName={crd.spec.names.kind}
       resource={cr}
-      initialResource={initialCustomResource}
+      initialResource={initialResource}
       initialUnchangedResource={initialUnchangedResource}
       setResource={setCr}
       onChange={onChange}

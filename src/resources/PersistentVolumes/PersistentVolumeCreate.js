@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as _ from 'lodash';
 
@@ -17,11 +17,10 @@ export default function PersistentVolumeCreate({
   const [pv, setPv] = useState(
     _.cloneDeep(initialPersistentVolume) || createPersistentVolumeTemplate(),
   );
+  const [initialResource] = useState(
+    initialPersistentVolume || createPersistentVolumeTemplate(),
+  );
   const { t } = useTranslation();
-
-  if (!initialPersistentVolume) {
-    initialPersistentVolume = createPersistentVolumeTemplate();
-  }
 
   return (
     <ResourceForm
@@ -29,7 +28,7 @@ export default function PersistentVolumeCreate({
       pluralKind="persistentvolumes"
       singularName={t('pv.name_singular')}
       resource={pv}
-      initialResource={initialPersistentVolume}
+      initialResource={initialResource}
       setResource={setPv}
       onlyYaml
       onChange={onChange}

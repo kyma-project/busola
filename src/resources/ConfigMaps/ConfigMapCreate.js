@@ -22,12 +22,11 @@ export default function ConfigMapCreate({
       : createConfigMapTemplate(namespace || ''),
   );
   const [initialUnchangedResource] = useState(initialConfigMap);
+  const [initialResource] = useState(
+    initialConfigMap || createConfigMapTemplate(namespace || ''),
+  );
 
   const { t } = useTranslation();
-
-  if (!initialConfigMap) {
-    initialConfigMap = createConfigMapTemplate(namespace || '');
-  }
 
   return (
     <ResourceForm
@@ -35,7 +34,7 @@ export default function ConfigMapCreate({
       pluralKind="configmaps"
       singularName={t('config-maps.name_singular')}
       resource={configMap}
-      initialResource={initialConfigMap}
+      initialResource={initialResource}
       initialUnchangedResource={initialUnchangedResource}
       setResource={setConfigMap}
       onChange={onChange}

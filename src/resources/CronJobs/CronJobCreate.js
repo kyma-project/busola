@@ -39,21 +39,20 @@ export default function CronJobCreate({
     cloneDeep(initialCronJob) || createCronJobTemplate(namespace),
   );
   const [initialUnchangedResource] = useState(initialCronJob);
+  const [initialResource] = useState(
+    initialCronJob || createCronJobTemplate(namespace),
+  );
 
   useEffect(() => {
     setCustomValid(isCronJobValid(cronJob));
   }, [cronJob, setCustomValid]);
-
-  if (!initialCronJob) {
-    initialCronJob = createCronJobTemplate(namespace);
-  }
 
   return (
     <ResourceForm
       {...props}
       pluralKind="cronjobs"
       singularName={t(`cron-jobs.name_singular`)}
-      initialResource={initialCronJob}
+      initialResource={initialResource}
       initialUnchangedResource={initialUnchangedResource}
       resource={cronJob}
       setResource={setCronJob}

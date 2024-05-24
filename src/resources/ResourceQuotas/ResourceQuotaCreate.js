@@ -22,13 +22,11 @@ export function ResourceQuotaCreate({
     _.cloneDeep(initialResourceQuota) ||
       createResourceQuotaTemplate({ namespaceName: namespaceId }),
   );
+  const [initialResource] = useState(
+    initialResourceQuota ||
+      createResourceQuotaTemplate({ namespaceName: namespaceId }),
+  );
   const { t } = useTranslation();
-
-  if (!initialResourceQuota) {
-    initialResourceQuota = createResourceQuotaTemplate({
-      namespaceName: namespaceId,
-    });
-  }
 
   return (
     <ResourceForm
@@ -36,7 +34,7 @@ export function ResourceQuotaCreate({
       pluralKind="resourceQuotas"
       singularName={t('resource-quotas.name_singular')}
       resource={resourceQuota}
-      initialResource={initialResourceQuota}
+      initialResource={initialResource}
       setResource={setResourceQuota}
       onChange={onChange}
       formElementRef={formElementRef}

@@ -40,6 +40,9 @@ export function GenericRoleBindingCreate({
     cloneDeep(initialRoleBinding) || createBindingTemplate(namespace),
   );
   const [initialUnchangedResource] = useState(initialRoleBinding);
+  const [initialResource] = useState(
+    initialRoleBinding || createBindingTemplate(namespace),
+  );
 
   React.useEffect(() => {
     setCustomValid(validateBinding(binding));
@@ -71,10 +74,6 @@ export function GenericRoleBindingCreate({
     (!namespace ? false : namespaceRolesLoading) || clusterRolesLoading;
   const rolesError = namespaceRolesError || clusterRolesError;
 
-  if (!initialRoleBinding) {
-    initialRoleBinding = createBindingTemplate(namespace);
-  }
-
   return (
     <ResourceForm
       {...props}
@@ -85,7 +84,7 @@ export function GenericRoleBindingCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
-      initialResource={initialRoleBinding}
+      initialResource={initialResource}
       initialUnchangedResource={initialUnchangedResource}
       nameProps={{ pattern: '.*', showHelp: false }}
       handleNameChange={name => {
