@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useMemo } from 'react';
+import React, { useRef, useEffect, useMemo, useState } from 'react';
 import classnames from 'classnames';
 import jsyaml from 'js-yaml';
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
@@ -62,9 +62,10 @@ export function ResourceForm({
   yamlSearchDisabled,
   yamlHideDisabled,
   isEdit,
-  stickyHeaderHeight,
+  // stickyHeaderHeight,
   resetLayout,
 }) {
+  // console.log(stickyHeaderHeight);
   // readonly schema ID, set only once
   const resourceSchemaId = useMemo(
     () => resource?.apiVersion + '/' + resource?.kind,
@@ -84,25 +85,36 @@ export function ResourceForm({
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
+  const [hasChanged, setHasChanged] = useState(false);
 
   useEffect(() => {
-    if (
-      !isResourceEdited.isEdited &&
-      !isResourceEdited.isSaved &&
-      JSON.stringify(excludeStatus(resource)) !==
-        JSON.stringify(excludeStatus(initialResource))
-    ) {
-      setIsResourceEdited({ ...isResourceEdited, isEdited: true });
-    }
+    if (!hasChanged) {
+      if (
+        !isResourceEdited.isEdited &&
+        !isResourceEdited.isSaved &&
+        JSON.stringify(excludeStatus(resource)) !==
+          JSON.stringify(excludeStatus(initialResource))
+      ) {
+        setHasChanged(true);
+        setIsResourceEdited({ ...isResourceEdited, isEdited: true });
+      }
 
-    if (
-      JSON.stringify(excludeStatus(resource)) ===
-        JSON.stringify(excludeStatus(initialResource)) &&
-      (isResourceEdited.isEdited || isResourceEdited.isSaved)
-    ) {
-      setIsResourceEdited({ isEdited: false, warningOpen: false });
+      if (
+        JSON.stringify(excludeStatus(resource)) !==
+          JSON.stringify(excludeStatus(initialResource)) &&
+        (isResourceEdited.isEdited || isResourceEdited.isSaved)
+      ) {
+        setHasChanged(true);
+        setIsResourceEdited({ isEdited: false, warningOpen: false });
+      }
     }
-  }, [initialResource, isResourceEdited, resource, setIsResourceEdited]);
+  }, [
+    hasChanged,
+    initialResource,
+    isResourceEdited,
+    resource,
+    setIsResourceEdited,
+  ]);
 
   const { t } = useTranslation();
   const createResource = useCreateResource({
@@ -258,8 +270,8 @@ export function ResourceForm({
         className="resource-form--panel card-shadow"
         style={spacing.sapUiSmallMarginTopBottom}
         disableMargin
-        stickyHeader={true}
-        headerTop={stickyHeaderHeight + 'px'}
+        // stickyHeader={true}
+        // headerTop={stickyHeaderHeight + 'px'}
         headerActions={
           <>
             {actions}
