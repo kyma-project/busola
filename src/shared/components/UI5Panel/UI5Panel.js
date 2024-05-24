@@ -9,7 +9,6 @@ import {
 
 import { spacing } from '@ui5/webcomponents-react-base';
 import './UI5Panel.scss';
-import { useEffect } from 'react';
 
 export const UI5Panel = ({
   fixed = true,
