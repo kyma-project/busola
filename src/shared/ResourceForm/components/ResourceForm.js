@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useMemo } from 'react';
+import React, { useRef, useEffect, useMemo, useState } from 'react';
 import classnames from 'classnames';
 import jsyaml from 'js-yaml';
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
@@ -20,13 +20,13 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { editViewModeState } from 'state/preferences/editViewModeAtom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 
-// const excludeStatus = resource => {
-//   const modifiedResource = { ...resource };
-//   delete modifiedResource.status;
-//   delete modifiedResource.metadata?.resourceVersion;
-//   delete modifiedResource.metadata?.managedFields;
-//   return modifiedResource;
-// };
+const excludeStatus = resource => {
+  const modifiedResource = { ...resource };
+  delete modifiedResource.status;
+  delete modifiedResource.metadata?.resourceVersion;
+  delete modifiedResource.metadata?.managedFields;
+  return modifiedResource;
+};
 
 export function ResourceForm({
   pluralKind, // used for the request path
@@ -84,10 +84,30 @@ export function ResourceForm({
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
+  const [isEdited] = useState(!isResourceEdited.isEdited);
+  const [isSaved] = useState(!isResourceEdited.isSaved);
+  useEffect(() => {
+    if (
+      !isEdited &&
+      !isSaved &&
+      JSON.stringify(excludeStatus(resource)) !==
+        JSON.stringify(excludeStatus(initialResource))
+    ) {
+      setIsResourceEdited({ ...isResourceEdited, isEdited: true });
+    }
 
-  useEffect(() => {}, [
+    if (
+      JSON.stringify(excludeStatus(resource)) ===
+        JSON.stringify(excludeStatus(initialResource)) &&
+      (isEdited || isSaved)
+    ) {
+      setIsResourceEdited({ isEdited: false, warningOpen: false });
+    }
+  }, [
     initialResource,
+    isEdited,
     isResourceEdited,
+    isSaved,
     resource,
     setIsResourceEdited,
   ]);
