@@ -1,1 +1,3671 @@
-[]
+general:
+  resource:
+    kind: Application
+    group: applicationconnector.kyma-project.io
+    version: v1alpha1
+  urlPath: applications
+  scope: cluster
+  name: Applications
+  category: Integration
+  description: >-
+    {{[Application](https://kyma-project.io/#/application-connector-manager/user/README)}}
+    represents an external solution connected to Kyma.
+details:
+  header:
+    - name: headers.description
+      source: spec.description
+    - name: headers.access-label
+      source: spec.accessLabel
+  body:
+    - widget: Table
+      source: spec.services
+      name: headers.services-and-events
+      children:
+        - source: $count($item.entries[type='API'])
+          name: headers.apis
+        - source: $count($item.entries[type='Events'])
+          name: headers.events
+        - source: $item.providerDisplayName
+          name: headers.provider
+      collapsibleTitle: $item.displayName
+      collapsible:
+        - widget: Plain
+          children:
+            - source: $item.longDescription
+        - widget: Table
+          name: headers.apis
+          source: $item.entries[type = 'API']
+          children:
+            - source: $item.name
+              name: headers.name
+            - source: $item.accessLabel
+              name: headers.access-label
+            - widget: ExternalLink
+              source: $item.centralGatewayUrl
+              name: headers.gateway-url
+              copyable: true
+        - widget: Table
+          name: headers.events
+          source: $item.entries[type = 'Events']
+          children:
+            - source: $item.name
+              name: headers.name
+            - source: $item.accessLabel
+              name: headers.access-label
+            - widget: ExternalLink
+              source: $item.centralGatewayUrl
+              name: headers.gateway-url
+              copyable: true
+form:
+  - path: metadata.name
+    extraPaths:
+      - spec.accessLabel
+      - metadata.labels['app.kubernetes.io/name']
+  - path: spec.description
+    placeholder: placeholders.description
+  - path: spec.accessLabel
+translations:
+  en:
+    headers:
+      access-label: Access Label
+      apis: APIs
+      description: Description
+      events: Events
+      gateway-url: Central Gateway URL
+      name: Name
+      provider: Provider
+      services-and-events: Provided Services and Events
+    placeholders:
+      description: Provide a description for your Application
+---
+details:
+  header:
+    - name: Replicas
+      widget: Badge
+      source: >-
+        $string($count($filter($replicas().items, function($r){ $r.status.phase
+        = 'Running'}))) & '/' & $string($count($replicas().items))
+      highlights:
+        negative: >-
+          $count($replicas().items) != $count($filter($replicas().items,
+          function($r){ $r.status.phase = 'Running'}))
+        warning: >-
+          $count($replicas().items) = 0 and $count($filter($replicas().items,
+          function($r){ $r.status.phase = 'Running'}) = 0)
+        positive: >-
+          $count($replicas().items) = $count($filter($replicas().items,
+          function($r){ $r.status.phase = 'Running'}))
+    - name: header.status
+      widget: Badge
+      highlights:
+        positive:
+          - RUNNING
+        negative:
+          - FAILED
+          - ERROR
+        informative:
+          - INITIALIZING
+        critical:
+          - DEPLOYING
+          - BUILDING
+          - PENDING
+      source: >-
+        ($.status = undefined or $.status.conditions = undefined or
+        $count($.status.conditions) = 0) ? 'INITIALIZING' :
+        $count($filter($.status.conditions, function($v) { $v.status = 'False'
+        })) != 0 ? $count($filter($.status.conditions, function($v) { $v.type =
+        'Running' and $v.status = 'True' })) != 0 ? 'ERROR' : 'FAILED' :
+        $count($filter($.status.conditions, function($v) { $v.type =
+        'ConfigurationReady' and $v.status = 'True' })) != 0 ?
+        $count($filter($.status.conditions, function($v) { $v.type =
+        'BuildReady' and $v.status = 'True' })) != 0 ?
+        $count($filter($.status.conditions, function($v) { $v.type = 'Running'
+        and $v.status = 'True' })) != 0 ? 'RUNNING' :
+        $count($filter($.status.conditions, function($v) { $v.type = 'Running'
+        and $v.status = 'Unknown' and $v.reason = 'MinReplicasNotAvailable' }))
+        != 0 ? 'PENDING' : 'DEPLOYING' : 'BUILDING' : 'INITIALIZING' 
+      description: >-
+        ($.status = undefined or $.status.conditions = undefined or
+        $count($.status.conditions) = 0) ? null :
+        $count($filter($.status.conditions, function($v) { $v.status = 'False'
+        })) != 0 ? $count($filter($.status.conditions, function($v) { $v.type =
+        'Running' and $v.status = 'True' })) != 0 ? 'New revision error: ' &
+        $filter($.status.conditions, function($v) { $v.status = 'False'
+        })[0].message : 'Error: ' & $filter($.status.conditions, function($v) {
+        $v.status = 'False' })[0].message : null 
+    - name: header.sourceType
+      source: 'spec.source.gitRepository ? "Git Repository" : "Inline Editor"'
+    - name: header.runtime
+      source: >-
+        spec.runtime = 'python39' ? 'Python 3.9 - deprecated' : (spec.runtime =
+        'nodejs18' ? 'Node.js 18 - deprecated' : (spec.runtime = 'python312' ?
+        'Python 3.12' : (spec.runtime = 'nodejs20' ? 'Node.js 20' :
+        spec.runtime)))
+  body:
+    - widget: Tabs
+      children:
+        - name: tabs.code
+          children:
+            - source: spec.source.inline.source
+              widget: CodeViewer
+              name: code.source
+              language: '$contains($root.spec.runtime, "python") ? "python": "javascript"'
+              visibility: $exists($value)
+            - source: spec.source.inline.dependencies
+              widget: CodeViewer
+              name: code.dependencies
+              language: '"json"'
+              visibility: $exists($value)
+            - source: spec.source.gitRepository
+              widget: Panel
+              name: code.gitRepositoryConfig
+              visibility: $exists($value)
+              children:
+                - name: code.gitRepository.url
+                  source: url
+                - name: code.gitRepository.reference
+                  source: reference
+                - name: code.gitRepository.baseDir
+                  source: baseDir
+                - name: code.gitRepository.auth
+                  visibility: $exists($value)
+                  widget: Panel
+                  source: auth
+                  children:
+                    - name: code.gitRepository.auth.secretName
+                      widget: ResourceLink
+                      source: secretName
+                      resource:
+                        kind: '''Secret'''
+                        name: secretName
+                        namespace: $root.metadata.namespace
+                    - name: code.gitRepository.auth.type
+                      source: type
+            - source: spec.env
+              widget: Table
+              name: code.env
+              children:
+                - source: $item.name
+                  name: code.env.name
+                - source: $item.value
+                  name: code.env.value
+                - name: code.env.valueFrom
+                  widget: ResourceLink
+                  source: >-
+                    $exists($item.valueFrom.configMapKeyRef)?
+                    $item.valueFrom.configMapKeyRef.name :
+                    $item.valueFrom.secretKeyRef.name
+                  resource:
+                    name: >-
+                      $exists($item.valueFrom.configMapKeyRef) ?
+                      $item.valueFrom.configMapKeyRef.name :
+                      $item.valueFrom.secretKeyRef.name
+                    namespace: $root.metadata.namespace
+                    kind: >-
+                      $exists($item.valueFrom.configMapKeyRef) ? 'ConfigMap' :
+                      'Secret'
+                - name: code.env.source
+                  widget: Badge
+                  source: >-
+                    $exists($item.value) ? 'CUSTOM' :
+                    $exists($item.valueFrom.configMapKeyRef) ? 'CONFIG MAP' :
+                    'SECRET'
+                - name: code.env.key
+                  source: >-
+                    $exists($item.valueFrom.configMapKeyRef) ?
+                    $item.valueFrom.configMapKeyRef.key :
+                    $exists($item.valueFrom.secretKeyRef) ?
+                    $item.valueFrom.secretKeyRef.key : 'N/A'
+            - widget: ResourceList
+              source: $replicas()
+              name: code.replicas
+              disableCreate: true
+            - widget: EventList
+              filter: $matchEvents($item, $root.kind, $root.metadata.name)
+              name: events
+              defaultType: information
+              hideInvolvedObjects: true
+        - name: tabs.configuration
+          children:
+            - widget: ResourceList
+              source: $apiRules()
+              name: configuration.apiRules
+              disableCreate: true
+            - widget: ResourceList
+              source: $subscriptions()
+              name: configuration.subscriptions
+              disableCreate: true
+        - name: tabs.resources
+          children:
+            - widget: Panel
+              description: resources.description
+              name: resources.scalingOptions
+              visibility: >-
+                $exists(spec.scaleConfig.minReplicas) or
+                $exists(spec.scaleConfig.maxReplicas)
+              children:
+                - name: resources.minReplicas
+                  source: spec.scaleConfig.minReplicas
+                - name: resources.maxReplicas
+                  source: spec.scaleConfig.maxReplicas
+            - widget: Columns
+              inline: false
+              children:
+                - name: resources.runtimeProfile
+                  widget: Panel
+                  children:
+                    - name: resources.requests.memory
+                      source: >-
+                        spec.resourceConfiguration.function.resources.requests.memory
+                    - name: resources.requests.cpu
+                      source: >-
+                        spec.resourceConfiguration.function.resources.requests.cpu
+                    - name: resources.limits.memory
+                      source: >-
+                        spec.resourceConfiguration.function.resources.limits.memory
+                    - name: resources.limits.cpu
+                      source: spec.resourceConfiguration.function.resources.limits.cpu
+                - name: resources.buildProfile
+                  widget: Panel
+                  children:
+                    - name: resources.requests.memory
+                      source: >-
+                        spec.resourceConfiguration.build.resources.requests.memory
+                    - name: resources.requests.cpu
+                      source: spec.resourceConfiguration.build.resources.requests.cpu
+                    - name: resources.limits.memory
+                      source: spec.resourceConfiguration.build.resources.limits.memory
+                    - name: resources.limits.cpu
+                      source: spec.resourceConfiguration.build.resources.limits.cpu
+form:
+  - var: sourceType
+    widget: Text
+    enum:
+      - Inline
+      - Git Repository
+    dynamicValue: '$exists(spec.source.gitRepository) ? "Git Repository" : "Inline"'
+    name: header.sourceType
+    trigger:
+      - sourceType
+  - simple: true
+    type: string
+    name: Language
+    var: language
+    required: true
+    enum:
+      - JavaScript
+      - Python
+    trigger:
+      - language
+    dynamicValue: |
+      spec.runtime in ['nodejs18', 'nodejs20'] ? 'JavaScript' :
+      spec.runtime in ['python39', 'python312'] ? 'Python' :
+      ''
+  - simple: true
+    path: spec.runtime
+    placeholder: placeholders.spec.runtime
+    enum: |
+      $language = 'JavaScript' ? ['nodejs18', 'nodejs20'] :
+      $language = 'Python' ? ['python39', 'python312'] :
+      []
+    subscribe:
+      language: >
+        $language = 'JavaScript' ? ($exists($root.spec.runtime) and
+        $root.spec.runtime != 'python39') ? $root.spec.runtime : 'nodejs20' :
+
+        $language = 'Python' ? 'python39' :
+
+        ''
+  - path: spec.resourceConfiguration.function.profile
+    simple: true
+    enum:
+      - XS
+      - S
+      - M
+      - L
+      - XL
+  - path: spec.source.inline
+    visibility: $sourceType = 'Inline'
+    simple: true
+    children:
+      - path: source
+        widget: CodeEditor
+        simple: true
+        language: '$contains($root.spec.runtime, "node") ? "javascript" : "python"'
+        defaultExpanded: true
+        subscribe:
+          sourceType: >-
+            $sourceType = 'Inline' ? $language = 'JavaScript' ?
+            $exists($root.metadata.creationTimestamp) ?
+            $root.spec.source.inline.source : "/*
+
+            If you prefer mjs import/export syntax over cjs you need to specify
+              'type': 'module'
+            in the Function dependencies (package.json) and along with that
+            change the import/export syntax to:
+
+            import foo from 'foo'
+
+            export function main(event, context) {
+              //your logic using foo library
+              return
+            }
+
+            */
+
+
+            module.exports = {
+              main: async function (event, context) {
+                var queryParams = event['extensions']['request']['query'];
+                //read query param, for example `?greeting=Hi`
+                var greetingMsg = queryParams['greeting']; 
+                if(!greetingMsg) {
+                  greetingMsg = 'Hello world';
+                } 
+                const message = greetingMsg
+                  + ` from the Kyma Function ${context['function-name']}`
+                  + ` running on ${context.runtime}!`;
+                console.log(message);
+                return message;
+              }
+            }" :
+
+            $language = 'Python' ? $exists($root.metadata.creationTimestamp) ?
+            $root.spec.source.inline.source : "def main(event, context):
+                request = event['extensions']['request']
+                greetingMsg = request.query.get('greeting')
+                if not greetingMsg:
+                  greetingMsg = 'Hello world'
+                message = greetingMsg + ' from the Kyma Function '+context['function-name']+' running on '+context['runtime']+ '!';
+                print(message)
+                return message" :
+            '' : ''
+          language: >-
+            $language = 'JavaScript' ? $exists($root.metadata.creationTimestamp)
+            ? $root.spec.source.inline.source : "/*
+
+            If you prefer mjs import/export syntax over cjs you need to specify
+              'type': 'module'
+            in the Function dependencies (package.json) and along with that
+            change the import/export syntax to:
+
+            import foo from 'foo'
+
+            export function main(event, context) {
+              //your logic using foo library
+              return
+            }
+
+            */
+
+
+            module.exports = {
+              main: async function (event, context) {
+                var queryParams = event['extensions']['request']['query'];
+
+                //read query param, for example `?greeting=Hi`
+                var greetingMsg = queryParams['greeting']; 
+                if(!greetingMsg) {
+                  greetingMsg = 'Hello world';
+                } 
+                const message = greetingMsg
+                  + ` from the Kyma Function ${context['function-name']}`
+                  + ` running on ${context.runtime}!`;
+                console.log(message);
+                return message;
+              }
+            }" :
+
+            $language = 'Python' ? $exists($root.metadata.creationTimestamp) ?
+            $root.spec.source.inline.source : "def main(event, context):
+                request = event['extensions']['request']
+                greetingMsg = request.query.get('greeting')
+                if not greetingMsg:
+                  greetingMsg = 'Hello world'
+                message = greetingMsg + ' from the Kyma Function '+context['function-name']+' running on '+context['runtime']+ '!';
+                print(message)
+                return message" :
+            ''
+      - path: dependencies
+        widget: CodeEditor
+        formatAsString: true
+        language: '$contains($root.spec.runtime, "node") ? "json" : "plaintext"'
+  - path: spec.source.gitRepository
+    widget: FormGroup
+    visibility: $sourceType = 'Git Repository'
+    defaultExpanded: true
+    children:
+      - path: url
+      - path: baseDir
+        required: true
+      - path: reference
+        required: true
+      - var: useAuthorization
+        type: boolean
+        name: code.gitRepository.auth
+        dynamicValue: $exists($.spec.source.gitRepository.auth)
+      - widget: FormGroup
+        path: auth
+        visibility: $useAuthorization
+        children:
+          - path: secretName
+            widget: Resource
+            resource:
+              kind: Secret
+              version: v1
+              scope: namespace
+          - path: type
+  - path: spec.scaleConfig
+    widget: FormGroup
+    columns: '2'
+    children:
+      - advanced: true
+        path: minReplicas
+        required: false
+        min: '1'
+      - advanced: true
+        path: maxReplicas
+        required: false
+        min: '1'
+  - path: spec.resourceConfiguration.function
+    widget: FormGroup
+    children:
+      - path: resources.limits
+        widget: KeyValuePair
+      - visibility: $boolean($root.spec.resourceConfiguration.function.profile)
+        severity: warning
+        alert: '''alert.resources.limits'''
+        widget: Alert
+      - path: resources.requests
+        widget: KeyValuePair
+      - visibility: $boolean($root.spec.resourceConfiguration.function.profile)
+        severity: warning
+        alert: '''alert.resources.requests'''
+        widget: Alert
+  - path: spec.resourceConfiguration.build
+    widget: FormGroup
+    children:
+      - path: resources.limits
+        widget: KeyValuePair
+      - path: resources.requests
+        widget: KeyValuePair
+  - path: spec.env
+    widget: GenericList
+    children:
+      - path: '[]'
+        children:
+          - var: envType
+            widget: Text
+            name: spec.env.source
+            enum:
+              - Custom
+              - From Config Map
+              - From Secret
+            dynamicValue: >-
+              $exists($item.valueFrom.secretKeyRef) ? 'From Secret' :
+              ($exists($item.valueFrom.configMapKeyRef) ? 'From Config Map' :
+              'Custom')
+          - path: name
+          - path: value
+            visibility: $envType = 'Custom'
+          - path: valueFrom.secretKeyRef.name
+            widget: Resource
+            resource:
+              kind: Secret
+              version: v1
+              scope: namespace
+            provideVar: secret
+            visibility: $envType = 'From Secret'
+          - path: valueFrom.secretKeyRef.key
+            widget: Text
+            enum: $keys($secret.data)
+            visibility: $envType = 'From Secret'
+          - path: valueFrom.configMapKeyRef.name
+            widget: Resource
+            resource:
+              kind: ConfigMap
+              version: v1
+              scope: namespace
+            provideVar: configMap
+            visibility: $envType = 'From Config Map'
+          - path: valueFrom.configMapKeyRef.key
+            widget: Text
+            enum: $keys($configMap.data)
+            visibility: $envType = 'From Config Map'
+  - path: spec
+    widget: FormGroup
+    children:
+      - path: labels
+        widget: KeyValuePair
+        defaultExpanded: false
+      - path: annotations
+        widget: KeyValuePair
+        defaultExpanded: false
+general:
+  resource:
+    kind: Function
+    group: serverless.kyma-project.io
+    version: v1alpha2
+  name: Functions
+  category: Workloads
+  urlPath: functions
+  scope: namespace
+  description: >-
+    {{"{{[Function](https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/svls-01-function/#documentation-content/)}}"}}
+    is a simple code snippet that you can run without provisioning or managing
+    servers.
+list:
+  - name: header.runtime
+    source: >-
+      spec.runtime = 'python39' ? 'Python 3.9 - deprecated' : (spec.runtime =
+      'nodejs18' ? 'Node.js 18 - deprecated' : (spec.runtime = 'python312' ?
+      'Python 3.12' : (spec.runtime = 'nodejs20' ? 'Node.js 20' :
+      spec.runtime)))
+  - name: header.sourceType
+    source: 'spec.source.gitRepository ? "Git Repository" : "Inline Editor"'
+  - name: header.status
+    widget: Badge
+    highlights:
+      positive:
+        - RUNNING
+      negative:
+        - FAILED
+        - ERROR
+      informative:
+        - INITIALIZING
+      critical:
+        - DEPLOYING
+        - BUILDING
+        - PENDING
+    source: >-
+      ($.status = undefined or $.status.conditions = undefined or
+      $count($.status.conditions) = 0) ? 'INITIALIZING' :
+      $count($filter($.status.conditions, function($v) { $v.status = 'False' }))
+      != 0 ? $count($filter($.status.conditions, function($v) { $v.type =
+      'Running' and $v.status = 'True' })) != 0 ? 'ERROR' : 'FAILED' :
+      $count($filter($.status.conditions, function($v) { $v.type =
+      'ConfigurationReady' and $v.status = 'True' })) != 0 ?
+      $count($filter($.status.conditions, function($v) { $v.type = 'BuildReady'
+      and $v.status = 'True' })) != 0 ? $count($filter($.status.conditions,
+      function($v) { $v.type = 'Running' and $v.status = 'True' })) != 0 ?
+      'RUNNING' : $count($filter($.status.conditions, function($v) { $v.type =
+      'Running' and $v.status = 'Unknown' and $v.reason =
+      'MinReplicasNotAvailable' })) != 0 ? 'PENDING' : 'DEPLOYING' : 'BUILDING'
+      : 'INITIALIZING' 
+    description: >-
+      ($.status = undefined or $.status.conditions = undefined or
+      $count($.status.conditions) = 0) ? null :
+      $count($filter($.status.conditions, function($v) { $v.status = 'False' }))
+      != 0 ? $count($filter($.status.conditions, function($v) { $v.type =
+      'Running' and $v.status = 'True' })) != 0 ? 'New revision error: ' &
+      $filter($.status.conditions, function($v) { $v.status = 'False'
+      })[0].message : 'Error: ' & $filter($.status.conditions, function($v) {
+      $v.status = 'False' })[0].message : null
+dataSources:
+  replicas:
+    resource:
+      kind: Pod
+      version: v1
+    filter: >-
+      ($item.metadata.labels.'serverless.kyma-project.io/function-name' =
+      $root.metadata.name) and
+      ($item.metadata.labels.'serverless.kyma-project.io/resource' =
+      'deployment')
+  apiRules:
+    resource:
+      kind: APIRule
+      version: v1beta1
+      group: gateway.kyma-project.io
+    filter: $contains($item.spec.service.name, $root.metadata.name)
+  subscriptions:
+    resource:
+      kind: Subscription
+      version: v1alpha2
+      group: eventing.kyma-project.io
+    filter: $contains($item.spec.sink, $root.metadata.name)
+translations:
+  en:
+    tabs.code: Code
+    tabs.configuration: Configuration
+    tabs.resources: Resources
+    code.gitRepositoryConfig: Repository Configuration
+    code.replicas: Replicas of the Function
+    code.source: Source
+    code.dependencies: Dependencies
+    code.gitRepository.url: URL
+    code.gitRepository.reference: Reference
+    code.gitRepository.baseDir: Base Directory
+    code.gitRepository.auth: Auth
+    code.gitRepository.auth.secretName: Secret name
+    code.gitRepository.auth.type: Type
+    code.env: Environment Variables
+    code.env.name: Name
+    code.env.value: Value
+    code.env.valueFrom: Value From
+    code.env.source: Source
+    code.env.key: Key
+    events: Events
+    configuration.apiRules: API Rules
+    configuration.subscriptions: Subscriptions
+    header.runtime: Runtime
+    header.status: Status
+    header.sourceType: Source Type
+    resources.scalingOptions: Scaling Options
+    resources.minReplicas: Minimum Replicas
+    resources.maxReplicas: Maximum Replicas
+    resources.description: Minimum and maximum number of running Replicas.
+    resources.runtimeProfile: Runtime Profile
+    resources.buildProfile: Build Job Profile
+    resources.requests.memory: Memory Requests
+    resources.requests.cpu: CPU Requests
+    resources.limits.memory: Memory Limits
+    resources.limits.cpu: CPU Limits
+    spec.scaleConfig: Scale Config
+    spec.scaleConfig.maxReplicas: Max Replicas
+    spec.scaleConfig.minReplicas: Min Replicas
+    spec.source.inline.dependencies: Dependencies
+    spec.source.inline.source: Source
+    spec.env: Environment Variables
+    Requests: Requests
+    Limits: Limits
+    spec.runtime: Runtime
+    Status: Status
+    Runtime: Runtime
+    Source Type: Source Type
+    spec.runtime.nodejs18: Node.js 18 - deprecated
+    spec.runtime.nodejs20: Node.js 20
+    spec.runtime.python39: Python 3.9 - deprecated
+    spec.runtime.python312: Python 3.12
+    spec.resourceConfiguration.build: Build
+    spec.resourceConfiguration.function: Function
+    spec.resourceConfiguration.function.profile: Function profile
+    placeholders.spec.runtime: Choose Function runtime
+    spec.env.name: Variable Name
+    spec.env.source: Source
+    envType: Variable Type
+    Node.js Function: Node.js Function
+    Python Function: Python Function
+    alert.resources.requests: >-
+      If you want to provide your own requests configuration, leave the Function
+      profile field empty.
+    alert.resources.limits: >-
+      If you want to provide your own limits configuration, leave the Function
+      profile field empty.
+    spec.labels: Runtime Labels
+    spec.annotations: Runtime Annotations
+presets:
+  - name: Default
+    default: true
+    value:
+      spec:
+        resourceConfiguration:
+          function:
+            profile: XS
+  - name: Node.js Function
+    value:
+      spec:
+        runtime: nodejs20
+        source:
+          inline:
+            source: >-
+              /*
+
+              If you prefer mjs import/export syntax over cjs you need to
+              specify
+
+              'type': 'module'
+
+              in the Function dependencies (package.json) and along with that
+              change the import/export syntax to:
+
+              import foo from 'foo'
+
+              export function main(event, context) {
+                //your logic using foo library
+                return
+              }
+
+              */
+
+
+              module.exports = {
+                main: async function (event, context) {
+                  const message = `Hello World`
+                    + ` from the Kyma Function ${context["function-name"]}`
+                    + ` running on ${context.runtime}!`;
+                  console.log(message);
+                  return message;
+                }
+              }
+  - name: Python Function
+    value:
+      spec:
+        runtime: python312
+        source:
+          inline:
+            source: |-
+              def main(event, context):
+                  message = "Hello World from the Kyma Function "+context['function-name']+" running on "+context['runtime']+ "!";
+                  print(message)
+                  return message
+---
+details:
+  header:
+    - name: status
+      source: 'status.state ? status.state : "UNKNOWN"'
+      highlights:
+        unknown:
+          - UNKNOWN
+      widget: Badge
+      description: status.message
+    - name: status.expirationDate
+      source: $readableTimestamp(status.expirationDate)
+    - name: commonName
+      source: spec.commonName
+  body:
+    - name: references
+      widget: Panel
+      children:
+        - name: issuer
+          source: status.issuerRef.name
+        - name: secret
+          source: spec.secretRef.name
+          widget: ResourceLink
+          resource:
+            namespace: $root.spec.secretRef.namespace
+            kind: '''Secret'''
+            name: $root.spec.secretRef.name
+        - name: spec.csr
+          source: spec.csr
+        - name: metadata.annotations
+          source: metadata.annotations
+          widget: Labels
+        - name: spec.renew
+          source: spec.renew
+        - name: spec.dnsNames
+          source: spec.dnsNames
+          widget: Labels
+form:
+  - var: useCSR
+    dynamicValue: $exists(spec.csr)
+    simple: true
+    type: boolean
+    name: spec.useCSR
+  - simple: true
+    path: spec.commonName
+    required: true
+    placeholder: certificateCN
+    visibility: $useCSR = false
+  - simple: true
+    path: spec.csr
+    required: true
+    placeholder: spec.certSignReq
+    visibility: $useCSR
+    decodable: true
+    decodedPlaceholder: spec.certSignReqDecoded
+  - path: spec.dnsNames
+    widget: SimpleList
+    children:
+      - path: '[]'
+    placeholder: spec.additionalDomains
+  - name: issuer
+    path: spec.issuerRef
+    required: false
+    widget: ResourceRef
+    resource:
+      kind: Issuer
+      group: cert.gardener.cloud
+      version: v1alpha1
+  - path: spec.renew
+  - var: useExistingSecret
+    name: spec.useExisting
+    dynamicValue: $exists(spec.secretRef)
+    type: boolean
+  - path: spec.secretName
+    visibility: $useExistingSecret = false
+  - path: spec.secretRef.name
+    widget: Resource
+    resource:
+      kind: Secret
+      version: v1
+      scope: namespace
+    filter: $item.type ='kubernetes.io/tls'
+    defaultExpanded: true
+    required: true
+    visibility: $useExistingSecret
+general:
+  resource:
+    kind: Certificate
+    group: cert.gardener.cloud
+    version: v1alpha1
+  name: Certificates
+  category: Configuration
+  urlPath: certificates
+  scope: namespace
+  description: >-
+    {{[Certificate](https://cert-manager.io/docs/concepts/certificate/)}}
+    provides a definition of a certificate that is then processed by the
+    indicated issuer.
+list:
+  - name: commonName
+    source: status.commonName
+  - name: issuer
+    source: status.issuerRef.name
+  - name: status.expirationDate
+    source: $readableTimestamp(status.expirationDate)
+  - name: status
+    source: 'status.state ? status.state : "UNKNOWN"'
+    highlights:
+      unknown:
+        - UNKNOWN
+    widget: Badge
+    description: status.message
+translations:
+  en:
+    metadata.annotations: Annotations
+    metadata.labels: Labels
+    metadata.creationTimestamp: Created at
+    status: Status
+    status.expirationDate: Expiration Time
+    issuer: Issuer
+    commonName: Common Name
+    spec.secretRef: Secret to use
+    spec.useExisting: Use the existing Secret
+    spec.additionalDomains: Additional domain names, one per line
+    spec.dnsNames: DNS Names
+    spec.csr: CSR
+    spec.useCSR: Use a CSR
+    spec.certSignReq: Plain text Certificate Signing Request
+    spec.certSignReqDecoded: Base64-encoded Certificate Signing Request
+    spec.renew: Renew
+    certificateCN: Certificate CN (max 64 characters)
+    references: References
+    secret: Secret
+---
+details:
+  header:
+    - source: 'status.state ? status.state : "UNKNOWN"'
+      highlights:
+        informative:
+          - UNKNOWN
+      type: string
+      name: status
+      widget: Badge
+      description: status.message
+  body:
+    - name: Provider
+      widget: Panel
+      children:
+        - name: Provider
+          source: status.provider
+    - name: Specification
+      widget: Panel
+      children:
+        - name: spec.dnsName
+          source: spec.dnsName
+        - name: TTL
+          source: spec.ttl
+        - name: spec.targets
+          widget: JoinedArray
+          source: spec.targets
+form:
+  - simple: true
+    path: spec.dnsName
+    placeholder: dnsName.placeholder
+    required: true
+  - simple: true
+    name: TTL
+    placeholder: ttl.placeholder
+    path: spec.ttl
+    required: true
+  - path: spec.targets
+    widget: SimpleList
+    simple: true
+    defaultExpanded: true
+    required: true
+    name: spec.targets
+    children:
+      - widget: Text
+        simple: true
+        placeholder: target.placeholder
+  - path: spec.text
+    name: spec.text
+    widget: SimpleList
+    children:
+      - path: '[]'
+        simple: true
+    placeholder: text.placeholder
+    defaultExpanded: true
+general:
+  resource:
+    kind: DNSEntry
+    group: dns.gardener.cloud
+    version: v1alpha1
+  name: DNS Entries
+  category: Configuration
+  urlPath: dnsentries
+  scope: namespace
+  description: >-
+    {{[DNSEntry](https://kyma-project.io/docs/kyma/latest/03-tutorials/00-api-exposure/apix-02-setup-custom-domain-for-workload/)}}
+    is an object that represents the request to create an external DNS record.
+list:
+  - source: 'status.state ? status.state : "UNKNOWN"'
+    highlights:
+      informative:
+        - UNKNOWN
+    type: string
+    name: status
+    widget: Badge
+    description: status.message
+presets:
+  - name: template
+    default: true
+    value:
+      metadata:
+        annotations:
+          dns.gardener.cloud/class: garden
+      spec:
+        ttl: 600
+        dnsName: ''
+        targets: []
+        text: []
+        items: []
+        name: ''
+        bool: false
+translations:
+  en:
+    metadata.annotations: Annotations
+    metadata.labels: Labels
+    metadata.creationTimestamp: Created at
+    target.placeholder: Enter the A record target or CNAME record
+    spec.targets: Targets
+    spec.dnsName: DNSName
+    ttl.placeholder: Enter the time to live
+    spec.text: Text
+    dnsName.placeholder: Select the DNSName
+    text.placeholder: Text record must be a string. Provide either target or text.
+    status: Status
+---
+details:
+  header:
+    - source: spec.type
+      name: spec.type
+    - source: 'status.state ? status.state : "UNKNOWN"'
+      highlights:
+        informative:
+          - UNKNOWN
+      type: string
+      name: status
+      widget: Badge
+      description: status.message
+  body:
+    - widget: Columns
+      children:
+        - name: included.domains
+          widget: Table
+          disablePadding: true
+          showHeader: true
+          source: spec.domains.include
+          children:
+            - source: $item
+              name: included.domains
+              search: true
+        - name: excluded.domains
+          widget: Table
+          disablePadding: true
+          showHeader: true
+          source: spec.domains.exclude
+          children:
+            - source: $item
+              name: excluded.domains
+              search: true
+form:
+  - simple: true
+    path: spec.type
+    widget: Text
+    placeholder: provider.choose
+    enum:
+      - alicloud-dns
+      - aws-route53
+      - azure-dns
+      - google-clouddns
+      - openstack-designate
+      - cloudflare-dns
+      - infoblox-dns
+      - netlify-dns
+    required: true
+  - name: spec.secretRef
+    simple: true
+    path: spec.secretRef
+    widget: ResourceRef
+    provideVar: secret
+    resource:
+      kind: Secret
+      version: v1
+    defaultExpanded: true
+    required: true
+  - path: spec.domains.include
+    simple: true
+    widget: SimpleList
+    children:
+      - path: '[]'
+        simple: true
+    placeholder: domain.allowed
+    defaultExpanded: true
+    required: true
+  - path: spec.domains.exclude
+    widget: SimpleList
+    children:
+      - path: '[]'
+    placeholder: domain.forbidden
+general:
+  resource:
+    kind: DNSProvider
+    group: dns.gardener.cloud
+    version: v1alpha1
+  name: DNS Providers
+  category: Configuration
+  urlPath: dnsproviders
+  scope: namespace
+  description: >-
+    {{[DNSProvider](https://kyma-project.io/docs/kyma/latest/03-tutorials/00-api-exposure/apix-02-setup-custom-domain-for-workload/)}}
+    is used to specify and manage the configuration for the external DNS
+    services.
+list:
+  - name: spec.type
+    source: spec.type
+  - source: 'status.state ? status.state : "UNKNOWN"'
+    highlights:
+      informative:
+        - UNKNOWN
+    name: status
+    widget: Badge
+    description: status.message
+presets:
+  - name: template
+    default: true
+    value:
+      metadata:
+        annotations:
+          dns.gardener.cloud/class: garden
+translations:
+  en:
+    metadata.annotations: Annotations
+    metadata.labels: Labels
+    metadata.creationTimestamp: Created at
+    provider.choose: Choose Provider type
+    spec.type: Type
+    spec.type.alicloud-dns: Alicloud DNS provider
+    spec.type.aws-route53: AWS Route 53 provider
+    spec.type.azure-dns: Azure DNS provider
+    spec.type.google-clouddns: Google CloudDNS provider
+    spec.type.openstack-designate: Openstack Designate provider
+    spec.type.cloudflare-dns: Cloudflare DNS provider
+    spec.type.infoblox-dns: Infoblox DNS provider
+    spec.type.netlify-dns: Netlify DNS provider
+    spec.domains.include: Include Domains
+    spec.domains.exclude: Exclude Domains
+    included.domains: Included Domains
+    excluded.domains: Excluded Domains
+    domain.allowed: Domain that is allowed
+    domain.forbidden: Domain that is forbidden
+    spec.secretRef: Secret Reference
+    status: Status
+---
+details:
+  header:
+    - name: Status
+      source: >-
+        $filter(status.conditions, function($v, $i, $a) {$v.status =
+        'True'}).type
+      widget: Labels
+  body:
+    - name: Specification
+      widget: Panel
+      children:
+        - name: Min Replicas
+          source: spec.minReplicas
+        - name: Current Replicas
+          source: status.currentReplicas
+        - name: Max Replicas
+          source: spec.maxReplicas
+        - name: Scale Target Reference - Kind
+          source: spec.scaleTargetRef.kind
+        - name: Scale Target Reference - Name
+          source: spec.scaleTargetRef.name
+          widget: ResourceLink
+          resource:
+            name: spec.scaleTargetRef.name
+            namespace: $root.metadata.namespace
+            kind: spec.scaleTargetRef.kind
+    - widget: Columns
+      children:
+        - name: Scale-down behavior
+          source: spec.behavior.scaleDown
+          widget: Panel
+          visibility: $exists(spec.behavior.scaleDown)
+          children:
+            - name: Stabilization window (seconds)
+              source: stabilizationWindowSeconds
+            - name: Select policy
+              source: selectPolicy
+            - name: Policies
+              source: policies
+              widget: Table
+              disablePadding: true
+              showHeader: true
+              children:
+                - name: Type
+                  source: type
+                - name: Value
+                  source: value
+                - name: Period (seconds)
+                  source: periodSeconds
+        - name: Scale-up behavior
+          source: spec.behavior.scaleUp
+          visibility: $exists(spec.behavior.scaleUp)
+          widget: Panel
+          children:
+            - name: Stabilization window (seconds)
+              source: stabilizationWindowSeconds
+            - name: Select policy
+              source: selectPolicy
+            - name: Policies
+              source: policies
+              widget: Table
+              showHeader: true
+              disablePadding: true
+              children:
+                - name: Type
+                  source: type
+                - name: Value
+                  source: value
+                - name: Period (seconds)
+                  source: periodSeconds
+    - name: Metrics
+      source: spec.metrics
+      widget: Table
+      showHeader: true
+      children:
+        - name: Type
+          search: true
+          source: type
+        - name: Name
+          search: true
+          source: >-
+            $item.type = "Resource" ? $item.resource.name : $item.type = "Pods"
+            ? $item.pods.metric.name :  $item.type = "Object" ?
+            $item.object.metric.name : $item.external.metric.name
+        - name: Target Type
+          source: >-
+            $item.type = "Resource" ? $item.resource.target.type : $item.type =
+            "Pods" ? $item.pods.target.type :  $item.type = "Object" ?
+            $item.object.target.type : $item.external.target.type
+        - name: Current Metric
+          source: >-
+            $item.type = "Resource" ? ($item.resource.target.type =
+            "Utilization" ?  $join([$string($not($root.status.currentMetrics =
+            null) ?  ($single($root.status.currentMetrics, function($v, $i, $a)
+            {$v.resource.name =
+            $item.resource.name}).resource.current.averageUtilization & "%") :
+            "-"), " / ",$string($item.resource.target.averageUtilization),"%"]):
+            $join([$string($not($root.status.currentMetrics = null) ? 
+            $single($root.status.currentMetrics, function($v, $i, $a)
+            {$v.resource.name =
+            $item.resource.name}).resource.current.averageValue : "-"), " /
+            ",$string($item.resource.target.averageValue)])) : $item.type =
+            "Pods" ?  $join([$string($not($root.status.currentMetrics = null) ? 
+            $single($root.status.currentMetrics, function($v, $i, $a)
+            {$v.pods.metric.name =
+            $item.pods.metric.name}).pods.current.averageValue : "-"), " /
+            ",$string($item.pods.target.averageValue)]) : $item.type = "Object"
+            ?  ($item.object.target.type = "AverageValue" ? 
+            $join([$string($not($root.status.currentMetrics = null) ? 
+            $single($root.status.currentMetrics, function($v, $i, $a)
+            {$v.object.metric.name =
+            $item.object.metric.name}).object.current.averageValue : "-"), " /
+            ",$string($item.object.target.averageValue)]):
+            $join([$string($not($root.status.currentMetrics = null) ? 
+            $single($root.status.currentMetrics, function($v, $i, $a)
+            {$v.object.metric.name =
+            $item.object.metric.name}).object.current.value : "-"), " /
+            ",$string($item.object.target.value)])) :
+            ($item.external.target.type = "AverageValue" ? 
+            $join([$string($not($root.status.currentMetrics = null) ? 
+            $single($root.status.currentMetrics, function($v, $i, $a)
+            {$v.external.metric.name =
+            $item.external.metric.name}).external.current.averageValue : "-"), "
+            / ",$string($item.external.target.averageValue)]):
+            $join([$string($not($root.status.currentMetrics = null) ? 
+            $single($root.status.currentMetrics, function($v, $i, $a)
+            {$v.external.metric.name =
+            $item.external.metric.name}).external.current.value : "-"), " /
+            ",$string($item.external.target.value)]))
+    - widget: EventList
+      name: Events
+      filter: $matchEvents($$, $root.kind, $root.metadata.name)
+      hideInvolvedObjects: true
+form:
+  - name: minReplicas
+    simple: true
+    path: spec.minReplicas
+  - name: maxReplicas
+    simple: true
+    required: true
+    path: spec.maxReplicas
+  - path: spec.behavior
+    widget: FormGroup
+    children:
+      - path: scaleDown
+        widget: FormGroup
+        defaultExpanded: true
+        children:
+          - path: selectPolicy
+            enum:
+              - Min
+              - Max
+              - Disabled
+          - path: stabilizationWindowSeconds
+          - path: policies
+            defaultExpanded: true
+            widget: GenericList
+            children:
+              - path: '[].type'
+                enum:
+                  - Pods
+                  - Percent
+              - path: '[].value'
+              - path: '[].periodSeconds'
+      - path: scaleUp
+        widget: FormGroup
+        defaultExpanded: true
+        children:
+          - path: selectPolicy
+            enum:
+              - Min
+              - Max
+              - Disabled
+          - path: stabilizationWindowSeconds
+          - path: policies
+            defaultExpanded: true
+            widget: GenericList
+            children:
+              - path: '[].type'
+                enum:
+                  - Pods
+                  - Percent
+              - path: '[].value'
+              - path: '[].periodSeconds'
+                defaultValue: 0
+  - name: Scale Target Reference
+    simple: true
+    path: spec.scaleTargetRef
+    widget: FormGroup
+    required: true
+    defaultExpanded: true
+    children:
+      - simple: true
+        required: true
+        path: kind
+        enum:
+          - Pod
+          - Deployment
+          - ReplicaSet
+          - StatefulSet
+      - simple: true
+        required: true
+        path: name
+        widget: Resource
+        resource:
+          scope: namespace
+          kind: Pod
+          version: v1
+        visibility: spec.scaleTargetRef.kind = "Pod"
+        overwrite: false
+      - simple: true
+        var: separator
+        value: ''
+      - simple: true
+        required: true
+        path: name
+        widget: Resource
+        resource:
+          scope: namespace
+          kind: Deployment
+          group: apps
+          version: v1
+        visibility: spec.scaleTargetRef.kind = "Deployment"
+        overwrite: false
+      - simple: true
+        var: separator
+        value: ''
+      - simple: true
+        required: true
+        path: name
+        widget: Resource
+        resource:
+          scope: namespace
+          kind: ReplicaSet
+          group: apps
+          version: v1
+        visibility: spec.scaleTargetRef.kind = "ReplicaSet"
+        overwrite: false
+      - simple: true
+        var: separator
+        value: ''
+      - simple: true
+        required: true
+        path: name
+        widget: Resource
+        resource:
+          scope: namespace
+          kind: StatefulSet
+          group: apps
+          version: v1
+        visibility: spec.scaleTargetRef.kind = "StatefulSet"
+        overwrite: false
+      - simple: true
+        var: separator
+        value: ''
+      - simple: true
+        required: true
+        path: name
+        visibility: >-
+          $not(spec.scaleTargetRef.kind = "Pod") and
+          $not(spec.scaleTargetRef.kind = "Deployment") and
+          $not(spec.scaleTargetRef.kind = "ReplicaSet") and
+          $not(spec.scaleTargetRef.kind = "StatefulSet")
+        overwrite: false
+      - name: API version
+        simple: true
+        path: apiVersion
+  - path: spec.metrics
+    simple: true
+    widget: GenericList
+    defaultExpanded: true
+    children:
+      - simple: true
+        path: '[].type'
+        required: true
+        enum:
+          - Resource
+          - Pods
+          - Object
+          - External
+      - path: '[].resource.name'
+        simple: true
+        enum:
+          - cpu
+          - memory
+        visibility: $item.type = 'Resource'
+      - path: '[].resource.target'
+        widget: FormGroup
+        simple: true
+        visibility: $item.type = 'Resource'
+        defaultExpanded: true
+        children:
+          - path: type
+            simple: true
+            enum:
+              - Utilization
+              - AverageValue
+          - path: averageUtilization
+            simple: true
+            visibility: $item.resource.target.type = 'Utilization'
+          - path: averageValue
+            simple: true
+            visibility: $item.resource.target.type = 'AverageValue'
+      - path: '[].pods.metric.name'
+        simple: true
+        widget: Resource
+        resource:
+          scope: namespace
+          kind: Pod
+          version: v1
+        visibility: $item.type = 'Pods'
+      - path: '[].pods.metric.selector.matchLabels'
+        simple: true
+        visibility: $item.type = 'Pods'
+        widget: KeyValuePair
+      - path: '[].pods.target'
+        widget: FormGroup
+        simple: true
+        visibility: $item.type = 'Pods'
+        defaultExpanded: true
+        children:
+          - path: type
+            simple: true
+            enum:
+              - AverageValue
+          - path: averageValue
+            simple: true
+            visibility: $item.pods.target.type = 'AverageValue'
+          - path: value
+            simple: true
+            visibility: $item.pods.target.type = 'Value'
+      - path: '[].object.metric.name'
+        simple: true
+        visibility: $item.type = 'Object'
+      - path: '[].object.metric.selector.matchLabels'
+        simple: true
+        visibility: $item.type = 'Object'
+        widget: KeyValuePair
+      - path: '[].object.describedObject'
+        widget: FormGroup
+        simple: true
+        visibility: $item.type = 'Object'
+        defaultExpanded: true
+        children:
+          - path: kind
+            simple: true
+            required: true
+          - path: name
+            simple: true
+            required: true
+          - name: API version
+            path: apiVersion
+            simple: true
+      - path: '[].object.target'
+        widget: FormGroup
+        simple: true
+        visibility: $item.type = 'Object'
+        defaultExpanded: true
+        children:
+          - path: type
+            simple: true
+            enum:
+              - AverageValue
+              - Value
+          - path: averageValue
+            simple: true
+            visibility: $item.object.target.type = 'AverageValue'
+          - path: value
+            simple: true
+            visibility: $item.object.target.type = 'Value'
+      - path: '[].external.metric.name'
+        simple: true
+        visibility: $item.type = 'External'
+      - path: '[].external.metric.selector.matchLabels'
+        simple: true
+        visibility: $item.type = 'External'
+        widget: KeyValuePair
+      - path: '[].external.target'
+        widget: FormGroup
+        simple: true
+        visibility: $item.type = 'External'
+        defaultExpanded: true
+        children:
+          - path: type
+            simple: true
+            enum:
+              - AverageValue
+              - Value
+          - path: averageValue
+            simple: true
+            visibility: $item.external.target.type = 'AverageValue'
+          - path: value
+            simple: true
+            visibility: $item.external.target.type = 'Value'
+general:
+  resource:
+    kind: HorizontalPodAutoscaler
+    group: autoscaling
+    version: v2
+  name: Horizontal Pod Autoscalers
+  category: Discovery and Network
+  urlPath: horizontalpodautoscalers
+  scope: namespace
+  description: >-
+    {{[Horizontal Pod
+    Autoscalers](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/horizontal-pod-autoscaler-v2/)}}
+    automatically manages the number of Pod replicas to match the demand.
+list:
+  - name: Metrics
+    source: $count(spec.metrics)
+  - name: Min Replicas
+    source: spec.minReplicas
+  - name: Max Replicas
+    source: spec.maxReplicas
+  - name: Current Replicas
+    source: status.currentReplicas
+  - name: Status
+    source: $filter(status.conditions, function($v, $i, $a) {$v.status = 'True'}).type
+    widget: Labels
+---
+details:
+  header:
+    - name: spec.acme.email
+      source: spec.acme.email
+    - source: 'status.state ? status.state : "UNKNOWN"'
+      highlights:
+        informative:
+          - UNKNOWN
+      name: status
+      widget: Badge
+      description: status.message
+    - name: spec.acme.server
+      source: spec.acme.server
+  body:
+    - widget: Columns
+      children:
+        - name: Included domains
+          widget: Table
+          disablePadding: true
+          showHeader: false
+          source: spec.acme.domains.include
+          children:
+            - source: $item
+              search: true
+        - name: Excluded domains
+          widget: Table
+          disablePadding: true
+          showHeader: false
+          source: spec.acme.domains.exclude
+          children:
+            - source: $item
+              search: true
+form:
+  - var: IssuerType
+    dynamicValue: |
+      $exists(spec.acme) ? 'ACME' : $exists(spec.ca) ? 'CA' : ''
+    name: issuertype
+    simple: true
+    widget: Text
+    enum:
+      - CA
+      - ACME
+    required: true
+    placeholder: selectissuertype
+  - path: spec.requestsPerDayQuota
+    required: true
+  - simple: true
+    path: spec.acme
+    visibility: $IssuerType = 'ACME'
+    children:
+      - path: server
+        simple: true
+        overwrite: false
+        placeholder: spec.acme.serverurl
+      - path: email
+        simple: true
+        placeholder: email.for.registration
+      - path: skipDNSChallengeValidation
+      - path: privateKeySecretRef
+        widget: ResourceRef
+        provideVar: secret
+        resource:
+          kind: Secret
+          version: v1
+        defaultExpanded: true
+      - path: autoRegistration
+      - path: domains.include
+        simple: true
+        widget: SimpleList
+        children:
+          - path: '[]'
+            simple: true
+        placeholder: spec.acme.domainallowed
+      - path: domains.exclude
+        widget: SimpleList
+        children:
+          - path: '[]'
+        placeholder: spec.acme.domainforbidden
+      - path: externalAccountBinding
+        widget: FormGroup
+        children:
+          - path: keyID
+            required: false
+            placeholder: spec.acme.externalAccountBinding.id
+      - path: externalAccountBinding.keySecretRef
+        widget: ResourceRef
+        provideVar: secret
+        resource:
+          kind: Secret
+          version: v1
+        defaultExpanded: true
+        visibility: $exists(spec.acme.externalAccountBinding.keyID)
+  - simple: true
+    path: spec.ca
+    visibility: $IssuerType = 'CA'
+    children:
+      - simple: true
+        path: privateKeySecretRef
+        widget: ResourceRef
+        provideVar: secret
+        resource:
+          kind: Secret
+          version: v1
+        defaultExpanded: true
+        required: true
+general:
+  resource:
+    kind: Issuer
+    group: cert.gardener.cloud
+    version: v1alpha1
+  name: Issuers
+  category: Configuration
+  urlPath: issuers
+  scope: namespace
+  description: >-
+    {{[Issuer](https://cert-manager.io/docs/concepts/issuer/)}} is a Namespace
+    resource responsible for provisioning of certificates.
+list:
+  - name: spec.acme.email
+    source: spec.acme.email
+  - name: status
+    source: 'status.state ? status.state : "UNKNOWN"'
+    highlights:
+      informative:
+        - UNKNOWN
+    widget: Badge
+    description: status.message
+presets:
+  - name: Default
+    default: true
+    value:
+      spec:
+        requestsPerDayQuota: 0
+  - name: Lets Encrypt stage
+    value:
+      metadata:
+        name: lets-encrypt-stage
+      spec:
+        requestsPerDayQuota: 0
+        acme:
+          server: https://acme-staging-v02.api.letsencrypt.org/directory
+          email: ''
+          autoRegistration: true
+  - name: Lets Encrypt Production
+    value:
+      metadata:
+        name: lets-encrypt-prod
+      spec:
+        requestsPerDayQuota: 0
+        acme:
+          server: https://acme-v02.api.letsencrypt.org/directory
+          email: ''
+          autoRegistration: true
+translations:
+  en:
+    metadata.annotations: Annotations
+    metadata.labels: Labels
+    metadata.creationTimestamp: Created at
+    issuertype: Issuer Type
+    selectissuertype: Select Issuer type
+    spec.requestsPerDayQuota: Daily Requests Quota
+    spec.acme.email: Email
+    email.for.registration: Email address for user registration
+    spec.acme.server: Server
+    spec.acme.serverurl: ACME Server URL
+    spec.acme.domains.include: Include Domains
+    spec.acme.domains.exclude: Exclude Domains
+    spec.acme.includeddomains: Included Domains
+    spec.acme.excludeddomains: Excluded Domains
+    spec.acme.domainallowed: Domain that is allowed
+    spec.acme.domainforbidden: Domain that is forbidden
+    status: Status
+    spec.acme.skipDNSChallengeValidation: Skip DNS challenge validation
+    spec.acme.privateKeySecretRef: Private key Secret
+    spec.acme.autoRegistration: Auto registration
+    spec.acme.externalAccountBinding: External account binding
+    spec.acme.externalAccountBinding.keyID: CA key ID
+    spec.acme.externalAccountBinding.id: ID of the CA that the external account is bound to
+    spec.acme.externalAccountBinding.keySecretRef: Symmetric MAC Secret
+    spec.ca.privateKeySecretRef: Private key Secret
+---
+dataSources:
+  moduleTemplates:
+    resource:
+      kind: ModuleTemplate
+      namespace: null
+      group: operator.kyma-project.io
+      version: v1beta2
+details:
+  header: []
+  body:
+    - name: Summary
+      widget: Panel
+      children:
+        - name: channel
+          source: spec.channel
+        - name: State
+          widget: Badge
+          source: status.state
+          description: 'status.state!="Ready" ? status.lastOperation.operation : ""'
+        - name: Age
+          source: metadata.creationTimestamp
+    - widget: Alert
+      severity: warning
+      source: '"alert.beta"'
+      visibility: >-
+        ( $fullModuleTemplate := $filter($moduleTemplates().items, function($v)
+        { $v.metadata.labels."operator.kyma-project.io/module-name" in
+        $item.spec.modules.name and
+        $v.metadata.labels."operator.kyma-project.io/beta" = "true" }); $isBeta
+        := $count($fullModuleTemplate) > 0; )
+    - widget: Table
+      source: >-
+        $sort(( $statusModules := $filter($root.status.modules, function($v) {
+        $exists($v.name) }); $specModulesWithoutStatus :=
+        $filter(spec.modules[], function($v) { $not($v.name in
+        $statusModules.name) }); $allModules :=
+        $append($specModulesWithoutStatus, $statusModules); $allModules; ),
+        function($l, $r) {$l.name > $r.name})
+      name: Modules
+      visibility: $exists(*)
+      children:
+        - name: Name
+          source: $
+          widget: Plain
+          children:
+            - widget: ResourceLink
+              visibility: $exists(resource.metadata.name)
+              source: name
+              resource:
+                name: resource.metadata.name
+                namespace: resource.metadata.namespace
+                kind: resource.kind
+            - widget: Text
+              visibility: $not($exists(resource.metadata.name))
+              source: name
+        - name: ''
+          source: >-
+            $filter($moduleTemplates().items, function($v)
+            {$v.metadata.labels."operator.kyma-project.io/module-name" in name
+            and
+            $v.spec.channel=channel}).metadata.labels."operator.kyma-project.io/beta"
+            = "true" ? "beta" : "-"
+        - name: Namespace
+          source: $parent.metadata.namespace
+        - name: Channel
+          source: channel
+          widget: Text
+        - name: Version
+          source: version
+          widget: Text
+        - name: State
+          widget: Badge
+          source: 'state ? state : "UNNKOWN"'
+          description: 'message ? message : ""'
+        - name: Documentation
+          widget: ExternalLink
+          copyable: false
+          source: '"Documentation"'
+          link: >-
+            $filter($moduleTemplates().items, function($v)
+            {$v.metadata.labels."operator.kyma-project.io/module-name" in name
+            and
+            $v.spec.channel=channel}).metadata.annotations."operator.kyma-project.io/doc-url"
+          visibility: >-
+            ( $docsLink := $filter($moduleTemplates().items, function($v)
+            {$v.metadata.labels."operator.kyma-project.io/module-name" in name
+            and
+            $v.spec.channel=channel}).metadata.annotations."operator.kyma-project.io/doc-url";
+            $hasDocs := $count($docsLink) > 0; )
+form:
+  - simple: true
+    path: spec.channel
+    name: Kyma Default Channel
+    enum: $distinct($moduleTemplates().items.spec.channel)
+    required: true
+  - simple: true
+    path: spec.modules
+    widget: Modules
+    name: Modules
+    defaultExpanded: true
+    options:
+      name: >
+        $distinct($moduleTemplates().items.metadata.labels."operator.kyma-project.io/module-name")
+      moduleTemplates: $moduleTemplates().items
+      betaAlert: '"alert.beta"'
+general:
+  resource:
+    kind: Kyma
+    group: operator.kyma-project.io
+    version: v1beta2
+  name: Kyma
+  category: Kyma
+  urlPath: kymas
+  scope: namespace
+  description: >-
+    {{[Kyma custom
+    resource](https://github.com/kyma-project/lifecycle-manager/blob/main/docs/technical-reference/api/kyma-cr.md)}}
+    configures your Kyma modules.
+list:
+  - name: Channel
+    widget: Badge
+    source: spec.channel
+  - name: State
+    widget: Badge
+    source: status.state
+    tooltip: status.state
+translations:
+  en:
+    alert.beta: >-
+      CAUTION: The Service Level Agreements (SLAs) and Support obligations do
+      not apply to Beta modules and functionalities. If Beta modules or
+      functionalities directly or indirectly affect other modules, the Service
+      Level Agreements and Support for these modules are limited to priority
+      levels P3 (Medium) or P4 (Low). Thus, Beta releases are not intended for
+      use in customer production environments.
+injections:
+  - title: Introducing Modules
+    name: Modules
+    description: >-
+      Modules add functionalities to your cluster. Consume SAP BTP services,
+      monitor your cluster, build serverless applications and more.
+    widget: FeaturedCard
+    source: $
+    id: ModulesBanner
+    order: 0
+    illustration: Modules
+    design: information-1
+    children:
+      - widget: ResourceButton
+        source: '''Modify Modules'''
+        resource:
+          customUrl: kymamodules
+      - widget: ExternalLinkButton
+        link: >-
+          https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-s-modular-approach
+    targets:
+      - slot: banner
+        location: ClusterOverview
+  - title: Shape the future of GenAI in Kyma
+    name: AIbanner
+    description: >-
+      Contribute to our survey and witness how your feedback drives intelligent
+      enhancements to the Kyma Dashboard. Together, we can leverage cutting-edge
+      technology to create a personalized experience that exceeds your
+      expectations.
+    widget: FeaturedCard
+    source: $
+    id: AIbanner
+    order: 1
+    visibility: $isSAPuser()
+    illustration: AI
+    design: information-2
+    children:
+      - widget: ExternalLinkButton
+        link: https://sapinsights.eu.qualtrics.com/jfe/form/SV_9WF4ZSc1tuexzVA
+        name: Take survey
+        emphasized: true
+    targets:
+      - slot: banner
+        location: ClusterOverview
+---
+details:
+  header:
+    - source: >-
+        $each(spec.output, function($v, $k) {$v.url.value or
+        $v.url.valueFrom.secretKeyRef.name or $v.host.value or
+        $v.host.valueFrom.secretKeyRef.name ? $k})
+      placeholder: custom
+      type: string
+      name: Type
+      isSelected: true
+      widget: Text
+    - name: Unsupported-Mode
+      source: status.unsupportedMode
+      widget: Badge
+      highlights:
+        positive:
+          - 'false'
+        negative:
+          - 'true'
+  body:
+    - source: >-
+        $filter(status.conditions, function ($v) { $v.type != "Pending" and
+        $v.type != "Running" })
+      widget: Table
+      name: Reconciliation Conditions
+      children:
+        - source: type
+          name: Type
+        - source: status
+          name: Status
+          widget: Badge
+          highlights:
+            success:
+              - 'True'
+            error:
+              - 'False'
+        - source: reason
+          name: Reason
+        - source: message
+          name: Message
+        - source: $readableTimestamp(lastTransitionTime)
+          name: Last transition
+          sort: true
+    - widget: Panel
+      name: Applications
+      children:
+        - widget: Panel
+          name: Namespaces
+          children:
+            - name: Include
+              widget: JoinedArray
+              source: spec.input.application.namespaces.include
+              separator: ', '
+            - name: Exclude
+              widget: JoinedArray
+              source: spec.input.application.namespaces.exclude
+              separator: ', '
+            - name: System Namespaces
+              source: spec.input.application.namespaces.system
+        - widget: Panel
+          name: Containers
+          children:
+            - name: Include
+              widget: JoinedArray
+              source: spec.input.application.containers.include
+              separator: ', '
+            - name: Exclude
+              widget: JoinedArray
+              source: spec.input.application.containers.exclude
+              separator: ', '
+        - widget: Panel
+          name: Other Settings
+          children:
+            - name: Keep Annotations
+              source: spec.input.application.keepAnnotations
+            - name: Drop Labels
+              source: spec.input.application.dropLabels
+    - widget: Panel
+      name: Output
+      children:
+        - name: Custom
+          widget: CodeViewer
+          language: '''plaintext'''
+          source: spec.output.custom
+          visibility: $exists(spec.output.custom)
+        - name: Grafana-Loki
+          widget: Panel
+          visibility: $not($exists(spec.output.custom) or $exists(spec.output.http))
+          children:
+            - name: URL
+              source: spec.output.`grafana-loki`.url.value
+            - name: Labels
+              widget: Labels
+              source: spec.output.`grafana-loki`.labels
+            - name: Remove keys
+              widget: JoinedArray
+              separator: ','
+              source: spec.output.`grafana-loki`.removeKeys
+        - name: HTTP
+          widget: Panel
+          visibility: $exists(spec.output.http)
+          children:
+            - name: Host
+              widget: Panel
+              children:
+                - name: Value
+                  source: spec.output.http.host.value
+                  visibility: $exists(spec.output.http.host.value)
+                - name: Value From Secret
+                  widget: ResourceRefs
+                  source: spec.output.http.host.valueFrom.secretKeyRef
+                  kind: Secret
+                  visibility: $exists(spec.output.http.host.valueFrom.secretKeyRef.name)
+            - name: User
+              widget: Panel
+              children:
+                - name: Value
+                  source: spec.output.http.user.value
+                  visibility: $exists(spec.output.http.user.value)
+                - name: Value From Secret
+                  widget: ResourceRefs
+                  source: spec.output.http.user.valueFrom.secretKeyRef
+                  kind: Secret
+                  visibility: $exists(spec.output.http.user.valueFrom.secretKeyRef.name)
+            - name: Password
+              widget: Panel
+              children:
+                - name: Value
+                  source: spec.output.http.password.value
+                  visibility: $exists(spec.output.http.password.value)
+                - name: Value From Secret
+                  widget: ResourceRefs
+                  source: spec.output.http.password.valueFrom.secretKeyRef
+                  kind: Secret
+                  visibility: >-
+                    $exists(spec.output.http.password.valueFrom.secretKeyRef.name)
+            - name: TLS Settings
+              widget: Panel
+              children:
+                - name: Disabled
+                  source: spec.output.http.tls.disabled
+                  placeholder: 'false'
+                - name: Skip certificate validation
+                  source: spec.output.http.tls.skipCertificateValidation
+                  placeholder: 'false'
+                - name: Ca
+                  widget: Panel
+                  visibility: $exists(spec.output.http.tls.ca)
+                  source: spec.output.http.tls.ca
+                  children:
+                    - name: Value
+                      source: value
+                      visibility: $exists(value)
+                    - name: Value From Secret
+                      widget: ResourceRefs
+                      source: valueFrom.secretKeyRef
+                      kind: Secret
+                      visibility: $exists(valueFrom.secretKeyRef.name)
+                - name: Cert
+                  widget: Panel
+                  visibility: $exists(spec.output.http.tls.cert)
+                  source: spec.output.http.tls.cert
+                  children:
+                    - name: Value
+                      source: value
+                      visibility: $exists(value)
+                    - name: Value From Secret
+                      widget: ResourceRefs
+                      source: valueFrom.secretKeyRef
+                      kind: Secret
+                      visibility: $exists(valueFrom.secretKeyRef.name)
+                - name: Key
+                  widget: Panel
+                  visibility: $exists(spec.output.http.tls.key)
+                  source: spec.output.http.tls.key
+                  children:
+                    - name: Value
+                      source: value
+                      visibility: $exists(value)
+                    - name: Value From Secret
+                      widget: ResourceRefs
+                      source: valueFrom.secretKeyRef
+                      kind: Secret
+                      visibility: $exists(valueFrom.secretKeyRef.name)
+            - name: Other Settings
+              widget: Panel
+              children:
+                - name: Compression
+                  source: spec.output.http.compress
+                - name: De-dot
+                  source: spec.output.http.dedot
+                  placeholder: 'false'
+                - name: Format
+                  source: spec.output.http.format
+                  placeholder: json
+                - name: Port
+                  source: spec.output.http.port
+                  placeholder: '443'
+                - name: URI
+                  source: spec.output.http.uri
+form:
+  - path: spec.input
+    widget: FormGroup
+    defaultExpanded: true
+    children:
+      - name: Include Namespaces
+        widget: SimpleList
+        path: application.namespaces.include
+        defaultExpanded: true
+        inputInfo: Include container logs from selected namespaces
+        children:
+          - path: '[]'
+      - name: Exclude Namespaces
+        widget: SimpleList
+        path: application.namespaces.exclude
+        children:
+          - path: '[]'
+      - name: Include System Namespaces
+        path: application.namespaces.system
+      - name: Include Containers
+        widget: SimpleList
+        path: application.containers.include
+      - name: Exclude Containers
+        widget: SimpleList
+        path: application.containers.exclude
+      - name: Keep Annotations
+        path: application.keepAnnotations
+      - name: Drop Labels
+        path: application.dropLabels
+  - name: Filters
+    widget: SimpleList
+    path: spec.filters
+    children:
+      - widget: FormGroup
+        path: '[]'
+        children:
+          - widget: CodeEditor
+            path: custom
+  - path: spec.output
+    widget: FormGroup
+    defaultExpanded: true
+    simple: true
+    children:
+      - name: Custom
+        path: custom
+        widget: CodeEditor
+        advanced: true
+        inputInfo: >-
+          Note: If you use a custom output, you put the LogPipeline in
+          unsupported mode
+          (https://kyma-project.io/#/telemetry-manager/user/02-logs?id=unsupported-mode)
+      - name: HTTP
+        path: http
+        widget: FormGroup
+        defaultExpanded: true
+        simple: true
+        children:
+          - name: Host
+            path: host
+            simple: true
+            widget: FormGroup
+            children:
+              - name: Value
+                path: value
+                simple: true
+                widget: Text
+              - name: Secret Reference
+                path: valueFrom.secretKeyRef
+                simple: true
+                widget: ResourceRef
+                resource:
+                  kind: secret
+                  version: v1
+                children:
+                  - path: key
+                    simple: true
+                    enum: $keys($secret.data)
+          - name: User
+            path: user
+            simple: true
+            widget: FormGroup
+            children:
+              - name: Value
+                path: value
+                simple: true
+                widget: Text
+              - name: Secret Reference
+                path: valueFrom.secretKeyRef
+                simple: true
+                widget: ResourceRef
+                resource:
+                  kind: secret
+                  version: v1
+                children:
+                  - path: key
+                    simple: true
+                    enum: $keys($secret.data)
+          - name: Password
+            path: password
+            simple: true
+            widget: FormGroup
+            children:
+              - name: Value
+                path: value
+                simple: true
+                widget: Text
+              - name: Secret Reference
+                path: valueFrom.secretKeyRef
+                simple: true
+                widget: ResourceRef
+                resource:
+                  kind: secret
+                  version: v1
+                children:
+                  - path: key
+                    simple: true
+                    enum: $keys($secret.data)
+          - name: TLS
+            widget: FormGroup
+            path: tls
+            children:
+              - name: Disabled
+                path: disabled
+              - name: Skip Certificate Validation
+                path: skipCertificateValidation
+              - name: CA
+                path: ca
+                widget: FormGroup
+                simple: true
+                children:
+                  - name: Value
+                    path: value
+                    widget: Text
+                    simple: true
+                  - name: Secret Reference
+                    path: valueFrom.secretKeyRef
+                    widget: ResourceRef
+                    simple: true
+                    resource:
+                      kind: secret
+                      version: v1
+                    children:
+                      - simple: true
+                        path: key
+                        enum: $keys($secret.data)
+              - name: Cert
+                path: cert
+                widget: FormGroup
+                simple: true
+                children:
+                  - name: Value
+                    path: value
+                    widget: Text
+                    simple: true
+                  - name: Secret Reference
+                    path: valueFrom.secretKeyRef
+                    widget: ResourceRef
+                    simple: true
+                    resource:
+                      kind: secret
+                      version: v1
+                    children:
+                      - simple: true
+                        path: key
+                        enum: $keys($secret.data)
+              - name: Key
+                path: key
+                widget: FormGroup
+                simple: true
+                children:
+                  - name: Value
+                    path: value
+                    widget: Text
+                    simple: true
+                  - name: Secret Reference
+                    path: valueFrom.secretKeyRef
+                    widget: ResourceRef
+                    simple: true
+                    resource:
+                      kind: secret
+                      version: v1
+                    children:
+                      - simple: true
+                        path: key
+                        enum: $keys($secret.data)
+          - name: URI
+            path: uri
+            widget: Text
+          - name: Port
+            path: port
+            widget: Text
+          - name: Compress
+            path: compress
+            widget: Text
+          - name: Format
+            path: format
+            widget: Text
+          - name: Dedot
+            simple: true
+            path: dedot
+general:
+  resource:
+    kind: LogPipeline
+    group: telemetry.kyma-project.io
+    version: v1alpha1
+  name: Log Pipelines
+  category: Observability
+  urlPath: logpipelines
+  scope: cluster
+  description: >-
+    {{[LogPipeline custom
+    resource](https://kyma-project.io/#/telemetry-manager/user/resources/02-logpipeline)}}
+    configures a custom Log Pipeline.
+list:
+  - source: >-
+      $each(spec.output, function($v, $k) {$v.url.value or
+      $v.url.valueFrom.secretKeyRef.name or $v.host.value or
+      $v.host.valueFrom.secretKeyRef.name ? $k})
+    placeholder: custom
+    type: string
+    name: Type
+    isSelected: true
+    widget: Text
+  - name: Unsupported-Mode
+    source: status.unsupportedMode
+    widget: Badge
+    highlights:
+      positive:
+        - 'false'
+      negative:
+        - 'true'
+  - name: Status
+    source: >-
+      $filter(status.conditions, function ($v) { $v.type != "Pending" and
+      $v.type != "Running" })
+    widget: Columns
+    children:
+      - name: Type
+        source: type
+        widget: Badge
+      - name: Status
+        source: status
+        widget: Badge
+        highlights:
+          success:
+            - 'True'
+          error:
+            - 'False'
+---
+dataSources:
+  oauth2clients:
+    resource:
+      kind: OAuth2Client
+      version: v1alpha1
+      group: hydra.ory.sh
+      namespace: null
+    filter: $item.metadata.namespace != "kyma-system"
+  secret:
+    resource:
+      kind: Secret
+      version: v1
+    filter: $item.metadata.name = $root.spec.secretName
+details:
+  header:
+    - source: 'status.state ? "error" : "ok"'
+      highlights:
+        positive:
+          - ok
+        negative:
+          - error
+      name: status
+      widget: Badge
+  body:
+    - source: '"deprecation.short"'
+      widget: Alert
+      name: warning
+      severity: warning
+    - name: configuration
+      widget: Panel
+      children:
+        - name: spec.redirectUris
+          source: spec.redirectUris
+          widget: Labels
+          visibility: $exists(spec.redirectUris)
+        - name: spec.postLogoutRedirectUris
+          source: spec.postLogoutRedirectUris
+          widget: Labels
+          visibility: $exists(spec.postLogoutRedirectUris)
+        - name: spec.clientName
+          source: spec.clientName
+          widget: Labels
+          visibility: $exists(spec.clientName)
+        - name: spec.responseTypes
+          source: spec.responseTypes
+          widget: Labels
+        - name: spec.grantTypes
+          source: spec.grantTypes
+          widget: Labels
+        - name: spec.scope
+          source: spec.scope
+          widget: Labels
+        - name: spec.audience
+          source: spec.audience
+          widget: Labels
+          visibility: $exists(spec.audience)
+        - name: spec.secretName
+          widget: ResourceLink
+          source: spec.secretName
+          resource:
+            name: spec.secretName
+            namespace: $root.metadata.namespace
+            kind: '''Secret'''
+        - name: spec.tokenEndpointAuthMethod
+          source: spec.tokenEndpointAuthMethod
+          widget: Labels
+    - name: data
+      widget: Panel
+      source: $secret().items.data
+      decodable: true
+      children:
+        - name: secret.client_id
+          source: client_id
+        - name: secret.client_secret
+          source: client_secret
+form:
+  - path: metadata.name
+    extraPaths:
+      - spec.secretName
+      - metadata.labels['app.kubernetes.io/name']
+  - path: spec.responseTypes
+    simple: true
+    required: true
+    widget: MultiCheckbox
+    name: Response Types
+    options:
+      - key: id_token
+        name: ID Token
+      - key: code
+        name: Code
+      - key: token
+        name: Token
+  - path: spec.grantTypes
+    simple: true
+    required: true
+    widget: MultiCheckbox
+    options:
+      - key: client_credentials
+        name: Client Credentials
+      - key: authorization_code
+        name: Authorization Code
+      - key: implicit
+        name: Implicit
+      - key: refresh_token
+        name: Refresh Token
+  - name: spec.clientName
+    path: spec.clientName
+    widget: Text
+  - name: spec.secretName
+    path: spec.secretName
+    widget: Resource
+    resource:
+      kind: Secret
+      scope: namespace
+      version: v1
+  - name: spec.tokenEndpointAuthMethod
+    path: spec.tokenEndpointAuthMethod
+    enum:
+      - none
+      - client_secret_basic
+      - client_secret_post
+      - private_key_jwt
+  - name: spec.scope
+    widget: Text
+    simple: true
+    path: spec.scope
+    inputInfo: >-
+      You can provide more then one Scope, but they have to be separated by a
+      Space
+  - widget: SimpleList
+    name: spec.redirectUris
+    defaultExpanded: true
+    path: spec.redirectUris
+    inputInfo: >-
+      Input must consist of two parts, which are separated by ':' (e.g.
+      'test:temp')
+    children:
+      - path: '[]'
+  - name: spec.postLogoutRedirectUris
+    path: spec.postLogoutRedirectUris
+    widget: SimpleList
+    defaultExpanded: true
+    inputInfo: >-
+      Input must consist of two parts, which are separated by ':' (e.g.
+      'test:temp')
+    children:
+      - path: '[]'
+  - path: spec.audience
+    name: spec.audience
+    widget: SimpleList
+    defaultExpanded: true
+    children:
+      - path: '[]'
+general:
+  resource:
+    kind: OAuth2Client
+    group: hydra.ory.sh
+    version: v1alpha1
+  name: OAuth2 Clients
+  category: Configuration
+  urlPath: oauth2clients
+  scope: namespace
+  description: >-
+    Disclaimer: OAuth2Clients support is discontinued in Kyma! Please make sure
+    to migrate to another solution as a soon as possible.
+list:
+  - source: '"deprecation.short"'
+    widget: Alert
+    severity: warning
+  - name: spec.secretName
+    widget: ResourceLink
+    source: spec.secretName
+    resource:
+      name: spec.secretName
+      namespace: $root.metadata.namespace
+      kind: '''secret'''
+  - source: 'status.state ? "error" : "ok"'
+    highlights:
+      positive:
+        - ok
+      negative:
+        - error
+    name: status
+    widget: Badge
+    description: status.message
+injections:
+  - name: deprecation.title
+    widget: Panel
+    source: $
+    filter: $item.metadata.uid = ($oauth2clients().items.metadata.uid)[0]
+    targets:
+      - slot: details-top
+        location: ClusterOverview
+    order: 1
+    children:
+      - widget: Alert
+        source: '''deprecation.long'''
+        severity: warning
+      - widget: ExternalLink
+        name: Migration blogpost
+        link: >-
+          "https://blogs.sap.com/2023/06/06/sap-btp-kyma-runtime-ory-hydra-oauth2-client-migration"
+        source: '"SAP BTP, Kyma runtime ORY Hydra OAuth2 Client migration"'
+      - widget: ResourceList
+        source: $oauth2clients()
+        name: OAuth2Clients
+        disableCreate: true
+        children:
+          - source: metadata.name
+            name: Name
+            sort: 'true'
+            search:
+              source: metadata.name
+            widget: ResourceLink
+            resource:
+              name: metadata.name
+              namespace: $root.metadata.namespace
+              kind: kind
+          - source: metadata.namespace
+            name: Namespace
+presets:
+  - name: template
+    default: true
+    value:
+      spec:
+        scope: ''
+        secretName: ''
+        tokenEndpointAuthMethod: client_secret_basic
+        responseTypes: []
+        grantTypes: []
+translations:
+  en:
+    metadata.annotations: Annotations
+    metadata.labels: Labels
+    metadata.creationTimestamp: Created at
+    status: Status
+    spec.scope: Scope
+    spec.responseTypes: Response Types
+    spec.grantTypes: Grant Types
+    spec.tokenEndpointAuthMethod: Token Endpoint Authentication Method
+    spec.tokenEndpointAuthMethod.none: None
+    spec.tokenEndpointAuthMethod.client_secret_basic: Client Secret/ Basic
+    spec.tokenEndpointAuthMethod.client_secret_post: Client Secret/ POST
+    spec.tokenEndpointAuthMethod.private_key_jwt: Private Key/ JWT
+    spec.redirectUris: Redirect URIs
+    spec.postLogoutRedirectUris: Post-Logout Redirect URIs
+    spec.audience: Audience
+    spec.secretName: Secret Name
+    configuration: Configuration
+    data: Data
+    spec.clientName: Client Name
+    secret.client_id: client_id
+    secret.client_secret: client_secret
+    deprecation.title: Ory Hydra Deprecation on May 19, 2022
+    deprecation.long: >
+      You are using Ory Hydra OAuth2, which has been deprecated since May 19,
+      2022 and is scheduled to be removed on October 14, 2023.
+
+      During the Kyma upgrade on October 14, 2023, workloads that still rely on
+      deprecated Ory Hydra OAuth2 may experience minor outages. To prevent this,
+      follow the procedure outlined in the blog post below before the specified
+      date.
+
+      If you are unable to follow the procedure, Ory Hydra OAuth2 will be
+      migrated to the hydra-deprecated Namespace to prevent outages caused by
+      API call failures. However, you will then be fully responsible for
+      managing Ory Hydra OAuth2. This includes troubleshooting, maintenance,
+      security updates, vulnerability fixes, and adherence to product standards.
+
+      If you want to continue using the OAuth2 functionality provided as part of
+      the SAP BTP, Kyma runtime offering, delete the hydra-deprecated Namespace
+      or follow the migration steps outlined in the blog post below.
+    deprecation.short: >-
+      Support for OAuth2Clients has been discontinued in Kyma. Migrate to a
+      different solution.
+---
+details:
+  header:
+    - name: spec.controlledBy
+      source: metadata.ownerReferences
+      widget: ControlledBy
+    - name: status
+      source: status.conditions[$count(status.conditions)-1].reason
+      description: >-
+        $filter(status.conditions, function ($v, $i, $a) { $length($v.message) >
+        0 })[0].message
+      widget: Badge
+      highlights:
+        positive:
+          - Provisioned
+        informative:
+          - NotProvisioned
+        negative:
+          - CreateFailed
+  body:
+    - name: bindingData
+      widget: Panel
+      children:
+        - name: spec.serviceInstanceName
+          source: spec.serviceInstanceName
+          widget: ResourceLink
+          resource:
+            namespace: $root.metadata.namespace
+            kind: '''ServiceInstance'''
+            name: $root.spec.serviceInstanceName
+        - name: spec.secretName
+          source: spec.secretName
+          widget: ResourceLink
+          resource:
+            namespace: $root.metadata.namespace
+            kind: '''Secret'''
+            name: $root.spec.secretName
+        - name: spec.externalName
+          source: spec.externalName
+        - name: status.bindingID
+          source: status.bindingID
+        - name: status.instanceID
+          source: status.instanceID
+    - name: spec.parameters
+      source: spec.parameters
+      widget: CodeViewer
+      visibility: '$exists($value) ? $boolean($value) : false'
+    - name: spec.parametersFrom
+      source: spec.parametersFrom
+      widget: CodeViewer
+      visibility: '$exists($value) ? $boolean($value) : false'
+form:
+  - simple: true
+    path: spec.serviceInstanceName
+    required: true
+    widget: Resource
+    resource:
+      kind: ServiceInstance
+      scope: namespace
+      group: services.cloud.sap.com
+      version: v1
+  - path: spec.externalName
+    placeholder: spec.externalNamePlaceholder
+  - path: spec.secretName
+  - path: spec.parameters
+    widget: CodeEditor
+    language: '''json'''
+  - path: spec.parametersFrom
+    widget: SimpleList
+    defaultExpanded: true
+    children:
+      - path: '[].secretKeyRef.name'
+        widget: Resource
+        resource:
+          kind: Secret
+          version: v1
+          scope: namespace
+        provideVar: secret
+        required: false
+      - path: '[].secretKeyRef.key'
+        enum: $keys($secret.data)
+        required: false
+        placeholder: chooseSecretKey
+general:
+  resource:
+    kind: ServiceBinding
+    group: services.cloud.sap.com
+    version: v1
+  name: Service Bindings
+  category: Service Management
+  urlPath: servicebindings
+  scope: namespace
+  description: >-
+    {{[BTP Service
+    Binding](https://github.com/SAP/sap-btp-service-operator/blob/main/README.md)}}
+    provides access details for an existing service instance.
+list:
+  - name: spec.controlledBy
+    source: metadata.ownerReferences
+    widget: ControlledBy
+  - name: spec.serviceInstanceName
+    source: spec.serviceInstanceName
+    widget: ResourceLink
+    resource:
+      namespace: $root.metadata.namespace
+      kind: '''ServiceInstance'''
+      name: $root.spec.serviceInstanceName
+  - name: spec.externalName
+    source: spec.externalName
+  - name: status
+    source: status.conditions[$count(status.conditions)-1].reason
+    description: >-
+      $filter(status.conditions, function ($v, $i, $a) { $length($v.message) > 0
+      })[0].message
+    highlights:
+      positive:
+        - Provisioned
+      informative:
+        - NotProvisioned
+      negative:
+        - CreateFailed
+    widget: Badge
+translations:
+  en:
+    metadata.annotations: Annotations
+    metadata.labels: Labels
+    metadata.creationTimestamp: Created at
+    status: Status
+    status.bindingID: Binding ID
+    status.instanceID: InstanceID
+    spec.secretName: Secret Name
+    spec.externalName: External Name
+    spec.externalNamePlaceholder: Defaults to the Service Binding name if empty
+    spec.serviceInstanceName: Service Instance Name
+    spec.controlledBy: Controlled By
+    spec.parameters: Parameters
+    spec.parametersFrom: Parameters from Secrets
+    chooseSecretKey: Choose Secret Key
+    bindingData: Binding Data
+---
+dataSources:
+  myServiceBindings:
+    resource:
+      kind: ServiceBinding
+      group: services.cloud.sap.com
+      version: v1
+    filter: $item.spec.serviceInstanceName = $root.metadata.name
+details:
+  header:
+    - name: status
+      source: status.conditions[$count(status.conditions)-1].reason
+      description: >-
+        $filter(status.conditions, function ($v, $i, $a) { $length($v.message) >
+        0 })[0].message
+      widget: Badge
+      highlights:
+        positive:
+          - Provisioned
+        informative:
+          - NotProvisioned
+        negative:
+          - CreateFailed
+  body:
+    - name: serviceinstancedata
+      widget: Panel
+      children:
+        - name: spec.serviceOfferingName
+          source: spec.serviceOfferingName
+        - name: spec.servicePlanName
+          source: spec.servicePlanName
+        - name: spec.externalName
+          source: spec.externalName
+        - name: status.instanceID
+          source: status.instanceID
+    - name: BTP Service Binding
+      source: $myServiceBindings()
+      widget: ResourceList
+    - name: spec.parameters
+      source: spec.parameters
+      widget: CodeViewer
+      visibility: '$exists($value) ? $boolean($value) : false'
+form:
+  - simple: true
+    path: spec.serviceOfferingName
+    required: true
+  - simple: true
+    path: spec.servicePlanName
+    required: true
+    placeholder: spec.servicePlanNamePlaceholder
+  - path: spec.externalName
+    placeholder: spec.externalNamePlaceholder
+  - path: spec.parameters
+    widget: CodeEditor
+    language: '''json'''
+general:
+  resource:
+    kind: ServiceInstance
+    group: services.cloud.sap.com
+    version: v1
+  name: Service Instances
+  category: Service Management
+  urlPath: serviceinstances
+  scope: namespace
+  description: >-
+    {{[BTP Service
+    Instance](https://github.com/SAP/sap-btp-service-operator/blob/main/README.md)}}
+    makes the functionality of a service available for consumption.
+list:
+  - name: spec.serviceOfferingName
+    source: spec.serviceOfferingName
+  - name: spec.servicePlanName
+    source: spec.servicePlanName
+  - name: spec.externalName
+    source: spec.externalName
+  - name: status
+    source: status.conditions[$count(status.conditions)-1].reason
+    description: >-
+      $filter(status.conditions, function ($v, $i, $a) { $length($v.message) > 0
+      })[0].message
+    widget: Badge
+    highlights:
+      positive:
+        - Provisioned
+      informative:
+        - NotProvisioned
+      negative:
+        - CreateFailed
+translations:
+  en:
+    metadata.annotations: Annotations
+    metadata.labels: Labels
+    metadata.creationTimestamp: Created at
+    status: Status
+    spec.externalName: External Name
+    spec.externalNamePlaceholder: Defaults to the instance name if empty
+    spec.servicePlanName: Plan Name
+    spec.servicePlanNamePlaceholder: The plan name to use for the Service Instance
+    spec.serviceOfferingName: Offering Name
+    spec.parameters: Instance Parameters
+    status.instanceID: Instance ID
+    serviceinstancedata: Service Instance Data
+---
+details:
+  header:
+    - name: Controlled by
+      source: metadata.ownerReferences
+      widget: ControlledBy
+    - name: Service Type
+      source: spec.type
+    - name: Cluster IP
+      source: spec.clusterIP
+    - name: Ports
+      source: >-
+        $count(spec.ports) ? $map(spec.ports, function($value) {$value.port =
+        $value.targetPort ? [$string($value.port), '/',
+        $string($value.protocol)] ~> $join('') : [ $string($value.name), ' (',
+        $string($value.port), ') --> (', $string($value.targetPort), ')'] ~>
+        $join('') }) ~> $join(', ')  : '-'
+    - name: External IPs
+      source: >-
+        $count(status.loadBalancer.ingress) ? $map(status.loadBalancer.ingress,
+        function($value) {$value.ip ? $value.ip : $value.hostname}) ~> $join(',
+        '): ($count($item.spec.externalIPs) ? $item.spec.externalIPs ~> $join(',
+        '): '-')
+  body:
+    - widget: ResourceList
+      source: $subscriptions()
+      name: Subscriptions
+      disableCreate: true
+      children:
+        - source: metadata.name
+          name: Name
+          sort: 'true'
+          widget: ResourceLink
+          resource:
+            name: metadata.name
+            namespace: $root.metadata.namespace
+            kind: kind
+        - source: spec.filter.filters[0].eventType.value
+          name: Event Types
+          sort:
+            default: true
+            compareFunction: $compareStrings($first, $second)
+        - source: status.ready
+          name: Ready
+          sort: true
+          widget: Badge
+          highlights:
+            positive:
+              - 'true'
+            negative:
+              - 'false'
+    - widget: ResourceList
+      source: $apirules()
+      name: API Rules
+      disableCreate: true
+      sort:
+        - source: spec.service.host
+          default: true
+        - source: spec.service.port
+          compareFunction: $first - $second
+    - widget: Panel
+      name: Selector
+      disablePadding: true
+      children:
+        - source: $podSelector()
+          widget: ResourceList
+          disableCreate: true
+          visibility: $exists($root.spec.selector) and $boolean($root.spec.selector)
+        - source: spec.selector
+          widget: Panel
+          name: Matches all Pods in the Namespace
+          visibility: $not($exists($value)) or $not($boolean($value))
+      header:
+        - source: spec.selector
+          widget: Labels
+          name: Selector
+          visibility: $exists($value) and $boolean($value)
+form:
+  - widget: KeyValuePair
+    path: spec.selector
+    simple: true
+    name: Selectors
+    defaultExpanded: true
+  - path: spec.type
+    name: Type
+    placeholder: Enter Type
+  - widget: GenericList
+    path: spec.ports
+    simple: true
+    children:
+      - path: '[]'
+        simple: true
+        children:
+          - path: name
+            simple: true
+            name: Ports Name
+            placeholder: Enter Ports Name
+            widget: Name
+          - path: protocol
+            simple: true
+            name: Protocol
+            placeholder: Enter Protocol
+            widget: Text
+            required: true
+          - path: port
+            simple: true
+            name: Port
+            placeholder: Enter Port
+            required: true
+          - path: targetPort
+            simple: true
+            name: Target Port
+            placeholder: Enter Target Port
+            widget: Text
+            required: true
+            inputInfo: >-
+              Number or name of the port to access on the pods targeted by the
+              service. Number must be in the range 1 to 65535.
+          - path: nodePort
+            simple: true
+            name: Node Port
+            visibility: $root.spec.type != 'ClusterIP'
+            placeholder: Enter Node Port
+          - path: appProtocol
+            simple: true
+            name: Application Protocol
+            enum:
+              - http
+              - tcp
+              - gRPC
+            placeholder: Enter Application Protocol
+    template:
+      protocol: TCP
+      port: 80
+      targetPort: 9376
+  - widget: SimpleList
+    path: spec.ipFamilies
+    name: IP Family
+    enum:
+      - IPv6
+      - IPv4
+    visibility: $root.spec.type != 'ExternalName'
+    children:
+      - path: '[]'
+    placeholder: Enter IP Family
+  - path: spec.ipFamilyPolicy
+    name: IP Family Policy
+    placeholder: Enter IP Family Policy
+    enum:
+      - SingleStack
+      - PreferDualStack
+      - RequireDualStack
+    visibility: $root.spec.type != 'ExternalName'
+  - widget: SimpleList
+    path: spec.clusterIPs
+    name: Cluster IPs
+    defaultexpanded: true
+    children:
+      - path: '[]'
+    placeholder: Enter IP addresses assigned to this service
+    visibility: $root.spec.type != 'ExternalName'
+  - path: spec.clusterIP
+    name: Cluster IP
+    placeholder: Enter IP address of the service
+    visibility: $root.spec.type != 'ExternalName'
+  - widget: SimpleList
+    path: spec.externalIPs
+    name: External IPs
+    children:
+      - path: '[]'
+    placeholder: Enter external IP addresses assigned to this service
+  - path: spec.sessionAffinity
+    name: Session Affinity
+    placeholder: Enter Session Affinity
+  - path: spec.externalTrafficPolicy
+    name: External Traffic Policy
+    placeholder: Enter External Traffic Policy
+    visibility: $root.spec.type = 'NodePort' or $root.spec.type = 'LoadBalancer'
+  - path: spec.internalTrafficPolicy
+    name: Internal Traffic Policy
+    placeholder: Enter Internal Traffic Policy
+  - widget: SimpleList
+    path: spec.loadBalancerSourceRanges
+    name: LoadBalancer Source Ranges
+    visibility: $root.spec.type = 'LoadBalancer'
+    children:
+      - path: '[]'
+    placeholder: Enter LoadBalancer source ranges
+  - path: spec.loadBalancerClass
+    name: LoadBalancer Class
+    placeholder: Enter LoadBalancer Class
+    visibility: $root.spec.type = 'LoadBalancer'
+  - path: spec.externalName
+    name: External Name
+    placeholder: Enter external name
+    visibility: $root.spec.type = 'ExternalName'
+  - path: spec.loadBalancerIP
+    name: LoadBalancer IP
+    placeholder: Enter LoadBalancer IP
+    visibility: $root.spec.type = 'LoadBalancer'
+  - path: spec.healthCheckNodePort
+    name: Health Check NodePort
+    placeholder: Enter Health Check NodePort
+    visibility: >-
+      $root.spec.type = 'LoadBalancer' and $root.spec.externalTrafficPolicy =
+      'Local'
+  - path: spec.allocateLoadBalancerNodePorts
+    name: Allocate LoadBalancer NodePorts
+    visibility: $root.spec.type = 'LoadBalancer'
+  - path: spec.publishNotReadyAddresses
+    name: Publish Not Ready Addresses
+  - path: spec.sessionAffinityConfig.clientIP.timeoutSeconds
+    visibility: $root.spec.sessionAffinity = 'ClientIP'
+    name: Timeout seconds
+    placeholder: enter timeout seconds
+    inputInfo: Default value is 10800(for 3 hours)
+list:
+  - name: Controlled By
+    source: metadata.ownerReferences
+    widget: ControlledBy
+    kindOnly: true
+  - name: Type
+    source: spec.type
+    sort:
+      compareFunction: $compareStrings($second, $first)
+  - name: Cluster IP
+    source: spec.clusterIP
+    sort: true
+  - name: Ports
+    source: >-
+      $count(spec.ports) ? $map(spec.ports, function($value) {$value.port =
+      $value.targetPort ? [$string($value.port), '/', $string($value.protocol)]
+      ~> $join('') : [ $string($value.name), ' (', $string($value.port), ') -->
+      (', $string($value.targetPort), ')'] ~> $join('') }) ~> $join(', ')  : '-'
+  - name: External IPs
+    source: >-
+      $count(status.loadBalancer.ingress) ? $map(status.loadBalancer.ingress,
+      function($value) {$value.ip ? $value.ip : $value.hostname}) ~> $join(',
+      '): ($count($item.spec.externalIPs) ? $item.spec.externalIPs ~> $join(',
+      '): '-')
+dataSources:
+  apirules:
+    resource:
+      kind: APIRule
+      group: gateway.kyma-project.io
+      version: v1beta1
+    filter: $item.spec.service.name = $root.metadata.name
+  podSelector:
+    resource:
+      kind: Pod
+      version: v1
+    filter: $matchByLabelSelector($item, $root.spec.selector)
+  subscriptions:
+    resource:
+      kind: Subscription
+      group: eventing.kyma-project.io
+      version: v1alpha1
+    filter: >-
+      $substringAfter($substringBefore($item.spec.sink, '.'), '://') =
+      $root.metadata.name
+general:
+  resource:
+    kind: Service
+    version: v1
+  urlPath: services
+  scope: namespace
+  name: Services
+  category: Discovery and Network
+  description: >-
+    {{[Services](https://kubernetes.io/docs/concepts/services-networking/service/)}}
+     enables access to an application running on a set of Pods.
+presets:
+  - name: template
+    default: true
+    value:
+      spec:
+        selector:
+          app: ''
+        type: ClusterIP
+---
+general:
+  resource:
+    kind: Subscription
+    group: eventing.kyma-project.io
+    version: v1alpha2
+  name: Subscriptions
+  category: Configuration
+  scope: namespace
+  description: >-
+    {{"{{[Subscription](https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/evnt-01-subscription#documentation-content)}}"}}
+    is used to subscribe to events.
+  urlPath: subscriptions
+details:
+  header:
+    - name: status.conditions.status
+      source: 'status.ready = false ? "error" : "ready"'
+      widget: Badge
+      description: status.conditions.message
+    - name: spec.typeMatching
+      source: spec.typeMatching
+    - name: spec.source
+      source: spec.source
+    - name: spec.sink
+      source: spec.sink
+      widget: ResourceLink
+      resource:
+        name: $substringBefore($substringAfter(spec.sink, "http://"), ".")
+        namespace: $root.metadata.namespace
+        kind: '''Service'''
+  body:
+    - source: status.conditions
+      widget: Table
+      name: status.conditions
+      children:
+        - source: $item.type
+          name: status.conditions.type
+        - source: $item.status
+          widget: Badge
+          name: status.conditions.status
+        - source: $item.reason
+          name: status.conditions.reason
+        - source: $item.message
+          name: status.conditions.message
+        - source: $readableTimestamp($item.lastTransitionTime)
+          name: status.conditions.lastTransitionTime
+    - name: spec.types
+      source: spec.types
+      widget: Table
+      children:
+        - name: Type
+          search: true
+          source: $item
+          sort: false
+    - widget: EventList
+      filter: $matchEvents($$, $root.kind, $root.metadata.name)
+      name: events
+      defaultType: NORMAL
+      hideInvolvedObjects: true
+form:
+  - path: spec.config
+    widget: KeyValuePair
+    defaultExpanded: false
+  - path: spec.types
+    simple: true
+    widget: SimpleList
+    defaultExpanded: true
+    children:
+      - path: '[]'
+        simple: true
+  - simple: true
+    type: string
+    var: service
+    name: Service
+    widget: Resource
+    resource:
+      kind: Service
+      version: v1
+      scope: namespace
+    trigger:
+      - sink
+  - path: spec.sink
+    name: spec.sink
+    simple: true
+    inputInfo: inputInfo.sink
+    placeholder: placeholder.sink
+    subscribe:
+      sink: >-
+        "http://" & $service & "." & $root.metadata.namespace &
+        ".svc.cluster.local"
+  - path: spec.typeMatching
+    simple: true
+    enum:
+      - standard
+      - exact
+    required: true
+  - path: spec.source
+    name: spec.source
+    simple: true
+    required: true
+    visibility: spec.typeMatching = 'standard'
+    widget: Resource
+    resource:
+      kind: Application
+      group: applicationconnector.kyma-project.io
+      version: v1alpha1
+list:
+  - name: status.conditions.status
+    source: 'status.ready = false ? "error" : "ready"'
+    widget: Badge
+    description: status.conditions.message
+presets:
+  - name: Default Type Matching
+    default: true
+    value:
+      spec:
+        typeMatching: standard
+translations:
+  en:
+    inputInfo.sink: Sink structure, 'http://{SERVICE}.{NAMESPACE}.svc.cluster.local'
+    inputInfo.eventType: Event Type structure, 'sap.kyma.custom.{APP}.{EVENT.NAME}.{VERSION}'
+    events: Events
+    placeholder.eventType: >-
+      Enter the event type, for example,
+      sap.kyma.custom.test-app.order.cancelled.v1
+    placeholder.sink: Enter the sink, for example, http://service.default.svc.cluster.local
+    spec.filters: Filters
+    spec.filter.eventType: Event Type
+    spec.filter.eventSource: Event Source
+    spec.filter.event.property: Property
+    spec.filter.event.type: Type
+    spec.filter.event.value: Value
+    spec.types: Types
+    spec.source: Source
+    spec.typeMatching: Type Matching
+    spec.sink: Sink
+    spec.service: Service
+    spec.sink.controlledBy: Controlled By
+    status.cleanEventTypes: Event Types
+    status.conditions: Conditions
+    status.conditions.lastTransitionTime: Last Transition
+    status.conditions.reason: Reason
+    status.conditions.status: Status
+    status.conditions.type: Type
+    status.conditions.message: Message
+    status.type: Type
+---
+details:
+  header:
+    - source: >-
+        $each(spec.output, function($v, $k) {$v.endpoint.value or
+        $v.endpoint.valueFrom.secretKeyRef.name ? $k})
+      placeholder: custom
+      type: string
+      name: Type
+      isSelected: true
+      widget: Text
+  body:
+    - source: >-
+        $filter(status.conditions, function ($v) { $v.type != "Pending" and
+        $v.type != "Running" })
+      widget: Table
+      name: Reconciliation Conditions
+      children:
+        - source: type
+          name: Type
+        - source: status
+          name: Status
+          widget: Badge
+          highlights:
+            success:
+              - 'True'
+            error:
+              - 'False'
+        - source: reason
+          name: Reason
+        - source: message
+          name: Message
+        - source: $readableTimestamp(lastTransitionTime)
+          name: Last transition
+          sort: true
+    - widget: Panel
+      name: Output
+      children:
+        - name: OTLP
+          widget: Panel
+          visibility: $exists(spec.output.otlp)
+          children:
+            - name: Endpoint
+              widget: Panel
+              visibility: $exists(spec.output.otlp.endpoint)
+              children:
+                - name: Value
+                  source: spec.output.otlp.endpoint.value
+                  visibility: $exists(spec.output.otlp.endpoint.value)
+                - name: Value From Secret
+                  widget: ResourceRefs
+                  source: spec.output.otlp.endpoint.valueFrom.secretKeyRef
+                  kind: Secret
+                  visibility: >-
+                    $exists(spec.output.otlp.endpoint.valueFrom.secretKeyRef.name)
+            - name: Authentication
+              widget: Panel
+              visibility: $exists(spec.output.otlp.authentication)
+              children:
+                - name: User
+                  widget: Panel
+                  visibility: $exists(spec.output.otlp.authentication.basic.user)
+                  children:
+                    - name: Value
+                      source: spec.output.otlp.authentication.basic.user.value
+                      visibility: >-
+                        $exists(spec.output.otlp.authentication.basic.user.value)
+                    - name: Value From Secret
+                      widget: ResourceRefs
+                      source: >-
+                        spec.output.otlp.authentication.basic.user.valueFrom.secretKeyRef
+                      kind: Secret
+                      visibility: >-
+                        $exists(spec.output.otlp.authentication.basic.user.valueFrom.secretKeyRef.name)
+                - name: Password
+                  widget: Panel
+                  visibility: $exists(spec.output.otlp.authentication.basic.password)
+                  children:
+                    - name: Value
+                      source: spec.output.otlp.authentication.basic.password.value
+                      visibility: >-
+                        $exists(spec.output.otlp.authentication.basic.password.value)
+                    - name: Value From Secret
+                      widget: ResourceRefs
+                      source: >-
+                        spec.output.otlp.authentication.basic.password.valueFrom.secretKeyRef
+                      kind: Secret
+                      visibility: >-
+                        $exists(spec.output.otlp.authentication.basic.password.valueFrom.secretKeyRef.name)
+            - name: Headers
+              widget: Panel
+              visibility: $exists(spec.output.otlp.headers)
+              children:
+                - name: Header
+                  widget: Panel
+                  visibility: $exists(spec.output.otlp.headers[].name)
+                  source: spec.output.otlp.headers[]
+                  children:
+                    - name: Name
+                      source: name
+                      visibility: $exists(name)
+                    - name: Prefix
+                      source: prefix
+                      visibility: $exists(prefix)
+                    - name: Value
+                      source: value
+                      visibility: $exists(value)
+                    - name: Value From Secret
+                      widget: ResourceRefs
+                      source: valueFrom.secretKeyRef
+                      kind: Secret
+                      visibility: $exists(valueFrom.secretKeyRef.name)
+            - name: TLS
+              widget: Panel
+              visibility: $exists(spec.output.otlp.tls)
+              children:
+                - name: Insecure
+                  visibility: $exists(spec.output.otlp.tls.insecure)
+                  source: spec.output.otlp.tls.insecure
+                - name: Skip Cert Verification
+                  visibility: $exists(spec.output.otlp.tls.insecureSkipVerify)
+                  source: spec.output.otlp.tls.insecureSkipVerify
+                - name: Ca
+                  widget: Panel
+                  visibility: $exists(spec.output.otlp.tls.ca)
+                  source: spec.output.otlp.tls.ca
+                  children:
+                    - name: Value
+                      source: value
+                      visibility: $exists(value)
+                    - name: Value From Secret
+                      widget: ResourceRefs
+                      source: valueFrom.secretKeyRef
+                      kind: Secret
+                      visibility: $exists(valueFrom.secretKeyRef.name)
+                - name: Cert
+                  widget: Panel
+                  visibility: $exists(spec.output.otlp.tls.cert)
+                  source: spec.output.otlp.tls.cert
+                  children:
+                    - name: Value
+                      source: value
+                      visibility: $exists(value)
+                    - name: Value From Secret
+                      widget: ResourceRefs
+                      source: valueFrom.secretKeyRef
+                      kind: Secret
+                      visibility: $exists(valueFrom.secretKeyRef.name)
+                - name: Key
+                  widget: Panel
+                  visibility: $exists(spec.output.otlp.tls.key)
+                  source: spec.output.otlp.tls.key
+                  children:
+                    - name: Value
+                      source: value
+                      visibility: $exists(value)
+                    - name: Value From Secret
+                      widget: ResourceRefs
+                      source: valueFrom.secretKeyRef
+                      kind: Secret
+                      visibility: $exists(valueFrom.secretKeyRef.name)
+            - widget: Panel
+              name: Other Settings
+              children:
+                - name: Protocol
+                  source: spec.output.otlp.protocol
+form:
+  - path: spec.output
+    widget: FormGroup
+    defaultExpanded: true
+    simple: true
+    children:
+      - name: OTLP
+        path: otlp
+        widget: FormGroup
+        defaultExpanded: true
+        simple: true
+        children:
+          - name: Endpoint
+            path: endpoint
+            widget: FormGroup
+            simple: true
+            children:
+              - name: Value
+                path: value
+                widget: Text
+                simple: true
+              - name: Secret Reference
+                path: valueFrom.secretKeyRef
+                widget: ResourceRef
+                simple: true
+                resource:
+                  kind: secret
+                  version: v1
+                children:
+                  - simple: true
+                    path: key
+                    enum: $keys($secret.data)
+          - name: Protocol
+            path: protocol
+            simple: true
+            widget: FormGroup
+            children:
+              - name: Value
+                widget: Text
+          - name: Authentication
+            path: authentication
+            widget: FormGroup
+            simple: true
+            children:
+              - name: User
+                path: basic.user
+                widget: FormGroup
+                simple: true
+                children:
+                  - name: Value
+                    path: value
+                    widget: Text
+                    simple: true
+                  - name: Secret Reference
+                    path: valueFrom.secretKeyRef
+                    widget: ResourceRef
+                    resource:
+                      kind: secret
+                      version: v1
+                    simple: true
+                    children:
+                      - simple: true
+                        path: key
+                        enum: $keys($secret.data)
+              - name: Password
+                path: basic.password
+                widget: FormGroup
+                simple: true
+                children:
+                  - name: Value
+                    path: value
+                    widget: Text
+                    simple: true
+                  - name: Secret Reference
+                    path: valueFrom.secretKeyRef
+                    widget: ResourceRef
+                    resource:
+                      kind: secret
+                      version: v1
+                    simple: true
+                    children:
+                      - simple: true
+                        path: key
+                        enum: $keys($secret.data)
+          - name: Headers
+            path: headers[]
+            widget: FormGroup
+            simple: true
+            children:
+              - name: Name
+                path: name
+                widget: Text
+                simple: true
+              - name: Prefix
+                path: prefix
+                widget: Text
+                simple: true
+              - name: Value
+                path: value
+                widget: Text
+                simple: true
+              - name: Secret Reference
+                path: valueFrom.secretKeyRef
+                widget: ResourceRef
+                simple: true
+                resource:
+                  kind: secret
+                  version: v1
+                children:
+                  - simple: true
+                    path: key
+                    enum: $keys($secret.data)
+          - name: TLS
+            widget: FormGroup
+            path: tls
+            children:
+              - name: Insecure
+                path: insecure
+              - name: Skip Certificate Validation
+                path: insecureSkipVerify
+              - name: CA
+                path: ca
+                widget: FormGroup
+                simple: true
+                children:
+                  - name: Value
+                    path: value
+                    widget: Text
+                    simple: true
+                  - name: Secret Reference
+                    path: valueFrom.secretKeyRef
+                    widget: ResourceRef
+                    simple: true
+                    resource:
+                      kind: secret
+                      version: v1
+                    children:
+                      - simple: true
+                        path: key
+                        enum: $keys($secret.data)
+              - name: Cert
+                path: cert
+                widget: FormGroup
+                simple: true
+                children:
+                  - name: Value
+                    path: value
+                    widget: Text
+                    simple: true
+                  - name: Secret Reference
+                    path: valueFrom.secretKeyRef
+                    widget: ResourceRef
+                    simple: true
+                    resource:
+                      kind: secret
+                      version: v1
+                    children:
+                      - simple: true
+                        path: key
+                        enum: $keys($secret.data)
+              - name: Key
+                path: key
+                widget: FormGroup
+                simple: true
+                children:
+                  - name: Value
+                    path: value
+                    widget: Text
+                    simple: true
+                  - name: Secret Reference
+                    path: valueFrom.secretKeyRef
+                    widget: ResourceRef
+                    simple: true
+                    resource:
+                      kind: secret
+                      version: v1
+                    children:
+                      - simple: true
+                        path: key
+                        enum: $keys($secret.data)
+general:
+  resource:
+    kind: TracePipeline
+    group: telemetry.kyma-project.io
+    version: v1alpha1
+  name: Trace Pipelines
+  category: Observability
+  urlPath: tracepipelines
+  scope: cluster
+  description: >-
+    {{[TracePipeline custom
+    resource](https://kyma-project.io/#/telemetry-manager/user/resources/04-tracepipeline)}}
+    configures a custom Trace Pipeline.
+list:
+  - source: >-
+      $each(spec.output, function($v, $k) {$v.endpoint.value or
+      $v.endpoint.valueFrom.secretKeyRef.name ? $k})
+    placeholder: custom
+    type: string
+    name: Type
+    isSelected: true
+    widget: Text
+  - name: Status
+    source: >-
+      $filter(status.conditions, function ($v) { $v.type != "Pending" and
+      $v.type != "Running" })
+    widget: Columns
+    children:
+      - name: Type
+        source: type
+        widget: Badge
+      - name: Status
+        source: status
+        widget: Badge
+        highlights:
+          success:
+            - 'True'
+          error:
+            - 'False'

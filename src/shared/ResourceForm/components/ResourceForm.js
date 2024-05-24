@@ -20,13 +20,13 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { editViewModeState } from 'state/preferences/editViewModeAtom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 
-const excludeStatus = resource => {
-  const modifiedResource = { ...resource };
-  delete modifiedResource.status;
-  delete modifiedResource.metadata?.resourceVersion;
-  delete modifiedResource.metadata?.managedFields;
-  return modifiedResource;
-};
+// const excludeStatus = resource => {
+//   const modifiedResource = { ...resource };
+//   delete modifiedResource.status;
+//   delete modifiedResource.metadata?.resourceVersion;
+//   delete modifiedResource.metadata?.managedFields;
+//   return modifiedResource;
+// };
 
 export function ResourceForm({
   pluralKind, // used for the request path
@@ -85,24 +85,12 @@ export function ResourceForm({
     isResourceEditedState,
   );
 
-  useEffect(() => {
-    if (
-      !isResourceEdited.isEdited &&
-      !isResourceEdited.isSaved &&
-      JSON.stringify(excludeStatus(resource)) !==
-        JSON.stringify(excludeStatus(initialResource))
-    ) {
-      setIsResourceEdited({ ...isResourceEdited, isEdited: true });
-    }
-
-    if (
-      JSON.stringify(excludeStatus(resource)) ===
-        JSON.stringify(excludeStatus(initialResource)) &&
-      (isResourceEdited.isEdited || isResourceEdited.isSaved)
-    ) {
-      setIsResourceEdited({ isEdited: false, warningOpen: false });
-    }
-  }, [initialResource, isResourceEdited, resource, setIsResourceEdited]);
+  useEffect(() => {}, [
+    initialResource,
+    isResourceEdited,
+    resource,
+    setIsResourceEdited,
+  ]);
 
   const { t } = useTranslation();
   const createResource = useCreateResource({
