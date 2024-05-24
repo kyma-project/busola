@@ -62,10 +62,9 @@ export function ResourceForm({
   yamlSearchDisabled,
   yamlHideDisabled,
   isEdit,
-  // stickyHeaderHeight,
+  stickyHeaderHeight,
   resetLayout,
 }) {
-  // console.log(stickyHeaderHeight);
   // readonly schema ID, set only once
   const resourceSchemaId = useMemo(
     () => resource?.apiVersion + '/' + resource?.kind,
@@ -270,8 +269,8 @@ export function ResourceForm({
         className="resource-form--panel card-shadow"
         style={spacing.sapUiSmallMarginTopBottom}
         disableMargin
-        // stickyHeader={true}
-        // headerTop={stickyHeaderHeight + 'px'}
+        stickyHeader={true}
+        headerTop={stickyHeaderHeight + 'px'}
         headerActions={
           <>
             {actions}
