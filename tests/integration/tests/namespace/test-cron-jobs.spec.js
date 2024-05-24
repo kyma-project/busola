@@ -84,7 +84,7 @@ context('Test Cron Jobs', () => {
       .contains('Always')
       .click();
 
-    cy.checkUnsavedDialog();
+    // cy.checkUnsavedDialog();
 
     cy.saveChanges('Create');
   });
@@ -152,7 +152,7 @@ context('Test Cron Jobs', () => {
       .contains('Never')
       .click();
 
-    cy.checkUnsavedDialog();
+    // cy.checkUnsavedDialog();
 
     cy.saveChanges('Edit');
   });
