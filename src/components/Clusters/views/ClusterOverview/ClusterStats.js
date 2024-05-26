@@ -1,10 +1,10 @@
+import React, { useEffect, useState } from 'react';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useTranslation } from 'react-i18next';
 import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
 import { Card, CardHeader, Title } from '@ui5/webcomponents-react';
 import { CountingCard } from 'shared/components/CountingCard/CountingCard';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import { useEffect, useState } from 'react';
 import {
   bytesToHumanReadable,
   getBytes,
@@ -14,6 +14,10 @@ import {
   getHealthyStatusesCount,
 } from 'resources/Namespaces/NamespaceWorkloads/NamespaceWorkloadsHelpers';
 import './ClusterStats.scss';
+
+const Injections = React.lazy(() =>
+  import('../../../Extensibility/ExtensibilityInjections'),
+);
 
 export default function ClusterStats({ nodesData }) {
   const { t } = useTranslation();
@@ -126,72 +130,67 @@ export default function ClusterStats({ nodesData }) {
             )}GiB / ${roundDecimals(memory.capacity)}GiB`}
           />
         </Card>
-        <div className="counting-cards-container">
-          {podsData && (
-            <CountingCard
-              value={podsData?.length}
-              title={t('cluster-overview.statistics.pods-overview')}
-              subTitle={t('cluster-overview.statistics.total-pods')}
-              resourceUrl="pods"
-              extraInfo={[
-                {
-                  title: t('cluster-overview.statistics.healthy-pods'),
-                  value: healthyPods,
-                },
-                {
-                  title: t('cluster-overview.statistics.failing-pods'),
-                  value: podsData.length - healthyPods,
-                },
-              ]}
-            />
-          )}
-          {deploymentsData && (
-            <CountingCard
-              value={deploymentsData?.length}
-              title={t('cluster-overview.statistics.deployments-overview')}
-              subTitle={t('cluster-overview.statistics.total-deployments')}
-              resourceUrl="deployments"
-              extraInfo={[
-                {
-                  title: t('cluster-overview.statistics.healthy-deployments'),
-                  value: healthyDeployments,
-                },
-                {
-                  title: t('cluster-overview.statistics.failing-deployments'),
-                  value: deploymentsData.length - healthyDeployments,
-                },
-              ]}
-            />
-          )}
-          {persistentVolumesData && (
-            <CountingCard
-              value={persistentVolumesData?.length}
-              title="Persistent Volumes Overview"
-              subTitle="Total Persistent Volumes"
-              resourceUrl="persistentvolumes"
-              isClusterResource
-              extraInfo={[
-                {
-                  title: 'Total Capacity',
-                  value: pvCapacity,
-                },
-              ]}
-            />
-          )}
-        </div>
+        {podsData && (
+          <CountingCard
+            value={podsData?.length}
+            title={t('cluster-overview.statistics.pods-overview')}
+            subTitle={t('cluster-overview.statistics.total-pods')}
+            resourceUrl="pods"
+            extraInfo={[
+              {
+                title: t('cluster-overview.statistics.healthy-pods'),
+                value: healthyPods,
+              },
+              {
+                title: t('cluster-overview.statistics.failing-pods'),
+                value: podsData.length - healthyPods,
+              },
+            ]}
+          />
+        )}
+        {deploymentsData && (
+          <CountingCard
+            value={deploymentsData?.length}
+            title={t('cluster-overview.statistics.deployments-overview')}
+            subTitle={t('cluster-overview.statistics.total-deployments')}
+            resourceUrl="deployments"
+            extraInfo={[
+              {
+                title: t('cluster-overview.statistics.healthy-deployments'),
+                value: healthyDeployments,
+              },
+              {
+                title: t('cluster-overview.statistics.failing-deployments'),
+                value: deploymentsData.length - healthyDeployments,
+              },
+            ]}
+          />
+        )}
+        {persistentVolumesData && (
+          <CountingCard
+            value={persistentVolumesData?.length}
+            title="Persistent Volumes Overview"
+            subTitle="Total Persistent Volumes"
+            resourceUrl="persistentvolumes"
+            isClusterResource
+            extraInfo={[
+              {
+                title: 'Total Capacity',
+                value: pvCapacity,
+              },
+            ]}
+          />
+        )}
         {nodesData && (
-          <div className="counting-cards-container">
-            <CountingCard
-              value={nodesData?.length}
-              title={t('cluster-overview.statistics.nodes')}
-            />
-          </div>
+          <CountingCard
+            value={nodesData?.length}
+            title={t('cluster-overview.statistics.nodes')}
+          />
         )}
         {daemonsetsData && (
-          <div className="counting-cards-container">
-            <CountingCard value={daemonsetsData?.length} title="Daemon Sets" />
-          </div>
+          <CountingCard value={daemonsetsData?.length} title="Daemon Sets" />
         )}
+        <Injections destination="ClusterStats" slot="cards" root="" />
       </div>
     </>
   );

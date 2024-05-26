@@ -19,6 +19,7 @@ import { ExternalLink } from './ExternalLink';
 import { Tabs } from './Tabs';
 import { Wizard } from './Wizard';
 import { FeaturedCard } from './FeaturedCard/FeaturedCard';
+import { StatisticalCard } from './StatisticalCard/StatisticalCard';
 
 import { APIRuleHost } from './APIRules/APIRuleHost';
 
@@ -48,6 +49,7 @@ export const widgets = {
   Text,
   Wizard,
   FeaturedCard,
+  StatisticalCard,
 };
 
 export const valuePreprocessors = {

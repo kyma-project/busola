@@ -23,7 +23,7 @@ export const CountingCard = ({
   value,
   extraInfo,
   title,
-  subTitle,
+  subTitle = ' ',
   resourceUrl,
   isClusterResource = false,
 }: CountingCardProps) => {

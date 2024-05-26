@@ -563,20 +563,23 @@ Nevertheless, it is also possible to use it as a regular widget.
 ```yaml
 injections: |-
   - title: Introducing Modules
+    name: Modules
     description: Modules add functionalities to your cluster. Consume SAP BTP services, monitor your cluster, build serverless applications and more.
     widget: FeaturedCard
+    source: $
     id: ModulesBanner
+    order: 0
     illustration: Modules
     design: information-1
     children:
-      - widget: Wizard
-        name: Add Modules
-        wizard: module-wizard
+      - widget: ResourceButton
+        source: "'Modify Modules'"
+        resource: 
+          customUrl: kymamodules
       - widget: ExternalLinkButton
         link: https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-s-modular-approach
-    order: 0
     targets:
-      - slot: details-banner
+      - slot: banner
         location: ClusterOverview
 ```
 
@@ -807,12 +810,14 @@ The **Injections** section contains a list of objects that defines the display s
 - **details-header** - In the header of the details view
 - **details-top** - At the top of the resource view
 - **list-header** - In the header of the list view
+- **banner** - At the top of the ClusterOverview or ResourceDetails
 
 ### All available _injections_ locations
 
 #### Special views
 
 - ClusterOverview (only supports the **details-\*** slots)
+- ClusterStats (the statistical cards section of the ClusterOverview)
 - CustomResourceDefinitions
 
 #### Resource views
