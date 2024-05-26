@@ -19,7 +19,8 @@ import { ExternalLink } from './ExternalLink';
 import { Tabs } from './Tabs';
 import { Wizard } from './Wizard';
 import { FeaturedCard } from './FeaturedCard/FeaturedCard';
-import { StatisticalCard } from './StatisticalCard/StatisticalCard';
+import { StatisticalCard } from './StatisticalCard';
+import { RadialGraphCard } from './RadialGraphCard';
 
 import { APIRuleHost } from './APIRules/APIRuleHost';
 
@@ -50,6 +51,7 @@ export const widgets = {
   Wizard,
   FeaturedCard,
   StatisticalCard,
+  RadialGraphCard,
 };
 
 export const valuePreprocessors = {
