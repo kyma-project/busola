@@ -32,7 +32,7 @@ export function ClusterOverview() {
   const currentCluster = clustersInfo?.currentCluster;
   const notification = useNotification();
   const navigate = useNavigate();
-  const { nodes: data, error, loading } = useNodesQuery();
+  const { nodes, error, loading } = useNodesQuery();
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     resourceType: t('clusters.labels.name'),
   });
@@ -98,8 +98,8 @@ export function ClusterOverview() {
               {t('cluster-overview.headers.cluster-details')}
             </Title>
             <ClusterDetails currentCluster={currentCluster} />
-            {data && <ClusterStats data={data} />}
-            <ClusterNodes data={data} error={error} loading={loading} />
+            <ClusterStats nodesData={nodes} />
+            <ClusterNodes data={nodes} error={error} loading={loading} />
             {clusterValidation?.isEnabled && <ClusterValidation />}
             <Injections destination="ClusterOverview" slot="details-bottom" />
           </>

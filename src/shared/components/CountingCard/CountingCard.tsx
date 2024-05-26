@@ -16,6 +16,7 @@ type CountingCardProps = {
   title: string;
   subTitle: string;
   resourceUrl: string;
+  isClusterResource: boolean;
 };
 
 export const CountingCard = ({
@@ -24,16 +25,18 @@ export const CountingCard = ({
   title,
   subTitle,
   resourceUrl,
+  isClusterResource = false,
 }: CountingCardProps) => {
   const { t } = useTranslation();
-  const { namespaceUrl } = useUrl();
+  const { namespaceUrl, clusterUrl } = useUrl();
 
   return (
     <Card
       className="counting-card"
       style={{
-        maxWidth: extraInfo ? '325px' : '175px',
-        maxHeight: extraInfo ? '' : '136px',
+        width: extraInfo ? '325px' : '150px',
+        maxWidth: extraInfo ? '325px' : '150px',
+        maxHeight: extraInfo ? '145px' : '125px',
       }}
       header={
         <AnalyticalCardHeader
@@ -62,9 +65,13 @@ export const CountingCard = ({
         {resourceUrl && (
           <Link
             design="Default"
-            url={namespaceUrl(resourceUrl, {
-              namespace: '-all-',
-            })}
+            url={
+              isClusterResource
+                ? clusterUrl(resourceUrl)
+                : namespaceUrl(resourceUrl, {
+                    namespace: '-all-',
+                  })
+            }
             className="counting-card__link"
           >
             {t('common.buttons.learn-more')}

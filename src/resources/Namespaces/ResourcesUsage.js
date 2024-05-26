@@ -18,7 +18,7 @@ const MEMORY_SUFFIX_POWER = {
   Ti: 2 ** 40,
 };
 
-function getBytes(memoryString) {
+export function getBytes(memoryString) {
   if (!memoryString || memoryString === '0') {
     return 0;
   }

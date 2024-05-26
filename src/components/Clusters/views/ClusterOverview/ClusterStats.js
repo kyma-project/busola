@@ -4,23 +4,30 @@ import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart'
 import { Card, CardHeader, Title } from '@ui5/webcomponents-react';
 import { CountingCard } from 'shared/components/CountingCard/CountingCard';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { useEffect, useState } from 'react';
+import {
+  bytesToHumanReadable,
+  getBytes,
+} from 'resources/Namespaces/ResourcesUsage';
 import {
   getHealthyReplicasCount,
   getHealthyStatusesCount,
 } from 'resources/Namespaces/NamespaceWorkloads/NamespaceWorkloadsHelpers';
 import './ClusterStats.scss';
 
-export default function ClusterStats({ data }) {
+export default function ClusterStats({ nodesData }) {
   const { t } = useTranslation();
 
   let cpu = { usage: 0, capacity: 0 };
   let memory = { usage: 0, capacity: 0 };
 
-  for (const node of data) {
-    cpu.usage += node.metrics.cpu?.usage ?? 0;
-    cpu.capacity += node.metrics.cpu?.capacity ?? 0;
-    memory.usage += node.metrics.memory?.usage ?? 0;
-    memory.capacity += node.metrics.memory?.capacity ?? 0;
+  if (nodesData) {
+    for (const node of nodesData) {
+      cpu.usage += node.metrics.cpu?.usage ?? 0;
+      cpu.capacity += node.metrics.cpu?.capacity ?? 0;
+      memory.usage += node.metrics.memory?.usage ?? 0;
+      memory.capacity += node.metrics.memory?.capacity ?? 0;
+    }
   }
 
   const { data: podsData } = useGetList()(`/api/v1/pods`, {
@@ -28,6 +35,28 @@ export default function ClusterStats({ data }) {
   });
 
   const { data: deploymentsData } = useGetList()('/apis/apps/v1/deployments', {
+    pollingInterval: 3200,
+  });
+
+  const { data: persistentVolumesData } = useGetList()(
+    '/api/v1/persistentvolumes',
+    {
+      pollingInterval: 3200,
+    },
+  );
+  const [pvCapacity, setPvCapacity] = useState(0);
+
+  useEffect(() => {
+    if (persistentVolumesData) {
+      let total_bytes_capacity = 0;
+      for (const pv of persistentVolumesData) {
+        total_bytes_capacity += getBytes(pv?.spec?.capacity?.storage);
+      }
+      setPvCapacity(bytesToHumanReadable(total_bytes_capacity));
+    }
+  }, [persistentVolumesData]);
+
+  const { data: daemonsetsData } = useGetList()('/apis/apps/v1/daemonsets', {
     pollingInterval: 3200,
   });
 
@@ -134,15 +163,35 @@ export default function ClusterStats({ data }) {
               ]}
             />
           )}
-        </div>
-        <div className="counting-cards-container">
-          {data && (
+          {persistentVolumesData && (
             <CountingCard
-              value={data?.length}
-              title={t('cluster-overview.statistics.nodes')}
+              value={persistentVolumesData?.length}
+              title="Persistent Volumes Overview"
+              subTitle="Total Persistent Volumes"
+              resourceUrl="persistentvolumes"
+              isClusterResource
+              extraInfo={[
+                {
+                  title: 'Total Capacity',
+                  value: pvCapacity,
+                },
+              ]}
             />
           )}
         </div>
+        {nodesData && (
+          <div className="counting-cards-container">
+            <CountingCard
+              value={nodesData?.length}
+              title={t('cluster-overview.statistics.nodes')}
+            />
+          </div>
+        )}
+        {daemonsetsData && (
+          <div className="counting-cards-container">
+            <CountingCard value={daemonsetsData?.length} title="Daemon Sets" />
+          </div>
+        )}
       </div>
     </>
   );
