@@ -34,9 +34,9 @@ export const CountingCard = ({
     <Card
       className="counting-card"
       style={{
-        width: extraInfo ? '325px' : '150px',
-        maxWidth: extraInfo ? '325px' : '150px',
-        maxHeight: extraInfo ? '145px' : '125px',
+        width: extraInfo ? '325px' : '154.5px',
+        maxWidth: extraInfo ? '325px' : '154.5px',
+        maxHeight: resourceUrl ? '145px' : '120px',
       }}
       header={
         <AnalyticalCardHeader

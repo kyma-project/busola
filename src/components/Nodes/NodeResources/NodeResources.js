@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
 import { Card, CardHeader } from '@ui5/webcomponents-react';
+import { roundTwoDecimals } from 'shared/utils/helpers';
 import './NodeResources.scss';
 
 export function NodeResources({ metrics }) {
@@ -19,10 +20,9 @@ export function NodeResources({ metrics }) {
           color="var(--sapChart_OrderedColor_5)"
           value={cpu.usage}
           max={cpu.capacity}
-          tooltip={{
-            content: `${t('machine-info.cpu-m')} ${cpu.usage}/${cpu.capacity}`,
-            position: 'bottom',
-          }}
+          additionalInfo={`${roundTwoDecimals(cpu.usage)}m / ${roundTwoDecimals(
+            cpu.capacity,
+          )}m`}
         />
       </Card>
       <Card
@@ -37,12 +37,9 @@ export function NodeResources({ metrics }) {
           color="var(--sapChart_OrderedColor_6)"
           value={memory.usage}
           max={memory.capacity}
-          tooltip={{
-            content: `${t('machine-info.memory-gib')} ${memory.usage}/${
-              memory.capacity
-            }`,
-            position: 'bottom',
-          }}
+          additionalInfo={`${roundTwoDecimals(
+            memory.usage,
+          )}GiB / ${roundTwoDecimals(memory.capacity)}GiB`}
         />
       </Card>
     </>

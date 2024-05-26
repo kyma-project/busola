@@ -5,9 +5,10 @@ export function StatisticalCard({ structure }) {
     <CountingCard
       value={structure?.value}
       title={structure?.title}
-      subTitle={structure?.subtitle}
-      resourceUrl={structure?.resourUrl}
+      subTitle={structure?.subTitle}
+      resourceUrl={structure?.resourceUrl}
       isClusterResource={structure?.isClusterResource}
+      extraInfo={structure?.extraInfo}
     />
   );
 }

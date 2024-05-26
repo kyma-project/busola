@@ -13,6 +13,7 @@ import {
   getHealthyReplicasCount,
   getHealthyStatusesCount,
 } from 'resources/Namespaces/NamespaceWorkloads/NamespaceWorkloadsHelpers';
+import { roundTwoDecimals } from 'shared/utils/helpers';
 import './ClusterStats.scss';
 
 const Injections = React.lazy(() =>
@@ -92,18 +93,11 @@ export default function ClusterStats({ nodesData }) {
         >
           <UI5RadialChart
             color="var(--sapChart_OrderedColor_5)"
-            value={roundDecimals(cpu.usage)}
-            max={roundDecimals(cpu.capacity)}
-            tooltip={{
-              content: t('cluster-overview.tooltips.cpu-used-m', {
-                value: roundDecimals(cpu.usage),
-                max: roundDecimals(cpu.capacity),
-              }),
-              position: 'bottom',
-            }}
-            additionalInfo={`${roundDecimals(cpu.usage)}m / ${roundDecimals(
-              cpu.capacity,
-            )}m`}
+            value={roundTwoDecimals(cpu.usage)}
+            max={roundTwoDecimals(cpu.capacity)}
+            additionalInfo={`${roundTwoDecimals(
+              cpu.usage,
+            )}m / ${roundTwoDecimals(cpu.capacity)}m`}
           />
         </Card>
         <Card
@@ -116,18 +110,11 @@ export default function ClusterStats({ nodesData }) {
         >
           <UI5RadialChart
             color="var(--sapChart_OrderedColor_6)"
-            value={roundDecimals(memory.usage)}
-            max={roundDecimals(memory.capacity)}
-            tooltip={{
-              content: t('cluster-overview.tooltips.memory-used-gib', {
-                value: roundDecimals(memory.usage),
-                max: roundDecimals(memory.capacity),
-              }),
-              position: 'bottom',
-            }}
-            additionalInfo={`${roundDecimals(
+            value={roundTwoDecimals(memory.usage)}
+            max={roundTwoDecimals(memory.capacity)}
+            additionalInfo={`${roundTwoDecimals(
               memory.usage,
-            )}GiB / ${roundDecimals(memory.capacity)}GiB`}
+            )}GiB / ${roundTwoDecimals(memory.capacity)}GiB`}
           />
         </Card>
         {podsData && (
@@ -194,8 +181,4 @@ export default function ClusterStats({ nodesData }) {
       </div>
     </>
   );
-}
-
-function roundDecimals(number) {
-  return parseFloat(number.toFixed(2));
 }
