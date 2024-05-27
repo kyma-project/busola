@@ -13,7 +13,6 @@ export function savePreviousPath() {
   const previousPath = queryParams.get('layout')
     ? `${window.location.pathname}?layout=${queryParams.get('layout')}`
     : window.location.pathname;
-
   if (previousPath !== '/' && previousPath !== '/clusters') {
     localStorage.setItem(PREVIOUS_PATHNAME_KEY, previousPath);
   }
