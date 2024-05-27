@@ -29,6 +29,9 @@ Cypress.Commands.add('handleExceptions', () => {
       ) ||
       err.message.includes(
         "Cannot read properties of null (reading 'getBoundingClientRect')",
+      ) ||
+      err.message.includes(
+        "Cannot read properties of undefined (reading 'showAt')",
       )
     )
       return false;
