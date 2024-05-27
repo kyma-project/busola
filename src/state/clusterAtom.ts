@@ -49,7 +49,6 @@ export const clusterState: RecoilState<ActiveClusterState> = atom<
         const clusters = getClusters();
 
         const clusterName = localStorage.getItem(CLUSTER_NAME_STORAGE_KEY);
-        console.log(clusterName);
 
         if (clusterName && !clusters?.[clusterName]) {
           localStorage.removeItem(CLUSTERS_STORAGE_KEY);

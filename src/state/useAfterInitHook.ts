@@ -13,9 +13,8 @@ export function savePreviousPath() {
   const previousPath = queryParams.get('layout')
     ? `${window.location.pathname}?layout=${queryParams.get('layout')}`
     : window.location.pathname;
-  console.log(previousPath);
+
   if (previousPath !== '/' && previousPath !== '/clusters') {
-    console.log('SAVE PATH');
     localStorage.setItem(PREVIOUS_PATHNAME_KEY, previousPath);
   }
 }
@@ -25,7 +24,6 @@ export function getPreviousPath() {
 }
 
 export function removePreviousPath() {
-  console.log('REMOVE!!!!!');
   localStorage.removeItem(PREVIOUS_PATHNAME_KEY);
 }
 
@@ -35,19 +33,13 @@ export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
   const [search] = useSearchParams();
   const navigate = useNavigate();
   const initDone = useRef(false);
-  console.log(cluster);
-  console.log(initDone.current);
-  console.log(!!cluster && !authData);
-  console.log(handledKubeconfigId);
-  useEffect(() => {
-    console.log(search.get('kubeconfigID'));
 
+  useEffect(() => {
     if (initDone.current === true) {
       return;
     }
     // wait until kubeconfig id is finished
     if (handledKubeconfigId !== 'done') {
-      console.log('WAITING');
       return;
     }
 
@@ -66,12 +58,10 @@ export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
       return;
     }
 
-    console.log(cluster);
     initDone.current = true;
     const previousPath = getPreviousPath();
-    console.log(previousPath);
+
     if (previousPath) {
-      console.log('NAVIGATE!!!!');
       navigate(previousPath);
       removePreviousPath();
     } else {

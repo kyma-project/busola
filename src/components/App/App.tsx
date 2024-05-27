@@ -42,7 +42,7 @@ export default function App() {
   const setNamespace = useSetRecoilState(activeNamespaceIdState);
   const { namespace } = useUrl();
   const makeGardenerLoginRoute = useMakeGardenerLoginRoute();
-  //console.log(cluster);
+
   useInitTheme();
 
   const { t, i18n } = useTranslation();
@@ -71,7 +71,7 @@ export default function App() {
   useAppTracking();
   useAfterInitHook(kubeconfigIdState);
   useGetKymaResources();
-  //console.log(cluster);
+
   return (
     <div id="html-wrap">
       <Header />
