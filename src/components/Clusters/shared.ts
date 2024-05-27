@@ -21,7 +21,7 @@ function addCurrentCluster(
 ) {
   const { setCurrentCluster } = clustersInfo;
 
-  removePreviousPath();
+  if (clustersInfo.currentCluster?.name !== params?.name) removePreviousPath();
 
   if (params.currentContext.namespace) {
     clustersInfo.navigate(
