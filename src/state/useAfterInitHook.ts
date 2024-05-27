@@ -60,7 +60,6 @@ export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
 
     initDone.current = true;
     const previousPath = getPreviousPath();
-
     if (previousPath) {
       navigate(previousPath);
       removePreviousPath();

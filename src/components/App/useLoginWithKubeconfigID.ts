@@ -82,6 +82,7 @@ const loadKubeconfigIdCluster = async (
 
     const shouldRedirectToCluster = (name: string) =>
       !showClustersOverview && (isOnlyOneCluster || isK8CurrentCluster(name));
+
     // add the clusters
     kubeconfig.contexts.forEach(context => {
       const previousStorageMethod: ClusterStorage =
