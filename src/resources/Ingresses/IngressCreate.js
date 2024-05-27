@@ -19,11 +19,10 @@ export default function IngressCreate({
   const [ingress, setIngress] = useState(
     _.cloneDeep(initialIngress) || createIngressTemplate(namespaceId),
   );
+  const [initialResource] = useState(
+    initialIngress || createIngressTemplate(namespaceId),
+  );
   const { t } = useTranslation();
-
-  if (!initialIngress) {
-    initialIngress = createIngressTemplate(namespaceId);
-  }
 
   return (
     <ResourceForm
@@ -31,7 +30,7 @@ export default function IngressCreate({
       pluralKind="ingresses"
       singularName={t('ingresses.name_singular')}
       resource={ingress}
-      initialResource={initialIngress}
+      initialResource={initialResource}
       setResource={setIngress}
       onlyYaml
       onChange={onChange}

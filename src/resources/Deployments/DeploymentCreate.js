@@ -34,10 +34,9 @@ export default function DeploymentCreate({
       : createDeploymentTemplate(namespace),
   );
   const [initialUnchangedResource] = useState(initialDeployment);
-
-  if (!initialDeployment) {
-    initialDeployment = createDeploymentTemplate(namespace);
-  }
+  const [initialResource] = useState(
+    initialDeployment || createDeploymentTemplate(namespace),
+  );
 
   const {
     isIstioFeatureOn,
@@ -86,7 +85,7 @@ export default function DeploymentCreate({
       }}
       // create modal on a namespace details doesn't have the resourceUrl
       createUrl={resourceUrl}
-      initialResource={initialDeployment}
+      initialResource={initialResource}
       initialUnchangedResource={initialUnchangedResource}
       handleNameChange={handleNameChange}
     >

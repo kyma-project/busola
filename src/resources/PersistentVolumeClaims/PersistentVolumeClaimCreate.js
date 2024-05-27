@@ -20,12 +20,10 @@ export default function PersistentVolumeClaimCreate({
     _.cloneDeep(initialPersistentVolumeClaim) ||
       createPersistentVolumeClaimTemplate(namespace),
   );
-
-  if (!initialPersistentVolumeClaim) {
-    initialPersistentVolumeClaim = createPersistentVolumeClaimTemplate(
-      namespace,
-    );
-  }
+  const [initialResource] = useState(
+    initialPersistentVolumeClaim ||
+      createPersistentVolumeClaimTemplate(namespace),
+  );
 
   return (
     <ResourceForm
@@ -33,7 +31,7 @@ export default function PersistentVolumeClaimCreate({
       pluralKind="persistentvolumeclaims"
       singularName={t('persistent-volume-claims.name_singular')}
       resource={persistentVolumeClaim}
-      initialResource={initialPersistentVolumeClaim}
+      initialResource={initialResource}
       setResource={setPersistentVolumeClaim}
       onChange={onChange}
       formElementRef={formElementRef}

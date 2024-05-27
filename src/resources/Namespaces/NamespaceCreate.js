@@ -44,6 +44,9 @@ export default function NamespaceCreate({
     initialNamespace ? cloneDeep(initialNamespace) : createNamespaceTemplate(),
   );
   const [initialUnchangedResource] = useState(initialNamespace);
+  const [initialResource] = useState(
+    initialNamespace || createNamespaceTemplate(),
+  );
 
   const {
     isIstioFeatureOn,
@@ -145,10 +148,6 @@ export default function NamespaceCreate({
     }
   }
 
-  if (!initialNamespace) {
-    initialNamespace = createNamespaceTemplate();
-  }
-
   const renderEditor = ({ defaultEditor, Editor }) => (
     <div>
       <ResourceForm.CollapsibleSection
@@ -198,7 +197,7 @@ export default function NamespaceCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
-      initialResource={initialNamespace}
+      initialResource={initialResource}
       initialUnchangedResource={initialUnchangedResource}
       afterCreatedFn={afterNamespaceCreated}
       setCustomValid={setCustomValid}

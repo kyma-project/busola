@@ -21,11 +21,10 @@ export default function NetworkPolicyCreate({
     _.cloneDeep(initialNetworkPolicy) ||
       createNetworkPolicyTemplate(namespaceId),
   );
+  const [initialResource] = useState(
+    initialNetworkPolicy || createNetworkPolicyTemplate(namespaceId),
+  );
   const { t } = useTranslation();
-
-  if (!initialNetworkPolicy) {
-    initialNetworkPolicy = createNetworkPolicyTemplate(namespaceId);
-  }
 
   return (
     <ResourceForm
@@ -33,7 +32,7 @@ export default function NetworkPolicyCreate({
       pluralKind="networkpolicies"
       singularName={t('network-policies.name_singular')}
       resource={networkPolicy}
-      initialResource={initialNetworkPolicy}
+      initialResource={initialResource}
       setResource={setNetworkPolicy}
       onlyYaml
       onChange={onChange}

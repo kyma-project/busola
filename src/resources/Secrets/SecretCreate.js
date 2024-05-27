@@ -27,6 +27,9 @@ export default function SecretCreate({
       : createSecretTemplate(namespace || ''),
   );
   const [initialUnchangedResource] = useState(initialSecret);
+  const [initialResource] = useState(
+    initialSecret || createSecretTemplate(namespace || ''),
+  );
 
   const [lockedKeys, setLockedKeys] = useState([]);
 
@@ -63,17 +66,13 @@ export default function SecretCreate({
     setValue(selectedOption.text);
   };
 
-  if (!initialSecret) {
-    initialSecret = createSecretTemplate(namespace || '');
-  }
-
   return (
     <ResourceForm
       {...props}
       pluralKind="secrets"
       singularName={t('secrets.name_singular')}
       resource={secret}
-      initialResource={initialSecret}
+      initialResource={initialResource}
       initialUnchangedResource={initialUnchangedResource}
       setResource={setSecret}
       onChange={onChange}
