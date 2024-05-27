@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -35,7 +35,6 @@ import { useAfterInitHook } from 'state/useAfterInitHook';
 import useSidebarCondensed from 'sidebar/useSidebarCondensed';
 import { useGetValidationEnabledSchemas } from 'state/validationEnabledSchemasAtom';
 import { useGetKymaResources } from 'state/kymaResourcesAtom';
-import { useClustersInfo } from 'state/utils/getClustersInfo';
 
 export default function App() {
   const language = useRecoilValue(languageAtom);
@@ -47,16 +46,6 @@ export default function App() {
   useInitTheme();
 
   const { t, i18n } = useTranslation();
-  const clustersInfo = useClustersInfo();
-  const { setCurrentCluster } = clustersInfo;
-  const [search] = useSearchParams();
-
-  useEffect(() => {
-    if (search.get('kubeconfigID')) {
-      console.log('SET');
-      setCurrentCluster(undefined);
-    }
-  }, [search, setCurrentCluster]);
 
   useEffect(() => {
     setNamespace(namespace);
