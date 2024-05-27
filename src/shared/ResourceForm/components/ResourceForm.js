@@ -84,25 +84,26 @@ export function ResourceForm({
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
+  const { isEdited, isSaved } = isResourceEdited;
 
   useEffect(() => {
     if (
-      !isResourceEdited.isEdited &&
-      !isResourceEdited.isSaved &&
+      !isEdited &&
+      !isSaved &&
       JSON.stringify(excludeStatus(resource)) !==
         JSON.stringify(excludeStatus(initialResource))
     ) {
-      setIsResourceEdited({ ...isResourceEdited, isEdited: true });
+      setIsResourceEdited({ isEdited: true });
     }
 
     if (
       JSON.stringify(excludeStatus(resource)) ===
         JSON.stringify(excludeStatus(initialResource)) &&
-      (isResourceEdited.isEdited || isResourceEdited.isSaved)
+      (isEdited || isSaved)
     ) {
       setIsResourceEdited({ isEdited: false, warningOpen: false });
     }
-  }, [initialResource, isResourceEdited, resource, setIsResourceEdited]);
+  }, [initialResource, isEdited, isSaved, resource, setIsResourceEdited]);
 
   const { t } = useTranslation();
   const createResource = useCreateResource({
