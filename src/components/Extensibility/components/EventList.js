@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { EventList as EventListComponent } from 'resources/Events/EventList';
 
@@ -42,9 +40,10 @@ export function EventList({
   const defaultType =
     EVENT_MESSAGE_TYPE[renameDefaultType(structure.defaultType)];
 
-  const resourceUrl = namespaceId
-    ? `/api/v1/namespaces/${namespaceId}/events`
-    : '/api/v1/events';
+  const resourceUrl =
+    namespaceId && namespaceId !== '-all-'
+      ? `/api/v1/namespaces/${namespaceId}/events`
+      : '/api/v1/events';
 
   const filter = res => {
     if (!structure.filter) return true;
