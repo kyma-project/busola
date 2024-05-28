@@ -200,12 +200,15 @@ export default function ClusterStats({ nodesData }) {
             <CountingCard
               className="item"
               value={daemonsetsData?.length}
-              title="DaemonSets Overview"
-              subTitle="Total DaemonSets"
+              title={t('cluster-overview.statistics.daemonsets-overview')}
+              subTitle={t('cluster-overview.statistics.total-daemonsets')}
               extraInfo={[
-                { title: 'Healthy DaemonSets', value: healthyDaemonsets },
                 {
-                  title: 'Unhealthy DaemonSets',
+                  title: t('cluster-overview.statistics.healthy-daemonsets'),
+                  value: healthyDaemonsets,
+                },
+                {
+                  title: t('cluster-overview.statistics.unhealthy-daemonsets'),
                   value: daemonsetsData?.length - healthyDaemonsets,
                 },
               ]}
@@ -218,12 +221,17 @@ export default function ClusterStats({ nodesData }) {
             <CountingCard
               className="item"
               value={statefulsetsData?.length}
-              title="StatefulSets Overview"
-              subTitle="Total StatefulSets"
+              title={t('cluster-overview.statistics.statefulsets-overview')}
+              subTitle={t('cluster-overview.statistics.total-statefulsets')}
               extraInfo={[
-                { title: 'Healthy StatefulSets', value: healthyStatefulsets },
                 {
-                  title: 'Unhealthy StatefulSets',
+                  title: t('cluster-overview.statistics.healthy-statefulsets'),
+                  value: healthyStatefulsets,
+                },
+                {
+                  title: t(
+                    'cluster-overview.statistics.unhealthy-statefulsets',
+                  ),
                   value: statefulsetsData?.length - healthyStatefulsets,
                 },
               ]}
@@ -236,12 +244,17 @@ export default function ClusterStats({ nodesData }) {
             <CountingCard
               className="item"
               value={servicesData?.length}
-              title="Services Overview"
-              subTitle="Total Services"
+              title={t('cluster-overview.statistics.services-overview')}
+              subTitle={t('cluster-overview.statistics.total-services')}
               extraInfo={[
-                { title: 'LoadBalancers', value: loadbalancerNumber },
                 {
-                  title: 'Other',
+                  title: t(
+                    'cluster-overview.statistics.services-loadbalancers',
+                  ),
+                  value: loadbalancerNumber,
+                },
+                {
+                  title: t('cluster-overview.statistics.services-others'),
                   value: servicesData?.length - loadbalancerNumber,
                 },
               ]}
@@ -254,13 +267,19 @@ export default function ClusterStats({ nodesData }) {
             <CountingCard
               className="item"
               value={persistentVolumesData?.length}
-              title="Persistent Volumes Overview"
-              subTitle="Total Persistent Volumes"
+              title={t(
+                'cluster-overview.statistics.persistentvolumes-overview',
+              )}
+              subTitle={t(
+                'cluster-overview.statistics.total-persistentvolumes',
+              )}
               resourceUrl="persistentvolumes"
               isClusterResource
               extraInfo={[
                 {
-                  title: 'Total Capacity',
+                  title: t(
+                    'cluster-overview.statistics.persistent-volumes-total-capacity',
+                  ),
                   value: pvCapacity,
                 },
               ]}
