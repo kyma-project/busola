@@ -115,7 +115,7 @@ export function ResourceList({
         namespace={value?.namespace || namespaceId}
         isCompact
         title={widgetT(structure)}
-        disableCreate={structure.disableCreate || false}
+        disableCreate={structure.disableCreate || true}
         showTitle={true}
         hasDetailsView={
           structure.hasDetailsView ?? !!PredefinedRenderer?.Details
