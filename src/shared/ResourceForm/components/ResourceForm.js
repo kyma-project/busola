@@ -16,12 +16,12 @@ import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import { spacing } from '@ui5/webcomponents-react-base';
 import './ResourceForm.scss';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { editViewModeState } from 'state/preferences/editViewModeAtom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 
 const excludeStatus = resource => {
-  const modifiedResource = { ...resource };
+  const modifiedResource = JSON.parse(JSON.stringify(resource || {}));
   delete modifiedResource.status;
   delete modifiedResource.metadata?.resourceVersion;
   delete modifiedResource.metadata?.managedFields;
@@ -81,27 +81,38 @@ export function ResourceForm({
   }
 
   const editViewMode = useRecoilValue(editViewModeState);
-  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
-    isResourceEditedState,
-  );
+  const isResourceEdited = useRecoilValue(isResourceEditedState);
+  const setIsResourceEdited = useSetRecoilState(isResourceEditedState);
   const { isEdited, isSaved } = isResourceEdited;
 
   useEffect(() => {
-    if (
-      !isEdited &&
-      !isSaved &&
-      JSON.stringify(excludeStatus(resource)) !==
-        JSON.stringify(excludeStatus(initialResource))
-    ) {
-      setIsResourceEdited({ isEdited: true });
-    }
+    console.log('first');
+    try {
+      const hasResourceChanged =
+        JSON.stringify(excludeStatus(resource)) ===
+        JSON.stringify(excludeStatus(initialResource));
 
-    if (
-      JSON.stringify(excludeStatus(resource)) ===
-        JSON.stringify(excludeStatus(initialResource)) &&
-      (isEdited || isSaved)
-    ) {
-      setIsResourceEdited({ isEdited: false, warningOpen: false });
+      if (!isEdited && !isSaved && !hasResourceChanged) {
+        console.log('setIsResourceEdited({ isEdited: true });', isEdited);
+        // prompt('setIsResourceEdited({ isEdited: true });');
+        setIsResourceEdited({
+          isEdited: true,
+          warningOpen: false,
+          isSaved: isSaved ?? false,
+          discardAction: () => {},
+        });
+      }
+
+      if ((isEdited || isSaved) && hasResourceChanged) {
+        console.log(
+          'setIsResourceEdited({ isEdited: false, warningOpen: false });',
+          isEdited,
+        );
+        // prompt('setIsResourceEdited({ isEdited: false, warningOpen: false });');
+        setIsResourceEdited({ isEdited: false, warningOpen: false });
+      }
+    } catch (e) {
+      console.log(e);
     }
   }, [initialResource, isEdited, isSaved, resource, setIsResourceEdited]);
 

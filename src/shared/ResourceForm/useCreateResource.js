@@ -133,6 +133,7 @@ export function useCreateResource({
     } else {
       defaultAfterCreatedFn();
     }
+    console.log('onSuccess');
     setIsResourceEdited({
       ...isResourceEdited,
       isEdited: false,

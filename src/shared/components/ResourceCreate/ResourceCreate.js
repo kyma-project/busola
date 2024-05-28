@@ -87,6 +87,7 @@ export const ResourceCreate = ({
   }
 
   function navigateAfterClose() {
+    console.log('ResourceCreate');
     setIsResourceEdited({ isEdited: false, warningOpen: false });
     window.history.pushState(
       window.history.state,
