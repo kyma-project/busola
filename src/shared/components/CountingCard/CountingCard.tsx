@@ -17,6 +17,7 @@ type CountingCardProps = {
   subTitle: string;
   resourceUrl: string;
   isClusterResource: boolean;
+  className: string;
 };
 
 export const CountingCard = ({
@@ -26,13 +27,14 @@ export const CountingCard = ({
   subTitle = ' ',
   resourceUrl,
   isClusterResource = false,
+  className = '',
 }: CountingCardProps) => {
   const { t } = useTranslation();
   const { namespaceUrl, clusterUrl } = useUrl();
 
   return (
     <Card
-      className="counting-card"
+      className={`counting-card ${className}`}
       style={{
         width: extraInfo ? '325px' : '154.5px',
         maxWidth: extraInfo ? '325px' : '154.5px',

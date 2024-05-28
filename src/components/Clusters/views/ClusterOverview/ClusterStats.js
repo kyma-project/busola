@@ -105,47 +105,58 @@ export default function ClusterStats({ nodesData }) {
       >
         {t('cluster-overview.statistics.title')}
       </Title>
-      <div
-        className="flexwrap cluster-stats"
-        style={spacing.sapUiSmallMarginBeginEnd}
-      >
-        <Card
-          className="radial-chart-card"
-          header={
-            <CardHeader
-              titleText={t('cluster-overview.statistics.cpu-usage')}
+      <div className="cluster-stats" style={spacing.sapUiTinyMarginBeginEnd}>
+        <div className="item-wrapper high">
+          <Card
+            className="radial-chart-card"
+            header={
+              <CardHeader
+                titleText={t('cluster-overview.statistics.cpu-usage')}
+              />
+            }
+          >
+            <UI5RadialChart
+              color="var(--sapChart_OrderedColor_5)"
+              value={roundTwoDecimals(cpu.usage)}
+              max={roundTwoDecimals(cpu.capacity)}
+              additionalInfo={`${roundTwoDecimals(
+                cpu.usage,
+              )}m / ${roundTwoDecimals(cpu.capacity)}m`}
             />
-          }
-        >
-          <UI5RadialChart
-            color="var(--sapChart_OrderedColor_5)"
-            value={roundTwoDecimals(cpu.usage)}
-            max={roundTwoDecimals(cpu.capacity)}
-            additionalInfo={`${roundTwoDecimals(
-              cpu.usage,
-            )}m / ${roundTwoDecimals(cpu.capacity)}m`}
-          />
-        </Card>
-        <Card
-          className="radial-chart-card"
-          header={
-            <CardHeader
-              titleText={t('cluster-overview.statistics.memory-usage')}
+          </Card>
+        </div>
+        <div className="item-wrapper high">
+          <Card
+            className="radial-chart-card"
+            header={
+              <CardHeader
+                titleText={t('cluster-overview.statistics.memory-usage')}
+              />
+            }
+          >
+            <UI5RadialChart
+              color="var(--sapChart_OrderedColor_6)"
+              value={roundTwoDecimals(memory.usage)}
+              max={roundTwoDecimals(memory.capacity)}
+              additionalInfo={`${roundTwoDecimals(
+                memory.usage,
+              )}GiB / ${roundTwoDecimals(memory.capacity)}GiB`}
             />
-          }
-        >
-          <UI5RadialChart
-            color="var(--sapChart_OrderedColor_6)"
-            value={roundTwoDecimals(memory.usage)}
-            max={roundTwoDecimals(memory.capacity)}
-            additionalInfo={`${roundTwoDecimals(
-              memory.usage,
-            )}GiB / ${roundTwoDecimals(memory.capacity)}GiB`}
-          />
-        </Card>
-        <div className="counting-cards-container">
-          {podsData && (
+          </Card>
+        </div>
+        {nodesData && (
+          <div className="item-wrapper small">
             <CountingCard
+              className="item"
+              value={nodesData?.length}
+              title={t('cluster-overview.statistics.nodes')}
+            />
+          </div>
+        )}
+        {podsData && (
+          <div className="item-wrapper wide">
+            <CountingCard
+              className="item"
               value={podsData?.length}
               title={t('cluster-overview.statistics.pods-overview')}
               subTitle={t('cluster-overview.statistics.total-pods')}
@@ -161,9 +172,12 @@ export default function ClusterStats({ nodesData }) {
                 },
               ]}
             />
-          )}
-          {deploymentsData && (
+          </div>
+        )}
+        {deploymentsData && (
+          <div className="item-wrapper wide">
             <CountingCard
+              className="item"
               value={deploymentsData?.length}
               title={t('cluster-overview.statistics.deployments-overview')}
               subTitle={t('cluster-overview.statistics.total-deployments')}
@@ -179,17 +193,12 @@ export default function ClusterStats({ nodesData }) {
                 },
               ]}
             />
-          )}
-        </div>
-        <div className="counting-cards-container">
-          {nodesData && (
+          </div>
+        )}
+        {daemonsetsData && (
+          <div className="item-wrapper wide">
             <CountingCard
-              value={nodesData?.length}
-              title={t('cluster-overview.statistics.nodes')}
-            />
-          )}
-          {daemonsetsData && (
-            <CountingCard
+              className="item"
               value={daemonsetsData?.length}
               title="DaemonSets Overview"
               subTitle="Total DaemonSets"
@@ -202,11 +211,12 @@ export default function ClusterStats({ nodesData }) {
               ]}
               resourceUrl="daemonsets"
             />
-          )}
-        </div>
-        <div className="counting-cards-container">
-          {statefulsetsData && (
+          </div>
+        )}
+        {statefulsetsData && (
+          <div className="item-wrapper wide">
             <CountingCard
+              className="item"
               value={statefulsetsData?.length}
               title="StatefulSets Overview"
               subTitle="Total StatefulSets"
@@ -219,9 +229,12 @@ export default function ClusterStats({ nodesData }) {
               ]}
               resourceUrl="statefulsets"
             />
-          )}
-          {servicesData && (
+          </div>
+        )}
+        {servicesData && (
+          <div className="item-wrapper wide">
             <CountingCard
+              className="item"
               value={servicesData?.length}
               title="Services Overview"
               subTitle="Total Services"
@@ -234,22 +247,25 @@ export default function ClusterStats({ nodesData }) {
               ]}
               resourceUrl="services"
             />
-          )}
-        </div>
+          </div>
+        )}
         {persistentVolumesData && (
-          <CountingCard
-            value={persistentVolumesData?.length}
-            title="Persistent Volumes Overview"
-            subTitle="Total Persistent Volumes"
-            resourceUrl="persistentvolumes"
-            isClusterResource
-            extraInfo={[
-              {
-                title: 'Total Capacity',
-                value: pvCapacity,
-              },
-            ]}
-          />
+          <div className="item-wrapper wide">
+            <CountingCard
+              className="item"
+              value={persistentVolumesData?.length}
+              title="Persistent Volumes Overview"
+              subTitle="Total Persistent Volumes"
+              resourceUrl="persistentvolumes"
+              isClusterResource
+              extraInfo={[
+                {
+                  title: 'Total Capacity',
+                  value: pvCapacity,
+                },
+              ]}
+            />
+          </div>
         )}
         <Injections destination="ClusterStats" slot="cards" root="" />
       </div>
