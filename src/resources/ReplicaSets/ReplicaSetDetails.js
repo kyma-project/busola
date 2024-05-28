@@ -9,9 +9,21 @@ import { Selector } from 'shared/components/Selector/Selector';
 import ReplicaSetCreate from './ReplicaSetCreate';
 import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 import { ResourceDescription } from 'resources/ReplicaSets';
+import { EventsList } from '../../shared/components/EventsList';
+import { filterByResource } from '../../hooks/useMessageList';
+import { CountingCard } from '../../shared/components/CountingCard/CountingCard';
 
-export function ReplicasetsDetails(props) {
+export function ReplicaSetsDetails(props) {
   const { t } = useTranslation();
+
+  const Events = () => (
+    <EventsList
+      key="events"
+      namespace={props.namespace}
+      filter={filterByResource('ReplicaSet', props.resourceName)}
+      hideInvolvedObjects={true}
+    />
+  );
 
   const customColumns = [
     {
@@ -32,7 +44,6 @@ export function ReplicasetsDetails(props) {
                 <br />
                 {t('replica-sets.memory')}: {c.resources?.limits?.memory}
                 <br />
-                description
               </React.Fragment>
             ))}
           </React.Fragment>
@@ -57,11 +68,25 @@ export function ReplicasetsDetails(props) {
         );
       },
     },
+  ];
+
+  const customStatusColumns = [
     {
-      header: t('common.headers.pods'),
-      value: resource => <ReplicaSetStatus replicaSet={resource} />,
+      header: t('replica-sets.status.observedGeneration'),
+      value: resource => (
+        <div>{resource?.status?.observedGeneration ?? 0} </div>
+      ),
     },
   ];
+
+  const statusConditions = resource => {
+    return resource?.status?.conditions?.map(condition => {
+      return {
+        header: { titleText: condition.type, status: condition.status },
+        message: condition.message,
+      };
+    });
+  };
 
   const MatchSelector = replicaset => (
     <Selector
@@ -77,15 +102,48 @@ export function ReplicasetsDetails(props) {
     <PodTemplate key="pod-template" template={replicaset.spec.template} />
   );
 
+  const customOverview = resource => {
+    return (
+      <CountingCard
+        value={resource?.status?.replicas ?? 0}
+        title={t('replica-sets.overview.header')}
+        subTitle={t('replica-sets.overview.replicas')}
+        extraInfo={[
+          {
+            title: t('replica-sets.overview.readyReplicas'),
+            value: resource?.status?.readyReplicas ?? 0,
+          },
+          {
+            title: t('replica-sets.overview.availableReplicas'),
+            value: resource?.status?.availableReplicas ?? 0,
+          },
+          {
+            title: t('replica-sets.overview.fullyLabeledReplicas'),
+            value: resource?.status?.fullyLabeledReplicas ?? 0,
+          },
+        ]}
+      />
+    );
+  };
+
   return (
     <ResourceDetails
       customColumns={customColumns}
-      customComponents={[HPASubcomponent, MatchSelector, ReplicaSetPodTemplate]}
+      customComponents={[
+        HPASubcomponent,
+        MatchSelector,
+        ReplicaSetPodTemplate,
+        Events,
+      ]}
+      statusBadge={replicaSet => <ReplicaSetStatus replicaSet={replicaSet} />}
+      customStatusColumns={customStatusColumns}
+      statusConditions={statusConditions}
       description={ResourceDescription}
       createResourceForm={ReplicaSetCreate}
+      customOverview={customOverview}
       {...props}
     />
   );
 }
 
-export default ReplicasetsDetails;
+export default ReplicaSetsDetails;
