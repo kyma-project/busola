@@ -1,3 +1,5 @@
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+
 const toSeconds = 1000;
 const toMinutes = 60;
 const toHours = 60;
@@ -7,6 +9,10 @@ export const getElapsedTime = (
   timestamp: string,
   valueUnit: string,
 ): string => {
+  if (!timestamp) {
+    return EMPTY_TEXT_PLACEHOLDER;
+  }
+
   const startDate = new Date(timestamp);
   const now = new Date();
   const timeDiff = now.valueOf() - startDate.valueOf();

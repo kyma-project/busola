@@ -328,6 +328,7 @@ common:
     resources: Resources
     nodeInfo: Node Info
     node-details: Node Details
+    started-at: Started At
     status: Status
     value: Value
     version: Version
@@ -344,6 +345,7 @@ common:
     issuer: Issuer
     kubernetes: Kubernetes
     kyma: Kyma
+    last-transition: Last Transition Time
     name: Name
     namespace: Namespace
     new-entry: New Entry
@@ -689,7 +691,6 @@ deployments:
     available-replicas: Available Replicas
     current-replicas: Current Replicas
     updated-replicas: Updated Replicas
-    last-scale: Last Scale Time
 discovery-and-network:
   title: Discovery and Network
 domains:
@@ -1083,7 +1084,6 @@ pods:
     view-logs: View Logs
   description: <0>Pod</0> is the smallest and simplest Kubernetes object that represents a set of containers running on your cluster.
   headers:
-    pod-ip: Pod IP
     type: Type
     volume-name: Volume Name
   labels:
@@ -1112,6 +1112,15 @@ pods:
   name_singular: Pod
   node: Node
   restarts: Restarts
+  status:
+    container-statuses: Container Statuses
+    ephemeral-container-statuses: Ephemeral Container Statuses
+    host-ip: Host IP
+    init-container-statuses: Init Container Statuses
+    nominated-node-name: Nominated Node Name
+    pod-ip: Pod IP
+    pod-ips: Pod IPs
+    qos-class: QoS Class
   statuses:
     completed: Completed
     containercreating: Pending
