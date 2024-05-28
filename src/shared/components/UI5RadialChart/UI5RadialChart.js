@@ -2,14 +2,14 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { RadialChart } from '@ui5/webcomponents-react-charts';
 import { spacing } from '@ui5/webcomponents-react-base';
-import './UI5RadialChart.scss';
 import { Text } from '@ui5/webcomponents-react';
+import './UI5RadialChart.scss';
 
 export const UI5RadialChart = ({
   size = 200,
   value,
   max,
-  color = 'var(--sapBrandColor)',
+  colorNumber = 0,
   onClick,
   additionalInfo = '',
 }) => {
@@ -20,6 +20,11 @@ export const UI5RadialChart = ({
   const classnames = classNames(`radial-chart`, {
     'cursor-pointer': onClick,
   });
+
+  let color = 'var(--sapBrandColor)';
+  if (colorNumber > 0 && colorNumber < 12) {
+    color = `var(--sapChart_OrderedColor_${colorNumber})`;
+  }
 
   return (
     <div className={classnames} onClick={onClick}>
@@ -52,7 +57,7 @@ export const UI5RadialChart = ({
 
 UI5RadialChart.propTypes = {
   size: PropTypes.number,
-  color: PropTypes.string,
+  colorNumber: PropTypes.number,
   value: PropTypes.number.isRequired,
   max: PropTypes.number.isRequired,
   onClick: PropTypes.func,

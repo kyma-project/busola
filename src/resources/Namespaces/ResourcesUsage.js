@@ -76,7 +76,7 @@ const MemoryRequestsCircle = ({ resourceQuotas, isLoading }) => {
 
   return (
     <UI5RadialChart
-      color="var(--sapChart_OrderedColor_5)"
+      colorNumber={5}
       value={totalUsage}
       max={totalRequests}
       additionalInfo={`${valueText} / ${maxText}`}
@@ -107,7 +107,7 @@ const MemoryLimitsCircle = ({ resourceQuotas, isLoading }) => {
 
   return (
     <UI5RadialChart
-      color="var(--sapChart_OrderedColor_6)"
+      colorNumber={6}
       value={totalUsage}
       max={totalLimits}
       additionalInfo={`${valueText} / ${maxText}`}

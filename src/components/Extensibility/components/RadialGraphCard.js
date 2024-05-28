@@ -10,7 +10,7 @@ export function RadialGraphCard({ structure }) {
         header={<CardHeader titleText={structure?.name} />}
       >
         <UI5RadialChart
-          color="var(--sapChart_OrderedColor_5)"
+          colorNumber={structure?.color}
           value={roundTwoDecimals(structure?.value)}
           max={roundTwoDecimals(structure?.max)}
           additionalInfo={structure?.additionalInfo}
