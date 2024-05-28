@@ -1225,9 +1225,18 @@ replica-sets:
   memory: Memory
   name_singular: ReplicaSet
   title: Replica Sets
+  overview:
+    header: Replicas Overview
+    replicas: Replicas
+    readyReplicas: Ready Replicas
+    availableReplicas: Available Replicas
+    fullyLabeledReplicas: Fully Labeled Replicas
   tooltips:
     error: At least one of the Pods has failed.
     running: All the Pods are running correctly.
+  status:
+    conditions: Conditions
+    observedGeneration: Observed Generation
 resource-graph:
   buttons:
     go-to-details: Go to details

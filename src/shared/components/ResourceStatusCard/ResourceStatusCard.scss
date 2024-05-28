@@ -11,8 +11,7 @@
   &__details-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    column-gap: 25px;
-    row-gap: 1rem;
+    gap: 1rem;
   }
 
   &__conditions {
