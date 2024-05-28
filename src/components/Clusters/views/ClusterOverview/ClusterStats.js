@@ -106,7 +106,7 @@ export default function ClusterStats({ nodesData }) {
         {t('cluster-overview.statistics.title')}
       </Title>
       <div className="cluster-stats" style={spacing.sapUiTinyMarginBeginEnd}>
-        <div className="item-wrapper high">
+        <div className="item-wrapper tall">
           <Card
             className="radial-chart-card"
             header={
@@ -125,7 +125,7 @@ export default function ClusterStats({ nodesData }) {
             />
           </Card>
         </div>
-        <div className="item-wrapper high">
+        <div className="item-wrapper tall">
           <Card
             className="radial-chart-card"
             header={

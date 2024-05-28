@@ -4,7 +4,7 @@ import { roundTwoDecimals } from 'shared/utils/helpers';
 
 export function RadialGraphCard({ structure }) {
   return (
-    <div className="item-wrapper high">
+    <div className="item-wrapper tall">
       <Card
         className="radial-chart-card"
         header={<CardHeader titleText={structure?.name} />}

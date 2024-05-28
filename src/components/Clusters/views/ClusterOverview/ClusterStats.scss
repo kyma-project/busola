@@ -9,7 +9,7 @@
   margin-top: -8px;
   display: grid;
   grid-auto-flow: dense;
-  grid-template-columns: repeat(auto-fill, calc((57.5px + 0.25rem)));
+  grid-template-columns: repeat(auto-fill, calc(57.5px + 0.25rem));
   grid-template-rows: repeat(auto-fill, calc(150px + 0.5rem));
 
   .item-wrapper {
@@ -24,7 +24,7 @@
     }
   }
 
-  .high {
+  .tall {
     height: calc(300px + 1rem);
     width: calc(230px + 1rem);
     grid-column: span 4;
