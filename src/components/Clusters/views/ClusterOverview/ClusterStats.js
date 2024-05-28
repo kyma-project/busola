@@ -10,6 +10,7 @@ import {
   getBytes,
 } from 'resources/Namespaces/ResourcesUsage';
 import {
+  getHealthyDaemonsets,
   getHealthyReplicasCount,
   getHealthyStatusesCount,
 } from 'resources/Namespaces/NamespaceWorkloads/NamespaceWorkloadsHelpers';
@@ -64,9 +65,34 @@ export default function ClusterStats({ nodesData }) {
   const { data: daemonsetsData } = useGetList()('/apis/apps/v1/daemonsets', {
     pollingInterval: 3200,
   });
+  const { data: statefulsetsData } = useGetList()(
+    '/apis/apps/v1/statefulsets',
+    {
+      pollingInterval: 3200,
+    },
+  );
+
+  const { data: servicesData } = useGetList()('/api/v1/services', {
+    pollingInterval: 3200,
+  });
+  const [loadbalancerNumber, setLoadbalancerNumber] = useState(0);
+
+  useEffect(() => {
+    if (servicesData) {
+      let loadbalancers = 0;
+      for (const sv of servicesData) {
+        if (sv?.spec?.type === 'LoadBalancer') {
+          loadbalancers++;
+        }
+      }
+      setLoadbalancerNumber(loadbalancers);
+    }
+  }, [servicesData]);
 
   const healthyPods = getHealthyStatusesCount(podsData);
   const healthyDeployments = getHealthyReplicasCount(deploymentsData);
+  const healthyDaemonsets = getHealthyDaemonsets(daemonsetsData);
+  const healthyStatefulsets = getHealthyReplicasCount(statefulsetsData);
 
   return (
     <>
@@ -153,6 +179,57 @@ export default function ClusterStats({ nodesData }) {
             ]}
           />
         )}
+        {nodesData && (
+          <CountingCard
+            value={nodesData?.length}
+            title={t('cluster-overview.statistics.nodes')}
+          />
+        )}
+        {daemonsetsData && (
+          <CountingCard
+            value={daemonsetsData?.length}
+            title="DaemonSets Overview"
+            subTitle="Total DaemonSets"
+            extraInfo={[
+              { title: 'Healthy DaemonSets', value: healthyDaemonsets },
+              {
+                title: 'Unhealthy DaemonSets',
+                value: daemonsetsData?.length - healthyDaemonsets,
+              },
+            ]}
+            resourceUrl="daemonsets"
+          />
+        )}
+        {statefulsetsData && (
+          <CountingCard
+            value={statefulsetsData?.length}
+            title="StatefulSets Overview"
+            subTitle="Total StatefulSets"
+            extraInfo={[
+              { title: 'Healthy StatefulSets', value: healthyStatefulsets },
+              {
+                title: 'Unhealthy StatefulSets',
+                value: statefulsetsData?.length - healthyStatefulsets,
+              },
+            ]}
+            resourceUrl="statefulsets"
+          />
+        )}
+        {servicesData && (
+          <CountingCard
+            value={servicesData?.length}
+            title="Services Overview"
+            subTitle="Total Services"
+            extraInfo={[
+              { title: 'LoadBalancers', value: loadbalancerNumber },
+              {
+                title: 'Other',
+                value: servicesData?.length - loadbalancerNumber,
+              },
+            ]}
+            resourceUrl="services"
+          />
+        )}
         {persistentVolumesData && (
           <CountingCard
             value={persistentVolumesData?.length}
@@ -167,15 +244,6 @@ export default function ClusterStats({ nodesData }) {
               },
             ]}
           />
-        )}
-        {nodesData && (
-          <CountingCard
-            value={nodesData?.length}
-            title={t('cluster-overview.statistics.nodes')}
-          />
-        )}
-        {daemonsetsData && (
-          <CountingCard value={daemonsetsData?.length} title="Daemon Sets" />
         )}
         <Injections destination="ClusterStats" slot="cards" root="" />
       </div>
