@@ -143,93 +143,99 @@ export default function ClusterStats({ nodesData }) {
             )}GiB / ${roundTwoDecimals(memory.capacity)}GiB`}
           />
         </Card>
-        {podsData && (
-          <CountingCard
-            value={podsData?.length}
-            title={t('cluster-overview.statistics.pods-overview')}
-            subTitle={t('cluster-overview.statistics.total-pods')}
-            resourceUrl="pods"
-            extraInfo={[
-              {
-                title: t('cluster-overview.statistics.healthy-pods'),
-                value: healthyPods,
-              },
-              {
-                title: t('cluster-overview.statistics.failing-pods'),
-                value: podsData.length - healthyPods,
-              },
-            ]}
-          />
-        )}
-        {deploymentsData && (
-          <CountingCard
-            value={deploymentsData?.length}
-            title={t('cluster-overview.statistics.deployments-overview')}
-            subTitle={t('cluster-overview.statistics.total-deployments')}
-            resourceUrl="deployments"
-            extraInfo={[
-              {
-                title: t('cluster-overview.statistics.healthy-deployments'),
-                value: healthyDeployments,
-              },
-              {
-                title: t('cluster-overview.statistics.failing-deployments'),
-                value: deploymentsData.length - healthyDeployments,
-              },
-            ]}
-          />
-        )}
-        {nodesData && (
-          <CountingCard
-            value={nodesData?.length}
-            title={t('cluster-overview.statistics.nodes')}
-          />
-        )}
-        {daemonsetsData && (
-          <CountingCard
-            value={daemonsetsData?.length}
-            title="DaemonSets Overview"
-            subTitle="Total DaemonSets"
-            extraInfo={[
-              { title: 'Healthy DaemonSets', value: healthyDaemonsets },
-              {
-                title: 'Unhealthy DaemonSets',
-                value: daemonsetsData?.length - healthyDaemonsets,
-              },
-            ]}
-            resourceUrl="daemonsets"
-          />
-        )}
-        {statefulsetsData && (
-          <CountingCard
-            value={statefulsetsData?.length}
-            title="StatefulSets Overview"
-            subTitle="Total StatefulSets"
-            extraInfo={[
-              { title: 'Healthy StatefulSets', value: healthyStatefulsets },
-              {
-                title: 'Unhealthy StatefulSets',
-                value: statefulsetsData?.length - healthyStatefulsets,
-              },
-            ]}
-            resourceUrl="statefulsets"
-          />
-        )}
-        {servicesData && (
-          <CountingCard
-            value={servicesData?.length}
-            title="Services Overview"
-            subTitle="Total Services"
-            extraInfo={[
-              { title: 'LoadBalancers', value: loadbalancerNumber },
-              {
-                title: 'Other',
-                value: servicesData?.length - loadbalancerNumber,
-              },
-            ]}
-            resourceUrl="services"
-          />
-        )}
+        <div className="counting-cards-container">
+          {podsData && (
+            <CountingCard
+              value={podsData?.length}
+              title={t('cluster-overview.statistics.pods-overview')}
+              subTitle={t('cluster-overview.statistics.total-pods')}
+              resourceUrl="pods"
+              extraInfo={[
+                {
+                  title: t('cluster-overview.statistics.healthy-pods'),
+                  value: healthyPods,
+                },
+                {
+                  title: t('cluster-overview.statistics.failing-pods'),
+                  value: podsData.length - healthyPods,
+                },
+              ]}
+            />
+          )}
+          {deploymentsData && (
+            <CountingCard
+              value={deploymentsData?.length}
+              title={t('cluster-overview.statistics.deployments-overview')}
+              subTitle={t('cluster-overview.statistics.total-deployments')}
+              resourceUrl="deployments"
+              extraInfo={[
+                {
+                  title: t('cluster-overview.statistics.healthy-deployments'),
+                  value: healthyDeployments,
+                },
+                {
+                  title: t('cluster-overview.statistics.failing-deployments'),
+                  value: deploymentsData.length - healthyDeployments,
+                },
+              ]}
+            />
+          )}
+        </div>
+        <div className="counting-cards-container">
+          {nodesData && (
+            <CountingCard
+              value={nodesData?.length}
+              title={t('cluster-overview.statistics.nodes')}
+            />
+          )}
+          {daemonsetsData && (
+            <CountingCard
+              value={daemonsetsData?.length}
+              title="DaemonSets Overview"
+              subTitle="Total DaemonSets"
+              extraInfo={[
+                { title: 'Healthy DaemonSets', value: healthyDaemonsets },
+                {
+                  title: 'Unhealthy DaemonSets',
+                  value: daemonsetsData?.length - healthyDaemonsets,
+                },
+              ]}
+              resourceUrl="daemonsets"
+            />
+          )}
+        </div>
+        <div className="counting-cards-container">
+          {statefulsetsData && (
+            <CountingCard
+              value={statefulsetsData?.length}
+              title="StatefulSets Overview"
+              subTitle="Total StatefulSets"
+              extraInfo={[
+                { title: 'Healthy StatefulSets', value: healthyStatefulsets },
+                {
+                  title: 'Unhealthy StatefulSets',
+                  value: statefulsetsData?.length - healthyStatefulsets,
+                },
+              ]}
+              resourceUrl="statefulsets"
+            />
+          )}
+          {servicesData && (
+            <CountingCard
+              value={servicesData?.length}
+              title="Services Overview"
+              subTitle="Total Services"
+              extraInfo={[
+                { title: 'LoadBalancers', value: loadbalancerNumber },
+                {
+                  title: 'Other',
+                  value: servicesData?.length - loadbalancerNumber,
+                },
+              ]}
+              resourceUrl="services"
+            />
+          )}
+        </div>
         {persistentVolumesData && (
           <CountingCard
             value={persistentVolumesData?.length}

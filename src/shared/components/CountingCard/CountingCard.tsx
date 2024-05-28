@@ -36,7 +36,8 @@ export const CountingCard = ({
       style={{
         width: extraInfo ? '325px' : '154.5px',
         maxWidth: extraInfo ? '325px' : '154.5px',
-        maxHeight: resourceUrl ? '145px' : '120px',
+        height: '145px',
+        maxHeight: '145px',
       }}
       header={
         <AnalyticalCardHeader
