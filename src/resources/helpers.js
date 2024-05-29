@@ -6,9 +6,9 @@ import { ReadableElapsedTimeFromNow } from 'shared/components/ReadableElapsedTim
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 import {
-  getResourceGraphConfig,
+  useGetResourceGraphConfig,
   useAddStyle,
-} from 'shared/components/ResourceGraph/getResourceGraphConfig';
+} from 'shared/components/ResourceGraph/useGetResourceGraphConfig';
 import { useRecoilValue } from 'recoil';
 import { extensionsState } from 'state/navigation/extensionsAtom';
 import { prettifyNameSingular } from 'shared/utils/helpers';
@@ -77,6 +77,7 @@ export const usePrepareDetailsProps = ({
 
   const extensions = useRecoilValue(extensionsState);
   const addStyle = useAddStyle({ styleId: 'graph-styles' });
+  const resourceGraphConfig = useGetResourceGraphConfig(extensions, addStyle);
 
   return {
     resourceUrl: resourceUrl,
@@ -88,7 +89,7 @@ export const usePrepareDetailsProps = ({
     namespace: namespaceId,
     readOnly: queryParams.get('readOnly') === 'true',
     showYamlTab,
-    resourceGraphConfig: getResourceGraphConfig(extensions, addStyle),
+    resourceGraphConfig: resourceGraphConfig,
     i18n,
   };
 };
