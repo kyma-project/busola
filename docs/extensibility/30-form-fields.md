@@ -2,11 +2,11 @@
 
 You can customize the create and/or edit pages of the user interface component of your resource by adding objects to the **data.form** section in your resource ConfigMap.
 
-## Available Paramaters
+## Available Parameters
 
 ### Default **form.metadata** Parameters
 
-Each form is created with the following default fields, also known as Form Fields
+Each form is created with the following default fields, also known as Form Fields.
 
 * **metadata.name**
 * **metadata.labels**
@@ -27,7 +27,7 @@ Any parameters that are not handled by a widget are added to the schema directly
 
 If you target elements of an array rather than the array itself, you can use the `items[]` notation.
 
-This table lists the available parameters of the **data.form** section in your resource ConfigMap. You can learn whether each of the paramaters is required and what purpose it serves.
+This table lists the available parameters of the **data.form** section in your resource ConfigMap. You can learn whether each of the parameters is required and what purpose it serves.
 
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
@@ -36,7 +36,7 @@ This table lists the available parameters of the **data.form** section in your r
 | **widget** | No | string | A widget used to render the field referred to by the **path** property. If you don't provide the **widget**, a default handler is used depending on the data type provided in the schema. For more information about the available widgets, see [Form Widgets](50-form-widgets.md). |
 | **children** | No | | Child widgets used for grouping. Child paths are relative to its parent. |
 | **visibility** | No | boolean or [JSONata](jsonata.md) expression | Controls the visibility of the element. |
-| **overwrite** | No | boolean | Used to disable the overwriting (clearing) of hidden fields. Used together with **visibility**, defaults to `true`. <br><br> **NOTE:** it is recommended to set **overwrite** to `false` when defining fields with the same `path` and different **visibility** conditions. |
+| **overwrite** | No | boolean | Used to disable the overwriting (clearing) of hidden fields. Used together with **visibility**, defaults to `true`. <br><br> **NOTE:** It is recommended to set **overwrite** to `false` when defining fields with the same `path` and different **visibility** conditions. |
 | **trigger** | No | []string | A list of events to trigger, see [Dynamic fields section](#dynamic-field-values). |
 | **subscribe** | No | object | A map of events to subscribe to, to their respective values, see [Dynamic fields section](#dynamic-field-values). |
 
@@ -66,7 +66,7 @@ See the following example:
 
 ### Use Variables in **data.form**
 
-Additionally, it's possible to define variable fields. In this case, **path** is omitted, and a **var** argument is used to specify the variable name to assign. Variable names have to be unique across the extension. Such a value is not added to the resultant YAML but instead stored in memory and provided to any [JSONata](jsonata.md) handlers as variables, for example, `$foo`. Variables are provided for the current context. If a variable is defined inside an array, the value is specified for that specific item. To access raw values, the predefined `$vars` variable has to be used.
+Additionally, it's possible to define variable fields. In this case, **path** is omitted, and a **var** argument is used to specify the variable name to assign. Variable names have to be unique across the extension. Such a value is not added to the resultant YAML but instead stored in memory and provided to any [JSONata](jsonata.md) handlers as variables, for example, `$foo`. Variables are provided for the current context. If a variable is defined inside an array, the value is specified for that specific item. To access raw values, you must use the predefined `$vars` variable.
 
 When using a variable inside an array it has to be wrapped inside a `[]` element (see [example](#example)).
 
@@ -79,7 +79,7 @@ When using a variable inside an array it has to be wrapped inside a `[]` element
 
 All other fields can be used analogously to regular form items (except for the **path** and **children** parameters).
 
-In the example, the visibility for item price and color are analogous - the former uses scoped variables for the current item, and the latter extracts the value from an array variable using provided index - this is mostly useful for complex scenarios only.
+In the example, the visibility for item price and color are analogous - the former uses scoped variables for the current item, and the latter extracts the value from an array variable using the provided index - this is useful for complex scenarios only.
 
 ```yaml
 - var: useDescription
@@ -112,7 +112,7 @@ It's possible to modify field values automatically when another value changes. T
 
 Triggers are listed as a **trigger** field that contains a list of string labels.
 
-Subscriptions are a key-value object where in the most generic case the key is the name of the trigger, while the value is a [JSONata](jsonata.md) expression used to generate the new value.
+Subscriptions are a key-value object. In the most generic case, the key is the name of the trigger, while the value is a [JSONata](jsonata.md) expression used to generate the new value.
 
 See the following example:
 
@@ -142,7 +142,7 @@ or with variables:
 
 #### Scoping
 
-When a trigger is invoked in an array, by default it matches only fields in the same array item. And it bubbles all the way up to root. To subscribe to a trigger on a different level a jsonata-like notation can be used. To match triggers globally, that is, match triggers happening in root, a `$root.foo` notation can be used. To just access a higher level, `$parent.foo` can be used instead. It's possible to repeat `$parent` multiple times to access even higher levels (e.g. `$parent.$parent.foo`).
+When a trigger is invoked in an array, by default it matches only fields in the same array item. And it bubbles all the way up to root. To subscribe to a trigger on a different level, you can use a jsonata-like notation. To match triggers globally, that is, match triggers happening in root, you can use a `$root.foo` notation. To just access a higher level, use `$parent.foo` instead. It's possible to repeat `$parent` multiple times to access even higher levels (for example, `$parent.$parent.foo`).
 
 ## Related Links
 

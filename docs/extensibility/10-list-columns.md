@@ -1,11 +1,10 @@
 # Configure a List Page
 
-You can customize the list page of the user interface component of your resource by adding objects to the **data.list** section in your resource ConfigMap.
-Each object adds a new column to your table.
+You can customize the list page of the user interface component of your resource by adding objects to the **data.list** section in your resource ConfigMap. Each object adds a new column to your table.
 
 ## Available Parameters
 
-This table lists the available parameters of the **data.list** section in your resource ConfigMap. You can learn whether each of the paramaters is required and what purpose it serves.
+This table lists the available parameters of the **data.list** section in your resource ConfigMap. You can learn whether each of the parameters is required and what purpose it serves.
 
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
