@@ -21,7 +21,6 @@ import { useUrl } from 'hooks/useUrl';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { NamespaceChooser } from 'header/NamespaceChooser/NamespaceChooser';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
 import { isFormOpenState } from 'state/formOpenAtom';
 
 export function SidebarNavigation() {

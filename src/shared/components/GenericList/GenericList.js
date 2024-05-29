@@ -29,7 +29,6 @@ import { useUrl } from 'hooks/useUrl';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import pluralize from 'pluralize';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
 import { isFormOpenState } from 'state/formOpenAtom';
 
 const defaultSort = {

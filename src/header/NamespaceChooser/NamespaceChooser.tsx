@@ -6,7 +6,6 @@ import { namespacesState } from 'state/namespacesAtom';
 
 import { SideNavigationSubItem } from '@ui5/webcomponents-react';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
 import { isFormOpenState } from 'state/formOpenAtom';
 
 export function NamespaceChooser() {

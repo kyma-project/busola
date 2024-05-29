@@ -8,7 +8,6 @@ import { useTranslation } from 'react-i18next';
 import { LOADING_INDICATOR } from '../types';
 import { useRecoilState } from 'recoil';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
 import { isFormOpenState } from 'state/formOpenAtom';
 
 function scrollInto(element: Element) {

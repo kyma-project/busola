@@ -9,7 +9,7 @@ import {
   Text,
 } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';
@@ -46,7 +46,7 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
   const [selected, setSelected] = useState(1);
   const setShowWizard = useSetRecoilState(showAddClusterWizard);
   const [showTitleDescription, setShowTitleDescription] = useState(false);
-  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
+  const setIsFormOpen = useSetRecoilState(isFormOpenState);
 
   useEffect(() => {
     const contentContainer = document

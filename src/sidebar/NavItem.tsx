@@ -13,7 +13,7 @@ import {
 } from '@ui5/webcomponents-react';
 import { useNavigate } from 'react-router-dom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
+
 import { isFormOpenState } from 'state/formOpenAtom';
 
 type NavItemProps = {

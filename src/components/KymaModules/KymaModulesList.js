@@ -25,7 +25,6 @@ import pluralize from 'pluralize';
 import { Link } from 'shared/components/Link/Link';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
 import { isFormOpenState } from 'state/formOpenAtom';
 
 export function KymaModulesList(props) {

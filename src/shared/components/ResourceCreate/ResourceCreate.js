@@ -15,7 +15,6 @@ import { UnsavedMessageBox } from '../UnsavedMessageBox/UnsavedMessageBox';
 import { createPortal } from 'react-dom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
 import { isFormOpenState } from 'state/formOpenAtom';
 
 export const ResourceCreate = ({
