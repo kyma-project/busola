@@ -49,15 +49,11 @@ export const HeaderRenderer = ({
           <TableColumn
             slot={`${slot}-${index}`}
             key={typeof h === 'object' ? index : h}
-            popinDisplay="Block"
-            demandPopin={h === 'Labels' ? true : false}
             minWidth={
               Array.isArray(noHideFields) && noHideFields.length !== 0
                 ? noHideFields.find(field => field === h)
                   ? ''
                   : 850
-                : h === 'Labels'
-                ? '15000'
                 : disableHiding
                 ? ''
                 : h !== 'Name' && h !== ''

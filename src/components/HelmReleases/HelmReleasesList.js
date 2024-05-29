@@ -6,7 +6,6 @@ import { Link, Text } from '@ui5/webcomponents-react';
 import { groupBy } from 'lodash';
 
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import { Labels } from 'shared/components/Labels/Labels';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { decodeHelmRelease } from './decodeHelmRelease';
@@ -73,9 +72,6 @@ function HelmReleasesList({ enableColumnLayout }) {
       </Link>
     ),
     namespace === '-all-' ? entry.namespace : null,
-    <div style={{ maxWidth: '36rem' }}>
-      <Labels labels={entry.recentRelease?.labels || {}} />
-    </div>,
     entry.recentRelease?.chart.metadata.name || t('common.statuses.unknown'),
     entry.revision,
     entry.recentRelease?.chart.metadata.version || t('common.statuses.unknown'),
