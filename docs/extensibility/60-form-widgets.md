@@ -128,7 +128,7 @@ See the following example:
 
 <img src="./assets/form-widgets/CodeEditor.png" alt="Example of a code editor widget" style="border: 1px solid #D2D5D9">
 
-> **NOTE:** Remember to put both single and double quotes if you want to use plain language (for example, "'YAML'"). Specifying just double quotes ("YAML") makes Busola try to access a nonexistent `YAML` variable, resulting in the language being `undefined`.
+> **NOTE:** Remember to put both single and double quotes if you want to use plain language (for example, "'YAML'"). Specifying just double quotes ("YAML") makes Busola try to access a nonexistent YAML variable, resulting in the language being `undefined`.
 
 ### `Resource`
 
@@ -358,7 +358,7 @@ These are the available `GenericList` widget parameters:
 |-----------|----------|------|-------------|
 | **placeholder** | | | Specifies a short hint about the input field value. |
 | **template** | | | Specifies default structure for a list item. |
-| **defaultExpanded** | | boolean that specifies if the widget should be expanded by default. Defaults to `false`. |
+| **defaultExpanded** | | boolean | Specifies if the widget should be expanded by default. Defaults to `false`. |
 | **required** | | boolean | Specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`. |
 
 See the following example:

@@ -132,7 +132,7 @@ These are the available `ExternalLinkButton` widget parameters:
 
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
-| **link** | Yes | boolean | A flag to set the target URL. |
+| **link** | **Yes** | boolean | A flag to set the target URL. |
 | **name** | No | string | An optional flag. The default value is `Learn More`. |
 | **emphasized** | No | boolean | Defines the visual appearence of the button. Can be either `true` or `false`. The default valie is `false`. |
 
@@ -383,7 +383,7 @@ The `FeaturedCard` widgets render a promotional banner with its own title, descr
 The `FeaturedCard` can be closed in the top right corner.
 It is important to select a unique ID for each `FeaturedCard`, since it will be displayed/hidden based on its ID.
 
-**TIP:** It is **recommended** to use the `FeatureCard` widget via [injections](#widget-injections-overview) (**slot: banner**). This will turn all `FeatureCards` at the top of a section into a carousel-component. Nevertheless, it is also possible to use it as a regular widget.
+**TIP:** It is **recommended** to use the `FeatureCard` widget via [injections](./70-widget-injection.md) (**slot: banner**). This will turn all `FeatureCards` at the top of a section into a carousel-component. Nevertheless, it is also possible to use it as a regular widget.
 
 These are the available `FeatureCard` widget parameters:
 
@@ -548,7 +548,7 @@ These are the available `ResourceRefs` widget parameters:
 
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
-| **kind** | Yes | |  Kubernetes kind of the resource. |
+| **kind** | **Yes** | |  Kubernetes kind of the resource. |
 
 See the following example:
 

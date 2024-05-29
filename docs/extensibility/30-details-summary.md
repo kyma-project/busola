@@ -6,14 +6,14 @@ You can customize the details page of the user interface component of your resou
 
 In the **data.details** section you can provide configuration of three optional components: **header**, **body**, and **resourceGraph**. The **header** and **body** components are lists of widgets visible in the respective sections of the details page. You can use the **resourceGraph** component to present the relationship between different resources.
 
-### **data.details.header** and **data.details.body** Parameters
+### **header** and **body** Parameters
 
 This table lists the available parameters of the **data.details.header** and/or **data.details.body** section in your resource ConfigMap. You can learn whether each of the parameters is required and what purpose it serves. The **data.details.header** and **data.details.body** components are arrays of objects.
 
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
-| **source** | Yes | string or [JSONata](jsonata.md) expression |  Used to fetch data for the widget. In its simplest form, it's the path to the value. Not required for presentational widgets. |
-| **name** | Yes | string | Name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the [**translation** section](./translations-section.md). |
+| **source** | **Yes** | string or [JSONata](jsonata.md) expression |  Used to fetch data for the widget. In its simplest form, it's the path to the value. Not required for presentational widgets. |
+| **name** | **Yes** | string | Name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the [**translation** section](./translations-section.md). |
 | **widget** | No | string | A widget to render the defined entry. By default the value is displayed verbatim. For more information about the available widgets, see [List and Details Widgets](./40-list-and-details-widgets.md). |
 | **valuePreprocessor** | No | string | Name of the [value preprocessor](resources.md#value-preprocessors). |
 | **visibility** | No | boolean or [JSONata](jsonata.md) expression | By default all fields are visible; however, you can use the **visibility** property to control a single item display. <br>- If set to `false` explicitly, the field doesn't render. <br> - If set to any string, this property is treated as [JSONata](jsonata.md) format, determining if the field should be visible based on the current value given as `$value`. <br> - If not set, the field always renders. |
@@ -89,13 +89,13 @@ renders the data for `spec.entry1` and `spec.entry2`.
 
 renders `spec.data[].name` and `spec.data[].description`.
 
-### **data.details.resourceGraph** Parameters
+### **resourceGraph** Parameters
 
 This table lists the available parameters of the **data.details.resourceGraph** section in your resource ConfigMap. You can learn whether each of the parameters is required and what purpose it serves. The **resourceGraph** component is an object.
 
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
-| **depth** | Yes | string | Defines the maximum distance from the original resource to a transitively related resource. Defaults to `infinity`. |
+| **depth** | **Yes** | string | Defines the maximum distance from the original resource to a transitively related resource. Defaults to `infinity`. |
 | **colorVariant** | No | integer | Denotes the SAP color variant of the node's border. Its value must be in range `1` to `11` or `neutral`. If not set, the node's border is the same as the current text color. |
 | **networkFlowKind** | No | boolean | Determines if the resource should be shown on the network graph. Defaults to `false`, which displays the resource on the structural graph. |
 | **networkFlowLevel** | No | integer | Sets the horizontal position of the resource's node on the network graph. |
@@ -129,4 +129,4 @@ dataSources:
 
 ## Related Links
 
-- [Widgets available for the list and details pages](./40-list-and-details-widgets.md)
+- [Widgets available for the list and details pages](./50-list-and-details-widgets.md)
