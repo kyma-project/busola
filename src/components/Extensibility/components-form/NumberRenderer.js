@@ -28,7 +28,7 @@ export function NumberRenderer({
 
   return (
     <ResourceForm.FormField
-      value={value}
+      value={isNaN(value) ? null : value}
       setValue={value => {
         onChange({
           storeKeys,
