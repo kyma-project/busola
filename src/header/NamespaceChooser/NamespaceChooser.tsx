@@ -6,7 +6,8 @@ import { namespacesState } from 'state/namespacesAtom';
 
 import { SideNavigationSubItem } from '@ui5/webcomponents-react';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { handleActionIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
+import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
+import { isFormOpenState } from 'state/formOpenAtom';
 
 export function NamespaceChooser() {
   const { t } = useTranslation();
@@ -16,6 +17,7 @@ export function NamespaceChooser() {
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
+  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
 
   const { resourceType = '' } =
     useMatch({
@@ -29,11 +31,16 @@ export function NamespaceChooser() {
       text={t('navigation.all-namespaces')}
       data-key="all-namespaces"
       onClick={() => {
-        handleActionIfResourceEdited(
-          isResourceEdited,
-          setIsResourceEdited,
-          () => navigate(namespaceUrl(resourceType, { namespace: '-all-' })),
-        );
+        if (isFormOpen.formOpen) {
+          setIsResourceEdited({
+            ...isResourceEdited,
+            discardAction: () =>
+              navigate(namespaceUrl(resourceType, { namespace: '-all-' })),
+          });
+          setIsFormOpen({ formOpen: true, leavingForm: true });
+          return;
+        }
+        navigate(namespaceUrl(resourceType, { namespace: '-all-' }));
       }}
     />,
   ];
@@ -45,15 +52,24 @@ export function NamespaceChooser() {
         key={ns}
         data-key={ns}
         onClick={e => {
-          handleActionIfResourceEdited(
-            isResourceEdited,
-            setIsResourceEdited,
-            () =>
-              navigate(
-                namespaceUrl(resourceType, {
-                  namespace: e.target.dataset.key ?? undefined,
-                }),
-              ),
+          console.log('tu');
+          if (isFormOpen.formOpen) {
+            setIsResourceEdited({
+              ...isResourceEdited,
+              discardAction: () =>
+                navigate(
+                  namespaceUrl(resourceType, {
+                    namespace: e.target.dataset.key ?? undefined,
+                  }),
+                ),
+            });
+            setIsFormOpen({ formOpen: true, leavingForm: true });
+            return;
+          }
+          navigate(
+            namespaceUrl(resourceType, {
+              namespace: e.target.dataset.key ?? undefined,
+            }),
           );
         }}
       />,

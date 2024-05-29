@@ -15,7 +15,8 @@ import { UnsavedMessageBox } from '../UnsavedMessageBox/UnsavedMessageBox';
 import { createPortal } from 'react-dom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import { handleActionIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
+import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
+import { isFormOpenState } from 'state/formOpenAtom';
 
 export const ResourceCreate = ({
   performRefetch,
@@ -44,6 +45,7 @@ export const ResourceCreate = ({
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
+  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
 
   confirmText = confirmText || t('common.buttons.create');
 
@@ -87,7 +89,7 @@ export const ResourceCreate = ({
   }
 
   function navigateAfterClose() {
-    setIsResourceEdited({ isEdited: false, warningOpen: false });
+    setIsResourceEdited({ isEdited: false });
     window.history.pushState(
       window.history.state,
       '',
@@ -151,11 +153,15 @@ export const ResourceCreate = ({
     return (
       <Button
         onClick={() => {
-          handleActionIfResourceEdited(
-            isResourceEdited,
-            setIsResourceEdited,
-            () => navigateAfterClose(),
-          );
+          if (isFormOpen.formOpen) {
+            setIsResourceEdited({
+              ...isResourceEdited,
+              discardAction: () => navigateAfterClose(),
+            });
+            setIsFormOpen({ formOpen: true, leavingForm: true });
+            return;
+          }
+          navigateAfterClose();
         }}
         design="Transparent"
       >

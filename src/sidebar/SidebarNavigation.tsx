@@ -21,7 +21,8 @@ import { useUrl } from 'hooks/useUrl';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { NamespaceChooser } from 'header/NamespaceChooser/NamespaceChooser';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { handleActionIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
+import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
+import { isFormOpenState } from 'state/formOpenAtom';
 
 export function SidebarNavigation() {
   const navigationNodes = useRecoilValue(sidebarNavigationNodesSelector);
@@ -33,6 +34,7 @@ export function SidebarNavigation() {
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
+  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
 
   const { clusterUrl, namespaceUrl } = useUrl();
   const { resourceType = '' } =
@@ -91,14 +93,20 @@ export function SidebarNavigation() {
                 icon={'slim-arrow-left'}
                 text={'Back To Cluster Details'}
                 onClick={() => {
-                  handleActionIfResourceEdited(
-                    isResourceEdited,
-                    setIsResourceEdited,
-                    () => {
-                      setDefaultColumnLayout();
-                      return navigate(clusterUrl(`overview`));
-                    },
-                  );
+                  if (isFormOpen.formOpen) {
+                    setIsResourceEdited({
+                      ...isResourceEdited,
+                      discardAction: () => {
+                        setDefaultColumnLayout();
+                        return navigate(clusterUrl(`overview`));
+                      },
+                    });
+                    setIsFormOpen({ formOpen: true, leavingForm: true });
+                    return;
+                  }
+
+                  setDefaultColumnLayout();
+                  return navigate(clusterUrl(`overview`));
                 }}
                 selected={isClusterOverviewSelected()}
               />
@@ -126,24 +134,39 @@ export function SidebarNavigation() {
                 id="NamespaceComboBox"
                 className="combobox-with-dimension-icon"
                 onSelectionChange={e => {
-                  handleActionIfResourceEdited(
-                    isResourceEdited,
-                    setIsResourceEdited,
-                    () => {
-                      setDefaultColumnLayout();
-                      return e.target.value === t('navigation.all-namespaces')
-                        ? navigate(
-                            namespaceUrl(resourceType, {
-                              namespace: '-all-',
-                            }),
-                          )
-                        : navigate(
-                            namespaceUrl(resourceType, {
-                              namespace: e.target.value ?? undefined,
-                            }),
-                          );
-                    },
-                  );
+                  if (isFormOpen.formOpen) {
+                    setIsResourceEdited({
+                      ...isResourceEdited,
+                      discardAction: () => {
+                        setDefaultColumnLayout();
+                        return e.target.value === t('navigation.all-namespaces')
+                          ? navigate(
+                              namespaceUrl(resourceType, {
+                                namespace: '-all-',
+                              }),
+                            )
+                          : navigate(
+                              namespaceUrl(resourceType, {
+                                namespace: e.target.value ?? undefined,
+                              }),
+                            );
+                      },
+                    });
+                    setIsFormOpen({ formOpen: true, leavingForm: true });
+                    return;
+                  }
+                  setDefaultColumnLayout();
+                  return e.target.value === t('navigation.all-namespaces')
+                    ? navigate(
+                        namespaceUrl(resourceType, {
+                          namespace: '-all-',
+                        }),
+                      )
+                    : navigate(
+                        namespaceUrl(resourceType, {
+                          namespace: e.target.value ?? undefined,
+                        }),
+                      );
                 }}
                 value={getNamespaceLabel()}
               >
@@ -161,11 +184,15 @@ export function SidebarNavigation() {
             icon={namespace ? 'slim-arrow-left' : 'bbyd-dashboard'}
             text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}
             onClick={() => {
-              handleActionIfResourceEdited(
-                isResourceEdited,
-                setIsResourceEdited,
-                () => navigate(clusterUrl(`overview`)),
-              );
+              if (isFormOpen.formOpen) {
+                setIsResourceEdited({
+                  ...isResourceEdited,
+                  discardAction: () => navigate(clusterUrl(`overview`)),
+                });
+                setIsFormOpen({ formOpen: true, leavingForm: true });
+                return;
+              }
+              navigate(clusterUrl(`overview`));
             }}
             selected={isClusterOverviewSelected()}
           />
@@ -186,14 +213,19 @@ export function SidebarNavigation() {
           icon={'bbyd-dashboard'}
           text={'Cluster Details'}
           onClick={() => {
-            handleActionIfResourceEdited(
-              isResourceEdited,
-              setIsResourceEdited,
-              () => {
-                setDefaultColumnLayout();
-                return navigate(clusterUrl(`overview`));
-              },
-            );
+            if (isFormOpen.formOpen) {
+              setIsResourceEdited({
+                ...isResourceEdited,
+                discardAction: () => {
+                  setDefaultColumnLayout();
+                  return navigate(clusterUrl(`overview`));
+                },
+              });
+              setIsFormOpen({ formOpen: true, leavingForm: true });
+              return;
+            }
+            setDefaultColumnLayout();
+            return navigate(clusterUrl(`overview`));
           }}
           selected={isClusterOverviewSelected()}
         />

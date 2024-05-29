@@ -15,6 +15,7 @@ import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useFeature } from 'hooks/useFeature';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { isFormOpenState } from 'state/formOpenAtom';
 
 export function useCreateResource({
   singularName,
@@ -40,6 +41,7 @@ export function useCreateResource({
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
+  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
 
   const { nextQuery, nextLayout } = usePrepareLayout(layoutNumber);
 
@@ -134,9 +136,11 @@ export function useCreateResource({
       defaultAfterCreatedFn();
     }
     setIsResourceEdited({
-      ...isResourceEdited,
       isEdited: false,
       isSaved: true,
+    });
+    setIsFormOpen({
+      formOpen: false,
     });
   };
 

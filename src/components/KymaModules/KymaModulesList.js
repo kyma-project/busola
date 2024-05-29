@@ -25,7 +25,8 @@ import pluralize from 'pluralize';
 import { Link } from 'shared/components/Link/Link';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { handleActionIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
+import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
+import { isFormOpenState } from 'state/formOpenAtom';
 
 export function KymaModulesList(props) {
   const { t } = useTranslation();
@@ -39,6 +40,7 @@ export function KymaModulesList(props) {
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
+  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
   const { clusterUrl } = useUrl();
 
   const { data: kymaResources, loading: kymaResourcesLoading } = useGet(
@@ -211,11 +213,15 @@ export function KymaModulesList(props) {
         <Link
           url={path}
           onClick={() => {
-            handleActionIfResourceEdited(
-              isResourceEdited,
-              setIsResourceEdited,
-              () => handleClickResource(),
-            );
+            if (isFormOpen.formOpen) {
+              setIsResourceEdited({
+                ...isResourceEdited,
+                discardAction: () => handleClickResource(),
+              });
+              setIsFormOpen({ formOpen: true, leavingForm: true });
+              return;
+            }
+            handleClickResource();
           }}
         >
           {resource.name}

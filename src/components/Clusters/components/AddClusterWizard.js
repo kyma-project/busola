@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import {
   Wizard,
@@ -9,7 +9,7 @@ import {
   Text,
 } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';
@@ -29,6 +29,7 @@ import { ClusterPreview } from './ClusterPreview';
 
 import { spacing } from '@ui5/webcomponents-react-base';
 import './AddClusterWizard.scss';
+import { isFormOpenState } from 'state/formOpenAtom';
 
 export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
   const busolaClusterParams = useRecoilValue(configurationAtom);
@@ -45,6 +46,7 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
   const [selected, setSelected] = useState(1);
   const setShowWizard = useSetRecoilState(showAddClusterWizard);
   const [showTitleDescription, setShowTitleDescription] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
 
   useEffect(() => {
     const contentContainer = document
@@ -129,6 +131,7 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
         );
         addByContext({ kubeconfig, context, storage, config }, clustersInfo);
       }
+      setIsFormOpen({ formOpen: false });
     } catch (e) {
       notification.notifyError({
         title: t('clusters.messages.wrong-configuration'),
@@ -276,7 +279,10 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
           lastStep={true}
           customFinish={t('clusters.buttons.verify-and-add')}
           onComplete={onComplete}
-          onCancel={() => setShowWizard(false)}
+          onCancel={() => {
+            setShowWizard(false);
+            setIsFormOpen({ formOpen: false });
+          }}
           validation={!storage}
           className="cluster-wizard__buttons"
         />

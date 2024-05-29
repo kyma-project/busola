@@ -1,7 +1,7 @@
 import { IsResourceEditedState } from 'state/resourceEditedAtom';
 import { SetterOrUpdater } from 'recoil';
 
-export function handleActionIfResourceEdited(
+export function handleActionIfFormOpen(
   isResourceEdited: IsResourceEditedState,
   setIsResourceEdited: SetterOrUpdater<IsResourceEditedState>,
   action: Function,
@@ -9,7 +9,6 @@ export function handleActionIfResourceEdited(
   if (isResourceEdited.isEdited) {
     setIsResourceEdited({
       ...isResourceEdited,
-      warningOpen: true,
       discardAction: () => {
         action();
       },

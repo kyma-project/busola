@@ -8,7 +8,8 @@ import { useTranslation } from 'react-i18next';
 import { LOADING_INDICATOR } from '../types';
 import { useRecoilState } from 'recoil';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { handleActionIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
+import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
+import { isFormOpenState } from 'state/formOpenAtom';
 
 function scrollInto(element: Element) {
   element.scrollIntoView({
@@ -38,6 +39,7 @@ export function ResultsList({
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
+  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
 
   //todo 2
   const isLoading = results.find((r: any) => r.type === LOADING_INDICATOR);
@@ -61,19 +63,24 @@ export function ResultsList({
         setActiveIndex(activeIndex - 1);
         scrollInto(listRef.current!.children[activeIndex - 1]);
       } else if (key === 'Enter' && results?.[activeIndex]) {
-        handleActionIfResourceEdited(
-          isResourceEdited,
-          setIsResourceEdited,
-          () => {
-            addHistoryEntry(results[activeIndex].query);
-            results[activeIndex].onActivate();
-          },
-        );
+        if (isFormOpen.formOpen) {
+          setIsResourceEdited({
+            ...isResourceEdited,
+            discardAction: () => {
+              addHistoryEntry(results[activeIndex].query);
+              results[activeIndex].onActivate();
+            },
+          });
+          setIsFormOpen({ formOpen: true, leavingForm: true });
+          return;
+        }
+        addHistoryEntry(results[activeIndex].query);
+        results[activeIndex].onActivate();
       }
     },
     [activeIndex, results, isHistoryMode],
   );
-
+  console.log(isFormOpen);
   return (
     <ul className="command-palette-ui__results" ref={listRef}>
       {results?.length ? (
@@ -85,14 +92,19 @@ export function ResultsList({
             activeIndex={activeIndex}
             setActiveIndex={setActiveIndex}
             onItemClick={() => {
-              handleActionIfResourceEdited(
-                isResourceEdited,
-                setIsResourceEdited,
-                () => {
-                  addHistoryEntry(result.query);
-                  result.onActivate();
-                },
-              );
+              if (isFormOpen.formOpen) {
+                setIsResourceEdited({
+                  ...isResourceEdited,
+                  discardAction: () => {
+                    addHistoryEntry(result.query);
+                    result.onActivate();
+                  },
+                });
+                setIsFormOpen({ formOpen: true, leavingForm: true });
+                return;
+              }
+              addHistoryEntry(result.query);
+              result.onActivate();
             }}
           />
         ))

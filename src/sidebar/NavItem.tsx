@@ -13,7 +13,8 @@ import {
 } from '@ui5/webcomponents-react';
 import { useNavigate } from 'react-router-dom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { handleActionIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
+import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
+import { isFormOpenState } from 'state/formOpenAtom';
 
 type NavItemProps = {
   node: NavNode;
@@ -28,6 +29,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
+  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
 
   const { scopedUrl } = urlGenerators;
   const namespaceId = useRecoilValue(activeNamespaceIdState);
@@ -63,21 +65,34 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
         );
         if (newWindow) newWindow.opener = null;
       } else {
-        handleActionIfResourceEdited(
-          isResourceEdited,
-          setIsResourceEdited,
-          () => {
-            setLayoutColumn({
-              midColumn: null,
-              endColumn: null,
-              layout: 'OneColumn',
-            });
-            navigate(
-              node.createUrlFn
-                ? node.createUrlFn(urlGenerators)
-                : scopedUrl(node.pathSegment),
-            );
-          },
+        if (isFormOpen.formOpen) {
+          setIsResourceEdited({
+            ...isResourceEdited,
+            discardAction: () => {
+              setLayoutColumn({
+                midColumn: null,
+                endColumn: null,
+                layout: 'OneColumn',
+              });
+              navigate(
+                node.createUrlFn
+                  ? node.createUrlFn(urlGenerators)
+                  : scopedUrl(node.pathSegment),
+              );
+            },
+          });
+          setIsFormOpen({ formOpen: true, leavingForm: true });
+          return;
+        }
+        setLayoutColumn({
+          midColumn: null,
+          endColumn: null,
+          layout: 'OneColumn',
+        });
+        navigate(
+          node.createUrlFn
+            ? node.createUrlFn(urlGenerators)
+            : scopedUrl(node.pathSegment),
         );
       }
     },

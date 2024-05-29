@@ -19,6 +19,7 @@ import './ResourceForm.scss';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { editViewModeState } from 'state/preferences/editViewModeAtom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { isFormOpenState } from 'state/formOpenAtom';
 
 const excludeStatus = resource => {
   const modifiedResource = { ...resource };
@@ -84,26 +85,40 @@ export function ResourceForm({
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
-  const { isEdited, isSaved } = isResourceEdited;
+  //const { isEdited, isSaved } = isResourceEdited;
+  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
+  const { leavingForm } = isFormOpen;
 
   useEffect(() => {
-    if (
-      !isEdited &&
-      !isSaved &&
-      JSON.stringify(excludeStatus(resource)) !==
-        JSON.stringify(excludeStatus(initialResource))
-    ) {
-      setIsResourceEdited({ isEdited: true });
-    }
+    console.log('test');
+    setIsFormOpen({ formOpen: true });
+  }, []);
 
-    if (
-      JSON.stringify(excludeStatus(resource)) ===
-        JSON.stringify(excludeStatus(initialResource)) &&
-      (isEdited || isSaved)
-    ) {
-      setIsResourceEdited({ isEdited: false, warningOpen: false });
+  useEffect(() => {
+    console.log('test1');
+    if (leavingForm) {
+      //console.log('test2');
+      if (
+        JSON.stringify(excludeStatus(resource)) !==
+        JSON.stringify(excludeStatus(initialResource))
+      ) {
+        setIsResourceEdited({ ...isResourceEdited, isEdited: true });
+      }
+
+      if (
+        JSON.stringify(excludeStatus(resource)) ===
+        JSON.stringify(excludeStatus(initialResource))
+      ) {
+        setIsResourceEdited({ isEdited: false });
+        setIsFormOpen({ formOpen: false });
+        if (isResourceEdited.discardAction) isResourceEdited.discardAction();
+      }
     }
-  }, [initialResource, isEdited, isSaved, resource, setIsResourceEdited]);
+  }, [leavingForm]);
+
+  //console.log(leavingForm);
+  console.log(isFormOpen);
+  console.log(isResourceEdited);
 
   const { t } = useTranslation();
   const createResource = useCreateResource({

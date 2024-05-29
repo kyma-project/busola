@@ -19,7 +19,8 @@ import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useFeature } from 'hooks/useFeature';
 import { HintButton } from '../DescriptionHint/DescriptionHint';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { handleActionIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
+import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
+import { isFormOpenState } from 'state/formOpenAtom';
 
 const Column = ({ title, children, columnSpan, image, style = {} }) => {
   const styleComputed = { gridColumn: columnSpan, ...style };
@@ -57,6 +58,7 @@ export const DynamicPageComponent = ({
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
+  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
   const [selectedSectionIdState, setSelectedSectionIdState] = useState('view');
 
   const handleColumnClose = () => {
@@ -196,11 +198,15 @@ export const DynamicPageComponent = ({
                     design="Transparent"
                     icon="decline"
                     onClick={() => {
-                      handleActionIfResourceEdited(
-                        isResourceEdited,
-                        setIsResourceEdited,
-                        () => handleColumnClose(),
-                      );
+                      if (isFormOpen.formOpen) {
+                        setIsResourceEdited({
+                          ...isResourceEdited,
+                          discardAction: () => handleColumnClose(),
+                        });
+                        setIsFormOpen({ formOpen: true, leavingForm: true });
+                        return;
+                      }
+                      handleColumnClose();
                     }}
                   />
                 </>
@@ -247,19 +253,19 @@ export const DynamicPageComponent = ({
         headerContent={customHeaderContent ?? headerContent}
         selectedSectionId={selectedSectionIdState}
         onBeforeNavigate={e => {
-          if (isResourceEdited.isEdited) {
+          if (isFormOpen.formOpen) {
             e.preventDefault();
+            console.log('in');
             setIsResourceEdited({
               ...isResourceEdited,
-              warningOpen: true,
               discardAction: () => {
                 setSelectedSectionIdState(e.detail.sectionId);
                 setIsResourceEdited({
                   isEdited: false,
-                  warningOpen: false,
                 });
               },
             });
+            setIsFormOpen({ formOpen: true, leavingForm: true });
             return;
           }
           setSelectedSectionIdState(e.detail.sectionId);

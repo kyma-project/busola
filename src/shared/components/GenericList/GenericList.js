@@ -29,7 +29,8 @@ import { useUrl } from 'hooks/useUrl';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import pluralize from 'pluralize';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { handleActionIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
+import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
+import { isFormOpenState } from 'state/formOpenAtom';
 
 const defaultSort = {
   name: nameLocaleSort,
@@ -260,6 +261,7 @@ export const GenericList = ({
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
+  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
   const { resourceUrl: resourceUrlFn } = useUrl();
   const linkTo = entry => {
     return customUrl
@@ -330,7 +332,7 @@ export const GenericList = ({
       );
     }
   };
-
+  //console.log(isFormOpen.formOpen);
   return (
     <UI5Panel
       title={title}
@@ -343,11 +345,17 @@ export const GenericList = ({
         className={`ui5-generic-list ${hasDetailsView ? 'cursor-pointer' : ''}`}
         onRowClick={e => {
           if (!hasDetailsView) return;
-          handleActionIfResourceEdited(
-            isResourceEdited,
-            setIsResourceEdited,
-            () => handleRowClick(e),
-          );
+          if (isFormOpen.formOpen) {
+            console.log('here');
+            setIsResourceEdited({
+              ...isResourceEdited,
+              discardAction: () => handleRowClick(e),
+            });
+            setIsFormOpen({ formOpen: true, leavingForm: true });
+            return;
+          }
+          console.log('here2');
+          handleRowClick(e);
         }}
         columns={
           <HeaderRenderer
