@@ -21,6 +21,7 @@ import { openapiLastFetchedState } from 'state/openapi/openapiLastFetchedAtom';
 import { clusterState } from 'state/clusterAtom';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
+import { useClustersInfo } from 'state/utils/getClustersInfo';
 
 export const useResourceSchemas = () => {
   const { cluster: activeClusterName } = useUrl();
@@ -31,6 +32,8 @@ export const useResourceSchemas = () => {
   const isClusterList = useMatch({ path: '/clusters' });
   const notification = useNotification();
   const { t } = useTranslation();
+  const clusterInfo = useClustersInfo();
+  const { currentCluster } = clusterInfo;
 
   const setSchemasState = useSetRecoilState(schemaWorkerStatusState);
   const [lastFetched, setLastFetched] = useRecoilState(openapiLastFetchedState);
@@ -59,7 +62,9 @@ export const useResourceSchemas = () => {
   ]);
 
   useEffect(() => {
-    const isOngoingClusterChange = !activeClusterName || !authData;
+    const isOngoingClusterChange =
+      !currentCluster || !activeClusterName || !authData;
+
     if (isOngoingClusterChange) {
       setSchemasState({ areSchemasComputed: false, schemasError: null });
       setLastFetched(null);
@@ -82,6 +87,7 @@ export const useResourceSchemas = () => {
       console.error(err);
     });
 
+    if (!activeClusterName) return;
     addWorkerErrorListener((err: Error) => {
       setSchemasState({ areSchemasComputed: false, schemasError: err });
       console.error(err);
@@ -94,6 +100,7 @@ export const useResourceSchemas = () => {
     lastFetched,
     setSchemasState,
     setLastFetched,
+    currentCluster,
   ]);
 
   useEffect(() => {
