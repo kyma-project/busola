@@ -1,7 +1,7 @@
 import { atom, RecoilState } from 'recoil';
 
 export interface IsResourceEditedState {
-  isEdited?: boolean;
+  isEdited: boolean;
   discardAction?: Function;
   isSaved?: boolean;
 }
