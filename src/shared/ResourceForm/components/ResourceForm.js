@@ -99,7 +99,7 @@ export function ResourceForm({
         JSON.stringify(excludeStatus(resource)) !==
         JSON.stringify(excludeStatus(initialResource))
       ) {
-        setIsResourceEdited({ ...isResourceEdited, isEdited: true });
+        setIsResourceEdited({ isEdited: true });
       }
 
       if (
