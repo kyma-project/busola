@@ -218,7 +218,7 @@ export function KymaModulesList(props) {
               setIsResourceEdited,
               isFormOpen,
               setIsFormOpen,
-              handleClickResource(),
+              () => handleClickResource(),
             );
           }}
         >
