@@ -73,6 +73,7 @@ ResourceDetails.propTypes = {
 ResourceDetails.defaultProps = {
   customColumns: [],
   customComponents: [],
+  customStatusComponents: [],
   headerActions: null,
   resourceHeaderActions: [],
   readOnly: false,
@@ -148,6 +149,7 @@ function Resource({
   createResourceForm: CreateResourceForm,
   customColumns,
   customComponents,
+  customStatusComponents,
   description,
   editActionLabel,
   headerActions,
@@ -277,21 +279,34 @@ function Resource({
     return EMPTY_TEXT_PLACEHOLDER;
   };
 
-  const resourceStatusCard = customStatusColumns ? (
-    <ResourceStatusCard
-      statusBadge={statusBadge ? statusBadge(resource) : null}
-      customColumns={
-        <>
-          {customStatusColumns?.filter(filterColumns)?.map(col => (
-            <DynamicPageComponent.Column key={col.header} title={col.header}>
-              {col.value(resource)}
-            </DynamicPageComponent.Column>
-          ))}
-        </>
-      }
-      conditions={statusConditions ? statusConditions(resource) : null}
-    />
-  ) : null;
+  const resourceStatusCard =
+    customStatusColumns || customStatusComponents ? (
+      <ResourceStatusCard
+        statusBadge={statusBadge ? statusBadge(resource) : null}
+        customColumns={
+          <>
+            {customStatusColumns?.filter(filterColumns)?.map(col => (
+              <DynamicPageComponent.Column key={col.header} title={col.header}>
+                {col.value(resource)}
+              </DynamicPageComponent.Column>
+            ))}
+          </>
+        }
+        customStatusComponents={
+          <>
+            {customStatusComponents?.filter(filterColumns)?.map(component => (
+              <DynamicPageComponent.Column
+                key={component.header}
+                title={component.header}
+              >
+                {component.value(resource)}
+              </DynamicPageComponent.Column>
+            ))}
+          </>
+        }
+        conditions={statusConditions ? statusConditions(resource) : null}
+      />
+    ) : null;
 
   const resourceDetailsCard = (
     <ResourceDetailsCard
