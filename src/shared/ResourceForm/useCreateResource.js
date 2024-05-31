@@ -1,7 +1,7 @@
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
@@ -15,6 +15,7 @@ import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useFeature } from 'hooks/useFeature';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { isFormOpenState } from 'state/formOpenAtom';
 
 export function useCreateResource({
   singularName,
@@ -37,9 +38,8 @@ export function useCreateResource({
   const navigate = useNavigate();
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
-  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
-    isResourceEditedState,
-  );
+  const setIsResourceEdited = useSetRecoilState(isResourceEditedState);
+  const setIsFormOpen = useSetRecoilState(isFormOpenState);
 
   const { nextQuery, nextLayout } = usePrepareLayout(layoutNumber);
 
@@ -134,9 +134,10 @@ export function useCreateResource({
       defaultAfterCreatedFn();
     }
     setIsResourceEdited({
-      ...isResourceEdited,
       isEdited: false,
-      isSaved: true,
+    });
+    setIsFormOpen({
+      formOpen: false,
     });
   };
 

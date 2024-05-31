@@ -13,7 +13,9 @@ import {
 } from '@ui5/webcomponents-react';
 import { useNavigate } from 'react-router-dom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { handleActionIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
+
+import { isFormOpenState } from 'state/formOpenAtom';
+import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
 
 type NavItemProps = {
   node: NavNode;
@@ -28,6 +30,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
+  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
 
   const { scopedUrl } = urlGenerators;
   const namespaceId = useRecoilValue(activeNamespaceIdState);
@@ -63,9 +66,11 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
         );
         if (newWindow) newWindow.opener = null;
       } else {
-        handleActionIfResourceEdited(
+        handleActionIfFormOpen(
           isResourceEdited,
           setIsResourceEdited,
+          isFormOpen,
+          setIsFormOpen,
           () => {
             setLayoutColumn({
               midColumn: null,

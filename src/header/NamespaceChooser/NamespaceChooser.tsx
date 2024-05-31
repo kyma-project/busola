@@ -6,7 +6,8 @@ import { namespacesState } from 'state/namespacesAtom';
 
 import { SideNavigationSubItem } from '@ui5/webcomponents-react';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { handleActionIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
+import { isFormOpenState } from 'state/formOpenAtom';
+import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
 
 export function NamespaceChooser() {
   const { t } = useTranslation();
@@ -16,6 +17,7 @@ export function NamespaceChooser() {
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
+  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
 
   const { resourceType = '' } =
     useMatch({
@@ -29,9 +31,11 @@ export function NamespaceChooser() {
       text={t('navigation.all-namespaces')}
       data-key="all-namespaces"
       onClick={() => {
-        handleActionIfResourceEdited(
+        handleActionIfFormOpen(
           isResourceEdited,
           setIsResourceEdited,
+          isFormOpen,
+          setIsFormOpen,
           () => navigate(namespaceUrl(resourceType, { namespace: '-all-' })),
         );
       }}
@@ -45,9 +49,11 @@ export function NamespaceChooser() {
         key={ns}
         data-key={ns}
         onClick={e => {
-          handleActionIfResourceEdited(
+          handleActionIfFormOpen(
             isResourceEdited,
             setIsResourceEdited,
+            isFormOpen,
+            setIsFormOpen,
             () =>
               navigate(
                 namespaceUrl(resourceType, {

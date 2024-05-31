@@ -29,7 +29,8 @@ import { useUrl } from 'hooks/useUrl';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import pluralize from 'pluralize';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { handleActionIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
+import { isFormOpenState } from 'state/formOpenAtom';
+import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
 
 const defaultSort = {
   name: nameLocaleSort,
@@ -260,6 +261,7 @@ export const GenericList = ({
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
+  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
   const { resourceUrl: resourceUrlFn } = useUrl();
   const linkTo = entry => {
     return customUrl
@@ -343,9 +345,11 @@ export const GenericList = ({
         className={`ui5-generic-list ${hasDetailsView ? 'cursor-pointer' : ''}`}
         onRowClick={e => {
           if (!hasDetailsView) return;
-          handleActionIfResourceEdited(
+          handleActionIfFormOpen(
             isResourceEdited,
             setIsResourceEdited,
+            isFormOpen,
+            setIsFormOpen,
             () => handleRowClick(e),
           );
         }}
