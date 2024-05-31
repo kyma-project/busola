@@ -85,20 +85,11 @@ export function ResourceForm({
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
-  //const { isEdited, isSaved } = isResourceEdited;
   const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
   const { leavingForm } = isFormOpen;
 
   useEffect(() => {
-    console.log('test');
-    setIsFormOpen({ formOpen: true });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    console.log('test1');
     if (leavingForm) {
-      //console.log('test2');
       if (
         JSON.stringify(excludeStatus(resource)) !==
         JSON.stringify(excludeStatus(initialResource))
@@ -117,10 +108,6 @@ export function ResourceForm({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [leavingForm]);
-
-  //console.log(leavingForm);
-  console.log(isFormOpen);
-  console.log(isResourceEdited);
 
   const { t } = useTranslation();
   const createResource = useCreateResource({

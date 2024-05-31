@@ -30,6 +30,7 @@ import { columnLayoutState } from 'state/columnLayoutAtom';
 import pluralize from 'pluralize';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
+import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
 
 const defaultSort = {
   name: nameLocaleSort,
@@ -331,7 +332,7 @@ export const GenericList = ({
       );
     }
   };
-  //console.log(isFormOpen.formOpen);
+
   return (
     <UI5Panel
       title={title}
@@ -344,17 +345,13 @@ export const GenericList = ({
         className={`ui5-generic-list ${hasDetailsView ? 'cursor-pointer' : ''}`}
         onRowClick={e => {
           if (!hasDetailsView) return;
-          if (isFormOpen.formOpen) {
-            console.log('here');
-            setIsResourceEdited({
-              ...isResourceEdited,
-              discardAction: () => handleRowClick(e),
-            });
-            setIsFormOpen({ formOpen: true, leavingForm: true });
-            return;
-          }
-          console.log('here2');
-          handleRowClick(e);
+          handleActionIfFormOpen(
+            isResourceEdited,
+            setIsResourceEdited,
+            isFormOpen,
+            setIsFormOpen,
+            () => handleRowClick(e),
+          );
         }}
         columns={
           <HeaderRenderer

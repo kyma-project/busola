@@ -30,6 +30,7 @@ import { useGetBusolaVersionDetails } from './SidebarMenu/useGetBusolaVersion';
 import './Header.scss';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
+import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
 
 export function Header() {
   useAvailableNamespaces();
@@ -112,15 +113,13 @@ export function Header() {
           window.location.pathname !== '/clusters' && <SidebarSwitcher />
         }
         onLogoClick={() => {
-          if (isFormOpen.formOpen) {
-            setIsResourceEdited({
-              ...isResourceEdited,
-              discardAction: () => navigate('/clusters'),
-            });
-            setIsFormOpen({ formOpen: true, leavingForm: true });
-            return;
-          }
-          navigate('/clusters');
+          handleActionIfFormOpen(
+            isResourceEdited,
+            setIsResourceEdited,
+            isFormOpen,
+            setIsFormOpen,
+            () => navigate('/clusters'),
+          );
         }}
         logo={<Logo />}
         primaryTitle={
@@ -130,24 +129,18 @@ export function Header() {
         }
         menuItems={window.location.pathname !== '/clusters' ? clustersList : []}
         onMenuItemClick={e => {
-          if (isFormOpen.formOpen) {
-            setIsResourceEdited({
-              ...isResourceEdited,
-              discardAction: () => {
-                e.detail.item.textContent ===
-                t('clusters.overview.title-all-clusters')
-                  ? navigate('/clusters')
-                  : navigate(`/cluster/${e.detail.item.textContent}`);
-              },
-            });
-            setIsFormOpen({ formOpen: true, leavingForm: true });
-            return;
-          }
-          console.log('here');
-          e.detail.item.textContent ===
-          t('clusters.overview.title-all-clusters')
-            ? navigate('/clusters')
-            : navigate(`/cluster/${e.detail.item.textContent}`);
+          handleActionIfFormOpen(
+            isResourceEdited,
+            setIsResourceEdited,
+            isFormOpen,
+            setIsFormOpen,
+            () => {
+              e.detail.item.textContent ===
+              t('clusters.overview.title-all-clusters')
+                ? navigate('/clusters')
+                : navigate(`/cluster/${e.detail.item.textContent}`);
+            },
+          );
         }}
         profile={
           <Avatar

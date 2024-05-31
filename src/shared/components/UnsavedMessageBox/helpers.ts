@@ -5,8 +5,8 @@ import { IsFormOpenState } from 'state/formOpenAtom';
 export function handleActionIfFormOpen(
   isResourceEdited: IsResourceEditedState,
   setIsResourceEdited: SetterOrUpdater<IsResourceEditedState>,
-  setIsFormOpen: SetterOrUpdater<IsFormOpenState>,
   isFormOpen: IsFormOpenState,
+  setIsFormOpen: SetterOrUpdater<IsFormOpenState>,
   action: Function,
 ) {
   if (isFormOpen.formOpen) {

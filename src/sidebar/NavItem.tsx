@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 
 import { isFormOpenState } from 'state/formOpenAtom';
+import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
 
 type NavItemProps = {
   node: NavNode;
@@ -65,34 +66,23 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
         );
         if (newWindow) newWindow.opener = null;
       } else {
-        if (isFormOpen.formOpen) {
-          setIsResourceEdited({
-            ...isResourceEdited,
-            discardAction: () => {
-              setLayoutColumn({
-                midColumn: null,
-                endColumn: null,
-                layout: 'OneColumn',
-              });
-              navigate(
-                node.createUrlFn
-                  ? node.createUrlFn(urlGenerators)
-                  : scopedUrl(node.pathSegment),
-              );
-            },
-          });
-          setIsFormOpen({ formOpen: true, leavingForm: true });
-          return;
-        }
-        setLayoutColumn({
-          midColumn: null,
-          endColumn: null,
-          layout: 'OneColumn',
-        });
-        navigate(
-          node.createUrlFn
-            ? node.createUrlFn(urlGenerators)
-            : scopedUrl(node.pathSegment),
+        handleActionIfFormOpen(
+          isResourceEdited,
+          setIsResourceEdited,
+          isFormOpen,
+          setIsFormOpen,
+          () => {
+            setLayoutColumn({
+              midColumn: null,
+              endColumn: null,
+              layout: 'OneColumn',
+            });
+            navigate(
+              node.createUrlFn
+                ? node.createUrlFn(urlGenerators)
+                : scopedUrl(node.pathSegment),
+            );
+          },
         );
       }
     },

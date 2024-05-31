@@ -26,6 +26,7 @@ import { Link } from 'shared/components/Link/Link';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
+import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
 
 export function KymaModulesList(props) {
   const { t } = useTranslation();
@@ -212,15 +213,13 @@ export function KymaModulesList(props) {
         <Link
           url={path}
           onClick={() => {
-            if (isFormOpen.formOpen) {
-              setIsResourceEdited({
-                ...isResourceEdited,
-                discardAction: () => handleClickResource(),
-              });
-              setIsFormOpen({ formOpen: true, leavingForm: true });
-              return;
-            }
-            handleClickResource();
+            handleActionIfFormOpen(
+              isResourceEdited,
+              setIsResourceEdited,
+              isFormOpen,
+              setIsFormOpen,
+              handleClickResource(),
+            );
           }}
         >
           {resource.name}

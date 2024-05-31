@@ -20,6 +20,7 @@ import { useFeature } from 'hooks/useFeature';
 import { HintButton } from '../DescriptionHint/DescriptionHint';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
+import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
 
 const Column = ({ title, children, columnSpan, image, style = {} }) => {
   const styleComputed = { gridColumn: columnSpan, ...style };
@@ -197,15 +198,13 @@ export const DynamicPageComponent = ({
                     design="Transparent"
                     icon="decline"
                     onClick={() => {
-                      if (isFormOpen.formOpen) {
-                        setIsResourceEdited({
-                          ...isResourceEdited,
-                          discardAction: () => handleColumnClose(),
-                        });
-                        setIsFormOpen({ formOpen: true, leavingForm: true });
-                        return;
-                      }
-                      handleColumnClose();
+                      handleActionIfFormOpen(
+                        isResourceEdited,
+                        setIsResourceEdited,
+                        isFormOpen,
+                        setIsFormOpen,
+                        () => handleColumnClose(),
+                      );
                     }}
                   />
                 </>
@@ -254,7 +253,6 @@ export const DynamicPageComponent = ({
         onBeforeNavigate={e => {
           if (isFormOpen.formOpen) {
             e.preventDefault();
-            console.log('in');
             setIsResourceEdited({
               ...isResourceEdited,
               discardAction: () => {

@@ -9,6 +9,7 @@ import { LOADING_INDICATOR } from '../types';
 import { useRecoilState } from 'recoil';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
+import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
 
 function scrollInto(element: Element) {
   element.scrollIntoView({
@@ -62,24 +63,21 @@ export function ResultsList({
         setActiveIndex(activeIndex - 1);
         scrollInto(listRef.current!.children[activeIndex - 1]);
       } else if (key === 'Enter' && results?.[activeIndex]) {
-        if (isFormOpen.formOpen) {
-          setIsResourceEdited({
-            ...isResourceEdited,
-            discardAction: () => {
-              addHistoryEntry(results[activeIndex].query);
-              results[activeIndex].onActivate();
-            },
-          });
-          setIsFormOpen({ formOpen: true, leavingForm: true });
-          return;
-        }
-        addHistoryEntry(results[activeIndex].query);
-        results[activeIndex].onActivate();
+        handleActionIfFormOpen(
+          isResourceEdited,
+          setIsResourceEdited,
+          isFormOpen,
+          setIsFormOpen,
+          () => {
+            addHistoryEntry(results[activeIndex].query);
+            results[activeIndex].onActivate();
+          },
+        );
       }
     },
     [activeIndex, results, isHistoryMode],
   );
-  console.log(isFormOpen);
+
   return (
     <ul className="command-palette-ui__results" ref={listRef}>
       {results?.length ? (
@@ -91,19 +89,16 @@ export function ResultsList({
             activeIndex={activeIndex}
             setActiveIndex={setActiveIndex}
             onItemClick={() => {
-              if (isFormOpen.formOpen) {
-                setIsResourceEdited({
-                  ...isResourceEdited,
-                  discardAction: () => {
-                    addHistoryEntry(result.query);
-                    result.onActivate();
-                  },
-                });
-                setIsFormOpen({ formOpen: true, leavingForm: true });
-                return;
-              }
-              addHistoryEntry(result.query);
-              result.onActivate();
+              handleActionIfFormOpen(
+                isResourceEdited,
+                setIsResourceEdited,
+                isFormOpen,
+                setIsFormOpen,
+                () => {
+                  addHistoryEntry(result.query);
+                  result.onActivate();
+                },
+              );
             }}
           />
         ))

@@ -16,6 +16,7 @@ import { createPortal } from 'react-dom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
+import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
 
 export const ResourceCreate = ({
   performRefetch,
@@ -152,15 +153,13 @@ export const ResourceCreate = ({
     return (
       <Button
         onClick={() => {
-          if (isFormOpen.formOpen) {
-            setIsResourceEdited({
-              ...isResourceEdited,
-              discardAction: () => navigateAfterClose(),
-            });
-            setIsFormOpen({ formOpen: true, leavingForm: true });
-            return;
-          }
-          navigateAfterClose();
+          handleActionIfFormOpen(
+            isResourceEdited,
+            setIsResourceEdited,
+            isFormOpen,
+            setIsFormOpen,
+            () => navigateAfterClose(),
+          );
         }}
         design="Transparent"
       >
