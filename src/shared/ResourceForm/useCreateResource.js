@@ -135,7 +135,6 @@ export function useCreateResource({
     }
     setIsResourceEdited({
       isEdited: false,
-      isSaved: true,
     });
     setIsFormOpen({
       formOpen: false,
