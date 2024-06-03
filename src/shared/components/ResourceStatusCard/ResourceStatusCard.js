@@ -25,7 +25,7 @@ export function ResourceStatusCard({
         }
         className="resource-status-card"
       >
-        {(customColumns || customStatusComponents) && (
+        {customColumns && (
           <div
             style={{
               ...spacing.sapUiSmallMargin,
@@ -34,7 +34,6 @@ export function ResourceStatusCard({
             className="resource-status-card__details-grid"
           >
             {customColumns}
-            {customStatusComponents}
           </div>
         )}
         {conditions && (

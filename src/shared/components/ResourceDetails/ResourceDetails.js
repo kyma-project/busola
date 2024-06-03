@@ -285,37 +285,26 @@ function Resource({
       customColumns={
         customStatusColumns ? (
           <>
-            {customStatusColumns?.filter(filterColumns)?.map(col => (
-              <DynamicPageComponent.Column key={col.header} title={col.header}>
-                {col.value(resource)}
-              </DynamicPageComponent.Column>
-            ))}
-          </>
-        ) : null
-      }
-      customStatusComponents={
-        customStatusComponents ? (
-          <>
-            {customStatusComponents
+            {customStatusColumns
               ?.filter(filterColumns)
-              .filter(col => !col?.fullWidth)
-              ?.map(component => (
+              .filter(col => !col?.conditionComponent)
+              ?.map(col => (
                 <DynamicPageComponent.Column
-                  key={component.header}
-                  title={component.header}
+                  key={col.header}
+                  title={col.header}
                 >
-                  {component.value(resource)}
+                  {col.value(resource)}
                 </DynamicPageComponent.Column>
               ))}
           </>
         ) : null
       }
       customConditionsComponent={
-        customStatusComponents ? (
+        customStatusColumns ? (
           <>
-            {customStatusComponents
+            {customStatusColumns
               ?.filter(filterColumns)
-              .filter(col => col?.fullWidth)
+              .filter(col => col?.conditionComponent)
               ?.map(component => (
                 <>
                   <div

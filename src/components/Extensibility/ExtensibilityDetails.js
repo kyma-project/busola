@@ -120,11 +120,11 @@ export const ExtensibilityDetailsCore = ({
             ]
           : []
       }
-      customStatusComponents={
+      customStatusColumns={
         Array.isArray(status)
           ? status.map((def, i) => ({
               header: def.name,
-              fullWidth: def.widget === 'ConditionList',
+              conditionComponent: def.widget === 'ConditionList',
               value: resource => (
                 <Widget
                   key={i}
