@@ -51,6 +51,7 @@ export function EventList({
     try {
       const [eventFilter, eventFilterError] = jsonata(structure.filter, {
         scope: res,
+        arrayItems: [res],
       });
       if (eventFilterError) return false;
       return !!eventFilter;

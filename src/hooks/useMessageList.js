@@ -5,6 +5,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useTranslation } from 'react-i18next';
 import { useUrl } from 'hooks/useUrl';
 import { Link } from 'shared/components/Link/Link';
+import pluralize from 'pluralize';
 
 export const EVENT_MESSAGE_TYPE = {
   ALL: { key: 'All', text: 'all' },
@@ -13,6 +14,7 @@ export const EVENT_MESSAGE_TYPE = {
 };
 
 export const RESOURCE_PATH = {
+  CAPOperator: 'customresources/capoperators.operator.sme.sap.com',
   Certificate: 'certificates',
   ConfigMap: 'configmaps',
   CronJob: 'cronjobs',
@@ -22,6 +24,7 @@ export const RESOURCE_PATH = {
   DNSEntry: 'dnsentries',
   DNSProvider: 'dnsproviders',
   Event: 'events',
+  Function: 'functions',
   Gateway: 'gateways',
   HorizontalPodAutoscaler: 'horizontalpodautoscalers',
   Ingress: 'ingresses',
@@ -32,6 +35,7 @@ export const RESOURCE_PATH = {
   PersistentVolumeClaim: 'persistentvolumeclaims',
   Pod: 'pods',
   ReplicaSet: 'replicasets',
+  Serverless: 'serverlesses',
   Service: 'services',
   ServiceAccount: 'serviceaccounts',
   StatefulSet: 'statefulsets',
@@ -44,13 +48,17 @@ export const filterByResource = (resourceKind, resourceName) => e =>
   e.involvedObject?.kind === resourceKind;
 
 export const FormatInvolvedObject = obj => {
+  console.log(obj);
   const namespacePrefix = obj.namespace ? `${obj.namespace}` : '';
   const namespaceOverride = obj.namespace ? { namespace: obj.namespace } : null;
 
   const text = `${obj.kind} ${namespacePrefix}/${obj.name}`;
   const isLink = !!RESOURCE_PATH[obj.kind];
+  console.log([obj.kind]);
   const { scopedUrl } = useUrl();
-  const path = `${RESOURCE_PATH[obj.kind]}/${obj.name}`;
+  const path = isLink
+    ? `${RESOURCE_PATH[obj.kind]}/${obj.name}`
+    : `${pluralize(obj?.kind).toLocaleLowerCase()}/${obj.name}`;
   return isLink ? (
     <Link url={scopedUrl(path, namespaceOverride)}>{text}</Link>
   ) : (
@@ -59,6 +67,7 @@ export const FormatInvolvedObject = obj => {
 };
 
 export const FormatSourceObject = obj => {
+  console.log(obj);
   const { clusterUrl } = useUrl();
   if (!obj || Object.keys(obj).length === 0) return EMPTY_TEXT_PLACEHOLDER;
   return obj.host ? (
