@@ -32,7 +32,7 @@ This table lists the available parameters of the **data.form** section in your r
 |-----------|----------|------|-------------|
 | **path** | **Yes** | string or [JSONata](jsonata.md) | A path to the property that you want to display in the form. |
 | **name** | No | string | The name for the field instead of the default capitalized last part of the path. This can be a key from the **translation** section. |
-| **widget** | No | string | A widget used to render the field referred to by the **path** property. If you don't provide the **widget**, a default handler is used depending on the data type provided in the schema. For more information about the available widgets, see [Form Widgets](50-form-widgets.md). |
+| **widget** | No | string | A widget used to render the field referred to by the **path** property. If you don't provide the **widget**, a default handler is used depending on the data type provided in the schema. For more information about the available widgets, see [Form Widgets](./60-form-widgets.md). |
 | **children** | No | | Child widgets used for grouping. Child paths are relative to its parent. |
 | **visibility** | No | boolean or [JSONata](jsonata.md) expression | Controls the visibility of the element. |
 | **overwrite** | No | boolean | Used to disable the overwriting (clearing) of hidden fields. Used together with **visibility**, defaults to `true`. <br><br> **NOTE:** It is recommended to set **overwrite** to `false` when defining fields with the same `path` and different **visibility** conditions. |
@@ -145,4 +145,4 @@ When a trigger is invoked in an array, by default it matches only fields in the 
 
 ## Related Links
 
-* [Widgets available for the create and edit pages](./50-form-widgets.md)
+* [Widgets available for the create and edit pages](./60-form-widgets.md)

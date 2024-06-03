@@ -10,7 +10,7 @@ This table lists the available parameters of the **data.list** section in your r
 |-----------|----------|------|-------------|
 | **source** | **Yes** | string or [JSONata](jsonata.md) expression | It is used to fetch data for the column. In its simplest form, it's the path to the value. |
 | **name** | **Yes** | string | Name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the [**translation** section](./translations-section.md). |
-| **widget** | No | string | A widget used to render the field referred to by the **source** property. By default, the value is displayed verbatim. For more information about the available widgets, see [List and Details Widgets](./40-list-and-details-widgets.md). |
+| **widget** | No | string | A widget used to render the field referred to by the **source** property. By default, the value is displayed verbatim. For more information about the available widgets, see [List and Details Widgets](./50-list-and-details-widgets.md). |
 | **valuePreprocessor** | No | string | The name of [value preprocessor](resources.md#value-preprocessors). |
 | **sort** | No | boolean | If set to `true`, it allows you to sort the resource list using this value. Defaults to `false`. It can also be set to an object with the following properties:
 | **sort.default** | No | boolean | If the flag is set to `true`, the list view is sorted by this value by default. |
