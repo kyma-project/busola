@@ -516,6 +516,20 @@ Columns widgets render the child widgets in multiple columns.
 
 <img src="./assets/display-widgets/Columns.png" alt="Example of a columns widget" style="border: 1px solid #D2D5D9">
 
+### ConditionList
+
+Condition List widget render the conditions as expandable list with condition details.
+
+#### Example
+
+```yaml
+- name: Condition details
+  widget: ConditionList
+  source: status.conditions
+```
+
+<img src="./assets/display-widgets/ConditionList.png" alt="Example of a condition list widget" style="border: 1px solid #D2D5D9">
+
 ### EventList
 
 EventList widget renders a list of Events.
