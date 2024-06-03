@@ -25,7 +25,7 @@ export function ResourceStatusCard({
         }
         className="resource-status-card"
       >
-        {customColumns && (
+        {(customColumns || customStatusComponents) && (
           <div
             style={{
               ...spacing.sapUiSmallMargin,
@@ -34,6 +34,7 @@ export function ResourceStatusCard({
             className="resource-status-card__details-grid"
           >
             {customColumns}
+            {customStatusComponents}
           </div>
         )}
         {conditions && (
@@ -46,18 +47,6 @@ export function ResourceStatusCard({
             </div>
             <ConditionList conditions={conditions} />
           </>
-        )}
-
-        {customStatusComponents && (
-          <div
-            style={{
-              ...spacing.sapUiSmallMargin,
-              ...spacing.sapUiTinyMarginTop,
-            }}
-            className="resource-status-card__details-grid"
-          >
-            {customStatusComponents}
-          </div>
         )}
         {customConditionsComponent && customConditionsComponent}
       </Card>

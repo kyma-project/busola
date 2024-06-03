@@ -279,11 +279,11 @@ function Resource({
     return EMPTY_TEXT_PLACEHOLDER;
   };
 
-  const resourceStatusCard =
-    customStatusColumns || customStatusComponents ? (
-      <ResourceStatusCard
-        statusBadge={statusBadge ? statusBadge(resource) : null}
-        customColumns={
+  const resourceStatusCard = (
+    <ResourceStatusCard
+      statusBadge={statusBadge ? statusBadge(resource) : null}
+      customColumns={
+        customStatusColumns ? (
           <>
             {customStatusColumns?.filter(filterColumns)?.map(col => (
               <DynamicPageComponent.Column key={col.header} title={col.header}>
@@ -291,8 +291,10 @@ function Resource({
               </DynamicPageComponent.Column>
             ))}
           </>
-        }
-        customStatusComponents={
+        ) : null
+      }
+      customStatusComponents={
+        customStatusComponents ? (
           <>
             {customStatusComponents
               ?.filter(filterColumns)
@@ -306,8 +308,10 @@ function Resource({
                 </DynamicPageComponent.Column>
               ))}
           </>
-        }
-        customConditionsComponent={
+        ) : null
+      }
+      customConditionsComponent={
+        customStatusComponents ? (
           <>
             {customStatusComponents
               ?.filter(filterColumns)
@@ -324,10 +328,11 @@ function Resource({
                 </>
               ))}
           </>
-        }
-        conditions={statusConditions ? statusConditions(resource) : null}
-      />
-    ) : null;
+        ) : null
+      }
+      conditions={statusConditions ? statusConditions(resource) : null}
+    />
+  );
 
   const resourceDetailsCard = (
     <ResourceDetailsCard

@@ -1,8 +1,7 @@
 import { List } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { ExpandableListItem } from '../ExpandableListItem/ExpandableListItem';
 
-export const ConditionList = ({ header, conditions }) => {
+export const ConditionList = ({ conditions }) => {
   if (!conditions) {
     return null;
   }

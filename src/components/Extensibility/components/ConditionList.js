@@ -1,7 +1,6 @@
-import { useGetTranslation } from '../helpers';
 import { ConditionList as ConditionListComponent } from 'shared/components/ConditionList/ConditionList';
 
-export const ConditionList = ({ value, structure, ...props }) => {
+export const ConditionList = ({ value, structure }) => {
   if (!Array.isArray(value) || value?.length === 0) {
     return null;
   }
