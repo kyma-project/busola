@@ -14,7 +14,7 @@ This table lists the available parameters of the **data.details.header** and/or 
 |-----------|----------|------|-------------|
 | **source** | **Yes** | string or [JSONata](jsonata.md) expression |  Used to fetch data for the widget. In its simplest form, it's the path to the value. Not required for presentational widgets. |
 | **name** | **Yes** | string | Name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the [**translation** section](./translations-section.md). |
-| **widget** | No | string | A widget to render the defined entry. By default the value is displayed verbatim. For more information about the available widgets, see [List and Details Widgets](.50-list-and-details-widgets.md). |
+| **widget** | No | string | A widget to render the defined entry. By default the value is displayed verbatim. For more information about the available widgets, see [List and Details Widgets](./50-list-and-details-widgets.md). |
 | **valuePreprocessor** | No | string | Name of the [value preprocessor](resources.md#value-preprocessors). |
 | **visibility** | No | boolean or [JSONata](jsonata.md) expression | By default all fields are visible; however, you can use the **visibility** property to control a single item display. <br>- If set to `false` explicitly, the field doesn't render. <br> - If set to any string, this property is treated as [JSONata](jsonata.md) format, determining if the field should be visible based on the current value given as `$value`. <br> - If not set, the field always renders. |
 | **children** | No | []objects | A list of child widgets used for all `object` and `array` fields. |
