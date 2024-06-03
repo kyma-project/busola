@@ -149,7 +149,6 @@ function Resource({
   createResourceForm: CreateResourceForm,
   customColumns,
   customComponents,
-  customStatusComponents,
   description,
   editActionLabel,
   headerActions,
@@ -279,7 +278,7 @@ function Resource({
     return EMPTY_TEXT_PLACEHOLDER;
   };
 
-  const resourceStatusCard = (
+  const resourceStatusCard = customStatusColumns ? (
     <ResourceStatusCard
       statusBadge={statusBadge ? statusBadge(resource) : null}
       customColumns={
@@ -299,6 +298,7 @@ function Resource({
           </>
         ) : null
       }
+      conditions={statusConditions ? statusConditions(resource) : null}
       customConditionsComponent={
         customStatusColumns ? (
           <>
@@ -311,7 +311,7 @@ function Resource({
                     className="title bsl-has-color-status-4 "
                     style={spacing.sapUiSmallMarginBeginEnd}
                   >
-                    {t('common.headers.conditions')}
+                    {component.header}:
                   </div>
                   {component.value(resource)}
                 </>
@@ -319,9 +319,8 @@ function Resource({
           </>
         ) : null
       }
-      conditions={statusConditions ? statusConditions(resource) : null}
     />
-  );
+  ) : null;
 
   const resourceDetailsCard = (
     <ResourceDetailsCard

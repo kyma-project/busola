@@ -123,7 +123,7 @@ export const ExtensibilityDetailsCore = ({
       customStatusColumns={
         Array.isArray(status)
           ? status.map((def, i) => ({
-              header: def.name,
+              header: widgetT(def),
               conditionComponent: def.widget === 'ConditionList',
               value: resource => (
                 <Widget

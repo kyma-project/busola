@@ -9,7 +9,6 @@ export function ResourceStatusCard({
   statusBadge,
   customColumns,
   conditions,
-  customStatusComponents,
   customConditionsComponent,
 }) {
   const { t } = useTranslation();
@@ -42,12 +41,12 @@ export function ResourceStatusCard({
               className="title bsl-has-color-status-4 "
               style={spacing.sapUiSmallMarginBeginEnd}
             >
-              {t('common.headers.conditions')}
+              {`${t('common.headers.conditions')}:`}
             </div>
             <ConditionList conditions={conditions} />
           </>
         )}
-        {customConditionsComponent && customConditionsComponent}
+        {customConditionsComponent}
       </Card>
     </div>
   );
