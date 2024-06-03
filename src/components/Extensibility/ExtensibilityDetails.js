@@ -124,6 +124,7 @@ export const ExtensibilityDetailsCore = ({
         Array.isArray(status)
           ? status.map((def, i) => ({
               header: def.name,
+              fullWidth: def.widget === 'ConditionList',
               value: resource => (
                 <Widget
                   key={i}

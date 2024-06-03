@@ -10,6 +10,7 @@ export function ResourceStatusCard({
   customColumns,
   conditions,
   customStatusComponents,
+  customConditionsComponent,
 }) {
   const { t } = useTranslation();
 
@@ -53,10 +54,12 @@ export function ResourceStatusCard({
               ...spacing.sapUiSmallMargin,
               ...spacing.sapUiTinyMarginTop,
             }}
+            className="resource-status-card__details-grid"
           >
             {customStatusComponents}
           </div>
         )}
+        {customConditionsComponent && customConditionsComponent}
       </Card>
     </div>
   );

@@ -294,14 +294,35 @@ function Resource({
         }
         customStatusComponents={
           <>
-            {customStatusComponents?.filter(filterColumns)?.map(component => (
-              <DynamicPageComponent.Column
-                key={component.header}
-                title={component.header}
-              >
-                {component.value(resource)}
-              </DynamicPageComponent.Column>
-            ))}
+            {customStatusComponents
+              ?.filter(filterColumns)
+              .filter(col => !col?.fullWidth)
+              ?.map(component => (
+                <DynamicPageComponent.Column
+                  key={component.header}
+                  title={component.header}
+                >
+                  {component.value(resource)}
+                </DynamicPageComponent.Column>
+              ))}
+          </>
+        }
+        customConditionsComponent={
+          <>
+            {customStatusComponents
+              ?.filter(filterColumns)
+              .filter(col => col?.fullWidth)
+              ?.map(component => (
+                <>
+                  <div
+                    className="title bsl-has-color-status-4 "
+                    style={spacing.sapUiSmallMarginBeginEnd}
+                  >
+                    {t('common.headers.conditions')}
+                  </div>
+                  {component.value(resource)}
+                </>
+              ))}
           </>
         }
         conditions={statusConditions ? statusConditions(resource) : null}
