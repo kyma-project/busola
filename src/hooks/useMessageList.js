@@ -48,17 +48,13 @@ export const filterByResource = (resourceKind, resourceName) => e =>
   e.involvedObject?.kind === resourceKind;
 
 export const FormatInvolvedObject = obj => {
-  console.log(obj);
   const namespacePrefix = obj.namespace ? `${obj.namespace}` : '';
   const namespaceOverride = obj.namespace ? { namespace: obj.namespace } : null;
 
   const text = `${obj.kind} ${namespacePrefix}/${obj.name}`;
   const isLink = !!RESOURCE_PATH[obj.kind];
-  console.log([obj.kind]);
   const { scopedUrl } = useUrl();
-  const path = isLink
-    ? `${RESOURCE_PATH[obj.kind]}/${obj.name}`
-    : `${pluralize(obj?.kind).toLocaleLowerCase()}/${obj.name}`;
+  const path = `${RESOURCE_PATH[obj.kind]}/${obj.name}`;
   return isLink ? (
     <Link url={scopedUrl(path, namespaceOverride)}>{text}</Link>
   ) : (
@@ -67,7 +63,6 @@ export const FormatInvolvedObject = obj => {
 };
 
 export const FormatSourceObject = obj => {
-  console.log(obj);
   const { clusterUrl } = useUrl();
   if (!obj || Object.keys(obj).length === 0) return EMPTY_TEXT_PLACEHOLDER;
   return obj.host ? (
