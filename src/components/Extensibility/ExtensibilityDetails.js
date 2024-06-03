@@ -133,7 +133,6 @@ export const ExtensibilityDetailsCore = ({
                   schema={schema}
                   dataSources={dataSources}
                   originalResource={resource}
-                  inlineContext={true}
                 />
               ),
             }))
