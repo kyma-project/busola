@@ -5,7 +5,6 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useTranslation } from 'react-i18next';
 import { useUrl } from 'hooks/useUrl';
 import { Link } from 'shared/components/Link/Link';
-import pluralize from 'pluralize';
 
 export const EVENT_MESSAGE_TYPE = {
   ALL: { key: 'All', text: 'all' },
