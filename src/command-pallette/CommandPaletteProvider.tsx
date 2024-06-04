@@ -3,15 +3,12 @@ import { CommandPaletteUI } from './CommandPalletteUI/CommandPaletteUI';
 import { useEventListener } from 'hooks/useEventListener';
 import { K8sResource } from 'types';
 import { useObjectState } from 'shared/useObjectState';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { useRecoilValue } from 'recoil';
 
 export const CommandPaletteProvider = ({
   children,
 }: {
   children: ReactNode;
 }) => {
-  const isResourceEdited = useRecoilValue(isResourceEditedState);
   const [showDialog, _setShowDialog] = useState(false);
   const hide = () => setShowDialog(false);
   const [resourceCache, updateResourceCache] = useObjectState<
@@ -21,7 +18,7 @@ export const CommandPaletteProvider = ({
   const setShowDialog = (value: boolean) => {
     const modalPresent = document.querySelector('ui5-dialog[open="true"]');
     // disable opening palette if other modal is present
-    if (!modalPresent || !value || isResourceEdited.warningOpen) {
+    if (!modalPresent || !value) {
       _setShowDialog(value);
     }
   };

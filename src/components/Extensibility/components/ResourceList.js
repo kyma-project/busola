@@ -76,7 +76,7 @@ export function ResourceList({
           error={value?.error}
           loading={value?.loading}
           title={t(structure.name)}
-          disableCreate={structure.disableCreate || false}
+          disableCreate={true}
         />
       </Suspense>
     );
@@ -115,7 +115,7 @@ export function ResourceList({
         namespace={value?.namespace || namespaceId}
         isCompact
         title={widgetT(structure)}
-        disableCreate={structure.disableCreate || false}
+        disableCreate={true}
         showTitle={true}
         hasDetailsView={
           structure.hasDetailsView ?? !!PredefinedRenderer?.Details
