@@ -412,8 +412,7 @@ export const useGetExtensions = () => {
   useEffect(() => {
     (crds as any)?.items.forEach((crd: CustomResourceDefinition) => {
       RESOURCE_PATH[crd?.spec.names.kind as keyof typeof RESOURCE_PATH] =
-        crd?.spec.names.plural ||
-        pluralize(crd?.spec.names.kind).toLocaleLowerCase();
+        'customresources/' + crd?.metadata.name;
     });
   }, [crds]);
 
