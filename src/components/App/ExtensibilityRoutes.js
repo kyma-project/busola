@@ -77,7 +77,7 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType, extension }) => {
     apiGroup: extension?.general.resource.group,
     apiVersion: extension?.general.resource.version,
   });
-
+  console.log(elementCreateProps);
   let midColumnComponent = null;
 
   if (layoutState?.showCreate?.resourceType) {
@@ -132,6 +132,10 @@ export const createExtensibilityRoutes = (extension, language, ...props) => {
     extension?.general?.urlPath ||
     pluralize(extension?.general?.resource?.kind?.toLowerCase() || '');
 
+  const resourceType = pluralize(
+    extension?.general?.resource?.kind?.toLowerCase() || '',
+  );
+
   const translationBundle = urlPath || 'extensibility';
   i18next.addResourceBundle(
     language,
@@ -146,7 +150,7 @@ export const createExtensibilityRoutes = (extension, language, ...props) => {
         exact
         element={
           <Suspense fallback={<Spinner />}>
-            <ColumnWrapper resourceType={urlPath} extension={extension} />
+            <ColumnWrapper resourceType={resourceType} extension={extension} />
           </Suspense>
         }
       />
@@ -156,7 +160,10 @@ export const createExtensibilityRoutes = (extension, language, ...props) => {
           exact
           element={
             <Suspense fallback={<Spinner />}>
-              <ColumnWrapper defaultColumn="details" resourceType={urlPath} />
+              <ColumnWrapper
+                defaultColumn="details"
+                resourceType={resourceType}
+              />
             </Suspense>
           }
         />
