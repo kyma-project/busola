@@ -20,6 +20,10 @@ import { doesUserHavePermission } from './filters/permissions';
 import { useUrl } from 'hooks/useUrl';
 import { K8sResource } from 'types';
 import { useFeature } from 'hooks/useFeature';
+import { RESOURCE_PATH } from 'hooks/useMessageList';
+import pluralize from 'pluralize';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
+import { CustomResourceDefinition } from 'command-pallette/CommandPalletteUI/handlers/crHandler';
 
 /*
 the order of the overwrting extensions
@@ -374,6 +378,14 @@ const getExtensions = async (
   }
 };
 
+const pushExtToEventTypes = (extensions: any) => {
+  extensions.forEach((ext: any) => {
+    RESOURCE_PATH[
+      ext?.general?.resource?.kind as keyof typeof RESOURCE_PATH
+    ] = pluralize(ext?.general?.resource?.kind).toLocaleLowerCase();
+  });
+};
+
 export const useGetExtensions = () => {
   const cluster = useRecoilValue(clusterState);
   const auth = useRecoilValue(authDataState);
@@ -393,6 +405,17 @@ export const useGetExtensions = () => {
   const { isEnabled: isExtensibilityWizardEnabled } = useFeature(
     'EXTENSIBILITY_WIZARD',
   );
+  const { data: crds } = useGet(
+    `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`,
+  );
+
+  useEffect(() => {
+    (crds as any)?.items.forEach((crd: CustomResourceDefinition) => {
+      RESOURCE_PATH[crd?.spec.names.kind as keyof typeof RESOURCE_PATH] =
+        crd?.spec.names.plural ||
+        pluralize(crd?.spec.names.kind).toLocaleLowerCase();
+    });
+  }, [crds]);
 
   useEffect(() => {
     const manageExtensions = async () => {
@@ -456,6 +479,7 @@ export const useGetExtensions = () => {
 
         setExtensions(filteredConfigs);
         setAllExtensions(configs);
+        pushExtToEventTypes(filteredConfigs);
       }
 
       if (!filteredConfigs && !statics) {

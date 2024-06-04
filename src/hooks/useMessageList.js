@@ -12,8 +12,7 @@ export const EVENT_MESSAGE_TYPE = {
   WARNING: { key: 'Warning', text: 'warnings' },
 };
 
-export const RESOURCE_PATH = {
-  CAPOperator: 'customresources/capoperators.operator.sme.sap.com',
+export let RESOURCE_PATH = {
   Certificate: 'certificates',
   ConfigMap: 'configmaps',
   CronJob: 'cronjobs',
@@ -23,7 +22,6 @@ export const RESOURCE_PATH = {
   DNSEntry: 'dnsentries',
   DNSProvider: 'dnsproviders',
   Event: 'events',
-  Function: 'functions',
   Gateway: 'gateways',
   HorizontalPodAutoscaler: 'horizontalpodautoscalers',
   Ingress: 'ingresses',
@@ -34,7 +32,6 @@ export const RESOURCE_PATH = {
   PersistentVolumeClaim: 'persistentvolumeclaims',
   Pod: 'pods',
   ReplicaSet: 'replicasets',
-  Serverless: 'serverlesses',
   Service: 'services',
   ServiceAccount: 'serviceaccounts',
   StatefulSet: 'statefulsets',
@@ -42,6 +39,7 @@ export const RESOURCE_PATH = {
   Subscription: 'subscriptions',
   VirtualService: 'virtualservices',
 };
+
 export const filterByResource = (resourceKind, resourceName) => e =>
   e.involvedObject?.name === resourceName &&
   e.involvedObject?.kind === resourceKind;
