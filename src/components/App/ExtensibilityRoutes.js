@@ -77,7 +77,7 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType, extension }) => {
     apiGroup: extension?.general.resource.group,
     apiVersion: extension?.general.resource.version,
   });
-  console.log(elementCreateProps);
+
   let midColumnComponent = null;
 
   if (layoutState?.showCreate?.resourceType) {
