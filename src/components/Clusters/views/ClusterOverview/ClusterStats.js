@@ -116,7 +116,7 @@ export default function ClusterStats({ nodesData }) {
             }
           >
             <UI5RadialChart
-              colorNumber={5}
+              color="var(--sapChart_OrderedColor_5)"
               value={roundTwoDecimals(cpu.usage)}
               max={roundTwoDecimals(cpu.capacity)}
               additionalInfo={`${roundTwoDecimals(
@@ -135,7 +135,7 @@ export default function ClusterStats({ nodesData }) {
             }
           >
             <UI5RadialChart
-              colorNumber={6}
+              color="var(--sapChart_OrderedColor_6)"
               value={roundTwoDecimals(memory.usage)}
               max={roundTwoDecimals(memory.capacity)}
               additionalInfo={`${roundTwoDecimals(

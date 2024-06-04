@@ -17,7 +17,7 @@ export function NodeResources({ metrics }) {
         }
       >
         <UI5RadialChart
-          colorNumber={5}
+          color="var(--sapChart_OrderedColor_5)"
           value={cpu.usage}
           max={cpu.capacity}
           additionalInfo={`${roundTwoDecimals(cpu.usage)}m / ${roundTwoDecimals(
@@ -34,7 +34,7 @@ export function NodeResources({ metrics }) {
         }
       >
         <UI5RadialChart
-          colorNumber={6}
+          color="var(--sapChart_OrderedColor_6)"
           value={memory.usage}
           max={memory.capacity}
           additionalInfo={`${roundTwoDecimals(
