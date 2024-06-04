@@ -293,6 +293,23 @@ ui5-tabcontainer::part(content) {
   min-width: 100%;
 }
 
+// WORKAROUND FOR UI5 TITLE CUT OFF
+ui5-title[level='H1'] {
+  line-height: calc(var(--sapFontHeader1Size) * 1.1);
+}
+ui5-title[level='H2'] {
+  line-height: calc(var(--sapFontHeader2Size) * 1.1);
+}
+ui5-title[level='H3'] {
+  line-height: calc(var(--sapFontHeader3Size) * 1.1);
+}
+ui5-title[level='H4'] {
+  line-height: calc(var(--sapFontHeader4Size) * 1.1);
+}
+ui5-title[level='H5'] {
+  line-height: calc(var(--sapFontHeader5Size) * 1.1);
+}
+
 @include graph-node-border(pod, 4);
 @include graph-node-border(virtualservice, 1);
 @include graph-node-border(rolebinding, 2);
