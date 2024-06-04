@@ -1,11 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { useUrl } from 'hooks/useUrl';
-import {
-  FormatInvolvedObject,
-  FormatSourceObject,
-  RESOURCE_PATH,
-} from 'hooks/useMessageList';
+import { FormatInvolvedObject, FormatSourceObject } from 'hooks/useMessageList';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
@@ -17,9 +13,6 @@ import { ResourceDescription } from 'resources/Events';
 import EventCreate from './EventYaml';
 import { Link } from 'shared/components/Link/Link';
 import { spacing } from '@ui5/webcomponents-react-base';
-import pluralize from 'pluralize';
-import { useEffect } from 'react';
-import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
 const RowComponent = ({ name, value }) =>
   value ? <LayoutPanelRow name={name} value={value} /> : null;
