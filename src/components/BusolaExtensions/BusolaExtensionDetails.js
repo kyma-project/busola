@@ -31,6 +31,7 @@ import { BusolaExtensionEdit } from './BusolaExtensionEdit';
 import { SECTIONS } from './helpers';
 import { EXTENSION_VERSION_LABEL } from './constants';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { useState } from 'react';
 
 export function BusolaExtensionDetails({ name, namespace }) {
   const { t } = useTranslation();
@@ -66,6 +67,8 @@ export function BusolaExtensionDetails({ name, namespace }) {
 
   const BusolaExtensionEditor = resource => {
     const { data } = resource;
+    const [initialResource] = useState(resource);
+
     return (
       <>
         {SECTIONS.map(key => (
@@ -110,6 +113,7 @@ export function BusolaExtensionDetails({ name, namespace }) {
                         };
                         updateBusolaExtension(newResource, resource);
                       }}
+                      initialResource={initialResource}
                     />
                   </ErrorBoundary>
                 )}

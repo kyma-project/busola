@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep } from 'lodash';
 
@@ -24,6 +24,9 @@ export function BusolaExtensionEdit({
       ? cloneDeep(initialExtension)
       : createConfigMapTemplate(namespace || ''),
   );
+  const [initialResource] = useState(
+    initialExtension || createConfigMapTemplate(namespace || ''),
+  );
   const { t } = useTranslation();
 
   return (
@@ -32,7 +35,7 @@ export function BusolaExtensionEdit({
       pluralKind="configmaps"
       singularName={t('config-maps.name_singular')}
       resource={extension}
-      initialResource={initialExtension}
+      initialResource={initialResource}
       setResource={setExtension}
       onChange={onChange}
       formElementRef={formElementRef}

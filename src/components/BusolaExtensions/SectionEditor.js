@@ -25,6 +25,7 @@ export function SectionEditor({
   onlyYaml,
   formElementRef,
   onSubmit,
+  initialResource,
 }) {
   const [store, setStore] = useState(() =>
     createStore(fromJS(jsyaml.load(data))),
@@ -41,7 +42,7 @@ export function SectionEditor({
       <UIStoreProvider store={store} showValidity={true} onChange={onChange}>
         <ResourceForm
           resource={resource}
-          initialResource={resource}
+          initialResource={initialResource}
           disableDefaultFields
           onlyYaml={onlyYaml}
           formElementRef={formElementRef}
