@@ -46,9 +46,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
         '',
       );
       const pathSegment = resourcePart.split('/')?.[0];
-      return (
-        pathSegment === node.pathSegment || pathSegment === node.resourceType
-      );
+      return pathSegment === node.pathSegment;
     }
   };
 
