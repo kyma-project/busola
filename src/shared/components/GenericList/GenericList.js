@@ -72,6 +72,7 @@ export const GenericList = ({
   handleRedirect = null,
   nameColIndex = 0,
   noHideFields,
+  customRowClick,
 }) => {
   const navigate = useNavigate();
   searchSettings = { ...defaultSearch, ...searchSettings };
@@ -270,66 +271,70 @@ export const GenericList = ({
   };
 
   const handleRowClick = e => {
-    const selectedEntry = entries.find(entry => {
-      return (
-        entry?.metadata?.name === e.target.children[nameColIndex].innerText ||
-        pluralize(entry?.spec?.names?.kind ?? '') ===
-          e.target.children[nameColIndex].innerText ||
-        entry?.name === e.target.children[nameColIndex].innerText
-      );
-    });
-
-    if (handleRedirect) {
-      const redirectLayout = handleRedirect(selectedEntry, resourceType);
-      if (redirectLayout) {
-        setLayoutColumn({
-          ...redirectLayout,
-        });
-        navigate(
-          redirectLayout.layout === 'OneColumn'
-            ? linkTo(selectedEntry)
-            : `${linkTo(selectedEntry)}?layout=${redirectLayout.layout}`,
+    if (customRowClick) {
+      return customRowClick(e.target.children[nameColIndex].innerText);
+    } else {
+      const selectedEntry = entries.find(entry => {
+        return (
+          entry?.metadata?.name === e.target.children[nameColIndex].innerText ||
+          pluralize(entry?.spec?.names?.kind ?? '') ===
+            e.target.children[nameColIndex].innerText ||
+          entry?.name === e.target.children[nameColIndex].innerText
         );
-        return;
-      }
-    }
-    setEntrySelected(
-      selectedEntry?.metadata?.name ?? e.target.children[0].innerText,
-    );
-    if (!enableColumnLayout) {
-      setLayoutColumn({
-        midColumn: null,
-        endColumn: null,
-        layout: 'OneColumn',
       });
 
-      navigate(linkTo(selectedEntry));
-    } else {
-      setLayoutColumn(
-        columnLayout
-          ? {
-              midColumn: layoutState.midColumn,
-              endColumn: customColumnLayout(selectedEntry),
-              layout: columnLayout,
-            }
-          : {
-              midColumn: {
-                resourceName:
-                  selectedEntry?.metadata?.name ??
-                  e.target.children[0].innerText,
-                resourceType: resourceType,
-                namespaceId: selectedEntry?.metadata?.namespace,
+      if (handleRedirect) {
+        const redirectLayout = handleRedirect(selectedEntry, resourceType);
+        if (redirectLayout) {
+          setLayoutColumn({
+            ...redirectLayout,
+          });
+          navigate(
+            redirectLayout.layout === 'OneColumn'
+              ? linkTo(selectedEntry)
+              : `${linkTo(selectedEntry)}?layout=${redirectLayout.layout}`,
+          );
+          return;
+        }
+      }
+      setEntrySelected(
+        selectedEntry?.metadata?.name ?? e.target.children[0].innerText,
+      );
+      if (!enableColumnLayout) {
+        setLayoutColumn({
+          midColumn: null,
+          endColumn: null,
+          layout: 'OneColumn',
+        });
+
+        navigate(linkTo(selectedEntry));
+      } else {
+        setLayoutColumn(
+          columnLayout
+            ? {
+                midColumn: layoutState.midColumn,
+                endColumn: customColumnLayout(selectedEntry),
+                layout: columnLayout,
+              }
+            : {
+                midColumn: {
+                  resourceName:
+                    selectedEntry?.metadata?.name ??
+                    e.target.children[0].innerText,
+                  resourceType: resourceType,
+                  namespaceId: selectedEntry?.metadata?.namespace,
+                },
+                endColumn: null,
+                layout: 'TwoColumnsMidExpanded',
               },
-              endColumn: null,
-              layout: 'TwoColumnsMidExpanded',
-            },
-      );
-      window.history.pushState(
-        window.history.state,
-        '',
-        `${linkTo(selectedEntry)}?layout=${columnLayout ??
-          'TwoColumnsMidExpanded'}`,
-      );
+        );
+        window.history.pushState(
+          window.history.state,
+          '',
+          `${linkTo(selectedEntry)}?layout=${columnLayout ??
+            'TwoColumnsMidExpanded'}`,
+        );
+      }
     }
   };
 
@@ -423,6 +428,7 @@ GenericList.propTypes = {
   customUrl: PropTypes.func,
   hasDetailsView: PropTypes.bool,
   noHideFields: PropTypes.arrayOf(PropTypes.string),
+  customRowClick: PropTypes.func,
 };
 
 GenericList.defaultProps = {
