@@ -21,7 +21,12 @@ const Details = React.lazy(() =>
 );
 const Create = React.lazy(() => import('../Extensibility/ExtensibilityCreate'));
 
-const ColumnWrapper = ({ defaultColumn = 'list', resourceType, extension }) => {
+const ColumnWrapper = ({
+  defaultColumn = 'list',
+  resourceType,
+  extension,
+  urlPath,
+}) => {
   const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const [searchParams] = useSearchParams();
@@ -36,7 +41,7 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType, extension }) => {
         layout: isColumnLeyoutEnabled && layout ? layout : layoutState?.layout,
         midColumn: {
           resourceName: resourceName,
-          resourceType: resourceType,
+          resourceType: urlPath ?? resourceType,
           namespaceId: namespaceId,
         },
         endColumn: null,
@@ -50,12 +55,22 @@ const ColumnWrapper = ({ defaultColumn = 'list', resourceType, extension }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [layout, isColumnLeyoutEnabled, namespaceId, resourceName, resourceType]);
 
-  const layoutCloseCreateUrl = resourceListUrl({
-    kind: resourceType,
-    metadata: {
-      namespace: layoutState?.midColumn?.namespaceId ?? namespaceId,
-    },
-  });
+  const layoutCloseCreateUrl = urlPath
+    ? resourceListUrl(
+        {
+          kind: urlPath,
+          metadata: {
+            namespace: layoutState?.midColumn?.namespaceId ?? namespaceId,
+          },
+        },
+        { resourceType: urlPath },
+      )
+    : resourceListUrl({
+        kind: resourceType,
+        metadata: {
+          namespace: layoutState?.midColumn?.namespaceId ?? namespaceId,
+        },
+      });
 
   let startColumnComponent = null;
   if ((!layout || !isColumnLeyoutEnabled) && defaultColumn === 'details') {
@@ -150,7 +165,11 @@ export const createExtensibilityRoutes = (extension, language, ...props) => {
         exact
         element={
           <Suspense fallback={<Spinner />}>
-            <ColumnWrapper resourceType={resourceType} extension={extension} />
+            <ColumnWrapper
+              resourceType={resourceType}
+              extension={extension}
+              urlPath={urlPath}
+            />
           </Suspense>
         }
       />
@@ -163,6 +182,7 @@ export const createExtensibilityRoutes = (extension, language, ...props) => {
               <ColumnWrapper
                 defaultColumn="details"
                 resourceType={resourceType}
+                urlPath={urlPath}
               />
             </Suspense>
           }
