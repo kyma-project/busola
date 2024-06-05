@@ -284,9 +284,7 @@ export function KymaModulesList(props) {
             design="Emphasized"
             onClick={handleShowAddModule}
           >
-            {resource?.status?.modules
-              ? t('kyma-modules.modify')
-              : t('common.buttons.add')}
+            {t('common.buttons.add')}
           </Button>,
         ]}
         customColumnLayout={customColumnLayout}
