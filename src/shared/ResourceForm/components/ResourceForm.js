@@ -119,7 +119,6 @@ export function ResourceForm({
     singularName,
     pluralKind,
     resource,
-    initialResource,
     initialUnchangedResource,
     createUrl,
     afterCreatedFn,

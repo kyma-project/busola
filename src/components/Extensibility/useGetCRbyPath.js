@@ -1,4 +1,6 @@
 import { useRecoilValue } from 'recoil';
+import { useMemo } from 'react';
+
 import { useParams } from 'react-router-dom';
 import { clusterState } from 'state/clusterAtom';
 import pluralize from 'pluralize';
@@ -10,29 +12,30 @@ export const useGetCRbyPath = resourceType => {
   const extensions = useRecoilValue(allExtensionsState);
   const { name: clusterName } = useRecoilValue(clusterState) || {};
   const layoutState = useRecoilValue(columnLayoutState);
+  const resource = useMemo(() => {
+    return extensions.find(el => {
+      const { scope, urlPath, resource } = el.general || {};
+      const extensionPath = urlPath || pluralize(resource?.kind?.toLowerCase());
 
-  const resource = extensions.find(el => {
-    const { scope, urlPath, resource } = el.general || {};
-    const extensionPath = urlPath || pluralize(resource?.kind?.toLowerCase());
+      const hasCorrectScope =
+        (scope?.toLowerCase() === 'namespace') ===
+          !!layoutState?.midColumn?.namespaceId ||
+        (scope?.toLowerCase() === 'namespace') === !!namespaceId;
 
-    const hasCorrectScope =
-      (scope?.toLowerCase() === 'namespace') ===
-        !!layoutState?.midColumn?.namespaceId ||
-      (scope?.toLowerCase() === 'namespace') === !!namespaceId;
+      if (!hasCorrectScope) return false;
 
-    if (!hasCorrectScope) return false;
+      const crPath = window.location.pathname
+        .replace(`/cluster/${clusterName}/`, '')
+        .replace(/namespaces\/([A-Za-z0-9.][-A-Za-z0-9_.]*)?[A-Za-z0-9]\//, '')
+        .replace('namespaces/-all-/', '')
+        .replace('core-ui/', '')
+        .replace('kymamodules/', '');
 
-    const crPath = window.location.pathname
-      .replace(`/cluster/${clusterName}/`, '')
-      .replace(/namespaces\/([A-Za-z0-9.][-A-Za-z0-9_.]*)?[A-Za-z0-9]\//, '')
-      .replace('namespaces/-all-/', '')
-      .replace('core-ui/', '')
-      .replace('kymamodules/', '');
-
-    return resourceType
-      ? resourceType === extensionPath
-      : crPath.split('/')[0] === extensionPath;
-  });
+      return resourceType
+        ? resourceType === extensionPath
+        : crPath.split('/')[0] === extensionPath;
+    });
+  }, [extensions, layoutState, clusterName, namespaceId, resourceType]);
 
   return resource;
 };

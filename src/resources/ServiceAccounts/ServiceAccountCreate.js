@@ -56,7 +56,6 @@ export default function ServiceAccountCreate({
     singularName: 'Secret',
     pluralKind: 'Secrets',
     resource: createDefaultSecret(serviceAccount.metadata.name),
-    initialResource: null,
     initialUnchangedResource: null,
     createUrl: `/api/v1/namespaces/${serviceAccount.metadata.namespace}/secrets`,
     afterCreatedFn: () => {},
