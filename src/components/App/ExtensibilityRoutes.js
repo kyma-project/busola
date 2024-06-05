@@ -55,7 +55,7 @@ const ColumnWrapper = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [layout, isColumnLeyoutEnabled, namespaceId, resourceName, resourceType]);
 
-  const overwrites = { resourceType: urlPath };
+  const overrides = { resourceType: urlPath };
 
   const layoutCloseCreateUrl = resourceListUrl(
     {
@@ -64,7 +64,7 @@ const ColumnWrapper = ({
         namespace: layoutState?.midColumn?.namespaceId ?? namespaceId,
       },
     },
-    urlPath ? overwrites : null,
+    urlPath ? overrides : null,
   );
 
   let startColumnComponent = null;
