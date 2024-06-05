@@ -1,7 +1,20 @@
 import { List } from '@ui5/webcomponents-react';
 import { ExpandableListItem } from '../ExpandableListItem/ExpandableListItem';
 
-export const ConditionList = ({ conditions }) => {
+type ConditionListProps = {
+  conditions: [ConditionItem];
+};
+
+type ConditionItem = {
+  message: string;
+  header: ConditionHeader;
+};
+type ConditionHeader = {
+  titleText: string;
+  status?: string;
+};
+
+export const ConditionList = ({ conditions }: ConditionListProps) => {
   if (!conditions) {
     return null;
   }
