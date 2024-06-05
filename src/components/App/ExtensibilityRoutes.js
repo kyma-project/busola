@@ -55,22 +55,17 @@ const ColumnWrapper = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [layout, isColumnLeyoutEnabled, namespaceId, resourceName, resourceType]);
 
-  const layoutCloseCreateUrl = urlPath
-    ? resourceListUrl(
-        {
-          kind: urlPath,
-          metadata: {
-            namespace: layoutState?.midColumn?.namespaceId ?? namespaceId,
-          },
-        },
-        { resourceType: urlPath },
-      )
-    : resourceListUrl({
-        kind: resourceType,
-        metadata: {
-          namespace: layoutState?.midColumn?.namespaceId ?? namespaceId,
-        },
-      });
+  const overwrites = { resourceType: urlPath };
+
+  const layoutCloseCreateUrl = resourceListUrl(
+    {
+      kind: urlPath ?? resourceType,
+      metadata: {
+        namespace: layoutState?.midColumn?.namespaceId ?? namespaceId,
+      },
+    },
+    urlPath ? overwrites : null,
+  );
 
   let startColumnComponent = null;
   if ((!layout || !isColumnLeyoutEnabled) && defaultColumn === 'details') {
