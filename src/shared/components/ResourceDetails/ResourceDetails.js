@@ -170,6 +170,7 @@ function Resource({
   customOverview,
   statusConditions,
   headerContent,
+  removeDeleteButton,
 }) {
   useVersionWarning({ resourceUrl, resourceType });
   const { t } = useTranslation();
@@ -229,15 +230,16 @@ function Resource({
       </Suspense>
       {headerActions}
       {resourceHeaderActions.map(resourceAction => resourceAction(resource))}
-      {deleteButtonWrapper(
-        <Button
-          disabled={protectedResource || disableDelete}
-          onClick={() => handleResourceDelete({ resourceUrl })}
-          design="Transparent"
-        >
-          {t('common.buttons.delete')}
-        </Button>,
-      )}
+      {!removeDeleteButton &&
+        deleteButtonWrapper(
+          <Button
+            disabled={protectedResource || disableDelete}
+            onClick={() => handleResourceDelete({ resourceUrl })}
+            design="Transparent"
+          >
+            {t('common.buttons.delete')}
+          </Button>,
+        )}
       {createPortal(
         <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />,
         document.body,

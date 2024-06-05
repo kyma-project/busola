@@ -356,6 +356,7 @@ export function KymaModulesList(props) {
       createResourceForm={KymaModulesCreate}
       disableResourceDetailsCard
       disableDelete
+      removeDeleteButton
       {...props}
     />
   );
