@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import { Label, DynamicPageHeader, Button } from '@ui5/webcomponents-react';
+import { DynamicPageHeader, Button, Text } from '@ui5/webcomponents-react';
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useState } from 'react';
@@ -27,6 +27,7 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
+import { Label } from 'shared/ResourceForm/components/Label';
 
 export function KymaModulesList(props) {
   const { t } = useTranslation();
@@ -249,7 +250,7 @@ export function KymaModulesList(props) {
               : findStatus(resource.name)?.state || 'None'
           }
         >
-          {findStatus(resource.name)?.state || 'UNKNOWN'}
+          {findStatus(resource.name)?.state || 'Unknown'}
         </StatusBadge>,
         // Documentation
         <ExternalLink
@@ -320,8 +321,8 @@ export function KymaModulesList(props) {
       layoutNumber="StartColumn"
       headerContent={
         <DynamicPageHeader>
-          <Label showColon>{t('kyma-modules.release-channel')}</Label>
-          <Label>{kymaResource?.spec.channel}</Label>
+          <Label showColon>{t('kyma-modules.release-channel')}</Label>{' '}
+          <Text>{kymaResource?.spec.channel}</Text>
           <HintButton
             style={spacing.sapUiTinyMarginBegin}
             setShowTitleDescription={setShowReleaseChannelTitleDescription}
