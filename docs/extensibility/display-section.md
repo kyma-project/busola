@@ -518,7 +518,7 @@ Columns widgets render the child widgets in multiple columns.
 
 ### ConditionList
 
-Condition List widget render the conditions as expandable list with condition details.
+Condition List widget renders the conditions as expandable list with condition details.
 
 #### Example
 

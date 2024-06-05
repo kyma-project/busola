@@ -122,20 +122,40 @@ export const ExtensibilityDetailsCore = ({
       }
       customStatusColumns={
         Array.isArray(status)
-          ? status.map((def, i) => ({
-              header: widgetT(def),
-              conditionComponent: def.widget === 'ConditionList',
-              value: resource => (
-                <Widget
-                  key={i}
-                  structure={def}
-                  value={resource}
-                  schema={schema}
-                  dataSources={dataSources}
-                  originalResource={resource}
-                />
-              ),
-            }))
+          ? status
+              .filter(def => def.widget !== 'ConditionList')
+              .map((def, i) => ({
+                header: widgetT(def),
+                value: resource => (
+                  <Widget
+                    key={i}
+                    structure={def}
+                    value={resource}
+                    schema={schema}
+                    dataSources={dataSources}
+                    originalResource={resource}
+                  />
+                ),
+              }))
+          : []
+      }
+      customConditionsComponents={
+        Array.isArray(status)
+          ? status
+              .filter(def => def.widget === 'ConditionList')
+              .map((def, i) => ({
+                header: widgetT(def),
+                value: resource => (
+                  <Widget
+                    key={i}
+                    structure={def}
+                    value={resource}
+                    schema={schema}
+                    dataSources={dataSources}
+                    originalResource={resource}
+                  />
+                ),
+              }))
           : []
       }
       description={description}

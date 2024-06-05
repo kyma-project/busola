@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { spacing } from '@ui5/webcomponents-react-base';
 import './ResourceStatusCard.scss';
 import { ConditionList } from '../ConditionList/ConditionList';
-import React from 'react';
 
 export function ResourceStatusCard({
   statusBadge,

@@ -149,6 +149,7 @@ function Resource({
   createResourceForm: CreateResourceForm,
   customColumns,
   customComponents,
+  customConditionsComponents,
   description,
   editActionLabel,
   headerActions,
@@ -278,49 +279,50 @@ function Resource({
     return EMPTY_TEXT_PLACEHOLDER;
   };
 
-  const resourceStatusCard = customStatusColumns ? (
-    <ResourceStatusCard
-      statusBadge={statusBadge ? statusBadge(resource) : null}
-      customColumns={
-        customStatusColumns ? (
-          <>
-            {customStatusColumns
-              ?.filter(filterColumns)
-              .filter(col => !col?.conditionComponent)
-              ?.map(col => (
-                <DynamicPageComponent.Column
-                  key={col.header}
-                  title={col.header}
-                >
-                  {col.value(resource)}
-                </DynamicPageComponent.Column>
-              ))}
-          </>
-        ) : null
-      }
-      conditions={statusConditions ? statusConditions(resource) : null}
-      customConditionsComponent={
-        customStatusColumns ? (
-          <>
-            {customStatusColumns
-              ?.filter(filterColumns)
-              .filter(col => col?.conditionComponent)
-              ?.map(component => (
-                <>
-                  <div
-                    className="title bsl-has-color-status-4 "
-                    style={spacing.sapUiSmallMarginBeginEnd}
+  const resourceStatusCard =
+    customStatusColumns?.length !== 0 ||
+    customConditionsComponents?.length !== 0 ? (
+      <ResourceStatusCard
+        statusBadge={statusBadge ? statusBadge(resource) : null}
+        customColumns={
+          customStatusColumns ? (
+            <>
+              {customStatusColumns
+                ?.filter(filterColumns)
+                .filter(col => !col?.conditionComponent)
+                ?.map(col => (
+                  <DynamicPageComponent.Column
+                    key={col.header}
+                    title={col.header}
                   >
-                    {component.header}:
-                  </div>
-                  {component.value(resource)}
-                </>
-              ))}
-          </>
-        ) : null
-      }
-    />
-  ) : null;
+                    {col.value(resource)}
+                  </DynamicPageComponent.Column>
+                ))}
+            </>
+          ) : null
+        }
+        conditions={statusConditions ? statusConditions(resource) : null}
+        customConditionsComponent={
+          customConditionsComponents ? (
+            <>
+              {customConditionsComponents
+                ?.filter(filterColumns)
+                ?.map(component => (
+                  <>
+                    <div
+                      className="title bsl-has-color-status-4 "
+                      style={spacing.sapUiSmallMarginBeginEnd}
+                    >
+                      {component.header}:
+                    </div>
+                    {component.value(resource)}
+                  </>
+                ))}
+            </>
+          ) : null
+        }
+      />
+    ) : null;
 
   const resourceDetailsCard = (
     <ResourceDetailsCard
