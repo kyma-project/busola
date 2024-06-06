@@ -66,7 +66,6 @@ export function BusolaExtensionDetails({ name, namespace }) {
 
   const BusolaExtensionEditor = resource => {
     const { data } = resource;
-
     return (
       <>
         {SECTIONS.map(key => (
