@@ -138,6 +138,7 @@ export default function KymaModulesAddModule(props) {
       resetLayout
       initialUnchangedResource={initialUnchangedResource}
       afterCreatedCustomMessage={t('kyma-modules.module-added')}
+      hideFormHeader
     >
       {modulesAddData?.length !== 0 ? (
         <>

@@ -66,6 +66,7 @@ export function ResourceForm({
   isEdit,
   stickyHeaderHeight,
   resetLayout,
+  hideFormHeader,
 }) {
   // readonly schema ID, set only once
   const resourceSchemaId = useMemo(
@@ -299,6 +300,7 @@ export function ResourceForm({
             )}
           </>
         }
+        hideFormHeader
       >
         <form
           ref={formElementRef}
