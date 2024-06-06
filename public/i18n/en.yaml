@@ -915,6 +915,7 @@ kubeconfig-id:
   error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 kyma-modules:
+  module-added: Module added 
   notification-uninstall: Module uninstalled successfully, it will take some time, go for a coffee.
   learn-more: Learn more
   add-module: Add Modules

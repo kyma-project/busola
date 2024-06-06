@@ -27,6 +27,7 @@ export function useCreateResource({
   urlPath,
   layoutNumber,
   resetLayout,
+  afterCreatedCustomMessage,
 }) {
   const { t } = useTranslation();
   const notification = useNotification();
@@ -46,14 +47,16 @@ export function useCreateResource({
 
   const defaultAfterCreatedFn = () => {
     notification.notifySuccess({
-      content: t(
-        isEdit
-          ? 'common.create-form.messages.patch-success'
-          : 'common.create-form.messages.create-success',
-        {
-          resourceType: singularName,
-        },
-      ),
+      content: afterCreatedCustomMessage
+        ? afterCreatedCustomMessage
+        : t(
+            isEdit
+              ? 'common.create-form.messages.patch-success'
+              : 'common.create-form.messages.create-success',
+            {
+              resourceType: singularName,
+            },
+          ),
     });
 
     if (!isEdit || resetLayout) {

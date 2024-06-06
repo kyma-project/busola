@@ -46,6 +46,7 @@ export function ResourceForm({
   renderEditor,
   onSubmit,
   afterCreatedFn,
+  afterCreatedCustomMessage,
   className,
   onlyYaml = false,
   autocompletionDisabled,
@@ -126,6 +127,7 @@ export function ResourceForm({
     layoutNumber,
     setResource,
     resetLayout,
+    afterCreatedCustomMessage,
   });
 
   const handleInitialMode = () => {
