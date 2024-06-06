@@ -916,7 +916,7 @@ kubeconfig-id:
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 kyma-modules:
   module-added: Module added 
-  notification-uninstall: Module uninstalled successfully, it will take some time, go for a coffee.
+  module-uninstall: Module uninstalled 
   learn-more: Learn more
   add-module: Add Modules
   modify: Modify 

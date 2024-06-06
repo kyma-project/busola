@@ -200,7 +200,7 @@ export function KymaModulesList(props) {
       createUrl: resourceUrl,
       afterCreatedFn: () =>
         notification.notifySuccess({
-          content: t('kyma-modules.notification-uninstall'),
+          content: t('kyma-modules.module-uninstall'),
         }),
     });
 
