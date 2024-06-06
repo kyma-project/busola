@@ -112,7 +112,6 @@ export function ResourceForm({
         !editorError
       ) {
         setIsResourceEdited({ isEdited: false });
-        setIsFormOpen({ formOpen: false });
         if (isResourceEdited.discardAction) isResourceEdited.discardAction();
       }
     }

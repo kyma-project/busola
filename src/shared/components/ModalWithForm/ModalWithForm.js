@@ -87,6 +87,7 @@ export const ModalWithForm = ({
       if (!getToggleFormFn) {
         setOpenStatus(false);
       }
+      setIsFormOpen({ formOpen: false });
     }
   }
 
