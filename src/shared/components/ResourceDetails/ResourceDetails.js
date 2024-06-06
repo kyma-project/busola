@@ -170,7 +170,6 @@ function Resource({
   customOverview,
   statusConditions,
   headerContent,
-  removeDeleteButton,
 }) {
   useVersionWarning({ resourceUrl, resourceType });
   const { t } = useTranslation();
@@ -230,10 +229,10 @@ function Resource({
       </Suspense>
       {headerActions}
       {resourceHeaderActions.map(resourceAction => resourceAction(resource))}
-      {!removeDeleteButton &&
+      {!disableDelete &&
         deleteButtonWrapper(
           <Button
-            disabled={protectedResource || disableDelete}
+            disabled={protectedResource}
             onClick={() => handleResourceDelete({ resourceUrl })}
             design="Transparent"
           >
