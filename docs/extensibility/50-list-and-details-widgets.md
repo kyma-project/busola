@@ -153,7 +153,7 @@ These are the available `JoinedArray` widget parameters:
 
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
-| **separator** | | string | A string by which the elements of the array are separated. The default value is a comma `,`. You can use `break` to separate elements with a new line. |
+| **separator** | No | string | A string by which the elements of the array are separated. The default value is a comma `,`. You can use `break` to separate elements with a new line. |
 | **children** | No | | Defines widgets used for rendering array items. If not provided, the content is rendered as a string. |
 | **copyable** | No | A flag indicating if the **Copy to clipboard** button should be displayed next to the widget. By default set to `false`. |
 
@@ -203,9 +203,9 @@ These are the available `ResourceButton` widget parameters:
 
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
-| **icon** | | | The name of an icon for this button. You can find the list of available icons [here](https://sap.github.io/fundamental-react/?path=/docs/component-api-icon--primary). Use string after `--`, for example, if an icon is named `sap-icon--accept`, use `accept`. |
-| **resource** | | | To create a hyperlink, Busola needs the name and the kind of the target resource; they must be passed into the **resource** object as property paths in either **\$item** - value extracted using **source**, or **\$root** - the original resource. If the target resource is in a `namespace`, provide **Namespace**, **name**, and **kind** properties. |
-| **source** | |[JSONata](jsonata.md) expression | Resolves the link text. This property has access to **\$item** and **\$root**. |
+| **icon** | No | string | The name of an icon for this button. You can find the list of available icons [here](https://sap.github.io/fundamental-react/?path=/docs/component-api-icon--primary). Use string after `--`, for example, if an icon is named `sap-icon--accept`, use `accept`. |
+| **resource** | **Yes** | object | To create a hyperlink, Busola needs the name and the kind of the target resource; they must be passed into the **resource** object as property paths in either **\$item** - value extracted using **source**, or **\$root** - the original resource. If the target resource is in a `namespace`, provide **Namespace**, **name**, and **kind** properties. |
+| **source** | **Yes** |[JSONata](jsonata.md) expression | Resolves the link text. This property has access to **\$item** and **\$root**. |
 
 This is an example for widget usage in the details section:
 
@@ -229,8 +229,8 @@ These are the available `ResourceLink` widget parameters:
 
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
-| **resource** | | | To create a hyperlink, Busola needs the name and the kind of the target resource. They must be passed into the **resource** object as property paths in either **\$item** - value extracted using **source**, or **\$root** - the original resource. If the target resource is in a `namespace`, provide **namespace**, **name**, and **kind** properties. |
-| **source** | | [JSONata](jsonata.md) expression | Resolves the link text. This property has access to **\$item** and **\$root**. |
+| **resource** | **Yes** | object | To create a hyperlink, Busola needs the name and the kind of the target resource. They must be passed into the **resource** object as property paths in either **\$item** - value extracted using **source**, or **\$root** - the original resource. If the target resource is in a `namespace`, provide **namespace**, **name**, and **kind** properties. |
+| **source** | **Yes** | [JSONata](jsonata.md) expression | Resolves the link text. This property has access to **\$item** and **\$root**. |
 
 This is an example of the `ResourceLink` widget usage in the details section:
 
@@ -279,7 +279,7 @@ These are the available `Alert` widget parameters:
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
 | **disableMargin** | No | boolean | Disables the margin outside the alert body. |
-| **severity** | | | Specifies one of the alert severities: `information`, `warning`, `error`, or `success`. By default, it's set to `information`. |
+| **severity** | No | string | Specifies one of the alert severities: `information`, `warning`, `error`, or `success`. By default, it's set to `information`. |
 
 See the following example:
 
@@ -350,8 +350,8 @@ These are the available `Columns` widget parameters:
 
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
-| **filter** | | [JSONata](jsonata.md) function | Use it to filter Events emitted by a specific resource. There is a special custom function [matchEvents](jsonata.md#matcheventsitem-kind-name) you can use to filter Events, for example, `$matchEvents($$, $root.kind, $root.metadata.name)`. |
-| **defaultType** | | | The value is either: `all`, `information`, or `warning`. When set to `information` or `warning`, Events with specific type are displayed. By default all Events are fetched. |
+| **filter** | No | [JSONata](jsonata.md) function | Use it to filter Events emitted by a specific resource. There is a special custom function [matchEvents](jsonata.md#matcheventsitem-kind-name) you can use to filter Events, for example, `$matchEvents($$, $root.kind, $root.metadata.name)`. |
+| **defaultType** | No | string | The value is either: `all`, `information`, or `warning`. When set to `information` or `warning`, Events with specific type are displayed. By default all Events are fetched. |
 | **hideInvolvedObjects** | No | boolean | If set to `true`, the **Involved Objects** column is hidden. Defaults to `false`. |
 
 See the following examples:
@@ -389,12 +389,12 @@ These are the available `FeatureCard` widget parameters:
 
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
-| **title** | | string | Renders the title. |
-| **description** | | string | Renders the description. |
-| **id** | | string | Defines the banner's **(unique!)** identifier. |
-| **children** | |  - an array of a maximum of 2 objects | Defines the banner's children that are displayed below the description. It is recommended to use button-like components here. |
-| **illustration** | | | Defines the illustration displayed on the right. Can be one of the following: `Modules` (default), `AI` |
-| **design** | | | Defines the background color-gradient of the banner. Can be one of the following: `information-1` (default), `information-2`. |
+| **title** | No | string | Renders the title. |
+| **description** | No | string | Renders the description. |
+| **id** | **Yes** | string | Defines the banner's **(unique!)** identifier. |
+| **children** | No | an array of the maximum 2 objects | Defines the banner's children that are displayed below the description. It is recommended to use button-like components here. |
+| **illustration** | No | string | Defines the illustration displayed on the right. Can be one of the following: `Modules` (default), `AI` |
+| **design** | No | string | Defines the background color-gradient of the banner. Can be one of the following: `information-1` (default), `information-2`. |
 
 See the following example:
 
@@ -430,8 +430,8 @@ These are the available `Panel` widget parameters:
 |-----------|----------|------|-------------|
 | **header** | No | array | Allows you to, for example, display labels in the panel header. |
 | **disablePadding** | No | boolean | Disables the padding inside the panel body. |
-| **description** | | | Displays a custom description on the resource list page. It can contain links. If the **translations** section has a translation entry with the ID that is the same as the **description** string, the translation is used. |
-| **decodable** | | | Decodes the values of all the children using base64 - must be used together with the **source** parameter. |
+| **description** | No | string | Displays a custom description on the resource list page. It can contain links. If the **translations** section has a translation entry with the ID that is the same as the **description** string, the translation is used. |
+| **decodable** | No | boolean | Decodes the values of all the children using base64 - must be used together with the **source** parameter. |
 
 See the following example:
 
@@ -487,11 +487,11 @@ These are the available `ResourceList` widget parameters:
 |-----------|----------|------|-------------|
 | **children** | No | | Used to obtain custom columns. If not set, the configuration is reused based on the existing resource list, defined in Busola or using extensibility. |
 | **sort** | No | an array of objects | Allows you to sort by the value from the given **source**. |
-| **sort.source** | Yes | [JSONata](jsonata.md) expression | Used to fetch data for the column. In its simplest form, it's the path to the value.
+| **sort.source** | **Yes** | [JSONata](jsonata.md) expression | Used to fetch data for the column. In its simplest form, it's the path to the value.
 | **sort.default** | No | boolean | An optional flag. If set to `true`, the list view is sorted by this value by default. |
 | **sort.compareFunction** | No | [JSONata](jsonata.md) compare function. | It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`. |
 | **search** | No | an array of objects | Allows you to search for resources including the value from the given **source**. |
-| **search.source** | Yes | contains a [JSONata](jsonata.md) expression | Used to fetch data for the column. In its simplest form, it's the path to the value. |
+| **search.source** | **Yes** | contains a [JSONata](jsonata.md) expression | Used to fetch data for the column. In its simplest form, it's the path to the value. |
 | **search.searchFunction** | No | [JSONata](jsonata.md) search function | It allows you to use the `$input` variable to get the search input's value that can be used to search for more complex data. |
 
 Since the `ResourceList` widget does more than just list the items, you must provide the whole data source (`$myResource()`) instead of just the items (`$myResource().items`).
@@ -548,7 +548,7 @@ These are the available `ResourceRefs` widget parameters:
 
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
-| **kind** | **Yes** | |  Kubernetes kind of the resource. |
+| **kind** | **Yes** | string |  Kubernetes kind of the resource. |
 
 See the following example:
 

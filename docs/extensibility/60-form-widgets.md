@@ -29,14 +29,14 @@ These are the available `Text` widget parameters:
 
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
-| **enum[]** | | an array of options | Generate an input field with a dropdown. Optionally can be a string containing a [JSONata](jsonata.md) expression returning an array of options. |
-| **placeholder**| | | Specifies a short hint about the input field value. |
-| **required** | | boolean | Specifies if a field is required. The default value is taken from CustomResourceDefintion (CRD); if it doesn't exist in the CRD, then it defaults to `false`. |
-| **inputInfo** | | string | A string below the input field that shows how to fill in the input. You can use the {{ [`name`] (`link`) }} format to display a `name` instead of a `link. |
-| **description** | | string | A string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD). |
-| **readOnly** | | boolean | Specifies if a field is read-only. Defaults to `false`. |
-| **decodable** | | boolean | Specifies that the field is base64-encoded and can be decoded in the UI. It can't be used together with **enum**. |
-| **decodedPlacehoder** | No | | An optional alternative placeholder to use when the field is decoded. |
+| **enum[]** | No | an array of options | Generate an input field with a dropdown. Optionally can be a string containing a [JSONata](jsonata.md) expression returning an array of options. |
+| **placeholder** | No | string | Specifies a short hint about the input field value. |
+| **required** | No | boolean | Specifies if a field is required. The default value is taken from CustomResourceDefintion (CRD); if it doesn't exist in the CRD, then it defaults to `false`. |
+| **inputInfo** | No | string | A string below the input field that shows how to fill in the input. You can use the {{ [`name`] (`link`) }} format to display a `name` instead of a `link. |
+| **description** | No | string | A string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD). |
+| **readOnly** | No | boolean | Specifies if a field is read-only. Defaults to `false`. |
+| **decodable** | No | boolean | Specifies that the field is base64-encoded and can be decoded in the UI. It can't be used together with **enum**. |
+| **decodedPlacehoder** | No | string | An optional alternative placeholder to use when the field is decoded. |
 
 See the following examples:
 
@@ -79,12 +79,12 @@ These are the available `Name` widget parameters:
 
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
-| **extraPaths** | | | An array of extra paths to fill in with the contents of the field. Each path can either be a period-separated string or an array of strings. |
-| **placeholder** | | |  Specifies a short hint about the input field value. |
-| **inputInfo** | | string | A string below the input field that shows how to fill in the input. It defaults to `Name must consist of lowercase alphanumeric characters or '-', and must start and end with an alphanumeric character (e.g. 'my-name', or '123-abc').`. To disable any suggestion, set this value to `null`. |
-| **description** | | string | A string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD). |
-| **disableOnEdit** | | | Disables a field in edit mode, defaults to `false`. |
-| **required** |  | boolean | Specifies if a field is required. The default value is taken from CRD; if it doesn't exist in CRD, then it defaults to `false`. |
+| **extraPaths** | No | []strings | An array of extra paths to fill in with the contents of the field. Each path can either be a period-separated string or an array of strings. |
+| **placeholder** | No | string |  Specifies a short hint about the input field value. |
+| **inputInfo** | No | string | A string below the input field that shows how to fill in the input. It defaults to `Name must consist of lowercase alphanumeric characters or '-', and must start and end with an alphanumeric character (e.g. 'my-name', or '123-abc').`. To disable any suggestion, set this value to `null`. |
+| **description** | No | string | A string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD). |
+| **disableOnEdit** | No | boolean | Disables a field in edit mode, defaults to `false`. |
+| **required** | No | boolean | Specifies if a field is required. The default value is taken from CRD; if it doesn't exist in CRD, then it defaults to `false`. |
 
 See the following examples:
 
@@ -111,10 +111,10 @@ These are the available `CodeEditor` widget parameters:
 
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
-| **language** | | a [JSONata](jsonata.md) expression | Resolves the desired language. It has access to the `$root` variable, containing the entire resource. |
-| **inputInfo** | | string | A string below the input field that shows how to fill in the input. You can use the {{ [`name`] (`link`) }} format to display a `name` instead of a `link. |
+| **language** | **Yes** | a [JSONata](jsonata.md) expression | Resolves the desired language. It has access to the `$root` variable, containing the entire resource. |
+| **inputInfo** | No | string | A string below the input field that shows how to fill in the input. You can use the {{ [`name`] (`link`) }} format to display a `name` instead of a `link. |
 | **description** | | string | A string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD). |
-| **defaultExpanded** | | boolean | Specifies if the widget should be expanded by default. Defaults to `false`. |
+| **defaultExpanded** | No | boolean | Specifies if the widget should be expanded by default. Defaults to `false`. |
 
 See the following example:
 
@@ -139,16 +139,16 @@ These are the available `Bagde` widget parameters:
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
 | **resource** | | | |
-| **resource.kind** | Yes | | Kubernetes kind of the resource. |
-| **resource.group** | No | | API group used for all requests. Not provided for Kubernetes resources in the core (also called legacy) group. |
-| **resource.version** | Yes | | The API version used for all requests. |
-| **resource.scope** | | | The value is either `namespace` or `cluster`. When set to `cluster`, namespaced resources are fetched from all Namespaces. Defaults to `cluster`. |
-| **resource.namespace** | | | The namespace to fetch resources from. Used only when scope is `namespace` and resources need to be fetched from a specific Namespace. Defaults to the active Namespace when omitted. |
-| **filter** | | JSONata expression | Filters resources based on a given condition. |
-| **provideVar** | | | When this field is defined, the chosen resource is provided as a variable of this name. |
-| **required** | | boolean | Specifies if a field is required. The default value is taken from CRD; if it doesn't exist in CRD, then it defaults to `false`. |
-| **inputInfo** | | string |A string below the input field that shows how to fill in the input. You can use the {{ [`name`] (`link`) }} format to display a `name` instead of a `link. |
-| **description** | | string | A string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD). |
+| **resource.kind** | **Yes** | string | Kubernetes kind of the resource. |
+| **resource.group** | No | string | API group used for all requests. Not provided for Kubernetes resources in the core (also called legacy) group. |
+| **resource.version** | **Yes** | string | The API version used for all requests. |
+| **resource.scope** | No | string | The value is either `namespace` or `cluster`. When set to `cluster`, namespaced resources are fetched from all Namespaces. Defaults to `cluster`. |
+| **resource.namespace** | No | string or variable | The namespace to fetch resources from. Used only when scope is `namespace` and resources need to be fetched from a specific Namespace. Defaults to the active Namespace when omitted. |
+| **filter** | No | JSONata expression | Filters resources based on a given condition. |
+| **provideVar** | No | string | When this field is defined, the chosen resource is provided as a variable of this name. |
+| **required** | No | boolean | Specifies if a field is required. The default value is taken from CRD; if it doesn't exist in CRD, then it defaults to `false`. |
+| **inputInfo** | No | string |A string below the input field that shows how to fill in the input. You can use the {{ [`name`] (`link`) }} format to display a `name` instead of a `link. |
+| **description** | No | string | A string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD). |
 
 See the following example:
 
@@ -179,14 +179,14 @@ These are the available `Bagde` widget parameters:
 
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
-| **options[]** | Yes | an array of objects | Generate the checkboxes. |
-| **options.key** | Yes | | The value used to generate checkboxes. It is set if a checkbox is selected. This `key`, together with the `path` defined for MultiCheckbox (`{path}.{key}`), can be used for **translation**. |
-| **options.name** | No | | An optional name for a checkbox instead of the default capitalized last part of the path. This can be a key from the **translation** section. |
+| **options[]** | **Yes** | an array of objects | Generate the checkboxes. |
+| **options.key** | **Yes** | string | The value used to generate checkboxes. It is set if a checkbox is selected. This `key`, together with the `path` defined for MultiCheckbox (`{path}.{key}`), can be used for **translation**. |
+| **options.name** | No | string | An optional name for a checkbox instead of the default capitalized last part of the path. This can be a key from the **translation** section. |
 | **options.description** | No | string | The string displayed in a tooltip when you hover over a question mark icon, next to the checkbox's label. |
-| **required** | | boolean | Specifies if a field is required. The default value is taken from CustomResourceDefintion (CRD); if it doesn't exist in the CRD, then it defaults to `false`. |
-| **inputInfo** | | string | A string below the input field that shows how to write in the input. You can use the {{ [`name`] (`link`) }} format to display a `name` instead of a `link. |
-| **description** | | string | A string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD). |
-| **readOnly** | | boolean | Specifies if a field is read-only. Defaults to `false`. |
+| **required** | No | boolean | Specifies if a field is required. The default value is taken from CustomResourceDefintion (CRD); if it doesn't exist in the CRD, then it defaults to `false`. |
+| **inputInfo** | No | string | A string below the input field that shows how to write in the input. You can use the {{ [`name`] (`link`) }} format to display a `name` instead of a `link. |
+| **description** | No | string | A string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD). |
+| **readOnly** | No | boolean | Specifies if a field is read-only. Defaults to `false`. |
 
 See the following example:
 
@@ -221,9 +221,9 @@ These are the available `Bagde` widget parameters:
 
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
-| **alert** | | | The information that you want to display. |
+| **alert** | **Yes** | a [JSONata](jsonata.md) expression | The information that you want to display. |
 | **disableMargin** | No | boolean | Disables the margin outside the alert body. |
-| **severity** | | | Specifies one of the alert severities: `information`, `warning`, `error`, or `success`. By default, it's set to **information**. |
+| **severity** | No | string | Specifies one of the alert severities: `information`, `warning`, `error`, or `success`. By default, it's set to **information**. |
 
 See the following example:
 
@@ -247,15 +247,15 @@ These are the available `KeyValuePair` widget parameters:
 
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
-| **required** | | boolean | Specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`. |
-| **keyEnum[]** | | an array of options | Generate a key input field with a dropdown. |
+| **required** | No | boolean | Specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`. |
+| **keyEnum[]** | No | an array of options | Generate a key input field with a dropdown. |
 | **value** | | | |
-| **value.type** | | string | Specifies the type of the value input. The options are `object`, `number`, `text`. Defaults to `text`. |
-| **value.keyEnum[]** | | array of options | Generate a key input field with a dropdown only if the `type` is set to `object`. |
-| **value.valueEnum[]** | | an array of options | Generate a value input field with a dropdown. |
-| **inputInfo** | | string | A string below the input field that shows how to fill in the input. You can use the {{ [`name`] (`link`) }} format to display a `name` instead of a `link. |
-| **description** | | string | A string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD). |
-| **defaultExpanded** | | boolean | Specifies if the widget should be expanded by default. Defaults to `false`. |
+| **value.type** | No | string | Specifies the type of the value input. The options are `object`, `number`, `text`. Defaults to `text`. |
+| **value.keyEnum[]** | No | array of options | Generate a key input field with a dropdown only if the `type` is set to `object`. |
+| **value.valueEnum[]** | No | an array of options | Generate a value input field with a dropdown. |
+| **inputInfo** | No | string | A string below the input field that shows how to fill in the input. You can use the {{ [`name`] (`link`) }} format to display a `name` instead of a `link. |
+| **description** | No | string | A string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD). |
+| **defaultExpanded** | No | boolean | Specifies if the widget should be expanded by default. Defaults to `false`. |
 
 See the following example:
 
@@ -284,14 +284,14 @@ These are the available `ResourceRef` widget parameters:
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
 | **resource** | | | |
-| **resource.kind** | Yes | | Kubernetes kind of the resource. |
-| **resource.group** | | | The API group used for all requests. Not provided for Kubernetes resources in the core (also called legacy) group. |
-| **resource.version** | Yes | | The API version used for all requests. |
-| **filter** | | JSONata expression | Flters resources based on a given condition. |
-| **provideVar** | | | When this field is defined, the chosen resource will be provided as a variable of this name. |
-| **toInternal** | |  a [JSONata](jsonata.md) function | Converts from the stored value to the `{name, namespace}` format. Useful, for example, when the data is stored as a string. |
-| **toExternal** | | | A corresponding function to convert back to store. |
-| **defaultExpanded** | | boolean | Specifies if the widget should be expanded by default. Defaults to `false`. |
+| **resource.kind** | **Yes** | string | Kubernetes kind of the resource. |
+| **resource.group** | No | string | The API group used for all requests. Not provided for Kubernetes resources in the core (also called legacy) group. |
+| **resource.version** | **Yes** | string | The API version used for all requests. |
+| **filter** | No | a JSONata expression | Flters resources based on a given condition. |
+| **provideVar** | No | string | When this field is defined, the chosen resource will be provided as a variable of this name. |
+| **toInternal** | No | a [JSONata](jsonata.md) function | Converts from the stored value to the `{name, namespace}` format. Useful, for example, when the data is stored as a string. |
+| **toExternal** | No | a [JSONata](jsonata.md) function | A corresponding function to convert back to store. |
+| **defaultExpanded** | No | boolean | Specifies if the widget should be expanded by default. Defaults to `false`. |
 
 See the following example:
 
@@ -333,8 +333,8 @@ These are the available `FormGroup` widget parameters:
 
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
-| **columns** | | | The number of columns the content is rendered in. Defaults to 1. |
-| **defaultExpanded** | | boolean | Specifies if the widget should be expanded by default. Defaults to `false`. |
+| **columns** | No | number | The number of columns the content is rendered in. Defaults to 1. |
+| **defaultExpanded** | No | boolean | Specifies if the widget should be expanded by default. Defaults to `false`. |
 
 See the following example:
 
@@ -356,10 +356,10 @@ These are the available `GenericList` widget parameters:
 
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
-| **placeholder** | | | Specifies a short hint about the input field value. |
-| **template** | | | Specifies default structure for a list item. |
-| **defaultExpanded** | | boolean | Specifies if the widget should be expanded by default. Defaults to `false`. |
-| **required** | | boolean | Specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`. |
+| **placeholder** | No | string | Specifies a short hint about the input field value. |
+| **template** | No | object | Specifies default values for the list items. Provided object should reflect the structure of the list items based on the the `children.path`. |
+| **defaultExpanded** | No | boolean | Specifies if the widget should be expanded by default. Defaults to `false`. |
+| **required** | No | boolean | Specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`. |
 
 See the following example:
 
@@ -398,11 +398,11 @@ These are the available `SimpleList` widget parameters:
 
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
-| **placeholder** | | | Specifies a short hint about the input field value. |
+| **placeholder** | No | string | Specifies a short hint about the input field value. |
 | **required** | No | boolean | Specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`. |
-| **inputInfo** | | string | A string below the input field that shows how to fill in the input. You can use the {{ [`name`] (`link`) }} format to display a `name` instead of a `link. |
-| **description** | | string | A string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD). |
-| **defaultExpanded** | | boolean | Specifies if the widget should be expanded by default. Defaults to `false`. |
+| **inputInfo** | No | string | A string below the input field that shows how to fill in the input. You can use the {{ [`name`] (`link`) }} format to display a `name` instead of a `link. |
+| **description** | No | string | A string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD). |
+| **defaultExpanded** | No | boolean | Specifies if the widget should be expanded by default. Defaults to `false`. |
 
 See the following example:
 

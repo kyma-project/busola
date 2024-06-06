@@ -71,8 +71,8 @@ When using a variable inside an array it has to be wrapped inside a `[]` element
 
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
-| **var** | Yes | string | The variable name. |
-| **type** | Yes | string | A type of the field, as defined by JSON Schema. |
+| **var** | **Yes** | string | The variable name. |
+| **type** | **Yes** | string | A type of the field, as defined by JSON Schema. |
 | **defaultValue** | No | string | The default value used for the variable when opening the form. |
 | **dynamicValue** | No | [JSONata](jsonata.md) expression | Used to calculate the default value of the variable. This happens when opening the form or after editing the raw YAML of the resource. This does not change on user input - for that see the [Dynamic fields section](#dynamic-field-values). |
 
