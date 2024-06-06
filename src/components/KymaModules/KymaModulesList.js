@@ -24,6 +24,9 @@ import { useUrl } from 'hooks/useUrl';
 import pluralize from 'pluralize';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { Label } from 'shared/ResourceForm/components/Label';
+import { cloneDeep } from 'lodash';
+import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
+import { useNotification } from 'shared/contexts/NotificationContext';
 
 export function KymaModulesList(props) {
   const { t } = useTranslation();
@@ -185,6 +188,45 @@ export function KymaModulesList(props) {
       };
     };
 
+    const [selectedModules] = useState(kymaResource?.spec?.modules);
+    const [initialUnchangedResource] = useState(cloneDeep(kymaResource));
+    const [kymaResourceState, setKymaResourceState] = useState(kymaResource);
+    const notification = useNotification();
+    const handleModuleUninstall = useCreateResource({
+      singularName: 'Kyma',
+      pluralKind: 'Kymas',
+      resource: kymaResourceState,
+      initialUnchangedResource: initialUnchangedResource,
+      createUrl: resourceUrl,
+      afterCreatedFn: () =>
+        notification.notifySuccess({
+          content:
+            'Module uninstalled successfully, it will take some time, go for a coffee',
+        }),
+    });
+
+    const actions = [
+      {
+        name: t('common.buttons.delete'),
+        tooltip: () => t('common.buttons.delete'),
+        icon: 'delete',
+        handler: resource => {
+          const index = selectedModules?.findIndex(kymaResourceModule => {
+            return kymaResourceModule.name === resource.name;
+          });
+          selectedModules.splice(index, 1);
+          setKymaResourceState({
+            ...kymaResource,
+            spec: {
+              ...kymaResource.spec,
+              modules: selectedModules,
+            },
+          });
+          handleModuleUninstall();
+        },
+      },
+    ];
+
     const handleClickResource = resourceName => {
       const isExtension = !!kymaExt?.find(ext =>
         ext.metadata.name.includes(resourceName),
@@ -256,8 +298,10 @@ export function KymaModulesList(props) {
         `${path}?layout=TwoColumnsMidExpanded`,
       );
     };
+
     return (
       <GenericList
+        actions={actions}
         customRowClick={handleClickResource}
         extraHeaderContent={[
           <Button
