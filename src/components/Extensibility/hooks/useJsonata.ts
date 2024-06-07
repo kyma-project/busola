@@ -1,12 +1,12 @@
-import { useState, useEffect, useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { last, mapValues } from 'lodash';
 
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
 import {
-  Resource,
-  DataSourcesContextType,
   DataSourcesContext,
+  DataSourcesContextType,
+  Resource,
 } from '../contexts/DataSources';
 
 type JsonataValue = [string, Error | null];
@@ -75,6 +75,11 @@ export function useJsonata({
     }
 
     try {
+      const a =
+        last(extras?.arrayItems) ||
+        last(arrayItems) ||
+        extras.resource ||
+        resource;
       const value = jsonataWrapper(query).evaluate(
         extras.scope || scope || extras.resource || resource,
         {

@@ -12,12 +12,17 @@ import './CountingCard.scss';
 
 type CountingCardProps = {
   value: number;
-  extraInfo: any;
+  extraInfo: [ExtraInfo];
   title: string;
   subTitle: string;
   resourceUrl: string;
   isClusterResource: boolean;
   className: string;
+};
+
+type ExtraInfo = {
+  value: string;
+  title: string;
 };
 
 export const CountingCard = ({
