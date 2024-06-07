@@ -104,7 +104,7 @@ export default function ClusterStats({ nodesData }) {
       <div className="cluster-stats" style={spacing.sapUiTinyMarginBeginEnd}>
         <div className="item-wrapper tall">
           <Card
-            className="radial-chart-card"
+            className="radial-chart-card item"
             header={
               <CardHeader
                 titleText={t('cluster-overview.statistics.cpu-usage')}
@@ -123,7 +123,7 @@ export default function ClusterStats({ nodesData }) {
         </div>
         <div className="item-wrapper tall">
           <Card
-            className="radial-chart-card"
+            className="radial-chart-card item"
             header={
               <CardHeader
                 titleText={t('cluster-overview.statistics.memory-usage')}

@@ -36,8 +36,8 @@ export const CountingCard = ({
     <Card
       className={`counting-card ${className}`}
       style={{
-        width: extraInfo ? '325px' : '154.5px',
-        maxWidth: extraInfo ? '325px' : '154.5px',
+        width: extraInfo ? '325px' : '175px',
+        maxWidth: extraInfo ? '325px' : '175px',
         height: '145px',
         maxHeight: '145px',
       }}
