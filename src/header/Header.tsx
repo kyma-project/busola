@@ -29,7 +29,8 @@ import { useGetBusolaVersionDetails } from './SidebarMenu/useGetBusolaVersion';
 
 import './Header.scss';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { handleActionIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
+import { isFormOpenState } from 'state/formOpenAtom';
+import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
 
 export function Header() {
   useAvailableNamespaces();
@@ -51,6 +52,7 @@ export function Header() {
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
+  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
 
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
     name => name !== cluster?.name,
@@ -111,9 +113,11 @@ export function Header() {
           window.location.pathname !== '/clusters' && <SidebarSwitcher />
         }
         onLogoClick={() => {
-          handleActionIfResourceEdited(
+          handleActionIfFormOpen(
             isResourceEdited,
             setIsResourceEdited,
+            isFormOpen,
+            setIsFormOpen,
             () => navigate('/clusters'),
           );
         }}
@@ -125,9 +129,11 @@ export function Header() {
         }
         menuItems={window.location.pathname !== '/clusters' ? clustersList : []}
         onMenuItemClick={e => {
-          handleActionIfResourceEdited(
+          handleActionIfFormOpen(
             isResourceEdited,
             setIsResourceEdited,
+            isFormOpen,
+            setIsFormOpen,
             () => {
               e.detail.item.textContent ===
               t('clusters.overview.title-all-clusters')

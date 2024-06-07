@@ -6,4 +6,4 @@ export const getExtensibilityPath = ({
 }: {
   urlPath?: string;
   resource: { kind: string };
-}) => urlPath || pluralize((kind ?? '').toLowerCase());
+}) => urlPath ?? pluralize((kind ?? '').toLowerCase());

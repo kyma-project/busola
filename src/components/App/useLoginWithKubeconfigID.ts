@@ -124,6 +124,7 @@ export function useLoginWithKubeconfigID() {
   const [search] = useSearchParams();
   const { t } = useTranslation();
   const clusterInfo = useClustersInfo();
+  const { setCurrentCluster } = clusterInfo;
   const [handledKubeconfigId, setHandledKubeconfigId] = useState<
     KubeconfigIdHandleState
   >('not started');
@@ -131,6 +132,11 @@ export function useLoginWithKubeconfigID() {
   useEffect(() => {
     const dependenciesReady = !!configuration?.features && !!clusters;
     const flowStarted = handledKubeconfigId !== 'not started';
+
+    if (search.get('kubeconfigID') && flowStarted) {
+      setCurrentCluster(undefined);
+    }
+
     if (!dependenciesReady || flowStarted) {
       return;
     }
@@ -157,6 +163,7 @@ export function useLoginWithKubeconfigID() {
     clusterInfo,
     handledKubeconfigId,
     configuration,
+    setCurrentCluster,
   ]);
 
   return handledKubeconfigId;

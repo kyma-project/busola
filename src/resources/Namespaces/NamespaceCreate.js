@@ -76,7 +76,6 @@ export default function NamespaceCreate({
     singularName: 'LimitRange',
     pluralKind: 'LimitRanges',
     resource: limits,
-    initialResource: null,
     initialUnchangedResource: null,
     createUrl: `/api/v1/namespaces/${namespace.metadata?.name}/limitranges`,
     afterCreatedFn: () => {},
@@ -86,7 +85,7 @@ export default function NamespaceCreate({
     singularName: 'ResourceQuota',
     pluralKind: 'ResourceQuotas',
     resource: memory,
-    initialResource: null,
+    initialUnchangedResource: null,
     createUrl: `/api/v1/namespaces/${namespace?.metadata?.name}/resourcequotas`,
     afterCreatedFn: () => {},
   });

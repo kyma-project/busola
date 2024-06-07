@@ -14,7 +14,7 @@ import {
   makeSuggestion,
 } from './helpers';
 
-interface CustomResourceDefinition extends K8sResource {
+export interface CustomResourceDefinition extends K8sResource {
   spec: {
     group: string;
     scope: 'Cluster' | 'Namespaced';

@@ -19,6 +19,7 @@ import './ResourceForm.scss';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { editViewModeState } from 'state/preferences/editViewModeAtom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { isFormOpenState } from 'state/formOpenAtom';
 
 const excludeStatus = resource => {
   const modifiedResource = { ...resource };
@@ -84,33 +85,40 @@ export function ResourceForm({
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
-  const { isEdited, isSaved } = isResourceEdited;
+  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
+  const { leavingForm } = isFormOpen;
 
   useEffect(() => {
-    if (
-      !isEdited &&
-      !isSaved &&
-      JSON.stringify(excludeStatus(resource)) !==
-        JSON.stringify(excludeStatus(initialResource))
-    ) {
-      setIsResourceEdited({ isEdited: true });
-    }
+    setIsFormOpen({ formOpen: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    if (
-      JSON.stringify(excludeStatus(resource)) ===
-        JSON.stringify(excludeStatus(initialResource)) &&
-      (isEdited || isSaved)
-    ) {
-      setIsResourceEdited({ isEdited: false, warningOpen: false });
+  useEffect(() => {
+    if (leavingForm) {
+      if (
+        JSON.stringify(excludeStatus(resource)) !==
+        JSON.stringify(excludeStatus(initialResource))
+      ) {
+        setIsResourceEdited({ isEdited: true });
+      }
+
+      if (
+        JSON.stringify(excludeStatus(resource)) ===
+        JSON.stringify(excludeStatus(initialResource))
+      ) {
+        setIsResourceEdited({ isEdited: false });
+        setIsFormOpen({ formOpen: false });
+        if (isResourceEdited.discardAction) isResourceEdited.discardAction();
+      }
     }
-  }, [initialResource, isEdited, isSaved, resource, setIsResourceEdited]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [leavingForm]);
 
   const { t } = useTranslation();
   const createResource = useCreateResource({
     singularName,
     pluralKind,
     resource,
-    initialResource,
     initialUnchangedResource,
     createUrl,
     afterCreatedFn,

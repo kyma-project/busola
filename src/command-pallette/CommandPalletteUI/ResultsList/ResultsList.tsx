@@ -8,7 +8,8 @@ import { useTranslation } from 'react-i18next';
 import { LOADING_INDICATOR } from '../types';
 import { useRecoilState } from 'recoil';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { handleActionIfResourceEdited } from 'shared/components/UnsavedMessageBox/helpers';
+import { isFormOpenState } from 'state/formOpenAtom';
+import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
 
 function scrollInto(element: Element) {
   element.scrollIntoView({
@@ -38,6 +39,7 @@ export function ResultsList({
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
+  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
 
   //todo 2
   const isLoading = results.find((r: any) => r.type === LOADING_INDICATOR);
@@ -61,9 +63,11 @@ export function ResultsList({
         setActiveIndex(activeIndex - 1);
         scrollInto(listRef.current!.children[activeIndex - 1]);
       } else if (key === 'Enter' && results?.[activeIndex]) {
-        handleActionIfResourceEdited(
+        handleActionIfFormOpen(
           isResourceEdited,
           setIsResourceEdited,
+          isFormOpen,
+          setIsFormOpen,
           () => {
             addHistoryEntry(results[activeIndex].query);
             results[activeIndex].onActivate();
@@ -85,9 +89,11 @@ export function ResultsList({
             activeIndex={activeIndex}
             setActiveIndex={setActiveIndex}
             onItemClick={() => {
-              handleActionIfResourceEdited(
+              handleActionIfFormOpen(
                 isResourceEdited,
                 setIsResourceEdited,
+                isFormOpen,
+                setIsFormOpen,
                 () => {
                   addHistoryEntry(result.query);
                   result.onActivate();
