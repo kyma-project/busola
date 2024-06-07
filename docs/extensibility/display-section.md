@@ -23,10 +23,8 @@
   - [FeaturedCard](#featuredcard)
   - [Panel](#panel)
   - [Plain](#plain)
-  - [RadialGraph](#radialgraph)
   - [ResourceList](#resourcelist)
   - [ResourceRefs](#resourcerefs)
-  - [StatisticalCard](#statisticalcard)
   - [Table](#table)
   - [Tabs](#tabs)
 - [Widget _injections_ overview](#widget-injections-overview)
@@ -651,38 +649,6 @@ Panel widgets render an object as a separate panel with its own title (based on 
 
 Plain widgets render all contents of an object or list sequentially without any decorations. This is the default behavior for all objects and arrays.
 
-### RadialGraph
-
-RadialGraph widgets render a card component with a circular chart.
-This widget is primarily designed to be used via [injections](#widget-injections-overview) (**destination: ClusterStats, slot: cards**), allowing the graph to be rendered within the dense grid layout of the ClusterOverview's statistical cards section.
-
-#### Example
-
-```yaml
-injections: |-
-  - name: TestGraph
-    widget: RadialGraphCard
-    color: 8
-    source: $
-    value: 112
-    max: 134
-    additionalInfo: 112 / 134
-    order: 0
-    targets:
-      - location: ClusterStats
-        slot: cards
-```
-
-<img src="./assets/display-widgets/RadialGraph.png" alt="Example of a RadialGraph widget" style="border: 1px solid #D2D5D9" width="35%">
-
-#### Widget-specific parameters
-
-- **name** - a string that renders the title in the upper left corner.
-- **color** - an integer number in range of 1 to 11, denoting the SAP color variant of the graph's fill color.
-- **value** - a number which (together with `max`) defines how much the ring is filled
-- **max** - a number which defines the maximum value to reach 100% filling.
-- **additionalInfo** - a string that defines additional information renderd inside the circle.
-
 ### ResourceList
 
 ResourceList widgets render a list of Kubernetes resources. The ResourceList widgets should be used along with the [related resources](datasources-section.md).
@@ -761,44 +727,6 @@ ResourceRefs widgets render the lists of links to the associated resources. The 
 ```
 
 <img src="./assets/display-widgets/ResourceRefs.png" alt="Example of a ResourceRefs widget" style="border: 1px solid #D2D5D9">
-
-### StatisticalCard
-
-StatisticalCard widgets render a card component with a several numerical information elements.
-This widget is primarily designed to be used via [injections](#widget-injections-overview) (**destination: ClusterStats, slot: cards**), allowing the card to be rendered within the dense grid layout of the ClusterOverview's statistical cards section.
-
-#### Example
-
-```yaml
-injections: |-
-  - name: MyTitle
-    widget: StatisticalCard
-    source: $
-    subTitle: MySubtitle
-    value: 112
-    resourceUrl: pods
-    isClusterResource: false
-    order: 2
-    extraInfo:
-      - title: ExtraInformation1
-        value: 106
-      - title: ExtraInformation2
-        value: 6
-    targets:
-      - location: ClusterStats
-        slot: cards
-```
-
-<img src="./assets/display-widgets/StatisticalCard.png" alt="Example of a StatisticalCard widget" style="border: 1px solid #D2D5D9" width="75%">
-
-#### Widget-specific parameters
-
-- **name** - a string that renders the title in the upper left corner.
-- **subTitle** - a string that renders the subtitle right underneath the title.
-- **value** - the main numeric value, displayed on the left underneath the subtitle
-- **resourceUrl** - an optional field, that renders a link on the bottom left leading to a resource
-- **isClusterResource** - an optional field, that defines whether the resource link leads to a namespace or cluster resource. Defaults to `false`(meaning namespace resource).
-- **extraInfo** - an optional array of objects with `title` and `value` property that define the titles and values of additional information rendered on the right side of the card.
 
 ### Table
 
@@ -883,14 +811,12 @@ The **Injections** section contains a list of objects that defines the display s
 - **details-top** - At the top of the resource view
 - **list-header** - In the header of the list view
 - **banner** - At the top of the ClusterOverview or ResourceDetails
-- **cards** - In the statistical cards section of the ClusterOverview
 
 ### All available _injections_ locations
 
 #### Special views
 
 - ClusterOverview (only supports the **details-\*** slots)
-- ClusterStats (the statistical cards section of the ClusterOverview)
 - CustomResourceDefinitions
 
 #### Resource views
