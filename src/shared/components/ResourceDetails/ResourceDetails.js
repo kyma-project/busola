@@ -284,7 +284,7 @@ function Resource({
       <ResourceStatusCard
         statusBadge={statusBadge ? statusBadge(resource) : null}
         customColumns={
-          customStatusColumns ? (
+          customStatusColumns?.length ? (
             <>
               {customStatusColumns
                 ?.filter(filterColumns)
@@ -302,7 +302,7 @@ function Resource({
         }
         conditions={statusConditions ? statusConditions(resource) : null}
         customConditionsComponent={
-          customConditionsComponents ? (
+          customConditionsComponents?.length ? (
             <>
               {customConditionsComponents
                 ?.filter(filterColumns)
