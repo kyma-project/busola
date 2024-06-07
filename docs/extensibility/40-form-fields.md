@@ -6,9 +6,9 @@ You can customize the create and/or edit pages of the user interface component o
 
 Each form is created with the following default fields, also known as Form Fields.
 
-* **metadata.name**
-* **metadata.labels**
-* **metadata.annotations**
+- **metadata.name**
+- **metadata.labels**
+- **metadata.annotations**
 
 Values for those fields are added to the form by default. You can change the default fields by specyfing overrides in the schema. For example:
 
@@ -28,16 +28,16 @@ If you target elements of an array rather than the array itself, you can use the
 
 This table lists the available parameters of the **data.form** section in your resource ConfigMap. You can learn whether each of the parameters is required and what purpose it serves.
 
-| Parameter | Required | Type | Description |
-|-----------|----------|------|-------------|
-| **path** | **Yes** | string or [JSONata](jsonata.md) | A path to the property that you want to display in the form. |
-| **name** | No | string | The name for the field instead of the default capitalized last part of the path. This can be a key from the **translation** section. |
-| **widget** | No | string | A widget used to render the field referred to by the **path** property. If you don't provide the **widget**, a default handler is used depending on the data type provided in the schema. For more information about the available widgets, see [Form Widgets](./60-form-widgets.md). |
-| **children** | No | | Child widgets used for grouping. Child paths are relative to its parent. |
-| **visibility** | No | boolean or [JSONata](jsonata.md) expression | Controls the visibility of the element. |
-| **overwrite** | No | boolean | Used to disable the overwriting (clearing) of hidden fields. Used together with **visibility**, defaults to `true`. <br><br> **NOTE:** It is recommended to set **overwrite** to `false` when defining fields with the same `path` and different **visibility** conditions. |
-| **trigger** | No | []string | A list of events to trigger, see [Dynamic fields section](#dynamic-field-values). |
-| **subscribe** | No | object | A map of events to subscribe to, to their respective values, see [Dynamic fields section](#dynamic-field-values). |
+| Parameter      | Required | Type                                        | Description                                                                                                                                                                                                                                                                           |
+| -------------- | -------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **path**       | **Yes**  | string or [JSONata](jsonata.md)             | A path to the property that you want to display in the form.                                                                                                                                                                                                                          |
+| **name**       | No       | string                                      | The name for the field instead of the default capitalized last part of the path. This can be a key from the **translation** section.                                                                                                                                                  |
+| **widget**     | No       | string                                      | A widget used to render the field referred to by the **path** property. If you don't provide the **widget**, a default handler is used depending on the data type provided in the schema. For more information about the available widgets, see [Form Widgets](./60-form-widgets.md). |
+| **children**   | No       |                                             | Child widgets used for grouping. Child paths are relative to its parent.                                                                                                                                                                                                              |
+| **visibility** | No       | boolean or [JSONata](jsonata.md) expression | Controls the visibility of the element.                                                                                                                                                                                                                                               |
+| **overwrite**  | No       | boolean                                     | Used to disable the overwriting (clearing) of hidden fields. Used together with **visibility**, defaults to `true`. <br><br> **NOTE:** It is recommended to set **overwrite** to `false` when defining fields with the same `path` and different **visibility** conditions.           |
+| **trigger**    | No       | []string                                    | A list of events to trigger, see [Dynamic fields section](#dynamic-field-values).                                                                                                                                                                                                     |
+| **subscribe**  | No       | object                                      | A map of events to subscribe to, to their respective values, see [Dynamic fields section](#dynamic-field-values).                                                                                                                                                                     |
 
 See the following example:
 
@@ -69,12 +69,12 @@ Additionally, it's possible to define variable fields. In this case, **path** is
 
 When using a variable inside an array it has to be wrapped inside a `[]` element. See the following example.
 
-| Parameter | Required | Type | Description |
-|-----------|----------|------|-------------|
-| **var** | **Yes** | string | The variable name. |
-| **type** | **Yes** | string | A type of the field, as defined by JSON Schema. |
-| **defaultValue** | No | string | The default value used for the variable when opening the form. |
-| **dynamicValue** | No | [JSONata](jsonata.md) expression | Used to calculate the default value of the variable. This happens when opening the form or after editing the raw YAML of the resource. This does not change on user input - for that see the [Dynamic fields section](#dynamic-field-values). |
+| Parameter        | Required | Type                             | Description                                                                                                                                                                                                                                   |
+| ---------------- | -------- | -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **var**          | **Yes**  | string                           | The variable name.                                                                                                                                                                                                                            |
+| **type**         | **Yes**  | string                           | A type of the field, as defined by JSON Schema.                                                                                                                                                                                               |
+| **defaultValue** | No       | string                           | The default value used for the variable when opening the form.                                                                                                                                                                                |
+| **dynamicValue** | No       | [JSONata](jsonata.md) expression | Used to calculate the default value of the variable. This happens when opening the form or after editing the raw YAML of the resource. This does not change on user input - for that see the [Dynamic fields section](#dynamic-field-values). |
 
 All other fields can be used analogously to regular form items (except for the **path** and **children** parameters).
 
@@ -145,4 +145,4 @@ When a trigger is invoked in an array, by default it matches only fields in the 
 
 ## Related Links
 
-* [Widgets available for the create and edit pages](./60-form-widgets.md)
+- [Widgets available for the create and edit pages](./60-form-widgets.md)

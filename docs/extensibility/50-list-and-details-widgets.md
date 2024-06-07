@@ -2,28 +2,28 @@
 
 You can use list and details widgets in the lists and details pages in the user interface component of your resource. You can distinguish the following widget types:
 
-* [Inline widgets](#inline-widgets) for simple values in **data.list**, **data.details.header**, and **data.detail.bodies**
-  * [`Bagde`](#badge)
-  * [`ControlledBy`](#controlledby)
-  * [`ExternalLink`](#externallink)
-  * [`ExternalLinkButton`](#externallinkbutton)
-  * [`JoinedArray`](#joinedarray)
-  * [`Labels`](#labels)
-  * [`ResourceButton`](#resourcebutton)
-  * [`ResourceLink`](#resourcelink)
-  * [`Text`](#text)
-* [Block widgets](#block-widgets) for more complex layouts used only in **data.details.body**
-  * [`Alert`](#alert)
-  * [`CodeViewer`](#codeviewer)
-  * [`Columns`](#columns)
-  * [`EventList`](#eventlist)
-  * [`FeatureCard`](#featuredcard)
-  * [`Panel`](#panel)
-  * [`Plain`](#plain)
-  * [`ResourceList`](#resourcelist)
-  * [`ResourceRefs`](#resourcerefs)
-  * [`Table`](#table)
-  * [`Tabs`](#tabs)
+- [Inline widgets](#inline-widgets) for simple values in **data.list**, **data.details.header**, and **data.detail.bodies**
+  - [`Bagde`](#badge)
+  - [`ControlledBy`](#controlledby)
+  - [`ExternalLink`](#externallink)
+  - [`ExternalLinkButton`](#externallinkbutton)
+  - [`JoinedArray`](#joinedarray)
+  - [`Labels`](#labels)
+  - [`ResourceButton`](#resourcebutton)
+  - [`ResourceLink`](#resourcelink)
+  - [`Text`](#text)
+- [Block widgets](#block-widgets) for more complex layouts used only in **data.details.body**
+  - [`Alert`](#alert)
+  - [`CodeViewer`](#codeviewer)
+  - [`Columns`](#columns)
+  - [`EventList`](#eventlist)
+  - [`FeatureCard`](#featuredcard)
+  - [`Panel`](#panel)
+  - [`Plain`](#plain)
+  - [`ResourceList`](#resourcelist)
+  - [`ResourceRefs`](#resourcerefs)
+  - [`Table`](#table)
+  - [`Tabs`](#tabs)
 
 ## Inline Widgets
 
@@ -35,12 +35,12 @@ The `Badge` widgets render texts as a status badge, using a set of predefined ru
 
 These are the available `Bagde` widget parameters:
 
-| Parameter | Required | Type | Description |
-|-----------|----------|------|-------------|
-| **placeholder** | No | string | Changes the default empty text placeholder `-` with a custom string. If the **translations** section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used. |
-| **highlights** | No | | A map of highlight rules. Key refers to the type of highlight, while the rule can just be a plain array of values or a string containing a [JSONata](jsonata.md) rule. Allowed keys are `informative`, `positive`, `warning` and `critical`. <br><br> When no highlights are provided, the following values are automatically handled: <br> - rendered as informative: `initial`, `pending`, `available`, `released`. <br> - rendered as positive: `ready`, `bound`, `running`, `success`, `succeeded`, `ok`. <br> - rendered as warning: `unknown`, `warning`. <br> - rendered as critical: `error`, `failure`, `invalid`.|
-| **description** | No | [JSONata](jsonata.md) expression | Used to fetch additional information that will be displayed in a tooltip when hovering over the badge. |
-| **copyable** | No | boolean | A flag indicating if the **Copy to clipboard** button should be displayed next to the widget. By default set to `false`. |
+| Parameter       | Required | Type                             | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| --------------- | -------- | -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **placeholder** | No       | string                           | Changes the default empty text placeholder `-` with a custom string. If the **translations** section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.                                                                                                                                                                                                                                                                                                                                                                                                           |
+| **highlights**  | No       |                                  | A map of highlight rules. Key refers to the type of highlight, while the rule can just be a plain array of values or a string containing a [JSONata](jsonata.md) rule. Allowed keys are `informative`, `positive`, `warning` and `critical`. <br><br> When no highlights are provided, the following values are automatically handled: <br> - rendered as informative: `initial`, `pending`, `available`, `released`. <br> - rendered as positive: `ready`, `bound`, `running`, `success`, `succeeded`, `ok`. <br> - rendered as warning: `unknown`, `warning`. <br> - rendered as critical: `error`, `failure`, `invalid`. |
+| **description** | No       | [JSONata](jsonata.md) expression | Used to fetch additional information that will be displayed in a tooltip when hovering over the badge.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| **copyable**    | No       | boolean                          | A flag indicating if the **Copy to clipboard** button should be displayed next to the widget. By default set to `false`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 
 See the following example:
 
@@ -66,10 +66,10 @@ The `ControlledBy` widgets render the kind and the name with a link to the resou
 
 These are the available `ControlledBy` widget parameters:
 
-| Parameter | Required | Type | Description |
-|-----------|----------|------|-------------|
-| **placeholder** | No | string | Changes the default empty text placeholder `-` with a custom string. If the **translations** section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used. |
-|**kindOnly** | No | boolean | Determines if the resource name is displayed. Defaults to `false`. |
+| Parameter       | Required | Type    | Description                                                                                                                                                                                                       |
+| --------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **placeholder** | No       | string  | Changes the default empty text placeholder `-` with a custom string. If the **translations** section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used. |
+| **kindOnly**    | No       | boolean | Determines if the resource name is displayed. Defaults to `false`.                                                                                                                                                |
 
 This is an example of kind and name link:
 
@@ -98,10 +98,10 @@ The `ExternalLink` widgets render the link to an external page.
 
 These are the available `ExternalLink` widget parameters:
 
-| Parameter | Required | Type | Description |
-|-----------|----------|------|-------------|
-| **link** | No |[JSONata](jsonata.md) function | Generate a custom link. Default value is taken from **source**. |
-| **copyable** | No | boolean | A flag indicating if the **Copy to clipboard** button should be displayed next to the widget. By default set to `false`. |
+| Parameter    | Required | Type                           | Description                                                                                                              |
+| ------------ | -------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| **link**     | No       | [JSONata](jsonata.md) function | Generate a custom link. Default value is taken from **source**.                                                          |
+| **copyable** | No       | boolean                        | A flag indicating if the **Copy to clipboard** button should be displayed next to the widget. By default set to `false`. |
 
 This is an example of the linkFormula and textFormula usage:
 
@@ -130,11 +130,11 @@ The `ExternalLinkButton` widgets render the link to an external page using a but
 
 These are the available `ExternalLinkButton` widget parameters:
 
-| Parameter | Required | Type | Description |
-|-----------|----------|------|-------------|
-| **link** | **Yes** | boolean | A flag to set the target URL. |
-| **name** | No | string | An optional flag. The default value is `Learn More`. |
-| **emphasized** | No | boolean | Defines the visual appearence of the button. Can be either `true` or `false`. The default valie is `false`. |
+| Parameter      | Required | Type    | Description                                                                                                 |
+| -------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------- |
+| **link**       | **Yes**  | boolean | A flag to set the target URL.                                                                               |
+| **name**       | No       | string  | An optional flag. The default value is `Learn More`.                                                        |
+| **emphasized** | No       | boolean | Defines the visual appearence of the button. Can be either `true` or `false`. The default valie is `false`. |
 
 See the following example:
 
@@ -151,11 +151,11 @@ The `JoinedArray` widgets render all the values of an array of strings as a comm
 
 These are the available `JoinedArray` widget parameters:
 
-| Parameter | Required | Type | Description |
-|-----------|----------|------|-------------|
-| **separator** | No | string | A string by which the elements of the array are separated. The default value is a comma `,`. You can use `break` to separate elements with a new line. |
-| **children** | No | []objects | Defines widgets used for rendering array items. If not provided, the content is rendered as a string. |
-| **copyable** | No | boolean | A flag indicating if the **Copy to clipboard** button should be displayed next to the widget. By default set to `false`. |
+| Parameter     | Required | Type      | Description                                                                                                                                            |
+| ------------- | -------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **separator** | No       | string    | A string by which the elements of the array are separated. The default value is a comma `,`. You can use `break` to separate elements with a new line. |
+| **children**  | No       | []objects | Defines widgets used for rendering array items. If not provided, the content is rendered as a string.                                                  |
+| **copyable**  | No       | boolean   | A flag indicating if the **Copy to clipboard** button should be displayed next to the widget. By default set to `false`.                               |
 
 See the following example:
 
@@ -180,10 +180,10 @@ The `Labels` widgets render all the array or object entries in the `value` or `k
 
 These are the available `Labels` widget parameters:
 
-| Parameter | Required | Type | Description |
-|-----------|----------|------|-------------|
-|**placeholder** | No | string | Changes the default empty text placeholder `-` with a custom string. If the **translations** section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used. |
-| **copyable** | No | boolean | A flag indicating if the **Copy to clipboard** button should be displayed next to the widget. By default set to `false`. |
+| Parameter       | Required | Type    | Description                                                                                                                                                                                                       |
+| --------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **placeholder** | No       | string  | Changes the default empty text placeholder `-` with a custom string. If the **translations** section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used. |
+| **copyable**    | No       | boolean | A flag indicating if the **Copy to clipboard** button should be displayed next to the widget. By default set to `false`.                                                                                          |
 
 See the following example:
 
@@ -201,11 +201,11 @@ The `ResourceButton` widgets render a button that links to Kubernetes resources.
 
 These are the available `ResourceButton` widget parameters:
 
-| Parameter | Required | Type | Description |
-|-----------|----------|------|-------------|
-| **icon** | No | string | The name of an icon for this button. You can find the list of available icons [here](https://sap.github.io/fundamental-react/?path=/docs/component-api-icon--primary). Use string after `--`, for example, if an icon is named `sap-icon--accept`, use `accept`. |
-| **resource** | **Yes** | object | To create a hyperlink, Busola needs the name and the kind of the target resource; they must be passed into the **resource** object as property paths in either **\$item** - value extracted using **source**, or **\$root** - the original resource. If the target resource is in a `namespace`, provide **Namespace**, **name**, and **kind** properties. |
-| **source** | **Yes** |[JSONata](jsonata.md) expression | Resolves the link text. This property has access to **\$item** and **\$root**. |
+| Parameter    | Required | Type                             | Description                                                                                                                                                                                                                                                                                                                                                |
+| ------------ | -------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **icon**     | No       | string                           | The name of an icon for this button. You can find the list of available icons [here](https://sap.github.io/fundamental-react/?path=/docs/component-api-icon--primary). Use string after `--`, for example, if an icon is named `sap-icon--accept`, use `accept`.                                                                                           |
+| **resource** | **Yes**  | object                           | To create a hyperlink, Busola needs the name and the kind of the target resource; they must be passed into the **resource** object as property paths in either **\$item** - value extracted using **source**, or **\$root** - the original resource. If the target resource is in a `namespace`, provide **Namespace**, **name**, and **kind** properties. |
+| **source**   | **Yes**  | [JSONata](jsonata.md) expression | Resolves the link text. This property has access to **\$item** and **\$root**.                                                                                                                                                                                                                                                                             |
 
 This is an example for widget usage in the details section:
 
@@ -227,10 +227,10 @@ The `ResourceLink` widgets render internal links to Kubernetes resources.
 
 These are the available `ResourceLink` widget parameters:
 
-| Parameter | Required | Type | Description |
-|-----------|----------|------|-------------|
-| **resource** | **Yes** | object | To create a hyperlink, Busola needs the name and the kind of the target resource. They must be passed into the **resource** object as property paths in either **\$item** - value extracted using **source**, or **\$root** - the original resource. If the target resource is in a `namespace`, provide **namespace**, **name**, and **kind** properties. |
-| **source** | **Yes** | [JSONata](jsonata.md) expression | Resolves the link text. This property has access to **\$item** and **\$root**. |
+| Parameter    | Required | Type                             | Description                                                                                                                                                                                                                                                                                                                                                |
+| ------------ | -------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **resource** | **Yes**  | object                           | To create a hyperlink, Busola needs the name and the kind of the target resource. They must be passed into the **resource** object as property paths in either **\$item** - value extracted using **source**, or **\$root** - the original resource. If the target resource is in a `namespace`, provide **namespace**, **name**, and **kind** properties. |
+| **source**   | **Yes**  | [JSONata](jsonata.md) expression | Resolves the link text. This property has access to **\$item** and **\$root**.                                                                                                                                                                                                                                                                             |
 
 This is an example of the `ResourceLink` widget usage in the details section:
 
@@ -251,10 +251,10 @@ The `Text` widgets render values as a simple text. This is the default behavior 
 
 These are the available `Text` widget parameters:
 
-| Parameter | Required | Type | Description |
-|-----------|----------|------|-------------|
-| **placeholder** | No | string | Change the default empty text placeholder `-` with a custom string. If the **translations** section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used. |
-| **copyable** | No | boolean | A flag indicating if the **Copy to clipboard** button should be displayed next to the widget. By default set to `false`. |
+| Parameter       | Required | Type    | Description                                                                                                                                                                                                      |
+| --------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **placeholder** | No       | string  | Change the default empty text placeholder `-` with a custom string. If the **translations** section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used. |
+| **copyable**    | No       | boolean | A flag indicating if the **Copy to clipboard** button should be displayed next to the widget. By default set to `false`.                                                                                         |
 
 See the following example:
 
@@ -276,10 +276,10 @@ The `Alert` widgets display values using predefined types.
 
 These are the available `Alert` widget parameters:
 
-| Parameter | Required | Type | Description |
-|-----------|----------|------|-------------|
-| **disableMargin** | No | boolean | Disables the margin outside the alert body. |
-| **severity** | No | string | Specifies one of the alert severities: `information`, `warning`, `error`, or `success`. By default, it's set to `information`. |
+| Parameter         | Required | Type    | Description                                                                                                                    |
+| ----------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| **disableMargin** | No       | boolean | Disables the margin outside the alert body.                                                                                    |
+| **severity**      | No       | string  | Specifies one of the alert severities: `information`, `warning`, `error`, or `success`. By default, it's set to `information`. |
 
 See the following example:
 
@@ -299,9 +299,9 @@ The `CodeViewer` widgets display values using a read-only code editor.
 
 These are the available `CodeViewer` widget parameters:
 
-| Parameter | Required | Type | Description |
-|-----------|----------|------|-------------|
-| **language** | No | [JSONata](jsonata.md) expression | Resolves the desired language, used for code highlighting. It has access to the `$root` variable, containing the entire resource. The editor supports languages handled by [Monaco](https://code.visualstudio.com/docs/languages/overview). If the language is not specified, the editor tries to display the content as `yaml` with a fallback to `json`. |
+| Parameter    | Required | Type                             | Description                                                                                                                                                                                                                                                                                                                                                |
+| ------------ | -------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **language** | No       | [JSONata](jsonata.md) expression | Resolves the desired language, used for code highlighting. It has access to the `$root` variable, containing the entire resource. The editor supports languages handled by [Monaco](https://code.visualstudio.com/docs/languages/overview). If the language is not specified, the editor tries to display the content as `yaml` with a fallback to `json`. |
 
 See the following example:
 
@@ -319,9 +319,9 @@ The `Columns` widgets render the child widgets in multiple columns.
 
 These are the available `Columns` widget parameters:
 
-| Parameter | Required | Type | Description |
-|-----------|----------|------|-------------|
-| **inline** | No | boolean | Change the layout mode. <br><br> - `true` - list is displayed inline, wrapped if needed. It is a default option for lists, panels, and headers. <br> - `false` - list is displayed as a grid. |
+| Parameter  | Required | Type    | Description                                                                                                                                                                                   |
+| ---------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **inline** | No       | boolean | Change the layout mode. <br><br> - `true` - list is displayed inline, wrapped if needed. It is a default option for lists, panels, and headers. <br> - `false` - list is displayed as a grid. |
 
 See the following example:
 
@@ -348,11 +348,11 @@ The `EventList` widget renders a list of Events.
 
 These are the available `Columns` widget parameters:
 
-| Parameter | Required | Type | Description |
-|-----------|----------|------|-------------|
-| **filter** | No | [JSONata](jsonata.md) function | Use it to filter Events emitted by a specific resource. There is a special custom function [matchEvents](jsonata.md#matcheventsitem-kind-name) you can use to filter Events, for example, `$matchEvents($$, $root.kind, $root.metadata.name)`. |
-| **defaultType** | No | string | The value is either: `all`, `information`, or `warning`. When set to `information` or `warning`, Events with specific type are displayed. By default all Events are fetched. |
-| **hideInvolvedObjects** | No | boolean | If set to `true`, the **Involved Objects** column is hidden. Defaults to `false`. |
+| Parameter               | Required | Type                           | Description                                                                                                                                                                                                                                    |
+| ----------------------- | -------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **filter**              | No       | [JSONata](jsonata.md) function | Use it to filter Events emitted by a specific resource. There is a special custom function [matchEvents](jsonata.md#matcheventsitem-kind-name) you can use to filter Events, for example, `$matchEvents($$, $root.kind, $root.metadata.name)`. |
+| **defaultType**         | No       | string                         | The value is either: `all`, `information`, or `warning`. When set to `information` or `warning`, Events with specific type are displayed. By default all Events are fetched.                                                                   |
+| **hideInvolvedObjects** | No       | boolean                        | If set to `true`, the **Involved Objects** column is hidden. Defaults to `false`.                                                                                                                                                              |
 
 See the following examples:
 
@@ -387,14 +387,14 @@ It is important to select a unique ID for each `FeaturedCard`, since it will be 
 
 These are the available `FeatureCard` widget parameters:
 
-| Parameter | Required | Type | Description |
-|-----------|----------|------|-------------|
-| **title** | No | string | Renders the title. |
-| **description** | No | string | Renders the description. |
-| **id** | **Yes** | string | Defines the banner's **(unique!)** identifier. |
-| **children** | No | []objects | Defines the banner's children that are displayed below the description. It is recommended to use button-like components here. The maximum number of objects is 2. |
-| **illustration** | No | string | Defines the illustration displayed on the right. Can be one of the following: `Modules` (default), `AI` |
-| **design** | No | string | Defines the background color-gradient of the banner. Can be one of the following: `information-1` (default), `information-2`. |
+| Parameter        | Required | Type      | Description                                                                                                                                                       |
+| ---------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **title**        | No       | string    | Renders the title.                                                                                                                                                |
+| **description**  | No       | string    | Renders the description.                                                                                                                                          |
+| **id**           | **Yes**  | string    | Defines the banner's **(unique!)** identifier.                                                                                                                    |
+| **children**     | No       | []objects | Defines the banner's children that are displayed below the description. It is recommended to use button-like components here. The maximum number of objects is 2. |
+| **illustration** | No       | string    | Defines the illustration displayed on the right. Can be one of the following: `Modules` (default), `AI`                                                           |
+| **design**       | No       | string    | Defines the background color-gradient of the banner. Can be one of the following: `information-1` (default), `information-2`.                                     |
 
 See the following example:
 
@@ -426,12 +426,12 @@ The `Panel` widgets render an object as a separate panel with its own title (bas
 
 These are the available `Panel` widget parameters:
 
-| Parameter | Required | Type | Description |
-|-----------|----------|------|-------------|
-| **header** | No | array | Allows you to, for example, display labels in the panel header. |
-| **disablePadding** | No | boolean | Disables the padding inside the panel body. |
-| **description** | No | string | Displays a custom description on the resource list page. It can contain links. If the **translations** section has a translation entry with the ID that is the same as the **description** string, the translation is used. |
-| **decodable** | No | boolean | Decodes the values of all the children using base64 - must be used together with the **source** parameter. |
+| Parameter          | Required | Type    | Description                                                                                                                                                                                                                 |
+| ------------------ | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **header**         | No       | array   | Allows you to, for example, display labels in the panel header.                                                                                                                                                             |
+| **disablePadding** | No       | boolean | Disables the padding inside the panel body.                                                                                                                                                                                 |
+| **description**    | No       | string  | Displays a custom description on the resource list page. It can contain links. If the **translations** section has a translation entry with the ID that is the same as the **description** string, the translation is used. |
+| **decodable**      | No       | boolean | Decodes the values of all the children using base64 - must be used together with the **source** parameter.                                                                                                                  |
 
 See the following example:
 
@@ -483,16 +483,16 @@ The `ResourceList` widgets render a list of Kubernetes resources. The ResourceLi
 
 These are the available `ResourceList` widget parameters:
 
-| Parameter | Required | Type | Description |
-|-----------|----------|------|-------------|
-| **children** | No | []objects | Used to obtain custom columns. If not set, the configuration is reused based on the existing resource list, defined in Busola or using extensibility. |
-| **sort** | No | []objects | Allows you to sort by the value from the given **source**. |
-| **sort.source** | **Yes** | [JSONata](jsonata.md) expression | Used to fetch data for the column. In its simplest form, it's the path to the value. |
-| **sort.default** | No | boolean | An optional flag. If set to `true`, the list view is sorted by this value by default. |
-| **sort.compareFunction** | No | [JSONata](jsonata.md) compare function | It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`. |
-| **search** | No | []objects | Allows you to search for resources including the value from the given **source**. |
-| **search.source** | **Yes** | [JSONata](jsonata.md) expression | Used to fetch data for the column. In its simplest form, it's the path to the value. |
-| **search.searchFunction** | No | [JSONata](jsonata.md) search function | It allows you to use the `$input` variable to get the search input's value that can be used to search for more complex data. |
+| Parameter                 | Required | Type                                   | Description                                                                                                                                                                                                                                                |
+| ------------------------- | -------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **children**              | No       | []objects                              | Used to obtain custom columns. If not set, the configuration is reused based on the existing resource list, defined in Busola or using extensibility.                                                                                                      |
+| **sort**                  | No       | []objects                              | Allows you to sort by the value from the given **source**.                                                                                                                                                                                                 |
+| **sort.source**           | **Yes**  | [JSONata](jsonata.md) expression       | Used to fetch data for the column. In its simplest form, it's the path to the value.                                                                                                                                                                       |
+| **sort.default**          | No       | boolean                                | An optional flag. If set to `true`, the list view is sorted by this value by default.                                                                                                                                                                      |
+| **sort.compareFunction**  | No       | [JSONata](jsonata.md) compare function | It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`. |
+| **search**                | No       | []objects                              | Allows you to search for resources including the value from the given **source**.                                                                                                                                                                          |
+| **search.source**         | **Yes**  | [JSONata](jsonata.md) expression       | Used to fetch data for the column. In its simplest form, it's the path to the value.                                                                                                                                                                       |
+| **search.searchFunction** | No       | [JSONata](jsonata.md) search function  | It allows you to use the `$input` variable to get the search input's value that can be used to search for more complex data.                                                                                                                               |
 
 Since the `ResourceList` widget does more than just list the items, you must provide the whole data source (`$myResource()`) instead of just the items (`$myResource().items`).
 
@@ -546,9 +546,9 @@ The `ResourceRefs` widgets render the lists of links to the associated resources
 
 These are the available `ResourceRefs` widget parameters:
 
-| Parameter | Required | Type | Description |
-|-----------|----------|------|-------------|
-| **kind** | **Yes** | string |  Kubernetes kind of the resource. |
+| Parameter | Required | Type   | Description                      |
+| --------- | -------- | ------ | -------------------------------- |
+| **kind**  | **Yes**  | string | Kubernetes kind of the resource. |
 
 See the following example:
 
@@ -566,15 +566,15 @@ Table widgets display array data as rows of a table instead of free-standing com
 
 These are the available `Table` widget parameters:
 
-| Parameter | Required | Type | Description |
-|-----------|----------|------|-------------|
-| **collapsible** | No | array of widgets | Displays as an extra collapsible section. Uses the same format as the **children** parameter. |
-| **collapsibleTitle** | No | string or the [JSONata](jsonata.md) function | Defines the title for the collapsible sections. |
-| **disablePadding** | No | boolean | Disables the padding inside the panel body. |
-| **showHeader** | No | boolean | Disables displaying the head row. |
-| **extraHeaderContent** | No | array of extra widgets | Displays as an action section. Uses the same format as the **children** parameter. |
-| **sort** | No | boolean |If set to `true`, it allows you to sort using this value. Defaults to false. It can also be set to an object with the following properties: <br>>br> - **default** - optional flag. If set to `true`, the list view is sorted by this value by default. <br> - **compareFunction** - optional [JSONata](jsonata.md) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`. |
-| **search** | No | boolean | If set to `true`, it allows you to search the resource list by this value. Defaults to false. It can also be set to an object with the following property: <br><br> - **searchFunction** - optional [JSONata](jsonata.md) search function. It allows you to use the `$input` variable to get the search input's value that can be used to search for more complex data. |
+| Parameter              | Required | Type                                         | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| ---------------------- | -------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **collapsible**        | No       | array of widgets                             | Displays as an extra collapsible section. Uses the same format as the **children** parameter.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| **collapsibleTitle**   | No       | string or the [JSONata](jsonata.md) function | Defines the title for the collapsible sections.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| **disablePadding**     | No       | boolean                                      | Disables the padding inside the panel body.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| **showHeader**         | No       | boolean                                      | Disables displaying the head row.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| **extraHeaderContent** | No       | array of extra widgets                       | Displays as an action section. Uses the same format as the **children** parameter.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| **sort**               | No       | boolean                                      | If set to `true`, it allows you to sort using this value. Defaults to false. It can also be set to an object with the following properties: <br>>br> - **default** - optional flag. If set to `true`, the list view is sorted by this value by default. <br> - **compareFunction** - optional [JSONata](jsonata.md) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`. |
+| **search**             | No       | boolean                                      | If set to `true`, it allows you to search the resource list by this value. Defaults to false. It can also be set to an object with the following property: <br><br> - **searchFunction** - optional [JSONata](jsonata.md) search function. It allows you to use the `$input` variable to get the search input's value that can be used to search for more complex data.                                                                                                                                                                                                                          |
 
 See the following example:
 

@@ -6,17 +6,17 @@ The **injections** section contains a list of objects that defines the display s
 
 These are the available **injections** widget parameters:
 
-| Parameter | Required | Type | Description |
-|-----------|----------|------|-------------|
-| **source** | **Yes** | string or [JSONata](jsonata.md) expression | Fetches data for the column. In its simplest form, it's the path to the value. |
-| **name** | No | string | The name for the field instead of the default capitalized last part of the path. This can be a key from the **translation** section. |
-| **widget** | No | string | The widget used to render the field referred to by the **source** property. The widget should be adjusted to handle arrays. |
-| **order** | No | integer | Defines in what order injections are rendered. If one or more injections have the same order, they are sorted by name. |
-| **targets** | **Yes** | []objects | Defines where the injection should be rendered. |
-| **targets.location** | **Yes** | string | Defines on what view the injection should be rendered. Currently, injections are rendered only on details views. For more information, check the list of [available locations](#available-injections-locations). |
-| **targets.slot** | **Yes** | string | Defines where the injection should be rendered on a page. Check the list of [available slots](#available-injections-slots). |
-| **targets.filter** | No | [JSONata](jsonata.md) expression| Filters resources based on a given condition. If defined, it overrides the general filter. |
-| **filter** | No | [JSONata](jsonata.md) expression | Filters resources based on a given condition. This is a general filter rule. If **filter** is defined in **targets**, it is ignored. |
+| Parameter            | Required | Type                                       | Description                                                                                                                                                                                                      |
+| -------------------- | -------- | ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **source**           | **Yes**  | string or [JSONata](jsonata.md) expression | Fetches data for the column. In its simplest form, it's the path to the value.                                                                                                                                   |
+| **name**             | No       | string                                     | The name for the field instead of the default capitalized last part of the path. This can be a key from the **translation** section.                                                                             |
+| **widget**           | No       | string                                     | The widget used to render the field referred to by the **source** property. The widget should be adjusted to handle arrays.                                                                                      |
+| **order**            | No       | integer                                    | Defines in what order injections are rendered. If one or more injections have the same order, they are sorted by name.                                                                                           |
+| **targets**          | **Yes**  | []objects                                  | Defines where the injection should be rendered.                                                                                                                                                                  |
+| **targets.location** | **Yes**  | string                                     | Defines on what view the injection should be rendered. Currently, injections are rendered only on details views. For more information, check the list of [available locations](#available-injections-locations). |
+| **targets.slot**     | **Yes**  | string                                     | Defines where the injection should be rendered on a page. Check the list of [available slots](#available-injections-slots).                                                                                      |
+| **targets.filter**   | No       | [JSONata](jsonata.md) expression           | Filters resources based on a given condition. If defined, it overrides the general filter.                                                                                                                       |
+| **filter**           | No       | [JSONata](jsonata.md) expression           | Filters resources based on a given condition. This is a general filter rule. If **filter** is defined in **targets**, it is ignored.                                                                             |
 
 ## Available **injections** Slots
 
