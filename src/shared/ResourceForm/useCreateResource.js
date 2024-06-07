@@ -21,7 +21,6 @@ export function useCreateResource({
   singularName,
   pluralKind,
   resource,
-  initialResource,
   initialUnchangedResource,
   createUrl,
   afterCreatedFn,

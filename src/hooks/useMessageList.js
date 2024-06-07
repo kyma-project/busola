@@ -12,7 +12,7 @@ export const EVENT_MESSAGE_TYPE = {
   WARNING: { key: 'Warning', text: 'warnings' },
 };
 
-export const RESOURCE_PATH = {
+export let RESOURCE_PATH = {
   Certificate: 'certificates',
   ConfigMap: 'configmaps',
   CronJob: 'cronjobs',
@@ -39,6 +39,7 @@ export const RESOURCE_PATH = {
   Subscription: 'subscriptions',
   VirtualService: 'virtualservices',
 };
+
 export const filterByResource = (resourceKind, resourceName) => e =>
   e.involvedObject?.name === resourceName &&
   e.involvedObject?.kind === resourceKind;
