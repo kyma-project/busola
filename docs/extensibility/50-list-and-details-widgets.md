@@ -154,8 +154,8 @@ These are the available `JoinedArray` widget parameters:
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
 | **separator** | No | string | A string by which the elements of the array are separated. The default value is a comma `,`. You can use `break` to separate elements with a new line. |
-| **children** | No | | Defines widgets used for rendering array items. If not provided, the content is rendered as a string. |
-| **copyable** | No | A flag indicating if the **Copy to clipboard** button should be displayed next to the widget. By default set to `false`. |
+| **children** | No | []objects | Defines widgets used for rendering array items. If not provided, the content is rendered as a string. |
+| **copyable** | No | boolean | A flag indicating if the **Copy to clipboard** button should be displayed next to the widget. By default set to `false`. |
 
 See the following example:
 
@@ -183,7 +183,7 @@ These are the available `Labels` widget parameters:
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
 |**placeholder** | No | string | Changes the default empty text placeholder `-` with a custom string. If the **translations** section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used. |
-| **copyable** | No | A flag indicating if the **Copy to clipboard** button should be displayed next to the widget. By default set to `false`. |
+| **copyable** | No | boolean | A flag indicating if the **Copy to clipboard** button should be displayed next to the widget. By default set to `false`. |
 
 See the following example:
 
@@ -254,7 +254,7 @@ These are the available `Text` widget parameters:
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
 | **placeholder** | No | string | Change the default empty text placeholder `-` with a custom string. If the **translations** section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used. |
-| **copyable** | No | A flag indicating if the **Copy to clipboard** button should be displayed next to the widget. By default set to `false`. |
+| **copyable** | No | boolean | A flag indicating if the **Copy to clipboard** button should be displayed next to the widget. By default set to `false`. |
 
 See the following example:
 
@@ -392,7 +392,7 @@ These are the available `FeatureCard` widget parameters:
 | **title** | No | string | Renders the title. |
 | **description** | No | string | Renders the description. |
 | **id** | **Yes** | string | Defines the banner's **(unique!)** identifier. |
-| **children** | No | an array of the maximum 2 objects | Defines the banner's children that are displayed below the description. It is recommended to use button-like components here. |
+| **children** | No | []objects | Defines the banner's children that are displayed below the description. It is recommended to use button-like components here. The maximum number of objects is 2. |
 | **illustration** | No | string | Defines the illustration displayed on the right. Can be one of the following: `Modules` (default), `AI` |
 | **design** | No | string | Defines the background color-gradient of the banner. Can be one of the following: `information-1` (default), `information-2`. |
 
@@ -485,13 +485,13 @@ These are the available `ResourceList` widget parameters:
 
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
-| **children** | No | | Used to obtain custom columns. If not set, the configuration is reused based on the existing resource list, defined in Busola or using extensibility. |
-| **sort** | No | an array of objects | Allows you to sort by the value from the given **source**. |
-| **sort.source** | **Yes** | [JSONata](jsonata.md) expression | Used to fetch data for the column. In its simplest form, it's the path to the value.
+| **children** | No | []objects | Used to obtain custom columns. If not set, the configuration is reused based on the existing resource list, defined in Busola or using extensibility. |
+| **sort** | No | []objects | Allows you to sort by the value from the given **source**. |
+| **sort.source** | **Yes** | [JSONata](jsonata.md) expression | Used to fetch data for the column. In its simplest form, it's the path to the value. |
 | **sort.default** | No | boolean | An optional flag. If set to `true`, the list view is sorted by this value by default. |
-| **sort.compareFunction** | No | [JSONata](jsonata.md) compare function. | It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`. |
-| **search** | No | an array of objects | Allows you to search for resources including the value from the given **source**. |
-| **search.source** | **Yes** | contains a [JSONata](jsonata.md) expression | Used to fetch data for the column. In its simplest form, it's the path to the value. |
+| **sort.compareFunction** | No | [JSONata](jsonata.md) compare function | It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`. |
+| **search** | No | []objects | Allows you to search for resources including the value from the given **source**. |
+| **search.source** | **Yes** | [JSONata](jsonata.md) expression | Used to fetch data for the column. In its simplest form, it's the path to the value. |
 | **search.searchFunction** | No | [JSONata](jsonata.md) search function | It allows you to use the `$input` variable to get the search input's value that can be used to search for more complex data. |
 
 Since the `ResourceList` widget does more than just list the items, you must provide the whole data source (`$myResource()`) instead of just the items (`$myResource().items`).

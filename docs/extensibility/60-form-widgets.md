@@ -111,7 +111,7 @@ These are the available `CodeEditor` widget parameters:
 
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
-| **language** | **Yes** | a [JSONata](jsonata.md) expression | Resolves the desired language. It has access to the `$root` variable, containing the entire resource. |
+| **language** | **Yes** | [JSONata](jsonata.md) expression | Resolves the desired language. It has access to the `$root` variable, containing the entire resource. |
 | **inputInfo** | No | string | A string below the input field that shows how to fill in the input. You can use the {{ [`name`] (`link`) }} format to display a `name` instead of a `link. |
 | **description** | | string | A string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD). |
 | **defaultExpanded** | No | boolean | Specifies if the widget should be expanded by default. Defaults to `false`. |
@@ -179,7 +179,7 @@ These are the available `Bagde` widget parameters:
 
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
-| **options[]** | **Yes** | an array of objects | Generate the checkboxes. |
+| **options[]** | **Yes** | []objects | Generate the checkboxes. |
 | **options.key** | **Yes** | string | The value used to generate checkboxes. It is set if a checkbox is selected. This `key`, together with the `path` defined for MultiCheckbox (`{path}.{key}`), can be used for **translation**. |
 | **options.name** | No | string | An optional name for a checkbox instead of the default capitalized last part of the path. This can be a key from the **translation** section. |
 | **options.description** | No | string | The string displayed in a tooltip when you hover over a question mark icon, next to the checkbox's label. |
@@ -221,7 +221,7 @@ These are the available `Bagde` widget parameters:
 
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
-| **alert** | **Yes** | a [JSONata](jsonata.md) expression | The information that you want to display. |
+| **alert** | **Yes** | [JSONata](jsonata.md) expression | The information that you want to display. |
 | **disableMargin** | No | boolean | Disables the margin outside the alert body. |
 | **severity** | No | string | Specifies one of the alert severities: `information`, `warning`, `error`, or `success`. By default, it's set to **information**. |
 
@@ -287,10 +287,10 @@ These are the available `ResourceRef` widget parameters:
 | **resource.kind** | **Yes** | string | Kubernetes kind of the resource. |
 | **resource.group** | No | string | The API group used for all requests. Not provided for Kubernetes resources in the core (also called legacy) group. |
 | **resource.version** | **Yes** | string | The API version used for all requests. |
-| **filter** | No | a JSONata expression | Flters resources based on a given condition. |
+| **filter** | No | [JSONata](jsonata.md) expression | Flters resources based on a given condition. |
 | **provideVar** | No | string | When this field is defined, the chosen resource will be provided as a variable of this name. |
-| **toInternal** | No | a [JSONata](jsonata.md) function | Converts from the stored value to the `{name, namespace}` format. Useful, for example, when the data is stored as a string. |
-| **toExternal** | No | a [JSONata](jsonata.md) function | A corresponding function to convert back to store. |
+| **toInternal** | No | [JSONata](jsonata.md) function | Converts from the stored value to the `{name, namespace}` format. Useful, for example, when the data is stored as a string. |
+| **toExternal** | No | [JSONata](jsonata.md) function | A corresponding function to convert back to store. |
 | **defaultExpanded** | No | boolean | Specifies if the widget should be expanded by default. Defaults to `false`. |
 
 See the following example:
@@ -333,7 +333,7 @@ These are the available `FormGroup` widget parameters:
 
 | Parameter | Required | Type | Description |
 |-----------|----------|------|-------------|
-| **columns** | No | number | The number of columns the content is rendered in. Defaults to 1. |
+| **columns** | No | integer | The number of columns the content is rendered in. Defaults to 1. |
 | **defaultExpanded** | No | boolean | Specifies if the widget should be expanded by default. Defaults to `false`. |
 
 See the following example:
