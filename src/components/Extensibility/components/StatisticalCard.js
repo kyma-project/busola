@@ -1,5 +1,7 @@
 import { CountingCard } from 'shared/components/CountingCard/CountingCard';
 import { useJsonata } from '../hooks/useJsonata';
+import { spacing } from '@ui5/webcomponents-react-base';
+import { useGetTranslation } from '../helpers';
 
 export function StatisticalCard({
   structure,
@@ -15,33 +17,45 @@ export function StatisticalCard({
     value,
     arrayItems,
   });
+  const { t } = useGetTranslation();
 
   const extraInfo = structure.children?.map(child => {
-    let childValue = undefined;
-    let eventFilterError;
-    try {
-      [childValue, eventFilterError] = jsonata(child.source, {
-        resource: value,
+    const [childValue, err] = jsonata(child.source, {
+      resource: value,
+    });
+    if (err) {
+      return t('extensibility.configuration-error', {
+        error: err.message,
       });
-      if (eventFilterError) throw eventFilterError;
-    } catch (e) {
-      throw e;
-      // return { title: 'Error', value: e };
     }
 
     return {
       title: child.name,
-      value: childValue,
+      value: childValue !== undefined ? childValue : 'N/A', //TODO: use translation
     };
   });
 
+  const [mainValue, err] = jsonata(structure?.mainValue?.source, {
+    resource: value,
+  });
+  if (err) {
+    return t('extensibility.configuration-error', {
+      error: err.message,
+    });
+  }
+
   return (
-    <div className={`item-wrapper ${structure?.children ? 'wide' : 'small'}`}>
+    <div
+      style={{
+        ...spacing.sapUiSmallMarginBegin,
+        ...spacing.sapUiSmallMarginBottom,
+      }}
+    >
       <CountingCard
         className="item"
-        value={value || 'N/A'}
+        value={mainValue !== undefined ? mainValue : 'N/A'}
         title={structure?.name}
-        subTitle={structure?.mainStatistic?.name}
+        subTitle={structure?.mainValue?.name}
         // resourceUrl={structure?.resourceUrl}
         // isClusterResource={structure?.isClusterResource}
         extraInfo={extraInfo}
