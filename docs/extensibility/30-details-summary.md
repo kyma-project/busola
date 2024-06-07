@@ -4,11 +4,11 @@ You can customize the details page of the user interface component of your resou
 
 ## Available Parameters
 
-In the **data.details** section you can provide configuration of three optional components: **header**, **body**, and **resourceGraph**. The **header** and **body** components are lists of widgets visible in the respective sections of the details page. You can use the **resourceGraph** component to present the relationship between different resources.
+In the **data.details** section you can provide configuration of four optional components: **header**, **body**, **status** and **resourceGraph**. The **header**, **status** and **body** components are lists of widgets visible in the respective sections of the details page. You can use the **resourceGraph** component to present the relationship between different resources.
 
 ### **header** and **body** Parameters
 
-This table lists the available parameters of the **data.details.header** and/or **data.details.body** section in your resource ConfigMap. You can learn whether each of the parameters is required and what purpose it serves. The **data.details.header** and **data.details.body** components are arrays of objects.
+This table lists the available parameters of the **data.details.header**, **data.details.status** and/or **data.details.body** section in your resource ConfigMap. You can learn whether each of the parameters is required and what purpose it serves. The **data.details.header** and **data.details.body** components are arrays of objects.
 
 | Parameter             | Required | Type                                        | Description                                                                                                                                                                                                                                                                                                                                                                                                      |
 | --------------------- | -------- | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
