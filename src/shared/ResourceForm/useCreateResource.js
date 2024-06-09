@@ -135,11 +135,10 @@ export function useCreateResource({
     setIsResourceEdited({
       isEdited: false,
     });
-    if (!isEdit) {
-      setIsFormOpen({
-        formOpen: false,
-      });
-    }
+
+    setIsFormOpen({
+      formOpen: false,
+    });
   };
 
   return async e => {
