@@ -1,6 +1,6 @@
 import { ConditionList as ConditionListComponent } from 'shared/components/ConditionList/ConditionList';
 
-export const ConditionList = ({ value, structure }) => {
+export const ConditionList = ({ value }) => {
   if (!Array.isArray(value) || value?.length === 0) {
     return null;
   }

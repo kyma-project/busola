@@ -659,11 +659,11 @@ section.
 
 These are the available `StatisticalCard` widget parameters:
 
-| Parameter             | Required | Type        | Description                                                                  |
-| --------------------- | -------- | ----------- | ---------------------------------------------------------------------------- |
-| **resourceURL**       | **No**   | string      | Path to busola resource.                                                     |
-| **isClusterResource** | **No**   | boolean     | Defines if resource is cluster wide                                          |
-| **allNamespaceURL**   | **No**   | **boolean** | Defines if resource URL should point to a list of resource in all namespaces |
+| Parameter             | Required | Type    | Description                                                                  |
+| --------------------- | -------- | ------- | ---------------------------------------------------------------------------- |
+| **resourceURL**       | **No**   | string  | Path to busola resource.                                                     |
+| **isClusterResource** | **No**   | boolean | Defines if resource is cluster wide                                          |
+| **allNamespaceURL**   | **No**   | boolean | Defines if resource URL should point to a list of resource in all namespaces |
 
 #### Example
 

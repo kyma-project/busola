@@ -15,7 +15,7 @@ type JsonataFunction = {
   (
     query: string,
     extras: { [key: string]: any },
-    defaultValue: any,
+    defaultValue?: any,
   ): JsonataValue;
   async: (
     query: string,
@@ -75,11 +75,6 @@ export function useJsonata({
     }
 
     try {
-      const a =
-        last(extras?.arrayItems) ||
-        last(arrayItems) ||
-        extras.resource ||
-        resource;
       const value = jsonataWrapper(query).evaluate(
         extras.scope || scope || extras.resource || resource,
         {

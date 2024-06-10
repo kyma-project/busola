@@ -2,21 +2,12 @@ import { CountingCard } from 'shared/components/CountingCard/CountingCard';
 import { useJsonata } from '../hooks/useJsonata';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useGetTranslation } from '../helpers';
-import { EMPTY_TEXT_PLACEHOLDER } from '../../../shared/constants';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
-export function StatisticalCard({
-  structure,
-  value,
-  originalResource,
-  scope,
-  arrayItems,
-  ...props
-}) {
+export function StatisticalCard({ structure, value, originalResource }) {
   const jsonata = useJsonata({
     resource: originalResource,
-    scope,
     value,
-    arrayItems,
   });
   const { t } = useGetTranslation();
 
