@@ -2,6 +2,7 @@ import { CountingCard } from 'shared/components/CountingCard/CountingCard';
 import { useJsonata } from '../hooks/useJsonata';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useGetTranslation } from '../helpers';
+import { EMPTY_TEXT_PLACEHOLDER } from '../../../shared/constants';
 
 export function StatisticalCard({
   structure,
@@ -31,7 +32,7 @@ export function StatisticalCard({
 
     return {
       title: child.name,
-      value: childValue !== undefined ? childValue : 'N/A', //TODO: use translation
+      value: childValue !== undefined ? childValue : EMPTY_TEXT_PLACEHOLDER,
     };
   });
 
@@ -53,11 +54,10 @@ export function StatisticalCard({
     >
       <CountingCard
         className="item"
-        value={mainValue !== undefined ? mainValue : 'N/A'}
+        value={mainValue !== undefined ? mainValue : EMPTY_TEXT_PLACEHOLDER}
         title={structure?.name}
         subTitle={structure?.mainValue?.name}
         // resourceUrl={structure?.resourceUrl}
-        // isClusterResource={structure?.isClusterResource}
         extraInfo={extraInfo}
       />
     </div>
