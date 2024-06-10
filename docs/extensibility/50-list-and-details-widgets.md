@@ -25,6 +25,7 @@ You can use list and details widgets in the lists and details pages in the user 
   - [`ResourceRefs`](#resourcerefs)
   - [`Table`](#table)
   - [`Tabs`](#tabs)
+  - [`StatisticalCard`](#StatisticalCard) - TODO: Where to put it exactly?
 
 ## Inline Widgets
 
@@ -636,3 +637,32 @@ See the following example:
 ```
 
 <img src="./assets/display-widgets/Tabs.png" alt="Example of a tabs widget" style="border: 1px solid #D2D5D9">
+
+### StatisticalCard
+
+StatisticalCard widgets render a card component with a several numerical information elements.
+This widget is primarily designed to be used via [injections](#widget-injections-overview) (**destination: ClusterStats, slot: cards**), allowing the card to be rendered within the dense grid layout of the ClusterOverview's statistical cards section.
+
+#### Example
+
+```yaml
+injections: |-
+  - name: MyTitle
+    widget: StatisticalCard
+    source: status
+    mainValue:
+      name: MySubtitle
+      source: $item.importantValue
+    resourceUrl: pods
+    isClusterResource: false
+    children:
+      - name: ExtraInformation1
+        soure: $item.value1
+      - title: ExtraInformation2
+        source: $item.value2
+    targets:
+      - location: ClusterStats
+        slot: cards
+```
+
+<img src="./assets/display-widgets/StatisticalCard.png" alt="Example of a StatisticalCard widget" style="border: 1px solid #D2D5D9" width="75%">
