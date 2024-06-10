@@ -1,10 +1,15 @@
-import { Card, CardHeader, List } from '@ui5/webcomponents-react';
+import { Card, CardHeader } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { spacing } from '@ui5/webcomponents-react-base';
-import { ExpandableListItem } from '../ExpandableListItem/ExpandableListItem';
 import './ResourceStatusCard.scss';
+import { ConditionList } from '../ConditionList/ConditionList';
 
-export function ResourceStatusCard({ statusBadge, customColumns, conditions }) {
+export function ResourceStatusCard({
+  statusBadge,
+  customColumns,
+  conditions,
+  customConditionsComponent,
+}) {
   const { t } = useTranslation();
 
   return (
@@ -30,23 +35,17 @@ export function ResourceStatusCard({ statusBadge, customColumns, conditions }) {
           </div>
         )}
         {conditions && (
-          <List className="resource-status-card__conditions">
+          <>
             <div
               className="title bsl-has-color-status-4 "
               style={spacing.sapUiSmallMarginBeginEnd}
             >
               {`${t('common.headers.conditions')}:`}
             </div>
-            {conditions?.map((cond, index) => (
-              <ExpandableListItem
-                key={index}
-                header={cond.header?.titleText}
-                status={cond.header?.status}
-                content={cond.message}
-              />
-            ))}
-          </List>
+            <ConditionList conditions={conditions} />
+          </>
         )}
+        {customConditionsComponent}
       </Card>
     </div>
   );
