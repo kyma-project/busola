@@ -58,6 +58,7 @@ export function StatisticalCard({
         title={structure?.name}
         subTitle={structure?.mainValue?.name}
         resourceUrl={structure?.resourceURL}
+        allNamespaceURL={structure?.allNamespaceURL}
         extraInfo={extraInfo}
       />
     </div>

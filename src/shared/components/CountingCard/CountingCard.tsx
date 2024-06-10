@@ -17,7 +17,8 @@ type CountingCardProps = {
   subTitle: string;
   resourceUrl: string;
   isClusterResource: boolean;
-  className: string;
+  allNamespaceURL: boolean;
+  className?: string;
 };
 
 type ExtraInfo = {
@@ -29,10 +30,11 @@ export const CountingCard = ({
   value,
   extraInfo,
   title,
-  subTitle = ' ',
+  subTitle = '',
   resourceUrl,
   isClusterResource = false,
-  className = '',
+  allNamespaceURL = true,
+  className = ''
 }: CountingCardProps) => {
   const { t } = useTranslation();
   const { namespaceUrl, clusterUrl } = useUrl();
@@ -76,9 +78,10 @@ export const CountingCard = ({
             url={
               isClusterResource
                 ? clusterUrl(resourceUrl)
-                : namespaceUrl(resourceUrl, {
-                    namespace: '-all-',
-                  })
+                : namespaceUrl(
+                    resourceUrl,
+                    allNamespaceURL ? { namespace: '-all-' } : {},
+                  )
             }
             className="counting-card__link"
           >

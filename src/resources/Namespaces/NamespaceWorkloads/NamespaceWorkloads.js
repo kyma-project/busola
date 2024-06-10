@@ -43,6 +43,7 @@ export function NamespaceWorkloads({ namespace }) {
               title={t('cluster-overview.statistics.pods-overview')}
               subTitle={t('cluster-overview.statistics.total-pods')}
               resourceUrl="pods"
+              allNamespaceURL={false}
               extraInfo={[
                 {
                   title: t('cluster-overview.statistics.healthy-pods'),
@@ -61,6 +62,7 @@ export function NamespaceWorkloads({ namespace }) {
               title={t('cluster-overview.statistics.deployments-overview')}
               subTitle={t('cluster-overview.statistics.total-deployments')}
               resourceUrl="deployments"
+              allNamespaceURL={false}
               extraInfo={[
                 {
                   title: t('cluster-overview.statistics.healthy-deployments'),
