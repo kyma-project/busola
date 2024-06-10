@@ -12,9 +12,9 @@ import { useGetCRbyPath } from './useGetCRbyPath';
 import { Widget } from './components/Widget';
 import ExtensibilityCreate from './ExtensibilityCreate';
 import {
-  useGetTranslation,
   TranslationBundleContext,
   useCreateResourceDescription,
+  useGetTranslation,
 } from './helpers';
 import { useJsonata } from './hooks/useJsonata';
 import CustomResource from 'resources/CustomResourceDefinitions/CustomResources.details';
@@ -68,6 +68,7 @@ export const ExtensibilityDetailsCore = ({
   }
 
   const header = resMetaData?.details?.header || [];
+  const status = resMetaData?.details?.status || [];
   const body = resMetaData?.details?.body || [];
   const dataSources = resMetaData?.dataSources || {};
 
@@ -117,6 +118,44 @@ export const ExtensibilityDetailsCore = ({
                 />
               ),
             ]
+          : []
+      }
+      customStatusColumns={
+        Array.isArray(status)
+          ? status
+              .filter(def => def.widget !== 'ConditionList')
+              .map((def, i) => ({
+                header: widgetT(def),
+                value: resource => (
+                  <Widget
+                    key={i}
+                    structure={def}
+                    value={resource}
+                    schema={schema}
+                    dataSources={dataSources}
+                    originalResource={resource}
+                  />
+                ),
+              }))
+          : []
+      }
+      customConditionsComponents={
+        Array.isArray(status)
+          ? status
+              .filter(def => def.widget === 'ConditionList')
+              .map((def, i) => ({
+                header: widgetT(def),
+                value: resource => (
+                  <Widget
+                    key={i}
+                    structure={def}
+                    value={resource}
+                    schema={schema}
+                    dataSources={dataSources}
+                    originalResource={resource}
+                  />
+                ),
+              }))
           : []
       }
       description={description}

@@ -13,12 +13,6 @@
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
   }
-
-  &__conditions {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
 }
 
 @container (min-width: 800px) {
