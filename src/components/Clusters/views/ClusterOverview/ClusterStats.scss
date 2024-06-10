@@ -53,3 +53,21 @@
     width: calc(var(--grid-column-width) * 3);
   }
 }
+
+@container (max-width: 375px) {
+  .cluster-stats {
+    .wide {
+      grid-column: span 5;
+      width: calc(var(--grid-column-width) * 5);
+    }
+  }
+}
+
+@container (max-width: 325px) {
+  .cluster-stats {
+    .wide {
+      grid-column: span 4;
+      width: calc(var(--grid-column-width) * 4);
+    }
+  }
+}
