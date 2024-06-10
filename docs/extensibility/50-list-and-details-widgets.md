@@ -2,9 +2,10 @@
 
 You can use list and details widgets in the lists and details pages in the user interface component of your resource. You can distinguish the following widget types:
 
-- [Inline widgets](#inline-widgets) for simple values in **data.list**, **data.details.header**, and **data.detail.bodies**
+- [Inline widgets](#inline-widgets) for simple values in **data.list**, **data.details.header**, **data.details.status** and **data.detail.bodies**
   - [`Bagde`](#badge)
   - [`ControlledBy`](#controlledby)
+  - [`ConditionList`](#conditionList) - used only in **data.details.status**
   - [`ExternalLink`](#externallink)
   - [`ExternalLinkButton`](#externallinkbutton)
   - [`JoinedArray`](#joinedarray)
@@ -89,6 +90,20 @@ This is an exaple of kind only:
   placeholder: '-'
   kindOnly: true
 ```
+
+### ConditionList
+
+The condition List widget renders the conditions as an expandable list with condition details.
+
+#### Example
+
+```yaml
+- name: Condition details
+  widget: ConditionList
+  source: status.conditions
+```
+
+<img src="./assets/display-widgets/ConditionList.png" alt="Example of a condition list widget" style="border: 1px solid #D2D5D9">
 
 <img src="./assets/display-widgets/ControlledBy--kindOnly.png" alt="Example of a ControlledBy widget without name link" width="40%" style="border: 1px solid #D2D5D9">
 
