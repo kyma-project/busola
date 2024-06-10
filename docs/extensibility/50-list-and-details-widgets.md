@@ -643,6 +643,12 @@ See the following example:
 StatisticalCard widgets render a card component with a several numerical information elements.
 This widget is primarily designed to be used via [injections](#widget-injections-overview) (**destination: ClusterStats, slot: cards**), allowing the card to be rendered within the dense grid layout of the ClusterOverview's statistical cards section.
 
+These are the available `ResourceRefs` widget parameters:
+
+| Parameter       | Required | Type   | Description              |
+| --------------- | -------- | ------ | ------------------------ |
+| **resourceURL** | **No**   | string | Path to busola resource. |
+
 #### Example
 
 ```yaml

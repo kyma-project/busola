@@ -57,7 +57,7 @@ export function StatisticalCard({
         value={mainValue !== undefined ? mainValue : EMPTY_TEXT_PLACEHOLDER}
         title={structure?.name}
         subTitle={structure?.mainValue?.name}
-        // resourceUrl={structure?.resourceUrl}
+        resourceUrl={structure?.resourceURL}
         extraInfo={extraInfo}
       />
     </div>
