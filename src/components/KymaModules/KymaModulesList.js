@@ -1,7 +1,12 @@
 import { useTranslation } from 'react-i18next';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import { DynamicPageHeader, Button, Text } from '@ui5/webcomponents-react';
+import {
+  DynamicPageHeader,
+  Button,
+  FlexBox,
+  Text,
+} from '@ui5/webcomponents-react';
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useState } from 'react';
@@ -344,15 +349,18 @@ export function KymaModulesList(props) {
       layoutNumber="StartColumn"
       headerContent={
         <DynamicPageHeader>
-          <Label showColon>{t('kyma-modules.release-channel')}</Label>{' '}
-          <Text>{kymaResource?.spec.channel}</Text>
-          <HintButton
-            style={spacing.sapUiTinyMarginBegin}
-            setShowTitleDescription={setShowReleaseChannelTitleDescription}
-            showTitleDescription={showReleaseChannelTitleDescription}
-            description={ReleaseChannelDescription}
-            context="details-release-channel"
-          />
+          <FlexBox alignItems="Center">
+            <Label showColon>{t('kyma-modules.release-channel')}</Label>
+            <Text renderWhitespace={true}> </Text>
+            <Text>{kymaResource?.spec.channel}</Text>
+            <HintButton
+              style={spacing.sapUiTinyMarginBegin}
+              setShowTitleDescription={setShowReleaseChannelTitleDescription}
+              showTitleDescription={showReleaseChannelTitleDescription}
+              description={ReleaseChannelDescription}
+              context="details-release-channel"
+            />
+          </FlexBox>
         </DynamicPageHeader>
       }
       customComponents={[ModulesList]}
