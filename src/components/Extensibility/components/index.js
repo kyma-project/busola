@@ -15,6 +15,7 @@ import { EventList } from './EventList';
 import { ResourceLink } from './ResourceLink.js';
 import { Labels } from './Labels';
 import { Alert } from './Alert';
+import { ConditionList } from './ConditionList';
 import { ExternalLink } from './ExternalLink';
 import { Tabs } from './Tabs';
 import { Wizard } from './Wizard';
@@ -31,6 +32,7 @@ export const widgets = {
   Badge,
   CodeViewer,
   Columns,
+  ConditionList,
   ControlledBy,
   EventList,
   ExternalLink,
