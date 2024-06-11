@@ -34,7 +34,7 @@ export const CountingCard = ({
   resourceUrl,
   isClusterResource = false,
   allNamespaceURL = true,
-  className = ''
+  className = '',
 }: CountingCardProps) => {
   const { t } = useTranslation();
   const { namespaceUrl, clusterUrl } = useUrl();
