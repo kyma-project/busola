@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Icon, StandardListItem } from '@ui5/webcomponents-react';
 import { StatusBadge } from '../StatusBadge/StatusBadge';
 import { useTranslation } from 'react-i18next';

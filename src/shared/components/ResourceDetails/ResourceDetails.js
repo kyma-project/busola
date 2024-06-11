@@ -180,7 +180,7 @@ function Resource({
     resource.kind,
   );
   const [showTitleDescription, setShowTitleDescription] = useState(false);
-
+  console.log(resource);
   const pluralizedResourceKind = pluralize(prettifiedResourceKind);
   useWindowTitle(windowTitle || pluralizedResourceKind);
   const { isProtected, protectedResourceWarning } = useProtectedResources();

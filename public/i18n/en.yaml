@@ -879,6 +879,7 @@ integration:
 istio:
   title: Istio
 jobs:
+  active: Active 
   completion-time: Completion Time
   completions: Completions
   conditions:
@@ -917,12 +918,17 @@ jobs:
       starting-deadline: Optional deadline in seconds for starting the job if it misses the scheduled time.
       suspend: 'If true, the controller suspends subsequent executions (default: false). It does not apply to started executions.'
   description: <0>Job</0> creates and supervises Pods until their successful termination.
+  failed: Failed 
   name_singular: Job
+  ready: Ready 
   start-time: Start Time
+  succeeded: Succeeded 
   title: Jobs
   tooltips:
     complete: Job completed
     not-complete: Job in progress
+  uncountedTerminatedPodsFailed: Terminated Pods Failed
+  uncountedTerminatedPodsSucceeded: Terminated Pods Succeeded
 kubeconfig-id:
   error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
