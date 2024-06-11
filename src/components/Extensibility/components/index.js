@@ -15,11 +15,11 @@ import { EventList } from './EventList';
 import { ResourceLink } from './ResourceLink.js';
 import { Labels } from './Labels';
 import { Alert } from './Alert';
+import { ConditionList } from './ConditionList';
 import { ExternalLink } from './ExternalLink';
 import { Tabs } from './Tabs';
 import { Wizard } from './Wizard';
 import { FeaturedCard } from './FeaturedCard/FeaturedCard';
-
 import { APIRuleHost } from './APIRules/APIRuleHost';
 
 import { PendingWrapper } from './PendingWrapper';
@@ -31,6 +31,7 @@ export const widgets = {
   Badge,
   CodeViewer,
   Columns,
+  ConditionList,
   ControlledBy,
   EventList,
   ExternalLink,

@@ -73,6 +73,7 @@ ResourceDetails.propTypes = {
 ResourceDetails.defaultProps = {
   customColumns: [],
   customComponents: [],
+  customStatusComponents: [],
   headerActions: null,
   resourceHeaderActions: [],
   readOnly: false,
@@ -148,6 +149,7 @@ function Resource({
   createResourceForm: CreateResourceForm,
   customColumns,
   customComponents,
+  customConditionsComponents,
   description,
   editActionLabel,
   headerActions,
@@ -278,21 +280,49 @@ function Resource({
     return EMPTY_TEXT_PLACEHOLDER;
   };
 
-  const resourceStatusCard = customStatusColumns ? (
-    <ResourceStatusCard
-      statusBadge={statusBadge ? statusBadge(resource) : null}
-      customColumns={
-        <>
-          {customStatusColumns?.filter(filterColumns)?.map(col => (
-            <DynamicPageComponent.Column key={col.header} title={col.header}>
-              {col.value(resource)}
-            </DynamicPageComponent.Column>
-          ))}
-        </>
-      }
-      conditions={statusConditions ? statusConditions(resource) : null}
-    />
-  ) : null;
+  const resourceStatusCard =
+    customStatusColumns?.length || customConditionsComponents?.length ? (
+      <ResourceStatusCard
+        statusBadge={statusBadge ? statusBadge(resource) : null}
+        customColumns={
+          customStatusColumns?.length ? (
+            <>
+              {customStatusColumns
+                ?.filter(filterColumns)
+                .filter(col => !col?.conditionComponent)
+                ?.map(col => (
+                  <DynamicPageComponent.Column
+                    key={col.header}
+                    title={col.header}
+                  >
+                    {col.value(resource)}
+                  </DynamicPageComponent.Column>
+                ))}
+            </>
+          ) : null
+        }
+        conditions={statusConditions ? statusConditions(resource) : null}
+        customConditionsComponent={
+          customConditionsComponents?.length ? (
+            <>
+              {customConditionsComponents
+                ?.filter(filterColumns)
+                ?.map(component => (
+                  <>
+                    <div
+                      className="title bsl-has-color-status-4 "
+                      style={spacing.sapUiSmallMarginBeginEnd}
+                    >
+                      {component.header}:
+                    </div>
+                    {component.value(resource)}
+                  </>
+                ))}
+            </>
+          ) : null
+        }
+      />
+    ) : null;
 
   const resourceDetailsCard = (
     <ResourceDetailsCard

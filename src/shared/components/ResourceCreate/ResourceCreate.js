@@ -11,8 +11,6 @@ import { spacing } from '@ui5/webcomponents-react-base';
 
 import './ResourceCreate.scss';
 import { useRecoilState } from 'recoil';
-import { UnsavedMessageBox } from '../UnsavedMessageBox/UnsavedMessageBox';
-import { createPortal } from 'react-dom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
@@ -230,7 +228,6 @@ export const ResourceCreate = ({
           })}
         </div>
       )}
-      {createPortal(<UnsavedMessageBox />, document.body)}
     </>
   );
 };
