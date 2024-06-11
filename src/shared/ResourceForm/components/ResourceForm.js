@@ -300,7 +300,7 @@ export function ResourceForm({
             )}
           </>
         }
-        hideFormHeader
+        hideFormHeader={hideFormHeader}
       >
         <form
           ref={formElementRef}
