@@ -347,6 +347,7 @@ export function KymaModulesList(props) {
   return (
     <ResourceDetails
       layoutNumber="StartColumn"
+      windowTitle={t('kyma-modules.title')}
       headerContent={
         <DynamicPageHeader>
           <FlexBox alignItems="Center">
