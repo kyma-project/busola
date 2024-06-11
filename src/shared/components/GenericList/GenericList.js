@@ -240,22 +240,34 @@ export const GenericList = ({
       );
     }
 
-    return pagedItems.map((e, index) => (
-      <RowRenderer
-        isSelected={
-          (layoutState?.midColumn?.resourceName === e.metadata?.name ||
-            layoutState?.endColumn?.resourceName === e.metadata?.name) &&
-          entrySelected === e.metadata?.name
-        }
-        index={index}
-        key={e.metadata?.uid || e.name || e.metadata?.name || index}
-        entry={e}
-        actions={actions}
-        rowRenderer={rowRenderer}
-        displayArrow={displayArrow}
-        hasDetailsView={hasDetailsView}
-      />
-    ));
+    return pagedItems.map((e, index) => {
+      // Special case for Kyma modules
+      let isModuleSelected;
+      if (
+        window.location.href.includes('kymamodules') &&
+        layoutState?.midColumn
+      ) {
+        isModuleSelected = entrySelected === e?.name;
+      }
+
+      return (
+        <RowRenderer
+          isSelected={
+            ((layoutState?.midColumn?.resourceName === e.metadata?.name ||
+              layoutState?.endColumn?.resourceName === e.metadata?.name) &&
+              entrySelected === e?.metadata?.name) ||
+            isModuleSelected
+          }
+          index={index}
+          key={e.metadata?.uid || e.name || e.metadata?.name || index}
+          entry={e}
+          actions={actions}
+          rowRenderer={rowRenderer}
+          displayArrow={displayArrow}
+          hasDetailsView={hasDetailsView}
+        />
+      );
+    });
   };
 
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
@@ -272,6 +284,7 @@ export const GenericList = ({
 
   const handleRowClick = e => {
     if (customRowClick) {
+      setEntrySelected(e.target.children[0].innerText);
       return customRowClick(e.target.children[nameColIndex].innerText);
     } else {
       const selectedEntry = entries.find(entry => {
