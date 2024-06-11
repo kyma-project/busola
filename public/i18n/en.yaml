@@ -20,17 +20,29 @@ cluster-overview:
     total-pods: 'Total Pods'
     healthy-pods: 'Healthy Pods'
     failing-pods: 'Failing Pods'
+    deployments-overview: 'Deployments Overview'
     total-deployments: 'Total Deployments'
     healthy-deployments: 'Healthy Deployments'
     failing-deployments: 'Failing Deployments'
+    daemonsets-overview: 'Daemon Sets Overview'
+    total-daemonsets: 'Total Daemon Sets'
+    healthy-daemonsets: 'Healthy Daemon Sets'
+    unhealthy-daemonsets: 'Unhealthy Daemon Sets'
+    statefulsets-overview: 'Stateful Sets Overview'
+    healthy-statefulsets: 'Healthy Stateful Sets'
+    unhealthy-statefulsets: 'Unhealthy Stateful Sets'
+    total-statefulsets: 'Total Stateful Sets'
+    services-overview: 'Services Overview'
+    services-loadbalancers: 'LoadBalancers'
+    services-others: 'Others'
+    total-services: 'Total Services'
+    persistentvolumes-overview: 'Persistent Volumes Overview'
+    total-persistentvolumes: 'Total Persistent Volumes'
+    persistent-volumes-total-capacity: 'Total Capacity'
     nodes: 'Nodes'
-    pods: 'Pods'
-    deployments-overview: 'Deployments Overview'
   tooltips:
       cpu-used-percentage: 'CPU used: {{percentage}}'
       memory-used-percentage: 'Memory used: {{percentage}}'
-      cpu-used-m: 'CPU (m) used: {{value}}/{{max}}'
-      memory-used-gib: 'Memory (GiB) used: {{value}}/{{max}}'
       healthy-pods: 'Healthy Pods: {{value}}/{{max}}'
       healthy-deployments: 'Healthy Deployments: {{value}}/{{max}}'
       namespaces-health-info: The chart includes Pods and Deployments from all namespaces.
@@ -995,17 +1007,6 @@ namespaces:
     active: Active
     terminating: Terminating
   title: Namespaces
-  tooltips:
-    active: The Namespace is available for use.
-    container-memory-limit: Define memory constraints for individual containers in your Namespace.
-    create: Select this option to disable Istio to mediate all communication between the Pods in your Namespace.
-    healthy-resources: '{{value}}/{{total}} {{resourceType}} are healthy.'
-    memory-examples: 'Use plain value in bytes (128974848) or equivalent suffixes (e.g.: 129e6, 129M, 123Mi).'
-    no-resources: There are no {{resourceType}} in this Namespace.
-    terminating: The Namespace is being terminated.
-    total-memory-limit: Define constraints that limit total memory consumption in your Namespace.
-    usage-of-memory-limits: This Namespace uses {{valueText}} of {{maxText}} its memory limits.
-    usage-of-memory-requests: This Namespace uses {{valueText}} of {{maxText}} its memory requests.
 navigation:
   all-namespaces: All Namespaces
   feedback: Feedback

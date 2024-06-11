@@ -254,22 +254,6 @@ const getStatics = async (
 
         if (!extResourceWithMetadata.data) return accumulator;
 
-        const indexOfTheSameExtension = accumulator.findIndex(ext =>
-          isTheSameNameAndUrl(ext.data, extResourceWithMetadata.data),
-        );
-
-        if (indexOfTheSameExtension !== -1) {
-          const areNamespacesTheSame =
-            currentNamespace ===
-            accumulator[indexOfTheSameExtension].metadata.namespace;
-          if (areNamespacesTheSame) {
-            return accumulator;
-          }
-
-          accumulator[indexOfTheSameExtension] = extResourceWithMetadata;
-          return accumulator;
-        }
-
         return [...accumulator, extResourceWithMetadata];
       },
       [] as ExtResourceWithMetadata[],

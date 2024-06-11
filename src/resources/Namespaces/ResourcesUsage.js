@@ -18,7 +18,7 @@ const MEMORY_SUFFIX_POWER = {
   Ti: 2 ** 40,
 };
 
-function getBytes(memoryString) {
+export function getBytes(memoryString) {
   if (!memoryString || memoryString === '0') {
     return 0;
   }
@@ -79,13 +79,6 @@ const MemoryRequestsCircle = ({ resourceQuotas, isLoading }) => {
       color="var(--sapChart_OrderedColor_5)"
       value={totalUsage}
       max={totalRequests}
-      tooltip={{
-        content: t('namespaces.tooltips.usage-of-memory-requests', {
-          valueText: valueText,
-          maxText: maxText,
-        }),
-        position: 'bottom',
-      }}
       additionalInfo={`${valueText} / ${maxText}`}
     />
   );
@@ -117,13 +110,6 @@ const MemoryLimitsCircle = ({ resourceQuotas, isLoading }) => {
       color="var(--sapChart_OrderedColor_6)"
       value={totalUsage}
       max={totalLimits}
-      tooltip={{
-        content: t('namespaces.tooltips.usage-of-memory-limits', {
-          valueText: valueText,
-          maxText: maxText,
-        }),
-        position: 'bottom',
-      }}
       additionalInfo={`${valueText} / ${maxText}`}
     />
   );

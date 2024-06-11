@@ -416,20 +416,23 @@ See the following example:
 ```yaml
 injections: |-
   - title: Introducing Modules
+    name: Modules
     description: Modules add functionalities to your cluster. Consume SAP BTP services, monitor your cluster, build serverless applications and more.
     widget: FeaturedCard
+    source: $
     id: ModulesBanner
+    order: 0
     illustration: Modules
     design: information-1
     children:
-      - widget: Wizard
-        name: Add Modules
-        wizard: module-wizard
+      - widget: ResourceButton
+        source: "'Modify Modules'"
+        resource: 
+          customUrl: kymamodules
       - widget: ExternalLinkButton
         link: https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-s-modular-approach
-    order: 0
     targets:
-      - slot: details-banner
+      - slot: banner
         location: ClusterOverview
 ```
 

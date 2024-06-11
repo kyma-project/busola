@@ -1,7 +1,73 @@
 .counting-cards-container {
-  display: grid;
-  grid-template-rows: auto auto;
-  grid-auto-columns: minmax(175px, max-content);
-  grid-auto-flow: column;
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
+  max-height: 300px;
+}
+
+.cluster-stats {
+  /*
+    The px values of row-height and column-width are specifically set to ensure that the following elements align well with each other in the grid.
+    - RadialdGraph (spans 4 columns and 2 rows)
+    - CountingCard (spans 3 columns and 1 row)
+    - CountingCard_extraInfo (spans 6 columns and 1 row)
+    The rem values are set in order to together with padding ensure an equal grid gap of 1rem between all elements of different proportions.
+  */
+  --grid-row-height: calc(150px + 0.5rem);
+  --grid-column-width: calc(57.5px + 0.25rem);
+
+  margin-top: -0.5rem;
+  display: grid;
+  grid-auto-flow: dense;
+  grid-template-rows: repeat(auto-fill, var(--grid-row-height));
+  grid-template-columns: repeat(auto-fill, var(--grid-column-width));
+
+  .item-wrapper {
+    padding: 0.5rem;
+    box-sizing: border-box;
+
+    .item {
+      width: 100% !important;
+      max-width: 100% !important;
+      height: 100% !important;
+      max-height: 100% !important;
+    }
+  }
+
+  .tall {
+    grid-row: span 2;
+    height: calc(var(--grid-row-height) * 2);
+    grid-column: span 4;
+    width: calc(var(--grid-column-width) * 4);
+  }
+
+  .wide {
+    height: var(--grid-row-height);
+    grid-column: span 6;
+    width: calc(var(--grid-column-width) * 6);
+  }
+
+  .small {
+    height: var(--grid-row-height);
+    grid-column: span 3;
+    width: calc(var(--grid-column-width) * 3);
+  }
+}
+
+@container (max-width: 375px) {
+  .cluster-stats {
+    .wide {
+      grid-column: span 5;
+      width: calc(var(--grid-column-width) * 5);
+    }
+  }
+}
+
+@container (max-width: 325px) {
+  .cluster-stats {
+    .wide {
+      grid-column: span 4;
+      width: calc(var(--grid-column-width) * 4);
+    }
+  }
 }

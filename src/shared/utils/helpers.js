@@ -137,3 +137,7 @@ export function buildPathsFromObject(object, path = '') {
 
   return result;
 }
+
+export function roundTwoDecimals(number) {
+  return parseFloat(number.toFixed(2));
+}
