@@ -696,3 +696,32 @@ See the following example:
 ```
 
 <img src="./assets/display-widgets/Tabs.png" alt="Example of a tabs widget" style="border: 1px solid #D2D5D9">
+
+## Radial Chart
+
+Radial Chart widgets render a card component with a graphical representation of radial chart.
+This widget is primarily designed to be used via [injections](#widget-injections-overview) (**destination: ClusterStats,
+slot: cards**), allowing the card to be rendered within the dense grid layout of the ClusterOverview's statistical cards
+section.
+
+These are the available `Radial Chart` widget parameters:
+
+| Parameter          | Required | Type                                         | Description                      |
+| ------------------ | -------- | -------------------------------------------- | -------------------------------- |
+| **maxValue**       | **No**   | string or the [JSONata](jsonata.md) function | Maximum value for radial chart   |
+| **additionalInfo** | **No**   | string or the [JSONata](jsonata.md) function | Additional description of values |
+| **color**          | **No**   | string                                       | Color of radial chart and value  |
+
+#### Example
+
+```yaml
+injections: |-
+  - name: MyTitle
+    widget: RadialChart
+    source: status.currentReplicas
+    maxValue: status.desiredReplicas
+    additionalInfo: $join([$string(status.currentReplicas), "/", $string(status.desiredReplicas)])
+    color: var(--sapChart_OrderedColor_5)
+```
+
+<img src="./assets/display-widgets/RadialChart.png" alt="Example of a RadialChart widget" style="border: 1px solid #D2D5D9" width="75%">
