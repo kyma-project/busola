@@ -8,6 +8,10 @@ import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';
 import { createPortal } from 'react-dom';
+import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
+import { useRecoilState } from 'recoil';
+import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { isFormOpenState } from 'state/formOpenAtom';
 
 export const ModalWithForm = ({
   performRefetch,
@@ -24,6 +28,10 @@ export const ModalWithForm = ({
 }) => {
   const { t } = useTranslation();
   const [isOpen, setOpen] = useState(false);
+  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
+    isResourceEditedState,
+  );
+  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
 
   const {
     isValid,
@@ -79,6 +87,7 @@ export const ModalWithForm = ({
       if (!getToggleFormFn) {
         setOpenStatus(false);
       }
+      setIsFormOpen({ formOpen: false });
     }
   }
 
@@ -147,7 +156,13 @@ export const ModalWithForm = ({
                   {renderConfirmButton()}
                   <Button
                     onClick={() => {
-                      setOpenStatus(false);
+                      handleActionIfFormOpen(
+                        isResourceEdited,
+                        setIsResourceEdited,
+                        isFormOpen,
+                        setIsFormOpen,
+                        () => setOpenStatus(false),
+                      );
                     }}
                     design="Transparent"
                   >
