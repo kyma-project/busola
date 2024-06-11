@@ -24,6 +24,7 @@ import { APIRuleHost } from './APIRules/APIRuleHost';
 
 import { PendingWrapper } from './PendingWrapper';
 import { StatisticalCard } from './StatisticalCard';
+import { RadialChart } from './RadialChart';
 
 export const widgets = {
   Null: () => '',
@@ -42,6 +43,7 @@ export const widgets = {
   Plain,
   ResourceButton,
   ExternalLinkButton,
+  RadialChart,
   ResourceLink,
   ResourceList,
   ResourceRefs,
