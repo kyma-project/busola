@@ -176,7 +176,7 @@ clusters:
       using-oidc: OIDC provider
     context: Context to connect
     kubeconfig-upload: Drop a .kubeconfig file or click to 
-    editor-placeholedr: Paste .kubeconfig here
+    editor-placeholder: Paste .kubeconfig here
     incomplete: We couldn't find enough authentication information for {{context}} in your kubeconfig. You can enter it manually.
     intro: To connect a cluster, you have to provide the cluster configuration – called “kubeconfig” in the Kubernetes world.
     kubeconfig: Provide Kubeconfig

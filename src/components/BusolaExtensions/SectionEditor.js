@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { UIMetaProvider } from '@ui-schema/ui-schema/UIMeta';
 import {
   UIStoreProvider,
@@ -31,6 +31,7 @@ export function SectionEditor({
   );
   const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
   const schemaMap = useMemo(() => createOrderedMap(schema), [schema]);
+  const [initialResource] = useState(resource);
 
   const onChange = actions => {
     setStore(prevStore => storeUpdater(actions)(prevStore));
@@ -41,7 +42,7 @@ export function SectionEditor({
       <UIStoreProvider store={store} showValidity={true} onChange={onChange}>
         <ResourceForm
           resource={resource}
-          initialResource={resource}
+          initialResource={initialResource}
           disableDefaultFields
           onlyYaml={onlyYaml}
           formElementRef={formElementRef}

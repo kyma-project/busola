@@ -10,6 +10,7 @@ export function Editor({
   language = 'yaml',
   convert = true,
   schemaId,
+  setEditorError,
   ...props
 }) {
   const { t } = useTranslation();
@@ -55,15 +56,20 @@ export function Editor({
         }
         if (typeof parsed !== 'object' || !parsed) {
           setError(t('common.create-form.object-required'));
+          if (typeof setEditorError === 'function')
+            setEditorError(t('common.create-form.object-required'));
           return;
         }
         if (typeof onChange === 'function') onChange(parsed);
         if (typeof setValue === 'function') setValue(parsed);
 
         setError(null);
+        if (typeof setEditorError === 'function') setEditorError(null);
       } catch ({ message }) {
         // get the message until the newline
         setError(message.substr(0, message.indexOf('\n')));
+        if (typeof setEditorError === 'function')
+          setEditorError(message.substr(0, message.indexOf('\n')));
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -78,7 +84,7 @@ export function Editor({
       onChange={handleChange}
       error={error}
       schemaId={schemaId}
-      placeholder={t('clusters.wizard.editor-placeholedr')}
+      placeholder={t('clusters.wizard.editor-placeholder')}
     />
   );
 }
