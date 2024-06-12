@@ -11,9 +11,7 @@ import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 
 import JobCreate from './JobCreate';
 import { JobCompletions } from './JobCompletions';
-import { JobConditions } from './JobConditions';
 import { ResourceDescription } from 'resources/Jobs';
-import { CountingCard } from 'shared/components/CountingCard/CountingCard';
 
 export function JobDetails(props) {
   const { t } = useTranslation();
@@ -51,7 +49,7 @@ export function JobDetails(props) {
     },
   ];
 
-  const customStatusColumns2 = [
+  const customStatusColumns = [
     {
       header: t('jobs.active'),
       value: job => <div>{job?.status?.active ?? EMPTY_TEXT_PLACEHOLDER}</div>,
@@ -72,19 +70,32 @@ export function JobDetails(props) {
     },
   ];
 
-  const customStatusColumns = [
-    {
-      header: '',
-      value: job => <div></div>,
-    },
-  ];
-
   const statusConditions = job => {
     return job?.status?.conditions?.map(condition => {
       return {
         header: { titleText: condition.type, status: condition.status },
         message:
           condition.message ?? condition.reason ?? EMPTY_TEXT_PLACEHOLDER,
+        customContent: [
+          {
+            header: t('jobs.conditions.last-probe'),
+            value: condition.lastProbeTime ? (
+              <ReadableCreationTimestamp timestamp={condition.lastProbeTime} />
+            ) : (
+              EMPTY_TEXT_PLACEHOLDER
+            ),
+          },
+          {
+            header: t('jobs.conditions.last-transition'),
+            value: condition.lastTransitionTime ? (
+              <ReadableCreationTimestamp
+                timestamp={condition.lastTransitionTime}
+              />
+            ) : (
+              EMPTY_TEXT_PLACEHOLDER
+            ),
+          },
+        ],
       };
     });
   };
@@ -112,57 +123,6 @@ export function JobDetails(props) {
     <PodTemplate key="pod-template" template={job.spec?.template} />
   );
 
-  const customOverview = job => {
-    return [
-      <CountingCard
-        title="Pods Overview"
-        subTitle="Pods "
-        value={
-          (job?.status?.failed ?? 0) +
-          (job?.status?.succeeded ?? 0) +
-          (job?.status?.ready ?? 0) +
-          (job?.status?.active ?? 0)
-        }
-        extraInfo={[
-          {
-            title: 'Active',
-            value: job?.status?.active ?? 0,
-          },
-          {
-            title: 'Failed',
-            value: job?.status?.failed ?? 0,
-          },
-          {
-            title: 'Ready',
-            value: job?.status?.ready ?? 0,
-          },
-          {
-            title: 'Succeeded',
-            value: job?.status?.succeeded ?? 0,
-          },
-        ]}
-      />,
-      <CountingCard
-        title="Uncounted Terminated Pods Overview"
-        subTitle="Uncounted Terminated Pods "
-        value={
-          (job?.status?.uncountedTerminatedPods?.failed?.length ?? 0) +
-          (job?.status?.uncountedTerminatedPods?.succeeded?.length ?? 0)
-        }
-        extraInfo={[
-          {
-            title: 'Failed',
-            value: job?.status?.uncountedTerminatedPods?.failed?.length ?? 0,
-          },
-          {
-            title: 'Succeeded',
-            value: job?.status?.uncountedTerminatedPods?.succeeded?.length ?? 0,
-          },
-        ]}
-      />,
-    ];
-  };
-
   const customComponents = [MatchSelector, JobPodTemplate, Events];
 
   return (
@@ -174,7 +134,6 @@ export function JobDetails(props) {
       customStatusColumns={customStatusColumns}
       statusConditions={statusConditions}
       statusBadge={job => <JobCompletions key="completions" job={job} />}
-      customOverview={customOverview}
       {...props}
     />
   );

@@ -180,7 +180,7 @@ function Resource({
     resource.kind,
   );
   const [showTitleDescription, setShowTitleDescription] = useState(false);
-  console.log(resource);
+
   const pluralizedResourceKind = pluralize(prettifiedResourceKind);
   useWindowTitle(windowTitle || pluralizedResourceKind);
   const { isProtected, protectedResourceWarning } = useProtectedResources();
@@ -280,7 +280,9 @@ function Resource({
   };
 
   const resourceStatusCard =
-    customStatusColumns?.length || customConditionsComponents?.length ? (
+    customStatusColumns?.length ||
+    customConditionsComponents?.length ||
+    statusConditions?.length ? (
       <ResourceStatusCard
         statusBadge={statusBadge ? statusBadge(resource) : null}
         customColumns={
