@@ -8,6 +8,7 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useUrl } from 'hooks/useUrl';
 import ExtensibilityDetails from 'components/Extensibility/ExtensibilityDetails';
+import { t } from 'i18next';
 
 const KymaModulesList = React.lazy(() =>
   import('../../components/KymaModules/KymaModulesList'),
@@ -61,8 +62,8 @@ const ColumnWraper = (defaultColumn = 'list') => {
   if (layoutState?.showCreate?.resourceType) {
     midColumnComponent = (
       <ResourceCreate
-        title={'Add Modules'}
-        confirmText={'Save'}
+        title={t('kyma-modules.add-module')}
+        confirmText={t('common.buttons.add')}
         layoutCloseCreateUrl={clusterUrl('kymamodules')}
         renderForm={renderProps => {
           return (
