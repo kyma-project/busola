@@ -52,46 +52,42 @@ export const UI5Panel = ({
       stickyHeader={stickyHeader}
       header={
         hideFormHeader ? null : (
-          <>
-            <Toolbar
-              style={{
-                height: '100%',
-                paddingTop: '0.5rem',
-                paddingBottom: '0.5rem',
-                paddingLeft: modeActions ? 0 : '1rem',
-              }}
-            >
-              {icon && icon}
-              {typeof title === 'string' ? (
-                <Title level="H5">{title}</Title>
-              ) : (
-                title
-              )}
-              {description && (
-                <>
-                  <ToolbarSeparator />
-                  <Text>{description}</Text>
-                </>
-              )}
-              {headerActions && modeActions && (
-                <>
-                  <div className="header-actions invisible">
-                    {headerActions}
-                  </div>
-                  <ToolbarSpacer />
-                  {modeActions}
-                  <ToolbarSpacer className="toolbar-spacer" />
-                  <div className="header-actions">{headerActions}</div>
-                </>
-              )}
-              {headerActions && !modeActions && (
-                <>
-                  <ToolbarSpacer />
-                  {headerActions}
-                </>
-              )}
-            </Toolbar>
-          </>
+          <Toolbar
+            style={{
+              height: '100%',
+              paddingTop: '0.5rem',
+              paddingBottom: '0.5rem',
+              paddingLeft: modeActions ? 0 : '1rem',
+            }}
+          >
+            {icon && icon}
+            {typeof title === 'string' ? (
+              <Title level="H5">{title}</Title>
+            ) : (
+              title
+            )}
+            {description && (
+              <>
+                <ToolbarSeparator />
+                <Text>{description}</Text>
+              </>
+            )}
+            {headerActions && modeActions && (
+              <>
+                <div className="header-actions invisible">{headerActions}</div>
+                <ToolbarSpacer />
+                {modeActions}
+                <ToolbarSpacer className="toolbar-spacer" />
+                <div className="header-actions">{headerActions}</div>
+              </>
+            )}
+            {headerActions && !modeActions && (
+              <>
+                <ToolbarSpacer />
+                {headerActions}
+              </>
+            )}
+          </Toolbar>
         )
       }
     >
