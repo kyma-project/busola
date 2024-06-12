@@ -3,8 +3,7 @@
 You can use list and details widgets in the lists and details pages in the user interface component of your resource.
 You can distinguish the following widget types:
 
-- [Inline widgets](#inline-widgets) for simple values in **data.list**, **data.details.header**, **data.details.status**
-  and **data.detail.bodies**
+- [Inline widgets](#inline-widgets) for simple values in **data.list**, **data.details.header**, **data.details.status** and **data.detail.bodies**
   - [`Bagde`](#badge)
   - [`ControlledBy`](#controlledby)
   - [`ConditionList`](#conditionList) - used only in **data.details.status**
@@ -66,8 +65,7 @@ See the following example:
 
 ### `ControlledBy`
 
-The `ControlledBy` widgets render the kind and the name with a link to the resources that the current resource is
-dependent on.
+The `ControlledBy` widgets render the kind and the name with a link to the resources that the current resource is dependent on.
 
 These are the available `ControlledBy` widget parameters:
 
@@ -398,14 +396,11 @@ See the following examples:
 
 ### `FeaturedCard`
 
-The `FeaturedCard` widgets render a promotional banner with its own title, description, illustration, and a maximum of 2
-additional children.
+The `FeaturedCard` widgets render a promotional banner with its own title, description, illustration, and a maximum of 2 additional children.
 The `FeaturedCard` can be closed in the top right corner.
 It is important to select a unique ID for each `FeaturedCard`, since it will be displayed/hidden based on its ID.
 
-**TIP:** It is **recommended** to use the `FeatureCard` widget via [injections](./70-widget-injection.md) (**slot:
-banner**). This will turn all `FeatureCards` at the top of a section into a carousel-component. Nevertheless, it is also
-possible to use it as a regular widget.
+**TIP:** It is **recommended** to use the `FeatureCard` widget via [injections](./70-widget-injection.md) (**slot: banner**). This will turn all `FeatureCards` at the top of a section into a carousel-component. Nevertheless, it is also possible to use it as a regular widget.
 
 These are the available `FeatureCard` widget parameters:
 
@@ -500,13 +495,11 @@ See the following example:
 
 ### `Plain`
 
-The `Plain` widgets render all contents of an object or list sequentially without any decorations. This is the default
-behavior for all objects and arrays.
+The `Plain` widgets render all contents of an object or list sequentially without any decorations. This is the default behavior for all objects and arrays.
 
 ### `ResourceList`
 
-The `ResourceList` widgets render a list of Kubernetes resources. The ResourceList widgets should be used along with
-the [related resources](datasources-section.md).
+The `ResourceList` widgets render a list of Kubernetes resources. The ResourceList widgets should be used along with the [related resources](datasources-section.md).
 
 These are the available `ResourceList` widget parameters:
 
@@ -521,8 +514,7 @@ These are the available `ResourceList` widget parameters:
 | **search.source**         | **Yes**  | [JSONata](jsonata.md) expression       | Used to fetch data for the column. In its simplest form, it's the path to the value.                                                                                                                                                                       |
 | **search.searchFunction** | No       | [JSONata](jsonata.md) search function  | It allows you to use the `$input` variable to get the search input's value that can be used to search for more complex data.                                                                                                                               |
 
-Since the `ResourceList` widget does more than just list the items, you must provide the whole data
-source (`$myResource()`) instead of just the items (`$myResource().items`).
+Since the `ResourceList` widget does more than just list the items, you must provide the whole data source (`$myResource()`) instead of just the items (`$myResource().items`).
 
 See the following examples"
 
@@ -570,8 +562,7 @@ See the following examples"
 
 ### `ResourceRefs`
 
-The `ResourceRefs` widgets render the lists of links to the associated resources. The corresponding specification object
-must be an array of objects `{name: 'foo', namespace: 'bar'}`.
+The `ResourceRefs` widgets render the lists of links to the associated resources. The corresponding specification object must be an array of objects `{name: 'foo', namespace: 'bar'}`.
 
 These are the available `ResourceRefs` widget parameters:
 
@@ -591,9 +582,7 @@ See the following example:
 
 ### `Table`
 
-Table widgets display array data as rows of a table instead of free-standing components. The **children** parameter
-defines the values used to render the columns. Similar to the **list** section of the ConfigMap, you should use inline
-widgets only as children.
+Table widgets display array data as rows of a table instead of free-standing components. The **children** parameter defines the values used to render the columns. Similar to the **list** section of the ConfigMap, you should use inline widgets only as children.
 
 These are the available `Table` widget parameters:
 
@@ -653,9 +642,7 @@ See the following example:
 ### StatisticalCard
 
 StatisticalCard widgets render a card component with a several numerical information elements.
-This widget is primarily designed to be used via [injections](#widget-injections-overview) (**destination: ClusterStats,
-slot: cards**), allowing the card to be rendered within the dense grid layout of the ClusterOverview's statistical cards
-section.
+This widget is primarily designed to be used via [injections](#widget-injections-overview) (**destination: ClusterStats, slot: cards**), allowing the card to be rendered within the dense grid layout of the ClusterOverview's statistical cards section.
 
 These are the available `StatisticalCard` widget parameters:
 
