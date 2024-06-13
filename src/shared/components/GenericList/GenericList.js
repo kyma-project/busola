@@ -247,21 +247,18 @@ export const GenericList = ({
         window.location.href.includes('kymamodules') &&
         layoutState?.midColumn
       ) {
-        // Workaround for modules like btp-operator
-        const resourceTypeDotIndex = layoutState?.midColumn?.resourceType.indexOf(
-          '.',
-        );
+        // Workaround for modules like btp-operator on refresh
+        const resourceType = layoutState.midColumn.resourceType;
+        const resourceTypeDotIndex = resourceType.indexOf('.');
+        const resourceTypeBase =
+          resourceTypeDotIndex !== -1
+            ? resourceType.substring(0, resourceTypeDotIndex)
+            : resourceType;
 
-        // Check if the entry is selected using click or from URL
+        // Check if the entry is selected using click or refresh
         isModuleSelected = entrySelected
           ? entrySelected === e?.name
-          : pluralize(e?.name?.replace('-', '') || '') ===
-            (resourceTypeDotIndex !== -1
-              ? layoutState?.midColumn?.resourceType.substring(
-                  0,
-                  resourceTypeDotIndex,
-                )
-              : layoutState?.midColumn?.resourceType);
+          : pluralize(e?.name?.replace('-', '') || '') === resourceTypeBase;
       }
 
       return (
