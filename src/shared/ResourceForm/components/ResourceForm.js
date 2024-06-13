@@ -269,24 +269,6 @@ export function ResourceForm({
     </Form>
   );
 
-  // if (formWithoutPanel)
-  //   return (
-  //     <section className={classnames('resource-form', className)}>
-  //       <form
-  //         ref={formElementRef}
-  //         onSubmit={onSubmit || createResource}
-  //         style={{ height: '100%' }}
-  //         onChange={onChange}
-  //       >
-  //         {mode === ModeSelector.MODE_YAML && (
-  //           <div className="yaml-form">{editor}</div>
-  //         )}
-  //         {formContent}
-  //       </form>
-  //       {createPortal(<UnsavedMessageBox />, document.body)}
-  //     </section>
-  //   );
-  // else {
   return (
     <section className={classnames('resource-form', className)}>
       {formWithoutPanel ? (
