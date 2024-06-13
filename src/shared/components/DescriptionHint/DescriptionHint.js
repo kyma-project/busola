@@ -36,7 +36,6 @@ export function HintButton({
             setShowTitleDescription(false);
           }}
           placementType="Right"
-          style={{ maxWidth: '500px' }}
         >
           <Text className="description">{description}</Text>
         </Popover>,

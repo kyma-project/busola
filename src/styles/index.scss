@@ -218,6 +218,11 @@ ui5-tabcontainer::part(content) {
   padding: 0 !important;
 }
 
+ui5-popover {
+  max-width: 500px;
+}
+
+// ICONS SIZES
 .bsl-icon-s {
   width: 0.75rem;
   height: 0.75rem;
