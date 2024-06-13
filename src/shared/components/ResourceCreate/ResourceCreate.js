@@ -243,7 +243,7 @@ ResourceCreate.propTypes = {
   isEdit: PropTypes.bool,
   readOnly: PropTypes.bool,
   disableEdit: PropTypes.bool,
-  layoutCloseCreateUrl: PropTypes.bool,
+  layoutCloseCreateUrl: PropTypes.string,
 };
 
 ResourceCreate.defaultProps = {
