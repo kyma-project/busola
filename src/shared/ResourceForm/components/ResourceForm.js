@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useMemo } from 'react';
+import React, { useRef, useEffect, useMemo, useState } from 'react';
 import classnames from 'classnames';
 import jsyaml from 'js-yaml';
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
@@ -20,6 +20,8 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { editViewModeState } from 'state/preferences/editViewModeAtom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
+import { createPortal } from 'react-dom';
+import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 
 const excludeStatus = resource => {
   const modifiedResource = { ...resource };
@@ -87,6 +89,7 @@ export function ResourceForm({
   );
   const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
   const { leavingForm } = isFormOpen;
+  const [editorError, setEditorError] = useState(null);
 
   useEffect(() => {
     setIsFormOpen({ formOpen: true });
@@ -97,17 +100,18 @@ export function ResourceForm({
     if (leavingForm) {
       if (
         JSON.stringify(excludeStatus(resource)) !==
-        JSON.stringify(excludeStatus(initialResource))
+          JSON.stringify(excludeStatus(initialResource)) ||
+        editorError
       ) {
-        setIsResourceEdited({ isEdited: true });
+        setIsResourceEdited({ ...isResourceEdited, isEdited: true });
       }
 
       if (
         JSON.stringify(excludeStatus(resource)) ===
-        JSON.stringify(excludeStatus(initialResource))
+          JSON.stringify(excludeStatus(initialResource)) &&
+        !editorError
       ) {
         setIsResourceEdited({ isEdited: false });
-        setIsFormOpen({ formOpen: false });
         if (isResourceEdited.discardAction) isResourceEdited.discardAction();
       }
     }
@@ -191,6 +195,7 @@ export function ResourceForm({
       readOnly={readOnly}
       schemaId={resourceSchemaId}
       updateValueOnParentChange={true}
+      setEditorError={setEditorError}
     />
   );
   editor = renderEditor
@@ -310,6 +315,7 @@ export function ResourceForm({
           {formContent}
         </form>
       </UI5Panel>
+      {createPortal(<UnsavedMessageBox />, document.body)}
     </section>
   );
 }
