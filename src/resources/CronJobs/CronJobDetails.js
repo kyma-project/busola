@@ -68,11 +68,14 @@ export function CronJobDetails(props) {
     },
     {
       header: t('cron-jobs.active'),
-      value: resource => (
-        <ReadableCreationTimestamp
-          timestamp={resource.status.active?.length ?? EMPTY_TEXT_PLACEHOLDER}
-        ></ReadableCreationTimestamp>
-      ),
+      value: resource =>
+        resource.status.active?.length ? (
+          <ReadableCreationTimestamp
+            timestamp={resource.status.active?.length}
+          />
+        ) : (
+          EMPTY_TEXT_PLACEHOLDER
+        ),
     },
   ];
 
