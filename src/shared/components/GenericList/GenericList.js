@@ -252,6 +252,7 @@ export const GenericList = ({
           '.',
         );
 
+        // Check if the entry is selected using click or from URL
         isModuleSelected = entrySelected
           ? entrySelected === e?.name
           : pluralize(e?.name?.replace('-', '') || '') ===
