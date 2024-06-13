@@ -29,6 +29,12 @@ header:
   - source: spec.priority
     widget: Badge
   - source: "$join(spec.volumes.name, ', ')"
+status:
+  - name: Replicas
+    source: status.replicas
+  - name: Condition details
+    widget: ConditionList
+    source: status.conditions
 body:
   - name: columns
     widget: Columns

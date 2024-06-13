@@ -95,14 +95,15 @@ This is an exaple of kind only:
 
 ### ConditionList
 
-The condition List widget renders the conditions as an expandable list with condition details.
+The condition List widget renders the conditions as an expandable list with condition details. This widget is primarily designed to be used in overview section **data.details.status**
 
-#### Example
+See the following example:
 
 ```yaml
-- name: Condition details
-  widget: ConditionList
-  source: status.conditions
+status:
+  - name: Condition details
+    widget: ConditionList
+    source: status.conditions
 ```
 
 <img src="./assets/display-widgets/ConditionList.png" alt="Example of a condition list widget" style="border: 1px solid #D2D5D9">
