@@ -247,7 +247,9 @@ export const GenericList = ({
         window.location.href.includes('kymamodules') &&
         layoutState?.midColumn
       ) {
-        isModuleSelected = entrySelected === e?.name;
+        isModuleSelected = entrySelected
+          ? entrySelected === e?.name
+          : pluralize(e?.name || '') === layoutState?.midColumn?.resourceType;
       }
 
       return (
