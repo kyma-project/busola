@@ -298,7 +298,7 @@ export const GenericList = ({
 
   const handleRowClick = e => {
     if (customRowClick) {
-      setEntrySelected(e.target.children[0].innerText);
+      setEntrySelected(e.target.children[nameColIndex].innerText);
       return customRowClick(e.target.children[nameColIndex].innerText);
     } else {
       const selectedEntry = entries.find(entry => {
