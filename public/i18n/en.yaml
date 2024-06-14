@@ -589,6 +589,7 @@ containers:
     terminating: Terminating the Container
     unknown: Container state unknown
 cron-jobs:
+  active: Active
   concurrency-policy:
     title: Concurrency Policy
   create-modal:
@@ -621,6 +622,7 @@ cron-jobs:
   image-pull-policy: Image Pull Policy
   last-job-execution: Last Job execution
   last-schedule-time: Last Schedule Time
+  last-successful-time: Last Successful Time
   name_singular: CronJob
   not-scheduled-yet: None scheduled yet
   schedule: Schedule

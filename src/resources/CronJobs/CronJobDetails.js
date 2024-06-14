@@ -13,6 +13,8 @@ import CronJobCreate from './CronJobCreate';
 import { CronJobJobs } from './CronJobJobs';
 import { ResourceDescription } from 'resources/CronJobs';
 import { Link } from 'shared/components/Link/Link';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 
 export function CronJobDetails(props) {
   const { t } = useTranslation();
@@ -22,6 +24,18 @@ export function CronJobDetails(props) {
       header: t('cron-jobs.schedule'),
       value: resource => <CronJobSchedule schedule={resource.spec.schedule} />,
     },
+
+    {
+      header: t('cron-jobs.concurrency-policy.title'),
+      value: resource => (
+        <CronJobConcurrencyPolicy
+          concurrencyPolicy={resource.spec.concurrencyPolicy}
+        />
+      ),
+    },
+  ];
+
+  const customStatusColumns = [
     {
       header: t('cron-jobs.last-schedule-time'),
       value: resource => (
@@ -31,11 +45,13 @@ export function CronJobDetails(props) {
       ),
     },
     {
-      header: t('cron-jobs.concurrency-policy.title'),
+      header: t('cron-jobs.last-successful-time'),
       value: resource => (
-        <CronJobConcurrencyPolicy
-          concurrencyPolicy={resource.spec.concurrencyPolicy}
-        />
+        <ReadableCreationTimestamp
+          timestamp={
+            resource.status.lastSuccessfulTime ?? EMPTY_TEXT_PLACEHOLDER
+          }
+        ></ReadableCreationTimestamp>
       ),
     },
     {
@@ -49,6 +65,17 @@ export function CronJobDetails(props) {
           resource.status.active[resource.status.active.length - 1].name;
         return <Link url={namespaceUrl(`jobs/${jobName}`)}>{jobName}</Link>;
       },
+    },
+    {
+      header: t('cron-jobs.active'),
+      value: resource =>
+        resource.status.active?.length ? (
+          <ReadableCreationTimestamp
+            timestamp={resource.status.active?.length}
+          />
+        ) : (
+          EMPTY_TEXT_PLACEHOLDER
+        ),
     },
   ];
 
@@ -70,10 +97,11 @@ export function CronJobDetails(props) {
 
   return (
     <ResourceDetails
-      customComponents={[CronJobJobs, Events, CronJobPodTemplate]}
+      customComponents={[CronJobJobs, CronJobPodTemplate, Events]}
       customColumns={customColumns}
       createResourceForm={CronJobCreate}
       description={ResourceDescription}
+      customStatusColumns={customStatusColumns}
       {...props}
     />
   );
