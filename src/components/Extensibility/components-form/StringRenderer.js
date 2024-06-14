@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
@@ -131,11 +131,14 @@ export function StringRenderer({
               schema,
               required,
               data: {
-                value: isNaN(value)
-                  ? value
-                  : value.endsWith('.') || value.endsWith('.0')
-                  ? value
-                  : parseFloat(value),
+                value:
+                  schema?.get('format') === 'int-or-string'
+                    ? isNaN(value)
+                      ? value
+                      : value.endsWith('.') || value.endsWith('.0')
+                      ? value
+                      : parseFloat(value)
+                    : value,
               },
             });
         }}
