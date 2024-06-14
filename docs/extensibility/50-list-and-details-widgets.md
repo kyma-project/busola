@@ -643,7 +643,7 @@ See the following example:
 ### StatisticalCard
 
 StatisticalCard widgets render a card component with a several numerical information elements.
-This widget is primarily designed to be used via [injections](#widget-injections-overview) (**destination: ClusterStats, slot: cards**), allowing the card to be rendered within the dense grid layout of the ClusterOverview's statistical cards section.
+This widget is primarily designed to be used in overview section **data.details.overview** or via [injections](#widget-injections-overview) (**destination: ClusterOverview, slot: health**), allowing the card to be rendered within the dense grid layout of the ClusterOverview's Monitoring and Health section.
 
 These are the available `StatisticalCard` widget parameters:
 
@@ -653,7 +653,11 @@ These are the available `StatisticalCard` widget parameters:
 | **isClusterResource** | **No**   | boolean | Defines if resource is cluster wide                                          |
 | **allNamespaceURL**   | **No**   | boolean | Defines if resource URL should point to a list of resource in all namespaces |
 
-#### Example
+This is an example for widget usage in the **data.details.health** section which allows StatisticalCard to be displayed in the details page in the overview section:
+
+<!-- TO DO -->
+
+This is an example for widget usage via injection which allows StatisticalCard to be displayed in ClusterOverview's Monitoring and Health section:
 
 ```yaml
 injections: |-
@@ -671,6 +675,9 @@ injections: |-
         source: $item.value1
       - title: ExtraInformation2
         source: $item.value2
+    targets:
+      - slot: health
+        location: ClusterOverview
 ```
 
 <img src="./assets/display-widgets/StatisticalCard.png" alt="Example of a StatisticalCard widget" style="border: 1px solid #D2D5D9" width="75%">

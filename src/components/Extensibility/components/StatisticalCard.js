@@ -1,6 +1,5 @@
 import { CountingCard } from 'shared/components/CountingCard/CountingCard';
 import { useJsonata } from '../hooks/useJsonata';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { useGetTranslation } from '../helpers';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
@@ -37,12 +36,7 @@ export function StatisticalCard({ structure, value, originalResource }) {
   }
 
   return (
-    <div
-      style={{
-        ...spacing.sapUiSmallMarginBegin,
-        ...spacing.sapUiSmallMarginBottom,
-      }}
-    >
+    <div className={`item-wrapper ${extraInfo ? 'wide' : 'small'}`}>
       <CountingCard
         className="item"
         value={mainValue !== undefined ? mainValue : EMPTY_TEXT_PLACEHOLDER}
@@ -55,3 +49,5 @@ export function StatisticalCard({ structure, value, originalResource }) {
     </div>
   );
 }
+
+StatisticalCard.array = true;

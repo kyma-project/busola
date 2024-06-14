@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useTranslation } from 'react-i18next';
 import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
@@ -16,6 +16,10 @@ import {
 } from 'resources/Namespaces/NamespaceWorkloads/NamespaceWorkloadsHelpers';
 import { roundTwoDecimals } from 'shared/utils/helpers';
 import './ClusterStats.scss';
+
+const Injections = React.lazy(() =>
+  import('../../../Extensibility/ExtensibilityInjections'),
+);
 
 export default function ClusterStats({ nodesData }) {
   const { t } = useTranslation();
@@ -282,6 +286,7 @@ export default function ClusterStats({ nodesData }) {
             />
           </div>
         )}
+        <Injections destination="ClusterOverview" slot="health" root="" />
       </div>
     </>
   );
