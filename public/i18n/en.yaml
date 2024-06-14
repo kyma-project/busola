@@ -1474,6 +1474,8 @@ settings:
   other:
     default-page-size: Default Page Size
     title: Other
+    all: All
+    results-per-page: Results per page
   theme: Theme
 stateful-sets:
   description: <0>StatefulSet</0> is used for the management of Pods' deployment and scaling.

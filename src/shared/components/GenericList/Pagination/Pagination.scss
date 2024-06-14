@@ -1,11 +1,33 @@
 .pagination {
   display: flex;
-  justify-content: 'center';
-  align-items: baseline;
-}
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
 
-.pagination > * {
-  margin: auto;
+  .pagesize-selector-container {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+
+    .pagesize-selector {
+      max-width: 80px;
+    }
+  }
+
+  .page-links-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+
+    #first-page-link,
+    #last-page-link {
+      display: none;
+    }
+  }
 }
 
 .nav-link {
@@ -26,5 +48,30 @@
   &.interactable {
     color: var(--sapBrandColor);
     cursor: pointer;
+  }
+}
+
+@container (max-width: 650px) {
+  .pagination {
+    .pagesize-selector-container {
+      .pagesize-label {
+        display: none;
+      }
+    }
+
+    .page-links-container {
+      position: relative;
+      left: auto;
+      transform: none;
+
+      #first-page-link,
+      #last-page-link {
+        display: inherit;
+      }
+    }
+
+    .items-number {
+      display: none;
+    }
   }
 }
