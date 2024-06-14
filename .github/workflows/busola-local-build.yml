@@ -1,4 +1,4 @@
-name: pull-busola-local-build
+name: busola-local-build
 
 on:
   push:
