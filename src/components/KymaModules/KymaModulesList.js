@@ -380,7 +380,7 @@ export function KymaModulesList(props) {
               setShowTitleDescription={setShowTitleDescription}
               showTitleDescription={showTitleDescription}
               description={ResourceDescription}
-              context="details"
+              context="modules"
             />
           }
         </>
