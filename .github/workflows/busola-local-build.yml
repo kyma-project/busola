@@ -1,0 +1,33 @@
+name: pull-busola-local-build
+
+on:
+  pull_request_target:
+    types: [opened, edited, synchronize, reopened, ready_for_review] 
+    # PATH TO WHICH CHANGES WILL TRIGGER A WORKFLOW
+    # paths:
+    #   - ".github/workflows/pull-image-builder-test.yml"
+    #   - ".github/workflows/image-builder.yml"
+    #   - ".github/actions/expose-jwt-action/**"
+    #   - ".github/actions/image-builder/**"
+
+permissions:
+  id-token: write # This is required for requesting the JWT token
+  contents: read # This is required for actions/checkout
+
+jobs:
+  build-image:
+    uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: kyma-project/test-infra/.github/workflows/image-builder.yml@main
+    with:
+      name: busola-local
+      dockerfile: Dockerfile.local
+      context: .
+      export-tags: true
+  test-image:
+    runs-on: ubuntu-latest
+    needs: build-image
+    steps:
+      - name: Test image
+        run: echo "Testing images ${{ needs.build-image.outputs.images }}"
+
+# PULL: PR-{PR_NUMBER} 
+# POST: v{DATE}-{COMMIT_SHA}
