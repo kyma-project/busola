@@ -1,6 +1,9 @@
 name: pull-busola-local-build
 
 on:
+  push:
+    branches:
+      - main
   pull_request_target:
     types: [opened, edited, synchronize, reopened, ready_for_review] 
 

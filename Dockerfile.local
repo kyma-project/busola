@@ -39,6 +39,9 @@ COPY --from=builder /app/backend/certs.pem /app/certs.pem
 COPY --from=builder /app/backend/package* /app/
 COPY --from=builder /app/backend/settings/* /app/settings/
 
+# move out the packed extensions for further use
+#RUN mv /app/extensions/extensions.yaml /app/extensions.yaml
+
 RUN npm ci --only=production
 
 # use sessionStorage as default
