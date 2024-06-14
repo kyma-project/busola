@@ -3,12 +3,6 @@ name: pull-busola-local-build
 on:
   pull_request_target:
     types: [opened, edited, synchronize, reopened, ready_for_review] 
-    # PATH TO WHICH CHANGES WILL TRIGGER A WORKFLOW
-    # paths:
-    #   - ".github/workflows/pull-image-builder-test.yml"
-    #   - ".github/workflows/image-builder.yml"
-    #   - ".github/actions/expose-jwt-action/**"
-    #   - ".github/actions/image-builder/**"
 
 permissions:
   id-token: write # This is required for requesting the JWT token
@@ -28,6 +22,3 @@ jobs:
     steps:
       - name: Test image
         run: echo "Testing images ${{ needs.build-image.outputs.images }}"
-
-# PULL: PR-{PR_NUMBER} 
-# POST: v{DATE}-{COMMIT_SHA}
