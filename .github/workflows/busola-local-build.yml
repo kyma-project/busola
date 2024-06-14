@@ -12,7 +12,7 @@ jobs:
   build-image:
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: kyma-project/test-infra/.github/workflows/image-builder.yml@main
     with:
-      name: busola-local
+      name: busola
       dockerfile: Dockerfile.local
       context: .
       export-tags: true

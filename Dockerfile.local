@@ -2,7 +2,7 @@
 
 # ---- Base Alpine with Node ----
 FROM alpine:3.20.0 AS builder
-ARG TAG_default_tag
+ARG default_tag
 
 RUN apk add --update nodejs npm
 
@@ -19,7 +19,7 @@ ENV CI true
 
 COPY . /app
 
-RUN sed -i "s/version: dev/version: ${TAG_default_tag}/" public/version.yaml && make resolve validate
+RUN sed -i "s/version: dev/version: ${default_tag}/" public/version.yaml && make resolve validate
 
 RUN npm test 2>&1 && npm run build:docker
 RUN cd /app/backend && npm run build
@@ -38,9 +38,6 @@ COPY --from=builder /app/backend/backend-production.js /app/backend-production.j
 COPY --from=builder /app/backend/certs.pem /app/certs.pem
 COPY --from=builder /app/backend/package* /app/
 COPY --from=builder /app/backend/settings/* /app/settings/
-
-# move out the packed extensions for further use
-#RUN mv /app/extensions/extensions.yaml /app/extensions.yaml
 
 RUN npm ci --only=production
 
