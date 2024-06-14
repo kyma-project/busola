@@ -132,7 +132,7 @@ export function StringRenderer({
               required,
               data: {
                 value:
-                  schema?.get('format') === 'int-or-string'
+                  schema.get('format') === 'int-or-string'
                     ? isNaN(value)
                       ? value
                       : value.endsWith('.') || value.endsWith('.0')
