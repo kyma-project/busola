@@ -1478,6 +1478,9 @@ settings:
     title: Other
     all: All
     results-per-page: Results per page
+    page: Page
+    of: of {{pagesCount}}
+    total-items: '{{itemsCount}} items'
   theme: Theme
 stateful-sets:
   description: <0>StatefulSet</0> is used for the management of Pods' deployment and scaling.

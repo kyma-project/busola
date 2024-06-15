@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { spacing } from '@ui5/webcomponents-react-base';
 import PropTypes from 'prop-types';
-import { Button, Text, Icon } from '@ui5/webcomponents-react';
+import { Button, Text, Icon, Input, FlexBox } from '@ui5/webcomponents-react';
 import classNames from 'classnames';
 import { Select, Option } from '@ui5/webcomponents-react';
 import { AVAILABLE_PAGE_SIZES } from 'state/preferences/pageSizeAtom';
@@ -27,7 +26,7 @@ const makePartitions = (currentPage, pagesCount) => {
 };
 
 const Link = ({ children, isInteractable, isCurrent, onClick, ...props }) => {
-  const className = classNames('nav-link', {
+  const className = classNames('page-link', {
     current: isCurrent,
     interactable: isInteractable,
   });
@@ -56,7 +55,7 @@ export const Pagination = ({
 
   const partitions = makePartitions(currentPage, pagesCount);
 
-  const onChange = event => {
+  const onSelectionChange = event => {
     const selectedSize = event.detail.selectedOption.value;
     setLocalPageSize(parseInt(selectedSize));
   };
@@ -67,7 +66,7 @@ export const Pagination = ({
         <Text className="pagesize-label bsl-has-color-status-4">
           {t('settings.other.results-per-page') + ':'}
         </Text>
-        <Select onChange={onChange} className="pagesize-selector">
+        <Select onChange={onSelectionChange} className="pagesize-selector">
           {AVAILABLE_PAGE_SIZES.map(available_size => (
             <Option
               value={available_size.toString()}
@@ -87,7 +86,7 @@ export const Pagination = ({
         </Select>
       </div>
 
-      <div className="page-links-container" style={spacing.sapUiSmallMarginEnd}>
+      <div className="page-links-container">
         <Link
           id="first-page-link"
           isInteractable={currentPage !== 1}
@@ -101,6 +100,7 @@ export const Pagination = ({
           />
         </Link>
         <Link
+          id="previous-page-link"
           isInteractable={currentPage !== 1}
           onClick={() => onChangePage(currentPage - 1)}
           aria-label="Previous page"
@@ -111,17 +111,44 @@ export const Pagination = ({
             design="Information"
           />
         </Link>
-        {partitions.map((current, i) => (
-          <Link
-            key={i}
-            isInteractable={current !== currentPage && current !== '...'}
-            isCurrent={current === currentPage}
-            onClick={() => onChangePage(current)}
-          >
-            {current}
-          </Link>
-        ))}
+        {partitions.map((current, i) =>
+          current === currentPage ? (
+            <FlexBox
+              direction="Row"
+              alignItems="Center"
+              style={{ gap: '0.5rem' }}
+              key={i}
+            >
+              <Text className="page-input-text bsl-has-color-status-4">
+                {t('settings.other.page')}
+              </Text>
+              <Input
+                className="page-input"
+                onChange={event => {
+                  const newValue = Number(event.target.typedInValue);
+                  if (newValue >= 1 && newValue <= pagesCount)
+                    onChangePage(newValue);
+                }}
+                value={currentPage}
+                type="Number"
+              />
+              <Text className="page-input-text bsl-has-color-status-4">
+                {t('settings.other.of', { pagesCount })}
+              </Text>
+            </FlexBox>
+          ) : (
+            <Link
+              key={i}
+              isInteractable={current !== '...'}
+              isCurrent={current === currentPage}
+              onClick={() => onChangePage(current)}
+            >
+              {current}
+            </Link>
+          ),
+        )}
         <Link
+          id="next-page-link"
           isInteractable={currentPage !== pagesCount}
           onClick={() => onChangePage(currentPage + 1)}
           aria-label="Next page"
@@ -147,7 +174,9 @@ export const Pagination = ({
       </div>
 
       <div className="items-number">
-        <span className="bsl-has-color-status-4">{itemsTotal} items</span>
+        <Text className="pagesize-label bsl-has-color-status-4">
+          {t('settings.other.total-items', { itemsCount: itemsTotal })}
+        </Text>
       </div>
     </div>
   );
