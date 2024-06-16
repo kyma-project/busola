@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, fireEvent, waitFor, act } from '@testing-library/react';
 import { Pagination } from 'shared/components/GenericList/Pagination/Pagination';
 import { ThemeProvider } from '@ui5/webcomponents-react';
@@ -6,7 +5,7 @@ import '@ui5/webcomponents-icons/dist/AllIcons.js';
 
 describe('Pagination', () => {
   it('Renders valid count of pages', () => {
-    const { queryByText } = render(
+    const { container, queryByText } = render(
       <ThemeProvider>
         <Pagination
           itemsTotal={25}
@@ -17,7 +16,7 @@ describe('Pagination', () => {
       </ThemeProvider>,
     );
 
-    expect(queryByText('1')).toBeInTheDocument();
+    expect(container.querySelector('ui5-input').value).toBe('1');
     expect(queryByText('2')).toBeInTheDocument();
     expect(queryByText('3')).not.toBeInTheDocument();
   });
@@ -68,7 +67,7 @@ describe('Pagination', () => {
   });
 
   it('Disables correct links', () => {
-    const { getByText, getByLabelText, rerender } = render(
+    const { container, getByText, getByLabelText, rerender } = render(
       <ThemeProvider>
         <Pagination
           itemsTotal={60}
@@ -79,7 +78,7 @@ describe('Pagination', () => {
       </ThemeProvider>,
     );
     expect(getByLabelText('Previous page')).toBeDisabled();
-    expect(getByText('1')).toBeDisabled();
+    expect(container.querySelector('ui5-input')).not.toBeDisabled();
     expect(getByText('2')).not.toBeDisabled();
     expect(getByText('3')).not.toBeDisabled();
     expect(getByLabelText('Next page')).not.toBeDisabled();
