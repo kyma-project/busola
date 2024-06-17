@@ -24,5 +24,7 @@ COPY certs.pem certs.pem
 COPY package* ./
 RUN npm ci --only=production
 
+USER 1000
+
 EXPOSE 3001
 CMD [ "npm", "run", "start:prod" ]
