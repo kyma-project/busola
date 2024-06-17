@@ -41,7 +41,6 @@ export const UI5Panel = ({
         }
       });
   });
-
   return (
     <Panel
       fixed={fixed}

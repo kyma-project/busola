@@ -131,11 +131,11 @@ context('Test Pizzas', () => {
     cy.inspectTab('View');
 
     cy.getMidColumn()
-      .contains('span', /^READY$/i)
+      .contains('span', /^Ready$/i)
       .should('not.exist');
 
     cy.getMidColumn()
-      .contains('span', /^ERROR$/i)
+      .contains('span', /^Error$/i)
       .should('be.visible');
   });
 

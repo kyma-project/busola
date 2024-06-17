@@ -231,15 +231,16 @@ function Resource({
       </Suspense>
       {headerActions}
       {resourceHeaderActions.map(resourceAction => resourceAction(resource))}
-      {deleteButtonWrapper(
-        <Button
-          disabled={protectedResource || disableDelete}
-          onClick={() => handleResourceDelete({ resourceUrl })}
-          design="Transparent"
-        >
-          {t('common.buttons.delete')}
-        </Button>,
-      )}
+      {!disableDelete &&
+        deleteButtonWrapper(
+          <Button
+            disabled={protectedResource}
+            onClick={() => handleResourceDelete({ resourceUrl })}
+            design="Transparent"
+          >
+            {t('common.buttons.delete')}
+          </Button>,
+        )}
       {createPortal(
         <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />,
         document.body,
