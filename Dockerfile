@@ -34,4 +34,3 @@ COPY --from=builder /app/nginx/mime.types /etc/nginx/
 
 EXPOSE 8080
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
-
