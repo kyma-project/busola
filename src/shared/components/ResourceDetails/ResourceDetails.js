@@ -280,7 +280,9 @@ function Resource({
   };
 
   const resourceStatusCard =
-    customStatusColumns?.length || customConditionsComponents?.length ? (
+    customStatusColumns?.length ||
+    customConditionsComponents?.length ||
+    statusConditions?.length ? (
       <ResourceStatusCard
         statusBadge={statusBadge ? statusBadge(resource) : null}
         customColumns={
