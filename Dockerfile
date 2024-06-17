@@ -32,8 +32,6 @@ COPY --from=builder /app/build /app/core-ui
 COPY --from=builder /app/nginx/nginx.conf /etc/nginx/
 COPY --from=builder /app/nginx/mime.types /etc/nginx/
 
-USER 1000
-
 EXPOSE 8080
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
 
