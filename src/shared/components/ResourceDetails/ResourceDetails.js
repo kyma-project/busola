@@ -25,6 +25,7 @@ import { Tooltip } from '../Tooltip/Tooltip';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { createPortal } from 'react-dom';
 import ResourceDetailsCard from './ResourceDetailsCard';
+import { ResourceHealthCard } from '../ResourceHealthCard/ResourceHealthCard';
 import { ResourceStatusCard } from '../ResourceStatusCard/ResourceStatusCard';
 import { EMPTY_TEXT_PLACEHOLDER } from '../../constants';
 import { ReadableElapsedTimeFromNow } from '../ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
@@ -67,7 +68,7 @@ ResourceDetails.propTypes = {
   showYamlTab: PropTypes.bool,
   layoutCloseCreateUrl: PropTypes.string,
   layoutNumber: PropTypes.string,
-  customOverviewCard: PropTypes.node,
+  customHealthCards: PropTypes.node,
 };
 
 ResourceDetails.defaultProps = {
@@ -169,7 +170,7 @@ function Resource({
   disableDelete,
   statusBadge,
   customStatusColumns,
-  customOverview,
+  customHealthCards,
   statusConditions,
   headerContent,
 }) {
@@ -391,7 +392,9 @@ function Resource({
     />
   );
 
-  const customOverviewCard = customOverview && customOverview(resource);
+  const customOverviewCard = customHealthCards.map(healthCard =>
+    healthCard(resource),
+  );
 
   return (
     <ResourceDetailContext.Provider value={true}>
@@ -430,9 +433,7 @@ function Resource({
                   {resourceDetailsCard}
                   {resourceStatusCard && resourceStatusCard}
                 </div>
-                <div className="flexwrap" style={spacing.sapUiSmallMargin}>
-                  {customOverviewCard && customOverviewCard}
-                </div>
+                <ResourceHealthCard customHealthCards={customOverviewCard} />
               </>
             )}
             <Suspense fallback={<Spinner />}>

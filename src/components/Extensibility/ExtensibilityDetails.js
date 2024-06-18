@@ -68,6 +68,7 @@ export const ExtensibilityDetailsCore = ({
   }
 
   const header = resMetaData?.details?.header || [];
+  const health = resMetaData?.details?.health || [];
   const status = resMetaData?.details?.status || [];
   const body = resMetaData?.details?.body || [];
   const dataSources = resMetaData?.dataSources || {};
@@ -156,6 +157,22 @@ export const ExtensibilityDetailsCore = ({
                   />
                 ),
               }))
+          : []
+      }
+      customHealthCards={
+        Array.isArray(health)
+          ? [
+              (resource, i) => (
+                <Widget
+                  key={i}
+                  value={resource}
+                  structure={health}
+                  schema={schema}
+                  dataSources={dataSources}
+                  originalResource={resource}
+                />
+              ),
+            ]
           : []
       }
       description={description}

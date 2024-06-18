@@ -12,7 +12,6 @@ cluster-overview:
     cluster-details: Cluster Details
     metadata: Metadata
   statistics:
-    title:  Monitoring and Health
     cpu-usage: 'CPU Usage'
     memory-usage: 'Memory Usage'
     namespaces-health: 'Namespaces Health'
@@ -327,6 +326,7 @@ common:
     link: Link
     loading: Loading...
     logs: Logs
+    monitoring-and-health: Monitoring and Health
     name: Name
     namespace: Namespace
     namespaces: Namespaces

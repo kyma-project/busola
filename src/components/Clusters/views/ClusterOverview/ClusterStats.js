@@ -103,7 +103,7 @@ export default function ClusterStats({ nodesData }) {
           ...spacing.sapUiMediumMarginTopBottom,
         }}
       >
-        {t('cluster-overview.statistics.title')}
+        {t('common.headers.monitoring-and-health')}
       </Title>
       <div className="cluster-stats" style={spacing.sapUiTinyMarginBeginEnd}>
         <div className="item-wrapper tall">
