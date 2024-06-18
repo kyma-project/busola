@@ -68,7 +68,6 @@ export const SortModalPanel = ({
     >
       <List
         separators="All"
-        style={{ width: '100%' }}
         onItemClick={e => {
           setOrder(e?.detail?.item?.children[0]?.value);
         }}
