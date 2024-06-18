@@ -13,6 +13,7 @@ export function CronJobJobs(cronJob) {
     <JobList
       key="cronJobJobs"
       {...{
+        disableCreate: true,
         disableHiding: true,
         displayArrow: false,
         hasDetailsView: true,

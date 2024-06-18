@@ -7,7 +7,7 @@ describe('StatusBadge', () => {
   it('renders status text with proper role', async () => {
     const { queryByRole } = render(
       <ThemeProvider>
-        <StatusBadge>INITIAL</StatusBadge>
+        <StatusBadge>Initial</StatusBadge>
       </ThemeProvider>,
     );
 

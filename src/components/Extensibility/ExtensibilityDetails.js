@@ -56,7 +56,7 @@ export const ExtensibilityDetailsCore = ({
 
   const resourceTitle = exists('name')
     ? t('name')
-    : resourceName || prettifyKind(resource?.kind || '');
+    : prettifyKind(resource?.kind || '') || resourceName;
 
   detailsProps.resourceTitle = resourceTitle;
 

@@ -18,30 +18,30 @@ injections: |-
         widget: Badge
         highlights:
           positive:
-            - RUNNING
+            - Running
           negative:
-            - FAILED
-            - ERROR
-            - DEPLOYING
-            - BUILDING
-            - PENDING
+            - Failed
+            - Error
+            - Deploying
+            - Building
+            - Pending
           informative:
-            - INITIALIZING
+            - Initializing
         source: >-
           ($.status = undefined or $.status.conditions = undefined or
-          $count($.status.conditions) = 0) ? 'INITIALIZING' :
+          $count($.status.conditions) = 0) ? 'Initializing' :
           $count($filter($.status.conditions, function($v) { $v.status = 'False' }))
           != 0 ? $count($filter($.status.conditions, function($v) { $v.type =
-          'Running' and $v.status = 'True' })) != 0 ? 'ERROR' : 'FAILED' :
+          'Running' and $v.status = 'True' })) != 0 ? 'Error' : 'Failed' :
           $count($filter($.status.conditions, function($v) { $v.type =
           'ConfigurationReady' and $v.status = 'True' })) != 0 ?
           $count($filter($.status.conditions, function($v) { $v.type = 'BuildReady'
           and $v.status = 'True' })) != 0 ? $count($filter($.status.conditions,
           function($v) { $v.type = 'Running' and $v.status = 'True' })) != 0 ?
-          'RUNNING' : $count($filter($.status.conditions, function($v) { $v.type =
+          'Running' : $count($filter($.status.conditions, function($v) { $v.type =
           'Running' and $v.status = 'Unknown' and $v.reason =
-          'MinReplicasNotAvailable' })) != 0 ? 'PENDING' : 'DEPLOYING' : 'BUILDING' :
-          'INITIALIZING' 
+          'MinReplicasNotAvailable' })) != 0 ? 'Pending' : 'Deploying' : 'Building' :
+          'Initializing' 
   - name: Connected Functions
     widget: Table
     source: $root
