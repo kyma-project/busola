@@ -170,6 +170,10 @@ export const GenericList = ({
           sort={sort}
           setSort={setSort}
           disabled={!entries.length}
+          defaultSort={{
+            name: sortBy && Object.keys(sortBy)[0],
+            order: 'ASC',
+          }}
         />
       )}
     </>

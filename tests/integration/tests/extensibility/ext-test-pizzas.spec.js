@@ -169,7 +169,7 @@ context('Test Pizzas', () => {
 
     cy.get('ui5-button[aria-label="open-sort"]').click();
 
-    cy.get('ui5-radio-button[name="sortOrder"][text="Descending"]').click();
+    cy.get('ui5-radio-button[name="sortOrder"][value="DESC"]').click();
 
     cy.get('ui5-button')
       .contains('OK')

@@ -12,7 +12,13 @@ import { Tooltip } from '../Tooltip/Tooltip';
 import { useTranslation } from 'react-i18next';
 import './SortModalPanel.scss';
 
-export const SortModalPanel = ({ sortBy, sort, setSort, disabled = false }) => {
+export const SortModalPanel = ({
+  sortBy,
+  sort,
+  setSort,
+  disabled = false,
+  defaultSort,
+}) => {
   const [order, setOrder] = useState(sort.order);
   const [name, setName] = useState(sort.name);
 
@@ -29,10 +35,20 @@ export const SortModalPanel = ({ sortBy, sort, setSort, disabled = false }) => {
     </Tooltip>
   );
 
+  const handleReset = () => {
+    setOrder(defaultSort.order);
+    setName(defaultSort.name);
+  };
+
   return (
     <Modal
       className={'sorting-modal'}
       title={t('common.sorting.sort')}
+      headerActions={
+        <Button design="Transparent" onClick={handleReset}>
+          {t('common.buttons.reset')}
+        </Button>
+      }
       actions={onClose => [
         <Button
           design="Emphasized"
@@ -56,6 +72,7 @@ export const SortModalPanel = ({ sortBy, sort, setSort, disabled = false }) => {
         onItemClick={e => {
           setOrder(e?.detail?.item?.children[0]?.value);
         }}
+        accessibleName="sortOrderList"
       >
         <GroupHeaderListItem>
           {t('common.sorting.sort-order')}
@@ -84,10 +101,9 @@ export const SortModalPanel = ({ sortBy, sort, setSort, disabled = false }) => {
         onItemClick={e => {
           setName(e?.detail?.item?.children[0]?.value);
         }}
+        accessibleName="sortByList"
       >
-        <GroupHeaderListItem className="sorting-header">
-          {t('common.sorting.sort-by')}
-        </GroupHeaderListItem>
+        <GroupHeaderListItem>{t('common.sorting.sort-by')}</GroupHeaderListItem>
         {sortBy && (
           <>
             {Object.entries(sortBy).flatMap(([value]) => {
