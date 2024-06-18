@@ -1,8 +1,16 @@
 import { useState } from 'react';
-import { Button, FlexBox, RadioButton } from '@ui5/webcomponents-react';
+import {
+  Button,
+  CustomListItem,
+  GroupHeaderListItem,
+  List,
+  RadioButton,
+  Text,
+} from '@ui5/webcomponents-react';
 import { Modal } from '../Modal/Modal';
 import { Tooltip } from '../Tooltip/Tooltip';
 import { useTranslation } from 'react-i18next';
+import './SortModalPanel.scss';
 
 export const SortModalPanel = ({ sortBy, sort, setSort, disabled = false }) => {
   const [order, setOrder] = useState(sort.order);
@@ -23,6 +31,7 @@ export const SortModalPanel = ({ sortBy, sort, setSort, disabled = false }) => {
 
   return (
     <Modal
+      className={'sorting-modal'}
       title={t('common.sorting.sort')}
       actions={onClose => [
         <Button
@@ -41,44 +50,67 @@ export const SortModalPanel = ({ sortBy, sort, setSort, disabled = false }) => {
       ]}
       modalOpeningComponent={sortOpeningComponent}
     >
-      <p style={{ padding: '10px' }}>{t('common.sorting.sort-order')}</p>
-      <FlexBox direction="Column">
-        <RadioButton
-          name="sortOrder"
-          value="ASC"
-          checked={order === 'ASC'}
-          text={t('common.sorting.asc')}
-          onChange={event => setOrder(event.target.value)}
-        />
-        <RadioButton
-          name="sortOrder"
-          value="DESC"
-          checked={order === 'DESC'}
-          text={t('common.sorting.desc')}
-          onChange={event => setOrder(event.target.value)}
-        />
-      </FlexBox>
-      <p style={{ padding: '10px' }}>{t('common.sorting.sort-by')}</p>
-      {sortBy && (
-        <FlexBox direction="Column">
-          {Object.entries(sortBy).flatMap(([value]) => {
-            return (
-              <RadioButton
-                name="sortBy"
-                value={value}
-                key={value}
-                checked={name === value}
-                text={
-                  i18n.exists(`common.sorting.${value}`)
-                    ? t(`common.sorting.${value}`)
-                    : value
-                }
-                onChange={event => setName(event.target.value)}
-              />
-            );
-          })}
-        </FlexBox>
-      )}
+      <List
+        separators="All"
+        style={{ width: '100%' }}
+        onItemClick={e => {
+          setOrder(e?.detail?.item?.children[0]?.value);
+        }}
+      >
+        <GroupHeaderListItem>
+          {t('common.sorting.sort-order')}
+        </GroupHeaderListItem>
+        <CustomListItem>
+          <RadioButton
+            name="sortOrder"
+            value="ASC"
+            checked={order === 'ASC'}
+            onChange={event => setOrder(event.target.value)}
+          />
+          <Text>{t('common.sorting.asc')}</Text>
+        </CustomListItem>
+        <CustomListItem>
+          <RadioButton
+            name="sortOrder"
+            value="DESC"
+            checked={order === 'DESC'}
+            onChange={event => setOrder(event.target.value)}
+          />
+          <Text>{t('common.sorting.desc')}</Text>
+        </CustomListItem>
+      </List>
+      <List
+        separators="All"
+        onItemClick={e => {
+          setName(e?.detail?.item?.children[0]?.value);
+        }}
+      >
+        <GroupHeaderListItem className="sorting-header">
+          {t('common.sorting.sort-by')}
+        </GroupHeaderListItem>
+        {sortBy && (
+          <>
+            {Object.entries(sortBy).flatMap(([value]) => {
+              return (
+                <CustomListItem>
+                  <RadioButton
+                    name="sortBy"
+                    value={value}
+                    key={value}
+                    checked={name === value}
+                    onChange={event => setName(event.target.value)}
+                  />
+                  <Text>
+                    {i18n.exists(`common.sorting.${value}`)
+                      ? t(`common.sorting.${value}`)
+                      : value}
+                  </Text>
+                </CustomListItem>
+              );
+            })}
+          </>
+        )}
+      </List>
     </Modal>
   );
 };
