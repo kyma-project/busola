@@ -224,13 +224,9 @@ export function ResourceForm({
       style={{ overflowX: 'hidden' }}
       onChange={onChange}
     >
-      {mode === ModeSelector.MODE_FORM && (
+      {(mode === ModeSelector.MODE_FORM || formWithoutPanel) && (
         <FormItem>
-          <div
-            className="full-width"
-            style={spacing.sapUiTinyMarginBottom}
-            hidden={mode !== ModeSelector.MODE_FORM}
-          >
+          <div className="full-width" style={spacing.sapUiTinyMarginBottom}>
             <ResourceFormWrapper
               resource={resource}
               setResource={setResource}
@@ -278,9 +274,6 @@ export function ResourceForm({
           style={{ height: '100%' }}
           onChange={onChange}
         >
-          {mode === ModeSelector.MODE_YAML && (
-            <div className="yaml-form">{editor}</div>
-          )}
           {formContent}
         </form>
       ) : (
