@@ -90,11 +90,11 @@ export function NamespaceDetails(props) {
       windowTitle={t('namespaces.overview.title')}
       customColumns={customColumns}
       headerActions={headerActions}
+      customHealthCards={[
+        () => <ResourcesUsage namespace={props.resourceName} />,
+        () => <NamespaceWorkloads namespace={props.resourceName} />,
+      ]}
     >
-      <div className="flexwrap" style={spacing.sapUiSmallMargin}>
-        <ResourcesUsage namespace={props.resourceName} />
-        <NamespaceWorkloads namespace={props.resourceName} />
-      </div>
       {LimitrangesList}
       {ResourceQuotasList}
       {Events}

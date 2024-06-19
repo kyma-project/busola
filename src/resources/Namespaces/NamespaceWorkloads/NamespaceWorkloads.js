@@ -36,46 +36,52 @@ export function NamespaceWorkloads({ namespace }) {
   return (
     <>
       {(podsData || deploymentsData) && (
-        <div className="counting-cards-container">
+        <>
           {podsData && (
-            <CountingCard
-              value={podsData?.length}
-              title={t('cluster-overview.statistics.pods-overview')}
-              subTitle={t('cluster-overview.statistics.total-pods')}
-              resourceUrl="pods"
-              allNamespaceURL={false}
-              extraInfo={[
-                {
-                  title: t('cluster-overview.statistics.healthy-pods'),
-                  value: healthyPods,
-                },
-                {
-                  title: t('cluster-overview.statistics.failing-pods'),
-                  value: podsData.length - healthyPods,
-                },
-              ]}
-            />
+            <div className="item-wrapper wide">
+              <CountingCard
+                className="item"
+                value={podsData?.length}
+                title={t('cluster-overview.statistics.pods-overview')}
+                subTitle={t('cluster-overview.statistics.total-pods')}
+                resourceUrl="pods"
+                allNamespaceURL={false}
+                extraInfo={[
+                  {
+                    title: t('cluster-overview.statistics.healthy-pods'),
+                    value: healthyPods,
+                  },
+                  {
+                    title: t('cluster-overview.statistics.failing-pods'),
+                    value: podsData.length - healthyPods,
+                  },
+                ]}
+              />
+            </div>
           )}
           {deploymentsData && (
-            <CountingCard
-              value={deploymentsData?.length}
-              title={t('cluster-overview.statistics.deployments-overview')}
-              subTitle={t('cluster-overview.statistics.total-deployments')}
-              resourceUrl="deployments"
-              allNamespaceURL={false}
-              extraInfo={[
-                {
-                  title: t('cluster-overview.statistics.healthy-deployments'),
-                  value: healthyDeployments,
-                },
-                {
-                  title: t('cluster-overview.statistics.failing-deployments'),
-                  value: deploymentsData.length - healthyDeployments,
-                },
-              ]}
-            />
+            <div className="item-wrapper wide">
+              <CountingCard
+                className="item"
+                value={deploymentsData?.length}
+                title={t('cluster-overview.statistics.deployments-overview')}
+                subTitle={t('cluster-overview.statistics.total-deployments')}
+                resourceUrl="deployments"
+                allNamespaceURL={false}
+                extraInfo={[
+                  {
+                    title: t('cluster-overview.statistics.healthy-deployments'),
+                    value: healthyDeployments,
+                  },
+                  {
+                    title: t('cluster-overview.statistics.failing-deployments'),
+                    value: deploymentsData.length - healthyDeployments,
+                  },
+                ]}
+              />
+            </div>
           )}
-        </div>
+        </>
       )}
     </>
   );

@@ -128,28 +128,34 @@ export const ResourcesUsage = ({ namespace }) => {
 
   return (
     <>
-      <Card
-        className="radial-chart-card"
-        header={
-          <CardHeader titleText={t('namespaces.overview.resources.requests')} />
-        }
-      >
-        <MemoryRequestsCircle
-          resourceQuotas={resourceQuotas}
-          isLoading={loading}
-        />
-      </Card>
-      <Card
-        className="radial-chart-card"
-        header={
-          <CardHeader titleText={t('namespaces.overview.resources.limits')} />
-        }
-      >
-        <MemoryLimitsCircle
-          resourceQuotas={resourceQuotas}
-          isLoading={loading}
-        />
-      </Card>
+      <div className="item-wrapper tall">
+        <Card
+          className="radial-chart-card"
+          header={
+            <CardHeader
+              titleText={t('namespaces.overview.resources.requests')}
+            />
+          }
+        >
+          <MemoryRequestsCircle
+            resourceQuotas={resourceQuotas}
+            isLoading={loading}
+          />
+        </Card>
+      </div>
+      <div className="item-wrapper tall">
+        <Card
+          className="radial-chart-card"
+          header={
+            <CardHeader titleText={t('namespaces.overview.resources.limits')} />
+          }
+        >
+          <MemoryLimitsCircle
+            resourceQuotas={resourceQuotas}
+            isLoading={loading}
+          />
+        </Card>
+      </div>
     </>
   );
 };

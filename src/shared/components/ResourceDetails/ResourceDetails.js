@@ -392,7 +392,7 @@ function Resource({
     />
   );
 
-  const customOverviewCard = customHealthCards.map(healthCard =>
+  const customOverviewCard = (customHealthCards || []).map(healthCard =>
     healthCard(resource),
   );
 
