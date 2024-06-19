@@ -596,7 +596,8 @@ These are the available `StatisticalCard` widget parameters:
 | **children**         | No       | array of objects                           | Array of additional values, listed next to the main one                                                                                                                                                              |
 | **children.source**  | **Yes**  | string or [JSONata](jsonata.md) expression | It is used to fetch data for the column. In its simplest form, it's the path to the value.                                                                                                                           |
 | **children.name**    | **Yes**  | string                                     | Name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the [**translation** section](./translations-section.md). |
-|  |
+
+|
 
 This is an example for widget usage in the **data.details.health** section which allows StatisticalCard to be displayed in the details page in the Monitoring and Health section:
 
