@@ -17,6 +17,10 @@ context('Clean up Namespace', () => {
       checkIfResourceIsRemoved: false,
       selectSearchResult: true,
     });
+
+    cy.get('ui5-table-row')
+      .find('.status-badge')
+      .contains('Terminating');
   });
 
   it(
@@ -28,10 +32,6 @@ context('Clean up Namespace', () => {
       },
     },
     () => {
-      cy.get('ui5-table-row')
-        .find('.status-badge')
-        .contains('Terminating');
-
       cy.get('ui5-table')
         .contains(Cypress.env('NAMESPACE_NAME'))
         .should('not.exist', { timeout: 50000 });
