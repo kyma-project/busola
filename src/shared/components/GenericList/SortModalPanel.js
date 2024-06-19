@@ -107,11 +107,10 @@ export const SortModalPanel = ({
           <>
             {Object.entries(sortBy).flatMap(([value]) => {
               return (
-                <CustomListItem>
+                <CustomListItem key={value}>
                   <RadioButton
                     name="sortBy"
                     value={value}
-                    key={value}
                     checked={name === value}
                     onChange={event => setName(event.target.value)}
                   />
