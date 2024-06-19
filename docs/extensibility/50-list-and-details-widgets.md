@@ -24,9 +24,9 @@ You can distinguish the following widget types:
   - [`Plain`](#plain)
   - [`ResourceList`](#resourcelist)
   - [`ResourceRefs`](#resourcerefs)
+  - [`StatisticalCard`](#StatisticalCard)
   - [`Table`](#table)
   - [`Tabs`](#tabs)
-  - [`StatisticalCard`](#StatisticalCard) - TODO: Where to put it exactly?
 
 ## Inline Widgets
 
@@ -581,6 +581,71 @@ See the following example:
 
 <img src="./assets/display-widgets/ResourceRefs.png" alt="Example of a ResourceRefs widget" style="border: 1px solid #D2D5D9">
 
+### StatisticalCard
+
+StatisticalCard widgets render a card component with a several numerical information elements.
+This widget is primarily designed to be used in Monitoring and Health section **data.details.health** or via [injections](#widget-injections-overview) (**destination: ClusterOverview, slot: health**), allowing the card to be rendered within the dense grid layout of the ClusterOverview's Monitoring and Health section.
+
+These are the available `StatisticalCard` widget parameters:
+
+| Parameter             | Required | Type                                       | Description                                                                                                                                                                                                          |
+| --------------------- | -------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **mainValue**         | **Yes**  | object                                     | Main value displayed with bigger font                                                                                                                                                                                |
+| **mainValue.source**  | **Yes**  | string or [JSONata](jsonata.md) expression | It is used to fetch data for the column. In its simplest form, it's the path to the value.                                                                                                                           |
+| **mainValue.name**    | **Yes**  | string                                     | Name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the [**translation** section](./translations-section.md). |
+| **children**          | No       | array of objects                           | Array of additional values, listed next to the main one                                                                                                                                                              |
+| **children.source**   | **Yes**  | string or [JSONata](jsonata.md) expression | It is used to fetch data for the column. In its simplest form, it's the path to the value.                                                                                                                           |
+| **children.name**     | **Yes**  | string                                     | Name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the [**translation** section](./translations-section.md). |
+| **resourceURL**       | No       | string                                     | Path fragment for this resource used in the URL. Might be the same as **general.urlPath** and defaults to pluralized lowercase **kind**.                                                                             |
+| **isClusterResource** | No       | boolean                                    | Defines if resource is cluster wide                                                                                                                                                                                  |
+| **allNamespaceURL**   | No       | boolean                                    | Defines if resource URL should point to a list of resources in all the namespaces                                                                                                                                    |
+
+This is an example for widget usage in the **data.details.health** section which allows StatisticalCard to be displayed in the details page in the Monitoring and Health section:
+
+```yaml
+details: |-
+  health:
+    - name: MyTitle
+      widget: StatisticalCard
+      source: status
+      mainValue:
+        name: MySubtitle
+        source: $item.importantValue
+      resourceUrl: pods
+      isClusterResource: false
+      allNamespaceURL: false 
+      children:
+        - name: ExtraInformation1
+          source: $item.value1
+        - name: ExtraInformation2
+          source: $item.value2
+```
+
+This is an example for widget usage via injection which allows StatisticalCard to be displayed in ClusterOverview's Monitoring and Health section:
+
+```yaml
+injections: |-
+  - name: MyTitle
+    widget: StatisticalCard
+    source: status
+    mainValue:
+      name: MySubtitle
+      source: $item.importantValue
+    resourceUrl: pods
+    isClusterResource: false
+    allNamespaceURL: false 
+    children:
+      - name: ExtraInformation1
+        source: $item.value1
+      - name: ExtraInformation2
+        source: $item.value2
+    targets:
+      - slot: health
+        location: ClusterOverview
+```
+
+<img src="./assets/display-widgets/StatisticalCard.png" alt="Example of a StatisticalCard widget" style="border: 1px solid #D2D5D9" width="75%">
+
 ### `Table`
 
 Table widgets display array data as rows of a table instead of free-standing components. The **children** parameter defines the values used to render the columns. Similar to the **list** section of the ConfigMap, you should use inline widgets only as children.
@@ -639,45 +704,3 @@ See the following example:
 ```
 
 <img src="./assets/display-widgets/Tabs.png" alt="Example of a tabs widget" style="border: 1px solid #D2D5D9">
-
-### StatisticalCard
-
-StatisticalCard widgets render a card component with a several numerical information elements.
-This widget is primarily designed to be used in overview section **data.details.overview** or via [injections](#widget-injections-overview) (**destination: ClusterOverview, slot: health**), allowing the card to be rendered within the dense grid layout of the ClusterOverview's Monitoring and Health section.
-
-These are the available `StatisticalCard` widget parameters:
-
-| Parameter             | Required | Type    | Description                                                                  |
-| --------------------- | -------- | ------- | ---------------------------------------------------------------------------- |
-| **resourceURL**       | **No**   | string  | Path to busola resource.                                                     |
-| **isClusterResource** | **No**   | boolean | Defines if resource is cluster wide                                          |
-| **allNamespaceURL**   | **No**   | boolean | Defines if resource URL should point to a list of resource in all namespaces |
-
-This is an example for widget usage in the **data.details.health** section which allows StatisticalCard to be displayed in the details page in the overview section:
-
-<!-- TO DO -->
-
-This is an example for widget usage via injection which allows StatisticalCard to be displayed in ClusterOverview's Monitoring and Health section:
-
-```yaml
-injections: |-
-  - name: MyTitle
-    widget: StatisticalCard
-    source: status
-    mainValue:
-      name: MySubtitle
-      source: $item.importantValue
-    resourceUrl: pods
-    isClusterResource: false
-    allNamespaceURL: false 
-    children:
-      - name: ExtraInformation1
-        source: $item.value1
-      - title: ExtraInformation2
-        source: $item.value2
-    targets:
-      - slot: health
-        location: ClusterOverview
-```
-
-<img src="./assets/display-widgets/StatisticalCard.png" alt="Example of a StatisticalCard widget" style="border: 1px solid #D2D5D9" width="75%">
