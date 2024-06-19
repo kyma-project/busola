@@ -39,6 +39,7 @@ export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
   }
 
   const dataSources = resMetaData?.dataSources || {};
+  const general = resMetaData?.general || {};
   const injection = resMetaData?.injection;
   const injectionName = injection?.name;
   const filter = injection?.target.filter || injection?.filter || null;
@@ -58,9 +59,11 @@ export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
       structure={injection}
       schema={schema}
       dataSources={dataSources}
+      general={general}
       originalResource={filteredItems}
       embedResource={root}
       inlineContext={true}
+      context={injection.target}
     />
   );
 };

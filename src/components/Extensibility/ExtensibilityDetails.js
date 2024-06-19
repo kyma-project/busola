@@ -72,6 +72,7 @@ export const ExtensibilityDetailsCore = ({
   const status = resMetaData?.details?.status || [];
   const body = resMetaData?.details?.body || [];
   const dataSources = resMetaData?.dataSources || {};
+  const general = resMetaData?.general || {};
 
   return (
     <ResourceDetails
@@ -169,7 +170,9 @@ export const ExtensibilityDetailsCore = ({
                   structure={health}
                   schema={schema}
                   dataSources={dataSources}
+                  general={general}
                   originalResource={resource}
+                  context={general.urlPath}
                 />
               ),
             ]

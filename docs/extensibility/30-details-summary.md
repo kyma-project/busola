@@ -43,9 +43,6 @@ details:
       mainValue:
         name: MySubtitle
         source: $item.importantValue
-      resourceUrl: pods
-      isClusterResource: false
-      allNamespaceURL: false
       children:
         - name: ExtraInformation1
           source: $item.value1

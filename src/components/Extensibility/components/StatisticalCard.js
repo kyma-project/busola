@@ -3,7 +3,13 @@ import { useJsonata } from '../hooks/useJsonata';
 import { useGetTranslation } from '../helpers';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
-export function StatisticalCard({ structure, value, originalResource }) {
+export function StatisticalCard({
+  structure,
+  value,
+  originalResource,
+  general,
+  context,
+}) {
   const jsonata = useJsonata({
     resource: originalResource,
     value,
@@ -42,8 +48,9 @@ export function StatisticalCard({ structure, value, originalResource }) {
         value={mainValue !== undefined ? mainValue : EMPTY_TEXT_PLACEHOLDER}
         title={structure?.name}
         subTitle={structure?.mainValue?.name}
-        resourceUrl={structure?.resourceURL}
-        allNamespaceURL={structure?.allNamespaceURL}
+        resourceUrl={context !== general?.urlPath ? general?.urlPath : null}
+        isClusterResource={general?.scope === 'cluster'}
+        allNamespaceURL={general?.scope === 'namespace'}
         extraInfo={extraInfo}
       />
     </div>

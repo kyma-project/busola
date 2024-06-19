@@ -588,17 +588,15 @@ This widget is primarily designed to be used in Monitoring and Health section **
 
 These are the available `StatisticalCard` widget parameters:
 
-| Parameter             | Required | Type                                       | Description                                                                                                                                                                                                          |
-| --------------------- | -------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **mainValue**         | **Yes**  | object                                     | Main value displayed with bigger font                                                                                                                                                                                |
-| **mainValue.source**  | **Yes**  | string or [JSONata](jsonata.md) expression | It is used to fetch data for the column. In its simplest form, it's the path to the value.                                                                                                                           |
-| **mainValue.name**    | **Yes**  | string                                     | Name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the [**translation** section](./translations-section.md). |
-| **children**          | No       | array of objects                           | Array of additional values, listed next to the main one                                                                                                                                                              |
-| **children.source**   | **Yes**  | string or [JSONata](jsonata.md) expression | It is used to fetch data for the column. In its simplest form, it's the path to the value.                                                                                                                           |
-| **children.name**     | **Yes**  | string                                     | Name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the [**translation** section](./translations-section.md). |
-| **resourceURL**       | No       | string                                     | Path fragment for this resource used in the URL. Might be the same as **general.urlPath** and defaults to pluralized lowercase **kind**.                                                                             |
-| **isClusterResource** | No       | boolean                                    | Defines if resource is cluster wide                                                                                                                                                                                  |
-| **allNamespaceURL**   | No       | boolean                                    | Defines if resource URL should point to a list of resources in all the namespaces                                                                                                                                    |
+| Parameter            | Required | Type                                       | Description                                                                                                                                                                                                          |
+| -------------------- | -------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **mainValue**        | **Yes**  | object                                     | Main value displayed with bigger font                                                                                                                                                                                |
+| **mainValue.source** | **Yes**  | string or [JSONata](jsonata.md) expression | It is used to fetch data for the column. In its simplest form, it's the path to the value.                                                                                                                           |
+| **mainValue.name**   | **Yes**  | string                                     | Name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the [**translation** section](./translations-section.md). |
+| **children**         | No       | array of objects                           | Array of additional values, listed next to the main one                                                                                                                                                              |
+| **children.source**  | **Yes**  | string or [JSONata](jsonata.md) expression | It is used to fetch data for the column. In its simplest form, it's the path to the value.                                                                                                                           |
+| **children.name**    | **Yes**  | string                                     | Name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the [**translation** section](./translations-section.md). |
+|  |
 
 This is an example for widget usage in the **data.details.health** section which allows StatisticalCard to be displayed in the details page in the Monitoring and Health section:
 
@@ -611,9 +609,6 @@ details: |-
       mainValue:
         name: MySubtitle
         source: $item.importantValue
-      resourceUrl: pods
-      isClusterResource: false
-      allNamespaceURL: false 
       children:
         - name: ExtraInformation1
           source: $item.value1
@@ -631,9 +626,6 @@ injections: |-
     mainValue:
       name: MySubtitle
       source: $item.importantValue
-    resourceUrl: pods
-    isClusterResource: false
-    allNamespaceURL: false 
     children:
       - name: ExtraInformation1
         source: $item.value1
