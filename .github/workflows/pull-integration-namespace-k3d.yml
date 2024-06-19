@@ -1,16 +1,16 @@
 name: pull-integration-namespace-k3d
+
 on: 
   pull_request:
     types: [opened, edited, synchronize, reopened, ready_for_review]
-    # paths:
-    #   - "backend/**"
-    #   - "public/**"
-    #   - "src/**"
-    #   - "tests/**"
-    #   - "package.json"
-    #   - "Makefile"
-    #   - "Dockerfile.local"
-    #   - "docs/**"
+    paths:
+      - ".github/workflows/pull-integration-namespace-k3d.yml"
+      - "resources/**"
+      - "tests/**"
+      - "nginx/**"
+      - "src/**"
+      - "tests/**"
+
 jobs:
   run-test:
     runs-on: ubuntu-latest
