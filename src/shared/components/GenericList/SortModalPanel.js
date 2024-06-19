@@ -76,7 +76,7 @@ export const SortModalPanel = ({
         <GroupHeaderListItem>
           {t('common.sorting.sort-order')}
         </GroupHeaderListItem>
-        <CustomListItem>
+        <CustomListItem selected={order === 'ASC'}>
           <RadioButton
             name="sortOrder"
             value="ASC"
@@ -85,7 +85,7 @@ export const SortModalPanel = ({
           />
           <Text>{t('common.sorting.asc')}</Text>
         </CustomListItem>
-        <CustomListItem>
+        <CustomListItem selected={order === 'DESC'}>
           <RadioButton
             name="sortOrder"
             value="DESC"
@@ -107,7 +107,7 @@ export const SortModalPanel = ({
           <>
             {Object.entries(sortBy).flatMap(([value]) => {
               return (
-                <CustomListItem key={value}>
+                <CustomListItem key={value} selected={name === value}>
                   <RadioButton
                     name="sortBy"
                     value={value}
