@@ -1,6 +1,11 @@
 .labels {
   display: grid;
   justify-items: start;
+  grid-template-columns: minmax(100px, max-content);
+
+  > * {
+    max-width: 100%;
+  }
 }
 
 .token {
