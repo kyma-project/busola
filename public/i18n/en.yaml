@@ -1480,6 +1480,7 @@ settings:
     title: Interface
   language: Language
   other:
+    info: Changes to the page size only take effect locally. To set the global default page size, go to Preferences.
     default-page-size: Default Page Size
     title: Other
     all: All

@@ -1,9 +1,11 @@
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Text, Icon, Input, FlexBox } from '@ui5/webcomponents-react';
 import classNames from 'classnames';
 import { Select, Option } from '@ui5/webcomponents-react';
 import { AVAILABLE_PAGE_SIZES } from 'state/preferences/pageSizeAtom';
+import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 import './Pagination.scss';
 
 const makePartitions = (currentPage, pagesCount) => {
@@ -51,6 +53,8 @@ export const Pagination = ({
   setLocalPageSize,
 }) => {
   const { t } = useTranslation();
+  const [showInfo, setShowInfo] = useState(false);
+
   const pagesCount = Math.ceil(itemsTotal / itemsPerPage);
 
   const partitions = makePartitions(currentPage, pagesCount);
@@ -84,6 +88,12 @@ export const Pagination = ({
             {t('settings.other.all')}
           </Option>
         </Select>
+        <HintButton
+          setShowTitleDescription={setShowInfo}
+          showTitleDescription={showInfo}
+          description={t('settings.other.info')}
+          context="pagination"
+        />
       </div>
 
       <div className="page-links-container">

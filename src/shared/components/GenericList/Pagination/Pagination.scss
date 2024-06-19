@@ -60,6 +60,7 @@
 @container (max-width: 750px) {
   .pagination {
     .pagesize-selector-container {
+      #descriptionOpener-pagination,
       .pagesize-label {
         display: none;
       }
