@@ -164,8 +164,11 @@ export function Widget({
 
   const sanitizedValue = stringifyIfBoolean(childValue);
 
-  return Array.isArray(childValue) && !Renderer.array ? (
-    childValue.map(valueItem => (
+  if (sanitizedValue?.loading) {
+    return null;
+  }
+  return Array.isArray(sanitizedValue) && !Renderer.array ? (
+    sanitizedValue.map(valueItem => (
       <SingleWidget
         {...props}
         inlineRenderer={inlineRenderer}
