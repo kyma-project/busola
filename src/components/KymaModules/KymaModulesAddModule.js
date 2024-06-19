@@ -18,6 +18,7 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 
 export default function KymaModulesAddModule(props) {
   const { t } = useTranslation();
+
   const modulesResourceUrl = `/apis/operator.kyma-project.io/v1beta2/moduletemplates`;
 
   const { data: kymaResources, loading: loadingKymaResources } = useGet(
@@ -136,11 +137,14 @@ export default function KymaModulesAddModule(props) {
       layoutNumber={'StartColumn'}
       resetLayout
       initialUnchangedResource={initialUnchangedResource}
+      afterCreatedCustomMessage={t('kyma-modules.module-added')}
+      formWithoutPanel
     >
       {modulesAddData?.length !== 0 ? (
         <>
           {modulesAddData?.find(module => module?.isBeta) ? (
             <MessageStrip
+              key={'beta'}
               design="Warning"
               hideCloseButton
               style={spacing.sapUiSmallMarginTopBottom}
@@ -156,6 +160,7 @@ export default function KymaModulesAddModule(props) {
 
               return (
                 <Card
+                  key={module.name}
                   className="addModuleCard"
                   header={
                     <CardHeader

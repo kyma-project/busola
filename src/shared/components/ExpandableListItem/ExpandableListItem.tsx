@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Icon, StandardListItem } from '@ui5/webcomponents-react';
 import { StatusBadge } from '../StatusBadge/StatusBadge';
 import { useTranslation } from 'react-i18next';
@@ -9,12 +9,19 @@ type ExpandableListItemProps = {
   header: string;
   status?: string;
   content: string;
+  customContent?: CustomContent[];
+};
+
+export type CustomContent = {
+  header: string;
+  value: string;
 };
 
 export const ExpandableListItem = ({
   header,
   status,
   content,
+  customContent,
 }: ExpandableListItemProps) => {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
@@ -51,18 +58,35 @@ export const ExpandableListItem = ({
         </div>
       </StandardListItem>
       {expanded && (
-        <div
-          className="expandable-item__message"
-          style={{
-            ...spacing.sapUiSmallMarginBeginEnd,
-            ...spacing.sapUiTinyMarginTopBottom,
-          }}
-        >
-          <div className="title bsl-has-color-status-4 ">
-            {`${t('common.headers.message')}:`}
+        <>
+          <div
+            className="expandable-item__message"
+            style={{
+              ...spacing.sapUiSmallMarginBeginEnd,
+              ...spacing.sapUiTinyMarginTopBottom,
+            }}
+          >
+            <div className="title bsl-has-color-status-4 ">
+              {`${t('common.headers.message')}:`}
+            </div>
+            {content}
           </div>
-          {content}
-        </div>
+          {customContent &&
+            customContent.map(element => (
+              <div
+                className="expandable-item__message"
+                style={{
+                  ...spacing.sapUiSmallMarginBeginEnd,
+                  ...spacing.sapUiTinyMarginTopBottom,
+                }}
+              >
+                <div className="title bsl-has-color-status-4 ">
+                  {`${element.header}:`}
+                </div>
+                {element.value}
+              </div>
+            ))}
+        </>
       )}
     </>
   );

@@ -11,17 +11,12 @@ import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 
 import JobCreate from './JobCreate';
 import { JobCompletions } from './JobCompletions';
-import { JobConditions } from './JobConditions';
 import { ResourceDescription } from 'resources/Jobs';
 
 export function JobDetails(props) {
   const { t } = useTranslation();
 
   const customColumns = [
-    {
-      header: t('jobs.completions'),
-      value: job => <JobCompletions key="completions" job={job} />,
-    },
     {
       header: t('jobs.start-time'),
       value: job =>
@@ -54,6 +49,57 @@ export function JobDetails(props) {
     },
   ];
 
+  const customStatusColumns = [
+    {
+      header: t('jobs.active'),
+      value: job => <div>{job?.status?.active ?? EMPTY_TEXT_PLACEHOLDER}</div>,
+    },
+    {
+      header: t('jobs.failed'),
+      value: job => <div>{job?.status?.failed ?? EMPTY_TEXT_PLACEHOLDER}</div>,
+    },
+    {
+      header: t('jobs.ready'),
+      value: job => <div>{job?.status?.ready ?? EMPTY_TEXT_PLACEHOLDER}</div>,
+    },
+    {
+      header: t('jobs.succeeded'),
+      value: job => (
+        <div>{job?.status?.succeeded ?? EMPTY_TEXT_PLACEHOLDER}</div>
+      ),
+    },
+  ];
+
+  const statusConditions = job => {
+    return job?.status?.conditions?.map(condition => {
+      return {
+        header: { titleText: condition.type, status: condition.status },
+        message:
+          condition.message ?? condition.reason ?? EMPTY_TEXT_PLACEHOLDER,
+        customContent: [
+          {
+            header: t('jobs.conditions.last-probe'),
+            value: condition.lastProbeTime ? (
+              <ReadableCreationTimestamp timestamp={condition.lastProbeTime} />
+            ) : (
+              EMPTY_TEXT_PLACEHOLDER
+            ),
+          },
+          {
+            header: t('jobs.conditions.last-transition'),
+            value: condition.lastTransitionTime ? (
+              <ReadableCreationTimestamp
+                timestamp={condition.lastTransitionTime}
+              />
+            ) : (
+              EMPTY_TEXT_PLACEHOLDER
+            ),
+          },
+        ],
+      };
+    });
+  };
+
   const Events = () => (
     <EventsList
       key="events"
@@ -77,12 +123,7 @@ export function JobDetails(props) {
     <PodTemplate key="pod-template" template={job.spec?.template} />
   );
 
-  const customComponents = [
-    JobConditions,
-    MatchSelector,
-    Events,
-    JobPodTemplate,
-  ];
+  const customComponents = [MatchSelector, JobPodTemplate, Events];
 
   return (
     <ResourceDetails
@@ -90,6 +131,9 @@ export function JobDetails(props) {
       customComponents={customComponents}
       createResourceForm={JobCreate}
       description={ResourceDescription}
+      customStatusColumns={customStatusColumns}
+      statusConditions={statusConditions}
+      statusBadge={job => <JobCompletions key="completions" job={job} />}
       {...props}
     />
   );

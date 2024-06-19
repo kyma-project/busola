@@ -4,7 +4,7 @@ export function getHealthyReplicasCount(resource) {
 }
 
 export function getHealthyStatusesCount(pods) {
-  const successStatuses = ['RUNNING', 'SUCCEEDED'];
+  const successStatuses = ['Running', 'Succeeded'];
   return pods?.filter(p =>
     successStatuses.includes(p.status.phase.toUpperCase()),
   )?.length;

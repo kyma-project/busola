@@ -97,7 +97,9 @@ export const DynamicPageComponent = ({
       style={title === 'Clusters Overview' ? { display: 'none' } : null}
       header={
         <FlexBox alignItems="Center">
-          <Title className="ui5-title">{title}</Title>
+          <Title level="H3" className="bold-title">
+            {title}
+          </Title>
           {protectedResource && (
             <span style={spacing.sapUiTinyMarginBegin}>
               {protectedResourceWarning}
