@@ -1,11 +1,19 @@
-# fragments shamelessly stolen from https://github.com/kyma-project/api-gateway/tree/main/.github
-name: Cypress PoC
-on: workflow_dispatch
+name: pull-integration-namespace-k3d
+on: 
+  pull_request:
+    types: [opened, edited, synchronize, reopened, ready_for_review]
+    # paths:
+    #   - "backend/**"
+    #   - "public/**"
+    #   - "src/**"
+    #   - "tests/**"
+    #   - "package.json"
+    #   - "Makefile"
+    #   - "Dockerfile.local"
+    #   - "docs/**"
 jobs:
   test:
     runs-on: ubuntu-latest
-    # environment:
-    #     name: release
     steps:
       - uses: gardenlinux/workflow-telemetry-action@6f19ac2411a52a120abb74c812592b44f165d05c # pin@v1
         with:
@@ -54,14 +62,14 @@ jobs:
           cd tests/integration
           npm ci && npm run "test:namespace"
       - name: Uploads artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
           name: cypress-${{ github.job }}
           path: tests/integration/cypress/
           retention-days: 90
       - name: Upload Busola logs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
           name: busola-logs-${{ github.job }}
