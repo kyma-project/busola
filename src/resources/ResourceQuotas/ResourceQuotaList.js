@@ -11,29 +11,28 @@ export function ResourceQuotaList(props) {
     {
       header: t('resource-quotas.headers.limits.cpu'),
       value: quota =>
-        (quota.spec?.hard && quota.spec?.hard['limits.cpu']) ||
-        EMPTY_TEXT_PLACEHOLDER,
+        quota.spec?.hard?.['limits.cpu'] || EMPTY_TEXT_PLACEHOLDER,
     },
     {
       header: t('resource-quotas.headers.limits.memory'),
       value: quota =>
-        (quota.spec?.hard && quota.spec?.hard['limits.memory']) ||
-        EMPTY_TEXT_PLACEHOLDER,
+        quota.spec?.hard?.['limits.memory'] || EMPTY_TEXT_PLACEHOLDER,
     },
     {
       header: t('resource-quotas.headers.requests.cpu'),
       value: quota =>
-        (quota.spec?.hard && quota.spec?.hard['requests.cpu']) ||
+        quota.spec?.hard?.['requests.cpu'] ||
+        quota.spec?.hard?.cpu ||
         EMPTY_TEXT_PLACEHOLDER,
     },
     {
       header: t('resource-quotas.headers.requests.memory'),
       value: quota =>
-        (quota.spec?.hard && quota.spec?.hard['requests.memory']) ||
+        quota.spec?.hard?.['requests.memory'] ||
+        quota.spec?.hard?.memory ||
         EMPTY_TEXT_PLACEHOLDER,
     },
   ];
-
   return (
     <ResourcesList
       disableHiding={true}
@@ -46,4 +45,5 @@ export function ResourceQuotaList(props) {
     />
   );
 }
+
 export default ResourceQuotaList;
