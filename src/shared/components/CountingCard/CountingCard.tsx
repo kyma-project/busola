@@ -18,6 +18,7 @@ type CountingCardProps = {
   resourceUrl: string;
   isClusterResource: boolean;
   className: string;
+  additionalContent?: React.ReactNode;
 };
 
 export const CountingCard = ({
@@ -28,6 +29,7 @@ export const CountingCard = ({
   resourceUrl,
   isClusterResource = false,
   className = '',
+  additionalContent,
 }: CountingCardProps) => {
   const { t } = useTranslation();
   const { namespaceUrl, clusterUrl } = useUrl();
@@ -80,6 +82,7 @@ export const CountingCard = ({
             {t('common.buttons.learn-more')}
           </Link>
         )}
+        {additionalContent && additionalContent}
       </div>
     </Card>
   );
