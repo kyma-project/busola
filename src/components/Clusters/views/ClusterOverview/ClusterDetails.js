@@ -77,7 +77,7 @@ export default function ClusterDetails({ currentCluster }) {
           <CountingCard
             className="item"
             value={modules?.length}
-            title={'Installed Modules'}
+            title={t('kyma-modules.installed-modules')}
             additionalContent={
               <Button
                 design="Emphasized"
