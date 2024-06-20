@@ -84,7 +84,7 @@ ResourcesList.defaultProps = {
   disableEdit: false,
   disableDelete: false,
   disableMargin: false,
-  enableColumnLayout: false,
+  enableColumnLayout: true,
   layoutNumber: 'StartColumn',
   filterFn: () => true,
 };

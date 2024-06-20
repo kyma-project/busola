@@ -18,8 +18,6 @@ import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 import { useUrl } from 'hooks/useUrl';
 
-import { useFeature } from 'hooks/useFeature';
-
 export const createPath = (
   config = { detailsView: false, pathSegment: '' },
 ) => {
@@ -63,7 +61,6 @@ const ColumnWrapper = ({
   create,
   ...props
 }) => {
-  const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
@@ -87,7 +84,7 @@ const ColumnWrapper = ({
 
   const initialLayoutState = layout
     ? {
-        layout: isColumnLeyoutEnabled && layout ? layout : layoutState?.layout,
+        layout: layout ? layout : layoutState?.layout,
         midColumn: {
           resourceName: resourceName,
           resourceType: props.resourceType,
@@ -102,13 +99,7 @@ const ColumnWrapper = ({
       setLayoutColumn(initialLayoutState);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    layout,
-    isColumnLeyoutEnabled,
-    namespaceId,
-    resourceName,
-    props.resourceType,
-  ]);
+  }, [layout, namespaceId, resourceName, props.resourceType]);
 
   const layoutCloseCreateUrl = resourceListUrl({
     kind: props.resourceType,
@@ -134,10 +125,7 @@ const ColumnWrapper = ({
   const listComponent = React.cloneElement(list, {
     ...elementListProps,
     layoutCloseCreateUrl,
-    enableColumnLayout:
-      elementListProps.resourceType !== 'Namespaces'
-        ? isColumnLeyoutEnabled
-        : false,
+    enableColumnLayout: elementListProps.resourceType !== 'Namespaces',
   });
   const detailsComponent = React.cloneElement(details, {
     ...elementDetailsProps,
@@ -145,7 +133,7 @@ const ColumnWrapper = ({
 
   let startColumnComponent = null;
 
-  if ((!layout || !isColumnLeyoutEnabled) && defaultColumn === 'details') {
+  if (!layout && defaultColumn === 'details') {
     startColumnComponent = detailsComponent;
   } else {
     startColumnComponent = listComponent;
@@ -179,11 +167,13 @@ const ColumnWrapper = ({
       />
     );
   }
+  console.log(layout);
   if (
     !layoutState?.showCreate &&
-    (layoutState?.midColumn || isColumnLeyoutEnabled) &&
+    (layoutState?.midColumn || true) &&
     !(layoutState?.layout === 'OneColumn' && defaultColumn === 'details')
   ) {
+    console.log('DETAILS');
     midColumnComponent = detailsComponent;
   }
 

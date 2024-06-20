@@ -9,7 +9,6 @@ import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate'
 import { usePrepareCreateProps } from 'resources/helpers';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import { useFeature } from 'hooks/useFeature';
 import { useUrl } from 'hooks/useUrl';
 
 const BusolaExtensionList = React.lazy(() =>
@@ -24,7 +23,6 @@ const BusolaExtensionCreate = React.lazy(() =>
 );
 
 const ColumnWrapper = ({ defaultColumn = 'list' }) => {
-  const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
@@ -36,7 +34,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
 
   const initialLayoutState = layout
     ? {
-        layout: isColumnLeyoutEnabled && layout ? layout : layoutState?.layout,
+        layout: layout ? layout : layoutState?.layout,
         midColumn: {
           resourceName: name,
           resourceType: 'Extensions',
@@ -50,7 +48,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
     if (layout) {
       setLayoutColumn(initialLayoutState);
     }
-  }, [layout, isColumnLeyoutEnabled, namespace, name]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [layout, namespace, name]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const elementCreateProps = usePrepareCreateProps({
     resourceType: 'ConfigMap',
@@ -61,7 +59,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
 
   let startColumnComponent = null;
 
-  if ((!layout || !isColumnLeyoutEnabled) && defaultColumn === 'details') {
+  if (!layout && defaultColumn === 'details') {
     startColumnComponent = (
       <BusolaExtensionDetails
         name={layoutState?.midColumn?.resourceName || name}
@@ -71,7 +69,6 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
   } else {
     startColumnComponent = (
       <BusolaExtensionList
-        enableColumnLayout={isColumnLeyoutEnabled}
         layoutCloseCreateUrl={clusterUrl('busolaextensions')}
       />
     );

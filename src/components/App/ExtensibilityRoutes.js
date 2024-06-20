@@ -7,7 +7,6 @@ import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import { useFeature } from 'hooks/useFeature';
 import { useUrl } from 'hooks/useUrl';
 
 import { usePrepareCreateProps } from 'resources/helpers';
@@ -27,7 +26,6 @@ const ColumnWrapper = ({
   extension,
   urlPath,
 }) => {
-  const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
@@ -38,7 +36,7 @@ const ColumnWrapper = ({
   const { namespaceId, resourceName } = useParams();
   const initialLayoutState = layout
     ? {
-        layout: isColumnLeyoutEnabled && layout ? layout : layoutState?.layout,
+        layout: layout ? layout : layoutState?.layout,
         midColumn: {
           resourceName: resourceName,
           resourceType: urlPath ?? resourceType,
@@ -53,8 +51,8 @@ const ColumnWrapper = ({
       setLayoutColumn(initialLayoutState);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [layout, isColumnLeyoutEnabled, namespaceId, resourceName, resourceType]);
-
+  }, [layout, namespaceId, resourceName, resourceType]);
+  console.log(initialLayoutState);
   const overrides = { resourceType: urlPath };
 
   const layoutCloseCreateUrl = resourceListUrl(
@@ -68,17 +66,12 @@ const ColumnWrapper = ({
   );
 
   let startColumnComponent = null;
-  if ((!layout || !isColumnLeyoutEnabled) && defaultColumn === 'details') {
+  if (!layout && defaultColumn === 'details') {
     startColumnComponent = (
       <Details resourceName={resourceName} namespaceId={namespaceId} />
     );
   } else {
-    startColumnComponent = (
-      <List
-        enableColumnLayout={isColumnLeyoutEnabled}
-        layoutCloseCreateUrl={layoutCloseCreateUrl}
-      />
-    );
+    startColumnComponent = <List layoutCloseCreateUrl={layoutCloseCreateUrl} />;
   }
 
   const elementCreateProps = usePrepareCreateProps({
@@ -114,7 +107,7 @@ const ColumnWrapper = ({
 
   if (
     !layoutState?.showCreate &&
-    (layoutState?.midColumn || isColumnLeyoutEnabled) &&
+    layoutState?.midColumn &&
     !(layoutState?.layout === 'OneColumn' && defaultColumn === 'details')
   ) {
     midColumnComponent = (
