@@ -66,7 +66,7 @@ const MemoryRequestsCircle = ({ resourceQuotas, isLoading }) => {
     (sum, quota) =>
       sum +
       getBytes(
-        quota.status?.used?.['requests.memory'] || quota.status?.used?.cpu,
+        quota.status?.used?.['requests.memory'] || quota.status?.used?.memory,
       ),
     0,
   );
