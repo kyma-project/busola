@@ -1488,7 +1488,19 @@ settings:
 stateful-sets:
   description: <0>StatefulSet</0> is used for the management of Pods' deployment and scaling.
   name_singular: StatefulSet
+  overview:
+    available-replicas: Available Replicas
+    current-replicas: Current Replicas
+    header: Replicas Overview
+    replicas: Replicas
+    ready-replicas: Ready Replicas
+    updated-replicas: Updated Replicas
   replicas: Replicas
+  status:
+    collision-count: Collision Count
+    current-revision: Current Revision
+    observed-generation: Observed Generation
+    update-revision: Update Revision
   title: Stateful Sets
 storage:
   title: Storage
