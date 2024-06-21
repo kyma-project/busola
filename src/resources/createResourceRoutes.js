@@ -140,6 +140,15 @@ const ColumnWrapper = ({
   }
 
   let midColumnComponent = null;
+
+  if (
+    !layoutState?.showCreate &&
+    !(layoutState?.layout === 'OneColumn' && defaultColumn === 'details')
+  ) {
+    console.log('DETAILS');
+    midColumnComponent = detailsComponent;
+  }
+
   if (
     layoutState?.showCreate?.resourceType &&
     create &&
@@ -168,14 +177,6 @@ const ColumnWrapper = ({
     );
   }
   console.log(layout);
-  if (
-    !layoutState?.showCreate &&
-    (layoutState?.midColumn || true) &&
-    !(layoutState?.layout === 'OneColumn' && defaultColumn === 'details')
-  ) {
-    console.log('DETAILS');
-    midColumnComponent = detailsComponent;
-  }
 
   return (
     <FlexibleColumnLayout

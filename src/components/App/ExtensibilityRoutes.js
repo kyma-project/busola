@@ -52,7 +52,7 @@ const ColumnWrapper = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [layout, namespaceId, resourceName, resourceType]);
-  console.log(initialLayoutState);
+
   const overrides = { resourceType: urlPath };
 
   const layoutCloseCreateUrl = resourceListUrl(
@@ -71,6 +71,7 @@ const ColumnWrapper = ({
       <Details resourceName={resourceName} namespaceId={namespaceId} />
     );
   } else {
+    console.log('setting list');
     startColumnComponent = <List layoutCloseCreateUrl={layoutCloseCreateUrl} />;
   }
 
@@ -80,7 +81,8 @@ const ColumnWrapper = ({
     apiGroup: extension?.general.resource.group,
     apiVersion: extension?.general.resource.version,
   });
-
+  console.log(layoutState);
+  console.log(layout);
   let midColumnComponent = null;
 
   if (layoutState?.showCreate?.resourceType) {
@@ -117,6 +119,8 @@ const ColumnWrapper = ({
       />
     );
   }
+  console.log(midColumnComponent);
+  console.log('rerender');
 
   return (
     <FlexibleColumnLayout
