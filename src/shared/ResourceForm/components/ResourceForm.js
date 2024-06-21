@@ -48,6 +48,7 @@ export function ResourceForm({
   renderEditor,
   onSubmit,
   afterCreatedFn,
+  afterCreatedCustomMessage,
   className,
   onlyYaml = false,
   autocompletionDisabled,
@@ -67,6 +68,7 @@ export function ResourceForm({
   isEdit,
   stickyHeaderHeight,
   resetLayout,
+  formWithoutPanel,
 }) {
   // readonly schema ID, set only once
   const resourceSchemaId = useMemo(
@@ -112,6 +114,7 @@ export function ResourceForm({
         !editorError
       ) {
         setIsResourceEdited({ isEdited: false });
+        setIsFormOpen({ formOpen: false });
         if (isResourceEdited.discardAction) isResourceEdited.discardAction();
       }
     }
@@ -130,6 +133,7 @@ export function ResourceForm({
     layoutNumber,
     setResource,
     resetLayout,
+    afterCreatedCustomMessage,
   });
 
   const handleInitialMode = () => {
@@ -220,13 +224,9 @@ export function ResourceForm({
       style={{ overflowX: 'hidden' }}
       onChange={onChange}
     >
-      {mode === ModeSelector.MODE_FORM && (
+      {(mode === ModeSelector.MODE_FORM || formWithoutPanel) && (
         <FormItem>
-          <div
-            className="full-width"
-            style={spacing.sapUiTinyMarginBottom}
-            hidden={mode !== ModeSelector.MODE_FORM}
-          >
+          <div className="full-width" style={spacing.sapUiTinyMarginBottom}>
             <ResourceFormWrapper
               resource={resource}
               setResource={setResource}
@@ -267,55 +267,67 @@ export function ResourceForm({
 
   return (
     <section className={classnames('resource-form', className)}>
-      <UI5Panel
-        key={`edit-panel-${singularName}`}
-        className="resource-form--panel card-shadow"
-        style={spacing.sapUiSmallMarginTopBottom}
-        disableMargin
-        stickyHeader={true}
-        headerTop={stickyHeaderHeight + 'px'}
-        headerActions={
-          <>
-            {actions}
-            <EditorActions
-              val={convertedResource}
-              editor={actionsEditor}
-              title={`${resource?.metadata?.name || singularName}.yaml`}
-              saveHidden
-              searchDisabled={yamlSearchDisabled || mode === 'MODE_FORM'}
-              hideDisabled={yamlHideDisabled || mode === 'MODE_FORM'}
-            />
-          </>
-        }
-        modeActions={
-          <>
-            {onlyYaml ? null : (
-              <ModeSelector
-                mode={mode}
-                setMode={newMode => {
-                  setMode(newMode);
-                  if (onModeChange) onModeChange(mode, newMode);
-                }}
-                isEditing={!!isEdit}
-                isDisabled={modeSelectorDisabled}
-              />
-            )}
-          </>
-        }
-      >
+      {formWithoutPanel ? (
         <form
           ref={formElementRef}
           onSubmit={onSubmit || createResource}
           style={{ height: '100%' }}
           onChange={onChange}
         >
-          {mode === ModeSelector.MODE_YAML && (
-            <div className="yaml-form">{editor}</div>
-          )}
           {formContent}
         </form>
-      </UI5Panel>
+      ) : (
+        <UI5Panel
+          key={`edit-panel-${singularName}`}
+          className="resource-form--panel card-shadow"
+          style={spacing.sapUiSmallMarginTopBottom}
+          disableMargin
+          stickyHeader={true}
+          headerTop={stickyHeaderHeight + 'px'}
+          headerActions={
+            <>
+              {actions}
+              <EditorActions
+                val={convertedResource}
+                editor={actionsEditor}
+                title={`${resource?.metadata?.name || singularName}.yaml`}
+                saveHidden
+                searchDisabled={yamlSearchDisabled || mode === 'MODE_FORM'}
+                hideDisabled={yamlHideDisabled || mode === 'MODE_FORM'}
+              />
+            </>
+          }
+          modeActions={
+            <>
+              {onlyYaml ? null : (
+                <ModeSelector
+                  mode={mode}
+                  setMode={newMode => {
+                    setMode(newMode);
+                    if (onModeChange) onModeChange(mode, newMode);
+                  }}
+                  isEditing={!!isEdit}
+                  isDisabled={modeSelectorDisabled}
+                />
+              )}
+            </>
+          }
+        >
+          <form
+            ref={formElementRef}
+            onSubmit={onSubmit || createResource}
+            style={{ height: '100%' }}
+            onChange={onChange}
+          >
+            {mode === ModeSelector.MODE_YAML && (
+              <div className="yaml-form">{editor}</div>
+            )}
+            {formContent}
+          </form>
+        </UI5Panel>
+      )}
       {createPortal(<UnsavedMessageBox />, document.body)}
     </section>
   );
+  // }
 }

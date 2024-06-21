@@ -58,7 +58,7 @@ const MemoryRequestsCircle = ({ resourceQuotas, isLoading }) => {
     (sum, quota) =>
       sum +
       getBytes(
-        quota.status?.hard?.['requests.memory'] || quota.status?.hard?.cpu,
+        quota.status?.hard?.['requests.memory'] || quota.status?.hard?.memory,
       ),
     0,
   );
@@ -66,7 +66,7 @@ const MemoryRequestsCircle = ({ resourceQuotas, isLoading }) => {
     (sum, quota) =>
       sum +
       getBytes(
-        quota.status?.used?.['requests.memory'] || quota.status?.used?.cpu,
+        quota.status?.used?.['requests.memory'] || quota.status?.used?.memory,
       ),
     0,
   );
@@ -94,11 +94,11 @@ const MemoryLimitsCircle = ({ resourceQuotas, isLoading }) => {
   }
 
   const totalLimits = resourceQuotas.reduce(
-    (sum, quota) => sum + getBytes(quota.status?.hard?.['limits.memory']), //should we sum it or take the max number?
+    (sum, quota) => sum + getBytes(quota.status?.hard?.['limits.memory']),
     0,
   );
   const totalUsage = resourceQuotas.reduce(
-    (sum, quota) => sum + getBytes(quota.status?.used?.['limits.memory']), //should we sum it or take the max number?
+    (sum, quota) => sum + getBytes(quota.status?.used?.['limits.memory']),
     0,
   );
 

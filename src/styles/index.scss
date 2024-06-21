@@ -218,6 +218,11 @@ ui5-tabcontainer::part(content) {
   padding: 0 !important;
 }
 
+ui5-popover {
+  max-width: 500px;
+}
+
+// ICONS SIZES
 .bsl-icon-s {
   width: 0.75rem;
   height: 0.75rem;
@@ -291,6 +296,23 @@ ui5-tabcontainer::part(content) {
 .bsl-col-md--12 {
   max-width: 100%;
   min-width: 100%;
+}
+
+// WORKAROUND FOR UI5 TITLE CUT OFF
+ui5-title[level='H1'] {
+  line-height: calc(var(--sapFontHeader1Size) * 1.15);
+}
+ui5-title[level='H2'] {
+  line-height: calc(var(--sapFontHeader2Size) * 1.15);
+}
+ui5-title[level='H3'] {
+  line-height: calc(var(--sapFontHeader3Size) * 1.15);
+}
+ui5-title[level='H4'] {
+  line-height: calc(var(--sapFontHeader4Size) * 1.15);
+}
+ui5-title[level='H5'] {
+  line-height: calc(var(--sapFontHeader5Size) * 1.15);
 }
 
 @include graph-node-border(pod, 4);

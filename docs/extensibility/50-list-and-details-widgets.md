@@ -429,7 +429,7 @@ injections: |-
     design: information-1
     children:
       - widget: ResourceButton
-        source: "'Modify Modules'"
+        source: "'Add Modules'"
         resource: 
           customUrl: kymamodules
       - widget: ExternalLinkButton

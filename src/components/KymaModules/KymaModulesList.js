@@ -1,7 +1,12 @@
 import { useTranslation } from 'react-i18next';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import { Label, DynamicPageHeader, Button } from '@ui5/webcomponents-react';
+import {
+  DynamicPageHeader,
+  Button,
+  FlexBox,
+  Text,
+} from '@ui5/webcomponents-react';
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useState } from 'react';
@@ -18,15 +23,15 @@ import {
   apiGroup,
   apiVersion,
 } from 'components/KymaModules';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useUrl } from 'hooks/useUrl';
 import pluralize from 'pluralize';
-import { Link } from 'shared/components/Link/Link';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { isFormOpenState } from 'state/formOpenAtom';
-import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
+import { Label } from 'shared/ResourceForm/components/Label';
+import { cloneDeep } from 'lodash';
+import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
+import { useNotification } from 'shared/contexts/NotificationContext';
 
 export function KymaModulesList(props) {
   const { t } = useTranslation();
@@ -37,10 +42,6 @@ export function KymaModulesList(props) {
     setShowReleaseChannelTitleDescription,
   ] = useState(false);
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
-  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
-    isResourceEditedState,
-  );
-  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
   const { clusterUrl } = useUrl();
 
   const { data: kymaResources, loading: kymaResourcesLoading } = useGet(
@@ -135,95 +136,11 @@ export function KymaModulesList(props) {
     ];
 
     const rowRenderer = resource => {
-      const isExtension = !!kymaExt?.find(ext =>
-        ext.metadata.name.includes(resource.name),
-      );
-
-      const path = findStatus(resource.name)?.resource?.metadata?.namespace
-        ? clusterUrl(
-            `kymamodules/namespaces/${
-              findStatus(resource.name)?.resource?.metadata?.namespace
-            }/${
-              isExtension
-                ? `${pluralize(
-                    findStatus(resource.name)?.resource?.kind || '',
-                  ).toLowerCase()}/${
-                    findStatus(resource.name)?.resource?.metadata?.name
-                  }`
-                : `${findCrd(resource.name)?.metadata?.name}/${
-                    findStatus(resource.name)?.resource?.metadata?.name
-                  }`
-            }`,
-          )
-        : clusterUrl(
-            `kymamodules/${
-              isExtension
-                ? `${pluralize(
-                    findStatus(resource.name)?.resource?.kind || '',
-                  ).toLowerCase()}/${
-                    findStatus(resource.name)?.resource?.metadata?.name
-                  }`
-                : `${findCrd(resource.name)?.metadata?.name}/${
-                    findStatus(resource.name)?.resource?.metadata?.name
-                  }`
-            }`,
-          );
-
-      const handleClickResource = () => {
-        if (!isExtension) {
-          setLayoutColumn({
-            midColumn: {
-              resourceType: findCrd(resource.name)?.metadata?.name,
-              resourceName: findStatus(resource.name)?.resource?.metadata?.name,
-              namespaceId:
-                findStatus(resource.name)?.resource?.metadata.namespace || '',
-            },
-            layout: 'TwoColumnsMidExpanded',
-            endColumn: null,
-          });
-          window.history.pushState(
-            window.history.state,
-            '',
-            `${path}?layout=TwoColumnsMidExpanded`,
-          );
-        } else {
-          setLayoutColumn({
-            midColumn: {
-              resourceType: pluralize(
-                findStatus(resource.name)?.resource?.kind || '',
-              ).toLowerCase(),
-              resourceName: findStatus(resource.name)?.resource?.metadata?.name,
-              namespaceId:
-                findStatus(resource.name)?.resource?.metadata.namespace || '',
-            },
-            layout: 'TwoColumnsMidExpanded',
-            endColumn: null,
-          });
-        }
-
-        window.history.pushState(
-          window.history.state,
-          '',
-          `${path}?layout=TwoColumnsMidExpanded`,
-        );
-      };
-
       return [
         // Name
-        <Link
-          url={path}
-          onClick={() => {
-            handleActionIfFormOpen(
-              isResourceEdited,
-              setIsResourceEdited,
-              isFormOpen,
-              setIsFormOpen,
-              () => handleClickResource(),
-            );
-          }}
-        >
+        <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
           {resource.name}
-        </Link>,
+        </Text>,
         // Beta
         checkBeta(
           findModule(
@@ -249,7 +166,7 @@ export function KymaModulesList(props) {
               : findStatus(resource.name)?.state || 'None'
           }
         >
-          {findStatus(resource.name)?.state || 'UNKNOWN'}
+          {findStatus(resource.name)?.state || 'Unknown'}
         </StatusBadge>,
         // Documentation
         <ExternalLink
@@ -276,27 +193,137 @@ export function KymaModulesList(props) {
       };
     };
 
+    const [selectedModules] = useState(kymaResource?.spec?.modules);
+    const [initialUnchangedResource] = useState(cloneDeep(kymaResource));
+    const [kymaResourceState, setKymaResourceState] = useState(kymaResource);
+    const notification = useNotification();
+    const handleModuleUninstall = useCreateResource({
+      singularName: 'Kyma',
+      pluralKind: 'Kymas',
+      resource: kymaResourceState,
+      initialUnchangedResource: initialUnchangedResource,
+      createUrl: resourceUrl,
+      afterCreatedFn: () =>
+        notification.notifySuccess({
+          content: t('kyma-modules.module-uninstall'),
+        }),
+    });
+
+    const actions = [
+      {
+        name: t('common.buttons.delete'),
+        tooltip: () => t('common.buttons.delete'),
+        icon: 'delete',
+        handler: resource => {
+          const index = selectedModules?.findIndex(kymaResourceModule => {
+            return kymaResourceModule.name === resource.name;
+          });
+          selectedModules.splice(index, 1);
+          setKymaResourceState({
+            ...kymaResource,
+            spec: {
+              ...kymaResource.spec,
+              modules: selectedModules,
+            },
+          });
+          handleModuleUninstall();
+        },
+      },
+    ];
+
+    const handleClickResource = resourceName => {
+      const isExtension = !!kymaExt?.find(ext =>
+        ext.metadata.name.includes(resourceName),
+      );
+
+      const path = findStatus(resourceName)?.resource?.metadata?.namespace
+        ? clusterUrl(
+            `kymamodules/namespaces/${
+              findStatus(resourceName)?.resource?.metadata?.namespace
+            }/${
+              isExtension
+                ? `${pluralize(
+                    findStatus(resourceName)?.resource?.kind || '',
+                  ).toLowerCase()}/${
+                    findStatus(resourceName)?.resource?.metadata?.name
+                  }`
+                : `${findCrd(resourceName)?.metadata?.name}/${
+                    findStatus(resourceName)?.resource?.metadata?.name
+                  }`
+            }`,
+          )
+        : clusterUrl(
+            `kymamodules/${
+              isExtension
+                ? `${pluralize(
+                    findStatus(resourceName)?.resource?.kind || '',
+                  ).toLowerCase()}/${
+                    findStatus(resourceName)?.resource?.metadata?.name
+                  }`
+                : `${findCrd(resourceName)?.metadata?.name}/${
+                    findStatus(resourceName)?.resource?.metadata?.name
+                  }`
+            }`,
+          );
+      if (!isExtension) {
+        setLayoutColumn({
+          midColumn: {
+            resourceType: findCrd(resourceName)?.metadata?.name,
+            resourceName: findStatus(resourceName)?.resource?.metadata?.name,
+            namespaceId:
+              findStatus(resourceName)?.resource?.metadata.namespace || '',
+          },
+          layout: 'TwoColumnsMidExpanded',
+          endColumn: null,
+        });
+        window.history.pushState(
+          window.history.state,
+          '',
+          `${path}?layout=TwoColumnsMidExpanded`,
+        );
+      } else {
+        setLayoutColumn({
+          midColumn: {
+            resourceType: pluralize(
+              findStatus(resourceName)?.resource?.kind || '',
+            ).toLowerCase(),
+            resourceName: findStatus(resourceName)?.resource?.metadata?.name,
+            namespaceId:
+              findStatus(resourceName)?.resource?.metadata.namespace || '',
+          },
+          layout: 'TwoColumnsMidExpanded',
+          endColumn: null,
+        });
+      }
+
+      window.history.pushState(
+        window.history.state,
+        '',
+        `${path}?layout=TwoColumnsMidExpanded`,
+      );
+    };
+
     return (
       <GenericList
+        actions={actions}
+        customRowClick={handleClickResource}
         extraHeaderContent={[
           <Button
             key="add-module"
             design="Emphasized"
             onClick={handleShowAddModule}
           >
-            {resource?.status?.modules
-              ? t('kyma-modules.modify')
-              : t('common.buttons.add')}
+            {t('common.buttons.add')}
           </Button>,
         ]}
         customColumnLayout={customColumnLayout}
         enableColumnLayout
+        hasDetailsView
         entries={resource?.status?.modules}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
-        disableHiding={false}
         noHideFields={['Name', '', 'Namespace']}
-        displayArrow={false}
+        displayArrow
         title={'Modules'}
         sortBy={{
           name: (a, b) => a.name?.localeCompare(b.name),
@@ -320,17 +347,21 @@ export function KymaModulesList(props) {
   return (
     <ResourceDetails
       layoutNumber="StartColumn"
+      windowTitle={t('kyma-modules.title')}
       headerContent={
         <DynamicPageHeader>
-          <Label showColon>{t('kyma-modules.release-channel')}</Label>
-          <Label>{kymaResource?.spec.channel}</Label>
-          <HintButton
-            style={spacing.sapUiTinyMarginBegin}
-            setShowTitleDescription={setShowReleaseChannelTitleDescription}
-            showTitleDescription={showReleaseChannelTitleDescription}
-            description={ReleaseChannelDescription}
-            context="details-release-channel"
-          />
+          <FlexBox alignItems="Center">
+            <Label showColon>{t('kyma-modules.release-channel')}</Label>
+            <Text renderWhitespace={true}> </Text>
+            <Text>{kymaResource?.spec.channel}</Text>
+            <HintButton
+              style={spacing.sapUiTinyMarginBegin}
+              setShowTitleDescription={setShowReleaseChannelTitleDescription}
+              showTitleDescription={showReleaseChannelTitleDescription}
+              description={ReleaseChannelDescription}
+              context="details-release-channel"
+            />
+          </FlexBox>
         </DynamicPageHeader>
       }
       customComponents={[ModulesList]}
@@ -349,7 +380,7 @@ export function KymaModulesList(props) {
               setShowTitleDescription={setShowTitleDescription}
               showTitleDescription={showTitleDescription}
               description={ResourceDescription}
-              context="details"
+              context="modules"
             />
           }
         </>

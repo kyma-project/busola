@@ -78,8 +78,8 @@ injections: |-
         location: ClusterOverview
       - slot: details-bottom
         location: ClusterOverview
-        filter: '$item.status.APIRuleStatus.code="OK"'
-    filter: '$item.status.APIRuleStatus.code="ERROR"'
+        filter: '$item.status.APIRuleStatus.code="Ok"'
+    filter: '$item.status.APIRuleStatus.code="Error"'
     order: 2
     children:
       - name: Name
@@ -92,11 +92,11 @@ injections: |-
         widget: Badge
         highlights:
           positive:
-            - 'OK'
+            - 'Ok'
           critical:
-            - 'ERROR'
-            - 'SKIPPED'
-        source: 'status.APIRuleStatus.code ? status.APIRuleStatus.code : "UNKNOWN"'
+            - 'Error'
+            - 'Skipped'
+        source: 'status.APIRuleStatus.code ? status.APIRuleStatus.code : "Unknown"'
         description: status.APIRuleStatus.desc
 ```
 

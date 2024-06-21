@@ -25,7 +25,7 @@ build-image:
 	docker build --build-arg=TAG_default_tag=$(TAG) -t $(IMG_NAME) -f Dockerfile .
 
 build-image-local:
-	docker build --build-arg=TAG_default_tag=$(TAG) -t $(LOCAL_IMG_NAME) -f Dockerfile.local .
+	docker build -t $(LOCAL_IMG_NAME) -f Dockerfile.local .
 
 push-image:
 	docker tag $(IMG_NAME) $(IMG):$(TAG)

@@ -1,8 +1,6 @@
 .page-header {
-  .ui5-title {
-    font-size: var(--sapFontHeader3Size);
+  .bold-title {
     font-family: var(--sapObjectHeader_Title_FontFamily);
-    line-height: calc(var(--sapFontHeader3Size) + 3px);
   }
 
   .description {

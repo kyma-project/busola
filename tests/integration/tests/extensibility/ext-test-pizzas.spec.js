@@ -131,11 +131,11 @@ context('Test Pizzas', () => {
     cy.inspectTab('View');
 
     cy.getMidColumn()
-      .contains('span', /^READY$/i)
+      .contains('span', /^Ready$/i)
       .should('not.exist');
 
     cy.getMidColumn()
-      .contains('span', /^ERROR$/i)
+      .contains('span', /^Error$/i)
       .should('be.visible');
   });
 
@@ -169,7 +169,7 @@ context('Test Pizzas', () => {
 
     cy.get('ui5-button[aria-label="open-sort"]').click();
 
-    cy.get('ui5-radio-button[name="sortOrder"][text="Descending"]').click();
+    cy.get('ui5-radio-button[name="sortOrder"][value="DESC"]').click();
 
     cy.get('ui5-button')
       .contains('OK')
@@ -185,7 +185,7 @@ context('Test Pizzas', () => {
 
     cy.get('ui5-button[aria-label="open-sort"]').click();
 
-    cy.get('ui5-radio-button[name="sortBy"][text="Name"]').click('left');
+    cy.get('ui5-radio-button[name="sortBy"][value="name"]').click('left');
 
     cy.get('ui5-button')
       .contains('OK')

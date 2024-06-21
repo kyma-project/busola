@@ -14,29 +14,29 @@ const resolveType = status => {
     return undefined;
   }
 
-  switch (status.toUpperCase()) {
-    case 'INITIAL':
-    case 'PENDING':
-    case 'AVAILABLE':
-    case 'RELEASED':
+  switch (status) {
+    case 'Initial':
+    case 'Pending':
+    case 'Available':
+    case 'Released':
       return 'Information';
 
-    case 'READY':
-    case 'BOUND':
-    case 'RUNNING':
-    case 'SUCCESS':
-    case 'SUCCEEDED':
-    case 'OK':
+    case 'Ready':
+    case 'Bound':
+    case 'Running':
+    case 'Success':
+    case 'Succeeded':
+    case 'Ok':
       return 'Success';
 
-    case 'UNKNOWN':
-    case 'WARNING':
+    case 'Unknown':
+    case 'Warning':
       return 'Warning';
 
-    case 'FAILED':
-    case 'ERROR':
-    case 'FAILURE':
-    case 'INVALID':
+    case 'Failed':
+    case 'Error':
+    case 'Failure':
+    case 'Invalid':
       return 'Error';
 
     default:
