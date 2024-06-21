@@ -1482,8 +1482,14 @@ settings:
     title: Interface
   language: Language
   other:
+    info: Changes to the page size only take effect locally. To set the global default page size, go to Preferences.
     default-page-size: Default Page Size
     title: Other
+    all: All
+    results-per-page: Results per page
+    page: Page
+    of: of {{pagesCount}}
+    total-items: '{{itemsCount}} items'
   theme: Theme
 stateful-sets:
   description: <0>StatefulSet</0> is used for the management of Pods' deployment and scaling.

@@ -1,8 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import { Select, Option } from '@ui5/webcomponents-react';
-import { pageSizeState } from 'state/preferences/pageSizeAtom';
-const AVAILABLE_PAGE_SIZES = [10, 20, 50];
+import {
+  AVAILABLE_PAGE_SIZES,
+  pageSizeState,
+} from 'state/preferences/pageSizeAtom';
 
 export default function OtherSettings() {
   const { t } = useTranslation();
@@ -29,6 +31,13 @@ export default function OtherSettings() {
             {available_size}
           </Option>
         ))}
+        <Option
+          value={Number.MAX_SAFE_INTEGER.toString()}
+          key="all"
+          selected={pageSize === Number.MAX_SAFE_INTEGER}
+        >
+          {t('settings.other.all')}
+        </Option>
       </Select>
     </div>
   );

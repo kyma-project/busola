@@ -97,7 +97,12 @@ export const GenericList = ({
     }
   };
 
-  const pageSize = useRecoilValue(pageSizeState);
+  const globalPageSize = useRecoilValue(pageSizeState);
+  const [pageSize, setLocalPageSize] = useState(globalPageSize);
+  useEffect(() => {
+    setLocalPageSize(globalPageSize);
+  }, [globalPageSize]);
+
   pagination = useMemo(() => {
     if (pagination) return { itemsPerPage: pageSize, ...(pagination || {}) };
     return undefined;
@@ -408,6 +413,7 @@ export const GenericList = ({
             currentPage={currentPage}
             itemsPerPage={pagination.itemsPerPage}
             onChangePage={setCurrentPage}
+            setLocalPageSize={setLocalPageSize}
           />
         )}
     </UI5Panel>
