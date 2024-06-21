@@ -589,15 +589,14 @@ To render the card within the dense grid layout in the **Monitoring and Health**
 
 These are the available `StatisticalCard` widget parameters:
 
-| Parameter            | Required | Type                                       | Description                                                                                                                                                                                                          |
-| -------------------- | -------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **mainValue**        | **Yes**  | object                                     | The main value displayed using a bigger font.                                                                                                                                                                              |
-| **mainValue.source** | **Yes**  | string or [JSONata](jsonata.md) expression | Fetches data for the column. In its simplest form, it's the path to the value.                                                                                                                           |
+| Parameter            | Required | Type                                       | Description                                                                                                                                                                                                              |
+| -------------------- | -------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **mainValue**        | **Yes**  | object                                     | The main value displayed using a bigger font.                                                                                                                                                                            |
+| **mainValue.source** | **Yes**  | string or [JSONata](jsonata.md) expression | Fetches data for the column. In its simplest form, it's the path to the value.                                                                                                                                           |
 | **mainValue.name**   | **Yes**  | string                                     | The name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the [**translation** section](./translations-section.md). |
 | **children**         | No       | array of objects                           | An array of additional values, listed next to the main one.                                                                                                                                                              |
-| **children.source**  | **Yes**  | string or [JSONata](jsonata.md) expression | Fetches data for the column. In its simplest form, it's the path to the value.                                                                                                                           |
+| **children.source**  | **Yes**  | string or [JSONata](jsonata.md) expression | Fetches data for the column. In its simplest form, it's the path to the value.                                                                                                                                           |
 | **children.name**    | **Yes**  | string                                     | The name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the [**translation** section](./translations-section.md). |
-
 
 This is an example of the widget configuration in the **data.details.health** section which allows the `StatisticalCard` to be displayed on the details page in the **Monitoring and Health** section:
 
@@ -626,12 +625,12 @@ injections: |-
     source: status
     mainValue:
       name: MySubtitle
-      source: $item.importantValue
+      source: $sum($item.importantValue)
     children:
       - name: ExtraInformation1
-        source: $item.value1
+        source: $max($item.value1)
       - name: ExtraInformation2
-        source: $item.value2
+        source: $count($item.value2)
     targets:
       - slot: health
         location: ClusterOverview
