@@ -699,10 +699,9 @@ See the following example:
 
 ## Radial Chart
 
-Radial Chart widgets render a card component with a graphical representation of radial chart.
-This widget is primarily designed to be used via [injections](#widget-injections-overview) (**destination: ClusterStats,
-slot: cards**), allowing the card to be rendered within the dense grid layout of the ClusterOverview's statistical cards
-section.
+`Radial Chart` widgets render a card component with a graphical representation of radial chart.
+To display the widget in the **Monitoring and Health** section of a details page, configure it in **data.details.health**.  
+To render the card within the dense grid layout in the **Monitoring and Health** section of **Cluster Details**, use [injections](#widget-injections-overview) (**destination: ClusterOverview, slot: health**).
 
 These are the available `Radial Chart` widget parameters:
 
@@ -710,9 +709,20 @@ These are the available `Radial Chart` widget parameters:
 | ------------------ | -------- | -------------------------------------------- | -------------------------------- |
 | **maxValue**       | **No**   | string or the [JSONata](jsonata.md) function | Maximum value for radial chart   |
 | **additionalInfo** | **No**   | string or the [JSONata](jsonata.md) function | Additional description of values |
-| **color**          | **No**   | string                                       | Color of radial chart and value  |
+| **color**          | **No**   | string                                       | Color of radial chart            |
 
-#### Example
+This is an example of the widget configuration in the **data.details.health** section which allows the `RadialChart` to be displayed on the details page in the **Monitoring and Health** section:
+
+```yaml
+- name: MyTitle
+  widget: RadialChart
+  source: status.currentReplicas
+  maxValue: status.desiredReplicas
+  additionalInfo: $join([$string(status.currentReplicas), "/", $string(status.desiredReplicas)])
+  color: var(--sapChart_OrderedColor_5)
+```
+
+This is an example of the widget configured using injection which allows the `RadialChart` to be displayed in the **Monitoring and Health** section of **Cluster Details**:
 
 ```yaml
 injections: |-
@@ -722,6 +732,9 @@ injections: |-
     maxValue: status.desiredReplicas
     additionalInfo: $join([$string(status.currentReplicas), "/", $string(status.desiredReplicas)])
     color: var(--sapChart_OrderedColor_5)
+    targets:
+      - slot: health
+        location: ClusterOverview
 ```
 
 <img src="./assets/display-widgets/RadialChart.png" alt="Example of a RadialChart widget" style="border: 1px solid #D2D5D9" width="75%">
