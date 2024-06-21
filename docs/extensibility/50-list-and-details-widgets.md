@@ -93,9 +93,9 @@ This is an exaple of kind only:
   kindOnly: true
 ```
 
-### ConditionList
+### `ConditionList`
 
-The condition List widget renders the conditions as an expandable list with condition details. This widget is primarily designed to be used in overview section **data.details.status**
+The `ConditionList` widget renders the conditions as an expandable list with condition details. This widget is primarily designed for the overview section **data.details.status**
 
 See the following example:
 
@@ -581,25 +581,25 @@ See the following example:
 
 <img src="./assets/display-widgets/ResourceRefs.png" alt="Example of a ResourceRefs widget" style="border: 1px solid #D2D5D9">
 
-### StatisticalCard
+### `StatisticalCard`
 
-StatisticalCard widgets render a card component with a several numerical information elements.
-This widget is primarily designed to be used in Monitoring and Health section **data.details.health** or via [injections](#widget-injections-overview) (**destination: ClusterOverview, slot: health**), allowing the card to be rendered within the dense grid layout of the ClusterOverview's Monitoring and Health section.
+`StatisticalCard` widgets render a card component with several numerical pieces of information.
+To display the widget in the **Monitoring and Health** section of a details page, configure it in **data.details.health**.  
+To render the card within the dense grid layout in the **Monitoring and Health** section of **Cluster Details**, use [injections](#widget-injections-overview) (**destination: ClusterOverview, slot: health**).
 
 These are the available `StatisticalCard` widget parameters:
 
 | Parameter            | Required | Type                                       | Description                                                                                                                                                                                                          |
 | -------------------- | -------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **mainValue**        | **Yes**  | object                                     | Main value displayed with bigger font                                                                                                                                                                                |
-| **mainValue.source** | **Yes**  | string or [JSONata](jsonata.md) expression | It is used to fetch data for the column. In its simplest form, it's the path to the value.                                                                                                                           |
-| **mainValue.name**   | **Yes**  | string                                     | Name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the [**translation** section](./translations-section.md). |
-| **children**         | No       | array of objects                           | Array of additional values, listed next to the main one                                                                                                                                                              |
-| **children.source**  | **Yes**  | string or [JSONata](jsonata.md) expression | It is used to fetch data for the column. In its simplest form, it's the path to the value.                                                                                                                           |
-| **children.name**    | **Yes**  | string                                     | Name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the [**translation** section](./translations-section.md). |
+| **mainValue**        | **Yes**  | object                                     | The main value displayed using a bigger font.                                                                                                                                                                              |
+| **mainValue.source** | **Yes**  | string or [JSONata](jsonata.md) expression | Fetches data for the column. In its simplest form, it's the path to the value.                                                                                                                           |
+| **mainValue.name**   | **Yes**  | string                                     | The name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the [**translation** section](./translations-section.md). |
+| **children**         | No       | array of objects                           | An array of additional values, listed next to the main one.                                                                                                                                                              |
+| **children.source**  | **Yes**  | string or [JSONata](jsonata.md) expression | Fetches data for the column. In its simplest form, it's the path to the value.                                                                                                                           |
+| **children.name**    | **Yes**  | string                                     | The name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the [**translation** section](./translations-section.md). |
 
-|
 
-This is an example for widget usage in the **data.details.health** section which allows StatisticalCard to be displayed in the details page in the Monitoring and Health section:
+This is an example of the widget configuration in the **data.details.health** section which allows the `StatisticalCard` to be displayed on the details page in the **Monitoring and Health** section:
 
 ```yaml
 details: |-
@@ -617,7 +617,7 @@ details: |-
           source: $item.value2
 ```
 
-This is an example for widget usage via injection which allows StatisticalCard to be displayed in ClusterOverview's Monitoring and Health section:
+This is an example of the widget configured using injection which allows the `StatisticalCard` to be displayed in the **Monitoring and Health** section of **Cluster Details**:
 
 ```yaml
 injections: |-
