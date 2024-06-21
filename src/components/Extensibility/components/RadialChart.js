@@ -49,5 +49,3 @@ export const RadialChart = ({ structure, value, originalResource }) => {
     </div>
   );
 };
-
-RadialChart.array = true;
