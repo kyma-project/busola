@@ -728,9 +728,9 @@ This is an example of the widget configured using injection which allows the `Ra
 injections: |-
   - name: MyTitle
     widget: RadialChart
-    source: status.currentReplicas
-    maxValue: status.desiredReplicas
-    additionalInfo: $join([$string(status.currentReplicas), "/", $string(status.desiredReplicas)])
+    source: $sum(status.currentReplicas)
+    maxValue: $sum(status.desiredReplicas)
+    additionalInfo: $join([$string($sum(status.currentReplicas)), "/", $string($sum(status.desiredReplicas))])
     color: var(--sapChart_OrderedColor_5)
     targets:
       - slot: health
