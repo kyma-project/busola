@@ -68,9 +68,11 @@ export const ExtensibilityDetailsCore = ({
   }
 
   const header = resMetaData?.details?.header || [];
+  const health = resMetaData?.details?.health || [];
   const status = resMetaData?.details?.status || [];
   const body = resMetaData?.details?.body || [];
   const dataSources = resMetaData?.dataSources || {};
+  const general = resMetaData?.general || {};
 
   return (
     <ResourceDetails
@@ -156,6 +158,24 @@ export const ExtensibilityDetailsCore = ({
                   />
                 ),
               }))
+          : []
+      }
+      customHealthCards={
+        Array.isArray(health)
+          ? [
+              (resource, i) => (
+                <Widget
+                  key={i}
+                  value={resource}
+                  structure={health}
+                  schema={schema}
+                  dataSources={dataSources}
+                  general={general}
+                  originalResource={resource}
+                  context={general.urlPath}
+                />
+              ),
+            ]
           : []
       }
       description={description}

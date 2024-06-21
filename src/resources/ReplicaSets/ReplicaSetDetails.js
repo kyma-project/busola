@@ -102,27 +102,30 @@ export function ReplicaSetsDetails(props) {
     <PodTemplate key="pod-template" template={replicaset.spec.template} />
   );
 
-  const customOverview = resource => {
+  const ReplicasOverview = resource => {
     return (
-      <CountingCard
-        value={resource?.status?.replicas ?? 0}
-        title={t('replica-sets.overview.header')}
-        subTitle={t('replica-sets.overview.replicas')}
-        extraInfo={[
-          {
-            title: t('replica-sets.overview.readyReplicas'),
-            value: resource?.status?.readyReplicas ?? 0,
-          },
-          {
-            title: t('replica-sets.overview.availableReplicas'),
-            value: resource?.status?.availableReplicas ?? 0,
-          },
-          {
-            title: t('replica-sets.overview.fullyLabeledReplicas'),
-            value: resource?.status?.fullyLabeledReplicas ?? 0,
-          },
-        ]}
-      />
+      <div className="item-wrapper wide">
+        <CountingCard
+          className="item"
+          value={resource?.status?.replicas ?? 0}
+          title={t('replica-sets.overview.header')}
+          subTitle={t('replica-sets.overview.replicas')}
+          extraInfo={[
+            {
+              title: t('replica-sets.overview.readyReplicas'),
+              value: resource?.status?.readyReplicas ?? 0,
+            },
+            {
+              title: t('replica-sets.overview.availableReplicas'),
+              value: resource?.status?.availableReplicas ?? 0,
+            },
+            {
+              title: t('replica-sets.overview.fullyLabeledReplicas'),
+              value: resource?.status?.fullyLabeledReplicas ?? 0,
+            },
+          ]}
+        />
+      </div>
     );
   };
 
@@ -140,7 +143,7 @@ export function ReplicaSetsDetails(props) {
       statusConditions={statusConditions}
       description={ResourceDescription}
       createResourceForm={ReplicaSetCreate}
-      customOverview={customOverview}
+      customHealthCards={[ReplicasOverview]}
       {...props}
     />
   );

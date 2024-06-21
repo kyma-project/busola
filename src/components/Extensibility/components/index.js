@@ -23,6 +23,7 @@ import { FeaturedCard } from './FeaturedCard/FeaturedCard';
 import { APIRuleHost } from './APIRules/APIRuleHost';
 
 import { PendingWrapper } from './PendingWrapper';
+import { StatisticalCard } from './StatisticalCard';
 
 export const widgets = {
   Null: () => '',
@@ -44,6 +45,7 @@ export const widgets = {
   ResourceLink,
   ResourceList,
   ResourceRefs,
+  StatisticalCard,
   Table,
   Tabs,
   Text,

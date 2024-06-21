@@ -12,22 +12,29 @@ import './CountingCard.scss';
 
 type CountingCardProps = {
   value: number;
-  extraInfo: any;
+  extraInfo: [ExtraInfo];
   title: string;
   subTitle: string;
-  resourceUrl: string;
-  isClusterResource: boolean;
-  className: string;
+  resourceUrl?: string;
+  isClusterResource?: boolean;
+  allNamespaceURL?: boolean;
+  className?: string;
   additionalContent?: React.ReactNode;
+};
+
+type ExtraInfo = {
+  value: string;
+  title: string;
 };
 
 export const CountingCard = ({
   value,
   extraInfo,
   title,
-  subTitle = ' ',
+  subTitle = '',
   resourceUrl,
   isClusterResource = false,
+  allNamespaceURL = true,
   className = '',
   additionalContent,
 }: CountingCardProps) => {
@@ -73,9 +80,10 @@ export const CountingCard = ({
             url={
               isClusterResource
                 ? clusterUrl(resourceUrl)
-                : namespaceUrl(resourceUrl, {
-                    namespace: '-all-',
-                  })
+                : namespaceUrl(
+                    resourceUrl,
+                    allNamespaceURL ? { namespace: '-all-' } : {},
+                  )
             }
             className="counting-card__link"
           >

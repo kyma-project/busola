@@ -4,11 +4,11 @@ You can customize the details page of the user interface component of your resou
 
 ## Available Parameters
 
-In the **data.details** section you can provide configuration of four optional components: **header**, **body**, **status** and **resourceGraph**. The **header**, **status** and **body** components are lists of widgets visible in the respective sections of the details page. You can use the **resourceGraph** component to present the relationship between different resources.
+In the **data.details** section you can provide configuration of four optional components: **header**, **body**, **status**, **health** and **resourceGraph**. The **header**, **status**, **body** and **health** components are lists of widgets visible in the respective sections of the details page. You can use the **resourceGraph** component to present the relationship between different resources.
 
-### **header** , **status** and **body** Parameters
+### **header**, **status**, **body** and **health** Parameters
 
-This table lists the available parameters of the **data.details.header**, **data.details.status** and/or **data.details.body** section in your resource ConfigMap. You can learn whether each of the parameters is required and what purpose it serves. The **data.details.header** and **data.details.body** components are arrays of objects.
+This table lists the available parameters of the **data.details.header**, **data.details.status**, **data.details.health** and/or **data.details.body** section in your resource ConfigMap. You can learn whether each of the parameters is required and what purpose it serves. The **data.details.header**, **data.details.status**, **data.details.health** and **data.details.body** components are arrays of objects.
 
 | Parameter             | Required | Type                                        | Description                                                                                                                                                                                                                                                                                                                                                                                                      |
 | --------------------- | -------- | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -24,41 +24,60 @@ Extra parameters might be available for specific widgets.
 See the following examples:
 
 ```yaml
-header:
-  - source: metadata.name
-  - source: spec.priority
-    widget: Badge
-  - source: "$join(spec.volumes.name, ', ')"
-body:
-  - name: columns
-    widget: Columns
-    children:
-      - name: left-panel
-        widget: Panel
-      - name: right-panel
-        widget: Panel
-  - name: summary
-    widget: Panel
-    children:
-      - source: metadata.name
-      - source: spec.priority
-        widget: Badge
-      - name: Volumes names of volumes with config map
-        source: "$join(spec.volumes['configMap' in $keys($)].name, ', ')"
-  - source: spec.details
-    widget: CodeViewer
-    language: "'json'"
-  - source: spec.configPatches
-    widget: Panel
-    children:
-      - source: applyTo
-      - source: match.context
-        visibility: '$exists($value.match.context)'
-  - source: spec.configPatches
-    widget: Table
-    children:
-      - source: applyTo
-      - source: match.context
+details:
+  header:
+    - source: metadata.name
+    - source: spec.priority
+      widget: Badge
+    - source: "$join(spec.volumes.name, ', ')"
+  status:
+    - name: Replicas
+      source: status.replicas
+    - name: Condition details
+      widget: ConditionList
+      source: status.conditions
+  health:
+    - name: MyTitle
+      widget: StatisticalCard
+      source: status
+      mainValue:
+        name: MySubtitle
+        source: $item.importantValue
+      children:
+        - name: ExtraInformation1
+          source: $item.value1
+        - name: ExtraInformation2
+          source: $item.value2
+  body:
+    - name: columns
+      widget: Columns
+      children:
+        - name: left-panel
+          widget: Panel
+        - name: right-panel
+          widget: Panel
+    - name: summary
+      widget: Panel
+      children:
+        - source: metadata.name
+        - source: spec.priority
+          widget: Badge
+        - name: Volumes names of volumes with config map
+          source: "$join(spec.volumes['configMap' in $keys($)].name, ', ')"
+    - source: spec.details
+      widget: CodeViewer
+      language: "'json'"
+    - source: spec.configPatches
+      widget: Panel
+      children:
+        - source: applyTo
+        - source: match.context
+          visibility: '$exists($value.match.context)'
+    - source: spec.configPatches
+      widget: Table
+      children:
+        - source: applyTo
+        - source: match.context
 ```
 
 ### Data Scoping

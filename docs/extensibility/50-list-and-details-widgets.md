@@ -1,6 +1,7 @@
 # List and Details Widgets
 
-You can use list and details widgets in the lists and details pages in the user interface component of your resource. You can distinguish the following widget types:
+You can use list and details widgets in the lists and details pages in the user interface component of your resource.
+You can distinguish the following widget types:
 
 - [Inline widgets](#inline-widgets) for simple values in **data.list**, **data.details.header**, **data.details.status** and **data.detail.bodies**
   - [`Bagde`](#badge)
@@ -23,6 +24,7 @@ You can use list and details widgets in the lists and details pages in the user 
   - [`Plain`](#plain)
   - [`ResourceList`](#resourcelist)
   - [`ResourceRefs`](#resourcerefs)
+  - [`StatisticalCard`](#StatisticalCard)
   - [`Table`](#table)
   - [`Tabs`](#tabs)
 
@@ -91,16 +93,17 @@ This is an exaple of kind only:
   kindOnly: true
 ```
 
-### ConditionList
+### `ConditionList`
 
-The condition List widget renders the conditions as an expandable list with condition details.
+The `ConditionList` widget renders the conditions as an expandable list with condition details. This widget is primarily designed for the overview section **data.details.status**
 
-#### Example
+See the following example:
 
 ```yaml
-- name: Condition details
-  widget: ConditionList
-  source: status.conditions
+status:
+  - name: Condition details
+    widget: ConditionList
+    source: status.conditions
 ```
 
 <img src="./assets/display-widgets/ConditionList.png" alt="Example of a condition list widget" style="border: 1px solid #D2D5D9">
@@ -577,6 +580,63 @@ See the following example:
 ```
 
 <img src="./assets/display-widgets/ResourceRefs.png" alt="Example of a ResourceRefs widget" style="border: 1px solid #D2D5D9">
+
+### `StatisticalCard`
+
+`StatisticalCard` widgets render a card component with several numerical pieces of information.
+To display the widget in the **Monitoring and Health** section of a details page, configure it in **data.details.health**.  
+To render the card within the dense grid layout in the **Monitoring and Health** section of **Cluster Details**, use [injections](#widget-injections-overview) (**destination: ClusterOverview, slot: health**).
+
+These are the available `StatisticalCard` widget parameters:
+
+| Parameter            | Required | Type                                       | Description                                                                                                                                                                                                              |
+| -------------------- | -------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **mainValue**        | **Yes**  | object                                     | The main value displayed using a bigger font.                                                                                                                                                                            |
+| **mainValue.source** | **Yes**  | string or [JSONata](jsonata.md) expression | Fetches data for the column. In its simplest form, it's the path to the value.                                                                                                                                           |
+| **mainValue.name**   | **Yes**  | string                                     | The name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the [**translation** section](./translations-section.md). |
+| **children**         | No       | array of objects                           | An array of additional values, listed next to the main one.                                                                                                                                                              |
+| **children.source**  | **Yes**  | string or [JSONata](jsonata.md) expression | Fetches data for the column. In its simplest form, it's the path to the value.                                                                                                                                           |
+| **children.name**    | **Yes**  | string                                     | The name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the [**translation** section](./translations-section.md). |
+
+This is an example of the widget configuration in the **data.details.health** section which allows the `StatisticalCard` to be displayed on the details page in the **Monitoring and Health** section:
+
+```yaml
+details: |-
+  health:
+    - name: MyTitle
+      widget: StatisticalCard
+      source: status
+      mainValue:
+        name: MySubtitle
+        source: $item.importantValue
+      children:
+        - name: ExtraInformation1
+          source: $item.value1
+        - name: ExtraInformation2
+          source: $item.value2
+```
+
+This is an example of the widget configured using injection which allows the `StatisticalCard` to be displayed in the **Monitoring and Health** section of **Cluster Details**:
+
+```yaml
+injections: |-
+  - name: MyTitle
+    widget: StatisticalCard
+    source: status
+    mainValue:
+      name: MySubtitle
+      source: $sum($item.importantValue)
+    children:
+      - name: ExtraInformation1
+        source: $max($item.value1)
+      - name: ExtraInformation2
+        source: $count($item.value2)
+    targets:
+      - slot: health
+        location: ClusterOverview
+```
+
+<img src="./assets/display-widgets/StatisticalCard.png" alt="Example of a StatisticalCard widget" style="border: 1px solid #D2D5D9" width="75%">
 
 ### `Table`
 
