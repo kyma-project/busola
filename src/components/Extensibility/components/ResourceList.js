@@ -25,6 +25,7 @@ const getProperNamespacePart = (givenNamespace, currentNamespace) => {
       return `/namespaces/${currentNamespace}`;
   }
 };
+
 export function ResourceList({
   value,
   structure,

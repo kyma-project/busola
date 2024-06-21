@@ -1,15 +1,14 @@
 import { getReasonPhrase } from 'http-status-codes';
-export const baseUrl = getConfigFn => getConfigFn('backendAddress');
 
 export class HttpError extends Error {
-  constructor(message, statusCode, code) {
-    if ([401, 403].includes(statusCode)) {
+  constructor(message, status, code) {
+    if ([401, 403].includes(status)) {
       super('You are not allowed to perform this operation');
     } else {
       super(message);
     }
     this.code = code;
-    this.statusCode = statusCode;
+    this.status = status;
     this.originalMessage = message;
   }
 }
@@ -31,7 +30,12 @@ export async function throwHttpError(response) {
       const errorMessage =
         message || `${status} ${statusText || getReasonPhrase(status)}`;
 
-      return new Error(errorMessage);
+      // When response status is 404 and boyd is empty it means that resoruce definition is not registered in k8s
+      let textStatus = '';
+      if (response.status === 404) {
+        textStatus = 'Definition not found';
+      }
+      return new HttpError(errorMessage, textStatus, response.status);
     }
   }
 }
