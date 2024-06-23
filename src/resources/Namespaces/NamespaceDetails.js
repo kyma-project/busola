@@ -15,7 +15,6 @@ import NamespaceCreate from './NamespaceCreate';
 import { AllNamespacesDetails } from './AllNamespacesDetails';
 
 import { useSetRecoilState } from 'recoil';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { ResourceDescription } from 'resources/Namespaces';
 
 export function NamespaceDetails(props) {
@@ -90,11 +89,11 @@ export function NamespaceDetails(props) {
       windowTitle={t('namespaces.overview.title')}
       customColumns={customColumns}
       headerActions={headerActions}
+      customHealthCards={[
+        () => <ResourcesUsage namespace={props.resourceName} />,
+        () => <NamespaceWorkloads namespace={props.resourceName} />,
+      ]}
     >
-      <div className="flexwrap" style={spacing.sapUiSmallMargin}>
-        <ResourcesUsage namespace={props.resourceName} />
-        <NamespaceWorkloads namespace={props.resourceName} />
-      </div>
       {LimitrangesList}
       {ResourceQuotasList}
       {Events}

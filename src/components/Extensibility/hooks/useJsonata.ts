@@ -1,12 +1,12 @@
-import { useState, useEffect, useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { last, mapValues } from 'lodash';
 
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
 import {
-  Resource,
-  DataSourcesContextType,
   DataSourcesContext,
+  DataSourcesContextType,
+  Resource,
 } from '../contexts/DataSources';
 
 type JsonataValue = [string, Error | null];
@@ -15,7 +15,7 @@ type JsonataFunction = {
   (
     query: string,
     extras: { [key: string]: any },
-    defaultValue: any,
+    defaultValue?: any,
   ): JsonataValue;
   async: (
     query: string,

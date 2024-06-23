@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Bar, Button, Dialog } from '@ui5/webcomponents-react';
+import { Bar, Button, Dialog, Title } from '@ui5/webcomponents-react';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useTranslation } from 'react-i18next';
@@ -23,6 +23,7 @@ Modal.propTypes = {
   waiting: PropTypes.bool,
   tooltipData: PropTypes.object,
   className: PropTypes.string,
+  headerActions: PropTypes.object,
 };
 
 Modal.defaultProps = {
@@ -50,6 +51,7 @@ export function Modal({
   children,
   className,
   disableAutoClose = true,
+  headerActions,
 }) {
   const { t } = useTranslation();
   const [show, setShow] = React.useState(false);
@@ -138,6 +140,14 @@ export function Modal({
           className={classNames('custom-modal', className)}
           type={type}
           headerText={title}
+          header={
+            headerActions ? (
+              <Bar
+                startContent={<Title level="H5">{title}</Title>}
+                endContent={headerActions}
+              />
+            ) : null
+          }
           open={show}
           onAfterClose={onClose}
           actions={modalActions()}

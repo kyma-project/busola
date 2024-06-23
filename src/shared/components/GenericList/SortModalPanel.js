@@ -1,10 +1,24 @@
 import { useState } from 'react';
-import { Button, FlexBox, RadioButton } from '@ui5/webcomponents-react';
+import {
+  Button,
+  CustomListItem,
+  GroupHeaderListItem,
+  List,
+  RadioButton,
+  Text,
+} from '@ui5/webcomponents-react';
 import { Modal } from '../Modal/Modal';
 import { Tooltip } from '../Tooltip/Tooltip';
 import { useTranslation } from 'react-i18next';
+import './SortModalPanel.scss';
 
-export const SortModalPanel = ({ sortBy, sort, setSort, disabled = false }) => {
+export const SortModalPanel = ({
+  sortBy,
+  sort,
+  setSort,
+  disabled = false,
+  defaultSort,
+}) => {
   const [order, setOrder] = useState(sort.order);
   const [name, setName] = useState(sort.name);
 
@@ -21,9 +35,20 @@ export const SortModalPanel = ({ sortBy, sort, setSort, disabled = false }) => {
     </Tooltip>
   );
 
+  const handleReset = () => {
+    setOrder(defaultSort.order);
+    setName(defaultSort.name);
+  };
+
   return (
     <Modal
+      className={'sorting-modal'}
       title={t('common.sorting.sort')}
+      headerActions={
+        <Button design="Transparent" onClick={handleReset}>
+          {t('common.buttons.reset')}
+        </Button>
+      }
       actions={onClose => [
         <Button
           design="Emphasized"
@@ -41,44 +66,65 @@ export const SortModalPanel = ({ sortBy, sort, setSort, disabled = false }) => {
       ]}
       modalOpeningComponent={sortOpeningComponent}
     >
-      <p style={{ padding: '10px' }}>{t('common.sorting.sort-order')}</p>
-      <FlexBox direction="Column">
-        <RadioButton
-          name="sortOrder"
-          value="ASC"
-          checked={order === 'ASC'}
-          text={t('common.sorting.asc')}
-          onChange={event => setOrder(event.target.value)}
-        />
-        <RadioButton
-          name="sortOrder"
-          value="DESC"
-          checked={order === 'DESC'}
-          text={t('common.sorting.desc')}
-          onChange={event => setOrder(event.target.value)}
-        />
-      </FlexBox>
-      <p style={{ padding: '10px' }}>{t('common.sorting.sort-by')}</p>
-      {sortBy && (
-        <FlexBox direction="Column">
-          {Object.entries(sortBy).flatMap(([value]) => {
-            return (
-              <RadioButton
-                name="sortBy"
-                value={value}
-                key={value}
-                checked={name === value}
-                text={
-                  i18n.exists(`common.sorting.${value}`)
-                    ? t(`common.sorting.${value}`)
-                    : value
-                }
-                onChange={event => setName(event.target.value)}
-              />
-            );
-          })}
-        </FlexBox>
-      )}
+      <List
+        separators="All"
+        onItemClick={e => {
+          setOrder(e?.detail?.item?.children[0]?.value);
+        }}
+        accessibleName="sortOrderList"
+      >
+        <GroupHeaderListItem>
+          {t('common.sorting.sort-order')}
+        </GroupHeaderListItem>
+        <CustomListItem selected={order === 'ASC'}>
+          <RadioButton
+            name="sortOrder"
+            value="ASC"
+            checked={order === 'ASC'}
+            onChange={event => setOrder(event.target.value)}
+          />
+          <Text>{t('common.sorting.asc')}</Text>
+        </CustomListItem>
+        <CustomListItem selected={order === 'DESC'}>
+          <RadioButton
+            name="sortOrder"
+            value="DESC"
+            checked={order === 'DESC'}
+            onChange={event => setOrder(event.target.value)}
+          />
+          <Text>{t('common.sorting.desc')}</Text>
+        </CustomListItem>
+      </List>
+      <List
+        separators="All"
+        onItemClick={e => {
+          setName(e?.detail?.item?.children[0]?.value);
+        }}
+        accessibleName="sortByList"
+      >
+        <GroupHeaderListItem>{t('common.sorting.sort-by')}</GroupHeaderListItem>
+        {sortBy && (
+          <>
+            {Object.entries(sortBy).flatMap(([value]) => {
+              return (
+                <CustomListItem key={value} selected={name === value}>
+                  <RadioButton
+                    name="sortBy"
+                    value={value}
+                    checked={name === value}
+                    onChange={event => setName(event.target.value)}
+                  />
+                  <Text>
+                    {i18n.exists(`common.sorting.${value}`)
+                      ? t(`common.sorting.${value}`)
+                      : value}
+                  </Text>
+                </CustomListItem>
+              );
+            })}
+          </>
+        )}
+      </List>
     </Modal>
   );
 };

@@ -10,7 +10,7 @@ import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import { prettifyNameSingular, prettifyNamePlural } from 'shared/utils/helpers';
+import { prettifyNamePlural, prettifyNameSingular } from 'shared/utils/helpers';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
@@ -487,7 +487,7 @@ export function ResourceListRenderer({
         />,
         document.body,
       )}
-      {!(error && error.toString().includes('is forbidden')) && (
+      {!(error && error.status === 'Definition not found') && (
         <GenericList
           displayArrow={displayArrow ?? true}
           disableHiding={disableHiding ?? false}

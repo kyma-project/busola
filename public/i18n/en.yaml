@@ -12,7 +12,6 @@ cluster-overview:
     cluster-details: Cluster Details
     metadata: Metadata
   statistics:
-    title:  Monitoring and Health
     cpu-usage: 'CPU Usage'
     memory-usage: 'Memory Usage'
     namespaces-health: 'Namespaces Health'
@@ -327,6 +326,7 @@ common:
     link: Link
     loading: Loading...
     logs: Logs
+    monitoring-and-health: Monitoring and Health
     name: Name
     namespace: Namespace
     namespaces: Namespaces
@@ -933,6 +933,8 @@ kubeconfig-id:
   error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 kyma-modules:
+  installed-modules: Installed Modules
+  modify-modules: Modify Modules
   module-added: Module added 
   module-uninstall: Module deleted
   learn-more: Learn more
@@ -1480,8 +1482,14 @@ settings:
     title: Interface
   language: Language
   other:
+    info: Changes to the page size only take effect locally. To set the global default page size, go to Preferences.
     default-page-size: Default Page Size
     title: Other
+    all: All
+    results-per-page: Results per page
+    page: Page
+    of: of {{pagesCount}}
+    total-items: '{{itemsCount}} items'
   theme: Theme
 stateful-sets:
   description: <0>StatefulSet</0> is used for the management of Pods' deployment and scaling.
