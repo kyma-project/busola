@@ -69,6 +69,7 @@ ResourceDetails.propTypes = {
   layoutCloseCreateUrl: PropTypes.string,
   layoutNumber: PropTypes.string,
   customHealthCards: PropTypes.node,
+  showHealthCardsTitle: PropTypes.bool,
 };
 
 ResourceDetails.defaultProps = {
@@ -171,6 +172,7 @@ function Resource({
   statusBadge,
   customStatusColumns,
   customHealthCards,
+  showHealthCardsTitle,
   statusConditions,
   headerContent,
 }) {
@@ -436,7 +438,10 @@ function Resource({
                   {resourceDetailsCard}
                   {resourceStatusCard && resourceStatusCard}
                 </div>
-                <ResourceHealthCard customHealthCards={customOverviewCard} />
+                <ResourceHealthCard
+                  customHealthCards={customOverviewCard}
+                  showHealthCardsTitle={showHealthCardsTitle}
+                />
               </>
             )}
             <Suspense fallback={<Spinner />}>
