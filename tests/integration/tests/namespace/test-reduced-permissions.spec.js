@@ -86,15 +86,13 @@ context('Test reduced permissions', () => {
       .click()
       .type(SA_NAME);
 
-    cy.wait(5000);
     cy.saveChanges('Create');
-    cy.wait(2000);
   });
 
   it('Create a ClusterRoleBinding for SA and CR', () => {
     cy.navigateTo('Back To Cluster Details', 'Cluster Role Bindings');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     // subject type - select it first so the list starts loading
     cy.get('ui5-dialog')
