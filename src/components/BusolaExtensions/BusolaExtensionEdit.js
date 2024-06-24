@@ -24,6 +24,8 @@ export function BusolaExtensionEdit({
       ? cloneDeep(initialExtension)
       : createConfigMapTemplate(namespace || ''),
   );
+
+  const [initialUnchangedResource] = useState(initialExtension);
   const [initialResource] = useState(
     initialExtension || createConfigMapTemplate(namespace || ''),
   );
@@ -36,6 +38,7 @@ export function BusolaExtensionEdit({
       singularName={t('config-maps.name_singular')}
       resource={extension}
       initialResource={initialResource}
+      initialUnchangedResource={initialUnchangedResource}
       setResource={setExtension}
       onChange={onChange}
       formElementRef={formElementRef}
