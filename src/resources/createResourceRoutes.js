@@ -144,7 +144,6 @@ const ColumnWrapper = ({
     !layoutState?.showCreate &&
     !(layoutState?.layout === 'OneColumn' && defaultColumn === 'details')
   ) {
-    console.log('DETAILS');
     detailsMidColumn = detailsComponent;
   }
 
@@ -170,8 +169,6 @@ const ColumnWrapper = ({
     />
   );
 
-  console.log(layoutState);
-  console.log(createMidColumn);
   return (
     <FlexibleColumnLayout
       style={{ height: '100%' }}

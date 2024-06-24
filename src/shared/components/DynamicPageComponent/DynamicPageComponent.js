@@ -264,6 +264,9 @@ export const DynamicPageComponent = ({
             return;
           }
           setSelectedSectionIdState(e.detail.sectionId);
+          if (e.detail.sectionId === 'edit') {
+            setIsFormOpen({ formOpen: true });
+          }
         }}
       >
         <ObjectPageSection

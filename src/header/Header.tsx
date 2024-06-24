@@ -57,7 +57,8 @@ export function Header() {
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
     name => name !== cluster?.name,
   );
-
+  console.log(isFormOpen);
+  console.log(isResourceEdited);
   const nonBreakableSpaces = (number: int): string => {
     let spaces = '';
     for (let i = 0; i < number; i++) {
