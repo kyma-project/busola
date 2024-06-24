@@ -139,53 +139,54 @@ const ColumnWrapper = ({
     startColumnComponent = listComponent;
   }
 
-  let midColumnComponent = null;
-
+  let detailsMidColumn = null;
   if (
     !layoutState?.showCreate &&
     !(layoutState?.layout === 'OneColumn' && defaultColumn === 'details')
   ) {
     console.log('DETAILS');
-    midColumnComponent = detailsComponent;
+    detailsMidColumn = detailsComponent;
   }
 
-  if (
-    layoutState?.showCreate?.resourceType &&
-    create &&
-    create?.type !== null
-  ) {
-    midColumnComponent = (
-      <ResourceCreate
-        title={elementCreateProps.resourceTitle}
-        confirmText={t('common.buttons.create')}
-        layoutCloseCreateUrl={layoutCloseCreateUrl}
-        renderForm={renderProps => {
-          const createComponent =
-            create &&
-            create?.type !== null &&
-            layoutState?.showCreate?.resourceType &&
-            React.cloneElement(create, {
-              ...elementCreateProps,
-              ...renderProps,
-              enableColumnLayout: true,
-              layoutNumber: 'StartColumn',
-              resource: layoutState?.showCreate?.resource, // For ResourceCreate we want to set layoutNumber to previous column so detail are opened instead of create
-            });
-          return <ErrorBoundary>{createComponent}</ErrorBoundary>;
-        }}
-      />
-    );
-  }
-  console.log(layout);
+  const createMidColumn = (
+    <ResourceCreate
+      title={elementCreateProps.resourceTitle}
+      confirmText={t('common.buttons.create')}
+      layoutCloseCreateUrl={layoutCloseCreateUrl}
+      renderForm={renderProps => {
+        const createComponent =
+          create &&
+          create?.type !== null &&
+          (layoutState?.showCreate?.resourceType || props?.resourceType) &&
+          React.cloneElement(create, {
+            ...elementCreateProps,
+            ...renderProps,
+            enableColumnLayout: true,
+            layoutNumber: 'StartColumn',
+            resource: layoutState?.showCreate?.resource, // For ResourceCreate we want to set layoutNumber to previous column so detail are opened instead of create
+          });
+        return <ErrorBoundary>{createComponent}</ErrorBoundary>;
+      }}
+    />
+  );
 
+  console.log(layoutState);
+  console.log(createMidColumn);
   return (
     <FlexibleColumnLayout
       style={{ height: '100%' }}
-      layout={
-        !midColumnComponent ? 'OneColumn' : layoutState?.layout || 'OneColumn'
-      }
+      layout={layoutState?.layout || 'OneColumn'}
       startColumn={<div className="column-content">{startColumnComponent}</div>}
-      midColumn={<div className="column-content">{midColumnComponent}</div>}
+      midColumn={
+        <>
+          {!layoutState?.showCreate && (
+            <div className="column-content">{detailsMidColumn}</div>
+          )}
+          {!layoutState?.midColumn && (
+            <div className="column-content">{createMidColumn}</div>
+          )}
+        </>
+      }
     />
   );
 };
