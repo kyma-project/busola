@@ -2,12 +2,15 @@ import { Title } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { spacing } from '@ui5/webcomponents-react-base';
 
-export function ResourceHealthCard({ customHealthCards, showTitle = false }) {
+export function ResourceHealthCard({
+  customHealthCards,
+  showHealthCardsTitle = false,
+}) {
   const { t } = useTranslation();
   if (!customHealthCards?.length) return null;
   return (
     <>
-      {showTitle && (
+      {showHealthCardsTitle && (
         <Title
           level="H3"
           style={{

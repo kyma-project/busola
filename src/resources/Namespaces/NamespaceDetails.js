@@ -93,7 +93,7 @@ export function NamespaceDetails(props) {
         () => <ResourcesUsage namespace={props.resourceName} />,
         () => <NamespaceWorkloads namespace={props.resourceName} />,
       ]}
-      showCustomHealthCardsTitle={true}
+      showHealthCardsTitle={true}
     >
       {LimitrangesList}
       {ResourceQuotasList}

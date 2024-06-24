@@ -69,7 +69,7 @@ ResourceDetails.propTypes = {
   layoutCloseCreateUrl: PropTypes.string,
   layoutNumber: PropTypes.string,
   customHealthCards: PropTypes.node,
-  showCustomHealthCardsTitle: PropTypes.bool,
+  showHealthCardsTitle: PropTypes.bool,
 };
 
 ResourceDetails.defaultProps = {
@@ -172,7 +172,7 @@ function Resource({
   statusBadge,
   customStatusColumns,
   customHealthCards,
-  showCustomHealthCardsTitle,
+  showHealthCardsTitle,
   statusConditions,
   headerContent,
 }) {
@@ -440,7 +440,7 @@ function Resource({
                 </div>
                 <ResourceHealthCard
                   customHealthCards={customOverviewCard}
-                  showTitle={showCustomHealthCardsTitle}
+                  showHealthCardsTitle={showHealthCardsTitle}
                 />
               </>
             )}
