@@ -36,7 +36,7 @@ const ColumnWrapper = ({
   const { namespaceId, resourceName } = useParams();
   const initialLayoutState = layout
     ? {
-        layout: layout ? layout : layoutState?.layout,
+        layout: layout ?? layoutState?.layout,
         midColumn: {
           resourceName: resourceName,
           resourceType: urlPath ?? resourceType,

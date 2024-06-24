@@ -18,7 +18,7 @@ import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { ResourceDescription } from 'components/HelmReleases';
 import { createPortal } from 'react-dom';
 
-function HelmReleasesList({ enableColumnLayout }) {
+function HelmReleasesList({ enableColumnLayout = true }) {
   const { t } = useTranslation();
   const namespace = useRecoilValue(activeNamespaceIdState);
   const { namespaceUrl } = useUrl();

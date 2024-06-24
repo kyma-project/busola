@@ -34,7 +34,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
 
   const initialLayoutState = layout
     ? {
-        layout: layout ? layout : layoutState?.layout,
+        layout: layout ?? layoutState?.layout,
         midColumn: {
           resourceName: name,
           resourceType: 'Extensions',

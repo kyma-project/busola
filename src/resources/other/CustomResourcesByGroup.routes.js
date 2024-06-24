@@ -38,7 +38,7 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
 
   const initialLayoutState = layout
     ? {
-        layout: layout ? layout : layoutState?.layout,
+        layout: layout ?? layoutState?.layout,
         midColumn: crdName
           ? {
               resourceName: crdName,
@@ -150,8 +150,8 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
   ) {
     midColumnComponent = (
       <CustomResourcesOfType
-        enableColumnLayout={true}
         crdName={layoutState?.midColumn?.resourceName ?? crdName}
+        enableColumnLayout={true}
         layoutCloseCreateUrl={layoutCloseCreateUrl}
       />
     );

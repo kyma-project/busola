@@ -84,7 +84,7 @@ const ColumnWrapper = ({
 
   const initialLayoutState = layout
     ? {
-        layout: layout ? layout : layoutState?.layout,
+        layout: layout ?? layoutState?.layout,
         midColumn: {
           resourceName: resourceName,
           resourceType: props.resourceType,
