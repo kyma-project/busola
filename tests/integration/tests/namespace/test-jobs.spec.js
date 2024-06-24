@@ -107,8 +107,8 @@ context('Test Jobs', () => {
     cy.wait(1000);
 
     // images for both containers
-    cy.contains(/Imagebusybox/);
-    cy.contains(/Imagenode:14-alpine/);
+    cy.contains(/Image:busybox/);
+    cy.contains(/Image:node:14-alpine/);
 
     // controlled-by
     cy.contains('div', 'Controlled By')

@@ -201,7 +201,7 @@ context('Test Pizzas', () => {
   });
 
   it('Tests the Create Form', () => {
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate().click();
 
     cy.get('.create-form').as('form');
 

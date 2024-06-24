@@ -144,8 +144,8 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
         }}
       />
     );
-  } else if (
-    layoutState?.midColumn?.resourceName &&
+  }
+  if (
     !(layoutState?.layout === 'OneColumn' && defaultColumn === 'listOfType')
   ) {
     midColumnComponent = (

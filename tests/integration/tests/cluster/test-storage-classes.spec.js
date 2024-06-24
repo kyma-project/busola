@@ -20,7 +20,7 @@ context('Test Storage Classes', () => {
   it('Create Storage Class', () => {
     cy.navigateTo('Storage', 'Storage Classes');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate().click();
 
     cy.wrap(loadSC(Cypress.env('STORAGE_CLASS_NAME'))).then(SC_CONFIG => {
       const SC = JSON.stringify(SC_CONFIG);
