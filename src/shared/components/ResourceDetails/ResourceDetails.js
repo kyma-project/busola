@@ -196,8 +196,6 @@ function Resource({
   });
 
   const layoutColumn = useRecoilValue(columnLayoutState);
-  const { isEnabled: isColumnLayoutEnabled } = useFeature('COLUMN_LAYOUT');
-
   const protectedResource = isProtected(resource);
 
   const deleteButtonWrapper = children => {
@@ -427,10 +425,9 @@ function Resource({
                 </Title>
                 <div
                   className={`resource-details-container ${
-                    isColumnLayoutEnabled &&
-                    (layoutColumn.layout === 'MidColumnFullScreen' ||
-                      layoutColumn.layout === 'EndColumnFullScreen' ||
-                      layoutColumn.layout === 'OneColumn')
+                    layoutColumn.layout === 'MidColumnFullScreen' ||
+                    layoutColumn.layout === 'EndColumnFullScreen' ||
+                    layoutColumn.layout === 'OneColumn'
                       ? ''
                       : 'column-view'
                   }`}

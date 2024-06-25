@@ -75,6 +75,14 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
   }
 
   let midColumnComponent = null;
+  if (!layoutState?.showCreate) {
+    midColumnComponent = (
+      <BusolaExtensionDetails
+        name={layoutState?.midColumn?.resourceName || name}
+        namespace={layoutState.midColumn?.namespaceId || namespace}
+      />
+    );
+  }
   if (layoutState?.showCreate?.resourceType) {
     midColumnComponent = (
       <ResourceCreate
@@ -95,14 +103,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
       />
     );
   }
-  if (!layoutState?.showCreate && layoutState?.midColumn) {
-    midColumnComponent = (
-      <BusolaExtensionDetails
-        name={layoutState?.midColumn?.resourceName || name}
-        namespace={layoutState.midColumn?.namespaceId || namespace}
-      />
-    );
-  }
+
   return (
     <FlexibleColumnLayout
       style={{ height: '100%' }}

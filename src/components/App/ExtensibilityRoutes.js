@@ -71,7 +71,12 @@ const ColumnWrapper = ({
       <Details resourceName={resourceName} namespaceId={namespaceId} />
     );
   } else {
-    startColumnComponent = <List layoutCloseCreateUrl={layoutCloseCreateUrl} />;
+    startColumnComponent = (
+      <List
+        layoutCloseCreateUrl={layoutCloseCreateUrl}
+        enableColumnLayout={true}
+      />
+    );
   }
 
   const elementCreateProps = usePrepareCreateProps({
