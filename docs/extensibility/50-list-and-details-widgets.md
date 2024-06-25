@@ -705,11 +705,11 @@ To render the card within the dense grid layout in the **Monitoring and Health**
 
 These are the available `Radial Chart` widget parameters:
 
-| Parameter          | Required | Type                                         | Description                      |
-| ------------------ | -------- | -------------------------------------------- | -------------------------------- |
-| **maxValue**       | **No**   | string or the [JSONata](jsonata.md) function | The maximum value for radial chart.   |
+| Parameter          | Required | Type                                         | Description                          |
+| ------------------ | -------- | -------------------------------------------- | ------------------------------------ |
+| **maxValue**       | **No**   | string or the [JSONata](jsonata.md) function | The maximum value for radial chart.  |
 | **additionalInfo** | **No**   | string or the [JSONata](jsonata.md) function | An additional description of values. |
-| **color**          | **No**   | string                                       | The color of the radial chart.            |
+| **color**          | **No**   | string                                       | The color of the radial chart.       |
 
 This is an example of the widget configuration in the **data.details.health** section, which allows the `RadialChart` to be displayed on the details page in the **Monitoring and Health** section:
 
