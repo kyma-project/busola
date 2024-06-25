@@ -671,6 +671,15 @@ daemon-sets:
   name_singular: DaemonSet
   node-selector: Node Selector
   pods: $t(pods.title)
+  status:
+    collision-count: Collision Count
+    current-number-scheduled: Current Number Scheduled
+    desired-number-scheduled: Desired Number Scheduled
+    number-available: Number Available
+    number-misscheduled: Number Misscheduled
+    number-ready: Number Ready
+    number-unavailable: Number Unavailable
+    updated-number-scheduled: Updated Number Scheduled
   title: Daemon Sets
   tolerations:
     effect: Effect
