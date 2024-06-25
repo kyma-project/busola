@@ -79,7 +79,7 @@ context('Test extensibility variables', () => {
       .contains(/^Test Resources$/)
       .click();
 
-    cy.openCreate().click();
+    cy.openCreate();
   });
 
   it('Tests variables', () => {

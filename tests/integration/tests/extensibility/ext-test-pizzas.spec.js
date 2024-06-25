@@ -201,7 +201,7 @@ context('Test Pizzas', () => {
   });
 
   it('Tests the Create Form', () => {
-    cy.openCreate().click();
+    cy.openCreate();
 
     cy.get('.create-form').as('form');
 

@@ -176,12 +176,14 @@ const ColumnWrapper = ({
       startColumn={<div className="column-content">{startColumnComponent}</div>}
       midColumn={
         <>
-          {!layoutState?.showCreate && (
-            <div className="column-content">{detailsMidColumn}</div>
-          )}
-          {!layoutState?.midColumn && (
-            <div className="column-content">{createMidColumn}</div>
-          )}
+          {!layoutState?.showCreate &&
+            (defaultColumn !== 'details' || layout) && (
+              <div className="column-content">{detailsMidColumn}</div>
+            )}
+          {!layoutState?.midColumn &&
+            (defaultColumn !== 'details' || layout) && (
+              <div className="column-content">{createMidColumn}</div>
+            )}
         </>
       }
     />
