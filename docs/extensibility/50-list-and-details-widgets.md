@@ -696,3 +696,45 @@ See the following example:
 ```
 
 <img src="./assets/display-widgets/Tabs.png" alt="Example of a tabs widget" style="border: 1px solid #D2D5D9">
+
+## Radial Chart
+
+`Radial Chart` widgets render a card component with a graphical representation of the radial chart.
+To display the widget in the **Monitoring and Health** section of a details page, configure it in **data.details.health**.  
+To render the card within the dense grid layout in the **Monitoring and Health** section of **Cluster Details**, use [injections](#widget-injections-overview) (`destination: ClusterOverview`, `slot: health`).
+
+These are the available `Radial Chart` widget parameters:
+
+| Parameter          | Required | Type                                         | Description                          |
+| ------------------ | -------- | -------------------------------------------- | ------------------------------------ |
+| **maxValue**       | **No**   | string or the [JSONata](jsonata.md) function | The maximum value for radial chart.  |
+| **additionalInfo** | **No**   | string or the [JSONata](jsonata.md) function | An additional description of values. |
+| **color**          | **No**   | string                                       | The color of the radial chart.       |
+
+This is an example of the widget configuration in the **data.details.health** section, which allows the `RadialChart` to be displayed on the details page in the **Monitoring and Health** section:
+
+```yaml
+- name: MyTitle
+  widget: RadialChart
+  source: status.currentReplicas
+  maxValue: status.desiredReplicas
+  additionalInfo: $join([$string(status.currentReplicas), "/", $string(status.desiredReplicas)])
+  color: var(--sapChart_OrderedColor_5)
+```
+
+This is an example of the widget configured using injection, which allows the `RadialChart` to be displayed in the **Monitoring and Health** section of **Cluster Details**:
+
+```yaml
+injections: |-
+  - name: MyTitle
+    widget: RadialChart
+    source: $sum(status.currentReplicas)
+    maxValue: $sum(status.desiredReplicas)
+    additionalInfo: $join([$string($sum(status.currentReplicas)), "/", $string($sum(status.desiredReplicas))])
+    color: var(--sapChart_OrderedColor_5)
+    targets:
+      - slot: health
+        location: ClusterOverview
+```
+
+<img src="./assets/display-widgets/RadialChart.png" alt="Example of a RadialChart widget" style="border: 1px solid #D2D5D9" width="75%">
