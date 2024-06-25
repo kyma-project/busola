@@ -5,7 +5,7 @@ import { GroupingListPage } from './GroupingListPage';
 import { useUrl } from 'hooks/useUrl';
 import { Link } from 'shared/components/Link/Link';
 
-export default function CustomResourcesByGroup({ enableColumnLayout }) {
+export default function CustomResourcesByGroup({ enableColumnLayout = true }) {
   const { t } = useTranslation();
   const { namespace, clusterUrl, scopedUrl } = useUrl();
   const description = (

@@ -12,7 +12,7 @@ import { createPortal } from 'react-dom';
 
 export default function CustomResourcesOfType({
   crdName,
-  enableColumnLayout,
+  enableColumnLayout = true,
   layoutCloseCreateUrl,
 }) {
   const { t } = useTranslation();

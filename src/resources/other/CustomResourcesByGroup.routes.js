@@ -115,12 +115,10 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
         />
       );
     } else {
-      startColumnComponent = (
-        <CustomResourcesByGroup enableColumnLayout={true} />
-      );
+      startColumnComponent = <CustomResourcesByGroup />;
     }
   } else {
-    startColumnComponent = <CustomResourcesByGroup enableColumnLayout={true} />;
+    startColumnComponent = <CustomResourcesByGroup />;
   }
 
   let midColumnComponent = null;
@@ -151,7 +149,6 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
     midColumnComponent = (
       <CustomResourcesOfType
         crdName={layoutState?.midColumn?.resourceName ?? crdName}
-        enableColumnLayout={true}
         layoutCloseCreateUrl={layoutCloseCreateUrl}
       />
     );
