@@ -1,5 +1,4 @@
-import { useNavigate } from 'react-router-dom';
-import { useSetRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 
 import { useTranslation } from 'react-i18next';
 import { Text } from '@ui5/webcomponents-react';
@@ -11,7 +10,6 @@ import { GenericList } from 'shared/components/GenericList/GenericList';
 import { decodeHelmRelease } from './decodeHelmRelease';
 import { findRecentRelease } from './findRecentRelease';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
-import { columnLayoutState } from 'state/columnLayoutAtom';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
@@ -22,8 +20,6 @@ function HelmReleasesList() {
   const { t } = useTranslation();
   const namespace = useRecoilValue(activeNamespaceIdState);
   const { namespaceUrl } = useUrl();
-  const navigate = useNavigate();
-  const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const resourceUrl = entry => {
     return namespaceUrl(`helm-releases/${entry.releaseName}`, {
       namespace: entry.namespace,
