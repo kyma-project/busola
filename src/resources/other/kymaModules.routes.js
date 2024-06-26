@@ -58,25 +58,9 @@ const ColumnWraper = (defaultColumn = 'list') => {
     startColumnComponent = <KymaModulesList />;
   }
 
-  let midColumnComponent = null;
-  if (layoutState?.showCreate?.resourceType) {
-    midColumnComponent = (
-      <ResourceCreate
-        title={t('kyma-modules.add-module')}
-        confirmText={t('common.buttons.add')}
-        layoutCloseCreateUrl={clusterUrl('kymamodules')}
-        renderForm={renderProps => {
-          return (
-            <ErrorBoundary>
-              <KymaModulesAddModule {...renderProps} />
-            </ErrorBoundary>
-          );
-        }}
-      />
-    );
-  }
+  let detailsMidColumn = null;
   if (!layoutState?.showCreate && layoutState?.midColumn) {
-    midColumnComponent = (
+    detailsMidColumn = (
       <ExtensibilityDetails
         layoutCloseCreateUrl={clusterUrl('kymamodules')}
         resourceName={layoutState?.midColumn?.resourceName || resourceName}
@@ -86,12 +70,38 @@ const ColumnWraper = (defaultColumn = 'list') => {
     );
   }
 
+  const createMidColumn = (
+    <ResourceCreate
+      title={t('kyma-modules.add-module')}
+      confirmText={t('common.buttons.add')}
+      layoutCloseCreateUrl={clusterUrl('kymamodules')}
+      renderForm={renderProps => {
+        return (
+          <ErrorBoundary>
+            <KymaModulesAddModule {...renderProps} />
+          </ErrorBoundary>
+        );
+      }}
+    />
+  );
+
   return (
     <FlexibleColumnLayout
       style={{ height: '100%' }}
       layout={layoutState?.layout || 'OneColumn'}
       startColumn={<div className="column-content">{startColumnComponent}</div>}
-      midColumn={<div className="column-content">{midColumnComponent}</div>}
+      midColumn={
+        <>
+          {!layoutState?.showCreate &&
+            (defaultColumn !== 'details' || layout) && (
+              <div className="column-content">{detailsMidColumn}</div>
+            )}
+          {!layoutState?.midColumn &&
+            (defaultColumn !== 'details' || layout) && (
+              <div className="column-content">{createMidColumn}</div>
+            )}
+        </>
+      }
     />
   );
 };

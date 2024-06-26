@@ -94,11 +94,6 @@ export function ResourceForm({
   const [editorError, setEditorError] = useState(null);
 
   useEffect(() => {
-    setIsFormOpen({ formOpen: true });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
     if (leavingForm) {
       if (
         JSON.stringify(excludeStatus(resource)) !==

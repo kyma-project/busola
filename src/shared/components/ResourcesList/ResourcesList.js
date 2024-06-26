@@ -5,7 +5,7 @@ import { Button, Text } from '@ui5/webcomponents-react';
 import { cloneDeep } from 'lodash';
 import * as jp from 'jsonpath';
 import pluralize from 'pluralize';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
@@ -24,6 +24,7 @@ import { useVersionWarning } from 'hooks/useVersionWarning';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { createPortal } from 'react-dom';
 import BannerCarousel from 'components/Extensibility/components/FeaturedCard/BannerCarousel';
+import { isFormOpenState } from 'state/formOpenAtom';
 
 const Injections = React.lazy(() =>
   import('../../../components/Extensibility/ExtensibilityInjections'),
@@ -222,6 +223,7 @@ export function ResourceListRenderer({
   const { t } = useTranslation();
   const { isProtected, protectedResourceWarning } = useProtectedResources();
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
+  const setIsFormOpen = useSetRecoilState(isFormOpenState);
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     resourceTitle,
@@ -429,6 +431,7 @@ export function ResourceListRenderer({
         layoutCloseCreateUrl ? layoutCloseCreateUrl : window.location.pathname
       }${layoutNumber === 'MidColumn' ? '?layout=TwoColumnsMidExpanded' : ''}`,
     );
+    setIsFormOpen({ formOpen: true });
   };
 
   const extraHeaderContent = listHeaderActions || [

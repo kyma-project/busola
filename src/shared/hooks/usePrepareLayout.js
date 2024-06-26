@@ -1,5 +1,3 @@
-import { useFeature } from 'hooks/useFeature';
-
 const switchToPrevLayout = layout => {
   switch (layout) {
     case 'EndColumn':
@@ -39,9 +37,7 @@ const switchToNextLayout = layout => {
 };
 
 export function usePrepareLayout(layoutNumber) {
-  const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
-
-  if (!isColumnLeyoutEnabled || !layoutNumber) {
+  if (!layoutNumber) {
     return {
       prevLayout: 'OneColumn',
       currentLayout: 'OneColumn',

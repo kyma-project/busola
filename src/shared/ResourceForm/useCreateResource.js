@@ -1,6 +1,5 @@
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
@@ -13,7 +12,6 @@ import { ForceUpdateModalContent } from './ForceUpdateModalContent';
 import { useUrl } from 'hooks/useUrl';
 import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import { useFeature } from 'hooks/useFeature';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 
@@ -35,9 +33,7 @@ export function useCreateResource({
   const postRequest = usePost();
   const patchRequest = useUpdate();
   const { scopedUrl } = useUrl();
-  const navigate = useNavigate();
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   const setIsResourceEdited = useSetRecoilState(isResourceEditedState);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
 
@@ -60,55 +56,45 @@ export function useCreateResource({
     });
 
     if (!isEdit || resetLayout) {
-      if (isColumnLeyoutEnabled) {
-        if (resetLayout) {
-          setLayoutColumn({
-            layout: 'OneColumn',
-            midColumn: null,
-            endColumn: null,
-            showCreate: null,
-          });
-        } else {
-          setLayoutColumn(
-            nextLayout === 'TwoColumnsMidExpanded'
-              ? {
-                  layout: nextLayout,
-                  showCreate: null,
-                  midColumn: {
-                    resourceName: resource.metadata.name,
-                    resourceType: resource.kind,
-                    namespaceId: resource.metadata.namespace,
-                  },
-                  endColumn: null,
-                }
-              : {
-                  ...layoutColumn,
-                  layout: nextLayout,
-                  showCreate: null,
-                  endColumn: {
-                    resourceName: resource.metadata.name,
-                    resourceType: resource.kind,
-                    namespaceId: resource.metadata.namespace,
-                  },
-                },
-          );
-          window.history.pushState(
-            window.history.state,
-            '',
-            `${scopedUrl(
-              `${urlPath || pluralKind.toLowerCase()}/${encodeURIComponent(
-                resource.metadata.name,
-              )}`,
-            )}${nextQuery}`,
-          );
-        }
+      if (resetLayout) {
+        setLayoutColumn({
+          layout: 'OneColumn',
+          midColumn: null,
+          endColumn: null,
+          showCreate: null,
+        });
       } else {
-        navigate(
+        setLayoutColumn(
+          nextLayout === 'TwoColumnsMidExpanded'
+            ? {
+                layout: nextLayout,
+                showCreate: null,
+                midColumn: {
+                  resourceName: resource.metadata.name,
+                  resourceType: resource.kind,
+                  namespaceId: resource.metadata.namespace,
+                },
+                endColumn: null,
+              }
+            : {
+                ...layoutColumn,
+                layout: nextLayout,
+                showCreate: null,
+                endColumn: {
+                  resourceName: resource.metadata.name,
+                  resourceType: resource.kind,
+                  namespaceId: resource.metadata.namespace,
+                },
+              },
+        );
+        window.history.pushState(
+          window.history.state,
+          '',
           `${scopedUrl(
             `${urlPath || pluralKind.toLowerCase()}/${encodeURIComponent(
               resource.metadata.name,
             )}`,
-          )}`,
+          )}${nextQuery}`,
         );
       }
     }

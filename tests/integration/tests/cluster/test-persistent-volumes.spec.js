@@ -24,7 +24,7 @@ context('Test Persistent Volumes', () => {
   it('Create PV', () => {
     cy.navigateTo('Storage', 'Persistent Volumes');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate().click();
 
     cy.wrap(loadPV(PV_NAME)).then(PV_CONFIG => {
       const PV = JSON.stringify(PV_CONFIG);

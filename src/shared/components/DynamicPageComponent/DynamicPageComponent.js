@@ -16,7 +16,6 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import { useFeature } from 'hooks/useFeature';
 import { HintButton } from '../DescriptionHint/DescriptionHint';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
@@ -53,7 +52,6 @@ export const DynamicPageComponent = ({
 }) => {
   const [showTitleDescription, setShowTitleDescription] = useState(false);
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   const { t } = useTranslation();
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
@@ -121,8 +119,7 @@ export const DynamicPageComponent = ({
           {actions && (
             <div className="page-header__actions">
               {actions}
-              {((window.location.search.includes('layout') &&
-                isColumnLeyoutEnabled) ||
+              {(window.location.search.includes('layout') ||
                 (!window.location.search.includes('layout') &&
                   layoutColumn?.showCreate?.resourceType)) &&
               layoutNumber !== 'StartColumn' ? (
@@ -130,8 +127,7 @@ export const DynamicPageComponent = ({
               ) : null}
             </div>
           )}
-          {(window.location.search.includes('layout') &&
-            isColumnLeyoutEnabled) ||
+          {window.location.search.includes('layout') ||
           (!window.location.search.includes('layout') &&
             layoutColumn?.showCreate?.resourceType) ? (
             layoutColumn.layout !== 'OneColumn' ? (
@@ -268,6 +264,9 @@ export const DynamicPageComponent = ({
             return;
           }
           setSelectedSectionIdState(e.detail.sectionId);
+          if (e.detail.sectionId === 'edit') {
+            setIsFormOpen({ formOpen: true });
+          }
         }}
       >
         <ObjectPageSection
