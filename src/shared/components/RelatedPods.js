@@ -17,6 +17,7 @@ export const RelatedPods = ({
     showTitle: true,
     disableCreate: true,
     disableMargin,
+    enableColumnLayout: false,
   };
 
   return <PodList {...podListParams} />;

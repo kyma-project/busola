@@ -1,5 +1,7 @@
 Cypress.Commands.add('openCreate', () => {
-  cy.contains('ui5-button', 'Create').click();
+  cy.get('ui5-panel')
+    .contains('ui5-button', 'Create')
+    .click();
 });
 
 Cypress.Commands.add('saveChanges', (action = 'Create') => {

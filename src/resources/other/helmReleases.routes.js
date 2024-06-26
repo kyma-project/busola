@@ -4,7 +4,6 @@ import { useRecoilState } from 'recoil';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import { useFeature } from 'hooks/useFeature';
 
 const HelmReleasesList = React.lazy(() =>
   import('../../components/HelmReleases/HelmReleasesList'),
@@ -15,7 +14,6 @@ const HelmReleaseDetails = React.lazy(() =>
 );
 
 const ColumnWrapper = ({ defaultColumn = 'list' }) => {
-  const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
@@ -23,7 +21,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
 
   const initialLayoutState = layout
     ? {
-        layout: isColumnLeyoutEnabled && layout ? layout : layoutState?.layout,
+        layout: layout ? layout : layoutState?.layout,
         midColumn: {
           resourceName: releaseName,
           resourceType: 'HelmReleases',
@@ -37,11 +35,11 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
     if (layout) {
       setLayoutColumn(initialLayoutState);
     }
-  }, [layout, isColumnLeyoutEnabled, namespaceId, releaseName]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [layout, namespaceId, releaseName]); // eslint-disable-line react-hooks/exhaustive-deps
 
   let startColumnComponent = null;
 
-  if ((!layout || !isColumnLeyoutEnabled) && defaultColumn === 'details') {
+  if (!layout && defaultColumn === 'details') {
     startColumnComponent = (
       <HelmReleaseDetails
         releaseName={layoutState?.midColumn?.resourceName || releaseName}
@@ -49,16 +47,11 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
       />
     );
   } else {
-    startColumnComponent = (
-      <HelmReleasesList enableColumnLayout={isColumnLeyoutEnabled} />
-    );
+    startColumnComponent = <HelmReleasesList />;
   }
 
   let midColumnComponent = null;
-  if (
-    (layoutState?.midColumn?.resourceName || isColumnLeyoutEnabled) &&
-    !(layoutState?.layout === 'OneColumn' && defaultColumn === 'details')
-  ) {
+  if (!(layoutState?.layout === 'OneColumn' && defaultColumn === 'details')) {
     midColumnComponent = (
       <HelmReleaseDetails
         releaseName={layoutState?.midColumn?.resourceName || releaseName}

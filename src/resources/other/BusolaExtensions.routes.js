@@ -9,7 +9,6 @@ import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate'
 import { usePrepareCreateProps } from 'resources/helpers';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import { useFeature } from 'hooks/useFeature';
 import { useUrl } from 'hooks/useUrl';
 
 const BusolaExtensionList = React.lazy(() =>
@@ -24,7 +23,6 @@ const BusolaExtensionCreate = React.lazy(() =>
 );
 
 const ColumnWrapper = ({ defaultColumn = 'list' }) => {
-  const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
@@ -36,7 +34,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
 
   const initialLayoutState = layout
     ? {
-        layout: isColumnLeyoutEnabled && layout ? layout : layoutState?.layout,
+        layout: layout ?? layoutState?.layout,
         midColumn: {
           resourceName: name,
           resourceType: 'Extensions',
@@ -50,7 +48,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
     if (layout) {
       setLayoutColumn(initialLayoutState);
     }
-  }, [layout, isColumnLeyoutEnabled, namespace, name]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [layout, namespace, name]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const elementCreateProps = usePrepareCreateProps({
     resourceType: 'ConfigMap',
@@ -61,7 +59,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
 
   let startColumnComponent = null;
 
-  if ((!layout || !isColumnLeyoutEnabled) && defaultColumn === 'details') {
+  if (!layout && defaultColumn === 'details') {
     startColumnComponent = (
       <BusolaExtensionDetails
         name={layoutState?.midColumn?.resourceName || name}
@@ -71,47 +69,57 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
   } else {
     startColumnComponent = (
       <BusolaExtensionList
-        enableColumnLayout={isColumnLeyoutEnabled}
         layoutCloseCreateUrl={clusterUrl('busolaextensions')}
       />
     );
   }
 
-  let midColumnComponent = null;
-  if (layoutState?.showCreate?.resourceType) {
-    midColumnComponent = (
-      <ResourceCreate
-        title={elementCreateProps.resourceTitle}
-        confirmText={t('common.buttons.create')}
-        layoutCloseCreateUrl={clusterUrl('busolaextensions')}
-        renderForm={renderProps => {
-          const createComponent = layoutState?.showCreate?.resourceType && (
-            <BusolaExtensionCreate
-              {...renderProps}
-              {...elementCreateProps}
-              layoutNumber="StartColumn" // For ResourceCreate we want to set layoutNumber to previous column so detail are opened instead of create
-            />
-          );
-
-          return <ErrorBoundary>{createComponent}</ErrorBoundary>;
-        }}
-      />
-    );
-  }
-  if (!layoutState?.showCreate && layoutState?.midColumn) {
-    midColumnComponent = (
+  let detailsMidColumn = null;
+  if (!layoutState?.showCreate) {
+    detailsMidColumn = (
       <BusolaExtensionDetails
         name={layoutState?.midColumn?.resourceName || name}
         namespace={layoutState.midColumn?.namespaceId || namespace}
       />
     );
   }
+
+  const createMidColumn = (
+    <ResourceCreate
+      title={elementCreateProps.resourceTitle}
+      confirmText={t('common.buttons.create')}
+      layoutCloseCreateUrl={clusterUrl('busolaextensions')}
+      renderForm={renderProps => {
+        const createComponent = (
+          <BusolaExtensionCreate
+            {...renderProps}
+            {...elementCreateProps}
+            layoutNumber="StartColumn" // For ResourceCreate we want to set layoutNumber to previous column so detail are opened instead of create
+          />
+        );
+
+        return <ErrorBoundary>{createComponent}</ErrorBoundary>;
+      }}
+    />
+  );
+
   return (
     <FlexibleColumnLayout
       style={{ height: '100%' }}
       layout={layoutState?.layout || 'OneColumn'}
       startColumn={<div className="column-content">{startColumnComponent}</div>}
-      midColumn={<div className="column-content">{midColumnComponent}</div>}
+      midColumn={
+        <>
+          {!layoutState?.showCreate &&
+            (defaultColumn !== 'details' || layout) && (
+              <div className="column-content">{detailsMidColumn}</div>
+            )}
+          {!layoutState?.midColumn &&
+            (defaultColumn !== 'details' || layout) && (
+              <div className="column-content">{createMidColumn}</div>
+            )}
+        </>
+      }
     />
   );
 };

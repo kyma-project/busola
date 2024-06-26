@@ -12,7 +12,6 @@ import { usePrepareCreateProps } from 'resources/helpers';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useUrl } from 'hooks/useUrl';
-import { useFeature } from 'hooks/useFeature';
 import CRCreate from '../CustomResourceDefinitions/CRCreate';
 
 const CustomResourcesByGroup = React.lazy(() =>
@@ -28,7 +27,6 @@ const CustomResource = React.lazy(() =>
 );
 
 export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
-  const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
@@ -40,7 +38,7 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
 
   const initialLayoutState = layout
     ? {
-        layout: isColumnLeyoutEnabled && layout ? layout : layoutState?.layout,
+        layout: layout ?? layoutState?.layout,
         midColumn: crdName
           ? {
               resourceName: crdName,
@@ -63,7 +61,7 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
     if (layout) {
       setLayoutColumn(initialLayoutState);
     }
-  }, [layout, isColumnLeyoutEnabled, crdName, crName, namespace]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [layout, crdName, crName, namespace]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const layoutCloseCreateUrl = scopedUrl(
     `customresources/${layoutState?.midColumn?.resourceName ?? crdName}`,
@@ -96,7 +94,7 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
   });
 
   let startColumnComponent = null;
-  if (!layout || !isColumnLeyoutEnabled) {
+  if (!layout) {
     if (defaultColumn === 'details') {
       startColumnComponent = (
         <CustomResource
@@ -117,14 +115,10 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
         />
       );
     } else {
-      startColumnComponent = (
-        <CustomResourcesByGroup enableColumnLayout={isColumnLeyoutEnabled} />
-      );
+      startColumnComponent = <CustomResourcesByGroup />;
     }
   } else {
-    startColumnComponent = (
-      <CustomResourcesByGroup enableColumnLayout={isColumnLeyoutEnabled} />
-    );
+    startColumnComponent = <CustomResourcesByGroup />;
   }
 
   let midColumnComponent = null;
@@ -148,14 +142,14 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
         }}
       />
     );
-  } else if (
-    (layoutState?.midColumn?.resourceName || isColumnLeyoutEnabled) &&
+  }
+  if (
     !(layoutState?.layout === 'OneColumn' && defaultColumn === 'listOfType')
   ) {
     midColumnComponent = (
       <CustomResourcesOfType
         crdName={layoutState?.midColumn?.resourceName ?? crdName}
-        enableColumnLayout={isColumnLeyoutEnabled}
+        enableColumnLayout={true}
         layoutCloseCreateUrl={layoutCloseCreateUrl}
       />
     );
@@ -187,7 +181,7 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
 
   if (
     !layoutState?.showCreate &&
-    (layoutState?.endColumn || isColumnLeyoutEnabled) &&
+    layoutState?.endColumn &&
     !(layoutState?.layout === 'OneColumn' && defaultColumn === 'details')
   ) {
     endColumnComponent = (

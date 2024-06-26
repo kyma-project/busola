@@ -79,7 +79,7 @@ context('Test extensibility variables', () => {
       .contains(/^Test Resources$/)
       .click();
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
   });
 
   it('Tests variables', () => {

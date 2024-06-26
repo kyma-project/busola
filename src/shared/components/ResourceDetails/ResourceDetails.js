@@ -31,7 +31,6 @@ import { EMPTY_TEXT_PLACEHOLDER } from '../../constants';
 import { ReadableElapsedTimeFromNow } from '../ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
 import { HintButton } from '../DescriptionHint/DescriptionHint';
 import { useRecoilValue } from 'recoil';
-import { useFeature } from 'hooks/useFeature';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import BannerCarousel from 'components/Extensibility/components/FeaturedCard/BannerCarousel';
 
@@ -196,8 +195,6 @@ function Resource({
   });
 
   const layoutColumn = useRecoilValue(columnLayoutState);
-  const { isEnabled: isColumnLayoutEnabled } = useFeature('COLUMN_LAYOUT');
-
   const protectedResource = isProtected(resource);
 
   const deleteButtonWrapper = children => {
@@ -427,10 +424,9 @@ function Resource({
                 </Title>
                 <div
                   className={`resource-details-container ${
-                    isColumnLayoutEnabled &&
-                    (layoutColumn.layout === 'MidColumnFullScreen' ||
-                      layoutColumn.layout === 'EndColumnFullScreen' ||
-                      layoutColumn.layout === 'OneColumn')
+                    layoutColumn.layout === 'MidColumnFullScreen' ||
+                    layoutColumn.layout === 'EndColumnFullScreen' ||
+                    layoutColumn.layout === 'OneColumn'
                       ? ''
                       : 'column-view'
                   }`}

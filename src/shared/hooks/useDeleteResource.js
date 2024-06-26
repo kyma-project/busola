@@ -17,7 +17,6 @@ import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
 import { prettifyNameSingular } from 'shared/utils/helpers';
 import { dontConfirmDeleteState } from 'state/preferences/dontConfirmDeleteAtom';
 import { useUrl } from 'hooks/useUrl';
-import { useFeature } from 'hooks/useFeature';
 
 import { clusterState } from 'state/clusterAtom';
 import { columnLayoutState } from 'state/columnLayoutAtom';
@@ -33,8 +32,6 @@ export function useDeleteResource({
   parentCrdName,
 }) {
   const { t } = useTranslation();
-  const { isEnabled: isColumnLeyoutEnabled } = useFeature('COLUMN_LAYOUT');
-
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const deleteResourceMutation = useDelete();
   const [dontConfirmDelete, setDontConfirmDelete] = useRecoilState(
@@ -94,10 +91,7 @@ export function useDeleteResource({
         });
 
         if (navigateToListAfterDelete || forceRedirect) {
-          if (
-            window.location.search.includes('layout') &&
-            isColumnLeyoutEnabled
-          ) {
+          if (window.location.search.includes('layout')) {
             if (window.location.pathname.includes('busolaextensions')) {
               navigate(`/cluster/${cluster.contextName}/busolaextensions`);
             } else {
