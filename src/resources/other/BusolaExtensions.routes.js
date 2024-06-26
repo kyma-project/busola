@@ -74,42 +74,52 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
     );
   }
 
-  let midColumnComponent = null;
+  let detailsMidColumn = null;
   if (!layoutState?.showCreate) {
-    midColumnComponent = (
+    detailsMidColumn = (
       <BusolaExtensionDetails
         name={layoutState?.midColumn?.resourceName || name}
         namespace={layoutState.midColumn?.namespaceId || namespace}
       />
     );
   }
-  if (layoutState?.showCreate?.resourceType) {
-    midColumnComponent = (
-      <ResourceCreate
-        title={elementCreateProps.resourceTitle}
-        confirmText={t('common.buttons.create')}
-        layoutCloseCreateUrl={clusterUrl('busolaextensions')}
-        renderForm={renderProps => {
-          const createComponent = layoutState?.showCreate?.resourceType && (
-            <BusolaExtensionCreate
-              {...renderProps}
-              {...elementCreateProps}
-              layoutNumber="StartColumn" // For ResourceCreate we want to set layoutNumber to previous column so detail are opened instead of create
-            />
-          );
 
-          return <ErrorBoundary>{createComponent}</ErrorBoundary>;
-        }}
-      />
-    );
-  }
+  const createMidColumn = (
+    <ResourceCreate
+      title={elementCreateProps.resourceTitle}
+      confirmText={t('common.buttons.create')}
+      layoutCloseCreateUrl={clusterUrl('busolaextensions')}
+      renderForm={renderProps => {
+        const createComponent = (
+          <BusolaExtensionCreate
+            {...renderProps}
+            {...elementCreateProps}
+            layoutNumber="StartColumn" // For ResourceCreate we want to set layoutNumber to previous column so detail are opened instead of create
+          />
+        );
+
+        return <ErrorBoundary>{createComponent}</ErrorBoundary>;
+      }}
+    />
+  );
 
   return (
     <FlexibleColumnLayout
       style={{ height: '100%' }}
       layout={layoutState?.layout || 'OneColumn'}
       startColumn={<div className="column-content">{startColumnComponent}</div>}
-      midColumn={<div className="column-content">{midColumnComponent}</div>}
+      midColumn={
+        <>
+          {!layoutState?.showCreate &&
+            (defaultColumn !== 'details' || layout) && (
+              <div className="column-content">{detailsMidColumn}</div>
+            )}
+          {!layoutState?.midColumn &&
+            (defaultColumn !== 'details' || layout) && (
+              <div className="column-content">{createMidColumn}</div>
+            )}
+        </>
+      }
     />
   );
 };
