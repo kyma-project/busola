@@ -56,5 +56,4 @@ UI5RadialChart.propTypes = {
   value: PropTypes.number.isRequired,
   max: PropTypes.number.isRequired,
   onClick: PropTypes.func,
-  title: PropTypes.string,
 };

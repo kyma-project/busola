@@ -14,7 +14,7 @@ type JsonataValue = [string, Error | null];
 type JsonataFunction = {
   (
     query: string,
-    extras: { [key: string]: any },
+    extras?: { [key: string]: any },
     defaultValue?: any,
   ): JsonataValue;
   async: (

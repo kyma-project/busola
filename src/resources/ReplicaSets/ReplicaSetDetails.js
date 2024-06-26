@@ -9,9 +9,10 @@ import { Selector } from 'shared/components/Selector/Selector';
 import ReplicaSetCreate from './ReplicaSetCreate';
 import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 import { ResourceDescription } from 'resources/ReplicaSets';
-import { EventsList } from '../../shared/components/EventsList';
-import { filterByResource } from '../../hooks/useMessageList';
-import { CountingCard } from '../../shared/components/CountingCard/CountingCard';
+import { EventsList } from 'shared/components/EventsList';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { filterByResource } from 'hooks/useMessageList';
+import { CountingCard } from 'shared/components/CountingCard/CountingCard';
 
 export function ReplicaSetsDetails(props) {
   const { t } = useTranslation();
@@ -74,7 +75,9 @@ export function ReplicaSetsDetails(props) {
     {
       header: t('replica-sets.status.observedGeneration'),
       value: resource => (
-        <div>{resource?.status?.observedGeneration ?? 0} </div>
+        <div>
+          {resource?.status?.observedGeneration ?? EMPTY_TEXT_PLACEHOLDER}{' '}
+        </div>
       ),
     },
   ];
