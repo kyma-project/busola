@@ -149,6 +149,7 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
     midColumnComponent = (
       <CustomResourcesOfType
         crdName={layoutState?.midColumn?.resourceName ?? crdName}
+        enableColumnLayout={true}
         layoutCloseCreateUrl={layoutCloseCreateUrl}
       />
     );

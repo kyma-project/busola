@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 
 import { useTranslation } from 'react-i18next';
-import { Link, Text } from '@ui5/webcomponents-react';
+import { Text } from '@ui5/webcomponents-react';
 import { groupBy } from 'lodash';
 
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
@@ -18,7 +18,7 @@ import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { ResourceDescription } from 'components/HelmReleases';
 import { createPortal } from 'react-dom';
 
-function HelmReleasesList({ enableColumnLayout = true }) {
+function HelmReleasesList() {
   const { t } = useTranslation();
   const namespace = useRecoilValue(activeNamespaceIdState);
   const { namespaceUrl } = useUrl();
@@ -49,28 +49,11 @@ function HelmReleasesList({ enableColumnLayout = true }) {
   ];
 
   const rowRenderer = entry => [
-    enableColumnLayout ? (
-      <>
-        <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
-          {entry.releaseName}
-        </Text>
-      </>
-    ) : (
-      <Link
-        style={{ fontWeight: 'bold' }}
-        onClick={() => {
-          setLayoutColumn({
-            midColumn: null,
-            endColumn: null,
-            layout: 'OneColumn',
-          });
-
-          navigate(resourceUrl(entry));
-        }}
-      >
+    <>
+      <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
         {entry.releaseName}
-      </Link>
-    ),
+      </Text>
+    </>,
     namespace === '-all-' ? entry.namespace : null,
     entry.recentRelease?.chart.metadata.name || t('common.statuses.unknown'),
     entry.revision,
@@ -109,7 +92,7 @@ function HelmReleasesList({ enableColumnLayout = true }) {
             allowSlashShortcut
             hasDetailsView
             displayArrow
-            enableColumnLayout={enableColumnLayout}
+            enableColumnLayout={true}
             customUrl={resourceUrl}
             resourceType="HelmReleases"
             sortBy={{
