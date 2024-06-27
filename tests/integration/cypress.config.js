@@ -47,6 +47,7 @@ module.exports = defineConfig({
       'tests/extensibility/ext-test-pizzas.spec.js',
       'tests/extensibility/ext-test-services.spec.js',
       'tests/extensibility/ext-test-variables.spec.js',
+      'tests/extensibility/ext-test-extensibility.spec.js',
       'tests/namespace/a-run-before.spec.js',
       'tests/namespace/test-namespace-overview.spec.js',
       'tests/namespace/test-navigation.spec.js',

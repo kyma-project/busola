@@ -53,6 +53,7 @@ export function CollapsibleSection({
       noAnimation
       className={classNames}
       onToggle={toggle}
+      data-testid={title.toLowerCase().replaceAll(' ', '-')}
       header={
         <Toolbar
           active={!disabled}
