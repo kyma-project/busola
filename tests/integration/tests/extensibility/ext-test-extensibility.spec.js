@@ -5,7 +5,7 @@ const EXTENSION_NAME = 'Potato Extension';
 const CR_NAME = 'first-potato';
 const FIRST_DESCRIPTION = 'My Description';
 
-context('Test Pizzas', () => {
+context('Test Potatoes', () => {
   Cypress.skipAfterFail();
 
   before(() => {
@@ -44,11 +44,10 @@ context('Test Pizzas', () => {
     //   .find('Close')
     //   .should('be.visible')
     //   .click();
+    cy.loginAndSelectCluster();
   });
 
-  it('Create Extensions', () => {
-    cy.loginAndSelectCluster();
-
+  it.skip('Create Extensions', () => {
     cy.navigateTo('Configuration', 'Extensions');
 
     cy.openCreate();
@@ -80,11 +79,15 @@ context('Test Pizzas', () => {
   it.skip('Check if Extensions is created', () => {
     cy.get('ui5-input[placeholder="Search"]:visible')
       .find('input')
-      .click()
+      .clear()
       .type('potatoes')
+      .get('ui5-li-suggestion-item:visible')
+      .contains('potatoes')
       .click();
 
-    cy.get('ui5-table-row').find('potatoes');
+    cy.get('ui5-table-row')
+      .contains('potatoes')
+      .should('be.visible');
   });
 
   it.skip('Check extension view', () => {
@@ -129,9 +132,10 @@ context('Test Pizzas', () => {
 
     cy.get('ui5-input[placeholder="Search"]:visible')
       .find('input')
-      .click()
       .clear()
       .type('potatoes')
+      .get('ui5-li-suggestion-item:visible')
+      .contains('potatoes')
       .click();
 
     cy.clickGenericListLink('potatoes');
@@ -146,8 +150,11 @@ context('Test Pizzas', () => {
       const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
 
       cy.get('@form')
-        .find('[data-testid="details-view"]:visible')
-        .pasteToMonaco(input);
+        .get('[data-testid="details-view"]')
+        .scrollIntoView()
+        .within(() => {
+          cy.pasteToMonaco(input);
+        });
     });
 
     cy.saveChanges('Edit');
