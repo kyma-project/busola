@@ -40,6 +40,7 @@ export default function BusolaExtensionCreate({
         formElementRef={formElementRef}
         onChange={onChange}
         resource={state}
+        initialResource={{}}
         setResource={setState}
         className="resource-form--unset-height"
         createResource={async () => {
