@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
+import jsyaml from 'js-yaml';
 
 context('Test Cluster Overview', () => {
   Cypress.skipAfterFail();
@@ -26,6 +27,40 @@ context('Test Cluster Overview', () => {
     cy.contains('Nodes').should('be.visible');
 
     cy.contains('Events').should('be.visible');
+  });
+
+  it('Check statistical card injection', () => {
+    cy.getLeftNav()
+      .contains('Cluster Details')
+      .click();
+
+    cy.contains('ui5-button', 'Upload YAML').click();
+
+    cy.loadFiles('examples/injections/countingcard-injection.yaml').then(
+      resources => {
+        const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+        cy.pasteToMonaco(input);
+      },
+    );
+
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Upload')
+      .should('be.visible')
+      .click();
+
+    cy.get('ui5-dialog')
+      .find('.status-message-success')
+      .should('have.length', 1);
+
+    cy.reload();
+
+    cy.contains('ui5-card.counting-card.item', 'HPA examples')
+      .find('ui5-link.counting-card__link')
+      .click();
+
+    cy.get('ui5-title')
+      .contains('Horizontal Pod Autoscalers')
+      .should('be.visible');
   });
 
   it('Check feedback feature via feature flag', () => {
