@@ -30,37 +30,52 @@ context('Test Cluster Overview', () => {
   });
 
   it('Check statistical card injection', () => {
-    cy.getLeftNav()
-      .contains('Cluster Details')
-      .click();
-
+    // upload injection
     cy.contains('ui5-button', 'Upload YAML').click();
-
-    cy.loadFiles('examples/injections/countingcard-injection.yaml').then(
-      resources => {
-        const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
-        cy.pasteToMonaco(input);
-      },
-    );
-
+    cy.loadFiles('examples/injections/countingcard.yaml').then(resources => {
+      const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+      cy.pasteToMonaco(input);
+    });
     cy.get('ui5-dialog')
       .contains('ui5-button', 'Upload')
       .should('be.visible')
       .click();
-
     cy.get('ui5-dialog')
       .find('.status-message-success')
       .should('have.length', 1);
 
     cy.reload();
 
-    cy.contains('ui5-card.counting-card.item', 'HPA examples')
+    // test injected statistical card exists and works
+    cy.contains(
+      'ui5-card.counting-card.item',
+      'HPAs Statistical Injection Example',
+    )
       .find('ui5-link.counting-card__link')
       .click();
 
     cy.get('ui5-title')
-      .contains('Horizontal Pod Autoscalers')
+      .contains('Hpatest')
       .should('be.visible');
+
+    // remove injection
+    cy.getLeftNav()
+      .contains('Back To Cluster Details')
+      .click();
+    cy.navigateTo('Configuration', 'Extensions');
+    cy.deleteFromGenericList('Extension', 'hpatest');
+
+    cy.reload();
+
+    // test injected statistical card does not exist
+    cy.getLeftNav()
+      .contains('Cluster Details')
+      .click();
+
+    cy.contains(
+      'ui5-card.counting-card.item',
+      'HPAs Statistical Injection Example',
+    ).should('not.exist');
   });
 
   it('Check feedback feature via feature flag', () => {
