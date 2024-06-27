@@ -712,7 +712,9 @@ deployments:
   title: Deployments
   status: 
     available-replicas: Available Replicas
-    current-replicas: Current Replicas
+    collision-count: Collision Count
+    replicas: Replicas
+    unavailable-replicas: Unavailable Replicas
     updated-replicas: Updated Replicas
 discovery-and-network:
   title: Discovery and Network

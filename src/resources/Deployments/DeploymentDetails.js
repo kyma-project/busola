@@ -7,7 +7,9 @@ import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 import { HPASubcomponent } from 'resources/HorizontalPodAutoscalers/HPASubcomponent';
 import { DeploymentStatus } from './DeploymentStatus';
 import DeploymentCreate from './DeploymentCreate';
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { EventsList } from 'shared/components/EventsList';
+import { filterByResource } from 'hooks/useMessageList';
+
 import { getLastTransitionTime } from 'resources/helpers';
 import { ResourceDescription } from 'resources/Deployments';
 
@@ -29,7 +31,7 @@ export function DeploymentDetails(props) {
         getLastTransitionTime(deployment?.status?.conditions),
     },
     {
-      header: t('deployments.status.current-replicas'),
+      header: t('deployments.status.replicas'),
       value: deployment => <div>{deployment?.status?.replicas ?? 0}</div>,
     },
     {
@@ -41,10 +43,18 @@ export function DeploymentDetails(props) {
     {
       header: t('deployments.status.available-replicas'),
       value: deployment => (
-        <div>
-          {deployment?.status?.availableReplicas ?? EMPTY_TEXT_PLACEHOLDER}
-        </div>
+        <div>{deployment?.status?.availableReplicas ?? 0}</div>
       ),
+    },
+    {
+      header: t('deployments.status.unavailable-replicas'),
+      value: deployment => (
+        <div>{deployment?.status?.unavailableReplicas ?? 0}</div>
+      ),
+    },
+    {
+      header: t('deployments.status.collision-count'),
+      value: deployment => <div>{deployment?.status?.collisionCount ?? 0}</div>,
     },
   ];
 
@@ -71,9 +81,23 @@ export function DeploymentDetails(props) {
     <PodTemplate key="pod-template" template={deployment.spec.template} />
   );
 
+  const Events = () => (
+    <EventsList
+      key="events"
+      namespace={props.namespace}
+      filter={filterByResource('Deployment', props.resourceName)}
+      hideInvolvedObjects={true}
+    />
+  );
+
   return (
     <ResourceDetails
-      customComponents={[HPASubcomponent, MatchSelector, DeploymentPodTemplate]}
+      customComponents={[
+        HPASubcomponent,
+        MatchSelector,
+        DeploymentPodTemplate,
+        Events,
+      ]}
       customColumns={customColumns}
       createResourceForm={DeploymentCreate}
       statusBadge={deployment => <DeploymentStatus deployment={deployment} />}
