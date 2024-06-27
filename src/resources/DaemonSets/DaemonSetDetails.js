@@ -9,6 +9,8 @@ import { DaemonSetStatus } from './DaemonSetStatus';
 import DaemonSetCreate from './DaemonSetCreate';
 import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 import { ResourceDescription } from 'resources/DaemonSets';
+import { EventsList } from 'shared/components/EventsList';
+import { filterByResource } from '../../hooks/useMessageList';
 
 const Tolerations = resource => {
   const { t } = useTranslation();
@@ -49,6 +51,15 @@ const Tolerations = resource => {
 export function DaemonSetDetails(props) {
   const { t } = useTranslation();
 
+  const Events = () => (
+    <EventsList
+      key="events"
+      namespace={props.namespace}
+      filter={filterByResource('DaemonSet', props.resourceName)}
+      hideInvolvedObjects={true}
+    />
+  );
+
   const customColumns = [
     {
       header: t('common.headers.owner'),
@@ -56,11 +67,59 @@ export function DaemonSetDetails(props) {
         <ControlledBy ownerReferences={resource.metadata.ownerReferences} />
       ),
     },
+  ];
+
+  const customStatusColumns = [
     {
-      header: t('common.headers.pods'),
-      value: resource => <DaemonSetStatus daemonSet={resource} />,
+      header: t('daemon-sets.status.collision-count'),
+      value: resource => <div>{resource?.status?.collisionCount ?? 0} </div>,
+    },
+    {
+      header: t('daemon-sets.status.current-number-scheduled'),
+      value: resource => (
+        <div>{resource?.status?.currentNumberScheduled ?? 0} </div>
+      ),
+    },
+    {
+      header: t('daemon-sets.status.desired-number-scheduled'),
+      value: resource => (
+        <div>{resource?.status?.desiredNumberScheduled ?? 0} </div>
+      ),
+    },
+    {
+      header: t('daemon-sets.status.number-available'),
+      value: resource => <div>{resource?.status?.numberAvailable ?? 0} </div>,
+    },
+    {
+      header: t('daemon-sets.status.number-misscheduled'),
+      value: resource => (
+        <div>{resource?.status?.numberMisscheduled ?? 0} </div>
+      ),
+    },
+    {
+      header: t('daemon-sets.status.number-ready'),
+      value: resource => <div>{resource?.status?.numberReady ?? 0} </div>,
+    },
+    {
+      header: t('daemon-sets.status.number-unavailable'),
+      value: resource => <div>{resource?.status?.numberUnavailable ?? 0} </div>,
+    },
+    {
+      header: t('daemon-sets.status.updated-number-scheduled'),
+      value: resource => (
+        <div>{resource?.status?.updatedNumberScheduled ?? 0} </div>
+      ),
     },
   ];
+
+  const statusConditions = resource => {
+    return resource?.status?.conditions?.map(condition => {
+      return {
+        header: { titleText: condition.type, status: condition.status },
+        message: condition.message,
+      };
+    });
+  };
 
   const MatchSelector = daemonSet => (
     <Selector
@@ -78,8 +137,16 @@ export function DaemonSetDetails(props) {
 
   return (
     <ResourceDetails
-      customComponents={[Tolerations, MatchSelector, DaemonSetPodTemplate]}
+      customComponents={[
+        Tolerations,
+        MatchSelector,
+        DaemonSetPodTemplate,
+        Events,
+      ]}
       customColumns={customColumns}
+      customStatusColumns={customStatusColumns}
+      statusConditions={statusConditions}
+      statusBadge={resource => <DaemonSetStatus daemonSet={resource} />}
       createResourceForm={DaemonSetCreate}
       description={ResourceDescription}
       {...props}
