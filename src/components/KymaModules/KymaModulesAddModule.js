@@ -3,13 +3,11 @@ import {
   Card,
   CardHeader,
   CheckBox,
-  FlexBox,
   Label,
   MessageStrip,
   Option,
   Panel,
   Select,
-  Text,
 } from '@ui5/webcomponents-react';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useTranslation } from 'react-i18next';
@@ -21,7 +19,6 @@ import { ResourceForm } from 'shared/ResourceForm';
 
 import './KymaModulesAddModule.scss';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { DESKTOP, useMinWidth } from 'hooks/useMinWidth';
 
 export default function KymaModulesAddModule(props) {
   const { t } = useTranslation();
@@ -87,18 +84,20 @@ export default function KymaModulesAddModule(props) {
       handleResize();
     });
 
-    if (cardsContainerRef?.current) {
-      resizeObserver.observe(cardsContainerRef?.current);
+    const currentRef = cardsContainerRef?.current;
+
+    if (currentRef) {
+      resizeObserver.observe(currentRef);
     }
 
     handleResize();
 
     return () => {
-      if (cardsContainerRef?.current) {
-        resizeObserver.unobserve(cardsContainerRef?.current);
+      if (currentRef) {
+        resizeObserver.unobserve(currentRef);
       }
     };
-  }, [calculateColumns, cardsContainerRef?.current]);
+  }, [calculateColumns]);
 
   if (loading || loadingKymaResources || !kymaResource) {
     return (
