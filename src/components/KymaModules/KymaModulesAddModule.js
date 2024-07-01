@@ -257,7 +257,9 @@ export default function KymaModulesAddModule(props) {
                     }
                     key={channel.channel}
                     value={channel.channel}
-                  >{`${channel.channel} (v${channel.version})`}</Option>
+                  >{`${channel.channel[0].toUpperCase()}${channel.channel.slice(
+                    1,
+                  )} (v${channel.version})`}</Option>
                 ))}
               </Select>
               {module.docsUrl ? (
