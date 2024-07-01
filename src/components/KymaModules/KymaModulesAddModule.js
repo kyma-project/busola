@@ -75,7 +75,8 @@ export default function KymaModulesAddModule(props) {
     setInitialUnchangedResource(cloneDeep(initialKymaResource));
     setKymaResource(cloneDeep(initialKymaResource));
     setSelectedModules(initialKymaResource?.spec?.modules);
-  }, [loading, initialKymaResource]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading]);
 
   useEffect(() => {
     const handleResize = () => {
