@@ -1,13 +1,11 @@
 Cypress.Commands.add('navigateTo', (leftNav, resource) => {
   cy.getLeftNav()
-    .contains(leftNav)
-    .should('be.visible');
-
-  cy.getLeftNav()
-    .contains(leftNav)
+    .get(`ui5-side-navigation-item[text="${leftNav}"]`)
+    .should('be.visible')
     .click();
 
   cy.getLeftNav()
-    .contains(resource)
+    .get(`ui5-side-navigation-sub-item[text="${resource}"]`)
+    .should('be.visible')
     .click();
 });

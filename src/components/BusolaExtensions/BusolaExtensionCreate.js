@@ -8,12 +8,14 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { ResourceForm } from 'shared/ResourceForm';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 
-import { createExtensibilityTemplate, createConfigmap } from './helpers';
+import { createConfigmap, createExtensibilityTemplate } from './helpers';
 import { ColumnsInput } from './ColumnsInput';
 import './ExtensibilityStarterForm.scss';
 import { clusterState } from 'state/clusterAtom';
 import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 import { columnLayoutState } from 'state/columnLayoutAtom';
+import { isFormOpenState } from '../../state/formOpenAtom';
+import { isResourceEditedState } from '../../state/resourceEditedAtom';
 
 export default function BusolaExtensionCreate({
   formElementRef,
@@ -33,6 +35,8 @@ export default function BusolaExtensionCreate({
   );
   const [crd, setCrd] = useState(null);
   const [state, setState] = useState({});
+  const setFormOpenState = useSetRecoilState(isFormOpenState);
+  const setResourceEditedState = useSetRecoilState(isResourceEditedState);
 
   return (
     <div className="extension-create-container">
@@ -80,6 +84,8 @@ export default function BusolaExtensionCreate({
             onSuccess,
             onError,
           });
+          setFormOpenState({ formOpen: false });
+          setResourceEditedState({ isEdited: false });
         }}
       >
         <ResourceForm.FormField
