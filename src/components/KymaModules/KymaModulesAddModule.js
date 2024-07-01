@@ -167,14 +167,20 @@ export default function KymaModulesAddModule(props) {
       )
     ) {
       selectedModules[index].channel = channel;
-      setKymaResource({
-        ...kymaResource,
-        spec: {
-          ...kymaResource.spec,
-          modules: selectedModules,
-        },
+    } else {
+      selectedModules.push({
+        name: module.name,
       });
+      selectedModules[selectedModules.length - 1].channel = channel;
     }
+
+    setKymaResource({
+      ...kymaResource,
+      spec: {
+        ...kymaResource.spec,
+        modules: selectedModules,
+      },
+    });
   };
 
   const findStatus = moduleName => {
