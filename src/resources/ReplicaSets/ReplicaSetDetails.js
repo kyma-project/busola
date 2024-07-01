@@ -12,7 +12,6 @@ import { ResourceDescription } from 'resources/ReplicaSets';
 import { EventsList } from 'shared/components/EventsList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { filterByResource } from 'hooks/useMessageList';
-import { CountingCard } from 'shared/components/CountingCard/CountingCard';
 
 export function ReplicaSetsDetails(props) {
   const { t } = useTranslation();

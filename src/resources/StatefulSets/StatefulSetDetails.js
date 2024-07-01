@@ -8,7 +8,6 @@ import { StatefulSetPods } from './StatefulSetPods';
 import StatefulSetCreate from './StatefulSetCreate';
 import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 import { EventsList } from 'shared/components/EventsList';
-import { CountingCard } from 'shared/components/CountingCard/CountingCard';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ResourceDescription } from 'resources/StatefulSets';
 
