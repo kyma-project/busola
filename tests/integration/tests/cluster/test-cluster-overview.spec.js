@@ -29,7 +29,7 @@ context('Test Cluster Overview', () => {
     cy.contains('Events').should('be.visible');
   });
 
-  it('Check statistical card injection', () => {
+  it('Check injections', () => {
     // upload injection
     cy.contains('ui5-button', 'Upload YAML').click();
     cy.loadFiles('examples/injections/countingcard.yaml').then(resources => {
@@ -45,6 +45,14 @@ context('Test Cluster Overview', () => {
       .should('have.length', 1);
 
     cy.reload();
+
+    // test injected RadialGraph exists and works
+    cy.get('.radial-chart-card')
+      .contains('.ui5-card-header-title', 'MyTitle')
+      .get('.radial-chart')
+      .contains('text.progress-label', '50%')
+      .get('.radial-chart')
+      .contains('span.additional-info', 'test1233456');
 
     // test injected statistical card exists and works
     cy.contains(
@@ -71,6 +79,8 @@ context('Test Cluster Overview', () => {
     cy.getLeftNav()
       .contains('Cluster Details')
       .click();
+
+    cy.contains('.ui5-card-header-title', 'MyTitle').should('not.exist');
 
     cy.contains(
       'ui5-card.counting-card.item',
