@@ -189,6 +189,12 @@ export default function KymaModulesAddModule(props) {
     );
   };
 
+  const findSpec = moduleName => {
+    return kymaResource?.spec.modules?.find(
+      module => moduleName === module.name,
+    );
+  };
+
   const renderCards = () => {
     const columns = Array.from({ length: columnsCount }, () => []);
 
@@ -254,12 +260,19 @@ export default function KymaModulesAddModule(props) {
                 onChange={event => {
                   setChannel(module, event.detail.selectedOption.value, index);
                 }}
-                value={module.channel ?? kymaResource?.spec?.channel}
+                value={
+                  findSpec(module.name)?.channel ||
+                  findStatus(module.name)?.channel ||
+                  kymaResource?.spec?.channel
+                }
+                className="channel-select"
               >
                 {module.channels?.map(channel => (
                   <Option
                     selected={
-                      channel.channel === selectedModules[index]?.channel
+                      channel.channel === findSpec(module.name)?.channel ||
+                      channel.channel === findStatus(module.name)?.channel ||
+                      channel.channel === kymaResource?.spec?.channel
                     }
                     key={channel.channel}
                     value={channel.channel}
