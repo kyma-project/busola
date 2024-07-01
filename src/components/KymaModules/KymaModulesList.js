@@ -32,6 +32,7 @@ import { Label } from 'shared/ResourceForm/components/Label';
 import { cloneDeep } from 'lodash';
 import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
 import { useNotification } from 'shared/contexts/NotificationContext';
+import { PopoverBadge } from 'shared/components/PopoverBadge/PopoverBadge';
 
 export function KymaModulesList(props) {
   const { t } = useTranslation();
@@ -156,18 +157,34 @@ export function KymaModulesList(props) {
         // Version
         findStatus(resource.name)?.version || EMPTY_TEXT_PLACEHOLDER,
         // State
-        <StatusBadge
-          resourceKind="kymas"
-          type={
-            findStatus(resource.name)?.state === 'Ready'
-              ? 'Success'
-              : findStatus(resource.name)?.state === 'Processing'
-              ? 'None'
-              : findStatus(resource.name)?.state || 'None'
-          }
-        >
-          {findStatus(resource.name)?.state || 'Unknown'}
-        </StatusBadge>,
+        findStatus(resource.name)?.message ? (
+          <PopoverBadge
+            resourceKind="kymas"
+            type={
+              findStatus(resource.name)?.state === 'Ready'
+                ? 'Success'
+                : findStatus(resource.name)?.state === 'Processing'
+                ? 'None'
+                : findStatus(resource.name)?.state || 'None'
+            }
+            tooltipContent={findStatus(resource.name)?.message}
+          >
+            {findStatus(resource.name)?.state || 'Unknown'}
+          </PopoverBadge>
+        ) : (
+          <StatusBadge
+            resourceKind="kymas"
+            type={
+              findStatus(resource.name)?.state === 'Ready'
+                ? 'Success'
+                : findStatus(resource.name)?.state === 'Processing'
+                ? 'None'
+                : findStatus(resource.name)?.state || 'None'
+            }
+          >
+            {findStatus(resource.name)?.state || 'Unknown'}
+          </StatusBadge>
+        ),
         // Documentation
         <ExternalLink
           url={
