@@ -11,7 +11,7 @@ on:
       - "src/**"
 
 jobs:
-  run-test:
+  run-cluster-test:
     runs-on: ubuntu-latest
     steps:
       - uses: gardenlinux/workflow-telemetry-action@v2
