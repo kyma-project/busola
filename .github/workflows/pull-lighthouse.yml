@@ -43,7 +43,7 @@ jobs:
         shell: bash
         run: |
           k3d kubeconfig get k3dCluster > tests/lighthouse/fixtures/kubeconfig.yaml
-          export CYPRESS_DOMAIN=http://localhost:3000
+          export DOMAIN=http://localhost:3000
           serve -s build > busola.log &
 
           pushd backend
@@ -51,18 +51,11 @@ jobs:
           popd
           
           echo "waiting for server to be up..."
-          while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' "$CYPRESS_DOMAIN")" != "200" ]]; do sleep 5; done
+          while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' "$DOMAIN")" != "200" ]]; do sleep 5; done
           sleep 10
           
           cd tests/lighthouse
           npm ci && npx playwright install --with-deps && npm run "test"
-      - name: Uploads artifacts
-        uses: actions/upload-artifact@v4
-        if: ${{ always() }}
-        with:
-          name: lighthouse-${{ github.job }}
-          path: tests/lighthouse/test-results/
-          retention-days: 90
       - name: Upload Busola logs
         uses: actions/upload-artifact@v4
         if: ${{ always() }}
