@@ -60,8 +60,8 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
-          name: cypress-${{ github.job }}
-          path: tests/integration/cypress/
+          name: lighthouse-${{ github.job }}
+          path: tests/lighthouse/test-results/
           retention-days: 90
       - name: Upload Busola logs
         uses: actions/upload-artifact@v4
