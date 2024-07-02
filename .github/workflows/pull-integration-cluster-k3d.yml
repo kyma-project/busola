@@ -1,4 +1,4 @@
-name: pull-integration-cluster-k3d
+name: PR Integration Cluster Tests
 
 on: 
   pull_request:

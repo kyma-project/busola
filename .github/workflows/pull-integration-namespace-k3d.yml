@@ -1,4 +1,4 @@
-name: pull-integration-namespace-k3d
+name: PR Integration Namespace Tests
 
 on: 
   pull_request:

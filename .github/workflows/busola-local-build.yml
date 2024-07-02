@@ -1,4 +1,4 @@
-name: busola-local-build
+name: Busola Local Build
 
 on:
   push:
