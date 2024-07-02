@@ -29,9 +29,18 @@ data:
         source: $count($item)
       children:
         - name: Test2
-          source: $min($item.currentReplicas)
+          source: "2"
         - name: Test3
-          source: $max($item.currentReplicas)
+          source: "3"
       targets:
         - location: ClusterOverview
           slot: health
+    - name: MyTitle
+      widget: RadialChart
+      source: "22"
+      maxValue: "44"
+      additionalInfo: "test1233456"
+      color: var(--sapChart_OrderedColor_5)
+      targets:
+        - slot: health
+          location: ClusterOverview
