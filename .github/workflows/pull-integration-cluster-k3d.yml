@@ -9,7 +9,6 @@ on:
       - "tests/**"
       - "nginx/**"
       - "src/**"
-      - "tests/**"
 
 jobs:
   run-test:

@@ -1,10 +1,10 @@
-name: PR Integration Namespace Tests
+name: PR Lighthouse Test
 
 on: 
   pull_request:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
-      - ".github/workflows/pull-integration-namespace-k3d.yml"
+      - ".github/workflows/pull-lighthouse.yml"
       - "resources/**"
       - "tests/**"
       - "nginx/**"
@@ -54,8 +54,8 @@ jobs:
           while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' "$CYPRESS_DOMAIN")" != "200" ]]; do sleep 5; done
           sleep 10
           
-          cd tests/integration
-          npm ci && npm run "test:namespace"
+          cd tests/lighthouse
+          npm ci && npx playwright install --with-deps && npm run "test"
       - name: Uploads artifacts
         uses: actions/upload-artifact@v4
         if: ${{ always() }}
