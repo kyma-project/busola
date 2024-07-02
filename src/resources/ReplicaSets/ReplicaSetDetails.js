@@ -12,7 +12,6 @@ import { ResourceDescription } from 'resources/ReplicaSets';
 import { EventsList } from 'shared/components/EventsList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { filterByResource } from 'hooks/useMessageList';
-import { CountingCard } from 'shared/components/CountingCard/CountingCard';
 
 export function ReplicaSetsDetails(props) {
   const { t } = useTranslation();
@@ -73,12 +72,30 @@ export function ReplicaSetsDetails(props) {
 
   const customStatusColumns = [
     {
-      header: t('replica-sets.status.observedGeneration'),
+      header: t('replica-sets.status.available-replicas'),
+      value: resource => <div>{resource?.status?.availableReplicas ?? 0}</div>,
+    },
+    {
+      header: t('replica-sets.status.fully-labeled-replicas'),
+      value: resource => (
+        <div>{resource?.status?.fullyLabeledReplicas ?? 0}</div>
+      ),
+    },
+    {
+      header: t('replica-sets.status.observed-generation'),
       value: resource => (
         <div>
           {resource?.status?.observedGeneration ?? EMPTY_TEXT_PLACEHOLDER}{' '}
         </div>
       ),
+    },
+    {
+      header: t('replica-sets.status.ready-replicas'),
+      value: resource => <div>{resource?.status?.readyReplicas ?? 0}</div>,
+    },
+    {
+      header: t('replica-sets.status.replicas'),
+      value: resource => <div>{resource?.status?.replicas ?? 0}</div>,
     },
   ];
 
@@ -105,33 +122,6 @@ export function ReplicaSetsDetails(props) {
     <PodTemplate key="pod-template" template={replicaset.spec.template} />
   );
 
-  const ReplicasOverview = resource => {
-    return (
-      <div className="item-wrapper wide">
-        <CountingCard
-          className="item"
-          value={resource?.status?.replicas ?? 0}
-          title={t('replica-sets.overview.header')}
-          subTitle={t('replica-sets.overview.replicas')}
-          extraInfo={[
-            {
-              title: t('replica-sets.overview.readyReplicas'),
-              value: resource?.status?.readyReplicas ?? 0,
-            },
-            {
-              title: t('replica-sets.overview.availableReplicas'),
-              value: resource?.status?.availableReplicas ?? 0,
-            },
-            {
-              title: t('replica-sets.overview.fullyLabeledReplicas'),
-              value: resource?.status?.fullyLabeledReplicas ?? 0,
-            },
-          ]}
-        />
-      </div>
-    );
-  };
-
   return (
     <ResourceDetails
       customColumns={customColumns}
@@ -146,7 +136,6 @@ export function ReplicaSetsDetails(props) {
       statusConditions={statusConditions}
       description={ResourceDescription}
       createResourceForm={ReplicaSetCreate}
-      customHealthCards={[ReplicasOverview]}
       {...props}
     />
   );
