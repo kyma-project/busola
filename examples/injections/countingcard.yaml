@@ -26,7 +26,7 @@ data:
       source: status
       mainValue:
         name: Test1
-        source: "1"
+        source: $count($item)
       children:
         - name: Test2
           source: "2"
