@@ -1,17 +1,17 @@
-name: PR Integration Namespace Tests
+name: PR Lighthouse Test
 
 on: 
   pull_request:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
-      - ".github/workflows/pull-integration-namespace-k3d.yml"
+      - ".github/workflows/pull-lighthouse.yml"
       - "resources/**"
       - "tests/**"
       - "nginx/**"
       - "src/**"
 
 jobs:
-  run-namespace-test:
+  run-lighthouse-test:
     runs-on: ubuntu-latest
     steps:
       - uses: gardenlinux/workflow-telemetry-action@v2
@@ -42,8 +42,8 @@ jobs:
       - name: run_tests
         shell: bash
         run: |
-          k3d kubeconfig get k3dCluster > tests/integration/fixtures/kubeconfig.yaml
-          export CYPRESS_DOMAIN=http://localhost:3000
+          k3d kubeconfig get k3dCluster > tests/lighthouse/fixtures/kubeconfig.yaml
+          export DOMAIN=http://localhost:3000
           serve -s build > busola.log &
 
           pushd backend
@@ -51,18 +51,11 @@ jobs:
           popd
           
           echo "waiting for server to be up..."
-          while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' "$CYPRESS_DOMAIN")" != "200" ]]; do sleep 5; done
+          while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' "$DOMAIN")" != "200" ]]; do sleep 5; done
           sleep 10
           
-          cd tests/integration
-          npm ci && npm run "test:namespace"
-      - name: Uploads artifacts
-        uses: actions/upload-artifact@v4
-        if: ${{ always() }}
-        with:
-          name: cypress-${{ github.job }}
-          path: tests/integration/cypress/
-          retention-days: 90
+          cd tests/lighthouse
+          npm ci && npx playwright install --with-deps && npm run "test"
       - name: Upload Busola logs
         uses: actions/upload-artifact@v4
         if: ${{ always() }}
