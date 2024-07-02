@@ -7,6 +7,8 @@ import { ResourceForm } from 'shared/ResourceForm';
 export default function KymaModulesCreate({ resource, ...props }) {
   const { t } = useTranslation();
   const [kymaResource, setKymaResource] = useState(cloneDeep(resource));
+  const [initialResource] = useState(resource);
+  const [initialUnchangedResource] = useState(resource);
 
   return (
     <ResourceForm
@@ -14,7 +16,8 @@ export default function KymaModulesCreate({ resource, ...props }) {
       pluralKind="kymas"
       singularName={t('kyma-modules.kyma')}
       resource={kymaResource}
-      initialResource={resource}
+      initialResource={initialResource}
+      initialUnchangedResource={initialUnchangedResource}
       setResource={setKymaResource}
       createUrl={props.resourceUrl}
       onlyYaml
