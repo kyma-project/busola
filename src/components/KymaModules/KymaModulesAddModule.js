@@ -53,7 +53,7 @@ export default function KymaModulesAddModule(props) {
   const [selectedModules, setSelectedModules] = useState(
     initialKymaResource?.spec?.modules ?? [],
   );
-  console.log(initialKymaResource?.spec?.modules);
+
   const [columnsCount, setColumnsCount] = useState(2);
   const cardsContainerRef = useRef(null);
 
