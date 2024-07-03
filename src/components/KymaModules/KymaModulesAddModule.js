@@ -51,7 +51,7 @@ export default function KymaModulesAddModule(props) {
     cloneDeep(initialKymaResource),
   );
   const [selectedModules, setSelectedModules] = useState(
-    initialKymaResource?.spec?.modules,
+    initialKymaResource?.spec?.modules ?? [],
   );
 
   const [columnsCount, setColumnsCount] = useState(2);
@@ -71,7 +71,7 @@ export default function KymaModulesAddModule(props) {
   useEffect(() => {
     setInitialUnchangedResource(cloneDeep(initialKymaResource));
     setKymaResource(cloneDeep(initialKymaResource));
-    setSelectedModules(initialKymaResource?.spec?.modules);
+    setSelectedModules(initialKymaResource?.spec?.modules ?? []);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
 
@@ -126,7 +126,7 @@ export default function KymaModulesAddModule(props) {
           module.metadata.labels['operator.kyma-project.io/beta'] === 'true',
       });
     } else {
-      existingModule.channels.push({
+      existingModule.channels?.push({
         channel: module.spec.channel,
         version: module.spec.descriptor.component.version,
       });
