@@ -40,7 +40,7 @@ jobs:
       export-tags: true
   test-local-image:
     runs-on: ubuntu-latest
-    needs: build-image
+    needs: build-local-image
     steps:
       - name: Test image
-        run: echo "Testing images ${{ needs.build-image.outputs.images }}"
+        run: echo "Testing images ${{ needs.build-local-image.outputs.images }}"
