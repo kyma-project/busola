@@ -92,16 +92,17 @@ async function getConfigMapsWithSelector(
   const namespacedCMUrl = `/api/v1/namespaces/${currentNamespace ??
     kubeconfigNamespace}/configmaps?labelSelector=${selector}`;
 
+  const hasAccessToClusterCMList = doesUserHavePermission(
+    ['list'],
+    { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
+    permissionSet,
+  );
+  console.log(hasAccessToClusterCMList);
+
+  // if user has no access to clusterwide namespace listing, fall back to namespaced listing
+  const url = hasAccessToClusterCMList ? clusterCMUrl : namespacedCMUrl;
+
   if (!currentNamespace) {
-    const hasAccessToClusterCMList = doesUserHavePermission(
-      ['list'],
-      { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
-      permissionSet,
-    );
-
-    // user has no access to clusterwide namespace listing, fall back to namespaced listing
-    const url = hasAccessToClusterCMList ? clusterCMUrl : namespacedCMUrl;
-
     try {
       const response = await fetchFn({ relativeUrl: url });
       const configMapResponse: ConfigMapListResponse = await response.json();
@@ -111,14 +112,6 @@ async function getConfigMapsWithSelector(
       return [];
     }
   } else {
-    const hasAccessToClusterCMList = doesUserHavePermission(
-      ['list'],
-      { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
-      permissionSet,
-    );
-
-    const url = hasAccessToClusterCMList ? clusterCMUrl : namespacedCMUrl;
-
     try {
       const response = await fetchFn({ relativeUrl: url });
       const configMapResponse: ConfigMapListResponse = await response.json();
