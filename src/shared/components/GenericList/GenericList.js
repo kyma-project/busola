@@ -258,6 +258,7 @@ export const GenericList = ({
       ) {
         // Workaround for modules like btp-operator on refresh
         const resourceType = layoutState.midColumn.resourceType;
+        console.log('resourceType', resourceType);
         const resourceTypeDotIndex = resourceType.indexOf('.');
         const resourceTypeBase =
           resourceTypeDotIndex !== -1
@@ -303,19 +304,22 @@ export const GenericList = ({
   };
 
   const handleRowClick = e => {
+    const selectedEntry = entries.find(entry => {
+      return (
+        entry?.metadata?.name === e.target.children[nameColIndex].innerText ||
+        pluralize(entry?.spec?.names?.kind ?? '') ===
+          e.target.children[nameColIndex].innerText ||
+        entry?.name === e.target.children[nameColIndex].innerText
+      );
+    });
+
     if (customRowClick) {
       setEntrySelected(e.target.children[nameColIndex].innerText);
-      return customRowClick(e.target.children[nameColIndex].innerText);
+      return customRowClick(
+        e.target.children[nameColIndex].innerText,
+        selectedEntry,
+      );
     } else {
-      const selectedEntry = entries.find(entry => {
-        return (
-          entry?.metadata?.name === e.target.children[nameColIndex].innerText ||
-          pluralize(entry?.spec?.names?.kind ?? '') ===
-            e.target.children[nameColIndex].innerText ||
-          entry?.name === e.target.children[nameColIndex].innerText
-        );
-      });
-
       if (handleRedirect) {
         const redirectLayout = handleRedirect(selectedEntry, resourceType);
         if (redirectLayout) {
