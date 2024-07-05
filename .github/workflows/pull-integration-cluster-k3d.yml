@@ -1,17 +1,17 @@
-name: PR Integration Namespace Tests
+name: PR Integration Cluster Tests
 
 on: 
   pull_request:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
-      - ".github/workflows/pull-integration-namespace-k3d.yml"
+      - ".github/workflows/pull-integration-cluster-k3d.yml"
       - "resources/**"
       - "tests/**"
       - "nginx/**"
       - "src/**"
 
 jobs:
-  run-namespace-test:
+  run-cluster-test:
     runs-on: ubuntu-latest
     steps:
       - uses: gardenlinux/workflow-telemetry-action@v2
@@ -55,7 +55,7 @@ jobs:
           sleep 10
           
           cd tests/integration
-          npm ci && npm run "test:namespace"
+          npm ci && npm run "test:cluster"
       - name: Uploads artifacts
         uses: actions/upload-artifact@v4
         if: ${{ always() }}
