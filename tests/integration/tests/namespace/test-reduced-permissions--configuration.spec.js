@@ -23,8 +23,7 @@ function mockPermissionsCall2(namespacePermissions, clusterPermissions) {
       url: '/backend/apis/authorization.k8s.io/v1/selfsubjectrulesreviews',
     },
     req => {
-      const ns = req.body.spec.namespace;
-      if (ns !== '*') {
+      if (req.body.spec.namespace !== '*') {
         req.reply({
           kind: 'SelfSubjectRulesReview',
           apiVersion: 'authorization.k8s.io/v1',
