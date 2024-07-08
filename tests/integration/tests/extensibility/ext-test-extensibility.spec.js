@@ -25,13 +25,12 @@ context('Test Extensibility Create/Update', () => {
 
     cy.contains('ui5-button', 'Upload YAML').click();
 
-    cy.loadFiles(
-      'examples/extensions/configuration/potatoes-crd.yaml',
-      'examples/extensions/configuration/namespace.yaml',
-    ).then(resources => {
-      const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
-      cy.pasteToMonaco(input);
-    });
+    cy.loadFiles('examples/extensions/configuration/potatoes-crd.yaml').then(
+      resources => {
+        const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+        cy.pasteToMonaco(input);
+      },
+    );
 
     cy.get('ui5-dialog')
       .contains('ui5-button', 'Upload')
@@ -40,7 +39,7 @@ context('Test Extensibility Create/Update', () => {
 
     cy.get('ui5-dialog[header-text="Upload YAML"]')
       .find('.status-message-success')
-      .should('have.length', 2);
+      .should('have.length', 1);
 
     cy.loadFiles('examples/extensions/samples/potato.yaml').then(resources => {
       const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
@@ -108,28 +107,12 @@ context('Test Extensibility Create/Update', () => {
   it('Check if extension is displayed correctly', () => {
     cy.reload(); //Reload is needed to load new extension
 
-    cy.getLeftNav()
-      .get('ui5-side-navigation-item[text="Namespaces"]')
-      .click();
-
-    cy.get('ui5-input[placeholder="Search"]:visible')
-      .find('input')
-      .wait(1000)
-      .clear()
-      .type(NAMESPACE_NAME);
-
-    cy.clickGenericListLink(NAMESPACE_NAME);
-
     cy.navigateTo('Custom Resources', EXTENSION_DISPLAY_NAME);
 
     cy.clickGenericListLink(CR_NAME);
 
     cy.contains(FIRST_DESCRIPTION);
     cy.should('not.contain.text', SECOND_DETAIL);
-
-    cy.getLeftNav()
-      .contains('Back To Cluster Details')
-      .click();
   });
 
   it('Edit extension', () => {
@@ -144,7 +127,7 @@ context('Test Extensibility Create/Update', () => {
       .contains(EXTENSION_NAME)
       .click();
 
-    cy.clickGenericListLink(NAMESPACE_NAME);
+    cy.clickGenericListLink(EXTENSION_NAME);
 
     cy.getMidColumn().inspectTab('Edit');
 
@@ -164,28 +147,11 @@ context('Test Extensibility Create/Update', () => {
     });
 
     cy.saveChanges('Edit');
+    cy.reload(); //Reload is needed to load new extension
   });
 
   it('Check if extension is updated and displayed correctly', () => {
-    cy.getLeftNav()
-      .contains('Namespaces')
-      .click();
-
-    cy.get('ui5-input[placeholder="Search"]:visible')
-      .find('input')
-      .wait(1000)
-      .clear()
-      .type(NAMESPACE_NAME);
-
-    cy.clickGenericListLink(NAMESPACE_NAME);
-
-    cy.getLeftNav()
-      .get('ui5-side-navigation-item[text="Custom Resources"]')
-      .click();
-
-    cy.getLeftNav()
-      .get(`ui5-side-navigation-sub-item[text="${EXTENSION_DISPLAY_NAME}"]`)
-      .click();
+    cy.navigateTo('Custom Resources', EXTENSION_DISPLAY_NAME);
 
     cy.clickGenericListLink(CR_NAME);
 
@@ -193,7 +159,7 @@ context('Test Extensibility Create/Update', () => {
     cy.contains(SECOND_DETAIL);
 
     cy.getLeftNav()
-      .contains('Back To Cluster Details')
+      .contains('Cluster Details')
       .click();
   });
 });

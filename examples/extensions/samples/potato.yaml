@@ -2,7 +2,6 @@ apiVersion: busola.example.com/v1
 kind: Potato
 metadata:
   name: first-potato
-  namespace: potato
 spec:
   kind: yellow
   weight: 2137
