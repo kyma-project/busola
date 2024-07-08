@@ -22,6 +22,7 @@ import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { createPortal } from 'react-dom';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
+import PropTypes from 'prop-types';
 
 export const excludeStatus = resource => {
   const modifiedResource = { ...resource };
@@ -94,7 +95,7 @@ export function ResourceForm({
   const [editorError, setEditorError] = useState(null);
 
   useEffect(() => {
-    if (leavingForm) {
+    if (leavingForm && formElementRef.current?.clientWidth > 0) {
       if (
         JSON.stringify(excludeStatus(resource)) !==
           JSON.stringify(excludeStatus(initialResource)) ||
@@ -324,5 +325,4 @@ export function ResourceForm({
       {createPortal(<UnsavedMessageBox />, document.body)}
     </section>
   );
-  // }
 }

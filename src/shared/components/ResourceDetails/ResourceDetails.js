@@ -174,6 +174,7 @@ function Resource({
   showHealthCardsTitle,
   statusConditions,
   headerContent,
+  className,
 }) {
   useVersionWarning({ resourceUrl, resourceType });
   const { t } = useTranslation();
@@ -401,6 +402,7 @@ function Resource({
   return (
     <ResourceDetailContext.Provider value={true}>
       <DynamicPageComponent
+        className={className}
         headerContent={headerContent}
         showYamlTab={showYamlTab || disableEdit}
         layoutNumber={layoutNumber ?? 'MidColumn'}

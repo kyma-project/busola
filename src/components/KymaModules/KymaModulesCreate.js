@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm';
+import './KymaModulesCreate.scss';
 
 export default function KymaModulesCreate({ resource, ...props }) {
   const { t } = useTranslation();
@@ -13,6 +14,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
   return (
     <ResourceForm
       {...props}
+      className="kyma-modules-create"
       pluralKind="kymas"
       singularName={t('kyma-modules.kyma')}
       resource={kymaResource}

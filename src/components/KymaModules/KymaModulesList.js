@@ -33,6 +33,9 @@ import { cloneDeep } from 'lodash';
 import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { PopoverBadge } from 'shared/components/PopoverBadge/PopoverBadge';
+import { isFormOpenState } from 'state/formOpenAtom';
+import { createPortal } from 'react-dom';
+import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 
 export function KymaModulesList(props) {
   const { t } = useTranslation();
@@ -43,6 +46,7 @@ export function KymaModulesList(props) {
     setShowReleaseChannelTitleDescription,
   ] = useState(false);
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
+  const setIsFormOpen = useSetRecoilState(isFormOpenState);
   const { clusterUrl } = useUrl();
 
   const { data: kymaResources, loading: kymaResourcesLoading } = useGet(
@@ -95,6 +99,8 @@ export function KymaModulesList(props) {
         resourceUrl: resourceUrl,
       },
     });
+
+    setIsFormOpen({ formOpen: true });
   };
 
   const ModulesList = resource => {
@@ -364,6 +370,7 @@ export function KymaModulesList(props) {
 
   return (
     <ResourceDetails
+      className="kyma-modules"
       layoutNumber="StartColumn"
       windowTitle={t('kyma-modules.title')}
       headerContent={
