@@ -37,8 +37,9 @@ export function hasAnyRoleBound(permissionSet: PermissionSetState) {
 export async function getPermissionResourceRules(
   postFn: PostFn,
   namespaceId?: string,
+  clusterWide?: boolean,
 ) {
-  const namespaceName = namespaceId ? namespaceId : '*';
+  const namespaceName = clusterWide || !namespaceId ? '*' : namespaceId;
   const path = '/apis/authorization.k8s.io/v1/selfsubjectrulesreviews';
   const ssrr = {
     typeMeta: {

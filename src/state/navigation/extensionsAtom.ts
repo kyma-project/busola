@@ -10,6 +10,7 @@ import { getFetchFn } from '../utils/getFetchFn';
 import { configurationAtom } from 'state/configuration/configurationAtom';
 import { openapiPathIdListSelector } from 'state/openapi/openapiPathIdSelector';
 import {
+  getPermissionResourceRules,
   permissionSetsSelector,
   PermissionSetState,
 } from 'state/permissionSetsSelector';
@@ -24,6 +25,7 @@ import { RESOURCE_PATH } from 'hooks/useMessageList';
 import pluralize from 'pluralize';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { CustomResourceDefinition } from 'command-pallette/CommandPalletteUI/handlers/crHandler';
+import { createPostFn } from 'shared/hooks/BackendAPI/usePost';
 
 /*
 the order of the overwrting extensions
@@ -92,16 +94,32 @@ async function getConfigMapsWithSelector(
   const namespacedCMUrl = `/api/v1/namespaces/${currentNamespace ??
     kubeconfigNamespace}/configmaps?labelSelector=${selector}`;
 
+  const namespaceAccess = doesUserHavePermission(
+    ['list'],
+    { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
+    permissionSet,
+  );
+
+  const postFn = createPostFn(fetchFn);
+  const clusterPermissionSet = await getPermissionResourceRules(
+    postFn,
+    '',
+    true,
+  );
+  const clusterAccess = doesUserHavePermission(
+    ['list'],
+    { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
+    clusterPermissionSet,
+  );
+
+  // if user has no access to clusterwide namespace listing, fall back to namespaced listing
+  const url = clusterAccess
+    ? clusterCMUrl
+    : namespaceAccess
+    ? namespacedCMUrl
+    : '';
+
   if (!currentNamespace) {
-    const hasAccessToClusterCMList = doesUserHavePermission(
-      ['list'],
-      { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
-      permissionSet,
-    );
-
-    // user has no access to clusterwide namespace listing, fall back to namespaced listing
-    const url = hasAccessToClusterCMList ? clusterCMUrl : namespacedCMUrl;
-
     try {
       const response = await fetchFn({ relativeUrl: url });
       const configMapResponse: ConfigMapListResponse = await response.json();
@@ -111,14 +129,6 @@ async function getConfigMapsWithSelector(
       return [];
     }
   } else {
-    const hasAccessToClusterCMList = doesUserHavePermission(
-      ['list'],
-      { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
-      permissionSet,
-    );
-
-    const url = hasAccessToClusterCMList ? clusterCMUrl : namespacedCMUrl;
-
     try {
       const response = await fetchFn({ relativeUrl: url });
       const configMapResponse: ConfigMapListResponse = await response.json();

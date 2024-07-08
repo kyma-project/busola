@@ -208,7 +208,7 @@ export class Scan {
         ['list'],
         {
           resourceGroupAndVersion: '',
-          resourceKind: resource.kind.toLowerCase(),
+          resourceKind: resource.kind,
         },
         scope.permissionSets,
       );
