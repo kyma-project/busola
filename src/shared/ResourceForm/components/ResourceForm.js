@@ -22,7 +22,6 @@ import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { createPortal } from 'react-dom';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
-import PropTypes from 'prop-types';
 
 export const excludeStatus = resource => {
   const modifiedResource = { ...resource };
