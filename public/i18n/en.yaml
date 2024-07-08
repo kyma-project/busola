@@ -712,7 +712,9 @@ deployments:
   title: Deployments
   status: 
     available-replicas: Available Replicas
-    current-replicas: Current Replicas
+    collision-count: Collision Count
+    replicas: Replicas
+    unavailable-replicas: Unavailable Replicas
     updated-replicas: Updated Replicas
 discovery-and-network:
   title: Discovery and Network
@@ -946,6 +948,7 @@ kyma-modules:
   modify-modules: Modify Modules
   module-added: Module added 
   module-uninstall: Module deleted
+  module-documentation: Module Documentation
   learn-more: Learn more
   add-module: Add Modules
   modify: Modify 
@@ -1245,18 +1248,16 @@ replica-sets:
   memory: Memory
   name_singular: ReplicaSet
   title: Replica Sets
-  overview:
-    header: Replicas Overview
-    replicas: Replicas
-    readyReplicas: Ready Replicas
-    availableReplicas: Available Replicas
-    fullyLabeledReplicas: Fully Labeled Replicas
   tooltips:
     error: At least one of the Pods has failed.
     running: All the Pods are running correctly.
   status:
+    available-replicas: Available Replicas
     conditions: Conditions
-    observedGeneration: Observed Generation
+    fully-labeled-replicas: Fully Labeled Replicas
+    observed-generation: Observed Generation
+    ready-replicas: Ready Replicas
+    replicas: Replicas
 resource-graph:
   buttons:
     go-to-details: Go to details
@@ -1503,18 +1504,16 @@ settings:
 stateful-sets:
   description: <0>StatefulSet</0> is used for the management of Pods' deployment and scaling.
   name_singular: StatefulSet
-  overview:
-    available-replicas: Available Replicas
-    current-replicas: Current Replicas
-    header: Replicas Overview
-    replicas: Replicas
-    ready-replicas: Ready Replicas
-    updated-replicas: Updated Replicas
   replicas: Replicas
   status:
+    available-replicas: Available Replicas
     collision-count: Collision Count
+    current-replicas: Current Replicas
     current-revision: Current Revision
     observed-generation: Observed Generation
+    ready-replicas: Ready Replicas
+    replicas: Replicas
+    updated-replicas: Updated Replicas
     update-revision: Update Revision
   title: Stateful Sets
 storage:

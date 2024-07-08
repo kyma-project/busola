@@ -1,0 +1,46 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: hpatest
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: horizontal-pod-autoscalers
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+data:
+  general: |-
+    resource: 
+      kind: HorizontalPodAutoscaler
+      group: autoscaling
+      version: v2
+    name: hpatest
+    category: Discovery and Network
+    urlPath: hpatest
+    scope: namespace
+    description: >-
+      {{[Horizontal Pod Autoscalers](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/horizontal-pod-autoscaler-v2/)}}
+      automatically manages the number of Pod replicas to match the demand.
+  injections: |-
+    - name: HPAs Statistical Injection Example
+      widget: StatisticalCard
+      source: status
+      mainValue:
+        name: Test1
+        source: $count($item)
+      children:
+        - name: Test2
+          source: "2"
+        - name: Test3
+          source: "3"
+      targets:
+        - location: ClusterOverview
+          slot: health
+    - name: MyTitle
+      widget: RadialChart
+      source: "22"
+      maxValue: "44"
+      additionalInfo: "test1233456"
+      color: var(--sapChart_OrderedColor_5)
+      targets:
+        - slot: health
+          location: ClusterOverview

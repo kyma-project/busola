@@ -1,4 +1,4 @@
-name: busola-local-build
+name: Busola Local Build
 
 on:
   push:
@@ -31,16 +31,16 @@ permissions:
   contents: read # This is required for actions/checkout
 
 jobs:
-  build-image:
+  build-local-image:
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: kyma-project/test-infra/.github/workflows/image-builder.yml@main
     with:
       name: busola
       dockerfile: Dockerfile.local
       context: .
       export-tags: true
-  test-image:
+  test-local-image:
     runs-on: ubuntu-latest
-    needs: build-image
+    needs: build-local-image
     steps:
       - name: Test image
-        run: echo "Testing images ${{ needs.build-image.outputs.images }}"
+        run: echo "Testing images ${{ needs.build-local-image.outputs.images }}"

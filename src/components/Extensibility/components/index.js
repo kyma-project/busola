@@ -21,6 +21,7 @@ import { Tabs } from './Tabs';
 import { Wizard } from './Wizard';
 import { FeaturedCard } from './FeaturedCard/FeaturedCard';
 import { APIRuleHost } from './APIRules/APIRuleHost';
+import { TimeFromNow } from './TimeFromNow';
 
 import { PendingWrapper } from './PendingWrapper';
 import { StatisticalCard } from './StatisticalCard';
@@ -53,6 +54,7 @@ export const widgets = {
   Text,
   Wizard,
   FeaturedCard,
+  TimeFromNow,
 };
 
 export const valuePreprocessors = {

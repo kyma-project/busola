@@ -32,6 +32,7 @@ import { Label } from 'shared/ResourceForm/components/Label';
 import { cloneDeep } from 'lodash';
 import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
 import { useNotification } from 'shared/contexts/NotificationContext';
+import { PopoverBadge } from 'shared/components/PopoverBadge/PopoverBadge';
 
 export function KymaModulesList(props) {
   const { t } = useTranslation();
@@ -136,6 +137,7 @@ export function KymaModulesList(props) {
     ];
 
     const rowRenderer = resource => {
+      const moduleStatus = findStatus(resource.name);
       return [
         // Name
         <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
@@ -149,25 +151,40 @@ export function KymaModulesList(props) {
           ),
         ),
         // Namespace
-        findStatus(resource.name)?.resource?.metadata?.namespace ||
-          EMPTY_TEXT_PLACEHOLDER,
+        moduleStatus?.resource?.metadata?.namespace || EMPTY_TEXT_PLACEHOLDER,
         // Channel
-        findStatus(resource.name)?.channel || EMPTY_TEXT_PLACEHOLDER,
+        moduleStatus?.channel || EMPTY_TEXT_PLACEHOLDER,
         // Version
-        findStatus(resource.name)?.version || EMPTY_TEXT_PLACEHOLDER,
+        moduleStatus?.version || EMPTY_TEXT_PLACEHOLDER,
         // State
-        <StatusBadge
-          resourceKind="kymas"
-          type={
-            findStatus(resource.name)?.state === 'Ready'
-              ? 'Success'
-              : findStatus(resource.name)?.state === 'Processing'
-              ? 'None'
-              : findStatus(resource.name)?.state || 'None'
-          }
-        >
-          {findStatus(resource.name)?.state || 'Unknown'}
-        </StatusBadge>,
+        moduleStatus?.message ? (
+          <PopoverBadge
+            resourceKind="kymas"
+            type={
+              moduleStatus?.state === 'Ready'
+                ? 'Success'
+                : moduleStatus?.state === 'Processing'
+                ? 'None'
+                : moduleStatus?.state || 'None'
+            }
+            tooltipContent={moduleStatus?.message}
+          >
+            {moduleStatus?.state || 'Unknown'}
+          </PopoverBadge>
+        ) : (
+          <StatusBadge
+            resourceKind="kymas"
+            type={
+              moduleStatus?.state === 'Ready'
+                ? 'Success'
+                : moduleStatus?.state === 'Processing'
+                ? 'None'
+                : moduleStatus?.state || 'None'
+            }
+          >
+            {moduleStatus?.state || 'Unknown'}
+          </StatusBadge>
+        ),
         // Documentation
         <ExternalLink
           url={
@@ -214,10 +231,17 @@ export function KymaModulesList(props) {
         name: t('common.buttons.delete'),
         tooltip: () => t('common.buttons.delete'),
         icon: 'delete',
+        disabledHandler: resource => {
+          const index = selectedModules?.findIndex(kymaResourceModule => {
+            return kymaResourceModule.name === resource.name;
+          });
+          return index < 0;
+        },
         handler: resource => {
           const index = selectedModules?.findIndex(kymaResourceModule => {
             return kymaResourceModule.name === resource.name;
           });
+
           selectedModules.splice(index, 1);
           setKymaResourceState({
             ...kymaResource,
@@ -235,20 +259,18 @@ export function KymaModulesList(props) {
       const isExtension = !!kymaExt?.find(ext =>
         ext.metadata.name.includes(resourceName),
       );
-
-      const path = findStatus(resourceName)?.resource?.metadata?.namespace
+      const moduleStatus = findStatus(resourceName);
+      const path = moduleStatus?.resource?.metadata?.namespace
         ? clusterUrl(
             `kymamodules/namespaces/${
-              findStatus(resourceName)?.resource?.metadata?.namespace
+              moduleStatus?.resource?.metadata?.namespace
             }/${
               isExtension
                 ? `${pluralize(
-                    findStatus(resourceName)?.resource?.kind || '',
-                  ).toLowerCase()}/${
-                    findStatus(resourceName)?.resource?.metadata?.name
-                  }`
+                    moduleStatus?.resource?.kind || '',
+                  ).toLowerCase()}/${moduleStatus?.resource?.metadata?.name}`
                 : `${findCrd(resourceName)?.metadata?.name}/${
-                    findStatus(resourceName)?.resource?.metadata?.name
+                    moduleStatus?.resource?.metadata?.name
                   }`
             }`,
           )
@@ -256,12 +278,10 @@ export function KymaModulesList(props) {
             `kymamodules/${
               isExtension
                 ? `${pluralize(
-                    findStatus(resourceName)?.resource?.kind || '',
-                  ).toLowerCase()}/${
-                    findStatus(resourceName)?.resource?.metadata?.name
-                  }`
+                    moduleStatus?.resource?.kind || '',
+                  ).toLowerCase()}/${moduleStatus?.resource?.metadata?.name}`
                 : `${findCrd(resourceName)?.metadata?.name}/${
-                    findStatus(resourceName)?.resource?.metadata?.name
+                    moduleStatus?.resource?.metadata?.name
                   }`
             }`,
           );
@@ -269,9 +289,8 @@ export function KymaModulesList(props) {
         setLayoutColumn({
           midColumn: {
             resourceType: findCrd(resourceName)?.metadata?.name,
-            resourceName: findStatus(resourceName)?.resource?.metadata?.name,
-            namespaceId:
-              findStatus(resourceName)?.resource?.metadata.namespace || '',
+            resourceName: moduleStatus?.resource?.metadata?.name,
+            namespaceId: moduleStatus?.resource?.metadata.namespace || '',
           },
           layout: 'TwoColumnsMidExpanded',
           endColumn: null,
@@ -285,11 +304,10 @@ export function KymaModulesList(props) {
         setLayoutColumn({
           midColumn: {
             resourceType: pluralize(
-              findStatus(resourceName)?.resource?.kind || '',
+              moduleStatus?.resource?.kind || '',
             ).toLowerCase(),
-            resourceName: findStatus(resourceName)?.resource?.metadata?.name,
-            namespaceId:
-              findStatus(resourceName)?.resource?.metadata.namespace || '',
+            resourceName: moduleStatus?.resource?.metadata?.name,
+            namespaceId: moduleStatus?.resource?.metadata.namespace || '',
           },
           layout: 'TwoColumnsMidExpanded',
           endColumn: null,

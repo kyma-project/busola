@@ -1,6 +1,10 @@
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
+import { createPostFn } from 'shared/hooks/BackendAPI/usePost';
 import { doesUserHavePermission } from 'state/navigation/filters/permissions';
-import { PermissionSetState } from 'state/permissionSetsSelector';
+import {
+  PermissionSetState,
+  getPermissionResourceRules,
+} from 'state/permissionSetsSelector';
 import { K8sResource } from 'types';
 
 export type ConfigMapData = {
@@ -30,14 +34,30 @@ export async function getConfigMaps(
   const namespacedCMUrl = `/api/v1/namespaces/${currentNamespace ??
     kubeconfigNamespace}/configmaps?labelSelector=${labelSelector}`;
 
-  const hasAccessToClusterCMList = doesUserHavePermission(
+  const namespaceAccess = doesUserHavePermission(
     ['list'],
     { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
     permissionSet,
   );
 
+  const postFn = createPostFn(fetchFn);
+  const clusterPermissionSet = await getPermissionResourceRules(
+    postFn,
+    '',
+    true,
+  );
+  const clusterAccess = doesUserHavePermission(
+    ['list'],
+    { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
+    clusterPermissionSet,
+  );
+
   // user has no access to clusterwide namespace listing, fall back to namespaced listing
-  const url = hasAccessToClusterCMList ? clusterCMUrl : namespacedCMUrl;
+  const url = clusterAccess
+    ? clusterCMUrl
+    : namespaceAccess
+    ? namespacedCMUrl
+    : '';
 
   try {
     const response = await fetchFn({ relativeUrl: url });

@@ -16,6 +16,34 @@ function mockPermissionsCall(permissions) {
   );
 }
 
+function mockPermissionsCall2(namespacePermissions, clusterPermissions) {
+  cy.intercept(
+    {
+      method: 'POST',
+      url: '/backend/apis/authorization.k8s.io/v1/selfsubjectrulesreviews',
+    },
+    req => {
+      if (req.body.spec.namespace !== '*') {
+        req.reply({
+          kind: 'SelfSubjectRulesReview',
+          apiVersion: 'authorization.k8s.io/v1',
+          status: {
+            resourceRules: namespacePermissions,
+          },
+        });
+      } else {
+        req.reply({
+          kind: 'SelfSubjectRulesReview',
+          apiVersion: 'authorization.k8s.io/v1',
+          status: {
+            resourceRules: clusterPermissions,
+          },
+        });
+      }
+    },
+  );
+}
+
 context('Test reduced permissions 2', () => {
   Cypress.skipAfterFail();
 
@@ -125,14 +153,24 @@ context('Test reduced permissions 2', () => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
 
-    mockPermissionsCall([
+    const namespacePermissions = [
       {
         verbs: ['*'],
         apiGroups: [''],
         resources: ['pods', 'configmaps'],
         namespace: namespaceName,
       },
-    ]);
+    ];
+
+    const clusterPermission = [
+      {
+        verbs: [''],
+        apiGroups: [''],
+        resources: [''],
+      },
+    ];
+
+    mockPermissionsCall2(namespacePermissions, clusterPermission);
 
     cy.intercept({
       method: 'GET',
