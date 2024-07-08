@@ -148,20 +148,27 @@ export function KymaModulesList(props) {
       t('kyma-modules.documentation'),
     ];
 
-    const rowRenderer = resource => {
+    const hasDetailsLink = resource => {
       const isInstalled =
         selectedModules?.findIndex(kymaResourceModule => {
           return kymaResourceModule.name === resource.name;
         }) >= 0;
       const moduleStatus = findStatus(resource.name);
-      const isDeletionFailed = moduleStatus.state === 'Warning';
+      const isDeletionFailed = moduleStatus?.state === 'Warning';
+      const isError = moduleStatus?.state === 'Error';
 
       const hasExtension = !!findExtension(resource?.resource?.kind);
       const hasCrd = !!findCrd(resource.name);
 
-      const showDetailsLink =
-        (isInstalled || isDeletionFailed) && (hasCrd || hasExtension);
+      return (
+        (isInstalled || isDeletionFailed || !isError) &&
+        (hasCrd || hasExtension)
+      );
+    };
 
+    const rowRenderer = resource => {
+      const moduleStatus = findStatus(resource.name);
+      const showDetailsLink = hasDetailsLink(resource);
       return [
         // Name
         showDetailsLink ? (
@@ -286,6 +293,11 @@ export function KymaModulesList(props) {
     const handleClickResource = (resourceName, resource) => {
       const isExtension = !!findExtension(resource?.resource?.kind);
       const moduleStatus = findStatus(resourceName);
+      const skipRedirect = !hasDetailsLink(resource);
+
+      if (skipRedirect) {
+        return;
+      }
 
       const path = moduleStatus?.resource?.metadata?.namespace
         ? clusterUrl(
