@@ -67,7 +67,7 @@ ResourceDetails.propTypes = {
   showYamlTab: PropTypes.bool,
   layoutCloseCreateUrl: PropTypes.string,
   layoutNumber: PropTypes.string,
-  customHealthCards: PropTypes.node,
+  customHealthCards: PropTypes.arrayOf(PropTypes.func),
   showHealthCardsTitle: PropTypes.bool,
 };
 
@@ -394,9 +394,9 @@ function Resource({
     />
   );
 
-  const customOverviewCard = (customHealthCards || []).map(healthCard =>
-    healthCard(resource),
-  );
+  const customOverviewCard = (
+    customHealthCards || []
+  ).map((healthCard, index) => healthCard(resource, index));
 
   return (
     <ResourceDetailContext.Provider value={true}>
