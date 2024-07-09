@@ -46,7 +46,12 @@ export function CollapsibleSection({
     },
   );
 
-  const titleText = typeof title === 'string' ? title : title?.props?.children;
+  const titleText =
+    typeof title === 'string'
+      ? title
+      : Array.isArray(title?.props?.children)
+      ? title?.props?.children.join()
+      : title?.props?.children;
 
   return (
     <Panel
