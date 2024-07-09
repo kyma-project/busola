@@ -15,7 +15,6 @@ jobs:
         shell: bash
         run: |
             set -e
-            npm install -g eslint
-            npm install -g prettier@1.18.2
+            npm install --only=dev
             npx eslint --max-warnings 0 .
             npm run lint-check
