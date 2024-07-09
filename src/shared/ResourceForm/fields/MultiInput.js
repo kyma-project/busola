@@ -157,7 +157,7 @@ export function MultiInput({
       tooltipContent={sectionTooltipContent || tooltipContent}
       {...props}
     >
-      <div className="form-field multi-input" justifyContent="Center">
+      <div className="form-field multi-input">
         <ul className="bsl-col-md--12">
           {internalValue.map((entry, index) => {
             const fieldWidth =
