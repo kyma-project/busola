@@ -6,6 +6,7 @@ import {
   Button,
   FlexBox,
   Text,
+  Badge,
 } from '@ui5/webcomponents-react';
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 import { spacing } from '@ui5/webcomponents-react-base';
@@ -114,9 +115,9 @@ export function KymaModulesList(props) {
     };
 
     const checkBeta = module => {
-      return module?.metadata.labels['operator.kyma-project.io/beta'] === 'true'
-        ? 'beta'
-        : EMPTY_TEXT_PLACEHOLDER;
+      return (
+        module?.metadata.labels['operator.kyma-project.io/beta'] === 'true'
+      );
     };
 
     const findCrd = moduleName =>
@@ -128,7 +129,6 @@ export function KymaModulesList(props) {
 
     const headerRenderer = () => [
       t('common.headers.name'),
-      '',
       t('kyma-modules.namespaces'),
       t('kyma-modules.channel'),
       t('kyma-modules.version'),
@@ -140,16 +140,19 @@ export function KymaModulesList(props) {
       const moduleStatus = findStatus(resource.name);
       return [
         // Name
-        <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
-          {resource.name}
-        </Text>,
-        // Beta
-        checkBeta(
-          findModule(
-            resource.name,
-            resource?.channel || kymaResource?.spec?.channel,
-          ),
-        ),
+        <>
+          <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
+            {resource.name}
+          </Text>
+          {checkBeta(
+            findModule(
+              resource.name,
+              resource?.channel || kymaResource?.spec?.channel,
+            ),
+          ) ? (
+            <Badge style={spacing.sapUiTinyMarginBegin}>Beta</Badge>
+          ) : null}
+        </>,
         // Namespace
         moduleStatus?.resource?.metadata?.namespace || EMPTY_TEXT_PLACEHOLDER,
         // Channel
