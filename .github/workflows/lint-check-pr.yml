@@ -16,4 +16,5 @@ jobs:
         run: |
             set -e
             npm ci
-            npx eslint .
+            CI=true npx eslint .
+            npm run lint-check
