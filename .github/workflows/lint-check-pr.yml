@@ -16,4 +16,4 @@ jobs:
         run: |
             set -e
             npm ci
-            npm lint-check
+            npm run lint-check
