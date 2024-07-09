@@ -28,7 +28,7 @@ context('Test Ingresses', () => {
   });
 
   it('Create an Ingress', () => {
-    cy.navigateTo('Discovery and Network', 'Ingress');
+    cy.navigateTo('Discovery and Network', 'Ingresses');
 
     cy.openCreate();
 
