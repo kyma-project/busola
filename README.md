@@ -11,7 +11,9 @@ Busola is a web-based UI for managing resources within a Kubernetes cluster. It'
 Busola project contains additional sub-projects:
 
 - [`Backend`](./backend) - A kind of a proxy between Busola and the Kubernetes cluster
-- [`Tests`](./tests) - Acceptance, regression and integration tests
+- [`Tests`](./tests) - Acceptan
+
+ce, regression and integration tests
 
 ## Prerequisites
 
