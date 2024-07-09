@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import jsyaml from 'js-yaml';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import {
@@ -8,6 +9,7 @@ import {
   Text,
   Badge,
 } from '@ui5/webcomponents-react';
+
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useState } from 'react';
@@ -113,19 +115,29 @@ export function KymaModulesList(props) {
         module => moduleName === module.name,
       );
     };
-
+    const findExtension = resourceKind => {
+      return kymaExt?.find(ext => {
+        const { resource: extensionResource } =
+          jsyaml.load(ext.data.general, { json: true }) || {};
+        return extensionResource === resourceKind;
+      });
+    };
     const checkBeta = module => {
       return (
         module?.metadata.labels['operator.kyma-project.io/beta'] === 'true'
       );
     };
 
+    // TODO: Remove this function and use newfindCrd instead
     const findCrd = moduleName =>
       crds?.items?.find(crd =>
         crd.metadata.name
           .toLocaleLowerCase()
           .includes(pluralize(moduleName.replace('-', '').toLocaleLowerCase())),
       );
+    const newfindCrd = resourceKind => {
+      return crds?.items?.find(crd => crd.spec?.names?.kind === resourceKind);
+    };
 
     const headerRenderer = () => [
       t('common.headers.name'),
@@ -136,14 +148,37 @@ export function KymaModulesList(props) {
       t('kyma-modules.documentation'),
     ];
 
+    const hasDetailsLink = resource => {
+      const isInstalled =
+        selectedModules?.findIndex(kymaResourceModule => {
+          return kymaResourceModule.name === resource.name;
+        }) >= 0;
+      const moduleStatus = findStatus(resource.name);
+      const isDeletionFailed = moduleStatus?.state === 'Warning';
+      const isError = moduleStatus?.state === 'Error';
+
+      const hasExtension = !!findExtension(resource?.resource?.kind);
+      const hasCrd = !!findCrd(resource.name);
+
+      return (
+        (isInstalled || isDeletionFailed || !isError) &&
+        (hasCrd || hasExtension)
+      );
+    };
+
     const rowRenderer = resource => {
       const moduleStatus = findStatus(resource.name);
+      const showDetailsLink = hasDetailsLink(resource);
       return [
         // Name
         <>
-          <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
-            {resource.name}
-          </Text>
+          {showDetailsLink ? (
+            <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
+              {resource.name}
+            </Text>
+          ) : (
+            resource.name
+          )}
           {checkBeta(
             findModule(
               resource.name,
@@ -258,11 +293,15 @@ export function KymaModulesList(props) {
       },
     ];
 
-    const handleClickResource = resourceName => {
-      const isExtension = !!kymaExt?.find(ext =>
-        ext.metadata.name.includes(resourceName),
-      );
+    const handleClickResource = (resourceName, resource) => {
+      const isExtension = !!findExtension(resource?.resource?.kind);
       const moduleStatus = findStatus(resourceName);
+      const skipRedirect = !hasDetailsLink(resource);
+
+      if (skipRedirect) {
+        return;
+      }
+
       const path = moduleStatus?.resource?.metadata?.namespace
         ? clusterUrl(
             `kymamodules/namespaces/${
@@ -272,7 +311,7 @@ export function KymaModulesList(props) {
                 ? `${pluralize(
                     moduleStatus?.resource?.kind || '',
                   ).toLowerCase()}/${moduleStatus?.resource?.metadata?.name}`
-                : `${findCrd(resourceName)?.metadata?.name}/${
+                : `${newfindCrd(resource?.resource?.kind)?.metadata?.name}/${
                     moduleStatus?.resource?.metadata?.name
                   }`
             }`,
@@ -283,11 +322,12 @@ export function KymaModulesList(props) {
                 ? `${pluralize(
                     moduleStatus?.resource?.kind || '',
                   ).toLowerCase()}/${moduleStatus?.resource?.metadata?.name}`
-                : `${findCrd(resourceName)?.metadata?.name}/${
+                : `${newfindCrd(resource?.resource?.kind)?.metadata?.name}/${
                     moduleStatus?.resource?.metadata?.name
                   }`
             }`,
           );
+
       if (!isExtension) {
         setLayoutColumn({
           midColumn: {
