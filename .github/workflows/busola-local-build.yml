@@ -24,7 +24,6 @@ on:
       - "package.json"
       - "Makefile"
       - "Dockerfile.local"
-      - "docs/**"
 
 permissions:
   id-token: write # This is required for requesting the JWT token
