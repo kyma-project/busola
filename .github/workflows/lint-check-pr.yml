@@ -15,4 +15,5 @@ jobs:
         shell: bash
         run: |
             set -e
+            npm ci
             npx eslint .
