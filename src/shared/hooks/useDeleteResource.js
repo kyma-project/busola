@@ -30,6 +30,7 @@ export function useDeleteResource({
   layoutNumber,
   redirectBack = true,
   parentCrdName,
+  forceConfirmDelete = false,
 }) {
   const { t } = useTranslation();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -148,7 +149,7 @@ export function useDeleteResource({
   };
 
   const handleResourceDelete = ({ resource, resourceUrl, deleteFn }) => {
-    if (dontConfirmDelete) {
+    if (dontConfirmDelete && !forceConfirmDelete) {
       performDelete(resource, resourceUrl, deleteFn);
     } else {
       setShowDeleteDialog(true);
@@ -218,12 +219,14 @@ export function useDeleteResource({
             },
           )}
         </Text>
-        <CheckBox
-          checked={dontConfirmDelete}
-          onChange={() => setDontConfirmDelete(prevState => !prevState)}
-          text={t('common.delete-dialog.delete-confirm')}
-        />
-        {dontConfirmDelete && (
+        {!forceConfirmDelete && (
+          <CheckBox
+            checked={dontConfirmDelete}
+            onChange={() => setDontConfirmDelete(prevState => !prevState)}
+            text={t('common.delete-dialog.delete-confirm')}
+          />
+        )}
+        {dontConfirmDelete && !forceConfirmDelete && (
           <MessageStrip design="Information" hideCloseButton>
             {t('common.delete-dialog.information')}
           </MessageStrip>
