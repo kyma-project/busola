@@ -167,6 +167,7 @@ When the k3d cluster's API Server is exposed on the `0.0.0.0` address on your ma
 #### Symptom
 
 When you run Busola in Docker on macOS, it can't connect to the k3d cluster. The container log contains the following errors:
+
 ```
 Error [ERR_TLS_CERT_ALTNAME_INVALID]: Hostname/IP does not match certificate's altnames: Host: host.docker.internal. is not in the cert's altnames: DNS:k3d-k3s-default-server-0, DNS:k3d-k3s-default-serverlb, DNS:kubernetes, DNS:kubernetes.default, DNS:kubernetes.default.svc, DNS:kubernetes.default.svc.cluster.local, DNS:localhost, IP Address:0.0.0.0, IP Address:10.43.0.1, IP Address:127.0.0.1, IP Address:172.28.0.3, IP Address:0:0:0:0:0:0:0:1
 ```
