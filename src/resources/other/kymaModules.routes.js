@@ -51,7 +51,12 @@ const ColumnWraper = (defaultColumn = 'list') => {
         layoutCloseCreateUrl={clusterUrl('kymamodules')}
         resourceName={layoutState?.midColumn?.resourceName || resourceName}
         resourceType={layoutState?.midColumn?.resourceType || resourceType}
-        namespaceId={layoutState?.midColumn?.namespaceId || namespace}
+        namespaceId={
+          layoutState?.midColumn?.namespaceId ||
+          layoutState?.midColumn?.namespaceId === ''
+            ? layoutState?.midColumn?.namespaceId
+            : namespace
+        }
       />
     );
   } else {
@@ -65,7 +70,12 @@ const ColumnWraper = (defaultColumn = 'list') => {
         layoutCloseCreateUrl={clusterUrl('kymamodules')}
         resourceName={layoutState?.midColumn?.resourceName || resourceName}
         resourceType={layoutState?.midColumn?.resourceType || resourceType}
-        namespaceId={layoutState?.midColumn?.namespaceId || namespace}
+        namespaceId={
+          layoutState?.midColumn?.namespaceId ||
+          layoutState?.midColumn?.namespaceId === ''
+            ? layoutState?.midColumn?.namespaceId
+            : namespace
+        }
       />
     );
   }
