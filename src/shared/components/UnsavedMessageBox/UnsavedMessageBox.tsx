@@ -58,8 +58,12 @@ export function UnsavedMessageBox({ isOpen }: UnsavedMessageBoxProps) {
       onClose={handleClose}
       titleText={t('common.headers.discard-changes')}
       actions={[
-        <Button design="Emphasized">{t('common.buttons.discard')}</Button>,
-        <Button design="Transparent">{`${t('common.buttons.cancel')}`}</Button>,
+        <Button design="Emphasized" key="discard">
+          {t('common.buttons.discard')}
+        </Button>,
+        <Button design="Transparent" key="cancel">{`${t(
+          'common.buttons.cancel',
+        )}`}</Button>,
       ]}
     >
       {t('common.messages.discard-changes-warning')}

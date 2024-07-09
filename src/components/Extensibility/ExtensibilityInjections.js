@@ -71,9 +71,13 @@ export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
 const ExtensibilityInjections = ({ destination, slot, root }) => {
   const injections = useGetInjections(destination, slot);
   let itemList = [];
-  (injections || []).forEach(injection => {
+  (injections || []).forEach((injection, index) => {
     itemList.push(
-      <ExtensibilityInjection resMetaData={injection} root={root} />,
+      <ExtensibilityInjection
+        resMetaData={injection}
+        root={root}
+        key={index}
+      />,
     );
   });
   return itemList;

@@ -161,7 +161,7 @@ export const ExtensibilityDetailsCore = ({
           : []
       }
       customHealthCards={
-        Array.isArray(health)
+        Array.isArray(health) && health?.length > 0
           ? [
               (resource, i) => (
                 <Widget
