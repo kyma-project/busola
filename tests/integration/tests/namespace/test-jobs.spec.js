@@ -26,7 +26,7 @@ context('Test Jobs', () => {
   });
 
   it('Create Job', () => {
-    cy.navigateTo('Workloads', /^Jobs/);
+    cy.navigateTo('Workloads', 'Jobs');
 
     cy.openCreate();
 
