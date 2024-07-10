@@ -55,18 +55,6 @@ export function KymaModulesList(props) {
     ext => ext.metadata.labels['app.kubernetes.io/part-of'] === 'Kyma',
   )('/api/v1/configmaps?labelSelector=busola.io/extension=resource', {
     pollingInterval: 5000,
-
-
-
-
-
-
-
-
-
-
-
-     
   });
 
   const resourceName =
