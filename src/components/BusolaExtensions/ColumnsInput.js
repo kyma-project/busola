@@ -16,6 +16,7 @@ export function ColumnsInput({ value: columns, setValue: setColumns }) {
     return (
       <div key={value.path} className="columns-input">
         <CheckBox
+          data-testid={value?.path}
           checked={value.isSelected}
           onChange={e => {
             value.isSelected = e.target.checked;

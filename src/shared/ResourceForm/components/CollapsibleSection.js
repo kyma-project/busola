@@ -46,6 +46,13 @@ export function CollapsibleSection({
     },
   );
 
+  const titleText =
+    typeof title === 'string'
+      ? title
+      : Array.isArray(title?.props?.children)
+      ? title?.props?.children.join()
+      : title?.props?.children;
+
   return (
     <Panel
       accessibleRole="Form"
@@ -53,6 +60,7 @@ export function CollapsibleSection({
       noAnimation
       className={classNames}
       onToggle={toggle}
+      data-testid={titleText?.toLowerCase().replaceAll(' ', '-')}
       header={
         <Toolbar
           active={!disabled}

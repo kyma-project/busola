@@ -1,0 +1,13 @@
+header: []
+body:
+  - name: Summary
+    widget: Panel
+    children:
+      - name: Updated description
+        source: spec.description
+      - name: kind
+        source: spec.kind
+      - name: weight
+        source: spec.weight
+  - source: spec
+    widget: CodeViewer
