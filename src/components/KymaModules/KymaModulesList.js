@@ -126,7 +126,7 @@ export function KymaModulesList(props) {
       return kymaExt?.find(ext => {
         const { resource: extensionResource } =
           jsyaml.load(ext.data.general, { json: true }) || {};
-        return extensionResource === resourceKind;
+        return extensionResource.kind === resourceKind;
       });
     };
     const checkBeta = module => {
