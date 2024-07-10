@@ -12,7 +12,16 @@ export function parseOIDCparams({ exec: commandData }: KubeconfigOIDCAuth) {
   let output: any = {};
 
   commandData.args.forEach(arg => {
-    const [argKey, argValue] = arg.split('=');
+    const regex = new RegExp('^(?<key>[^=\\s]+)(?:=(?<value>.*$))');
+    const match = arg.match(regex);
+
+    if (!match) {
+      return;
+    }
+
+    const argKey: string = match.groups?.key || '';
+    const argValue: string = match.groups?.value || '';
+
     if (!OIDC_PARAM_NAMES.has(argKey)) return;
 
     const outputKey = OIDC_PARAM_NAMES.get(argKey)!;
