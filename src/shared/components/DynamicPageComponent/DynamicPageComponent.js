@@ -49,6 +49,7 @@ export const DynamicPageComponent = ({
   showYamlTab,
   protectedResource,
   protectedResourceWarning,
+  className,
 }) => {
   const [showTitleDescription, setShowTitleDescription] = useState(false);
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
@@ -241,7 +242,7 @@ export const DynamicPageComponent = ({
     return (
       <ObjectPage
         mode="IconTabBar"
-        className="page-header"
+        className={`page-header ${className}`}
         alwaysShowContentHeader
         showHideHeaderButton={false}
         headerContentPinnable={false}
@@ -251,19 +252,21 @@ export const DynamicPageComponent = ({
         onBeforeNavigate={e => {
           if (isFormOpen.formOpen) {
             e.preventDefault();
-            setIsResourceEdited({
-              ...isResourceEdited,
-              discardAction: () => {
-                setSelectedSectionIdState(e.detail.sectionId);
-                setIsResourceEdited({
-                  isEdited: false,
-                });
-              },
-            });
-            setIsFormOpen({ formOpen: true, leavingForm: true });
-            return;
           }
-          setSelectedSectionIdState(e.detail.sectionId);
+
+          handleActionIfFormOpen(
+            isResourceEdited,
+            setIsResourceEdited,
+            isFormOpen,
+            setIsFormOpen,
+            () => {
+              setSelectedSectionIdState(e.detail.sectionId);
+              setIsResourceEdited({
+                isEdited: false,
+              });
+            },
+          );
+
           if (e.detail.sectionId === 'edit') {
             setIsFormOpen({ formOpen: true });
           }

@@ -94,7 +94,8 @@ export function ResourceForm({
   const [editorError, setEditorError] = useState(null);
 
   useEffect(() => {
-    if (leavingForm) {
+    // Check if form is opened based on width
+    if (leavingForm && formElementRef.current?.clientWidth > 0) {
       if (
         JSON.stringify(excludeStatus(resource)) !==
           JSON.stringify(excludeStatus(initialResource)) ||
@@ -324,5 +325,4 @@ export function ResourceForm({
       {createPortal(<UnsavedMessageBox />, document.body)}
     </section>
   );
-  // }
 }
