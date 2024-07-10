@@ -300,11 +300,12 @@ export default function KymaModulesAddModule(props) {
                     }
                     key={channel.channel}
                     value={channel.channel}
-                  >{`${channel.channel[0].toUpperCase()}${channel.channel.slice(
-                    1,
-                  )} (v${channel.version}${
-                    channel?.isBeta ? '-beta' : ''
-                  })`}</Option>
+                    additionalText={channel?.isBeta ? 'Beta' : ''}
+                  >
+                    {`${channel.channel[0].toUpperCase()}${channel.channel.slice(
+                      1,
+                    )} (v${channel.version})`}{' '}
+                  </Option>
                 ))}
               </Select>
               {module.docsUrl ? (

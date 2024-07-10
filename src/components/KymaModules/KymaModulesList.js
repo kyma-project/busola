@@ -151,7 +151,7 @@ export function KymaModulesList(props) {
     const hasDetailsLink = resource => {
       const isInstalled =
         selectedModules?.findIndex(kymaResourceModule => {
-          return kymaResourceModule.name === resource.name;
+          return kymaResourceModule?.name === resource?.name;
         }) >= 0;
       const moduleStatus = findStatus(resource.name);
       const isDeletionFailed = moduleStatus?.state === 'Warning';
