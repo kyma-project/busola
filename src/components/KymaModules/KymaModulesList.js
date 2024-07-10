@@ -7,7 +7,6 @@ import {
   Button,
   FlexBox,
   Text,
-  Table,
 } from '@ui5/webcomponents-react';
 
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
