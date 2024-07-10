@@ -7,6 +7,7 @@ import {
   Button,
   FlexBox,
   Text,
+  Badge,
 } from '@ui5/webcomponents-react';
 
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
@@ -122,9 +123,9 @@ export function KymaModulesList(props) {
       });
     };
     const checkBeta = module => {
-      return module?.metadata.labels['operator.kyma-project.io/beta'] === 'true'
-        ? 'beta'
-        : EMPTY_TEXT_PLACEHOLDER;
+      return (
+        module?.metadata.labels['operator.kyma-project.io/beta'] === 'true'
+      );
     };
 
     // TODO: Remove this function and use newfindCrd instead
@@ -140,7 +141,6 @@ export function KymaModulesList(props) {
 
     const headerRenderer = () => [
       t('common.headers.name'),
-      '',
       t('kyma-modules.namespaces'),
       t('kyma-modules.channel'),
       t('kyma-modules.version'),
@@ -151,7 +151,7 @@ export function KymaModulesList(props) {
     const hasDetailsLink = resource => {
       const isInstalled =
         selectedModules?.findIndex(kymaResourceModule => {
-          return kymaResourceModule.name === resource.name;
+          return kymaResourceModule?.name === resource?.name;
         }) >= 0;
       const moduleStatus = findStatus(resource.name);
       const isDeletionFailed = moduleStatus?.state === 'Warning';
@@ -171,20 +171,23 @@ export function KymaModulesList(props) {
       const showDetailsLink = hasDetailsLink(resource);
       return [
         // Name
-        showDetailsLink ? (
-          <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
-            {resource.name}
-          </Text>
-        ) : (
-          resource.name
-        ),
-        // Beta
-        checkBeta(
-          findModule(
-            resource.name,
-            resource?.channel || kymaResource?.spec?.channel,
-          ),
-        ),
+        <>
+          {showDetailsLink ? (
+            <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
+              {resource.name}
+            </Text>
+          ) : (
+            resource.name
+          )}
+          {checkBeta(
+            findModule(
+              resource.name,
+              resource?.channel || kymaResource?.spec?.channel,
+            ),
+          ) ? (
+            <Badge style={spacing.sapUiTinyMarginBegin}>Beta</Badge>
+          ) : null}
+        </>,
         // Namespace
         moduleStatus?.resource?.metadata?.namespace || EMPTY_TEXT_PLACEHOLDER,
         // Channel

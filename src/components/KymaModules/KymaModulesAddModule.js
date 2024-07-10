@@ -118,20 +118,21 @@ export default function KymaModulesAddModule(props) {
           {
             channel: module.spec.channel,
             version: module.spec.descriptor.component.version,
+            isBeta:
+              module.metadata.labels['operator.kyma-project.io/beta'] ===
+              'true',
           },
         ],
         docsUrl:
           module.metadata.annotations['operator.kyma-project.io/doc-url'],
-        isBeta:
-          module.metadata.labels['operator.kyma-project.io/beta'] === 'true',
       });
     } else {
       existingModule.channels?.push({
         channel: module.spec.channel,
         version: module.spec.descriptor.component.version,
+        isBeta:
+          module.metadata.labels['operator.kyma-project.io/beta'] === 'true',
       });
-      existingModule.isBeta =
-        module.metadata.labels['operator.kyma-project.io/beta'] === 'true';
     }
     return acc;
   }, []);
@@ -195,6 +196,29 @@ export default function KymaModulesAddModule(props) {
     );
   };
 
+  const checkIfSelectedModuleIsBeta = moduleName => {
+    return selectedModules.some(({ name, channel }) => {
+      if (moduleName && name !== moduleName) {
+        return false;
+      }
+      const moduleData = modulesAddData?.find(module => module.name === name);
+      return moduleData
+        ? moduleData.channels.some(
+            ({ channel: ch, isBeta }) => ch === channel && isBeta,
+          )
+        : false;
+    });
+  };
+
+  const checkIfStatusModuleIsBeta = moduleName => {
+    return modulesAddData
+      ?.find(mod => mod.name === moduleName)
+      ?.channels.some(
+        ({ channel: ch, isBeta }) =>
+          ch === findStatus(moduleName)?.channel && isBeta,
+      );
+  };
+
   const renderCards = () => {
     const columns = Array.from({ length: columnsCount }, () => []);
 
@@ -227,7 +251,7 @@ export default function KymaModulesAddModule(props) {
               subtitleText={
                 findStatus(module.name)?.version
                   ? `v${findStatus(module.name)?.version} ${
-                      module?.isBeta ? '(Beta)' : ''
+                      checkIfStatusModuleIsBeta(module.name) ? '(Beta)' : ''
                     }`
                   : module.channels.find(
                       channel =>
@@ -238,7 +262,7 @@ export default function KymaModulesAddModule(props) {
                         channel =>
                           kymaResource?.spec?.channel === channel.channel,
                       )?.version
-                    } ${module?.isBeta ? '(Beta)' : ''}`
+                    } ${checkIfStatusModuleIsBeta(module.name) ? '(Beta)' : ''}`
                   : t('kyma-modules.no-version')
               }
             />
@@ -276,9 +300,12 @@ export default function KymaModulesAddModule(props) {
                     }
                     key={channel.channel}
                     value={channel.channel}
-                  >{`${channel.channel[0].toUpperCase()}${channel.channel.slice(
-                    1,
-                  )} (v${channel.version})`}</Option>
+                    additionalText={channel?.isBeta ? 'Beta' : ''}
+                  >
+                    {`${channel.channel[0].toUpperCase()}${channel.channel.slice(
+                      1,
+                    )} (v${channel.version})`}{' '}
+                  </Option>
                 ))}
               </Select>
               {module.docsUrl ? (
@@ -300,7 +327,11 @@ export default function KymaModulesAddModule(props) {
     });
 
     return (
-      <div className="gridbox-addModule" ref={cardsContainerRef}>
+      <div
+        className="gridbox-addModule"
+        ref={cardsContainerRef}
+        style={spacing.sapUiSmallMarginTop}
+      >
         {columns.map((column, columnIndex) => (
           <div
             className={`gridbox-addModule-column column-${columnIndex}`}
@@ -333,12 +364,12 @@ export default function KymaModulesAddModule(props) {
     >
       {modulesAddData?.length !== 0 ? (
         <>
-          {modulesAddData?.find(module => module?.isBeta) ? (
+          {checkIfSelectedModuleIsBeta() ? (
             <MessageStrip
               key={'beta'}
               design="Warning"
               hideCloseButton
-              style={spacing.sapUiSmallMarginTopBottom}
+              style={spacing.sapUiSmallMarginTop}
             >
               {t('kyma-modules.beta')}
             </MessageStrip>
