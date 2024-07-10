@@ -95,6 +95,7 @@ export function ResourceForm({
 
   useEffect(() => {
     if (leavingForm && formElementRef.current?.clientWidth > 0) {
+      //check if form is opened based on width
       if (
         JSON.stringify(excludeStatus(resource)) !==
           JSON.stringify(excludeStatus(initialResource)) ||
