@@ -231,6 +231,7 @@ command-palette:
     functions: Functions
     gateways: Gateways
     horizontalpodautoscalers: Horizontal Pod Autoscalers
+    kyma: Modules
     networkpolicies: Network Policies
     oauth2clients: OAuth2 Clients
     persistentvolumeclaims: Persistent Volume Claims
