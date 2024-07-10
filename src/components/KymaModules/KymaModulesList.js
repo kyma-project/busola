@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { createPortal } from 'react-dom';
 import jsyaml from 'js-yaml';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
@@ -34,6 +35,7 @@ import { Label } from 'shared/ResourceForm/components/Label';
 import { cloneDeep } from 'lodash';
 import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
 import { useNotification } from 'shared/contexts/NotificationContext';
+import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { PopoverBadge } from 'shared/components/PopoverBadge/PopoverBadge';
 
 export function KymaModulesList(props) {
@@ -46,6 +48,11 @@ export function KymaModulesList(props) {
   ] = useState(false);
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const { clusterUrl } = useUrl();
+
+  const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
+    resourceType: t('kyma-modules.title'),
+    forceConfirmDelete: true,
+  });
 
   const { data: kymaResources, loading: kymaResourcesLoading } = useGet(
     '/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas',
@@ -82,6 +89,7 @@ export function KymaModulesList(props) {
   const { data: crds } = useGet(crdUrl, {
     pollingInterval: 5000,
   });
+  const [chosenModuleIndex, setChosenModuleIndex] = useState(null);
 
   if (kymaResourcesLoading || modulesLoading || kymaResourceLoading) {
     return <Spinner />;
@@ -127,14 +135,7 @@ export function KymaModulesList(props) {
         : EMPTY_TEXT_PLACEHOLDER;
     };
 
-    // TODO: Remove this function and use newfindCrd instead
-    const findCrd = moduleName =>
-      crds?.items?.find(crd =>
-        crd.metadata.name
-          .toLocaleLowerCase()
-          .includes(pluralize(moduleName.replace('-', '').toLocaleLowerCase())),
-      );
-    const newfindCrd = resourceKind => {
+    const findCrd = resourceKind => {
       return crds?.items?.find(crd => crd.spec?.names?.kind === resourceKind);
     };
 
@@ -158,7 +159,7 @@ export function KymaModulesList(props) {
       const isError = moduleStatus?.state === 'Error';
 
       const hasExtension = !!findExtension(resource?.resource?.kind);
-      const hasCrd = !!findCrd(resource.name);
+      const hasCrd = !!findCrd(resource?.resource?.kind);
 
       return (
         (isInstalled || isDeletionFailed || !isError) &&
@@ -198,7 +199,8 @@ export function KymaModulesList(props) {
             type={
               moduleStatus?.state === 'Ready'
                 ? 'Success'
-                : moduleStatus?.state === 'Processing'
+                : moduleStatus?.state === 'Processing' ||
+                  moduleStatus?.state === 'Deleting'
                 ? 'None'
                 : moduleStatus?.state || 'None'
             }
@@ -212,7 +214,8 @@ export function KymaModulesList(props) {
             type={
               moduleStatus?.state === 'Ready'
                 ? 'Success'
-                : moduleStatus?.state === 'Processing'
+                : moduleStatus?.state === 'Processing' ||
+                  moduleStatus?.state === 'Deleting'
                 ? 'None'
                 : moduleStatus?.state || 'None'
             }
@@ -277,15 +280,21 @@ export function KymaModulesList(props) {
             return kymaResourceModule.name === resource.name;
           });
 
-          selectedModules.splice(index, 1);
-          setKymaResourceState({
-            ...kymaResource,
-            spec: {
-              ...kymaResource.spec,
-              modules: selectedModules,
+          setChosenModuleIndex(index);
+          handleResourceDelete({
+            deleteFn: () => {
+              selectedModules.splice(index, 1);
+
+              setKymaResourceState({
+                ...kymaResource,
+                spec: {
+                  ...kymaResource.spec,
+                  modules: selectedModules,
+                },
+              });
+              handleModuleUninstall();
             },
           });
-          handleModuleUninstall();
         },
       },
     ];
@@ -293,6 +302,7 @@ export function KymaModulesList(props) {
     const handleClickResource = (resourceName, resource) => {
       const isExtension = !!findExtension(resource?.resource?.kind);
       const moduleStatus = findStatus(resourceName);
+      const moduleCrd = findCrd(resource?.resource?.kind);
       const skipRedirect = !hasDetailsLink(resource);
 
       if (skipRedirect) {
@@ -308,9 +318,7 @@ export function KymaModulesList(props) {
                 ? `${pluralize(
                     moduleStatus?.resource?.kind || '',
                   ).toLowerCase()}/${moduleStatus?.resource?.metadata?.name}`
-                : `${newfindCrd(resource?.resource?.kind)?.metadata?.name}/${
-                    moduleStatus?.resource?.metadata?.name
-                  }`
+                : `${moduleCrd?.metadata?.name}/${moduleStatus?.resource?.metadata?.name}`
             }`,
           )
         : clusterUrl(
@@ -319,16 +327,14 @@ export function KymaModulesList(props) {
                 ? `${pluralize(
                     moduleStatus?.resource?.kind || '',
                   ).toLowerCase()}/${moduleStatus?.resource?.metadata?.name}`
-                : `${newfindCrd(resource?.resource?.kind)?.metadata?.name}/${
-                    moduleStatus?.resource?.metadata?.name
-                  }`
+                : `${moduleCrd?.metadata?.name}/${moduleStatus?.resource?.metadata?.name}`
             }`,
           );
 
       if (!isExtension) {
         setLayoutColumn({
           midColumn: {
-            resourceType: findCrd(resourceName)?.metadata?.name,
+            resourceType: moduleCrd?.metadata?.name,
             resourceName: moduleStatus?.resource?.metadata?.name,
             namespaceId: moduleStatus?.resource?.metadata.namespace || '',
           },
@@ -362,43 +368,63 @@ export function KymaModulesList(props) {
     };
 
     return (
-      <GenericList
-        actions={actions}
-        customRowClick={handleClickResource}
-        extraHeaderContent={[
-          <Button
-            key="add-module"
-            design="Emphasized"
-            onClick={handleShowAddModule}
-          >
-            {t('common.buttons.add')}
-          </Button>,
-        ]}
-        customColumnLayout={customColumnLayout}
-        enableColumnLayout
-        hasDetailsView
-        entries={resource?.status?.modules}
-        headerRenderer={headerRenderer}
-        rowRenderer={rowRenderer}
-        noHideFields={['Name', '', 'Namespace']}
-        displayArrow
-        title={'Modules'}
-        sortBy={{
-          name: (a, b) => a.name?.localeCompare(b.name),
-        }}
-        emptyListProps={{
-          image: 'TntComponents',
-          titleText: `${t('common.labels.no')} ${t(
-            'kyma-modules.title',
-          ).toLocaleLowerCase()}`,
-          subtitleText: t('kyma-modules.no-modules-description'),
-          url:
-            'https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-s-modular-approach?locale=en-US&state=DRAFT&version=Cloud',
-          buttonText: t('common.buttons.add'),
-          showButton: true,
-          onClick: handleShowAddModule,
-        }}
-      />
+      <>
+        {createPortal(
+          <DeleteMessageBox
+            resourceTitle={selectedModules[chosenModuleIndex]?.name}
+            deleteFn={() => {
+              selectedModules.splice(chosenModuleIndex, 1);
+              setKymaResourceState({
+                ...kymaResource,
+                spec: {
+                  ...kymaResource.spec,
+                  modules: selectedModules,
+                },
+              });
+
+              handleModuleUninstall();
+            }}
+          />,
+          document.body,
+        )}
+        <GenericList
+          actions={actions}
+          customRowClick={handleClickResource}
+          extraHeaderContent={[
+            <Button
+              key="add-module"
+              design="Emphasized"
+              onClick={handleShowAddModule}
+            >
+              {t('common.buttons.add')}
+            </Button>,
+          ]}
+          customColumnLayout={customColumnLayout}
+          enableColumnLayout
+          hasDetailsView
+          entries={resource?.status?.modules}
+          headerRenderer={headerRenderer}
+          rowRenderer={rowRenderer}
+          noHideFields={['Name', '', 'Namespace']}
+          displayArrow
+          title={'Modules'}
+          sortBy={{
+            name: (a, b) => a.name?.localeCompare(b.name),
+          }}
+          emptyListProps={{
+            image: 'TntComponents',
+            titleText: `${t('common.labels.no')} ${t(
+              'kyma-modules.title',
+            ).toLocaleLowerCase()}`,
+            subtitleText: t('kyma-modules.no-modules-description'),
+            url:
+              'https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-s-modular-approach?locale=en-US&state=DRAFT&version=Cloud',
+            buttonText: t('common.buttons.add'),
+            showButton: true,
+            onClick: handleShowAddModule,
+          }}
+        />
+      </>
     );
   };
 
