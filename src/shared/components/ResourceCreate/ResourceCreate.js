@@ -177,20 +177,25 @@ export const ResourceCreate = ({
           }`}
           showYamlTab={disableEdit && onlyYaml}
           content={stickyHeaderHeight => (
-            <div className="create-form">
-              {renderForm({
-                formElementRef,
-                isValid,
-                setCustomValid,
-                onChange: handleFormChanged,
-                onError: handleFormError,
-                onCompleted: handleFormSuccess,
-                performManualSubmit: handleFormSubmit,
-                stickyHeaderHeight,
-              })}
+            <>
+              {/*<div>*/}
+              <div className="create-form">
+                {renderForm({
+                  formElementRef,
+                  isValid,
+                  setCustomValid,
+                  onChange: handleFormChanged,
+                  onError: handleFormError,
+                  onCompleted: handleFormSuccess,
+                  performManualSubmit: handleFormSubmit,
+                  stickyHeaderHeight,
+                })}
+              </div>
               <div
+                data-testid={'footer-bar'}
                 style={{
                   ...spacing.sapUiSmallMarginBeginEnd,
+                  marginTop: 'auto',
                   position: 'sticky',
                   bottom: '0.5rem',
                 }}
@@ -205,7 +210,8 @@ export const ResourceCreate = ({
                   }
                 />
               </div>
-            </div>
+              {/*</div>*/}
+            </>
           )}
         />
       )}
