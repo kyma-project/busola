@@ -135,14 +135,7 @@ export function KymaModulesList(props) {
         : EMPTY_TEXT_PLACEHOLDER;
     };
 
-    // TODO: Remove this function and use newfindCrd instead
-    const findCrd = moduleName =>
-      crds?.items?.find(crd =>
-        crd.metadata.name
-          .toLocaleLowerCase()
-          .includes(pluralize(moduleName.replace('-', '').toLocaleLowerCase())),
-      );
-    const newfindCrd = resourceKind => {
+    const findCrd = resourceKind => {
       return crds?.items?.find(crd => crd.spec?.names?.kind === resourceKind);
     };
 
@@ -166,7 +159,7 @@ export function KymaModulesList(props) {
       const isError = moduleStatus?.state === 'Error';
 
       const hasExtension = !!findExtension(resource?.resource?.kind);
-      const hasCrd = !!findCrd(resource.name);
+      const hasCrd = !!findCrd(resource?.resource?.kind);
 
       return (
         (isInstalled || isDeletionFailed || !isError) &&
@@ -309,6 +302,7 @@ export function KymaModulesList(props) {
     const handleClickResource = (resourceName, resource) => {
       const isExtension = !!findExtension(resource?.resource?.kind);
       const moduleStatus = findStatus(resourceName);
+      const moduleCrd = findCrd(resource?.resource?.kind);
       const skipRedirect = !hasDetailsLink(resource);
 
       if (skipRedirect) {
@@ -324,9 +318,7 @@ export function KymaModulesList(props) {
                 ? `${pluralize(
                     moduleStatus?.resource?.kind || '',
                   ).toLowerCase()}/${moduleStatus?.resource?.metadata?.name}`
-                : `${newfindCrd(resource?.resource?.kind)?.metadata?.name}/${
-                    moduleStatus?.resource?.metadata?.name
-                  }`
+                : `${moduleCrd?.metadata?.name}/${moduleStatus?.resource?.metadata?.name}`
             }`,
           )
         : clusterUrl(
@@ -335,16 +327,14 @@ export function KymaModulesList(props) {
                 ? `${pluralize(
                     moduleStatus?.resource?.kind || '',
                   ).toLowerCase()}/${moduleStatus?.resource?.metadata?.name}`
-                : `${newfindCrd(resource?.resource?.kind)?.metadata?.name}/${
-                    moduleStatus?.resource?.metadata?.name
-                  }`
+                : `${moduleCrd?.metadata?.name}/${moduleStatus?.resource?.metadata?.name}`
             }`,
           );
 
       if (!isExtension) {
         setLayoutColumn({
           midColumn: {
-            resourceType: findCrd(resourceName)?.metadata?.name,
+            resourceType: moduleCrd?.metadata?.name,
             resourceName: moduleStatus?.resource?.metadata?.name,
             namespaceId: moduleStatus?.resource?.metadata.namespace || '',
           },
