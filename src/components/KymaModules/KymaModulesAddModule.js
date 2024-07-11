@@ -185,7 +185,7 @@ export default function KymaModulesAddModule(props) {
   };
 
   const findStatus = moduleName => {
-    return kymaResource?.status.modules?.find(
+    return kymaResource?.status?.modules?.find(
       module => moduleName === module.name,
     );
   };

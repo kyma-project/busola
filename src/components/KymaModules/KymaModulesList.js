@@ -255,7 +255,7 @@ export function KymaModulesList(props) {
       };
     };
 
-    const [selectedModules] = useState(kymaResource?.spec?.modules);
+    const [selectedModules] = useState(kymaResource?.spec?.modules || []);
     const [initialUnchangedResource] = useState(cloneDeep(kymaResource));
     const [kymaResourceState, setKymaResourceState] = useState(kymaResource);
     const notification = useNotification();
