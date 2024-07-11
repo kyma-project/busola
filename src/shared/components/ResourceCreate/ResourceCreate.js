@@ -194,7 +194,7 @@ export const ResourceCreate = ({
                 })}
               </div>
               <div
-                data-testid={'footer-bar'}
+                data-testid={'create-form-footer-bar'}
                 style={{
                   ...spacing.sapUiSmallMarginBeginEnd,
                   marginTop: 'auto',
