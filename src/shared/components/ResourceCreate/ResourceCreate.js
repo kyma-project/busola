@@ -178,8 +178,10 @@ export const ResourceCreate = ({
           showYamlTab={disableEdit && onlyYaml}
           content={stickyHeaderHeight => (
             <>
-              {/*<div>*/}
-              <div className="create-form">
+              <div
+                className="create-form"
+                style={spacing.sapUiSmallMarginBottom}
+              >
                 {renderForm({
                   formElementRef,
                   isValid,
@@ -210,7 +212,6 @@ export const ResourceCreate = ({
                   }
                 />
               </div>
-              {/*</div>*/}
             </>
           )}
         />
