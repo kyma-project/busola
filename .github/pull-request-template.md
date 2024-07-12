@@ -29,5 +29,5 @@ Changes proposed in this pull request:
   - test: Adding tests
   - chore: Maintainance changes to the build process or auxiliary tools, libraries, workflows, etc.
 - [ ] Related issues are linked (for links to internal trackers you can use the issue ids like `backlog#4567`)
-- [ ] It's clear why is this PR was created and what it does
+- [ ] Explain clearly why you created the PR and what changes it introduces
 - [ ] All necessary steps are delivered, for example, tests, documentation, merging
