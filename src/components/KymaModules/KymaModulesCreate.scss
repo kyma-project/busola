@@ -1,0 +1,20 @@
+.kyma-modules {
+  .edit-form {
+    min-height: calc(100vh - 17rem);
+  }
+
+  .kyma-modules-create {
+    .resource-form--panel,
+    .resource-form--panel::part(content) {
+      min-height: calc(100vh - 20rem);
+    }
+
+    .resource-form--panel {
+      margin-bottom: 0 !important;
+    }
+
+    .yaml-form {
+      height: calc(100vh - 20rem);
+    }
+  }
+}

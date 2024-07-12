@@ -303,21 +303,21 @@ export const GenericList = ({
   };
 
   const handleRowClick = e => {
+    const item =
+      e.target.children[nameColIndex].children[0].innerText ??
+      e.target.children[nameColIndex].innerText;
+
     const selectedEntry = entries.find(entry => {
       return (
-        entry?.metadata?.name === e.target.children[nameColIndex].innerText ||
-        pluralize(entry?.spec?.names?.kind ?? '') ===
-          e.target.children[nameColIndex].innerText ||
-        entry?.name === e.target.children[nameColIndex].innerText
+        entry?.metadata?.name === item ||
+        pluralize(entry?.spec?.names?.kind ?? '') === item ||
+        entry?.name === item
       );
     });
 
     if (customRowClick) {
-      setEntrySelected(e.target.children[nameColIndex].innerText);
-      return customRowClick(
-        e.target.children[nameColIndex].innerText,
-        selectedEntry,
-      );
+      setEntrySelected(item);
+      return customRowClick(item, selectedEntry);
     } else {
       if (handleRedirect) {
         const redirectLayout = handleRedirect(selectedEntry, resourceType);

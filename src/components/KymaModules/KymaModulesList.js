@@ -8,6 +8,7 @@ import {
   Button,
   FlexBox,
   Text,
+  Badge,
 } from '@ui5/webcomponents-react';
 
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
@@ -37,6 +38,7 @@ import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { PopoverBadge } from 'shared/components/PopoverBadge/PopoverBadge';
+import { isFormOpenState } from 'state/formOpenAtom';
 
 export function KymaModulesList(props) {
   const { t } = useTranslation();
@@ -47,6 +49,7 @@ export function KymaModulesList(props) {
     setShowReleaseChannelTitleDescription,
   ] = useState(false);
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
+  const setIsFormOpen = useSetRecoilState(isFormOpenState);
   const { clusterUrl } = useUrl();
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
@@ -105,6 +108,8 @@ export function KymaModulesList(props) {
         resourceUrl: resourceUrl,
       },
     });
+
+    setIsFormOpen({ formOpen: true });
   };
 
   const ModulesList = resource => {
@@ -126,13 +131,13 @@ export function KymaModulesList(props) {
       return kymaExt?.find(ext => {
         const { resource: extensionResource } =
           jsyaml.load(ext.data.general, { json: true }) || {};
-        return extensionResource === resourceKind;
+        return extensionResource.kind === resourceKind;
       });
     };
     const checkBeta = module => {
-      return module?.metadata.labels['operator.kyma-project.io/beta'] === 'true'
-        ? 'beta'
-        : EMPTY_TEXT_PLACEHOLDER;
+      return (
+        module?.metadata.labels['operator.kyma-project.io/beta'] === 'true'
+      );
     };
 
     const findCrd = resourceKind => {
@@ -141,7 +146,6 @@ export function KymaModulesList(props) {
 
     const headerRenderer = () => [
       t('common.headers.name'),
-      '',
       t('kyma-modules.namespaces'),
       t('kyma-modules.channel'),
       t('kyma-modules.version'),
@@ -152,7 +156,7 @@ export function KymaModulesList(props) {
     const hasDetailsLink = resource => {
       const isInstalled =
         selectedModules?.findIndex(kymaResourceModule => {
-          return kymaResourceModule.name === resource.name;
+          return kymaResourceModule?.name === resource?.name;
         }) >= 0;
       const moduleStatus = findStatus(resource.name);
       const isDeletionFailed = moduleStatus?.state === 'Warning';
@@ -172,20 +176,23 @@ export function KymaModulesList(props) {
       const showDetailsLink = hasDetailsLink(resource);
       return [
         // Name
-        showDetailsLink ? (
-          <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
-            {resource.name}
-          </Text>
-        ) : (
-          resource.name
-        ),
-        // Beta
-        checkBeta(
-          findModule(
-            resource.name,
-            resource?.channel || kymaResource?.spec?.channel,
-          ),
-        ),
+        <>
+          {showDetailsLink ? (
+            <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
+              {resource.name}
+            </Text>
+          ) : (
+            resource.name
+          )}
+          {checkBeta(
+            findModule(
+              resource.name,
+              resource?.channel || kymaResource?.spec?.channel,
+            ),
+          ) ? (
+            <Badge style={spacing.sapUiTinyMarginBegin}>Beta</Badge>
+          ) : null}
+        </>,
         // Namespace
         moduleStatus?.resource?.metadata?.namespace || EMPTY_TEXT_PLACEHOLDER,
         // Channel
@@ -248,7 +255,7 @@ export function KymaModulesList(props) {
       };
     };
 
-    const [selectedModules] = useState(kymaResource?.spec?.modules);
+    const [selectedModules] = useState(kymaResource?.spec?.modules || []);
     const [initialUnchangedResource] = useState(cloneDeep(kymaResource));
     const [kymaResourceState, setKymaResourceState] = useState(kymaResource);
     const notification = useNotification();
@@ -430,6 +437,7 @@ export function KymaModulesList(props) {
 
   return (
     <ResourceDetails
+      className="kyma-modules"
       layoutNumber="StartColumn"
       windowTitle={t('kyma-modules.title')}
       headerContent={
