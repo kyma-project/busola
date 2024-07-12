@@ -6,7 +6,7 @@ Cypress.Commands.add('openCreate', () => {
 
 Cypress.Commands.add('saveChanges', (action = 'Create') => {
   const isCreate = action === 'Create';
-  cy.get(isCreate ? '.create-form' : '.edit-form')
+  cy.get(isCreate ? '[data-testid="create-form-footer-bar"]' : '.edit-form')
     .contains('ui5-button:visible', isCreate ? 'Create' : 'Save')
     .click();
 });
