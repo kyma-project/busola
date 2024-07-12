@@ -60,7 +60,7 @@ context('Test Cluster configuration', () => {
       .click();
 
     // Uncomment after resolving https://github.com/kyma-project/busola/issues/2511
-    // cy.contains(/session storage/i).should('be.visible');
+    cy.contains(/session storage/i).should('be.visible');
   });
 
   it('Test pagination', () => {
