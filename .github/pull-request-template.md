@@ -21,7 +21,7 @@ Changes proposed in this pull request:
 
 **Confirm that everything was done**
 
-- [ ] PR title starts with prefix
+- [ ] The PR's title starts with one of the following prefixes:
   - feat: A new feature
   - fix: A bug fix
   - docs: Documentation only changes
