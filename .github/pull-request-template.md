@@ -28,6 +28,6 @@ Changes proposed in this pull request:
   - refactor: A code change that neither fixes a bug nor adds a feature
   - test: Adding tests
   - chore: Maintainance changes to the build process or auxiliary tools, libraries, workflows, etc.
-- [ ] Related issues are linked (for links to internal trackers you can use the issue ids like `backlog#4567`)
+- [ ] Related issues are linked. To link internal trackers, use the issue IDs like `backlog#4567`
 - [ ] Explain clearly why you created the PR and what changes it introduces
 - [ ] All necessary steps are delivered, for example, tests, documentation, merging
