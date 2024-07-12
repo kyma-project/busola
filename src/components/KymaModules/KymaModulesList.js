@@ -18,7 +18,6 @@ import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import KymaModulesCreate from './KymaModulesCreate';
 import {
   ReleaseChannelDescription,
@@ -37,8 +36,8 @@ import { cloneDeep } from 'lodash';
 import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
-import { PopoverBadge } from 'shared/components/PopoverBadge/PopoverBadge';
 import { isFormOpenState } from 'state/formOpenAtom';
+import { ModuleStatus } from './components/ModuleStatus';
 
 export function KymaModulesList(props) {
   const { t } = useTranslation();
@@ -174,6 +173,7 @@ export function KymaModulesList(props) {
     const rowRenderer = resource => {
       const moduleStatus = findStatus(resource.name);
       const showDetailsLink = hasDetailsLink(resource);
+
       return [
         // Name
         <>
@@ -200,36 +200,7 @@ export function KymaModulesList(props) {
         // Version
         moduleStatus?.version || EMPTY_TEXT_PLACEHOLDER,
         // State
-        moduleStatus?.message ? (
-          <PopoverBadge
-            resourceKind="kymas"
-            type={
-              moduleStatus?.state === 'Ready'
-                ? 'Success'
-                : moduleStatus?.state === 'Processing' ||
-                  moduleStatus?.state === 'Deleting'
-                ? 'None'
-                : moduleStatus?.state || 'None'
-            }
-            tooltipContent={moduleStatus?.message}
-          >
-            {moduleStatus?.state || 'Unknown'}
-          </PopoverBadge>
-        ) : (
-          <StatusBadge
-            resourceKind="kymas"
-            type={
-              moduleStatus?.state === 'Ready'
-                ? 'Success'
-                : moduleStatus?.state === 'Processing' ||
-                  moduleStatus?.state === 'Deleting'
-                ? 'None'
-                : moduleStatus?.state || 'None'
-            }
-          >
-            {moduleStatus?.state || 'Unknown'}
-          </StatusBadge>
-        ),
+        <ModuleStatus moduleStatus={moduleStatus} resource={resource} />,
         // Documentation
         <ExternalLink
           url={
