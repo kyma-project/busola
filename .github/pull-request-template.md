@@ -19,7 +19,7 @@ Changes proposed in this pull request:
 
 <!-- If you refer to a particular issue, provide its number. For example, `Resolves #123`, `Fixes #43`, or `See also #33`. -->
 
-**Confirm that everything was done**
+**Definition of done**
 
 - [ ] The PR's title starts with one of the following prefixes:
   - feat: A new feature
