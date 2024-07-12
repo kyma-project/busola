@@ -1,0 +1,20 @@
+name: PR Lint Check
+
+on: 
+  pull_request:
+    types: [opened, edited, synchronize, reopened, ready_for_review]
+
+jobs:
+  run-lint-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: lint_check
+        shell: bash
+        run: |
+            set -e
+            npm ci
+            npx eslint --max-warnings 0 src/ backend/ 
+            npm run lint-check
