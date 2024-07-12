@@ -72,21 +72,6 @@ context('Test login - kubeconfigID', () => {
     });
   });
 
-  it('Gracefully fails on invalid input', () => {
-    cy.intercept(
-      {
-        method: 'GET',
-        url: `${kubeconfigIdAddress}/*`,
-      },
-      `a:
-  c:d`,
-    );
-    cy.visit(`${config.clusterAddress}/clusters?kubeconfigID=tests`);
-    Cypress.on('window:alert', alertContent =>
-      expect(alertContent).to.include('Error loading kubeconfig ID'),
-    );
-  });
-
   // Uncomment after resolving https://github.com/kyma-project/busola/issues/2511
   it('Handles default kubeconfig', () => {
     // mock defaultKubeconfig on
@@ -131,5 +116,20 @@ context('Test login - kubeconfigID', () => {
 
       cy.contains('Session Storage').should('be.visible');
     });
+  });
+
+  it('Gracefully fails on invalid input', () => {
+    cy.intercept(
+      {
+        method: 'GET',
+        url: `${kubeconfigIdAddress}/*`,
+      },
+      `a:
+  c:d`,
+    );
+    cy.visit(`${config.clusterAddress}/clusters?kubeconfigID=tests`);
+    Cypress.on('window:alert', alertContent =>
+      expect(alertContent).to.include('Error loading kubeconfig ID'),
+    );
   });
 });
