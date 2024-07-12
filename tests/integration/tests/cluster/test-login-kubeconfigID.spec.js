@@ -72,7 +72,6 @@ context('Test login - kubeconfigID', () => {
     });
   });
 
-  // Uncomment after resolving https://github.com/kyma-project/busola/issues/2511
   it('Handles default kubeconfig', () => {
     // mock defaultKubeconfig on
     cy.intercept(

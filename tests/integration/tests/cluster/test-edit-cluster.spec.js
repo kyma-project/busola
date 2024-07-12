@@ -41,10 +41,7 @@ context('Test edit cluster', () => {
       .should('be.visible')
       .click();
 
-    cy.get('ui5-li:visible')
-      .contains('Clusters Overview')
-      .click({ force: true });
-    cy.visit(`${config.clusterAddress}/clusters`); ///////////////////////////////////FIX
+    cy.visit(`${config.clusterAddress}/clusters`);
 
     cy.contains(DESC).should('be.visible');
   });
