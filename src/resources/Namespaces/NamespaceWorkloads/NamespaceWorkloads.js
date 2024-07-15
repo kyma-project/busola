@@ -5,7 +5,8 @@ import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 
 import {
   getHealthyReplicasCount,
-  getHealthyStatusesCount,
+  getStatusesPodCount,
+  PodStatusCounterKey,
 } from './NamespaceWorkloadsHelpers';
 import { CountingCard } from 'shared/components/CountingCard/CountingCard';
 
@@ -30,7 +31,17 @@ export function NamespaceWorkloads({ namespace }) {
     },
   );
 
-  const healthyPods = getHealthyStatusesCount(podsData);
+  const statusPodsData = getStatusesPodCount(podsData);
+  const healthyPods = statusPodsData.has(PodStatusCounterKey.Healthy)
+    ? statusPodsData.get(PodStatusCounterKey.Healthy)
+    : 0;
+  const pendingPods = statusPodsData.has(PodStatusCounterKey.Pending)
+    ? statusPodsData.get(PodStatusCounterKey.Pending)
+    : 0;
+  const failedPods = statusPodsData.has(PodStatusCounterKey.Failed)
+    ? statusPodsData.get(PodStatusCounterKey.Failed)
+    : 0;
+
   const healthyDeployments = getHealthyReplicasCount(deploymentsData);
 
   return (
@@ -52,8 +63,12 @@ export function NamespaceWorkloads({ namespace }) {
                     value: healthyPods,
                   },
                   {
+                    title: t('cluster-overview.statistics.pending-pods'),
+                    value: pendingPods,
+                  },
+                  {
                     title: t('cluster-overview.statistics.failing-pods'),
-                    value: podsData.length - healthyPods,
+                    value: failedPods,
                   },
                 ]}
               />
