@@ -10,7 +10,7 @@ interface PopoverBadgeProps {
   children?: ReactNode;
   tooltipContent: ReactNode;
   type: 'Information' | 'Success' | 'Error' | 'Warning' | 'None';
-  className: string;
+  className?: string;
 }
 
 export const PopoverBadge = ({
