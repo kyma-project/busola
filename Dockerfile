@@ -1,5 +1,5 @@
 # ---- Base Alpine with Node ----
-FROM alpine:3.20.0 AS builder
+FROM alpine:3.20.1 AS builder
 ARG TAG_default_tag
 
 RUN apk add --update nodejs npm
