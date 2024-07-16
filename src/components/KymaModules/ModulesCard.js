@@ -6,7 +6,6 @@ import {
   Panel,
   Select,
   StandardListItem,
-  Text,
   Title,
 } from '@ui5/webcomponents-react';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
@@ -35,21 +34,6 @@ export default function ModulesCard({
         <CheckBox className="checkbox" checked={isChecked(module.name)} />
         <div className="titles">
           <Title level="H6">{module.name}</Title>
-          <Text className="bsl-has-color-status-4">
-            {findStatus(module.name)?.version
-              ? `v${findStatus(module.name)?.version} ${
-                  checkIfStatusModuleIsBeta(module.name) ? '(Beta)' : ''
-                }`
-              : module.channels.find(
-                  channel => kymaResource?.spec?.channel === channel.channel,
-                )?.version
-              ? `v${
-                  module.channels.find(
-                    channel => kymaResource?.spec?.channel === channel.channel,
-                  )?.version
-                } ${checkIfStatusModuleIsBeta(module.name) ? '(Beta)' : ''}`
-              : t('kyma-modules.no-version')}
-          </Text>
         </div>
         <img className="avatar" alt="SAP" src="\assets\sap-logo.svg" />
       </StandardListItem>

@@ -949,7 +949,7 @@ kyma-modules:
   modify-modules: Modify Modules
   module-added: Module added 
   module-uninstall: Module deleted
-  module-documentation: Module Documentation
+  module-documentation: Documentation
   learn-more: Learn more
   add-module: Add Modules
   modify: Modify 
