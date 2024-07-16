@@ -25,6 +25,25 @@ describe('parseOIDCparams', () => {
     });
   });
 
+  it('Parses params with equal sign in the value properly', () => {
+    const input = {
+      exec: {
+        args: [
+          '--oidc-issuer-url=https://coastguard.gov.us',
+          '--oidc-client-id=hasselhoff',
+          '--oidc-client-secret=hasselhoff=secret',
+          '--oidc-extra-scope=peach',
+        ],
+      },
+    };
+    expect(parseOIDCparams(input)).toMatchObject({
+      clientId: 'hasselhoff',
+      clientSecret: 'hasselhoff=secret',
+      issuerUrl: 'https://coastguard.gov.us',
+      scope: 'peach',
+    });
+  });
+
   it('Concatinates params', () => {
     const input = {
       exec: {
