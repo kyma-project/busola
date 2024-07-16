@@ -18,6 +18,7 @@ cluster-overview:
     pods-overview: 'Pods Overview'
     total-pods: 'Total Pods'
     healthy-pods: 'Healthy Pods'
+    pending-pods: 'Pending Pods'
     failing-pods: 'Failing Pods'
     deployments-overview: 'Deployments Overview'
     total-deployments: 'Total Deployments'
