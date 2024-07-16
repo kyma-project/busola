@@ -1,4 +1,4 @@
-import { calculatePodState } from '../../Pods/PodStatus';
+import { calculatePodState } from 'resources/Pods/PodStatus';
 
 export function getHealthyReplicasCount(resource) {
   return resource?.filter(r => r.status.replicas === r.status.readyReplicas)
