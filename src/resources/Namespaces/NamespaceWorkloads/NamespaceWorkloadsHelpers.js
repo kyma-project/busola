@@ -17,7 +17,6 @@ export function getStatusesPodCount(pods) {
   }
   const statusData = Map.groupBy(pods, pod => {
     const podState = calculatePodState(pod);
-    console.log(podState.status);
     return getPodState(podState.status);
   });
 
