@@ -1,24 +1,13 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import {
-  Card,
-  CardHeader,
-  CheckBox,
-  Label,
-  MessageStrip,
-  Option,
-  Panel,
-  Select,
-} from '@ui5/webcomponents-react';
+import { useState, useEffect, useCallback } from 'react';
+import { MessageStrip } from '@ui5/webcomponents-react';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useTranslation } from 'react-i18next';
-import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { cloneDeep } from 'lodash';
-
 import { ResourceForm } from 'shared/ResourceForm';
-
-import './KymaModulesAddModule.scss';
 import { Spinner } from 'shared/components/Spinner/Spinner';
+import ModulesCard from './ModulesCard';
+import './KymaModulesAddModule.scss';
 
 export default function KymaModulesAddModule(props) {
   const { t } = useTranslation();
@@ -55,17 +44,20 @@ export default function KymaModulesAddModule(props) {
   );
 
   const [columnsCount, setColumnsCount] = useState(2);
-  const cardsContainerRef = useRef(null);
+  const [cardsContainerRef, setCardsContainerRef] = useState(null);
 
   const calculateColumns = useCallback(() => {
-    const containerWidth = cardsContainerRef?.current?.clientWidth || 700; //we want the default to be 2 columns
-    const cardWidth = 250;
-    const gap = 16;
-    const colNumber = Math.max(
-      1,
-      Math.floor(containerWidth / (cardWidth + gap)),
-    );
-    return colNumber > 2 ? 2 : colNumber;
+    if (cardsContainerRef?.clientWidth) {
+      const containerWidth = cardsContainerRef?.clientWidth;
+      const cardWidth = 350;
+      const gap = 16;
+      const colNumber = Math.max(
+        1,
+        Math.floor((containerWidth + gap) / (cardWidth + gap)),
+      );
+      return colNumber;
+    }
+    return 2;
   }, [cardsContainerRef]);
 
   useEffect(() => {
@@ -76,28 +68,20 @@ export default function KymaModulesAddModule(props) {
   }, [loading]);
 
   useEffect(() => {
-    const handleResize = () => {
-      setColumnsCount(calculateColumns());
-    };
-
     const resizeObserver = new ResizeObserver(() => {
-      handleResize();
+      setColumnsCount(calculateColumns());
     });
 
-    const currentRef = cardsContainerRef?.current;
-
-    if (currentRef) {
-      resizeObserver.observe(currentRef);
+    if (cardsContainerRef) {
+      resizeObserver.observe(cardsContainerRef);
     }
 
-    handleResize();
-
     return () => {
-      if (currentRef) {
-        resizeObserver.unobserve(currentRef);
+      if (cardsContainerRef) {
+        resizeObserver.unobserve(cardsContainerRef);
       }
     };
-  }, [calculateColumns]);
+  }, [cardsContainerRef, calculateColumns]);
 
   if (loading || loadingKymaResources || !kymaResource) {
     return (
@@ -228,108 +212,25 @@ export default function KymaModulesAddModule(props) {
       });
 
       const card = (
-        <Card
-          key={module.name}
-          className="addModuleCard"
-          header={
-            <CardHeader
-              onClick={e =>
-                isChecked(module.name)
-                  ? setCheckbox(module, undefined, index)
-                  : setCheckbox(module, e.target._state.titleText, index)
-              }
-              action={
-                <img
-                  alt="SAP"
-                  src="\assets\sap-logo.svg"
-                  style={{ height: '32px' }}
-                />
-              }
-              interactive
-              avatar={<CheckBox checked={isChecked(module.name)} />}
-              titleText={module.name}
-              subtitleText={
-                findStatus(module.name)?.version
-                  ? `v${findStatus(module.name)?.version} ${
-                      checkIfStatusModuleIsBeta(module.name) ? '(Beta)' : ''
-                    }`
-                  : module.channels.find(
-                      channel =>
-                        kymaResource?.spec?.channel === channel.channel,
-                    )?.version
-                  ? `v${
-                      module.channels.find(
-                        channel =>
-                          kymaResource?.spec?.channel === channel.channel,
-                      )?.version
-                    } ${checkIfStatusModuleIsBeta(module.name) ? '(Beta)' : ''}`
-                  : t('kyma-modules.no-version')
-              }
-            />
-          }
-          style={spacing.sapUiSmallMarginBottom}
-        >
-          <Panel
-            className="settings-panel"
-            collapsed
-            headerText="Advanced"
-            noAnimation
-          >
-            <div
-              className="settings-panel__content"
-              style={spacing.sapUiSmallMargin}
-            >
-              <Label>{t('kyma-modules.release-channel') + ':'} </Label>
-              <Select
-                onChange={event => {
-                  setChannel(module, event.detail.selectedOption.value, index);
-                }}
-                value={
-                  findSpec(module.name)?.channel ||
-                  findStatus(module.name)?.channel ||
-                  kymaResource?.spec?.channel
-                }
-                className="channel-select"
-              >
-                {module.channels?.map(channel => (
-                  <Option
-                    selected={
-                      channel.channel === findSpec(module.name)?.channel ||
-                      channel.channel === findStatus(module.name)?.channel ||
-                      channel.channel === kymaResource?.spec?.channel
-                    }
-                    key={channel.channel}
-                    value={channel.channel}
-                    additionalText={channel?.isBeta ? 'Beta' : ''}
-                  >
-                    {`${channel.channel[0].toUpperCase()}${channel.channel.slice(
-                      1,
-                    )} (v${channel.version})`}{' '}
-                  </Option>
-                ))}
-              </Select>
-              {module.docsUrl ? (
-                <ExternalLink
-                  url={module.docsUrl}
-                  linkStyle={spacing.sapUiSmallMarginTop}
-                >
-                  {t('kyma-modules.module-documentation')}
-                </ExternalLink>
-              ) : (
-                <div></div>
-              )}
-            </div>
-          </Panel>
-        </Card>
+        <ModulesCard
+          module={module}
+          kymaResource={kymaResource}
+          index={index}
+          isChecked={isChecked}
+          setCheckbox={setCheckbox}
+          setChannel={setChannel}
+          findStatus={findStatus}
+          findSpec={findSpec}
+          checkIfStatusModuleIsBeta={checkIfStatusModuleIsBeta}
+        />
       );
-
       columns[i % columnsCount].push(card);
     });
 
     return (
       <div
         className="gridbox-addModule"
-        ref={cardsContainerRef}
+        ref={setCardsContainerRef}
         style={spacing.sapUiSmallMarginTop}
       >
         {columns.map((column, columnIndex) => (

@@ -12,7 +12,8 @@ import {
 import {
   getHealthyDaemonsets,
   getHealthyReplicasCount,
-  getHealthyStatusesCount,
+  getStatusesPodCount,
+  PodStatusCounterKey,
 } from 'resources/Namespaces/NamespaceWorkloads/NamespaceWorkloadsHelpers';
 import { roundTwoDecimals } from 'shared/utils/helpers';
 import './ClusterStats.scss';
@@ -89,7 +90,16 @@ export default function ClusterStats({ nodesData }) {
     }
   }, [servicesData]);
 
-  const healthyPods = getHealthyStatusesCount(podsData);
+  const statusPodsData = getStatusesPodCount(podsData);
+  const healthyPods = statusPodsData.has(PodStatusCounterKey.Healthy)
+    ? statusPodsData.get(PodStatusCounterKey.Healthy)
+    : 0;
+  const pendingPods = statusPodsData.has(PodStatusCounterKey.Pending)
+    ? statusPodsData.get(PodStatusCounterKey.Pending)
+    : 0;
+  const failedPods = statusPodsData.has(PodStatusCounterKey.Failed)
+    ? statusPodsData.get(PodStatusCounterKey.Failed)
+    : 0;
   const healthyDeployments = getHealthyReplicasCount(deploymentsData);
   const healthyDaemonsets = getHealthyDaemonsets(daemonsetsData);
   const healthyStatefulsets = getHealthyReplicasCount(statefulsetsData);
@@ -167,8 +177,12 @@ export default function ClusterStats({ nodesData }) {
                   value: healthyPods,
                 },
                 {
+                  title: t('cluster-overview.statistics.pending-pods'),
+                  value: pendingPods,
+                },
+                {
                   title: t('cluster-overview.statistics.failing-pods'),
-                  value: podsData.length - healthyPods,
+                  value: failedPods,
                 },
               ]}
             />
