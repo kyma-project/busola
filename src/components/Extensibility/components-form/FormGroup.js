@@ -19,13 +19,14 @@ export function FormGroup({
 
   const defaultOpen = schema.get('defaultExpanded') ?? false;
   const schemaRequired = schema.get('required') ?? required;
-
+  const description = schema.get('description');
   return (
     <ResourceForm.CollapsibleSection
       title={tFromStoreKeys(storeKeys, schema)}
       defaultOpen={defaultOpen}
       nestingLevel={nestingLevel}
       required={schemaRequired}
+      tooltipContent={description}
     >
       <div className="form-group__grid-wrapper" style={{ gridTemplateColumns }}>
         <WidgetRenderer
