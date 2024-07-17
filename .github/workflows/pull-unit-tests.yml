@@ -1,0 +1,49 @@
+name: PR Unit Tests
+
+on: 
+  pull_request:
+    types: [opened, edited, synchronize, reopened, ready_for_review]
+    paths:
+      - ".github/workflows/pull-unit-tests.yml"
+      - "backend/**"
+      - "public/**"
+      - "src/**"
+      - "tests/**"
+      - "package.json"
+      - "Makefile"
+      - "Dockerfile.local"
+
+jobs:
+  run-namespace-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: gardenlinux/workflow-telemetry-action@v2
+        with:
+          comment_on_pr: false
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: setup_busola
+        shell: bash
+        run: |
+            set -e
+            npm ci
+            npm run build
+            npm i -g serve
+      - name: run_tests
+        shell: bash
+        run: |
+          serve -s build > busola.log &
+
+          pushd backend
+          npm start > backend.log &
+          popd
+          
+          echo "waiting for server to be up..."
+          while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' "$CYPRESS_DOMAIN")" != "200" ]]; do sleep 5; done
+          sleep 10
+          
+          npm run test
