@@ -29,8 +29,8 @@ jobs:
       - name: setup_busola
         shell: bash
         run: |
-            set -e
-            npm ci
+          set -e
+          npm ci
       - name: run_tests
         shell: bash
         run: |          
