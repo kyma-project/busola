@@ -1,4 +1,5 @@
-import { ExtWizardConfig } from './../types';
+import { namespaced } from './../../resources/StorageClasses/index';
+import { ExtWizardConfig, NavNode, externalNodesExt } from './../types';
 import jsyaml from 'js-yaml';
 import { mapValues, partial } from 'lodash';
 import { useEffect } from 'react';
@@ -26,6 +27,7 @@ import pluralize from 'pluralize';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { CustomResourceDefinition } from 'command-pallette/CommandPalletteUI/handlers/crHandler';
 import { createPostFn } from 'shared/hooks/BackendAPI/usePost';
+import { DataSources } from 'components/Extensibility/contexts/DataSources';
 
 /*
 the order of the overwrting extensions
@@ -296,9 +298,9 @@ const getExtensions = async (
     let defaultExtensions = jsyaml.loadAll(
       await extensionsResponse.text(),
     ) as ExtResource[];
-
     if (Array.isArray(defaultExtensions[0]))
       defaultExtensions = defaultExtensions[0];
+    console.log(defaultExtensions);
 
     const configMaps = await getConfigMapsWithSelector(
       fetchFn,
@@ -307,9 +309,10 @@ const getExtensions = async (
       permissionSet,
       'busola.io/extension=resource',
     );
-
+    console.log(configMaps);
     const configMapsExtensions = configMaps.reduce(
       (accumulator, currentConfigMap) => {
+        console.log(currentConfigMap);
         const extResourceWithMetadata = {
           ...currentConfigMap,
           data: mapValues(
@@ -317,9 +320,8 @@ const getExtensions = async (
             convertYamlToObject,
           ) as ExtResource,
         };
-
         if (!extResourceWithMetadata.data) return accumulator;
-
+        console.log(extResourceWithMetadata);
         const indexOfTheSameExtension = accumulator.findIndex(ext =>
           isTheSameNameAndUrl(ext.data, extResourceWithMetadata.data),
         );
@@ -356,6 +358,7 @@ const getExtensions = async (
         });
       },
     );
+    console.log(configMapsExtensions);
 
     const configMapsExtensionsDataOnly: ExtResource[] = configMapsExtensions.map(
       cm => cm.data,
@@ -387,6 +390,7 @@ export const useGetExtensions = () => {
   const setAllExtensions = useSetRecoilState(allExtensionsState);
   const setInjections = useSetRecoilState(injectionsState);
   const setWizard = useSetRecoilState(wizardState);
+  const setExternalNodesExt = useSetRecoilState(externalNodesExtState);
   const fetchFn = getFetchFn(useRecoilValue);
   const configuration = useRecoilValue(configurationAtom);
   const features = configuration?.features;
@@ -417,6 +421,7 @@ export const useGetExtensions = () => {
         setAllExtensions([]);
         setInjections([]);
         setWizard([]);
+        setExternalNodesExt([]);
         return;
       }
 
@@ -426,7 +431,7 @@ export const useGetExtensions = () => {
         namespace,
         permissionSet,
       );
-
+      console.log(configs);
       const statics = await getStatics(
         fetchFn,
         cluster.currentContext.namespace,
@@ -470,8 +475,11 @@ export const useGetExtensions = () => {
             : isNodeVisibleForCurrentConfigSet(mapExtResourceToNavNode(node)),
         );
 
+        const externalNodes = getExternalNodeExt(filteredConfigs);
+        console.log(externalNodes);
         setExtensions(filteredConfigs);
         setAllExtensions(configs);
+        setExternalNodesExt(externalNodes);
         pushExtToEventTypes(filteredConfigs);
       }
 
@@ -510,6 +518,61 @@ export const useGetExtensions = () => {
   }, [cluster, auth, permissionSet, namespace, openapiPathIdList, features]);
 };
 
+const createExternalNode = (
+  url: string,
+  label: string,
+  category: string,
+  icon?: string,
+  scope?: string,
+  dataSources?: DataSources,
+): NavNode => ({
+  resourceType: '',
+  category: category,
+  icon: icon,
+  namespaced: scope === 'namespace',
+  label: label,
+  pathSegment: '',
+  requiredFeatures: [],
+  apiVersion: '',
+  apiGroup: '',
+  externalUrl: url.startsWith('http') ? url : `https://${url}`,
+  dataSources: dataSources,
+});
+
+const getExternalNodeExt = (configs: any) => {
+  console.log(configs);
+  const externalNodes = configs
+    .filter((conf: any) => {
+      return conf.general?.externalNodes;
+    })
+    .map((conf: any) => {
+      return conf.general?.externalNodes;
+    })
+    .flat();
+
+  console.log(externalNodes);
+
+  if (externalNodes) {
+    return externalNodes.flatMap(
+      ({
+        category,
+        icon,
+        children,
+        scope,
+      }: {
+        category: string;
+        icon: string;
+        children: any[];
+        scope: string;
+      }) =>
+        children.map(({ label, link, dataSources }) =>
+          createExternalNode(link, label, category, icon, scope, dataSources),
+        ),
+    );
+  }
+  return [];
+};
+
 // null for defaultValue,
 // empty array for value or error
 const defaultValue = null;
@@ -540,3 +603,8 @@ export const wizardState: RecoilState<ExtWizardConfig[] | null> = atom<
   key: 'wizardState',
   default: defaultValue,
 });
+
+export const externalNodesExtState: RecoilState<any[] | null> = atom<
+  //////////////////ANY
+  any[] | null
+>({ key: 'externalNodesExtState', default: defaultValue });

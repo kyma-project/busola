@@ -6,6 +6,7 @@ import { isSidebarCondensedState } from 'state/preferences/isSidebarCondensedAto
 
 import { ExpandedCategories } from 'state/navigation/expandedCategories/expandedCategoriesAtom';
 import { NavItem } from './NavItem';
+import { DataSourcesContextProvider } from 'components/Extensibility/contexts/DataSources';
 
 type CategoryItemProps = {
   category: Category;
@@ -39,7 +40,15 @@ export function CategoryItem({
   };
 
   const children = category.items?.map(nn => (
-    <NavItem node={nn} key={nn.pathSegment} subItem={true} />
+    <>
+      {nn.dataSources ? (
+        <DataSourcesContextProvider dataSources={nn.dataSources}>
+          <NavItem node={nn} key={nn.pathSegment} subItem={true} />
+        </DataSourcesContextProvider>
+      ) : (
+        <NavItem node={nn} key={nn.pathSegment} subItem={true} />
+      )}
+    </>
   ));
 
   return (

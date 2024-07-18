@@ -10,7 +10,7 @@ import { clusterAndNsNodesSelector } from './clusterAndNsNodesSelector';
 import { externalNodesSelector } from './externalNodesSelector';
 import { activeNamespaceIdState } from '../activeNamespaceIdAtom';
 import { configurationAtom } from '../configuration/configurationAtom';
-import { extensionsState } from './extensionsAtom';
+import { extensionsState, externalNodesExtState } from './extensionsAtom';
 import { mapExtResourceToNavNode } from '../resourceList/mapExtResourceToNavNode';
 
 export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = selector<
@@ -21,9 +21,10 @@ export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = s
     const navNodes: NavNode[] = get(clusterAndNsNodesSelector);
     const activeNamespaceId = get(activeNamespaceIdState);
     const externalNodes = get(externalNodesSelector);
+    const externalNodesExt = get(externalNodesExtState);
     const configuration = get(configurationAtom);
     const features = configuration?.features;
-
+    console.log(externalNodesExt);
     const scope: Scope = activeNamespaceId ? 'namespace' : 'cluster';
     if (!navNodes || !externalNodes) {
       return [];
@@ -37,6 +38,11 @@ export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = s
       allNodes = mergeInExtensibilityNav(allNodes, extNavNodes);
     }
 
+    console.log(allNodes);
+    if (externalNodesExt) {
+      allNodes = allNodes.concat(externalNodesExt);
+    }
+    console.log(allNodes);
     const nodesFromCurrentScope = partial(hasCurrentScope, scope);
     const filteredNodes = allNodes.filter(nodesFromCurrentScope);
 

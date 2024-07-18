@@ -45,7 +45,7 @@ export const ExtensibilityListCore = ({
   const { schema } = useGetSchema({
     resource,
   });
-
+  console.log(dataSources);
   const listProps = usePrepareListProps({
     resourceCustomType: getExtensibilityPath(resMetaData?.general),
     resourceI18Key: 'name',
@@ -142,7 +142,7 @@ const ExtensibilityList = ({ overrideResMetadata, ...props }) => {
   const defaultResMetadata = useGetCRbyPath();
   const resMetaData = overrideResMetadata || defaultResMetadata;
   const { urlPath, defaultPlaceholder } = resMetaData?.general ?? {};
-
+  console.log(resMetaData);
   return (
     <TranslationBundleContext.Provider
       value={{

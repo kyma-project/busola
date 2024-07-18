@@ -23,11 +23,14 @@ import { NamespaceChooser } from 'header/NamespaceChooser/NamespaceChooser';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
+import { DataSourcesContextProvider } from 'components/Extensibility/contexts/DataSources';
+import { externalNodesExtState } from 'state/navigation/extensionsAtom';
 
 export function SidebarNavigation() {
   const navigationNodes = useRecoilValue(sidebarNavigationNodesSelector);
   const isSidebarCondensed = useRecoilValue(isSidebarCondensedState);
   const namespace = useRecoilValue(activeNamespaceIdState);
+  const externalNodesExt = useRecoilValue(externalNodesExtState);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
@@ -35,7 +38,7 @@ export function SidebarNavigation() {
     isResourceEditedState,
   );
   const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
-
+  console.log(navigationNodes);
   const { clusterUrl, namespaceUrl } = useUrl();
   const { resourceType = '' } =
     useMatch({
@@ -88,24 +91,26 @@ export function SidebarNavigation() {
                 marginTop: '0.75rem',
               }}
             >
-              <SideNavigationItem
-                className="hide-shadow"
-                icon={'slim-arrow-left'}
-                text={'Back To Cluster Details'}
-                onClick={() => {
-                  handleActionIfFormOpen(
-                    isResourceEdited,
-                    setIsResourceEdited,
-                    isFormOpen,
-                    setIsFormOpen,
-                    () => {
-                      setDefaultColumnLayout();
-                      return navigate(clusterUrl(`overview`));
-                    },
-                  );
-                }}
-                selected={isClusterOverviewSelected()}
-              />
+              <DataSourcesContextProvider dataSources={{}}>
+                <SideNavigationItem
+                  className="hide-shadow"
+                  icon={'slim-arrow-left'}
+                  text={'Back To Cluster Details'}
+                  onClick={() => {
+                    handleActionIfFormOpen(
+                      isResourceEdited,
+                      setIsResourceEdited,
+                      isFormOpen,
+                      setIsFormOpen,
+                      () => {
+                        setDefaultColumnLayout();
+                        return navigate(clusterUrl(`overview`));
+                      },
+                    );
+                  }}
+                  selected={isClusterOverviewSelected()}
+                />
+              </DataSourcesContextProvider>
             </SideNavigation>
           )}
           {(!namespace || isSidebarCondensed) && <div className="space-top" />}
