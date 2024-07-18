@@ -8,10 +8,7 @@ on:
       - "backend/**"
       - "public/**"
       - "src/**"
-      - "tests/**"
       - "package.json"
-      - "Makefile"
-      - "Dockerfile.local"
 
 jobs:
   run-unit-test:
