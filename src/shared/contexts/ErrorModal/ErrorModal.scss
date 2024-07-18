@@ -1,8 +1,11 @@
 .error-modal::part(content) {
   padding: 20px !important;
   max-width: 33rem;
+}
 
-  &--wider {
+--wider::part(content) {
+  // appending a selector to the .error-modal selector
+  @at-root #{selector-append(".error-modal", &)} {
     max-width: 75vw;
   }
 }
