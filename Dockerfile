@@ -19,7 +19,7 @@ COPY . /app
 
 RUN sed -i "s/version: dev/version: ${TAG_default_tag}/" public/version.yaml && make resolve validate
 
-RUN npm test 2>&1 && npm run build:docker
+RUN npm run build:docker
 
 # ---- Serve ----
 FROM nginxinc/nginx-unprivileged:1.25-alpine

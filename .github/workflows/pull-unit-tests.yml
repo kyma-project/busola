@@ -1,0 +1,33 @@
+name: PR Unit Tests
+
+on: 
+  pull_request:
+    types: [opened, edited, synchronize, reopened, ready_for_review]
+    paths:
+      - ".github/workflows/pull-unit-tests.yml"
+      - "public/**"
+      - "src/**"
+      - "package.json"
+
+jobs:
+  run-unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: gardenlinux/workflow-telemetry-action@v2
+        with:
+          comment_on_pr: false
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: setup_busola
+        shell: bash
+        run: |
+          set -e
+          npm ci
+      - name: run_tests
+        shell: bash
+        run: |          
+          npm run test
