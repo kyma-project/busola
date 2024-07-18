@@ -383,7 +383,9 @@ export const GenericList = ({
       style={disableMargin ? {} : spacing.sapUiSmallMargin}
     >
       <Table
-        className={`ui5-generic-list ${hasDetailsView ? 'cursor-pointer' : ''}`}
+        className={`ui5-generic-list ${
+          hasDetailsView && filteredEntries.length ? 'cursor-pointer' : ''
+        }`}
         onRowClick={e => {
           if (!hasDetailsView) return;
           handleActionIfFormOpen(
