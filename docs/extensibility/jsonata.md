@@ -106,7 +106,7 @@ You can use this function to sort two strings alphabetically.
 
 #### Example
 
-Here is an example from the [ResourceList widget](display-section.md#resourcelist):
+Here is an example from the [ResourceList widget](./50-list-and-details-widgets.md#resourcelist):
 
 ```yaml
 - widget: ResourceList
