@@ -173,6 +173,13 @@ export function KymaModulesList(props) {
     const rowRenderer = resource => {
       const moduleStatus = findStatus(resource.name);
       const showDetailsLink = hasDetailsLink(resource);
+      const moduleIndex = kymaResource?.spec?.modules?.findIndex(
+        kymaResourceModule => {
+          return kymaResourceModule?.name === resource?.name;
+        },
+      );
+      const isChannelOverriden =
+        kymaResource?.spec?.modules[moduleIndex]?.channel !== undefined;
 
       return [
         // Name
@@ -196,7 +203,22 @@ export function KymaModulesList(props) {
         // Namespace
         moduleStatus?.resource?.metadata?.namespace || EMPTY_TEXT_PLACEHOLDER,
         // Channel
-        moduleStatus?.channel || EMPTY_TEXT_PLACEHOLDER,
+        <>
+          {moduleStatus?.channel
+            ? moduleStatus?.channel
+            : EMPTY_TEXT_PLACEHOLDER}
+          {isChannelOverriden ? (
+            <Badge
+              hideStateIcon
+              design="Information"
+              style={spacing.sapUiTinyMarginBegin}
+            >
+              {t('kyma-modules.channel-overridden')}
+            </Badge>
+          ) : (
+            ''
+          )}
+        </>,
         // Version
         moduleStatus?.version || EMPTY_TEXT_PLACEHOLDER,
         // State
