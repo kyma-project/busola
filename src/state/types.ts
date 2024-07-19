@@ -108,6 +108,8 @@ export type externalNodesExt = {
     label: string;
     link: string;
   }[];
+  dataSources?: DataSources;
+  resource?: any; //////////////ANY
 };
 
 export interface UrlOverrides {

@@ -16,7 +16,6 @@ import { isResourceEditedState } from 'state/resourceEditedAtom';
 
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
-import jsonata from 'jsonata';
 import { useJsonata } from 'components/Extensibility/hooks/useJsonata';
 
 type NavItemProps = {
@@ -65,6 +64,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
     onClick: (e: Event) => {
       if (node.dataSources) {
         let [link] = jsonata(node.externalUrl || '');
+        link = link || node.externalUrl || '';
         link = link.startsWith('http') ? link : `https://${link}`;
         const newWindow = window.open(link, '_blank', 'noopener, noreferrer');
         if (newWindow) newWindow.opener = null;

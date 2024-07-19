@@ -1,18 +1,19 @@
-import { useJsonata } from 'components/Extensibility/hooks/useJsonata';
+import { DataSources } from 'components/Extensibility/contexts/DataSources';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   extensionsState,
   externalNodesExtState,
 } from 'state/navigation/extensionsAtom';
+import { externalNodesExt } from 'state/types';
 
 const createExternalNode = (
-  url,
-  label,
-  category,
-  icon,
-  scope,
-  dataSources,
-  resource,
+  url: string,
+  label: string,
+  category: string,
+  icon: string,
+  scope: string,
+  resource: any, //////////////ANY
+  dataSources?: DataSources,
 ) => ({
   resourceType: '',
   category: category,
@@ -28,7 +29,13 @@ const createExternalNode = (
   resource: resource,
 });
 
-const createResource = (name, kind, group, version, namespace) => ({
+const createResource = (
+  name: string,
+  kind: string,
+  group: string,
+  version: string,
+  namespace?: string,
+) => ({
   name: name,
   kind: kind,
   group: group,
@@ -40,24 +47,19 @@ export const useGetExtensibilityNodesExt = () => {
   const setExternalNodeExt = useSetRecoilState(externalNodesExtState);
   const extensions = useRecoilValue(extensionsState) || [];
 
-  const jsonata = useJsonata({});
-
-  console.log(extensions);
-
   const externalNodes = extensions
     ?.filter(conf => {
       return conf.general?.externalNodes;
     })
     ?.map(conf => {
-      return conf.general?.externalNodes.map(ext => {
-        console.log(conf);
+      return conf.general?.externalNodes?.map(ext => {
         const resource = createResource(
           conf.general.name,
           conf.general.resource.kind,
           conf.general.resource.group,
           conf.general.resource.version,
         );
-        console.log(resource);
+
         ext = {
           ...ext,
           dataSources: conf.dataSources ?? null,
@@ -68,29 +70,38 @@ export const useGetExtensibilityNodesExt = () => {
     })
     ?.flat();
 
-  console.log(externalNodes);
-
   let nodes;
   if (externalNodes) {
-    nodes = externalNodes.flatMap(
+    nodes = (externalNodes as externalNodesExt[]).flatMap(
       ({ category, icon, children, scope, dataSources, resource }) =>
-        children.map(({ label, link: url }) => {
-          console.log(url);
-          const [link] = jsonata(url);
-          console.log(link);
+        children.map(({ label, link }: { label: string; link: string }) => {
           return createExternalNode(
-            url,
+            link,
             label,
             category,
             icon,
             scope,
-            dataSources,
             resource,
+            dataSources,
           );
         }),
     );
   }
-  console.log(nodes);
+
   setExternalNodeExt(nodes || []);
   return nodes || [];
 };
+
+/*
+: {
+        category: string;
+        icon: string;
+        scope: string;
+        dataSources: DataSources;
+        resource: any; //////////////ANY
+        children:  {
+          label: string;
+          link: string;
+        }[];
+      }
+*/

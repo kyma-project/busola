@@ -1,5 +1,4 @@
-import { namespaced } from './../../resources/StorageClasses/index';
-import { ExtWizardConfig, NavNode, externalNodesExt } from './../types';
+import { ExtWizardConfig } from './../types';
 import jsyaml from 'js-yaml';
 import { mapValues, partial } from 'lodash';
 import { useEffect } from 'react';
@@ -27,8 +26,6 @@ import pluralize from 'pluralize';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { CustomResourceDefinition } from 'command-pallette/CommandPalletteUI/handlers/crHandler';
 import { createPostFn } from 'shared/hooks/BackendAPI/usePost';
-import { DataSources } from 'components/Extensibility/contexts/DataSources';
-import { jsonataWrapper } from 'components/Extensibility/helpers/jsonataWrapper';
 
 /*
 the order of the overwrting extensions
@@ -336,7 +333,7 @@ const getExtensions = async (
           accumulator[indexOfTheSameExtension] = extResourceWithMetadata;
           return accumulator;
         }
-        console.log(extResourceWithMetadata);
+
         return [...accumulator, extResourceWithMetadata];
       },
       [] as ExtResourceWithMetadata[],
@@ -429,7 +426,7 @@ export const useGetExtensions = () => {
         namespace,
         permissionSet,
       );
-      console.log(configs);
+
       const statics = await getStatics(
         fetchFn,
         cluster.currentContext.namespace,

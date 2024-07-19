@@ -30,7 +30,6 @@ export function SidebarNavigation() {
   const navigationNodes = useRecoilValue(sidebarNavigationNodesSelector);
   const isSidebarCondensed = useRecoilValue(isSidebarCondensedState);
   const namespace = useRecoilValue(activeNamespaceIdState);
-  const externalNodesExt = useRecoilValue(externalNodesExtState);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
@@ -38,7 +37,7 @@ export function SidebarNavigation() {
     isResourceEditedState,
   );
   const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
-  console.log(navigationNodes);
+
   const { clusterUrl, namespaceUrl } = useUrl();
   const { resourceType = '' } =
     useMatch({
