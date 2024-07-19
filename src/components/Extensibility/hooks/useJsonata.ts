@@ -45,14 +45,15 @@ export function useJsonata({
   arrayItems,
 }: {
   resource: Resource;
-  parent: Resource;
-  embedResource: Resource;
-  scope: any;
-  arrayItems: any[];
+  parent?: Resource;
+  embedResource?: Resource;
+  scope?: any;
+  arrayItems?: any[];
 }): JsonataFunction {
   const { t } = useTranslation();
   const dataSourcesContext = useContext(DataSourcesContext);
-
+  console.log(dataSourcesContext);
+  console.log(resource);
   const [dataSourceFetchers, setDataSourceFetchers] = useState(
     getDataSourceFetchers(resource, dataSourcesContext),
   );
@@ -70,6 +71,7 @@ export function useJsonata({
     extras = {},
     defaultValue = null,
   ) => {
+    console.log(query);
     if (!query) {
       return [defaultValue, null];
     }

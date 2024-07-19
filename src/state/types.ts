@@ -143,6 +143,7 @@ export type NavNode = {
   createUrlFn?: (generators: UrlGenerators) => string;
   aliases?: string[];
   dataSources?: DataSources;
+  resource?: any;
 };
 
 export type ClusterStorage = 'localStorage' | 'sessionStorage' | string;

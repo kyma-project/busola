@@ -16,6 +16,8 @@ import { isResourceEditedState } from 'state/resourceEditedAtom';
 
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
+import jsonata from 'jsonata';
+import { useJsonata } from 'components/Extensibility/hooks/useJsonata';
 
 type NavItemProps = {
   node: NavNode;
@@ -36,6 +38,11 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const cluster = useRecoilValue(clusterState);
 
+  const jsonata = useJsonata({ resource: node.resource });
+  console.log(node.externalUrl);
+  console.log(jsonata(node.externalUrl || ''));
+
+  console.log(node);
   const isNodeSelected = (node: NavNode) => {
     if (node.externalUrl) return false;
     else {
@@ -56,6 +63,13 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
     selected: isNodeSelected(node),
     key: node.pathSegment,
     onClick: (e: Event) => {
+      if (node.dataSources) {
+        let [link] = jsonata(node.externalUrl || '');
+        link = link.startsWith('http') ? link : `https://${link}`;
+        const newWindow = window.open(link, '_blank', 'noopener, noreferrer');
+        if (newWindow) newWindow.opener = null;
+        return;
+      }
       if (node.externalUrl) {
         const newWindow = window.open(
           node.externalUrl,

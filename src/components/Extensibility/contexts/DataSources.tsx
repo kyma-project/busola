@@ -93,7 +93,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
       ownerLabelSelectorPath,
     } = dataSource;
     if (typeof namespace === 'undefined') {
-      namespace = resource.metadata.namespace;
+      namespace = resource.metadata?.namespace;
     }
 
     const namespacePart = namespace ? `/namespaces/${namespace}` : '';
