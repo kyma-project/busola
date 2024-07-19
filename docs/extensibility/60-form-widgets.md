@@ -27,16 +27,16 @@ The `Text` widgets render a field as a text field. They are used by default for 
 
 These are the available `Text` widget parameters:
 
-| Parameter             | Required | Type                | Description                                                                                                                                                             |
-| --------------------- | -------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **enum[]**            | No       | an array of options | Generate an input field with a dropdown. Optionally can be a string containing a [JSONata](jsonata.md) expression returning an array of options.                        |
-| **placeholder**       | No       | string              | Specifies a short hint about the input field value.                                                                                                                     |
-| **required**          | No       | boolean             | Specifies if a field is required. The default value is taken from CustomResourceDefintion (CRD); if it doesn't exist in the CRD, then it defaults to `false`.           |
-| **inputInfo**         | No       | string              | A string below the input field that shows how to fill in the input. You can use the {{ [`name`] (`link`) }} format to display a `name` instead of a `link.              |
-| **description**       | No       | string              | A string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD). |
-| **readOnly**          | No       | boolean             | Specifies if a field is read-only. Defaults to `false`.                                                                                                                 |
-| **decodable**         | No       | boolean             | Specifies that the field is base64-encoded and can be decoded in the UI. It can't be used together with **enum**.                                                       |
-| **decodedPlacehoder** | No       | string              | An optional alternative placeholder to use when the field is decoded.                                                                                                   |
+| Parameter             | Required | Type                | Description                                                                                                                                                                                                                  |
+| --------------------- | -------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **enum[]**            | No       | an array of options | Generate an input field with a dropdown. Optionally can be a string containing a [JSONata](jsonata.md) expression returning an array of options.                                                                             |
+| **placeholder**       | No       | string              | Specifies a short hint about the input field value.                                                                                                                                                                          |
+| **required**          | No       | boolean             | Specifies if a field is required. The default value is taken from CustomResourceDefintion (CRD); if it doesn't exist in the CRD, then it defaults to `false`.                                                                |
+| **inputInfo**         | No       | string              | A string below the input field that shows how to fill in the input. You can use the {{ [`name`] (`link`) }} format to display a `name` instead of a `link.                                                                   |
+| **description**       | No       | string              | A string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD). The tooltip can be disabled by placing empty string. |
+| **readOnly**          | No       | boolean             | Specifies if a field is read-only. Defaults to `false`.                                                                                                                                                                      |
+| **decodable**         | No       | boolean             | Specifies that the field is base64-encoded and can be decoded in the UI. It can't be used together with **enum**.                                                                                                            |
+| **decodedPlacehoder** | No       | string              | An optional alternative placeholder to use when the field is decoded.                                                                                                                                                        |
 
 See the following examples:
 
