@@ -197,7 +197,9 @@ export function KymaModulesList(props) {
               resource?.channel || kymaResource?.spec?.channel,
             ),
           ) ? (
-            <Badge style={spacing.sapUiTinyMarginBegin}>Beta</Badge>
+            <Badge style={spacing.sapUiTinyMarginBegin}>
+              {t('kyma-modules.beta')}
+            </Badge>
           ) : null}
         </>,
         // Namespace
