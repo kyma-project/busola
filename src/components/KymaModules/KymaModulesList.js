@@ -212,7 +212,8 @@ export function KymaModulesList(props) {
           {isChannelOverriden ? (
             <Badge
               hideStateIcon
-              design="Information"
+              design="Set2"
+              colorScheme="5"
               style={spacing.sapUiTinyMarginBegin}
             >
               {t('kyma-modules.channel-overridden')}
