@@ -23,7 +23,6 @@ import { NamespaceChooser } from 'header/NamespaceChooser/NamespaceChooser';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
-import { DataSourcesContextProvider } from 'components/Extensibility/contexts/DataSources';
 
 export function SidebarNavigation() {
   const navigationNodes = useRecoilValue(sidebarNavigationNodesSelector);

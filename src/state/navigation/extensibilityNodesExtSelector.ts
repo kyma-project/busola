@@ -1,9 +1,9 @@
 import { RecoilValueReadOnly, selector } from 'recoil';
-import { NavNode } from '../types';
+import { ExtNodeResource, ExtResource, NavNode } from '../types';
 import { getFetchFn } from '../utils/getFetchFn';
 import { DataSources } from 'components/Extensibility/contexts/DataSources';
 import { extensionsState } from 'state/navigation/extensionsAtom';
-import { externalNodesExt } from 'state/types';
+import { ExtensibilityNodesExt } from 'state/types';
 
 const createExternalNode = (
   url: string,
@@ -11,7 +11,7 @@ const createExternalNode = (
   category: string,
   icon: string,
   scope: string,
-  resource: any, //////////////ANY
+  resource: ExtNodeResource,
   dataSources?: DataSources,
 ) => ({
   resourceType: '',
@@ -33,22 +33,20 @@ const createResource = (
   kind: string,
   group: string,
   version: string,
-  namespace?: string,
 ) => ({
   name: name,
   kind: kind,
   group: group,
-  verion: version,
-  namespace: namespace,
+  version: version,
 });
 
-const getExtensibilityNodesExt = (extensions: any) => {
+const getExtensibilityNodesExt = (extensions: ExtResource[]) => {
   const externalNodes = extensions
-    ?.filter((conf: any) => {
+    ?.filter(conf => {
       return conf.general?.externalNodes;
     })
-    ?.map((conf: any) => {
-      return conf.general?.externalNodes?.map((ext: any) => {
+    ?.map(conf => {
+      return conf.general?.externalNodes?.map(ext => {
         const resource = createResource(
           conf.general.name,
           conf.general.resource.kind,
@@ -68,7 +66,7 @@ const getExtensibilityNodesExt = (extensions: any) => {
 
   let nodes;
   if (externalNodes) {
-    nodes = (externalNodes as externalNodesExt[]).flatMap(
+    nodes = (externalNodes as ExtensibilityNodesExt[]).flatMap(
       ({ category, icon, children, scope, dataSources, resource }) =>
         children.map(({ label, link }: { label: string; link: string }) => {
           return createExternalNode(
@@ -84,7 +82,6 @@ const getExtensibilityNodesExt = (extensions: any) => {
     );
   }
 
-  //setExternalNodeExt(nodes || []);
   return nodes || [];
 };
 
