@@ -1,8 +1,7 @@
 # ---- Base Alpine with Node ----
 FROM alpine:3.20.1 AS base
 # install node
-RUN apk add --update nodejs npm openssl nghttp2
-
+RUN apk add --update nodejs npm
 
 # ---- Install ependencies ----
 FROM base AS build
@@ -12,8 +11,6 @@ RUN npm ci
 
 # build to a naked Javascript
 RUN npm run build
-
-
 
 # ---- Serve ----
 FROM base AS release
