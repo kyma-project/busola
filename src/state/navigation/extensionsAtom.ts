@@ -296,6 +296,7 @@ const getExtensions = async (
     let defaultExtensions = jsyaml.loadAll(
       await extensionsResponse.text(),
     ) as ExtResource[];
+
     if (Array.isArray(defaultExtensions[0]))
       defaultExtensions = defaultExtensions[0];
 
@@ -316,6 +317,7 @@ const getExtensions = async (
             convertYamlToObject,
           ) as ExtResource,
         };
+
         if (!extResourceWithMetadata.data) return accumulator;
 
         const indexOfTheSameExtension = accumulator.findIndex(ext =>

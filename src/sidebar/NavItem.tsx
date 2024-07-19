@@ -66,16 +66,10 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
         let [link] = jsonata(node.externalUrl || '');
         link = link || node.externalUrl || '';
         link = link.startsWith('http') ? link : `https://${link}`;
-        const newWindow = window.open(link, '_blank', 'noopener, noreferrer');
+        const newWindow = window.open(link, 'noopener, noreferrer');
         if (newWindow) newWindow.opener = null;
-        return;
-      }
-      if (node.externalUrl) {
-        const newWindow = window.open(
-          node.externalUrl,
-          '_blank',
-          'noopener, noreferrer',
-        );
+      } else if (node.externalUrl) {
+        const newWindow = window.open(node.externalUrl, 'noopener, noreferrer');
         if (newWindow) newWindow.opener = null;
       } else {
         handleActionIfFormOpen(

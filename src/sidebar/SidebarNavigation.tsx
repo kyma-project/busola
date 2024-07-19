@@ -89,26 +89,24 @@ export function SidebarNavigation() {
                 marginTop: '0.75rem',
               }}
             >
-              <DataSourcesContextProvider dataSources={{}}>
-                <SideNavigationItem
-                  className="hide-shadow"
-                  icon={'slim-arrow-left'}
-                  text={'Back To Cluster Details'}
-                  onClick={() => {
-                    handleActionIfFormOpen(
-                      isResourceEdited,
-                      setIsResourceEdited,
-                      isFormOpen,
-                      setIsFormOpen,
-                      () => {
-                        setDefaultColumnLayout();
-                        return navigate(clusterUrl(`overview`));
-                      },
-                    );
-                  }}
-                  selected={isClusterOverviewSelected()}
-                />
-              </DataSourcesContextProvider>
+              <SideNavigationItem
+                className="hide-shadow"
+                icon={'slim-arrow-left'}
+                text={'Back To Cluster Details'}
+                onClick={() => {
+                  handleActionIfFormOpen(
+                    isResourceEdited,
+                    setIsResourceEdited,
+                    isFormOpen,
+                    setIsFormOpen,
+                    () => {
+                      setDefaultColumnLayout();
+                      return navigate(clusterUrl(`overview`));
+                    },
+                  );
+                }}
+                selected={isClusterOverviewSelected()}
+              />
             </SideNavigation>
           )}
           {(!namespace || isSidebarCondensed) && <div className="space-top" />}
