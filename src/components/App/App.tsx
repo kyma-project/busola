@@ -35,7 +35,6 @@ import { useAfterInitHook } from 'state/useAfterInitHook';
 import useSidebarCondensed from 'sidebar/useSidebarCondensed';
 import { useGetValidationEnabledSchemas } from 'state/validationEnabledSchemasAtom';
 import { useGetKymaResources } from 'state/kymaResourcesAtom';
-import { useGetExtensibilityNodesExt } from 'sidebar/useGetExtensibilityNodesExt';
 
 export default function App() {
   const language = useRecoilValue(languageAtom);
@@ -60,7 +59,6 @@ export default function App() {
   useAuthHandler();
   useGetConfiguration();
   useGetExtensions();
-  useGetExtensibilityNodesExt();
   useGetExtensibilitySchemas();
   useGetValidationSchemas();
   useGetValidationEnabledSchemas();

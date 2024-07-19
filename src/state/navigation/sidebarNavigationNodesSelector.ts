@@ -10,8 +10,9 @@ import { clusterAndNsNodesSelector } from './clusterAndNsNodesSelector';
 import { externalNodesSelector } from './externalNodesSelector';
 import { activeNamespaceIdState } from '../activeNamespaceIdAtom';
 import { configurationAtom } from '../configuration/configurationAtom';
-import { extensionsState, externalNodesExtState } from './extensionsAtom';
+import { extensionsState } from './extensionsAtom';
 import { mapExtResourceToNavNode } from '../resourceList/mapExtResourceToNavNode';
+import { extensibilityNodesExtSelector } from './extensibilityNodesExtSelector';
 
 export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = selector<
   Category[]
@@ -21,7 +22,7 @@ export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = s
     const navNodes: NavNode[] = get(clusterAndNsNodesSelector);
     const activeNamespaceId = get(activeNamespaceIdState);
     const externalNodes = get(externalNodesSelector);
-    const externalNodesExt = get(externalNodesExtState);
+    const externalNodesExt = get(extensibilityNodesExtSelector);
     const configuration = get(configurationAtom);
     const features = configuration?.features;
 

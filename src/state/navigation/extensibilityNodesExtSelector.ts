@@ -1,9 +1,8 @@
+import { RecoilValueReadOnly, selector } from 'recoil';
+import { NavNode } from '../types';
+import { getFetchFn } from '../utils/getFetchFn';
 import { DataSources } from 'components/Extensibility/contexts/DataSources';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import {
-  extensionsState,
-  externalNodesExtState,
-} from 'state/navigation/extensionsAtom';
+import { extensionsState } from 'state/navigation/extensionsAtom';
 import { externalNodesExt } from 'state/types';
 
 const createExternalNode = (
@@ -43,16 +42,13 @@ const createResource = (
   namespace: namespace,
 });
 
-export const useGetExtensibilityNodesExt = () => {
-  const setExternalNodeExt = useSetRecoilState(externalNodesExtState);
-  const extensions = useRecoilValue(extensionsState) || [];
-
+const getExtensibilityNodesExt = (extensions: any) => {
   const externalNodes = extensions
-    ?.filter(conf => {
+    ?.filter((conf: any) => {
       return conf.general?.externalNodes;
     })
-    ?.map(conf => {
-      return conf.general?.externalNodes?.map(ext => {
+    ?.map((conf: any) => {
+      return conf.general?.externalNodes?.map((ext: any) => {
         const resource = createResource(
           conf.general.name,
           conf.general.resource.kind,
@@ -88,20 +84,23 @@ export const useGetExtensibilityNodesExt = () => {
     );
   }
 
-  setExternalNodeExt(nodes || []);
+  //setExternalNodeExt(nodes || []);
   return nodes || [];
 };
 
-/*
-: {
-        category: string;
-        icon: string;
-        scope: string;
-        dataSources: DataSources;
-        resource: any; //////////////ANY
-        children:  {
-          label: string;
-          link: string;
-        }[];
-      }
-*/
+export const extensibilityNodesExtSelector: RecoilValueReadOnly<
+  NavNode[] | null
+> = selector<NavNode[] | null>({
+  key: 'extensibilityNodesExtSelector',
+  get: async ({ get }) => {
+    const extensions = get(extensionsState) || [];
+    const fetchFn = getFetchFn(get);
+    if (!fetchFn) {
+      return null;
+    }
+
+    const extensibilityNodes = getExtensibilityNodesExt(extensions);
+
+    return [...extensibilityNodes.filter(n => n)];
+  },
+});

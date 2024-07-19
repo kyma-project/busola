@@ -385,7 +385,6 @@ export const useGetExtensions = () => {
   const setAllExtensions = useSetRecoilState(allExtensionsState);
   const setInjections = useSetRecoilState(injectionsState);
   const setWizard = useSetRecoilState(wizardState);
-  const setExternalNodesExt = useSetRecoilState(externalNodesExtState);
   const fetchFn = getFetchFn(useRecoilValue);
   const configuration = useRecoilValue(configurationAtom);
   const features = configuration?.features;
@@ -416,7 +415,6 @@ export const useGetExtensions = () => {
         setAllExtensions([]);
         setInjections([]);
         setWizard([]);
-        setExternalNodesExt([]);
         return;
       }
 
@@ -540,8 +538,3 @@ export const wizardState: RecoilState<ExtWizardConfig[] | null> = atom<
   key: 'wizardState',
   default: defaultValue,
 });
-
-export const externalNodesExtState: RecoilState<any[] | null> = atom<
-  //////////////////ANY
-  any[] | null
->({ key: 'externalNodesExtState', default: defaultValue });

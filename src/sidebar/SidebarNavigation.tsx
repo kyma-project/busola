@@ -24,7 +24,6 @@ import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
 import { DataSourcesContextProvider } from 'components/Extensibility/contexts/DataSources';
-import { externalNodesExtState } from 'state/navigation/extensionsAtom';
 
 export function SidebarNavigation() {
   const navigationNodes = useRecoilValue(sidebarNavigationNodesSelector);
