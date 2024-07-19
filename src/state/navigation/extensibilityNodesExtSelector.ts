@@ -1,5 +1,5 @@
 import { RecoilValueReadOnly, selector } from 'recoil';
-import { ExtNodeResource, ExtResource, NavNode } from '../types';
+import { ExtResource, NavNode } from '../types';
 import { getFetchFn } from '../utils/getFetchFn';
 import { DataSources } from 'components/Extensibility/contexts/DataSources';
 import { extensionsState } from 'state/navigation/extensionsAtom';
@@ -11,7 +11,6 @@ const createExternalNode = (
   category: string,
   icon: string,
   scope: string,
-  resource: ExtNodeResource,
   dataSources?: DataSources,
 ) => ({
   resourceType: '',
@@ -25,19 +24,6 @@ const createExternalNode = (
   apiGroup: '',
   externalUrl: url,
   dataSources: dataSources,
-  resource: resource,
-});
-
-const createResource = (
-  name: string,
-  kind: string,
-  group: string,
-  version: string,
-) => ({
-  name: name,
-  kind: kind,
-  group: group,
-  version: version,
 });
 
 const getExtensibilityNodesExt = (extensions: ExtResource[]) => {
@@ -47,17 +33,9 @@ const getExtensibilityNodesExt = (extensions: ExtResource[]) => {
     })
     ?.map(conf => {
       return conf.general?.externalNodes?.map(ext => {
-        const resource = createResource(
-          conf.general.name,
-          conf.general.resource.kind,
-          conf.general.resource.group,
-          conf.general.resource.version,
-        );
-
         ext = {
           ...ext,
           dataSources: conf.dataSources ?? null,
-          resource: resource,
         };
         return ext;
       });
@@ -67,7 +45,7 @@ const getExtensibilityNodesExt = (extensions: ExtResource[]) => {
   let nodes;
   if (externalNodes) {
     nodes = (externalNodes as ExtensibilityNodesExt[]).flatMap(
-      ({ category, icon, children, scope, dataSources, resource }) =>
+      ({ category, icon, children, scope, dataSources }) =>
         children.map(({ label, link }: { label: string; link: string }) => {
           return createExternalNode(
             link,
@@ -75,7 +53,6 @@ const getExtensibilityNodesExt = (extensions: ExtResource[]) => {
             category,
             icon,
             scope,
-            resource,
             dataSources,
           );
         }),

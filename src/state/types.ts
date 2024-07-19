@@ -1,7 +1,4 @@
-import {
-  DataSources,
-  Resource,
-} from 'components/Extensibility/contexts/DataSources';
+import { DataSources } from 'components/Extensibility/contexts/DataSources';
 import { K8sResource } from 'types';
 
 export type Scope = 'namespace' | 'cluster';
@@ -103,13 +100,6 @@ export type ExtResource = {
   injections?: ExtInjection[];
 };
 
-export type ExtNodeResource = {
-  name: string;
-  kind: string;
-  group: string;
-  version: string;
-};
-
 export type ExtensibilityNodesExt = {
   category: string;
   scope: 'namespace' | 'cluster';
@@ -119,7 +109,6 @@ export type ExtensibilityNodesExt = {
     link: string;
   }[];
   dataSources: DataSources;
-  resource: ExtNodeResource;
 };
 
 export interface UrlOverrides {
@@ -155,7 +144,6 @@ export type NavNode = {
   createUrlFn?: (generators: UrlGenerators) => string;
   aliases?: string[];
   dataSources?: DataSources;
-  resource?: ExtNodeResource;
 };
 
 export type ClusterStorage = 'localStorage' | 'sessionStorage' | string;
