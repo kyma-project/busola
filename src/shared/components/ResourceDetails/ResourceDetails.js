@@ -345,7 +345,6 @@ function Resource({
                   setShowTitleDescription={setShowTitleDescription}
                   showTitleDescription={showTitleDescription}
                   description={description}
-                  context="details"
                 />
               )}
             </div>

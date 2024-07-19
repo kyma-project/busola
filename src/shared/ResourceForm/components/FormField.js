@@ -44,7 +44,6 @@ export function FormField({
               setShowTitleDescription={setOpenPopover}
               showTitleDescription={openPopover}
               description={tooltipContent}
-              context={props['data-testid'] ?? label}
               style={spacing.sapUiTinyMarginBegin}
             />
           )}

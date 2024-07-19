@@ -110,7 +110,6 @@ export const DynamicPageComponent = ({
               setShowTitleDescription={setShowTitleDescription}
               showTitleDescription={showTitleDescription}
               description={description}
-              context="dynamic"
             />
           )}
         </FlexBox>
