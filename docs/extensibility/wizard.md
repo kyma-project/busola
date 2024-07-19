@@ -59,7 +59,7 @@ Each step contains the following parameters:
 - **name** - _[required]_ - the name of the step displayed on the step navigation and in the step header
 - **description** - extra details about the step, shown only when the step is active
 - **resource** - _[required]_ - the identifier of the default resource for this step
-- **form** - _[required]_ - the definition of the form - this is analogous to the contents of the [_form_ section](form-section.md) of the resource extension
+- **form** - _[required]_ - the definition of the form - this is analogous to the contents of the [_form_ section](./40-form-fields.md) of the resource extension
 
 ## _defaults_ section
 
