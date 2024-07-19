@@ -1,21 +1,27 @@
 import { Button, Popover, Text } from '@ui5/webcomponents-react';
 import { createPortal } from 'react-dom';
-import { useRef, useState } from 'react';
+import React, { CSSProperties, ReactNode, useRef, useState } from 'react';
 import { uniqueId } from 'lodash';
+
+type HintButtonProps = {
+  setShowTitleDescription: React.Dispatch<React.SetStateAction<boolean>>;
+  showTitleDescription: boolean;
+  description: string | ReactNode;
+  style?: CSSProperties;
+};
 
 export function HintButton({
   setShowTitleDescription,
   showTitleDescription,
   description,
   style,
-  dataTestID = null,
-}) {
-  const [uniqueID] = useState(uniqueId('id-'));
+}: HintButtonProps) {
+  const [ID] = useState(uniqueId('id-')); //todo: migrate to useID from react after upgrade to version 18+
   const descBtnRef = useRef(null);
   return (
     <>
       <Button
-        id={`descriptionOpener-${uniqueID}`} //migrate to useID from react after upgrade to version 18+
+        id={`descriptionOpener-${ID}`}
         ref={descBtnRef}
         icon="hint"
         design="Transparent"
@@ -24,13 +30,13 @@ export function HintButton({
           e.stopPropagation();
           setShowTitleDescription(true);
         }}
-        data-testid={dataTestID}
       />
       {createPortal(
         <Popover
-          opener={`descriptionOpener-${uniqueID}`}
+          opener={`descriptionOpener-${ID}`}
           //Point initial focus to other component removes the focus from the link in description
           onAfterOpen={() => {
+            // @ts-ignore
             descBtnRef.current.focus();
           }}
           open={showTitleDescription}
