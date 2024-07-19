@@ -151,12 +151,15 @@ export default function KymaModulesAddModule(props) {
         selectedModule => selectedModule.name === module.name,
       )
     ) {
-      selectedModules[index].channel = channel;
+      if (channel === 'predefined') {
+        delete selectedModules[index].channel;
+      } else selectedModules[index].channel = channel;
     } else {
       selectedModules.push({
         name: module.name,
       });
-      selectedModules[selectedModules.length - 1].channel = channel;
+      if (channel !== 'predefined')
+        selectedModules[selectedModules.length - 1].channel = channel;
     }
 
     setKymaResource({
@@ -261,7 +264,7 @@ export default function KymaModulesAddModule(props) {
       resetLayout
       initialUnchangedResource={initialUnchangedResource}
       afterCreatedCustomMessage={t('kyma-modules.module-added')}
-      formWithoutPanel
+      // formWithoutPanel
     >
       {modulesAddData?.length !== 0 ? (
         <>
