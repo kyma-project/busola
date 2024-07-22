@@ -91,9 +91,7 @@ export default function ModulesCard({
             <Option
               selected={
                 !module.channels?.filter(
-                  channel =>
-                    channel.channel === findSpec(module.name)?.channel ||
-                    channel.channel === findStatus(module.name)?.channel,
+                  channel => channel.channel === findSpec(module.name)?.channel,
                 )
               }
               value={'predefined'}
@@ -110,10 +108,7 @@ export default function ModulesCard({
             </Option>
             {module.channels?.map(channel => (
               <Option
-                selected={
-                  channel.channel === findSpec(module.name)?.channel ||
-                  channel.channel === findStatus(module.name)?.channel
-                }
+                selected={channel.channel === findSpec(module.name)?.channel}
                 key={channel.channel}
                 value={channel.channel}
                 additionalText={channel?.isBeta ? 'Beta' : ''}
