@@ -71,6 +71,7 @@ export default function ModulesCard({
         collapsed
         headerText="Advanced"
         noAnimation
+        data-testid={`module-settings-panel-${module.name}`}
       >
         <div
           className="settings-panel__content"
