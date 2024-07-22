@@ -45,6 +45,13 @@ The **general** section is required and contains basic information about the res
     - **disableCreate** - when set to `true`, it disables the **Create** button. Defaults to `false`.
     - **disableEdit** - when set to `true`, it disables the **Edit** button. Defaults to `false`.
     - **disableDelete** - when set to `true`, it disables the **Delete** button. Defaults to `false`.
+- **externalNodes** - a optional list of links to external websites.
+  - **category** - a category name
+  - **scope** - either `namespace` or `cluster`. Defaults to `cluster`.
+  - **icon** - an optional icon
+  - **children** - a list of child nodes containing details about the links
+    - **label** - a displayed label
+    - **link** - a link to external website. A [JSONata](jsonata.md) function can be provided.
 
 ### Example
 
@@ -63,6 +70,12 @@ features:
   actions:
     disableCreate: true
     disableDelete: true
+externalNodes:
+  - category: My Category
+    icon: course-book
+    children:
+      - label: Example Node Label
+        link: 'https://github.com/kyma-project/busola' & $string($exampleResource().link)
 ```
 
 ## _form_ section
