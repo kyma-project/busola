@@ -18,6 +18,7 @@ import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
 import { useJsonata } from 'components/Extensibility/hooks/useJsonata';
 import { Resource } from 'components/Extensibility/contexts/DataSources';
+import { useEffect, useState } from 'react';
 
 type NavItemProps = {
   node: NavNode;
@@ -39,7 +40,12 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   const cluster = useRecoilValue(clusterState);
 
   const jsonata = useJsonata({ resource: {} as Resource });
-  const [jsonataLink] = jsonata(node.externalUrl || '');
+  const [jsonataLink, setJsonataLink] = useState('');
+
+  useEffect(() => {
+    const [jsonataLinkTmp] = jsonata(node.externalUrl || '');
+    setJsonataLink(jsonataLinkTmp);
+  }, [jsonata, node.externalUrl]);
 
   const isNodeSelected = (node: NavNode) => {
     if (node.externalUrl) return false;
