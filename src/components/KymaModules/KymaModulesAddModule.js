@@ -272,7 +272,7 @@ export default function KymaModulesAddModule(props) {
               hideCloseButton
               style={spacing.sapUiSmallMarginTop}
             >
-              {t('kyma-modules.beta')}
+              {t('kyma-modules.beta-alert')}
             </MessageStrip>
           ) : null}
           {renderCards()}
