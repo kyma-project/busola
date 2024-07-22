@@ -18,6 +18,7 @@ cluster-overview:
     pods-overview: 'Pods Overview'
     total-pods: 'Total Pods'
     healthy-pods: 'Healthy Pods'
+    pending-pods: 'Pending Pods'
     failing-pods: 'Failing Pods'
     deployments-overview: 'Deployments Overview'
     total-deployments: 'Total Deployments'
@@ -946,10 +947,11 @@ kubeconfig-id:
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 kyma-modules:
   installed-modules: Installed Modules
+  predefined-channel: Predefined
   modify-modules: Modify Modules
   module-added: Module added 
   module-uninstall: Module deleted
-  module-documentation: Module Documentation
+  module-documentation: Documentation
   learn-more: Learn more
   add-module: Add Modules
   modify: Modify 
@@ -965,7 +967,9 @@ kyma-modules:
   state: State
   documentation: Documentation
   no-version: No version available
-  beta: "CAUTION: The Service Level Agreements (SLAs) and Support obligations do not apply to Beta modules and functionalities. If Beta modules or functionalities directly or indirectly affect other modules, the Service Level Agreements and Support for these modules are limited to priority levels P3 (Medium) or P4 (Low). Thus, Beta releases are not intended for use in customer production environments."
+  channel-overridden: Overridden
+  beta: Beta
+  beta-alert: "CAUTION: The Service Level Agreements (SLAs) and Support obligations do not apply to Beta modules and functionalities. If Beta modules or functionalities directly or indirectly affect other modules, the Service Level Agreements and Support for these modules are limited to priority levels P3 (Medium) or P4 (Low). Thus, Beta releases are not intended for use in customer production environments."
 legal:
   copyright: Copyright
   legal-disclosure: Legal Disclosure

@@ -2,7 +2,7 @@
 
 ## Overview
 
-With Busola's extensibility feature, you can create a dedicated user interface (UI) page for your CustomResourceDefinition (CRD). It enables you to add navigation nodes, on cluster or namespace level, and to configure your [UI display](display-section.md), for example, a resource list page, and details pages. You can also [create and edit forms](form-section.md). To create a UI component, you need a ConfigMap.
+With Busola's extensibility feature, you can create a dedicated user interface (UI) page for your CustomResourceDefinition (CRD). It enables you to add navigation nodes, on cluster or namespace level, and to configure your [UI display](./30-details-summary.md), for example, a resource list page, and details pages. You can also [create and edit forms](./40-form-fields.md). To create a UI component, you need a ConfigMap.
 
 ## Create a ConfigMap for Your UI
 

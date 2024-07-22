@@ -1,23 +1,65 @@
 .gridbox-addModule {
+  --card-width: 350px;
+
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 16px;
+  grid-template-columns: repeat(auto-fill, var(--card-width));
   grid-template-rows: min-content;
+  gap: 16px;
 
   .gridbox-addModule-column {
     display: grid;
     grid-template-columns: 1fr;
+    gap: 16px;
+    max-width: var(--card-width);
     height: fit-content;
+
+    .addModuleCard {
+      --left-spacing: 45px;
+
+      .moduleCardHeader {
+        position: relative;
+        height: 62.5px;
+
+        .checkbox {
+          position: absolute;
+          top: 5px;
+          left: 7.5px;
+        }
+
+        .titles {
+          position: absolute;
+          top: 12.5px;
+          left: var(--left-spacing);
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+
+        .avatar {
+          position: absolute;
+          height: 36px;
+          top: 10.5px;
+          right: 10px;
+        }
+      }
+
+      .content {
+        margin-left: var(--left-spacing);
+      }
+    }
   }
+
   .settings-panel {
     &::part(header) {
       font-family: var(--sapFontFamily);
       font-size: var(--sapFontSize);
+      padding: 0 0.225rem;
+      gap: 2.5px;
     }
 
-    &::part(content),
-    &::part(header) {
-      padding: 0 1rem;
+    &::part(content) {
+      padding: 0 var(--left-spacing);
+      padding-bottom: 5px;
     }
 
     &__content {
@@ -33,8 +75,34 @@
   }
 }
 
-@container (max-width: 532px) {
+@container (max-width: 350px) {
   .gridbox-addModule {
-    grid-template-columns: 1fr;
+    --card-width: 300px;
+
+    .gridbox-addModule-column {
+      .addModuleCard {
+        .moduleCardHeader {
+          .avatar {
+            height: 30px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@container (max-width: 300px) {
+  .gridbox-addModule {
+    --card-width: 275px;
+
+    .avatar {
+      display: none;
+    }
+  }
+}
+
+@container (max-width: 260px) {
+  .gridbox-addModule {
+    --card-width: 230px;
   }
 }

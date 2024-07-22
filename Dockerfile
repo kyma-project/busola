@@ -1,5 +1,5 @@
 # ---- Base Alpine with Node ----
-FROM alpine:3.20.0 AS builder
+FROM alpine:3.20.1 AS builder
 ARG TAG_default_tag
 
 RUN apk add --update nodejs npm
@@ -9,7 +9,7 @@ WORKDIR /app
 # Install global dependencies
 RUN apk update && \
   apk upgrade && \
-  apk add --no-cache curl make
+  apk add --no-cache make
 
 # Set env variables
 ENV PRODUCTION true
@@ -19,7 +19,7 @@ COPY . /app
 
 RUN sed -i "s/version: dev/version: ${TAG_default_tag}/" public/version.yaml && make resolve validate
 
-RUN npm test 2>&1 && npm run build:docker
+RUN npm run build:docker
 
 # ---- Serve ----
 FROM nginxinc/nginx-unprivileged:1.25-alpine

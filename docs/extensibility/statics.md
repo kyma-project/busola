@@ -29,4 +29,4 @@ The **general** section is not required as static extensions present data that a
 
 ## _injections_ section
 
-For more information read the [widget injections overview](display-section.md#widget-injections-overview).
+For more information read the [widget injections overview](./70-widget-injection.md).
