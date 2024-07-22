@@ -85,17 +85,31 @@ export default function ModulesCard({
             value={
               findSpec(module.name)?.channel ||
               findStatus(module.name)?.channel ||
-              kymaResource?.spec?.channel
+              'predefined'
             }
             className="channel-select"
           >
+            <Option
+              selected={
+                !module.channels?.filter(
+                  channel => channel.channel === findSpec(module.name)?.channel,
+                )
+              }
+              value={'predefined'}
+            >
+              {`${t(
+                'kyma-modules.predefined-channel',
+              )} (${kymaResource?.spec?.channel[0].toUpperCase()}${kymaResource?.spec?.channel.slice(
+                1,
+              )} v${
+                module.channels?.filter(
+                  channel => channel.channel === kymaResource?.spec?.channel,
+                )[0]?.version
+              })`}
+            </Option>
             {module.channels?.map(channel => (
               <Option
-                selected={
-                  channel.channel === findSpec(module.name)?.channel ||
-                  channel.channel === findStatus(module.name)?.channel ||
-                  channel.channel === kymaResource?.spec?.channel
-                }
+                selected={channel.channel === findSpec(module.name)?.channel}
                 key={channel.channel}
                 value={channel.channel}
                 additionalText={channel?.isBeta ? 'Beta' : ''}

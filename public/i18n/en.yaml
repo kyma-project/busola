@@ -947,6 +947,7 @@ kubeconfig-id:
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 kyma-modules:
   installed-modules: Installed Modules
+  predefined-channel: Predefined
   modify-modules: Modify Modules
   module-added: Module added 
   module-uninstall: Module deleted
