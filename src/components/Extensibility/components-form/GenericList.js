@@ -28,6 +28,7 @@ export function GenericList({
   const schemaPlaceholder = schema.get('placeholder');
   const itemTemplate = schema.get('template') || {};
   const defaultOpen = schema.get('defaultExpanded') ?? false;
+  const tooltipContent = schema.get('description');
   const [newItemIndex, setNewItemIndex] = useState(0);
 
   const addItem = itemTemplate => {
@@ -55,6 +56,7 @@ export function GenericList({
   return (
     <ResourceForm.CollapsibleSection
       defaultOpen={defaultOpen}
+      tooltipContent={t(tooltipContent)}
       container
       title={tFromStoreKeys(storeKeys, schema)}
       nestingLevel={nestingLevel}

@@ -12,13 +12,14 @@ export function FormGroup({
 }) {
   const { WidgetRenderer } = widgets;
   const ownSchema = schema.delete('widget');
-  const { tFromStoreKeys } = useGetTranslation();
+  const { tFromStoreKeys, t: tExt } = useGetTranslation();
 
   const columns = schema.get('columns');
   const gridTemplateColumns = `repeat(${columns}, 1fr)`;
 
   const defaultOpen = schema.get('defaultExpanded') ?? false;
   const schemaRequired = schema.get('required') ?? required;
+  const tooltipContent = schema.get('description');
 
   return (
     <ResourceForm.CollapsibleSection
@@ -26,6 +27,7 @@ export function FormGroup({
       defaultOpen={defaultOpen}
       nestingLevel={nestingLevel}
       required={schemaRequired}
+      tooltipContent={tExt(tooltipContent)}
     >
       <div className="form-group__grid-wrapper" style={{ gridTemplateColumns }}>
         <WidgetRenderer

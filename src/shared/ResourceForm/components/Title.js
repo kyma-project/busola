@@ -37,7 +37,6 @@ export function Title({
             setShowTitleDescription={setOpenPopover}
             showTitleDescription={openPopover}
             description={tooltipContent}
-            context={title}
             style={spacing.sapUiTinyMarginBegin}
           />
         )}

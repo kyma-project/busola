@@ -19,7 +19,6 @@ export function ClusterStorageType({ clusterConfig }) {
         setShowTitleDescription={setShowDescription}
         showTitleDescription={showDescription}
         description={tooltipContent}
-        context="storage-type"
       ></HintButton>
     </div>
   );

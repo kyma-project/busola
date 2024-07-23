@@ -1,19 +1,27 @@
 import { Button, Popover, Text } from '@ui5/webcomponents-react';
 import { createPortal } from 'react-dom';
-import { useRef } from 'react';
+import React, { CSSProperties, ReactNode, useRef, useState } from 'react';
+import { uniqueId } from 'lodash';
+
+type HintButtonProps = {
+  setShowTitleDescription: React.Dispatch<React.SetStateAction<boolean>>;
+  showTitleDescription: boolean;
+  description: string | ReactNode;
+  style?: CSSProperties;
+};
 
 export function HintButton({
   setShowTitleDescription,
   showTitleDescription,
   description,
   style,
-  context,
-}) {
+}: HintButtonProps) {
+  const [ID] = useState(uniqueId('id-')); //todo: migrate to useID from react after upgrade to version 18+
   const descBtnRef = useRef(null);
   return (
     <>
       <Button
-        id={`descriptionOpener-${context}`}
+        id={`descriptionOpener-${ID}`}
         ref={descBtnRef}
         icon="hint"
         design="Transparent"
@@ -25,9 +33,10 @@ export function HintButton({
       />
       {createPortal(
         <Popover
-          opener={`descriptionOpener-${context}`}
+          opener={`descriptionOpener-${ID}`}
           //Point initial focus to other component removes the focus from the link in description
           onAfterOpen={() => {
+            // @ts-ignore
             descBtnRef.current.focus();
           }}
           open={showTitleDescription}

@@ -447,7 +447,6 @@ export function KymaModulesList(props) {
               setShowTitleDescription={setShowReleaseChannelTitleDescription}
               showTitleDescription={showReleaseChannelTitleDescription}
               description={ReleaseChannelDescription}
-              context="details-release-channel"
             />
           </FlexBox>
         </DynamicPageHeader>
@@ -468,7 +467,6 @@ export function KymaModulesList(props) {
               setShowTitleDescription={setShowTitleDescription}
               showTitleDescription={showTitleDescription}
               description={ResourceDescription}
-              context="modules"
             />
           }
         </>

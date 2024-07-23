@@ -92,7 +92,6 @@ export const Pagination = ({
           setShowTitleDescription={setShowInfo}
           showTitleDescription={showInfo}
           description={t('settings.other.info')}
-          context="pagination"
         />
       </div>
 
