@@ -118,7 +118,7 @@ export default function KymaModulesAddModule(props) {
           module.metadata.labels['operator.kyma-project.io/beta'] === 'true',
       });
     }
-    return acc;
+    return acc ?? [];
   }, []);
 
   const isChecked = name => {
