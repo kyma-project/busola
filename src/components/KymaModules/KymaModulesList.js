@@ -177,10 +177,11 @@ export function KymaModulesList(props) {
         ? kymaResource?.spec?.modules?.findIndex(kymaResourceModule => {
             return kymaResourceModule?.name === resource?.name;
           })
-        : 0;
-      const isChannelOverriden = moduleIndex
-        ? kymaResource?.spec?.modules[moduleIndex]?.channel !== undefined
-        : false;
+        : null;
+      const isChannelOverriden =
+        moduleIndex !== null
+          ? kymaResource?.spec?.modules[moduleIndex]?.channel !== undefined
+          : false;
 
       return [
         // Name
