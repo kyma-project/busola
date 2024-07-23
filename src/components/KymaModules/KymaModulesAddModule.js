@@ -92,8 +92,9 @@ export default function KymaModulesAddModule(props) {
   }
 
   const modulesAddData = modules?.items.reduce((acc, module) => {
-    const name = module.metadata.labels['operator.kyma-project.io/module-name'];
-    const existingModule = acc.find(item => item.name === name);
+    const name =
+      module?.metadata?.labels['operator.kyma-project.io/module-name'];
+    const existingModule = acc?.find(item => item.name === name);
 
     if (!existingModule) {
       acc.push({
@@ -129,17 +130,17 @@ export default function KymaModulesAddModule(props) {
 
   const setCheckbox = (module, checked, index) => {
     if (checked) {
-      selectedModules.push({
+      selectedModules?.push({
         name: module.name,
       });
     } else {
-      selectedModules.splice(index, 1);
+      selectedModules?.splice(index, 1);
     }
 
     setKymaResource({
       ...kymaResource,
       spec: {
-        ...kymaResource.spec,
+        ...kymaResource?.spec,
         modules: selectedModules,
       },
     });
