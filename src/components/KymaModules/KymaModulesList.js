@@ -178,8 +178,9 @@ export function KymaModulesList(props) {
             return kymaResourceModule?.name === resource?.name;
           })
         : 0;
-      const isChannelOverriden =
-        kymaResource?.spec?.modules[moduleIndex]?.channel !== undefined;
+      const isChannelOverriden = moduleIndex
+        ? kymaResource?.spec?.modules[moduleIndex]?.channel !== undefined
+        : false;
 
       return [
         // Name
