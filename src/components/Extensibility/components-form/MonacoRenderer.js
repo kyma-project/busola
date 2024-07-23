@@ -95,11 +95,10 @@ export function MonacoRenderer({
       required={required}
       defaultOpen={defaultOpen}
       nestingLevel={nestingLevel}
+      tooltipContent={tExt(tooltipContent)}
     >
       <div style={spacing.sapUiTinyMarginBottom}>
-        <Label required={required} tooltipContent={tExt(tooltipContent)}>
-          {tFromStoreKeys(storeKeys, schema)}
-        </Label>
+        <Label required={required}>{tFromStoreKeys(storeKeys, schema)}</Label>
       </div>
 
       <div className="bsl-col-md--11">
