@@ -118,7 +118,7 @@ export default function KymaModulesAddModule(props) {
           module.metadata.labels['operator.kyma-project.io/beta'] === 'true',
       });
     }
-    return acc;
+    return acc ?? [];
   }, []);
 
   const isChecked = name => {
@@ -159,7 +159,7 @@ export default function KymaModulesAddModule(props) {
         name: module.name,
       });
       if (channel !== 'predefined')
-        selectedModules[selectedModules.length - 1].channel = channel;
+        selectedModules[selectedModules?.length - 1].channel = channel;
     }
 
     setKymaResource({
