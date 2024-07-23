@@ -173,15 +173,14 @@ export function KymaModulesList(props) {
     const rowRenderer = resource => {
       const moduleStatus = findStatus(resource.name);
       const showDetailsLink = hasDetailsLink(resource);
-      const moduleIndex = kymaResource?.spec?.modules
-        ? kymaResource?.spec?.modules?.findIndex(kymaResourceModule => {
-            return kymaResourceModule?.name === resource?.name;
-          })
-        : null;
+      const moduleIndex = kymaResource?.spec?.modules?.findIndex(
+        kymaResourceModule => {
+          return kymaResourceModule?.name === resource?.name;
+        },
+      );
+
       const isChannelOverriden =
-        moduleIndex !== null
-          ? kymaResource?.spec?.modules[moduleIndex]?.channel !== undefined
-          : false;
+        kymaResource?.spec?.modules?.[moduleIndex]?.channel !== undefined;
 
       return [
         // Name
