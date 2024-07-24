@@ -1,6 +1,7 @@
 import { ResourceForm } from 'shared/ResourceForm';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 import './FormGroup.scss';
+import { enhanceLink } from 'shared/helpers/crd';
 
 export function FormGroup({
   schema,

@@ -7,6 +7,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 import pluralize from 'pluralize';
 import { fromJS } from 'immutable';
+import { enhanceLink } from 'shared/helpers/crd';
 
 export function GenericList({
   storeKeys,
