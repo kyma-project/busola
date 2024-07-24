@@ -45,13 +45,13 @@ The **general** section is required and contains basic information about the res
     - **disableCreate** - when set to `true`, it disables the **Create** button. Defaults to `false`.
     - **disableEdit** - when set to `true`, it disables the **Edit** button. Defaults to `false`.
     - **disableDelete** - when set to `true`, it disables the **Delete** button. Defaults to `false`.
-- **externalNodes** - a optional list of links to external websites.
+- **externalNodes** - an optional list of links to external websites.
   - **category** - a category name
   - **scope** - either `namespace` or `cluster`. Defaults to `cluster`.
-  - **icon** - an optional icon. You can find the list of available icons [here](https://sdk.openui5.org/test-resources/sap/m/demokit/iconExplorer/webapp/index.html#/overview)
+  - **icon** - an optional icon. Go to [Icon Explorer](https://sdk.openui5.org/test-resources/sap/m/demokit/iconExplorer/webapp/index.html#/overview) to find a list of the available icons.
   - **children** - a list of child nodes containing details about the links
     - **label** - a displayed label
-    - **link** - a link to external website. A [JSONata](jsonata.md) function can be provided.
+    - **link** - a link to an external website. You can provide a [JSONata](jsonata.md) function.
 
 ### Example
 
