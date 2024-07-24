@@ -952,6 +952,7 @@ kyma-modules:
   module-added: Module added 
   module-uninstall: Module deleted
   module-documentation: Documentation
+  modules-channel: Modules Channel
   learn-more: Learn more
   add-module: Add Modules
   modify: Modify 

@@ -16,5 +16,23 @@
     .yaml-form {
       height: calc(100vh - 20rem);
     }
+
+    .gridbox-editModule {
+      display: grid;
+      gap: 16px;
+    }
+
+    .channel-select {
+      width: 100%;
+    }
+
+    .collapsible-margins {
+      padding: 0;
+      padding-left: 0;
+      padding-right: 0;
+      margin-top: 1rem;
+      margin-left: -1rem;
+      margin-right: -1rem;
+    }
   }
 }
