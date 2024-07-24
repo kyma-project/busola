@@ -284,6 +284,14 @@ export default function KymaModulesAddModule(props) {
           ) : null}
           {renderCards()}
         </>
+      ) : kymaResource?.spec?.modules ? (
+        <MessageStrip
+          design="Information"
+          hideCloseButton
+          style={spacing.sapUiSmallMarginTop}
+        >
+          {t('extensibility.widgets.modules.all-modules-added')}
+        </MessageStrip>
       ) : (
         <MessageStrip
           design="Warning"
