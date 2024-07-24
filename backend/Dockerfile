@@ -1,5 +1,5 @@
 # ---- Base Alpine with Node ----
-FROM alpine:3.20.1 AS base
+FROM alpine:3.20.2 AS base
 # install node
 RUN apk add --update nodejs npm
 
