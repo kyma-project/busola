@@ -163,7 +163,7 @@ export default function KymaModulesAddModule(props) {
         name: module.name,
       });
       if (channel !== 'predefined')
-        selectedModules[selectedModules.length - 1].channel = channel;
+        selectedModules[selectedModules?.length - 1].channel = channel;
     }
 
     setKymaResource({
