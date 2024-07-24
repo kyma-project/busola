@@ -75,7 +75,13 @@ externalNodes:
     icon: course-book
     children:
       - label: Example Node Label
-        link: 'https://github.com/kyma-project/busola' & $string($exampleResource().link)
+        link: 'https://github.com/kyma-project/busola'
+  - category: My Second Category
+    icon: bar-chart
+    scope: namespace
+    children:
+      - label: Example Node Label
+        link: '$string($exampleResource().link)'
 ```
 
 ## _form_ section
