@@ -92,8 +92,8 @@ export const DataSourcesContextProvider: FC<Props> = ({
       resource: { group, kind, version, name, namespace },
       ownerLabelSelectorPath,
     } = dataSource;
-    if (typeof namespace === 'undefined' && resource.metadata) {
-      namespace = resource.metadata.namespace;
+    if (typeof namespace === 'undefined') {
+      namespace = resource?.metadata?.namespace;
     }
 
     const namespacePart = namespace ? `/namespaces/${namespace}` : '';
