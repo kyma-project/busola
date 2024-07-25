@@ -1,5 +1,5 @@
 # ---- Base Alpine with Node ----
-FROM alpine:3.20.1 AS builder
+FROM alpine:3.20.2 AS builder
 ARG TAG_default_tag
 
 RUN apk add --update nodejs npm
@@ -22,7 +22,7 @@ RUN sed -i "s/version: dev/version: ${TAG_default_tag}/" public/version.yaml && 
 RUN npm run build:docker
 
 # ---- Serve ----
-FROM nginxinc/nginx-unprivileged:1.25-alpine
+FROM nginxinc/nginx-unprivileged:1.27-alpine
 WORKDIR /app
 
 # apps
