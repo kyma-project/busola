@@ -2,7 +2,13 @@ import { cloneDeep } from 'lodash';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
-import { Label, MessageStrip, Option, Select } from '@ui5/webcomponents-react';
+import {
+  FlexBox,
+  Label,
+  MessageStrip,
+  Option,
+  Select,
+} from '@ui5/webcomponents-react';
 import { spacing } from '@ui5/webcomponents-react-base';
 
 import { ResourceForm } from 'shared/ResourceForm';
@@ -115,15 +121,19 @@ export default function KymaModulesCreate({ resource, ...props }) {
         : false;
     });
   };
-  const renderCards = () => {
-    const cards = [];
+  const renderModules = () => {
+    const modulesList = [];
     modulesEditData?.forEach((module, i) => {
       const index = selectedModules?.findIndex(selectedModule => {
         return selectedModule.name === module?.name;
       });
 
-      const card = (
-        <>
+      const mod = (
+        <FlexBox
+          direction="Column"
+          style={{ gap: '0.5rem' }}
+          key={module?.name}
+        >
           <Label>{module.name}</Label>
           <Select
             onChange={event => {
@@ -167,16 +177,12 @@ export default function KymaModulesCreate({ resource, ...props }) {
               </Option>
             ))}
           </Select>
-        </>
+        </FlexBox>
       );
-      cards.push(card);
+      modulesList.push(mod);
     });
 
-    return (
-      <div className="gridbox-editModule" style={spacing.sapUiSmallMarginTop}>
-        {cards}
-      </div>
-    );
+    return <div className="gridbox-editModule">{modulesList}</div>;
   };
 
   return (
@@ -210,7 +216,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
                 {t('kyma-modules.beta-alert')}
               </MessageStrip>
             ) : null}
-            {renderCards()}
+            {renderModules()}
           </>
         ) : (
           <MessageStrip
@@ -218,7 +224,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
             hideCloseButton
             style={spacing.sapUiSmallMarginTop}
           >
-            {t('extensibility.widgets.modules.no-modules')}
+            {t('extensibility.widgets.modules.no-modules-installed')}
           </MessageStrip>
         )}
       </ResourceForm.CollapsibleSection>

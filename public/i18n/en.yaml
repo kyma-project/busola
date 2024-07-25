@@ -793,6 +793,7 @@ extensibility:
       error: The table widget configuration is incorrect. Path value must be an array type.
     modules:
       no-modules: No modules available
+      no-modules-installed: No modules installed
       documentation: DOCUMENTATION
       module-channel-label: Module channel overwrite
       module-channel-placeholder: Uses Default Kyma Channel

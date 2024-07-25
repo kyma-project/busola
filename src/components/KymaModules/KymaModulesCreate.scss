@@ -19,7 +19,8 @@
 
     .gridbox-editModule {
       display: grid;
-      gap: 0.5rem;
+      grid-template-columns: 3fr 3fr;
+      gap: 0.5rem 1rem;
     }
 
     .channel-select {
@@ -30,7 +31,6 @@
       padding: 0;
       padding-left: 0;
       padding-right: 0;
-      margin-top: 1rem;
       margin-left: -1rem;
       margin-right: -1rem;
     }
