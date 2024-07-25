@@ -2,7 +2,7 @@ import { cloneDeep } from 'lodash';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
-import { MessageStrip, Option, Select, Text } from '@ui5/webcomponents-react';
+import { Label, MessageStrip, Option, Select } from '@ui5/webcomponents-react';
 import { spacing } from '@ui5/webcomponents-react-base';
 
 import { ResourceForm } from 'shared/ResourceForm';
@@ -124,7 +124,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
 
       const card = (
         <>
-          <Text>{module.name}</Text>
+          <Label>{module.name}</Label>
           <Select
             onChange={event => {
               setChannel(module, event.detail.selectedOption.value, index);
