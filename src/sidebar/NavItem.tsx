@@ -16,6 +16,8 @@ import { isResourceEditedState } from 'state/resourceEditedAtom';
 
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
+import { useJsonata } from 'components/Extensibility/hooks/useJsonata';
+import { Resource } from 'components/Extensibility/contexts/DataSources';
 
 type NavItemProps = {
   node: NavNode;
@@ -35,6 +37,9 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   const { scopedUrl } = urlGenerators;
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const cluster = useRecoilValue(clusterState);
+
+  const jsonata = useJsonata({ resource: {} as Resource });
+  const [jsonataLink, jsonataError] = jsonata(node.externalUrl || '');
 
   const isNodeSelected = (node: NavNode) => {
     if (node.externalUrl) return false;
@@ -56,12 +61,14 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
     selected: isNodeSelected(node),
     key: node.pathSegment,
     onClick: (e: Event) => {
-      if (node.externalUrl) {
-        const newWindow = window.open(
-          node.externalUrl,
-          '_blank',
-          'noopener, noreferrer',
-        );
+      if (node.dataSources) {
+        let link =
+          !jsonataError && jsonataLink ? jsonataLink : node.externalUrl || '';
+        link = link.startsWith('http') ? link : `https://${link}`;
+        const newWindow = window.open(link, 'noopener, noreferrer');
+        if (newWindow) newWindow.opener = null;
+      } else if (node.externalUrl) {
+        const newWindow = window.open(node.externalUrl, 'noopener, noreferrer');
         if (newWindow) newWindow.opener = null;
       } else {
         handleActionIfFormOpen(

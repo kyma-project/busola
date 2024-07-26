@@ -12,6 +12,7 @@ import { activeNamespaceIdState } from '../activeNamespaceIdAtom';
 import { configurationAtom } from '../configuration/configurationAtom';
 import { extensionsState } from './extensionsAtom';
 import { mapExtResourceToNavNode } from '../resourceList/mapExtResourceToNavNode';
+import { extensibilityNodesExtSelector } from './extensibilityNodesExtSelector';
 
 export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = selector<
   Category[]
@@ -21,6 +22,7 @@ export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = s
     const navNodes: NavNode[] = get(clusterAndNsNodesSelector);
     const activeNamespaceId = get(activeNamespaceIdState);
     const externalNodes = get(externalNodesSelector);
+    const externalNodesExt = get(extensibilityNodesExtSelector);
     const configuration = get(configurationAtom);
     const features = configuration?.features;
 
@@ -37,6 +39,9 @@ export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = s
       allNodes = mergeInExtensibilityNav(allNodes, extNavNodes);
     }
 
+    if (externalNodesExt) {
+      allNodes = allNodes.concat(externalNodesExt);
+    }
     const nodesFromCurrentScope = partial(hasCurrentScope, scope);
     const filteredNodes = allNodes.filter(nodesFromCurrentScope);
 
