@@ -21,6 +21,7 @@ export function useCreateResource({
   resource,
   initialUnchangedResource,
   createUrl,
+  skipCreateFn,
   afterCreatedFn,
   urlPath,
   layoutNumber,
@@ -130,11 +131,7 @@ export function useCreateResource({
     });
   };
 
-  return async e => {
-    if (e) {
-      e.preventDefault();
-    }
-
+  const handleCreate = async () => {
     try {
       if (isEdit) {
         const diff = createPatch(initialUnchangedResource, resource);
@@ -189,5 +186,14 @@ export function useCreateResource({
         return false;
       }
     }
+  };
+
+  return async e => {
+    if (e) {
+      e.preventDefault();
+    }
+    if (skipCreateFn && skipCreateFn()) {
+      return null;
+    } else handleCreate();
   };
 }
