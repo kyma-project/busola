@@ -8,7 +8,7 @@ In the **data.details** section you can provide configuration of four optional c
 
 ### **header**, **status**, **body** and **health** Parameters
 
-This table lists the available parameters of the **data.details.header**, **data.details.status**, **data.details.health** and/or **data.details.body** section in your resource ConfigMap. You can learn whether each of the parameters is required and what purpose it serves. The **data.details.header**, **data.details.status**, **data.details.health** and **data.details.body** components are arrays of objects.
+This table lists the available parameters of the **data.details.header**, **data.details.status**, **data.details.health** and/or **data.details.body** section in your resource ConfigMap. You can learn whether each of the parameters is required and what purpose it serves. The **data.details.header**, **data.details.health** and **data.details.body** components are arrays of objects. The **data.details.status** component is an object that accepts **header** and **details** parameters. Within **data.details.status**, the **header** component is an object, and the **details** component is an array of objects.
 
 | Parameter             | Required | Type                                        | Description                                                                                                                                                                                                                                                                                                                                                                                                      |
 | --------------------- | -------- | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -21,6 +21,13 @@ This table lists the available parameters of the **data.details.header**, **data
 
 Extra parameters might be available for specific widgets.
 
+#### Status Header
+
+The **data.details.status.header** accepts one widget (for example [Badge](./50-list-and-details-widgets.md#badge)), displayed on the right side of the **Status** section header. This widget is used to summarize the status of the resource.
+
+<img src="./assets/display-widgets/StatusBadge.png" alt="Example of a status badge widget" width="30%" style="border: 1px solid #D2D5D9">
+<br></br>
+
 See the following examples:
 
 ```yaml
@@ -31,11 +38,19 @@ details:
       widget: Badge
     - source: "$join(spec.volumes.name, ', ')"
   status:
-    - name: Replicas
-      source: status.replicas
-    - name: Condition details
-      widget: ConditionList
-      source: status.conditions
+    header:
+      - source: status.value1 & '/' & status.value2
+        widget: Badge
+        highlights:
+          positive: status.value1 = status.value2
+          critical: status.value1 != status.value2
+        description: 'Example description'
+    body:
+      - name: Replicas
+        source: status.replicas
+      - name: Condition details
+        widget: ConditionList
+        source: status.conditions
   health:
     - name: MyTitle
       widget: StatisticalCard

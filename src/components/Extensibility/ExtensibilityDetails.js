@@ -162,18 +162,16 @@ export const ExtensibilityDetailsCore = ({
           : []
       }
       statusBadge={
-        Array.isArray(statusHeader)
-          ? statusHeader.find(def => def.widget === 'Badge')
-            ? resource => (
-                <Widget
-                  value={resource}
-                  structure={statusHeader}
-                  schema={schema}
-                  dataSources={dataSources}
-                  originalResource={resource}
-                />
-              )
-            : null
+        statusHeader
+          ? resource => (
+              <Widget
+                value={resource}
+                structure={statusHeader}
+                schema={schema}
+                dataSources={dataSources}
+                originalResource={resource}
+              />
+            )
           : null
       }
       customHealthCards={
