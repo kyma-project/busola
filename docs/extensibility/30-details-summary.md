@@ -25,7 +25,7 @@ Extra parameters might be available for specific widgets.
 
 The **data.details.status.header** accepts one widget (for example [Badge](./50-list-and-details-widgets.md#badge)), displayed on the right side of the **Status** section header. This widget is used to summarize the status of the resource.
 
-<img src="./assets/display-widgets/StatusBadge.png" alt="Example of a status badge widget" width="30%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/StatusBadge.png" alt="Example of a status badge widget" width="40%" style="border: 1px solid #D2D5D9">
 <br></br>
 
 See the following examples:
