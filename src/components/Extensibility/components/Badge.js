@@ -38,7 +38,7 @@ export function Badge({
     arrayItems,
   });
 
-  const [tooltip] = jsonata(structure?.description);
+  const [tooltip, tooltipError] = jsonata(structure?.description);
 
   let type = null;
   if (structure?.highlights) {
@@ -72,8 +72,14 @@ export function Badge({
 
   return isNil(value) ? (
     emptyLeafPlaceholder
-  ) : tooltip ? (
-    <StatusBadge autoResolveType={!type} type={type} tooltipContent={tooltip}>
+  ) : structure?.description ? (
+    <StatusBadge
+      autoResolveType={!type}
+      type={type}
+      tooltipContent={
+        tooltip && !tooltipError ? tooltip : structure.description
+      }
+    >
       {tExt(value)}
     </StatusBadge>
   ) : (
