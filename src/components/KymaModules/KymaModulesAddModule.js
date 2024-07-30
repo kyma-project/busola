@@ -94,8 +94,11 @@ export default function KymaModulesAddModule(props) {
   const modulesAddData = modules?.items.reduce((acc, module) => {
     const name = module.metadata.labels['operator.kyma-project.io/module-name'];
     const existingModule = acc.find(item => item.name === name);
+    const isAlreadyInstalled = initialUnchangedResource?.spec?.modules?.find(
+      installedModule => installedModule.name === name,
+    );
 
-    if (!existingModule) {
+    if (!existingModule && !isAlreadyInstalled) {
       acc.push({
         name: name,
         channels: [
@@ -110,7 +113,7 @@ export default function KymaModulesAddModule(props) {
         docsUrl:
           module.metadata.annotations['operator.kyma-project.io/doc-url'],
       });
-    } else {
+    } else if (existingModule) {
       existingModule.channels?.push({
         channel: module.spec.channel,
         version: module.spec.descriptor.component.version,
@@ -118,6 +121,7 @@ export default function KymaModulesAddModule(props) {
           module.metadata.labels['operator.kyma-project.io/beta'] === 'true',
       });
     }
+
     return acc ?? [];
   }, []);
 
@@ -280,6 +284,14 @@ export default function KymaModulesAddModule(props) {
           ) : null}
           {renderCards()}
         </>
+      ) : kymaResource?.spec?.modules ? (
+        <MessageStrip
+          design="Information"
+          hideCloseButton
+          style={spacing.sapUiSmallMarginTop}
+        >
+          {t('extensibility.widgets.modules.all-modules-added')}
+        </MessageStrip>
       ) : (
         <MessageStrip
           design="Warning"

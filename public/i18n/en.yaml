@@ -794,6 +794,7 @@ extensibility:
     modules:
       no-modules: No modules available
       no-modules-installed: No modules installed
+      all-modules-added: You have added all the modules
       documentation: DOCUMENTATION
       module-channel-label: Module channel overwrite
       module-channel-placeholder: Uses Default Kyma Channel
