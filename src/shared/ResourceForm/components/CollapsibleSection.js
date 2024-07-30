@@ -10,6 +10,7 @@ export function CollapsibleSection({
   defaultOpen = undefined,
   canChangeState = true,
   title,
+  defaultTitleType = false,
   actions,
   children,
   resource,
@@ -68,13 +69,16 @@ export function CollapsibleSection({
           onClick={toggle}
           aria-label={`expand ${title}`}
         >
-          <Title
-            tooltipContent={tooltipContent}
-            title={title}
-            disabled={disabled}
-            canChangeState={canChangeState}
-            required={required}
-          />
+          {!defaultTitleType && (
+            <Title
+              tooltipContent={tooltipContent}
+              title={title}
+              disabled={disabled}
+              canChangeState={canChangeState}
+              required={required}
+            />
+          )}
+          {defaultTitleType && title}
           {actions && (
             <>
               <ToolbarSpacer />

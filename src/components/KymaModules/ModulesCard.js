@@ -9,6 +9,7 @@ import {
   Text,
   Title,
 } from '@ui5/webcomponents-react';
+import '@ui5/webcomponents/dist/features/InputElementsFormSupport.js';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { useTranslation } from 'react-i18next';
 import { spacing } from '@ui5/webcomponents-react-base';
