@@ -8,11 +8,12 @@ const createExternalNode = (
   label: string,
   category: string,
   icon?: string,
+  scope?: string,
 ): NavNode => ({
   resourceType: '',
   category: category,
   icon: icon,
-  namespaced: false,
+  namespaced: scope === 'namespace',
   label: label,
   pathSegment: '',
   requiredFeatures: [],
@@ -33,13 +34,15 @@ const getExternalNodes = (
       category,
       icon,
       children,
+      scope,
     }: {
       category: string;
       icon: string;
       children: NodeChild[];
+      scope?: string;
     }) =>
       children.map(({ label, link }) =>
-        createExternalNode(link, label, category, icon),
+        createExternalNode(link, label, category, icon, scope),
       ),
   );
 };

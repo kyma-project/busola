@@ -69,7 +69,8 @@ export const ExtensibilityDetailsCore = ({
 
   const header = resMetaData?.details?.header || [];
   const health = resMetaData?.details?.health || [];
-  const status = resMetaData?.details?.status || [];
+  const statusBody = resMetaData?.details?.status?.body || [];
+  const statusHeader = resMetaData?.details?.status?.header || [];
   const body = resMetaData?.details?.body || [];
   const dataSources = resMetaData?.dataSources || {};
   const general = resMetaData?.general || {};
@@ -123,8 +124,8 @@ export const ExtensibilityDetailsCore = ({
           : []
       }
       customStatusColumns={
-        Array.isArray(status)
-          ? status
+        Array.isArray(statusBody)
+          ? statusBody
               .filter(def => def.widget !== 'ConditionList')
               .map((def, i) => ({
                 header: widgetT(def),
@@ -142,8 +143,8 @@ export const ExtensibilityDetailsCore = ({
           : []
       }
       customConditionsComponents={
-        Array.isArray(status)
-          ? status
+        Array.isArray(statusBody)
+          ? statusBody
               .filter(def => def.widget === 'ConditionList')
               .map((def, i) => ({
                 header: widgetT(def),
@@ -159,6 +160,19 @@ export const ExtensibilityDetailsCore = ({
                 ),
               }))
           : []
+      }
+      statusBadge={
+        statusHeader
+          ? resource => (
+              <Widget
+                value={resource}
+                structure={statusHeader}
+                schema={schema}
+                dataSources={dataSources}
+                originalResource={resource}
+              />
+            )
+          : null
       }
       customHealthCards={
         Array.isArray(health) && health?.length > 0

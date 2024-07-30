@@ -56,7 +56,7 @@ EXTENSIBILITY:
   isEnabled: true
 ```
 
-- **EXTERNAL_NODES** - a list of links to external websites. `category`: a category name, `icon`: an optional icon, `children`: a list of pairs (label and link).
+- **EXTERNAL_NODES** - a list of links to external websites. `category`: a category name, `icon`: an optional icon, `scope`: either `namespace` or `cluster` (defaults to `cluster`), `children`: a list of pairs (label and link).
 
   Default settings:
 
@@ -67,6 +67,7 @@ EXTENSIBILITY:
     nodes:
       - category: My Category
         icon: course-book
+        scope: cluster
         children:
           - label: Example Node Label
             link: https://github.com/kyma-project/busola

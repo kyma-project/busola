@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
 import { useGetSchema } from 'hooks/useGetSchema';
 

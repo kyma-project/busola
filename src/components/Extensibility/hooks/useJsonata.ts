@@ -45,10 +45,10 @@ export function useJsonata({
   arrayItems,
 }: {
   resource: Resource;
-  parent: Resource;
-  embedResource: Resource;
-  scope: any;
-  arrayItems: any[];
+  parent?: Resource;
+  embedResource?: Resource;
+  scope?: any;
+  arrayItems?: any[];
 }): JsonataFunction {
   const { t } = useTranslation();
   const dataSourcesContext = useContext(DataSourcesContext);
