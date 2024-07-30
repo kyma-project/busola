@@ -27,6 +27,7 @@ import { spacing } from '@ui5/webcomponents-react-base';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import './KymaModulesCreate.scss';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 
 export default function KymaModulesCreate({ resource, ...props }) {
   const { t } = useTranslation();
@@ -37,7 +38,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
   const resourceName = kymaResource?.metadata.name;
   const modulesResourceUrl = `/apis/operator.kyma-project.io/v1beta2/moduletemplates`;
 
-  const { data: modules } = useGet(modulesResourceUrl, {
+  const { data: modules, loading } = useGet(modulesResourceUrl, {
     pollingInterval: 3000,
     skip: !resourceName,
   });
@@ -48,12 +49,22 @@ export default function KymaModulesCreate({ resource, ...props }) {
 
   const getRequest = useSingleGet();
   const patchRequest = useUpdate();
-  const [selectedModules] = useState(initialResource?.spec?.modules ?? []);
+  const [selectedModules] = useState(
+    cloneDeep(initialResource?.spec?.modules) ?? [],
+  );
   const [isEdited, setIsEdited] = useState(false);
   const [showMessageBox, setShowMessageBox] = useState({
     isOpen: false,
     hide: false,
   });
+
+  if (loading) {
+    return (
+      <div style={{ height: 'calc(100vh - 14rem)' }}>
+        <Spinner />
+      </div>
+    );
+  }
 
   const setChannel = (module, channel, index) => {
     if (
@@ -161,7 +172,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
           style={{ gap: '0.5rem' }}
           key={module?.name}
         >
-          <Label>{module.name}</Label>
+          <Label>{`${module.name}:`}</Label>
           <Select
             onChange={event => {
               setChannel(module, event.detail.selectedOption.value, index);
@@ -310,7 +321,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
           actions={[
             <Button
               design="Emphasized"
-              key="discard"
+              key="change"
               onClick={() => handleCreate()}
             >
               {t('kyma-modules.change')}
