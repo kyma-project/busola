@@ -18,18 +18,31 @@ import {
 } from './helpers';
 import { useJsonata } from './hooks/useJsonata';
 import CustomResource from 'resources/CustomResourceDefinitions/CustomResources.details';
+import { useEffect } from 'react';
 
 export const ExtensibilityDetailsCore = ({
   resMetaData,
   resourceName,
   layoutCloseCreateUrl,
   namespaceId,
+  isModule,
+  headerActions,
+  onMount,
+  onUnmount,
 }) => {
-  const { t, widgetT, exists } = useGetTranslation();
+  useEffect(() => {
+    onMount && onMount();
 
+    return () => {
+      onUnmount && onUnmount();
+    };
+  }, [onMount, onUnmount]);
+
+  const { t, widgetT, exists } = useGetTranslation();
   const { urlPath, resource, features, description: resourceDescription } =
     resMetaData?.general ?? {};
-  const { disableEdit, disableDelete } = features?.actions || {};
+  let { disableEdit, disableDelete } = features?.actions || {};
+  if (isModule) disableDelete = true;
 
   const { schema } = useGetSchema({
     resource,
@@ -81,6 +94,8 @@ export const ExtensibilityDetailsCore = ({
       disableEdit={disableEdit}
       disableDelete={disableDelete}
       resourceTitle={resourceTitle}
+      headerActions={headerActions}
+      isModule={isModule}
       customColumns={
         Array.isArray(header)
           ? header.map((def, i) => ({
@@ -199,11 +214,16 @@ export const ExtensibilityDetailsCore = ({
     />
   );
 };
+
 const ExtensibilityDetails = ({
   resourceName,
   resourceType,
   layoutCloseCreateUrl,
   namespaceId,
+  isModule = false,
+  headerActions,
+  onMount,
+  onUnmount,
 }) => {
   const resMetaData = useGetCRbyPath(resourceType);
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
@@ -236,6 +256,10 @@ const ExtensibilityDetails = ({
             resourceName={resourceName}
             layoutCloseCreateUrl={layoutCloseCreateUrl}
             namespaceId={namespaceId}
+            isModule={isModule}
+            headerActions={headerActions}
+            onMount={onMount}
+            onUnmount={onUnmount}
           />
         </ExtensibilityErrBoundary>
       </DataSourcesContextProvider>

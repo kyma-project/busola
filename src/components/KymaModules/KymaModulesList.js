@@ -32,14 +32,23 @@ import { useUrl } from 'hooks/useUrl';
 import pluralize from 'pluralize';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { Label } from 'shared/ResourceForm/components/Label';
-import { cloneDeep } from 'lodash';
-import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
-import { useNotification } from 'shared/contexts/NotificationContext';
-import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { ModuleStatus } from './components/ModuleStatus';
 
-export function KymaModulesList(props) {
+export default function KymaModulesList({
+  DeleteMessageBox,
+  handleResourceDelete,
+  handleModuleUninstall,
+  setKymaResourceState,
+  resourceName,
+  resourceUrl,
+  kymaResource,
+  kymaResourceLoading,
+  kymaResourcesLoading,
+  selectedModules,
+  setOpenedModuleIndex,
+  detailsOpen,
+}) {
   const { t } = useTranslation();
 
   const [showTitleDescription, setShowTitleDescription] = useState(false);
@@ -51,37 +60,18 @@ export function KymaModulesList(props) {
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
   const { clusterUrl } = useUrl();
 
-  const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
-    resourceType: t('kyma-modules.title'),
-    forceConfirmDelete: true,
-  });
-
-  const { data: kymaResources, loading: kymaResourcesLoading } = useGet(
-    '/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas',
-  );
   const { data: kymaExt } = useGetList(
     ext => ext.metadata.labels['app.kubernetes.io/part-of'] === 'Kyma',
   )('/api/v1/configmaps?labelSelector=busola.io/extension=resource', {
     pollingInterval: 5000,
   });
 
-  const resourceName =
-    kymaResources?.items.find(kymaResource => kymaResource?.status)?.metadata
-      .name || kymaResources?.items[0]?.metadata?.name;
-  const resourceUrl = `/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas/${resourceName}`;
   const namespace = 'kyma-system';
 
   const modulesResourceUrl = `/apis/operator.kyma-project.io/v1beta2/moduletemplates`;
 
   const { data: modules, loading: modulesLoading } = useGet(
     modulesResourceUrl,
-    {
-      pollingInterval: 3000,
-    },
-  );
-
-  const { data: kymaResource, loading: kymaResourceLoading } = useGet(
-    resourceUrl,
     {
       pollingInterval: 3000,
     },
@@ -252,22 +242,6 @@ export function KymaModulesList(props) {
       };
     };
 
-    const [selectedModules] = useState(kymaResource?.spec?.modules || []);
-    const [initialUnchangedResource] = useState(cloneDeep(kymaResource));
-    const [kymaResourceState, setKymaResourceState] = useState(kymaResource);
-    const notification = useNotification();
-    const handleModuleUninstall = useCreateResource({
-      singularName: 'Kyma',
-      pluralKind: 'Kymas',
-      resource: kymaResourceState,
-      initialUnchangedResource: initialUnchangedResource,
-      createUrl: resourceUrl,
-      afterCreatedFn: () =>
-        notification.notifySuccess({
-          content: t('kyma-modules.module-uninstall'),
-        }),
-    });
-
     const actions = [
       {
         name: t('common.buttons.delete'),
@@ -304,6 +278,9 @@ export function KymaModulesList(props) {
     ];
 
     const handleClickResource = (resourceName, resource) => {
+      setOpenedModuleIndex(
+        selectedModules.findIndex(entry => entry.name === resourceName),
+      );
       const isExtension = !!findExtension(resource?.resource?.kind);
       const moduleStatus = findStatus(resourceName);
       const moduleCrd = findCrd(resource?.resource?.kind);
@@ -373,24 +350,25 @@ export function KymaModulesList(props) {
 
     return (
       <>
-        {createPortal(
-          <DeleteMessageBox
-            resourceTitle={selectedModules[chosenModuleIndex]?.name}
-            deleteFn={() => {
-              selectedModules.splice(chosenModuleIndex, 1);
-              setKymaResourceState({
-                ...kymaResource,
-                spec: {
-                  ...kymaResource.spec,
-                  modules: selectedModules,
-                },
-              });
+        {!detailsOpen &&
+          createPortal(
+            <DeleteMessageBox
+              resourceTitle={selectedModules[chosenModuleIndex]?.name}
+              deleteFn={() => {
+                selectedModules.splice(chosenModuleIndex, 1);
+                setKymaResourceState({
+                  ...kymaResource,
+                  spec: {
+                    ...kymaResource.spec,
+                    modules: selectedModules,
+                  },
+                });
 
-              handleModuleUninstall();
-            }}
-          />,
-          document.body,
-        )}
+                handleModuleUninstall();
+              }}
+            />,
+            document.body,
+          )}
         <GenericList
           actions={actions}
           customRowClick={handleClickResource}
@@ -475,9 +453,6 @@ export function KymaModulesList(props) {
       createResourceForm={KymaModulesCreate}
       disableResourceDetailsCard
       disableDelete
-      {...props}
     />
   );
 }
-
-export default KymaModulesList;

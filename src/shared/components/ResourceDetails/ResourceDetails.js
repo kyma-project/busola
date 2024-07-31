@@ -232,19 +232,22 @@ function Resource({
       </Suspense>
       {headerActions}
       {resourceHeaderActions.map(resourceAction => resourceAction(resource))}
-      {!disableDelete &&
-        deleteButtonWrapper(
-          <Button
-            disabled={protectedResource}
-            onClick={() => handleResourceDelete({ resourceUrl })}
-            design="Transparent"
-          >
-            {t('common.buttons.delete')}
-          </Button>,
-        )}
-      {createPortal(
-        <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />,
-        document.body,
+      {!disableDelete && (
+        <>
+          {deleteButtonWrapper(
+            <Button
+              disabled={protectedResource}
+              onClick={() => handleResourceDelete({ resourceUrl })}
+              design="Transparent"
+            >
+              {t('common.buttons.delete')}
+            </Button>,
+          )}
+          {createPortal(
+            <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />,
+            document.body,
+          )}
+        </>
       )}
       {createPortal(<YamlUploadDialog />, document.body)}
     </>

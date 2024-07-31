@@ -1,5 +1,5 @@
-import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
-import React, { Suspense, useEffect } from 'react';
+import { Button, FlexibleColumnLayout } from '@ui5/webcomponents-react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { Route, useParams, useSearchParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
@@ -9,6 +9,12 @@ import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useUrl } from 'hooks/useUrl';
 import ExtensibilityDetails from 'components/Extensibility/ExtensibilityDetails';
 import { t } from 'i18next';
+import { createPortal } from 'react-dom';
+import { useDeleteResource } from 'shared/hooks/useDeleteResource';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
+import { cloneDeep } from 'lodash';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
 const KymaModulesList = React.lazy(() =>
   import('../../components/KymaModules/KymaModulesList'),
@@ -43,7 +49,96 @@ const ColumnWraper = (defaultColumn = 'list') => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [layout, namespace, resourceName, resourceType]);
 
+  const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
+    resourceType: t('kyma-modules.title'),
+    forceConfirmDelete: true,
+  });
+
+  const { data: kymaResources, loading: kymaResourcesLoading } = useGet(
+    '/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas',
+  );
+  const kymaResourceName =
+    kymaResources?.items.find(kymaResource => kymaResource?.status)?.metadata
+      .name || kymaResources?.items[0]?.metadata?.name;
+  const resourceUrl = `/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas/${kymaResourceName}`;
+
+  const { data: kymaResource, loading: kymaResourceLoading } = useGet(
+    resourceUrl,
+    {
+      pollingInterval: 3000,
+    },
+  );
+  const [selectedModules, setSelectedModules] = useState([]);
+  const [detailsOpen, setDetailsOpen] = useState();
+  const [openedModuleIndex, setOpenedModuleIndex] = useState();
+  useEffect(() => {
+    if (kymaResource) {
+      setSelectedModules(kymaResource?.spec?.modules || []);
+      setKymaResourceState(kymaResource);
+      setInitialUnchangedResource(cloneDeep(kymaResource));
+    }
+  }, [kymaResource]);
+
+  const [initialUnchangedResource, setInitialUnchangedResource] = useState();
+  const [kymaResourceState, setKymaResourceState] = useState();
+  const notification = useNotification();
+  const handleModuleUninstall = useCreateResource({
+    singularName: 'Kyma',
+    pluralKind: 'Kymas',
+    resource: kymaResourceState,
+    initialUnchangedResource: initialUnchangedResource,
+    createUrl: resourceUrl,
+    afterCreatedFn: () =>
+      notification.notifySuccess({
+        content: t('kyma-modules.module-uninstall'),
+      }),
+  });
+
   let startColumnComponent = null;
+
+  const headerActions = (
+    <>
+      <Button
+        onClick={() =>
+          handleResourceDelete({
+            deleteFn: () => {
+              selectedModules.splice(openedModuleIndex, 1);
+
+              setKymaResourceState({
+                ...kymaResource,
+                spec: {
+                  ...kymaResource.spec,
+                  modules: selectedModules,
+                },
+              });
+              handleModuleUninstall();
+            },
+          })
+        }
+        design="Transparent"
+      >
+        {t('common.buttons.delete-module')}
+      </Button>
+      {createPortal(
+        <DeleteMessageBox
+          resourceTitle={selectedModules[openedModuleIndex]?.name}
+          deleteFn={() => {
+            selectedModules.splice(openedModuleIndex, 1);
+            setKymaResourceState({
+              ...kymaResource,
+              spec: {
+                ...kymaResource.spec,
+                modules: selectedModules,
+              },
+            });
+
+            handleModuleUninstall();
+          }}
+        />,
+        document.body,
+      )}
+    </>
+  );
 
   if (!layout && defaultColumn === 'details') {
     startColumnComponent = (
@@ -57,10 +152,29 @@ const ColumnWraper = (defaultColumn = 'list') => {
             ? layoutState?.midColumn?.namespaceId
             : namespace
         }
+        isModule={true}
+        headerActions={headerActions}
+        onMount={() => setDetailsOpen(true)}
+        onUnmount={() => setDetailsOpen(false)}
       />
     );
   } else {
-    startColumnComponent = <KymaModulesList />;
+    startColumnComponent = (
+      <KymaModulesList
+        DeleteMessageBox={DeleteMessageBox}
+        handleResourceDelete={handleResourceDelete}
+        handleModuleUninstall={handleModuleUninstall}
+        setKymaResourceState={setKymaResourceState}
+        resourceName={kymaResourceName}
+        resourceUrl={resourceUrl}
+        kymaResource={kymaResource}
+        kymaResourceLoading={kymaResourceLoading}
+        kymaResourcesLoading={kymaResourcesLoading}
+        selectedModules={selectedModules}
+        setOpenedModuleIndex={setOpenedModuleIndex}
+        detailsOpen={detailsOpen}
+      />
+    );
   }
 
   let detailsMidColumn = null;
@@ -76,6 +190,10 @@ const ColumnWraper = (defaultColumn = 'list') => {
             ? layoutState?.midColumn?.namespaceId
             : namespace
         }
+        isModule={true}
+        headerActions={headerActions}
+        onMount={() => setDetailsOpen(true)}
+        onUnmount={() => setDetailsOpen(false)}
       />
     );
   }
