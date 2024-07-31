@@ -253,19 +253,24 @@ export function KymaModulesList(props) {
     };
 
     const [selectedModules] = useState(kymaResource?.spec?.modules || []);
-    const [initialUnchangedResource] = useState(cloneDeep(kymaResource));
+    const [initialUnchangedResource, setInitialUnchangedResource] = useState(
+      cloneDeep(kymaResource),
+    );
     const [kymaResourceState, setKymaResourceState] = useState(kymaResource);
     const notification = useNotification();
+
     const handleModuleUninstall = useCreateResource({
       singularName: 'Kyma',
       pluralKind: 'Kymas',
       resource: kymaResourceState,
       initialUnchangedResource: initialUnchangedResource,
       createUrl: resourceUrl,
-      afterCreatedFn: () =>
-        notification.notifySuccess({
+      afterCreatedFn: () => {
+        setInitialUnchangedResource(cloneDeep(kymaResource));
+        return notification.notifySuccess({
           content: t('kyma-modules.module-uninstall'),
-        }),
+        });
+      },
     });
 
     const actions = [
