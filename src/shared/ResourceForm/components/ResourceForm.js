@@ -22,9 +22,10 @@ import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { createPortal } from 'react-dom';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
+import { cloneDeep } from 'lodash';
 
 export const excludeStatus = resource => {
-  const modifiedResource = { ...resource };
+  const modifiedResource = cloneDeep(resource);
   delete modifiedResource.status;
   delete modifiedResource.metadata?.resourceVersion;
   delete modifiedResource.metadata?.managedFields;

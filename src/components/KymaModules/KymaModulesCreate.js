@@ -28,12 +28,16 @@ import { spacing } from '@ui5/webcomponents-react-base';
 import { ResourceForm } from 'shared/ResourceForm';
 import './KymaModulesCreate.scss';
 import { Spinner } from 'shared/components/Spinner/Spinner';
+import { isFormOpenState } from 'state/formOpenAtom';
+import { isResourceEditedState } from 'state/resourceEditedAtom';
 
 export default function KymaModulesCreate({ resource, ...props }) {
   const { t } = useTranslation();
   const [kymaResource, setKymaResource] = useState(cloneDeep(resource));
   const [initialResource] = useState(resource);
   const [initialUnchangedResource] = useState(cloneDeep(resource));
+  const [, setIsResourceEdited] = useRecoilState(isResourceEditedState);
+  const [, setIsFormOpen] = useRecoilState(isFormOpenState);
 
   const resourceName = kymaResource?.metadata.name;
   const modulesResourceUrl = `/apis/operator.kyma-project.io/v1beta2/moduletemplates`;
@@ -254,6 +258,14 @@ export default function KymaModulesCreate({ resource, ...props }) {
       '',
       `${scopedUrl(`kymas/${encodeURIComponent(kymaResource.metadata.name)}`)}`,
     );
+
+    setIsResourceEdited({
+      isEdited: false,
+    });
+
+    setIsFormOpen({
+      formOpen: false,
+    });
   };
   const handleCreate = async () => {
     try {
