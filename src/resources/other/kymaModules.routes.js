@@ -161,6 +161,7 @@ const ColumnWraper = (defaultColumn = 'list') => {
               },
             });
             handleModuleUninstall();
+            setInitialUnchangedResource(cloneDeep(kymaResourceState));
           }}
         />,
         document.body,
@@ -191,11 +192,13 @@ const ColumnWraper = (defaultColumn = 'list') => {
         handleResourceDelete={handleResourceDelete}
         handleModuleUninstall={handleModuleUninstall}
         setKymaResourceState={setKymaResourceState}
+        setInitialUnchangedResource={setInitialUnchangedResource}
         resourceName={kymaResourceName}
         resourceUrl={resourceUrl}
         kymaResource={kymaResource}
         kymaResourceLoading={kymaResourceLoading}
         kymaResourcesLoading={kymaResourcesLoading}
+        kymaResourceState={kymaResourceState}
         selectedModules={selectedModules}
         detailsOpen={detailsOpen}
       />

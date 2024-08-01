@@ -34,17 +34,20 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { Label } from 'shared/ResourceForm/components/Label';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { ModuleStatus } from './components/ModuleStatus';
+import { cloneDeep } from 'lodash';
 
 export default function KymaModulesList({
   DeleteMessageBox,
   handleResourceDelete,
   handleModuleUninstall,
   setKymaResourceState,
+  setInitialUnchangedResource,
   resourceName,
   resourceUrl,
   kymaResource,
   kymaResourceLoading,
   kymaResourcesLoading,
+  kymaResourceState,
   selectedModules,
   detailsOpen,
 }) {
@@ -268,6 +271,7 @@ export default function KymaModulesList({
                 },
               });
               handleModuleUninstall();
+              setInitialUnchangedResource(cloneDeep(kymaResourceState));
             },
           });
         },
@@ -358,6 +362,7 @@ export default function KymaModulesList({
                   },
                 });
                 handleModuleUninstall();
+                setInitialUnchangedResource(cloneDeep(kymaResourceState));
               }}
             />,
             document.body,
