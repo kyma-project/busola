@@ -133,7 +133,6 @@ const ColumnWraper = (defaultColumn = 'list') => {
           handleResourceDelete({
             deleteFn: () => {
               selectedModules.splice(openedModuleIndex, 1);
-
               setKymaResourceState({
                 ...kymaResource,
                 spec: {
@@ -161,7 +160,6 @@ const ColumnWraper = (defaultColumn = 'list') => {
                 modules: selectedModules,
               },
             });
-
             handleModuleUninstall();
           }}
         />,

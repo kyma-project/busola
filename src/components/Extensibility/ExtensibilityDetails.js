@@ -84,7 +84,6 @@ export const ExtensibilityDetailsCore = ({
       disableDelete={disableDelete}
       resourceTitle={resourceTitle}
       headerActions={headerActions}
-      isModule={isModule}
       customColumns={
         Array.isArray(header)
           ? header.map((def, i) => ({
@@ -220,10 +219,12 @@ const ExtensibilityDetails = ({
       <CustomResource
         params={{
           customResourceDefinitionName: resourceType,
-          resourceName: resourceName,
+          resourceName,
           resourceNamespace: namespaceId,
-          layoutCloseCreateUrl: layoutCloseCreateUrl,
+          layoutCloseCreateUrl,
           layoutNumber: 'MidColumn',
+          headerActions,
+          isModule,
         }}
       />
     );

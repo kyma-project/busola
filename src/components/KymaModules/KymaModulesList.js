@@ -256,12 +256,10 @@ export default function KymaModulesList({
           const index = selectedModules?.findIndex(kymaResourceModule => {
             return kymaResourceModule.name === resource.name;
           });
-
           setChosenModuleIndex(index);
           handleResourceDelete({
             deleteFn: () => {
               selectedModules.splice(index, 1);
-
               setKymaResourceState({
                 ...kymaResource,
                 spec: {
@@ -359,7 +357,6 @@ export default function KymaModulesList({
                     modules: selectedModules,
                   },
                 });
-
                 handleModuleUninstall();
               }}
             />,
