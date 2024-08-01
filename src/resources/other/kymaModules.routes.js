@@ -1,6 +1,6 @@
 import { Button, FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import React, { Suspense, useEffect, useState } from 'react';
-import { Route, useParams, useSearchParams } from 'react-router-dom';
+import { Route, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
@@ -24,39 +24,20 @@ const KymaModulesAddModule = React.lazy(() =>
   import('../../components/KymaModules/KymaModulesAddModule'),
 );
 
-const modules_dict = {
-  apigateways: 'api-gateway',
-  applicationconnectors: 'application-connector',
-  'btpoperators.operator.kyma-project.io': 'btp-operator',
-  'capoperators.operator.sme.sap.com': 'cap-operator',
-  'cloudresources.cloud-resources.kyma-project.io': 'cloud-manager',
-  connectivityproxies: 'connectivity-proxy',
-  'eventings.operator.kyma-project.io': 'eventing',
-  istios: 'istio',
-  kedas: 'keda',
-  nats: 'nats',
-  serverlesses: 'serverless',
-  telemetries: 'telemetry',
-  'transparentproxies.operator.kyma-project.io': 'transparent-proxy',
-};
-
 const ColumnWraper = (defaultColumn = 'list') => {
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const { clusterUrl } = useUrl();
-  const [searchParams] = useSearchParams();
-  const layout = searchParams.get('layout');
+  const layout = 'OneColumn';
   const { resourceName, resourceType, namespace } = useParams();
-  const initialLayoutState = layout
-    ? {
-        layout: layout ? layout : layoutState?.layout,
-        midColumn: {
-          resourceName: resourceName,
-          resourceType: resourceType,
-          namespaceId: namespace,
-        },
-        endColumn: null,
-      }
-    : null;
+  const initialLayoutState = {
+    layout: layout,
+    midColumn: {
+      resourceName: resourceName,
+      resourceType: resourceType,
+      namespaceId: namespace,
+    },
+    endColumn: null,
+  };
 
   useEffect(() => {
     if (layout && resourceName && resourceType) {
@@ -98,16 +79,8 @@ const ColumnWraper = (defaultColumn = 'list') => {
   useEffect(() => {
     if (layoutState?.layout) {
       setDetailsOpen(layoutState?.layout !== 'OneColumn');
-
-      const type = layoutState?.midColumn?.resourceType || resourceType;
-      if (selectedModules && type) {
-        const moduleName = modules_dict[type];
-        setOpenedModuleIndex(
-          selectedModules.findIndex(entry => entry.name === moduleName),
-        );
-      }
     }
-  }, [layoutState, selectedModules, resourceType]);
+  }, [layoutState]);
 
   const [initialUnchangedResource, setInitialUnchangedResource] = useState();
   const [kymaResourceState, setKymaResourceState] = useState();
@@ -200,6 +173,7 @@ const ColumnWraper = (defaultColumn = 'list') => {
         kymaResourcesLoading={kymaResourcesLoading}
         kymaResourceState={kymaResourceState}
         selectedModules={selectedModules}
+        setOpenedModuleIndex={setOpenedModuleIndex}
         detailsOpen={detailsOpen}
       />
     );
