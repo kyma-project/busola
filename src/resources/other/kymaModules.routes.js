@@ -24,6 +24,22 @@ const KymaModulesAddModule = React.lazy(() =>
   import('../../components/KymaModules/KymaModulesAddModule'),
 );
 
+const modules_dict = {
+  apigateways: 'api-gateway',
+  applicationconnectors: 'application-connector',
+  'btpoperators.operator.kyma-project.io': 'btp-operator',
+  'capoperators.operator.sme.sap.com': 'cap-operator',
+  'cloudresources.cloud-resources.kyma-project.io': 'cloud-manager',
+  connectivityproxies: 'connectivity-proxy',
+  'eventings.operator.kyma-project.io': 'eventing',
+  istios: 'istio',
+  kedas: 'keda',
+  nats: 'nats',
+  serverlesses: 'serverless',
+  telemetries: 'telemetry',
+  'transparentproxies.operator.kyma-project.io': 'transparent-proxy',
+};
+
 const ColumnWraper = (defaultColumn = 'list') => {
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const { clusterUrl } = useUrl();
@@ -69,7 +85,7 @@ const ColumnWraper = (defaultColumn = 'list') => {
     },
   );
   const [selectedModules, setSelectedModules] = useState([]);
-  const [detailsOpen, setDetailsOpen] = useState();
+  const [detailsOpen, setDetailsOpen] = useState(false);
   const [openedModuleIndex, setOpenedModuleIndex] = useState();
   useEffect(() => {
     if (kymaResource) {
@@ -78,6 +94,20 @@ const ColumnWraper = (defaultColumn = 'list') => {
       setInitialUnchangedResource(cloneDeep(kymaResource));
     }
   }, [kymaResource]);
+
+  useEffect(() => {
+    if (layoutState?.layout) {
+      setDetailsOpen(layoutState?.layout !== 'OneColumn');
+
+      const type = layoutState?.midColumn?.resourceType || resourceType;
+      if (selectedModules && type) {
+        const moduleName = modules_dict[type];
+        setOpenedModuleIndex(
+          selectedModules.findIndex(entry => entry.name === moduleName),
+        );
+      }
+    }
+  }, [layoutState, selectedModules, resourceType]);
 
   const [initialUnchangedResource, setInitialUnchangedResource] = useState();
   const [kymaResourceState, setKymaResourceState] = useState();
@@ -154,8 +184,6 @@ const ColumnWraper = (defaultColumn = 'list') => {
         }
         isModule={true}
         headerActions={headerActions}
-        onMount={() => setDetailsOpen(true)}
-        onUnmount={() => setDetailsOpen(false)}
       />
     );
   } else {
@@ -171,7 +199,6 @@ const ColumnWraper = (defaultColumn = 'list') => {
         kymaResourceLoading={kymaResourceLoading}
         kymaResourcesLoading={kymaResourcesLoading}
         selectedModules={selectedModules}
-        setOpenedModuleIndex={setOpenedModuleIndex}
         detailsOpen={detailsOpen}
       />
     );
@@ -192,8 +219,6 @@ const ColumnWraper = (defaultColumn = 'list') => {
         }
         isModule={true}
         headerActions={headerActions}
-        onMount={() => setDetailsOpen(true)}
-        onUnmount={() => setDetailsOpen(false)}
       />
     );
   }

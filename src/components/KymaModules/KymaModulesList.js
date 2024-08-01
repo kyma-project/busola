@@ -46,7 +46,6 @@ export default function KymaModulesList({
   kymaResourceLoading,
   kymaResourcesLoading,
   selectedModules,
-  setOpenedModuleIndex,
   detailsOpen,
 }) {
   const { t } = useTranslation();
@@ -278,9 +277,6 @@ export default function KymaModulesList({
     ];
 
     const handleClickResource = (resourceName, resource) => {
-      setOpenedModuleIndex(
-        selectedModules.findIndex(entry => entry.name === resourceName),
-      );
       const isExtension = !!findExtension(resource?.resource?.kind);
       const moduleStatus = findStatus(resourceName);
       const moduleCrd = findCrd(resource?.resource?.kind);
