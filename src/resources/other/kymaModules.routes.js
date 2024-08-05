@@ -104,24 +104,7 @@ const ColumnWraper = (defaultColumn = 'list') => {
 
   const headerActions = (
     <>
-      <Button
-        onClick={() =>
-          handleResourceDelete({
-            deleteFn: () => {
-              selectedModules.splice(openedModuleIndex, 1);
-              setKymaResourceState({
-                ...kymaResource,
-                spec: {
-                  ...kymaResource.spec,
-                  modules: selectedModules,
-                },
-              });
-              handleModuleUninstall();
-            },
-          })
-        }
-        design="Transparent"
-      >
+      <Button onClick={() => handleResourceDelete({})} design="Transparent">
         {t('common.buttons.delete-module')}
       </Button>
       {createPortal(
@@ -138,6 +121,11 @@ const ColumnWraper = (defaultColumn = 'list') => {
             });
             handleModuleUninstall();
             setInitialUnchangedResource(cloneDeep(kymaResourceState));
+            setLayoutColumn({
+              layout: 'OneColumn',
+              midColumn: null,
+              endColumn: null,
+            });
           }}
         />,
         document.body,

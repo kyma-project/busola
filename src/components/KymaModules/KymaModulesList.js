@@ -261,20 +261,7 @@ export default function KymaModulesList({
             return kymaResourceModule.name === resource.name;
           });
           setChosenModuleIndex(index);
-          handleResourceDelete({
-            deleteFn: () => {
-              selectedModules.splice(index, 1);
-              setKymaResourceState({
-                ...kymaResource,
-                spec: {
-                  ...kymaResource.spec,
-                  modules: selectedModules,
-                },
-              });
-              handleModuleUninstall();
-              setInitialUnchangedResource(cloneDeep(kymaResourceState));
-            },
-          });
+          handleResourceDelete({});
         },
       },
     ];
