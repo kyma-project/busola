@@ -1,98 +1,121 @@
 import { Trans } from 'react-i18next';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 
-// TODO: change the name to something like: insertLinksToTranslation
-export const processTranslation = text => {
-  let matches = [];
-  let result = getI18nVarLink(text);
-  matches = matches.concat(result.matches);
-  text = result.text;
+export const createTranslationTextWithLinks = (text, t, i18n) => {
+  const { processedText, components } = insert18nLinks(text);
+  if (components.length) {
+    return (
+      <Trans
+        i18nKey={processedText}
+        i18n={i18n}
+        t={t}
+        components={components}
+      />
+    );
+  } else {
+    return text;
+  }
+};
 
-  result = getMdLink(text, matches.length);
-  text = result.text;
-  matches = matches.concat(result.matches);
+export const createI18nLink = (linkText, idx) => {
+  return `<${idx}>${linkText}</${idx}>`;
+};
 
-  result = getHTMLLinks(text, matches.length);
-  matches = matches.concat(result.matches);
-  text = result.text;
+export const insert18nLinks = text => {
+  const links = extractLinks(text);
 
-  return { matches: matches ? matches : [], trans: text };
+  if (!links) {
+    return text;
+  }
+
+  let processedText = text;
+  const components = links.map((link, idx) => {
+    const i18NLink = createI18nLink(link.urlText, idx);
+    processedText = processedText.replace(link.matchedText, i18NLink);
+    return <ExternalLink url={link.url} key={idx} />;
+  });
+
+  return { processedText, components };
+};
+
+export const extractLinks = text => {
+  let processedText = text;
+  let links = [];
+
+  let result = getI18nVarLink(processedText);
+  links = links.concat(result.links);
+  processedText = result.text;
+
+  result = result = getMarkdownLinks(processedText);
+  links = links.concat(result.links);
+  processedText = result.text;
+
+  result = result = getHTMLLinks(processedText);
+  links = links.concat(result.links);
+
+  return links;
 };
 
 const getI18nVarLink = text => {
   const i18VarRegex = /{{.*?}}/g;
   let matchesIterator = text?.matchAll(i18VarRegex);
-  let matches = matchesIterator ? [...matchesIterator].flat() : null;
+  let matches = matchesIterator ? [...matchesIterator].flat() : [];
+  let links = [];
 
   if (matches?.length) {
-    matches = matches.map((link, index) => {
-      const linkReplacement = processLink(link, index);
-      text = text.replace(link, linkReplacement);
-      return link.replace('{{', '').replace('}}', '');
+    links = matches.map(link => {
+      const { links: mdLinks } = getMarkdownLinks(link);
+      console.log(mdLinks);
+      if (mdLinks?.length) {
+        const { url, urlText } = mdLinks[0];
+        text = text.replace(link, '<>');
+        return {
+          matchedText: link,
+          url,
+          urlText,
+        };
+      }
+      return {};
     });
   }
-  return { matches, text };
+  return { links, text };
 };
 
-const getMdLink = (text, globalIdx) => {
+const getMarkdownLinks = text => {
   const mdLinkRegex = /\[([^\]]*)]\(([^)]*)\)/g;
   let matchesIterator = text?.matchAll(mdLinkRegex);
-  let matches = matchesIterator ? [...matchesIterator] : null;
+  let matches = matchesIterator ? [...matchesIterator] : [];
+  let links = [];
 
   if (matches?.length) {
-    matches = matches.map((link, index) => {
-      const localIdx = index + globalIdx;
-      const linkReplacement = `<${localIdx}>${link[1]}</${localIdx}>`;
-      text = text.replace(link[0], linkReplacement);
-      return `(${link[2]})`;
+    links = matches.map(link => {
+      const url = link[2];
+      const urlText = link[1];
+      text = text.replace(link[0], '<>');
+      return {
+        matchedText: link[0],
+        url,
+        urlText,
+      };
     });
   }
-  return { matches, text };
+  return { links, text };
 };
 
-const getHTMLLinks = (text, globalIdx) => {
+const getHTMLLinks = text => {
   const httpRegex = /\bhttps?:\/\/\S*\b/g;
   let matchesIterator = text?.matchAll(httpRegex);
-  let matches = matchesIterator ? [...matchesIterator].flat() : null;
+  let matches = matchesIterator ? [...matchesIterator].flat() : [];
+  let links = [];
 
   if (matches?.length) {
-    matches = matches.map((link, index) => {
-      const idx = index + globalIdx;
-      const linkReplacement = `<${idx}>${link}</${idx}>`;
-      text = text.replace(link, linkReplacement);
-      return `(${link})`;
+    links = matches.map((link, index) => {
+      return {
+        matchedText: link,
+        url: link,
+        urlText: link,
+      };
     });
   }
-  return { matches, text };
-};
-
-export const createTranslationTextWithLinks = (text, t, i18n) => {
-  // const { t, i18n } = useGetTranslation();
-  const { matches, trans: processedTrans } = processTranslation(text);
-  if (matches.length) {
-    return (
-      <Trans
-        i18nKey={processedTrans}
-        i18n={i18n}
-        t={t}
-        components={matches.map((result, idx) => {
-          const url = result.match(/\((.*?)\)/)[1];
-
-          return <ExternalLink url={url} key={idx} />;
-        })}
-      />
-    );
-  } else {
-    return processedTrans;
-  }
-};
-
-const processLink = (link, index) => {
-  let linkText;
-  if (link.match(/\[(.*?)]/)) {
-    linkText = link.match(/\[(.*?)]/)[1];
-  } else {
-    linkText = link.match(/\((.*?)\)/)[1];
-  }
-  return `<${index}>${linkText}</${index}>`;
+  return { links, text };
 };

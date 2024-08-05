@@ -9,7 +9,7 @@ import { prettifyNamePlural } from 'shared/utils/helpers';
 import { jsonataWrapper } from './jsonataWrapper';
 import {
   createTranslationTextWithLinks,
-  processTranslation,
+  extractLinks,
 } from 'shared/helpers/linkExtractor';
 
 export const TranslationBundleContext = createContext({
@@ -179,15 +179,22 @@ export const getResourceDescAndUrl = descID => {
   let trans = descID.replace(helmBracketsRegex, '$1');
 
   if (typeof trans === 'string') {
-    const { matches, trans: processedTrans } = processTranslation(trans);
-    if (matches.length) {
+    const links = extractLinks(trans);
+    console.log(links, trans);
+
+    if (links?.length >= 1) {
+      const matchedLink = links[0];
+      const processedTrans = trans.replace(
+        matchedLink.matchedText,
+        `<0>${matchedLink.urlText}</0>`,
+      );
       return {
         description: processedTrans,
-        url: matches.map(result => result.match(/\((.*?)\)/)[1]),
+        url: matchedLink.url,
       };
     } else {
       return {
-        description: processedTrans,
+        description: trans,
         url: null,
       };
     }
