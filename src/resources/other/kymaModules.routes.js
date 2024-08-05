@@ -63,9 +63,12 @@ const ColumnWraper = (defaultColumn = 'list') => {
     resourceUrl,
     {
       pollingInterval: 3000,
+      skip: !kymaResourceName,
     },
   );
-  const [selectedModules, setSelectedModules] = useState([]);
+  const [selectedModules, setSelectedModules] = useState(
+    kymaResource?.spec?.modules ?? [],
+  );
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [openedModuleIndex, setOpenedModuleIndex] = useState();
   useEffect(() => {
@@ -206,7 +209,18 @@ const ColumnWraper = (defaultColumn = 'list') => {
       renderForm={renderProps => {
         return (
           <ErrorBoundary>
-            <KymaModulesAddModule {...renderProps} />
+            <KymaModulesAddModule
+              resourceName={kymaResourceName}
+              loadingKymaResources={kymaResourcesLoading}
+              kymaResourceUrl={resourceUrl}
+              initialKymaResource={kymaResource}
+              loading={kymaResourceLoading}
+              selectedModules={selectedModules}
+              initialUnchangedResource={initialUnchangedResource}
+              kymaResource={kymaResourceState}
+              setKymaResource={setKymaResourceState}
+              props={renderProps}
+            />
           </ErrorBoundary>
         );
       }}
