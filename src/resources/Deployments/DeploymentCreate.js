@@ -84,46 +84,49 @@ export default function DeploymentCreate({
   }
 
   return (
-    <ResourceForm
-      {...props}
-      pluralKind="deployments"
-      singularName={t(`deployments.name_singular`)}
-      resource={deployment}
-      setResource={setDeployment}
-      onChange={onChange}
-      formElementRef={formElementRef}
-      presets={!initialUnchangedResource && createPresets(namespace, t)}
-      onPresetSelected={value => {
-        setDeployment(value.deployment);
-      }}
-      // create modal on a namespace details doesn't have the resourceUrl
-      createUrl={resourceUrl}
-      initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
-      handleNameChange={handleNameChange}
-    >
-      {isIstioFeatureOn ? (
-        <ResourceForm.FormField
-          label={t('namespaces.create-modal.enable-sidecar')}
-          input={Inputs.Switch}
-          checked={isSidecarEnabled}
-          onChange={() => {
-            setSidecarEnabled(value => !value);
-            setIsChanged(true);
-          }}
-        />
-      ) : null}
-
+    <>
       {!loading ? (
-        <AdvancedContainersView
+        <ResourceForm
+          {...props}
+          pluralKind="deployments"
+          singularName={t(`deployments.name_singular`)}
           resource={deployment}
           setResource={setDeployment}
           onChange={onChange}
-          namespace={namespace}
-          createContainerTemplate={createContainerTemplate}
+          formElementRef={formElementRef}
+          presets={!initialUnchangedResource && createPresets(namespace, t)}
+          onPresetSelected={value => {
+            setDeployment(value.deployment);
+          }}
+          // create modal on a namespace details doesn't have the resourceUrl
+          createUrl={resourceUrl}
+          initialResource={initialResource}
+          initialUnchangedResource={initialUnchangedResource}
+          handleNameChange={handleNameChange}
           schema={schema}
-        />
+        >
+          {isIstioFeatureOn ? (
+            <ResourceForm.FormField
+              label={t('namespaces.create-modal.enable-sidecar')}
+              input={Inputs.Switch}
+              checked={isSidecarEnabled}
+              onChange={() => {
+                setSidecarEnabled(value => !value);
+                setIsChanged(true);
+              }}
+            />
+          ) : null}
+
+          <AdvancedContainersView
+            resource={deployment}
+            setResource={setDeployment}
+            onChange={onChange}
+            namespace={namespace}
+            createContainerTemplate={createContainerTemplate}
+            schema={schema}
+          />
+        </ResourceForm>
       ) : null}
-    </ResourceForm>
+    </>
   );
 }

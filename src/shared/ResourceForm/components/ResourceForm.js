@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import classnames from 'classnames';
 import jsyaml from 'js-yaml';
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
@@ -9,7 +9,7 @@ import { ModeSelector } from './ModeSelector';
 import { ResourceFormWrapper } from './Wrapper';
 import { Presets } from './Presets';
 import { useCreateResource } from '../useCreateResource';
-import { KeyValueField, K8sNameField } from '../fields';
+import { K8sNameField, KeyValueField } from '../fields';
 import * as jp from 'jsonpath';
 import { Form, FormItem } from '@ui5/webcomponents-react';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
@@ -23,6 +23,7 @@ import { isFormOpenState } from 'state/formOpenAtom';
 import { createPortal } from 'react-dom';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { cloneDeep } from 'lodash';
+import { getDescription } from 'shared/helpers/schema';
 
 export const excludeStatus = resource => {
   const modifiedResource = cloneDeep(resource);
@@ -70,6 +71,7 @@ export function ResourceForm({
   isEdit,
   stickyHeaderHeight,
   resetLayout,
+  schema,
   formWithoutPanel,
 }) {
   // readonly schema ID, set only once
@@ -205,6 +207,10 @@ export function ResourceForm({
     ? renderEditor({ defaultEditor: editor, Editor: EditorWrapper })
     : editor;
 
+  const nameDesc = getDescription(schema, 'metadata.name');
+  const labelsDesc = getDescription(schema, 'metadata.labels');
+  const annotationsDesc = getDescription(schema, 'metadata.annotations');
+
   const formContent = (
     <Form
       className={classnames(
@@ -240,6 +246,7 @@ export function ResourceForm({
                     kind={singularName}
                     readOnly={readOnly || !!initialUnchangedResource}
                     setValue={handleNameChange}
+                    tooltipContent={nameDesc}
                     {...nameProps}
                   />
                   <KeyValueField
@@ -247,12 +254,14 @@ export function ResourceForm({
                     title={t('common.headers.labels')}
                     style={spacing.sapUiSmallMarginTop}
                     inputInfo={t('common.tooltips.key-value')}
+                    tooltipContent={labelsDesc}
                     {...labelsProps}
                   />
                   <KeyValueField
                     propertyPath="$.metadata.annotations"
                     title={t('common.headers.annotations')}
                     inputInfo={t('common.tooltips.key-value')}
+                    tooltipContent={annotationsDesc}
                   />
                 </>
               )}
