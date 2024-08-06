@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import * as _ from 'lodash';
@@ -12,7 +12,6 @@ import {
   createDeploymentTemplate,
   createPresets,
 } from './templates';
-import { useGetSchema } from 'hooks/useGetSchema';
 
 const ISTIO_INJECTION_LABEL = 'sidecar.istio.io/inject';
 const ISTIO_INJECTION_ENABLED = 'true';
@@ -38,14 +37,6 @@ export default function DeploymentCreate({
   const [initialResource] = useState(
     initialDeployment || createDeploymentTemplate(namespace),
   );
-
-  const resourceSchemaId = useMemo(
-    () => deployment?.apiVersion + '/' + deployment?.kind,
-    [], // eslint-disable-line react-hooks/exhaustive-deps
-  );
-  const { schema, loading, error } = useGetSchema({
-    schemaId: resourceSchemaId,
-  });
 
   const {
     isIstioFeatureOn,
@@ -79,10 +70,6 @@ export default function DeploymentCreate({
     setDeployment({ ...deployment });
   };
 
-  if (error) {
-    throw error;
-  }
-
   return (
     <ResourceForm
       {...props}
@@ -114,16 +101,13 @@ export default function DeploymentCreate({
         />
       ) : null}
 
-      {!loading ? (
-        <AdvancedContainersView
-          resource={deployment}
-          setResource={setDeployment}
-          onChange={onChange}
-          namespace={namespace}
-          createContainerTemplate={createContainerTemplate}
-          schema={schema}
-        />
-      ) : null}
+      <AdvancedContainersView
+        resource={deployment}
+        setResource={setDeployment}
+        onChange={onChange}
+        namespace={namespace}
+        createContainerTemplate={createContainerTemplate}
+      />
     </ResourceForm>
   );
 }

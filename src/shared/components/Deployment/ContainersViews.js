@@ -5,7 +5,6 @@ import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSe
 import { Containers } from './Containers';
 
 import * as jp from 'jsonpath';
-import { getDescription } from 'shared/helpers/crd';
 
 export function AdvancedContainersView({
   resource,
@@ -13,20 +12,19 @@ export function AdvancedContainersView({
   onChange,
   namespace,
   createContainerTemplate,
-  schema,
 }) {
   const { t } = useTranslation();
-  const desc = getDescription(schema, 'spec.template.spec.imagePullSecrets');
-
   return (
     <ResourceForm.Wrapper resource={resource} setResource={setResource}>
       <ResourceForm.CollapsibleSection
         title={t('deployments.create-modal.image-pull-secret')}
         resource={resource}
         setResource={setResource}
-        tooltipContent={desc}
       >
         <ResourceForm.FormField
+          tooltipContent={t(
+            'deployments.create-modal.image-pull-secret-tooltip',
+          )}
           label={t('deployments.create-modal.image-pull-secret')}
           input={() => (
             <K8sResourceSelectWithUseGetList
