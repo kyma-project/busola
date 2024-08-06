@@ -1,13 +1,16 @@
 import { createContext, useContext } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { OrderedMap } from 'immutable';
 import { last, merge } from 'lodash';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { prettifyNamePlural } from 'shared/utils/helpers';
 
 import { jsonataWrapper } from './jsonataWrapper';
+import {
+  createTranslationTextWithLinks,
+  extractLinks,
+} from 'shared/helpers/linkExtractor';
 
 export const TranslationBundleContext = createContext({
   translationBundle: 'extensibility',
@@ -22,7 +25,7 @@ export const applyFormula = (value, formula, t, additionalSources) => {
   }
 };
 
-export const useGetTranslation = path => {
+export const useGetTranslation = () => {
   const { translationBundle } = useContext(TranslationBundleContext);
   const { t, i18n } = useTranslation([translationBundle]);
   //doesn't always work, add `translationBundle.` at the beginning of a path
@@ -153,30 +156,6 @@ export const getObjectValueWorkaround = (
   }
 };
 
-const processTranslation = trans => {
-  const i18VarRegex = /{{.*?}}/g;
-  const matchesIterator = trans?.matchAll(i18VarRegex);
-  const matches = matchesIterator ? [...matchesIterator].flat() : null;
-
-  if (matches?.length) {
-    matches.forEach((link, index) => {
-      const linkReplacement = processLink(link, index);
-      trans = trans.replace(link, linkReplacement);
-    });
-    return { matches: matches, trans: trans };
-  } else return { matches: [], trans: trans };
-};
-
-const processLink = (link, index) => {
-  let linkText;
-  if (link.match(/\[(.*?)]/)) {
-    linkText = link.match(/\[(.*?)]/)[1];
-  } else {
-    linkText = link.match(/\((.*?)\)/)[1];
-  }
-  return `<${index}>${linkText}</${index}>`;
-};
-
 export const useCreateResourceDescription = descID => {
   const { t, i18n } = useGetTranslation();
   if (!descID) return;
@@ -185,23 +164,7 @@ export const useCreateResourceDescription = descID => {
   const trans = t(descID.replace(helmBracketsRegex, '$1'));
 
   if (typeof trans === 'string') {
-    const { matches, trans: processedTrans } = processTranslation(trans);
-    if (matches.length) {
-      return (
-        <Trans
-          i18nKey={processedTrans}
-          i18n={i18n}
-          t={t}
-          components={matches.map((result, idx) => {
-            const url = result.match(/\((.*?)\)/)[1];
-
-            return <ExternalLink url={url} key={idx} />;
-          })}
-        />
-      );
-    } else {
-      return processedTrans;
-    }
+    return createTranslationTextWithLinks(trans, t, i18n);
   }
 };
 
@@ -216,15 +179,22 @@ export const getResourceDescAndUrl = descID => {
   let trans = descID.replace(helmBracketsRegex, '$1');
 
   if (typeof trans === 'string') {
-    const { matches, trans: processedTrans } = processTranslation(trans);
-    if (matches.length) {
+    const links = extractLinks(trans);
+    console.log(links, trans);
+
+    if (links?.length >= 1) {
+      const matchedLink = links[0];
+      const processedTrans = trans.replace(
+        matchedLink.matchedText,
+        `<0>${matchedLink.urlText}</0>`,
+      );
       return {
         description: processedTrans,
-        url: matches.map(result => result.match(/\((.*?)\)/)[1]),
+        url: matchedLink.url,
       };
     } else {
       return {
-        description: processedTrans,
+        description: trans,
         url: null,
       };
     }

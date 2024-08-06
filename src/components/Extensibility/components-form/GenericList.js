@@ -56,7 +56,7 @@ export function GenericList({
   return (
     <ResourceForm.CollapsibleSection
       defaultOpen={defaultOpen}
-      tooltipContent={t(tooltipContent)}
+      tooltipContent={tExt(tooltipContent)}
       container
       title={tFromStoreKeys(storeKeys, schema)}
       nestingLevel={nestingLevel}
