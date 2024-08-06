@@ -267,6 +267,7 @@ common:
     copy: Copy
     create: Create
     delete: Delete
+    delete-module: Delete Module
     discard: Discard
     disconnect: Disconnect
     edit: Edit

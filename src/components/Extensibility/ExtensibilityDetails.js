@@ -24,12 +24,14 @@ export const ExtensibilityDetailsCore = ({
   resourceName,
   layoutCloseCreateUrl,
   namespaceId,
+  isModule,
+  headerActions,
 }) => {
   const { t, widgetT, exists } = useGetTranslation();
-
   const { urlPath, resource, features, description: resourceDescription } =
     resMetaData?.general ?? {};
-  const { disableEdit, disableDelete } = features?.actions || {};
+  let { disableEdit, disableDelete } = features?.actions || {};
+  if (isModule) disableDelete = true;
 
   const { schema } = useGetSchema({
     resource,
@@ -81,6 +83,7 @@ export const ExtensibilityDetailsCore = ({
       disableEdit={disableEdit}
       disableDelete={disableDelete}
       resourceTitle={resourceTitle}
+      headerActions={headerActions}
       customColumns={
         Array.isArray(header)
           ? header.map((def, i) => ({
@@ -199,11 +202,14 @@ export const ExtensibilityDetailsCore = ({
     />
   );
 };
+
 const ExtensibilityDetails = ({
   resourceName,
   resourceType,
   layoutCloseCreateUrl,
   namespaceId,
+  isModule = false,
+  headerActions,
 }) => {
   const resMetaData = useGetCRbyPath(resourceType);
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
@@ -213,10 +219,12 @@ const ExtensibilityDetails = ({
       <CustomResource
         params={{
           customResourceDefinitionName: resourceType,
-          resourceName: resourceName,
+          resourceName,
           resourceNamespace: namespaceId,
-          layoutCloseCreateUrl: layoutCloseCreateUrl,
+          layoutCloseCreateUrl,
           layoutNumber: 'MidColumn',
+          headerActions,
+          isModule,
         }}
       />
     );
@@ -236,6 +244,8 @@ const ExtensibilityDetails = ({
             resourceName={resourceName}
             layoutCloseCreateUrl={layoutCloseCreateUrl}
             namespaceId={namespaceId}
+            isModule={isModule}
+            headerActions={headerActions}
           />
         </ExtensibilityErrBoundary>
       </DataSourcesContextProvider>

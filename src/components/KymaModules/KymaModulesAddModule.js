@@ -3,45 +3,31 @@ import { MessageStrip } from '@ui5/webcomponents-react';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useTranslation } from 'react-i18next';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
-import { cloneDeep } from 'lodash';
 import { ResourceForm } from 'shared/ResourceForm';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import ModulesCard from './ModulesCard';
 import './KymaModulesAddModule.scss';
 
-export default function KymaModulesAddModule(props) {
+export default function KymaModulesAddModule({
+  resourceName,
+  loadingKymaResources,
+  kymaResourceUrl,
+  initialKymaResource,
+  loading,
+  selectedModules,
+  initialUnchangedResource,
+  kymaResource,
+  setKymaResource,
+  props,
+}) {
   const { t } = useTranslation();
 
   const modulesResourceUrl = `/apis/operator.kyma-project.io/v1beta2/moduletemplates`;
-
-  const { data: kymaResources, loading: loadingKymaResources } = useGet(
-    '/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas',
-  );
-
-  const resourceName =
-    kymaResources?.items.find(kymaResource => kymaResource?.status)?.metadata
-      .name || kymaResources?.items[0]?.metadata?.name;
-  const kymaResourceUrl = `/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas/${resourceName}`;
 
   const { data: modules } = useGet(modulesResourceUrl, {
     pollingInterval: 3000,
     skip: !resourceName,
   });
-
-  const { data: initialKymaResource, loading } = useGet(kymaResourceUrl, {
-    pollingInterval: 3000,
-    skip: !resourceName,
-  });
-
-  const [kymaResource, setKymaResource] = useState(
-    cloneDeep(initialKymaResource),
-  );
-  const [initialUnchangedResource, setInitialUnchangedResource] = useState(
-    cloneDeep(initialKymaResource),
-  );
-  const [selectedModules, setSelectedModules] = useState(
-    initialKymaResource?.spec?.modules ?? [],
-  );
 
   const [columnsCount, setColumnsCount] = useState(2);
   const [cardsContainerRef, setCardsContainerRef] = useState(null);
@@ -59,13 +45,6 @@ export default function KymaModulesAddModule(props) {
     }
     return 2;
   }, [cardsContainerRef]);
-
-  useEffect(() => {
-    setInitialUnchangedResource(cloneDeep(initialKymaResource));
-    setKymaResource(cloneDeep(initialKymaResource));
-    setSelectedModules(initialKymaResource?.spec?.modules ?? []);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading]);
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver(() => {

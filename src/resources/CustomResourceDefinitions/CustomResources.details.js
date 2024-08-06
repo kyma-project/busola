@@ -15,6 +15,8 @@ export default function CustomResource({ params }) {
     resourceVersion,
     resourceName,
     resourceNamespace,
+    isModule,
+    headerActions,
   } = params;
 
   const { data, loading } = useGet(
@@ -65,6 +67,8 @@ export default function CustomResource({ params }) {
       )}
       customComponents={[yamlPreview]}
       layoutCloseCreateUrl={params.layoutCloseCreateUrl}
+      disableDelete={isModule}
+      headerActions={headerActions}
     />
   );
 }
