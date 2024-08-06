@@ -80,10 +80,7 @@ export function BusolaExtensionDetails({ name, namespace }) {
                   section: t(`extensibility.sections.${key}`),
                 })}
                 modalOpeningComponent={
-                  <Button
-                    style={spacing.sapUiTinyMarginEnd}
-                    design="Emphasized"
-                  >
+                  <Button style={spacing.sapUiTinyMarginEnd} design="Default">
                     {t('extensibility.edit-section', {
                       section: t(`extensibility.sections.${key}`),
                     })}
