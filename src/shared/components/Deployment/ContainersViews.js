@@ -5,7 +5,7 @@ import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSe
 import { Containers } from './Containers';
 
 import * as jp from 'jsonpath';
-import { enhanceLink, getDescription } from 'shared/helpers/crd';
+import { getDescription, getPartialSchema } from 'shared/helpers/schema';
 
 export function AdvancedContainersView({
   resource,
@@ -23,6 +23,11 @@ export function AdvancedContainersView({
   const containersDesc = getDescription(
     schema,
     `spec.template.spec.containers`,
+  );
+
+  const containerSchema = getPartialSchema(
+    schema,
+    'spec.template.spec.containers[]',
   );
 
   return (
@@ -85,7 +90,10 @@ export function AdvancedContainersView({
           </Button>
         )}
       >
-        <Containers propertyPath="$.spec.template.spec.containers" />
+        <Containers
+          propertyPath="$.spec.template.spec.containers"
+          containerSchema={containerSchema}
+        />
       </ResourceForm.CollapsibleSection>
     </ResourceForm.Wrapper>
   );
