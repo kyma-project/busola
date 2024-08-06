@@ -21,7 +21,6 @@ import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 import { useVersionWarning } from 'hooks/useVersionWarning';
 
-import { Tooltip } from '../Tooltip/Tooltip';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { createPortal } from 'react-dom';
 import ResourceDetailsCard from './ResourceDetailsCard';
@@ -198,20 +197,6 @@ function Resource({
   const layoutColumn = useRecoilValue(columnLayoutState);
   const protectedResource = isProtected(resource);
 
-  const deleteButtonWrapper = children => {
-    if (protectedResource) {
-      return (
-        <Tooltip
-          className="actions-tooltip"
-          content={t('common.tooltips.protected-resources-info')}
-        >
-          {children}
-        </Tooltip>
-      );
-    } else {
-      return children;
-    }
-  };
   const actions = readOnly ? null : (
     <>
       <Suspense fallback={<Spinner />}>
@@ -234,15 +219,19 @@ function Resource({
       {resourceHeaderActions.map(resourceAction => resourceAction(resource))}
       {!disableDelete && (
         <>
-          {deleteButtonWrapper(
-            <Button
-              disabled={protectedResource}
-              onClick={() => handleResourceDelete({ resourceUrl })}
-              design="Transparent"
-            >
-              {t('common.buttons.delete')}
-            </Button>,
-          )}
+          <Button
+            disabled={protectedResource}
+            onClick={() => handleResourceDelete({ resourceUrl })}
+            design="Transparent"
+            tooltip={
+              protectedResource
+                ? t('common.tooltips.protected-resources-info')
+                : null
+            }
+          >
+            {t('common.buttons.delete')}
+          </Button>
+          ,
           {createPortal(
             <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />,
             document.body,

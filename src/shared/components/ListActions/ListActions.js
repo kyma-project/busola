@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Button, Menu, MenuItem } from '@ui5/webcomponents-react';
 
 import PropTypes from 'prop-types';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 
 import './ListActions.scss';
@@ -19,7 +18,8 @@ const StandaloneAction = ({ action, entry }) => {
   if (action.component) {
     return action.component(entry);
   }
-  const actionButton = (
+
+  return (
     <Button
       data-testid={action.name.replace(' ', '').toLowerCase()}
       onClick={() => action.handler(entry)}
@@ -28,25 +28,14 @@ const StandaloneAction = ({ action, entry }) => {
       icon={typeof icon === 'function' ? icon(entry) : icon}
       aria-label={action.name}
       disabled={action.disabledHandler && action.disabledHandler(entry)}
-    >
-      {icon ? '' : action.name}
-    </Button>
-  );
-
-  return action.tooltip ? (
-    <Tooltip
-      className="actions-tooltip"
-      content={
+      tooltip={
         typeof action.tooltip === 'function'
           ? action.tooltip(entry)
           : action.tooltip
       }
     >
-      {' '}
-      {actionButton}{' '}
-    </Tooltip>
-  ) : (
-    <> {actionButton} </>
+      {icon ? '' : action.name}
+    </Button>
   );
 };
 

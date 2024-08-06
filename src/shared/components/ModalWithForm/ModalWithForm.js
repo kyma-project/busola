@@ -4,7 +4,6 @@ import { Dialog, Button, Bar } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';
 import { createPortal } from 'react-dom';
@@ -91,36 +90,6 @@ export const ModalWithForm = ({
     }
   }
 
-  function renderConfirmButton() {
-    const disabled = !isValid;
-    const button = (
-      <Button
-        disabled={disabled}
-        aria-disabled={disabled}
-        onClick={handleFormSubmit}
-        design="Emphasized"
-      >
-        {confirmText}
-      </Button>
-    );
-
-    if (invalidPopupMessage && disabled) {
-      return (
-        <Tooltip
-          content={invalidPopupMessage}
-          position="top"
-          trigger="mouseenter"
-          tippyProps={{
-            distance: 16,
-          }}
-        >
-          {button}
-        </Tooltip>
-      );
-    }
-    return button;
-  }
-
   const renderModalOpeningComponent = _ =>
     modalOpeningComponent ? (
       <div style={{ display: 'contents' }} onClick={() => setOpenStatus(true)}>
@@ -153,7 +122,15 @@ export const ModalWithForm = ({
               design="Footer"
               endContent={
                 <>
-                  {renderConfirmButton()}
+                  <Button
+                    disabled={!isValid}
+                    aria-disabled={!isValid}
+                    onClick={handleFormSubmit}
+                    design="Emphasized"
+                    tooltip={!isValid ? invalidPopupMessage : null}
+                  >
+                    {confirmText}
+                  </Button>
                   <Button
                     onClick={() => {
                       handleActionIfFormOpen(
