@@ -5,11 +5,6 @@ import { uniqueId } from 'lodash';
 import { createTranslationTextWithLinks } from '../../helpers/linkExtractor';
 import { useTranslation } from 'react-i18next'; // this regex catch 2 things, markdown URL or normal URL
 
-// this regex catch 2 things, markdown URL or normal URL
-// markdown url consists of 2 groups: [text](url)
-//source: https://github.com/kyma-incubator/milv/blob/main/pkg/parser.go#L22
-// const LinkRegexExpression = /\[([^\]]*)\]\(([^)]*)\)|\bhttps?:\/\/\S*\b/gm;
-
 type HintButtonProps = {
   setShowTitleDescription: React.Dispatch<React.SetStateAction<boolean>>;
   showTitleDescription: boolean;
