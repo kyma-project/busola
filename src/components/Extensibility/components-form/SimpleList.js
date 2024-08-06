@@ -10,7 +10,6 @@ import {
 import { ResourceForm } from 'shared/ResourceForm';
 import { Label } from '../../../shared/ResourceForm/components/Label';
 import { spacing } from '@ui5/webcomponents-react-base';
-import { enhanceLink } from 'shared/helpers/crd';
 
 export function SimpleList({
   storeKeys,

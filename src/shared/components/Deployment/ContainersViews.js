@@ -5,7 +5,7 @@ import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSe
 import { Containers } from './Containers';
 
 import * as jp from 'jsonpath';
-import { enhanceLink, getDescription } from 'shared/helpers/crd';
+import { getDescription } from 'shared/helpers/crd';
 
 export function AdvancedContainersView({
   resource,
