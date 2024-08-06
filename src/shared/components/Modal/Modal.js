@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Bar, Button, Dialog, Title } from '@ui5/webcomponents-react';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
@@ -12,6 +11,7 @@ import './Modal.scss';
 Modal.propTypes = {
   title: PropTypes.any,
   modalOpeningComponent: PropTypes.any.isRequired,
+  openerDisabled: PropTypes.bool,
   onShow: PropTypes.func,
   actions: PropTypes.any,
   onHide: PropTypes.func,
@@ -21,7 +21,6 @@ Modal.propTypes = {
   type: PropTypes.string,
   disabledConfirm: PropTypes.bool,
   waiting: PropTypes.bool,
-  tooltipData: PropTypes.object,
   className: PropTypes.string,
   headerActions: PropTypes.object,
 };
@@ -33,12 +32,14 @@ Modal.defaultProps = {
   type: 'default',
   disabledConfirm: false,
   waiting: false,
+  openerDisabled: false,
 };
 
 export function Modal({
   title,
   actions,
   modalOpeningComponent,
+  openerDisabled,
   onShow,
   onHide,
   onConfirm,
@@ -47,7 +48,6 @@ export function Modal({
   type,
   disabledConfirm,
   waiting,
-  tooltipData,
   children,
   className,
   disableAutoClose = true,
@@ -90,7 +90,7 @@ export function Modal({
       t(confirmText)
     );
 
-    const confirmButton = (
+    let output = [
       <Button
         design="Emphasized"
         onClick={handleConfirmClicked}
@@ -98,16 +98,7 @@ export function Modal({
         data-e2e-id="modal-confirmation-button"
       >
         {confirmMessage}
-      </Button>
-    );
-    let output = [
-      tooltipData ? (
-        <Tooltip {...tooltipData} minWidth={tooltipData.minWidth || '191px'}>
-          {confirmButton}
-        </Tooltip>
-      ) : (
-        confirmButton
-      ),
+      </Button>,
     ];
 
     if (cancelText) {
@@ -132,7 +123,10 @@ export function Modal({
 
   return (
     <>
-      <div style={{ display: 'contents' }} onClick={onOpen}>
+      <div
+        style={{ display: 'contents' }}
+        onClick={!openerDisabled ? onOpen : null}
+      >
         {modalOpeningComponent}
       </div>
       {createPortal(
