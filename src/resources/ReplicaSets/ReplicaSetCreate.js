@@ -29,14 +29,6 @@ export default function ReplicaSetCreate({
     initialReplicaSet || createReplicaSetTemplate(namespace),
   );
 
-  const resourceSchemaId = useMemo(
-    () => replicaset?.apiVersion + '/' + replicaset?.kind,
-    [], // eslint-disable-line react-hooks/exhaustive-deps
-  );
-  const { schema, loading, error } = useGetSchema({
-    schemaId: resourceSchemaId,
-  });
-
   useEffect(() => {
     const hasAnyContainers = !!(
       jp.value(replicaset, '$.spec.template.spec.containers') || []
@@ -44,6 +36,17 @@ export default function ReplicaSetCreate({
 
     setCustomValid(hasAnyContainers);
   }, [replicaset, setCustomValid]);
+
+  const resourceSchemaId = useMemo(
+    () => replicaset?.apiVersion + '/' + replicaset?.kind,
+    [], // eslint-disable-line react-hooks/exhaustive-deps
+  );
+  const { schema, loading, error } = useGetSchema({
+    schemaId: resourceSchemaId,
+  });
+  if (error) {
+    throw error;
+  }
 
   const handleNameChange = name => {
     jp.value(replicaset, '$.metadata.name', name);
@@ -53,9 +56,6 @@ export default function ReplicaSetCreate({
     jp.value(replicaset, '$.spec.template.metadata.labels.app', name); // pod labels
     setReplicaSet({ ...replicaset });
   };
-  if (error) {
-    throw error;
-  }
 
   return (
     <>
