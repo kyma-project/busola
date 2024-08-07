@@ -1,5 +1,5 @@
-import { MessageStrip } from '@ui5/webcomponents-react';
-import { createContext, useContext, useState } from 'react';
+import { Toast, ToastDomRef } from '@ui5/webcomponents-react';
+import { createContext, useContext, useRef, useState } from 'react';
 import {
   ErrorModal,
   ErrorModalProps,
@@ -23,28 +23,23 @@ type NotificationContextArgs = {
 
 export const NotificationContext = createContext<NotificationContextArgs>({
   isOpen: false,
-  notifySuccess: props => {},
-  notifyError: props => {},
+  notifySuccess: () => {},
+  notifyError: () => {},
 });
 
 export const NotificationProvider = ({
   children,
-  defaultVisibilityTime = 5000,
+  defaultVisibilityTime = 3000,
 }: NotificationContextProps) => {
   const [toastProps, setToastProps] = useState<ToastProps | null>();
   const [errorProps, setErrorProps] = useState<ErrorModalProps | null>();
 
+  const toast = useRef<ToastDomRef | null>(null);
+
   const methods = {
-    notifySuccess: function(
-      notificationProps: ToastProps,
-      visibilityTime: number = defaultVisibilityTime,
-    ) {
-      if (visibilityTime !== 0) {
-        setTimeout(() => {
-          setToastProps(null);
-        }, visibilityTime);
-      }
+    notifySuccess: function(notificationProps: ToastProps) {
       setToastProps(notificationProps);
+      toast.current?.show();
     },
     notifyError: function(notificationProps: Omit<ErrorModalProps, 'close'>) {
       setErrorProps({
@@ -61,16 +56,9 @@ export const NotificationProvider = ({
         ...methods,
       }}
     >
-      {toastProps && (
-        <div
-          className="message-toast--wrapper"
-          onClick={() => setToastProps(null)}
-        >
-          <MessageStrip hideIcon hideCloseButton>
-            {toastProps.content}
-          </MessageStrip>
-        </div>
-      )}
+      <Toast ref={toast} duration={defaultVisibilityTime}>
+        {toastProps?.content}
+      </Toast>
       {errorProps &&
         createPortal(<ErrorModal {...errorProps} />, document.body)}
       {children}
