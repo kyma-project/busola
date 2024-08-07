@@ -69,7 +69,7 @@ describe('get description from schema', () => {
     const desc = getDescription(partialSchema, 'nfs.server');
 
     //THEN
-    expect(desc).toEqual('Description not found');
+    expect(desc).toBeNull();
   });
 
   it('Not existing description', () => {
@@ -80,6 +80,6 @@ describe('get description from schema', () => {
     );
 
     //THEN
-    expect(desc).toEqual('Description not found');
+    expect(desc).toBeNull();
   });
 });
