@@ -19,7 +19,7 @@ export function getDescription(schema: any, path: string): string {
   if (!arrayDesc && !objDesc) {
     return 'Description not found';
   }
-  return objDesc + (arrayDesc ? ' ' + arrayDesc : '');
+  return objDesc.concat(arrayDesc ? ' ' + arrayDesc : '');
 }
 
 export function getPartialSchema(schema: any, path: string): string {
