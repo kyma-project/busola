@@ -189,8 +189,6 @@ Cypress.Commands.add(
       cy.contains('ui5-link', resourceName).should('be.visible');
     }
 
-    cy.contains('ui5-message-strip', /created/).should('not.exist');
-
     cy.get('ui5-button[data-testid="delete"]').click();
 
     if (confirmationEnabled) {
@@ -201,7 +199,7 @@ Cypress.Commands.add(
         .click();
 
       if (deletedVisible) {
-        cy.contains('ui5-message-strip', /deleted/).should('be.visible');
+        cy.contains('ui5-toast', /deleted/).should('be.visible');
       }
 
       if (clearSearch) {
