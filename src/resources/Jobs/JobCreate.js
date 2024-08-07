@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 
@@ -6,10 +6,11 @@ import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 
-import { createJobTemplate, createJobPresets } from './templates';
+import { createJobPresets, createJobTemplate } from './templates';
 import { JobSpecSection } from './SpecSection';
 import { ContainersSection } from './ContainersSection';
 import { MessageStrip } from '@ui5/webcomponents-react';
+import { useGetSchema } from 'hooks/useGetSchema';
 
 function isJobValid(job = {}) {
   const isNameValid = jp.value(job, '$.metadata.name');
@@ -51,34 +52,50 @@ export default function JobCreate({
     setCustomValid(isJobValid(job));
   }, [job, setCustomValid]);
 
+  const resourceSchemaId = useMemo(
+    () => job?.apiVersion + '/' + job?.kind,
+    [], // eslint-disable-line react-hooks/exhaustive-deps
+  );
+  const { schema, loading, error } = useGetSchema({
+    schemaId: resourceSchemaId,
+  });
+  if (error) {
+    throw error;
+  }
+
   return (
-    <ResourceForm
-      {...props}
-      pluralKind="jobs"
-      singularName={t(`jobs.name_singular`)}
-      resource={job}
-      setResource={setJob}
-      initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
-      onChange={onChange}
-      formElementRef={formElementRef}
-      presets={
-        !initialUnchangedResource &&
-        createJobPresets(namespace, t, defaultSidecarAnnotations)
-      }
-      createUrl={resourceUrl}
-    >
-      <JobSpecSection
-        propertyPath="$.spec"
-        readOnly={!!initialUnchangedResource}
-      />
-      <ContainersSection
-        propertyPath="$.spec.template.spec.containers"
-        readOnly={!!initialUnchangedResource}
-      />
-      <MessageStrip design="Information" hideCloseButton>
-        {t('jobs.create-modal.containers-readonly-in-edit')}
-      </MessageStrip>
-    </ResourceForm>
+    <>
+      {!loading ? (
+        <ResourceForm
+          {...props}
+          pluralKind="jobs"
+          singularName={t(`jobs.name_singular`)}
+          resource={job}
+          setResource={setJob}
+          initialResource={initialResource}
+          initialUnchangedResource={initialUnchangedResource}
+          onChange={onChange}
+          formElementRef={formElementRef}
+          presets={
+            !initialUnchangedResource &&
+            createJobPresets(namespace, t, defaultSidecarAnnotations)
+          }
+          createUrl={resourceUrl}
+          schema={schema}
+        >
+          <JobSpecSection
+            propertyPath="$.spec"
+            readOnly={!!initialUnchangedResource}
+          />
+          <ContainersSection
+            propertyPath="$.spec.template.spec.containers"
+            readOnly={!!initialUnchangedResource}
+          />
+          <MessageStrip design="Information" hideCloseButton>
+            {t('jobs.create-modal.containers-readonly-in-edit')}
+          </MessageStrip>
+        </ResourceForm>
+      ) : null}
+    </>
   );
 }
