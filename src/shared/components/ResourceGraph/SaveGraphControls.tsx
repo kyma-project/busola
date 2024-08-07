@@ -1,5 +1,5 @@
 import { saveAs } from 'file-saver';
-import { Button, Icon } from '@ui5/webcomponents-react';
+import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
 export function SaveGraphControls({
@@ -13,6 +13,7 @@ export function SaveGraphControls({
   return (
     <Button
       className="controls"
+      icon="download"
       onClick={() => {
         const blob = new Blob([content], {
           type: 'text/vnd.graphviz',
@@ -20,7 +21,6 @@ export function SaveGraphControls({
         saveAs(blob, name);
       }}
     >
-      <Icon aria-label="download" name="download" />
       {t('resource-graph.save-as-dot')}
     </Button>
   );
