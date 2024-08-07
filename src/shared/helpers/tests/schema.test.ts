@@ -1,8 +1,6 @@
 import schema from 'shared/helpers/tests/fixtures/deployment-schema.json';
 import { getDescription, getPartialSchema } from 'shared/helpers/schema';
 
-export {};
-
 describe('get description from schema', () => {
   it('Get description using full path', () => {
     //WHEN
