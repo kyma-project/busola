@@ -4,7 +4,7 @@
  * @param schema json schema of k8s resource
  * @param path path to desired field. kubectl explain format is accepted
  */
-export function getDescription(schema: any, path: string): string {
+export function getDescription(schema: any, path: string): string | null {
   let contextSchema = schema;
   path.split('.').forEach(pathItem => {
     //Check if it's array as it has fields under `items`
@@ -17,7 +17,7 @@ export function getDescription(schema: any, path: string): string {
     ? contextSchema.items.description
     : '';
   if (!arrayDesc && !objDesc) {
-    return 'Description not found';
+    return null;
   }
   return objDesc.concat(arrayDesc ? ' ' + arrayDesc : '');
 }
