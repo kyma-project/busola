@@ -77,9 +77,14 @@ export function KeyValuePairRenderer({
   required,
   resource,
   nestingLevel = 0,
+  editMode,
+  ...props
 }) {
   // TODO the value obtained by ui-schema is undefined for this component
   value = getObjectValueWorkaround(schema, resource, storeKeys, value);
+
+  const disableOnEdit = schema.get('disableOnEdit') || false;
+  const disabledKeys = disableOnEdit ? value.keySeq().toArray() : [];
 
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
   const { t } = useTranslation();
@@ -123,6 +128,8 @@ export function KeyValuePairRenderer({
       title={titleTranslation}
       initialValue={valueInfo.type === 'object' ? {} : ''}
       defaultOpen={schema.get('defaultExpanded') ?? false}
+      lockedKeys={disabledKeys}
+      lockedValues={disabledKeys}
       {...getPropsFromSchema(schema, required, tExt)}
     />
   );
