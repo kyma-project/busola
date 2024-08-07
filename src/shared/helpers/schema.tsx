@@ -12,7 +12,7 @@ export function getDescription(schema: any, path: string): string {
     contextSchema = contextSchema?.properties?.[pathItem];
   });
 
-  const objDesc = contextSchema?.description ? contextSchema.description : '';
+  const objDesc = contextSchema?.description;
   const arrayDesc = contextSchema?.items?.description
     ? contextSchema.items.description
     : '';
