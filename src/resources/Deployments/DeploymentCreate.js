@@ -39,14 +39,6 @@ export default function DeploymentCreate({
     initialDeployment || createDeploymentTemplate(namespace),
   );
 
-  const resourceSchemaId = useMemo(
-    () => deployment?.apiVersion + '/' + deployment?.kind,
-    [], // eslint-disable-line react-hooks/exhaustive-deps
-  );
-  const { schema, loading, error } = useGetSchema({
-    schemaId: resourceSchemaId,
-  });
-
   const {
     isIstioFeatureOn,
     isSidecarEnabled,
@@ -70,6 +62,17 @@ export default function DeploymentCreate({
     setCustomValid(hasAnyContainers);
   }, [deployment, setCustomValid]);
 
+  const resourceSchemaId = useMemo(
+    () => deployment?.apiVersion + '/' + deployment?.kind,
+    [], // eslint-disable-line react-hooks/exhaustive-deps
+  );
+  const { schema, loading, error } = useGetSchema({
+    schemaId: resourceSchemaId,
+  });
+  if (error) {
+    throw error;
+  }
+
   const handleNameChange = name => {
     jp.value(deployment, '$.metadata.name', name);
     jp.value(deployment, "$.metadata.labels['app.kubernetes.io/name']", name);
@@ -78,10 +81,6 @@ export default function DeploymentCreate({
     jp.value(deployment, '$.spec.template.metadata.labels.app', name); // pod labels
     setDeployment({ ...deployment });
   };
-
-  if (error) {
-    throw error;
-  }
 
   return (
     <>

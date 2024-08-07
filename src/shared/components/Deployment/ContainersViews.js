@@ -27,7 +27,7 @@ export function AdvancedContainersView({
 
   const containerSchema = getPartialSchema(
     schema,
-    'spec.template.spec.containers[]',
+    'spec.template.spec.containers',
   );
 
   return (
