@@ -68,7 +68,10 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
         const newWindow = window.open(link, 'noopener, noreferrer');
         if (newWindow) newWindow.opener = null;
       } else if (node.externalUrl) {
-        const newWindow = window.open(node.externalUrl, 'noopener, noreferrer');
+        const link = node.externalUrl.startsWith('http')
+          ? node.externalUrl
+          : `https://${node.externalUrl}`;
+        const newWindow = window.open(link, 'noopener, noreferrer');
         if (newWindow) newWindow.opener = null;
       } else {
         handleActionIfFormOpen(
