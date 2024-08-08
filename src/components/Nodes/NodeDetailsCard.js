@@ -33,10 +33,10 @@ export function NodeDetailsCard({ node, loading, error }) {
               <DynamicPageComponent.Column
                 title={t('node-details.internal-ip')}
               >
-                {internalIP.address}
+                {internalIP?.address ?? EMPTY_TEXT_PLACEHOLDER}
               </DynamicPageComponent.Column>
               <DynamicPageComponent.Column title={t('common.labels.hostname')}>
-                {hostname.address}
+                {hostname?.address ?? EMPTY_TEXT_PLACEHOLDER}
               </DynamicPageComponent.Column>
               <DynamicPageComponent.Column title={t('common.headers.region')}>
                 {region ?? EMPTY_TEXT_PLACEHOLDER}
