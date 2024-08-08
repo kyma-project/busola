@@ -24,7 +24,7 @@ export function getDescription(schema: any, path: string): string | null {
   return objDesc.concat(arrayDesc ? ' ' + arrayDesc : '');
 }
 
-export function getPartialSchema(schema: any, path: string): string {
+export function getPartialSchema(schema: any, path: string): object {
   let contextSchema = schema;
 
   path.split('.').forEach(pathItem => {
