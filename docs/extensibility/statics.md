@@ -29,13 +29,13 @@ The **general** section is not required as static extensions present data that a
 
 ### _externalNodes_
 
-The **externalNodes** parameter allows you to define optional links to external websites, which will appear in the navigation menu.
+The **externalNodes** parameter allows you to define optional links to external websites that appear in the navigation menu.
 
 - **externalNodes** - an optional list of links to external websites.
-  - **category** - a category name
+  - **category** - a category name.
   - **scope** - either `namespace` or `cluster`. Defaults to `cluster`.
-  - **icon** - an optional icon. Go to [Icon Explorer](https://sdk.openui5.org/test-resources/sap/m/demokit/iconExplorer/webapp/index.html#/overview) to find a list of the available icons.
-  - **children** - a list of child nodes containing details about the links
+  - **icon** - an optional icon. Go to [Icon Explorer](https://sdk.openui5.org/test-resources/sap/m/demokit/iconExplorer/webapp/index.html#/overview) to find the list of the available icons.
+  - **children** - a list of child Nodes containing details about the links.
     - **label** - a displayed label
     - **link** - a link to an external website. You can provide a [JSONata](jsonata.md) function.
 
@@ -53,4 +53,4 @@ general:
 
 ## _injections_ section
 
-For more information read the [widget injections overview](./70-widget-injection.md).
+For more information, read the [widget injections overview](./70-widget-injection.md).
