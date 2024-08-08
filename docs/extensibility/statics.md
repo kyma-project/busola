@@ -27,6 +27,30 @@ The version is a string value that defines in which version the extension is con
 
 The **general** section is not required as static extensions present data that are not connected to any resource. Instead, they may use information from the page they are displayed on via variable `$embedResource`.
 
+### _externalNodes_
+
+The **externalNodes** parameter allows you to define optional links to external websites that appear in the navigation menu.
+
+- **externalNodes** - an optional list of links to external websites.
+  - **category** - a category name.
+  - **scope** - either `namespace` or `cluster`. Defaults to `cluster`.
+  - **icon** - an optional icon. Go to [Icon Explorer](https://sdk.openui5.org/test-resources/sap/m/demokit/iconExplorer/webapp/index.html#/overview) to find the list of the available icons.
+  - **children** - a list of child Nodes containing details about the links.
+    - **label** - a displayed label
+    - **link** - a link to an external website. You can provide a [JSONata](jsonata.md) function.
+
+### Example
+
+```yaml
+general:
+  externalNodes:
+    - category: My Category
+      icon: course-book
+      children:
+        - label: Example Node Label
+          link: 'https://github.com/kyma-project/busola'
+```
+
 ## _injections_ section
 
-For more information read the [widget injections overview](./70-widget-injection.md).
+For more information, read the [widget injections overview](./70-widget-injection.md).
