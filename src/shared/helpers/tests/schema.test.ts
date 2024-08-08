@@ -4,60 +4,43 @@ import { getDescription, getPartialSchema } from 'shared/helpers/schema';
 describe('get description from schema', () => {
   it('Get description using full path', () => {
     //WHEN
-    const desc = getDescription(schema, 'spec.strategy');
+    const desc = getDescription(schema, 'spec.description');
 
-    expect(desc).toEqual(
-      'DeploymentStrategy describes how to replace existing pods with new ones.',
-    );
+    expect(desc).toEqual('Order description');
   });
 
   it('Get description using full path with array object', () => {
     //WHEN
-    const desc = getDescription(schema, 'spec.template.spec.containers');
+    const desc = getDescription(schema, 'spec.pizzas');
 
     expect(desc).toEqual(
-      'List of containers belonging to the pod. Containers cannot currently be added or removed. ' +
-        'There must be at least one container in a Pod. ' +
-        'Cannot be updated. ' +
-        'A single application container that you want to run within a pod.',
+      'Ordered pizzas. ' + 'A single pizza definition you want to order.',
     );
   });
 
   it('Get description using full path with array object in path', () => {
     //WHEN
-    const desc = getDescription(schema, 'spec.template.spec.containers.tty');
+    const desc = getDescription(schema, 'spec.pizzas.name');
 
-    expect(desc).toEqual(
-      "Whether this container should allocate a TTY for itself, also requires 'stdin' to be true. " +
-        'Default is false.',
-    );
+    expect(desc).toEqual('Name of the ordered pizza.');
   });
 
   it('Get description using partial schema', () => {
     //WHEN
-    const partialSchema = getPartialSchema(schema, 'metadata');
-    const desc = getDescription(partialSchema, 'generation');
+    const partialSchema = getPartialSchema(schema, 'spec');
+    const desc = getDescription(partialSchema, 'orderDetails');
 
     //THEN
-    expect(desc).toEqual(
-      'A sequence number representing a specific generation of the desired state. ' +
-        'Populated by the system. Read-only.',
-    );
+    expect(desc).toEqual('The details of the order');
   });
 
   it('Get description using partial schema with array object in path', () => {
     //WHEN
-    const partialSchema = getPartialSchema(
-      schema,
-      'spec.template.spec.volumes',
-    );
-    const desc = getDescription(partialSchema, 'nfs.server');
+    const partialSchema = getPartialSchema(schema, 'spec.pizzas');
+    const desc = getDescription(partialSchema, 'namespace');
 
     //THEN
-    expect(desc).toEqual(
-      'server is the hostname or IP address of the NFS server. ' +
-        'More info: https://kubernetes.io/docs/concepts/storage/volumes#nfs',
-    );
+    expect(desc).toEqual('Namespace of the ordered pizza.');
   });
 
   it('Not existing description using partial schema', () => {
