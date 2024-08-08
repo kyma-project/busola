@@ -14,7 +14,7 @@ describe('get description from schema', () => {
     const desc = getDescription(schema, 'spec.pizzas');
 
     expect(desc).toEqual(
-      'Ordered pizzas. ' + 'A single pizza definition you want to order.',
+      'Ordered pizzas. A single pizza definition you want to order.',
     );
   });
 
