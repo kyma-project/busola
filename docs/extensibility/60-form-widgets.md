@@ -37,6 +37,7 @@ These are the available `Text` widget parameters:
 | **readOnly**          | No       | boolean             | Specifies if a field is read-only. Defaults to `false`.                                                                                                                                                              |
 | **decodable**         | No       | boolean             | Specifies that the field is base64-encoded and can be decoded in the UI. It can't be used together with **enum**.                                                                                                    |
 | **decodedPlacehoder** | No       | string              | An optional alternative placeholder to use when the field is decoded.                                                                                                                                                |
+| **disableOnEdit**     | No       | boolean             | Disables a field in edit mode, defaults to `false`. Ignored if **readOnly** is set to `true`.                                                                                                                        |
 
 See the following examples:
 
