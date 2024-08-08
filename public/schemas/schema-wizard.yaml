@@ -24,24 +24,23 @@ properties:
       resources:
         type: object
         properties:
-          OBJECT_NAME IDK WHAT TO PASTE HERE: # TO DO
-            type: object
-            required:
-              - kind
-              - version
-            properties:
-              kind:
-                type: string
-                description: Kubernetes kind of the resource.
-              group:
-                type: string
-                description: API group used for all requests. Not provided for Kubernetes resources in the core (also called legacy) group.
-              version:
-                type: string
-                description: API version used for all requests.
-              namespace:
-                type: string
-                description: The resource's Namespace name; it defaults to the original resource's Namespace. If set to null, cluster-wide resources or resources in all Namespaces are matched
+          type: object
+          required:
+            - kind
+            - version
+          properties:
+            kind:
+              type: string
+              description: Kubernetes kind of the resource.
+            group:
+              type: string
+              description: API group used for all requests. Not provided for Kubernetes resources in the core (also called legacy) group.
+            version:
+              type: string
+              description: API version used for all requests.
+            namespace:
+              type: string
+              description: The resource's Namespace name; it defaults to the original resource's Namespace. If set to null, cluster-wide resources or resources in all Namespaces are matched
   steps:
     type: array
     items:
@@ -63,7 +62,6 @@ properties:
     type: object
     description: Default values which will be provided to form.
     properties:
-      OBJECT_NAME IDK WHAT TO PASTE HERE: # TO DO
-        type: string
+      type: string
   injections:
     $ref: "#/$defs/component"
