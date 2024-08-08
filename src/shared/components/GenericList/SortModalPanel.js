@@ -8,7 +8,6 @@ import {
   Text,
 } from '@ui5/webcomponents-react';
 import { Modal } from '../Modal/Modal';
-import { Tooltip } from '../Tooltip/Tooltip';
 import { useTranslation } from 'react-i18next';
 import './SortModalPanel.scss';
 
@@ -25,14 +24,13 @@ export const SortModalPanel = ({
   const { i18n, t } = useTranslation();
 
   const sortOpeningComponent = (
-    <Tooltip content={t('common.tooltips.sort')}>
-      <Button
-        disabled={disabled}
-        design="Transparent"
-        icon="sort"
-        aria-label="open-sort"
-      />
-    </Tooltip>
+    <Button
+      disabled={disabled}
+      design="Transparent"
+      icon="sort"
+      aria-label="open-sort"
+      tooltip={t('common.tooltips.sort')}
+    />
   );
 
   const handleReset = () => {
@@ -65,6 +63,7 @@ export const SortModalPanel = ({
         </Button>,
       ]}
       modalOpeningComponent={sortOpeningComponent}
+      openerDisabled={disabled}
     >
       <List
         separators="All"

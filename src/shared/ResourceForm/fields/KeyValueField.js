@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Button } from '@ui5/webcomponents-react';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { useTranslation } from 'react-i18next';
 
 import { base64Decode, base64Encode, readFromFile } from 'shared/helpers';
@@ -135,23 +134,22 @@ export function KeyValueField({
         ({ value, setValue, updateValue }) => (
           <>
             {readableFromFile ? (
-              <Tooltip content={t('common.tooltips.read-file')}>
-                <Button
-                  onClick={() =>
-                    readFromFile()?.then(result => {
-                      setValue({
-                        key: value?.key || result.name,
-                        val: !encodable
-                          ? result.content
-                          : base64Encode(result.content),
-                      });
-                      updateValue();
-                    })
-                  }
-                >
-                  {t('components.key-value-form.read-value')}
-                </Button>
-              </Tooltip>
+              <Button
+                onClick={() =>
+                  readFromFile()?.then(result => {
+                    setValue({
+                      key: value?.key || result.name,
+                      val: !encodable
+                        ? result.content
+                        : base64Encode(result.content),
+                    });
+                    updateValue();
+                  })
+                }
+                tooltip={t('common.tooltips.read-file')}
+              >
+                {t('components.key-value-form.read-value')}
+              </Button>
             ) : null}
           </>
         ),

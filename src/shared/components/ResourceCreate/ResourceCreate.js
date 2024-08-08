@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';
 import { spacing } from '@ui5/webcomponents-react-base';
@@ -119,32 +118,17 @@ export const ResourceCreate = ({
   }
 
   function renderConfirmButton() {
-    const button = (
+    return (
       <Button
         disabled={readOnly || disableEdit}
         aria-disabled={readOnly || disableEdit}
         onClick={handleFormSubmit}
         design="Emphasized"
+        tooltip={invalidPopupMessage}
       >
         {confirmText}
       </Button>
     );
-    if (invalidPopupMessage) {
-      return (
-        <Tooltip
-          content={invalidPopupMessage}
-          position="top"
-          trigger="mouseenter"
-          tippyProps={{
-            distance: 16,
-          }}
-        >
-          {button}
-        </Tooltip>
-      );
-    }
-
-    return button;
   }
 
   const renderCancelButton = () => {

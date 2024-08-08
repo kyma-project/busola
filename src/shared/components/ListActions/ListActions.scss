@@ -2,8 +2,7 @@
   float: right;
   display: flex;
 
-  &__standalone:not(:last-child),
-  & .actions-tooltip:not(:last-child) {
+  &__standalone:not(:last-child) {
     margin-right: 4px;
   }
 }

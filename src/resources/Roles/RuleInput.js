@@ -3,7 +3,6 @@ import { BusyIndicator, Button, MessageStrip } from '@ui5/webcomponents-react';
 import * as jp from 'jsonpath';
 import { ResourceForm } from 'shared/ResourceForm';
 import { ComboboxArrayInput, TextArrayInput } from 'shared/ResourceForm/fields';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { InvalidRoleError } from './InvalidRoleError';
 import { useResourcesForApiGroups } from './useResourcesForApiGroups';
 import {
@@ -138,16 +137,15 @@ export function RuleInput({ rule, rules, setRules }) {
           loading ? (
             <BusyIndicator size="Small" active={true} delay="0" />
           ) : (
-            <Tooltip content={t('roles.tooltips.load')}>
-              <Button
-                design="Transparent"
-                onClick={fetchResources}
-                disabled={!loadable}
-                aria-label={t('roles.buttons.load')}
-              >
-                {t('roles.buttons.load-resources')}
-              </Button>
-            </Tooltip>
+            <Button
+              design="Transparent"
+              onClick={fetchResources}
+              disabled={!loadable}
+              aria-label={t('roles.buttons.load')}
+              tooltip={t('roles.tooltips.load')}
+            >
+              {t('roles.buttons.load-resources')}
+            </Button>
           )
         }
         actions={[

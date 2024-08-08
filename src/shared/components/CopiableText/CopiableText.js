@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { Button } from '@ui5/webcomponents-react';
 import copyToCliboard from 'copy-to-clipboard';
 import { useTranslation } from 'react-i18next';
@@ -27,18 +26,17 @@ export function CopiableText({
   return (
     <div className="copiable-text">
       {!iconOnly ? children || textToCopy : null}
-      <Tooltip content={t('common.tooltips.copy-to-clipboard')} position="top">
-        <Button
-          icon="copy"
-          iconEnd
-          design="Transparent"
-          style={spacing.sapUiTinyMarginBegin}
-          disabled={disabled}
-          onClick={() => copyToCliboard(textToCopy)}
-        >
-          {buttonText ? buttonText : null}
-        </Button>
-      </Tooltip>
+      <Button
+        icon="copy"
+        iconEnd
+        design="Transparent"
+        style={spacing.sapUiTinyMarginBegin}
+        disabled={disabled}
+        onClick={() => copyToCliboard(textToCopy)}
+        tooltip={t('common.tooltips.copy-to-clipboard')}
+      >
+        {buttonText ? buttonText : null}
+      </Button>
     </div>
   );
 }

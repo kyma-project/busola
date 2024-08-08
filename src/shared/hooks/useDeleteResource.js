@@ -194,6 +194,7 @@ export function useDeleteResource({
         <Button
           key="delete-cancel"
           data-testid="delete-cancel"
+          design="Transparent"
           onClick={() => setShowDeleteDialog(false)}
         >
           {t('common.buttons.cancel')}
