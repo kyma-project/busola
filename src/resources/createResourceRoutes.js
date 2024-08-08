@@ -149,23 +149,13 @@ const ColumnWrapper = ({
     detailsMidColumn = detailsComponent;
   }
 
-  const resourceSchemaId = useMemo(
-    //In each index.js resourceType is in plural form. I don't know if it's correct
-    () =>
-      [
-        props?.apiGroup,
-        props?.apiVersion,
-        props?.resourceType.slice(0, -1),
-      ].join('/'),
-    [], // eslint-disable-line react-hooks/exhaustive-deps
-  );
-  const { schema, loading, error } = useGetSchema({
-    schemaId: resourceSchemaId,
+  const { schema, loading } = useGetSchema({
+    resource: {
+      group: props?.apiGroup,
+      version: props.apiVersion,
+      kind: props?.resourceType.slice(0, -1),
+    },
   });
-  if (error) {
-    //TODO:
-    // throw error;
-  }
   if (loading) {
     return null;
   }
