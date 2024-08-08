@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import * as _ from 'lodash';
@@ -8,7 +8,7 @@ import * as Inputs from 'shared/ResourceForm/inputs';
 import { AdvancedContainersView } from 'shared/components/Deployment/ContainersViews';
 
 import { createContainerTemplate, createReplicaSetTemplate } from './templates';
-import { useGetSchema } from 'hooks/useGetSchema';
+import { SchemaContext } from 'shared/helpers/schema';
 
 export default function ReplicaSetCreate({
   resourceUrl,
@@ -37,17 +37,6 @@ export default function ReplicaSetCreate({
     setCustomValid(hasAnyContainers);
   }, [replicaset, setCustomValid]);
 
-  const resourceSchemaId = useMemo(
-    () => replicaset?.apiVersion + '/' + replicaset?.kind,
-    [], // eslint-disable-line react-hooks/exhaustive-deps
-  );
-  const { schema, loading, error } = useGetSchema({
-    schemaId: resourceSchemaId,
-  });
-  if (error) {
-    throw error;
-  }
-
   const handleNameChange = name => {
     jp.value(replicaset, '$.metadata.name', name);
     jp.value(replicaset, "$.metadata.labels['app.kubernetes.io/name']", name);
@@ -57,56 +46,54 @@ export default function ReplicaSetCreate({
     setReplicaSet({ ...replicaset });
   };
 
+  const schema = useContext(SchemaContext);
+
   return (
-    <>
-      {!loading ? (
-        <ResourceForm
-          {...props}
-          pluralKind="replicasets"
-          singularName={t(`replica-sets.name_singular`)}
-          resource={replicaset}
-          setResource={setReplicaSet}
-          onChange={onChange}
-          formElementRef={formElementRef}
-          createUrl={resourceUrl}
-          initialResource={initialResource}
-          initialUnchangedResource={initialUnchangedResource}
-          handleNameChange={handleNameChange}
-          schema={schema}
-        >
-          <ResourceForm.FormField
-            required
-            propertyPath="$.spec.replicas"
-            label={t('replica-sets.create-modal.labels.replicas')}
-            input={Inputs.Number}
-            placeholder={t('replica-sets.create-modal.placeholders.replicas')}
-            tooltipContent={t('replica-sets.create-modal.tooltips.replicas')}
-            min={0}
-          />
+    <ResourceForm
+      {...props}
+      pluralKind="replicasets"
+      singularName={t(`replica-sets.name_singular`)}
+      resource={replicaset}
+      setResource={setReplicaSet}
+      onChange={onChange}
+      formElementRef={formElementRef}
+      createUrl={resourceUrl}
+      initialResource={initialResource}
+      initialUnchangedResource={initialUnchangedResource}
+      handleNameChange={handleNameChange}
+      schema={schema}
+    >
+      <ResourceForm.FormField
+        required
+        propertyPath="$.spec.replicas"
+        label={t('replica-sets.create-modal.labels.replicas')}
+        input={Inputs.Number}
+        placeholder={t('replica-sets.create-modal.placeholders.replicas')}
+        tooltipContent={t('replica-sets.create-modal.tooltips.replicas')}
+        min={0}
+      />
 
-          <ResourceForm.FormField
-            propertyPath="$.spec.minReadySeconds"
-            label={t('replica-sets.create-modal.labels.min-ready-seconds')}
-            input={Inputs.Number}
-            placeholder={t(
-              'replica-sets.create-modal.placeholders.min-ready-seconds',
-            )}
-            tooltipContent={t(
-              'replica-sets.create-modal.tooltips.min-ready-seconds',
-            )}
-            min={0}
-          />
+      <ResourceForm.FormField
+        propertyPath="$.spec.minReadySeconds"
+        label={t('replica-sets.create-modal.labels.min-ready-seconds')}
+        input={Inputs.Number}
+        placeholder={t(
+          'replica-sets.create-modal.placeholders.min-ready-seconds',
+        )}
+        tooltipContent={t(
+          'replica-sets.create-modal.tooltips.min-ready-seconds',
+        )}
+        min={0}
+      />
 
-          <AdvancedContainersView
-            resource={replicaset}
-            setResource={setReplicaSet}
-            onChange={onChange}
-            namespace={namespace}
-            createContainerTemplate={createContainerTemplate}
-            schema={schema}
-          />
-        </ResourceForm>
-      ) : null}
-    </>
+      <AdvancedContainersView
+        resource={replicaset}
+        setResource={setReplicaSet}
+        onChange={onChange}
+        namespace={namespace}
+        createContainerTemplate={createContainerTemplate}
+        schema={schema}
+      />
+    </ResourceForm>
   );
 }

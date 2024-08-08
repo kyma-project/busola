@@ -1,3 +1,5 @@
+import { createContext } from 'react';
+
 /**
  * This method get description of k8s resource field. Similar in functionality to kubectl explain.
  *
@@ -31,3 +33,5 @@ export function getPartialSchema(schema: any, path: string): string {
 
   return contextSchema;
 }
+
+export const SchemaContext = createContext(null);
