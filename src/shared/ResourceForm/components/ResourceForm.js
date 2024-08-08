@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import classnames from 'classnames';
 import jsyaml from 'js-yaml';
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
@@ -23,7 +23,7 @@ import { isFormOpenState } from 'state/formOpenAtom';
 import { createPortal } from 'react-dom';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { cloneDeep } from 'lodash';
-import { getDescription } from 'shared/helpers/schema';
+import { getDescription, SchemaContext } from 'shared/helpers/schema';
 
 export const excludeStatus = resource => {
   const modifiedResource = cloneDeep(resource);
@@ -71,7 +71,6 @@ export function ResourceForm({
   isEdit,
   stickyHeaderHeight,
   resetLayout,
-  schema,
   formWithoutPanel,
 }) {
   // readonly schema ID, set only once
@@ -136,6 +135,8 @@ export function ResourceForm({
     resetLayout,
     afterCreatedCustomMessage,
   });
+
+  const schema = useContext(SchemaContext);
 
   const handleInitialMode = () => {
     if (initialMode) {
