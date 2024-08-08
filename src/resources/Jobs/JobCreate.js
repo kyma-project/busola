@@ -10,7 +10,6 @@ import { createJobPresets, createJobTemplate } from './templates';
 import { JobSpecSection } from './SpecSection';
 import { ContainersSection } from './ContainersSection';
 import { MessageStrip } from '@ui5/webcomponents-react';
-import { SchemaContext } from 'shared/helpers/schema';
 
 function isJobValid(job = {}) {
   const isNameValid = jp.value(job, '$.metadata.name');
@@ -52,8 +51,6 @@ export default function JobCreate({
     setCustomValid(isJobValid(job));
   }, [job, setCustomValid]);
 
-  const schema = useContext(SchemaContext);
-
   return (
     <ResourceForm
       {...props}
@@ -70,7 +67,6 @@ export default function JobCreate({
         createJobPresets(namespace, t, defaultSidecarAnnotations)
       }
       createUrl={resourceUrl}
-      schema={schema}
     >
       <JobSpecSection
         propertyPath="$.spec"

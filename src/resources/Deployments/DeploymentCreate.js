@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import * as _ from 'lodash';
@@ -12,7 +12,6 @@ import {
   createDeploymentTemplate,
   createPresets,
 } from './templates';
-import { SchemaContext } from 'shared/helpers/schema';
 
 const ISTIO_INJECTION_LABEL = 'sidecar.istio.io/inject';
 const ISTIO_INJECTION_ENABLED = 'true';
@@ -62,8 +61,6 @@ export default function DeploymentCreate({
     setCustomValid(hasAnyContainers);
   }, [deployment, setCustomValid]);
 
-  const schema = useContext(SchemaContext);
-
   const handleNameChange = name => {
     jp.value(deployment, '$.metadata.name', name);
     jp.value(deployment, "$.metadata.labels['app.kubernetes.io/name']", name);
@@ -110,7 +107,6 @@ export default function DeploymentCreate({
         onChange={onChange}
         namespace={namespace}
         createContainerTemplate={createContainerTemplate}
-        schema={schema}
       />
     </ResourceForm>
   );

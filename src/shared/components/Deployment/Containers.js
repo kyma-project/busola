@@ -6,16 +6,17 @@ import { Button, MessageStrip } from '@ui5/webcomponents-react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
-import { getDescription } from 'shared/helpers/schema';
+import { getDescription, SchemaContext } from 'shared/helpers/schema';
+import { useContext } from 'react';
 
-function SingleContainerSection({ container, setContainer, schema }) {
+function SingleContainerSection({ container, setContainer }) {
   const { t } = useTranslation();
+  const schema = useContext(SchemaContext);
 
   const nameDesc = getDescription(schema, 'name');
 
   const dockerImgDesc = getDescription(schema, 'image');
   const resourcesDesc = getDescription(schema, 'resources');
-  console.log(nameDesc, schema);
 
   return (
     <ResourceForm.Wrapper resource={container} setResource={setContainer}>
@@ -51,13 +52,9 @@ function SingleContainerSection({ container, setContainer, schema }) {
   );
 }
 
-export function Containers({
-  value: containers,
-  setValue: setContainers,
-  containerSchema,
-  propertyPath,
-}) {
+export function Containers({ value: containers, setValue: setContainers }) {
   const { t } = useTranslation();
+  // const schema = useContext(SchemaContext);
 
   const removeContainer = index => {
     setContainers(containers.filter((_, i) => index !== i));
@@ -81,7 +78,6 @@ export function Containers({
           containers.splice(0, 1, newContainer);
           setContainers(containers);
         }}
-        schema={containerSchema}
       />
     );
   }
@@ -107,7 +103,6 @@ export function Containers({
           containers.splice(i, 1, newContainer);
           setContainers(containers);
         }}
-        schema={containerSchema}
       />
     </ResourceForm.CollapsibleSection>
   ));

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import * as _ from 'lodash';
@@ -8,7 +8,6 @@ import * as Inputs from 'shared/ResourceForm/inputs';
 import { AdvancedContainersView } from 'shared/components/Deployment/ContainersViews';
 
 import { createContainerTemplate, createReplicaSetTemplate } from './templates';
-import { SchemaContext } from 'shared/helpers/schema';
 
 export default function ReplicaSetCreate({
   resourceUrl,
@@ -46,8 +45,6 @@ export default function ReplicaSetCreate({
     setReplicaSet({ ...replicaset });
   };
 
-  const schema = useContext(SchemaContext);
-
   return (
     <ResourceForm
       {...props}
@@ -61,7 +58,6 @@ export default function ReplicaSetCreate({
       initialResource={initialResource}
       initialUnchangedResource={initialUnchangedResource}
       handleNameChange={handleNameChange}
-      schema={schema}
     >
       <ResourceForm.FormField
         required
@@ -92,7 +88,6 @@ export default function ReplicaSetCreate({
         onChange={onChange}
         namespace={namespace}
         createContainerTemplate={createContainerTemplate}
-        schema={schema}
       />
     </ResourceForm>
   );
