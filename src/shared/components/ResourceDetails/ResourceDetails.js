@@ -185,7 +185,11 @@ function Resource({
 
   const pluralizedResourceKind = pluralize(prettifiedResourceKind);
   useWindowTitle(windowTitle || pluralizedResourceKind);
-  const { isProtected, protectedResourceWarning } = useProtectedResources();
+  const {
+    isProtected,
+    protectedResourceWarning,
+    protectedResourcePopover,
+  } = useProtectedResources();
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     resourceTitle,
@@ -392,6 +396,7 @@ function Resource({
 
   return (
     <ResourceDetailContext.Provider value={true}>
+      {protectedResourcePopover()}
       <DynamicPageComponent
         className={className}
         headerContent={headerContent}
