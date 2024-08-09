@@ -1,0 +1,67 @@
+$schema: http://json-schema.org/draft-07/schema
+description: Schema defining structure of wizards configuration
+type: object
+required:
+  - general
+  - steps
+properties:
+  general:
+    type: object
+    description: general informations about the wizard
+    required:
+      - id
+      - resources
+    properties:
+      id:
+        type: string
+        description: An identifier used to reference the wizard to trigger its opening.
+      name:
+        type: string
+        description: Name of the wizard displayed in the window title.
+      description:
+        type: string
+        description: A string displayed in a wizard.
+      resources:
+        type: object
+        properties:
+          type: object
+          required:
+            - kind
+            - version
+          properties:
+            kind:
+              type: string
+              description: Kubernetes kind of the resource.
+            group:
+              type: string
+              description: API group used for all requests. Not provided for Kubernetes resources in the core (also called legacy) group.
+            version:
+              type: string
+              description: API version used for all requests.
+            namespace:
+              type: string
+              description: The resource's Namespace name; it defaults to the original resource's Namespace. If set to null, cluster-wide resources or resources in all Namespaces are matched
+  steps:
+    type: array
+    items:
+      type: object
+      required:
+        - name
+        - resource
+        - form
+      properties:
+        name:
+          type: string
+        resource:
+          type: string
+        form:
+          $ref: "#/$defs/component"
+        description:
+          type: string
+  defaults:
+    type: object
+    description: Default values which will be provided to form.
+    properties:
+      type: string
+  injections:
+    $ref: "#/$defs/component"
