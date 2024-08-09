@@ -56,7 +56,10 @@ export function ClusterNodes({ data, error, loading }) {
     const zone = entry?.metadata?.labels?.['topology.kubernetes.io/zone'];
 
     return [
-      <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
+      <Text
+        style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}
+        data-testID={`node-details-link-${entry.metadata?.name}`}
+      >
         {entry.metadata?.name}
       </Text>,
       cpu ? (
