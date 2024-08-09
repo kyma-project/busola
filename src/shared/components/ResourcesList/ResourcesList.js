@@ -391,16 +391,22 @@ export function ResourceListRenderer({
   const nameColIndex = customColumns.findIndex(col => col.id === 'name');
 
   const headerRenderer = () => {
-    const rowColumns = customColumns?.map(col => col?.header || null);
-    rowColumns.splice(nameColIndex + 1, 0, '');
-    return rowColumns;
+    return customColumns?.map(col => col?.header || null);
   };
 
   const rowRenderer = entry => {
-    const rowColumns = customColumns?.map(col =>
-      col?.value ? col.value(entry) : null,
-    );
-    rowColumns.splice(nameColIndex + 1, 0, protectedResourceWarning(entry));
+    const rowColumns = customColumns?.map((col, index) => {
+      if (col?.value && index === nameColIndex) {
+        return (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            {col.value(entry)}
+            {protectedResourceWarning(entry)}
+          </div>
+        );
+      }
+      return col?.value ? col.value(entry) : null;
+    });
+
     return rowColumns;
   };
 
