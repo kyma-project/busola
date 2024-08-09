@@ -110,7 +110,7 @@ export function ClusterNodes({ data, error, loading }) {
     data?.[0]?.status?.nodeInfo?.kubeletVersion,
   );
 
-  const handleClickResource = (resourceName, resource) => {
+  const handleClickResource = resourceName => {
     navigate(clusterUrl(`overview/nodes/${resourceName}`));
   };
 
