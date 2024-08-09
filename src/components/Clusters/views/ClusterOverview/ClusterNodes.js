@@ -1,5 +1,4 @@
 import { ErrorPanel } from 'shared/components/ErrorPanel/ErrorPanel';
-import { Link } from 'shared/components/Link/Link';
 import { useTranslation } from 'react-i18next';
 
 import { EventsList } from 'shared/components/EventsList';
@@ -11,17 +10,12 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useUrl } from 'hooks/useUrl';
 import { ProgressIndicatorWithPercentage } from 'shared/components/ProgressIndicatorWithPercentage/ProgressIndicatorWithPercentage';
-
-const NodeHeader = ({ nodeName }) => {
-  const { clusterUrl } = useUrl();
-  return (
-    <Link url={clusterUrl(`overview/nodes/${nodeName}`)} resetLayout={false}>
-      {nodeName}
-    </Link>
-  );
-};
+import { Text } from '@ui5/webcomponents-react';
+import { useNavigate } from 'react-router-dom';
 
 export function ClusterNodes({ data, error, loading }) {
+  const { clusterUrl } = useUrl();
+  const navigate = useNavigate();
   const { t } = useTranslation();
 
   const getStatusType = status => {
@@ -62,7 +56,9 @@ export function ClusterNodes({ data, error, loading }) {
     const zone = entry?.metadata?.labels?.['topology.kubernetes.io/zone'];
 
     return [
-      <NodeHeader nodeName={entry.metadata?.name} />,
+      <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
+        {entry.metadata?.name}
+      </Text>,
       cpu ? (
         <>
           <ProgressIndicatorWithPercentage
@@ -114,6 +110,10 @@ export function ClusterNodes({ data, error, loading }) {
     data?.[0]?.status?.nodeInfo?.kubeletVersion,
   );
 
+  const handleClickResource = (resourceName, resource) => {
+    navigate(clusterUrl(`overview/nodes/${resourceName}`));
+  };
+
   return (
     <>
       {!(error && error.toString().includes('Error: nodes is forbidden')) && (
@@ -131,6 +131,8 @@ export function ClusterNodes({ data, error, loading }) {
             showSearchField: false,
             allowSlashShortcut: false,
           }}
+          customRowClick={handleClickResource}
+          hasDetailsView
         />
       )}
       {error &&
