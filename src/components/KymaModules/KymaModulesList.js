@@ -13,7 +13,7 @@ import {
 
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 import { spacing } from '@ui5/webcomponents-react-base';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
@@ -35,6 +35,8 @@ import { Label } from 'shared/ResourceForm/components/Label';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { ModuleStatus } from './components/ModuleStatus';
 import { cloneDeep } from 'lodash';
+import { useModuleStatus } from './support';
+import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 
 export default function KymaModulesList({
   DeleteMessageBox,
@@ -156,14 +158,35 @@ export default function KymaModulesList({
 
       const hasExtension = !!findExtension(resource?.resource?.kind);
       const hasCrd = !!findCrd(resource?.resource?.kind);
+      console.log(resource);
+      /*console.log(
+        isInstalled,
+        isDeletionFailed,
+        !isError,
+        hasCrd,
+        hasExtension,
+      );*/
+      //console.log(isInstalled || isDeletionFailed || isError);
+      //console.log(resource);
+      //console.log(hasCrd, hasExtension);
+      //console.log(moduleStatus?.state);
+      //console.log(moduleStatus?.state !== 'Deleting');
+      //console.log(isInstalled);
+      //console.log(isDeletionFailed);
+      //console.log(isError);
+      /*console.log(
+        moduleStatus?.state !== 'Deleting' || isInstalled || isDeletionFailed,
+      );*/
 
       return (
-        (isInstalled || isDeletionFailed || !isError) &&
-        (hasCrd || hasExtension)
+        (hasCrd || hasExtension) &&
+        (isInstalled || isDeletionFailed) &&
+        (moduleStatus?.state !== 'Deleting' || !isError)
       );
     };
 
     const rowRenderer = resource => {
+      //const { data: status } = useModuleStatus(resource);
       const moduleStatus = findStatus(resource.name);
       const showDetailsLink = hasDetailsLink(resource);
       const moduleIndex = kymaResource?.spec?.modules?.findIndex(
