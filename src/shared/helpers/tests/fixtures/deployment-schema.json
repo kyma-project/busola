@@ -1,0 +1,72 @@
+{
+  "description": "A custom resource for creating orders for pizzas",
+  "type": "object",
+  "properties": {
+    "spec": {
+      "description": "Information about the order",
+      "type": "object",
+      "required": ["description", "status"],
+      "properties": {
+        "description": {
+          "description": "Order description",
+          "type": "string"
+        },
+        "orderDetails": {
+          "description": "The details of the order",
+          "type": "object",
+          "properties": {
+            "paymentMethod": {
+              "type": "string",
+              "description": "The payment method for the order",
+              "enum": ["CARD", "CASH"]
+            },
+            "realization": {
+              "description": "The order's realization way",
+              "type": "string",
+              "enum": ["DELIVERY", "SELF-PICKUP"]
+            }
+          }
+        },
+        "pizzas": {
+          "type": "array",
+          "description": "Ordered pizzas.",
+          "items": {
+            "type": "object",
+            "description": "A single pizza definition you want to order.",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Name of the ordered pizza."
+              },
+              "namespace": {
+                "description": "Namespace of the ordered pizza.",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "object",
+      "properties": {
+        "messages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "conversion": null,
+  "strategy": "None"
+}
