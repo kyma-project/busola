@@ -221,7 +221,11 @@ export function ResourceListRenderer({
     resourceType,
   });
   const { t } = useTranslation();
-  const { isProtected, protectedResourceWarning } = useProtectedResources();
+  const {
+    isProtected,
+    protectedResourceWarning,
+    protectedResourcePopover,
+  } = useProtectedResources();
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
 
@@ -491,46 +495,49 @@ export function ResourceListRenderer({
         document.body,
       )}
       {!(error && error.status === 'Definition not found') && (
-        <GenericList
-          displayArrow={displayArrow ?? true}
-          disableHiding={disableHiding ?? false}
-          hasDetailsView={hasDetailsView}
-          customUrl={customUrl}
-          resourceType={resourceType}
-          customColumnLayout={customColumnLayout}
-          columnLayout={columnLayout}
-          enableColumnLayout={enableColumnLayout}
-          disableMargin={disableMargin}
-          title={showTitle ? title || prettifiedResourceName : null}
-          actions={actions}
-          entries={resources || []}
-          headerRenderer={headerRenderer}
-          rowRenderer={rowRenderer}
-          serverDataError={error}
-          serverDataLoading={loading}
-          pagination={{ autoHide: true, ...pagination }}
-          extraHeaderContent={extraHeaderContent}
-          testid={testid}
-          sortBy={sortBy}
-          searchSettings={{
-            ...searchSettings,
-            textSearchProperties: textSearchProperties(),
-          }}
-          emptyListProps={
-            simpleEmptyListMessage
-              ? null
-              : {
-                  titleText: `${t('common.labels.no')} ${processTitle(
-                    prettifyNamePlural(resourceTitle, resourceType),
-                  )}`,
-                  onClick: handleShowCreate,
-                  showButton: !disableCreate && namespace !== '-all-',
-                  ...emptyListProps,
-                }
-          }
-          handleRedirect={handleRedirect}
-          nameColIndex={nameColIndex}
-        />
+        <>
+          {protectedResourcePopover()}
+          <GenericList
+            displayArrow={displayArrow ?? true}
+            disableHiding={disableHiding ?? false}
+            hasDetailsView={hasDetailsView}
+            customUrl={customUrl}
+            resourceType={resourceType}
+            customColumnLayout={customColumnLayout}
+            columnLayout={columnLayout}
+            enableColumnLayout={enableColumnLayout}
+            disableMargin={disableMargin}
+            title={showTitle ? title || prettifiedResourceName : null}
+            actions={actions}
+            entries={resources || []}
+            headerRenderer={headerRenderer}
+            rowRenderer={rowRenderer}
+            serverDataError={error}
+            serverDataLoading={loading}
+            pagination={{ autoHide: true, ...pagination }}
+            extraHeaderContent={extraHeaderContent}
+            testid={testid}
+            sortBy={sortBy}
+            searchSettings={{
+              ...searchSettings,
+              textSearchProperties: textSearchProperties(),
+            }}
+            emptyListProps={
+              simpleEmptyListMessage
+                ? null
+                : {
+                    titleText: `${t('common.labels.no')} ${processTitle(
+                      prettifyNamePlural(resourceTitle, resourceType),
+                    )}`,
+                    onClick: handleShowCreate,
+                    showButton: !disableCreate && namespace !== '-all-',
+                    ...emptyListProps,
+                  }
+            }
+            handleRedirect={handleRedirect}
+            nameColIndex={nameColIndex}
+          />
+        </>
       )}
       {!isCompact && createPortal(<YamlUploadDialog />, document.body)}
     </>
