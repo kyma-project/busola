@@ -308,3 +308,7 @@ $widgets:
         decodedPlaceholder:
           type: string
           description: optional alternative placeholder to use when the field is decoded
+        disableOnEdit:
+          type: boolean
+          description: a boolean which specifies if field is disabled on edit.
+          default: false

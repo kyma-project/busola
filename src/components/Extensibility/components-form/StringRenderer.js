@@ -19,6 +19,7 @@ export function StringRenderer({
   required,
   placeholder,
   originalResource,
+  editMode,
   ...props
 }) {
   const { t } = useTranslation();
@@ -26,6 +27,7 @@ export function StringRenderer({
   const schemaPlaceholder = schema.get('placeholder');
   const readOnly = schema.get('readOnly') ?? false;
   const decodable = schema.get('decodable');
+  const disableOnEdit = schema.get('disableOnEdit');
   const [decoded, setDecoded] = useState(true);
 
   let decodeError = false;
@@ -142,7 +144,7 @@ export function StringRenderer({
               },
             });
         }}
-        disabled={readOnly}
+        disabled={readOnly || (disableOnEdit && editMode)}
         isListItem={props.isListItem}
         label={tFromStoreKeys(storeKeys, schema)}
         data-testid={storeKeys.join('.') || tFromStoreKeys(storeKeys, schema)}
