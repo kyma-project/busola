@@ -128,16 +128,6 @@ ui5-tabcontainer::part(content) {
   font-style: normal;
 }
 
-.message-toast--wrapper {
-  position: fixed;
-  transition: all ease-in-out 0.4s;
-  z-index: 1100;
-  cursor: pointer;
-  left: 50vw;
-  transform: translateX(-50%);
-  bottom: 50px;
-}
-
 .flexwrap {
   display: flex;
   flex-wrap: wrap;

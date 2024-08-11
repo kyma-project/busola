@@ -2,7 +2,7 @@ import { RecoilValueReadOnly, selector } from 'recoil';
 import { ExtResource, NavNode } from '../types';
 import { getFetchFn } from '../utils/getFetchFn';
 import { DataSources } from 'components/Extensibility/contexts/DataSources';
-import { extensionsState } from 'state/navigation/extensionsAtom';
+import { extensionsState, staticsState } from 'state/navigation/extensionsAtom';
 import { ExtensibilityNodesExt } from 'state/types';
 
 const createExternalNode = (
@@ -68,13 +68,19 @@ export const extensibilityNodesExtSelector: RecoilValueReadOnly<
   key: 'extensibilityNodesExtSelector',
   get: async ({ get }) => {
     const extensions = get(extensionsState) || [];
+    const statics = get(staticsState) || [];
+
     const fetchFn = getFetchFn(get);
     if (!fetchFn) {
       return null;
     }
 
     const extensibilityNodes = getExtensibilityNodesExt(extensions);
+    const staticsNodes = getExtensibilityNodesExt(statics);
 
-    return [...extensibilityNodes.filter(n => n)];
+    const filteredExtNodes = [...extensibilityNodes.filter(n => n)];
+    const filteresStaticsNodes = [...staticsNodes.filter(n => n)];
+
+    return [...filteredExtNodes.concat(filteresStaticsNodes)];
   },
 });
