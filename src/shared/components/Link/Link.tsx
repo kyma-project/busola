@@ -38,6 +38,7 @@ export const Link = ({
 
   return (
     <UI5Link
+      wrappingType={'Normal'}
       design={design}
       className={className}
       data-testid={dataTestId}
