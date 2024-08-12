@@ -106,7 +106,9 @@ context('Test Cluster Overview', () => {
     cy.wait(500);
 
     cy.contains('ui5-panel', 'Nodes').within(_ => {
-      cy.get('a')
+      cy.get('ui5-table-row')
+        .first()
+        .find('ui5-table-cell')
         .first()
         .click();
     });
