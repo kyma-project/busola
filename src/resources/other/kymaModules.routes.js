@@ -27,8 +27,15 @@ const KymaModulesAddModule = React.lazy(() =>
 const ColumnWraper = (defaultColumn = 'list') => {
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const { clusterUrl } = useUrl();
-  const [searchParams] = useSearchParams();
-  const layout = searchParams.get('layout');
+  const layout = 'OneColumn';
+
+  if (layoutState.layout === layout) {
+    window.history.pushState(
+      window.history.state,
+      '',
+      `${clusterUrl('kymamodules')}`,
+    );
+  }
   const { resourceName, resourceType, namespace } = useParams();
 
   const initialLayoutState = {
