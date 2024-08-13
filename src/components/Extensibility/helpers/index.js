@@ -180,7 +180,6 @@ export const getResourceDescAndUrl = descID => {
 
   if (typeof trans === 'string') {
     const links = extractLinks(trans);
-    console.log(links, trans);
 
     if (links?.length >= 1) {
       const matchedLink = links[0];
