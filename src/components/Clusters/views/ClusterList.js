@@ -106,7 +106,7 @@ function ClusterList() {
         color: 'var(--sapLinkColor)',
       }}
     >
-      {entry.contextName}
+      {entry.name}
     </Text>,
     entry.currentContext.cluster.cluster.server,
     <ClusterStorageType clusterConfig={entry.config} />,
