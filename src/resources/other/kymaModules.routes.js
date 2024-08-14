@@ -1,6 +1,6 @@
 import { Button, FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import React, { Suspense, useEffect, useState } from 'react';
-import { Route, useParams, useSearchParams } from 'react-router-dom';
+import { Route, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';

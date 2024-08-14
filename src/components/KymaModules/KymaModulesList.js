@@ -158,9 +158,8 @@ export default function KymaModulesList({
       const hasCrd = !!findCrd(resource?.resource?.kind);
 
       return (
-        (hasCrd || hasExtension) &&
-        (isInstalled || isDeletionFailed) &&
-        !isError
+        (isInstalled || isDeletionFailed || !isError) &&
+        (hasCrd || hasExtension)
       );
     };
 
