@@ -4,9 +4,26 @@ on:
   push:
     branches:
       - main
-
+    paths:
+      - ".github/workflows/busola-web-build.yml"
+      - "backend/**"
+      - "public/**"
+      - "src/**"
+      - "tests/**"
+      - "package.json"
+      - "Makefile"
+      - "Dockerfile"
   pull_request_target:
     types: [opened, edited, synchronize, reopened, ready_for_review]
+    paths:
+      - ".github/workflows/busola-web-build.yml"
+      - "backend/**"
+      - "public/**"
+      - "src/**"
+      - "tests/**"
+      - "package.json"
+      - "Makefile"
+      - "Dockerfile"
 
 permissions:
   id-token: write # This is required for requesting the JWT token
@@ -16,7 +33,7 @@ jobs:
   build-web-image:
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: kyma-project/test-infra/.github/workflows/image-builder.yml@main
     with:
-      name: busola
+      name: busola-web
       dockerfile: Dockerfile
       context: .
       export-tags: true
@@ -26,4 +43,3 @@ jobs:
     steps:
       - name: Test image
         run: echo "Testing images ${{ needs.build-web-image.outputs.images }}"
-        
