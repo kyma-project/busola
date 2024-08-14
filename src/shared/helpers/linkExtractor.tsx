@@ -84,7 +84,7 @@ const getI18nVarLink = (text: string) => {
   if (matches?.length) {
     links = matches.map(link => {
       const { links: mdLinks } = getMarkdownLinks(link);
-      console.log(mdLinks);
+
       if (mdLinks?.length) {
         const { url, urlText } = mdLinks[0];
         text = text.replace(link, coveredLinkSign);
