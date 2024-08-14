@@ -33,7 +33,7 @@ jobs:
   build-web-image:
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: kyma-project/test-infra/.github/workflows/image-builder.yml@main
     with:
-      name: busola
+      name: busola-web
       dockerfile: Dockerfile
       context: .
       export-tags: true
