@@ -30,7 +30,7 @@ export const CATEGORIES: Category[] = [
   },
   {
     key: predefinedCategories['discovery-and-network'],
-    icon: 'tnt/network',
+    icon: 'world',
     label: 'discovery-and-network.title',
     items: [],
   },
@@ -42,7 +42,7 @@ export const CATEGORIES: Category[] = [
   },
   {
     key: predefinedCategories['service-management'],
-    icon: 'tnt/application-service',
+    icon: 'popup-window',
     label: 'service-management.title',
     items: [],
   },
@@ -54,7 +54,7 @@ export const CATEGORIES: Category[] = [
   },
   {
     key: predefinedCategories.apps,
-    icon: 'tnt/application',
+    icon: 'folder-2',
     label: 'apps.title',
     items: [],
   },
