@@ -28,7 +28,6 @@ export default function CustomResource({ params }) {
   );
 
   if (loading) return <Spinner />;
-  if (!data) return null;
 
   const versions = data?.spec?.versions;
   const version =

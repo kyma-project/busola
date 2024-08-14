@@ -4,7 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
 
-export const ResourceNotFound = ({ resource, customMessage }) => {
+export const ResourceNotFound = ({
+  resource,
+  customMessage,
+  layoutCloseUrl,
+  layoutNumber,
+}) => {
   const { t } = useTranslation();
   return (
     <>
@@ -21,6 +26,8 @@ export const ResourceNotFound = ({ resource, customMessage }) => {
             }
           />
         }
+        layoutCloseUrl={layoutCloseUrl}
+        layoutNumber={layoutNumber}
       />
     </>
   );

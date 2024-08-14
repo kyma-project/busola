@@ -68,6 +68,7 @@ ResourceDetails.propTypes = {
   layoutNumber: PropTypes.string,
   customHealthCards: PropTypes.arrayOf(PropTypes.func),
   showHealthCardsTitle: PropTypes.bool,
+  isModule: PropTypes.bool,
 };
 
 ResourceDetails.defaultProps = {
@@ -94,12 +95,13 @@ export function ResourceDetails(props) {
 export const ResourceDetailContext = createContext(false);
 
 function ResourceDetailsRenderer(props) {
-  const {
-    loading = true,
-    error,
-    data: resource,
-    silentRefetch,
-  } = useGet(props.resourceUrl, { pollingInterval: 3000 });
+  const { loading = true, error, data: resource, silentRefetch } = useGet(
+    props.resourceUrl,
+    {
+      pollingInterval: 3000,
+      errorTolerancy: props.isModule ? 0 : undefined,
+    },
+  );
 
   const updateResourceMutation = useUpdate(props.resourceUrl);
   const deleteResourceMutation = useDelete(props.resourceUrl);
@@ -113,6 +115,8 @@ function ResourceDetailsRenderer(props) {
             props.resourceTitle,
             props.resourceType,
           )}
+          layoutCloseUrl={props.layoutCloseCreateUrl}
+          layoutNumber={props.layoutNumber ?? 'MidColumn'}
         />
       );
     }
@@ -120,6 +124,8 @@ function ResourceDetailsRenderer(props) {
       <ResourceNotFound
         resource={prettifyNameSingular(props.resourceTitle, props.resourceType)}
         customMessage={getErrorMessage(error)}
+        layoutCloseUrl={props.layoutCloseCreateUrl}
+        layoutNumber={props.layoutNumber ?? 'MidColumn'}
       />
     );
   }

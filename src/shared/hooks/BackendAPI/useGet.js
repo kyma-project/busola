@@ -12,7 +12,10 @@ import { authDataState } from '../../../state/authDataAtom';
 const ERROR_TOLERANCY = 2;
 
 const useGetHook = processDataFn =>
-  function(path, { pollingInterval, onDataReceived, skip } = {}) {
+  function(
+    path,
+    { pollingInterval, onDataReceived, skip, errorTolerancy = undefined } = {},
+  ) {
     const authData = useRecoilValue(authDataState);
     const lastAuthData = useRef(null);
     const lastResourceVersion = useRef(null);
@@ -37,7 +40,13 @@ const useGetHook = processDataFn =>
         function processError(error) {
           if (!abortController.current.signal.aborted) {
             errorTolerancyCounter.current++;
-            if (errorTolerancyCounter.current > ERROR_TOLERANCY || !data) {
+
+            const errorLimit =
+              typeof errorTolerancy === 'number'
+                ? errorTolerancy
+                : ERROR_TOLERANCY;
+
+            if (errorTolerancyCounter.current > errorLimit || !data) {
               console.error(error);
               setError(error);
             }

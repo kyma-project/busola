@@ -28,7 +28,16 @@ const ColumnWraper = (defaultColumn = 'list') => {
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const { clusterUrl } = useUrl();
   const layout = 'OneColumn';
+
+  if (layoutState.layout === layout) {
+    window.history.pushState(
+      window.history.state,
+      '',
+      `${clusterUrl('kymamodules')}`,
+    );
+  }
   const { resourceName, resourceType, namespace } = useParams();
+
   const initialLayoutState = {
     layout: layout,
     midColumn: {

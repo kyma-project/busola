@@ -198,6 +198,7 @@ export const ExtensibilityDetailsCore = ({
       description={description}
       createResourceForm={ExtensibilityCreate}
       resourceSchema={resMetaData}
+      isModule={isModule}
       {...detailsProps}
     />
   );
