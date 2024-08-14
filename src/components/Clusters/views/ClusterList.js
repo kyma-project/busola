@@ -2,8 +2,7 @@ import { useState } from 'react';
 import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@ui5/webcomponents-react';
-import { Link } from 'shared/components/Link/Link';
+import { Button, Text } from '@ui5/webcomponents-react';
 
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 
@@ -52,6 +51,10 @@ function ClusterList() {
 
   const { clusters, currentCluster } = clustersInfo;
 
+  const handleClickResource = (_, selectedEntry) => {
+    navigate(`/cluster/${selectedEntry.contextName}`);
+  };
+
   const isClusterActive = entry => {
     return (
       entry?.kubeconfig?.['current-context'] === currentCluster?.contextName
@@ -97,13 +100,14 @@ function ClusterList() {
   ];
 
   const rowRenderer = entry => [
-    <Link
-      design={isClusterActive(entry) ? 'Emphasized' : 'Default'}
-      url={`/cluster/${entry.contextName}`}
-      resetLayout={false}
+    <Text
+      style={{
+        fontWeight: isClusterActive(entry) ? 'bold' : 'normal',
+        color: 'var(--sapLinkColor)',
+      }}
     >
       {entry.name}
-    </Link>,
+    </Text>,
     entry.currentContext.cluster.cluster.server,
     <ClusterStorageType clusterConfig={entry.config} />,
     entry.config?.description || EMPTY_TEXT_PLACEHOLDER,
@@ -235,6 +239,8 @@ function ClusterList() {
                 showSearchSuggestion: false,
                 noSearchResultMessage: t('clusters.list.no-clusters-found'),
               }}
+              customRowClick={handleClickResource}
+              hasDetailsView
             />
             {createPortal(
               <DeleteMessageBox

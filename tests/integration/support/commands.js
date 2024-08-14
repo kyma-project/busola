@@ -165,7 +165,6 @@ Cypress.Commands.add(
       confirmationEnabled = true,
       deletedVisible = true,
       clearSearch = true,
-      isUI5Link = true,
       checkIfResourceIsRemoved = true,
       selectSearchResult = false,
     } = options;
@@ -183,11 +182,7 @@ Cypress.Commands.add(
         .click();
     }
 
-    if (isUI5Link) {
-      cy.checkItemOnGenericListLink(resourceName);
-    } else {
-      cy.contains('ui5-link', resourceName).should('be.visible');
-    }
+    cy.checkItemOnGenericListLink(resourceName);
 
     cy.get('ui5-button[data-testid="delete"]').click();
 

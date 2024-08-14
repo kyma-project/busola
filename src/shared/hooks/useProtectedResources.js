@@ -1,14 +1,24 @@
-import { Icon, ObjectStatus } from '@ui5/webcomponents-react';
+import {
+  Button,
+  Icon,
+  ObjectStatus,
+  Popover,
+  Text,
+} from '@ui5/webcomponents-react';
 import { useFeature } from 'hooks/useFeature';
 import * as jp from 'jsonpath';
+import { useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { disableResourceProtectionState } from 'state/preferences/disableResourceProtectionAtom';
 
 export function useProtectedResources() {
   const { t } = useTranslation();
+  const popoverRef = useRef(null);
+  const [popoverMessage, setPopoverMessage] = useState('');
+
   const protectedResourcesFeature = useFeature('PROTECTED_RESOURCES');
   const disableResourceProtection = useRecoilValue(
     disableResourceProtectionState,
@@ -52,13 +62,14 @@ export function useProtectedResources() {
       .join('\n');
 
     return (
-      <Tooltip
-        className="protected-resource-warning"
-        content={message}
-        delay={0}
+      <Button
+        design="Transparent"
+        onClick={e => {
+          setPopoverMessage(message);
+          popoverRef?.current?.showAt(e?.target);
+        }}
       >
-        {!withText && <Icon design="Critical" name="locked" />}
-        {withText && (
+        {withText ? (
           <ObjectStatus
             icon={<Icon name="locked" />}
             showDefaultIcon
@@ -67,8 +78,26 @@ export function useProtectedResources() {
           >
             {t('common.protected-resource')}
           </ObjectStatus>
+        ) : (
+          <Icon
+            design="Critical"
+            name="locked"
+            style={{ marginTop: '0.125rem' }}
+          />
         )}
-      </Tooltip>
+      </Button>
+    );
+  };
+
+  const protectedResourcePopover = () => {
+    if (disableResourceProtection) {
+      return <></>;
+    }
+    return createPortal(
+      <Popover placementType="Right" ref={popoverRef}>
+        <Text className="description">{popoverMessage}</Text>
+      </Popover>,
+      document.body,
     );
   };
 
@@ -77,5 +106,6 @@ export function useProtectedResources() {
     getEntryProtection,
     isProtected,
     protectedResourceWarning,
+    protectedResourcePopover,
   };
 }
