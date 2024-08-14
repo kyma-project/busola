@@ -29,17 +29,4 @@ permissions:
   id-token: write # This is required for requesting the JWT token
   contents: read # This is required for actions/checkout
 
-jobs:
-  build-web-image:
-    uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: kyma-project/test-infra/.github/workflows/image-builder.yml@main
-    with:
-      name: busola-web
-      dockerfile: Dockerfile
-      context: .
-      export-tags: true
-  test-web-image:
-    runs-on: ubuntu-latest
-    needs: build-web-image
-    steps:
-      - name: Test image
-        run: echo "Testing images ${{ needs.build-web-image.outputs.images }}"
+#test
