@@ -1,39 +1,36 @@
-name: Busola Local Build
+name: Busola Web Build
 
 on:
   push:
     branches:
       - main
     paths:
-      - ".github/workflows/busola-local-build.yml"
-      - "backend/**"
+      - ".github/workflows/busola-web-build.yml"
       - "public/**"
       - "src/**"
-      - "tests/**"
       - "package.json"
       - "Makefile"
-      - "Dockerfile.local"
+      - "Dockerfile"
   pull_request_target:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
-      - ".github/workflows/busola-local-build.yml"
-      - "backend/**"
+      - ".github/workflows/busola-web-build.yml"
       - "public/**"
       - "src/**"
-      - "tests/**"
       - "package.json"
       - "Makefile"
-      - "Dockerfile.local"
+      - "Dockerfile"
 
 permissions:
   id-token: write # This is required for requesting the JWT token
   contents: read # This is required for actions/checkout
 
 jobs:
-  build-local-image:
+  build-web-image:
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: kyma-project/test-infra/.github/workflows/image-builder.yml@main
     with:
-      name: busola
-      dockerfile: Dockerfile.local
+      name: busola-web
+      dockerfile: Dockerfile
       context: .
       export-tags: true
+

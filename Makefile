@@ -22,7 +22,7 @@ release: build-image push-image
 release-local: build-image-local push-image-local
 
 build-image:
-	docker build --build-arg=TAG_default_tag=$(TAG) -t $(IMG_NAME) -f Dockerfile .
+	docker build -t $(IMG_NAME) -f Dockerfile .
 
 build-image-local:
 	docker build -t $(LOCAL_IMG_NAME) -f Dockerfile.local .
