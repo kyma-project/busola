@@ -6,10 +6,8 @@ on:
       - main
     paths:
       - ".github/workflows/busola-web-build.yml"
-      - "backend/**"
       - "public/**"
       - "src/**"
-      - "tests/**"
       - "package.json"
       - "Makefile"
       - "Dockerfile"
@@ -17,10 +15,8 @@ on:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
       - ".github/workflows/busola-web-build.yml"
-      - "backend/**"
       - "public/**"
       - "src/**"
-      - "tests/**"
       - "package.json"
       - "Makefile"
       - "Dockerfile"

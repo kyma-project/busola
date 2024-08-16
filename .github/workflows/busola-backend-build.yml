@@ -7,23 +7,13 @@ on:
     paths:
       - ".github/workflows/busola-backend-build.yml"
       - "backend/**"
-      - "public/**"
-      - "src/**"
-      - "tests/**"
       - "package.json"
-      - "Makefile"
-      - "Dockerfile"
   pull_request_target:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
       - ".github/workflows/busola-backend-build.yml"
       - "backend/**"
-      - "public/**"
-      - "src/**"
-      - "tests/**"
       - "package.json"
-      - "Makefile"
-      - "Dockerfile"
 
 permissions:
   id-token: write # This is required for requesting the JWT token
