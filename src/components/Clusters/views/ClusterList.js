@@ -12,8 +12,8 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-
 import { deleteCluster } from './../shared';
+
 import { AddClusterDialog } from '../components/AddClusterDialog';
 import { EditCluster } from './EditCluster/EditCluster';
 import { ClusterStorageType } from './ClusterStorageType';

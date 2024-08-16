@@ -59,6 +59,7 @@ export const makeHandleRequest = () => {
   return async (req, res) => {
     logger(req, res);
     let headersData;
+
     try {
       headersData = extractHeadersData(req);
     } catch (e) {
