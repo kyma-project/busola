@@ -145,7 +145,14 @@ const DefaultRowRenderer = ({
       {cells}
       {!!actions.length && actionsCell}
       {displayArrow && (
-        <TableCell style={{ padding: 0 }}>
+        <TableCell
+          style={{
+            padding: 0,
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+          }}
+        >
           <Icon name="slim-arrow-right" design="Neutral" />
         </TableCell>
       )}
