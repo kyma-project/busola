@@ -25,7 +25,10 @@ export function ConfigMapDetails(props) {
     {
       header: t('common.headers.owner'),
       value: secret => (
-        <ControlledBy ownerReferences={secret.metadata.ownerReferences} />
+        <ControlledBy
+          ownerReferences={secret.metadata.ownerReferences}
+          namespace={secret.metadata.namespace}
+        />
       ),
     },
   ];

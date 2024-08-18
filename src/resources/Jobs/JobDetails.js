@@ -44,7 +44,10 @@ export function JobDetails(props) {
     {
       header: t('common.headers.owner'),
       value: job => (
-        <ControlledBy ownerReferences={job.metadata.ownerReferences} />
+        <ControlledBy
+          ownerReferences={job.metadata.ownerReferences}
+          namespace={job.metadata.namespace}
+        />
       ),
     },
   ];

@@ -29,7 +29,10 @@ export function ReplicaSetsDetails(props) {
     {
       header: t('common.headers.owner'),
       value: resource => (
-        <ControlledBy ownerReferences={resource.metadata.ownerReferences} />
+        <ControlledBy
+          ownerReferences={resource.metadata.ownerReferences}
+          namespace={resource.metadata.namespace}
+        />
       ),
     },
     {
