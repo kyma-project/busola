@@ -9,9 +9,20 @@ import { NetworkPolicyPeers } from './Peers';
 import NetworkPolicyCreate from './NetworkPolicyCreate';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ResourceDescription } from 'resources/NetworkPolicies';
+import { EventsList } from 'shared/components/EventsList';
+import { filterByResource } from 'hooks/useMessageList';
 
 export function NetworkPolicyDetails(props) {
   const { t } = useTranslation();
+
+  const Events = () => (
+    <EventsList
+      key="events"
+      namespace={props.namespace}
+      filter={filterByResource('NetworkPolicy', props.resourceName)}
+      hideInvolvedObjects={true}
+    />
+  );
 
   const customColumns = [
     {
@@ -77,7 +88,7 @@ export function NetworkPolicyDetails(props) {
     );
   };
 
-  const customComponents = [Ingresses, Egresses, PodSelector];
+  const customComponents = [Ingresses, Egresses, PodSelector, Events];
 
   return (
     <ResourceDetails
