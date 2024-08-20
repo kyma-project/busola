@@ -54,7 +54,6 @@ function SingleContainerSection({ container, setContainer }) {
 
 export function Containers({ value: containers, setValue: setContainers }) {
   const { t } = useTranslation();
-  // const schema = useContext(SchemaContext);
 
   const removeContainer = index => {
     setContainers(containers.filter((_, i) => index !== i));
