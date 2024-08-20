@@ -76,6 +76,7 @@ export const widgets = {
     Accordions: AccordionsRenderer,
     */
     Text: StringRenderer,
+    Switch: SwitchRenderer,
     Jsonata,
     /*
     Text: TextRenderer,
