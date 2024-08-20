@@ -11,6 +11,7 @@ import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ResourceDescription } from 'resources/NetworkPolicies';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
+import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
 export function NetworkPolicyDetails(props) {
   const { t } = useTranslation();
@@ -24,12 +25,18 @@ export function NetworkPolicyDetails(props) {
     />
   );
 
-  const customColumns = [
-    {
-      header: t('network-policies.headers.policy-types'),
-      value: ({ spec }) => <Tokens tokens={spec.policyTypes || []} />,
-    },
-  ];
+  const Specification = ({ spec }) => (
+    <UI5Panel
+      key="specification"
+      title="Specification"
+      keyComponent="specification-panel"
+    >
+      <LayoutPanelRow
+        name={t('network-policies.headers.policy-types')}
+        children={<Tokens tokens={spec.policyTypes || []} />}
+      />
+    </UI5Panel>
+  );
 
   const Ingresses = ({ spec }) => {
     if (!spec.ingress?.length) return null;
@@ -88,11 +95,16 @@ export function NetworkPolicyDetails(props) {
     );
   };
 
-  const customComponents = [Ingresses, Egresses, PodSelector, Events];
+  const customComponents = [
+    Specification,
+    Ingresses,
+    Egresses,
+    PodSelector,
+    Events,
+  ];
 
   return (
     <ResourceDetails
-      customColumns={customColumns}
       customComponents={customComponents}
       description={ResourceDescription}
       createResourceForm={NetworkPolicyCreate}

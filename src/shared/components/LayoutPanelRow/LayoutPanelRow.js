@@ -5,7 +5,7 @@ import { Text } from '@ui5/webcomponents-react';
 import { spacing } from '@ui5/webcomponents-react-base';
 import './LayoutPanelRow.scss';
 
-export function LayoutPanelRow({ name, value }) {
+export function LayoutPanelRow({ name, value, children }) {
   const sanitizedValue = stringifyIfBoolean(value);
   return (
     <div
@@ -16,7 +16,10 @@ export function LayoutPanelRow({ name, value }) {
       }}
     >
       <Text style={spacing.sapUiTinyMarginBottom}>{name}</Text>
-      <Text>{sanitizedValue}</Text>
+      <div>
+        {sanitizedValue && <Text>{sanitizedValue}</Text>}
+        {children}
+      </div>
     </div>
   );
 }
