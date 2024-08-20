@@ -147,7 +147,11 @@ export function AuthForm({
         <ResourceForm.FormField
           label={t('clusters.wizard.auth.using-oidc')}
           input={() => (
-            <Switch checked={useOidc} onChange={switchAuthVariant} />
+            <Switch
+              style={spacing.sapUiTinyMarginTop}
+              checked={useOidc}
+              onChange={switchAuthVariant}
+            />
           )}
           className="oidc-switch"
         />
