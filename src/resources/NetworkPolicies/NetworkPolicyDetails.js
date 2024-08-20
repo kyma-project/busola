@@ -28,7 +28,7 @@ export function NetworkPolicyDetails(props) {
   const Specification = ({ spec }) => (
     <UI5Panel
       key="specification"
-      title="Specification"
+      title={t('common.headers.specification')}
       keyComponent="specification-panel"
     >
       <LayoutPanelRow
