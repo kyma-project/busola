@@ -5,6 +5,7 @@ import './ClusterPreview.scss';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { findInitialValue } from '../views/EditCluster/EditCluster';
 import { getUserIndex } from '../shared';
+import { Tokens } from 'shared/components/Tokens';
 
 export function ClusterPreview({ kubeconfig, storage, setSelected, hasAuth }) {
   const { t } = useTranslation();
@@ -25,7 +26,7 @@ export function ClusterPreview({ kubeconfig, storage, setSelected, hasAuth }) {
       'oidc-client-secret',
       userIndex,
     );
-    const extraScope = findInitialValue(
+    const extraScopes = findInitialValue(
       kubeconfig,
       'oidc-extra-scope',
       userIndex,
@@ -75,7 +76,7 @@ export function ClusterPreview({ kubeconfig, storage, setSelected, hasAuth }) {
             <div>{clientSecret}</div>
           </>
         )}
-        {extraScope && (
+        {extraScopes && (
           <>
             <p
               className="cluster-preview__data-header"
@@ -86,7 +87,7 @@ export function ClusterPreview({ kubeconfig, storage, setSelected, hasAuth }) {
             >
               {t('clusters.labels.scopes')}:
             </p>
-            <div>{extraScope}</div>
+            {<Tokens tokens={extraScopes} />}
           </>
         )}
       </>

@@ -21,11 +21,20 @@ import { getUserIndex } from '../../shared';
 
 export const findInitialValue = (kubeconfig, id, userIndex = 0) => {
   if (kubeconfig?.users?.[userIndex]?.user?.exec?.args) {
-    const elementWithId = kubeconfig?.users?.[
+    const elementsWithId = kubeconfig?.users?.[
       userIndex
-    ]?.user?.exec?.args.find(el => el.includes(id));
+    ]?.user?.exec?.args.filter(el => el.includes(id));
     const regex = new RegExp(`${id}=(?<value>.*)`);
-    return regex.exec(elementWithId)?.groups?.value || '';
+    const values = [];
+
+    for (const element of elementsWithId) {
+      const match = regex.exec(element);
+      if (match?.groups?.value) {
+        values.push(match.groups.value);
+      }
+    }
+
+    return values.length === 1 ? values[0] : values;
   }
   return '';
 };
