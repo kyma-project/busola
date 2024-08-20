@@ -28,7 +28,10 @@ export function StatefulSetDetails(props) {
     {
       header: t('common.headers.owner'),
       value: set => (
-        <ControlledBy ownerReferences={set.metadata.ownerReferences} />
+        <ControlledBy
+          ownerReferences={set.metadata.ownerReferences}
+          namespace={set.metadata.namespace}
+        />
       ),
     },
   ];

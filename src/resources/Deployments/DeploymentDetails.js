@@ -19,7 +19,10 @@ export function DeploymentDetails(props) {
     {
       header: t('common.headers.owner'),
       value: deployment => (
-        <ControlledBy ownerReferences={deployment.metadata.ownerReferences} />
+        <ControlledBy
+          ownerReferences={deployment.metadata.ownerReferences}
+          namespace={deployment.metadata.namespace}
+        />
       ),
     },
   ];

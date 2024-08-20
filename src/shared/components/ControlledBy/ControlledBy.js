@@ -9,7 +9,12 @@ import { useUrl } from 'hooks/useUrl';
 import { getExtensibilityPath } from 'components/Extensibility/helpers/getExtensibilityPath';
 import { Link } from '../Link/Link';
 
-export const GoToDetailsLink = ({ kind, name, noBrackets = false }) => {
+export const GoToDetailsLink = ({
+  kind,
+  name,
+  namespace,
+  noBrackets = false,
+}) => {
   const extensions = useRecoilValue(extensionsState);
   const { namespaceUrl, clusterUrl } = useUrl();
 
@@ -22,14 +27,14 @@ export const GoToDetailsLink = ({ kind, name, noBrackets = false }) => {
   if (resource) {
     const partialPath = pluralize(kind || '')?.toLowerCase();
     if (resource.namespaced) {
-      path = namespaceUrl(`${partialPath}/${name}`);
+      path = namespaceUrl(`${partialPath}/${name}`, { namespace });
     } else {
       path = clusterUrl(`${partialPath}/${name}`);
     }
   } else if (extResource) {
     const partialPath = getExtensibilityPath(extResource.general);
     if (extResource.general.scope === 'namespace') {
-      path = namespaceUrl(`${partialPath}/${name}`);
+      path = namespaceUrl(`${partialPath}/${name}`, { namespace });
     } else {
       path = clusterUrl(`${partialPath}/${name}`);
     }
@@ -48,6 +53,7 @@ export const GoToDetailsLink = ({ kind, name, noBrackets = false }) => {
 
 export const ControlledBy = ({
   ownerReferences,
+  namespace,
   kindOnly,
   placeholder = EMPTY_TEXT_PLACEHOLDER,
 }) => {
@@ -57,9 +63,9 @@ export const ControlledBy = ({
   )
     return placeholder;
 
-  const OwnerRef = ({ owner, className }) => {
+  const OwnerRef = ({ owner }) => {
     return (
-      <div key={owner.name} className={className}>
+      <div key={owner.name}>
         {owner.kind}
         {!kindOnly && (
           <>
@@ -68,6 +74,7 @@ export const ControlledBy = ({
               kind={owner.kind}
               apiVersion={owner.apiVersion}
               name={owner.name}
+              namespace={namespace}
             />
           </>
         )}

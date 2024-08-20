@@ -34,7 +34,10 @@ export function PodDetails(props) {
     {
       header: t('common.headers.owner'),
       value: pod => (
-        <ControlledBy ownerReferences={pod.metadata.ownerReferences} />
+        <ControlledBy
+          ownerReferences={pod.metadata.ownerReferences}
+          namespace={pod.metadata.namespace}
+        />
       ),
     },
   ];
