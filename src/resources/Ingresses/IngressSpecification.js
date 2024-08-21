@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 export const IngressSpecification = ({ resource }) => {
   const { t } = useTranslation();
@@ -9,7 +10,7 @@ export const IngressSpecification = ({ resource }) => {
   return (
     <>
       <UI5Panel title={t('common.headers.specification')}>
-        {resource.spec && (
+        {resource.spec.ingressClassName && (
           <LayoutPanelRow
             name={t('ingresses.labels.ingress-class-name')}
             value={resource.spec.ingressClassName}
@@ -22,7 +23,10 @@ export const IngressSpecification = ({ resource }) => {
               t('ingresses.labels.hosts'),
               t('ingresses.labels.secret-name'),
             ]}
-            rowRenderer={tls => [tls?.hosts.join(', '), tls?.secretName]}
+            rowRenderer={tls => [
+              tls?.hosts?.join(', ') ?? EMPTY_TEXT_PLACEHOLDER,
+              tls?.secretName ?? EMPTY_TEXT_PLACEHOLDER,
+            ]}
             entries={resource.spec?.tls}
             searchSettings={{
               showSearchField: false,

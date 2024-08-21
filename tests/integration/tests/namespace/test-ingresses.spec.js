@@ -48,6 +48,14 @@ context('Test Ingresses', () => {
       .should('be.visible');
 
     cy.getMidColumn()
+      .contains(/specification/i)
+      .should('be.visible');
+
+    cy.getMidColumn()
+      .contains(/tls/i)
+      .should('be.visible');
+
+    cy.getMidColumn()
       .get('#content-wrap')
       .contains(/rules/i)
       .should('be.visible');

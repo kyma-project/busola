@@ -42,9 +42,12 @@ export function IngressDetails(props) {
 
   const customComponents = [];
 
-  customComponents.push(resource => (
-    <IngressSpecification resource={resource} />
-  ));
+  customComponents.push(
+    resource =>
+      (resource.spec?.ingressClassName || resource.spec?.tls) && (
+        <IngressSpecification resource={resource} />
+      ),
+  );
 
   customComponents.push(resource =>
     resource.spec.defaultBackend ? (
