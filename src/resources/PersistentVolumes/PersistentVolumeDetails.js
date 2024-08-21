@@ -15,6 +15,7 @@ import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ResourceDescription } from 'resources/PersistentVolumes';
 import { Link } from 'shared/components/Link/Link';
 import { getReadableTimestampWithTime } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
+import { Labels } from 'shared/components/Labels/Labels';
 
 export function PersistentVolumeDetails(props) {
   const { t } = useTranslation();
@@ -96,17 +97,60 @@ export function PersistentVolumeDetails(props) {
             )
           }
         />
+        <LayoutPanelRow
+          name={t('pv.headers.volumeMode')}
+          value={spec?.volumeMode}
+        />
       </UI5Panel>
 
-      <UI5Panel title={t('pv.nfs')}>
-        <LayoutPanelRow
-          name={t('pv.headers.server')}
-          value={spec.nfs?.server || EMPTY_TEXT_PLACEHOLDER}
-        />
-        <LayoutPanelRow
-          name={t('pv.headers.path')}
-          value={spec.nfs?.path || EMPTY_TEXT_PLACEHOLDER}
-        />
+      <UI5Panel title={t('pv.headers.source')}>
+        {spec.nfs && (
+          <>
+            <LayoutPanelRow
+              name={t('pv.headers.type')}
+              value={t('pv.nfs.type')}
+            />
+            <LayoutPanelRow
+              name={t('pv.nfs.server')}
+              value={spec.nfs?.server || EMPTY_TEXT_PLACEHOLDER}
+            />
+            <LayoutPanelRow
+              name={t('pv.nfs.path')}
+              value={spec.nfs?.path || EMPTY_TEXT_PLACEHOLDER}
+            />
+          </>
+        )}
+        {spec.csi && (
+          <>
+            <LayoutPanelRow
+              name={t('pv.headers.type')}
+              value={t('pv.csi.type')}
+            />
+            <LayoutPanelRow
+              name={t('pv.csi.driver')}
+              value={spec.csi?.driver || EMPTY_TEXT_PLACEHOLDER}
+            />
+            <LayoutPanelRow
+              name={t('pv.csi.volumeHandle')}
+              value={spec.csi?.volumeHandle || EMPTY_TEXT_PLACEHOLDER}
+            />
+            <LayoutPanelRow
+              name={t('pv.csi.fsType')}
+              value={spec.csi?.fsType || EMPTY_TEXT_PLACEHOLDER}
+            />
+            <LayoutPanelRow
+              name={t('pv.csi.volumeAttributes')}
+              value={
+                (
+                  <Labels
+                    labels={spec.csi?.volumeAttributes || {}}
+                    shortenLongLabels={false}
+                  />
+                ) || EMPTY_TEXT_PLACEHOLDER
+              }
+            />
+          </>
+        )}
       </UI5Panel>
     </div>
   );

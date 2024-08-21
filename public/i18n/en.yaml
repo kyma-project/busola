@@ -1219,14 +1219,24 @@ pv:
     claim-name: Claim Name
     finalizers: Finalizers
     mount-options: Mount Options
-    path: Path
     reclaim-policy: Reclaim Policy
-    server: Server
     storage-class: Storage Class
     storage-class-name: Storage Class Name
     lastPhaseTransitionTime: Last Phase Transition Time
+    volumeMode: Volume Mode
+    source: Source
+    type: Type
   name_singular: PersistentVolume
-  nfs: Network File System
+  nfs: 
+    type: Network File System
+    server: Server
+    path: Path
+  csi: 
+    type: Container Storage Interface
+    driver: Driver
+    volumeHandle: Volume Handle
+    fsType: FSType
+    volumeAttributes: Volume Attributes
   statuses:
     available: Available
     bound: Bound
