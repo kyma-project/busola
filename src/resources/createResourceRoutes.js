@@ -2,7 +2,6 @@ import React, { Suspense, useEffect, useMemo } from 'react';
 
 import { useRecoilState } from 'recoil';
 import { Route, useParams, useSearchParams } from 'react-router-dom';
-import pluralize from 'pluralize';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
@@ -28,32 +27,6 @@ export const createPath = (
   const details = detailsView ? '/:resourceName' : '';
 
   return `${pathSegment}${details}`;
-};
-
-export const createUrl = (
-  { resourceType, pathSegment, namespaced, resourceName },
-  namespace,
-) => {
-  const namespacePrefix = namespaced ? `/namespaces/${namespace}` : '';
-  const details = resourceName || '';
-  pathSegment = pathSegment || pluralize(resourceType).toLowerCase();
-
-  return `${namespacePrefix}/${pathSegment}/${details}`;
-};
-
-export const createKubernetesUrl = ({
-  resourceType,
-  namespace,
-  resourceName,
-  apiGroup = '',
-  apiVersion,
-}) => {
-  const namespaceSegment = namespace ? `namespaces/${namespace}/` : '';
-  const details = resourceName || '';
-  const apiPrefix = apiGroup ? 'apis/' : 'api';
-  resourceType = pluralize(resourceType).toLowerCase();
-
-  return `${apiPrefix}${apiGroup}/${apiVersion}/${namespaceSegment}${resourceType}/${details}`;
 };
 
 const ColumnWrapper = ({
