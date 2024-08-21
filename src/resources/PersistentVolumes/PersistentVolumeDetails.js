@@ -14,17 +14,11 @@ import PersistentVolumeCreate from './PersistentVolumeCreate';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ResourceDescription } from 'resources/PersistentVolumes';
 import { Link } from 'shared/components/Link/Link';
+import { getReadableTimestampWithTime } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 
 export function PersistentVolumeDetails(props) {
   const { t } = useTranslation();
   const { resourceUrl } = useUrl();
-
-  const customColumns = [
-    {
-      header: t('common.headers.status'),
-      value: ({ status }) => <PersistentVolumeStatus status={status} />,
-    },
-  ];
 
   const { data: storageClasses } = useGetList()(
     '/apis/storage.k8s.io/v1/storageclasses',
@@ -124,9 +118,18 @@ export function PersistentVolumeDetails(props) {
     />
   );
 
+  const customStatusColumns = [
+    {
+      header: t('pv.headers.lastPhaseTransitionTime'),
+      value: pv =>
+        getReadableTimestampWithTime(pv?.status?.lastPhaseTransitionTime),
+    },
+  ];
+
   return (
     <ResourceDetails
-      customColumns={customColumns}
+      statusBadge={pv => <PersistentVolumeStatus status={pv?.status} />}
+      customStatusColumns={customStatusColumns}
       customComponents={[PvDetails, Events]}
       description={ResourceDescription}
       createResourceForm={PersistentVolumeCreate}

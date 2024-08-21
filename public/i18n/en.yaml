@@ -1224,6 +1224,7 @@ pv:
     server: Server
     storage-class: Storage Class
     storage-class-name: Storage Class Name
+    lastPhaseTransitionTime: Last Phase Transition Time
   name_singular: PersistentVolume
   nfs: Network File System
   statuses:
