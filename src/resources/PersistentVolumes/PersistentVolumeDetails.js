@@ -19,15 +19,19 @@ import { Labels } from 'shared/components/Labels/Labels';
 
 export function PersistentVolumeDetails(props) {
   const { t } = useTranslation();
-  const { resourceUrl } = useUrl();
+  const { resourceUrl, namespaceUrl } = useUrl();
 
   const { data: storageClasses } = useGetList()(
     '/apis/storage.k8s.io/v1/storageclasses',
   );
 
+  const { data: secrets } = useGetList()('/api/v1/secrets');
+
   const { data: persistentVolumeClaims } = useGetList()(
     '/api/v1/persistentvolumeclaims',
   );
+  const findSecret = secretName =>
+    secrets?.find(({ metadata }) => metadata.name === secretName);
 
   const PvDetails = ({ spec, metadata, status }) => (
     <div key="persistent-volumes-ref" data-testid="persistent-volumes-ref">
@@ -238,16 +242,29 @@ export function PersistentVolumeDetails(props) {
               name={t('pv.iscsi.chapAuthSession')}
               value={spec.iscsi?.chapAuthSession || EMPTY_TEXT_PLACEHOLDER}
             />
-            {/* TO DO: HERE SHOULD BE CLICKABLE LINK TO SECRET */}
             <LayoutPanelRow
               name={t('pv.iscsi.secretRef')}
               value={
-                (
-                  <Labels
-                    labels={spec.iscsi?.secretRef || {}}
-                    shortenLongLabels={false}
-                  />
-                ) || EMPTY_TEXT_PLACEHOLDER
+                findSecret(spec.iscsi?.secretRef?.name) ? (
+                  <Link
+                    url={resourceUrl(
+                      {
+                        kind: 'Secret',
+                        metadata: {
+                          name: spec.iscsi?.secretRef?.name,
+                        },
+                      },
+                      {
+                        namespace: findSecret(spec.iscsi?.secretRef?.name)
+                          .metadata.namespace,
+                      },
+                    )}
+                  >
+                    {spec.iscsi?.secretRef?.name}
+                  </Link>
+                ) : (
+                  <p>{spec.iscsi?.secretRef?.name || EMPTY_TEXT_PLACEHOLDER}</p>
+                )
               }
             />
           </>
