@@ -4,8 +4,6 @@ import { ConditionList } from 'shared/components/ConditionList/ConditionList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { spacing } from '@ui5/webcomponents-react-base';
 import './IngressStatus.scss';
-import { Label } from 'shared/ResourceForm/components/Label';
-import { Badge } from 'components/Extensibility/components/Badge';
 
 export const IngressStatus = ({ resource }) => {
   const { t } = useTranslation();
@@ -19,14 +17,24 @@ export const IngressStatus = ({ resource }) => {
       conditions={ingresses.map(ingress => ({
         header: {
           titleText: ingress.hostname ? (
-            <div className="load-balancers__header">
+            <div>
+              <span
+                style={{ ...spacing.sapUiTinyMarginEnd }}
+                className="title bsl-has-color-status-4"
+              >
+                {`${t('ingresses.labels.host-name')}:`}
+              </span>
               {`${ingress.hostname}`}
-              <Badge value={`${t('ingresses.labels.host-name')} `} />
             </div>
           ) : (
-            <div className="load-balancers__header">
+            <div>
+              <span
+                style={{ ...spacing.sapUiTinyMarginEnd }}
+                className="title bsl-has-color-status-4"
+              >
+                {`${t('ingresses.labels.ip')}:`}
+              </span>
               {`${ingress.ip}`}
-              <Badge value={`${t('ingresses.labels.ip')} `} />
             </div>
           ),
         },

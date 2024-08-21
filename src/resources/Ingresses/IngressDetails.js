@@ -11,37 +11,7 @@ import { filterByResource } from 'hooks/useMessageList';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { IngressStatus } from './IngressStatus';
 import { IngressSpecification } from './IngressSpecification';
-import { useEffect, useState } from 'react';
-
-const exampleStatus = {
-  loadBalancer: {
-    ingress: [
-      {
-        hostname: 'example-lb1.example.com',
-        ports: [
-          {
-            port: 80,
-            protocol: 'TCP',
-            error: 'ServicePortConflict',
-          },
-          {
-            port: 443,
-            protocol: 'TCP',
-          },
-        ],
-      },
-      {
-        ip: '192.0.2.2',
-        ports: [
-          {
-            port: 80,
-            protocol: 'TCP',
-          },
-        ],
-      },
-    ],
-  },
-};
+import { useState } from 'react';
 
 export function IngressDetails(props) {
   const { t } = useTranslation();
@@ -49,8 +19,6 @@ export function IngressDetails(props) {
   const [healthyPods, setHealthyPods] = useState(0);
 
   const calculateTotalPorts = ingress => {
-    if (ingress.metadata.name === 'cafe-ingress')
-      ingress.status = exampleStatus;
     let allPorts = 0;
 
     ingress?.status?.loadBalancer?.ingress?.forEach(element => {
@@ -61,7 +29,6 @@ export function IngressDetails(props) {
   };
 
   const calculatePortsWithoutErrors = ingress => {
-    //ingress.status = exampleStatus;
     let healthyPods = 0;
 
     ingress?.status?.loadBalancer?.ingress?.forEach(element => {
