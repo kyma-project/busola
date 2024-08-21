@@ -1257,6 +1257,9 @@ pv:
     chapAuthDiscovery: DiscoveryCHAPAuth
     chapAuthSession: SessionCHAPAuth
     secretRef: Secret Reference
+  local:
+    type: Local
+    path: Path
   statuses:
     available: Available
     bound: Bound

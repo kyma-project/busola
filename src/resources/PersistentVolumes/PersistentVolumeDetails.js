@@ -224,7 +224,7 @@ export function PersistentVolumeDetails(props) {
               value={spec.iscsi?.fsType || EMPTY_TEXT_PLACEHOLDER}
             />
             <LayoutPanelRow
-              name={t('pv.fc.portals')}
+              name={t('pv.iscsi.portals')}
               value={
                 <Tokens tokens={spec.iscsi?.portals || []} /> ||
                 EMPTY_TEXT_PLACEHOLDER
@@ -240,7 +240,7 @@ export function PersistentVolumeDetails(props) {
             />
             {/* TO DO: HERE SHOULD BE CLICKABLE LINK TO SECRET */}
             <LayoutPanelRow
-              name={t('pv.csi.secretRef')}
+              name={t('pv.iscsi.secretRef')}
               value={
                 (
                   <Labels
@@ -249,6 +249,18 @@ export function PersistentVolumeDetails(props) {
                   />
                 ) || EMPTY_TEXT_PLACEHOLDER
               }
+            />
+          </>
+        )}
+        {spec.local && (
+          <>
+            <LayoutPanelRow
+              name={t('pv.headers.type')}
+              value={t('pv.local.type')}
+            />
+            <LayoutPanelRow
+              name={t('pv.local.path')}
+              value={spec.local?.path || EMPTY_TEXT_PLACEHOLDER}
             />
           </>
         )}
