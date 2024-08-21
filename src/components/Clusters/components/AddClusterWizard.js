@@ -166,7 +166,7 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
           firstStep={true}
           onCancel={() => setShowWizard(false)}
           validation={!kubeconfig}
-          className="cluster-wizard__buttons"
+          className="cluster-wizard__buttons__sticky"
         />
       </WizardStep>
 
@@ -197,7 +197,7 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
             setSelected={setSelected}
             onCancel={() => setShowWizard(false)}
             validation={!authValid}
-            className="cluster-wizard__buttons"
+            className="cluster-wizard__buttons__absolute"
           />
         </WizardStep>
       )}
@@ -217,14 +217,14 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
         data-step={!hasAuth || !hasOneContext ? '3' : '2'}
       >
         <div className="add-cluster__content-container">
-          <Title level="H5">
+          <Title level="H5" style={spacing.sapUiSmallMarginBottom}>
             {t('clusters.storage.choose-storage.label')}
             <>
               <Button
                 id="storageDescriptionOpener"
                 icon="hint"
                 design="Transparent"
-                style={spacing.sapUiTinyMargin}
+                style={spacing.sapUiTinyMarginBegin}
                 onClick={() => setShowTitleDescription(true)}
               />
               {createPortal(
@@ -248,7 +248,7 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
             setSelected={setSelected}
             validation={!storage}
             onCancel={() => setShowWizard(false)}
-            className="cluster-wizard__buttons"
+            className="cluster-wizard__buttons__absolute"
           />
         </div>
       </WizardStep>
@@ -284,7 +284,7 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
             setIsFormOpen({ formOpen: false });
           }}
           validation={!storage}
-          className="cluster-wizard__buttons"
+          className="cluster-wizard__buttons__absolute"
         />
       </WizardStep>
     </Wizard>

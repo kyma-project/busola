@@ -6,7 +6,7 @@
   &__content-container {
     background-color: var(--sapGroup_TitleBackground);
     border-radius: var(--sapElement_BorderCornerRadius);
-    padding: 0 1rem 1rem;
+    padding: 1rem;
   }
 
   &__kubeconfig-info {
@@ -19,17 +19,13 @@ ui5-wizard {
   min-width: 80vw;
 
   .cluster-wizard {
-    &__buttons {
+    @mixin cluster-wizard-buttons-style {
       z-index: 100;
-      position: absolute;
       bottom: 1rem;
-      left: 0;
       display: flex;
       justify-content: flex-end;
       box-sizing: border-box;
-      width: calc(100% - 20px);
-      margin: 0 10px;
-      padding: 7px;
+      padding: 0.5rem;
       border: 1px solid var(--sapGroup_TitleBorderColor);
       border-radius: var(--sapElement_BorderCornerRadius);
       background-color: var(--sapGroup_TitleBackground);
@@ -37,6 +33,23 @@ ui5-wizard {
           color-mix(in srgb, var(--sapContent_ShadowColor) 16%, transparent),
         0 0.5rem 1rem 0
           color-mix(in srgb, var(--sapContent_ShadowColor) 16%, transparent);
+    }
+
+    &__buttons {
+      &__sticky {
+        position: sticky;
+        width: calc(100% + 32px);
+        margin: 0 -16px;
+        @include cluster-wizard-buttons-style;
+      }
+
+      &__absolute {
+        position: absolute;
+        left: 0;
+        width: calc(100% - 50px);
+        margin: 0 25px;
+        @include cluster-wizard-buttons-style;
+      }
     }
 
     &__token-info,
@@ -49,7 +62,6 @@ ui5-wizard {
       display: flex;
       flex-flow: column;
       overflow: auto;
-      height: calc(90vh - 8rem);
 
       .cluster-wizard__auth-form {
         height: unset;
@@ -58,7 +70,7 @@ ui5-wizard {
   }
 
   .resource-form {
-    padding: 1rem 0;
+    padding: 0;
 
     .form-field {
       justify-content: start;
