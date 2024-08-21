@@ -27,7 +27,7 @@ export function AddClusterDialog() {
   return (
     <Dialog
       open={showWizard}
-      className="wizard-dialog"
+      className="add-cluster-wizard-dialog"
       headerText={t('clusters.add.title')}
       onAfterClose={() => setShowWizard(false)}
     >

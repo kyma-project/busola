@@ -1,3 +1,7 @@
+.add-cluster-wizard-dialog::part(content) {
+  height: 90vh;
+}
+
 .add-cluster {
   &__content-container {
     background-color: var(--sapGroup_TitleBackground);
@@ -11,7 +15,7 @@
 }
 
 ui5-wizard {
-  height: 95%;
+  height: 100%;
   min-width: 80vw;
 
   .cluster-wizard {
