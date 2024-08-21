@@ -1,9 +1,12 @@
 import pluralize from 'pluralize';
 import { createContext, useEffect, useRef, FC } from 'react';
+import { useRecoilValue } from 'recoil';
+
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { useObjectState } from 'shared/useObjectState';
 import * as jp from 'jsonpath';
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 export interface Resource {
   metadata: {
@@ -79,6 +82,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
   const dataSourcesDict = useRef<DataSourcesDict>({});
   // refetch intervals
   const intervals = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const fallbackNamespace = useRecoilValue(activeNamespaceIdState);
 
   // clear timeouts on component unmount
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -93,7 +97,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
       ownerLabelSelectorPath,
     } = dataSource;
     if (typeof namespace === 'undefined') {
-      namespace = resource?.metadata?.namespace;
+      namespace = resource?.metadata?.namespace || fallbackNamespace;
     }
 
     const namespacePart = namespace ? `/namespaces/${namespace}` : '';
