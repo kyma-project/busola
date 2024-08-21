@@ -3,7 +3,10 @@ import { Button, FlexBox, RadioButton, Title } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import './ClusterPreview.scss';
 import { spacing } from '@ui5/webcomponents-react-base';
-import { findInitialValue } from '../views/EditCluster/EditCluster';
+import {
+  findInitialValue,
+  findInitialValues,
+} from '../views/EditCluster/EditCluster';
 import { getUserIndex } from '../shared';
 import { Tokens } from 'shared/components/Tokens';
 
@@ -26,7 +29,7 @@ export function ClusterPreview({ kubeconfig, storage, setSelected, hasAuth }) {
       'oidc-client-secret',
       userIndex,
     );
-    const extraScopes = findInitialValue(
+    const extraScopes = findInitialValues(
       kubeconfig,
       'oidc-extra-scope',
       userIndex,

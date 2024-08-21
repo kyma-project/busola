@@ -19,22 +19,31 @@ import { addCluster, getContext, deleteCluster } from '../../shared';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { getUserIndex } from '../../shared';
 
+export const findInitialValues = (kubeconfig, id, userIndex = 0) => {
+  const elementsWithId =
+    kubeconfig?.users?.[userIndex]?.user?.exec?.args.filter(el =>
+      el.includes(id),
+    ) || [];
+  const regex = new RegExp(`${id}=(?<value>.*)`);
+  const values = [];
+
+  for (const element of elementsWithId) {
+    const match = regex.exec(element);
+    if (match?.groups?.value) {
+      values.push(match.groups.value);
+    }
+  }
+
+  return values;
+};
+
 export const findInitialValue = (kubeconfig, id, userIndex = 0) => {
   if (kubeconfig?.users?.[userIndex]?.user?.exec?.args) {
-    const elementsWithId = kubeconfig?.users?.[
+    const elementWithId = kubeconfig?.users?.[
       userIndex
-    ]?.user?.exec?.args.filter(el => el.includes(id));
+    ]?.user?.exec?.args.find(el => el.includes(id));
     const regex = new RegExp(`${id}=(?<value>.*)`);
-    const values = [];
-
-    for (const element of elementsWithId) {
-      const match = regex.exec(element);
-      if (match?.groups?.value) {
-        values.push(match.groups.value);
-      }
-    }
-
-    return values.length === 1 ? values[0] : values;
+    return regex.exec(elementWithId)?.groups?.value || '';
   }
   return '';
 };
@@ -65,7 +74,7 @@ export const ClusterDataForm = ({
     'oidc-client-secret',
     userIndex,
   );
-  const scopes = findInitialValue(kubeconfig, 'oidc-extra-scope', userIndex);
+  const scopes = findInitialValues(kubeconfig, 'oidc-extra-scope', userIndex);
 
   useEffect(() => {
     setAuthenticationType(
@@ -98,7 +107,7 @@ export const ClusterDataForm = ({
         `--oidc-issuer-url=${config.issuerUrl}`,
         `--oidc-client-id=${config.clientId}`,
         `--oidc-client-secret=${config.clientSecret}`,
-        findInitialValue(kubeconfig, 'oidc-extra-scope', userIndex)
+        findInitialValues(kubeconfig, 'oidc-extra-scope', userIndex)
           ? `--oidc-extra-scope=${config.scopes}`
           : `--oidc-extra-scope=openid ${config.scopes}`,
         '--grant-type=auto',
