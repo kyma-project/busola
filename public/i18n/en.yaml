@@ -1237,6 +1237,12 @@ pv:
     volumeHandle: Volume Handle
     fsType: FSType
     volumeAttributes: Volume Attributes
+  fc:
+    type: Fibre Channel
+    lun: LUN
+    fsType: FSType
+    wwids: WWIDs
+    targetWWNs: TargetWWNs
   statuses:
     available: Available
     bound: Bound

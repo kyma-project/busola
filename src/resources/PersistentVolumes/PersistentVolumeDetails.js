@@ -151,6 +151,40 @@ export function PersistentVolumeDetails(props) {
             />
           </>
         )}
+        {spec.fc && (
+          <>
+            <LayoutPanelRow
+              name={t('pv.headers.type')}
+              value={t('pv.fc.type')}
+            />
+            <LayoutPanelRow
+              name={t('pv.fc.lun')}
+              value={spec.fc?.lun || EMPTY_TEXT_PLACEHOLDER}
+            />
+            <LayoutPanelRow
+              name={t('pv.fc.fsType')}
+              value={spec.fc?.fsType || EMPTY_TEXT_PLACEHOLDER}
+            />
+            {spec.fc?.wwids && (
+              <LayoutPanelRow
+                name={t('pv.fc.wwids')}
+                value={
+                  <Tokens tokens={spec.fc?.wwids || []} /> ||
+                  EMPTY_TEXT_PLACEHOLDER
+                }
+              />
+            )}
+            {spec.fc?.targetWWNs && (
+              <LayoutPanelRow
+                name={t('pv.fc.targetWWNs')}
+                value={
+                  <Tokens tokens={spec.fc?.targetWWNs || []} /> ||
+                  EMPTY_TEXT_PLACEHOLDER
+                }
+              />
+            )}
+          </>
+        )}
       </UI5Panel>
     </div>
   );
