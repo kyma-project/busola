@@ -197,6 +197,61 @@ export function PersistentVolumeDetails(props) {
             />
           </>
         )}
+        {spec.iscsi && (
+          <>
+            <LayoutPanelRow
+              name={t('pv.headers.type')}
+              value={t('pv.iscsi.type')}
+            />
+            <LayoutPanelRow
+              name={t('pv.iscsi.targetPortal')}
+              value={spec.iscsi?.targetPortal || EMPTY_TEXT_PLACEHOLDER}
+            />
+            <LayoutPanelRow
+              name={t('pv.iscsi.iqn')}
+              value={spec.iscsi?.iqn || EMPTY_TEXT_PLACEHOLDER}
+            />
+            <LayoutPanelRow
+              name={t('pv.iscsi.lun')}
+              value={`${spec.iscsi?.lun}` || EMPTY_TEXT_PLACEHOLDER}
+            />
+            <LayoutPanelRow
+              name={t('pv.iscsi.iscsiInterface')}
+              value={spec.iscsi?.iscsiInterface || EMPTY_TEXT_PLACEHOLDER}
+            />
+            <LayoutPanelRow
+              name={t('pv.iscsi.fsType')}
+              value={spec.iscsi?.fsType || EMPTY_TEXT_PLACEHOLDER}
+            />
+            <LayoutPanelRow
+              name={t('pv.fc.portals')}
+              value={
+                <Tokens tokens={spec.iscsi?.portals || []} /> ||
+                EMPTY_TEXT_PLACEHOLDER
+              }
+            />
+            <LayoutPanelRow
+              name={t('pv.iscsi.chapAuthDiscovery')}
+              value={spec.iscsi?.chapAuthDiscovery || EMPTY_TEXT_PLACEHOLDER}
+            />
+            <LayoutPanelRow
+              name={t('pv.iscsi.chapAuthSession')}
+              value={spec.iscsi?.chapAuthSession || EMPTY_TEXT_PLACEHOLDER}
+            />
+            {/* TO DO: HERE SHOULD BE CLICKABLE LINK TO SECRET */}
+            <LayoutPanelRow
+              name={t('pv.csi.secretRef')}
+              value={
+                (
+                  <Labels
+                    labels={spec.iscsi?.secretRef || {}}
+                    shortenLongLabels={false}
+                  />
+                ) || EMPTY_TEXT_PLACEHOLDER
+              }
+            />
+          </>
+        )}
       </UI5Panel>
     </div>
   );

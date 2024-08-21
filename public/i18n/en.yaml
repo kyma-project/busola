@@ -1246,6 +1246,17 @@ pv:
   hostPath:
     type: HostPath
     path: Path
+  iscsi:
+    type: iSCSI
+    targetPortal: Target Portal
+    iqn: IQN
+    lun: Lun
+    iscsiInterface: ISCSIInterface
+    fsType: FSType
+    portals: Portals
+    chapAuthDiscovery: DiscoveryCHAPAuth
+    chapAuthSession: SessionCHAPAuth
+    secretRef: Secret Reference
   statuses:
     available: Available
     bound: Bound
