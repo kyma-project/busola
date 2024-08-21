@@ -185,6 +185,18 @@ export function PersistentVolumeDetails(props) {
             )}
           </>
         )}
+        {spec.hostPath && (
+          <>
+            <LayoutPanelRow
+              name={t('pv.headers.type')}
+              value={t('pv.hostPath.type')}
+            />
+            <LayoutPanelRow
+              name={t('pv.hostPath.path')}
+              value={spec.hostPath?.path || EMPTY_TEXT_PLACEHOLDER}
+            />
+          </>
+        )}
       </UI5Panel>
     </div>
   );
