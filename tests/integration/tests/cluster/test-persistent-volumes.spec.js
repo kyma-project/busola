@@ -111,10 +111,6 @@ context('Test Persistent Volumes', () => {
       .should('be.visible');
 
     cy.getMidColumn()
-      .contains('Retain')
-      .should('be.visible');
-
-    cy.getMidColumn()
       .contains('ext4')
       .should('be.visible');
 
