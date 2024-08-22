@@ -51,6 +51,8 @@ general:
           link: 'https://github.com/kyma-project/busola'
 ```
 
+To see an exemplary configuration of the `External Nodes` feature in static extensions, check the [configuration example](examples/../../../examples/statics/statics-external-nodes.yaml).
+
 ## _injections_ section
 
 For more information, read the [widget injections overview](./70-widget-injection.md).
