@@ -49,11 +49,13 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
 
   useEffect(() => {
-    const contentContainer = document
-      .getElementsByTagName('ui5-wizard')[0]
-      ?.shadowRoot?.querySelectorAll('.ui5-wiz-content-item-wrapper')[
-      selected - 1
-    ];
+    const wizard = document.getElementsByTagName('ui5-wizard')[0];
+    const wizardContent = wizard?.shadowRoot?.querySelector('.ui5-wiz-content');
+
+    const contentContainer = wizardContent?.querySelectorAll(
+      '.ui5-wiz-content-item-wrapper',
+    )[selected - 1];
+
     if (contentContainer) {
       contentContainer.style['background-color'] = 'transparent';
       contentContainer.style['padding'] = '0';
