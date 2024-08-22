@@ -22,7 +22,7 @@ export function LayoutPanelRow({ name, value }: LayoutPanelRowProps) {
       }}
     >
       <Text style={spacing.sapUiTinyMarginBottom}>{name}</Text>
-      <Text>{sanitizedValue}</Text>
+      {sanitizedValue && <Text>{sanitizedValue}</Text>}
     </div>
   );
 }

@@ -9,16 +9,34 @@ import { NetworkPolicyPeers } from './Peers';
 import NetworkPolicyCreate from './NetworkPolicyCreate';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ResourceDescription } from 'resources/NetworkPolicies';
+import { EventsList } from 'shared/components/EventsList';
+import { filterByResource } from 'hooks/useMessageList';
+import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
 export function NetworkPolicyDetails(props) {
   const { t } = useTranslation();
 
-  const customColumns = [
-    {
-      header: t('network-policies.headers.policy-types'),
-      value: ({ spec }) => <Tokens tokens={spec.policyTypes || []} />,
-    },
-  ];
+  const Events = () => (
+    <EventsList
+      key="events"
+      namespace={props.namespace}
+      filter={filterByResource('NetworkPolicy', props.resourceName)}
+      hideInvolvedObjects={true}
+    />
+  );
+
+  const Specification = ({ spec }) => (
+    <UI5Panel
+      key="specification"
+      title={t('common.headers.specification')}
+      keyComponent="specification-panel"
+    >
+      <LayoutPanelRow
+        name={t('network-policies.headers.policy-types')}
+        children={<Tokens tokens={spec.policyTypes || []} />}
+      />
+    </UI5Panel>
+  );
 
   const Ingresses = ({ spec }) => {
     if (!spec.ingress?.length) return null;
@@ -77,11 +95,16 @@ export function NetworkPolicyDetails(props) {
     );
   };
 
-  const customComponents = [Ingresses, Egresses, PodSelector];
+  const customComponents = [
+    Specification,
+    Ingresses,
+    Egresses,
+    PodSelector,
+    Events,
+  ];
 
   return (
     <ResourceDetails
-      customColumns={customColumns}
       customComponents={customComponents}
       description={ResourceDescription}
       createResourceForm={NetworkPolicyCreate}
