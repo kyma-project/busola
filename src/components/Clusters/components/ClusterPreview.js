@@ -116,123 +116,125 @@ export function ClusterPreview({ kubeconfig, storage, setSelected, hasAuth }) {
   };
 
   return (
-    <div className="cluster-preview add-cluster__content-container">
-      <Title level="H5" style={spacing.sapUiMediumMarginBottom}>
-        {t('clusters.wizard.review')}
-      </Title>
-      <Title
-        level="H5"
-        className="cluster-preview__subtitle"
-        style={spacing.sapUiSmallMarginTopBottom}
-      >{`1. ${t('configuration.title')}`}</Title>
-      <p
-        className="cluster-preview__data-header"
-        style={{
-          ...spacing.sapUiSmallMarginTop,
-          ...spacing.sapUiTinyMarginBottom,
-        }}
-      >
-        {t('clusters.name_singular')}:
-      </p>
-      <div
-        className="cluster-preview__content"
-        style={{
-          ...spacing.sapUiMediumMarginBottom,
-          ...spacing.sapUiTinyMarginTop,
-        }}
-      >
-        <div>{kubeconfig?.['current-context']}</div>
-        <Button
-          design="Transparent"
-          onClick={() => setSelected(1)}
-          className="cluster-preview__edit-button"
-        >
-          {t('common.buttons.edit')}
-        </Button>
-      </div>
-      <Title
-        level="H5"
-        className="cluster-preview__subtitle"
-        style={spacing.sapUiSmallMarginTopBottom}
-      >{`2. ${t('clusters.wizard.authentication')}`}</Title>
-
-      <div
-        className="cluster-preview__content"
-        style={{
-          ...spacing.sapUiMediumMarginBottom,
-          ...spacing.sapUiTinyMarginTop,
-        }}
-      >
-        <div className="cluster-preview__auth">
-          {authenticationType === 'token' ? <TokenData /> : <OidcData />}
-        </div>
-        <Button
-          design="Transparent"
-          onClick={() => (hasAuth ? setSelected(1) : setSelected(2))}
-          className="cluster-preview__edit-button"
-        >
-          {t('common.buttons.edit')}
-        </Button>
-      </div>
-      <Title
-        level="H5"
-        className="cluster-preview__subtitle"
-        style={spacing.sapUiSmallMarginTopBottom}
-      >{`3. ${t('clusters.wizard.storage')}`}</Title>
-      <p
-        className="cluster-preview__data-header"
-        style={{
-          ...spacing.sapUiSmallMarginTop,
-          ...spacing.sapUiTinyMarginBottom,
-        }}
-      >
-        {`${t('clusters.storage.storage-preference')}:`}
-      </p>
-      <div
-        className="cluster-preview__content"
-        style={{
-          ...spacing.sapUiMediumMarginBottom,
-          ...spacing.sapUiTinyMarginTop,
-        }}
-      >
-        <FlexBox
-          direction="Column"
-          className="cluster-preview__storage-container"
-        >
-          <RadioButton
-            checked={storage === 'localStorage'}
-            text={`${t('clusters.storage.labels.localStorage')}: ${t(
-              'clusters.storage.descriptions.localStorage',
-            )}`}
-            disabled
-            className="cluster-preview__storage"
-          />
-          <RadioButton
-            checked={storage === 'sessionStorage'}
-            text={`${t('clusters.storage.labels.sessionStorage')}: ${t(
-              'clusters.storage.descriptions.sessionStorage',
-            )}`}
-            disabled
-            className="cluster-preview__storage"
-          />
-          <RadioButton
-            checked={storage === 'inMemory'}
-            text={`${t('clusters.storage.labels.inMemory')}: ${t(
-              'clusters.storage.descriptions.inMemory',
-            )}`}
-            disabled
-            className="cluster-preview__storage"
-          />
-        </FlexBox>
-        <Button
-          design="Transparent"
-          onClick={() => {
-            hasAuth ? setSelected(2) : setSelected(3);
+    <div className="cluster-preview">
+      <div className="add-cluster__content-container">
+        <Title level="H5" style={spacing.sapUiMediumMarginBottom}>
+          {t('clusters.wizard.review')}
+        </Title>
+        <Title
+          level="H5"
+          className="cluster-preview__subtitle"
+          style={spacing.sapUiSmallMarginTopBottom}
+        >{`1. ${t('configuration.title')}`}</Title>
+        <p
+          className="cluster-preview__data-header"
+          style={{
+            ...spacing.sapUiSmallMarginTop,
+            ...spacing.sapUiTinyMarginBottom,
           }}
-          className="cluster-preview__edit-button"
         >
-          {t('common.buttons.edit')}
-        </Button>
+          {t('clusters.name_singular')}:
+        </p>
+        <div
+          className="cluster-preview__content"
+          style={{
+            ...spacing.sapUiMediumMarginBottom,
+            ...spacing.sapUiTinyMarginTop,
+          }}
+        >
+          <div>{kubeconfig?.['current-context']}</div>
+          <Button
+            design="Transparent"
+            onClick={() => setSelected(1)}
+            className="cluster-preview__edit-button"
+          >
+            {t('common.buttons.edit')}
+          </Button>
+        </div>
+        <Title
+          level="H5"
+          className="cluster-preview__subtitle"
+          style={spacing.sapUiSmallMarginTopBottom}
+        >{`2. ${t('clusters.wizard.authentication')}`}</Title>
+
+        <div
+          className="cluster-preview__content"
+          style={{
+            ...spacing.sapUiMediumMarginBottom,
+            ...spacing.sapUiTinyMarginTop,
+          }}
+        >
+          <div className="cluster-preview__auth">
+            {authenticationType === 'token' ? <TokenData /> : <OidcData />}
+          </div>
+          <Button
+            design="Transparent"
+            onClick={() => (hasAuth ? setSelected(1) : setSelected(2))}
+            className="cluster-preview__edit-button"
+          >
+            {t('common.buttons.edit')}
+          </Button>
+        </div>
+        <Title
+          level="H5"
+          className="cluster-preview__subtitle"
+          style={spacing.sapUiSmallMarginTopBottom}
+        >{`3. ${t('clusters.wizard.storage')}`}</Title>
+        <p
+          className="cluster-preview__data-header"
+          style={{
+            ...spacing.sapUiSmallMarginTop,
+            ...spacing.sapUiTinyMarginBottom,
+          }}
+        >
+          {`${t('clusters.storage.storage-preference')}:`}
+        </p>
+        <div
+          className="cluster-preview__content"
+          style={{
+            ...spacing.sapUiMediumMarginBottom,
+            ...spacing.sapUiTinyMarginTop,
+          }}
+        >
+          <FlexBox
+            direction="Column"
+            className="cluster-preview__storage-container"
+          >
+            <RadioButton
+              checked={storage === 'localStorage'}
+              text={`${t('clusters.storage.labels.localStorage')}: ${t(
+                'clusters.storage.descriptions.localStorage',
+              )}`}
+              disabled
+              className="cluster-preview__storage"
+            />
+            <RadioButton
+              checked={storage === 'sessionStorage'}
+              text={`${t('clusters.storage.labels.sessionStorage')}: ${t(
+                'clusters.storage.descriptions.sessionStorage',
+              )}`}
+              disabled
+              className="cluster-preview__storage"
+            />
+            <RadioButton
+              checked={storage === 'inMemory'}
+              text={`${t('clusters.storage.labels.inMemory')}: ${t(
+                'clusters.storage.descriptions.inMemory',
+              )}`}
+              disabled
+              className="cluster-preview__storage"
+            />
+          </FlexBox>
+          <Button
+            design="Transparent"
+            onClick={() => {
+              hasAuth ? setSelected(2) : setSelected(3);
+            }}
+            className="cluster-preview__edit-button"
+          >
+            {t('common.buttons.edit')}
+          </Button>
+        </div>
       </div>
     </div>
   );

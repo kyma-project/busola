@@ -286,7 +286,7 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
             setIsFormOpen({ formOpen: false });
           }}
           validation={!storage}
-          className="cluster-wizard__buttons__absolute"
+          className="cluster-wizard__buttons__sticky"
         />
       </WizardStep>
     </Wizard>
