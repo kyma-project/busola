@@ -1,10 +1,10 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: default
+  name: nodes-test
   namespace: kube-public
   labels:
-    app.kubernetes.io/name: default
+    app.kubernetes.io/name: nodes-test
     busola.io/extension: statics
     busola.io/extension-version: '0.5'
 data:
