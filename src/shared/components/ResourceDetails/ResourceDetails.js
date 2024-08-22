@@ -241,7 +241,6 @@ function Resource({
           >
             {t('common.buttons.delete')}
           </Button>
-          ,
           {createPortal(
             <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />,
             document.body,
@@ -286,8 +285,7 @@ function Resource({
   const resourceStatusCard =
     customStatusColumns?.length ||
     customConditionsComponents?.length ||
-    statusConditions?.length ||
-    statusBadge ? (
+    statusConditions?.length ? (
       <ResourceStatusCard
         statusBadge={statusBadge ? statusBadge(resource) : null}
         customColumns={
