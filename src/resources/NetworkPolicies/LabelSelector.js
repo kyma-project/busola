@@ -4,6 +4,8 @@ import { Tokens } from 'shared/components/Tokens';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useTranslation } from 'react-i18next';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { Text } from '@ui5/webcomponents-react';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 export const LabelSelector = ({ selector, title }) => {
   const { t } = useTranslation();
@@ -65,7 +67,9 @@ export const LabelSelector = ({ selector, title }) => {
       title={title || t('network-policies.headers.pod-selector')}
       keyComponent="policy-types"
     >
-      {t('network-policies.present-but-empty')}
+      <Text style={spacing.sapUiSmallMarginBegin}>
+        {t('network-policies.present-but-empty')}
+      </Text>
     </UI5Panel>
   );
 };

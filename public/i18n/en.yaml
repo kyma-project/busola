@@ -343,6 +343,7 @@ common:
     resources: Resources
     nodeInfo: Node Info
     node-details: Node Details
+    specification: Specification
     started-at: Started At
     status: Status
     value: Value
