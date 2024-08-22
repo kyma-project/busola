@@ -51,7 +51,7 @@ export function createUserManager(
     client_id: clientId,
     authority: issuerUrl,
     client_secret: clientSecret,
-    scope: scope || 'openid',
+    scope: `openid ${scope || ''}`,
     response_type: 'code',
     response_mode: 'query',
   });
