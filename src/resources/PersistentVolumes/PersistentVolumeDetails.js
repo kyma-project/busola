@@ -15,7 +15,12 @@ import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ResourceDescription } from 'resources/PersistentVolumes';
 import { Link } from 'shared/components/Link/Link';
 import { getReadableTimestampWithTime } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
-import { Labels } from 'shared/components/Labels/Labels';
+import { VolumeNFS } from './components/VolumeNFS';
+import { VolumeCSI } from './components/VolumeCSI';
+import { VolumeFC } from './components/VolumeFC';
+import { VolumeHostPath } from './components/VolumeHostPath';
+import { VolumeISCSI } from './components/VolumeISCSI';
+import { VolumeLocal } from './components/VolumeLocal';
 
 export function PersistentVolumeDetails(props) {
   const { t } = useTranslation();
@@ -108,179 +113,17 @@ export function PersistentVolumeDetails(props) {
       </UI5Panel>
 
       <UI5Panel title={t('pv.headers.volumeType')}>
-        {spec.nfs && (
-          <>
-            <LayoutPanelRow
-              name={t('pv.headers.type')}
-              value={t('pv.nfs.type')}
-            />
-            <LayoutPanelRow
-              name={t('pv.nfs.server')}
-              value={spec.nfs?.server || EMPTY_TEXT_PLACEHOLDER}
-            />
-            <LayoutPanelRow
-              name={t('pv.nfs.path')}
-              value={spec.nfs?.path || EMPTY_TEXT_PLACEHOLDER}
-            />
-          </>
-        )}
-        {spec.csi && (
-          <>
-            <LayoutPanelRow
-              name={t('pv.headers.type')}
-              value={t('pv.csi.type')}
-            />
-            <LayoutPanelRow
-              name={t('pv.csi.driver')}
-              value={spec.csi?.driver || EMPTY_TEXT_PLACEHOLDER}
-            />
-            <LayoutPanelRow
-              name={t('pv.csi.volumeHandle')}
-              value={spec.csi?.volumeHandle || EMPTY_TEXT_PLACEHOLDER}
-            />
-            <LayoutPanelRow
-              name={t('pv.csi.fsType')}
-              value={spec.csi?.fsType || EMPTY_TEXT_PLACEHOLDER}
-            />
-            <LayoutPanelRow
-              name={t('pv.csi.volumeAttributes')}
-              value={
-                (
-                  <Labels
-                    labels={spec.csi?.volumeAttributes || {}}
-                    shortenLongLabels={false}
-                  />
-                ) || EMPTY_TEXT_PLACEHOLDER
-              }
-            />
-          </>
-        )}
-        {spec.fc && (
-          <>
-            <LayoutPanelRow
-              name={t('pv.headers.type')}
-              value={t('pv.fc.type')}
-            />
-            <LayoutPanelRow
-              name={t('pv.fc.lun')}
-              value={spec.fc?.lun || EMPTY_TEXT_PLACEHOLDER}
-            />
-            <LayoutPanelRow
-              name={t('pv.fc.fsType')}
-              value={spec.fc?.fsType || EMPTY_TEXT_PLACEHOLDER}
-            />
-            {spec.fc?.wwids && (
-              <LayoutPanelRow
-                name={t('pv.fc.wwids')}
-                value={
-                  <Tokens tokens={spec.fc?.wwids || []} /> ||
-                  EMPTY_TEXT_PLACEHOLDER
-                }
-              />
-            )}
-            {spec.fc?.targetWWNs && (
-              <LayoutPanelRow
-                name={t('pv.fc.targetWWNs')}
-                value={
-                  <Tokens tokens={spec.fc?.targetWWNs || []} /> ||
-                  EMPTY_TEXT_PLACEHOLDER
-                }
-              />
-            )}
-          </>
-        )}
-        {spec.hostPath && (
-          <>
-            <LayoutPanelRow
-              name={t('pv.headers.type')}
-              value={t('pv.hostPath.type')}
-            />
-            <LayoutPanelRow
-              name={t('pv.hostPath.path')}
-              value={spec.hostPath?.path || EMPTY_TEXT_PLACEHOLDER}
-            />
-          </>
-        )}
+        {spec.nfs && <VolumeNFS nfs={spec.nfs} />}
+        {spec.csi && <VolumeCSI csi={spec.csi} />}
+        {spec.fc && <VolumeFC fc={spec.fc} />}
+        {spec.hostPath && <VolumeHostPath hostPath={spec.hostPath} />}
         {spec.iscsi && (
-          <>
-            <LayoutPanelRow
-              name={t('pv.headers.type')}
-              value={t('pv.iscsi.type')}
-            />
-            <LayoutPanelRow
-              name={t('pv.iscsi.targetPortal')}
-              value={spec.iscsi?.targetPortal || EMPTY_TEXT_PLACEHOLDER}
-            />
-            <LayoutPanelRow
-              name={t('pv.iscsi.iqn')}
-              value={spec.iscsi?.iqn || EMPTY_TEXT_PLACEHOLDER}
-            />
-            <LayoutPanelRow
-              name={t('pv.iscsi.lun')}
-              value={`${spec.iscsi?.lun}` || EMPTY_TEXT_PLACEHOLDER}
-            />
-            <LayoutPanelRow
-              name={t('pv.iscsi.iscsiInterface')}
-              value={spec.iscsi?.iscsiInterface || EMPTY_TEXT_PLACEHOLDER}
-            />
-            <LayoutPanelRow
-              name={t('pv.iscsi.fsType')}
-              value={spec.iscsi?.fsType || EMPTY_TEXT_PLACEHOLDER}
-            />
-            <LayoutPanelRow
-              name={t('pv.iscsi.portals')}
-              value={
-                <Tokens tokens={spec.iscsi?.portals || []} /> ||
-                EMPTY_TEXT_PLACEHOLDER
-              }
-            />
-            <LayoutPanelRow
-              name={t('pv.iscsi.chapAuthDiscovery')}
-              value={spec.iscsi?.chapAuthDiscovery || EMPTY_TEXT_PLACEHOLDER}
-            />
-            <LayoutPanelRow
-              name={t('pv.iscsi.chapAuthSession')}
-              value={spec.iscsi?.chapAuthSession || EMPTY_TEXT_PLACEHOLDER}
-            />
-            <LayoutPanelRow
-              name={t('pv.iscsi.secretRef')}
-              value={
-                findSecret(spec.iscsi?.secretRef?.name) ? (
-                  <Link
-                    url={resourceUrl(
-                      {
-                        kind: 'Secret',
-                        metadata: {
-                          name: spec.iscsi?.secretRef?.name,
-                        },
-                      },
-                      {
-                        namespace: findSecret(spec.iscsi?.secretRef?.name)
-                          .metadata.namespace,
-                      },
-                    )}
-                  >
-                    {spec.iscsi?.secretRef?.name}
-                  </Link>
-                ) : (
-                  <p>{spec.iscsi?.secretRef?.name || EMPTY_TEXT_PLACEHOLDER}</p>
-                )
-              }
-            />
-          </>
+          <VolumeISCSI
+            iscsi={spec.iscsi}
+            secret={findSecret(spec.iscsi?.secretRef?.name)}
+          />
         )}
-        {spec.local && (
-          <>
-            <LayoutPanelRow
-              name={t('pv.headers.type')}
-              value={t('pv.local.type')}
-            />
-            <LayoutPanelRow
-              name={t('pv.local.path')}
-              value={spec.local?.path || EMPTY_TEXT_PLACEHOLDER}
-            />
-          </>
-        )}
+        {spec.local && <VolumeLocal local={spec.local} />}
       </UI5Panel>
     </div>
   );
