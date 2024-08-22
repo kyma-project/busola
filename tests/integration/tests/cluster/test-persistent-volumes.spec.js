@@ -85,7 +85,7 @@ context('Test Persistent Volumes', () => {
   it('Create PV with CSI', () => {
     cy.openCreate().click();
 
-    cy.wrap(loadPV(PV_CSI_NAME, 'test-persistent-volume-NFS.yaml')).then(
+    cy.wrap(loadPV(PV_CSI_NAME, 'test-persistent-volume-CSI.yaml')).then(
       PV_CONFIG => {
         const PV = JSON.stringify(PV_CONFIG);
         cy.pasteToMonaco(PV);
@@ -108,6 +108,10 @@ context('Test Persistent Volumes', () => {
 
     cy.getMidColumn()
       .contains('Filesystem')
+      .should('be.visible');
+
+    cy.getMidColumn()
+      .contains('Retain')
       .should('be.visible');
 
     cy.getMidColumn()
