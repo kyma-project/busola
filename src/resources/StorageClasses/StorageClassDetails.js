@@ -16,46 +16,53 @@ import { ResourceDescription } from 'resources/StorageClasses';
 export function StorageClassDetails(props) {
   const { t } = useTranslation();
 
-  const StorageClassParameters = storageclass => {
+  const StorageClassConfiguration = storageclass => {
     const parameters = storageclass?.parameters || [];
 
     return (
       <UI5Panel
         fixed
-        keyComponent={'storageclass-parameters'}
-        title={t('storage-classes.headers.parameters')}
+        keyComponent={'storageclass-configuration'}
+        title={t('storage-classes.headers.configuration')}
       >
-        {Object.keys(parameters).length > 0 ? (
-          Object.entries(parameters).map(parameters => {
-            return (
-              <LayoutPanelRow
-                name={parameters[0]}
-                value={parameters[1] || EMPTY_TEXT_PLACEHOLDER}
-                key={parameters[0]}
-              />
-            );
-          })
-        ) : (
-          <Text>{t('common.messages.no-entries-found')}</Text>
-        )}
+        <LayoutPanelRow
+          name={t('storage-classes.headers.provisioner')}
+          value={storageclass.provisioner || EMPTY_TEXT_PLACEHOLDER}
+        />
+        <LayoutPanelRow
+          name={t('storage-classes.headers.reclaim-policy')}
+          value={storageclass.reclaimPolicy || EMPTY_TEXT_PLACEHOLDER}
+        />
+        <LayoutPanelRow
+          name={t('storage-classes.headers.volume-binding-mode')}
+          value={storageclass.volumeBindingMode || EMPTY_TEXT_PLACEHOLDER}
+        />
+        <LayoutPanelRow
+          name={t('storage-classes.headers.allow-volume-expansion')}
+          value={storageclass.allowVolumeExpansion || EMPTY_TEXT_PLACEHOLDER}
+        />
+        <UI5Panel
+          fixed
+          keyComponent={'storageclass-parameters'}
+          title={t('storage-classes.headers.parameters')}
+        >
+          {Object.keys(parameters).length > 0 ? (
+            Object.entries(parameters).map(parameters => {
+              return (
+                <LayoutPanelRow
+                  name={parameters[0]}
+                  value={parameters[1] || EMPTY_TEXT_PLACEHOLDER}
+                  key={parameters[0]}
+                />
+              );
+            })
+          ) : (
+            <Text>{t('common.messages.no-entries-found')}</Text>
+          )}
+        </UI5Panel>
       </UI5Panel>
     );
   };
-
-  const customColumns = [
-    {
-      header: t('storage-classes.headers.provisioner'),
-      value: ({ provisioner }) => (
-        <p>{provisioner || EMPTY_TEXT_PLACEHOLDER}</p>
-      ),
-    },
-    {
-      header: t('storage-classes.headers.reclaim-policy'),
-      value: ({ reclaimPolicy }) => (
-        <p>{reclaimPolicy || EMPTY_TEXT_PLACEHOLDER}</p>
-      ),
-    },
-  ];
 
   const Events = () => (
     <EventsList
@@ -68,12 +75,11 @@ export function StorageClassDetails(props) {
   return (
     <ResourceDetails
       customComponents={[
-        StorageClassParameters,
+        StorageClassConfiguration,
         PersistentVolumesList,
         PersistentVolumeClaimsList,
         Events,
       ]}
-      customColumns={customColumns}
       description={ResourceDescription}
       resourceTitle={t('storage-classes.title')}
       singularName={t('storage-classes.name_singular')}
