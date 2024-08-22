@@ -73,6 +73,34 @@ See the following examples:
 <img src="./assets/form-widgets/Dropdown.png" alt="Example of a dropdown text widget with a tooltip" style="border: 1px solid #D2D5D9">
 <img src="./assets/form-widgets/Dropdown2.png" alt="Example of a dropdown text widget" style="border: 1px solid #D2D5D9">
 
+### `Number`
+
+The `Number` widgets render a field as a number field. They are used by default for all number and integer values.
+
+| Parameter         | Required | Type    | Description                                                                                                                                                             |
+| ----------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **description**   | No       | string  | A string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD). |
+| **disableOnEdit** | No       | boolean | Disables a field in edit mode, defaults to `false`.                                                                                                                     |
+
+See the following examples:
+
+```yaml
+- path: spec.capacity
+  name: spec.capacity
+  widget: Number
+```
+
+<img src="./assets/form-widgets/Number.png" alt="Example of a number widget" style="border: 1px solid #D2D5D9">
+
+```yaml
+- path: spec.capacity
+  name: spec.capacity
+  widget: Number
+  disableOnEdit: true
+```
+
+<img src="./assets/form-widgets/Number2.png" alt="Example of a number widget" style="border: 1px solid #D2D5D9">
+
 ### `Switch`
 
 The `Switch` widgets render a switch button that is used to control boolean values.

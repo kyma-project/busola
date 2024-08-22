@@ -326,3 +326,17 @@ $widgets:
           type: boolean
           description: a boolean which specifies if field is disabled on edit.
           default: false
+  Number:
+    if:
+      properties:
+        widget:
+          const: Number
+    then:
+      properties:
+        description:
+          type: string
+          description: A string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
+        disableOnEdit:
+          type: boolean
+          description: a boolean which specifies if field is disabled on edit.
+          default: false

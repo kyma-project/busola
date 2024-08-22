@@ -26,6 +26,8 @@ export function NumberRenderer({
     ['min', 'max'].map(prop => [prop, schema.get(prop)]),
   );
 
+  const disableOnEdit = schema.get('disableOnEdit');
+
   return (
     <ResourceForm.FormField
       value={value}
@@ -44,6 +46,7 @@ export function NumberRenderer({
       data-testid={storeKeys.join('.') || tFromStoreKeys(storeKeys, schema)}
       input={Inputs.Number}
       compact={compact}
+      disabled={disableOnEdit}
       {...numberProps}
       {...getPropsFromSchema(schema, required, tExt)}
     />

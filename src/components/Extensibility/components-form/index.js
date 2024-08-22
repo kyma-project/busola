@@ -77,6 +77,7 @@ export const widgets = {
     */
     Text: StringRenderer,
     Switch: SwitchRenderer,
+    Number: NumberRenderer,
     Jsonata,
     /*
     Text: TextRenderer,
