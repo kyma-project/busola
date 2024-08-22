@@ -1,38 +1,46 @@
 import { useTranslation } from 'react-i18next';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 import { Rules } from './Rules';
 import { DefaultBackendPanel } from './DefaultBackendPanel';
 import IngressCreate from './IngressCreate';
 import { ResourceDescription } from 'resources/Ingresses';
+import { EventsList } from 'shared/components/EventsList';
+import { filterByResource } from 'hooks/useMessageList';
+import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
+import { IngressStatus } from './IngressStatus';
+import { IngressSpecification } from './IngressSpecification';
+import { useState } from 'react';
 
 export function IngressDetails(props) {
   const { t } = useTranslation();
+  const [totalPorts, setTotalPorts] = useState(0);
+  const [healthyPorts, setHealthyPorts] = useState(0);
 
-  const getLoadBalancer = ingress => {
-    if (ingress.status.loadBalancer?.ingress) {
-      return ingress.status.loadBalancer?.ingress
-        .map(endpoint => endpoint.ip || endpoint.hostname)
-        .join(', ');
-    } else {
-      return EMPTY_TEXT_PLACEHOLDER;
-    }
+  const calculatePorts = ingress => {
+    let allPorts = 0;
+    let healthyPorts = 0;
+
+    ingress?.status?.loadBalancer?.ingress?.forEach(element => {
+      element?.ports?.forEach(port => {
+        allPorts++;
+        if (!port.error) healthyPorts++;
+      });
+    });
+
+    setTotalPorts(allPorts);
+    setHealthyPorts(healthyPorts);
   };
 
-  const customColumns = [
-    {
-      header: t('ingresses.labels.load-balancers'),
-      value: getLoadBalancer,
-    },
-    {
-      header: t('ingresses.labels.ingress-class-name'),
-      value: ingress => ingress.spec.ingressClassName,
-    },
-  ];
-
   const customComponents = [];
+
+  customComponents.push(
+    resource =>
+      (resource.spec?.ingressClassName || resource.spec?.tls) && (
+        <IngressSpecification resource={resource} />
+      ),
+  );
 
   customComponents.push(resource =>
     resource.spec.defaultBackend ? (
@@ -49,12 +57,44 @@ export function IngressDetails(props) {
     ) : null,
   );
 
+  customComponents.push(() => (
+    <EventsList
+      key="events"
+      namespace={props.namespace}
+      filter={filterByResource('Ingress', props.resourceName)}
+      hideInvolvedObjects={true}
+    />
+  ));
+
+  const statusBadge = resource => {
+    calculatePorts(resource);
+    const portsStatus =
+      totalPorts === 0
+        ? 'Information'
+        : totalPorts === healthyPorts
+        ? 'Success'
+        : 'Error';
+
+    return (
+      <StatusBadge
+        type={portsStatus}
+        tooltipContent={'Healthy Ports'}
+      >{`${healthyPorts} / ${totalPorts}`}</StatusBadge>
+    );
+  };
+
   return (
     <ResourceDetails
-      customColumns={customColumns}
       customComponents={customComponents}
       description={ResourceDescription}
       createResourceForm={IngressCreate}
+      statusBadge={statusBadge}
+      customConditionsComponents={[
+        {
+          header: t('ingresses.labels.load-balancers'),
+          value: resource => <IngressStatus resource={resource} />,
+        },
+      ]}
       {...props}
     />
   );

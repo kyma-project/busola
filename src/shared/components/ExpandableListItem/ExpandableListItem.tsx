@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { Icon, StandardListItem } from '@ui5/webcomponents-react';
 import { StatusBadge } from '../StatusBadge/StatusBadge';
 import { useTranslation } from 'react-i18next';
@@ -6,15 +6,16 @@ import { spacing } from '@ui5/webcomponents-react-base';
 import './ExpandableListItem.scss';
 
 type ExpandableListItemProps = {
-  header: string;
+  header: string | ReactNode;
   status?: string;
-  content: string;
+  content?: string;
   customContent?: CustomContent[];
 };
 
 export type CustomContent = {
   header: string;
   value: string;
+  className?: string;
 };
 
 export const ExpandableListItem = ({
@@ -59,31 +60,38 @@ export const ExpandableListItem = ({
       </StandardListItem>
       {expanded && (
         <>
-          <div
-            className="expandable-item__message"
-            style={{
-              ...spacing.sapUiSmallMarginBeginEnd,
-              ...spacing.sapUiTinyMarginTopBottom,
-            }}
-          >
-            <div className="title bsl-has-color-status-4 ">
-              {`${t('common.headers.message')}:`}
+          {content && (
+            <div
+              className="expandable-item__message"
+              style={{
+                ...spacing.sapUiSmallMarginBeginEnd,
+                ...spacing.sapUiTinyMarginTopBottom,
+              }}
+            >
+              <div className="title bsl-has-color-status-4 ">
+                {`${t('common.headers.message')}:`}
+              </div>
+              {content}
             </div>
-            {content}
-          </div>
+          )}
           {customContent &&
-            customContent.map(element => (
+            customContent.map((element, index) => (
               <div
-                className="expandable-item__message"
+                className={`expandable-item__message ${
+                  element?.className ? element.className : ''
+                }`}
                 style={{
                   ...spacing.sapUiSmallMarginBeginEnd,
                   ...spacing.sapUiTinyMarginTopBottom,
                 }}
+                key={index}
               >
-                <div className="title bsl-has-color-status-4 ">
-                  {`${element.header}:`}
-                </div>
-                {element.value}
+                {element?.header && (
+                  <div className="title bsl-has-color-status-4 ">
+                    {`${element?.header}:`}
+                  </div>
+                )}
+                {element?.value}
               </div>
             ))}
         </>
