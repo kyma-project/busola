@@ -37,21 +37,22 @@ type handleLoginProps = {
 };
 
 export function createUserManager(
-  userCredentials: KubeconfigOIDCAuth,
+  oidcParams: {
+    issuerUrl: string;
+    clientId: string;
+    clientSecret: string;
+    scope: string;
+  },
   redirectPath = '',
 ) {
-  const { issuerUrl, clientId, clientSecret, scope } = parseOIDCparams(
-    userCredentials,
-  );
-
   return new UserManager({
     redirect_uri: window.location.origin + redirectPath,
     post_logout_redirect_uri: window.location.origin + '/logout.html',
     loadUserInfo: true,
-    client_id: clientId,
-    authority: issuerUrl,
-    client_secret: clientSecret,
-    scope: scope || 'openid',
+    client_id: oidcParams.clientId,
+    authority: oidcParams.issuerUrl,
+    client_secret: oidcParams.clientSecret,
+    scope: oidcParams.scope || 'openid',
     response_type: 'code',
     response_mode: 'query',
   });
@@ -63,11 +64,15 @@ async function handleLogin({
   onAfterLogin,
   onError,
 }: handleLoginProps): Promise<void> {
-  const setupAuthEventsHooks = (userManager: UserManager) => {
+  const setupAuthEventsHooks = (
+    userManager: UserManager,
+    useAccessToken: boolean,
+  ) => {
     userManager.events.addAccessTokenExpiring(async () => {
       const user = await userManager.signinSilent();
-      const token = user?.id_token!;
-      setAuth({ token });
+      setAuth({
+        token: useAccessToken ? user?.access_token! : user?.id_token!,
+      });
     });
     userManager.events.addSilentRenewError(e => {
       console.warn('silent renew failed', e);
@@ -79,28 +84,34 @@ async function handleLogin({
   const setupVisibilityEventsHooks = (
     userManager: UserManager,
     user: User | null,
+    useAccessToken: boolean,
   ) => {
     document.addEventListener('visibilitychange', async event => {
       if (document.visibilityState === 'visible') {
         if (!!user?.expired || (user?.expires_in && user?.expires_in <= 2)) {
           user = await userManager.signinSilent();
-          const token = user?.id_token!;
-          setAuth({ token });
+          setAuth({
+            token: useAccessToken ? user?.access_token! : user?.id_token!,
+          });
         }
       }
     });
   };
 
-  const userManager = createUserManager(userCredentials);
+  const oidcParams = parseOIDCparams(userCredentials);
+  const userManager = createUserManager(oidcParams);
+
+  const useAccessToken: boolean = oidcParams?.useAccessToken ?? false;
+
   try {
     const storedUser = await userManager.getUser();
     const user =
       storedUser && !storedUser.expired
         ? storedUser
         : await userManager.signinRedirectCallback(window.location.href);
-    setAuth({ token: user?.id_token! });
-    setupAuthEventsHooks(userManager);
-    setupVisibilityEventsHooks(userManager, user);
+    setAuth({ token: useAccessToken ? user?.access_token : user?.id_token! });
+    setupAuthEventsHooks(userManager, useAccessToken);
+    setupVisibilityEventsHooks(userManager, user, useAccessToken);
     onAfterLogin();
   } catch (e) {
     // ignore 'No state in response' error - it means we didn't fire login request yet

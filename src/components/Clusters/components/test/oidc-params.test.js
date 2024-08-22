@@ -14,6 +14,7 @@ describe('parseOIDCparams', () => {
           '--oidc-client-id=hasselhoff',
           '--oidc-client-secret=hasselhoffsecret',
           '--oidc-extra-scope=peach',
+          '--oidc-use-access-token',
         ],
       },
     };
@@ -22,6 +23,7 @@ describe('parseOIDCparams', () => {
       clientSecret: 'hasselhoffsecret',
       issuerUrl: 'https://coastguard.gov.us',
       scope: 'peach',
+      useAccessToken: true,
     });
   });
 

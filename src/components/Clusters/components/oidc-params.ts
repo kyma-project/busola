@@ -5,6 +5,7 @@ const OIDC_PARAM_NAMES = new Map([
   ['--oidc-client-id', 'clientId'],
   ['--oidc-client-secret', 'clientSecret'],
   ['--oidc-extra-scope', 'scope'],
+  ['--oidc-use-access-token', 'useAccessToken'],
 ]);
 
 export function parseOIDCparams({ exec: commandData }: KubeconfigOIDCAuth) {
@@ -27,7 +28,7 @@ export function parseOIDCparams({ exec: commandData }: KubeconfigOIDCAuth) {
      * For an interactive example that demonstrates this regex pattern with various inputs and explains each part of the
      * expression in detail, visit the provided link: https://regex101.com/r/3hc8qX/2
      */
-    const regex = new RegExp('^(?<key>[^=]+)(?:=(?<value>.*$))');
+    const regex = new RegExp('^(?<key>[^=]+)(?:=(?<value>.*$))?');
     const match = arg.match(regex);
 
     if (!match) {
@@ -35,7 +36,7 @@ export function parseOIDCparams({ exec: commandData }: KubeconfigOIDCAuth) {
     }
 
     const argKey: string = match.groups?.key || '';
-    const argValue: string = match.groups?.value || '';
+    const argValue: any = match.groups?.value ?? true;
 
     if (!OIDC_PARAM_NAMES.has(argKey)) return;
 
