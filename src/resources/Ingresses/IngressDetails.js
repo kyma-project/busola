@@ -15,29 +15,22 @@ import { useState } from 'react';
 
 export function IngressDetails(props) {
   const { t } = useTranslation();
-  const [totalPods, setTotalPods] = useState(0);
-  const [healthyPods, setHealthyPods] = useState(0);
+  const [totalPorts, setTotalPorts] = useState(0);
+  const [healthyPorts, setHealthyPorts] = useState(0);
 
-  const calculateTotalPorts = ingress => {
+  const calculatePorts = ingress => {
     let allPorts = 0;
-
-    ingress?.status?.loadBalancer?.ingress?.forEach(element => {
-      element?.ports?.forEach(() => allPorts++);
-    });
-
-    setTotalPods(allPorts);
-  };
-
-  const calculatePortsWithoutErrors = ingress => {
-    let healthyPods = 0;
+    let healthyPorts = 0;
 
     ingress?.status?.loadBalancer?.ingress?.forEach(element => {
       element?.ports?.forEach(port => {
-        if (!port.error) healthyPods++;
+        allPorts++;
+        if (!port.error) healthyPorts++;
       });
     });
 
-    setHealthyPods(healthyPods);
+    setTotalPorts(allPorts);
+    setHealthyPorts(healthyPorts);
   };
 
   const customComponents = [];
@@ -74,12 +67,11 @@ export function IngressDetails(props) {
   ));
 
   const statusBadge = resource => {
-    calculateTotalPorts(resource);
-    calculatePortsWithoutErrors(resource);
+    calculatePorts(resource);
     const portsStatus =
-      totalPods === 0
+      totalPorts === 0
         ? 'Information'
-        : totalPods === healthyPods
+        : totalPorts === healthyPorts
         ? 'Success'
         : 'Error';
 
@@ -87,7 +79,7 @@ export function IngressDetails(props) {
       <StatusBadge
         type={portsStatus}
         tooltipContent={'Healthy Ports'}
-      >{`${healthyPods} / ${totalPods}`}</StatusBadge>
+      >{`${healthyPorts} / ${totalPorts}`}</StatusBadge>
     );
   };
 

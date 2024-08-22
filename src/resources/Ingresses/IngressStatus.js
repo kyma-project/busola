@@ -39,24 +39,20 @@ export const IngressStatus = ({ resource }) => {
           ),
         },
         customContent: [
-          ...(ingress.hostname
-            ? [
-                {
-                  header: t('ingresses.labels.host-name'),
-                  value: ingress.hostname,
-                  className: 'load-balancers__content',
-                },
-              ]
-            : []),
-          ...(ingress.ip
-            ? [
-                {
-                  header: t('ingresses.labels.ip'),
-                  value: ingress.ip,
-                  className: 'load-balancers__content',
-                },
-              ]
-            : []),
+          ingress.hostname
+            ? {
+                header: t('ingresses.labels.host-name'),
+                value: ingress.hostname,
+                className: 'load-balancers__content',
+              }
+            : null,
+          ingress.ip
+            ? {
+                header: t('ingresses.labels.ip'),
+                value: ingress.ip,
+                className: 'load-balancers__content',
+              }
+            : null,
           {
             header: t('ingresses.labels.ports'),
             value: ingress.ports ? (
@@ -73,15 +69,13 @@ export const IngressStatus = ({ resource }) => {
                             header: t('ingresses.labels.protocol'),
                             value: port.protocol,
                           }
-                        : {},
-                      ...(port.error
-                        ? [
-                            {
-                              header: 'Error',
-                              value: port.error,
-                            },
-                          ]
-                        : []),
+                        : null,
+                      port.error
+                        ? {
+                            header: 'Error',
+                            value: port.error,
+                          }
+                        : null,
                     ],
                   };
                 })}
@@ -89,6 +83,7 @@ export const IngressStatus = ({ resource }) => {
             ) : (
               EMPTY_TEXT_PLACEHOLDER
             ),
+            className: ingress.ports ? '' : 'load-balancers__content',
           },
         ],
       }))}

@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { Tokens } from 'shared/components/Tokens';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
@@ -24,7 +25,11 @@ export const IngressSpecification = ({ resource }) => {
               t('ingresses.labels.secret-name'),
             ]}
             rowRenderer={tls => [
-              tls?.hosts?.join(', ') ?? EMPTY_TEXT_PLACEHOLDER,
+              tls?.hosts ? (
+                <Tokens tokens={tls?.hosts} />
+              ) : (
+                EMPTY_TEXT_PLACEHOLDER
+              ),
               tls?.secretName ?? EMPTY_TEXT_PLACEHOLDER,
             ]}
             entries={resource.spec?.tls}

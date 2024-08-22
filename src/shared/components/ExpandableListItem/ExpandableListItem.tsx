@@ -77,17 +77,21 @@ export const ExpandableListItem = ({
           {customContent &&
             customContent.map((element, index) => (
               <div
-                className={`expandable-item__message ${element.className}`}
+                className={`expandable-item__message ${
+                  element?.className ? element.className : ''
+                }`}
                 style={{
                   ...spacing.sapUiSmallMarginBeginEnd,
                   ...spacing.sapUiTinyMarginTopBottom,
                 }}
                 key={index}
               >
-                <div className="title bsl-has-color-status-4 ">
-                  {`${element.header}:`}
-                </div>
-                {element.value}
+                {element?.header && (
+                  <div className="title bsl-has-color-status-4 ">
+                    {`${element?.header}:`}
+                  </div>
+                )}
+                {element?.value}
               </div>
             ))}
         </>

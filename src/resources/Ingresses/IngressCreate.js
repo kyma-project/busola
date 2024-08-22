@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as _ from 'lodash';
 
@@ -19,6 +19,9 @@ export default function IngressCreate({
   const [ingress, setIngress] = useState(
     _.cloneDeep(initialIngress) || createIngressTemplate(namespaceId),
   );
+  const [initialUnchangedResource] = useState(
+    initialIngress || createIngressTemplate(namespaceId),
+  );
   const [initialResource] = useState(
     initialIngress || createIngressTemplate(namespaceId),
   );
@@ -31,6 +34,7 @@ export default function IngressCreate({
       singularName={t('ingresses.name_singular')}
       resource={ingress}
       initialResource={initialResource}
+      initialUnchangedResource={initialUnchangedResource}
       setResource={setIngress}
       onlyYaml
       onChange={onChange}

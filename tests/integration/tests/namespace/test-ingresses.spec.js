@@ -56,6 +56,16 @@ context('Test Ingresses', () => {
       .should('be.visible');
 
     cy.getMidColumn()
+      .get('ui5-table')
+      .contains('test.com')
+      .should('be.visible');
+
+    cy.getMidColumn()
+      .get('ui5-table')
+      .contains('tests-tls-secret')
+      .should('be.visible');
+
+    cy.getMidColumn()
       .get('#content-wrap')
       .contains(/rules/i)
       .should('be.visible');
