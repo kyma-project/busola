@@ -19,7 +19,7 @@ import { Labels } from 'shared/components/Labels/Labels';
 
 export function PersistentVolumeDetails(props) {
   const { t } = useTranslation();
-  const { resourceUrl, namespaceUrl } = useUrl();
+  const { resourceUrl } = useUrl();
 
   const { data: storageClasses } = useGetList()(
     '/apis/storage.k8s.io/v1/storageclasses',
