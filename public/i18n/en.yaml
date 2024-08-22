@@ -1224,7 +1224,7 @@ pv:
     storage-class-name: Storage Class Name
     lastPhaseTransitionTime: Last Phase Transition Time
     volumeMode: Volume Mode
-    source: Source
+    volumeType: Volume Type
     type: Type
   name_singular: PersistentVolume
   nfs: 

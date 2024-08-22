@@ -107,7 +107,7 @@ export function PersistentVolumeDetails(props) {
         />
       </UI5Panel>
 
-      <UI5Panel title={t('pv.headers.source')}>
+      <UI5Panel title={t('pv.headers.volumeType')}>
         {spec.nfs && (
           <>
             <LayoutPanelRow
