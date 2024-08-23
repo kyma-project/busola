@@ -84,7 +84,8 @@ export function KeyValuePairRenderer({
   value = getObjectValueWorkaround(schema, resource, storeKeys, value);
 
   const disableOnEdit = schema.get('disableOnEdit') || false;
-  const disabledKeys = disableOnEdit ? value.keySeq().toArray() : [];
+  const disabledKeys =
+    disableOnEdit && editMode ? value.keySeq().toArray() : [];
 
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
   const { t } = useTranslation();
