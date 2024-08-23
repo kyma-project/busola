@@ -49,25 +49,23 @@ export function FormField({
           )}
         </div>
       </FlexBox>
-      <FlexBox wrap="Wrap" alignItems="Center">
-        <div className="bsl-col-md--12">
-          <FlexBox wrap="Wrap" alignItems="Center">
-            {messageStrip
-              ? messageStrip
-              : input({
-                  updatesOnInput,
-                  required,
-                  disabled,
-                  className: 'full-width',
-                  ...inputProps,
-                })}
-            {inputInfo && (
-              <Label wrappingType="Normal" style={{ marginTop: '5px' }}>
-                {inputInfoLink}
-              </Label>
-            )}
-          </FlexBox>
-        </div>
+      <FlexBox wrap="Wrap" alignItems="Center" className="full-width">
+        <FlexBox wrap="Wrap" alignItems="Center" className="bsl-col-md--12">
+          {messageStrip
+            ? messageStrip
+            : input({
+                updatesOnInput,
+                required,
+                disabled,
+                className: 'full-width',
+                ...inputProps,
+              })}
+          {inputInfo && (
+            <Label wrappingType="Normal" style={{ marginTop: '5px' }}>
+              {inputInfoLink}
+            </Label>
+          )}
+        </FlexBox>
       </FlexBox>
     </FlexBox>
   );
