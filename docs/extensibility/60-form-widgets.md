@@ -80,7 +80,7 @@ The `Switch` widgets render a switch button that is used to control boolean valu
 | Parameter         | Required | Type    | Description                                                                                                                                                             |
 | ----------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **description**   | No       | string  | A string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD). |
-| **disableOnEdit** | No       | boolean | Disables a field in edit mode, defaults to `false`.                                                                                                                     |
+| **disableOnEdit** | No       | boolean | Disables a switch in edit mode, defaults to `false`.                                                                                                                    |
 
 See the following examples:
 
