@@ -15,6 +15,7 @@ export function SwitchRenderer({
   storeKeys,
   required,
   compact,
+  editMode,
   ...props
 }) {
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
@@ -37,7 +38,7 @@ export function SwitchRenderer({
       data-testid={storeKeys.join('.') || tFromStoreKeys(storeKeys, schema)}
       input={Inputs.Switch}
       compact={compact}
-      disabled={disableOnEdit}
+      disabled={disableOnEdit && editMode}
       {...props}
       {...getPropsFromSchema(schema, required, tExt)}
     />
