@@ -313,6 +313,7 @@ These are the available `KeyValuePair` widget parameters:
 | **inputInfo**         | No       | string              | A string below the input field that shows how to fill in the input. You can use the {{ [`name`] (`link`) }} format to display a `name` instead of a `link.              |
 | **description**       | No       | string              | A string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD). |
 | **defaultExpanded**   | No       | boolean             | Specifies if the widget should be expanded by default. Defaults to `false`.                                                                                             |
+| **disableOnEdit**     | No       | boolean             | Disables all key value pairs in edit mode, defaults to `false`.                                                                                                         |
 
 See the following example:
 
