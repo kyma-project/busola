@@ -155,7 +155,7 @@ $widgets:
       properties:
         disableOnEdit:
           type: boolean
-          description: a boolean which specifies if field is disabled on edit.
+          description: a boolean which specifies if KeyValuePair is disabled on edit.
           default: false
         keyEnum:
           type: array
