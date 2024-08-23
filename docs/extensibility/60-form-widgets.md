@@ -4,6 +4,7 @@ You can use form widgets in the create and/or edit pages in the user interface c
 
 - [Simple widgets](#simple-widgets) that represent a single scalar value
   - [`Text`](#text)
+  - [`Number`](#number)
   - [`Switch`](#switch)
   - [`Name`](#name)
   - [`CodeEditor`](#codeeditor)
@@ -80,7 +81,7 @@ The `Number` widgets render a field as a number field. They are used by default 
 | Parameter         | Required | Type    | Description                                                                                                                                                             |
 | ----------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **description**   | No       | string  | A string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD). |
-| **disableOnEdit** | No       | boolean | Disables a field in edit mode, defaults to `false`.                                                                                                                     |
+| **disableOnEdit** | No       | boolean | Disables a number field in edit mode, defaults to `false`.                                                                                                              |
 
 See the following examples:
 
