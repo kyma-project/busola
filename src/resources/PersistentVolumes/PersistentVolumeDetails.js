@@ -40,7 +40,7 @@ export function PersistentVolumeDetails(props) {
 
   const PvDetails = ({ spec, metadata, status }) => (
     <div key="persistent-volumes-ref" data-testid="persistent-volumes-ref">
-      <UI5Panel title={t('pv.details')}>
+      <UI5Panel title={t('common.headers.specification')}>
         <LayoutPanelRow
           name={t('pv.headers.finalizers')}
           value={<Tokens tokens={metadata.finalizers} />}

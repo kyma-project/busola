@@ -1212,7 +1212,6 @@ pods:
     unknown: Pod state unknown
 pv:
   description: <0>PersistentVolume (PV)</0> is used to manage storage in a cluster that an administrator has provisioned.
-  details: Details
   headers:
     access-modes: Access Mode
     capacity: Capacity
