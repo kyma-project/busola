@@ -22,6 +22,8 @@ export function KeyValueField({
   lockedKeys = [],
   lockedValues = [],
   required,
+  disableOnEdit,
+  editMode,
   ...props
 }) {
   const { t } = useTranslation();
@@ -85,7 +87,8 @@ export function KeyValueField({
             {input.key({
               fullWidth: true,
               className: 'full-width',
-              disabled: lockedKeys.includes(value?.key),
+              disabled:
+                lockedKeys.includes(value?.key) || (disableOnEdit && editMode),
               key: 'key',
               value: value?.key || '',
               ref: ref,
@@ -110,7 +113,9 @@ export function KeyValueField({
               onKeyDown: e => focus(e),
               value: dataValue(value),
               placeholder: t('components.key-value-field.enter-value'),
-              disabled: lockedValues.includes(value?.key),
+              disabled:
+                lockedValues.includes(value?.key) ||
+                (disableOnEdit && editMode),
               setValue: val => {
                 setValue({
                   ...value,
@@ -156,6 +161,8 @@ export function KeyValueField({
       ]}
       actions={actions}
       required={required}
+      disableOnEdit={disableOnEdit}
+      editMode={editMode}
       {...props}
     />
   );

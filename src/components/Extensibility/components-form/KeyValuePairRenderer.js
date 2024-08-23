@@ -131,6 +131,8 @@ export function KeyValuePairRenderer({
       defaultOpen={schema.get('defaultExpanded') ?? false}
       lockedKeys={disabledKeys}
       lockedValues={disabledKeys}
+      disableOnEdit={disableOnEdit}
+      editMode={editMode}
       {...getPropsFromSchema(schema, required, tExt)}
     />
   );
