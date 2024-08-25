@@ -95,6 +95,11 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
 
   const onComplete = () => {
     try {
+      kubeconfig?.users.forEach(user => {
+        if (!user?.user?.exec?.args?.includes('--oidc-extra-scope=openid')) {
+          user?.user?.exec?.args?.push('--oidc-extra-scope=openid');
+        }
+      });
       setAuth(null);
       const contextName = kubeconfig['current-context'];
       if (!kubeconfig.contexts?.length) {
