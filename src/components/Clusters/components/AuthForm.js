@@ -9,10 +9,7 @@ import * as Inputs from 'shared/ResourceForm/inputs';
 import { getUser, getUserIndex } from '../shared';
 
 import { spacing } from '@ui5/webcomponents-react-base';
-
-export const AUTH_FORM_TOKEN = 'Token';
-export const AUTH_FORM_OIDC = 'OIDC';
-export const DEFAULT_SCOPE_VALUE = 'openid';
+import { TextArrayInput } from 'shared/ResourceForm/fields';
 
 const OIDCform = ({ resource, setResource, ...props }) => {
   const { t } = useTranslation();
@@ -57,11 +54,11 @@ const OIDCform = ({ resource, setResource, ...props }) => {
         input={Inputs.Text}
         aria-label="client-secret"
       />
-      <ResourceForm.FormField
+      <TextArrayInput
         required
-        propertyPath="$.scope"
-        label={t('clusters.wizard.auth.scopes')}
-        input={Inputs.Text}
+        defaultOpen
+        propertyPath="$.scopes"
+        title={t('clusters.wizard.auth.scopes')}
         aria-label="scopes"
       />
     </ResourceForm.Wrapper>

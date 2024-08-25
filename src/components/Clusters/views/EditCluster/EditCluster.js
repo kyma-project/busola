@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useSetRecoilState } from 'recoil';
 
 import { ResourceForm } from 'shared/ResourceForm';
-import { K8sNameField } from 'shared/ResourceForm/fields';
+import { K8sNameField, TextArrayInput } from 'shared/ResourceForm/fields';
 import { ChooseStorage } from 'components/Clusters/components/ChooseStorage';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -22,7 +22,7 @@ import { getUserIndex } from '../../shared';
 export const findInitialValues = (kubeconfig, id, userIndex = 0) => {
   const elementsWithId =
     kubeconfig?.users?.[userIndex]?.user?.exec?.args.filter(el =>
-      el.includes(id),
+      el?.includes(id),
     ) || [];
   const regex = new RegExp(`${id}=(?<value>.*)`);
   const values = [];
@@ -41,7 +41,7 @@ export const findInitialValue = (kubeconfig, id, userIndex = 0) => {
   if (kubeconfig?.users?.[userIndex]?.user?.exec?.args) {
     const elementWithId = kubeconfig?.users?.[
       userIndex
-    ]?.user?.exec?.args.find(el => el.includes(id));
+    ]?.user?.exec?.args.find(el => el?.includes(id));
     const regex = new RegExp(`${id}=(?<value>.*)`);
     return regex.exec(elementWithId)?.groups?.value || '';
   }
@@ -107,9 +107,9 @@ export const ClusterDataForm = ({
         `--oidc-issuer-url=${config.issuerUrl}`,
         `--oidc-client-id=${config.clientId}`,
         `--oidc-client-secret=${config.clientSecret}`,
-        findInitialValues(kubeconfig, 'oidc-extra-scope', userIndex)
-          ? `--oidc-extra-scope=${config.scopes}`
-          : `--oidc-extra-scope=openid ${config.scopes}`,
+        ...(config.scopes?.length
+          ? config.scopes.map(scope => `--oidc-extra-scope=${scope || ''}`)
+          : [`--oidc-extra-scope=openid`]),
         '--grant-type=auto',
       ],
     };
@@ -145,10 +145,10 @@ export const ClusterDataForm = ({
           createOIDC('clientSecret', val);
         }}
       />
-      <ResourceForm.FormField
-        label={t('clusters.labels.scopes')}
-        input={Inputs.Text}
+      <TextArrayInput
         required
+        defaultOpen
+        title={t('clusters.labels.scopes')}
         value={scopes}
         setValue={val => {
           createOIDC('scopes', val);

@@ -4,7 +4,7 @@ const OIDC_PARAM_NAMES = new Map([
   ['--oidc-issuer-url', 'issuerUrl'],
   ['--oidc-client-id', 'clientId'],
   ['--oidc-client-secret', 'clientSecret'],
-  ['--oidc-extra-scope', 'scope'],
+  ['--oidc-extra-scope', 'scopes'],
 ]);
 
 export function parseOIDCparams({ exec: commandData }: KubeconfigOIDCAuth) {
@@ -40,8 +40,19 @@ export function parseOIDCparams({ exec: commandData }: KubeconfigOIDCAuth) {
     if (!OIDC_PARAM_NAMES.has(argKey)) return;
 
     const outputKey = OIDC_PARAM_NAMES.get(argKey)!;
-    if (output[outputKey]) output[outputKey] += ' ' + argValue;
-    else output[outputKey] = argValue;
+    if (output[outputKey]) {
+      if (outputKey === 'scopes') {
+        output[outputKey].push(argValue);
+      } else {
+        output[outputKey] += ' ' + argValue;
+      }
+    } else {
+      if (outputKey === 'scopes') {
+        output[outputKey] = [argValue];
+      } else {
+        output[outputKey] = argValue;
+      }
+    }
   });
 
   return output;
@@ -60,7 +71,7 @@ export function createLoginCommand(
     issuerUrl: string;
     clientId: string;
     clientSecret?: string;
-    scope: string;
+    scopes: string[];
   },
   execRest: object,
 ): LoginCommand {
@@ -74,9 +85,9 @@ export function createLoginCommand(
       `--oidc-issuer-url=${oidcConfig.issuerUrl || ''}`,
       `--oidc-client-id=${oidcConfig.clientId || ''}`,
       `--oidc-client-secret=${oidcConfig.clientSecret || ''}`,
-      oidcConfig.scope
-        ? `--oidc-extra-scope=${oidcConfig.scope || ''}`
-        : `--oidc-extra-scope=openid ${oidcConfig.scope || ''}`,
+      ...(oidcConfig.scopes?.length
+        ? oidcConfig.scopes.map(scope => `--oidc-extra-scope=${scope || ''}`)
+        : [`--oidc-extra-scope=openid`]),
       '--grant-type=auto',
     ],
   };
