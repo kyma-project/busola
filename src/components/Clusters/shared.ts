@@ -128,7 +128,7 @@ export function hasKubeconfigAuth(kubeconfig: Kubeconfig) {
     }
     const oidcData = tryParseOIDCparams(user as KubeconfigOIDCAuth);
 
-    if (oidcData?.issuerUrl && oidcData?.clientId && oidcData?.scope) {
+    if (oidcData?.issuerUrl && oidcData?.clientId && oidcData?.scopes) {
       return oidcData;
     }
   } catch (e) {
