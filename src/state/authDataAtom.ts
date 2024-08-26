@@ -40,9 +40,11 @@ export function createUserManager(
   userCredentials: KubeconfigOIDCAuth,
   redirectPath = '',
 ) {
-  const { issuerUrl, clientId, clientSecret, scope } = parseOIDCparams(
+  const { issuerUrl, clientId, clientSecret, scopes } = parseOIDCparams(
     userCredentials,
   );
+  const uniqueScopes = new Set(scopes || []);
+  uniqueScopes.delete('openid');
 
   return new UserManager({
     redirect_uri: window.location.origin + redirectPath,
@@ -51,7 +53,7 @@ export function createUserManager(
     client_id: clientId,
     authority: issuerUrl,
     client_secret: clientSecret,
-    scope: scope || 'openid',
+    scope: `openid ${[...uniqueScopes].join(' ')}`,
     response_type: 'code',
     response_mode: 'query',
   });
