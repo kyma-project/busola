@@ -1544,6 +1544,9 @@ storage-classes:
     parameters: Parameters
     provisioner: Provisioner
     reclaim-policy: Reclaim Policy
+    allow-volume-expansion: Allow Volume Expansion
+    volume-binding-mode: Volume Binding Mode
+    configuration: Configuration
   name_singular: StorageClass
   title: Storage Classes
 top-nav:

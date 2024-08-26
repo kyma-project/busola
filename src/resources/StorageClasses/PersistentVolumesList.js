@@ -4,6 +4,7 @@ import PersistentVolumesListComponent from 'resources/PersistentVolumes/Persiste
 
 export function PersistentVolumesList(storageclass) {
   const params = {
+    disableCreate: true,
     disableHiding: true,
     displayArrow: false,
     hasDetailsView: true,
