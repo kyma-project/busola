@@ -33,7 +33,7 @@ export function NetworkPolicyDetails(props) {
     >
       <LayoutPanelRow
         name={t('network-policies.headers.policy-types')}
-        children={<Tokens tokens={spec.policyTypes || []} />}
+        value={<Tokens tokens={spec.policyTypes || []} />}
       />
     </UI5Panel>
   );

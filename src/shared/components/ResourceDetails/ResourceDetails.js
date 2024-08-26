@@ -241,7 +241,6 @@ function Resource({
           >
             {t('common.buttons.delete')}
           </Button>
-          ,
           {createPortal(
             <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />,
             document.body,

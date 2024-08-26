@@ -1,0 +1,23 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: csi
+spec:
+  capacity:
+    storage: 5Gi
+  csi:
+    driver: csi-driver.example.com
+    volumeHandle: existingVolumeName
+    fsType: ext4
+    volumeAttributes:
+      test: mount
+      test2: mount2
+  accessModes:
+    - ReadWriteOnce
+  claimRef:
+    kind: PersistentVolumeClaim
+    namespace: default
+    name: test123
+    apiVersion: v1
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Filesystem

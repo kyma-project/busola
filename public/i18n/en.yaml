@@ -1219,7 +1219,6 @@ pods:
     unknown: Pod state unknown
 pv:
   description: <0>PersistentVolume (PV)</0> is used to manage storage in a cluster that an administrator has provisioned.
-  details: Details
   headers:
     access-modes: Access Mode
     capacity: Capacity
@@ -1227,13 +1226,47 @@ pv:
     claim-name: Claim Name
     finalizers: Finalizers
     mount-options: Mount Options
-    path: Path
     reclaim-policy: Reclaim Policy
-    server: Server
     storage-class: Storage Class
     storage-class-name: Storage Class Name
+    lastPhaseTransitionTime: Last Phase Transition Time
+    volumeMode: Volume Mode
+    volumeType: Volume Type
+    type: Type
   name_singular: PersistentVolume
-  nfs: Network File System
+  nfs: 
+    type: Network File System
+    server: Server
+    path: Path
+  csi: 
+    type: Container Storage Interface
+    driver: Driver
+    volumeHandle: Volume Handle
+    fsType: FSType
+    volumeAttributes: Volume Attributes
+  fc:
+    type: Fibre Channel
+    lun: LUN
+    fsType: FSType
+    wwids: WWIDs
+    targetWWNs: TargetWWNs
+  hostPath:
+    type: HostPath
+    path: Path
+  iscsi:
+    type: iSCSI
+    targetPortal: Target Portal
+    iqn: IQN
+    lun: Lun
+    iscsiInterface: ISCSIInterface
+    fsType: FSType
+    portals: Portals
+    chapAuthDiscovery: DiscoveryCHAPAuth
+    chapAuthSession: SessionCHAPAuth
+    secretRef: Secret Reference
+  local:
+    type: Local
+    path: Path
   statuses:
     available: Available
     bound: Bound

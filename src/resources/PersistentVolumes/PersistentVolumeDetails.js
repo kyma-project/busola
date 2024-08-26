@@ -14,29 +14,33 @@ import PersistentVolumeCreate from './PersistentVolumeCreate';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ResourceDescription } from 'resources/PersistentVolumes';
 import { Link } from 'shared/components/Link/Link';
+import { getReadableTimestampWithTime } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
+import { VolumeNFS } from './components/VolumeNFS';
+import { VolumeCSI } from './components/VolumeCSI';
+import { VolumeFC } from './components/VolumeFC';
+import { VolumeHostPath } from './components/VolumeHostPath';
+import { VolumeISCSI } from './components/VolumeISCSI';
+import { VolumeLocal } from './components/VolumeLocal';
 
 export function PersistentVolumeDetails(props) {
   const { t } = useTranslation();
   const { resourceUrl } = useUrl();
 
-  const customColumns = [
-    {
-      header: t('common.headers.status'),
-      value: ({ status }) => <PersistentVolumeStatus status={status} />,
-    },
-  ];
-
   const { data: storageClasses } = useGetList()(
     '/apis/storage.k8s.io/v1/storageclasses',
   );
 
+  const { data: secrets } = useGetList()('/api/v1/secrets');
+
   const { data: persistentVolumeClaims } = useGetList()(
     '/api/v1/persistentvolumeclaims',
   );
+  const findSecret = secretName =>
+    secrets?.find(({ metadata }) => metadata.name === secretName);
 
   const PvDetails = ({ spec, metadata, status }) => (
     <div key="persistent-volumes-ref" data-testid="persistent-volumes-ref">
-      <UI5Panel title={t('pv.details')}>
+      <UI5Panel title={t('common.headers.specification')}>
         <LayoutPanelRow
           name={t('pv.headers.finalizers')}
           value={<Tokens tokens={metadata.finalizers} />}
@@ -102,17 +106,24 @@ export function PersistentVolumeDetails(props) {
             )
           }
         />
+        <LayoutPanelRow
+          name={t('pv.headers.volumeMode')}
+          value={spec?.volumeMode}
+        />
       </UI5Panel>
 
-      <UI5Panel title={t('pv.nfs')}>
-        <LayoutPanelRow
-          name={t('pv.headers.server')}
-          value={spec.nfs?.server || EMPTY_TEXT_PLACEHOLDER}
-        />
-        <LayoutPanelRow
-          name={t('pv.headers.path')}
-          value={spec.nfs?.path || EMPTY_TEXT_PLACEHOLDER}
-        />
+      <UI5Panel title={t('pv.headers.volumeType')}>
+        {spec.nfs && <VolumeNFS nfs={spec.nfs} />}
+        {spec.csi && <VolumeCSI csi={spec.csi} />}
+        {spec.fc && <VolumeFC fc={spec.fc} />}
+        {spec.hostPath && <VolumeHostPath hostPath={spec.hostPath} />}
+        {spec.iscsi && (
+          <VolumeISCSI
+            iscsi={spec.iscsi}
+            secret={findSecret(spec.iscsi?.secretRef?.name)}
+          />
+        )}
+        {spec.local && <VolumeLocal local={spec.local} />}
       </UI5Panel>
     </div>
   );
@@ -124,9 +135,18 @@ export function PersistentVolumeDetails(props) {
     />
   );
 
+  const customStatusColumns = [
+    {
+      header: t('pv.headers.lastPhaseTransitionTime'),
+      value: pv =>
+        getReadableTimestampWithTime(pv?.status?.lastPhaseTransitionTime),
+    },
+  ];
+
   return (
     <ResourceDetails
-      customColumns={customColumns}
+      statusBadge={pv => <PersistentVolumeStatus status={pv?.status} />}
+      customStatusColumns={customStatusColumns}
       customComponents={[PvDetails, Events]}
       description={ResourceDescription}
       createResourceForm={PersistentVolumeCreate}
