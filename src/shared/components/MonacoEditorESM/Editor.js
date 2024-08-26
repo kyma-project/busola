@@ -79,7 +79,7 @@ export function Editor({
       editorInstance.setValue(value);
       prevValueRef.current = value;
     }
-  }, [value]);
+  }, [value, editorInstance, readOnly]);
 
   useUpdateValueOnParentChange({
     updateValueOnParentChange,
