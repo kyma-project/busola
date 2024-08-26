@@ -7,6 +7,8 @@ import ServiceAccountCreate from './ServiceAccountCreate';
 import { Button } from '@ui5/webcomponents-react';
 import { TokenRequestModal } from './TokenRequestModal/TokenRequestModal';
 import { ResourceDescription } from 'resources/ServiceAccounts';
+import { EventsList } from 'shared/components/EventsList';
+import { filterByResource } from 'hooks/useMessageList';
 
 const ServiceAccountSecrets = serviceAccount => {
   const namespace = serviceAccount.metadata.namespace;
@@ -70,6 +72,15 @@ export default function ServiceAccountDetails(props) {
     },
   ];
 
+  const Events = () => (
+    <EventsList
+      key="events"
+      namespace={props.namespace}
+      filter={filterByResource('ServiceAccount', props.resourceName)}
+      hideInvolvedObjects={true}
+    />
+  );
+
   const headerActions = [
     <Button
       key="generate-token-request"
@@ -85,6 +96,7 @@ export default function ServiceAccountDetails(props) {
         customComponents={[
           ServiceAccountSecrets,
           ServiceAccountImagePullSecrets,
+          Events,
         ]}
         customColumns={customColumns}
         createResourceForm={ServiceAccountCreate}
