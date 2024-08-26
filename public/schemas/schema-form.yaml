@@ -340,3 +340,4 @@ $widgets:
           type: boolean
           description: a boolean which specifies if field is disabled on edit.
           default: false
+
