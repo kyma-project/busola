@@ -7,6 +7,8 @@ import { HelmReleaseData } from 'components/HelmReleases/HelmReleaseData';
 import { CertificateData } from './CertificateData';
 import SecretCreate from './SecretCreate';
 import { ResourceDescription } from 'resources/Secrets';
+import { EventsList } from 'shared/components/EventsList';
+import { filterByResource } from 'hooks/useMessageList';
 
 function HelmReleaseDataWrapper(secret) {
   if (secret.type !== 'helm.sh/release.v1') {
@@ -43,9 +45,23 @@ export function SecretDetails(props) {
     },
   ];
 
+  const Events = () => (
+    <EventsList
+      key="events"
+      namespace={props.namespace}
+      filter={filterByResource('Secret', props.resourceName)}
+      hideInvolvedObjects={true}
+    />
+  );
+
   return (
     <ResourceDetails
-      customComponents={[Secret, CertificateData, HelmReleaseDataWrapper]}
+      customComponents={[
+        Secret,
+        CertificateData,
+        HelmReleaseDataWrapper,
+        Events,
+      ]}
       customColumns={customColumns}
       description={ResourceDescription}
       createResourceForm={SecretCreate}
