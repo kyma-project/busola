@@ -45,7 +45,7 @@ export function createUserManager(
   },
   redirectPath = '',
 ) {
-  const uniqueScopes = new Set(scopes || []);
+  const uniqueScopes = new Set(oidcParams.scopes || []);
   uniqueScopes.delete('openid');
 
   return new UserManager({
