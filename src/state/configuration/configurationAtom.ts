@@ -1,5 +1,5 @@
 import jsyaml from 'js-yaml';
-import { mergeWith, isArray } from 'lodash';
+import { isArray, mergeWith } from 'lodash';
 import { useEffect } from 'react';
 import { atom, RecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -10,6 +10,8 @@ import { ConfigFeatureList } from '../types';
 import { apiGroupState } from '..//discoverability/apiGroupsSelector';
 import { getFeatures } from './getFeatures';
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
+import getConfigFileLocation from '../../shared/utils/env';
+import getConfigDir from '../../shared/utils/env';
 
 type Configuration = {
   features?: ConfigFeatureList;
@@ -38,7 +40,16 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
       '/defaultConfig.yaml' + cacheBuster,
     );
 
-    const configResponse = await fetch('/config/config.yaml' + cacheBuster);
+    const defaultParams = jsyaml.load(
+      await defaultConfigResponse.text(),
+    ) as Config;
+
+    //use memo, get and etc
+    const configDir = await getConfigDir();
+    const configResponse = await fetch(
+      configDir + '/config/config.yaml' + cacheBuster,
+    );
+
     let configMapResponse: ConfigMapResponse;
     if (fetchFn) {
       try {
@@ -52,9 +63,6 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
       }
     }
 
-    const defaultParams = jsyaml.load(
-      await defaultConfigResponse.text(),
-    ) as Config;
     const configParams = jsyaml.load(await configResponse.text()) as Config;
     const mapParams = configMapResponse?.data?.config
       ? (jsyaml.load(configMapResponse.data.config) as Config)
