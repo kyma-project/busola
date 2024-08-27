@@ -60,7 +60,11 @@ export function Dropdown({
   );
 
   return (
-    <FlexBox className="flexbox-gap" justifyContent="Center" direction="Column">
+    <FlexBox
+      className="flexbox-gap full-width"
+      justifyContent="Center"
+      direction="Column"
+    >
       {label && <Label forElement={id}>{label}</Label>}
       {inlineHelp ? (
         <Tooltip content={inlineHelp}>{combobox}</Tooltip>
