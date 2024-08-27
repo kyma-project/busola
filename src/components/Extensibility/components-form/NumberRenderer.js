@@ -28,7 +28,6 @@ export function NumberRenderer({
   );
 
   const disableOnEdit = schema.get('disableOnEdit');
-  console.log('NumbererRenderer editMode: ', editMode);
 
   return (
     <ResourceForm.FormField
