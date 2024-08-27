@@ -9,6 +9,8 @@ import SecretCreate from './SecretCreate';
 import { ResourceDescription } from 'resources/Secrets';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
 function HelmReleaseDataWrapper(secret) {
   if (secret.type !== 'helm.sh/release.v1') {
@@ -29,12 +31,6 @@ export function SecretDetails(props) {
 
   const customColumns = [
     {
-      header: t('secrets.headers.type'),
-      value: secret => {
-        return secret.type;
-      },
-    },
-    {
       header: t('common.headers.owner'),
       value: secret => (
         <ControlledBy
@@ -54,9 +50,20 @@ export function SecretDetails(props) {
     />
   );
 
+  const Configuration = secret => (
+    <UI5Panel
+      fixed
+      keyComponent={'storageclass-configuration'}
+      title={t('storage-classes.headers.configuration')}
+    >
+      <LayoutPanelRow name={t('secrets.headers.type')} value={secret.type} />
+    </UI5Panel>
+  );
+
   return (
     <ResourceDetails
       customComponents={[
+        Configuration,
         Secret,
         CertificateData,
         HelmReleaseDataWrapper,
