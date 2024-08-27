@@ -27,4 +27,4 @@ jobs:
       dockerfile: Dockerfile
       context: backend
       export-tags: true
-
+      tags: latest
