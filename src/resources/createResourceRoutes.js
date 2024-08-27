@@ -1,8 +1,7 @@
 import React, { Suspense, useEffect, useMemo } from 'react';
 
 import { useRecoilState } from 'recoil';
-import { Route, useSearchParams, useParams } from 'react-router-dom';
-import pluralize from 'pluralize';
+import { Route, useParams, useSearchParams } from 'react-router-dom';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
@@ -15,8 +14,10 @@ import {
   usePrepareListProps,
 } from './helpers';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
-import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 import { useUrl } from 'hooks/useUrl';
+import { useGetSchema } from 'hooks/useGetSchema';
+import { SchemaContext } from 'shared/helpers/schema';
+import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 
 export const createPath = (
   config = { detailsView: false, pathSegment: '' },
@@ -26,32 +27,6 @@ export const createPath = (
   const details = detailsView ? '/:resourceName' : '';
 
   return `${pathSegment}${details}`;
-};
-
-export const createUrl = (
-  { resourceType, pathSegment, namespaced, resourceName },
-  namespace,
-) => {
-  const namespacePrefix = namespaced ? `/namespaces/${namespace}` : '';
-  const details = resourceName || '';
-  pathSegment = pathSegment || pluralize(resourceType).toLowerCase();
-
-  return `${namespacePrefix}/${pathSegment}/${details}`;
-};
-
-export const createKubernetesUrl = ({
-  resourceType,
-  namespace,
-  resourceName,
-  apiGroup = '',
-  apiVersion,
-}) => {
-  const namespaceSegment = namespace ? `namespaces/${namespace}/` : '';
-  const details = resourceName || '';
-  const apiPrefix = apiGroup ? 'apis/' : 'api';
-  resourceType = pluralize(resourceType).toLowerCase();
-
-  return `${apiPrefix}${apiGroup}/${apiVersion}/${namespaceSegment}${resourceType}/${details}`;
 };
 
 const ColumnWrapper = ({
@@ -147,26 +122,39 @@ const ColumnWrapper = ({
     detailsMidColumn = detailsComponent;
   }
 
+  const { schema, loading } = useGetSchema({
+    resource: {
+      group: props?.apiGroup,
+      version: props.apiVersion,
+      kind: props?.resourceType.slice(0, -1),
+    },
+  });
+  if (loading) {
+    return null;
+  }
+
   const createMidColumn = (
-    <ResourceCreate
-      title={elementCreateProps.resourceTitle}
-      confirmText={t('common.buttons.create')}
-      layoutCloseCreateUrl={layoutCloseCreateUrl}
-      renderForm={renderProps => {
-        const createComponent =
-          create &&
-          create?.type !== null &&
-          (layoutState?.showCreate?.resourceType || props?.resourceType) &&
-          React.cloneElement(create, {
-            ...elementCreateProps,
-            ...renderProps,
-            enableColumnLayout: true,
-            layoutNumber: 'StartColumn',
-            resource: layoutState?.showCreate?.resource, // For ResourceCreate we want to set layoutNumber to previous column so detail are opened instead of create
-          });
-        return <ErrorBoundary>{createComponent}</ErrorBoundary>;
-      }}
-    />
+    <SchemaContext.Provider value={schema}>
+      <ResourceCreate
+        title={elementCreateProps.resourceTitle}
+        confirmText={t('common.buttons.create')}
+        layoutCloseCreateUrl={layoutCloseCreateUrl}
+        renderForm={renderProps => {
+          const createComponent =
+            create &&
+            create?.type !== null &&
+            (layoutState?.showCreate?.resourceType || props?.resourceType) &&
+            React.cloneElement(create, {
+              ...elementCreateProps,
+              ...renderProps,
+              enableColumnLayout: true,
+              layoutNumber: 'StartColumn',
+              resource: layoutState?.showCreate?.resource, // For ResourceCreate we want to set layoutNumber to previous column so detail are opened instead of create
+            });
+          return <ErrorBoundary>{createComponent}</ErrorBoundary>;
+        }}
+      />
+    </SchemaContext.Provider>
   );
 
   return (

@@ -41,10 +41,13 @@ export function createUserManager(
     issuerUrl: string;
     clientId: string;
     clientSecret: string;
-    scope: string;
+    scopes: string[];
   },
   redirectPath = '',
 ) {
+  const uniqueScopes = new Set(scopes || []);
+  uniqueScopes.delete('openid');
+
   return new UserManager({
     redirect_uri: window.location.origin + redirectPath,
     post_logout_redirect_uri: window.location.origin + '/logout.html',
@@ -52,7 +55,7 @@ export function createUserManager(
     client_id: oidcParams.clientId,
     authority: oidcParams.issuerUrl,
     client_secret: oidcParams.clientSecret,
-    scope: oidcParams.scope || 'openid',
+    scope: `openid ${[...uniqueScopes].join(' ')}`,
     response_type: 'code',
     response_mode: 'query',
   });

@@ -4,6 +4,7 @@ import PersistentVolumeClaimsListComponent from 'resources/PersistentVolumeClaim
 
 export function PersistentVolumeClaimsList(storageclass) {
   const params = {
+    disableCreate: true,
     displayArrow: false,
     disableHiding: true,
     hasDetailsView: true,

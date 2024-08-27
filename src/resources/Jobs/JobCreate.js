@@ -6,7 +6,7 @@ import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 
-import { createJobTemplate, createJobPresets } from './templates';
+import { createJobPresets, createJobTemplate } from './templates';
 import { JobSpecSection } from './SpecSection';
 import { ContainersSection } from './ContainersSection';
 import { MessageStrip } from '@ui5/webcomponents-react';

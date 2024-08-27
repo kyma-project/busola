@@ -8,6 +8,8 @@ import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 import { useCustomResourceUrl } from 'resources/CustomResourceDefinitions/useCustomResourceUrl';
 
 import { createTemplate } from './templates';
+import { useTranslation } from 'react-i18next';
+import { useNotification } from 'shared/contexts/NotificationContext';
 
 function CRCreate({
   onChange,
@@ -17,6 +19,8 @@ function CRCreate({
   resource: initialCustomResource,
   ...props
 }) {
+  const { t } = useTranslation();
+  const notification = useNotification();
   const [cr, setCr] = useState(
     cloneDeep(initialCustomResource) || createTemplate(crd),
   );
@@ -37,7 +41,7 @@ function CRCreate({
     ? nextQuery
     : currentQuery;
 
-  const currentVersion = crd.spec.versions.find(ver => ver.storage).name;
+  const currentVersion = crd.spec.versions?.find(ver => ver.storage).name;
   const namespace =
     crd.spec.scope === 'Namespaced'
       ? `/namespaces/${cr.metadata?.namespace || ''}`
@@ -66,6 +70,11 @@ function CRCreate({
       onlyYaml
       layoutNumber={layoutNumber}
       afterCreatedFn={() => {
+        notification.notifySuccess({
+          content: t('common.create-form.messages.patch-success', {
+            resourceType: crd.spec.names.kind,
+          }),
+        });
         navigate(`${customUrl(cr)}${goToLayoutQuery}`);
       }}
     />

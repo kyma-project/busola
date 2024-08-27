@@ -22,7 +22,7 @@ describe('parseOIDCparams', () => {
       clientId: 'hasselhoff',
       clientSecret: 'hasselhoffsecret',
       issuerUrl: 'https://coastguard.gov.us',
-      scope: 'peach',
+      scopes: ['peach'],
       useAccessToken: true,
     });
   });
@@ -42,11 +42,11 @@ describe('parseOIDCparams', () => {
       clientId: 'hasselhoff',
       clientSecret: 'hasselhoff=secret',
       issuerUrl: 'https://coastguard.gov.us',
-      scope: 'peach',
+      scopes: ['peach'],
     });
   });
 
-  it('Concatinates params', () => {
+  it('Multiple scopes', () => {
     const input = {
       exec: {
         args: [
@@ -57,7 +57,7 @@ describe('parseOIDCparams', () => {
       },
     };
     expect(parseOIDCparams(input)).toMatchObject({
-      scope: 'peach melon plum',
+      scopes: ['peach', 'melon', 'plum'],
     });
   });
 

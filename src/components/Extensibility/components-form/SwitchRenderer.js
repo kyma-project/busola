@@ -15,9 +15,11 @@ export function SwitchRenderer({
   storeKeys,
   required,
   compact,
+  editMode,
   ...props
 }) {
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
+  const disableOnEdit = schema.get('disableOnEdit');
 
   return (
     <ResourceForm.FormField
@@ -36,6 +38,7 @@ export function SwitchRenderer({
       data-testid={storeKeys.join('.') || tFromStoreKeys(storeKeys, schema)}
       input={Inputs.Switch}
       compact={compact}
+      disabled={disableOnEdit && editMode}
       {...props}
       {...getPropsFromSchema(schema, required, tExt)}
     />

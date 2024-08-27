@@ -7,6 +7,7 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import CRCreate from 'resources/CustomResourceDefinitions/CRCreate';
+import { useCallback } from 'react';
 
 export default function CustomResource({ params }) {
   const namespace = useRecoilValue(activeNamespaceIdState);
@@ -25,6 +26,11 @@ export default function CustomResource({ params }) {
       pollingInterval: null,
       skip: !customResourceDefinitionName,
     },
+  );
+
+  const CRCreateWrapper = useCallback(
+    props => <CRCreate {...props} crd={data} layoutNumber="MidColumn" />,
+    [data],
   );
 
   if (loading) return <Spinner />;
@@ -61,9 +67,7 @@ export default function CustomResource({ params }) {
       resourceType={crdName}
       resourceName={resourceName}
       namespace={namespace}
-      createResourceForm={props => (
-        <CRCreate {...props} crd={data} layoutNumber="MidColumn" />
-      )}
+      createResourceForm={CRCreateWrapper}
       customComponents={[yamlPreview]}
       layoutCloseCreateUrl={params.layoutCloseCreateUrl}
       disableDelete={isModule}

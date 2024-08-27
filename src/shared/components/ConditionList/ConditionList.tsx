@@ -3,27 +3,32 @@ import {
   CustomContent,
   ExpandableListItem,
 } from '../ExpandableListItem/ExpandableListItem';
+import { ReactNode } from 'react';
 
 type ConditionListProps = {
   conditions: [ConditionItem];
+  className?: string;
 };
 
 type ConditionItem = {
-  message: string;
   header: ConditionHeader;
+  message?: string;
   customContent?: CustomContent[];
 };
 type ConditionHeader = {
-  titleText: string;
+  titleText: string | ReactNode;
   status?: string;
 };
 
-export const ConditionList = ({ conditions }: ConditionListProps) => {
+export const ConditionList = ({
+  conditions,
+  className,
+}: ConditionListProps) => {
   if (!conditions) {
     return null;
   }
   return (
-    <List>
+    <List className={className}>
       {conditions?.map((cond, index) => (
         <ExpandableListItem
           key={index}

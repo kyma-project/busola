@@ -7,6 +7,10 @@ import ServiceAccountCreate from './ServiceAccountCreate';
 import { Button } from '@ui5/webcomponents-react';
 import { TokenRequestModal } from './TokenRequestModal/TokenRequestModal';
 import { ResourceDescription } from 'resources/ServiceAccounts';
+import { EventsList } from 'shared/components/EventsList';
+import { filterByResource } from 'hooks/useMessageList';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
 const ServiceAccountSecrets = serviceAccount => {
   const namespace = serviceAccount.metadata.namespace;
@@ -59,17 +63,32 @@ const ServiceAccountImagePullSecrets = serviceAccount => {
 export default function ServiceAccountDetails(props) {
   const { t } = useTranslation();
   const [isTokenModalOpen, setTokenModalOpen] = useState(false);
-  const customColumns = [
-    {
-      header: t('service-accounts.headers.auto-mount-token'),
-      value: value => (
-        <ServiceAccountTokenStatus
-          automount={value.automountServiceAccountToken}
-        />
-      ),
-    },
-  ];
 
+  const Events = () => (
+    <EventsList
+      key="events"
+      namespace={props.namespace}
+      filter={filterByResource('ServiceAccount', props.resourceName)}
+      hideInvolvedObjects={true}
+    />
+  );
+
+  const Configuration = value => (
+    <UI5Panel
+      fixed
+      keyComponent={'serviceaccount-configuration'}
+      title={t('configuration.title')}
+    >
+      <LayoutPanelRow
+        name={t('service-accounts.headers.auto-mount-token')}
+        value={
+          <ServiceAccountTokenStatus
+            automount={value.automountServiceAccountToken}
+          />
+        }
+      />
+    </UI5Panel>
+  );
   const headerActions = [
     <Button
       key="generate-token-request"
@@ -83,10 +102,11 @@ export default function ServiceAccountDetails(props) {
     <>
       <ResourceDetails
         customComponents={[
+          Configuration,
           ServiceAccountSecrets,
           ServiceAccountImagePullSecrets,
+          Events,
         ]}
-        customColumns={customColumns}
         createResourceForm={ServiceAccountCreate}
         description={ResourceDescription}
         headerActions={headerActions}

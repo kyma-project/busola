@@ -1,12 +1,18 @@
-import React from 'react';
+import { ReactNode } from 'react';
 import { stringifyIfBoolean } from 'shared/utils/helpers';
 import { Text } from '@ui5/webcomponents-react';
 
 import { spacing } from '@ui5/webcomponents-react-base';
 import './LayoutPanelRow.scss';
 
-export function LayoutPanelRow({ name, value }) {
+type LayoutPanelRowProps = {
+  name: string;
+  value: string | ReactNode;
+};
+
+export function LayoutPanelRow({ name, value }: LayoutPanelRowProps) {
   const sanitizedValue = stringifyIfBoolean(value);
+
   return (
     <div
       className="break-word layout-panel-row"
@@ -16,7 +22,7 @@ export function LayoutPanelRow({ name, value }) {
       }}
     >
       <Text style={spacing.sapUiTinyMarginBottom}>{name}</Text>
-      <Text>{sanitizedValue}</Text>
+      {sanitizedValue && <Text>{sanitizedValue}</Text>}
     </div>
   );
 }

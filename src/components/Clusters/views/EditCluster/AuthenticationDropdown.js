@@ -14,7 +14,6 @@ export function AuthenticationTypeDropdown({ type, setType }) {
       options={options}
       selectedKey={type}
       onSelect={(_, selected) => setType(selected.key)}
-      fullWidth
       required
     />
   );

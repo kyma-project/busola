@@ -343,6 +343,7 @@ common:
     resources: Resources
     nodeInfo: Node Info
     node-details: Node Details
+    specification: Specification
     started-at: Started At
     status: Status
     value: Value
@@ -877,17 +878,24 @@ ingresses:
     backend: Backend
     default-backend: Default Backend
     host: Host
+    host-name: Host name
+    hosts: Hosts
     ingress-class-name: Ingress class name
+    ip: IP
     kind: Kind
     load-balancers: Load Balancers
     path: Path
     path-type: Path type
     paths: Paths
     port: Port
+    ports: Ports
     port-name: Port name
     port-number: Port number
+    protocol: Protocol
     rules: Rules
+    secret-name: Secret name
     service-name: Service name
+    tls: TLS
   message:
     rules-not-found: Rules not found
   name_singular: Ingress
@@ -1211,7 +1219,6 @@ pods:
     unknown: Pod state unknown
 pv:
   description: <0>PersistentVolume (PV)</0> is used to manage storage in a cluster that an administrator has provisioned.
-  details: Details
   headers:
     access-modes: Access Mode
     capacity: Capacity
@@ -1219,13 +1226,47 @@ pv:
     claim-name: Claim Name
     finalizers: Finalizers
     mount-options: Mount Options
-    path: Path
     reclaim-policy: Reclaim Policy
-    server: Server
     storage-class: Storage Class
     storage-class-name: Storage Class Name
+    lastPhaseTransitionTime: Last Phase Transition Time
+    volumeMode: Volume Mode
+    volumeType: Volume Type
+    type: Type
   name_singular: PersistentVolume
-  nfs: Network File System
+  nfs: 
+    type: Network File System
+    server: Server
+    path: Path
+  csi: 
+    type: Container Storage Interface
+    driver: Driver
+    volumeHandle: Volume Handle
+    fsType: FSType
+    volumeAttributes: Volume Attributes
+  fc:
+    type: Fibre Channel
+    lun: LUN
+    fsType: FSType
+    wwids: WWIDs
+    targetWWNs: TargetWWNs
+  hostPath:
+    type: HostPath
+    path: Path
+  iscsi:
+    type: iSCSI
+    targetPortal: Target Portal
+    iqn: IQN
+    lun: Lun
+    iscsiInterface: ISCSIInterface
+    fsType: FSType
+    portals: Portals
+    chapAuthDiscovery: DiscoveryCHAPAuth
+    chapAuthSession: SessionCHAPAuth
+    secretRef: Secret Reference
+  local:
+    type: Local
+    path: Path
   statuses:
     available: Available
     bound: Bound
@@ -1536,6 +1577,9 @@ storage-classes:
     parameters: Parameters
     provisioner: Provisioner
     reclaim-policy: Reclaim Policy
+    allow-volume-expansion: Allow Volume Expansion
+    volume-binding-mode: Volume Binding Mode
+    configuration: Configuration
   name_singular: StorageClass
   title: Storage Classes
 top-nav:

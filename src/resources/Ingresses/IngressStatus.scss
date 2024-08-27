@@ -1,0 +1,11 @@
+.load-balancers {
+  .expandable-item__message:not(.load-balancers__content) {
+    .title {
+      margin-left: 0.5rem !important;
+    }
+  }
+
+  &__content {
+    margin-left: 1.5rem !important;
+  }
+}

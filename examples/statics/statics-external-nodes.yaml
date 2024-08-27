@@ -1,0 +1,44 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: nodes-test
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: nodes-test
+    busola.io/extension: statics
+    busola.io/extension-version: '0.5'
+data:
+  dataSources: |-
+    secrets:
+      resource:
+        kind: Secret
+        version: v1
+    clsSecret:
+      resource:
+        kind: Secret
+        version: v1
+  general: |-
+    externalNodes:
+        - category: External Nodes
+          icon: course-book
+          scope: namespace
+          children:
+            - label: Test Node
+              link: $base64decode($string(($clsSecret().items.data.'dashboards-endpoint')[0]))
+            - label: Node Func
+              link: $string($filter($secrets().items, function ($v) { $v.metadata.name = "sap-cloud-logging" }).data."dashboards-endpoint")
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: sap-cloud-logging
+  namespace: kube-public
+data:
+  dashboards-endpoint: aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1kUXc0dzlXZ1hjUQ==
+  ingest-mtls-cert: aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1kUXc0dzlXZ1hjUQ==
+  ingest-mtls-endpoint: aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1kUXc0dzlXZ1hjUQ==
+  ingest-mtls-key: aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1kUXc0dzlXZ1hjUQ==
+  ingest-otlp-cert: aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1kUXc0dzlXZ1hjUQ==
+  ingest-otlp-endpoint: aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1kUXc0dzlXZ1hjUQ==
+  ingest-otlp-key: aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1kUXc0dzlXZ1hjUQ==
+type: Opaque
