@@ -73,11 +73,11 @@ export default function ServiceAccountDetails(props) {
     />
   );
 
-  const Config = value => (
+  const Configuration = value => (
     <UI5Panel
       fixed
-      keyComponent={'storageclass-configuration'}
-      title={t('storage-classes.headers.configuration')}
+      keyComponent={'serviceaccount-configuration'}
+      title={t('configuration.title')}
     >
       <LayoutPanelRow
         name={t('service-accounts.headers.auto-mount-token')}
@@ -102,7 +102,7 @@ export default function ServiceAccountDetails(props) {
     <>
       <ResourceDetails
         customComponents={[
-          Config,
+          Configuration,
           ServiceAccountSecrets,
           ServiceAccountImagePullSecrets,
           Events,
