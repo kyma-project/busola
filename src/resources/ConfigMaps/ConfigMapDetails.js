@@ -36,10 +36,10 @@ export function ConfigMapDetails(props) {
   const customColumns = [
     {
       header: t('common.headers.owner'),
-      value: secret => (
+      value: configMap => (
         <ControlledBy
-          ownerReferences={secret.metadata.ownerReferences}
-          namespace={secret.metadata.namespace}
+          ownerReferences={configMap.metadata.ownerReferences}
+          namespace={configMap.metadata.namespace}
         />
       ),
     },
