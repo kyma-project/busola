@@ -97,10 +97,11 @@ const useGetHook = processDataFn =>
     );
 
     useEffect(() => {
+      console.log(error?.code);
       const receivedForbidden = error?.code === 403;
 
       // POLLING
-      if (!pollingInterval || receivedForbidden || skip) return;
+      if (!pollingInterval || receivedForbidden || skip || error) return;
       const intervalId = setInterval(refetch(true, data), pollingInterval);
       return _ => clearInterval(intervalId);
     }, [path, pollingInterval, data, error, skip, refetch]);
