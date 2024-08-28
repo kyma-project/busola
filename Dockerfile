@@ -20,8 +20,6 @@ RUN yq -i '.version = "'${default_tag}'"' public/version.yaml && \
 
 RUN npm run build:docker
 
-RUN touch /app/public/active.env
-
 # ---- Serve ----
 FROM nginxinc/nginx-unprivileged:1.27.1-alpine3.20
 WORKDIR /app
@@ -32,6 +30,9 @@ COPY --from=builder /app/build /app/core-ui
 # nginx
 COPY --from=builder /app/nginx/nginx.conf /etc/nginx/
 COPY --from=builder /app/nginx/mime.types /etc/nginx/
+
+#entrypoint
+COPY --from=builder --chown=nginx /app/start_nginx.sh /app/start_nginx.sh
 
 USER root:root
 RUN chown -R nginx:root /etc/nginx /app/core-ui
