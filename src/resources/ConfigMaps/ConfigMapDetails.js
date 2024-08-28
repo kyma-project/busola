@@ -21,13 +21,25 @@ export function ConfigMapDetails(props) {
     ));
   };
 
+  const ConfigMapBinaryDataEditor = resource => {
+    const { binaryData } = resource;
+    return Object.keys(binaryData || {}).map(key => (
+      <ReadonlyEditorPanel
+        title={key}
+        value={binaryData[key]}
+        key={key + JSON.stringify(binaryData[key])}
+        isBase64={true}
+      />
+    ));
+  };
+
   const customColumns = [
     {
       header: t('common.headers.owner'),
-      value: secret => (
+      value: configMap => (
         <ControlledBy
-          ownerReferences={secret.metadata.ownerReferences}
-          namespace={secret.metadata.namespace}
+          ownerReferences={configMap.metadata.ownerReferences}
+          namespace={configMap.metadata.namespace}
         />
       ),
     },
@@ -35,7 +47,7 @@ export function ConfigMapDetails(props) {
 
   return (
     <ResourceDetails
-      customComponents={[ConfigMapEditor]}
+      customComponents={[ConfigMapEditor, ConfigMapBinaryDataEditor]}
       customColumns={customColumns}
       description={ResourceDescription}
       createResourceForm={ConfigMapCreate}

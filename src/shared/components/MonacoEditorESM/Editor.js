@@ -74,6 +74,13 @@ export function Editor({
     }
   }, [value, editorInstance, error]);
 
+  useEffect(() => {
+    if (prevValueRef.current !== value && readOnly) {
+      editorInstance.setValue(value);
+      prevValueRef.current = value;
+    }
+  }, [value, editorInstance, readOnly]);
+
   useUpdateValueOnParentChange({
     updateValueOnParentChange,
     editorInstance,

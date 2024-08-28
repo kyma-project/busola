@@ -2,6 +2,7 @@ import React from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { predefinedCategories } from 'state/navigation/categories';
 import { Description } from 'shared/components/Description/Description';
+import { matchByOwnerReference } from 'shared/utils/helpers';
 
 export const resourceType = 'ConfigMaps';
 export const namespaced = true;
@@ -24,4 +25,14 @@ export const Create = React.lazy(() => import('./ConfigMapCreate'));
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   depth: 1,
   networkFlowLevel: 1,
+  relations: [
+    {
+      resource: { kind: 'Pod' },
+      filter: (cm, pod) =>
+        matchByOwnerReference({
+          resource: cm,
+          owner: pod,
+        }),
+    },
+  ],
 });
