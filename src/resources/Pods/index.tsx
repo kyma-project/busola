@@ -50,14 +50,6 @@ export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowLevel: 0,
   relations: [
     {
-      resource: { kind: 'ConfigMap' },
-      filter: (pod, cm) =>
-        matchByOwnerReference({
-          resource: cm,
-          owner: pod,
-        }),
-    },
-    {
       resource: { kind: 'DaemonSet' },
       filter: (pod, ds) =>
         matchByOwnerReference({
