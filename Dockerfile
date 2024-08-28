@@ -20,6 +20,10 @@ RUN yq -i '.version = "'${default_tag}'"' public/version.yaml && \
 
 RUN npm run build:docker
 
+RUN <<EOF
+touch /app/public/active.env
+EOF
+
 # ---- Serve ----
 FROM nginxinc/nginx-unprivileged:1.27.1-alpine3.20
 WORKDIR /app
@@ -36,4 +40,4 @@ RUN chown -R nginx:root /etc/nginx /app/core-ui
 USER nginx:nginx
 
 EXPOSE 8080
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["/app/start_nginx.sh"]

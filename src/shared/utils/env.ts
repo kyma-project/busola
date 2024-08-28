@@ -3,12 +3,12 @@ import joinPaths from './path';
 //TODO: use react hook
 export default async function getConfigDir(): Promise<string> {
   const input = await fetchActiveEnv();
-  const envVar = input.split('=');
+  const envVar = input.trim().split('=');
   if (envVar?.length === 2 && envVar[1]) {
     const envDir = envVar[1].trim();
     return joinPaths('environment', envDir);
   }
-  return '/';
+  return '';
 }
 
 async function fetchActiveEnv(): Promise<string> {
