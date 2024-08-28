@@ -44,7 +44,6 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
       await defaultConfigResponse.text(),
     ) as Config;
 
-    //use memo, get and etc
     const configDir = await getConfigDir();
     const configResponse = await fetch(
       configDir + '/config/config.yaml' + cacheBuster,

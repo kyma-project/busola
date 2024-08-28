@@ -2,7 +2,7 @@ import { ExtWizardConfig } from './../types';
 import jsyaml from 'js-yaml';
 import { mapValues, partial } from 'lodash';
 import { useEffect } from 'react';
-import { ExtResource, ExtInjectionConfig } from '../types';
+import { ExtInjectionConfig, ExtResource } from '../types';
 import { atom, RecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { clusterState } from '../clusterAtom';
 import { authDataState } from '../authDataAtom';
@@ -151,7 +151,8 @@ const getExtensionWizards = async (
     return null;
   }
   try {
-    const wizardsResponse = await fetch('/extensions/wizards.yaml');
+    const configDir = await getConfigDir();
+    const wizardsResponse = await fetch(configDir + '/extensions/wizards.yaml');
 
     let defaultWizards = jsyaml.loadAll(
       await wizardsResponse.text(),
@@ -237,7 +238,8 @@ const getStatics = async (
     return null;
   }
   try {
-    const staticsResponse = await fetch('/extensions/statics.yaml');
+    const configDir = await getConfigDir();
+    const staticsResponse = await fetch(configDir + '/extensions/statics.yaml');
 
     let defaultStatics = jsyaml.loadAll(
       await staticsResponse.text(),
