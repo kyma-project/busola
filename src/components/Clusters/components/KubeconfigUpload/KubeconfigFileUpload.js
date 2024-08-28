@@ -24,14 +24,14 @@ export function KubeconfigFileUpload({ onKubeconfigTextAdded }) {
 
   return (
     <div>
-      <Title level="H5">
+      <Title level="H5" style={spacing.sapUiTinyMarginBottom}>
         {t('clusters.wizard.kubeconfig')}
         <>
           <Button
             id="descriptionOpener"
             icon="hint"
             design="Transparent"
-            style={spacing.sapUiTinyMargin}
+            style={spacing.sapUiTinyMarginBegin}
             onClick={() => {
               setShowTitleDescription(true);
             }}

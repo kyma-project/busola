@@ -37,3 +37,4 @@ jobs:
       dockerfile: Dockerfile.local
       context: .
       export-tags: true
+      tags: latest

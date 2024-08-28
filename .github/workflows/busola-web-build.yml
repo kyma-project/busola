@@ -33,4 +33,4 @@ jobs:
       dockerfile: Dockerfile
       context: .
       export-tags: true
-
+      tags: latest

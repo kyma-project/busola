@@ -14,6 +14,7 @@ import { createUserManager } from 'state/authDataAtom';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { removePreviousPath } from 'state/useAfterInitHook';
+import { parseOIDCparams } from 'components/Clusters/components/oidc-params';
 
 function addCurrentCluster(
   params: NonNullable<ActiveClusterState>,
@@ -56,7 +57,7 @@ export function deleteCluster(
     const prevCredentials = prev?.[clusterName]?.currentContext.user.user;
     if (!hasNonOidcAuth(prevCredentials)) {
       const userManager = createUserManager(
-        prevCredentials as KubeconfigOIDCAuth,
+        parseOIDCparams(prevCredentials as KubeconfigOIDCAuth),
       );
       userManager.removeUser().catch(console.warn);
     }
@@ -128,7 +129,7 @@ export function hasKubeconfigAuth(kubeconfig: Kubeconfig) {
     }
     const oidcData = tryParseOIDCparams(user as KubeconfigOIDCAuth);
 
-    if (oidcData?.issuerUrl && oidcData?.clientId && oidcData?.scope) {
+    if (oidcData?.issuerUrl && oidcData?.clientId && oidcData?.scopes) {
       return oidcData;
     }
   } catch (e) {

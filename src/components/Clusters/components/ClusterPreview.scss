@@ -2,7 +2,8 @@
   overflow-y: scroll;
   overflow-x: hidden;
   height: 100%;
-  max-height: calc(90vh - 12rem);
+  min-height: calc(90vh - 11.85rem);
+  margin-bottom: 1rem;
 
   &__subtitle {
     padding-bottom: 1rem;

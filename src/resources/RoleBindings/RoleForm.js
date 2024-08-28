@@ -61,31 +61,28 @@ export const RoleForm = ({
       label={t('role-bindings.create-modal.role')}
       propertyPath="$.roleRef.name"
       input={props => (
-        <div className="bsl-col-md--11">
-          <ComboBox
-            id="role"
-            aria-label="Role Combobox"
-            disabled={props.disabled || !options?.length}
-            filter="Contains"
-            inputRef={props.inputRef}
-            placeholder={t('common.messages.type-to-select', {
-              value: t(
-                binding.roleRef?.kind === 'ClusterRole'
-                  ? 'cluster-roles.name_singular'
-                  : 'roles.name_singular',
-              ),
-            })}
-            value={
-              options.find(o => o.key === props.value)?.text ?? props.value
-            }
-            onChange={event => onChange(event, props)}
-            onInput={event => onChange(event, props)}
-          >
-            {options.map(option => (
-              <ComboBoxItem id={option.key} text={option.text} />
-            ))}
-          </ComboBox>
-        </div>
+        <ComboBox
+          className="bsl-col-md--12"
+          id="role"
+          aria-label="Role Combobox"
+          disabled={props.disabled || !options?.length}
+          filter="Contains"
+          inputRef={props.inputRef}
+          placeholder={t('common.messages.type-to-select', {
+            value: t(
+              binding.roleRef?.kind === 'ClusterRole'
+                ? 'cluster-roles.name_singular'
+                : 'roles.name_singular',
+            ),
+          })}
+          value={options.find(o => o.key === props.value)?.text ?? props.value}
+          onChange={event => onChange(event, props)}
+          onInput={event => onChange(event, props)}
+        >
+          {options.map(option => (
+            <ComboBoxItem id={option.key} text={option.text} />
+          ))}
+        </ComboBox>
       )}
     />
   );

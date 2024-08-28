@@ -1,5 +1,6 @@
 import { FlexBox, RadioButton } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
+import { spacing } from '@ui5/webcomponents-react-base';
 import './ChooseStorage.scss';
 
 export function ChooseStorage({ storage, setStorage }) {
@@ -7,7 +8,10 @@ export function ChooseStorage({ storage, setStorage }) {
 
   return (
     <>
-      <p className="cluster-wizard__storage-preference">
+      <p
+        className="cluster-wizard__storage-preference"
+        style={spacing.sapUiTinyMarginBottom}
+      >
         {`${t('clusters.storage.storage-preference')}:`}
       </p>
       <FlexBox direction="Column">

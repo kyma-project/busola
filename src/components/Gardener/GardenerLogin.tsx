@@ -7,6 +7,7 @@ import { createUserManager } from 'state/authDataAtom';
 import { KubeconfigOIDCAuth } from 'types';
 import { GardenerLoginFeature } from './GardenerLoginFeature';
 import { useGardenerLogin } from './useGardenerLoginFunction';
+import { parseOIDCparams } from 'components/Clusters/components/oidc-params';
 
 import { spacing } from '@ui5/webcomponents-react-base';
 
@@ -29,7 +30,10 @@ export default function GardenerLogin() {
         setToken(user.token);
       } else {
         const auth = user as KubeconfigOIDCAuth;
-        const userManager = createUserManager(auth, '/gardener-login');
+        const userManager = createUserManager(
+          parseOIDCparams(auth),
+          '/gardener-login',
+        );
         try {
           const storedUser = await userManager.getUser();
           const user =

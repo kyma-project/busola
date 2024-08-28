@@ -35,7 +35,10 @@ export function KubeconfigUpload({ kubeconfig, setKubeconfig, formRef }) {
 
   return (
     <div className="kubeconfig-upload">
-      <div className="add-cluster__content-container">
+      <div
+        className="add-cluster__content-container"
+        style={spacing.sapUiSmallMarginBottom}
+      >
         <KubeconfigFileUpload
           onKubeconfigTextAdded={text => {
             updateKubeconfig(text);
@@ -58,11 +61,7 @@ export function KubeconfigUpload({ kubeconfig, setKubeconfig, formRef }) {
         yamlHideDisabled
       />
       {error && (
-        <MessageStrip
-          design="Negative"
-          hideCloseButton
-          style={spacing.sapUiSmallMarginTop}
-        >
+        <MessageStrip design="Negative" hideCloseButton>
           {t('common.create-form.editor-error', { error })}
         </MessageStrip>
       )}
