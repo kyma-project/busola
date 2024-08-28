@@ -20,9 +20,7 @@ RUN yq -i '.version = "'${default_tag}'"' public/version.yaml && \
 
 RUN npm run build:docker
 
-RUN <<EOF
-touch /app/public/active.env
-EOF
+RUN touch /app/public/active.env
 
 # ---- Serve ----
 FROM nginxinc/nginx-unprivileged:1.27.1-alpine3.20

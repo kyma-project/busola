@@ -7,10 +7,10 @@ import { clusterState } from '../clusterAtom';
 import { authDataState } from '../authDataAtom';
 import { getFetchFn } from '../utils/getFetchFn';
 import { ConfigFeatureList } from '../types';
-import { apiGroupState } from '..//discoverability/apiGroupsSelector';
+import { apiGroupState } from '../discoverability/apiGroupsSelector';
 import { getFeatures } from './getFeatures';
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
-import getConfigDir from '../../shared/utils/env';
+import getConfigDir from 'shared/utils/env';
 
 type Configuration = {
   features?: ConfigFeatureList;

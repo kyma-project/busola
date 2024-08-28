@@ -1,6 +1,5 @@
 import joinPaths from './path';
 
-//TODO: use react hook
 export default async function getConfigDir(): Promise<string> {
   const input = await fetchActiveEnv();
   const envVar = input.trim().split('=');

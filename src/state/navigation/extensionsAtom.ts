@@ -26,7 +26,7 @@ import pluralize from 'pluralize';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { CustomResourceDefinition } from 'command-pallette/CommandPalletteUI/handlers/crHandler';
 import { createPostFn } from 'shared/hooks/BackendAPI/usePost';
-import getConfigDir from '../../shared/utils/env';
+import getConfigDir from 'shared/utils/env';
 
 /*
 the order of the overwrting extensions
@@ -371,7 +371,6 @@ const getExtensions = async (
       ...defaultExtensionsWithoutOverride,
       ...configMapsExtensionsDataOnly,
     ].filter(ext => !!ext.general);
-    console.log(combinedExtensions);
     return combinedExtensions;
   } catch (e) {
     console.warn('Cannot load extensions: ', e);
