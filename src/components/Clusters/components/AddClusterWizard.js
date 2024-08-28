@@ -151,7 +151,7 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
   return (
     <Wizard contentLayout="SingleStep" onStepChange={handleStepChange}>
       <WizardStep
-        titleText={t('configuration.title')}
+        titleText={t('common.headers.configuration')}
         branching={!kubeconfig}
         selected={selected === 1}
         data-step={'1'}

@@ -188,7 +188,7 @@ export function ClusterValidationConfigurationDialog({
     <Dialog
       onAfterClose={onCancel}
       open={show}
-      headerText={t('cluster-validation.scan.configuration.title')}
+      headerText={t('cluster-validation.scan.common.headers.configuration')}
       footer={
         <Bar
           design="Footer"

@@ -1,6 +1,7 @@
 import React from 'react';
 import { predefinedCategories } from 'state/navigation/categories';
 import { Description } from 'shared/components/Description/Description';
+import { matchByOwnerReference } from 'shared/utils/helpers';
 
 export const resourceType = 'Secrets';
 export const namespaced = true;
@@ -59,4 +60,14 @@ export const secrets = () => [
 export const resourceGraphConfig = () => ({
   depth: 1,
   networkFlowLevel: 1,
+  relations: [
+    {
+      resource: { kind: 'Deployment' },
+      filter: (secret: any, deployment: any) =>
+        matchByOwnerReference({
+          resource: secret,
+          owner: deployment,
+        }),
+    },
+  ],
 });

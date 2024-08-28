@@ -319,6 +319,7 @@ common:
     age: Age
     annotations: Annotations
     created: Created
+    configuration: Configuration
     last-update: Last Update
     description: Description
     discard-changes: Discard Changes
