@@ -2,14 +2,12 @@
 FROM alpine:3.20.2 AS builder
 ARG default_tag
 
-RUN apk add --update nodejs npm
-
-WORKDIR /app
-
 # Install global dependencies
 RUN apk update && \
   apk upgrade && \
-  apk add --no-cache make
+  apk add --no-cache make nodejs npm yq
+
+WORKDIR /app
 
 # Set env variables
 ENV PRODUCTION true
@@ -17,7 +15,9 @@ ENV CI true
 
 COPY . /app
 
-RUN sed -i "s/version: dev/version: ${default_tag}/" public/version.yaml && make resolve validate
+RUN yq -i '.version = "${default_tag}"' public/version.yaml && \
+  make resolve validate && \
+  chown -R 101:0 /app/nginx
 
 RUN npm run build:docker
 
@@ -31,6 +31,8 @@ COPY --from=builder /app/build /app/core-ui
 # nginx
 COPY --from=builder /app/nginx/nginx.conf /etc/nginx/
 COPY --from=builder /app/nginx/mime.types /etc/nginx/
+
+RUN ls -lha /etc/nginx
 
 EXPOSE 8080
 ENTRYPOINT ["nginx", "-g", "daemon off;"]

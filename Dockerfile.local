@@ -4,14 +4,13 @@
 FROM alpine:3.20.2 AS builder
 ARG default_tag
 
-RUN apk add --update nodejs npm
+RUN apk update && \
+  apk upgrade && \
+  apk add --no-cache --update make nodejs npm yq
 
 WORKDIR /app
 
 # Install global dependencies
-RUN apk update && \
-  apk upgrade && \
-  apk add --no-cache make
 
 # Set env variables
 ENV PRODUCTION true
@@ -19,7 +18,8 @@ ENV CI true
 
 COPY . /app
 
-RUN sed -i "s/version: dev/version: ${default_tag}/" public/version.yaml && make resolve validate
+RUN yq -i '.version = "${default_tag}"' public/version.yaml && \
+  make resolve validate
 
 RUN npm run build:docker
 RUN cd /app/backend && npm run build
@@ -29,8 +29,7 @@ FROM alpine:3.20.2
 WORKDIR /app
 
 RUN apk --no-cache upgrade && \
-  apk --no-cache add nginx && \
-  apk add --update nodejs npm yq
+  apk --no-cache --update add nginx nodejs npm yq
 WORKDIR /app
 
 COPY --chown=65532:65532 --from=builder /app/build /app/core-ui
@@ -46,8 +45,8 @@ RUN npm ci --only=production
 
 # use sessionStorage as default
 # SHOW_KYMA_VERSION for production
-RUN yq eval -i '.config.features.SHOW_KYMA_VERSION.isEnabled = true' core-ui/defaultConfig.yaml 
-RUN yq eval -i '.config.defaultStorage = "sessionStorage"' core-ui/defaultConfig.yaml 
+RUN yq eval -i '.config.features.SHOW_KYMA_VERSION.isEnabled = true' core-ui/defaultConfig.yaml
+RUN yq eval -i '.config.defaultStorage = "sessionStorage"' core-ui/defaultConfig.yaml
 
 USER 65532:65532
 
