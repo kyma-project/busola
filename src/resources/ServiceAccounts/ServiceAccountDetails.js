@@ -77,7 +77,7 @@ export default function ServiceAccountDetails(props) {
     <UI5Panel
       fixed
       keyComponent={'serviceaccount-configuration'}
-      title={t('configuration.title')}
+      title={t('common.headers.configuration')}
     >
       <LayoutPanelRow
         name={t('service-accounts.headers.auto-mount-token')}

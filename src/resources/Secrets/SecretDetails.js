@@ -53,8 +53,8 @@ export function SecretDetails(props) {
   const Configuration = secret => (
     <UI5Panel
       fixed
-      keyComponent={'storageclass-configuration'}
-      title={t('storage-classes.headers.configuration')}
+      keyComponent={'secret-configuration'}
+      title={t('common.headers.configuration')}
     >
       <LayoutPanelRow name={t('secrets.headers.type')} value={secret.type} />
     </UI5Panel>

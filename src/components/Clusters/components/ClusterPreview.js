@@ -125,7 +125,7 @@ export function ClusterPreview({ kubeconfig, storage, setSelected, hasAuth }) {
           level="H5"
           className="cluster-preview__subtitle"
           style={spacing.sapUiSmallMarginTopBottom}
-        >{`1. ${t('configuration.title')}`}</Title>
+        >{`1. ${t('common.headers.configuration')}`}</Title>
         <p
           className="cluster-preview__data-header"
           style={{
