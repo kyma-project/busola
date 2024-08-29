@@ -49,22 +49,15 @@ function TimeInput({ entries, index, name, setSchedule }) {
     <ResourceForm.FormField
       required
       label={t('cron-jobs.create-modal.' + name)}
+      tooltipContent={t('cron-jobs.create-modal.tooltips.' + name)}
       input={() => (
-        <>
-          <Inputs.Text
-            value={entries[index] || ''}
-            setValue={setValue}
-            placeholder={t('cron-jobs.create-modal.' + name)}
-            className="full-width"
-            required
-          />
-          <p
-            style={{ color: 'var(--sapNeutralTextColor)' }}
-            className="full-width"
-          >
-            {t('cron-jobs.create-modal.tooltips.' + name)}
-          </p>
-        </>
+        <Inputs.Text
+          value={entries[index] || ''}
+          setValue={setValue}
+          placeholder={t('cron-jobs.create-modal.' + name)}
+          className="full-width"
+          required
+        />
       )}
     />
   );

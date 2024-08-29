@@ -169,7 +169,7 @@ export function BusolaExtensionDetails({ name, namespace }) {
             hideCloseButton
             style={spacing.sapUiSmallMarginBottom}
           >
-            <Trans i18nKey="extensibility.message.unnown-version">
+            <Trans i18nKey="extensibility.message.unknown-version">
               <ExternalLink url="https://github.com/kyma-project/busola/tree/main/docs/extensibility" />
             </Trans>
           </MessageStrip>
