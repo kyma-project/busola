@@ -43,9 +43,11 @@ cluster-overview:
 cluster-role-bindings:
   description: <0>ClusterRoleBinding</0> assigns the permissions defined in a ClusterRole to a user.
   name_singular: ClusterRoleBinding
+  title: Cluster Role Bindings
 cluster-roles:
   description: <0>ClusterRole</0> is a set of cluster-level resources and permissions that can be assigned to a user.
   name_singular: ClusterRole
+  title: Cluster Roles
 cluster-validation:
   title: Cluster Validation
   scan:
@@ -310,7 +312,7 @@ common:
     name: Name
     namespace: Namespace
     new-entry: New Entry
-    'no': No'
+    'no': 'No'
     path: Path
     read-only: Read-only mode
     resource: Resource
@@ -342,10 +344,18 @@ common:
   protected-resource: Protected resource 
   sorting:
     asc: Ascending
+    count: Count
     desc: Descending
+    lastseen: Last Seen
+    name: Name
+    namespace: Namespace
+    replicas: Replicas
     sort: Sort
     sort-by: Sort By
     sort-order: Sort Order
+    status: Status
+    time: Age
+    type: Type
   statuses:
     error: Error
     ready: Ready
@@ -430,6 +440,7 @@ config-maps:
     migrate: Migrate
   description: <0>ConfigMap</0> is an object that allows for storing non-sensitive data in key-value pairs.
   name_singular: ConfigMap
+  title: Config Maps
 configuration:
   title: Configuration
 cron-jobs:
@@ -657,6 +668,7 @@ ingresses:
     service-name: Service name
     tls: TLS
   name_singular: Ingress
+  title: Ingresses
 integration:
   title: Integration
 istio:
@@ -826,6 +838,7 @@ network-policies:
     values: Values
   name_singular: NetworkPolicy
   present-but-empty: Present but empty selector selects all pods / namespaces.
+  title: Network Policies
 no-permissions:
   enter-namespace-name: 'If you expect to have access to a Namespace, please enter its name here:'
   enter-namespace-name-placeholder: Enter Namespace name
@@ -850,6 +863,7 @@ persistent-volume-claims:
   message:
     empty-selector: Matches all PersistentVolumes
   name_singular: PersistentVolumeClaim
+  title: Persistent Volume Claims
   tooltips:
     bound: Binding between PersistentVolume and PersistentVolumeClaim established
     lost: Lost binding between PersistentVolume and PersistentVolumeClaim
@@ -1011,6 +1025,7 @@ role-bindings:
   name_singular: RoleBinding
   placeholders:
     api-group: API Group
+  title: Role Bindings
 roles:
   buttons:
     load-resources: Load resources
@@ -1031,6 +1046,7 @@ roles:
   templates:
     all-permissions: All permissions
     view-only: View only
+  title: Roles
   tooltips:
     load: Load resources
 schema:
@@ -1097,6 +1113,7 @@ secrets:
   name_singular: Secret
   placeholders:
     type: Type of Secret
+  title: Secrets
   type: Type
 selector:
   message:
