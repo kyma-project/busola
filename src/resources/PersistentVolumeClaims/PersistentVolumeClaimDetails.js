@@ -66,56 +66,101 @@ export const PVCConfiguration = pvc => {
     '/apis/storage.k8s.io/v1/storageclasses',
   );
   return (
-    <UI5Panel
-      key="pvc-configuration"
-      title={t('persistent-volume-claims.headers.configuration')}
-      keyComponent={'pvc-configuration'}
-    >
-      <LayoutPanelRow
-        key={pvc.spec?.volumeMode}
-        name={t('persistent-volume-claims.headers.volume-mode')}
-        value={pvc.spec?.volumeMode}
-      />
-      <LayoutPanelRow
-        key={pvc.spec?.accessModes}
-        name={t('persistent-volume-claims.headers.access-modes')}
-        value={<Tokens tokens={pvc.spec?.accessModes} />}
-      />
-      <LayoutPanelRow
-        key={pvc.spec?.volumeName}
-        name={t('persistent-volume-claims.headers.volume-name')}
-        value={
-          pvc.spec?.volumeName ? (
-            <Link url={clusterUrl(`persistentvolumes/${pvc.spec?.volumeName}`)}>
-              {pvc.spec?.volumeName}
-            </Link>
-          ) : (
-            <p>{EMPTY_TEXT_PLACEHOLDER}</p>
-          )
-        }
-      />
-      <LayoutPanelRow
-        key={pvc.spec?.storageClassName}
-        name={t('persistent-volume-claims.headers.storage-class-name')}
-        value={
-          storageClasses?.find(
-            ({ metadata }) => metadata.name === pvc.spec?.storageClassName,
-          ) ? (
-            <Link
-              url={clusterUrl(`storageclasses/${pvc.spec?.storageClassName}`)}
-            >
-              {pvc.spec?.storageClassName}
-            </Link>
-          ) : (
-            <p>
-              {pvc.spec?.storageClassName !== ''
-                ? pvc.spec?.storageClassName
-                : EMPTY_TEXT_PLACEHOLDER}
-            </p>
-          )
-        }
-      />
-    </UI5Panel>
+    <>
+      <UI5Panel
+        title={t('persistent-volume-claims.headers.resources.title')}
+        keyComponent={'pvc-resources'}
+      >
+        {pvc.spec.resources?.requests && (
+          <UI5Panel
+            title={t('persistent-volume-claims.headers.resources.requests')}
+            keyComponent={'pvc-resources-requests'}
+          >
+            {Object.entries(pvc.spec.resources?.requests).map(requests => {
+              return (
+                <LayoutPanelRow
+                  name={requests[0]}
+                  value={requests[1] || EMPTY_TEXT_PLACEHOLDER}
+                  key={requests[0]}
+                />
+              );
+            })}
+          </UI5Panel>
+        )}
+        {pvc.spec.resources?.limits && (
+          <UI5Panel
+            title={t('persistent-volume-claims.headers.resources.limits')}
+            keyComponent={'pvc-resources-limits'}
+          >
+            {Object.entries(pvc.spec.resources?.limits).map(limits => {
+              return (
+                <LayoutPanelRow
+                  name={limits[0]}
+                  value={limits[1] || EMPTY_TEXT_PLACEHOLDER}
+                  key={limits[0]}
+                />
+              );
+            })}
+          </UI5Panel>
+        )}
+        {/* <LayoutPanelRow
+          key={pvc.spec.resources?.requests?.storage}
+          name={t('persistent-volume-claims.headers.storage')}
+          value={pvc.spec.resources?.requests?.storage}
+        /> */}
+      </UI5Panel>
+      <UI5Panel
+        title={t('common.headers.specification')}
+        keyComponent={'pvc-specification'}
+      >
+        <LayoutPanelRow
+          key={pvc.spec?.volumeMode}
+          name={t('persistent-volume-claims.headers.volume-mode')}
+          value={pvc.spec?.volumeMode}
+        />
+        <LayoutPanelRow
+          key={pvc.spec?.accessModes}
+          name={t('persistent-volume-claims.headers.access-modes')}
+          value={<Tokens tokens={pvc.spec?.accessModes} />}
+        />
+        <LayoutPanelRow
+          key={pvc.spec?.volumeName}
+          name={t('persistent-volume-claims.headers.volume-name')}
+          value={
+            pvc.spec?.volumeName ? (
+              <Link
+                url={clusterUrl(`persistentvolumes/${pvc.spec?.volumeName}`)}
+              >
+                {pvc.spec?.volumeName}
+              </Link>
+            ) : (
+              <p>{EMPTY_TEXT_PLACEHOLDER}</p>
+            )
+          }
+        />
+        <LayoutPanelRow
+          key={pvc.spec?.storageClassName}
+          name={t('persistent-volume-claims.headers.storage-class-name')}
+          value={
+            storageClasses?.find(
+              ({ metadata }) => metadata.name === pvc.spec?.storageClassName,
+            ) ? (
+              <Link
+                url={clusterUrl(`storageclasses/${pvc.spec?.storageClassName}`)}
+              >
+                {pvc.spec?.storageClassName}
+              </Link>
+            ) : (
+              <p>
+                {pvc.spec?.storageClassName !== ''
+                  ? pvc.spec?.storageClassName
+                  : EMPTY_TEXT_PLACEHOLDER}
+              </p>
+            )
+          }
+        />
+      </UI5Panel>
+    </>
   );
 };
 
@@ -128,10 +173,6 @@ export function PersistentVolumeClaimDetails(props) {
         <PersistentVolumeClaimStatus phase={status.phase} /> || {
           EMPTY_TEXT_PLACEHOLDER,
         },
-    },
-    {
-      header: t('persistent-volume-claims.headers.storage'),
-      value: ({ spec }) => <p>{spec.resources?.requests?.storage}</p>,
     },
   ];
 
