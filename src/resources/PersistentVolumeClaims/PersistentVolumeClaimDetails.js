@@ -19,6 +19,8 @@ import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ResourceDescription } from 'resources/PersistentVolumeClaims';
 import { Link } from 'shared/components/Link/Link';
 
+import './PersistentVolumeClaim.scss';
+
 const RelatedVolumes = ({ labels }) => {
   const PVParams = {
     hasDetailsView: true,
@@ -67,48 +69,47 @@ export const PVCConfiguration = pvc => {
   );
   return (
     <>
-      <UI5Panel
-        title={t('persistent-volume-claims.headers.resources.title')}
-        keyComponent={'pvc-resources'}
-      >
-        {pvc.spec.resources?.requests && (
-          <UI5Panel
-            title={t('persistent-volume-claims.headers.resources.requests')}
-            keyComponent={'pvc-resources-requests'}
+      {pvc.spec.resources && (
+        <UI5Panel
+          title={t('persistent-volume-claims.headers.resources.title')}
+          keyComponent={'pvc-resources'}
+        >
+          <div
+            className={
+              pvc.spec.resources?.requests && pvc.spec.resources?.limits
+                ? 'grid-requests'
+                : ''
+            }
           >
-            {Object.entries(pvc.spec.resources?.requests).map(requests => {
-              return (
-                <LayoutPanelRow
-                  name={requests[0]}
-                  value={requests[1] || EMPTY_TEXT_PLACEHOLDER}
-                  key={requests[0]}
-                />
-              );
-            })}
-          </UI5Panel>
-        )}
-        {pvc.spec.resources?.limits && (
-          <UI5Panel
-            title={t('persistent-volume-claims.headers.resources.limits')}
-            keyComponent={'pvc-resources-limits'}
-          >
-            {Object.entries(pvc.spec.resources?.limits).map(limits => {
-              return (
-                <LayoutPanelRow
-                  name={limits[0]}
-                  value={limits[1] || EMPTY_TEXT_PLACEHOLDER}
-                  key={limits[0]}
-                />
-              );
-            })}
-          </UI5Panel>
-        )}
-        {/* <LayoutPanelRow
-          key={pvc.spec.resources?.requests?.storage}
-          name={t('persistent-volume-claims.headers.storage')}
-          value={pvc.spec.resources?.requests?.storage}
-        /> */}
-      </UI5Panel>
+            {pvc.spec.resources?.requests && (
+              <div>
+                {Object.entries(pvc.spec.resources?.requests).map(requests => {
+                  return (
+                    <LayoutPanelRow
+                      name={requests[0] + ' Requests'}
+                      value={requests[1] || EMPTY_TEXT_PLACEHOLDER}
+                      key={requests[0]}
+                    />
+                  );
+                })}
+              </div>
+            )}
+            {pvc.spec.resources?.limits && (
+              <div>
+                {Object.entries(pvc.spec.resources?.limits).map(limits => {
+                  return (
+                    <LayoutPanelRow
+                      name={limits[0] + ' Limits'}
+                      value={limits[1] || EMPTY_TEXT_PLACEHOLDER}
+                      key={limits[0]}
+                    />
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </UI5Panel>
+      )}
       <UI5Panel
         title={t('common.headers.specification')}
         keyComponent={'pvc-specification'}
