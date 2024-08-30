@@ -1,11 +1,9 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
-
 import { ResourceForm } from 'shared/ResourceForm';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import * as _ from 'lodash';
-
 import { createLimitRangeTemplate } from './templates';
 
 export default function LimitRangeCreate({
@@ -44,6 +42,7 @@ export default function LimitRangeCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
+      onlyYaml
     />
   );
 }

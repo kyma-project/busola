@@ -29,8 +29,6 @@ export type LimitRangeProps = {
 };
 
 export default function LimitRangeDetails(props: any) {
-  const { t } = useTranslation();
-
   const customComponents = [
     (resource: LimitRangeProps) => (
       <LimitRangeSpecification resource={resource} />
