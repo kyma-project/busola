@@ -202,6 +202,7 @@ command-palette:
     serviceentries: Service Entries
     statefulsets: Stateful Sets
     storageclasses: Storage Classes
+    subscriptions: Subscriptions
   results:
     did-you-mean: 'Did you mean: '
     help: Help
