@@ -91,7 +91,7 @@ export function SidebarNavigation() {
               <SideNavigationItem
                 className="hide-shadow"
                 icon={'slim-arrow-left'}
-                text={'Back To Cluster Details'}
+                text={t('clusters.overview.back')}
                 onClick={() => {
                   handleActionIfFormOpen(
                     isResourceEdited,
@@ -165,7 +165,7 @@ export function SidebarNavigation() {
           <SideNavigationItem className="space-top disable-effects" />
           <SideNavigationItem
             icon={namespace ? 'slim-arrow-left' : 'bbyd-dashboard'}
-            text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}
+            text={namespace ? t('clusters.overview.back') : 'Cluster Details'}
             onClick={() => {
               handleActionIfFormOpen(
                 isResourceEdited,
@@ -192,7 +192,7 @@ export function SidebarNavigation() {
         <SideNavigationItem
           className="hide-shadow"
           icon={'bbyd-dashboard'}
-          text={'Cluster Details'}
+          text={t('cluster-overview.headers.cluster-details')}
           onClick={() => {
             handleActionIfFormOpen(
               isResourceEdited,

@@ -17,6 +17,7 @@ import * as Deployments from './Deployments';
 import * as DaemonSets from './DaemonSets';
 import * as ConfigMaps from './ConfigMaps';
 import * as ServiceAccounts from './ServiceAccounts';
+import * as LimitRanges from './LimitRanges';
 
 // //cluster
 import * as ClusterRoles from './ClusterRoles';
@@ -41,6 +42,7 @@ export const resources = [
   // discovery and network
   Ingresses,
   NetworkPolicies,
+  LimitRanges,
   // storage
   PersistentVolumeClaims,
   // configuration

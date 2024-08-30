@@ -991,13 +991,18 @@ legal:
   privacy: Privacy
   trademark: Trademark
 limit-ranges:
+  description: <0> Limit Range </0> is a policy to constrain the resource allocations that you can specify for each applicable object kind in a namespace.
   headers:
     default: Default
     default-request: Default Request
     max: Max
     min: Min
+    limits: Limits
+    max-ratio: Max Limit/Request Ratio
+    resource: Resource
   name_singular: LimitRange
   title: Limit Ranges
+
 machine-info:
   architecture-cpus: Architecture and CPUs
   cpu-m: 'CPU (m):'

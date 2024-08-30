@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 
@@ -8,7 +8,7 @@ import * as _ from 'lodash';
 
 import { createLimitRangeTemplate } from './templates';
 
-export function LimitRangeCreate({
+export default function LimitRangeCreate({
   formElementRef,
   onChange,
   setCustomValid,
@@ -29,6 +29,8 @@ export function LimitRangeCreate({
       }),
   );
 
+  const [initialUnchangedResource] = useState(initialLimitRange);
+
   return (
     <ResourceForm
       {...props}
@@ -36,13 +38,12 @@ export function LimitRangeCreate({
       singularName={t('limit-ranges.name_singular')}
       resource={limitRange}
       initialResource={initialResource}
+      initialUnchangedResource={initialUnchangedResource}
       setResource={setLimitRange}
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
-      onlyYaml
-      afterCreatedFn={() => {}}
     />
   );
 }
