@@ -9,21 +9,21 @@ type LimitResources = {
   storage?: string;
 };
 
+export type LimitProps = {
+  type: string;
+  max?: LimitResources;
+  min?: LimitResources;
+  default?: LimitResources;
+  defaultRequest?: LimitResources;
+};
+
 export type LimitRangeProps = {
   metadata: {
     name: string;
     namespace: string;
   };
   spec: {
-    limits: [
-      {
-        type: string;
-        max?: LimitResources;
-        min?: LimitResources;
-        default?: LimitResources;
-        defaultRequest?: LimitResources;
-      },
-    ];
+    limits: [LimitProps];
   };
 };
 

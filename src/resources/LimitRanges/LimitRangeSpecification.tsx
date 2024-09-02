@@ -4,6 +4,7 @@ import { GenericList } from 'shared/components/GenericList/GenericList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import './LimitRangeSpecification.scss';
+import { LimitRangeProps } from './LimitRangeDetails';
 
 type FlatLimitProps = {
   type?: string;
@@ -14,17 +15,6 @@ type FlatLimitProps = {
   defaultRequest: string;
   maxLimitRequestRatio: string;
 };
-
-const compactEmptyLimit = [
-  {
-    type: EMPTY_TEXT_PLACEHOLDER,
-    resource: EMPTY_TEXT_PLACEHOLDER,
-    max: EMPTY_TEXT_PLACEHOLDER,
-    min: EMPTY_TEXT_PLACEHOLDER,
-    default: EMPTY_TEXT_PLACEHOLDER,
-    defaultRequest: EMPTY_TEXT_PLACEHOLDER,
-  },
-];
 
 const emptyLimit = [
   {
@@ -45,7 +35,7 @@ export default function LimitRangeSpecification({
   resource,
   isCompact = false,
 }: {
-  resource: any;
+  resource: LimitRangeProps;
   isCompact?: boolean;
 }) {
   const { t } = useTranslation();
