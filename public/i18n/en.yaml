@@ -1001,6 +1001,7 @@ limit-ranges:
     min: Min
     limits: Limits
     resource: Resource
+    type: Type
   name_singular: LimitRange
   title: Limit Ranges
 machine-info:

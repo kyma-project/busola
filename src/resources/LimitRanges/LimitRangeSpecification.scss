@@ -1,0 +1,11 @@
+.limit-range-spec {
+  &.compact {
+    margin: 0 !important;
+    padding-right: 0.5rem;
+  }
+  text-transform: capitalize;
+}
+
+ui5-table-cell:has(> ui5-panel.limit-range-spec.compact) {
+  display: inline !important;
+}

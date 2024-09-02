@@ -21,6 +21,8 @@ context(
         .scrollIntoView()
         .should('be.visible');
 
+      cy.contains('Container').should('be.visible');
+
       cy.contains('b', QUOTA_NAME)
         .scrollIntoView()
         .should('be.visible');
