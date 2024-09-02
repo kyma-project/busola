@@ -80,7 +80,6 @@ export default function LimitRangeSpecification({
       });
     });
 
-    console.log(transformed.flat());
     return transformed.flat();
   }, [resource]);
 
@@ -120,7 +119,7 @@ export default function LimitRangeSpecification({
   }, [resource]);
 
   const headerRenderer = () => [
-    ...[isCompact ? t('limit-ranges.headers.type') : []],
+    isCompact ? t('limit-ranges.headers.type') : null,
     t('limit-ranges.headers.resource'),
     t('limit-ranges.headers.min'),
     t('limit-ranges.headers.max'),
@@ -139,7 +138,7 @@ export default function LimitRangeSpecification({
     maxLimitRequestRatio,
   }: FlatLimitProps) => {
     return [
-      ...[isCompact ? type : []],
+      isCompact ? type : null,
       resource || EMPTY_TEXT_PLACEHOLDER,
       min || EMPTY_TEXT_PLACEHOLDER,
       max || EMPTY_TEXT_PLACEHOLDER,
