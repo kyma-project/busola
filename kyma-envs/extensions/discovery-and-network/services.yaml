@@ -1,0 +1,281 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: services
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: services
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+data:
+  details: |-
+    header:
+      - name: Controlled by
+        source: metadata.ownerReferences
+        widget: ControlledBy
+      - name: Service Type
+        source: spec.type
+      - name: Cluster IP
+        source: spec.clusterIP
+      - name: Ports
+        source: >-
+          $count(spec.ports) ? $map(spec.ports, function($value) {$value.port =
+          $value.targetPort ? [$string($value.port), '/', $string($value.protocol)] ~>
+          $join('') : [ $string($value.name), ' (', $string($value.port), ') --> (', $string($value.targetPort), ')'] ~> $join('') }) ~> $join(', ')  : '-'
+      - name: External IPs
+        source: >-
+          $count(status.loadBalancer.ingress) ? $map(status.loadBalancer.ingress,
+          function($value) {$value.ip ? $value.ip : $value.hostname}) ~> $join(',
+          '): ($count($item.spec.externalIPs) ? $item.spec.externalIPs ~> $join(',
+          '): '-')
+    body:
+      - widget: ResourceList
+        source: $subscriptions()
+        name: Subscriptions
+        disableCreate: true
+        children:
+          - source: metadata.name
+            name: Name
+            sort: 'true'
+            widget: ResourceLink
+            resource:
+              name: metadata.name
+              namespace: $root.metadata.namespace
+              kind: kind
+          - source: spec.filter.filters[0].eventType.value
+            name: Event Types
+            sort:
+              default: true
+              compareFunction: $compareStrings($first, $second)
+          - source: status.ready
+            name: Ready
+            sort: true
+            widget: Badge
+            highlights:
+              positive:
+                - 'true'
+              negative:
+                - 'false'
+      - widget: ResourceList
+        source: $apirules()
+        name: API Rules
+        disableCreate: true
+        sort:
+          - source: spec.service.host
+            default: true
+          - source: spec.service.port
+            compareFunction: $first - $second
+      - widget: Panel
+        name: Selector
+        disablePadding: true
+        children:
+          - source: $podSelector()
+            widget: ResourceList
+            disableCreate: true
+            visibility: $exists($root.spec.selector) and $boolean($root.spec.selector)
+          - source: spec.selector
+            widget: Panel
+            name: Matches all Pods in the Namespace
+            visibility: $not($exists($value)) or $not($boolean($value))
+        header:
+          - source: spec.selector
+            widget: Labels
+            name: Selector
+            visibility: $exists($value) and $boolean($value)
+  form: |-
+    - widget: KeyValuePair
+      path: spec.selector
+      simple: true
+      name: Selectors
+      defaultExpanded: true
+    - path: spec.type
+      name: Type
+      placeholder: Enter Type
+    - widget: GenericList
+      path: spec.ports
+      simple: true
+      children:
+        - path: '[]'
+          simple: true
+          children:
+            - path: name
+              simple: true
+              name: Ports Name
+              placeholder: Enter Ports Name
+              widget: Name
+            - path: protocol
+              simple: true
+              name: Protocol
+              placeholder: Enter Protocol
+              widget: Text
+              required: true
+            - path: port
+              simple: true
+              name: Port
+              placeholder: Enter Port
+              required: true
+            - path: targetPort
+              simple: true
+              name:  Target Port
+              placeholder: Enter Target Port
+              widget: Text
+              required: true
+              inputInfo: Number or name of the port to access on the pods targeted by the service. Number must be in the range 1 to 65535.
+            - path: nodePort
+              simple: true
+              name: Node Port
+              visibility: "$root.spec.type != 'ClusterIP'"
+              placeholder: Enter Node Port
+            - path: appProtocol
+              simple: true
+              name: Application Protocol
+              enum:
+              - http
+              - tcp
+              - gRPC
+              placeholder: Enter Application Protocol
+      template:
+        protocol: 'TCP'
+        port: 80
+        targetPort: 9376 
+    - widget: SimpleList
+      path: spec.ipFamilies
+      name: IP Family
+      enum:
+      - IPv6
+      - IPv4
+      visibility: "$root.spec.type != 'ExternalName'"
+      children:
+        - path: '[]'
+      placeholder: Enter IP Family
+    - path: spec.ipFamilyPolicy
+      name: IP Family Policy
+      placeholder: Enter IP Family Policy
+      enum: 
+        - SingleStack
+        - PreferDualStack
+        - RequireDualStack
+      visibility: "$root.spec.type != 'ExternalName'"
+    - widget: SimpleList
+      path: spec.clusterIPs
+      name: Cluster IPs
+      defaultexpanded: true
+      children:
+        - path: '[]'
+      placeholder: Enter IP addresses assigned to this service
+      visibility: "$root.spec.type != 'ExternalName'"
+    - path: spec.clusterIP
+      name: Cluster IP
+      placeholder: Enter IP address of the service
+      visibility: "$root.spec.type != 'ExternalName'"
+    - widget: SimpleList
+      path: spec.externalIPs
+      name: External IPs
+      children:
+        - path: '[]'
+      placeholder: Enter external IP addresses assigned to this service
+    - path: spec.sessionAffinity
+      name: Session Affinity
+      placeholder: Enter Session Affinity
+    - path: spec.externalTrafficPolicy
+      name: External Traffic Policy
+      placeholder: Enter External Traffic Policy
+      visibility: "$root.spec.type = 'NodePort' or $root.spec.type = 'LoadBalancer'"
+    - path: spec.internalTrafficPolicy
+      name: Internal Traffic Policy
+      placeholder: Enter Internal Traffic Policy
+    - widget: SimpleList
+      path: spec.loadBalancerSourceRanges
+      name: LoadBalancer Source Ranges
+      visibility: "$root.spec.type = 'LoadBalancer'"
+      children:
+        - path: '[]'
+      placeholder: Enter LoadBalancer source ranges
+    - path: spec.loadBalancerClass
+      name: LoadBalancer Class
+      placeholder: Enter LoadBalancer Class
+      visibility: "$root.spec.type = 'LoadBalancer'"
+    - path: spec.externalName
+      name: External Name
+      placeholder: Enter external name
+      visibility: "$root.spec.type = 'ExternalName'"
+    - path: spec.loadBalancerIP
+      name: LoadBalancer IP
+      placeholder: Enter LoadBalancer IP
+      visibility: "$root.spec.type = 'LoadBalancer'"
+    - path: spec.healthCheckNodePort
+      name: Health Check NodePort
+      placeholder: Enter Health Check NodePort
+      visibility: "$root.spec.type = 'LoadBalancer' and $root.spec.externalTrafficPolicy = 'Local'"
+    - path: spec.allocateLoadBalancerNodePorts
+      name: Allocate LoadBalancer NodePorts
+      visibility: "$root.spec.type = 'LoadBalancer'"
+    - path: spec.publishNotReadyAddresses
+      name: Publish Not Ready Addresses
+    - path: spec.sessionAffinityConfig.clientIP.timeoutSeconds
+      visibility: "$root.spec.sessionAffinity = 'ClientIP'"
+      name: Timeout seconds
+      placeholder: enter timeout seconds
+      inputInfo: Default value is 10800(for 3 hours)
+  list: |-
+    - name: Controlled By
+      source: metadata.ownerReferences
+      widget: ControlledBy
+      kindOnly: true
+    - name: Type
+      source: spec.type
+      sort:
+        compareFunction: $compareStrings($second, $first)
+    - name: Cluster IP
+      source: spec.clusterIP
+      sort: true
+    - name: Ports
+      source: >-
+        $count(spec.ports) ? $map(spec.ports, function($value) {$value.port =
+        $value.targetPort ? [$string($value.port), '/', $string($value.protocol)] ~>
+        $join('') : [ $string($value.name), ' (', $string($value.port), ') --> (', $string($value.targetPort), ')'] ~> $join('') }) ~> $join(', ')  : '-'
+    - name: External IPs
+      source: >-
+        $count(status.loadBalancer.ingress) ? $map(status.loadBalancer.ingress,
+        function($value) {$value.ip ? $value.ip : $value.hostname}) ~> $join(', '):
+        ($count($item.spec.externalIPs) ? $item.spec.externalIPs ~> $join(', '):
+        '-')
+  dataSources: |-
+    apirules:
+      resource:
+        kind: APIRule
+        group: gateway.kyma-project.io
+        version: v1beta1
+      filter: $item.spec.service.name = $root.metadata.name
+    podSelector:
+      resource:
+        kind: Pod
+        version: v1
+      filter: $matchByLabelSelector($item, $root.spec.selector)
+    subscriptions:
+      resource:
+        kind: Subscription
+        group: eventing.kyma-project.io
+        version: v1alpha1
+      filter: >-
+        $substringAfter($substringBefore($item.spec.sink, '.'), '://') =
+        $root.metadata.name
+  general: |-
+    resource:
+      kind: Service
+      version: v1
+    urlPath: services
+    scope: namespace
+    name: Services
+    category: Discovery and Network
+    description: >-
+      {{[Services](https://kubernetes.io/docs/concepts/services-networking/service/)}}
+       enables access to an application running on a set of Pods.
+  presets: |-
+    - name: template
+      default: true
+      value:
+        spec:
+          selector: 
+            app: ''
+          type: 'ClusterIP'

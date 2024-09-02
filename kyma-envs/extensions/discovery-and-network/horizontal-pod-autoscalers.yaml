@@ -1,0 +1,431 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: horizontal-pod-autoscalers
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: horizontal-pod-autoscalers
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+data:
+  dataSources: |-
+    relatedDeployments:
+      resource:
+        kind: Deployment
+        version: v1
+      filter: >-
+        $root.spec.scaleTargetRef.kind = 'Deployment' and $root.spec.scaleTargetRef.name = $item.metadata.name
+  details: |-
+    resourceGraph:
+      depth: 2
+      networkFlowLevel: -1
+      dataSources:
+        - source: relatedDeployments
+    header:
+      - name: Status
+        source: $filter(status.conditions, function($v, $i, $a) {$v.status = 'True'}).type
+        widget: Labels
+    status:
+      - name: Conditions
+        source: status.conditions
+        widget: ConditionList
+      - name: Last Scale Time
+        source: status.lastScaleTime
+        widget: TimeFromNow
+      - name: Current Replicas
+        source: status.currentReplicas
+      - name: Desired Replicas
+        source: status.desiredReplicas
+      - name: Observed Generation
+        source: status.observedGeneration
+    body:
+      - name: Specification
+        widget: Panel
+        children:
+          - name: Min Replicas
+            source: spec.minReplicas
+          - name: Current Replicas
+            source: status.currentReplicas
+          - name: Max Replicas
+            source: spec.maxReplicas
+          - name: Scale Target Reference - Kind
+            source: spec.scaleTargetRef.kind
+          - name: Scale Target Reference - Name
+            source: spec.scaleTargetRef.name
+            widget: ResourceLink
+            resource: 
+              name: spec.scaleTargetRef.name
+              namespace: $root.metadata.namespace
+              kind: spec.scaleTargetRef.kind
+      - widget: Columns
+        children:
+          - name: Scale-down behavior
+            source: spec.behavior.scaleDown
+            widget: Panel
+            visibility: $exists(spec.behavior.scaleDown)
+            children:
+              - name: Stabilization window (seconds)
+                source: stabilizationWindowSeconds
+              - name: Select policy
+                source: selectPolicy
+              - name: Policies
+                source: policies
+                widget: Table
+                disablePadding: true
+                showHeader: true
+                children:
+                  - name: Type
+                    source: type
+                  - name: Value
+                    source: value
+                  - name: Period (seconds)
+                    source: periodSeconds
+          - name: Scale-up behavior
+            source: spec.behavior.scaleUp
+            visibility: $exists(spec.behavior.scaleUp)
+            widget: Panel
+            children:
+              - name: Stabilization window (seconds)
+                source: stabilizationWindowSeconds
+              - name: Select policy
+                source: selectPolicy
+              - name: Policies
+                source: policies
+                widget: Table
+                showHeader: true
+                disablePadding: true
+                children:
+                  - name: Type
+                    source: type
+                  - name: Value
+                    source: value
+                  - name: Period (seconds)
+                    source: periodSeconds
+      - name: Metrics
+        source: spec.metrics
+        widget: Table
+        showHeader: true
+        children:
+          - name: Type
+            search: true
+            source: type
+          - name: Name
+            search: true
+            source: '$item.type = "Resource" ? $item.resource.name : $item.type = "Pods" ? $item.pods.metric.name : 
+                    $item.type = "Object" ? $item.object.metric.name : $item.external.metric.name'
+          - name: Target Type
+            source: '$item.type = "Resource" ? $item.resource.target.type : $item.type = "Pods" ? $item.pods.target.type : 
+                    $item.type = "Object" ? $item.object.target.type : $item.external.target.type'
+          - name: Current Metric
+            source: '$item.type = "Resource" ?
+                      ($item.resource.target.type = "Utilization" ? 
+                        $join([$string($not($root.status.currentMetrics = null) ? 
+                          ($single($root.status.currentMetrics, function($v, $i, $a) {$v.resource.name = $item.resource.name}).resource.current.averageUtilization & "%") : "-"),
+                          " / ",$string($item.resource.target.averageUtilization),"%"]):
+                        $join([$string($not($root.status.currentMetrics = null) ? 
+                          $single($root.status.currentMetrics, function($v, $i, $a) {$v.resource.name = $item.resource.name}).resource.current.averageValue : "-"),
+                          " / ",$string($item.resource.target.averageValue)])) :
+                    $item.type = "Pods" ? 
+                        $join([$string($not($root.status.currentMetrics = null) ? 
+                          $single($root.status.currentMetrics, function($v, $i, $a) {$v.pods.metric.name = $item.pods.metric.name}).pods.current.averageValue : "-"),
+                          " / ",$string($item.pods.target.averageValue)]) :
+                    $item.type = "Object" ? 
+                      ($item.object.target.type = "AverageValue" ? 
+                        $join([$string($not($root.status.currentMetrics = null) ? 
+                          $single($root.status.currentMetrics, function($v, $i, $a) {$v.object.metric.name = $item.object.metric.name}).object.current.averageValue : "-"),
+                          " / ",$string($item.object.target.averageValue)]):
+                        $join([$string($not($root.status.currentMetrics = null) ? 
+                          $single($root.status.currentMetrics, function($v, $i, $a) {$v.object.metric.name = $item.object.metric.name}).object.current.value : "-"),
+                          " / ",$string($item.object.target.value)])) :
+                    ($item.external.target.type = "AverageValue" ? 
+                        $join([$string($not($root.status.currentMetrics = null) ? 
+                          $single($root.status.currentMetrics, function($v, $i, $a) {$v.external.metric.name = $item.external.metric.name}).external.current.averageValue : "-"),
+                          " / ",$string($item.external.target.averageValue)]):
+                        $join([$string($not($root.status.currentMetrics = null) ? 
+                          $single($root.status.currentMetrics, function($v, $i, $a) {$v.external.metric.name = $item.external.metric.name}).external.current.value : "-"),
+                          " / ",$string($item.external.target.value)]))'
+      - widget: EventList
+        name: Events
+        filter: "$matchEvents($$, $root.kind, $root.metadata.name)"
+        hideInvolvedObjects: true
+  form: |-
+    - name: minReplicas
+      simple: true
+      path: spec.minReplicas
+    - name: maxReplicas
+      simple: true
+      required: true
+      path: spec.maxReplicas
+    - path: spec.behavior
+      widget: FormGroup
+      children:
+        - path: scaleDown
+          widget: FormGroup
+          defaultExpanded: true
+          children:
+            - path: selectPolicy
+              enum:
+                - Min
+                - Max
+                - Disabled
+            - path: stabilizationWindowSeconds
+            - path: policies
+              defaultExpanded: true
+              widget: GenericList
+              children:
+                - path: '[].type'
+                  enum:
+                    - Pods
+                    - Percent
+                - path: '[].value'
+                - path: '[].periodSeconds'
+        - path: scaleUp
+          widget: FormGroup
+          defaultExpanded: true
+          children:
+            - path: selectPolicy
+              enum:
+                - Min
+                - Max
+                - Disabled
+            - path: stabilizationWindowSeconds
+            - path: policies
+              defaultExpanded: true
+              widget: GenericList
+              children:
+                - path: '[].type'
+                  enum:
+                    - Pods
+                    - Percent
+                - path: '[].value'
+                - path: '[].periodSeconds'
+                  defaultValue: 0
+    - name: Scale Target Reference
+      simple: true
+      path: spec.scaleTargetRef
+      widget: FormGroup
+      required: true
+      defaultExpanded: true
+      children:
+        - simple: true
+          required: true
+          path: kind
+          enum:
+            - Pod
+            - Deployment
+            - ReplicaSet
+            - StatefulSet
+        - simple: true
+          required: true
+          path: name
+          widget: Resource
+          resource:
+            scope: namespace
+            kind: Pod
+            version: v1
+          visibility: spec.scaleTargetRef.kind = "Pod"
+          overwrite: false
+        - simple: true
+          var: separator
+          value: ""
+        - simple: true
+          required: true
+          path: name
+          widget: Resource
+          resource:
+            scope: namespace
+            kind: Deployment
+            group: apps
+            version: v1
+          visibility: spec.scaleTargetRef.kind = "Deployment"
+          overwrite: false
+        - simple: true
+          var: separator
+          value: ""
+        - simple: true
+          required: true
+          path: name
+          widget: Resource
+          resource:
+            scope: namespace
+            kind: ReplicaSet
+            group: apps
+            version: v1
+          visibility: spec.scaleTargetRef.kind = "ReplicaSet"
+          overwrite: false
+        - simple: true
+          var: separator
+          value: ""
+        - simple: true
+          required: true
+          path: name
+          widget: Resource
+          resource:
+            scope: namespace
+            kind: StatefulSet
+            group: apps
+            version: v1
+          visibility: spec.scaleTargetRef.kind = "StatefulSet"
+          overwrite: false
+        - simple: true
+          var: separator
+          value: ""
+        - simple: true
+          required: true
+          path: name
+          visibility: '$not(spec.scaleTargetRef.kind = "Pod") and $not(spec.scaleTargetRef.kind = "Deployment") and $not(spec.scaleTargetRef.kind = "ReplicaSet") and $not(spec.scaleTargetRef.kind = "StatefulSet")'
+          overwrite: false
+        - name: API version
+          simple: true
+          path: apiVersion
+    - path: spec.metrics
+      simple: true
+      widget: GenericList
+      defaultExpanded: true
+      children:
+        - simple: true
+          path: '[].type'
+          required: true
+          enum:
+            - Resource
+            - Pods
+            - Object
+            - External
+        - path: '[].resource.name'
+          simple: true
+          enum:
+            - cpu
+            - memory
+          visibility: "$item.type = 'Resource'" 
+        - path: '[].resource.target'
+          widget: FormGroup
+          simple: true
+          visibility: "$item.type = 'Resource'"
+          defaultExpanded: true
+          children:
+            - path: type
+              simple: true
+              enum:
+                - Utilization
+                - AverageValue
+            - path: averageUtilization
+              simple: true
+              visibility: "$item.resource.target.type = 'Utilization'"
+            - path: averageValue
+              simple: true
+              visibility: "$item.resource.target.type = 'AverageValue'"
+        - path: '[].pods.metric.name'
+          simple: true
+          widget: Resource
+          resource:
+            scope: namespace
+            kind: Pod
+            version: v1
+          visibility: "$item.type = 'Pods'"
+        - path: '[].pods.metric.selector.matchLabels'
+          simple: true
+          visibility: "$item.type = 'Pods'"
+          widget: KeyValuePair
+        - path: '[].pods.target'
+          widget: FormGroup
+          simple: true
+          visibility: "$item.type = 'Pods'"
+          defaultExpanded: true
+          children:
+            - path: type
+              simple: true
+              enum:
+                - AverageValue
+            - path: averageValue
+              simple: true
+              visibility: "$item.pods.target.type = 'AverageValue'"
+            - path: value
+              simple: true
+              visibility: "$item.pods.target.type = 'Value'"
+        - path: '[].object.metric.name'
+          simple: true
+          visibility: "$item.type = 'Object'"
+        - path: '[].object.metric.selector.matchLabels'
+          simple: true
+          visibility: "$item.type = 'Object'"
+          widget: KeyValuePair
+        - path: '[].object.describedObject'
+          widget: FormGroup
+          simple: true
+          visibility: "$item.type = 'Object'"
+          defaultExpanded: true
+          children:
+            - path: kind
+              simple: true
+              required: true
+            - path: name
+              simple: true
+              required: true
+            - name: API version
+              path: apiVersion
+              simple: true
+        - path: '[].object.target'
+          widget: FormGroup
+          simple: true
+          visibility: "$item.type = 'Object'"
+          defaultExpanded: true
+          children:
+            - path: type
+              simple: true
+              enum:
+                - AverageValue
+                - Value
+            - path: averageValue
+              simple: true
+              visibility: "$item.object.target.type = 'AverageValue'"
+            - path: value
+              simple: true
+              visibility: "$item.object.target.type = 'Value'"
+        - path: '[].external.metric.name'
+          simple: true
+          visibility: "$item.type = 'External'"
+        - path: '[].external.metric.selector.matchLabels'
+          simple: true
+          visibility: "$item.type = 'External'"
+          widget: KeyValuePair
+        - path: '[].external.target'
+          widget: FormGroup
+          simple: true
+          visibility: "$item.type = 'External'"
+          defaultExpanded: true
+          children:
+            - path: type
+              simple: true
+              enum:
+                - AverageValue
+                - Value
+            - path: averageValue
+              simple: true
+              visibility: "$item.external.target.type = 'AverageValue'"
+            - path: value
+              simple: true
+              visibility: "$item.external.target.type = 'Value'"
+  general: |-
+    resource: 
+      kind: HorizontalPodAutoscaler
+      group: autoscaling
+      version: v2
+    name: Horizontal Pod Autoscalers
+    category: Discovery and Network
+    urlPath: horizontalpodautoscalers
+    scope: namespace
+    description: >-
+      {{[Horizontal Pod Autoscalers](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/horizontal-pod-autoscaler-v2/)}}
+      automatically manages the number of Pod replicas to match the demand.
+  list: |-
+    - name: Metrics
+      source: $count(spec.metrics)
+    - name: Min Replicas
+      source: spec.minReplicas
+    - name: Max Replicas
+      source: spec.maxReplicas
+    - name: Current Replicas
+      source: status.currentReplicas
+    - name: Status
+      source: $filter(status.conditions, function($v, $i, $a) {$v.status = 'True'}).type
+      widget: Labels

@@ -1,0 +1,155 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: certificates
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: certificates
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+data:
+  details: |
+    header:
+      - name: status
+        source: 'status.state ? status.state : "UNKNOWN"'
+        highlights:
+          unknown:
+          - UNKNOWN
+        widget: Badge
+        description: status.message
+      - name: status.expirationDate
+        source: '$readableTimestamp(status.expirationDate)'
+      - name: commonName
+        source: spec.commonName
+    body:
+      - name: references
+        widget: Panel
+        children:
+          - name: issuer
+            source: status.issuerRef.name
+          - name: secret
+            source: spec.secretRef.name
+            widget: ResourceLink
+            resource:
+              namespace: $root.spec.secretRef.namespace
+              kind: "'Secret'"
+              name: $root.spec.secretRef.name
+          - name: spec.csr
+            source: spec.csr
+          - name: metadata.annotations
+            source: metadata.annotations
+            widget: Labels
+          - name: spec.renew
+            source: spec.renew
+          - name: spec.dnsNames
+            source: spec.dnsNames
+            widget: Labels
+  form: |
+    - var: useCSR
+      dynamicValue: '$exists(spec.csr)'
+      simple: true
+      type: boolean
+      name: spec.useCSR
+    - simple: true
+      path: spec.commonName
+      required: true
+      placeholder: certificateCN
+      visibility: "$useCSR = false"
+    - simple: true
+      path: spec.csr
+      required: true
+      placeholder: spec.certSignReq
+      visibility: "$useCSR"
+      decodable: true
+      decodedPlaceholder: spec.certSignReqDecoded
+    - path: spec.dnsNames
+      widget: SimpleList
+      children:
+        - path: '[]'
+      placeholder: spec.additionalDomains
+    - name: issuer
+      path: spec.issuerRef
+      required: false
+      widget: ResourceRef
+      visibility: $canI("cert.gardener.cloud/v1alpha1", 'Issuer')
+      overwrite: false
+      resource:
+        kind: Issuer
+        group: cert.gardener.cloud
+        version: v1alpha1
+    - simple: true
+      var: separator
+      value: ""
+    - simple: true
+      path: spec.issuerRef
+      required: false
+      widget: FormGroup
+      overwrite: false
+      visibility: $not($canI('cert.gardener.cloud/v1alpha1', 'Issuer'))
+      children:
+        - path: namespace
+        - path: name
+    - path: spec.renew
+    - var: useExistingSecret
+      name: spec.useExisting
+      dynamicValue: "$exists(spec.secretRef)"
+      type: boolean
+    - path: spec.secretName
+      visibility: "$useExistingSecret = false"
+    - path: spec.secretRef.name
+      widget: Resource      
+      resource:
+        kind: Secret
+        version: v1
+        scope: namespace
+      filter: "$item.type ='kubernetes.io/tls'"
+      defaultExpanded: true
+      required: true 
+      visibility: "$useExistingSecret"
+  general: |
+    resource:
+      kind: Certificate
+      group: cert.gardener.cloud
+      version: v1alpha1
+    name: Certificates
+    category: Configuration
+    urlPath: certificates
+    scope: namespace
+    description: >-
+      {{[Certificate](https://cert-manager.io/docs/concepts/certificate/)}}
+      provides a definition of a certificate that is then processed by the indicated issuer.
+  list: |
+    - name: commonName
+      source: status.commonName
+    - name: issuer
+      source: status.issuerRef.name
+    - name: status.expirationDate
+      source: '$readableTimestamp(status.expirationDate)'
+    - name: status
+      source: 'status.state ? status.state : "UNKNOWN"'
+      highlights:
+        unknown:
+        - UNKNOWN
+      widget: Badge
+      description: status.message
+  translations: |
+    en:
+      metadata.annotations: Annotations
+      metadata.labels: Labels
+      metadata.creationTimestamp: Created at
+      status: Status
+      status.expirationDate: Expiration Time
+      issuer: Issuer
+      commonName: Common Name
+      spec.secretRef: Secret to use
+      spec.useExisting: Use the existing Secret
+      spec.additionalDomains: Additional domain names, one per line
+      spec.dnsNames: DNS Names
+      spec.csr: CSR
+      spec.useCSR: Use a CSR
+      spec.certSignReq: Plain text Certificate Signing Request
+      spec.certSignReqDecoded: Base64-encoded Certificate Signing Request 
+      spec.renew: Renew
+      certificateCN: Certificate CN (max 64 characters)
+      references: References
+      secret: Secret

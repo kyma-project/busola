@@ -1,0 +1,106 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: serviceinstances
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: serviceinstances
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+data:
+  dataSources: |
+    myServiceBindings:
+      resource:
+        kind: ServiceBinding
+        group: services.cloud.sap.com
+        version: v1
+      filter: '$item.spec.serviceInstanceName = $root.metadata.name'
+  details: |
+    header:
+      - name: status
+        source: 'status.conditions[$count(status.conditions)-1].reason'
+        description: '$filter(status.conditions, function ($v, $i, $a) { $length($v.message) > 0 })[0].message'
+        widget: Badge
+        highlights:
+          positive:
+            - Provisioned
+          informative: 
+            - NotProvisioned
+          negative:
+            - CreateFailed
+    body:
+      - name: serviceinstancedata
+        widget: Panel
+        children:
+          - name: spec.serviceOfferingName
+            source: spec.serviceOfferingName
+          - name: spec.servicePlanName
+            source: spec.servicePlanName
+          - name: spec.externalName
+            source: spec.externalName
+          - name: status.instanceID
+            source: status.instanceID
+      - name: BTP Service Binding
+        source: '$myServiceBindings()'
+        widget: ResourceList
+      - name: spec.parameters
+        source: spec.parameters
+        widget: CodeViewer
+        visibility: '$exists($value) ? $boolean($value) : false'
+  form: |
+    - simple: true
+      path: spec.serviceOfferingName
+      required: true
+    - simple: true
+      path: spec.servicePlanName
+      required: true
+      placeholder: spec.servicePlanNamePlaceholder
+    - path: spec.externalName
+      placeholder: spec.externalNamePlaceholder
+    - path: spec.parameters
+      widget: CodeEditor
+      language: "'json'"
+  general: |
+    resource:
+      kind: ServiceInstance
+      group: services.cloud.sap.com
+      version: v1
+    name: Service Instances
+    category: Service Management
+    urlPath: serviceinstances
+    scope: namespace
+    description: >-
+      {{[BTP Service Instance](https://github.com/SAP/sap-btp-service-operator/blob/main/README.md)}}
+      makes the functionality of a service available for consumption.
+  list: |
+    - name: spec.serviceOfferingName
+      source: spec.serviceOfferingName
+    - name: spec.servicePlanName
+      source: spec.servicePlanName
+    - name: spec.externalName
+      source: spec.externalName
+    - name: status
+      source: 'status.conditions[$count(status.conditions)-1].reason'
+      description: '$filter(status.conditions, function ($v, $i, $a) { $length($v.message) > 0 })[0].message'
+      widget: Badge
+      highlights:
+        positive:
+          - Provisioned
+        informative: 
+          - NotProvisioned
+        negative: 
+          - CreateFailed
+  translations: |
+    en:
+      metadata.annotations: Annotations
+      metadata.labels: Labels
+      metadata.creationTimestamp: Created at
+      status: Status
+      spec.externalName: External Name
+      spec.externalNamePlaceholder: Defaults to the instance name if empty
+      spec.servicePlanName: Plan Name
+      spec.servicePlanNamePlaceholder: The plan name to use for the Service Instance
+      spec.serviceOfferingName: Offering Name
+      spec.parameters: Instance Parameters
+      status.instanceID: Instance ID
+      serviceinstancedata: Service Instance Data
