@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import LimitRangeCreate from './LimitRangeCreate';
 import LimitRangeSpecification from './LimitRangeSpecification';
