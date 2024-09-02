@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useUrl } from 'hooks/useUrl';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { Button } from '@ui5/webcomponents-react';
 import { Labels } from 'shared/components/Labels/Labels';
@@ -12,6 +12,7 @@ import pluralize from 'pluralize';
 
 import { spacing } from '@ui5/webcomponents-react-base';
 import './DetailsCard.scss';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 export function DetailsCard({
   resource,
@@ -24,6 +25,7 @@ export function DetailsCard({
   const navigate = useNavigate();
   const { clusterUrl } = useUrl();
   const nodes = useRecoilValue(allNodesSelector);
+  const [, setLayoutColumn] = useRecoilState(columnLayoutState);
 
   return (
     <div className="details-card-wrapper">
@@ -64,6 +66,12 @@ export function DetailsCard({
                 `${namespacePart}${node.resourceType}/${resource.metadata.name}`,
               ),
             );
+
+            setLayoutColumn({
+              layout: 'OneColumn',
+              midColumn: null,
+              endColumn: null,
+            });
           }}
         >
           {t('resource-graph.buttons.go-to-details')}

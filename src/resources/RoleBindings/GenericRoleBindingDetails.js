@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { RoleSubjects } from './RoleSubjects.js';
 import { RoleRef } from './RoleRef';
@@ -10,20 +9,11 @@ export function GenericRoleBindingDetails({
   description,
   ...otherParams
 }) {
-  const { t } = useTranslation();
-
-  const customColumns = [
-    {
-      header: t('role-bindings.headers.role-ref'),
-      value: resource => <RoleRef roleRef={resource.roleRef} />,
-    },
-  ];
   return (
     <ResourceDetails
       {...otherParams}
-      customColumns={customColumns}
       description={description}
-      customComponents={[RoleSubjects]}
+      customComponents={[RoleRef, RoleSubjects]}
     />
   );
 }
