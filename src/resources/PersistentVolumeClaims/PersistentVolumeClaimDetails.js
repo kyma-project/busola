@@ -18,6 +18,7 @@ import PersistentVolumeClaimCreate from './PersistentVolumeClaimCreate';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ResourceDescription } from 'resources/PersistentVolumeClaims';
 import { Link } from 'shared/components/Link/Link';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 import './PersistentVolumeClaim.scss';
 
@@ -167,13 +168,10 @@ export const PVCConfiguration = pvc => {
 
 export function PersistentVolumeClaimDetails(props) {
   const { t } = useTranslation();
-  const customColumns = [
+  const customStatusColumns = [
     {
-      header: t('common.headers.status'),
-      value: ({ status }) =>
-        <PersistentVolumeClaimStatus phase={status.phase} /> || {
-          EMPTY_TEXT_PLACEHOLDER,
-        },
+      header: t('persistent-volume-claims.headers.access-modes'),
+      value: pvc => <Tokens tokens={pvc?.status?.accessModes} />,
     },
   ];
 
@@ -204,13 +202,46 @@ export function PersistentVolumeClaimDetails(props) {
 
   return (
     <ResourceDetails
+      statusBadge={pvc =>
+        <PersistentVolumeClaimStatus phase={pvc?.status.phase} /> || {
+          EMPTY_TEXT_PLACEHOLDER,
+        }
+      }
+      customStatusColumns={customStatusColumns}
+      customConditionsComponents={[
+        {
+          header: t('persistent-volume-claims.headers.capacity'),
+          value: pvc =>
+            pvc.status.capacity ? (
+              Object.entries(pvc?.status?.capacity).map(capacity => {
+                console.log(capacity);
+                return (
+                  <LayoutPanelRow
+                    name={capacity[0]}
+                    value={capacity[1] || EMPTY_TEXT_PLACEHOLDER}
+                    key={capacity[0]}
+                  />
+                );
+              })
+            ) : (
+              <div
+                className="content bsl-has-color-text-1"
+                style={{
+                  ...spacing.sapUiSmallMarginBegin,
+                  ...spacing.sapUiSmallMarginBottom,
+                }}
+              >
+                {EMPTY_TEXT_PLACEHOLDER}
+              </div>
+            ),
+        },
+      ]}
       customComponents={[
         PVCConfiguration,
         PVCPods,
         PVCSelectorSpecification,
         Events,
       ]}
-      customColumns={customColumns}
       description={ResourceDescription}
       singularName={t('persistent-volume-claims.name_singular')}
       createResourceForm={PersistentVolumeClaimCreate}
