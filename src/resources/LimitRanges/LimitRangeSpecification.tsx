@@ -13,6 +13,21 @@ type FlatLimitProps = {
   maxLimitRequestRatio: string;
 };
 
+const emptyLimit = [
+  {
+    type: EMPTY_TEXT_PLACEHOLDER,
+    props: [
+      {
+        resource: EMPTY_TEXT_PLACEHOLDER,
+        max: EMPTY_TEXT_PLACEHOLDER,
+        min: EMPTY_TEXT_PLACEHOLDER,
+        default: EMPTY_TEXT_PLACEHOLDER,
+        defaultRequest: EMPTY_TEXT_PLACEHOLDER,
+      },
+    ],
+  },
+];
+
 export default function LimitRangeSpecification({
   resource,
 }: {
@@ -21,7 +36,9 @@ export default function LimitRangeSpecification({
   const { t } = useTranslation();
 
   const transLimits = useMemo(() => {
-    return resource.spec?.limits.map((limit: any) => {
+    if (!resource.spec?.limits) return emptyLimit;
+
+    return resource.spec?.limits?.map((limit: any) => {
       const keys = [
         'max',
         'min',
@@ -48,7 +65,7 @@ export default function LimitRangeSpecification({
 
       return {
         type: limit.type,
-        props,
+        props: props.length > 0 ? props : emptyLimit[0].props,
       };
     });
   }, [resource]);
@@ -82,19 +99,17 @@ export default function LimitRangeSpecification({
 
   return (
     <UI5Panel title={t('limit-ranges.headers.limits')} headerActions={null}>
-      {transLimits?.map((limit: { type: string; props: FlatLimitProps[] }) => {
+      {transLimits.map((limit: { type: string; props: FlatLimitProps[] }) => {
         return (
-          <>
-            <GenericList
-              title={limit.type}
-              entries={limit.props || []}
-              headerRenderer={headerRenderer}
-              rowRenderer={rowRenderer}
-              searchSettings={{
-                showSearchField: false,
-              }}
-            />
-          </>
+          <GenericList
+            title={limit.type || ''}
+            entries={limit.props || []}
+            headerRenderer={headerRenderer}
+            rowRenderer={rowRenderer}
+            searchSettings={{
+              showSearchField: false,
+            }}
+          />
         );
       })}
     </UI5Panel>
