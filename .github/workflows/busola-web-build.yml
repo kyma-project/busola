@@ -34,3 +34,11 @@ jobs:
       context: .
       export-tags: true
       tags: latest
+  build-kyma-web-image:
+    uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: kyma-project/test-infra/.github/workflows/image-builder.yml@main
+    with:
+      name: busola-web
+      dockerfile: Dockerfile.kyma
+      context: .
+      export-tags: true
+      tags: latest

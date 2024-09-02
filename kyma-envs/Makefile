@@ -29,7 +29,6 @@ prepare-all-prod:
 
 prepare-configuration: prepare-all-dev prepare-all-stage prepare-all-prod ## Prepare all configuration for dev, stage and prod
 
-#TODO: migrate it to gulp
 copy-config:
 	$(call check-var,ENV)
 	mkdir -p ./build/${ENV}/config
