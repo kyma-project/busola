@@ -1,4 +1,4 @@
-name: Busola Web Build
+name: Busola Kyma Web Build
 
 on:
   push:
