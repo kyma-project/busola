@@ -1,12 +1,3 @@
-#	WORKDIR /build
-#
-#	RUN apk add --update nodejs npm
-#	RUN apk update && apk upgrade
-#
-#	COPY . /build
-#
-#	RUN npm ci
-
 ##@ General
 .DEFAULT_GOAL=help
 .PHONY: help
