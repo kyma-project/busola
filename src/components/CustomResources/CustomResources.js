@@ -1,4 +1,4 @@
-import * as jp from 'jsonpath';
+import jp from 'jsonpath';
 import pluralize from 'pluralize';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';

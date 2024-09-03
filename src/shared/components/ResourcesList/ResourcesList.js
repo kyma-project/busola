@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Text } from '@ui5/webcomponents-react';
 import { cloneDeep } from 'lodash';
-import * as jp from 'jsonpath';
+import jp from 'jsonpath';
 import pluralize from 'pluralize';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 

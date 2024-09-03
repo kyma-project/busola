@@ -8,8 +8,8 @@ import {
 import { createPortal } from 'react-dom';
 
 type NotificationContextProps = {
-  children: React.ReactNode;
-  defaultVisibilityTime: number;
+  children?: React.ReactNode;
+  defaultVisibilityTime?: number;
 };
 
 type NotifySuccessFn = (props: ToastProps, visibilityTime?: number) => void;

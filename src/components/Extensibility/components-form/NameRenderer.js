@@ -1,6 +1,6 @@
 import React from 'react';
 import { List } from 'immutable';
-import * as jp from 'jsonpath';
+import jp from 'jsonpath';
 
 import { K8sNameField } from 'shared/ResourceForm/fields';
 import { useGetTranslation } from 'components/Extensibility/helpers';

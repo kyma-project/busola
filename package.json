@@ -3,6 +3,7 @@
   "license": "Apache-2.0",
   "name": "@kyma-project/busola",
   "version": "0.0.1-rc.8",
+  "type": "module",
   "scripts": {
     "postinstall": "cd backend && npm install",
     "start": "concurrently -c cyan,green npm:busola npm:backend",

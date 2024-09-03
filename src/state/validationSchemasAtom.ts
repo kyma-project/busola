@@ -52,7 +52,7 @@ type ValidationPolicy = {
 
 const fetchBaseValidationConfig = async (): Promise<ValidationConfig[]> => {
   try {
-    const response = await fetch(`/resource-validation/rule-set.yaml`);
+    const response = await fetch(`/examples/resource-validation/rule-set.yaml`);
     const text = await response.text();
     return jsyaml.loadAll(text) as ValidationConfig[];
   } catch (error) {

@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "baseUrl": ".",
+    "paths": {
+      "src/*": ["./src/*"],
+      "state/*": ["./src/state/*"],
+      "shared/*": ["./src/shared/*"],
+      "resources/*": ["./src/resources/*"],
+      "components/*": ["./src/components/*"],
+      "hooks/*": ["./src/hooks/*"]
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import * as jp from 'jsonpath';
+import jp from 'jsonpath';
 import { ResourceForm } from '..';
 import * as Inputs from '../inputs';
 import { FlexBox } from '@ui5/webcomponents-react';

@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react';
-import * as jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useSetRecoilState } from 'recoil';
@@ -18,6 +17,7 @@ import { Title } from '@ui5/webcomponents-react';
 import { addCluster, getContext, deleteCluster } from '../../shared';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { getUserIndex } from '../../shared';
+import jp from 'jsonpath';
 
 export const findInitialValues = (kubeconfig, id, userIndex = 0) => {
   const elementsWithId =
@@ -179,14 +179,13 @@ export const ClusterDataForm = ({
         <K8sNameField
           kind={t('clusters.name_singular')}
           date-testid="cluster-name"
+          // value={kubeconfig}
           value={
             kubeconfig ? jp.value(kubeconfig, '$["current-context"]') : null
           }
           setValue={name => {
             if (kubeconfig) {
               jp.value(kubeconfig, '$["current-context"]', name);
-              jp.value(kubeconfig, `$.contexts[${userIndex}].name`, name);
-
               setResource({ ...kubeconfig });
             }
           }}
