@@ -6,16 +6,15 @@
   "scripts": {
     "postinstall": "cd backend && npm install",
     "start": "concurrently -c cyan,green npm:busola npm:backend",
-    "busola": "npm run copy-themes; PORT=8080 BROWSER=none GENERATE_SOURCEMAP=false react-app-rewired start",
+    "busola": "npm run copy-themes; PORT=8080 BROWSER=none GENERATE_SOURCEMAP=false vite",
     "backend": "cd backend && npm run start",
     "eslint-check": "eslint src/ backend/",
     "lint-check": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
     "lint-fix": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
     "lint-staged": "lint-staged --concurrent=false",
-    "test": "react-app-rewired test",
-    "eject": "react-scripts eject",
-    "build": "npm run copy-themes; INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false react-app-rewired build",
-    "build:docker": "npm run copy-themes; INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false react-app-rewired build --env IS_DOCKER=true",
+    "test": "vitest",
+    "build": "npm run copy-themes; INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false tsc && vite build",
+    "build:docker": "npm run copy-themes; INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false tsc && vite build --env IS_DOCKER=true",
     "copy-themes": "cp node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_horizon/css_variables.css public/themes/@sap-theming/default.css; for theme in hcb dark hcw ; do cp node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_horizon_$theme/css_variables.css public/themes/@sap-theming/$theme.css ; done"
   },
   "eslintConfig": {
