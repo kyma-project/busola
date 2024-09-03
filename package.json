@@ -13,6 +13,7 @@
     "lint-fix": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
     "lint-staged": "lint-staged --concurrent=false",
     "test": "vitest",
+    "test:coverage": "vitest run --coverage --watch=false",
     "build": "npm run copy-themes; INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false tsc && vite build",
     "build:docker": "npm run copy-themes; INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false tsc && vite build --env IS_DOCKER=true",
     "copy-themes": "cp node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_horizon/css_variables.css public/themes/@sap-theming/default.css; for theme in hcb dark hcw ; do cp node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_horizon_$theme/css_variables.css public/themes/@sap-theming/$theme.css ; done"
@@ -118,6 +119,7 @@
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
     "@types/uuid": "^9.0.0",
+    "@vitest/coverage-v8": "^2.0.5",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.6",
     "babel-polyfill": "^6.26.0",
     "concurrently": "^7.6.0",
@@ -126,6 +128,7 @@
     "enzyme-to-json": "^3.4.0",
     "husky": "^2.4.1",
     "jest": "^29.7.0",
+    "jsdom": "^25.0.0",
     "jsdom-worker-fix": "^0.1.8",
     "lint-staged": "^10.4.0",
     "prettier": "^1.18.2",
@@ -133,7 +136,8 @@
     "sass": "^1.77.8",
     "sass-loader": "^13.3.2",
     "typescript": "^4.8.4",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "vitest": "^2.0.5"
   },
   "lint-staged": {
     "src/i18n/*.yaml": "yaml-sort --lineWidth=-1 -i ",
