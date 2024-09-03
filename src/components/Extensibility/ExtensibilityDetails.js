@@ -132,6 +132,7 @@ export const ExtensibilityDetailsCore = ({
               .filter(def => def.widget !== 'ConditionList')
               .map((def, i) => ({
                 header: widgetT(def),
+                type: def.type,
                 value: resource => (
                   <Widget
                     key={i}
