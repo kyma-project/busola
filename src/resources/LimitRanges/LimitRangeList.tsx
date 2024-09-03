@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import LimitRangeCreate from './LimitRangeCreate';
-import { docsURL, i18nDescriptionKey } from '.';
+import { ResourceDescription, docsURL, i18nDescriptionKey } from '.';
 import { LimitRangeProps } from './LimitRangeDetails';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
@@ -60,6 +60,7 @@ export default function LimitRangeList(props: any) {
   return (
     <ResourcesList
       resourceTitle={t('limit-ranges.title')}
+      description={ResourceDescription}
       {...props}
       createResourceForm={LimitRangeCreate}
       emptyListProps={{
