@@ -44,10 +44,11 @@ COPY --from=builder /app/build /app/core-ui
 COPY --from=builder /app/nginx/nginx.conf /etc/nginx/
 COPY --from=builder /app/nginx/mime.types /etc/nginx/
 
-COPY --from=configuration /kyma/build /app/core-ui/environments
-
 #entrypoint
 COPY --from=builder --chown=nginx /app/start_nginx.sh /app/start_nginx.sh
+
+#environment configuration
+COPY --from=configuration /kyma/build /app/core-ui/environments
 
 USER root:root
 RUN chown -R nginx:root /etc/nginx /app/core-ui

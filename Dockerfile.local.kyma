@@ -50,11 +50,8 @@ COPY --chown=65532:65532 --from=builder /app/backend/backend-production.js /app/
 COPY --chown=65532:65532 --from=builder /app/backend/certs.pem /app/certs.pem
 COPY --chown=65532:65532 --from=builder /app/backend/package* /app/
 COPY --chown=65532:65532 --from=builder /app/backend/settings/* /app/settings/
-COPY --chown=65532:65532 --from=configuration /kyma/build /app/core-ui/environments
 COPY --chown=65532:65532 --from=builder /app/start_node.sh /app/start_node.sh
-
-# move out the packed extensions for further use
-#RUN mv /app/extensions/extensions.yaml /app/extensions.yaml
+COPY --chown=65532:65532 --from=configuration /kyma/build /app/core-ui/environments
 
 RUN npm ci --only=production
 
@@ -66,6 +63,6 @@ RUN yq eval -i '.config.defaultStorage = "sessionStorage"' core-ui/defaultConfig
 USER 65532:65532
 
 EXPOSE 3001
-ENV NODE_ENV=production ADDRESS=0.0.0.0 IS_DOCKER=true
+ENV NODE_ENV=production ADDRESS=0.0.0.0 IS_DOCKER=true ENVIRONMENT=""
 
 ENTRYPOINT ["/app/start_node.sh"]
