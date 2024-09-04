@@ -8,7 +8,7 @@ In the **data.details** section you can provide configuration of four optional c
 
 ### **header**, **status**, **body** and **health** Parameters
 
-This table lists the available parameters of the **data.details.header**, **data.details.status**, **data.details.health** and/or **data.details.body** section in your resource ConfigMap. You can learn whether each of the parameters is required and what purpose it serves. The **data.details.header**, **data.details.health** and **data.details.body** components are arrays of objects. The **data.details.status** component is an object that accepts the **header** and **details** parameters. Within **data.details.status**, the **header** component is an object, and the **details** component is an array of objects.
+This table lists the available parameters of the **data.details.header**, **data.details.status**, **data.details.health** and/or **data.details.body** section in your resource ConfigMap. You can learn whether each of the parameters is required and what purpose it serves. The **data.details.header**, **data.details.health** and **data.details.body** components are arrays of objects. The **data.details.status** component is an object that accepts the **header** and **details** parameters. Within **data.details.status**, the **header** component is an object, and the **body** component is an array of objects.
 
 | Parameter             | Required | Type                                        | Description                                                                                                                                                                                                                                                                                                                                                                                                      |
 | --------------------- | -------- | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -20,6 +20,46 @@ This table lists the available parameters of the **data.details.header**, **data
 | **children**          | No       | []objects                                   | A list of child widgets used for all `object` and `array` fields.                                                                                                                                                                                                                                                                                                                                                |
 
 Extra parameters might be available for specific widgets.
+
+#### Status Body
+
+The **data.details.status.body** is an array of objects. By default listed values are displayed in two columns. Adding parameter **type: long** will display values in one column. The **data.details.status.body** accepts one widget (for example [ConditionList](./50-list-and-details-widgets.md#conditionList))
+
+See the following examples:
+
+```yaml
+details:
+  status:
+    header:
+      - source: status.value1 & '/' & status.value2
+        widget: Badge
+        highlights:
+          positive: status.value1 = status.value2
+          critical: status.value1 != status.value2
+        description: 'Example description'
+    body:
+      - name: Replicas
+        source: status.replicas
+      - name: Containers
+        source: status.containers
+        type: long
+      - name: Condition details
+        widget: ConditionList
+        source: status.conditions
+```
+
+```yaml
+details:
+  status:
+    - name: Replicas
+      source: status.replicas
+    - name: Containers
+      source: status.containers
+      type: long
+    - name: Condition details
+      widget: ConditionList
+      source: status.conditions
+```
 
 #### Status Header
 
@@ -45,6 +85,9 @@ details:
     body:
       - name: Replicas
         source: status.replicas
+      - name: Containers
+        source: status.containers
+        type: long
       - name: Condition details
         widget: ConditionList
         source: status.conditions
