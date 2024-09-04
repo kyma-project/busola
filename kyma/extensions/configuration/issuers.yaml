@@ -9,22 +9,81 @@ metadata:
     busola.io/extension-version: '0.5'
 data:
   details: |-
-    header:
-      - name: spec.acme.email
-        source: spec.acme.email
-      - source: 'status.state ? status.state : "UNKNOWN"'
-        highlights:
-          informative:
-            - UNKNOWN
-        name: status
-        widget: Badge
-        description: status.message
-      - name: spec.acme.server
-        source: spec.acme.server
+    status:
+      header:
+        - name: status
+          source: 'status.state ? status.state : "UNKNOWN"'
+          highlights:
+            informative:
+              - UNKNOWN
+          widget: Badge
+          description: status.message
+      body:
+        - name: status.observedGeneration
+          source: status.observedGeneration
+        - name: status.requestsPerDayQuota
+          source: status.requestsPerDayQuota
     body:
-      - widget: Columns
+      - name: specification
+        widget: Panel
         children:
-          - name: Included domains
+          - name: issuertype
+            source: '$exists(spec.acme) ? "ACME" : $exists(spec.ca) ? "CA" : ""'
+          - name: spec.acme.server
+            source: spec.acme.server
+            visibility: $exists(spec.acme)
+          - name: spec.acme.email
+            source: spec.acme.email
+            visibility: $exists(spec.acme)
+          - name: spec.acme.skipDNSChallengeValidation
+            source: spec.acme.skipDNSChallengeValidation
+            visibility: $exists(spec.acme)
+          - name: spec.acme.autoRegistration
+            source: spec.acme.autoRegistration
+            visibility: $exists(spec.acme)
+          - name: spec.ca.privateKeySecretRef
+            visibility: $exists(spec.acme)
+            source: spec.acme.privateKeySecretRef.name
+            widget: ResourceLink
+            resource:
+              namespace: $root.spec.acme.privateKeySecretRef.namespace
+              kind: "'Secret'"
+              name: $root.spec.acme.privateKeySecretRef.name
+          - name: spec.ca.privateKeySecretRef
+            visibility: $exists(spec.ca)
+            source: spec.ca.privateKeySecretRef.name
+            widget: ResourceLink
+            resource:
+              namespace: $root.spec.ca.privateKeySecretRef.namespace
+              kind: "'Secret'"
+              name: $root.spec.ca.privateKeySecretRef.name
+          - name: spec.acme.externalAccountBinding.keyID
+            source: spec.acme.externalAccountBinding.keyID
+            visibility: $exists(spec.acme)
+          - name: spec.acme.externalAccountBinding.keySecretRef
+            visibility: $exists(spec.acme)
+            source: spec.acme.externalAccountBinding.keySecretRef.name
+            widget: ResourceLink
+            resource:
+              namespace: $root.spec.acme.externalAccountBinding.keySecretRef.namespace
+              kind: "'Secret'"
+              name: $root.spec.acme.externalAccountBinding.keySecretRef.name 
+      - widget: Columns
+        visibility: $exists(spec.acme.precheckNameservers)
+        children:
+        - name: spec.acme.precheckNameservers
+          widget: Table
+          visibility: $exists(spec.acme.precheckNameservers)
+          disablePadding: true
+          showHeader: false
+          source: spec.acme.precheckNameservers
+          children:
+            - source: $item
+              search: true
+      - widget: Columns
+        visibility: $exists(spec.acme)
+        children:
+          - name: spec.acme.includeddomains
             widget: Table
             disablePadding: true
             showHeader: false
@@ -32,7 +91,7 @@ data:
             children:
               - source: $item
                 search: true
-          - name: Excluded domains
+          - name: spec.acme.excludeddomains
             widget: Table
             disablePadding: true
             showHeader: false
@@ -40,6 +99,10 @@ data:
             children:
               - source: $item
                 search: true
+      - widget: EventList
+        name: events
+        filter: "$matchEvents($$, $root.kind, $root.metadata.name)"
+        hideInvolvedObjects: true
   form: |-
     - var: IssuerType
       dynamicValue: | 
@@ -66,6 +129,13 @@ data:
           simple: true
           placeholder: email.for.registration
         - path: skipDNSChallengeValidation
+        - name: spec.acme.precheckNameservers
+          path: precheckNameservers
+          widget: SimpleList
+          children:
+            - path: '[]'
+              simple: true
+              placeholder: spec.acme.precheckNameservers.placeholder
         - path: privateKeySecretRef
           widget: ResourceRef
           provideVar: secret
@@ -126,6 +196,8 @@ data:
       {{[Issuer](https://cert-manager.io/docs/concepts/issuer/)}}
       is a Namespace resource responsible for provisioning of certificates.
   list: |-
+    - name: issuertype
+      source: '$exists(spec.acme) ? "ACME" : $exists(spec.ca) ? "CA" : ""'
     - name: spec.acme.email
       source: spec.acme.email
     - name: status
@@ -168,6 +240,7 @@ data:
       metadata.creationTimestamp: Created at
       issuertype: Issuer Type
       selectissuertype: Select Issuer type
+      specification: Specification
       spec.requestsPerDayQuota: Daily Requests Quota
       spec.acme.email: Email
       email.for.registration: Email address for user registration
@@ -179,7 +252,6 @@ data:
       spec.acme.excludeddomains: Excluded Domains
       spec.acme.domainallowed: Domain that is allowed
       spec.acme.domainforbidden: Domain that is forbidden
-      status: Status
       spec.acme.skipDNSChallengeValidation: Skip DNS challenge validation
       spec.acme.privateKeySecretRef: Private key Secret
       spec.acme.autoRegistration: Auto registration
@@ -187,4 +259,10 @@ data:
       spec.acme.externalAccountBinding.keyID: CA key ID
       spec.acme.externalAccountBinding.id: ID of the CA that the external account is bound to
       spec.acme.externalAccountBinding.keySecretRef: Symmetric MAC Secret
+      spec.acme.precheckNameservers: Precheck Nameservers
+      spec.acme.precheckNameservers.placeholder: Format `host` or `host:port`, e.g. "8.8.8.8" or "8.8.8.8:53"
       spec.ca.privateKeySecretRef: Private key Secret
+      status: Status
+      status.observedGeneration: Observed Generation
+      status.requestsPerDayQuota: Requests per day quota
+      events: Events

@@ -8,24 +8,61 @@ metadata:
     busola.io/extension: resource
     busola.io/extension-version: '0.5'
 data:
+  dataSources: |-
+    relatedServiceInstance:
+      resource:
+        kind: ServiceInstance
+        group: services.cloud.sap.com
+        version: v1
+      filter: $root.spec.serviceInstanceName = $item.metadata.name
+    relatedSecret:
+      resource:
+        kind: Secret
+        version: v1
+      filter: $root.spec.secretName = $item.metadata.name
   details: |
+    resourceGraph:
+      depth: 1
+      dataSources:
+        - source: relatedServiceInstance
+        - source: relatedSecret
+    status:
+      header:
+        - name: status
+          source: status.conditions[$count(status.conditions)-1].reason
+          highlights:
+            positive:
+              - Provisioned
+            informative:
+              - NotProvisioned
+            negative:
+              - CreateFailed
+          widget: Badge
+          description: >-
+            $filter(status.conditions, function ($v, $i, $a) { $length($v.message) >
+            0 })[0].message
+      body:
+        - name: status.observedGeneration
+          source: status.observedGeneration
+        - name: status.lastCredentialsRotationTime
+          source: status.lastCredentialsRotationTime
+        - name: status.bindingID
+          source: status.bindingID
+        - name: status.instanceID
+          source: status.instanceID
+        - name: status.operationType
+          source: status.operationType
+        - name: status.operationURL
+          source: status.operationURL
+        - name: conditions
+          source: status.conditions
+          widget: ConditionList
     header:
-      - name: spec.controlledBy
-        source: metadata.ownerReferences
-        widget: ControlledBy
-      - name: status
-        source: 'status.conditions[$count(status.conditions)-1].reason'
-        description: '$filter(status.conditions, function ($v, $i, $a) { $length($v.message) > 0 })[0].message'
-        widget: Badge
-        highlights:
-          positive:
-            - Provisioned
-          informative:
-            - NotProvisioned
-          negative: 
-            - CreateFailed
+      - name: metadata.finalizers
+        source: metadata.finalizers
+        widget: Labels
     body:
-      - name: bindingData
+      - name: spec.specification
         widget: Panel
         children:
           - name: spec.serviceInstanceName
@@ -33,29 +70,60 @@ data:
             widget: ResourceLink
             resource:
               namespace: $root.metadata.namespace
-              kind: "'ServiceInstance'"
+              kind: '''ServiceInstance'''
               name: $root.spec.serviceInstanceName
           - name: spec.secretName
             source: spec.secretName
             widget: ResourceLink
             resource:
               namespace: $root.metadata.namespace
-              kind: "'Secret'"
+              kind: '''Secret'''
               name: $root.spec.secretName
           - name: spec.externalName
             source: spec.externalName
-          - name: status.bindingID
-            source: status.bindingID
-          - name: status.instanceID
-            source: status.instanceID
+          - name: spec.secretKey
+            source: spec.secretKey
+            visibility: '$exists($value) ? $boolean($value) : false'
+          - name: spec.secretRootKey
+            source: spec.secretRootKey
+            visibility: '$exists($value) ? $boolean($value) : false'
+      - name: spec.userInfo
+        widget: Panel
+        children:
+          - name: spec.groups
+            source: spec.userInfo.groups
+            widget: Labels
+          - name: spec.uid
+            source: spec.userInfo.uid
+          - name: spec.username
+            source: spec.userInfo.username
+        visibility: $exists(spec.userInfo)
+      - name: spec.credentialsRotationPolicy
+        widget: Panel
+        visibility: $exists(spec.credentialsRotationPolicy)
+        children:
+          - name: spec.enabled
+            source: spec.credentialsRotationPolicy.enabled
+          - name: spec.rotatedBindingTTL
+            source: spec.credentialsRotationPolicy.rotatedBindingTTL
+          - name: spec.rotationFrequency
+            source: spec.credentialsRotationPolicy.rotationFrequency
       - name: spec.parameters
         source: spec.parameters
         widget: CodeViewer
-        visibility: "$exists($value) ? $boolean($value) : false"
+        visibility: '$exists($value) ? $boolean($value) : false'
       - name: spec.parametersFrom
         source: spec.parametersFrom
         widget: CodeViewer
-        visibility: "$exists($value) ? $boolean($value) : false"
+        visibility: '$exists($value) ? $boolean($value) : false'
+      - name: spec.secretTemplate
+        source: spec.secretTemplate
+        widget: CodeViewer
+        visibility: '$exists($value) ? $boolean($value) : false'
+      - widget: EventList
+        name: Events
+        filter: "$matchEvents($$, $root.kind, $root.metadata.name)"
+        hideInvolvedObjects: true
   form: |
     - simple: true
       path: spec.serviceInstanceName
@@ -70,7 +138,7 @@ data:
         version: v1
     - simple: true
       var: separator
-      value: ""
+      value: ''
     - simple: true
       path: spec.serviceInstanceName
       required: true
@@ -80,9 +148,11 @@ data:
     - path: spec.externalName
       placeholder: spec.externalNamePlaceholder
     - path: spec.secretName
+    - path: spec.secretKey
+    - path: spec.secretRootKey
     - path: spec.parameters
       widget: CodeEditor
-      language: "'json'"
+      language: '''json'''
     - path: spec.parametersFrom
       widget: SimpleList
       defaultExpanded: true
@@ -96,9 +166,18 @@ data:
           provideVar: secret
           required: false
         - path: '[].secretKeyRef.key'
-          enum: '$keys($secret.data)'
+          enum: $keys($secret.data)
           required: false
           placeholder: chooseSecretKey
+    - path: spec.credentialsRotationPolicy
+      widget: FormGroup
+      children:
+        - path: enabled
+        - path: rotationFrequency
+        - path: rotatedBindingTTL
+    - path: spec.secretTemplate
+      widget: CodeEditor
+      language: '''go'''
   general: |
     resource:
       kind: ServiceBinding
@@ -112,9 +191,6 @@ data:
       {{[BTP Service Binding](https://github.com/SAP/sap-btp-service-operator/blob/main/README.md)}}
       provides access details for an existing service instance.
   list: |
-    - name: spec.controlledBy
-      source: metadata.ownerReferences
-      widget: ControlledBy
     - name: spec.serviceInstanceName
       source: spec.serviceInstanceName
       widget: ResourceLink
@@ -140,9 +216,15 @@ data:
       metadata.annotations: Annotations
       metadata.labels: Labels
       metadata.creationTimestamp: Created at
+      metadata.finalizers: Finalizers
       status: Status
       status.bindingID: Binding ID
       status.instanceID: InstanceID
+      status.observedGeneration: Observed Generation
+      status.lastCredentialsRotationTime: Last Credentials Rotation Time
+      status.operationURL: Operation URL
+      status.operationType: Operation Type
+      spec.specification: Specification
       spec.secretName: Secret Name
       spec.externalName: External Name
       spec.externalNamePlaceholder: Defaults to the Service Binding name if empty
@@ -150,5 +232,17 @@ data:
       spec.controlledBy: Controlled By
       spec.parameters: Parameters
       spec.parametersFrom: Parameters from Secrets
+      spec.credentialsRotationPolicy: Credentials Rotation Policy
+      spec.secretTemplate: Secret Template
+      spec.secretKey: Secret Key
+      spec.secretRootKey: Secret Root Key
+      spec.enabled: Enabled
+      spec.rotationFrequency: Rotation Frequency
+      spec.rotatedBindingTTL: Rotated Binding TTL
+      spec.userInfo: User Info
+      spec.groups: Groups
+      spec.uid: UID
+      spec.username: Username
       chooseSecretKey: Choose Secret Key
       bindingData: Binding Data
+      conditions: Conditions

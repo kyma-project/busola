@@ -16,37 +16,91 @@ data:
         version: v1
       filter: '$item.spec.serviceInstanceName = $root.metadata.name'
   details: |
+    resourceGraph:
+      depth: 1
+      dataSources:
+        - source: myServiceBindings
+    status:
+      header:
+        - name: status
+          source: 'status.conditions[$count(status.conditions)-1].reason'
+          description: '$filter(status.conditions, function ($v, $i, $a) { $length($v.message) > 0 })[0].message'
+          widget: Badge
+          highlights:
+            positive:
+              - Provisioned
+            informative: 
+              - NotProvisioned
+            negative:
+              - CreateFailed
+      body:
+        - name: status.observedGeneration
+          source: status.observedGeneration
+        - name: status.instanceID
+          source: status.instanceID
+        - name: status.operationType
+          source: status.operationType
+        - name: status.operationURL
+          source: status.operationURL
+        - name: status.tags
+          source: status.tags
+          widget: Labels
+          fullWidth: true
+        - name: conditions
+          source: status.conditions
+          widget: ConditionList
     header:
-      - name: status
-        source: 'status.conditions[$count(status.conditions)-1].reason'
-        description: '$filter(status.conditions, function ($v, $i, $a) { $length($v.message) > 0 })[0].message'
-        widget: Badge
-        highlights:
-          positive:
-            - Provisioned
-          informative: 
-            - NotProvisioned
-          negative:
-            - CreateFailed
+      - name: metadata.finalizers
+        source: metadata.finalizers
+        widget: Labels
     body:
-      - name: serviceinstancedata
+      - name: specification
         widget: Panel
         children:
           - name: spec.serviceOfferingName
             source: spec.serviceOfferingName
           - name: spec.servicePlanName
             source: spec.servicePlanName
+          - name: spec.servicePlanID
+            source: spec.servicePlanID
+            visibility: '$exists($value) ? $boolean($value) : false'
           - name: spec.externalName
             source: spec.externalName
-          - name: status.instanceID
-            source: status.instanceID
-      - name: BTP Service Binding
-        source: '$myServiceBindings()'
-        widget: ResourceList
+          - name: spec.shared
+            source: spec.shared
+          - name: spec.btpAccessCredentialsSecret
+            source: spec.btpAccessCredentialsSecret
+            visibility: '$exists($value) ? $boolean($value) : false'
+          - name: spec.customTags
+            source: spec.customTags
+            widget: Labels
+            visibility: '$exists($value) ? $boolean($value) : false'
+      - name: spec.userInfo
+        widget: Panel
+        children:
+          - name: spec.groups
+            source: spec.userInfo.groups
+            widget: Labels
+          - name: spec.uid
+            source: spec.userInfo.uid
+          - name: spec.username
+            source: spec.userInfo.username
+        visibility: $exists(spec.userInfo)
       - name: spec.parameters
         source: spec.parameters
         widget: CodeViewer
         visibility: '$exists($value) ? $boolean($value) : false'
+      - name: spec.parametersFrom
+        source: spec.parametersFrom
+        widget: CodeViewer
+        visibility: '$exists($value) ? $boolean($value) : false'
+      - name: BTP Service Binding
+        source: '$myServiceBindings()'
+        widget: ResourceList
+      - widget: EventList
+        name: Events
+        filter: "$matchEvents($$, $root.kind, $root.metadata.name)"
+        hideInvolvedObjects: true
   form: |
     - simple: true
       path: spec.serviceOfferingName
@@ -55,11 +109,36 @@ data:
       path: spec.servicePlanName
       required: true
       placeholder: spec.servicePlanNamePlaceholder
+    - simple: true
+      path: spec.servicePlanID
     - path: spec.externalName
       placeholder: spec.externalNamePlaceholder
+    - path: spec.btpAccessCredentialsSecret
+    - path: spec.shared
     - path: spec.parameters
       widget: CodeEditor
       language: "'json'"
+    - path: spec.parametersFrom
+      widget: GenericList
+      defaultExpanded: true
+      children:
+        - path: '[].secretKeyRef.name'
+          widget: Resource
+          resource:
+            kind: Secret
+            version: v1
+            scope: namespace
+          provideVar: secret
+          required: false
+        - path: '[].secretKeyRef.key'
+          enum: '$keys($secret.data)'
+          required: false
+          placeholder: chooseSecretKey
+    - path: spec.customTags
+      widget: SimpleList
+      children:
+        - path: '[]'
+      placeholder: spec.enterCustomTag
   general: |
     resource:
       kind: ServiceInstance
@@ -92,15 +171,28 @@ data:
           - CreateFailed
   translations: |
     en:
-      metadata.annotations: Annotations
-      metadata.labels: Labels
-      metadata.creationTimestamp: Created at
+      metadata.finalizers: Finalizers
+      conditions: Conditions
       status: Status
+      status.observedGeneration: Observed Generation
+      status.operationURL: Operation URL
+      status.operationType: Operation Type
+      status.tags: Tags
+      status.instanceID: Instance ID
+      specification: Specification
       spec.externalName: External Name
       spec.externalNamePlaceholder: Defaults to the instance name if empty
       spec.servicePlanName: Plan Name
       spec.servicePlanNamePlaceholder: The plan name to use for the Service Instance
       spec.serviceOfferingName: Offering Name
       spec.parameters: Instance Parameters
-      status.instanceID: Instance ID
-      serviceinstancedata: Service Instance Data
+      spec.userInfo: User Info
+      spec.groups: Groups
+      spec.uid: UID
+      spec.username: Username
+      spec.customTags: Custom Tags
+      spec.enterCustomTag: Enter custom tag
+      spec.shared: Shared
+      spec.btpAccessCredentialsSecret: BTP Access Credentials Secret
+      spec.servicePlanID: Plan ID
+      chooseSecretKey: Choose Secret Key
