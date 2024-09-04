@@ -4,7 +4,7 @@ import { Button } from '@ui5/webcomponents-react';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
-import { LimitRangeList } from 'resources/LimitRanges/LimitRangeList';
+import { LimitRangesList } from 'resources/LimitRanges/LimitRangesList';
 import { ResourceQuotaList as ResourceQuotaListComponent } from 'resources/ResourceQuotas/ResourceQuotaList';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
@@ -26,7 +26,7 @@ export function NamespaceDetails(props) {
   }
 
   const limitRangesParams = {
-    hasDetailsView: false,
+    hasDetailsView: true,
     resourceUrl: `/api/v1/namespaces/${props.resourceName}/limitranges`,
     resourceType: 'LimitRanges',
     namespace: props.resourceName,
@@ -35,7 +35,7 @@ export function NamespaceDetails(props) {
     disableCreate: true,
   };
 
-  const LimitrangesList = <LimitRangeList {...limitRangesParams} />;
+  const LimitrangesList = <LimitRangesList {...limitRangesParams} />;
 
   const resourceQuotasParams = {
     hasDetailsView: false,

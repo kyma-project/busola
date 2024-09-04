@@ -73,6 +73,7 @@ export const GenericList = ({
   nameColIndex = 0,
   noHideFields,
   customRowClick,
+  className = '',
 }) => {
   const navigate = useNavigate();
   searchSettings = { ...defaultSearch, ...searchSettings };
@@ -381,6 +382,7 @@ export const GenericList = ({
       data-testid={testid}
       disableMargin
       style={disableMargin ? {} : spacing.sapUiSmallMargin}
+      className={className}
     >
       <Table
         className={`ui5-generic-list ${
