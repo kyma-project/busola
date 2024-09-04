@@ -29,7 +29,6 @@ export function useVersionWarning({
     if (preferredVersion && version !== preferredVersion) {
       Sentry.captureMessage(
         `Unexpected version of ${resourceType}: expected ${preferredVersion}, got ${version}.`,
-        Sentry.Severity.Info,
       );
     }
   }, [apiGroups, isTrackingEnabled, resourceType, resourceUrl]);
