@@ -9,13 +9,13 @@ check-var = $(if $(strip $($1)),,$(error "$1" is not defined))
 ##@ Environments
 
 prepare-all-dev:
-	npm run prepare-all-dev
+	npm run prepare-extensibility-dev
 	ENV=dev make copy-config
 prepare-all-stage:
-	npm run prepare-all-stage
+	npm run prepare-extensibility-stage
 	ENV=stage make copy-config
 prepare-all-prod:
-	npm run prepare-all-prod
+	npm run prepare-extensibility-prod
 	ENV=prod make copy-config
 
 prepare-configuration: prepare-all-dev prepare-all-stage prepare-all-prod ## Prepare all configuration for dev, stage and prod
@@ -26,5 +26,5 @@ copy-config:
 	cp -r ./environments/${ENV}/config.yaml ./build/${ENV}/config/config.yaml
 
 clean: ##Remove all output directories (dist)
-	rm -r ./tmp
+	rm -r ./temp
 	rm -r ./build

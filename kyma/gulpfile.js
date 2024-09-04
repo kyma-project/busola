@@ -100,7 +100,7 @@ const loadPreparedExtensions = through2.obj((file, _, cb) => {
 gulp.task('clean-extensions', () => {
   const env = process.env.ENV;
   return gulp
-    .src(`environments/tmp/${env}/extensions-local`, {
+    .src(`environments/temp/${env}/extensions-local`, {
       read: false,
       allowEmpty: true,
     })
@@ -111,13 +111,13 @@ gulp.task('get-extensions', () => {
   return gulp
     .src(`environments/${process.env.ENV}/extensions.json`)
     .pipe(loadExtensions)
-    .pipe(gulp.dest(`tmp/${process.env.ENV}/extensions-local/-/-`)); // gulp strips the 2 last path components?
+    .pipe(gulp.dest(`temp/${process.env.ENV}/extensions-local/-/-`)); // gulp strips the 2 last path components?
 });
 
 gulp.task('pack-extensions', () => {
   const env = process.env.ENV;
   return gulp
-    .src(`tmp/${env}/extensions-local/**/*.yaml`)
+    .src(`temp/${env}/extensions-local/**/*.yaml`)
     .pipe(loadPreparedExtensions)
     .pipe(
       concat('extensions.yaml', {
@@ -130,7 +130,7 @@ gulp.task('pack-extensions', () => {
 gulp.task('clean-statics', () => {
   const env = process.env.ENV;
   return gulp
-    .src(`environments/tmp/${env}/extensions/statics-local`, {
+    .src(`environments/temp/${env}/extensions/statics-local`, {
       read: false,
       allowEmpty: true,
     })
@@ -141,13 +141,13 @@ gulp.task('get-statics', () => {
   return gulp
     .src(`environments/${process.env.ENV}/statics.json`)
     .pipe(loadExtensions)
-    .pipe(gulp.dest(`tmp/${process.env.ENV}/statics-local/-/-`)); // gulp strips the 2 last path components?
+    .pipe(gulp.dest(`temp/${process.env.ENV}/statics-local/-/-`)); // gulp strips the 2 last path components?
 });
 
 gulp.task('pack-statics', () => {
   const env = process.env.ENV;
   return gulp
-    .src(`tmp/${env}/statics-local/**/*.yaml`)
+    .src(`temp/${env}/statics-local/**/*.yaml`)
     .pipe(loadPreparedExtensions)
     .pipe(
       concat('statics.yaml', {
@@ -160,7 +160,7 @@ gulp.task('pack-statics', () => {
 gulp.task('clean-wizards', () => {
   const env = process.env.ENV;
   return gulp
-    .src(`environments/tmp/${env}/extensions/wizards-local`, {
+    .src(`environments/temp/${env}/extensions/wizards-local`, {
       read: false,
       allowEmpty: true,
     })
@@ -171,13 +171,13 @@ gulp.task('get-wizards', () => {
   return gulp
     .src(`environments/${process.env.ENV}/wizards.json`)
     .pipe(loadExtensions)
-    .pipe(gulp.dest(`tmp/${process.env.ENV}/wizards-local/-/-`)); // gulp strips the 2 last path components?
+    .pipe(gulp.dest(`temp/${process.env.ENV}/wizards-local/-/-`)); // gulp strips the 2 last path components?
 });
 
 gulp.task('pack-wizards', () => {
   const env = process.env.ENV;
   return gulp
-    .src(`tmp/${env}/wizards-local/**/*.yaml`)
+    .src(`temp/${env}/wizards-local/**/*.yaml`)
     .pipe(loadPreparedExtensions)
     .pipe(
       concat('wizards.yaml', {

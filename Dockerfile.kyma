@@ -27,10 +27,10 @@ WORKDIR /kyma
 
 RUN apk add make
 
+#Copy /kyma configuration into container to /kyma
 COPY /kyma /kyma
 
 RUN npm ci
-
 RUN make prepare-configuration
 
 # ---- Serve ----

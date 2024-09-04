@@ -92,4 +92,4 @@ backend/backend-production.*
 **/public/**
 
 tests/integration/fixtures/kubeconfig.yaml
-kyma/
+kyma/**
