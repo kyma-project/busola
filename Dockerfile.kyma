@@ -1,11 +1,11 @@
 # ---- Base Alpine with Node ----
-FROM alpine:3.20.2 AS builder
+FROM node:20.17-alpine3.20  AS builder
 ARG default_tag
 
 # Install global dependencies
 RUN apk update && \
   apk upgrade && \
-  apk add --no-cache make nodejs npm yq
+  apk add --no-cache make yq
 
 WORKDIR /app
 
@@ -21,7 +21,7 @@ RUN yq -i '.version = "'${default_tag}'"' public/version.yaml && \
 RUN npm run build:docker
 
 # ---- Environments Configuration ----
-FROM node:22.7.0-alpine3.19 as configuration
+FROM node:20.17-alpine3.20 as configuration
 #RUN apk add make
 WORKDIR /kyma
 

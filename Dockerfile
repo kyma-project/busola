@@ -1,11 +1,11 @@
 # ---- Base Alpine with Node ----
-FROM alpine:3.20.2 AS builder
+FROM node:20.17-alpine3.20 AS builder
 ARG default_tag
 
 # Install global dependencies
 RUN apk update && \
   apk upgrade && \
-  apk add --no-cache make nodejs npm yq
+  apk add --no-cache make yq
 
 WORKDIR /app
 
