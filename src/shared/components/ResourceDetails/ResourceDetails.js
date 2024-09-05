@@ -294,7 +294,7 @@ function Resource({
               {customStatusColumns
                 ?.filter(filterColumns)
                 .filter(col => !col?.conditionComponent)
-                ?.filter(col => col?.type !== 'long')
+                ?.filter(col => !col?.fullWidth || col?.fullWidth === false)
                 ?.map(col => (
                   <DynamicPageComponent.Column
                     key={col.header}
@@ -312,7 +312,7 @@ function Resource({
               {customStatusColumns
                 ?.filter(filterColumns)
                 .filter(col => !col?.conditionComponent)
-                ?.filter(col => col?.type === 'long')
+                ?.filter(col => col?.fullWidth && col?.fullWidth === true)
                 ?.map(col => (
                   <DynamicPageComponent.Column
                     key={col.header}

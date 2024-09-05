@@ -23,7 +23,7 @@ Extra parameters might be available for specific widgets.
 
 #### Status Body
 
-The **data.details.status.body** is an array of objects. By default listed values are displayed in two columns. Adding parameter **type: long** will display values in one column. The **data.details.status.body** accepts one widget (for example [ConditionList](./50-list-and-details-widgets.md#conditionList))
+The **data.details.status.body** is an array of objects. By default listed values are displayed in two columns. Adding parameter **fullWidth: true** will display values in one column. The **data.details.status.body** accepts one widget (for example [ConditionList](./50-list-and-details-widgets.md#conditionList))
 
 See the following examples:
 
@@ -42,7 +42,7 @@ details:
         source: status.replicas
       - name: Containers
         source: status.containers
-        type: long
+        fullWidth: true
       - name: Condition details
         widget: ConditionList
         source: status.conditions
@@ -55,7 +55,7 @@ details:
       source: status.replicas
     - name: Containers
       source: status.containers
-      type: long
+      fullWidth: true
     - name: Condition details
       widget: ConditionList
       source: status.conditions
@@ -87,7 +87,7 @@ details:
         source: status.replicas
       - name: Containers
         source: status.containers
-        type: long
+        fullWidth: true
       - name: Condition details
         widget: ConditionList
         source: status.conditions
