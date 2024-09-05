@@ -1,0 +1,272 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: oauth2clients
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: oauth2clients
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+data:
+  dataSources: |
+    oauth2clients:
+      resource:
+        kind: OAuth2Client
+        version: v1alpha1
+        group: hydra.ory.sh
+        namespace: null
+      filter: '$item.metadata.namespace != "kyma-system"'
+    secret:
+      resource:
+        kind: Secret
+        version: v1
+      filter: '$item.metadata.name = $root.spec.secretName'
+  details: |-
+    header: 
+      - source: 'status.state ? "error" : "ok"'
+        highlights:
+          positive:
+            - ok
+          negative: 
+            - error
+        name: status
+        widget: Badge
+    body: 
+      - source: '"deprecation.short"'
+        widget: Alert
+        name: warning
+        severity: warning
+      - name: configuration
+        widget: Panel
+        children:
+          - name: spec.redirectUris
+            source: spec.redirectUris
+            widget: Labels
+            visibility: $exists(spec.redirectUris)
+          - name: spec.postLogoutRedirectUris
+            source: spec.postLogoutRedirectUris
+            widget: Labels
+            visibility: $exists(spec.postLogoutRedirectUris)
+          - name: spec.clientName
+            source: spec.clientName
+            widget: Labels
+            visibility: $exists(spec.clientName)
+          - name: spec.responseTypes
+            source: spec.responseTypes
+            widget: Labels
+          - name: spec.grantTypes
+            source: spec.grantTypes
+            widget: Labels
+          - name: spec.scope
+            source: spec.scope
+            widget: Labels
+          - name: spec.audience
+            source: spec.audience
+            widget: Labels
+            visibility: $exists(spec.audience)
+          - name: spec.secretName
+            widget: ResourceLink
+            source: spec.secretName
+            resource:
+              name: spec.secretName
+              namespace: $root.metadata.namespace
+              kind: "'Secret'"
+          - name: spec.tokenEndpointAuthMethod
+            source: spec.tokenEndpointAuthMethod
+            widget: Labels
+      - name: data
+        widget: Panel
+        source: $secret().items.data
+        decodable: true
+        children:
+          - name: secret.client_id
+            source: client_id
+          - name: secret.client_secret
+            source: client_secret
+  form: |
+    - path: metadata.name
+      extraPaths:
+        - spec.secretName
+        - metadata.labels['app.kubernetes.io/name']
+    - path: spec.responseTypes
+      simple: true
+      required: true
+      widget: MultiCheckbox
+      name: Response Types
+      options:
+        - key: id_token
+          name: ID Token
+        - key: code
+          name: Code
+        - key: token
+          name: Token
+    - path: spec.grantTypes
+      simple: true
+      required: true
+      widget: MultiCheckbox
+      options:
+        - key: client_credentials
+          name: Client Credentials
+        - key: authorization_code
+          name: Authorization Code
+        - key: implicit
+          name: Implicit
+        - key: refresh_token
+          name: Refresh Token
+    - name: spec.clientName
+      path: spec.clientName
+      widget: Text      
+    - name: spec.secretName
+      path: spec.secretName
+      widget: Resource
+      visibility: $canI('v1', 'Secret')
+      overwrite: false
+      resource:
+        kind: Secret
+        scope: namespace
+        version: v1  
+    - simple: true
+      var: separator
+      value: ""
+    - name: spec.secretName
+      path: spec.secretName
+      visibility: $not($canI('v1', 'Secret'))
+      overwrite: false
+      widget: Text
+    - name: spec.tokenEndpointAuthMethod
+      path: spec.tokenEndpointAuthMethod
+      enum:
+        - none
+        - client_secret_basic
+        - client_secret_post
+        - private_key_jwt
+    - name: spec.scope
+      widget: Text
+      simple: true
+      path: spec.scope
+      inputInfo: 'You can provide more then one Scope, but they have to be separated by a Space'    
+    - widget: SimpleList
+      name: spec.redirectUris
+      defaultExpanded: true
+      path: spec.redirectUris
+      inputInfo: "Input must consist of two parts, which are separated by ':' (e.g. 'test:temp')"      
+      children:
+        - path: '[]'
+    - name: spec.postLogoutRedirectUris
+      path: spec.postLogoutRedirectUris
+      widget: SimpleList
+      defaultExpanded: true
+      inputInfo: "Input must consist of two parts, which are separated by ':' (e.g. 'test:temp')"      
+      children:
+        - path: '[]'
+    - path: spec.audience
+      name: spec.audience
+      widget: SimpleList
+      defaultExpanded: true
+      children:
+        - path: '[]'
+  general: |-
+    resource: 
+      kind: OAuth2Client
+      group: hydra.ory.sh
+      version: v1alpha1
+    name: OAuth2 Clients
+    category: Configuration
+    urlPath: oauth2clients
+    scope: namespace
+    description: >-
+      Disclaimer: OAuth2Clients support is discontinued in Kyma! Please make sure to migrate to another solution as a soon as possible.
+  list: |-
+    - source: '"deprecation.short"'
+      widget: Alert
+      severity: warning
+    - name: spec.secretName
+      widget: ResourceLink
+      source: spec.secretName
+      resource:
+        name: spec.secretName
+        namespace: $root.metadata.namespace
+        kind: "'secret'"
+    - source: 'status.state ? "error" : "ok"'
+      highlights:
+        positive:
+          - ok
+        negative: 
+          - error
+      name: status
+      widget: Badge
+      description: status.message
+  injections: |-
+    - name: deprecation.title
+      widget: Panel
+      source: $
+      filter: $item.metadata.uid = ($oauth2clients().items.metadata.uid)[0]
+      targets:
+        - slot: details-top
+          location: ClusterOverview
+      order: 1
+      children:
+        - widget: Alert
+          source: "'deprecation.long'"
+          severity: warning
+        - widget: ExternalLink
+          name: "Migration blogpost"
+          link: '"https://blogs.sap.com/2023/06/06/sap-btp-kyma-runtime-ory-hydra-oauth2-client-migration"'
+          source: '"SAP BTP, Kyma runtime ORY Hydra OAuth2 Client migration"'
+        - widget: ResourceList
+          source: $oauth2clients()
+          name: OAuth2Clients
+          disableCreate: true
+          children:
+            - source: metadata.name
+              name: Name
+              sort: 'true'
+              search:
+                source: metadata.name
+              widget: ResourceLink
+              resource:
+                name: metadata.name
+                namespace: $root.metadata.namespace
+                kind: kind
+            - source: metadata.namespace
+              name: Namespace
+  presets: |-
+    - name: template
+      default: true
+      value:
+        spec:
+          scope: ''
+          secretName: ''
+          tokenEndpointAuthMethod: client_secret_basic  
+          responseTypes: []
+          grantTypes: []
+  translations: |-
+    en: 
+        metadata.annotations: Annotations
+        metadata.labels: Labels
+        metadata.creationTimestamp: Created at
+        status: Status
+        spec.scope: Scope
+        spec.responseTypes: Response Types
+        spec.grantTypes: Grant Types
+        spec.tokenEndpointAuthMethod: Token Endpoint Authentication Method
+        spec.tokenEndpointAuthMethod.none: None
+        spec.tokenEndpointAuthMethod.client_secret_basic: Client Secret/ Basic
+        spec.tokenEndpointAuthMethod.client_secret_post: Client Secret/ POST
+        spec.tokenEndpointAuthMethod.private_key_jwt: Private Key/ JWT
+        spec.redirectUris: Redirect URIs
+        spec.postLogoutRedirectUris: Post-Logout Redirect URIs
+        spec.audience: Audience
+        spec.secretName: Secret Name
+        configuration: Configuration
+        data: Data
+        spec.clientName: Client Name
+        secret.client_id: client_id
+        secret.client_secret: client_secret
+        deprecation.title: Ory Hydra Deprecation on May 19, 2022
+        deprecation.long: |
+          You are using Ory Hydra OAuth2, which has been deprecated since May 19, 2022 and is scheduled to be removed on October 14, 2023.
+          During the Kyma upgrade on October 14, 2023, workloads that still rely on deprecated Ory Hydra OAuth2 may experience minor outages. To prevent this, follow the procedure outlined in the blog post below before the specified date.
+          If you are unable to follow the procedure, Ory Hydra OAuth2 will be migrated to the hydra-deprecated Namespace to prevent outages caused by API call failures. However, you will then be fully responsible for managing Ory Hydra OAuth2. This includes troubleshooting, maintenance, security updates, vulnerability fixes, and adherence to product standards.
+          If you want to continue using the OAuth2 functionality provided as part of the SAP BTP, Kyma runtime offering, delete the hydra-deprecated Namespace or follow the migration steps outlined in the blog post below.
+        deprecation.short: Support for OAuth2Clients has been discontinued in Kyma. Migrate to a different solution.

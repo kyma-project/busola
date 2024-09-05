@@ -1,0 +1,26 @@
+[
+  {
+    "source": "extensions/applicationconnector"
+  },
+  {
+    "source": "extensions/discovery-and-network"
+  },
+  {
+    "source": "extensions/configuration"
+  },
+  {
+    "source": "extensions/kyma"
+  },
+  {
+    "source": "extensions/service-management"
+  },
+  {
+    "source": "https://raw.githubusercontent.com/kyma-project/eventing-manager/main/config/ui-extensions/subscriptions/subscriptions.yaml"
+  },
+  {
+    "source": "https://raw.githubusercontent.com/kyma-project/telemetry-manager/main/config/busola/logpipeline_busola_extension_cm.yaml"
+  },
+  {
+    "source": "https://raw.githubusercontent.com/kyma-project/telemetry-manager/main/config/busola/tracepipeline_busola_extension_cm.yaml"
+  }
+]

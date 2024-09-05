@@ -1,0 +1,48 @@
+name: Busola Kyma Web Build
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/busola-kyma-build.yml"
+      - "kyma/**"
+      - "public/**"
+      - "src/**"
+      - "package.json"
+      - "Makefile"
+      - "Dockerfile.kyma"
+  pull_request_target:
+    types: [opened, edited, synchronize, reopened, ready_for_review]
+    paths:
+      - ".github/workflows/busola-kyma-build.yml"
+      - "kyma/**"
+      - "public/**"
+      - "src/**"
+      - "kyma/**"
+      - "package.json"
+      - "Makefile"
+      - "Dockerfile.kyma"
+      - "Dockerfile.local.kyma"
+
+permissions:
+  id-token: write # This is required for requesting the JWT token
+  contents: read # This is required for actions/checkout
+
+jobs:
+  build-kyma-web-image:
+    uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: kyma-project/test-infra/.github/workflows/image-builder.yml@main
+    with:
+      name: busola-kyma-web
+      dockerfile: Dockerfile.kyma
+      context: .
+      export-tags: true
+      tags: latest
+  build-kyma-web-local-image:
+    uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: kyma-project/test-infra/.github/workflows/image-builder.yml@main
+    with:
+      name: busola-kyma-web-local
+      dockerfile: Dockerfile.local.kyma
+      context: .
+      export-tags: true
+      tags: latest

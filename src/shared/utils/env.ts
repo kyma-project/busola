@@ -5,7 +5,7 @@ export default async function getConfigDir(): Promise<string> {
   const envVar = input.trim().split('=');
   if (envVar?.length === 2 && envVar[1]) {
     const envDir = envVar[1].trim();
-    return joinPaths('environment', envDir);
+    return joinPaths('environments', envDir);
   }
   return '';
 }
