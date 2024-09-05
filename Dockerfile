@@ -31,9 +31,12 @@ COPY --from=builder /app/build /app/core-ui
 COPY --from=builder /app/nginx/nginx.conf /etc/nginx/
 COPY --from=builder /app/nginx/mime.types /etc/nginx/
 
+#entrypoint
+COPY --from=builder --chown=nginx /app/start_nginx.sh /app/start_nginx.sh
+
 USER root:root
 RUN chown -R nginx:root /etc/nginx /app/core-ui
 USER nginx:nginx
 
 EXPOSE 8080
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["/app/start_nginx.sh"]

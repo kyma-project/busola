@@ -2,7 +2,7 @@ import { ExtWizardConfig } from './../types';
 import jsyaml from 'js-yaml';
 import { mapValues, partial } from 'lodash';
 import { useEffect } from 'react';
-import { ExtResource, ExtInjectionConfig } from '../types';
+import { ExtInjectionConfig, ExtResource } from '../types';
 import { atom, RecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { clusterState } from '../clusterAtom';
 import { authDataState } from '../authDataAtom';
@@ -26,6 +26,7 @@ import pluralize from 'pluralize';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { CustomResourceDefinition } from 'command-pallette/CommandPalletteUI/handlers/crHandler';
 import { createPostFn } from 'shared/hooks/BackendAPI/usePost';
+import getConfigDir from 'shared/utils/env';
 
 /*
 the order of the overwrting extensions
@@ -150,7 +151,8 @@ const getExtensionWizards = async (
     return null;
   }
   try {
-    const wizardsResponse = await fetch('/extensions/wizards.yaml');
+    const configDir = await getConfigDir();
+    const wizardsResponse = await fetch(configDir + '/extensions/wizards.yaml');
 
     let defaultWizards = jsyaml.loadAll(
       await wizardsResponse.text(),
@@ -236,7 +238,8 @@ const getStatics = async (
     return null;
   }
   try {
-    const staticsResponse = await fetch('/extensions/statics.yaml');
+    const configDir = await getConfigDir();
+    const staticsResponse = await fetch(configDir + '/extensions/statics.yaml');
 
     let defaultStatics = jsyaml.loadAll(
       await staticsResponse.text(),
@@ -291,7 +294,10 @@ const getExtensions = async (
   }
 
   try {
-    const extensionsResponse = await fetch('/extensions/extensions.yaml');
+    const configDir = await getConfigDir();
+    const extensionsResponse = await fetch(
+      configDir + '/extensions/extensions.yaml',
+    );
 
     let defaultExtensions = jsyaml.loadAll(
       await extensionsResponse.text(),

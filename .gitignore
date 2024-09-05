@@ -53,4 +53,7 @@ tests/integration/fixtures/sa-kubeconfig.yaml
 
 public/themes/@sap-theming/*.css
 
+public/environment
+public/active.env
+
 extensions/downloads/*
