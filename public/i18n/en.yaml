@@ -1114,7 +1114,7 @@ persistent-volume-claims:
   description: <0>PersistentVolumeClaim (PVC)</0> is a request for the PersistentVolume resources.
   headers:
     capacity: Capacity
-    access-modes: Access Mode
+    access-modes: Access Modes
     selector: Selector
     storage: Storage
     storage-class-name: Storage Class Name

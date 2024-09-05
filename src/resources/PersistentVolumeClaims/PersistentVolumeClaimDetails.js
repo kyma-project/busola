@@ -207,14 +207,12 @@ export function PersistentVolumeClaimDetails(props) {
           EMPTY_TEXT_PLACEHOLDER,
         }
       }
-      customStatusColumns={customStatusColumns}
       customConditionsComponents={[
         {
           header: t('persistent-volume-claims.headers.capacity'),
           value: pvc =>
             pvc.status.capacity ? (
               Object.entries(pvc?.status?.capacity).map(capacity => {
-                console.log(capacity);
                 return (
                   <LayoutPanelRow
                     name={capacity[0]}
@@ -236,6 +234,7 @@ export function PersistentVolumeClaimDetails(props) {
             ),
         },
       ]}
+      customStatusColumns={customStatusColumns}
       customComponents={[
         PVCConfiguration,
         PVCPods,
