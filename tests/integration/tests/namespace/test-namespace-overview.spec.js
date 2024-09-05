@@ -17,9 +17,11 @@ context(
     });
 
     it('Check sections of namespace details', () => {
-      cy.contains('b', LIMIT_NAME)
+      cy.contains('span', LIMIT_NAME)
         .scrollIntoView()
         .should('be.visible');
+
+      cy.contains('Container').should('be.visible');
 
       cy.contains('b', QUOTA_NAME)
         .scrollIntoView()

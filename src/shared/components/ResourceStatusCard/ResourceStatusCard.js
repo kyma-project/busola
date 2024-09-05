@@ -7,6 +7,7 @@ import { ConditionList } from '../ConditionList/ConditionList';
 export function ResourceStatusCard({
   statusBadge,
   customColumns,
+  customColumnsLong,
   conditions,
   customConditionsComponent,
 }) {
@@ -32,6 +33,16 @@ export function ResourceStatusCard({
             className="resource-status-card__details-grid"
           >
             {customColumns}
+          </div>
+        )}
+        {customColumnsLong && (
+          <div
+            style={{
+              ...spacing.sapUiSmallMargin,
+              ...spacing.sapUiTinyMarginTop,
+            }}
+          >
+            {customColumnsLong}
           </div>
         )}
         {conditions && (

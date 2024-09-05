@@ -189,3 +189,15 @@ k3d cluster create kyma --k3s-arg '--tls-san=host.docker.internal@server:*'
 ```
 
 A cluster created in such a way has the `host.docker.internal` set as Subject Alternative Name in the SSL Certificate of the API Server since the very beginning.
+
+## Contributing
+
+See the [Contributing Rules](CONTRIBUTING.md).
+
+## Code of Conduct
+
+See the [Code of Conduct](CODE_OF_CONDUCT.md) document.
+
+## Licensing
+
+See the [license](./LICENSE) file.

@@ -90,3 +90,6 @@ backend/backend-production.*
 **/*.chunk.*
 
 **/public/**
+
+tests/integration/fixtures/kubeconfig.yaml
+kyma/**

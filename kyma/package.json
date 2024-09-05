@@ -1,0 +1,35 @@
+{
+  "name": "kyma-dashboard",
+  "version": "1.0.0",
+  "main": "gulpfile.js",
+  "scripts": {
+    "pack-extensions": "gulp pack-extensions",
+    "prepare-extensions": "gulp clean-extensions && gulp get-extensions",
+    "pack-statics": "gulp pack-statics",
+    "prepare-statics": "gulp clean-statics && gulp get-statics",
+    "pack-wizards": "gulp pack-wizards",
+    "prepare-wizards": "gulp clean-wizards && gulp get-wizards",
+    "lint-fix": "prettier --config ./.prettierrc --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}' --ignore-path ./.prettierignore",
+    "prepare-extensibility-dev": "ENV=dev npm run prepare-extensions && ENV=dev npm run pack-extensions && ENV=dev npm run prepare-wizards && ENV=dev npm run pack-wizards && ENV=dev npm run prepare-statics && ENV=dev npm run pack-statics",
+    "prepare-extensibility-stage": "ENV=stage npm run prepare-extensions && ENV=stage npm run pack-extensions && ENV=stage npm run prepare-wizards && ENV=stage npm run pack-wizards && ENV=stage npm run prepare-statics && ENV=stage npm run pack-statics",
+    "prepare-extensibility-prod": "ENV=prod npm run prepare-extensions && ENV=prod npm run pack-extensions && ENV=prod npm run prepare-wizards && ENV=prod npm run pack-wizards && ENV=prod npm run prepare-statics && ENV=prod npm run pack-statics"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.1",
+    "gulp-clean": "^0.4.0",
+    "gulp-concat": "^2.6.1",
+    "husky": "^2.4.1",
+    "js-yaml": "^4.1.0",
+    "lint-staged": "^10.4.0",
+    "node-fetch": "^2.6.1",
+    "prettier": "^1.18.2"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,json,html,css,scss,yaml,md}": "prettier --config ./.prettierrc --write --ignore-path ./.prettierignore"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  }
+}

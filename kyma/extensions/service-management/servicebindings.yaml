@@ -1,0 +1,154 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: servicebindings
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: servicebindings
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+data:
+  details: |
+    header:
+      - name: spec.controlledBy
+        source: metadata.ownerReferences
+        widget: ControlledBy
+      - name: status
+        source: 'status.conditions[$count(status.conditions)-1].reason'
+        description: '$filter(status.conditions, function ($v, $i, $a) { $length($v.message) > 0 })[0].message'
+        widget: Badge
+        highlights:
+          positive:
+            - Provisioned
+          informative:
+            - NotProvisioned
+          negative: 
+            - CreateFailed
+    body:
+      - name: bindingData
+        widget: Panel
+        children:
+          - name: spec.serviceInstanceName
+            source: spec.serviceInstanceName
+            widget: ResourceLink
+            resource:
+              namespace: $root.metadata.namespace
+              kind: "'ServiceInstance'"
+              name: $root.spec.serviceInstanceName
+          - name: spec.secretName
+            source: spec.secretName
+            widget: ResourceLink
+            resource:
+              namespace: $root.metadata.namespace
+              kind: "'Secret'"
+              name: $root.spec.secretName
+          - name: spec.externalName
+            source: spec.externalName
+          - name: status.bindingID
+            source: status.bindingID
+          - name: status.instanceID
+            source: status.instanceID
+      - name: spec.parameters
+        source: spec.parameters
+        widget: CodeViewer
+        visibility: "$exists($value) ? $boolean($value) : false"
+      - name: spec.parametersFrom
+        source: spec.parametersFrom
+        widget: CodeViewer
+        visibility: "$exists($value) ? $boolean($value) : false"
+  form: |
+    - simple: true
+      path: spec.serviceInstanceName
+      required: true
+      widget: Resource
+      visibility: $canI('services.cloud.sap.com/v1', 'ServiceInstance')
+      overwrite: false
+      resource:
+        kind: ServiceInstance
+        scope: namespace
+        group: services.cloud.sap.com
+        version: v1
+    - simple: true
+      var: separator
+      value: ""
+    - simple: true
+      path: spec.serviceInstanceName
+      required: true
+      widget: Text
+      overwrite: false
+      visibility: $not($canI('services.cloud.sap.com/v1', 'ServiceInstance'))
+    - path: spec.externalName
+      placeholder: spec.externalNamePlaceholder
+    - path: spec.secretName
+    - path: spec.parameters
+      widget: CodeEditor
+      language: "'json'"
+    - path: spec.parametersFrom
+      widget: SimpleList
+      defaultExpanded: true
+      children:
+        - path: '[].secretKeyRef.name'
+          widget: Resource
+          resource:
+            kind: Secret
+            version: v1
+            scope: namespace
+          provideVar: secret
+          required: false
+        - path: '[].secretKeyRef.key'
+          enum: '$keys($secret.data)'
+          required: false
+          placeholder: chooseSecretKey
+  general: |
+    resource:
+      kind: ServiceBinding
+      group: services.cloud.sap.com
+      version: v1
+    name: Service Bindings
+    category: Service Management
+    urlPath: servicebindings
+    scope: namespace
+    description: >-
+      {{[BTP Service Binding](https://github.com/SAP/sap-btp-service-operator/blob/main/README.md)}}
+      provides access details for an existing service instance.
+  list: |
+    - name: spec.controlledBy
+      source: metadata.ownerReferences
+      widget: ControlledBy
+    - name: spec.serviceInstanceName
+      source: spec.serviceInstanceName
+      widget: ResourceLink
+      resource:
+        namespace: $root.metadata.namespace
+        kind: "'ServiceInstance'"
+        name: $root.spec.serviceInstanceName
+    - name: spec.externalName
+      source: spec.externalName
+    - name: status
+      source: 'status.conditions[$count(status.conditions)-1].reason'
+      description: '$filter(status.conditions, function ($v, $i, $a) { $length($v.message) > 0 })[0].message'
+      highlights:
+        positive:
+          - Provisioned
+        informative:
+          - NotProvisioned
+        negative: 
+          - CreateFailed
+      widget: Badge
+  translations: |
+    en:
+      metadata.annotations: Annotations
+      metadata.labels: Labels
+      metadata.creationTimestamp: Created at
+      status: Status
+      status.bindingID: Binding ID
+      status.instanceID: InstanceID
+      spec.secretName: Secret Name
+      spec.externalName: External Name
+      spec.externalNamePlaceholder: Defaults to the Service Binding name if empty
+      spec.serviceInstanceName: Service Instance Name
+      spec.controlledBy: Controlled By
+      spec.parameters: Parameters
+      spec.parametersFrom: Parameters from Secrets
+      chooseSecretKey: Choose Secret Key
+      bindingData: Binding Data

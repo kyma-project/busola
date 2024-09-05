@@ -24,6 +24,7 @@ export default function PersistentVolumeClaimCreate({
     initialPersistentVolumeClaim ||
       createPersistentVolumeClaimTemplate(namespace),
   );
+  const [initialUnchangedResource] = useState(initialPersistentVolumeClaim);
 
   return (
     <ResourceForm
@@ -32,6 +33,7 @@ export default function PersistentVolumeClaimCreate({
       singularName={t('persistent-volume-claims.name_singular')}
       resource={persistentVolumeClaim}
       initialResource={initialResource}
+      initialUnchangedResource={initialUnchangedResource}
       setResource={setPersistentVolumeClaim}
       onChange={onChange}
       formElementRef={formElementRef}

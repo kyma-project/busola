@@ -1,0 +1,99 @@
+config:
+  storage: localStorage
+  features:
+    PROTECTED_RESOURCES:
+      isEnabled: true
+      config:
+        resources:
+          - match:
+              $.metadata.labels['serverless.kyma-project.io/managed-by']: function-controller
+            message: 'Resource managed by: function-controller'
+          - match:
+              $.metadata.labels['reconciler.kyma-project.io/managed-by']: reconciler
+            messageSrc: >-
+              $.metadata.annotations['reconciler.kyma-project.io/managed-by-reconciler-disclaimer']
+          - match:
+              $.metadata.labels['istio.io/rev']: default
+            message: Resource managed by Istio control plane
+          - match:
+              $.metadata.labels['applicationconnector.kyma-project.io/managed-by']: compass-runtime-agent
+    LEGAL_LINKS:
+      config:
+        legal-disclosure:
+          default: https://www.sap.com/corporate/en/legal/impressum.html
+          de: https://www.sap.com/corporate/de/legal/impressum.html
+        privacy:
+          default: >-
+            https://help.sap.com/viewer/82bdf2271c6041f79387c122147cf774/Cloud/en-US
+        copyright:
+          default: https://www.sap.com/corporate/en/legal/copyright.html
+          de: https://www.sap.com/corporate/de/legal/copyright.html
+        trademark:
+          default: https://www.sap.com/corporate/en/legal/trademark.html
+          de: https://www.sap.com/corporate/de/legal/trademark.html
+    SSO_LOGIN:
+      isEnabled: false
+      config:
+        issuerUrl: https://kymatest.accounts400.ondemand.com
+        scope: openid
+        clientId: 9bd05ed7-a930-44e6-8c79-e6defeb7dec9
+    KUBECONFIG_ID:
+      isEnabled: true
+      config:
+        kubeconfigUrl: https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig
+    SENTRY:
+      isEnabled: true
+      selectors: []
+      config:
+        dsn: >-
+          https://016845744e4741cc9bea0caaabc0fe87@o399001.ingest.sentry.io/5953495
+    SHOW_KYMA_VERSION:
+      isEnabled: true
+    SHOW_GARDENER_METADATA:
+      isEnabled: true
+    EXTERNAL_NODES:
+      isEnabled: true
+      stage: SECONDARY
+    HIDDEN_NAMESPACES:
+      isEnabled: true
+      config:
+        namespaces:
+          - istio-system
+          - kube-system
+    GZIP:
+      isEnabled: true
+    EXTENSIBILITY:
+      isEnabled: true
+    EXTENSIBILITY_INJECTIONS:
+      isEnabled: true
+    EXTENSIBILITY_WIZARD:
+      isEnabled: true
+    TRACKING:
+      isEnabled: false
+    EVENTING:
+      isEnabled: true
+      selectors:
+        - type: apiGroup
+          apiGroup: eventing.kyma-project.io
+    API_GATEWAY:
+      isEnabled: true
+      selectors:
+        - type: apiGroup
+          apiGroup: gateway.kyma-project.io
+    GARDENER_LOGIN:
+      isEnabled: false
+      kubeconfig: null
+    ISTIO:
+      isEnabled: true
+    RESOURCE_VALIDATION:
+      isEnabled: true
+      config:
+        policies:
+          - Default
+    CLUSTER_VALIDATION:
+      isEnabled: true
+    FEEDBACK:
+      isEnabled: true
+      link: https://sapinsights.eu.qualtrics.com/jfe/form/SV_d3UPNymSgUHAb9Y?product=SAP%20BTP,%20Kyma%20Runtime&product_filter=Kyma
+    COLUMN_LAYOUT:
+      isEnabled: true
