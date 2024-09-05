@@ -23,6 +23,7 @@ export default function StatefulSetCreate({
   const [initialResource] = useState(
     initialStatefulSet || createStatefulSetTemplate(namespaceId),
   );
+  const [initialUnchangedResource] = useState(_.cloneDeep(initialStatefulSet));
   const { t } = useTranslation();
 
   return (
@@ -32,6 +33,7 @@ export default function StatefulSetCreate({
       singularName={t('stateful-sets.name_singular')}
       resource={statefulSet}
       initialResource={initialResource}
+      initialUnchangedResource={initialUnchangedResource}
       setResource={setStatefulSet}
       onChange={onChange}
       formElementRef={formElementRef}
