@@ -8,17 +8,17 @@ check-var = $(if $(strip $($1)),,$(error "$1" is not defined))
 
 ##@ Environments
 
-prepare-all-dev:
+prepare-configuration-dev:
 	npm run prepare-extensibility-dev
 	ENV=dev make copy-config
-prepare-all-stage:
+prepare-configuration-stage:
 	npm run prepare-extensibility-stage
 	ENV=stage make copy-config
-prepare-all-prod:
+prepare-configuration-prod:
 	npm run prepare-extensibility-prod
 	ENV=prod make copy-config
 
-prepare-configuration: prepare-all-dev prepare-all-stage prepare-all-prod ## Prepare all configuration for dev, stage and prod
+prepare-configuration: prepare-configuration-dev prepare-configuration-stage prepare-configuration-prod ## Prepare all configuration for dev, stage and prod
 
 copy-config:
 	$(call check-var,ENV)
