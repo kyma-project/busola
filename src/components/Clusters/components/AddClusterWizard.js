@@ -278,7 +278,7 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
           selected={selected}
           setSelected={setSelected}
           lastStep={true}
-          customFinish={t('clusters.buttons.verify-and-add')}
+          customFinish={t('clusters.buttons.connect-cluster')}
           onComplete={onComplete}
           onCancel={() => {
             setShowWizard(false);

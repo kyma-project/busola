@@ -1,6 +1,4 @@
-api-rules: API Rules
 horizontal-pod-autoscalers: Horizontal Pod Autoscalers
-subscriptions: Subscriptions
 apps:
   title: Apps
 cluster-overview:
@@ -14,7 +12,6 @@ cluster-overview:
   statistics:
     cpu-usage: 'CPU Usage'
     memory-usage: 'Memory Usage'
-    namespaces-health: 'Namespaces Health'
     pods-overview: 'Pods Overview'
     total-pods: 'Total Pods'
     healthy-pods: 'Healthy Pods'
@@ -43,9 +40,6 @@ cluster-overview:
   tooltips:
       cpu-used-percentage: 'CPU used: {{percentage}}'
       memory-used-percentage: 'Memory used: {{percentage}}'
-      healthy-pods: 'Healthy Pods: {{value}}/{{max}}'
-      healthy-deployments: 'Healthy Deployments: {{value}}/{{max}}'
-      namespaces-health-info: The chart includes Pods and Deployments from all namespaces.
 cluster-role-bindings:
   description: <0>ClusterRoleBinding</0> assigns the permissions defined in a ClusterRole to a user.
   name_singular: ClusterRoleBinding
@@ -71,25 +65,19 @@ cluster-validation:
       configure: Configure
       clear: Clear
     configuration:
-      title: Scan Configuration for Cluster Validation
       namespaces: Namespaces To Scan
-      policies: Policies
       parameters: Scan Parameters
       parallel-requests: Parallel Requests
       invalid-parallel-requests: Please select an integer greater than 0
 clusters:
   add:
-    errors:
-      failed-to-add-cluster: Failed to connect a cluster
     load-default: Load default cluster
     title: Connect cluster
   auth-type: Authentication type
   buttons:
-    apply-configuration: Apply configuration
-    apply-kubeconfig: Apply kubeconfig
     next-step: Next step
     previous-step: Previous step
-    verify-and-add: Connect cluster
+    connect-cluster: Connect cluster
   common:
     api-server-address: API Server Address
     download-kubeconfig: Download Kubeconfig
@@ -99,14 +87,11 @@ clusters:
   disconnect: Cluster disconnected
   edit-cluster: Edit Cluster
   empty:
-    go-to-btp-cockpit: To view your clusters, go to
     subtitle: Connect one to use the Kyma dashboard.
     title: There are no clusters yet
   gardener:
     error: 'Connecting clusters failed: {{message}}.'
-    title: Connecting Gardener cluster
     button: Connect a Gardener cluster
-  kubeconfig: kubeconfig
   labels:
     client-id: Client ID
     client-secret: Client Secret
@@ -115,23 +100,14 @@ clusters:
     scopes: Scopes
   list:
     no-clusters-found: No clusters found
-    outdated:
-      tooltip: Outdated parameter version may cause errors. Delete and re-add your cluster.
   messages:
-    error-kubeconfig: Error reading the kubeconfig
-    missing-configuration-data: Configuration included properly. Fill the remaining required data.
-    upload-paste-kubeconfig: Upload or paste your kubeconfig file
     wrong-configuration: Cannot apply the configuration
     connection-failed: Error connecting to cluster. Check your configuration and make sure the cluster is online.
   name_singular: Cluster
   oidc: OIDC
   overview:
-    back: Back to Cluster Details
-    messages:
-      no-metrics: No metrics available for this node
     title-all-clusters: Clusters Overview
     title-current-cluster: Cluster Details
-    title-no-clusters-available: No clusters available
     kyma-version: Kyma Version
     kubernetes-version: Kubernetes Version
   statuses:
@@ -140,7 +116,6 @@ clusters:
     sessionstorage: Session Storage
     unknown: Unknown
   storage:
-    changed-message: The chosen storage type has been overwritten by the cluster configuration from {{originalStorage}} to {{targetStorage}}.
     choose-storage:
       label: Storage type configuration
     storage-preference: Storage preference
@@ -148,7 +123,6 @@ clusters:
       inMemory: Cluster data is cleared when you leave or refresh the page.
       localStorage: Cluster data is persisted between browser reloads.
       sessionStorage: Cluster data is cleared when the page session ends.
-      unknown: Unknown storage type
     info: |
       You can choose where to store your cluster configuration. 
       However, we recommend the pre-selected storage mode based on your kubeconfig file type. 
@@ -157,14 +131,8 @@ clusters:
       inMemory: In memory
       localStorage: Local storage
       sessionStorage: Session storage
-      unknown: Unknown
     title: Storage Type
   token: Token
-  tooltips:
-    inmemory: Cluster data is cleared when you leave or refresh the page.
-    localstorage: Cluster data is persisted between browser reloads.
-    sessionstorage: Cluster data is cleared when the page session ends.
-    unknown: Unknown storage type
   wizard:
     all-contexts: All contexts
     auth:
@@ -183,21 +151,13 @@ clusters:
     multi-context-info: All contexts will be connected. Be aware that only {{context}} is validated. The remaining contexts are connected without validation.
     not-an-object: kubeconfig is not an object
     storage: Privacy
-    storage-info: |
-      Don't worry, we don't store your kubeconfig file on the server. The information stays in your browser.
-      You can choose your privacy options in the last step.
     token-info: If you don't know how to get your token, ask your authentication provider.
     update: Provide Authentication
     authentication: Authentication
     review: Review
 command-palette:
-  crds:
-    name-short: CRD
-    name-short_plural: CRDs
   crs:
     cluster-short: Cluster CRs
-    name-short: CR
-    name-short_plural: CRs
     namespace-short: Namespace CRs
     cluster: Custom Resources (Cluster)
     namespace: Custom Resources (Namespace)
@@ -215,7 +175,6 @@ command-palette:
   item-actions:
     navigate-autocomplete: Use <0>Enter</0> to navigate, <0>Tab</0> to autocomplete
     navigate: Use <0>Enter</0> to navigate
-    open: Open
     show-help: Show available commands
     switch: Switch context
   resource-names:
@@ -247,7 +206,6 @@ command-palette:
   results:
     did-you-mean: 'Did you mean: '
     help: Help
-    list-of: List of {{resourceType}}
     logs-for: Logs for {{target}}
     no-results-found: No results found
   search:
@@ -258,7 +216,6 @@ common:
   buttons:
     add: Add
     add-all: Add all
-    add-new: Add New
     button-disabled: Disabled
     cancel: Cancel
     clone: Clone
@@ -271,10 +228,7 @@ common:
     discard: Discard
     disconnect: Disconnect
     edit: Edit
-    edit-yaml: Edit YAML
-    generate-name: Generate
     learn-more: Learn More
-    load: Load
     ok: OK
     remove-all: Remove all
     reset: Reset
@@ -283,7 +237,6 @@ common:
     submit: Submit
     update: Update
     upload: Upload
-    view-yaml: View YAML
   create-form:
     autocomplete-unavailable-error: Monaco autocompletion unavailable. {{error}}.
     choose-template: Choose template
@@ -314,7 +267,6 @@ common:
     no-permissions: You don't have enough permissions to view this content.
     no-permissions-header: Not enough permissions
     no-permissions-message: Contact your administrator to grant you access.
-    no-permissions-no-role: You have no role assigned.
   headers:
     age: Age
     annotations: Annotations
@@ -325,11 +277,9 @@ common:
     discard-changes: Discard Changes
     items: Items
     key: Key
-    kind: Kind
     labels: Labels
     link: Link
     loading: Loading...
-    logs: Logs
     monitoring-and-health: Monitoring and Health
     name: Name
     namespace: Namespace
@@ -341,7 +291,6 @@ common:
     resource: Resource
     resource-type: Resource Type
     resource-details: Resource Details
-    resources: Resources
     nodeInfo: Node Info
     node-details: Node Details
     specification: Specification
@@ -360,40 +309,28 @@ common:
     data: Data
     hostname: Hostname
     issuer: Issuer
-    kubernetes: Kubernetes
-    kyma: Kyma
     last-transition: Last Transition Time
     name: Name
     namespace: Namespace
     new-entry: New Entry
     'no': 'No'
     path: Path
-    protocol: Protocol
     read-only: Read-only mode
     resource: Resource
     resource-name: '{{resource}} $t(common.labels.name)'
     resource-namespace: '{{resource}} $t(common.labels.namespace)'
     secret: Secret
-    service: Service
     version: 'Kyma Dashboard version:'
-    'yes': 'Yes'
-  lowercase:
-    name: name
   messages:
     cannot-load: 'Cannot load {{value}}: {{error.message}}.'
     choose: Choose {{value}}
-    click-to-select: Select {{value}} from the list
     discard-changes-warning: You haven't saved your changes. Navigating out will discard them.
-    doesnt-exist: doesn't exist
-    entry-not-found: Entry not found
     error: 'Error: {{error}}'
     fill-required-data: Fill the remaining required data.
-    loading-name: Loading name...
     must-fill-required: You must fill in all required data.
     no-entries-found: No entries found
     no-instances-found: No matching {{value}} found
     no-instances-found-namespace: No matching {{value}} found in this Namespace
-    parse-error: Parse error, previous valid input will be used.
     resource-name-error: Requested resource with this name not found in the selected Namespace.
     resource-namespace-error: Requested Namespace not found
     restart-failure: Connected Pods have failed to restart.
@@ -422,33 +359,22 @@ common:
     type: Type
   statuses:
     error: Error
-    failed: Failed
-    'false': 'false'
-    invalid: Invalid
-    ok: OK
-    pending: Pending
     ready: Ready
-    'true': 'true'
     unknown: Unknown
   tabs:
     edit: Edit
     view: View
     yaml: YAML
   tooltips:
-    at: at
     column: Col
     copy-to-clipboard: Copy to Clipboard
     download: Download
-    duplicate-key: Duplicate key
     error: Error
-    generate-name: Generate name
     hide: Hide read-only fields
     k8s-name-input: "Name must consist of lowercase alphanumeric characters or '-', and must start and end with an alphanumeric character (e.g. 'my-name', or '123-abc')."
-    key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: Key and value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     line: Ln
     protected-resources-info: To allow for modifying protected resources go to Preferences > Clusters.
-    protected-resources-view-yaml: View YAML. To allow for modifying protected resources go to Preferences > Clusters.
     read-file: Read file content as a single value, with file name as a key.
     resource-ref-name: Unique name within a Namespace to refer to a {{resource}} resource.
     resource-ref-namespace: Namespace defines the space within which the {{resource}} name must be unique.
@@ -456,12 +382,9 @@ common:
     running-pods-singular: 1 Pod is running
     save: Save
     search: Search
-    secret-ref-name: Unique name within a Namespace to refer to a Secret resource.
-    secret-ref-namespace: Namespace defines the space within which the secret name must be unique.
     show: Show read-only fields
     sort: Sort
     unknown-date: Unknown date
-    value: Value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
   'yes': 'yes'
 components:
   incorrect-path:
@@ -492,13 +415,8 @@ components:
     enter-key: Enter key
     enter-value: Enter value
   key-value-form:
-    add-entry: Add data entry
     key: Key
     read-value: Read value from file
-    value: Value
-  label-selector-input:
-    click-to-delete: Click to delete
-    enter-key-value: Enter key-value labels
   modal:
     confirm-text: Confirm
     title: Modal
@@ -516,83 +434,16 @@ components:
       delete:
         failure: 'Failed to delete the {{resourceType}}: {{error}}'
         success: '{{resourceType}} deleted'
-      update:
-        failure: 'Failed to update the {{resourceType}}: {{error}}'
-        success: '{{resourceType}} updated'
   rich-editor-data-field:
     language-placeholder: Choose language
-  string-input:
-    placeholder: Enter multiple values separated by comma
-    remove: Click to remove
 config-maps:
   buttons:
     migrate: Migrate
-    update: Update
   description: <0>ConfigMap</0> is an object that allows for storing non-sensitive data in key-value pairs.
-  errors:
-    cannot-create: Cannot create the ConfigMap
-    cannot-update: Cannot update the ConfigMap
-  messages:
-    created: ConfigMap created
-    updated: ConfigMap updated
   name_singular: ConfigMap
-  subtitle:
-    edit-config-map: Edit ConfigMap
   title: Config Maps
 configuration:
   title: Configuration
-containers:
-  statuses:
-    completed: Completed
-    containercreating: Pending
-    containersnotinitialized: Pending
-    containersnotready: Pending
-    crashloopbackoff: Error
-    createcontainerconfigerror: Error
-    createcontainererror: Error
-    dockerdaemonnotready: Pending
-    errimageneverpull: Error
-    errimagepull: Error
-    evicted: Evicted
-    imageinspecterror: Error
-    imagepullbackoff: Error
-    invalidimagename: Error
-    networkpluginnotready: Error
-    pending: Pending
-    podinitializing: Initializing
-    poststarthookerror: Error
-    registryunavailable: Error
-    runcontainererror: Error
-    running: Running
-    terminated: Terminated
-    terminating: Terminating
-    unknown: Unknown
-  tooltips:
-    completed: Container completed
-    containercreating: Creating container
-    containersnotinitialized: Container not initialized
-    containersnotready: Container not ready
-    crashloopbackoff: Container is in a crashing loop
-    createcontainerconfigerror: Create container configuration error
-    createcontainererror: Create container error
-    dockerdaemonnotready: Docker daemon not ready
-    errimageneverpull: Image has never been pulled
-    errimagepull: Image pull error
-    error: Container failed to start
-    imageinspecterror: Image inspect error
-    imagepullbackoff: Could not pull a container image
-    invalidimagename: Invalid image name
-    networkpluginnotready: Network plugin not ready
-    no-restarts: Container has not restarted
-    pending: Container scheduled
-    podinitializing: Initializing the Pod
-    poststarthookerror: Post-start hook error
-    registryunavailable: Registry unavailable
-    runcontainererror: Run container error
-    running: Container running correctly
-    terminated: Container terminated
-    terminating: Terminating the Container
-    unknown: Container state unknown
 cron-jobs:
   active: Active
   concurrency-policy:
@@ -619,12 +470,7 @@ cron-jobs:
       hour: 0 to 23 (always UTC)
       minute: 0 to 59
       month: 1 to 12
-      starting-deadline: Optional deadline in seconds for starting the job if it misses the scheduled time.
-      suspend: 'If true, the controller suspends subsequent executions (default: false). It does not apply to started executions.'
   description: <0>CronJob</0> is a job that is run according to a specified schedule.
-  docker-image: Docker Image
-  failed-jobs-history-limit: Failed Jobs History Limit
-  image-pull-policy: Image Pull Policy
   last-job-execution: Last Job execution
   last-schedule-time: Last Schedule Time
   last-successful-time: Last Successful Time
@@ -632,10 +478,6 @@ cron-jobs:
   not-scheduled-yet: None scheduled yet
   schedule: Schedule
   title: Cron Jobs
-  tooltips:
-    allow: Allow concurrent executions
-    forbid: No concurrent executions. Skip the new run if the previous one hasn't finished yet.
-    replace: No concurrent executions. Replace the previous run with the new one.
 custom-resource-definitions:
   description: <0>CustomResourceDefinition</0> is an object used to define a custom resource that allows you to extend the Kubernetes API for use cases that are not directly covered by core Kubernetes.
   headers:
@@ -649,7 +491,6 @@ custom-resource-definitions:
     short-names: Short Names
     singular: Singular
     type: Type
-    value: Value
   name_singular: CustomResourceDefinition
   status:
     not-served: Not Served
@@ -662,20 +503,13 @@ custom-resource-definitions:
     schema: Schema
     version: Version
   title: Custom Resource Definitions
-  tooltips:
-    not-served: This version is not served using REST APIs.
-    served: This version is served using REST APIs.
-    storage: Use this version when persisting custom resources to storage.
 custom-resources:
   description: <0>Custom resource</0> extends the Kubernetes API. You can define your own custom resource by creating a <1>CustomResourceDefinition</1> first.
-  schema-preview: Schema Preview
   title: Custom Resources
 daemon-sets:
   description: <0>DaemonSet</0> ensures that replicated Pods are running across a set of available nodes.
-  images: Images
   name_singular: DaemonSet
   node-selector: Node Selector
-  pods: $t(pods.title)
   status:
     collision-count: Collision Count
     current-number-scheduled: Current Number Scheduled
@@ -707,12 +541,9 @@ deployments:
     docker-image: Docker Image
     docker-image-placeholder: Enter the Docker image tag, for example, bitnami/nginx
     image-pull-secret: Image Pull Secret
-    image-pull-secret-tooltip: The secret for authorization to the private Docker repository.
-    title: Create Deployment
   description: <0>Deployment</0> is a Kubernetes object that represents a replicated application running on your cluster.
   headers:
     images: Images
-    pods: $t(pods.title)
   name_singular: Deployment
   title: Deployments
   status: 
@@ -723,14 +554,6 @@ deployments:
     updated-replicas: Updated Replicas
 discovery-and-network:
   title: Discovery and Network
-domains:
-  example: For example, *.api.mydomain.com
-  exclude:
-    label: Exclude Domains
-    placeholder: Domain that is forbidden
-  include:
-    label: Include Domains
-    placeholder: Domain that is allowed
 err-boundary:
   go-back: Go back
   restored-initial-form: Something went wrong. We restored the initial form for you.
@@ -744,7 +567,6 @@ events:
     reason: Reason
     source: Source
     type: Type
-  name_singular: Event
   title: Events
 extensibility:
   configuration-error: 'Configuration error: {{error}}'
@@ -753,7 +575,7 @@ extensibility:
   error: Your extension configuration is incorrect.
   message:
     old-version: There is a newer version of the extensibility configuration. Please migrate to the newest version.
-    unnown-version: Your extensibility configuration version is no longer supported, but cannot be migrated. For more information, see <0>Extensibility documentation</0>.
+    unknown-version: Your extensibility configuration version is no longer supported, but cannot be migrated. For more information, see <0>Extensibility documentation</0>.
     unsupported-version: Your extensibility configuration version is no longer supported. Please migrate to the newest version.
   no-path-children: A widget lacks one of the required properties, add either "path" or "children".
   not-an-object: Not an object.
@@ -762,13 +584,10 @@ extensibility:
     details: Details View
     form: Form Fields
     general: General
-    lang-translations: Translations ({{lang}})
     list: List Columns
     translations: Translations
     version: Version
   starter-modal:
-    buttons:
-      open-modal: Create UI
     crd: Resource
     headers:
       details-summary: Details Summary
@@ -776,14 +595,9 @@ extensibility:
       form-fields: Form Fields
       list-columns: List Columns
     messages:
-      configmap-info: The <0>{{name}}</0> ConfigMap is created or updated in the <1>kube-public</1> Namespace.
-      docs-info: For more information, see the <0>Extensibility documentation</0>.
       error: Failed to upsert UI configuration.
       no-columns: No example values could be inferred from the CRD.
-      not-an-array: Wrong data format. Values should be an array.
-      scaffold-only: The above configuration can be changed later at the ConfigMap level.
       success: UI configuration upserted.
-    title: Create UI for {{kind}} CRD
   title: Extensions
   version:
     current: Current version
@@ -809,30 +623,9 @@ extensibility:
 gardener:
   headers:
     provider: Provider
-generic-list:
-  no-entries-found: No entries found
 get-help:
   kyma-project-io: kyma-project.io
   help-sap-com: help.sap.com
-graphs:
-  capacity: Capacity
-  cpu: CPU
-  free-space: Free space
-  limits: Limits
-  memory: Memory
-  network: Network
-  network-down: Download
-  network-up: Upload
-  nodes: Nodes
-  pvc-usage: Volume Space Usage
-  requests: Requests
-  resource-commitment:
-    cpu: CPU Commitment
-    limits-exceed: Resource limits exceed 150% of the cluster capacity.
-    memory: Memory Commitment
-    utilized-value: Utilized ({{value}}%)
-  total: Total
-  used-space: Used space
 helm-releases:
   description: <0>Helm Release</0> tracks the installed charts. For each installed chart, a new release is created.
   headers:
@@ -845,33 +638,12 @@ helm-releases:
     last-deployed: Last Deployed
     other-release-versions: Other Release Versions
     release: 'Release '
-    release-config: Release Config
     release-data: Release Data
     release-version: Version v{{version}}
     revision: Revision
   messages:
     cannot-decode: Cannot decode the given Helm Release
-  statuses:
-    deployed: Deployed
-    failed: Failed
-    pending-install: Pending Install
-    pending-rollback: Pending Rollback
-    pending-upgrade: Pending Upgrade
-    superseded: Superseded
-    uninstalled: Uninstalled
-    uninstalling: Uninstalling
-    unknown: Unknown
   title: Helm Releases
-  tooltips:
-    deployed: The release has been pushed to the cluster.
-    failed: The release was not deployed.
-    pending-install: An install operation is underway.
-    pending-rollback: A rollback operation is underway.
-    pending-upgrade: An upgrade operation is underway.
-    superseded: The release is outdated and a newer one exists.
-    uninstalled: The release has been uninstalled from the cluster.
-    uninstalling: An uninstall operation is underway.
-    unknown: The release is in an uncertain state.
 ingresses:
   description: <0>Ingress</0> describes the routing rules for traffic to services within a cluster. The routing is managed by the Ingress resource.
   labels:
@@ -888,7 +660,6 @@ ingresses:
     path: Path
     path-type: Path type
     paths: Paths
-    port: Port
     ports: Ports
     port-name: Port name
     port-number: Port number
@@ -897,8 +668,6 @@ ingresses:
     secret-name: Secret name
     service-name: Service name
     tls: TLS
-  message:
-    rules-not-found: Rules not found
   name_singular: Ingress
   title: Ingresses
 integration:
@@ -916,7 +685,6 @@ jobs:
     title: Conditions
     type: Type
   create-modal:
-    add-container: Add container
     at-least-one-container-required: CronJob must have at least one container.
     container: Container
     containers: Containers
@@ -965,9 +733,7 @@ kyma-modules:
   module-uninstall: Module deleted
   module-documentation: Documentation
   modules-channel: Modules Channel
-  learn-more: Learn more
   add-module: Add Modules
-  modify: Modify 
   no-modules-description: Customize your cluster by adding the modules you need.
   description: With <0>Kyma’s modular approach</0>, you can install just the modules you need, instead of a predefined set of components.
   release-channel-description: According to the <0>Kyma modules` release cycle</0>, we first release a new module’s major or minor version in the fast channel. After approximately two weeks, we promote the release to the regular channel.
@@ -1006,15 +772,11 @@ limit-ranges:
   title: Limit Ranges
 machine-info:
   architecture-cpus: Architecture and CPUs
-  cpu-m: 'CPU (m):'
-  cpu-usage: CPU Usage
   cpus: CPUs
   gib: GiB
   kube-proxy-version: Kube proxy version
   kubelet-version: Kubelet version
   memory: Memory
-  memory-gib: 'Memory (GiB):'
-  memory-usage: Memory Usage
   operating-system: Operating system
   pods-capacity: Pods capacity
   title: Machine info
@@ -1037,7 +799,6 @@ namespaces:
   description: <0>Namespace</0> helps to maintain and divide resources in a cluster.
   name_singular: Namespace
   namespace-details: Namespace Details
-  namespaces-overview: Namespaces Overview
   overview:
     resources:
       error: Error while loading memory consumption data
@@ -1045,15 +806,6 @@ namespaces:
       requests: Memory Requests
       title: Resource Consumption
     title: Overview
-    workloads:
-      deploy-new: Deploy new workload
-      deployments: $t(deployments.title)
-      error: 'Error while loading {{title}} data due to: {{message}}'
-      pods: $t(pods.title)
-      title: Healthy Resources
-  statuses:
-    active: Active
-    terminating: Terminating
   title: Namespaces
 navigation:
   all-namespaces: All Namespaces
@@ -1087,6 +839,7 @@ network-policies:
     policy-port: Network Policy Ports
     policy-types: Policy Types
     port: Port
+    ports: Ports
     protocol: Protocol
     values: Values
   name_singular: NetworkPolicy
@@ -1095,19 +848,13 @@ network-policies:
 no-permissions:
   enter-namespace-name: 'If you expect to have access to a Namespace, please enter its name here:'
   enter-namespace-name-placeholder: Enter Namespace name
-  title: No Permissions
 node-details:
   all: All messages
   information: Information
   internal-ip: Internal IP
-  involved-object: Involved Object
-  messages: Messages
-  name: Cluster Details - Nodes
   pod-cidr: Pod CIDR
-  timestamp: Timestamp
   warnings: Warnings
 nodes:
-  name_singular: Node
   title: Nodes
   title_details: Node {{nodeName}}
 persistent-volume-claims:
@@ -1161,72 +908,18 @@ pods:
   message:
     failed-to-download: Failed to download the logs
     no-logs-available: No logs available for the '{{containerName}}' container
-    type-not-found: '{{type}} not found'
   name_singular: Pod
   node: Node
   restarts: Restarts
   status:
-    container-statuses: Container Statuses
-    ephemeral-container-statuses: Ephemeral Container Statuses
     host-ip: Host IP
-    init-container-statuses: Init Container Statuses
     nominated-node-name: Nominated Node Name
     pod-ip: Pod IP
     pod-ips: Pod IPs
     qos-class: QoS Class
-  statuses:
-    completed: Completed
-    containercreating: Pending
-    containersnotinitialized: Pending
-    containersnotready: Pending
-    crashloopbackoff: Error
-    createcontainerconfigerror: Error
-    createcontainererror: Error
-    dockerdaemonnotready: Pending
-    errimageneverpull: Error
-    errimagepull: Error
-    evicted: Evicted
-    imageinspecterror: Error
-    imagepullbackoff: Error
-    invalidimagename: Error
-    networkpluginnotready: Error
-    pending: Pending
-    podinitializing: Initializing
-    poststarthookerror: Error
-    registryunavailable: Error
-    runcontainererror: Error
-    running: Running
-    terminated: Terminated
-    terminating: Terminating
-    unknown: Unknown
   title: Pods
   tooltips:
-    completed: Pod completed
-    containercreating: Creating container
-    containersnotinitialized: Containers not initialized
-    containersnotready: Containers not ready
-    crashloopbackoff: Pod is in a crashing loop
-    createcontainerconfigerror: Create container configuration error
-    createcontainererror: Create container error
-    dockerdaemonnotready: Docker daemon not ready
-    errimageneverpull: Image has never been pulled
-    errimagepull: Image pull error
-    error: Pod failed to start
-    evicted: Pod removed
-    imageinspecterror: Image inspect error
-    imagepullbackoff: Could not pull a container image
-    invalidimagename: Invalid image name
-    networkpluginnotready: Network plugin not ready
     no-restarts: None of the containers has restarted
-    pending: Pod scheduled
-    podinitializing: Initializing the Pod
-    poststarthookerror: Post-start hook error
-    registryunavailable: Registry unavailable
-    runcontainererror: Run container error
-    running: Pod running correctly
-    terminated: Pod terminated
-    terminating: Terminating the Pod
-    unknown: Pod state unknown
 pv:
   description: <0>PersistentVolume (PV)</0> is used to manage storage in a cluster that an administrator has provisioned.
   headers:
@@ -1277,19 +970,7 @@ pv:
   local:
     type: Local
     path: Path
-  statuses:
-    available: Available
-    bound: Bound
-    failed: Failed
-    pending: Pending
-    released: Released
   title: Persistent Volumes
-  tooltips:
-    available: PersistentVolume not yet bound
-    bound: PersistentVolume bound
-    failed: Recycle or deletion failed
-    pending: PersistentVolume not available
-    released: Bound PersistentVolumeClaim deleted
 replica-sets:
   cpu: CPU
   create-modal:
@@ -1306,17 +987,12 @@ replica-sets:
   headers:
     images: Images
     limits: Limits
-    replicas: Ready Replicas
     requests: Requests
   memory: Memory
   name_singular: ReplicaSet
   title: Replica Sets
-  tooltips:
-    error: At least one of the Pods has failed.
-    running: All the Pods are running correctly.
   status:
     available-replicas: Available Replicas
-    conditions: Conditions
     fully-labeled-replicas: Fully Labeled Replicas
     observed-generation: Observed Generation
     ready-replicas: Ready Replicas
@@ -1356,7 +1032,6 @@ role-bindings:
     role-ref: Role Reference
     subjects: Subjects
   labels:
-    annotations: Annotations
     service-account: Service Account
   name_singular: RoleBinding
   placeholders:
@@ -1386,7 +1061,6 @@ roles:
   tooltips:
     load: Load resources
 schema:
-  array-item: ({{name}} item)
   fields:
     additionalProperties: Additional Properties
     allOf: All of
@@ -1436,39 +1110,22 @@ secrets:
     expired: Certificate expired
     will-expire: Certificate will expire in {{daysToExpire}} {{daysForm}}.
   certificate-panel:
-    expiration-warning: This certificate is expired.
     expires: Expires
     issuer: Issuer
     subject: Subject
     title: Certificate Data for {{name}}
     valid-since: Valid Since
-  create-modal:
-    messages:
-      decoding-failure: 'Failed to decode the Secret data: {{error}}'
-      failure: 'Failed to create the Secret: {{error}}'
-      success: Secret created
-    title: Create Secret
   data: Data
   description: <0>Secret</0> is an object that stores sensitive data in key-value pairs.
-  edit-modal:
-    messages:
-      failure: 'Failed to update the Secret: {{error}}'
-      success: Secret updated
   headers:
     type: Type
-  labels:
-    annotations: Annotations
-    type: Secret Type
   messages:
     decode-error: Failed to decode, not a proper base64 string
-  metadata: Metadata
   name_singular: Secret
   placeholders:
     type: Type of Secret
   title: Secrets
-  title-edit-secret: Edit Secret
   type: Type
-  updated: Secret updated
 selector:
   message:
     empty-selector: Matches all Pods in the Namespace
@@ -1492,19 +1149,15 @@ service-accounts:
     warning: The TokenRequest allows you to log in with your ServiceAccount credentials. It  will be deactivated after the expiration seconds.
     input-info: You can choose one of the provided options from the dropdown or enter the value in seconds.
   create-modal:
-    at-least-one-secret-required: '{{resource}} must have at least one secret.'
     tooltips:
       associated-secret: Creates a long-lived API token for a ServiceAccount which data is kept in the associated Secret.
       auto-mount-token: When set to true, it automatically mounts the ServiceAccount token within each container of a given Pod. For security reasons, don't enable automount if you don't need it.
       image-pull-secrets: Image Pull Secrets is a list of references to Secrets in the same Namespace to use for pulling any images in Pods that reference this ServiceAccount. Image Pull Secrets are distinct from Secrets because Secrets can be mounted in a Pod, but Image Pull Secrets are only accessed by the kubelet.
-      secrets: Secrets is the list of Secrets allowed to be used by running Pods using this ServiceAccount.
   description: <0>ServiceAccount</0> enables processes to run on a Pod to communicate and authenticate to the API server.
   headers:
     auto-mount-token: Automount Token
     download-kubeconfig: Download Kubeconfig
     image-pull-secrets: Image Pull Secrets
-    secret: Secret
-    secrets: Secrets
   name_singular: ServiceAccount
   service-account: Service Account
   title: Service Accounts
@@ -1512,7 +1165,6 @@ service-management:
   title: Service Management
 settings:
   clusters:
-    confirmations: Confirmations
     description: Cluster interaction, resource validation
     disableResourceProtection: Allow for modification of protected resources
     dontConfirmDelete: Delete without confirmation
@@ -1526,7 +1178,6 @@ settings:
     resourcesValidation:
       title: Resource Validation
       validateResources: Validate Resources
-      choose-policies: Enable custom policies
       enabled-policies: Enabled Policies
       reset: Reset
       customize: Customize
@@ -1567,7 +1218,6 @@ settings:
 stateful-sets:
   description: <0>StatefulSet</0> is used for the management of Pods' deployment and scaling.
   name_singular: StatefulSet
-  replicas: Replicas
   status:
     available-replicas: Available Replicas
     collision-count: Collision Count
@@ -1592,9 +1242,6 @@ storage-classes:
     configuration: Configuration
   name_singular: StorageClass
   title: Storage Classes
-top-nav:
-  profile:
-    preferences: $t(navigation.preferences.title)
 upload-yaml:
   uploaded-resources: Uploaded Resources
   info: You can upload multiple resources, separated by “---” in your YAML file. 
@@ -1604,7 +1251,6 @@ upload-yaml:
   labels:
     validate-resources: 'Validate resources:'
   messages:
-    no-warnings-found: No warnings found
     not-a-k8s-resource: Not a Kubernetes resource!
   or-paste-here: 'or paste it here:'
   statuses:
@@ -1616,11 +1262,6 @@ upload-yaml:
   upload-progress: 'Upload progress'
   warnings:
     different-namespace: This resource will be uploaded to the '{{namespace}}' Namespace.
-    incorrect-namespace: The cluster-wide resources shouldn't have a Namespace.
   you-will-create: <0>{{count}} resources</0> will be created.
-workload-selector:
-  title: Workload Selector
 workloads:
-  docker-image:
-    tooltip: Enter a valid Docker image registry path.
   title: Workloads
