@@ -6,7 +6,7 @@ You can distinguish the following widget types:
 - [Inline widgets](#inline-widgets) for simple values in **data.list**, **data.details.header**, **data.details.status** and **data.detail.bodies**
   - [`Bagde`](#badge)
   - [`ControlledBy`](#controlledby)
-  - [`ConditionList`](#conditionList) - used only in **data.details.status**
+  - [`ConditionList`](#conditionList) - used only in **data.details.status** or **data.details.status.body**
   - [`ExternalLink`](#externallink)
   - [`ExternalLinkButton`](#externallinkbutton)
   - [`JoinedArray`](#joinedarray)
@@ -95,7 +95,7 @@ This is an exaple of kind only:
 
 ### `ConditionList`
 
-The `ConditionList` widget renders the conditions as an expandable list with condition details. This widget is primarily designed for the overview section **data.details.status**
+The `ConditionList` widget renders the conditions as an expandable list with condition details. This widget is primarily designed for the overview section **data.details.status** or **data.details.status.body**
 
 See the following example:
 
