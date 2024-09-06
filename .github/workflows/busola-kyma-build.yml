@@ -12,6 +12,8 @@ on:
       - "package.json"
       - "Makefile"
       - "Dockerfile.kyma"
+      - "Dockerfile.local.kyma"
+
   pull_request_target:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
