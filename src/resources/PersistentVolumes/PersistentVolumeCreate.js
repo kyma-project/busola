@@ -20,6 +20,9 @@ export default function PersistentVolumeCreate({
   const [initialResource] = useState(
     initialPersistentVolume || createPersistentVolumeTemplate(),
   );
+  const [initialUnchangedResource] = useState(
+    _.cloneDeep(initialPersistentVolume),
+  );
   const { t } = useTranslation();
 
   return (
@@ -29,6 +32,7 @@ export default function PersistentVolumeCreate({
       singularName={t('pv.name_singular')}
       resource={pv}
       initialResource={initialResource}
+      initialUnchangedResource={initialUnchangedResource}
       setResource={setPv}
       onlyYaml
       onChange={onChange}

@@ -23,6 +23,7 @@ export default function DaemonSetCreate({
   const [initialResource] = useState(
     initialDaemonSet || createDaemonSetTemplate(namespaceId),
   );
+  const [initialUnchangedResource] = useState(_.cloneDeep(initialDaemonSet));
   const { t } = useTranslation();
 
   return (
@@ -32,6 +33,7 @@ export default function DaemonSetCreate({
       singularName={t('daemon-sets.name_singular')}
       resource={daemonSet}
       initialResource={initialResource}
+      initialUnchangedResource={initialUnchangedResource}
       setResource={setDaemonSet}
       onChange={onChange}
       formElementRef={formElementRef}

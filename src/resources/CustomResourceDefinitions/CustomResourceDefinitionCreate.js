@@ -24,6 +24,9 @@ export default function CustomResourceDefinitionCreate({
     initialCustomResourceDefinition ||
       createCustomResourceDefinitionsTemplate(namespace),
   );
+  const [initialUnchangedResource] = useState(
+    _.cloneDeep(initialCustomResourceDefinition),
+  );
 
   return (
     <ResourceForm
@@ -32,6 +35,7 @@ export default function CustomResourceDefinitionCreate({
       singularName={t('custom-resource-definitions.name_singular')}
       resource={customResourceDefinitions}
       initialResource={initialResource}
+      initialUnchangedResource={initialUnchangedResource}
       setResource={setCustomResourceDefinitions}
       onChange={onChange}
       formElementRef={formElementRef}

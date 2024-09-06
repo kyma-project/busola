@@ -21,6 +21,7 @@ export default function StorageClassCreate({
   const [initialResource] = useState(
     initialStorageClass || createStorageClassTemplate(),
   );
+  const [initialUnchangedResource] = useState(_.cloneDeep(initialStorageClass));
 
   return (
     <ResourceForm
@@ -29,6 +30,7 @@ export default function StorageClassCreate({
       singularName={t('storage-classes.name_singular')}
       resource={storageClass}
       initialResource={initialResource}
+      initialUnchangedResource={initialUnchangedResource}
       setResource={setStorageClass}
       onChange={onChange}
       formElementRef={formElementRef}
