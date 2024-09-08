@@ -6,6 +6,9 @@ export default defineConfig(() => {
     build: {
       outDir: 'build',
     },
+    server: {
+      port: 8080,
+    },
     plugins: [
       {
         name: 'treat-js-files-as-jsx',
