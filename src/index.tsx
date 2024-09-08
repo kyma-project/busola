@@ -36,8 +36,8 @@ i18next
     defaultNS: 'translation',
     backend: {
       loadPath: '/i18n/{{lng}}.yaml',
-      parse: data => ({
-        ...yaml.load(data),
+      parse: (data: string) => ({
+        ...(yaml.load(data) as object),
         fallback: '{{fallback}}',
       }),
     },
