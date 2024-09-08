@@ -115,6 +115,7 @@
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
     "@types/uuid": "^9.0.0",
+    "@vitejs/plugin-react": "^4.3.1",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.6",
     "babel-polyfill": "^6.26.0",
     "concurrently": "^7.6.0",
@@ -131,7 +132,8 @@
     "sass": "^1.77.8",
     "sass-loader": "^13.3.2",
     "typescript": "^4.8.4",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "vite": "^5.4.3"
   },
   "lint-staged": {
     "src/i18n/*.yaml": "yaml-sort --lineWidth=-1 -i ",
