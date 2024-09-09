@@ -1,4 +1,4 @@
-name: PR Smoke Tests Prod
+name: PR Kyma Dashboard Smoke Tests Prod
 
 on: 
   pull_request:

@@ -1,4 +1,4 @@
-name: PR Integration Tests
+name: PR Kyma Dashboard Integration Tests
 
 on:
   pull_request:
