@@ -43,6 +43,9 @@ echo "Apply and enable telemetry module"
 kubectl apply -f https://github.com/kyma-project/telemetry-manager/releases/latest/download/telemetry-manager.yaml
 kubectl apply -f https://github.com/kyma-project/telemetry-manager/releases/latest/download/telemetry-default-cr.yaml -n kyma-system
 
+echo "Apply modules fixtures"
+kubectl apply -f tests/kyma/fixtures/modules
+
 echo "Apply gardener resources"
 echo "Certificates"
 kubectl apply -f https://raw.githubusercontent.com/gardener/cert-management/master/pkg/apis/cert/crds/cert.gardener.cloud_certificates.yaml

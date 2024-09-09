@@ -1,10 +1,10 @@
-name: PR Kyma Dashboard Smoke Tests Prod
+name: PR Kyma Dashboard Smoke Tests Stage
 
 on: 
   pull_request:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
-      - ".github/workflows/pull-smoke-test-prod.yml"
+      - ".github/workflows/pull-smoke-test-stage.yml"
       - "resources/**"
       - "tests/kyma/**"
       - "nginx/**"
@@ -13,7 +13,7 @@ on:
       - "Dockerfile*"
 
 jobs:
-  run-smoke-test-prod:
+  run-smoke-test-stage:
     runs-on: ubuntu-latest
     steps:
       - uses: gardenlinux/workflow-telemetry-action@v2
