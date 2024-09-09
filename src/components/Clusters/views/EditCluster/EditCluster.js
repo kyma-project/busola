@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import * as jp from 'jsonpath';
+import jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useSetRecoilState } from 'recoil';

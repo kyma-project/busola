@@ -56,7 +56,7 @@ type AddLinkEffect = () => AtomEffect<Theme>;
 export const addLinkEffect: AddLinkEffect = () => ({ onSet, setSelf }) => {
   setSelf(param => {
     const defaultValue = param as Theme;
-    applyThemeToLinkNode(defaultValue, process.env.PUBLIC_URL);
+    applyThemeToLinkNode(defaultValue, import.meta.env.PUBLIC_URL);
     return defaultValue;
   });
 
@@ -65,7 +65,7 @@ export const addLinkEffect: AddLinkEffect = () => ({ onSet, setSelf }) => {
     if (newTheme === 'light_dark')
       themeNew = isSystemThemeDark() ? 'dark' : 'default';
     else themeNew = newTheme === 'sap_horizon' ? 'default' : newTheme.slice(12);
-    applyThemeToLinkNode(themeNew, process.env.PUBLIC_URL);
+    applyThemeToLinkNode(themeNew, import.meta.env.PUBLIC_URL);
   });
 };
 
