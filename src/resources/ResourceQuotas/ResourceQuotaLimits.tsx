@@ -63,13 +63,8 @@ export default function ResourceQuotaLimits({
 
     for (const resource in hardResources) {
       if (hardResources.hasOwnProperty(resource)) {
-        const formattedResource = resource
-          .split('.')
-          .map(part => part.charAt(0).toUpperCase() + part.slice(1))
-          .join(' ');
-
         result.push({
-          resource: formattedResource,
+          resource,
           hard: hardResources[resource],
           used: usedResources[resource] || '0',
         });
@@ -77,7 +72,7 @@ export default function ResourceQuotaLimits({
     }
 
     return result;
-  }, []);
+  }, [resource.spec.hard, resource.status.used]);
 
   const rowRenderer = ({ resource, used, hard }: ResourceTableEntry) => {
     return [

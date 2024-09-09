@@ -8,9 +8,9 @@ import { columnLayoutState } from 'state/columnLayoutAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { useUrl } from 'hooks/useUrl';
 import pluralize from 'pluralize';
-import ResourceQuotaLimits from './ResourceQuotaLimits';
+import ResourceQuotaLimits, { ResourceQuotaProps } from './ResourceQuotaLimits';
 
-export function ResourceQuotasList(props) {
+export function ResourceQuotasList(props: any) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [, setLayoutColumn] = useRecoilState(columnLayoutState);
@@ -20,7 +20,9 @@ export function ResourceQuotasList(props) {
   const customColumns = [
     {
       header: 'Popin',
-      value: quota => <ResourceQuotaLimits resource={quota} isCompact />,
+      value: (quota: ResourceQuotaProps) => (
+        <ResourceQuotaLimits resource={quota} isCompact />
+      ),
     },
   ];
 
@@ -34,7 +36,7 @@ export function ResourceQuotasList(props) {
       },
       layout: 'TwoColumnsMidExpanded',
     });
-    setIsFormOpen({ formOpen: true });
+    setIsFormOpen({ formOpen: true, leavingForm: false });
     navigate(
       namespaceUrl(`${pluralize(props.resourceType.toLowerCase() || '')}`),
     );
