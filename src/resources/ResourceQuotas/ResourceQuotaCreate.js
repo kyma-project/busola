@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 import * as _ from 'lodash';
@@ -8,7 +8,7 @@ import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 import { createResourceQuotaTemplate } from './templates';
 
-export function ResourceQuotaCreate({
+export default function ResourceQuotaCreate({
   formElementRef,
   onChange,
   setCustomValid,
@@ -17,6 +17,7 @@ export function ResourceQuotaCreate({
 
   ...props
 }) {
+  const { t } = useTranslation();
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const [resourceQuota, setResourceQuota] = useState(
     _.cloneDeep(initialResourceQuota) ||
@@ -26,7 +27,10 @@ export function ResourceQuotaCreate({
     initialResourceQuota ||
       createResourceQuotaTemplate({ namespaceName: namespaceId }),
   );
-  const { t } = useTranslation();
+
+  const [initialUnchangedResource] = useState(
+    _.cloneDeep(initialResourceQuota),
+  );
 
   return (
     <ResourceForm
@@ -35,13 +39,13 @@ export function ResourceQuotaCreate({
       singularName={t('resource-quotas.name_singular')}
       resource={resourceQuota}
       initialResource={initialResource}
+      initialUnchangedResource={initialUnchangedResource}
       setResource={setResourceQuota}
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
       onlyYaml
-      afterCreatedFn={() => {}}
     />
   );
 }

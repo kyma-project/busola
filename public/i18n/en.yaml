@@ -1004,6 +1004,7 @@ resource-graph:
   save-as-dot: DOT format
   title: Resource Graph
 resource-quotas:
+  description: A <0>Resource Quota</0> provides constraints that limit aggregate resource consumption per namespace. 
   headers:
     limits:
       memory: Memory Limits
@@ -1011,6 +1012,15 @@ resource-quotas:
     requests:
       memory: Memory Requests
       cpu: CPU Requests
+    scopes: Scopes
+    scope-selectors: Scope Selectors
+    limits-usage: Limits and Usage
+    resource: Resource
+    hard: Hard
+    used: Used
+    operator: Operator
+    values: Values
+
   title: Resource Quotas
   name_singular: Resource Quota
 role-bindings:
