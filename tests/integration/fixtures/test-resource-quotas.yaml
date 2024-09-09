@@ -1,0 +1,16 @@
+apiVersion: 'v1'
+kind: 'ResourceQuota'
+metadata:
+  name: ''
+  namespace: default
+spec:
+  hard:
+    limits.memory: 3Gi
+    limits.cpu: '4'
+    requests.memory: 2.8Gi
+    requests.cpu: '2'
+  scopeSelector:
+    matchExpressions:
+      - scopeName: PriorityClass
+        operator: In
+        values: ['high-priority']
