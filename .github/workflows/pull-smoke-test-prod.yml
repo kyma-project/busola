@@ -5,14 +5,12 @@ on:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
       - ".github/workflows/pull-smoke-test-prod.yml"
-      - "Dockerfile.*"
-      - "package.json"
-      - "environments/prod/**"
-      - "extensions/**"
-      - "gulpfile.js"
-      - "Makefile"
-      - "tests/tests/cluster/test-check-extensions.spec.js"
-      - "tests/tests/namespace/test-check-extensions.spec.js"
+      - "resources/**"
+      - "tests/kyma/**"
+      - "nginx/**"
+      - "src/**"
+      - "kyma/**"
+      - "Dockerfile*"
 
 jobs:
   run-smoke-test-prod:

@@ -1,21 +1,18 @@
-name: PR Smoke Tests Prod
+name: PR Integration Tests
 
-on: 
+on:
   pull_request:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
-      - ".github/workflows/pull-smoke-test-prod.yml"
-      - "Dockerfile.*"
-      - "package.json"
-      - "environments/prod/**"
-      - "extensions/**"
-      - "gulpfile.js"
-      - "Makefile"
-      - "tests/tests/cluster/test-check-extensions.spec.js"
-      - "tests/tests/namespace/test-check-extensions.spec.js"
-
+      - ".github/workflows/pull-kyma-intergation-tests.yml"
+      - "resources/**"
+      - "tests/kyma/**"
+      - "nginx/**"
+      - "src/**"
+      - "kyma/**"
+      - "Dockerfile*"
 jobs:
-  run-smoke-test-prod:
+  run-integration-test:
     runs-on: ubuntu-latest
     steps:
       - uses: gardenlinux/workflow-telemetry-action@v2
@@ -38,7 +35,7 @@ jobs:
         shell: bash
         run: |
           ./.github/scripts/setup-busola.sh | tee busola-build.log
-        env: 
+        env:
           ENV: dev
       - name: run_tests
         shell: bash
