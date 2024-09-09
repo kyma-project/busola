@@ -4,6 +4,7 @@ set -e
 
 APPLICATION_CONNECTOR_VERSION="1.1.3"
 
+echo "Downalod Kyma Cli"
 make --makefile ./.github/scripts/kyma.mk kyma
 
 echo "Provisioning k3d cluster for Kyma"

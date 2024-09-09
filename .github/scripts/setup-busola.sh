@@ -1,15 +1,12 @@
 #!/bin/bash
 
 set -e
-export REPO_IMG_DEV="k3d-registry.localhost:5000/kyma-dashboard"
-
-echo "Create k3d registry..."
-#k3d registry create registry.localhost --port=5000
+export KYMA_DASHBOARD_IMG="k3d-registry.localhost:5000/kyma-dashboard"
 
 echo "Build local image"
-docker build -t "${REPO_IMG_DEV}" -f Dockerfile.local.kyma .
+docker build -t "${KYMA_DASHBOARD_IMG}" -f Dockerfile.local.kyma .
 echo "Running kyma-dashboard... with ${ENV} configuration"
-docker run -d --rm --net=host --pid=host --name kyma-dashboard --env ENVIRONMENT="${ENV}" "${REPO_IMG_DEV}"
+docker run -d --rm --net=host --pid=host --name kyma-dashboard --env ENVIRONMENT="${ENV}" "${KYMA_DASHBOARD_IMG}"
 
 echo "waiting for server to be up..."
 while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' "http://localhost:3001")" != "200" ]]; do sleep 5; done
