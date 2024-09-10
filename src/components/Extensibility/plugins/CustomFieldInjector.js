@@ -1,6 +1,5 @@
-import React from 'react';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
-import * as jp from 'jsonpath';
+import jp from 'jsonpath';
 
 import { useVariables } from '../hooks/useVariables';
 

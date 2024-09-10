@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import * as jp from 'jsonpath';
+import jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 
 import { cloneDeep } from 'lodash';

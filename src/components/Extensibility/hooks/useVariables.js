@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { last, initial, tail, trim } from 'lodash';
-import * as jp from 'jsonpath';
+import jp from 'jsonpath';
 
 import { useJsonata } from './useJsonata';
 import { VarStoreContext } from '../contexts/VarStore';

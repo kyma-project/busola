@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import * as jp from 'jsonpath';
+import jp from 'jsonpath';
 import { useFeature } from 'hooks/useFeature';
 
 export const useSidecar = ({

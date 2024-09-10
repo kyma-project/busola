@@ -1,5 +1,5 @@
 import { EXTENSION_VERSION_LABEL } from 'components/BusolaExtensions/constants';
-import * as jp from 'jsonpath';
+import jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
 
 const versionPath = `$.metadata.labels["${EXTENSION_VERSION_LABEL}"]`;

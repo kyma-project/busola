@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil';
 
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { useObjectState } from 'shared/useObjectState';
-import * as jp from 'jsonpath';
+import jp from 'jsonpath';
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
