@@ -2,9 +2,20 @@
 
 set -e
 
-APPLICATION_CONNECTOR_VERSION="1.1.3"
+OS="$(uname -s | tr 'A-Z' 'a-z')"
 
-echo "Downalod Kyma Cli"
+APPLICATION_CONNECTOR_VERSION="1.1.3"
+echo "Using OS:" "${OS}"
+
+if [ ! -f "./bin/kyma" ]; then
+  echo "Kyma CLI Download is starting"
+  mkdir -p ./bin
+  curl -Lo ./bin/kyma https://storage.googleapis.com/kyma-cli-unstable/kyma-"${OS}"
+  chmod +x ./bin/kyma
+  echo "Kyma CLI Download finished"
+fi
+
+
 make --makefile ./.github/scripts/kyma.mk kyma
 
 echo "Provisioning k3d cluster for Kyma"
