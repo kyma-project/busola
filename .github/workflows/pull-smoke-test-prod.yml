@@ -29,13 +29,14 @@ jobs:
       - name: Setup Kyma
         run: |
           set -o pipefail
-          ./.github/scripts/setup-kym.sh | tee kyma-alpha-deploy.log
+          ./.github/scripts/setup-kyma.sh | tee kyma-alpha-deploy.log
       - uses: actions/setup-node@v4
         with:
           node-version: 20
       - name: setup_busola
         shell: bash
         run: |
+          set -o pipefail
           ./.github/scripts/setup-busola.sh | tee busola-build.log
         env: 
           ENV: prod
