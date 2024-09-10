@@ -388,7 +388,10 @@ export function ResourceListRenderer({
         ...customListActions,
       ].filter(e => e);
 
-  const nameColIndex = customColumns.findIndex(col => col.id === 'name');
+  const nameColIndex = customColumns.findIndex(col => col?.id === 'name');
+  const namespaceColIndex = customColumns.findIndex(
+    col => col?.id === 'namespace',
+  );
 
   const headerRenderer = () => {
     return customColumns?.map(col => col?.header || null);
@@ -542,6 +545,7 @@ export function ResourceListRenderer({
             }
             handleRedirect={handleRedirect}
             nameColIndex={nameColIndex}
+            namespaceColIndex={namespaceColIndex}
           />
         </>
       )}
