@@ -9,7 +9,23 @@ import {
 
 import { spacing } from '@ui5/webcomponents-react-base';
 import './UI5Panel.scss';
-import { useEffect } from 'react';
+import { CSSProperties, ReactNode, useEffect } from 'react';
+
+type UI5PanelProps = {
+  fixed?: boolean;
+  icon?: string;
+  title: string | ReactNode;
+  headerActions?: ReactNode;
+  modeActions?: ReactNode;
+  keyComponent?: string;
+  disableMargin?: boolean;
+  className?: string;
+  children: ReactNode;
+  description?: string;
+  style?: CSSProperties;
+  stickyHeader?: boolean;
+  headerTop?: string;
+};
 
 export const UI5Panel = ({
   fixed = true,
@@ -22,10 +38,10 @@ export const UI5Panel = ({
   className = '',
   children,
   description = '',
-  style = null,
+  style = undefined,
   stickyHeader = false,
   headerTop = '0',
-}) => {
+}: UI5PanelProps) => {
   useEffect(() => {
     if (headerTop !== '0')
       setTimeout(() => {
@@ -34,7 +50,7 @@ export const UI5Panel = ({
           ?.shadowRoot?.querySelector('.ui5-panel-root')
           ?.querySelector(
             '.ui5-panel-heading-wrapper.ui5-panel-heading-wrapper-sticky',
-          );
+          ) as HTMLElement;
 
         if (stickyHeader) {
           stickyHeader.style['top'] = headerTop;
@@ -46,7 +62,9 @@ export const UI5Panel = ({
       fixed={fixed}
       key={keyComponent}
       className={`${className} bsl-panel-header card-shadow`}
-      style={style ? style : !disableMargin ? spacing.sapUiSmallMargin : null}
+      style={
+        style ? style : !disableMargin ? spacing.sapUiSmallMargin : undefined
+      }
       stickyHeader={stickyHeader}
       header={
         <Toolbar

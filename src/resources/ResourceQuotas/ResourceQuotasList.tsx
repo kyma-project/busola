@@ -9,6 +9,7 @@ import { isFormOpenState } from 'state/formOpenAtom';
 import { useUrl } from 'hooks/useUrl';
 import pluralize from 'pluralize';
 import ResourceQuotaLimits, { ResourceQuotaProps } from './ResourceQuotaLimits';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 export function ResourceQuotasList(props: any) {
   const { t } = useTranslation();
@@ -19,10 +20,28 @@ export function ResourceQuotasList(props: any) {
 
   const customColumns = [
     {
-      header: 'Popin',
-      value: (quota: ResourceQuotaProps) => (
-        <ResourceQuotaLimits resource={quota} isCompact />
-      ),
+      header: t('resource-quotas.headers.limits.cpu'),
+      value: (quota: ResourceQuotaProps) =>
+        quota.spec?.hard?.['limits.cpu'] || EMPTY_TEXT_PLACEHOLDER,
+    },
+    {
+      header: t('resource-quotas.headers.limits.memory'),
+      value: (quota: ResourceQuotaProps) =>
+        quota.spec?.hard?.['limits.memory'] || EMPTY_TEXT_PLACEHOLDER,
+    },
+    {
+      header: t('resource-quotas.headers.requests.cpu'),
+      value: (quota: ResourceQuotaProps) =>
+        quota.spec?.hard?.['requests.cpu'] ||
+        quota.spec?.hard?.cpu ||
+        EMPTY_TEXT_PLACEHOLDER,
+    },
+    {
+      header: t('resource-quotas.headers.requests.memory'),
+      value: (quota: ResourceQuotaProps) =>
+        quota.spec?.hard?.['requests.memory'] ||
+        quota.spec?.hard?.memory ||
+        EMPTY_TEXT_PLACEHOLDER,
     },
   ];
 

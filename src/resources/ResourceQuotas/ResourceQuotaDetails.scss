@@ -21,6 +21,11 @@
   text-transform: capitalize;
 }
 
+.resource-quota-spec-subheader {
+  border-block-end: 0.0625rem solid var(--sapGroup_TitleBorderColor);
+  padding-bottom: 0.5rem;
+}
+
 ui5-table-cell:has(> ui5-panel.resource-quota-limits.compact) {
   display: inline !important;
 }

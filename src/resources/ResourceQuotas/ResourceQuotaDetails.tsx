@@ -6,26 +6,8 @@ import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { useTranslation } from 'react-i18next';
 import { Tokens } from 'shared/components/Tokens';
-import { GroupHeaderListItem, List, Text } from '@ui5/webcomponents-react';
+import { Text, Title } from '@ui5/webcomponents-react';
 import { spacing } from '@ui5/webcomponents-react-base';
-import { ReactNode } from 'react';
-
-function ResourceQuotaRow({
-  label,
-  value,
-}: {
-  label: string;
-  value: ReactNode;
-}) {
-  return (
-    <div className="resource-quota-spec-row" style={spacing.sapUiSmallMargin}>
-      <Text className="resource-quota-spec-row-label bsl-has-color-status-4">
-        {label + ':'}
-      </Text>
-      {value}
-    </div>
-  );
-}
 
 export default function ResourceQuotaDetails(props: any) {
   const { t } = useTranslation();
@@ -35,10 +17,7 @@ export default function ResourceQuotaDetails(props: any) {
       return (
         <>
           {(resource.spec.scopes || resource.spec.scopeSelector) && (
-            <UI5Panel
-              title={t('common.headers.specification')}
-              headerActions={null}
-            >
+            <UI5Panel title={t('common.headers.specification')}>
               {resource.spec?.scopes && (
                 <LayoutPanelRow
                   name={t('resource-quotas.headers.scopes')}
@@ -46,25 +25,29 @@ export default function ResourceQuotaDetails(props: any) {
                 />
               )}
               {resource.spec?.scopeSelector && (
-                <List headerText={t('resource-quotas.headers.scope-selectors')}>
+                <UI5Panel title={t('resource-quotas.headers.scope-selectors')}>
                   {resource.spec.scopeSelector?.matchExpressions?.map(scope => (
                     <>
-                      <GroupHeaderListItem>
+                      <Title
+                        level="H6"
+                        className="resource-quota-spec-subheader"
+                        style={spacing.sapUiSmallMargin}
+                      >
                         {scope.scopeName}
-                      </GroupHeaderListItem>
-                      <ResourceQuotaRow
-                        label={t('resource-quotas.headers.operator')}
+                      </Title>
+                      <LayoutPanelRow
+                        name={t('resource-quotas.headers.operator')}
                         value={<Text>{scope.operator}</Text>}
                       />
                       {scope.values && (
-                        <ResourceQuotaRow
-                          label={t('resource-quotas.headers.values')}
+                        <LayoutPanelRow
+                          name={t('resource-quotas.headers.values')}
                           value={<Tokens tokens={scope.values} />}
                         />
                       )}
                     </>
                   ))}
-                </List>
+                </UI5Panel>
               )}
             </UI5Panel>
           )}
