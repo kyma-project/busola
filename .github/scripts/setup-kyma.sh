@@ -15,9 +15,6 @@ if [ ! -f "./bin/kyma" ]; then
   echo "Kyma CLI Download finished"
 fi
 
-
-make --makefile ./.github/scripts/kyma.mk kyma
-
 echo "Provisioning k3d cluster for Kyma"
 k3d registry create kyma-registry --port 5001
 
