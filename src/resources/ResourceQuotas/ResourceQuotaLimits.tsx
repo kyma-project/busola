@@ -3,36 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import './ResourceQuotaDetails.scss';
-
-export type ResourceQuotaProps = {
-  kind: string;
-  apiVersion: string;
-  metadata: {
-    name: string;
-    namespace: string;
-  };
-  spec: {
-    scopes?: string[];
-    hard: {
-      [key: string]: string;
-    };
-    scopeSelector?: {
-      matchExpressions: {
-        scopeName: string;
-        operator: string;
-        values?: string[];
-      }[];
-    };
-  };
-  status: {
-    hard: {
-      [key: string]: string;
-    };
-    used: {
-      [key: string]: string;
-    };
-  };
-};
+import { ResourceQuotaProps } from './ResourceQuotaDetails';
 
 type ResourceTableEntry = {
   resource: string;

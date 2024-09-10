@@ -1,18 +1,3 @@
-.resource-quota-spec-row {
-  display: grid;
-  grid-template-columns: 1fr 5fr;
-  grid-auto-flow: row;
-  gap: 40px;
-
-  > ui5-token {
-    width: fit-content;
-  }
-}
-
-.resource-quota-spec-row-label {
-  text-align: end;
-}
-
 .resource-quota-limits {
   &.compact {
     margin: 0 0 1rem 0 !important;
@@ -28,16 +13,4 @@
 
 ui5-table-cell:has(> ui5-panel.resource-quota-limits.compact) {
   display: inline !important;
-}
-
-@container (max-width: 650px) {
-  .resource-quota-spec-row {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 5px;
-  }
-
-  .resource-quota-spec-row-label {
-    text-align: start;
-  }
 }

@@ -3,7 +3,7 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ResourceDescription, docsURL, i18nDescriptionKey } from '.';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import ResourceQuotaCreate from './ResourceQuotaCreate';
-import { ResourceQuotaProps } from './ResourceQuotaLimits';
+import { ResourceQuotaProps } from './ResourceQuotaDetails';
 
 export default function ResourceQuotaList(props: any) {
   const { t } = useTranslation();

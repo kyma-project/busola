@@ -8,7 +8,7 @@ import { columnLayoutState } from 'state/columnLayoutAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { useUrl } from 'hooks/useUrl';
 import pluralize from 'pluralize';
-import ResourceQuotaLimits, { ResourceQuotaProps } from './ResourceQuotaLimits';
+import { ResourceQuotaProps } from './ResourceQuotaDetails';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 export function ResourceQuotasList(props: any) {
