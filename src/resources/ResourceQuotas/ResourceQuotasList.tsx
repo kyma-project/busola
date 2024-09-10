@@ -63,6 +63,7 @@ export function ResourceQuotasList(props: any) {
       {...props}
       createResourceForm={ResourceQuotaCreate}
       listHeaderActions={createButton}
+      readOnly
     />
   );
 }
