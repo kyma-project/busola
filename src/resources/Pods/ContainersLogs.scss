@@ -7,6 +7,11 @@
 }
 
 .logs-panel-body {
+  height: 100%;
+  overflow-y: scroll;
+  padding: 0;
+  overflow-wrap: break-word;
+
   > :first-child {
     padding-top: 10px;
   }
@@ -14,10 +19,6 @@
   > :last-child {
     padding-bottom: 10px;
   }
-  height: 100%;
-  overflow-y: scroll;
-  padding: 0;
-  overflow-wrap: break-word;
 }
 
 .logs {
