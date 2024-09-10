@@ -31,6 +31,9 @@ export default defineConfig({
       include: '**/*.svg?react',
     }),
   ],
+  worker: {
+    plugins: () => [viteTsconfigPaths()],
+  },
 
   optimizeDeps: {
     force: true,
