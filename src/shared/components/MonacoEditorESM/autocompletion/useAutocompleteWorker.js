@@ -9,16 +9,22 @@ window.MonacoEnvironment = {
     switch (label) {
       case 'editorWorkerService':
         return new Worker(
-          new URL('monaco-editor/esm/vs/editor/editor.worker', import.meta.url),
+          new URL(
+            'monaco-editor/esm/vs/editor/editor.worker.js',
+            import.meta.url,
+          ),
         );
       case 'yaml':
-        return new Worker(new URL('monaco-yaml/yaml.worker', import.meta.url), {
-          type: 'module',
-        });
+        return new Worker(
+          new URL('monaco-yaml/yaml.worker.js', import.meta.url),
+          {
+            type: 'module',
+          },
+        );
       case 'json':
         return new Worker(
           new URL(
-            'monaco-editor/esm/vs/language/json/json.worker',
+            'monaco-editor/esm/vs/language/json/json.worker.js',
             import.meta.url,
           ),
           { type: 'module' },
@@ -27,7 +33,7 @@ window.MonacoEnvironment = {
       case 'typescript':
         return new Worker(
           new URL(
-            'monaco-editor/esm/vs/language/typescript/ts.worker',
+            'monaco-editor/esm/vs/language/typescript/ts.worker.js',
             import.meta.url,
           ),
         );
