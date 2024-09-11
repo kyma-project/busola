@@ -6,8 +6,9 @@ import { decodeHelmRelease } from './decodeHelmRelease';
 import { findRecentRelease } from './findRecentRelease';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
-import { ResourceDescription } from 'components/HelmReleases';
+import { ResourceDescription, docsURL } from 'components/HelmReleases';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { HelmReleaseStatus } from './HelmReleaseStatus';
 
 function HelmReleasesList() {
   const { t } = useTranslation();
@@ -62,6 +63,12 @@ function HelmReleasesList() {
         entry.recentRelease?.chart.metadata.version ||
         t('common.statuses.unknown'),
     },
+    {
+      header: t('common.headers.status'),
+      value: entry => (
+        <HelmReleaseStatus status={entry.metadata.labels.status} />
+      ),
+    },
   ];
 
   return (
@@ -87,13 +94,9 @@ function HelmReleasesList() {
           ],
         }}
         emptyListProps={{
-          titleText: `${t('common.labels.no')} ${t(
-            'helm-releases.title',
-          ).toLocaleLowerCase()}`,
           subtitleText: ResourceDescription,
-          url:
-            'https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces',
-          buttonText: t('common.buttons.connect'),
+          url: docsURL,
+          showButton: false,
         }}
         readOnly
         description={ResourceDescription}

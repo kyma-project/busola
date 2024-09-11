@@ -261,7 +261,7 @@ function Resource({
     }
     return visible;
   };
-  console.log(resource);
+
   // https://stackoverflow.com/questions/70330862/how-to-get-the-latest-change-time-of-a-resource-instance-in-k8s
   let lastUpdate;
   const managedFields = resource.metadata?.managedFields;

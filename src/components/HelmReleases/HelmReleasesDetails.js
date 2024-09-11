@@ -8,7 +8,6 @@ import { HelmReleaseStatus } from './HelmReleaseStatus';
 import { OtherReleaseVersions } from './OtherReleaseVersions';
 import { findRecentRelease } from './findRecentRelease';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
-import { useUrl } from 'hooks/useUrl';
 import { ResourceDescription } from 'components/HelmReleases';
 import HelmReleasesYaml from './HelmReleasesYaml';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
@@ -19,7 +18,6 @@ import { filterByResource } from 'hooks/useMessageList';
 
 function HelmReleasesDetails({ releaseName, namespace }) {
   const { t } = useTranslation();
-  const { namespaceUrl } = useUrl();
 
   const resourceUrl =
     namespace === '-all-'
@@ -40,6 +38,9 @@ function HelmReleasesDetails({ releaseName, namespace }) {
       />
     );
   }
+
+  const release = decodeHelmRelease(releaseSecret.data.release);
+
   const customComponents = [
     () => <HelmReleaseData releaseSecret={releaseSecret} />,
     () => <OtherReleaseVersions releaseSecret={releaseSecret} secrets={data} />,
@@ -47,14 +48,11 @@ function HelmReleasesDetails({ releaseName, namespace }) {
       <EventsList
         key="events"
         namespace={namespace}
-        filter={filterByResource('HelmRelease', releaseName)}
+        filter={filterByResource('Secret', releaseSecret.metadata.name)}
         hideInvolvedObjects={true}
       />
     ),
   ];
-  console.log(releaseSecret);
-
-  const release = decodeHelmRelease(releaseSecret.data.release);
 
   const customStatusColumns = [
     {
@@ -102,7 +100,6 @@ function HelmReleasesDetails({ releaseName, namespace }) {
         )}
         customComponents={customComponents}
         disableDelete
-        //{...props}
       />
     </>
   );

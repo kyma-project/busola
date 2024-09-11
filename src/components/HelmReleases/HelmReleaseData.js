@@ -6,7 +6,7 @@ import { ChartContent } from './ChartContent';
 import { useTranslation } from 'react-i18next';
 import jsyaml from 'js-yaml';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
-///polaczone z secretami
+
 export function HelmReleaseData({
   releaseSecret,
   resourceType = 'HelmRelease',
@@ -27,11 +27,11 @@ export function HelmReleaseData({
   return (
     <React.Fragment key="helm-release-data">
       <ReleaseDataPanel release={release} secret={releaseSecret} />
-      <ReadonlyEditorPanel
-        title={t('helm-releases.headers.release-data')}
-        value={jsyaml.dump(release.config)}
-      />
       <ChartContent chart={release.chart} />
+      <ReadonlyEditorPanel
+        title={t('helm-releases.headers.release-manifest')}
+        value={jsyaml.dump(release.manifest)}
+      />
     </React.Fragment>
   );
 }

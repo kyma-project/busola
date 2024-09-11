@@ -33,7 +33,7 @@ export default function LimitRangeDetails(props: any) {
       <LimitRangeSpecification resource={resource} />
     ),
   ];
-  console.log(props);
+
   return (
     <ResourceDetails
       description={ResourceDescription}

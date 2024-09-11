@@ -94,7 +94,7 @@ export function ResourcesList(props) {
   if (!props.resourceUrl) {
     return <></>; // wait for the context update
   }
-  console.log(props.resources);
+
   const content = props.resources ? (
     <ResourceListRenderer
       resources={(props.resources || []).filter(props.filterFn)}
@@ -228,7 +228,7 @@ export function ResourceListRenderer({
   } = useProtectedResources();
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
-  console.log(resources);
+
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     resourceTitle,
     resourceType,

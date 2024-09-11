@@ -638,7 +638,7 @@ helm-releases:
     last-deployed: Last Deployed
     other-release-versions: Other Release Versions
     release: 'Release '
-    release-data: Release Data
+    release-manifest: Release Manifest
     release-version: Version v{{version}}
     revision: Revision
   messages:
