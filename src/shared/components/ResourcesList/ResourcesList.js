@@ -194,7 +194,7 @@ export function ResourceListRenderer({
   error,
   resources,
   resourceUrlPrefix,
-  nameSelector = entry => entry?.metadata?.name, // overriden for CRDGroupList
+  nameSelector = entry => entry?.metadata.name, // overriden for CRDGroupList
   disableCreate,
   disableDelete,
   disableMargin,
@@ -266,7 +266,7 @@ export function ResourceListRenderer({
       header: t('common.headers.created'),
       value: entry => (
         <ReadableCreationTimestamp
-          timestamp={entry.metadata?.creationTimestamp}
+          timestamp={entry.metadata.creationTimestamp}
         />
       ),
       id: 'created',

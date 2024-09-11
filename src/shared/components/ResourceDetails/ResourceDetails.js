@@ -375,7 +375,7 @@ function Resource({
             title={t('common.headers.age')}
           >
             <ReadableElapsedTimeFromNow
-              timestamp={resource.metadata?.creationTimestamp}
+              timestamp={resource.metadata.creationTimestamp}
               valueUnit={t('common.value-units.days')}
             />
           </DynamicPageComponent.Column>

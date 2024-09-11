@@ -7,10 +7,7 @@ import { useTranslation } from 'react-i18next';
 import jsyaml from 'js-yaml';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
-export function HelmReleaseData({
-  releaseSecret,
-  resourceType = 'HelmRelease',
-}) {
+export function HelmReleaseData({ releaseSecret }) {
   const { t } = useTranslation();
 
   const release = decodeHelmRelease(releaseSecret.data.release);

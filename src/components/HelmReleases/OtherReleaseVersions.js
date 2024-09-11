@@ -14,6 +14,7 @@ export function OtherReleaseVersions({ releaseSecret, secrets }) {
   secrets = secrets.sort(
     (a, b) => b.metadata.labels.version - a.metadata.labels.version,
   );
+
   const headerRenderer = () => [
     t('secrets.name_singular'),
     t('common.headers.version'),

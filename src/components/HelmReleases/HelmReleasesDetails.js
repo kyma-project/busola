@@ -60,7 +60,7 @@ function HelmReleasesDetails({ releaseName, namespace }) {
       value: () => releaseSecret.metadata.labels.version,
     },
     {
-      header: t('Description'),
+      header: t('common.headers.description'),
       value: () => release.info.description,
     },
   ];
