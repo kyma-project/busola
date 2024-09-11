@@ -107,9 +107,9 @@ export default function EventDetails(props) {
       createResourceForm={EventCreate}
       readOnly
       disableEdit
-      disableLabels
-      disableAnnotations
-      disableLastUpdate
+      hideLabels
+      hideAnnotations
+      hideLastUpdate
       {...props}
     />
   );

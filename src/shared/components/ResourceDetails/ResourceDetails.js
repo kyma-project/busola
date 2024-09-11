@@ -149,9 +149,9 @@ function ResourceDetailsRenderer(props) {
 function Resource({
   customTitle,
   disableResourceDetailsCard = false,
-  disableLabels = false,
-  disableAnnotations = false,
-  disableLastUpdate = false,
+  hideLabels = false,
+  hideAnnotations = false,
+  hideLastUpdate = false,
   layoutNumber,
   layoutCloseCreateUrl,
   children,
@@ -381,7 +381,7 @@ function Resource({
               valueUnit={t('common.value-units.days')}
             />
           </DynamicPageComponent.Column>
-          {!disableLastUpdate && (
+          {!hideLastUpdate && (
             <DynamicPageComponent.Column
               key="Last Update"
               title={t('common.headers.last-update')}
@@ -394,7 +394,7 @@ function Resource({
               {col.value(resource)}
             </DynamicPageComponent.Column>
           ))}
-          {!disableLabels && (
+          {!hideLabels && (
             <DynamicPageComponent.Column
               key="Labels"
               title={t('common.headers.labels')}
@@ -406,7 +406,7 @@ function Resource({
               />
             </DynamicPageComponent.Column>
           )}
-          {!disableAnnotations && (
+          {!hideAnnotations && (
             <DynamicPageComponent.Column
               key="Annotations"
               title={t('common.headers.annotations')}
