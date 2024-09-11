@@ -1,0 +1,23 @@
+{
+  "name": "ui-tests",
+  "description": "UI tests for Kyma-Dashboard",
+  "scripts": {
+    "start": "cypress open",
+    "start:local": "CYPRESS_LOCAL_DEV=true cypress open --config watchForFileChanges=false",
+    "test:cluster": "cypress run --spec \"tests/cluster/*.spec.js\" --browser chromium",
+    "test:namespace": "cypress run --spec \"tests/namespace/*.spec.js\" --browser chromium",
+    "test:cluster:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/cluster/*.spec.js,tests/extensibility/*.spec.js\" --browser chrome",
+    "test:namespace:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/namespace/*.spec.js\" --browser chrome",
+    "test:e2e": "cypress run --browser chromium",
+    "test:local": "CYPRESS_LOCAL_DEV=true cypress run --browser chrome",
+    "test:smoke-extensions": "cypress run --browser chromium -C cypress-smoke.js",
+    "run-docker": "docker run --rm -it -p 3001:3001 -e DOCKER_DESKTOP_CLUSTER=true --pid=host --name kyma-dashboard europe-docker.pkg.dev/kyma-project/dev/kyma-dashboard-local-dev:PR-$PR_NUMBER"
+  },
+  "devDependencies": {
+    "cypress-file-upload": "^5.0.8",
+    "js-yaml": "^4.1.0"
+  },
+  "optionalDependencies": {
+    "cypress": "^13.9.0"
+  }
+}
