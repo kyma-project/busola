@@ -10,37 +10,14 @@ import './HelmReleaseDataPanel.scss';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { Link } from 'shared/components/Link/Link';
 
-export function ReleaseDataPanel({ release }) {
+export function ReleaseDataPanel({ release, secret }) {
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();
 
   const { name, version, chart, info } = release;
-
+  console.log(release);
   return (
-    <UI5Panel
-      title={
-        false ? (
-          t('helm-releases.headers.release-data')
-        ) : (
-          <>
-            <Link
-              className="release-link"
-              url={namespaceUrl(`helm-releases/${name}`)}
-            >
-              {name}
-            </Link>
-            <div style={spacing.sapUiSmallMarginBegin}>
-              <StatusBadge noTooltip type="Information">
-                {t('helm-releases.headers.release-version', { version })}
-              </StatusBadge>
-            </div>
-            <div style={spacing.sapUiTinyMarginBegin}>
-              <HelmReleaseStatus status={release.info.status} />
-            </div>
-          </>
-        )
-      }
-    >
+    <UI5Panel title={<>{'Chart Info'}</>}>
       <LayoutPanelRow
         name={t('helm-releases.headers.chart-version')}
         value={chart.metadata.version}
@@ -61,6 +38,20 @@ export function ReleaseDataPanel({ release }) {
         name={t('helm-releases.headers.last-deployed')}
         value={<ReadableCreationTimestamp timestamp={info.last_deployed} />}
       />
+      {secret && (
+        <LayoutPanelRow
+          name={t('secrets.name_singular')}
+          value={
+            <Link
+              url={namespaceUrl(`secrets/${secret.metadata.name}`, {
+                namespace: secret.metadata.namespace,
+              })}
+            >
+              {secret.metadata.name}
+            </Link>
+          }
+        />
+      )}
     </UI5Panel>
   );
 }

@@ -20,7 +20,8 @@ function HelmReleaseDataWrapper(secret) {
   return (
     <HelmReleaseData
       key="helm-release-data"
-      encodedRelease={secret.data.release}
+      releaseSecret={secret}
+      resourceType="Secret"
     />
   );
 }

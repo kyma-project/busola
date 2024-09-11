@@ -6,11 +6,14 @@ import { ChartContent } from './ChartContent';
 import { useTranslation } from 'react-i18next';
 import jsyaml from 'js-yaml';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
-
-export function HelmReleaseData({ encodedRelease }) {
+///polaczone z secretami
+export function HelmReleaseData({
+  releaseSecret,
+  resourceType = 'HelmRelease',
+}) {
   const { t } = useTranslation();
 
-  const release = decodeHelmRelease(encodedRelease);
+  const release = decodeHelmRelease(releaseSecret.data.release);
 
   if (!release) {
     return (
@@ -23,7 +26,7 @@ export function HelmReleaseData({ encodedRelease }) {
 
   return (
     <React.Fragment key="helm-release-data">
-      <ReleaseDataPanel release={release} />
+      <ReleaseDataPanel release={release} secret={releaseSecret} />
       <ReadonlyEditorPanel
         title={t('helm-releases.headers.release-data')}
         value={jsyaml.dump(release.config)}

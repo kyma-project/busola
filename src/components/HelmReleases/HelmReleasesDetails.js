@@ -3,29 +3,31 @@ import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNot
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { prettifyNameSingular } from 'shared/utils/helpers';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { HelmReleaseData } from './HelmReleaseData';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
 import { OtherReleaseVersions } from './OtherReleaseVersions';
 import { findRecentRelease } from './findRecentRelease';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 import { useUrl } from 'hooks/useUrl';
-import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { ResourceDescription } from 'components/HelmReleases';
 import HelmReleasesYaml from './HelmReleasesYaml';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
-import { showYamlTab } from './index';
-import { Link } from 'shared/components/Link/Link';
-import { createPortal } from 'react-dom';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import { decodeHelmRelease } from './decodeHelmRelease';
+import { EventsList } from 'shared/components/EventsList';
+import { filterByResource } from 'hooks/useMessageList';
 
 function HelmReleasesDetails({ releaseName, namespace }) {
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();
 
-  const { data, loading } = useGetList(s => s.type === 'helm.sh/release.v1')(
+  const resourceUrl =
     namespace === '-all-'
       ? `/api/v1/secrets?labelSelector=name==${releaseName}`
-      : `/api/v1/namespaces/${namespace}/secrets?labelSelector=name==${releaseName}`,
+      : `/api/v1/namespaces/${namespace}/secrets?labelSelector=name==${releaseName}`;
+
+  const { data, loading } = useGetList(s => s.type === 'helm.sh/release.v1')(
+    resourceUrl,
   );
 
   if (loading) return <Spinner />;
@@ -38,15 +40,50 @@ function HelmReleasesDetails({ releaseName, namespace }) {
       />
     );
   }
+  const customComponents = [
+    () => <HelmReleaseData releaseSecret={releaseSecret} />,
+    () => <OtherReleaseVersions releaseSecret={releaseSecret} secrets={data} />,
+    () => (
+      <EventsList
+        key="events"
+        namespace={namespace}
+        filter={filterByResource('HelmRelease', releaseName)}
+        hideInvolvedObjects={true}
+      />
+    ),
+  ];
+  console.log(releaseSecret);
+
+  const release = decodeHelmRelease(releaseSecret.data.release);
+
+  const customStatusColumns = [
+    {
+      header: t('helm-releases.headers.revision'),
+      value: () => releaseSecret.metadata.labels.version,
+    },
+    {
+      header: t('Description'),
+      value: () => release.info.description,
+    },
+  ];
+
+  const statusBadge = () => (
+    <HelmReleaseStatus status={releaseSecret.metadata.labels.status} />
+  );
 
   return (
     <>
-      <DynamicPageComponent
-        title={releaseName}
+      <ResourceDetails
         description={ResourceDescription}
-        showYamlTab={showYamlTab}
-        layoutNumber="MidColumn"
-        inlineEditForm={() => (
+        resourceType="HelmReleases"
+        namespace={namespace}
+        resourceName={releaseName}
+        customTitle={releaseName}
+        resourceUrl={resourceUrl}
+        resource={releaseSecret}
+        customStatusColumns={customStatusColumns}
+        statusBadge={statusBadge}
+        createResourceForm={() => (
           <ResourceCreate
             title={'HelmRelease'}
             isEdit={true}
@@ -63,41 +100,10 @@ function HelmReleasesDetails({ releaseName, namespace }) {
             )}
           />
         )}
-        content={
-          <>
-            <HelmReleaseData encodedRelease={releaseSecret.data.release} />
-            <OtherReleaseVersions
-              releaseSecret={releaseSecret}
-              secrets={data}
-            />
-          </>
-        }
-      >
-        {releaseSecret && (
-          <>
-            <DynamicPageComponent.Column title={t('secrets.name_singular')}>
-              <Link
-                url={namespaceUrl(`secrets/${releaseSecret.metadata.name}`, {
-                  namespace: releaseSecret.metadata.namespace,
-                })}
-              >
-                {releaseSecret.metadata.name}
-              </Link>
-            </DynamicPageComponent.Column>
-            <DynamicPageComponent.Column
-              title={t('helm-releases.headers.revision')}
-            >
-              {releaseSecret.metadata.labels.version}
-            </DynamicPageComponent.Column>
-            <DynamicPageComponent.Column title={t('common.headers.status')}>
-              <HelmReleaseStatus
-                status={releaseSecret.metadata.labels.status}
-              />
-            </DynamicPageComponent.Column>
-          </>
-        )}
-        {createPortal(<YamlUploadDialog />, document.body)}
-      </DynamicPageComponent>
+        customComponents={customComponents}
+        disableDelete
+        //{...props}
+      />
     </>
   );
 }

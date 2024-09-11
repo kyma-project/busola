@@ -2,7 +2,7 @@ import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import { UI5Panel } from './UI5Panel/UI5Panel';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@ui5/webcomponents-react';
 import { base64Decode } from 'shared/helpers';
 
@@ -17,6 +17,10 @@ export function ReadonlyEditorPanel({
   const [editor, setEditor] = useState(null);
   const [isEncoded, setEncoded] = useState(true);
   const [valueState, setValueState] = useState(value);
+
+  useEffect(() => {
+    setValueState(value);
+  }, [value]);
 
   const decode = () => {
     setEncoded(true);

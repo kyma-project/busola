@@ -1,20 +1,13 @@
 import { useRecoilValue } from 'recoil';
-
 import { useTranslation } from 'react-i18next';
-import { Text } from '@ui5/webcomponents-react';
 import { groupBy } from 'lodash';
-
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
-import { GenericList } from 'shared/components/GenericList/GenericList';
 import { decodeHelmRelease } from './decodeHelmRelease';
 import { findRecentRelease } from './findRecentRelease';
-import { HelmReleaseStatus } from './HelmReleaseStatus';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
-import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { ResourceDescription } from 'components/HelmReleases';
-import { createPortal } from 'react-dom';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 
 function HelmReleasesList() {
   const { t } = useTranslation();
@@ -26,41 +19,20 @@ function HelmReleasesList() {
     });
   };
 
-  const { data, loading, error } = useGetList(
-    s => s.type === 'helm.sh/release.v1',
-  )(
+  const dataUrl =
     namespace === '-all-'
       ? `/api/v1/secrets`
-      : `/api/v1/namespaces/${namespace}/secrets`,
-  );
+      : `/api/v1/namespaces/${namespace}/secrets`;
 
-  const headerRenderer = () => [
-    t('common.headers.name'),
-    namespace === '-all-' ? t('common.headers.namespace') : null,
-    t('common.headers.labels'),
-    t('helm-releases.headers.chart'),
-    t('helm-releases.headers.revision'),
-    t('helm-releases.headers.chart-version'),
-    t('common.headers.status'),
-  ];
-
-  const rowRenderer = entry => [
-    <>
-      <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
-        {entry.releaseName}
-      </Text>
-    </>,
-    namespace === '-all-' ? entry.namespace : null,
-    entry.recentRelease?.chart.metadata.name || t('common.statuses.unknown'),
-    entry.revision,
-    entry.recentRelease?.chart.metadata.version || t('common.statuses.unknown'),
-    <HelmReleaseStatus status={entry.status} />,
-  ];
+  const { data, loading, error } = useGetList(
+    s => s.type === 'helm.sh/release.v1',
+  )(dataUrl);
 
   const entries = Object.entries(
     groupBy(data || [], r => r.metadata.labels.name),
   ).map(([releaseName, releases]) => {
     const recentRelease = findRecentRelease(releases);
+    recentRelease.metadata.name = releaseName;
     return {
       name: releaseName,
       releaseName,
@@ -69,50 +41,63 @@ function HelmReleasesList() {
       revision: releases.length,
       status: recentRelease?.metadata.labels.status || 'unknown',
       namespace: recentRelease?.metadata.namespace,
+      ...recentRelease,
     };
   });
 
+  const customColumns = [
+    {
+      header: t('helm-releases.headers.chart'),
+      value: entry =>
+        entry.recentRelease?.chart.metadata.name ||
+        t('common.statuses.unknown'),
+    },
+    {
+      header: t('helm-releases.headers.revision'),
+      value: entry => entry.revision,
+    },
+    {
+      header: t('helm-releases.headers.chart-version'),
+      value: entry =>
+        entry.recentRelease?.chart.metadata.version ||
+        t('common.statuses.unknown'),
+    },
+  ];
+
   return (
     <>
-      <DynamicPageComponent
-        title={t('helm-releases.title')}
+      <ResourcesList
+        resources={entries}
+        customColumns={customColumns}
+        serverDataLoading={loading}
+        serverDataError={error}
+        allowSlashShortcut
+        hasDetailsView
+        enableColumnLayout
+        customUrl={resourceUrl}
+        resourceUrl={dataUrl}
+        resourceType="HelmReleases"
+        sortBy={{
+          name: (a, b) => a.releaseName.localeCompare(b.releaseName),
+        }}
+        searchSettings={{
+          textSearchProperties: [
+            'recentRelease.chart.metadata.name',
+            'releaseName',
+          ],
+        }}
+        emptyListProps={{
+          titleText: `${t('common.labels.no')} ${t(
+            'helm-releases.title',
+          ).toLocaleLowerCase()}`,
+          subtitleText: ResourceDescription,
+          url:
+            'https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces',
+          buttonText: t('common.buttons.connect'),
+        }}
+        readOnly
         description={ResourceDescription}
-        layoutNumber={'StartColumn'}
-        content={
-          <GenericList
-            entries={entries}
-            headerRenderer={headerRenderer}
-            rowRenderer={rowRenderer}
-            serverDataLoading={loading}
-            serverDataError={error}
-            allowSlashShortcut
-            hasDetailsView
-            displayArrow
-            enableColumnLayout={true}
-            customUrl={resourceUrl}
-            resourceType="HelmReleases"
-            sortBy={{
-              name: (a, b) => a.releaseName.localeCompare(b.releaseName),
-            }}
-            searchSettings={{
-              textSearchProperties: [
-                'recentRelease.chart.metadata.name',
-                'releaseName',
-              ],
-            }}
-            emptyListProps={{
-              titleText: `${t('common.labels.no')} ${t(
-                'helm-releases.title',
-              ).toLocaleLowerCase()}`,
-              subtitleText: t('helm-releases.description'),
-              url:
-                'https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces',
-              buttonText: t('common.buttons.connect'),
-            }}
-          />
-        }
       />
-      {createPortal(<YamlUploadDialog />, document.body)}
     </>
   );
 }

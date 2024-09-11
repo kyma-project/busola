@@ -261,7 +261,7 @@ function Resource({
     }
     return visible;
   };
-
+  console.log(resource);
   // https://stackoverflow.com/questions/70330862/how-to-get-the-latest-change-time-of-a-resource-instance-in-k8s
   let lastUpdate;
   const managedFields = resource.metadata?.managedFields;
@@ -375,7 +375,7 @@ function Resource({
             title={t('common.headers.age')}
           >
             <ReadableElapsedTimeFromNow
-              timestamp={resource.metadata.creationTimestamp}
+              timestamp={resource.metadata?.creationTimestamp}
               valueUnit={t('common.value-units.days')}
             />
           </DynamicPageComponent.Column>
