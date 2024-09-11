@@ -565,6 +565,7 @@ events:
     last-seen: Last Seen
     message: Message
     reason: Reason
+    reporting-component: Reporting Component
     source: Source
     type: Type
   title: Events

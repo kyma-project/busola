@@ -22,7 +22,7 @@ const Specification = event => {
   return (
     <UI5Panel
       key="message"
-      title={t('common.headers.specification')}
+      title={t('common.headers.configuration')}
       keyComponent="specification-panel"
     >
       <RowComponent
@@ -59,6 +59,20 @@ const Specification = event => {
         value={event.reason || EMPTY_TEXT_PLACEHOLDER}
       />
       <RowComponent
+        name={t('events.headers.involved-object')}
+        value={FormatInvolvedObject(
+          event.involvedObject || EMPTY_TEXT_PLACEHOLDER,
+        )}
+      />
+      <RowComponent
+        name={t('events.headers.source')}
+        value={FormatSourceObject(event.source || EMPTY_TEXT_PLACEHOLDER)}
+      />
+      <RowComponent
+        name={t('events.headers.reporting-component')}
+        value={event.reportingComponent || EMPTY_TEXT_PLACEHOLDER}
+      />
+      <RowComponent
         name={t('events.headers.count')}
         value={event.count || EMPTY_TEXT_PLACEHOLDER}
       />
@@ -71,15 +85,6 @@ export default function EventDetails(props) {
   const { clusterUrl } = useUrl();
 
   const customColumns = [
-    {
-      header: t('events.headers.involved-object'),
-      value: event => FormatInvolvedObject(event.involvedObject),
-    },
-    {
-      header: t('events.headers.source'),
-      value: event =>
-        FormatSourceObject(event.source || EMPTY_TEXT_PLACEHOLDER),
-    },
     {
       header: t('common.labels.namespace'),
       value: event => (
