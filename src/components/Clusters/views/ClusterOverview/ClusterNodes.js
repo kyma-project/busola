@@ -58,7 +58,7 @@ export function ClusterNodes({ data, error, loading }) {
     return [
       <Text
         style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}
-        data-testID={`node-details-link-${entry.metadata?.name}`}
+        data-testid={`node-details-link-${entry.metadata?.name}`}
       >
         {entry.metadata?.name}
       </Text>,
