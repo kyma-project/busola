@@ -23,10 +23,12 @@ export function ReleaseDataPanel({ release, secret }) {
         name={t('helm-releases.headers.chart-name')}
         value={chart.metadata.name}
       />
-      <LayoutPanelRow
-        name={t('helm-releases.headers.chart-description')}
-        value={chart.metadata.description}
-      />
+      {chart.metadata.description && (
+        <LayoutPanelRow
+          name={t('helm-releases.headers.chart-description')}
+          value={chart.metadata.description}
+        />
+      )}
       <LayoutPanelRow
         name={t('helm-releases.headers.first-deployed')}
         value={<ReadableCreationTimestamp timestamp={info.first_deployed} />}
@@ -35,6 +37,12 @@ export function ReleaseDataPanel({ release, secret }) {
         name={t('helm-releases.headers.last-deployed')}
         value={<ReadableCreationTimestamp timestamp={info.last_deployed} />}
       />
+      {chart.metadata.appVersion && (
+        <LayoutPanelRow
+          name={t('helm-releases.headers.app-version')}
+          value={chart.metadata.appVersion}
+        />
+      )}
       {secret && (
         <LayoutPanelRow
           name={t('secrets.name_singular')}

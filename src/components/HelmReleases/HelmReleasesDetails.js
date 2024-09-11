@@ -42,7 +42,7 @@ function HelmReleasesDetails({ releaseName, namespace }) {
   const release = decodeHelmRelease(releaseSecret.data.release);
 
   const customComponents = [
-    () => <HelmReleaseData releaseSecret={releaseSecret} />,
+    () => <HelmReleaseData releaseSecret={releaseSecret} release={release} />,
     () => <OtherReleaseVersions releaseSecret={releaseSecret} secrets={data} />,
     () => (
       <EventsList

@@ -1,5 +1,4 @@
 import React from 'react';
-import { decodeHelmRelease } from 'components/HelmReleases/decodeHelmRelease';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 import { ReleaseDataPanel } from './ReleaseDataPanel';
 import { ChartContent } from './ChartContent';
@@ -7,10 +6,8 @@ import { useTranslation } from 'react-i18next';
 import jsyaml from 'js-yaml';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
-export function HelmReleaseData({ releaseSecret }) {
+export function HelmReleaseData({ releaseSecret, release }) {
   const { t } = useTranslation();
-
-  const release = decodeHelmRelease(releaseSecret.data.release);
 
   if (!release) {
     return (

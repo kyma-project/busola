@@ -629,6 +629,7 @@ get-help:
 helm-releases:
   description: <0>Helm Release</0> tracks the installed charts. For each installed chart, a new release is created.
   headers:
+    app-version: App Version
     chart: Chart
     chart-description: Chart Description
     chart-files: Chart Files
