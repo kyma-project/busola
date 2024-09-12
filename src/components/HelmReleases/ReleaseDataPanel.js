@@ -15,6 +15,20 @@ export function ReleaseDataPanel({ release, secret }) {
 
   return (
     <UI5Panel title={<>{t('helm-releases.headers.chart-information')}</>}>
+      {secret?.metadata && (
+        <LayoutPanelRow
+          name={t('secrets.name_singular')}
+          value={
+            <Link
+              url={namespaceUrl(`secrets/${secret.metadata.name}`, {
+                namespace: secret.metadata.namespace,
+              })}
+            >
+              {secret.metadata.name}
+            </Link>
+          }
+        />
+      )}
       <LayoutPanelRow
         name={t('helm-releases.headers.chart-version')}
         value={chart.metadata.version}
@@ -29,6 +43,12 @@ export function ReleaseDataPanel({ release, secret }) {
           value={chart.metadata.description}
         />
       )}
+      {chart.metadata.appVersion && (
+        <LayoutPanelRow
+          name={t('helm-releases.headers.app-version')}
+          value={chart.metadata.appVersion}
+        />
+      )}
       {info.first_deployed && (
         <LayoutPanelRow
           name={t('helm-releases.headers.first-deployed')}
@@ -39,26 +59,6 @@ export function ReleaseDataPanel({ release, secret }) {
         <LayoutPanelRow
           name={t('helm-releases.headers.last-deployed')}
           value={<ReadableCreationTimestamp timestamp={info.last_deployed} />}
-        />
-      )}
-      {chart.metadata.appVersion && (
-        <LayoutPanelRow
-          name={t('helm-releases.headers.app-version')}
-          value={chart.metadata.appVersion}
-        />
-      )}
-      {secret?.metadata && (
-        <LayoutPanelRow
-          name={t('secrets.name_singular')}
-          value={
-            <Link
-              url={namespaceUrl(`secrets/${secret.metadata.name}`, {
-                namespace: secret.metadata.namespace,
-              })}
-            >
-              {secret.metadata.name}
-            </Link>
-          }
         />
       )}
     </UI5Panel>
