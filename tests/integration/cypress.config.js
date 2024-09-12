@@ -75,6 +75,7 @@ module.exports = defineConfig({
       'tests/namespace/test-persistent-volume-claims.spec.js',
       'tests/namespace/test-custom-resources.spec.js',
       'tests/namespace/test-limit-ranges.spec.js',
+      'tests/namespace/test-resource-quotas.spec.js',
       'tests/namespace/z-run-after.spec.js',
     ],
     supportFile: 'support/index.js',

@@ -5,7 +5,7 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { LimitRangesList } from 'resources/LimitRanges/LimitRangesList';
-import { ResourceQuotaList as ResourceQuotaListComponent } from 'resources/ResourceQuotas/ResourceQuotaList';
+import { ResourceQuotasList as ResourceQuotaListComponent } from 'resources/ResourceQuotas/ResourceQuotasList';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 import { NamespaceStatus } from './NamespaceStatus';
@@ -32,19 +32,17 @@ export function NamespaceDetails(props) {
     namespace: props.resourceName,
     isCompact: true,
     showTitle: true,
-    disableCreate: true,
   };
 
   const LimitrangesList = <LimitRangesList {...limitRangesParams} />;
 
   const resourceQuotasParams = {
-    hasDetailsView: false,
+    hasDetailsView: true,
     resourceUrl: `/api/v1/namespaces/${props.resourceName}/resourcequotas`,
     resourceType: 'ResourceQuotas',
     namespace: props.resourceName,
     isCompact: true,
     showTitle: true,
-    disableCreate: true,
   };
 
   const ResourceQuotasList = (
