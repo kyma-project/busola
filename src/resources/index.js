@@ -27,6 +27,7 @@ import * as Namespaces from './Namespaces';
 import * as ClusterEvents from './ClusterEvents';
 import * as CustomResourceDefinitions from './CustomResourceDefinitions';
 import * as ClusterRoleBindings from './ClusterRoleBindings';
+import * as ResourceQuotas from './ResourceQuotas';
 
 export const resources = [
   // namespace resources
@@ -43,6 +44,7 @@ export const resources = [
   Ingresses,
   NetworkPolicies,
   LimitRanges,
+  ResourceQuotas,
   // storage
   PersistentVolumeClaims,
   // configuration

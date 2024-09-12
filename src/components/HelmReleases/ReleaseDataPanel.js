@@ -1,46 +1,34 @@
-import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-import { HelmReleaseStatus } from 'components/HelmReleases/HelmReleaseStatus';
 import { useTranslation } from 'react-i18next';
 import { useUrl } from 'hooks/useUrl';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import './HelmReleaseDataPanel.scss';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { Link } from 'shared/components/Link/Link';
 
-export function ReleaseDataPanel({ release }) {
+export function ReleaseDataPanel({ release, secret }) {
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();
 
-  const { name, version, chart, info } = release;
+  const { chart, info } = release;
 
   return (
-    <UI5Panel
-      title={
-        false ? (
-          t('helm-releases.headers.release-data')
-        ) : (
-          <>
+    <UI5Panel title={<>{t('helm-releases.headers.chart-information')}</>}>
+      {secret?.metadata && (
+        <LayoutPanelRow
+          name={t('secrets.name_singular')}
+          value={
             <Link
-              className="release-link"
-              url={namespaceUrl(`helm-releases/${name}`)}
+              url={namespaceUrl(`secrets/${secret.metadata.name}`, {
+                namespace: secret.metadata.namespace,
+              })}
             >
-              {name}
+              {secret.metadata.name}
             </Link>
-            <div style={spacing.sapUiSmallMarginBegin}>
-              <StatusBadge noTooltip type="Information">
-                {t('helm-releases.headers.release-version', { version })}
-              </StatusBadge>
-            </div>
-            <div style={spacing.sapUiTinyMarginBegin}>
-              <HelmReleaseStatus status={release.info.status} />
-            </div>
-          </>
-        )
-      }
-    >
+          }
+        />
+      )}
       <LayoutPanelRow
         name={t('helm-releases.headers.chart-version')}
         value={chart.metadata.version}
@@ -49,18 +37,30 @@ export function ReleaseDataPanel({ release }) {
         name={t('helm-releases.headers.chart-name')}
         value={chart.metadata.name}
       />
-      <LayoutPanelRow
-        name={t('helm-releases.headers.chart-description')}
-        value={chart.metadata.description}
-      />
-      <LayoutPanelRow
-        name={t('helm-releases.headers.first-deployed')}
-        value={<ReadableCreationTimestamp timestamp={info.first_deployed} />}
-      />
-      <LayoutPanelRow
-        name={t('helm-releases.headers.last-deployed')}
-        value={<ReadableCreationTimestamp timestamp={info.last_deployed} />}
-      />
+      {chart.metadata.description && (
+        <LayoutPanelRow
+          name={t('helm-releases.headers.chart-description')}
+          value={chart.metadata.description}
+        />
+      )}
+      {chart.metadata.appVersion && (
+        <LayoutPanelRow
+          name={t('helm-releases.headers.app-version')}
+          value={chart.metadata.appVersion}
+        />
+      )}
+      {info.first_deployed && (
+        <LayoutPanelRow
+          name={t('helm-releases.headers.first-deployed')}
+          value={<ReadableCreationTimestamp timestamp={info.first_deployed} />}
+        />
+      )}
+      {info.last_deployed && (
+        <LayoutPanelRow
+          name={t('helm-releases.headers.last-deployed')}
+          value={<ReadableCreationTimestamp timestamp={info.last_deployed} />}
+        />
+      )}
     </UI5Panel>
   );
 }

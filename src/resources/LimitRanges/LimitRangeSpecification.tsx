@@ -161,7 +161,6 @@ export default function LimitRangeSpecification({
   ) : (
     <UI5Panel
       title={t('limit-ranges.headers.limits')}
-      headerActions={null}
       className={'limit-range-spec'}
     >
       {transLimits.map((limit: { type: string; props: FlatLimitProps[] }) => {
