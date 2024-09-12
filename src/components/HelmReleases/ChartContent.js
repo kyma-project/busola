@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 import { ComboboxInput } from 'shared/ResourceForm/inputs';
 import { useTranslation } from 'react-i18next';
