@@ -149,6 +149,9 @@ function ResourceDetailsRenderer(props) {
 function Resource({
   customTitle,
   disableResourceDetailsCard = false,
+  hideLabels = false,
+  hideAnnotations = false,
+  hideLastUpdate = false,
   layoutNumber,
   layoutCloseCreateUrl,
   children,
@@ -369,7 +372,6 @@ function Resource({
               )}
             </div>
           </DynamicPageComponent.Column>
-
           <DynamicPageComponent.Column
             key="Age"
             title={t('common.headers.age')}
@@ -379,36 +381,42 @@ function Resource({
               valueUnit={t('common.value-units.days')}
             />
           </DynamicPageComponent.Column>
-
-          <DynamicPageComponent.Column
-            key="Last Update"
-            title={t('common.headers.last-update')}
-          >
-            {renderUpdateDate(lastUpdate, t('common.value-units.days-ago'))}
-          </DynamicPageComponent.Column>
-
+          {!hideLastUpdate && (
+            <DynamicPageComponent.Column
+              key="Last Update"
+              title={t('common.headers.last-update')}
+            >
+              {renderUpdateDate(lastUpdate, t('common.value-units.days-ago'))}
+            </DynamicPageComponent.Column>
+          )}
           {customColumns.filter(filterColumns).map(col => (
             <DynamicPageComponent.Column key={col.header} title={col.header}>
               {col.value(resource)}
             </DynamicPageComponent.Column>
           ))}
-          <DynamicPageComponent.Column
-            key="Labels"
-            title={t('common.headers.labels')}
-            columnSpan="1/1"
-          >
-            <Labels labels={resource.metadata.labels || {}} shortenLongLabels />
-          </DynamicPageComponent.Column>
-
-          <DynamicPageComponent.Column
-            key="Annotations"
-            title={t('common.headers.annotations')}
-          >
-            <Labels
-              labels={resource.metadata.annotations || {}}
-              shortenLongLabels
-            />
-          </DynamicPageComponent.Column>
+          {!hideLabels && (
+            <DynamicPageComponent.Column
+              key="Labels"
+              title={t('common.headers.labels')}
+              columnSpan="1/1"
+            >
+              <Labels
+                labels={resource.metadata.labels || {}}
+                shortenLongLabels
+              />
+            </DynamicPageComponent.Column>
+          )}
+          {!hideAnnotations && (
+            <DynamicPageComponent.Column
+              key="Annotations"
+              title={t('common.headers.annotations')}
+            >
+              <Labels
+                labels={resource.metadata.annotations || {}}
+                shortenLongLabels
+              />
+            </DynamicPageComponent.Column>
+          )}
         </>
       }
     />
