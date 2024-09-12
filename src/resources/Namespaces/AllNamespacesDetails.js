@@ -3,6 +3,7 @@ import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/Dyn
 import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
 import { ResourcesUsage } from './ResourcesUsage';
 import { spacing } from '@ui5/webcomponents-react-base';
+import { Title } from '@ui5/webcomponents-react';
 
 export function AllNamespacesDetails() {
   const { t } = useTranslation();
@@ -12,10 +13,21 @@ export function AllNamespacesDetails() {
       <DynamicPageComponent
         title={t('navigation.all-namespaces')}
         content={
-          <div className="flexwrap" style={{ ...spacing.sapUiMediumMargin }}>
-            <ResourcesUsage />
-            <NamespaceWorkloads />
-          </div>
+          <>
+            <Title
+              level="H3"
+              style={{
+                ...spacing.sapUiMediumMarginBegin,
+                ...spacing.sapUiMediumMarginTopBottom,
+              }}
+            >
+              {t('common.headers.monitoring-and-health')}
+            </Title>
+            <div className="cluster-stats" style={spacing.sapUiTinyMargin}>
+              <ResourcesUsage />
+              <NamespaceWorkloads />
+            </div>
+          </>
         }
       />
     </>
