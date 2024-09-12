@@ -47,18 +47,20 @@ export function ReleaseDataPanel({ release, secret }) {
           value={chart.metadata.appVersion}
         />
       )}
-      <LayoutPanelRow
-        name={t('secrets.name_singular')}
-        value={
-          <Link
-            url={namespaceUrl(`secrets/${secret.metadata.name}`, {
-              namespace: secret.metadata.namespace,
-            })}
-          >
-            {secret.metadata.name}
-          </Link>
-        }
-      />
+      {secret?.metadata && (
+        <LayoutPanelRow
+          name={t('secrets.name_singular')}
+          value={
+            <Link
+              url={namespaceUrl(`secrets/${secret.metadata.name}`, {
+                namespace: secret.metadata.namespace,
+              })}
+            >
+              {secret.metadata.name}
+            </Link>
+          }
+        />
+      )}
     </UI5Panel>
   );
 }
