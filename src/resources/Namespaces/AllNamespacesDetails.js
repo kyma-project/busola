@@ -8,6 +8,8 @@ import LimitRangeList from 'resources/LimitRanges/LimitRangeList';
 import { EventsList } from 'shared/components/EventsList';
 import { ResourceQuotasList as ResourceQuotaListComponent } from 'resources/ResourceQuotas/ResourceQuotasList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
+import { createPortal } from 'react-dom';
+import YamlUploadDialog from './YamlUpload/YamlUploadDialog';
 
 export function AllNamespacesDetails() {
   const { t } = useTranslation();
@@ -63,6 +65,7 @@ export function AllNamespacesDetails() {
             {Events}
           </>
         }
+        actions={createPortal(<YamlUploadDialog />, document.body)}
       />
     </>
   );

@@ -158,6 +158,7 @@ export function NamespaceWorkloads({ namespace }) {
                     value: daemonsetsData?.length - healthyDaemonsets,
                   },
                 ]}
+                allNamespaceURL={false}
                 resourceUrl="daemonsets"
               />
             </div>
@@ -183,6 +184,7 @@ export function NamespaceWorkloads({ namespace }) {
                     value: statefulsetsData?.length - healthyStatefulsets,
                   },
                 ]}
+                allNamespaceURL={false}
                 resourceUrl="statefulsets"
               />
             </div>
@@ -206,6 +208,7 @@ export function NamespaceWorkloads({ namespace }) {
                     value: servicesData?.length - loadbalancerNumber,
                   },
                 ]}
+                allNamespaceURL={false}
                 resourceUrl="services"
               />
             </div>
