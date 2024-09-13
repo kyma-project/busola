@@ -4,9 +4,39 @@ import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
 import { ResourcesUsage } from './ResourcesUsage';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { Title } from '@ui5/webcomponents-react';
+import LimitRangeList from 'resources/LimitRanges/LimitRangeList';
+import { EventsList } from 'shared/components/EventsList';
+import { ResourceQuotasList as ResourceQuotaListComponent } from 'resources/ResourceQuotas/ResourceQuotasList';
+import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 
 export function AllNamespacesDetails() {
   const { t } = useTranslation();
+
+  const limitRangesParams = {
+    hasDetailsView: true,
+    resourceUrl: `/api/v1/limitranges`,
+    resourceType: 'LimitRanges',
+    namespace: '-all-',
+    isCompact: true,
+    showTitle: true,
+  };
+
+  const LimitrangesList = <LimitRangeList {...limitRangesParams} />;
+
+  const resourceQuotasParams = {
+    hasDetailsView: true,
+    resourceUrl: `/api/v1/resourcequotas`,
+    resourceType: 'ResourceQuotas',
+    namespace: '-all-',
+    isCompact: true,
+    showTitle: true,
+  };
+
+  const ResourceQuotasList = (
+    <ResourceQuotaListComponent {...resourceQuotasParams} />
+  );
+
+  const Events = <EventsList defaultType={EVENT_MESSAGE_TYPE.WARNING} />;
 
   return (
     <>
@@ -27,6 +57,9 @@ export function AllNamespacesDetails() {
               <ResourcesUsage />
               <NamespaceWorkloads />
             </div>
+            {LimitrangesList}
+            {ResourceQuotasList}
+            {Events}
           </>
         }
       />
