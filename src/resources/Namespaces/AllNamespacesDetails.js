@@ -30,6 +30,7 @@ export function AllNamespacesDetails() {
     namespace: '-all-',
     isCompact: true,
     showTitle: true,
+    disableCreate: true,
   };
 
   const ResourceQuotasList = (
