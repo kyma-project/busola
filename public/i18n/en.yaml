@@ -484,7 +484,9 @@ custom-resource-definitions:
   description: <0>CustomResourceDefinition</0> is an object used to define a custom resource that allows you to extend the Kubernetes API for use cases that are not directly covered by core Kubernetes.
   headers:
     categories: Categories
+    conversion: Conversion
     description: Description
+    group: Group
     json-path: JSON Path
     kind: Kind
     list-kind: List Kind
@@ -492,7 +494,13 @@ custom-resource-definitions:
     scope: Scope
     short-names: Short Names
     singular: Singular
+    strategy: Strategy
+    service-name: Service Name
+    service-namespace: Service Namespace
+    service-port: Service Port
+    conversion-review-versions: Conversion Review Versions
     type: Type
+    versions: Versions
   name_singular: CustomResourceDefinition
   status:
     not-served: Not Served

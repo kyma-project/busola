@@ -52,14 +52,44 @@ export default function CustomResource({ params }) {
       }${crdName}/${resourceName}`
     : '';
 
-  const yamlPreview = resource => (
+  const yamlPreview = resource => {
+    return Object.keys(resource || {}).map(key => {
+      if (typeof resource[key] === 'object' && key !== 'metadata') {
+        //&& key !== 'metadata'
+        return (
+          <ReadonlyEditorPanel
+            title={key} //key[0].toLocaleUpperCase() + key.substring(1)
+            value={jsyaml.dump(resource[key])}
+            key={key + JSON.stringify(resource[key])}
+          />
+        );
+      }
+    });
+  };
+
+  const yamlSinglePropsPreview = resource => {
+    const singleProps = {};
+    Object.keys(resource || {}).forEach(key => {
+      if (typeof resource[key] !== 'object' && key !== 'metadata') {
+        singleProps[key] = resource[key];
+      }
+    });
+    if (Object.keys(singleProps).length > 0) {
+      return (
+        <ReadonlyEditorPanel
+          title="props"
+          value={jsyaml.dump(singleProps)}
+          key="single-props"
+        />
+      );
+    }
     <ReadonlyEditorPanel
       key="editor"
       title="YAML"
       value={jsyaml.dump(resource)}
-      editorProps={{ language: 'yaml', height: '500px' }}
-    />
-  );
+    />;
+  };
+
   return (
     <ResourceDetails
       layoutNumber={params.layoutNumber ?? 'EndColumn'}
