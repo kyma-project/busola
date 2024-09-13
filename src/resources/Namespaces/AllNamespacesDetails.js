@@ -3,16 +3,19 @@ import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/Dyn
 import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
 import { ResourcesUsage } from './ResourcesUsage';
 import { spacing } from '@ui5/webcomponents-react-base';
-import { Title } from '@ui5/webcomponents-react';
+import { Button, Title } from '@ui5/webcomponents-react';
 import LimitRangeList from 'resources/LimitRanges/LimitRangeList';
 import { EventsList } from 'shared/components/EventsList';
 import { ResourceQuotasList as ResourceQuotaListComponent } from 'resources/ResourceQuotas/ResourceQuotasList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { createPortal } from 'react-dom';
 import YamlUploadDialog from './YamlUpload/YamlUploadDialog';
+import { useSetRecoilState } from 'recoil';
+import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 export function AllNamespacesDetails() {
   const { t } = useTranslation();
+  const setShowAdd = useSetRecoilState(showYamlUploadDialogState);
 
   const limitRangesParams = {
     hasDetailsView: true,
@@ -41,6 +44,20 @@ export function AllNamespacesDetails() {
 
   const Events = <EventsList defaultType={EVENT_MESSAGE_TYPE.WARNING} />;
 
+  const headerActions = (
+    <>
+      <Button
+        icon="add"
+        onClick={() => {
+          setShowAdd(true);
+        }}
+      >
+        {t('upload-yaml.title')}
+      </Button>
+      {createPortal(<YamlUploadDialog />, document.body)}
+    </>
+  );
+
   return (
     <>
       <DynamicPageComponent
@@ -65,7 +82,7 @@ export function AllNamespacesDetails() {
             {Events}
           </>
         }
-        actions={createPortal(<YamlUploadDialog />, document.body)}
+        actions={headerActions}
       />
     </>
   );
