@@ -6,7 +6,3 @@ resources:
   # This will tell the istio sidecar to use TLS to connect to the backend service.
   # For this to work, you need to enable TLS in the backend. See docs/install-kyma-dashboard-manually.md for more information.
   # - destinationrule-busola-backend.yaml
-
-bases:
-  - ../backend
-  - ../web
