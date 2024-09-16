@@ -7,8 +7,16 @@ import { permissionSetsSelector } from 'state/permissionSetsSelector';
 import { jwtDecode } from 'jwt-decode';
 import { AuthDataState, authDataState } from 'state/authDataAtom';
 
+export const escapeKebabCase = (expr: string) => {
+  return expr.replace(
+    /(?<!`)(?<!["'0-9a-zA-Z_])([a-zA-Z0-9_]+(?:-[a-zA-Z0-9_]+)+)(?!["'`0-9])/g,
+    '`$1`',
+  );
+};
+
 export function jsonataWrapper(expression: string) {
-  const exp = jsonata(expression);
+  const escapedExpression = escapeKebabCase(expression);
+  const exp = jsonata(escapedExpression);
 
   exp.registerFunction('matchByLabelSelector', (pod, labels) => {
     if (!pod.metadata?.labels || !labels) return false;
