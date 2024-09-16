@@ -37,9 +37,6 @@ export const ExtensibilityDetailsCore = ({
     resource,
   });
 
-  console.log(schema);
-  console.log(resMetaData);
-
   const jsonata = useJsonata({});
 
   const description = useCreateResourceDescription(resourceDescription);

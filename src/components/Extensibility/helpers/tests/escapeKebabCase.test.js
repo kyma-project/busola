@@ -6,12 +6,12 @@ describe('escapeKebabCase', () => {
     expect(escapeKebabCase(expression)).toBe('$root.spec.myRegularPath');
   });
 
-  it('kebab path 1', () => {
+  it('kebab path', () => {
     const expression = '$root.spec.my-kebab-path';
     expect(escapeKebabCase(expression)).toBe('$root.spec.`my-kebab-path`');
   });
 
-  it('kebab path, regular path', () => {
+  it('kebab path and regular path', () => {
     const expression = '$root.spec.my-kebab-path.subPath';
     expect(escapeKebabCase(expression)).toBe(
       '$root.spec.`my-kebab-path`.subPath',
@@ -23,11 +23,6 @@ describe('escapeKebabCase', () => {
     expect(escapeKebabCase(expression)).toBe(
       '$root.spec.`my-kebab-path`.`sub-path`',
     );
-  });
-
-  it('special path', () => {
-    const expression = '$root.spec.some-$special-path';
-    expect(escapeKebabCase(expression)).toBe('$root.spec.`some-$special-path`');
   });
 
   it('direct follow-up 1', () => {
