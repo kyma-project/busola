@@ -9,7 +9,7 @@ import { AuthDataState, authDataState } from 'state/authDataAtom';
 
 export const escapeKebabCase = (expr: string) => {
   return expr.replace(
-    /(["'`])(?:\\.|.)*?\1|([a-zA-Z_][\w-]*)(-\w+)/g,
+    /(["'`])(?:[^\\]|\\.)*?\1|([a-zA-Z_][\w-]*)(-\w+)/g,
     (match, quotedString, identifier, hyphenPart) => {
       if (quotedString) return match;
       return `\`${identifier}${hyphenPart}\``;
