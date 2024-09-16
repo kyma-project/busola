@@ -12,6 +12,7 @@ Busola project contains additional sub-projects:
 
 - [`Backend`](./backend) - A kind of a proxy between Busola and the Kubernetes cluster
 - [`Tests`](./tests) - Acceptance, regression and integration tests
+- [`Kyma`](./kyma) - Kyma specific configuration for busola
 
 ## Prerequisites
 
@@ -69,6 +70,7 @@ Busola configuration is the product of gathering and merging the configurations 
   This data is mounted to the Busola `web` and `backend` Pods, and during the local development,
   the [defaultConfig.yaml](public/defaultConfig.yaml) file is used.
 - Target cluster configuration, available on the target cluster in ConfigMap "kube-public/busola-config" under the key "config". Busola performs a request for that resource during the bootstrap process.
+- Custom configuration with `extensibility` and `config` located in [public/environemnt](./public/environments).
 
 ### Change the Configuration
 
@@ -83,6 +85,36 @@ Features comprise the following elements:
 - `config`: Provides additional configuration options as needed for each feature. For details, see the README in the specific component or feature.
 
 See the available Busola [feature flags](docs/features.md) for more information.
+
+#### Environment specific settings
+
+You can have override the default configuration with your own environment specific settings.
+
+Custom environment directory structure should look and be placed in [public/environments][public/environments]
+
+```
+custom-env/
+├── config
+│   └── config.yaml
+└── extensions
+    ├── extensions.yaml
+    └── wizards.yaml
+```
+
+> **Important:** Files `extensions.yaml`, `statics.yaml`, `wizards.yaml` and `config.yaml` are required to make busola work properly.
+
+To activate environment configuration you have to create or edit `active.env` file located in [public](./public).
+The `active.env` file should look like that:
+
+```dotenv
+ENVIRONMENT=your-environment-name
+```
+
+The value of the `ENVIRONMENT` variable points from which directory from [public/environemnt](./public/environments) fethc the configuration.
+When the `ENVIRONMENT` is set to `my-env`, the busola will look for custom configuration in [public/environemnt/my-env](./public/environments/my-env).
+If the `ENVIRONMENT` is not set, busola fetch default configuration.
+
+In case of docker image, the file `active.env` is created from `ENVIRONMENT` env at the startup to image.
 
 ## Development
 
