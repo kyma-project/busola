@@ -64,18 +64,3 @@ make prepare-all-configuration
 
 This target fetches and copies configuration file to **temp** directory.
 Then all the files are merged and moved to final **build** directory.
-
-## Contributing
-<!--- mandatory section - do not change this! --->
-
-See the [Contributing Rules](CONTRIBUTING.md).
-
-## Code of Conduct
-<!--- mandatory section - do not change this! --->
-
-See the [Code of Conduct](CODE_OF_CONDUCT.md) document.
-
-## Licensing
-<!--- mandatory section - do not change this! --->
-
-See the [license](./LICENSE) file.

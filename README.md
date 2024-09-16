@@ -89,7 +89,7 @@ See the available Busola [feature flags](docs/features.md) for more information.
 #### Environment specific settings
 
 You can provide override to the default configuration with your own environment specific settings.
-Custom environment directory structure should look and be placed in [public/environments][public/environments].
+Custom environment directory structure should look and be placed in **public/environments**.
 
 ```
 custom-env/
@@ -109,7 +109,7 @@ The `active.env` file should look like that:
 ENVIRONMENT=your-environment-name
 ```
 
-When the `ENVIRONMENT` is set to `my-env`, the busola looks for custom configuration in [public/environemnt/my-env](./public/environments/my-env).
+When the `ENVIRONMENT` is set to `my-env`, the busola looks for custom configuration in **public/environemnt/my-env**
 If the `ENVIRONMENT` is not set busola fetch default configuration which has the same structure as custom configuration located in [public](./public)
 
 In case of docker image, the file `active.env` is created from `ENVIRONMENT` env at the startup to image.
