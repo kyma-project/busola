@@ -70,7 +70,7 @@ Busola configuration is the product of gathering and merging the configurations 
   This data is mounted to the Busola `web` and `backend` Pods, and during the local development,
   the [defaultConfig.yaml](public/defaultConfig.yaml) file is used.
 - Target cluster configuration, available on the target cluster in ConfigMap "kube-public/busola-config" under the key "config". Busola performs a request for that resource during the bootstrap process.
-- Custom configuration with `extensibility` and `config` located in [public/environemnt](./public/environments).
+- Custom configuration with `extensibility` and `config` located in [public/environemnt](./public/environments),[read more](#environment-specific-settings).
 
 ### Change the Configuration
 
@@ -88,9 +88,8 @@ See the available Busola [feature flags](docs/features.md) for more information.
 
 #### Environment specific settings
 
-You can have override the default configuration with your own environment specific settings.
-
-Custom environment directory structure should look and be placed in [public/environments][public/environments]
+You can provide override to the default configuration with your own environment specific settings.
+Custom environment directory structure should look and be placed in [public/environments][public/environments].
 
 ```
 custom-env/
@@ -110,9 +109,8 @@ The `active.env` file should look like that:
 ENVIRONMENT=your-environment-name
 ```
 
-The value of the `ENVIRONMENT` variable points from which directory from [public/environemnt](./public/environments) fethc the configuration.
-When the `ENVIRONMENT` is set to `my-env`, the busola will look for custom configuration in [public/environemnt/my-env](./public/environments/my-env).
-If the `ENVIRONMENT` is not set, busola fetch default configuration.
+When the `ENVIRONMENT` is set to `my-env`, the busola looks for custom configuration in [public/environemnt/my-env](./public/environments/my-env).
+If the `ENVIRONMENT` is not set busola fetch default configuration which has the same structure as custom configuration located in [public](./public)
 
 In case of docker image, the file `active.env` is created from `ENVIRONMENT` env at the startup to image.
 
