@@ -53,17 +53,20 @@ export default function CustomResource({ params }) {
     : '';
 
   const yamlPreview = resource => {
-    return Object.keys(resource || {}).map(key => {
-      if (typeof resource[key] === 'object' && key !== 'metadata') {
-        return (
-          <ReadonlyEditorPanel
-            title={key}
-            value={jsyaml.dump(resource[key])}
-            key={key + JSON.stringify(resource[key])}
-          />
-        );
-      }
-    });
+    return Object.keys(resource || {})
+      ?.map(key => {
+        if (typeof resource[key] === 'object' && key !== 'metadata') {
+          return (
+            <ReadonlyEditorPanel
+              title={key}
+              value={jsyaml.dump(resource[key])}
+              key={key + JSON.stringify(resource[key])}
+            />
+          );
+        }
+        return null;
+      })
+      .filter(Boolean);
   };
 
   return (
