@@ -7,13 +7,36 @@ import { permissionSetsSelector } from 'state/permissionSetsSelector';
 import { jwtDecode } from 'jwt-decode';
 import { AuthDataState, authDataState } from 'state/authDataAtom';
 
+/*
+  Turns jsonata expressions like
+  "$root.spec.some-specific-path" into "$root.spec.`some-specific-path`"
+  see more examples in the corresponding unit test
+*/
 export const escapeKebabCase = (expr: string) => {
-  return expr.replace(
-    /(["'`])(?:[^\\]|\\.)*?\1|([a-zA-Z_][\w-]*)(-\w+)/g,
-    (match, quotedString, identifier, hyphenPart) => {
-      if (quotedString) return match;
-      return `\`${identifier}${hyphenPart}\``;
-    },
+  const stringLiteralPattern = /(["'`])(?:\\.|[^\\])*?\1/g;
+  const identifierPattern = /([a-zA-Z_][\w-]*)(-\w+)/g;
+
+  // Placeholder character that is unlikely to be in the input (NULL character)
+  const placeholder = '\u0000';
+
+  // First, extract all string literals to preserve them.
+  const literals: any = [];
+  const expressionWithoutStrings = expr.replace(stringLiteralPattern, match => {
+    literals.push(match);
+    // Encapsulate index with placeholder
+    return placeholder + (literals.length - 1) + placeholder;
+  });
+
+  // Escape hyphens in the remaining expression (outside of string literals)
+  const escapedExpression = expressionWithoutStrings.replace(
+    identifierPattern,
+    '`$1$2`',
+  );
+
+  // Restore string literals in their original places
+  return escapedExpression.replace(
+    new RegExp(placeholder + '(\\d+)' + placeholder, 'g'),
+    (_, index) => literals[index],
   );
 };
 
