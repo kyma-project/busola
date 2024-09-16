@@ -516,6 +516,8 @@ custom-resource-definitions:
 custom-resources:
   description: <0>Custom resource</0> extends the Kubernetes API. You can define your own custom resource by creating a <1>CustomResourceDefinition</1> first.
   title: Custom Resources
+  headers:
+    api-version: API Version
 daemon-sets:
   description: <0>DaemonSet</0> ensures that replicated Pods are running across a set of available nodes.
   name_singular: DaemonSet

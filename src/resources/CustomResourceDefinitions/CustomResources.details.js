@@ -8,8 +8,10 @@ import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import CRCreate from 'resources/CustomResourceDefinitions/CRCreate';
 import { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export default function CustomResource({ params }) {
+  const { t } = useTranslation();
   const namespace = useRecoilValue(activeNamespaceIdState);
   const {
     customResourceDefinitionName,
@@ -52,6 +54,12 @@ export default function CustomResource({ params }) {
       }${crdName}/${resourceName}`
     : '';
 
+  const customColumns = [
+    {
+      header: t('custom-resources.headers.api-version'),
+      value: resource => resource.apiVersion,
+    },
+  ];
   const yamlPreview = resource => {
     return Object.keys(resource || {})
       ?.map(key => {
@@ -76,6 +84,7 @@ export default function CustomResource({ params }) {
       resourceType={crdName}
       resourceName={resourceName}
       namespace={namespace}
+      customColumns={customColumns}
       createResourceForm={CRCreateWrapper}
       customComponents={[yamlPreview]}
       layoutCloseCreateUrl={params.layoutCloseCreateUrl}
