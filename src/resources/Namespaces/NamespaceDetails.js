@@ -17,7 +17,7 @@ import { AllNamespacesDetails } from './AllNamespacesDetails';
 import { useSetRecoilState } from 'recoil';
 import { ResourceDescription } from 'resources/Namespaces';
 
-export function NamespaceDetails(props) {
+export default function NamespaceDetails(props) {
   const { t } = useTranslation();
   const setShowAdd = useSetRecoilState(showYamlUploadDialogState);
 
@@ -99,5 +99,3 @@ export function NamespaceDetails(props) {
     </ResourceDetails>
   );
 }
-
-export default NamespaceDetails;

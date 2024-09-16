@@ -61,7 +61,7 @@ export function ResourceQuotasList(props: any) {
     );
   };
 
-  const createButton = (
+  const createButton = !props?.disableCreate ? (
     <Button
       key={`create-resource-quotas`}
       data-testid={`create-resource-quotas`}
@@ -70,7 +70,7 @@ export function ResourceQuotasList(props: any) {
     >
       {t('components.resources-list.create')}
     </Button>
-  );
+  ) : null;
 
   return (
     <ResourcesList
