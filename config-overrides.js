@@ -21,7 +21,7 @@ module.exports = {
       new CopyPlugin({
         patterns: [
           {
-            from: 'resources/resource-validation/rule-sets/**/*.yaml',
+            from: 'resources/base/resource-validation/rule-sets/**/*.yaml',
             to: 'resource-validation/rule-set.yaml',
             transformAll(assets) {
               return assets.reduce((accumulator, asset) => {

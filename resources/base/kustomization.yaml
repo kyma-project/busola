@@ -3,6 +3,5 @@ kind: Kustomization
 resources:
   - ingress.yaml
   - ingressClass.yaml
-bases:
   - backend
   - web
