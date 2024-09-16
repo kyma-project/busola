@@ -8,10 +8,10 @@ This project contains integration and smoke UI tests for Kyma-Dashboard.
 
 Before testing, you need to copy your cluster's kubeconfig file to `fixtures/kubeconfig.yaml`.
 
-You need to have ran Kyma-Dashboard using docker and PR number:
+You need to have run Kyma-Dashboard using docker, PR number and desired environment (can be empty):
 
 ```bash
-PR_NUMBER={YOUR_PR_NUMBER} npm run run-docker
+PR_NUMBER={YOUR_PR_NUMBER} ENV={DESIRED_ENV} npm run run-docker
 ```
 
 ## Installation

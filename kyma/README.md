@@ -8,10 +8,10 @@
 > - `Code of Conduct` - do not change this!
 > - `Licensing` - do not change this!
 
-# Kyma configuration
+# Kyma dashboard
 
 ## Overview
-The directory contains configuration of kyma extensibility for busola and tools to prepare configuration.
+The directory contains configuration of kyma extensibility for busola and tools to prepare configuration to build Kyma-dashboard using busola.
 
 Files structure:
 ```
