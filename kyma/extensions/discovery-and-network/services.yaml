@@ -8,27 +8,125 @@ metadata:
     busola.io/extension: resource
     busola.io/extension-version: '0.5'
 data:
+  dataSources: |-
+    apirules:
+      resource:
+        kind: APIRule
+        group: gateway.kyma-project.io
+        version: v1beta1
+      filter: $item.spec.service.name = $root.metadata.name
+    podSelector:
+      resource:
+        kind: Pod
+        version: v1
+      filter: $matchByLabelSelector($item, $root.spec.selector)
+    subscriptions:
+      resource:
+        kind: Subscription
+        group: eventing.kyma-project.io
+        version: v1alpha1
+      filter: >-
+        $substringAfter($substringBefore($item.spec.sink, '.'), '://') =
+        $root.metadata.name
+    relatedDNSEntry:
+      resource:
+        kind: DNSEntry
+        group: dns.gardener.cloud
+        version: v1alpha1
+      filter: >-
+        $filter($item.spec.targets, function ($v, $i, $a) { $contains($root.status.loadBalancer.ingress.ip, $v)})
   details: |-
+    resourceGraph:
+      dataSources:
+        - source: apirules
+        - source: podSelector
+        - source: subscriptions
+        - source: relatedDNSEntry
+    status:
+      body:
+        - name: Conditions
+          source: status.conditions
+          visibility: $exists(status.conditions)
+          widget: ConditionList
+        - name: External IPs
+          source: >-
+            $count(status.loadBalancer.ingress) ? $map(status.loadBalancer.ingress,
+            function($value) {$value.ip ? $value.ip : $value.hostname}) ~> $join(',
+            '): ($count($item.spec.externalIPs) ? $item.spec.externalIPs ~> $join(',
+            '): '-')
     header:
       - name: Controlled by
         source: metadata.ownerReferences
         widget: ControlledBy
-      - name: Service Type
-        source: spec.type
-      - name: Cluster IP
-        source: spec.clusterIP
-      - name: Ports
-        source: >-
-          $count(spec.ports) ? $map(spec.ports, function($value) {$value.port =
-          $value.targetPort ? [$string($value.port), '/', $string($value.protocol)] ~>
-          $join('') : [ $string($value.name), ' (', $string($value.port), ') --> (', $string($value.targetPort), ')'] ~> $join('') }) ~> $join(', ')  : '-'
-      - name: External IPs
-        source: >-
-          $count(status.loadBalancer.ingress) ? $map(status.loadBalancer.ingress,
-          function($value) {$value.ip ? $value.ip : $value.hostname}) ~> $join(',
-          '): ($count($item.spec.externalIPs) ? $item.spec.externalIPs ~> $join(',
-          '): '-')
     body:
+      - name: Specification
+        widget: Panel
+        children:
+          - name: Service Type
+            source: spec.type
+          - name: Cluster IP
+            source: spec.clusterIP
+            visibility: $exists(spec.clusterIP)
+          - name: Cluster IPs
+            source: spec.clusterIPs
+            visibility: $exists(spec.clusterIPs)
+            widget: Labels
+          - name: Ports
+            source: >-
+              $count(spec.ports) ? $map(spec.ports, function($value) {$value.port =
+              $value.targetPort ? [$string($value.port), '/', $string($value.protocol)] ~>
+              $join('') : [ $string($value.name), ' (', $string($value.port), ') --> (', $string($value.targetPort), ')'] ~> $join('') }) ~> $join(', ')  : '-'
+          - name: Selector
+            source: spec.selector
+            visibility: $exists(spec.selector)
+            widget: Labels
+          - name: Allocate Load Balancer Node Ports
+            source: spec.allocateLoadBalancerNodePorts
+            visibility: $exists(spec.allocateLoadBalancerNodePorts)
+          - name: External IPs
+            source: spec.externalIPs
+            visibility: $exists(spec.externalIPs)
+            widget: Labels
+          - name: External Name
+            source: spec.externalName
+            visibility: $exists(spec.externalName)
+          - name: External Traffic Policy
+            source: spec.externalTrafficPolicy
+            visibility: $exists(spec.externalTrafficPolicy)
+          - name: Health Check Node Port
+            source: spec.healthCheckNodePort
+            visibility: $exists(spec.healthCheckNodePort)
+          - name: Internal Traffic Policy
+            source: spec.internalTrafficPolicy
+            visibility: $exists(spec.internalTrafficPolicy)
+          - name: IP Families
+            source: spec.ipFamilies
+            visibility: $exists(spec.ipFamilies)
+            widget: Labels
+          - name: IP Family Policy
+            source: spec.ipFamilyPolicy
+            visibility: $exists(spec.ipFamilyPolicy)
+          - name: Load Balancer Class
+            source: spec.loadBalancerClass
+            visibility: $exists(spec.loadBalancerClass)
+          - name: Load Balancer IP
+            source: spec.loadBalancerIP
+            visibility: $exists(spec.loadBalancerIP)
+          - name: Load Balancer Source Ranges
+            source: spec.loadBalancerSourceRanges
+            visibility: $exists(spec.loadBalancerSourceRanges)
+          - name: Publish Not Ready Addresses
+            source: spec.publishNotReadyAddresses
+            visibility: $exists(spec.publishNotReadyAddresses)
+          - name: Session Affinity
+            source: spec.sessionAffinity
+            visibility: $exists(spec.sessionAffinity)
+          - name: Session Affinity Config Timeout Seconds
+            source: spec.sessionAffinityConfig.clientIP.timeoutSeconds
+            visibility: $exists(spec.sessionAffinityConfig.clientIP.timeoutSeconds)
+          - name: Traffic Distribution
+            source: spec.trafficDistribution
+            visibility: $exists(spec.trafficDistribution)
       - widget: ResourceList
         source: $subscriptions()
         name: Subscriptions
@@ -82,6 +180,10 @@ data:
             widget: Labels
             name: Selector
             visibility: $exists($value) and $boolean($value)
+      - widget: EventList
+        name: Events
+        filter: "$matchEvents($$, $root.kind, $root.metadata.name)"
+        hideInvolvedObjects: true
   form: |-
     - widget: KeyValuePair
       path: spec.selector
@@ -240,26 +342,6 @@ data:
         function($value) {$value.ip ? $value.ip : $value.hostname}) ~> $join(', '):
         ($count($item.spec.externalIPs) ? $item.spec.externalIPs ~> $join(', '):
         '-')
-  dataSources: |-
-    apirules:
-      resource:
-        kind: APIRule
-        group: gateway.kyma-project.io
-        version: v1beta1
-      filter: $item.spec.service.name = $root.metadata.name
-    podSelector:
-      resource:
-        kind: Pod
-        version: v1
-      filter: $matchByLabelSelector($item, $root.spec.selector)
-    subscriptions:
-      resource:
-        kind: Subscription
-        group: eventing.kyma-project.io
-        version: v1alpha1
-      filter: >-
-        $substringAfter($substringBefore($item.spec.sink, '.'), '://') =
-        $root.metadata.name
   general: |-
     resource:
       kind: Service
