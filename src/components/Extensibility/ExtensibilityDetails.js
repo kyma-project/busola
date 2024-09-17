@@ -77,6 +77,11 @@ export const ExtensibilityDetailsCore = ({
   const dataSources = resMetaData?.dataSources || {};
   const general = resMetaData?.general || {};
 
+  const prepareVisibility = (def, resource) => {
+    const [visible, error] = jsonata(def.visibility, { resource }, true);
+    return { visible, error };
+  };
+
   return (
     <ResourceDetails
       layoutCloseCreateUrl={layoutCloseCreateUrl}
@@ -88,14 +93,7 @@ export const ExtensibilityDetailsCore = ({
         Array.isArray(header)
           ? header.map((def, i) => ({
               header: widgetT(def),
-              visibility: resource => {
-                const [visible, error] = jsonata(
-                  def.visibility,
-                  { resource },
-                  true,
-                );
-                return { visible, error };
-              },
+              visibility: resource => prepareVisibility(def, resource),
               value: resource => (
                 <Widget
                   key={i}
@@ -133,6 +131,7 @@ export const ExtensibilityDetailsCore = ({
               .map((def, i) => ({
                 header: widgetT(def),
                 fullWidth: def.fullWidth,
+                visibility: resource => prepareVisibility(def, resource),
                 value: resource => (
                   <Widget
                     key={i}
@@ -152,6 +151,7 @@ export const ExtensibilityDetailsCore = ({
               .filter(def => def.widget === 'ConditionList')
               .map((def, i) => ({
                 header: widgetT(def),
+                visibility: resource => prepareVisibility(def, resource),
                 value: resource => (
                   <Widget
                     key={i}

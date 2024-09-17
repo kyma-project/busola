@@ -8,22 +8,40 @@ metadata:
     busola.io/extension: resource
     busola.io/extension-version: '0.5'
 data:
+  dataSources: |-
+    targetServices:
+      resource:
+        kind: Service
+        version: v1
+      filter: >-
+        $exists($item.status.loadBalancer.ingress)
+    relatedService:
+      resource:
+        kind: Service
+        version: v1
+      filter: >-
+        $filter($root.spec.targets, function ($v, $i, $a) { $contains($item.status.loadBalancer.ingress.ip, $v)})
   details: |-
-    header: 
-      - source: 'status.state ? status.state : "UNKNOWN"'
-        highlights:
-          informative:
-            - UNKNOWN
-        type: string
-        name: status
-        widget: Badge
-        description: status.message
+    resourceGraph:
+      dataSources:
+        - source: relatedService
+    status:
+      header:
+        - source: 'status.state ? status.state : "UNKNOWN"'
+          highlights:
+            informative:
+              - UNKNOWN
+          type: string
+          name: status
+          widget: Badge
+          description: status.message
+      body:
+        - name: Provider
+          source: status.provider
+          fullWidth: true
+        - name: Observed Generation
+          source: status.observedGeneration
     body: 
-      - name: Provider
-        widget: Panel
-        children:
-          - name: Provider
-            source: status.provider
       - name: Specification
         widget: Panel
         children:
@@ -51,8 +69,10 @@ data:
       required: true    
       name: spec.targets
       children:
-        - widget: Text
-          simple: true
+        - simple: true
+          enum: "$map($targetServices().items, function($v, $i, $a) {
+            {'key':$v.status.loadBalancer.ingress.ip , 'name':$v.status.loadBalancer.ingress.ip & ' (' & $v.metadata.name & ')'}
+          })"
           placeholder: target.placeholder 
     - path: spec.text
       name: spec.text

@@ -51,9 +51,13 @@ tests/integration/fixtures/kubeconfig.yaml
 tests/integration/fixtures/kubeconfig-k3s.yaml
 tests/integration/fixtures/sa-kubeconfig.yaml
 
+tests/kyma/cypress/*
+tests/kyma/fixtures/kubeconfig.yaml
+
 public/themes/@sap-theming/*.css
 
 public/environments
 public/active.env
 
 extensions/downloads/*
+bin

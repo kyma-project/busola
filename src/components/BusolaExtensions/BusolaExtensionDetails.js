@@ -43,6 +43,10 @@ export function BusolaExtensionDetails({ name, namespace }) {
   const updateResourceMutation = useUpdate(resourceUrl);
   const notification = useNotification();
 
+  if (!name) {
+    return null;
+  }
+
   const updateBusolaExtension = async (newBusolaExtension, configmap) => {
     try {
       const diff = createPatch(configmap, newBusolaExtension);
@@ -66,56 +70,53 @@ export function BusolaExtensionDetails({ name, namespace }) {
 
   const BusolaExtensionEditor = resource => {
     const { data } = resource;
-    return (
-      <>
-        {SECTIONS.map(key => (
-          <ReadonlyEditorPanel
-            editorProps={{ language: 'yaml' }}
-            title={t(`extensibility.sections.${key}`)}
-            value={data[key]}
-            key={key + JSON.stringify(data[key])}
-            actions={[
-              <ModalWithForm
-                title={t('extensibility.edit-section', {
+    return SECTIONS.map(key => (
+      <ReadonlyEditorPanel
+        editorProps={{ language: 'yaml' }}
+        title={t(`extensibility.sections.${key}`)}
+        value={data[key]}
+        key={key + JSON.stringify(data[key])}
+        actions={[
+          <ModalWithForm
+            title={t('extensibility.edit-section', {
+              section: t(`extensibility.sections.${key}`),
+            })}
+            modalOpeningComponent={
+              <Button style={spacing.sapUiTinyMarginEnd} design="Default">
+                {t('extensibility.edit-section', {
                   section: t(`extensibility.sections.${key}`),
                 })}
-                modalOpeningComponent={
-                  <Button style={spacing.sapUiTinyMarginEnd} design="Default">
-                    {t('extensibility.edit-section', {
-                      section: t(`extensibility.sections.${key}`),
-                    })}
-                  </Button>
-                }
-                confirmText={t('common.buttons.save')}
-                id={`edit-resource-modal`}
-                className="modal-size--l"
-                renderForm={props => (
-                  <ErrorBoundary>
-                    <SectionEditor
-                      {...props}
-                      onlyYaml={!extensibilitySchemas[key]}
-                      data={data[key]}
-                      schema={extensibilitySchemas[key]}
-                      resource={data}
-                      onSubmit={newData => {
-                        const newResource = {
-                          ...resource,
-                          data: {
-                            ...data,
-                            [key]: newData,
-                          },
-                        };
-                        updateBusolaExtension(newResource, resource);
-                      }}
-                    />
-                  </ErrorBoundary>
-                )}
-              />,
-            ]}
-          />
-        ))}
-      </>
-    );
+              </Button>
+            }
+            confirmText={t('common.buttons.save')}
+            id={`edit-resource-modal`}
+            key={`edit-resource-modal`}
+            className="modal-size--l"
+            renderForm={props => (
+              <ErrorBoundary>
+                <SectionEditor
+                  {...props}
+                  onlyYaml={!extensibilitySchemas[key]}
+                  data={data[key]}
+                  schema={extensibilitySchemas[key]}
+                  resource={data}
+                  onSubmit={newData => {
+                    const newResource = {
+                      ...resource,
+                      data: {
+                        ...data,
+                        [key]: newData,
+                      },
+                    };
+                    updateBusolaExtension(newResource, resource);
+                  }}
+                />
+              </ErrorBoundary>
+            )}
+          />,
+        ]}
+      />
+    ));
   };
 
   const ExtensibilityVersion = configmap => {
@@ -180,6 +181,7 @@ export function BusolaExtensionDetails({ name, namespace }) {
       <UI5Panel
         keyComponent="extensibility-version"
         title={t('extensibility.sections.version')}
+        key={'extensibility-version'}
         headerActions={
           hasMigrationFunction && (
             <>

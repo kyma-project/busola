@@ -73,6 +73,7 @@ export function BusolaExtensionEdit({
         <ResourceForm.CollapsibleSection
           title={t(`extensibility.sections.${key}`)}
           defaultOpen
+          key={key}
         >
           <Editor
             language="yaml"

@@ -1,16 +1,21 @@
-if [ -z "$1" ] ; then  
+#!/bin/bash
+set -e
+
+if [ -z "$1" ] ; then
     echo "No domain passed as first argument, aborting." 
     exit 1
 fi
 
-namespace=${2:-busola}
+export DOMAIN=$1
+NAMESPACE=${2:-busola}
+export ENVIRONMENT=$3
+TMP_DIR="../temp/resources"
 
-mkdir -p ../temp/resources 
 
-cp -rf . ../temp/resources
+mkdir -p "${TMP_DIR}"
+cp -rf . "${TMP_DIR}"
 
-for i in ../temp/resources/**{/*,}.yaml; do
-    sed -i'' "s/%DOMAIN%/$1/g" $i
-done
+envsubst < "${TMP_DIR}"/base/ingress.tpl.yaml > "${TMP_DIR}"/base/ingress.yaml
 
-kubectl apply -k ../temp/resources --namespace=$namespace
+kubectl create namespace "${NAMESPACE}" || true
+kubectl apply -k "${TMP_DIR}/environments/${ENVIRONMENT}" --namespace="${NAMESPACE}"

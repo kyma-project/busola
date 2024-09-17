@@ -17,12 +17,7 @@ function HelmReleaseDataWrapper(secret) {
     return null;
   }
 
-  return (
-    <HelmReleaseData
-      key="helm-release-data"
-      encodedRelease={secret.data.release}
-    />
-  );
+  return <HelmReleaseData key="helm-release-data" releaseSecret={secret} />;
 }
 
 export function SecretDetails(props) {

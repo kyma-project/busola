@@ -8,25 +8,49 @@ metadata:
     busola.io/extension: resource
     busola.io/extension-version: '0.5'
 data:
+  dataSources: |-
+    jksSecret:
+      resource:
+        kind: Secret
+        version: v1
+      filter: $item.metadata.name = $root.spec.keystores.jks.passwordSecretRef.secretName
+    pkcs12Secret:
+      resource:
+        kind: Secret
+        version: v1
+      filter: $item.metadata.name = $root.spec.keystores.pkcs12.passwordSecretRef.secretName
   details: |
-    header:
-      - name: status
-        source: 'status.state ? status.state : "UNKNOWN"'
-        highlights:
-          unknown:
-          - UNKNOWN
-        widget: Badge
-        description: status.message
-      - name: status.expirationDate
-        source: '$readableTimestamp(status.expirationDate)'
-      - name: commonName
-        source: spec.commonName
+    status:
+      header:
+        - name: status
+          source: 'status.state ? status.state : "UNKNOWN"'
+          highlights:
+            unknown:
+            - UNKNOWN
+          widget: Badge
+          description: status.message
+      body:
+        - name: conditions
+          source: status.conditions
+          widget: ConditionList
+        - name: status.expirationDate
+          source: '$readableTimestamp(status.expirationDate)'
+        - name: issuer
+          source: status.issuerRef.name
+        - name: Observed Generation
+          source: status.observedGeneration
     body:
-      - name: references
+      - name: Specification
         widget: Panel
         children:
           - name: issuer
-            source: status.issuerRef.name
+            source: spec.issuerRef.name
+            widget: ResourceLink
+            visibility: $exists(spec.issuerRef)
+            resource:
+              namespace: $root.spec.issuerRef.namespace
+              kind: "'Issuer'"
+              name: $root.spec.issuerRef.name
           - name: secret
             source: spec.secretRef.name
             widget: ResourceLink
@@ -34,16 +58,98 @@ data:
               namespace: $root.spec.secretRef.namespace
               kind: "'Secret'"
               name: $root.spec.secretRef.name
-          - name: spec.csr
-            source: spec.csr
-          - name: metadata.annotations
-            source: metadata.annotations
-            widget: Labels
-          - name: spec.renew
-            source: spec.renew
-          - name: spec.dnsNames
+          - name: spec.secretName
+            source: spec.secretName
+            visibility: $exists(spec.secretName) and $not($exists(spec.secretRef))
+          - name: spec.secretLabels
+            source: spec.secretLabels
+            visibility: $exists(spec.secretLabels)
+          - name: commonName
+            source: spec.commonName
+          - name: dnsNames
             source: spec.dnsNames
             widget: Labels
+          - name: spec.csr
+            source: spec.csr
+          - name: spec.followCNAME
+            source: spec.followCNAME
+            visibility: $exists(spec.followCNAME)
+          - name: spec.renew
+            source: spec.renew
+          - name: spec.ensureRenewedAfter
+            source: spec.ensureRenewedAfter
+            visibility: $exists(spec.ensureRenewedAfter)
+          - name: spec.preferredChain
+            source: spec.preferredChain
+            visibility: $exists(spec.preferredChain)
+      - name: spec.keystores
+        widget: Panel
+        visibility: $exists(spec.keystores)
+        children:
+          - name: JKS
+            widget: Panel
+            visibility: $exists(spec.keystores.jks)
+            children:
+              - name: spec.keystores.create
+                source: spec.keystores.jks.create
+                visibility: $exists(spec.keystores.jks.create)
+              - name: spec.keystores.passwordSecretRef
+                widget: Panel
+                visibility: $exists(spec.keystores.jks.passwordSecretRef)
+                children:
+                  - name: Password Secret Ref
+                    source: spec.keystores.jks.passwordSecretRef.secretName
+                    widget: ResourceLink
+                    visibility: $exists(spec.keystores.jks.passwordSecretRef.secretName) and $count($jksSecret().items)>0
+                    resource:
+                      namespace: $jksSecret().items.metadata.namespace
+                      kind: "'Secret'"
+                      name: $root.spec.keystores.jks.passwordSecretRef.secretName
+                  - name: spec.keystores.secretName
+                    source: spec.keystores.jks.passwordSecretRef.secretName
+                    visibility: $exists(spec.keystores.jks.passwordSecretRef.secretName) and $count($jksSecret().items)=0
+                  - name: spec.keystores.key
+                    source: spec.keystores.jks.passwordSecretRef.key
+                    visibility: $exists(spec.keystores.jks.passwordSecretRef.key)
+          - name: PKCS12
+            widget: Panel
+            visibility: $exists(spec.keystores.pkcs12)
+            children:
+              - name: Create
+                source: spec.keystores.pkcs12.create
+                visibility: $exists(spec.keystores.pkcs12.create)
+              - name: spec.keystores.passwordSecretRef
+                widget: Panel
+                visibility: $exists(spec.keystores.pkcs12.passwordSecretRef)
+                children:
+                  - name: Password Secret Ref
+                    source: spec.keystores.pkcs12.passwordSecretRef.secretName
+                    widget: ResourceLink
+                    visibility: $exists(spec.keystores.pkcs12.passwordSecretRef.secretName) and $count($pkcs12Secret().items)>0
+                    resource:
+                      namespace: $pkcs12Secret().items.metadata.namespace
+                      kind: "'Secret'"
+                      name: $root.spec.keystores.pkcs12.passwordSecretRef.secretName
+                  - name: spec.keystores.secretName
+                    source: spec.keystores.pkcs12.passwordSecretRef.secretName
+                    visibility: $exists(spec.keystores.pkcs12.passwordSecretRef.secretName) and $count($pkcs12Secret().items)=0
+                  - name: spec.keystores.key
+                    source: spec.keystores.pkcs12.passwordSecretRef.key
+                    visibility: $exists(spec.keystores.pkcs12.passwordSecretRef.key)
+      - name: spec.privateKey
+        widget: Panel
+        visibility: $exists(spec.privateKey)
+        children:
+          - name: spec.privateKey.algorithm
+            source: spec.privateKey.algorithm
+            visibility: $exists(spec.privateKey.algorithm)
+          - name: spec.privateKey.size
+            source: spec.privateKey.size
+            visibility: $exists(spec.privateKey.size)
+      - widget: EventList
+        name: Events
+        filter: "$matchEvents($$, $root.kind, $root.metadata.name)"
+        hideInvolvedObjects: true
   form: |
     - var: useCSR
       dynamicValue: '$exists(spec.csr)'
@@ -139,17 +245,32 @@ data:
       metadata.creationTimestamp: Created at
       status: Status
       status.expirationDate: Expiration Time
+      conditions.conditions: Conditions
       issuer: Issuer
       commonName: Common Name
       spec.secretRef: Secret to use
       spec.useExisting: Use the existing Secret
       spec.additionalDomains: Additional domain names, one per line
       spec.dnsNames: DNS Names
+      dnsNames: DNS Names
       spec.csr: CSR
       spec.useCSR: Use a CSR
       spec.certSignReq: Plain text Certificate Signing Request
       spec.certSignReqDecoded: Base64-encoded Certificate Signing Request 
+      spec.followCNAME: Follow CNAME
+      spec.keystores: Keystores
+      spec.keystores.create: Create
+      spec.keystores.passwordSecretRef: Password Secret Ref
+      spec.keystores.secretName: Secret Name
+      spec.keystores.key: Key
+      spec.privateKey: Private Key
+      spec.privateKey.algorithm: Algorithm
+      spec.privateKey.size: Size
       spec.renew: Renew
+      spec.ensureRenewedAfter: Ensure Renewed After
+      spec.preferredChain: Preferred Chain
+      spec.secretLabels: Secret Labels
+      spec.secretName: Secret Name
       certificateCN: Certificate CN (max 64 characters)
-      references: References
       secret: Secret
+      conditions: Conditions

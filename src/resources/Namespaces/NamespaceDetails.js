@@ -5,7 +5,7 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { LimitRangesList } from 'resources/LimitRanges/LimitRangesList';
-import { ResourceQuotaList as ResourceQuotaListComponent } from 'resources/ResourceQuotas/ResourceQuotaList';
+import { ResourceQuotasList as ResourceQuotaListComponent } from 'resources/ResourceQuotas/ResourceQuotasList';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 import { NamespaceStatus } from './NamespaceStatus';
@@ -17,7 +17,7 @@ import { AllNamespacesDetails } from './AllNamespacesDetails';
 import { useSetRecoilState } from 'recoil';
 import { ResourceDescription } from 'resources/Namespaces';
 
-export function NamespaceDetails(props) {
+export default function NamespaceDetails(props) {
   const { t } = useTranslation();
   const setShowAdd = useSetRecoilState(showYamlUploadDialogState);
 
@@ -32,19 +32,17 @@ export function NamespaceDetails(props) {
     namespace: props.resourceName,
     isCompact: true,
     showTitle: true,
-    disableCreate: true,
   };
 
   const LimitrangesList = <LimitRangesList {...limitRangesParams} />;
 
   const resourceQuotasParams = {
-    hasDetailsView: false,
+    hasDetailsView: true,
     resourceUrl: `/api/v1/namespaces/${props.resourceName}/resourcequotas`,
     resourceType: 'ResourceQuotas',
     namespace: props.resourceName,
     isCompact: true,
     showTitle: true,
-    disableCreate: true,
   };
 
   const ResourceQuotasList = (
@@ -101,5 +99,3 @@ export function NamespaceDetails(props) {
     </ResourceDetails>
   );
 }
-
-export default NamespaceDetails;

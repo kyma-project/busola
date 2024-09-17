@@ -5,3 +5,5 @@
 .git
 .github
 kyma/temp
+bin
+tests

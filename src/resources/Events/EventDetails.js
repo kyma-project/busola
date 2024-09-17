@@ -4,10 +4,9 @@ import { useUrl } from 'hooks/useUrl';
 import { FormatInvolvedObject, FormatSourceObject } from 'hooks/useMessageList';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { Icon, ObjectStatus } from '@ui5/webcomponents-react';
+import { Icon, ObjectStatus, Text } from '@ui5/webcomponents-react';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ResourceDescription } from 'resources/Events';
 import EventCreate from './EventYaml';
@@ -17,42 +16,75 @@ import { spacing } from '@ui5/webcomponents-react-base';
 const RowComponent = ({ name, value }) =>
   value ? <LayoutPanelRow name={name} value={value} /> : null;
 
-const Message = event => {
+const Specification = event => {
   const { t } = useTranslation();
 
   return (
     <UI5Panel
       key="message"
-      title={t('events.headers.message')}
+      title={t('common.headers.configuration')}
       keyComponent="specification-panel"
     >
-      {event.message && (
-        <RowComponent
-          name={t('events.headers.message')}
-          value={event.message}
-        />
-      )}
-      {event.reason && (
-        <RowComponent name={t('events.headers.reason')} value={event.reason} />
-      )}
+      <RowComponent
+        name={t('events.headers.type')}
+        value={
+          <Text style={{ display: 'flex', alignItems: 'center' }}>
+            {event.type}{' '}
+            {event.type === 'Warning' ? (
+              <ObjectStatus
+                aria-label="Warning"
+                icon={<Icon name="warning" />}
+                className="has-tooltip"
+                state="Warning"
+                style={spacing.sapUiTinyMarginBegin}
+              />
+            ) : (
+              <ObjectStatus
+                aria-label="Normal"
+                icon={<Icon name="information" />}
+                className="has-tooltip"
+                state="Information"
+                style={spacing.sapUiTinyMarginBegin}
+              />
+            )}
+          </Text>
+        }
+      />
+      <RowComponent
+        name={t('events.headers.message')}
+        value={event.message || EMPTY_TEXT_PLACEHOLDER}
+      />
+      <RowComponent
+        name={t('events.headers.reason')}
+        value={event.reason || EMPTY_TEXT_PLACEHOLDER}
+      />
+      <RowComponent
+        name={t('events.headers.involved-object')}
+        value={FormatInvolvedObject(
+          event.involvedObject || EMPTY_TEXT_PLACEHOLDER,
+        )}
+      />
+      <RowComponent
+        name={t('events.headers.source')}
+        value={FormatSourceObject(event.source || EMPTY_TEXT_PLACEHOLDER)}
+      />
+      <RowComponent
+        name={t('events.headers.reporting-component')}
+        value={event.reportingComponent || EMPTY_TEXT_PLACEHOLDER}
+      />
+      <RowComponent
+        name={t('events.headers.count')}
+        value={event.count || EMPTY_TEXT_PLACEHOLDER}
+      />
     </UI5Panel>
   );
 };
 
-export function EventDetails(props) {
+export default function EventDetails(props) {
   const { t } = useTranslation();
   const { clusterUrl } = useUrl();
 
   const customColumns = [
-    {
-      header: t('events.headers.involved-object'),
-      value: event => FormatInvolvedObject(event.involvedObject),
-    },
-    {
-      header: t('events.headers.source'),
-      value: event =>
-        FormatSourceObject(event.source || EMPTY_TEXT_PLACEHOLDER),
-    },
     {
       header: t('common.labels.namespace'),
       value: event => (
@@ -65,39 +97,6 @@ export function EventDetails(props) {
       ),
     },
     {
-      header: t('events.headers.type'),
-      value: event => (
-        <p style={{ display: 'flex', alignItems: 'center' }}>
-          {event.type}{' '}
-          {event.type === 'Warning' ? (
-            <Tooltip content={event.type}>
-              <ObjectStatus
-                aria-label="Warning"
-                icon={<Icon name="warning" />}
-                className="has-tooltip"
-                state="Warning"
-                style={spacing.sapUiTinyMarginBegin}
-              />
-            </Tooltip>
-          ) : (
-            <Tooltip content={event.type}>
-              <ObjectStatus
-                aria-label="Normal"
-                icon={<Icon name="information" />}
-                className="has-tooltip"
-                state="Information"
-                style={spacing.sapUiTinyMarginBegin}
-              />
-            </Tooltip>
-          )}
-        </p>
-      ),
-    },
-    {
-      header: t('events.headers.count'),
-      value: event => <p>{event.count || EMPTY_TEXT_PLACEHOLDER}</p>,
-    },
-    {
       header: t('events.headers.last-seen'),
       value: event => (
         <ReadableCreationTimestamp timestamp={event.lastTimestamp} />
@@ -107,15 +106,16 @@ export function EventDetails(props) {
 
   return (
     <ResourceDetails
-      customComponents={[Message]}
+      customComponents={[Specification]}
       customColumns={customColumns}
       description={ResourceDescription}
       createResourceForm={EventCreate}
+      readOnly
+      disableEdit
+      hideLabels
+      hideAnnotations
+      hideLastUpdate
       {...props}
-      readOnly={true}
-      disableEdit={true}
     />
   );
 }
-
-export default EventDetails;

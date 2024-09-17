@@ -1,0 +1,113 @@
+apiVersion: operator.kyma-project.io/v1beta2
+kind: ModuleTemplate
+metadata:
+  name: api-gateway-regular
+  namespace: kcp-system
+  labels:
+    'operator.kyma-project.io/controller-name': 'manifest'
+    'operator.kyma-project.io/managed-by': 'lifecycle-manager'
+    'operator.kyma-project.io/module-name': 'api-gateway'
+  annotations:
+    'operator.kyma-project.io/doc-url': 'https://kyma-project.io/#/api-gateway/user/README'
+    'operator.kyma-project.io/is-cluster-scoped': 'true'
+    'operator.kyma-project.io/module-version': '2.3.1'
+spec:
+  channel: regular
+  mandatory: false
+  data:
+    apiVersion: operator.kyma-project.io/v1alpha1
+    kind: APIGateway
+    metadata:
+      name: default
+    spec:
+      enableKymaGateway: true
+  descriptor:
+    component:
+      componentReferences: []
+      labels:
+        - name: security.kyma-project.io/scan
+          value: enabled
+          version: v1
+      name: kyma-project.io/module/api-gateway
+      provider: '{"name":"kyma-project.io","labels":[{"name":"kyma-project.io/built-by","value":"cli","version":"v1"}]}'
+      repositoryContexts:
+        - baseUrl: europe-docker.pkg.dev/kyma-project/modules-internal
+          componentNameMapping: urlPath
+          type: OCIRegistry
+      resources:
+        - access:
+            imageReference: europe-docker.pkg.dev/kyma-project/prod/api-gateway-manager:2.3.1
+            type: ociRegistry
+          labels:
+            - name: scan.security.kyma-project.io/type
+              value: third-party-image
+              version: v1
+          name: api-gateway-manager
+          relation: external
+          type: ociImage
+          version: 2.3.1
+        - access:
+            imageReference: europe-docker.pkg.dev/kyma-project/prod/external/oryd/oathkeeper:v0.38.25-beta.1
+            type: ociRegistry
+          labels:
+            - name: scan.security.kyma-project.io/type
+              value: third-party-image
+              version: v1
+          name: oathkeeper
+          relation: external
+          type: ociImage
+          version: v0.38.25-beta.1
+        - access:
+            imageReference: europe-docker.pkg.dev/kyma-project/prod/external/oryd/oathkeeper-maester:v0.1.5
+            type: ociRegistry
+          labels:
+            - name: scan.security.kyma-project.io/type
+              value: third-party-image
+              version: v1
+          name: oathkeeper-maester
+          relation: external
+          type: ociImage
+          version: v0.1.5
+        - access:
+            localReference: sha256:78bab6b37b97ccd1cd86b04b7dcb4bcda6079b6a87dc4a54c9b26efd9743cf52
+            mediaType: application/octet-stream
+            referenceName: raw-manifest
+            type: localBlob
+          digest:
+            hashAlgorithm: SHA-256
+            normalisationAlgorithm: genericBlobDigest/v1
+            value: 78bab6b37b97ccd1cd86b04b7dcb4bcda6079b6a87dc4a54c9b26efd9743cf52
+          name: raw-manifest
+          relation: local
+          type: yaml
+          version: 2.3.1
+      sources:
+        - access:
+            commit: e2943f2c34d213a4f8f1509391689f0eb5e8259f
+            repoUrl: https://github.com/kyma-project/api-gateway.git
+            type: gitHub
+          labels:
+            - name: git.kyma-project.io/ref
+              value: HEAD
+              version: v1
+            - name: scan.security.kyma-project.io/rc-tag
+              value: ''
+              version: v1
+            - name: scan.security.kyma-project.io/language
+              value: golang-mod
+              version: v1
+            - name: scan.security.kyma-project.io/dev-branch
+              value: ''
+              version: v1
+            - name: scan.security.kyma-project.io/subprojects
+              value: 'false'
+              version: v1
+            - name: scan.security.kyma-project.io/exclude
+              value: '**/tests/**,**/test/**,**/*_test.go'
+              version: v1
+          name: module-sources
+          type: Github
+          version: 2.3.1
+      version: 2.3.1
+    meta:
+      schemaVersion: v2

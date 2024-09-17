@@ -1,3 +1,4 @@
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SetterOrUpdater, useRecoilValue } from 'recoil';
 import { Category } from 'state/navigation/categories';
@@ -40,7 +41,7 @@ export function CategoryItem({
   };
 
   const children = category.items?.map(nn => (
-    <>
+    <React.Fragment key={nn.pathSegment}>
       {nn.dataSources ? (
         <DataSourcesContextProvider dataSources={nn.dataSources}>
           <NavItem node={nn} key={nn.pathSegment} subItem={true} />
@@ -48,7 +49,7 @@ export function CategoryItem({
       ) : (
         <NavItem node={nn} key={nn.pathSegment} subItem={true} />
       )}
-    </>
+    </React.Fragment>
   ));
 
   return (

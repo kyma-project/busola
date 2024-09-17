@@ -1,0 +1,66 @@
+name: PR Kyma Dashboard Smoke Tests Prod
+
+on: 
+  pull_request:
+    types: [opened, edited, synchronize, reopened, ready_for_review]
+    paths:
+      - ".github/workflows/pull-smoke-test-prod.yml"
+      - "resources/**"
+      - "tests/kyma/**"
+      - "nginx/**"
+      - "src/**"
+      - "kyma/**"
+      - "Dockerfile*"
+
+jobs:
+  run-smoke-test-prod:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: gardenlinux/workflow-telemetry-action@v2
+        with:
+          comment_on_pr: false
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install k3d
+        env:
+          K3D_URL: https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh
+        run: curl --silent --fail $K3D_URL | bash
+      - name: Setup Kyma
+        run: |
+          set -o pipefail
+          ./.github/scripts/setup-kyma.sh | tee kyma-alpha-deploy.log
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: setup_busola
+        shell: bash
+        run: |
+          set -o pipefail
+          ./.github/scripts/setup-busola.sh | tee busola-build.log
+        env: 
+          ENV: prod
+      - name: run_tests
+        shell: bash
+        run: |
+          k3d kubeconfig get kyma > tests/kyma/fixtures/kubeconfig.yaml
+          export CYPRESS_DOMAIN=http://localhost:3001
+
+          cd tests/kyma
+          npm ci && npm run "test:smoke-extensions"
+      - name: Uploads artifacts
+        uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: cypress-${{ github.job }}
+          path: tests/cypress/
+          retention-days: 90
+      - name: Upload Kyma Dashboard logs
+        uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: kyma-dashboard-logs-${{ github.job }}
+          path: |
+            kyma-alpha-deploy.log
+            busola-build.log
+          retention-days: 90

@@ -192,11 +192,13 @@ command-palette:
     gateways: Gateways
     horizontalpodautoscalers: Horizontal Pod Autoscalers
     kyma: Modules
+    limitranges: Limit Ranges
     networkpolicies: Network Policies
     oauth2clients: OAuth2 Clients
     persistentvolumeclaims: Persistent Volume Claims
     persistentvolumes: Persistent Volumes
     replicasets: Replica Sets
+    resourcequotas: Resource Quotas
     rolebindings: Role Bindings
     serviceaccounts: Service Accounts
     serviceentries: Service Entries
@@ -565,6 +567,7 @@ events:
     last-seen: Last Seen
     message: Message
     reason: Reason
+    reporting-component: Reporting Component
     source: Source
     type: Type
   title: Events
@@ -629,16 +632,18 @@ get-help:
 helm-releases:
   description: <0>Helm Release</0> tracks the installed charts. For each installed chart, a new release is created.
   headers:
+    app-version: App Version
     chart: Chart
     chart-description: Chart Description
     chart-files: Chart Files
+    chart-information: Chart Information
     chart-name: Chart Name
     chart-version: Chart Version
     first-deployed: First Deployed
     last-deployed: Last Deployed
     other-release-versions: Other Release Versions
     release: 'Release '
-    release-data: Release Data
+    release-manifest: Release Manifest
     release-version: Version v{{version}}
     revision: Revision
   messages:
@@ -1004,6 +1009,7 @@ resource-graph:
   save-as-dot: DOT format
   title: Resource Graph
 resource-quotas:
+  description: A <0>Resource Quota</0> provides constraints that limit aggregate resource consumption per namespace. 
   headers:
     limits:
       memory: Memory Limits
@@ -1011,6 +1017,14 @@ resource-quotas:
     requests:
       memory: Memory Requests
       cpu: CPU Requests
+    scopes: Scopes
+    scope-selectors: Scope Selectors
+    limits-usage: Limits and Usage
+    resource: Resource
+    hard: Hard
+    used: Used
+    operator: Operator
+    values: Values
   title: Resource Quotas
   name_singular: Resource Quota
 role-bindings:

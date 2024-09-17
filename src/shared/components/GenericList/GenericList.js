@@ -71,6 +71,7 @@ export const GenericList = ({
   displayArrow = false,
   handleRedirect = null,
   nameColIndex = 0,
+  namespaceColIndex = -1,
   noHideFields,
   customRowClick,
   className = '',
@@ -78,6 +79,7 @@ export const GenericList = ({
   const navigate = useNavigate();
   searchSettings = { ...defaultSearch, ...searchSettings };
   const [entrySelected, setEntrySelected] = useState('');
+  const [entrySelectedNamespace, setEntrySelectedNamespace] = useState('');
   if (typeof sortBy === 'function') sortBy = sortBy(defaultSort);
 
   const [sort, setSort] = useState({
@@ -276,7 +278,9 @@ export const GenericList = ({
           isSelected={
             ((layoutState?.midColumn?.resourceName === e.metadata?.name ||
               layoutState?.endColumn?.resourceName === e.metadata?.name) &&
-              entrySelected === e?.metadata?.name) ||
+              entrySelected === e?.metadata?.name &&
+              (entrySelectedNamespace === '' ||
+                entrySelectedNamespace === e?.metadata?.namespace)) ||
             isModuleSelected
           }
           index={index}
@@ -308,16 +312,24 @@ export const GenericList = ({
       e.target.children[nameColIndex].children[0].innerText ??
       e.target.children[nameColIndex].innerText;
 
+    const hasNamepace = namespaceColIndex !== -1;
+    const itemNamespace = hasNamepace
+      ? e?.target?.children[namespaceColIndex]?.children[0]?.innerText ??
+        e?.target?.children[namespaceColIndex]?.innerText
+      : '';
+
     const selectedEntry = entries.find(entry => {
       return (
-        entry?.metadata?.name === item ||
-        pluralize(entry?.spec?.names?.kind ?? '') === item ||
-        entry?.name === item
+        (entry?.metadata?.name === item ||
+          pluralize(entry?.spec?.names?.kind ?? '') === item ||
+          entry?.name === item) &&
+        (!hasNamepace || entry?.metadata?.namespace === itemNamespace)
       );
     });
 
     if (customRowClick) {
       setEntrySelected(item);
+      setEntrySelectedNamespace(itemNamespace);
       return customRowClick(item, selectedEntry);
     } else {
       if (handleRedirect) {
@@ -337,6 +349,7 @@ export const GenericList = ({
       setEntrySelected(
         selectedEntry?.metadata?.name ?? e.target.children[0].innerText,
       );
+      setEntrySelectedNamespace(selectedEntry?.metadata?.namespace ?? '');
       if (!enableColumnLayout) {
         setLayoutColumn({
           midColumn: null,
