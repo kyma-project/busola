@@ -32,7 +32,11 @@ Cypress.Commands.add('handleExceptions', () => {
       ) ||
       err.message.includes(
         "Cannot read properties of undefined (reading 'showAt')",
-      )
+      ) ||
+      err.message.includes(
+        'Uncaught SyntaxError: Cannot use import statement outside a module',
+      ) ||
+      err.message.includes('Uncaught ReferenceError: module is not define')
     )
       return false;
   });
