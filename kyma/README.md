@@ -1,13 +1,3 @@
-> **NOTE:** This is a general template that you can use for a project README.md. Except for the mandatory sections, use only those sections that suit your use case but keep the proposed section order.
->
-> Mandatory sections:
-> - `Overview`
-> - `Prerequisites`, if there are any requirements regarding hard- or software
-> - `Installation`
-> - `Contributing` - do not change this!
-> - `Code of Conduct` - do not change this!
-> - `Licensing` - do not change this!
-
 # Kyma dashboard
 
 ## Overview
@@ -45,8 +35,8 @@ The **extensions** directory contains general extensibility configuration to avo
 
 ## Prerequisites
 
-- [`npm`](https://www.npmjs.com/) in version 8.1.2 or higher
-- [`node`](https://nodejs.org/en/) in version 16.13.2 or higher
+- [`npm`](https://www.npmjs.com/) in version 10.x
+- [`node`](https://nodejs.org/en/) in version 20.x
 - [`make`](https://www.gnu.org/software/make/)
 
 ## Installation
