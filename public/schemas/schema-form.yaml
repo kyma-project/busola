@@ -153,6 +153,10 @@ $widgets:
           const: KeyValuePair
     then:
       properties:
+        disableOnEdit:
+          type: boolean
+          description: A boolean that specifies if KeyValuePair is disabled on edit.
+          default: false
         keyEnum:
           type: array
           description: An array of options to generate a key input field with a dropdown
