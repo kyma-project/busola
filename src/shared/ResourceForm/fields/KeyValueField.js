@@ -80,8 +80,11 @@ export function KeyValueField({
           .reduce((acc, entry) => ({ ...acc, [entry.key]: entry.val }), {})
       }
       inputs={[
-        ({ value, setValue, ref, updateValue, focus }) => (
-          <div className={readableFromFile ? 'bsl-col-md--4' : 'bsl-col-md--6'}>
+        ({ value, setValue, ref, updateValue, focus, index }) => (
+          <div
+            key={`key-value-field-key-${index}`}
+            className={readableFromFile ? 'bsl-col-md--4' : 'bsl-col-md--6'}
+          >
             {input.key({
               fullWidth: true,
               className: 'full-width',
@@ -101,8 +104,11 @@ export function KeyValueField({
             })}
           </div>
         ),
-        ({ focus, value, setValue, updateValue, ...props }) => (
-          <div className={readableFromFile ? 'bsl-col-md--5' : 'bsl-col-md--6'}>
+        ({ focus, value, setValue, updateValue, index, ...props }) => (
+          <div
+            key={`key-value-field-value-${index}`}
+            className={readableFromFile ? 'bsl-col-md--5' : 'bsl-col-md--6'}
+          >
             {input.value({
               fullWidth: true,
               className: 'value-input full-width',
@@ -131,8 +137,8 @@ export function KeyValueField({
             })}
           </div>
         ),
-        ({ value, setValue, updateValue }) => (
-          <>
+        ({ value, setValue, updateValue, index }) => (
+          <React.Fragment key={`read-file-button-${index}`}>
             {readableFromFile ? (
               <Button
                 onClick={() =>
@@ -151,7 +157,7 @@ export function KeyValueField({
                 {t('components.key-value-form.read-value')}
               </Button>
             ) : null}
-          </>
+          </React.Fragment>
         ),
       ]}
       actions={actions}

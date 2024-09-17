@@ -92,7 +92,6 @@ export function Editor({
   return (
     <div
       className="resource-form__wrapper"
-      {...rest}
       style={{ height, minHeight: height }}
     >
       {loading ? (
