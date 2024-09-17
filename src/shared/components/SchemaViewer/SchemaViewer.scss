@@ -1,7 +1,7 @@
 .schema-viewer {
   dl {
     display: grid;
-    grid-template-columns: auto Min(calc(100vw - 30rem), calc(100% - 8rem));
+    grid-template-columns: auto Min(calc(100vw - 30rem), calc(100% - 9rem));
     grid-row-gap: 4px;
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
@@ -12,6 +12,7 @@
 
       &.expandable {
         cursor: pointer;
+        margin-bottom: 0.5rem;
       }
     }
 

@@ -1,9 +1,8 @@
-import React from 'react';
-
 import { useTranslation } from 'react-i18next';
 
 import { ObjectProperties } from './ObjectProperties';
-import { ObjectStatus, Text } from '@ui5/webcomponents-react';
+import { FlexBox, ObjectStatus, Text } from '@ui5/webcomponents-react';
+import { spacing } from '@ui5/webcomponents-react-base';
 
 export function JSONSchema({
   root = false,
@@ -19,8 +18,12 @@ export function JSONSchema({
   return (
     <section className="object-details">
       {!root && (
-        <div>
-          {name && <Text className="property-name">{name}</Text>}{' '}
+        <FlexBox alignItems="Center">
+          {name && (
+            <Text style={spacing.sapUiTinyMarginEnd} className="property-name">
+              {name}
+            </Text>
+          )}
           {types &&
             types
               .map(type => {
@@ -40,7 +43,7 @@ export function JSONSchema({
               {t('schema.required')}
             </ObjectStatus>
           )}
-        </div>
+        </FlexBox>
       )}
       {description && <div className="description">{description}</div>}
 

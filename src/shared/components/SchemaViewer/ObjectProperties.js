@@ -20,13 +20,13 @@ function ObjectProperty({ label, val, handler, required, expanded = false }) {
       >
         {handler.expandable && (
           <Icon
-            style={spacing.sapUiSmallMarginEnd}
+            style={spacing.sapUiTinyMarginEnd}
             aria-hidden
             name={
               collapsed ? 'navigation-right-arrow' : 'navigation-down-arrow'
             }
           />
-        )}{' '}
+        )}
         <Text>{label}</Text>
       </dd>
       {(!handler.expandable || !collapsed) && (

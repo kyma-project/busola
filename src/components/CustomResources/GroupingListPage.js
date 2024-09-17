@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { groupBy } from 'lodash';
 import { Tokens } from 'shared/components/Tokens';
@@ -12,6 +12,7 @@ import { SearchInput } from 'shared/components/GenericList/SearchInput';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { createPortal } from 'react-dom';
+import './GroupingListPage.scss';
 
 export function GroupingListPage({
   title,
@@ -57,7 +58,7 @@ export function GroupingListPage({
       {entries
         .sort(([groupA], [groupB]) => groupA.localeCompare(groupB))
         .map(([group, crds]) => (
-          <li key={group}>
+          <li key={group} className="cr-group-list">
             <ResourceListRenderer
               resourceUrl={resourceUrl}
               resourceType="CustomResourceDefinition"
