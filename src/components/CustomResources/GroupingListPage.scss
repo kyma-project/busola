@@ -1,0 +1,18 @@
+.cr-group-list {
+  ui5-table-cell[slot='default-1'] {
+    width: 35vw;
+  }
+
+  ui5-table-cell[slot='default-2'] {
+    width: 22vw;
+  }
+}
+
+@media (max-width: 850px) {
+  .cr-group-list {
+    ui5-table-cell[slot='default-1'],
+    ui5-table-cell[slot='default-2'] {
+      width: unset;
+    }
+  }
+}
