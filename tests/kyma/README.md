@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project contains integration and smoke UI tests for Kyma-Dashboard.
+This project contains integration and smoke UI tests for Kyma dashboard.
 
 ## Prerequisites
 
@@ -23,19 +23,19 @@ To install dependencies, run the `npm install` command.
 ### Run Cypress UI tests in the headless mode
 
 To run Cypress UI tests using a Chrome browser in `headless mode`,
-pointing to a `remote Kyma-Dashboard` cluster with the default `local.kyma.dev` domain, use this command:
+pointing to a `remote Kyma dashboard` cluster with the default `local.kyma.dev` domain, use this command:
 
 ```bash
 npm test
 ```
 
-To run the tests, pointing to a `remote Kyma-Dashboard` cluster with `custom` domain, use this command:
+To run the tests, pointing to a `remote Kyma dashboard` cluster with `custom` domain, use this command:
 
 ```bash
 CYPRESS_DOMAIN={YOUR_DOMAIN} npm test
 ```
 
-To run the tests, pointing to a `local Kyma-Dashboard` instance, use this command:
+To run the tests, pointing to a `local Kyma dashboard` instance, use this command:
 
 ```bash
 npm run test:local
@@ -44,19 +44,19 @@ npm run test:local
 ### Run Cypress UI tests in the test runner mode
 
 To open Cypress UI `tests runner`,
-pointing to a `remote Kyma-Dashboard` cluster with the default `local.kyma.dev` domain, use this command:
+pointing to a `remote Kyma dashboard` cluster with the default `local.kyma.dev` domain, use this command:
 
 ```bash
 npm run start
 ```
 
-To open the `tests runner`, pointing to a `remote Kyma-Dashboard` cluster with `custom` domain, use this command:
+To open the `tests runner`, pointing to a `remote Kyma dashboard` cluster with `custom` domain, use this command:
 
 ```bash
 CYPRESS_DOMAIN={YOUR_DOMAIN} npm run start
 ```
 
-To open the `tests runner`, pointing to a `local Kyma-Dashboard` instance, use this command:
+To open the `tests runner`, pointing to a `local Kyma dashboard` instance, use this command:
 
 ```bash
 npm run start:local
@@ -64,7 +64,7 @@ npm run start:local
 
 ### Smoke tests
 
-To run smoke tests, pointing to a local Kyma-Dashboard instance, use this command:
+To run smoke tests, pointing to a local Kyma dashboard instance, use this command:
 
 ```bash
 test:smoke-extensions
