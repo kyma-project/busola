@@ -11,7 +11,7 @@
     "test:e2e": "cypress run --browser chromium",
     "test:local": "CYPRESS_LOCAL_DEV=true cypress run --browser chrome",
     "test:smoke-extensions": "cypress run --browser chromium -C cypress-smoke.js",
-    "run-docker": "docker run --rm -it -p 3001:3001 -e DOCKER_DESKTOP_CLUSTER=true --pid=host --name kyma-dashboard europe-docker.pkg.dev/kyma-project/dev/kyma-dashboard-local-dev:PR-$PR_NUMBER"
+    "run-docker": "docker run --rm -it -p 3001:3001 -e DOCKER_DESKTOP_CLUSTER=true --net=host --pid=host --name kyma-dashboard --env ENVIRONMENT=$ENV europe-docker.pkg.dev/kyma-project/dev/busola-kyma-web-local:PR-$PR_NUMBER"
   },
   "devDependencies": {
     "cypress-file-upload": "^5.0.8",
