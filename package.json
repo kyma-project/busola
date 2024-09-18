@@ -7,7 +7,7 @@
   "scripts": {
     "postinstall": "cd backend && npm install",
     "start": "concurrently -c cyan,green npm:busola npm:backend",
-    "busola": "npm run copy-themes; PORT=8080 BROWSER=none GENERATE_SOURCEMAP=false vite",
+    "busola": "npm run copy-themes; BROWSER=none GENERATE_SOURCEMAP=false vite",
     "backend": "cd backend && npm run start",
     "eslint-check": "eslint src/ backend/",
     "lint-check": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
