@@ -40,6 +40,7 @@ The `extensions` directory contains a general extensibility configuration to avo
 - [Make](https://www.gnu.org/software/make/)
 
 ## Installation
+It is used to download all dependencies needed to prepare configurations.
 
 ```bash
 npm clean-install

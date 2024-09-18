@@ -113,7 +113,7 @@ ENVIRONMENT=your-environment-name
 When **ENVIRONMENT** is set to `my-env`, Busola looks for your custom configuration in `public/environemnt/my-env`.
 If **ENVIRONMENT** is not set, Busola fetches the default configuration with the same structure as the custom configuration located in the [public directory](./public).
 
-In case of docker image, the file `active.env` is created from `ENVIRONMENT` env at the startup to image.
+In the case of the Docker image, the `active.env` file is created at the startup of the image from the environment specified in the **ENVIRONMENT** variable.
 
 ## Development
 
