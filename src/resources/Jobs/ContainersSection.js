@@ -9,6 +9,7 @@ export const ContainersSection = ({ readOnly, ...props }) => {
 
   return (
     <ItemArray
+      defaultOpen
       listTitle={t('jobs.create-modal.containers')}
       nameSingular={t('jobs.create-modal.container')}
       entryTitle={container => container?.name}
