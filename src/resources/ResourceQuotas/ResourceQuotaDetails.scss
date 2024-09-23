@@ -1,9 +1,10 @@
 .resource-quota-limits {
+  text-transform: capitalize;
+
   &.compact {
     margin: 0 0 1rem 0 !important;
     padding-right: 0.5rem;
   }
-  text-transform: capitalize;
 }
 
 .resource-quota-spec-subheader {
