@@ -38,7 +38,6 @@ context('Test Jobs', () => {
       .type(JOB_NAME, { force: true });
 
     // job container name
-    cy.get('[aria-label="expand Containers"]').click();
     cy.get('[aria-label="Container name"]:visible')
       .find('input')
       .type(JOB_NAME, { force: true });

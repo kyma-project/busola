@@ -29,6 +29,8 @@ export function MultiInput({
   newItemAction,
   newItemActionWidth = 1,
   inputInfo,
+  disableOnEdit,
+  editMode,
   ...props
 }) {
   const { t } = useTranslation();
@@ -186,7 +188,7 @@ export function MultiInput({
                   {!isLast(index) && (
                     <div className="bsl-col-md--1">
                       <Button
-                        disabled={readOnly}
+                        disabled={readOnly || (disableOnEdit && editMode)}
                         className={classnames({
                           hidden: isEntryLocked(entry),
                         })}

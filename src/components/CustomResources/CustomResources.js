@@ -15,6 +15,7 @@ export function CustomResources({
   hideCreateOption,
   enableColumnLayout,
   layoutCloseCreateUrl,
+  simpleEmptyListMessage = false,
 }) {
   const { group, names } = crd.spec;
   const name = names.plural;
@@ -94,6 +95,7 @@ export function CustomResources({
     customColumnLayout,
     layoutNumber: 'MidColumn',
     parentCrdName: crd.metadata.name,
+    simpleEmptyListMessage,
   };
   return <ResourcesList {...params} />;
 }
