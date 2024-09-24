@@ -90,7 +90,7 @@ export const PVCConfiguration = pvc => {
                       name={requests[0] + ' Requests'}
                       value={requests[1] || EMPTY_TEXT_PLACEHOLDER}
                       key={requests[0]}
-                      capitabilize={true}
+                      capitalize={true}
                     />
                   );
                 })}
