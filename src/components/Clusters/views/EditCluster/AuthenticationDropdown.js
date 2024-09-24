@@ -10,7 +10,6 @@ export function AuthenticationTypeDropdown({ type, setType }) {
   ];
   return (
     <Dropdown
-      compact
       options={options}
       selectedKey={type}
       onSelect={(_, selected) => setType(selected.key)}

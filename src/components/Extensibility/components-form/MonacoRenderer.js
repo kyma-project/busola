@@ -100,21 +100,16 @@ export function MonacoRenderer({
       <div style={spacing.sapUiTinyMarginBottom}>
         <Label required={required}>{tFromStoreKeys(storeKeys, schema)}</Label>
       </div>
-
-      <div className="bsl-col-md--11">
-        <Editor
-          autocompletionDisabled
-          updateValueOnParentChange
-          value={formattedValue}
-          language={language}
-          onChange={handleChange}
-        />
-        {inputInfo && (
-          <p style={{ color: 'var(--sapNeutralTextColor)' }}>
-            {tExt(inputInfo)}
-          </p>
-        )}
-      </div>
+      <Editor
+        autocompletionDisabled
+        updateValueOnParentChange
+        value={formattedValue}
+        language={language}
+        onChange={handleChange}
+      />
+      {inputInfo && (
+        <p style={{ color: 'var(--sapNeutralTextColor)' }}>{tExt(inputInfo)}</p>
+      )}
     </ResourceForm.CollapsibleSection>
   );
 }

@@ -340,6 +340,7 @@ common:
     type-to-select: Start typing to select {{value}} from the list
     validation-error: Validation error
   placeholders:
+    enter-jsonata: Enter JSONata expression
     secret-ref-name: Select name
     secret-ref-namespace: Select Namespace
   product-title: Kyma

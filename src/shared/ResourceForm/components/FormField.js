@@ -38,34 +38,30 @@ export function FormField({
     >
       <FlexBox wrap="Wrap" alignItems="Center" className="bsl-col-md--12">
         {!isListItem && <Label required={required && !disabled}>{label}</Label>}
-        <div className="tooltip-column">
-          {tooltipContent && (
-            <HintButton
-              setShowTitleDescription={setOpenPopover}
-              showTitleDescription={openPopover}
-              description={tooltipContent}
-              style={spacing.sapUiTinyMarginBegin}
-            />
-          )}
-        </div>
+        {tooltipContent && (
+          <HintButton
+            setShowTitleDescription={setOpenPopover}
+            showTitleDescription={openPopover}
+            description={tooltipContent}
+            style={spacing.sapUiTinyMarginBegin}
+          />
+        )}
       </FlexBox>
       <FlexBox wrap="Wrap" alignItems="Center" className="full-width">
-        <FlexBox wrap="Wrap" alignItems="Center" className="bsl-col-md--12">
-          {messageStrip
-            ? messageStrip
-            : input({
-                updatesOnInput,
-                required,
-                disabled,
-                className: 'full-width',
-                ...inputProps,
-              })}
-          {inputInfo && (
-            <Label wrappingType="Normal" style={{ marginTop: '5px' }}>
-              {inputInfoLink}
-            </Label>
-          )}
-        </FlexBox>
+        {messageStrip
+          ? messageStrip
+          : input({
+              updatesOnInput,
+              required,
+              disabled,
+              className: 'full-width',
+              ...inputProps,
+            })}
+        {inputInfo && (
+          <Label wrappingType="Normal" style={{ marginTop: '5px' }}>
+            {inputInfoLink}
+          </Label>
+        )}
       </FlexBox>
     </FlexBox>
   );

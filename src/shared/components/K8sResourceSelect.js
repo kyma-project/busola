@@ -93,27 +93,25 @@ export function K8sResourceSelect({
   };
 
   return (
-    <div className="bsl-col-md--12">
-      <ComboBox
-        required={required}
-        disabled={props.disabled || !options?.length}
-        placeholder={t('common.messages.type-to-select', {
-          value: resourceType,
-        })}
-        id="k8s-resource-dropdown"
-        data-testid={props['data-testid']}
-        aria-label={t('common.messages.choose', { value: resourceType })}
-        onChange={onChange}
-        onInput={onChange}
-        value={value}
-        valueState={getValidationState()?.state}
-        valueStateMessage={<Text>{getValidationState()?.text}</Text>}
-        pattern={k8sNamePattern}
-      >
-        {options.map(option => (
-          <ComboBoxItem id={option.key} text={option.text} />
-        ))}
-      </ComboBox>
-    </div>
+    <ComboBox
+      required={required}
+      disabled={props.disabled || !options?.length}
+      placeholder={t('common.messages.type-to-select', {
+        value: resourceType,
+      })}
+      id="k8s-resource-dropdown"
+      data-testid={props['data-testid']}
+      aria-label={t('common.messages.choose', { value: resourceType })}
+      onChange={onChange}
+      onInput={onChange}
+      value={value}
+      valueState={getValidationState()?.state}
+      valueStateMessage={<Text>{getValidationState()?.text}</Text>}
+      pattern={k8sNamePattern}
+    >
+      {options.map(option => (
+        <ComboBoxItem id={option.key} text={option.text} />
+      ))}
+    </ComboBox>
   );
 }
