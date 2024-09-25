@@ -2,6 +2,8 @@ import { defineConfig, transformWithEsbuild } from 'vite';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
 import svgr from 'vite-plugin-svgr';
 import react from '@vitejs/plugin-react';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
+import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -30,11 +32,22 @@ export default defineConfig({
     svgr({
       include: '**/*.svg?react',
     }),
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'resources/base/resource-validation/rule-sets/**/*.yaml',
+          dest: 'resource-validation',
+          rename: 'rule-set.yaml',
+          transform(content) {
+            return `---\n${content.toString()}\n`;
+          },
+        },
+      ],
+    }),
   ],
   worker: {
     plugins: () => [viteTsconfigPaths()],
   },
-
   optimizeDeps: {
     force: true,
     esbuildOptions: {
@@ -44,7 +57,16 @@ export default defineConfig({
     },
     include: [
       '@openapi-contrib/openapi-schema-to-json-schema', 
-      '@stoplight/json-ref-resolver'
+      '@stoplight/json-ref-resolver',
+      'monaco-yaml/yaml.worker.js'
     ]
+  },
+  resolve: {
+    alias: {
+      shared: path.resolve(__dirname, 'src/shared'),
+    },
+  },
+  define: {
+    'process.env.IS_DOCKER': JSON.stringify(process.env.IS_DOCKER),
   },
 });
