@@ -1,5 +1,5 @@
 import { useValidation } from 'shared/hooks/useValidation';
-import { ResourceForm } from 'shared/ResourceForm/components/ResourceForm';
+import { ResourceForm } from 'shared/ResourceForm';
 import {
   useGetTranslation,
   getPropsFromSchema,
