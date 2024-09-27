@@ -5,10 +5,10 @@ import { useGetSchema } from 'hooks/useGetSchema';
 import { v4 as uuid } from 'uuid';
 import YamlWorker from './yaml.worker.js?worker';
 
-self.MonacoEnvironment = {
+window.MonacoEnvironment = {
   getWorker: function(workerId, label) {
     const getWorkerModule = (moduleUrl, label) => {
-      return new Worker(self.MonacoEnvironment.getWorkerUrl(moduleUrl), {
+      return new Worker(window.MonacoEnvironment.getWorkerUrl(moduleUrl), {
         name: label,
         type: 'module',
       });
