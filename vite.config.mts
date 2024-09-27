@@ -4,6 +4,8 @@ import svgr from 'vite-plugin-svgr';
 import react from '@vitejs/plugin-react';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import path from 'path';
+import fs from 'fs';
+import glob from 'glob';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -38,8 +40,8 @@ export default defineConfig({
           src: 'resources/base/resource-validation/rule-sets/**/*.yaml',
           dest: 'resource-validation',
           rename: 'rule-set.yaml',
-          transform(content) {
-            return `---\n${content.toString()}\n`;
+          transform() {
+            return mergeYamlFiles('resources/base/resource-validation/rule-sets/**/*.yaml');
           },
         },
       ],
@@ -70,3 +72,16 @@ export default defineConfig({
     'process.env.IS_DOCKER': JSON.stringify(process.env.IS_DOCKER),
   },
 });
+
+function mergeYamlFiles (filesPath) {
+  let mergedYamlContent = '';
+
+  const files = glob.sync(filesPath);
+
+  files.forEach(file => {
+    const content = fs.readFileSync(file, 'utf-8');
+    mergedYamlContent += `---\n${content}\n`;
+  });
+
+  return mergedYamlContent;
+}
