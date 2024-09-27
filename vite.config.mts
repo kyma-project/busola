@@ -3,7 +3,6 @@ import viteTsconfigPaths from 'vite-tsconfig-paths';
 import svgr from 'vite-plugin-svgr';
 import react from '@vitejs/plugin-react';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
-import path from 'path';
 import fs from 'fs';
 import glob from 'glob';
 
@@ -62,11 +61,6 @@ export default defineConfig({
       '@stoplight/json-ref-resolver',
       'monaco-yaml/yaml.worker.js'
     ]
-  },
-  resolve: {
-    alias: {
-      shared: path.resolve(__dirname, 'src/shared'),
-    },
   },
   define: {
     'process.env.IS_DOCKER': JSON.stringify(process.env.IS_DOCKER),
