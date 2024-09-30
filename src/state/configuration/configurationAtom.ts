@@ -88,6 +88,7 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
       customizer,
     ) as Configuration;
   } catch (e) {
+    console.warn('Cannot load cluster params: ', e);
     return {
       features: {},
     } as Configuration;
