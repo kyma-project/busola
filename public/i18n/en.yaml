@@ -342,7 +342,7 @@ common:
   placeholders:
     enter-jsonata: Enter JSONata expression
     secret-ref-name: Select name
-    secret-ref-namespace: Select Namespace
+    secret-ref-namespace: Select namespace
   product-title: Kyma
   protected-resource-description: Resource protected. Go to Preferences to turn on the modification of protected resources.
   protected-resource: Protected resource 
