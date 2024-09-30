@@ -107,9 +107,6 @@ export function ExtensibilityWizardCore({
     [store],
   );
   const [resourcesWithStatuses, setResourcesWithStatuses] = useState([]);
-  const [initialUnchangedResources, setInitialUnchangedResources] = useState(
-    resourcesWithStatuses,
-  );
 
   const onChange = (actions, resource) => {
     if (actions.scopes.includes('value')) {
@@ -164,32 +161,18 @@ export function ExtensibilityWizardCore({
           }),
         );
 
-        if (!initialUnchangedResources.length) {
-          const temp = files.map(resource => {
-            if (
-              resource.metadata.name === resourceInitial.metadata.name &&
-              resource.kind === resourceInitial.kind
-            ) {
-              const temp = { value: resourceInitial };
-              return temp;
-            } else return resource;
-          });
-          setInitialUnchangedResources(temp);
-        }
         setError(null);
       }
     } catch ({ message }) {
       setError(message.substr(0, message.indexOf('\n')));
       setResourcesWithStatuses([]);
     }
-  }, [yaml, t, initialUnchangedResources, resourceInitial]);
+  }, [yaml, t, resourceInitial]);
 
   const uploadResources = useUploadResources(
     resourcesWithStatuses,
-    initialUnchangedResources,
     setResourcesWithStatuses,
     setUploadState,
-
     // defaultNamespace,
     'default',
   );

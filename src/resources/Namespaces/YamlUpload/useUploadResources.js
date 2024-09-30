@@ -24,7 +24,6 @@ export const STATE_CREATED = 'CREATED';
 
 export function useUploadResources(
   resources = [],
-  initialUnchangedResources = [],
   setResourcesData,
   setLastOperationState,
   namespaceId,
@@ -87,7 +86,7 @@ export function useUploadResources(
     }
   };
 
-  const fetchApiGroup = async (resource, initialResource, index) => {
+  const fetchApiGroup = async (resource, index) => {
     const url = await getUrl(resource.value);
     const urlWithName = `${url}/${resource?.value?.metadata?.name}`;
     const existingResource = await fetchPossibleExistingResource(urlWithName);
@@ -102,7 +101,7 @@ export function useUploadResources(
             : lastOperationState,
         );
       } else {
-        const diff = createPatch(initialResource?.value, resource.value);
+        const diff = createPatch(existingResource, resource.value);
         await patchRequest(urlWithName, diff);
         updateState(index, STATE_UPDATED);
         setLastOperationState(lastOperationState =>
@@ -125,22 +124,9 @@ export function useUploadResources(
       setLastOperationState(OPERATION_STATE_WAITING);
       for (const [index, resource] of filteredResources?.entries()) {
         updateState(index, STATE_WAITING);
-        const matchedInitialResource = initialUnchangedResources?.find(
-          initial => {
-            if (initial?.value?.metadata?.uid) {
-              return initial.value.metadata.uid === resource.value.metadata.uid;
-            }
-            return (
-              initial.value.kind === resource.value.kind &&
-              initial.value.apiVersion === resource.value.apiVersion &&
-              initial.value.metadata.name === resource.value.metadata.name
-            );
-          },
-        );
-        fetchApiGroup(resource, matchedInitialResource, index);
+        fetchApiGroup(resource, index);
       }
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resources]);
 

@@ -8,9 +8,14 @@ import './LayoutPanelRow.scss';
 type LayoutPanelRowProps = {
   name: string;
   value: string | ReactNode;
+  capitalize?: boolean;
 };
 
-export function LayoutPanelRow({ name, value }: LayoutPanelRowProps) {
+export function LayoutPanelRow({
+  name,
+  value,
+  capitalize = false,
+}: LayoutPanelRowProps) {
   const sanitizedValue = stringifyIfBoolean(value);
 
   return (
@@ -19,6 +24,7 @@ export function LayoutPanelRow({ name, value }: LayoutPanelRowProps) {
       style={{
         ...spacing.sapUiTinyMarginTopBottom,
         ...spacing.sapUiSmallMarginBeginEnd,
+        ...(capitalize ? { textTransform: 'capitalize' } : {}),
       }}
     >
       <Text style={spacing.sapUiTinyMarginBottom}>{name}</Text>
