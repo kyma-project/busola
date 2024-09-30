@@ -48,6 +48,16 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
       configDir + '/config/config.yaml' + cacheBuster,
     );
 
+    let envConfig: Config = {};
+
+    // When yaml is not available, the busola returns react application which displays not found error.
+    // Then jsyaml.load raise an exception and NavigationSidebar is not able to render because it's in infinite loop.
+    if (configResponse.headers.get('Content-Type')?.includes('text/yaml')) {
+      envConfig = jsyaml.load(await configResponse.text()) as Config;
+    } else {
+      console.warn(`Custom Configuration is not available.`);
+    }
+
     let configMapResponse: ConfigMapResponse;
     if (fetchFn) {
       try {
@@ -61,7 +71,6 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
       }
     }
 
-    const configParams = jsyaml.load(await configResponse.text()) as Config;
     const mapParams = configMapResponse?.data?.config
       ? (jsyaml.load(configMapResponse.data.config) as Config)
       : {};
@@ -74,13 +83,14 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
 
     return mergeWith(
       defaultParams?.config,
-      configParams?.config,
+      envConfig?.config,
       mapParams?.config,
       customizer,
     ) as Configuration;
   } catch (e) {
-    console.warn('Cannot load cluster params: ', e);
-    return null;
+    return {
+      features: {},
+    } as Configuration;
   }
 };
 

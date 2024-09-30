@@ -48,3 +48,7 @@ ifeq ($(JOB_TYPE), postsubmit)
 else
 	@echo "Image tagging with latest skipped"
 endif
+
+run-local-docker:
+	docker build -t "local-busola" -f Dockerfile.local.kyma .
+	docker run --rm --interactive --tty --net=host --pid=host --name kyma-dashboard --env ENVIRONMENT="${ENV}" "local-busola"
