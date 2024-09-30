@@ -17,6 +17,8 @@ context('Test Custom Resources', () => {
   before(() => {
     cy.loginAndSelectCluster();
 
+    cy.wait(2000);
+
     cy.navigateTo('Configuration', 'Custom Resource Definitions');
 
     cy.openCreate().click();
