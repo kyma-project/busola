@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
@@ -28,6 +28,7 @@ import './ClusterList.scss';
 import { useSetRecoilState } from 'recoil';
 import { showAddClusterWizard } from 'state/showAddClusterWizard';
 import { EmptyListComponent } from 'shared/components/EmptyListComponent/EmptyListComponent';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 function ClusterList() {
   const gardenerLoginFeature = useFeature('GARDENER_LOGIN');
@@ -45,6 +46,15 @@ function ClusterList() {
 
   const [chosenCluster, setChosenCluster] = useState(null);
   const setShowAdd = useSetRecoilState(showAddClusterWizard);
+  const setLayoutColumn = useSetRecoilState(columnLayoutState);
+
+  useEffect(() => {
+    setLayoutColumn({
+      layout: 'OneColumn',
+      midColumn: null,
+      endColumn: null,
+    });
+  }, [setLayoutColumn]);
 
   const [toggleFormFn, getToggleFormFn] = useState(() => {});
   const [editedCluster, setEditedCluster] = useState(null);
