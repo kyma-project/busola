@@ -159,63 +159,60 @@ export function MultiInput({
       tooltipContent={sectionTooltipContent || tooltipContent}
       {...props}
     >
-      <div className="form-field multi-input">
-        <ul className="bsl-col-md--12">
-          {internalValue.map((entry, index) => {
-            const fieldWidth =
-              isLast(index) && newItemAction
-                ? `bsl-col-md--${12 - newItemActionWidth}`
-                : 'bsl-col-md--11';
+      <ul className="full-width form-field multi-input">
+        {internalValue.map((entry, index) => {
+          const fieldWidth =
+            isLast(index) && newItemAction
+              ? `bsl-col-md--${12 - newItemActionWidth}`
+              : 'bsl-col-md--11';
 
-            return (
-              <li key={index} style={spacing.sapUiTinyMarginBottom}>
-                <FlexBox style={{ gap: '10px' }} alignItems="Center">
-                  {noEdit && !isLast(index) && (
-                    <span className="readonly-value">{entry}</span>
-                  )}
+          return (
+            <li key={index} style={spacing.sapUiTinyMarginBottom}>
+              <FlexBox style={{ gap: '10px' }} alignItems="Center">
+                {noEdit && !isLast(index) && (
+                  <span className="readonly-value">{entry}</span>
+                )}
 
-                  {(!noEdit || isLast(index)) && (
-                    <div className={fieldWidth}>
-                      <FlexBox style={{ gap: '10px' }} alignItems="Center">
-                        {inputs.map(
-                          (input, inputIndex) =>
-                            inputComponents[index][inputIndex],
-                        )}
-                      </FlexBox>
-                    </div>
-                  )}
+                {(!noEdit || isLast(index)) && (
+                  <FlexBox
+                    style={{ gap: '10px' }}
+                    alignItems="Center"
+                    className={fieldWidth}
+                  >
+                    {inputs.map(
+                      (input, inputIndex) => inputComponents[index][inputIndex],
+                    )}
+                  </FlexBox>
+                )}
 
-                  {!isLast(index) && (
-                    <div className="bsl-col-md--1">
-                      <Button
-                        disabled={readOnly || (disableOnEdit && editMode)}
-                        className={classnames({
-                          hidden: isEntryLocked(entry),
-                        })}
-                        icon="delete"
-                        design="Transparent"
-                        onClick={() => removeValue(index)}
-                        aria-label={t('common.buttons.delete')}
-                      />
-                    </div>
-                  )}
+                {!isLast(index) && (
+                  <Button
+                    disabled={readOnly || (disableOnEdit && editMode)}
+                    className={classnames({
+                      hidden: isEntryLocked(entry),
+                    })}
+                    icon="delete"
+                    design="Transparent"
+                    onClick={() => removeValue(index)}
+                    aria-label={t('common.buttons.delete')}
+                  />
+                )}
 
-                  {isLast(index) && newItemAction && (
-                    <div className={`bsl-col-md--${newItemActionWidth}`}>
-                      {newItemAction}
-                    </div>
-                  )}
-                </FlexBox>
-              </li>
-            );
-          })}
-          {inputInfo && (
-            <Label wrappingType="Normal" style={{ marginTop: '5px' }}>
-              {inputInfoLink}
-            </Label>
-          )}
-        </ul>
-      </div>
+                {isLast(index) && newItemAction && (
+                  <div className={`bsl-col-md--${newItemActionWidth}`}>
+                    {newItemAction}
+                  </div>
+                )}
+              </FlexBox>
+            </li>
+          );
+        })}
+        {inputInfo && (
+          <Label wrappingType="Normal" style={{ marginTop: '5px' }}>
+            {inputInfoLink}
+          </Label>
+        )}
+      </ul>
     </ResourceForm.CollapsibleSection>
   );
 }

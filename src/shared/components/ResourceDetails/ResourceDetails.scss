@@ -1,10 +1,10 @@
-.cluster-overview__details-wrapper,
 .cluster-overview__details-grid {
   display: grid;
   gap: 1rem;
 }
 
 .cluster-overview__details-wrapper {
+  display: grid;
   grid-template-columns: 1fr;
   min-width: 200px;
   width: fit-content;

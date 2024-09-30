@@ -96,7 +96,12 @@ export function BusolaExtensionDetails({ name, namespace }) {
               <ErrorBoundary>
                 <SectionEditor
                   {...props}
-                  onlyYaml={!extensibilitySchemas[key]}
+                  onlyYaml={
+                    // onlyYaml view for form & details due to heavy performance issues
+                    !extensibilitySchemas[key] ||
+                    key === 'form' ||
+                    key === 'details'
+                  }
                   data={data[key]}
                   schema={extensibilitySchemas[key]}
                   resource={data}

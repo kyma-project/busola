@@ -14,7 +14,6 @@ export function WrappedText({ value, setValue, onChange, inputRef, ...props }) {
     setMultiValue,
     setResource,
     validateMessage,
-    fullWidth = false,
     ...inputProps
   } = props;
 
@@ -24,13 +23,11 @@ export function WrappedText({ value, setValue, onChange, inputRef, ...props }) {
   });
 
   return (
-    <div className={fullWidth ? '' : 'bsl-col-md--12'}>
-      <Input
-        value={value || ''}
-        onInput={onChange ?? (e => setValue && setValue(e.target.value))}
-        {...inputProps}
-        {...validationProps}
-      />
-    </div>
+    <Input
+      value={value || ''}
+      onInput={onChange ?? (e => setValue && setValue(e.target.value))}
+      {...inputProps}
+      {...validationProps}
+    />
   );
 }

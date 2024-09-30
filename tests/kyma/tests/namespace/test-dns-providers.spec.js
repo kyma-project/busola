@@ -30,7 +30,7 @@ context('Test DNS Providers', () => {
 
     // secret
     chooseComboboxOption(
-      '[placeholder="Select Namespace"]',
+      '[placeholder="Select namespace"]',
       Cypress.env('NAMESPACE_NAME'),
     );
 

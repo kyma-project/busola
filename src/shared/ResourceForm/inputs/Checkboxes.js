@@ -27,17 +27,15 @@ export function Checkboxes({
             onChange={e => updateValue(key, e.target.checked)}
             text={text}
           />
-          <div className="bsl-col-md--1 tooltip-column">
-            {description && (
-              <Tooltip className="has-tooltip" delay={0} content={description}>
-                <Icon
-                  className="bsl-icon-m"
-                  name="message-information"
-                  design="Information"
-                />
-              </Tooltip>
-            )}
-          </div>
+          {description && (
+            <Tooltip className="has-tooltip" delay={0} content={description}>
+              <Icon
+                className="bsl-icon-m"
+                name="message-information"
+                design="Information"
+              />
+            </Tooltip>
+          )}
         </FlexBox>
       ))}
     </>

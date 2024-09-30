@@ -39,7 +39,7 @@ context('Test Issuers', () => {
     chooseComboboxOption('[placeholder="Select Issuer type"]', 'CA');
 
     chooseComboboxOption(
-      '[placeholder="Select Namespace"]',
+      '[placeholder="Select namespace"]',
       Cypress.env('NAMESPACE_NAME'),
     );
 
