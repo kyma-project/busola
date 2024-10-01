@@ -5,7 +5,7 @@ const getBackendAddress = () => {
   if (
     window.location.hostname.startsWith('localhost') &&
     window.location.port === '8080' &&
-    process.env.IS_DOCKER
+    !process.env.IS_DOCKER
   ) {
     return 'http://127.0.0.1:3001/backend';
     // dev busola
