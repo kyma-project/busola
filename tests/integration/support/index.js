@@ -10,4 +10,7 @@ import './createNamespace';
 import './loadFile';
 import './mockConfig';
 import '../continuum/cypress';
+import './check-extension';
+import './navigate-back-to';
+
 require('cypress-plugin-tab');
