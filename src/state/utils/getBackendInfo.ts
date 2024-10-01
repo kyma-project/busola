@@ -4,7 +4,8 @@ const getBackendAddress = () => {
   // local busola - needed for e2e tests to work locally
   if (
     window.location.hostname.startsWith('localhost') &&
-    window.location.port === '8080'
+    window.location.port === '8080' &&
+    process.env.IS_DOCKER
   ) {
     return 'http://127.0.0.1:3001/backend';
     // dev busola
