@@ -63,7 +63,7 @@ export default defineConfig({
     ]
   },
   define: {
-    'process.env.IS_DOCKER': JSON.stringify(process.env.VITE_IS_DOCKER || false),
+    'process.env.IS_DOCKER': JSON.stringify(process.env.IS_DOCKER || false),
   },
 });
 
