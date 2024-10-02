@@ -53,8 +53,6 @@ export default function KymaModulesList({
   detailsOpen,
 }) {
   const { t } = useTranslation();
-
-  const [showTitleDescription, setShowTitleDescription] = useState(false);
   const [
     showReleaseChannelTitleDescription,
     setShowReleaseChannelTitleDescription,
