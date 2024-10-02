@@ -79,19 +79,24 @@ context('Test login - kubeconfigID', () => {
         method: 'GET',
         url: '/config/config.yaml*',
       },
-      jsyaml.dump({
-        config: {
-          features: {
-            KUBECONFIG_ID: {
-              isEnabled: true,
-              config: {
-                kubeconfigUrl: '/kubeconfig',
-                defaultKubeconfig: 'mock-kubeconfig.yaml',
+      {
+        headers: {
+          'Content-Type': 'text/yaml',
+        },
+        body: jsyaml.dump({
+          config: {
+            features: {
+              KUBECONFIG_ID: {
+                isEnabled: true,
+                config: {
+                  kubeconfigUrl: '/kubeconfig',
+                  defaultKubeconfig: 'mock-kubeconfig.yaml',
+                },
               },
             },
           },
-        },
-      }),
+        }),
+      },
     );
 
     cy.wrap(loadFile('kubeconfig.yaml')).then(kubeconfig => {
