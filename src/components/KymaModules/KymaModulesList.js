@@ -415,6 +415,7 @@ export default function KymaModulesList({
               setShowTitleDescription={setShowReleaseChannelTitleDescription}
               showTitleDescription={showReleaseChannelTitleDescription}
               description={ReleaseChannelDescription}
+              ariaTitle={t('kyma-modules.release-channel')}
             />
           </FlexBox>
         </DynamicPageHeader>
@@ -426,19 +427,8 @@ export default function KymaModulesList({
       resourceType={resourceType}
       resourceName={resourceName}
       namespace={namespace}
-      customTitle={
-        <>
-          {t('kyma-modules.title')}
-          {
-            <HintButton
-              style={spacing.sapUiTinyMarginBegin}
-              setShowTitleDescription={setShowTitleDescription}
-              showTitleDescription={showTitleDescription}
-              description={ResourceDescription}
-            />
-          }
-        </>
-      }
+      customTitle={t('kyma-modules.title')}
+      headerDescription={ResourceDescription}
       createResourceForm={KymaModulesCreate}
       disableResourceDetailsCard
       disableDelete
