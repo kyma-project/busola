@@ -147,6 +147,9 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
       cy.contains('ui5-title', 'Cluster Details').should('be.visible');
     }
 
+    cy.reload();
+    cy.wait(2000);
+
     return cy.end();
   });
 });
