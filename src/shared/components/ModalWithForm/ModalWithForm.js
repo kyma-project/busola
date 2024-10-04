@@ -153,6 +153,7 @@ export const ModalWithForm = ({
             setOpenStatus(false);
           }}
           headerText={title}
+          accessibleName={title}
         >
           {isOpen &&
             renderForm({

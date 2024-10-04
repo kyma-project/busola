@@ -2,7 +2,7 @@ import ListActions from 'shared/components/ListActions/ListActions';
 import '@ui5/webcomponents-icons/dist/AllIcons.js';
 
 import 'core-js/es/array/flat-map';
-import { act, render, waitFor } from '@testing-library/react';
+import { act, queryByAttribute, render, waitFor } from '@testing-library/react';
 
 describe('ListActions', () => {
   it('Renders only standalone buttons', async () => {
@@ -11,19 +11,25 @@ describe('ListActions', () => {
       { name: 'action1', handler: jest.fn() },
       { name: 'action2', handler: jest.fn() },
     ];
-    const { queryByText, queryByLabelText } = render(
+    const { container, queryByText } = render(
       <ListActions actions={actions} entry={entry} />,
     );
 
     await waitFor(async () => {
       await act(async () => {
-        expect(queryByLabelText('more-actions')).toBeFalsy();
+        expect(
+          queryByAttribute('accessible-name', container, 'more-actions'),
+        ).toBeFalsy();
 
         expect(queryByText(actions[0].name)).toBeInTheDocument();
         expect(queryByText(actions[1].name)).toBeInTheDocument();
 
         actions.forEach(action => {
-          const actionButton = queryByLabelText(action.name);
+          const actionButton = queryByAttribute(
+            'accessible-name',
+            container,
+            action.name,
+          );
           expect(actionButton).toBeTruthy();
 
           actionButton.click();
@@ -41,13 +47,17 @@ describe('ListActions', () => {
       { name: 'action3', handler: jest.fn() },
       { name: 'action4', handler: jest.fn() },
     ];
-    const { queryByText, queryByLabelText } = render(
+    const { container, queryByText } = render(
       <ListActions actions={actions} entry={{}} />,
     );
 
     await waitFor(async () => {
       await act(async () => {
-        const moreActionsButton = queryByLabelText('more-actions');
+        const moreActionsButton = queryByAttribute(
+          'accessible-name',
+          container,
+          'more-actions',
+        );
         expect(moreActionsButton).toBeInTheDocument();
         expect(queryByText(actions[0].name)).toBeInTheDocument();
         expect(queryByText(actions[3].name)).not.toBeInTheDocument();
@@ -61,11 +71,15 @@ describe('ListActions', () => {
 
   it('Renders icon for standalone button', () => {
     const actions = [{ name: 'action', handler: jest.fn(), icon: 'edit' }];
-    const { queryByText, queryByLabelText } = render(
+    const { container, queryByText } = render(
       <ListActions actions={actions} entry={{}} />,
     );
 
-    const actionButton = queryByLabelText(actions[0].name);
+    const actionButton = queryByAttribute(
+      'accessible-name',
+      container,
+      actions[0].name,
+    );
     expect(actionButton).toBeInTheDocument();
     expect(actionButton).toHaveAttribute('icon', 'edit');
 
@@ -77,14 +91,16 @@ describe('ListActions', () => {
       { name: 'Edit', handler: jest.fn() },
       { name: 'Delete', handler: jest.fn() },
     ];
-    const { getByLabelText } = render(
-      <ListActions actions={actions} entry={{}} />,
-    );
+    const { container } = render(<ListActions actions={actions} entry={{}} />);
 
-    const editButton = getByLabelText('Edit');
+    const editButton = queryByAttribute('accessible-name', container, 'Edit');
     expect(editButton).toHaveAttribute('icon', 'edit');
 
-    const deleteButton = getByLabelText('Delete');
+    const deleteButton = queryByAttribute(
+      'accessible-name',
+      container,
+      'Delete',
+    );
     expect(deleteButton).toHaveAttribute('icon', 'delete');
   });
 
@@ -93,14 +109,16 @@ describe('ListActions', () => {
       { name: 'Edit', handler: jest.fn(), icon: 'add' },
       { name: 'Delete', handler: jest.fn(), icon: 'delete' },
     ];
-    const { getByLabelText } = render(
-      <ListActions actions={actions} entry={{}} />,
-    );
+    const { container } = render(<ListActions actions={actions} entry={{}} />);
 
-    const editButton = getByLabelText('Edit');
+    const editButton = queryByAttribute('accessible-name', container, 'Edit');
     expect(editButton).toHaveAttribute('icon', 'add');
 
-    const deleteButton = getByLabelText('Delete');
+    const deleteButton = queryByAttribute(
+      'accessible-name',
+      container,
+      'Delete',
+    );
     expect(deleteButton).toHaveAttribute('icon', 'delete');
   });
 });
