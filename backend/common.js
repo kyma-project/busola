@@ -30,6 +30,13 @@ const workaroundForNodeMetrics = req => {
   }
 };
 
+// remove headers
+const workaroundForAbsoluteLinks = req => {
+  if (req.originalUrl.includes('maytheforce')) {
+    delete req.headers;
+  }
+};
+
 export const makeHandleRequest = () => {
   const isDev = process.env.NODE_ENV !== 'production';
   const isTrackingEnabled =
@@ -92,7 +99,9 @@ export const makeHandleRequest = () => {
       cert,
       key,
     };
+    console.log(console.log('lolo options', options));
     workaroundForNodeMetrics(req);
+    workaroundForAbsoluteLinks(req);
 
     const k8sRequest = https.request(options, function(k8sResponse) {
       if (

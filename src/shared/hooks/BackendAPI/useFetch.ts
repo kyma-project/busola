@@ -8,10 +8,12 @@ import { getClusterConfig } from '../../../state/utils/getBackendInfo';
 import { clusterState, ActiveClusterState } from '../../../state/clusterAtom';
 
 export type FetchFn = ({
+  isAbsolute,
   relativeUrl,
   abortController,
   init,
 }: {
+  isAbsolute?: string;
   relativeUrl: string;
   init?: any;
   abortController?: AbortController;
@@ -24,10 +26,12 @@ export const createFetchFn = ({
   authData: AuthDataState;
   cluster: ActiveClusterState;
 }): FetchFn => async ({
+  isAbsolute,
   relativeUrl,
   abortController,
   init,
 }: {
+  isAbsolute?: string;
   relativeUrl: string;
   init?: any;
   abortController?: AbortController;
@@ -40,10 +44,31 @@ export const createFetchFn = ({
     },
     signal: abortController?.signal,
   };
+  console.log('lolo init', init);
   const { backendAddress } = getClusterConfig();
 
+  console.log(
+    'createFetchFn isAbsolute',
+    isAbsolute,
+    'relativeUrl',
+    relativeUrl,
+  );
   try {
-    const response = await fetch(backendAddress + relativeUrl, init);
+    const response = await fetch(
+      isAbsolute ? relativeUrl : backendAddress + relativeUrl,
+      isAbsolute
+        ? {
+            ...init,
+            headers: {
+              'X-Cluster-Url': cluster?.currentContext.cluster.cluster.server,
+              'X-Cluster-Certificate-Authority-Data':
+                cluster?.currentContext.cluster.cluster[
+                  'certificate-authority-data'
+                ],
+            },
+          }
+        : init,
+    );
     if (response.ok) {
       return response;
     } else {

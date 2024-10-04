@@ -14,8 +14,26 @@ const ERROR_TOLERANCY = 2;
 const useGetHook = processDataFn =>
   function(
     path,
-    { pollingInterval, onDataReceived, skip, errorTolerancy = undefined } = {},
+    {
+      pollingInterval,
+      onDataReceived,
+      skip,
+      errorTolerancy = undefined,
+      isAbsolute = false,
+    } = {},
   ) {
+    console.log(
+      'useGetHook path',
+      path,
+      'pollingInterval',
+      pollingInterval,
+      'onDataReceived',
+      onDataReceived,
+      'skip',
+      skip,
+      'isAbsolute',
+      isAbsolute,
+    );
     const authData = useRecoilValue(authDataState);
     const lastAuthData = useRef(null);
     const lastResourceVersion = useRef(null);
@@ -58,6 +76,7 @@ const useGetHook = processDataFn =>
           requestData.current[currentRequestId] = { start: Date.now() };
           const response = await fetch({
             relativeUrl: path,
+            isAbsolute: isAbsolute,
             abortController: abortController.current,
           });
           const payload = await response.json();

@@ -94,7 +94,7 @@ export function ResourcesList(props) {
   if (!props.resourceUrl) {
     return <></>; // wait for the context update
   }
-
+  console.log('ResourcesList', props.resourceUrl);
   const content = props.resources ? (
     <ResourceListRenderer
       resources={(props.resources || []).filter(props.filterFn)}
@@ -147,16 +147,19 @@ function Resources(props) {
     resourceUrl,
     skipDataLoading,
     isCompact,
+    isAbsolute,
   } = props;
   useWindowTitle(prettifyNamePlural(resourceTitle, resourceType), {
     skip: isCompact,
   });
 
+  console.log('Resources', resourceUrl);
   const { loading, error, data: resources, silentRefetch } = useGetList()(
     resourceUrl,
     {
       pollingInterval: 3000,
       skip: skipDataLoading,
+      isAbsolute: isAbsolute,
     },
   );
 

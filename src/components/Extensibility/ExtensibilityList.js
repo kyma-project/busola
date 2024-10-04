@@ -32,8 +32,13 @@ export const ExtensibilityListCore = ({
   const { t: tBusola } = useTranslation();
   const jsonata = useJsonata({});
 
-  const { resource, description, features, filter: generalFilter } =
-    resMetaData?.general ?? {};
+  const {
+    resource,
+    backendUrls,
+    description,
+    features,
+    filter: generalFilter,
+  } = resMetaData?.general ?? {};
 
   const { disableCreate, disableEdit, disableDelete } = features?.actions ?? {
     disableCreate: props.disableCreate,
@@ -52,14 +57,16 @@ export const ExtensibilityListCore = ({
     apiGroup: resource?.group,
     apiVersion: resource?.version,
     hasDetailsView: !!resMetaData?.details,
+    getUrl: backendUrls?.get,
   });
+  console.log('usePrepareListProps', listProps);
 
   const resourceTitle = resMetaData?.general?.name;
   listProps.resourceTitle = exists('name')
     ? t('name')
     : resourceTitle || pluralize(prettifyKind(resource?.kind || ''));
 
-  if (resource?.kind) {
+  if (resource?.kind && !backendUrls?.get) {
     listProps.resourceUrl = listProps.resourceUrl?.replace(
       /[a-z0-9-]+\/?$/,
       pluralize(resource.kind).toLowerCase(),
