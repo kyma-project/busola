@@ -8,7 +8,7 @@ function VerbStatus({ rule, verb }) {
   const hasVerb = rule.verbs?.includes(verb) || rule.verbs?.includes('*');
 
   return hasVerb ? (
-    <Icon name="accept" aria-hidden aria-label={verb} data-testid={verb} />
+    <Icon name="accept" aria-hidden accessibleName={verb} data-testid={verb} />
   ) : (
     <span data-testid={verb}>{EMPTY_TEXT_PLACEHOLDER}</span>
   );

@@ -91,7 +91,7 @@ export default function SecretCreate({
         input={({ value, setValue }) => (
           <ComboBox
             id="secrets-type-combobox"
-            aria-label="Secret's type's Combobox"
+            accessibleName="Secret's type's Combobox"
             placeholder={t('secrets.placeholders.type')}
             value={options.find(o => o.key === value)?.text ?? value}
             disabled={!!initialUnchangedResource || !options?.length}

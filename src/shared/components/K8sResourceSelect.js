@@ -101,7 +101,7 @@ export function K8sResourceSelect({
       })}
       id="k8s-resource-dropdown"
       data-testid={props['data-testid']}
-      aria-label={t('common.messages.choose', { value: resourceType })}
+      accessibleName={t('common.messages.choose', { value: resourceType })}
       onChange={onChange}
       onInput={onChange}
       value={value}

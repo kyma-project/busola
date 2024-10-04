@@ -105,7 +105,7 @@ export function SearchInput({
   return (
     <Input
       id="search-input"
-      aria-label={`search-${entriesKind}`}
+      accessibleName={`search-${entriesKind}`}
       role="search"
       type="Text"
       ref={searchInputRef}

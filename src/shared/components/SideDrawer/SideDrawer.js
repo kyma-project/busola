@@ -87,7 +87,7 @@ export const SideDrawer = ({
           <Icon
             name={isOpen ? 'open-command-field' : 'close-command-field'}
             className="bsl-icon-l"
-            aria-label="Open/close the drawer"
+            accessibleName="Open/close the drawer"
           />
           {buttonText}
         </Button>
@@ -97,7 +97,7 @@ export const SideDrawer = ({
         <div className="handle" onMouseDown={onResizeStart}>
           <Icon
             name="vertical-grip"
-            aria-label="resize"
+            accessibleName="resize"
             className="bsl-icon-m"
           />
         </div>

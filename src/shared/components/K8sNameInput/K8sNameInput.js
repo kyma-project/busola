@@ -40,7 +40,7 @@ export const K8sNameInput = ({
       id={id}
       value={value || defaultValue || ''}
       aria-required={required ? 'true' : 'false'}
-      aria-label={t('components.k8s-name-input.aria-label', {
+      accessibleName={t('components.k8s-name-input.aria-label', {
         resourceType: kind,
       })}
       required={required}

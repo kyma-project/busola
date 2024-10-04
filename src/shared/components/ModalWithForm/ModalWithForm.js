@@ -99,7 +99,7 @@ export const ModalWithForm = ({
       <Button
         icon={button.icon || null}
         iconEnd
-        aria-label={button.label || null}
+        accessibleName={button.label || null}
         design={button.design}
         disabled={!!button.disabled}
         onClick={() => setOpenStatus(true)}

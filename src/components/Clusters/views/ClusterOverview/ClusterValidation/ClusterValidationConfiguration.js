@@ -199,7 +199,7 @@ export function ClusterValidationConfigurationDialog({
                 onClick={() => {
                   onSubmit(tempConfiguration);
                 }}
-                aria-label="cluster-validation-submit"
+                accessibleName="cluster-validation-submit"
               >
                 {t('common.buttons.submit')}
               </Button>

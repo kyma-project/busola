@@ -37,7 +37,7 @@ export function TextArrayInput({
             className="full-width"
             {...readOnlyOptions}
             {...inputProps}
-            aria-label={ariaLabel}
+            accessibleName={ariaLabel}
           />
         ),
       ]}

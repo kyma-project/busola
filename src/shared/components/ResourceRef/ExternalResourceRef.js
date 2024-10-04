@@ -110,7 +110,7 @@ export function ExternalResourceRef({
         input={() => (
           <ComboBox
             id={`secret-namespace-combobox-${index}`}
-            aria-label="Secret namespace Combobox"
+            accessibleName="Secret namespace Combobox"
             placeholder={t('common.placeholders.secret-ref-namespace')}
             onChange={event => {
               const selectedOption = namespacesOptions.find(
@@ -147,7 +147,7 @@ export function ExternalResourceRef({
           <div className="bsl-col-md--12">
             <ComboBox
               id={`secret-name-combobox-${index}`}
-              aria-label="Secret name Combobox"
+              accessibleName="Secret name Combobox"
               disabled={!filteredResourcesOptions?.length}
               placeholder={t('common.placeholders.secret-ref-name')}
               onChange={event => {

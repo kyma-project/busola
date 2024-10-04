@@ -34,7 +34,7 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
   const languageDropdown = (
     <ComboBox
       id="choose-language-input"
-      aria-label="choose-language"
+      accessibleName="choose-language"
       disabled={!item}
       value={typeof language === 'string' ? language : ''}
       onChange={event => {
