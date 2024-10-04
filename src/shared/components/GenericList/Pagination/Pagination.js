@@ -92,6 +92,7 @@ export const Pagination = ({
           setShowTitleDescription={setShowInfo}
           showTitleDescription={showInfo}
           description={t('settings.other.info')}
+          ariaTitle={t('settings.other.pagination')}
         />
       </div>
 

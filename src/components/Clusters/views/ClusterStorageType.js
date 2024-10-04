@@ -10,16 +10,20 @@ export function ClusterStorageType({ clusterConfig }) {
 
   const tooltipContent = t(`clusters.storage.descriptions.${storage}`);
 
+  const storageType =
+    t(`clusters.statuses.${storage?.toLowerCase()}`) ||
+    t('clusters.statuses.unknown');
+
   return (
     <div style={{ display: 'flex', alignItems: 'center' }}>
-      {t(`clusters.statuses.${storage?.toLowerCase()}`) ||
-        t('clusters.statuses.unknown')}
+      {storageType}
       <HintButton
         style={spacing.sapUiTinyMarginBegin}
         setShowTitleDescription={setShowDescription}
         showTitleDescription={showDescription}
         description={tooltipContent}
-      ></HintButton>
+        ariaTitle={storageType}
+      />
     </div>
   );
 }

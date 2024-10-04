@@ -369,6 +369,7 @@ function Resource({
                   setShowTitleDescription={setShowTitleDescription}
                   showTitleDescription={showTitleDescription}
                   description={description}
+                  ariaTitle={resource?.kind}
                 />
               )}
             </div>
