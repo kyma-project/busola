@@ -39,27 +39,27 @@ const OIDCform = ({ resource, setResource, ...props }) => {
         propertyPath="$.issuerUrl"
         label={t('clusters.wizard.auth.issuer-url')}
         input={Inputs.Text}
-        aria-label="issuer-url"
+        accessible-name="issuer-url"
       />
       <ResourceForm.FormField
         required
         propertyPath="$.clientId"
         label={t('clusters.wizard.auth.client-id')}
         input={Inputs.Text}
-        aria-label="client-id"
+        accessible-name="client-id"
       />
       <ResourceForm.FormField
         propertyPath="$.clientSecret"
         label={t('clusters.wizard.auth.client-secret')}
         input={Inputs.Text}
-        aria-label="client-secret"
+        accessible-name="client-secret"
       />
       <TextArrayInput
         required
         defaultOpen
         propertyPath="$.scopes"
         title={t('clusters.wizard.auth.scopes')}
-        aria-label="scopes"
+        accessible-name="scopes"
       />
     </ResourceForm.Wrapper>
   );

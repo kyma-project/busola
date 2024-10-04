@@ -30,6 +30,6 @@ context('Test Module-templates', () => {
 
     cy.contains('keda-fast.yaml');
 
-    cy.get('[aria-label="close drawer"]:visible').click();
+    cy.get('[accessible-name="close drawer"]:visible').click();
   });
 });
