@@ -17,7 +17,7 @@ context('Test invalid kubeconfig', () => {
     cy.pasteToMonaco('wrong_kubeconfig');
 
     // trigger blur on editor
-    cy.get('[aria-label="cancel"]')
+    cy.get('[accessible-name="cancel"]')
       .should('contain.text', 'Cancel')
       .should('be.visible');
 

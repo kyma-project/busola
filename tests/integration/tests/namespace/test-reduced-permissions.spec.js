@@ -31,7 +31,7 @@ context('Test reduced permissions', () => {
 
     cy.openCreate();
 
-    cy.get('[aria-label="ClusterRole name"]:visible')
+    cy.get('[accessible-name="ClusterRole name"]:visible')
       .find('input')
       .type(CR_NAME, { force: true });
 
@@ -46,7 +46,7 @@ context('Test reduced permissions', () => {
       'apps',
     );
 
-    cy.get('ui5-button[aria-label="roles.buttons.load"]:visible').click();
+    cy.get('ui5-button[accessible-name="roles.buttons.load"]:visible').click();
     cy.wait(500);
 
     // resources
@@ -81,7 +81,7 @@ context('Test reduced permissions', () => {
 
     cy.openCreate();
 
-    cy.get('[aria-label="ServiceAccount name"]:visible')
+    cy.get('[accessible-name="ServiceAccount name"]:visible')
       .find('input')
       .click()
       .type(SA_NAME);
@@ -105,7 +105,7 @@ context('Test reduced permissions', () => {
       .click({ force: true });
 
     // name
-    cy.get('ui5-input[aria-label="ClusterRoleBinding name"]:visible')
+    cy.get('ui5-input[accessible-name="ClusterRoleBinding name"]:visible')
       .find('input')
       .type(CRB_NAME);
 
@@ -117,13 +117,13 @@ context('Test reduced permissions', () => {
 
     // service account namespace
     chooseComboboxOption(
-      '[id="secret-namespace-combobox-0"][aria-label="Secret namespace Combobox"]:visible',
+      '[id="secret-namespace-combobox-0"][accessible-name="Secret namespace Combobox"]:visible',
       Cypress.env('NAMESPACE_NAME'),
     );
 
     // service account name
     chooseComboboxOption(
-      '[id="secret-name-combobox-0"][aria-label="Secret name Combobox"]',
+      '[id="secret-name-combobox-0"][accessible-name="Secret name Combobox"]',
       SA_NAME,
     );
 
@@ -149,7 +149,7 @@ context('Test reduced permissions', () => {
       .click();
 
     cy.get('[data-component-name="ToolbarOverflowPopoverContent"]')
-      .find('ui5-button[aria-label="full-screen"]')
+      .find('ui5-button[accessible-name="enter-full-screen"]')
       .click();
 
     cy.contains('ui5-button', 'Generate TokenRequest').click();

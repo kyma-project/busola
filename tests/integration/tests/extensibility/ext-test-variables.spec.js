@@ -157,7 +157,7 @@ context('Test extensibility variables', () => {
     cy.get('.create-form').as('form');
     // test default preset
     cy.get('@form')
-      .find('[aria-label="TestResource name"]:visible')
+      .find('[accessible-name="TestResource name"]:visible')
       .should('have.value', NAME);
 
     // test presets
@@ -273,7 +273,7 @@ context('Test extensibility variables', () => {
       .get('ui5-checkbox[data-testid="spec.arrayOfStrings.value_3"]:visible')
       .click();
 
-    cy.get('[aria-label="TestResource name"]', { log: false })
+    cy.get('[accessible-name="TestResource name"]', { log: false })
       .find('input')
       .type(NAME)
       .click();

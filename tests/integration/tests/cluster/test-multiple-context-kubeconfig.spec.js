@@ -76,7 +76,7 @@ context('Test multiple context kubeconfig', () => {
         .contains('Next step')
         .click();
 
-      cy.get(`[aria-label="last-step"]:visible`)
+      cy.get(`[accessible-name="last-step"]:visible`)
         .contains('Connect cluster')
         .click({ force: true });
 
