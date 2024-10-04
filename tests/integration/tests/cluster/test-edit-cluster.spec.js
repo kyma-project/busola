@@ -57,7 +57,9 @@ context('Test edit cluster', () => {
 
     cy.contains('ui5-button', 'Update').click();
 
-    cy.contains(originalName)
+    cy.get('ui5-shellbar')
+      .find('.ui5-shellbar-menu-button-title')
+      .contains(originalName)
       .should('be.visible')
       .click();
   });

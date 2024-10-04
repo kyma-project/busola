@@ -167,7 +167,7 @@ context('Test Pizzas', () => {
       .eq(1)
       .should('contain.text', 'diavola');
 
-    cy.get('ui5-button[accessible-name="open-sort"]').click();
+    cy.get('ui5-button[accessible-name="open-sort-modal"]').click();
 
     cy.get('ui5-radio-button[name="sortOrder"][value="DESC"]').click();
 
@@ -183,7 +183,7 @@ context('Test Pizzas', () => {
       .eq(1)
       .should('contain.text', 'margherita');
 
-    cy.get('ui5-button[accessible-name="open-sort"]').click();
+    cy.get('ui5-button[accessible-name="open-sort-modal"]').click();
 
     cy.get('ui5-radio-button[name="sortBy"][value="name"]').click('left');
 
