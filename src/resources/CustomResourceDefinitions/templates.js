@@ -1,4 +1,4 @@
-import * as jp from 'jsonpath';
+import jp from 'jsonpath';
 
 const convert = (arg, currentPath, spec) => {
   switch (arg?.type) {

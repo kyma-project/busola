@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react';
-import * as jp from 'jsonpath';
+import jp from 'jsonpath';
 
 export const VarStoreContext = createContext({
   vars: {},

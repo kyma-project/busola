@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createRef } from 'react';
-import * as jp from 'jsonpath';
+import jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 
 export function ResourceFormWrapper({

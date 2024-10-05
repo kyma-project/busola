@@ -21,9 +21,9 @@ import { useMakeGardenerLoginRoute } from 'components/Gardener/useMakeGardenerLo
 import { useHandleResetEndpoint } from 'components/Clusters/shared';
 import { Preferences } from 'components/Preferences/Preferences';
 import { useResourceSchemas } from './resourceSchemas/useResourceSchemas';
-import { Header } from 'header/Header';
+
 import { ContentWrapper } from './ContentWrapper/ContentWrapper';
-import { Sidebar } from 'sidebar/Sidebar';
+import { Sidebar } from 'src/sidebar/Sidebar';
 import { useInitTheme } from './useInitTheme';
 import ClusterList from 'components/Clusters/views/ClusterList';
 import ClusterRoutes from './ClusterRoutes';
@@ -32,9 +32,10 @@ import { IncorrectPath } from './IncorrectPath';
 
 import './App.scss';
 import { useAfterInitHook } from 'state/useAfterInitHook';
-import useSidebarCondensed from 'sidebar/useSidebarCondensed';
+import useSidebarCondensed from 'src/sidebar/useSidebarCondensed';
 import { useGetValidationEnabledSchemas } from 'state/validationEnabledSchemasAtom';
 import { useGetKymaResources } from 'state/kymaResourcesAtom';
+import { Header } from 'src/header/Header';
 
 export default function App() {
   const language = useRecoilValue(languageAtom);

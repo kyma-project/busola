@@ -6,7 +6,7 @@ import {
   Text,
 } from '@ui5/webcomponents-react';
 import { useFeature } from 'hooks/useFeature';
-import * as jp from 'jsonpath';
+import jp from 'jsonpath';
 import { useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';

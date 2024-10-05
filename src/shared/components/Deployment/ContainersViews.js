@@ -4,7 +4,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 import { Containers } from './Containers';
 
-import * as jp from 'jsonpath';
+import jp from 'jsonpath';
 import {
   getDescription,
   getPartialSchema,

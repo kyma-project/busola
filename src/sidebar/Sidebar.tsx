@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { SidebarNavigation } from 'sidebar/SidebarNavigation';
+import { SidebarNavigation } from 'src/sidebar/SidebarNavigation';
 
 import './Sidebar.scss';
 import { spacing } from '@ui5/webcomponents-react-base';

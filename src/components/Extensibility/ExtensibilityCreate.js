@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState, useContext } from 'react';
 import Immutable from 'immutable';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
-import * as jp from 'jsonpath';
+import jp from 'jsonpath';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useNotification } from 'shared/contexts/NotificationContext';

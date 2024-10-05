@@ -10,7 +10,7 @@ import { ResourceFormWrapper } from './Wrapper';
 import { Presets } from './Presets';
 import { useCreateResource } from '../useCreateResource';
 import { K8sNameField, KeyValueField } from '../fields';
-import * as jp from 'jsonpath';
+import jp from 'jsonpath';
 import { Form, FormItem } from '@ui5/webcomponents-react';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 

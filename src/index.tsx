@@ -6,12 +6,8 @@ import { RecoilRoot } from 'recoil';
 import { initReactI18next } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 import i18nextBackend from 'i18next-http-backend';
-import { savePreviousPath } from 'state/useAfterInitHook';
 
 import App from './components/App/App';
-import { Spinner } from 'shared/components/Spinner/Spinner';
-import { CommandPaletteProvider } from 'command-pallette/CommandPaletteProvider';
-import { NotificationProvider } from 'shared/contexts/NotificationContext';
 
 import { ThemeProvider } from '@ui5/webcomponents-react';
 import '@ui5/webcomponents-react/dist/Assets';
@@ -25,6 +21,10 @@ import './styles/sapIllus-Fills.css';
 import './styles/sapIllus-Layout.css';
 import './styles/index.scss';
 import './styles/fiori-helpers.scss';
+import { savePreviousPath } from './state/useAfterInitHook';
+import { Spinner } from './shared/components/Spinner/Spinner';
+import { CommandPaletteProvider } from './command-pallette/CommandPaletteProvider';
+import { NotificationProvider } from './shared/contexts/NotificationContext';
 
 i18next
   .use(initReactI18next)
@@ -36,8 +36,8 @@ i18next
     defaultNS: 'translation',
     backend: {
       loadPath: '/i18n/{{lng}}.yaml',
-      parse: data => ({
-        ...yaml.load(data),
+      parse: (data: string) => ({
+        ...(yaml.load(data) as object),
         fallback: '{{fallback}}',
       }),
     },

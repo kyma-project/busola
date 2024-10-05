@@ -11,7 +11,7 @@ import { expandedCategoriesSelector } from 'state/navigation/expandedCategories/
 import { CategoryItem } from './CategoryItem';
 import { NavItem } from './NavItem';
 import { isSidebarCondensedState } from 'state/preferences/isSidebarCondensedAtom';
-import { NamespaceDropdown } from 'header/NamespaceDropdown/NamespaceDropdown';
+import { NamespaceDropdown } from 'src/header/NamespaceDropdown/NamespaceDropdown';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { useMatch, useNavigate } from 'react-router';
 import { useUrl } from 'hooks/useUrl';
 import { spacing } from '@ui5/webcomponents-react-base';
-import { NamespaceChooser } from 'header/NamespaceChooser/NamespaceChooser';
+import { NamespaceChooser } from 'src/header/NamespaceChooser/NamespaceChooser';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';

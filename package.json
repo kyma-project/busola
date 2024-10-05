@@ -3,19 +3,20 @@
   "license": "Apache-2.0",
   "name": "@kyma-project/busola",
   "version": "0.0.1-rc.8",
+  "type": "module",
   "scripts": {
     "postinstall": "cd backend && npm install",
     "start": "concurrently -c cyan,green npm:busola npm:backend",
-    "busola": "npm run copy-themes; PORT=8080 BROWSER=none GENERATE_SOURCEMAP=false react-app-rewired start",
+    "busola": "npm run copy-themes; PORT=8080 BROWSER=none GENERATE_SOURCEMAP=false vite",
     "backend": "cd backend && npm run start",
     "eslint-check": "eslint src/ backend/",
     "lint-check": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
     "lint-fix": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
     "lint-staged": "lint-staged --concurrent=false",
-    "test": "react-app-rewired test",
-    "eject": "react-scripts eject",
-    "build": "npm run copy-themes; INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false react-app-rewired build",
-    "build:docker": "npm run copy-themes; INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false react-app-rewired build --env IS_DOCKER=true",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage --watch=false",
+    "build": "npm run copy-themes; INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false tsc && vite build",
+    "build:docker": "npm run copy-themes; INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false tsc && vite build --env IS_DOCKER=true",
     "copy-themes": "cp node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_horizon/css_variables.css public/themes/@sap-theming/default.css; for theme in hcb dark hcw ; do cp node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_horizon_$theme/css_variables.css public/themes/@sap-theming/$theme.css ; done"
   },
   "eslintConfig": {
@@ -67,6 +68,7 @@
     "@ui5/webcomponents-react": "~1.28.1",
     "@ui5/webcomponents-react-base": "^1.28.1",
     "@ui5/webcomponents-react-charts": "^1.28.1",
+    "@vitejs/plugin-react-swc": "^3.7.0",
     "classnames": "^2.2.6",
     "copy-to-clipboard": "^3.2.0",
     "core-js": "^3.3.6",
@@ -99,7 +101,10 @@
     "recoil": "^0.7.5",
     "resize-observer-polyfill": "^1.5.1",
     "rfc6902": "^5.0.1",
-    "url": "^0.11.0"
+    "url": "^0.11.0",
+    "vite": "^5.4.2",
+    "vite-plugin-svgr": "^4.2.0",
+    "vite-tsconfig-paths": "^5.0.1"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.4.5",
@@ -115,6 +120,7 @@
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
     "@types/uuid": "^9.0.0",
+    "@vitest/coverage-v8": "^2.0.5",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.6",
     "babel-polyfill": "^6.26.0",
     "concurrently": "^7.6.0",
@@ -123,15 +129,16 @@
     "enzyme-to-json": "^3.4.0",
     "husky": "^2.4.1",
     "jest": "^29.7.0",
+    "jsdom": "^25.0.0",
     "jsdom-worker-fix": "^0.1.8",
     "lint-staged": "^10.4.0",
     "prettier": "^1.18.2",
     "react-app-rewired": "^2.2.1",
-    "react-scripts": "^5.0.0",
     "sass": "^1.77.8",
     "sass-loader": "^13.3.2",
     "typescript": "^4.8.4",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "vitest": "^2.0.5"
   },
   "lint-staged": {
     "src/i18n/*.yaml": "yaml-sort --lineWidth=-1 -i ",
