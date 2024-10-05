@@ -83,25 +83,40 @@ export const makeHandleRequest = () => {
     }
 
     const { targetApiServer, ca, cert, key, authorization } = headersData;
+    let headers, options;
+    if (req.originalUrl.includes('maytheforce')) {
+      headers = req.headers;
 
-    const headers = authorization
-      ? { ...req.headers, authorization }
-      : req.headers;
+      options = {
+        hostname: targetApiServer.hostname,
+        path: req.originalUrl.replace(/^\/maytheforce/, ''),
+        headers,
+        body: req.body,
+        method: req.method,
+        port: targetApiServer.port || 443,
+        ca,
+        cert,
+        key,
+      };
+    } else {
+      headers = authorization ? { ...req.headers, authorization } : req.headers;
 
-    const options = {
-      hostname: targetApiServer.hostname,
-      path: req.originalUrl.replace(/^\/backend/, ''),
-      headers,
-      body: req.body,
-      method: req.method,
-      port: targetApiServer.port || 443,
-      ca,
-      cert,
-      key,
-    };
-    console.log(console.log('lolo options', options));
+      options = {
+        hostname: targetApiServer.hostname,
+        path: req.originalUrl.replace(/^\/backend/, ''),
+        headers,
+        body: req.body,
+        method: req.method,
+        port: targetApiServer.port || 443,
+        ca,
+        cert,
+        key,
+      };
+    }
+
+    console.log('lolo req.originalUrl', req.originalUrl);
+    console.log('lolo options', options);
     workaroundForNodeMetrics(req);
-    workaroundForAbsoluteLinks(req);
 
     const k8sRequest = https.request(options, function(k8sResponse) {
       if (

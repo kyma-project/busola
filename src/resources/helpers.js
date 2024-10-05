@@ -57,7 +57,7 @@ export const usePrepareListProps = ({
     i18n,
   };
 };
-ś;
+
 export const usePrepareDetailsProps = ({
   resourceCustomType,
   resourceType,

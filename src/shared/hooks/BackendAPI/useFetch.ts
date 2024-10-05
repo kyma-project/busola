@@ -45,7 +45,7 @@ export const createFetchFn = ({
     signal: abortController?.signal,
   };
   console.log('lolo init', init);
-  const { backendAddress } = getClusterConfig();
+  const { backendAddress, customUIBackendAddress } = getClusterConfig();
 
   console.log(
     'createFetchFn isAbsolute',
@@ -55,19 +55,10 @@ export const createFetchFn = ({
   );
   try {
     const response = await fetch(
-      isAbsolute ? relativeUrl : backendAddress + relativeUrl,
       isAbsolute
-        ? {
-            ...init,
-            headers: {
-              'X-Cluster-Url': cluster?.currentContext.cluster.cluster.server,
-              'X-Cluster-Certificate-Authority-Data':
-                cluster?.currentContext.cluster.cluster[
-                  'certificate-authority-data'
-                ],
-            },
-          }
-        : init,
+        ? customUIBackendAddress + relativeUrl
+        : backendAddress + relativeUrl,
+      init,
     );
     if (response.ok) {
       return response;
