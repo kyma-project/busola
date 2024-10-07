@@ -83,10 +83,10 @@ export const makeHandleRequest = () => {
       options = {
         hostname: 'http://localhost:8080', //targetApiServer.hostname,
         path: '/api/secrets', //req.originalUrl.replace(/^\/maytheforce/, ''),
-        // headers,
-        // body: req.body,
+        headers,
+        body: req.body,
         method: req.method,
-        // port: targetApiServer.port || 443,
+        port: targetApiServer.port || 80,
         // ca,
         // cert,
         // key,
@@ -125,7 +125,11 @@ export const makeHandleRequest = () => {
       // change all 503 into 502
       const statusCode =
         k8sResponse.statusCode === 503 ? 502 : k8sResponse.statusCode;
-
+      console.log(
+        'lolo k8sResponse.statusCode',
+        k8sResponse.statusCode,
+        options,
+      );
       res.writeHead(statusCode, {
         'Content-Type': k8sResponse.headers['Content-Type'] || 'text/json',
         'Content-Encoding': k8sResponse.headers['content-encoding'] || '',

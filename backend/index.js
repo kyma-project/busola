@@ -87,6 +87,7 @@ if (isDocker) {
   serveStaticApp(app, '/', '/core-ui');
 } else {
   handleTracking(app);
+  console.log('lolololo');
   app.use(handleRequest);
 }
 

@@ -56,7 +56,7 @@ export const createFetchFn = ({
   try {
     const response = await fetch(
       isAbsolute
-        ? customUIBackendAddress + relativeUrl
+        ? customUIBackendAddress //+ relativeUrl
         : backendAddress + relativeUrl,
       init,
     );
