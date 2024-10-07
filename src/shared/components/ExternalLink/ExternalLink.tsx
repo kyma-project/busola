@@ -64,7 +64,7 @@ export const ExternalLink = ({
             marginRight: '0.15rem',
             ...(iconStyle || {}),
           }}
-          aria-label={t('common.ariaLabel.new-tab-link')}
+          accessibleName={t('common.ariaLabel.new-tab-link')}
         />
       </FlexBox>
     </Link>

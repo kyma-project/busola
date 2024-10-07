@@ -31,7 +31,7 @@ export function WizardButtons({
           design="Transparent"
           onClick={goToPreviousStep}
           style={spacing.sapUiTinyMarginEnd}
-          aria-label="previous-step"
+          accessibleName="previous-step"
         >
           {t('clusters.buttons.previous-step')}
         </Button>
@@ -41,7 +41,7 @@ export function WizardButtons({
         onClick={lastStep ? onComplete : goToNextStep}
         disabled={validation}
         style={spacing.sapUiTinyMarginEnd}
-        aria-label={lastStep ? 'last-step' : 'next-step'}
+        accessibleName={lastStep ? 'last-step' : 'next-step'}
       >
         {lastStep
           ? customFinish
@@ -49,7 +49,7 @@ export function WizardButtons({
             : t('common.buttons.submit')
           : t('clusters.buttons.next-step')}
       </Button>
-      <Button design="Transparent" onClick={onCancel} aria-label="cancel">
+      <Button design="Transparent" onClick={onCancel} accessibleName="cancel">
         {t('common.buttons.cancel')}
       </Button>
     </div>

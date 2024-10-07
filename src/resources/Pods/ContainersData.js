@@ -36,7 +36,7 @@ export default function ContainersData({ type, containers, statuses }) {
         title={container.name}
         headerActions={
           <Button
-            aria-label={'view-logs-for-' + container.name}
+            accessibleName={'view-logs-for-' + container.name}
             onClick={() => {
               setLayout({
                 midColumn: null,

@@ -26,7 +26,7 @@ const StandaloneAction = ({ action, entry }) => {
       className="list-actions__standalone"
       design="Transparent"
       icon={typeof icon === 'function' ? icon(entry) : icon}
-      aria-label={action.name}
+      accessibleName={action.name}
       disabled={action.disabledHandler && action.disabledHandler(entry)}
       tooltip={
         typeof action.tooltip === 'function'
@@ -59,7 +59,7 @@ const ListActions = ({ actions, entry }) => {
             id={'openMenuBtn'}
             icon="vertical-grip"
             design="Transparent"
-            aria-label="more-actions"
+            accessibleName="more-actions"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           />
           <Menu
@@ -74,6 +74,7 @@ const ListActions = ({ actions, entry }) => {
                 onClick={() => a.handler(entry)}
                 key={a.name}
                 text={a.name}
+                accessibleName={a.name}
               />
             ))}
           </Menu>

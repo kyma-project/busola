@@ -53,7 +53,7 @@ export function NamespaceContextDisplay({
           <Icon
             name="decline"
             onClick={() => setNamespaceContext(null)}
-            aria-label={t('command-palette.search.remove-ns-context')}
+            accessibleName={t('command-palette.search.remove-ns-context')}
           />
         }
       />

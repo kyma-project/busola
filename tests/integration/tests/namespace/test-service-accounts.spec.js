@@ -19,7 +19,7 @@ context('Test Service Accounts', () => {
     cy.wait(1000);
     cy.openCreate();
 
-    cy.get('[aria-label="ServiceAccount name"]')
+    cy.get('[accessible-name="ServiceAccount name"]')
       .find('input')
       .click()
       .clear()

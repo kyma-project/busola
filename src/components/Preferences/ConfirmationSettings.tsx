@@ -16,7 +16,7 @@ export default function ConfirmationSettings() {
       </span>
       <div>
         <Switch
-          aria-label={t('settings.clusters.dontConfirmDelete')}
+          accessibleName={t('settings.clusters.dontConfirmDelete')}
           checked={dontConfirmDelete}
           onChange={() => setDontConfirmDelete(previousState => !previousState)}
         />

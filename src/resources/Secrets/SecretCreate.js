@@ -89,21 +89,19 @@ export default function SecretCreate({
         propertyPath="$.type"
         label={t('secrets.type')}
         input={({ value, setValue }) => (
-          <div className="bsl-col-md--11">
-            <ComboBox
-              id="secrets-type-combobox"
-              aria-label="Secret's type's Combobox"
-              placeholder={t('secrets.placeholders.type')}
-              value={options.find(o => o.key === value)?.text ?? value}
-              disabled={!!initialUnchangedResource || !options?.length}
-              onChange={event => onChangeInput(event, setValue)}
-              onInput={event => onChangeInput(event, setValue)}
-            >
-              {options.map(option => (
-                <ComboBoxItem id={option.key} text={option.text} />
-              ))}
-            </ComboBox>
-          </div>
+          <ComboBox
+            id="secrets-type-combobox"
+            accessibleName="Secret's type's Combobox"
+            placeholder={t('secrets.placeholders.type')}
+            value={options.find(o => o.key === value)?.text ?? value}
+            disabled={!!initialUnchangedResource || !options?.length}
+            onChange={event => onChangeInput(event, setValue)}
+            onInput={event => onChangeInput(event, setValue)}
+          >
+            {options.map(option => (
+              <ComboBoxItem id={option.key} text={option.text} />
+            ))}
+          </ComboBox>
         )}
       />
       <DataField

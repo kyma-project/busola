@@ -19,7 +19,7 @@ context('Test Certificates', () => {
 
     cy.openCreate();
 
-    cy.get('[aria-label="Certificate name"]:visible')
+    cy.get('[accessible-name="Certificate name"]:visible')
       .find('input')
       .click()
       .type(CERT_NAME, { force: true });

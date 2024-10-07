@@ -167,7 +167,7 @@ export function YamlResourcesList({ resourcesData }) {
                       <Icon
                         className={`status status-${getIcon(r?.status)}`}
                         name={getIcon(r?.status)}
-                        aria-label="status"
+                        accessibleName="status"
                       />
                       <Text>
                         {String(r?.value?.kind)}{' '}

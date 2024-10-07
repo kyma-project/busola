@@ -100,7 +100,6 @@ export function MonacoRenderer({
       <div style={spacing.sapUiTinyMarginBottom}>
         <Label required={required}>{tFromStoreKeys(storeKeys, schema)}</Label>
       </div>
-
       <div className="bsl-col-md--11">
         <Editor
           autocompletionDisabled

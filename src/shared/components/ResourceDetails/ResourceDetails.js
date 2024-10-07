@@ -183,6 +183,7 @@ function Resource({
   statusConditions,
   headerContent,
   className,
+  headerDescription,
 }) {
   useVersionWarning({ resourceUrl, resourceType });
   const { t } = useTranslation();
@@ -368,6 +369,7 @@ function Resource({
                   setShowTitleDescription={setShowTitleDescription}
                   showTitleDescription={showTitleDescription}
                   description={description}
+                  ariaTitle={resource?.kind}
                 />
               )}
             </div>
@@ -436,6 +438,7 @@ function Resource({
         layoutNumber={layoutNumber ?? 'MidColumn'}
         layoutCloseUrl={layoutCloseCreateUrl}
         title={customTitle ?? resource.metadata.name}
+        description={headerDescription}
         actions={actions}
         protectedResource={protectedResource}
         protectedResourceWarning={protectedResourceWarning(resource)}

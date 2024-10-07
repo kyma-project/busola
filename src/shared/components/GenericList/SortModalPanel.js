@@ -28,7 +28,7 @@ export const SortModalPanel = ({
       disabled={disabled}
       design="Transparent"
       icon="sort"
-      aria-label="open-sort"
+      accessibleName="open-sort-modal"
       tooltip={t('common.tooltips.sort')}
     />
   );
@@ -40,10 +40,10 @@ export const SortModalPanel = ({
 
   return (
     <Modal
-      className={'sorting-modal'}
+      className="sorting-modal"
       title={t('common.sorting.sort')}
       headerActions={
-        <Button design="Transparent" onClick={handleReset}>
+        <Button design="Transparent" onClick={handleReset} tabIndex="-1">
           {t('common.buttons.reset')}
         </Button>
       }

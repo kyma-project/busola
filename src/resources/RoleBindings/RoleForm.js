@@ -26,7 +26,6 @@ export const RoleForm = ({
       propertyPath="$.roleRef.kind"
       input={props => (
         <Dropdown
-          fullWidth={false}
           selectedKey={props.value}
           options={['Role', 'ClusterRole'].map(v => ({ key: v, text: v }))}
           {...props}
@@ -62,9 +61,8 @@ export const RoleForm = ({
       propertyPath="$.roleRef.name"
       input={props => (
         <ComboBox
-          className="bsl-col-md--12"
           id="role"
-          aria-label="Role Combobox"
+          accessibleName="Role Combobox"
           disabled={props.disabled || !options?.length}
           filter="Contains"
           inputRef={props.inputRef}

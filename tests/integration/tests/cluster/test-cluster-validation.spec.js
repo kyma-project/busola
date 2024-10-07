@@ -86,7 +86,7 @@ context('Test Cluster Validation Scan', () => {
       .type(1);
 
     cy.get('ui5-dialog')
-      .find('[aria-label="cluster-validation-submit"]')
+      .find('[accessible-name="cluster-validation-submit"]')
       .should('be.visible')
       .click();
 

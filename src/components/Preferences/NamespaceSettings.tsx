@@ -20,7 +20,7 @@ export default function NamespaceSettings() {
       </span>
       <div>
         <Switch
-          aria-label={t('settings.clusters.showHiddenNamespaces')}
+          accessibleName={t('settings.clusters.showHiddenNamespaces')}
           checked={showHiddenNamespaces}
           onChange={toggleVisibility}
         />

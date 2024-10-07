@@ -25,7 +25,7 @@ context('Test Kyma', () => {
     cy.openCreate();
 
     cy.get('ui5-dialog')
-      .find('[aria-label="Kyma name"]:visible')
+      .find('[accessible-name="Kyma name"]:visible')
       .find('input')
       .click()
       .type(KYMA_NAME, { force: true });

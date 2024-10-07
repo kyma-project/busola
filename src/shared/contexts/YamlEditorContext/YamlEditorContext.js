@@ -22,7 +22,7 @@ const DrawerHeader = ({ title, closeEditor }) => (
     <Button
       design="Transparent"
       icon="decline"
-      aria-label="close drawer"
+      accessibleName="close drawer"
       onClick={closeEditor}
     />
   </header>

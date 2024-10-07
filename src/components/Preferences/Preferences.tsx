@@ -31,7 +31,7 @@ export function Preferences() {
         <Icon
           style={{ margin: 'auto' }}
           name="accelerated"
-          aria-label={t('settings.interface.title')}
+          accessibleName={t('settings.interface.title')}
           className="bsl-icon-xl"
         />
       ),
@@ -44,7 +44,7 @@ export function Preferences() {
         <Icon
           style={{ margin: 'auto' }}
           name="database"
-          aria-label={t('settings.clusters.title')}
+          accessibleName={t('settings.clusters.title')}
           className="bsl-icon-xl"
         />
       ),

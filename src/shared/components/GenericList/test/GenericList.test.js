@@ -4,6 +4,8 @@ import {
   queryByText,
   waitFor,
   act,
+  queryAllByAttribute,
+  queryByAttribute,
 } from 'testing/reactTestingUtils';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { ThemeProvider } from '@ui5/webcomponents-react';
@@ -38,7 +40,7 @@ describe('GenericList', () => {
   describe('Actions', () => {
     it("Renders actions button when 'actions' prop is provided", async () => {
       const actions = [{ name: 'testaction', handler: () => {} }];
-      const { getAllByLabelText } = render(
+      const { container } = render(
         <ThemeProvider>
           <GenericList
             headerRenderer={() => []}
@@ -50,7 +52,11 @@ describe('GenericList', () => {
       );
       await waitFor(async () => {
         await act(async () => {
-          const actionButtons = getAllByLabelText(actions[0].name);
+          const actionButtons = queryAllByAttribute(
+            'accessible-name',
+            container,
+            actions[0].name,
+          );
           expect(actionButtons.length).toBe(mockEntries.length);
         });
       });
@@ -65,7 +71,7 @@ describe('GenericList', () => {
           skipAction: () => false,
         },
       ];
-      const { queryByLabelText } = render(
+      const { container } = render(
         <ThemeProvider>
           <GenericList
             headerRenderer={() => []}
@@ -77,8 +83,12 @@ describe('GenericList', () => {
       );
       await waitFor(async () => {
         await act(async () => {
-          expect(queryByLabelText(actions[0].name)).toBeNull();
-          expect(queryByLabelText(actions[1].name)).toBeTruthy();
+          expect(
+            queryByAttribute('accessible-name', container, actions[0].name),
+          ).toBeNull();
+          expect(
+            queryByAttribute('accessible-name', container, actions[1].name),
+          ).toBeTruthy();
         });
       });
     });

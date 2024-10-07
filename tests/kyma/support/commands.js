@@ -224,7 +224,7 @@ Cypress.Commands.add('changeCluster', clusterName => {
     .click({ force: true });
 
   cy.get('ui5-list')
-    .find(`[aria-label="${clusterName}"]:visible`)
+    .find(`[accessible-name="${clusterName}"]:visible`)
     .find('span[part="title"]')
     .click({ force: true });
 });
@@ -239,11 +239,11 @@ Cypress.Commands.add(
         .click();
 
       cy.get('[data-component-name="ToolbarOverflowPopoverContent"]')
-        .find('ui5-button[aria-label="close-column"]')
+        .find('ui5-button[accessible-name="close-column"]')
         .click();
     } else
       cy.getMidColumn()
-        .find('ui5-button[aria-label="close-column"]')
+        .find('ui5-button[accessible-name="close-column"]')
         .click();
 
     cy.wait(1000);
@@ -254,7 +254,7 @@ Cypress.Commands.add(
 
 Cypress.Commands.add('closeEndColumn', (checkIfNotExist = false) => {
   cy.getEndColumn()
-    .find('ui5-button[aria-label="close-column"]')
+    .find('ui5-button[accessible-name="close-column"]')
     .click();
 
   if (checkIfNotExist) cy.getEndColumn().should('not.exist');

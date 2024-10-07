@@ -38,6 +38,7 @@ export function Title({
             showTitleDescription={openPopover}
             description={tooltipContent}
             style={spacing.sapUiTinyMarginBegin}
+            ariaTitle={title}
           />
         )}
       </FlexBox>

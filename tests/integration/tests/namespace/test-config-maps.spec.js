@@ -21,7 +21,7 @@ context('Test Config Maps', () => {
 
     cy.openCreate();
 
-    cy.get('[aria-label="ConfigMap name"]:visible')
+    cy.get('[accessible-name="ConfigMap name"]:visible')
       .find('input')
       .type(CONFIG_MAP_NAME, { force: true })
       .click();
@@ -75,7 +75,7 @@ context('Test Config Maps', () => {
       .find('ui5-button[data-testid="clone"]')
       .click();
 
-    cy.get('[aria-label="ConfigMap name"]:visible')
+    cy.get('[accessible-name="ConfigMap name"]:visible')
       .find('input')
       .click()
       .type(CLONE_NAME)

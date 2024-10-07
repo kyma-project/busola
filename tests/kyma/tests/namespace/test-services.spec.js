@@ -18,7 +18,7 @@ context('Test Services', () => {
 
     cy.openCreate();
 
-    cy.get('[aria-label="Service name"]:visible')
+    cy.get('[accessible-name="Service name"]:visible')
       .find('input')
       .click()
       .type(SERVICE_NAME, { force: true });
@@ -40,7 +40,7 @@ context('Test Services', () => {
       .contains('Add')
       .click();
 
-    cy.get('[aria-label="Service name"]:visible')
+    cy.get('[accessible-name="Service name"]:visible')
       .eq(1)
       .find('input')
       .click()

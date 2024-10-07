@@ -340,8 +340,9 @@ common:
     type-to-select: Start typing to select {{value}} from the list
     validation-error: Validation error
   placeholders:
+    enter-jsonata: Enter JSONata expression
     secret-ref-name: Select name
-    secret-ref-namespace: Select Namespace
+    secret-ref-namespace: Select namespace
   product-title: Kyma
   protected-resource-description: Resource protected. Go to Preferences to turn on the modification of protected resources.
   protected-resource: Protected resource 
@@ -1230,6 +1231,7 @@ settings:
     title: Interface
   language: Language
   other:
+    pagination: Pagination
     info: Changes to the page size only take effect locally. To set the global default page size, go to Preferences.
     default-page-size: Default Page Size
     title: Other

@@ -89,7 +89,9 @@ export const UI5Panel = ({
           )}
           {headerActions && modeActions && (
             <>
-              <div className="header-actions invisible">{headerActions}</div>
+              <div className="header-actions invisible" aria-hidden="true">
+                {headerActions}
+              </div>
               <ToolbarSpacer />
               {modeActions}
               <ToolbarSpacer className="toolbar-spacer" />

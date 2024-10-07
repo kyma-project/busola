@@ -30,7 +30,7 @@ context('Test DNS Providers', () => {
 
     // secret
     chooseComboboxOption(
-      '[placeholder="Select Namespace"]',
+      '[placeholder="Select namespace"]',
       Cypress.env('NAMESPACE_NAME'),
     );
 
@@ -48,7 +48,7 @@ context('Test DNS Providers', () => {
       .type(PROVIDER_INCLUDED_DOMAIN, { force: true });
 
     // name
-    cy.get('[aria-label="DNSProvider name"]:visible')
+    cy.get('[accessible-name="DNSProvider name"]:visible')
       .find('input')
       .type(PROVIDER_NAME, { force: true });
 
@@ -69,7 +69,7 @@ context('Test DNS Providers', () => {
     cy.inspectTab('Edit');
 
     // name should be readonly
-    cy.get('[aria-label="DNSProvider name"]:visible')
+    cy.get('[accessible-name="DNSProvider name"]:visible')
       .find('input')
       .should('have.attr', 'readonly', 'readonly');
 

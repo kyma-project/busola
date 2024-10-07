@@ -64,76 +64,67 @@ export function SimpleList({
       tooltipContent={tExt(tooltipContent)}
       {...props}
     >
-      <div className="bsl-col-md--12 multi-input">
-        <ul>
-          {isObject && (
-            <li>
-              <FlexBox alignItems="Center">
-                <div className="bsl-col-md--12 simple-list ">
-                  <PluginStack
-                    schema={itemsSchema}
-                    widgets={{
-                      ...widgets,
-                      types: mapValues(widgets.types, () => titleRenderer),
-                      custom: {
-                        ...mapValues(widgets.custom, () => titleRenderer),
-                        Null: () => '',
-                      },
-                    }}
-                    parentSchema={schema}
-                    storeKeys={storeKeys.push(0)}
-                    level={level + 1}
-                    nestingLevel={nestingLevel + 1}
-                    schemaKeys={schemaKeys?.push('items')}
-                  />
-                </div>
-              </FlexBox>
-            </li>
-          )}
-          {Array(listSize + 1)
-            .fill(null)
-            .map((_val, index) => {
-              const ownKeys = storeKeys.push(index);
-
-              return (
-                <>
-                  <li key={index}>
-                    <FlexBox alignItems="Center">
-                      <div className="bsl-col-md--11 simple-list ">
-                        <PluginStack
-                          showValidity={showValidity}
-                          schema={itemsSchema}
-                          parentSchema={schema}
-                          storeKeys={ownKeys}
-                          level={level + 1}
-                          schemaKeys={schemaKeys?.push('items')}
-                          placeholder={tExt(schemaPlaceholder)}
-                          isListItem
-                          inputInfo={inputInfo}
-                        />
-                      </div>
-                      {!isLast(index) && (
-                        <Button
-                          disabled={readOnly}
-                          style={spacing.sapUiTinyMarginTop}
-                          icon="delete"
-                          design="Transparent"
-                          onClick={() => removeItem(index)}
-                          aria-label={t('common.buttons.delete')}
-                        />
-                      )}
-                    </FlexBox>
-                  </li>
-                  {isLast(index) && inputInfo && (
-                    <Label wrappingType="Normal" style={{ marginTop: '5px' }}>
-                      {inputInfo}
-                    </Label>
+      <ul className="multi-input">
+        {isObject && (
+          <li key="is-object" className="bsl-col-md--11 simple-list">
+            <PluginStack
+              schema={itemsSchema}
+              widgets={{
+                ...widgets,
+                types: mapValues(widgets.types, () => titleRenderer),
+                custom: {
+                  ...mapValues(widgets.custom, () => titleRenderer),
+                  Null: () => '',
+                },
+              }}
+              parentSchema={schema}
+              storeKeys={storeKeys.push(0)}
+              level={level + 1}
+              nestingLevel={nestingLevel + 1}
+              schemaKeys={schemaKeys?.push('items')}
+            />
+          </li>
+        )}
+        {Array(listSize + 1)
+          .fill(null)
+          .map((_val, index) => {
+            const ownKeys = storeKeys.push(index);
+            return (
+              <li key={index}>
+                <FlexBox alignItems="Center">
+                  <div className="bsl-col-md--11 simple-list">
+                    <PluginStack
+                      showValidity={showValidity}
+                      schema={itemsSchema}
+                      parentSchema={schema}
+                      storeKeys={ownKeys}
+                      level={level + 1}
+                      schemaKeys={schemaKeys?.push('items')}
+                      placeholder={tExt(schemaPlaceholder)}
+                      isListItem
+                      inputInfo={inputInfo}
+                    />
+                  </div>
+                  {!isLast(index) && (
+                    <Button
+                      disabled={readOnly}
+                      style={spacing.sapUiTinyMarginTop}
+                      icon="delete"
+                      design="Transparent"
+                      onClick={() => removeItem(index)}
+                      accessibleName={t('common.buttons.delete')}
+                    />
                   )}
-                </>
-              );
-            })}
-        </ul>
-      </div>
+                </FlexBox>
+                {isLast(index) && inputInfo && (
+                  <Label wrappingType="Normal" style={{ marginTop: '5px' }}>
+                    {inputInfo}
+                  </Label>
+                )}
+              </li>
+            );
+          })}
+      </ul>
     </ResourceForm.CollapsibleSection>
   );
 }
