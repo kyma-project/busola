@@ -141,7 +141,7 @@ export function RuleInput({ rule, rules, setRules }) {
               design="Transparent"
               onClick={fetchResources}
               disabled={!loadable}
-              aria-label={t('roles.buttons.load')}
+              accessibleName={t('roles.buttons.load')}
               tooltip={t('roles.tooltips.load')}
             >
               {t('roles.buttons.load-resources')}

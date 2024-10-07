@@ -82,7 +82,7 @@ export function SingleSubjectForm({
           value={subject.name || []}
           setValue={setName}
           input={Inputs.Text}
-          aria-label={t('role-bindings.create-modal.user-name')}
+          accessible-name={t('role-bindings.create-modal.user-name')}
         />
       )}
 
@@ -93,7 +93,7 @@ export function SingleSubjectForm({
           value={subject.name || []}
           setValue={setName}
           input={Inputs.Text}
-          aria-label={t('role-bindings.create-modal.group-name')}
+          accessible-name={t('role-bindings.create-modal.group-name')}
         />
       )}
 

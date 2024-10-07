@@ -18,7 +18,7 @@ context('Test Cluster Role Bindings', () => {
 
     cy.openCreate();
 
-    cy.get('[aria-label="ClusterRoleBinding name"]')
+    cy.get('[accessible-name="ClusterRoleBinding name"]')
       .find('input')
       .click()
       .type(CRB_NAME);
@@ -35,7 +35,7 @@ context('Test Cluster Role Bindings', () => {
       .find('li')
       .click();
 
-    cy.get('[aria-label="User name"]')
+    cy.get('[accessible-name="User name"]')
       .find('input')
       .type(USER_NAME)
       .blur({ force: true });
@@ -84,7 +84,7 @@ context('Test Cluster Role Bindings', () => {
 
     cy.contains('Group').click();
 
-    cy.get('[aria-label="Group name"]')
+    cy.get('[accessible-name="Group name"]')
       .find('input')
       .type('test-group')
       .blur({ force: true });

@@ -5,7 +5,7 @@ import { loadFile } from '../../support/loadFile';
 const FILE_NAME = 'test-customresourcedefinisions-namespaced.yaml';
 
 function getQueryInput() {
-  return cy.get('[aria-label=command-palette-search]').find('input');
+  return cy.get('[accessible-name=command-palette-search]').find('input');
 }
 
 context('Test Custom Resources', () => {
@@ -36,7 +36,7 @@ context('Test Custom Resources', () => {
       .should('have.length', 1);
 
     cy.get('ui5-dialog')
-      .find('[aria-label="yaml-upload-close"]')
+      .find('[accessible-name="yaml-upload-close"]')
       .should('be.visible')
       .click();
   });

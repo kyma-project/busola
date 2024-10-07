@@ -75,7 +75,7 @@ export const ExternalLink = ({
         name="inspect"
         className="bsl-icon-s"
         style={spacing.sapUiTinyMarginBegin}
-        aria-label={t('common.ariaLabel.new-tab-link')}
+        accessibleName={t('common.ariaLabel.new-tab-link')}
         originalResource={originalResource}
       />
     </Link>

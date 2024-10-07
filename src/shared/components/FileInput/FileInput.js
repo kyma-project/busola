@@ -94,7 +94,7 @@ export function FileInput({
       <div>
         <Icon
           name="upload"
-          aria-label="file upload"
+          accessibleName="file upload"
           design="Information"
           className="file-input__icon"
         />

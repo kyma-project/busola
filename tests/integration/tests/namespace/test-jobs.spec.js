@@ -31,14 +31,14 @@ context('Test Jobs', () => {
     cy.openCreate();
 
     // job name
-    cy.get('[aria-label="Job name"]:visible')
+    cy.get('[accessible-name="Job name"]:visible')
       .find('input')
       .click()
       .clear()
       .type(JOB_NAME, { force: true });
 
     // job container name
-    cy.get('[aria-label="Container name"]:visible')
+    cy.get('[accessible-name="Container name"]:visible')
       .find('input')
       .type(JOB_NAME, { force: true });
 
@@ -68,7 +68,7 @@ context('Test Jobs', () => {
     cy.contains('Container 2').click();
 
     // job container name
-    cy.get('[aria-label="Container name"]:visible')
+    cy.get('[accessible-name="Container name"]:visible')
       .find('input')
       .type(SECOND_CONTAINER_NAME, { force: true });
 
@@ -122,11 +122,11 @@ context('Test Jobs', () => {
 
     // check logs
     checkJobLogs({
-      showLogsSelector: `[aria-label="view-logs-for-${JOB_NAME}"]`,
+      showLogsSelector: `[accessible-name="view-logs-for-${JOB_NAME}"]`,
       expectedLogs: 'Busola test',
     });
     checkJobLogs({
-      showLogsSelector: `[aria-label="view-logs-for-${SECOND_CONTAINER_NAME}"]`,
+      showLogsSelector: `[accessible-name="view-logs-for-${SECOND_CONTAINER_NAME}"]`,
       expectedLogs: 'Node image test',
     });
 

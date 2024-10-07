@@ -98,7 +98,7 @@ export default function ResourceValidationSettings() {
       title={t('settings.clusters.resourcesValidation.validateResources')}
       headerActions={
         <Switch
-          aria-label={t(
+          accessibleName={t(
             'settings.clusters.resourcesValidation.validateResources',
           )}
           checked={isEnabled}
@@ -132,7 +132,7 @@ export default function ResourceValidationSettings() {
                   <span>{entry.text}</span>
                   {choosePolicies && (
                     <Switch
-                      aria-label={t(
+                      accessibleName={t(
                         'settings.clusters.resourcesValidation.select-policy',
                         {
                           name: entry.text,

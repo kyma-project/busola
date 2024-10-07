@@ -1,4 +1,10 @@
-import { render, fireEvent, waitFor, act } from '@testing-library/react';
+import {
+  render,
+  fireEvent,
+  waitFor,
+  act,
+  queryByAttribute,
+} from '@testing-library/react';
 import { Pagination } from 'shared/components/GenericList/Pagination/Pagination';
 import { ThemeProvider } from '@ui5/webcomponents-react';
 import '@ui5/webcomponents-icons/dist/AllIcons.js';
@@ -51,7 +57,7 @@ describe('Pagination', () => {
 
   it('Fire events', async () => {
     const callback = jest.fn();
-    const { getByText, getByLabelText } = render(
+    const { container, getByText } = render(
       <ThemeProvider>
         <Pagination
           itemsTotal={200}
@@ -68,17 +74,21 @@ describe('Pagination', () => {
         fireEvent.click(getByText('6'));
         expect(callback).toHaveBeenCalledWith(6);
 
-        fireEvent.click(getByLabelText('Next page'));
+        fireEvent.click(
+          queryByAttribute('accessible-name', container, 'Next page'),
+        );
         expect(callback).toHaveBeenCalledWith(6);
 
-        fireEvent.click(getByLabelText('Previous page'));
+        fireEvent.click(
+          queryByAttribute('accessible-name', container, 'Previous page'),
+        );
         expect(callback).toHaveBeenCalledWith(4);
       });
     });
   });
 
   it('Disables correct links', () => {
-    const { container, getByText, getByLabelText, rerender } = render(
+    const { container, getByText, rerender } = render(
       <ThemeProvider>
         <Pagination
           itemsTotal={60}
@@ -89,11 +99,15 @@ describe('Pagination', () => {
         />
       </ThemeProvider>,
     );
-    expect(getByLabelText('Previous page')).toBeDisabled();
+    expect(
+      queryByAttribute('accessible-name', container, 'Previous page'),
+    ).toBeDisabled();
     expect(container.querySelector('ui5-input')).not.toBeDisabled();
     expect(getByText('2')).not.toBeDisabled();
     expect(getByText('3')).not.toBeDisabled();
-    expect(getByLabelText('Next page')).not.toBeDisabled();
+    expect(
+      queryByAttribute('accessible-name', container, 'Next page'),
+    ).not.toBeDisabled();
 
     rerender(
       <ThemeProvider>
@@ -106,8 +120,12 @@ describe('Pagination', () => {
         />
       </ThemeProvider>,
     );
-    expect(getByLabelText('Previous page')).not.toBeDisabled();
-    expect(getByLabelText('Next page')).toBeDisabled();
+    expect(
+      queryByAttribute('accessible-name', container, 'Previous page'),
+    ).not.toBeDisabled();
+    expect(
+      queryByAttribute('accessible-name', container, 'Next page'),
+    ).toBeDisabled();
 
     rerender(
       <ThemeProvider>
@@ -120,7 +138,11 @@ describe('Pagination', () => {
         />
       </ThemeProvider>,
     );
-    expect(getByLabelText('Previous page')).not.toBeDisabled();
-    expect(getByLabelText('Next page')).not.toBeDisabled();
+    expect(
+      queryByAttribute('accessible-name', container, 'Previous page'),
+    ).not.toBeDisabled();
+    expect(
+      queryByAttribute('accessible-name', container, 'Next page'),
+    ).not.toBeDisabled();
   });
 });

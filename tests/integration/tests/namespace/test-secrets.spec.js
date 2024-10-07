@@ -23,7 +23,7 @@ context('Test Secrets', () => {
 
     cy.openCreate();
 
-    cy.get('[aria-label="Secret name"]:visible')
+    cy.get('[accessible-name="Secret name"]:visible')
       .find('input')
       .type(SECRET_NAME, { force: true });
 
@@ -110,7 +110,7 @@ context('Test Secrets', () => {
       .eq(2)
       .type(`${SECRET3_VALUE}`, { force: true });
 
-    cy.get('[aria-label="Delete"]:visible')
+    cy.get('[accessible-name="Delete"]:visible')
       .eq(1)
       .click();
 

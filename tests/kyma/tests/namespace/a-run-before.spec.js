@@ -34,7 +34,7 @@ context('Create Namespace', () => {
       .click({ force: true });
 
     cy.get('.create-form')
-      .find('[aria-label="Namespace name"]:visible')
+      .find('[accessible-name="Namespace name"]:visible')
       .find('input')
       .type(Cypress.env('NAMESPACE_NAME'));
 

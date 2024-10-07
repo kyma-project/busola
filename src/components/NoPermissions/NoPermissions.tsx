@@ -33,7 +33,7 @@ function NoPermissions() {
 
   return (
     <section className="no-permissions">
-      <Icon aria-label="no-permissions" name="locked" />
+      <Icon accessibleName="no-permissions" name="locked" />
       <header>{t('common.errors.no-permissions-header')}</header>
       <Text style={spacing.sapUiMediumMarginTop}>
         {t('common.errors.no-permissions')}

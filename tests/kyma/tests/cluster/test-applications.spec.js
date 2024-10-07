@@ -19,7 +19,7 @@ context('Test Applications', () => {
 
     cy.openCreate();
 
-    cy.get('[aria-label="Application name"]')
+    cy.get('[accessible-name="Application name"]')
       .find('input')
       .click()
       .type(Cypress.env('APP_NAME'), { force: true });

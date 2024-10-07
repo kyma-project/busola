@@ -9,6 +9,7 @@ Cypress.Commands.add(
       .find('[role="tablist"]')
       .find('[role="tab"]')
       .contains(tabName)
+      .should('be.visible')
       .click();
   },
 );

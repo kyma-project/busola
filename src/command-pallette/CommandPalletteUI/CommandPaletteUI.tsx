@@ -187,7 +187,7 @@ export function CommandPaletteUI({
           />
           <Input
             id="command-palette-search"
-            aria-label="command-palette-search"
+            accessibleName="command-palette-search"
             value={!isHistoryMode ? query : ''}
             placeholder={!isHistoryMode ? '' : query}
             onInput={(e: any) => setQuery((e.target as HTMLInputElement).value)}

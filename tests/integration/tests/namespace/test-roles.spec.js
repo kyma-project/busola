@@ -22,7 +22,7 @@ context('Test Roles', () => {
 
     cy.openCreate();
 
-    cy.get('ui5-input[aria-label="Role name"]:visible', { log: false })
+    cy.get('ui5-input[accessible-name="Role name"]:visible', { log: false })
       .find('input')
       .click()
       .type(ROLE_NAME, { force: true });
@@ -32,7 +32,9 @@ context('Test Roles', () => {
       API_GROUP,
     );
 
-    cy.get('[aria-label="roles.buttons.load"]:visible', { log: false }).click();
+    cy.get('[accessible-name="roles.buttons.load"]:visible', {
+      log: false,
+    }).click();
 
     chooseComboboxOption(
       '[placeholder^="Start typing to select Resources"]:visible',
@@ -123,7 +125,7 @@ context('Test Roles', () => {
       .find('ui5-button[data-testid="clone"]')
       .click();
 
-    cy.get('ui5-input[aria-label="Role name"]:visible', { log: false })
+    cy.get('ui5-input[accessible-name="Role name"]:visible', { log: false })
       .find('input')
       .click()
       .type(CLONE_NAME);

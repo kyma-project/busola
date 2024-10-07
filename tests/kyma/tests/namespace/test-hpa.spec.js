@@ -23,7 +23,7 @@ context('Test HPA', () => {
 
     cy.openCreate();
 
-    cy.get('[aria-label="Deployment name"]:visible')
+    cy.get('[accessible-name="Deployment name"]:visible')
       .find('input')
       .type(DEPLOYEMENT_NAME, { force: true });
 
@@ -41,7 +41,7 @@ context('Test HPA', () => {
 
     cy.openCreate();
 
-    cy.get('[aria-label="HorizontalPodAutoscaler name"]:visible')
+    cy.get('[accessible-name="HorizontalPodAutoscaler name"]:visible')
       .find('input')
       .type(HPA_NAME, { force: true });
 

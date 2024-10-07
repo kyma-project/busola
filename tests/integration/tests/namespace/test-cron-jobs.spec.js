@@ -16,7 +16,7 @@ context('Test Cron Jobs', () => {
 
     cy.openCreate();
 
-    cy.get('[aria-label="CronJob name"]')
+    cy.get('[accessible-name="CronJob name"]')
       .find('input')
       .type(CRON_JOB_NAME, { force: true });
 
@@ -62,7 +62,7 @@ context('Test Cron Jobs', () => {
       .clear()
       .type('ls -la', { force: true });
 
-    cy.get('[aria-label="Container name"]')
+    cy.get('[accessible-name="Container name"]')
       .find('input')
       .click()
       .clear()
@@ -131,7 +131,7 @@ context('Test Cron Jobs', () => {
       .clear()
       .type('ls', { force: true });
 
-    cy.get('[aria-label="Container name"]')
+    cy.get('[accessible-name="Container name"]')
       .find('input')
       .clear()
       .type('test-busybox', { force: true });

@@ -30,7 +30,7 @@ context('Test app settings and preferences', () => {
 
     cy.openCreate();
 
-    cy.get('[aria-label="ConfigMap name"]:visible')
+    cy.get('[accessible-name="ConfigMap name"]:visible')
       .find('input')
       .type(NAME, { force: true })
       .click();
@@ -103,7 +103,7 @@ context('Test app settings and preferences', () => {
     cy.contains('Cluster interaction').click();
 
     cy.contains('.preferences-row', 'Show hidden Namespaces')
-      .find('[aria-label="Show hidden Namespaces"]')
+      .find('[accessible-name="Show hidden Namespaces"]')
       .invoke('attr', 'aria-checked')
       .then(value => {
         if (value === 'true') {

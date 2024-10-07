@@ -14,7 +14,7 @@ context('Test Issuers', () => {
 
     cy.openCreate();
 
-    cy.get('[aria-label="Secret name"]:visible')
+    cy.get('[accessible-name="Secret name"]:visible')
       .find('input')
       .click()
       .type(SECRET_NAME, { force: true });
@@ -31,7 +31,7 @@ context('Test Issuers', () => {
 
     cy.openCreate();
 
-    cy.get('[aria-label="Issuer name"]:visible')
+    cy.get('[accessible-name="Issuer name"]:visible')
       .find('input')
       .click()
       .type(ISSUER_NAME, { force: true });
