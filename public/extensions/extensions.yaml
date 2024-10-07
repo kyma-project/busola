@@ -1,1 +1,17 @@
-[]
+
+list: []
+details: []
+form: []
+general:
+  resource:
+    kind: DNSProvider
+    group: dns.gardener.cloud
+    version: v1alpha1
+  backendUrls: 
+    post: http://127.0.0.1:8001/api/v1/namespaces/ak/services/nginx-service/proxy/data.json
+    get: http://localhost:8080/api/secrets
+  name: Custom Extension
+  category: Configuration
+  urlPath: custom
+  scope: namespace
+  description: Custom
