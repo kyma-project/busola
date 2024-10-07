@@ -76,39 +76,22 @@ export const makeHandleRequest = () => {
     }
 
     const { targetApiServer, ca, cert, key, authorization } = headersData;
-    let headers, options;
-    if (req.originalUrl.includes('maytheforce')) {
-      headers = req.headers;
 
-      options = {
-        hostname: 'http://localhost:8080', //targetApiServer.hostname,
-        path: '/api/secrets', //req.originalUrl.replace(/^\/maytheforce/, ''),
-        headers,
-        body: req.body,
-        method: req.method,
-        port: targetApiServer.port || 80,
-        // ca,
-        // cert,
-        // key,
-      };
+    const headers = authorization
+      ? { ...req.headers, authorization }
+      : req.headers;
 
-      console.log('lolo req.originalUrl', req.originalUrl);
-      console.log('lolo options', options);
-    } else {
-      headers = authorization ? { ...req.headers, authorization } : req.headers;
-
-      options = {
-        hostname: targetApiServer.hostname,
-        path: req.originalUrl.replace(/^\/backend/, ''),
-        headers,
-        body: req.body,
-        method: req.method,
-        port: targetApiServer.port || 443,
-        ca,
-        cert,
-        key,
-      };
-    }
+    const options = {
+      hostname: targetApiServer.hostname,
+      path: req.originalUrl.replace(/^\/backend/, ''),
+      headers,
+      body: req.body,
+      method: req.method,
+      port: targetApiServer.port || 443,
+      ca,
+      cert,
+      key,
+    };
 
     workaroundForNodeMetrics(req);
 
@@ -125,11 +108,7 @@ export const makeHandleRequest = () => {
       // change all 503 into 502
       const statusCode =
         k8sResponse.statusCode === 503 ? 502 : k8sResponse.statusCode;
-      console.log(
-        'lolo k8sResponse.statusCode',
-        k8sResponse.statusCode,
-        options,
-      );
+
       res.writeHead(statusCode, {
         'Content-Type': k8sResponse.headers['Content-Type'] || 'text/json',
         'Content-Encoding': k8sResponse.headers['content-encoding'] || '',

@@ -13,10 +13,10 @@ const getBackendAddress = () => {
 const getCustomUiBackendAddress = () => {
   // dev busola
   if (window.location.hostname.startsWith('localhost')) {
-    return 'http://localhost:3001/maytheforce/';
+    return 'http://localhost:3001/maytheforce';
     // on cluster
   } else {
-    return '/maytheforce/';
+    return '/maytheforce';
   }
 };
 
