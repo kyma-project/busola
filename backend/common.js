@@ -30,13 +30,6 @@ const workaroundForNodeMetrics = req => {
   }
 };
 
-// remove headers
-const workaroundForAbsoluteLinks = req => {
-  if (req.originalUrl.includes('maytheforce')) {
-    delete req.headers;
-  }
-};
-
 export const makeHandleRequest = () => {
   const isDev = process.env.NODE_ENV !== 'production';
   const isTrackingEnabled =
@@ -88,16 +81,19 @@ export const makeHandleRequest = () => {
       headers = req.headers;
 
       options = {
-        hostname: targetApiServer.hostname,
-        path: req.originalUrl.replace(/^\/maytheforce/, ''),
-        headers,
-        body: req.body,
+        hostname: 'http://localhost:8080', //targetApiServer.hostname,
+        path: '/api/secrets', //req.originalUrl.replace(/^\/maytheforce/, ''),
+        // headers,
+        // body: req.body,
         method: req.method,
-        port: targetApiServer.port || 443,
-        ca,
-        cert,
-        key,
+        // port: targetApiServer.port || 443,
+        // ca,
+        // cert,
+        // key,
       };
+
+      console.log('lolo req.originalUrl', req.originalUrl);
+      console.log('lolo options', options);
     } else {
       headers = authorization ? { ...req.headers, authorization } : req.headers;
 
@@ -114,8 +110,6 @@ export const makeHandleRequest = () => {
       };
     }
 
-    console.log('lolo req.originalUrl', req.originalUrl);
-    console.log('lolo options', options);
     workaroundForNodeMetrics(req);
 
     const k8sRequest = https.request(options, function(k8sResponse) {
