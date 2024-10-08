@@ -1,5 +1,9 @@
 
-list: []
+list: 
+  - name: Name
+    source: name
+  - name: Namespace
+    source: namespace
 details: []
 form: []
 general:
@@ -9,7 +13,10 @@ general:
     version: v1alpha1
   backendUrls: 
     post: http://127.0.0.1:8001/api/v1/namespaces/ak/services/nginx-service/proxy/data.json
-    get: http://localhost:8080/api/secrets
+    get: /api/secrets
+    host: http://localhost:8080
+  features:
+    disableDefaultColumns: true
   name: Custom Extension
   category: Configuration
   urlPath: custom

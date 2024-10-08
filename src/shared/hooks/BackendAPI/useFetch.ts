@@ -56,9 +56,17 @@ export const createFetchFn = ({
   try {
     const response = await fetch(
       isAbsolute
-        ? customUIBackendAddress //+ relativeUrl
+        ? customUIBackendAddress + relativeUrl
         : backendAddress + relativeUrl,
-      init,
+      isAbsolute
+        ? {
+            ...init,
+            headers: {
+              ...init.headers,
+              'X-Cluster-Url': 'http://localhost:8080',
+            },
+          }
+        : init,
     );
     if (response.ok) {
       return response;

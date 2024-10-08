@@ -46,6 +46,9 @@ export const ExtensibilityListCore = ({
     disableDelete: props.disableDelete,
   };
 
+  const disableDefaultColumns =
+    features?.disableDefaultColumns ?? props.disableDefaultColumns;
+
   const dataSources = resMetaData?.dataSources || {};
   const { schema } = useGetSchema({
     resource,
@@ -75,8 +78,7 @@ export const ExtensibilityListCore = ({
   listProps.createFormProps = { resourceSchema: resMetaData };
 
   listProps.description = useCreateResourceDescription(description);
-
-  listProps.customColumns = Array.isArray(resMetaData?.list)
+  const columns = Array.isArray(resMetaData?.list)
     ? resMetaData?.list.map((column, i) => ({
         header: widgetT(column),
         value: resource => (
@@ -92,6 +94,12 @@ export const ExtensibilityListCore = ({
         ),
       }))
     : [];
+
+  if (disableDefaultColumns) {
+    listProps.columns = columns;
+  } else {
+    listProps.customColumns = columns;
+  }
 
   const isFilterAString =
     typeof resMetaData?.resource?.filter === 'string' ||
