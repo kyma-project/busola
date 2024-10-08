@@ -8,13 +8,15 @@
     "test:namespace": "cypress run --spec \"tests/namespace/*.spec.js\" --browser chromium",
     "test:cluster:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/cluster/*.spec.js,tests/extensibility/*.spec.js\" --browser chrome",
     "test:namespace:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/namespace/*.spec.js\" --browser chrome",
-    "test:local": "CYPRESS_LOCAL_DEV=true cypress run --browser chrome"
+    "test:local": "CYPRESS_LOCAL_DEV=true cypress run --browser chrome",
+    "test:accesibility": "cypress run --spec \"tests/accessibility/*.spec.js\" --browser chromium"
   },
   "devDependencies": {
     "cypress": "^13.8.1",
     "cypress-file-upload": "^5.0.8",
     "cypress-plugin-tab": "^1.0.5",
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.1.0",
+    "@continuum/continuum-javascript-professional": "file:./lib/continuum-continuum-javascript-professional-5.1.2.tgz"
   },
   "optionalDependencies": {
     "cypress": "^13.6.1"
