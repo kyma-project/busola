@@ -13,7 +13,7 @@ window.LevelAccess_AccessContinuumConfiguration = {
     1471 /* WCAG 2.0 Level A & AA Baseline */,
   ],
   includePotentialAccessibilityConcerns: false,
-  ampApiToken: process.env.AMP_TOKEN,
+  ampApiToken: process.env.ACC_AMP_TOKEN,
   proxy: {
     host: null,
     port: null,
