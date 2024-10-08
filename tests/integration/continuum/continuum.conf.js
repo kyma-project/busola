@@ -13,15 +13,13 @@ window.LevelAccess_AccessContinuumConfiguration = {
     1471 /* WCAG 2.0 Level A & AA Baseline */,
   ],
   includePotentialAccessibilityConcerns: false,
-  ampApiToken: process.env.ACC_AMP_TOKEN,
-  proxy: {
-    host: null,
-    port: null,
-    username: null,
-    password: null,
-  },
+  ampApiToken: '539618c93fae2321daeac9cf82f79db7834cc348',
   accessibilityConcerns: {
     includePotentialConcerns: false,
     format: 'amp',
+  },
+  elevin: {
+    baseUrl: null,
+    apiKey: null,
   },
 };
