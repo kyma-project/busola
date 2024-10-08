@@ -13,7 +13,7 @@ window.LevelAccess_AccessContinuumConfiguration = {
     1471 /* WCAG 2.0 Level A & AA Baseline */,
   ],
   includePotentialAccessibilityConcerns: false,
-  ampApiToken: '539618c93fae2321daeac9cf82f79db7834cc348',
+  ampApiToken: process.env.ACC_AMP_TOKEN,
   accessibilityConcerns: {
     includePotentialConcerns: false,
     format: 'amp',
