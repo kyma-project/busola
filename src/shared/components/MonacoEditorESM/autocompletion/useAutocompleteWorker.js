@@ -3,36 +3,36 @@ import { Uri } from 'monaco-editor';
 import { setDiagnosticsOptions } from 'monaco-yaml';
 import { useGetSchema } from 'hooks/useGetSchema';
 import { v4 as uuid } from 'uuid';
+import YamlWorker from './yaml.worker.js?worker';
 
 window.MonacoEnvironment = {
-  getWorker(moduleId, label) {
+  getWorker: function(workerId, label) {
+    const getWorkerModule = (moduleUrl, label) => {
+      return new Worker(window.MonacoEnvironment.getWorkerUrl(moduleUrl), {
+        name: label,
+        type: 'module',
+      });
+    };
+
     switch (label) {
-      case 'editorWorkerService':
-        return new Worker(
-          new URL('monaco-editor/esm/vs/editor/editor.worker', import.meta.url),
+      case 'json':
+        return getWorkerModule(
+          '/monaco-editor/esm/vs/language/json/json.worker?worker',
+          label,
         );
       case 'yaml':
-        return new Worker(new URL('monaco-yaml/yaml.worker', import.meta.url), {
-          type: 'module',
-        });
-      case 'json':
-        return new Worker(
-          new URL(
-            'monaco-editor/esm/vs/language/json/json.worker',
-            import.meta.url,
-          ),
-          { type: 'module' },
-        );
-      case 'javascript':
+        return YamlWorker();
       case 'typescript':
-        return new Worker(
-          new URL(
-            'monaco-editor/esm/vs/language/typescript/ts.worker',
-            import.meta.url,
-          ),
+      case 'javascript':
+        return getWorkerModule(
+          '/monaco-editor/esm/vs/language/typescript/ts.worker?worker',
+          label,
         );
       default:
-        throw new Error(`Unknown label ${label}`);
+        return getWorkerModule(
+          '/monaco-editor/esm/vs/editor/editor.worker?worker',
+          label,
+        );
     }
   },
 };
