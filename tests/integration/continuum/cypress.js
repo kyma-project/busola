@@ -129,7 +129,7 @@ const submitAccessibilityConcernsToAMP = () => {
       await ampReportingService.setActiveAsset(38893); // ID of AMP asset to submit test results to
       //await ampReportingService.setActiveReportByName("Example Report");
       await ampReportingService.setActiveReportByName(
-        'Example Report - ' + todaysDate,
+        'Busola ACC (main) - ' + todaysDate,
       );
       await ampReportingService.setActiveModuleByName(pageTitle, pageUrl);
       await ampReportingService.setActiveReportManagementStrategy(
