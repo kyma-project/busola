@@ -31,13 +31,11 @@ yarn-error.log*
 **/.vscode
 
 dist
-lib
 coverage
 build
 react-components/index.js
 temp
 **/dist
-**/lib
 **/coverage
 **/build
 **/react-components/index.js
