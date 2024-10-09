@@ -1,4 +1,4 @@
-import * as jp from 'jsonpath';
+import jp from 'jsonpath';
 
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
 import { Input, FlexBox } from '@ui5/webcomponents-react';
