@@ -20,7 +20,7 @@ context('Test Replica Sets', () => {
 
     cy.openCreate();
 
-    cy.get('[aria-label="ReplicaSet name"]')
+    cy.get('[accessible-name="ReplicaSet name"]')
       .find('input')
       .clear()
       .type(REPLICA_SET_NAME);

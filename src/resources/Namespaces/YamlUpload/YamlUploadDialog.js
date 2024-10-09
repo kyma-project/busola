@@ -74,7 +74,7 @@ export function YamlUploadDialog() {
       <Button
         onClick={() => setShowAdd(false)}
         design="Emphasized"
-        aria-label="yaml-upload-close"
+        accessibleName="yaml-upload-close"
       >
         {t('common.buttons.close')}
       </Button>

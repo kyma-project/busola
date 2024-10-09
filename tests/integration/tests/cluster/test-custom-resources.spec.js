@@ -125,7 +125,7 @@ context('Test Custom Resources', () => {
       .click();
 
     cy.getMidColumn()
-      .find('ui5-button[aria-label="full-screen"]')
+      .find('ui5-button[accessible-name="enter-full-screen"]')
       .should('not.exist');
 
     cy.wait(1000); //wait for button

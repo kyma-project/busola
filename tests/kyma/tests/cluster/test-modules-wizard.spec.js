@@ -16,7 +16,7 @@ context('Test Modules Wizard', () => {
 
     cy.contains('keda').click();
 
-    cy.get('[aria-label="Module channel overwrite"]:visible').click();
+    cy.get('[accessible-name="Module channel overwrite"]:visible').click();
 
     cy.contains('fast').click();
 

@@ -51,7 +51,7 @@ context('Test Protected Resources', () => {
 
     cy.openCreate();
 
-    cy.get('[aria-label="ConfigMap name"]:visible')
+    cy.get('[accessible-name="ConfigMap name"]:visible')
       .find('input')
       .type(NAME, { force: true });
 
@@ -92,7 +92,7 @@ context('Test Protected Resources', () => {
 
     cy.openCreate();
 
-    cy.get('[aria-label="Deployment name"]:visible')
+    cy.get('[accessible-name="Deployment name"]:visible')
       .find('input')
       .click()
       .clear()
@@ -111,7 +111,7 @@ context('Test Protected Resources', () => {
 
     cy.getMidColumn()
       .contains('ui5-table-row', NAME)
-      .find('[aria-label="Delete"][disabled="true"]')
+      .find('[accessible-name="Delete"][disabled="true"]')
       .should('exist');
   });
 

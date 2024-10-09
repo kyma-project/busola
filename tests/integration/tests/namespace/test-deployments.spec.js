@@ -17,7 +17,7 @@ context('Test Deployments', () => {
 
     cy.openCreate();
 
-    cy.get('[aria-label="Deployment name"]:visible')
+    cy.get('[accessible-name="Deployment name"]:visible')
       .find('input')
       .click()
       .clear()

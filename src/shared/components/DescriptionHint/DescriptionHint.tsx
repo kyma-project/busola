@@ -11,6 +11,7 @@ type HintButtonProps = {
   description: string | ReactNode;
   style?: CSSProperties;
   disableLinkDetection?: boolean;
+  ariaTitle?: string;
 };
 
 export function HintButton({
@@ -19,6 +20,7 @@ export function HintButton({
   description,
   style,
   disableLinkDetection = false,
+  ariaTitle = '',
 }: HintButtonProps) {
   const [ID] = useState(uniqueId('id-')); //todo: migrate to useID from react after upgrade to version 18+
   const descBtnRef = useRef(null);
@@ -41,6 +43,7 @@ export function HintButton({
           e.stopPropagation();
           setShowTitleDescription(true);
         }}
+        accessibleName={`${ariaTitle} information`}
       />
       {createPortal(
         <Popover

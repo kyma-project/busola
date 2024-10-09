@@ -9,6 +9,8 @@ Cypress.Commands.add('saveChanges', (action = 'Create') => {
   cy.get(isCreate ? '[data-testid="create-form-footer-bar"]' : '.edit-form')
     .contains('ui5-button:visible', isCreate ? 'Create' : 'Save')
     .click();
+
+  cy.wait(1000);
 });
 
 Cypress.Commands.add('checkUnsavedDialog', () => {

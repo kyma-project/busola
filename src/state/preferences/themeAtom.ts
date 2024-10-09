@@ -54,9 +54,12 @@ function addLinkNode() {
 }
 type AddLinkEffect = () => AtomEffect<Theme>;
 export const addLinkEffect: AddLinkEffect = () => ({ onSet, setSelf }) => {
+  const envUrl =
+    import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
+
   setSelf(param => {
     const defaultValue = param as Theme;
-    applyThemeToLinkNode(defaultValue, process.env.PUBLIC_URL);
+    applyThemeToLinkNode(defaultValue, envUrl);
     return defaultValue;
   });
 
@@ -65,7 +68,7 @@ export const addLinkEffect: AddLinkEffect = () => ({ onSet, setSelf }) => {
     if (newTheme === 'light_dark')
       themeNew = isSystemThemeDark() ? 'dark' : 'default';
     else themeNew = newTheme === 'sap_horizon' ? 'default' : newTheme.slice(12);
-    applyThemeToLinkNode(themeNew, process.env.PUBLIC_URL);
+    applyThemeToLinkNode(themeNew, envUrl);
   });
 };
 

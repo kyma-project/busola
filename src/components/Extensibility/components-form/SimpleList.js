@@ -112,7 +112,7 @@ export function SimpleList({
                       icon="delete"
                       design="Transparent"
                       onClick={() => removeItem(index)}
-                      aria-label={t('common.buttons.delete')}
+                      accessibleName={t('common.buttons.delete')}
                     />
                   )}
                 </FlexBox>

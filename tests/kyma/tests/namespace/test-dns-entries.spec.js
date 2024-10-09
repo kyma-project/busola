@@ -33,7 +33,7 @@ context('Test DNS Entries', () => {
       .click();
 
     // name
-    cy.get('[aria-label="DNSEntry name"]:visible')
+    cy.get('[accessible-name="DNSEntry name"]:visible')
       .find('input')
       .type(DNS_ENTRY_NAME, { force: true });
 
@@ -56,7 +56,7 @@ context('Test DNS Entries', () => {
     cy.inspectTab('Edit');
 
     // name should be disabled for edit
-    cy.get('[aria-label="DNSEntry name"]:visible')
+    cy.get('[accessible-name="DNSEntry name"]:visible')
       .find('input')
       .should('have.attr', 'readonly');
 

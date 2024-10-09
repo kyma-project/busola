@@ -44,6 +44,7 @@ export function FormField({
             showTitleDescription={openPopover}
             description={tooltipContent}
             style={spacing.sapUiTinyMarginBegin}
+            ariaTitle={!isListItem ? label : ''}
           />
         )}
       </FlexBox>

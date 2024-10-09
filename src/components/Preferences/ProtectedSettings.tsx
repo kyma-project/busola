@@ -24,7 +24,7 @@ export default function ProtectedSettings() {
       </span>
       <div>
         <Switch
-          aria-label={t('settings.clusters.disableResourceProtection')}
+          accessibleName={t('settings.clusters.disableResourceProtection')}
           checked={disableResourceProtection}
           onChange={() => setDisableResourceProtection(prevState => !prevState)}
         />

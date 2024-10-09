@@ -17,7 +17,7 @@ context('Test OAuth2 Clients', () => {
 
     cy.openCreate();
 
-    cy.get('[aria-label="OAuth2Client name"]:visible')
+    cy.get('[accessible-name="OAuth2Client name"]:visible')
       .find('input')
       .click()
       .type(AUTH2_NAME, { force: true });

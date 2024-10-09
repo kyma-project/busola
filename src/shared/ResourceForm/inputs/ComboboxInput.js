@@ -29,7 +29,7 @@ export function ComboboxInput({
   return (
     <ComboBox
       className={className}
-      aria-label="Combobox input"
+      accessibleName="Combobox input"
       id={id || 'combobox-input'}
       ref={_ref}
       disabled={props.disabled || !options?.length}

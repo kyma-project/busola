@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { Wizard, WizardStep } from '@ui5/webcomponents-react';
 import { mapValues } from 'lodash';
 import jsyaml from 'js-yaml';
-import * as jp from 'jsonpath';
+import jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 import {
   UIMetaProvider,

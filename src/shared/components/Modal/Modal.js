@@ -131,6 +131,7 @@ export function Modal({
       </div>
       {createPortal(
         <Dialog
+          accessibleName={title}
           className={classNames('custom-modal', className)}
           type={type}
           headerText={title}

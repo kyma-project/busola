@@ -32,7 +32,7 @@ export function JsonataInput({
       {...props}
       {...validationProps}
       onInput={onChange ?? (e => setValue && setValue(e.target.value))}
-      icon={<Icon aria-label="Jsonata" name="source-code" />}
+      icon={<Icon accessibleName="Jsonata" name="source-code" />}
     />
   );
 }

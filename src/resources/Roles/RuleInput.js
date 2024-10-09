@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { BusyIndicator, Button, MessageStrip } from '@ui5/webcomponents-react';
-import * as jp from 'jsonpath';
+import jp from 'jsonpath';
 import { ResourceForm } from 'shared/ResourceForm';
 import { ComboboxArrayInput, TextArrayInput } from 'shared/ResourceForm/fields';
 import { InvalidRoleError } from './InvalidRoleError';
@@ -141,7 +141,7 @@ export function RuleInput({ rule, rules, setRules }) {
               design="Transparent"
               onClick={fetchResources}
               disabled={!loadable}
-              aria-label={t('roles.buttons.load')}
+              accessibleName={t('roles.buttons.load')}
               tooltip={t('roles.tooltips.load')}
             >
               {t('roles.buttons.load-resources')}

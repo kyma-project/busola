@@ -194,7 +194,7 @@ export function MultiInput({
                     icon="delete"
                     design="Transparent"
                     onClick={() => removeValue(index)}
-                    aria-label={t('common.buttons.delete')}
+                    accessibleName={t('common.buttons.delete')}
                   />
                 )}
 

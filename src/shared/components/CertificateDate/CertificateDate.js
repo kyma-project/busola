@@ -53,7 +53,7 @@ export function CertificateDate({ date, lang }) {
       <Tooltip content={certificateDetails.tooltipContent}>
         <Icon
           style={spacing.sapUiTinyMarginBegin}
-          aria-label={certificateDetails.ariaLabel}
+          accessibleName={certificateDetails.ariaLabel}
           name={certificateDetails.glyph}
           className={`bsl-has-color-status-${certificateDetails.colorIndex} has-tooltip bsl-icon-s`}
         />

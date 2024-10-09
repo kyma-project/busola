@@ -11,7 +11,7 @@ export function RuleTitle({ rule, i }) {
     <Tooltip position="right" content={tooltipContent} delay={0}>
       <Icon
         className="bsl-color--warning"
-        aria-label={t('common.messages.validation-error')}
+        accessibleName={t('common.messages.validation-error')}
         name="alert"
       />
     </Tooltip>

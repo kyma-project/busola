@@ -53,7 +53,9 @@ test('Busola Lighthouse audit', async () => {
   await page.locator('ui5-button:has-text("Next Step"):visible').click();
 
   await page
-    .locator('ui5-button[aria-label="last-step"]:has-text("Connect cluster")')
+    .locator(
+      'ui5-button[accessible-name="last-step"]:has-text("Connect cluster")',
+    )
     .click();
 
   await expect(

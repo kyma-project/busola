@@ -27,7 +27,14 @@ const makePartitions = (currentPage, pagesCount) => {
   return partitions;
 };
 
-const Link = ({ children, isInteractable, isCurrent, onClick, ...props }) => {
+const Link = ({
+  children,
+  isInteractable,
+  isCurrent,
+  onClick,
+  accessibleName,
+  ...props
+}) => {
   const className = classNames('page-link', {
     current: isCurrent,
     interactable: isInteractable,
@@ -38,6 +45,7 @@ const Link = ({ children, isInteractable, isCurrent, onClick, ...props }) => {
       disabled={!isInteractable}
       className={className}
       onClick={onClick}
+      accessibleName={accessibleName}
       {...props}
     >
       {children}
@@ -92,6 +100,7 @@ export const Pagination = ({
           setShowTitleDescription={setShowInfo}
           showTitleDescription={showInfo}
           description={t('settings.other.info')}
+          ariaTitle={t('settings.other.pagination')}
         />
       </div>
 
@@ -100,10 +109,10 @@ export const Pagination = ({
           id="first-page-link"
           isInteractable={currentPage !== 1}
           onClick={() => onChangePage(1)}
-          aria-label="First page"
+          accessibleName="First page"
         >
           <Icon
-            aria-label="first page icon"
+            accessibleName="first page icon"
             name="close-command-field"
             design="Information"
           />
@@ -112,10 +121,10 @@ export const Pagination = ({
           id="previous-page-link"
           isInteractable={currentPage !== 1}
           onClick={() => onChangePage(currentPage - 1)}
-          aria-label="Previous page"
+          accessibleName="Previous page"
         >
           <Icon
-            aria-label="previous page icon"
+            accessibleName="previous page icon"
             name="navigation-left-arrow"
             design="Information"
           />
@@ -160,10 +169,10 @@ export const Pagination = ({
           id="next-page-link"
           isInteractable={currentPage !== pagesCount}
           onClick={() => onChangePage(currentPage + 1)}
-          aria-label="Next page"
+          accessibleName="Next page"
         >
           <Icon
-            aria-label="next page icon"
+            accessibleName="next page icon"
             name="navigation-right-arrow"
             design="Information"
           />
@@ -172,10 +181,10 @@ export const Pagination = ({
           id="last-page-link"
           isInteractable={currentPage !== pagesCount}
           onClick={() => onChangePage(pagesCount)}
-          aria-label="Last page"
+          accessibleName="Last page"
         >
           <Icon
-            aria-label="last page icon"
+            accessibleName="last page icon"
             name="open-command-field"
             design="Information"
           />

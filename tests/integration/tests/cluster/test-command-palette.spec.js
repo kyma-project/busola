@@ -12,10 +12,10 @@ function closeCommandPalette() {
 }
 
 function getQueryUI5Input() {
-  return cy.get('[aria-label=command-palette-search]');
+  return cy.get('[accessible-name=command-palette-search]');
 }
 function getQueryInput() {
-  return cy.get('[aria-label=command-palette-search]').find('input');
+  return cy.get('[accessible-name=command-palette-search]').find('input');
 }
 
 context('Test Command Palette navigation', () => {
@@ -46,7 +46,7 @@ context('Test Command Palette navigation', () => {
     // navigate to namespace
     openCommandPalette();
 
-    cy.get('[aria-label="Remove Namespace context"]').should('not.exist');
+    cy.get('[accessible-name="Remove Namespace context"]').should('not.exist');
 
     getQueryInput().type('ns/default');
 
@@ -57,7 +57,7 @@ context('Test Command Palette navigation', () => {
     // navigate to list of cluster role bindings
     openCommandPalette();
 
-    cy.get('[aria-label="Remove Namespace context"]').should('be.visible');
+    cy.get('[accessible-name="Remove Namespace context"]').should('be.visible');
 
     getQueryInput().type('crb');
 
