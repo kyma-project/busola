@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 import config from '../../config';
 
-context('Test Cluster configuration', () => {
+context('Accessibility test Cluster list and overview', () => {
   Cypress.skipAfterFail();
 
   before(() => {
@@ -9,7 +9,7 @@ context('Test Cluster configuration', () => {
     cy.setUpContinuum('continuum/continuum.conf.js');
   });
 
-  it('Acc test clusters', () => {
+  it('Acc test clusters list', () => {
     cy.visit(`${config.clusterAddress}/clusters`)
       .runAllAccessibilityTests()
       .printAccessibilityTestResults()
