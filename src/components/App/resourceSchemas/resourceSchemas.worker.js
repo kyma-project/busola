@@ -2,7 +2,7 @@
 
 import toJsonSchema from '@openapi-contrib/openapi-schema-to-json-schema';
 import { Resolver } from '@stoplight/json-ref-resolver';
-import * as jp from 'jsonpath';
+import jp from 'jsonpath';
 
 const CUSTOM_KEY = 'format';
 const CUSTOM_FORMATS = {

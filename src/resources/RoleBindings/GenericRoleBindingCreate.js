@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import * as jp from 'jsonpath';
+import jp from 'jsonpath';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { cloneDeep } from 'lodash';
 

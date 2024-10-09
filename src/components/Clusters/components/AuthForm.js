@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MessageStrip, Switch, Title } from '@ui5/webcomponents-react';
-import * as jp from 'jsonpath';
+import jp from 'jsonpath';
 import { createLoginCommand, tryParseOIDCparams } from './oidc-params';
 
 import { ResourceForm } from 'shared/ResourceForm';

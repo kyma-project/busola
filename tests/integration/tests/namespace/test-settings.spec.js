@@ -106,7 +106,7 @@ context('Test app settings and preferences', () => {
       .find('[accessible-name="Show hidden Namespaces"]')
       .invoke('attr', 'aria-checked')
       .then(value => {
-        if (value === 'true') {
+        if (value === 'true' || value === 'checked') {
           cy.contains('.preferences-row', 'Show hidden Namespaces')
             .find('ui5-switch')
             .click();
