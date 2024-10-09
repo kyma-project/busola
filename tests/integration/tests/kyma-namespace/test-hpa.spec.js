@@ -37,7 +37,7 @@ context('Test HPA', () => {
   });
 
   it('Create HPA', () => {
-    cy.navigateTo('Discovery and Network', 'Horizontal Pod');
+    cy.navigateTo('Discovery and Network', 'Horizontal Pod Autoscalers');
 
     cy.openCreate();
 
