@@ -5,7 +5,7 @@ on:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
       - ".github/workflows/accessibility-tests.yml"
-      - "tests/tests/accessibility/**"
+      - "tests/integration/tests/accessibility/**"
 
 jobs:
   run-cluster-test:
