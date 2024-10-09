@@ -7,3 +7,5 @@ whitesource:
   exclude:
     - '**/backend/config/config.yaml'
     - '**/tests/**'
+    - '**/kyma/enviroments/**'
+    - '**/kyma/extensions/**'
