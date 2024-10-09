@@ -1,9 +1,9 @@
-import Enzyme from 'enzyme';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import 'jsdom-worker-fix';
-import { act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import 'babel-polyfill';
+import 'jsdom-worker-fix';
+import Enzyme from 'enzyme';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import { act } from '@testing-library/react';
 import ResizeObserverPolyfill from 'resize-observer-polyfill';
 
 Element.prototype.scroll = () => {};
@@ -29,9 +29,9 @@ ignoreConsoleErrors([
 
 // Mock IntersectionObserver
 class IntersectionObserver {
-  observe = jest.fn();
-  disconnect = jest.fn();
-  unobserve = jest.fn();
+  observe = vi.fn();
+  disconnect = vi.fn();
+  unobserve = vi.fn();
 }
 
 Object.defineProperty(window, 'IntersectionObserver', {
@@ -46,13 +46,7 @@ Object.defineProperty(global, 'IntersectionObserver', {
   value: IntersectionObserver,
 });
 
-var nodeCrypto = require('crypto');
-global.crypto = {
-  getRandomValues: function(buffer) {
-    return nodeCrypto.randomFillSync(Buffer.from(buffer));
-  },
-};
-global.URL.createObjectURL = jest.fn();
+global.URL.createObjectURL = vi.fn();
 
 global.wait = async (ms = 0) => {
   await act(() => {
@@ -71,14 +65,14 @@ global.document.createRange = () => ({
   },
 });
 
-window.postMessage = jest.fn();
+window.postMessage = vi.fn();
 
 // graphviz-react uses es modules which jest doesn't understand
-jest.mock('graphviz-react', () => ({
+vi.mock('graphviz-react', () => ({
   Graphviz: () => 'Graphviz mock',
 }));
 
-jest.mock(
+vi.mock(
   'shared/components/MonacoEditorESM/hooks/useCreateDiffEditor.ts',
   () => ({
     editorInstance: {},
@@ -87,14 +81,14 @@ jest.mock(
 );
 
 // suppress "SyntaxError: Cannot use 'import.meta' outside a module"
-jest.mock('shared/components/MonacoEditorESM/Editor', () => ({
+vi.mock('shared/components/MonacoEditorESM/Editor', () => ({
   'monaco-editor': () => 'monaco-editor',
 }));
 
 // suppress "SyntaxError: Cannot use 'import.meta' outside a module"
-jest.mock('hooks/useGetSchema', () => ({}));
+vi.mock('hooks/useGetSchema', () => ({}));
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => {
     return {

@@ -1,12 +1,22 @@
 import { TranslationBundleContext } from 'components/Extensibility/helpers';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { mount } from 'testing/enzymeUtils';
+import { mount } from 'enzyme';
 import { act, render, waitFor } from 'testing/reactTestingUtils';
 import { Table } from '../Table';
 import { ThemeProvider } from '@ui5/webcomponents-react';
+import { RecoilRoot } from 'recoil';
+import { MemoryRouter } from 'react-router-dom';
 
-jest.mock('components/Extensibility/ExtensibilityCreate', () => null);
-jest.mock('components/Extensibility/ExtensibilityWizard', () => null);
+vi.mock('components/Extensibility/ExtensibilityCreate', () => {
+  return {
+    default: () => ({}),
+  };
+});
+vi.mock('components/Extensibility/ExtensibilityWizard', () => {
+  return {
+    default: () => ({}),
+  };
+});
 
 const genericNotFoundMessage = 'components.generic-list.messages.not-found';
 const elements = [
@@ -68,9 +78,13 @@ describe('Table', () => {
       it('passes array as entries', async () => {
         const value = ['a'];
         const component = mount(
-          <ThemeProvider>
-            <Table value={value} structure={{}} />
-          </ThemeProvider>,
+          <MemoryRouter>
+            <RecoilRoot>
+              <ThemeProvider>
+                <Table value={value} structure={{}} />
+              </ThemeProvider>
+            </RecoilRoot>
+          </MemoryRouter>,
         );
         await waitFor(async () => {
           await act(async () => {
@@ -86,9 +100,13 @@ describe('Table', () => {
 
       it('for nullish value defaults to empty array', async () => {
         const component = mount(
-          <ThemeProvider>
-            <Table value={null} structure={{}} />
-          </ThemeProvider>,
+          <MemoryRouter>
+            <RecoilRoot>
+              <ThemeProvider>
+                <Table value={null} structure={{}} />
+              </ThemeProvider>
+            </RecoilRoot>
+          </MemoryRouter>,
         );
 
         await waitFor(async () => {
@@ -105,9 +123,13 @@ describe('Table', () => {
 
       it('for invalid value, renders "not-found" message', async () => {
         const component = mount(
-          <ThemeProvider>
-            <Table value={-3} structure={{}} />
-          </ThemeProvider>,
+          <MemoryRouter>
+            <RecoilRoot>
+              <ThemeProvider>
+                <Table value={-3} structure={{}} />
+              </ThemeProvider>
+            </RecoilRoot>
+          </MemoryRouter>,
         );
         await waitFor(async () => {
           await act(async () => {
@@ -163,29 +185,29 @@ describe('Table', () => {
     // we cannot test Widget underneath the rowRenderer, as jsonpath
     // import is messed up by Jest
     // https://stackoverflow.com/questions/70586995/jest-modules-do-not-import-correctly
-    describe('header & row renderer', () => {
-      // const value = [{ a: 'b' }, { a: 'c' }];
-      // it('passes empty renderers for nullish children', () => {
-      //   const component = mount(
-      //     <Table value={value} structure={{ children: null }} />,
-      //   );
-      //   const list = component.find(GenericList);
-      //   expect(list).toHaveLength(1);
-      //   const { rowRenderer, headerRenderer } = list.props();
-      //   expect(rowRenderer()).toBe('');
-      // });
-      // it('2', () => {
-      // const component = mount(
-      //   <DataSourcesContextProvider value={{}} dataSources={{}}>
-      //     <Table value={value} structure={{ children: [{ path: '$.a' }] }} />
-      //   </DataSourcesContextProvider>,
-      // );
-      // const list = component.find(GenericList);
-      // expect(list).toHaveLength(1);
-      // const { rowRenderer, headerRenderer } = list.props();
-      // expect(rowRenderer()).toHaveLength(1); // one column
-      // expect(rowRenderer()[0].props.structure).toMatchObject({ path: '$.a' });
-      // });
-    });
+    //describe('header & row renderer', () => {
+    // const value = [{ a: 'b' }, { a: 'c' }];
+    // it('passes empty renderers for nullish children', () => {
+    //   const component = mount(
+    //     <Table value={value} structure={{ children: null }} />,
+    //   );
+    //   const list = component.find(GenericList);
+    //   expect(list).toHaveLength(1);
+    //   const { rowRenderer, headerRenderer } = list.props();
+    //   expect(rowRenderer()).toBe('');
+    // });
+    // it('2', () => {
+    // const component = mount(
+    //   <DataSourcesContextProvider value={{}} dataSources={{}}>
+    //     <Table value={value} structure={{ children: [{ path: '$.a' }] }} />
+    //   </DataSourcesContextProvider>,
+    // );
+    // const list = component.find(GenericList);
+    // expect(list).toHaveLength(1);
+    // const { rowRenderer, headerRenderer } = list.props();
+    // expect(rowRenderer()).toHaveLength(1); // one column
+    // expect(rowRenderer()[0].props.structure).toMatchObject({ path: '$.a' });
+    // });
+    //});
   });
 });

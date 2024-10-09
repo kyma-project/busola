@@ -4,7 +4,7 @@ import { ResourceDetails } from '../ResourceDetails';
 import { ThemeProvider } from '@ui5/webcomponents-react';
 import '@ui5/webcomponents-icons/dist/AllIcons.js';
 
-jest.mock('shared/hooks/BackendAPI/useGet', () => ({
+vi.mock('shared/hooks/BackendAPI/useGet', () => ({
   useGet: () => {
     return {
       loading: false,
@@ -21,13 +21,17 @@ jest.mock('shared/hooks/BackendAPI/useGet', () => ({
   useSingleGet: () => {},
 }));
 
-jest.mock('components/Extensibility/ExtensibilityInjections', () => () => (
-  <div />
-));
+vi.mock('components/Extensibility/ExtensibilityInjections', () => {
+  return {
+    default: () => <div />,
+  };
+});
 
-jest.mock('resources/Namespaces/YamlUpload/YamlUploadDialog', () => () => (
-  <div />
-));
+vi.mock('resources/Namespaces/YamlUpload/YamlUploadDialog', () => {
+  return {
+    default: () => <div />,
+  };
+});
 
 describe('ResourceDetails Columns', () => {
   it('Renders basic column', async () => {

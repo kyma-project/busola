@@ -1,32 +1,38 @@
 import { allExtensionsState } from 'state/navigation/extensionsAtom';
-import { render } from 'testing/reactTestingUtils';
+import { render } from '@testing-library/react';
 import { useGetCRbyPath } from '../useGetCRbyPath.js';
+import { RecoilRoot } from 'recoil';
 
 let mockNamespaceId = 'namespaceId';
 let mockCrds = [];
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+vi.mock('react-router-dom', () => ({
+  ...vi.importActual('react-router-dom'),
   useParams: () => ({
     namespaceId: mockNamespaceId,
   }),
 }));
 
-function TestComponent() {
+const TestComponent = () => {
   const value = useGetCRbyPath();
+  console.log(value);
   return <p data-testid="value">{JSON.stringify(value)}</p>;
-}
+};
 
 describe('useGetCRbyPath', () => {
   it('Returns nothing for an empty list', () => {
-    const { queryByTestId } = render(<TestComponent />, {
-      initializeState: snapshot => snapshot.set(allExtensionsState, []),
-    });
+    const { queryByTestId } = render(
+      <RecoilRoot
+        initializeState={snapshot => snapshot.set(allExtensionsState, mockCrds)}
+      >
+        <TestComponent />
+      </RecoilRoot>,
+    );
 
     expect(queryByTestId('value')).toHaveTextContent('');
   });
 
-  it('Returns first namespacematching crd', () => {
+  it('Returns first namespace matching crd', () => {
     delete window.location;
     window.location = {
       pathname: `namespaces/${mockNamespaceId}/path2`,
@@ -47,11 +53,13 @@ describe('useGetCRbyPath', () => {
       },
     ];
 
-    const { queryByTestId } = render(<TestComponent />, {
-      initializeState: snapshot => {
-        snapshot.set(allExtensionsState, mockCrds);
-      },
-    });
+    const { queryByTestId } = render(
+      <RecoilRoot
+        initializeState={snapshot => snapshot.set(allExtensionsState, mockCrds)}
+      >
+        <TestComponent />
+      </RecoilRoot>,
+    );
     expect(queryByTestId('value')).toHaveTextContent(
       JSON.stringify(mockCrds[1]),
     );
@@ -79,11 +87,14 @@ describe('useGetCRbyPath', () => {
       },
     ];
 
-    const { queryByTestId } = render(<TestComponent />, {
-      initializeState: snapshot => {
-        snapshot.set(allExtensionsState, mockCrds);
-      },
-    });
+    const { queryByTestId } = render(
+      <RecoilRoot
+        initializeState={snapshot => snapshot.set(allExtensionsState, mockCrds)}
+      >
+        <TestComponent />
+      </RecoilRoot>,
+    );
+
     expect(queryByTestId('value')).toHaveTextContent(
       JSON.stringify(mockCrds[1]),
     );
@@ -110,11 +121,13 @@ describe('useGetCRbyPath', () => {
       },
     ];
 
-    const { queryByTestId } = render(<TestComponent />, {
-      initializeState: snapshot => {
-        snapshot.set(allExtensionsState, mockCrds);
-      },
-    });
+    const { queryByTestId } = render(
+      <RecoilRoot
+        initializeState={snapshot => snapshot.set(allExtensionsState, mockCrds)}
+      >
+        <TestComponent />
+      </RecoilRoot>,
+    );
     expect(queryByTestId('value')).toHaveTextContent(
       JSON.stringify(mockCrds[1]),
     );

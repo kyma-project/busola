@@ -1,15 +1,13 @@
 import { render } from 'testing/reactTestingUtils';
 import { ControlledBy } from '../ControlledBy';
 
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
-  useMatch: () => {
-    return {
-      params: {
-        cluster: 'test-cluster',
-      },
-    };
-  },
+vi.mock('react-router', () => ({
+  ...vi.importActual('react-router'),
+  useMatch: () => ({
+    params: {
+      cluster: 'test-cluster',
+    },
+  }),
 }));
 
 describe('ControlledBy', () => {

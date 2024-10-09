@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Selector } from '../Selector';
 import { ThemeProvider } from '@ui5/webcomponents-react';
 
-jest.mock('../../RelatedPods.js', () => ({
+vi.mock('../../RelatedPods.js', () => ({
   RelatedPods: ({ namespace }) => <div>Related Pods for {namespace}</div>,
 }));
 

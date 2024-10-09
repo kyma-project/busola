@@ -1,8 +1,8 @@
 import { render } from 'testing/reactTestingUtils';
 import { ResourceLink } from '../ResourceLink';
 
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
+vi.mock('react-router', () => ({
+  ...vi.importActual('react-router'),
   useMatch: () => {
     return {
       params: {

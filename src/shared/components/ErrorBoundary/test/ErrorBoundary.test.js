@@ -1,10 +1,9 @@
-import React from 'react';
 import { render } from '@testing-library/react';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 
-const consoleErrorFn = jest
+const consoleErrorFn = vi
   .spyOn(console, 'error')
-  .mockImplementation(() => jest.fn());
+  .mockImplementation(() => vi.fn());
 
 const TestBed = ({ children }) => {
   return <ErrorBoundary>{children}</ErrorBoundary>;

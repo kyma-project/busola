@@ -21,7 +21,7 @@ describe('StatusBadge', () => {
   });
 
   it('displays warning when autoResolveType is set and "children" is a node', async () => {
-    console.warn = jest.fn();
+    console.warn = vi.fn();
 
     render(
       <ThemeProvider>
