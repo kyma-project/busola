@@ -12,5 +12,6 @@ import './mockConfig';
 import '../continuum/cypress';
 import './check-extension';
 import './navigate-back-to';
+import './helpers';
 
 require('cypress-plugin-tab');
