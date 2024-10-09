@@ -5,9 +5,3 @@ exports[`StatusBadge > displays warning when autoResolveType is set and "childre
   "'autoResolveType' prop requires 'children' prop to be a string.",
 ]
 `;
-
-exports[`StatusBadge displays warning when autoResolveType is set and "children" is a node 1`] = `
-[
-  "'autoResolveType' prop requires 'children' prop to be a string.",
-]
-`;

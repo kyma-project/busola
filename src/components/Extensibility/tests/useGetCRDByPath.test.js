@@ -15,7 +15,7 @@ vi.mock('react-router-dom', () => ({
 
 const TestComponent = () => {
   const value = useGetCRbyPath();
-  console.log(value);
+
   return <p data-testid="value">{JSON.stringify(value)}</p>;
 };
 
