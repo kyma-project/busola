@@ -1,7 +1,7 @@
 name: Accessibility Tests
 
 on: 
-  pull_request:
+  pull_request_target:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
       - ".github/workflows/accessibility-tests.yml"
