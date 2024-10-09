@@ -15,6 +15,7 @@ module.exports = (on, config) => {
   config.env.NAMESPACE_NAME = namespaceName;
   config.env.STORAGE_CLASS_NAME = randomName;
   config.env.APP_NAME = randomName;
+  config.env.ACC_AMP_TOKEN = process.env.ACC_AMP_TOKEN;
 
   on('task', {
     removeFile(filePath) {
