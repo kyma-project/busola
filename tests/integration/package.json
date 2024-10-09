@@ -11,7 +11,8 @@
     "test:local": "CYPRESS_LOCAL_DEV=true cypress run --browser chrome",
     "test:accesibility": "cypress run --spec \"tests/accessibility/*.spec.js\" --browser chromium"
     "test:kyma-e2e": "cypress run --spec \"tests/kyma*/*spec.js\" --browser chromium",
-    "test:kyma-e2e:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/kyma*/*spec.js\" --browser chromium"
+    "test:kyma-e2e:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/kyma*/*spec.js\" --browser chromium",
+    "test:smoke-extensions": "cypress run --browser chromium -C cypress-smoke.js"
   },
   "devDependencies": {
     "cypress": "^13.15.0",

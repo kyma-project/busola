@@ -43,7 +43,7 @@ jobs:
       - name: run_tests
         shell: bash
         run: |
-          k3d kubeconfig get kyma > tests/kyma/fixtures/kubeconfig.yaml
+          k3d kubeconfig get kyma > tests/integration/fixtures/kubeconfig.yaml
           export CYPRESS_DOMAIN=http://localhost:3001
 
           cd tests/kyma
