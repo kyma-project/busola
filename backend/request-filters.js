@@ -32,4 +32,43 @@ const pathWhitelistFilter = req => {
   }
 };
 
-export const filters = [localIpFilter, pathWhitelistFilter];
+const pathInvalidCharacterFilter = req => {
+  const encodedPath = req.originalUrl.replace(/^\/backend/, '');
+  let decodedPath;
+
+  try {
+    decodedPath = decodeURIComponent(encodedPath);
+  } catch (err) {
+    throw Error('Invalid URL encoding in path.');
+  }
+
+  // Allow alphanumeric, dashes, underscores, dots, slashes, colons, tildes, question marks, equals, and ampersands
+  const validPathRegex = /^[a-zA-Z0-9/_\-.:~?&=]+$/;
+  if (decodedPath.includes('..') || !validPathRegex.test(decodedPath)) {
+    throw Error(`Path ${decodedPath} contains invalid characters.`);
+  }
+};
+
+const invalidHeaderFilter = req => {
+  const headers = req.headers;
+
+  if ('x-forwarded-for' in headers || 'forwarded' in headers) {
+    throw Error(`Request contains invalid headers.`);
+  }
+};
+
+const invalidRequestMethodFilter = req => {
+  const method = req.method;
+
+  if (method === 'TRACE') {
+    throw Error(`Invalid request method`);
+  }
+};
+
+export const filters = [
+  invalidRequestMethodFilter,
+  localIpFilter,
+  pathWhitelistFilter,
+  pathInvalidCharacterFilter,
+  invalidHeaderFilter,
+];
