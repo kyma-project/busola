@@ -8,7 +8,7 @@ on:
       - "tests/integration/tests/accessibility/**"
 
 jobs:
-  run-cluster-test:
+  run-accessibility-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
