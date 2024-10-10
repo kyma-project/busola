@@ -14,7 +14,7 @@ general:
   backendUrls: 
     post: http://127.0.0.1:8001/api/v1/namespaces/ak/services/nginx-service/proxy/data.json
     get: /api/secrets
-    host: http://localhost:8080
+    host: http://localhost:8000
   features:
     disableDefaultColumns: true
   name: Custom Extension

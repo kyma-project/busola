@@ -90,7 +90,7 @@ if (isDocker) {
 } else {
   handleTracking(app);
 
-  const CUSTOM_UI_URL = 'http://localhost:8080';
+  const CUSTOM_UI_URL = 'http://localhost:8000';
   app.use(
     '/maytheforce',
     createProxyMiddleware({
