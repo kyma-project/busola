@@ -18,13 +18,11 @@ module.exports = (on, config) => {
     1 +
     '/' +
     date.getDate() +
-    '/' +
-    date.getFullYear() +
     '-' +
     (date.getUTCHours() + 2) +
     ':' +
     date.getUTCMinutes();
-  const reportName = `AMP REPORT ${todaysDate}`;
+  const reportName = `AMP_REPORT_${todaysDate}`;
 
   config.env.NAMESPACE_NAME = namespaceName;
   config.env.STORAGE_CLASS_NAME = randomName;
