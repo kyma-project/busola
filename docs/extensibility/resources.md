@@ -45,6 +45,7 @@ The **general** section is required and contains basic information about the res
     - **disableCreate** - when set to `true`, it disables the **Create** button. Defaults to `false`.
     - **disableEdit** - when set to `true`, it disables the **Edit** button. Defaults to `false`.
     - **disableDelete** - when set to `true`, it disables the **Delete** button. Defaults to `false`.
+  - **disableDefaultColumns** - when set to `true`, it disables the default columns in the resource list.
 - **externalNodes** - an optional list of links to external websites.
   - **category** - a category name
   - **scope** - either `namespace` or `cluster`. Defaults to `cluster`.

@@ -1,6 +1,8 @@
 import { makeHandleRequest, serveStaticApp, serveMonaco } from './common';
 import { handleTracking } from './tracking.js';
 import jsyaml from 'js-yaml';
+const { createProxyMiddleware } = require('http-proxy-middleware');
+
 //import { requestLogger } from './utils/other'; //uncomment this to log the outgoing traffic
 
 const express = require('express');
@@ -87,6 +89,18 @@ if (isDocker) {
   serveStaticApp(app, '/', '/core-ui');
 } else {
   handleTracking(app);
+
+  const CUSTOM_UI_URL = 'http://localhost:8000';
+  app.use(
+    '/maytheforce',
+    createProxyMiddleware({
+      target: CUSTOM_UI_URL,
+      changeOrigin: true,
+      pathRewrite: {
+        [`^/maytheforce`]: '',
+      },
+    }),
+  );
   app.use(handleRequest);
 }
 
