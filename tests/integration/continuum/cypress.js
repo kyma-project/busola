@@ -108,28 +108,11 @@ const submitAccessibilityConcernsToAMP = (reportTitle = 'Busola ACC') => {
 
   cy.title({ log: false }).then(pageTitle => {
     cy.url({ log: false }).then({ timeout: 30000 }, async pageUrl => {
-      const d = new Date();
-      var todaysDate =
-        d.getMonth() +
-        1 +
-        '/' +
-        d.getDate() +
-        '/' +
-        d.getFullYear() +
-        '-' +
-        (d.getUTCHours() + 2) +
-        ':' +
-        d.getUTCMinutes() +
-        ':' +
-        d.getUTCSeconds(); //Date and Timestamp
-
       const ampReportingService = Continuum.AMPReportingService;
 
       await ampReportingService.setActiveOrganization(10274); // ID of AMP organization to submit test results to
       await ampReportingService.setActiveAsset(38893); // ID of AMP asset to submit test results to
-      await ampReportingService.setActiveReportByName(
-        `${reportTitle} - ${todaysDate}`,
-      );
+      await ampReportingService.setActiveReportByName(reportTitle);
       await ampReportingService.setActiveModuleByName(pageTitle, pageUrl);
       await ampReportingService.setActiveReportManagementStrategy(
         ReportManagementStrategy.APPEND,
