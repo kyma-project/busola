@@ -11,7 +11,7 @@ context('Accessibility test Namespace overview', () => {
   it('Acc test namespace overview', () => {
     cy.loginAndSelectCluster();
 
-    // cy.url().should('match', /overview$/);
+    cy.url().should('match', /overview$/);
 
     cy.createNamespace('acc-test-namespace');
 

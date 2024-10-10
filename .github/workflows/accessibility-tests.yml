@@ -51,7 +51,7 @@ jobs:
           sleep 10
           
           cd tests/integration
-          npm ci && ACC_AMP_TOKEN=ACC_AMP_TOKEN npm run "test:accesibility"
+          npm ci && ACC_AMP_TOKEN=$ACC_AMP_TOKEN npm run "test:accesibility"
       - name: Uploads artifacts
         uses: actions/upload-artifact@v4
         if: ${{ always() }}
