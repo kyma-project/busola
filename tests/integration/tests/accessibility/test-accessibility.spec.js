@@ -1,18 +1,5 @@
 /// <reference types="cypress" />
 import config from '../../config';
-const date = new Date();
-const todaysDate =
-  date.getMonth() +
-  1 +
-  '/' +
-  date.getDate() +
-  '/' +
-  date.getFullYear() +
-  '-' +
-  (date.getUTCHours() + 2) +
-  ':' +
-  date.getUTCMinutes();
-const reportName = `AMP REPORT ${todaysDate}`;
 
 context('Accessibility test Cluster list and overview', () => {
   Cypress.skipAfterFail();
@@ -26,7 +13,7 @@ context('Accessibility test Cluster list and overview', () => {
     cy.visit(`${config.clusterAddress}/clusters`)
       .runAllAccessibilityTests()
       .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(reportName);
+      .submitAccessibilityConcernsToAMP(Cypress.env('AMP_REPORT_NAME'));
   });
 
   it('Acc test cluster overview', () => {
@@ -36,7 +23,7 @@ context('Accessibility test Cluster list and overview', () => {
 
     cy.runAllAccessibilityTests()
       .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(reportName);
+      .submitAccessibilityConcernsToAMP(Cypress.env('AMP_REPORT_NAME'));
   });
 
   it('Acc test namespace overview', () => {
@@ -48,6 +35,6 @@ context('Accessibility test Cluster list and overview', () => {
 
     cy.runAllAccessibilityTests()
       .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(reportName);
+      .submitAccessibilityConcernsToAMP(Cypress.env('AMP_REPORT_NAME'));
   });
 });
