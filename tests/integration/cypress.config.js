@@ -78,9 +78,6 @@ module.exports = defineConfig({
       'tests/namespace/test-limit-ranges.spec.js',
       'tests/namespace/test-resource-quotas.spec.js',
       'tests/namespace/z-run-after.spec.js',
-      // uncomment after frog fix
-      // 'tests/kyma-cluster/test-applications.spec.js',
-      // 'tests/kyma-cluster/test-modules-wizard.spec.js',
       'tests/kyma-cluster/test-kyma-modules.spec.js',
       'tests/kyma-namespace/a-run-before.spec.js',
       'tests/kyma-namespace/test-certificates.spec.js',
@@ -90,8 +87,6 @@ module.exports = defineConfig({
       'tests/kyma-namespace/test-oauth2.spec.js',
       'tests/kyma-namespace/test-dns-entries.spec.js',
       'tests/kyma-namespace/test-services.spec.js',
-      // 'tests/kyma-namespace/test-kyma.spec.js',
-      // 'tests/kyma-namespace/test-module-templates.spec.js',
       'tests/kyma-namespace/z-run-after.spec.js',
     ],
     supportFile: 'support/index.js',
