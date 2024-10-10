@@ -135,7 +135,7 @@ const submitAccessibilityConcernsToAMP = (reportTitle = 'Busola ACC') => {
         ReportManagementStrategy.APPEND,
       );
       await ampReportingService.setActiveModuleManagementStrategy(
-        ModuleManagementStrategy.OVERWRITE,
+        ModuleManagementStrategy.APPEND,
       );
       await ampReportingService.submitAccessibilityConcernsToAMP(
         accessibilityConcerns,
