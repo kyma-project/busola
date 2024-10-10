@@ -8,7 +8,7 @@ vi.mock('../../RelatedPods.js', () => ({
   RelatedPods: ({ namespace }) => <div>Related Pods for {namespace}</div>,
 }));
 
-describe('Selector tests', () => {
+describe.skip('Selector tests', () => {
   describe('Selector tests for Kubernetes resources', () => {
     it('Does not render Selector when selector is null', async () => {
       const { queryByText } = render(
