@@ -1,38 +1,40 @@
 /// <reference types="cypress" />
-import config from '../../config';
+import config from "../../config";
 
-context('Accessibility test Cluster list and overview', () => {
+context("Accessibility test Cluster list and overview", () => {
   Cypress.skipAfterFail();
 
   before(() => {
     cy.handleExceptions();
-    cy.setUpContinuum('continuum/continuum.conf.js');
+    cy.setUpContinuum("continuum/continuum.conf.js");
   });
 
-  it('Acc test clusters list', () => {
+  it("Acc test clusters list", () => {
     cy.visit(`${config.clusterAddress}/clusters`)
       .runAllAccessibilityTests()
       .printAccessibilityTestResults()
       .submitAccessibilityConcernsToAMP();
   });
 
-  it('Acc test cluster overview', () => {
+  it("Acc test cluster overview", () => {
     cy.loginAndSelectCluster();
 
-    cy.url().should('match', /overview$/);
+    cy.url().should("match", /overview$/);
 
     cy.runAllAccessibilityTests().printAccessibilityTestResults();
   });
 
-  it('Acc test namespace overview', () => {
+  it("Acc test namespace overview", () => {
     cy.loginAndSelectCluster();
 
-    cy.createNamespace('acc-test-namespace');
+    cy.url().should("match", /overview$/);
+
+    cy.createNamespace("acc-test-namespace");
 
     cy.runAllAccessibilityTests().printAccessibilityTestResults();
   });
 
-  it('Subbmit accessibility concerns to AMP', () => {
+  it("Subbmit accessibility concerns to AMP", () => {
     cy.submitAccessibilityConcernsToAMP();
   });
 });
