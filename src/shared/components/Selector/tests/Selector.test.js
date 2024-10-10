@@ -10,7 +10,7 @@ vi.mock('../../RelatedPods.js', () => ({
 
 describe('Selector tests', () => {
   describe('Selector tests for Kubernetes resources', () => {
-    it('Does not render Selector when selector is null', async () => {
+    it('Does not render Selector when selector is null', () => {
       const { queryByText } = render(
         <ThemeProvider>
           <Selector selector={null} />
@@ -20,7 +20,7 @@ describe('Selector tests', () => {
       expect(queryByText('selector.title')).not.toBeInTheDocument();
     });
 
-    it('Renders default message when selector labels are null', async () => {
+    it('Renders default message when selector labels are null', () => {
       const mockedSelector = {};
 
       const { getByText } = render(
@@ -32,7 +32,7 @@ describe('Selector tests', () => {
       expect(getByText('selector.message.empty-selector')).toBeInTheDocument();
     });
 
-    it('Renders Selector with labels and pods list', async () => {
+    it('Renders Selector with labels and pods list', () => {
       const mockedSelector = {
         matchLabels: {
           test: 'test',
@@ -48,15 +48,12 @@ describe('Selector tests', () => {
           />
         </ThemeProvider>,
       );
-      await waitFor(async () => {
-        expect(
-          getByText('Related Pods for test-namespace'),
-        ).toBeInTheDocument();
-        expect(getByText('test=test')).toBeInTheDocument(); // selector labels
-      });
+
+      expect(getByText('Related Pods for test-namespace')).toBeInTheDocument();
+      expect(getByText('test=test')).toBeInTheDocument(); // selector labels
     });
 
-    it('Renders Selector with matchExpressions and without pods list', async () => {
+    it('Renders Selector with matchExpressions and without pods list', () => {
       const mockedSelector = {
         matchLabels: {
           test: 'test',
@@ -76,15 +73,14 @@ describe('Selector tests', () => {
           />
         </ThemeProvider>,
       );
-      await waitFor(async () => {
-        expect(getAllByText('match-expressions.title')[0]).toBeInTheDocument(); //title of the matchExpressions table
-        expect(getAllByText('test=test')[0]).toBeInTheDocument();
-        expect(getByText('test-key')).toBeInTheDocument(); // matchExpressions elements
-        expect(getByText('In')).toBeInTheDocument();
-      });
+
+      expect(getAllByText('match-expressions.title')[0]).toBeInTheDocument(); //title of the matchExpressions table
+      expect(getAllByText('test=test')[0]).toBeInTheDocument();
+      expect(getByText('test-key')).toBeInTheDocument(); // matchExpressions elements
+      expect(getByText('In')).toBeInTheDocument();
     });
 
-    it('Renders custom message when selector labels are null ', async () => {
+    it('Renders custom message when selector labels are null ', () => {
       const mockedSelector = {};
       const { t } = useTranslation();
       const { getByText } = render(
@@ -101,7 +97,7 @@ describe('Selector tests', () => {
       ).toBeInTheDocument();
     });
 
-    it('Renders Selector with custom RelatedResources', async () => {
+    it('Renders Selector with custom RelatedResources', () => {
       const mockedSelector = {
         matchLabels: {
           test: 'test',
@@ -117,14 +113,13 @@ describe('Selector tests', () => {
           />
         </ThemeProvider>,
       );
-      await waitFor(async () => {
-        expect(getByText('Persistent Volumes')).toBeInTheDocument();
-      });
+
+      expect(getByText('Persistent Volumes')).toBeInTheDocument();
     });
   });
 
   describe('Selector tests for Istio resources', () => {
-    it('Renders message when selector is null', async () => {
+    it('Renders message when selector is null', () => {
       const { getByText } = render(
         <ThemeProvider>
           <Selector selector={null} isIstioSelector />
@@ -134,7 +129,7 @@ describe('Selector tests', () => {
       expect(getByText('selector.message.empty-selector')).toBeInTheDocument();
     });
 
-    it('Renders Selector with custom title', async () => {
+    it('Renders Selector with custom title', () => {
       const { t } = useTranslation();
 
       const { getByText } = render(
@@ -150,7 +145,7 @@ describe('Selector tests', () => {
       expect(getByText('workload-selector-title')).toBeInTheDocument();
     });
 
-    it('Renders Selector with non-empty labels', async () => {
+    it('Renders Selector with non-empty labels', () => {
       const mockedSelector = {
         matchLabels: {
           test: 'test',
@@ -168,10 +163,9 @@ describe('Selector tests', () => {
           />
         </ThemeProvider>,
       );
-      await waitFor(async () => {
-        expect(getByText('Custom Resources')).toBeInTheDocument();
-        expect(getByText('test=test')).toBeInTheDocument();
-      });
+
+      expect(getByText('Custom Resources')).toBeInTheDocument();
+      expect(getByText('test=test')).toBeInTheDocument();
     });
   });
 });
