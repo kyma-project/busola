@@ -5,6 +5,7 @@ import Enzyme from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { act } from '@testing-library/react';
 import ResizeObserverPolyfill from 'resize-observer-polyfill';
+import { cleanup } from '@testing-library/react';
 
 Element.prototype.scroll = () => {};
 
@@ -67,11 +68,6 @@ global.document.createRange = () => ({
 
 window.postMessage = vi.fn();
 
-// graphviz-react uses es modules which jest doesn't understand
-vi.mock('graphviz-react', () => ({
-  Graphviz: () => 'Graphviz mock',
-}));
-
 vi.mock(
   'shared/components/MonacoEditorESM/hooks/useCreateDiffEditor.ts',
   () => ({
@@ -108,3 +104,7 @@ vi.mock('react-i18next', () => ({
 }));
 
 Enzyme.configure({ adapter: new Adapter() });
+
+afterEach(() => {
+  cleanup();
+});
