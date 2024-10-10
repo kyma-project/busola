@@ -9,7 +9,7 @@
     "test:cluster:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/cluster/*.spec.js,tests/extensibility/*.spec.js\" --browser chrome",
     "test:namespace:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/namespace/*.spec.js\" --browser chrome",
     "test:local": "CYPRESS_LOCAL_DEV=true cypress run --browser chrome",
-    "test:accesibility": "cypress run --spec \"tests/accessibility/*.spec.js\" --browser chrome",
+    "test:accesibility": "cypress run --spec \"tests/accessibility/*.spec.js\" --browser chromium",
     "test:accesibility:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/accessibility/*.spec.js\" --browser chrome"
   },
   "devDependencies": {

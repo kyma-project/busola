@@ -12,11 +12,25 @@ module.exports = (on, config) => {
     cancelTests: false,
   };
 
+  const date = new Date();
+  const todaysDate =
+    date.getMonth() +
+    1 +
+    '/' +
+    date.getDate() +
+    '/' +
+    date.getFullYear() +
+    '-' +
+    (date.getUTCHours() + 2) +
+    ':' +
+    date.getUTCMinutes();
+  const reportName = `AMP REPORT TEST ${todaysDate}`;
+
   config.env.NAMESPACE_NAME = namespaceName;
   config.env.STORAGE_CLASS_NAME = randomName;
   config.env.APP_NAME = randomName;
   config.env.ACC_AMP_TOKEN = process.env.ACC_AMP_TOKEN;
-  config.env.AMP_REPORT_NAME = 'AMP REPORT';
+  config.env.AMP_REPORT_NAME = reportName;
 
   on('task', {
     removeFile(filePath) {

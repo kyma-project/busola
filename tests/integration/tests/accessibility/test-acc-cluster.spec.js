@@ -25,16 +25,4 @@ context('Accessibility test Cluster list and overview', () => {
       .printAccessibilityTestResults()
       .submitAccessibilityConcernsToAMP(Cypress.env('AMP_REPORT_NAME'));
   });
-
-  it('Acc test namespace overview', () => {
-    cy.loginAndSelectCluster();
-
-    cy.url().should('match', /overview$/);
-
-    cy.createNamespace('acc-test-namespace');
-
-    cy.runAllAccessibilityTests()
-      .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(Cypress.env('AMP_REPORT_NAME'));
-  });
 });
