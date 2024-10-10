@@ -33,7 +33,7 @@ const pathWhitelistFilter = req => {
 };
 
 const pathInvalidCharacterFilter = req => {
-  const encodedPath = req.originalUrl.replace(/^\/backend/, '');
+  const encodedPath = req.originalUrl;
   let decodedPath;
 
   try {
@@ -58,9 +58,13 @@ const invalidHeaderFilter = req => {
 };
 
 const invalidRequestMethodFilter = req => {
+  const path = req.originalUrl;
   const method = req.method;
 
-  if (method === 'TRACE') {
+  if (
+    method === 'TRACE' ||
+    (['OPTIONS', 'HEAD'].includes(method) && !path.includes('proxy'))
+  ) {
     throw Error(`Invalid request method`);
   }
 };
