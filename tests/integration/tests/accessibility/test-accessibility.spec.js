@@ -21,8 +21,20 @@ context('Accessibility test Cluster list and overview', () => {
 
     cy.url().should('match', /overview$/);
 
-    cy.runAllAccessibilityTests()
-      .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP();
+    cy.runAllAccessibilityTests().printAccessibilityTestResults();
+  });
+
+  it('Acc test namespace overview', () => {
+    cy.loginAndSelectCluster();
+
+    cy.url().should('match', /overview$/);
+
+    cy.createNamespace('acc-test-namespace');
+
+    cy.runAllAccessibilityTests().printAccessibilityTestResults();
+  });
+
+  it('Subbmit accessibility concerns to AMP', () => {
+    cy.submitAccessibilityConcernsToAMP();
   });
 });
