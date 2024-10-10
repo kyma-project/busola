@@ -5,7 +5,7 @@ on:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
       - ".github/workflows/accessibility-tests.yml"
-      - "tests/tests/accessibility/**"
+      - "tests/integration/tests/accessibility/**"
 
 jobs:
   run-cluster-test:
@@ -51,7 +51,7 @@ jobs:
           sleep 10
           
           cd tests/integration
-          npm ci && npm run "test:accesibility"
+          npm ci && ACC_AMP_TOKEN=ACC_AMP_TOKEN npm run "test:accesibility"
       - name: Uploads artifacts
         uses: actions/upload-artifact@v4
         if: ${{ always() }}
