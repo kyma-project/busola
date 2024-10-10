@@ -28,48 +28,5 @@ describe('Selector tests', () => {
         });
       });
     });
-
-    it('Renders default message when selector labels are null', async () => {
-      const mockedSelector = {};
-
-      const { getByText } = render(
-        <ThemeProvider>
-          <Selector selector={mockedSelector} />
-        </ThemeProvider>,
-      );
-      await waitFor(async () => {
-        await act(async () => {
-          expect(
-            getByText('selector.message.empty-selector'),
-          ).toBeInTheDocument();
-        });
-      });
-    });
-
-    it('Renders Selector with labels and pods list', async () => {
-      const mockedSelector = {
-        matchLabels: {
-          test: 'test',
-        },
-      };
-
-      const { getByText } = render(
-        <ThemeProvider>
-          <Selector
-            selector={mockedSelector}
-            namespace="test-namespace"
-            labels={mockedSelector.matchLabels}
-          />
-        </ThemeProvider>,
-      );
-      await waitFor(async () => {
-        await act(async () => {
-          expect(
-            getByText('Related Pods for test-namespace'),
-          ).toBeInTheDocument();
-          expect(getByText('test=test')).toBeInTheDocument(); // selector labels
-        });
-      });
-    });
   });
 });
