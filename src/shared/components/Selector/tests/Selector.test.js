@@ -46,7 +46,7 @@ describe.skip('Selector tests', () => {
       });
     });
 
-    it('Renders Selector with labels and pods list', async () => {
+    it.only('Renders Selector with labels and pods list', async () => {
       const mockedSelector = {
         matchLabels: {
           test: 'test',
