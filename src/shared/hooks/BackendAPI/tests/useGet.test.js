@@ -3,8 +3,8 @@ import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { authDataState } from 'state/authDataAtom';
 import { clusterState } from 'state/clusterAtom';
 
-const mockUseFetch = jest.fn();
-jest.mock('./../useFetch', () => ({
+const mockUseFetch = vi.fn();
+vi.mock('./../useFetch', () => ({
   useFetch: () => mockUseFetch,
 }));
 
@@ -16,7 +16,7 @@ function Testbed({ setGetResult }) {
 
 describe('useGet', () => {
   it('Tolerancy', async () => {
-    const mock = jest.fn();
+    const mock = vi.fn();
 
     mockUseFetch
       .mockImplementationOnce(

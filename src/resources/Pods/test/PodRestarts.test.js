@@ -1,4 +1,3 @@
-import React from 'react';
 import { act, render, waitFor } from '@testing-library/react';
 import PodRestarts from '../PodRestarts';
 import { ThemeProvider } from '@ui5/webcomponents-react';

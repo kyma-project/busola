@@ -7,14 +7,14 @@ import '@ui5/webcomponents-icons/dist/AllIcons.js';
 // ... which originals in turn are required in other `Widget.test.js`
 
 const CopyableMockWidget = ({ value }) => value;
-jest.doMock('./../index', () => {
+vi.doMock('./../index', () => {
   return {
     widgets: { CopyableMockWidget },
     valuePreprocessors: [],
   };
 });
 
-jest.mock('copy-to-clipboard');
+vi.mock('copy-to-clipboard');
 
 // Widget needs to be imported in each test so that mocking './../index' works
 describe('Widget.copyable', () => {

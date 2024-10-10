@@ -3,7 +3,7 @@ import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 import copyToClipboard from 'copy-to-clipboard';
 import '@ui5/webcomponents-icons/dist/AllIcons.js';
 
-jest.mock('copy-to-clipboard');
+vi.mock('copy-to-clipboard');
 
 describe('CopiableText', () => {
   it('renders the text', () => {
