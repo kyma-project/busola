@@ -1,4 +1,3 @@
-import React from 'react';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { act, render, waitFor } from '@testing-library/react';
 import { ThemeProvider } from '@ui5/webcomponents-react';

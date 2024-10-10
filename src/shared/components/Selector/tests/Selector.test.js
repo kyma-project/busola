@@ -1,6 +1,4 @@
-import { act, render, waitFor } from 'testing/reactTestingUtils';
-import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { render } from 'testing/reactTestingUtils';
 import { Selector } from '../Selector';
 import { ThemeProvider } from '@ui5/webcomponents-react';
 
@@ -82,19 +80,16 @@ describe('Selector tests', () => {
 
     it('Renders custom message when selector labels are null ', () => {
       const mockedSelector = {};
-      const { t } = useTranslation();
       const { getByText } = render(
         <ThemeProvider>
           <Selector
             selector={mockedSelector}
-            message={t('persistent-volume-claims.message.empty-selector')}
+            message={'Matches all PersistentVolumes'}
           />
         </ThemeProvider>,
       );
 
-      expect(
-        getByText('persistent-volume-claims.message.empty-selector'),
-      ).toBeInTheDocument();
+      expect(getByText('Matches all PersistentVolumes')).toBeInTheDocument();
     });
 
     it('Renders Selector with custom RelatedResources', () => {
@@ -130,19 +125,13 @@ describe('Selector tests', () => {
     });
 
     it('Renders Selector with custom title', () => {
-      const { t } = useTranslation();
-
       const { getByText } = render(
         <ThemeProvider>
-          <Selector
-            selector={null}
-            title={t('workload-selector-title')}
-            isIstioSelector
-          />
+          <Selector selector={null} title={'Custom Title'} isIstioSelector />
         </ThemeProvider>,
       );
 
-      expect(getByText('workload-selector-title')).toBeInTheDocument();
+      expect(getByText('Custom Title')).toBeInTheDocument();
     });
 
     it('Renders Selector with non-empty labels', () => {
