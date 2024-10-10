@@ -24,7 +24,7 @@ module.exports = (on, config) => {
     (date.getUTCHours() + 2) +
     ':' +
     date.getUTCMinutes();
-  const reportName = `AMP REPORT TEST ${todaysDate}`;
+  const reportName = `AMP REPORT ${todaysDate}`;
 
   config.env.NAMESPACE_NAME = namespaceName;
   config.env.STORAGE_CLASS_NAME = randomName;

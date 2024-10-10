@@ -17,7 +17,7 @@
     "cypress-file-upload": "^5.0.8",
     "cypress-plugin-tab": "^1.0.5",
     "js-yaml": "^4.1.0",
-    "@continuum/continuum-javascript-professional": "file:./lib/continuum-continuum-javascript-professional-5.1.2.tgz"
+    "@continuum/continuum-javascript-professional": "file:./lib/continuum-continuum-javascript-professional-6.1.0.tgz"
   },
   "optionalDependencies": {
     "cypress": "^13.6.1"
