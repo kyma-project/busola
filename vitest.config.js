@@ -10,8 +10,5 @@ export default mergeConfig(
       globals: true, // Enable globals for Vitest
       setupFiles: ['./src/setupTests.js'],
     },
-    define: {
-      'import.meta.vitest': 'undefined',
-    },
   }),
 );

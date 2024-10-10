@@ -1,12 +1,20 @@
 import { render } from 'testing/reactTestingUtils';
 import { Selector } from '../Selector';
 import { ThemeProvider } from '@ui5/webcomponents-react';
+import { cleanup } from '@testing-library/react';
 
 vi.mock('../../RelatedPods.js', () => ({
   RelatedPods: ({ namespace }) => <div>Related Pods for {namespace}</div>,
 }));
 
 describe('Selector tests', () => {
+  afterAll(async () => {
+    await cleanup();
+    await vi.mockReset();
+    await vi.clearAllMocks();
+    await vi.useRealTimers();
+  });
+
   describe('Selector tests for Kubernetes resources', () => {
     it('Does not render Selector when selector is null', () => {
       const { queryByText } = render(
