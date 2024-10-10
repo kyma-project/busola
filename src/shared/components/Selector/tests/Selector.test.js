@@ -16,7 +16,7 @@ describe.skip('Selector tests', () => {
   });
 
   describe('Selector tests for Kubernetes resources', () => {
-    it('Does not render Selector when selector is null', async () => {
+    it.only('Does not render Selector when selector is null', async () => {
       const { queryByText } = render(
         <ThemeProvider>
           <Selector selector={null} />
