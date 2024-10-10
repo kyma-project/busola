@@ -149,13 +149,8 @@ describe('Selector tests', () => {
           <Selector selector={null} isIstioSelector />
         </ThemeProvider>,
       );
-      await waitFor(async () => {
-        await act(async () => {
-          expect(
-            getByText('selector.message.empty-selector'),
-          ).toBeInTheDocument();
-        });
-      });
+
+      expect(getByText('selector.message.empty-selector')).toBeInTheDocument();
     });
 
     it('Renders Selector with custom title', async () => {
@@ -170,11 +165,8 @@ describe('Selector tests', () => {
           />
         </ThemeProvider>,
       );
-      await waitFor(async () => {
-        await act(async () => {
-          expect(getByText('workload-selector-title')).toBeInTheDocument();
-        });
-      });
+
+      expect(getByText('workload-selector-title')).toBeInTheDocument();
     });
 
     it('Renders Selector with non-empty labels', async () => {
@@ -196,10 +188,8 @@ describe('Selector tests', () => {
         </ThemeProvider>,
       );
       await waitFor(async () => {
-        await act(async () => {
-          expect(getByText('Custom Resources')).toBeInTheDocument();
-          expect(getByText('test=test')).toBeInTheDocument();
-        });
+        expect(getByText('Custom Resources')).toBeInTheDocument();
+        expect(getByText('test=test')).toBeInTheDocument();
       });
     });
   });
