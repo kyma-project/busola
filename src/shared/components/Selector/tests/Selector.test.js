@@ -29,7 +29,7 @@ describe.skip('Selector tests', () => {
       });
     });
 
-    it('Renders default message when selector labels are null', async () => {
+    it.only('Renders default message when selector labels are null', async () => {
       const mockedSelector = {};
 
       const { getByText } = render(
