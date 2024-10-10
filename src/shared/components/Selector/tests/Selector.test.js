@@ -8,7 +8,7 @@ vi.mock('../../RelatedPods.js', () => ({
   RelatedPods: ({ namespace }) => <div>Related Pods for {namespace}</div>,
 }));
 
-describe.skip('Selector tests', () => {
+describe('Selector tests', () => {
   afterEach(async () => {
     await cleanup();
     await vi.clearAllMocks();
@@ -176,7 +176,7 @@ describe.skip('Selector tests', () => {
       });
     });
 
-    it.only('Renders Selector with non-empty labels', async () => {
+    it('Renders Selector with non-empty labels', async () => {
       const mockedSelector = {
         matchLabels: {
           test: 'test',
