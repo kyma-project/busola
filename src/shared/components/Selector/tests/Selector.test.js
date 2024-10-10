@@ -176,7 +176,7 @@ describe.skip('Selector tests', () => {
       });
     });
 
-    it('Renders Selector with non-empty labels', async () => {
+    it.only('Renders Selector with non-empty labels', async () => {
       const mockedSelector = {
         matchLabels: {
           test: 'test',
