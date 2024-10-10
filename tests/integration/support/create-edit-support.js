@@ -20,7 +20,7 @@ Cypress.Commands.add('checkUnsavedDialog', () => {
 
   cy.get('ui5-dialog[header-text="Discard Changes"]').should('be.visible');
 
-  cy.get('ui5-dialog[header-text="Discard Changes"]')
+  cy.get('ui5-dialog[header-text="Discard Changes"]:visible')
     .find('ui5-button')
     .contains('Cancel')
     .click();
