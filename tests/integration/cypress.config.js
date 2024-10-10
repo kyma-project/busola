@@ -30,7 +30,8 @@ module.exports = defineConfig({
       return require('./plugins')(on, config);
     },
     specPattern: [
-      'tests/accessibility/test-cluster-overview.spec.js',
+      'tests/accessibility/test-acc-cluster.spec.js',
+      'tests/accessibility/test-acc-namespace-overview.spec.js',
       'tests/cluster/test-download-a-kubeconfig.spec.js',
       'tests/cluster/test-edit-cluster.spec.js',
       'tests/cluster/test-cluster-overview.spec.js',

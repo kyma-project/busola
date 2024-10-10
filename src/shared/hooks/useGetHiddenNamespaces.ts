@@ -1,5 +1,6 @@
 import { useFeature } from 'hooks/useFeature';
 import { ConfigFeature } from 'state/types';
+import { useMemo } from 'react';
 
 interface HiddenNamespacesFeature extends ConfigFeature {
   config?: {
@@ -12,9 +13,13 @@ export const useGetHiddenNamespaces = (): string[] => {
     'HIDDEN_NAMESPACES',
   );
 
-  const isValidAndEnabled =
-    hiddenNamespacesConfig?.isEnabled &&
-    Array.isArray(hiddenNamespacesConfig?.config?.namespaces);
+  const hiddenNamespaces = useMemo(() => {
+    const isValidAndEnabled =
+      hiddenNamespacesConfig?.isEnabled &&
+      Array.isArray(hiddenNamespacesConfig?.config?.namespaces);
 
-  return isValidAndEnabled ? hiddenNamespacesConfig!.config!.namespaces! : [];
+    return isValidAndEnabled ? hiddenNamespacesConfig!.config!.namespaces! : [];
+  }, [hiddenNamespacesConfig]);
+
+  return hiddenNamespaces;
 };

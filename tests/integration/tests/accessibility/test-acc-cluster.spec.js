@@ -13,7 +13,7 @@ context('Accessibility test Cluster list and overview', () => {
     cy.visit(`${config.clusterAddress}/clusters`)
       .runAllAccessibilityTests()
       .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP();
+      .submitAccessibilityConcernsToAMP(Cypress.env('AMP_REPORT_NAME'));
   });
 
   it('Acc test cluster overview', () => {
@@ -23,6 +23,6 @@ context('Accessibility test Cluster list and overview', () => {
 
     cy.runAllAccessibilityTests()
       .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP();
+      .submitAccessibilityConcernsToAMP(Cypress.env('AMP_REPORT_NAME'));
   });
 });

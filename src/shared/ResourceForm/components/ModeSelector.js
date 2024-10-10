@@ -24,21 +24,25 @@ export function ModeSelector({ mode, setMode, isDisabled = false }) {
 
   return (
     <div className="ui5-content-density-compact mode-selector">
-      <SegmentedButton className="mode-selector__content">
+      <SegmentedButton
+        className="mode-selector__content"
+        onSelectionChange={event => {
+          const mode = event.detail.selectedItem.getAttribute('data-mode');
+          setMode(mode);
+          if (preferencesViewType === 'MODE_DEFAULT') {
+            setEditViewMode({
+              preferencesViewType: preferencesViewType,
+              dynamicViewType: mode,
+            });
+          }
+        }}
+      >
         {buttonsToDisplay.map(button => (
           <SegmentedButtonItem
             key={button.mode}
             pressed={mode === button.mode}
-            onClick={() => {
-              setMode(button.mode);
-              if (preferencesViewType === 'MODE_DEFAULT') {
-                setEditViewMode({
-                  preferencesViewType: preferencesViewType,
-                  dynamicViewType: button.mode,
-                });
-              }
-            }}
             disabled={isDisabled}
+            data-mode={button.mode}
           >
             {button.label}
           </SegmentedButtonItem>
