@@ -34,6 +34,6 @@ context('Accessibility test Cluster list and overview', () => {
   });
 
   it('Subbmit accessibility concerns to AMP', () => {
-    cy.submitAccessibilityConcernsToAMP();
+    cy.submitAccessibilityConcernsToAMP('AMP test PR');
   });
 });

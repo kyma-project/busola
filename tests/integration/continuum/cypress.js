@@ -98,7 +98,7 @@ const failIfAnyAccessibilityConcerns = () => {
   ).to.have.lengthOf(0);
 };
 
-const submitAccessibilityConcernsToAMP = () => {
+const submitAccessibilityConcernsToAMP = (reportTitle = 'Busola ACC') => {
   const accessibilityConcerns = Continuum.getAccessibilityConcerns();
   if (accessibilityConcerns.length <= 0) {
     return;
@@ -117,7 +117,7 @@ const submitAccessibilityConcernsToAMP = () => {
         '/' +
         d.getFullYear() +
         '-' +
-        d.getUTCHours() +
+        (d.getUTCHours() + 2) +
         ':' +
         d.getUTCMinutes() +
         ':' +
@@ -128,7 +128,7 @@ const submitAccessibilityConcernsToAMP = () => {
       await ampReportingService.setActiveOrganization(10274); // ID of AMP organization to submit test results to
       await ampReportingService.setActiveAsset(38893); // ID of AMP asset to submit test results to
       await ampReportingService.setActiveReportByName(
-        'Busola ACC (main) - ' + todaysDate,
+        `${reportTitle} - ${todaysDate}`,
       );
       await ampReportingService.setActiveModuleByName(pageTitle, pageUrl);
       await ampReportingService.setActiveReportManagementStrategy(
