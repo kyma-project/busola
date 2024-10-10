@@ -11,7 +11,7 @@ export function useAvailableNamespaces() {
   const hiddenNamespaces = useGetHiddenNamespaces();
   const [namespaces, setNamespaces] = useRecoilState(namespacesState);
 
-  const { data, error, refetch, silentRefetch } = useGetList()(
+  const { data: allNamespaces, error, refetch, silentRefetch } = useGetList()(
     '/api/v1/namespaces',
     {
       skip: false,
@@ -31,7 +31,7 @@ export function useAvailableNamespaces() {
       setNamespaces([]);
       return;
     }
-    const filteredNamespaces = data
+    const filteredNamespaces = allNamespaces
       ?.map(n => n.metadata?.name)
       ?.filter(n => {
         if (showHiddenNamespaces) return true;
@@ -40,7 +40,13 @@ export function useAvailableNamespaces() {
     if (filteredNamespaces) {
       setNamespaces(filteredNamespaces);
     }
-  }, [data, error, hiddenNamespaces, setNamespaces, showHiddenNamespaces]);
+  }, [
+    allNamespaces,
+    error,
+    hiddenNamespaces,
+    setNamespaces,
+    showHiddenNamespaces,
+  ]);
 
   return { namespaces, refetch, silentRefetch, setNamespaces };
 }
