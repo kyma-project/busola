@@ -107,4 +107,6 @@ Enzyme.configure({ adapter: new Adapter() });
 
 afterEach(() => {
   cleanup();
+  vi.clearAllMocks();
+  vi.useRealTimers();
 });
