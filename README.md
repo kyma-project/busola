@@ -170,13 +170,13 @@ For the information on how to run tests and configure them, go to the [`tests`](
 ### Set active environment
 
 1. To use one of build-in environments in `busola-kyma` image (dev, stage, prod), pass env `ENVIRONMENT` to docker container.
-    ```bash
-    docker run --rm -it -p 3001:3001 -v --env ENVIRONMENT={your-env}--pid=host --name busola europe-docker.pkg.dev/kyma-project/prod/busola-kyma-web:latest
-    ```
+   ```bash
+   docker run --rm -it -p 3001:3001 -v --env ENVIRONMENT={your-env}--pid=host --name busola europe-docker.pkg.dev/kyma-project/prod/busola-kyma-web:latest
+   ```
 2. To use custom environment configuration, mount it in docker and pass env `ENVIRONMENT` to docker container.
-    ```bash
-    docker run --rm -it -p 3001:3001 -v <path to your custom config>:/app/core-ui/environments/ --env ENVIRONMENT={your-env} --pid=host --name busola europe-docker.pkg.dev/kyma-project/prod/busola:latest
-    ```
+   ```bash
+   docker run --rm -it -p 3001:3001 -v <path to your custom config>:/app/core-ui/environments/ --env ENVIRONMENT={your-env} --pid=host --name busola europe-docker.pkg.dev/kyma-project/prod/busola:latest
+   ```
 
 ## Troubleshooting
 
