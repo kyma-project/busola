@@ -5,6 +5,7 @@ import Enzyme from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { act } from '@testing-library/react';
 import ResizeObserverPolyfill from 'resize-observer-polyfill';
+import { cleanup } from '@testing-library/react';
 
 Element.prototype.scroll = () => {};
 
@@ -103,3 +104,9 @@ vi.mock('react-i18next', () => ({
 }));
 
 Enzyme.configure({ adapter: new Adapter() });
+
+afterEach(() => {
+  cleanup();
+  vi.clearAllMocks();
+  vi.useRealTimers();
+});

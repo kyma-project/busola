@@ -6,6 +6,7 @@ export default mergeConfig(
   viteConfig,
   defineConfig({
     test: {
+      environment: 'jsdom',
       plugins: [viteTsconfigPaths()],
       globals: true, // Enable globals for Vitest
       setupFiles: ['./src/setupTests.js'],

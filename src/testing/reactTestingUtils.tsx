@@ -10,7 +10,7 @@ type CustomRenderOptions = Omit<RenderOptions, 'wrapper'> & {
 const customRender = (ui: ReactElement, options?: CustomRenderOptions) => {
   const AllTheProviders = ({ children }: { children: ReactNode }) => {
     return (
-      <RecoilRoot initializeState={options?.initializeState}>
+      <RecoilRoot initializeState={options?.initializeState ?? (() => {})}>
         <BrowserRouter>{children}</BrowserRouter>
       </RecoilRoot>
     );
