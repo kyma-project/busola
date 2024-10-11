@@ -155,7 +155,9 @@ When developing new features in Busola, adhere to the following rules. This will
 
 For the information on how to run tests and configure them, go to the [`tests`](tests) directory.
 
-## Busola in Docker: adding a cluster via kubeconfig ID
+## Busola in Docker
+
+### Adding a cluster via kubeconfig ID
 
 1. If you run Busola in Docker, you can mount your kubeconfig as a bind mount for Busola container. Execute the following command:
 
@@ -164,6 +166,17 @@ For the information on how to run tests and configure them, go to the [`tests`](
    ```
 
 2. When you open Busola in your browser, go to `http://localhost:3001?kubeconfigID={YOUR_KUBECONFIG_FILE_NAME}`. Busola will try to download that file and add it for your Busola instance.
+
+### Set active environment
+
+1. To use one of build-in environments in `busola-kyma` image (dev, stage, prod), pass env `ENVIRONMENT` to docker container.
+    ```bash
+    docker run --rm -it -p 3001:3001 -v --env ENVIRONMENT={your-env}--pid=host --name busola europe-docker.pkg.dev/kyma-project/prod/busola-kyma-web:latest
+    ```
+2. To use custom environment configuration, mount it in docker and pass env `ENVIRONMENT` to docker container.
+    ```bash
+    docker run --rm -it -p 3001:3001 -v <path to your custom config>:/app/core-ui/environments/ --env ENVIRONMENT={your-env} --pid=host --name busola europe-docker.pkg.dev/kyma-project/prod/busola:latest
+    ```
 
 ## Troubleshooting
 
