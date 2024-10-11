@@ -7,7 +7,7 @@
     "start": "SSL_CERT_FILE=certs.pem NODE_ENV=development nodemon --exec babel-node index.js",
     "build": "webpack --mode=production",
     "start:prod": "SSL_CERT_FILE=certs.pem NODE_ENV=production node backend-production.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -31,6 +31,7 @@
     "@babel/register": "^7.12.10",
     "babel-loader": "^8.2.2",
     "core-js": "^3.8.1",
+    "jest": "^29.7.0",
     "nodemon": "^2.0.7",
     "webpack": "^5.10.1",
     "webpack-cli": "^4.2.0",
