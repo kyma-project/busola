@@ -1,8 +1,8 @@
 import { render } from 'testing/reactTestingUtils';
 import { ResourceLink } from '../ResourceLink';
 
-vi.mock('react-router', () => ({
-  ...vi.importActual('react-router'),
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
   useMatch: () => {
     return {
       params: {

@@ -1,8 +1,8 @@
 import { render } from 'testing/reactTestingUtils';
 import { ControlledBy } from '../ControlledBy';
 
-vi.mock('react-router', () => ({
-  ...vi.importActual('react-router'),
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
   useMatch: () => ({
     params: {
       cluster: 'test-cluster',

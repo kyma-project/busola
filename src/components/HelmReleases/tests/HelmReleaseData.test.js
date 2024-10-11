@@ -7,7 +7,7 @@ vi.mock('components/HelmReleases/decodeHelmRelease', () => ({
   decodeHelmRelease: release => mockDecodeHelmRelease(release),
 }));
 
-const originalDecodeHelmRelease = vi.importActual(
+const originalDecodeHelmRelease = await vi.importActual(
   'components/HelmReleases/decodeHelmRelease',
 );
 

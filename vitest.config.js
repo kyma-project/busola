@@ -10,6 +10,7 @@ export default mergeConfig(
       plugins: [viteTsconfigPaths()],
       globals: true, // Enable globals for Vitest
       setupFiles: ['./src/setupTests.js'],
+      fileParallelism: false,
     },
   }),
 );

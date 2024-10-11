@@ -6,8 +6,8 @@ import { RecoilRoot } from 'recoil';
 let mockNamespaceId = 'namespaceId';
 let mockCrds = [];
 
-vi.mock('react-router-dom', () => ({
-  ...vi.importActual('react-router-dom'),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual('react-router-dom')),
   useParams: () => ({
     namespaceId: mockNamespaceId,
   }),
