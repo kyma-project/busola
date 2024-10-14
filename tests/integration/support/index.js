@@ -9,4 +9,5 @@ import './inspectTab';
 import './createNamespace';
 import './loadFile';
 import './mockConfig';
+import '../continuum/cypress';
 require('cypress-plugin-tab');
