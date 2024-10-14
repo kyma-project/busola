@@ -39,7 +39,7 @@ export const pathInvalidCharacterFilter = req => {
   try {
     decodedPath = decodeURIComponent(encodedPath);
   } catch (err) {
-    throw Error('Invalid URL encoding in path.');
+    throw Error('Path contains invalid encoding.');
   }
 
   // Check if the decoded path still contains encoded characters (i.e., '%' symbol)
@@ -51,7 +51,7 @@ export const pathInvalidCharacterFilter = req => {
   // eslint-disable-next-line no-control-regex
   const controlCharRegex = /[\x00-\x1F\x7F]/;
   if (controlCharRegex.test(decodedPath)) {
-    throw Error('Path contains non-printable or control characters.');
+    throw Error('Path contains invalid characters.');
   }
 
   // Allow alphanumeric, dashes, underscores, dots, slashes, colons, tildes, question marks, equals, and ampersands
