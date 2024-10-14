@@ -4,7 +4,7 @@ set -e
 export KYMA_DASHBOARD_IMG="k3d-registry.localhost:5000/kyma-dashboard"
 
 echo "Build local image"
-docker build -t "${KYMA_DASHBOARD_IMG}" -f Dockerfile.local.kyma .
+docker build -t "${KYMA_DASHBOARD_IMG}" -f Dockerfile.local .
 echo "Running kyma-dashboard... with ${ENV} configuration"
 docker run -d --rm --net=host --pid=host --name kyma-dashboard --env ENVIRONMENT="${ENV}" "${KYMA_DASHBOARD_IMG}"
 
