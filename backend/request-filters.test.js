@@ -129,6 +129,13 @@ describe('pathInvalidCharacterFilter', () => {
     );
   });
 
+  it('should throw an error when path contains NULL character', () => {
+    const req = { originalUrl: '/valid/path%00' }; // NULL character encoded as %00
+    expect(() => {
+      pathInvalidCharacterFilter(req);
+    }).toThrow('Path contains non-printable or control characters.');
+  });
+
   it('should throw an error for an improperly encoded path', () => {
     const req = {
       originalUrl: '/invalid%path',
@@ -139,9 +146,9 @@ describe('pathInvalidCharacterFilter', () => {
     );
   });
 
-  it('should throw an error when maximum decode attempts are reached', () => {
+  it('should throw an error for double encoded characters', () => {
     const req = {
-      originalUrl: '/%2525252e%2525252e', // triple-encoded ".."
+      originalUrl: '/%252e%252e',
     };
 
     expect(() => pathInvalidCharacterFilter(req)).toThrowError(
@@ -149,22 +156,12 @@ describe('pathInvalidCharacterFilter', () => {
     );
   });
 
-  it('should handle multiple encoding attempts correctly', () => {
+  it('should handle single encoded characters correctly', () => {
     const req = {
-      originalUrl: '%252F', // double-encoded "/"
+      originalUrl: '%2E', // encoded single dot "."
     };
 
     expect(() => pathInvalidCharacterFilter(req)).not.toThrow();
-  });
-
-  it('should throw en error for multi-encoded invalid caracters', () => {
-    const req = {
-      originalUrl: '/%252e%252e', // double-encoded ".."
-    };
-
-    expect(() => pathInvalidCharacterFilter(req)).toThrowError(
-      'Path contains invalid characters.',
-    );
   });
 });
 

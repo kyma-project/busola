@@ -34,24 +34,24 @@ export const pathWhitelistFilter = req => {
 
 export const pathInvalidCharacterFilter = req => {
   const encodedPath = req.originalUrl;
-  let decodedPath = encodedPath;
-  let previousPath;
-  let decodeAttempts = 0;
-  const maxDecodeAttempts = 3;
+  let decodedPath;
 
-  // Iteratively decode the path until it stabilizes (no more changes) or reaches the max attempts
-  do {
-    previousPath = decodedPath;
-    try {
-      decodedPath = decodeURIComponent(decodedPath);
-      decodeAttempts++;
-    } catch (err) {
-      throw Error('Invalid URL encoding in path.');
-    }
-  } while (decodedPath !== previousPath && decodeAttempts < maxDecodeAttempts);
+  try {
+    decodedPath = decodeURIComponent(encodedPath);
+  } catch (err) {
+    throw Error('Invalid URL encoding in path.');
+  }
 
-  if (decodeAttempts === maxDecodeAttempts && decodedPath !== previousPath) {
-    throw Error('Path contains invalid encoding');
+  // Check if the decoded path still contains encoded characters (i.e., '%' symbol)
+  if (decodedPath.includes('%')) {
+    throw Error('Path contains invalid encoding.');
+  }
+
+  // Check if the decoded path contains any non-printable or control characters
+  // eslint-disable-next-line no-control-regex
+  const controlCharRegex = /[\x00-\x1F\x7F]/;
+  if (controlCharRegex.test(decodedPath)) {
+    throw Error('Path contains non-printable or control characters.');
   }
 
   // Allow alphanumeric, dashes, underscores, dots, slashes, colons, tildes, question marks, equals, and ampersands
