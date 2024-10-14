@@ -7,10 +7,14 @@ export default mergeConfig(
   defineConfig({
     test: {
       environment: 'jsdom',
+      include: ['**/?(*.)+(test).[jt]s?(x)'],
       plugins: [viteTsconfigPaths()],
       globals: true, // Enable globals for Vitest
       setupFiles: ['./src/setupTests.js'],
       fileParallelism: false,
+      coverage: {
+        reporter: ['text'],
+      },
     },
   }),
 );

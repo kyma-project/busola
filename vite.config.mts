@@ -68,14 +68,6 @@ export default defineConfig({
   define: {
     'process.env.IS_DOCKER': JSON.stringify(process.env.IS_DOCKER || false),
   },
-  test: {
-    setupFiles: './vitest-setup.ts',
-    environment: 'jsdom',
-    include: ['**/?(*.)+(test).[jt]s?(x)'],
-    coverage: {
-      reporter: ['text'],
-    },
-  },
 });
 
 function mergeYamlFiles (filesPath) {
