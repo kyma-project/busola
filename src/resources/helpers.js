@@ -34,6 +34,7 @@ export const usePrepareListProps = ({
   apiVersion,
   hasDetailsView,
   getUrl,
+  customUIUrl,
 }) => {
   const { namespaceId } = useParams();
   const queryParams = new URLSearchParams(window.location.search);
@@ -51,6 +52,7 @@ export const usePrepareListProps = ({
     readOnly: queryParams.get('readOnly') === 'true',
     resourceUrl,
     isAbsolute: !!getUrl,
+    customUIUrl: customUIUrl,
     resourceType: resourceCustomType || pluralize(resourceType || ''),
     resourceTitle: i18n.exists(resourceI18Key) ? t(resourceI18Key) : '',
     namespace: namespaceId,

@@ -9,11 +9,13 @@ import { clusterState, ActiveClusterState } from '../../../state/clusterAtom';
 
 export type FetchFn = ({
   isAbsolute,
+  customUIUrl,
   relativeUrl,
   abortController,
   init,
 }: {
   isAbsolute?: string;
+  customUIUrl?: string;
   relativeUrl: string;
   init?: any;
   abortController?: AbortController;
@@ -27,11 +29,13 @@ export const createFetchFn = ({
   cluster: ActiveClusterState;
 }): FetchFn => async ({
   isAbsolute,
+  customUIUrl,
   relativeUrl,
   abortController,
   init,
 }: {
   isAbsolute?: string;
+  customUIUrl?: string;
   relativeUrl: string;
   init?: any;
   abortController?: AbortController;
@@ -44,19 +48,14 @@ export const createFetchFn = ({
     },
     signal: abortController?.signal,
   };
-  console.log('lolo init', init);
   const { backendAddress, customUIBackendAddress } = getClusterConfig();
 
-  console.log(
-    'createFetchFn isAbsolute',
-    isAbsolute,
-    'relativeUrl',
-    relativeUrl,
-  );
   try {
     const response = await fetch(
       isAbsolute
-        ? customUIBackendAddress + relativeUrl
+        ? customUIBackendAddress +
+            relativeUrl +
+            (customUIUrl ? `?customUIUrl=${customUIUrl}` : '')
         : backendAddress + relativeUrl,
       isAbsolute
         ? {

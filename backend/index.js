@@ -89,12 +89,15 @@ if (isDocker) {
   serveStaticApp(app, '/', '/core-ui');
 } else {
   handleTracking(app);
+  const customRouter = function(req) {
+    const { query } = req;
+    return query.customUIUrl; // protocol + host
+  };
 
-  const CUSTOM_UI_URL = 'http://localhost:8000';
   app.use(
     '/maytheforce',
     createProxyMiddleware({
-      target: CUSTOM_UI_URL,
+      router: customRouter,
       changeOrigin: true,
       pathRewrite: {
         [`^/maytheforce`]: '',

@@ -20,20 +20,9 @@ const useGetHook = processDataFn =>
       skip,
       errorTolerancy = undefined,
       isAbsolute = false,
+      customUIUrl,
     } = {},
   ) {
-    console.log(
-      'useGetHook path',
-      path,
-      'pollingInterval',
-      pollingInterval,
-      'onDataReceived',
-      onDataReceived,
-      'skip',
-      skip,
-      'isAbsolute',
-      isAbsolute,
-    );
     const authData = useRecoilValue(authDataState);
     const lastAuthData = useRef(null);
     const lastResourceVersion = useRef(null);
@@ -77,6 +66,7 @@ const useGetHook = processDataFn =>
           const response = await fetch({
             relativeUrl: path,
             isAbsolute: isAbsolute,
+            customUIUrl: customUIUrl,
             abortController: abortController.current,
           });
           const payload = await response.json();

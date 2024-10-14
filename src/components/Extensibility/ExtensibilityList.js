@@ -61,8 +61,8 @@ export const ExtensibilityListCore = ({
     apiVersion: resource?.version,
     hasDetailsView: !!resMetaData?.details,
     getUrl: backendUrls?.get,
+    customUIUrl: backendUrls?.host,
   });
-  console.log('usePrepareListProps', listProps);
 
   const resourceTitle = resMetaData?.general?.name;
   listProps.resourceTitle = exists('name')
