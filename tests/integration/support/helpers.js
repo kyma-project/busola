@@ -12,3 +12,17 @@ export function chooseComboboxOption(selector, optionText) {
 
   return cy.end();
 }
+
+export function useCategory(category) {
+  before(() => {
+    cy.getLeftNav()
+      .contains(category)
+      .click();
+  });
+
+  after(() => {
+    cy.getLeftNav()
+      .contains(category)
+      .click();
+  });
+}
