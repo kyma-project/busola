@@ -8,7 +8,6 @@
     "test:cluster:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/cluster/*.spec.js,tests/extensibility/*.spec.js\" --browser chrome",
     "test:namespace": "cypress run --spec \"tests/namespace/*.spec.js\" --browser chromium",
     "test:namespace:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/namespace/*.spec.js\" --browser chrome",
-    "test:accesibility": "cypress run --spec \"tests/accessibility/*.spec.js\" --browser chromium",
     "test:kyma-e2e": "cypress run --spec \"tests/kyma*/*spec.js\" --browser chromium",
     "test:kyma-e2e:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/kyma*/*spec.js\" --browser chromium",
     "test:smoke-extensions": "cypress run --browser chromium -C cypress-smoke.js",
