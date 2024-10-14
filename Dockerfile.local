@@ -24,6 +24,19 @@ RUN yq -i '.version = "'${default_tag}'"' public/version.yaml && \
 RUN npm run build:docker
 RUN cd /app/backend && npm run build
 
+# ---- Environments Configuration ----
+FROM node:20.17-alpine3.20 AS configuration
+#RUN apk add make
+WORKDIR /kyma
+
+RUN apk add make
+
+#Copy /kyma configuration into container to /kyma
+COPY /kyma /kyma
+
+RUN npm ci
+RUN make prepare-configuration
+
 # ---- Serve ----
 FROM alpine:3.20.2
 WORKDIR /app
@@ -37,9 +50,8 @@ COPY --chown=65532:65532 --from=builder /app/backend/backend-production.js /app/
 COPY --chown=65532:65532 --from=builder /app/backend/certs.pem /app/certs.pem
 COPY --chown=65532:65532 --from=builder /app/backend/package* /app/
 COPY --chown=65532:65532 --from=builder /app/backend/settings/* /app/settings/
-
-# move out the packed extensions for further use
-#RUN mv /app/extensions/extensions.yaml /app/extensions.yaml
+COPY --chown=65532:65532 --from=builder /app/start_node.sh /app/start_node.sh
+COPY --chown=65532:65532 --from=configuration /kyma/build /app/core-ui/environments
 
 RUN npm ci --only=production
 
@@ -51,5 +63,6 @@ RUN yq eval -i '.config.defaultStorage = "sessionStorage"' core-ui/defaultConfig
 USER 65532:65532
 
 EXPOSE 3001
-ENV NODE_ENV=production ADDRESS=0.0.0.0 IS_DOCKER=true
-CMD ["node", "backend-production.js"]
+ENV NODE_ENV=production ADDRESS=0.0.0.0 IS_DOCKER=true ENVIRONMENT=""
+
+ENTRYPOINT ["/app/start_node.sh"]

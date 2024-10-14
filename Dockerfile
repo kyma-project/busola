@@ -1,5 +1,5 @@
 # ---- Base Alpine with Node ----
-FROM node:20.17-alpine3.20 AS builder
+FROM node:20.17-alpine3.20  AS builder
 ARG default_tag
 
 # Install global dependencies
@@ -20,6 +20,19 @@ RUN yq -i '.version = "'${default_tag}'"' public/version.yaml && \
 
 RUN npm run build:docker
 
+# ---- Environments Configuration ----
+FROM node:20.17-alpine3.20 as configuration
+#RUN apk add make
+WORKDIR /kyma
+
+RUN apk add make
+
+#Copy /kyma configuration into container to /kyma
+COPY /kyma /kyma
+
+RUN npm ci
+RUN make prepare-configuration
+
 # ---- Serve ----
 FROM nginxinc/nginx-unprivileged:1.27.1-alpine3.20
 WORKDIR /app
@@ -34,9 +47,14 @@ COPY --from=builder /app/nginx/mime.types /etc/nginx/
 #entrypoint
 COPY --from=builder --chown=nginx /app/start_nginx.sh /app/start_nginx.sh
 
+#environment configuration
+COPY --from=configuration /kyma/build /app/core-ui/environments
+
 USER root:root
 RUN chown -R nginx:root /etc/nginx /app/core-ui
 USER nginx:nginx
+
+ENV ENVIRONMENT=""
 
 EXPOSE 8080
 ENTRYPOINT ["/app/start_nginx.sh"]

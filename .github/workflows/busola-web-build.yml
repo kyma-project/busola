@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - ".github/workflows/busola-web-build.yml"
+      - "kyma/**"
       - "public/**"
       - "src/**"
       - "package.json"
@@ -15,6 +16,7 @@ on:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
       - ".github/workflows/busola-web-build.yml"
+      - "kyma/**"
       - "public/**"
       - "src/**"
       - "package.json"
