@@ -6,6 +6,7 @@ import { Table } from '../Table';
 import { ThemeProvider } from '@ui5/webcomponents-react';
 import { RecoilRoot } from 'recoil';
 import { MemoryRouter } from 'react-router-dom';
+import { DataSourcesContextProvider } from '../../contexts/DataSources';
 
 vi.mock('components/Extensibility/ExtensibilityCreate', () => {
   return {
@@ -182,32 +183,44 @@ describe('Table', () => {
       });
     });
 
-    // we cannot test Widget underneath the rowRenderer, as jsonpath
-    // import is messed up by Jest
-    // https://stackoverflow.com/questions/70586995/jest-modules-do-not-import-correctly
-    //describe('header & row renderer', () => {
-    // const value = [{ a: 'b' }, { a: 'c' }];
-    // it('passes empty renderers for nullish children', () => {
-    //   const component = mount(
-    //     <Table value={value} structure={{ children: null }} />,
-    //   );
-    //   const list = component.find(GenericList);
-    //   expect(list).toHaveLength(1);
-    //   const { rowRenderer, headerRenderer } = list.props();
-    //   expect(rowRenderer()).toBe('');
-    // });
-    // it('2', () => {
-    // const component = mount(
-    //   <DataSourcesContextProvider value={{}} dataSources={{}}>
-    //     <Table value={value} structure={{ children: [{ path: '$.a' }] }} />
-    //   </DataSourcesContextProvider>,
-    // );
-    // const list = component.find(GenericList);
-    // expect(list).toHaveLength(1);
-    // const { rowRenderer, headerRenderer } = list.props();
-    // expect(rowRenderer()).toHaveLength(1); // one column
-    // expect(rowRenderer()[0].props.structure).toMatchObject({ path: '$.a' });
-    // });
-    //});
+    describe('header & row renderer', () => {
+      const value = [{ a: 'b' }, { a: 'c' }];
+      it('passes empty renderers for nullish children', () => {
+        const component = mount(
+          <MemoryRouter>
+            <RecoilRoot>
+              <ThemeProvider>
+                <Table value={value} structure={{ children: null }} />
+              </ThemeProvider>
+            </RecoilRoot>
+          </MemoryRouter>,
+        );
+        const list = component.find(GenericList);
+        expect(list).toHaveLength(1);
+        const { rowRenderer } = list.props();
+        expect(rowRenderer()).toHaveLength(0);
+      });
+      it('2', () => {
+        const component = mount(
+          <MemoryRouter>
+            <RecoilRoot>
+              <ThemeProvider>
+                <DataSourcesContextProvider value={{}} dataSources={{}}>
+                  <Table
+                    value={value}
+                    structure={{ children: [{ path: '$.a' }] }}
+                  />
+                </DataSourcesContextProvider>
+              </ThemeProvider>
+            </RecoilRoot>
+          </MemoryRouter>,
+        );
+        const list = component.find(GenericList);
+        expect(list).toHaveLength(1);
+        const { rowRenderer } = list.props();
+        expect(rowRenderer()).toHaveLength(1); // one column
+        expect(rowRenderer()[0].props.structure).toMatchObject({ path: '$.a' });
+      });
+    });
   });
 });
