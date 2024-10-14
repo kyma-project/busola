@@ -11,10 +11,12 @@ function openSearchWithSlashShortcut() {
   cy.get('body').type('/', { force: true });
 }
 
-context('Test Custom Resources', () => {
+context('Accessibility test Custom Resources', () => {
   Cypress.skipAfterFail();
 
   before(() => {
+    cy.setUpContinuum('continuum/continuum.conf.js');
+
     cy.loginAndSelectCluster();
 
     cy.navigateTo('Configuration', 'Custom Resource Definitions');
