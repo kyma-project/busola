@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - "busola-build.yml"
+      - ".github/workflows/busola-build.yml"
       - "backend/**"
       - "kyma/**"
       - "public/**"
@@ -16,7 +16,7 @@ on:
   pull_request_target:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
-      - "busola-build.yml"
+      - ".github/workflows/busola-build.yml"
       - "kyma/**"
       - "backend/**"
       - "public/**"
