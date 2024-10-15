@@ -1,7 +1,5 @@
 /// <reference types="cypress" />
 
-// Also column layout test
-
 import { loadFile } from '../../support/loadFile';
 
 const FILE_NAME = 'test-customresourcedefinisions-cluster.yaml';
