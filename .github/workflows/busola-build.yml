@@ -1,4 +1,4 @@
-name: Busola Local Build
+name: Busola Build
 
 on:
   push:
