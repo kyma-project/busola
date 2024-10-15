@@ -12,7 +12,7 @@ on:
       - "src/**"
       - "package.json"
       - "Makefile"
-      - "../../Dockerfile"
+      - "Dockerfile"
   pull_request_target:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
@@ -23,7 +23,7 @@ on:
       - "src/**"
       - "package.json"
       - "Makefile"
-      - "../../Dockerfile"
+      - "Dockerfile"
 
 permissions:
   id-token: write # This is required for requesting the JWT token
