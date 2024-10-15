@@ -4,9 +4,8 @@ import 'babel-polyfill';
 import 'jsdom-worker-fix';
 import Enzyme from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import { act } from '@testing-library/react';
+import { act, cleanup } from '@testing-library/react';
 import ResizeObserverPolyfill from 'resize-observer-polyfill';
-import { cleanup } from '@testing-library/react';
 
 Element.prototype.scroll = () => {};
 
