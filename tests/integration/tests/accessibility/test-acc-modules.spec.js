@@ -16,7 +16,10 @@ context('Accessibility test Modules view', () => {
 
     cy.runAllAccessibilityTests()
       .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(Cypress.env('AMP_REPORT_NAME'));
+      .submitAccessibilityConcernsToAMP(
+        Cypress.env('AMP_REPORT_NAME'),
+        'Modules view',
+      );
   });
 
   it('Acc test add Modules view', () => {
@@ -28,7 +31,10 @@ context('Accessibility test Modules view', () => {
 
     cy.runAllAccessibilityTests()
       .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(Cypress.env('AMP_REPORT_NAME'));
+      .submitAccessibilityConcernsToAMP(
+        Cypress.env('AMP_REPORT_NAME'),
+        'Add Modules view',
+      );
   });
 
   it('Acc test edit Modules view', () => {
@@ -56,6 +62,9 @@ context('Accessibility test Modules view', () => {
 
     cy.runAllAccessibilityTests()
       .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(Cypress.env('AMP_REPORT_NAME'));
+      .submitAccessibilityConcernsToAMP(
+        Cypress.env('AMP_REPORT_NAME'),
+        'Edit Modules view',
+      );
   });
 });

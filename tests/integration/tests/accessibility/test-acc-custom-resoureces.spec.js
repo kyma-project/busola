@@ -5,10 +5,6 @@ import { loadFile } from '../../support/loadFile';
 const FILE_NAME = 'test-customresourcedefinisions-cluster.yaml';
 const TCLUSTER_FILE_NAME = 'test-Tcluster.yaml';
 
-function openSearchWithSlashShortcut() {
-  cy.get('body').type('/', { force: true });
-}
-
 context('Accessibility test Custom Resources', () => {
   Cypress.skipAfterFail();
 
@@ -40,7 +36,10 @@ context('Accessibility test Custom Resources', () => {
 
     cy.runAllAccessibilityTests()
       .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(Cypress.env('AMP_REPORT_NAME'));
+      .submitAccessibilityConcernsToAMP(
+        Cypress.env('AMP_REPORT_NAME'),
+        'Custom Resources overview',
+      );
   });
 
   it('Acc test single Custom Resource list', () => {
@@ -56,7 +55,10 @@ context('Accessibility test Custom Resources', () => {
 
     cy.runAllAccessibilityTests()
       .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(Cypress.env('AMP_REPORT_NAME'));
+      .submitAccessibilityConcernsToAMP(
+        Cypress.env('AMP_REPORT_NAME'),
+        'Custom Resources single list',
+      );
   });
 
   it('Acc test Tcluster Custom Resource details', () => {
@@ -85,6 +87,9 @@ context('Accessibility test Custom Resources', () => {
 
     cy.runAllAccessibilityTests()
       .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(Cypress.env('AMP_REPORT_NAME'));
+      .submitAccessibilityConcernsToAMP(
+        Cypress.env('AMP_REPORT_NAME'),
+        'Tcluster Custom Resource details',
+      );
   });
 });

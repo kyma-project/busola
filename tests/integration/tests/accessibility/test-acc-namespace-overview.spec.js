@@ -17,6 +17,9 @@ context('Accessibility test Namespace overview', () => {
 
     cy.runAllAccessibilityTests()
       .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(Cypress.env('AMP_REPORT_NAME'));
+      .submitAccessibilityConcernsToAMP(
+        Cypress.env('AMP_REPORT_NAME'),
+        'Namespace overview',
+      );
   });
 });

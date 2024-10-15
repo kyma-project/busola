@@ -78,7 +78,10 @@ context('Accessibility test Pizza Orders', () => {
 
     cy.runAllAccessibilityTests()
       .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(Cypress.env('AMP_REPORT_NAME'));
+      .submitAccessibilityConcernsToAMP(
+        Cypress.env('AMP_REPORT_NAME'),
+        'Pizza Orders list',
+      );
   });
 
   it('Acc test Pizza Orders create', () => {
@@ -86,7 +89,10 @@ context('Accessibility test Pizza Orders', () => {
 
     cy.runAllAccessibilityTests()
       .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(Cypress.env('AMP_REPORT_NAME'));
+      .submitAccessibilityConcernsToAMP(
+        Cypress.env('AMP_REPORT_NAME'),
+        'Pizza Orders create',
+      );
   });
 
   it('Acc test Pizza Orders details', () => {
@@ -98,6 +104,9 @@ context('Accessibility test Pizza Orders', () => {
 
     cy.runAllAccessibilityTests()
       .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(Cypress.env('AMP_REPORT_NAME'));
+      .submitAccessibilityConcernsToAMP(
+        Cypress.env('AMP_REPORT_NAME'),
+        'Pizza Orders details',
+      );
   });
 });

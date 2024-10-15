@@ -35,7 +35,10 @@ context('Accessibility test Cron Jobs', () => {
 
     cy.runAllAccessibilityTests()
       .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(Cypress.env('AMP_REPORT_NAME'));
+      .submitAccessibilityConcernsToAMP(
+        Cypress.env('AMP_REPORT_NAME'),
+        'Cron Jobs list',
+      );
   });
 
   it('Acc test Cron Jobs create', () => {
@@ -47,7 +50,10 @@ context('Accessibility test Cron Jobs', () => {
 
     cy.runAllAccessibilityTests()
       .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(Cypress.env('AMP_REPORT_NAME'));
+      .submitAccessibilityConcernsToAMP(
+        Cypress.env('AMP_REPORT_NAME'),
+        'Cron Jobs create',
+      );
   });
 
   it('Acc test Cron Jobs details', () => {
@@ -127,6 +133,9 @@ context('Accessibility test Cron Jobs', () => {
 
     cy.runAllAccessibilityTests()
       .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(Cypress.env('AMP_REPORT_NAME'));
+      .submitAccessibilityConcernsToAMP(
+        Cypress.env('AMP_REPORT_NAME'),
+        'Cron Jobs details',
+      );
   });
 });

@@ -45,7 +45,10 @@ context('Accessibility test Extensions view', () => {
 
     cy.runAllAccessibilityTests()
       .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(Cypress.env('AMP_REPORT_NAME'));
+      .submitAccessibilityConcernsToAMP(
+        Cypress.env('AMP_REPORT_NAME'),
+        'Extensions list',
+      );
   });
 
   it('Acc test Extensions create', () => {
@@ -53,7 +56,10 @@ context('Accessibility test Extensions view', () => {
 
     cy.runAllAccessibilityTests()
       .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(Cypress.env('AMP_REPORT_NAME'));
+      .submitAccessibilityConcernsToAMP(
+        Cypress.env('AMP_REPORT_NAME'),
+        'Extensions create',
+      );
   });
 
   it('Acc test Extensions details', () => {
@@ -70,7 +76,10 @@ context('Accessibility test Extensions view', () => {
 
     cy.runAllAccessibilityTests()
       .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(Cypress.env('AMP_REPORT_NAME'));
+      .submitAccessibilityConcernsToAMP(
+        Cypress.env('AMP_REPORT_NAME'),
+        'Extensions details',
+      );
   });
 
   it('Clean up', () => {
