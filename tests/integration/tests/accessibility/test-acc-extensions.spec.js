@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 
+import jsyaml from 'js-yaml';
+
 context('Accessibility test Extensions view', () => {
   Cypress.skipAfterFail();
 
@@ -7,9 +9,13 @@ context('Accessibility test Extensions view', () => {
     cy.handleExceptions();
     cy.setUpContinuum('continuum/continuum.conf.js');
     cy.loginAndSelectCluster();
-  });
 
-  it('Acc test Extensions list', () => {
+    cy.createNamespace('pizzas');
+
+    cy.getLeftNav()
+      .contains('Cluster Details')
+      .click();
+
     cy.contains('ui5-button', 'Upload YAML').click();
 
     cy.loadFiles(
@@ -28,10 +34,14 @@ context('Accessibility test Extensions view', () => {
     cy.get('ui5-dialog')
       .find('.status-message-success')
       .should('have.length', 2);
+  });
 
-    cy.getLeftNav()
-      .contains('Extensions')
-      .click();
+  it('Acc test Extensions list', () => {
+    cy.loginAndSelectCluster();
+
+    cy.navigateTo('Configuration', 'Extensions');
+
+    cy.wait(500);
 
     cy.runAllAccessibilityTests()
       .printAccessibilityTestResults()
@@ -39,7 +49,7 @@ context('Accessibility test Extensions view', () => {
   });
 
   it('Acc test Extensions create', () => {
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.runAllAccessibilityTests()
       .printAccessibilityTestResults()
@@ -51,10 +61,31 @@ context('Accessibility test Extensions view', () => {
       .contains('Extensions')
       .click();
 
+    cy.get('ui5-input[placeholder="Search"]:visible')
+      .find('input')
+      .wait(1000)
+      .type('pizzas');
+
     cy.clickGenericListLink('pizzas');
 
     cy.runAllAccessibilityTests()
       .printAccessibilityTestResults()
       .submitAccessibilityConcernsToAMP(Cypress.env('AMP_REPORT_NAME'));
+  });
+
+  it('Clean up', () => {
+    cy.getLeftNav()
+      .contains('Namespaces')
+      .click();
+
+    cy.deleteFromGenericList('Namespace', 'pizzas', {
+      clearSearch: false,
+      checkIfResourceIsRemoved: false,
+      selectSearchResult: true,
+    });
+
+    cy.get('ui5-table-row')
+      .find('.status-badge')
+      .contains('Terminating');
   });
 });

@@ -81,7 +81,7 @@ context('Accessibility test Custom Resources', () => {
 
     cy.saveChanges('Create');
 
-    cy.contains('ui5-title', 'tests').should('be.visible');
+    cy.contains('ui5-title', 'tcluster-test').should('be.visible');
 
     cy.runAllAccessibilityTests()
       .printAccessibilityTestResults()

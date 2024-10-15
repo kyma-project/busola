@@ -10,6 +10,7 @@ context('Accessibility test Cron Jobs', () => {
 
   before(() => {
     cy.handleExceptions();
+    cy.setUpContinuum('continuum/continuum.conf.js');
     cy.loginAndSelectCluster();
     cy.createNamespace(NAMESPACE_NAME);
   });
