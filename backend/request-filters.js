@@ -25,6 +25,7 @@ const pathWhitelistFilter = req => {
     '/openid',
     '/readyz',
     '/version',
+    '/maytheforce',
   ];
 
   if (!whitelist.some(e => path.startsWith(e))) {

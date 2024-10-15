@@ -68,13 +68,18 @@ const ColumnWrapper = ({
   let startColumnComponent = null;
   if (!layout && defaultColumn === 'details') {
     startColumnComponent = (
-      <Details resourceName={resourceName} namespaceId={namespaceId} />
+      <Details
+        resourceName={resourceName}
+        namespaceId={namespaceId}
+        getUrl={extension?.general?.backendUrls?.get}
+      />
     );
   } else {
     startColumnComponent = (
       <List
         layoutCloseCreateUrl={layoutCloseCreateUrl}
         enableColumnLayout={true}
+        getUrl={extension?.general?.backendUrls?.get}
       />
     );
   }
@@ -84,6 +89,7 @@ const ColumnWrapper = ({
     resourceTypeForTitle: extension?.general?.name,
     apiGroup: extension?.general.resource.group,
     apiVersion: extension?.general.resource.version,
+    postUrl: extension?.general?.backendUrls?.post,
   });
 
   let midColumnComponent = null;
@@ -119,6 +125,7 @@ const ColumnWrapper = ({
       <Details
         resourceName={layoutState?.midColumn?.resourceName ?? resourceName}
         namespaceId={layoutState.midColumn?.namespaceId ?? namespaceId}
+        getUrl={extension?.general?.backendUrls?.get}
       />
     );
   }

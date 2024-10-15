@@ -33,21 +33,26 @@ export const usePrepareListProps = ({
   apiGroup,
   apiVersion,
   hasDetailsView,
+  getUrl,
+  customUIUrl,
 }) => {
   const { namespaceId } = useParams();
   const queryParams = new URLSearchParams(window.location.search);
   const { i18n, t } = useTranslation();
 
   const api = apiGroup ? `apis/${apiGroup}/${apiVersion}` : `api/${apiVersion}`;
-  const resourceUrl =
-    namespaceId && namespaceId !== '-all-'
-      ? `/${api}/namespaces/${namespaceId}/${resourceType?.toLowerCase()}`
-      : `/${api}/${resourceType?.toLowerCase()}`;
+  const resourceUrl = getUrl
+    ? getUrl
+    : namespaceId && namespaceId !== '-all-'
+    ? `/${api}/namespaces/${namespaceId}/${resourceType?.toLowerCase()}`
+    : `/${api}/${resourceType?.toLowerCase()}`;
 
   return {
     hasDetailsView,
     readOnly: queryParams.get('readOnly') === 'true',
     resourceUrl,
+    isAbsolute: !!getUrl,
+    customUIUrl: customUIUrl,
     resourceType: resourceCustomType || pluralize(resourceType || ''),
     resourceTitle: i18n.exists(resourceI18Key) ? t(resourceI18Key) : '',
     namespace: namespaceId,
@@ -64,13 +69,16 @@ export const usePrepareDetailsProps = ({
   resourceName,
   namespaceId,
   showYamlTab,
+  getUrl,
 }) => {
   const encodedResourceName = encodeURIComponent(resourceName);
   const queryParams = new URLSearchParams(window.location.search);
   const { i18n, t } = useTranslation();
   const api = apiGroup ? `apis/${apiGroup}/${apiVersion}` : `api/${apiVersion}`;
   const resourceUrl = resourceName
-    ? namespaceId
+    ? getUrl
+      ? getUrl
+      : namespaceId
       ? `/${api}/namespaces/${namespaceId}/${resourceType?.toLowerCase()}/${encodedResourceName}`
       : `/${api}/${resourceType?.toLowerCase()}/${encodedResourceName}`
     : '';
@@ -100,15 +108,17 @@ export const usePrepareCreateProps = ({
   resourceTypeForTitle,
   apiGroup,
   apiVersion,
+  postUrl,
 }) => {
   const { namespaceId } = useParams();
   const { i18n, t } = useTranslation();
 
   const api = apiGroup ? `apis/${apiGroup}/${apiVersion}` : `api/${apiVersion}`;
-  const resourceUrl =
-    namespaceId && namespaceId !== '-all-'
-      ? `/${api}/namespaces/${namespaceId}/${resourceType?.toLowerCase()}`
-      : `/${api}/${resourceType?.toLowerCase()}`;
+  const resourceUrl = postUrl
+    ? postUrl
+    : namespaceId && namespaceId !== '-all-'
+    ? `/${api}/namespaces/${namespaceId}/${resourceType?.toLowerCase()}`
+    : `/${api}/${resourceType?.toLowerCase()}`;
 
   return {
     resourceUrl,

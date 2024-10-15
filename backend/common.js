@@ -92,6 +92,7 @@ export const makeHandleRequest = () => {
       cert,
       key,
     };
+
     workaroundForNodeMetrics(req);
 
     const k8sRequest = https.request(options, function(k8sResponse) {

@@ -8,10 +8,14 @@ import { getClusterConfig } from '../../../state/utils/getBackendInfo';
 import { clusterState, ActiveClusterState } from '../../../state/clusterAtom';
 
 export type FetchFn = ({
+  isAbsolute,
+  customUIUrl,
   relativeUrl,
   abortController,
   init,
 }: {
+  isAbsolute?: string;
+  customUIUrl?: string;
   relativeUrl: string;
   init?: any;
   abortController?: AbortController;
@@ -24,10 +28,14 @@ export const createFetchFn = ({
   authData: AuthDataState;
   cluster: ActiveClusterState;
 }): FetchFn => async ({
+  isAbsolute,
+  customUIUrl,
   relativeUrl,
   abortController,
   init,
 }: {
+  isAbsolute?: string;
+  customUIUrl?: string;
   relativeUrl: string;
   init?: any;
   abortController?: AbortController;
@@ -40,10 +48,25 @@ export const createFetchFn = ({
     },
     signal: abortController?.signal,
   };
-  const { backendAddress } = getClusterConfig();
+  const { backendAddress, customUIBackendAddress } = getClusterConfig();
 
   try {
-    const response = await fetch(backendAddress + relativeUrl, init);
+    const response = await fetch(
+      isAbsolute
+        ? customUIBackendAddress +
+            relativeUrl +
+            (customUIUrl ? `?customUIUrl=${customUIUrl}` : '')
+        : backendAddress + relativeUrl,
+      isAbsolute
+        ? {
+            ...init,
+            headers: {
+              ...init.headers,
+              'X-Cluster-Url': 'http://localhost:8000',
+            },
+          }
+        : init,
+    );
     if (response.ok) {
       return response;
     } else {
