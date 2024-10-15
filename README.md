@@ -173,7 +173,7 @@ For the information on how to run tests and configure them, go to the [`tests`](
    ```bash
    docker run --rm -it -p 3001:3001 -v --env ENVIRONMENT={your-env}--pid=host --name busola europe-docker.pkg.dev/kyma-project/prod/busola-kyma-web:latest
    ```
-2. To use a custom environment configuration, mount it in Docker and pass the `ENVIRONMENT`  env to the Docker container.
+2. To use a custom environment configuration, mount it in Docker and pass the `ENVIRONMENT` env to the Docker container.
    ```bash
    docker run --rm -it -p 3001:3001 -v <path to your custom config>:/app/core-ui/environments/ --env ENVIRONMENT={your-env} --pid=host --name busola europe-docker.pkg.dev/kyma-project/prod/busola:latest
    ```
