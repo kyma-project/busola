@@ -81,6 +81,8 @@ context('Accessibility test Custom Resources', () => {
 
     cy.saveChanges('Create');
 
+    cy.contains('ui5-title', 'tests').should('be.visible');
+
     cy.runAllAccessibilityTests()
       .printAccessibilityTestResults()
       .submitAccessibilityConcernsToAMP(Cypress.env('AMP_REPORT_NAME'));
