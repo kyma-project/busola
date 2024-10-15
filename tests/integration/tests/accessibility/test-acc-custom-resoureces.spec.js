@@ -38,8 +38,6 @@ context('Accessibility test Custom Resources', () => {
 
     cy.contains('ui5-title', 'Custom Resources').should('be.visible');
 
-    openSearchWithSlashShortcut();
-
     cy.runAllAccessibilityTests()
       .printAccessibilityTestResults()
       .submitAccessibilityConcernsToAMP(Cypress.env('AMP_REPORT_NAME'));

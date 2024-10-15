@@ -14,13 +14,20 @@ context('Accessibility test Extensions view', () => {
 
     cy.loadFiles(
       'examples/pizzas/configuration/pizzas-configmap.yaml',
-      'examples/pizzas/configuration/pizza-orders-configmap.yaml',
       'examples/pizzas/configuration/pizzas-crd.yaml',
-      'examples/pizzas/configuration/pizza-orders-crd.yaml',
     ).then(resources => {
       const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
       cy.pasteToMonaco(input);
     });
+
+    cy.get('ui5-dialog')
+      .contains('ui5-button', 'Upload')
+      .should('be.visible')
+      .click();
+
+    cy.get('ui5-dialog')
+      .find('.status-message-success')
+      .should('have.length', 2);
 
     cy.getLeftNav()
       .contains('Extensions')
