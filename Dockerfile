@@ -1,13 +1,16 @@
+# this is a Dockerfile for single deployment app - both backend and frontends
+
 # ---- Base Alpine with Node ----
 FROM node:20.17-alpine3.20  AS builder
 ARG default_tag
 
-# Install global dependencies
 RUN apk update && \
   apk upgrade && \
   apk add --no-cache make yq
 
 WORKDIR /app
+
+# Install global dependencies
 
 # Set env variables
 ENV PRODUCTION true
@@ -19,10 +22,10 @@ RUN yq -i '.version = "'${default_tag}'"' public/version.yaml && \
   make resolve validate
 
 RUN npm run build:docker
+RUN cd /app/backend && npm run build
 
 # ---- Environments Configuration ----
-FROM node:20.17-alpine3.20 as configuration
-#RUN apk add make
+FROM node:20.17-alpine3.20 AS configuration
 WORKDIR /kyma
 
 RUN apk add make
@@ -34,27 +37,31 @@ RUN npm ci
 RUN make prepare-configuration
 
 # ---- Serve ----
-FROM nginxinc/nginx-unprivileged:1.27.1-alpine3.20
+FROM alpine:3.20.2
 WORKDIR /app
 
-# apps
-COPY --from=builder /app/build /app/core-ui
+RUN apk --no-cache upgrade && \
+  apk --no-cache --update add nginx nodejs npm yq
+WORKDIR /app
 
-# nginx
-COPY --from=builder /app/nginx/nginx.conf /etc/nginx/
-COPY --from=builder /app/nginx/mime.types /etc/nginx/
+COPY --chown=65532:65532 --from=builder /app/build /app/core-ui
+COPY --chown=65532:65532 --from=builder /app/backend/backend-production.js /app/backend-production.js
+COPY --chown=65532:65532 --from=builder /app/backend/certs.pem /app/certs.pem
+COPY --chown=65532:65532 --from=builder /app/backend/package* /app/
+COPY --chown=65532:65532 --from=builder /app/backend/settings/* /app/settings/
+COPY --chown=65532:65532 --from=builder /app/start_node.sh /app/start_node.sh
+COPY --chown=65532:65532 --from=configuration /kyma/build /app/core-ui/environments
 
-#entrypoint
-COPY --from=builder --chown=nginx /app/start_nginx.sh /app/start_nginx.sh
+RUN npm ci --only=production
 
-#environment configuration
-COPY --from=configuration /kyma/build /app/core-ui/environments
+# use sessionStorage as default
+# SHOW_KYMA_VERSION for production
+RUN yq eval -i '.config.features.SHOW_KYMA_VERSION.isEnabled = true' core-ui/defaultConfig.yaml
+RUN yq eval -i '.config.defaultStorage = "sessionStorage"' core-ui/defaultConfig.yaml
 
-USER root:root
-RUN chown -R nginx:root /etc/nginx /app/core-ui
-USER nginx:nginx
+USER 65532:65532
 
-ENV ENVIRONMENT=""
+EXPOSE 3001
+ENV NODE_ENV=production ADDRESS=0.0.0.0 IS_DOCKER=true ENVIRONMENT=""
 
-EXPOSE 8080
-ENTRYPOINT ["/app/start_nginx.sh"]
+ENTRYPOINT ["/app/start_node.sh"]
