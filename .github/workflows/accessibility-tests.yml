@@ -15,15 +15,14 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-      - name: Create Single Cluster
-        uses: AbsaOSS/k3d-action@4e8b3239042be1dc0aed6c5eb80c13b18200fc79 #v2.4.0
-        with:
-          cluster-name: "k3dCluster"
-          args: >-
-            --agents 1
-            --port 80:80@loadbalancer
-            --port 443:443@loadbalancer
-            --wait
+      - name: Install k3d
+        env:
+          K3D_URL: https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh
+        run: curl --silent --fail $K3D_URL | bash
+      - name: Setup Kyma
+        run: |
+          set -o pipefail
+          ./.github/scripts/setup-kyma.sh | tee kyma-alpha-deploy.log
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -39,7 +38,7 @@ jobs:
         env:
           ACC_AMP_TOKEN: ${{ secrets.ACC_AMP_TOKEN }}
         run: |
-          k3d kubeconfig get k3dCluster > tests/integration/fixtures/kubeconfig.yaml
+          k3d kubeconfig get kyma > tests/integration/fixtures/kubeconfig.yaml
           export CYPRESS_DOMAIN=http://localhost:3000
           serve -s build > busola.log &
 
@@ -67,5 +66,6 @@ jobs:
           name: busola-logs-${{ github.job }}
           path: |
             backend/backend.log
+            kyma-alpha-deploy.log
             busola.log
           retention-days: 90
