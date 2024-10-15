@@ -32,6 +32,9 @@ module.exports = defineConfig({
     specPattern: [
       'tests/accessibility/test-acc-cluster.spec.js',
       'tests/accessibility/test-acc-namespace-overview.spec.js',
+      'tests/accessibility/test-acc-modules.spec.js',
+      'tests/accessibility/test-acc-performance.spec.js',
+      'tests/accessibility/test-acc-custom-resoureces.spec.js',
       'tests/cluster/test-download-a-kubeconfig.spec.js',
       'tests/cluster/test-edit-cluster.spec.js',
       'tests/cluster/test-cluster-overview.spec.js',
