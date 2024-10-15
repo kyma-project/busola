@@ -8,6 +8,7 @@ context('Accessibility test Pizza Orders', () => {
 
   before(() => {
     cy.handleExceptions();
+    cy.setUpContinuum('continuum/continuum.conf.js');
     cy.loginAndSelectCluster();
     cy.createNamespace('pizzas');
   });
