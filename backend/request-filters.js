@@ -54,8 +54,7 @@ export const pathInvalidCharacterFilter = req => {
     throw Error('Path contains invalid characters.');
   }
 
-  // Allow alphanumeric, dashes, underscores, dots, slashes, colons, tildes, question marks, equals, and ampersands
-  const validPathRegex = /^[a-zA-Z0-9/_\-.:~?&=]+$/;
+  const validPathRegex = /^[a-zA-Z0-9/_\-.:~?&=#@]+$/;
   if (decodedPath.includes('..') || !validPathRegex.test(decodedPath)) {
     throw Error(`Path contains invalid characters.`);
   }

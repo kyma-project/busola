@@ -111,7 +111,7 @@ describe('pathInvalidCharacterFilter tests', () => {
     {
       description: 'should not throw an error for a valid path',
       req: {
-        originalUrl: '/valid/path-123',
+        originalUrl: '/valid/path-123@456#789',
       },
     },
     {
