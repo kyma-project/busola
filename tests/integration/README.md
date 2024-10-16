@@ -74,7 +74,7 @@ CYPRESS_OIDC_PASS={YOUR_PASSWORD} CYPRESS_OIDC_USER={YOUR_USERNAME} npm start
 
 ## Prerequisites
 
-Before testing, you need to copy your cluster's kubeconfig file to `fixtures/kubeconfig.yaml`.
+Before testing, copy your cluster's kubeconfig file to `fixtures/kubeconfig.yaml`.
 
 Also you need `ACC_AMP_TOKEN` to submit your generated accessibility report to AMP Prtal.
 
