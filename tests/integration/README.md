@@ -70,7 +70,7 @@ If a cluster requires an OIDC authentication, include these additional arguments
 CYPRESS_OIDC_PASS={YOUR_PASSWORD} CYPRESS_OIDC_USER={YOUR_USERNAME} npm start
 ```
 
-## Accessibility tests
+## Accessibility Tests
 
 ## Prerequisites
 
