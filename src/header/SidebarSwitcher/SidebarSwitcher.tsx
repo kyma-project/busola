@@ -1,6 +1,6 @@
 import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { isSidebarCondensedState } from 'state/preferences/isSidebarCondensedAtom';
 
 export function SidebarSwitcher(props: any) {
