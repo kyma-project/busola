@@ -78,7 +78,7 @@ Before testing, copy your cluster's kubeconfig file to `fixtures/kubeconfig.yaml
 
 Also you need `ACC_AMP_TOKEN` to submit your generated accessibility report to AMP Prtal.
 
-### Run Accessibility tests in the headless mode
+### Run Accessibility Tests in the Headless Mode
 
 To run the tests, pointing to a `local Busola` instance, use this command:
 
