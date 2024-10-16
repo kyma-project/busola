@@ -2,11 +2,17 @@
 
 ## Overview
 
-This project contains smoke and integration UI tests for Busola.
+This project contains smoke, integration UI, and Kyma-related tests for Busola.
 
 ## Prerequisites
 
 Before testing, you need to copy your cluster's kubeconfig file to `fixtures/kubeconfig.yaml`.
+
+For tests that start with `kyma-`, run Busola using Docker, PR number, and - optionally - your desired environment:
+
+```bash
+PR_NUMBER={YOUR_PR_NUMBER} ENV={DESIRED_ENV} npm run run-docker
+```
 
 ## Installation
 

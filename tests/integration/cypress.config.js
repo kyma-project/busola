@@ -14,6 +14,7 @@ module.exports = defineConfig({
   viewportHeight: 1500,
   scrollBehavior: false,
   video: true,
+  watchForFileChanges: false,
   screenshotsFolder: process?.env?.ARTIFACTS
     ? `${process.env?.ARTIFACTS}/screenshots`
     : 'cypress/screenshots',
@@ -29,8 +30,8 @@ module.exports = defineConfig({
       return require('./plugins')(on, config);
     },
     specPattern: [
-      'tests/accessibility/test-cluster-overview.spec.js',
-      'tests/accessibility/test-namespace-overview.spec.js',
+      'tests/accessibility/test-acc-cluster.spec.js',
+      'tests/accessibility/test-acc-namespace-overview.spec.js',
       'tests/cluster/test-download-a-kubeconfig.spec.js',
       'tests/cluster/test-edit-cluster.spec.js',
       'tests/cluster/test-cluster-overview.spec.js',
@@ -78,6 +79,16 @@ module.exports = defineConfig({
       'tests/namespace/test-limit-ranges.spec.js',
       'tests/namespace/test-resource-quotas.spec.js',
       'tests/namespace/z-run-after.spec.js',
+      'tests/kyma-cluster/test-kyma-modules.spec.js',
+      'tests/kyma-namespace/a-run-before.spec.js',
+      'tests/kyma-namespace/test-certificates.spec.js',
+      'tests/kyma-namespace/test-issuers.spec.js',
+      'tests/kyma-namespace/test-dns-providers.spec.js',
+      'tests/kyma-namespace/test-hpa.spec.js',
+      'tests/kyma-namespace/test-oauth2.spec.js',
+      'tests/kyma-namespace/test-dns-entries.spec.js',
+      'tests/kyma-namespace/test-services.spec.js',
+      'tests/kyma-namespace/z-run-after.spec.js',
     ],
     supportFile: 'support/index.js',
   },

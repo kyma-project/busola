@@ -98,7 +98,7 @@ const failIfAnyAccessibilityConcerns = () => {
   ).to.have.lengthOf(0);
 };
 
-const submitAccessibilityConcernsToAMP = () => {
+const submitAccessibilityConcernsToAMP = (reportTitle = 'Busola ACC') => {
   const accessibilityConcerns = Continuum.getAccessibilityConcerns();
   if (accessibilityConcerns.length <= 0) {
     return;
@@ -108,34 +108,17 @@ const submitAccessibilityConcernsToAMP = () => {
 
   cy.title({ log: false }).then(pageTitle => {
     cy.url({ log: false }).then({ timeout: 30000 }, async pageUrl => {
-      const d = new Date();
-      var todaysDate =
-        d.getMonth() +
-        1 +
-        '/' +
-        d.getDate() +
-        '/' +
-        d.getFullYear() +
-        '-' +
-        d.getUTCHours() +
-        ':' +
-        d.getUTCMinutes() +
-        ':' +
-        d.getUTCSeconds(); //Date and Timestamp
-
       const ampReportingService = Continuum.AMPReportingService;
 
       await ampReportingService.setActiveOrganization(10274); // ID of AMP organization to submit test results to
       await ampReportingService.setActiveAsset(38893); // ID of AMP asset to submit test results to
-      await ampReportingService.setActiveReportByName(
-        'Busola ACC (main) - ' + todaysDate,
-      );
+      await ampReportingService.setActiveReportByName(reportTitle);
       await ampReportingService.setActiveModuleByName(pageTitle, pageUrl);
       await ampReportingService.setActiveReportManagementStrategy(
         ReportManagementStrategy.APPEND,
       );
       await ampReportingService.setActiveModuleManagementStrategy(
-        ModuleManagementStrategy.OVERWRITE,
+        ModuleManagementStrategy.APPEND,
       );
       await ampReportingService.submitAccessibilityConcernsToAMP(
         accessibilityConcerns,
