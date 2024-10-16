@@ -88,7 +88,7 @@ ACC_AMP_TOKEN={YOUR_AMP_TOKEN} npm run test:accesibility:local
 
 ### Run Accessibility Tests in the Test Runner Mode
 
-To open the `tests runner`, pointing to a `local Busola` instance, use this command:
+To open `tests runner`, pointing to a `local Busola` instance, use this command:
 
 ```bash
 ACC_AMP_TOKEN={YOUR_AMP_TOKEN} npm run start:local
