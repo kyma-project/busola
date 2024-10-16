@@ -14,6 +14,8 @@ general:
   backendUrls: 
     post: http://127.0.0.1:8001/api/v1/namespaces/ak/services/nginx-service/proxy/data.json
     get: /api/secrets
+    url: /api/service-offerings
+    query: sm_secret_name=sap-btp-service-operator&sm_secret_namespace=kyma-system
     host: http://localhost:8000
   features:
     disableDefaultColumns: true

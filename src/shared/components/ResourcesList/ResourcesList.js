@@ -146,7 +146,6 @@ function Resources(props) {
     resourceUrl,
     skipDataLoading,
     isCompact,
-    isAbsolute,
     customUIUrl,
   } = props;
   useWindowTitle(prettifyNamePlural(resourceTitle, resourceType), {
@@ -158,7 +157,6 @@ function Resources(props) {
     {
       pollingInterval: 3000,
       skip: skipDataLoading,
-      isAbsolute: isAbsolute,
       customUIUrl,
     },
   );

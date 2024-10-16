@@ -60,10 +60,13 @@ export const ExtensibilityListCore = ({
     apiGroup: resource?.group,
     apiVersion: resource?.version,
     hasDetailsView: !!resMetaData?.details,
-    getUrl: backendUrls?.get,
-    customUIUrl: backendUrls?.host,
   });
 
+  listProps.customUIUrl = {
+    host: backendUrls?.host,
+    url: backendUrls?.url,
+    query: backendUrls?.query,
+  };
   const resourceTitle = resMetaData?.general?.name;
   listProps.resourceTitle = exists('name')
     ? t('name')
@@ -137,6 +140,7 @@ export const ExtensibilityListCore = ({
       disableCreate={disableCreate}
       disableEdit={disableEdit}
       disableDelete={disableDelete}
+      disableDefaultColumns={disableDefaultColumns}
       createResourceForm={ExtensibilityCreate}
       sortBy={defaultSortOptions =>
         sortBy(jsonata, sortOptions, t, defaultSortOptions)

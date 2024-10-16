@@ -19,7 +19,6 @@ const useGetHook = processDataFn =>
       onDataReceived,
       skip,
       errorTolerancy = undefined,
-      isAbsolute = false,
       customUIUrl,
     } = {},
   ) {
@@ -65,7 +64,6 @@ const useGetHook = processDataFn =>
           requestData.current[currentRequestId] = { start: Date.now() };
           const response = await fetch({
             relativeUrl: path,
-            isAbsolute: isAbsolute,
             customUIUrl: customUIUrl,
             abortController: abortController.current,
           });
