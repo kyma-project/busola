@@ -22,6 +22,7 @@ jobs:
         run: |
           sudo apt remove chromium -y
           sudo snap remove chromium 
+          sudo rm /usr/bin/chromium
           whereis chromium
           sudo apt install flatpak
           sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
