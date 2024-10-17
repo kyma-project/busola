@@ -21,11 +21,13 @@ jobs:
         shell: bash
         run: |
           sudo apt remove chromium -y
+          whereis chromium
           sudo apt install flatpak
           sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
           sudo flatpak install org.chromium.Chromium -y
           sudo flatpak update --commit=57738d65980bb60a37f4d433ed9574e62373a4f3cb6b3ff202b19e3629863fbb org.chromium.Chromium -y
           export PATH=$PATH:~/.flatpak/bin
+          whereis chromium
           chromium --version
           echo "export PATH=$PATH:~/.flatpak/bin" >> ~/.bashrc
       - uses: gardenlinux/workflow-telemetry-action@v2
