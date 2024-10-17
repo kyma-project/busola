@@ -20,6 +20,7 @@ jobs:
       - name: Install Chrome
         shell: bash
         run: |
+          sudo snap install chromium --channel=127.0.6533.0
           snap info chromium
           snap list chromium --all
       - uses: gardenlinux/workflow-telemetry-action@v2
