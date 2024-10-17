@@ -15,8 +15,17 @@
   align-items: center;
   gap: 0.5rem;
 
-  .search-label-hidden {
-    display: none;
+  #search-input {
+    margin: 0;
+  }
+}
+
+@container (max-width: 450px) {
+  .search-input-container {
+    flex-direction: column;
+    align-items: start;
+    justify-content: end;
+    gap: 0.25rem;
   }
 }
 

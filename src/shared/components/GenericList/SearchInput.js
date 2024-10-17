@@ -104,11 +104,7 @@ export function SearchInput({
 
   return (
     <div className="search-input-container">
-      <Label
-        for="search-input"
-        showColon
-        className={searchQuery === '' ? 'search-label-hidden' : ''}
-      >
+      <Label for="search-input" showColon>
         {t('common.tooltips.search')}
       </Label>
       <Input
@@ -118,7 +114,6 @@ export function SearchInput({
         type="Text"
         icon={<Icon className="bsl-has-color-status-4" name="search" />}
         ref={searchInputRef}
-        placeholder={t('common.tooltips.search')}
         value={searchQuery}
         onInput={e => handleQueryChange(e.target.value)}
         showSuggestions={showSuggestion}
