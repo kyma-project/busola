@@ -4,7 +4,7 @@ on:
   pull_request:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
-      - ".github/workflows/pull-kyma-intergation-tests.yml"
+      - ".github/workflows/pull-kyma-integration-tests.yml"
       - "resources/**"
       - "tests/integration/**"
       - "nginx/**"
