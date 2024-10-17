@@ -64,6 +64,7 @@ export function CollapsibleSection({
       data-testid={titleText?.toLowerCase().replaceAll(' ', '-')}
       header={
         <Toolbar
+          tabIndex={-1}
           active={!disabled}
           toolbarStyle="Clear"
           onClick={toggle}

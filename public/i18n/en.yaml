@@ -388,6 +388,8 @@ common:
     show: Show read-only fields
     sort: Sort
     unknown-date: Unknown date
+    expand-navigation: Expand Navigation
+    collapse-navigation: Collapse Navigation
   'yes': 'yes'
 components:
   incorrect-path:

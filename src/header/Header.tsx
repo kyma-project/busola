@@ -157,6 +157,7 @@ export function Header() {
             onClick={() => window.open(feedbackLink, '_blank')}
             icon="feedback"
             text={t('navigation.feedback')}
+            title={t('navigation.feedback')}
           />
         )}
       </ShellBar>
