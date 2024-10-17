@@ -20,10 +20,7 @@ jobs:
       - name: Install Chrome
         shell: bash
         run: |
-          sudo apt update
-          # sudo apt list -a chromium-browser
-          sudo apt install devscripts
-          rmadison chromium-browser
+          snap info chromium-browser
       - uses: gardenlinux/workflow-telemetry-action@v2
         with:
           comment_on_pr: false
