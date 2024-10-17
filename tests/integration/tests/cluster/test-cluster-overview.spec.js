@@ -31,7 +31,10 @@ context('Test Cluster Overview', () => {
 
   it('Check injections', () => {
     // upload injection
-    cy.contains('ui5-button', 'Upload YAML').click();
+    cy.contains('ui5-button', 'Upload YAML')
+      .should('be.visible')
+      .should('not.be.disabled')
+      .click({ force: true });
     cy.loadFiles('examples/injections/countingcard.yaml').then(resources => {
       const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
       cy.pasteToMonaco(input);
