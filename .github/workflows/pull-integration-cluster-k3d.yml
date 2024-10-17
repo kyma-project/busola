@@ -24,6 +24,9 @@ jobs:
           sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
           sudo flatpak install org.chromium.Chromium -y
           sudo flatpak update --commit=57738d65980bb60a37f4d433ed9574e62373a4f3cb6b3ff202b19e3629863fbb org.chromium.Chromium -y
+          export PATH=$PATH:~/.flatpak/bin
+          chromium --version
+          echo "export PATH=$PATH:~/.flatpak/bin" >> ~/.bashrc
       - uses: gardenlinux/workflow-telemetry-action@v2
         with:
           comment_on_pr: false
@@ -52,6 +55,7 @@ jobs:
       - name: run_tests
         shell: bash
         run: |
+          chromium --version
           k3d kubeconfig get k3dCluster > tests/integration/fixtures/kubeconfig.yaml
           export CYPRESS_DOMAIN=http://localhost:3000
           serve -s build > busola.log &
