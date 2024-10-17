@@ -20,8 +20,8 @@ jobs:
       - name: Install Chrome
         shell: bash
         run: |
-          snap info chromium-browser
-          snap list chromium-browser --all
+          snap info chromium
+          snap list chromium --all
       - uses: gardenlinux/workflow-telemetry-action@v2
         with:
           comment_on_pr: false
