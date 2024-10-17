@@ -1,9 +1,11 @@
 
 list: 
-  - name: Name
-    source: name
-  - name: Namespace
-    source: namespace
+  - name: Display Name
+    source: metadata.displayName
+    sort:
+      default: true  
+  - name: Description
+    source: description
 details: []
 form: []
 general:

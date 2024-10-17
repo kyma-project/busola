@@ -69,6 +69,7 @@ ResourcesList.propTypes = {
   disableEdit: PropTypes.bool,
   disableDelete: PropTypes.bool,
   disableMargin: PropTypes.bool,
+  disableDefaultColumns: PropTypes.bool,
   enableColumnLayout: PropTypes.bool,
   layoutNumber: PropTypes.string,
   handleRedirect: PropTypes.func,
@@ -85,6 +86,7 @@ ResourcesList.defaultProps = {
   disableEdit: false,
   disableDelete: false,
   disableMargin: false,
+  disableDefaultColumns: false,
   enableColumnLayout: false,
   layoutNumber: 'StartColumn',
   filterFn: () => true,
@@ -199,6 +201,7 @@ export function ResourceListRenderer({
   disableCreate,
   disableDelete,
   disableMargin,
+  disableDefaultColumns,
   enableColumnLayout,
   columnLayout,
   customColumnLayout,
@@ -517,6 +520,7 @@ export function ResourceListRenderer({
             columnLayout={columnLayout}
             enableColumnLayout={enableColumnLayout}
             disableMargin={disableMargin}
+            disableDefaultColumns={disableDefaultColumns}
             title={showTitle ? title || prettifiedResourceName : null}
             actions={actions}
             entries={resources || []}

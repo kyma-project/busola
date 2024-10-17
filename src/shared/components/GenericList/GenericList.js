@@ -57,6 +57,7 @@ export const GenericList = ({
   serverDataLoading,
   pagination,
   sortBy,
+  disableDefaultColumns = false,
   notFoundMessage,
   searchSettings,
   disableMargin,
@@ -80,7 +81,9 @@ export const GenericList = ({
   searchSettings = { ...defaultSearch, ...searchSettings };
   const [entrySelected, setEntrySelected] = useState('');
   const [entrySelectedNamespace, setEntrySelectedNamespace] = useState('');
-  if (typeof sortBy === 'function') sortBy = sortBy(defaultSort);
+
+  if (typeof sortBy === 'function')
+    sortBy = sortBy(disableDefaultColumns ? {} : defaultSort);
 
   const [sort, setSort] = useState({
     name: sortBy && Object.keys(sortBy)[0],
