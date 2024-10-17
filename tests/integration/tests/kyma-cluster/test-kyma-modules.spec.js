@@ -115,7 +115,7 @@ context('Test Kyma Modules views', () => {
   it('Test Modules list and details', () => {
     cy.wait(1000);
 
-    cy.get('ui5-input[placeholder="Search"]:visible')
+    cy.get('ui5-input[id="search-input"]:visible')
       .find('input')
       .wait(1000)
       .type('api-gateway');
@@ -134,7 +134,7 @@ context('Test Kyma Modules views', () => {
 
     cy.closeMidColumn();
 
-    cy.get('ui5-input[placeholder="Search"]:visible')
+    cy.get('ui5-input[id="search-input"]:visible')
       .find('input')
       .clearInput();
 
@@ -242,7 +242,7 @@ context('Test Kyma Modules views', () => {
   it('Test deleting Modules from List and Details', { retries: 3 }, () => {
     cy.deleteFromGenericList('Module', 'eventing');
 
-    cy.get('ui5-input[placeholder="Search"]:visible')
+    cy.get('ui5-input[id="search-input"]:visible')
       .find('input')
       .wait(1000)
       .type('api-gateway');
@@ -255,7 +255,7 @@ context('Test Kyma Modules views', () => {
 
     cy.wait(20000);
 
-    cy.get('ui5-input[placeholder="Search"]:visible')
+    cy.get('ui5-input[id="search-input"]:visible')
       .find('input')
       .clear();
 

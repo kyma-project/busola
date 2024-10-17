@@ -40,7 +40,7 @@ context('Test Custom Resources', () => {
 
     openSearchWithSlashShortcut();
 
-    cy.get('ui5-input[placeholder="Search"]:visible')
+    cy.get('ui5-input[id="search-input"]:visible')
       .find('input')
       .click()
       .type('cypress', {
@@ -73,7 +73,7 @@ context('Test Custom Resources', () => {
       .contains('Custom Resources')
       .click();
 
-    cy.get('ui5-input[placeholder="Search"]:visible')
+    cy.get('ui5-input[id="search-input"]:visible')
       .find('input')
       .wait(1000)
       .type('cypress');
@@ -96,7 +96,7 @@ context('Test Custom Resources', () => {
       .contains('Custom Resources')
       .click();
 
-    cy.get('ui5-input[placeholder="Search"]:visible')
+    cy.get('ui5-input[id="search-input"]:visible')
       .find('input')
       .wait(1000)
       .type('cypress');
@@ -104,7 +104,7 @@ context('Test Custom Resources', () => {
 
     cy.testMidColumnLayout('Tclusters', false);
 
-    cy.get('ui5-input[placeholder="Search"]:visible')
+    cy.get('ui5-input[id="search-input"]:visible')
       .find('input')
       .wait(1000)
       .type('cypress');
