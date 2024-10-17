@@ -66,7 +66,7 @@ context('Accessibility test Custom Resources', () => {
       .contains('Custom Resources')
       .click();
 
-    cy.get('ui5-input[placeholder="Search"]:visible')
+    cy.get('ui5-input[id="search-input"]:visible')
       .find('input')
       .wait(1000)
       .type('cypress');
