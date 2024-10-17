@@ -20,9 +20,9 @@ jobs:
       - name: Install Chrome
         shell: bash
         run: |
-          sudo snap install chromium --channel=127.0.6533.0
-          snap info chromium
-          snap list chromium --all
+          sudo add-apt-repository ppa:xtradeb/apps -y
+          sudo apt update
+          sudo apt install chromium=126.0.6478.126-1xtradeb1.2310.1
       - uses: gardenlinux/workflow-telemetry-action@v2
         with:
           comment_on_pr: false
