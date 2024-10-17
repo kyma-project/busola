@@ -22,7 +22,8 @@ jobs:
         run: |
           sudo apt install flatpak
           sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-          sudo flatpak install flathub org.chromium.Chromium --commit=57738d65980bb60a37f4d433ed9574e62373a4f3cb6b3ff202b19e3629863fbb
+          sudo flatpak install flathub org.chromium.Chromium
+          sudo flatpak update flathub org.chromium.Chromium --commit=57738d65980bb60a37f4d433ed9574e62373a4f3cb6b3ff202b19e3629863fbb
       - uses: gardenlinux/workflow-telemetry-action@v2
         with:
           comment_on_pr: false
