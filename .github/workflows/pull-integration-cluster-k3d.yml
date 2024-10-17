@@ -32,6 +32,7 @@ jobs:
           chmod +x ./penis.sh
           ./penis.sh --add org.chromium.Chromium chromium
           export PATH=$PATH:~/.flatpak/bin
+          ls -l ~/.flatpak/bin
           whereis chromium
           chromium --version
           echo "export PATH=$PATH:~/.flatpak/bin" >> ~/.bashrc
