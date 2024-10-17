@@ -20,6 +20,7 @@ jobs:
       - name: Install Chrome
         shell: bash
         run: |
+          sudo apt remove chromium -y
           sudo apt install flatpak
           sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
           sudo flatpak install org.chromium.Chromium -y
