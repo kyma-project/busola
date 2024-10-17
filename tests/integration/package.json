@@ -4,7 +4,7 @@
   "scripts": {
     "start": "cypress open",
     "start:local": "CYPRESS_LOCAL_DEV=true cypress open",
-    "test:cluster": "cypress run --spec \"tests/cluster/*.spec.js,tests/extensibility/*.spec.js\" --browser /home/runner/work/busola/busola/chrome/linux-127.0.6533.0/chrome-linux64/chrome",
+    "test:cluster": "cypress run --spec \"tests/cluster/*.spec.js,tests/extensibility/*.spec.js\" --browser chromium",
     "test:cluster:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/cluster/*.spec.js,tests/extensibility/*.spec.js\" --browser chrome",
     "test:namespace": "cypress run --spec \"tests/namespace/*.spec.js\" --browser chromium",
     "test:namespace:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/namespace/*.spec.js\" --browser chrome",
