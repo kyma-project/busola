@@ -18,7 +18,7 @@ jobs:
         shell: bash
         run: |
           sudo apt update
-          sudo apt-get list -a chromium-browser
+          sudo apt list -a chromium-browser
       - uses: gardenlinux/workflow-telemetry-action@v2
         with:
           comment_on_pr: false
