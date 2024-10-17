@@ -50,13 +50,8 @@ export const pathInvalidCharacterFilter = req => {
   // Check if the decoded path contains any non-printable or control characters
   // eslint-disable-next-line no-control-regex
   const controlCharRegex = /[\x00-\x1F\x7F]/;
-  if (controlCharRegex.test(decodedPath)) {
+  if (controlCharRegex.test(decodedPath) || decodedPath.includes('..')) {
     throw Error('Path contains invalid characters.');
-  }
-
-  const validPathRegex = /^[a-zA-Z0-9/_\-.:~?&=#@]+$/;
-  if (decodedPath.includes('..') || !validPathRegex.test(decodedPath)) {
-    throw Error(`Path contains invalid characters.`);
   }
 };
 

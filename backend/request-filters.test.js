@@ -111,7 +111,7 @@ describe('pathInvalidCharacterFilter tests', () => {
     {
       description: 'should not throw an error for a valid path',
       req: {
-        originalUrl: '/valid/path-123@456#789',
+        originalUrl: '/valid/path-123',
       },
     },
     {
@@ -123,13 +123,6 @@ describe('pathInvalidCharacterFilter tests', () => {
   ];
 
   const errorTestCases = [
-    {
-      description: 'should throw an error for a path with invalid characters',
-      req: {
-        originalUrl: '/invalid/path<with>brackets',
-      },
-      expectedError: 'Path contains invalid characters.',
-    },
     {
       description: 'should throw an error for a path containing ..',
       req: {
