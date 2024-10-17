@@ -31,7 +31,7 @@ jobs:
           curl https://raw.githubusercontent.com/ronoaldo/tools/refs/heads/master/bin/flatpak-gen-shims > penis.sh
           chmod +x ./penis.sh
           ./penis.sh --add org.chromium.Chromium chromium
-          # export PATH=$PATH:~/.flatpak/bin
+          export PATH=$PATH:~/.flatpak/bin
           whereis chromium
           chromium --version
           echo "export PATH=$PATH:~/.flatpak/bin" >> ~/.bashrc
