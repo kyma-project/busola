@@ -61,6 +61,6 @@ context('Test edit cluster', () => {
       .find('.ui5-shellbar-menu-button-title')
       .contains(originalName)
       .should('be.visible')
-      .click({ force: true });
+      .click();
   });
 });
