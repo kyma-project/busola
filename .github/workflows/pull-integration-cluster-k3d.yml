@@ -17,7 +17,7 @@ jobs:
       - name: Install Chrome
         shell: bash
         run: |
-          sudo apt-get install chromium-browser=127.0.6533.119
+          sudo apt-get install chromium-browser=127.0.6533.99
       - uses: gardenlinux/workflow-telemetry-action@v2
         with:
           comment_on_pr: false
