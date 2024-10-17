@@ -1,9 +1,16 @@
-import React from 'react';
 import { render } from '@testing-library/react';
 import { JoinedArray } from '../JoinedArray';
 
-jest.mock('components/Extensibility/ExtensibilityCreate', () => null);
-jest.mock('components/Extensibility/ExtensibilityWizard', () => null);
+vi.mock('components/Extensibility/ExtensibilityCreate', () => {
+  return {
+    default: () => ({}),
+  };
+});
+vi.mock('components/Extensibility/ExtensibilityWizard', () => {
+  return {
+    default: () => ({}),
+  };
+});
 
 describe('JoinedArray', () => {
   it('Renders joined array', () => {

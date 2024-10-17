@@ -2,8 +2,16 @@ import { render, waitFor } from 'testing/reactTestingUtils';
 import { Widget } from '../Widget';
 import { ExtensibilityTestWrapper } from './helpers';
 
-jest.mock('components/Extensibility/ExtensibilityCreate', () => null);
-jest.mock('components/Extensibility/ExtensibilityWizard', () => null);
+vi.mock('components/Extensibility/ExtensibilityCreate', () => {
+  return {
+    default: () => ({}),
+  };
+});
+vi.mock('components/Extensibility/ExtensibilityWizard', () => {
+  return {
+    default: () => ({}),
+  };
+});
 
 const resource = {
   test: 'test-value',
@@ -51,7 +59,7 @@ describe('Widget', () => {
     });
 
     it('jsonata error -> display error', async () => {
-      console.warn = jest.fn();
+      console.warn = vi.fn();
 
       const { findByText } = render(
         <ExtensibilityTestWrapper>

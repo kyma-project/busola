@@ -1,8 +1,10 @@
+/// <reference types="vitest/config" />
 import { defineConfig, transformWithEsbuild } from 'vite';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
 import svgr from 'vite-plugin-svgr';
 import react from '@vitejs/plugin-react';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
+import eslint from 'vite-plugin-eslint';
 import fs from 'fs';
 import glob from 'glob';
 
@@ -45,6 +47,7 @@ export default defineConfig({
         },
       ],
     }),
+    eslint()
   ],
   worker: {
     plugins: () => [viteTsconfigPaths()],

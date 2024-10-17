@@ -1,9 +1,10 @@
+import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
+import 'babel-polyfill';
+import 'jsdom-worker-fix';
 import Enzyme from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import 'jsdom-worker-fix';
-import { act } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import 'babel-polyfill';
+import { act, cleanup } from '@testing-library/react';
 import ResizeObserverPolyfill from 'resize-observer-polyfill';
 
 Element.prototype.scroll = () => {};
@@ -11,6 +12,7 @@ Element.prototype.scroll = () => {};
 window.ResizeObserver = ResizeObserverPolyfill;
 
 const originalConsoleError = console.error;
+const originalConsoleWarn = console.warn;
 export const ignoreConsoleErrors = patterns => {
   console.error = (...data) => {
     for (const d of data) {
@@ -19,6 +21,16 @@ export const ignoreConsoleErrors = patterns => {
     originalConsoleError(...data);
   };
 };
+
+export const ignoreConsoleWarns = patterns => {
+  console.warn = (...data) => {
+    for (const d of data) {
+      if (patterns.some(pattern => d.toString().includes(pattern))) return;
+    }
+    originalConsoleWarn(...data);
+  };
+};
+
 // shutup popper error
 ignoreConsoleErrors([
   'Element passed as the argument does not exist in the instance',
@@ -27,11 +39,14 @@ ignoreConsoleErrors([
   '2',
 ]);
 
+// ignore lit dev mode log - it's UI5 dependency
+ignoreConsoleWarns(['Lit is in dev mode.']);
+
 // Mock IntersectionObserver
 class IntersectionObserver {
-  observe = jest.fn();
-  disconnect = jest.fn();
-  unobserve = jest.fn();
+  observe = vi.fn();
+  disconnect = vi.fn();
+  unobserve = vi.fn();
 }
 
 Object.defineProperty(window, 'IntersectionObserver', {
@@ -46,13 +61,7 @@ Object.defineProperty(global, 'IntersectionObserver', {
   value: IntersectionObserver,
 });
 
-var nodeCrypto = require('crypto');
-global.crypto = {
-  getRandomValues: function(buffer) {
-    return nodeCrypto.randomFillSync(Buffer.from(buffer));
-  },
-};
-global.URL.createObjectURL = jest.fn();
+global.URL.createObjectURL = vi.fn();
 
 global.wait = async (ms = 0) => {
   await act(() => {
@@ -71,14 +80,9 @@ global.document.createRange = () => ({
   },
 });
 
-window.postMessage = jest.fn();
+window.postMessage = vi.fn();
 
-// graphviz-react uses es modules which jest doesn't understand
-jest.mock('graphviz-react', () => ({
-  Graphviz: () => 'Graphviz mock',
-}));
-
-jest.mock(
+vi.mock(
   'shared/components/MonacoEditorESM/hooks/useCreateDiffEditor.ts',
   () => ({
     editorInstance: {},
@@ -87,14 +91,14 @@ jest.mock(
 );
 
 // suppress "SyntaxError: Cannot use 'import.meta' outside a module"
-jest.mock('shared/components/MonacoEditorESM/Editor', () => ({
+vi.mock('shared/components/MonacoEditorESM/Editor', () => ({
   'monaco-editor': () => 'monaco-editor',
 }));
 
 // suppress "SyntaxError: Cannot use 'import.meta' outside a module"
-jest.mock('hooks/useGetSchema', () => ({}));
+vi.mock('hooks/useGetSchema', () => ({}));
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => {
     return {
@@ -114,3 +118,9 @@ jest.mock('react-i18next', () => ({
 }));
 
 Enzyme.configure({ adapter: new Adapter() });
+
+afterEach(() => {
+  cleanup();
+  vi.clearAllMocks();
+  vi.useRealTimers();
+});

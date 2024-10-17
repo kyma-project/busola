@@ -1,10 +1,17 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import { Columns } from '../Columns';
 import { Widget } from '../Widget';
 
-jest.mock('components/Extensibility/ExtensibilityCreate', () => null);
-jest.mock('components/Extensibility/ExtensibilityWizard', () => null);
+vi.mock('components/Extensibility/ExtensibilityCreate', () => {
+  return {
+    default: () => ({}),
+  };
+});
+vi.mock('components/Extensibility/ExtensibilityWizard', () => {
+  return {
+    default: () => ({}),
+  };
+});
 
 describe('Columns', () => {
   it('Renders columns', () => {

@@ -1,23 +1,23 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Namespace create helpers formatLimits creates valid limits input 1`] = `
-Object {
+exports[`Namespace create helpers > formatLimits > creates valid limits input 1`] = `
+{
   "apiVersion": "v1",
   "kind": "LimitRange",
-  "metadata": Object {
+  "metadata": {
     "name": "test-namespace-limits",
     "namespace": "test-namespace",
   },
-  "spec": Object {
-    "limits": Array [
-      Object {
-        "default": Object {
+  "spec": {
+    "limits": [
+      {
+        "default": {
           "memory": "test-default",
         },
-        "defaultRequest": Object {
+        "defaultRequest": {
           "memory": "test-default-request",
         },
-        "max": Object {
+        "max": {
           "memory": "test-max",
         },
         "type": "Container",
@@ -27,16 +27,16 @@ Object {
 }
 `;
 
-exports[`Namespace create helpers formatMemoryQuotas creates valid memory quotas input 1`] = `
-Object {
+exports[`Namespace create helpers > formatMemoryQuotas > creates valid memory quotas input 1`] = `
+{
   "apiVersion": "v1",
   "kind": "ResourceQuota",
-  "metadata": Object {
+  "metadata": {
     "name": "test-namespace-quotas",
     "namespace": "test-namespace",
   },
-  "spec": Object {
-    "hard": Object {
+  "spec": {
+    "hard": {
       "limits.memory": "test-limits",
       "requests.memory": "test-requests",
     },
@@ -44,10 +44,10 @@ Object {
 }
 `;
 
-exports[`Namespace create helpers formatNamespace creates valid namespace input 1`] = `
-Object {
-  "metadata": Object {
-    "labels": Object {
+exports[`Namespace create helpers > formatNamespace > creates valid namespace input 1`] = `
+{
+  "metadata": {
+    "labels": {
       "a": "b",
       "c": "d",
     },

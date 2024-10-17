@@ -2,7 +2,7 @@ import { handleSubscriptionArrayEvent } from 'shared/utils/handleSubscriptionArr
 
 describe('handleSubscriptionArrayEvent', () => {
   const resource = [{ name: 'a' }, { name: 'b' }];
-  const setResource = jest.fn();
+  const setResource = vi.fn();
 
   beforeEach(setResource.mockReset);
 
