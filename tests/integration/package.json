@@ -4,16 +4,16 @@
   "scripts": {
     "start": "cypress open",
     "start:local": "CYPRESS_LOCAL_DEV=true cypress open",
-    "test:cluster": "cypress run --spec \"tests/cluster/*.spec.js,tests/extensibility/*.spec.js\" --browser chromium",
+    "test:cluster": "cypress run --spec \"tests/cluster/*.spec.js,tests/extensibility/*.spec.js\" --browser chrome",
     "test:cluster:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/cluster/*.spec.js,tests/extensibility/*.spec.js\" --browser chrome",
-    "test:namespace": "cypress run --spec \"tests/namespace/*.spec.js\" --browser chromium",
+    "test:namespace": "cypress run --spec \"tests/namespace/*.spec.js\" --browser chrome",
     "test:namespace:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/namespace/*.spec.js\" --browser chrome",
     "test:kyma-e2e": "cypress run --spec \"tests/kyma*/*spec.js\" --browser chromium",
     "test:kyma-e2e:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/kyma*/*spec.js\" --browser chromium",
     "test:smoke-extensions": "cypress run --browser chromium -C cypress-smoke.js",
     "test:local": "CYPRESS_LOCAL_DEV=true cypress run --browser chrome",
     "run-docker": "docker run --rm -it -e DOCKER_DESKTOP_CLUSTER=true --net=host --pid=host --name kyma-dashboard --env ENVIRONMENT=$ENV europe-docker.pkg.dev/kyma-project/dev/busola:PR-$PR_NUMBER",
-    "test:accesibility": "cypress run --spec \"tests/accessibility/*.spec.js\" --browser chromium",
+    "test:accesibility": "cypress run --spec \"tests/accessibility/*.spec.js\" --browser chrome",
     "test:accesibility:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/accessibility/*.spec.js\" --browser chrome"
   },
   "devDependencies": {

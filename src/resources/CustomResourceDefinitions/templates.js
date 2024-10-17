@@ -50,7 +50,7 @@ const convert = (arg, currentPath, spec) => {
 
 export function createTemplate(crd) {
   const spec = {};
-  const currentVersion = crd.spec.versions.find(ver => ver.storage);
+  const currentVersion = crd?.spec?.versions.find(ver => ver.storage);
 
   return {
     apiVersion: `${crd.spec.group}/${currentVersion.name}`,
