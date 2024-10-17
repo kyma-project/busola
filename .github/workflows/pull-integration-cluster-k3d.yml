@@ -17,7 +17,7 @@ jobs:
       - name: Install Chrome
         shell: bash
         run: |
-          sudo apt-update
+          sudo apt update
           sudo apt-get list -a chromium-browser
       - uses: gardenlinux/workflow-telemetry-action@v2
         with:
