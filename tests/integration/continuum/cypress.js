@@ -98,7 +98,10 @@ const failIfAnyAccessibilityConcerns = () => {
   ).to.have.lengthOf(0);
 };
 
-const submitAccessibilityConcernsToAMP = (reportTitle = 'Busola ACC') => {
+const submitAccessibilityConcernsToAMP = (
+  reportTitle = 'Busola ACC',
+  moduleName,
+) => {
   const accessibilityConcerns = Continuum.getAccessibilityConcerns();
   if (accessibilityConcerns.length <= 0) {
     return;
@@ -113,7 +116,10 @@ const submitAccessibilityConcernsToAMP = (reportTitle = 'Busola ACC') => {
       await ampReportingService.setActiveOrganization(10274); // ID of AMP organization to submit test results to
       await ampReportingService.setActiveAsset(38893); // ID of AMP asset to submit test results to
       await ampReportingService.setActiveReportByName(reportTitle);
-      await ampReportingService.setActiveModuleByName(pageTitle, pageUrl);
+      await ampReportingService.setActiveModuleByName(
+        moduleName ?? pageTitle,
+        pageUrl,
+      );
       await ampReportingService.setActiveReportManagementStrategy(
         ReportManagementStrategy.APPEND,
       );

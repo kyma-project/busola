@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project contains smoke, integration UI, and Kyma-related tests for Busola.
+This project contains smoke, integration UI, accessibility and Kyma-related tests for Busola.
 
 ## Prerequisites
 
@@ -68,4 +68,28 @@ If a cluster requires an OIDC authentication, include these additional arguments
 
 ```bash
 CYPRESS_OIDC_PASS={YOUR_PASSWORD} CYPRESS_OIDC_USER={YOUR_USERNAME} npm start
+```
+
+## Accessibility Tests
+
+## Prerequisites
+
+Before testing, copy your cluster's kubeconfig file to `fixtures/kubeconfig.yaml`.
+
+Also, you need `ACC_AMP_TOKEN` to submit your generated accessibility report to AMP Portal.
+
+### Run Accessibility Tests in the Headless Mode
+
+To run the tests, pointing to a `local Busola` instance, use this command:
+
+```bash
+ACC_AMP_TOKEN={YOUR_AMP_TOKEN} npm run test:accesibility:local
+```
+
+### Run Accessibility Tests in the Test Runner Mode
+
+To open `tests runner`, pointing to a `local Busola` instance, use this command:
+
+```bash
+ACC_AMP_TOKEN={YOUR_AMP_TOKEN} npm run start:local
 ```
