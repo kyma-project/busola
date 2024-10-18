@@ -47,7 +47,7 @@ context('Test Config Maps', () => {
     cy.inspectTab('Edit');
 
     // hide first entry so Cypress doesn't get confuused
-    cy.get('[aria-label="expand config-map-key"]').click();
+    cy.get('[aria-label="config-map-key, expanded"]').click();
 
     cy.get('[placeholder="Enter key"]:visible')
       .find('input')

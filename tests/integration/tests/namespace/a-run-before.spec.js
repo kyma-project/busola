@@ -22,7 +22,7 @@ context('Create Namespace', () => {
       .find('[role="checkbox"]')
       .click();
 
-    cy.get('[aria-label="expand Apply Total Memory Quotas"]')
+    cy.get('[aria-label="Apply Total Memory Quotas, collapsed"]')
       .find('ui5-combobox[placeholder="Choose template"]:visible')
       .find('ui5-icon[accessible-name="Select Options"]')
       .click();

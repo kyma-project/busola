@@ -74,7 +74,7 @@ context('Test DNS Providers', () => {
       .should('have.attr', 'readonly', 'readonly');
 
     // edit labels
-    cy.get('[aria-label="expand Labels"]')
+    cy.get('[aria-label="Labels, collapsed"]')
       .filter(':visible', { log: false })
       .click();
 

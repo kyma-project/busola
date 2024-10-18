@@ -112,7 +112,7 @@ context('Test extensibility variables', () => {
       .find('[data-testid="spec.name"]:visible')
       .should('not.exist');
 
-    cy.get('[aria-label="expand Advanced"]:visible', { log: false }).should(
+    cy.get('[aria-label="Advanced, collapsed"]:visible', { log: false }).should(
       'not.exist',
     );
 
@@ -138,7 +138,7 @@ context('Test extensibility variables', () => {
       .contains('advanced')
       .click();
 
-    cy.get('[aria-label="expand Advanced"]:visible', { log: false }).should(
+    cy.get('[aria-label="Advanced, collapsed"]:visible', { log: false }).should(
       'exist',
     );
 
@@ -185,7 +185,7 @@ context('Test extensibility variables', () => {
   });
 
   it('Tests templates', () => {
-    cy.get('[aria-label="expand Array Of Objects"]:visible', { log: false })
+    cy.get('[aria-label="Array Of Objects, collapsed"]:visible', { log: false })
       .contains('Add')
       .click();
 

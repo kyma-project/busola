@@ -36,7 +36,7 @@ context('Test Services', () => {
       .first()
       .type(SERVICE_VALUE, { force: true });
 
-    cy.get('[aria-label="expand Ports"]:visible', { log: false })
+    cy.get('[aria-label="Ports, collapsed"]:visible', { log: false })
       .contains('Add')
       .click();
 
