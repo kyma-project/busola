@@ -1,5 +1,4 @@
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
-import React from 'react';
 
 // secret is required to call validators directly
 import secret from 'prop-types/lib/ReactPropTypesSecret';

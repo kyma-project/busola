@@ -1,4 +1,4 @@
-const PopperJS = jest.requireActual('popper.js');
+const PopperJS = await vi.importActual('popper.js');
 
 /* eslint-disable import/no-anonymous-default-export */
 export default class {

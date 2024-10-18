@@ -3,7 +3,7 @@ import { ThemeProvider } from '@ui5/webcomponents-react';
 import { UI5RadialChart } from '../UI5RadialChart';
 
 beforeAll(() => {
-  jest.spyOn(console, 'warn').mockImplementationOnce(() => {});
+  vi.spyOn(console, 'warn').mockImplementationOnce(() => {});
 });
 
 describe('UI5RadialChart', () => {

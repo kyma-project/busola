@@ -5,7 +5,7 @@ import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { PopoverBadge } from 'shared/components/PopoverBadge/PopoverBadge';
 import { ThemeProvider } from '@ui5/webcomponents-react';
 
-jest.mock('../../hooks/useJsonata', () => ({
+vi.mock('../../hooks/useJsonata', () => ({
   useJsonata: () => {
     return structure => [structure];
   },

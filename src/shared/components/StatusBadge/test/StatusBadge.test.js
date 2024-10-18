@@ -1,4 +1,3 @@
-import React from 'react';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { act, render, waitFor } from '@testing-library/react';
 import { ThemeProvider } from '@ui5/webcomponents-react';
@@ -21,7 +20,7 @@ describe('StatusBadge', () => {
   });
 
   it('displays warning when autoResolveType is set and "children" is a node', async () => {
-    console.warn = jest.fn();
+    console.warn = vi.fn();
 
     render(
       <ThemeProvider>

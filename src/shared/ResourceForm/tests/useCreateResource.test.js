@@ -5,23 +5,23 @@ import { useCreateResource } from '../useCreateResource';
 import { createPatch } from 'rfc6902';
 import { ignoreConsoleErrors } from 'setupTests';
 
-const mockNotifySuccess = jest.fn();
-const mockNotifyError = jest.fn();
-jest.mock('shared/contexts/NotificationContext', () => ({
+const mockNotifySuccess = vi.fn();
+const mockNotifyError = vi.fn();
+vi.mock('shared/contexts/NotificationContext', () => ({
   useNotification: () => ({
     notifySuccess: mockNotifySuccess,
     notifyError: mockNotifyError,
   }),
 }));
 
-const mockFetch = jest.fn();
-jest.mock('shared/hooks/BackendAPI/useFetch', () => ({
+const mockFetch = vi.fn();
+vi.mock('shared/hooks/BackendAPI/useFetch', () => ({
   useFetch: () => mockFetch,
 }));
 
-const consoleErrorMock = jest
+const consoleErrorMock = vi
   .spyOn(console, 'error')
-  .mockImplementation(() => jest.fn());
+  .mockImplementation(() => vi.fn());
 
 const Testbed = ({ namespace = 'test-namespace', ...props }) => {
   const Component = () => {
@@ -34,9 +34,9 @@ const Testbed = ({ namespace = 'test-namespace', ...props }) => {
 
 describe('useCreateResource', () => {
   beforeEach(() => {
-    mockFetch.mockReturnValue(
-      Promise.resolve({ json: () => Promise.resolve({}) }),
-    );
+    mockFetch.mockReset();
+    mockNotifySuccess.mockReset();
+    mockNotifyError.mockReset();
     consoleErrorMock.mockRestore();
   });
 
@@ -47,6 +47,9 @@ describe('useCreateResource', () => {
   };
 
   it('Fires POST if initial resource name does not exist', async () => {
+    mockFetch.mockReturnValue(
+      Promise.resolve({ json: () => Promise.resolve({}) }),
+    );
     const { getByText } = render(<Testbed {...props} />);
 
     fireEvent.click(getByText('Act'));
@@ -70,6 +73,9 @@ describe('useCreateResource', () => {
 
   it('Fires PATCH if initial resource name exists', async () => {
     const initialResource = { metadata: { name: 'test-name' } };
+    mockFetch.mockReturnValue(
+      Promise.resolve({ json: () => Promise.resolve({}) }),
+    );
     const { getByText } = render(
       <Testbed
         {...props}

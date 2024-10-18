@@ -1,16 +1,19 @@
 import { render } from '@testing-library/react';
 import { HelmReleaseData } from '../HelmReleaseData';
 
-const mockDecodeHelmRelease = jest.fn();
-jest.mock('components/HelmReleases/decodeHelmRelease', () => ({
+const mockDecodeHelmRelease = vi.fn();
+vi.mock('components/HelmReleases/decodeHelmRelease', () => ({
+  default: release => mockDecodeHelmRelease(release),
   decodeHelmRelease: release => mockDecodeHelmRelease(release),
 }));
 
-const originalDecodeHelmRelease = jest.requireActual(
+const originalDecodeHelmRelease = await vi.importActual(
   'components/HelmReleases/decodeHelmRelease',
 );
 
-jest.mock('shared/components/ReadonlyEditorPanel', () => 'mock');
+vi.mock('shared/components/ReadonlyEditorPanel', () => ({
+  default: 'mock',
+}));
 
 describe.skip('HelmReleaseData', () => {
   const PANEL_TITLE = 'helm-releases.headers.release';
