@@ -62,12 +62,18 @@ export function CollapsibleSection({
       className={classNames}
       onToggle={toggle}
       data-testid={titleText?.toLowerCase().replaceAll(' ', '-')}
+      accessibleName={titleText}
+      ref={panelElement => {
+        if (panelElement) {
+          panelElement.useAccessibleNameForToggleButton = true;
+        }
+      }}
       header={
         <Toolbar
           active={!disabled}
           toolbarStyle="Clear"
           onClick={toggle}
-          aria-label={`expand ${title}`}
+          aria-label={`${title}, ${open ? 'expanded' : 'collapsed'} `}
         >
           {!defaultTitleType && (
             <Title
