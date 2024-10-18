@@ -1,9 +1,13 @@
 import { Button } from '@ui5/webcomponents-react';
-import { useSetRecoilState } from 'recoil';
+import { useTranslation } from 'react-i18next';
+import { useRecoilState } from 'recoil';
 import { isSidebarCondensedState } from 'state/preferences/isSidebarCondensedAtom';
 
 export function SidebarSwitcher(props: any) {
-  const setSidebarCondensed = useSetRecoilState(isSidebarCondensedState);
+  const { t } = useTranslation();
+  const [isSidebarCondensed, setSidebarCondensed] = useRecoilState(
+    isSidebarCondensedState,
+  );
 
   return (
     <Button
@@ -12,6 +16,11 @@ export function SidebarSwitcher(props: any) {
       icon="menu2"
       design="Transparent"
       accessibleName="collapse-sidebar"
+      tooltip={
+        isSidebarCondensed
+          ? t('common.tooltips.expand-navigation')
+          : t('common.tooltips.collapse-navigation')
+      }
     />
   );
 }
