@@ -23,7 +23,7 @@ context('Test Deployments', () => {
       .clear()
       .type(DEPLOYMENT_NAME, { force: true });
 
-    cy.get('[aria-label="expand Labels"]').click();
+    cy.get('[aria-label="Labels, collapsed"]').click();
 
     cy.get('[placeholder="Enter key"]:visible')
       .find('input')
@@ -110,7 +110,7 @@ context('Test Deployments', () => {
 
     cy.getMidColumn().inspectTab('Edit');
 
-    cy.get('[aria-label="expand Labels"]').click();
+    cy.get('[aria-label="Labels, collapsed"]').click();
 
     cy.get('[placeholder="Enter key"]:visible')
       .find('input')

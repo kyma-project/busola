@@ -74,7 +74,7 @@ context('Test Extensibility Create/Update', () => {
       .clear()
       .type(EXTENSION_DISPLAY_NAME);
 
-    cy.get('[aria-label="expand Details Summary"]').click();
+    cy.get('[aria-label="Details Summary, collapsed"]').click();
     cy.get('ui5-panel[data-testid="details-summary"]').within(() => {
       cy.get('ui5-input[value="description"]')
         .find('input')

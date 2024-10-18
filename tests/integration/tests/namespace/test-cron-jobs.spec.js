@@ -51,7 +51,7 @@ context('Test Cron Jobs', () => {
       .type('*', { force: true });
 
     cy.get(
-      '[aria-label="expand Schedule: At 12:00 AM, on day 1 of the month"]',
+      '[aria-label="Schedule: At 12:00 AM, on day 1 of the month, expanded"]',
     ).click();
 
     cy.contains('Command').click();
@@ -121,9 +121,9 @@ context('Test Cron Jobs', () => {
       .clear()
       .type('*', { force: true });
 
-    cy.get('[aria-label="expand Schedule: Every hour"]').click();
+    cy.get('[aria-label="Schedule: Every hour, expanded"]').click();
 
-    cy.get('[aria-label="expand Command"]').click();
+    cy.get('[aria-label="Command, collapsed"]').click();
 
     cy.get('[placeholder="Command to run in a container"]')
       .find('input')
