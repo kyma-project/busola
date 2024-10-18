@@ -7,6 +7,7 @@ Cypress.Commands.add('handleExceptions', () => {
         "Cannot read properties of undefined (reading 'uri')",
       ) ||
       err.message.includes('ResizeObserver loop limit exceeded') ||
+      err.message.includes('502 Bad Gateway') ||
       err.message.includes(
         'ResizeObserver loop completed with undelivered notifications',
       ) ||

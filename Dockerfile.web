@@ -22,7 +22,6 @@ RUN npm run build:docker
 
 # ---- Environments Configuration ----
 FROM node:20.17-alpine3.20 as configuration
-#RUN apk add make
 WORKDIR /kyma
 
 RUN apk add make

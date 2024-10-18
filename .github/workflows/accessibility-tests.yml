@@ -24,6 +24,10 @@ jobs:
             --port 80:80@loadbalancer
             --port 443:443@loadbalancer
             --wait
+      - name: Setup Kyma
+        run: |
+          set -o pipefail
+          ./.github/scripts/setup-kyma.sh | tee kyma-alpha-deploy.log
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -39,7 +43,7 @@ jobs:
         env:
           ACC_AMP_TOKEN: ${{ secrets.ACC_AMP_TOKEN }}
         run: |
-          k3d kubeconfig get k3dCluster > tests/integration/fixtures/kubeconfig.yaml
+          k3d kubeconfig get kyma > tests/integration/fixtures/kubeconfig.yaml
           export CYPRESS_DOMAIN=http://localhost:3000
           serve -s build > busola.log &
 
@@ -67,5 +71,6 @@ jobs:
           name: busola-logs-${{ github.job }}
           path: |
             backend/backend.log
+            kyma-alpha-deploy.log
             busola.log
           retention-days: 90

@@ -7,28 +7,21 @@ context('Accessibility test Cluster list and overview', () => {
   before(() => {
     cy.handleExceptions();
     cy.setUpContinuum('continuum/continuum.conf.js');
-  });
-
-  it('Acc test clusters list', () => {
-    cy.visit(`${config.clusterAddress}/clusters`)
-      .runAllAccessibilityTests()
-      .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(
-        Cypress.env('AMP_REPORT_NAME'),
-        'Clusters list',
-      );
-  });
-
-  it('Acc test cluster overview', () => {
     cy.loginAndSelectCluster();
+  });
 
-    cy.url().should('match', /overview$/);
+  it('Acc test with performance panel open', () => {
+    cy.get('[title="Profile"]').click();
+
+    cy.get('ui5-menu-li:visible')
+      .contains('Preferences')
+      .click({ force: true });
 
     cy.runAllAccessibilityTests()
       .printAccessibilityTestResults()
       .submitAccessibilityConcernsToAMP(
         Cypress.env('AMP_REPORT_NAME'),
-        'Cluster overview',
+        'Performance panel',
       );
   });
 });
