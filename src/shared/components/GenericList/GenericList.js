@@ -308,10 +308,9 @@ export const GenericList = ({
   };
 
   const handleRowClick = e => {
-    const item = (
+    const item =
       e.target.children[nameColIndex].children[0].innerText ??
-      e.target.children[nameColIndex].innerText
-    )?.trimEnd();
+      e.target.children[nameColIndex].innerText;
 
     const hasNamepace = namespaceColIndex !== -1;
     const itemNamespace = hasNamepace
