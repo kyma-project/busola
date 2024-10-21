@@ -71,6 +71,7 @@
     "@ui5/webcomponents-react": "^2.2.0",
     "@ui5/webcomponents-react-base": "^2.2.0",
     "@ui5/webcomponents-react-charts": "^2.2.0",
+    "@ui5/webcomponents-react-compat": "^2.3.0",
     "classnames": "^2.2.6",
     "copy-to-clipboard": "^3.2.0",
     "core-js": "^3.3.6",
