@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ConditionList } from 'shared/components/ConditionList/ConditionList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import './IngressStatus.scss';
 
 export const IngressStatus = ({ resource }) => {

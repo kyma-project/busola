@@ -5,7 +5,7 @@ import { useCreateDiffEditor } from 'shared/components/MonacoEditorESM/hooks/use
 import { RecoilRoot } from 'recoil';
 import { K8sResource } from 'types';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 type ForceUpdateModalContentProps<TResourceType extends K8sResource> = {
   error: Error;

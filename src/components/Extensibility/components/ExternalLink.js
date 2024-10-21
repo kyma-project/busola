@@ -8,7 +8,7 @@ import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useJsonata } from '../hooks/useJsonata';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 const makeHref = ({ jsonata, value, structure }) => {
   const [link, linkError] = jsonata(structure.link);

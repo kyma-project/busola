@@ -11,7 +11,7 @@ import {
 } from '@ui5/webcomponents-react';
 
 import './DynamicPageComponent.scss';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';

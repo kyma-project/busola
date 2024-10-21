@@ -16,7 +16,7 @@ import { authDataState } from 'state/authDataAtom';
 import { Title } from '@ui5/webcomponents-react';
 
 import { addCluster, getContext, deleteCluster } from '../../shared';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import { getUserIndex } from '../../shared';
 
 export const findInitialValues = (kubeconfig, id, userIndex = 0) => {

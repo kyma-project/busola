@@ -22,7 +22,7 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { validationSchemasEnabledState } from 'state/validationEnabledSchemasAtom';
 import { useLoadingDebounce } from 'shared/hooks/useLoadingDebounce';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import { SeparatorLine } from './SeparatorLine';
 
 const useNamespaceWarning = resource => {

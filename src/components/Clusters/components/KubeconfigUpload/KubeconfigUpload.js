@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { KubeconfigFileUpload } from './KubeconfigFileUpload';
 import jsyaml from 'js-yaml';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import './KubeconfigUpload.scss';
 import { ClusterDataForm } from 'components/Clusters/views/EditCluster/EditCluster';
 

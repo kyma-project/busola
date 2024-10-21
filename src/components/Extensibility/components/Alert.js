@@ -2,7 +2,7 @@ import React from 'react';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 export const Alert = ({ value, schema, structure, ...props }) => {
   const { t: tExt } = useGetTranslation();

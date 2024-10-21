@@ -2,7 +2,7 @@ import { ReactNode, useState } from 'react';
 import { Icon, StandardListItem } from '@ui5/webcomponents-react';
 import { StatusBadge } from '../StatusBadge/StatusBadge';
 import { useTranslation } from 'react-i18next';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import './ExpandableListItem.scss';
 
 type ExpandableListItemProps = {

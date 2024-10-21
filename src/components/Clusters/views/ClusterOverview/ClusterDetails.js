@@ -10,7 +10,7 @@ import { CountingCard } from 'shared/components/CountingCard/CountingCard';
 import { useKymaModulesQuery } from 'components/KymaModules/KymaModulesQuery';
 import { useUrl } from 'hooks/useUrl';
 import { useNavigate } from 'react-router-dom';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 const GardenerProvider = () => {
   const { t } = useTranslation();

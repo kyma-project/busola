@@ -17,7 +17,7 @@ import { K8sResource } from 'types';
 import { ResourceGraphConfig } from './types';
 import { Panel, Title, Toolbar, ToolbarSpacer } from '@ui5/webcomponents-react';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import './ResourceGraph.scss';
 
 function ResourceGraph({

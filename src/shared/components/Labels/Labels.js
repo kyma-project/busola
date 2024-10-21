@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Badge, Label } from '@ui5/webcomponents-react';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import './Labels.scss';
 import { useTranslation } from 'react-i18next';
 

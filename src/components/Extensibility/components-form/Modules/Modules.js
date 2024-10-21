@@ -11,7 +11,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { Dropdown } from 'shared/ResourceForm/inputs';
 
 import './Modules.scss';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 
 export function Modules({ storeKeys, resource, onChange, schema, required }) {

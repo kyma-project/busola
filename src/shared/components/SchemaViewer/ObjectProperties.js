@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { Text, Icon } from '@ui5/webcomponents-react';
 
 import { Generic, PROPERTIES } from './handlers';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 function ObjectProperty({ label, val, handler, required, expanded = false }) {
   const [collapsed, setCollapsed] = useState(!expanded);

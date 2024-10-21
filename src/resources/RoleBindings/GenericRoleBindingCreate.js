@@ -19,7 +19,7 @@ import { validateBinding } from './helpers';
 import { RoleForm } from './RoleForm';
 import { useHasPermissionsFor } from 'hooks/useHasPermissionsFor';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 export function GenericRoleBindingCreate({
   formElementRef,

@@ -23,7 +23,7 @@ import { getErrorMessage } from 'shared/utils/helpers';
 import { pageSizeState } from 'state/preferences/pageSizeAtom';
 import './GenericList.scss';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import { EmptyListComponent } from '../EmptyListComponent/EmptyListComponent';
 import { useUrl } from 'hooks/useUrl';
 import { columnLayoutState } from 'state/columnLayoutAtom';

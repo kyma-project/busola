@@ -15,7 +15,7 @@ import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useNavigate } from 'react-router-dom';
 import { deleteCluster } from 'components/Clusters/shared';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import './ClusterOverview.scss';
 import { useSetRecoilState } from 'recoil';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';

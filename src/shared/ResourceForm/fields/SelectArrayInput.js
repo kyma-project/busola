@@ -1,7 +1,7 @@
 import { MultiInput } from './MultiInput';
 import * as Inputs from '../inputs';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 export function SelectArrayInput({
   title,

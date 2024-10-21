@@ -3,7 +3,7 @@ import { FileInput } from 'shared/components/FileInput/FileInput';
 import { Title, Button, Popover, Text } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 export function KubeconfigFileUpload({ onKubeconfigTextAdded }) {
   const { t } = useTranslation();

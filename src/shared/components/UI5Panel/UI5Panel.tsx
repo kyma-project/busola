@@ -7,7 +7,7 @@ import {
   ToolbarSpacer,
 } from '@ui5/webcomponents-react';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import './UI5Panel.scss';
 import { CSSProperties, ReactNode, useEffect } from 'react';
 

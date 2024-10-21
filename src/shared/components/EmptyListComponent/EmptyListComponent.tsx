@@ -4,7 +4,7 @@ import { Button, IllustratedMessage } from '@ui5/webcomponents-react';
 import '@ui5/webcomponents-fiori/dist/illustrations/AllIllustrations';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import './EmptyListComponent.scss';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 type EmptyListComponentProps = {
   titleText: string;

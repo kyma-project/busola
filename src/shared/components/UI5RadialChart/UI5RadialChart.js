@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { RadialChart } from '@ui5/webcomponents-react-charts';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import { Text } from '@ui5/webcomponents-react';
 import './UI5RadialChart.scss';
 

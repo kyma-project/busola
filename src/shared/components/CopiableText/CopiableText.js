@@ -4,7 +4,7 @@ import { Button } from '@ui5/webcomponents-react';
 import copyToCliboard from 'copy-to-clipboard';
 import { useTranslation } from 'react-i18next';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import './CopiableText.scss';
 
 CopiableText.propTypes = {

@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { stringifyIfBoolean } from 'shared/utils/helpers';
 import { Text } from '@ui5/webcomponents-react';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import './LayoutPanelRow.scss';
 
 type LayoutPanelRowProps = {

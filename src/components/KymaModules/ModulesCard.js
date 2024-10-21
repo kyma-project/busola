@@ -12,7 +12,7 @@ import {
 import '@ui5/webcomponents/dist/features/InputElementsFormSupport.js';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { useTranslation } from 'react-i18next';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 export default function ModulesCard({
   module,

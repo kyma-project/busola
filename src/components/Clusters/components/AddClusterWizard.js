@@ -27,7 +27,7 @@ import { ChooseStorage } from './ChooseStorage';
 import { WizardButtons } from 'shared/components/WizardButtons/WizardButtons';
 import { ClusterPreview } from './ClusterPreview';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import './AddClusterWizard.scss';
 import { isFormOpenState } from 'state/formOpenAtom';
 

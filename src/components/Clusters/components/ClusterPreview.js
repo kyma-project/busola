@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, FlexBox, RadioButton, Title } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import './ClusterPreview.scss';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import {
   findInitialValue,
   findInitialValues,

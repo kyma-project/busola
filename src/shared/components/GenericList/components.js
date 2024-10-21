@@ -10,7 +10,7 @@ import {
 } from '@ui5/webcomponents-react';
 import ListActions from 'shared/components/ListActions/ListActions';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 export const BodyFallback = ({ children }) => (
   // TODO replace once new Table component is available in ui5-webcomponents-react

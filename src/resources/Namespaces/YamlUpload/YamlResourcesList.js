@@ -23,7 +23,7 @@ import {
 } from './useUploadResources';
 import { ResourceValidationResult } from './ResourceValidationResult';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import { activeNamespaceIdState } from '../../../state/activeNamespaceIdAtom';
 import { SeparatorLine } from './SeparatorLine';
 import { ValidationSwitch } from './ValidationSwitch';

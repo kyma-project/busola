@@ -6,7 +6,7 @@ import { MatchExpressionsList } from '../MatchExpressionsList';
 import { isEmpty, isEqual } from 'lodash';
 import { Text, Title } from '@ui5/webcomponents-react';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 const SelectorDetails = ({
   expressions,

@@ -16,7 +16,7 @@ import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { extensibilitySchemasState } from 'state/extensibilitySchemasAtom';
 import { useUrl } from 'hooks/useUrl';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 import {
   formatCurrentVersion,

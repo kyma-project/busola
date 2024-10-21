@@ -2,7 +2,7 @@ import { Card, CardHeader, Icon } from '@ui5/webcomponents-react';
 import PropTypes from 'prop-types';
 
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 const TooltipWrapper = ({ tooltipProps, children }) => {
   if (tooltipProps?.content) {

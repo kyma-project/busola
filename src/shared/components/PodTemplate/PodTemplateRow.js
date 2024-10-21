@@ -1,5 +1,5 @@
 import { Text } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 export function PodTemplateRow({ label, component }) {
   return (

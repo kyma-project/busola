@@ -6,7 +6,7 @@ import { Label } from '../../../shared/ResourceForm/components/Label';
 
 import { ResourceForm } from '..';
 import { useCreateResourceDescription } from 'components/Extensibility/helpers';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 import './MultiInput.scss';
 

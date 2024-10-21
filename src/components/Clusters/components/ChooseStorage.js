@@ -1,6 +1,6 @@
 import { FlexBox, RadioButton } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import './ChooseStorage.scss';
 
 export function ChooseStorage({ storage, setStorage }) {

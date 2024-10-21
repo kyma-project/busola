@@ -23,7 +23,7 @@ import {
   Option,
   Select,
 } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import './KymaModulesCreate.scss';

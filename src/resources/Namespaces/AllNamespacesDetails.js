@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
 import { ResourcesUsage } from './ResourcesUsage';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import { Button, Title } from '@ui5/webcomponents-react';
 import LimitRangeList from 'resources/LimitRanges/LimitRangeList';
 import { EventsList } from 'shared/components/EventsList';

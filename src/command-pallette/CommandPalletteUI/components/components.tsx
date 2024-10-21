@@ -4,7 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { HelpEntries } from '../types';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import './components.scss';
 
 export function SuggestedQuery({
