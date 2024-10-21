@@ -109,9 +109,9 @@ describe('invalidHeaderFilter tests', () => {
 describe('pathInvalidCharacterFilter tests', () => {
   const successTestCases = [
     {
-      description: 'should not throw an error for a valid path',
+      description: 'should not throw an error for a valid characters',
       req: {
-        originalUrl: '/valid/path-123',
+        originalUrl: '/valid/path-#&?-123',
       },
     },
     {
