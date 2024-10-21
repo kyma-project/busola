@@ -8,7 +8,7 @@ import {
   MenuDomRef,
   ShellBar,
   ShellBarItem,
-  StandardListItem,
+  ListItemStandard,
 } from '@ui5/webcomponents-react';
 import { MenuItemClickEventDetail } from '@ui5/webcomponents/dist/Menu.js';
 
@@ -69,14 +69,14 @@ export function Header() {
   const clustersList = [
     ...inactiveClusterNames.map((name, index) => {
       return (
-        <StandardListItem accessibleName={name} data-key={index}>
+        <ListItemStandard accessibleName={name} data-key={index}>
           {name}
-        </StandardListItem>
+        </ListItemStandard>
       );
     }),
-    <StandardListItem accessibleName="all-clusters">
+    <ListItemStandard accessibleName="all-clusters">
       {t('clusters.overview.title-all-clusters')}
-    </StandardListItem>,
+    </ListItemStandard>,
   ];
 
   const openNewWindow = (link: string) => {

@@ -5,7 +5,7 @@ import {
   Option,
   Panel,
   Select,
-  StandardListItem,
+  ListItemStandard,
   Text,
   Title,
 } from '@ui5/webcomponents-react';
@@ -29,7 +29,7 @@ export default function ModulesCard({
 
   return (
     <Card key={module.name} className="addModuleCard">
-      <StandardListItem
+      <ListItemStandard
         className="moduleCardHeader"
         onClick={e => setCheckbox(module, !isChecked(module.name), index)}
       >
@@ -53,7 +53,7 @@ export default function ModulesCard({
           </Text>
         </div>
         <img className="avatar" alt="SAP" src="\assets\sap-logo.svg" />
-      </StandardListItem>
+      </ListItemStandard>
       <div className="content">
         {module.docsUrl && (
           <ExternalLink
