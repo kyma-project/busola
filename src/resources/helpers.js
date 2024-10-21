@@ -65,7 +65,7 @@ export const usePrepareDetailsProps = ({
   namespaceId,
   showYamlTab,
 }) => {
-  const encodedResourceName = encodeURIComponent(resourceName);
+  const encodedResourceName = encodeURIComponent(resourceName?.trimEnd());
   const queryParams = new URLSearchParams(window.location.search);
   const { i18n, t } = useTranslation();
   const api = apiGroup ? `apis/${apiGroup}/${apiVersion}` : `api/${apiVersion}`;
