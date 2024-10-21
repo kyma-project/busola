@@ -43,7 +43,7 @@ context('Test Jobs', () => {
       .type(JOB_NAME, { force: true });
 
     // job command
-    cy.get('[aria-label="expand Command"]').click();
+    cy.get('[aria-label="Command, collapsed"]').click();
     cy.get('[placeholder^="Command to run"]:visible')
       .find('input')
       .type('/bin/sh', { force: true });
@@ -73,7 +73,7 @@ context('Test Jobs', () => {
       .type(SECOND_CONTAINER_NAME, { force: true });
 
     // job args
-    cy.get('[aria-label="expand Args"]:visible').click();
+    cy.get('[aria-label="Args, collapsed"]:visible').click();
 
     cy.get('[placeholder^="Arguments to the"]:visible')
       .find('input')

@@ -44,6 +44,7 @@ export function HintButton({
           setShowTitleDescription(true);
         }}
         accessibleName={`${ariaTitle} information`}
+        tooltip={`${ariaTitle} Information`}
       />
       {createPortal(
         <Popover

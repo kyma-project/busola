@@ -8,8 +8,8 @@ describe('ListActions', () => {
   it('Renders only standalone buttons', async () => {
     const entry = { id: '123' };
     const actions = [
-      { name: 'action1', handler: jest.fn() },
-      { name: 'action2', handler: jest.fn() },
+      { name: 'action1', handler: vi.fn() },
+      { name: 'action2', handler: vi.fn() },
     ];
     const { container, queryByText } = render(
       <ListActions actions={actions} entry={entry} />,
@@ -42,10 +42,10 @@ describe('ListActions', () => {
 
   it('Renders more actions dropdown', async () => {
     const actions = [
-      { name: 'action1', handler: jest.fn() },
-      { name: 'action2', handler: jest.fn() },
-      { name: 'action3', handler: jest.fn() },
-      { name: 'action4', handler: jest.fn() },
+      { name: 'action1', handler: vi.fn() },
+      { name: 'action2', handler: vi.fn() },
+      { name: 'action3', handler: vi.fn() },
+      { name: 'action4', handler: vi.fn() },
     ];
     const { container, queryByText } = render(
       <ListActions actions={actions} entry={{}} />,
@@ -70,7 +70,7 @@ describe('ListActions', () => {
   });
 
   it('Renders icon for standalone button', () => {
-    const actions = [{ name: 'action', handler: jest.fn(), icon: 'edit' }];
+    const actions = [{ name: 'action', handler: vi.fn(), icon: 'edit' }];
     const { container, queryByText } = render(
       <ListActions actions={actions} entry={{}} />,
     );
@@ -88,8 +88,8 @@ describe('ListActions', () => {
 
   it('Renders predefined icons', () => {
     const actions = [
-      { name: 'Edit', handler: jest.fn() },
-      { name: 'Delete', handler: jest.fn() },
+      { name: 'Edit', handler: vi.fn() },
+      { name: 'Delete', handler: vi.fn() },
     ];
     const { container } = render(<ListActions actions={actions} entry={{}} />);
 
@@ -106,8 +106,8 @@ describe('ListActions', () => {
 
   it('Can override predefined icons', () => {
     const actions = [
-      { name: 'Edit', handler: jest.fn(), icon: 'add' },
-      { name: 'Delete', handler: jest.fn(), icon: 'delete' },
+      { name: 'Edit', handler: vi.fn(), icon: 'add' },
+      { name: 'Delete', handler: vi.fn(), icon: 'delete' },
     ];
     const { container } = render(<ListActions actions={actions} entry={{}} />);
 

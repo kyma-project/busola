@@ -1,15 +1,14 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import { CodeViewer } from '../CodeViewer';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 
-jest.mock('../../helpers', () => ({
+vi.mock('../../helpers', () => ({
   useGetTranslation: () => ({
     widgetT: key => key,
   }),
 }));
 
-jest.mock('../../hooks/useJsonata', () => ({
+vi.mock('../../hooks/useJsonata', () => ({
   useJsonata: () => {
     return structure => [structure];
   },

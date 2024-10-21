@@ -39,7 +39,7 @@ context('Test Certificates', () => {
   it('Edits a certificate', () => {
     cy.inspectTab('Edit');
 
-    cy.get('[aria-label="expand Annotations"]').click();
+    cy.get('[aria-label="Annotations, collapsed"]').click();
 
     cy.get('[placeholder="Enter key"]:visible', { log: false })
       .find('input')

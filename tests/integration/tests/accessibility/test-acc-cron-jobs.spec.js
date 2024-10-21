@@ -92,7 +92,7 @@ context('Accessibility test Cron Jobs', () => {
       .type('*', { force: true });
 
     cy.get(
-      '[aria-label="expand Schedule: At 12:00 AM, on day 1 of the month"]',
+      '[aria-label="Schedule: At 12:00 AM, on day 1 of the month, expanded"]',
     ).click();
 
     cy.contains('Command').click();
