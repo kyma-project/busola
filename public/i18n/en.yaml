@@ -761,7 +761,8 @@ kyma-modules:
   namespaces: Namespace
   channel: Channel
   version: Version 
-  state: State
+  module-state: Module State
+  installation-state: Installation State
   documentation: Documentation
   no-version: No version available
   channel-overridden: Overridden

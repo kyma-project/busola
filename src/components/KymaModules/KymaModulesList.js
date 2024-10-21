@@ -35,6 +35,7 @@ import { Label } from 'shared/ResourceForm/components/Label';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { ModuleStatus } from './components/ModuleStatus';
 import { cloneDeep } from 'lodash';
+import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 
 export default function KymaModulesList({
   DeleteMessageBox,
@@ -139,7 +140,8 @@ export default function KymaModulesList({
       t('kyma-modules.namespaces'),
       t('kyma-modules.channel'),
       t('kyma-modules.version'),
-      t('kyma-modules.state'),
+      t('kyma-modules.module-state'),
+      t('kyma-modules.installation-state'),
       t('kyma-modules.documentation'),
     ];
 
@@ -216,8 +218,23 @@ export default function KymaModulesList({
         </>,
         // Version
         moduleStatus?.version || EMPTY_TEXT_PLACEHOLDER,
-        // State
-        <ModuleStatus moduleStatus={moduleStatus} resource={resource} />,
+        // Module State
+        <ModuleStatus resource={resource} />,
+        // Installation State
+        <StatusBadge
+          resourceKind="kymas"
+          type={
+            moduleStatus?.state === 'Ready'
+              ? 'Success'
+              : moduleStatus?.state === 'Processing' ||
+                moduleStatus?.state === 'Deleting'
+              ? 'None'
+              : moduleStatus?.state || 'None'
+          }
+          tooltipContent={moduleStatus?.message}
+        >
+          {moduleStatus?.state || 'Unknown'}
+        </StatusBadge>,
         // Documentation
         <ExternalLink
           url={
