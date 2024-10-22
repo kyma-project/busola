@@ -71,7 +71,7 @@ export const makeHandleRequest = () => {
       filters.forEach(filter => filter(req, headersData));
     } catch (e) {
       req.log.error('Filters rejected the request: ' + e.message);
-      res.status(400).send('Request ID: ' + req.id);
+      res.status(400).send('Request' + req + ', ' + e.message);
       return;
     }
 

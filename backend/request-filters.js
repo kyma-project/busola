@@ -33,18 +33,18 @@ export const pathWhitelistFilter = req => {
 };
 
 export const pathInvalidCharacterFilter = req => {
-  const encodedPath = req.originalUrl;
+  const encodedPath = req.originalUrl.replace(/^\/backend/, '');
   let decodedPath;
 
   try {
     decodedPath = decodeURIComponent(encodedPath);
   } catch (err) {
-    throw Error('Path contains invalid encoding.');
+    throw Error('Path contains invalid encoding. 1');
   }
 
   // Check if the decoded path still contains encoded characters (i.e., '%' symbol)
   if (decodedPath.includes('%')) {
-    throw Error('Path contains invalid encoding.');
+    throw Error('Path contains invalid encoding. 2');
   }
 
   // Check if the decoded path contains any non-printable or control characters
