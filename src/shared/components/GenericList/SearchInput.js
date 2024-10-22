@@ -10,6 +10,7 @@ import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorConte
 import { ResourceDetailContext } from '../ResourceDetails/ResourceDetails';
 import { useRecoilValue } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
+import './SearchInput.scss';
 
 SearchInput.propTypes = {
   searchQuery: PropTypes.string,
