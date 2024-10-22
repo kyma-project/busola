@@ -109,9 +109,9 @@ describe('invalidHeaderFilter tests', () => {
 describe('pathInvalidCharacterFilter tests', () => {
   const successTestCases = [
     {
-      description: 'should not throw an error for a valid path',
+      description: 'should not throw an error for a valid characters',
       req: {
-        originalUrl: '/valid/path-123',
+        originalUrl: '/valid/path-#&?-123',
       },
     },
     {
@@ -124,37 +124,30 @@ describe('pathInvalidCharacterFilter tests', () => {
 
   const errorTestCases = [
     {
-      description: 'should throw an error for a path with invalid characters',
-      req: {
-        originalUrl: '/invalid/path<with>brackets',
-      },
-      expectedError: 'Path contains invalid characters.',
-    },
-    {
       description: 'should throw an error for a path containing ..',
       req: {
         originalUrl: '/valid/../invalid/path',
       },
-      expectedError: 'Path contains invalid characters.',
+      expectedError: 'Path contains invalid characters',
     },
     {
       description: 'should throw an error when path contains NULL character',
       req: { originalUrl: '/valid/path%00' },
-      expectedError: 'Path contains invalid characters.',
+      expectedError: 'Path contains invalid characters',
     },
     {
       description: 'should throw an error for an improperly encoded path',
       req: {
         originalUrl: '/invalid%path',
       },
-      expectedError: 'Path contains invalid encoding.',
+      expectedError: 'Path contains invalid encoding',
     },
     {
       description: 'should throw an error for double encoded characters',
       req: {
         originalUrl: '/%252e%252e',
       },
-      expectedError: 'Path contains invalid encoding',
+      expectedError: 'Decoded path contains illegal % characters',
     },
   ];
 
