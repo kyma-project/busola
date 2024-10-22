@@ -2,7 +2,7 @@ import { createPortal } from 'react-dom';
 import { cloneDeep } from 'lodash';
 import { useState } from 'react';
 import { createPatch } from 'rfc6902';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useTranslation, Trans } from 'react-i18next';
 import { useUrl } from 'hooks/useUrl';
 
@@ -37,8 +37,8 @@ export default function KymaModulesCreate({ resource, ...props }) {
   const [kymaResource, setKymaResource] = useState(cloneDeep(resource));
   const [initialResource] = useState(resource);
   const [initialUnchangedResource] = useState(cloneDeep(resource));
-  const [, setIsResourceEdited] = useRecoilState(isResourceEditedState);
-  const [, setIsFormOpen] = useRecoilState(isFormOpenState);
+  const setIsResourceEdited = useSetRecoilState(isResourceEditedState);
+  const setIsFormOpen = useSetRecoilState(isFormOpenState);
 
   const resourceName = kymaResource?.metadata.name;
   const modulesResourceUrl = `/apis/operator.kyma-project.io/v1beta2/moduletemplates`;
@@ -58,10 +58,17 @@ export default function KymaModulesCreate({ resource, ...props }) {
     cloneDeep(initialResource?.spec?.modules) ?? [],
   );
   const [isEdited, setIsEdited] = useState(false);
+  const [isManagedChanged, setIsManagedChanged] = useState(false);
   const [showMessageBox, setShowMessageBox] = useState({
     isOpen: false,
     hide: false,
   });
+  const [showManagedBox, setShowManagedBox] = useState({
+    isOpen: false,
+    hide: false,
+    onSave: false,
+  });
+  console.log(showManagedBox);
 
   if (loading) {
     return (
@@ -108,7 +115,8 @@ export default function KymaModulesCreate({ resource, ...props }) {
         modules: selectedModules,
       },
     });
-    setIsEdited(true);
+    setIsManagedChanged(true);
+    setShowManagedBox({ isOpen: true, hide: false, onSave: false });
   };
 
   const installedModules = modules?.items.filter(module => {
@@ -238,7 +246,6 @@ export default function KymaModulesCreate({ resource, ...props }) {
             text={t('kyma-modules.managed')}
             checked={findSpec(module.name)?.managed}
             onChange={event => {
-              console.log(event.target.checked);
               setManaged(event.target.checked, index);
             }}
           />
@@ -283,6 +290,10 @@ export default function KymaModulesCreate({ resource, ...props }) {
     );
 
     setIsResourceEdited({
+      isEdited: false,
+    });
+
+    setIsManagedChanged({
       isEdited: false,
     });
 
@@ -372,6 +383,59 @@ export default function KymaModulesCreate({ resource, ...props }) {
         </MessageBox>,
         document.body,
       )}
+      {createPortal(
+        <MessageBox
+          type="Warning"
+          open={showManagedBox.isOpen}
+          onClose={() => {
+            setShowManagedBox({ isOpen: false, hide: false, onSave: false });
+          }}
+          titleText={
+            showManagedBox?.onSave
+              ? 'SERIOUSLY, CLICK UPDATE AND WILL BREAK HARD'
+              : 'WARNING, WILL BREAK'
+          }
+          actions={[
+            <Button
+              design="Emphasized"
+              key="change-managed"
+              onClick={() =>
+                showManagedBox?.onSave
+                  ? isEdited
+                    ? 'OK'
+                    : handleCreate()
+                  : setShowManagedBox({
+                      isOpen: false,
+                      onSave: false,
+                    })
+              }
+            >
+              {showManagedBox?.onSave
+                ? isEdited
+                  ? 'OK'
+                  : t('kyma-modules.change')
+                : 'OK'}
+            </Button>,
+            showManagedBox?.onSave && (
+              <Button design="Transparent" key="cancel">{`${t(
+                'common.buttons.cancel',
+              )}`}</Button>
+            ),
+          ]}
+        >
+          {showManagedBox?.onSave
+            ? 'SERIOUSLY, CLICK UPDATE AND WILL BREAK HARD'
+            : 'WARNING, WILL BREAK'}
+          {/* <Trans
+            i18nKey="isManagedChanged?.onSave
+              ? 'SERIOUSLY, CLICK UPDATE AND WILL BREAK HARD'
+              : 'WARNING, WILL BREAK'"
+          >
+            <span style={{ fontWeight: 'bold' }} />
+          </Trans> */}
+        </MessageBox>,
+        document.body,
+      )}
       <ResourceForm
         {...props}
         className="kyma-modules-create"
@@ -384,8 +448,25 @@ export default function KymaModulesCreate({ resource, ...props }) {
         createUrl={props.resourceUrl}
         disableDefaultFields
         skipCreateFn={() => {
-          if (isEdited && !showMessageBox.hide) {
-            setShowMessageBox({ ...showMessageBox, isOpen: true, hide: true });
+          if (
+            (isEdited && !showMessageBox.hide) ||
+            (isManagedChanged && !showManagedBox.hide)
+          ) {
+            if (isManagedChanged && !showManagedBox.hide) {
+              setShowManagedBox({
+                ...showManagedBox,
+                isOpen: true,
+                hide: true,
+                onSave: true,
+              });
+            }
+            if (isEdited && !showMessageBox.hide) {
+              setShowMessageBox({
+                ...showMessageBox,
+                isOpen: true,
+                hide: true,
+              });
+            }
             return true;
           }
           return false;
