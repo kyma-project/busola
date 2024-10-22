@@ -97,6 +97,20 @@ export default function KymaModulesCreate({ resource, ...props }) {
     });
     setIsEdited(true);
   };
+
+  const setManaged = (managed, index) => {
+    selectedModules[index].managed = managed;
+
+    setKymaResource({
+      ...kymaResource,
+      spec: {
+        ...kymaResource.spec,
+        modules: selectedModules,
+      },
+    });
+    setIsEdited(true);
+  };
+
   const installedModules = modules?.items.filter(module => {
     const name =
       module.metadata?.labels['operator.kyma-project.io/module-name'];
@@ -170,7 +184,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
       const index = selectedModules?.findIndex(selectedModule => {
         return selectedModule.name === module?.name;
       });
-      console.log(module);
+
       const mod = (
         <FlexBox
           direction="Column"
@@ -223,6 +237,10 @@ export default function KymaModulesCreate({ resource, ...props }) {
           <CheckBox
             text={t('kyma-modules.managed')}
             checked={findSpec(module.name)?.managed}
+            onChange={event => {
+              console.log(event.target.checked);
+              setManaged(event.target.checked, index);
+            }}
           />
         </FlexBox>
       );
