@@ -33,25 +33,25 @@ export const pathWhitelistFilter = req => {
 };
 
 export const pathInvalidCharacterFilter = req => {
-  const encodedPath = req.originalUrl.replace(/^\/backend/, '');
+  const encodedPath = req.originalUrl;
   let decodedPath;
 
   try {
     decodedPath = decodeURIComponent(encodedPath);
   } catch (err) {
-    throw Error('Path contains invalid encoding. 1');
+    throw Error('Path contains invalid encoding', { cause: err });
   }
 
   // Check if the decoded path still contains encoded characters (i.e., '%' symbol)
   if (decodedPath.includes('%')) {
-    throw Error('Path contains invalid encoding. 2');
+    throw Error('Decoded path contains illegal % characters');
   }
 
   // Check if the decoded path contains any non-printable or control characters
   // eslint-disable-next-line no-control-regex
   const controlCharRegex = /[\x00-\x1F\x7F]/;
   if (controlCharRegex.test(decodedPath) || decodedPath.includes('..')) {
-    throw Error('Path contains invalid characters.');
+    throw Error('Path contains invalid characters');
   }
 };
 
