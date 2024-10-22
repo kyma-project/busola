@@ -16,6 +16,7 @@ import { ForceUpdateModalContent } from 'shared/ResourceForm/ForceUpdateModalCon
 
 import {
   Button,
+  CheckBox,
   FlexBox,
   Label,
   MessageBox,
@@ -169,7 +170,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
       const index = selectedModules?.findIndex(selectedModule => {
         return selectedModule.name === module?.name;
       });
-
+      console.log(module);
       const mod = (
         <FlexBox
           direction="Column"
@@ -219,6 +220,10 @@ export default function KymaModulesCreate({ resource, ...props }) {
               </Option>
             ))}
           </Select>
+          <CheckBox
+            text={t('kyma-modules.managed')}
+            checked={findSpec(module.name)?.managed}
+          />
         </FlexBox>
       );
       modulesList.push(mod);
