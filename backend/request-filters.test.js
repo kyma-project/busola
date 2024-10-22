@@ -64,6 +64,10 @@ describe('invalidHeaderFilter tests', () => {
         },
       },
     },
+    {
+      description: 'should not throw an error for no provided headers',
+      req: {},
+    },
   ];
 
   const errorTestCases = [
