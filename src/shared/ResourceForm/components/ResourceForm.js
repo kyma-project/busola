@@ -218,17 +218,10 @@ export function ResourceForm({
         'resource-form ui5-content-density-compact',
         className,
       )}
-      columnsL={1}
-      columnsM={1}
-      columnsS={1}
-      columnsXL={1}
-      labelSpanL={0}
-      labelSpanM={0}
-      labelSpanS={0}
-      labelSpanXL={0}
-      as="div"
       style={{ overflowX: 'hidden' }}
       onChange={onChange}
+      labelSpan="S0 M0 L0 XL0"
+      layout="S1 M1 L1 XL1"
     >
       {(mode === ModeSelector.MODE_FORM || formWithoutPanel) && (
         <FormItem>

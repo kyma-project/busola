@@ -135,7 +135,7 @@ export function RuleInput({ rule, rules, setRules }) {
         newItemActionWidth={2}
         newItemAction={
           loading ? (
-            <BusyIndicator size="Small" active={true} delay="0" />
+            <BusyIndicator size="S" active={true} delay="0" />
           ) : (
             <Button
               design="Transparent"
@@ -159,7 +159,6 @@ export function RuleInput({ rule, rules, setRules }) {
           </Button>,
         ]}
       />
-
       {loadable && (
         <MessageStrip
           design="Information"

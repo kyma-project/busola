@@ -116,7 +116,7 @@ export function Editor({
         )}
         {schemaError && (
           <MessageStrip
-            design="Warning"
+            design="Critical"
             className="break-word"
             style={spacing.sapUiSmallMargin}
           >
@@ -127,7 +127,7 @@ export function Editor({
         )}
         {warnings.length ? (
           <MessageStrip
-            design="Warning"
+            design="Critical"
             hideCloseButton
             className="break-word"
             style={spacing.sapUiSmallMargin}

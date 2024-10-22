@@ -40,8 +40,8 @@ export function KubeconfigFileUpload({ onKubeconfigTextAdded }) {
             <Popover
               opener="descriptionOpener"
               open={showTitleDescription}
-              onAfterClose={() => setShowTitleDescription(false)}
-              placementType="Right"
+              onClose={() => setShowTitleDescription(false)}
+              placement="End"
             >
               <Text className="description">{t('clusters.wizard.intro')}</Text>
             </Popover>,

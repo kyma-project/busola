@@ -11,7 +11,7 @@ export function InvalidRoleError({ rule }) {
   return (
     isRuleInvalid(rule) && (
       <MessageStrip
-        design="Warning"
+        design="Critical"
         hideCloseButton
         style={spacing.sapUiSmallMarginTop}
       >

@@ -73,7 +73,7 @@ export function useProtectedResources() {
           <ObjectStatus
             icon={<Icon name="locked" />}
             showDefaultIcon
-            state="Warning"
+            state="Critical"
             style={{ textOverflow: 'ellipsis' }}
           >
             {t('common.protected-resource')}
@@ -94,7 +94,7 @@ export function useProtectedResources() {
       return <></>;
     }
     return createPortal(
-      <Popover placementType="Right" ref={popoverRef}>
+      <Popover placement="End" ref={popoverRef}>
         <Text className="description">{popoverMessage}</Text>
       </Popover>,
       document.body,

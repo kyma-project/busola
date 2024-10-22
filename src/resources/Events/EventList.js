@@ -58,7 +58,7 @@ export function EventList({
                 aria-label="Warning"
                 icon={<Icon name="warning" />}
                 className="has-tooltip"
-                state="Warning"
+                state="Critical"
               />
             </Tooltip>
           ) : (

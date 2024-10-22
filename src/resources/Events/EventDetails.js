@@ -35,7 +35,7 @@ const Specification = event => {
                 aria-label="Warning"
                 icon={<Icon name="warning" />}
                 className="has-tooltip"
-                state="Warning"
+                state="Critical"
                 style={spacing.sapUiTinyMarginBegin}
               />
             ) : (

@@ -100,7 +100,7 @@ export function TokenRequestModal({
   return (
     <Dialog
       open={isModalOpen}
-      onAfterClose={handleCloseModal}
+      onClose={handleCloseModal}
       headerText={t('service-accounts.token-request.generate')}
       footer={
         <Bar
@@ -140,7 +140,7 @@ export function TokenRequestModal({
           )}
         />
         <div style={spacing.sapUiSmallMarginTop}>
-          <MessageStrip design="Warning" hideCloseButton>
+          <MessageStrip design="Critical" hideCloseButton>
             {t('service-accounts.token-request.warning')}
           </MessageStrip>
           <div
@@ -163,8 +163,7 @@ export function TokenRequestModal({
               disabled={token === ''}
               design="Transparent"
               style={spacing.sapUiTinyMarginEnd}
-              icon="download"
-              iconEnd
+              endIcon="download"
             >
               {t('service-accounts.headers.download-kubeconfig')}
             </Button>

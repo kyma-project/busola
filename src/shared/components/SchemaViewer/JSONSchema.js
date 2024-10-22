@@ -39,14 +39,13 @@ export function JSONSchema({
                 <ObjectStatus inverted>{type.toUpperCase()}</ObjectStatus>
               ))}{' '}
           {isRequired && (
-            <ObjectStatus inverted state="Warning">
+            <ObjectStatus inverted state="Critical">
               {t('schema.required')}
             </ObjectStatus>
           )}
         </FlexBox>
       )}
       {description && <div className="description">{description}</div>}
-
       <dl>
         <ObjectProperties def={def} expanded={root} />
       </dl>

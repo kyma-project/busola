@@ -65,7 +65,7 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
   if (!validationSchema)
     return (
       <MessageStrip
-        design="Warning"
+        design="Critical"
         hideCloseButton
         style={spacing.sapUiSmallMarginBottom}
       >
