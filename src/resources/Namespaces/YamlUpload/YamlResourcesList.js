@@ -138,7 +138,9 @@ export function YamlResourcesList({ resourcesData }) {
                 header={
                   <CardHeader
                     titleText={t('upload-yaml.upload-progress')}
-                    status={resources?.length + '/' + uploadedResources?.length}
+                    additionalText={
+                      resources?.length + '/' + uploadedResources?.length
+                    }
                   />
                 }
               >
@@ -146,7 +148,7 @@ export function YamlResourcesList({ resourcesData }) {
                   value={getPercentage()}
                   valueState={
                     resources?.length === uploadedResources?.length
-                      ? 'Success'
+                      ? 'Positive'
                       : 'None'
                   }
                   className="sap-margin-x-small"

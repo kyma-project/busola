@@ -414,7 +414,7 @@ export const GenericList = ({
             () => handleRowClick(e),
           );
         }}
-        columns={
+        headerRow={
           <HeaderRenderer
             entries={entries}
             actions={actions}
@@ -427,7 +427,6 @@ export const GenericList = ({
       >
         {renderTableBody()}
       </Table>
-
       {pagination &&
         (!pagination.autoHide ||
           filteredEntries.length > pagination.itemsPerPage) && (

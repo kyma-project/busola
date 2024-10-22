@@ -98,7 +98,7 @@ export function TokenRequestModal({
   return (
     <Dialog
       open={isModalOpen}
-      onAfterClose={handleCloseModal}
+      onClose={handleCloseModal}
       headerText={t('service-accounts.token-request.generate')}
       footer={
         <Bar

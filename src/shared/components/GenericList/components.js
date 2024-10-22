@@ -1,8 +1,14 @@
 import { useState } from 'react';
-import { Button, FlexBox, Icon, Text } from '@ui5/webcomponents-react';
-import { TableCell } from '@ui5/webcomponents-react-compat/dist/components/TableCell/index.js';
-import { TableColumn } from '@ui5/webcomponents-react-compat/dist/components/TableColumn/index.js';
-import { TableRow } from '@ui5/webcomponents-react-compat/dist/components/TableRow/index.js';
+import {
+  Button,
+  FlexBox,
+  Icon,
+  Text,
+  TableCell,
+  TableHeaderCell,
+  TableRow,
+} from '@ui5/webcomponents-react';
+import ListActions from 'shared/components/ListActions/ListActions';
 
 import ListActions from 'shared/components/ListActions/ListActions';
 
@@ -26,25 +32,23 @@ export const HeaderRenderer = ({
   let emptyColumn = null;
   if (actions.length) {
     emptyColumn = (
-      <TableColumn
+      <TableHeaderCell
         slot={slot}
         key="actions-column"
         aria-label="actions-column"
         minWidth={850}
       >
         <Text />
-      </TableColumn>
+      </TableHeaderCell>
     );
   }
   const Header = (
     <>
       {headerRenderer().map((h, index) => {
         return (
-          <TableColumn
+          <TableHeaderCell
             slot={`${slot}-${index}`}
             key={typeof h === 'object' ? index : h}
-            popinDisplay="Block"
-            demandPopin={h === 'Popin' ? true : false}
             minWidth={
               Array.isArray(noHideFields) && noHideFields.length !== 0
                 ? noHideFields.find(field => field === h)
@@ -61,14 +65,18 @@ export const HeaderRenderer = ({
             aria-label={`${typeof h === 'object' ? index : h}-column`}
           >
             <Text>{h}</Text>
-          </TableColumn>
+          </TableHeaderCell>
         );
       })}
       {emptyColumn}
       {displayArrow && (
-        <TableColumn slot={slot} key="arrow-column" aria-label="arrow-column">
+        <TableHeaderCell
+          slot={slot}
+          key="arrow-column"
+          aria-label="arrow-column"
+        >
           <Text />
-        </TableColumn>
+        </TableHeaderCell>
       )}
     </>
   );
@@ -135,11 +143,7 @@ const DefaultRowRenderer = ({
   );
 
   return (
-    <TableRow
-      type={hasDetailsView ? 'Active' : 'Inactive'}
-      navigated={isSelected}
-      selected={isSelected}
-    >
+    <TableRow>
       {cells}
       {!!actions.length && actionsCell}
       {displayArrow && (

@@ -54,11 +54,11 @@ export const PopoverBadge = ({
         <Popover
           ref={popoverRef}
           open={openPopover}
-          onAfterClose={e => {
+          onClose={e => {
             e.stopPropagation();
             setOpenPopover(false);
           }}
-          placementType="Right"
+          placement="End"
         >
           {tooltipContent}
         </Popover>,

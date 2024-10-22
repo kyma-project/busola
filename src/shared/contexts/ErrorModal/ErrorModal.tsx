@@ -54,7 +54,7 @@ export function ErrorModal({
 
   return (
     <Dialog
-      onAfterClose={close}
+      onClose={close}
       className={classNames('error-modal', { 'error-modal--wider': wider })}
       header={
         <Bar

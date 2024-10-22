@@ -102,7 +102,7 @@ export function GenericRoleBindingCreate({
       />
       {!jp.value(binding, '$.subjects.length') && (
         <MessageStrip
-          design="Warning"
+          design="Critical"
           hideCloseButton
           className="sap-margin-top-small"
         >
