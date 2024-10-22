@@ -56,7 +56,7 @@ export const pathInvalidCharacterFilter = req => {
 };
 
 export const invalidHeaderFilter = req => {
-  const headers = req.headers;
+  const headers = req.headers || {};
 
   if ('x-forwarded-for' in headers || 'forwarded' in headers) {
     throw Error(`Request contains invalid headers.`);
