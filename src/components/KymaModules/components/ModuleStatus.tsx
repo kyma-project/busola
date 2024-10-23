@@ -9,7 +9,7 @@ export const ModuleStatus = ({ moduleStatus, resource }: any) => {
       ? moduleStatus?.state || 'Unknown'
       : status?.state || moduleStatus?.state || 'Unknown';
   const message = status?.description || moduleStatus?.message;
-  console.log(moduleState);
+
   return message ? (
     <PopoverBadge
       type={

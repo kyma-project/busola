@@ -1,6 +1,6 @@
 import { createPortal } from 'react-dom';
 import { cloneDeep } from 'lodash';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { createPatch } from 'rfc6902';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useTranslation, Trans } from 'react-i18next';
@@ -68,7 +68,12 @@ export default function KymaModulesCreate({ resource, ...props }) {
     hide: false,
     onSave: false,
   });
-  console.log(showManagedBox);
+
+  const isSomeModuleUnmanaged = useMemo(() => {
+    return kymaResource?.spec.modules.some(module => {
+      return module?.managed === false;
+    });
+  }, [kymaResource]);
 
   if (loading) {
     return (
@@ -478,6 +483,16 @@ export default function KymaModulesCreate({ resource, ...props }) {
           className="collapsible-margins"
           title={t('kyma-modules.modules-channel')}
         >
+          {isSomeModuleUnmanaged && (
+            <MessageStrip
+              design="Information"
+              hideCloseButton
+              style={spacing.sapUiTinyMarginBottom}
+            >
+              ONE OF THE MODULE IN SET AS UNMANAGED, IT COULD BREAK YOUR MODULES
+              CONFIGURATION
+            </MessageStrip>
+          )}
           {modulesEditData?.length !== 0 ? (
             <>
               {checkIfSelectedModuleIsBeta() ? (
