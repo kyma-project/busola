@@ -9,13 +9,15 @@ export const ModuleStatus = ({ moduleStatus, resource }: any) => {
       ? moduleStatus?.state || 'Unknown'
       : status?.state || moduleStatus?.state || 'Unknown';
   const message = status?.description || moduleStatus?.message;
-
+  console.log(moduleState);
   return message ? (
     <PopoverBadge
       type={
         moduleState === 'Ready'
           ? 'Success'
-          : moduleState === 'Processing' || moduleState === 'Deleting'
+          : moduleState === 'Processing' ||
+            moduleState === 'Deleting' ||
+            moduleState === 'Unmanaged'
           ? 'None'
           : moduleState || 'None'
       }
@@ -29,7 +31,9 @@ export const ModuleStatus = ({ moduleStatus, resource }: any) => {
       type={
         moduleState === 'Ready'
           ? 'Success'
-          : moduleState === 'Processing' || moduleState === 'Deleting'
+          : moduleState === 'Processing' ||
+            moduleState === 'Deleting' ||
+            moduleState === 'Unmanaged'
           ? 'None'
           : moduleState || 'None'
       }
