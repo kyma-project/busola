@@ -1,31 +1,13 @@
-import { PopoverBadge } from 'shared/components/PopoverBadge/PopoverBadge';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useModuleStatus } from '../support';
 
-export const ModuleStatus = ({ moduleStatus, resource }: any) => {
-  const { data: status, loading, error } = useModuleStatus(resource);
-  const moduleState =
-    loading || error
-      ? moduleStatus?.state || 'Unknown'
-      : status?.state || moduleStatus?.state || 'Unknown';
-  const message = status?.description || moduleStatus?.message;
+export const ModuleStatus = ({ resource }: any) => {
+  const { data: status } = useModuleStatus(resource);
 
-  return message ? (
-    <PopoverBadge
-      type={
-        moduleState === 'Ready'
-          ? 'Success'
-          : moduleState === 'Processing' ||
-            moduleState === 'Deleting' ||
-            moduleState === 'Unmanaged'
-          ? 'None'
-          : moduleState || 'None'
-      }
-      tooltipContent={message}
-    >
-      {moduleState}
-    </PopoverBadge>
-  ) : (
+  const moduleState = status?.state || 'Unknown';
+  const moduleMessage = status?.description;
+
+  return (
     <StatusBadge
       resourceKind="kymas"
       type={
@@ -33,10 +15,11 @@ export const ModuleStatus = ({ moduleStatus, resource }: any) => {
           ? 'Success'
           : moduleState === 'Processing' ||
             moduleState === 'Deleting' ||
-            moduleState === 'Unmanaged'
+            moduleState === 'Unknown'
           ? 'None'
           : moduleState || 'None'
       }
+      tooltipContent={moduleMessage}
     >
       {moduleState}
     </StatusBadge>
