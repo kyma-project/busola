@@ -13,7 +13,9 @@ export const ModuleStatus = ({ resource }: any) => {
       type={
         moduleState === 'Ready'
           ? 'Success'
-          : moduleState === 'Processing' || moduleState === 'Deleting'
+          : moduleState === 'Processing' ||
+            moduleState === 'Deleting' ||
+            moduleState === 'Unknown'
           ? 'None'
           : moduleState || 'None'
       }

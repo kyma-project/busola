@@ -227,7 +227,9 @@ export default function KymaModulesList({
             moduleStatus?.state === 'Ready'
               ? 'Success'
               : moduleStatus?.state === 'Processing' ||
-                moduleStatus?.state === 'Deleting'
+                moduleStatus?.state === 'Deleting' ||
+                moduleStatus?.state === 'Unmanaged' ||
+                moduleStatus?.state === 'Unknown'
               ? 'None'
               : moduleStatus?.state || 'None'
           }
