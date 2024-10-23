@@ -55,14 +55,6 @@ export const pathInvalidCharacterFilter = req => {
   }
 };
 
-export const invalidHeaderFilter = req => {
-  const headers = req.headers || {};
-
-  if ('x-forwarded-for' in headers || 'forwarded' in headers) {
-    throw Error(`Request contains invalid headers.`);
-  }
-};
-
 export const invalidRequestMethodFilter = req => {
   const path = req.originalUrl;
   const method = req.method;
@@ -80,5 +72,4 @@ export const filters = [
   localIpFilter,
   pathWhitelistFilter,
   pathInvalidCharacterFilter,
-  invalidHeaderFilter,
 ];
