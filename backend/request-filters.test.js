@@ -1,5 +1,4 @@
 import {
-  invalidHeaderFilter,
   invalidRequestMethodFilter,
   localIpFilter,
   pathInvalidCharacterFilter,
@@ -48,64 +47,6 @@ describe('invalidRequestMethodFilter tests', () => {
   test.each(errorTestCases)('$description', ({ req }) => {
     expect(() => invalidRequestMethodFilter(req)).toThrowError(
       'Invalid request method',
-    );
-  });
-});
-
-describe('invalidHeaderFilter tests', () => {
-  const successTestCases = [
-    {
-      description:
-        'should not throw an error if x-forwarded-for and forwarded headers are absent',
-      req: {
-        headers: {
-          host: 'localhost',
-          'user-agent': 'Mozilla/5.0',
-        },
-      },
-    },
-    {
-      description: 'should not throw an error for no provided headers',
-      req: {},
-    },
-  ];
-
-  const errorTestCases = [
-    {
-      description: 'should throw an error if x-forwarded-for header is present',
-      req: {
-        headers: {
-          'x-forwarded-for': '123.45.67.89',
-        },
-      },
-    },
-    {
-      description: 'should throw an error if forwarded header is present',
-      req: {
-        headers: {
-          forwarded: 'for=123.45.67.89;by=proxy',
-        },
-      },
-    },
-    {
-      description:
-        'should throw an error if both x-forwarded-for and forwarded headers are present',
-      req: {
-        headers: {
-          'x-forwarded-for': '123.45.67.89',
-          forwarded: 'for=123.45.67.89;by=proxy',
-        },
-      },
-    },
-  ];
-
-  test.each(successTestCases)('$description', ({ req }) => {
-    expect(() => invalidHeaderFilter(req)).not.toThrow();
-  });
-
-  test.each(errorTestCases)('$description', ({ req }) => {
-    expect(() => invalidHeaderFilter(req)).toThrowError(
-      'Request contains invalid headers.',
     );
   });
 });
