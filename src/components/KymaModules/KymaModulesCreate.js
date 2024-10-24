@@ -395,11 +395,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
           onClose={() => {
             setShowManagedBox({ isOpen: false, hide: false, onSave: false });
           }}
-          titleText={
-            showManagedBox?.onSave
-              ? 'SERIOUSLY, CLICK UPDATE AND WILL BREAK HARD'
-              : 'WARNING, WILL BREAK'
-          }
+          titleText={showManagedBox?.onSave ? 'SIRIUS WARNING' : 'WARNING'}
           actions={[
             <Button
               design="Emphasized"
@@ -428,16 +424,15 @@ export default function KymaModulesCreate({ resource, ...props }) {
             ),
           ]}
         >
-          {showManagedBox?.onSave
-            ? 'SERIOUSLY, CLICK UPDATE AND WILL BREAK HARD'
-            : 'WARNING, WILL BREAK'}
-          {/* <Trans
-            i18nKey="isManagedChanged?.onSave
-              ? 'SERIOUSLY, CLICK UPDATE AND WILL BREAK HARD'
-              : 'WARNING, WILL BREAK'"
+          <Trans
+            i18nKey={
+              isManagedChanged?.onSave
+                ? 'kyma-modules.unmanaged-modules-save-warning'
+                : 'kyma-modules.unmanaged-modules-warning'
+            }
           >
             <span style={{ fontWeight: 'bold' }} />
-          </Trans> */}
+          </Trans>
         </MessageBox>,
         document.body,
       )}
@@ -489,8 +484,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
               hideCloseButton
               style={spacing.sapUiTinyMarginBottom}
             >
-              ONE OF THE MODULE IN SET AS UNMANAGED, IT COULD BREAK YOUR MODULES
-              CONFIGURATION
+              {t('kyma-modules.unmanaged-modules-info')}
             </MessageStrip>
           )}
           {modulesEditData?.length !== 0 ? (
