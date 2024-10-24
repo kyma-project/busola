@@ -206,6 +206,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
         >
           <Label>{`${module.name}:`}</Label>
           <Select
+            accessibleName={`channel-select-${module.name}`}
             onChange={event => {
               setChannel(module, event.detail.selectedOption.value, index);
             }}
@@ -223,6 +224,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
                 )
               }
               value={'predefined'}
+              key={`predefined-${module.name}`}
             >
               {`${t(
                 'kyma-modules.predefined-channel',
@@ -237,7 +239,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
             {module.channels?.map(channel => (
               <Option
                 selected={channel.channel === findSpec(module.name)?.channel}
-                key={channel.channel}
+                key={`${channel.channel}-${module.name}`}
                 value={channel.channel}
                 additionalText={channel?.isBeta ? 'Beta' : ''}
               >
@@ -248,6 +250,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
             ))}
           </Select>
           <CheckBox
+            accessibleName="managed-checkbox"
             text={t('kyma-modules.managed')}
             checked={findSpec(module.name)?.managed}
             onChange={event => {
@@ -371,15 +374,18 @@ export default function KymaModulesCreate({ resource, ...props }) {
           titleText={t('kyma-modules.change-release-channel')}
           actions={[
             <Button
+              accessibleName="change-kyma"
               design="Emphasized"
-              key="change"
+              key="change-kyma"
               onClick={() => handleCreate()}
             >
               {t('kyma-modules.change')}
             </Button>,
-            <Button design="Transparent" key="cancel">{`${t(
-              'common.buttons.cancel',
-            )}`}</Button>,
+            <Button
+              accessibleName="cancel-kyma"
+              design="Transparent"
+              key="cancel-kyma"
+            >{`${t('common.buttons.cancel')}`}</Button>,
           ]}
         >
           <Trans i18nKey="kyma-modules.change-release-channel-warning">
@@ -398,8 +404,11 @@ export default function KymaModulesCreate({ resource, ...props }) {
           titleText={showManagedBox?.onSave ? 'SIRIUS WARNING' : 'WARNING'}
           actions={[
             <Button
+              accessibleName={
+                showManagedBox?.onSave ? 'change-managed' : 'ok-managed'
+              }
               design="Emphasized"
-              key="change-managed"
+              key={showManagedBox?.onSave ? 'change-managed' : 'ok-managed'}
               onClick={() =>
                 showManagedBox?.onSave
                   ? isEdited
@@ -418,9 +427,11 @@ export default function KymaModulesCreate({ resource, ...props }) {
                 : 'OK'}
             </Button>,
             showManagedBox?.onSave && (
-              <Button design="Transparent" key="cancel">{`${t(
-                'common.buttons.cancel',
-              )}`}</Button>
+              <Button
+                accessibleName="cancel-managed"
+                design="Transparent"
+                key="cancel-managed"
+              >{`${t('common.buttons.cancel')}`}</Button>
             ),
           ]}
         >
