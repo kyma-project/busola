@@ -385,7 +385,9 @@ export default function KymaModulesCreate({ resource, ...props }) {
               accessibleName="cancel-kyma"
               design="Transparent"
               key="cancel-kyma"
-            >{t('common.buttons.cancel')}</Button>,
+            >
+              {t('common.buttons.cancel')}
+            </Button>,
           ]}
         >
           <Trans i18nKey="kyma-modules.change-release-channel-warning">
