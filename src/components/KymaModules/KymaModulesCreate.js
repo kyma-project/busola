@@ -3,7 +3,7 @@ import { cloneDeep } from 'lodash';
 import { useMemo, useState } from 'react';
 import { createPatch } from 'rfc6902';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useUrl } from 'hooks/useUrl';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -19,7 +19,6 @@ import {
   CheckBox,
   FlexBox,
   Label,
-  MessageBox,
   MessageStrip,
   Option,
   Select,
@@ -32,6 +31,7 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { ManagedWarnings } from './ManagedWarnings';
+import { ChannelWarning } from './ChannelWarning';
 
 export default function KymaModulesCreate({ resource, ...props }) {
   const { t } = useTranslation();
@@ -382,37 +382,11 @@ export default function KymaModulesCreate({ resource, ...props }) {
   return (
     <>
       {createPortal(
-        <MessageBox
-          type="Warning"
-          open={showMessageBox.isOpen}
-          onClose={() => {
-            setShowMessageBox({ isOpen: false });
-          }}
-          titleText={t('kyma-modules.change-release-channel')}
-          actions={[
-            <Button
-              accessibleName="change-kyma"
-              design="Emphasized"
-              key="change-kyma"
-              onClick={() => {
-                handleCreate();
-              }}
-            >
-              {t('kyma-modules.change')}
-            </Button>,
-            <Button
-              accessibleName="cancel-kyma"
-              design="Transparent"
-              key="cancel-kyma"
-            >
-              {t('common.buttons.cancel')}
-            </Button>,
-          ]}
-        >
-          <Trans i18nKey="kyma-modules.change-release-channel-warning">
-            <span style={{ fontWeight: 'bold' }} />
-          </Trans>
-        </MessageBox>,
+        <ChannelWarning
+          showMessageBox={showMessageBox}
+          setShowMessageBox={setShowMessageBox}
+          handleCreate={handleCreate}
+        />,
         document.body,
       )}
       {createPortal(
