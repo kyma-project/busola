@@ -32,6 +32,7 @@ import { isFormOpenState } from 'state/formOpenAtom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { ManagedWarnings } from './ManagedWarnings';
 import { ChannelWarning } from './ChannelWarning';
+import { UnmanagedModuleInfo } from './UnmanagedModuleInfo';
 
 export default function KymaModulesCreate({ resource, ...props }) {
   const { t } = useTranslation();
@@ -67,12 +68,6 @@ export default function KymaModulesCreate({ resource, ...props }) {
     isOpen: false,
     onSave: false,
   });
-
-  const isSomeModuleUnmanaged = useMemo(() => {
-    return kymaResource?.spec.modules.some(module => {
-      return module?.managed === false;
-    });
-  }, [kymaResource]);
 
   if (loading) {
     return (
@@ -418,15 +413,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
           className="collapsible-margins"
           title={t('kyma-modules.modules-channel')}
         >
-          {isSomeModuleUnmanaged && (
-            <MessageStrip
-              design="Information"
-              hideCloseButton
-              style={spacing.sapUiTinyMarginBottom}
-            >
-              {t('kyma-modules.unmanaged-modules-info')}
-            </MessageStrip>
-          )}
+          <UnmanagedModuleInfo kymaResource={kymaResource} />
           {modulesEditData?.length !== 0 ? (
             <>
               {checkIfSelectedModuleIsBeta() ? (
