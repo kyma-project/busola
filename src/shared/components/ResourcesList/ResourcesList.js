@@ -62,6 +62,7 @@ ResourcesList.propTypes = {
   description: PropTypes.node,
   readOnly: PropTypes.bool,
   customUrl: PropTypes.func,
+  customUIUrl: PropTypes.any,
   testid: PropTypes.string,
   omitColumnsIds: PropTypes.arrayOf(PropTypes.string.isRequired),
   resourceUrlPrefix: PropTypes.string,
