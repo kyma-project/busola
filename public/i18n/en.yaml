@@ -277,6 +277,7 @@ common:
     last-update: Last Update
     description: Description
     discard-changes: Discard Changes
+    warning: Warning
     items: Items
     key: Key
     labels: Labels
@@ -744,6 +745,9 @@ kubeconfig-id:
   error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 kyma-modules:
+  unmanaged-modules-info: One of the modules is not managed and may not work properly. We cannot guarantee any service level agreement (SLA) or provide updates and maintenance for the module.
+  unmanaged-modules-save-warning: Before proceeding, be aware that disabling module management may impact the stability and data integrity of your cluster. Once the management is disabled, reverting back may not be possible. Are you sure you want to continue?
+  unmanaged-modules-warning: Disabling this option can lead to potential instability and loss of data within your cluster. Proceed with caution. Once disabled, it may not be possible to revert back.
   installed-modules: Installed Modules
   predefined-channel: Predefined
   modify-modules: Modify Modules
@@ -766,6 +770,7 @@ kyma-modules:
   documentation: Documentation
   no-version: No version available
   channel-overridden: Overridden
+  managed: Managed
   beta: Beta
   beta-alert: "CAUTION: The Service Level Agreements (SLAs) and Support obligations do not apply to Beta modules and functionalities. If Beta modules or functionalities directly or indirectly affect other modules, the Service Level Agreements and Support for these modules are limited to priority levels P3 (Medium) or P4 (Low). Thus, Beta releases are not intended for use in customer production environments."
   change: Change
