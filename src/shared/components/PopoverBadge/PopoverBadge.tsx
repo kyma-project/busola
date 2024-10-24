@@ -9,7 +9,7 @@ import { createPortal } from 'react-dom';
 interface PopoverBadgeProps {
   children?: ReactNode;
   tooltipContent: ReactNode;
-  type: 'Information' | 'Success' | 'Error' | 'Warning' | 'None';
+  type: 'Information' | 'Positive' | 'Negative' | 'Critical' | 'None';
   className?: string;
 }
 

@@ -27,17 +27,17 @@ const resolveType = status => {
     case 'Success':
     case 'Succeeded':
     case 'Ok':
-      return 'Success';
+      return 'Positive';
 
     case 'Unknown':
     case 'Warning':
-      return 'Warning';
+      return 'Critical';
 
     case 'Failed':
     case 'Error':
     case 'Failure':
     case 'Invalid':
-      return 'Error';
+      return 'Negative';
 
     default:
       return 'None';
@@ -58,9 +58,9 @@ const prepareTranslationPath = (resourceKind, value, type) => {
 };
 
 const TYPE_FALLBACK = new Map([
-  ['success', 'Success'],
-  ['warning', 'Warning'],
-  ['error', 'Error'],
+  ['success', 'Positive'],
+  ['warning', 'Critical'],
+  ['error', 'Negative'],
   ['info', 'Information'],
 ]);
 
@@ -130,7 +130,7 @@ export const StatusBadge = ({
       content = `${content}: ${additionalContent}`;
     }
   }
-
+  console.log(type);
   // tooltipContent is DEPRECATED. Use the TooltipBadge component if a Badge with a simple Tooltip is needed.
   if (tooltipContent) {
     return (
@@ -168,7 +168,13 @@ export const StatusBadge = ({
 StatusBadge.propTypes = {
   additionalContent: PropTypes.node,
   tooltipContent: PropTypes.node,
-  type: PropTypes.oneOf(['Information', 'Success', 'Error', 'Warning', 'None']),
+  type: PropTypes.oneOf([
+    'Information',
+    'Positive',
+    'Negative',
+    'Critical',
+    'None',
+  ]),
   autoResolveType: PropTypes.bool,
   noTooltip: PropTypes.bool,
   resourceKind: PropTypes.string,

@@ -57,7 +57,7 @@ export const CurrentCRDVersion = resource => {
             'custom-resource-definitions.subtitle.version',
           )} ${storageVersion.name}`}</Title>
           <StatusBadge
-            type={storageVersion.served ? 'Success' : 'Information'}
+            type={storageVersion.served ? 'Positive' : 'Information'}
             className="version-status"
             resourceKind="custom-resource-definitions"
           >
@@ -67,7 +67,7 @@ export const CurrentCRDVersion = resource => {
           </StatusBadge>
           {storageVersion.storage && (
             <StatusBadge
-              type="Success"
+              type="Positive"
               className="version-status"
               resourceKind="custom-resource-definitions"
             >

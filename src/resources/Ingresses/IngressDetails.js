@@ -72,8 +72,8 @@ export function IngressDetails(props) {
       totalPorts === 0
         ? 'Information'
         : totalPorts === healthyPorts
-        ? 'Success'
-        : 'Error';
+        ? 'Positive'
+        : 'Negative';
 
     return (
       <StatusBadge
