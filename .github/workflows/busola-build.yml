@@ -13,6 +13,7 @@ on:
       - "package.json"
       - "Makefile"
       - "Dockerfile"
+      - "nginx/nginx.conf"
   pull_request_target:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
@@ -24,6 +25,7 @@ on:
       - "package.json"
       - "Makefile"
       - "Dockerfile"
+      - "nginx/nginx.conf"
 
 permissions:
   id-token: write # This is required for requesting the JWT token
