@@ -31,6 +31,7 @@ import './KymaModulesCreate.scss';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { ManagedWarnings } from './ManagedWarnings';
 
 export default function KymaModulesCreate({ resource, ...props }) {
   const { t } = useTranslation();
@@ -61,11 +62,9 @@ export default function KymaModulesCreate({ resource, ...props }) {
   const [isManagedChanged, setIsManagedChanged] = useState(false);
   const [showMessageBox, setShowMessageBox] = useState({
     isOpen: false,
-    hide: false,
   });
   const [showManagedBox, setShowManagedBox] = useState({
     isOpen: false,
-    hide: false,
     onSave: false,
   });
 
@@ -121,7 +120,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
       },
     });
     setIsManagedChanged(true);
-    setShowManagedBox({ isOpen: true, hide: false, onSave: false });
+    setShowManagedBox({ isOpen: true, onSave: false });
   };
 
   const installedModules = modules?.items.filter(module => {
@@ -301,9 +300,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
       isEdited: false,
     });
 
-    setIsManagedChanged({
-      isEdited: false,
-    });
+    setIsManagedChanged(false);
 
     setIsFormOpen({
       formOpen: false,
@@ -362,6 +359,26 @@ export default function KymaModulesCreate({ resource, ...props }) {
     }
   };
 
+  const skipModuleFn = () => {
+    const shouldShowManagedWarning = isManagedChanged;
+    const shouldShowChannelWarning = isEdited;
+
+    if (shouldShowManagedWarning) {
+      setShowManagedBox({
+        ...showManagedBox,
+        isOpen: true,
+        onSave: true,
+      });
+    }
+    if (shouldShowChannelWarning) {
+      setShowMessageBox({
+        ...showMessageBox,
+        isOpen: true,
+      });
+    }
+    return shouldShowManagedWarning || shouldShowChannelWarning;
+  };
+
   return (
     <>
       {createPortal(
@@ -369,7 +386,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
           type="Warning"
           open={showMessageBox.isOpen}
           onClose={() => {
-            setShowMessageBox({ isOpen: false, hide: true });
+            setShowMessageBox({ isOpen: false });
           }}
           titleText={t('kyma-modules.change-release-channel')}
           actions={[
@@ -377,7 +394,9 @@ export default function KymaModulesCreate({ resource, ...props }) {
               accessibleName="change-kyma"
               design="Emphasized"
               key="change-kyma"
-              onClick={() => handleCreate()}
+              onClick={() => {
+                handleCreate();
+              }}
             >
               {t('kyma-modules.change')}
             </Button>,
@@ -397,56 +416,13 @@ export default function KymaModulesCreate({ resource, ...props }) {
         document.body,
       )}
       {createPortal(
-        <MessageBox
-          type="Warning"
-          open={showManagedBox.isOpen}
-          onClose={() => {
-            setShowManagedBox({ isOpen: false, hide: false, onSave: false });
-          }}
-          titleText={showManagedBox?.onSave ? 'SIRIUS WARNING' : 'WARNING'}
-          actions={[
-            <Button
-              accessibleName={
-                showManagedBox?.onSave ? 'change-managed' : 'ok-managed'
-              }
-              design="Emphasized"
-              key={showManagedBox?.onSave ? 'change-managed' : 'ok-managed'}
-              onClick={() =>
-                showManagedBox?.onSave
-                  ? isEdited
-                    ? 'OK'
-                    : handleCreate()
-                  : setShowManagedBox({
-                      isOpen: false,
-                      onSave: false,
-                    })
-              }
-            >
-              {showManagedBox?.onSave
-                ? isEdited
-                  ? 'OK'
-                  : t('kyma-modules.change')
-                : 'OK'}
-            </Button>,
-            showManagedBox?.onSave && (
-              <Button
-                accessibleName="cancel-managed"
-                design="Transparent"
-                key="cancel-managed"
-              >{`${t('common.buttons.cancel')}`}</Button>
-            ),
-          ]}
-        >
-          <Trans
-            i18nKey={
-              isManagedChanged?.onSave
-                ? 'kyma-modules.unmanaged-modules-save-warning'
-                : 'kyma-modules.unmanaged-modules-warning'
-            }
-          >
-            <span style={{ fontWeight: 'bold' }} />
-          </Trans>
-        </MessageBox>,
+        <ManagedWarnings
+          showManagedBox={showManagedBox}
+          setShowManagedBox={setShowManagedBox}
+          handleCreate={handleCreate}
+          isEdited={isEdited}
+          setShowMessageBox={setShowMessageBox}
+        />,
         document.body,
       )}
       <ResourceForm
@@ -460,30 +436,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
         setResource={setKymaResource}
         createUrl={props.resourceUrl}
         disableDefaultFields
-        skipCreateFn={() => {
-          if (
-            (isEdited && !showMessageBox.hide) ||
-            (isManagedChanged && !showManagedBox.hide)
-          ) {
-            if (isManagedChanged && !showManagedBox.hide) {
-              setShowManagedBox({
-                ...showManagedBox,
-                isOpen: true,
-                hide: true,
-                onSave: true,
-              });
-            }
-            if (isEdited && !showMessageBox.hide) {
-              setShowMessageBox({
-                ...showMessageBox,
-                isOpen: true,
-                hide: true,
-              });
-            }
-            return true;
-          }
-          return false;
-        }}
+        skipCreateFn={skipModuleFn}
       >
         <ResourceForm.CollapsibleSection
           defaultOpen

@@ -277,6 +277,7 @@ common:
     last-update: Last Update
     description: Description
     discard-changes: Discard Changes
+    warning: Warning
     items: Items
     key: Key
     labels: Labels
@@ -745,7 +746,7 @@ kubeconfig-id:
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 kyma-modules:
   unmanaged-modules-info: One of the modules is not managed and may not work properly. We cannot guarantee any service level agreement (SLA) or provide updates and maintenance for the module.
-  unmanaged-module-save-warning: Before proceeding, be aware that disabling module management may impact the stability and data integrity of your cluster. Once the management is disabled, reverting back may not be possible. Are you sure you want to continue?
+  unmanaged-modules-save-warning: Before proceeding, be aware that disabling module management may impact the stability and data integrity of your cluster. Once the management is disabled, reverting back may not be possible. Are you sure you want to continue?
   unmanaged-modules-warning: Disabling this option can lead to potential instability and loss of data within your cluster. Proceed with caution. Once disabled, it may not be possible to revert back.
   installed-modules: Installed Modules
   predefined-channel: Predefined
