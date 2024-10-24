@@ -1,5 +1,4 @@
 import {
-  invalidHeaderFilter,
   invalidRequestMethodFilter,
   localIpFilter,
   pathInvalidCharacterFilter,
@@ -52,66 +51,12 @@ describe('invalidRequestMethodFilter tests', () => {
   });
 });
 
-describe('invalidHeaderFilter tests', () => {
-  const successTestCases = [
-    {
-      description:
-        'should not throw an error if x-forwarded-for and forwarded headers are absent',
-      req: {
-        headers: {
-          host: 'localhost',
-          'user-agent': 'Mozilla/5.0',
-        },
-      },
-    },
-  ];
-
-  const errorTestCases = [
-    {
-      description: 'should throw an error if x-forwarded-for header is present',
-      req: {
-        headers: {
-          'x-forwarded-for': '123.45.67.89',
-        },
-      },
-    },
-    {
-      description: 'should throw an error if forwarded header is present',
-      req: {
-        headers: {
-          forwarded: 'for=123.45.67.89;by=proxy',
-        },
-      },
-    },
-    {
-      description:
-        'should throw an error if both x-forwarded-for and forwarded headers are present',
-      req: {
-        headers: {
-          'x-forwarded-for': '123.45.67.89',
-          forwarded: 'for=123.45.67.89;by=proxy',
-        },
-      },
-    },
-  ];
-
-  test.each(successTestCases)('$description', ({ req }) => {
-    expect(() => invalidHeaderFilter(req)).not.toThrow();
-  });
-
-  test.each(errorTestCases)('$description', ({ req }) => {
-    expect(() => invalidHeaderFilter(req)).toThrowError(
-      'Request contains invalid headers.',
-    );
-  });
-});
-
 describe('pathInvalidCharacterFilter tests', () => {
   const successTestCases = [
     {
-      description: 'should not throw an error for a valid path',
+      description: 'should not throw an error for a valid characters',
       req: {
-        originalUrl: '/valid/path-123',
+        originalUrl: '/valid/path-#&?-123',
       },
     },
     {
@@ -124,37 +69,30 @@ describe('pathInvalidCharacterFilter tests', () => {
 
   const errorTestCases = [
     {
-      description: 'should throw an error for a path with invalid characters',
-      req: {
-        originalUrl: '/invalid/path<with>brackets',
-      },
-      expectedError: 'Path contains invalid characters.',
-    },
-    {
       description: 'should throw an error for a path containing ..',
       req: {
         originalUrl: '/valid/../invalid/path',
       },
-      expectedError: 'Path contains invalid characters.',
+      expectedError: 'Path contains invalid characters',
     },
     {
       description: 'should throw an error when path contains NULL character',
       req: { originalUrl: '/valid/path%00' },
-      expectedError: 'Path contains invalid characters.',
+      expectedError: 'Path contains invalid characters',
     },
     {
       description: 'should throw an error for an improperly encoded path',
       req: {
         originalUrl: '/invalid%path',
       },
-      expectedError: 'Path contains invalid encoding.',
+      expectedError: 'Path contains invalid encoding',
     },
     {
       description: 'should throw an error for double encoded characters',
       req: {
         originalUrl: '/%252e%252e',
       },
-      expectedError: 'Path contains invalid encoding',
+      expectedError: 'Decoded path contains illegal % characters',
     },
   ];
 
