@@ -68,6 +68,7 @@ export const UI5Panel = ({
       stickyHeader={stickyHeader}
       header={
         <Toolbar
+          className="toolbar"
           style={{
             height: '100%',
             paddingTop: '0.5rem',

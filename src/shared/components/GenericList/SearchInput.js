@@ -1,6 +1,6 @@
 import { useContext, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Input, SuggestionItem } from '@ui5/webcomponents-react';
+import { Icon, Input, Label, SuggestionItem } from '@ui5/webcomponents-react';
 import '@ui5/webcomponents/dist/features/InputSuggestions.js';
 import { useTranslation } from 'react-i18next';
 import { useEventListener } from 'hooks/useEventListener';
@@ -10,6 +10,7 @@ import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorConte
 import { ResourceDetailContext } from '../ResourceDetails/ResourceDetails';
 import { useRecoilValue } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
+import './SearchInput.scss';
 
 SearchInput.propTypes = {
   searchQuery: PropTypes.string,
@@ -103,19 +104,23 @@ export function SearchInput({
   };
 
   return (
-    <Input
-      id="search-input"
-      accessibleName={`search-${entriesKind}`}
-      role="search"
-      type="Text"
-      ref={searchInputRef}
-      placeholder={t('common.tooltips.search')}
-      className="search-with-magnifying-glass"
-      value={searchQuery}
-      onInput={e => handleQueryChange(e.target.value)}
-      showSuggestions={showSuggestion}
-    >
-      {showSuggestion && renderSearchList(filteredEntries)}
-    </Input>
+    <div className="search-input-container">
+      <Label for="search-input" showColon>
+        {t('common.tooltips.search')}
+      </Label>
+      <Input
+        id="search-input"
+        accessibleName={`search-${entriesKind}`}
+        role="search"
+        type="Text"
+        icon={<Icon className="bsl-has-color-status-4" name="search" />}
+        ref={searchInputRef}
+        value={searchQuery}
+        onInput={e => handleQueryChange(e.target.value)}
+        showSuggestions={showSuggestion}
+      >
+        {showSuggestion && renderSearchList(filteredEntries)}
+      </Input>
+    </div>
   );
 }

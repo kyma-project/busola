@@ -138,7 +138,7 @@ context('Test OAuth2 Clients', () => {
     cy.contains('Ory Hydra Deprecation').should('be.visible');
 
     cy.contains('ui5-panel', 'OAuth2Clients').within(_$genericList => {
-      cy.get('ui5-input[placeholder="Search"]:visible')
+      cy.get('ui5-input[id="search-input"]:visible')
         .find('input')
         .wait(1000)
         .type(AUTH2_NAME);

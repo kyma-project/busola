@@ -9,6 +9,11 @@
   }
 }
 
+.toolbar > :first-child {
+  display: flex;
+  align-items: end;
+}
+
 .header-actions {
   display: flex;
   align-items: center;

@@ -90,7 +90,7 @@ context('Test Extensibility Create/Update', () => {
   });
 
   it('Check if Extensions is created', () => {
-    cy.get('ui5-input[placeholder="Search"]:visible')
+    cy.get('ui5-input[id="search-input"]:visible')
       .find('input')
       .wait(1000)
       .clear()
@@ -118,7 +118,7 @@ context('Test Extensibility Create/Update', () => {
   it('Edit extension', () => {
     cy.navigateTo('Configuration', 'Extensions');
 
-    cy.get('ui5-input[placeholder="Search"]:visible')
+    cy.get('ui5-input[id="search-input"]:visible')
       .find('input')
       .wait(1000)
       .clear()
