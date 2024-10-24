@@ -50,7 +50,7 @@ export const ExpandableListItem = ({
           {header}
           {status && (
             <StatusBadge
-              type={status === 'True' ? 'Success' : 'Error'}
+              type={status === 'True' ? 'Positive' : 'Negative'}
               className={'header__status-badge'}
             >
               {status}

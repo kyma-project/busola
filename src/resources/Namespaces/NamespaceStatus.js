@@ -1,15 +1,14 @@
-import React from 'react';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 
 export function NamespaceStatus({ namespaceStatus }) {
   const badgeType = status => {
     switch (status) {
       case 'Active':
-        return 'Success';
+        return 'Positive';
       case 'Terminating':
         return 'Information';
       default:
-        return 'Error';
+        return 'Negative';
     }
   };
 

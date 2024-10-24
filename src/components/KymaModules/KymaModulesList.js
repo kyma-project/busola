@@ -225,7 +225,7 @@ export default function KymaModulesList({
           resourceKind="kymas"
           type={
             moduleStatus?.state === 'Ready'
-              ? 'Success'
+              ? 'Positive'
               : moduleStatus?.state === 'Processing' ||
                 moduleStatus?.state === 'Deleting' ||
                 moduleStatus?.state === 'Unmanaged' ||
