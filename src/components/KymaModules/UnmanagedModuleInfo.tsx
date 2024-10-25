@@ -7,9 +7,11 @@ export const UnmanagedModuleInfo = ({ kymaResource }: any) => {
   const { t } = useTranslation();
 
   const isSomeModuleUnmanaged = useMemo(() => {
-    return kymaResource?.spec.modules.some((module: { managed: boolean }) => {
-      return module?.managed === false;
-    });
+    return (kymaResource?.spec?.modules || []).some(
+      (module: { managed: boolean }) => {
+        return module?.managed === false;
+      },
+    );
   }, [kymaResource]);
 
   return (
