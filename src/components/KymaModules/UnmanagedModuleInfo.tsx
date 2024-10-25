@@ -12,13 +12,15 @@ export const UnmanagedModuleInfo = ({ kymaResource }: any) => {
     });
   }, [kymaResource]);
 
-  return isSomeModuleUnmanaged ? (
-    <MessageStrip
-      design="Information"
-      hideCloseButton
-      style={spacing.sapUiTinyMarginBottom}
-    >
-      {t('kyma-modules.unmanaged-modules-info')}
-    </MessageStrip>
-  ) : null;
+  return (
+    isSomeModuleUnmanaged && (
+      <MessageStrip
+        design="Information"
+        hideCloseButton
+        style={spacing.sapUiTinyMarginBottom}
+      >
+        {t('kyma-modules.unmanaged-modules-info')}
+      </MessageStrip>
+    )
+  );
 };

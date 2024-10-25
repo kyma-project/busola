@@ -22,7 +22,7 @@ export const ManagedWarnings = ({
 }: ManagedWarningsTypes) => {
   const { t } = useTranslation();
 
-  if (showManagedBox?.onSave)
+  if (showManagedBox?.onSave) {
     return (
       <MessageBox
         type="Warning"
@@ -72,7 +72,7 @@ export const ManagedWarnings = ({
         {t('kyma-modules.unmanaged-modules-save-warning')}
       </MessageBox>
     );
-  else
+  } else {
     return (
       <MessageBox
         type="Warning"
@@ -97,4 +97,5 @@ export const ManagedWarnings = ({
         {t('kyma-modules.unmanaged-modules-warning')}
       </MessageBox>
     );
+  }
 };

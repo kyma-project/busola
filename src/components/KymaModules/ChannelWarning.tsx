@@ -1,13 +1,10 @@
 import { Button, MessageBox } from '@ui5/webcomponents-react';
 import { Trans, useTranslation } from 'react-i18next';
 
-type ShowMessegeBox = {
-  isOpen: boolean;
-};
 type ManagedWarningsTypes = {
-  showMessageBox: ShowMessegeBox;
+  showMessageBox: { isOpen: boolean };
   handleCreate(): void;
-  setShowMessageBox(value: ShowMessegeBox): void;
+  setShowMessageBox(value: { isOpen: boolean }): void;
 };
 
 export const ChannelWarning = ({

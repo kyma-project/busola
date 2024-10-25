@@ -1,6 +1,6 @@
 import { createPortal } from 'react-dom';
 import { cloneDeep } from 'lodash';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { createPatch } from 'rfc6902';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useTranslation } from 'react-i18next';
