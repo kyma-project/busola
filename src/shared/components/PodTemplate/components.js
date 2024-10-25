@@ -1,16 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { getPorts } from '../GetContainersPorts';
 import { useUrl } from 'hooks/useUrl';
+import { List, Label, Text, Title } from '@ui5/webcomponents-react';
 import {
-  List,
-  Label,
-  GroupHeaderListItem,
   Table as UI5Table,
-  TableColumn,
+  TableHeaderCell,
   TableRow,
   TableCell,
-  Text,
-  Title,
+  ListItemGroup,
 } from '@ui5/webcomponents-react';
 import { Labels } from '../Labels/Labels';
 import { PodTemplateRow } from './PodTemplateRow';
@@ -24,9 +21,9 @@ function Table({ items, columns, rowRenderer }) {
   return (
     <UI5Table
       columns={columns.map(column => (
-        <TableColumn style={{ width: '50%' }}>
+        <TableHeaderCell style={{ width: '50%' }}>
           <Title level="H5">{column}</Title>
-        </TableColumn>
+        </TableHeaderCell>
       ))}
     >
       {items.map((item, index) => (

@@ -7,6 +7,7 @@ import {
   TableCell,
   TableColumn,
   TableRow,
+  TableHeaderRow,
 } from '@ui5/webcomponents-react';
 import ListActions from 'shared/components/ListActions/ListActions';
 
@@ -14,69 +15,60 @@ import { spacing } from '@ui5/webcomponents-react-base';
 
 export const BodyFallback = ({ children }) => (
   // TODO replace once new Table component is available in ui5-webcomponents-react
-  <tr>
-    <td colSpan="100%">
+  <TableRow>
+    <TableCell colSpan="100%">
       <div className="body-fallback">{children}</div>
-    </td>
-  </tr>
+    </TableCell>
+  </TableRow>
 );
 
 export const HeaderRenderer = ({
-  slot,
   actions,
   headerRenderer,
   disableHiding = true,
   displayArrow = false,
   noHideFields,
+  slot = null,
 }) => {
   let emptyColumn = null;
-  if (actions.length) {
+  if (actions?.length) {
     emptyColumn = (
-      <TableColumn
-        slot={slot}
+      <TableHeaderCell
+        //slot={slot}
         key="actions-column"
         aria-label="actions-column"
-        minWidth={850}
+        //minWidth={850}
       >
         <Text />
-      </TableColumn>
+      </TableHeaderCell>
     );
   }
+
   const Header = (
-    <>
+    <TableHeaderRow slot="headerRow">
       {headerRenderer().map((h, index) => {
         return (
-          <TableColumn
-            slot={`${slot}-${index}`}
+          <TableHeaderCell
+            //slot={`${slot}-${index}`}
             key={typeof h === 'object' ? index : h}
-            popinDisplay="Block"
-            demandPopin={h === 'Popin' ? true : false}
-            minWidth={
-              Array.isArray(noHideFields) && noHideFields.length !== 0
-                ? noHideFields.find(field => field === h)
-                  ? ''
-                  : 850
-                : h === 'Popin'
-                ? 15000
-                : disableHiding
-                ? ''
-                : h !== 'Name' && h !== ''
-                ? 850
-                : ''
-            }
             aria-label={`${typeof h === 'object' ? index : h}-column`}
           >
             <Text>{h}</Text>
-          </TableColumn>
+          </TableHeaderCell>
         );
       })}
       {emptyColumn}
       {displayArrow && (
-        <TableColumn slot={slot} key="arrow-column" aria-label="arrow-column">
+        <TableHeaderCell
+          //slot={slot}
+          key="arrow-column"
+          aria-label="arrow-column"
+          horizontalAlign="End"
+        >
           <Text />
-        </TableColumn>
+        </TableHeaderCell>
       )}
-    </>
+    </TableHeaderRow>
   );
 
   return Header;
@@ -141,11 +133,7 @@ const DefaultRowRenderer = ({
   );
 
   return (
-    <TableRow
-      type={hasDetailsView ? 'Active' : 'Inactive'}
-      navigated={isSelected}
-      selected={isSelected}
-    >
+    <TableRow interactive={hasDetailsView}>
       {cells}
       {!!actions.length && actionsCell}
       {displayArrow && (
