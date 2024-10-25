@@ -7,6 +7,7 @@ import {
   TableCell,
   TableHeaderCell,
   TableRow,
+  TableHeaderRow,
 } from '@ui5/webcomponents-react';
 import ListActions from 'shared/components/ListActions/ListActions';
 
@@ -14,54 +15,42 @@ import { spacing } from 'shared/helpers/spacing';
 
 export const BodyFallback = ({ children }) => (
   // TODO replace once new Table component is available in ui5-webcomponents-react
-  <tr>
-    <td colSpan="100%">
+  <TableRow>
+    <TableCell colSpan="100%">
       <div className="body-fallback">{children}</div>
-    </td>
-  </tr>
+    </TableCell>
+  </TableRow>
 );
 
 export const HeaderRenderer = ({
-  slot,
   actions,
   headerRenderer,
   disableHiding = true,
   displayArrow = false,
   noHideFields,
+  slot = null,
 }) => {
   let emptyColumn = null;
-  if (actions.length) {
+  if (actions?.length) {
     emptyColumn = (
       <TableHeaderCell
-        slot={slot}
+        //slot={slot}
         key="actions-column"
         aria-label="actions-column"
-        minWidth={850}
+        //minWidth={850}
       >
         <Text />
       </TableHeaderCell>
     );
   }
+
   const Header = (
-    <>
+    <TableHeaderRow slot="headerRow">
       {headerRenderer().map((h, index) => {
         return (
           <TableHeaderCell
-            slot={`${slot}-${index}`}
+            //slot={`${slot}-${index}`}
             key={typeof h === 'object' ? index : h}
-            minWidth={
-              Array.isArray(noHideFields) && noHideFields.length !== 0
-                ? noHideFields.find(field => field === h)
-                  ? ''
-                  : 850
-                : h === 'Popin'
-                ? 15000
-                : disableHiding
-                ? ''
-                : h !== 'Name' && h !== ''
-                ? 850
-                : ''
-            }
             aria-label={`${typeof h === 'object' ? index : h}-column`}
           >
             <Text>{h}</Text>
@@ -71,14 +60,15 @@ export const HeaderRenderer = ({
       {emptyColumn}
       {displayArrow && (
         <TableHeaderCell
-          slot={slot}
+          //slot={slot}
           key="arrow-column"
           aria-label="arrow-column"
+          horizontalAlign="End"
         >
           <Text />
         </TableHeaderCell>
       )}
-    </>
+    </TableHeaderRow>
   );
 
   return Header;
@@ -143,7 +133,7 @@ const DefaultRowRenderer = ({
   );
 
   return (
-    <TableRow>
+    <TableRow interactive={hasDetailsView}>
       {cells}
       {!!actions.length && actionsCell}
       {displayArrow && (

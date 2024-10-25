@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { Table } from '@ui5/webcomponents-react';
+import { Table, TableCell, TableRow } from '@ui5/webcomponents-react';
 import { useNavigate } from 'react-router-dom';
 import {
   BodyFallback,
@@ -309,14 +309,15 @@ export const GenericList = ({
 
   const handleRowClick = e => {
     const item = (
-      e.target.children[nameColIndex].children[0].innerText ??
-      e.target.children[nameColIndex].innerText
+      e.detail.row.children[nameColIndex].children[0].innerText ??
+      e.detail.row.children[nameColIndex].innerText
     )?.trimEnd();
-
+    console.log(item);
+    console.log(e.detail.row);
     const hasNamepace = namespaceColIndex !== -1;
     const itemNamespace = hasNamepace
-      ? e?.target?.children[namespaceColIndex]?.children[0]?.innerText ??
-        e?.target?.children[namespaceColIndex]?.innerText
+      ? e?.detail?.row.children[namespaceColIndex]?.children[0]?.innerText ??
+        e?.detail?.row.children[namespaceColIndex]?.innerText
       : '';
 
     const selectedEntry = entries.find(entry => {
@@ -348,7 +349,7 @@ export const GenericList = ({
         }
       }
       setEntrySelected(
-        selectedEntry?.metadata?.name ?? e.target.children[0].innerText,
+        selectedEntry?.metadata?.name ?? e.detail.row.children[0].innerText,
       );
       setEntrySelectedNamespace(selectedEntry?.metadata?.namespace ?? '');
       if (!enableColumnLayout) {
@@ -371,7 +372,7 @@ export const GenericList = ({
                 midColumn: {
                   resourceName:
                     selectedEntry?.metadata?.name ??
-                    e.target.children[0].innerText,
+                    e.detail.row.children[0].innerText,
                   resourceType: resourceType,
                   namespaceId: selectedEntry?.metadata?.namespace,
                 },
@@ -402,9 +403,6 @@ export const GenericList = ({
         className={`ui5-generic-list ${
           hasDetailsView && filteredEntries.length ? 'cursor-pointer' : ''
         }`}
-        onMouseDown={() => {
-          window.getSelection().removeAllRanges();
-        }}
         onRowClick={e => {
           const selection = window.getSelection().toString();
           if (!hasDetailsView || selection.length > 0) return;
@@ -418,7 +416,6 @@ export const GenericList = ({
         }}
         headerRow={
           <HeaderRenderer
-            entries={entries}
             actions={actions}
             headerRenderer={headerRenderer}
             disableHiding={disableHiding}
