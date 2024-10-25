@@ -130,7 +130,7 @@ export const StatusBadge = ({
       content = `${content}: ${additionalContent}`;
     }
   }
-  console.log(type);
+
   // tooltipContent is DEPRECATED. Use the TooltipBadge component if a Badge with a simple Tooltip is needed.
   if (tooltipContent) {
     return (
