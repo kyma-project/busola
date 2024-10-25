@@ -90,6 +90,7 @@ export function ClusterOverview() {
             />
             <Title
               level="H3"
+              size="H3"
               style={{
                 ...spacing.sapUiMediumMarginBegin,
                 ...spacing.sapUiMediumMarginTopBottom,
