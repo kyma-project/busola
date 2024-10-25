@@ -36,6 +36,7 @@ export default function NodeDetails({ nodeName }) {
               <>
                 <Title
                   level="H3"
+                  size="H3"
                   style={{
                     ...spacing.sapUiMediumMarginBegin,
                     ...spacing.sapUiMediumMarginTopBottom,
@@ -57,6 +58,7 @@ export default function NodeDetails({ nodeName }) {
                 </div>
                 <Title
                   level="H3"
+                  size="H3"
                   style={{
                     ...spacing.sapUiMediumMarginBegin,
                     ...spacing.sapUiMediumMarginTop,

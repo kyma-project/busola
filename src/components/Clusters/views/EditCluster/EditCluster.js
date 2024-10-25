@@ -273,7 +273,7 @@ function EditClusterComponent({
           ...spacing.sapUiSmallMarginTopBottom,
         }}
       >
-        <Title level="H3" style={spacing.sapUiSmallMarginBottom}>
+        <Title level="H3" size="H3" style={spacing.sapUiSmallMarginBottom}>
           {t('clusters.storage.choose-storage.label')}
         </Title>
         <ChooseStorage

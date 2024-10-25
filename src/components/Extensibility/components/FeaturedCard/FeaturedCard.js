@@ -95,7 +95,7 @@ export function FeaturedCard({ value, structure, schema, ...props }) {
           />
           <div className="outer-container" style={{ margin: '2rem 2.5rem' }}>
             <div className="inner-container">
-              <Title level="H1" wrappingType="Normal">
+              <Title level="H1" size="H1" wrappingType="Normal">
                 {structure?.title}
               </Title>
               <Text>{structure?.description}</Text>

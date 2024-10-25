@@ -53,7 +53,7 @@ export const CurrentCRDVersion = resource => {
       key="crd-version"
       title={
         <>
-          <Title level="H4">{`${t(
+          <Title level="H4" size="H4">{`${t(
             'custom-resource-definitions.subtitle.version',
           )} ${storageVersion.name}`}</Title>
           <StatusBadge
