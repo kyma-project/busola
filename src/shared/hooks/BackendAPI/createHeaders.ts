@@ -1,5 +1,6 @@
 import { AuthDataState } from 'state/authDataAtom';
 import { ActiveClusterState } from 'state/clusterAtom';
+import Cookies from 'js-cookie';
 
 export function createAuthHeaders(auth: AuthDataState) {
   if (!auth) {
@@ -7,8 +8,16 @@ export function createAuthHeaders(auth: AuthDataState) {
   }
 
   if ('token' in auth) {
+    Cookies.set('X-K8s-Authorization', `Bearer ${auth.token}`, {
+      secure: true,
+    });
     return { 'X-K8s-Authorization': `Bearer ${auth.token}` };
   } else if (auth['client-certificate-data'] && auth['client-key-data']) {
+    Cookies.set('X-Client-Certificate-Data', auth['client-certificate-data'], {
+      secure: true,
+    });
+    Cookies.set('X-Client-Key-Data', auth['client-key-data'], { secure: true });
+
     return {
       'X-Client-Certificate-Data': auth['client-certificate-data'],
       'X-Client-Key-Data': auth['client-key-data'],
