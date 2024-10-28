@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { Button, IllustratedMessage } from '@ui5/webcomponents-react';
+import { Button, IllustratedMessage, Title } from '@ui5/webcomponents-react';
 import '@ui5/webcomponents-fiori/dist/illustrations/AllIllustrations';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import './EmptyListComponent.scss';
@@ -41,8 +41,12 @@ export const EmptyListComponent = ({
   return (
     <IllustratedMessage
       name={image}
-      design="Auto"
-      titleText={titleText}
+      design="Scene"
+      title={
+        <Title level="H2" size="H2">
+          {titleText}
+        </Title>
+      }
       subtitle={
         <p
           className="emptyListComponent__subtitle"
