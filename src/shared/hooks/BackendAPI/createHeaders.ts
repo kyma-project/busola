@@ -29,6 +29,22 @@ export function createHeaders(
   authData: AuthDataState,
   cluster: ActiveClusterState,
 ): HeadersInit {
+  if (cluster?.currentContext.cluster.cluster.server != null) {
+    Cookies.set(
+      'X-Cluster-Url',
+      cluster?.currentContext.cluster.cluster.server,
+      { secure: true },
+    );
+  }
+
+  Cookies.set(
+    'X-Cluster-Certificate-Authority-Data',
+    <string>(
+      cluster?.currentContext.cluster.cluster['certificate-authority-data']
+    ),
+    { secure: true },
+  );
+
   return {
     ...createAuthHeaders(authData),
     'X-Cluster-Url': cluster?.currentContext.cluster.cluster.server,
