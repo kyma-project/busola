@@ -1,8 +1,7 @@
 import { makeHandleRequest, serveStaticApp, serveMonaco } from './common';
 import { handleTracking } from './tracking.js';
 import jsyaml from 'js-yaml';
-const { createProxyMiddleware } = require('http-proxy-middleware');
-
+import cookieParser from 'cookie-parser';
 //import { requestLogger } from './utils/other'; //uncomment this to log the outgoing traffic
 
 const express = require('express');
@@ -35,6 +34,8 @@ try {
 const app = express();
 app.disable('x-powered-by');
 app.use(express.raw({ type: '*/*', limit: '100mb' }));
+
+app.use(cookieParser());
 
 const gzipEnabled = global.config.features?.GZIP?.isEnabled;
 if (gzipEnabled)
@@ -89,21 +90,6 @@ if (isDocker) {
   serveStaticApp(app, '/', '/core-ui');
 } else {
   handleTracking(app);
-  const customRouter = function(req) {
-    const { query } = req;
-    return query.customUIUrl; // protocol + host
-  };
-
-  app.use(
-    '/maytheforce',
-    createProxyMiddleware({
-      router: customRouter,
-      changeOrigin: true,
-      pathRewrite: {
-        [`^/maytheforce`]: '',
-      },
-    }),
-  );
   app.use(handleRequest);
 }
 

@@ -1,12 +1,22 @@
 import PinoHttp from 'pino-http';
-import { handleDockerDesktopSubsitution } from './docker-desktop-substitution';
 import { filters } from './request-filters';
+import { handleDockerDesktopSubsitution } from './docker-desktop-substitution';
+import { string } from 'prop-types';
+import { lowerCase } from 'lodash';
 
 const https = require('https');
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const uuid = require('uuid').v4;
+
+const K8S_Keys = {
+  URL: 'x-cluster-url',
+  CA: 'x-cluster-certificate-authority-data',
+  CLIENT_CA: 'x-client-certificate-data',
+  CLIENT_KEY_DATA: 'x-client-key-data',
+  AUTH: 'x-k8s-authorization',
+};
 
 // https://github.tools.sap/sgs/SAP-Global-Trust-List/blob/master/approved.pem
 const certs = fs.readFileSync('certs.pem', 'utf8');
@@ -58,9 +68,9 @@ export const makeHandleRequest = () => {
 
   return async (req, res) => {
     logger(req, res);
-    let headersData;
+    let k8sData;
     try {
-      headersData = extractHeadersData(req);
+      k8sData = extractK8sData(req);
     } catch (e) {
       req.log.error('Headers error:' + e.message);
       res.status(400).send('Headers are missing or in a wrong format.');
@@ -68,14 +78,14 @@ export const makeHandleRequest = () => {
     }
 
     try {
-      filters.forEach(filter => filter(req, headersData));
+      filters.forEach(filter => filter(req, k8sData));
     } catch (e) {
       req.log.error('Filters rejected the request: ' + e.message);
       res.status(400).send('Request ID: ' + req.id);
       return;
     }
 
-    const { targetApiServer, ca, cert, key, authorization } = headersData;
+    const { targetApiServer, ca, cert, key, authorization } = k8sData;
 
     const headers = authorization
       ? { ...req.headers, authorization }
@@ -137,28 +147,44 @@ export const serveMonaco = app => {
   app.use('/vs', express.static(path.join(__dirname, '/core-ui/vs')));
 };
 
-function extractHeadersData(req) {
+function extractK8sData(req) {
   const urlHeader = 'x-cluster-url';
-  const caHeader = 'x-cluster-certificate-authority-data';
-  const clientCAHeader = 'x-client-certificate-data';
-  const clientKeyDataHeader = 'x-client-key-data';
-  const authorizationHeader = 'x-k8s-authorization';
 
-  const targetApiServer = handleDockerDesktopSubsitution(
-    new URL(req.headers[urlHeader]),
-  );
-  const ca = decodeHeaderToBuffer(req.headers[caHeader]) || certs;
-  const cert = decodeHeaderToBuffer(req.headers[clientCAHeader]);
-  const key = decodeHeaderToBuffer(req.headers[clientKeyDataHeader]);
-  const authorization = req.headers[authorizationHeader];
+  let k8sData = null;
+  let k8sUrl = req.headers[K8S_Keys.URL];
+  // If url is not in headers we will try to extract it from cookies
+  if (k8sUrl) {
+    k8sData = req.headers;
+  } else {
+    let cookies = {};
+    Object.keys(req.cookies).forEach(key => {
+      cookies[key.toLowerCase()] = req.cookies[key];
+    });
+    k8sUrl = cookies[K8S_Keys.URL];
+    k8sData = cookies;
+  }
 
-  delete req.headers[urlHeader];
-  delete req.headers[caHeader];
-  delete req.headers[clientCAHeader];
-  delete req.headers[clientKeyDataHeader];
-  delete req.headers[authorizationHeader];
+  const targetApiServer = handleDockerDesktopSubsitution(new URL(k8sUrl));
+  const { ca, cert, key, authorization } = getK8SData(k8sData);
 
   delete req.headers.host; // remove host in order not to confuse APIServer
+  deleteK8sHeaders(req.headers);
 
   return { targetApiServer, ca, cert, key, authorization };
+}
+
+function getK8SData(data) {
+  const ca = decodeHeaderToBuffer(data[K8S_Keys.CA]) || certs;
+  const cert = decodeHeaderToBuffer(data[K8S_Keys.CLIENT_CA]);
+  const key = decodeHeaderToBuffer(data[K8S_Keys.CLIENT_KEY_DATA]);
+  const authorization = data[K8S_Keys.AUTH];
+  return { ca, cert, key, authorization };
+}
+
+function deleteK8sHeaders(headers) {
+  delete headers[K8S_Keys.URL];
+  delete headers[K8S_Keys.CA];
+  delete headers[K8S_Keys.CLIENT_CA];
+  delete headers[K8S_Keys.CLIENT_KEY_DATA];
+  delete headers[K8S_Keys.AUTH];
 }
