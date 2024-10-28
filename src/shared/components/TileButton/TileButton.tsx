@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 import classNames from 'classnames';
 
 import './TileButton.scss';
+import { Text } from '@ui5/webcomponents-react';
 
 type TileButtonProps = {
   title: string;
@@ -24,8 +25,8 @@ export function TileButton({
       <button onClick={handleClick}>
         {icon}
         <div className="tile-button__text">
-          <p>{title}</p>
-          <p className="bsl-has-color-status-4">{description}</p>
+          <Text>{title}</Text>
+          <Text className="bsl-has-color-status-4">{description}</Text>
         </div>
       </button>
     </li>
