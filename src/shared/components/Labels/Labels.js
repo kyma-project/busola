@@ -55,6 +55,8 @@ export const Labels = ({
             aria-label={label}
             key={id}
             colorScheme="10"
+            design="Set2"
+            hideStateIcon
             style={{
               ...spacing.sapUiTinyMarginEnd,
               ...bottomMargin,

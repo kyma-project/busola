@@ -176,7 +176,7 @@ export function Header() {
       <Menu
         open={isMenuOpen}
         opener="openShellbarMenu"
-        onAfterClose={() => {
+        onClose={() => {
           setIsMenuOpen(false);
         }}
         onItemClick={handleMenuItemClick}
