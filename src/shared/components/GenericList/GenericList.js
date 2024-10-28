@@ -312,8 +312,7 @@ export const GenericList = ({
       e.detail.row.children[nameColIndex].children[0].innerText ??
       e.detail.row.children[nameColIndex].innerText
     )?.trimEnd();
-    console.log(item);
-    console.log(e.detail.row);
+
     const hasNamepace = namespaceColIndex !== -1;
     const itemNamespace = hasNamepace
       ? e?.detail?.row.children[namespaceColIndex]?.children[0]?.innerText ??

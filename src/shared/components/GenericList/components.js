@@ -14,9 +14,8 @@ import ListActions from 'shared/components/ListActions/ListActions';
 import { spacing } from '@ui5/webcomponents-react-base';
 
 export const BodyFallback = ({ children }) => (
-  // TODO replace once new Table component is available in ui5-webcomponents-react
   <TableRow>
-    <TableCell colSpan="100%">
+    <TableCell style={{ gridColumn: '1 / -1' }}>
       <div className="body-fallback">{children}</div>
     </TableCell>
   </TableRow>

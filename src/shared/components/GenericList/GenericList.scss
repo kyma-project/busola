@@ -1,5 +1,6 @@
 .ui5-generic-list {
-  display: block;
+  display: initial;
+  padding-bottom: 0;
 
   .body-fallback {
     font-size: 18px;
@@ -7,6 +8,10 @@
     margin: 0 auto;
     text-align: center;
     color: var(--sapList_TextColor);
+  }
+
+  ui5-table-row:last-of-type {
+    border-bottom: none;
   }
 }
 
