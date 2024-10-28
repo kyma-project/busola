@@ -1,8 +1,6 @@
 import PinoHttp from 'pino-http';
 import { filters } from './request-filters';
 import { handleDockerDesktopSubsitution } from './docker-desktop-substitution';
-import { string } from 'prop-types';
-import { lowerCase } from 'lodash';
 
 const https = require('https');
 const express = require('express');
@@ -118,9 +116,11 @@ export const makeHandleRequest = () => {
       // change all 503 into 502
       const statusCode =
         k8sResponse.statusCode === 503 ? 502 : k8sResponse.statusCode;
-
+      const contentType = req.originalUrl.includes('proxy')
+        ? 'text/html; charset=utf-8'
+        : 'text/json';
       res.writeHead(statusCode, {
-        'Content-Type': k8sResponse.headers['Content-Type'] || 'text/json',
+        'Content-Type': k8sResponse.headers['Content-Type'] || contentType,
         'Content-Encoding': k8sResponse.headers['content-encoding'] || '',
       });
       k8sResponse.pipe(res);
