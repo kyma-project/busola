@@ -423,7 +423,6 @@ export const DynamicPageComponent = ({
         mode="IconTabBar"
         className={`page-header ${className}`}
         headerPinned
-        alwaysShowContentHeader
         hidePinButton={true}
         titleArea={headerTitle}
         headerArea={customHeaderContent ?? headerContent}

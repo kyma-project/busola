@@ -9,6 +9,7 @@ import {
   ShellBar,
   ShellBarItem,
   ListItemStandard,
+  MenuSeparator,
 } from '@ui5/webcomponents-react';
 import { MenuItemClickEventDetail } from '@ui5/webcomponents/dist/Menu.js';
 
@@ -210,11 +211,11 @@ export function Header() {
               icon="inspect"
             />
           ))}
+          <MenuSeparator />
           <MenuItem
             text={t('common.labels.version')}
             additionalText={busolaVersion}
             icon="inspect"
-            startsSection
           />
         </MenuItem>
       </Menu>
