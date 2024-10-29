@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   Avatar,
@@ -8,7 +8,6 @@ import {
   MenuDomRef,
   ShellBar,
   ShellBarItem,
-  ShellBarDomRef,
   ListItemStandard,
 } from '@ui5/webcomponents-react';
 import { MenuItemClickEventDetail } from '@ui5/webcomponents/dist/Menu.js';
@@ -54,16 +53,6 @@ export function Header() {
     isResourceEditedState,
   );
   const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
-
-  const shellbarRef = useRef<ShellBarDomRef>(null);
-  useEffect(() => {
-    if (shellbarRef?.current) {
-      shellbarRef.current.accessibilityTexts = {
-        ...shellbarRef.current.accessibilityTexts,
-        logoTitle: 'SAP Kyma logo',
-      };
-    }
-  }, [shellbarRef]);
 
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
     name => name !== cluster?.name,
@@ -120,10 +109,14 @@ export function Header() {
     <>
       <ShellBar
         className="header"
+        accessibilityAttributes={{
+          logo: {
+            name: 'SAP Kyma logo',
+          },
+        }}
         startButton={
           window.location.pathname !== '/clusters' && <SidebarSwitcher />
         }
-        ref={shellbarRef}
         onLogoClick={() => {
           handleActionIfFormOpen(
             isResourceEdited,
