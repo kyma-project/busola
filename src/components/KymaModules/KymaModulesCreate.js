@@ -2,8 +2,8 @@ import { createPortal } from 'react-dom';
 import { cloneDeep } from 'lodash';
 import { useState } from 'react';
 import { createPatch } from 'rfc6902';
-import { useRecoilState } from 'recoil';
-import { useTranslation, Trans } from 'react-i18next';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useTranslation } from 'react-i18next';
 import { useUrl } from 'hooks/useUrl';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -16,9 +16,9 @@ import { ForceUpdateModalContent } from 'shared/ResourceForm/ForceUpdateModalCon
 
 import {
   Button,
+  CheckBox,
   FlexBox,
   Label,
-  MessageBox,
   MessageStrip,
   Option,
   Select,
@@ -30,14 +30,17 @@ import './KymaModulesCreate.scss';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { ManagedWarnings } from './ManagedWarnings';
+import { ChannelWarning } from './ChannelWarning';
+import { UnmanagedModuleInfo } from './UnmanagedModuleInfo';
 
 export default function KymaModulesCreate({ resource, ...props }) {
   const { t } = useTranslation();
   const [kymaResource, setKymaResource] = useState(cloneDeep(resource));
   const [initialResource] = useState(resource);
   const [initialUnchangedResource] = useState(cloneDeep(resource));
-  const [, setIsResourceEdited] = useRecoilState(isResourceEditedState);
-  const [, setIsFormOpen] = useRecoilState(isFormOpenState);
+  const setIsResourceEdited = useSetRecoilState(isResourceEditedState);
+  const setIsFormOpen = useSetRecoilState(isFormOpenState);
 
   const resourceName = kymaResource?.metadata.name;
   const modulesResourceUrl = `/apis/operator.kyma-project.io/v1beta2/moduletemplates`;
@@ -57,9 +60,13 @@ export default function KymaModulesCreate({ resource, ...props }) {
     cloneDeep(initialResource?.spec?.modules) ?? [],
   );
   const [isEdited, setIsEdited] = useState(false);
+  const [isManagedChanged, setIsManagedChanged] = useState(false);
   const [showMessageBox, setShowMessageBox] = useState({
     isOpen: false,
-    hide: false,
+  });
+  const [showManagedBox, setShowManagedBox] = useState({
+    isOpen: false,
+    onSave: false,
   });
 
   if (loading) {
@@ -96,6 +103,21 @@ export default function KymaModulesCreate({ resource, ...props }) {
     });
     setIsEdited(true);
   };
+
+  const setManaged = (managed, index) => {
+    selectedModules[index].managed = managed;
+
+    setKymaResource({
+      ...kymaResource,
+      spec: {
+        ...kymaResource.spec,
+        modules: selectedModules,
+      },
+    });
+    setIsManagedChanged(true);
+    setShowManagedBox({ isOpen: true, onSave: false });
+  };
+
   const installedModules = modules?.items.filter(module => {
     const name =
       module.metadata?.labels['operator.kyma-project.io/module-name'];
@@ -178,6 +200,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
         >
           <Label>{`${module.name}:`}</Label>
           <Select
+            accessibleName={`channel-select-${module.name}`}
             onChange={event => {
               setChannel(module, event.detail.selectedOption.value, index);
             }}
@@ -195,6 +218,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
                 )
               }
               value={'predefined'}
+              key={`predefined-${module.name}`}
             >
               {`${t(
                 'kyma-modules.predefined-channel',
@@ -209,7 +233,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
             {module.channels?.map(channel => (
               <Option
                 selected={channel.channel === findSpec(module.name)?.channel}
-                key={channel.channel}
+                key={`${channel.channel}-${module.name}`}
                 value={channel.channel}
                 additionalText={channel?.isBeta ? 'Beta' : ''}
               >
@@ -219,6 +243,14 @@ export default function KymaModulesCreate({ resource, ...props }) {
               </Option>
             ))}
           </Select>
+          <CheckBox
+            accessibleName="managed-checkbox"
+            text={t('kyma-modules.managed')}
+            checked={findSpec(module.name)?.managed}
+            onChange={event => {
+              setManaged(event.target.checked, index);
+            }}
+          />
         </FlexBox>
       );
       modulesList.push(mod);
@@ -262,6 +294,8 @@ export default function KymaModulesCreate({ resource, ...props }) {
     setIsResourceEdited({
       isEdited: false,
     });
+
+    setIsManagedChanged(false);
 
     setIsFormOpen({
       formOpen: false,
@@ -320,33 +354,44 @@ export default function KymaModulesCreate({ resource, ...props }) {
     }
   };
 
+  const skipModuleFn = () => {
+    const shouldShowManagedWarning = isManagedChanged;
+    const shouldShowChannelWarning = isEdited;
+
+    if (shouldShowManagedWarning) {
+      setShowManagedBox({
+        ...showManagedBox,
+        isOpen: true,
+        onSave: true,
+      });
+    }
+    if (shouldShowChannelWarning) {
+      setShowMessageBox({
+        ...showMessageBox,
+        isOpen: true,
+      });
+    }
+    return shouldShowManagedWarning || shouldShowChannelWarning;
+  };
+
   return (
     <>
       {createPortal(
-        <MessageBox
-          type="Warning"
-          open={showMessageBox.isOpen}
-          onClose={() => {
-            setShowMessageBox({ isOpen: false, hide: true });
-          }}
-          titleText={t('kyma-modules.change-release-channel')}
-          actions={[
-            <Button
-              design="Emphasized"
-              key="change"
-              onClick={() => handleCreate()}
-            >
-              {t('kyma-modules.change')}
-            </Button>,
-            <Button design="Transparent" key="cancel">{`${t(
-              'common.buttons.cancel',
-            )}`}</Button>,
-          ]}
-        >
-          <Trans i18nKey="kyma-modules.change-release-channel-warning">
-            <span style={{ fontWeight: 'bold' }} />
-          </Trans>
-        </MessageBox>,
+        <ChannelWarning
+          showMessageBox={showMessageBox}
+          setShowMessageBox={setShowMessageBox}
+          handleCreate={handleCreate}
+        />,
+        document.body,
+      )}
+      {createPortal(
+        <ManagedWarnings
+          showManagedBox={showManagedBox}
+          setShowManagedBox={setShowManagedBox}
+          handleCreate={handleCreate}
+          isEdited={isEdited}
+          setShowMessageBox={setShowMessageBox}
+        />,
         document.body,
       )}
       <ResourceForm
@@ -360,13 +405,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
         setResource={setKymaResource}
         createUrl={props.resourceUrl}
         disableDefaultFields
-        skipCreateFn={() => {
-          if (isEdited && !showMessageBox.hide) {
-            setShowMessageBox({ ...showMessageBox, isOpen: true, hide: true });
-            return true;
-          }
-          return false;
-        }}
+        skipCreateFn={skipModuleFn}
       >
         <ResourceForm.CollapsibleSection
           defaultOpen
@@ -374,6 +413,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
           className="collapsible-margins"
           title={t('kyma-modules.modules-channel')}
         >
+          <UnmanagedModuleInfo kymaResource={kymaResource} />
           {modulesEditData?.length !== 0 ? (
             <>
               {checkIfSelectedModuleIsBeta() ? (
