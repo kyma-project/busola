@@ -106,7 +106,7 @@ export const makeHandleRequest = () => {
     const k8sRequest = https.request(options, function(k8sResponse) {
       if (
         k8sResponse.headers &&
-        (k8sResponse.headers['content-type']?.includes('\\') || //content-type, with uppercase it can't find the app type
+        (k8sResponse.headers['content-type']?.includes('\\') ||
           k8sResponse.headers['content-encoding']?.includes('\\'))
       )
         return throwInternalServerError(
