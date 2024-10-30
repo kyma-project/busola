@@ -26,10 +26,12 @@ function addCurrentCluster(
 
   if (params.currentContext.namespace) {
     clustersInfo.navigate(
-      `/cluster/${params.contextName}/namespaces/${params.currentContext.namespace}`,
+      `/cluster/${encodeURIComponent(params.contextName)}/namespaces/${
+        params.currentContext.namespace
+      }`,
     );
   } else {
-    clustersInfo.navigate(`/cluster/${params.contextName}`);
+    clustersInfo.navigate(`/cluster/${encodeURIComponent(params.contextName)}`);
   }
 
   setCurrentCluster(params);

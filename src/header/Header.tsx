@@ -150,7 +150,11 @@ export function Header() {
               e.detail.item.textContent ===
               t('clusters.overview.title-all-clusters')
                 ? navigate('/clusters')
-                : navigate(`/cluster/${e.detail.item.textContent}`);
+                : navigate(
+                    `/cluster/${encodeURIComponent(
+                      e.detail.item?.textContent ?? '',
+                    )}`,
+                  );
             },
           );
         }}

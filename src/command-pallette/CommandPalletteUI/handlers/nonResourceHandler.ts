@@ -114,7 +114,9 @@ function createResults(context: CommandPaletteContext): Result[] | null {
               label: t('clusters.overview.title-current-cluster'),
               query: 'overview',
               onActivate: () => {
-                const pathname = `/cluster/${activeClusterName}/overview`;
+                const pathname = `/cluster/${encodeURIComponent(
+                  activeClusterName,
+                )}/overview`;
                 navigate(pathname);
               },
               aliases: ['ov'],

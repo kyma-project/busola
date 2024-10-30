@@ -94,7 +94,11 @@ export function useDeleteResource({
         if (navigateToListAfterDelete || forceRedirect) {
           if (window.location.search.includes('layout')) {
             if (window.location.pathname.includes('busolaextensions')) {
-              navigate(`/cluster/${cluster.contextName}/busolaextensions`);
+              navigate(
+                `/cluster/${encodeURIComponent(
+                  cluster.contextName,
+                )}/busolaextensions`,
+              );
             } else {
               window.history.pushState(
                 window.history.state,
@@ -119,7 +123,11 @@ export function useDeleteResource({
                 });
           } else {
             if (window.location.pathname.includes('busolaextensions')) {
-              navigate(`/cluster/${cluster.contextName}/busolaextensions`);
+              navigate(
+                `/cluster/${encodeURIComponent(
+                  cluster.contextName,
+                )}/busolaextensions`,
+              );
             } else {
               navigate(resourceListUrl(resource, { resourceType }));
             }
