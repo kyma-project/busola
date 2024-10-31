@@ -37,13 +37,16 @@ export function createHeaders(
     );
   }
 
-  Cookies.set(
-    'X-Cluster-Certificate-Authority-Data',
-    <string>(
-      cluster?.currentContext.cluster.cluster['certificate-authority-data']
-    ),
-    { secure: true },
-  );
+  if (
+    cluster?.currentContext.cluster.cluster['certificate-authority-data'] !=
+    null
+  ) {
+    Cookies.set(
+      'X-Cluster-Certificate-Authority-Data',
+      cluster?.currentContext.cluster.cluster['certificate-authority-data'],
+      { secure: true },
+    );
+  }
 
   return {
     ...createAuthHeaders(authData),
