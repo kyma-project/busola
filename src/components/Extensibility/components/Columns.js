@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Widget } from './Widget';
 import { isNil } from 'lodash';
 
@@ -12,7 +10,11 @@ export function Columns({ structure, inlineContext, ...props }) {
   const classNames = inline ? 'inline-display' : 'panel-grid';
 
   return (
-    <div className={classNames} style={spacing.sapUiSmallMargin}>
+    <div
+      className={classNames}
+      style={spacing.sapUiSmallMargin}
+      data-testid="extensibility-columns"
+    >
       {(structure.children || []).map(child => (
         <Widget
           structure={child}
