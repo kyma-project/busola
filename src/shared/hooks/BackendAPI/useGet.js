@@ -28,6 +28,7 @@ const useGetHook = processDataFn =>
     const currentRequestId = uuid();
     const requestData = useRef({});
     const previousRequestNotFinished = useRef(null);
+    const intervalIdRef = useRef(null);
 
     const refetch = useCallback(
       (isSilent, currentData) => async () => {
@@ -96,14 +97,22 @@ const useGetHook = processDataFn =>
       [fetch, authData],
     );
 
+    const cleanupPolling = useCallback(() => {
+      if (intervalIdRef.current) {
+        clearInterval(intervalIdRef.current);
+        intervalIdRef.current = null;
+      }
+    }, []);
+
     useEffect(() => {
       const receivedForbidden = error?.code === 403;
 
+      cleanupPolling();
       // POLLING
       if (!pollingInterval || receivedForbidden || skip) return;
-      const intervalId = setInterval(refetch(true, data), pollingInterval);
-      return _ => clearInterval(intervalId);
-    }, [path, pollingInterval, data, error, skip, refetch]);
+      intervalIdRef.current = setInterval(refetch(true, data), pollingInterval);
+      return cleanupPolling;
+    }, [path, pollingInterval, data, error, skip, refetch, cleanupPolling]);
 
     useEffect(() => {
       // INITIAL FETCH on path being set/changed
