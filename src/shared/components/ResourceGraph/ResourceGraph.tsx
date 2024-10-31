@@ -15,9 +15,10 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useFeature } from 'hooks/useFeature';
 import { K8sResource } from 'types';
 import { ResourceGraphConfig } from './types';
-import { Panel, Title, Toolbar, ToolbarSpacer } from '@ui5/webcomponents-react';
-
 import { spacing } from '@ui5/webcomponents-react-base';
+import { Panel, Title } from '@ui5/webcomponents-react';
+import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
+import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
 import './ResourceGraph.scss';
 
 function ResourceGraph({
