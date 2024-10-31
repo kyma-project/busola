@@ -11,7 +11,7 @@ export function ResourceHealthCard({
     <>
       {showHealthCardsTitle && (
         <Title
-          size="H3"
+          level="H3"
           className="sap-margin-begin-medium sap-margin-y-medium"
         >
           {t('common.headers.monitoring-and-health')}
