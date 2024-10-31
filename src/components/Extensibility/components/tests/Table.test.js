@@ -25,7 +25,6 @@ vi.mock('shared/components/GenericList/GenericList', async () => {
   };
 });
 
-const genericNotFoundMessage = 'components.generic-list.messages.not-found';
 const elements = [
   {
     key: 'first',

@@ -1,4 +1,3 @@
-import { screen } from '@testing-library/react';
 import { ControlledBy } from '../ControlledBy';
 import { ControlledBy as CB } from 'shared/components/ControlledBy/ControlledBy';
 import { render } from 'testing/reactTestingUtils';
