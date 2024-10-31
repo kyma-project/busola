@@ -16,7 +16,6 @@ import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { extensibilitySchemasState } from 'state/extensibilitySchemasAtom';
 import { useUrl } from 'hooks/useUrl';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 import {
   formatCurrentVersion,
@@ -82,7 +81,7 @@ export function BusolaExtensionDetails({ name, namespace }) {
               section: t(`extensibility.sections.${key}`),
             })}
             modalOpeningComponent={
-              <Button style={spacing.sapUiTinyMarginEnd} design="Default">
+              <Button design="Default">
                 {t('extensibility.edit-section', {
                   section: t(`extensibility.sections.${key}`),
                 })}
@@ -153,7 +152,7 @@ export function BusolaExtensionDetails({ name, namespace }) {
           <MessageStrip
             design="Information"
             hideCloseButton
-            style={spacing.sapUiSmallMarginBottom}
+            className="sap-margin-bottom-small sap-margin-top-small"
           >
             {t('extensibility.message.old-version')}
           </MessageStrip>
@@ -163,7 +162,7 @@ export function BusolaExtensionDetails({ name, namespace }) {
           <MessageStrip
             design="Negative"
             hideCloseButton
-            style={spacing.sapUiSmallMarginBottom}
+            className="sap-margin-bottom-small"
           >
             {t('extensibility.message.unsupported-version')}
           </MessageStrip>
@@ -173,7 +172,7 @@ export function BusolaExtensionDetails({ name, namespace }) {
           <MessageStrip
             design="Negative"
             hideCloseButton
-            style={spacing.sapUiSmallMarginBottom}
+            className="sap-margin-bottom-small"
           >
             <Trans i18nKey="extensibility.message.unknown-version">
               <ExternalLink url="https://github.com/kyma-project/busola/tree/main/docs/extensibility" />

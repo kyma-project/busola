@@ -106,7 +106,7 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
     >
       {keyInput}
       <div className="rich-editor__dropdown-wrapper">
-        <div style={spacing.sapUiTinyMargin}>{languageDropdown}</div>
+        <div className="sap-margin-tiny">{languageDropdown}</div>
       </div>
       {valueInput}
     </ResourceForm.CollapsibleSection>

@@ -11,7 +11,6 @@ import {
 } from '@ui5/webcomponents-react';
 
 import './DynamicPageComponent.scss';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
@@ -100,13 +99,13 @@ export const DynamicPageComponent = ({
             {title}
           </Title>
           {protectedResource && (
-            <span style={spacing.sapUiTinyMarginBegin}>
+            <span className="sap-margin-begin-tiny">
               {protectedResourceWarning}
             </span>
           )}
           {description && (
             <HintButton
-              style={spacing.sapUiTinyMargin}
+              className="sap-margin-tiny"
               setShowTitleDescription={setShowTitleDescription}
               showTitleDescription={showTitleDescription}
               description={description}
