@@ -1,6 +1,16 @@
-import { shallow } from 'enzyme';
+import { screen } from '@testing-library/react';
 import { ControlledBy } from '../ControlledBy';
 import { ControlledBy as CB } from 'shared/components/ControlledBy/ControlledBy';
+import { render } from 'testing/reactTestingUtils';
+
+vi.mock('shared/components/ControlledBy/ControlledBy', async () => {
+  const CBMock = (
+    await vi.importActual('shared/components/ControlledBy/ControlledBy')
+  ).ControlledBy;
+  return {
+    ControlledBy: vi.fn(props => <CBMock {...props} />),
+  };
+});
 
 describe('ControlledBy', () => {
   it('Renders ControlledBy component', () => {
@@ -17,12 +27,18 @@ describe('ControlledBy', () => {
       },
     ];
 
-    const component = shallow(<ControlledBy value={owners} />);
-    const cb = component.find(CB);
-    const { ownerReferences, kindOnly } = component.props();
+    const { container } = render(<ControlledBy value={owners} />);
+
+    expect(CB).toHaveBeenCalledWith(
+      expect.objectContaining({
+        ownerReferences: owners,
+        kindOnly: undefined,
+      }),
+      {},
+    );
+
+    const cb = container.getElementsByClassName('controlled-by-list');
     expect(cb).toHaveLength(1);
-    expect(ownerReferences).toHaveLength(2);
-    expect(kindOnly).toBeFalsy();
   });
 });
 
@@ -40,12 +56,18 @@ it('Renders ControlledBy with kindOnly component', () => {
     },
   ];
 
-  const component = shallow(
+  const { container } = render(
     <ControlledBy structure={{ kindOnly: true }} value={owners} />,
   );
-  const cb = component.find(CB);
-  const { ownerReferences, kindOnly } = component.props();
+
+  expect(CB).toHaveBeenCalledWith(
+    expect.objectContaining({
+      ownerReferences: owners,
+      kindOnly: true,
+    }),
+    {},
+  );
+
+  const cb = container.getElementsByClassName('controlled-by-list');
   expect(cb).toHaveLength(1);
-  expect(ownerReferences).toHaveLength(2);
-  expect(kindOnly).toBe(true);
 });
