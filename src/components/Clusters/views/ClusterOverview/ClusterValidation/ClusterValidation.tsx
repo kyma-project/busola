@@ -18,9 +18,9 @@ import {
   Card,
   CardHeader,
   FlexBox,
-  Loader,
   ProgressIndicator,
 } from '@ui5/webcomponents-react';
+import { Loader } from '@ui5/webcomponents-react-compat/dist/components/Loader/index.js';
 import { ClusterValidationConfigurationDialog } from './ClusterValidationConfiguration';
 import { resourcesState } from 'state/resourcesAtom';
 

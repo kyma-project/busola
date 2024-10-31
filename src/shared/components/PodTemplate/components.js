@@ -1,7 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { getPorts } from '../GetContainersPorts';
 import { useUrl } from 'hooks/useUrl';
-import { List, Label, Text, Title } from '@ui5/webcomponents-react';
+import {
+  List,
+  Label,
+  Text,
+  Title,
+  ListItemGroup,
+} from '@ui5/webcomponents-react';
 import { Table as UI5Table } from '@ui5/webcomponents-react-compat/dist/components/Table/index.js';
 import { TableColumn } from '@ui5/webcomponents-react-compat/dist/components/TableColumn/index.js';
 import { TableRow } from '@ui5/webcomponents-react-compat/dist/components/TableRow/index.js';
