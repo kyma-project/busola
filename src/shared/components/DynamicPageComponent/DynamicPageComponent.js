@@ -11,10 +11,12 @@ import {
   DynamicPageTitle,
   Title,
 } from '@ui5/webcomponents-react';
+import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
+import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
 
 import './DynamicPageComponent.scss';
 import { spacing } from 'shared/helpers/spacing';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
@@ -131,7 +133,8 @@ export const DynamicPageComponent = ({
   };
 
   const actionsBar = (
-    <>
+    <Toolbar design="Transparent" toolbarStyle="Clear">
+      <ToolbarSpacer />
       {actions && (
         <div className="page-header__actions">
           {actions}
@@ -225,15 +228,20 @@ export const DynamicPageComponent = ({
           ) : null
         ) : null
       ) : null}
-    </>
+    </Toolbar>
   );
 
   const headerTitle = inlineEditForm ? (
     <ObjectPageTitle
       style={title === 'Clusters Overview' ? { display: 'none' } : null}
       header={
-        <FlexBox alignItems="Center">
-          <Title level="H3" size="H3" className="bold-title">
+        <FlexBox className="title-container" alignItems="Center">
+          <Title
+            level="H3"
+            size="H3"
+            className="bold-title"
+            wrappingType="None"
+          >
             {title}
           </Title>
           {protectedResource && (
@@ -258,12 +266,13 @@ export const DynamicPageComponent = ({
     <DynamicPageTitle
       style={title === 'Clusters Overview' ? { display: 'none' } : null}
       heading={
-        <FlexBox alignItems="Center" justifyContent="Center">
+        <FlexBox className="title-container" alignItems="Center">
           <Title
             style={{ fontSize: 'var(--sapObjectHeader_Title_FontSize)' }}
             level="H3"
             size="H3"
             className="bold-title"
+            wrappingType="None"
           >
             {title}
           </Title>
@@ -324,7 +333,6 @@ export const DynamicPageComponent = ({
         mode="IconTabBar"
         className={`page-header ${className}`}
         headerPinned
-        alwaysShowContentHeader
         hidePinButton={true}
         titleArea={headerTitle}
         headerArea={customHeaderContent ?? headerContent}
