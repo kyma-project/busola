@@ -393,7 +393,7 @@ export const GenericList = ({
       title={title}
       headerActions={!headerActionsEmpty && headerActions}
       data-testid={testid}
-      disableMargin
+      disableMargin={disableMargin}
       className={className}
     >
       <Table
