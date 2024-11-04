@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 import { useTranslation } from 'react-i18next';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 export function ClusterStorageType({ clusterConfig }) {
   const { t } = useTranslation();
@@ -18,7 +17,7 @@ export function ClusterStorageType({ clusterConfig }) {
     <div style={{ display: 'flex', alignItems: 'center' }}>
       {storageType}
       <HintButton
-        style={spacing.sapUiTinyMarginBegin}
+        className="sap-margin-begin-tiny"
         setShowTitleDescription={setShowDescription}
         showTitleDescription={showDescription}
         description={tooltipContent}
