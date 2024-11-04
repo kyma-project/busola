@@ -92,7 +92,7 @@ function navigateTo({
 }) {
   const isNamespaced = crd.spec.scope === 'Namespaced';
 
-  const clusterPath = `/cluster/${activeClusterName}`;
+  const clusterPath = `/cluster/${encodeURIComponent(activeClusterName)}`;
   const path = matchingNode
     ? `${matchingNode.pathSegment}/${crName || ''}` // custom nav node
     : `customresources/${crd.metadata.name}/${crName}`; // generic route

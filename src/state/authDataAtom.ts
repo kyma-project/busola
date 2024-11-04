@@ -158,10 +158,12 @@ export function useAuthHandler() {
           if (!getPreviousPath() || getPreviousPath() === '/clusters') {
             if (cluster.currentContext.namespace) {
               navigate(
-                `/cluster/${cluster.name}/namespaces/${cluster.currentContext.namespace}`,
+                `/cluster/${encodeURIComponent(cluster.name)}/namespaces/${
+                  cluster.currentContext.namespace
+                }`,
               );
             } else {
-              navigate('/cluster/' + cluster.name);
+              navigate('/cluster/' + encodeURIComponent(cluster.name));
             }
           }
         };

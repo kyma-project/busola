@@ -69,7 +69,9 @@ function makeListItem(
       category: t('workloads.title') + ' > ' + t('pods.title'),
       query,
       onActivate: () => {
-        const pathname = `/cluster/${activeClusterName}/${namespacePart}/pods/${podName}/containers/${containerName}`;
+        const pathname = `/cluster/${encodeURIComponent(
+          activeClusterName ?? '',
+        )}/${namespacePart}/pods/${podName}/containers/${containerName}`;
         navigate(pathname);
       },
       customActionText: 'command-palette.item-actions.navigate',

@@ -12,12 +12,15 @@ export const useUrl: () => UrlGenerators = () => {
       ?.params?.namespace ?? '';
 
   const clusterUrl = (path: string, overrides: UrlOverrides = {}) => {
-    return `/cluster/${overrides?.cluster ?? cluster}/${path ?? ''}`;
+    return `/cluster/${encodeURIComponent(
+      overrides?.cluster ?? cluster,
+    )}/${path ?? ''}`;
   };
 
   const namespaceUrl = (path: string, overrides: UrlOverrides = {}) => {
-    return `/cluster/${overrides?.cluster ??
-      cluster}/namespaces/${overrides?.namespace ?? namespace}/${path ?? ''}`;
+    return `/cluster/${encodeURIComponent(
+      overrides?.cluster ?? cluster,
+    )}/namespaces/${overrides?.namespace ?? namespace}/${path ?? ''}`;
   };
 
   const scopedUrl = (path: string, overrides: UrlOverrides = {}) => {

@@ -49,7 +49,9 @@ function makeListItem(item: K8sResource, context: CommandPaletteContext) {
       t('configuration.title') + ' > ' + t('custom-resource-definitions.title'),
     query: `crds/${name}`,
     onActivate: () => {
-      const pathname = `/cluster/${activeClusterName}/customresourcedefinitions/${name}`;
+      const pathname = `/cluster/${encodeURIComponent(
+        activeClusterName ?? '',
+      )}/customresourcedefinitions/${name}`;
       navigate(pathname);
     },
     customActionText: 'command-palette.item-actions.navigate',
@@ -92,7 +94,9 @@ function createResults(context: CommandPaletteContext): Result[] {
       t('configuration.title') + ' > ' + t('custom-resource-definitions.title'),
     query: 'crds',
     onActivate: () => {
-      const pathname = `/cluster/${activeClusterName}/customresourcedefinitions`;
+      const pathname = `/cluster/${encodeURIComponent(
+        activeClusterName ?? '',
+      )}/customresourcedefinitions`;
       navigate(pathname);
     },
     aliases: crdResourceAliases,
