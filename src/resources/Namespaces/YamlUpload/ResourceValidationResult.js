@@ -6,10 +6,9 @@ import {
   MessageStrip,
   ObjectStatus,
   Panel,
-  Toolbar,
-  ToolbarSpacer,
-  ValueState,
 } from '@ui5/webcomponents-react';
+import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
+import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
 import {
   getExtendedValidateResourceState,
   validateResourcesState,
@@ -82,9 +81,9 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
           <FlexBox alignItems={'Begin'}>
             <ObjectStatus
               showDefaultIcon
-              state={ValueState.Warning}
+              state="Critical"
               style={{
-                marginLeft: '-0.3125rem', //set icon in one line with expand arrow. The value from class `--_ui5-v1-24-0_panel_content_padding` is divided by 2
+                marginLeft: '-0.3125rem', //set icon in one line with expand arrow. The value from class `--_ui5-v2-3-0_panel_content_padding` is divided by 2
                 ...spacing.sapUiSmallMarginEnd,
               }}
             />
@@ -115,9 +114,9 @@ export const ResourceValidationResult = ({ resource }) => {
   ];
   const statusIcon = validateResources.isEnabled ? (
     warnings.flat().length !== 0 ? (
-      <ObjectStatus showDefaultIcon state={ValueState.Warning} />
+      <ObjectStatus showDefaultIcon state="Critical" />
     ) : (
-      <ObjectStatus showDefaultIcon state={ValueState.Success} />
+      <ObjectStatus showDefaultIcon state="Positive" />
     )
   ) : (
     <div></div>

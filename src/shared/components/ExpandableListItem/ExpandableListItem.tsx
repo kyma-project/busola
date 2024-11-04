@@ -1,5 +1,5 @@
 import { ReactNode, useState } from 'react';
-import { Icon, StandardListItem } from '@ui5/webcomponents-react';
+import { Icon, ListItemStandard } from '@ui5/webcomponents-react';
 import { StatusBadge } from '../StatusBadge/StatusBadge';
 import { useTranslation } from 'react-i18next';
 import { spacing } from '@ui5/webcomponents-react-base';
@@ -29,7 +29,7 @@ export const ExpandableListItem = ({
 
   return (
     <>
-      <StandardListItem
+      <ListItemStandard
         onClick={() => setExpanded(!expanded)}
         className="expandable-item"
       >
@@ -57,7 +57,7 @@ export const ExpandableListItem = ({
             </StatusBadge>
           )}
         </div>
-      </StandardListItem>
+      </ListItemStandard>
       {expanded && (
         <>
           {content && (
