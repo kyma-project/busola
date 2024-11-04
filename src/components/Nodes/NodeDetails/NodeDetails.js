@@ -7,7 +7,6 @@ import { NodeResources } from '../NodeResources/NodeResources';
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 
-import { spacing } from '@ui5/webcomponents-react-base';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { Title } from '@ui5/webcomponents-react';
 import { createPortal } from 'react-dom';
@@ -36,10 +35,7 @@ export default function NodeDetails({ nodeName }) {
               <>
                 <Title
                   level="H3"
-                  style={{
-                    ...spacing.sapUiMediumMarginBegin,
-                    ...spacing.sapUiMediumMarginTopBottom,
-                  }}
+                  className="sap-margin-begin-medium sap-margin-y-medium"
                 >
                   {t('common.headers.node-details')}
                 </Title>
@@ -57,18 +53,11 @@ export default function NodeDetails({ nodeName }) {
                 </div>
                 <Title
                   level="H3"
-                  style={{
-                    ...spacing.sapUiMediumMarginBegin,
-                    ...spacing.sapUiMediumMarginTop,
-                    ...spacing.sapUiSmallMarginBottom,
-                  }}
+                  className="sap-margin-begin-medium sap-margin-top-medium sap-margin-bottom-small"
                 >
                   {t('common.headers.nodeInfo')}
                 </Title>
-                <div
-                  className="flexwrap"
-                  style={spacing.sapUiSmallMarginBeginEnd}
-                >
+                <div className="flexwrap sap-margin-x-small">
                   <NodeResources {...data} />
                 </div>
                 {Events}
