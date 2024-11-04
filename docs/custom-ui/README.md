@@ -10,6 +10,8 @@ Custom UI needs to be deployed in a service. Based on the configuration (details
 
 ## Architecture graph
 
+![Architecture graph](./assets/architecture-diagram.svg)
+
 ## What to remember?
 
 - UI can be crated in any technology - but please don’t use deprecated technologies (like ‘create-react-app’)
