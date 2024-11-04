@@ -16,7 +16,7 @@ import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/T
 
 import './DynamicPageComponent.scss';
 import { spacing } from 'shared/helpers/spacing';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
