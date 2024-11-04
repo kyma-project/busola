@@ -1,24 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { MemoizedGraphviz } from './GraphvizComponent';
-
-import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
-
+import { useEffect, useState } from 'react';
+import { useFeature } from 'hooks/useFeature';
+import { useTranslation } from 'react-i18next';
 import { useRelatedResources } from 'shared/components/ResourceGraph/useRelatedResources';
 import { useIntersectionObserver } from 'shared/hooks/useIntersectionObserver';
+
+import { MemoizedGraphviz } from './GraphvizComponent';
+import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { buildGraph } from 'shared/components/ResourceGraph/buildGraph';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { useTranslation } from 'react-i18next';
 import { useMinWidth, TABLET } from 'hooks/useMinWidth';
 import { SaveGraphControls } from './SaveGraphControls';
 import { DetailsCard } from './DetailsCard/DetailsCard';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { useFeature } from 'hooks/useFeature';
 import { K8sResource } from 'types';
 import { ResourceGraphConfig } from './types';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { Panel, Title } from '@ui5/webcomponents-react';
 import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
 import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
+
 import './ResourceGraph.scss';
 
 function ResourceGraph({
@@ -99,8 +98,7 @@ function ResourceGraph({
   return (
     <Panel
       fixed
-      className="card-shadow"
-      style={spacing.sapUiSmallMargin}
+      className="card-shadow sap-margin-small"
       ref={(node: any) => setGraphEl(node)}
       header={
         <Toolbar>

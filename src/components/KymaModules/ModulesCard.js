@@ -11,7 +11,6 @@ import {
 } from '@ui5/webcomponents-react';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { useTranslation } from 'react-i18next';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 export default function ModulesCard({
   module,
@@ -57,10 +56,7 @@ export default function ModulesCard({
         {module.docsUrl && (
           <ExternalLink
             url={module.docsUrl}
-            linkStyle={{
-              ...spacing.sapUiTinyMarginTop,
-              ...spacing.sapUiSmallMarginBottom,
-            }}
+            linkClassName="sap-margin-top-tiny sap-margin-bottom-small"
           >
             {t('kyma-modules.module-documentation')}
           </ExternalLink>
@@ -73,10 +69,7 @@ export default function ModulesCard({
         noAnimation
         data-testid={`module-settings-panel-${module.name}`}
       >
-        <div
-          className="settings-panel__content"
-          style={spacing.sapUiSmallMarginTopBottom}
-        >
+        <div className="settings-panel__content sap-margin-y-small">
           <Label>{t('kyma-modules.release-channel') + ':'} </Label>
           <Select
             onChange={event => {

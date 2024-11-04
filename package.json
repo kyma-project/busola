@@ -56,6 +56,7 @@
     "@openapi-contrib/openapi-schema-to-json-schema": "^3.1.1",
     "@peculiar/x509": "^1.6.0",
     "@sap-theming/theming-base-content": "^11.1.28",
+    "@sap-ui/common-css": "^0.38.0",
     "@sentry/react": "^6.17.4",
     "@sentry/tracing": "^6.12.0",
     "@stoplight/json-ref-resolver": "^3.1.3",

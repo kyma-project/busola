@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { useTranslation } from 'react-i18next';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+
 import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
 import { Card, CardHeader, Title } from '@ui5/webcomponents-react';
 import { CountingCard } from 'shared/components/CountingCard/CountingCard';
-import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import {
   bytesToHumanReadable,
   getBytes,
@@ -16,6 +16,7 @@ import {
   PodStatusCounterKey,
 } from 'resources/Namespaces/NamespaceWorkloads/NamespaceWorkloadsHelpers';
 import { roundTwoDecimals } from 'shared/utils/helpers';
+
 import './ClusterStats.scss';
 
 const Injections = React.lazy(() =>
@@ -106,16 +107,10 @@ export default function ClusterStats({ nodesData }) {
 
   return (
     <>
-      <Title
-        level="H3"
-        style={{
-          ...spacing.sapUiMediumMarginBegin,
-          ...spacing.sapUiMediumMarginTopBottom,
-        }}
-      >
+      <Title level="H3" className="sap-margin-begin-medium sap-margin-y-medium">
         {t('common.headers.monitoring-and-health')}
       </Title>
-      <div className="cluster-stats" style={spacing.sapUiTinyMarginBeginEnd}>
+      <div className="cluster-stats sap-margin-x-tiny">
         <div className="item-wrapper tall">
           <Card
             className="radial-chart-card item"

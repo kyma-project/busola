@@ -1,6 +1,6 @@
 import { Button, Popover, Text } from '@ui5/webcomponents-react';
 import { createPortal } from 'react-dom';
-import React, { CSSProperties, ReactNode, useRef, useState } from 'react';
+import React, { ReactNode, useRef, useState } from 'react';
 import { uniqueId } from 'lodash';
 import { createTranslationTextWithLinks } from '../../helpers/linkExtractor';
 import { useTranslation } from 'react-i18next'; // this regex catch 2 things, markdown URL or normal URL
@@ -9,18 +9,18 @@ type HintButtonProps = {
   setShowTitleDescription: React.Dispatch<React.SetStateAction<boolean>>;
   showTitleDescription: boolean;
   description: string | ReactNode;
-  style?: CSSProperties;
   disableLinkDetection?: boolean;
   ariaTitle?: string;
+  className?: string;
 };
 
 export function HintButton({
   setShowTitleDescription,
   showTitleDescription,
   description,
-  style,
   disableLinkDetection = false,
   ariaTitle = '',
+  className,
 }: HintButtonProps) {
   const [ID] = useState(uniqueId('id-')); //todo: migrate to useID from react after upgrade to version 18+
   const descBtnRef = useRef(null);
@@ -34,11 +34,11 @@ export function HintButton({
   return (
     <>
       <Button
+        className={className}
         id={`descriptionOpener-${ID}`}
         ref={descBtnRef}
         icon="hint"
         design="Transparent"
-        style={style}
         onClick={e => {
           e.stopPropagation();
           setShowTitleDescription(true);

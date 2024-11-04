@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { RadialChart } from '@ui5/webcomponents-react-charts';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { Text } from '@ui5/webcomponents-react';
+
 import './UI5RadialChart.scss';
 
 export const UI5RadialChart = ({
@@ -32,10 +32,10 @@ export const UI5RadialChart = ({
         value={value}
         maxValue={max}
         color={color}
+        className="sap-margin-y-tiny"
         style={{
           height: size + 'px',
           width: size + 'px',
-          ...spacing.sapUiTinyMarginTopBottom,
         }}
         chartConfig={{
           innerRadius: '99%',

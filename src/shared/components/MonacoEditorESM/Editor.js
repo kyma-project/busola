@@ -12,7 +12,6 @@ import { useOnMount } from './hooks/useOnMount';
 import { useOnChange } from './hooks/useOnChange';
 import { useCreateEditor } from './hooks/useCreateEditor';
 
-import { spacing } from '@ui5/webcomponents-react-base';
 import './Editor.scss';
 
 export function Editor({
@@ -108,8 +107,7 @@ export function Editor({
           <MessageStrip
             design="Negative"
             hideCloseButton
-            className="break-word"
-            style={spacing.sapUiSmallMargin}
+            className="break-word sap-margin-small"
           >
             {t('common.create-form.editor-error', { error })}
           </MessageStrip>
@@ -117,8 +115,7 @@ export function Editor({
         {schemaError && (
           <MessageStrip
             design="Warning"
-            className="break-word"
-            style={spacing.sapUiSmallMargin}
+            className="break-word sap-margin-small"
           >
             {t('common.create-form.autocomplete-unavailable-error', {
               error: schemaError.error || schemaError.message || schemaError,
@@ -129,8 +126,7 @@ export function Editor({
           <MessageStrip
             design="Warning"
             hideCloseButton
-            className="break-word"
-            style={spacing.sapUiSmallMargin}
+            className="break-word sap-margin-small"
           >
             {warnings.map(m => (
               <span

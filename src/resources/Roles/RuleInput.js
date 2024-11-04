@@ -13,7 +13,6 @@ import {
 import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { groupVersionState } from 'state/discoverability/groupVersionsSelector';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 const nonResourceUrls = [
   '/healthz/ready',
@@ -164,9 +163,7 @@ export function RuleInput({ rule, rules, setRules }) {
         <MessageStrip
           design="Information"
           hideCloseButton
-          style={{
-            marginBottom: spacing.sapUiSmallMarginBottom.marginBottom,
-          }}
+          className="sap-margin-bottom-small"
         >
           {t('roles.messages.load-resources')}
         </MessageStrip>

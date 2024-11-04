@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
 import { Button, Title } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNotFound';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
@@ -336,10 +335,7 @@ function Resource({
                 ?.filter(filterColumns)
                 ?.map(component => (
                   <>
-                    <div
-                      className="title bsl-has-color-status-4 "
-                      style={spacing.sapUiSmallMarginBeginEnd}
-                    >
+                    <div className="title bsl-has-color-status-4 sap-margin-x-small">
                       {component.header}:
                     </div>
                     {component.value(resource)}
@@ -365,7 +361,7 @@ function Resource({
               {resource.kind}
               {description && (
                 <HintButton
-                  style={spacing.sapUiTinyMarginBegin}
+                  className="sap-margin-begin-tiny"
                   setShowTitleDescription={setShowTitleDescription}
                   showTitleDescription={showTitleDescription}
                   description={description}
@@ -448,10 +444,7 @@ function Resource({
               <>
                 <Title
                   level="H3"
-                  style={{
-                    ...spacing.sapUiMediumMarginBegin,
-                    ...spacing.sapUiMediumMarginTopBottom,
-                  }}
+                  className="sap-margin-begin-medium sap-margin-y-medium"
                 >
                   {title ?? t('common.headers.resource-details')}
                 </Title>

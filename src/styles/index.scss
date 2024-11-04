@@ -208,6 +208,10 @@ ui5-tabcontainer::part(content) {
   padding: 0 !important;
 }
 
+.no-margin {
+  margin: 0 !important;
+}
+
 ui5-popover {
   max-width: 500px;
 }
