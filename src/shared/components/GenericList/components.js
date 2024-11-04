@@ -10,8 +10,6 @@ import {
 } from '@ui5/webcomponents-react';
 import ListActions from 'shared/components/ListActions/ListActions';
 
-import ListActions from 'shared/components/ListActions/ListActions';
-
 export const BodyFallback = ({ children }) => (
   // TODO replace once new Table component is available in ui5-webcomponents-react
   <tr>
