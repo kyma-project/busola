@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { Button, Icon, Dialog, Bar, Title } from '@ui5/webcomponents-react';
 import { useEventListener } from 'hooks/useEventListener';
 
-import { spacing } from '@ui5/webcomponents-react-base';
 import './ErrorModal.scss';
 
 export type ToastProps = {
@@ -65,7 +64,7 @@ export function ErrorModal({
               <Icon
                 design="Negative"
                 name="message-error"
-                style={spacing.sapUiTinyMarginEnd}
+                className="sap-margin-end-tiny"
               />
               <Title level="H5">{header}</Title>
             </>

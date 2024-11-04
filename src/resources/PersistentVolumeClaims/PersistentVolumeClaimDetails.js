@@ -18,7 +18,6 @@ import PersistentVolumeClaimCreate from './PersistentVolumeClaimCreate';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ResourceDescription } from 'resources/PersistentVolumeClaims';
 import { Link } from 'shared/components/Link/Link';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 import './PersistentVolumeClaim.scss';
 
@@ -223,13 +222,7 @@ export function PersistentVolumeClaimDetails(props) {
                 );
               })
             ) : (
-              <div
-                className="content bsl-has-color-text-1"
-                style={{
-                  ...spacing.sapUiSmallMarginBegin,
-                  ...spacing.sapUiSmallMarginBottom,
-                }}
-              >
+              <div className="content bsl-has-color-text-1 sap-margin-begin-small sap-margin-bottom-small">
                 {EMPTY_TEXT_PLACEHOLDER}
               </div>
             ),

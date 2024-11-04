@@ -15,7 +15,6 @@ import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar
 import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
 
 import './DynamicPageComponent.scss';
-import { spacing } from 'shared/helpers/spacing';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
@@ -245,13 +244,13 @@ export const DynamicPageComponent = ({
             {title}
           </Title>
           {protectedResource && (
-            <span style={spacing.sapUiTinyMarginBegin}>
+            <span className="sap-margin-begin-tiny">
               {protectedResourceWarning}
             </span>
           )}
           {description && (
             <HintButton
-              style={spacing.sapUiTinyMargin}
+              className="sap-margin-tiny"
               setShowTitleDescription={setShowTitleDescription}
               showTitleDescription={showTitleDescription}
               description={description}

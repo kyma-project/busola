@@ -9,8 +9,6 @@ import { ComboboxInput } from 'shared/ResourceForm/inputs';
 import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 
-import { spacing } from '@ui5/webcomponents-react-base';
-
 const expirationSecondsOptions = [
   {
     text: '3600s (1h)',
@@ -139,16 +137,14 @@ export function TokenRequestModal({
             />
           )}
         />
-        <div style={spacing.sapUiSmallMarginTop}>
-          <MessageStrip design="Warning" hideCloseButton>
+        <div className="sap-margin-top-small">
+          <MessageStrip design="Critical" hideCloseButton>
             {t('service-accounts.token-request.warning')}
           </MessageStrip>
           <div
-            className="bsl-display-flex"
+            className="bsl-display-flex sap-margin-y-small"
             style={{
               justifyContent: 'flex-end',
-              marginTop: spacing.sapUiSmallMarginTop.marginTop,
-              marginBottom: spacing.sapUiSmallMarginBottom.marginBottom,
             }}
           >
             {/*@ts-ignore*/}
@@ -162,9 +158,8 @@ export function TokenRequestModal({
               onClick={() => downloadKubeconfig(serviceAccountName, token)}
               disabled={token === ''}
               design="Transparent"
-              style={spacing.sapUiTinyMarginEnd}
-              icon="download"
-              iconEnd
+              className="sap-margin-end-tiny"
+              endIcon="download"
             >
               {t('service-accounts.headers.download-kubeconfig')}
             </Button>

@@ -23,7 +23,6 @@ import { useFeature } from 'hooks/useFeature';
 import { useNavigate } from 'react-router-dom';
 import { createPortal } from 'react-dom';
 
-import { spacing } from '@ui5/webcomponents-react-base';
 import './ClusterList.scss';
 import { useSetRecoilState } from 'recoil';
 import { showAddClusterWizard } from 'state/showAddClusterWizard';
@@ -194,7 +193,7 @@ function ClusterList() {
         kubeconfigIdFeature?.config?.defaultKubeconfig && (
           <Button
             onClick={loadDefaultKubeconfigId}
-            style={spacing.sapUiTinyMarginBeginEnd}
+            className="sap-margin-x-tiny"
           >
             {t('clusters.add.load-default')}
           </Button>

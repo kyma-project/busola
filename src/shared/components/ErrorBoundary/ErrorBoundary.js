@@ -3,8 +3,6 @@ import { Bar, Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import * as Sentry from '@sentry/react';
 
-import { spacing } from '@ui5/webcomponents-react-base';
-
 class ErrorBoundaryComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -31,13 +29,10 @@ class ErrorBoundaryComponent extends React.Component {
             style={{
               width: '90vh',
               height: '70vh',
-              margin: spacing.sapUiMediumMargin.margin,
             }}
+            className="sap-margin-medium"
           >
-            <p
-              className="bsl-color--text"
-              style={spacing.sapUiSmallMarginTopBottom}
-            >
+            <p className="bsl-color--text sap-margin-y-small">
               {this.props.customMessage ||
                 this.props.t('err-boundary.restored-initial-form')}
             </p>

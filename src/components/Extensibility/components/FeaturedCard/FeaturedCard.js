@@ -1,5 +1,4 @@
 import { Button, Card, Text, Title } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { useEffect, useState } from 'react';
 import modulesIllustration from './assets/Modules/modulesIllustration.svg';
 import modulesIllustrationHC from './assets/Modules/modulesIllustrationHC.svg';
@@ -81,7 +80,7 @@ export function FeaturedCard({ value, structure, schema, ...props }) {
   }
 
   return (
-    <div style={spacing.sapUiSmallMargin}>
+    <div className="sap-margin-small">
       <Card>
         <div
           className="feature-card"
@@ -99,10 +98,7 @@ export function FeaturedCard({ value, structure, schema, ...props }) {
                 {structure?.title}
               </Title>
               <Text>{structure?.description}</Text>
-              <div
-                className="button-container"
-                style={spacing.sapUiSmallMarginTop}
-              >
+              <div className="button-container sap-margin-top-small">
                 {structure.children?.slice(0, 2).map((def, idx) => (
                   <Widget
                     key={idx}
