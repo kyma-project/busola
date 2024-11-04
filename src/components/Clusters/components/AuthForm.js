@@ -128,7 +128,7 @@ export function AuthForm({
         <MessageStrip
           design="Warning"
           hideCloseButton
-          className="sap-margin-top-small sap-margin-bottom-small"
+          className="sap-margin-y-small"
         >
           {t('clusters.wizard.incomplete', {
             context:

@@ -142,7 +142,7 @@ export function TokenRequestModal({
             {t('service-accounts.token-request.warning')}
           </MessageStrip>
           <div
-            className="bsl-display-flex sap-margin-top-small sap-margin-bottom-small"
+            className="bsl-display-flex sap-margin-y-small"
             style={{
               justifyContent: 'flex-end',
             }}

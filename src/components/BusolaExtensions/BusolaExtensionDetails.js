@@ -152,7 +152,7 @@ export function BusolaExtensionDetails({ name, namespace }) {
           <MessageStrip
             design="Information"
             hideCloseButton
-            className="sap-margin-bottom-small sap-margin-top-small"
+            className="sap-margin-y-small"
           >
             {t('extensibility.message.old-version')}
           </MessageStrip>

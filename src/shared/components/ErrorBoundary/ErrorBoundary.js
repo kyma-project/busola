@@ -32,7 +32,7 @@ class ErrorBoundaryComponent extends React.Component {
             }}
             className="sap-margin-medium"
           >
-            <p className="bsl-color--text sap-margin-top-small sap-margin-bottom-small">
+            <p className="bsl-color--text sap-margin-y-small">
               {this.props.customMessage ||
                 this.props.t('err-boundary.restored-initial-form')}
             </p>

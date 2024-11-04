@@ -91,7 +91,7 @@ export function ClusterPreview({ kubeconfig, storage, setSelected, hasAuth }) {
         </Title>
         <Title
           level="H5"
-          className="cluster-preview__subtitle sap-margin-top-small sap-margin-bottom-small"
+          className="cluster-preview__subtitle sap-margin-y-small"
         >{`1. ${t('common.headers.configuration')}`}</Title>
         <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
           {t('clusters.name_singular')}:
@@ -108,7 +108,7 @@ export function ClusterPreview({ kubeconfig, storage, setSelected, hasAuth }) {
         </div>
         <Title
           level="H5"
-          className="cluster-preview__subtitle sap-margin-top-small sap-margin-bottom-small"
+          className="cluster-preview__subtitle sap-margin-y-small"
         >{`2. ${t('clusters.wizard.authentication')}`}</Title>
 
         <div className="cluster-preview__content sap-margin-top-small sap-margin-bottom-tiny">
@@ -125,7 +125,7 @@ export function ClusterPreview({ kubeconfig, storage, setSelected, hasAuth }) {
         </div>
         <Title
           level="H5"
-          className="cluster-preview__subtitle sap-margin-top-small sap-margin-bottom-small"
+          className="cluster-preview__subtitle sap-margin-y-small"
         >{`3. ${t('clusters.wizard.storage')}`}</Title>
         <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
           {`${t('clusters.storage.storage-preference')}:`}

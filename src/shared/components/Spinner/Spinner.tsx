@@ -25,7 +25,7 @@ export const Spinner = ({
       size={size}
       aria-label={ariaLabel}
       style={style}
-      className="sap-margin-top-small sap-margin-bottom-small"
+      className="sap-margin-y-small"
     />
   );
 };
