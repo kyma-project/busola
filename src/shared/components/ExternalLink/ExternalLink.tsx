@@ -17,7 +17,7 @@ type LinkProps = {
     | 'Attention';
   iconClassName?: string;
   type?: 'link' | 'button';
-  linkStyle?: React.CSSProperties;
+  linkClassName?: string;
 };
 
 export const ExternalLink = ({
@@ -28,16 +28,15 @@ export const ExternalLink = ({
   buttonDesign = 'Transparent',
   iconClassName,
   type = 'link',
-  linkStyle,
+  linkClassName,
 }: LinkProps) => {
   const { t } = useTranslation();
 
   if (type === 'button') {
     return (
       <Button
-        icon="inspect"
+        endIcon="inspect"
         design={buttonDesign}
-        iconEnd
         className="sap-margin-x-tiny"
         onClick={() => {
           const newWindow = window.open(url, '_blank', 'noopener, noreferrer');
@@ -50,7 +49,7 @@ export const ExternalLink = ({
   }
 
   return (
-    <Link design={design} href={url} target="_blank" style={linkStyle}>
+    <Link design={design} href={url} target="_blank" className={linkClassName}>
       <FlexBox alignItems="Center">
         {text || children || url}
         <Icon

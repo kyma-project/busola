@@ -9,8 +9,6 @@ import { GardenerLoginFeature } from './GardenerLoginFeature';
 import { useGardenerLogin } from './useGardenerLoginFunction';
 import { parseOIDCparams } from 'components/Clusters/components/oidc-params';
 
-import { spacing } from '@ui5/webcomponents-react-base';
-
 export default function GardenerLogin() {
   const [token, setToken] = useState('');
   const [error, setError] = useState<Error | null>(null);
@@ -80,7 +78,7 @@ export default function GardenerLogin() {
       <MessageStrip
         design="Information"
         hideCloseButton
-        style={spacing.sapUiSmallMarginTop}
+        className="sap-margin-top-small"
       >
         {report}
       </MessageStrip>
@@ -88,7 +86,7 @@ export default function GardenerLogin() {
         <MessageStrip
           design="Negative"
           hideCloseButton
-          style={spacing.sapUiSmallMarginTop}
+          className="sap-margin-top-small"
         >
           {t('clusters.gardener.error', { message: error.message })}
         </MessageStrip>

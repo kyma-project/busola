@@ -57,10 +57,7 @@ export default function ModulesCard({
         {module.docsUrl && (
           <ExternalLink
             url={module.docsUrl}
-            linkStyle={{
-              ...spacing.sapUiTinyMarginTop,
-              ...spacing.sapUiSmallMarginBottom,
-            }}
+            linkClassName="sap-margin-top-tiny sap-margin-bottom-small"
           >
             {t('kyma-modules.module-documentation')}
           </ExternalLink>

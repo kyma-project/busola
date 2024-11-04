@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
-import { MessageStrip } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { useTranslation } from 'react-i18next';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
+
+import { MessageStrip } from '@ui5/webcomponents-react';
 import { ResourceForm } from 'shared/ResourceForm';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import ModulesCard from './ModulesCard';
+
 import './KymaModulesAddModule.scss';
 
 export default function KymaModulesAddModule({
@@ -215,9 +216,8 @@ export default function KymaModulesAddModule({
 
     return (
       <div
-        className="gridbox-addModule"
+        className="gridbox-addModule sap-margin-top-small"
         ref={setCardsContainerRef}
-        style={spacing.sapUiSmallMarginTop}
       >
         {columns.map((column, columnIndex) => (
           <div
@@ -256,7 +256,7 @@ export default function KymaModulesAddModule({
               key={'beta'}
               design="Warning"
               hideCloseButton
-              style={spacing.sapUiSmallMarginTop}
+              className="sap-margin-top-small"
             >
               {t('kyma-modules.beta-alert')}
             </MessageStrip>
@@ -267,7 +267,7 @@ export default function KymaModulesAddModule({
         <MessageStrip
           design="Information"
           hideCloseButton
-          style={spacing.sapUiSmallMarginTop}
+          className="sap-margin-top-small"
         >
           {t('extensibility.widgets.modules.all-modules-added')}
         </MessageStrip>
@@ -275,7 +275,7 @@ export default function KymaModulesAddModule({
         <MessageStrip
           design="Warning"
           hideCloseButton
-          style={spacing.sapUiSmallMarginTop}
+          className="sap-margin-top-small"
         >
           {t('extensibility.widgets.modules.no-modules')}
         </MessageStrip>
