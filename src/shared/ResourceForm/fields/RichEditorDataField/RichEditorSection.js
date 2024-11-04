@@ -8,7 +8,6 @@ import { FormField } from '../../components/FormField';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import { ResourceForm } from 'shared/ResourceForm/components/ResourceForm';
 
-import { spacing } from '@ui5/webcomponents-react-base';
 import './RichEditorSection.scss';
 
 function getAvailableLanguages() {
@@ -66,7 +65,7 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
       setValue={key => onChange({ key })}
       input={Inputs.Text}
       label={t('components.key-value-form.key')}
-      style={spacing.sapUiSmallMarginBottom}
+      className="sap-margin-bottom-small"
       placeholder={t('components.key-value-field.enter-key')}
       onBlur={pushValue}
       pattern={'[-._a-zA-Z0-9]+'}

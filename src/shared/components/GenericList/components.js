@@ -6,8 +6,6 @@ import { TableRow } from '@ui5/webcomponents-react-compat/dist/components/TableR
 
 import ListActions from 'shared/components/ListActions/ListActions';
 
-import { spacing } from '@ui5/webcomponents-react-base';
-
 export const BodyFallback = ({ children }) => (
   // TODO replace once new Table component is available in ui5-webcomponents-react
   <tr>
@@ -185,7 +183,7 @@ const CollapsedRowRenderer = ({
         >
           <FlexBox>
             <Icon
-              style={spacing.sapUiTinyMarginEnd}
+              className="sap-margin-end-tiny"
               name={isOpen ? 'navigation-up-arrow' : 'navigation-down-arrow'}
             />
             {title}

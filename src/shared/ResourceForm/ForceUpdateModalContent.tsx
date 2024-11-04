@@ -38,7 +38,7 @@ function ForceUpdateModalContentComponent({
 
   return (
     <>
-      <p style={spacing.sapUiSmallMarginBottom}>
+      <p className="sap-margin-bottom-small">
         {t('common.create-form.messages.patch-failure', {
           resourceType: singularName,
           error: error.message,
@@ -48,7 +48,7 @@ function ForceUpdateModalContentComponent({
       <MessageStrip
         design="Warning"
         hideCloseButton
-        style={spacing.sapUiSmallMarginTop}
+        className="sap-margin-top-small"
       >
         {t('common.create-form.messages.force-update')}
       </MessageStrip>

@@ -6,14 +6,14 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';
-import { spacing } from '@ui5/webcomponents-react-base';
 
-import './ResourceCreate.scss';
 import { useRecoilState } from 'recoil';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
+
+import './ResourceCreate.scss';
 
 export const ResourceCreate = ({
   performRefetch,
@@ -162,10 +162,7 @@ export const ResourceCreate = ({
           showYamlTab={disableEdit && onlyYaml}
           content={stickyHeaderHeight => (
             <>
-              <div
-                className="create-form"
-                style={spacing.sapUiSmallMarginBottom}
-              >
+              <div className="create-form sap-margin-bottom-small">
                 {renderForm({
                   formElementRef,
                   isValid,
@@ -179,8 +176,8 @@ export const ResourceCreate = ({
               </div>
               <div
                 data-testid={'create-form-footer-bar'}
+                className="sap-margin-x-small"
                 style={{
-                  ...spacing.sapUiSmallMarginBeginEnd,
                   marginTop: 'auto',
                   position: 'sticky',
                   bottom: '0.5rem',
