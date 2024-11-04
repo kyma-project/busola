@@ -130,6 +130,104 @@ export const DynamicPageComponent = ({
         });
   };
 
+  const actionsBar = (
+    <>
+      {actions && (
+        <div className="page-header__actions">
+          {actions}
+          {(window.location.search.includes('layout') ||
+            (!window.location.search.includes('layout') &&
+              layoutColumn?.showCreate?.resourceType)) &&
+          layoutNumber !== 'StartColumn' ? (
+            <span className="separator" />
+          ) : null}
+        </div>
+      )}
+      {window.location.search.includes('layout') ||
+      (!window.location.search.includes('layout') &&
+        layoutColumn?.showCreate?.resourceType) ? (
+        layoutColumn.layout !== 'OneColumn' ? (
+          layoutNumber !== 'StartColumn' ? (
+            <>
+              {layoutColumn.layout === 'TwoColumnsMidExpanded' ||
+              ((layoutColumn.layout === 'ThreeColumnsMidExpanded' ||
+                layoutColumn.layout === 'ThreeColumnsEndExpanded') &&
+                layoutNumber !== 'MidColumn') ? (
+                <Button
+                  accessibleName="enter-full-screen"
+                  design="Transparent"
+                  icon="full-screen"
+                  onClick={() => {
+                    const newLayout =
+                      layoutNumber === 'MidColumn'
+                        ? 'MidColumnFullScreen'
+                        : 'EndColumnFullScreen';
+                    setLayoutColumn({
+                      ...layoutColumn,
+                      layout: newLayout,
+                    });
+                    window.history.pushState(
+                      window.history.state,
+                      '',
+                      `${window.location.pathname}${
+                        layoutColumn?.showCreate?.resourceType
+                          ? ''
+                          : '?layout=' + newLayout
+                      }`,
+                    );
+                  }}
+                />
+              ) : null}
+              {layoutColumn.layout === 'MidColumnFullScreen' ||
+              layoutColumn.layout === 'EndColumnFullScreen' ? (
+                <Button
+                  accessibleName="close-full-screen"
+                  design="Transparent"
+                  icon="exit-full-screen"
+                  onClick={() => {
+                    const newLayout =
+                      layoutNumber === 'MidColumn'
+                        ? layoutColumn.endColumn === null
+                          ? 'TwoColumnsMidExpanded'
+                          : 'ThreeColumnsMidExpanded'
+                        : 'ThreeColumnsEndExpanded';
+                    setLayoutColumn({
+                      ...layoutColumn,
+                      layout: newLayout,
+                    });
+                    window.history.pushState(
+                      window.history.state,
+                      '',
+                      `${window.location.pathname}${
+                        layoutColumn?.showCreate?.resourceType
+                          ? ''
+                          : '?layout=' + newLayout
+                      }`,
+                    );
+                  }}
+                />
+              ) : null}
+              <Button
+                accessibleName="close-column"
+                design="Transparent"
+                icon="decline"
+                onClick={() => {
+                  handleActionIfFormOpen(
+                    isResourceEdited,
+                    setIsResourceEdited,
+                    isFormOpen,
+                    setIsFormOpen,
+                    () => handleColumnClose(),
+                  );
+                }}
+              />
+            </>
+          ) : null
+        ) : null
+      ) : null}
+    </>
+  );
+
   const headerTitle = inlineEditForm ? (
     <ObjectPageTitle
       style={title === 'Clusters Overview' ? { display: 'none' } : null}
@@ -154,103 +252,7 @@ export const DynamicPageComponent = ({
           )}
         </FlexBox>
       }
-      actionsBar={
-        <>
-          {actions && (
-            <div className="page-header__actions">
-              {actions}
-              {(window.location.search.includes('layout') ||
-                (!window.location.search.includes('layout') &&
-                  layoutColumn?.showCreate?.resourceType)) &&
-              layoutNumber !== 'StartColumn' ? (
-                <span className="separator" />
-              ) : null}
-            </div>
-          )}
-          {window.location.search.includes('layout') ||
-          (!window.location.search.includes('layout') &&
-            layoutColumn?.showCreate?.resourceType) ? (
-            layoutColumn.layout !== 'OneColumn' ? (
-              layoutNumber !== 'StartColumn' ? (
-                <>
-                  {layoutColumn.layout === 'TwoColumnsMidExpanded' ||
-                  ((layoutColumn.layout === 'ThreeColumnsMidExpanded' ||
-                    layoutColumn.layout === 'ThreeColumnsEndExpanded') &&
-                    layoutNumber !== 'MidColumn') ? (
-                    <Button
-                      accessibleName="enter-full-screen"
-                      design="Transparent"
-                      icon="full-screen"
-                      onClick={() => {
-                        const newLayout =
-                          layoutNumber === 'MidColumn'
-                            ? 'MidColumnFullScreen'
-                            : 'EndColumnFullScreen';
-                        setLayoutColumn({
-                          ...layoutColumn,
-                          layout: newLayout,
-                        });
-                        window.history.pushState(
-                          window.history.state,
-                          '',
-                          `${window.location.pathname}${
-                            layoutColumn?.showCreate?.resourceType
-                              ? ''
-                              : '?layout=' + newLayout
-                          }`,
-                        );
-                      }}
-                    />
-                  ) : null}
-                  {layoutColumn.layout === 'MidColumnFullScreen' ||
-                  layoutColumn.layout === 'EndColumnFullScreen' ? (
-                    <Button
-                      accessibleName="close-full-screen"
-                      design="Transparent"
-                      icon="exit-full-screen"
-                      onClick={() => {
-                        const newLayout =
-                          layoutNumber === 'MidColumn'
-                            ? layoutColumn.endColumn === null
-                              ? 'TwoColumnsMidExpanded'
-                              : 'ThreeColumnsMidExpanded'
-                            : 'ThreeColumnsEndExpanded';
-                        setLayoutColumn({
-                          ...layoutColumn,
-                          layout: newLayout,
-                        });
-                        window.history.pushState(
-                          window.history.state,
-                          '',
-                          `${window.location.pathname}${
-                            layoutColumn?.showCreate?.resourceType
-                              ? ''
-                              : '?layout=' + newLayout
-                          }`,
-                        );
-                      }}
-                    />
-                  ) : null}
-                  <Button
-                    accessibleName="close-column"
-                    design="Transparent"
-                    icon="decline"
-                    onClick={() => {
-                      handleActionIfFormOpen(
-                        isResourceEdited,
-                        setIsResourceEdited,
-                        isFormOpen,
-                        setIsFormOpen,
-                        () => handleColumnClose(),
-                      );
-                    }}
-                  />
-                </>
-              ) : null
-            ) : null
-          ) : null}
-        </>
-      }
+      actionsBar={actionsBar}
     />
   ) : (
     <DynamicPageTitle
@@ -281,127 +283,26 @@ export const DynamicPageComponent = ({
           )}
         </FlexBox>
       }
-      actionsBar={
-        <>
-          {actions && (
-            <div className="page-header__actions">
-              {actions}
-              {(window.location.search.includes('layout') ||
-                (!window.location.search.includes('layout') &&
-                  layoutColumn?.showCreate?.resourceType)) &&
-              layoutNumber !== 'StartColumn' ? (
-                <span className="separator" />
-              ) : null}
-            </div>
-          )}
-          {window.location.search.includes('layout') ||
-          (!window.location.search.includes('layout') &&
-            layoutColumn?.showCreate?.resourceType) ? (
-            layoutColumn.layout !== 'OneColumn' ? (
-              layoutNumber !== 'StartColumn' ? (
-                <>
-                  {layoutColumn.layout === 'TwoColumnsMidExpanded' ||
-                  ((layoutColumn.layout === 'ThreeColumnsMidExpanded' ||
-                    layoutColumn.layout === 'ThreeColumnsEndExpanded') &&
-                    layoutNumber !== 'MidColumn') ? (
-                    <Button
-                      accessibleName="enter-full-screen"
-                      design="Transparent"
-                      icon="full-screen"
-                      onClick={() => {
-                        const newLayout =
-                          layoutNumber === 'MidColumn'
-                            ? 'MidColumnFullScreen'
-                            : 'EndColumnFullScreen';
-                        setLayoutColumn({
-                          ...layoutColumn,
-                          layout: newLayout,
-                        });
-                        window.history.pushState(
-                          window.history.state,
-                          '',
-                          `${window.location.pathname}${
-                            layoutColumn?.showCreate?.resourceType
-                              ? ''
-                              : '?layout=' + newLayout
-                          }`,
-                        );
-                      }}
-                    />
-                  ) : null}
-                  {layoutColumn.layout === 'MidColumnFullScreen' ||
-                  layoutColumn.layout === 'EndColumnFullScreen' ? (
-                    <Button
-                      accessibleName="close-full-screen"
-                      design="Transparent"
-                      icon="exit-full-screen"
-                      onClick={() => {
-                        const newLayout =
-                          layoutNumber === 'MidColumn'
-                            ? layoutColumn.endColumn === null
-                              ? 'TwoColumnsMidExpanded'
-                              : 'ThreeColumnsMidExpanded'
-                            : 'ThreeColumnsEndExpanded';
-                        setLayoutColumn({
-                          ...layoutColumn,
-                          layout: newLayout,
-                        });
-                        window.history.pushState(
-                          window.history.state,
-                          '',
-                          `${window.location.pathname}${
-                            layoutColumn?.showCreate?.resourceType
-                              ? ''
-                              : '?layout=' + newLayout
-                          }`,
-                        );
-                      }}
-                    />
-                  ) : null}
-                  <Button
-                    accessibleName="close-column"
-                    design="Transparent"
-                    icon="decline"
-                    onClick={() => {
-                      handleActionIfFormOpen(
-                        isResourceEdited,
-                        setIsResourceEdited,
-                        isFormOpen,
-                        setIsFormOpen,
-                        () => handleColumnClose(),
-                      );
-                    }}
-                  />
-                </>
-              ) : null
-            ) : null
-          ) : null}
-        </>
-      }
+      actionsBar={actionsBar}
     />
   );
 
-  const headerContent = inlineEditForm ? (
-    <>
-      {title !== 'Clusters Overview' && children ? (
+  const headerContent =
+    title !== 'Clusters Overview' && children ? (
+      inlineEditForm ? (
         <ObjectPageHeader className="header-wrapper">
           <section className={`column-wrapper ${columnWrapperClassName || ''}`}>
             {children}
           </section>
         </ObjectPageHeader>
-      ) : null}
-    </>
-  ) : (
-    <>
-      {title !== 'Clusters Overview' && children ? (
+      ) : (
         <DynamicPageHeader className="header-wrapper">
           <section className={`column-wrapper ${columnWrapperClassName || ''}`}>
             {children}
           </section>
         </DynamicPageHeader>
-      ) : null}
-    </>
-  );
+      )
+    ) : null;
 
   const [stickyHeaderHeight, setStickyHeaderHeight] = useState(0);
 
