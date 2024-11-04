@@ -149,7 +149,7 @@ export function YamlResourcesList({ resourcesData }) {
                       ? 'Success'
                       : 'None'
                   }
-                  className="sap-margin-x-small sap-margin-y-small"
+                  className="sap-margin-x-small"
                   style={{
                     width: '95%',
                   }}

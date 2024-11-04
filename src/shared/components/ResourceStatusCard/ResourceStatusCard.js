@@ -13,7 +13,7 @@ export function ResourceStatusCard({
   const { t } = useTranslation();
 
   return (
-    <div className="sap-margin-x-small sap-margin-y-small">
+    <div className="sap-margin-x-small">
       <Card
         header={
           <div className="resource-status-card__header">
@@ -35,7 +35,7 @@ export function ResourceStatusCard({
         )}
         {conditions && (
           <>
-            <div className="title bsl-has-color-status-4 sap-margin-x-small sap-margin-y-small">
+            <div className="title bsl-has-color-status-4 sap-margin-x-small">
               {`${t('common.headers.conditions')}:`}
             </div>
             <ConditionList conditions={conditions} />
