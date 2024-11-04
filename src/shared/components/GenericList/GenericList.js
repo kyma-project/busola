@@ -414,7 +414,7 @@ export const GenericList = ({
             () => handleRowClick(e),
           );
         }}
-        headerRow={
+        columns={
           <HeaderRenderer
             entries={entries}
             actions={actions}
