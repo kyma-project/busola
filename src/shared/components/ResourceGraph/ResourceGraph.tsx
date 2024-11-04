@@ -17,7 +17,6 @@ import { K8sResource } from 'types';
 import { ResourceGraphConfig } from './types';
 import { Panel, Title, Toolbar, ToolbarSpacer } from '@ui5/webcomponents-react';
 
-import { spacing } from '@ui5/webcomponents-react-base';
 import './ResourceGraph.scss';
 
 function ResourceGraph({
@@ -98,8 +97,7 @@ function ResourceGraph({
   return (
     <Panel
       fixed
-      className="card-shadow"
-      style={spacing.sapUiSmallMargin}
+      className="card-shadow sap-margin-small"
       ref={(node: any) => setGraphEl(node)}
       header={
         <Toolbar>

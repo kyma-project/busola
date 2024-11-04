@@ -7,9 +7,8 @@ import {
   ToolbarSpacer,
 } from '@ui5/webcomponents-react';
 
-import { spacing } from '@ui5/webcomponents-react-base';
 import './UI5Panel.scss';
-import { CSSProperties, ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect } from 'react';
 
 type UI5PanelProps = {
   fixed?: boolean;
@@ -22,7 +21,6 @@ type UI5PanelProps = {
   className?: string;
   children: ReactNode;
   description?: string;
-  style?: CSSProperties;
   stickyHeader?: boolean;
   headerTop?: string;
 };
@@ -38,7 +36,6 @@ export const UI5Panel = ({
   className = '',
   children,
   description = '',
-  style = undefined,
   stickyHeader = false,
   headerTop = '0',
 }: UI5PanelProps) => {
@@ -61,10 +58,9 @@ export const UI5Panel = ({
     <Panel
       fixed={fixed}
       key={keyComponent}
-      className={`${className} bsl-panel-header card-shadow`}
-      style={
-        style ? style : !disableMargin ? spacing.sapUiSmallMargin : undefined
-      }
+      className={`${className} bsl-panel-header card-shadow ${
+        !disableMargin ? 'sap-margin-small' : ''
+      }`}
       stickyHeader={stickyHeader}
       header={
         <Toolbar

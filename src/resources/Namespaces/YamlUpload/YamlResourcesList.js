@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Card,
   CardHeader,
@@ -23,7 +22,6 @@ import {
 } from './useUploadResources';
 import { ResourceValidationResult } from './ResourceValidationResult';
 
-import { spacing } from '@ui5/webcomponents-react-base';
 import { activeNamespaceIdState } from '../../../state/activeNamespaceIdAtom';
 import { SeparatorLine } from './SeparatorLine';
 import { ValidationSwitch } from './ValidationSwitch';
@@ -84,9 +82,9 @@ export function YamlResourcesList({ resourcesData }) {
             <FlexBox
               direction={'Column'}
               justifyContent={'SpaceBetween'}
+              className="sap-margin-small"
               style={{
                 gap: '1rem',
-                ...spacing.sapUiSmallMargin,
               }}
             >
               <p
@@ -104,7 +102,7 @@ export function YamlResourcesList({ resourcesData }) {
                   <span style={{ fontWeight: 'bold' }}></span>
                 </Trans>
               </p>
-              <Title level="H4" style={spacing.sapUiSmallMarginTop}>
+              <Title level="H4" className="sap-margin-top-small">
                 {t('upload-yaml.uploaded-resources')}
               </Title>
               <SeparatorLine style={{ margin: '0rem -1rem' }} />
@@ -127,16 +125,13 @@ export function YamlResourcesList({ resourcesData }) {
     } else {
       return (
         <>
-          <div
-            className={'yaml-upload-modal__content'}
-            style={spacing.sapUiTinyMarginBegin}
-          >
+          <div className={'yaml-upload-modal__content sap-margin-begin-tiny'}>
             <FlexBox
               direction={'Column'}
               justifyContent={'SpaceBetween'}
+              className="sap-margin-begin-tiny"
               style={{
                 gap: '1rem',
-                ...spacing.sapUiSmallMargin,
               }}
             >
               <Card
@@ -154,9 +149,9 @@ export function YamlResourcesList({ resourcesData }) {
                       ? 'Success'
                       : 'None'
                   }
+                  className="sap-margin-x-small sap-margin-y-small"
                   style={{
                     width: '95%',
-                    ...spacing.sapUiSmallMarginBeginEnd,
                   }}
                 />
               </Card>

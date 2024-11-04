@@ -27,7 +27,6 @@ import { ChooseStorage } from './ChooseStorage';
 import { WizardButtons } from 'shared/components/WizardButtons/WizardButtons';
 import { ClusterPreview } from './ClusterPreview';
 
-import { spacing } from '@ui5/webcomponents-react-base';
 import './AddClusterWizard.scss';
 import { isFormOpenState } from 'state/formOpenAtom';
 
@@ -219,14 +218,14 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
         data-step={!hasAuth || !hasOneContext ? '3' : '2'}
       >
         <div className="add-cluster__content-container">
-          <Title level="H5" style={spacing.sapUiSmallMarginBottom}>
+          <Title level="H5" className="sap-margin-small">
             {t('clusters.storage.choose-storage.label')}
             <>
               <Button
                 id="storageDescriptionOpener"
                 icon="hint"
                 design="Transparent"
-                style={spacing.sapUiTinyMarginBegin}
+                className="sap-margin-begin-tiny"
                 onClick={() => setShowTitleDescription(true)}
               />
               {createPortal(

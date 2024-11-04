@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MessageStrip, Switch, Title } from '@ui5/webcomponents-react';
 import jp from 'jsonpath';
@@ -8,7 +8,6 @@ import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { getUser, getUserIndex } from '../shared';
 
-import { spacing } from '@ui5/webcomponents-react-base';
 import { TextArrayInput } from 'shared/ResourceForm/fields';
 
 const OIDCform = ({ resource, setResource, ...props }) => {
@@ -129,7 +128,7 @@ export function AuthForm({
         <MessageStrip
           design="Warning"
           hideCloseButton
-          style={spacing.sapUiSmallMarginTopBottom}
+          className="sap-margin-top-small sap-margin-bottom-small"
         >
           {t('clusters.wizard.incomplete', {
             context:
@@ -145,7 +144,7 @@ export function AuthForm({
           label={t('clusters.wizard.auth.using-oidc')}
           input={() => (
             <Switch
-              style={spacing.sapUiTinyMarginTop}
+              className="sap-margin-top-tiny"
               checked={useOidc}
               onChange={switchAuthVariant}
             />
