@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { Table } from '@ui5/webcomponents-react';
+import { Table } from '@ui5/webcomponents-react-compat/dist/components/Table/index.js';
 import { useNavigate } from 'react-router-dom';
 import {
   BodyFallback,

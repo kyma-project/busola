@@ -1,14 +1,9 @@
-import {
-  Panel,
-  Text,
-  Title,
-  Toolbar,
-  ToolbarSeparator,
-  ToolbarSpacer,
-} from '@ui5/webcomponents-react';
-
-import './UI5Panel.scss';
 import { ReactNode, useEffect } from 'react';
+import { Panel, Text, Title } from '@ui5/webcomponents-react';
+import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
+import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
+import { ToolbarSeparator } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSeparator/index.js';
+import './UI5Panel.scss';
 
 type UI5PanelProps = {
   fixed?: boolean;

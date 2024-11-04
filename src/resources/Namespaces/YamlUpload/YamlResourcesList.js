@@ -1,7 +1,7 @@
 import {
   Card,
   CardHeader,
-  CustomListItem,
+  ListItemCustom,
   FlexBox,
   Icon,
   List,
@@ -157,7 +157,7 @@ export function YamlResourcesList({ resourcesData }) {
               </Card>
               <List>
                 {resources.map(r => (
-                  <CustomListItem type={'Inactive'}>
+                  <ListItemCustom type={'Inactive'}>
                     <FlexBox alignItems={'Center'}>
                       <Icon
                         className={`status status-${getIcon(r?.status)}`}
@@ -170,7 +170,7 @@ export function YamlResourcesList({ resourcesData }) {
                         {getStatus(r?.status)}
                       </Text>
                     </FlexBox>
-                  </CustomListItem>
+                  </ListItemCustom>
                 ))}
               </List>
             </FlexBox>

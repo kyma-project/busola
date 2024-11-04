@@ -1,4 +1,3 @@
-import ReactDOM from 'react-dom';
 import i18next from 'i18next';
 import yaml from 'js-yaml';
 import { Suspense } from 'react';
@@ -26,6 +25,7 @@ import './styles/sapIllus-Fills.css';
 import './styles/sapIllus-Layout.css';
 import './styles/index.scss';
 import './styles/fiori-helpers.scss';
+import { createRoot } from 'react-dom/client';
 
 i18next
   .use(initReactI18next)
@@ -55,7 +55,10 @@ i18next
 
 savePreviousPath();
 
-ReactDOM.render(
+const container = document.getElementById('root');
+const root = createRoot(container!);
+
+root.render(
   <RecoilRoot>
     <ThemeProvider>
       <BrowserRouter>
@@ -69,5 +72,4 @@ ReactDOM.render(
       </BrowserRouter>
     </ThemeProvider>
   </RecoilRoot>,
-  document.getElementById('root'),
 );

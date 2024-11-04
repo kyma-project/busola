@@ -1,13 +1,9 @@
 import { useState } from 'react';
-import {
-  Button,
-  FlexBox,
-  Icon,
-  Text,
-  TableCell,
-  TableColumn,
-  TableRow,
-} from '@ui5/webcomponents-react';
+import { Button, FlexBox, Icon, Text } from '@ui5/webcomponents-react';
+import { TableCell } from '@ui5/webcomponents-react-compat/dist/components/TableCell/index.js';
+import { TableColumn } from '@ui5/webcomponents-react-compat/dist/components/TableColumn/index.js';
+import { TableRow } from '@ui5/webcomponents-react-compat/dist/components/TableRow/index.js';
+
 import ListActions from 'shared/components/ListActions/ListActions';
 
 import { spacing } from '@ui5/webcomponents-react-base';

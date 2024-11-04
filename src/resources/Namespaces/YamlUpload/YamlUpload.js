@@ -25,7 +25,7 @@ function YamlUpload({
     ?.join('---\n');
 
   useEffect(() => {
-    if (!yamlContentString && editor) editor.getModel().setValue('');
+    if (!yamlContentString && editor) editor.getModel()?.setValue('');
   }, [editor, yamlContentString]);
 
   const updateYamlContent = useCallback(
