@@ -55,7 +55,7 @@ const useGetHeaderHeight = dynamicPageRef => {
     return () => {
       headerObserver.disconnect();
     };
-  }, []);
+  }, [dynamicPageRef]);
   return headerHeight;
 };
 
