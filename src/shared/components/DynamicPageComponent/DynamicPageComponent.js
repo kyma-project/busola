@@ -11,7 +11,6 @@ import {
 } from '@ui5/webcomponents-react';
 
 import './DynamicPageComponent.scss';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
@@ -94,19 +93,19 @@ export const DynamicPageComponent = ({
   const headerTitle = (
     <DynamicPageTitle
       style={title === 'Clusters Overview' ? { display: 'none' } : null}
-      header={
+      heading={
         <FlexBox alignItems="Center">
           <Title level="H3" className="bold-title">
             {title}
           </Title>
           {protectedResource && (
-            <span style={spacing.sapUiTinyMarginBegin}>
+            <span className="sap-margin-begin-tiny">
               {protectedResourceWarning}
             </span>
           )}
           {description && (
             <HintButton
-              style={spacing.sapUiTinyMargin}
+              className="sap-margin-tiny"
               setShowTitleDescription={setShowTitleDescription}
               showTitleDescription={showTitleDescription}
               description={description}
@@ -243,11 +242,9 @@ export const DynamicPageComponent = ({
       <ObjectPage
         mode="IconTabBar"
         className={`page-header ${className}`}
-        alwaysShowContentHeader
-        showHideHeaderButton={false}
-        headerContentPinnable={false}
-        headerTitle={headerTitle}
-        headerContent={customHeaderContent ?? headerContent}
+        headerPinned
+        titleArea={headerTitle}
+        headerArea={customHeaderContent ?? headerContent}
         selectedSectionId={selectedSectionIdState}
         onBeforeNavigate={e => {
           if (isFormOpen.formOpen) {
@@ -271,6 +268,7 @@ export const DynamicPageComponent = ({
             setIsFormOpen({ formOpen: true });
           }
         }}
+        hidePinButton
       >
         <ObjectPageSection
           aria-label="View"
@@ -280,7 +278,6 @@ export const DynamicPageComponent = ({
         >
           {content}
         </ObjectPageSection>
-
         <ObjectPageSection
           aria-label="Edit"
           hideTitleText
@@ -299,12 +296,11 @@ export const DynamicPageComponent = ({
     <DynamicPage
       className="page-header"
       alwaysShowContentHeader
-      showHideHeaderButton={false}
       headerContentPinnable={false}
       backgroundDesign="Solid"
-      headerTitle={headerTitle}
-      headerContent={headerContent}
-      footer={footer}
+      titleArea={headerTitle}
+      headerArea={headerContent}
+      footerArea={footer}
     >
       {({ stickyHeaderHeight }) => {
         return typeof content === 'function'

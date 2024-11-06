@@ -23,7 +23,6 @@ import { getErrorMessage } from 'shared/utils/helpers';
 import { pageSizeState } from 'state/preferences/pageSizeAtom';
 import './GenericList.scss';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { EmptyListComponent } from '../EmptyListComponent/EmptyListComponent';
 import { useUrl } from 'hooks/useUrl';
 import { columnLayoutState } from 'state/columnLayoutAtom';
@@ -395,7 +394,6 @@ export const GenericList = ({
       headerActions={!headerActionsEmpty && headerActions}
       data-testid={testid}
       disableMargin
-      style={disableMargin ? {} : spacing.sapUiSmallMargin}
       className={className}
     >
       <Table
@@ -425,7 +423,6 @@ export const GenericList = ({
       >
         {renderTableBody()}
       </Table>
-
       {pagination &&
         (!pagination.autoHide ||
           filteredEntries.length > pagination.itemsPerPage) && (

@@ -1,11 +1,9 @@
-import React from 'react';
+import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { Badge, Label } from '@ui5/webcomponents-react';
+import { Tag, Label } from '@ui5/webcomponents-react';
 
-import { spacing } from '@ui5/webcomponents-react-base';
 import './Labels.scss';
-import { useTranslation } from 'react-i18next';
 
 const SHORTENING_TRESHOLD = 50;
 
@@ -22,7 +20,7 @@ export const Labels = ({
     return (
       <>
         {displayLabelForLabels ? (
-          <Label showColon={true} style={spacing.sapUiTinyMarginBottom}>
+          <Label showColon={true} className="sap-margin-bottom-tiny">
             {t('common.headers.labels')}
           </Label>
         ) : null}
@@ -36,34 +34,31 @@ export const Labels = ({
   }
 
   const shortenLabel = label => label.slice(0, SHORTENING_TRESHOLD) + '...';
-  const bottomMargin = disableMarginBottom ? {} : spacing.sapUiTinyMarginBottom;
 
   return (
     <>
       {displayLabelForLabels ? (
         <Label
           showColon={true}
-          style={spacing.sapUiTinyMarginBottom}
-          className="bsl-has-color-status-4"
+          className="bsl-has-color-status-4 sap-margin-bottom-tiny"
         >
           {t('common.headers.labels')}
         </Label>
       ) : null}
       <div className={classNames('labels', className)} style={style}>
         {separatedLabels.map((label, id) => (
-          <Badge
+          <Tag
             aria-label={label}
             key={id}
             colorScheme="10"
-            style={{
-              ...spacing.sapUiTinyMarginEnd,
-              ...bottomMargin,
-            }}
+            className={`sap-margin-end-tiny ${
+              disableMarginBottom ? '' : 'sap-margin-bottom-tiny'
+            }`}
           >
             {shortenLongLabels && label.length > SHORTENING_TRESHOLD
               ? shortenLabel(label)
               : label}
-          </Badge>
+          </Tag>
         ))}
       </div>
     </>

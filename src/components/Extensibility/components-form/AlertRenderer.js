@@ -1,11 +1,9 @@
-import React from 'react';
 import { MessageStrip } from '@ui5/webcomponents-react';
 
 import { useCreateResourceDescription } from 'components/Extensibility/helpers';
 
 import { useVariables } from '../hooks/useVariables';
 import { useJsonata } from '../hooks/useJsonata';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 export function AlertRenderer({
   value,
@@ -56,7 +54,7 @@ export function AlertRenderer({
     <MessageStrip
       design={schemaType}
       hideCloseButton
-      style={spacing.sapUiTinyMarginTopBottom}
+      className="sap-margin-y-tiny"
     >
       {alertLink}
     </MessageStrip>

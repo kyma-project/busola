@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import { Text, Icon } from '@ui5/webcomponents-react';
 
 import { Generic, PROPERTIES } from './handlers';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 function ObjectProperty({ label, val, handler, required, expanded = false }) {
   const [collapsed, setCollapsed] = useState(!expanded);
@@ -20,7 +19,7 @@ function ObjectProperty({ label, val, handler, required, expanded = false }) {
       >
         {handler.expandable && (
           <Icon
-            style={spacing.sapUiTinyMarginEnd}
+            className="sap-margin-end-tiny"
             aria-hidden
             name={
               collapsed ? 'navigation-right-arrow' : 'navigation-down-arrow'

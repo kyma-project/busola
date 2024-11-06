@@ -1,13 +1,12 @@
 import classnames from 'classnames';
 import { FlexBox } from '@ui5/webcomponents-react';
 import { Label } from '../../../shared/ResourceForm/components/Label';
+import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 
 import { useCreateResourceDescription } from 'components/Extensibility/helpers';
+import { useState } from 'react';
 
 import './FormField.scss';
-import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
-import { useState } from 'react';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 export function FormField({
   propertyPath,
@@ -43,7 +42,7 @@ export function FormField({
             setShowTitleDescription={setOpenPopover}
             showTitleDescription={openPopover}
             description={tooltipContent}
-            style={spacing.sapUiTinyMarginBegin}
+            className="sap-margin-begin-tiny"
             ariaTitle={!isListItem ? label : ''}
           />
         )}

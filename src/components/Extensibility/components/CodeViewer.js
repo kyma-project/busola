@@ -1,4 +1,3 @@
-import React from 'react';
 import jsyaml from 'js-yaml';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';

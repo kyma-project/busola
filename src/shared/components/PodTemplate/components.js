@@ -48,7 +48,7 @@ function ContainerComponent({ container }) {
 
   return (
     <>
-      <GroupHeaderListItem>{container.name}</GroupHeaderListItem>
+      <ListItemGroup>{container.name}</ListItemGroup>
       <PodTemplateRow
         label={t('pods.labels.image')}
         component={
@@ -170,7 +170,7 @@ function VolumeComponent({ volume }) {
 
   return (
     <>
-      <GroupHeaderListItem>{name}</GroupHeaderListItem>
+      <ListItemGroup>{name}</ListItemGroup>
       <PodTemplateRow label="Type" component={<Text>{typeLabel}</Text>} />
       {k8sResource && (
         <PodTemplateRow

@@ -11,7 +11,7 @@ import {
 } from '@ui5/webcomponents-react';
 import ListActions from 'shared/components/ListActions/ListActions';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import ListActions from 'shared/components/ListActions/ListActions';
 
 export const BodyFallback = ({ children }) => (
   <TableRow>
@@ -176,7 +176,7 @@ const CollapsedRowRenderer = ({
         >
           <FlexBox>
             <Icon
-              style={spacing.sapUiTinyMarginEnd}
+              className="sap-margin-end-tiny"
               name={isOpen ? 'navigation-up-arrow' : 'navigation-down-arrow'}
             />
             {title}

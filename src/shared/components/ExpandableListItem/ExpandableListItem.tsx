@@ -1,8 +1,8 @@
 import { ReactNode, useState } from 'react';
-import { Icon, StandardListItem } from '@ui5/webcomponents-react';
+import { Icon, ListItemStandard } from '@ui5/webcomponents-react';
 import { StatusBadge } from '../StatusBadge/StatusBadge';
 import { useTranslation } from 'react-i18next';
-import { spacing } from '@ui5/webcomponents-react-base';
+
 import './ExpandableListItem.scss';
 
 type ExpandableListItemProps = {
@@ -29,7 +29,7 @@ export const ExpandableListItem = ({
 
   return (
     <>
-      <StandardListItem
+      <ListItemStandard
         onClick={() => setExpanded(!expanded)}
         className="expandable-item"
       >
@@ -38,13 +38,13 @@ export const ExpandableListItem = ({
             <Icon
               name="slim-arrow-down"
               design="Information"
-              style={spacing.sapUiTinyMarginEnd}
+              className="sap-margin-end-tiny"
             />
           ) : (
             <Icon
               name="slim-arrow-right"
               design="Information"
-              style={spacing.sapUiTinyMarginEnd}
+              className="sap-margin-end-tiny"
             />
           )}
           {header}
@@ -57,17 +57,11 @@ export const ExpandableListItem = ({
             </StatusBadge>
           )}
         </div>
-      </StandardListItem>
+      </ListItemStandard>
       {expanded && (
         <>
           {content && (
-            <div
-              className="expandable-item__message"
-              style={{
-                ...spacing.sapUiSmallMarginBeginEnd,
-                ...spacing.sapUiTinyMarginTopBottom,
-              }}
-            >
+            <div className="expandable-item__message sap-margin-x-small sap-margin-y-tiny">
               <div className="title bsl-has-color-status-4 ">
                 {`${t('common.headers.message')}:`}
               </div>
@@ -79,11 +73,7 @@ export const ExpandableListItem = ({
               <div
                 className={`expandable-item__message ${
                   element?.className ? element.className : ''
-                }`}
-                style={{
-                  ...spacing.sapUiSmallMarginBeginEnd,
-                  ...spacing.sapUiTinyMarginTopBottom,
-                }}
+                } sap-margin-x-small sap-margin-y-tiny`}
                 key={index}
               >
                 {element?.header && (

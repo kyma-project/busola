@@ -40,7 +40,7 @@ export function ModeSelector({ mode, setMode, isDisabled = false }) {
         {buttonsToDisplay.map(button => (
           <SegmentedButtonItem
             key={button.mode}
-            pressed={mode === button.mode}
+            selected={mode === button.mode}
             disabled={isDisabled}
             data-mode={button.mode}
           >
