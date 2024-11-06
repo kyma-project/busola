@@ -170,7 +170,6 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
           className="cluster-wizard__buttons__sticky"
         />
       </WizardStep>
-
       {kubeconfig && (!hasAuth || !hasOneContext) && (
         <WizardStep
           titleText={t('clusters.wizard.authentication')}
@@ -202,7 +201,6 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
           />
         </WizardStep>
       )}
-
       <WizardStep
         titleText={t('clusters.wizard.storage')}
         selected={
@@ -232,8 +230,8 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
                 <Popover
                   opener="storageDescriptionOpener"
                   open={showTitleDescription}
-                  onAfterClose={() => setShowTitleDescription(false)}
-                  placementType="Right"
+                  onClose={() => setShowTitleDescription(false)}
+                  placement="End"
                 >
                   <Text className="description">
                     {t('clusters.storage.info')}

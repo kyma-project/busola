@@ -9,7 +9,7 @@ export function InvalidRoleError({ rule }) {
   return (
     isRuleInvalid(rule) && (
       <MessageStrip
-        design="Warning"
+        design="Critical"
         hideCloseButton
         className="sap-margin-top-small"
       >

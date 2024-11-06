@@ -126,7 +126,7 @@ export function AuthForm({
       <div className="add-cluster__content-container">
         <Title level="H5">{t('clusters.wizard.update')}</Title>
         <MessageStrip
-          design="Warning"
+          design="Critical"
           hideCloseButton
           className="sap-margin-y-small"
         >

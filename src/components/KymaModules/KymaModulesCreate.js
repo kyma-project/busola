@@ -418,7 +418,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
               {checkIfSelectedModuleIsBeta() ? (
                 <MessageStrip
                   key={'beta'}
-                  design="Warning"
+                  design="Critical"
                   hideCloseButton
                   className="sap-margin-top-tiny"
                 >
@@ -429,7 +429,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
             </>
           ) : (
             <MessageStrip
-              design="Warning"
+              design="Critical"
               hideCloseButton
               className="sap-margin-top-small"
             >

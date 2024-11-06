@@ -81,7 +81,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
   const Items = parsedOptions?.name?.map((name, index) => {
     if (!name)
       return (
-        <MessageStrip design="Warning" hideCloseButton>
+        <MessageStrip design="Critical" hideCloseButton>
           {t('extensibility.widgets.modules.no-modules')}
         </MessageStrip>
       );
@@ -213,7 +213,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
         </div>
         {parsedOptions?.betaAlert && isBeta && isChecked ? (
           <MessageStrip
-            design="Warning"
+            design="Critical"
             hideCloseButton
             className="alert sap-margin-y-small"
           >

@@ -372,7 +372,6 @@ export const DynamicPageComponent = ({
         >
           {content}
         </ObjectPageSection>
-
         <ObjectPageSection
           aria-label="Edit"
           hideTitleText
