@@ -173,6 +173,8 @@ export const ClusterValidation = () => {
         </>
       }
     >
+      {!scanReady && <Loader type="Indeterminate" />}
+
       <Section titleText={t('cluster-validation.scan.scope')}>
         <FlexBox className="bsl-has-padding-small">
           <InfoTile
