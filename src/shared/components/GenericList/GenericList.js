@@ -427,7 +427,6 @@ export const GenericList = ({
       >
         {renderTableBody()}
       </Table>
-
       {pagination &&
         (!pagination.autoHide ||
           filteredEntries.length > pagination.itemsPerPage) && (

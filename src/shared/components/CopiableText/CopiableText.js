@@ -25,8 +25,7 @@ export function CopiableText({
     <div className="copiable-text">
       {!iconOnly ? children || textToCopy : null}
       <Button
-        icon="copy"
-        iconEnd
+        endIcon="copy"
         design="Transparent"
         className="sap-margin-begin-tiny"
         disabled={disabled}

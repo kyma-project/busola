@@ -44,7 +44,7 @@ function ForceUpdateModalContentComponent({
       </p>
       <div style={{ height: '400px' }} ref={divRef}></div>
       <MessageStrip
-        design="Warning"
+        design="Critical"
         hideCloseButton
         className="sap-margin-top-small"
       >

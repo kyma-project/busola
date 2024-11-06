@@ -154,22 +154,20 @@ export const ClusterValidation = () => {
       headerActions={
         <>
           <Button
-            icon="play"
-            iconEnd
+            endIcon="play"
             onClick={scan}
             disabled={!!scanProgress || !scanReady}
           >
             {t('cluster-validation.scan.buttons.scan')}
           </Button>
           <Button
-            icon="settings"
-            iconEnd
+            endIcon="settings"
             onClick={configure}
             disabled={!!scanProgress || !scanReady}
           >
             {t('cluster-validation.scan.buttons.configure')}
           </Button>
-          <Button icon="reset" iconEnd onClick={clear} disabled={!scanProgress}>
+          <Button endIcon="reset" onClick={clear} disabled={!scanProgress}>
             {t('cluster-validation.scan.buttons.clear')}
           </Button>
         </>
@@ -193,7 +191,6 @@ export const ClusterValidation = () => {
           />
         </FlexBox>
       </Section>
-
       {scanProgress && (
         <Section
           titleText={t('cluster-validation.scan.progress')}
@@ -213,20 +210,18 @@ export const ClusterValidation = () => {
             }
             valueState={
               scanProgress && scanProgress.total === scanProgress.scanned
-                ? 'Success'
+                ? 'Positive'
                 : 'None'
             }
             style={{ width: '96%', padding: '5px 2%' }}
           />
         </Section>
       )}
-
       {scanResult && (
         <Section titleText={t('cluster-validation.scan.result')}>
           <ScanResultTree scanResult={scanResult} />
         </Section>
       )}
-
       {createPortal(
         <ClusterValidationConfigurationDialog
           show={isConfigurationOpen}
@@ -275,7 +270,7 @@ const Section = ({
             <CardHeader
               titleText={titleText}
               subtitleText={subtitleText}
-              status={status}
+              additionalText={status}
             />
           ) : (
             header

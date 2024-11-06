@@ -114,8 +114,8 @@ export function Editor({
         )}
         {schemaError && (
           <MessageStrip
-            design="Warning"
             className="break-word sap-margin-small"
+            design="Critical"
           >
             {t('common.create-form.autocomplete-unavailable-error', {
               error: schemaError.error || schemaError.message || schemaError,
@@ -124,7 +124,7 @@ export function Editor({
         )}
         {warnings.length ? (
           <MessageStrip
-            design="Warning"
+            design="Critical"
             hideCloseButton
             className="break-word sap-margin-small"
           >

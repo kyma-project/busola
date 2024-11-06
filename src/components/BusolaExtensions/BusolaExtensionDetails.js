@@ -193,8 +193,7 @@ export function BusolaExtensionDetails({ name, namespace }) {
                 <>
                   <Button
                     disabled={currentVersion === getLatestVersion()}
-                    icon="forward"
-                    iconEnd
+                    endIcon="forward"
                     onClick={() => {
                       const newBusolaExtension = migrateToLatest(configmap);
                       updateBusolaExtension(newBusolaExtension, configmap);

@@ -52,9 +52,8 @@ export const ExternalLink = ({
   if (structure.type === 'button') {
     return (
       <Button
-        icon="inspect"
-        iconEnd
         className="sap-margin-x-tiny"
+        endIcon="inspect"
         onClick={() => {
           const newWindow = window.open(href, '_blank', 'noopener, noreferrer');
           if (newWindow) newWindow.opener = null;
