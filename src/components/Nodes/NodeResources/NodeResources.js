@@ -4,9 +4,10 @@ import { Card, CardHeader } from '@ui5/webcomponents-react';
 import { roundTwoDecimals } from 'shared/utils/helpers';
 import './NodeResources.scss';
 
-export function NodeResources({ metrics }) {
+export function NodeResources({ metrics, resources }) {
   const { t } = useTranslation();
   const { cpu, memory } = metrics || {};
+  console.log(resources);
 
   return cpu && memory ? (
     <>
@@ -39,6 +40,72 @@ export function NodeResources({ metrics }) {
           max={memory.capacity}
           additionalInfo={`${roundTwoDecimals(
             memory.usage,
+          )}GiB / ${roundTwoDecimals(memory.capacity)}GiB`}
+        />
+      </Card>
+      <Card
+        className="radial-chart-card"
+        header={
+          <CardHeader
+            titleText={t('cluster-overview.statistics.cpu-requests')}
+          />
+        }
+      >
+        <UI5RadialChart
+          color="var(--sapChart_OrderedColor_6)"
+          value={resources?.requests?.cpu}
+          max={cpu.capacity}
+          additionalInfo={`${roundTwoDecimals(
+            resources?.requests?.cpu,
+          )}m / ${roundTwoDecimals(cpu.capacity)}m`}
+        />
+      </Card>
+      <Card
+        className="radial-chart-card"
+        header={
+          <CardHeader
+            titleText={t('cluster-overview.statistics.memory-requests')}
+          />
+        }
+      >
+        <UI5RadialChart
+          color="var(--sapChart_OrderedColor_6)"
+          value={resources?.requests?.memory}
+          max={memory.capacity}
+          additionalInfo={`${roundTwoDecimals(
+            resources.requests?.memory,
+          )}GiB / ${roundTwoDecimals(memory.capacity)}GiB`}
+        />
+      </Card>
+      <Card
+        className="radial-chart-card"
+        header={
+          <CardHeader titleText={t('cluster-overview.statistics.cpu-limits')} />
+        }
+      >
+        <UI5RadialChart
+          color="var(--sapChart_OrderedColor_6)"
+          value={resources?.limits?.cpu}
+          max={cpu.capacity}
+          additionalInfo={`${roundTwoDecimals(
+            resources?.limits?.cpu,
+          )}m / ${roundTwoDecimals(cpu.capacity)}m`}
+        />
+      </Card>
+      <Card
+        className="radial-chart-card"
+        header={
+          <CardHeader
+            titleText={t('cluster-overview.statistics.memory-limits')}
+          />
+        }
+      >
+        <UI5RadialChart
+          color="var(--sapChart_OrderedColor_6)"
+          value={resources?.limits?.memory}
+          max={memory.capacity}
+          additionalInfo={`${roundTwoDecimals(
+            resources.limits.memory,
           )}GiB / ${roundTwoDecimals(memory.capacity)}GiB`}
         />
       </Card>

@@ -12,6 +12,10 @@ cluster-overview:
   statistics:
     cpu-usage: 'CPU Usage'
     memory-usage: 'Memory Usage'
+    cpu-requests: 'CPU requests'
+    memory-requests: 'Memory requests'
+    cpu-limits: 'CPU limits'
+    memory-limits: 'Memory limits'
     pods-overview: 'Pods Overview'
     total-pods: 'Total Pods'
     healthy-pods: 'Healthy Pods'
