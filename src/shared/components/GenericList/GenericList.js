@@ -400,6 +400,7 @@ export const GenericList = ({
         className={`ui5-generic-list ${
           hasDetailsView && filteredEntries.length ? 'cursor-pointer' : ''
         }`}
+        overflowMode="Popin"
         onRowClick={e => {
           const selection = window.getSelection().toString();
           if (!hasDetailsView || selection.length > 0) return;

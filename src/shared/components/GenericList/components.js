@@ -25,17 +25,11 @@ export const HeaderRenderer = ({
   disableHiding = true,
   displayArrow = false,
   noHideFields,
-  slot = null,
 }) => {
   let emptyColumn = null;
   if (actions?.length) {
     emptyColumn = (
-      <TableHeaderCell
-        //slot={slot}
-        key="actions-column"
-        aria-label="actions-column"
-        //minWidth={850}
-      >
+      <TableHeaderCell key="actions-column" aria-label="actions-column">
         <Text />
       </TableHeaderCell>
     );
@@ -46,18 +40,18 @@ export const HeaderRenderer = ({
       {headerRenderer().map((h, index) => {
         return (
           <TableHeaderCell
-            //slot={`${slot}-${index}`}
             key={typeof h === 'object' ? index : h}
             aria-label={`${typeof h === 'object' ? index : h}-column`}
+            importance={h === 'Popin' ? -1 : 0}
+            minWidth={h === 'Popin' ? '100%' : null}
           >
-            <Text>{h}</Text>
+            {h === 'Popin' ? null : <Text>{h}</Text>}
           </TableHeaderCell>
         );
       })}
       {emptyColumn}
       {displayArrow && (
         <TableHeaderCell
-          //slot={slot}
           key="arrow-column"
           aria-label="arrow-column"
           horizontalAlign="End"
