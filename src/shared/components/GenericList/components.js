@@ -5,12 +5,10 @@ import {
   Icon,
   Text,
   TableCell,
-  TableColumn,
   TableRow,
   TableHeaderRow,
+  TableHeaderCell,
 } from '@ui5/webcomponents-react';
-import ListActions from 'shared/components/ListActions/ListActions';
-
 import ListActions from 'shared/components/ListActions/ListActions';
 
 export const BodyFallback = ({ children }) => (

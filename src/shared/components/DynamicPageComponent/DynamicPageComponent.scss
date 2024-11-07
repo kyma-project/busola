@@ -39,6 +39,10 @@
       border-radius: 5px;
     }
   }
+
+  &::part(fit-content) {
+    padding: 0;
+  }
 }
 
 .header-wrapper {

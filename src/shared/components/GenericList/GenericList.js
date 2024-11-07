@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { Table, TableCell, TableRow } from '@ui5/webcomponents-react';
+import { Table } from '@ui5/webcomponents-react';
 import { useNavigate } from 'react-router-dom';
 import {
   BodyFallback,
@@ -45,19 +45,19 @@ const defaultSearch = {
 };
 
 export const GenericList = ({
-  entries,
-  actions,
+  entries = [],
+  actions = [],
   extraHeaderContent,
   title,
   headerRenderer,
   rowRenderer,
   testid,
-  serverDataError,
-  serverDataLoading,
+  serverDataError = null,
+  serverDataLoading = false,
   pagination,
   sortBy,
-  notFoundMessage,
-  searchSettings,
+  notFoundMessage = 'components.generic-list.messages.not-found',
+  searchSettings = defaultSearch,
   disableMargin,
   emptyListProps = null,
   columnLayout = null,
@@ -394,7 +394,7 @@ export const GenericList = ({
       headerActions={!headerActionsEmpty && headerActions}
       data-testid={testid}
       disableMargin
-      className={className}
+      className={`${className} ${disableMargin ? {} : 'sap-margin-small'}`}
     >
       <Table
         className={`ui5-generic-list ${
@@ -411,7 +411,7 @@ export const GenericList = ({
             () => handleRowClick(e),
           );
         }}
-        columns={
+        headerRow={
           <HeaderRenderer
             actions={actions}
             headerRenderer={headerRenderer}
@@ -481,13 +481,4 @@ GenericList.propTypes = {
   hasDetailsView: PropTypes.bool,
   noHideFields: PropTypes.arrayOf(PropTypes.string),
   customRowClick: PropTypes.func,
-};
-
-GenericList.defaultProps = {
-  entries: [],
-  actions: [],
-  serverDataError: null,
-  serverDataLoading: false,
-  notFoundMessage: 'components.generic-list.messages.not-found',
-  searchSettings: defaultSearch,
 };
