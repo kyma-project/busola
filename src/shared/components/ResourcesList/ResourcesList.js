@@ -417,9 +417,7 @@ export function ResourceListRenderer({
           </div>
         );
       }
-      if (col?.value) {
-        return col.value(entry);
-      }
+      return col?.value ? col.value(entry) : null;
     });
 
     return rowColumns.filter(Boolean);
