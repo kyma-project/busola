@@ -8,11 +8,10 @@ import {
   Button,
   FlexBox,
   Text,
-  Badge,
+  Tag,
 } from '@ui5/webcomponents-react';
 
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { useState } from 'react';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
@@ -191,9 +190,9 @@ export default function KymaModulesList({
               resource?.channel || kymaResource?.spec?.channel,
             ),
           ) ? (
-            <Badge style={spacing.sapUiTinyMarginBegin}>
+            <Tag className="sap-margin-begin-tiny">
               {t('kyma-modules.beta')}
-            </Badge>
+            </Tag>
           ) : null}
         </>,
         // Namespace
@@ -204,14 +203,14 @@ export default function KymaModulesList({
             ? moduleStatus?.channel
             : EMPTY_TEXT_PLACEHOLDER}
           {isChannelOverriden ? (
-            <Badge
+            <Tag
               hideStateIcon
               design="Set2"
               colorScheme="5"
-              style={spacing.sapUiTinyMarginBegin}
+              className="sap-margin-begin-tiny"
             >
               {t('kyma-modules.channel-overridden')}
-            </Badge>
+            </Tag>
           ) : (
             ''
           )}
@@ -428,7 +427,7 @@ export default function KymaModulesList({
             <Text renderWhitespace={true}> </Text>
             <Text>{kymaResource?.spec.channel}</Text>
             <HintButton
-              style={spacing.sapUiTinyMarginBegin}
+              className="sap-margin-begin-tiny"
               setShowTitleDescription={setShowReleaseChannelTitleDescription}
               showTitleDescription={showReleaseChannelTitleDescription}
               description={ReleaseChannelDescription}

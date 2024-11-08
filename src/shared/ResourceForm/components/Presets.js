@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
-import { spacing } from '@ui5/webcomponents-react-base';
+
 import './Presets.scss';
 
 export function Presets({
@@ -33,13 +33,7 @@ export function Presets({
   return inlinePresets ? (
     presetDropdown
   ) : (
-    <div
-      className="ui5-content-density-compact preset-separator"
-      style={{
-        ...spacing.sapUiTinyMarginTopBottom,
-        paddingBottom: spacing.sapUiContentPadding.padding,
-      }}
-    >
+    <div className="ui5-content-density-compact preset-separator sap-margin-y-tiny sap-padding-x-small">
       {presetDropdown}
     </div>
   );

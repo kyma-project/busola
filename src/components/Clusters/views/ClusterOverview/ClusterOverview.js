@@ -1,25 +1,26 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { useFeature } from 'hooks/useFeature';
+import { useNavigate } from 'react-router-dom';
+import { useClustersInfo } from 'state/utils/getClustersInfo';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import { useDeleteResource } from 'shared/hooks/useDeleteResource';
+import { useNodesQuery } from 'components/Nodes/nodeQueries';
+import { useSetRecoilState } from 'recoil';
+
+import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
+import { createPortal } from 'react-dom';
+import { deleteCluster } from 'components/Clusters/shared';
 import { Button, Title } from '@ui5/webcomponents-react';
 import { ClusterNodes } from './ClusterNodes';
 import { ClusterValidation } from './ClusterValidation/ClusterValidation';
-import { useFeature } from 'hooks/useFeature';
-import { useNodesQuery } from 'components/Nodes/nodeQueries';
+import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import ClusterStats from './ClusterStats';
 import ClusterDetails from './ClusterDetails';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
-import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
-import { useTranslation } from 'react-i18next';
-import { createPortal } from 'react-dom';
-import { useDeleteResource } from 'shared/hooks/useDeleteResource';
-import { useClustersInfo } from 'state/utils/getClustersInfo';
-import { useNotification } from 'shared/contexts/NotificationContext';
-import { useNavigate } from 'react-router-dom';
-import { deleteCluster } from 'components/Clusters/shared';
-import { spacing } from '@ui5/webcomponents-react-base';
-import './ClusterOverview.scss';
-import { useSetRecoilState } from 'recoil';
-import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 import BannerCarousel from 'components/Extensibility/components/FeaturedCard/BannerCarousel';
+
+import './ClusterOverview.scss';
 
 const Injections = React.lazy(() =>
   import('../../../Extensibility/ExtensibilityInjections'),
@@ -91,10 +92,7 @@ export function ClusterOverview() {
             <Title
               level="H3"
               size="H3"
-              style={{
-                ...spacing.sapUiMediumMarginBegin,
-                ...spacing.sapUiMediumMarginTopBottom,
-              }}
+              className="sap-margin-begin-medium sap-margin-y-medium"
             >
               {t('cluster-overview.headers.cluster-details')}
             </Title>

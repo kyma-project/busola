@@ -97,8 +97,7 @@ export const ModalWithForm = ({
       </div>
     ) : (
       <Button
-        icon={button.icon || null}
-        iconEnd
+        endIcon={button.icon || null}
         accessibleName={button.label || null}
         design={button.design}
         disabled={!!button.disabled}
@@ -149,7 +148,7 @@ export const ModalWithForm = ({
               }
             />
           }
-          onAfterClose={() => {
+          onClose={() => {
             setOpenStatus(false);
           }}
           headerText={title}

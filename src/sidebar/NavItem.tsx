@@ -59,7 +59,6 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
     icon: node.externalUrl ? 'action' : node.icon,
     text: t(node.label, { defaultValue: node.label }),
     selected: isNodeSelected(node),
-    key: node.pathSegment,
     onClick: (e: Event) => {
       if (node.dataSources) {
         let link =
@@ -97,8 +96,8 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   };
 
   if (subItem) {
-    return <SideNavigationSubItem {...propsForNav} />;
+    return <SideNavigationSubItem key={node.pathSegment} {...propsForNav} />;
   }
 
-  return <SideNavigationItem {...propsForNav} />;
+  return <SideNavigationItem key={node.pathSegment} {...propsForNav} />;
 }

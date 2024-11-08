@@ -9,10 +9,9 @@ import { fromJS } from 'immutable';
 import { CheckBox, MessageStrip } from '@ui5/webcomponents-react';
 import { ResourceForm } from 'shared/ResourceForm';
 import { Dropdown } from 'shared/ResourceForm/inputs';
+import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 
 import './Modules.scss';
-import { spacing } from '@ui5/webcomponents-react-base';
-import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 
 export function Modules({ storeKeys, resource, onChange, schema, required }) {
   const { t: tExt } = useGetTranslation();
@@ -82,7 +81,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
   const Items = parsedOptions?.name?.map((name, index) => {
     if (!name)
       return (
-        <MessageStrip design="Warning" hideCloseButton>
+        <MessageStrip design="Critical" hideCloseButton>
           {t('extensibility.widgets.modules.no-modules')}
         </MessageStrip>
       );
@@ -140,12 +139,12 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
 
     return (
       <>
-        <div className="gridbox ">
-          <div style={spacing.sapUiSmallMarginTop}>
+        <div className="gridbox">
+          <div className="sap-margin-top-small">
             {index === 0 ? `${sectionName}:` : ''}
           </div>
           <CheckBox
-            style={spacing.sapUiSmallMarginTop}
+            className="sap-margin-top-small"
             checked={isChecked}
             onChange={e => {
               setCheckbox(
@@ -163,7 +162,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
             text={name}
           />
           <Dropdown
-            style={spacing.sapUiTinyMarginTop}
+            className="sap-margin-top-tiny"
             label={t('extensibility.widgets.modules.module-channel-label')}
             disabled={!isChecked}
             placeholder={t(
@@ -207,17 +206,16 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
           />
 
           {link ? (
-            <ExternalLink url={link} iconStyle={spacing.sapUiMediumMarginTop}>
+            <ExternalLink url={link} iconClassName="sap-margin-top-medium">
               {t('extensibility.widgets.modules.documentation')}
             </ExternalLink>
           ) : null}
         </div>
         {parsedOptions?.betaAlert && isBeta && isChecked ? (
           <MessageStrip
-            design="Warning"
+            design="Critical"
             hideCloseButton
-            className="alert"
-            style={spacing.sapUiSmallMarginTopBottom}
+            className="alert sap-margin-y-small"
           >
             {tExt(parsedOptions?.betaAlert)}
           </MessageStrip>

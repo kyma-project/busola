@@ -3,8 +3,8 @@ import { useTranslation, Trans } from 'react-i18next';
 import { Button, IllustratedMessage } from '@ui5/webcomponents-react';
 import '@ui5/webcomponents-fiori/dist/illustrations/AllIllustrations';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
+
 import './EmptyListComponent.scss';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 type EmptyListComponentProps = {
   titleText: string;
@@ -41,13 +41,10 @@ export const EmptyListComponent = ({
   return (
     <IllustratedMessage
       name={image}
-      size="Auto"
+      design="Auto"
       titleText={titleText}
       subtitle={
-        <p
-          className="emptyListComponent__subtitle"
-          style={spacing.sapUiSmallMarginTop}
-        >
+        <p className="emptyListComponent__subtitle sap-margin-top-small">
           {subtitle}
         </p>
       }

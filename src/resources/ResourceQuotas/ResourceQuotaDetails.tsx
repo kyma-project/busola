@@ -7,7 +7,6 @@ import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow'
 import { useTranslation } from 'react-i18next';
 import { Tokens } from 'shared/components/Tokens';
 import { Text, Title } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 export type ResourceQuotaProps = {
   kind: string;
@@ -61,8 +60,7 @@ export default function ResourceQuotaDetails(props: any) {
                       <Title
                         level="H6"
                         size="H6"
-                        className="resource-quota-spec-subheader"
-                        style={spacing.sapUiSmallMargin}
+                        className="resource-quota-spec-subheader sap-margin-small"
                       >
                         {scope.scopeName}
                       </Title>
