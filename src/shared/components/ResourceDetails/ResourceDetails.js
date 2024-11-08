@@ -213,15 +213,6 @@ function Resource({
   const actions = readOnly ? null : (
     <>
       <Suspense fallback={<Spinner />}>
-        <BannerCarousel
-          children={
-            <Injections
-              destination={resourceType}
-              slot="banner"
-              root={resource}
-            />
-          }
-        />
         <Injections
           destination={resourceType}
           slot="details-header"
@@ -440,6 +431,15 @@ function Resource({
         protectedResourceWarning={protectedResourceWarning(resource)}
         content={
           <>
+            <BannerCarousel
+              children={
+                <Injections
+                  destination={resourceType}
+                  slot="banner"
+                  root={resource}
+                />
+              }
+            />
             {!disableResourceDetailsCard && (
               <>
                 <Title

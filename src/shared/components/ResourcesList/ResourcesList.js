@@ -25,6 +25,7 @@ import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { createPortal } from 'react-dom';
 import BannerCarousel from 'components/Extensibility/components/FeaturedCard/BannerCarousel';
 import { isFormOpenState } from 'state/formOpenAtom';
+import { useGetInjections } from 'components/Extensibility/useGetInjection';
 
 const Injections = React.lazy(() =>
   import('../../../components/Extensibility/ExtensibilityInjections'),
@@ -91,17 +92,44 @@ ResourcesList.defaultProps = {
 };
 
 export function ResourcesList(props) {
+  const headerInjections = useGetInjections(props.resourceType, 'list-header');
   if (!props.resourceUrl) {
     return <></>; // wait for the context update
   }
 
-  const content = props.resources ? (
-    <ResourceListRenderer
-      resources={(props.resources || []).filter(props.filterFn)}
-      {...props}
-    />
+  const content = (
+    <>
+      <BannerCarousel
+        children={
+          <Injections
+            destination={props.resourceType}
+            slot="banner"
+            root={props.resources}
+          />
+        }
+      />
+      {props.resources ? (
+        <ResourceListRenderer
+          resources={(props.resources || []).filter(props.filterFn)}
+          {...props}
+        />
+      ) : (
+        <Resources {...props} />
+      )}
+    </>
+  );
+
+  const headerActions = headerInjections.length ? (
+    <>
+      <Injections
+        destination={props.resourceType}
+        slot="list-header"
+        root={props.resources}
+      />
+      {props.customHeaderActions}
+    </>
   ) : (
-    <Resources {...props} />
+    props.customHeaderActions
   );
 
   return (
@@ -110,25 +138,7 @@ export function ResourcesList(props) {
         <DynamicPageComponent
           layoutNumber={props.layoutNumber}
           title={prettifyNamePlural(props.resourceTitle, props.resourceType)}
-          actions={
-            <>
-              <BannerCarousel
-                children={
-                  <Injections
-                    destination={props.resourceType}
-                    slot="banner"
-                    root={props.resources}
-                  />
-                }
-              />
-              <Injections
-                destination={props.resourceType}
-                slot="list-header"
-                root={props.resources}
-              />
-              {props.customHeaderActions}
-            </>
-          }
+          actions={headerActions}
           description={props.description}
           content={content}
         />

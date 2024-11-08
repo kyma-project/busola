@@ -1,4 +1,11 @@
 .page-header {
+  background-color: var(--sapBackgroundColor);
+
+  ui5-dynamic-page-title {
+    justify-content: center;
+    min-height: 3rem;
+  }
+
   .bold-title {
     font-family: var(--sapObjectHeader_Title_FontFamily);
   }
@@ -20,24 +27,35 @@
     display: none;
   }
 
+  [data-component-name='ObjectPageTitleMiddleSection'] > div {
+    flex-basis: 100%;
+  }
+
   &__actions {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
 
     ui5-button {
       &:not(:last-of-type) {
         margin-right: 0.5rem;
       }
     }
+  }
 
-    .separator {
-      display: inline-block;
-      width: 1px;
-      height: 90%;
-      margin-left: 5px;
-      background-color: var(--sapList_BorderColor);
-      border-radius: 5px;
+  &__layout {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    ui5-button {
+      width: fit-content;
     }
+  }
+
+  &::part(fit-content) {
+    position: static;
+    padding: unset;
   }
 }
 
@@ -79,6 +97,11 @@
     color: var(--sapNeutralColor);
     margin-bottom: 4px;
   }
+}
+
+ui5-button[data-component-name='ObjectPageAnchorBarExpandBtn'],
+div[data-component-name='ObjectPageHeaderContainer'] {
+  display: none;
 }
 
 @media (max-width: 768px) {
