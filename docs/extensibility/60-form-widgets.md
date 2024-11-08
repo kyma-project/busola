@@ -82,7 +82,7 @@ The `Number` widgets render a field as a number field. They are used by default 
 | ----------------- | -------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **description**   | No       | string              | A string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD). |
 | **disableOnEdit** | No       | boolean             | Disables a number field in edit mode, defaults to `false`.                                                                                                              |
-| **enum[]**        | No       | an array of options | Generate an input field with a dropdown. Optionally can be a string containing a [JSONata](jsonata.md) expression returning an array of options.                        |
+| **enum[]**        | No       | an array of options | Generates an input field with a dropdown. Optionally, it can be a string containing a [JSONata](jsonata.md) expression returning an array of options.                        |
 
 See the following examples:
 
