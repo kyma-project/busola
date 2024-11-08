@@ -6,7 +6,7 @@ You can distinguish the following widget types:
 - [Inline widgets](#inline-widgets) for simple values in **data.list**, **data.details.header**, **data.details.status** and **data.detail.bodies**
   - [`Bagde`](#badge)
   - [`ControlledBy`](#controlledby)
-  - [`ConditionList`](#conditionList) - used only in **data.details.status** or **data.details.status.body**
+  - [`ConditionList`](#conditionlist) - used only in **data.details.status** or **data.details.status.body**
   - [`ExternalLink`](#externallink)
   - [`ExternalLinkButton`](#externallinkbutton)
   - [`JoinedArray`](#joinedarray)
@@ -24,7 +24,7 @@ You can distinguish the following widget types:
   - [`Plain`](#plain)
   - [`ResourceList`](#resourcelist)
   - [`ResourceRefs`](#resourcerefs)
-  - [`StatisticalCard`](#StatisticalCard)
+  - [`StatisticalCard`](#statisticalcard)
   - [`Table`](#table)
   - [`Tabs`](#tabs)
 
