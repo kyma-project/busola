@@ -39,7 +39,9 @@ export const NotificationProvider = ({
   const methods = {
     notifySuccess: function(notificationProps: ToastProps) {
       setToastProps(notificationProps);
-      toast.current?.show();
+      if (toast.current) {
+        toast.current.open = true;
+      }
     },
     notifyError: function(notificationProps: Omit<ErrorModalProps, 'close'>) {
       setErrorProps({
@@ -56,7 +58,7 @@ export const NotificationProvider = ({
         ...methods,
       }}
     >
-      <Toast ref={toast} duration={defaultVisibilityTime}>
+      <Toast ref={toast} duration={defaultVisibilityTime} style={{ zIndex: 1 }}>
         {toastProps?.content}
       </Toast>
       {errorProps &&
