@@ -58,9 +58,9 @@ const prepareTranslationPath = (resourceKind, value, type) => {
 };
 
 const TYPE_FALLBACK = new Map([
-  ['success', 'Positive'],
-  ['warning', 'Critical'],
-  ['error', 'Negative'],
+  ['positive', 'Positive'],
+  ['critical', 'Critical'],
+  ['negative', 'Negative'],
   ['info', 'Information'],
 ]);
 

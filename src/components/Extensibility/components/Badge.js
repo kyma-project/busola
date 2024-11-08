@@ -63,10 +63,10 @@ export function Badge({
     }
   }
 
-  if (type === 'negative') type = 'Negative';
+  if (type === 'negative') type = 'Critical';
   else if (type === 'informative') type = 'Information';
   else if (type === 'positive') type = 'Positive';
-  else if (type === 'critical') type = 'Critical';
+  else if (type === 'critical') type = 'Negative';
 
   type = TYPE_FALLBACK.get(type) || type;
 
