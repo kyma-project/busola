@@ -52,7 +52,7 @@ export function NodeResources({ metrics, resources }) {
         }
       >
         <UI5RadialChart
-          color="var(--sapChart_OrderedColor_6)"
+          color="var(--sapChart_OrderedColor_5)"
           value={resources?.requests?.cpu}
           max={cpu.capacity}
           additionalInfo={`${roundTwoDecimals(
@@ -84,7 +84,7 @@ export function NodeResources({ metrics, resources }) {
         }
       >
         <UI5RadialChart
-          color="var(--sapChart_OrderedColor_6)"
+          color="var(--sapChart_OrderedColor_5)"
           value={resources?.limits?.cpu}
           max={cpu.capacity}
           additionalInfo={`${roundTwoDecimals(

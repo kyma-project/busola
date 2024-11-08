@@ -1,9 +1,8 @@
 import { calcNodeResources } from './nodeQueries.js';
-// TODO: Values as string and as numbers
 describe('Calculate resources for node', () => {
-  it.each([
+  const testCases = [
     {
-      name: 'Pods with one container and values as string',
+      name: 'Pods with one container',
       pods: {
         items: [
           fixPod([fixResources('7m', '70Mi', '14m', '140Mi')]),
@@ -12,20 +11,23 @@ describe('Calculate resources for node', () => {
       },
       expectedValue: {
         limits: {
-          cpu: '10m',
-          memory: '100.00Mi',
+          cpu: 10,
+          memory: 100.0 / 1024,
         },
         requests: {
-          cpu: '20m',
-          memory: '200.00Mi',
+          cpu: 20,
+          memory: 200.0 / 1024,
         },
       },
     },
     {
-      name: 'Pods with two containers and values as string',
+      name: 'Pods with two containers',
       pods: {
         items: [
-          fixPod([fixResources('7m', '70Mi', '14m', '140Mi')]),
+          fixPod([
+            fixResources('7m', '70Mi', '14m', '140Mi'),
+            fixResources('7m', '70Mi', '14m', '140Mi'),
+          ]),
           fixPod([
             fixResources('3m', '30Mi', '6m', '60Mi'),
             fixResources('5m', '50Mi', '11m', '110Mi'),
@@ -34,12 +36,12 @@ describe('Calculate resources for node', () => {
       },
       expectedValue: {
         limits: {
-          cpu: '15m',
-          memory: '150.00Mi',
+          cpu: 22,
+          memory: 220.0 / 1024,
         },
         requests: {
-          cpu: '31m',
-          memory: '310.00Mi',
+          cpu: 45,
+          memory: 450.0 / 1024,
         },
       },
     },
@@ -53,47 +55,26 @@ describe('Calculate resources for node', () => {
       },
       expectedValue: {
         limits: {
-          cpu: '7m',
-          memory: '70.00Mi',
+          cpu: 7,
+          memory: 70.0 / 1024,
         },
         requests: {
-          cpu: '14m',
-          memory: '140.00Mi',
+          cpu: 14,
+          memory: 140.0 / 1024,
         },
       },
     },
-  ])('Values as string', tc => {
-    //WHEN
-    const resources = calcNodeResources(tc.pods);
+  ];
 
-    //THEN
-    expect(resources).toStrictEqual(tc.expectedValue);
+  testCases.forEach(tc => {
+    test(tc.name, () => {
+      //WHEN
+      const resources = calcNodeResources(tc.pods);
+
+      //THEN
+      expect(resources).toStrictEqual(tc.expectedValue);
+    });
   });
-
-  // test('Pods with one container and values as string', () => {
-  //   //GIVEN
-  //   const expectedValue = {
-  //     limits: {
-  //       cpu: '10m',
-  //       memory: '100.00Mi',
-  //     },
-  //     requests: {
-  //       cpu: '20m',
-  //       memory: '200.00Mi',
-  //     },
-  //   };
-  //   const pods = {
-  //     items: [
-  //       fixPod(fixResources('7m', '70Mi', '14m', '140Mi')),
-  //       fixPod(fixResources('3m', '30Mi', '6m', '60Mi')),
-  //     ],
-  //   };
-  //   //WHEN
-  //   const resources = calcNodeResources(pods);
-  //
-  //   //THEN
-  //   expect(resources).toStrictEqual(expectedValue);
-  // });
 });
 
 function fixPod(resources) {
@@ -132,16 +113,3 @@ function fixResources(cpuLimit, memoryLimit, cpuRequest, memoryRequest) {
     },
   };
 }
-
-// TODO: REMOVE IT
-describe('A', () => {
-  test('B', () => {
-    const data = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-    const result = data.reduce((acc, item) => {
-      const bb = acc + item;
-      return bb;
-    });
-
-    console.log(result);
-  });
-});

@@ -107,7 +107,6 @@ export function useNodeQuery(nodeName) {
     }
   }, [node, nodeMetrics]);
 
-  console.log('metrics', data);
   return {
     data,
     error: metricsError || nodeError,
@@ -139,7 +138,7 @@ function addResources(a, b) {
     }
     return a;
   }
-  const sum = {
+  return {
     limits: {
       cpu: getCpus(a?.limits?.cpu) + getCpus(b?.limits?.cpu),
       memory: getBytes(a?.limits?.memory) + getBytes(b?.limits?.memory),
@@ -149,14 +148,12 @@ function addResources(a, b) {
       memory: getBytes(a?.requests?.memory) + getBytes(b?.requests?.memory),
     },
   };
-  return sum;
 }
 
 function sumContainersResources(containers) {
-  const a = containers?.reduce((containerAccu, container) => {
+  return containers?.reduce((containerAccu, container) => {
     return addResources(containerAccu, container.resources);
   }, structuredClone(emptyResources));
-  return a;
 }
 
 export function calcNodeResources(pods) {
@@ -166,17 +163,7 @@ export function calcNodeResources(pods) {
         const containerResources = sumContainersResources(
           pod?.spec?.containers,
         );
-        console.log(pod.spec.containers);
-        const summed = addResources(accumulator, containerResources);
-        console.log(
-          'Container: ',
-          containerResources,
-          ' Accumulator:',
-          accumulator,
-          ' Summed:',
-          summed,
-        );
-        return summed;
+        return addResources(accumulator, containerResources);
       }
       return accumulator;
     }, structuredClone(emptyResources)) || structuredClone(emptyResources);
@@ -199,18 +186,13 @@ export function useResourceByNode(nodeName) {
     `/api/v1/pods?fieldSelector=spec.nodeName=${nodeName},status.phase!=Failed,status.phase!=Succeeded&limit=500`,
   );
 
-  React.useState();
-
-  const nodeResourcesHumanReadable = useMemo(() => calcNodeResources(pods), [
-    pods,
-  ]);
-  console.log(nodeResourcesHumanReadable);
+  const nodeResources = useMemo(() => calcNodeResources(pods), [pods]);
 
   React.useEffect(() => {
-    if (nodeResourcesHumanReadable) {
-      setData(nodeResourcesHumanReadable);
+    if (nodeResources) {
+      setData(nodeResources);
     }
-  }, [nodeResourcesHumanReadable]);
+  }, [nodeResources]);
   return {
     data,
     error,
