@@ -880,7 +880,8 @@ node-details:
   all: All messages
   information: Information
   internal-ip: Internal IP
-  pod-cidr: Pod CIDR
+  pod-cidr: Pod CIDRs
+  provider: Provider
   warnings: Warnings
 nodes:
   title: Nodes

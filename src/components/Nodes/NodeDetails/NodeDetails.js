@@ -54,6 +54,7 @@ export default function NodeDetails({ nodeName }) {
                   <MachineInfo
                     nodeInfo={data.node.status.nodeInfo}
                     capacity={data.node.status.capacity}
+                    spec={data.node.spec}
                   />
                 </div>
                 <Title

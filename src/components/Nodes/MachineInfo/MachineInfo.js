@@ -3,7 +3,7 @@ import './MachineInfo.scss';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import ResourceDetailsCard from 'shared/components/ResourceDetails/ResourceDetailsCard';
 
-export function MachineInfo({ nodeInfo, capacity }) {
+export function MachineInfo({ nodeInfo, capacity, spec }) {
   const formattedMemory =
     Math.round((parseInt(capacity.memory) / 1024 / 1024) * 10) / 10;
   const { t } = useTranslation();
@@ -19,6 +19,12 @@ export function MachineInfo({ nodeInfo, capacity }) {
             title={t('machine-info.operating-system')}
           >
             {`${nodeInfo.operatingSystem} (${nodeInfo.osImage})`}
+          </DynamicPageComponent.Column>
+          <DynamicPageComponent.Column title={t('node-details.pod-cidr')}>
+            {spec.podCIDRs.join(',')}
+          </DynamicPageComponent.Column>
+          <DynamicPageComponent.Column title={t('node-details.provider')}>
+            {spec.providerID}
           </DynamicPageComponent.Column>
           <DynamicPageComponent.Column
             title={t('machine-info.architecture-cpus')}
