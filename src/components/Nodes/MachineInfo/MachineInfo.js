@@ -20,24 +20,23 @@ export function MachineInfo({ nodeInfo, capacity, spec }) {
           >
             {`${nodeInfo.operatingSystem} (${nodeInfo.osImage})`}
           </DynamicPageComponent.Column>
-          <DynamicPageComponent.Column title={t('node-details.pod-cidr')}>
-            {spec.podCIDRs.join(',')}
-          </DynamicPageComponent.Column>
           <DynamicPageComponent.Column title={t('node-details.provider')}>
             {spec.providerID}
           </DynamicPageComponent.Column>
-          <DynamicPageComponent.Column
-            title={t('machine-info.architecture-cpus')}
-          >
-            {`${nodeInfo.architecture}, ${capacity.cpu} ${t(
-              'machine-info.cpus',
-            )}`}
+          <DynamicPageComponent.Column title={t('machine-info.architecture')}>
+            {nodeInfo.architecture}
+          </DynamicPageComponent.Column>
+          <DynamicPageComponent.Column title={t('machine-info.cpus')}>
+            {capacity.cpu}
+          </DynamicPageComponent.Column>
+          <DynamicPageComponent.Column title={t('machine-info.memory')}>
+            {`${formattedMemory} ${t('machine-info.gib')}`}
           </DynamicPageComponent.Column>
           <DynamicPageComponent.Column title={t('machine-info.pods-capacity')}>
             {capacity.pods}
           </DynamicPageComponent.Column>
-          <DynamicPageComponent.Column title={t('machine-info.memory')}>
-            {`${formattedMemory} ${t('machine-info.gib')}`}
+          <DynamicPageComponent.Column title={t('node-details.pod-cidr')}>
+            {spec.podCIDRs.join(',')}
           </DynamicPageComponent.Column>
           <DynamicPageComponent.Column
             title={t('machine-info.kube-proxy-version')}

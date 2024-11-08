@@ -799,7 +799,7 @@ limit-ranges:
   name_singular: LimitRange
   title: Limit Ranges
 machine-info:
-  architecture-cpus: Architecture and CPUs
+  architecture: Architecture
   cpus: CPUs
   gib: GiB
   kube-proxy-version: Kube proxy version
