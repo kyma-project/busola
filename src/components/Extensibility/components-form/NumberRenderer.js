@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import {
@@ -9,15 +7,12 @@ import {
 
 export function NumberRenderer({
   onChange,
-  onKeyDown,
   value,
   schema,
   storeKeys,
   required,
-  compact,
   placeholder,
   editMode,
-  ...props
 }) {
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
 
@@ -28,6 +23,38 @@ export function NumberRenderer({
   );
 
   const disableOnEdit = schema.get('disableOnEdit');
+
+  const getTypeSpecificProps = () => {
+    if (schema.get('enum')) {
+      let enumOptions = schema.toJS().enum;
+      // if there's only 1 option, it will be not in an array
+      if (typeof enumOptions === 'number') {
+        enumOptions = [enumOptions];
+      }
+      if (!Array.isArray(enumOptions)) {
+        if (enumOptions.key) {
+          enumOptions = [enumOptions];
+        } else {
+          enumOptions = [];
+        }
+      }
+
+      const displayOptions = enumOptions
+        .filter(option => typeof option === 'number')
+        .map(option => ({
+          key: option,
+          text: option,
+        }));
+
+      return {
+        input: Inputs.ComboboxInput,
+        options: displayOptions,
+        isNumeric: true,
+      };
+    } else {
+      return { input: Inputs.Number };
+    }
+  };
 
   return (
     <ResourceForm.FormField
@@ -45,10 +72,9 @@ export function NumberRenderer({
       label={tFromStoreKeys(storeKeys, schema)}
       placeholder={tExt(schemaPlaceholder) || tExt(placeholder)}
       data-testid={storeKeys.join('.') || tFromStoreKeys(storeKeys, schema)}
-      input={Inputs.Number}
-      compact={compact}
       disabled={disableOnEdit && editMode}
       {...numberProps}
+      {...getTypeSpecificProps()}
       {...getPropsFromSchema(schema, required, tExt)}
     />
   );

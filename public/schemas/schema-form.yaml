@@ -337,6 +337,14 @@ $widgets:
           const: Number
     then:
       properties:
+        enum:
+          type: [number, array]
+          widget: MultiType
+          widgets:
+            number: Jsonata
+            array: SimpleList
+          items:
+            type: number
         description:
           type: string
           description: A string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).

@@ -18,6 +18,18 @@ export function JobDetails(props) {
 
   const customColumns = [
     {
+      header: t('common.headers.owner'),
+      value: job => (
+        <ControlledBy
+          ownerReferences={job.metadata.ownerReferences}
+          namespace={job.metadata.namespace}
+        />
+      ),
+    },
+  ];
+
+  const customStatusColumns = [
+    {
       header: t('jobs.start-time'),
       value: job =>
         job.status.startTime ? (
@@ -41,18 +53,6 @@ export function JobDetails(props) {
           EMPTY_TEXT_PLACEHOLDER
         ),
     },
-    {
-      header: t('common.headers.owner'),
-      value: job => (
-        <ControlledBy
-          ownerReferences={job.metadata.ownerReferences}
-          namespace={job.metadata.namespace}
-        />
-      ),
-    },
-  ];
-
-  const customStatusColumns = [
     {
       header: t('jobs.active'),
       value: job => <div>{job?.status?.active ?? EMPTY_TEXT_PLACEHOLDER}</div>,
