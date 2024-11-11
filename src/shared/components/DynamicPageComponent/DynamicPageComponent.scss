@@ -1,4 +1,11 @@
 .page-header {
+  background-color: var(--sapBackgroundColor);
+
+  ui5-dynamic-page-title {
+    justify-content: center;
+    min-height: 3rem;
+  }
+
   .bold-title {
     font-family: var(--sapObjectHeader_Title_FontFamily);
   }
@@ -23,6 +30,7 @@
   &__actions {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
 
     ui5-button {
       &:not(:last-of-type) {
@@ -33,11 +41,16 @@
     .separator {
       display: inline-block;
       width: 1px;
-      height: 90%;
-      margin-left: 5px;
+      height: 1.5rem;
+      margin: 0 5px;
       background-color: var(--sapList_BorderColor);
       border-radius: 5px;
     }
+  }
+
+  &::part(fit-content) {
+    position: static;
+    padding: unset;
   }
 }
 
@@ -79,6 +92,11 @@
     color: var(--sapNeutralColor);
     margin-bottom: 4px;
   }
+}
+
+ui5-button[data-component-name='ObjectPageAnchorBarExpandBtn'],
+div[data-component-name='ObjectPageHeaderContainer'] {
+  display: none;
 }
 
 @media (max-width: 768px) {

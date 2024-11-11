@@ -12,7 +12,7 @@ import { useOnMount } from './hooks/useOnMount';
 import { useOnChange } from './hooks/useOnChange';
 import { useCreateEditor } from './hooks/useCreateEditor';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import './Editor.scss';
 
 export function Editor({
@@ -116,7 +116,7 @@ export function Editor({
         )}
         {schemaError && (
           <MessageStrip
-            design="Warning"
+            design="Critical"
             className="break-word"
             style={spacing.sapUiSmallMargin}
           >
@@ -127,7 +127,7 @@ export function Editor({
         )}
         {warnings.length ? (
           <MessageStrip
-            design="Warning"
+            design="Critical"
             hideCloseButton
             className="break-word"
             style={spacing.sapUiSmallMargin}

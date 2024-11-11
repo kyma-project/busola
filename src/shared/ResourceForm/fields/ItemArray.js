@@ -89,7 +89,7 @@ export function ItemArray({
     >
       {content}
       {atLeastOneRequiredMessage && !values.length && (
-        <MessageStrip design="Warning" hideCloseButton>
+        <MessageStrip design="Critical" hideCloseButton>
           {atLeastOneRequiredMessage}
         </MessageStrip>
       )}

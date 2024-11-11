@@ -1,9 +1,9 @@
 import React from 'react';
 import classNames from 'classnames';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { Badge, Label } from '@ui5/webcomponents-react';
+import { Tag, Label } from '@ui5/webcomponents-react';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import './Labels.scss';
 import { useTranslation } from 'react-i18next';
 
@@ -51,10 +51,12 @@ export const Labels = ({
       ) : null}
       <div className={classNames('labels', className)} style={style}>
         {separatedLabels.map((label, id) => (
-          <Badge
+          <Tag
             aria-label={label}
             key={id}
             colorScheme="10"
+            design="Set2"
+            hideStateIcon
             style={{
               ...spacing.sapUiTinyMarginEnd,
               ...bottomMargin,
@@ -63,7 +65,7 @@ export const Labels = ({
             {shortenLongLabels && label.length > SHORTENING_TRESHOLD
               ? shortenLabel(label)
               : label}
-          </Badge>
+          </Tag>
         ))}
       </div>
     </>

@@ -10,7 +10,7 @@ import { K8sResource } from 'types';
 import { allNodesSelector } from 'state/navigation/allNodesSelector';
 import pluralize from 'pluralize';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import './DetailsCard.scss';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 

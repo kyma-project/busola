@@ -3,7 +3,7 @@ import {
   Card,
   NumericSideIndicator,
 } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import { useUrl } from 'hooks/useUrl';
 import { useTranslation } from 'react-i18next';
 import { Link } from '../Link/Link';

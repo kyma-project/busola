@@ -9,7 +9,7 @@ import { GardenerLoginFeature } from './GardenerLoginFeature';
 import { useGardenerLogin } from './useGardenerLoginFunction';
 import { parseOIDCparams } from 'components/Clusters/components/oidc-params';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 export default function GardenerLogin() {
   const [token, setToken] = useState('');

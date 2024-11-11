@@ -3,7 +3,7 @@ import { MessageStrip, Select, Option, Title } from '@ui5/webcomponents-react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import './ContextChooser.scss';
 
 export function ContextChooser(params) {

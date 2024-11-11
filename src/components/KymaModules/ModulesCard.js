@@ -5,14 +5,13 @@ import {
   Option,
   Panel,
   Select,
-  StandardListItem,
+  ListItemStandard,
   Text,
   Title,
 } from '@ui5/webcomponents-react';
-import '@ui5/webcomponents/dist/features/InputElementsFormSupport.js';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { useTranslation } from 'react-i18next';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 export default function ModulesCard({
   module,
@@ -29,13 +28,15 @@ export default function ModulesCard({
 
   return (
     <Card key={module.name} className="addModuleCard">
-      <StandardListItem
+      <ListItemStandard
         className="moduleCardHeader"
         onClick={e => setCheckbox(module, !isChecked(module.name), index)}
       >
         <CheckBox className="checkbox" checked={isChecked(module.name)} />
         <div className="titles">
-          <Title level="H6">{module.name}</Title>
+          <Title level="H6" size="H6">
+            {module.name}
+          </Title>
           <Text className="bsl-has-color-status-4">
             {findStatus(module.name)?.version
               ? `v${findStatus(module.name)?.version} ${
@@ -53,7 +54,7 @@ export default function ModulesCard({
           </Text>
         </div>
         <img className="avatar" alt="SAP" src="\assets\sap-logo.svg" />
-      </StandardListItem>
+      </ListItemStandard>
       <div className="content">
         {module.docsUrl && (
           <ExternalLink

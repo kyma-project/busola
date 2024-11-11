@@ -5,7 +5,7 @@ import jsyaml from 'js-yaml';
 
 import { YamlFileUploader } from './YamlFileUploader';
 import { OPERATION_STATE_INITIAL } from './YamlUploadDialog';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import { FlexBox } from '@ui5/webcomponents-react';
 
 const isK8sResource = resource => {
@@ -26,7 +26,7 @@ function YamlUpload({
     ?.join('---\n');
 
   useEffect(() => {
-    if (!yamlContentString && editor) editor.getModel().setValue('');
+    if (!yamlContentString && editor) editor.getModel()?.setValue('');
   }, [editor, yamlContentString]);
 
   const updateYamlContent = useCallback(

@@ -6,7 +6,7 @@ export function ColumnsInput({ value: columns, setValue: setColumns }) {
 
   if (!columns?.length) {
     return (
-      <MessageStrip design="Warning" hideCloseButton>
+      <MessageStrip design="Critical" hideCloseButton>
         {t('extensibility.starter-modal.messages.no-columns')}
       </MessageStrip>
     );

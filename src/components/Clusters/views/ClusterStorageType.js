@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 import { useTranslation } from 'react-i18next';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 export function ClusterStorageType({ clusterConfig }) {
   const { t } = useTranslation();

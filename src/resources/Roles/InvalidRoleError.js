@@ -3,7 +3,7 @@ import { MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { isRuleInvalid } from './helpers';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 export function InvalidRoleError({ rule }) {
   const { t } = useTranslation();
@@ -11,7 +11,7 @@ export function InvalidRoleError({ rule }) {
   return (
     isRuleInvalid(rule) && (
       <MessageStrip
-        design="Warning"
+        design="Critical"
         hideCloseButton
         style={spacing.sapUiSmallMarginTop}
       >

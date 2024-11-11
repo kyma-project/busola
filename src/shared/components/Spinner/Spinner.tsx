@@ -1,5 +1,5 @@
 import { BusyIndicator } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 type SpinnerProps = {
   ariaLabel?: string;

@@ -8,7 +8,7 @@ import { Label } from '../../../shared/ResourceForm/components/Label';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 import { useJsonata } from '../hooks/useJsonata';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 function getValue(storeKeys, resource) {
   let value = resource;

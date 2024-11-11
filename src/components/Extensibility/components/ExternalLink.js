@@ -8,7 +8,7 @@ import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useJsonata } from '../hooks/useJsonata';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 const makeHref = ({ jsonata, value, structure }) => {
   const [link, linkError] = jsonata(structure.link);
@@ -54,8 +54,7 @@ export const ExternalLink = ({
   if (structure.type === 'button') {
     return (
       <Button
-        icon="inspect"
-        iconEnd
+        endIcon="inspect"
         style={spacing.sapUiTinyMarginBeginEnd}
         onClick={() => {
           const newWindow = window.open(href, '_blank', 'noopener, noreferrer');

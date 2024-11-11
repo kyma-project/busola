@@ -7,7 +7,7 @@ import { clusterState } from 'state/clusterAtom';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { cloneDeep } from 'lodash';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import './NoPermissions.scss';
 
 function NoPermissions() {

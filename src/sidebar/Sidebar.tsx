@@ -5,7 +5,7 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { SidebarNavigation } from 'sidebar/SidebarNavigation';
 
 import './Sidebar.scss';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 const noSidebarPathnames = ['/clusters', '/no-permissions', '/gardener-login'];
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import { useTranslation } from 'react-i18next';
 import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
 import { Card, CardHeader, Title } from '@ui5/webcomponents-react';
@@ -108,6 +108,7 @@ export default function ClusterStats({ nodesData }) {
     <>
       <Title
         level="H3"
+        size="H3"
         style={{
           ...spacing.sapUiMediumMarginBegin,
           ...spacing.sapUiMediumMarginTopBottom,

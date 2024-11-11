@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ObjectProperties } from './ObjectProperties';
 import { FlexBox, ObjectStatus, Text } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 export function JSONSchema({
   root = false,
@@ -39,14 +39,13 @@ export function JSONSchema({
                 <ObjectStatus inverted>{type.toUpperCase()}</ObjectStatus>
               ))}{' '}
           {isRequired && (
-            <ObjectStatus inverted state="Warning">
+            <ObjectStatus inverted state="Critical">
               {t('schema.required')}
             </ObjectStatus>
           )}
         </FlexBox>
       )}
       {description && <div className="description">{description}</div>}
-
       <dl>
         <ObjectProperties def={def} expanded={root} />
       </dl>

@@ -5,7 +5,7 @@ import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useTranslation } from 'react-i18next';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { Text } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 export const LabelSelector = ({ selector, title }) => {
   const { t } = useTranslation();

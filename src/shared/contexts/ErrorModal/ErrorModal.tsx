@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, Icon, Dialog, Bar, Title } from '@ui5/webcomponents-react';
 import { useEventListener } from 'hooks/useEventListener';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import './ErrorModal.scss';
 
 export type ToastProps = {
@@ -55,7 +55,7 @@ export function ErrorModal({
 
   return (
     <Dialog
-      onAfterClose={close}
+      onClose={close}
       className={classNames('error-modal', { 'error-modal--wider': wider })}
       header={
         <Bar

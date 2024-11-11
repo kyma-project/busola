@@ -23,7 +23,7 @@ import { useFeature } from 'hooks/useFeature';
 import { useNavigate } from 'react-router-dom';
 import { createPortal } from 'react-dom';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import './ClusterList.scss';
 import { useSetRecoilState } from 'recoil';
 import { showAddClusterWizard } from 'state/showAddClusterWizard';

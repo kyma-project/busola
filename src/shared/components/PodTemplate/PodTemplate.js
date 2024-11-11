@@ -5,7 +5,7 @@ import { ContainersPanel, VolumesPanel } from './components';
 import { Card, CardHeader, Text } from '@ui5/webcomponents-react';
 import { PodTemplateRow } from './PodTemplateRow';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import './PodTemplate.scss';
 
 export function PodTemplate({ template }) {

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { MessageStrip } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import { useTranslation } from 'react-i18next';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { ResourceForm } from 'shared/ResourceForm';
@@ -254,7 +254,7 @@ export default function KymaModulesAddModule({
           {checkIfSelectedModuleIsBeta() ? (
             <MessageStrip
               key={'beta'}
-              design="Warning"
+              design="Critical"
               hideCloseButton
               style={spacing.sapUiSmallMarginTop}
             >
@@ -273,7 +273,7 @@ export default function KymaModulesAddModule({
         </MessageStrip>
       ) : (
         <MessageStrip
-          design="Warning"
+          design="Critical"
           hideCloseButton
           style={spacing.sapUiSmallMarginTop}
         >

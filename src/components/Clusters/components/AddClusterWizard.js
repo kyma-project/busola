@@ -27,7 +27,7 @@ import { ChooseStorage } from './ChooseStorage';
 import { WizardButtons } from 'shared/components/WizardButtons/WizardButtons';
 import { ClusterPreview } from './ClusterPreview';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import './AddClusterWizard.scss';
 import { isFormOpenState } from 'state/formOpenAtom';
 
@@ -171,7 +171,6 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
           className="cluster-wizard__buttons__sticky"
         />
       </WizardStep>
-
       {kubeconfig && (!hasAuth || !hasOneContext) && (
         <WizardStep
           titleText={t('clusters.wizard.authentication')}
@@ -203,7 +202,6 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
           />
         </WizardStep>
       )}
-
       <WizardStep
         titleText={t('clusters.wizard.storage')}
         selected={
@@ -233,8 +231,8 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
                 <Popover
                   opener="storageDescriptionOpener"
                   open={showTitleDescription}
-                  onAfterClose={() => setShowTitleDescription(false)}
-                  placementType="Right"
+                  onClose={() => setShowTitleDescription(false)}
+                  placement="End"
                 >
                   <Text className="description">
                     {t('clusters.storage.info')}

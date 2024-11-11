@@ -144,7 +144,7 @@ export function Modal({
             ) : null
           }
           open={show}
-          onAfterClose={onClose}
+          onClose={onClose}
           actions={modalActions()}
         >
           {children}

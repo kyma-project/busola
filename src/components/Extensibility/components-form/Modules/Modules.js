@@ -11,7 +11,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { Dropdown } from 'shared/ResourceForm/inputs';
 
 import './Modules.scss';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 
 export function Modules({ storeKeys, resource, onChange, schema, required }) {
@@ -82,7 +82,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
   const Items = parsedOptions?.name?.map((name, index) => {
     if (!name)
       return (
-        <MessageStrip design="Warning" hideCloseButton>
+        <MessageStrip design="Critical" hideCloseButton>
           {t('extensibility.widgets.modules.no-modules')}
         </MessageStrip>
       );
@@ -214,7 +214,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
         </div>
         {parsedOptions?.betaAlert && isBeta && isChecked ? (
           <MessageStrip
-            design="Warning"
+            design="Critical"
             hideCloseButton
             className="alert"
             style={spacing.sapUiSmallMarginTopBottom}

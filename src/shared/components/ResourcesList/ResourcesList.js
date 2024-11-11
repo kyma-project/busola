@@ -394,7 +394,7 @@ export function ResourceListRenderer({
   );
 
   const headerRenderer = () => {
-    return customColumns?.map(col => col?.header || null);
+    return customColumns?.map(col => col?.header || null).filter(Boolean);
   };
 
   const rowRenderer = entry => {
@@ -407,10 +407,12 @@ export function ResourceListRenderer({
           </div>
         );
       }
-      return col?.value ? col.value(entry) : null;
+      if (col?.value) {
+        return col.value(entry);
+      }
     });
 
-    return rowColumns;
+    return rowColumns.filter(Boolean);
   };
 
   const handleShowCreate = () => {

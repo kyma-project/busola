@@ -1,6 +1,6 @@
 import { Title } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 export function ResourceHealthCard({
   customHealthCards,
@@ -13,6 +13,7 @@ export function ResourceHealthCard({
       {showHealthCardsTitle && (
         <Title
           level="H3"
+          size="H3"
           style={{
             ...spacing.sapUiMediumMarginBegin,
             ...spacing.sapUiMediumMarginTopBottom,

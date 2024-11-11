@@ -9,7 +9,7 @@ import { ComboboxInput } from 'shared/ResourceForm/inputs';
 import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 const expirationSecondsOptions = [
   {
@@ -100,7 +100,7 @@ export function TokenRequestModal({
   return (
     <Dialog
       open={isModalOpen}
-      onAfterClose={handleCloseModal}
+      onClose={handleCloseModal}
       headerText={t('service-accounts.token-request.generate')}
       footer={
         <Bar
@@ -140,7 +140,7 @@ export function TokenRequestModal({
           )}
         />
         <div style={spacing.sapUiSmallMarginTop}>
-          <MessageStrip design="Warning" hideCloseButton>
+          <MessageStrip design="Critical" hideCloseButton>
             {t('service-accounts.token-request.warning')}
           </MessageStrip>
           <div
@@ -163,8 +163,7 @@ export function TokenRequestModal({
               disabled={token === ''}
               design="Transparent"
               style={spacing.sapUiTinyMarginEnd}
-              icon="download"
-              iconEnd
+              endIcon="download"
             >
               {t('service-accounts.headers.download-kubeconfig')}
             </Button>

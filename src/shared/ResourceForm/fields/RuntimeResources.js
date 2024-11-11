@@ -6,7 +6,7 @@ import { FlexBox } from '@ui5/webcomponents-react';
 import { Label } from '../../../shared/ResourceForm/components/Label';
 import { MemoryInput } from 'resources/Namespaces/MemoryQuotas';
 import './RuntimeResources.scss';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 function CpuInput({ label, propertyPath, container = {}, setContainer }) {
   let value = jp.value(container, propertyPath)?.toString() || '';

@@ -50,16 +50,16 @@ export function HintButton({
         <Popover
           opener={`descriptionOpener-${ID}`}
           //Point initial focus to other component removes the focus from the link in description
-          onAfterOpen={() => {
+          onOpen={() => {
             // @ts-ignore
             descBtnRef.current.focus();
           }}
           open={showTitleDescription}
-          onAfterClose={e => {
+          onClose={e => {
             e.stopPropagation();
             setShowTitleDescription(false);
           }}
-          placementType="Right"
+          placement="End"
         >
           <Text className="description">{desc}</Text>
         </Popover>,

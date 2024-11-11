@@ -6,7 +6,7 @@ import { MessageStrip, Text } from '@ui5/webcomponents-react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 const presets = {
   '@yearly': '0 0 1 1 *',

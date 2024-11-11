@@ -8,7 +8,7 @@ import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 import './FileInput.scss';
 import { showAddClusterWizard } from 'state/showAddClusterWizard';
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 
 FileInput.propTypes = {
   fileInputChanged: PropTypes.func.isRequired,

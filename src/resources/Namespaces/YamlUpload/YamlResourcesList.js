@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Card,
   CardHeader,
-  CustomListItem,
+  ListItemCustom,
   FlexBox,
   Icon,
   List,
@@ -23,7 +23,7 @@ import {
 } from './useUploadResources';
 import { ResourceValidationResult } from './ResourceValidationResult';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import { activeNamespaceIdState } from '../../../state/activeNamespaceIdAtom';
 import { SeparatorLine } from './SeparatorLine';
 import { ValidationSwitch } from './ValidationSwitch';
@@ -104,7 +104,7 @@ export function YamlResourcesList({ resourcesData }) {
                   <span style={{ fontWeight: 'bold' }}></span>
                 </Trans>
               </p>
-              <Title level="H4" style={spacing.sapUiSmallMarginTop}>
+              <Title level="H4" size="H4" style={spacing.sapUiSmallMarginTop}>
                 {t('upload-yaml.uploaded-resources')}
               </Title>
               <SeparatorLine style={{ margin: '0rem -1rem' }} />
@@ -143,7 +143,9 @@ export function YamlResourcesList({ resourcesData }) {
                 header={
                   <CardHeader
                     titleText={t('upload-yaml.upload-progress')}
-                    status={resources?.length + '/' + uploadedResources?.length}
+                    additionalText={
+                      resources?.length + '/' + uploadedResources?.length
+                    }
                   />
                 }
               >
@@ -151,7 +153,7 @@ export function YamlResourcesList({ resourcesData }) {
                   value={getPercentage()}
                   valueState={
                     resources?.length === uploadedResources?.length
-                      ? 'Success'
+                      ? 'Positive'
                       : 'None'
                   }
                   style={{
@@ -162,7 +164,7 @@ export function YamlResourcesList({ resourcesData }) {
               </Card>
               <List>
                 {resources.map(r => (
-                  <CustomListItem type={'Inactive'}>
+                  <ListItemCustom type={'Inactive'}>
                     <FlexBox alignItems={'Center'}>
                       <Icon
                         className={`status status-${getIcon(r?.status)}`}
@@ -175,7 +177,7 @@ export function YamlResourcesList({ resourcesData }) {
                         {getStatus(r?.status)}
                       </Text>
                     </FlexBox>
-                  </CustomListItem>
+                  </ListItemCustom>
                 ))}
               </List>
             </FlexBox>

@@ -8,7 +8,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { getUser, getUserIndex } from '../shared';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import { spacing } from 'shared/helpers/spacing';
 import { TextArrayInput } from 'shared/ResourceForm/fields';
 
 const OIDCform = ({ resource, setResource, ...props }) => {
@@ -127,7 +127,7 @@ export function AuthForm({
       <div className="add-cluster__content-container">
         <Title level="H5">{t('clusters.wizard.update')}</Title>
         <MessageStrip
-          design="Warning"
+          design="Critical"
           hideCloseButton
           style={spacing.sapUiSmallMarginTopBottom}
         >
