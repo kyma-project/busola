@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 
@@ -6,17 +5,17 @@ const createPhaseProperties = (phase, t) => {
   switch (phase) {
     case 'Bound':
       return {
-        type: 'Success',
+        type: 'Positive',
         tooltipContent: t('persistent-volume-claims.tooltips.bound'),
       };
     case 'Lost':
       return {
-        type: 'Error',
+        type: 'Negative',
         tooltipContent: t('persistent-volume-claims.tooltips.lost'),
       };
     case 'Pending':
       return {
-        type: 'Warning',
+        type: 'Critical',
         tooltipContent: t('persistent-volume-claims.tooltips.pending'),
       };
     default:
