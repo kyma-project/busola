@@ -152,6 +152,7 @@ const getExtensionWizards = async (
   if (!fetchFn) {
     return null;
   }
+  window.kymaFetchFn = fetchFn;
   try {
     const configDir = await getConfigDir();
     const wizardsResponse = await fetch(configDir + '/extensions/wizards.yaml');
