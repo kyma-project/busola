@@ -33,7 +33,7 @@ export function AlertRenderer({
 
   let schemaType = 'Information';
   if (severity === 'warning') {
-    schemaType = 'Warning';
+    schemaType = 'Critical';
   } else if (severity === 'error') {
     schemaType = 'Negative';
   } else if (severity === 'success') {
