@@ -1,0 +1,11 @@
+resource:
+  kind: Istio
+  group: operator.kyma-project.io
+  version: v1alpha2
+urlPath: service-management-ui
+category: Kyma
+name: Service Management UI
+scope: cluster
+customElement: my-component-1
+description: >-
+  Service Management UI

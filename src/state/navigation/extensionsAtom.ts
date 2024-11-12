@@ -45,6 +45,8 @@ type ConfigMapData = {
   dataSources: string;
   translations: string;
   presets: string;
+  customScript: string;
+  customHtml: string;
 };
 
 type ConfigMapResponse = K8sResource & {
@@ -177,7 +179,8 @@ const getExtensionWizards = async (
             convertYamlToObject,
           ) as ExtResource,
         };
-
+        extResourceWithMetadata.data.customHtml =
+          extResourceWithMetadata.data.customHtml || '';
         if (!extResourceWithMetadata.data) return accumulator;
 
         const indexOfTheSameExtension = accumulator.findIndex(ext =>
@@ -323,6 +326,10 @@ const getExtensions = async (
             convertYamlToObject,
           ) as ExtResource,
         };
+        extResourceWithMetadata.data.customHtml =
+          currentConfigMap.data.customHtml;
+        extResourceWithMetadata.data.customScript =
+          currentConfigMap.data.customScript;
 
         if (!extResourceWithMetadata.data) return accumulator;
 
@@ -346,7 +353,7 @@ const getExtensions = async (
       },
       [] as ExtResourceWithMetadata[],
     );
-
+    console.log('configMapsExtensions', configMapsExtensions);
     const defaultExtensionsWithoutOverride = defaultExtensions.filter(
       defExt => {
         return configMapsExtensions.every(cmExt => {

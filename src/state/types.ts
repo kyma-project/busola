@@ -98,6 +98,8 @@ export type ExtResource = {
   presets: any[];
   dataSources: Record<string, any>;
   injections?: ExtInjection[];
+  customHtml: {};
+  customScript: {};
 };
 
 export type ExtensibilityNodesExt = {

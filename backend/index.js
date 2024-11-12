@@ -1,4 +1,5 @@
 import { makeHandleRequest, serveStaticApp, serveMonaco } from './common';
+import { proxyHandler } from './proxy.js';
 import { handleTracking } from './tracking.js';
 import jsyaml from 'js-yaml';
 //import { requestLogger } from './utils/other'; //uncomment this to log the outgoing traffic
@@ -52,6 +53,7 @@ if (gzipEnabled)
 if (process.env.NODE_ENV === 'development') {
   app.use(cors({ origin: '*' }));
 }
+app.get('/proxy', proxyHandler);
 
 let server = null;
 

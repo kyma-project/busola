@@ -1,0 +1,11 @@
+configMapGenerator:
+  - name: sm-ui
+    files:
+      - customHtml=ui.html
+      - customScript=script.js
+      - general=general.yaml
+    options:
+      disableNameSuffixHash: true
+      labels:
+        busola.io/extension: 'resource'
+        busola.io/extension-version: '0.5'

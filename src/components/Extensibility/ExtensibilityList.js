@@ -142,7 +142,18 @@ const ExtensibilityList = ({ overrideResMetadata, ...props }) => {
   const defaultResMetadata = useGetCRbyPath();
   const resMetaData = overrideResMetadata || defaultResMetadata;
   const { urlPath, defaultPlaceholder } = resMetaData?.general ?? {};
-
+  if (resMetaData?.general?.customElement) {
+    if (!customElements.get(resMetaData.general.customElement)) {
+      const script = document.createElement('script');
+      script.type = 'module';
+      script.textContent = resMetaData.customScript;
+      console.log(script);
+      document.head.appendChild(script);
+      console.log('Custom element loaded');
+    } else {
+      console.log('Custom element already exists');
+    }
+  }
   return (
     <TranslationBundleContext.Provider
       value={{
@@ -152,7 +163,13 @@ const ExtensibilityList = ({ overrideResMetadata, ...props }) => {
     >
       <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
         <ExtensibilityErrBoundary key={urlPath}>
-          <ExtensibilityListCore resMetaData={resMetaData} {...props} />
+          {resMetaData.customHtml ? (
+            <div
+              dangerouslySetInnerHTML={{ __html: resMetaData.customHtml }}
+            ></div>
+          ) : (
+            <ExtensibilityListCore resMetaData={resMetaData} {...props} />
+          )}
         </ExtensibilityErrBoundary>
       </DataSourcesContextProvider>
     </TranslationBundleContext.Provider>
