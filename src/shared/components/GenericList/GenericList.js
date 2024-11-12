@@ -45,19 +45,19 @@ const defaultSearch = {
 };
 
 export const GenericList = ({
-  entries,
-  actions,
+  entries = [],
+  actions = [],
   extraHeaderContent,
   title,
   headerRenderer,
   rowRenderer,
   testid,
-  serverDataError,
-  serverDataLoading,
+  serverDataError = null,
+  serverDataLoading = false,
   pagination,
   sortBy,
-  notFoundMessage,
-  searchSettings,
+  notFoundMessage = 'components.generic-list.messages.not-found',
+  searchSettings = defaultSearch,
   disableMargin,
   emptyListProps = null,
   columnLayout = null,
@@ -485,13 +485,4 @@ GenericList.propTypes = {
   hasDetailsView: PropTypes.bool,
   noHideFields: PropTypes.arrayOf(PropTypes.string),
   customRowClick: PropTypes.func,
-};
-
-GenericList.defaultProps = {
-  entries: [],
-  actions: [],
-  serverDataError: null,
-  serverDataLoading: false,
-  notFoundMessage: 'components.generic-list.messages.not-found',
-  searchSettings: defaultSearch,
 };

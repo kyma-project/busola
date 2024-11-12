@@ -67,33 +67,28 @@ ResourcesList.propTypes = {
   omitColumnsIds: PropTypes.arrayOf(PropTypes.string.isRequired),
   resourceUrlPrefix: PropTypes.string,
   disableCreate: PropTypes.bool,
-  disableEdit: PropTypes.bool,
   disableDelete: PropTypes.bool,
   disableMargin: PropTypes.bool,
   enableColumnLayout: PropTypes.bool,
   layoutNumber: PropTypes.string,
   handleRedirect: PropTypes.func,
+  filterFn: PropTypes.func,
 };
 
-ResourcesList.defaultProps = {
-  customHeaderActions: null,
-  customColumns: [],
-  createResourceForm: null,
-  showTitle: false,
-  listHeaderActions: null,
-  readOnly: false,
-  disableCreate: false,
-  disableEdit: false,
-  disableDelete: false,
-  disableMargin: false,
-  enableColumnLayout: false,
-  layoutNumber: 'StartColumn',
-  filterFn: () => true,
-};
-
-export function ResourcesList(props) {
-  const headerInjections = useGetInjections(props.resourceType, 'list-header');
-  if (!props.resourceUrl) {
+export function ResourcesList(
+  customHeaderActions = null,
+  resourceUrl,
+  resourceType,
+  resourceTitle,
+  isCompact,
+  description,
+  layoutNumber = 'StartColumn',
+  resources,
+  filterFn = () => true,
+  ...props
+) {
+  const headerInjections = useGetInjections(resourceType, 'list-header');
+  if (!resourceUrl) {
     return <></>; // wait for the context update
   }
 
@@ -102,15 +97,15 @@ export function ResourcesList(props) {
       <BannerCarousel
         children={
           <Injections
-            destination={props.resourceType}
+            destination={resourceType}
             slot="banner"
-            root={props.resources}
+            root={resources}
           />
         }
       />
-      {props.resources ? (
+      {resources ? (
         <ResourceListRenderer
-          resources={(props.resources || []).filter(props.filterFn)}
+          resources={(resources || []).filter(filterFn)}
           {...props}
         />
       ) : (
@@ -122,24 +117,24 @@ export function ResourcesList(props) {
   const headerActions = headerInjections.length ? (
     <>
       <Injections
-        destination={props.resourceType}
+        destination={resourceType}
         slot="list-header"
-        root={props.resources}
+        root={resources}
       />
-      {props.customHeaderActions}
+      {customHeaderActions}
     </>
   ) : (
-    props.customHeaderActions
+    customHeaderActions
   );
 
   return (
     <>
-      {!props.isCompact ? (
+      {!isCompact ? (
         <DynamicPageComponent
-          layoutNumber={props.layoutNumber}
-          title={prettifyNamePlural(props.resourceTitle, props.resourceType)}
+          layoutNumber={layoutNumber}
+          title={prettifyNamePlural(resourceTitle, resourceType)}
           actions={headerActions}
-          description={props.description}
+          description={description}
           content={content}
         />
       ) : (
@@ -188,13 +183,13 @@ export function ResourceListRenderer({
   namespace,
   customColumns = [],
   columns,
-  createResourceForm: CreateResourceForm,
+  createResourceForm: CreateResourceForm = null,
   createActionLabel,
   hasDetailsView,
   title,
-  showTitle,
-  listHeaderActions,
-  readOnly,
+  showTitle = false,
+  listHeaderActions = null,
+  readOnly = false,
   customUrl,
   testid,
   omitColumnsIds = ['namespace'],
@@ -205,10 +200,10 @@ export function ResourceListRenderer({
   resources,
   resourceUrlPrefix,
   nameSelector = entry => entry?.metadata.name, // overriden for CRDGroupList
-  disableCreate,
-  disableDelete,
-  disableMargin,
-  enableColumnLayout,
+  disableCreate = false,
+  disableDelete = false,
+  disableMargin = false,
+  enableColumnLayout = false,
   columnLayout,
   customColumnLayout,
   layoutCloseCreateUrl,

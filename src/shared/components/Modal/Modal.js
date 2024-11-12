@@ -25,32 +25,21 @@ Modal.propTypes = {
   headerActions: PropTypes.object,
 };
 
-Modal.defaultProps = {
-  title: 'components.modal.title',
-  confirmText: 'components.modal.confirm-text',
-  actions: null,
-  type: 'default',
-  disabledConfirm: false,
-  waiting: false,
-  openerDisabled: false,
-};
-
 export function Modal({
-  title,
-  actions,
+  title = 'components.modal.title',
+  actions = null,
   modalOpeningComponent,
-  openerDisabled,
+  openerDisabled = false,
   onShow,
   onHide,
   onConfirm,
-  confirmText,
+  confirmText = 'components.modal.confirm-text',
   cancelText,
-  type,
-  disabledConfirm,
-  waiting,
+  type = 'default',
+  disabledConfirm = false,
+  waiting = false,
   children,
   className,
-  disableAutoClose = true,
   headerActions,
 }) {
   const { t } = useTranslation();

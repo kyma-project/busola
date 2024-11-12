@@ -75,7 +75,7 @@ const Column = ({ title, children, columnSpan, image, style = {} }) => {
 export const DynamicPageComponent = ({
   headerContent: customHeaderContent,
   title,
-  description,
+  description = '',
   actions,
   children,
   columnWrapperClassName,
@@ -404,8 +404,4 @@ DynamicPageComponent.Column = Column;
 DynamicPageComponent.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.node,
-};
-
-DynamicPageComponent.defaultProps = {
-  description: '',
 };
