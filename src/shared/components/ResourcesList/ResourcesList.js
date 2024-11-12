@@ -25,6 +25,7 @@ import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { createPortal } from 'react-dom';
 import BannerCarousel from 'components/Extensibility/components/FeaturedCard/BannerCarousel';
 import { isFormOpenState } from 'state/formOpenAtom';
+import { useGetInjections } from 'components/Extensibility/useGetInjection';
 
 const Injections = React.lazy(() =>
   import('../../../components/Extensibility/ExtensibilityInjections'),
@@ -91,6 +92,7 @@ ResourcesList.defaultProps = {
 };
 
 export function ResourcesList(props) {
+  const headerInjections = useGetInjections(props.resourceType, 'list-header');
   if (!props.resourceUrl) {
     return <></>; // wait for the context update
   }
@@ -117,22 +119,26 @@ export function ResourcesList(props) {
     </>
   );
 
+  const headerActions = headerInjections.length ? (
+    <>
+      <Injections
+        destination={props.resourceType}
+        slot="list-header"
+        root={props.resources}
+      />
+      {props.customHeaderActions}
+    </>
+  ) : (
+    props.customHeaderActions
+  );
+
   return (
     <>
       {!props.isCompact ? (
         <DynamicPageComponent
           layoutNumber={props.layoutNumber}
           title={prettifyNamePlural(props.resourceTitle, props.resourceType)}
-          actions={
-            <>
-              <Injections
-                destination={props.resourceType}
-                slot="list-header"
-                root={props.resources}
-              />
-              {props.customHeaderActions}
-            </>
-          }
+          actions={headerActions}
           description={props.description}
           content={content}
         />
