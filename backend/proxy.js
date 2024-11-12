@@ -21,6 +21,9 @@ async function proxyHandler(req, res) {
       method: req.method,
       headers: { ...req.headers, host: parsedUrl.host },
     };
+    if (req.headers['x-authorization']) {
+      options.headers.authorization = req.headers['x-authorization'];
+    }
 
     // Create the proxy request
     const proxyReq = libRequest(options, proxyRes => {

@@ -152,7 +152,6 @@ const getExtensionWizards = async (
   if (!fetchFn) {
     return null;
   }
-  window.kymaFetchFn = fetchFn;
   try {
     const configDir = await getConfigDir();
     const wizardsResponse = await fetch(configDir + '/extensions/wizards.yaml');
@@ -417,6 +416,10 @@ export const useGetExtensions = () => {
   const { data: crds } = useGet(
     `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`,
   );
+
+  // expose fetchFn and authData to the window object for the extensions to use
+  window.kymaFetchFn = fetchFn;
+  window.kymaAuth = auth;
 
   useEffect(() => {
     (crds as any)?.items.forEach((crd: CustomResourceDefinition) => {

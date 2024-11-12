@@ -14,7 +14,7 @@ export default defineConfig({
     outDir: 'build',
   },
   server: {
-    port: 8000,
+    port: 8080,
   },
   plugins: [
     {
