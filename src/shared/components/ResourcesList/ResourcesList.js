@@ -95,13 +95,26 @@ export function ResourcesList(props) {
     return <></>; // wait for the context update
   }
 
-  const content = props.resources ? (
-    <ResourceListRenderer
-      resources={(props.resources || []).filter(props.filterFn)}
-      {...props}
-    />
-  ) : (
-    <Resources {...props} />
+  const content = (
+    <>
+      <BannerCarousel
+        children={
+          <Injections
+            destination={props.resourceType}
+            slot="banner"
+            root={props.resources}
+          />
+        }
+      />
+      {props.resources ? (
+        <ResourceListRenderer
+          resources={(props.resources || []).filter(props.filterFn)}
+          {...props}
+        />
+      ) : (
+        <Resources {...props} />
+      )}
+    </>
   );
 
   return (
@@ -112,15 +125,6 @@ export function ResourcesList(props) {
           title={prettifyNamePlural(props.resourceTitle, props.resourceType)}
           actions={
             <>
-              <BannerCarousel
-                children={
-                  <Injections
-                    destination={props.resourceType}
-                    slot="banner"
-                    root={props.resources}
-                  />
-                }
-              />
               <Injections
                 destination={props.resourceType}
                 slot="list-header"
