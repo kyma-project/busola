@@ -51,7 +51,6 @@ export function getCpus(cpuString) {
 
   const suffixPower = CPU_SUFFIX_POWER[suffix];
   if (!suffixPower) {
-    console.log(cpuString);
     return parseFloat(cpuString);
   }
 

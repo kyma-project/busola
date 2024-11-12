@@ -139,5 +139,5 @@ export function buildPathsFromObject(object, path = '') {
 }
 
 export function roundTwoDecimals(number) {
-  return parseFloat(number.toFixed(2));
+  return Number(parseFloat(number).toExponential(2));
 }

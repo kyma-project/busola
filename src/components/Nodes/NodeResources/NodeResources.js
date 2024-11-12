@@ -7,7 +7,6 @@ import './NodeResources.scss';
 export function NodeResources({ metrics, resources }) {
   const { t } = useTranslation();
   const { cpu, memory } = metrics || {};
-  console.log(resources);
 
   return cpu && memory ? (
     <>
