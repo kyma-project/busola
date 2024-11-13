@@ -35,6 +35,7 @@ export default function NodeDetails({ nodeName }) {
               <>
                 <Title
                   level="H3"
+                  size="H3"
                   className="sap-margin-begin-medium sap-margin-y-medium"
                 >
                   {t('common.headers.node-details')}
@@ -53,6 +54,7 @@ export default function NodeDetails({ nodeName }) {
                 </div>
                 <Title
                   level="H3"
+                  size="H3"
                   className="sap-margin-begin-medium sap-margin-top-medium sap-margin-bottom-small"
                 >
                   {t('common.headers.nodeInfo')}

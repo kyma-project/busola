@@ -267,7 +267,7 @@ function EditClusterComponent({
   return (
     <>
       <div className="sap-margin-x-large sap-margin-y-small">
-        <Title level="H3" className="sap-margin-bottom-small">
+        <Title level="H3" size="H3" className="sap-margin-bottom-small">
           {t('clusters.storage.choose-storage.label')}
         </Title>
         <ChooseStorage

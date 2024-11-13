@@ -65,6 +65,7 @@ export function AllNamespacesDetails() {
           <>
             <Title
               level="H3"
+              size="H3"
               className="sap-margin-begin-medium sap-margin-y-medium"
             >
               {t('common.headers.monitoring-and-health')}
