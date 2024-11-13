@@ -53,7 +53,7 @@ if (gzipEnabled)
 if (process.env.NODE_ENV === 'development') {
   app.use(cors({ origin: '*' }));
 }
-app.get('/proxy', proxyHandler);
+app.use('/proxy', proxyHandler);
 
 let server = null;
 
@@ -83,13 +83,15 @@ const isDocker = process.env.IS_DOCKER === 'true';
 const handleRequest = makeHandleRequest();
 
 if (isDocker) {
+  console.log('Running in dev mode');
   // yup, order matters here
   serveMonaco(app);
   app.use('/backend', handleRequest);
   serveStaticApp(app, '/', '/core-ui');
 } else {
+  console.log('Running in prod mode');
   handleTracking(app);
-  app.use(handleRequest);
+  app.use('/backend', handleRequest);
 }
 
 process.on('SIGINT', function() {

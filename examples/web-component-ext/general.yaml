@@ -1,6 +1,5 @@
 resource:
-  kind: VolumeSnapshot
-  group: snapshot.storage.k8s.io
+  kind: Secret
   version: v1
 urlPath: service-management-ui
 category: Kyma

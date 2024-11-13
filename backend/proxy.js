@@ -3,6 +3,7 @@ import { request as httpRequest } from 'http';
 import { URL } from 'url';
 
 async function proxyHandler(req, res) {
+  console.log('Proxy request received:', req.method, req.query.url);
   const targetUrl = req.query.url;
   if (!targetUrl) {
     return res.status(400).send('Target URL is required as a query parameter');
@@ -21,10 +22,7 @@ async function proxyHandler(req, res) {
       method: req.method,
       headers: { ...req.headers, host: parsedUrl.host },
     };
-    if (req.headers['x-authorization']) {
-      options.headers.authorization = req.headers['x-authorization'];
-    }
-
+    console.log('Proxy request options:', options);
     // Create the proxy request
     const proxyReq = libRequest(options, proxyRes => {
       // Forward status and headers from the target response
@@ -38,12 +36,10 @@ async function proxyHandler(req, res) {
     proxyReq.on('error', error => {
       res.status(500).send(`Error making proxy request: ${error.message}`);
     });
-
-    // Pipe the request data from the client to the target server (for POST, PUT, etc.)
-    if (req.method !== 'GET' && req.method !== 'HEAD') {
-      req.pipe(proxyReq);
+    if (Buffer.isBuffer(req.body)) {
+      proxyReq.end(req.body); // If the body is already buffered, use it directly.
     } else {
-      proxyReq.end();
+      req.pipe(proxyReq); // Otherwise, pipe the request for streamed or chunked data.
     }
   } catch (error) {
     res.status(500).send(`Error processing request: ${error.message}`);
