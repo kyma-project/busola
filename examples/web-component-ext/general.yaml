@@ -1,7 +1,7 @@
 resource:
-  kind: Istio
-  group: operator.kyma-project.io
-  version: v1alpha2
+  kind: VolumeSnapshot
+  group: snapshot.storage.k8s.io
+  version: v1
 urlPath: service-management-ui
 category: Kyma
 name: Service Management UI
