@@ -75,7 +75,7 @@ ResourcesList.propTypes = {
   filterFn: PropTypes.func,
 };
 
-export function ResourcesList(
+export function ResourcesList({
   customHeaderActions = null,
   resourceUrl,
   resourceType,
@@ -86,7 +86,7 @@ export function ResourcesList(
   resources,
   filterFn = () => true,
   ...props
-) {
+}) {
   const headerInjections = useGetInjections(resourceType, 'list-header');
   if (!resourceUrl) {
     return <></>; // wait for the context update
