@@ -11,7 +11,7 @@ GET_STATUS_JQ_QUERY=".check_suites | \"\(.status)-\(.conclusion)\""
 GET_COUNT_JQ_QUERY=".total_count"
 
 response=`curl -s ${STATUS_URL}`
-
+echo ${response}
 count=`echo $response | jq -r "${GET_COUNT_JQ_QUERY}"`
 if [[ "$count" == "0" ]]; then
   echo "No actions to verify"
