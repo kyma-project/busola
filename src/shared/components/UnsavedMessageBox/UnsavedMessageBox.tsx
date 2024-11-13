@@ -22,23 +22,13 @@ export function UnsavedMessageBox({ isOpen }: UnsavedMessageBoxProps) {
   );
   const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
 
-  const handleClose = (event: {
-    detail: {
-      action:
-        | string
-        | ForwardRefExoticComponent<
-            ButtonPropTypes &
-              WithWebComponentPropTypes &
-              RefAttributes<ButtonDomRef>
-          >;
-    };
-  }) => {
-    if (event.detail.action === '0: custom action') {
+  const handleClose = (action, escapedPressed) => {
+    if (action === '0: custom action' || escapedPressed) {
       if (isResourceEdited.discardAction) {
         isResourceEdited.discardAction();
       }
       setIsFormOpen({ formOpen: false, leavingForm: false });
-    } else if (event.detail.action === '1: custom action') {
+    } else if (action === '1: custom action') {
       setIsResourceEdited({ isEdited: true });
       setIsFormOpen({ formOpen: true, leavingForm: false });
       return;
