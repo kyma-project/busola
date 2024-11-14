@@ -9,3 +9,6 @@ images:
   - name: busola-web
     newName: europe-docker.pkg.dev/kyma-project/prod/busola-web
     newTag: latest
+  - name: busola-backend
+    newName: europe-docker.pkg.dev/kyma-project/prod/busola-backend
+    newTag: latest
