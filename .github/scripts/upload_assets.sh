@@ -8,6 +8,7 @@ set -o pipefail # prevents errors in a pipeline from being masked
 
 REPOSITORY=${REPOSITORY:-kyma-project/busola}
 RELEASE_ID=${RELEASE_ID?"Release id is not defined"}
+RELEASE_TAG=${RELEASE_TAG?"Release tag is not defined"}
 echo "release id ${RELEASE_ID}"
 
 
@@ -31,34 +32,13 @@ uploadFile() {
   fi
 }
 
-#make generate chart with desired img.
-#TODO: probably not needed can be taken from previous step
-echo "Fetching releases"
-#echo "https://api.github.com/repos/${REPOSITORY}/releases"
-#
-#CURL_RESPONSE=$(curl -w "%{http_code}" -sL \
-#                -H "Accept: application/vnd.github+json" \
-#                -H "Authorization: Bearer $GITHUB_TOKEN" \
-#                https://api.github.com/repos/"${REPOSITORY}"/releases)
-#JSON_RESPONSE=$(sed '$ d' <<< "${CURL_RESPONSE}")
-#HTTP_CODE=$(tail -n1 <<< "${CURL_RESPONSE}")
-#if [[ "${HTTP_CODE}" != "200" ]]; then
-#  echo "${CURL_RESPONSE}"
-#  exit 1
-#fi
-
-#echo ${JSON_RESPONSE}
-
-#echo "Finding release id for: ${PULL_BASE_REF}"
-#RELEASE_ID=$(jq <<< ${JSON_RESPONSE} --arg tag "${PULL_BASE_REF}" '.[] | select(.tag_name == $ARGS.named.tag) | .id')
-
-#echo "Got '${RELEASE_ID}' release id"
-#if [ -z "${RELEASE_ID}" ]
-#then
-#  echo "No release with tag = ${PULL_BASE_REF}"
-#  exit 1
-#fi
-
+BUSOLA_K8S="busola.yaml"
+generate_k8s() {
+  cd resoruces
+  (cd base/web && kustomize edit set image busola-web=europe-docker.pkg.dev/kyma-project/prod/busola-web:${RELEASE_TAG})
+  kustomize build base/ > ../"${BUSOLA_K8S}"
+  cd -
+}
 
 DASHBOARD_K8S="kyma-dashboard.yaml"
 
@@ -71,3 +51,6 @@ echo "Updating github release with assets"
 UPLOAD_URL="https://uploads.github.com/repos/${REPOSITORY}/releases/${RELEASE_ID}/assets"
 
 uploadFile ${DASHBOARD_K8S} "${UPLOAD_URL}?name=${DASHBOARD_K8S}"
+
+generate_k8s
+uploadFile ${BUSOLA_K8S} "${UPLOAD_URL}?name=${BUSOLA_K8S}"

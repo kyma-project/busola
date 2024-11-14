@@ -111,7 +111,7 @@ jobs:
           echo $RELEASE_ID
           echo "release_id=$RELEASE_ID" >> $GITHUB_OUTPUT
 
-      - name: Create release assets #TODO: Probably here we should generate busola chart
+      - name: Create release assets
         id: create-assets
         env:
           PULL_BASE_REF: ${{ github.event.inputs.name }}
