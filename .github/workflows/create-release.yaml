@@ -17,19 +17,21 @@ permissions: # used by build images steps
   contents: write # This is required for actions/checkout and builds
 
 jobs:
-  verify-head-status:
-    name: Verify HEAD
-    runs-on: ubuntu-latest
+  #  TODO: Do we need this check? Our tests on main depends on what have changed.
+  #  verify-head-status:
+  #    name: Verify HEAD
+  #    runs-on: ubuntu-latest
+  #
+  #    steps:
+  #      - name: Checkout code
+  #        uses: actions/checkout@v4
+  #        with:
+  #          fetch-depth: 0
+  #
+  #      - name: Verify github actions
+  #        run: ./.github/scripts/verify-actions-status.sh ${{ github.ref_name }}
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Verify github actions
-        run: ./.github/scripts/verify-actions-status.sh ${{ github.ref_name }}
-
+  # TODO: This steps cannot be executed on fork, so I need to adjust them later
   #  upgrade-images:
   #    name: Upgrade main images
   #    needs: verify-head-status
@@ -114,7 +116,7 @@ jobs:
         env:
           PULL_BASE_REF: ${{ github.event.inputs.name }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPOSITORY: dbadura/busola #TODO: Remove it
+          REPOSITORY: dbadura/busola
           RELEASE_ID: ${{ steps.create-draft.outputs.release_id }}
         run: ./.github/scripts/upload_assets.sh
 
