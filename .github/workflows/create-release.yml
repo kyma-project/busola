@@ -1,0 +1,159 @@
+name: create release
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Release name ( e.g. "2.1.3" )'
+        default: ''
+        required: true
+      latest_release:
+        description: 'Latest release'
+        type: boolean
+        default: true
+
+permissions: # used by build images steps
+  id-token: write # This is required for requesting the JWT token
+  contents: write # This is required for actions/checkout and builds
+
+jobs:
+  #  TODO: Do we need this check? Our tests on main depends on what have changed.
+  #  verify-head-status:
+  #    name: Verify HEAD
+  #    runs-on: ubuntu-latest
+  #
+  #    steps:
+  #      - name: Checkout code
+  #        uses: actions/checkout@v4
+  #        with:
+  #          fetch-depth: 0
+  #
+  #      - name: Verify github actions
+  #        run: ./.github/scripts/verify-actions-status.sh ${{ github.ref_name }}
+
+  # TODO: This steps cannot be executed on fork, so I need to adjust them later
+  #  upgrade-images:
+  #    name: Upgrade main images
+  #    needs: verify-head-status
+  #    runs-on: ubuntu-latest
+  #
+  #    steps:
+  #      - name: Checkout code
+  #        uses: actions/checkout@v4
+  #        with:
+  #          token: ${{ secrets.BOT_TOKEN }}
+  #          fetch-depth: 0
+
+  #      - name: Bump values.yaml
+  #        run: |
+  #          ./hack/replace_serverless_chart_images.sh all .
+  #        env:
+  #          IMG_DIRECTORY: "prod"
+  #          IMG_VERSION: ${{ github.event.inputs.name }}
+  #          PROJECT_ROOT: "."
+  #
+  #      - name: Bump sec-scanners-config.yaml based on values.yaml
+  #        run: ./.github/scripts/upgrade-sec-scanners-config.sh
+  #        env:
+  #          IMG_VERSION: ${{ github.event.inputs.name }}
+  #
+  #      - name: Commit&Push
+  #        run: |
+  #          git config --local user.email "team-otters@sap.com"
+  #          git config --local user.name "ottersbot"
+  #
+  #          git add .
+  #          git commit --allow-empty -m "upgrade dependencies"
+  #          git push origin ${{ github.ref_name }}
+
+  create-tag:
+    name: Create tag
+    #    needs: upgrade-images
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref_name }} # Checkout to latest branch changes
+
+      - name: Create tag
+        run: |
+          git tag ${{ github.event.inputs.name }}
+          git push origin ${{ github.event.inputs.name }}
+
+  builds:
+    name: Build images
+    runs-on: ubuntu-lates
+    steps:
+      - name: Build busola web
+        uses: ./.github/workflows/busola-web-build.yml
+        with:
+          tag: '${{ github.event.inputs.name }}'
+      - name: Build busola backend
+        uses: ./.github/workflows/busola-backend-build.yml
+        with:
+          tag: '${{ github.event.inputs.name }}'
+    needs: create-tag
+
+
+  create-draft:
+    name: Create draft release
+    needs: builds
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref_name }} # checkout to latest branch changes ( by default this action checkouts to the SHA that triggers action )
+
+      - name: Create draft release
+        id: create-draft
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          REPOSITORY: dbadura/busola #TODO: Remove it
+        run: |
+          RELEASE_ID=$(./.github/scripts/create_draft_release.sh ${{ github.event.inputs.name }})
+          echo $RELEASE_ID
+          echo "release_id=$RELEASE_ID" >> $GITHUB_OUTPUT
+
+      - name: Create release assets
+        id: create-assets
+        env:
+          PULL_BASE_REF: ${{ github.event.inputs.name }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          REPOSITORY: dbadura/busola #TODO: Remove it
+          RELEASE_ID: ${{ steps.create-draft.outputs.release_id }}
+        run: ./.github/scripts/upload_assets.sh
+
+    outputs:
+      release_id: ${{ steps.create-draft.outputs.release_id }}
+
+  # TODO: Run integration tests?
+  #  integrations:
+  #    needs: create-draft
+  #    secrets: inherit
+  #    uses: ./.github/workflows/_integration-tests.yaml
+  #    with:
+  #      image: europe-docker.pkg.dev/kyma-project/prod/serverless-operator:${{ github.event.inputs.name }}
+
+  publish-release:
+    name: Publish release
+    needs: [create-draft] #integrations, create-draft]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.inputs.name }} # checkout to latest branch changes ( by default this action checkouts to the SHA that triggers action )
+
+      - name: Publish release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          REPOSITORY: dbadura/busola #TODO: Remove it
+        run: ./.github/scripts/publish_release.sh ${{ needs.create-draft.outputs.release_id }} ${{ github.event.inputs.latest_release }}
