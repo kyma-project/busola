@@ -1,12 +1,5 @@
-import {
-  Button,
-  ButtonDomRef,
-  ButtonPropTypes,
-  MessageBox,
-  WithWebComponentPropTypes,
-} from '@ui5/webcomponents-react';
+import { Button, MessageBox } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { ForwardRefExoticComponent, RefAttributes } from 'react';
 import { useRecoilState } from 'recoil';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
