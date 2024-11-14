@@ -21,6 +21,8 @@ import { useNavigate } from 'react-router-dom';
 import './NamespaceCreate.scss';
 import { useSetRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
+import { ResourceDescription as LimitRangeDescription } from 'resources/LimitRanges';
+import { ResourceDescription as ResourceQuotaDescription } from 'resources/ResourceQuotas';
 
 const ISTIO_INJECTION_LABEL = 'istio-injection';
 const ISTIO_INJECTION_ENABLED = 'enabled';
@@ -161,6 +163,7 @@ export default function NamespaceCreate({
       {!initialUnchangedResource && withLimits ? (
         <ResourceForm.CollapsibleSection
           title={t('namespaces.create-modal.container-limits')}
+          tooltipContent={LimitRangeDescription}
         >
           <Editor
             value={limits}
@@ -173,6 +176,7 @@ export default function NamespaceCreate({
       {!initialUnchangedResource && withMemory ? (
         <ResourceForm.CollapsibleSection
           title={t('namespaces.create-modal.memory-quotas')}
+          tooltipContent={ResourceQuotaDescription}
         >
           <Editor
             value={memory}
@@ -221,6 +225,7 @@ export default function NamespaceCreate({
       {!initialUnchangedResource ? (
         <ResourceForm.CollapsibleSection
           title={t('namespaces.create-modal.apply-memory-quotas')}
+          tooltipContent={ResourceQuotaDescription}
           actions={() => (
             <div className="additional-resource">
               <CheckBox
@@ -263,6 +268,7 @@ export default function NamespaceCreate({
       {!initialUnchangedResource ? (
         <ResourceForm.CollapsibleSection
           title={t('namespaces.create-modal.apply-limits')}
+          tooltipContent={LimitRangeDescription}
           actions={() => (
             <div className="additional-resource">
               <CheckBox

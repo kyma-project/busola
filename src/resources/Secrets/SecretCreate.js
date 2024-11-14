@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ComboBox, ComboBoxItem } from '@ui5/webcomponents-react';
 
@@ -9,6 +9,7 @@ import { createSecretTemplate, createPresets, getSecretDefs } from './helpers';
 
 import { useRecoilValue } from 'recoil';
 import { configurationAtom } from 'state/configuration/configurationAtom';
+import { getDescription, SchemaContext } from 'shared/helpers/schema';
 
 export default function SecretCreate({
   namespace,
@@ -57,6 +58,9 @@ export default function SecretCreate({
       },
     });
   }, [type]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const schema = useContext(SchemaContext);
+  const dataDesc = getDescription(schema, 'data');
 
   const onChangeInput = (event, setValue) => {
     const selectedOption = options.find(o => o.text === event.target.value) ?? {
@@ -108,6 +112,7 @@ export default function SecretCreate({
         defaultOpen
         encodable
         propertyPath="$.data"
+        tooltipContent={dataDesc}
         lockedKeys={lockedKeys}
       />
     </ResourceForm>

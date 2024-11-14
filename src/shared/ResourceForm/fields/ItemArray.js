@@ -14,6 +14,7 @@ export function ItemArray({
   itemRenderer,
   newResourceTemplateFn,
   readOnly,
+  tooltipContent,
   nestingLevel = 0,
   ...props
 }) {
@@ -72,6 +73,7 @@ export function ItemArray({
   return (
     <ResourceForm.CollapsibleSection
       title={listTitle}
+      tooltipContent={tooltipContent}
       actions={setOpen => (
         <Button
           icon="add"
