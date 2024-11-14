@@ -34,7 +34,8 @@ uploadFile() {
 BUSOLA_K8S="busola.yaml"
 generate_k8s() {
   pwd
-  cd resoruces
+  ls -l
+  cd resources
   (cd base/web && kustomize edit set image busola-web=europe-docker.pkg.dev/kyma-project/prod/busola-web:${RELEASE_ID})
   kustomize build base/ > ../"${BUSOLA_K8S}"
   cd -
