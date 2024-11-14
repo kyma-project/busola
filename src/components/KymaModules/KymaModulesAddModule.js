@@ -248,6 +248,7 @@ export default function KymaModulesAddModule({
       initialUnchangedResource={initialUnchangedResource}
       afterCreatedCustomMessage={t('kyma-modules.module-added')}
       formWithoutPanel
+      className="add-modules-form"
     >
       {modulesAddData?.length !== 0 ? (
         <>
