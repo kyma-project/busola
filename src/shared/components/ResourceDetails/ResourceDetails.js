@@ -70,19 +70,6 @@ ResourceDetails.propTypes = {
   isModule: PropTypes.bool,
 };
 
-ResourceDetails.defaultProps = {
-  customColumns: [],
-  customComponents: [],
-  customStatusComponents: [],
-  headerActions: null,
-  resourceHeaderActions: [],
-  readOnly: false,
-  disableEdit: false,
-  disableDelete: false,
-  showYamlTab: false,
-  layoutNumber: 'MidColumn',
-};
-
 export function ResourceDetails(props) {
   if (!props.resourceUrl) {
     return <></>; // wait for the context update
@@ -151,20 +138,20 @@ function Resource({
   hideLabels = false,
   hideAnnotations = false,
   hideLastUpdate = false,
-  layoutNumber,
+  layoutNumber = 'MidColumn',
   layoutCloseCreateUrl,
   children,
   createResourceForm: CreateResourceForm,
-  customColumns,
-  customComponents,
+  customColumns = [],
+  customComponents = [],
   customConditionsComponents,
   description,
   editActionLabel,
-  headerActions,
+  headerActions = null,
   namespace,
-  readOnly,
+  readOnly = false,
   resource,
-  resourceHeaderActions,
+  resourceHeaderActions = [],
   resourceType,
   resourceUrl,
   title,
@@ -172,9 +159,9 @@ function Resource({
   resourceTitle,
   resourceGraphConfig,
   resourceSchema,
-  disableEdit,
-  showYamlTab,
-  disableDelete,
+  disableEdit = false,
+  showYamlTab = false,
+  disableDelete = false,
   statusBadge,
   customStatusColumns,
   customHealthCards,
@@ -444,6 +431,7 @@ function Resource({
               <>
                 <Title
                   level="H3"
+                  size="H3"
                   className="sap-margin-begin-medium sap-margin-y-medium"
                 >
                   {title ?? t('common.headers.resource-details')}

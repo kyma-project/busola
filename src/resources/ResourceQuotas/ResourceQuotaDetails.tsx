@@ -59,6 +59,7 @@ export default function ResourceQuotaDetails(props: any) {
                     <>
                       <Title
                         level="H6"
+                        size="H6"
                         className="resource-quota-spec-subheader sap-margin-small"
                       >
                         {scope.scopeName}

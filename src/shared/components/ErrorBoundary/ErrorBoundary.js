@@ -66,11 +66,7 @@ class ErrorBoundaryComponent extends React.Component {
   }
 }
 
-ErrorBoundaryComponent.defaultProps = {
-  displayButton: true,
-};
-
-export const ErrorBoundary = ({ ...props }) => {
+export const ErrorBoundary = ({ displayButton = true, ...props }) => {
   const { t } = useTranslation();
   return <ErrorBoundaryComponent {...props} t={t} />;
 };

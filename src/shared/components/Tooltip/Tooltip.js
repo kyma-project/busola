@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Tooltip as TippyTooltip } from 'react-tippy';
@@ -10,7 +9,7 @@ export const Tooltip = ({
   children,
   content,
   position,
-  trigger,
+  trigger = 'mouseenter',
   tippyProps,
   delay = [200, 0],
 }) => {
@@ -33,8 +32,4 @@ Tooltip.propTypes = {
   position: PropTypes.oneOf(['top', 'bottom', 'left', 'right']),
   trigger: PropTypes.oneOf(['mouseenter', 'focus', 'click', 'manual']),
   children: PropTypes.node,
-};
-
-Tooltip.defaultProps = {
-  trigger: 'mouseenter',
 };
