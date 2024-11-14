@@ -1,8 +1,8 @@
 import React, { ReactNode } from 'react';
 import classNames from 'classnames';
+import { Text } from '@ui5/webcomponents-react';
 
 import './TileButton.scss';
-import { Text } from '@ui5/webcomponents-react';
 
 type TileButtonProps = {
   title: string;
