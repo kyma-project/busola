@@ -8,7 +8,6 @@ set -o pipefail # prevents errors in a pipeline from being masked
 
 REPOSITORY=${REPOSITORY:-kyma-project/busola}
 RELEASE_ID=${RELEASE_ID?"Release id is not defined"}
-RELEASE_TAG=${RELEASE_TAG?"Release tag is not defined"}
 echo "release id ${RELEASE_ID}"
 
 
@@ -35,7 +34,7 @@ uploadFile() {
 BUSOLA_K8S="busola.yaml"
 generate_k8s() {
   cd resoruces
-  (cd base/web && kustomize edit set image busola-web=europe-docker.pkg.dev/kyma-project/prod/busola-web:${RELEASE_TAG})
+  (cd base/web && kustomize edit set image busola-web=europe-docker.pkg.dev/kyma-project/prod/busola-web:${RELEASE_ID})
   kustomize build base/ > ../"${BUSOLA_K8S}"
   cd -
 }
