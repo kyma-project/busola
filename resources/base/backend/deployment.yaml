@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: europe-docker.pkg.dev/kyma-project/prod/busola-backend:latest
+          image: busola-backend
           imagePullPolicy: Always
           resources:
             limits:
