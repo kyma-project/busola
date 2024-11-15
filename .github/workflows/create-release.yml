@@ -83,19 +83,19 @@ jobs:
           git tag ${{ github.event.inputs.name }}
           git push origin ${{ github.event.inputs.name }}
 
-  builds:
-    name: Build images
-    runs-on: ubuntu-lates
-    steps:
-      - name: Build busola web
-        uses: ./.github/workflows/busola-web-build.yml
-        with:
-          tag: '${{ github.event.inputs.name }}'
-      - name: Build busola backend
-        uses: ./.github/workflows/busola-backend-build.yml
-        with:
-          tag: '${{ github.event.inputs.name }}'
-    needs: create-tag
+#  builds: TODO: Currently there is no runner to pick the build
+#    name: Build images
+#    runs-on: ubuntu-lates
+#    steps:
+#      - name: Build busola web
+#        uses: ./.github/workflows/busola-web-build.yml
+#        with:
+#          tag: '${{ github.event.inputs.name }}'
+#      - name: Build busola backend
+#        uses: ./.github/workflows/busola-backend-build.yml
+#        with:
+#          tag: '${{ github.event.inputs.name }}'
+#    needs: create-tag
 
 
   create-draft:
@@ -123,14 +123,10 @@ jobs:
       - name: Create release assets
         id: create-assets
         env:
-          PULL_BASE_REF: ${{ github.event.inputs.name }}
+          RELEASE_TAG: ${{ github.event.inputs.name }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #          REPOSITORY: dbadura/busola #TODO: Remove it
-          RELEASE_ID: ${{ steps.create-draft.outputs.release_id }}
         run: ./.github/scripts/upload_assets.sh
-
-    outputs:
-      release_id: ${{ steps.create-draft.outputs.release_id }}
 
   # TODO: Run integration tests?
   #  integrations:

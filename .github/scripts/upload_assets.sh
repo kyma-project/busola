@@ -7,8 +7,8 @@ set -E          # needs to be set if we want the ERR trap
 set -o pipefail # prevents errors in a pipeline from being masked
 
 REPOSITORY=${REPOSITORY:-kyma-project/busola}
-RELEASE_ID=${RELEASE_ID?"Release id is not defined"}
-echo "release id ${RELEASE_ID}"
+RELEASE_TAG=${RELEASE_TAG?"Release id is not defined"}
+echo "release tag ${RELEASE_TAG}"
 
 
 uploadFile() {
@@ -37,24 +37,26 @@ generate_k8s() {
   pwd
   ls -l
   cd resources
-  (cd base/web && kustomize edit set image busola-web=europe-docker.pkg.dev/kyma-project/prod/busola-web:"${RELEASE_ID}")
-  (cd base/backend && kustomize edit set image busola-backend=europe-docker.pkg.dev/kyma-project/prod/busola-backend:"${RELEASE_ID}")
+  (cd base/web && kustomize edit set image busola-web=europe-docker.pkg.dev/kyma-project/prod/busola-web:"${RELEASE_TAG}")
+  (cd base/backend && kustomize edit set image busola-backend=europe-docker.pkg.dev/kyma-project/prod/busola-backend:"${RELEASE_TAG}")
   kustomize build base/ > ../"${BUSOLA_K8S}"
   cd -
   pwd
 }
 
-DASHBOARD_K8S="kyma-dashboard.yaml"
-
-cat <<EOT >$DASHBOARD_K8S
-This is test release file
-create by to test empty release flow
-EOT
-
 echo "Updating github release with assets"
-UPLOAD_URL="https://uploads.github.com/repos/${REPOSITORY}/releases/${RELEASE_ID}/assets"
+UPLOAD_URL="https://uploads.github.com/repos/${REPOSITORY}/releases/${RELEASE_TAG}/assets"
 
-uploadFile ${DASHBOARD_K8S} "${UPLOAD_URL}?name=${DASHBOARD_K8S}"
+
+#DASHBOARD_K8S="kyma-dashboard.yaml"
+#
+#cat <<EOT >$DASHBOARD_K8S
+#This is test release file
+#create by to test empty release flow
+#EOT
+
+
+#uploadFile ${DASHBOARD_K8S} "${UPLOAD_URL}?name=${DASHBOARD_K8S}"
 
 generate_k8s
 uploadFile ${BUSOLA_K8S} "${UPLOAD_URL}?name=${BUSOLA_K8S}"
