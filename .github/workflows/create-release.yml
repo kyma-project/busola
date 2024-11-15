@@ -83,18 +83,18 @@ jobs:
           git tag ${{ github.event.inputs.name }}
           git push origin ${{ github.event.inputs.name }}
 
-  build-web:
-    name: Build Busola web
-    needs: create-tag
-    uses: ./.github/workflows/busola-web-build.yml
-    with:
-      tag: ${{ github.event.inputs.name }}
-  build-backend:
-    name: Build busola backend
-    needs: create-tag
-    uses: ./.github/workflows/busola-backend-build.yml
-    with:
-      tag: ${{ github.event.inputs.name }}
+#  build-web:
+#    name: Build Busola web
+#    needs: create-tag
+#    uses: ./.github/workflows/busola-web-build.yml
+#    with:
+#      tag: ${{ github.event.inputs.name }}
+#  build-backend:
+#    name: Build busola backend
+#    needs: create-tag
+#    uses: ./.github/workflows/busola-backend-build.yml
+#    with:
+#      tag: ${{ github.event.inputs.name }}
 
   # TODO: Run integration tests?
   #  integrations:
@@ -106,9 +106,9 @@ jobs:
 
   create-draft:
     name: Create draft release
-    needs:
-      - build-web
-      - build-backend
+#    needs:
+#      - build-web
+#      - build-backend
     runs-on: ubuntu-latest
 
     steps:
@@ -122,7 +122,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PULL_BASE_REF: ${{ github.event.inputs.name }}
-        run: ./.github/scripts/create-changelog.sh ${{ github.event.inputs.name }}
+        run: ./.github/scripts/create_changelog.sh ${{ github.event.inputs.name }}
 
       - name: Create draft release
         id: create-draft
