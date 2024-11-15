@@ -14,6 +14,7 @@ import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { groupVersionState } from 'state/discoverability/groupVersionsSelector';
 import { spacing } from '@ui5/webcomponents-react-base';
+import { getDescription } from 'shared/helpers/schema';
 
 const nonResourceUrls = [
   '/healthz/ready',
@@ -42,10 +43,16 @@ const verbs = [
   '*',
 ];
 
-export function RuleInput({ rule, rules, setRules }) {
+export function RuleInput({ rule, rules, setRules, schema }) {
   const groupVersions = useRecoilValue(groupVersionState);
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const { t } = useTranslation();
+
+  const apiGroupDesc = getDescription(schema, 'rules.apiGroups');
+  const resourcesDesc = getDescription(schema, 'rules.resources');
+  const verbsDesc = getDescription(schema, 'rules.verbs');
+  const resourceNamesDesc = getDescription(schema, 'rules.resourceNames');
+  const nonResourceURLsDesc = getDescription(schema, 'rules.nonResourceURLs');
 
   if (!Array.isArray(rule?.apiGroups)) {
     rule.apiGroups = [];
@@ -114,6 +121,7 @@ export function RuleInput({ rule, rules, setRules }) {
         filterOptions
         title={t('roles.headers.api-groups')}
         propertyPath="$.apiGroups"
+        sectionTooltipContent={t(apiGroupDesc)}
         options={apiGroupsInputOptions}
         emptyStringKey={EMPTY_API_GROUP_KEY}
         defaultOpen
@@ -129,6 +137,7 @@ export function RuleInput({ rule, rules, setRules }) {
         filterOptions
         title={t('roles.headers.resources')}
         propertyPath="$.resources"
+        sectionTooltipContent={t(resourcesDesc)}
         options={availableResources.map(i => ({ key: i, text: i }))}
         defaultOpen
         nestingLevel={2}
@@ -175,6 +184,7 @@ export function RuleInput({ rule, rules, setRules }) {
         filterOptions
         title={t('roles.headers.verbs')}
         propertyPath="$.verbs"
+        sectionTooltipContent={t(verbsDesc)}
         options={verbs.map(i => ({ key: i, text: i }))}
         defaultOpen
         nestingLevel={2}
@@ -187,12 +197,14 @@ export function RuleInput({ rule, rules, setRules }) {
       <TextArrayInput
         title={t('roles.headers.resource-names')}
         propertyPath="$.resourceNames"
+        sectionTooltipContent={t(resourceNamesDesc)}
         nestingLevel={2}
       />
       {!namespaceId && (
         <ComboboxArrayInput
           title={t('roles.headers.non-resource-urls')}
           propertyPath="$.nonResourceURLs"
+          sectionTooltipContent={t(nonResourceURLsDesc)}
           nestingLevel={2}
           options={nonResourceUrls.map(i => ({ key: i, text: i }))}
         />
