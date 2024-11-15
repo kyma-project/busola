@@ -118,6 +118,12 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.ref_name }} # checkout to latest branch changes ( by default this action checkouts to the SHA that triggers action )
 
+      - name: Create changelog
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PULL_BASE_REF: ${{ github.event.inputs.name }}
+        run: ./.github/scripts/create-changelog.sh ${{ github.event.inputs.name }}
+
       - name: Create draft release
         id: create-draft
         env:
@@ -140,7 +146,7 @@ jobs:
 
   publish-release:
     name: Publish release
-    needs: [create-draft]
+    needs: [ create-draft ]
     runs-on: ubuntu-latest
 
     steps:
