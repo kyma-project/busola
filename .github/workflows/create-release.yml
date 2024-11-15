@@ -153,4 +153,6 @@ jobs:
       - name: Publish release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./.github/scripts/publish_release.sh ${{ needs.create-draft.outputs.release_id }} ${{ github.event.inputs.latest_release }}
+          RELEASE_ID: ${{ steps.create-draft.outputs.release_id }}
+          IS_LATEST_RELEASE: ${{ github.event.inputs.latest_release }}
+        run: ./.github/scripts/publish_release.sh
