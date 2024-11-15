@@ -100,7 +100,7 @@ jobs:
 
   create-draft:
     name: Create draft release
-    needs: builds
+#    needs: builds
     runs-on: ubuntu-latest
 
     steps:
