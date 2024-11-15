@@ -88,13 +88,13 @@ jobs:
     needs: create-tag
     uses: ./.github/workflows/busola-web-build.yml
     with:
-      tags: "${{ github.event.inputs.name }}"
+      tag: "${{ github.event.inputs.name }}"
   build-backend:
     name: Build busola backend
     needs: create-tag
     uses: ./.github/workflows/busola-backend-build.yml
     with:
-      tags: "${{ github.event.inputs.name }}"
+      tag: "${{ github.event.inputs.name }}"
 
   # TODO: Run integration tests?
   #  integrations:
