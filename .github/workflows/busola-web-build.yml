@@ -1,6 +1,13 @@
 name: Busola Web Build
 
 on:
+  workflow_call:
+    inputs:
+      tag:
+        description: "Additional tag for built images"
+        required: false
+        type: string
+        default: ""
   push:
     branches:
       - main
