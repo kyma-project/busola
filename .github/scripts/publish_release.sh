@@ -8,7 +8,7 @@ set -o errexit  # exit immediately when a command fails.
 set -E          # needs to be set if we want the ERR trap
 set -o pipefail # prevents errors in a pipeline from being masked
 
-RELEASE_ID=${$RELEASE_ID?"Release id not defined"}
+RELEASE_ID=${RELEASE_ID?"Release id is not defined"}
 IS_LATEST_RELEASE=${IS_LATEST_RELEASE?"latest release not defined"}
 
 REPOSITORY=${REPOSITORY:-kyma-project/busola}
