@@ -10,7 +10,6 @@ on:
   push:
     branches:
       - main
-      - release
     paths:
       - ".github/workflows/busola-web-build.yml"
       - "kyma/**"
