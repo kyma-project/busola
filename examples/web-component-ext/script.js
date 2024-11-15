@@ -91,7 +91,7 @@ function decodeBase64(base64) {
 
 async function getSMsecret() {
   let url = `/api/v1/namespaces/kyma-system/secrets/sap-btp-service-operator`;
-  const fetchFn = window.kymaFetchFn;
+  const fetchFn = window.extensionProps.kymaFetchFn;
 
   let resp = await fetchFn({ relativeUrl: url });
   let data = await resp.json();
@@ -117,7 +117,7 @@ async function createServiceInstance(name, namespace, offering, plan) {
   };
   let relativeUrl = `/apis/services.cloud.sap.com/v1/namespaces/${namespace}/serviceinstances`;
   try {
-    let resp = await window.kymaFetchFn({
+    let resp = await window.extensionProps.kymaFetchFn({
       relativeUrl,
       init: {
         method: 'POST',
@@ -139,19 +139,19 @@ async function createServiceInstance(name, namespace, offering, plan) {
 
 async function getServiceInstances() {
   let relativeUrl = '/apis/services.cloud.sap.com/v1/serviceinstances';
-  let resp = await window.kymaFetchFn({ relativeUrl });
+  let resp = await window.extensionProps.kymaFetchFn({ relativeUrl });
   let data = await resp.json();
   return data.items;
 }
 async function getServiceBindings() {
   let relativeUrl = '/apis/services.cloud.sap.com/v1/servicebindings';
-  let resp = await window.kymaFetchFn({ relativeUrl });
+  let resp = await window.extensionProps.kymaFetchFn({ relativeUrl });
   let data = await resp.json();
   return data.items;
 }
 async function getNamespaces() {
   let relativeUrl = '/api/v1/namespaces';
-  let resp = await window.kymaFetchFn({ relativeUrl });
+  let resp = await window.extensionProps.kymaFetchFn({ relativeUrl });
   let data = await resp.json();
   return data.items;
 }

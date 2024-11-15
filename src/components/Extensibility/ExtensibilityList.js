@@ -1,5 +1,6 @@
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { usePrepareListProps } from 'resources/helpers';
@@ -142,18 +143,26 @@ const ExtensibilityList = ({ overrideResMetadata, ...props }) => {
   const defaultResMetadata = useGetCRbyPath();
   const resMetaData = overrideResMetadata || defaultResMetadata;
   const { urlPath, defaultPlaceholder } = resMetaData?.general ?? {};
-  if (resMetaData?.general?.customElement) {
-    if (!customElements.get(resMetaData.general.customElement)) {
+
+  useEffect(() => {
+    const customElement = resMetaData?.general?.customElement;
+    const customScript = resMetaData?.customScript;
+
+    if (customElement && customScript && !customElements.get(customElement)) {
       const script = document.createElement('script');
       script.type = 'module';
-      script.textContent = resMetaData.customScript;
-      console.log(script);
+      script.textContent = customScript;
+      script.onerror = e => {
+        console.error('Script loading or execution error:', e);
+      };
       document.head.appendChild(script);
-      console.log('Custom element loaded');
-    } else {
-      console.log('Custom element already exists');
+
+      return () => {
+        document.head.removeChild(script);
+      };
     }
-  }
+  }, [resMetaData]);
+
   return (
     <TranslationBundleContext.Provider
       value={{

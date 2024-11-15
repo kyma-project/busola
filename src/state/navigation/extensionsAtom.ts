@@ -353,7 +353,6 @@ const getExtensions = async (
       },
       [] as ExtResourceWithMetadata[],
     );
-    console.log('configMapsExtensions', configMapsExtensions);
     const defaultExtensionsWithoutOverride = defaultExtensions.filter(
       defExt => {
         return configMapsExtensions.every(cmExt => {
@@ -418,8 +417,10 @@ export const useGetExtensions = () => {
   );
 
   // expose fetchFn and authData to the window object for the extensions to use
-  window.kymaFetchFn = fetchFn;
-  window.kymaAuth = auth;
+  (window as any).extensionProps = {
+    kymaFetchFn: fetchFn,
+    kymaAuth: auth,
+  };
 
   useEffect(() => {
     (crds as any)?.items.forEach((crd: CustomResourceDefinition) => {
