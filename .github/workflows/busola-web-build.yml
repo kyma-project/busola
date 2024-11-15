@@ -45,4 +45,4 @@ jobs:
       dockerfile: Dockerfile.web
       context: .
       export-tags: true
-      tags: "${{ github.inputs.tag }}"
+      tags: "${{ inputs.tag }}"
