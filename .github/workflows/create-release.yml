@@ -88,18 +88,25 @@ jobs:
     needs: create-tag
     uses: ./.github/workflows/busola-web-build.yml
     with:
-      tag: "${{ github.event.inputs.name }}"
+      tags: "${{ github.event.inputs.name }}"
   build-backend:
     name: Build busola backend
     needs: create-tag
     uses: ./.github/workflows/busola-backend-build.yml
     with:
-      tag: "${{ github.event.inputs.name }}"
+      tags: "${{ github.event.inputs.name }}"
 
+  # TODO: Run integration tests?
+  #  integrations:
+  #    needs: create-draft
+  #    secrets: inherit
+  #    uses: ./.github/workflows/_integration-tests.yaml
+  #    with:
+  #      image: europe-docker.pkg.dev/kyma-project/prod/serverless-operator:${{ github.event.inputs.name }}
 
   create-draft:
     name: Create draft release
-#    needs: builds
+    needs: builds
     runs-on: ubuntu-latest
 
     steps:
@@ -113,7 +120,6 @@ jobs:
         id: create-draft
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          REPOSITORY: dbadura/busola #TODO: Remove it
         run: |
           RELEASE_ID=$(./.github/scripts/create_draft_release.sh ${{ github.event.inputs.name }})
           echo $RELEASE_ID
@@ -124,20 +130,11 @@ jobs:
         env:
           RELEASE_TAG: ${{ github.event.inputs.name }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          REPOSITORY: dbadura/busola #TODO: Remove it
           RELEASE_ID: ${{ steps.create-draft.outputs.release_id }}
         run: ./.github/scripts/upload_assets.sh
 
     outputs:
       release_id: ${{ steps.create-draft.outputs.release_id }}
-
-  # TODO: Run integration tests?
-  #  integrations:
-  #    needs: create-draft
-  #    secrets: inherit
-  #    uses: ./.github/workflows/_integration-tests.yaml
-  #    with:
-  #      image: europe-docker.pkg.dev/kyma-project/prod/serverless-operator:${{ github.event.inputs.name }}
 
   publish-release:
     name: Publish release
@@ -154,5 +151,4 @@ jobs:
       - name: Publish release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          REPOSITORY: dbadura/busola #TODO: Remove it
         run: ./.github/scripts/publish_release.sh ${{ needs.create-draft.outputs.release_id }} ${{ github.event.inputs.latest_release }}

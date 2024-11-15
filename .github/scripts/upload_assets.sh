@@ -48,16 +48,5 @@ generate_k8s() {
 echo "Updating github release with assets"
 UPLOAD_URL="https://uploads.github.com/repos/${REPOSITORY}/releases/${RELEASE_ID}/assets"
 
-
-#DASHBOARD_K8S="kyma-dashboard.yaml"
-#
-#cat <<EOT >$DASHBOARD_K8S
-#This is test release file
-#create by to test empty release flow
-#EOT
-
-
-#uploadFile ${DASHBOARD_K8S} "${UPLOAD_URL}?name=${DASHBOARD_K8S}"
-
 generate_k8s
 uploadFile ${BUSOLA_K8S} "${UPLOAD_URL}?name=${BUSOLA_K8S}"
