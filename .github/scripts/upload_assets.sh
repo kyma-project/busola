@@ -7,7 +7,8 @@ set -E          # needs to be set if we want the ERR trap
 set -o pipefail # prevents errors in a pipeline from being masked
 
 REPOSITORY=${REPOSITORY:-kyma-project/busola}
-RELEASE_TAG=${RELEASE_TAG?"Release id is not defined"}
+RELEASE_TAG=${RELEASE_TAG?"Release tag is not defined"}
+RELEASE_ID=${RELEASE_ID?"Release id is not defined"}
 echo "release tag ${RELEASE_TAG}"
 
 
@@ -45,7 +46,7 @@ generate_k8s() {
 }
 
 echo "Updating github release with assets"
-UPLOAD_URL="https://uploads.github.com/repos/${REPOSITORY}/releases/${RELEASE_TAG}/assets"
+UPLOAD_URL="https://uploads.github.com/repos/${REPOSITORY}/releases/${RELEASE_ID}/assets"
 
 
 #DASHBOARD_K8S="kyma-dashboard.yaml"

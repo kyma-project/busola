@@ -126,7 +126,11 @@ jobs:
           RELEASE_TAG: ${{ github.event.inputs.name }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #          REPOSITORY: dbadura/busola #TODO: Remove it
+          RELEASE_ID: ${{ steps.create-draft.outputs.release_id }}
         run: ./.github/scripts/upload_assets.sh
+
+    outputs:
+      release_id: ${{ steps.create-draft.outputs.release_id }}
 
   # TODO: Run integration tests?
   #  integrations:
