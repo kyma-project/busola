@@ -7,7 +7,6 @@ set -o nounset  # treat unset variables as an error and exit immediately.
 set -o errexit  # exit immediately when a command fails.
 set -E          # needs to be set if we want the ERR trap
 set -o pipefail # prevents errors in a pipeline from being masked
-
 RELEASE_TAG=$1
 
 REPOSITORY=${REPOSITORY:-kyma-project/busola}
@@ -18,6 +17,7 @@ CHANGELOG_FILE="CHANGELOG.md"
 if [ "${PREVIOUS_RELEASE}"  == "" ]
 then
   PREVIOUS_RELEASE=$(git describe --tags --abbrev=0)
+#  fatal: No names found, cannot describe anything.
 fi
 
 echo "## What has changed" >> ${CHANGELOG_FILE}
