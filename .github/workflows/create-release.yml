@@ -106,7 +106,9 @@ jobs:
 
   create-draft:
     name: Create draft release
-    needs: builds
+    needs:
+      - build-web
+      - build-backend
     runs-on: ubuntu-latest
 
     steps:
@@ -138,7 +140,7 @@ jobs:
 
   publish-release:
     name: Publish release
-    needs: [create-draft] #integrations, create-draft]
+    needs: [create-draft]
     runs-on: ubuntu-latest
 
     steps:
