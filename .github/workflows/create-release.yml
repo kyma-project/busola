@@ -83,19 +83,19 @@ jobs:
           git tag ${{ github.event.inputs.name }}
           git push origin ${{ github.event.inputs.name }}
 
-#  builds: TODO: Currently there is no runner to pick the build
-#    name: Build images
-#    runs-on: ubuntu-lates
-#    steps:
-#      - name: Build busola web
-#        uses: ./.github/workflows/busola-web-build.yml
-#        with:
-#          tag: '${{ github.event.inputs.name }}'
-#      - name: Build busola backend
-#        uses: ./.github/workflows/busola-backend-build.yml
-#        with:
-#          tag: '${{ github.event.inputs.name }}'
-#    needs: create-tag
+  builds: #TODO: Currently there is no runner to pick the build
+    name: Build images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build busola web
+        uses: ./.github/workflows/busola-web-build.yml
+        with:
+          tag: '${{ github.event.inputs.name }}'
+      - name: Build busola backend
+        uses: ./.github/workflows/busola-backend-build.yml
+        with:
+          tag: '${{ github.event.inputs.name }}'
+    needs: create-tag
 
 
   create-draft:
