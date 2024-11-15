@@ -27,9 +27,6 @@ export function NodeDetailsCard({ node, loading, error }) {
                   timestamp={node.metadata.creationTimestamp}
                 />
               </DynamicPageComponent.Column>
-              <DynamicPageComponent.Column title={t('node-details.pod-cidr')}>
-                {node.spec.podCIDR}
-              </DynamicPageComponent.Column>
               <DynamicPageComponent.Column
                 title={t('node-details.internal-ip')}
               >

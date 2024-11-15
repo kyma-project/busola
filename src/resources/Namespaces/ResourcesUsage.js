@@ -18,31 +18,54 @@ const MEMORY_SUFFIX_POWER = {
   Ti: 2 ** 40,
 };
 
+const CPU_SUFFIX_POWER = {
+  m: 1e-3,
+};
+
 export function getBytes(memoryString) {
   if (!memoryString || memoryString === '0') {
     return 0;
   }
-  const suffixMatch = memoryString.match(/\D+$/);
+  const suffixMatch = String(memoryString).match(/\D+$/);
 
   if (!suffixMatch?.length) {
-    console.warn('error');
-    return 0;
+    return memoryString;
   }
   const suffix = suffixMatch[0];
-  const number = memoryString.replace(suffix, '');
+  const number = String(memoryString).replace(suffix, '');
 
   const suffixPower = MEMORY_SUFFIX_POWER[suffix];
   if (!suffixPower) {
-    console.warn('error');
+    return number;
+  }
+
+  return number * suffixPower;
+}
+
+export function getCpus(cpuString) {
+  if (!cpuString || cpuString === '0') {
     return 0;
   }
 
+  const suffix = String(cpuString).slice(-1);
+
+  const suffixPower = CPU_SUFFIX_POWER[suffix];
+  if (!suffixPower) {
+    return parseFloat(cpuString);
+  }
+
+  const number = String(cpuString).replace(suffix, '');
   return number * suffixPower;
 }
 
 export function bytesToHumanReadable(bytes) {
   if (!bytes) return bytes;
   return getSIPrefix(bytes, true, { withoutSpace: true }).string;
+}
+
+export function cpusToHumanReadable(cpus) {
+  if (!cpus) return cpus;
+  return cpus / MEMORY_SUFFIX_POWER['m'] + 'm';
 }
 
 const MemoryRequestsCircle = ({ resourceQuotas, isLoading }) => {

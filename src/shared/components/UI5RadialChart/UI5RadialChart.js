@@ -14,7 +14,7 @@ export const UI5RadialChart = ({
   additionalInfo = '',
 }) => {
   const percent = max && value ? Math.round((value * 100) / max) : 0;
-  const text = percent + '%';
+  const text = (percent > 10_000 ? percent.toPrecision(3) : percent) + '%';
   const textSize = size / Math.max(3.5, text.length) + 'px';
 
   const classnames = classNames(`radial-chart`, {
