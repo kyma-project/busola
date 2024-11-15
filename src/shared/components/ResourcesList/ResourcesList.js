@@ -182,9 +182,9 @@ function Resources(props) {
     <ResourceListRenderer
       loading={loading}
       error={error}
-      resources={filter ? (resources || []).filter(filter) : resources || []}
       silentRefetch={silentRefetch}
       {...props}
+      resources={filter ? (resources || []).filter(filter) : resources || []}
     />
   );
 }
