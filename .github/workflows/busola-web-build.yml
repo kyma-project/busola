@@ -5,9 +5,8 @@ on:
     inputs:
       tag:
         description: "Additional tag for built images"
-        required: false
+        required: true
         type: string
-        default: "latest"
   push:
     branches:
       - main
