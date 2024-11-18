@@ -118,7 +118,7 @@ export const DynamicPageComponent = ({
       actions={
         <>
           {actions && (
-            <div className="page-header__actions">
+            <>
               {actions}
               {(window.location.search.includes('layout') ||
                 (!window.location.search.includes('layout') &&
@@ -126,7 +126,7 @@ export const DynamicPageComponent = ({
               layoutNumber !== 'StartColumn' ? (
                 <span className="separator" />
               ) : null}
-            </div>
+            </>
           )}
           {window.location.search.includes('layout') ||
           (!window.location.search.includes('layout') &&

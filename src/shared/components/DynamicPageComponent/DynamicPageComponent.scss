@@ -20,24 +20,23 @@
     display: none;
   }
 
-  &__actions {
-    display: flex;
-    align-items: center;
+  [data-component-name='ObjectPageTitleMiddleSection'] > div {
+    flex-basis: 100%;
+  }
 
-    ui5-button {
-      &:not(:last-of-type) {
-        margin-right: 0.5rem;
-      }
+  ui5-button {
+    &:not(:last-of-type) {
+      margin-right: 0.5rem;
     }
+  }
 
-    .separator {
-      display: inline-block;
-      width: 1px;
-      height: 90%;
-      margin-left: 5px;
-      background-color: var(--sapList_BorderColor);
-      border-radius: 5px;
-    }
+  .separator {
+    display: inline-block;
+    width: 1px;
+    height: 90%;
+    margin-left: 5px;
+    background-color: var(--sapList_BorderColor);
+    border-radius: 5px;
   }
 }
 
