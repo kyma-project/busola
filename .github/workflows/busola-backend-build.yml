@@ -33,4 +33,3 @@ jobs:
       name: busola-backend
       dockerfile: Dockerfile
       tags: ${{ inputs.tag }}
-

@@ -105,9 +105,7 @@ jobs:
 
   create-draft:
     name: Create draft release
-    needs:
-      - build-web
-      - build-backend
+    needs: create-tag
     runs-on: ubuntu-latest
 
     steps:
