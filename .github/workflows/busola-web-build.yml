@@ -7,7 +7,7 @@ on:
         description: "Additional tag for built images"
         required: true
         type: string
-#        default: latest
+        default: latest
   push:
     branches:
       - main
@@ -37,16 +37,10 @@ permissions:
   contents: read # This is required for actions/checkout
 
 jobs:
-  echo-tag:
-    name: Echo tag
-    runs-on: ubuntu-latest
-    steps:
-      - name: Echo tag
-        run: |
-          echo ${{ inputs.name }}
   build-web-image:
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: kyma-project/test-infra/.github/workflows/image-builder.yml@main
     with:
       name: busola-web
       dockerfile: Dockerfile.web
       tags: ${{ inputs.tag }}
+      build-args: ${{ inputs.tag != '' && format('default_tag={0}', inputs.tag) || Null }}
