@@ -92,6 +92,19 @@ export function ResourcesList({
     return <></>; // wait for the context update
   }
 
+  const allProps = {
+    customHeaderActions,
+    resourceUrl,
+    resourceType,
+    resourceTitle,
+    isCompact,
+    description,
+    layoutNumber,
+    resources,
+    filterFn,
+    ...props,
+  };
+
   const content = (
     <>
       <BannerCarousel
@@ -106,10 +119,10 @@ export function ResourcesList({
       {resources ? (
         <ResourceListRenderer
           resources={(resources || []).filter(filterFn)}
-          {...props}
+          {...allProps}
         />
       ) : (
-        <Resources {...props} />
+        <Resources {...allProps} />
       )}
     </>
   );
@@ -169,9 +182,9 @@ function Resources(props) {
     <ResourceListRenderer
       loading={loading}
       error={error}
-      resources={filter ? (resources || []).filter(filter) : resources || []}
       silentRefetch={silentRefetch}
       {...props}
+      resources={filter ? (resources || []).filter(filter) : resources || []}
     />
   );
 }
