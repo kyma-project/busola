@@ -41,6 +41,4 @@ jobs:
     with:
       name: busola-web
       dockerfile: Dockerfile.web
-      context: .
-      export-tags: true
       tags: "${{ inputs.tag }}"

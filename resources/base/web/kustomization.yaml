@@ -8,4 +8,4 @@ resources:
 images:
   - name: busola-web
     newName: europe-docker.pkg.dev/kyma-project/prod/busola-web
-    newTag: latest
+    newTag: v0.0.1
