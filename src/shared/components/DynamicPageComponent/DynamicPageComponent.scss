@@ -33,7 +33,10 @@
   .separator {
     display: inline-block;
     width: 1px;
-    height: 90%;
+    position: absolute;
+    top: 50%;
+    height: 1.5rem;
+    margin-top: -0.75rem;
     margin-left: 5px;
     background-color: var(--sapList_BorderColor);
     border-radius: 5px;
