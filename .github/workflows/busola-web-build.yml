@@ -41,4 +41,4 @@ jobs:
     with:
       name: busola-web
       dockerfile: Dockerfile.web
-      tags: "${{ github.events.inputs.tag }}"
+      tags: ${{ github.event.inputs.tag }}
