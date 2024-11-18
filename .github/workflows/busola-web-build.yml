@@ -7,6 +7,7 @@ on:
         description: "Additional tag for built images"
         required: true
         type: string
+#        default: latest
   push:
     branches:
       - main
@@ -42,10 +43,10 @@ jobs:
     steps:
       - name: Echo tag
         run: |
-          echo ${{ github.event.inputs.name }}
+          echo ${{ inputs.name }}
   build-web-image:
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: kyma-project/test-infra/.github/workflows/image-builder.yml@main
     with:
       name: busola-web
       dockerfile: Dockerfile.web
-      tags: ${{ github.event.inputs.tag }}
+      tags: ${{ inputs.tag }}

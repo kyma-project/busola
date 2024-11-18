@@ -7,7 +7,7 @@ on:
         description: "Additional tag for built images"
         required: false
         type: string
-        default: ""
+#        default: latest
   push:
     branches:
       - main
@@ -32,6 +32,5 @@ jobs:
     with:
       name: busola-backend
       dockerfile: Dockerfile
-      context: backend
-      export-tags: true
-      tags: latest
+      tags: ${{ inputs.tag }}
+
