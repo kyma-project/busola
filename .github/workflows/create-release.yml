@@ -66,26 +66,8 @@ jobs:
   #          git commit --allow-empty -m "upgrade dependencies"
   #          git push origin ${{ github.ref_name }}
 
-  create-tag:
-    name: Create tag
-    #    needs: upgrade-images
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ github.ref_name }} # Checkout to latest branch changes
-
-      - name: Create tag
-        run: |
-          git tag ${{ github.event.inputs.name }}
-          git push origin ${{ github.event.inputs.name }}
-
   build-web:
     name: Build Busola web
-    needs: create-tag
     uses: ./.github/workflows/busola-web-build.yml
     with:
       tag: ${{ github.event.inputs.name }}
@@ -103,6 +85,24 @@ jobs:
   #    uses: ./.github/workflows/_integration-tests.yaml
   #    with:
   #      image: europe-docker.pkg.dev/kyma-project/prod/serverless-operator:${{ github.event.inputs.name }}
+
+
+  create-tag:
+    name: Create tag
+    needs: [ build-web, build-backend ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref_name }} # Checkout to latest branch changes
+
+      - name: Create tag
+        run: |
+          git tag ${{ github.event.inputs.name }}
+          git push origin ${{ github.event.inputs.name }}
 
   create-draft:
     name: Create draft release
