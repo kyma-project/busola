@@ -43,4 +43,4 @@ jobs:
       name: busola-web
       dockerfile: Dockerfile.web
       tags: ${{ inputs.tag }}
-      build-args: ${{ inputs.tag != '' && format('default_tag={0}', inputs.tag) || Null }}
+      build-args: ${{ inputs.tag != '' && format('default_tag={0}', inputs.tag) || '' }}
