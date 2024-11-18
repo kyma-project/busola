@@ -73,7 +73,6 @@ jobs:
       tag: ${{ github.event.inputs.name }}
   build-backend:
     name: Build busola backend
-    needs: create-tag
     uses: ./.github/workflows/busola-backend-build.yml
     with:
       tag: ${{ github.event.inputs.name }}
