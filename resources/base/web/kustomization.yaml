@@ -5,7 +5,3 @@ resources:
   - deployment.yaml
   - hpa.yaml
   - service.yaml
-images:
-  - name: busola-web
-    newName: europe-docker.pkg.dev/kyma-project/prod/busola-web
-    newTag: v0.0.1
