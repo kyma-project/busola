@@ -1,22 +1,25 @@
 import { useState } from 'react';
-import { Button, FlexBox, Icon, Text } from '@ui5/webcomponents-react';
-import { TableCell } from '@ui5/webcomponents-react-compat/dist/components/TableCell/index.js';
-import { TableColumn } from '@ui5/webcomponents-react-compat/dist/components/TableColumn/index.js';
-import { TableRow } from '@ui5/webcomponents-react-compat/dist/components/TableRow/index.js';
-
+import {
+  Button,
+  FlexBox,
+  Icon,
+  Text,
+  TableCell,
+  TableRow,
+  TableHeaderRow,
+  TableHeaderCell,
+} from '@ui5/webcomponents-react';
 import ListActions from 'shared/components/ListActions/ListActions';
 
 export const BodyFallback = ({ children }) => (
-  // TODO replace once new Table component is available in ui5-webcomponents-react
-  <tr>
-    <td colSpan="100%">
+  <TableRow>
+    <TableCell style={{ gridColumn: '1 / -1' }}>
       <div className="body-fallback">{children}</div>
-    </td>
-  </tr>
+    </TableCell>
+  </TableRow>
 );
 
 export const HeaderRenderer = ({
-  slot,
   actions,
   headerRenderer,
   disableHiding = true,
@@ -24,51 +27,39 @@ export const HeaderRenderer = ({
   noHideFields,
 }) => {
   let emptyColumn = null;
-  if (actions.length) {
+  if (actions?.length) {
     emptyColumn = (
-      <TableColumn
-        slot={slot}
-        key="actions-column"
-        aria-label="actions-column"
-        minWidth={850}
-      >
+      <TableHeaderCell key="actions-column" aria-label="actions-column">
         <Text />
-      </TableColumn>
+      </TableHeaderCell>
     );
   }
+
   const Header = (
-    <>
+    <TableHeaderRow slot="headerRow">
       {headerRenderer().map((h, index) => {
         return (
-          <TableColumn
-            slot={`${slot}-${index}`}
+          <TableHeaderCell
             key={typeof h === 'object' ? index : h}
-            minWidth={
-              Array.isArray(noHideFields) && noHideFields.length !== 0
-                ? noHideFields.find(field => field === h)
-                  ? ''
-                  : 850
-                : h === 'Popin'
-                ? 15000
-                : disableHiding
-                ? ''
-                : h !== 'Name' && h !== ''
-                ? 850
-                : ''
-            }
             aria-label={`${typeof h === 'object' ? index : h}-column`}
+            importance={h === 'Popin' ? -1 : 0}
+            minWidth={h === 'Popin' ? '100%' : null}
           >
-            <Text>{h}</Text>
-          </TableColumn>
+            {h === 'Popin' ? null : <Text>{h}</Text>}
+          </TableHeaderCell>
         );
       })}
       {emptyColumn}
       {displayArrow && (
-        <TableColumn slot={slot} key="arrow-column" aria-label="arrow-column">
+        <TableHeaderCell
+          key="arrow-column"
+          aria-label="arrow-column"
+          horizontalAlign="End"
+        >
           <Text />
-        </TableColumn>
+        </TableHeaderCell>
       )}
-    </>
+    </TableHeaderRow>
   );
 
   return Header;
@@ -133,7 +124,7 @@ const DefaultRowRenderer = ({
   );
 
   return (
-    <TableRow>
+    <TableRow interactive={hasDetailsView}>
       {cells}
       {!!actions.length && actionsCell}
       {displayArrow && (

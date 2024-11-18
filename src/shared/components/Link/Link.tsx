@@ -26,7 +26,8 @@ export const Link = ({
   const setLayout = useSetRecoilState(columnLayoutState);
   const navigate = useNavigate();
 
-  function handleOnlick(resetLayout: any, url: any) {
+  function handleOnlick(resetLayout: any, url: any, e: any) {
+    e.stopPropagation();
     if (resetLayout)
       setLayout({
         midColumn: null,
@@ -42,7 +43,7 @@ export const Link = ({
       design={design}
       className={className}
       data-testid={dataTestId}
-      onClick={() => (onClick ? onClick() : handleOnlick(resetLayout, url))}
+      onClick={e => (onClick ? onClick() : handleOnlick(resetLayout, url, e))}
     >
       {children}
     </UI5Link>
