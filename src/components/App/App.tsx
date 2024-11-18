@@ -42,10 +42,9 @@ export default function App() {
   const setNamespace = useSetRecoilState(activeNamespaceIdState);
   const { namespace } = useUrl();
   const makeGardenerLoginRoute = useMakeGardenerLoginRoute();
+  const { t, i18n } = useTranslation();
 
   useInitTheme();
-
-  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     setNamespace(namespace);
