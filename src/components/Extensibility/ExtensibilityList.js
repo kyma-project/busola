@@ -23,6 +23,7 @@ import { sortBy } from './helpers/sortBy';
 import { Widget } from './components/Widget';
 import { DataSourcesContextProvider } from './contexts/DataSources';
 import { useJsonata } from './hooks/useJsonata';
+import { useFeature } from 'hooks/useFeature';
 
 export const ExtensibilityListCore = ({
   resMetaData,
@@ -143,12 +144,20 @@ const ExtensibilityList = ({ overrideResMetadata, ...props }) => {
   const defaultResMetadata = useGetCRbyPath();
   const resMetaData = overrideResMetadata || defaultResMetadata;
   const { urlPath, defaultPlaceholder } = resMetaData?.general ?? {};
+  const { isEnabled: isExtensibilityCustomComponentsEnabled } = useFeature(
+    'EXTENSIBILITY_CUSTOM_COMPONENTS',
+  );
 
   useEffect(() => {
     const customElement = resMetaData?.general?.customElement;
     const customScript = resMetaData?.customScript;
 
-    if (customElement && customScript && !customElements.get(customElement)) {
+    if (
+      isExtensibilityCustomComponentsEnabled &&
+      customElement &&
+      customScript &&
+      !customElements.get(customElement)
+    ) {
       const script = document.createElement('script');
       script.type = 'module';
       script.textContent = customScript;
@@ -161,7 +170,7 @@ const ExtensibilityList = ({ overrideResMetadata, ...props }) => {
         document.head.removeChild(script);
       };
     }
-  }, [resMetaData]);
+  }, [resMetaData, isExtensibilityCustomComponentsEnabled]);
 
   return (
     <TranslationBundleContext.Provider
@@ -172,7 +181,7 @@ const ExtensibilityList = ({ overrideResMetadata, ...props }) => {
     >
       <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
         <ExtensibilityErrBoundary key={urlPath}>
-          {resMetaData.customHtml ? (
+          {isExtensibilityCustomComponentsEnabled && resMetaData.customHtml ? (
             <div
               dangerouslySetInnerHTML={{ __html: resMetaData.customHtml }}
             ></div>
