@@ -115,6 +115,7 @@ export const DynamicPageComponent = ({
           )}
         </FlexBox>
       }
+      actionsToolbarProps={{ numberOfAlwaysVisibleItems: 2 }}
       actions={
         <>
           {actions && (
