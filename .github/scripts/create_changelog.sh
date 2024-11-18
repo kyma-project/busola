@@ -17,7 +17,6 @@ CHANGELOG_FILE="CHANGELOG.md"
 if [ "${PREVIOUS_RELEASE}"  == "" ]
 then
   PREVIOUS_RELEASE=$(git describe --tags --abbrev=0)
-#  fatal: No names found, cannot describe anything.
 fi
 
 echo "## What has changed" >> ${CHANGELOG_FILE}
