@@ -18,6 +18,7 @@ if [ "${PREVIOUS_RELEASE}"  == "" ]
 then
   PREVIOUS_RELEASE=$(git describe --tags --abbrev=0)
 fi
+echo "Previous release: ${PREVIOUS_RELEASE}"
 
 echo "## What has changed" >> ${CHANGELOG_FILE}
 
