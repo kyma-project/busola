@@ -16,7 +16,6 @@ runs:
     # read more: https://github.com/actions/checkout?tab=readme-ov-file#usage
     - name: Update origin/main
       run: |
-        git branch -D main
         git fetch origin main
         git checkout origin/main
 
