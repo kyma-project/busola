@@ -17,12 +17,17 @@ runs:
     - name: Update origin/main
       run: |
         git fetch origin main
+        git checkout origin/main
+        git checkout -B main
+        git pull --unshallow origin main
+
+        # go back to the HEAD commit
+        git switch --detach ${{ github.sha }}
       shell: bash
 
     - name: Rebase to main
       run: |
-        git config pull.rebase true
-        git pull origin main
+        git rebase main
       shell: bash
 
     - name: Print branch log
