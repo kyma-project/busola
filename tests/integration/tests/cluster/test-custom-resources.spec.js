@@ -104,10 +104,10 @@ context('Test Custom Resources', () => {
 
     cy.testMidColumnLayout('Tclusters', false);
 
-    cy.getMidColumn()
-      .get('ui5-input[id="search-input"]:visible')
+    cy.get('ui5-input[id="search-input"]:visible')
       .find('input')
       .wait(1000)
+      .clear()
       .type('cypress');
     cy.clickGenericListLink('Tclusters');
 
