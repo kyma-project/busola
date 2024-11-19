@@ -221,7 +221,7 @@ export const ResourceCreate = ({
 };
 
 ResourceCreate.propTypes = {
-  performRefetch: PropTypes.func.isRequired,
+  performRefetch: PropTypes.func,
   title: PropTypes.string.isRequired,
   renderForm: PropTypes.func.isRequired,
   confirmText: PropTypes.string,
