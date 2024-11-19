@@ -12,7 +12,7 @@ import {
 } from '@ui5/webcomponents-react';
 
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
@@ -354,7 +354,7 @@ export default function KymaModulesList({
     };
 
     return (
-      <>
+      <React.Fragment key="modules-list">
         {!detailsOpen &&
           createPortal(
             <DeleteMessageBox
@@ -411,7 +411,7 @@ export default function KymaModulesList({
             onClick: handleShowAddModule,
           }}
         />
-      </>
+      </React.Fragment>
     );
   };
 

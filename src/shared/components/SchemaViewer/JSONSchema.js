@@ -33,8 +33,10 @@ export function JSONSchema({
                 }
               })
               .map(type => (
-                <ObjectStatus inverted>{type.toUpperCase()}</ObjectStatus>
-              ))}{' '}
+                <ObjectStatus key={type} inverted>
+                  {type.toUpperCase()}
+                </ObjectStatus>
+              ))}
           {isRequired && (
             <ObjectStatus inverted state="Critical">
               {t('schema.required')}
