@@ -19,9 +19,6 @@ jobs:
         with:
           comment_on_pr: false
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: ./.github/actions/rebase
       - name: Install k3d
         env:
           K3D_URL: https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh
