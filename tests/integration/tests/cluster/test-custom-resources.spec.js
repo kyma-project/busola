@@ -104,7 +104,8 @@ context('Test Custom Resources', () => {
 
     cy.testMidColumnLayout('Tclusters', false);
 
-    cy.get('ui5-input[id="search-input"]:visible')
+    cy.getMidColumn()
+      .get('ui5-input[id="search-input"]:visible')
       .find('input')
       .wait(1000)
       .type('cypress');
