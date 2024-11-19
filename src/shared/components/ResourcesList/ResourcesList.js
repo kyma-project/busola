@@ -116,7 +116,7 @@ export function ResourcesList({
           />
         }
       />
-      {props.resources ? (
+      {resources ? (
         <ResourceListRenderer
           resources={(resources || []).filter(filterFn)}
           {...allProps}
