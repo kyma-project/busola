@@ -52,10 +52,6 @@ jobs:
   #          IMG_VERSION: ${{ github.event.inputs.name }}
   #          PROJECT_ROOT: "."
   #
-  #      - name: Bump sec-scanners-config.yaml based on values.yaml
-  #        run: ./.github/scripts/upgrade-sec-scanners-config.sh
-  #        env:
-  #          IMG_VERSION: ${{ github.event.inputs.name }}
   #
   #      - name: Commit&Push
   #        run: |
@@ -85,19 +81,16 @@ jobs:
   #    with:
   #      image: europe-docker.pkg.dev/kyma-project/prod/serverless-operator:${{ github.event.inputs.name }}
 
-
-  create-tag:
-    name: Create tag
+  create-release:
+    name: Create release
     needs: [ build-web, build-backend ]
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.ref_name }} # Checkout to latest branch changes
-
+          ref: ${{ github.ref_name }} # checkout to latest branch changes ( by default this action checkouts to the SHA that triggers action )
       - name: Create changelog
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -109,17 +102,6 @@ jobs:
           git tag ${{ github.event.inputs.name }}
           git push origin ${{ github.event.inputs.name }}
 
-  create-draft:
-    name: Create draft release
-    needs: create-tag
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ github.ref_name }} # checkout to latest branch changes ( by default this action checkouts to the SHA that triggers action )
-
       - name: Create draft release
         id: create-draft
         env:
@@ -129,32 +111,17 @@ jobs:
           echo $RELEASE_ID
           echo "release_id=$RELEASE_ID" >> $GITHUB_OUTPUT
 
-      - name: Create release assets
-        id: create-assets
+      - name: Upload release assets
+        id: upload-assets
         env:
           RELEASE_TAG: ${{ github.event.inputs.name }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_ID: ${{ steps.create-draft.outputs.release_id }}
+          RELEASE_ID: ${{ steps.create-release.outputs.release_id }}
         run: ./.github/scripts/upload_assets.sh
-
-    outputs:
-      release_id: ${{ steps.create-draft.outputs.release_id }}
-
-  publish-release:
-    name: Publish release
-    needs: [ create-draft ]
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ github.event.inputs.name }} # checkout to latest branch changes ( by default this action checkouts to the SHA that triggers action )
 
       - name: Publish release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_ID: ${{ needs.create-draft.outputs.release_id }}
+          RELEASE_ID: ${{ steps.create-release.outputs.release_id }}
           IS_LATEST_RELEASE: ${{ github.event.inputs.latest_release }}
         run: ./.github/scripts/publish_release.sh
