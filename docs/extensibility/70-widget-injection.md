@@ -23,7 +23,7 @@ These are the available **injections** widget parameters:
 - **details-bottom** - At the bottom of the resource view
 - **details-header** - In the header of the details view
 - **details-top** - At the top of the resource view
-- **banner** - At the top of the resource view. This slot should be only used with `location: ClusterOverview` and [`widget: FeaturedCard`](./50-list-and-details-widgets.md#featuredcard).
+- **banner** - At the top of the resource view. This slot should be only used with [`widget: FeaturedCard`](./50-list-and-details-widgets.md#featuredcard).
 - **health** - At the top of the resource view. This slot should be only used with `location: ClusterOverview` and [`widget: StatisticalCard`](./50-list-and-details-widgets.md#statisticalcard).
 - **list-header** - In the header of the list view
 

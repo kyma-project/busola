@@ -95,7 +95,11 @@ function ScheduleEditor({ schedule, setSchedule }) {
   );
 }
 
-export function ScheduleSection({ value: schedule, setValue: setSchedule }) {
+export function ScheduleSection({
+  value: schedule,
+  setValue: setSchedule,
+  tooltipContent,
+}) {
   const { t, i18n } = useTranslation();
 
   const schedulePresets = [
@@ -132,6 +136,7 @@ export function ScheduleSection({ value: schedule, setValue: setSchedule }) {
   return (
     <ResourceForm.CollapsibleSection
       title={`${t('cron-jobs.schedule')}: ${readableSchedule(schedule, i18n)}`}
+      tooltipContent={tooltipContent}
       actions={presets}
       defaultOpen
     >

@@ -40,7 +40,7 @@ export function NamespaceList(props) {
 
   useEffect(() => {
     if (!hasPermissions) {
-      navigate(`/cluster/${cluster.name}/no-permissions`);
+      navigate(`/cluster/${encodeURIComponent(cluster.name)}/no-permissions`);
     }
   }, [cluster.name, hasPermissions, navigate]);
 

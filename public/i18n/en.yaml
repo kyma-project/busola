@@ -12,6 +12,10 @@ cluster-overview:
   statistics:
     cpu-usage: 'CPU Usage'
     memory-usage: 'Memory Usage'
+    cpu-requests: 'CPU requests'
+    memory-requests: 'Memory requests'
+    cpu-limits: 'CPU limits'
+    memory-limits: 'Memory limits'
     pods-overview: 'Pods Overview'
     total-pods: 'Total Pods'
     healthy-pods: 'Healthy Pods'
@@ -795,7 +799,7 @@ limit-ranges:
   name_singular: LimitRange
   title: Limit Ranges
 machine-info:
-  architecture-cpus: Architecture and CPUs
+  architecture: Architecture
   cpus: CPUs
   gib: GiB
   kube-proxy-version: Kube proxy version
@@ -876,7 +880,8 @@ node-details:
   all: All messages
   information: Information
   internal-ip: Internal IP
-  pod-cidr: Pod CIDR
+  pod-cidr: Pod CIDRs
+  provider: Provider
   warnings: Warnings
 nodes:
   title: Nodes

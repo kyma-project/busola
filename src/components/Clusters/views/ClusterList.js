@@ -61,7 +61,7 @@ function ClusterList() {
   const { clusters, currentCluster } = clustersInfo;
 
   const handleClickResource = (_, selectedEntry) => {
-    navigate(`/cluster/${selectedEntry.contextName}`);
+    navigate(`/cluster/${encodeURIComponent(selectedEntry.contextName)}`);
   };
 
   const isClusterActive = entry => {

@@ -71,7 +71,7 @@ export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
       const hasEmptyPath = window.location.pathname === '/';
       if (hasEmptyPath) {
         if (cluster) {
-          navigate(`/cluster/${cluster.name}/overview`);
+          navigate(`/cluster/${encodeURIComponent(cluster.name)}/overview`);
         } else {
           navigate('/clusters');
         }
