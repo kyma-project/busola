@@ -9,7 +9,6 @@ set -o pipefail # prevents errors in a pipeline from being masked
 REPOSITORY=${REPOSITORY:-kyma-project/busola}
 RELEASE_TAG=${RELEASE_TAG?"Release tag is not defined"}
 RELEASE_ID=${RELEASE_ID?"Release id is not defined"}
-echo "release tag ${RELEASE_TAG}"
 
 
 uploadFile() {
@@ -35,14 +34,11 @@ uploadFile() {
 BUSOLA_K8S="busola.yaml"
 generate_k8s() {
   set -x
-  pwd
-  ls -l
   cd resources
   (cd base/web && kustomize edit set image busola-web=europe-docker.pkg.dev/kyma-project/prod/busola-web:"${RELEASE_TAG}")
   (cd base/backend && kustomize edit set image busola-backend=europe-docker.pkg.dev/kyma-project/prod/busola-backend:"${RELEASE_TAG}")
   kustomize build base/ > ../"${BUSOLA_K8S}"
   cd -
-  pwd
 }
 
 echo "Updating github release with assets"

@@ -116,14 +116,14 @@ jobs:
         env:
           RELEASE_TAG: ${{ github.event.inputs.name }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_ID: ${{ steps.create-release.outputs.release_id }}
+          RELEASE_ID: ${{ steps.create-draft.outputs.release_id }}
         run: ./.github/scripts/upload_assets.sh
 
       - name: Publish release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_ID: ${{ steps.create-release.outputs.release_id }}
           IS_LATEST_RELEASE: ${{ github.event.inputs.latest_release }}
+          RELEASE_ID: ${{ steps.create-draft.outputs.release_id }}
         run: ./.github/scripts/publish_release.sh
     outputs:
-      release_id: ${{ steps.create-release.outputs.release_id }}
+      release_id: ${{ steps.create-draft.outputs.release_id }}
