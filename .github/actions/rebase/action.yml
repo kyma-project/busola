@@ -21,6 +21,7 @@ runs:
 
     - name: Rebase to main
       run: |
+        git config pull.rebase true
         git pull origin main
       shell: bash
 
