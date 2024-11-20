@@ -312,7 +312,9 @@ function Resource({
               {customConditionsComponents
                 ?.filter(filterColumns)
                 ?.map((component, index) => (
-                  <React.Fragment key={index}>
+                  <React.Fragment
+                    key={`${component.header.replace(' ', '-')}-${index}`}
+                  >
                     <div className="title bsl-has-color-status-4 sap-margin-x-small">
                       {component.header}:
                     </div>

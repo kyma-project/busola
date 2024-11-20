@@ -164,20 +164,18 @@ export default function LimitRangeSpecification({
       className={'limit-range-spec'}
     >
       {transLimits.map(
-        (limit: { type: string; props: FlatLimitProps[] }, index: number) => {
-          return (
-            <GenericList
-              key={index}
-              title={limit.type || ''}
-              entries={limit.props || []}
-              headerRenderer={headerRenderer}
-              rowRenderer={rowRenderer}
-              searchSettings={{
-                showSearchField: false,
-              }}
-            />
-          );
-        },
+        (limit: { type: string; props: FlatLimitProps[] }, index: number) => (
+          <GenericList
+            key={`${limit.type}-${index}`}
+            title={limit.type || ''}
+            entries={limit.props || []}
+            headerRenderer={headerRenderer}
+            rowRenderer={rowRenderer}
+            searchSettings={{
+              showSearchField: false,
+            }}
+          />
+        ),
       )}
     </UI5Panel>
   );
