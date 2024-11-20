@@ -3,9 +3,13 @@
   --border-radius: 0.5rem;
 }
 
-ui5-shellbar.header::part(root) {
-  padding-inline-start: 0.75rem;
-  padding-inline-end: 1.25rem;
+ui5-shellbar.header {
+  padding: 0 !important;
   border-radius: 0.5rem;
-  box-shadow: var(--sapContainer_Shadow1);
+
+  &::part(root) {
+    padding-inline-start: 0.75rem;
+    padding-inline-end: 1.25rem;
+    box-shadow: var(--sapContainer_Shadow1);
+  }
 }
