@@ -32,8 +32,8 @@ permissions:
 
 jobs:
   build-web-image:
-    if: github.event.pull_request.draft == false
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: kyma-project/test-infra/.github/workflows/image-builder.yml@main
+    if: github.event.pull_request.draft == false
     with:
       name: busola-web
       dockerfile: Dockerfile.web
