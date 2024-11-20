@@ -148,7 +148,7 @@ const getExtensionWizards = async (
   kubeconfigNamespace = 'kube-public',
   currentNamespace: string,
   permissionSet: PermissionSetState,
-  extCustomComponentsEnabled: boolean | undefined,
+  extCustomComponentsEnabled: boolean,
 ) => {
   if (!fetchFn) {
     return null;
@@ -294,7 +294,7 @@ const getExtensions = async (
   kubeconfigNamespace = 'kube-public',
   currentNamespace: string,
   permissionSet: PermissionSetState,
-  extCustomComponentsEnabled: boolean | undefined,
+  extCustomComponentsEnabled: boolean,
 ) => {
   if (!fetchFn) {
     return null;
@@ -461,7 +461,7 @@ export const useGetExtensions = () => {
         cluster.currentContext.namespace || 'kube-public',
         namespace,
         permissionSet,
-        isExtensibilityCustomComponentsEnabled,
+        isExtensibilityCustomComponentsEnabled ?? false,
       );
 
       const statics = await getStatics(
@@ -476,7 +476,7 @@ export const useGetExtensions = () => {
         cluster.currentContext.namespace || 'kube-public',
         namespace,
         permissionSet,
-        isExtensibilityCustomComponentsEnabled,
+        isExtensibilityCustomComponentsEnabled ?? false,
       );
 
       if (!wizardConfigs || !isExtensibilityWizardEnabled) {

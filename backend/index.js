@@ -83,13 +83,13 @@ const isDocker = process.env.IS_DOCKER === 'true';
 const handleRequest = makeHandleRequest();
 
 if (isDocker) {
-  console.log('Running in dev mode');
+  // Running in dev mode
   // yup, order matters here
   serveMonaco(app);
   app.use('/backend', handleRequest);
   serveStaticApp(app, '/', '/core-ui');
 } else {
-  console.log('Running in prod mode');
+  // Running in prod mode
   handleTracking(app);
   app.use('/backend', handleRequest);
 }
