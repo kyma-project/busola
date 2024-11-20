@@ -1,4 +1,3 @@
-import React from 'react';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 
 export function PersistentVolumeStatus({ status }) {
@@ -6,12 +5,12 @@ export function PersistentVolumeStatus({ status }) {
     switch (status) {
       case 'Bound':
       case 'Available':
-        return 'Success';
+        return 'Positive';
       case 'Released':
       case 'Pending':
         return 'Information';
       default:
-        return 'Error';
+        return 'Negative';
     }
   };
 

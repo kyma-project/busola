@@ -5,19 +5,13 @@ import { ContainersPanel, VolumesPanel } from './components';
 import { Card, CardHeader, Text } from '@ui5/webcomponents-react';
 import { PodTemplateRow } from './PodTemplateRow';
 
-import { spacing } from '@ui5/webcomponents-react-base';
 import './PodTemplate.scss';
 
 export function PodTemplate({ template }) {
   const { t } = useTranslation();
 
   return (
-    <div
-      style={{
-        ...spacing.sapUiSmallMarginBeginEnd,
-        ...spacing.sapUiSmallMarginBottom,
-      }}
-    >
+    <div className="sap-margin-x-small sap-margin-bottom-small">
       <Card
         key="pod-template"
         header={<CardHeader titleText={t('pods.labels.pod-template')} />}

@@ -1,5 +1,4 @@
 import { FlexBox, Icon, Label } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { useState } from 'react';
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 
@@ -17,11 +16,7 @@ export function Title({
     <div className="title">
       <FlexBox alignItems="Center">
         {!disabled && canChangeState && iconGlyph && (
-          <Icon
-            style={spacing.sapUiSmallMarginEnd}
-            aria-hidden
-            name={iconGlyph}
-          />
+          <Icon className="sap-margin-end-small" aria-hidden name={iconGlyph} />
         )}
         <Label
           style={{
@@ -37,7 +32,7 @@ export function Title({
             setShowTitleDescription={setOpenPopover}
             showTitleDescription={openPopover}
             description={tooltipContent}
-            style={spacing.sapUiTinyMarginBegin}
+            className="sap-margin-begin-tiny"
             ariaTitle={title}
           />
         )}

@@ -15,9 +15,9 @@ export function JobConditions(job) {
   ];
   const conditionTypeStatus = type => {
     if (type === 'Complete') {
-      return 'Success';
+      return 'Positive';
     } else if (type === 'Failed') {
-      return 'Error';
+      return 'Negative';
     } else {
       return 'Information';
     }

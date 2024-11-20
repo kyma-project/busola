@@ -1,16 +1,10 @@
 import { useState } from 'react';
-import {
-  Button,
-  FlexBox,
-  Icon,
-  Text,
-  TableCell,
-  TableColumn,
-  TableRow,
-} from '@ui5/webcomponents-react';
-import ListActions from 'shared/components/ListActions/ListActions';
+import { Button, FlexBox, Icon, Text } from '@ui5/webcomponents-react';
+import { TableCell } from '@ui5/webcomponents-react-compat/dist/components/TableCell/index.js';
+import { TableColumn } from '@ui5/webcomponents-react-compat/dist/components/TableColumn/index.js';
+import { TableRow } from '@ui5/webcomponents-react-compat/dist/components/TableRow/index.js';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import ListActions from 'shared/components/ListActions/ListActions';
 
 export const BodyFallback = ({ children }) => (
   // TODO replace once new Table component is available in ui5-webcomponents-react
@@ -49,8 +43,6 @@ export const HeaderRenderer = ({
           <TableColumn
             slot={`${slot}-${index}`}
             key={typeof h === 'object' ? index : h}
-            popinDisplay="Block"
-            demandPopin={h === 'Popin' ? true : false}
             minWidth={
               Array.isArray(noHideFields) && noHideFields.length !== 0
                 ? noHideFields.find(field => field === h)
@@ -141,11 +133,7 @@ const DefaultRowRenderer = ({
   );
 
   return (
-    <TableRow
-      type={hasDetailsView ? 'Active' : 'Inactive'}
-      navigated={isSelected}
-      selected={isSelected}
-    >
+    <TableRow>
       {cells}
       {!!actions.length && actionsCell}
       {displayArrow && (
@@ -189,7 +177,7 @@ const CollapsedRowRenderer = ({
         >
           <FlexBox>
             <Icon
-              style={spacing.sapUiTinyMarginEnd}
+              className="sap-margin-end-tiny"
               name={isOpen ? 'navigation-up-arrow' : 'navigation-down-arrow'}
             />
             {title}

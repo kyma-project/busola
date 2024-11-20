@@ -61,11 +61,11 @@ export const ServiceAccountTokenStatus = ({
         <Popover
           ref={popoverRef}
           open={openPopover}
-          onAfterClose={e => {
+          onClose={e => {
             e.stopPropagation();
             setOpenPopover(false);
           }}
-          placementType="Right"
+          placement="End"
         >
           {accountTokenValues.tooltipContent}
         </Popover>,

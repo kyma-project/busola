@@ -11,9 +11,9 @@ import {
 import './Badge.scss';
 
 const TYPE_FALLBACK = new Map([
-  ['success', 'Success'],
-  ['warning', 'Warning'],
-  ['error', 'Error'],
+  ['positive', 'Positive'],
+  ['critical', 'Critical'],
+  ['negative', 'Negative'],
   ['info', 'Information'],
 ]);
 
@@ -63,10 +63,10 @@ export function Badge({
     }
   }
 
-  if (type === 'negative') type = 'Warning';
+  if (type === 'negative') type = 'Critical';
   else if (type === 'informative') type = 'Information';
-  else if (type === 'positive') type = 'Success';
-  else if (type === 'critical') type = 'Error';
+  else if (type === 'positive') type = 'Positive';
+  else if (type === 'critical') type = 'Negative';
 
   type = TYPE_FALLBACK.get(type) || type;
 

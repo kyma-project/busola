@@ -65,7 +65,7 @@ const ListActions = ({ actions, entry }) => {
           <Menu
             open={isMenuOpen}
             opener={'openMenuBtn'}
-            onAfterClose={() => {
+            onClose={() => {
               setIsMenuOpen(false);
             }}
           >
