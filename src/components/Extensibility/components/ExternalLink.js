@@ -56,7 +56,6 @@ export const ExternalLink = ({
       <Button
         icon="inspect"
         iconEnd
-        style={spacing.sapUiTinyMarginBeginEnd}
         onClick={() => {
           const newWindow = window.open(href, '_blank', 'noopener, noreferrer');
           if (newWindow) newWindow.opener = null;

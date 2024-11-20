@@ -98,12 +98,7 @@ context('Test Service Accounts', () => {
   });
 
   it('Generate TokenRequest', () => {
-    cy.getMidColumn()
-      .find('header')
-      .find('ui5-toggle-button:visible')
-      .click();
-
-    cy.get('[data-component-name="ToolbarOverflowPopoverContent"]')
+    cy.get('[data-component-name="ToolbarChildContainer"]')
       .contains('ui5-button', 'Generate TokenRequest')
       .click();
 
