@@ -7,7 +7,6 @@ on:
         description: "Additional tag for built images"
         required: true
         type: string
-        default: latest
   push:
     branches:
       - main

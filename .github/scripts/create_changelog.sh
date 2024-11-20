@@ -22,21 +22,21 @@ echo "Previous release: ${PREVIOUS_RELEASE}"
 
 echo "## What has changed" >> ${CHANGELOG_FILE}
 
-git log ${PREVIOUS_RELEASE}..HEAD --pretty=tformat:"%h" --reverse | while read -r commit
+git log "${PREVIOUS_RELEASE}"..HEAD --pretty=tformat:"%h" --reverse | while read -r COMMIT
 do
-    COMMIT_AUTHOR=$(curl -H "${GITHUB_AUTH_HEADER}" -sS "${GITHUB_URL}/commits/${commit}" | jq -r '.author.login')
+    COMMIT_AUTHOR=$(curl -H "${GITHUB_AUTH_HEADER}" -sS "${GITHUB_URL}/commits/${COMMIT}" | jq -r '.author.login')
     if [ "${COMMIT_AUTHOR}" != "kyma-bot" ]; then
-      git show -s ${commit} --format="* %s by @${COMMIT_AUTHOR}" >> ${CHANGELOG_FILE}
+      git show -s "${COMMIT}" --format="* %s by @${COMMIT_AUTHOR}" >> ${CHANGELOG_FILE}
     fi
 done
 
-NEW_CONTRIB=$$.new
+NEW_CONTRIB=$(mktemp --suffix=.new XXXXX)
 
 join -v2 \
 <(curl -H "${GITHUB_AUTH_HEADER}" -sS "${GITHUB_URL}/compare/$(git rev-list --max-parents=0 HEAD)...${PREVIOUS_RELEASE}" | jq -r '.commits[].author.login' | sort -u) \
-<(curl -H "${GITHUB_AUTH_HEADER}" -sS "${GITHUB_URL}/compare/${PREVIOUS_RELEASE}...HEAD" | jq -r '.commits[].author.login' | sort -u) >${NEW_CONTRIB}
+<(curl -H "${GITHUB_AUTH_HEADER}" -sS "${GITHUB_URL}/compare/${PREVIOUS_RELEASE}...HEAD" | jq -r '.commits[].author.login' | sort -u) >"${NEW_CONTRIB}"
 
-if [ -s ${NEW_CONTRIB} ]
+if [ -s "${NEW_CONTRIB}" ]
 then
   echo -e "\n## New contributors" >> ${CHANGELOG_FILE}
   while read -r user
@@ -47,10 +47,10 @@ then
       REF_PR=" in ${REF_PR}"
     fi
     echo "* @${user} made first contribution${REF_PR}" >> ${CHANGELOG_FILE}
-  done <${NEW_CONTRIB}
+  done <"${NEW_CONTRIB}"
 fi
 
 echo -e "\n**Full changelog**: https://github.com/$REPOSITORY/compare/${PREVIOUS_RELEASE}...${RELEASE_TAG}" >> ${CHANGELOG_FILE}
 
 # cleanup
-rm ${NEW_CONTRIB} || echo "cleaned up"
+rm "${NEW_CONTRIB}" || echo "cleaned up"

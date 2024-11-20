@@ -5,9 +5,8 @@ on:
     inputs:
       tag:
         description: "Additional tag for built images"
-        required: false
+        required: true
         type: string
-#        default: latest
   push:
     branches:
       - main
@@ -32,4 +31,4 @@ jobs:
     with:
       name: busola-backend
       dockerfile: Dockerfile
-      tags: ${{ inputs.tag }}
+      tags: ${{ inputs.tag != '' && inputs.tag || 'latest' }}
