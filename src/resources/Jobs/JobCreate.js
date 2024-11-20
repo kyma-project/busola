@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 
@@ -10,6 +10,7 @@ import { createJobPresets, createJobTemplate } from './templates';
 import { JobSpecSection } from './SpecSection';
 import { ContainersSection } from './ContainersSection';
 import { MessageStrip } from '@ui5/webcomponents-react';
+import { getDescription, SchemaContext } from 'shared/helpers/schema';
 
 function isJobValid(job = {}) {
   const isNameValid = jp.value(job, '$.metadata.name');
@@ -51,6 +52,12 @@ export default function JobCreate({
     setCustomValid(isJobValid(job));
   }, [job, setCustomValid]);
 
+  const schema = useContext(SchemaContext);
+  const containersDesc = getDescription(
+    schema,
+    'spec.template.spec.containers',
+  );
+
   return (
     <ResourceForm
       {...props}
@@ -74,6 +81,7 @@ export default function JobCreate({
       />
       <ContainersSection
         propertyPath="$.spec.template.spec.containers"
+        tooltipContent={t(containersDesc)}
         readOnly={!!initialUnchangedResource}
       />
       <MessageStrip design="Information" hideCloseButton>

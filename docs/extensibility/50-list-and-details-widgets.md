@@ -6,7 +6,7 @@ You can distinguish the following widget types:
 - [Inline widgets](#inline-widgets) for simple values in **data.list**, **data.details.header**, **data.details.status** and **data.detail.bodies**
   - [`Bagde`](#badge)
   - [`ControlledBy`](#controlledby)
-  - [`ConditionList`](#conditionList) - used only in **data.details.status** or **data.details.status.body**
+  - [`ConditionList`](#conditionlist) - used only in **data.details.status** or **data.details.status.body**
   - [`ExternalLink`](#externallink)
   - [`ExternalLinkButton`](#externallinkbutton)
   - [`JoinedArray`](#joinedarray)
@@ -24,7 +24,7 @@ You can distinguish the following widget types:
   - [`Plain`](#plain)
   - [`ResourceList`](#resourcelist)
   - [`ResourceRefs`](#resourcerefs)
-  - [`StatisticalCard`](#StatisticalCard)
+  - [`StatisticalCard`](#statisticalcard)
   - [`Table`](#table)
   - [`Tabs`](#tabs)
 
@@ -411,7 +411,7 @@ These are the available `FeatureCard` widget parameters:
 | **description**  | No       | string    | Renders the description.                                                                                                                                          |
 | **id**           | **Yes**  | string    | Defines the banner's **(unique!)** identifier.                                                                                                                    |
 | **children**     | No       | []objects | Defines the banner's children that are displayed below the description. It is recommended to use button-like components here. The maximum number of objects is 2. |
-| **illustration** | No       | string    | Defines the illustration displayed on the right. Can be one of the following: `Modules` (default), `AI`                                                           |
+| **illustration** | No       | string    | Defines the illustration displayed on the right. Can be one of the following: `Modules` (default), `AI`, `None`                                                   |
 | **design**       | No       | string    | Defines the background color-gradient of the banner. Can be one of the following: `information-1` (default), `information-2`.                                     |
 
 See the following example:

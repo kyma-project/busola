@@ -73,7 +73,7 @@ export function SearchInput({
     }
   };
 
-  useEventListener('keydown', onKeyPress, [
+  useEventListener('keydown', onKeyPress, null, [
     disabled,
     allowSlashShortcut,
     isSideDrawerOpened,

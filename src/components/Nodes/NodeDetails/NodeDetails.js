@@ -1,6 +1,6 @@
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useTranslation } from 'react-i18next';
-import { useNodeQuery } from '../nodeQueries';
+import { useNodeQuery, useResourceByNode } from '../nodeQueries';
 import { NodeDetailsCard } from '../NodeDetailsCard';
 import { MachineInfo } from '../MachineInfo/MachineInfo';
 import { NodeResources } from '../NodeResources/NodeResources';
@@ -16,6 +16,7 @@ export default function NodeDetails({ nodeName }) {
   const { data, error, loading } = useNodeQuery(nodeName);
   const { t } = useTranslation();
   useWindowTitle(t('nodes.title_details', { nodeName }));
+  const { data: resources } = useResourceByNode(nodeName);
 
   const filterByHost = e => e.source.host === nodeName;
   const Events = (
@@ -50,6 +51,7 @@ export default function NodeDetails({ nodeName }) {
                   <MachineInfo
                     nodeInfo={data.node.status.nodeInfo}
                     capacity={data.node.status.capacity}
+                    spec={data.node.spec}
                   />
                 </div>
                 <Title
@@ -60,7 +62,7 @@ export default function NodeDetails({ nodeName }) {
                   {t('common.headers.nodeInfo')}
                 </Title>
                 <div className="flexwrap sap-margin-x-small">
-                  <NodeResources {...data} />
+                  <NodeResources metrics={data.metrics} resources={resources} />
                 </div>
                 {Events}
               </>

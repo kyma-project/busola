@@ -6,7 +6,7 @@ export const Alert = ({ value, schema, structure, ...props }) => {
 
   let schemaType = 'Information';
   if (structure.severity === 'warning') {
-    schemaType = 'Warning';
+    schemaType = 'Critical';
   } else if (structure.severity === 'error') {
     schemaType = 'Negative';
   } else if (structure.severity === 'success') {

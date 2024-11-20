@@ -15,25 +15,12 @@ import { ResourceDescription } from 'resources/CronJobs';
 import { Link } from 'shared/components/Link/Link';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
 export function CronJobDetails(props) {
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();
-  const customColumns = [
-    {
-      header: t('cron-jobs.schedule'),
-      value: resource => <CronJobSchedule schedule={resource.spec.schedule} />,
-    },
-
-    {
-      header: t('cron-jobs.concurrency-policy.title'),
-      value: resource => (
-        <CronJobConcurrencyPolicy
-          concurrencyPolicy={resource.spec.concurrencyPolicy}
-        />
-      ),
-    },
-  ];
 
   const customStatusColumns = [
     {
@@ -79,6 +66,27 @@ export function CronJobDetails(props) {
     },
   ];
 
+  const Specification = ({ spec }) => (
+    <UI5Panel
+      key="specification"
+      title={t('common.headers.specification')}
+      keyComponent="specification-panel"
+    >
+      <LayoutPanelRow
+        name={t('cron-jobs.schedule')}
+        value={<CronJobSchedule schedule={spec.schedule} />}
+      />
+      <LayoutPanelRow
+        name={t('cron-jobs.concurrency-policy.title')}
+        value={
+          <CronJobConcurrencyPolicy
+            concurrencyPolicy={spec.concurrencyPolicy}
+          />
+        }
+      />
+    </UI5Panel>
+  );
+
   const Events = () => (
     <EventsList
       key="events"
@@ -97,8 +105,12 @@ export function CronJobDetails(props) {
 
   return (
     <ResourceDetails
-      customComponents={[CronJobJobs, CronJobPodTemplate, Events]}
-      customColumns={customColumns}
+      customComponents={[
+        Specification,
+        CronJobJobs,
+        CronJobPodTemplate,
+        Events,
+      ]}
       createResourceForm={CronJobCreate}
       description={ResourceDescription}
       customStatusColumns={customStatusColumns}

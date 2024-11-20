@@ -33,7 +33,7 @@ export function Presets({
   return inlinePresets ? (
     presetDropdown
   ) : (
-    <div className="ui5-content-density-compact preset-separator sap-margin-y-tiny sap-padding-x-small">
+    <div className="ui5-content-density-compact preset-separator sap-margin-y-tiny">
       {presetDropdown}
     </div>
   );

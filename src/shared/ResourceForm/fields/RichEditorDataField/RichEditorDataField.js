@@ -3,7 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm/components/ResourceForm';
 import { RichEditorSection } from './RichEditorSection';
 
-export function RichEditorDataField({ value: data, setValue: setData }) {
+export function RichEditorDataField({
+  value: data,
+  setValue: setData,
+  tooltipContent,
+}) {
   const { t } = useTranslation();
   const [internalData, setInternalData] = useState([]);
   const valueRef = useRef(null);
@@ -41,6 +45,7 @@ export function RichEditorDataField({ value: data, setValue: setData }) {
   return (
     <ResourceForm.CollapsibleSection
       defaultOpen
+      tooltipContent={tooltipContent}
       title={t('common.labels.data')}
     >
       {internalData.map((item, index) => (

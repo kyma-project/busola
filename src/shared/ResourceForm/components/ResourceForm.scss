@@ -14,6 +14,11 @@ form .resource-form {
   ui5-form-item::part(layout) {
     grid-template-columns: none;
   }
+
+  &::part(layout) {
+    padding: 0;
+  }
+
   form {
     overflow: hidden;
     flex-grow: 1;

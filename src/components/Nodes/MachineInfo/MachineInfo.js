@@ -3,7 +3,7 @@ import './MachineInfo.scss';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import ResourceDetailsCard from 'shared/components/ResourceDetails/ResourceDetailsCard';
 
-export function MachineInfo({ nodeInfo, capacity }) {
+export function MachineInfo({ nodeInfo, capacity, spec }) {
   const formattedMemory =
     Math.round((parseInt(capacity.memory) / 1024 / 1024) * 10) / 10;
   const { t } = useTranslation();
@@ -20,18 +20,23 @@ export function MachineInfo({ nodeInfo, capacity }) {
           >
             {`${nodeInfo.operatingSystem} (${nodeInfo.osImage})`}
           </DynamicPageComponent.Column>
-          <DynamicPageComponent.Column
-            title={t('machine-info.architecture-cpus')}
-          >
-            {`${nodeInfo.architecture}, ${capacity.cpu} ${t(
-              'machine-info.cpus',
-            )}`}
+          <DynamicPageComponent.Column title={t('node-details.provider')}>
+            {spec.providerID}
+          </DynamicPageComponent.Column>
+          <DynamicPageComponent.Column title={t('machine-info.architecture')}>
+            {nodeInfo.architecture}
+          </DynamicPageComponent.Column>
+          <DynamicPageComponent.Column title={t('machine-info.cpus')}>
+            {capacity.cpu}
+          </DynamicPageComponent.Column>
+          <DynamicPageComponent.Column title={t('machine-info.memory')}>
+            {`${formattedMemory} ${t('machine-info.gib')}`}
           </DynamicPageComponent.Column>
           <DynamicPageComponent.Column title={t('machine-info.pods-capacity')}>
             {capacity.pods}
           </DynamicPageComponent.Column>
-          <DynamicPageComponent.Column title={t('machine-info.memory')}>
-            {`${formattedMemory} ${t('machine-info.gib')}`}
+          <DynamicPageComponent.Column title={t('node-details.pod-cidr')}>
+            {spec.podCIDRs.join(',')}
           </DynamicPageComponent.Column>
           <DynamicPageComponent.Column
             title={t('machine-info.kube-proxy-version')}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep } from 'lodash';
@@ -14,6 +14,7 @@ import {
   createCronJobTemplate,
   createCronJobPresets,
 } from 'resources/Jobs/templates';
+import { getDescription, SchemaContext } from 'shared/helpers/schema';
 
 function isCronJobValid(cronJob) {
   const containers =
@@ -47,6 +48,13 @@ export default function CronJobCreate({
     setCustomValid(isCronJobValid(cronJob));
   }, [cronJob, setCustomValid]);
 
+  const schema = useContext(SchemaContext);
+  const scheduleDesc = getDescription(schema, 'spec.schedule');
+  const containersDesc = getDescription(
+    schema,
+    'spec.jobTemplate.spec.template.spec.containers',
+  );
+
   return (
     <ResourceForm
       {...props}
@@ -62,10 +70,13 @@ export default function CronJobCreate({
       createUrl={resourceUrl}
     >
       <CronJobSpecSection propertyPath="$.spec" />
-
-      <ScheduleSection propertyPath="$.spec.schedule" />
+      <ScheduleSection
+        propertyPath="$.spec.schedule"
+        tooltipContent={t(scheduleDesc)}
+      />
       <ContainersSection
         defaultOpen
+        tooltipContent={containersDesc}
         propertyPath="$.spec.jobTemplate.spec.template.spec.containers"
       />
     </ResourceForm>
