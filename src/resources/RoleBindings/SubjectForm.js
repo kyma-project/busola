@@ -67,7 +67,11 @@ export function SingleSubjectForm({
         input={() => (
           <Select onChange={onChange} className="bsl-col-md--12">
             {SUBJECT_KINDS.map(kind => (
-              <Option value={kind} selected={(subject.kind || '') === kind}>
+              <Option
+                key={kind}
+                value={kind}
+                selected={(subject.kind || '') === kind}
+              >
                 {kind}
               </Option>
             ))}

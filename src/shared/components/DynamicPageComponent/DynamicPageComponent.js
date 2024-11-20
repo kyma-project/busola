@@ -34,7 +34,11 @@ const useGetHeaderHeight = dynamicPageRef => {
     if (dynamicPageRef.current) {
       // wait for the custom element to be defined (adjust the tag-name if you're using the scoping feature)
       void customElements.whenDefined('ui5-dynamic-page').then(() => {
-        const { shadowRoot } = dynamicPageRef.current;
+        const shadowRoot = dynamicPageRef.current?.shadowRoot;
+
+        if (!shadowRoot) {
+          return;
+        }
 
         // wait for the shadowRoot to be populated
         const shadowRootObserver = new MutationObserver(() => {
@@ -45,10 +49,17 @@ const useGetHeaderHeight = dynamicPageRef => {
           }
         });
 
-        if (shadowRoot && shadowRoot.childElementCount) {
-          headerObserver.observe(shadowRoot.querySelector('header'));
-        } else {
+        if (shadowRoot.childElementCount > 0) {
+          const header = shadowRoot.querySelector('header');
+          if (header) {
+            headerObserver.observe(header);
+          } else {
+            return;
+          }
+        } else if (shadowRoot instanceof Node) {
           shadowRootObserver.observe(shadowRoot, { childList: true });
+        } else {
+          return;
         }
       });
     }
