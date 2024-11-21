@@ -18,6 +18,7 @@ type ConditionItem = {
 type ConditionHeader = {
   titleText: string | ReactNode;
   status?: string;
+  overrideStatusType?: string;
 };
 
 export const ConditionList = ({
@@ -34,6 +35,7 @@ export const ConditionList = ({
           key={index}
           header={cond.header?.titleText}
           status={cond.header?.status}
+          overrideStatusType={cond.header?.overrideStatusType}
           content={cond.message}
           customContent={cond.customContent}
         />
