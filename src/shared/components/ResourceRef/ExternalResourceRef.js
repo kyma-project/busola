@@ -131,7 +131,11 @@ export function ExternalResourceRef({
             }
           >
             {namespacesOptions.map(namespace => (
-              <ComboBoxItem id={namespace.key} text={namespace.text} />
+              <ComboBoxItem
+                key={namespace.key}
+                id={namespace.key}
+                text={namespace.text}
+              />
             ))}
           </ComboBox>
         )}

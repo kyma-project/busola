@@ -203,6 +203,7 @@ export default function KymaModulesAddModule({
           module={module}
           kymaResource={kymaResource}
           index={index}
+          key={module.name}
           isChecked={isChecked}
           setCheckbox={setCheckbox}
           setChannel={setChannel}

@@ -38,7 +38,7 @@ export function IngressDetails(props) {
   customComponents.push(
     resource =>
       (resource.spec?.ingressClassName || resource.spec?.tls) && (
-        <IngressSpecification resource={resource} />
+        <IngressSpecification key="ingress-specification" resource={resource} />
       ),
   );
 
