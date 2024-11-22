@@ -24,7 +24,7 @@ jobs:
       tag: ${{ github.event.inputs.name }}
   build-busola:
     name: Build Busola
-    uses: ./.github/workflows/busola-web-build.yml
+    uses: ./.github/workflows/busola-build.yml
     with:
       tag: ${{ github.event.inputs.name }}
   build-busola-backend:
