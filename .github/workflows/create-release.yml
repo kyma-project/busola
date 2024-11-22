@@ -17,33 +17,31 @@ permissions: # used by build images steps
   contents: write # This is required for actions/checkout and builds
 
 jobs:
-  build-web:
+  build-busola-web:
     name: Build Busola web
     uses: ./.github/workflows/busola-web-build.yml
     with:
       tag: ${{ github.event.inputs.name }}
-  build-backend:
+  build-busola:
+    name: Build Busola web
+    uses: ./.github/workflows/busola-web-build.yml
+    with:
+      tag: ${{ github.event.inputs.name }}
+  build-busola-backend:
     name: Build busola backend
     uses: ./.github/workflows/busola-backend-build.yml
     with:
       tag: ${{ github.event.inputs.name }}
 
-  #  integrations:
-  #    needs: create-draft
-  #    secrets: inherit
-  #    uses: ./.github/workflows/_integration-tests.yaml
-  #    with:
-  #      image: europe-docker.pkg.dev/kyma-project/prod/serverless-operator:${{ github.event.inputs.name }}
-
   create-release:
     name: Create release
-    needs: [ build-web, build-backend ]
+    needs: [ build-busola-web, build-busola-backend, build-busola ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-tags: true
           ref: ${{ github.ref_name }} # checkout to latest branch changes ( by default this action checkouts to the SHA that triggers action )
       - name: Create changelog
         env:

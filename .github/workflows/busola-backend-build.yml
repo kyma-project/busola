@@ -31,4 +31,5 @@ jobs:
     with:
       name: busola-backend
       dockerfile: Dockerfile
+      context: backend
       tags: ${{ inputs.tag != '' && inputs.tag || 'latest' }}

@@ -15,7 +15,7 @@ ENV PRODUCTION true
 ENV CI true
 
 COPY . /app
-
+# build arg `tag` is used because `default_tag` is used by image builder and it cannot be overwritten.
 RUN export TAG=${tag:-$default_tag} &&  yq -i '.version = "'${TAG}'"' public/version.yaml && \
   make resolve validate
 
