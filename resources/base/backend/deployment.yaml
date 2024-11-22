@@ -21,7 +21,7 @@ spec:
       containers:
         - name: backend
           image: busola-backend
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           resources:
             limits:
               cpu: 1
@@ -41,6 +41,12 @@ spec:
           env:
             - name: ADDRESS
               value: 0.0.0.0
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  optional: true
+                  key: NODE_ENV
+                  name: busola-backend-config
           volumeMounts:
             - name: config
               mountPath: /app/config

@@ -8,22 +8,21 @@ metadata:
     nginx.ingress.kubernetes.io/server-snippet: 'server_tokens off;' # hide nginx version
     nginx.ingress.kubernetes.io/enable-cors: 'false'
 spec:
-  ingressClassName: nginx
   rules:
-    - host: $DOMAIN
-      http:
+    - http:
         paths:
-          - backend:
+          - path: /
+            pathType: Prefix
+            backend:
               service:
                 name: web
                 port:
                   number: 8080
-            path: /(.*)
+
+          - path: /backend
             pathType: Prefix
-          - backend:
+            backend:
               service:
                 name: backend
                 port:
                   number: 3001
-            path: /backend(?:/|$)(.*)
-            pathType: Prefix
