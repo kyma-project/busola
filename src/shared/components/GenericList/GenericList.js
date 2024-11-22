@@ -222,27 +222,30 @@ export const GenericList = ({
           </BodyFallback>
         );
       }
-      return (
-        <BodyFallback>
-          {emptyListProps ? (
-            <EmptyListComponent
-              titleText={emptyListProps.titleText}
-              subtitleText={emptyListProps.subtitleText}
-              showButton={emptyListProps.showButton}
-              buttonText={emptyListProps.buttonText}
-              url={emptyListProps.url}
-              onClick={emptyListProps.onClick}
-              image={emptyListProps?.image}
-            />
-          ) : (
-            <p>
-              {i18n.exists(notFoundMessage)
-                ? t(notFoundMessage)
-                : notFoundMessage}
-            </p>
-          )}
-        </BodyFallback>
-      );
+
+      if (!entries.length) {
+        return (
+          <BodyFallback>
+            {emptyListProps ? (
+              <EmptyListComponent
+                titleText={emptyListProps.titleText}
+                subtitleText={emptyListProps.subtitleText}
+                showButton={emptyListProps.showButton}
+                buttonText={emptyListProps.buttonText}
+                url={emptyListProps.url}
+                onClick={emptyListProps.onClick}
+                image={emptyListProps?.image}
+              />
+            ) : (
+              <p>
+                {i18n.exists(notFoundMessage)
+                  ? t(notFoundMessage)
+                  : notFoundMessage}
+              </p>
+            )}
+          </BodyFallback>
+        );
+      }
     }
 
     let pagedItems = filteredEntries;
