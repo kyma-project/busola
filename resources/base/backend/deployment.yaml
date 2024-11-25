@@ -41,12 +41,6 @@ spec:
           env:
             - name: ADDRESS
               value: 0.0.0.0
-            - name: NODE_ENV
-              valueFrom:
-                configMapKeyRef:
-                  optional: true
-                  key: NODE_ENV
-                  name: busola-backend-config
           volumeMounts:
             - name: config
               mountPath: /app/config

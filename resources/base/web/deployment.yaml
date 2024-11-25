@@ -17,7 +17,7 @@ spec:
       containers:
         - name: busola
           image: busola-web
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           env:
             - name: ENVIRONMENT
               valueFrom:
