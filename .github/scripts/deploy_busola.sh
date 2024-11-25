@@ -8,8 +8,8 @@ set -o errexit  # exit immediately when a command fails.
 set -E          # needs to be set if we want the ERR trap
 set -o pipefail # prevents errors in a pipeline from being masked
 
+ENV=${ENV?"env is not set"}
 IMG_TAG=$1
-ENV=$2
 
 kubectl delete configmap environment --ignore-not-found=true
 kubectl create configmap environment --from-literal=ENVIRONMENT="${ENV}"
