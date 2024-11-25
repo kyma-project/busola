@@ -8,11 +8,12 @@ set -o errexit  # exit immediately when a command fails.
 set -E          # needs to be set if we want the ERR trap
 set -o pipefail # prevents errors in a pipeline from being masked
 
-trap print_k8s_resources EXIT
+trap print_k8s_resources SIGTERM
 
 print_k8s_resources()
 {
   kubectl get all
+  kubectl get deployment -oyaml
 }
 
 ENV=${ENV?"env is not set"}
