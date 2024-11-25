@@ -6,7 +6,6 @@ set -o errexit  # exit immediately when a command fails.
 set -E          # needs to be set if we want the ERR trap
 set -o pipefail # prevents errors in a pipeline from being masked
 
-IP=${1}
 k3d kubeconfig get kyma > tests/integration/fixtures/kubeconfig.yaml
 
 #To access kubernetes inside the cluster change the api server addrees available inside the cluster

@@ -33,11 +33,8 @@ jobs:
           node-version: 20
       - name: deploy_busola
         shell: bash
-
         run: |
-          ./.github/scripts/deploy_busola.sh | tee busola-deploy.log
-        env:
-          ENV: dev
+          ./.github/scripts/deploy_busola.sh dev | tee busola-deploy.log
       - name: prepare_kubeconfig
         run: |
           prepare_kubeconfig.sh
