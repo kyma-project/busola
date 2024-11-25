@@ -1,4 +1,4 @@
-import { Table } from '../../../components/App/UI5Imports';
+import { Table, TableCell, TableRow } from '../../../components/App/UI5Imports';
 
 import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
@@ -32,6 +32,7 @@ import pluralize from 'pluralize';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
+import './GenericList.scss';
 
 const defaultSort = {
   name: nameLocaleSort,
@@ -113,9 +114,7 @@ export const GenericList = ({
   }, [pageSize, pagination]);
 
   const { i18n, t } = useTranslation();
-  const [currentPage, setCurrentPage] = React.useState(
-    pagination?.initialPage || 1,
-  );
+  const [currentPage, setCurrentPage] = useState(pagination?.initialPage || 1);
 
   const [filteredEntries, setFilteredEntries] = useState(() =>
     sorting(sort, entries),
@@ -197,7 +196,7 @@ export const GenericList = ({
   const renderTableBody = () => {
     if (serverDataError) {
       return (
-        <BodyFallback>
+        <BodyFallback key="tableErrorMessage">
           <p>{getErrorMessage(serverDataError)}</p>
         </BodyFallback>
       );
@@ -205,7 +204,7 @@ export const GenericList = ({
 
     if (serverDataLoading) {
       return (
-        <BodyFallback>
+        <BodyFallback key="tableDataLoading">
           <Spinner />
         </BodyFallback>
       );
