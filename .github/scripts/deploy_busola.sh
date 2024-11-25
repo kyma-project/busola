@@ -18,14 +18,15 @@ print_k8s_resources()
 
 ENV=${ENV?"env is not set"}
 IMG_TAG=$1
+IMG_DIR=dev
 
 kubectl delete configmap environment --ignore-not-found=true
 kubectl create configmap environment --from-literal=ENVIRONMENT="${ENV}"
 echo "### Deploying busola from: ${IMG_TAG}"
 
 cd resources
-(cd base/web && kustomize edit set image busola-web=europe-docker.pkg.dev/kyma-project/prod/busola-web:"${IMG_TAG}")
-(cd base/backend && kustomize edit set image busola-backend=europe-docker.pkg.dev/kyma-project/prod/busola-backend:"${IMG_TAG}")
+(cd base/web && kustomize edit set image busola-web=europe-docker.pkg.dev/kyma-project/${IMG_DIR}/busola-web:"${IMG_TAG}")
+(cd base/backend && kustomize edit set image busola-backend=europe-docker.pkg.dev/kyma-project/${IMG_DIR}/busola-backend:"${IMG_TAG}")
 kustomize build base/ | kubectl apply -f-
 
 kubectl apply -f ingress/ingress.yaml
