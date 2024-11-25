@@ -1,4 +1,4 @@
-import { Table, TableCell, TableRow } from '../../../components/App/UI5Imports';
+import { Table } from '../../../components/App/UI5Imports';
 
 import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
