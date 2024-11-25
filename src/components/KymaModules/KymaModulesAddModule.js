@@ -30,6 +30,7 @@ export default function KymaModulesAddModule({
     pollingInterval: 3000,
     skip: !resourceName,
   });
+
   const { data: moduleReleaseMetas } = useGet(modulesReleaseMetaResourceUrl, {
     pollingInterval: 3000,
     skip: !resourceName,
