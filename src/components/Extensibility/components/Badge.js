@@ -67,6 +67,7 @@ export function Badge({
   else if (type === 'informative') type = 'Information';
   else if (type === 'positive') type = 'Success';
   else if (type === 'critical') type = 'Error';
+  else if (type === 'none') type = 'None';
 
   type = TYPE_FALLBACK.get(type) || type;
 
