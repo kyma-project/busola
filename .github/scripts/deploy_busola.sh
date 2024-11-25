@@ -9,9 +9,10 @@ set -E          # needs to be set if we want the ERR trap
 set -o pipefail # prevents errors in a pipeline from being masked
 
 IMG_TAG=$1
+ENV=$2
 
-#kubectl create configmap ENV #TODO: Fix it
-
+kubectl delete configmap environment --ignore-not-found=true
+kubectl create configmap environment --from-literal=ENVIRONMENT="${ENV}"
 echo "### Deploying busola from: ${IMG_TAG}"
 
 cd resources
