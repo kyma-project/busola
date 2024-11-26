@@ -8,9 +8,9 @@ import { Button, FlexBox, Icon, Text } from '@ui5/webcomponents-react';
 
 import ListActions from 'shared/components/ListActions/ListActions';
 
-export const BodyFallback = ({ children, key }) => (
+export const BodyFallback = ({ children }) => (
   // TODO replace once new Table component is available in ui5-webcomponents-react
-  <tr key={key}>
+  <tr>
     <td colSpan="100%">
       <div className="body-fallback">{children}</div>
     </td>
