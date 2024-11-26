@@ -15,12 +15,12 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
     steps:
-      - name: Install Chrome
-        shell: bash
-        run: |
-          wget --no-verbose -O /tmp/chrome.deb https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_127.0.6533.119-1_amd64.deb 
-          sudo apt install --allow-downgrades -y /tmp/chrome.deb 
-          rm /tmp/chrome.deb
+      # - name: Install Chrome
+      #   shell: bash
+      #   run: |
+      #     wget --no-verbose -O /tmp/chrome.deb https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_127.0.6533.119-1_amd64.deb 
+      #     sudo apt install --allow-downgrades -y /tmp/chrome.deb 
+      #     rm /tmp/chrome.deb
       - uses: gardenlinux/workflow-telemetry-action@v2
         with:
           comment_on_pr: false
