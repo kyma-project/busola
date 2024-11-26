@@ -1,12 +1,12 @@
 import { calculatePodState } from 'resources/Pods/PodStatus';
 
 export function getHealthyReplicasCount(resource) {
-  return resource?.filter(
-    r =>
-      r.status.replicas &&
-      r.status.readyReplicas &&
-      r.status.replicas === r.status.readyReplicas,
-  )?.length;
+  return resource?.filter(r => {
+    const running = r.status.readyReplicas || 0;
+    const expected = r.status.replicas || r.spec.replicas || 0;
+
+    return running === expected;
+  })?.length;
 }
 
 export const PodStatusCounterKey = {
