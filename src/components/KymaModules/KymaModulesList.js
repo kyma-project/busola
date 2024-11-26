@@ -4,11 +4,11 @@ import jsyaml from 'js-yaml';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import {
-  DynamicPageHeader,
   Button,
   FlexBox,
   Text,
   Tag,
+  ObjectPageHeader,
 } from '@ui5/webcomponents-react';
 
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
@@ -421,7 +421,7 @@ export default function KymaModulesList({
       layoutNumber="StartColumn"
       windowTitle={t('kyma-modules.title')}
       headerContent={
-        <DynamicPageHeader>
+        <ObjectPageHeader>
           <FlexBox alignItems="Center">
             <Label showColon>{t('kyma-modules.release-channel')}</Label>
             <Text renderWhitespace={true}> </Text>
@@ -434,7 +434,7 @@ export default function KymaModulesList({
               ariaTitle={t('kyma-modules.release-channel')}
             />
           </FlexBox>
-        </DynamicPageHeader>
+        </ObjectPageHeader>
       }
       customComponents={[ModulesList]}
       apiGroup={apiGroup}

@@ -1,6 +1,12 @@
 .page-header {
   background-color: var(--sapBackgroundColor);
 
+  &.no-tabs {
+    ui5-tabcontainer {
+      display: none;
+    }
+  }
+
   ui5-dynamic-page-title {
     justify-content: center;
     min-height: 3rem;
@@ -111,7 +117,6 @@ ui5-button[data-component-name='ObjectPageAnchorBarExpandBtn'] {
   }
 }
 
-[data-component-name='DynamicPageContent'],
 [data-component-name='ObjectPageContent'] {
   padding: 0 !important;
 }
