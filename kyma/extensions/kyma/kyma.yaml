@@ -77,7 +77,20 @@ data:
           - name: Version
             source: version
             widget: Text
-          - name: State
+          - name: Module State
+            widget: Badge
+            source: "$getModuleState($$)"
+            description: "$getModuleDescription($$)"
+            highlights: 
+              positive:
+                - 'Ready'
+              critical:
+                - 'Error'
+              none: 
+                - 'Processing'
+                - 'Deleting'
+                - 'Unknown'
+          - name: Installation State
             widget: Badge
             source: 'state ? state : "UNNKOWN"'
             description: 'message ? message : ""'
