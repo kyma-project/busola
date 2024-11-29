@@ -1,1 +1,41 @@
-[]
+dataSources:
+  moduleTemplates:
+    resource:
+      kind: ModuleTemplate
+      namespace: null
+      group: operator.kyma-project.io
+      version: v1beta1
+general:
+  id: module-wizard
+  name: Module Wizard
+  description: Add your module.
+  resources:
+    kyma:
+      kind: Kyma
+      group: operator.kyma-project.io
+      version: v1beta1
+steps:
+  - name: Kyma Modules
+    description: Choose modules you want to install on the cluster.
+    resource: kyma
+    form:
+      - path: spec.channel
+        name: Kyma Default Channel
+        required: true
+        enum: $distinct($moduleTemplates().items.spec.channel)
+      - path: spec.modules
+        widget: Modules
+        name: Modules
+        defaultExpanded: true
+        options:
+          name: >
+            $distinct($moduleTemplates().items.metadata.labels."operator.kyma-project.io/module-name")
+          moduleTemplates: $moduleTemplates().items
+          betaAlert: >-
+            "CAUTION: The Service Level Agreements (SLAs) and Support
+            obligations do not apply to Beta modules and functionalities. If
+            Beta modules or functionalities directly or indirectly affect other
+            modules, the Service Level Agreements and Support for these modules
+            are limited to priority levels P3 (Medium) or P4 (Low). Thus, Beta
+            releases are not intended for use in customer production
+            environments."
