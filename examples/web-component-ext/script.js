@@ -305,12 +305,27 @@ function proxyFetch(url, options = {}) {
   let proxyUrl = baseUrl + `?url=${url}`;
   return fetch(proxyUrl, options);
 }
+
+function createLink(text, href) { 
+  const a = document.createElement('a');
+  const handler = (e) => { 
+    e.preventDefault();
+    window.history.pushState({}, '', href);
+    window.dispatchEvent(new PopStateEvent('popstate'));
+  }
+  a.addEventListener('click', handler);
+  a.href = href;
+  a.innerHTML = text;
+  return a;
+}
+
 function instancesList(instances) {
   let list = document.createElement('ul');
   for (let instance of instances) {
-    // li contains instance name and namespace and button to delete instance
     let li = document.createElement('li');
-    li.innerHTML = `${instance.metadata.name} (${instance.metadata.namespace})`;
+    let link = createLink(`${instance.metadata.name} (${instance.metadata.namespace})`,
+     `namespaces/${instance.metadata.namespace}/serviceinstances/${instance.metadata.name}`);
+    li.appendChild(link);
     let deleteBtn = document.createElement('ui5-button');
     deleteBtn.setAttribute('icon', 'delete');
     deleteBtn.onclick = async () => {
