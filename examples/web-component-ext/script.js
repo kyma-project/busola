@@ -1,15 +1,27 @@
-class MyComponent1 extends HTMLElement {
+class SMCatalog extends HTMLElement {
   connectedCallback() {
     const shadow = this.attachShadow({ mode: 'open' });
     let style = styling();
     shadow.appendChild(style);
-
+    // refresh button
+    const refreshBtn = document.createElement('ui5-button');
+    refreshBtn.setAttribute('icon', 'refresh');
+    refreshBtn.innerHTML = 'Refresh';
+    refreshBtn.setAttribute('design', 'Emphasized');
+    refreshBtn.onclick = () => {
+      loadData(shadow.querySelector('div'));
+    };
+    shadow.appendChild(refreshBtn);
     const contentDiv = document.createElement('div');
     shadow.appendChild(contentDiv);
     contentDiv.innerHTML = 'loading...';
     loadData(contentDiv);
   }
 }
+if (!customElements.get('sm-catalog')) {
+  customElements.define('sm-catalog', SMCatalog);
+}
+
 function sortByInstanceCountAndOfferingName(a, b) {
   if (a.instances.length > b.instances.length) {
     return -1;
@@ -81,9 +93,6 @@ function styling() {
   `;
   return style;
 }
-if (!customElements.get('my-component-1')) {
-  customElements.define('my-component-1', MyComponent1);
-}
 function decodeBase64(base64) {
   const raw = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
   return new TextDecoder().decode(raw);
@@ -136,7 +145,24 @@ async function createServiceInstance(name, namespace, offering, plan) {
     };
   }
 }
-
+async function deleteServiceInstance(name, namespace) {
+  let relativeUrl = `/apis/services.cloud.sap.com/v1/namespaces/${namespace}/serviceinstances/${name}`;
+  try {
+    let resp = await window.extensionProps.kymaFetchFn({
+      relativeUrl,
+      init: {
+        method: 'DELETE',
+      },
+    });
+    console.log(resp);
+    return { status: 'ok', message: 'Service instance deleted' };
+  } catch (e) {
+    return {
+      status: 'error',
+      message: `Failed to delete service instance: ${e}`,
+    };
+  }
+}
 async function getServiceInstances() {
   let relativeUrl = '/apis/services.cloud.sap.com/v1/serviceinstances';
   let resp = await window.extensionProps.kymaFetchFn({ relativeUrl });
@@ -279,6 +305,27 @@ function proxyFetch(url, options = {}) {
   let proxyUrl = baseUrl + `?url=${url}`;
   return fetch(proxyUrl, options);
 }
+function instancesList(instances) {
+  let list = document.createElement('ul');
+  for (let instance of instances) {
+    // li contains instance name and namespace and button to delete instance
+    let li = document.createElement('li');
+    li.innerHTML = `${instance.metadata.name} (${instance.metadata.namespace})`;
+    let deleteBtn = document.createElement('ui5-button');
+    deleteBtn.setAttribute('icon', 'delete');
+    deleteBtn.onclick = async () => {
+      const resp = await deleteServiceInstance(
+        instance.metadata.name,
+        instance.metadata.namespace,
+      );
+      console.log(resp);
+    };
+    li.appendChild(deleteBtn);
+    list.appendChild(li);
+
+  }
+  return list;
+}
 
 function offeringCard(offering) {
   const greyImg =
@@ -315,6 +362,7 @@ function offeringCard(offering) {
       );
     },
   );
+  cardContent.appendChild(instancesList(offering.instances));
   cardContent.appendChild(btn);
   cardContent.appendChild(popover);
 
