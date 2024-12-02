@@ -13,7 +13,7 @@ import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/T
 import { ToolbarSeparator } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSeparator/index.js';
 
 import './DynamicPageComponent.scss';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
@@ -79,6 +79,7 @@ export const DynamicPageComponent = ({
             ?.clientHeight ?? 0),
       );
     });
+    // eslint-disable-line react-hooks/exhaustive-deps
   }, []);
 
   const handleColumnClose = () => {
