@@ -32,6 +32,7 @@ import './Header.scss';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
+import { showKymaCompanionState } from 'components/KymaCompanion/state/showKymaCompanionAtom';
 
 export function Header() {
   useAvailableNamespaces();
@@ -54,6 +55,7 @@ export function Header() {
     isResourceEditedState,
   );
   const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
+  const setShowCompanion = useSetRecoilState(showKymaCompanionState);
 
   const shellbarRef = useRef<ShellBarDomRef>(null);
   useEffect(() => {
@@ -174,6 +176,19 @@ export function Header() {
             icon="feedback"
             text={t('navigation.feedback')}
             title={t('navigation.feedback')}
+          />
+        )}
+        {isFeedbackEnabled && (
+          <ShellBarItem
+            onClick={() =>
+              setShowCompanion({
+                show: true,
+                fullScreen: false,
+              })
+            }
+            icon="da"
+            text={t('kyma-companion.name')}
+            title={t('kyma-companion.name')}
           />
         )}
       </ShellBar>

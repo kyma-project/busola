@@ -1,0 +1,28 @@
+.code-response {
+  background-color: #484848;
+  color: white;
+  padding: 0.75rem;
+  border-radius: 4px;
+
+  .text {
+    color: white;
+  }
+}
+
+.code-panel::part(header) {
+  background-color: #484848;
+  color: white;
+  border-radius: 4px 4px 0 0;
+  font-size: 0.9rem;
+}
+
+.code-panel::part(content) {
+  background-color: #484848;
+  border-radius: 0 0 4px 4px;
+}
+
+.code-panel {
+  .text {
+    color: white;
+  }
+}

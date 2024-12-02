@@ -36,6 +36,10 @@ import useSidebarCondensed from 'sidebar/useSidebarCondensed';
 import { useGetValidationEnabledSchemas } from 'state/validationEnabledSchemasAtom';
 import { useGetKymaResources } from 'state/kymaResourcesAtom';
 
+import { SplitterElement, SplitterLayout } from '@ui5/webcomponents-react';
+import { showKymaCompanionState } from 'components/KymaCompanion/state/showKymaCompanionAtom';
+import KymaCompanion from 'components/KymaCompanion/components/KymaCompanion';
+
 export default function App() {
   const language = useRecoilValue(languageAtom);
   const cluster = useRecoilValue(clusterState);
@@ -72,37 +76,63 @@ export default function App() {
   useAfterInitHook(kubeconfigIdState);
   useGetKymaResources();
 
+  const showCompanion = useRecoilValue(showKymaCompanionState);
+
   return (
-    <div id="html-wrap">
-      <Header />
-      <div id="page-wrap">
-        <Sidebar key={cluster?.name} />
-        <ContentWrapper>
-          <Routes key={cluster?.name}>
-            <Route
-              path="*"
-              element={
-                <IncorrectPath
-                  to="clusters"
-                  message={t('components.incorrect-path.message.clusters')}
+    <SplitterLayout id="splitter-layout">
+      <SplitterElement
+        resizable={showCompanion.show}
+        size={
+          showCompanion.show
+            ? showCompanion.fullScreen
+              ? '0%'
+              : '70%'
+            : '100%'
+        }
+      >
+        <div id="html-wrap">
+          <Header />
+          <div id="page-wrap">
+            <Sidebar key={cluster?.name} />
+            <ContentWrapper>
+              <Routes key={cluster?.name}>
+                <Route
+                  path="*"
+                  element={
+                    <IncorrectPath
+                      to="clusters"
+                      message={t('components.incorrect-path.message.clusters')}
+                    />
+                  }
                 />
-              }
-            />
-            <Route path="/" />
-            <Route path="clusters" element={<ClusterList />} />
-            <Route
-              path="cluster/:currentClusterName"
-              element={<Navigate to="overview" />}
-            />
-            <Route
-              path="cluster/:currentClusterName/*"
-              element={<ClusterRoutes />}
-            />
-            {makeGardenerLoginRoute()}
-          </Routes>
-          <Preferences />
-        </ContentWrapper>
-      </div>
-    </div>
+                <Route path="/" />
+                <Route path="clusters" element={<ClusterList />} />
+                <Route
+                  path="cluster/:currentClusterName"
+                  element={<Navigate to="overview" />}
+                />
+                <Route
+                  path="cluster/:currentClusterName/*"
+                  element={<ClusterRoutes />}
+                />
+                {makeGardenerLoginRoute()}
+              </Routes>
+              <Preferences />
+            </ContentWrapper>
+          </div>
+        </div>
+      </SplitterElement>
+      {showCompanion.show ? (
+        <SplitterElement
+          resizable={!showCompanion.fullScreen}
+          size={showCompanion.fullScreen ? '100%' : '30%'}
+          minSize={350}
+        >
+          <KymaCompanion />
+        </SplitterElement>
+      ) : (
+        <></>
+      )}
+    </SplitterLayout>
   );
 }
