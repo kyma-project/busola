@@ -139,7 +139,6 @@ export function buildPathsFromObject(object, path = '') {
 }
 
 export function roundTwoDecimals(number) {
-  return number > 100_000
-    ? Number.parseFloat(number).toExponential(2)
-    : Number.parseFloat(number.toFixed(2));
+  console.log(number > 100_000);
+  return Number.parseFloat(number.toFixed(2));
 }
