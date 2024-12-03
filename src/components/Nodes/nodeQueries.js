@@ -66,7 +66,6 @@ export function useNodesQuery(skip = false) {
         const metricsForNode = nodeMetrics.items.find(
           metrics => node.metadata.name === metrics.metadata.name,
         );
-        console.log(metricsForNode);
         return createUsageMetrics(node, metricsForNode);
       };
 
@@ -104,7 +103,6 @@ export function useNodeQuery(nodeName) {
 
   useEffect(() => {
     if (node) {
-      console.log(nodeMetrics);
       setData({
         node,
         metrics: nodeMetrics ? createUsageMetrics(node, nodeMetrics) : {},

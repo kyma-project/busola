@@ -18,7 +18,6 @@ export default function NodeDetails({ nodeName }) {
   const { t } = useTranslation();
   useWindowTitle(t('nodes.title_details', { nodeName }));
   const { data: resources } = useResourceByNode(nodeName);
-  console.log('XDD', data);
 
   const filterByHost = e => e.source.host === nodeName;
   const Events = (
