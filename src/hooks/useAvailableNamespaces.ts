@@ -14,9 +14,9 @@ export function useAvailableNamespaces() {
   const { data: allNamespaces, error, refetch, silentRefetch } = useGetList()(
     '/api/v1/namespaces',
     {
-      skip: false,
       pollingInterval: 3000,
       onDataReceived: () => {},
+      skip: false,
     },
   ) as {
     loading: boolean;
