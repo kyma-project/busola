@@ -113,7 +113,7 @@ context('Test Custom Resources', () => {
     cy.getMidColumn()
       .get('ui5-table-row')
       .find('ui5-table-cell')
-      .contains('span', 'tcluster-test')
+      .contains('ui5-text', 'tcluster-test')
       .click();
 
     cy.testEndColumnLayout('tcluster-test', false);
@@ -121,7 +121,7 @@ context('Test Custom Resources', () => {
     cy.getMidColumn()
       .get('ui5-table-row')
       .find('ui5-table-cell')
-      .contains('span', 'tcluster-test')
+      .contains('ui5-text', 'tcluster-test')
       .click();
 
     cy.getMidColumn()

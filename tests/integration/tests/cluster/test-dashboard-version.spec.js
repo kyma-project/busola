@@ -15,8 +15,7 @@ context('Test Kyma Dashboard Version link', () => {
       .contains('Legal Information')
       .click({ force: true });
 
-    cy.get('ui5-responsive-popover[placement-type="Right"]')
-      .find('ui5-menu-li:visible')
+    cy.get('li:visible')
       .contains('Kyma Dashboard version:')
       .should('be.visible');
   });

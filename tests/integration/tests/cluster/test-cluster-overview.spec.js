@@ -62,7 +62,8 @@ context('Test Cluster Overview', () => {
       .find('ui5-link.counting-card__link')
       .click();
 
-    cy.get('ui5-title')
+    cy.get('ui5-dynamic-page-title')
+      .find('ui5-title')
       .contains('Hpatest')
       .should('be.visible');
 
