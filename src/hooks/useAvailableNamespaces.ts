@@ -37,7 +37,10 @@ export function useAvailableNamespaces() {
         if (showHiddenNamespaces) return true;
         return !hiddenNamespaces.includes(n);
       });
-    if (filteredNamespaces) {
+    if (
+      filteredNamespaces &&
+      JSON.stringify(filteredNamespaces) !== JSON.stringify(namespaces)
+    ) {
       setNamespaces(filteredNamespaces);
     }
   }, [
@@ -46,6 +49,7 @@ export function useAvailableNamespaces() {
     hiddenNamespaces,
     setNamespaces,
     showHiddenNamespaces,
+    namespaces,
   ]);
 
   return { namespaces, refetch, silentRefetch, setNamespaces };
