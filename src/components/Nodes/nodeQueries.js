@@ -32,13 +32,11 @@ const createUsageMetrics = (node, metricsForNode) => {
     cpu: {
       usage: cpuUsage,
       capacity: cpuCapacity,
-      percentage: cpuPercentage + '%',
       percentageValue: cpuPercentage,
     },
     memory: {
       usage: memoryUsage,
       capacity: memoryCapacity,
-      percentage: memoryPercentage + '%',
       percentageValue: memoryPercentage,
     },
   };
@@ -141,7 +139,7 @@ function addResources(a, b) {
     }
     return a;
   }
-  const addedResources = {
+  return {
     limits: {
       cpu: getCpus(a?.limits?.cpu) + getCpus(b?.limits?.cpu),
       memory: getBytes(a?.limits?.memory) + getBytes(b?.limits?.memory),
@@ -151,7 +149,6 @@ function addResources(a, b) {
       memory: getBytes(a?.requests?.memory) + getBytes(b?.requests?.memory),
     },
   };
-  return addedResources;
 }
 
 function sumContainersResources(containers) {
@@ -181,7 +178,7 @@ export function calcNodeResources(pods) {
     },
     requests: {
       cpu: nodeResources.requests.cpu * 1000,
-      memory: nodeResources.requests.memory / 1024 / 1024 / 1024,
+      memory: nodeResources.requests.memory / Math.pow(1024, 3),
     },
   };
 }
