@@ -33,7 +33,8 @@ context('Test Kyma Modules views', () => {
 
   it('Test adding Modules', () => {
     cy.get('ui5-table')
-      .find('ui5-illustrated-message[title-text="No modules"]')
+      .find('ui5-illustrated-message')
+      .find('ui5-title', 'No modules')
       .should('be.visible');
 
     cy.get('div[data-component-name="DynamicPageHeader"]')
