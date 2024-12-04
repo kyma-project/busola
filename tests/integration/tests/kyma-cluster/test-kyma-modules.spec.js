@@ -166,7 +166,7 @@ context('Test Kyma Modules views', () => {
 
     cy.wait(500);
 
-    cy.get('ui5-li:visible')
+    cy.get('ui5-option:visible')
       .contains(/^Fast .*/)
       .click();
 
@@ -211,7 +211,7 @@ context('Test Kyma Modules views', () => {
       .find('ui5-select')
       .click();
 
-    cy.get('ui5-li:visible')
+    cy.get('ui5-option:visible')
       .contains(/Predefined .*/)
       .filter(':visible')
       .find('li')
