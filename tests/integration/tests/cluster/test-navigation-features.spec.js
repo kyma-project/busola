@@ -40,7 +40,9 @@ context('Test navigation features', () => {
       .contains('li', /cronjob-controller/)
       .click();
 
-    cy.contains('ui5-table-cell', 'cronjob-controller (SA)')
+    cy.wait(1000);
+
+    cy.contains('div', 'cronjob-controller (SA)')
       .find('ui5-link') // link itself
       .click();
 

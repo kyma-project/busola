@@ -255,7 +255,7 @@ Cypress.Commands.add(
 
     cy.get('ui5-table-row')
       .find('ui5-table-cell')
-      .contains('span', resourceName)
+      .contains('ui5-text', resourceName)
       .should('not.be.visible');
 
     cy.getEndColumn()
