@@ -14,12 +14,6 @@ jobs:
   run-cluster-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Install Chrome # this step could be removed after https://github.com/cypress-io/cypress/issues/30374 is resolved
-        shell: bash
-        run: |
-          wget --no-verbose -O /tmp/chrome.deb https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_127.0.6533.119-1_amd64.deb 
-          sudo apt install --allow-downgrades -y /tmp/chrome.deb 
-          rm /tmp/chrome.deb
       - uses: gardenlinux/workflow-telemetry-action@v2
         with:
           comment_on_pr: false
