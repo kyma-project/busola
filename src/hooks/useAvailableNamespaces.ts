@@ -27,7 +27,7 @@ export function useAvailableNamespaces() {
   };
 
   useEffect(() => {
-    if (error) {
+    if (error && Array.isArray(namespaces) && namespaces.length !== 0) {
       setNamespaces([]);
       return;
     }
