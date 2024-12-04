@@ -5,6 +5,6 @@ urlPath: service-management-ui
 category: Kyma
 name: Service Management UI
 scope: cluster
-customElement: my-component-1
+customElement: sm-catalog
 description: >-
   Service Management UI

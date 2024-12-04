@@ -424,12 +424,21 @@ export const useGetExtensions = () => {
   const { data: crds } = useGet(
     `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`,
   );
-
+  
   useEffect(() => {
     if (isExtensibilityCustomComponentsEnabled) {
-      // Expose fetchFn and authData to the window object for the extensions to use
+      // Wrap busola fetch function to be able to use it in the extensions as regular fetch. 
+      // It reduces the learning curve for the extension developers and introduces loose coupling between Busola and the extensions.
+      function asRegularFetch(busolaFetch:any, url: string, options: any) {
+        return busolaFetch({
+          relativeUrl: url,
+          init: options,
+          abortController: options?.signal ? {signal: options?.signal}: undefined,
+        });
+      }
+          
       (window as any).extensionProps = {
-        kymaFetchFn: fetchFn,
+        kymaFetchFn: (url:string, options:any) => asRegularFetch(fetchFn, url, options),
       };
     }
 

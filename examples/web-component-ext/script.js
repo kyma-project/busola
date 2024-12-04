@@ -97,12 +97,16 @@ function decodeBase64(base64) {
   const raw = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
   return new TextDecoder().decode(raw);
 }
+function fetchWrapper(url, options) {
+  if (window.extensionProps.kymaFetchFn) {
+    return window.extensionProps.kymaFetchFn(url, options);
+  }
+  return fetch(url, options);
+}
 
 async function getSMsecret() {
   let url = `/api/v1/namespaces/kyma-system/secrets/sap-btp-service-operator`;
-  const fetchFn = window.extensionProps.kymaFetchFn;
-
-  let resp = await fetchFn({ relativeUrl: url });
+  let resp = await fetchWrapper(url);
   let data = await resp.json();
   let secret = data.data;
   for (const key in secret) {
@@ -126,16 +130,16 @@ async function createServiceInstance(name, namespace, offering, plan) {
   };
   let relativeUrl = `/apis/services.cloud.sap.com/v1/namespaces/${namespace}/serviceinstances`;
   try {
-    let resp = await window.extensionProps.kymaFetchFn({
+    let resp = await fetchWrapper(
       relativeUrl,
-      init: {
+      {
         method: 'POST',
         body: JSON.stringify(serviceInstance),
         headers: {
           'Content-Type': 'application/json',
         },
-      },
-    });
+      }
+    );
     console.log(resp);
     return { status: 'ok', message: 'Service instance created' };
   } catch (e) {
@@ -148,12 +152,7 @@ async function createServiceInstance(name, namespace, offering, plan) {
 async function deleteServiceInstance(name, namespace) {
   let relativeUrl = `/apis/services.cloud.sap.com/v1/namespaces/${namespace}/serviceinstances/${name}`;
   try {
-    let resp = await window.extensionProps.kymaFetchFn({
-      relativeUrl,
-      init: {
-        method: 'DELETE',
-      },
-    });
+    let resp = await fetchWrapper(relativeUrl, {method: 'DELETE'});
     console.log(resp);
     return { status: 'ok', message: 'Service instance deleted' };
   } catch (e) {
@@ -165,19 +164,19 @@ async function deleteServiceInstance(name, namespace) {
 }
 async function getServiceInstances() {
   let relativeUrl = '/apis/services.cloud.sap.com/v1/serviceinstances';
-  let resp = await window.extensionProps.kymaFetchFn({ relativeUrl });
+  let resp = await fetchWrapper(relativeUrl );
   let data = await resp.json();
   return data.items;
 }
 async function getServiceBindings() {
   let relativeUrl = '/apis/services.cloud.sap.com/v1/servicebindings';
-  let resp = await window.extensionProps.kymaFetchFn({ relativeUrl });
+  let resp = await fetchWrapper(relativeUrl);
   let data = await resp.json();
   return data.items;
 }
 async function getNamespaces() {
   let relativeUrl = '/api/v1/namespaces';
-  let resp = await window.extensionProps.kymaFetchFn({ relativeUrl });
+  let resp = await fetchWrapper( relativeUrl );
   let data = await resp.json();
   return data.items;
 }
