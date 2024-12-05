@@ -15,7 +15,7 @@ context('Accessibility test Custom Resources', () => {
 
     cy.navigateTo('Configuration', 'Custom Resource Definitions');
 
-    cy.openCreate().click();
+    cy.openCreate();
 
     cy.wrap(loadFile(FILE_NAME)).then(CRD_CONFIG => {
       const CRD = JSON.stringify(CRD_CONFIG);

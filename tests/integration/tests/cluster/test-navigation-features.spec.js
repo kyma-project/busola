@@ -42,8 +42,11 @@ context('Test navigation features', () => {
 
     cy.wait(1000);
 
-    cy.contains('div', 'cronjob-controller (SA)')
-      .find('ui5-link') // link itself
+    cy.contains('ui5-text', 'system:controller:cronjob-controller').click();
+
+    cy.getMidColumn()
+      .contains('ui5-Panel', 'Subjects')
+      .contains('ui5-link', 'cronjob-controller')
       .click();
 
     cy.contains('disabled').should('exist');
