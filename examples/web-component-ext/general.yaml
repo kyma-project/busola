@@ -1,0 +1,10 @@
+resource:
+  kind: Secret
+  version: v1
+urlPath: service-management-ui
+category: Kyma
+name: Service Management UI
+scope: cluster
+customElement: sm-catalog
+description: >-
+  Service Management UI

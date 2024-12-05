@@ -1,5 +1,6 @@
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { usePrepareListProps } from 'resources/helpers';
@@ -22,6 +23,7 @@ import { sortBy } from './helpers/sortBy';
 import { Widget } from './components/Widget';
 import { DataSourcesContextProvider } from './contexts/DataSources';
 import { useJsonata } from './hooks/useJsonata';
+import { useFeature } from 'hooks/useFeature';
 
 export const ExtensibilityListCore = ({
   resMetaData,
@@ -142,6 +144,33 @@ const ExtensibilityList = ({ overrideResMetadata, ...props }) => {
   const defaultResMetadata = useGetCRbyPath();
   const resMetaData = overrideResMetadata || defaultResMetadata;
   const { urlPath, defaultPlaceholder } = resMetaData?.general ?? {};
+  const { isEnabled: isExtensibilityCustomComponentsEnabled } = useFeature(
+    'EXTENSIBILITY_CUSTOM_COMPONENTS',
+  );
+
+  useEffect(() => {
+    const customElement = resMetaData?.general?.customElement;
+    const customScript = resMetaData?.customScript;
+
+    if (
+      isExtensibilityCustomComponentsEnabled &&
+      customElement &&
+      customScript &&
+      !customElements.get(customElement)
+    ) {
+      const script = document.createElement('script');
+      script.type = 'module';
+      script.textContent = customScript;
+      script.onerror = e => {
+        console.error('Script loading or execution error:', e);
+      };
+      document.head.appendChild(script);
+
+      return () => {
+        document.head.removeChild(script);
+      };
+    }
+  }, [resMetaData, isExtensibilityCustomComponentsEnabled]);
 
   return (
     <TranslationBundleContext.Provider
@@ -152,7 +181,13 @@ const ExtensibilityList = ({ overrideResMetadata, ...props }) => {
     >
       <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
         <ExtensibilityErrBoundary key={urlPath}>
-          <ExtensibilityListCore resMetaData={resMetaData} {...props} />
+          {isExtensibilityCustomComponentsEnabled && resMetaData.customHtml ? (
+            <div
+              dangerouslySetInnerHTML={{ __html: resMetaData.customHtml }}
+            ></div>
+          ) : (
+            <ExtensibilityListCore resMetaData={resMetaData} {...props} />
+          )}
         </ExtensibilityErrBoundary>
       </DataSourcesContextProvider>
     </TranslationBundleContext.Provider>
