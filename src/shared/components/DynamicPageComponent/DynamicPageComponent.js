@@ -352,7 +352,7 @@ export const DynamicPageComponent = ({
         titleArea={headerTitle}
         headerArea={customHeaderContent ?? headerContent}
         selectedSectionId={selectedSectionIdState}
-        onSelectedSectionChange={e => {
+        onBeforeNavigate={e => {
           if (isFormOpen.formOpen) {
             e.preventDefault();
           }
@@ -363,14 +363,14 @@ export const DynamicPageComponent = ({
             isFormOpen,
             setIsFormOpen,
             () => {
-              setSelectedSectionIdState(e.detail.selectedSectionId);
+              setSelectedSectionIdState(e.detail.sectionId);
               setIsResourceEdited({
                 isEdited: false,
               });
             },
           );
 
-          if (e.detail.selectedSectionId === 'edit') {
+          if (e.detail.sectionId === 'edit') {
             setIsFormOpen({ formOpen: true });
           }
         }}

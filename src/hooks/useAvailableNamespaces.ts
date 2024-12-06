@@ -27,8 +27,8 @@ export function useAvailableNamespaces() {
   };
 
   useEffect(() => {
-    if (error && Array.isArray(namespaces) && namespaces.length !== 0) {
-      setNamespaces([]);
+    if (error) {
+      setNamespaces(null);
       return;
     }
     const filteredNamespaces = allNamespaces
