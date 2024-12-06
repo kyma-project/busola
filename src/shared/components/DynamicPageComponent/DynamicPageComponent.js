@@ -1,14 +1,11 @@
 import PropTypes from 'prop-types';
 import {
   Button,
-  DynamicPage,
   FlexBox,
   ObjectPage,
   ObjectPageHeader,
   ObjectPageSection,
   ObjectPageTitle,
-  DynamicPageHeader,
-  DynamicPageTitle,
   Title,
 } from '@ui5/webcomponents-react';
 import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
@@ -16,7 +13,7 @@ import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/T
 import { ToolbarSeparator } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSeparator/index.js';
 
 import './DynamicPageComponent.scss';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
@@ -24,51 +21,6 @@ import { HintButton } from '../DescriptionHint/DescriptionHint';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
-
-const useGetHeaderHeight = dynamicPageRef => {
-  const [headerHeight, setHeaderHeight] = useState(undefined);
-  useEffect(() => {
-    const headerObserver = new ResizeObserver(([header]) => {
-      setHeaderHeight(header.contentRect.height);
-    });
-    if (dynamicPageRef.current) {
-      // wait for the custom element to be defined (adjust the tag-name if you're using the scoping feature)
-      void customElements.whenDefined('ui5-dynamic-page').then(() => {
-        const shadowRoot = dynamicPageRef.current?.shadowRoot;
-
-        if (!shadowRoot) {
-          return;
-        }
-
-        // wait for the shadowRoot to be populated
-        const shadowRootObserver = new MutationObserver(() => {
-          const header = shadowRoot.querySelector('header');
-          if (header) {
-            shadowRootObserver.disconnect();
-            headerObserver.observe(header);
-          }
-        });
-
-        if (shadowRoot.childElementCount > 0) {
-          const header = shadowRoot.querySelector('header');
-          if (header) {
-            headerObserver.observe(header);
-          } else {
-            return;
-          }
-        } else if (shadowRoot instanceof Node) {
-          shadowRootObserver.observe(shadowRoot, { childList: true });
-        } else {
-          return;
-        }
-      });
-    }
-    return () => {
-      headerObserver.disconnect();
-    };
-  }, [dynamicPageRef]);
-  return headerHeight;
-};
 
 const Column = ({ title, children, columnSpan, image, style = {} }) => {
   const styleComputed = { gridColumn: columnSpan, ...style };
@@ -109,8 +61,26 @@ export const DynamicPageComponent = ({
   const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
   const [selectedSectionIdState, setSelectedSectionIdState] = useState('view');
 
-  const dynamicPageRef = useRef(null);
-  const headerHeight = useGetHeaderHeight(dynamicPageRef);
+  const [stickyHeaderHeight, setStickyHeaderHeight] = useState(0);
+
+  useEffect(() => {
+    const pageCompClassName = `.page-header${className ? `.${className}` : ''}`;
+    setTimeout(() => {
+      setStickyHeaderHeight(
+        (document.querySelector(pageCompClassName)?.querySelector('header')
+          ?.clientHeight ?? 0) +
+          (document
+            .querySelector(pageCompClassName)
+            ?.querySelector('[data-component-name="ObjectPageTabContainer"]')
+            ?.clientHeight ?? 0) +
+          (document
+            .querySelector(pageCompClassName)
+            ?.querySelector('[data-component-name="ObjectPageHeader"]')
+            ?.clientHeight ?? 0),
+      );
+    });
+    // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleColumnClose = () => {
     window.history.pushState(
@@ -246,7 +216,7 @@ export const DynamicPageComponent = ({
     </Toolbar>
   );
 
-  const headerTitle = inlineEditForm ? (
+  const headerTitle = (
     <ObjectPageTitle
       style={title === 'Clusters Overview' ? { display: 'none' } : null}
       header={
@@ -277,70 +247,16 @@ export const DynamicPageComponent = ({
       }
       actionsBar={actionsBar}
     />
-  ) : (
-    <DynamicPageTitle
-      style={title === 'Clusters Overview' ? { display: 'none' } : null}
-      heading={
-        <FlexBox className="title-container" alignItems="Center">
-          <Title
-            style={{ fontSize: 'var(--sapObjectHeader_Title_FontSize)' }}
-            level="H3"
-            size="H3"
-            className="bold-title"
-            wrappingType="None"
-          >
-            {title}
-          </Title>
-          {protectedResource && (
-            <span className="sap-margin-begin-tiny">
-              {protectedResourceWarning}
-            </span>
-          )}
-          {description && (
-            <HintButton
-              className="sap-margin-tiny"
-              setShowTitleDescription={setShowTitleDescription}
-              showTitleDescription={showTitleDescription}
-              description={description}
-              ariaTitle={title}
-            />
-          )}
-        </FlexBox>
-      }
-      actionsBar={actionsBar}
-    />
   );
 
   const headerContent =
     title !== 'Clusters Overview' && children ? (
-      inlineEditForm ? (
-        <ObjectPageHeader className="header-wrapper">
-          <section className={`column-wrapper ${columnWrapperClassName || ''}`}>
-            {children}
-          </section>
-        </ObjectPageHeader>
-      ) : (
-        <DynamicPageHeader className="header-wrapper">
-          <section className={`column-wrapper ${columnWrapperClassName || ''}`}>
-            {children}
-          </section>
-        </DynamicPageHeader>
-      )
+      <ObjectPageHeader className="header-wrapper">
+        <section className={`column-wrapper ${columnWrapperClassName || ''}`}>
+          {children}
+        </section>
+      </ObjectPageHeader>
     ) : null;
-
-  const [stickyHeaderHeight, setStickyHeaderHeight] = useState(0);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setStickyHeaderHeight(
-        (document.querySelector('.page-header')?.querySelector('header')
-          ?.clientHeight ?? 0) +
-          (document
-            .querySelector('.page-header')
-            ?.querySelector('ui5-tabcontainer')?.clientHeight ?? 0),
-      );
-    });
-  }, []);
 
   if (inlineEditForm) {
     return (
@@ -352,7 +268,7 @@ export const DynamicPageComponent = ({
         titleArea={headerTitle}
         headerArea={customHeaderContent ?? headerContent}
         selectedSectionId={selectedSectionIdState}
-        onBeforeNavigate={e => {
+        onSelectedSectionChange={e => {
           if (isFormOpen.formOpen) {
             e.preventDefault();
           }
@@ -363,14 +279,14 @@ export const DynamicPageComponent = ({
             isFormOpen,
             setIsFormOpen,
             () => {
-              setSelectedSectionIdState(e.detail.sectionId);
+              setSelectedSectionIdState(e.detail.selectedSectionId);
               setIsResourceEdited({
                 isEdited: false,
               });
             },
           );
 
-          if (e.detail.sectionId === 'edit') {
+          if (e.detail.selectedSectionI === 'edit') {
             setIsFormOpen({ formOpen: true });
           }
         }}
@@ -398,16 +314,15 @@ export const DynamicPageComponent = ({
   }
 
   return (
-    <DynamicPage
-      className="page-header"
+    <ObjectPage
+      className="page-header no-tabs"
       hidePinButton
       titleArea={headerTitle}
       headerArea={headerContent}
       footerArea={footer}
-      ref={dynamicPageRef}
     >
-      {typeof content === 'function' ? content(headerHeight) : content}
-    </DynamicPage>
+      {typeof content === 'function' ? content(stickyHeaderHeight) : content}
+    </ObjectPage>
   );
 };
 DynamicPageComponent.Column = Column;
