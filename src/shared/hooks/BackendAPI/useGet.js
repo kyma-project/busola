@@ -14,7 +14,7 @@ const ERROR_TOLERANCY = 2;
 const useGetHook = processDataFn =>
   function(
     path,
-    { pollingInterval, onDataReceived, skip, errorTolerancy = undefined } = {},
+    { pollingInterval, onDataReceived, skip, errorTolerancy } = {},
   ) {
     const authData = useRecoilValue(authDataState);
     const lastAuthData = useRef(null);
