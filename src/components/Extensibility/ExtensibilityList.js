@@ -24,6 +24,8 @@ import { Widget } from './components/Widget';
 import { DataSourcesContextProvider } from './contexts/DataSources';
 import { useJsonata } from './hooks/useJsonata';
 import { useFeature } from 'hooks/useFeature';
+import { createPortal } from 'react-dom';
+import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 
 export const ExtensibilityListCore = ({
   resMetaData,
@@ -182,9 +184,12 @@ const ExtensibilityList = ({ overrideResMetadata, ...props }) => {
       <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
         <ExtensibilityErrBoundary key={urlPath}>
           {isExtensibilityCustomComponentsEnabled && resMetaData.customHtml ? (
-            <div
-              dangerouslySetInnerHTML={{ __html: resMetaData.customHtml }}
-            ></div>
+            <>
+              <div
+                dangerouslySetInnerHTML={{ __html: resMetaData.customHtml }}
+              ></div>
+              {createPortal(<YamlUploadDialog />, document.body)}
+            </>
           ) : (
             <ExtensibilityListCore resMetaData={resMetaData} {...props} />
           )}
