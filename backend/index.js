@@ -1,4 +1,5 @@
 import { makeHandleRequest, serveStaticApp, serveMonaco } from './common';
+import { proxyHandler } from './proxy.js';
 import { handleTracking } from './tracking.js';
 import jsyaml from 'js-yaml';
 //import { requestLogger } from './utils/other'; //uncomment this to log the outgoing traffic
@@ -53,6 +54,8 @@ if (process.env.NODE_ENV === 'development') {
   app.use(cors({ origin: '*' }));
 }
 
+app.get('/proxy', proxyHandler);
+
 let server = null;
 
 if (
@@ -81,13 +84,15 @@ const isDocker = process.env.IS_DOCKER === 'true';
 const handleRequest = makeHandleRequest();
 
 if (isDocker) {
+  // Running in dev mode
   // yup, order matters here
   serveMonaco(app);
   app.use('/backend', handleRequest);
   serveStaticApp(app, '/', '/core-ui');
 } else {
+  // Running in prod mode
   handleTracking(app);
-  app.use(handleRequest);
+  app.use('/backend', handleRequest);
 }
 
 process.on('SIGINT', function() {
