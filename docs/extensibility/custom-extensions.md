@@ -1,6 +1,6 @@
 # Custom Extensions
 
-Busola's custom extension feature allows you to design fully custom user interfaces that go beyond the built-in extensibility functionality. This feature is ideal for creating unique and specialized displays that are not covered by the standard built-in components.
+Busola's custom extension feature allows you to design fully custom user interfaces that go beyond the built-in extensibility functionality. This feature is ideal for creating unique and specialized displays that are not covered by the built-in components.
 
 ## Getting Started
 
