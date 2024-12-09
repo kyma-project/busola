@@ -1,6 +1,6 @@
 # Set Up Your Custom Busola Extension
 
-This example contains a basic custom extension, that queries all deployments corresponding to a selected namespace of your cluster, and additionally retrieves the current weather data for Munich, Germany from an external weather API.
+This example contains a basic custom extension, that queries all deployments of a selected namespace of your cluster, and additionally retrieves the current weather data for Munich, Germany from an external weather API.
 
 To set up and deploy your own custom Busola extension, follow these steps.
 
