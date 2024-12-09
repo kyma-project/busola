@@ -142,10 +142,12 @@ function extractHeadersData(req) {
   const clientCAHeader = 'x-client-certificate-data';
   const clientKeyDataHeader = 'x-client-key-data';
   const authorizationHeader = 'x-k8s-authorization';
-
-  const targetApiServer = handleDockerDesktopSubsitution(
-    new URL(req.headers[urlHeader]),
-  );
+  let targetApiServer;
+  if (req.headers[urlHeader]) {
+    targetApiServer = handleDockerDesktopSubsitution(
+      new URL(req.headers[urlHeader]),
+    );
+  }
   const ca = decodeHeaderToBuffer(req.headers[caHeader]) || certs;
   const cert = decodeHeaderToBuffer(req.headers[clientCAHeader]);
   const key = decodeHeaderToBuffer(req.headers[clientKeyDataHeader]);
