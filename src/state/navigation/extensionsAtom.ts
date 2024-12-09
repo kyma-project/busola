@@ -63,6 +63,10 @@ type ConfigMapListResponse =
     }
   | undefined;
 
+interface ExtensionProps {
+  kymaFetchFn: (url: string, options?: any) => Promise<Response>;
+}
+
 const isTheSameNameAndUrl = (
   firstCM: Partial<ExtResource>,
   secondCM: Partial<ExtResource>,
@@ -430,24 +434,29 @@ export const useGetExtensions = () => {
     if (isExtensibilityCustomComponentsEnabled) {
       // Wrap busola fetch function to be able to use it in the extensions as regular fetch.
       // It reduces the learning curve for the extension developers and introduces loose coupling between Busola and the extensions.
-      function asRegularFetch(busolaFetch: any, url: string, options: any) {
+      function asRegularFetch(busolaFetch: FetchFn, url: string, options: any) {
         return busolaFetch({
           relativeUrl: url,
           init: options,
           abortController: options?.signal
-            ? { signal: options?.signal }
+            ? { signal: options?.signal, abort: () => {} }
             : undefined,
         });
       }
 
-      (window as any).extensionProps = {
-        kymaFetchFn: (url: string, options: any) =>
-          asRegularFetch(fetchFn, url, options),
-      };
+      if (fetchFn) {
+        (window as Window & {
+          extensionProps?: ExtensionProps;
+        }).extensionProps = {
+          kymaFetchFn: (url: string, options: any) =>
+            asRegularFetch(fetchFn, url, options),
+        };
+      }
     }
 
     return () => {
-      delete (window as any).extensionProps;
+      delete (window as Window & { extensionProps?: ExtensionProps })
+        .extensionProps;
     };
   }, [fetchFn, auth, isExtensibilityCustomComponentsEnabled]);
 

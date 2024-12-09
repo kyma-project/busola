@@ -32,7 +32,7 @@ Ensure that the `general.customElement` property matches the name of the custom 
 
 ### 4. Deploy Your Extension
 
-Run `./deploy.sh` to create a ConfigMap and deploy it to your cluster
+Run `./deploy-custom-extension.sh` to create a ConfigMap and deploy it to your cluster
 
 Alternatively, you can use the following command:
 
