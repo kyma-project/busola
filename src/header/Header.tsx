@@ -58,7 +58,7 @@ export function Header() {
     name => name !== cluster?.name,
   );
 
-  const nonBreakableSpaces = (number: int): string => {
+  const nonBreakableSpaces = (number: number): string => {
     let spaces = '';
     for (let i = 0; i < number; i++) {
       spaces += '\u00a0';
@@ -218,7 +218,6 @@ export function Header() {
             text={t('common.labels.version')}
             additionalText={busolaVersion}
             icon="inspect"
-            startsSection
           />
         </MenuItem>
       </Menu>
