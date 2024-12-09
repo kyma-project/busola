@@ -32,6 +32,12 @@ Ensure that the `general.customElement` property matches the name of the custom 
 
 ### 4. Deploy Your Extension
 
+Before running the deployment command, ensure that your **Kubeconfig** is correctly exported and points to the desired cluster. You can check the current context by running:
+
+```bash
+kubectl config current-context
+```
+
 Run `./deploy-custom-extension.sh` to create a ConfigMap and deploy it to your cluster
 
 Alternatively, you can use the following command:

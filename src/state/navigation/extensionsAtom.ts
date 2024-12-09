@@ -152,7 +152,6 @@ const getExtensionWizards = async (
   kubeconfigNamespace = 'kube-public',
   currentNamespace: string,
   permissionSet: PermissionSetState,
-  extCustomComponentsEnabled: boolean,
 ) => {
   if (!fetchFn) {
     return null;
@@ -184,10 +183,7 @@ const getExtensionWizards = async (
             convertYamlToObject,
           ) as ExtResource,
         };
-        if (extCustomComponentsEnabled) {
-          extResourceWithMetadata.data.customHtml =
-            extResourceWithMetadata.data.customHtml || '';
-        }
+
         if (!extResourceWithMetadata.data) return accumulator;
 
         const indexOfTheSameExtension = accumulator.findIndex(ext =>
@@ -337,9 +333,9 @@ const getExtensions = async (
 
         if (extCustomComponentsEnabled) {
           extResourceWithMetadata.data.customHtml =
-            currentConfigMap.data.customHtml;
+            currentConfigMap.data.customHtml || '';
           extResourceWithMetadata.data.customScript =
-            currentConfigMap.data.customScript;
+            currentConfigMap.data.customScript || '';
         }
         if (!extResourceWithMetadata.data) return accumulator;
 
@@ -498,7 +494,6 @@ export const useGetExtensions = () => {
         cluster.currentContext.namespace || 'kube-public',
         namespace,
         permissionSet,
-        isExtensibilityCustomComponentsEnabled ?? false,
       );
 
       if (!wizardConfigs || !isExtensibilityWizardEnabled) {
