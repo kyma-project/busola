@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { useUrl } from 'hooks/useUrl';
 import { useSentry } from 'hooks/useSentry';
@@ -35,6 +35,8 @@ import { useAfterInitHook } from 'state/useAfterInitHook';
 import useSidebarCondensed from 'sidebar/useSidebarCondensed';
 import { useGetValidationEnabledSchemas } from 'state/validationEnabledSchemasAtom';
 import { useGetKymaResources } from 'state/kymaResourcesAtom';
+import { themeState } from 'state/preferences/themeAtom';
+import Snowfall from 'react-snowfall';
 
 export default function App() {
   const language = useRecoilValue(languageAtom);
@@ -42,7 +44,9 @@ export default function App() {
   const setNamespace = useSetRecoilState(activeNamespaceIdState);
   const { namespace } = useUrl();
   const makeGardenerLoginRoute = useMakeGardenerLoginRoute();
+  const [theme] = useRecoilState(themeState);
 
+  console.log('kon-test', theme);
   useInitTheme();
 
   const { t, i18n } = useTranslation();
@@ -74,6 +78,12 @@ export default function App() {
 
   return (
     <div id="html-wrap">
+      <Snowfall
+        style={{
+          background: 'black',
+          position: 'absolute',
+        }}
+      />
       <Header />
       <div id="page-wrap">
         <Sidebar key={cluster?.name} />
