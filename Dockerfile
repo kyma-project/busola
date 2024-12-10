@@ -3,6 +3,7 @@
 # ---- Base Alpine with Node ----
 FROM node:20.17-alpine3.20  AS builder
 ARG default_tag
+ARG tag
 
 RUN apk update && \
   apk upgrade && \
@@ -18,7 +19,8 @@ ENV CI true
 
 COPY . /app
 
-RUN yq -i '.version = "'${default_tag}'"' public/version.yaml && \
+# build arg `tag` is used because `default_tag` is used by image builder and it cannot be overwritten.
+RUN export TAG=${tag:-$default_tag} &&  yq -i '.version = "'${TAG}'"' public/version.yaml && \
   make resolve validate
 
 RUN npm run build:docker
