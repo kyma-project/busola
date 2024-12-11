@@ -4,11 +4,11 @@ import jsyaml from 'js-yaml';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import {
-  DynamicPageHeader,
   Button,
   FlexBox,
   Text,
   Tag,
+  DynamicPageHeader,
 } from '@ui5/webcomponents-react';
 
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';

@@ -39,6 +39,7 @@ import { useAfterInitHook } from 'state/useAfterInitHook';
 import useSidebarCondensed from 'sidebar/useSidebarCondensed';
 import { useGetValidationEnabledSchemas } from 'state/validationEnabledSchemasAtom';
 import { useGetKymaResources } from 'state/kymaResourcesAtom';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 
 export default function App() {
   const language = useRecoilValue(languageAtom);
@@ -59,7 +60,7 @@ export default function App() {
   useResourceSchemas();
   useSidebarCondensed();
 
-  useAuthHandler();
+  const { isLoading } = useAuthHandler();
   useGetConfiguration();
   useGetExtensions();
   useGetExtensibilitySchemas();
@@ -74,6 +75,10 @@ export default function App() {
   useAppTracking();
   useAfterInitHook(kubeconfigIdState);
   useGetKymaResources();
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div id="html-wrap">
