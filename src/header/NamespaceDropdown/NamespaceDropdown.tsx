@@ -11,7 +11,7 @@ export function NamespaceDropdown() {
 
   let namespaces = [];
 
-  if (allNamespaces.length > 0) {
+  if (allNamespaces && allNamespaces.length > 0) {
     namespaces.push(
       <ComboBoxItem
         text={t('navigation.all-namespaces')}
@@ -21,7 +21,7 @@ export function NamespaceDropdown() {
     );
   }
 
-  allNamespaces.map(ns =>
+  allNamespaces?.map(ns =>
     namespaces.push(<ComboBoxItem text={ns} key={ns} data-key={ns} />),
   );
 
