@@ -3,7 +3,7 @@
 Each pull request (PR) to the repository triggers CI/CD jobs that verify the Busola configuration, build and run integration tests.
 
 - `Busola Web Build / build-web-image / Build image` - Checks the ESLint code quality and builds the web Docker image.
-- `Busola Build / build-busola-image / Build image` - Checking the ESLint code quality and building the web and backend Docker image.
+- `Busola Build / build-busola-image / Build image` - Checks the ESLint code quality and builds the web and backend Docker image.
 - `Busola Backend Build / build-backend-image / Build image` - Builds the backend Docker image. The job runs only when changes affect the backend.
 - `PR Integration Cluster Tests / run-cluster-test` - Performs integration testing for Busola related to cluster-level functionalities using a k3d cluster.
 - `PR Integration Namespace Tests / run-namespace-test` - Performs integration testing for Busola related to namespace-level functionalities using a k3d cluster.
