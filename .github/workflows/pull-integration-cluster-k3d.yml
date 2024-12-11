@@ -9,6 +9,7 @@ on:
       - "tests/**"
       - "nginx/**"
       - "src/**"
+      - "backend/**"
 
 jobs:
   run-cluster-test:
