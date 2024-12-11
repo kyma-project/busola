@@ -46,7 +46,6 @@ export default function App() {
   const makeGardenerLoginRoute = useMakeGardenerLoginRoute();
   const [theme] = useRecoilState(themeState);
 
-  console.log('kon-test', theme);
   useInitTheme();
 
   const { t, i18n } = useTranslation();
@@ -78,12 +77,16 @@ export default function App() {
 
   return (
     <div id="html-wrap">
-      <Snowfall
-        style={{
-          background: 'black',
-          position: 'absolute',
-        }}
-      />
+      {(theme === 'snow_fall' || theme === 'snow_fall_dark') && (
+        <Snowfall
+          style={{
+            position: 'fixed',
+            width: '100vw',
+            height: '100vh',
+            zIndex: 5,
+          }}
+        />
+      )}
       <Header />
       <div id="page-wrap">
         <Sidebar key={cluster?.name} />

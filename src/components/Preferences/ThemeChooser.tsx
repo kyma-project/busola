@@ -15,6 +15,8 @@ const AVAILABLE_THEMES: Theme[] = [
   'sap_horizon_dark',
   'sap_horizon_hcw',
   'sap_horizon_hcb',
+  'snow_fall',
+  'snow_fall_dark',
 ];
 
 export default function ThemeChooser() {

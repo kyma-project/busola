@@ -1241,6 +1241,12 @@ settings:
       light_dark:
         description: Automatically matches your system settings
         title: Light / Dark
+      snow_fall:
+        description: Use to feel the magic of a snowy winter
+        title: Snowfall
+      snow_fall_dark:
+        description: Use to feel the magic of a snowy winter night
+        title: Snowfall dark
     title: Interface
   language: Language
   other:
