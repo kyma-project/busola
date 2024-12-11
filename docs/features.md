@@ -56,7 +56,7 @@ EXTENSIBILITY:
   isEnabled: true
 ```
 
-- **EXTENSIBILITY_CUSTOM_COMPONENTS** - is used to indicate whether entirely custom extensions can be added to Busola. An example for a custom extension can be found [here](../examples/custom-extension/README.md).
+- **EXTENSIBILITY_CUSTOM_COMPONENTS** - is used to indicate whether entirely custom extensions can be added to Busola. See [this example](../examples/custom-extension/README.md).
 
 Default settings:
 
