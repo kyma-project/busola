@@ -39,5 +39,10 @@
   },
   "node": {
     "child_process": false
+  },
+  "overrides": {
+    "express": {
+      "path-to-regexp": "0.1.12"
+    }
   }
 }
