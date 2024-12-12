@@ -136,16 +136,13 @@ const ColumnWrapper = ({
     detailsMidColumn = detailsComponent;
   }
 
-  const { schema, loading } = useGetSchema({
+  const { schema } = useGetSchema({
     resource: {
       group: props?.apiGroup,
       version: props.apiVersion,
       kind: props?.resourceType.slice(0, -1),
     },
   });
-  if (loading) {
-    return null;
-  }
 
   const createMidColumn = (
     <ResourceCreate
@@ -170,7 +167,7 @@ const ColumnWrapper = ({
   );
 
   return (
-    <SchemaContext.Provider value={schema}>
+    <SchemaContext.Provider value={schema || null}>
       <FlexibleColumnLayout
         style={{ height: '100%' }}
         layout={layoutState?.layout || 'OneColumn'}
