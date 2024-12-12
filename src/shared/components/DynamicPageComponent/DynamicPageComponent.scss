@@ -1,15 +1,14 @@
 .page-header {
   background-color: var(--sapBackgroundColor);
 
-  &.no-tabs {
-    ui5-tabcontainer {
-      display: none;
-    }
+  .no-shadow {
+    box-shadow: none;
   }
 
   ui5-dynamic-page-title {
     justify-content: center;
     min-height: 3rem;
+    padding-left: 2rem;
   }
 
   .bold-title {
@@ -31,10 +30,6 @@
 
   &::-webkit-scrollbar {
     display: none;
-  }
-
-  [data-component-name='ObjectPageTitleMiddleSection'] > div {
-    flex-basis: 100%;
   }
 
   &__actions {
@@ -105,18 +100,10 @@
   }
 }
 
-ui5-button[data-component-name='ObjectPageAnchorBarExpandBtn'] {
-  display: none;
-}
-
 @media (max-width: 768px) {
   .column-wrapper {
     display: flex;
     flex-direction: column;
     gap: 12px;
   }
-}
-
-[data-component-name='ObjectPageContent'] {
-  padding: 0 !important;
 }

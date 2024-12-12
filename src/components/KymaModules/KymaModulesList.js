@@ -8,7 +8,7 @@ import {
   FlexBox,
   Text,
   Tag,
-  ObjectPageHeader,
+  DynamicPageHeader,
 } from '@ui5/webcomponents-react';
 
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
@@ -421,7 +421,7 @@ export default function KymaModulesList({
       layoutNumber="StartColumn"
       windowTitle={t('kyma-modules.title')}
       headerContent={
-        <ObjectPageHeader>
+        <DynamicPageHeader>
           <FlexBox alignItems="Center">
             <Label showColon>{t('kyma-modules.release-channel')}</Label>
             <Text renderWhitespace={true}> </Text>
@@ -434,7 +434,7 @@ export default function KymaModulesList({
               ariaTitle={t('kyma-modules.release-channel')}
             />
           </FlexBox>
-        </ObjectPageHeader>
+        </DynamicPageHeader>
       }
       customComponents={[ModulesList]}
       apiGroup={apiGroup}
