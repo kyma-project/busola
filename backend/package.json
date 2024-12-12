@@ -16,7 +16,7 @@
     "@babel/runtime": "^7.13.10",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
-    "express": "^4.21.0",
+    "express": "^4.21.2",
     "https": "^1.0.0",
     "jose": "^5.2.4",
     "js-yaml": "^4.1.0",
@@ -39,11 +39,5 @@
   },
   "node": {
     "child_process": false
-  },
-  "overrides": {
-    "express": {
-      "path-to-regexp": "0.1.12",
-      "cookie": "0.7.0"
-    }
   }
 }
