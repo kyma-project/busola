@@ -4,11 +4,8 @@ import {
   FlexBox,
   DynamicPage,
   DynamicPageHeader,
-  ObjectPageSection,
   DynamicPageTitle,
   Title,
-  SegmentedButton,
-  SegmentedButtonItem,
   TabContainer,
   Tab,
 } from '@ui5/webcomponents-react';
@@ -83,8 +80,7 @@ export const DynamicPageComponent = ({
             ?.clientHeight ?? 0),
       );
     });
-    // eslint-disable-line react-hooks/exhaustive-deps
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleColumnClose = () => {
     window.history.pushState(
@@ -222,6 +218,7 @@ export const DynamicPageComponent = ({
 
   const headerTitle = (
     <DynamicPageTitle
+      className={inlineEditForm ? 'no-shadow' : ''}
       style={title === 'Clusters Overview' ? { display: 'none' } : null}
       heading={
         <FlexBox className="title-container" alignItems="Center">
@@ -266,7 +263,7 @@ export const DynamicPageComponent = ({
     return (
       <DynamicPage
         mode="IconTabBar"
-        className={`page-header ${className} no-shadow`}
+        className={`page-header ${className}`}
         headerPinned
         hidePinButton={true}
         titleArea={headerTitle}
@@ -301,8 +298,11 @@ export const DynamicPageComponent = ({
             setSelectedSectionIdState(mode);
           }}
         >
-          <Tab data-mode="view" text="View"></Tab>
-          <Tab data-mode="edit" text="Edit"></Tab>
+          <Tab data-mode="view" text={t('common.tabs.view')}></Tab>
+          <Tab
+            data-mode="edit"
+            text={showYamlTab ? t('common.tabs.yaml') : t('common.tabs.edit')}
+          ></Tab>
         </TabContainer>
 
         {selectedSectionIdState === 'view' && content}
