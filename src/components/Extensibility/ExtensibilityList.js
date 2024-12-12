@@ -162,7 +162,17 @@ const ExtensibilityList = ({ overrideResMetadata, ...props }) => {
     ) {
       const script = document.createElement('script');
       script.type = 'module';
-      script.textContent = customScript;
+      const scriptBlob = new Blob([customScript], {
+        type: 'application/javascript',
+      });
+      const blobURL = URL.createObjectURL(scriptBlob);
+      script.src = blobURL;
+
+      // Clean up the Blob URL after the script loads
+      script.onload = () => {
+        URL.revokeObjectURL(blobURL);
+      };
+
       script.onerror = e => {
         console.error('Script loading or execution error:', e);
       };
