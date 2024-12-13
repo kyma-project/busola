@@ -302,6 +302,23 @@ export const DynamicPageComponent = ({
       </DynamicPageHeader>
     ) : null;
 
+  const handlePageRef = dynamicPage => {
+    if (dynamicPageRef) {
+      if (typeof dynamicPageRef === 'function') {
+        dynamicPageRef(dynamicPage);
+      } else if (dynamicPageRef.current !== undefined) {
+        dynamicPageRef.current = dynamicPage;
+      }
+    }
+
+    const button = dynamicPage?.shadowRoot?.querySelector(
+      'ui5-dynamic-page-header-actions',
+    );
+    if (button) {
+      button.style['display'] = 'none';
+    }
+  };
+
   if (inlineEditForm) {
     return (
       <DynamicPage
@@ -334,22 +351,7 @@ export const DynamicPageComponent = ({
             setIsFormOpen({ formOpen: true });
           }
         }}
-        ref={dynamicPage => {
-          if (dynamicPageRef) {
-            if (typeof dynamicPageRef === 'function') {
-              dynamicPageRef(dynamicPage);
-            } else if (dynamicPageRef.current !== undefined) {
-              dynamicPageRef.current = dynamicPage;
-            }
-          }
-
-          const button = dynamicPage?.shadowRoot?.querySelector(
-            'ui5-dynamic-page-header-actions',
-          );
-          if (button) {
-            button.style['display'] = 'none';
-          }
-        }}
+        ref={dynamicPage => handlePageRef(dynamicPage)}
       >
         <TabContainer
           className="tab-container"
@@ -382,7 +384,7 @@ export const DynamicPageComponent = ({
       titleArea={headerTitle}
       headerArea={headerContent}
       footerArea={footer}
-      ref={dynamicPageRef}
+      ref={dynamicPage => handlePageRef(dynamicPage)}
     >
       {typeof content === 'function' ? content(headerHeight) : content}
     </DynamicPage>
