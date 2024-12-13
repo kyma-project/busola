@@ -12,13 +12,13 @@ on:
 jobs:
   run-unit-test:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
     steps:
       - uses: gardenlinux/workflow-telemetry-action@v2
         with:
           comment_on_pr: false
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - uses: ./.github/actions/rebase
       - uses: actions/setup-node@v4
         with:
           node-version: 20
