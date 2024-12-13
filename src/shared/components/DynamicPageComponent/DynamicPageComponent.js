@@ -14,7 +14,7 @@ import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/T
 import { ToolbarSeparator } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSeparator/index.js';
 
 import './DynamicPageComponent.scss';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
@@ -22,6 +22,62 @@ import { HintButton } from '../DescriptionHint/DescriptionHint';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
+
+const useGetHeaderHeight = (dynamicPageRef, tabContainerRef) => {
+  const [headerHeight, setHeaderHeight] = useState(undefined);
+  const [tabContainerHeight, setTabContainerHeight] = useState(undefined);
+
+  useEffect(() => {
+    const headerObserver = new ResizeObserver(([header]) => {
+      setHeaderHeight(header.contentRect.height);
+    });
+
+    const tabContainerObserver = new ResizeObserver(([tabContainer]) => {
+      setTabContainerHeight(tabContainer.contentRect.height);
+    });
+
+    if (dynamicPageRef.current) {
+      // Wait for the custom element to be defined
+      void customElements.whenDefined('ui5-dynamic-page').then(() => {
+        const shadowRoot = dynamicPageRef.current?.shadowRoot;
+
+        if (!shadowRoot) {
+          return;
+        }
+
+        // Wait for the shadowRoot to be populated
+        const shadowRootObserver = new MutationObserver(() => {
+          const header = shadowRoot.querySelector('header');
+
+          if (header) {
+            headerObserver.observe(header);
+            shadowRootObserver.disconnect();
+          }
+        });
+
+        if (shadowRoot.childElementCount > 0) {
+          const header = shadowRoot.querySelector('header');
+          if (header) {
+            headerObserver.observe(header);
+          }
+        } else if (shadowRoot instanceof Node) {
+          shadowRootObserver.observe(shadowRoot, { childList: true });
+        }
+      });
+    }
+
+    if (tabContainerRef.current) {
+      tabContainerObserver.observe(tabContainerRef.current);
+    }
+
+    return () => {
+      headerObserver.disconnect();
+      tabContainerObserver.disconnect();
+    };
+  }, [dynamicPageRef, tabContainerRef]);
+
+  return { headerHeight, tabContainerHeight };
+};
 
 const Column = ({ title, children, columnSpan, image, style = {} }) => {
   const styleComputed = { gridColumn: columnSpan, ...style };
@@ -62,25 +118,12 @@ export const DynamicPageComponent = ({
   const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
   const [selectedSectionIdState, setSelectedSectionIdState] = useState('view');
 
-  const [stickyHeaderHeight, setStickyHeaderHeight] = useState(0);
-
-  useEffect(() => {
-    const pageCompClassName = `.page-header${className ? `.${className}` : ''}`;
-    setTimeout(() => {
-      setStickyHeaderHeight(
-        (document.querySelector(pageCompClassName)?.querySelector('header')
-          ?.clientHeight ?? 0) +
-          (document
-            .querySelector(pageCompClassName)
-            ?.querySelector('[data-component-name="ObjectPageTabContainer"]')
-            ?.clientHeight ?? 0) +
-          (document
-            .querySelector(pageCompClassName)
-            ?.querySelector('[data-component-name="DynamicPageHeader"]')
-            ?.clientHeight ?? 0),
-      );
-    });
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const dynamicPageRef = useRef(null);
+  const tabContainerRef = useRef(null);
+  const { headerHeight, tabContainerHeight } = useGetHeaderHeight(
+    dynamicPageRef,
+    tabContainerRef,
+  );
 
   const handleColumnClose = () => {
     window.history.pushState(
@@ -291,8 +334,27 @@ export const DynamicPageComponent = ({
             setIsFormOpen({ formOpen: true });
           }
         }}
+        ref={dynamicPage => {
+          if (dynamicPageRef) {
+            if (typeof dynamicPageRef === 'function') {
+              dynamicPageRef(dynamicPage);
+            } else if (dynamicPageRef.current !== undefined) {
+              dynamicPageRef.current = dynamicPage;
+            }
+          }
+
+          const button = dynamicPage?.shadowRoot?.querySelector(
+            'ui5-dynamic-page-header-actions',
+          );
+          if (button) {
+            button.style['display'] = 'none';
+          }
+        }}
       >
         <TabContainer
+          className="tab-container"
+          style={{ top: `${headerHeight}px` }}
+          ref={tabContainerRef}
           onTabSelect={event => {
             const mode = event.detail.tab.getAttribute('data-mode');
             setSelectedSectionIdState(mode);
@@ -308,7 +370,7 @@ export const DynamicPageComponent = ({
         {selectedSectionIdState === 'view' && content}
 
         {selectedSectionIdState === 'edit' &&
-          inlineEditForm(stickyHeaderHeight)}
+          inlineEditForm(headerHeight + tabContainerHeight)}
       </DynamicPage>
     );
   }
@@ -320,8 +382,9 @@ export const DynamicPageComponent = ({
       titleArea={headerTitle}
       headerArea={headerContent}
       footerArea={footer}
+      ref={dynamicPageRef}
     >
-      {typeof content === 'function' ? content(stickyHeaderHeight) : content}
+      {typeof content === 'function' ? content(headerHeight) : content}
     </DynamicPage>
   );
 };

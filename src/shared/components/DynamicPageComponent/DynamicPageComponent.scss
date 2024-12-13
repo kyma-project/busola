@@ -1,10 +1,6 @@
 .page-header {
   background-color: var(--sapBackgroundColor);
 
-  .no-shadow {
-    box-shadow: none;
-  }
-
   ui5-dynamic-page-title {
     justify-content: center;
     min-height: 3rem;
@@ -57,6 +53,17 @@
   &::part(fit-content) {
     position: static;
     padding: unset;
+  }
+
+  .tab-container {
+    position: sticky;
+    z-index: 1;
+  }
+}
+
+ui5-dynamic-page {
+  .no-shadow {
+    box-shadow: none;
   }
 }
 
