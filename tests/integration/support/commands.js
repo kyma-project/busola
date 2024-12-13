@@ -61,6 +61,7 @@ Cypress.Commands.add('filterWithNoValue', { prevSubject: true }, $elements =>
 Cypress.Commands.add('goToNamespaceDetails', () => {
   // Go to the details of namespace
   cy.getLeftNav()
+    .find('ui5-side-navigation-item')
     .contains('Namespaces')
     .click();
 
