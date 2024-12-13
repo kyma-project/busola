@@ -123,6 +123,7 @@ context('Test app settings and preferences', () => {
       .click();
 
     cy.getLeftNav()
+      .find('ui5-side-navigation-item')
       .contains('Namespaces')
       .click();
 
