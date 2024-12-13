@@ -92,6 +92,7 @@ context('Test Custom Resources', () => {
   });
 
   it('Test column layout and remove CRD', () => {
+    cy.reload();
     cy.getLeftNav()
       .contains('Custom Resources')
       .click();
