@@ -72,36 +72,34 @@ function HelmReleasesList() {
   ];
 
   return (
-    <>
-      <ResourcesList
-        resources={entries}
-        customColumns={customColumns}
-        serverDataLoading={loading}
-        serverDataError={error}
-        allowSlashShortcut
-        hasDetailsView
-        enableColumnLayout
-        customUrl={resourceUrl}
-        resourceUrl={dataUrl}
-        resourceType="HelmReleases"
-        sortBy={{
-          name: (a, b) => a.releaseName.localeCompare(b.releaseName),
-        }}
-        searchSettings={{
-          textSearchProperties: [
-            'recentRelease.chart.metadata.name',
-            'releaseName',
-          ],
-        }}
-        emptyListProps={{
-          subtitleText: ResourceDescription,
-          url: docsURL,
-          showButton: false,
-        }}
-        readOnly
-        description={ResourceDescription}
-      />
-    </>
+    <ResourcesList
+      resources={entries}
+      customColumns={customColumns}
+      serverDataLoading={loading}
+      serverDataError={error}
+      allowSlashShortcut
+      hasDetailsView
+      enableColumnLayout
+      customUrl={resourceUrl}
+      resourceUrl={dataUrl}
+      resourceType="HelmReleases"
+      sortBy={{
+        name: (a, b) => a.releaseName.localeCompare(b.releaseName),
+      }}
+      searchSettings={{
+        textSearchProperties: [
+          'recentRelease.chart.metadata.name',
+          'releaseName',
+        ],
+      }}
+      emptyListProps={{
+        subtitleText: ResourceDescription,
+        url: docsURL,
+        showButton: false,
+      }}
+      readOnly
+      description={ResourceDescription}
+    />
   );
 }
 

@@ -25,7 +25,14 @@ export default function KymaModulesAddModule({
 
   const modulesResourceUrl = `/apis/operator.kyma-project.io/v1beta2/moduletemplates`;
 
+  const modulesReleaseMetaResourceUrl = `/apis/operator.kyma-project.io/v1beta2/modulereleasemetas`;
+
   const { data: modules } = useGet(modulesResourceUrl, {
+    pollingInterval: 3000,
+    skip: !resourceName,
+  });
+
+  const { data: moduleReleaseMetas } = useGet(modulesReleaseMetaResourceUrl, {
     pollingInterval: 3000,
     skip: !resourceName,
   });
@@ -77,29 +84,65 @@ export default function KymaModulesAddModule({
     const isAlreadyInstalled = initialUnchangedResource?.spec?.modules?.find(
       installedModule => installedModule.name === name,
     );
+    const moduleMetaRelase = moduleReleaseMetas?.items.find(
+      item => item.spec.moduleName === name,
+    );
 
-    if (!existingModule && !isAlreadyInstalled) {
-      acc.push({
-        name: name,
-        channels: [
-          {
-            channel: module.spec.channel,
-            version: module.spec.descriptor.component.version,
-            isBeta:
-              module.metadata.labels['operator.kyma-project.io/beta'] ===
-              'true',
-          },
-        ],
-        docsUrl:
-          module.metadata.annotations['operator.kyma-project.io/doc-url'],
-      });
-    } else if (existingModule) {
-      existingModule.channels?.push({
-        channel: module.spec.channel,
-        version: module.spec.descriptor.component.version,
-        isBeta:
-          module.metadata.labels['operator.kyma-project.io/beta'] === 'true',
-      });
+    if (module.spec.channel) {
+      if (!existingModule && !isAlreadyInstalled) {
+        acc.push({
+          name: name,
+          channels: [
+            {
+              channel: module.spec.channel,
+              version: module.spec.descriptor.component.version,
+              isBeta:
+                module.metadata.labels['operator.kyma-project.io/beta'] ===
+                'true',
+            },
+          ],
+          docsUrl:
+            module.metadata.annotations['operator.kyma-project.io/doc-url'],
+        });
+      } else if (existingModule) {
+        existingModule.channels?.push({
+          channel: module.spec.channel,
+          version: module.spec.descriptor.component.version,
+          isBeta:
+            module.metadata.labels['operator.kyma-project.io/beta'] === 'true',
+        });
+      }
+    } else {
+      if (!existingModule && !isAlreadyInstalled) {
+        moduleMetaRelase?.spec.channels.forEach(channel => {
+          if (!acc.find(item => item.name === name)) {
+            acc.push({
+              name: name,
+              channels: [
+                {
+                  channel: channel.channel,
+                  version: channel.version,
+                  isBeta:
+                    module.metadata.labels['operator.kyma-project.io/beta'] ===
+                    'true',
+                },
+              ],
+              docsUrl:
+                module.metadata.annotations['operator.kyma-project.io/doc-url'],
+            });
+          } else {
+            acc
+              .find(item => item.name === name)
+              .channels.push({
+                channel: channel.channel,
+                version: channel.version,
+                isBeta:
+                  module.metadata.labels['operator.kyma-project.io/beta'] ===
+                  'true',
+              });
+          }
+        });
+      }
     }
 
     return acc ?? [];
