@@ -52,11 +52,11 @@ context('Test Cluster Role Bindings', () => {
     cy.clickGenericListLink(CRB_NAME);
 
     cy.getMidColumn()
-      .contains('User')
+      .contains('ui5-table-cell', 'User')
       .should('be.visible');
 
     cy.getMidColumn()
-      .contains(USER_NAME)
+      .contains('ui5-table-cell', USER_NAME)
       .should('be.visible');
 
     cy.getMidColumn()

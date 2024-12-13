@@ -1,22 +1,20 @@
 import PropTypes from 'prop-types';
 import {
   Button,
-  DynamicPage,
   FlexBox,
-  ObjectPage,
-  ObjectPageHeader,
-  ObjectPageSection,
-  ObjectPageTitle,
+  DynamicPage,
   DynamicPageHeader,
   DynamicPageTitle,
   Title,
+  TabContainer,
+  Tab,
 } from '@ui5/webcomponents-react';
 import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
 import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
 import { ToolbarSeparator } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSeparator/index.js';
 
 import './DynamicPageComponent.scss';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
@@ -25,14 +23,21 @@ import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
 
-const useGetHeaderHeight = dynamicPageRef => {
+const useGetHeaderHeight = (dynamicPageRef, tabContainerRef) => {
   const [headerHeight, setHeaderHeight] = useState(undefined);
+  const [tabContainerHeight, setTabContainerHeight] = useState(undefined);
+
   useEffect(() => {
     const headerObserver = new ResizeObserver(([header]) => {
       setHeaderHeight(header.contentRect.height);
     });
+
+    const tabContainerObserver = new ResizeObserver(([tabContainer]) => {
+      setTabContainerHeight(tabContainer.contentRect.height);
+    });
+
     if (dynamicPageRef.current) {
-      // wait for the custom element to be defined (adjust the tag-name if you're using the scoping feature)
+      // Wait for the custom element to be defined
       void customElements.whenDefined('ui5-dynamic-page').then(() => {
         const shadowRoot = dynamicPageRef.current?.shadowRoot;
 
@@ -40,12 +45,13 @@ const useGetHeaderHeight = dynamicPageRef => {
           return;
         }
 
-        // wait for the shadowRoot to be populated
+        // Wait for the shadowRoot to be populated
         const shadowRootObserver = new MutationObserver(() => {
           const header = shadowRoot.querySelector('header');
+
           if (header) {
-            shadowRootObserver.disconnect();
             headerObserver.observe(header);
+            shadowRootObserver.disconnect();
           }
         });
 
@@ -53,21 +59,24 @@ const useGetHeaderHeight = dynamicPageRef => {
           const header = shadowRoot.querySelector('header');
           if (header) {
             headerObserver.observe(header);
-          } else {
-            return;
           }
         } else if (shadowRoot instanceof Node) {
           shadowRootObserver.observe(shadowRoot, { childList: true });
-        } else {
-          return;
         }
       });
     }
+
+    if (tabContainerRef.current) {
+      tabContainerObserver.observe(tabContainerRef.current);
+    }
+
     return () => {
       headerObserver.disconnect();
+      tabContainerObserver.disconnect();
     };
-  }, [dynamicPageRef]);
-  return headerHeight;
+  }, [dynamicPageRef, tabContainerRef]);
+
+  return { headerHeight, tabContainerHeight };
 };
 
 const Column = ({ title, children, columnSpan, image, style = {} }) => {
@@ -110,7 +119,11 @@ export const DynamicPageComponent = ({
   const [selectedSectionIdState, setSelectedSectionIdState] = useState('view');
 
   const dynamicPageRef = useRef(null);
-  const headerHeight = useGetHeaderHeight(dynamicPageRef);
+  const tabContainerRef = useRef(null);
+  const { headerHeight, tabContainerHeight } = useGetHeaderHeight(
+    dynamicPageRef,
+    tabContainerRef,
+  );
 
   const handleColumnClose = () => {
     window.history.pushState(
@@ -246,44 +259,13 @@ export const DynamicPageComponent = ({
     </Toolbar>
   );
 
-  const headerTitle = inlineEditForm ? (
-    <ObjectPageTitle
-      style={title === 'Clusters Overview' ? { display: 'none' } : null}
-      header={
-        <FlexBox className="title-container" alignItems="Center">
-          <Title
-            level="H3"
-            size="H3"
-            className="bold-title"
-            wrappingType="None"
-          >
-            {title}
-          </Title>
-          {protectedResource && (
-            <span className="sap-margin-begin-tiny">
-              {protectedResourceWarning}
-            </span>
-          )}
-          {description && (
-            <HintButton
-              className="sap-margin-tiny"
-              setShowTitleDescription={setShowTitleDescription}
-              showTitleDescription={showTitleDescription}
-              description={description}
-              ariaTitle={title}
-            />
-          )}
-        </FlexBox>
-      }
-      actionsBar={actionsBar}
-    />
-  ) : (
+  const headerTitle = (
     <DynamicPageTitle
+      className={inlineEditForm ? 'no-shadow' : ''}
       style={title === 'Clusters Overview' ? { display: 'none' } : null}
       heading={
         <FlexBox className="title-container" alignItems="Center">
           <Title
-            style={{ fontSize: 'var(--sapObjectHeader_Title_FontSize)' }}
             level="H3"
             size="H3"
             className="bold-title"
@@ -313,38 +295,33 @@ export const DynamicPageComponent = ({
 
   const headerContent =
     title !== 'Clusters Overview' && children ? (
-      inlineEditForm ? (
-        <ObjectPageHeader className="header-wrapper">
-          <section className={`column-wrapper ${columnWrapperClassName || ''}`}>
-            {children}
-          </section>
-        </ObjectPageHeader>
-      ) : (
-        <DynamicPageHeader className="header-wrapper">
-          <section className={`column-wrapper ${columnWrapperClassName || ''}`}>
-            {children}
-          </section>
-        </DynamicPageHeader>
-      )
+      <DynamicPageHeader className="header-wrapper">
+        <section className={`column-wrapper ${columnWrapperClassName || ''}`}>
+          {children}
+        </section>
+      </DynamicPageHeader>
     ) : null;
 
-  const [stickyHeaderHeight, setStickyHeaderHeight] = useState(0);
+  const handlePageRef = dynamicPage => {
+    if (dynamicPageRef) {
+      if (typeof dynamicPageRef === 'function') {
+        dynamicPageRef(dynamicPage);
+      } else if (dynamicPageRef.current !== undefined) {
+        dynamicPageRef.current = dynamicPage;
+      }
+    }
 
-  useEffect(() => {
-    setTimeout(() => {
-      setStickyHeaderHeight(
-        (document.querySelector('.page-header')?.querySelector('header')
-          ?.clientHeight ?? 0) +
-          (document
-            .querySelector('.page-header')
-            ?.querySelector('ui5-tabcontainer')?.clientHeight ?? 0),
-      );
-    });
-  }, []);
+    const button = dynamicPage?.shadowRoot?.querySelector(
+      'ui5-dynamic-page-header-actions',
+    );
+    if (button) {
+      button.style['display'] = 'none';
+    }
+  };
 
   if (inlineEditForm) {
     return (
-      <ObjectPage
+      <DynamicPage
         mode="IconTabBar"
         className={`page-header ${className}`}
         headerPinned
@@ -352,7 +329,7 @@ export const DynamicPageComponent = ({
         titleArea={headerTitle}
         headerArea={customHeaderContent ?? headerContent}
         selectedSectionId={selectedSectionIdState}
-        onBeforeNavigate={e => {
+        onSelectedSectionChange={e => {
           if (isFormOpen.formOpen) {
             e.preventDefault();
           }
@@ -363,37 +340,40 @@ export const DynamicPageComponent = ({
             isFormOpen,
             setIsFormOpen,
             () => {
-              setSelectedSectionIdState(e.detail.sectionId);
+              setSelectedSectionIdState(e.detail.selectedSectionId);
               setIsResourceEdited({
                 isEdited: false,
               });
             },
           );
 
-          if (e.detail.sectionId === 'edit') {
+          if (e.detail.selectedSectionI === 'edit') {
             setIsFormOpen({ formOpen: true });
           }
         }}
+        ref={dynamicPage => handlePageRef(dynamicPage)}
       >
-        <ObjectPageSection
-          aria-label="View"
-          hideTitleText
-          id="view"
-          titleText={t('common.tabs.view')}
+        <TabContainer
+          className="tab-container"
+          style={{ top: `${headerHeight}px` }}
+          ref={tabContainerRef}
+          onTabSelect={event => {
+            const mode = event.detail.tab.getAttribute('data-mode');
+            setSelectedSectionIdState(mode);
+          }}
         >
-          {content}
-        </ObjectPageSection>
-        <ObjectPageSection
-          aria-label="Edit"
-          hideTitleText
-          id="edit"
-          titleText={
-            showYamlTab ? t('common.tabs.yaml') : t('common.tabs.edit')
-          }
-        >
-          {inlineEditForm(stickyHeaderHeight)}
-        </ObjectPageSection>
-      </ObjectPage>
+          <Tab data-mode="view" text={t('common.tabs.view')}></Tab>
+          <Tab
+            data-mode="edit"
+            text={showYamlTab ? t('common.tabs.yaml') : t('common.tabs.edit')}
+          ></Tab>
+        </TabContainer>
+
+        {selectedSectionIdState === 'view' && content}
+
+        {selectedSectionIdState === 'edit' &&
+          inlineEditForm(headerHeight + tabContainerHeight)}
+      </DynamicPage>
     );
   }
 
@@ -404,7 +384,7 @@ export const DynamicPageComponent = ({
       titleArea={headerTitle}
       headerArea={headerContent}
       footerArea={footer}
-      ref={dynamicPageRef}
+      ref={dynamicPage => handlePageRef(dynamicPage)}
     >
       {typeof content === 'function' ? content(headerHeight) : content}
     </DynamicPage>
