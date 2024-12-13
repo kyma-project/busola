@@ -1,6 +1,5 @@
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
-import { useEffect } from 'react';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { usePrepareListProps } from 'resources/helpers';
@@ -23,9 +22,6 @@ import { sortBy } from './helpers/sortBy';
 import { Widget } from './components/Widget';
 import { DataSourcesContextProvider } from './contexts/DataSources';
 import { useJsonata } from './hooks/useJsonata';
-import { useFeature } from 'hooks/useFeature';
-import { createPortal } from 'react-dom';
-import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 
 export const ExtensibilityListCore = ({
   resMetaData,
@@ -144,43 +140,6 @@ const ExtensibilityList = ({ overrideResMetadata, ...props }) => {
   const defaultResMetadata = useGetCRbyPath();
   const resMetaData = overrideResMetadata || defaultResMetadata;
   const { urlPath, defaultPlaceholder } = resMetaData?.general ?? {};
-  const { isEnabled: isExtensibilityCustomComponentsEnabled } = useFeature(
-    'EXTENSIBILITY_CUSTOM_COMPONENTS',
-  );
-
-  useEffect(() => {
-    const customElement = resMetaData?.general?.customElement;
-    const customScript = resMetaData?.customScript;
-
-    if (
-      isExtensibilityCustomComponentsEnabled &&
-      customElement &&
-      customScript &&
-      !customElements.get(customElement)
-    ) {
-      const script = document.createElement('script');
-      script.type = 'module';
-      const scriptBlob = new Blob([customScript], {
-        type: 'application/javascript',
-      });
-      const blobURL = URL.createObjectURL(scriptBlob);
-      script.src = blobURL;
-
-      // Clean up the Blob URL after the script loads
-      script.onload = () => {
-        URL.revokeObjectURL(blobURL);
-      };
-
-      script.onerror = e => {
-        console.error('Script loading or execution error:', e);
-      };
-      document.head.appendChild(script);
-
-      return () => {
-        document.head.removeChild(script);
-      };
-    }
-  }, [resMetaData, isExtensibilityCustomComponentsEnabled]);
 
   return (
     <TranslationBundleContext.Provider
@@ -191,16 +150,7 @@ const ExtensibilityList = ({ overrideResMetadata, ...props }) => {
     >
       <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
         <ExtensibilityErrBoundary key={urlPath}>
-          {isExtensibilityCustomComponentsEnabled && resMetaData.customHtml ? (
-            <>
-              <div
-                dangerouslySetInnerHTML={{ __html: resMetaData.customHtml }}
-              ></div>
-              {createPortal(<YamlUploadDialog />, document.body)}
-            </>
-          ) : (
-            <ExtensibilityListCore resMetaData={resMetaData} {...props} />
-          )}
+          <ExtensibilityListCore resMetaData={resMetaData} {...props} />
         </ExtensibilityErrBoundary>
       </DataSourcesContextProvider>
     </TranslationBundleContext.Provider>

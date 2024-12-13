@@ -45,8 +45,6 @@ type ConfigMapData = {
   dataSources: string;
   translations: string;
   presets: string;
-  customScript: string;
-  customHtml: string;
 };
 
 type ConfigMapResponse = K8sResource & {
@@ -62,10 +60,6 @@ type ConfigMapListResponse =
       items: ConfigMapResponse[];
     }
   | undefined;
-
-interface ExtensionProps {
-  kymaFetchFn: (url: string, options?: any) => Promise<Response>;
-}
 
 const isTheSameNameAndUrl = (
   firstCM: Partial<ExtResource>,
@@ -294,7 +288,6 @@ const getExtensions = async (
   kubeconfigNamespace = 'kube-public',
   currentNamespace: string,
   permissionSet: PermissionSetState,
-  extCustomComponentsEnabled: boolean,
 ) => {
   if (!fetchFn) {
     return null;
@@ -331,12 +324,6 @@ const getExtensions = async (
           ) as ExtResource,
         };
 
-        if (extCustomComponentsEnabled) {
-          extResourceWithMetadata.data.customHtml =
-            currentConfigMap.data.customHtml || '';
-          extResourceWithMetadata.data.customScript =
-            currentConfigMap.data.customScript || '';
-        }
         if (!extResourceWithMetadata.data) return accumulator;
 
         const indexOfTheSameExtension = accumulator.findIndex(ext =>
@@ -419,42 +406,9 @@ export const useGetExtensions = () => {
   const { isEnabled: isExtensibilityWizardEnabled } = useFeature(
     'EXTENSIBILITY_WIZARD',
   );
-  const { isEnabled: isExtensibilityCustomComponentsEnabled } = useFeature(
-    'EXTENSIBILITY_CUSTOM_COMPONENTS',
-  );
   const { data: crds } = useGet(
     `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`,
   );
-
-  useEffect(() => {
-    if (isExtensibilityCustomComponentsEnabled) {
-      // Wrap busola fetch function to be able to use it in the extensions as regular fetch.
-      // It reduces the learning curve for the extension developers and introduces loose coupling between Busola and the extensions.
-      function asRegularFetch(busolaFetch: FetchFn, url: string, options: any) {
-        return busolaFetch({
-          relativeUrl: url,
-          init: options,
-          abortController: options?.signal
-            ? { signal: options?.signal, abort: () => {} }
-            : undefined,
-        });
-      }
-
-      if (fetchFn) {
-        (window as Window & {
-          extensionProps?: ExtensionProps;
-        }).extensionProps = {
-          kymaFetchFn: (url: string, options: any) =>
-            asRegularFetch(fetchFn, url, options),
-        };
-      }
-    }
-
-    return () => {
-      delete (window as Window & { extensionProps?: ExtensionProps })
-        .extensionProps;
-    };
-  }, [fetchFn, auth, isExtensibilityCustomComponentsEnabled]);
 
   useEffect(() => {
     (crds as any)?.items.forEach((crd: CustomResourceDefinition) => {
@@ -479,7 +433,6 @@ export const useGetExtensions = () => {
         cluster.currentContext.namespace || 'kube-public',
         namespace,
         permissionSet,
-        isExtensibilityCustomComponentsEnabled ?? false,
       );
 
       const statics = await getStatics(

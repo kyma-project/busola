@@ -112,7 +112,7 @@ const ColumnWraper = (defaultColumn = 'list') => {
   let startColumnComponent = null;
 
   const headerActions = (
-    <div>
+    <>
       <Button onClick={() => handleResourceDelete({})} design="Transparent">
         {t('common.buttons.delete-module')}
       </Button>
@@ -139,7 +139,7 @@ const ColumnWraper = (defaultColumn = 'list') => {
         />,
         document.body,
       )}
-    </div>
+    </>
   );
 
   if (!layout && defaultColumn === 'details') {

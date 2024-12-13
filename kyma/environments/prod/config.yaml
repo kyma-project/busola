@@ -68,8 +68,6 @@ config:
       isEnabled: true
     EXTENSIBILITY_INJECTIONS:
       isEnabled: true
-    EXTENSIBILITY_CUSTOM_COMPONENTS:
-      isEnabled: false
     EXTENSIBILITY_WIZARD:
       isEnabled: true
     EVENTING:

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import {
   getBytes,
@@ -22,30 +22,27 @@ const formatMemory = memoryStr =>
 const createUsageMetrics = (node, metricsForNode) => {
   const cpuUsage = formatCpu(metricsForNode?.usage.cpu);
   const memoryUsage = formatMemory(metricsForNode?.usage.memory);
-  const cpuCapacity = parseInt(node.status.allocatable?.cpu || '0');
-  const memoryCapacity = formatMemory(node.status.allocatable?.memory);
-
-  const cpuPercentage = getPercentageFromUsage(cpuUsage, cpuCapacity);
-  const memoryPercentage = getPercentageFromUsage(memoryUsage, memoryCapacity);
+  const cpuCapacity = parseInt(node.status.capacity?.cpu || '0') * 1000;
+  const memoryCapacity = formatMemory(node.status.capacity?.memory);
 
   return {
     cpu: {
       usage: cpuUsage,
       capacity: cpuCapacity,
-      percentage: cpuPercentage + '%',
-      percentageValue: cpuPercentage,
+      percentage: getPercentageFromUsage(cpuUsage, cpuCapacity) + '%',
+      percentageValue: getPercentageFromUsage(cpuUsage, cpuCapacity),
     },
     memory: {
       usage: memoryUsage,
       capacity: memoryCapacity,
-      percentage: memoryPercentage + '%',
-      percentageValue: memoryPercentage,
+      percentage: getPercentageFromUsage(memoryUsage, memoryCapacity) + '%',
+      percentageValue: getPercentageFromUsage(memoryUsage, memoryCapacity),
     },
   };
 };
 
 export function useNodesQuery(skip = false) {
-  const [data, setData] = useState(null);
+  const [data, setData] = React.useState(null);
   const { data: nodeMetrics, loading: metricsLoading } = useGet(
     '/apis/metrics.k8s.io/v1beta1/nodes',
     {
@@ -60,7 +57,7 @@ export function useNodesQuery(skip = false) {
     loading: nodesLoading,
   } = useGet('/api/v1/nodes', { pollingInterval: 5500, skip });
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (nodes) {
       const getNodeMetrics = node => {
         const metricsForNode = nodeMetrics.items.find(
@@ -86,7 +83,7 @@ export function useNodesQuery(skip = false) {
 }
 
 export function useNodeQuery(nodeName) {
-  const [data, setData] = useState(null);
+  const [data, setData] = React.useState(null);
   const {
     data: nodeMetrics,
     error: metricsError,
@@ -101,7 +98,7 @@ export function useNodeQuery(nodeName) {
     loading: nodeLoading,
   } = useGet(`/api/v1/nodes/${nodeName}`, { pollingInterval: 3000 });
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (node) {
       setData({
         node,
@@ -155,9 +152,7 @@ function addResources(a, b) {
 
 function sumContainersResources(containers) {
   return containers?.reduce((containerAccu, container) => {
-    const containerResources = container.resources;
-    const updatedResources = addResources(containerAccu, containerResources);
-    return updatedResources;
+    return addResources(containerAccu, container.resources);
   }, structuredClone(emptyResources));
 }
 
@@ -186,14 +181,14 @@ export function calcNodeResources(pods) {
 }
 
 export function useResourceByNode(nodeName) {
-  const [data, setData] = useState(null);
+  const [data, setData] = React.useState(null);
   const { data: pods, error, loading } = useGet(
     `/api/v1/pods?fieldSelector=spec.nodeName=${nodeName},status.phase!=Failed,status.phase!=Succeeded&limit=500`,
   );
 
   const nodeResources = useMemo(() => calcNodeResources(pods), [pods]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (nodeResources) {
       setData(nodeResources);
     }
