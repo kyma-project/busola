@@ -10,9 +10,9 @@ import {
   ShellBarItem,
   StandardListItem,
   ShellBarDomRef,
-  Button,
 } from '@ui5/webcomponents-react';
 import { MenuItemClickEventDetail } from '@ui5/webcomponents/dist/Menu.js';
+import Snowfall from 'react-snowfall';
 
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -33,18 +33,20 @@ import './Header.scss';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
-import Snowfall from 'react-snowfall';
+import { configFeaturesNames } from 'state/types';
 
 export function Header() {
   useAvailableNamespaces();
+  const { isEnabled: isFeedbackEnabled, link: feedbackLink } = useFeature(
+    configFeaturesNames.FEEDBACK,
+  );
+  const { isEnabled: isSnowEnabled } = useFeature(configFeaturesNames.SNOW);
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSnowOpen, setIsSnowOpen] = useState(true);
+  const [isSnowOpen, setIsSnowOpen] = useState(isSnowEnabled);
 
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { isEnabled: isFeedbackEnabled, link: feedbackLink } = useFeature(
-    'FEEDBACK',
-  );
 
   const { githubLink, busolaVersion } = useGetBusolaVersionDetails();
   const legalLinks = useGetLegalLinks();
@@ -128,7 +130,6 @@ export function Header() {
           }}
         />
       )}
-      <Button onClick={() => setIsSnowOpen(!isSnowOpen)}>*</Button>
       <ShellBar
         className="header"
         startButton={
@@ -179,11 +180,14 @@ export function Header() {
         }
         onProfileClick={() => setIsMenuOpen(true)}
       >
-        <ShellBarItem
-          onClick={() => setIsSnowOpen(!isSnowOpen)}
-          text={'Snow'}
-          title={'Snow'}
-        />
+        {isSnowEnabled && (
+          <ShellBarItem
+            onClick={() => setIsSnowOpen(!isSnowOpen)}
+            icon="heating-cooling"
+            text={'Snow'}
+            title={'Snow'}
+          />
+        )}
         {isFeedbackEnabled && (
           <ShellBarItem
             onClick={() => window.open(feedbackLink, '_blank')}
