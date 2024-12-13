@@ -109,9 +109,11 @@ export default function ModulesCard({
                 value={channel.channel}
                 additionalText={channel?.isBeta ? 'Beta' : ''}
               >
-                {`${channel.channel[0].toUpperCase()}${channel.channel.slice(
-                  1,
-                )} (v${channel.version})`}{' '}
+                {`${(
+                  channel?.channel[0] || ''
+                ).toUpperCase()}${channel.channel.slice(1)} (v${
+                  channel.version
+                })`}{' '}
               </Option>
             ))}
           </Select>
