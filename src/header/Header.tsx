@@ -10,6 +10,7 @@ import {
   ShellBarItem,
   StandardListItem,
   ShellBarDomRef,
+  Button,
 } from '@ui5/webcomponents-react';
 import { MenuItemClickEventDetail } from '@ui5/webcomponents/dist/Menu.js';
 
@@ -32,10 +33,12 @@ import './Header.scss';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
+import Snowfall from 'react-snowfall';
 
 export function Header() {
   useAvailableNamespaces();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSnowOpen, setIsSnowOpen] = useState(true);
 
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -118,6 +121,14 @@ export function Header() {
 
   return (
     <>
+      {isSnowOpen && (
+        <Snowfall
+          style={{
+            zIndex: 5,
+          }}
+        />
+      )}
+      <Button onClick={() => setIsSnowOpen(!isSnowOpen)}>*</Button>
       <ShellBar
         className="header"
         startButton={
@@ -168,6 +179,11 @@ export function Header() {
         }
         onProfileClick={() => setIsMenuOpen(true)}
       >
+        <ShellBarItem
+          onClick={() => setIsSnowOpen(!isSnowOpen)}
+          text={'Snow'}
+          title={'Snow'}
+        />
         {isFeedbackEnabled && (
           <ShellBarItem
             onClick={() => window.open(feedbackLink, '_blank')}

@@ -6,9 +6,7 @@ export type Theme =
   | 'sap_horizon'
   | 'sap_horizon_dark'
   | 'sap_horizon_hcw'
-  | 'sap_horizon_hcb'
-  | 'snow_fall'
-  | 'snow_fall_dark';
+  | 'sap_horizon_hcb';
 
 const THEME_STORAGE_KEY = 'busola.theme';
 const DEFAULT_THEME = 'light_dark';
