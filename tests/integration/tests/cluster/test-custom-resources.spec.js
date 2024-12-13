@@ -107,7 +107,6 @@ context('Test Custom Resources', () => {
     cy.get('ui5-input[id="search-input"]:visible')
       .find('input')
       .wait(1000)
-      .clear()
       .type('cypress');
     cy.clickGenericListLink('Tclusters');
 

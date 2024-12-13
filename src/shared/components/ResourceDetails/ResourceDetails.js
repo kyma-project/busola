@@ -208,33 +208,27 @@ function Resource({
       </Suspense>
       {headerActions}
       {resourceHeaderActions.map(resourceAction => resourceAction(resource))}
-      <div>
-        {!disableDelete && (
-          <>
-            <Button
-              disabled={protectedResource}
-              onClick={() => handleResourceDelete({ resourceUrl })}
-              design="Transparent"
-              tooltip={
-                protectedResource
-                  ? t('common.tooltips.protected-resources-info')
-                  : null
-              }
-            >
-              {t('common.buttons.delete')}
-            </Button>
-
-            {createPortal(
-              <DeleteMessageBox
-                resource={resource}
-                resourceUrl={resourceUrl}
-              />,
-              document.body,
-            )}
-          </>
-        )}
-        {createPortal(<YamlUploadDialog />, document.body)}
-      </div>
+      {!disableDelete && (
+        <>
+          <Button
+            disabled={protectedResource}
+            onClick={() => handleResourceDelete({ resourceUrl })}
+            design="Transparent"
+            tooltip={
+              protectedResource
+                ? t('common.tooltips.protected-resources-info')
+                : null
+            }
+          >
+            {t('common.buttons.delete')}
+          </Button>
+          {createPortal(
+            <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />,
+            document.body,
+          )}
+        </>
+      )}
+      {createPortal(<YamlUploadDialog />, document.body)}
     </>
   );
 

@@ -201,7 +201,7 @@ export default function KymaModulesList({
         <>
           {moduleStatus?.channel
             ? moduleStatus?.channel
-            : kymaResource?.spec?.modules?.[moduleIndex]?.channel}
+            : EMPTY_TEXT_PLACEHOLDER}
           {isChannelOverriden ? (
             <Tag
               hideStateIcon

@@ -5,8 +5,6 @@ protecode:
 whitesource:
   language: javascript
   exclude:
-    - 'package-lock.json'
-    - '**/backend/package-lock.json'
     - '**/backend/config/config.yaml'
     - '**/tests/**'
     - '**/kyma/enviroments/**'

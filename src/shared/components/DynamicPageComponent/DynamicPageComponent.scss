@@ -32,15 +32,11 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-  }
 
-  [data-component-name='ObjectPageTitleMiddleSection'] > div {
-    flex-basis: 100%;
-  }
-
-  ui5-button {
-    &:not(:last-of-type) {
-      margin-right: 0.5rem;
+    ui5-button {
+      &:not(:last-of-type) {
+        margin-right: 0.5rem;
+      }
     }
   }
 
@@ -52,18 +48,6 @@
     ui5-button {
       width: fit-content;
     }
-  }
-
-  .separator {
-    display: inline-block;
-    width: 1px;
-    position: absolute;
-    top: 50%;
-    height: 1.5rem;
-    margin-top: -0.75rem;
-    margin-left: 5px;
-    background-color: var(--sapList_BorderColor);
-    border-radius: 5px;
   }
 
   &::part(fit-content) {

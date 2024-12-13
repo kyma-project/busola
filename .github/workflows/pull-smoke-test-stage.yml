@@ -15,13 +15,13 @@ on:
 jobs:
   run-smoke-test-stage:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == false
     steps:
       - uses: gardenlinux/workflow-telemetry-action@v2
         with:
           comment_on_pr: false
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/rebase
+        with:
+          fetch-depth: 0
       - name: Install k3d
         env:
           K3D_URL: https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh
