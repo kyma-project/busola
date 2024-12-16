@@ -37,11 +37,11 @@ context('Test Kyma Modules views', () => {
       .find('ui5-title', 'No modules')
       .should('be.visible');
 
-    cy.get('div[data-component-name="DynamicPageHeaderContainer"]')
+    cy.get('ui5-dynamic-page-header')
       .contains('Release channel')
       .should('be.visible');
 
-    cy.get('div[data-component-name="DynamicPageHeaderContainer"]')
+    cy.get('ui5-dynamic-page-header')
       .contains('regular')
       .should('be.visible');
 
