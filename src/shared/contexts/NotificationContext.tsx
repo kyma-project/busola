@@ -39,7 +39,7 @@ export const NotificationProvider = ({
   const methods = {
     notifySuccess: function(notificationProps: ToastProps) {
       setToastProps(notificationProps);
-      if (toast.current) {
+      if (toast.current && !toastProps?.parentContainer) {
         toast.current.open = true;
       }
     },
@@ -58,9 +58,31 @@ export const NotificationProvider = ({
         ...methods,
       }}
     >
-      <Toast ref={toast} duration={defaultVisibilityTime} style={{ zIndex: 1 }}>
-        {toastProps?.content}
-      </Toast>
+      {toastProps?.parentContainer &&
+        createPortal(
+          <Toast
+            open={!!toastProps}
+            ref={toast}
+            duration={defaultVisibilityTime}
+            style={{ zIndex: 1 }}
+            onClose={e => {
+              setToastProps(null);
+              e.stopPropagation();
+            }}
+          >
+            {toastProps?.content}
+          </Toast>,
+          toastProps.parentContainer,
+        )}
+      {!toastProps?.parentContainer && (
+        <Toast
+          ref={toast}
+          duration={defaultVisibilityTime}
+          style={{ zIndex: 1 }}
+        >
+          {toastProps?.content}
+        </Toast>
+      )}
       {errorProps &&
         createPortal(<ErrorModal {...errorProps} />, document.body)}
       {children}
