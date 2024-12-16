@@ -45,6 +45,8 @@ export const HeaderRenderer = ({
           <TableColumn
             slot={`${slot}-${index}`}
             key={typeof h === 'object' ? index : h}
+            popinDisplay="Block"
+            demandPopin={h === 'Popin' ? true : false}
             minWidth={
               Array.isArray(noHideFields) && noHideFields.length !== 0
                 ? noHideFields.find(field => field === h)
@@ -135,7 +137,7 @@ const DefaultRowRenderer = ({
   );
 
   return (
-    <TableRow type="Active">
+    <TableRow type="Active" selected={isSelected}>
       {cells}
       {!!actions.length && actionsCell}
       {displayArrow && (
