@@ -54,7 +54,7 @@ if (process.env.NODE_ENV === 'development') {
   app.use(cors({ origin: '*' }));
 }
 
-app.get('/proxy', proxyHandler);
+app.use('/proxy', proxyHandler);
 
 let server = null;
 
