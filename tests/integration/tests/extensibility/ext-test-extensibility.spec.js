@@ -140,6 +140,7 @@ context('Test Extensibility Create/Update', () => {
 
       cy.get('@form')
         .get('[data-testid="details-view"]')
+        .findMonaco(monacoCount)
         .scrollIntoView()
         .within(() => {
           cy.pasteToMonaco(input);
