@@ -85,6 +85,7 @@ export type ExtGeneral = {
   icon?: string;
   id?: string;
   externalNodes?: ExtensibilityNodesExt[];
+  customElement?: string;
 };
 
 export type ExtResource = {
