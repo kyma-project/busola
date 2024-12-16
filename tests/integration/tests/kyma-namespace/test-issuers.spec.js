@@ -87,6 +87,8 @@ context('Test Issuers', () => {
       .find('input')
       .type('other.server.com{enter}another.server.com', { force: true });
 
+    cy.wait(2000);
+
     cy.saveChanges('Edit');
     cy.getMidColumn().inspectTab('View');
   });
