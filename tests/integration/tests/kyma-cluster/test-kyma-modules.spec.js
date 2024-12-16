@@ -261,7 +261,7 @@ context('Test Kyma Modules views', () => {
       .clear();
 
     cy.get('ui5-table')
-      .find('ui5-illustrated-message[title-text="No modules"]')
+      .contains('ui5-illustrated-message', 'No modules')
       .should('be.visible');
   });
 });
