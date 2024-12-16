@@ -37,16 +37,15 @@ import { configFeaturesNames } from 'state/types';
 
 export function Header() {
   useAvailableNamespaces();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSnowOpen, setIsSnowOpen] = useState(false);
+
+  const { t } = useTranslation();
+  const navigate = useNavigate();
   const { isEnabled: isFeedbackEnabled, link: feedbackLink } = useFeature(
     configFeaturesNames.FEEDBACK,
   );
   const { isEnabled: isSnowEnabled } = useFeature(configFeaturesNames.SNOW);
-
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSnowOpen, setIsSnowOpen] = useState(isSnowEnabled);
-
-  const { t } = useTranslation();
-  const navigate = useNavigate();
 
   const { githubLink, busolaVersion } = useGetBusolaVersionDetails();
   const legalLinks = useGetLegalLinks();
