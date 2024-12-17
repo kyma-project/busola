@@ -9,6 +9,7 @@ on:
       - "tests/integration/**"
       - "nginx/**"
       - "src/**"
+      - "backend/**"
       - "kyma/**"
       - "Dockerfile*"
 jobs:
