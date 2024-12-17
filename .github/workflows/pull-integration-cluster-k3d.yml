@@ -9,10 +9,12 @@ on:
       - "tests/**"
       - "nginx/**"
       - "src/**"
+      - "backend/**"
 
 jobs:
   run-cluster-test:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
     steps:
       - name: Install Chrome # this step could be removed after https://github.com/cypress-io/cypress/issues/30374 is resolved
         shell: bash
@@ -24,8 +26,7 @@ jobs:
         with:
           comment_on_pr: false
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - uses: ./.github/actions/rebase
       - name: Create Single Cluster
         uses: AbsaOSS/k3d-action@4e8b3239042be1dc0aed6c5eb80c13b18200fc79 #v2.4.0
         with:

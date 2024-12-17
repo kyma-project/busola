@@ -6,6 +6,7 @@ import { doesUserHavePermission } from 'state/navigation/filters/permissions';
 import { permissionSetsSelector } from 'state/permissionSetsSelector';
 import { jwtDecode } from 'jwt-decode';
 import { AuthDataState, authDataState } from 'state/authDataAtom';
+import { useModuleStatus } from '../../KymaModules/support';
 
 /*
   Turns jsonata expressions like
@@ -63,6 +64,16 @@ export function jsonataWrapper(expression: string) {
       );
     },
   );
+
+  exp.registerFunction('getModuleState', resource => {
+    const { data: status } = useModuleStatus(resource);
+    return status?.state || 'Unknown';
+  });
+
+  exp.registerFunction('getModuleDescription', resource => {
+    const { data: status } = useModuleStatus(resource);
+    return status?.description;
+  });
 
   exp.registerFunction('compareStrings', (first, second) => {
     return first?.localeCompare(second) ?? 1;

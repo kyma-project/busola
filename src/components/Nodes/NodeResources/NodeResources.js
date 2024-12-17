@@ -39,7 +39,7 @@ export function NodeResources({ metrics, resources }) {
           max={memory.capacity}
           additionalInfo={`${roundTwoDecimals(
             memory.usage,
-          )}GiB / ${roundTwoDecimals(memory.capacity)}GiB`}
+          )}Gi / ${roundTwoDecimals(memory.capacity)}Gi`}
         />
       </Card>
       <Card
@@ -73,7 +73,7 @@ export function NodeResources({ metrics, resources }) {
           max={memory.capacity}
           additionalInfo={`${roundTwoDecimals(
             resources.requests?.memory,
-          )}GiB / ${roundTwoDecimals(memory.capacity)}GiB`}
+          )}Gi / ${roundTwoDecimals(memory.capacity)}Gi`}
         />
       </Card>
       <Card
@@ -105,7 +105,7 @@ export function NodeResources({ metrics, resources }) {
           max={memory.capacity}
           additionalInfo={`${roundTwoDecimals(
             resources.limits.memory,
-          )}GiB / ${roundTwoDecimals(memory.capacity)}GiB`}
+          )}Gi / ${roundTwoDecimals(memory.capacity)}Gi`}
         />
       </Card>
     </>
