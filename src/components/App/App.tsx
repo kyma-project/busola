@@ -3,6 +3,10 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
+// this import is necessary for the V1 Tables to work properly,
+// it can be removed after https://github.com/kyma-project/busola/issues/3489 is resolved
+import './UI5Imports';
+
 import { useUrl } from 'hooks/useUrl';
 import { useSentry } from 'hooks/useSentry';
 import { useAppTracking } from 'hooks/tracking';
@@ -35,6 +39,7 @@ import { useAfterInitHook } from 'state/useAfterInitHook';
 import useSidebarCondensed from 'sidebar/useSidebarCondensed';
 import { useGetValidationEnabledSchemas } from 'state/validationEnabledSchemasAtom';
 import { useGetKymaResources } from 'state/kymaResourcesAtom';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 
 export default function App() {
   const language = useRecoilValue(languageAtom);
@@ -42,10 +47,9 @@ export default function App() {
   const setNamespace = useSetRecoilState(activeNamespaceIdState);
   const { namespace } = useUrl();
   const makeGardenerLoginRoute = useMakeGardenerLoginRoute();
+  const { t, i18n } = useTranslation();
 
   useInitTheme();
-
-  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     setNamespace(namespace);
@@ -56,7 +60,7 @@ export default function App() {
   useResourceSchemas();
   useSidebarCondensed();
 
-  useAuthHandler();
+  const { isLoading } = useAuthHandler();
   useGetConfiguration();
   useGetExtensions();
   useGetExtensibilitySchemas();
@@ -71,6 +75,10 @@ export default function App() {
   useAppTracking();
   useAfterInitHook(kubeconfigIdState);
   useGetKymaResources();
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div id="html-wrap">

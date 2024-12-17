@@ -82,7 +82,9 @@ function makeListItem(
     // some resources have no category
     category: category ? category + ' > ' + resourceTypeText : resourceTypeText,
     onActivate: () => {
-      const pathname = `/cluster/${activeClusterName}/${pathSegment}/${name}`;
+      const pathname = `/cluster/${encodeURIComponent(
+        activeClusterName ?? '',
+      )}/${pathSegment}/${name}`;
       navigate(pathname);
     },
     customActionText: customActionText
@@ -138,7 +140,9 @@ function sendNamespaceSwitchMessage(
   const resourceType = matchedRoute.params.resourceType || '';
 
   navigate(
-    `/cluster/${activeClusterName}/namespaces/${newNamespace}/${resourceType}`,
+    `/cluster/${encodeURIComponent(
+      activeClusterName,
+    )}/namespaces/${newNamespace}/${resourceType}`,
   );
 }
 
@@ -166,7 +170,9 @@ function makeSingleNamespaceLinks(
     category,
     query,
     onActivate: () => {
-      const pathname = `/cluster/${activeClusterName}/namespaces/${name}`;
+      const pathname = `/cluster/${encodeURIComponent(
+        activeClusterName ?? '',
+      )}/namespaces/${name}`;
       navigate(pathname);
     },
     customActionText: 'command-palette.item-actions.navigate',
@@ -194,7 +200,9 @@ function createAllResults(context: CommandPaletteContext) {
         ...clusterNode,
         query: clusterNode.resourceType,
         onActivate: () => {
-          const pathname = `/cluster/${activeClusterName}/${clusterNode.pathSegment}`;
+          const pathname = `/cluster/${encodeURIComponent(
+            activeClusterName ?? '',
+          )}/${clusterNode.pathSegment}`;
           navigate(pathname);
         },
         aliases:
@@ -227,7 +235,9 @@ function createSingleResult(
       : resourceTypeText,
     query: matchedNode.resourceType,
     onActivate: () => {
-      const pathname = `/cluster/${activeClusterName}/${matchedNode.pathSegment}`;
+      const pathname = `/cluster/${encodeURIComponent(
+        activeClusterName ?? '',
+      )}/${matchedNode.pathSegment}`;
       navigate(pathname);
     },
     aliases:
@@ -301,7 +311,9 @@ function createResults(context: CommandPaletteContext): Result[] {
           category: resourceTypeText,
           query: matchedNode.resourceType,
           onActivate: () => {
-            const pathname = `/cluster/${activeClusterName}/namespaces/-all-`;
+            const pathname = `/cluster/${encodeURIComponent(
+              activeClusterName ?? '',
+            )}/namespaces/-all-`;
             navigate(pathname);
           },
         },
@@ -313,7 +325,9 @@ function createResults(context: CommandPaletteContext): Result[] {
           category: resourceTypeText,
           query: matchedNode.resourceType,
           onActivate: () => {
-            const pathname = `/cluster/${activeClusterName}/namespaces/-all-`;
+            const pathname = `/cluster/${encodeURIComponent(
+              activeClusterName ?? '',
+            )}/namespaces/-all-`;
             navigate(pathname);
           },
         },

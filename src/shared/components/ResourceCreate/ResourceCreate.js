@@ -16,14 +16,14 @@ import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
 import './ResourceCreate.scss';
 
 export const ResourceCreate = ({
-  performRefetch,
+  performRefetch = () => {},
   title,
   renderForm,
   confirmText,
-  invalidPopupMessage,
-  isEdit,
-  readOnly,
-  disableEdit,
+  invalidPopupMessage = '',
+  isEdit = false,
+  readOnly = false,
+  disableEdit = false,
   layoutCloseCreateUrl,
   layoutNumber = 'MidColumn',
   onlyYaml = false,
@@ -221,7 +221,7 @@ export const ResourceCreate = ({
 };
 
 ResourceCreate.propTypes = {
-  performRefetch: PropTypes.func.isRequired,
+  performRefetch: PropTypes.func,
   title: PropTypes.string.isRequired,
   renderForm: PropTypes.func.isRequired,
   confirmText: PropTypes.string,
@@ -232,12 +232,4 @@ ResourceCreate.propTypes = {
   readOnly: PropTypes.bool,
   disableEdit: PropTypes.bool,
   layoutCloseCreateUrl: PropTypes.string,
-};
-
-ResourceCreate.defaultProps = {
-  performRefetch: () => {},
-  invalidPopupMessage: '',
-  isEdit: false,
-  readOnly: false,
-  disableEdit: false,
 };

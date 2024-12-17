@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep } from 'lodash';
 
@@ -6,6 +6,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { RichEditorDataField } from 'shared/ResourceForm/fields';
 
 import { createConfigMapTemplate, createPresets } from './helpers';
+import { getDescription, SchemaContext } from 'shared/helpers/schema';
 
 export default function ConfigMapCreate({
   namespace,
@@ -28,6 +29,9 @@ export default function ConfigMapCreate({
 
   const { t } = useTranslation();
 
+  const schema = useContext(SchemaContext);
+  const dataDesc = getDescription(schema, 'data');
+
   return (
     <ResourceForm
       {...props}
@@ -44,7 +48,11 @@ export default function ConfigMapCreate({
       setCustomValid={setCustomValid}
       nameProps={{ readOnly: !!initialConfigMap?.metadata?.name }}
     >
-      <RichEditorDataField defaultOpen propertyPath="$.data" />
+      <RichEditorDataField
+        defaultOpen
+        propertyPath="$.data"
+        tooltipContent={t(dataDesc)}
+      />
     </ResourceForm>
   );
 }

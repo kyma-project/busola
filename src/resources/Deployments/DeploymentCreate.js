@@ -89,6 +89,16 @@ export default function DeploymentCreate({
       initialUnchangedResource={initialUnchangedResource}
       handleNameChange={handleNameChange}
     >
+      <ResourceForm.FormField
+        required
+        propertyPath="$.spec.replicas"
+        label={t('replica-sets.create-modal.labels.replicas')}
+        input={Inputs.Number}
+        placeholder={t('replica-sets.create-modal.placeholders.replicas')}
+        tooltipContent={t('replica-sets.create-modal.tooltips.replicas')}
+        min={0}
+      />
+
       {isIstioFeatureOn ? (
         <ResourceForm.FormField
           label={t('namespaces.create-modal.enable-sidecar')}

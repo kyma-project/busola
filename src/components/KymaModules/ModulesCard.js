@@ -33,7 +33,9 @@ export default function ModulesCard({
       >
         <CheckBox className="checkbox" checked={isChecked(module.name)} />
         <div className="titles">
-          <Title level="H6">{module.name}</Title>
+          <Title level="H6" size="H6">
+            {module.name}
+          </Title>
           <Text className="bsl-has-color-status-4">
             {findStatus(module.name)?.version
               ? `v${findStatus(module.name)?.version} ${

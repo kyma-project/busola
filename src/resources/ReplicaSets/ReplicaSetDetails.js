@@ -11,6 +11,8 @@ import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 import { ResourceDescription } from 'resources/ReplicaSets';
 import { EventsList } from 'shared/components/EventsList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { filterByResource } from 'hooks/useMessageList';
 
 export function ReplicaSetsDetails(props) {
@@ -35,43 +37,60 @@ export function ReplicaSetsDetails(props) {
         />
       ),
     },
-    {
-      header: t('replica-sets.headers.limits'),
-      value: resource => {
-        const containers = resource.spec.template.spec.containers || [];
-        return (
-          <React.Fragment key="limits">
-            {containers.map(c => (
-              <React.Fragment key={c.name}>
-                {t('replica-sets.cpu')}: {c.resources?.limits?.cpu}
-                <br />
-                {t('replica-sets.memory')}: {c.resources?.limits?.memory}
-                <br />
-              </React.Fragment>
-            ))}
-          </React.Fragment>
-        );
-      },
-    },
-    {
-      header: t('replica-sets.headers.requests'),
-      value: resource => {
-        const containers = resource.spec.template.spec.containers || [];
-        return (
-          <React.Fragment key="requests">
-            {containers.map(c => (
-              <React.Fragment key={c.name}>
-                {t('replica-sets.cpu')}: {c.resources?.requests?.cpu}
-                <br />
-                {t('replica-sets.memory')}: {c.resources?.requests?.memory}
-                <br />
-              </React.Fragment>
-            ))}
-          </React.Fragment>
-        );
-      },
-    },
   ];
+
+  const Specification = ({ spec }) => {
+    const containers = spec.template.spec.containers || [];
+    if (
+      !containers?.[0].resources?.limits &&
+      !containers?.[0].resources?.requests
+    ) {
+      return null;
+    }
+
+    return (
+      <UI5Panel
+        key="specification"
+        title={t('common.headers.specification')}
+        keyComponent="specification-panel"
+      >
+        {containers?.[0].resources?.limits && (
+          <LayoutPanelRow
+            name={t('replica-sets.headers.limits')}
+            value={
+              <React.Fragment key="limits">
+                {containers.map(c => (
+                  <React.Fragment key={c.name}>
+                    {t('replica-sets.cpu')}: {c.resources?.limits?.cpu}
+                    <br />
+                    {t('replica-sets.memory')}: {c.resources?.limits?.memory}
+                    <br />
+                  </React.Fragment>
+                ))}
+              </React.Fragment>
+            }
+          />
+        )}
+        {containers?.[0].resources?.requests && (
+          <LayoutPanelRow
+            name={t('replica-sets.headers.requests')}
+            value={
+              <React.Fragment key="requests">
+                {containers.map(c => (
+                  <React.Fragment key={c.name}>
+                    {t('replica-sets.cpu')}: {c.resources?.requests?.cpu}
+                    <br />
+                    {t('replica-sets.memory')}: {c.resources?.requests?.memory}
+                    <br />
+                  </React.Fragment>
+                ))}
+              </React.Fragment>
+            }
+          />
+        )}
+      </UI5Panel>
+    );
+  };
 
   const customStatusColumns = [
     {
@@ -129,6 +148,7 @@ export function ReplicaSetsDetails(props) {
     <ResourceDetails
       customColumns={customColumns}
       customComponents={[
+        Specification,
         HPASubcomponent,
         MatchSelector,
         ReplicaSetPodTemplate,

@@ -1,8 +1,10 @@
+import {
+  TableColumn,
+  TableCell,
+  TableRow,
+} from '../../../components/App/UI5Imports';
 import { useState } from 'react';
 import { Button, FlexBox, Icon, Text } from '@ui5/webcomponents-react';
-import { TableCell } from '@ui5/webcomponents-react-compat/dist/components/TableCell/index.js';
-import { TableColumn } from '@ui5/webcomponents-react-compat/dist/components/TableColumn/index.js';
-import { TableRow } from '@ui5/webcomponents-react-compat/dist/components/TableRow/index.js';
 
 import ListActions from 'shared/components/ListActions/ListActions';
 
@@ -43,6 +45,8 @@ export const HeaderRenderer = ({
           <TableColumn
             slot={`${slot}-${index}`}
             key={typeof h === 'object' ? index : h}
+            popinDisplay="Block"
+            demandPopin={h === 'Popin' ? true : false}
             minWidth={
               Array.isArray(noHideFields) && noHideFields.length !== 0
                 ? noHideFields.find(field => field === h)
@@ -133,7 +137,7 @@ const DefaultRowRenderer = ({
   );
 
   return (
-    <TableRow>
+    <TableRow type="Active" selected={isSelected}>
       {cells}
       {!!actions.length && actionsCell}
       {displayArrow && (

@@ -1,14 +1,13 @@
-import React from 'react';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 
 export function HelmReleaseStatus({ status }) {
   const resolveType = status => {
     switch (status) {
       case 'deployed':
-        return 'Success';
+        return 'Positive';
       case 'uninstalling':
       case 'failed':
-        return 'Error';
+        return 'Negative';
       case 'unknown':
         return 'None';
       default:

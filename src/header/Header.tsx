@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   Avatar,
@@ -8,7 +8,6 @@ import {
   MenuDomRef,
   ShellBar,
   ShellBarItem,
-  ShellBarDomRef,
   ListItemStandard,
 } from '@ui5/webcomponents-react';
 import { MenuItemClickEventDetail } from '@ui5/webcomponents/dist/Menu.js';
@@ -55,21 +54,11 @@ export function Header() {
   );
   const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
 
-  const shellbarRef = useRef<ShellBarDomRef>(null);
-  useEffect(() => {
-    if (shellbarRef?.current) {
-      shellbarRef.current.accessibilityTexts = {
-        ...shellbarRef.current.accessibilityTexts,
-        logoTitle: 'SAP Kyma logo',
-      };
-    }
-  }, [shellbarRef]);
-
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
     name => name !== cluster?.name,
   );
 
-  const nonBreakableSpaces = (number: int): string => {
+  const nonBreakableSpaces = (number: number): string => {
     let spaces = '';
     for (let i = 0; i < number; i++) {
       spaces += '\u00a0';
@@ -120,10 +109,14 @@ export function Header() {
     <>
       <ShellBar
         className="header"
+        accessibilityAttributes={{
+          logo: {
+            name: 'SAP Kyma logo',
+          },
+        }}
         startButton={
           window.location.pathname !== '/clusters' && <SidebarSwitcher />
         }
-        ref={shellbarRef}
         onLogoClick={() => {
           handleActionIfFormOpen(
             isResourceEdited,
@@ -150,7 +143,11 @@ export function Header() {
               e.detail.item.textContent ===
               t('clusters.overview.title-all-clusters')
                 ? navigate('/clusters')
-                : navigate(`/cluster/${e.detail.item.textContent}`);
+                : navigate(
+                    `/cluster/${encodeURIComponent(
+                      e.detail.item?.textContent ?? '',
+                    )}`,
+                  );
             },
           );
         }}
@@ -176,7 +173,7 @@ export function Header() {
       <Menu
         open={isMenuOpen}
         opener="openShellbarMenu"
-        onAfterClose={() => {
+        onClose={() => {
           setIsMenuOpen(false);
         }}
         onItemClick={handleMenuItemClick}
@@ -221,7 +218,6 @@ export function Header() {
             text={t('common.labels.version')}
             additionalText={busolaVersion}
             icon="inspect"
-            startsSection
           />
         </MenuItem>
       </Menu>

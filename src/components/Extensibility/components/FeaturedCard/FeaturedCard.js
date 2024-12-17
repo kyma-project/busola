@@ -13,6 +13,8 @@ import './FeaturedCard.scss';
 
 const getIllustration = (illustration, theme) => {
   switch (illustration) {
+    case 'None':
+      return null;
     case 'AI':
       switch (theme) {
         case 'sap_horizon_hcw':
@@ -79,6 +81,7 @@ export function FeaturedCard({ value, structure, schema, ...props }) {
     return <></>;
   }
 
+  const illustration = getIllustration(structure?.illustration, theme);
   return (
     <div className="sap-margin-small">
       <Card>
@@ -94,7 +97,7 @@ export function FeaturedCard({ value, structure, schema, ...props }) {
           />
           <div className="outer-container" style={{ margin: '2rem 2.5rem' }}>
             <div className="inner-container">
-              <Title level="H1" wrappingType="Normal">
+              <Title level="H1" size="H1" wrappingType="Normal">
                 {structure?.title}
               </Title>
               <Text>{structure?.description}</Text>
@@ -112,11 +115,13 @@ export function FeaturedCard({ value, structure, schema, ...props }) {
                 ))}
               </div>
             </div>
-            <img
-              src={getIllustration(structure?.illustration, theme)}
-              alt="FeaturedCard Illustration"
-              className="illustration"
-            />
+            {illustration && (
+              <img
+                src={illustration}
+                alt="FeaturedCard Illustration"
+                className="illustration"
+              />
+            )}
           </div>
         </div>
       </Card>

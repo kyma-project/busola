@@ -84,17 +84,31 @@ const ColumnWrapper = ({
   });
 
   const elementListProps = usePrepareListProps({
-    ...props,
+    resourceCustomType: props.resourceCustomType,
+    resourceType: props.resourceType,
+    resourceI18Key: props.resourceI18Key,
+    apiGroup: props.apiGroup,
+    apiVersion: props.apiVersion,
+    hasDetailsView: props.hasDetailsView,
   });
 
   const elementDetailsProps = usePrepareDetailsProps({
-    ...props,
+    resourceCustomType: props.resourceCustomType,
+    resourceType: props.resourceType,
+    resourceI18Key: props.resourceI18Key,
+    apiGroup: props.apiGroup,
+    apiVersion: props.apiVersion,
     resourceName: layoutState?.midColumn?.resourceName ?? resourceName,
     namespaceId: layoutState?.midColumn?.namespaceId ?? namespaceId,
+    showYamlTab: props.showYamlTab,
   });
 
   const elementCreateProps = usePrepareCreateProps({
-    ...props,
+    resourceCustomType: props.resourceCustomType,
+    resourceType: props.resourceType,
+    resourceTypeForTitle: props.resourceType,
+    apiGroup: props.apiGroup,
+    apiVersion: props.apiVersion,
   });
 
   const listComponent = React.cloneElement(list, {
@@ -122,59 +136,58 @@ const ColumnWrapper = ({
     detailsMidColumn = detailsComponent;
   }
 
-  const { schema, loading } = useGetSchema({
+  const { schema } = useGetSchema({
     resource: {
       group: props?.apiGroup,
       version: props.apiVersion,
       kind: props?.resourceType.slice(0, -1),
     },
   });
-  if (loading) {
-    return null;
-  }
 
   const createMidColumn = (
-    <SchemaContext.Provider value={schema}>
-      <ResourceCreate
-        title={elementCreateProps.resourceTitle}
-        confirmText={t('common.buttons.create')}
-        layoutCloseCreateUrl={layoutCloseCreateUrl}
-        renderForm={renderProps => {
-          const createComponent =
-            create &&
-            create?.type !== null &&
-            (layoutState?.showCreate?.resourceType || props?.resourceType) &&
-            React.cloneElement(create, {
-              ...elementCreateProps,
-              ...renderProps,
-              enableColumnLayout: true,
-              layoutNumber: 'StartColumn',
-              resource: layoutState?.showCreate?.resource, // For ResourceCreate we want to set layoutNumber to previous column so detail are opened instead of create
-            });
-          return <ErrorBoundary>{createComponent}</ErrorBoundary>;
-        }}
-      />
-    </SchemaContext.Provider>
+    <ResourceCreate
+      title={elementCreateProps.resourceTitle}
+      confirmText={t('common.buttons.create')}
+      layoutCloseCreateUrl={layoutCloseCreateUrl}
+      renderForm={renderProps => {
+        const createComponent =
+          create &&
+          create?.type !== null &&
+          (layoutState?.showCreate?.resourceType || props?.resourceType) &&
+          React.cloneElement(create, {
+            ...elementCreateProps,
+            ...renderProps,
+            enableColumnLayout: true,
+            layoutNumber: 'StartColumn',
+            resource: layoutState?.showCreate?.resource, // For ResourceCreate we want to set layoutNumber to previous column so detail are opened instead of create
+          });
+        return <ErrorBoundary>{createComponent}</ErrorBoundary>;
+      }}
+    />
   );
 
   return (
-    <FlexibleColumnLayout
-      style={{ height: '100%' }}
-      layout={layoutState?.layout || 'OneColumn'}
-      startColumn={<div className="column-content">{startColumnComponent}</div>}
-      midColumn={
-        <>
-          {!layoutState?.showCreate &&
-            (defaultColumn !== 'details' || layout) && (
-              <div className="column-content">{detailsMidColumn}</div>
-            )}
-          {!layoutState?.midColumn &&
-            (defaultColumn !== 'details' || layout) && (
-              <div className="column-content">{createMidColumn}</div>
-            )}
-        </>
-      }
-    />
+    <SchemaContext.Provider value={schema || null}>
+      <FlexibleColumnLayout
+        style={{ height: '100%' }}
+        layout={layoutState?.layout || 'OneColumn'}
+        startColumn={
+          <div className="column-content">{startColumnComponent}</div>
+        }
+        midColumn={
+          <>
+            {!layoutState?.showCreate &&
+              (defaultColumn !== 'details' || layout) && (
+                <div className="column-content">{detailsMidColumn}</div>
+              )}
+            {!layoutState?.midColumn &&
+              (defaultColumn !== 'details' || layout) && (
+                <div className="column-content">{createMidColumn}</div>
+              )}
+          </>
+        }
+      />
+    </SchemaContext.Provider>
   );
 };
 

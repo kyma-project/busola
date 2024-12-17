@@ -15,10 +15,24 @@ export function ComboboxInput({
   ...props
 }) {
   const onChange = event => {
-    const selectedOption = options.find(o => o.text === event.target.value) ?? {
-      key: event.target._state.filterValue,
-      text: event.target._state.filterValue,
-    };
+    let selectedOption;
+    if (!props?.isNumeric) {
+      selectedOption = options.find(o => o.text === event.target.value) ?? {
+        key: event.target._state.filterValue,
+        text: event.target._state.filterValue,
+      };
+    } else {
+      const newValue = Number(event.target.value);
+      const filterValue = Number(event.target._state.filterValue);
+      if (isNaN(newValue) && isNaN(filterValue)) {
+        return;
+      }
+
+      selectedOption = options.find(o => o.text === newValue) ?? {
+        key: filterValue,
+        text: filterValue,
+      };
+    }
     if (onSelectionChange) {
       onSelectionChange(event, selectedOption);
     } else {

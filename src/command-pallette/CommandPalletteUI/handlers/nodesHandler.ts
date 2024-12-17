@@ -53,7 +53,11 @@ function makeListItem(
       t('clusters.overview.title-current-cluster') + ' > ' + t('nodes.title'),
     query: `node/${name}`,
     onActivate: () =>
-      navigate(`/cluster/${activeClusterName}/overview/nodes/${name}`),
+      navigate(
+        `/cluster/${encodeURIComponent(
+          activeClusterName ?? '',
+        )}/overview/nodes/${name}`,
+      ),
     customActionText: 'command-palette.item-actions.navigate',
   };
 }

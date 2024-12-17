@@ -13,14 +13,14 @@ import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 
 export const ModalWithForm = ({
-  performRefetch,
+  performRefetch = () => {},
   title,
   button,
   renderForm,
   item,
   modalOpeningComponent,
   confirmText,
-  invalidPopupMessage,
+  invalidPopupMessage = '',
   className,
   getToggleFormFn,
   ...props
@@ -182,9 +182,4 @@ ModalWithForm.propTypes = {
   invalidPopupMessage: PropTypes.string,
   button: CustomPropTypes.button,
   className: PropTypes.string,
-};
-
-ModalWithForm.defaultProps = {
-  performRefetch: () => {},
-  invalidPopupMessage: '',
 };

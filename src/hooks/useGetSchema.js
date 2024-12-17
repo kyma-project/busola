@@ -26,6 +26,13 @@ export const useGetSchema = ({ schemaId, skip, resource }) => {
   const [loading, setLoading] = useState(!isWorkerOkay ? false : !skip);
 
   useEffect(() => {
+    setSchema(null);
+    setError(null);
+    setLoading(!isWorkerOkay ? false : !skip);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [schemaId]);
+
+  useEffect(() => {
     if (!areSchemasComputed || schema || skip || !isWorkerOkay) {
       return;
     }

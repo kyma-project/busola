@@ -91,6 +91,7 @@ export function ClusterOverview() {
             />
             <Title
               level="H3"
+              size="H3"
               className="sap-margin-begin-medium sap-margin-y-medium"
             >
               {t('cluster-overview.headers.cluster-details')}

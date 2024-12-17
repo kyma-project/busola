@@ -57,7 +57,9 @@ function makeListItem(item: K8sResource, context: CommandPaletteContext) {
     category: t('configuration.title') + ' > ' + t('helm-releases.title'),
     query: `helmreleases/${name}`,
     onActivate: () => {
-      const pathname = `/cluster/${activeClusterName}/namespaces/${namespace}/helm-releases/${name}`;
+      const pathname = `/cluster/${encodeURIComponent(
+        activeClusterName ?? '',
+      )}/namespaces/${namespace}/helm-releases/${name}`;
       navigate(pathname);
     },
     customActionText: 'command-palette.item-actions.navigate',
@@ -114,7 +116,9 @@ function createResults(context: CommandPaletteContext): Result[] | null {
     category: t('configuration.title') + ' > ' + t('helm-releases.title'),
     query: 'helmReleases',
     onActivate: () => {
-      const pathname = `/cluster/${activeClusterName}/namespaces/${namespace}/helm-releases`;
+      const pathname = `/cluster/${encodeURIComponent(
+        activeClusterName ?? '',
+      )}/namespaces/${namespace}/helm-releases`;
       navigate(pathname);
     },
     aliases: helmReleaseAliases,

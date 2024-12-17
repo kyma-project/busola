@@ -1,9 +1,11 @@
+import { Table } from '../../../components/App/UI5Imports';
+
 import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { Table } from '@ui5/webcomponents-react-compat/dist/components/Table/index.js';
+
 import { useNavigate } from 'react-router-dom';
 import {
   BodyFallback,
@@ -30,6 +32,7 @@ import pluralize from 'pluralize';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
+import './GenericList.scss';
 
 const defaultSort = {
   name: nameLocaleSort,
@@ -45,19 +48,19 @@ const defaultSearch = {
 };
 
 export const GenericList = ({
-  entries,
-  actions,
+  entries = [],
+  actions = [],
   extraHeaderContent,
   title,
   headerRenderer,
   rowRenderer,
   testid,
-  serverDataError,
-  serverDataLoading,
+  serverDataError = null,
+  serverDataLoading = false,
   pagination,
   sortBy,
-  notFoundMessage,
-  searchSettings,
+  notFoundMessage = 'components.generic-list.messages.not-found',
+  searchSettings = defaultSearch,
   disableMargin,
   emptyListProps = null,
   columnLayout = null,
@@ -111,9 +114,7 @@ export const GenericList = ({
   }, [pageSize, pagination]);
 
   const { i18n, t } = useTranslation();
-  const [currentPage, setCurrentPage] = React.useState(
-    pagination?.initialPage || 1,
-  );
+  const [currentPage, setCurrentPage] = useState(pagination?.initialPage || 1);
 
   const [filteredEntries, setFilteredEntries] = useState(() =>
     sorting(sort, entries),
@@ -195,7 +196,7 @@ export const GenericList = ({
   const renderTableBody = () => {
     if (serverDataError) {
       return (
-        <BodyFallback>
+        <BodyFallback key="tableErrorMessage">
           <p>{getErrorMessage(serverDataError)}</p>
         </BodyFallback>
       );
@@ -203,7 +204,7 @@ export const GenericList = ({
 
     if (serverDataLoading) {
       return (
-        <BodyFallback>
+        <BodyFallback key="tableDataLoading">
           <Spinner />
         </BodyFallback>
       );
@@ -220,27 +221,30 @@ export const GenericList = ({
           </BodyFallback>
         );
       }
-      return (
-        <BodyFallback>
-          {emptyListProps ? (
-            <EmptyListComponent
-              titleText={emptyListProps.titleText}
-              subtitleText={emptyListProps.subtitleText}
-              showButton={emptyListProps.showButton}
-              buttonText={emptyListProps.buttonText}
-              url={emptyListProps.url}
-              onClick={emptyListProps.onClick}
-              image={emptyListProps?.image}
-            />
-          ) : (
-            <p>
-              {i18n.exists(notFoundMessage)
-                ? t(notFoundMessage)
-                : notFoundMessage}
-            </p>
-          )}
-        </BodyFallback>
-      );
+
+      if (!entries.length) {
+        return (
+          <BodyFallback>
+            {emptyListProps ? (
+              <EmptyListComponent
+                titleText={emptyListProps.titleText}
+                subtitleText={emptyListProps.subtitleText}
+                showButton={emptyListProps.showButton}
+                buttonText={emptyListProps.buttonText}
+                url={emptyListProps.url}
+                onClick={emptyListProps.onClick}
+                image={emptyListProps?.image}
+              />
+            ) : (
+              <p>
+                {i18n.exists(notFoundMessage)
+                  ? t(notFoundMessage)
+                  : notFoundMessage}
+              </p>
+            )}
+          </BodyFallback>
+        );
+      }
     }
 
     let pagedItems = filteredEntries;
@@ -485,13 +489,4 @@ GenericList.propTypes = {
   hasDetailsView: PropTypes.bool,
   noHideFields: PropTypes.arrayOf(PropTypes.string),
   customRowClick: PropTypes.func,
-};
-
-GenericList.defaultProps = {
-  entries: [],
-  actions: [],
-  serverDataError: null,
-  serverDataLoading: false,
-  notFoundMessage: 'components.generic-list.messages.not-found',
-  searchSettings: defaultSearch,
 };

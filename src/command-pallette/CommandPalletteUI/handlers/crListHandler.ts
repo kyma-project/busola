@@ -55,7 +55,9 @@ function createResults(context: CommandPaletteContext): Result[] {
         t('command-palette.crs.cluster-short'),
       query: 'crs',
       onActivate: () => {
-        const pathname = `/cluster/${activeClusterName}/customResources`;
+        const pathname = `/cluster/${encodeURIComponent(
+          activeClusterName ?? '',
+        )}/customResources`;
         navigate(pathname);
       },
       aliases: ['crs'],
@@ -68,7 +70,9 @@ function createResults(context: CommandPaletteContext): Result[] {
         t('command-palette.crs.namespace-short'),
       query: 'crds',
       onActivate: () => {
-        const pathname = `/cluster/${activeClusterName}/namespaces/${namespace}/customResources`;
+        const pathname = `/cluster/${encodeURIComponent(
+          activeClusterName ?? '',
+        )}/namespaces/${namespace}/customResources`;
         navigate(pathname);
       },
       aliases: ['crs'],
