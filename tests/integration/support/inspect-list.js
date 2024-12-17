@@ -6,5 +6,5 @@ Cypress.Commands.add('inspectList', (resourceName, hiddenButtons = false) => {
     .wait(1000)
     .type(`${resourceName}{enter}`);
 
-  cy.contains('span', resourceName).should('be.visible');
+  cy.contains('ui5-text', resourceName).should('be.visible');
 });

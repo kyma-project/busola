@@ -95,8 +95,8 @@ context('Test Extensibility Create/Update', () => {
       .wait(1000)
       .clear()
       .type(EXTENSION_NAME)
-      .get('ui5-li-suggestion-item:visible')
-      .contains(EXTENSION_NAME)
+      .get('ui5-suggestion-item:visible')
+      .contains('li', EXTENSION_NAME)
       .click();
 
     cy.get('ui5-table-row')
@@ -123,8 +123,8 @@ context('Test Extensibility Create/Update', () => {
       .wait(1000)
       .clear()
       .type(EXTENSION_NAME)
-      .get('ui5-li-suggestion-item:visible')
-      .contains(EXTENSION_NAME)
+      .get('ui5-suggestion-item:visible')
+      .contains('li', EXTENSION_NAME)
       .click();
 
     cy.clickGenericListLink(EXTENSION_NAME);
@@ -140,6 +140,7 @@ context('Test Extensibility Create/Update', () => {
 
       cy.get('@form')
         .get('[data-testid="details-view"]')
+        .findMonaco(monacoCount)
         .scrollIntoView()
         .within(() => {
           cy.pasteToMonaco(input);

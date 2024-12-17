@@ -82,7 +82,7 @@ context('Test Protected Resources', () => {
 
     cy.clickGenericListLink(NAME);
 
-    cy.get('ui5-button[disabled="true"]')
+    cy.get('ui5-button[disabled]')
       .should('contain.text', 'Delete')
       .should('be.visible');
   });
@@ -111,14 +111,14 @@ context('Test Protected Resources', () => {
 
     cy.getMidColumn()
       .contains('ui5-table-row', NAME)
-      .find('[accessible-name="Delete"][disabled="true"]')
+      .find('[accessible-name="Delete"][disabled]')
       .should('exist');
   });
 
   it('Change protection setting', () => {
     cy.get('[title="Profile"]').click();
 
-    cy.get('ui5-menu-li:visible')
+    cy.get('ui5-menu-item:visible')
       .contains('Preferences')
       .click({ force: true });
 
