@@ -7,6 +7,7 @@ import './ErrorModal.scss';
 
 export type ToastProps = {
   content: React.ReactNode;
+  parentContainer?: HTMLElement | null;
 };
 
 type CloseFn = () => void;
