@@ -17,7 +17,7 @@ spec:
       containers:
         - name: busola
           image: busola-web
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           env:
             - name: ENVIRONMENT
               valueFrom:
@@ -25,6 +25,8 @@ spec:
                   optional: true
                   key: ENVIRONMENT
                   name: environment
+            - name: BACKEND_URL
+              value: backend
           resources:
             requests:
               cpu: 100m
