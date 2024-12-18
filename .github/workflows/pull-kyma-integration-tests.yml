@@ -32,20 +32,18 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: deploy_busola
+      - name: setup_busola
         shell: bash
-
         run: |
-          ./.github/scripts/deploy_busola.sh | tee busola-deploy.log
+          ./.github/scripts/setup-busola.sh | tee busola-build.log
         env:
           ENV: dev
-      - name: prepare_kubeconfig
-        run: |
-          prepare_kubeconfig.sh
       - name: run_tests
         shell: bash
         run: |
-          export CYPRESS_DOMAIN=http://${{steps.deploy_busola.IP}}
+          k3d kubeconfig get kyma > tests/integration/fixtures/kubeconfig.yaml
+          export CYPRESS_DOMAIN=http://localhost:3001
+
           cd tests/integration
           npm ci && npm run "test:kyma-e2e"
       - name: Uploads artifacts
