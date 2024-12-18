@@ -45,7 +45,7 @@ export function AllNamespacesDetails() {
   const Events = <EventsList defaultType={EVENT_MESSAGE_TYPE.WARNING} />;
 
   const headerActions = (
-    <>
+    <div>
       <Button
         icon="add"
         onClick={() => {
@@ -55,7 +55,7 @@ export function AllNamespacesDetails() {
         {t('upload-yaml.title')}
       </Button>
       {createPortal(<YamlUploadDialog />, document.body)}
-    </>
+    </div>
   );
 
   return (

@@ -8,6 +8,7 @@ import './ExpandableListItem.scss';
 type ExpandableListItemProps = {
   header: string | ReactNode;
   status?: string;
+  overrideStatusType?: string;
   content?: string;
   customContent?: CustomContent[];
 };
@@ -21,11 +22,17 @@ export type CustomContent = {
 export const ExpandableListItem = ({
   header,
   status,
+  overrideStatusType,
   content,
   customContent,
 }: ExpandableListItemProps) => {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
+
+  let statusType = status === 'True' ? 'Success' : 'Error';
+  if (overrideStatusType !== undefined) {
+    statusType = overrideStatusType === 'True' ? 'Success' : 'Error';
+  }
 
   return (
     <>
@@ -49,10 +56,7 @@ export const ExpandableListItem = ({
           )}
           {header}
           {status && (
-            <StatusBadge
-              type={status === 'True' ? 'Success' : 'Error'}
-              className={'header__status-badge'}
-            >
+            <StatusBadge type={statusType} className={'header__status-badge'}>
               {status}
             </StatusBadge>
           )}
