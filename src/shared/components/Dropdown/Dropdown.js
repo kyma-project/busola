@@ -2,6 +2,7 @@ import { ComboBox, ComboBoxItem, FlexBox } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { Label } from '../../../shared/ResourceForm/components/Label';
+import { useRef } from 'react';
 
 export function Dropdown({
   accessibleName,
@@ -20,6 +21,7 @@ export function Dropdown({
 }) {
   if (!props.readOnly) delete props.readOnly;
   const { t } = useTranslation();
+  const flexBoxRef = useRef(null);
   if (!options || !options.length) {
     options = [
       {
@@ -48,6 +50,18 @@ export function Dropdown({
       onKeyDown={event => {
         event.preventDefault();
       }}
+      onClick={() => {
+        flexBoxRef?.current
+          ?.querySelector('#select-dropdown')
+          ?.shadowRoot?.querySelector('ui5-icon')
+          ?.click();
+      }}
+      onFocus={() => {
+        flexBoxRef?.current
+          ?.querySelector('#select-dropdown')
+          ?.shadowRoot?.querySelector('input')
+          ?.setAttribute('autocomplete', 'off');
+      }}
       onSelectionChange={onSelectionChange}
       value={options.find(o => o.key === selectedKey)?.text}
       ref={_ref}
@@ -61,6 +75,7 @@ export function Dropdown({
 
   return (
     <FlexBox
+      ref={flexBoxRef}
       className="flexbox-gap full-width"
       justifyContent="Center"
       direction="Column"
