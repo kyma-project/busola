@@ -178,6 +178,22 @@ For the information on how to run tests and configure them, go to the [`tests`](
    docker run --rm -it -p 3001:3001 -v <path to your custom config>:/app/core-ui/environments/ --env ENVIRONMENT={your-env} --pid=host --name busola europe-docker.pkg.dev/kyma-project/prod/busola:latest
    ```
 
+## Busola installed in Kubernetes cluster
+
+You can install busola on kubernetes cluster in 3 flavours:
+
+- normal
+- with ingress
+- with Istio configuration
+
+To install Busola in kubernetes
+
+### K3d
+
+### Port-forward
+
+### Istio-ingress gateway
+
 ## Troubleshooting
 
 > **TIP:** To solve most of the problems with Busola development, clear the browser cache or do a hard refresh of the website.
