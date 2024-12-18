@@ -1,10 +1,15 @@
 name: Busola Web Build
 
 on:
+  workflow_call:
+    inputs:
+      tag:
+        description: "Additional tag for built images"
+        required: true
+        type: string
   push:
     branches:
       - main
-      - release
     paths:
       - ".github/workflows/busola-web-build.yml"
       - "kyma/**"
@@ -37,6 +42,5 @@ jobs:
     with:
       name: busola-web
       dockerfile: Dockerfile.web
-      context: .
-      export-tags: true
-      tags: latest
+      tags: ${{ inputs.tag != '' && inputs.tag || 'latest' }}
+      build-args: ${{ inputs.tag != '' && format('tag={0}', inputs.tag) || '' }}

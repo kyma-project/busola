@@ -16,12 +16,13 @@ spec:
     spec:
       containers:
         - name: busola
-          image: europe-docker.pkg.dev/kyma-project/prod/busola-web:latest
+          image: busola-web
           imagePullPolicy: Always
           env:
             - name: ENVIRONMENT
               valueFrom:
                 configMapKeyRef:
+                  optional: true
                   key: ENVIRONMENT
                   name: environment
           resources:
