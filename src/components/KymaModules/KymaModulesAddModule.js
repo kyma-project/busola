@@ -117,7 +117,6 @@ export default function KymaModulesAddModule({
       }
     } else {
       if (!existingModule && !isAlreadyInstalled) {
-        console.log(name, module.spec?.info);
         moduleMetaRelase?.spec.channels.forEach(channel => {
           if (!acc.find(item => item.name === name)) {
             acc.push({
@@ -248,7 +247,6 @@ export default function KymaModulesAddModule({
       const index = selectedModules?.findIndex(kymaResourceModule => {
         return kymaResourceModule.name === module?.name;
       });
-      // console.log(module.name, module.icon);
 
       const card = (
         <ModulesCard
