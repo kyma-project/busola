@@ -137,8 +137,8 @@ export function Header() {
     <>
       {isSnowOpen && (
         <div className="snowflakes" aria-hidden="true">
-          {[...Array(10).keys()].map((_, index) => (
-            <div key={index} className="snowflake">
+          {[...Array(10).keys()].map(key => (
+            <div key={`snowflake-${key}`} className="snowflake">
               ❅
             </div>
           ))}
