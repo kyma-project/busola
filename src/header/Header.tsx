@@ -32,16 +32,23 @@ import './Header.scss';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
+import { configFeaturesNames } from 'state/types';
+
+const SNOW_STORAGE_KEY = 'snow-animation';
 
 export function Header() {
   useAvailableNamespaces();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSnowOpen, setIsSnowOpen] = useState(
+    !!localStorage.getItem(SNOW_STORAGE_KEY),
+  );
 
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { isEnabled: isFeedbackEnabled, link: feedbackLink } = useFeature(
-    'FEEDBACK',
+    configFeaturesNames.FEEDBACK,
   );
+  const { isEnabled: isSnowEnabled } = useFeature(configFeaturesNames.SNOW);
 
   const { githubLink, busolaVersion } = useGetBusolaVersionDetails();
   const legalLinks = useGetLegalLinks();
@@ -75,6 +82,16 @@ export function Header() {
       spaces += '\u00a0';
     }
     return spaces;
+  };
+
+  const handleSnowButtonClick = () => {
+    if (isSnowOpen) {
+      setIsSnowOpen(false);
+      localStorage.removeItem(SNOW_STORAGE_KEY);
+    } else {
+      setIsSnowOpen(true);
+      localStorage.setItem(SNOW_STORAGE_KEY, 'true');
+    }
   };
 
   const clustersList = [
@@ -118,6 +135,15 @@ export function Header() {
 
   return (
     <>
+      {isSnowOpen && (
+        <div className="snowflakes" aria-hidden="true">
+          {[...Array(10).keys()].map(key => (
+            <div key={`snowflake-${key}`} className="snowflake">
+              ❅
+            </div>
+          ))}
+        </div>
+      )}
       <ShellBar
         className="header"
         startButton={
@@ -168,6 +194,16 @@ export function Header() {
         }
         onProfileClick={() => setIsMenuOpen(true)}
       >
+        {isSnowEnabled && (
+          <ShellBarItem
+            onClick={handleSnowButtonClick}
+            icon={isSnowOpen ? 'heating-cooling' : 'activate'}
+            text={isSnowOpen ? t('navigation.snow-stop') : t('navigation.snow')}
+            title={
+              isSnowOpen ? t('navigation.snow-stop') : t('navigation.snow')
+            }
+          />
+        )}
         {isFeedbackEnabled && (
           <ShellBarItem
             onClick={() => window.open(feedbackLink, '_blank')}
