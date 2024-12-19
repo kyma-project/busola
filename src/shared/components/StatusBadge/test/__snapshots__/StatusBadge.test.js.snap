@@ -1,7 +1,0 @@
-// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
-
-exports[`StatusBadge > displays warning when autoResolveType is set and "children" is a node 1`] = `
-[
-  "'autoResolveType' prop requires 'children' prop to be a string.",
-]
-`;
