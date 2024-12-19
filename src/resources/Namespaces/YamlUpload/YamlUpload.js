@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import jsyaml from 'js-yaml';
 
 import { YamlFileUploader } from './YamlFileUploader';
 import { OPERATION_STATE_INITIAL } from './YamlUploadDialog';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { FlexBox } from '@ui5/webcomponents-react';
 
 const isK8sResource = resource => {
@@ -26,7 +25,7 @@ function YamlUpload({
     ?.join('---\n');
 
   useEffect(() => {
-    if (!yamlContentString && editor) editor.getModel().setValue('');
+    if (!yamlContentString && editor) editor.getModel()?.setValue('');
   }, [editor, yamlContentString]);
 
   const updateYamlContent = useCallback(
@@ -54,13 +53,13 @@ function YamlUpload({
 
   return (
     <FlexBox
+      className="sap-margin-end-small"
       style={{
         gap: '1rem',
         // when using solution from: https://github.com/microsoft/monaco-editor/issues/3393
         // the Monaco is able to decrease it's size after enlarging
         minWidth: 0, // https://github.com/microsoft/monaco-editor/issues/3393
         minHeight: 0,
-        ...spacing.sapUiSmallMarginEnd,
       }}
       direction={'Column'}
     >
@@ -70,7 +69,7 @@ function YamlUpload({
           editor.getModel().setValue(val);
         }}
       />
-      <p style={spacing.sapUiTinyMargin}>{t('upload-yaml.or-paste-here')}</p>
+      <p className="sap-margin-tiny">{t('upload-yaml.or-paste-here')}</p>
       <div
         className={'yaml-upload-modal__content'}
         style={{

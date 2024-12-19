@@ -8,8 +8,6 @@ import { Label } from '../../../shared/ResourceForm/components/Label';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 import { useJsonata } from '../hooks/useJsonata';
 
-import { spacing } from '@ui5/webcomponents-react-base';
-
 function getValue(storeKeys, resource) {
   let value = resource;
   const keys = storeKeys.toJS();
@@ -97,7 +95,7 @@ export function MonacoRenderer({
       nestingLevel={nestingLevel}
       tooltipContent={tExt(tooltipContent)}
     >
-      <div style={spacing.sapUiTinyMarginBottom}>
+      <div className="sap-margin-bottom-tiny">
         <Label required={required}>{tFromStoreKeys(storeKeys, schema)}</Label>
       </div>
       <div className="bsl-col-md--11">

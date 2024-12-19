@@ -102,7 +102,7 @@ export function YamlUploadDialog() {
   return (
     <Dialog
       open={openAdd}
-      onAfterClose={() => setShowAdd(false)}
+      onClose={() => setShowAdd(false)}
       headerText={t('upload-yaml.title')}
       footer={<Bar design="Footer" endContent={<>{actions}</>} />}
       className="yaml-upload-modal__dialog"

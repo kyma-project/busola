@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useCreateKubeconfig } from 'hooks/useCreateKubeconfig';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, RefObject } from 'react';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import jsyaml from 'js-yaml';
 
@@ -19,6 +19,7 @@ export const useGenerateTokenRequest = (
   generate: boolean,
   namespace: string,
   serviceAccountName: string,
+  modalRef?: RefObject<HTMLElement>,
 ) => {
   const { t } = useTranslation();
   const post = usePost();
@@ -44,6 +45,7 @@ export const useGenerateTokenRequest = (
       notifyToast(
         {
           content: t('service-accounts.token-request.notification.success'),
+          parentContainer: generate ? modalRef?.current : undefined,
         },
         3000,
       );

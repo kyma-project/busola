@@ -1,5 +1,4 @@
-import { mount, shallow } from 'enzyme';
-import { act, render } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { Badge } from '../Badge';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { PopoverBadge } from 'shared/components/PopoverBadge/PopoverBadge';
@@ -11,16 +10,48 @@ vi.mock('../../hooks/useJsonata', () => ({
   },
 }));
 
+vi.mock('shared/components/StatusBadge/StatusBadge', async () => {
+  const StatusBadgeMock = (
+    await vi.importActual('shared/components/StatusBadge/StatusBadge')
+  ).StatusBadge;
+  return {
+    StatusBadge: vi.fn(props => <StatusBadgeMock {...props} />),
+  };
+});
+
+vi.mock('shared/components/PopoverBadge/PopoverBadge', async () => {
+  const PopoverBadgeMock = (
+    await vi.importActual('shared/components/PopoverBadge/PopoverBadge')
+  ).PopoverBadge;
+  return {
+    PopoverBadge: vi.fn(props => <PopoverBadgeMock {...props} />),
+  };
+});
+
 describe('Badge', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('Renders a badge with a default type', () => {
     const value = 'Unknown';
     const structure = {};
 
-    const wrapper = shallow(<Badge value={value} structure={structure} />);
-    const status = wrapper.find(StatusBadge);
-    const badgeProps = status.props();
-    expect(badgeProps.type).toEqual(null);
-    expect(badgeProps.autoResolveType).toEqual(true);
+    render(
+      <ThemeProvider>
+        <Badge value={value} structure={structure} />
+      </ThemeProvider>,
+    );
+
+    expect(StatusBadge).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: null,
+        autoResolveType: true,
+      }),
+      {},
+    );
+
+    const status = screen.getAllByRole('status');
     expect(status).toHaveLength(1);
   });
 
@@ -32,11 +63,21 @@ describe('Badge', () => {
       },
     };
 
-    const wrapper = shallow(<Badge value={value} structure={structure} />);
-    const status = wrapper.find(StatusBadge);
-    const badgeProps = status.props();
-    expect(badgeProps.type).toEqual('Success');
-    expect(badgeProps.autoResolveType).toEqual(false);
+    render(
+      <ThemeProvider>
+        <Badge value={value} structure={structure} />
+      </ThemeProvider>,
+    );
+
+    expect(StatusBadge).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: 'Success',
+        autoResolveType: false,
+      }),
+      {},
+    );
+
+    const status = screen.getAllByRole('status');
     expect(status).toHaveLength(1);
   });
 
@@ -48,11 +89,20 @@ describe('Badge', () => {
       },
     };
 
-    const wrapper = shallow(<Badge value={value} structure={structure} />);
-    const status = wrapper.find(StatusBadge);
-    const badgeProps = status.props();
-    expect(badgeProps.type).toEqual('Error');
-    expect(badgeProps.autoResolveType).toEqual(false);
+    render(
+      <ThemeProvider>
+        <Badge value={value} structure={structure} />
+      </ThemeProvider>,
+    );
+    expect(StatusBadge).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: 'Error',
+        autoResolveType: false,
+      }),
+      {},
+    );
+
+    const status = screen.getAllByRole('status');
     expect(status).toHaveLength(1);
   });
 
@@ -62,7 +112,12 @@ describe('Badge', () => {
       placeholder: 'empty',
     };
 
-    const { getByText } = render(<Badge value={value} structure={structure} />);
+    const { getByText } = render(
+      <ThemeProvider>
+        <Badge value={value} structure={structure} />
+      </ThemeProvider>,
+    );
+
     expect(getByText('extensibility::empty')).toBeVisible();
   });
 
@@ -70,7 +125,12 @@ describe('Badge', () => {
     const value = null;
     const structure = {};
 
-    const { getByText } = render(<Badge value={value} structure={structure} />);
+    const { getByText } = render(
+      <ThemeProvider>
+        <Badge value={value} structure={structure} />
+      </ThemeProvider>,
+    );
+
     expect(getByText('-')).toBeVisible();
   });
 
@@ -80,20 +140,22 @@ describe('Badge', () => {
       description: 'popover',
     };
 
-    let wrapper;
     act(() => {
-      wrapper = mount(
+      render(
         <ThemeProvider>
           <Badge value={value} structure={structure} />
         </ThemeProvider>,
       );
     });
-    const status = wrapper.find(StatusBadge);
-    const popoverBadge = status.find(PopoverBadge);
-    const popoverProps = popoverBadge.props();
 
-    expect(popoverProps.tooltipContent).toEqual('popover');
-    expect(status).toHaveLength(1);
+    expect(PopoverBadge).toHaveBeenCalledWith(
+      expect.objectContaining({
+        tooltipContent: 'popover',
+      }),
+      {},
+    );
+
+    const popoverBadge = screen.getAllByTestId('has-tooltip');
     expect(popoverBadge).toHaveLength(1);
   });
 });

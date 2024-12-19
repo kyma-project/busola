@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { PluginStack, useUIStore } from '@ui-schema/ui-schema';
 import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';

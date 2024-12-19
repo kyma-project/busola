@@ -17,7 +17,7 @@ export function ContainerStatus({ status }) {
       case 'running':
       case 'completed':
       case 'succeeded':
-        return 'Success';
+        return 'Positive';
       case 'containercreating':
       case 'initing':
       case 'pending':
@@ -27,7 +27,7 @@ export function ContainerStatus({ status }) {
       case 'unknown':
         return 'None';
       default:
-        return 'Error';
+        return 'Negative';
     }
   };
 

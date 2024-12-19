@@ -2,7 +2,6 @@ import { Card, CardHeader, Icon } from '@ui5/webcomponents-react';
 import PropTypes from 'prop-types';
 
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 const TooltipWrapper = ({ tooltipProps, children }) => {
   if (tooltipProps?.content) {
@@ -27,7 +26,7 @@ export const CardWithTooltip = ({ title, tooltip, children, icon }) => {
         />
       }
     >
-      <div style={{ ...spacing.sapUiSmallMargin }}>{children}</div>
+      <div className="sap-margin-small">{children}</div>
     </Card>
   );
 };

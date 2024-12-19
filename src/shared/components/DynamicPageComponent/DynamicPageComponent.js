@@ -1,18 +1,19 @@
 import PropTypes from 'prop-types';
 import {
   Button,
+  FlexBox,
   DynamicPage,
   DynamicPageHeader,
   DynamicPageTitle,
-  FlexBox,
-  ObjectPage,
-  ObjectPageSection,
   Title,
+  TabContainer,
+  Tab,
 } from '@ui5/webcomponents-react';
+import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
+import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
 
 import './DynamicPageComponent.scss';
-import { spacing } from '@ui5/webcomponents-react-base';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
@@ -20,6 +21,62 @@ import { HintButton } from '../DescriptionHint/DescriptionHint';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
+
+const useGetHeaderHeight = (dynamicPageRef, tabContainerRef) => {
+  const [headerHeight, setHeaderHeight] = useState(undefined);
+  const [tabContainerHeight, setTabContainerHeight] = useState(undefined);
+
+  useEffect(() => {
+    const headerObserver = new ResizeObserver(([header]) => {
+      setHeaderHeight(header.contentRect.height);
+    });
+
+    const tabContainerObserver = new ResizeObserver(([tabContainer]) => {
+      setTabContainerHeight(tabContainer.contentRect.height);
+    });
+
+    if (dynamicPageRef.current) {
+      // Wait for the custom element to be defined
+      void customElements.whenDefined('ui5-dynamic-page').then(() => {
+        const shadowRoot = dynamicPageRef.current?.shadowRoot;
+
+        if (!shadowRoot) {
+          return;
+        }
+
+        // Wait for the shadowRoot to be populated
+        const shadowRootObserver = new MutationObserver(() => {
+          const header = shadowRoot.querySelector('header');
+
+          if (header) {
+            headerObserver.observe(header);
+            shadowRootObserver.disconnect();
+          }
+        });
+
+        if (shadowRoot.childElementCount > 0) {
+          const header = shadowRoot.querySelector('header');
+          if (header) {
+            headerObserver.observe(header);
+          }
+        } else if (shadowRoot instanceof Node) {
+          shadowRootObserver.observe(shadowRoot, { childList: true });
+        }
+      });
+    }
+
+    if (tabContainerRef.current) {
+      tabContainerObserver.observe(tabContainerRef.current);
+    }
+
+    return () => {
+      headerObserver.disconnect();
+      tabContainerObserver.disconnect();
+    };
+  }, [dynamicPageRef, tabContainerRef]);
+
+  return { headerHeight, tabContainerHeight };
+};
 
 const Column = ({ title, children, columnSpan, image, style = {} }) => {
   const styleComputed = { gridColumn: columnSpan, ...style };
@@ -37,7 +94,7 @@ const Column = ({ title, children, columnSpan, image, style = {} }) => {
 export const DynamicPageComponent = ({
   headerContent: customHeaderContent,
   title,
-  description,
+  description = '',
   actions,
   children,
   columnWrapperClassName,
@@ -59,6 +116,13 @@ export const DynamicPageComponent = ({
   );
   const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
   const [selectedSectionIdState, setSelectedSectionIdState] = useState('view');
+
+  const dynamicPageRef = useRef(null);
+  const tabContainerRef = useRef(null);
+  const { headerHeight, tabContainerHeight } = useGetHeaderHeight(
+    dynamicPageRef,
+    tabContainerRef,
+  );
 
   const handleColumnClose = () => {
     window.history.pushState(
@@ -91,22 +155,131 @@ export const DynamicPageComponent = ({
         });
   };
 
+  const actionsBar = (
+    <Toolbar
+      design="Transparent"
+      toolbarStyle="Clear"
+      numberOfAlwaysVisibleItems={1}
+    >
+      <ToolbarSpacer />
+      {actions && (
+        <>
+          {actions}
+          {(window.location.search.includes('layout') ||
+            (!window.location.search.includes('layout') &&
+              layoutColumn?.showCreate?.resourceType)) &&
+          layoutNumber !== 'StartColumn' ? (
+            <span className="separator" />
+          ) : null}
+        </>
+      )}
+      {window.location.search.includes('layout') ||
+      (!window.location.search.includes('layout') &&
+        layoutColumn?.showCreate?.resourceType) ? (
+        layoutColumn.layout !== 'OneColumn' ? (
+          layoutNumber !== 'StartColumn' ? (
+            <>
+              {layoutColumn.layout === 'TwoColumnsMidExpanded' ||
+              ((layoutColumn.layout === 'ThreeColumnsMidExpanded' ||
+                layoutColumn.layout === 'ThreeColumnsEndExpanded') &&
+                layoutNumber !== 'MidColumn') ? (
+                <Button
+                  accessibleName="enter-full-screen"
+                  design="Transparent"
+                  icon="full-screen"
+                  onClick={() => {
+                    const newLayout =
+                      layoutNumber === 'MidColumn'
+                        ? 'MidColumnFullScreen'
+                        : 'EndColumnFullScreen';
+                    setLayoutColumn({
+                      ...layoutColumn,
+                      layout: newLayout,
+                    });
+                    window.history.pushState(
+                      window.history.state,
+                      '',
+                      `${window.location.pathname}${
+                        layoutColumn?.showCreate?.resourceType
+                          ? ''
+                          : '?layout=' + newLayout
+                      }`,
+                    );
+                  }}
+                />
+              ) : null}
+              {layoutColumn.layout === 'MidColumnFullScreen' ||
+              layoutColumn.layout === 'EndColumnFullScreen' ? (
+                <Button
+                  accessibleName="close-full-screen"
+                  design="Transparent"
+                  icon="exit-full-screen"
+                  onClick={() => {
+                    const newLayout =
+                      layoutNumber === 'MidColumn'
+                        ? layoutColumn.endColumn === null
+                          ? 'TwoColumnsMidExpanded'
+                          : 'ThreeColumnsMidExpanded'
+                        : 'ThreeColumnsEndExpanded';
+                    setLayoutColumn({
+                      ...layoutColumn,
+                      layout: newLayout,
+                    });
+                    window.history.pushState(
+                      window.history.state,
+                      '',
+                      `${window.location.pathname}${
+                        layoutColumn?.showCreate?.resourceType
+                          ? ''
+                          : '?layout=' + newLayout
+                      }`,
+                    );
+                  }}
+                />
+              ) : null}
+              <Button
+                accessibleName="close-column"
+                design="Transparent"
+                icon="decline"
+                onClick={() => {
+                  handleActionIfFormOpen(
+                    isResourceEdited,
+                    setIsResourceEdited,
+                    isFormOpen,
+                    setIsFormOpen,
+                    () => handleColumnClose(),
+                  );
+                }}
+              />
+            </>
+          ) : null
+        ) : null
+      ) : null}
+    </Toolbar>
+  );
+
   const headerTitle = (
     <DynamicPageTitle
+      className={inlineEditForm ? 'no-shadow' : ''}
       style={title === 'Clusters Overview' ? { display: 'none' } : null}
-      header={
-        <FlexBox alignItems="Center">
-          <Title level="H3" className="bold-title">
+      heading={
+        <FlexBox className="title-container" alignItems="Center">
+          <Title
+            level="H3"
+            size="H3"
+            className="bold-title"
+            wrappingType="None"
+          >
             {title}
           </Title>
           {protectedResource && (
-            <span style={spacing.sapUiTinyMarginBegin}>
+            <span className="sap-margin-begin-tiny">
               {protectedResourceWarning}
             </span>
           )}
           {description && (
             <HintButton
-              style={spacing.sapUiTinyMargin}
+              className="sap-margin-tiny"
               setShowTitleDescription={setShowTitleDescription}
               showTitleDescription={showTitleDescription}
               description={description}
@@ -115,104 +288,7 @@ export const DynamicPageComponent = ({
           )}
         </FlexBox>
       }
-      actionsToolbarProps={{ numberOfAlwaysVisibleItems: 2 }}
-      actions={
-        <>
-          {actions && (
-            <>
-              {actions}
-              {(window.location.search.includes('layout') ||
-                (!window.location.search.includes('layout') &&
-                  layoutColumn?.showCreate?.resourceType)) &&
-              layoutNumber !== 'StartColumn' ? (
-                <span className="separator" />
-              ) : null}
-            </>
-          )}
-          {window.location.search.includes('layout') ||
-          (!window.location.search.includes('layout') &&
-            layoutColumn?.showCreate?.resourceType) ? (
-            layoutColumn.layout !== 'OneColumn' ? (
-              layoutNumber !== 'StartColumn' ? (
-                <>
-                  {layoutColumn.layout === 'TwoColumnsMidExpanded' ||
-                  ((layoutColumn.layout === 'ThreeColumnsMidExpanded' ||
-                    layoutColumn.layout === 'ThreeColumnsEndExpanded') &&
-                    layoutNumber !== 'MidColumn') ? (
-                    <Button
-                      accessibleName="enter-full-screen"
-                      design="Transparent"
-                      icon="full-screen"
-                      onClick={() => {
-                        const newLayout =
-                          layoutNumber === 'MidColumn'
-                            ? 'MidColumnFullScreen'
-                            : 'EndColumnFullScreen';
-                        setLayoutColumn({
-                          ...layoutColumn,
-                          layout: newLayout,
-                        });
-                        window.history.pushState(
-                          window.history.state,
-                          '',
-                          `${window.location.pathname}${
-                            layoutColumn?.showCreate?.resourceType
-                              ? ''
-                              : '?layout=' + newLayout
-                          }`,
-                        );
-                      }}
-                    />
-                  ) : null}
-                  {layoutColumn.layout === 'MidColumnFullScreen' ||
-                  layoutColumn.layout === 'EndColumnFullScreen' ? (
-                    <Button
-                      accessibleName="close-full-screen"
-                      design="Transparent"
-                      icon="exit-full-screen"
-                      onClick={() => {
-                        const newLayout =
-                          layoutNumber === 'MidColumn'
-                            ? layoutColumn.endColumn === null
-                              ? 'TwoColumnsMidExpanded'
-                              : 'ThreeColumnsMidExpanded'
-                            : 'ThreeColumnsEndExpanded';
-                        setLayoutColumn({
-                          ...layoutColumn,
-                          layout: newLayout,
-                        });
-                        window.history.pushState(
-                          window.history.state,
-                          '',
-                          `${window.location.pathname}${
-                            layoutColumn?.showCreate?.resourceType
-                              ? ''
-                              : '?layout=' + newLayout
-                          }`,
-                        );
-                      }}
-                    />
-                  ) : null}
-                  <Button
-                    accessibleName="close-column"
-                    design="Transparent"
-                    icon="decline"
-                    onClick={() => {
-                      handleActionIfFormOpen(
-                        isResourceEdited,
-                        setIsResourceEdited,
-                        isFormOpen,
-                        setIsFormOpen,
-                        () => handleColumnClose(),
-                      );
-                    }}
-                  />
-                </>
-              ) : null
-            ) : null
-          ) : null}
-        </>
-      }
+      actionsBar={actionsBar}
     />
   );
 
@@ -225,32 +301,34 @@ export const DynamicPageComponent = ({
       </DynamicPageHeader>
     ) : null;
 
-  const [stickyHeaderHeight, setStickyHeaderHeight] = useState(0);
+  const handlePageRef = dynamicPage => {
+    if (dynamicPageRef) {
+      if (typeof dynamicPageRef === 'function') {
+        dynamicPageRef(dynamicPage);
+      } else if (dynamicPageRef.current !== undefined) {
+        dynamicPageRef.current = dynamicPage;
+      }
+    }
 
-  useEffect(() => {
-    setTimeout(() => {
-      setStickyHeaderHeight(
-        (document.querySelector('.page-header')?.querySelector('header')
-          ?.clientHeight ?? 0) +
-          (document
-            .querySelector('.page-header')
-            ?.querySelector('ui5-tabcontainer')?.clientHeight ?? 0),
-      );
-    });
-  }, []);
+    const button = dynamicPage?.shadowRoot?.querySelector(
+      'ui5-dynamic-page-header-actions',
+    );
+    if (button) {
+      button.style['display'] = 'none';
+    }
+  };
 
   if (inlineEditForm) {
     return (
-      <ObjectPage
+      <DynamicPage
         mode="IconTabBar"
         className={`page-header ${className}`}
-        alwaysShowContentHeader
-        showHideHeaderButton={false}
-        headerContentPinnable={false}
-        headerTitle={headerTitle}
-        headerContent={customHeaderContent ?? headerContent}
+        headerPinned
+        hidePinButton={true}
+        titleArea={headerTitle}
+        headerArea={customHeaderContent ?? headerContent}
         selectedSectionId={selectedSectionIdState}
-        onBeforeNavigate={e => {
+        onSelectedSectionChange={e => {
           if (isFormOpen.formOpen) {
             e.preventDefault();
           }
@@ -261,57 +339,53 @@ export const DynamicPageComponent = ({
             isFormOpen,
             setIsFormOpen,
             () => {
-              setSelectedSectionIdState(e.detail.sectionId);
+              setSelectedSectionIdState(e.detail.selectedSectionId);
               setIsResourceEdited({
                 isEdited: false,
               });
             },
           );
 
-          if (e.detail.sectionId === 'edit') {
+          if (e.detail.selectedSectionI === 'edit') {
             setIsFormOpen({ formOpen: true });
           }
         }}
+        ref={dynamicPage => handlePageRef(dynamicPage)}
       >
-        <ObjectPageSection
-          aria-label="View"
-          hideTitleText
-          id="view"
-          titleText={t('common.tabs.view')}
+        <TabContainer
+          className="tab-container"
+          style={{ top: `${headerHeight}px` }}
+          ref={tabContainerRef}
+          onTabSelect={event => {
+            const mode = event.detail.tab.getAttribute('data-mode');
+            setSelectedSectionIdState(mode);
+          }}
         >
-          {content}
-        </ObjectPageSection>
+          <Tab data-mode="view" text={t('common.tabs.view')}></Tab>
+          <Tab
+            data-mode="edit"
+            text={showYamlTab ? t('common.tabs.yaml') : t('common.tabs.edit')}
+          ></Tab>
+        </TabContainer>
 
-        <ObjectPageSection
-          aria-label="Edit"
-          hideTitleText
-          id="edit"
-          titleText={
-            showYamlTab ? t('common.tabs.yaml') : t('common.tabs.edit')
-          }
-        >
-          {inlineEditForm(stickyHeaderHeight)}
-        </ObjectPageSection>
-      </ObjectPage>
+        {selectedSectionIdState === 'view' && content}
+
+        {selectedSectionIdState === 'edit' &&
+          inlineEditForm(headerHeight + tabContainerHeight)}
+      </DynamicPage>
     );
   }
 
   return (
     <DynamicPage
       className="page-header"
-      alwaysShowContentHeader
-      showHideHeaderButton={false}
-      headerContentPinnable={false}
-      backgroundDesign="Solid"
-      headerTitle={headerTitle}
-      headerContent={headerContent}
-      footer={footer}
+      hidePinButton
+      titleArea={headerTitle}
+      headerArea={headerContent}
+      footerArea={footer}
+      ref={dynamicPage => handlePageRef(dynamicPage)}
     >
-      {({ stickyHeaderHeight }) => {
-        return typeof content === 'function'
-          ? content(stickyHeaderHeight)
-          : content;
-      }}
+      {typeof content === 'function' ? content(headerHeight) : content}
     </DynamicPage>
   );
 };
@@ -320,8 +394,4 @@ DynamicPageComponent.Column = Column;
 DynamicPageComponent.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.node,
-};
-
-DynamicPageComponent.defaultProps = {
-  description: '',
 };

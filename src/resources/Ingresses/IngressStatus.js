@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ConditionList } from 'shared/components/ConditionList/ConditionList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { spacing } from '@ui5/webcomponents-react-base';
+
 import './IngressStatus.scss';
 
 export const IngressStatus = ({ resource }) => {
@@ -18,20 +18,14 @@ export const IngressStatus = ({ resource }) => {
         header: {
           titleText: ingress.hostname ? (
             <div>
-              <span
-                style={{ ...spacing.sapUiTinyMarginEnd }}
-                className="title bsl-has-color-status-4"
-              >
+              <span className="title bsl-has-color-status-4 sap-margin-end-tiny">
                 {`${t('ingresses.labels.host-name')}:`}
               </span>
               {`${ingress.hostname}`}
             </div>
           ) : (
             <div>
-              <span
-                style={{ ...spacing.sapUiTinyMarginEnd }}
-                className="title bsl-has-color-status-4"
-              >
+              <span className="title bsl-has-color-status-4 sap-margin-end-tiny">
                 {`${t('ingresses.labels.ip')}:`}
               </span>
               {`${ingress.ip}`}
@@ -89,13 +83,7 @@ export const IngressStatus = ({ resource }) => {
       }))}
     />
   ) : (
-    <div
-      className="content bsl-has-color-text-1"
-      style={{
-        ...spacing.sapUiSmallMarginBegin,
-        ...spacing.sapUiSmallMarginBottom,
-      }}
-    >
+    <div className="content bsl-has-color-text-1 sap-margin-begin-small sap-margin-bottom-small">
       {EMPTY_TEXT_PLACEHOLDER}
     </div>
   );

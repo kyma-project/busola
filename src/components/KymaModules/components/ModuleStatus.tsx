@@ -7,18 +7,27 @@ export const ModuleStatus = ({ resource }: any) => {
   const moduleState = status?.state || 'Unknown';
   const moduleMessage = status?.description;
 
+  const resolveType = (status: string) => {
+    switch (status) {
+      case 'Ready':
+        return 'Positive';
+      case 'Processing':
+      case 'Deleting':
+      case 'Unknown':
+        return 'None';
+      case 'Warning':
+        return 'Critical';
+      case 'Error':
+        return 'Negative';
+      default:
+        return 'None';
+    }
+  };
+
   return (
     <StatusBadge
       resourceKind="kymas"
-      type={
-        moduleState === 'Ready'
-          ? 'Success'
-          : moduleState === 'Processing' ||
-            moduleState === 'Deleting' ||
-            moduleState === 'Unknown'
-          ? 'None'
-          : moduleState || 'None'
-      }
+      type={resolveType(moduleState)}
       tooltipContent={moduleMessage}
     >
       {moduleState}
