@@ -249,9 +249,7 @@ describe('GenericList', () => {
 
     cy.contains(content).should('exist');
   });
-});
 
-describe('GenericList2', () => {
   it('Renders with minimal props', () => {
     cy.mount(
       <GenericList
