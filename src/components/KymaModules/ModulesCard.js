@@ -46,7 +46,7 @@ export default function ModulesCard({
   checkIfStatusModuleIsBeta,
 }) {
   const { t } = useTranslation();
-  const [imageSrc, setImageSrc] = useState('/assets/sap-logo.svg');
+  const [imageSrc, setImageSrc] = useState('');
 
   useEffect(() => {
     async function checkImage() {
@@ -55,6 +55,7 @@ export default function ModulesCard({
     }
     checkImage();
   }, [module]);
+
   return (
     <Card key={module.name} className="addModuleCard">
       <StandardListItem
@@ -80,11 +81,13 @@ export default function ModulesCard({
               : t('kyma-modules.no-version')}
           </Text>
         </div>
-        <img
-          className="avatar"
-          alt={module.icon.name ? module.icon.name : 'SAP'}
-          src={imageSrc}
-        />
+        {imageSrc !== '' && (
+          <img
+            className="avatar"
+            alt={module.icon.name ? module.icon.name : 'SAP'}
+            src={imageSrc}
+          />
+        )}
       </StandardListItem>
       <div className="content">
         {module.docsUrl && (
