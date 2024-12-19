@@ -12,7 +12,6 @@ import {
   ShellBarDomRef,
 } from '@ui5/webcomponents-react';
 import { MenuItemClickEventDetail } from '@ui5/webcomponents/dist/Menu.js';
-import Snowfall from 'react-snowfall';
 
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -35,10 +34,14 @@ import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
 import { configFeaturesNames } from 'state/types';
 
+const SNOW_STORAGE_KEY = 'snow-animation';
+
 export function Header() {
   useAvailableNamespaces();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSnowOpen, setIsSnowOpen] = useState(false);
+  const [isSnowOpen, setIsSnowOpen] = useState(
+    !!localStorage.getItem(SNOW_STORAGE_KEY),
+  );
 
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -79,6 +82,16 @@ export function Header() {
       spaces += '\u00a0';
     }
     return spaces;
+  };
+
+  const handleSnowButtonClick = () => {
+    if (isSnowOpen) {
+      setIsSnowOpen(false);
+      localStorage.removeItem(SNOW_STORAGE_KEY);
+    } else {
+      setIsSnowOpen(true);
+      localStorage.setItem(SNOW_STORAGE_KEY, 'true');
+    }
   };
 
   const clustersList = [
@@ -123,11 +136,13 @@ export function Header() {
   return (
     <>
       {isSnowOpen && (
-        <Snowfall
-          style={{
-            zIndex: 5,
-          }}
-        />
+        <div className="snowflakes" aria-hidden="true">
+          {[...Array(10).keys()].map((_, index) => (
+            <div key={index} className="snowflake">
+              ❅
+            </div>
+          ))}
+        </div>
       )}
       <ShellBar
         className="header"
@@ -181,10 +196,12 @@ export function Header() {
       >
         {isSnowEnabled && (
           <ShellBarItem
-            onClick={() => setIsSnowOpen(!isSnowOpen)}
-            icon="heating-cooling"
-            text={'Snow'}
-            title={'Snow'}
+            onClick={handleSnowButtonClick}
+            icon={isSnowOpen ? 'heating-cooling' : 'activate'}
+            text={isSnowOpen ? t('navigation.snow-stop') : t('navigation.snow')}
+            title={
+              isSnowOpen ? t('navigation.snow-stop') : t('navigation.snow')
+            }
           />
         )}
         {isFeedbackEnabled && (
