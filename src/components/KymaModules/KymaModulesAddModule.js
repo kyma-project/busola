@@ -102,6 +102,10 @@ export default function KymaModulesAddModule({
           ],
           docsUrl:
             module.metadata.annotations['operator.kyma-project.io/doc-url'],
+          icon: {
+            icon: module.spec?.info?.icons[0]?.link,
+            name: module.spec?.info?.icons[0]?.name,
+          },
         });
       } else if (existingModule) {
         existingModule.channels?.push({
@@ -113,6 +117,7 @@ export default function KymaModulesAddModule({
       }
     } else {
       if (!existingModule && !isAlreadyInstalled) {
+        console.log(name, module.spec?.info);
         moduleMetaRelase?.spec.channels.forEach(channel => {
           if (!acc.find(item => item.name === name)) {
             acc.push({
@@ -128,6 +133,10 @@ export default function KymaModulesAddModule({
               ],
               docsUrl:
                 module.metadata.annotations['operator.kyma-project.io/doc-url'],
+              icon: {
+                icon: module.spec?.info?.icons[0]?.link,
+                name: module.spec?.info?.icons[0]?.name,
+              },
             });
           } else {
             acc
@@ -239,6 +248,7 @@ export default function KymaModulesAddModule({
       const index = selectedModules?.findIndex(kymaResourceModule => {
         return kymaResourceModule.name === module?.name;
       });
+      // console.log(module.name, module.icon);
 
       const card = (
         <ModulesCard

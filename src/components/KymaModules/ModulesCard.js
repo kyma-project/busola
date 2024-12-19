@@ -52,7 +52,11 @@ export default function ModulesCard({
               : t('kyma-modules.no-version')}
           </Text>
         </div>
-        <img className="avatar" alt="SAP" src="\assets\sap-logo.svg" />
+        <img
+          className="avatar"
+          alt={module.icon.name ? module.icon.name : 'SAP'}
+          src={module.icon.icon ? module.icon.icon : '/assets/sap-logo.svg'}
+        />
       </StandardListItem>
       <div className="content">
         {module.docsUrl && (
