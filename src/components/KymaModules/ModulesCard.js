@@ -13,6 +13,26 @@ import '@ui5/webcomponents/dist/features/InputElementsFormSupport.js';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { useTranslation } from 'react-i18next';
 import { spacing } from '@ui5/webcomponents-react-base';
+import { useEffect, useState } from 'react';
+
+async function isImageAvailable(url) {
+  try {
+    const response = await fetch(url, { method: 'HEAD' });
+    return response.ok;
+  } catch (error) {
+    return false;
+  }
+}
+async function getImageSrc(module) {
+  const defaultImage = '/assets/sap-logo.svg';
+  const iconLink = module.icon.link;
+
+  if (iconLink && (await isImageAvailable(iconLink))) {
+    return iconLink;
+  } else {
+    return defaultImage;
+  }
+}
 
 export default function ModulesCard({
   module,
@@ -26,7 +46,15 @@ export default function ModulesCard({
   checkIfStatusModuleIsBeta,
 }) {
   const { t } = useTranslation();
+  const [imageSrc, setImageSrc] = useState('/assets/sap-logo.svg');
 
+  useEffect(() => {
+    async function checkImage() {
+      const src = await getImageSrc(module);
+      setImageSrc(src);
+    }
+    checkImage();
+  }, [module]);
   return (
     <Card key={module.name} className="addModuleCard">
       <StandardListItem
@@ -55,7 +83,7 @@ export default function ModulesCard({
         <img
           className="avatar"
           alt={module.icon.name ? module.icon.name : 'SAP'}
-          src={module.icon.icon ? module.icon.icon : '/assets/sap-logo.svg'}
+          src={imageSrc}
         />
       </StandardListItem>
       <div className="content">

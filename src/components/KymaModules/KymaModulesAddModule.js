@@ -103,7 +103,7 @@ export default function KymaModulesAddModule({
           docsUrl:
             module.metadata.annotations['operator.kyma-project.io/doc-url'],
           icon: {
-            icon: module.spec?.info?.icons[0]?.link,
+            link: module.spec?.info?.icons[0]?.link,
             name: module.spec?.info?.icons[0]?.name,
           },
         });
@@ -134,7 +134,7 @@ export default function KymaModulesAddModule({
               docsUrl:
                 module.metadata.annotations['operator.kyma-project.io/doc-url'],
               icon: {
-                icon: module.spec?.info?.icons[0]?.link,
+                link: module.spec?.info?.icons[0]?.link,
                 name: module.spec?.info?.icons[0]?.name,
               },
             });
