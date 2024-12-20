@@ -99,7 +99,7 @@ context('Test reduced permissions', () => {
       .get('ui5-select:visible')
       .click();
 
-    cy.get('ui5-li:visible')
+    cy.get('ui5-option:visible')
       .contains('ServiceAccount')
       .find('li')
       .click({ force: true });

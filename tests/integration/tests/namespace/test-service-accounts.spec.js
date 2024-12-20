@@ -98,15 +98,16 @@ context('Test Service Accounts', () => {
   });
 
   it('Generate TokenRequest', () => {
-    cy.get('[data-component-name="ToolbarChildContainer"]')
+    cy.getMidColumn()
       .contains('ui5-button', 'Generate TokenRequest')
       .click();
+
+    cy.contains('TokenRequest generated').should('be.visible');
 
     cy.contains(
       'The TokenRequest allows you to log in with your ServiceAccount credentials.',
     ).should('be.visible');
 
-    cy.contains('TokenRequest generated').should('be.visible');
     cy.readFile(filepath).should('not.exist');
 
     //check if TokenRequest is being generated after value change

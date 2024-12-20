@@ -64,21 +64,27 @@ context('Test multiple context kubeconfig', () => {
         .contains(kubeconfig['current-context'])
         .click();
 
-      cy.get('ui5-li:visible').contains(kubeconfig.contexts[1].name);
+      cy.get('ui5-option:visible').contains(kubeconfig.contexts[1].name);
 
-      cy.get('ui5-li:visible')
+      cy.wait(3000);
+
+      cy.get('ui5-option:visible')
         .contains('All contexts')
         .click();
+      cy.wait(3000);
 
       cy.contains('Next').click({ force: true });
+      cy.wait(3000);
 
       cy.get('ui5-button:visible')
         .contains('Next step')
         .click();
+      cy.wait(3000);
 
       cy.get(`[accessible-name="last-step"]:visible`)
         .contains('Connect cluster')
         .click({ force: true });
+      cy.wait(3000);
 
       cy.contains('Cluster Details').should('exist');
 
