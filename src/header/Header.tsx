@@ -32,16 +32,29 @@ import './Header.scss';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
+import { configFeaturesNames } from 'state/types';
+import { themeState } from 'state/preferences/themeAtom';
+
+const SNOW_STORAGE_KEY = 'snow-animation';
 
 export function Header() {
   useAvailableNamespaces();
+  const localStorageSnowEnabled = () => {
+    const snowStorage = localStorage.getItem(SNOW_STORAGE_KEY);
+    if (snowStorage && typeof JSON.parse(snowStorage) === 'boolean') {
+      return JSON.parse(snowStorage);
+    }
+    return true;
+  };
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSnowOpen, setIsSnowOpen] = useState(localStorageSnowEnabled());
 
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { isEnabled: isFeedbackEnabled, link: feedbackLink } = useFeature(
-    'FEEDBACK',
+    configFeaturesNames.FEEDBACK,
   );
+  const { isEnabled: isSnowEnabled } = useFeature(configFeaturesNames.SNOW);
 
   const { githubLink, busolaVersion } = useGetBusolaVersionDetails();
   const legalLinks = useGetLegalLinks();
@@ -54,6 +67,7 @@ export function Header() {
     isResourceEditedState,
   );
   const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
+  const [theme] = useRecoilState(themeState);
 
   const shellbarRef = useRef<ShellBarDomRef>(null);
   useEffect(() => {
@@ -65,6 +79,13 @@ export function Header() {
     }
   }, [shellbarRef]);
 
+  useEffect(() => {
+    if (theme === 'sap_horizon_hcb' || theme === 'sap_horizon_hcw') {
+      setIsSnowOpen(false);
+      localStorage.setItem(SNOW_STORAGE_KEY, JSON.stringify(false));
+    }
+  }, [theme]);
+
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
     name => name !== cluster?.name,
   );
@@ -75,6 +96,16 @@ export function Header() {
       spaces += '\u00a0';
     }
     return spaces;
+  };
+
+  const handleSnowButtonClick = () => {
+    if (isSnowOpen) {
+      setIsSnowOpen(false);
+      localStorage.setItem(SNOW_STORAGE_KEY, JSON.stringify(false));
+    } else {
+      setIsSnowOpen(true);
+      localStorage.setItem(SNOW_STORAGE_KEY, JSON.stringify(true));
+    }
   };
 
   const clustersList = [
@@ -118,6 +149,15 @@ export function Header() {
 
   return (
     <>
+      {isSnowOpen && isSnowEnabled && (
+        <div className="snowflakes" aria-hidden="true">
+          {[...Array(10).keys()].map(key => (
+            <div key={`snowflake-${key}`} className="snowflake">
+              ❅
+            </div>
+          ))}
+        </div>
+      )}
       <ShellBar
         className="header"
         startButton={
@@ -168,6 +208,16 @@ export function Header() {
         }
         onProfileClick={() => setIsMenuOpen(true)}
       >
+        {isSnowEnabled && (
+          <ShellBarItem
+            onClick={handleSnowButtonClick}
+            icon={isSnowOpen ? 'heating-cooling' : 'activate'}
+            text={isSnowOpen ? t('navigation.snow-stop') : t('navigation.snow')}
+            title={
+              isSnowOpen ? t('navigation.snow-stop') : t('navigation.snow')
+            }
+          />
+        )}
         {isFeedbackEnabled && (
           <ShellBarItem
             onClick={() => window.open(feedbackLink, '_blank')}
