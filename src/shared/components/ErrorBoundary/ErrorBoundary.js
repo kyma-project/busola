@@ -9,6 +9,8 @@ class ErrorBoundaryComponent extends React.Component {
     this.state = {
       hasError: false,
     };
+
+    console.log(this.props.displayButton);
   }
 
   static getDerivedStateFromError(error) {
@@ -68,5 +70,7 @@ class ErrorBoundaryComponent extends React.Component {
 
 export const ErrorBoundary = ({ displayButton = true, ...props }) => {
   const { t } = useTranslation();
-  return <ErrorBoundaryComponent {...props} t={t} />;
+  return (
+    <ErrorBoundaryComponent displayButton={displayButton} {...props} t={t} />
+  );
 };
