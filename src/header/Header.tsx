@@ -39,10 +39,15 @@ const SNOW_STORAGE_KEY = 'snow-animation';
 
 export function Header() {
   useAvailableNamespaces();
+  const localStorageSnowEnabled = () => {
+    const snowStorage = localStorage.getItem(SNOW_STORAGE_KEY);
+    if (snowStorage && typeof JSON.parse(snowStorage) === 'boolean') {
+      return JSON.parse(snowStorage);
+    }
+    return true;
+  };
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSnowOpen, setIsSnowOpen] = useState(
-    !!localStorage.getItem(SNOW_STORAGE_KEY),
-  );
+  const [isSnowOpen, setIsSnowOpen] = useState(localStorageSnowEnabled());
 
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -77,7 +82,7 @@ export function Header() {
   useEffect(() => {
     if (theme === 'sap_horizon_hcb' || theme === 'sap_horizon_hcw') {
       setIsSnowOpen(false);
-      localStorage.removeItem(SNOW_STORAGE_KEY);
+      localStorage.setItem(SNOW_STORAGE_KEY, JSON.stringify(false));
     }
   }, [theme]);
 
@@ -96,10 +101,10 @@ export function Header() {
   const handleSnowButtonClick = () => {
     if (isSnowOpen) {
       setIsSnowOpen(false);
-      localStorage.removeItem(SNOW_STORAGE_KEY);
+      localStorage.setItem(SNOW_STORAGE_KEY, JSON.stringify(false));
     } else {
       setIsSnowOpen(true);
-      localStorage.setItem(SNOW_STORAGE_KEY, 'true');
+      localStorage.setItem(SNOW_STORAGE_KEY, JSON.stringify(true));
     }
   };
 
@@ -144,7 +149,7 @@ export function Header() {
 
   return (
     <>
-      {isSnowOpen && (
+      {isSnowOpen && isSnowEnabled && (
         <div className="snowflakes" aria-hidden="true">
           {[...Array(10).keys()].map(key => (
             <div key={`snowflake-${key}`} className="snowflake">
