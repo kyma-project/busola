@@ -1,3 +1,4 @@
+import React from 'react';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { ResourceDescription } from '.';
 import ResourceQuotaCreate from './ResourceQuotaCreate';
@@ -7,7 +8,6 @@ import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow'
 import { useTranslation } from 'react-i18next';
 import { Tokens } from 'shared/components/Tokens';
 import { Text, Title } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 export type ResourceQuotaProps = {
   kind: string;
@@ -45,7 +45,7 @@ export default function ResourceQuotaDetails(props: any) {
   const customComponents = [
     (resource: ResourceQuotaProps) => {
       return (
-        <>
+        <React.Fragment key="resource-quota-details">
           {(resource.spec.scopes || resource.spec.scopeSelector) && (
             <UI5Panel title={t('common.headers.specification')}>
               {resource.spec?.scopes && (
@@ -60,8 +60,8 @@ export default function ResourceQuotaDetails(props: any) {
                     <>
                       <Title
                         level="H6"
-                        className="resource-quota-spec-subheader"
-                        style={spacing.sapUiSmallMargin}
+                        size="H6"
+                        className="resource-quota-spec-subheader sap-margin-small"
                       >
                         {scope.scopeName}
                       </Title>
@@ -81,11 +81,11 @@ export default function ResourceQuotaDetails(props: any) {
               )}
             </UI5Panel>
           )}
-        </>
+        </React.Fragment>
       );
     },
     (resource: ResourceQuotaProps) => (
-      <ResourceQuotaLimits resource={resource} />
+      <ResourceQuotaLimits key="resource-quota-limits" resource={resource} />
     ),
   ];
 

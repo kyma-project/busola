@@ -18,7 +18,6 @@ import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useTranslation } from 'react-i18next';
 import { useMatch, useNavigate } from 'react-router';
 import { useUrl } from 'hooks/useUrl';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { NamespaceChooser } from 'header/NamespaceChooser/NamespaceChooser';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
@@ -112,19 +111,13 @@ export function SidebarNavigation() {
           <div style={namespace ? { zIndex: '0' } : { display: 'none' }}>
             <Label
               for="NamespaceComboBox"
-              style={{
-                ...spacing.sapUiTinyMarginBottom,
-                ...spacing.sapUiSmallMarginBegin,
-              }}
+              className="sap-margin-bottom-tiny sap-margin-begin-small"
             >
               {t('common.headers.namespaces')}
             </Label>
             <FlexBox
               alignItems="Center"
-              style={{
-                ...spacing.sapUiSmallMarginBottom,
-                ...spacing.sapUiTinyMarginBeginEnd,
-              }}
+              className="sap-margin-bottom-small sap-margin-x-tiny"
             >
               <ComboBox
                 id="NamespaceComboBox"

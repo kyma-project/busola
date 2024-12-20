@@ -130,6 +130,7 @@ export function PersistentVolumeDetails(props) {
 
   const Events = () => (
     <EventsList
+      key="events"
       filter={filterByResource('PersistentVolume', props.resourceName)}
       hideInvolvedObjects={true}
     />

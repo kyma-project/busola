@@ -22,7 +22,10 @@ const StandaloneAction = ({ action, entry }) => {
   return (
     <Button
       data-testid={action.name.replace(' ', '').toLowerCase()}
-      onClick={() => action.handler(entry)}
+      onClick={e => {
+        e.stopPropagation();
+        action.handler(entry);
+      }}
       className="list-actions__standalone"
       design="Transparent"
       icon={typeof icon === 'function' ? icon(entry) : icon}
@@ -65,7 +68,7 @@ const ListActions = ({ actions, entry }) => {
           <Menu
             open={isMenuOpen}
             opener={'openMenuBtn'}
-            onAfterClose={() => {
+            onClose={() => {
               setIsMenuOpen(false);
             }}
           >

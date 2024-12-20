@@ -1,8 +1,8 @@
 import { useValidation } from 'shared/hooks/useValidation';
 import { Input } from '@ui5/webcomponents-react';
 
-export function Text(props) {
-  return <WrappedText {...props} />;
+export function Text({ key, ...props }) {
+  return <WrappedText key={key} {...props} />;
 }
 
 export function WrappedText({ value, setValue, onChange, inputRef, ...props }) {

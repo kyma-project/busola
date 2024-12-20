@@ -1,6 +1,6 @@
-import { shallow } from 'enzyme';
+import { render, screen } from '@testing-library/react';
 import { Columns } from '../Columns';
-import { Widget } from '../Widget';
+import { ThemeProvider } from '@ui5/webcomponents-react';
 
 vi.mock('components/Extensibility/ExtensibilityCreate', () => {
   return {
@@ -30,16 +30,24 @@ describe('Columns', () => {
       ],
     };
 
-    const component = shallow(<Columns structure={structure} />);
-    const widget = component.find(Widget);
-    expect(widget).toHaveLength(2);
+    render(
+      <ThemeProvider>
+        <Columns structure={structure} />
+      </ThemeProvider>,
+    );
+    const widget = screen.getByTestId('extensibility-columns');
+    expect(widget.childElementCount).toBe(2);
   });
 
   it('Renders columns', () => {
     const structure = {};
 
-    const component = shallow(<Columns structure={structure} />);
-    const widget = component.find(Widget);
-    expect(widget).toHaveLength(0);
+    render(
+      <ThemeProvider>
+        <Columns structure={structure} />
+      </ThemeProvider>,
+    );
+    const widget = screen.getByTestId('extensibility-columns');
+    expect(widget.childElementCount).toBe(0);
   });
 });

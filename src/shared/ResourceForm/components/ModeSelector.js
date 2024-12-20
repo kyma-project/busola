@@ -27,7 +27,7 @@ export function ModeSelector({ mode, setMode, isDisabled = false }) {
       <SegmentedButton
         className="mode-selector__content"
         onSelectionChange={event => {
-          const mode = event.detail.selectedItem.getAttribute('data-mode');
+          const mode = event.detail.selectedItems[0].getAttribute('data-mode');
           setMode(mode);
           if (preferencesViewType === 'MODE_DEFAULT') {
             setEditViewMode({
@@ -40,7 +40,7 @@ export function ModeSelector({ mode, setMode, isDisabled = false }) {
         {buttonsToDisplay.map(button => (
           <SegmentedButtonItem
             key={button.mode}
-            pressed={mode === button.mode}
+            selected={mode === button.mode}
             disabled={isDisabled}
             data-mode={button.mode}
           >

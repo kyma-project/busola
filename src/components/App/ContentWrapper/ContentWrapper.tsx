@@ -1,4 +1,3 @@
-import { spacing } from '@ui5/webcomponents-react-base';
 import './ContentWrapper.scss';
 
 type ContentWrapperProps = {
@@ -7,7 +6,7 @@ type ContentWrapperProps = {
 
 export const ContentWrapper = ({ children }: ContentWrapperProps) => {
   return (
-    <div id="content-wrap" style={spacing.sapUiTinyMarginTop}>
+    <div id="content-wrap" className="sap-margin-top-tiny">
       <div className="content-scroll">{children}</div>
     </div>
   );

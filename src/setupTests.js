@@ -2,8 +2,6 @@ import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/vitest';
 import 'babel-polyfill';
 import 'jsdom-worker-fix';
-import Enzyme from 'enzyme';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { act, cleanup } from '@testing-library/react';
 import ResizeObserverPolyfill from 'resize-observer-polyfill';
 
@@ -116,8 +114,6 @@ vi.mock('react-i18next', () => ({
     };
   },
 }));
-
-Enzyme.configure({ adapter: new Adapter() });
 
 afterEach(() => {
   cleanup();

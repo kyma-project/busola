@@ -19,7 +19,7 @@ export function ClusterNodes({ data, error, loading }) {
   const { t } = useTranslation();
 
   const getStatusType = status => {
-    if (status === 'Ready') return 'Success';
+    if (status === 'Ready') return 'Positive';
     return undefined;
   };
 
