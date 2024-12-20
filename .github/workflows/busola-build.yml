@@ -1,6 +1,12 @@
 name: Busola Build
 
 on:
+  workflow_call:
+    inputs:
+      tag:
+        description: "Additional tag for built images"
+        required: true
+        type: string
   push:
     branches:
       - main
@@ -38,6 +44,5 @@ jobs:
     with:
       name: busola
       dockerfile: Dockerfile
-      context: .
-      export-tags: true
-      tags: latest
+      tags: ${{ inputs.tag != '' && inputs.tag || 'latest' }}
+      build-args: ${{ inputs.tag != '' && format('tag={0}', inputs.tag) || '' }}
