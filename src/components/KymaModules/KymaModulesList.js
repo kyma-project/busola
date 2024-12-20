@@ -201,7 +201,7 @@ export default function KymaModulesList({
         <>
           {moduleStatus?.channel
             ? moduleStatus?.channel
-            : EMPTY_TEXT_PLACEHOLDER}
+            : kymaResource?.spec?.modules?.[moduleIndex]?.channel}
           {isChannelOverriden ? (
             <Tag
               hideStateIcon
@@ -421,7 +421,7 @@ export default function KymaModulesList({
       layoutNumber="StartColumn"
       windowTitle={t('kyma-modules.title')}
       headerContent={
-        <DynamicPageHeader>
+        <DynamicPageHeader className="no-shadow">
           <FlexBox alignItems="Center">
             <Label showColon>{t('kyma-modules.release-channel')}</Label>
             <Text renderWhitespace={true}> </Text>

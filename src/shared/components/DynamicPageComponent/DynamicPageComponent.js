@@ -11,7 +11,6 @@ import {
 } from '@ui5/webcomponents-react';
 import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
 import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
-import { ToolbarSeparator } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSeparator/index.js';
 
 import './DynamicPageComponent.scss';
 import { useEffect, useState, useRef } from 'react';
@@ -164,15 +163,15 @@ export const DynamicPageComponent = ({
     >
       <ToolbarSpacer />
       {actions && (
-        <div className="page-header__actions">
+        <>
           {actions}
           {(window.location.search.includes('layout') ||
             (!window.location.search.includes('layout') &&
               layoutColumn?.showCreate?.resourceType)) &&
           layoutNumber !== 'StartColumn' ? (
-            <ToolbarSeparator />
+            <span className="separator" />
           ) : null}
-        </div>
+        </>
       )}
       {window.location.search.includes('layout') ||
       (!window.location.search.includes('layout') &&

@@ -8,6 +8,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { ComboboxInput } from 'shared/ResourceForm/inputs';
 import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
+import { useRef } from 'react';
 
 const expirationSecondsOptions = [
   {
@@ -71,6 +72,7 @@ export function TokenRequestModal({
 }: TokenRequestModalProps) {
   const { t } = useTranslation();
   const downloadKubeconfig = useDownloadKubeconfigWithToken();
+  const modalRef = useRef(null);
 
   const {
     kubeconfigYaml,
@@ -78,7 +80,12 @@ export function TokenRequestModal({
     generateTokenRequest,
     tokenRequest,
     setTokenRequest,
-  } = useGenerateTokenRequest(isModalOpen, namespace, serviceAccountName);
+  } = useGenerateTokenRequest(
+    isModalOpen,
+    namespace,
+    serviceAccountName,
+    modalRef,
+  );
 
   const isExpirationSecondsValueANumber = () =>
     !Number(tokenRequest.spec.expirationSeconds);
@@ -100,6 +107,7 @@ export function TokenRequestModal({
       open={isModalOpen}
       onClose={handleCloseModal}
       headerText={t('service-accounts.token-request.generate')}
+      ref={modalRef}
       footer={
         <Bar
           design="Footer"

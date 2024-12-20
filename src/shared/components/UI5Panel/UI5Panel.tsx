@@ -38,7 +38,7 @@ export const UI5Panel = ({
     if (headerTop !== '0')
       setTimeout(() => {
         const stickyHeader = document
-          .querySelector('ui5-panel')
+          .querySelector('.resource-form--panel')
           ?.shadowRoot?.querySelector('.ui5-panel-root')
           ?.querySelector(
             '.ui5-panel-heading-wrapper.ui5-panel-heading-wrapper-sticky',
