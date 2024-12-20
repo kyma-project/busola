@@ -60,7 +60,7 @@ export default defineConfig({
       },
     },
     include: [
-      '@openapi-contrib/openapi-schema-to-json-schema', 
+      '@openapi-contrib/openapi-schema-to-json-schema',
       '@stoplight/json-ref-resolver',
       'monaco-yaml/yaml.worker.js'
     ]

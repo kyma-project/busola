@@ -5,7 +5,7 @@ import { throwHttpError } from 'shared/hooks/BackendAPI/config';
 
 import { authDataState, AuthDataState } from '../../../state/authDataAtom';
 import { getClusterConfig } from '../../../state/utils/getBackendInfo';
-import { clusterState, ActiveClusterState } from '../../../state/clusterAtom';
+import { ActiveClusterState, clusterState } from '../../../state/clusterAtom';
 
 export type FetchFn = ({
   relativeUrl,
@@ -40,7 +40,7 @@ export const createFetchFn = ({
     },
     signal: abortController?.signal,
   };
-  const { backendAddress } = getClusterConfig();
+  const { backendAddress } = await getClusterConfig();
 
   try {
     const response = await fetch(backendAddress + relativeUrl, init);

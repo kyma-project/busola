@@ -21,12 +21,12 @@ async function failFastFetch<T>(
 }
 
 export function useGardenerLogin(setReport: (report: string) => void) {
-  const { backendAddress } = getClusterConfig();
   const clustersInfo = useClustersInfo();
 
   const getAvailableProjects = async (
     fetchHeaders: HeadersInit,
   ): Promise<string[]> => {
+    const { backendAddress } = await getClusterConfig();
     type SSRResult = {
       status: { resourceRules: PermissionSet[] };
     };
@@ -63,6 +63,8 @@ export function useGardenerLogin(setReport: (report: string) => void) {
     fetchHeaders: HeadersInit,
     availableProjects: string[],
   ) => {
+    const { backendAddress } = await getClusterConfig();
+
     type ShootsResult = {
       items: K8sResource[];
     };

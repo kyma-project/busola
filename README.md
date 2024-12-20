@@ -178,6 +178,45 @@ For the information on how to run tests and configure them, go to the [`tests`](
    docker run --rm -it -p 3001:3001 -v <path to your custom config>:/app/core-ui/environments/ --env ENVIRONMENT={your-env} --pid=host --name busola europe-docker.pkg.dev/kyma-project/prod/busola:latest
    ```
 
+## Deploy busola in Kubernetes Cluster
+
+To install busola on k8s cluster go to `resources` directory and run:
+
+```shell
+kustomize build base/ | kubectl apply -f-
+```
+
+To install busola with istio gateway please prepare `DOMAIN`, go to `resources` and run:
+
+```shell
+./apply-resources-istio.sh ${YOUR_DOMAIN}
+```
+
+### Access busola installed on Kubernetes
+
+You can access busola installed on Kubernetes in several ways, depends on how it's installed:
+
+### K3d
+
+Use port-forward
+
+```shell
+kubectl port-forward services/web 8080:8080
+kubectl port-forward services/backend 3001:3001
+```
+
+Install ingress by runing:
+
+```shell
+(cd resources && kubectl apply -f ingress/ingress.yaml)
+```
+
+Then go to `localhost`
+
+### Port-forward
+
+### Istio-ingress gateway
+
 ## Troubleshooting
 
 > **TIP:** To solve most of the problems with Busola development, clear the browser cache or do a hard refresh of the website.
