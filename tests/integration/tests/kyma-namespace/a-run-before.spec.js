@@ -24,7 +24,6 @@ context('Create Namespace', () => {
 
     cy.get('[aria-label="Apply Total Memory Quotas, collapsed"]')
       .find('ui5-combobox[placeholder="Choose template"]:visible')
-      .find('ui5-icon[accessible-name="Select Options"]')
       .click();
 
     cy.get('ui5-responsive-popover:visible')
