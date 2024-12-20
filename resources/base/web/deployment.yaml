@@ -26,20 +26,14 @@ spec:
                   key: ENVIRONMENT
                   name: environment
             - name: BACKEND_URL
-              value: backend
+              valueFrom:
+                configMapKeyRef:
+                  optional: true
+                  key: BACKEND_URL
+                  name: busola-config
           resources:
             requests:
               cpu: 100m
               memory: 21Mi
           ports:
             - containerPort: 8080
-          volumeMounts:
-            - name: config
-              mountPath: /app/core-ui/config
-      volumes:
-        - name: config
-          configMap:
-            name: busola-config
-            items:
-              - key: config
-                path: config.yaml

@@ -26,7 +26,7 @@ import pluralize from 'pluralize';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { CustomResourceDefinition } from 'command-pallette/CommandPalletteUI/handlers/crHandler';
 import { createPostFn } from 'shared/hooks/BackendAPI/usePost';
-import getConfigDir from 'shared/utils/env';
+import { getConfigDir } from 'shared/utils/env';
 
 /*
 the order of the overwrting extensions

@@ -1,0 +1,6 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: busola-config
+data:
+  BACKEND_URL: 'http://localhost/backend'

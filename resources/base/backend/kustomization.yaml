@@ -7,4 +7,4 @@ resources:
 images:
   - name: busola-backend
     newName: europe-docker.pkg.dev/kyma-project/prod/busola-backend
-    newTag: v0.0.1
+    newTag: latest
