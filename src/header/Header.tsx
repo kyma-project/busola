@@ -33,6 +33,7 @@ import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
 import { configFeaturesNames } from 'state/types';
+import { themeState } from 'state/preferences/themeAtom';
 
 const SNOW_STORAGE_KEY = 'snow-animation';
 
@@ -61,6 +62,7 @@ export function Header() {
     isResourceEditedState,
   );
   const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
+  const [theme] = useRecoilState(themeState);
 
   const shellbarRef = useRef<ShellBarDomRef>(null);
   useEffect(() => {
@@ -71,6 +73,13 @@ export function Header() {
       };
     }
   }, [shellbarRef]);
+
+  useEffect(() => {
+    if (theme === 'sap_horizon_hcb' || theme === 'sap_horizon_hcw') {
+      setIsSnowOpen(false);
+      localStorage.removeItem(SNOW_STORAGE_KEY);
+    }
+  }, [theme]);
 
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
     name => name !== cluster?.name,
