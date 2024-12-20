@@ -87,7 +87,7 @@ context('Test Issuers', () => {
       .find('input')
       .type('other.server.com', { force: true });
 
-    cy.get('[placeholder^="Domain"]:visible')
+    cy.get('[placeholder^="Domain"][value]:visible')
       .find('input')
       .type('another.server.com', { force: true });
 

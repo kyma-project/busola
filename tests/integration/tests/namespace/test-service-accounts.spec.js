@@ -135,6 +135,6 @@ context('Test Service Accounts', () => {
   });
 
   it('Inspect list', () => {
-    cy.inspectList(SERVICE_NAME, true);
+    cy.inspectList(SERVICE_NAME, false);
   });
 });
