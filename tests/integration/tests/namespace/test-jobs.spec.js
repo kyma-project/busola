@@ -181,6 +181,6 @@ context('Test Jobs', () => {
       .contains(/^Jobs/)
       .click();
 
-    cy.contains('span', JOB_NAME).should('be.visible');
+    cy.contains('ui5-text', JOB_NAME).should('be.visible');
   });
 });
