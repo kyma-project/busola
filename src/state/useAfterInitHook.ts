@@ -48,7 +48,7 @@ export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
     }
 
     // cluster not yet loaded
-    if (!cluster === undefined) {
+    if (cluster === undefined) {
       return;
     }
 

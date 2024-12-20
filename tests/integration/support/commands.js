@@ -43,14 +43,14 @@ Cypress.Commands.add(
 Cypress.Commands.add('checkItemOnGenericListLink', resourceName => {
   cy.get('ui5-table-row')
     .find('ui5-table-cell')
-    .contains('span', resourceName)
+    .contains('ui5-text', resourceName)
     .should('be.visible');
 });
 
 Cypress.Commands.add('clickGenericListLink', resourceName => {
   cy.get('ui5-table-row')
     .find('ui5-table-cell')
-    .contains('span', resourceName)
+    .contains('ui5-text', resourceName)
     .click();
 });
 
@@ -61,6 +61,7 @@ Cypress.Commands.add('filterWithNoValue', { prevSubject: true }, $elements =>
 Cypress.Commands.add('goToNamespaceDetails', () => {
   // Go to the details of namespace
   cy.getLeftNav()
+    .find('ui5-side-navigation-item')
     .contains('Namespaces')
     .click();
 
@@ -177,8 +178,8 @@ Cypress.Commands.add(
     cy.wait(1000);
 
     if (selectSearchResult) {
-      cy.get('ui5-li-suggestion-item:visible')
-        .contains(resourceName)
+      cy.get('ui5-suggestion-item:visible')
+        .contains('li', resourceName)
         .click();
     }
 
@@ -233,7 +234,7 @@ Cypress.Commands.add(
 
     cy.get('ui5-table-row')
       .find('ui5-table-cell')
-      .contains('span', resourceName)
+      .contains('ui5-text', resourceName)
       .should('not.be.visible');
 
     cy.getMidColumn()
@@ -255,7 +256,7 @@ Cypress.Commands.add(
 
     cy.get('ui5-table-row')
       .find('ui5-table-cell')
-      .contains('span', resourceName)
+      .contains('ui5-text', resourceName)
       .should('not.be.visible');
 
     cy.getEndColumn()

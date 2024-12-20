@@ -100,7 +100,7 @@ context('Test Jobs', () => {
       .find('ui5-panel')
       .find('ui5-table-row')
       .find('ui5-table-cell')
-      .contains('span', JOB_NAME)
+      .contains('ui5-text', JOB_NAME)
       .click();
 
     cy.wait(1000);
@@ -149,7 +149,7 @@ context('Test Jobs', () => {
     cy.contains('After a Job is created, the containers are read-only.');
 
     cy.get('.edit-form')
-      .get('ui5-button[icon="add"][disabled="true"]')
+      .get('ui5-button[icon="add"][disabled]')
       .contains('Add Container')
       .should('be.visible');
 
@@ -181,6 +181,6 @@ context('Test Jobs', () => {
       .contains(/^Jobs/)
       .click();
 
-    cy.contains('span', JOB_NAME).should('be.visible');
+    cy.contains('ui5-text', JOB_NAME).should('be.visible');
   });
 });
