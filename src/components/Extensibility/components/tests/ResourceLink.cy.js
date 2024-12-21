@@ -1,16 +1,5 @@
-import { render } from 'testing/reactTestingUtils';
+/* global cy */
 import { ResourceLink } from '../ResourceLink';
-
-vi.mock('react-router', async () => ({
-  ...(await vi.importActual('react-router')),
-  useMatch: () => {
-    return {
-      params: {
-        cluster: 'test-cluster',
-      },
-    };
-  },
-}));
 
 describe('ResourceLink', () => {
   const value = 'link-to-resource';
@@ -20,15 +9,14 @@ describe('ResourceLink', () => {
     kind: 'original-resource.kind',
   };
 
-  it('Renders placeholder for no value', async () => {
-    const { findByText } = render(
-      <ResourceLink structure={{ placeholder: 'empty!' }} />,
-    );
-    expect(await findByText('extensibility::empty!'));
+  it('Renders placeholder for no value', () => {
+    cy.mount(<ResourceLink structure={{ placeholder: 'empty!' }} />);
+
+    cy.contains('empty!').should('be.visible');
   });
 
   it('Accepts config without namespace', () => {
-    const { getByText } = render(
+    cy.mount(
       <ResourceLink
         value={value}
         structure={{
@@ -42,12 +30,11 @@ describe('ResourceLink', () => {
       />,
     );
 
-    // no errors here
-    expect(getByText(`extensibility::${value}`)).toBeInTheDocument();
+    cy.contains(`${value}`).should('exist');
   });
 
   it('Show error on invalid config', () => {
-    const { queryByText } = render(
+    cy.mount(
       <ResourceLink
         value={value}
         structure={{ resource: { namespace: '$notExistingMethod()' } }}
@@ -55,8 +42,6 @@ describe('ResourceLink', () => {
       />,
     );
 
-    expect(
-      queryByText('extensibility.configuration-error'),
-    ).toBeInTheDocument();
+    cy.contains('extensibility.configuration-error').should('be.visible');
   });
 });
