@@ -15,13 +15,13 @@ context(
     });
 
     it('Check sections of namespace details', () => {
-      cy.contains('span', LIMIT_NAME)
+      cy.contains('ui5-text', LIMIT_NAME)
         .scrollIntoView()
         .should('be.visible');
 
       cy.contains('Container').should('be.visible');
 
-      cy.contains('span', QUOTA_NAME)
+      cy.contains('ui5-text', QUOTA_NAME)
         .scrollIntoView()
         .should('be.visible');
 

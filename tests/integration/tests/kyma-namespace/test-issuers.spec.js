@@ -10,6 +10,8 @@ context('Test Issuers', () => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
 
+    cy.wait(1000);
+
     cy.navigateTo('Configuration', 'Secrets');
 
     cy.openCreate();
@@ -83,7 +85,12 @@ context('Test Issuers', () => {
 
     cy.get('[placeholder^="Domain"]:visible')
       .find('input')
-      .type('other.server.com{enter}another.server.com', { force: true });
+      .type('other.server.com', { force: true });
+
+    cy.get('[placeholder^="Domain"][value]:visible')
+      .eq(1)
+      .find('input')
+      .type('another.server.com', { force: true });
 
     cy.saveChanges('Edit');
     cy.getMidColumn().inspectTab('View');
