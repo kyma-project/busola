@@ -14,6 +14,7 @@ export const Labels = ({
   style = null,
   displayLabelForLabels = false,
   disableMarginBottom = false,
+  hideIcon = true,
 }) => {
   const { t } = useTranslation();
   if (!labels || Object.keys(labels).length === 0) {
@@ -54,6 +55,7 @@ export const Labels = ({
             className={`sap-margin-end-tiny ${
               disableMarginBottom ? '' : 'sap-margin-bottom-tiny'
             }`}
+            hideStateIcon={hideIcon}
           >
             {shortenLongLabels && label.length > SHORTENING_TRESHOLD
               ? shortenLabel(label)

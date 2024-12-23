@@ -11,6 +11,7 @@ import {
 } from '@ui5/webcomponents-react';
 import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
 import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
+import { ToolbarSeparator } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSeparator/index.js';
 
 import './DynamicPageComponent.scss';
 import { useEffect, useState, useRef } from 'react';
@@ -169,7 +170,7 @@ export const DynamicPageComponent = ({
             (!window.location.search.includes('layout') &&
               layoutColumn?.showCreate?.resourceType)) &&
           layoutNumber !== 'StartColumn' ? (
-            <span className="separator" />
+            <ToolbarSeparator />
           ) : null}
         </>
       )}
@@ -327,44 +328,46 @@ export const DynamicPageComponent = ({
         hidePinButton={true}
         titleArea={headerTitle}
         headerArea={customHeaderContent ?? headerContent}
-        selectedSectionId={selectedSectionIdState}
-        onSelectedSectionChange={e => {
-          if (isFormOpen.formOpen) {
-            e.preventDefault();
-          }
-
-          handleActionIfFormOpen(
-            isResourceEdited,
-            setIsResourceEdited,
-            isFormOpen,
-            setIsFormOpen,
-            () => {
-              setSelectedSectionIdState(e.detail.selectedSectionId);
-              setIsResourceEdited({
-                isEdited: false,
-              });
-            },
-          );
-
-          if (e.detail.selectedSectionI === 'edit') {
-            setIsFormOpen({ formOpen: true });
-          }
-        }}
         ref={dynamicPage => handlePageRef(dynamicPage)}
       >
         <TabContainer
           className="tab-container"
           style={{ top: `${headerHeight}px` }}
           ref={tabContainerRef}
-          onTabSelect={event => {
-            const mode = event.detail.tab.getAttribute('data-mode');
-            setSelectedSectionIdState(mode);
+          onTabSelect={e => {
+            if (isFormOpen.formOpen) {
+              e.preventDefault();
+            }
+
+            handleActionIfFormOpen(
+              isResourceEdited,
+              setIsResourceEdited,
+              isFormOpen,
+              setIsFormOpen,
+              () => {
+                setSelectedSectionIdState(
+                  e.detail.tab.getAttribute('data-mode'),
+                );
+                setIsResourceEdited({
+                  isEdited: false,
+                });
+              },
+            );
+
+            if (e.detail.tab.getAttribute('data-mode') === 'edit') {
+              setIsFormOpen({ formOpen: true });
+            }
           }}
         >
-          <Tab data-mode="view" text={t('common.tabs.view')}></Tab>
+          <Tab
+            data-mode="view"
+            text={t('common.tabs.view')}
+            selected={selectedSectionIdState === 'view'}
+          ></Tab>
           <Tab
             data-mode="edit"
             text={showYamlTab ? t('common.tabs.yaml') : t('common.tabs.edit')}
+            selected={selectedSectionIdState === 'edit'}
           ></Tab>
         </TabContainer>
 
