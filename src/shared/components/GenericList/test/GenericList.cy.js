@@ -1,7 +1,6 @@
 /* global cy */
 import { GenericList } from '../GenericList';
 
-// Mock data and renderers
 const defaultNotFoundText = 'components.generic-list.messages.not-found';
 
 const mockHeaderRenderer = () => ['Id', 'Name', 'description'];
@@ -42,7 +41,6 @@ describe('GenericList', () => {
         />,
       );
 
-      // Each entry should have an action button with `accessible-name="testaction"`.
       cy.get('[accessible-name="testaction"]').should(
         'have.length',
         mockEntries.length,
@@ -85,7 +83,6 @@ describe('GenericList', () => {
 
       cy.get('[aria-label="actions-column"]').should('exist');
 
-      // Rerender without actions
       cy.mount(
         <GenericList
           headerRenderer={() => []}
@@ -107,7 +104,6 @@ describe('GenericList', () => {
       />,
     );
 
-    // Check that each entry cell text is rendered
     mockEntries.forEach(entry => {
       Object.keys(entry)
         .filter(key => key !== 'metadata')
@@ -151,7 +147,6 @@ describe('GenericList', () => {
       />,
     );
 
-    // Verify visible cells
     mockEntries.forEach(entry => {
       Object.keys(entry)
         .filter(key => key !== 'metadata')
@@ -160,20 +155,14 @@ describe('GenericList', () => {
         });
     });
 
-    // Check collapse buttons
-    // Assume they have data-testid attributes in the component: 'collapse-button-close' for closed state
     cy.get('[data-testid="collapse-button-close"]').should('have.length', 2);
 
-    // Click the first collapse button
     cy.get('[data-testid="collapse-button-close"]')
       .first()
       .click();
 
-    // After clicking, we should have changed collapse states
     cy.get('[data-testid="collapse-button-close"]').should('have.length', 1);
     cy.get('[data-testid="collapse-button-open"]').should('have.length', 1);
-
-    // Check that collapse content is now visible
     cy.get('[data-testid="collapse-content"]').should('have.length', 1);
   });
 
@@ -196,11 +185,9 @@ describe('GenericList', () => {
       />,
     );
 
-    // No collapse buttons should be present
     cy.get('[data-testid="collapse-button-close"]').should('have.length', 0);
     cy.get('[data-testid="collapse-button-open"]').should('have.length', 0);
 
-    // Collapse content should be directly visible
     cy.get('[data-testid="collapse-content"]').should('have.length', 3);
   });
 
@@ -228,9 +215,6 @@ describe('GenericList', () => {
       />,
     );
 
-    // When header is hidden and no entries are present,
-    // we should have a single row with the not-found text
-    // The table row might still exist; we check for defaultNotFoundText
     cy.get('tr').should('have.length', 1);
     cy.contains(defaultNotFoundText).should('exist');
   });
@@ -304,7 +288,6 @@ describe('GenericList', () => {
         />,
       );
 
-      // Assuming the search field has a role of 'search'
       cy.get('[role="search"]').should('exist');
     });
 
@@ -338,7 +321,6 @@ describe('GenericList', () => {
         />,
       );
 
-      // Assuming the table has role 'table' and rows have role 'row'
       cy.get('[role="row"]').should('have.length', 1);
       cy.contains(new RegExp(serverErrorMessage.message, 'i')).should('exist');
     });
@@ -353,7 +335,6 @@ describe('GenericList', () => {
         />,
       );
 
-      // Assuming the spinner has aria-label 'Loading'
       cy.get('[aria-label="Loading"]').should('exist');
     });
   });
