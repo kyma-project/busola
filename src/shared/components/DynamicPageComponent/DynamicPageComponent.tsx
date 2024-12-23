@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import { CSSProperties, ReactNode, useEffect, useState } from 'react';
 import {
   Button,
   DynamicPage,
@@ -12,7 +12,6 @@ import {
 
 import './DynamicPageComponent.scss';
 import { spacing } from '@ui5/webcomponents-react-base';
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
@@ -21,7 +20,38 @@ import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
 
-const Column = ({ title, children, columnSpan, image, style = {} }) => {
+type ColumnProps = {
+  title: string;
+  children?: ReactNode;
+  columnSpan?: string;
+  image?: any;
+  style?: CSSProperties | undefined;
+};
+type DynamicPageComponentProps = {
+  headerContent?: JSX.Element;
+  title: string;
+  description?: ReactNode;
+  actions?: JSX.Element | JSX.Element[];
+  children?: ReactNode;
+  columnWrapperClassName?: string;
+  content?: any;
+  footer?: JSX.Element;
+  layoutNumber?: string;
+  layoutCloseUrl?: string;
+  inlineEditForm?: (stickyHeaderHeight: any) => JSX.Element;
+  showYamlTab?: boolean;
+  protectedResource?: boolean;
+  protectedResourceWarning?: JSX.Element;
+  className?: string;
+};
+
+const Column = ({
+  title,
+  children,
+  columnSpan,
+  image,
+  style = {},
+}: ColumnProps) => {
   const styleComputed = { gridColumn: columnSpan, ...style };
   return (
     <div className="page-header__column" style={styleComputed}>
@@ -50,7 +80,7 @@ export const DynamicPageComponent = ({
   protectedResource,
   protectedResourceWarning,
   className,
-}) => {
+}: DynamicPageComponentProps) => {
   const [showTitleDescription, setShowTitleDescription] = useState(false);
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
   const { t } = useTranslation();
@@ -93,7 +123,7 @@ export const DynamicPageComponent = ({
 
   const headerTitle = (
     <DynamicPageTitle
-      style={title === 'Clusters Overview' ? { display: 'none' } : null}
+      style={title === 'Clusters Overview' ? { display: 'none' } : undefined}
       header={
         <FlexBox alignItems="Center">
           <Title level="H3" className="bold-title">
@@ -109,7 +139,7 @@ export const DynamicPageComponent = ({
               style={spacing.sapUiTinyMargin}
               setShowTitleDescription={setShowTitleDescription}
               showTitleDescription={showTitleDescription}
-              description={description}
+              description={description ?? ''}
               ariaTitle={title}
             />
           )}
@@ -223,7 +253,9 @@ export const DynamicPageComponent = ({
           {children}
         </section>
       </DynamicPageHeader>
-    ) : null;
+    ) : (
+      undefined
+    );
 
   const [stickyHeaderHeight, setStickyHeaderHeight] = useState(0);
 
@@ -269,7 +301,7 @@ export const DynamicPageComponent = ({
           );
 
           if (e.detail.sectionId === 'edit') {
-            setIsFormOpen({ formOpen: true });
+            setIsFormOpen(prev => ({ ...prev, formOpen: true }));
           }
         }}
       >
@@ -316,12 +348,3 @@ export const DynamicPageComponent = ({
   );
 };
 DynamicPageComponent.Column = Column;
-
-DynamicPageComponent.propTypes = {
-  title: PropTypes.string.isRequired,
-  description: PropTypes.node,
-};
-
-DynamicPageComponent.defaultProps = {
-  description: '',
-};
