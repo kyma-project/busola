@@ -140,8 +140,13 @@ context('Test Extensibility Create/Update', () => {
 
       cy.get('@form')
         .get('[data-testid="details-view"]')
-        .findMonaco()
-        .scrollIntoView()
+        .find('div.monaco-editor')
+        .find('textarea[aria-roledescription="editor"]')
+        .focus()
+        .scrollIntoView();
+
+      cy.get('@form')
+        .get('[data-testid="details-view"]')
         .within(() => {
           cy.pasteToMonaco(input);
         });
