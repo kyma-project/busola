@@ -69,6 +69,8 @@ context('Test Extensibility Create/Update', () => {
 
     chooseComboboxOption('[id="combobox-input"]', 'potato');
 
+    cy.wait(500);
+
     cy.get(`ui5-input[value="Potatoes"]`)
       .find('input')
       .clear()

@@ -10,6 +10,8 @@ context('Test Issuers', () => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
 
+    cy.wait(1000);
+
     cy.navigateTo('Configuration', 'Secrets');
 
     cy.openCreate();
