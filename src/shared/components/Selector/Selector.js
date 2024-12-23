@@ -24,7 +24,7 @@ const SelectorDetails = ({
   };
 
   const relatedResources = RelatedResources ? (
-    <RelatedResources labels={labels} />
+    <RelatedResources labels={labels} namespace={namespace} />
   ) : (
     <RelatedPods
       namespace={namespace}

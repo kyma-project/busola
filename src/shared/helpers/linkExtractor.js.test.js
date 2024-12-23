@@ -1,5 +1,14 @@
 import { extractLinks } from 'shared/helpers/linkExtractor';
 
+vi.mock('@ui5/webcomponents-react', () => {
+  return {
+    Icon: () => ({}),
+    Link: () => ({}),
+    Button: () => ({}),
+    FlexBox: () => ({}),
+  };
+});
+
 describe('process text with different link style', () => {
   it('Markdown style links', () => {
     //GIVEN

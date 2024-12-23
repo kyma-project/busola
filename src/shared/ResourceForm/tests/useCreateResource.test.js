@@ -5,6 +5,12 @@ import { useCreateResource } from '../useCreateResource';
 import { createPatch } from 'rfc6902';
 import { ignoreConsoleErrors } from 'setupTests';
 
+vi.mock('@ui5/webcomponents-react', () => {
+  return {
+    Button: props => <button {...props}>{props.children}</button>,
+  };
+});
+
 const mockNotifySuccess = vi.fn();
 const mockNotifyError = vi.fn();
 vi.mock('shared/contexts/NotificationContext', () => ({
