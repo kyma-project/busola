@@ -111,7 +111,9 @@ export default function ModulesCard({
             {module.channels?.map(channel => (
               <Option
                 selected={channel.channel === findSpec(module.name)?.channel}
-                key={channel.channel}
+                key={`${channel.channel}${
+                  channel.isMetaRelease ? '-meta' : ''
+                }`}
                 value={channel.channel}
                 additionalText={channel?.isBeta ? 'Beta' : ''}
               >
