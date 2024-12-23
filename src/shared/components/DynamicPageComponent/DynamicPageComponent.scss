@@ -95,3 +95,7 @@
 [data-component-name='ObjectPageContent'] {
   padding: 0 !important;
 }
+
+div[data-component-name='DynamicPageTitleActions'] {
+  overflow: visible;
+}

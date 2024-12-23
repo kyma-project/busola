@@ -293,9 +293,12 @@ function Resource({
           customStatusColumns?.length ? (
             <>
               {customStatusColumns
-                ?.filter(filterColumns)
-                .filter(col => !col?.conditionComponent)
-                ?.filter(col => !col?.fullWidth || col?.fullWidth === false)
+                ?.filter(
+                  col =>
+                    filterColumns(col) &&
+                    !col?.conditionComponent &&
+                    !col?.fullWidth,
+                )
                 ?.map(col => (
                   <DynamicPageComponent.Column
                     key={col.header}
@@ -311,9 +314,13 @@ function Resource({
           customStatusColumns?.length ? (
             <>
               {customStatusColumns
-                ?.filter(filterColumns)
-                .filter(col => !col?.conditionComponent)
-                ?.filter(col => col?.fullWidth && col?.fullWidth === true)
+                ?.filter(
+                  col =>
+                    filterColumns(col) &&
+                    !col?.conditionComponent &&
+                    col?.fullWidth &&
+                    col?.fullWidth === true,
+                )
                 ?.map(col => (
                   <DynamicPageComponent.Column
                     key={col.header}
