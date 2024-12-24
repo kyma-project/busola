@@ -106,7 +106,6 @@ const ColumnWrapper = ({
   const elementCreateProps = usePrepareCreateProps({
     resourceCustomType: props.resourceCustomType,
     resourceType: props.resourceType,
-    resourceTypeForTitle: props.resourceType,
     apiGroup: props.apiGroup,
     apiVersion: props.apiVersion,
   });

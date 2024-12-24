@@ -84,6 +84,7 @@ context('Accessibility test Extensions view', () => {
 
   it('Clean up', () => {
     cy.getLeftNav()
+      .find('ui5-side-navigation-item')
       .contains('Namespaces')
       .click();
 
