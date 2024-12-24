@@ -106,6 +106,7 @@ export default function KymaModulesList({
 
   const ModulesList = resource => {
     const findModule = (moduleName, channel, version) => {
+      // This change was made due to changes in modules and should be simplified once all modules migrate
       const moduleWithoutInfo = modules?.items?.find(
         module =>
           moduleName ===
