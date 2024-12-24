@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
-
 import { useUrl } from 'hooks/useUrl';
+
 import { FormatInvolvedObject, FormatSourceObject } from 'hooks/useMessageList';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
@@ -11,7 +11,6 @@ import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ResourceDescription } from 'resources/Events';
 import EventCreate from './EventYaml';
 import { Link } from 'shared/components/Link/Link';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 const RowComponent = ({ name, value }) =>
   value ? <LayoutPanelRow name={name} value={value} /> : null;
@@ -34,17 +33,15 @@ const Specification = event => {
               <ObjectStatus
                 aria-label="Warning"
                 icon={<Icon name="warning" />}
-                className="has-tooltip"
-                state="Warning"
-                style={spacing.sapUiTinyMarginBegin}
+                className="has-tooltip sap-margin-begin-tiny"
+                state="Critical"
               />
             ) : (
               <ObjectStatus
                 aria-label="Normal"
                 icon={<Icon name="information" />}
-                className="has-tooltip"
+                className="has-tooltip sap-margin-begin-tiny"
                 state="Information"
-                style={spacing.sapUiTinyMarginBegin}
               />
             )}
           </Text>

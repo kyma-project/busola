@@ -30,7 +30,10 @@ export type LimitRangeProps = {
 export default function LimitRangeDetails(props: any) {
   const customComponents = [
     (resource: LimitRangeProps) => (
-      <LimitRangeSpecification resource={resource} />
+      <LimitRangeSpecification
+        key="limit-range-specification"
+        resource={resource}
+      />
     ),
   ];
 

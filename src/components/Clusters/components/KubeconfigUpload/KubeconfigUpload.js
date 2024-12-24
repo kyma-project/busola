@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { KubeconfigFileUpload } from './KubeconfigFileUpload';
 import jsyaml from 'js-yaml';
 
-import { spacing } from '@ui5/webcomponents-react-base';
 import './KubeconfigUpload.scss';
 import { ClusterDataForm } from 'components/Clusters/views/EditCluster/EditCluster';
 
@@ -35,10 +34,7 @@ export function KubeconfigUpload({ kubeconfig, setKubeconfig, formRef }) {
 
   return (
     <div className="kubeconfig-upload">
-      <div
-        className="add-cluster__content-container"
-        style={spacing.sapUiSmallMarginBottom}
-      >
+      <div className="add-cluster__content-container sap-margin-bottom-small">
         <KubeconfigFileUpload
           onKubeconfigTextAdded={text => {
             updateKubeconfig(text);

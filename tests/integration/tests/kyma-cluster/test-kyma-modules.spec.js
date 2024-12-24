@@ -33,14 +33,15 @@ context('Test Kyma Modules views', () => {
 
   it('Test adding Modules', () => {
     cy.get('ui5-table')
-      .find('ui5-illustrated-message[title-text="No modules"]')
+      .find('ui5-illustrated-message')
+      .find('ui5-title', 'No modules')
       .should('be.visible');
 
-    cy.get('div[data-component-name="DynamicPageHeader"]')
+    cy.get('ui5-dynamic-page-header')
       .contains('Release channel')
       .should('be.visible');
 
-    cy.get('div[data-component-name="DynamicPageHeader"]')
+    cy.get('ui5-dynamic-page-header')
       .contains('regular')
       .should('be.visible');
 
@@ -165,7 +166,7 @@ context('Test Kyma Modules views', () => {
 
     cy.wait(500);
 
-    cy.get('ui5-li:visible')
+    cy.get('ui5-option:visible')
       .contains(/^Fast .*/)
       .click();
 
@@ -210,7 +211,7 @@ context('Test Kyma Modules views', () => {
       .find('ui5-select')
       .click();
 
-    cy.get('ui5-li:visible')
+    cy.get('ui5-option:visible')
       .contains(/Predefined .*/)
       .filter(':visible')
       .find('li')
@@ -260,7 +261,7 @@ context('Test Kyma Modules views', () => {
       .clear();
 
     cy.get('ui5-table')
-      .find('ui5-illustrated-message[title-text="No modules"]')
+      .contains('ui5-illustrated-message', 'No modules')
       .should('be.visible');
   });
 });

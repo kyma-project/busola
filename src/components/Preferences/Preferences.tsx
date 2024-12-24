@@ -64,7 +64,7 @@ export function Preferences() {
 
   return (
     <Dialog
-      onAfterClose={handleCloseModal}
+      onClose={handleCloseModal}
       open={isModalOpen}
       headerText={t('navigation.preferences.title')}
       footer={
@@ -86,7 +86,6 @@ export function Preferences() {
           <TabContainer
             tabLayout="Inline"
             contentBackgroundDesign="Transparent"
-            fixed
           >
             <Tab
               style={{ padding: '-16px -32px' }}
@@ -107,7 +106,6 @@ export function Preferences() {
           <TabContainer
             tabLayout="Inline"
             contentBackgroundDesign="Transparent"
-            fixed
           >
             <Tab
               key="cluster-interaction"

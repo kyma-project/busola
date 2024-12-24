@@ -1,6 +1,5 @@
 import { ProgressIndicator } from '@ui5/webcomponents-react';
 import PropTypes from 'prop-types';
-import React, { useRef } from 'react';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import './ProgressIndicatorWithPercentage.scss';
 
@@ -19,18 +18,19 @@ export const ProgressIndicatorWithPercentage = ({
   leftTitle,
   rightTitle,
 }) => {
-  const progressRef = useRef(null);
-  const dataBar = progressRef.current?.shadowRoot?.querySelector(
-    '.ui5-progress-indicator-bar',
-  );
-  const remainingBar = progressRef.current?.shadowRoot?.querySelector(
-    '.ui5-progress-indicator-remaining-bar',
-  );
+  const applyColors = progressRef => {
+    const dataBar = progressRef?.shadowRoot?.querySelector(
+      '.ui5-progress-indicator-bar',
+    );
+    const remainingBar = progressRef?.shadowRoot?.querySelector(
+      '.ui5-progress-indicator-remaining-bar',
+    );
 
-  if (dataBar && remainingBar) {
-    dataBar.style['background-color'] = dataBarColor;
-    remainingBar.style['background-color'] = remainingBarColor;
-  }
+    if (dataBar && remainingBar) {
+      dataBar.style['background-color'] = dataBarColor;
+      remainingBar.style['background-color'] = remainingBarColor;
+    }
+  };
 
   return (
     <TooltipWrapper tooltipProps={tooltip}>
@@ -43,7 +43,7 @@ export const ProgressIndicatorWithPercentage = ({
         <ProgressIndicator
           displayValue={leftTitle}
           value={value}
-          ref={progressRef}
+          ref={progress => applyColors(progress)}
           className="progress-indicator"
           style={{ position: 'relative', zIndex: '0' }}
         />

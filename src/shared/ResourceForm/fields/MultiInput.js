@@ -6,7 +6,6 @@ import { Label } from '../../../shared/ResourceForm/components/Label';
 
 import { ResourceForm } from '..';
 import { useCreateResourceDescription } from 'components/Extensibility/helpers';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 import './MultiInput.scss';
 
@@ -167,7 +166,7 @@ export function MultiInput({
               : 'bsl-col-md--11';
 
           return (
-            <li key={index} style={spacing.sapUiTinyMarginBottom}>
+            <li key={index} className="sap-margin-bottom-tiny">
               <FlexBox style={{ gap: '10px' }} alignItems="Center">
                 {noEdit && !isLast(index) && (
                   <span className="readonly-value">{entry}</span>

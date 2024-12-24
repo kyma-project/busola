@@ -32,7 +32,7 @@ const badgeType = status => {
     case 'Running':
     case 'Succeeded':
     case 'Completed':
-      return 'Success';
+      return 'Positive';
     case 'Terminated':
     case 'Pending':
     case 'Terminating':
@@ -42,7 +42,7 @@ const badgeType = status => {
     case 'Unknown':
       return 'None';
     default:
-      return 'Error';
+      return 'Negative';
   }
 };
 

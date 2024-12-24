@@ -63,7 +63,7 @@ export function Containers({ value: containers, setValue: setContainers }) {
 
   if (!containers.length) {
     return (
-      <MessageStrip design="Warning" hideCloseButton>
+      <MessageStrip design="Critical" hideCloseButton>
         {t('deployments.create-modal.one-container-required')}
       </MessageStrip>
     );

@@ -23,6 +23,7 @@ export function StorageClassDetails(props) {
       <UI5Panel
         fixed
         keyComponent={'storageclass-configuration'}
+        key="storageclass-configuration"
         title={t('storage-classes.headers.configuration')}
       >
         <LayoutPanelRow
@@ -66,6 +67,7 @@ export function StorageClassDetails(props) {
 
   const Events = () => (
     <EventsList
+      key="events"
       namespace={props.namespace}
       filter={filterByResource('StorageClass', props.resourceName)}
       hideInvolvedObjects={true}

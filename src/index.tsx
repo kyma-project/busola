@@ -1,4 +1,3 @@
-import ReactDOM from 'react-dom';
 import i18next from 'i18next';
 import yaml from 'js-yaml';
 import { Suspense } from 'react';
@@ -19,12 +18,15 @@ import '@ui5/webcomponents-icons/dist/AllIcons.js';
 import '@ui5/webcomponents-icons-tnt/dist/network.js';
 import '@ui5/webcomponents-icons-tnt/dist/application.js';
 import '@ui5/webcomponents-icons-tnt/dist/application-service.js';
+import '@sap-ui/common-css/dist/sap-margin.css';
+import '@sap-ui/common-css/dist/sap-padding.css';
 
 import './styles/reset.css';
 import './styles/sapIllus-Fills.css';
 import './styles/sapIllus-Layout.css';
 import './styles/index.scss';
 import './styles/fiori-helpers.scss';
+import { createRoot } from 'react-dom/client';
 
 i18next
   .use(initReactI18next)
@@ -54,7 +56,10 @@ i18next
 
 savePreviousPath();
 
-ReactDOM.render(
+const container = document.getElementById('root');
+const root = createRoot(container!);
+
+root.render(
   <RecoilRoot>
     <ThemeProvider>
       <BrowserRouter>
@@ -68,5 +73,4 @@ ReactDOM.render(
       </BrowserRouter>
     </ThemeProvider>
   </RecoilRoot>,
-  document.getElementById('root'),
 );

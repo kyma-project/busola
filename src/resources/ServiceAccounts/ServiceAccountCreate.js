@@ -154,7 +154,7 @@ export default function ServiceAccountCreate({
         }
       />
       {shouldCreateSecret && (
-        <MessageStrip design="Warning" hideCloseButton>
+        <MessageStrip design="Critical" hideCloseButton>
           {t('service-accounts.associated-secret.warning')}
         </MessageStrip>
       )}

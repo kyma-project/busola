@@ -88,8 +88,15 @@ export default function NamespaceDetails(props) {
       customColumns={customColumns}
       headerActions={headerActions}
       customHealthCards={[
-        () => <ResourcesUsage namespace={props.resourceName} />,
-        () => <NamespaceWorkloads namespace={props.resourceName} />,
+        () => (
+          <ResourcesUsage namespace={props.resourceName} key="resourcesUsage" />
+        ),
+        () => (
+          <NamespaceWorkloads
+            namespace={props.resourceName}
+            key="namespaceWorkloads"
+          />
+        ),
       ]}
       showHealthCardsTitle={true}
     >

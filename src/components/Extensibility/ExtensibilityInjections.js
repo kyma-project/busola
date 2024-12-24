@@ -27,7 +27,10 @@ export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
     resourceType: pluralize(resource?.kind || '').toLowerCase(),
   });
 
-  const { data } = useGet(resourceUrl, { pollingInterval: 3000 });
+  const { data } = useGet(resourceUrl, {
+    pollingInterval: 3000,
+    skip: !resourceUrl,
+  });
 
   const jsonata = useJsonata({});
 

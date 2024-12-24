@@ -9,7 +9,7 @@ import { createPortal } from 'react-dom';
 interface PopoverBadgeProps {
   children?: ReactNode;
   tooltipContent: ReactNode;
-  type: 'Information' | 'Success' | 'Error' | 'Warning' | 'None';
+  type: 'Information' | 'Positive' | 'Negative' | 'Critical' | 'None';
   className?: string;
 }
 
@@ -54,11 +54,11 @@ export const PopoverBadge = ({
         <Popover
           ref={popoverRef}
           open={openPopover}
-          onAfterClose={e => {
+          onClose={e => {
             e.stopPropagation();
             setOpenPopover(false);
           }}
-          placementType="Right"
+          placement="End"
         >
           {tooltipContent}
         </Popover>,

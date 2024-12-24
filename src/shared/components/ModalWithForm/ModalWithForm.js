@@ -13,14 +13,14 @@ import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 
 export const ModalWithForm = ({
-  performRefetch,
+  performRefetch = () => {},
   title,
   button,
   renderForm,
   item,
   modalOpeningComponent,
   confirmText,
-  invalidPopupMessage,
+  invalidPopupMessage = '',
   className,
   getToggleFormFn,
   ...props
@@ -97,8 +97,7 @@ export const ModalWithForm = ({
       </div>
     ) : (
       <Button
-        icon={button.icon || null}
-        iconEnd
+        endIcon={button.icon || null}
         accessibleName={button.label || null}
         design={button.design}
         disabled={!!button.disabled}
@@ -149,7 +148,7 @@ export const ModalWithForm = ({
               }
             />
           }
-          onAfterClose={() => {
+          onClose={() => {
             setOpenStatus(false);
           }}
           headerText={title}
@@ -183,9 +182,4 @@ ModalWithForm.propTypes = {
   invalidPopupMessage: PropTypes.string,
   button: CustomPropTypes.button,
   className: PropTypes.string,
-};
-
-ModalWithForm.defaultProps = {
-  performRefetch: () => {},
-  invalidPopupMessage: '',
 };

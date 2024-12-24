@@ -121,7 +121,7 @@ export function ExternalResourceRef({
             }}
             required={required}
             value={value?.namespace || ''}
-            valueState={namespaceValid ? null : 'Error'}
+            valueState={namespaceValid ? null : 'Negative'}
             valueStateMessage={
               <Text>
                 {namespaceValid
@@ -131,7 +131,11 @@ export function ExternalResourceRef({
             }
           >
             {namespacesOptions.map(namespace => (
-              <ComboBoxItem id={namespace.key} text={namespace.text} />
+              <ComboBoxItem
+                key={namespace.key}
+                id={namespace.key}
+                text={namespace.text}
+              />
             ))}
           </ComboBox>
         )}
@@ -162,7 +166,7 @@ export function ExternalResourceRef({
               }}
               required={required}
               value={value?.name || ''}
-              valueState={nameValid ? null : 'Error'}
+              valueState={nameValid ? null : 'Negative'}
               valueStateMessage={
                 <Text>
                   {nameValid ? '' : t('common.messages.resource-name-error')}

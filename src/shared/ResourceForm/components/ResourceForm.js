@@ -14,8 +14,6 @@ import jp from 'jsonpath';
 import { Form, FormItem } from '@ui5/webcomponents-react';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
-import { spacing } from '@ui5/webcomponents-react-base';
-import './ResourceForm.scss';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { editViewModeState } from 'state/preferences/editViewModeAtom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
@@ -24,6 +22,8 @@ import { createPortal } from 'react-dom';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { cloneDeep } from 'lodash';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
+
+import './ResourceForm.scss';
 
 export const excludeStatus = resource => {
   const modifiedResource = cloneDeep(resource);
@@ -218,21 +218,14 @@ export function ResourceForm({
         'resource-form ui5-content-density-compact',
         className,
       )}
-      columnsL={1}
-      columnsM={1}
-      columnsS={1}
-      columnsXL={1}
-      labelSpanL={0}
-      labelSpanM={0}
-      labelSpanS={0}
-      labelSpanXL={0}
-      as="div"
       style={{ overflowX: 'hidden' }}
       onChange={onChange}
+      labelSpan="S0 M0 L0 XL0"
+      layout="S1 M1 L1 XL1"
     >
       {(mode === ModeSelector.MODE_FORM || formWithoutPanel) && (
         <FormItem>
-          <div className="full-width" style={spacing.sapUiTinyMarginBottom}>
+          <div className="full-width sap-margin-bottom-tiny">
             <ResourceFormWrapper
               resource={resource}
               setResource={setResource}
@@ -253,7 +246,7 @@ export function ResourceForm({
                   <KeyValueField
                     propertyPath="$.metadata.labels"
                     title={t('common.headers.labels')}
-                    style={spacing.sapUiSmallMarginTop}
+                    className="sap-margin-top-small"
                     inputInfo={t('common.tooltips.key-value')}
                     tooltipContent={labelsDesc}
                     {...labelsProps}
@@ -288,8 +281,7 @@ export function ResourceForm({
       ) : (
         <UI5Panel
           key={`edit-panel-${singularName}`}
-          className="resource-form--panel card-shadow"
-          style={spacing.sapUiSmallMarginTopBottom}
+          className="resource-form--panel card-shadow sap-margin-y-small"
           disableMargin
           stickyHeader={true}
           headerTop={stickyHeaderHeight + 'px'}

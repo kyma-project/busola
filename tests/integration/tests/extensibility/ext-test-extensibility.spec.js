@@ -69,6 +69,8 @@ context('Test Extensibility Create/Update', () => {
 
     chooseComboboxOption('[id="combobox-input"]', 'potato');
 
+    cy.wait(500);
+
     cy.get(`ui5-input[value="Potatoes"]`)
       .find('input')
       .clear()
@@ -95,8 +97,8 @@ context('Test Extensibility Create/Update', () => {
       .wait(1000)
       .clear()
       .type(EXTENSION_NAME)
-      .get('ui5-li-suggestion-item:visible')
-      .contains(EXTENSION_NAME)
+      .get('ui5-suggestion-item:visible')
+      .contains('li', EXTENSION_NAME)
       .click();
 
     cy.get('ui5-table-row')
@@ -123,8 +125,8 @@ context('Test Extensibility Create/Update', () => {
       .wait(1000)
       .clear()
       .type(EXTENSION_NAME)
-      .get('ui5-li-suggestion-item:visible')
-      .contains(EXTENSION_NAME)
+      .get('ui5-suggestion-item:visible')
+      .contains('li', EXTENSION_NAME)
       .click();
 
     cy.clickGenericListLink(EXTENSION_NAME);
@@ -140,7 +142,13 @@ context('Test Extensibility Create/Update', () => {
 
       cy.get('@form')
         .get('[data-testid="details-view"]')
-        .scrollIntoView()
+        .find('div.monaco-editor')
+        .find('textarea[aria-roledescription="editor"]')
+        .focus()
+        .scrollIntoView();
+
+      cy.get('@form')
+        .get('[data-testid="details-view"]')
         .within(() => {
           cy.pasteToMonaco(input);
         });

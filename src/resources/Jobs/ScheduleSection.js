@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { parse } from '@datasert/cronjs-parser';
 import { toString as cRonstrue } from 'cronstrue/i18n';
@@ -6,7 +5,6 @@ import { MessageStrip, Text } from '@ui5/webcomponents-react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 const presets = {
   '@yearly': '0 0 1 1 *',
@@ -85,12 +83,12 @@ function ScheduleEditor({ schedule, setSchedule }) {
         <MessageStrip
           design="Negative"
           hideCloseButton
-          style={spacing.sapUiSmallMarginTop}
+          className="sap-margin-top-small"
         >
           {t('cron-jobs.create-modal.parse-error')}
         </MessageStrip>
       )}
-      <Text style={spacing.sapUiSmallMarginTop}>
+      <Text className="sap-margin-top-small">
         {t('cron-jobs.create-modal.schedule-description')}
       </Text>
     </>

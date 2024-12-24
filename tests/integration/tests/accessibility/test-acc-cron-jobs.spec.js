@@ -118,9 +118,7 @@ context('Accessibility test Cron Jobs', () => {
       .clear()
       .type('busybox', { force: true });
 
-    cy.get('ui5-combobox[value="IfNotPresent"]')
-      .find('ui5-icon[accessible-name="Select Options"]')
-      .click();
+    cy.get('ui5-combobox[value="IfNotPresent"]').click();
 
     cy.get('ui5-li:visible')
       .contains('Always')

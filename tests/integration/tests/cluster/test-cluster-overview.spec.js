@@ -52,7 +52,7 @@ context('Test Cluster Overview', () => {
       .get('.radial-chart')
       .contains('text.progress-label', '50%')
       .get('.radial-chart')
-      .contains('span.additional-info', 'test1233456');
+      .contains('ui5-text.additional-info', 'test1233456');
 
     // test injected statistical card exists and works
     cy.contains(
@@ -62,7 +62,8 @@ context('Test Cluster Overview', () => {
       .find('ui5-link.counting-card__link')
       .click();
 
-    cy.get('ui5-title')
+    cy.get('ui5-dynamic-page-title')
+      .find('ui5-title')
       .contains('Hpatest')
       .should('be.visible');
 
@@ -93,13 +94,17 @@ context('Test Cluster Overview', () => {
 
     cy.loginAndSelectCluster();
 
-    cy.get('[name="feedback"]').should('exist');
+    cy.get('ui5-shellbar')
+      .find('[name="feedback"]')
+      .should('exist');
 
     cy.setBusolaFeature('FEEDBACK', false);
 
     cy.loginAndSelectCluster();
 
-    cy.get('[name="feedback"]').should('not.exist');
+    cy.get('ui5-shellbar')
+      .find('[name="feedback"]')
+      .should('not.exist');
   });
 
   it('Go to Node details', () => {

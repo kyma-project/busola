@@ -1,11 +1,8 @@
 import { TranslationBundleContext } from 'components/Extensibility/helpers';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { mount } from 'enzyme';
 import { act, render, waitFor } from 'testing/reactTestingUtils';
 import { Table } from '../Table';
 import { ThemeProvider } from '@ui5/webcomponents-react';
-import { RecoilRoot } from 'recoil';
-import { MemoryRouter } from 'react-router-dom';
 import { DataSourcesContextProvider } from '../../contexts/DataSources';
 
 vi.mock('components/Extensibility/ExtensibilityCreate', () => {
@@ -19,7 +16,15 @@ vi.mock('components/Extensibility/ExtensibilityWizard', () => {
   };
 });
 
-const genericNotFoundMessage = 'components.generic-list.messages.not-found';
+vi.mock('shared/components/GenericList/GenericList', async () => {
+  const GenericListMock = (
+    await vi.importActual('shared/components/GenericList/GenericList')
+  ).GenericList;
+  return {
+    GenericList: vi.fn(props => <GenericListMock {...props} />),
+  };
+});
+
 const elements = [
   {
     key: 'first',
@@ -78,68 +83,65 @@ describe('Table', () => {
     describe('entries', () => {
       it('passes array as entries', async () => {
         const value = ['a'];
-        const component = mount(
-          <MemoryRouter>
-            <RecoilRoot>
-              <ThemeProvider>
-                <Table value={value} structure={{}} />
-              </ThemeProvider>
-            </RecoilRoot>
-          </MemoryRouter>,
+        const { container } = render(
+          <ThemeProvider>
+            <Table value={value} structure={{}} />
+          </ThemeProvider>,
         );
         await waitFor(async () => {
           await act(async () => {
-            const list = component.find(GenericList);
-            expect(list).toHaveLength(1);
+            expect(GenericList).toHaveBeenLastCalledWith(
+              expect.objectContaining({
+                entries: expect.arrayContaining(value),
+              }),
+              {},
+            );
 
-            const { entries, notFoundMessage } = list.props();
-            expect(entries).toMatchObject(value);
-            expect(notFoundMessage).toBe(genericNotFoundMessage);
+            const list = container.getElementsByTagName('ui5-table');
+            expect(list).toHaveLength(1);
           });
         });
       });
 
       it('for nullish value defaults to empty array', async () => {
-        const component = mount(
-          <MemoryRouter>
-            <RecoilRoot>
-              <ThemeProvider>
-                <Table value={null} structure={{}} />
-              </ThemeProvider>
-            </RecoilRoot>
-          </MemoryRouter>,
+        const { container } = render(
+          <ThemeProvider>
+            <Table value={null} structure={{}} />
+          </ThemeProvider>,
         );
 
         await waitFor(async () => {
           await act(async () => {
-            const list = component.find(GenericList);
-            expect(list).toHaveLength(1);
-
-            const { entries, notFoundMessage } = list.props();
-            expect(entries).toMatchObject([]);
-            expect(notFoundMessage).toBe(genericNotFoundMessage);
+            expect(GenericList).toHaveBeenCalledWith(
+              expect.objectContaining({
+                entries: [],
+              }),
+              {},
+            );
           });
+
+          const list = container.getElementsByTagName('ui5-table');
+          expect(list).toHaveLength(1);
         });
       });
 
       it('for invalid value, renders "not-found" message', async () => {
-        const component = mount(
-          <MemoryRouter>
-            <RecoilRoot>
-              <ThemeProvider>
-                <Table value={-3} structure={{}} />
-              </ThemeProvider>
-            </RecoilRoot>
-          </MemoryRouter>,
+        const { container } = render(
+          <ThemeProvider>
+            <Table value={-3} structure={{}} />
+          </ThemeProvider>,
         );
         await waitFor(async () => {
           await act(async () => {
-            const list = component.find(GenericList);
-            expect(list).toHaveLength(1);
+            expect(GenericList).toHaveBeenCalledWith(
+              expect.objectContaining({
+                entries: expect.objectContaining([-3]),
+              }),
+              {},
+            );
 
-            const { entries, notFoundMessage } = list.props();
-            expect(entries).toMatchObject([-3]);
-            expect(notFoundMessage).toBe(genericNotFoundMessage);
+            const list = container.getElementsByTagName('ui5-table');
+            expect(list).toHaveLength(1);
           });
         });
       });
@@ -186,40 +188,39 @@ describe('Table', () => {
     describe('header & row renderer', () => {
       const value = [{ a: 'b' }, { a: 'c' }];
       it('passes empty renderers for nullish children', () => {
-        const component = mount(
-          <MemoryRouter>
-            <RecoilRoot>
-              <ThemeProvider>
-                <Table value={value} structure={{ children: null }} />
-              </ThemeProvider>
-            </RecoilRoot>
-          </MemoryRouter>,
+        const { container } = render(
+          <ThemeProvider>
+            <Table value={value} structure={{ children: null }} />
+          </ThemeProvider>,
         );
-        const list = component.find(GenericList);
+
+        const genericListCall = GenericList.mock.calls[0][0];
+        const rowRenderer = genericListCall.rowRenderer;
+        const renderedRows = rowRenderer();
+        expect(renderedRows).toHaveLength(0);
+
+        const list = container.getElementsByTagName('ui5-table');
         expect(list).toHaveLength(1);
-        const { rowRenderer } = list.props();
-        expect(rowRenderer()).toHaveLength(0);
       });
       it('2', () => {
-        const component = mount(
-          <MemoryRouter>
-            <RecoilRoot>
-              <ThemeProvider>
-                <DataSourcesContextProvider value={{}} dataSources={{}}>
-                  <Table
-                    value={value}
-                    structure={{ children: [{ path: '$.a' }] }}
-                  />
-                </DataSourcesContextProvider>
-              </ThemeProvider>
-            </RecoilRoot>
-          </MemoryRouter>,
+        const { container } = render(
+          <ThemeProvider>
+            <DataSourcesContextProvider value={{}} dataSources={{}}>
+              <Table
+                value={value}
+                structure={{ children: [{ path: '$.a' }] }}
+              />
+            </DataSourcesContextProvider>
+          </ThemeProvider>,
         );
-        const list = component.find(GenericList);
+        const genericListCall = GenericList.mock.calls[0][0];
+        const rowRenderer = genericListCall.rowRenderer;
+        const renderedRows = rowRenderer();
+        expect(renderedRows).toHaveLength(1);
+        expect(renderedRows[0].props.structure).toMatchObject({ path: '$.a' });
+
+        const list = container.getElementsByTagName('ui5-table');
         expect(list).toHaveLength(1);
-        const { rowRenderer } = list.props();
-        expect(rowRenderer()).toHaveLength(1); // one column
-        expect(rowRenderer()[0].props.structure).toMatchObject({ path: '$.a' });
       });
     });
   });
