@@ -72,7 +72,7 @@ export const SortModalPanel = ({
         }}
         accessibleName="sortOrderList"
       >
-        <ListItemGroup>{t('common.sorting.sort-order')}</ListItemGroup>
+        <ListItemGroup headerText={t('common.sorting.sort-order')} />
         <ListItemCustom selected={order === 'ASC'}>
           <RadioButton
             name="sortOrder"
@@ -99,7 +99,7 @@ export const SortModalPanel = ({
         }}
         accessibleName="sortByList"
       >
-        <ListItemGroup>{t('common.sorting.sort-by')}</ListItemGroup>
+        <ListItemGroup headerText={t('common.sorting.sort-by')} />
         {sortBy && (
           <>
             {Object.entries(sortBy).flatMap(([value]) => {
