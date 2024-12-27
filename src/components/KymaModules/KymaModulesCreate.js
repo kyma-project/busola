@@ -156,6 +156,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
               isBeta:
                 module.metadata.labels['operator.kyma-project.io/beta'] ===
                 'true',
+              isMetaRelease: false,
             },
           ],
           docsUrl:
@@ -167,6 +168,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
           version: module.spec.descriptor.component.version,
           isBeta:
             module.metadata.labels['operator.kyma-project.io/beta'] === 'true',
+          isMetaRelease: false,
         });
       }
     } else {
@@ -182,10 +184,10 @@ export default function KymaModulesCreate({ resource, ...props }) {
                   isBeta:
                     module.metadata.labels['operator.kyma-project.io/beta'] ===
                     'true',
+                  isMetaRelease: true,
                 },
               ],
-              docsUrl:
-                module.metadata.annotations['operator.kyma-project.io/doc-url'],
+              docsUrl: module.spec.info.documentation,
             });
           } else {
             acc
@@ -196,6 +198,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
                 isBeta:
                   module.metadata.labels['operator.kyma-project.io/beta'] ===
                   'true',
+                isMetaRelease: true,
               });
           }
         });
@@ -278,7 +281,9 @@ export default function KymaModulesCreate({ resource, ...props }) {
             {module.channels?.map(channel => (
               <Option
                 selected={channel.channel === findSpec(module.name)?.channel}
-                key={`${channel.channel}-${module.name}`}
+                key={`${channel.channel}-${module.name}${
+                  channel.isMetaRelease ? '-meta' : ''
+                }`}
                 value={channel.channel}
                 additionalText={channel?.isBeta ? 'Beta' : ''}
               >
