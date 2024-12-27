@@ -1,6 +1,7 @@
 /* global cy */
 import { ResourceDetails } from '../ResourceDetails';
 import { authDataState } from 'state/authDataAtom';
+import '@ui5/webcomponents-icons/dist/AllIcons.js';
 
 describe('ResourceDetails Columns', () => {
   it('Renders basic column', () => {
@@ -13,7 +14,7 @@ describe('ResourceDetails Columns', () => {
           namespace: 'test-resource-namespace',
         },
       },
-    }).as('testResource');
+    });
 
     const initializeRecoil = ({ set }) => {
       set(authDataState, {
@@ -38,8 +39,9 @@ describe('ResourceDetails Columns', () => {
       },
     );
 
-    cy.wait(5000);
-    cy.contains('some-header:').should('exist');
-    cy.contains('test-resource-name | test-resource-namespace').should('exist');
+    cy.contains('some-header:', { timeout: 10000 }).should('exist');
+    cy.contains('test-resource-name | test-resource-namespace', {
+      timeout: 10000,
+    }).should('exist');
   });
 });
