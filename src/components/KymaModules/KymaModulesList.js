@@ -75,6 +75,7 @@ export default function KymaModulesList({
     modulesResourceUrl,
     {
       pollingInterval: 3000,
+      skip: !resourceName,
     },
   );
 
@@ -103,13 +104,23 @@ export default function KymaModulesList({
   };
 
   const ModulesList = resource => {
-    const findModule = (moduleName, channel) => {
-      return modules?.items?.find(
+    const findModule = (moduleName, channel, version) => {
+      // This change was made due to changes in modules and should be simplified once all modules migrate
+      const moduleWithoutInfo = modules?.items?.find(
         module =>
           moduleName ===
             module.metadata.labels['operator.kyma-project.io/module-name'] &&
           module.spec.channel === channel,
       );
+      const moduleWithInfo = modules?.items?.find(
+        module =>
+          moduleName ===
+            module.metadata.labels['operator.kyma-project.io/module-name'] &&
+          !module.spec.channel &&
+          module.spec.version === version,
+      );
+
+      return moduleWithInfo ?? moduleWithoutInfo;
     };
 
     const findStatus = moduleName => {
@@ -171,6 +182,12 @@ export default function KymaModulesList({
         },
       );
 
+      const currentModule = findModule(
+        resource.name,
+        resource?.channel || kymaResource?.spec?.channel,
+        resource?.version,
+      );
+
       const isChannelOverriden =
         kymaResource?.spec?.modules?.[moduleIndex]?.channel !== undefined;
 
@@ -184,13 +201,8 @@ export default function KymaModulesList({
           ) : (
             resource.name
           )}
-          {checkBeta(
-            findModule(
-              resource.name,
-              resource?.channel || kymaResource?.spec?.channel,
-            ),
-          ) ? (
-            <Tag className="sap-margin-begin-tiny">
+          {checkBeta(currentModule) ? (
+            <Tag className="sap-margin-begin-tiny" hideStateIcon>
               {t('kyma-modules.beta')}
             </Tag>
           ) : null}
@@ -239,10 +251,11 @@ export default function KymaModulesList({
         // Documentation
         <ExternalLink
           url={
-            findModule(
-              resource.name,
-              resource.channel || kymaResource?.spec.channel,
-            )?.metadata?.annotations['operator.kyma-project.io/doc-url']
+            currentModule?.spec?.info
+              ? currentModule.spec.info.documentation
+              : currentModule?.metadata?.annotations[
+                  'operator.kyma-project.io/doc-url'
+                ]
           }
         >
           {t('common.headers.link')}
