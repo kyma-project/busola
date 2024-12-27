@@ -13,7 +13,7 @@ on:
       - 'cypress.config.component.ts'
 
 jobs:
-  run-unit-test:
+  run-unit-and-component-test:
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
     steps:
@@ -30,7 +30,11 @@ jobs:
         run: |
           set -e
           npm ci
-      - name: run_tests
+      - name: run_unit_tests
         shell: bash
         run: |
           npm run test
+      - name: run_component_tests
+        shell: bash
+        run: |
+          npm run component-test
