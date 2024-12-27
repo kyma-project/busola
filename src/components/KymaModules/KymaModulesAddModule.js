@@ -102,6 +102,7 @@ export default function KymaModulesAddModule({
           ],
           docsUrl:
             module.metadata.annotations['operator.kyma-project.io/doc-url'],
+          isMetaRelease: false,
         });
       } else if (existingModule) {
         existingModule.channels?.push({
@@ -109,6 +110,7 @@ export default function KymaModulesAddModule({
           version: module.spec.descriptor.component.version,
           isBeta:
             module.metadata.labels['operator.kyma-project.io/beta'] === 'true',
+          isMetaRelease: false,
         });
       }
     } else {
@@ -124,10 +126,10 @@ export default function KymaModulesAddModule({
                   isBeta:
                     module.metadata.labels['operator.kyma-project.io/beta'] ===
                     'true',
+                  isMetaRelease: true,
                 },
               ],
-              docsUrl:
-                module.metadata.annotations['operator.kyma-project.io/doc-url'],
+              docsUrl: module.spec.info.documentation,
             });
           } else {
             acc
@@ -138,6 +140,7 @@ export default function KymaModulesAddModule({
                 isBeta:
                   module.metadata.labels['operator.kyma-project.io/beta'] ===
                   'true',
+                isMetaRelease: true,
               });
           }
         });
