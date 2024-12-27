@@ -15,6 +15,7 @@ const TYPE_FALLBACK = new Map([
   ['critical', 'Critical'],
   ['negative', 'Negative'],
   ['info', 'Information'],
+  ['none', 'Neutral'],
 ]);
 
 export function Badge({
@@ -63,10 +64,10 @@ export function Badge({
     }
   }
 
-  if (type === 'negative') type = 'Critical';
+  if (type === 'negative') type = 'Negative';
   else if (type === 'informative') type = 'Information';
   else if (type === 'positive') type = 'Positive';
-  else if (type === 'critical') type = 'Negative';
+  else if (type === 'critical') type = 'Critical';
   else if (type === 'none') type = 'Neutral';
 
   type = TYPE_FALLBACK.get(type) || type;

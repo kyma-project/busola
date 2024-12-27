@@ -1,5 +1,6 @@
 /* global cy */
 import { HelmReleaseData } from '../HelmReleaseData';
+import '@ui5/webcomponents-icons/dist/AllIcons.js';
 
 describe('HelmReleaseData.cy.jsx', () => {
   it('renders nothing for invalid release data', () => {

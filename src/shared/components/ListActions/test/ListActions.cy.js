@@ -1,5 +1,6 @@
 /* global cy */
 import ListActions from '../ListActions';
+import '@ui5/webcomponents-icons/dist/AllIcons.js';
 
 describe('ListActions', () => {
   it('Renders only standalone buttons', () => {

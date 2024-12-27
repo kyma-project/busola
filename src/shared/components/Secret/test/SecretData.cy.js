@@ -1,5 +1,6 @@
 /* global cy */
 import SecretData from '../SecretData';
+import '@ui5/webcomponents-icons/dist/AllIcons.js';
 
 describe('SecretData Component', () => {
   const secret = {

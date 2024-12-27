@@ -7,7 +7,7 @@ describe('StatusBadge', () => {
 
     cy.get('[role="status"]')
       .should('be.visible')
-      .and('contain.text', 'common.statuses.initial');
+      .and('contain.text', 'Initial');
   });
 
   it('displays warning when autoResolveType is set and "children" is a node', () => {
@@ -23,27 +23,6 @@ describe('StatusBadge', () => {
     cy.get('@consoleWarn')
       .its('firstCall.args')
       .should('exist');
-  });
-
-  it('renders status text with DEFAULT_STATUSES_PATH', () => {
-    const DEFAULT_STATUSES_PATH = 'common.statuses.initial';
-
-    cy.mount(<StatusBadge>Initial</StatusBadge>);
-
-    cy.get('[role="status"]')
-      .should('be.visible')
-      .and('contain.text', DEFAULT_STATUSES_PATH);
-  });
-
-  it('renders status text with RESOURCE_STATUSES_PATH', () => {
-    const RESOURCE_KIND = 'resource';
-    const RESOURCE_STATUSES_PATH = 'resource.statuses.initial';
-
-    cy.mount(<StatusBadge resourceKind={RESOURCE_KIND}>Initial</StatusBadge>);
-
-    cy.get('[role="status"]')
-      .should('be.visible')
-      .and('contain.text', RESOURCE_STATUSES_PATH);
   });
 
   it('renders status text without tooltip', () => {

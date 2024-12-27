@@ -1,5 +1,6 @@
 /* global cy */
 import { Pagination } from '../Pagination';
+import '@ui5/webcomponents-icons/dist/AllIcons.js';
 
 describe('Pagination', () => {
   it('Renders valid count of pages', () => {

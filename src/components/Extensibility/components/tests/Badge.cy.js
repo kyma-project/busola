@@ -40,7 +40,13 @@ describe('Badge Component', () => {
       },
     };
 
-    cy.mount(<Badge value={value} structure={structure} />);
+    cy.mount(
+      <Badge
+        originalResource={{ data: value }}
+        value={value}
+        structure={structure}
+      />,
+    );
 
     cy.get('[role="status"]')
       .should('have.length', 1)

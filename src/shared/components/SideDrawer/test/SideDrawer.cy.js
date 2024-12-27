@@ -1,5 +1,6 @@
 /* global cy */
 import { SideDrawer } from '../SideDrawer';
+import '@ui5/webcomponents-icons/dist/AllIcons.js';
 
 describe('SideDrawer', () => {
   const testText1 = 'hi there';

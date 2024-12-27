@@ -1,5 +1,6 @@
 /* global cy */
 import { CodeViewer } from '../CodeViewer';
+import '@ui5/webcomponents-icons/dist/AllIcons.js';
 
 describe('CodeViewer Component', () => {
   it('Renders CodeViewer component and detects yaml', () => {
