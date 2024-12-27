@@ -12,7 +12,7 @@ Each pull request (PR) to the repository triggers CI/CD jobs that verify the Bus
 - `PR Kyma Dashboard Smoke Tests Prod / run-smoke-test-prod` - Performs smoke testing for Busola with PROD environement and configuration related to the Kyma functionalities using a k3d cluster with installed Kyma.
 - `PR Lighthouse Test / run-lighthouse-test` - Performs performance testing for Busola - threshold for accessibility: 80, best-practices: 100.
 - `PR Lint Check / run-lint-check` - Performing ESlint and Prettier code quality.
-- `PR Unit Tests / run-unit-test` - Performs unit tests of the Busola.
+- `PR Unit and Component Tests / run-unit-and-component-test` - Performs unit tests as well as component tests of the Busola
 - `Lint Markdown Links PR / markdown-link-check` - Checks links in documentation.
 - `CodeQL / Analyze (javascript)` - Code quality static code check.
 
