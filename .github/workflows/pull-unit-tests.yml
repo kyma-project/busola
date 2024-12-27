@@ -37,4 +37,4 @@ jobs:
       - name: run_component_tests
         shell: bash
         run: |
-          npm run component-test
+          npm run component-test-headless

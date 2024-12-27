@@ -2,6 +2,7 @@ import { defineConfig } from 'cypress';
 
 export default defineConfig({
   component: {
+    screenshotOnRunFailure: false,
     includeShadowDom: true,
     devServer: {
       framework: 'react',
