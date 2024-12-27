@@ -1,3 +1,4 @@
+/* global Cypress */
 import React from 'react';
 import { mount } from 'cypress/react18';
 import { ThemeProvider } from '@ui5/webcomponents-react';
@@ -19,23 +20,18 @@ i18n.use(initReactI18next).init({
   },
 });
 
-declare global {
-  namespace Cypress {
-    interface Chainable {
-      mount: typeof mount;
-    }
-  }
-}
-
-Cypress.Commands.add('mount', (component, options = {}) => {
-  return mount(
-    <RecoilRoot>
-      <I18nextProvider i18n={i18n}>
-        <MemoryRouter>
-          <ThemeProvider>{component}</ThemeProvider>
-        </MemoryRouter>
-      </I18nextProvider>
-    </RecoilRoot>,
-    options,
-  );
-});
+Cypress.Commands.add(
+  'mount',
+  (component, { initializeRecoil, ...options } = {}) => {
+    return mount(
+      <RecoilRoot initializeState={initializeRecoil}>
+        <I18nextProvider i18n={i18n}>
+          <MemoryRouter>
+            <ThemeProvider>{component}</ThemeProvider>
+          </MemoryRouter>
+        </I18nextProvider>
+      </RecoilRoot>,
+      options,
+    );
+  },
+);

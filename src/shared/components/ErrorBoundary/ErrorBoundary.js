@@ -9,8 +9,6 @@ class ErrorBoundaryComponent extends React.Component {
     this.state = {
       hasError: false,
     };
-
-    console.log(this.props.displayButton);
   }
 
   static getDerivedStateFromError(error) {

@@ -8,6 +8,6 @@ export default defineConfig({
       bundler: 'vite',
     },
     specPattern: 'src/**/*.cy.{js,jsx,ts,tsx}',
-    supportFile: 'cypress/support/component.tsx',
+    supportFile: 'cypress/support/component.jsx',
   },
 });
