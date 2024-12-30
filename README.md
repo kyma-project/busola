@@ -186,10 +186,10 @@ To install busola on k8s cluster run:
 (cd resources && kustomize build base/ | kubectl apply -f- )
 ```
 
-To install busola with istio gateway please prepare `DOMAIN`, go to `resources` and run:
+To install busola using specific environment configuration, set `ENVIRONMENT` environment variable and run:
 
 ```shell
-./apply-resources-istio.sh ${YOUR_DOMAIN}
+(cd resources && kustomize build environments/${ENVIRONMENT} | kubectl apply -f- )
 ```
 
 ### Access busola installed on Kubernetes
@@ -214,9 +214,13 @@ Install ingress resources by running:
 
 Then go to `localhost`
 
-### Istio-ingress gateway
+### Istio
 
-TODO: access via istio ingress
+To install Istio needed resources, prepare `DOMAIN`and run:
+
+```shell
+(cd resources && ./apply-resources-istio.sh ${YOUR_DOMAIN})
+```
 
 ## Troubleshooting
 

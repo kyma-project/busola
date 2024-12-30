@@ -7,12 +7,15 @@ if [ -z "$1" ] ; then
 fi
 
 export DOMAIN=$1
-export NAMESPACE=${2:-busola}
-export ENVIRONMENT=$3
+export NAMESPACE=${2:-default}
 TMP_DIR="../temp/resources"
 
-./apply-resources.sh "$@"
 
-envsubst < "${TMP_DIR}"/istio/virtualservice-busola.tpl.yaml > "${TMP_DIR}"/istio/virtualservice-busola.yaml
+mkdir -p "${TMP_DIR}"
+cp -rf . "${TMP_DIR}"
+#./apply-resources.sh "$@"
+
+envsubst < "${TMP_DIR}"/istio/gateway.tpl.yaml > "${TMP_DIR}"/istio/gateway.yaml
+envsubst < "${TMP_DIR}"/istio/http_route.tpl.yaml > "${TMP_DIR}"/istio/http_route.yaml
 
 kubectl apply -k "${TMP_DIR}"/istio --namespace=$NAMESPACE
