@@ -13,7 +13,6 @@ export function CodeViewer({
   value,
   structure,
   originalResource,
-  schema,
   scope,
   arrayItems,
   singleRootResource,
@@ -35,7 +34,7 @@ export function CodeViewer({
   let [language] = jsonata(structure?.language, {}, detectLanguage(value));
   language = language?.toLowerCase();
 
-  const getValue = (value, structure) => {
+  const getValue = value => {
     if (!isNil(value)) {
       try {
         switch (language) {

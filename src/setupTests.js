@@ -30,15 +30,7 @@ export const ignoreConsoleWarns = patterns => {
 };
 
 // shutup popper error
-ignoreConsoleErrors([
-  'Element passed as the argument does not exist in the instance',
-  'Error: Could not parse CSS stylesheet',
-  'Warning: validateDOMNesting(...): <tr> cannot appear as a child of <ui5-table>.',
-  '2',
-]);
-
-// ignore lit dev mode log - it's UI5 dependency
-ignoreConsoleWarns(['Lit is in dev mode.']);
+ignoreConsoleErrors(['2']);
 
 // Mock IntersectionObserver
 class IntersectionObserver {
