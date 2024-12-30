@@ -10,14 +10,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: web
-                port:
-                  number: 8080
-
-          - path: /backend
-            pathType: Prefix
-            backend:
-              service:
-                name: backend
+                name: busola
                 port:
                   number: 3001

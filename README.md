@@ -180,10 +180,10 @@ For the information on how to run tests and configure them, go to the [`tests`](
 
 ## Deploy busola in Kubernetes Cluster
 
-To install busola on k8s cluster go to `resources` directory and run:
+To install busola on k8s cluster run:
 
 ```shell
-kustomize build base/ | kubectl apply -f-
+(cd resources && kustomize build base/ | kubectl apply -f- )
 ```
 
 To install busola with istio gateway please prepare `DOMAIN`, go to `resources` and run:
@@ -196,16 +196,17 @@ To install busola with istio gateway please prepare `DOMAIN`, go to `resources` 
 
 You can access busola installed on Kubernetes in several ways, depends on how it's installed:
 
-### K3d
+### Port-forward
 
 Use port-forward
 
 ```shell
-kubectl port-forward services/web 8080:8080
-kubectl port-forward services/backend 3001:3001
+kubectl port-forward services/busola 3001:3001
 ```
 
-Install ingress by runing:
+### K3d
+
+Install ingress resources by running:
 
 ```shell
 (cd resources && kubectl apply -f ingress/ingress.yaml)
@@ -213,9 +214,9 @@ Install ingress by runing:
 
 Then go to `localhost`
 
-### Port-forward
-
 ### Istio-ingress gateway
+
+TODO: access via istio ingress
 
 ## Troubleshooting
 
