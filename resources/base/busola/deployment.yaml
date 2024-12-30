@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web
+  name: busola
   labels:
     app: busola
 spec:
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: busola
-          image: busola-web
+          image: busola
           imagePullPolicy: IfNotPresent
           env:
             - name: ENVIRONMENT
@@ -25,15 +25,19 @@ spec:
                   optional: true
                   key: ENVIRONMENT
                   name: environment
-            - name: BACKEND_URL
-              valueFrom:
-                configMapKeyRef:
-                  optional: true
-                  key: BACKEND_URL
-                  name: busola-config
+          volumeMounts:
+            - name: config
+              mountPath: /app/config
           resources:
             requests:
               cpu: 100m
               memory: 21Mi
           ports:
-            - containerPort: 8080
+            - containerPort: 3001
+      volumes:
+        - name: config
+          configMap:
+            name: busola-config
+            items:
+              - key: config
+                path: config.yaml
