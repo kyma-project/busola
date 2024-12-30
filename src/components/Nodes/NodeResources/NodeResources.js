@@ -8,7 +8,6 @@ export function NodeResources({ metrics, resources }) {
   const { t } = useTranslation();
   const { cpu, memory } = metrics || {};
 
-  cpu.capacity *= 1000; //convert to mili cpus
   return cpu && memory ? (
     <>
       <Card
@@ -20,10 +19,10 @@ export function NodeResources({ metrics, resources }) {
         <UI5RadialChart
           color="var(--sapChart_OrderedColor_5)"
           value={cpu.usage}
-          max={cpu.capacity}
+          max={cpu.capacity * 1000}
           additionalInfo={`${roundTwoDecimals(cpu.usage)}m / ${roundTwoDecimals(
             cpu.capacity,
-          )}m`}
+          ) * 1000}m`}
         />
       </Card>
       <Card
@@ -54,10 +53,10 @@ export function NodeResources({ metrics, resources }) {
         <UI5RadialChart
           color="var(--sapChart_OrderedColor_5)"
           value={resources?.requests?.cpu}
-          max={cpu.capacity}
+          max={cpu.capacity * 1000}
           additionalInfo={`${roundTwoDecimals(
             resources?.requests?.cpu,
-          )}m / ${roundTwoDecimals(cpu.capacity)}m`}
+          )}m / ${roundTwoDecimals(cpu.capacity) * 1000}m`}
         />
       </Card>
       <Card
@@ -86,10 +85,10 @@ export function NodeResources({ metrics, resources }) {
         <UI5RadialChart
           color="var(--sapChart_OrderedColor_5)"
           value={resources?.limits?.cpu}
-          max={cpu.capacity}
+          max={cpu.capacity * 1000}
           additionalInfo={`${roundTwoDecimals(
             resources?.limits?.cpu,
-          )}m / ${roundTwoDecimals(cpu.capacity)}m`}
+          )}m / ${roundTwoDecimals(cpu.capacity) * 1000}m`}
         />
       </Card>
       <Card
