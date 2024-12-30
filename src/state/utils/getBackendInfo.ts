@@ -1,14 +1,6 @@
-import getEnv, { Envs } from '../../shared/utils/env';
-
 const domain = window.location.hostname;
 
-async function getBackendAddress() {
-  const backendUrl = await getEnv(Envs.BACKEND_URL);
-  console.log(backendUrl);
-  if (backendUrl) {
-    return backendUrl;
-  }
-
+const getBackendAddress = () => {
   // local busola - needed for e2e tests to work locally
   if (
     window.location.hostname.startsWith('localhost') &&
@@ -23,11 +15,9 @@ async function getBackendAddress() {
   } else {
     return '/backend';
   }
-}
+};
 
-export async function getClusterConfig() {
-  return {
-    domain,
-    backendAddress: await getBackendAddress(),
-  };
-}
+export const getClusterConfig = () => ({
+  domain,
+  backendAddress: getBackendAddress(),
+});

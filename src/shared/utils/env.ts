@@ -1,11 +1,10 @@
 import joinPaths from './path';
 
 export enum Envs {
-  BACKEND_URL = 'BACKEND_URL',
   ENVIRONMENT = 'ENVIRONMENT',
 }
 
-export default async function getEnv(env: Envs): Promise<string> {
+async function getEnv(env: Envs): Promise<string> {
   const input = await fetchActiveEnv();
   const envs = readEnv(input);
   const desiredEnv = envs.get(env);

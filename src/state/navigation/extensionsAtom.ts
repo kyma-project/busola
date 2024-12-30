@@ -435,7 +435,10 @@ export const useGetExtensions = () => {
           relativeUrl: url,
           init: options,
           abortController: options?.signal
-            ? { signal: options?.signal, abort: () => {} }
+            ? {
+                signal: options?.signal,
+                abort: () => {},
+              }
             : undefined,
         });
       }

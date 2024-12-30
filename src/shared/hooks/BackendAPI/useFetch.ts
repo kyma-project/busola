@@ -40,7 +40,7 @@ export const createFetchFn = ({
     },
     signal: abortController?.signal,
   };
-  const { backendAddress } = await getClusterConfig();
+  const { backendAddress } = getClusterConfig();
 
   try {
     const response = await fetch(backendAddress + relativeUrl, init);

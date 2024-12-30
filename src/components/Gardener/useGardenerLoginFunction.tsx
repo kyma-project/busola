@@ -26,7 +26,7 @@ export function useGardenerLogin(setReport: (report: string) => void) {
   const getAvailableProjects = async (
     fetchHeaders: HeadersInit,
   ): Promise<string[]> => {
-    const { backendAddress } = await getClusterConfig();
+    const { backendAddress } = getClusterConfig();
     type SSRResult = {
       status: { resourceRules: PermissionSet[] };
     };
@@ -63,7 +63,7 @@ export function useGardenerLogin(setReport: (report: string) => void) {
     fetchHeaders: HeadersInit,
     availableProjects: string[],
   ) => {
-    const { backendAddress } = await getClusterConfig();
+    const { backendAddress } = getClusterConfig();
 
     type ShootsResult = {
       items: K8sResource[];
