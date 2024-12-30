@@ -8,6 +8,7 @@ export function NodeResources({ metrics, resources }) {
   const { t } = useTranslation();
   const { cpu, memory } = metrics || {};
 
+  cpu.capacity *= 1000; //convert to mili cpus
   return cpu && memory ? (
     <>
       <Card
