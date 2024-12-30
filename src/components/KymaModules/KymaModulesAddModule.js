@@ -103,6 +103,10 @@ export default function KymaModulesAddModule({
           ],
           docsUrl:
             module.metadata.annotations['operator.kyma-project.io/doc-url'],
+          icon: {
+            link: module.spec?.info?.icons[0]?.link,
+            name: module.spec?.info?.icons[0]?.name,
+          },
           isMetaRelease: false,
         });
       } else if (existingModule) {
@@ -131,6 +135,10 @@ export default function KymaModulesAddModule({
                 },
               ],
               docsUrl: module.spec.info.documentation,
+              icon: {
+                link: module.spec?.info?.icons[0]?.link,
+                name: module.spec?.info?.icons[0]?.name,
+              },
             });
           } else {
             acc

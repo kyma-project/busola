@@ -50,6 +50,8 @@
   }
 
   .settings-panel {
+    width: 350px;
+
     &::part(header) {
       font-family: var(--sapFontFamily);
       font-size: var(--sapFontSize);

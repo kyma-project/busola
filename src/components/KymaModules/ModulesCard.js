@@ -11,6 +11,26 @@ import {
 } from '@ui5/webcomponents-react';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from 'react';
+
+async function isImageAvailable(url) {
+  try {
+    const response = await fetch(url, { method: 'HEAD' });
+    return response.ok;
+  } catch (error) {
+    return false;
+  }
+}
+async function getImageSrc(module) {
+  const defaultImage = '/assets/sap-logo.svg';
+  const iconLink = module.icon.link;
+
+  if (iconLink && (await isImageAvailable(iconLink))) {
+    return iconLink;
+  } else {
+    return defaultImage;
+  }
+}
 
 export default function ModulesCard({
   module,
@@ -24,6 +44,15 @@ export default function ModulesCard({
   checkIfStatusModuleIsBeta,
 }) {
   const { t } = useTranslation();
+  const [imageSrc, setImageSrc] = useState('');
+
+  useEffect(() => {
+    async function checkImage() {
+      const src = await getImageSrc(module);
+      setImageSrc(src);
+    }
+    checkImage();
+  }, [module]);
 
   return (
     <Card key={module.name} className="addModuleCard">
@@ -52,7 +81,13 @@ export default function ModulesCard({
               : t('kyma-modules.no-version')}
           </Text>
         </div>
-        <img className="avatar" alt="SAP" src="\assets\sap-logo.svg" />
+        {imageSrc !== '' && (
+          <img
+            className="avatar"
+            alt={module.icon.name ? module.icon.name : 'SAP'}
+            src={imageSrc}
+          />
+        )}
       </ListItemStandard>
       <div className="content">
         {module.docsUrl && (
