@@ -24,6 +24,7 @@
   overflow: hidden;
   flex-grow: 1;
   border: 1px solid var(--sapNeutralBackground);
+  z-index: 100;
 }
 
 .resource-form__legend {
