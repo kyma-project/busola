@@ -26,18 +26,19 @@ data:
         source: $filter(status.conditions, function($v, $i, $a) {$v.status = 'True'}).type
         widget: Labels
     status:
-      - name: Conditions
-        source: status.conditions
-        widget: ConditionList
-      - name: Last Scale Time
-        source: status.lastScaleTime
-        widget: TimeFromNow
-      - name: Current Replicas
-        source: status.currentReplicas
-      - name: Desired Replicas
-        source: status.desiredReplicas
-      - name: Observed Generation
-        source: status.observedGeneration
+      body:
+        - name: Conditions
+          source: status.conditions
+          widget: ConditionList
+        - name: Last Scale Time
+          source: status.lastScaleTime
+          widget: TimeFromNow
+        - name: Current Replicas
+          source: status.currentReplicas
+        - name: Desired Replicas
+          source: status.desiredReplicas
+        - name: Observed Generation
+          source: status.observedGeneration
     body:
       - name: Specification
         widget: Panel

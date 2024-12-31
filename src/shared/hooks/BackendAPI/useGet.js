@@ -14,7 +14,13 @@ const ERROR_TOLERANCY = 2;
 const useGetHook = processDataFn =>
   function(
     path,
-    { pollingInterval, onDataReceived, skip, errorTolerancy = undefined } = {},
+    {
+      pollingInterval,
+      onDataReceived,
+      skip,
+      errorTolerancy = undefined,
+      compareEntireResource = false,
+    } = {},
   ) {
     const authData = useRecoilValue(authDataState);
     const lastAuthData = useRef(null);
@@ -82,7 +88,13 @@ const useGetHook = processDataFn =>
           if (error) setTimeout(_ => setError(null)); // bring back the data and clear the error once the connection started working again
           errorTolerancyCounter.current = 0;
           setTimeout(_ =>
-            processDataFn(payload, currentData, setData, lastResourceVersion),
+            processDataFn(
+              payload,
+              currentData,
+              setData,
+              lastResourceVersion,
+              compareEntireResource,
+            ),
           );
         } catch (e) {
           previousRequestNotFinished.current = null;
@@ -325,10 +337,17 @@ function handleListDataReceived(filter) {
   };
 }
 
-function handleSingleDataReceived(newData, oldData, setDataFn) {
+function handleSingleDataReceived(
+  newData,
+  oldData,
+  setDataFn,
+  compareEntireResource,
+) {
   if (
     !oldData || // current data is empty and we received some. There's no doubdt we should update.
-    newData.metadata.resourceVersion !== oldData.metadata?.resourceVersion
+    newData.metadata.resourceVersion !== oldData.metadata?.resourceVersion ||
+    (compareEntireResource &&
+      JSON.stringify(newData) !== JSON.stringify(oldData))
   ) {
     // Compare resourceVersion.
     setDataFn(newData);
