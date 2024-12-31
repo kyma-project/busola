@@ -192,9 +192,9 @@ To install Busola using specific environment configuration, set `ENVIRONMENT` en
 (cd resources && kustomize build environments/${ENVIRONMENT} | kubectl apply -f- )
 ```
 
-### Access Busola installed on Kubernetes
+## Access Busola installed on Kubernetes
 
-You can access Busola installed on Kubernetes in several ways, depends on how it's installed:
+You can access Busola installed on Kubernetes in several ways, depends on how cluster is configured.
 
 ### Port-forward
 
