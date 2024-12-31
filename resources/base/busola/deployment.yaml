@@ -37,6 +37,7 @@ spec:
       volumes:
         - name: config
           configMap:
+            optional: true
             name: busola-config
             items:
               - key: config
