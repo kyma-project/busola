@@ -97,7 +97,7 @@ export function ClusterNodes({ data, error, loading }) {
       <ReadableCreationTimestamp
         timestamp={entry.metadata?.creationTimestamp}
       />,
-      entry.status?.nodeInfo?.kubeProxyVersion || EMPTY_TEXT_PLACEHOLDER,
+      entry.status?.nodeInfo?.kubeletVersion || EMPTY_TEXT_PLACEHOLDER,
       getStatus(entry.status),
       region ?? EMPTY_TEXT_PLACEHOLDER,
       zone ?? EMPTY_TEXT_PLACEHOLDER,
