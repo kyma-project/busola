@@ -2,8 +2,6 @@ import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, FlexBox, Icon, Link } from '@ui5/webcomponents-react';
 
-import { spacing } from '@ui5/webcomponents-react-base';
-
 type LinkProps = {
   url: string;
   text?: string;
@@ -17,9 +15,9 @@ type LinkProps = {
     | 'Default'
     | 'Emphasized'
     | 'Attention';
-  iconStyle?: React.CSSProperties;
+  iconClassName?: string;
   type?: 'link' | 'button';
-  linkStyle?: React.CSSProperties;
+  linkClassName?: string;
 };
 
 export const ExternalLink = ({
@@ -28,19 +26,18 @@ export const ExternalLink = ({
   children,
   design = 'Default',
   buttonDesign = 'Transparent',
-  iconStyle,
+  iconClassName,
   type = 'link',
-  linkStyle,
+  linkClassName,
 }: LinkProps) => {
   const { t } = useTranslation();
 
   if (type === 'button') {
     return (
       <Button
-        icon="inspect"
+        endIcon="inspect"
         design={buttonDesign}
-        iconEnd
-        style={spacing.sapUiTinyMarginBeginEnd}
+        className="sap-margin-x-tiny"
         onClick={() => {
           const newWindow = window.open(url, '_blank', 'noopener, noreferrer');
           if (newWindow) newWindow.opener = null;
@@ -52,17 +49,15 @@ export const ExternalLink = ({
   }
 
   return (
-    <Link design={design} href={url} target="_blank" style={linkStyle}>
+    <Link design={design} href={url} target="_blank" className={linkClassName}>
       <FlexBox alignItems="Center">
         {text || children || url}
         <Icon
           design="Information"
           name="inspect"
-          className="bsl-icon-s"
+          className={`bsl-icon-s sap-margin-begin-tiny ${iconClassName}`}
           style={{
-            ...spacing.sapUiTinyMarginBegin,
             marginRight: '0.15rem',
-            ...(iconStyle || {}),
           }}
           accessibleName={t('common.ariaLabel.new-tab-link')}
         />

@@ -10,7 +10,6 @@ import { CountingCard } from 'shared/components/CountingCard/CountingCard';
 import { useKymaModulesQuery } from 'components/KymaModules/KymaModulesQuery';
 import { useUrl } from 'hooks/useUrl';
 import { useNavigate } from 'react-router-dom';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 const GardenerProvider = () => {
   const { t } = useTranslation();
@@ -74,10 +73,7 @@ export default function ClusterDetails({ currentCluster }) {
         }
       />
       {!error && !loadingModules && modules && (
-        <div
-          className="item-wrapper small"
-          style={spacing.sapUiSmallMarginBeginEnd}
-        >
+        <div className="item-wrapper small sap-margin-x-small">
           <CountingCard
             className="item"
             value={modules?.length}

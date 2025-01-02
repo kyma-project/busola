@@ -7,7 +7,6 @@ import { clusterState } from 'state/clusterAtom';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { cloneDeep } from 'lodash';
 
-import { spacing } from '@ui5/webcomponents-react-base';
 import './NoPermissions.scss';
 
 function NoPermissions() {
@@ -35,16 +34,16 @@ function NoPermissions() {
     <section className="no-permissions">
       <Icon accessibleName="no-permissions" name="locked" />
       <header>{t('common.errors.no-permissions-header')}</header>
-      <Text style={spacing.sapUiMediumMarginTop}>
+      <Text className="sap-margin-top-medium">
         {t('common.errors.no-permissions')}
       </Text>
       <Text>{t('common.errors.no-permissions-message')}</Text>
-      <Text style={spacing.sapUiMediumMarginTopBottom}>
+      <Text className="sap-margin-y-medium">
         {t('no-permissions.enter-namespace-name')}
       </Text>
       <form className="bsl-display-flex">
         <Input
-          style={spacing.sapUiNoMargin}
+          className="no-margin"
           placeholder={t('no-permissions.enter-namespace-name-placeholder')}
           value={namespaceName}
           onInput={(e: any) => setNamespaceName(e.target.typedInValue)}

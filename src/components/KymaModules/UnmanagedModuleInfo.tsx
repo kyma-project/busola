@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { MessageStrip } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { useTranslation } from 'react-i18next';
 
 export const UnmanagedModuleInfo = ({ kymaResource }: any) => {
@@ -19,7 +18,7 @@ export const UnmanagedModuleInfo = ({ kymaResource }: any) => {
       <MessageStrip
         design="Information"
         hideCloseButton
-        style={spacing.sapUiTinyMarginBottom}
+        className="sap-margin-bottom-tiny"
       >
         {t('kyma-modules.unmanaged-modules-info')}
       </MessageStrip>

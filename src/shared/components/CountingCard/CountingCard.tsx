@@ -3,7 +3,6 @@ import {
   Card,
   NumericSideIndicator,
 } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { useUrl } from 'hooks/useUrl';
 import { useTranslation } from 'react-i18next';
 import { Link } from '../Link/Link';
@@ -68,12 +67,7 @@ export const CountingCard = ({
         </AnalyticalCardHeader>
       }
     >
-      <div
-        style={{
-          ...spacing.sapUiSmallMarginBeginEnd,
-          ...spacing.sapUiSmallMarginBottom,
-        }}
-      >
+      <div className="sap-margin-x-small sap-margin-bottom-small">
         {resourceUrl && (
           <Link
             design="Default"

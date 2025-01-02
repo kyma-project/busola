@@ -6,6 +6,13 @@ import '@ui5/webcomponents-icons/dist/AllIcons.js';
 // those tests are in separate file as we need to mock the `widgets` collection from `./../index.js`...
 // ... which originals in turn are required in other `Widget.test.js`
 
+vi.mock('@ui5/webcomponents-react', () => {
+  return {
+    Button: props => <button {...props}>{props.children}</button>,
+    Text: props => <p {...props}>{props.children}</p>,
+  };
+});
+
 const CopyableMockWidget = ({ value }) => value;
 vi.doMock('./../index', () => {
   return {
@@ -38,7 +45,7 @@ describe('Widget.copyable', () => {
     await waitFor(async () => {
       await act(async () => {
         // find copy button
-        container.querySelector('ui5-button').click();
+        container.querySelector('button').click();
 
         expect(copyToClipboard).toHaveBeenCalledWith('test-value');
       });
@@ -92,7 +99,7 @@ describe('Widget.copyable', () => {
     await waitFor(async () => {
       await act(async () => {
         // find copy button
-        container.querySelector('ui5-button').click();
+        container.querySelector('button').click();
 
         expect(copyToClipboard).toHaveBeenCalledWith('this is test-value');
       });

@@ -23,7 +23,6 @@ import {
   Option,
   Select,
 } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import './KymaModulesCreate.scss';
@@ -472,9 +471,9 @@ export default function KymaModulesCreate({ resource, ...props }) {
               {checkIfSelectedModuleIsBeta() ? (
                 <MessageStrip
                   key={'beta'}
-                  design="Warning"
+                  design="Critical"
                   hideCloseButton
-                  style={spacing.sapUiTinyMarginTop}
+                  className="sap-margin-top-tiny"
                 >
                   {t('kyma-modules.beta-alert')}
                 </MessageStrip>
@@ -483,9 +482,9 @@ export default function KymaModulesCreate({ resource, ...props }) {
             </>
           ) : (
             <MessageStrip
-              design="Warning"
+              design="Critical"
               hideCloseButton
-              style={spacing.sapUiSmallMarginTop}
+              className="sap-margin-top-small"
             >
               {t('extensibility.widgets.modules.no-modules-installed')}
             </MessageStrip>

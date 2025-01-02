@@ -19,7 +19,7 @@ context('Test Custom Resources', () => {
 
     cy.navigateTo('Configuration', 'Custom Resource Definitions');
 
-    cy.openCreate().click();
+    cy.openCreate();
 
     cy.wrap(loadFile(FILE_NAME)).then(CRD_CONFIG => {
       const CRD = JSON.stringify(CRD_CONFIG);
@@ -92,6 +92,7 @@ context('Test Custom Resources', () => {
   });
 
   it('Test column layout and remove CRD', () => {
+    cy.reload();
     cy.getLeftNav()
       .contains('Custom Resources')
       .click();
@@ -107,14 +108,13 @@ context('Test Custom Resources', () => {
     cy.get('ui5-input[id="search-input"]:visible')
       .find('input')
       .wait(1000)
-      .clear()
       .type('cypress');
     cy.clickGenericListLink('Tclusters');
 
     cy.getMidColumn()
       .get('ui5-table-row')
       .find('ui5-table-cell')
-      .contains('span', 'tcluster-test')
+      .contains('ui5-text', 'tcluster-test')
       .click();
 
     cy.testEndColumnLayout('tcluster-test', false);
@@ -122,7 +122,7 @@ context('Test Custom Resources', () => {
     cy.getMidColumn()
       .get('ui5-table-row')
       .find('ui5-table-cell')
-      .contains('span', 'tcluster-test')
+      .contains('ui5-text', 'tcluster-test')
       .click();
 
     cy.getMidColumn()

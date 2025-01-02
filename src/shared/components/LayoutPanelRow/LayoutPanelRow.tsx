@@ -2,7 +2,6 @@ import { ReactNode } from 'react';
 import { stringifyIfBoolean } from 'shared/utils/helpers';
 import { Text } from '@ui5/webcomponents-react';
 
-import { spacing } from '@ui5/webcomponents-react-base';
 import './LayoutPanelRow.scss';
 
 type LayoutPanelRowProps = {
@@ -20,14 +19,12 @@ export function LayoutPanelRow({
 
   return (
     <div
-      className="break-word layout-panel-row"
+      className="break-word layout-panel-row sap-margin-y-tiny sap-margin-x-small"
       style={{
-        ...spacing.sapUiTinyMarginTopBottom,
-        ...spacing.sapUiSmallMarginBeginEnd,
         ...(capitalize ? { textTransform: 'capitalize' } : {}),
       }}
     >
-      <Text style={spacing.sapUiTinyMarginBottom}>{name}</Text>
+      <Text className="sap-margin-bottom-tiny">{name}</Text>
       {sanitizedValue && <Text>{sanitizedValue}</Text>}
     </div>
   );

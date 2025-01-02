@@ -27,6 +27,7 @@ export function RoleRef({ roleRef }) {
   return (
     <UI5Panel
       keyComponent="role-binding"
+      key="role-binding"
       title={t('common.headers.configuration')}
     >
       <LayoutPanelRow

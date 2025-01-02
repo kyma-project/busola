@@ -6,7 +6,6 @@ import { MatchExpressionsList } from '../MatchExpressionsList';
 import { isEmpty, isEqual } from 'lodash';
 import { Text, Title } from '@ui5/webcomponents-react';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 const SelectorDetails = ({
   expressions,
@@ -25,7 +24,7 @@ const SelectorDetails = ({
   };
 
   const relatedResources = RelatedResources ? (
-    <RelatedResources labels={labels} />
+    <RelatedResources labels={labels} namespace={namespace} />
   ) : (
     <RelatedPods
       namespace={namespace}
@@ -80,7 +79,7 @@ export const Selector = ({
       data-test-id="workload-selector"
     >
       {isSelectorDefinedOrEmpty ? (
-        <Text style={spacing.sapUiSmallMargin}>
+        <Text className="sap-margin-small">
           {message || t('selector.message.empty-selector')}
         </Text>
       ) : (

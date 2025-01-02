@@ -149,9 +149,8 @@ context('Test Command Palette navigation', () => {
     getQueryInput().type('pref');
 
     // autocomplete
-    cy.get('body')
-      .tab()
-      .type('{enter}', { force: true });
+    cy.get('body').tab();
+    getQueryInput().type('{enter}', { force: true });
 
     cy.contains('Cluster interaction').should('be.visible');
 

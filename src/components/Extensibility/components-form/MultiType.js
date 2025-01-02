@@ -63,7 +63,7 @@ export function MultiType({
               <SegmentedButtonItem
                 compact
                 key={type}
-                pressed={type === selectedType}
+                selected={type === selectedType}
                 onClick={() => {
                   onChange &&
                     onChange({

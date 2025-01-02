@@ -1,4 +1,4 @@
-import { render, waitFor, act } from 'testing/reactTestingUtils';
+import { render, waitFor } from 'testing/reactTestingUtils';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { authDataState } from 'state/authDataAtom';
 import { clusterState } from 'state/clusterAtom';
@@ -36,29 +36,27 @@ describe('useGet', () => {
         snapshot.set(clusterState, {});
       },
     });
-    await act(async () => {
-      // first call - loading
-      expect(mock).toHaveBeenCalledWith(true, null, null);
-      // first call - valid data
-      await waitFor(() =>
-        expect(mock).toHaveBeenCalledWith(false, null, expect.any(Object)),
-      );
-      // second call - error, but still show data (1/2)
-      await waitFor(() =>
-        expect(mock).toHaveBeenCalledWith(false, null, expect.any(Object)),
-      );
-      // third call - error, but still show data (2/2)
-      await waitFor(() =>
-        expect(mock).toHaveBeenCalledWith(false, null, expect.any(Object)),
-      );
-      // fourth call - error, start displaying error
-      await waitFor(() =>
-        expect(mock).toHaveBeenCalledWith(
-          false,
-          expect.any(Error),
-          expect.any(Object),
-        ),
-      );
-    });
+    // first call - loading
+    expect(mock).toHaveBeenCalledWith(true, null, null);
+    // first call - valid data
+    await waitFor(() =>
+      expect(mock).toHaveBeenCalledWith(false, null, expect.any(Object)),
+    );
+    // second call - error, but still show data (1/2)
+    await waitFor(() =>
+      expect(mock).toHaveBeenCalledWith(false, null, expect.any(Object)),
+    );
+    // third call - error, but still show data (2/2)
+    await waitFor(() =>
+      expect(mock).toHaveBeenCalledWith(false, null, expect.any(Object)),
+    );
+    // fourth call - error, start displaying error
+    await waitFor(() =>
+      expect(mock).toHaveBeenCalledWith(
+        false,
+        expect.any(Error),
+        expect.any(Object),
+      ),
+    );
   });
 });

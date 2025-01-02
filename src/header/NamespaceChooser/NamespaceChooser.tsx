@@ -42,7 +42,7 @@ export function NamespaceChooser() {
     />,
   ];
 
-  allNamespaces.map(ns =>
+  allNamespaces?.map(ns =>
     namespaces.push(
       <SideNavigationSubItem
         text={ns}
