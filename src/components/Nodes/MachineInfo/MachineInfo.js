@@ -39,11 +39,6 @@ export function MachineInfo({ nodeInfo, capacity, spec }) {
             {spec.podCIDRs.join(',')}
           </DynamicPageComponent.Column>
           <DynamicPageComponent.Column
-            title={t('machine-info.kube-proxy-version')}
-          >
-            {nodeInfo.kubeProxyVersion}
-          </DynamicPageComponent.Column>
-          <DynamicPageComponent.Column
             title={t('machine-info.kubelet-version')}
           >
             {nodeInfo.kubeletVersion}
