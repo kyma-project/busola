@@ -47,6 +47,10 @@
   div[data-component-name='ToolbarChildContainer'] {
     overflow: visible;
   }
+
+  div[data-component-name='ToolbarChildContainer'] > * {
+    overflow: visible;
+  }
 }
 
 .header-wrapper {
