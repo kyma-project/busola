@@ -51,6 +51,7 @@ export function useNodesQuery(skip = false) {
     {
       pollingInterval: 4000,
       skip,
+      compareEntireResource: true,
     },
   );
 
