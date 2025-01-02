@@ -180,13 +180,13 @@ For the information on how to run tests and configure them, go to the [`tests`](
 
 ## Deploy Busola in Kubernetes Cluster
 
-To install Busola on k8s cluster run:
+To install Busola on Kubernetes cluster run:
 
 ```shell
 (cd resources && kustomize build base/ | kubectl apply -f- )
 ```
 
-To install Busola using specific environment configuration, set `ENVIRONMENT` environment variable and run:
+To install Busola using specific environment configuration, set `ENVIRONMENT` shell environment variable and run:
 
 ```shell
 (cd resources && kustomize build environments/${ENVIRONMENT} | kubectl apply -f- )
@@ -194,17 +194,15 @@ To install Busola using specific environment configuration, set `ENVIRONMENT` en
 
 ## Access Busola installed on Kubernetes
 
-You can access Busola installed on Kubernetes in several ways, depends on how cluster is configured.
+### Kubectl
 
-### Port-forward
-
-Use port-forward
+The simplest method which always works is to use capabilities of `kubectl`.
 
 ```shell
 kubectl port-forward services/busola 3001:3001
 ```
 
-### K3d
+### Busola installed on K3d
 
 Prerequisites:
 
@@ -216,26 +214,27 @@ Install ingress resources by running:
 (cd resources && kubectl apply -f ingress/ingress.yaml)
 ```
 
-Then go to `localhost`
+Go to `localhost`
 
 #### Connect to the k3d cluster where Busola is installed.
 
-To be able to connect to the same K3d cluster where Busola is installed download kubeconfig and change cluster server address to `https://kubernetes.default.svc:443`.
+To be able to connect to the same K3d cluster where Busola is installed.
+Download kubeconfig and change cluster server address to `https://kubernetes.default.svc:443`.
 
 Using shell:
-Prepare name of your cluster and set `K3D_CLUSTER_NAME` shell environment variable with the name of the cluster then run:
+Set `K3D_CLUSTER_NAME` shell environment variable to name of your cluster.
 
 ```shell
 k3d kubeconfig get ${K3D_CLUSTER_NAME} > k3d-kubeconfig.yaml
 yq --inplace '.clusters[].cluster.server = "https://kubernetes.default.svc:443"' k3d-kubeconfig.yaml
 ```
 
-### Istio
+### Kubernetes cluster with Istio installed
 
 Prerequisites:
 
-- Sidecar Proxy injection enabled, see [Kyma Docs](https://kyma-project.io/#/istio/user/tutorials/01-40-enable-sidecar-injection?id=enable-istio-sidecar-proxy-injection), how to enable it.
-- Api gateway module installed, see [Install docs](https://kyma-project.io/#/02-get-started/01-quick-install)
+- Sidecar Proxy injection enabled, see [Kyma docs](https://kyma-project.io/#/istio/user/tutorials/01-40-enable-sidecar-injection?id=enable-istio-sidecar-proxy-injection), how to enable it.
+- Api gateway module installed, see [install docs](https://kyma-project.io/#/02-get-started/01-quick-install)
 
 Install Istio needed resources by running:
 
