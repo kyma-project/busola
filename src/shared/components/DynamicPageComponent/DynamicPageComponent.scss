@@ -41,6 +41,12 @@
     background-color: var(--sapList_BorderColor);
     border-radius: 5px;
   }
+
+  div[data-component-name='DynamicPageTitleActions'],
+  div[data-component-name='ToolbarContent'],
+  div[data-component-name='ToolbarChildContainer'] {
+    overflow: visible;
+  }
 }
 
 .header-wrapper {
@@ -94,10 +100,4 @@
 [data-component-name='DynamicPageContent'],
 [data-component-name='ObjectPageContent'] {
   padding: 0 !important;
-}
-
-div[data-component-name='DynamicPageTitleActions'],
-div[data-component-name='ToolbarContent'],
-div[data-component-name='ToolbarChildContainer'] {
-  overflow: visible;
 }
