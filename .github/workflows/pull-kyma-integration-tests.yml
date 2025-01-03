@@ -39,7 +39,7 @@ jobs:
           ENV: dev
         run: |
           ./.github/scripts/deploy_busola.sh PR-${{ github.event.number }} | tee busola-deploy.log
-      - name: prepare_kubeconfig
+      - name: Prepare kubeconfig
         run: |
           ./.github/scripts/prepare_kubeconfig.sh
       - name: Run tests
