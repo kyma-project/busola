@@ -127,7 +127,7 @@ export default function KymaModulesAddModule({
                 {
                   channel: channel.channel,
                   version: channel.version,
-                  isBeta: module.spec.beta ?? false,
+                  isBeta: moduleMetaRelase.spec.beta ?? false,
                   isMetaRelease: true,
                 },
               ],
@@ -143,7 +143,7 @@ export default function KymaModulesAddModule({
               .channels.push({
                 channel: channel.channel,
                 version: channel.version,
-                isBeta: module.spec.beta ?? false,
+                isBeta: moduleMetaRelase.spec.beta ?? false,
                 isMetaRelease: true,
               });
           }
@@ -222,9 +222,11 @@ export default function KymaModulesAddModule({
         return false;
       }
       const moduleData = modulesAddData?.find(module => module.name === name);
+
       return moduleData
         ? moduleData.channels.some(
-            ({ channel: ch, isBeta }) => ch === channel && isBeta,
+            ({ channel: ch, isBeta }) =>
+              ch === channel || (kymaResource.spec.channel && isBeta),
           )
         : false;
     });
@@ -235,7 +237,8 @@ export default function KymaModulesAddModule({
       ?.find(mod => mod.name === moduleName)
       ?.channels.some(
         ({ channel: ch, isBeta }) =>
-          ch === findStatus(moduleName)?.channel && isBeta,
+          ch === findStatus(moduleName)?.channel ||
+          (kymaResource.spec.channel && isBeta),
       );
   };
 
