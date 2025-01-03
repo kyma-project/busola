@@ -252,7 +252,7 @@ function Resource({
     </>
   );
 
-  const filterColumns = col => {
+  const filterColumnByVisibility = col => {
     const { visible, error } = col.visibility?.(resource) || {
       visible: true,
     };
@@ -293,9 +293,12 @@ function Resource({
           customStatusColumns?.length ? (
             <>
               {customStatusColumns
-                ?.filter(filterColumns)
-                .filter(col => !col?.conditionComponent)
-                ?.filter(col => !col?.fullWidth || col?.fullWidth === false)
+                ?.filter(
+                  col =>
+                    filterColumnByVisibility(col) &&
+                    !col?.conditionComponent &&
+                    !col?.fullWidth,
+                )
                 ?.map(col => (
                   <DynamicPageComponent.Column
                     key={col.header}
@@ -311,9 +314,13 @@ function Resource({
           customStatusColumns?.length ? (
             <>
               {customStatusColumns
-                ?.filter(filterColumns)
-                .filter(col => !col?.conditionComponent)
-                ?.filter(col => col?.fullWidth && col?.fullWidth === true)
+                ?.filter(
+                  col =>
+                    filterColumnByVisibility(col) &&
+                    !col?.conditionComponent &&
+                    col?.fullWidth &&
+                    col?.fullWidth === true,
+                )
                 ?.map(col => (
                   <DynamicPageComponent.Column
                     key={col.header}
@@ -330,7 +337,7 @@ function Resource({
           customConditionsComponents?.length ? (
             <>
               {customConditionsComponents
-                ?.filter(filterColumns)
+                ?.filter(filterColumnByVisibility)
                 ?.map(component => (
                   <>
                     <div
@@ -388,7 +395,7 @@ function Resource({
               {renderUpdateDate(lastUpdate, t('common.value-units.days-ago'))}
             </DynamicPageComponent.Column>
           )}
-          {customColumns.filter(filterColumns).map(col => (
+          {customColumns.filter(filterColumnByVisibility).map(col => (
             <DynamicPageComponent.Column key={col.header} title={col.header}>
               {col.value(resource)}
             </DynamicPageComponent.Column>
