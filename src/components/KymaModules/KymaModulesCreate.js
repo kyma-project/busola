@@ -182,9 +182,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
                 {
                   channel: channel.channel,
                   version: channel.version,
-                  isBeta:
-                    module.metadata.labels['operator.kyma-project.io/beta'] ===
-                    'true',
+                  isBeta: module.spec.beta ?? false,
                   isMetaRelease: true,
                 },
               ],
@@ -196,9 +194,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
               .channels.push({
                 channel: channel.channel,
                 version: channel.version,
-                isBeta:
-                  module.metadata.labels['operator.kyma-project.io/beta'] ===
-                  'true',
+                isBeta: module.spec.beta ?? false,
                 isMetaRelease: true,
               });
           }
