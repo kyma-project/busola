@@ -16,6 +16,7 @@ const getBackendAddress = () => {
     return '/backend';
   }
 };
+
 export const getClusterConfig = () => ({
   domain,
   backendAddress: getBackendAddress(),

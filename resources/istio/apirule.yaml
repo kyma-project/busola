@@ -1,0 +1,15 @@
+apiVersion: gateway.kyma-project.io/v2alpha1
+kind: APIRule
+metadata:
+  name: busola
+spec:
+  gateway: kyma-system/kyma-gateway
+  hosts:
+    - busola
+  service:
+    name: busola
+    port: 3001
+  rules:
+    - path: /{**}
+      methods: ['GET']
+      noAuth: true

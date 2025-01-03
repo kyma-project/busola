@@ -178,6 +178,78 @@ For the information on how to run tests and configure them, go to the [`tests`](
    docker run --rm -it -p 3001:3001 -v <path to your custom config>:/app/core-ui/environments/ --env ENVIRONMENT={your-env} --pid=host --name busola europe-docker.pkg.dev/kyma-project/prod/busola:latest
    ```
 
+## Deploy Busola in Kubernetes Cluster
+
+To install Busola on Kubernetes cluster run:
+
+```shell
+(cd resources && kustomize build base/ | kubectl apply -f- )
+```
+
+To install Busola using specific environment configuration, set `ENVIRONMENT` shell environment variable and run:
+
+```shell
+(cd resources && kustomize build environments/${ENVIRONMENT} | kubectl apply -f- )
+```
+
+## Access Busola installed on Kubernetes
+
+### Kubectl
+
+The simplest method which always works is to use capabilities of `kubectl`.
+
+```shell
+kubectl port-forward services/busola 3001:3001
+```
+
+### Busola installed on K3d
+
+Prerequisites:
+
+- K3d with installed Traefik, by default it's installed.
+
+Install ingress resources by running:
+
+```shell
+(cd resources && kubectl apply -f ingress/ingress.yaml)
+```
+
+Go to `localhost`
+
+#### Connect to the k3d cluster where Busola is installed.
+
+To be able to connect to the same K3d cluster where Busola is installed.
+Download kubeconfig and change cluster server address to `https://kubernetes.default.svc:443`.
+
+Using shell:
+Set `K3D_CLUSTER_NAME` shell environment variable to name of your cluster.
+
+```shell
+k3d kubeconfig get ${K3D_CLUSTER_NAME} > k3d-kubeconfig.yaml
+yq --inplace '.clusters[].cluster.server = "https://kubernetes.default.svc:443"' k3d-kubeconfig.yaml
+```
+
+### Kubernetes cluster with Istio installed
+
+Prerequisites:
+
+- Sidecar Proxy injection enabled, see [Kyma docs](https://kyma-project.io/#/istio/user/tutorials/01-40-enable-sidecar-injection?id=enable-istio-sidecar-proxy-injection), how to enable it.
+- Api gateway module installed, see [install docs](https://kyma-project.io/#/02-get-started/01-quick-install)
+
+Install Istio needed resources by running:
+
+```shell
+(cd resources && kubectl apply -k istio)
+```
+
+To get Busola address run:
+
+```shell
+kubectl get virtualservices.networking.istio.io
+```
+
+and find `busola-***` virtual service. Under `HOSTS` there is address to access Busola page.
+
 ## Troubleshooting
 
 > **TIP:** To solve most of the problems with Busola development, clear the browser cache or do a hard refresh of the website.
