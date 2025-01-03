@@ -1,4 +1,5 @@
 import { defineConfig, mergeConfig } from 'vitest/config';
+outputs;
 import viteConfig from './vite.config.mts';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
 

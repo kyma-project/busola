@@ -38,11 +38,11 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: 'resources/base/resource-validation/rule-sets/**/*.yaml',
+          src: 'resource-validation/rule-sets/**/*.yaml',
           dest: 'resource-validation',
           rename: 'rule-set.yaml',
           transform() {
-            return mergeYamlFiles('resources/base/resource-validation/rule-sets/**/*.yaml');
+            return mergeYamlFiles('resource-validation/rule-sets/**/*.yaml');
           },
         },
       ],
