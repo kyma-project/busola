@@ -226,7 +226,7 @@ export default function KymaModulesAddModule({
       return moduleData
         ? moduleData.channels.some(
             ({ channel: ch, isBeta }) =>
-              ch === channel || (kymaResource.spec.channel && isBeta),
+              ch === (channel || kymaResource.spec.channel) && isBeta,
           )
         : false;
     });
