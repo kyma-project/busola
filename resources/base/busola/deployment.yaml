@@ -27,7 +27,7 @@ spec:
                   name: environment
           volumeMounts:
             - name: config
-              mountPath: /app/config
+              mountPath: /app/core-ui/config
           resources:
             requests:
               cpu: 100m
