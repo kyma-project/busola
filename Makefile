@@ -24,7 +24,7 @@ release-local: build-image-local push-image-local
 build-image: ## Build busola backend image
 	docker build -t $(APP_NAME) -f Dockerfile .
 
-install-busola: build-image ## Build busola web image and install it on local k3d cluster
+install-busola-k3d: build-image ## Build busola web image and install it on local k3d cluster
 	$(eval HASH_TAG=$(shell docker images $(APP_NAME):latest --quiet))
 	docker tag $(APP_NAME) $(APP_NAME):$(HASH_TAG)
 
