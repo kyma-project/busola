@@ -221,8 +221,13 @@ Prerequisites:
 To be able to connect to the same K3d cluster where Busola is installed.
 Download kubeconfig and change cluster server address to `https://kubernetes.default.svc:443`.
 
-Using shell:
-Set `K3D_CLUSTER_NAME` shell environment variable to name of your cluster.
+Using shell.
+
+Prerequisites:
+
+- [yq](https://mikefarah.gitbook.io/yq)
+
+Set `K3D_CLUSTER_NAME` shell environment variable to name of your cluster and run:
 
 ```shell
 k3d kubeconfig get ${K3D_CLUSTER_NAME} > k3d-kubeconfig.yaml
