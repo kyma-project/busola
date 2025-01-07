@@ -206,7 +206,9 @@ kubectl port-forward services/busola 3001:3001
 
 Prerequisites:
 
-- K3d with installed Traefik, by default it's installed.
+- K3d with exposed loadbalancer on port 80.
+  > **TIP:** To create K3d with exposed load balancer run: `k3d cluster create -p "80:80@loadbalancer"`.
+  > More details available in k3d docs [exposing services](https://k3d.io/v5.6.3/usage/exposing_services/).
 
 1. Install Ingress resources:
 
