@@ -43,20 +43,7 @@
   }
 
   div[data-component-name='DynamicPageTitleMiddleSection'] {
-    width: 100%;
-    > * {
-      flex-basis: 50%;
-    }
-  }
-
-  div[data-component-name='DynamicPageTitleActions'],
-  div[data-component-name='ToolbarContent'],
-  div[data-component-name='ToolbarChildContainer'] {
-    overflow: visible;
-  }
-
-  div[data-component-name='ToolbarChildContainer'] > * {
-    overflow: visible;
+    color: red;
   }
 }
 
