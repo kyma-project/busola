@@ -38,6 +38,14 @@ export function Badge({
     arrayItems,
   });
 
+  const extractMessageAndCheckValidity = text => {
+    const messageArray = `${text}`.split('message');
+    const message = messageArray[messageArray.length - 1];
+    return message.includes('null') || message.includes('undefined')
+      ? ''
+      : text;
+  };
+
   const [tooltip, tooltipError] = jsonata(structure?.description);
 
   let type = null;
@@ -78,7 +86,9 @@ export function Badge({
       autoResolveType={!type}
       type={type}
       tooltipContent={
-        tooltip && !tooltipError ? tooltip : structure.description
+        tooltip && !tooltipError
+          ? tooltip
+          : extractMessageAndCheckValidity(structure.description)
       }
     >
       {tExt(value)}
