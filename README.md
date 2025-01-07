@@ -178,43 +178,43 @@ For the information on how to run tests and configure them, go to the [`tests`](
    docker run --rm -it -p 3001:3001 -v <path to your custom config>:/app/core-ui/environments/ --env ENVIRONMENT={your-env} --pid=host --name busola europe-docker.pkg.dev/kyma-project/prod/busola:latest
    ```
 
-## Deploy Busola in Kubernetes Cluster
+## Deploy Busola on the Kubernetes Cluster
 
-To install Busola on Kubernetes cluster run:
+To install Busola on the Kubernetes cluster, run:
 
 ```shell
 (cd resources && kustomize build base/ | kubectl apply -f- )
 ```
 
-To install Busola using specific environment configuration, set `ENVIRONMENT` shell environment variable and run:
+To install Busola using a specific environment configuration, set the `ENVIRONMENT` shell environment variable and run:
 
 ```shell
 (cd resources && kustomize build environments/${ENVIRONMENT} | kubectl apply -f- )
 ```
 
-## Access Busola installed on Kubernetes
+## Access Busola Installed on Kubernetes
 
-### Kubectl
+### kubectl
 
-The simplest method which always works is to use capabilities of `kubectl`.
+The simplest method that always works is to use the capabilities of kubectl.
 
 ```shell
 kubectl port-forward services/busola 3001:3001
 ```
 
-### Busola installed on K3d
+### k3d
 
 Prerequisites:
 
 - K3d with installed Traefik, by default it's installed.
 
-Install ingress resources by running:
+1. Install Ingress resources:
 
 ```shell
 (cd resources && kubectl apply -f ingress/ingress.yaml)
 ```
 
-Go to `localhost`
+2. Go to `localhost`
 
 #### Connect to the k3d cluster where Busola is installed.
 
@@ -229,26 +229,26 @@ k3d kubeconfig get ${K3D_CLUSTER_NAME} > k3d-kubeconfig.yaml
 yq --inplace '.clusters[].cluster.server = "https://kubernetes.default.svc:443"' k3d-kubeconfig.yaml
 ```
 
-### Kubernetes cluster with Istio installed
+### Kubernetes Cluster with Istio Installed
 
 Prerequisites:
 
-- Sidecar Proxy injection enabled, see [Kyma docs](https://kyma-project.io/#/istio/user/tutorials/01-40-enable-sidecar-injection?id=enable-istio-sidecar-proxy-injection), how to enable it.
-- Api gateway module installed, see [install docs](https://kyma-project.io/#/02-get-started/01-quick-install)
+- Sidecar Proxy injection enabled, see [Enable Istio Sidecar Proxy Injection](https://kyma-project.io/#/istio/user/tutorials/01-40-enable-sidecar-injection?id=enable-istio-sidecar-proxy-injection).
+- The API Gateway module installed, see [Quick Install](https://kyma-project.io/#/02-get-started/01-quick-install)
 
-Install Istio needed resources by running:
+1. Install the Istio required resources:
 
 ```shell
 (cd resources && kubectl apply -k istio)
 ```
 
-To get Busola address run:
+2. To get the Busola address, run:
 
 ```shell
 kubectl get virtualservices.networking.istio.io
 ```
 
-and find `busola-***` virtual service. Under `HOSTS` there is address to access Busola page.
+and find the `busola-***` virtual service. Under `HOSTS,` there is an address where you can access the Busola page.
 
 ## Troubleshooting
 
