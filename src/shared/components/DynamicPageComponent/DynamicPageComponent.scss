@@ -51,14 +51,9 @@
 
   div[data-component-name='DynamicPageTitleMiddleSection'],
   div[data-component-name='DynamicPageTitleActions'],
-  div[data-component-name='ToolbarContent'],
-  div[data-component-name='ToolbarChildContainer'] {
+  div[data-component-name='ToolbarContent'] {
     overflow: visible;
   }
-
-  // div[data-component-name='ToolbarChildContainer'] > * {
-  //   overflow: visible;
-  // }
 }
 
 .header-wrapper {
