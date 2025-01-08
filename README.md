@@ -165,7 +165,7 @@ For the information on how to run tests and configure them, go to the [`tests`](
    docker run --rm -it -p 3001:3001 -v <path to your kubeconfig>:/app/core-ui/kubeconfig/<your kubeconfig file name> --pid=host --name busola europe-docker.pkg.dev/kyma-project/prod/busola:latest
    ```
 
-2. When you open Busola in your browser, go to `http://localhost:3001?kubeconfigID={YOUR_KUBECONFIG_FILE_NAME}`. Busola will try to download that file and add it for your Busola instance.
+2. When you open Busola in your browser, visit `http://localhost:3001?kubeconfigID={YOUR_KUBECONFIG_FILE_NAME}`. Busola will try to download that file and add it for your Busola instance.
 
 ### Set active environment
 
@@ -216,13 +216,13 @@ Prerequisites:
 (cd resources && kubectl apply -f ingress/ingress.yaml)
 ```
 
-2. Go to `localhost`
+2. Visit `localhost`
 
 #### Connect to the k3d Cluster With Busola Installed.
 
 To connect to the same k3d cluster with Busola installed, download kubeconfig and change the cluster server address to `https://kubernetes.default.svc:443`.
 
-Using shell.
+Use shell to quickly process the file
 
 Prerequisites:
 
