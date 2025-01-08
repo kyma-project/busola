@@ -43,12 +43,8 @@ jobs:
         shell: bash
         run: |
           k3d kubeconfig get k3dCluster > tests/lighthouse/fixtures/kubeconfig.yaml
-          export DOMAIN=http://localhost:3000
-          serve -s build > busola.log &
-
-          pushd backend
-          npm start > backend.log &
-          popd
+          export DOMAIN=http://localhost:3001
+          npm run start
           
           echo "waiting for server to be up..."
           while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' "$DOMAIN")" != "200" ]]; do sleep 5; done

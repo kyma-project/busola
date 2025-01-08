@@ -45,17 +45,12 @@ jobs:
             set -e
             npm ci
             npm run build
-            npm i -g serve
       - name: run_tests
         shell: bash
         run: |
           k3d kubeconfig get k3dCluster > tests/integration/fixtures/kubeconfig.yaml
-          export CYPRESS_DOMAIN=http://localhost:3000
-          serve -s build > busola.log &
-
-          pushd backend
-          npm start > backend.log &
-          popd
+          export CYPRESS_DOMAIN=http://localhost:3001
+          npm run start
           
           echo "waiting for server to be up..."
           while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' "$CYPRESS_DOMAIN")" != "200" ]]; do sleep 5; done
