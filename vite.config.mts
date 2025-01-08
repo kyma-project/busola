@@ -15,6 +15,13 @@ export default defineConfig({
   },
   server: {
     port: 8080,
+    proxy: {
+      // with options
+      '^/backend/.*': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+    },
   },
   plugins: [
     {
