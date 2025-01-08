@@ -178,9 +178,9 @@ For the information on how to run tests and configure them, go to the [`tests`](
    docker run --rm -it -p 3001:3001 -v <path to your custom config>:/app/core-ui/environments/ --env ENVIRONMENT={your-env} --pid=host --name busola europe-docker.pkg.dev/kyma-project/prod/busola:latest
    ```
 
-## Deploy Busola on the Kubernetes Cluster
+## Deploy Busola in the Kubernetes Cluster
 
-To install Busola on the Kubernetes cluster, run:
+To install Busola in the Kubernetes cluster, run:
 
 ```shell
 (cd resources && kustomize build base/ | kubectl apply -f- )
