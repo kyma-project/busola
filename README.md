@@ -222,7 +222,7 @@ Prerequisites:
 
 To connect to the same k3d cluster with Busola installed, download kubeconfig and change the cluster server address to `https://kubernetes.default.svc:443`.
 
-Use shell to quickly process the file
+Use shell to quickly process the file.
 
 Prerequisites:
 
