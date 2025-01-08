@@ -208,7 +208,7 @@ Prerequisites:
 
 - K3d with exposed loadbalancer on port 80.
   > **TIP:** To create K3d with exposed load balancer run: `k3d cluster create -p "80:80@loadbalancer"`.
-  > More details available in k3d docs [exposing services](https://k3d.io/v5.6.3/usage/exposing_services/).
+  > See [Exposing Services](https://k3d.io/v5.6.3/usage/exposing_services/) for more details.
 
 1. Install Ingress resources:
 
@@ -218,10 +218,9 @@ Prerequisites:
 
 2. Go to `localhost`
 
-#### Connect to the k3d cluster where Busola is installed.
+#### Connect to the k3d Cluster With Busola Installed.
 
-To be able to connect to the same K3d cluster where Busola is installed.
-Download kubeconfig and change cluster server address to `https://kubernetes.default.svc:443`.
+To connect to the same k3d cluster with Busola installed, download kubeconfig and change the cluster server address to `https://kubernetes.default.svc:443`.
 
 Using shell.
 
@@ -229,7 +228,7 @@ Prerequisites:
 
 - [yq](https://mikefarah.gitbook.io/yq)
 
-Set `K3D_CLUSTER_NAME` shell environment variable to name of your cluster and run:
+Set the `K3D_CLUSTER_NAME` shell environment variable to the name of your cluster and run:
 
 ```shell
 k3d kubeconfig get ${K3D_CLUSTER_NAME} > k3d-kubeconfig.yaml
