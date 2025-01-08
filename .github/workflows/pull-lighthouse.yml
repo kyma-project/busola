@@ -37,14 +37,12 @@ jobs:
         run: |
             set -e
             npm ci
-            npm run build
-            npm i -g serve
+            npm run start > busola.log &
       - name: run_tests
         shell: bash
         run: |
           k3d kubeconfig get k3dCluster > tests/lighthouse/fixtures/kubeconfig.yaml
-          export DOMAIN=http://localhost:3001
-          npm run start > busola.log &
+          export DOMAIN=http://localhost:8080
           
           echo "waiting for server to be up..."
           while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' "$DOMAIN")" != "200" ]]; do sleep 5; done
@@ -58,6 +56,5 @@ jobs:
         with:
           name: busola-logs-${{ github.job }}
           path: |
-            backend/backend.log
             busola.log
           retention-days: 90
