@@ -1,0 +1,53 @@
+
+> @kyma-project/busola@0.0.1-rc.8 start
+> concurrently -c cyan,green npm:busola npm:backend
+
+[busola] 
+[busola] > @kyma-project/busola@0.0.1-rc.8 busola
+[busola] > npm run copy-themes; BROWSER=none GENERATE_SOURCEMAP=false vite
+[busola] 
+[backend] 
+[backend] > @kyma-project/busola@0.0.1-rc.8 backend
+[backend] > cd backend && npm run start
+[backend] 
+[busola] 
+[busola] > @kyma-project/busola@0.0.1-rc.8 copy-themes
+[busola] > cp node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_horizon/css_variables.css public/themes/@sap-theming/default.css; for theme in hcb dark hcw ; do cp node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_horizon_$theme/css_variables.css public/themes/@sap-theming/$theme.css ; done
+[busola] 
+[backend] 
+[backend] > backend@1.0.0 start
+[backend] > SSL_CERT_FILE=certs.pem NODE_ENV=development nodemon --exec babel-node index.js
+[backend] 
+[backend] [33m[nodemon] 2.0.22[39m
+[backend] [33m[nodemon] to restart at any time, enter `rs`[39m
+[backend] [33m[nodemon] watching path(s): *.*[39m
+[backend] [33m[nodemon] watching extensions: js,mjs,json[39m
+[backend] [32m[nodemon] starting `babel-node index.js`[39m
+[busola] Forced re-optimization of dependencies
+[busola] [vite-plugin-static-copy] Collected 1 items.
+[busola] 
+[busola]   VITE v5.4.3  ready in 1274 ms
+[busola] 
+[busola]   ➜  Local:   http://localhost:8080/
+[busola]   ➜  Network: use --host to expose
+[backend] node:events:496
+[backend]       throw er; // Unhandled 'error' event
+[backend]       ^
+[backend] 
+[backend] Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+[backend]     at Server.setupListenHandle [as _listen2] (node:net:1897:16)
+[backend]     at listenInCluster (node:net:1945:12)
+[backend]     at doListen (node:net:2109:7)
+[backend]     at processTicksAndRejections (node:internal/process/task_queues:83:21)
+[backend] Emitted 'error' event on Server instance at:
+[backend]     at emitErrorNT (node:net:1924:8)
+[backend]     at processTicksAndRejections (node:internal/process/task_queues:82:21) {
+[backend]   code: 'EADDRINUSE',
+[backend]   errno: -98,
+[backend]   syscall: 'listen',
+[backend]   address: '0.0.0.0',
+[backend]   port: 3001
+[backend] }
+[backend] 
+[backend] Node.js v20.12.1
+[backend] [31m[nodemon] app crashed - waiting for file changes before starting...[39m
