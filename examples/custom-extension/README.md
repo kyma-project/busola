@@ -4,7 +4,13 @@ This example contains a basic custom extension that queries all deployments of a
 
 To set up and deploy your own custom Busola extension, follow these steps.
 
-1. Adjust the static HTML content.
+1. Enable custom extensions in your cluster:
+
+```
+kubectl apply -f busola-config.yaml
+```
+
+2. Adjust the static HTML content.
 
 Edit the `ui.html` file to define the static HTML content for your custom extension.
 
