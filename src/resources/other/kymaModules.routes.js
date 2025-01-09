@@ -263,5 +263,21 @@ export default (
       path="kymamodules/:resourceType/:resourceName"
       element={<ColumnWraper defaultColumn="details" />}
     />
+    <Route
+      path={'namespaces/:globalnamespace/kymamodules'}
+      element={
+        <Suspense fallback={<Spinner />}>
+          <ColumnWraper />
+        </Suspense>
+      }
+    />
+    <Route
+      path="namespaces/:globalnamespace/kymamodules/namespaces/:namespace/:resourceType/:resourceName"
+      element={<ColumnWraper defaultColumn="details" />}
+    />
+    <Route
+      path="namespaces/:globalnamespace/kymamodules/:resourceType/:resourceName"
+      element={<ColumnWraper defaultColumn="details" />}
+    />
   </>
 );

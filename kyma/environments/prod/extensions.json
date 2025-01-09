@@ -9,9 +9,6 @@
     "source": "extensions/configuration"
   },
   {
-    "source": "extensions/kyma"
-  },
-  {
     "source": "extensions/service-management"
   },
   {
