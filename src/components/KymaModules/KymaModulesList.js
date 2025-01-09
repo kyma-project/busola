@@ -9,13 +9,19 @@ import {
   FlexBox,
   Text,
   Badge,
+  List,
+  StandardListItem,
 } from '@ui5/webcomponents-react';
 
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useState } from 'react';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
+import {
+  useGet,
+  useGetList,
+  useSingleGet,
+} from 'shared/hooks/BackendAPI/useGet';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import KymaModulesCreate from './KymaModulesCreate';
@@ -34,7 +40,7 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { Label } from 'shared/ResourceForm/components/Label';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { ModuleStatus } from './components/ModuleStatus';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, find } from 'lodash';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 
 export default function KymaModulesList({
@@ -61,6 +67,7 @@ export default function KymaModulesList({
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
   const { clusterUrl } = useUrl();
+  const fetch = useSingleGet();
 
   const { data: kymaExt } = useGetList(
     ext => ext.metadata.labels['app.kubernetes.io/part-of'] === 'Kyma',
@@ -367,11 +374,62 @@ export default function KymaModulesList({
       );
     };
 
+    const getAssciatedResources = () => {
+      const module = findModule(
+        selectedModules[chosenModuleIndex]?.name,
+        selectedModules[chosenModuleIndex]?.channel ||
+          kymaResource?.spec?.channel,
+        selectedModules[chosenModuleIndex]?.version ||
+          findStatus(selectedModules[chosenModuleIndex]?.name)?.version,
+      );
+      console.log(module?.spec?.associatedResources);
+      return module?.spec?.associatedResources || [];
+    };
+
+    const getNumberOfResources = async (kind, group, version) => {
+      const url =
+        group === 'v1'
+          ? '/api/v1'
+          : `/apis/${group}/${version}/${pluralize(kind.toLowerCase())}`;
+      try {
+        const response = await fetch(url);
+        const json = await response.json();
+        console.log(json.items.length);
+        return json.items.length;
+      } catch (e) {
+        console.warn(e);
+        return 'Error';
+      }
+    };
+
     return (
       <>
         {!detailsOpen &&
           createPortal(
             <DeleteMessageBox
+              additionalDeleteInfo={
+                getAssciatedResources().length > 0 && (
+                  <>
+                    <List
+                      headerText="AssociatedResources"
+                      mode="None"
+                      separators="All"
+                    >
+                      {getAssciatedResources().map(assResource => (
+                        <StandardListItem
+                          additionalText={getNumberOfResources(
+                            assResource?.kind,
+                            assResource?.group,
+                            assResource?.version,
+                          )}
+                        >
+                          {pluralize(assResource?.kind)}
+                        </StandardListItem>
+                      ))}
+                    </List>
+                  </>
+                )
+              }
               resourceTitle={selectedModules[chosenModuleIndex]?.name}
               deleteFn={() => {
                 selectedModules.splice(chosenModuleIndex, 1);

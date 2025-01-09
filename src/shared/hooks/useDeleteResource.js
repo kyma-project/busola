@@ -173,6 +173,7 @@ export function useDeleteResource({
     resourceIsCluster = false,
     resourceUrl,
     deleteFn,
+    additionalDeleteInfo,
   }) => (
     <MessageBox
       type="Warning"
@@ -228,6 +229,9 @@ export function useDeleteResource({
             },
           )}
         </Text>
+        {additionalDeleteInfo && (
+          <Text style={{ paddingLeft: '7.5px' }}>{additionalDeleteInfo}</Text>
+        )}
         {!forceConfirmDelete && (
           <CheckBox
             checked={dontConfirmDelete}
