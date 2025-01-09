@@ -38,12 +38,21 @@ export function Badge({
     arrayItems,
   });
 
-  const extractMessageAndCheckValidity = text => {
-    const messageArray = `${text}`.split('message');
-    const message = messageArray[messageArray.length - 1];
-    return message.includes('null') || message.includes('undefined')
+  const extractMessageAndCheckValidity = description => {
+    if (!description && typeof description !== 'string') {
+      return '';
+    }
+    // Extracts a message from the string.
+    const messageArray = description.split('message');
+    // Removes the colon and blank, leaving only the value.
+    const messageValue = messageArray[messageArray.length - 1].replace(
+      /:|\s/g,
+      '',
+    );
+    // Checks if it is valid.
+    return messageValue === 'null' || messageValue === 'undefined'
       ? ''
-      : text;
+      : description;
   };
 
   const [tooltip, tooltipError] = jsonata(structure?.description);
