@@ -15,7 +15,7 @@ import {
 
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 import { spacing } from '@ui5/webcomponents-react-base';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import {
   useGet,
@@ -402,6 +402,34 @@ export default function KymaModulesList({
       }
     };
 
+    const fetchResourceCounts = async () => {
+      const resources = getAssciatedResources();
+      const counts = {};
+      for (const resource of resources) {
+        const count = await getNumberOfResources(
+          resource.kind,
+          resource.group,
+          resource.version,
+        );
+        counts[
+          `${resource.kind}-${resource.group}-${resource.version}`
+        ] = count;
+      }
+      return counts;
+    };
+
+    const [resourceCounts, setResourceCounts] = useState({});
+
+    useEffect(() => {
+      const fetchCounts = async () => {
+        const counts = await fetchResourceCounts();
+        setResourceCounts(counts);
+      };
+
+      fetchCounts();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [chosenModuleIndex]);
+
     return (
       <>
         {!detailsOpen &&
@@ -417,11 +445,12 @@ export default function KymaModulesList({
                     >
                       {getAssciatedResources().map(assResource => (
                         <StandardListItem
-                          additionalText={getNumberOfResources(
-                            assResource?.kind,
-                            assResource?.group,
-                            assResource?.version,
-                          )}
+                          key={`${assResource.kind}-${assResource.group}-${assResource.version}`}
+                          additionalText={
+                            resourceCounts[
+                              `${assResource.kind}-${assResource.group}-${assResource.version}`
+                            ] || 'Loading...'
+                          }
                         >
                           {pluralize(assResource?.kind)}
                         </StandardListItem>
