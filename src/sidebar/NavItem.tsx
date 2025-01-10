@@ -11,7 +11,7 @@ import {
   SideNavigationSubItem,
   SideNavigationItem,
 } from '@ui5/webcomponents-react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 
 import { isFormOpenState } from 'state/formOpenAtom';
@@ -28,6 +28,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   const { t } = useTranslation();
   const urlGenerators = useUrl();
   const navigate = useNavigate();
+  const location = useLocation();
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
@@ -61,6 +62,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
     selected: isNodeSelected(node),
     key: node.pathSegment,
     onClick: (e: Event) => {
+      e.stopPropagation();
       if (node.dataSources) {
         let link =
           !jsonataError && jsonataLink ? jsonataLink : node.externalUrl || '';
@@ -74,24 +76,28 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
         const newWindow = window.open(link, 'noopener, noreferrer');
         if (newWindow) newWindow.opener = null;
       } else {
-        handleActionIfFormOpen(
-          isResourceEdited,
-          setIsResourceEdited,
-          isFormOpen,
-          setIsFormOpen,
-          () => {
-            setLayoutColumn({
-              midColumn: null,
-              endColumn: null,
-              layout: 'OneColumn',
-            });
-            navigate(
-              node.createUrlFn
+        const url = node.createUrlFn
+          ? node.createUrlFn(urlGenerators)
+          : scopedUrl(node.pathSegment);
+        if (location?.pathname !== url) {
+          handleActionIfFormOpen(
+            isResourceEdited,
+            setIsResourceEdited,
+            isFormOpen,
+            setIsFormOpen,
+            () => {
+              setLayoutColumn({
+                midColumn: null,
+                endColumn: null,
+                layout: 'OneColumn',
+              });
+              const url = node.createUrlFn
                 ? node.createUrlFn(urlGenerators)
-                : scopedUrl(node.pathSegment),
-            );
-          },
-        );
+                : scopedUrl(node.pathSegment);
+              navigate(url);
+            },
+          );
+        }
       }
     },
   };
