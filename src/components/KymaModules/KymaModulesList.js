@@ -70,6 +70,12 @@ export default function KymaModulesList({
   const namespace = 'kyma-system';
 
   const modulesResourceUrl = `/apis/operator.kyma-project.io/v1beta2/moduletemplates`;
+  const modulesReleaseMetaResourceUrl = `/apis/operator.kyma-project.io/v1beta2/modulereleasemetas`;
+
+  const { data: moduleReleaseMetas } = useGet(modulesReleaseMetaResourceUrl, {
+    pollingInterval: 3000,
+    skip: !resourceName,
+  });
 
   const { data: modules, loading: modulesLoading } = useGet(
     modulesResourceUrl,
@@ -123,6 +129,12 @@ export default function KymaModulesList({
       return moduleWithInfo ?? moduleWithoutInfo;
     };
 
+    const findModuleReleaseMeta = moduleName => {
+      return moduleReleaseMetas?.items.find(
+        item => item.spec.moduleName === moduleName,
+      );
+    };
+
     const findStatus = moduleName => {
       return kymaResource?.status.modules?.find(
         module => moduleName === module.name,
@@ -135,9 +147,11 @@ export default function KymaModulesList({
         return extensionResource.kind === resourceKind;
       });
     };
-    const checkBeta = module => {
+
+    const checkBeta = (module, currentModuleReleaseMeta) => {
       return (
-        module?.metadata.labels['operator.kyma-project.io/beta'] === 'true'
+        module?.metadata.labels['operator.kyma-project.io/beta'] === 'true' ||
+        currentModuleReleaseMeta?.spec?.beta === true
       );
     };
 
@@ -188,6 +202,8 @@ export default function KymaModulesList({
         resource?.version,
       );
 
+      const currentModuleReleaseMeta = findModuleReleaseMeta(resource.name);
+
       const isChannelOverriden =
         kymaResource?.spec?.modules?.[moduleIndex]?.channel !== undefined;
 
@@ -201,7 +217,7 @@ export default function KymaModulesList({
           ) : (
             resource.name
           )}
-          {checkBeta(currentModule) ? (
+          {checkBeta(currentModule, currentModuleReleaseMeta) ? (
             <Tag className="sap-margin-begin-tiny" hideStateIcon>
               {t('kyma-modules.beta')}
             </Tag>
