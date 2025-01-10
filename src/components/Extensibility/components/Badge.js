@@ -38,17 +38,6 @@ export function Badge({
     arrayItems,
   });
 
-  const getLatestStatusMessage = (resource, defaultValue) => {
-    const getTime = date => new Date(date)?.getTime();
-    const latestStatus = resource?.status?.conditions?.reduce((prev, current) =>
-      prev &&
-      getTime(prev.lastTransitionTime) > getTime(current.lastTransitionTime)
-        ? prev
-        : current,
-    );
-    return latestStatus?.message ?? defaultValue;
-  };
-
   const [tooltip, tooltipError] = jsonata(structure?.description);
 
   let type = null;
@@ -82,17 +71,23 @@ export function Badge({
 
   type = TYPE_FALLBACK.get(type) || type;
 
+  const getTooltipContent = description => {
+    if (tooltip && !tooltipError) {
+      return tooltip;
+    }
+    if (!tooltip && !tooltipError) {
+      return '';
+    }
+    return description;
+  };
+
   return isNil(value) ? (
     emptyLeafPlaceholder
   ) : structure?.description ? (
     <StatusBadge
       autoResolveType={!type}
       type={type}
-      tooltipContent={
-        tooltip && !tooltipError
-          ? tooltip
-          : getLatestStatusMessage(originalResource, structure.description)
-      }
+      tooltipContent={getTooltipContent(structure.description)}
     >
       {tExt(value)}
     </StatusBadge>
