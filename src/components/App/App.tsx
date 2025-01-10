@@ -36,6 +36,9 @@ import useSidebarCondensed from 'sidebar/useSidebarCondensed';
 import { useGetValidationEnabledSchemas } from 'state/validationEnabledSchemasAtom';
 import { useGetKymaResources } from 'state/kymaResourcesAtom';
 
+import '../web-components/MonacoWebComponent';
+import '../web-components/DynamicPageWebComponent';
+
 export default function App() {
   const language = useRecoilValue(languageAtom);
   const cluster = useRecoilValue(clusterState);
