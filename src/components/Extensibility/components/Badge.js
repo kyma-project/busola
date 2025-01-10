@@ -38,21 +38,15 @@ export function Badge({
     arrayItems,
   });
 
-  const extractMessageAndCheckValidity = description => {
-    if (!description && typeof description !== 'string') {
-      return '';
-    }
-    // Extracts a message from the string.
-    const messageArray = description.split('message');
-    // Removes the colon and blank, leaving only the value.
-    const messageValue = messageArray[messageArray.length - 1].replace(
-      /:|\s/g,
-      '',
+  const getLatestStatusMessage = (resource, defaultValue) => {
+    const getTime = date => new Date(date)?.getTime();
+    const latestStatus = resource?.status?.conditions?.reduce((prev, current) =>
+      prev &&
+      getTime(prev.lastTransitionTime) > getTime(current.lastTransitionTime)
+        ? prev
+        : current,
     );
-    // Checks if it is valid.
-    return messageValue === 'null' || messageValue === 'undefined'
-      ? ''
-      : description;
+    return latestStatus?.message ?? defaultValue;
   };
 
   const [tooltip, tooltipError] = jsonata(structure?.description);
@@ -97,7 +91,7 @@ export function Badge({
       tooltipContent={
         tooltip && !tooltipError
           ? tooltip
-          : extractMessageAndCheckValidity(structure.description)
+          : getLatestStatusMessage(originalResource, structure.description)
       }
     >
       {tExt(value)}
