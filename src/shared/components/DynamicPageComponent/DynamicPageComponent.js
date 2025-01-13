@@ -50,6 +50,7 @@ export const DynamicPageComponent = ({
   protectedResource,
   protectedResourceWarning,
   className,
+  customActionIfFormOpen,
 }) => {
   const [showTitleDescription, setShowTitleDescription] = useState(false);
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
@@ -251,6 +252,11 @@ export const DynamicPageComponent = ({
         headerContent={customHeaderContent ?? headerContent}
         selectedSectionId={selectedSectionIdState}
         onBeforeNavigate={e => {
+          if (customActionIfFormOpen) {
+            customActionIfFormOpen();
+            return;
+          }
+
           if (isFormOpen.formOpen) {
             e.preventDefault();
           }

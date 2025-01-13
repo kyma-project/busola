@@ -9,22 +9,19 @@ function DynamicPageWithRecoil(props) {
       return (
         <div
           dangerouslySetInnerHTML={{
-            __html: props.inlineEditForm(stickyHeaderHeight),
+            __html: props.inlineEditForm(stickyHeaderHeight).outerHTML,
           }}
         />
       );
     else return null;
   };
 
-  console.log(transformedForm());
   return (
     <RecoilRoot>
       <ThemeProvider>
         <DynamicPageComponent
           {...props}
-          inlineEditForm={stickyHeaderHeight => (
-            <div>test{stickyHeaderHeight}</div>
-          )}
+          inlineEditForm={props?.inlineEditForm ? transformedForm : undefined}
         />
       </ThemeProvider>
     </RecoilRoot>
@@ -35,21 +32,22 @@ createWebComponent(
   'dynamic-page-component',
   DynamicPageWithRecoil,
   {
-    headerContent: null, //slot
+    headerContent: null,
     title: '',
     description: '',
-    actions: null, //slot
+    actions: null,
     children: null,
     columnWrapperClassName: '',
-    content: null, // slot
-    footer: null, // slot
+    content: null,
+    footer: null,
     layoutNumber: null,
     layoutCloseUrl: null,
     inlineEditForm: null,
     showYamlTab: false,
     protectedResource: false,
-    protectedResourceWarning: null, //can be a slot
+    protectedResourceWarning: null,
     className: '',
+    customActionIfFormOpen: undefined,
   },
   [
     'header-content',
@@ -66,5 +64,6 @@ createWebComponent(
     'protected-resource',
     'protected-resource-warning',
     'class-name',
+    'custom-action-if-form-open',
   ], // Observed attributes
 );

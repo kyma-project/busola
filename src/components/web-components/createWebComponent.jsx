@@ -15,6 +15,7 @@ function createWebComponent(
       super();
       this.reactRoot = null;
       this._props = {};
+      this._slots = {};
     }
 
     connectedCallback() {
@@ -39,10 +40,16 @@ function createWebComponent(
 
     // Define a generic property setter for custom props
     setProp(key, value) {
-      console.log(key);
       const camelCaseKey = kebabToCamelCase(key);
       this._props[camelCaseKey] = value;
       this.mountReactComponent(); // Re-render on prop change
+    }
+
+    // Define a method to programmatically set a slot's content
+    setSlot(name, content) {
+      const camelCaseName = kebabToCamelCase(name);
+      this._slots[camelCaseName] = content.outerHTML;
+      this.mountReactComponent(); // Re-render on slot change
     }
 
     mountReactComponent() {
@@ -60,22 +67,18 @@ function createWebComponent(
         return acc;
       }, {});
 
-      // Combine props from attributes and custom properties
       const props = {
         ...defaultProps,
         ...propsFromAttributes,
         ...this._props,
       };
-      console.log(this._props);
-      // Map slots to props
-      const slots = this.querySelectorAll('[slot]');
-      slots.forEach(slot => {
-        const slotName = slot.getAttribute('slot');
-        const slotContent = slot.cloneNode(true);
-        slot.remove(); // Remove the slot from the DOM
-        props[slotName] = (
-          <div dangerouslySetInnerHTML={{ __html: slotContent.outerHTML }} />
-        );
+
+      Object.keys(this._slots).forEach(slotName => {
+        if (typeof this._slots[slotName] !== 'function') {
+          props[slotName] = (
+            <div dangerouslySetInnerHTML={{ __html: this._slots[slotName] }} />
+          );
+        }
       });
 
       ReactDOM.render(
