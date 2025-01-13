@@ -37,7 +37,9 @@ jobs:
         run: |
             set -e
             npm ci
-            npm run start > busola.log &
+            npm run build
+            cp -r build backend/core-ui
+            IS_DOCKER=true npm run start > busola.log &
       - name: run_tests
         shell: bash
         run: |
