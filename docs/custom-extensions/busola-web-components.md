@@ -111,4 +111,4 @@ See the following example:
 
 <img src="./assets/DynamicPage.png" alt="Example of a Monaco Editor" width="50%" style="border: 1px solid #D2D5D9">
 
-To see an exemplary configuration of the Busola custom extension feature using Web Components, check [this](examples/../../../examples/pizzas/README.md).
+To see an exemplary configuration of the Busola custom extension feature using Web Components, check files in [this](examples/../../../examples/busola-web-components/README.md) example.
