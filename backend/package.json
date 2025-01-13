@@ -6,7 +6,7 @@
   "scripts": {
     "start": "SSL_CERT_FILE=certs.pem NODE_ENV=development nodemon --exec babel-node index.js",
     "build": "webpack --mode=production",
-    "start:prod": "SSL_CERT_FILE=certs.pem NODE_ENV=production node --max-http-header-size 81920 backend-production.js",
+    "start:prod": "SSL_CERT_FILE=certs.pem NODE_ENV=production node --max-http-header-size 24576 backend-production.js",
     "test": "jest"
   },
   "keywords": [],
