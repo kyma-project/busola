@@ -36,8 +36,7 @@ import useSidebarCondensed from 'sidebar/useSidebarCondensed';
 import { useGetValidationEnabledSchemas } from 'state/validationEnabledSchemasAtom';
 import { useGetKymaResources } from 'state/kymaResourcesAtom';
 
-import '../web-components/MonacoWebComponent';
-import '../web-components/DynamicPageWebComponent';
+import '../../web-components/index'; //Import for custom Web Components
 
 export default function App() {
   const language = useRecoilValue(languageAtom);
