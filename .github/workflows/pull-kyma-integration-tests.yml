@@ -35,7 +35,7 @@ jobs:
       - name: Setup Busola
         shell: bash
         run: |
-          .github/scripts/setup-local_busola.sh
+          .github/scripts/setup-busola.sh | tee busola-build.log
         env:
           ENV: dev
       - name: Run tests
