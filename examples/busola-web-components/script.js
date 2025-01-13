@@ -36,11 +36,18 @@ document
   .getElementsByClassName('dynamic-page')[0]
   .setProp('inline-edit-form', renderEditForm);
 
+const handleActionIfFormOpen = (
+  isResourceEdited,
+  setIsResourceEdited,
+  isFormOpen,
+  setIsFormOpen,
+) => {
+  setIsFormOpen({ formOpen: false, leavingForm: false });
+};
+
 document
   .getElementsByClassName('dynamic-page')[0]
-  .setProp('custom-action-if-form-open', () => {
-    return;
-  });
+  .setProp('custom-action-if-form-open', handleActionIfFormOpen);
 
 const renderContent = () => {
   const text = document.createElement('ui5-text');

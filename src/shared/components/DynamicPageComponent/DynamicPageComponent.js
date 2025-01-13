@@ -253,7 +253,12 @@ export const DynamicPageComponent = ({
         selectedSectionId={selectedSectionIdState}
         onBeforeNavigate={e => {
           if (customActionIfFormOpen) {
-            customActionIfFormOpen();
+            customActionIfFormOpen(
+              isResourceEdited,
+              setIsResourceEdited,
+              isFormOpen,
+              setIsFormOpen,
+            );
             return;
           }
 

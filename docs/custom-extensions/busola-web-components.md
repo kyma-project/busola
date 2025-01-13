@@ -67,23 +67,34 @@ See the following example:
 The `Dynamic Page` web component is used to display content on the page and consisting of a title, header, a content area, an optional inline edit form and floating footer.
 The `Dynamic Page` supports the following attributes and properties. Attributes correspond to camel-cased React props when accessed programmatically.
 
-| Parameter                      | Required | Type     | Description                                                                                                                             |
-| ------------------------------ | -------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| **title**                      | No       | string   | The title of the page displayed in the header.                                                                                          |
-| **description**                | No       | string   | A description displayed below the title.                                                                                                |
-| **actions**                    | No       | node     | Custom actions rendered in the header toolbar.                                                                                          |
-| **children**                   | No       | node     | Child elements or components to be rendered within the page.                                                                            |
-| **column-wrapper-class-name**  | No       | string   | Additional class names for the column wrapper, used for styling purposes.                                                               |
-| **content**                    | No       | node     | Content displayed in the main section of the page.                                                                                      |
-| **footer**                     | No       | node     | Content displayed in the footer section.                                                                                                |
-| **layout-number**              | No       | string   | Layout identifier for column management.                                                                                                |
-| **layout-close-url**           | No       | string   | URL to navigate to when the column layout is closed.                                                                                    |
-| **inline-edit-form**           | No       | function | A function defining the inline edit form. It receives the `stickyHeaderHeight` as an argument and is expected to return a HTML element. |
-| **show-yaml-tab**              | No       | boolean  | Specifies whether to show a YAML editing tab.                                                                                           |
-| **protected-resource**         | No       | boolean  | Indicates whether the resource is protected.                                                                                            |
-| **protected-resource-warning** | No       | node     | Warning message for protected resources.                                                                                                |
-| **class-name**                 | No       | string   | Additional class names for the component, used for custom styling.                                                                      |
-| **custom-action-if-form-open** | No       | function | Specifies a custom action triggered when user tries to navigate out of the Edit form tab.                                               |
+| Parameter                      | Required | Type     | Description                                                                                                                                                                                     |
+| ------------------------------ | -------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **title**                      | No       | string   | The title of the page displayed in the header.                                                                                                                                                  |
+| **description**                | No       | string   | A description displayed below the title.                                                                                                                                                        |
+| **actions**                    | No       | node     | Custom actions rendered in the header toolbar.                                                                                                                                                  |
+| **children**                   | No       | node     | Child elements or components to be rendered within the page.                                                                                                                                    |
+| **column-wrapper-class-name**  | No       | string   | Additional class names for the column wrapper, used for styling purposes.                                                                                                                       |
+| **content**                    | No       | node     | Content displayed in the main section of the page.                                                                                                                                              |
+| **footer**                     | No       | node     | Content displayed in the footer section.                                                                                                                                                        |
+| **layout-number**              | No       | string   | Layout identifier for column management.                                                                                                                                                        |
+| **layout-close-url**           | No       | string   | URL to navigate to when the column layout is closed.                                                                                                                                            |
+| **inline-edit-form**           | No       | function | A function defining the inline edit form. It receives the `stickyHeaderHeight` as an argument and is expected to return a HTML element.                                                         |
+| **show-yaml-tab**              | No       | boolean  | Specifies whether to show a YAML editing tab.                                                                                                                                                   |
+| **protected-resource**         | No       | boolean  | Indicates whether the resource is protected.                                                                                                                                                    |
+| **protected-resource-warning** | No       | node     | Warning message for protected resources.                                                                                                                                                        |
+| **class-name**                 | No       | string   | Additional class names for the component, used for custom styling.                                                                                                                              |
+| **custom-action-if-form-open** | No       | function | Specifies a custom action triggered when user tries to navigate out of the Edit form tab. It recieves four arguments: `isResourceEdited`, `setIsResourceEdited`, `isFormOpen`, `setIsFormOpen`. |
+
+#### `custom-action-if-form-open`
+
+The `custom-action-if-form-open` prop in the `Dynamic Page` component is a customizable callback function designed to handle specific actions when a form is open. It recieves four arguments:
+
+| Argument                | Type     | Description                                                                                                                       |
+| ----------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| **isResourceEdited**    | object   | Indicates if the current resource has been edited. The object has the structure: { isEdited: boolean; discardAction?: Function; } |
+| **setIsResourceEdited** | function | A state setter function to update the `isResourceEdited` state.                                                                   |
+| **isFormOpen**          | object   | Tracks the status of the inline edit form. The object has the structure: { formOpen: boolean; leavingForm: boolean; }             |
+| **setIsFormOpen**       | function | A state setter function to update the `isFormOpen` state.                                                                         |
 
 See the following example:
 
