@@ -1,8 +1,7 @@
-# Jsonata preset functions for resource-based extensions
+# Use JSONata Expressions with Resource-Based Extensions
 
 **Table of Contents**
 
-- [Overview](#overview)
 - [Scoping](#scoping)
 - [Preset functions](#preset-functions)
   - [_canI_](#caniresourcegroupandversion-resourcekind)
@@ -10,13 +9,9 @@
   - [_matchByLabelSelector_](#matchbylabelselectoritem-selectorpath)
   - [_matchEvents_](#matcheventsitem-kind-name)
 
-## Overview
-
-This document describes how to use JSONata expressions [JSONata](https://docs.jsonata.org/overview.html) throughout the extensions.
-
 ## Scoping
 
-The primary data source of JSONata expressions changes depending on where it's used. Starting with the root, it contains the whole resource, but whenever it's in a child whose parent has a **source** (in lists and details) or **path** (in forms) parameter, the scope changes to data from that source or path.
+The primary data source of [JSONata](https://docs.jsonata.org/overview.html) expressions changes depending on where it's used. Starting with the root, it contains the whole resource, but whenever it's in a child whose parent has a **source** (in lists and details) or **path** (in forms) parameter, the scope changes to data from that source or path.
 
 Additionally, scope in arrays changes to the array item.
 
@@ -35,25 +30,25 @@ spec:
 The following definition has their scope changed as follows:
 
 ```yaml
-- source: spec.name # top level, scope is the same as resource
+- source: spec.name # top level, scope is the same as a resource
 
-- source: spec # top level, scope is the same as resource
+- source: spec # top level, scope is the same as a resource
   children:
     - source: name # parent has source=spec, therefore this refers to spec.name
 
 - children:
-    - source: spec.name # however there's no parent source here, therefore scope is still the resource
+    - source: spec.name # As there's no parent source here, the scope is still the resource
 
 - source: spec.items
   children:
-    - source: name # parent data is an array, therefore scope changes to it's item - this refers to spec.items[0].name
+    - source: name # parent data is an array, therefore scope changes to its item - this refers to spec.items[0].name
     - source: details.status # refers to spec.items[0].details.status (same as above)
-    - source: details # this changes scope for it's children again
+    - source: details # this changes scope for its children again
       children:
-        source: status # so this refers to spec.items[0].details.status
+        source: status # this refers to spec.items[0].details.status
 ```
 
-## Common variables
+## Common Variables
 
 Common variables are the primary means to bypass the default scoping.
 
@@ -72,17 +67,15 @@ Common variables are the primary means to bypass the default scoping.
   collapsibleTitle: "'Rule #' & $string($index + 1)"
 ```
 
-## Data sources
+## Data Sources
 
-Whenever data sources are provided, they are available as corresponding variable names. See [data sources](datasources-section.md) section for more details.
+Whenever data sources are provided, they are available as corresponding variable names. See [Configure the dataSources Section](datasources-section.md) for more details.
 
-## Preset functions
+## Preset Functions
 
 ### canI(resourceGroupAndVersion, resourceKind)
 
-You can use this function to determine if a user has access rights for listing a specified resource.
-
-#### Function parameters
+You can use the **canI** function to determine if a user has access rights for listing a specified resource. The function comes with the following parameters:
 
 - **resourceGroupAndVersion** - the first part of a resource URL following the pattern: `${resource group}/${resource version}`.
 - **resourceKind** - resource kind.
@@ -97,9 +90,7 @@ You can use this function to determine if a user has access rights for listing a
 
 ### compareStrings(first, second)
 
-You can use this function to sort two strings alphabetically.
-
-#### Function parameters
+You can use this function to sort two strings alphabetically. The function comes with the following parameters:
 
 - **first** - first string to compare.
 - **second** - second string to compare.
@@ -120,11 +111,9 @@ Here is an example from the [ResourceList widget](./50-list-and-details-widgets.
 
 ### matchByLabelSelector(item, selectorPath)
 
-You can use this function to match Pods using a resource selector.
+You can use this function to match Pods using a resource selector. The function comes with the following parameters:
 
-#### Function parameters
-
-- **item** - Pod to be used.
+- **item** - a Pod to be used.
 - **selectorPath** - path to selector labels from `$root`.
 
 #### Example
@@ -141,13 +130,11 @@ Example from [dataSources](datasources-section.md).
 
 ### matchEvents(item, kind, name)
 
-You can use this function to match Events using a resource selector.
+You can use this function to match Events using a resource selector. The function comes with the following parameters:
 
-#### Function parameters
-
-- **item** - Event to be checked.
-- **kind** - kind of the Event emitting resource.
-- **name** - name of the Event emitting resource.
+- **item** - an Event to be checked.
+- **kind** - the kind of the Event emitting resource.
+- **name** - the name of the Event emitting resource.
 
 #### Example
 
@@ -161,9 +148,7 @@ You can use this function to match Events using a resource selector.
 
 ### readableTimestamp(timestamp)
 
-You can use this function to convert time to readable time.
-
-#### Function parameters
+You can use this function to convert time to readable time. The function comes with the following parameters:
 
 - **timestamp** - timestamp to convert.
 
