@@ -42,7 +42,7 @@ jobs:
       - name: Setup Busola
         shell: bash
         run: |
-          .github/scripts/setup-local_busola.sh
+          .github/scripts/setup_local_busola.sh
       - name: run_tests
         shell: bash
         run: |
