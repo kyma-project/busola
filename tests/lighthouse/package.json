@@ -8,7 +8,7 @@
     "test": "npx playwright test"
   },
   "devDependencies": {
-    "@playwright/test": "^1.44.0",
+    "@playwright/test": "^1.49.1",
     "lighthouse": "^12.0.0",
     "playwright": "^1.44.0",
     "playwright-lighthouse": "^4.0.0",
