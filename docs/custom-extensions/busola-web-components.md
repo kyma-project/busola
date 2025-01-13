@@ -62,6 +62,8 @@ See the following example:
   ></monaco-editor>
 ```
 
+<img src="./assets/MonacoEditor.png" alt="Example of a Monaco Editor" width="70%" style="border: 1px solid #D2D5D9">
+
 ### Dynamic Page
 
 The `Dynamic Page` web component is used to display content on the page and consisting of a title, header, a content area, an optional inline edit form and floating footer.
@@ -106,5 +108,7 @@ See the following example:
   class-name="custom-page-class"
 >
 ```
+
+<img src="./assets/DynamicPage.png" alt="Example of a Monaco Editor" width="50%" style="border: 1px solid #D2D5D9">
 
 To see an exemplary configuration of the Busola custom extension feature using Web Components, check [this](examples/../../../examples/pizzas/README.md).
