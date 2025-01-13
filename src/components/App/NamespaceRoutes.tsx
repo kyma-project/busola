@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Routes, Route, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +19,33 @@ export default function NamespaceRoutes() {
   const { clusterUrl } = useUrl();
   const language = useRecoilValue(languageAtom);
   const extensions = useRecoilValue(extensionsState);
+  const [additionalRouts, setAdditionalRouts] = useState<
+    (JSX.Element | JSX.Element[])[] | null
+  >(null);
+
+  useEffect(() => {
+    if (extensions?.length) {
+      const extensibilityRoutesPromise: Promise<JSX.Element[]> = Promise.resolve(
+        extensions?.map(extension =>
+          createExtensibilityRoutes(extension, language),
+        ),
+      );
+      const resourceRoutesPromise: Promise<JSX.Element> = Promise.resolve(
+        resourceRoutesNamespaced,
+      );
+      const otherRoutesPromise: Promise<JSX.Element> = Promise.resolve(
+        otherRoutesNamespaced,
+      );
+
+      Promise.all([
+        extensibilityRoutesPromise,
+        resourceRoutesPromise,
+        otherRoutesPromise,
+      ]).then(values => {
+        setAdditionalRouts(values);
+      });
+    }
+  }, [extensions]);
 
   const { error } = useGet(
     namespaceId === '-all-'
@@ -42,22 +70,20 @@ export default function NamespaceRoutes() {
   }
 
   return (
-    <Routes>
-      <Route
-        path="*"
-        element={
-          <IncorrectPath
-            to=""
-            message={t('components.incorrect-path.message.namespace')}
-          />
-        }
-      />
-      {/* extensibility routes should go first, so if someone overwrites the default view, the new one should have a higher priority */}
-      {extensions?.map(extension =>
-        createExtensibilityRoutes(extension, language),
-      )}
-      {resourceRoutesNamespaced}
-      {otherRoutesNamespaced}
-    </Routes>
+    additionalRouts && (
+      <Routes>
+        <Route
+          path="*"
+          element={
+            <IncorrectPath
+              to=""
+              message={t('components.incorrect-path.message.namespace')}
+            />
+          }
+        />
+        {/* extensibility routes should go first, so if someone overwrites the default view, the new one should have a higher priority */}
+        {additionalRouts}
+      </Routes>
+    )
   );
 }
