@@ -3,7 +3,10 @@ import { playAudit } from 'playwright-lighthouse';
 import { chromium } from 'playwright';
 import { tmpdir } from 'os';
 
-const ADDRESS = 'http://localhost:3001';
+const ADDRESS = process.env.LOCAL
+  ? 'http://localhost:8080'
+  : 'http://localhost:3001';
+// What to do with that
 
 test('Busola Lighthouse audit', async () => {
   const context = await chromium.launchPersistentContext(tmpdir(), {
