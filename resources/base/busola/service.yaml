@@ -1,14 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend
+  name: busola
   labels:
-    app: backend
+    app: busola
 spec:
   ports:
     - port: 3001
+      name: http-busola
       targetPort: 3001
-      protocol: TCP
-      name: http
   selector:
-    app: backend
+    app: busola
