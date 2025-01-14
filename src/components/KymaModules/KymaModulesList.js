@@ -52,6 +52,7 @@ export default function KymaModulesList({
   selectedModules,
   setOpenedModuleIndex,
   detailsOpen,
+  namespaced,
 }) {
   const { t } = useTranslation();
   const [
@@ -60,7 +61,7 @@ export default function KymaModulesList({
   ] = useState(false);
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
-  const { clusterUrl } = useUrl();
+  const { clusterUrl, namespaceUrl } = useUrl();
 
   const { data: kymaExt } = useGetList(
     ext => ext.metadata.labels['app.kubernetes.io/part-of'] === 'Kyma',
@@ -325,27 +326,21 @@ export default function KymaModulesList({
         return;
       }
 
-      const path = moduleStatus?.resource?.metadata?.namespace
-        ? clusterUrl(
-            `kymamodules/namespaces/${
-              moduleStatus?.resource?.metadata?.namespace
-            }/${
-              isExtension
-                ? `${pluralize(
-                    moduleStatus?.resource?.kind || '',
-                  ).toLowerCase()}/${moduleStatus?.resource?.metadata?.name}`
-                : `${moduleCrd?.metadata?.name}/${moduleStatus?.resource?.metadata?.name}`
-            }`,
-          )
-        : clusterUrl(
-            `kymamodules/${
-              isExtension
-                ? `${pluralize(
-                    moduleStatus?.resource?.kind || '',
-                  ).toLowerCase()}/${moduleStatus?.resource?.metadata?.name}`
-                : `${moduleCrd?.metadata?.name}/${moduleStatus?.resource?.metadata?.name}`
-            }`,
-          );
+      const pathName = `${
+        isExtension
+          ? `${pluralize(moduleStatus?.resource?.kind || '').toLowerCase()}/${
+              moduleStatus?.resource?.metadata?.name
+            }`
+          : `${moduleCrd?.metadata?.name}/${moduleStatus?.resource?.metadata?.name}`
+      }`;
+
+      const partialPath = moduleStatus?.resource?.metadata?.namespace
+        ? `kymamodules/namespaces/${moduleStatus?.resource?.metadata?.namespace}/${pathName}`
+        : `kymamodules/${pathName}`;
+
+      const path = namespaced
+        ? namespaceUrl(partialPath)
+        : clusterUrl(partialPath);
 
       if (!isExtension) {
         setLayoutColumn({

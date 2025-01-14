@@ -24,18 +24,18 @@ const KymaModulesAddModule = React.lazy(() =>
   import('../../components/KymaModules/KymaModulesAddModule'),
 );
 
-const ColumnWraper = (defaultColumn = 'list') => {
+const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const { clusterUrl } = useUrl();
+  const { clusterUrl, namespaceUrl } = useUrl();
   const layout = 'OneColumn';
+  const url = namespaced
+    ? namespaceUrl('kymamodules')
+    : clusterUrl('kymamodules');
 
   if (layoutState.layout === layout) {
-    window.history.pushState(
-      window.history.state,
-      '',
-      `${clusterUrl('kymamodules')}`,
-    );
+    window.history.pushState(window.history.state, '', url);
   }
+
   const { resourceName, resourceType, namespace } = useParams();
 
   const initialLayoutState = {
@@ -145,7 +145,7 @@ const ColumnWraper = (defaultColumn = 'list') => {
   if (!layout && defaultColumn === 'details') {
     startColumnComponent = (
       <ExtensibilityDetails
-        layoutCloseCreateUrl={clusterUrl('kymamodules')}
+        layoutCloseCreateUrl={url}
         resourceName={layoutState?.midColumn?.resourceName || resourceName}
         resourceType={layoutState?.midColumn?.resourceType || resourceType}
         namespaceId={
@@ -175,6 +175,7 @@ const ColumnWraper = (defaultColumn = 'list') => {
         selectedModules={selectedModules}
         setOpenedModuleIndex={setOpenedModuleIndex}
         detailsOpen={detailsOpen}
+        namespaced={namespaced}
       />
     );
   }
@@ -183,7 +184,7 @@ const ColumnWraper = (defaultColumn = 'list') => {
   if (!layoutState?.showCreate && layoutState?.midColumn) {
     detailsMidColumn = (
       <ExtensibilityDetails
-        layoutCloseCreateUrl={clusterUrl('kymamodules')}
+        layoutCloseCreateUrl={url}
         resourceName={layoutState?.midColumn?.resourceName || resourceName}
         resourceType={layoutState?.midColumn?.resourceType || resourceType}
         namespaceId={
@@ -202,7 +203,7 @@ const ColumnWraper = (defaultColumn = 'list') => {
     <ResourceCreate
       title={t('kyma-modules.add-module')}
       confirmText={t('common.buttons.add')}
-      layoutCloseCreateUrl={clusterUrl('kymamodules')}
+      layoutCloseCreateUrl={url}
       renderForm={renderProps => {
         return (
           <ErrorBoundary>
@@ -267,17 +268,17 @@ export default (
       path={'namespaces/:globalnamespace/kymamodules'}
       element={
         <Suspense fallback={<Spinner />}>
-          <ColumnWraper />
+          <ColumnWraper namespaced={true} />
         </Suspense>
       }
     />
     <Route
       path="namespaces/:globalnamespace/kymamodules/namespaces/:namespace/:resourceType/:resourceName"
-      element={<ColumnWraper defaultColumn="details" />}
+      element={<ColumnWraper defaultColumn="details" namespaced={true} />}
     />
     <Route
       path="namespaces/:globalnamespace/kymamodules/:resourceType/:resourceName"
-      element={<ColumnWraper defaultColumn="details" />}
+      element={<ColumnWraper defaultColumn="details" namespaced={true} />}
     />
   </>
 );
