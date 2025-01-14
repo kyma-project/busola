@@ -469,8 +469,7 @@ export default function KymaModulesList({
                 getAssciatedResources().length > 0 && (
                   <>
                     <MessageStrip design="Warning" hideCloseButton>
-                      If there are some resources left, then you need to remove
-                      them first to delete the module
+                      {t('kyma-modules.associated-resources-warning')}
                     </MessageStrip>
                     <List
                       headerText="AssociatedResources"
@@ -492,7 +491,7 @@ export default function KymaModulesList({
                           additionalText={
                             resourceCounts[
                               `${assResource.kind}-${assResource.group}-${assResource.version}`
-                            ] || 'Loading...'
+                            ] || t('common.header.loading')
                           }
                         >
                           {pluralize(assResource?.kind)}
