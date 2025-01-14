@@ -102,6 +102,10 @@ export default function KymaModulesAddModule({
           ],
           docsUrl:
             module.metadata.annotations['operator.kyma-project.io/doc-url'],
+          icon: {
+            link: module.spec?.info?.icons[0]?.link,
+            name: module.spec?.info?.icons[0]?.name,
+          },
           isMetaRelease: false,
         });
       } else if (existingModule) {
@@ -123,13 +127,15 @@ export default function KymaModulesAddModule({
                 {
                   channel: channel.channel,
                   version: channel.version,
-                  isBeta:
-                    module.metadata.labels['operator.kyma-project.io/beta'] ===
-                    'true',
+                  isBeta: moduleMetaRelase.spec.beta ?? false,
                   isMetaRelease: true,
                 },
               ],
               docsUrl: module.spec.info.documentation,
+              icon: {
+                link: module.spec?.info?.icons[0]?.link,
+                name: module.spec?.info?.icons[0]?.name,
+              },
             });
           } else {
             acc
@@ -137,9 +143,7 @@ export default function KymaModulesAddModule({
               .channels.push({
                 channel: channel.channel,
                 version: channel.version,
-                isBeta:
-                  module.metadata.labels['operator.kyma-project.io/beta'] ===
-                  'true',
+                isBeta: moduleMetaRelase.spec.beta ?? false,
                 isMetaRelease: true,
               });
           }
@@ -218,9 +222,11 @@ export default function KymaModulesAddModule({
         return false;
       }
       const moduleData = modulesAddData?.find(module => module.name === name);
+
       return moduleData
         ? moduleData.channels.some(
-            ({ channel: ch, isBeta }) => ch === channel && isBeta,
+            ({ channel: ch, isBeta }) =>
+              ch === (channel || kymaResource.spec.channel) && isBeta,
           )
         : false;
     });
@@ -231,7 +237,8 @@ export default function KymaModulesAddModule({
       ?.find(mod => mod.name === moduleName)
       ?.channels.some(
         ({ channel: ch, isBeta }) =>
-          ch === findStatus(moduleName)?.channel && isBeta,
+          ch === findStatus(moduleName)?.channel ||
+          (kymaResource.spec.channel && isBeta),
       );
   };
 
