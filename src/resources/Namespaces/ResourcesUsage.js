@@ -9,6 +9,7 @@ import { Card, CardHeader } from '@ui5/webcomponents-react';
 const MEMORY_SUFFIX_POWER = {
   // must be sorted from the smallest to the largest; it is case sensitive; more info: https://medium.com/swlh/understanding-kubernetes-resource-cpu-and-memory-units-30284b3cc866
   m: 1e-3,
+  k: 1e3,
   K: 1e3,
   Ki: 2 ** 10,
   M: 1e6,
@@ -22,24 +23,13 @@ const CPU_SUFFIX_POWER = {
   m: 1e-3,
 };
 
-export function getBytes(memoryString) {
-  if (!memoryString || memoryString === '0') {
-    return 0;
-  }
-  const suffixMatch = String(memoryString).match(/\D+$/);
+export function getBytes(memoryStr) {
+  if (!memoryStr) return 0;
 
-  if (!suffixMatch?.length) {
-    return memoryString;
-  }
-  const suffix = suffixMatch[0];
-  const number = String(memoryString).replace(suffix, '');
-
-  const suffixPower = MEMORY_SUFFIX_POWER[suffix];
-  if (!suffixPower) {
-    return number;
-  }
-
-  return number * suffixPower;
+  const unit = String(memoryStr).match(/[a-zA-Z]+/g)?.[0];
+  const value = parseFloat(memoryStr);
+  const bytes = value * (MEMORY_SUFFIX_POWER[unit] || 1);
+  return bytes;
 }
 
 export function getCpus(cpuString) {
@@ -148,7 +138,7 @@ export const ResourcesUsage = ({ namespace }) => {
       pollingInterval: 3300,
     },
   );
-
+  if (resourceQuotas?.length < 1) return null;
   return (
     <>
       <div className="item-wrapper tall">

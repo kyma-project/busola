@@ -68,6 +68,8 @@ config:
       isEnabled: true
     EXTENSIBILITY_INJECTIONS:
       isEnabled: true
+    EXTENSIBILITY_CUSTOM_COMPONENTS:
+      isEnabled: false
     EXTENSIBILITY_WIZARD:
       isEnabled: true
     EVENTING:
@@ -97,3 +99,5 @@ config:
       link: https://sapinsights.eu.qualtrics.com/jfe/form/SV_2gcfdw3EYYOIz5A?product=SAP%20BTP,%20Kyma%20Runtime&product_filter=Kyma
     COLUMN_LAYOUT:
       isEnabled: true
+    SNOW:
+      isEnabled: false

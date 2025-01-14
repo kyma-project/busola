@@ -1,7 +1,7 @@
 import { getExtensibilityPath } from 'components/Extensibility/helpers/getExtensibilityPath';
 import pluralize from 'pluralize';
 
-import { ExtResource, NavNode } from '../types';
+import { configFeaturesNames, ExtResource, NavNode } from '../types';
 
 export const mapExtResourceToNavNode = (extRes: ExtResource) => {
   const node: NavNode = {} as NavNode;
@@ -14,6 +14,11 @@ export const mapExtResourceToNavNode = (extRes: ExtResource) => {
   node.namespaced = extRes.general.scope === 'namespace';
   node.apiGroup = extRes.general.resource.group || '';
   node.apiVersion = extRes.general.resource.version;
+  if (extRes.general.customElement) {
+    node.requiredFeatures = [
+      configFeaturesNames.EXTENSIBILITY_CUSTOM_COMPONENTS,
+    ];
+  }
 
   return node;
 };

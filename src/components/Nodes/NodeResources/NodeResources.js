@@ -19,10 +19,10 @@ export function NodeResources({ metrics, resources }) {
         <UI5RadialChart
           color="var(--sapChart_OrderedColor_5)"
           value={cpu.usage}
-          max={cpu.capacity}
+          max={cpu.capacity * 1000}
           additionalInfo={`${roundTwoDecimals(cpu.usage)}m / ${roundTwoDecimals(
             cpu.capacity,
-          )}m`}
+          ) * 1000}m`}
         />
       </Card>
       <Card
@@ -39,7 +39,7 @@ export function NodeResources({ metrics, resources }) {
           max={memory.capacity}
           additionalInfo={`${roundTwoDecimals(
             memory.usage,
-          )}GiB / ${roundTwoDecimals(memory.capacity)}GiB`}
+          )}Gi / ${roundTwoDecimals(memory.capacity)}Gi`}
         />
       </Card>
       <Card
@@ -53,10 +53,10 @@ export function NodeResources({ metrics, resources }) {
         <UI5RadialChart
           color="var(--sapChart_OrderedColor_5)"
           value={resources?.requests?.cpu}
-          max={cpu.capacity}
+          max={cpu.capacity * 1000}
           additionalInfo={`${roundTwoDecimals(
             resources?.requests?.cpu,
-          )}m / ${roundTwoDecimals(cpu.capacity)}m`}
+          )}m / ${roundTwoDecimals(cpu.capacity) * 1000}m`}
         />
       </Card>
       <Card
@@ -73,7 +73,7 @@ export function NodeResources({ metrics, resources }) {
           max={memory.capacity}
           additionalInfo={`${roundTwoDecimals(
             resources.requests?.memory,
-          )}GiB / ${roundTwoDecimals(memory.capacity)}GiB`}
+          )}Gi / ${roundTwoDecimals(memory.capacity)}Gi`}
         />
       </Card>
       <Card
@@ -85,10 +85,10 @@ export function NodeResources({ metrics, resources }) {
         <UI5RadialChart
           color="var(--sapChart_OrderedColor_5)"
           value={resources?.limits?.cpu}
-          max={cpu.capacity}
+          max={cpu.capacity * 1000}
           additionalInfo={`${roundTwoDecimals(
             resources?.limits?.cpu,
-          )}m / ${roundTwoDecimals(cpu.capacity)}m`}
+          )}m / ${roundTwoDecimals(cpu.capacity) * 1000}m`}
         />
       </Card>
       <Card
@@ -105,7 +105,7 @@ export function NodeResources({ metrics, resources }) {
           max={memory.capacity}
           additionalInfo={`${roundTwoDecimals(
             resources.limits.memory,
-          )}GiB / ${roundTwoDecimals(memory.capacity)}GiB`}
+          )}Gi / ${roundTwoDecimals(memory.capacity)}Gi`}
         />
       </Card>
     </>

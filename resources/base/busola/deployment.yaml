@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web
+  name: busola
   labels:
     app: busola
 spec:
@@ -16,26 +16,28 @@ spec:
     spec:
       containers:
         - name: busola
-          image: europe-docker.pkg.dev/kyma-project/prod/busola-web:latest
-          imagePullPolicy: Always
+          image: busola
+          imagePullPolicy: IfNotPresent
           env:
             - name: ENVIRONMENT
               valueFrom:
                 configMapKeyRef:
+                  optional: true
                   key: ENVIRONMENT
                   name: environment
+          volumeMounts:
+            - name: config
+              mountPath: /app/core-ui/config
           resources:
             requests:
               cpu: 100m
               memory: 21Mi
           ports:
-            - containerPort: 8080
-          volumeMounts:
-            - name: config
-              mountPath: /app/core-ui/config
+            - containerPort: 3001
       volumes:
         - name: config
           configMap:
+            optional: true
             name: busola-config
             items:
               - key: config

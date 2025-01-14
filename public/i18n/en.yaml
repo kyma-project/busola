@@ -855,6 +855,8 @@ namespaces:
 navigation:
   all-namespaces: All Namespaces
   feedback: Feedback
+  snow: Let it snow
+  snow-stop: Stop the snow
   menu:
     get-help: Get Help
     give-feedback: Give Feedback

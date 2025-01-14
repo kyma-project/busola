@@ -56,6 +56,15 @@ EXTENSIBILITY:
   isEnabled: true
 ```
 
+- **EXTENSIBILITY_CUSTOM_COMPONENTS** - is used to indicate whether entirely custom extensions can be added to Busola. See [this example](../examples/custom-extension/README.md).
+
+Default settings:
+
+```yaml
+EXTENSIBILITY_CUSTOM_COMPONENTS:
+  isEnabled: false
+```
+
 - **EXTERNAL_NODES** - a list of links to external websites. `category`: a category name, `icon`: an optional icon, `scope`: either `namespace` or `cluster` (defaults to `cluster`), `children`: a list of pairs (label and link).
 
   Default settings:

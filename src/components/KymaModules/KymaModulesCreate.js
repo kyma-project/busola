@@ -45,7 +45,17 @@ export default function KymaModulesCreate({ resource, ...props }) {
   const resourceName = kymaResource?.metadata.name;
   const modulesResourceUrl = `/apis/operator.kyma-project.io/v1beta2/moduletemplates`;
 
-  const { data: modules, loading } = useGet(modulesResourceUrl, {
+  const modulesReleaseMetaResourceUrl = `/apis/operator.kyma-project.io/v1beta2/modulereleasemetas`;
+
+  const { data: modules, loading: lodingModules } = useGet(modulesResourceUrl, {
+    pollingInterval: 3000,
+    skip: !resourceName,
+  });
+
+  const {
+    data: moduleReleaseMetas,
+    loading: loadingModulesReleaseMetas,
+  } = useGet(modulesReleaseMetaResourceUrl, {
     pollingInterval: 3000,
     skip: !resourceName,
   });
@@ -69,7 +79,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
     onSave: false,
   });
 
-  if (loading) {
+  if (lodingModules || loadingModulesReleaseMetas) {
     return (
       <div style={{ height: 'calc(100vh - 14rem)' }}>
         <Spinner />
@@ -132,29 +142,64 @@ export default function KymaModulesCreate({ resource, ...props }) {
     const name =
       module.metadata?.labels['operator.kyma-project.io/module-name'];
     const existingModule = acc.find(item => item.name === name);
+    const moduleMetaRelase = moduleReleaseMetas?.items.find(
+      item => item.spec.moduleName === name,
+    );
 
-    if (!existingModule) {
-      acc.push({
-        name: name,
-        channels: [
-          {
-            channel: module.spec.channel,
-            version: module.spec.descriptor.component.version,
-            isBeta:
-              module.metadata.labels['operator.kyma-project.io/beta'] ===
-              'true',
-          },
-        ],
-        docsUrl:
-          module.metadata.annotations['operator.kyma-project.io/doc-url'],
-      });
+    if (module.spec.channel) {
+      if (!existingModule) {
+        acc.push({
+          name: name,
+          channels: [
+            {
+              channel: module.spec.channel,
+              version: module.spec.descriptor.component.version,
+              isBeta:
+                module.metadata.labels['operator.kyma-project.io/beta'] ===
+                'true',
+              isMetaRelease: false,
+            },
+          ],
+          docsUrl:
+            module.metadata.annotations['operator.kyma-project.io/doc-url'],
+        });
+      } else if (existingModule) {
+        existingModule.channels?.push({
+          channel: module.spec.channel,
+          version: module.spec.descriptor.component.version,
+          isBeta:
+            module.metadata.labels['operator.kyma-project.io/beta'] === 'true',
+          isMetaRelease: false,
+        });
+      }
     } else {
-      existingModule.channels?.push({
-        channel: module.spec.channel,
-        version: module.spec.descriptor.component.version,
-        isBeta:
-          module.metadata.labels['operator.kyma-project.io/beta'] === 'true',
-      });
+      if (!existingModule) {
+        moduleMetaRelase?.spec.channels.forEach(channel => {
+          if (!acc.find(item => item.name === name)) {
+            acc.push({
+              name: name,
+              channels: [
+                {
+                  channel: channel.channel,
+                  version: channel.version,
+                  isBeta: moduleMetaRelase.spec.beta ?? false,
+                  isMetaRelease: true,
+                },
+              ],
+              docsUrl: module.spec.info.documentation,
+            });
+          } else {
+            acc
+              .find(item => item.name === name)
+              .channels.push({
+                channel: channel.channel,
+                version: channel.version,
+                isBeta: moduleMetaRelase.spec.beta ?? false,
+                isMetaRelease: true,
+              });
+          }
+        });
+      }
     }
     return acc;
   }, []);
@@ -177,9 +222,11 @@ export default function KymaModulesCreate({ resource, ...props }) {
         return false;
       }
       const moduleData = modulesEditData?.find(module => module.name === name);
+
       return moduleData
         ? moduleData.channels.some(
-            ({ channel: ch, isBeta }) => ch === channel && isBeta,
+            ({ channel: ch, isBeta }) =>
+              ch === (channel || kymaResource.spec.channel) && isBeta,
           )
         : false;
     });
@@ -233,13 +280,17 @@ export default function KymaModulesCreate({ resource, ...props }) {
             {module.channels?.map(channel => (
               <Option
                 selected={channel.channel === findSpec(module.name)?.channel}
-                key={`${channel.channel}-${module.name}`}
+                key={`${channel.channel}-${module.name}${
+                  channel.isMetaRelease ? '-meta' : ''
+                }`}
                 value={channel.channel}
                 additionalText={channel?.isBeta ? 'Beta' : ''}
               >
-                {`${channel.channel[0].toUpperCase()}${channel.channel.slice(
-                  1,
-                )} (v${channel.version})`}{' '}
+                {`${(
+                  channel?.channel[0] || ''
+                ).toUpperCase()}${channel.channel.slice(1)} (v${
+                  channel.version
+                })`}{' '}
               </Option>
             ))}
           </Select>

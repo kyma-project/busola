@@ -6,7 +6,7 @@
   "scripts": {
     "start": "SSL_CERT_FILE=certs.pem NODE_ENV=development nodemon --exec babel-node index.js",
     "build": "webpack --mode=production",
-    "start:prod": "SSL_CERT_FILE=certs.pem NODE_ENV=production node backend-production.js",
+    "start:prod": "SSL_CERT_FILE=certs.pem NODE_ENV=production node --max-http-header-size 24576 backend-production.js",
     "test": "jest"
   },
   "keywords": [],
@@ -16,7 +16,7 @@
     "@babel/runtime": "^7.13.10",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
-    "express": "^4.21.0",
+    "express": "^4.21.2",
     "https": "^1.0.0",
     "jose": "^5.2.4",
     "js-yaml": "^4.1.0",

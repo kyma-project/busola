@@ -22,6 +22,7 @@ export const configFeaturesNames = {
   VISUAL_RESOURCES: 'VISUAL_RESOURCES',
   EXTENSIBILITY: 'EXTENSIBILITY',
   EXTENSIBILITY_INJECTIONS: 'EXTENSIBILITY_INJECTIONS',
+  EXTENSIBILITY_CUSTOM_COMPONENTS: 'EXTENSIBILITY_CUSTOM_COMPONENTS',
   EXTENSIBILITY_WIZARD: 'EXTENSIBILITY_WIZARD',
   TRACKING: 'TRACKING',
   PROTECTED_RESOURCES: 'PROTECTED_RESOURCES',
@@ -84,6 +85,7 @@ export type ExtGeneral = {
   icon?: string;
   id?: string;
   externalNodes?: ExtensibilityNodesExt[];
+  customElement?: string;
 };
 
 export type ExtResource = {
@@ -98,6 +100,8 @@ export type ExtResource = {
   presets: any[];
   dataSources: Record<string, any>;
   injections?: ExtInjection[];
+  customHtml: {};
+  customScript: {};
 };
 
 export type ExtensibilityNodesExt = {

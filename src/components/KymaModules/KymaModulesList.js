@@ -71,11 +71,18 @@ export default function KymaModulesList({
   const namespace = 'kyma-system';
 
   const modulesResourceUrl = `/apis/operator.kyma-project.io/v1beta2/moduletemplates`;
+  const modulesReleaseMetaResourceUrl = `/apis/operator.kyma-project.io/v1beta2/modulereleasemetas`;
+
+  const { data: moduleReleaseMetas } = useGet(modulesReleaseMetaResourceUrl, {
+    pollingInterval: 3000,
+    skip: !resourceName,
+  });
 
   const { data: modules, loading: modulesLoading } = useGet(
     modulesResourceUrl,
     {
       pollingInterval: 3000,
+      skip: !resourceName,
     },
   );
 
@@ -104,12 +111,28 @@ export default function KymaModulesList({
   };
 
   const ModulesList = resource => {
-    const findModule = (moduleName, channel) => {
-      return modules?.items?.find(
+    const findModule = (moduleName, channel, version) => {
+      // This change was made due to changes in modules and should be simplified once all modules migrate
+      const moduleWithoutInfo = modules?.items?.find(
         module =>
           moduleName ===
             module.metadata.labels['operator.kyma-project.io/module-name'] &&
           module.spec.channel === channel,
+      );
+      const moduleWithInfo = modules?.items?.find(
+        module =>
+          moduleName ===
+            module.metadata.labels['operator.kyma-project.io/module-name'] &&
+          !module.spec.channel &&
+          module.spec.version === version,
+      );
+
+      return moduleWithInfo ?? moduleWithoutInfo;
+    };
+
+    const findModuleReleaseMeta = moduleName => {
+      return moduleReleaseMetas?.items.find(
+        item => item.spec.moduleName === moduleName,
       );
     };
 
@@ -125,9 +148,11 @@ export default function KymaModulesList({
         return extensionResource.kind === resourceKind;
       });
     };
-    const checkBeta = module => {
+
+    const checkBeta = (module, currentModuleReleaseMeta) => {
       return (
-        module?.metadata.labels['operator.kyma-project.io/beta'] === 'true'
+        module?.metadata.labels['operator.kyma-project.io/beta'] === 'true' ||
+        currentModuleReleaseMeta?.spec?.beta === true
       );
     };
 
@@ -172,6 +197,14 @@ export default function KymaModulesList({
         },
       );
 
+      const currentModule = findModule(
+        resource.name,
+        resource?.channel || kymaResource?.spec?.channel,
+        resource?.version,
+      );
+
+      const currentModuleReleaseMeta = findModuleReleaseMeta(resource.name);
+
       const isChannelOverriden =
         kymaResource?.spec?.modules?.[moduleIndex]?.channel !== undefined;
 
@@ -185,12 +218,7 @@ export default function KymaModulesList({
           ) : (
             resource.name
           )}
-          {checkBeta(
-            findModule(
-              resource.name,
-              resource?.channel || kymaResource?.spec?.channel,
-            ),
-          ) ? (
+          {checkBeta(currentModule, currentModuleReleaseMeta) ? (
             <Badge style={spacing.sapUiTinyMarginBegin}>
               {t('kyma-modules.beta')}
             </Badge>
@@ -202,7 +230,7 @@ export default function KymaModulesList({
         <>
           {moduleStatus?.channel
             ? moduleStatus?.channel
-            : EMPTY_TEXT_PLACEHOLDER}
+            : kymaResource?.spec?.modules?.[moduleIndex]?.channel}
           {isChannelOverriden ? (
             <Badge
               hideStateIcon
@@ -240,10 +268,11 @@ export default function KymaModulesList({
         // Documentation
         <ExternalLink
           url={
-            findModule(
-              resource.name,
-              resource.channel || kymaResource?.spec.channel,
-            )?.metadata?.annotations['operator.kyma-project.io/doc-url']
+            currentModule?.spec?.info
+              ? currentModule.spec.info.documentation
+              : currentModule?.metadata?.annotations[
+                  'operator.kyma-project.io/doc-url'
+                ]
           }
         >
           {t('common.headers.link')}
