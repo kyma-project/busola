@@ -20,6 +20,7 @@ import { GenericList } from 'shared/components/GenericList/GenericList';
 import {
   useGet,
   useGetList,
+  useGetScope,
   useSingleGet,
 } from 'shared/hooks/BackendAPI/useGet';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
@@ -42,6 +43,7 @@ import { isFormOpenState } from 'state/formOpenAtom';
 import { ModuleStatus } from './components/ModuleStatus';
 import { cloneDeep } from 'lodash';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
+import { useNavigate } from 'react-router-dom';
 
 export default function KymaModulesList({
   DeleteMessageBox,
@@ -66,8 +68,10 @@ export default function KymaModulesList({
   ] = useState(false);
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
-  const { clusterUrl } = useUrl();
+  const { clusterUrl, namespaceUrl } = useUrl();
   const fetch = useSingleGet();
+  const getScope = useGetScope();
+  const navigate = useNavigate();
 
   const { data: kymaExt } = useGetList(
     ext => ext.metadata.labels['app.kubernetes.io/part-of'] === 'Kyma',
@@ -382,7 +386,7 @@ export default function KymaModulesList({
         selectedModules[chosenModuleIndex]?.version ||
           findStatus(selectedModules[chosenModuleIndex]?.name)?.version,
       );
-      console.log(module?.spec?.associatedResources);
+
       return module?.spec?.associatedResources || [];
     };
 
@@ -391,15 +395,25 @@ export default function KymaModulesList({
         group === 'v1'
           ? '/api/v1'
           : `/apis/${group}/${version}/${pluralize(kind.toLowerCase())}`;
+
       try {
         const response = await fetch(url);
         const json = await response.json();
-        console.log(json.items.length);
         return json.items.length;
       } catch (e) {
         console.warn(e);
         return 'Error';
       }
+    };
+
+    const handleItemClick = async (kind, group, version) => {
+      const isNamespaced = await getScope(group, version, kind);
+      const path = `${pluralize(kind.toLowerCase())}`;
+      const link = isNamespaced
+        ? namespaceUrl(path, { namespace: '-all-' })
+        : clusterUrl(path);
+
+      navigate(link);
     };
 
     const fetchResourceCounts = async () => {
@@ -445,6 +459,15 @@ export default function KymaModulesList({
                     >
                       {getAssciatedResources().map(assResource => (
                         <StandardListItem
+                          onClick={e => {
+                            e.preventDefault();
+                            handleItemClick(
+                              assResource.kind,
+                              assResource.group,
+                              assResource.version,
+                            );
+                          }}
+                          type="Active"
                           key={`${assResource.kind}-${assResource.group}-${assResource.version}`}
                           additionalText={
                             resourceCounts[
