@@ -168,5 +168,28 @@ context('Test Command Palette navigation', () => {
       });
 
     getQueryUI5Input().should('not.exist');
+
+    cy.get('.yaml-upload-modal__dialog')
+      .contains('ui5-button', 'Cancel')
+      .click();
+  });
+
+  it("Command Palette shouldn't navigate when form is edited", () => {
+    cy.navigateTo('Configuration', 'Cluster Role Bindings');
+
+    cy.openCreate();
+
+    cy.get('[accessible-name="ClusterRoleBinding name"]')
+      .find('input')
+      .click()
+      .type('test-crb');
+
+    openCommandPalette();
+
+    getQueryInput().type('ns/default');
+
+    cy.contains('li.result', 'default').click();
+
+    cy.get('ui5-dialog[header-text="Discard Changes"]').should('be.visible');
   });
 });

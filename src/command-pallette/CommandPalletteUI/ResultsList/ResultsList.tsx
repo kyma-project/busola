@@ -63,6 +63,7 @@ export function ResultsList({
         setActiveIndex(activeIndex - 1);
         scrollInto(listRef.current!.children[activeIndex - 1]);
       } else if (key === 'Enter' && results?.[activeIndex]) {
+        e.preventDefault();
         handleActionIfFormOpen(
           isResourceEdited,
           setIsResourceEdited,
