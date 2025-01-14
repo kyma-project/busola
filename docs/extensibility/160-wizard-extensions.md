@@ -38,4 +38,4 @@ resources:
     group: busola.example.com
     version: v1
 ```
-See [Additional Sections for Wizard Extensions](170-additional-sections.md) for more information on the available sections.
+See [Additional Sections for Wizard Extensions](170-additional-sections-wizard.md) for more information on the available sections.
