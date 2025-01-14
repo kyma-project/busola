@@ -76,28 +76,25 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
         const newWindow = window.open(link, 'noopener, noreferrer');
         if (newWindow) newWindow.opener = null;
       } else {
-        const url = node.createUrlFn
-          ? node.createUrlFn(urlGenerators)
-          : scopedUrl(node.pathSegment);
-        if (location?.pathname !== url) {
-          handleActionIfFormOpen(
-            isResourceEdited,
-            setIsResourceEdited,
-            isFormOpen,
-            setIsFormOpen,
-            () => {
-              setLayoutColumn({
-                midColumn: null,
-                endColumn: null,
-                layout: 'OneColumn',
-              });
-              const url = node.createUrlFn
-                ? node.createUrlFn(urlGenerators)
-                : scopedUrl(node.pathSegment);
+        handleActionIfFormOpen(
+          isResourceEdited,
+          setIsResourceEdited,
+          isFormOpen,
+          setIsFormOpen,
+          () => {
+            setLayoutColumn({
+              midColumn: null,
+              endColumn: null,
+              layout: 'OneColumn',
+            });
+            const url = node.createUrlFn
+              ? node.createUrlFn(urlGenerators)
+              : scopedUrl(node.pathSegment);
+            if (location?.pathname !== url) {
               navigate(url);
-            },
-          );
-        }
+            }
+          },
+        );
       }
     },
   };

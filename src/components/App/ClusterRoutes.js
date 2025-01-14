@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Route, Routes, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
@@ -30,6 +30,17 @@ export default function ClusterRoutes() {
   const extensions = useRecoilValue(extensionsState);
   const [cluster, setCluster] = useRecoilState(clusterState);
   const [search] = useSearchParams();
+  const [extensibilityRoutes, setExtensibilityRoutes] = useState(null);
+
+  useEffect(() => {
+    if (extensions?.length) {
+      setExtensibilityRoutes(
+        extensions?.map(extension =>
+          createExtensibilityRoutes(extension, language),
+        ),
+      );
+    }
+  }, [extensions]);
 
   useEffect(() => {
     if (cluster?.name === currentClusterName) return;
@@ -55,15 +66,17 @@ export default function ClusterRoutes() {
 
   return (
     <Routes>
-      <Route
-        path="*"
-        element={
-          <IncorrectPath
-            to="overview"
-            message={t('components.incorrect-path.message.cluster')}
-          />
-        }
-      />
+      {extensibilityRoutes && (
+        <Route
+          path="*"
+          element={
+            <IncorrectPath
+              to="overview"
+              message={t('components.incorrect-path.message.cluster')}
+            />
+          }
+        />
+      )}
       {/*  overview route should stay static  */}
       <Route
         path="overview"
@@ -75,9 +88,7 @@ export default function ClusterRoutes() {
       />
 
       {/* extensibility routes should go first, so if someone overwrites the default view, the new one should have a higher priority */}
-      {extensions?.map(extension =>
-        createExtensibilityRoutes(extension, language),
-      )}
+      {extensibilityRoutes}
       {resourceRoutes}
       {otherRoutes}
       <Route path="namespaces/:namespaceId/*" element={<NamespaceRoutes />} />

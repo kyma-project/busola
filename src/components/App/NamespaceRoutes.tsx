@@ -19,31 +19,17 @@ export default function NamespaceRoutes() {
   const { clusterUrl } = useUrl();
   const language = useRecoilValue(languageAtom);
   const extensions = useRecoilValue(extensionsState);
-  const [additionalRouts, setAdditionalRouts] = useState<
-    (JSX.Element | JSX.Element[])[] | null
+  const [extensibilityRoutes, setExtensibilityRoutes] = useState<
+    JSX.Element[] | null
   >(null);
 
   useEffect(() => {
     if (extensions?.length) {
-      const extensibilityRoutesPromise: Promise<JSX.Element[]> = Promise.resolve(
-        extensions?.map(extension =>
+      setExtensibilityRoutes(
+        extensions.map(extension =>
           createExtensibilityRoutes(extension, language),
         ),
       );
-      const resourceRoutesPromise: Promise<JSX.Element> = Promise.resolve(
-        resourceRoutesNamespaced,
-      );
-      const otherRoutesPromise: Promise<JSX.Element> = Promise.resolve(
-        otherRoutesNamespaced,
-      );
-
-      Promise.all([
-        extensibilityRoutesPromise,
-        resourceRoutesPromise,
-        otherRoutesPromise,
-      ]).then(values => {
-        setAdditionalRouts(values);
-      });
     }
   }, [extensions]);
 
@@ -55,7 +41,7 @@ export default function NamespaceRoutes() {
       skip: false,
       pollingInterval: 0,
       onDataReceived: () => {},
-    },
+    } as any,
   );
   const hasAccessToNamespace =
     JSON.parse(JSON.stringify(error)) === null ||
@@ -70,8 +56,8 @@ export default function NamespaceRoutes() {
   }
 
   return (
-    additionalRouts && (
-      <Routes>
+    <Routes>
+      {extensibilityRoutes && (
         <Route
           path="*"
           element={
@@ -81,9 +67,11 @@ export default function NamespaceRoutes() {
             />
           }
         />
-        {/* extensibility routes should go first, so if someone overwrites the default view, the new one should have a higher priority */}
-        {additionalRouts}
-      </Routes>
-    )
+      )}
+      {/* extensibility routes should go first, so if someone overwrites the default view, the new one should have a higher priority */}
+      {extensibilityRoutes}
+      {resourceRoutesNamespaced}
+      {otherRoutesNamespaced}
+    </Routes>
   );
 }
