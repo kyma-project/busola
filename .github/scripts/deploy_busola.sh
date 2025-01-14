@@ -25,7 +25,7 @@ kubectl create configmap environment --from-literal=ENVIRONMENT="${ENV}"
 echo "### Deploying busola from: ${IMG_DIR}/${IMG_TAG}"
 
 cd resources
-(cd base && kustomize edit set image busola=europe-docker.pkg.dev/kyma-project/${IMG_DIR}/busola:"${IMG_TAG}")
+(cd base && kustomize edit set image busola=europe-docker.pkg.dev/kyma-project/"${IMG_DIR}"/busola:"${IMG_TAG}")
 kustomize build base/ | kubectl apply -f-
 
 kubectl apply -f ingress/ingress.yaml
@@ -38,7 +38,7 @@ kubectl wait --for=jsonpath='{.status.loadBalancer.ingress}' ingress/busola
 IP=$(kubectl get ingress busola -ojson | jq .status.loadBalancer.ingress[].ip | tr -d '/"')
 echo "IP address: ${IP}"
 
-if [[ ! -z "${GITHUB_OUTPUT:-}" ]]; then
+if [[ -n "${GITHUB_OUTPUT:-}" ]]; then
   echo "IP=${IP}" >> "${GITHUB_OUTPUT}"
   echo "IP saved"
   fi;
