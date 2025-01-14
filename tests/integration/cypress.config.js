@@ -2,12 +2,12 @@ const { defineConfig } = require('cypress');
 
 module.exports = defineConfig({
   includeShadowDom: true,
-  defaultCommandTimeout: 10000,
-  execTimeout: 10000,
-  taskTimeout: 10000,
-  pageLoadTimeout: 10000,
-  requestTimeout: 10000,
-  responseTimeout: 10000,
+  defaultCommandTimeout: 3000,
+  execTimeout: 3000,
+  taskTimeout: 3000,
+  pageLoadTimeout: 3000,
+  requestTimeout: 3000,
+  responseTimeout: 3000,
   fixturesFolder: 'fixtures',
   chromeWebSecurity: false,
   viewportWidth: 1500,
