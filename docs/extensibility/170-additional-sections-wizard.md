@@ -16,7 +16,7 @@ Each wizard consists of steps. This section contains their definitions.
 
 ## _defaults_ section
 
-This section is optional. If present, not all resources must be covered. This section contains a map of default values for specific resources. It is appended to the basic skeleton resources created based on the data provided in the [_general_ section](#general-section).
+This section is optional. If present, not all resources must be covered. This section contains a map of default values for specific resources. It is appended to the basic skeleton resources created based on the data provided in the [general section](160-wizard-extensions.md).
 
 ### Example
 

@@ -45,7 +45,7 @@ You can use this function to match Pods using a resource selector. The function 
 
 ### Example
 
-Example from [dataSources](datasources-section.md).
+Example from [dataSources](90-datasources.md).
 
 ```yaml
 - podSelector:

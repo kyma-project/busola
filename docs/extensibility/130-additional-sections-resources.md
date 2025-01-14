@@ -26,4 +26,4 @@ Value preprocessors are used as a middleware between a value and the actual rend
   - For truthy `error`, it displays an error message.
   - Otherwise, it passes `data` to the display component.
 
-  Unless you need custom handling of error or loading state, we recommend using **PendingWrapper**, for example, for fields that use [data sources](./datasources-section.md).
+  Unless you need custom handling of error or loading state, we recommend using **PendingWrapper**, for example, for fields that use [data sources](90-datasources.md).

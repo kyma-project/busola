@@ -60,4 +60,4 @@ Common variables are the primary means to bypass the default scoping.
 
 ## Data Sources
 
-Whenever data sources are provided, they are available as corresponding variable names. See [Configure the dataSources Section](datasources-section.md) for more details.
+Whenever data sources are provided, they are available as corresponding variable names. See [Configure the dataSources Section](90-datasources.md) for more details.
