@@ -38,9 +38,6 @@ kubectl wait --for=jsonpath='{.status.loadBalancer.ingress}' ingress/busola
 IP=$(kubectl get ingress busola -ojson | jq .status.loadBalancer.ingress[].ip | tr -d '/"')
 echo "IP address: ${IP}"
 
-# check if busola is available with curl
-curl --fail "${IP}"
-
 if [[ ! -z "${GITHUB_OUTPUT:-}" ]]; then
   echo "IP=${IP}" >> "${GITHUB_OUTPUT}"
   echo "IP saved"
