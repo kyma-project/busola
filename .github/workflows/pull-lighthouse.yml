@@ -32,28 +32,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: setup_busola
+      - name: Run busola
         shell: bash
         run: |
-            set -e
-            npm ci
-            npm run build
-            npm i -g serve
-      - name: run_tests
+          .github/scripts/setup_local_busola.sh
+      - name: Run lighthouse tests
         shell: bash
         run: |
           k3d kubeconfig get k3dCluster > tests/lighthouse/fixtures/kubeconfig.yaml
-          export DOMAIN=http://localhost:3000
-          serve -s build > busola.log &
-
-          pushd backend
-          npm start > backend.log &
-          popd
-          
-          echo "waiting for server to be up..."
-          while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' "$DOMAIN")" != "200" ]]; do sleep 5; done
-          sleep 10
-          
           cd tests/lighthouse
           npm ci && npx playwright install --with-deps && npm run "test"
       - name: Upload Busola logs
@@ -62,6 +48,5 @@ jobs:
         with:
           name: busola-logs-${{ github.job }}
           path: |
-            backend/backend.log
             busola.log
           retention-days: 90
