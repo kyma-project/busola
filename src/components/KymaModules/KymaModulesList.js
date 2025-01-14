@@ -11,6 +11,7 @@ import {
   Badge,
   List,
   StandardListItem,
+  MessageStrip,
 } from '@ui5/webcomponents-react';
 
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
@@ -467,6 +468,10 @@ export default function KymaModulesList({
               additionalDeleteInfo={
                 getAssciatedResources().length > 0 && (
                   <>
+                    <MessageStrip design="Warning" hideCloseButton>
+                      If there are some resources left, then you need to remove
+                      them first to delete the module
+                    </MessageStrip>
                     <List
                       headerText="AssociatedResources"
                       mode="None"
