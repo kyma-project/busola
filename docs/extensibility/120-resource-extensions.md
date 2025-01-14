@@ -1,13 +1,13 @@
-# Configure a Config Map
+# Configure a Config Map for Resource-Based Extensions
 
 You can set up your ConfigMap to handle your UI page by adding objects to the **general** section. This section contains basic information about the resource and additional options.
 You can provide all the ConfigMap data sections as either JSON or YAML.
 
-## Extension version
+## Extension Version
 
 The version is a string value that defines in which version the extension is configured. It is stored as a value of the `busola.io/extension-version` label. If the configuration is created with the **Create Extension** button, this value is provided automatically. When created manually, use the latest version number, for example, `'0.5'`.
 
-> [!WARNING] 
+> [!NOTE] 
 > Busola supports only the two latest versions of the configuration. Whenever a new version of the configuration is proposed, go to your Extension and migrate your configuration to the latest version.
 
 ## Available Parameters
@@ -69,3 +69,4 @@ externalNodes:
       - label: Example Node Label
         link: '$string($exampleResource().link)'
 ```
+See [Additional Sections for Resource-Based Extensions](130-additional-sections-resources.md) for more information on the available sections.
