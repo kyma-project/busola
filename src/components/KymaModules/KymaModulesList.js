@@ -444,11 +444,26 @@ export default function KymaModulesList({
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [chosenModuleIndex]);
 
+    const checkIfAssociatedResourceLeft = () => {
+      const resources = getAssciatedResources();
+      for (const resource of resources) {
+        if (
+          resourceCounts[
+            `${resource.kind}-${resource.group}-${resource.version}`
+          ] > 0
+        ) {
+          return true;
+        }
+      }
+      return false;
+    };
+
     return (
       <>
         {!detailsOpen &&
           createPortal(
             <DeleteMessageBox
+              disableDeleteButton={checkIfAssociatedResourceLeft()}
               additionalDeleteInfo={
                 getAssciatedResources().length > 0 && (
                   <>
