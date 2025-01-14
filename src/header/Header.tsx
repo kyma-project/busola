@@ -68,8 +68,10 @@ export function Header() {
     isResourceEditedState,
   );
   const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
-  const setShowCompanion = useSetRecoilState(showKymaCompanionState);
   const [theme] = useRecoilState(themeState);
+
+  const { isEnabled: isKymaCompanionEnabled } = useFeature('KYMA_COMPANION');
+  const setShowCompanion = useSetRecoilState(showKymaCompanionState);
 
   const shellbarRef = useRef<ShellBarDomRef>(null);
   useEffect(() => {
@@ -228,7 +230,7 @@ export function Header() {
             title={t('navigation.feedback')}
           />
         )}
-        {isFeedbackEnabled && (
+        {isKymaCompanionEnabled && window.location.pathname !== '/clusters' && (
           <ShellBarItem
             onClick={() =>
               setShowCompanion({

@@ -16,7 +16,7 @@ import './Chat.scss';
 
 interface MessageType {
   author: 'user' | 'ai';
-  messageChunks: { step: string; result: string }[]; // Example structure for message chunks
+  messageChunks: { step: string; result: string }[];
   isLoading: boolean;
   suggestions?: any[];
 }
