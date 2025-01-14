@@ -72,15 +72,23 @@ export function Badge({
 
   type = TYPE_FALLBACK.get(type) || type;
 
+  const getTooltipContent = description => {
+    if (tooltip && !tooltipError) {
+      return tooltip;
+    }
+    if (!tooltip && !tooltipError) {
+      return '';
+    }
+    return description;
+  };
+
   return isNil(value) ? (
     emptyLeafPlaceholder
   ) : structure?.description ? (
     <StatusBadge
       autoResolveType={!type}
       type={type}
-      tooltipContent={
-        tooltip && !tooltipError ? tooltip : structure.description
-      }
+      tooltipContent={getTooltipContent(structure.description)}
     >
       {tExt(value)}
     </StatusBadge>
