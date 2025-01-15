@@ -20,7 +20,15 @@ const SI_PREFIXES_BINARY = {
   Pi: 2 ** 50,
 };
 
-export function getSIPrefix(
+/*
+More precise round method.
+Want 1.005 to be rounded to 1.01 we need to add Number.EPSILON to fix the float inaccuracy
+ */
+const preciseRound = (num, places) =>
+  Math.round((num + Number.EPSILON) * Math.pow(10, places)) /
+  Math.pow(10, places);
+
+export function formatResourceUnit(
   amount,
   binary = false,
   { unit = '', withoutSpace = true, fixed = 2 } = {},
@@ -28,28 +36,26 @@ export function getSIPrefix(
   const prefixMap = binary ? SI_PREFIXES_BINARY : SI_PREFIXES;
   const infix = withoutSpace ? '' : ' ';
 
-  const coreValue = (
-    Math.round((+amount + Number.EPSILON) * 100) / 100
-  ).toFixed(fixed);
+  if (unit !== '' && prefixMap[unit]) {
+    const value = (amount / prefixMap[unit]).toFixed(fixed);
+    return {
+      value: value,
+      string: `${value}${infix}${unit}`,
+    };
+  }
+
+  const coreValue = preciseRound(amount, 2).toFixed(fixed);
+
   let output = {
-    raw: amount,
     value: coreValue,
-    rounded: coreValue,
-    prefix: '',
     string: `${coreValue}${infix}${unit}`,
   };
   Object.entries(prefixMap).forEach(([prefix, power]) => {
     const tmpValue = amount / power;
     if (tmpValue >= 1) {
-      const value = (
-        Math.round((tmpValue + Number.EPSILON) * 100) / 100
-      ).toFixed(fixed);
+      const value = preciseRound(tmpValue, 2).toFixed(fixed);
       output = {
-        raw: tmpValue,
         value,
-        rounded: value * power,
-        prefix,
-        unit: `${prefix}${unit}`,
         string: `${value}${infix}${prefix}${unit}`,
       };
     }
