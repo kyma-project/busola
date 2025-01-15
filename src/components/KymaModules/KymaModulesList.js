@@ -9,13 +9,21 @@ import {
   FlexBox,
   Text,
   Badge,
+  List,
+  StandardListItem,
+  MessageStrip,
 } from '@ui5/webcomponents-react';
 
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 import { spacing } from '@ui5/webcomponents-react-base';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
+import {
+  useGet,
+  useGetList,
+  useGetScope,
+  useSingleGet,
+} from 'shared/hooks/BackendAPI/useGet';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import KymaModulesCreate from './KymaModulesCreate';
@@ -36,6 +44,7 @@ import { isFormOpenState } from 'state/formOpenAtom';
 import { ModuleStatus } from './components/ModuleStatus';
 import { cloneDeep } from 'lodash';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
+import { useNavigate } from 'react-router-dom';
 
 export default function KymaModulesList({
   DeleteMessageBox,
@@ -62,6 +71,9 @@ export default function KymaModulesList({
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
   const { clusterUrl, namespaceUrl } = useUrl();
+  const fetch = useSingleGet();
+  const getScope = useGetScope();
+  const navigate = useNavigate();
 
   const { data: kymaExt } = useGetList(
     ext => ext.metadata.labels['app.kubernetes.io/part-of'] === 'Kyma',
@@ -378,11 +390,128 @@ export default function KymaModulesList({
       );
     };
 
+    const getAssociatedResources = () => {
+      const module = findModule(
+        selectedModules[chosenModuleIndex]?.name,
+        selectedModules[chosenModuleIndex]?.channel ||
+          kymaResource?.spec?.channel,
+        selectedModules[chosenModuleIndex]?.version ||
+          findStatus(selectedModules[chosenModuleIndex]?.name)?.version,
+      );
+
+      return module?.spec?.associatedResources || [];
+    };
+
+    const getNumberOfResources = async (kind, group, version) => {
+      const url =
+        group === 'v1'
+          ? '/api/v1'
+          : `/apis/${group}/${version}/${pluralize(kind.toLowerCase())}`;
+
+      try {
+        const response = await fetch(url);
+        const json = await response.json();
+        return json.items.length;
+      } catch (e) {
+        console.warn(e);
+        return 'Error';
+      }
+    };
+
+    const handleItemClick = async (kind, group, version) => {
+      const isNamespaced = await getScope(group, version, kind);
+      const path = `${pluralize(kind.toLowerCase())}`;
+      const link = isNamespaced
+        ? namespaceUrl(path, { namespace: '-all-' })
+        : clusterUrl(path);
+
+      navigate(link);
+    };
+
+    const fetchResourceCounts = async () => {
+      const resources = getAssociatedResources();
+      const counts = {};
+      for (const resource of resources) {
+        const count = await getNumberOfResources(
+          resource.kind,
+          resource.group,
+          resource.version,
+        );
+        counts[
+          `${resource.kind}-${resource.group}-${resource.version}`
+        ] = count;
+      }
+      return counts;
+    };
+
+    const [resourceCounts, setResourceCounts] = useState({});
+
+    useEffect(() => {
+      const fetchCounts = async () => {
+        const counts = await fetchResourceCounts();
+        setResourceCounts(counts);
+      };
+
+      fetchCounts();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [chosenModuleIndex]);
+
+    const checkIfAssociatedResourceLeft = () => {
+      const resources = getAssociatedResources();
+      for (const resource of resources) {
+        if (
+          resourceCounts[
+            `${resource.kind}-${resource.group}-${resource.version}`
+          ] > 0
+        ) {
+          return true;
+        }
+      }
+      return false;
+    };
+
     return (
       <>
         {!detailsOpen &&
           createPortal(
             <DeleteMessageBox
+              disableDeleteButton={checkIfAssociatedResourceLeft()}
+              additionalDeleteInfo={
+                getAssociatedResources().length > 0 && (
+                  <>
+                    <MessageStrip design="Warning" hideCloseButton>
+                      {t('kyma-modules.associated-resources-warning')}
+                    </MessageStrip>
+                    <List
+                      headerText={t('kyma-modules.associated-resources')}
+                      mode="None"
+                      separators="All"
+                    >
+                      {getAssociatedResources().map(assResource => (
+                        <StandardListItem
+                          onClick={e => {
+                            e.preventDefault();
+                            handleItemClick(
+                              assResource.kind,
+                              assResource.group,
+                              assResource.version,
+                            );
+                          }}
+                          type="Active"
+                          key={`${assResource.kind}-${assResource.group}-${assResource.version}`}
+                          additionalText={
+                            resourceCounts[
+                              `${assResource.kind}-${assResource.group}-${assResource.version}`
+                            ] || t('common.headers.loading')
+                          }
+                        >
+                          {pluralize(assResource?.kind)}
+                        </StandardListItem>
+                      ))}
+                    </List>
+                  </>
+                )
+              }
               resourceTitle={selectedModules[chosenModuleIndex]?.name}
               deleteFn={() => {
                 selectedModules.splice(chosenModuleIndex, 1);
