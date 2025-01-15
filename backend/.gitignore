@@ -25,3 +25,5 @@ yarn-error.log*
 
 backend-production.js
 backend-production.js.LICENSE*
+core-ui
+busola.log
