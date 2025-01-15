@@ -31,7 +31,7 @@ export default function NamespaceRoutes() {
         ),
       );
     }
-  }, [extensions]);
+  }, [extensions, language]);
 
   const { error } = useGet(
     namespaceId === '-all-'

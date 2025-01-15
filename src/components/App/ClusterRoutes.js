@@ -40,7 +40,7 @@ export default function ClusterRoutes() {
         ),
       );
     }
-  }, [extensions]);
+  }, [extensions, language]);
 
   useEffect(() => {
     if (cluster?.name === currentClusterName) return;
