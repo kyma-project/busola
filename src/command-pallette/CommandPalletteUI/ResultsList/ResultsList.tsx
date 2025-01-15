@@ -53,6 +53,13 @@ export function ResultsList({
   useEventListener(
     'keydown',
     (e: Event) => {
+      if (
+        document.querySelector(
+          'ui5-dialog[header-text="Discard Changes"][open]',
+        )
+      )
+        return;
+
       if (isHistoryMode) return;
 
       const { key } = e as KeyboardEvent;
