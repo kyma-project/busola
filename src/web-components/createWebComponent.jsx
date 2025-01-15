@@ -9,6 +9,7 @@ function createWebComponent(
   ReactComponent,
   defaultProps = {},
   observedAttributes = [],
+  styles = '',
 ) {
   class GenericWebComponent extends HTMLElement {
     constructor() {
@@ -19,9 +20,8 @@ function createWebComponent(
     }
 
     connectedCallback() {
-      this.reactRoot = document.createElement('div');
-      this.appendChild(this.reactRoot);
       this.mountReactComponent();
+      this.applyStyles();
     }
 
     disconnectedCallback() {
@@ -50,6 +50,21 @@ function createWebComponent(
       const camelCaseName = kebabToCamelCase(name);
       this._slots[camelCaseName] = content.outerHTML;
       this.mountReactComponent(); // Re-render on slot change
+    }
+
+    applyStyles() {
+      if (!styles) return;
+
+      // Ensure styles are only applied once per component instance
+      const existingStyleElement = this.querySelector(
+        'style[data-web-component-style]',
+      );
+      if (existingStyleElement) return;
+
+      const styleElement = document.createElement('style');
+      styleElement.setAttribute('data-web-component-style', 'true');
+      styleElement.textContent = styles;
+      this.appendChild(styleElement);
     }
 
     mountReactComponent() {

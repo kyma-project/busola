@@ -37,19 +37,20 @@ dynamicPage.setSlot('footer', customFooter);
 The `Monaco Editor` component is a versatile code editor. It provides features such as syntax highlighting and autocompletion.
 The `Monaco Editor` web component supports the following attributes and properties. Attributes correspond to camel-cased React props when accessed programmatically.
 
-| Parameter                         | Required | Type     | Description                                                                                                        |
-| --------------------------------- | -------- | -------- | ------------------------------------------------------------------------------------------------------------------ |
-| **value**                         | No       | string   | The initial code content displayed in the editor. Defaults to an empty string.                                     |
-| **placeholder**                   | No       | string   | Specifies a short hint about the input field value.                                                                |
-| **language**                      | No       | string   | Specifies the programming language of the editor's content (e.g., `javascript`, `json`). Defaults to `javascript`. |
-| **height**                        | No       | string   | Specifies the height of the component. Must include the unit (e.g., `100px`, `50vh`).                              |
-| **autocompletion-disabled**       | No       | boolean  | Disables autocompletion suggestions when set to `true`.                                                            |
-| **read-only**                     | No       | boolean  | Specifies if the field is read-only. Defaults to `false`.                                                          |
-| **on-change**                     | No       | function | Callback function triggered when the content changes.                                                              |
-| **on-mount**                      | No       | function | Callback function triggered when the editor mounts.                                                                |
-| **on-blur**                       | No       | function | Callback function triggered when the editor loses focus.                                                           |
-| **on-focus**                      | No       | function | Callback function triggered when the editor gains focus.                                                           |
-| **update-value-on-parent-change** | No       | boolean  | Updates the editor content if the parent component changes its `value` prop.                                       |
+| Parameter                         | Required | Type     | Description                                                                                                                        |
+| --------------------------------- | -------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| **value**                         | No       | string   | The initial code content displayed in the editor. Defaults to an empty string.                                                     |
+| **placeholder**                   | No       | string   | Specifies a short hint about the input field value.                                                                                |
+| **language**                      | No       | string   | Specifies the programming language of the editor's content (e.g., `javascript`, `json`). Defaults to `javascript`.                 |
+| **height**                        | No       | string   | Specifies the height of the component. Must include the unit (e.g., `100px`, `50vh`).                                              |
+| **schema-id**                     | No       | string   | A unique identifier for the JSON schema used to enable autocompletion and validation. If not provided, autocompletion is disabled. |
+| **autocompletion-disabled**       | No       | boolean  | Disables autocompletion suggestions when set to `true`.                                                                            |
+| **read-only**                     | No       | boolean  | Specifies if the field is read-only. Defaults to `false`.                                                                          |
+| **on-change**                     | No       | function | Callback function triggered when the content changes.                                                                              |
+| **on-mount**                      | No       | function | Callback function triggered when the editor mounts.                                                                                |
+| **on-blur**                       | No       | function | Callback function triggered when the editor loses focus.                                                                           |
+| **on-focus**                      | No       | function | Callback function triggered when the editor gains focus.                                                                           |
+| **update-value-on-parent-change** | No       | boolean  | Updates the editor content if the parent component changes its `value` prop.                                                       |
 
 See the following example:
 

@@ -1,60 +1,116 @@
-document.getElementsByClassName('monaco')[0].setProp('on-change', value => {
-  document.getElementsByClassName('monaco')[0].setAttribute('value', value);
-});
+class MyCustomElement extends HTMLElement {
+  connectedCallback() {
+    const shadow = this.attachShadow({ mode: 'open' });
 
-function renderEditForm(stickyHeaderHeight) {
-  const formContainer = document.createElement('div');
-  formContainer.classList.add('edit-form-test');
+    // Add basic styling
+    const style = document.createElement('style');
+    style.textContent = `
+       .dynamic-page-panel {
+         margin-bottom: 1rem;
+       }
+     `;
+    shadow.appendChild(style);
 
-  const form = document.createElement('form');
+    // Create container
+    const container = this.createContainer();
+    shadow.appendChild(container);
 
-  const nameLabel = document.createElement('label');
-  nameLabel.setAttribute('for', 'name');
-  nameLabel.textContent = 'Name:';
-  const nameInput = document.createElement('input');
-  nameInput.setAttribute('type', 'text');
-  nameInput.setAttribute('id', 'name');
-  nameInput.setAttribute('name', 'name');
-  nameInput.setAttribute('value', 'John Doe');
-  nameInput.setAttribute('placeholder', 'Enter your name');
+    // Create Dynamic Page Panel
+    const dynamicPagePanel = this.createDynamicPagePanel();
+    container.appendChild(dynamicPagePanel);
 
-  const submitButton = document.createElement('button');
-  submitButton.textContent = 'Submit';
-  submitButton.setAttribute('type', 'submit');
-  submitButton.disabled = false;
+    // Create Monaco Editor Panel
+    const monacoEditorPanel = this.createMonacoEditorPanel();
+    container.appendChild(monacoEditorPanel);
+  }
 
-  form.appendChild(nameLabel);
-  form.appendChild(nameInput);
-  form.appendChild(submitButton);
+  createContainer() {
+    const container = document.createElement('div');
+    container.className = 'container';
+    return container;
+  }
 
-  formContainer.appendChild(form);
+  createDynamicPagePanel() {
+    const dynamicPagePanel = document.createElement('ui5-panel');
+    dynamicPagePanel.setAttribute('header-text', 'Dynamic Page example');
+    dynamicPagePanel.classList.add('dynamic-page-panel');
 
-  return formContainer;
+    const dynamicPageComponent = document.createElement(
+      'dynamic-page-component',
+    );
+    dynamicPageComponent.setAttribute('title', 'Dynamic Page');
+    dynamicPageComponent.classList.add('dynamic-page');
+    dynamicPageComponent.setProp('inline-edit-form', this.renderEditForm);
+    dynamicPageComponent.setProp(
+      'custom-action-if-form-open',
+      this.handleActionIfFormOpen,
+    );
+    dynamicPageComponent.setSlot('content', this.renderContent());
+
+    dynamicPagePanel.appendChild(dynamicPageComponent);
+    return dynamicPagePanel;
+  }
+
+  createMonacoEditorPanel() {
+    const monacoEditorPanel = document.createElement('ui5-panel');
+    monacoEditorPanel.setAttribute('header-text', 'Monaco editor example');
+
+    const monacoEditor = document.createElement('monaco-editor');
+    monacoEditor.classList.add('monaco');
+    monacoEditor.setAttribute('value', '');
+    monacoEditor.setAttribute('language', 'javascript');
+    monacoEditor.setAttribute('height', '200px');
+    monacoEditor.setAttribute('placeholder', 'Write something!');
+    monacoEditor.setProp('on-change', value => {
+      monacoEditor.setAttribute('value', value);
+    });
+
+    monacoEditorPanel.appendChild(monacoEditor);
+    return monacoEditorPanel;
+  }
+
+  renderEditForm() {
+    const formContainer = document.createElement('div');
+    formContainer.classList.add('edit-form-test');
+
+    const form = document.createElement('form');
+
+    const nameLabel = document.createElement('ui5-label');
+    nameLabel.setAttribute('for', 'name');
+    nameLabel.textContent = 'Name:';
+    form.appendChild(nameLabel);
+
+    const nameInput = document.createElement('ui5-input');
+    nameInput.setAttribute('id', 'name');
+    nameInput.setAttribute('name', 'name');
+    nameInput.setAttribute('value', 'John Doe');
+    nameInput.setAttribute('placeholder', 'Enter your name');
+    form.appendChild(nameInput);
+
+    const submitButton = document.createElement('ui5-button');
+    submitButton.textContent = 'Submit';
+    submitButton.setAttribute('type', 'submit');
+    form.appendChild(submitButton);
+
+    formContainer.appendChild(form);
+    return formContainer;
+  }
+
+  handleActionIfFormOpen(
+    isResourceEdited,
+    setIsResourceEdited,
+    isFormOpen,
+    setIsFormOpen,
+  ) {
+    setIsFormOpen({ formOpen: false, leavingForm: false });
+  }
+
+  renderContent() {
+    const text = document.createElement('ui5-text');
+    text.innerText = 'Lorem ipsum.';
+    return text;
+  }
 }
 
-document
-  .getElementsByClassName('dynamic-page')[0]
-  .setProp('inline-edit-form', renderEditForm);
-
-const handleActionIfFormOpen = (
-  isResourceEdited,
-  setIsResourceEdited,
-  isFormOpen,
-  setIsFormOpen,
-) => {
-  setIsFormOpen({ formOpen: false, leavingForm: false });
-};
-
-document
-  .getElementsByClassName('dynamic-page')[0]
-  .setProp('custom-action-if-form-open', handleActionIfFormOpen);
-
-const renderContent = () => {
-  const text = document.createElement('ui5-text');
-  text.innerText = 'Lorem ipsum.';
-  return text;
-};
-
-document
-  .getElementsByClassName('dynamic-page')[0]
-  .setSlot('content', renderContent());
+// Define the custom element
+customElements.define('my-custom-element', MyCustomElement);

@@ -1,6 +1,8 @@
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import { RecoilRoot } from 'recoil';
 import createWebComponent from './createWebComponent';
+import monacoCSS from 'monaco-editor/min/vs/editor/editor.main.css?inline';
+import customCSS from 'shared/components/MonacoEditorESM/Editor.scss?inline';
 
 function EditorWithRecoil(props) {
   return (
@@ -25,6 +27,7 @@ createWebComponent(
     autocompletionDisabled: false,
     onBlur: undefined,
     onFocus: undefined,
+    schemaId: undefined,
   },
   [
     'value',
@@ -38,5 +41,7 @@ createWebComponent(
     'autocompletion-disabled',
     'on-blur',
     'on-focus',
+    'schema-id',
   ],
+  `${monacoCSS}\n${customCSS}`,
 ); // Observed attributes
