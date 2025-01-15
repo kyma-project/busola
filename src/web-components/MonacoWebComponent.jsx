@@ -28,6 +28,8 @@ createWebComponent(
     onBlur: undefined,
     onFocus: undefined,
     schemaId: undefined,
+    options: {},
+    error: undefined,
   },
   [
     'value',
@@ -42,6 +44,8 @@ createWebComponent(
     'on-blur',
     'on-focus',
     'schema-id',
+    'options',
+    'error',
   ],
   `${monacoCSS}\n${customCSS}`,
 ); // Observed attributes
