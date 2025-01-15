@@ -34,8 +34,6 @@ data:
       description: this is the first step
       resource: qqq
       form:
-        - path: metadata.name
-        #widget:
         - id: foo
           path: spec.string-ref
           name: string ref
