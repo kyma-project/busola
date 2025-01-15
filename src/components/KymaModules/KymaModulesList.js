@@ -488,7 +488,7 @@ export default function KymaModulesList({
                       {t('kyma-modules.associated-resources-warning')}
                     </MessageStrip>
                     <List
-                      headerText="AssociatedResources"
+                      headerText={t('kyma-modules.associated-resources')}
                       mode="None"
                       separators="All"
                     >
