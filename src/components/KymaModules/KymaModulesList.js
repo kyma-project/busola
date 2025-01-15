@@ -507,7 +507,7 @@ export default function KymaModulesList({
                           additionalText={
                             resourceCounts[
                               `${assResource.kind}-${assResource.group}-${assResource.version}`
-                            ] || t('common.header.loading')
+                            ] || t('common.headers.loading')
                           }
                         >
                           {pluralize(assResource?.kind)}
