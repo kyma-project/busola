@@ -47,9 +47,6 @@ data:
           subscribe:
             init: spec."string-ref"
             sr: spec."string-ref"
-        - path: spec.double-ref.namespace
-          visibility: |
-            $exists(spec."double-ref".name)
 ```
 
 For the example of usage, check the [Get started with functions](../../examples/wizard/README.md) wizard.
