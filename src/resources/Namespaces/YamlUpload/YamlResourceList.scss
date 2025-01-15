@@ -1,6 +1,7 @@
 .status {
   color: var(--sapNeutralColor);
-  padding-right: 5px;
+  min-width: 16px;
+  margin-right: 16px;
 
   &-message-success {
     color: var(--sapPositiveColor);
