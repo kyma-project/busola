@@ -395,7 +395,7 @@ export default function KymaModulesList({
       );
     };
 
-    const getAssciatedResources = () => {
+    const getAssociatedResources = () => {
       const module = findModule(
         selectedModules[chosenModuleIndex]?.name,
         selectedModules[chosenModuleIndex]?.channel ||
@@ -434,7 +434,7 @@ export default function KymaModulesList({
     };
 
     const fetchResourceCounts = async () => {
-      const resources = getAssciatedResources();
+      const resources = getAssociatedResources();
       const counts = {};
       for (const resource of resources) {
         const count = await getNumberOfResources(
@@ -462,7 +462,7 @@ export default function KymaModulesList({
     }, [chosenModuleIndex]);
 
     const checkIfAssociatedResourceLeft = () => {
-      const resources = getAssciatedResources();
+      const resources = getAssociatedResources();
       for (const resource of resources) {
         if (
           resourceCounts[
@@ -482,7 +482,7 @@ export default function KymaModulesList({
             <DeleteMessageBox
               disableDeleteButton={checkIfAssociatedResourceLeft()}
               additionalDeleteInfo={
-                getAssciatedResources().length > 0 && (
+                getAssociatedResources().length > 0 && (
                   <>
                     <MessageStrip design="Warning" hideCloseButton>
                       {t('kyma-modules.associated-resources-warning')}
@@ -492,7 +492,7 @@ export default function KymaModulesList({
                       mode="None"
                       separators="All"
                     >
-                      {getAssciatedResources().map(assResource => (
+                      {getAssociatedResources().map(assResource => (
                         <StandardListItem
                           onClick={e => {
                             e.preventDefault();
