@@ -34,6 +34,10 @@ spec:
               memory: 21Mi
           ports:
             - containerPort: 3001
+          startupProbe:
+            httpGet:
+              port: 3001
+              path: /
       volumes:
         - name: config
           configMap:

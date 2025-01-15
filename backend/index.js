@@ -51,6 +51,7 @@ if (gzipEnabled)
   );
 
 if (process.env.NODE_ENV === 'development') {
+  console.log('Use development settings of cors');
   app.use(cors({ origin: '*' }));
 }
 
