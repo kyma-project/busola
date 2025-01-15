@@ -6,9 +6,6 @@
     "source": "extensions/discovery-and-network"
   },
   {
-    "source": "extensions/kyma"
-  },
-  {
     "source": "extensions/service-management"
   },
   {
