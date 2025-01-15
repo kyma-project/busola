@@ -15,13 +15,16 @@ export function UnsavedMessageBox({ isOpen }: UnsavedMessageBoxProps) {
   );
   const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
 
-  const handleClose = (action, escapedPressed) => {
-    if (action === '0: custom action' || escapedPressed) {
+  const handleClose = (
+    action: string | undefined,
+    escapedPressed?: true | undefined,
+  ) => {
+    if (action === '0: custom action') {
       if (isResourceEdited.discardAction) {
         isResourceEdited.discardAction();
       }
       setIsFormOpen({ formOpen: false, leavingForm: false });
-    } else if (action === '1: custom action') {
+    } else if (action === '1: custom action' || escapedPressed) {
       setIsResourceEdited({ isEdited: true });
       setIsFormOpen({ formOpen: true, leavingForm: false });
       return;
