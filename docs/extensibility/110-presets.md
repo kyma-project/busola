@@ -5,7 +5,7 @@ The **presets** section contains a list of objects that define which preset and 
 ## Available Parameters
 
 | Parameter   | Required | Type    | Description                                                                                      |
-|-------------|----------|---------|--------------------------------------------------------------------------------------------------|
+| ----------- | -------- | ------- | ------------------------------------------------------------------------------------------------ |
 | **name**    | **Yes**  | string  | A name to display on the preset's dropdown.                                                      |
 | **value**   | **Yes**  |         | It contains the fields that are set when you choose the given preset from the list.              |
 | **default** | No       | boolean | If set to `true`, it prefills the form with values defined in **value**. It defaults to `false`. |
