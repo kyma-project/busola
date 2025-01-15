@@ -10,6 +10,7 @@ export function Dropdown({
   options,
   selectedKey,
   onSelect,
+  required = false,
   inlineHelp = '',
   id,
   disabled = false,
@@ -21,7 +22,10 @@ export function Dropdown({
 }) {
   if (!props.readOnly) delete props.readOnly;
   const { t } = useTranslation();
-  const flexBoxRef = useRef(null);
+
+  const localeRef = useRef(null);
+  const comboboxRef = _ref || localeRef;
+
   if (!options || !options.length) {
     options = [
       {
@@ -32,7 +36,6 @@ export function Dropdown({
     selectedKey = options[0]?.key;
     disabled = true;
   }
-  id = id || 'select-dropdown';
 
   const onSelectionChange = event => {
     const selectedOption = options.find(o => o.key === event.detail.item.id);
@@ -42,29 +45,34 @@ export function Dropdown({
   const combobox = (
     <ComboBox
       className={className}
+      ref={comboboxRef}
       id={id}
       data-testid={id}
       accessibleName={accessibleName || label}
       placeholder={placeholder || label}
       disabled={disabled || !options?.length}
+      required={required}
       onKeyDown={event => {
         event.preventDefault();
       }}
       onClick={() => {
-        flexBoxRef?.current
-          ?.querySelector('#select-dropdown')
-          ?.shadowRoot?.querySelector('ui5-icon')
-          ?.click();
+        const popover = comboboxRef?.current?.shadowRoot?.querySelector(
+          'ui5-responsive-popover',
+        );
+        popover.open = true;
       }}
       onFocus={() => {
-        flexBoxRef?.current
-          ?.querySelector('#select-dropdown')
-          ?.shadowRoot?.querySelector('input')
+        comboboxRef?.current?.shadowRoot
+          ?.querySelector('input')
           ?.setAttribute('autocomplete', 'off');
+
+        const popover = comboboxRef?.current?.shadowRoot?.querySelector(
+          'ui5-responsive-popover',
+        );
+        popover.open = true;
       }}
       onSelectionChange={onSelectionChange}
       value={options.find(o => o.key === selectedKey)?.text}
-      ref={_ref}
       {...props}
     >
       {options.map(option => (
@@ -75,7 +83,6 @@ export function Dropdown({
 
   return (
     <FlexBox
-      ref={flexBoxRef}
       className="flexbox-gap full-width"
       justifyContent="Center"
       direction="Column"
