@@ -9,6 +9,10 @@
   }
 }
 
+.toolbar {
+  container-type: inline-size;
+}
+
 .toolbar > :first-child {
   display: flex;
   align-items: end;
