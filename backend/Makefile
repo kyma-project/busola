@@ -1,12 +1,6 @@
-APP_NAME = busola-backend
-IMG_NAME := $(DOCKER_PUSH_REPOSITORY)$(DOCKER_PUSH_DIRECTORY)/$(APP_NAME)
-TAG := $(DOCKER_TAG)
-
-
-build-image:
-	docker build -t $(APP_NAME) -f Dockerfile .
-push-image:
-	docker tag $(APP_NAME):latest $(IMG_NAME):$(TAG)
-	docker push $(IMG_NAME):$(TAG)
-
-release: build-image push-image 
+##@ General
+.DEFAULT_GOAL=help
+.PHONY: help
+.PHONY: help
+help: ## Display this help.
+	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)

@@ -1,13 +1,34 @@
 import joinPaths from './path';
 
-export default async function getConfigDir(): Promise<string> {
+export enum Envs {
+  ENVIRONMENT = 'ENVIRONMENT',
+}
+
+async function getEnv(env: Envs): Promise<string> {
   const input = await fetchActiveEnv();
-  const envVar = input.trim().split('=');
-  if (envVar?.length === 2 && envVar[1]) {
-    const envDir = envVar[1].trim();
-    return joinPaths('environments', envDir);
+  const envs = readEnv(input);
+  const desiredEnv = envs.get(env);
+  return desiredEnv ? desiredEnv : '';
+}
+
+export async function getConfigDir(): Promise<string> {
+  const environment = await getEnv(Envs.ENVIRONMENT);
+  if (environment) {
+    return joinPaths('environments', environment);
   }
   return '';
+}
+
+function readEnv(input: string): Map<string, string> {
+  return new Map(
+    input.split('\n').map(value => {
+      const envVar = value.trim().split('=');
+      if (envVar?.length === 2 && envVar[1]) {
+        return [envVar[0], envVar[1]];
+      }
+      return ['', ''];
+    }),
+  );
 }
 
 async function fetchActiveEnv(): Promise<string> {

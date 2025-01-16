@@ -1,8 +1,8 @@
 name: PR Integration Cluster Tests
 
-on: 
+on:
   pull_request:
-    types: [opened, edited, synchronize, reopened, ready_for_review]
+    types: [ opened, edited, synchronize, reopened, ready_for_review ]
     paths:
       - ".github/workflows/pull-integration-cluster-k3d.yml"
       - "resources/**"
@@ -39,28 +39,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: setup_busola
+      - name: Setup Busola
         shell: bash
         run: |
-            set -e
-            npm ci
-            npm run build
-            npm i -g serve
-      - name: run_tests
+          .github/scripts/setup_local_busola.sh
+      - name: Run tests
         shell: bash
         run: |
           k3d kubeconfig get k3dCluster > tests/integration/fixtures/kubeconfig.yaml
-          export CYPRESS_DOMAIN=http://localhost:3000
-          serve -s build > busola.log &
-
-          pushd backend
-          npm start > backend.log &
-          popd
-          
-          echo "waiting for server to be up..."
-          while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' "$CYPRESS_DOMAIN")" != "200" ]]; do sleep 5; done
-          sleep 10
-          
+          export CYPRESS_DOMAIN=http://localhost:3001          
           cd tests/integration
           npm ci && npm run "test:cluster"
       - name: Uploads artifacts
@@ -76,6 +63,5 @@ jobs:
         with:
           name: busola-logs-${{ github.job }}
           path: |
-            backend/backend.log
             busola.log
           retention-days: 90
