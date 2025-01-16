@@ -13,7 +13,6 @@ export default function KymaModulesAddModule({
   resourceName,
   loadingKymaResources,
   kymaResourceUrl,
-  initialKymaResource,
   loading,
   selectedModules,
   initialUnchangedResource,
