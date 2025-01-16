@@ -73,7 +73,7 @@ export default function ClusterDetails({ currentCluster }) {
         }
       />
       {!error && !loadingModules && modules && (
-        <div className="item-wrapper small sap-margin-x-small">
+        <div className="item-wrapper sap-margin-x-small">
           <CountingCard
             className="item"
             value={modules?.length}

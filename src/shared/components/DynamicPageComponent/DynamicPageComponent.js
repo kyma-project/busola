@@ -323,7 +323,7 @@ export const DynamicPageComponent = ({
     return (
       <DynamicPage
         mode="IconTabBar"
-        className={`page-header ${className}`}
+        className={`page-header ${className ?? ''}`}
         headerPinned
         hidePinButton={true}
         titleArea={headerTitle}
