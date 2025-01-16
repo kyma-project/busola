@@ -20,7 +20,6 @@ export function Presets({
       placeholder={t('common.create-form.choose-template')} //TODO Have placeholder blank or sth
       options={options}
       disabled={disabled}
-      selectedKey=""
       label={label}
       onSelect={(e, preset) => {
         e.stopPropagation();
