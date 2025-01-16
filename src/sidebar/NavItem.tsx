@@ -103,7 +103,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
     if (navigationType === NavigationType.Pop) {
       handleNavigation();
     }
-  }, [navigationType]);
+  }, [navigationType, handleNavigation]);
 
   const propsForNav = {
     icon: node.externalUrl ? 'action' : node.icon,
