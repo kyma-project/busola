@@ -358,3 +358,15 @@ export const useSingleGet = () => {
   const fetch = useFetch();
   return url => fetch({ relativeUrl: url });
 };
+
+export const useGetScope = () => {
+  const fetch = useFetch();
+  return async (group, version, kind) => {
+    const response = await fetch({
+      relativeUrl: `/apis/${group}/${version}`,
+    });
+    const openApiSpec = await response.json();
+
+    return openApiSpec.resources.find(r => r.kind === kind).namespaced;
+  };
+};
