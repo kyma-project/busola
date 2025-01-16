@@ -1,6 +1,5 @@
 import { ComboBox, ComboBoxItem, FlexBox } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { Label } from '../../../shared/ResourceForm/components/Label';
 import { useRef } from 'react';
 
@@ -11,7 +10,6 @@ export function Dropdown({
   selectedKey,
   onSelect,
   required = false,
-  inlineHelp = '',
   id,
   disabled = false,
   placeholder,
@@ -88,11 +86,7 @@ export function Dropdown({
       direction="Column"
     >
       {label && <Label forElement={id}>{label}</Label>}
-      {inlineHelp ? (
-        <Tooltip content={inlineHelp}>{combobox}</Tooltip>
-      ) : (
-        combobox
-      )}
+      {combobox}
     </FlexBox>
   );
 }
