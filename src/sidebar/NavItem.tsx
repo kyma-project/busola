@@ -103,7 +103,8 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
     if (navigationType === NavigationType.Pop) {
       handleNavigation();
     }
-  }, [navigationType, handleNavigation]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigationType]);
 
   const propsForNav = {
     icon: node.externalUrl ? 'action' : node.icon,
