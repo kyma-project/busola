@@ -4,7 +4,6 @@
   ui5-dynamic-page-title {
     justify-content: center;
     min-height: 3rem;
-    padding-left: 2rem;
   }
 
   .bold-title {
@@ -58,6 +57,11 @@
   .tab-container {
     position: sticky;
     z-index: 1;
+  }
+
+  ui5-dynamic-page-header {
+    padding-top: 0;
+    padding-bottom: 0;
   }
 }
 

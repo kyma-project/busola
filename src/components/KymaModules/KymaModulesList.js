@@ -453,7 +453,7 @@ export default function KymaModulesList({
         <DynamicPageHeader className="no-shadow">
           <FlexBox alignItems="Center">
             <Label showColon>{t('kyma-modules.release-channel')}</Label>
-            <Text renderWhitespace={true}> </Text>
+            <Text style={{ marginRight: '0.2rem' }}> </Text>
             <Text>{kymaResource?.spec.channel}</Text>
             <HintButton
               className="sap-margin-begin-tiny"
