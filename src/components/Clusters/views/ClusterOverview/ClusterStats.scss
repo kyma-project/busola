@@ -16,6 +16,8 @@
   --grid-row-height: calc(150px + 0.5rem);
   --grid-column-width: calc(57.5px + 0.25rem);
 
+  container-type: inline-size;
+
   margin-top: -0.5rem;
   display: grid;
   grid-auto-flow: dense;
@@ -33,41 +35,37 @@
       max-height: 100% !important;
     }
   }
+}
 
-  .tall {
-    grid-row: span 2;
-    height: calc(var(--grid-row-height) * 2);
-    grid-column: span 4;
-    width: calc(var(--grid-column-width) * 4);
-  }
+.tall {
+  grid-row: span 2;
+  height: calc(var(--grid-row-height) * 2);
+  grid-column: span 4;
+  width: calc(var(--grid-column-width) * 4);
+}
 
-  .wide {
-    height: var(--grid-row-height);
-    grid-column: span 6;
-    width: calc(var(--grid-column-width) * 6);
-  }
+.wide {
+  height: var(--grid-row-height);
+  grid-column: span 6;
+  width: calc(var(--grid-column-width) * 6);
+}
 
-  .small {
-    height: var(--grid-row-height);
-    grid-column: span 3;
-    width: calc(var(--grid-column-width) * 3);
-  }
+.small {
+  height: var(--grid-row-height);
+  grid-column: span 3;
+  width: calc(var(--grid-column-width) * 3);
 }
 
 @container (max-width: 375px) {
-  .cluster-stats {
-    .wide {
-      grid-column: span 5;
-      width: calc(var(--grid-column-width) * 5);
-    }
+  .wide {
+    grid-column: span 5;
+    width: calc(var(--grid-column-width) * 5);
   }
 }
 
 @container (max-width: 325px) {
-  .cluster-stats {
-    .wide {
-      grid-column: span 4;
-      width: calc(var(--grid-column-width) * 4);
-    }
+  .wide {
+    grid-column: span 4;
+    width: calc(var(--grid-column-width) * 4);
   }
 }
