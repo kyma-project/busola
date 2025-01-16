@@ -12,7 +12,8 @@ class MyCustomElement extends HTMLElement {
     shadow.appendChild(style);
 
     // Create container
-    const container = this.createContainer();
+    const container = document.createElement('div');
+    container.className = 'container';
     shadow.appendChild(container);
 
     // Create Dynamic Page Panel
@@ -22,12 +23,6 @@ class MyCustomElement extends HTMLElement {
     // Create Monaco Editor Panel
     const monacoEditorPanel = this.createMonacoEditorPanel();
     container.appendChild(monacoEditorPanel);
-  }
-
-  createContainer() {
-    const container = document.createElement('div');
-    container.className = 'container';
-    return container;
   }
 
   createDynamicPagePanel() {
@@ -40,11 +35,16 @@ class MyCustomElement extends HTMLElement {
     );
     dynamicPageComponent.setAttribute('title', 'Dynamic Page');
     dynamicPageComponent.classList.add('dynamic-page');
+
+    // Set inline edit form function
     dynamicPageComponent.setProp('inline-edit-form', this.renderEditForm);
+    // Set custom action when form is open
     dynamicPageComponent.setProp(
       'custom-action-if-form-open',
       this.handleActionIfFormOpen,
     );
+
+    // Set Dynamic Page content
     dynamicPageComponent.setSlot('content', this.renderContent());
 
     dynamicPagePanel.appendChild(dynamicPageComponent);
