@@ -1,13 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
-
 import './Presets.scss';
 
 export function Presets({
   presets,
   onSelect,
   inlinePresets = false,
-  ...otherProps
+  disabled = false,
 }) {
   const { t } = useTranslation();
   const options = presets.map(({ name }) => ({
@@ -20,14 +19,12 @@ export function Presets({
     <Dropdown
       placeholder={t('common.create-form.choose-template')} //TODO Have placeholder blank or sth
       options={options}
-      selectedKey={''}
-      fullWidth={false}
+      disabled={disabled}
       label={label}
       onSelect={(e, preset) => {
         e.stopPropagation();
         onSelect(presets.find(p => p.name === preset.key));
       }}
-      {...otherProps}
     />
   );
   return inlinePresets ? (

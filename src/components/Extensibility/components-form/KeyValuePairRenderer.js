@@ -23,9 +23,6 @@ const getEnumComponent = (
   return ({ onChange, setValue, onBlur, value, ...props }) => (
     <Dropdown
       {...props}
-      onKeyDown={event => {
-        event.preventDefault();
-      }}
       value={value}
       options={options}
       setValue={v => {
@@ -78,7 +75,6 @@ export function KeyValuePairRenderer({
   resource,
   nestingLevel = 0,
   editMode,
-  ...props
 }) {
   // TODO the value obtained by ui-schema is undefined for this component
   value = getObjectValueWorkaround(schema, resource, storeKeys, value);
