@@ -199,6 +199,7 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
     );
   }
 
+  console.log(selectedModules);
   const createMidColumn = (
     <ResourceCreate
       title={t('kyma-modules.add-module')}
@@ -214,6 +215,7 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
               initialKymaResource={kymaResource}
               loading={kymaResourceLoading}
               selectedModules={selectedModules}
+              setSelectedModules={setSelectedModules}
               initialUnchangedResource={initialUnchangedResource}
               kymaResource={kymaResourceState}
               setKymaResource={setKymaResourceState}

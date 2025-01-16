@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useTranslation } from 'react-i18next';
@@ -12,9 +12,9 @@ export default function KymaModulesAddModule({
   resourceName,
   loadingKymaResources,
   kymaResourceUrl,
-  initialKymaResource,
   loading,
   selectedModules,
+  setSelectedModules,
   initialUnchangedResource,
   kymaResource,
   setKymaResource,
@@ -155,51 +155,52 @@ export default function KymaModulesAddModule({
   }, []);
 
   const isChecked = name => {
-    return kymaResource?.spec?.modules?.find(module => module.name === name)
-      ? true
-      : false;
+    return !!selectedModules?.find(module => module.name === name);
   };
 
   const setCheckbox = (module, checked, index) => {
+    const newSelectedModules = [...selectedModules];
     if (checked) {
-      selectedModules.push({
+      newSelectedModules.push({
         name: module.name,
       });
     } else {
-      selectedModules.splice(index, 1);
+      newSelectedModules.splice(index, 1);
     }
+    setSelectedModules(newSelectedModules);
 
     setKymaResource({
       ...kymaResource,
       spec: {
         ...kymaResource.spec,
-        modules: selectedModules,
+        modules: newSelectedModules,
       },
     });
   };
 
   const setChannel = (module, channel, index) => {
+    const modulesToUpdate = [...selectedModules];
     if (
       selectedModules.find(
         selectedModule => selectedModule.name === module.name,
       )
     ) {
       if (channel === 'predefined') {
-        delete selectedModules[index].channel;
-      } else selectedModules[index].channel = channel;
+        delete modulesToUpdate[index].channel;
+      } else modulesToUpdate[index].channel = channel;
     } else {
-      selectedModules.push({
+      modulesToUpdate.push({
         name: module.name,
       });
       if (channel !== 'predefined')
-        selectedModules[selectedModules?.length - 1].channel = channel;
+        modulesToUpdate[modulesToUpdate?.length - 1].channel = channel;
     }
-
+    setSelectedModules(modulesToUpdate);
     setKymaResource({
       ...kymaResource,
       spec: {
         ...kymaResource.spec,
-        modules: selectedModules,
+        modules: modulesToUpdate,
       },
     });
   };
