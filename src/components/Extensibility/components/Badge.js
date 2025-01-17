@@ -88,11 +88,16 @@ export function Badge({
       autoResolveType={!type}
       type={type}
       tooltipContent={getTooltipContent(structure.description)}
+      latestStatusUpdate={originalResource?.status?.conditions?.[0]}
     >
       {tExt(value)}
     </StatusBadge>
   ) : (
-    <StatusBadge autoResolveType={!type} type={type}>
+    <StatusBadge
+      autoResolveType={!type}
+      type={type}
+      latestStatusUpdate={originalResource?.status?.conditions?.[0]}
+    >
       {tExt(value)}
     </StatusBadge>
   );
