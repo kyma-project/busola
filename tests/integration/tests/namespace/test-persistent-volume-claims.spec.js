@@ -73,6 +73,10 @@ context('Test Persistent Volume Claims', () => {
       .should('be.visible');
 
     cy.getMidColumn()
+      .find('ui5-button[accessible-name="enter-full-screen"]')
+      .click();
+
+    cy.getMidColumn()
       .contains('Events')
       .scrollIntoView()
       .should('be.visible');
