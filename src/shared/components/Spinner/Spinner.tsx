@@ -2,7 +2,7 @@ import { BusyIndicator } from '@ui5/webcomponents-react';
 
 type SpinnerProps = {
   ariaLabel?: string;
-  size?: 'L' | 'M' | 'S';
+  size?: 'S' | 'M' | 'L';
   center?: boolean;
 };
 
