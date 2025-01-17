@@ -137,7 +137,7 @@ const DefaultRowRenderer = ({
   );
 
   return (
-    <TableRow type="Active" selected={isSelected}>
+    <TableRow type="Active" selected={isSelected} navigated={isSelected}>
       {cells}
       {!!actions.length && actionsCell}
       {displayArrow && (

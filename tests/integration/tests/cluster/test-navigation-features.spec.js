@@ -45,7 +45,7 @@ context('Test navigation features', () => {
     cy.contains('ui5-text', 'system:controller:cronjob-controller').click();
 
     cy.getMidColumn()
-      .contains('ui5-Panel', 'Subjects')
+      .contains('ui5-panel', 'Subjects')
       .contains('ui5-link', 'cronjob-controller')
       .click();
 

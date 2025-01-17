@@ -12,20 +12,3 @@
 .content-scroll {
   height: 100%;
 }
-
-html.sap-desktop:not(.sapUiNativeScrollbars) ::-webkit-scrollbar {
-  background-color: #fff;
-}
-
-html.sap-desktop:not(.sapUiNativeScrollbars) ::-webkit-scrollbar-corner {
-  background-color: #fff;
-}
-
-html.sap-desktop:not(.sapUiNativeScrollbars) ::-webkit-scrollbar-thumb {
-  border-radius: 0.75rem;
-  border: 0.125rem solid #fff;
-}
-
-html.sap-desktop:not(.sapUiNativeScrollbars) ::-webkit-scrollbar-thumb {
-  background-color: #7b91a8;
-}
