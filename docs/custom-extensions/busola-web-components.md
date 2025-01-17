@@ -1,17 +1,17 @@
 # Custom Busola Web Components
 
-Busola provides a suite of custom Web Components to enhance your application's functionality. These components come with utility functions to dynamically update their properties, attributes, and slots after initialization.
+Busola provides a suite of custom web womponents to enhance your application's functionality.
 
 ## Utility Functions
 
-All custom Web Components expose methods to dynamically update their properties, attributes, and slots after initialization.
-String and boolean properties can be passed as standard HTML attributes. For example:
+All custom web components expose methods to dynamically update their properties, attributes, and slots after initialization.
+You can pass the string and boolean properties as standard HTML attributes. For example:
 
 ```HTML
 <monaco-editor read-only="true"></monaco-editor>
 ```
 
-Functions, objects, and arrays can be passed using the `setProp` function. For example:
+You can pass functions, objects, and arrays using the `setProp` function. For example:
 
 ```JS
 const editor = document.querySelector('monaco-editor');
@@ -72,34 +72,34 @@ See the following example:
 The `Dynamic Page` web component is used to display content on the page and consisting of a title, header, a content area, an optional inline edit form and floating footer.
 The `Dynamic Page` supports the following attributes and properties. Attributes correspond to camel-cased React props when accessed programmatically.
 
-| Parameter                      | Required | Type     | Description                                                                                                                                                                                     |
-| ------------------------------ | -------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **title**                      | No       | string   | The title of the page displayed in the header.                                                                                                                                                  |
-| **description**                | No       | string   | A description displayed below the title.                                                                                                                                                        |
-| **actions**                    | No       | node     | Custom actions rendered in the header toolbar.                                                                                                                                                  |
-| **children**                   | No       | node     | Child elements or components to be rendered within the page.                                                                                                                                    |
-| **column-wrapper-class-name**  | No       | string   | Additional class names for the column wrapper, used for styling purposes.                                                                                                                       |
-| **content**                    | No       | node     | Content displayed in the main section of the page.                                                                                                                                              |
-| **footer**                     | No       | node     | Content displayed in the footer section.                                                                                                                                                        |
-| **layout-number**              | No       | string   | Layout identifier for column management.                                                                                                                                                        |
-| **layout-close-url**           | No       | string   | URL to navigate to when the column layout is closed.                                                                                                                                            |
-| **inline-edit-form**           | No       | function | A function defining the inline edit form. It receives the `stickyHeaderHeight` as an argument and is expected to return a HTML element.                                                         |
-| **show-yaml-tab**              | No       | boolean  | Specifies whether to show a YAML editing tab.                                                                                                                                                   |
-| **protected-resource**         | No       | boolean  | Indicates whether the resource is protected.                                                                                                                                                    |
-| **protected-resource-warning** | No       | node     | Warning message for protected resources.                                                                                                                                                        |
-| **class-name**                 | No       | string   | Additional class names for the component, used for custom styling.                                                                                                                              |
-| **custom-action-if-form-open** | No       | function | Specifies a custom action triggered when user tries to navigate out of the Edit form tab. It recieves four arguments: `isResourceEdited`, `setIsResourceEdited`, `isFormOpen`, `setIsFormOpen`. |
+| Parameter                      | Required | Type     | Description                                                                                                                                                                                       |
+| ------------------------------ | -------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **title**                      | No       | string   | The title of the page displayed in the header.                                                                                                                                                    |
+| **description**                | No       | string   | A description displayed below the title.                                                                                                                                                          |
+| **actions**                    | No       | node     | Custom actions rendered in the header toolbar.                                                                                                                                                    |
+| **children**                   | No       | node     | Child elements or components to be rendered within the page.                                                                                                                                      |
+| **column-wrapper-class-name**  | No       | string   | Additional class names for the column wrapper, used for styling purposes.                                                                                                                         |
+| **content**                    | No       | node     | Content displayed in the main section of the page.                                                                                                                                                |
+| **footer**                     | No       | node     | Content displayed in the footer section.                                                                                                                                                          |
+| **layout-number**              | No       | string   | Layout identifier for column management.                                                                                                                                                          |
+| **layout-close-url**           | No       | string   | URL to navigate to when the column layout is closed.                                                                                                                                              |
+| **inline-edit-form**           | No       | function | A function defining the inline edit form. It receives the `stickyHeaderHeight` as an argument and is expected to return a HTML element.                                                           |
+| **show-yaml-tab**              | No       | boolean  | Specifies whether to show a YAML editing tab.                                                                                                                                                     |
+| **protected-resource**         | No       | boolean  | Indicates whether the resource is protected.                                                                                                                                                      |
+| **protected-resource-warning** | No       | node     | Warning message for protected resources.                                                                                                                                                          |
+| **class-name**                 | No       | string   | Additional class names for the component, used for custom styling.                                                                                                                                |
+| **custom-action-if-form-open** | No       | function | Specifies a custom action triggered when a user tries to navigate out of the Edit form tab. It receives four arguments: `isResourceEdited`, `setIsResourceEdited`, `isFormOpen`, `setIsFormOpen`. |
 
 #### `custom-action-if-form-open`
 
-The `custom-action-if-form-open` prop in the `Dynamic Page` component is a customizable callback function designed to handle specific actions when a form is open. It recieves four arguments:
+The `custom-action-if-form-open` prop in the Dynamic Page component is a customizable callback function designed to handle specific actions when a form is open. It receives four arguments:
 
-| Argument                | Type     | Description                                                                                                                       |
-| ----------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| **isResourceEdited**    | object   | Indicates if the current resource has been edited. The object has the structure: { isEdited: boolean; discardAction?: Function; } |
-| **setIsResourceEdited** | function | A state setter function to update the `isResourceEdited` state.                                                                   |
-| **isFormOpen**          | object   | Tracks the status of the inline edit form. The object has the structure: { formOpen: boolean; leavingForm: boolean; }             |
-| **setIsFormOpen**       | function | A state setter function to update the `isFormOpen` state.                                                                         |
+| Argument                | Type     | Description                                                                                                                         |
+| ----------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| **isResourceEdited**    | object   | Indicates if the current resource has been edited. The object has the structure: `{ isEdited: boolean; discardAction?: Function; }` |
+| **setIsResourceEdited** | function | A state setter function to update the `isResourceEdited` state.                                                                     |
+| **isFormOpen**          | object   | Tracks the status of the inline edit form. The object has the structure: `{ formOpen: boolean; leavingForm: boolean; }`             |
+| **setIsFormOpen**       | function | A state setter function to update the `isFormOpen` state.                                                                           |
 
 See the following example:
 
@@ -114,4 +114,4 @@ See the following example:
 
 <img src="./assets/DynamicPage.png" alt="Example of a Monaco Editor" width="50%" style="border: 1px solid #D2D5D9">
 
-To see an exemplary configuration of the Busola custom extension feature using Web Components, check files in [this](examples/../../../examples/busola-web-components/README.md) example.
+To see an exemplary configuration of the Busola custom extension feature using web components, check files in [this](examples/../../../examples/busola-web-components/README.md) example.
