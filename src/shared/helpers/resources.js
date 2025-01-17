@@ -36,30 +36,21 @@ export function formatResourceUnit(
   const prefixMap = binary ? SI_PREFIXES_BINARY : SI_PREFIXES;
   const infix = withoutSpace ? '' : ' ';
 
-  if (unit !== '' && prefixMap[unit]) {
+  if (unit && prefixMap[unit]) {
     const value = (amount / prefixMap[unit]).toFixed(fixed);
-    return {
-      value: value,
-      string: `${value}${infix}${unit}`,
-    };
+    return `${value}${infix}${unit}`;
   }
 
   const coreValue = preciseRound(amount, 2).toFixed(fixed);
 
-  let output = {
-    value: coreValue,
-    string: `${coreValue}${infix}${unit}`,
-  };
+  let output = `${coreValue}${infix}${unit}`;
   Object.entries(prefixMap).forEach(([prefix, power]) => {
     const tmpValue = amount / power;
     if (tmpValue >= 1) {
       const value = preciseRound(tmpValue, 2).toFixed(fixed);
-      output = {
-        value,
-        string: `${value}${infix}${prefix}${unit}`,
-      };
+      output = `${value}${infix}${prefix}${unit}`;
     }
   });
 
-  return output;
+  return output.string;
 }

@@ -51,13 +51,12 @@ export function getCpus(cpuString) {
 
 export function bytesToHumanReadable(bytes) {
   if (!bytes) return bytes;
-  return formatResourceUnit(bytes, true, { withoutSpace: true }).string;
+  return formatResourceUnit(bytes, true, { withoutSpace: true });
 }
 
 export function cpusToHumanReadable(cpus, { fixed = 0, unit = '' } = {}) {
   if (!cpus) return cpus;
-  return formatResourceUnit(cpus, false, { withoutSpace: true, fixed, unit })
-    .string;
+  return formatResourceUnit(cpus, false, { withoutSpace: true, fixed, unit });
 }
 
 const MemoryRequestsCircle = ({ resourceQuotas, isLoading }) => {
