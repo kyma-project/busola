@@ -15,6 +15,13 @@ export default defineConfig({
   },
   server: {
     port: 8080,
+    proxy: {
+      // with options
+      '^/backend/.*': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+    },
   },
   plugins: [
     {
@@ -38,11 +45,11 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: 'resources/base/resource-validation/rule-sets/**/*.yaml',
+          src: 'resource-validation/rule-sets/**/*.yaml',
           dest: 'resource-validation',
           rename: 'rule-set.yaml',
           transform() {
-            return mergeYamlFiles('resources/base/resource-validation/rule-sets/**/*.yaml');
+            return mergeYamlFiles('resource-validation/rule-sets/**/*.yaml');
           },
         },
       ],
@@ -60,7 +67,7 @@ export default defineConfig({
       },
     },
     include: [
-      '@openapi-contrib/openapi-schema-to-json-schema', 
+      '@openapi-contrib/openapi-schema-to-json-schema',
       '@stoplight/json-ref-resolver',
       'monaco-yaml/yaml.worker.js'
     ]

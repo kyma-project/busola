@@ -170,6 +170,7 @@ export function YamlResourcesList({ resourcesData }) {
                         {String(r?.value?.kind)}{' '}
                         {String(r?.value?.metadata?.name)} -{' '}
                         {getStatus(r?.status)}
+                        {r?.message}
                       </Text>
                     </FlexBox>
                   </ListItemCustom>

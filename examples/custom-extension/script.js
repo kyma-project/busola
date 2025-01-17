@@ -6,9 +6,7 @@ function fetchWrapper(url, options = {}) {
 }
 
 function proxyFetch(url, options = {}) {
-  const baseUrl = window.location.hostname.startsWith('localhost')
-    ? 'http://localhost:3001/proxy'
-    : '/proxy';
+  const baseUrl = '/proxy';
   const encodedUrl = encodeURIComponent(url);
   const proxyUrl = `${baseUrl}?url=${encodedUrl}`;
   return fetch(proxyUrl, options);

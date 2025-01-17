@@ -101,6 +101,13 @@ export function useUploadResources(
             : lastOperationState,
         );
       } else {
+        if (
+          existingResource?.metadata?.resourceVersion &&
+          !resource?.value?.metadata?.resourceVersion
+        ) {
+          resource.value.metadata.resourceVersion =
+            existingResource.metadata.resourceVersion;
+        }
         const diff = createPatch(existingResource, resource.value);
         await patchRequest(urlWithName, diff);
         updateState(index, STATE_UPDATED);
