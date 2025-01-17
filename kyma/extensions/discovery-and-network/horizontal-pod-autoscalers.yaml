@@ -21,7 +21,7 @@ data:
       networkFlowLevel: -1
       dataSources:
         - source: relatedDeployments
-    header:
+    header: 
       - name: Status
         source: $filter(status.conditions, function($v, $i, $a) {$v.status = 'True'}).type
         widget: Labels
@@ -30,6 +30,14 @@ data:
         - name: Conditions
           source: status.conditions
           widget: ConditionList
+          highlights:
+            - type: ScalingActive
+              positive:
+                - 'False'
+              negative: 
+                - 'True'
+              informative:
+                - unknown
         - name: Last Scale Time
           source: status.lastScaleTime
           widget: TimeFromNow

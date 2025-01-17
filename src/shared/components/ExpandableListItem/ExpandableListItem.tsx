@@ -29,9 +29,10 @@ export const ExpandableListItem = ({
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
 
-  let statusType = status === 'True' ? 'Success' : 'Error';
+  let statusType = status === 'True' ? 'Success' : 'Error'; //TODO
+
   if (overrideStatusType !== undefined) {
-    statusType = overrideStatusType === 'True' ? 'Success' : 'Error';
+    statusType = overrideStatusType;
   }
 
   return (
