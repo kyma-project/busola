@@ -1,42 +1,8 @@
 import { ConditionList as ConditionListComponent } from 'shared/components/ConditionList/ConditionList';
 import { useJsonata } from '../hooks/useJsonata';
 import { useTranslation } from 'react-i18next';
+import { getBadgeType } from 'components/Extensibility/helpers';
 
-function getType(highlights, value, jsonata, t) {
-  let type = null;
-  if (highlights) {
-    const match = Object.entries(highlights).find(([key, rule]) => {
-      if (key === 'type') {
-        return null;
-      }
-      if (Array.isArray(rule)) {
-        return rule.includes(value);
-      } else {
-        const [doesMatch, matchError] = jsonata(rule);
-        if (matchError) {
-          console.error(
-            t('extensibility.configuration-error', {
-              error: matchError.message,
-            }),
-          );
-          return false;
-        }
-        return doesMatch;
-      }
-    });
-    if (match) {
-      type = match[0];
-    }
-  }
-
-  if (type === 'negative') type = 'Warning';
-  else if (type === 'informative') type = 'Information';
-  else if (type === 'positive') type = 'Success';
-  else if (type === 'critical') type = 'Error';
-  else if (type === 'none') type = 'None';
-
-  return type;
-}
 export const ConditionList = ({
   value,
   structure,
@@ -61,9 +27,9 @@ export const ConditionList = ({
   }
 
   const conditions = value.map(v => {
-    const override = structure.highlights.find(o => o.type === v.type);
+    const override = structure?.highlights?.find(o => o.type === v.type);
     const badgeType = override
-      ? getType(override, v.status, jsonata, t)
+      ? getBadgeType(override, v.status, jsonata, t)
       : undefined;
     return {
       header: {

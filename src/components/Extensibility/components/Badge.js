@@ -6,16 +6,10 @@ import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import {
   useGetPlaceholder,
   useGetTranslation,
+  getBadgeType,
 } from 'components/Extensibility/helpers';
 
 import './Badge.scss';
-
-const TYPE_FALLBACK = new Map([
-  ['success', 'Success'],
-  ['warning', 'Warning'],
-  ['error', 'Error'],
-  ['info', 'Information'],
-]);
 
 export function Badge({
   value,
@@ -40,36 +34,7 @@ export function Badge({
 
   const [tooltip, tooltipError] = jsonata(structure?.description);
 
-  let type = null;
-  if (structure?.highlights) {
-    const match = Object.entries(structure.highlights).find(([key, rule]) => {
-      if (Array.isArray(rule)) {
-        return rule.includes(value);
-      } else {
-        const [doesMatch, matchError] = jsonata(rule);
-        if (matchError) {
-          console.error(
-            t('extensibility.configuration-error', {
-              error: matchError.message,
-            }),
-          );
-          return false;
-        }
-        return doesMatch;
-      }
-    });
-    if (match) {
-      type = match[0];
-    }
-  }
-
-  if (type === 'negative') type = 'Warning';
-  else if (type === 'informative') type = 'Information';
-  else if (type === 'positive') type = 'Success';
-  else if (type === 'critical') type = 'Error';
-  else if (type === 'none') type = 'None';
-
-  type = TYPE_FALLBACK.get(type) || type;
+  const badgeType = getBadgeType(structure.highlights, value, jsonata, t);
 
   const getTooltipContent = description => {
     if (tooltip && !tooltipError) {
@@ -85,14 +50,14 @@ export function Badge({
     emptyLeafPlaceholder
   ) : structure?.description ? (
     <StatusBadge
-      autoResolveType={!type}
-      type={type}
+      autoResolveType={!badgeType}
+      type={badgeType}
       tooltipContent={getTooltipContent(structure.description)}
     >
       {tExt(value)}
     </StatusBadge>
   ) : (
-    <StatusBadge autoResolveType={!type} type={type}>
+    <StatusBadge autoResolveType={!badgeType} type={badgeType}>
       {tExt(value)}
     </StatusBadge>
   );
