@@ -81,6 +81,10 @@ export function Badge({
     return description;
   };
 
+  const runningStatus = originalResource?.status?.conditions?.find(
+    condition => condition.type === 'Running',
+  );
+
   return isNil(value) ? (
     emptyLeafPlaceholder
   ) : structure?.description ? (
@@ -88,7 +92,7 @@ export function Badge({
       autoResolveType={!type}
       type={type}
       tooltipContent={getTooltipContent(structure.description)}
-      latestStatusUpdate={originalResource?.status?.conditions?.[0]}
+      latestStatusUpdate={runningStatus}
     >
       {tExt(value)}
     </StatusBadge>
@@ -96,7 +100,7 @@ export function Badge({
     <StatusBadge
       autoResolveType={!type}
       type={type}
-      latestStatusUpdate={originalResource?.status?.conditions?.[0]}
+      latestStatusUpdate={runningStatus}
     >
       {tExt(value)}
     </StatusBadge>

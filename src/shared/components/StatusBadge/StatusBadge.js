@@ -6,25 +6,25 @@ import classNames from 'classnames';
 import './StatusBadge.scss';
 import { PopoverBadge } from '../PopoverBadge/PopoverBadge';
 
-const resolveType = (value, latestStatusUpdate) => {
+const resolveType = (value, runningStatus) => {
   let status = value;
-  if (typeof status !== 'string' && !latestStatusUpdate?.type) {
+  if (typeof status !== 'string' && !runningStatus?.type) {
     console.warn(
       `'autoResolveType' prop requires 'children' prop to be a string.`,
     );
     return undefined;
   } else if (
     typeof status !== 'string' &&
-    latestStatusUpdate?.type &&
-    latestStatusUpdate?.status === 'Unknown'
+    runningStatus?.type &&
+    runningStatus?.status === 'Unknown'
   ) {
-    status = latestStatusUpdate.status;
+    status = runningStatus.status;
   } else if (
     typeof status !== 'string' &&
-    latestStatusUpdate?.type &&
-    latestStatusUpdate?.status === 'True'
+    runningStatus?.type &&
+    runningStatus?.status === 'True'
   ) {
-    status = latestStatusUpdate.type;
+    status = runningStatus.type;
   }
 
   switch (status) {
@@ -86,10 +86,10 @@ export const StatusBadge = ({
   autoResolveType = false,
   noTooltip = false,
   className,
-  latestStatusUpdate = undefined,
+  runningStatus = undefined,
 }) => {
   const { t, i18n } = useTranslation();
-  if (autoResolveType) type = resolveType(value, latestStatusUpdate);
+  if (autoResolveType) type = resolveType(value, runningStatus);
   else type = TYPE_FALLBACK.get(type) || type;
 
   const i18nFullVariableName = prepareTranslationPath(
@@ -188,5 +188,5 @@ StatusBadge.propTypes = {
   resourceKind: PropTypes.string,
   tooltipProps: PropTypes.object,
   className: PropTypes.string,
-  latestStatusUpdate: PropTypes.object,
+  runningStatus: PropTypes.object,
 };
