@@ -1,6 +1,6 @@
 # Custom Busola Web Components
 
-Busola provides a suite of custom web womponents to enhance your application's functionality.
+Busola provides a suite of custom web components to enhance your application's functionality.
 
 ## Utility Functions
 
@@ -18,7 +18,7 @@ const editor = document.querySelector('monaco-editor');
 editor.setProp('on-change', (value) => console.log('New content:', value));
 ```
 
-HTML elements can be passed using the `setSlot` attribute. For example:
+You can pass HTML elements using the `setSlot` attribute. For example:
 
 ```JS
 const dynamicPage = document.querySelector('dynamic-page-component');
@@ -34,25 +34,24 @@ dynamicPage.setSlot('footer', customFooter);
 
 ### Monaco Editor
 
-The `Monaco Editor` component is a versatile code editor. It provides features such as syntax highlighting and autocompletion.
-The `Monaco Editor` web component supports the following attributes and properties. Attributes correspond to camel-cased React props when accessed programmatically.
+The Monaco Editor component is a versatile code editor. It provides features such as syntax highlighting and autocompletion. It supports the following attributes and properties. Attributes correspond to camel-cased React props when accessed programmatically.
 
-| Parameter                         | Required | Type     | Description                                                                                                                                                                               |
-| --------------------------------- | -------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **value**                         | No       | string   | The initial code content displayed in the editor. Defaults to an empty string.                                                                                                            |
-| **placeholder**                   | No       | string   | Specifies a short hint about the input field value.                                                                                                                                       |
-| **language**                      | No       | string   | Specifies the programming language of the editor's content (e.g., `javascript`, `json`). Defaults to `javascript`.                                                                        |
-| **height**                        | No       | string   | Specifies the height of the component. Must include the unit (e.g., `100px`, `50vh`).                                                                                                     |
-| **schema-id**                     | No       | string   | A unique identifier for the JSON schema used to enable autocompletion and validation. If not provided, autocompletion is disabled.                                                        |
-| **autocompletion-disabled**       | No       | boolean  | Disables autocompletion suggestions when set to `true`.                                                                                                                                   |
-| **read-only**                     | No       | boolean  | Specifies if the field is read-only. Defaults to `false`.                                                                                                                                 |
-| **on-change**                     | No       | function | Callback function triggered when the content changes.                                                                                                                                     |
-| **on-mount**                      | No       | function | Callback function triggered when the editor mounts.                                                                                                                                       |
-| **on-blur**                       | No       | function | Callback function triggered when the editor loses focus.                                                                                                                                  |
-| **on-focus**                      | No       | function | Callback function triggered when the editor gains focus.                                                                                                                                  |
-| **update-value-on-parent-change** | No       | boolean  | Updates the editor content if the parent component changes its `value` prop.                                                                                                              |
-| **options**                       | No       | object   | Custom options for configuring the Monaco Editor. Refer to the Monaco Editor API for available options.                                                                                   |
-| **error**                         | No       | string   | Displays an error message in the editor when provided. If an error is displayed, it indicates that the current input is invalid, but the previous valid input will be used by the editor. |
+| Parameter                         | Required | Type     | Description                                                                                                                                                                                                                |
+| --------------------------------- | -------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **value**                         | No       | string   | The initial code content displayed in the editor. Defaults to an empty string.                                                                                                                                             |
+| **placeholder**                   | No       | string   | Specifies a short hint about the input field value.                                                                                                                                                                        |
+| **language**                      | No       | string   | Specifies the programming language of the editor's content (for example, `javascript`, `json`). Defaults to `javascript`.                                                                                                  |
+| **height**                        | No       | string   | Specifies the height of the component. Must include the unit (e.g., `100px`, `50vh`).                                                                                                                                      |
+| **schema-id**                     | No       | string   | A unique identifier for the JSON schema used to enable autocompletion and validation. If not provided, autocompletion is disabled.                                                                                         |
+| **autocompletion-disabled**       | No       | boolean  | Disables autocompletion suggestions when set to `true`.                                                                                                                                                                    |
+| **read-only**                     | No       | boolean  | Specifies if the field is read-only. Defaults to `false`.                                                                                                                                                                  |
+| **on-change**                     | No       | function | Callback function triggered when the content changes.                                                                                                                                                                      |
+| **on-mount**                      | No       | function | Callback function triggered when the editor mounts.                                                                                                                                                                        |
+| **on-blur**                       | No       | function | Callback function triggered when the editor loses focus.                                                                                                                                                                   |
+| **on-focus**                      | No       | function | Callback function triggered when the editor gains focus.                                                                                                                                                                   |
+| **update-value-on-parent-change** | No       | boolean  | Updates the editor content if the parent component changes its `value` prop.                                                                                                                                               |
+| **options**                       | No       | object   | Custom options for configuring the Monaco Editor. Refer to the [Monaco Editor API](https://microsoft.github.io/monaco-editor/docs.html#interfaces/editor.IStandaloneEditorConstructionOptions.html) for available options. |
+| **error**                         | No       | string   | Displays an error message in the editor when provided. If an error is displayed, it indicates that the current input is invalid, but the previous valid input will be used by the editor.                                  |
 
 See the following example:
 
@@ -69,8 +68,7 @@ See the following example:
 
 ### Dynamic Page
 
-The `Dynamic Page` web component is used to display content on the page and consisting of a title, header, a content area, an optional inline edit form and floating footer.
-The `Dynamic Page` supports the following attributes and properties. Attributes correspond to camel-cased React props when accessed programmatically.
+The Dynamic Page web component displays content on the page, consisting of a title, a header, a content area, an optional inline edit form, and a floating footer. It supports the following attributes and properties. Attributes correspond to camel-cased React props when accessed programmatically.
 
 | Parameter                      | Required | Type     | Description                                                                                                                                                                                       |
 | ------------------------------ | -------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
