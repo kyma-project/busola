@@ -30,14 +30,6 @@ data:
         - name: Conditions
           source: status.conditions
           widget: ConditionList
-          highlights:
-            - type: ScalingActive
-              positive:
-                - 'False'
-              negative: 
-                - 'True'
-              informative:
-                - unknown
         - name: Last Scale Time
           source: status.lastScaleTime
           widget: TimeFromNow
