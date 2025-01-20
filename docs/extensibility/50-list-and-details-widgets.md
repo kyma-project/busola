@@ -97,13 +97,34 @@ This is an exaple of kind only:
 
 The `ConditionList` widget renders the conditions as an expandable list with condition details. This widget is primarily designed for the overview section **data.details.status** or **data.details.status.body**
 
-See the following example:
+| Parameter      | Required | Type | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| -------------- | -------- | ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **highlights** | No       |      | A map of highlight rules that will only be applied to the `condition` matching `type`. Key refers to the type of highlight, while the rule can simply be a plain array of values ​​or a string containing the [JSONata](jsonata.md) rule. Allowed keys are `informative`, `positive`, `warning` and `critical` and `type` (more below). <br><br> The `type` key (required) allows you to specify which condition the highlighting should be applied to. It should contain one of the `types` of the source condition. <br><br> If no highlighting is provided, the following values ​​are automatically supported: <br> - rendered as informational: `Unknown`. <br> - rendered as positive: `True`. <br> - rendered as critical: `False`. |
+
+See the following example of standard `ConditionList`:
 
 ```yaml
 status:
   - name: Condition details
     widget: ConditionList
     source: status.conditions
+```
+
+This is an example of `ConditionList` with overriden statuses:
+
+```yaml
+status:
+  - name: Condition details
+    widget: ConditionList
+    source: status.conditions
+    highlights:
+      - type: ScalingActive
+        positive:
+          - 'False'
+        negative:
+          - 'True'
+        informative:
+          - unknown
 ```
 
 <img src="./assets/display-widgets/ConditionList.png" alt="Example of a condition list widget" style="border: 1px solid #D2D5D9">
