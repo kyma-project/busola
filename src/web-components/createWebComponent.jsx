@@ -1,4 +1,5 @@
 import ReactDOM from 'react-dom';
+import { parseHtmlToJsx } from './htmlTojsx';
 
 function kebabToCamelCase(str) {
   return str.replace(/-([a-z])/g, (_, char) => char.toUpperCase());
@@ -20,8 +21,8 @@ function createWebComponent(
     }
 
     connectedCallback() {
-      this.mountReactComponent();
       this.applyStyles();
+      this.mountReactComponent();
     }
 
     disconnectedCallback() {
@@ -42,14 +43,21 @@ function createWebComponent(
     setProp(key, value) {
       const camelCaseKey = kebabToCamelCase(key);
       this._props[camelCaseKey] = value;
-      this.mountReactComponent(); // Re-render on prop change
+    }
+
+    getProps() {
+      return { ...this._props };
     }
 
     // Define a method to programmatically set a slot's content
     setSlot(name, content) {
       const camelCaseName = kebabToCamelCase(name);
-      this._slots[camelCaseName] = content.outerHTML;
-      this.mountReactComponent(); // Re-render on slot change
+      this._slots[camelCaseName] = content;
+      this.mountReactComponent();
+    }
+
+    getSlots() {
+      return { ...this._slots };
     }
 
     applyStyles() {
@@ -88,11 +96,29 @@ function createWebComponent(
         ...this._props,
       };
 
+      // Check for props and slots in attributes
+      for (let i = 0; i < this.attributes.length; i++) {
+        const attribute = this.attributes[i];
+
+        if (attribute.name.includes('prop_')) {
+          props[kebabToCamelCase(attribute.name.replace('prop_', ''))] = eval(
+            this.attributes[i].value,
+          );
+          this.removeAttribute(attribute.value);
+        }
+
+        if (attribute.name.includes('slot_')) {
+          props[
+            kebabToCamelCase(attribute.name.replace('slot_', ''))
+          ] = this.attributes[i].value;
+          this.removeAttribute(attribute.value);
+        }
+      }
+
+      // Set slots
       Object.keys(this._slots).forEach(slotName => {
         if (typeof this._slots[slotName] !== 'function') {
-          props[slotName] = (
-            <div dangerouslySetInnerHTML={{ __html: this._slots[slotName] }} />
-          );
+          props[slotName] = parseHtmlToJsx(this._slots[slotName]);
         }
       });
 
