@@ -35,8 +35,7 @@ BUSOLA_K8S="busola.yaml"
 generate_k8s() {
   set -x
   cd resources
-  (cd base/web && kustomize edit set image busola-web=europe-docker.pkg.dev/kyma-project/prod/busola-web:"${RELEASE_TAG}")
-  (cd base/backend && kustomize edit set image busola-backend=europe-docker.pkg.dev/kyma-project/prod/busola-backend:"${RELEASE_TAG}")
+  (cd base && kustomize edit set image busola=europe-docker.pkg.dev/kyma-project/prod/busola:"${RELEASE_TAG}")
   kustomize build base/ > ../"${BUSOLA_K8S}"
   cd -
 }

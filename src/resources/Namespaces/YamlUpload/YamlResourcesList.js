@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Card,
   CardHeader,
@@ -162,8 +161,8 @@ export function YamlResourcesList({ resourcesData }) {
               </Card>
               <List>
                 {resources.map(r => (
-                  <CustomListItem type={'Inactive'}>
-                    <FlexBox alignItems={'Center'}>
+                  <CustomListItem type="Inactive">
+                    <FlexBox alignItems="Center">
                       <Icon
                         className={`status status-${getIcon(r?.status)}`}
                         name={getIcon(r?.status)}
@@ -173,6 +172,7 @@ export function YamlResourcesList({ resourcesData }) {
                         {String(r?.value?.kind)}{' '}
                         {String(r?.value?.metadata?.name)} -{' '}
                         {getStatus(r?.status)}
+                        {r?.message}
                       </Text>
                     </FlexBox>
                   </CustomListItem>
