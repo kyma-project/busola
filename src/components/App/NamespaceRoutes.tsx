@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Routes, Route, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +19,19 @@ export default function NamespaceRoutes() {
   const { clusterUrl } = useUrl();
   const language = useRecoilValue(languageAtom);
   const extensions = useRecoilValue(extensionsState);
+  const [extensibilityRoutes, setExtensibilityRoutes] = useState<
+    JSX.Element[] | null
+  >(null);
+
+  useEffect(() => {
+    if (extensions?.length) {
+      setExtensibilityRoutes(
+        extensions.map(extension =>
+          createExtensibilityRoutes(extension, language),
+        ),
+      );
+    }
+  }, [extensions, language]);
 
   const { error } = useGet(
     namespaceId === '-all-'
@@ -27,7 +41,7 @@ export default function NamespaceRoutes() {
       skip: false,
       pollingInterval: 0,
       onDataReceived: () => {},
-    },
+    } as any,
   );
   const hasAccessToNamespace =
     JSON.parse(JSON.stringify(error)) === null ||
@@ -43,19 +57,19 @@ export default function NamespaceRoutes() {
 
   return (
     <Routes>
-      <Route
-        path="*"
-        element={
-          <IncorrectPath
-            to=""
-            message={t('components.incorrect-path.message.namespace')}
-          />
-        }
-      />
-      {/* extensibility routes should go first, so if someone overwrites the default view, the new one should have a higher priority */}
-      {extensions?.map(extension =>
-        createExtensibilityRoutes(extension, language),
+      {extensibilityRoutes && (
+        <Route
+          path="*"
+          element={
+            <IncorrectPath
+              to=""
+              message={t('components.incorrect-path.message.namespace')}
+            />
+          }
+        />
       )}
+      {/* extensibility routes should go first, so if someone overwrites the default view, the new one should have a higher priority */}
+      {extensibilityRoutes}
       {resourceRoutesNamespaced}
       {otherRoutesNamespaced}
     </Routes>
