@@ -27,8 +27,8 @@ export const ExtensibilityDetailsCore = ({
   namespaceId,
   isModule,
   headerActions,
-  replicas,
-  updateReplicas,
+  replicas = null,
+  updateReplicas = null,
 }) => {
   const { t, widgetT, exists } = useGetTranslation();
   const { urlPath, resource, features, description: resourceDescription } =
@@ -137,7 +137,7 @@ export const ExtensibilityDetailsCore = ({
                 visibility: resource => prepareVisibility(def, resource),
                 value: resource => {
                   if (replicas !== resource.status.replicas) {
-                    updateReplicas(resource.status.replicas);
+                    updateReplicas?.(resource.status.replicas);
                   }
                   return (
                     <Widget

@@ -69,7 +69,7 @@ export const DataSourcesContext = createContext<DataSourcesContextType>(
 interface Props {
   dataSources: DataSources;
   children: JSX.Element;
-  replicas: any;
+  replicas?: any;
 }
 
 export const DataSourcesContextProvider: FC<Props> = ({
