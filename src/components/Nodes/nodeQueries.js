@@ -6,7 +6,8 @@ import {
 } from '../../resources/Namespaces/ResourcesUsage.js';
 
 const round = (num, places) =>
-  Math.round(num * Math.pow(10, places)) / Math.pow(10, places);
+  Math.round((num + Number.EPSILON) * Math.pow(10, places)) /
+  Math.pow(10, places);
 
 const getPercentageFromUsage = (value, total) => {
   if (total === 0) {
@@ -15,16 +16,16 @@ const getPercentageFromUsage = (value, total) => {
   return Math.round((100 * value) / total);
 };
 
-const formatCpu = cpuStr => Math.ceil(parseInt(cpuStr || '0') / 1000_000);
-const formatMemory = memoryStr =>
+const formatKiToGiMemory = memoryStr =>
   round(parseInt(memoryStr || '0') / 1024 / 1024, 1);
 
 const createUsageMetrics = (node, metricsForNode) => {
-  const cpuUsage = formatCpu(metricsForNode?.usage.cpu);
-  const memoryUsage = formatMemory(metricsForNode?.usage.memory);
-  const cpuCapacity = parseInt(node.status.allocatable?.cpu || '0');
-  const memoryCapacity = formatMemory(node.status.allocatable?.memory);
+  const cpuUsage = getCpus(metricsForNode?.usage.cpu);
+  const memoryUsage = formatKiToGiMemory(metricsForNode?.usage.memory);
+  const cpuCapacity = getCpus(node.status.allocatable?.cpu || '0');
+  const memoryCapacity = formatKiToGiMemory(node.status.allocatable?.memory);
 
+  console.log(cpuCapacity);
   const cpuPercentage = getPercentageFromUsage(cpuUsage, cpuCapacity);
   const memoryPercentage = getPercentageFromUsage(memoryUsage, memoryCapacity);
 
@@ -176,11 +177,11 @@ export function calcNodeResources(pods) {
 
   return {
     limits: {
-      cpu: nodeResources.limits.cpu * 1000,
+      cpu: nodeResources.limits.cpu,
       memory: nodeResources.limits.memory / Math.pow(1024, 3),
     },
     requests: {
-      cpu: nodeResources.requests.cpu * 1000,
+      cpu: nodeResources.requests.cpu,
       memory: nodeResources.requests.memory / Math.pow(1024, 3),
     },
   };
