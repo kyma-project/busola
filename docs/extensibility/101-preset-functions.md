@@ -2,7 +2,7 @@
 
 ## canI(resourceGroupAndVersion, resourceKind)
 
-You can use the **canI** function to determine if a user has access rights for listing a specified resource. The function comes with the following parameters:
+You can use the **canI** function to determine if a user has access rights to list a specified resource. The function comes with the following parameters:
 
 - **resourceGroupAndVersion** - the first part of a resource URL following the pattern: `${resource group}/${resource version}`.
 - **resourceKind** - resource kind.

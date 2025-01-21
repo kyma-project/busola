@@ -1,6 +1,6 @@
 # Configure a Config Map for Static Extensions
 
-You can define a static extension by adding the `busola.io/extension:statics` label to the ConfigMap. You don't need the **general** section as static extensions present data that are not connected to any resource. Instead, they may use information from the page they are displayed on using the `$embedResource` variable .You can provide all the ConfigMap data sections as either JSON or YAML.
+You can define a static extension by adding the `busola.io/extension:statics` label to the ConfigMap. You don't need the **general** section as static extensions present data that are not connected to any resource. Instead, they may use information from the page they are displayed on using the `$embedResource` variable. You can provide all the ConfigMap data sections as either JSON or YAML.
 
 ## Extension Version
 
@@ -33,4 +33,4 @@ general:
           link: 'https://github.com/kyma-project/busola'
 ```
 
-To see an exemplary configuration of the `External Nodes` feature in static extensions, check the [configuration example](examples/../../../examples/statics/statics-external-nodes.yaml).
+For more information on an exemplary configuration of the `External Nodes` feature in static extensions, see the [configuration example](examples/../../../examples/statics/statics-external-nodes.yaml).

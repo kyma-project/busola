@@ -1,4 +1,4 @@
-# translations Section
+# Configure Translations
 
 This optional section contains all available languages formatted for [i18next](https://www.i18next.com/) either as YAML or JSON, based on their paths. When a name is provided for a widget, that value can be used as the key, and the value is the translation for a specific language.
 

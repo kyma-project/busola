@@ -1,8 +1,8 @@
 # Additional Sections for Wizard Extensions
 
-## steps section
+## steps Section
 
-Each wizard consists of steps. This section contains their definitions.
+Each wizard consists of steps. The steps section contains their definitions.
 
 ### Available Parameters
 
@@ -13,9 +13,9 @@ Each wizard consists of steps. This section contains their definitions.
 | **form**        | **Yes**  | string | the form definition. This is analogous to the contents of the [form section](./40-form-fields.md) of the resource extension. |     |
 | **description** | No       | string | Additional details about the step, shown only when the step is active.                                                       |     |
 
-## defaults section
+## defaults Section
 
-This section is optional. If present, not all resources must be covered. This section contains a map of default values for specific resources. It is appended to the basic skeleton resources created based on the data provided in the [general section](160-wizard-extensions.md).
+The defaults section is optional. If present, not all resources must be covered. This section contains a map of default values for specific resources. It is appended to the basic skeleton resources created based on the data provided in the [general section](160-wizard-extensions.md).
 
 ## Example
 

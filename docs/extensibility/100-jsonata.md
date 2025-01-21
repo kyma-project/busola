@@ -4,7 +4,7 @@
 
 The primary data source of [JSONata](https://docs.jsonata.org/overview.html) expressions changes depending on where it's used. Starting with the root, it contains the whole resource, but whenever it's in a child whose parent has a **source** (in lists and details) or **path** (in forms) parameter, the scope changes to data from that source or path.
 
-Additionally, scope in arrays changes to the array item.
+Additionally, the scope in arrays changes to the array item.
 
 For example, for this resource:
 
@@ -60,4 +60,4 @@ Common variables are the primary means to bypass the default scoping.
 
 ## Data Sources
 
-Whenever data sources are provided, they are available as corresponding variable names. See [Configure the dataSources Section](90-datasources.md) for more details.
+Whenever data sources are provided, they are available as corresponding variable names. For more information, see [Configure the dataSources Section](90-datasources.md).

@@ -1,6 +1,6 @@
 # Custom Extensions
 
-With Busola's custom extension feature you can design fully custom user interfaces beyond the built-in extensibility functionality. This feature is ideal for creating unique and specialized displays not covered by the built-in components.
+With Busola's custom extension feature, you can design fully custom user interfaces beyond the built-in extensibility functionality. This feature is ideal for creating unique and specialized displays that are not covered by the built-in components.
 
 ## Getting Started
 
@@ -21,4 +21,4 @@ Creating a custom extension is as straightforward as setting up a ConfigMap with
 
 Once your ConfigMap is ready, add it to your cluster. Then, Busola loads and displays your custom UI.
 
-See this [example](./../../examples/custom-extension/README.md), to learn more.
+For more information, see this [example](./../../examples/custom-extension/README.md).

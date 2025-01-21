@@ -69,4 +69,4 @@ externalNodes:
         link: '$string($exampleResource().link)'
 ```
 
-See [Additional Sections for Resource-Based Extensions](130-additional-sections-resources.md) for more information on the available sections.
+For more information, see [Additional Sections for Resource-Based Extensions](130-additional-sections-resources.md).
