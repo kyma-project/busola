@@ -5,7 +5,6 @@ import {
   ObjectStatus,
   Text,
 } from '@ui5/webcomponents-react';
-import { segmentMarkdownText } from 'components/KymaCompanion/utils/formatMarkdown';
 import CodePanel from './CodePanel';
 import './Message.scss';
 
@@ -48,7 +47,9 @@ export default function Message({
     );
   }
 
-  const segmentedText = segmentMarkdownText(messageChunks.slice(-1)[0]?.result);
+  const segmentedText: any[] = [];
+  // TODO: uncomment when utils changes are added
+  // const segmentedText = segmentMarkdownText(messageChunks.slice(-1)[0]?.result);
   return (
     <div className={'message ' + className}>
       {segmentedText && (

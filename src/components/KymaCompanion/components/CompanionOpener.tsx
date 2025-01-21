@@ -16,7 +16,6 @@ import { useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { showKymaCompanionState } from 'components/KymaCompanion/state/showKymaCompanionAtom';
 import { initialPromptState } from '../state/initalPromptAtom';
-import getPromptSuggestions from 'components/KymaCompanion/api/getPromptSuggestions';
 import { createPortal } from 'react-dom';
 import { sessionIDState } from '../state/sessionIDAtom';
 import { clusterState } from 'state/clusterAtom';
@@ -56,20 +55,9 @@ export default function CompanionOpener({
       // TODO
       const sessionID = '';
       setSessionID(sessionID);
-      const promptSuggestions = await getPromptSuggestions({
-        namespace,
-        resourceType,
-        groupVersion,
-        resourceName,
-        sessionID,
-        clusterUrl: cluster?.currentContext.cluster.cluster.server ?? '',
-        // TODO
-        token: '',
-        certificateAuthorityData:
-          cluster?.currentContext.cluster.cluster[
-            'certificate-authority-data'
-          ] ?? '',
-      });
+      const promptSuggestions: string[] = [];
+      // TODO: uncomment when API changes are added
+      //const promptSuggestions = await getPromptSuggestions({ namespace, resourceType, groupVersion, resourceName, sessionID, clusterUrl: cluster?.currentContext.cluster.cluster.server ?? '', token: '', certificateAuthorityData: cluster?.currentContext.cluster.cluster['certificate-authority-data'] ?? ''});
       setIsLoading(false);
       if (!promptSuggestions) {
         setErrorOccured(true);

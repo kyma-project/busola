@@ -7,9 +7,7 @@ import { initialPromptState } from 'components/KymaCompanion/state/initalPromptA
 import Message from './messages/Message';
 import Bubbles from './messages/Bubbles';
 import ErrorMessage from './messages/ErrorMessage';
-import getChatResponse from 'components/KymaCompanion/api/getChatResponse';
 import { sessionIDState } from 'components/KymaCompanion/state/sessionIDAtom';
-import getFollowUpQuestions from 'components/KymaCompanion/api/getFollowUpQuestions';
 import { clusterState } from 'state/clusterAtom';
 import { authDataState } from 'state/authDataAtom';
 import './Chat.scss';
@@ -41,14 +39,8 @@ export default function Chat() {
   const handleChatResponse = (response: any) => {
     const isLoading = response?.step !== 'output';
     if (!isLoading) {
-      getFollowUpQuestions({
-        sessionID,
-        handleFollowUpQuestions,
-        clusterUrl: cluster.currentContext.cluster.cluster.server,
-        token: authData.token,
-        certificateAuthorityData:
-          cluster.currentContext.cluster.cluster['certificate-authority-data'],
-      });
+      // TODO: uncomment when API changes are added
+      /*getFollowUpQuestions({ sessionID, handleFollowUpQuestions, clusterUrl: cluster.currentContext.cluster.cluster.server, token: authData.token, certificateAuthorityData: cluster.currentContext.cluster.cluster['certificate-authority-data']});*/
     }
     setChatHistory(prevMessages => {
       const [latestMessage] = prevMessages.slice(-1);
@@ -81,16 +73,8 @@ export default function Chat() {
       messageChunks: [{ step: 'output', result: prompt }],
       isLoading: false,
     });
-    getChatResponse({
-      prompt,
-      handleChatResponse,
-      handleError,
-      sessionID,
-      clusterUrl: cluster.currentContext.cluster.cluster.server,
-      token: authData.token,
-      certificateAuthorityData:
-        cluster.currentContext.cluster.cluster['certificate-authority-data'],
-    });
+    // TODO: uncomment when API changes are added
+    /*getChatResponse({ prompt, handleChatResponse, handleError, sessionID, clusterUrl: cluster.currentContext.cluster.cluster.server, token: authData.token, certificateAuthorityData: cluster.currentContext.cluster.cluster['certificate-authority-data'], });*/
     addMessage({ author: 'ai', messageChunks: [], isLoading: true });
   };
 

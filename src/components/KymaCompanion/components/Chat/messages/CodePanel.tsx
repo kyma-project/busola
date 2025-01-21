@@ -1,5 +1,4 @@
 import { Text, Panel } from '@ui5/webcomponents-react';
-import { formatCodeSegment } from 'components/KymaCompanion/utils/formatMarkdown';
 import './CodePanel.scss';
 
 interface CodePanelProps {
@@ -7,7 +6,9 @@ interface CodePanelProps {
 }
 
 export default function CodePanel({ text }: CodePanelProps): JSX.Element {
-  const { language, code } = formatCodeSegment(text);
+  const { language, code } = { language: '', code: '' };
+  // TODO: uncomment when utils changes are added
+  //const { language, code } = formatCodeSegment(text);
   return !language ? (
     <div className="code-response">
       <Text className="text" renderWhitespace>
