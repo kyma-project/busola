@@ -29,29 +29,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: setup_busola
+      - name: Run busola
         shell: bash
         run: |
-            set -e
-            npm ci
-            npm run build
-            npm i -g serve
+          .github/scripts/setup_local_busola.sh
       - name: run_tests
         shell: bash
         env:
           ACC_AMP_TOKEN: ${{ secrets.ACC_AMP_TOKEN }}
         run: |
-          k3d kubeconfig get kyma > tests/integration/fixtures/kubeconfig.yaml
-          export CYPRESS_DOMAIN=http://localhost:3000
-          serve -s build > busola.log &
-
-          pushd backend
-          npm start > backend.log &
-          popd
-          
-          echo "waiting for server to be up..."
-          while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' "$CYPRESS_DOMAIN")" != "200" ]]; do sleep 5; done
-          sleep 10
+          k3d kubeconfig get k3dCluster > tests/lighthouse/fixtures/kubeconfig.yaml
           
           cd tests/integration
           npm ci && ACC_AMP_TOKEN=$ACC_AMP_TOKEN npm run "test:accesibility"
