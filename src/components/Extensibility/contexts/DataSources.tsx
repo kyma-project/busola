@@ -69,11 +69,13 @@ export const DataSourcesContext = createContext<DataSourcesContextType>(
 interface Props {
   dataSources: DataSources;
   children: JSX.Element;
+  conditions: [];
 }
 
 export const DataSourcesContextProvider: FC<Props> = ({
   children,
   dataSources,
+  conditions,
 }) => {
   const fetch = useFetch();
   // store
@@ -87,6 +89,15 @@ export const DataSourcesContextProvider: FC<Props> = ({
   // clear timeouts on component unmount
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => () => intervals.current.forEach(clearInterval), []);
+  useEffect(
+    () => () => {
+      // Force update for replicas.
+      if (dataSourcesDict?.current?.['replicas']) {
+        dataSourcesDict.current['replicas'] = null;
+      }
+    },
+    [conditions],
+  );
 
   const buildUrl = (
     dataSource: DataSource,

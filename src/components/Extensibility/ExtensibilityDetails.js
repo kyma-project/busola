@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import pluralize from 'pluralize';
 
 import { usePrepareDetailsProps } from 'resources/helpers';
@@ -26,6 +27,8 @@ export const ExtensibilityDetailsCore = ({
   namespaceId,
   isModule,
   headerActions,
+  updatedConditions,
+  updateConditions,
 }) => {
   const { t, widgetT, exists } = useGetTranslation();
   const { urlPath, resource, features, description: resourceDescription } =
@@ -132,16 +135,21 @@ export const ExtensibilityDetailsCore = ({
                 header: widgetT(def),
                 fullWidth: def.fullWidth,
                 visibility: resource => prepareVisibility(def, resource),
-                value: resource => (
-                  <Widget
-                    key={i}
-                    structure={def}
-                    value={resource}
-                    schema={schema}
-                    dataSources={dataSources}
-                    originalResource={resource}
-                  />
-                ),
+                value: resource => {
+                  if (updatedConditions !== resource.status.conditions) {
+                    updateConditions(resource.status.conditions);
+                  }
+                  return (
+                    <Widget
+                      key={i}
+                      structure={def}
+                      value={resource}
+                      schema={schema}
+                      dataSources={dataSources}
+                      originalResource={resource}
+                    />
+                  );
+                },
               }))
           : []
       }
@@ -215,6 +223,7 @@ const ExtensibilityDetails = ({
 }) => {
   const resMetaData = useGetCRbyPath(resourceType);
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
+  const [updatedConditions, setUpdatedConditions] = useState([]);
 
   if (!resMetaData) {
     return (
@@ -239,7 +248,10 @@ const ExtensibilityDetails = ({
         defaultResourcePlaceholder: defaultPlaceholder,
       }}
     >
-      <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
+      <DataSourcesContextProvider
+        conditions={updatedConditions}
+        dataSources={resMetaData?.dataSources || {}}
+      >
         <ExtensibilityErrBoundary>
           <ExtensibilityDetailsCore
             resMetaData={resMetaData}
@@ -248,6 +260,8 @@ const ExtensibilityDetails = ({
             namespaceId={namespaceId}
             isModule={isModule}
             headerActions={headerActions}
+            updatedConditions={updatedConditions}
+            updateConditions={data => setUpdatedConditions(data)}
           />
         </ExtensibilityErrBoundary>
       </DataSourcesContextProvider>
