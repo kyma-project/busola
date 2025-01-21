@@ -9,7 +9,7 @@ on:
       - 'src/**'
       - 'backend/**'
       - 'package.json'
-      - 'cypress/support/**'
+      - 'cypress/**'
       - 'cypress.config.component.ts'
 
 jobs:
