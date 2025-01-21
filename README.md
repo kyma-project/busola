@@ -180,7 +180,7 @@ For the information on how to run tests and configure them, go to the [`tests`](
 
 ## Deploy Busola in the Kubernetes Cluster
 
-To install Busola from release in the Kubernetes cluster set `VERSION`shell environment variable with desired release and run:
+To install Busola from release in the Kubernetes cluster set `VERSION` shell environment variable with desired release and run:
 
 ```shell
 kubectl apply -f https://github.com/kyma-project/busola/releases/download/${VERSION}/busola.yaml
