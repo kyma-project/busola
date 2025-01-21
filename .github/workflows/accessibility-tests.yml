@@ -33,7 +33,7 @@ jobs:
         shell: bash
         run: |
           .github/scripts/setup_local_busola.sh
-      - name: run_tests
+      - name: Run tests
         shell: bash
         env:
           ACC_AMP_TOKEN: ${{ secrets.ACC_AMP_TOKEN }}
