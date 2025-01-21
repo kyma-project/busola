@@ -22,7 +22,10 @@ const StandaloneAction = ({ action, entry }) => {
   return (
     <Button
       data-testid={action.name.replace(' ', '').toLowerCase()}
-      onClick={() => action.handler(entry)}
+      onClick={e => {
+        e.stopPropagation();
+        action.handler(entry);
+      }}
       className="list-actions__standalone"
       design="Transparent"
       icon={typeof icon === 'function' ? icon(entry) : icon}
