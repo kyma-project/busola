@@ -1,6 +1,6 @@
 # JSONata Preset Functions for Resource-Based Extensions
 
-## canI(resourceGroupAndVersion, resourceKind)
+## canI (resourceGroupAndVersion, resourceKind)
 
 You can use the **canI** function to determine if a user has access rights to list a specified resource. The function comes with the following parameters:
 
@@ -15,7 +15,7 @@ You can use the **canI** function to determine if a user has access rights to li
   visibility: $not($canI('networking.istio.io/v1beta1', 'Gateway'))
 ```
 
-## compareStrings(first, second)
+## compareStrings (first, second)
 
 You can use this function to sort two strings alphabetically. The function comes with the following parameters:
 
@@ -36,7 +36,7 @@ Here is an example from the [ResourceList widget](./50-list-and-details-widgets.
       default: true
 ```
 
-## matchByLabelSelector(item, selectorPath)
+## matchByLabelSelector (item, selectorPath)
 
 You can use this function to match Pods using a resource selector. The function comes with the following parameters:
 
@@ -55,7 +55,7 @@ Example from [dataSources](90-datasources.md).
     filter: '$matchByLabelSelector($item, $root.spec.selector)'
 ```
 
-## matchEvents(item, kind, name)
+## matchEvents (item, kind, name)
 
 You can use this function to match Events using a resource selector. The function comes with the following parameters:
 
@@ -73,7 +73,7 @@ You can use this function to match Events using a resource selector. The functio
   hideInvolvedObjects: true
 ```
 
-## readableTimestamp(timestamp)
+## readableTimestamp (timestamp)
 
 You can use this function to convert time to readable time. The function comes with the following parameters:
 
