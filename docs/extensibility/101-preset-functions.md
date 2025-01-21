@@ -4,8 +4,8 @@
 
 You can use the **canI** function to determine if a user has access rights to list a specified resource. The function comes with the following parameters:
 
-- **resourceGroupAndVersion** - the first part of a resource URL following the pattern: `${resource group}/${resource version}`.
-- **resourceKind** - resource kind.
+- **resourceGroupAndVersion**: Determines the first part of a resource URL following the pattern: `${resource group}/${resource version}`.
+- **resourceKind**: Describes a resource kind.
 
 ### Example
 
@@ -19,8 +19,8 @@ You can use the **canI** function to determine if a user has access rights to li
 
 You can use this function to sort two strings alphabetically. The function comes with the following parameters:
 
-- **first** - first string to compare.
-- **second** - second string to compare.
+- **first**: Determines the first string to compare.
+- **second**: Determines the second string to compare.
 
 ### Example
 
@@ -40,8 +40,8 @@ Here is an example from the [ResourceList widget](./50-list-and-details-widgets.
 
 You can use this function to match Pods using a resource selector. The function comes with the following parameters:
 
-- **item** - a Pod to be used.
-- **selectorPath** - path to selector labels from `$root`.
+- **item**: Describes a Pod to be used.
+- **selectorPath**: Defines a path to selector labels from `$root`.
 
 ### Example
 
@@ -59,9 +59,9 @@ Example from [dataSources](90-datasources.md).
 
 You can use this function to match Events using a resource selector. The function comes with the following parameters:
 
-- **item** - an Event to be checked.
-- **kind** - the kind of the Event emitting resource.
-- **name** - the name of the Event emitting resource.
+- **item**: Describes an Event to be checked.
+- **kind**: Describes the kind of the Event emitting resource.
+- **name**: Describes the name of the Event emitting resource.
 
 ### Example
 
@@ -77,7 +77,7 @@ You can use this function to match Events using a resource selector. The functio
 
 You can use this function to convert time to readable time. The function comes with the following parameters:
 
-- **timestamp** - timestamp to convert.
+- **timestamp**: Defines a timestamp to convert.
 
 ### Example
 
