@@ -38,7 +38,7 @@ jobs:
         env:
           ACC_AMP_TOKEN: ${{ secrets.ACC_AMP_TOKEN }}
         run: |
-          k3d kubeconfig get k3dCluster > tests/lighthouse/fixtures/kubeconfig.yaml
+          k3d kubeconfig get k3dCluster > tests/integration/fixtures/kubeconfig.yaml
           
           cd tests/integration
           npm ci && ACC_AMP_TOKEN=$ACC_AMP_TOKEN npm run "test:accesibility"
