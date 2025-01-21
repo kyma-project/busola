@@ -1,3 +1,5 @@
+// TODO: uncomment when API changes are added
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useTranslation } from 'react-i18next';
 import React, { useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';

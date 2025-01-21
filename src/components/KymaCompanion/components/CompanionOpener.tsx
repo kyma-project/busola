@@ -1,3 +1,5 @@
+// TODO: uncomment when API changes are added
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Button,
   CustomListItem,
