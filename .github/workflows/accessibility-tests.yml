@@ -13,11 +13,9 @@ on:
 jobs:
   run-accessibility-tests:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: 0
       - name: Install k3d
         env:
           K3D_URL: https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh
@@ -29,7 +27,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Run busola
+      - name: Setup busola
         shell: bash
         run: |
           .github/scripts/setup_local_busola.sh
