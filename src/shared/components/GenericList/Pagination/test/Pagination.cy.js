@@ -44,6 +44,7 @@ describe('Pagination', () => {
   });
 
   it('Fire events', () => {
+    cy.viewport(800, 500);
     cy.mount(
       <Pagination
         itemsTotal={200}

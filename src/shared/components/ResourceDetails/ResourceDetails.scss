@@ -24,7 +24,7 @@
   min-width: 200px;
 }
 
-@media (min-width: 650px) {
+@container (min-width: 550px) {
   .cluster-overview__details-wrapper {
     grid-template-columns: fit-content(100%) max-content;
   }
@@ -39,7 +39,7 @@
   }
 }
 
-@media (min-width: 900px) {
+@container (min-width: 900px) {
   .resource-details-container {
     grid-template-columns: fit-content(100%) max-content;
     gap: 0;

@@ -84,7 +84,7 @@ export function FeaturedCard({ value, structure, schema, ...props }) {
   const illustration = getIllustration(structure?.illustration, theme);
   return (
     <div className="sap-margin-small">
-      <Card>
+      <Card className="feature-card-container">
         <div
           className="feature-card"
           style={getBackgroundStyle(structure?.design)}

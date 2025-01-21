@@ -211,7 +211,6 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
               resourceName={kymaResourceName}
               loadingKymaResources={kymaResourcesLoading}
               kymaResourceUrl={resourceUrl}
-              initialKymaResource={kymaResource}
               loading={kymaResourceLoading}
               selectedModules={selectedModules}
               initialUnchangedResource={initialUnchangedResource}
