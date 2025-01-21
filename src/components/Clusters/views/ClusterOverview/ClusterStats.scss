@@ -37,34 +37,34 @@
   }
 }
 
-.tall {
+.card-tall {
   grid-row: span 2;
   height: calc(var(--grid-row-height) * 2);
   grid-column: span 4;
   width: calc(var(--grid-column-width) * 4);
 }
 
-.wide {
+.card-wide {
   height: var(--grid-row-height);
   grid-column: span 6;
   width: calc(var(--grid-column-width) * 6);
 }
 
-.small {
+.card-small {
   height: var(--grid-row-height);
   grid-column: span 3;
   width: calc(var(--grid-column-width) * 3);
 }
 
 @container (max-width: 375px) {
-  .wide {
+  .card-wide {
     grid-column: span 5;
     width: calc(var(--grid-column-width) * 5);
   }
 }
 
 @container (max-width: 325px) {
-  .wide {
+  .card-wide {
     grid-column: span 4;
     width: calc(var(--grid-column-width) * 4);
   }
