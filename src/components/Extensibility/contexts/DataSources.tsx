@@ -69,13 +69,13 @@ export const DataSourcesContext = createContext<DataSourcesContextType>(
 interface Props {
   dataSources: DataSources;
   children: JSX.Element;
-  conditions: [];
+  replicas: any;
 }
 
 export const DataSourcesContextProvider: FC<Props> = ({
   children,
   dataSources,
-  conditions,
+  replicas,
 }) => {
   const fetch = useFetch();
   // store
@@ -96,7 +96,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
         dataSourcesDict.current['replicas'] = null;
       }
     },
-    [conditions],
+    [replicas],
   );
 
   const buildUrl = (

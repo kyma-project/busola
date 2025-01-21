@@ -27,8 +27,8 @@ export const ExtensibilityDetailsCore = ({
   namespaceId,
   isModule,
   headerActions,
-  updatedConditions,
-  updateConditions,
+  replicas,
+  updateReplicas,
 }) => {
   const { t, widgetT, exists } = useGetTranslation();
   const { urlPath, resource, features, description: resourceDescription } =
@@ -136,8 +136,8 @@ export const ExtensibilityDetailsCore = ({
                 fullWidth: def.fullWidth,
                 visibility: resource => prepareVisibility(def, resource),
                 value: resource => {
-                  if (updatedConditions !== resource.status.conditions) {
-                    updateConditions(resource.status.conditions);
+                  if (replicas !== resource.status.replicas) {
+                    updateReplicas(resource.status.replicas);
                   }
                   return (
                     <Widget
@@ -223,7 +223,7 @@ const ExtensibilityDetails = ({
 }) => {
   const resMetaData = useGetCRbyPath(resourceType);
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
-  const [updatedConditions, setUpdatedConditions] = useState([]);
+  const [replicas, setReplicas] = useState(null);
 
   if (!resMetaData) {
     return (
@@ -249,7 +249,7 @@ const ExtensibilityDetails = ({
       }}
     >
       <DataSourcesContextProvider
-        conditions={updatedConditions}
+        replicas={replicas}
         dataSources={resMetaData?.dataSources || {}}
       >
         <ExtensibilityErrBoundary>
@@ -260,8 +260,8 @@ const ExtensibilityDetails = ({
             namespaceId={namespaceId}
             isModule={isModule}
             headerActions={headerActions}
-            updatedConditions={updatedConditions}
-            updateConditions={data => setUpdatedConditions(data)}
+            replicas={replicas}
+            updateReplicas={data => setReplicas(data)}
           />
         </ExtensibilityErrBoundary>
       </DataSourcesContextProvider>
