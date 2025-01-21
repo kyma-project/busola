@@ -1,5 +1,5 @@
 import pluralize from 'pluralize';
-import { createContext, useEffect, useRef, FC } from 'react';
+import { createContext, useEffect, useRef, FC, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
@@ -85,6 +85,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
   // refetch intervals
   const intervals = useRef<ReturnType<typeof setTimeout>[]>([]);
   const fallbackNamespace = useRecoilValue(activeNamespaceIdState);
+  const [refetchSource, setRefetchSource] = useState('');
 
   // clear timeouts on component unmount
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -93,7 +94,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
     () => () => {
       // Force update for replicas.
       if (dataSourcesDict?.current?.['replicas']) {
-        dataSourcesDict.current['replicas'] = null;
+        setRefetchSource('replicas');
       }
     },
     [replicas],
@@ -190,6 +191,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
     const dataSource = dataSources[dataSourceName];
 
     if (
+      refetchSource === dataSourceName ||
       !dataSourcesDict.current[dataSourceName] ||
       dataSourcesDict.current[dataSourceName].rootName !==
         resource?.metadata?.name ||
@@ -216,7 +218,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
           REFETCH_INTERVAL,
         ),
       );
-
+      setRefetchSource('');
       return firstFetch;
     } else if (store?.[dataSourceName]?.loading) {
       return store?.[dataSourceName]?.firstFetch;
