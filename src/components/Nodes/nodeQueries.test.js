@@ -24,11 +24,11 @@ describe('Calculate resources for node', () => {
       },
       expectedValue: {
         limits: {
-          cpu: 10,
+          cpu: 0.01,
           memory: 100.0 / 1024,
         },
         requests: {
-          cpu: 20,
+          cpu: 0.02,
           memory: 200.0 / 1024,
         },
       },
@@ -49,11 +49,11 @@ describe('Calculate resources for node', () => {
       },
       expectedValue: {
         limits: {
-          cpu: 22,
+          cpu: 0.022,
           memory: 220.0 / 1024,
         },
         requests: {
-          cpu: 45,
+          cpu: 0.045,
           memory: 450.0 / 1024,
         },
       },
@@ -68,11 +68,11 @@ describe('Calculate resources for node', () => {
       },
       expectedValue: {
         limits: {
-          cpu: 7,
+          cpu: 0.007,
           memory: 70.0 / 1024,
         },
         requests: {
-          cpu: 14,
+          cpu: 0.014,
           memory: 140.0 / 1024,
         },
       },

@@ -3,6 +3,7 @@ import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart'
 import { Card, CardHeader } from '@ui5/webcomponents-react';
 import { roundTwoDecimals } from 'shared/utils/helpers';
 import './NodeResources.scss';
+import { cpusToHumanReadable } from '../../../resources/Namespaces/ResourcesUsage.js';
 
 export function NodeResources({ metrics, resources }) {
   const { t } = useTranslation();
@@ -19,10 +20,10 @@ export function NodeResources({ metrics, resources }) {
         <UI5RadialChart
           color="var(--sapChart_OrderedColor_5)"
           value={cpu.usage}
-          max={cpu.capacity * 1000}
-          additionalInfo={`${roundTwoDecimals(cpu.usage)}m / ${roundTwoDecimals(
-            cpu.capacity,
-          ) * 1000}m`}
+          max={cpu.capacity}
+          additionalInfo={`${cpusToHumanReadable(cpu.usage, {
+            unit: 'm',
+          })} / ${cpusToHumanReadable(cpu.capacity, { unit: 'm' })}`}
         />
       </Card>
       <Card
@@ -53,10 +54,12 @@ export function NodeResources({ metrics, resources }) {
         <UI5RadialChart
           color="var(--sapChart_OrderedColor_5)"
           value={resources?.requests?.cpu}
-          max={cpu.capacity * 1000}
-          additionalInfo={`${roundTwoDecimals(
-            resources?.requests?.cpu,
-          )}m / ${roundTwoDecimals(cpu.capacity) * 1000}m`}
+          max={cpu.capacity}
+          additionalInfo={`${cpusToHumanReadable(resources?.requests?.cpu, {
+            unit: 'm',
+          })} / ${cpusToHumanReadable(cpu.capacity, {
+            unit: 'm',
+          })}`}
         />
       </Card>
       <Card
@@ -85,10 +88,12 @@ export function NodeResources({ metrics, resources }) {
         <UI5RadialChart
           color="var(--sapChart_OrderedColor_5)"
           value={resources?.limits?.cpu}
-          max={cpu.capacity * 1000}
-          additionalInfo={`${roundTwoDecimals(
-            resources?.limits?.cpu,
-          )}m / ${roundTwoDecimals(cpu.capacity) * 1000}m`}
+          max={cpu.capacity}
+          additionalInfo={`${cpusToHumanReadable(resources?.limits?.cpu, {
+            unit: 'm',
+          })} / ${cpusToHumanReadable(cpu.capacity, {
+            unit: 'm',
+          })}`}
         />
       </Card>
       <Card
