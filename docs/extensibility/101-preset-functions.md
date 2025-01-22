@@ -1,4 +1,4 @@
-# JSONata Preset Functions for Resource-Based Extensions
+# Use JSONata Preset Functions for Resource-Based Extensions
 
 ## canI (resourceGroupAndVersion, resourceKind)
 
