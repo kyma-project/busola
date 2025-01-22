@@ -231,7 +231,7 @@ export default function KymaModulesList({
           ) : (
             resource.name
           )}
-          {true ? (
+          {checkBeta(currentModule, currentModuleReleaseMeta) ? (
             <Tag
               className="sap-margin-begin-tiny"
               hideStateIcon
