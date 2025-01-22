@@ -1,0 +1,10 @@
+resource:
+  kind: Secret
+  version: v1
+urlPath: busola-web-components-example
+category: Kyma
+name: Busola Web Components example
+scope: cluster
+customElement: my-custom-element
+description: >-
+  Busola Web Components example

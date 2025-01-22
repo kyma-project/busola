@@ -3,7 +3,7 @@ import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useTranslation } from 'react-i18next';
 
-import { getSIPrefix } from 'shared/helpers/siPrefixes';
+import { formatResourceUnit } from 'shared/helpers/resources.js';
 import { Card, CardHeader } from '@ui5/webcomponents-react';
 
 const MEMORY_SUFFIX_POWER = {
@@ -21,6 +21,7 @@ const MEMORY_SUFFIX_POWER = {
 
 const CPU_SUFFIX_POWER = {
   m: 1e-3,
+  n: 1e-9,
 };
 
 export function getBytes(memoryStr) {
@@ -50,12 +51,12 @@ export function getCpus(cpuString) {
 
 export function bytesToHumanReadable(bytes) {
   if (!bytes) return bytes;
-  return getSIPrefix(bytes, true, { withoutSpace: true }).string;
+  return formatResourceUnit(bytes, true, { withoutSpace: true });
 }
 
-export function cpusToHumanReadable(cpus) {
+export function cpusToHumanReadable(cpus, { fixed = 0, unit = '' } = {}) {
   if (!cpus) return cpus;
-  return cpus / MEMORY_SUFFIX_POWER['m'] + 'm';
+  return formatResourceUnit(cpus, false, { withoutSpace: true, fixed, unit });
 }
 
 const MemoryRequestsCircle = ({ resourceQuotas, isLoading }) => {
@@ -138,7 +139,7 @@ export const ResourcesUsage = ({ namespace }) => {
       pollingInterval: 3300,
     },
   );
-  if (resourceQuotas?.length < 1) return null;
+  if (!resourceQuotas || resourceQuotas?.length < 1) return null;
   return (
     <>
       <div className="item-wrapper tall">

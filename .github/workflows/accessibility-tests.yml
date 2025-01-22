@@ -13,11 +13,9 @@ on:
 jobs:
   run-accessibility-tests:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: 0
       - name: Install k3d
         env:
           K3D_URL: https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh
@@ -29,30 +27,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: setup_busola
+      - name: Setup busola
         shell: bash
         run: |
-            set -e
-            npm ci
-            npm run build
-            npm i -g serve
-      - name: run_tests
+          .github/scripts/setup_local_busola.sh
+      - name: Run tests
         shell: bash
         env:
           ACC_AMP_TOKEN: ${{ secrets.ACC_AMP_TOKEN }}
         run: |
           k3d kubeconfig get kyma > tests/integration/fixtures/kubeconfig.yaml
-          export CYPRESS_DOMAIN=http://localhost:3000
-          serve -s build > busola.log &
-
-          pushd backend
-          npm start > backend.log &
-          popd
-          
-          echo "waiting for server to be up..."
-          while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' "$CYPRESS_DOMAIN")" != "200" ]]; do sleep 5; done
-          sleep 10
-          
+          export CYPRESS_DOMAIN=http://localhost:3001          
           cd tests/integration
           npm ci && ACC_AMP_TOKEN=$ACC_AMP_TOKEN npm run "test:accesibility"
       - name: Uploads artifacts

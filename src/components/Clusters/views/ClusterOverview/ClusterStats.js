@@ -7,6 +7,7 @@ import { CountingCard } from 'shared/components/CountingCard/CountingCard';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import {
   bytesToHumanReadable,
+  cpusToHumanReadable,
   getBytes,
 } from 'resources/Namespaces/ResourcesUsage';
 import {
@@ -129,9 +130,11 @@ export default function ClusterStats({ nodesData }) {
               color="var(--sapChart_OrderedColor_5)"
               value={roundTwoDecimals(cpu.usage)}
               max={roundTwoDecimals(cpu.capacity)}
-              additionalInfo={`${roundTwoDecimals(
-                cpu.usage,
-              )}m / ${roundTwoDecimals(cpu.capacity)}m`}
+              additionalInfo={`${cpusToHumanReadable(cpu.usage, {
+                unit: 'm',
+              })} / ${cpusToHumanReadable(cpu.capacity, {
+                unit: 'm',
+              })}`}
             />
           </Card>
         </div>
