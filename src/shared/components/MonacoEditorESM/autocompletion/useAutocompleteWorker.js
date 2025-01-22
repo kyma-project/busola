@@ -4,22 +4,22 @@ import { setDiagnosticsOptions } from 'monaco-yaml';
 import { useGetSchema } from 'hooks/useGetSchema';
 import { v4 as uuid } from 'uuid';
 import YamlWorker from './yaml.worker.js?worker';
-import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
-import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker';
-import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
+import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
+import TsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
+import JsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker';
 
 window.MonacoEnvironment = {
   getWorker: function(workerId, label) {
     switch (label) {
       case 'json':
-        return jsonWorker();
+        return new JsonWorker();
       case 'yaml':
-        return YamlWorker();
+        return new YamlWorker();
       case 'typescript':
       case 'javascript':
-        return tsWorker();
+        return new TsWorker();
       default:
-        return editorWorker();
+        return new EditorWorker();
     }
   },
 };

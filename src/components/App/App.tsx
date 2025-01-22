@@ -41,6 +41,7 @@ import { themeState } from 'state/preferences/themeAtom';
 import { initTheme } from './initTheme';
 
 import './App.scss';
+import '../../web-components/index'; //Import for custom Web Components
 
 export default function App() {
   const theme = useRecoilValue(themeState);

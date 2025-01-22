@@ -108,6 +108,7 @@ export const DynamicPageComponent = ({
   protectedResource,
   protectedResourceWarning,
   className,
+  customActionIfFormOpen,
 }) => {
   const [showTitleDescription, setShowTitleDescription] = useState(false);
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
@@ -335,6 +336,16 @@ export const DynamicPageComponent = ({
           style={{ top: `${headerHeight}px` }}
           ref={tabContainerRef}
           onTabSelect={e => {
+            if (customActionIfFormOpen) {
+              customActionIfFormOpen(
+                isResourceEdited,
+                setIsResourceEdited,
+                isFormOpen,
+                setIsFormOpen,
+              );
+              return;
+            }
+
             if (isFormOpen.formOpen) {
               e.preventDefault();
             }

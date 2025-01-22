@@ -52,5 +52,5 @@ export function formatResourceUnit(
     }
   });
 
-  return output.string;
+  return output;
 }
