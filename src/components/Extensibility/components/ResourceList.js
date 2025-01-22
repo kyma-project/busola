@@ -45,6 +45,7 @@ export function ResourceList({
   const api = value?.apiVersion === 'v1' ? 'api' : 'apis';
   const resourceUrlPrefix = `/${api}/${value?.apiVersion}`;
   const resourceUrl = `${resourceUrlPrefix}${namespacePart}/${pluralKind}`;
+  const simpleEmptyListMessage = structure.simpleEmptyListMessage || false;
 
   const jsonata = useJsonata({
     resource: originalResource,
@@ -78,6 +79,7 @@ export function ResourceList({
           loading={value?.loading}
           title={t(structure.name)}
           disableCreate={true}
+          simpleEmptyListMessage={simpleEmptyListMessage}
         />
       </Suspense>
     );
@@ -125,6 +127,7 @@ export function ResourceList({
         sortBy={defaultSortOptions =>
           sortBy(jsonata, sortOptions, t, defaultSort ? defaultSortOptions : {})
         }
+        simpleEmptyListMessage={simpleEmptyListMessage}
         searchSettings={{
           textSearchProperties: defaultSortOptions =>
             textSearchProperties(defaultSortOptions),
