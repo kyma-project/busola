@@ -139,7 +139,7 @@ export const ResourcesUsage = ({ namespace }) => {
       pollingInterval: 3300,
     },
   );
-  if (resourceQuotas?.length < 1) return null;
+  if (!resourceQuotas || resourceQuotas?.length < 1) return null;
   return (
     <>
       <div className="item-wrapper tall">
