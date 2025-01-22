@@ -52,6 +52,7 @@ export const Labels = ({
             aria-label={label}
             key={id}
             colorScheme="10"
+            design="Set2"
             className={`sap-margin-end-tiny ${
               disableMarginBottom ? '' : 'sap-margin-bottom-tiny'
             }`}
