@@ -27,6 +27,8 @@ import { useFeature } from 'hooks/useFeature';
 import { createPortal } from 'react-dom';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 
+import '../../web-components/eventListenerTracker';
+
 export const ExtensibilityListCore = ({
   resMetaData,
   filterFunction,
