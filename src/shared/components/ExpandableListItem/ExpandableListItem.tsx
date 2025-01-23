@@ -32,10 +32,10 @@ export const ExpandableListItem = ({
   let statusType;
   switch (status) {
     case 'True':
-      statusType = 'Success';
+      statusType = 'Positive';
       break;
     case 'False':
-      statusType = 'Error';
+      statusType = 'Negative';
       break;
     case 'Unknown':
       statusType = 'Information';

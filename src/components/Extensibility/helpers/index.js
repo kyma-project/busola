@@ -269,9 +269,9 @@ export const getTextSearchProperties = ({
 };
 
 const TYPE_FALLBACK = new Map([
-  ['success', 'Success'],
-  ['warning', 'Warning'],
-  ['error', 'Error'],
+  ['success', 'Positive'],
+  ['warning', 'Critical'],
+  ['error', 'Negative'],
   ['info', 'Information'],
 ]);
 
@@ -301,11 +301,10 @@ export const getBadgeType = (highlights, value, jsonata, t) => {
       type = match[0];
     }
   }
-
-  if (type === 'negative') type = 'Warning';
+  if (type === 'negative') type = 'Critical';
   else if (type === 'informative') type = 'Information';
-  else if (type === 'positive') type = 'Success';
-  else if (type === 'critical') type = 'Error';
+  else if (type === 'positive') type = 'Positive';
+  else if (type === 'critical') type = 'Negative';
   else if (type === 'none') type = 'None';
 
   type = TYPE_FALLBACK.get(type) || type;
