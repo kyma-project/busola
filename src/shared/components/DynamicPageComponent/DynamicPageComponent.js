@@ -335,6 +335,7 @@ export const DynamicPageComponent = ({
           className="tab-container"
           style={{ top: `${headerHeight}px` }}
           ref={tabContainerRef}
+          collapsed
           onTabSelect={e => {
             if (customActionIfFormOpen) {
               customActionIfFormOpen(
@@ -343,9 +344,9 @@ export const DynamicPageComponent = ({
                 isFormOpen,
                 setIsFormOpen,
               );
+              setSelectedSectionIdState(e.detail.tab.getAttribute('data-mode'));
               return;
             }
-
             if (isFormOpen.formOpen) {
               e.preventDefault();
             }
