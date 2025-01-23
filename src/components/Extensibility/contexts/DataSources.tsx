@@ -7,6 +7,7 @@ import { useObjectState } from 'shared/useObjectState';
 import jp from 'jsonpath';
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { resourcesConditions } from 'state/resourceConditionsAtom';
 
 export interface Resource {
   metadata: {
@@ -69,13 +70,11 @@ export const DataSourcesContext = createContext<DataSourcesContextType>(
 interface Props {
   dataSources: DataSources;
   children: JSX.Element;
-  replicas?: any;
 }
 
 export const DataSourcesContextProvider: FC<Props> = ({
   children,
   dataSources,
-  replicas,
 }) => {
   const fetch = useFetch();
   // store
@@ -85,19 +84,28 @@ export const DataSourcesContextProvider: FC<Props> = ({
   // refetch intervals
   const intervals = useRef<ReturnType<typeof setTimeout>[]>([]);
   const fallbackNamespace = useRecoilValue(activeNamespaceIdState);
+  const stateConditions = useRecoilValue(resourcesConditions);
   const [refetchSource, setRefetchSource] = useState('');
+
+  const findUpdatedName = (conditionsArr: string[], storeArr: string[]) => {
+    return conditionsArr.find(item => storeArr.includes(item));
+  };
 
   // clear timeouts on component unmount
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => () => intervals.current.forEach(clearInterval), []);
   useEffect(
     () => () => {
-      // Force update for replicas.
-      if (dataSourcesDict?.current?.['replicas']) {
-        setRefetchSource('replicas');
+      const updatedSourceName = findUpdatedName(
+        Object.keys(stateConditions),
+        Object.keys(store),
+      );
+      if (updatedSourceName) {
+        setRefetchSource(updatedSourceName);
       }
     },
-    [replicas],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [stateConditions],
   );
 
   const buildUrl = (

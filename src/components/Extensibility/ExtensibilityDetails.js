@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import pluralize from 'pluralize';
 
 import { usePrepareDetailsProps } from 'resources/helpers';
@@ -19,6 +18,8 @@ import {
 } from './helpers';
 import { useJsonata } from './hooks/useJsonata';
 import CustomResource from 'resources/CustomResourceDefinitions/CustomResources.details';
+import { useSetRecoilState } from 'recoil';
+import { resourcesConditions } from 'state/resourceConditionsAtom';
 
 export const ExtensibilityDetailsCore = ({
   resMetaData,
@@ -27,10 +28,9 @@ export const ExtensibilityDetailsCore = ({
   namespaceId,
   isModule,
   headerActions,
-  replicas = undefined,
-  updateReplicas = undefined,
 }) => {
   const { t, widgetT, exists } = useGetTranslation();
+  const setResourcesConditions = useSetRecoilState(resourcesConditions);
   const { urlPath, resource, features, description: resourceDescription } =
     resMetaData?.general ?? {};
   let { disableEdit, disableDelete } = features?.actions || {};
@@ -81,6 +81,7 @@ export const ExtensibilityDetailsCore = ({
   const general = resMetaData?.general || {};
 
   const prepareVisibility = (def, resource) => {
+    setResourcesConditions(resource.status);
     const [visible, error] = jsonata(def.visibility, { resource }, true);
     return { visible, error };
   };
@@ -135,25 +136,16 @@ export const ExtensibilityDetailsCore = ({
                 header: widgetT(def),
                 fullWidth: def.fullWidth,
                 visibility: resource => prepareVisibility(def, resource),
-                value: resource => {
-                  if (
-                    updateReplicas &&
-                    resource?.status?.replicas &&
-                    replicas !== resource.status.replicas
-                  ) {
-                    updateReplicas(resource.status.replicas);
-                  }
-                  return (
-                    <Widget
-                      key={i}
-                      structure={def}
-                      value={resource}
-                      schema={schema}
-                      dataSources={dataSources}
-                      originalResource={resource}
-                    />
-                  );
-                },
+                value: resource => (
+                  <Widget
+                    key={i}
+                    structure={def}
+                    value={resource}
+                    schema={schema}
+                    dataSources={dataSources}
+                    originalResource={resource}
+                  />
+                ),
               }))
           : []
       }
@@ -227,7 +219,6 @@ const ExtensibilityDetails = ({
 }) => {
   const resMetaData = useGetCRbyPath(resourceType);
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
-  const [replicas, setReplicas] = useState(null);
 
   if (!resMetaData) {
     return (
@@ -252,10 +243,7 @@ const ExtensibilityDetails = ({
         defaultResourcePlaceholder: defaultPlaceholder,
       }}
     >
-      <DataSourcesContextProvider
-        replicas={replicas}
-        dataSources={resMetaData?.dataSources || {}}
-      >
+      <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
         <ExtensibilityErrBoundary>
           <ExtensibilityDetailsCore
             resMetaData={resMetaData}
@@ -264,8 +252,6 @@ const ExtensibilityDetails = ({
             namespaceId={namespaceId}
             isModule={isModule}
             headerActions={headerActions}
-            replicas={replicas}
-            updateReplicas={data => setReplicas(data)}
           />
         </ExtensibilityErrBoundary>
       </DataSourcesContextProvider>
