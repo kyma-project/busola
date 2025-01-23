@@ -224,7 +224,8 @@ export const GenericList = ({
 
       return (
         <BodyFallback>
-          {emptyListProps?.simpleEmptyListMessage === false ? (
+          {emptyListProps?.simpleEmptyListMessage === false ||
+          (emptyListProps && !emptyListProps.simpleEmptyListMessage) ? (
             <EmptyListComponent
               titleText={emptyListProps.titleText}
               subtitleText={emptyListProps.subtitleText}
