@@ -100,12 +100,12 @@ export const DataSourcesContextProvider: FC<Props> = ({
         Object.keys(stateConditions),
         Object.keys(store),
       );
-      if (updatedSourceName) {
+      if (updatedSourceName && !refetchSource) {
         setRefetchSource(updatedSourceName);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [stateConditions],
+    [stateConditions, refetchSource],
   );
 
   const buildUrl = (
@@ -226,7 +226,9 @@ export const DataSourcesContextProvider: FC<Props> = ({
           REFETCH_INTERVAL,
         ),
       );
-      setRefetchSource('');
+      if (refetchSource) {
+        setRefetchSource('reFetched');
+      }
       return firstFetch;
     } else if (store?.[dataSourceName]?.loading) {
       return store?.[dataSourceName]?.firstFetch;
