@@ -36,7 +36,7 @@ describe('Badge Component', () => {
     const value = -2;
     const structure = {
       highlights: {
-        negative: 'data < 0',
+        critical: 'data < 0',
       },
     };
 
