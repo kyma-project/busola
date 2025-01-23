@@ -71,18 +71,18 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
   const { data: kymaResource, loading: kymaResourceLoading } = useGet(
     resourceUrl,
     {
-      pollingInterval: 3000,
+      pollingInterval: 1000,
       skip: !kymaResourceName,
     },
   );
-  const [selectedModules, setSelectedModules] = useState(
+  const [activeKymaModules, setActiveKymaModules] = useState(
     kymaResource?.spec?.modules ?? [],
   );
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [openedModuleIndex, setOpenedModuleIndex] = useState();
   useEffect(() => {
     if (kymaResource) {
-      setSelectedModules(kymaResource?.spec?.modules || []);
+      setActiveKymaModules(kymaResource?.spec?.modules || []);
       setKymaResourceState(kymaResource);
       setInitialUnchangedResource(cloneDeep(kymaResource));
     }
@@ -118,14 +118,14 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
       </Button>
       {createPortal(
         <DeleteMessageBox
-          resourceTitle={selectedModules[openedModuleIndex]?.name}
+          resourceTitle={activeKymaModules[openedModuleIndex]?.name}
           deleteFn={() => {
-            selectedModules.splice(openedModuleIndex, 1);
+            activeKymaModules.splice(openedModuleIndex, 1);
             setKymaResourceState({
               ...kymaResource,
               spec: {
                 ...kymaResource.spec,
-                modules: selectedModules,
+                modules: activeKymaModules,
               },
             });
             handleModuleUninstall();
@@ -172,7 +172,7 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
         kymaResourceLoading={kymaResourceLoading}
         kymaResourcesLoading={kymaResourcesLoading}
         kymaResourceState={kymaResourceState}
-        selectedModules={selectedModules}
+        selectedModules={activeKymaModules}
         setOpenedModuleIndex={setOpenedModuleIndex}
         detailsOpen={detailsOpen}
         namespaced={namespaced}
@@ -199,7 +199,6 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
     );
   }
 
-  console.log(selectedModules);
   const createMidColumn = (
     <ResourceCreate
       title={t('kyma-modules.add-module')}
@@ -214,8 +213,7 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
               kymaResourceUrl={resourceUrl}
               initialKymaResource={kymaResource}
               loading={kymaResourceLoading}
-              selectedModules={selectedModules}
-              setSelectedModules={setSelectedModules}
+              activeKymaModules={activeKymaModules}
               initialUnchangedResource={initialUnchangedResource}
               kymaResource={kymaResourceState}
               setKymaResource={setKymaResourceState}

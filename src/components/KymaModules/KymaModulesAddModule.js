@@ -7,14 +7,16 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import ModulesCard from './ModulesCard';
 import './KymaModulesAddModule.scss';
+import { cloneDeep } from 'lodash';
 
 export default function KymaModulesAddModule({
   resourceName,
   loadingKymaResources,
   kymaResourceUrl,
   loading,
-  selectedModules,
-  setSelectedModules,
+  activeKymaModules,
+  // selectedModules,
+  // setSelectedModules,
   initialUnchangedResource,
   kymaResource,
   setKymaResource,
@@ -25,6 +27,23 @@ export default function KymaModulesAddModule({
   const modulesResourceUrl = `/apis/operator.kyma-project.io/v1beta2/moduletemplates`;
 
   const modulesReleaseMetaResourceUrl = `/apis/operator.kyma-project.io/v1beta2/modulereleasemetas`;
+
+  const [resource, setResource] = useState(cloneDeep(initialUnchangedResource));
+
+  const [selectedModules, setSelectedModules] = useState(
+    cloneDeep(activeKymaModules),
+  );
+
+  useEffect(() => {
+    console.log(initialUnchangedResource);
+    setResource({
+      ...initialUnchangedResource,
+      spec: {
+        ...initialUnchangedResource.spec,
+        modules: selectedModules,
+      },
+    });
+  }, [initialUnchangedResource, selectedModules]);
 
   const { data: modules } = useGet(modulesResourceUrl, {
     pollingInterval: 3000,
@@ -169,13 +188,13 @@ export default function KymaModulesAddModule({
     }
     setSelectedModules(newSelectedModules);
 
-    setKymaResource({
-      ...kymaResource,
-      spec: {
-        ...kymaResource.spec,
-        modules: newSelectedModules,
-      },
-    });
+    // setResource({
+    //   ...initialUnchangedResource,
+    //   spec: {
+    //     ...initialUnchangedResource.spec,
+    //     modules: newSelectedModules,
+    //   },
+    // });
   };
 
   const setChannel = (module, channel, index) => {
@@ -196,13 +215,13 @@ export default function KymaModulesAddModule({
         modulesToUpdate[modulesToUpdate?.length - 1].channel = channel;
     }
     setSelectedModules(modulesToUpdate);
-    setKymaResource({
-      ...kymaResource,
-      spec: {
-        ...kymaResource.spec,
-        modules: modulesToUpdate,
-      },
-    });
+    // setResource({
+    //   ...initialUnchangedResource,
+    //   spec: {
+    //     ...initialUnchangedResource.spec,
+    //     modules: modulesToUpdate,
+    //   },
+    // });
   };
 
   const findStatus = moduleName => {
@@ -291,8 +310,8 @@ export default function KymaModulesAddModule({
       createUrl={kymaResourceUrl}
       pluralKind={'kymas'}
       singularName={'Kyma'}
-      resource={kymaResource}
-      setResource={setKymaResource}
+      resource={resource}
+      setResource={setResource}
       initialResource={initialUnchangedResource}
       disableDefaultFields
       formElementRef={props.formElementRef}
