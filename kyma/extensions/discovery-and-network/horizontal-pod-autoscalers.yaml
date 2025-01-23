@@ -21,7 +21,7 @@ data:
       networkFlowLevel: -1
       dataSources:
         - source: relatedDeployments
-    header:
+    header: 
       - name: Status
         source: $filter(status.conditions, function($v, $i, $a) {$v.status = 'True'}).type
         widget: Labels

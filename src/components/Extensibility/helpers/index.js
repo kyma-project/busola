@@ -267,3 +267,48 @@ export const getTextSearchProperties = ({
     ...searchingFunctions(searchOptions, originalResource),
   ];
 };
+
+const TYPE_FALLBACK = new Map([
+  ['success', 'Success'],
+  ['warning', 'Warning'],
+  ['error', 'Error'],
+  ['info', 'Information'],
+]);
+
+export const getBadgeType = (highlights, value, jsonata, t) => {
+  let type = null;
+  if (highlights) {
+    const match = Object.entries(highlights).find(([key, rule]) => {
+      if (key === 'type') {
+        return null;
+      }
+      if (Array.isArray(rule)) {
+        return rule.includes(value);
+      } else {
+        const [doesMatch, matchError] = jsonata(rule);
+        if (matchError) {
+          console.error(
+            t('extensibility.configuration-error', {
+              error: matchError.message,
+            }),
+          );
+          return false;
+        }
+        return doesMatch;
+      }
+    });
+    if (match) {
+      type = match[0];
+    }
+  }
+
+  if (type === 'negative') type = 'Warning';
+  else if (type === 'informative') type = 'Information';
+  else if (type === 'positive') type = 'Success';
+  else if (type === 'critical') type = 'Error';
+  else if (type === 'none') type = 'None';
+
+  type = TYPE_FALLBACK.get(type) || type;
+
+  return type;
+};
