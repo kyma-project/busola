@@ -15,8 +15,6 @@ export default function KymaModulesAddModule({
   kymaResourceUrl,
   loading,
   activeKymaModules,
-  // selectedModules,
-  // setSelectedModules,
   initialUnchangedResource,
   kymaResource,
   setKymaResource,
@@ -28,22 +26,21 @@ export default function KymaModulesAddModule({
 
   const modulesReleaseMetaResourceUrl = `/apis/operator.kyma-project.io/v1beta2/modulereleasemetas`;
 
-  const [resource, setResource] = useState(cloneDeep(initialUnchangedResource));
+  const [resource, setResource] = useState(cloneDeep(kymaResource));
 
   const [selectedModules, setSelectedModules] = useState(
     cloneDeep(activeKymaModules),
   );
 
   useEffect(() => {
-    console.log(initialUnchangedResource);
     setResource({
-      ...initialUnchangedResource,
+      ...kymaResource,
       spec: {
-        ...initialUnchangedResource.spec,
+        ...kymaResource.spec,
         modules: selectedModules,
       },
     });
-  }, [initialUnchangedResource, selectedModules]);
+  }, [kymaResource, selectedModules]);
 
   const { data: modules } = useGet(modulesResourceUrl, {
     pollingInterval: 3000,
@@ -187,14 +184,6 @@ export default function KymaModulesAddModule({
       newSelectedModules.splice(index, 1);
     }
     setSelectedModules(newSelectedModules);
-
-    // setResource({
-    //   ...initialUnchangedResource,
-    //   spec: {
-    //     ...initialUnchangedResource.spec,
-    //     modules: newSelectedModules,
-    //   },
-    // });
   };
 
   const setChannel = (module, channel, index) => {
@@ -215,13 +204,6 @@ export default function KymaModulesAddModule({
         modulesToUpdate[modulesToUpdate?.length - 1].channel = channel;
     }
     setSelectedModules(modulesToUpdate);
-    // setResource({
-    //   ...initialUnchangedResource,
-    //   spec: {
-    //     ...initialUnchangedResource.spec,
-    //     modules: modulesToUpdate,
-    //   },
-    // });
   };
 
   const findStatus = moduleName => {
