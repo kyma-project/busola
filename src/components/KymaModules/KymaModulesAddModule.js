@@ -11,13 +11,11 @@ import { cloneDeep } from 'lodash';
 
 export default function KymaModulesAddModule({
   resourceName,
-  loadingKymaResources,
   kymaResourceUrl,
   loading,
   activeKymaModules,
   initialUnchangedResource,
   kymaResource,
-  setKymaResource,
   props,
 }) {
   const { t } = useTranslation();
@@ -34,13 +32,13 @@ export default function KymaModulesAddModule({
 
   useEffect(() => {
     setResource({
-      ...kymaResource,
+      ...initialUnchangedResource,
       spec: {
-        ...kymaResource.spec,
+        ...initialUnchangedResource.spec,
         modules: selectedModules,
       },
     });
-  }, [kymaResource, selectedModules]);
+  }, [initialUnchangedResource, selectedModules]);
 
   const { data: modules } = useGet(modulesResourceUrl, {
     pollingInterval: 3000,
@@ -85,7 +83,7 @@ export default function KymaModulesAddModule({
     };
   }, [cardsContainerRef, calculateColumns]);
 
-  if (loading || loadingKymaResources || !kymaResource) {
+  if (loading || !kymaResource) {
     return (
       <div style={{ height: 'calc(100vh - 14rem)' }}>
         <Spinner />

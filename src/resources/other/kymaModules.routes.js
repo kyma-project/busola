@@ -71,7 +71,7 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
   const { data: kymaResource, loading: kymaResourceLoading } = useGet(
     resourceUrl,
     {
-      pollingInterval: 1000,
+      pollingInterval: 3000,
       skip: !kymaResourceName,
     },
   );
@@ -209,10 +209,9 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
           <ErrorBoundary>
             <KymaModulesAddModule
               resourceName={kymaResourceName}
-              loadingKymaResources={kymaResourcesLoading}
               kymaResourceUrl={resourceUrl}
               initialKymaResource={kymaResource}
-              loading={kymaResourceLoading}
+              loading={kymaResourcesLoading || kymaResourceLoading}
               activeKymaModules={activeKymaModules}
               initialUnchangedResource={initialUnchangedResource}
               kymaResource={kymaResourceState}
