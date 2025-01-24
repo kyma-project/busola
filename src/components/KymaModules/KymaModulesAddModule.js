@@ -27,32 +27,24 @@ export default function KymaModulesAddModule({
 
   const [resource, setResource] = useState(cloneDeep(kymaResource));
 
-  const [selectedModules, setSelectedModules] = useState(
-    cloneDeep(activeKymaModules),
-  );
+  const [selectedModules, setSelectedModules] = useState([]);
 
   useEffect(() => {
-    if (activeKymaModules) {
+    if (selectedModules && kymaResource) {
       const mergedModules = activeKymaModules.concat(
         selectedModules.filter(
           i => !activeKymaModules.find(j => j.name === i.name),
         ),
       );
-      setSelectedModules(mergedModules);
-    }
-  }, [activeKymaModules]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    if (selectedModules && kymaResource) {
       setResource({
         ...kymaResource,
         spec: {
           ...kymaResource?.spec,
-          modules: selectedModules,
+          modules: mergedModules,
         },
       });
     }
-  }, [setKymaResource, kymaResource, selectedModules]);
+  }, [setKymaResource, kymaResource, selectedModules, activeKymaModules]);
 
   const { data: modules } = useGet(modulesResourceUrl, {
     pollingInterval: 3000,
