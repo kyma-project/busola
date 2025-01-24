@@ -32,6 +32,12 @@ export default function KymaModulesAddModule({
   );
 
   useEffect(() => {
+    if (activeKymaModules) {
+      setSelectedModules(activeKymaModules);
+    }
+  }, [activeKymaModules]);
+
+  useEffect(() => {
     if (selectedModules && kymaResource) {
       setResource({
         ...kymaResource,
