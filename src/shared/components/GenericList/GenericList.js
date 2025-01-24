@@ -1,7 +1,7 @@
 import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { Table } from '@ui5/webcomponents-react';
 import { useNavigate } from 'react-router-dom';
@@ -221,9 +221,11 @@ export const GenericList = ({
           </BodyFallback>
         );
       }
+
       return (
         <BodyFallback>
-          {emptyListProps ? (
+          {emptyListProps?.simpleEmptyListMessage === false ||
+          (emptyListProps && !emptyListProps.simpleEmptyListMessage) ? (
             <EmptyListComponent
               titleText={emptyListProps.titleText}
               subtitleText={emptyListProps.subtitleText}
@@ -235,9 +237,13 @@ export const GenericList = ({
             />
           ) : (
             <p>
-              {i18n.exists(notFoundMessage)
-                ? t(notFoundMessage)
-                : notFoundMessage}
+              {emptyListProps?.titleText ? (
+                <Trans i18nKey={emptyListProps?.titleText} />
+              ) : i18n.exists(notFoundMessage) ? (
+                t(notFoundMessage)
+              ) : (
+                notFoundMessage
+              )}
             </p>
           )}
         </BodyFallback>

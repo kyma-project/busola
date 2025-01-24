@@ -25,6 +25,7 @@ export function EventList({
     value,
     arrayItems,
   });
+  const simpleEmptyListMessage = structure.simpleEmptyListMessage || false;
 
   const renameDefaultType = defaultType => {
     switch ((defaultType || '').toLowerCase()) {
@@ -67,6 +68,7 @@ export function EventList({
     hideInvolvedObjects: structure?.hideInvolvedObjects,
     isCompact: true,
     title: widgetT(structure),
+    simpleEmptyListMessage: simpleEmptyListMessage,
     defaultType,
     filter,
   };

@@ -541,18 +541,15 @@ export function ResourceListRenderer({
               ...searchSettings,
               textSearchProperties: textSearchProperties(),
             }}
-            emptyListProps={
-              simpleEmptyListMessage
-                ? null
-                : {
-                    titleText: `${t('common.labels.no')} ${processTitle(
-                      prettifyNamePlural(resourceTitle, resourceType),
-                    )}`,
-                    onClick: handleShowCreate,
-                    showButton: !disableCreate && namespace !== '-all-',
-                    ...emptyListProps,
-                  }
-            }
+            emptyListProps={{
+              titleText: `${t('common.labels.no')} ${processTitle(
+                prettifyNamePlural(resourceTitle, resourceType),
+              )}`,
+              onClick: handleShowCreate,
+              showButton: !disableCreate && namespace !== '-all-',
+              ...emptyListProps,
+              simpleEmptyListMessage: simpleEmptyListMessage,
+            }}
             handleRedirect={handleRedirect}
             nameColIndex={nameColIndex}
             namespaceColIndex={namespaceColIndex}
