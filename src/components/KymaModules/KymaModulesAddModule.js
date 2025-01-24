@@ -31,11 +31,13 @@ export default function KymaModulesAddModule({
 
   useEffect(() => {
     if (selectedModules && kymaResource) {
-      const mergedModules = activeKymaModules.concat(
-        selectedModules.filter(
-          i => !activeKymaModules.find(j => j.name === i.name),
-        ),
+      const newModules = selectedModules.filter(
+        newModules =>
+          !activeKymaModules.find(
+            activeModules => activeModules.name === newModules.name,
+          ),
       );
+      const mergedModules = activeKymaModules.concat(newModules);
       setResource({
         ...kymaResource,
         spec: {
