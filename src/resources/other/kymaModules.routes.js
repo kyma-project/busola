@@ -75,14 +75,14 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
       skip: !kymaResourceName,
     },
   );
-  const [selectedModules, setSelectedModules] = useState(
+  const [activeKymaModules, setActiveKymaModules] = useState(
     kymaResource?.spec?.modules ?? [],
   );
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [openedModuleIndex, setOpenedModuleIndex] = useState();
   useEffect(() => {
     if (kymaResource) {
-      setSelectedModules(kymaResource?.spec?.modules || []);
+      setActiveKymaModules(kymaResource?.spec?.modules || []);
       setKymaResourceState(kymaResource);
       setInitialUnchangedResource(cloneDeep(kymaResource));
     }
@@ -118,14 +118,14 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
       </Button>
       {createPortal(
         <DeleteMessageBox
-          resourceTitle={selectedModules[openedModuleIndex]?.name}
+          resourceTitle={activeKymaModules[openedModuleIndex]?.name}
           deleteFn={() => {
-            selectedModules.splice(openedModuleIndex, 1);
+            activeKymaModules.splice(openedModuleIndex, 1);
             setKymaResourceState({
               ...kymaResource,
               spec: {
                 ...kymaResource.spec,
-                modules: selectedModules,
+                modules: activeKymaModules,
               },
             });
             handleModuleUninstall();
@@ -172,7 +172,7 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
         kymaResourceLoading={kymaResourceLoading}
         kymaResourcesLoading={kymaResourcesLoading}
         kymaResourceState={kymaResourceState}
-        selectedModules={selectedModules}
+        selectedModules={activeKymaModules}
         setOpenedModuleIndex={setOpenedModuleIndex}
         detailsOpen={detailsOpen}
         namespaced={namespaced}
@@ -209,11 +209,10 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
           <ErrorBoundary>
             <KymaModulesAddModule
               resourceName={kymaResourceName}
-              loadingKymaResources={kymaResourcesLoading}
               kymaResourceUrl={resourceUrl}
               initialKymaResource={kymaResource}
-              loading={kymaResourceLoading}
-              selectedModules={selectedModules}
+              loading={kymaResourcesLoading || kymaResourceLoading}
+              activeKymaModules={activeKymaModules}
               initialUnchangedResource={initialUnchangedResource}
               kymaResource={kymaResourceState}
               setKymaResource={setKymaResourceState}
