@@ -16,6 +16,7 @@ export default function KymaModulesAddModule({
   activeKymaModules,
   initialUnchangedResource,
   kymaResource,
+  setKymaResource,
   props,
 }) {
   const { t } = useTranslation();
@@ -26,17 +27,19 @@ export default function KymaModulesAddModule({
 
   const [resource, setResource] = useState(cloneDeep(kymaResource));
 
-  const [selectedModules, setSelectedModules] = useState(activeKymaModules);
+  const [selectedModules, setSelectedModules] = useState(
+    cloneDeep(activeKymaModules),
+  );
 
   useEffect(() => {
     setResource({
-      ...initialUnchangedResource,
+      ...kymaResource,
       spec: {
-        ...initialUnchangedResource.spec,
+        ...kymaResource?.spec,
         modules: selectedModules,
       },
     });
-  }, [initialUnchangedResource, selectedModules]);
+  }, [setKymaResource, kymaResource, selectedModules]);
 
   const { data: modules } = useGet(modulesResourceUrl, {
     pollingInterval: 3000,
