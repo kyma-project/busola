@@ -41,7 +41,7 @@ import pluralize from 'pluralize';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { Label } from 'shared/ResourceForm/components/Label';
 import { isFormOpenState } from 'state/formOpenAtom';
-import { ModuleStatus } from './components/ModuleStatus';
+import { ModuleStatus, resolveType } from './components/ModuleStatus';
 import { cloneDeep } from 'lodash';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useNavigate } from 'react-router-dom';
@@ -269,16 +269,7 @@ export default function KymaModulesList({
         // Installation State
         <StatusBadge
           resourceKind="kymas"
-          type={
-            moduleStatus?.state === 'Ready'
-              ? 'Positive'
-              : moduleStatus?.state === 'Processing' ||
-                moduleStatus?.state === 'Deleting' ||
-                moduleStatus?.state === 'Unmanaged' ||
-                moduleStatus?.state === 'Unknown'
-              ? 'None'
-              : moduleStatus?.state || 'None'
-          }
+          type={resolveType(moduleStatus?.state)}
           tooltipContent={moduleStatus?.message}
         >
           {moduleStatus?.state || 'Unknown'}
