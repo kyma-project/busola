@@ -32,13 +32,15 @@ export default function KymaModulesAddModule({
   );
 
   useEffect(() => {
-    setResource({
-      ...kymaResource,
-      spec: {
-        ...kymaResource?.spec,
-        modules: selectedModules,
-      },
-    });
+    if (selectedModules && kymaResource) {
+      setResource({
+        ...kymaResource,
+        spec: {
+          ...kymaResource?.spec,
+          modules: selectedModules,
+        },
+      });
+    }
   }, [setKymaResource, kymaResource, selectedModules]);
 
   const { data: modules } = useGet(modulesResourceUrl, {
