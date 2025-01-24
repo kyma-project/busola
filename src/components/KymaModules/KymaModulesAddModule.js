@@ -26,9 +26,7 @@ export default function KymaModulesAddModule({
 
   const [resource, setResource] = useState(cloneDeep(kymaResource));
 
-  const [selectedModules, setSelectedModules] = useState(
-    cloneDeep(activeKymaModules),
-  );
+  const [selectedModules, setSelectedModules] = useState(activeKymaModules);
 
   useEffect(() => {
     setResource({
