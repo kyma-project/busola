@@ -33,7 +33,12 @@ export default function KymaModulesAddModule({
 
   useEffect(() => {
     if (activeKymaModules) {
-      setSelectedModules(activeKymaModules);
+      const mergedModules = activeKymaModules.concat(
+        selectedModules.filter(
+          i => !activeKymaModules.find(j => j.name === i.name),
+        ),
+      );
+      setSelectedModules(mergedModules);
     }
   }, [activeKymaModules]);
 
