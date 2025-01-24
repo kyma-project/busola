@@ -40,7 +40,7 @@ export default function KymaModulesAddModule({
       );
       setSelectedModules(mergedModules);
     }
-  }, [activeKymaModules]);
+  }, [activeKymaModules]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (selectedModules && kymaResource) {
