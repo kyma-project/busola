@@ -15,8 +15,8 @@ These are the available **injections** widget parameters:
 | **targets**          | **Yes**  | []objects                                      | Defines where the injection should be rendered.                                                                                                                                                                  |
 | **targets.location** | **Yes**  | string                                         | Defines on what view the injection should be rendered. Currently, injections are rendered only on details views. For more information, check the list of [available locations](#available-injections-locations). |
 | **targets.slot**     | **Yes**  | string                                         | Defines where the injection should be rendered on a page. Check the list of [available slots](#available-injections-slots).                                                                                      |
-| **targets.filter**   | No       | [JSONata](jsonata.md) expression               | Filters resources based on a given condition. If defined, it overrides the general filter.                                                                                                                       |
-| **filter**           | No       | [JSONata](jsonata.md) expression               | Filters resources based on a given condition. This is a general filter rule. If **filter** is defined in **targets**, it is ignored.                                                                             |
+| **targets.filter**   | No       | [JSONata](100-jsonata.md) expression           | Filters resources based on a given condition. If defined, it overrides the general filter.                                                                                                                       |
+| **filter**           | No       | [JSONata](100-jsonata.md) expression           | Filters resources based on a given condition. This is a general filter rule. If **filter** is defined in **targets**, it is ignored.                                                                             |
 
 ## Available **injections** Slots
 
