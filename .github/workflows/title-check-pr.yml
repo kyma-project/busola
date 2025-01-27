@@ -1,7 +1,7 @@
 name: PR Title Check
 env:
   PR_TITLE: ${{ github.event.pull_request.title }}
-  PR_DESCRIPTION: ${{ github.event }}
+  PR_DESCRIPTION: ${{ github.event.head_commit.message }}
 on: 
   pull_request:
     types: [opened, edited, synchronize, reopened, ready_for_review]
