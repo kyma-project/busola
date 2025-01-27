@@ -150,7 +150,7 @@ export default function KymaModulesList({
     };
 
     const findStatus = moduleName => {
-      return kymaResource?.status.modules?.find(
+      return kymaResource?.status?.modules?.find(
         module => moduleName === module.name,
       );
     };

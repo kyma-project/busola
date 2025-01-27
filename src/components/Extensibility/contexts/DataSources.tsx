@@ -1,5 +1,5 @@
 import pluralize from 'pluralize';
-import { createContext, useEffect, useRef, FC } from 'react';
+import { createContext, useEffect, useRef, FC, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
@@ -7,6 +7,7 @@ import { useObjectState } from 'shared/useObjectState';
 import jp from 'jsonpath';
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { resourcesConditions } from 'state/resourceConditionsAtom';
 
 export interface Resource {
   metadata: {
@@ -83,10 +84,29 @@ export const DataSourcesContextProvider: FC<Props> = ({
   // refetch intervals
   const intervals = useRef<ReturnType<typeof setTimeout>[]>([]);
   const fallbackNamespace = useRecoilValue(activeNamespaceIdState);
+  const stateConditions = useRecoilValue(resourcesConditions);
+  const [refetchSource, setRefetchSource] = useState('');
+
+  const findUpdatedName = (conditionsArr: string[], storeArr: string[]) => {
+    return conditionsArr.find(item => storeArr.includes(item));
+  };
 
   // clear timeouts on component unmount
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => () => intervals.current.forEach(clearInterval), []);
+  useEffect(
+    () => () => {
+      const updatedSourceName = findUpdatedName(
+        Object.keys(stateConditions),
+        Object.keys(store),
+      );
+      if (updatedSourceName && !refetchSource) {
+        setRefetchSource(updatedSourceName);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [stateConditions, refetchSource],
+  );
 
   const buildUrl = (
     dataSource: DataSource,
@@ -179,6 +199,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
     const dataSource = dataSources[dataSourceName];
 
     if (
+      refetchSource === dataSourceName ||
       !dataSourcesDict.current[dataSourceName] ||
       dataSourcesDict.current[dataSourceName].rootName !==
         resource?.metadata?.name ||
@@ -205,7 +226,9 @@ export const DataSourcesContextProvider: FC<Props> = ({
           REFETCH_INTERVAL,
         ),
       );
-
+      if (refetchSource) {
+        setRefetchSource('reFetched');
+      }
       return firstFetch;
     } else if (store?.[dataSourceName]?.loading) {
       return store?.[dataSourceName]?.firstFetch;

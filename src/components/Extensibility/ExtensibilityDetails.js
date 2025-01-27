@@ -18,6 +18,8 @@ import {
 } from './helpers';
 import { useJsonata } from './hooks/useJsonata';
 import CustomResource from 'resources/CustomResourceDefinitions/CustomResources.details';
+import { useSetRecoilState } from 'recoil';
+import { resourcesConditions } from 'state/resourceConditionsAtom';
 
 export const ExtensibilityDetailsCore = ({
   resMetaData,
@@ -28,6 +30,7 @@ export const ExtensibilityDetailsCore = ({
   headerActions,
 }) => {
   const { t, widgetT, exists } = useGetTranslation();
+  const setResourcesConditions = useSetRecoilState(resourcesConditions);
   const { urlPath, resource, features, description: resourceDescription } =
     resMetaData?.general ?? {};
   let { disableEdit, disableDelete } = features?.actions || {};
@@ -78,6 +81,7 @@ export const ExtensibilityDetailsCore = ({
   const general = resMetaData?.general || {};
 
   const prepareVisibility = (def, resource) => {
+    setResourcesConditions(resource.status);
     const [visible, error] = jsonata(def.visibility, { resource }, true);
     return { visible, error };
   };

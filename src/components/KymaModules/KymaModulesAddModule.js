@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
@@ -8,13 +8,13 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import ModulesCard from './ModulesCard';
 
 import './KymaModulesAddModule.scss';
+import { cloneDeep } from 'lodash';
 
 export default function KymaModulesAddModule({
   resourceName,
-  loadingKymaResources,
   kymaResourceUrl,
   loading,
-  selectedModules,
+  activeKymaModules,
   initialUnchangedResource,
   kymaResource,
   setKymaResource,
@@ -25,6 +25,29 @@ export default function KymaModulesAddModule({
   const modulesResourceUrl = `/apis/operator.kyma-project.io/v1beta2/moduletemplates`;
 
   const modulesReleaseMetaResourceUrl = `/apis/operator.kyma-project.io/v1beta2/modulereleasemetas`;
+
+  const [resource, setResource] = useState(cloneDeep(kymaResource));
+
+  const [selectedModules, setSelectedModules] = useState([]);
+
+  useEffect(() => {
+    if (selectedModules && kymaResource) {
+      const newModules = selectedModules.filter(
+        newModules =>
+          !activeKymaModules.find(
+            activeModules => activeModules.name === newModules.name,
+          ),
+      );
+      const mergedModules = activeKymaModules.concat(newModules);
+      setResource({
+        ...kymaResource,
+        spec: {
+          ...kymaResource?.spec,
+          modules: mergedModules,
+        },
+      });
+    }
+  }, [setKymaResource, kymaResource, selectedModules, activeKymaModules]);
 
   const { data: modules } = useGet(modulesResourceUrl, {
     pollingInterval: 3000,
@@ -69,7 +92,7 @@ export default function KymaModulesAddModule({
     };
   }, [cardsContainerRef, calculateColumns]);
 
-  if (loading || loadingKymaResources || !kymaResource) {
+  if (loading || !kymaResource) {
     return (
       <div style={{ height: 'calc(100vh - 14rem)' }}>
         <Spinner />
@@ -155,53 +178,39 @@ export default function KymaModulesAddModule({
   }, []);
 
   const isChecked = name => {
-    return kymaResource?.spec?.modules?.find(module => module.name === name)
-      ? true
-      : false;
+    return !!selectedModules?.find(module => module.name === name);
   };
 
   const setCheckbox = (module, checked, index) => {
+    const newSelectedModules = [...selectedModules];
     if (checked) {
-      selectedModules.push({
+      newSelectedModules.push({
         name: module.name,
       });
     } else {
-      selectedModules.splice(index, 1);
+      newSelectedModules.splice(index, 1);
     }
-
-    setKymaResource({
-      ...kymaResource,
-      spec: {
-        ...kymaResource.spec,
-        modules: selectedModules,
-      },
-    });
+    setSelectedModules(newSelectedModules);
   };
 
   const setChannel = (module, channel, index) => {
+    const modulesToUpdate = [...selectedModules];
     if (
       selectedModules.find(
         selectedModule => selectedModule.name === module.name,
       )
     ) {
       if (channel === 'predefined') {
-        delete selectedModules[index].channel;
-      } else selectedModules[index].channel = channel;
+        delete modulesToUpdate[index].channel;
+      } else modulesToUpdate[index].channel = channel;
     } else {
-      selectedModules.push({
+      modulesToUpdate.push({
         name: module.name,
       });
       if (channel !== 'predefined')
-        selectedModules[selectedModules?.length - 1].channel = channel;
+        modulesToUpdate[modulesToUpdate?.length - 1].channel = channel;
     }
-
-    setKymaResource({
-      ...kymaResource,
-      spec: {
-        ...kymaResource.spec,
-        modules: selectedModules,
-      },
-    });
+    setSelectedModules(modulesToUpdate);
   };
 
   const findStatus = moduleName => {
@@ -290,8 +299,8 @@ export default function KymaModulesAddModule({
       createUrl={kymaResourceUrl}
       pluralKind={'kymas'}
       singularName={'Kyma'}
-      resource={kymaResource}
-      setResource={setKymaResource}
+      resource={resource}
+      setResource={setResource}
       initialResource={initialUnchangedResource}
       disableDefaultFields
       formElementRef={props.formElementRef}
