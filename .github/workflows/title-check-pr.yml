@@ -11,7 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         env:
-          PR_ALL: ${{ github.event.pull_request }}
           PR_TITLE: ${{ github.event.pull_request.title }}
           PR_DESCRIPTION: ${{ github.event.head_commit.message }}
           run: |
