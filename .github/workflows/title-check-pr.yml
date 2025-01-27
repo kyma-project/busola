@@ -5,7 +5,7 @@ on:
     types: [opened, edited, synchronize, reopened, ready_for_review]
 
 jobs:
-  run-title-description-check:
+  run-title-check:
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
     steps:
