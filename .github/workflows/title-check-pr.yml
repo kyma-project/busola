@@ -1,5 +1,7 @@
 name: PR Title Check
-
+env:
+  PR_TITLE: ${{ github.event.pull_request.title }}
+  PR_DESCRIPTION: ${{ github.event }}
 on: 
   pull_request:
     types: [opened, edited, synchronize, reopened, ready_for_review]
@@ -10,12 +12,10 @@ jobs:
     if: github.event.pull_request.draft == false
     steps:
       - uses: actions/checkout@v4
-        env:
-          PR_TITLE: ${{ github.event.pull_request.title }}
-          PR_DESCRIPTION: ${{ github.event.head_commit.message }}
-          run: |
-            echo "PR title is: $PR_TITLE"
-            echo "PR description is: $PR_DESCRIPTION"
+      - name: Print PR info to console
+        run: |
+          echo "PR title is: $PR_TITLE"
+          echo "PR description is: $PR_DESCRIPTION"
   run-title-check:
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
