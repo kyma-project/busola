@@ -19,7 +19,7 @@ You can use form widgets in the create and/or edit pages in the user interface c
   - [`GenericList`](#genericlist)
   - [`SimpleList`](#simplelist)
 
-## Simple widgets
+## Simple Widgets
 
 Simple widgets represent a single scalar value.
 

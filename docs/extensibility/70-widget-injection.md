@@ -2,7 +2,7 @@
 
 The **injections** section contains a list of objects that defines the display structure of the current extension in a different view. Each object is a separate **injection** that will be injected in the specified view at a specified slot.
 
-## Available _injections_ section parameters
+## Available injections Section Parameters
 
 These are the available **injections** widget parameters:
 
@@ -27,7 +27,7 @@ These are the available **injections** widget parameters:
 - **health** - At the top of the resource view. This slot should be only used with `location: ClusterOverview` and [`widget: StatisticalCard`](./50-list-and-details-widgets.md#statisticalcard).
 - **list-header** - In the header of the list view
 
-## Available **injections** Locations
+## Available injections Locations
 
 ### Special Views
 
