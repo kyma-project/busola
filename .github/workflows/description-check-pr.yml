@@ -5,8 +5,9 @@ on:
     types: [opened, edited, synchronize, reopened, ready_for_review]
 
 jobs:
-  ci:
-    runs-on: self-hosted
+  run-desc-check:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
     steps:
       - uses: actions/checkout@v3
       - name: Print PR info to console
