@@ -5,6 +5,18 @@ on:
     types: [opened, edited, synchronize, reopened, ready_for_review]
 
 jobs:
+  run-desc-check:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - uses: actions/checkout@v4
+        env:
+          PR_ALL: ${{ github.event.pull_request }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_DESCRIPTION: ${{ github.event.head_commit.message }}
+          run: |
+            echo "PR title is: $PR_TITLE"
+            echo "PR description is: $PR_DESCRIPTION"
   run-title-check:
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
@@ -12,8 +24,6 @@ jobs:
       - uses: amannn/action-semantic-pull-request@47b15d52c5c30e94a17ec87eb8dd51ff5221fed9
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_TITLE: ${{ github.event.pull_request }}
-          PR_DESCRIPTION: ${{ github.event.head_commit.message }}
         with:
           types: |
             feat
