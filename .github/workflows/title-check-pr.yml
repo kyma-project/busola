@@ -16,8 +16,8 @@ jobs:
         run: |
           echo "PR title is: $PR_TITLE"
           echo "PR description is: $PR_DESCRIPTION"
-          echo ${{ github.event.pull_request.comments[0] }}
           echo ${{ github.event.pull_request.body }}
+          echo ${{ github.event.pull_request }}
   run-title-check:
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
