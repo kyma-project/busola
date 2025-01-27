@@ -1,0 +1,25 @@
+name: PR Title Check
+
+on: 
+  pull_request:
+    types: [opened, edited, synchronize, reopened, ready_for_review]
+
+jobs:
+  run-title-check:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: amannn/action-semantic-pull-request@47b15d52c5c30e94a17ec87eb8dd51ff5221fed9
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        with:
+          types: |
+            feat
+            fix
+            docs
+            refactor
+            test
+            chore
+          requireScope: false
+          subjectPattern: ^([A-Z].*[^.]|bump .*)$
