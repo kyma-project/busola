@@ -12,5 +12,5 @@ jobs:
       - uses: actions/checkout@v3
       - name: Print PR info to console
         run: |
-          echo "${{ github.event.pull_request.labels.description }}"
-          echo "${{ github.event.pull_request.comments }}"
+          echo "${{ github.event.pull_request.labels[0] }}"
+          echo "${{ github.event.pull_request.labels[1] }}"
