@@ -14,6 +14,8 @@ jobs:
     steps:
       - uses: nearform-actions/github-action-check-linked-issues@v1
         id: check-linked-issues
+        with:
+          custom-body-comment: "No linked issues found. Please add the corresponding issues in the pull request description."
   check-unchecked-tasks:
     runs-on: ubuntu-latest
     steps:
