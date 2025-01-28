@@ -4,14 +4,14 @@ import jsyaml from 'js-yaml';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import {
-  DynamicPageHeader,
-  Button,
-  FlexBox,
-  Text,
   Badge,
+  Button,
+  DynamicPageHeader,
+  FlexBox,
   List,
-  StandardListItem,
   MessageStrip,
+  StandardListItem,
+  Text,
 } from '@ui5/webcomponents-react';
 
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
@@ -28,11 +28,11 @@ import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import KymaModulesCreate from './KymaModulesCreate';
 import {
+  apiGroup,
+  apiVersion,
   ReleaseChannelDescription,
   ResourceDescription,
   resourceType,
-  apiGroup,
-  apiVersion,
 } from 'components/KymaModules';
 import { useSetRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
@@ -45,6 +45,10 @@ import { ModuleStatus } from './components/ModuleStatus';
 import { cloneDeep } from 'lodash';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useNavigate } from 'react-router-dom';
+import {
+  useModulesReleaseQuery,
+  useModuleTemplatesQuery,
+} from './kymaModulesQueries.js';
 
 export default function KymaModulesList({
   DeleteMessageBox,
@@ -56,7 +60,6 @@ export default function KymaModulesList({
   resourceUrl,
   kymaResource,
   kymaResourceLoading,
-  kymaResourcesLoading,
   kymaResourceState,
   selectedModules,
   setOpenedModuleIndex,
@@ -83,21 +86,11 @@ export default function KymaModulesList({
 
   const namespace = 'kyma-system';
 
-  const modulesResourceUrl = `/apis/operator.kyma-project.io/v1beta2/moduletemplates`;
-  const modulesReleaseMetaResourceUrl = `/apis/operator.kyma-project.io/v1beta2/modulereleasemetas`;
-
-  const { data: moduleReleaseMetas } = useGet(modulesReleaseMetaResourceUrl, {
-    pollingInterval: 3000,
-    skip: !resourceName,
-  });
-
-  const { data: modules, loading: modulesLoading } = useGet(
-    modulesResourceUrl,
-    {
-      pollingInterval: 3000,
-      skip: !resourceName,
-    },
-  );
+  const { data: moduleReleaseMetas } = useModulesReleaseQuery(!resourceName);
+  const {
+    data: moduleTemplates,
+    loading: moduleTemplateLoading,
+  } = useModuleTemplatesQuery(!resourceName);
 
   const crdUrl = `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`;
   const { data: crds } = useGet(crdUrl, {
@@ -105,7 +98,7 @@ export default function KymaModulesList({
   });
   const [chosenModuleIndex, setChosenModuleIndex] = useState(null);
 
-  if (kymaResourcesLoading || modulesLoading || kymaResourceLoading) {
+  if (moduleTemplateLoading || kymaResourceLoading) {
     return <Spinner />;
   }
 
@@ -125,14 +118,14 @@ export default function KymaModulesList({
 
   const ModulesList = resource => {
     const findModule = (moduleName, channel, version) => {
-      // This change was made due to changes in modules and should be simplified once all modules migrate
-      const moduleWithoutInfo = modules?.items?.find(
+      // This change was made due to changes in moduleTemplates and should be simplified once all moduleTemplates migrate
+      const moduleWithoutInfo = moduleTemplates?.items?.find(
         module =>
           moduleName ===
             module.metadata.labels['operator.kyma-project.io/module-name'] &&
           module.spec.channel === channel,
       );
-      const moduleWithInfo = modules?.items?.find(
+      const moduleWithInfo = moduleTemplates?.items?.find(
         module =>
           moduleName ===
             module.metadata.labels['operator.kyma-project.io/module-name'] &&
@@ -233,7 +226,7 @@ export default function KymaModulesList({
           )}
           {checkBeta(currentModule, currentModuleReleaseMeta) ? (
             <Badge style={spacing.sapUiTinyMarginBegin}>
-              {t('kyma-modules.beta')}
+              {t('kyma-moduleTemplates.beta')}
             </Badge>
           ) : null}
         </>,

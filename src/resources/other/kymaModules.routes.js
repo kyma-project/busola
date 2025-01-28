@@ -14,7 +14,7 @@ import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
 import { cloneDeep } from 'lodash';
-import { useGet } from 'shared/hooks/BackendAPI/useGet';
+import { useKymaQuery } from '../../components/KymaModules/kymaModulesQueries.js';
 
 const KymaModulesList = React.lazy(() =>
   import('../../components/KymaModules/KymaModulesList'),
@@ -60,21 +60,11 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
     forceConfirmDelete: true,
   });
 
-  const { data: kymaResources, loading: kymaResourcesLoading } = useGet(
-    '/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas',
-  );
-  const kymaResourceName =
-    kymaResources?.items.find(kymaResource => kymaResource?.status)?.metadata
-      .name || kymaResources?.items[0]?.metadata?.name;
-  const resourceUrl = `/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas/${kymaResourceName}`;
-
-  const { data: kymaResource, loading: kymaResourceLoading } = useGet(
+  const {
+    data: kymaResource,
+    loading: kymaResourceLoading,
     resourceUrl,
-    {
-      pollingInterval: 3000,
-      skip: !kymaResourceName,
-    },
-  );
+  } = useKymaQuery();
   const [activeKymaModules, setActiveKymaModules] = useState(
     kymaResource?.spec?.modules ?? [],
   );
@@ -166,11 +156,10 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
         handleModuleUninstall={handleModuleUninstall}
         setKymaResourceState={setKymaResourceState}
         setInitialUnchangedResource={setInitialUnchangedResource}
-        resourceName={kymaResourceName}
+        resourceName={kymaResource?.metadata?.name}
         resourceUrl={resourceUrl}
         kymaResource={kymaResource}
         kymaResourceLoading={kymaResourceLoading}
-        kymaResourcesLoading={kymaResourcesLoading}
         kymaResourceState={kymaResourceState}
         selectedModules={activeKymaModules}
         setOpenedModuleIndex={setOpenedModuleIndex}
@@ -208,10 +197,10 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
         return (
           <ErrorBoundary>
             <KymaModulesAddModule
-              resourceName={kymaResourceName}
+              resourceName={kymaResource}
               kymaResourceUrl={resourceUrl}
               initialKymaResource={kymaResource}
-              loading={kymaResourcesLoading || kymaResourceLoading}
+              loading={kymaResourceLoading}
               activeKymaModules={activeKymaModules}
               initialUnchangedResource={initialUnchangedResource}
               kymaResource={kymaResourceState}
