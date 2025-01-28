@@ -1,19 +1,29 @@
-name: PR has a valid Issue?
+name: PR Description Check
 
-on:
-  pull_request_target:
+on: 
+  pull_request:
     types: [opened, edited, synchronize, reopened, ready_for_review]
 
 jobs:
-  link-check:
+  run-desc-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Issue Validator
-        uses: HarshCasper/validate-issues-over-pull-requests@v0.1.1
+      - uses: actions/checkout@v3
+      - name: Print PR info to console
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          {
+            echo 'cleaned<<EOF'
+            echo "${PR_BODY}" | tr -d '\r'
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
+  run-link-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify Linked Issue
+        uses: hattan/verify-linked-issue-action@v1.1.5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        id: validator
         with:
-          prbody: ${{ github.event.pull_request.body }}
-          prurl: ${{ github.event.pull_request.url }}
+          message: 'Error! This is a custom error'
