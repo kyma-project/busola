@@ -96,12 +96,14 @@ export const DataSourcesContextProvider: FC<Props> = ({
   useEffect(() => () => intervals.current.forEach(clearInterval), []);
   useEffect(
     () => () => {
-      const updatedSourceName = findUpdatedName(
-        Object.keys(stateConditions),
-        Object.keys(store),
-      );
-      if (updatedSourceName && !refetchSource) {
-        setRefetchSource(updatedSourceName);
+      if (stateConditions && store) {
+        const updatedSourceName = findUpdatedName(
+          Object.keys(stateConditions),
+          Object.keys(store),
+        );
+        if (updatedSourceName && !refetchSource) {
+          setRefetchSource(updatedSourceName);
+        }
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
