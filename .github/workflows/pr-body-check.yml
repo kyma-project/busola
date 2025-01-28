@@ -10,14 +10,13 @@ jobs:
     name: Check linked issues
     permissions:
       issues: read
-      pull-requests: write
     steps:
       - uses: nearform-actions/github-action-check-linked-issues@v1
         id: check-linked-issues
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          custom-body-comment: "No linked issues found. Please add the corresponding issues in the pull request description."
+          comment: false
       - name: Get the output
         run: echo "How many linked issues? ${{ steps.check-linked-issues.outputs.linked_issues_count }}"  
   check-unchecked-tasks:
