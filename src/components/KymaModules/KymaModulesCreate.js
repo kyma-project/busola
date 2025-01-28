@@ -36,7 +36,7 @@ import {
   useModulesReleaseQuery,
   useModuleTemplatesQuery,
 } from './kymaModulesQueries';
-import { findSpec, findStatus } from './support';
+import { findSpec, findStatus, setChannel } from './support';
 
 export default function KymaModulesCreate({ resource, ...props }) {
   const { t } = useTranslation();
@@ -67,10 +67,12 @@ export default function KymaModulesCreate({ resource, ...props }) {
 
   const getRequest = useSingleGet();
   const patchRequest = useUpdate();
-  const [selectedModules] = useState(
+  const [selectedModules, setSelectedModules] = useState(
     cloneDeep(initialResource?.spec?.modules) ?? [],
   );
-  const [isEdited, setIsEdited] = useState(false);
+  const [showChannelChangeWarning, setShowChannelChangeWarning] = useState(
+    false,
+  );
   const [isManagedChanged, setIsManagedChanged] = useState(false);
   const [showMessageBox, setShowMessageBox] = useState({
     isOpen: false,
@@ -87,33 +89,6 @@ export default function KymaModulesCreate({ resource, ...props }) {
       </div>
     );
   }
-
-  const setChannel = (module, channel, index) => {
-    if (
-      selectedModules.find(
-        selectedModule => selectedModule.name === module.name,
-      )
-    ) {
-      if (channel === 'predefined') {
-        delete selectedModules[index].channel;
-      } else selectedModules[index].channel = channel;
-    } else {
-      selectedModules.push({
-        name: module.name,
-      });
-      if (channel !== 'predefined')
-        selectedModules[selectedModules.length - 1].channel = channel;
-    }
-
-    setKymaResource({
-      ...kymaResource,
-      spec: {
-        ...kymaResource.spec,
-        modules: selectedModules,
-      },
-    });
-    setIsEdited(true);
-  };
 
   const setManaged = (managed, index) => {
     selectedModules[index].managed = managed;
@@ -238,7 +213,21 @@ export default function KymaModulesCreate({ resource, ...props }) {
           <Select
             accessibleName={`channel-select-${module.name}`}
             onChange={event => {
-              setChannel(module, event.detail.selectedOption.value, index);
+              setChannel(
+                module,
+                event.detail.selectedOption.value,
+                index,
+                selectedModules,
+                setSelectedModules,
+              );
+              setKymaResource({
+                ...kymaResource,
+                spec: {
+                  ...kymaResource.spec,
+                  modules: selectedModules,
+                },
+              });
+              setShowChannelChangeWarning(true);
             }}
             value={
               findSpec(kymaResource, module.name)?.channel ||
@@ -401,7 +390,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
 
   const skipModuleFn = () => {
     const shouldShowManagedWarning = isManagedChanged;
-    const shouldShowChannelWarning = isEdited;
+    const shouldShowChannelWarning = showChannelChangeWarning;
 
     if (shouldShowManagedWarning) {
       setShowManagedBox({
@@ -434,7 +423,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
           showManagedBox={showManagedBox}
           setShowManagedBox={setShowManagedBox}
           handleCreate={handleCreate}
-          isEdited={isEdited}
+          showChannelChangeWarning={showChannelChangeWarning}
           setShowMessageBox={setShowMessageBox}
         />,
         document.body,
