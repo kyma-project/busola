@@ -48,7 +48,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   useModulesReleaseQuery,
   useModuleTemplatesQuery,
-} from './kymaModulesQueries.js';
+} from './kymaModulesQueries';
 
 export default function KymaModulesList({
   DeleteMessageBox,

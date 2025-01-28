@@ -7,7 +7,7 @@ import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/Dyn
 import ResourceDetailsCard from 'shared/components/ResourceDetails/ResourceDetailsCard';
 import { Button, Text } from '@ui5/webcomponents-react';
 import { CountingCard } from 'shared/components/CountingCard/CountingCard';
-import { useKymaModulesQuery } from 'components/KymaModules/kymaModulesQueries.js';
+import { useKymaModulesQuery } from 'components/KymaModules/kymaModulesQueries';
 import { useUrl } from 'hooks/useUrl';
 import { useNavigate } from 'react-router-dom';
 import { spacing } from '@ui5/webcomponents-react-base';

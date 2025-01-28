@@ -14,7 +14,7 @@ import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
 import { cloneDeep } from 'lodash';
-import { useKymaQuery } from '../../components/KymaModules/kymaModulesQueries.js';
+import { useKymaQuery } from 'components/KymaModules/kymaModulesQueries';
 
 const KymaModulesList = React.lazy(() =>
   import('../../components/KymaModules/KymaModulesList'),
