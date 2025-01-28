@@ -93,11 +93,11 @@ context('Test Custom Resources', () => {
 
   it('Test column layout and remove CRD', () => {
     cy.reload();
+    cy.wait(2000);
+
     cy.getLeftNav()
       .contains('Custom Resources')
       .click();
-
-    cy.wait(2000);
 
     cy.get('ui5-input[id="search-input"]:visible')
       .find('input')
