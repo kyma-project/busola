@@ -121,21 +121,24 @@ export default function KymaModulesList({
   const ModulesList = resource => {
     const findModule = (moduleName, channel, version) => {
       // This change was made due to changes in moduleTemplates and should be simplified once all moduleTemplates migrate
-      const moduleWithoutInfo = moduleTemplates?.items?.find(
-        module =>
+      const moduleTemplateWithoutInfo = moduleTemplates?.items?.find(
+        moduleTemplate =>
           moduleName ===
-            module.metadata.labels['operator.kyma-project.io/module-name'] &&
-          module.spec.channel === channel,
+            moduleTemplate.metadata.labels[
+              'operator.kyma-project.io/module-name'
+            ] && moduleTemplate.spec.channel === channel,
       );
       const moduleWithInfo = moduleTemplates?.items?.find(
-        module =>
+        moduleTemplate =>
           moduleName ===
-            module.metadata.labels['operator.kyma-project.io/module-name'] &&
-          !module.spec.channel &&
-          module.spec.version === version,
+            moduleTemplate.metadata.labels[
+              'operator.kyma-project.io/module-name'
+            ] &&
+          !moduleTemplate.spec.channel &&
+          moduleTemplate.spec.version === version,
       );
 
-      return moduleWithInfo ?? moduleWithoutInfo;
+      return moduleWithInfo ?? moduleTemplateWithoutInfo;
     };
 
     const findModuleReleaseMeta = moduleName => {
