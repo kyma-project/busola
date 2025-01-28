@@ -33,6 +33,6 @@ jobs:
       - uses: actions/github-script@v6
         with:
           script: |
-            const body = context;
+            const body = context.payload.pull_request.body;
             console.log(JSON.stringify(body));
             
