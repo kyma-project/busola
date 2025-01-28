@@ -32,18 +32,3 @@ jobs:
     outputs:
       checked: ${{ steps.detect.outputs.checked }}
       unchecked: ${{ steps.detect.outputs.unchecked }}
-
-    permissions:
-      pull-requests: write
-
-    steps:
-      - name: Checkbox Trigger
-        id: detect
-        uses: a7med3bdulbaset/checklist
-        with:
-          token: ${{ github.token }}
-            
-      - name: list changes
-        run: |
-          echo "checked=${{ steps.detect.outputs.checked }}"
-          echo "unchecked=${{ steps.detect.outputs.unchecked }}
