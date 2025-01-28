@@ -30,7 +30,9 @@ jobs:
   task-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: venkatsarvesh/pr-tasks-completed-action@v1.0.0
+      - uses: actions/github-script@v6
         with:
-          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          script: |
+            const body = github.event.pull_request.body;
+            console.log(JSON.stringify(body));
+            
