@@ -493,9 +493,13 @@ export default function KymaModulesList({
                           type="Active"
                           key={`${assResource.kind}-${assResource.group}-${assResource.version}`}
                           additionalText={
-                            resourceCounts[
+                            (resourceCounts[
                               `${assResource.kind}-${assResource.group}-${assResource.version}`
-                            ] || t('common.headers.loading')
+                            ] === 0
+                              ? '0'
+                              : resourceCounts[
+                                  `${assResource.kind}-${assResource.group}-${assResource.version}`
+                                ]) || t('common.headers.loading')
                           }
                         >
                           {pluralize(assResource?.kind)}
