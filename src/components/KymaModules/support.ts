@@ -45,3 +45,9 @@ export const findStatus = (kymaResource: any, moduleName: string) => {
     (module: any) => moduleName === module.name,
   );
 };
+
+export const findSpec = (kymaResource: any, moduleName: string) => {
+  return kymaResource?.spec.modules?.find(
+    (module: any) => moduleName === module.name,
+  );
+};

@@ -14,7 +14,7 @@ import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { useTranslation } from 'react-i18next';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useEffect, useState } from 'react';
-import { findStatus } from './support';
+import { findSpec, findStatus } from './support';
 
 async function isImageAvailable(url) {
   try {
@@ -42,7 +42,6 @@ export default function ModulesCard({
   isChecked,
   setCheckbox,
   setChannel,
-  findSpec,
   checkIfStatusModuleIsBeta,
 }) {
   const { t } = useTranslation();
@@ -119,7 +118,7 @@ export default function ModulesCard({
               setChannel(module, event.detail.selectedOption.value, index);
             }}
             value={
-              findSpec(module.name)?.channel ||
+              findSpec(kymaResource, module.name)?.channel ||
               findStatus(kymaResource, module.name)?.channel ||
               'predefined'
             }
@@ -128,7 +127,9 @@ export default function ModulesCard({
             <Option
               selected={
                 !module.channels?.filter(
-                  channel => channel.channel === findSpec(module.name)?.channel,
+                  channel =>
+                    channel.channel ===
+                    findSpec(kymaResource, module.name)?.channel,
                 )
               }
               value={'predefined'}
@@ -145,7 +146,10 @@ export default function ModulesCard({
             </Option>
             {module.channels?.map(channel => (
               <Option
-                selected={channel.channel === findSpec(module.name)?.channel}
+                selected={
+                  channel.channel ===
+                  findSpec(kymaResource, module.name)?.channel
+                }
                 key={`${channel.channel}${
                   channel.isMetaRelease ? '-meta' : ''
                 }`}

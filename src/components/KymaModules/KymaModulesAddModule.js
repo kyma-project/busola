@@ -210,12 +210,6 @@ export default function KymaModulesAddModule({
     setSelectedModules(modulesToUpdate);
   };
 
-  const findSpec = moduleName => {
-    return kymaResource?.spec.modules?.find(
-      module => moduleName === module.name,
-    );
-  };
-
   const checkIfSelectedModuleIsBeta = moduleName => {
     return selectedModules.some(({ name, channel }) => {
       if (moduleName && name !== moduleName) {
@@ -258,7 +252,6 @@ export default function KymaModulesAddModule({
           isChecked={isChecked}
           setCheckbox={setCheckbox}
           setChannel={setChannel}
-          findSpec={findSpec}
           checkIfStatusModuleIsBeta={checkIfStatusModuleIsBeta}
         />
       );

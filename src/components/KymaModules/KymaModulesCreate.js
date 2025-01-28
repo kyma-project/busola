@@ -36,7 +36,7 @@ import {
   useModulesReleaseQuery,
   useModuleTemplatesQuery,
 } from './kymaModulesQueries';
-import { findStatus } from './support';
+import { findSpec, findStatus } from './support';
 
 export default function KymaModulesCreate({ resource, ...props }) {
   const { t } = useTranslation();
@@ -205,12 +205,6 @@ export default function KymaModulesCreate({ resource, ...props }) {
     return acc;
   }, []);
 
-  const findSpec = moduleName => {
-    return kymaResource?.spec.modules?.find(
-      module => moduleName === module.name,
-    );
-  };
-
   const checkIfSelectedModuleIsBeta = moduleName => {
     return selectedModules.some(({ name, channel }) => {
       if (moduleName && name !== moduleName) {
@@ -247,7 +241,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
               setChannel(module, event.detail.selectedOption.value, index);
             }}
             value={
-              findSpec(module.name)?.channel ||
+              findSpec(kymaResource, module.name)?.channel ||
               findStatus(kymaResource, module.name)?.channel ||
               'predefined'
             }
@@ -256,7 +250,9 @@ export default function KymaModulesCreate({ resource, ...props }) {
             <Option
               selected={
                 !module.channels?.filter(
-                  channel => channel.channel === findSpec(module.name)?.channel,
+                  channel =>
+                    channel.channel ===
+                    findSpec(kymaResource, module.name)?.channel,
                 )
               }
               value={'predefined'}
@@ -274,7 +270,10 @@ export default function KymaModulesCreate({ resource, ...props }) {
             </Option>
             {module.channels?.map(channel => (
               <Option
-                selected={channel.channel === findSpec(module.name)?.channel}
+                selected={
+                  channel.channel ===
+                  findSpec(kymaResource, module.name)?.channel
+                }
                 key={`${channel.channel}-${module.name}${
                   channel.isMetaRelease ? '-meta' : ''
                 }`}
@@ -292,7 +291,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
           <CheckBox
             accessibleName="managed-checkbox"
             text={t('kyma-modules.managed')}
-            checked={findSpec(module.name)?.managed}
+            checked={findSpec(kymaResource, module.name)?.managed}
             onChange={event => {
               setManaged(event.target.checked, index);
             }}
