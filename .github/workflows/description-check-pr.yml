@@ -27,3 +27,12 @@ jobs:
     steps:
       - uses: nearform-actions/github-action-check-linked-issues@v1
         id: check-linked-issues
+  detect:
+    runs-on: ubuntu-latest
+    outputs:
+      checked: ${{ steps.detect.outputs.checked }}
+    steps:
+      - uses: marocchino/checkbox-action@v1
+        id: detect
+        with:
+          action: 'detect'
