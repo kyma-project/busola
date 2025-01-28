@@ -231,7 +231,7 @@ export default function KymaModulesList({
           )}
           {checkBeta(currentModule, currentModuleReleaseMeta) ? (
             <Badge style={spacing.sapUiTinyMarginBegin}>
-              {t('kyma-moduleTemplates.beta')}
+              {t('kyma-modules.beta')}
             </Badge>
           ) : null}
         </>,
