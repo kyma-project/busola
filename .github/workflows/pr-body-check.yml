@@ -54,10 +54,10 @@ jobs:
                       console.log(`SUCCESS: All tasks completed`);
                       return;
                   } else {
-                      console.log(`FAILED: Some tasks are still pending! \n${pendingTasks}\nLength: ${pendingTasks.length}`);
+                      core.setFailed(`FAILED: Some tasks are still pending! \n${pendingTasks}\nLength: ${pendingTasks.length}`);
                   }
               } catch (error) {
-                  console.log(error.message)
+                  core.setFailed(error.message)
               }
             }
             run();
