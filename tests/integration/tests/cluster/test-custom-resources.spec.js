@@ -97,6 +97,8 @@ context('Test Custom Resources', () => {
       .contains('Custom Resources')
       .click();
 
+    cy.wait(2000);
+
     cy.get('ui5-input[id="search-input"]:visible')
       .find('input')
       .wait(1000)
