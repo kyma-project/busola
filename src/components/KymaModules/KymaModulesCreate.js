@@ -36,6 +36,7 @@ import {
   useModulesReleaseQuery,
   useModuleTemplatesQuery,
 } from './kymaModulesQueries';
+import { findStatus } from './support';
 
 export default function KymaModulesCreate({ resource, ...props }) {
   const { t } = useTranslation();
@@ -204,12 +205,6 @@ export default function KymaModulesCreate({ resource, ...props }) {
     return acc;
   }, []);
 
-  const findStatus = moduleName => {
-    return kymaResource?.status?.modules?.find(
-      module => moduleName === module.name,
-    );
-  };
-
   const findSpec = moduleName => {
     return kymaResource?.spec.modules?.find(
       module => moduleName === module.name,
@@ -253,7 +248,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
             }}
             value={
               findSpec(module.name)?.channel ||
-              findStatus(module.name)?.channel ||
+              findStatus(kymaResource, module.name)?.channel ||
               'predefined'
             }
             className="channel-select"
