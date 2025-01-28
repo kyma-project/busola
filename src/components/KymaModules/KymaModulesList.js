@@ -86,11 +86,13 @@ export default function KymaModulesList({
 
   const namespace = 'kyma-system';
 
-  const { data: moduleReleaseMetas } = useModulesReleaseQuery(!resourceName);
+  const { data: moduleReleaseMetas } = useModulesReleaseQuery({
+    skip: !resourceName,
+  });
   const {
     data: moduleTemplates,
     loading: moduleTemplateLoading,
-  } = useModuleTemplatesQuery(!resourceName);
+  } = useModuleTemplatesQuery({ skip: !resourceName });
 
   const crdUrl = `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`;
   const { data: crds } = useGet(crdUrl, {

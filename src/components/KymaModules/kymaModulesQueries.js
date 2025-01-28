@@ -39,7 +39,7 @@ export function useKymaQuery() {
   };
 }
 
-export function useModuleTemplatesQuery(skip = false) {
+export function useModuleTemplatesQuery({ skip = false }) {
   const modulesResourceUrl = `/apis/operator.kyma-project.io/v1beta2/moduletemplates`;
 
   const { data, loading } = useGet(modulesResourceUrl, {
@@ -52,7 +52,7 @@ export function useModuleTemplatesQuery(skip = false) {
   };
 }
 
-export function useModulesReleaseQuery(skip = false) {
+export function useModulesReleaseQuery({ skip = false }) {
   const modulesReleaseMetaResourceUrl = `/apis/operator.kyma-project.io/v1beta2/modulereleasemetas`;
 
   const { data, loading } = useGet(modulesReleaseMetaResourceUrl, {
