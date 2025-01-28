@@ -1,6 +1,6 @@
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
-export function useKymaModulesQuery(skip = false) {
+export function useKymaModulesQuery() {
   const {
     data: kymaResources,
     loading: loadingKymaResources,
