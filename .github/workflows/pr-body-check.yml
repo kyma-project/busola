@@ -36,7 +36,7 @@ jobs:
             }
             async function run() {
               try {
-                  const prBody = github.context.payload.pull_request?.body;
+                  const prBody = context?.payload?.pull_request?.body;
                   if (!prBody) {
                       console.log("PR don't have tasks to check");
                       return
