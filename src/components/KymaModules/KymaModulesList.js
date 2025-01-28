@@ -480,31 +480,33 @@ export default function KymaModulesList({
                       mode="None"
                       separators="All"
                     >
-                      {getAssociatedResources().map(assResource => (
-                        <StandardListItem
-                          onClick={e => {
-                            e.preventDefault();
-                            handleItemClick(
-                              assResource.kind,
-                              assResource.group,
-                              assResource.version,
-                            );
-                          }}
-                          type="Active"
-                          key={`${assResource.kind}-${assResource.group}-${assResource.version}`}
-                          additionalText={
-                            (resourceCounts[
-                              `${assResource.kind}-${assResource.group}-${assResource.version}`
-                            ] === 0
-                              ? '0'
-                              : resourceCounts[
-                                  `${assResource.kind}-${assResource.group}-${assResource.version}`
-                                ]) || t('common.headers.loading')
-                          }
-                        >
-                          {pluralize(assResource?.kind)}
-                        </StandardListItem>
-                      ))}
+                      {getAssociatedResources().map(assResource => {
+                        const resourceCount =
+                          resourceCounts[
+                            `${assResource.kind}-${assResource.group}-${assResource.version}`
+                          ];
+
+                        return (
+                          <StandardListItem
+                            onClick={e => {
+                              e.preventDefault();
+                              handleItemClick(
+                                assResource.kind,
+                                assResource.group,
+                                assResource.version,
+                              );
+                            }}
+                            type="Active"
+                            key={`${assResource.kind}-${assResource.group}-${assResource.version}`}
+                            additionalText={
+                              (resourceCount === 0 ? '0' : resourceCount) ||
+                              t('common.headers.loading')
+                            }
+                          >
+                            {pluralize(assResource?.kind)}
+                          </StandardListItem>
+                        );
+                      })}
                     </List>
                   </>
                 )
