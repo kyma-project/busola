@@ -1,26 +1,16 @@
-name: PR Description Check
+name: VerifyIssue
 
-on: 
+on:
   pull_request:
     types: [opened, edited, synchronize, reopened, ready_for_review]
+  check_run:
 
 jobs:
-  run-desc-check:
+  verify_linked_issue:
     runs-on: ubuntu-latest
+    name: Ensure Pull Request has a linked issue.
     steps:
       - name: Verify Linked Issue
-        uses: hattan/verify-linked-issue-action@v1.1.5
+        uses: hattan/verify-linked-issue-action@v1.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          message: 'Error! This is a custom error'
-      - uses: actions/checkout@v3
-      - name: Print PR info to console
-        env:
-          PR_BODY: ${{ github.event.pull_request.body }}
-        run: |
-          {
-            echo 'cleaned<<EOF'
-            echo "${PR_BODY}" | tr -d '\r'
-            echo EOF
-          } >> "$GITHUB_OUTPUT"
