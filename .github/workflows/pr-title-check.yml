@@ -5,7 +5,7 @@ on:
     types: [opened, edited, synchronize, reopened, ready_for_review]
 
 jobs:
-  run-title-check:
+  check-pr-type:
     runs-on: ubuntu-latest
     steps:
       - uses: amannn/action-semantic-pull-request@47b15d52c5c30e94a17ec87eb8dd51ff5221fed9
