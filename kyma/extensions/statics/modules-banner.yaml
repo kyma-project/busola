@@ -1,0 +1,37 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: modules-banner
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: modules-banner
+    busola.io/extension: statics
+    busola.io/extension-version: '0.5'
+data:
+  dataSources: |-
+    kymas:
+      resource:
+        kind: Kyma
+        group: operator.kyma-project.io
+        version: v1beta2
+  injections: 
+    - title: Introducing Modules
+      name: Modules
+      description: Modules add functionalities to your cluster. Consume SAP BTP services, monitor your cluster, build serverless applications and more.
+      widget: FeaturedCard
+      visibility: '$count($kymas().items)>0'
+      source: $
+      id: ModulesBanner
+      order: 0
+      illustration: Modules
+      design: information-1
+      children:
+        - widget: ResourceButton
+          source: "'Add Modules'"
+          resource: 
+            customUrl: kymamodules
+        - widget: ExternalLinkButton
+          link: https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-s-modular-approach
+      targets:
+        - slot: banner
+          location: ClusterOverview
