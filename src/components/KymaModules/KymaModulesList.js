@@ -49,6 +49,7 @@ import {
   useModulesReleaseQuery,
   useModuleTemplatesQuery,
 } from './kymaModulesQueries';
+import { findStatus } from './support';
 
 export default function KymaModulesList({
   DeleteMessageBox,
@@ -147,11 +148,6 @@ export default function KymaModulesList({
       );
     };
 
-    const findStatus = moduleName => {
-      return kymaResource?.status?.modules?.find(
-        module => moduleName === module.name,
-      );
-    };
     const findExtension = resourceKind => {
       return kymaExt?.find(ext => {
         const { resource: extensionResource } =
@@ -186,7 +182,7 @@ export default function KymaModulesList({
         selectedModules?.findIndex(kymaResourceModule => {
           return kymaResourceModule?.name === resource?.name;
         }) >= 0;
-      const moduleStatus = findStatus(resource.name);
+      const moduleStatus = findStatus(kymaResource, resource.name);
       const isDeletionFailed = moduleStatus?.state === 'Warning';
       const isError = moduleStatus?.state === 'Error';
 
@@ -200,7 +196,7 @@ export default function KymaModulesList({
     };
 
     const rowRenderer = resource => {
-      const moduleStatus = findStatus(resource.name);
+      const moduleStatus = findStatus(kymaResource, resource.name);
       const showDetailsLink = hasDetailsLink(resource);
       const moduleIndex = kymaResource?.spec?.modules?.findIndex(
         kymaResourceModule => {
@@ -295,10 +291,11 @@ export default function KymaModulesList({
       return {
         resourceName: resource?.name,
         resourceType: pluralize(
-          findStatus(resource.name)?.resource?.kind || '',
+          findStatus(kymaResource, resource.name)?.resource?.kind || '',
         ),
         namespaceId:
-          findStatus(resource.name)?.resource?.metadata?.namespace || '',
+          findStatus(kymaResource, resource.name)?.resource?.metadata
+            ?.namespace || '',
       };
     };
 
@@ -328,7 +325,7 @@ export default function KymaModulesList({
         selectedModules.findIndex(entry => entry.name === resourceName),
       );
       const isExtension = !!findExtension(resource?.resource?.kind);
-      const moduleStatus = findStatus(resourceName);
+      const moduleStatus = findStatus(kymaResource, resourceName);
       const moduleCrd = findCrd(resource?.resource?.kind);
       const skipRedirect = !hasDetailsLink(resource);
 
@@ -394,7 +391,8 @@ export default function KymaModulesList({
         selectedModules[chosenModuleIndex]?.channel ||
           kymaResource?.spec?.channel,
         selectedModules[chosenModuleIndex]?.version ||
-          findStatus(selectedModules[chosenModuleIndex]?.name)?.version,
+          findStatus(kymaResource, selectedModules[chosenModuleIndex]?.name)
+            ?.version,
       );
 
       return module?.spec?.associatedResources || [];

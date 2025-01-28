@@ -39,3 +39,9 @@ export function useModuleStatus(resource: any) {
 
   return { data: data, loading: loading, error: error };
 }
+
+export const findStatus = (kymaResource: any, moduleName: string) => {
+  return kymaResource?.status?.modules?.find(
+    (module: any) => moduleName === module.name,
+  );
+};
