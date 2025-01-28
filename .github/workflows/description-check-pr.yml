@@ -33,6 +33,45 @@ jobs:
       - uses: actions/github-script@v6
         with:
           script: |
-            const body = context.payload.pull_request.body;
-            console.log(JSON.stringify(body));
+            getPendingTasks(body: string): string {
+                let responseString = "";
+                try {
+                    const uncompletedTasks = body.match(/(- \[[ ]\].+)/g);
+                    if (undefined != uncompletedTasks) {
+                        responseString += 'Uncompleted Tasks\n';
+                        uncompletedTasks.forEach(u => {
+                            responseString += `${u}\n`;
+                        });
+                    }
+                } catch (e) {
+                    responseString = "";
+                }
+                return responseString;
+            }
+            async function run(): Promise<void> {
+                try {
+                    const prBody = github.context.payload.pull_request?.body;
+                    if (!prBody) {
+                        console.log("PR don't have tasks to check");
+                        return
+                    }
+                    console.log('Getting a list of uncompleted tasks: ');
+                    let pendingTasks = Util.getPendingTasks(prBody);
+                    console.log(pendingTasks);
+                    let isTaskListCompleted = false;
+                    if (!pendingTasks) {
+                        isTaskListCompleted = true;
+                    }
+                    console.log(`All tasks completed: ${isTaskListCompleted}`);
             
+                    if (isTaskListCompleted) {
+                        console.log(`SUCCESS: All tasks completed`);
+                        return;
+                    } else {
+                        console.log(`FAILED: Some tasks are still pending! \n${pendingTasks}\nLength: ${pendingTasks.length}`);
+                    }
+                } catch (error) {
+                    console.log(error.message)
+                }
+            }
+            run();
