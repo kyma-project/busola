@@ -1,0 +1,16 @@
+name: Description Check
+
+on: 
+  pull_request:
+    types: [opened, edited, synchronize, reopened, ready_for_review]
+
+jobs:
+  check-description:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            const prBody = context?.payload?.pull_request?.body;
+            const subString = prBody.substring(prBody.indexOf("Changes proposed in this pull request") + 1, prBody.lastIndexOf("Related issue"));
+            console.log(subString);
