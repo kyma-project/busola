@@ -12,6 +12,7 @@ import {
 } from './kymaModulesQueries';
 
 import './KymaModulesAddModule.scss';
+import { findStatus } from './support';
 
 export default function KymaModulesAddModule({
   resourceName,
@@ -209,12 +210,6 @@ export default function KymaModulesAddModule({
     setSelectedModules(modulesToUpdate);
   };
 
-  const findStatus = moduleName => {
-    return kymaResource?.status?.modules?.find(
-      module => moduleName === module.name,
-    );
-  };
-
   const findSpec = moduleName => {
     return kymaResource?.spec.modules?.find(
       module => moduleName === module.name,
@@ -242,7 +237,7 @@ export default function KymaModulesAddModule({
       ?.find(mod => mod.name === moduleName)
       ?.channels.some(
         ({ channel: ch, isBeta }) =>
-          ch === findStatus(moduleName)?.channel ||
+          ch === findStatus(kymaResource, moduleName)?.channel ||
           (kymaResource.spec.channel && isBeta),
       );
   };
@@ -263,7 +258,6 @@ export default function KymaModulesAddModule({
           isChecked={isChecked}
           setCheckbox={setCheckbox}
           setChannel={setChannel}
-          findStatus={findStatus}
           findSpec={findSpec}
           checkIfStatusModuleIsBeta={checkIfStatusModuleIsBeta}
         />

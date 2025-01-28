@@ -14,6 +14,7 @@ import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { useTranslation } from 'react-i18next';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useEffect, useState } from 'react';
+import { findStatus } from './support';
 
 async function isImageAvailable(url) {
   try {
@@ -41,7 +42,6 @@ export default function ModulesCard({
   isChecked,
   setCheckbox,
   setChannel,
-  findStatus,
   findSpec,
   checkIfStatusModuleIsBeta,
 }) {
@@ -60,14 +60,14 @@ export default function ModulesCard({
     <Card key={module.name} className="addModuleCard">
       <StandardListItem
         className="moduleCardHeader"
-        onClick={e => setCheckbox(module, !isChecked(module.name), index)}
+        onClick={() => setCheckbox(module, !isChecked(module.name), index)}
       >
         <CheckBox className="checkbox" checked={isChecked(module.name)} />
         <div className="titles">
           <Title level="H6">{module.name}</Title>
           <Text className="bsl-has-color-status-4">
-            {findStatus(module.name)?.version
-              ? `v${findStatus(module.name)?.version} ${
+            {findStatus(kymaResource, module.name)?.version
+              ? `v${findStatus(kymaResource, module.name)?.version} ${
                   checkIfStatusModuleIsBeta(module.name) ? '(Beta)' : ''
                 }`
               : module.channels.find(
@@ -120,7 +120,7 @@ export default function ModulesCard({
             }}
             value={
               findSpec(module.name)?.channel ||
-              findStatus(module.name)?.channel ||
+              findStatus(kymaResource, module.name)?.channel ||
               'predefined'
             }
             className="channel-select"
