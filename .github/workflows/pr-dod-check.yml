@@ -1,20 +1,10 @@
-name: PR Body Check
+name: Definition of done Check
 
 on: 
   pull_request:
     types: [opened, edited, synchronize, reopened, ready_for_review]
 
 jobs:
-  check-linked-issue:
-    runs-on: ubuntu-latest
-    name: Check linked issues
-    permissions:
-      issues: read
-    steps:
-      - uses: nearform-actions/github-action-check-linked-issues@v1
-        id: check-linked-issues
-        with:
-          comment: false 
   check-unchecked-tasks:
     runs-on: ubuntu-latest
     steps:
