@@ -21,3 +21,5 @@ jobs:
             chore
           requireScope: false
           subjectPattern: ^([A-Z].*[^.]|bump .*)$
+          subjectPatternError: |
+            This pull request should be linked to an issue.
