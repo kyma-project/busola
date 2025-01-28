@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 import { useUrl } from 'hooks/useUrl';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
@@ -33,6 +32,10 @@ import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { ManagedWarnings } from './ManagedWarnings';
 import { ChannelWarning } from './ChannelWarning';
 import { UnmanagedModuleInfo } from './UnmanagedModuleInfo';
+import {
+  useModulesReleaseQuery,
+  useModuleTemplatesQuery,
+} from './kymaModulesQueries';
 
 export default function KymaModulesCreate({ resource, ...props }) {
   const { t } = useTranslation();
@@ -43,20 +46,17 @@ export default function KymaModulesCreate({ resource, ...props }) {
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
 
   const resourceName = kymaResource?.metadata.name;
-  const modulesResourceUrl = `/apis/operator.kyma-project.io/v1beta2/moduletemplates`;
-
-  const modulesReleaseMetaResourceUrl = `/apis/operator.kyma-project.io/v1beta2/modulereleasemetas`;
-
-  const { data: modules, loading: lodingModules } = useGet(modulesResourceUrl, {
-    pollingInterval: 3000,
-    skip: !resourceName,
-  });
 
   const {
     data: moduleReleaseMetas,
     loading: loadingModulesReleaseMetas,
-  } = useGet(modulesReleaseMetaResourceUrl, {
-    pollingInterval: 3000,
+  } = useModulesReleaseQuery({
+    skip: !resourceName,
+  });
+  const {
+    data: moduleTemplates,
+    loading: lodingModuleTemplates,
+  } = useModuleTemplatesQuery({
     skip: !resourceName,
   });
 
@@ -79,7 +79,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
     onSave: false,
   });
 
-  if (lodingModules || loadingModulesReleaseMetas) {
+  if (lodingModuleTemplates || loadingModulesReleaseMetas) {
     return (
       <div style={{ height: 'calc(100vh - 14rem)' }}>
         <Spinner />
@@ -128,7 +128,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
     setShowManagedBox({ isOpen: true, onSave: false });
   };
 
-  const installedModules = modules?.items.filter(module => {
+  const installedModules = moduleTemplates?.items.filter(module => {
     const name =
       module.metadata?.labels['operator.kyma-project.io/module-name'];
     return (
