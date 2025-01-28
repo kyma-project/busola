@@ -1,14 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useGet } from 'shared/hooks/BackendAPI/useGet';
-
 import { MessageStrip } from '@ui5/webcomponents-react';
+import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import ModulesCard from './ModulesCard';
+import { cloneDeep } from 'lodash';
+import {
+  useModulesReleaseQuery,
+  useModuleTemplatesQuery,
+} from './kymaModulesQueries';
 
 import './KymaModulesAddModule.scss';
-import { cloneDeep } from 'lodash';
 
 export default function KymaModulesAddModule({
   resourceName,
@@ -21,10 +23,6 @@ export default function KymaModulesAddModule({
   props,
 }) {
   const { t } = useTranslation();
-
-  const modulesResourceUrl = `/apis/operator.kyma-project.io/v1beta2/moduletemplates`;
-
-  const modulesReleaseMetaResourceUrl = `/apis/operator.kyma-project.io/v1beta2/modulereleasemetas`;
 
   const [resource, setResource] = useState(cloneDeep(kymaResource));
 
@@ -49,13 +47,10 @@ export default function KymaModulesAddModule({
     }
   }, [setKymaResource, kymaResource, selectedModules, activeKymaModules]);
 
-  const { data: modules } = useGet(modulesResourceUrl, {
-    pollingInterval: 3000,
+  const { data: moduleReleaseMetas } = useModulesReleaseQuery({
     skip: !resourceName,
   });
-
-  const { data: moduleReleaseMetas } = useGet(modulesReleaseMetaResourceUrl, {
-    pollingInterval: 3000,
+  const { data: moduleTemplates } = useModuleTemplatesQuery({
     skip: !resourceName,
   });
 
@@ -100,7 +95,7 @@ export default function KymaModulesAddModule({
     );
   }
 
-  const modulesAddData = modules?.items.reduce((acc, module) => {
+  const modulesAddData = moduleTemplates?.items.reduce((acc, module) => {
     const name = module.metadata.labels['operator.kyma-project.io/module-name'];
     const existingModule = acc.find(item => item.name === name);
     const isAlreadyInstalled = initialUnchangedResource?.spec?.modules?.find(
