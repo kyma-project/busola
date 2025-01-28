@@ -27,8 +27,9 @@ jobs:
     steps:
       - uses: nearform-actions/github-action-check-linked-issues@v1
         id: check-linked-issues
-  detect:
+  task-check:
     runs-on: ubuntu-latest
-    outputs:
-      checked: ${{ steps.detect.outputs.checked }}
-      unchecked: ${{ steps.detect.outputs.unchecked }}
+    steps:
+      - uses: venkatsarvesh/pr-tasks-completed-action@v1.0.0
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
