@@ -7,7 +7,6 @@ on:
 jobs:
   run-title-check:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == false
     steps:
       - uses: amannn/action-semantic-pull-request@47b15d52c5c30e94a17ec87eb8dd51ff5221fed9
         env:
@@ -22,3 +21,7 @@ jobs:
             chore
           requireScope: false
           subjectPattern: ^([A-Z].*[^.]|bump .*)$
+          subjectPatternError: |
+            The subject "{subject}" found in the pull request title "{title}"
+            didn't match the configured pattern. Please ensure that the subject
+            doesn't start with an uppercase character.
