@@ -14,7 +14,7 @@ import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { useTranslation } from 'react-i18next';
 import { spacing } from '@ui5/webcomponents-react-base';
 import { useEffect, useState } from 'react';
-import { findSpec, findStatus } from './support';
+import { findSpec, findStatus, setChannel } from './support';
 
 async function isImageAvailable(url) {
   try {
@@ -41,8 +41,9 @@ export default function ModulesCard({
   index,
   isChecked,
   setCheckbox,
-  setChannel,
   checkIfStatusModuleIsBeta,
+  selectedModules,
+  setSelectedModules,
 }) {
   const { t } = useTranslation();
   const [imageSrc, setImageSrc] = useState('');
@@ -115,7 +116,13 @@ export default function ModulesCard({
           <Label>{t('kyma-modules.release-channel') + ':'} </Label>
           <Select
             onChange={event => {
-              setChannel(module, event.detail.selectedOption.value, index);
+              setChannel(
+                module,
+                event.detail.selectedOption.value,
+                index,
+                selectedModules,
+                setSelectedModules,
+              );
             }}
             value={
               findSpec(kymaResource, module.name)?.channel ||

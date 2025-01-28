@@ -1,5 +1,5 @@
 import pluralize from 'pluralize';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 
@@ -50,4 +50,30 @@ export const findSpec = (kymaResource: any, moduleName: string) => {
   return kymaResource?.spec.modules?.find(
     (module: any) => moduleName === module.name,
   );
+};
+
+export const setChannel = (
+  module: any,
+  channel: any,
+  index: any,
+  selectedModules: any,
+  setSelectedModules: React.Dispatch<React.SetStateAction<any[]>>,
+) => {
+  const modulesToUpdate = [...selectedModules];
+  if (
+    selectedModules.find(
+      (selectedModule: any) => selectedModule.name === module.name,
+    )
+  ) {
+    if (channel === 'predefined') {
+      delete modulesToUpdate[index].channel;
+    } else modulesToUpdate[index].channel = channel;
+  } else {
+    modulesToUpdate.push({
+      name: module.name,
+    });
+    if (channel !== 'predefined')
+      modulesToUpdate[modulesToUpdate?.length - 1].channel = channel;
+  }
+  setSelectedModules(modulesToUpdate);
 };

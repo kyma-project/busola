@@ -190,26 +190,6 @@ export default function KymaModulesAddModule({
     setSelectedModules(newSelectedModules);
   };
 
-  const setChannel = (module, channel, index) => {
-    const modulesToUpdate = [...selectedModules];
-    if (
-      selectedModules.find(
-        selectedModule => selectedModule.name === module.name,
-      )
-    ) {
-      if (channel === 'predefined') {
-        delete modulesToUpdate[index].channel;
-      } else modulesToUpdate[index].channel = channel;
-    } else {
-      modulesToUpdate.push({
-        name: module.name,
-      });
-      if (channel !== 'predefined')
-        modulesToUpdate[modulesToUpdate?.length - 1].channel = channel;
-    }
-    setSelectedModules(modulesToUpdate);
-  };
-
   const checkIfSelectedModuleIsBeta = moduleName => {
     return selectedModules.some(({ name, channel }) => {
       if (moduleName && name !== moduleName) {
@@ -251,7 +231,8 @@ export default function KymaModulesAddModule({
           index={index}
           isChecked={isChecked}
           setCheckbox={setCheckbox}
-          setChannel={setChannel}
+          selectedModules={selectedModules}
+          setSelectedModules={setSelectedModules}
           checkIfStatusModuleIsBeta={checkIfStatusModuleIsBeta}
         />
       );
