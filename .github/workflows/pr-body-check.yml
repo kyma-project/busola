@@ -19,7 +19,7 @@ jobs:
       - uses: actions/github-script@v6
         with:
           script: |
-            function getPendingTasks(body) {
+            const getPendingTasks = (body) => {
               let responseString = "";
               try {
                   const uncompletedTasks = body.match(/(- \[[ ]\].+)/g);
@@ -34,24 +34,24 @@ jobs:
               }
               return responseString;
             }
-            async function run() {
+            (async () => {
               try {
                   const prBody = context?.payload?.pull_request?.body;
                   if (!prBody) {
-                      console.log("PR don't have tasks to check");
+                      core.info("PR don't have tasks to check");
                       return
                   }
-                  console.log('Getting a list of uncompleted tasks: ');
+                  core.debug('Getting a list of uncompleted tasks: ');
                   let pendingTasks = getPendingTasks(prBody);
-                  console.log(pendingTasks);
+                  core.debug(pendingTasks);
                   let isTaskListCompleted = false;
                   if (!pendingTasks) {
                       isTaskListCompleted = true;
                   }
-                  console.log(`All tasks completed: ${isTaskListCompleted}`);
+                  core.debug(`All tasks completed: ${isTaskListCompleted}`);
                 
                   if (isTaskListCompleted) {
-                      console.log(`SUCCESS: All tasks completed`);
+                      core.info(`SUCCESS: All tasks completed`);
                       return;
                   } else {
                       core.setFailed(`FAILED: Some tasks are still pending! \n${pendingTasks}\nLength: ${pendingTasks.length}`);
@@ -59,5 +59,4 @@ jobs:
               } catch (error) {
                   core.setFailed(error.message)
               }
-            }
-            run();
+            })();
