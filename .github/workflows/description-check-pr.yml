@@ -10,5 +10,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Print PR info to console
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
         run: |
-          echo "${{ github.event.pull_request.head.label }}"
+          {
+            echo 'cleaned<<EOF'
+            echo "${PR_BODY}" | tr -d '\r'
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
