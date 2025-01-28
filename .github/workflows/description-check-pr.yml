@@ -18,12 +18,12 @@ jobs:
             echo "${PR_BODY}" | tr -d '\r'
             echo EOF
           } >> "$GITHUB_OUTPUT"
-  run-link-check:
+  check_link_requests:
     runs-on: ubuntu-latest
+    name: Check linked issues
+    permissions:
+      issues: read
+      pull-requests: write
     steps:
-      - name: Issue Validator
-        uses: HarshCasper/validate-issues-over-pull-requests@v0.1.1
-        id: validator
-        with:
-          prbody: ${{ github.event.pull_request.body }}
-          prurl: ${{ github.event.pull_request.url }}
+      - uses: nearform-actions/github-action-check-linked-issues@v1
+        id: check-linked-issues
