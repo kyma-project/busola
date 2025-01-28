@@ -1,16 +1,19 @@
-name: VerifyIssue
+name: PR has a valid Issue?
 
 on:
-  pull_request:
-    types: [opened, edited, synchronize, reopened, ready_for_review]
-  check_run:
+  pull_request_target:
+    types: [ edited, synchronize, opened, reopened ]
 
 jobs:
-  verify_linked_issue:
+  checker:
     runs-on: ubuntu-latest
-    name: Ensure Pull Request has a linked issue.
+
     steps:
-      - name: Verify Linked Issue
-        uses: hattan/verify-linked-issue-action@v1.1.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v2
+      
+      - name: Issue Validator
+        uses: HarshCasper/validate-issues-over-pull-requests@v0.1.1
+        id: validator
+        with:
+          prbody: ${{ github.event.pull_request.body }}
+          prurl: ${{ github.event.pull_request.url }}
