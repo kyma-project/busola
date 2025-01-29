@@ -3,6 +3,19 @@ import React, { useEffect, useState } from 'react';
 
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 
+type KymaResourceType = {
+  spec: {
+    modules: {
+      name: string;
+    }[];
+  };
+  status: {
+    modules: {
+      name: string;
+    }[];
+  };
+};
+
 export function useModuleStatus(resource: any) {
   const fetch = useFetch();
   const [data, setData] = useState<any>(null);
@@ -40,29 +53,43 @@ export function useModuleStatus(resource: any) {
   return { data: data, loading: loading, error: error };
 }
 
-export const findStatus = (kymaResource: any, moduleName: string) => {
+export const findStatus = (
+  kymaResource: KymaResourceType,
+  moduleName: string,
+) => {
+  console.log(
+    kymaResource?.status?.modules?.find(
+      (module: { name: string }) => moduleName === module.name,
+    ),
+  );
   return kymaResource?.status?.modules?.find(
-    (module: any) => moduleName === module.name,
+    (module: { name: string }) => moduleName === module.name,
   );
 };
 
-export const findSpec = (kymaResource: any, moduleName: string) => {
+export const findSpec = (
+  kymaResource: KymaResourceType,
+  moduleName: string,
+) => {
   return kymaResource?.spec.modules?.find(
-    (module: any) => moduleName === module.name,
+    (module: { name: string }) => moduleName === module.name,
   );
 };
 
 export const setChannel = (
-  module: any,
-  channel: any,
-  index: any,
-  selectedModules: any,
+  module: { name: string },
+  channel: string,
+  index: number,
+  selectedModules: {
+    name: string;
+    channel?: string;
+  }[],
   setSelectedModules: React.Dispatch<React.SetStateAction<any[]>>,
 ) => {
   const modulesToUpdate = [...selectedModules];
   if (
     selectedModules.find(
-      (selectedModule: any) => selectedModule.name === module.name,
+      (selectedModule: { name: string }) => selectedModule.name === module.name,
     )
   ) {
     if (channel === 'predefined') {
