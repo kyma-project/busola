@@ -1,11 +1,9 @@
 name: Rebase Pull Requests
 on:
   push:
-    branches: [main, gh-actions-rebase]
+    branches: '**'
 jobs:
   rebase:
     runs-on: ubuntu-latest
     steps:
       - uses: peter-evans/rebase@v3
-        with:
-          base: main
