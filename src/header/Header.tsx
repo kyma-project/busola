@@ -265,6 +265,13 @@ export function Header() {
             />
           ))}
           <MenuItem
+            onClick={() => {
+              window.open(
+                busolaVersion === 'dev'
+                  ? 'https://github.com/kyma-project/busola'
+                  : `https://github.com/kyma-project/busola/releases/tag/${busolaVersion}`,
+              );
+            }}
             text={t('common.labels.version')}
             additionalText={busolaVersion}
             icon="inspect"
