@@ -15,6 +15,7 @@ Each pull request (PR) to the repository triggers CI/CD jobs that verify the Bus
 - `PR Unit and Component Tests / run-unit-and-component-test` - Performs unit and component tests of Busola.
 - `Lint Markdown Links PR / markdown-link-check` - Checks links in documentation.
 - `CodeQL / Analyze (javascript)` - Code quality static code check.
+- `Rebase Pull Requests` - Makes sure the PR branch is up to date with `main` branch.
 
 After the pull request is merged, the following CI/CD jobs are executed:
 
