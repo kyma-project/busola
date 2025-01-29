@@ -34,7 +34,7 @@ export function useModuleStatus(resource: any) {
 
   useEffect(() => {
     async function fetchModule() {
-      if (path.includes('undefined')) return;
+      if (!resource?.resources) return;
       try {
         const response = await fetch({ relativeUrl: path });
         const status = (await response.json())?.status;
@@ -47,6 +47,7 @@ export function useModuleStatus(resource: any) {
         setLoading(false);
       }
     }
+
     fetchModule();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [path]);
