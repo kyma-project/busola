@@ -77,6 +77,7 @@ export default function ServiceAccountDetails(props) {
     <UI5Panel
       fixed
       keyComponent={'serviceaccount-configuration'}
+      key="serviceaccount-configuration"
       title={t('common.headers.configuration')}
     >
       <LayoutPanelRow

@@ -6,6 +6,12 @@
   ui5-table-cell[slot='default-2'] {
     width: 22vw;
   }
+
+  ui5-panel {
+    &::part(content) {
+      overflow: unset;
+    }
+  }
 }
 
 @media (max-width: 850px) {

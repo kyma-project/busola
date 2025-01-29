@@ -14,9 +14,9 @@ export function useAvailableNamespaces() {
   const { data: allNamespaces, error, refetch, silentRefetch } = useGetList()(
     '/api/v1/namespaces',
     {
-      skip: false,
       pollingInterval: 3000,
       onDataReceived: () => {},
+      skip: false,
     },
   ) as {
     loading: boolean;
@@ -28,7 +28,7 @@ export function useAvailableNamespaces() {
 
   useEffect(() => {
     if (error) {
-      setNamespaces([]);
+      setNamespaces(null);
       return;
     }
     const filteredNamespaces = allNamespaces
@@ -37,7 +37,10 @@ export function useAvailableNamespaces() {
         if (showHiddenNamespaces) return true;
         return !hiddenNamespaces.includes(n);
       });
-    if (filteredNamespaces) {
+    if (
+      filteredNamespaces &&
+      JSON.stringify(filteredNamespaces) !== JSON.stringify(namespaces)
+    ) {
       setNamespaces(filteredNamespaces);
     }
   }, [
@@ -46,6 +49,7 @@ export function useAvailableNamespaces() {
     hiddenNamespaces,
     setNamespaces,
     showHiddenNamespaces,
+    namespaces,
   ]);
 
   return { namespaces, refetch, silentRefetch, setNamespaces };

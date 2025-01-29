@@ -1,16 +1,19 @@
-name: PR Unit Tests
+name: PR Unit and Component Tests
 
-on: 
+on:
   pull_request:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
-      - ".github/workflows/pull-unit-tests.yml"
-      - "public/**"
-      - "src/**"
-      - "package.json"
+      - '.github/workflows/pull-unit-tests.yml'
+      - 'public/**'
+      - 'src/**'
+      - 'backend/**'
+      - 'package.json'
+      - 'cypress/**'
+      - 'cypress.config.component.ts'
 
 jobs:
-  run-unit-test:
+  run-unit-and-component-test:
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
     steps:
@@ -27,7 +30,11 @@ jobs:
         run: |
           set -e
           npm ci
-      - name: run_tests
+      - name: run_unit_tests
         shell: bash
-        run: |          
+        run: |
           npm run test
+      - name: run_component_tests
+        shell: bash
+        run: |
+          npm run component-test-headless

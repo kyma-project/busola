@@ -1,8 +1,8 @@
 import { atom, RecoilState } from 'recoil';
 
-export type NamespacesState = string[];
+export type NamespacesState = string[] | null;
 
-const defaultValue: string[] = [];
+const defaultValue = null;
 
 export const namespacesState: RecoilState<NamespacesState> = atom<
   NamespacesState

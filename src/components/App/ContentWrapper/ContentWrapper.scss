@@ -1,5 +1,5 @@
 :root {
-  --solidBg: var(--_ui5-v1-24-0_fcl_solid_bg);
+  --solidBg: var(--_ui5-v2-4-0_fcl_solid_bg);
 }
 
 #content-wrap {
@@ -11,21 +11,4 @@
 
 .content-scroll {
   height: 100%;
-}
-
-html.sap-desktop:not(.sapUiNativeScrollbars) ::-webkit-scrollbar {
-  background-color: #fff;
-}
-
-html.sap-desktop:not(.sapUiNativeScrollbars) ::-webkit-scrollbar-corner {
-  background-color: #fff;
-}
-
-html.sap-desktop:not(.sapUiNativeScrollbars) ::-webkit-scrollbar-thumb {
-  border-radius: 0.75rem;
-  border: 0.125rem solid #fff;
-}
-
-html.sap-desktop:not(.sapUiNativeScrollbars) ::-webkit-scrollbar-thumb {
-  background-color: #7b91a8;
 }

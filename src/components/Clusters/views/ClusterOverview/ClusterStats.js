@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { useTranslation } from 'react-i18next';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+
 import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
 import { Card, CardHeader, Title } from '@ui5/webcomponents-react';
 import { CountingCard } from 'shared/components/CountingCard/CountingCard';
-import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import {
   bytesToHumanReadable,
   cpusToHumanReadable,
@@ -17,6 +17,7 @@ import {
   PodStatusCounterKey,
 } from 'resources/Namespaces/NamespaceWorkloads/NamespaceWorkloadsHelpers';
 import { roundTwoDecimals } from 'shared/utils/helpers';
+
 import './ClusterStats.scss';
 
 const Injections = React.lazy(() =>
@@ -109,15 +110,13 @@ export default function ClusterStats({ nodesData }) {
     <>
       <Title
         level="H3"
-        style={{
-          ...spacing.sapUiMediumMarginBegin,
-          ...spacing.sapUiMediumMarginTopBottom,
-        }}
+        size="H3"
+        className="sap-margin-begin-medium sap-margin-y-medium"
       >
         {t('common.headers.monitoring-and-health')}
       </Title>
-      <div className="cluster-stats" style={spacing.sapUiTinyMarginBeginEnd}>
-        <div className="item-wrapper tall">
+      <div className="cluster-stats sap-margin-x-tiny">
+        <div className="item-wrapper card-tall">
           <Card
             className="radial-chart-card item"
             header={
@@ -138,7 +137,7 @@ export default function ClusterStats({ nodesData }) {
             />
           </Card>
         </div>
-        <div className="item-wrapper tall">
+        <div className="item-wrapper card-tall">
           <Card
             className="radial-chart-card item"
             header={
@@ -158,7 +157,7 @@ export default function ClusterStats({ nodesData }) {
           </Card>
         </div>
         {nodesData && (
-          <div className="item-wrapper small">
+          <div className="item-wrapper card-small">
             <CountingCard
               className="item"
               value={nodesData?.length}
@@ -167,7 +166,7 @@ export default function ClusterStats({ nodesData }) {
           </div>
         )}
         {podsData && (
-          <div className="item-wrapper wide">
+          <div className="item-wrapper card-wide">
             <CountingCard
               className="item"
               value={podsData?.length}
@@ -192,7 +191,7 @@ export default function ClusterStats({ nodesData }) {
           </div>
         )}
         {deploymentsData && (
-          <div className="item-wrapper wide">
+          <div className="item-wrapper card-wide">
             <CountingCard
               className="item"
               value={deploymentsData?.length}
@@ -213,7 +212,7 @@ export default function ClusterStats({ nodesData }) {
           </div>
         )}
         {daemonsetsData && (
-          <div className="item-wrapper wide">
+          <div className="item-wrapper card-wide">
             <CountingCard
               className="item"
               value={daemonsetsData?.length}
@@ -234,7 +233,7 @@ export default function ClusterStats({ nodesData }) {
           </div>
         )}
         {statefulsetsData && (
-          <div className="item-wrapper wide">
+          <div className="item-wrapper card-wide">
             <CountingCard
               className="item"
               value={statefulsetsData?.length}
@@ -257,7 +256,7 @@ export default function ClusterStats({ nodesData }) {
           </div>
         )}
         {servicesData && (
-          <div className="item-wrapper wide">
+          <div className="item-wrapper card-wide">
             <CountingCard
               className="item"
               value={servicesData?.length}
@@ -280,7 +279,7 @@ export default function ClusterStats({ nodesData }) {
           </div>
         )}
         {persistentVolumesData && (
-          <div className="item-wrapper wide">
+          <div className="item-wrapper card-wide">
             <CountingCard
               className="item"
               value={persistentVolumesData?.length}

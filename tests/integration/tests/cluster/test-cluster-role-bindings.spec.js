@@ -20,6 +20,7 @@ context('Test Cluster Role Bindings', () => {
 
     cy.get('[accessible-name="ClusterRoleBinding name"]')
       .find('input')
+      .wait(1000)
       .click()
       .type(CRB_NAME);
 
@@ -27,6 +28,7 @@ context('Test Cluster Role Bindings', () => {
       'ui5-combobox[placeholder="Start typing to select ClusterRole from the list"]',
     )
       .find('input')
+      .wait(1000)
       .click()
       .type('admin');
 
@@ -37,6 +39,7 @@ context('Test Cluster Role Bindings', () => {
 
     cy.get('[accessible-name="User name"]')
       .find('input')
+      .wait(1000)
       .type(USER_NAME)
       .blur({ force: true });
 
@@ -52,11 +55,11 @@ context('Test Cluster Role Bindings', () => {
     cy.clickGenericListLink(CRB_NAME);
 
     cy.getMidColumn()
-      .contains('User')
+      .contains('ui5-table-cell', 'User')
       .should('be.visible');
 
     cy.getMidColumn()
-      .contains(USER_NAME)
+      .contains('ui5-table-cell', USER_NAME)
       .should('be.visible');
 
     cy.getMidColumn()
@@ -71,7 +74,7 @@ context('Test Cluster Role Bindings', () => {
 
     cy.contains('[role="combobox"]', 'User').click();
 
-    cy.get('ui5-li:visible')
+    cy.get('ui5-option:visible')
       .contains('ServiceAccount')
       .find('li')
       .click({ force: true });
@@ -96,6 +99,7 @@ context('Test Cluster Role Bindings', () => {
     cy.inspectTab('View');
 
     cy.getMidColumn()
+      .find('ui5-table-cell')
       .contains('Group')
       .should('be.visible');
 

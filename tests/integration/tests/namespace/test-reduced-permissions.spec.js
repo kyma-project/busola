@@ -99,7 +99,7 @@ context('Test reduced permissions', () => {
       .get('ui5-select:visible')
       .click();
 
-    cy.get('ui5-li:visible')
+    cy.get('ui5-option:visible')
       .contains('ServiceAccount')
       .find('li')
       .click({ force: true });
@@ -132,6 +132,7 @@ context('Test reduced permissions', () => {
 
   it('Download kubeconfig for Service Account', () => {
     cy.getLeftNav()
+      .find('ui5-side-navigation-item')
       .contains('Namespaces')
       .click();
 
@@ -144,11 +145,6 @@ context('Test reduced permissions', () => {
     cy.clickGenericListLink(SA_NAME);
 
     cy.getMidColumn()
-      .find('header')
-      .find('ui5-toggle-button:visible')
-      .click();
-
-    cy.get('[data-component-name="ToolbarOverflowPopoverContent"]')
       .find('ui5-button[accessible-name="enter-full-screen"]')
       .click();
 

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   Avatar,
@@ -8,8 +8,7 @@ import {
   MenuDomRef,
   ShellBar,
   ShellBarItem,
-  StandardListItem,
-  ShellBarDomRef,
+  ListItemStandard,
 } from '@ui5/webcomponents-react';
 import { MenuItemClickEventDetail } from '@ui5/webcomponents/dist/Menu.js';
 
@@ -73,16 +72,6 @@ export function Header() {
   const { isEnabled: isKymaCompanionEnabled } = useFeature('KYMA_COMPANION');
   const setShowCompanion = useSetRecoilState(showKymaCompanionState);
 
-  const shellbarRef = useRef<ShellBarDomRef>(null);
-  useEffect(() => {
-    if (shellbarRef?.current) {
-      shellbarRef.current.accessibilityTexts = {
-        ...shellbarRef.current.accessibilityTexts,
-        logoTitle: 'SAP Kyma logo',
-      };
-    }
-  }, [shellbarRef]);
-
   useEffect(() => {
     if (theme === 'sap_horizon_hcb' || theme === 'sap_horizon_hcw') {
       setIsSnowOpen(false);
@@ -94,7 +83,7 @@ export function Header() {
     name => name !== cluster?.name,
   );
 
-  const nonBreakableSpaces = (number: int): string => {
+  const nonBreakableSpaces = (number: number): string => {
     let spaces = '';
     for (let i = 0; i < number; i++) {
       spaces += '\u00a0';
@@ -115,14 +104,14 @@ export function Header() {
   const clustersList = [
     ...inactiveClusterNames.map((name, index) => {
       return (
-        <StandardListItem accessibleName={name} data-key={index}>
+        <ListItemStandard accessibleName={name} data-key={index}>
           {name}
-        </StandardListItem>
+        </ListItemStandard>
       );
     }),
-    <StandardListItem accessibleName="all-clusters">
+    <ListItemStandard accessibleName="all-clusters">
       {t('clusters.overview.title-all-clusters')}
-    </StandardListItem>,
+    </ListItemStandard>,
   ];
 
   const openNewWindow = (link: string) => {
@@ -164,10 +153,14 @@ export function Header() {
       )}
       <ShellBar
         className="header"
+        accessibilityAttributes={{
+          logo: {
+            name: 'SAP Kyma logo',
+          },
+        }}
         startButton={
           window.location.pathname !== '/clusters' && <SidebarSwitcher />
         }
-        ref={shellbarRef}
         onLogoClick={() => {
           handleActionIfFormOpen(
             isResourceEdited,
@@ -247,7 +240,7 @@ export function Header() {
       <Menu
         open={isMenuOpen}
         opener="openShellbarMenu"
-        onAfterClose={() => {
+        onClose={() => {
           setIsMenuOpen(false);
         }}
         onItemClick={handleMenuItemClick}
@@ -292,7 +285,6 @@ export function Header() {
             text={t('common.labels.version')}
             additionalText={busolaVersion}
             icon="inspect"
-            startsSection
           />
         </MenuItem>
       </Menu>

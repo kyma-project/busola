@@ -4,14 +4,14 @@ import { useUrl } from 'hooks/useUrl';
 import {
   List,
   Label,
-  GroupHeaderListItem,
-  Table as UI5Table,
-  TableColumn,
-  TableRow,
-  TableCell,
   Text,
   Title,
+  ListItemGroup,
 } from '@ui5/webcomponents-react';
+import { Table as UI5Table } from '@ui5/webcomponents-react-compat/dist/components/Table/index.js';
+import { TableColumn } from '@ui5/webcomponents-react-compat/dist/components/TableColumn/index.js';
+import { TableRow } from '@ui5/webcomponents-react-compat/dist/components/TableRow/index.js';
+import { TableCell } from '@ui5/webcomponents-react-compat/dist/components/TableCell/index.js';
 import { Labels } from '../Labels/Labels';
 import { PodTemplateRow } from './PodTemplateRow';
 import { Link } from '../Link/Link';
@@ -51,7 +51,7 @@ function ContainerComponent({ container }) {
 
   return (
     <>
-      <GroupHeaderListItem>{container.name}</GroupHeaderListItem>
+      <ListItemGroup headerText={container.name} />
       <PodTemplateRow
         label={t('pods.labels.image')}
         component={
@@ -173,7 +173,7 @@ function VolumeComponent({ volume }) {
 
   return (
     <>
-      <GroupHeaderListItem>{name}</GroupHeaderListItem>
+      <ListItemGroup headerText={name} />
       <PodTemplateRow label="Type" component={<Text>{typeLabel}</Text>} />
       {k8sResource && (
         <PodTemplateRow

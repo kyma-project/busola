@@ -2,6 +2,10 @@
   font-family: monospace;
 }
 
+.pod-template {
+  container-type: inline-size;
+}
+
 .pod-template-row {
   display: grid;
   grid-template-columns: 1fr 5fr;

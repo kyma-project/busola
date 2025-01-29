@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
 import { Button, Title } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNotFound';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
@@ -69,19 +68,6 @@ ResourceDetails.propTypes = {
   customHealthCards: PropTypes.arrayOf(PropTypes.func),
   showHealthCardsTitle: PropTypes.bool,
   isModule: PropTypes.bool,
-};
-
-ResourceDetails.defaultProps = {
-  customColumns: [],
-  customComponents: [],
-  customStatusComponents: [],
-  headerActions: null,
-  resourceHeaderActions: [],
-  readOnly: false,
-  disableEdit: false,
-  disableDelete: false,
-  showYamlTab: false,
-  layoutNumber: 'MidColumn',
 };
 
 export function ResourceDetails(props) {
@@ -152,20 +138,20 @@ function Resource({
   hideLabels = false,
   hideAnnotations = false,
   hideLastUpdate = false,
-  layoutNumber,
+  layoutNumber = 'MidColumn',
   layoutCloseCreateUrl,
   children,
   createResourceForm: CreateResourceForm,
-  customColumns,
-  customComponents,
+  customColumns = [],
+  customComponents = [],
   customConditionsComponents,
   description,
   editActionLabel,
-  headerActions,
+  headerActions = null,
   namespace,
-  readOnly,
+  readOnly = false,
   resource,
-  resourceHeaderActions,
+  resourceHeaderActions = [],
   resourceType,
   resourceUrl,
   title,
@@ -173,9 +159,9 @@ function Resource({
   resourceTitle,
   resourceGraphConfig,
   resourceSchema,
-  disableEdit,
-  showYamlTab,
-  disableDelete,
+  disableEdit = false,
+  showYamlTab = false,
+  disableDelete = false,
   statusBadge,
   customStatusColumns,
   customHealthCards,
@@ -331,16 +317,15 @@ function Resource({
             <>
               {customConditionsComponents
                 ?.filter(filterColumns)
-                ?.map(component => (
-                  <>
-                    <div
-                      className="title bsl-has-color-status-4 "
-                      style={spacing.sapUiSmallMarginBeginEnd}
-                    >
+                ?.map((component, index) => (
+                  <React.Fragment
+                    key={`${component.header.replace(' ', '-')}-${index}`}
+                  >
+                    <div className="title bsl-has-color-status-4 sap-margin-x-small">
                       {component.header}:
                     </div>
                     {component.value(resource)}
-                  </>
+                  </React.Fragment>
                 ))}
             </>
           ) : null
@@ -362,7 +347,7 @@ function Resource({
               {resource.kind}
               {description && (
                 <HintButton
-                  style={spacing.sapUiTinyMarginBegin}
+                  className="sap-margin-begin-tiny"
                   setShowTitleDescription={setShowTitleDescription}
                   showTitleDescription={showTitleDescription}
                   description={description}
@@ -454,10 +439,8 @@ function Resource({
               <>
                 <Title
                   level="H3"
-                  style={{
-                    ...spacing.sapUiMediumMarginBegin,
-                    ...spacing.sapUiMediumMarginTopBottom,
-                  }}
+                  size="H3"
+                  className="sap-margin-begin-medium sap-margin-y-medium"
                 >
                   {title ?? t('common.headers.resource-details')}
                 </Title>

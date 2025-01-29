@@ -1,7 +1,7 @@
-import { Widget, InlineWidget } from './Widget';
 import { useGetTranslation } from '../helpers';
+
+import { Widget, InlineWidget } from './Widget';
 import { TabContainer, Tab } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 export function Tabs({
   value,
@@ -13,12 +13,7 @@ export function Tabs({
   const { widgetT } = useGetTranslation();
 
   return Array.isArray(structure?.children) ? (
-    <div
-      style={{
-        ...spacing.sapUiSmallMarginTop,
-        ...spacing.sapUiSmallMarginBeginEnd,
-      }}
-    >
+    <div className="sap-margin-top-small sap-margin-x-small">
       <TabContainer tabLayout="Inline" contentBackgroundDesign="Transparent">
         {structure.children.map((child, idx) => (
           <Tab key={`tab-wrapper-${idx}`} text={widgetT(child)}>

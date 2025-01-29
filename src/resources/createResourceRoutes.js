@@ -84,17 +84,30 @@ const ColumnWrapper = ({
   });
 
   const elementListProps = usePrepareListProps({
-    ...props,
+    resourceCustomType: props.resourceCustomType,
+    resourceType: props.resourceType,
+    resourceI18Key: props.resourceI18Key,
+    apiGroup: props.apiGroup,
+    apiVersion: props.apiVersion,
+    hasDetailsView: props.hasDetailsView,
   });
 
   const elementDetailsProps = usePrepareDetailsProps({
-    ...props,
+    resourceCustomType: props.resourceCustomType,
+    resourceType: props.resourceType,
+    resourceI18Key: props.resourceI18Key,
+    apiGroup: props.apiGroup,
+    apiVersion: props.apiVersion,
     resourceName: layoutState?.midColumn?.resourceName ?? resourceName,
     namespaceId: layoutState?.midColumn?.namespaceId ?? namespaceId,
+    showYamlTab: props.showYamlTab,
   });
 
   const elementCreateProps = usePrepareCreateProps({
-    ...props,
+    resourceCustomType: props.resourceCustomType,
+    resourceType: props.resourceType,
+    apiGroup: props.apiGroup,
+    apiVersion: props.apiVersion,
   });
 
   const listComponent = React.cloneElement(list, {
@@ -122,16 +135,13 @@ const ColumnWrapper = ({
     detailsMidColumn = detailsComponent;
   }
 
-  const { schema, loading } = useGetSchema({
+  const { schema } = useGetSchema({
     resource: {
       group: props?.apiGroup,
       version: props.apiVersion,
       kind: props?.resourceType.slice(0, -1),
     },
   });
-  if (loading) {
-    return null;
-  }
 
   const createMidColumn = (
     <ResourceCreate
@@ -156,7 +166,7 @@ const ColumnWrapper = ({
   );
 
   return (
-    <SchemaContext.Provider value={schema}>
+    <SchemaContext.Provider value={schema || null}>
       <FlexibleColumnLayout
         style={{ height: '100%' }}
         layout={layoutState?.layout || 'OneColumn'}

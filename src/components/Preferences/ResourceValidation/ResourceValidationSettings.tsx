@@ -152,8 +152,7 @@ export default function ResourceValidationSettings() {
                   {!choosePolicies && (
                     <Button
                       design="Transparent"
-                      icon="customize"
-                      iconEnd
+                      endIcon="customize"
                       onClick={enablePolicyCustomization}
                     >
                       {t('settings.clusters.resourcesValidation.customize')}
@@ -162,8 +161,7 @@ export default function ResourceValidationSettings() {
                   {choosePolicies && (
                     <Button
                       design="Transparent"
-                      icon="reset"
-                      iconEnd
+                      endIcon="reset"
                       onClick={disablePolicyCustomization}
                     >
                       {t('settings.clusters.resourcesValidation.reset')}

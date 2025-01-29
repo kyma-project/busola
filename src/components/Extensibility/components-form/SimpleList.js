@@ -9,7 +9,6 @@ import {
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { Label } from '../../../shared/ResourceForm/components/Label';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 export function SimpleList({
   storeKeys,
@@ -108,7 +107,7 @@ export function SimpleList({
                   {!isLast(index) && (
                     <Button
                       disabled={readOnly}
-                      style={spacing.sapUiTinyMarginTop}
+                      className="sap-margin-top-tiny"
                       icon="delete"
                       design="Transparent"
                       onClick={() => removeItem(index)}

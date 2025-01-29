@@ -19,7 +19,7 @@ You can use form widgets in the create and/or edit pages in the user interface c
   - [`GenericList`](#genericlist)
   - [`SimpleList`](#simplelist)
 
-## Simple widgets
+## Simple Widgets
 
 Simple widgets represent a single scalar value.
 
@@ -31,7 +31,7 @@ These are the available `Text` widget parameters:
 
 | Parameter             | Required | Type                | Description                                                                                                                                                                                                          |
 | --------------------- | -------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **enum[]**            | No       | an array of options | Generate an input field with a dropdown. Optionally can be a string containing a [JSONata](jsonata.md) expression returning an array of options.                                                                     |
+| **enum[]**            | No       | an array of options | Generate an input field with a dropdown. Optionally can be a string containing a [JSONata](100-jsonata.md) expression returning an array of options.                                                                 |
 | **placeholder**       | No       | string              | Specifies a short hint about the input field value.                                                                                                                                                                  |
 | **required**          | No       | boolean             | Specifies if a field is required. The default value is taken from CustomResourceDefintion (CRD); if it doesn't exist in the CRD, then it defaults to `false`.                                                        |
 | **inputInfo**         | No       | string              | A string below the input field that shows how to fill in the input. You can use the {{ [`name`] (`link`) }} format to display a `name` instead of a `link.                                                           |
@@ -82,7 +82,7 @@ The `Number` widgets render a field as a number field. They are used by default 
 | ----------------- | -------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **description**   | No       | string              | A string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD). |
 | **disableOnEdit** | No       | boolean             | Disables a number field in edit mode, defaults to `false`.                                                                                                              |
-| **enum[]**        | No       | an array of options | Generates an input field with a dropdown. Optionally, it can be a string containing a [JSONata](jsonata.md) expression returning an array of options.                   |
+| **enum[]**        | No       | an array of options | Generates an input field with a dropdown. Optionally, it can be a string containing a [JSONata](100-jsonata.md) expression returning an array of options.               |
 
 See the following examples:
 
@@ -167,12 +167,12 @@ The `CodeEditor` widgets render a versatile code editor that can be used to edit
 
 These are the available `CodeEditor` widget parameters:
 
-| Parameter           | Required | Type                             | Description                                                                                                                                                             |
-| ------------------- | -------- | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **language**        | **Yes**  | [JSONata](jsonata.md) expression | Resolves the desired language. It has access to the `$root` variable, containing the entire resource.                                                                   |
-| **inputInfo**       | No       | string                           | A string below the input field that shows how to fill in the input. You can use the {{ [`name`] (`link`) }} format to display a `name` instead of a `link.              |
-| **description**     |          | string                           | A string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD). |
-| **defaultExpanded** | No       | boolean                          | Specifies if the widget should be expanded by default. Defaults to `false`.                                                                                             |
+| Parameter           | Required | Type                                 | Description                                                                                                                                                             |
+| ------------------- | -------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **language**        | **Yes**  | [JSONata](100-jsonata.md) expression | Resolves the desired language. It has access to the `$root` variable, containing the entire resource.                                                                   |
+| **inputInfo**       | No       | string                               | A string below the input field that shows how to fill in the input. You can use the {{ [`name`] (`link`) }} format to display a `name` instead of a `link.              |
+| **description**     |          | string                               | A string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD). |
+| **defaultExpanded** | No       | boolean                              | Specifies if the widget should be expanded by default. Defaults to `false`.                                                                                             |
 
 See the following example:
 
@@ -277,11 +277,11 @@ The `Alert` widgets display values using predefined types.
 
 These are the available `Bagde` widget parameters:
 
-| Parameter         | Required | Type                             | Description                                                                                                                      |
-| ----------------- | -------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| **alert**         | **Yes**  | [JSONata](jsonata.md) expression | The information that you want to display.                                                                                        |
-| **disableMargin** | No       | boolean                          | Disables the margin outside the alert body.                                                                                      |
-| **severity**      | No       | string                           | Specifies one of the alert severities: `information`, `warning`, `error`, or `success`. By default, it's set to **information**. |
+| Parameter         | Required | Type                                 | Description                                                                                                                      |
+| ----------------- | -------- | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
+| **alert**         | **Yes**  | [JSONata](100-jsonata.md) expression | The information that you want to display.                                                                                        |
+| **disableMargin** | No       | boolean                              | Disables the margin outside the alert body.                                                                                      |
+| **severity**      | No       | string                               | Specifies one of the alert severities: `information`, `warning`, `error`, or `success`. By default, it's set to **information**. |
 
 See the following example:
 
@@ -340,17 +340,17 @@ The `ResourceRef` widgets render two dropdowns to select the associated resource
 
 These are the available `ResourceRef` widget parameters:
 
-| Parameter            | Required | Type                             | Description                                                                                                                 |
-| -------------------- | -------- | -------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| **resource**         |          |                                  |                                                                                                                             |
-| **resource.kind**    | **Yes**  | string                           | Kubernetes kind of the resource.                                                                                            |
-| **resource.group**   | No       | string                           | The API group used for all requests. Not provided for Kubernetes resources in the core (also called legacy) group.          |
-| **resource.version** | **Yes**  | string                           | The API version used for all requests.                                                                                      |
-| **filter**           | No       | [JSONata](jsonata.md) expression | Flters resources based on a given condition.                                                                                |
-| **provideVar**       | No       | string                           | When this field is defined, the chosen resource will be provided as a variable of this name.                                |
-| **toInternal**       | No       | [JSONata](jsonata.md) function   | Converts from the stored value to the `{name, namespace}` format. Useful, for example, when the data is stored as a string. |
-| **toExternal**       | No       | [JSONata](jsonata.md) function   | A corresponding function to convert back to store.                                                                          |
-| **defaultExpanded**  | No       | boolean                          | Specifies if the widget should be expanded by default. Defaults to `false`.                                                 |
+| Parameter            | Required | Type                                 | Description                                                                                                                 |
+| -------------------- | -------- | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| **resource**         |          |                                      |                                                                                                                             |
+| **resource.kind**    | **Yes**  | string                               | Kubernetes kind of the resource.                                                                                            |
+| **resource.group**   | No       | string                               | The API group used for all requests. Not provided for Kubernetes resources in the core (also called legacy) group.          |
+| **resource.version** | **Yes**  | string                               | The API version used for all requests.                                                                                      |
+| **filter**           | No       | [JSONata](100-jsonata.md) expression | Flters resources based on a given condition.                                                                                |
+| **provideVar**       | No       | string                               | When this field is defined, the chosen resource will be provided as a variable of this name.                                |
+| **toInternal**       | No       | [JSONata](100-jsonata.md) function   | Converts from the stored value to the `{name, namespace}` format. Useful, for example, when the data is stored as a string. |
+| **toExternal**       | No       | [JSONata](100-jsonata.md) function   | A corresponding function to convert back to store.                                                                          |
+| **defaultExpanded**  | No       | boolean                              | Specifies if the widget should be expanded by default. Defaults to `false`.                                                 |
 
 See the following example:
 

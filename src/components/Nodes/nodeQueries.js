@@ -25,7 +25,6 @@ const createUsageMetrics = (node, metricsForNode) => {
   const cpuCapacity = getCpus(node.status.allocatable?.cpu || '0');
   const memoryCapacity = formatKiToGiMemory(node.status.allocatable?.memory);
 
-  console.log(cpuCapacity);
   const cpuPercentage = getPercentageFromUsage(cpuUsage, cpuCapacity);
   const memoryPercentage = getPercentageFromUsage(memoryUsage, memoryCapacity);
 
