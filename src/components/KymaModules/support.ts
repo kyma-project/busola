@@ -34,6 +34,7 @@ export function useModuleStatus(resource: any) {
 
   useEffect(() => {
     async function fetchModule() {
+      if (path.includes('undefined')) return;
       try {
         const response = await fetch({ relativeUrl: path });
         const status = (await response.json())?.status;
@@ -57,11 +58,6 @@ export const findStatus = (
   kymaResource: KymaResourceType,
   moduleName: string,
 ) => {
-  console.log(
-    kymaResource?.status?.modules?.find(
-      (module: { name: string }) => moduleName === module.name,
-    ),
-  );
   return kymaResource?.status?.modules?.find(
     (module: { name: string }) => moduleName === module.name,
   );
