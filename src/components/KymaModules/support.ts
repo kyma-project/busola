@@ -34,7 +34,7 @@ export function useModuleStatus(resource: any) {
 
   useEffect(() => {
     async function fetchModule() {
-      if (!resource?.resources) return;
+      if (!resource?.resource) return;
       try {
         const response = await fetch({ relativeUrl: path });
         const status = (await response.json())?.status;
