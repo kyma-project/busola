@@ -4,6 +4,12 @@ import React, { useEffect, useState } from 'react';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 
 type KymaResourceType = {
+  apiVersion: string;
+  kind: string;
+  metadata: {
+    name: string;
+    namespace: string;
+  };
   spec: {
     modules: {
       name: string;
@@ -16,25 +22,25 @@ type KymaResourceType = {
   };
 };
 
-export function useModuleStatus(resource: any) {
+export function useModuleStatus(resource: KymaResourceType) {
   const fetch = useFetch();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  const path = resource?.resource?.metadata?.namespace
-    ? `/apis/${resource?.resource?.apiVersion}/namespaces/${
-        resource?.resource?.metadata?.namespace
-      }/${pluralize(resource?.resource?.kind || '').toLowerCase()}/${
-        resource?.resource?.metadata?.name
+  const path = resource?.metadata?.namespace
+    ? `/apis/${resource?.apiVersion}/namespaces/${
+        resource?.metadata?.namespace
+      }/${pluralize(resource?.kind || '').toLowerCase()}/${
+        resource?.metadata?.name
       }`
-    : `/apis/${resource?.resource?.apiVersion}/${pluralize(
-        resource?.resource?.kind || '',
-      ).toLowerCase()}/${resource?.resource?.metadata?.name}`;
+    : `/apis/${resource?.apiVersion}/${pluralize(
+        resource?.kind || '',
+      ).toLowerCase()}/${resource?.metadata?.name}`;
 
   useEffect(() => {
     async function fetchModule() {
-      if (!resource?.resource) return;
+      if (!resource) return;
       try {
         const response = await fetch({ relativeUrl: path });
         const status = (await response.json())?.status;
@@ -52,7 +58,7 @@ export function useModuleStatus(resource: any) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [path]);
 
-  return { data: data, loading: loading, error: error };
+  return { data, loading, error };
 }
 
 export const findStatus = (

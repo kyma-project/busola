@@ -66,12 +66,12 @@ export function jsonataWrapper(expression: string) {
   );
 
   exp.registerFunction('getModuleState', resource => {
-    const { data: status } = useModuleStatus(resource);
+    const { data: status } = useModuleStatus(resource?.resource);
     return status?.state || 'Unknown';
   });
 
   exp.registerFunction('getModuleDescription', resource => {
-    const { data: status } = useModuleStatus(resource);
+    const { data: status } = useModuleStatus(resource?.resource);
     return status?.description;
   });
 
