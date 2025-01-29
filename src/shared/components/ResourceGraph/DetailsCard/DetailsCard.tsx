@@ -9,10 +9,9 @@ import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTim
 import { K8sResource } from 'types';
 import { allNodesSelector } from 'state/navigation/allNodesSelector';
 import pluralize from 'pluralize';
-
-import { spacing } from '@ui5/webcomponents-react-base';
-import './DetailsCard.scss';
 import { columnLayoutState } from 'state/columnLayoutAtom';
+
+import './DetailsCard.scss';
 
 export function DetailsCard({
   resource,
@@ -49,7 +48,7 @@ export function DetailsCard({
       </section>
       <div className="buttons-wrapper">
         <Button
-          style={spacing.sapUiSmallMarginEnd}
+          className="sap-margin-end-small"
           onClick={() => {
             const namespacePart = resource.metadata.namespace
               ? `namespaces/${resource.metadata.namespace}/`
@@ -77,7 +76,7 @@ export function DetailsCard({
           {t('resource-graph.buttons.go-to-details')}
         </Button>
         <Button
-          style={spacing.sapUiSmallMarginEnd}
+          className="sap-margin-end-small"
           onClick={() => handleCloseCard()}
         >
           {t('common.buttons.close')}

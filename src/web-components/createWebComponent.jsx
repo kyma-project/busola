@@ -1,4 +1,4 @@
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { parseHtmlToJsx } from './htmlTojsx';
 
 function kebabToCamelCase(str) {
@@ -16,17 +16,32 @@ function createWebComponent(
     constructor() {
       super();
       this.reactRoot = null;
+      this.reactRootInstance = null;
       this._props = {};
       this._slots = {};
     }
 
     connectedCallback() {
+      if (!this.reactRoot) {
+        this.reactRoot = document.createElement('div');
+        this.appendChild(this.reactRoot);
+        this.reactRootInstance = createRoot(this.reactRoot); // Initialize root
+      }
+
       this.applyStyles();
       this.mountReactComponent();
     }
 
     disconnectedCallback() {
-      ReactDOM.unmountComponentAtNode(this.reactRoot);
+      // Delay unmounting to avoid conflicts with React rendering
+      if (this.reactRootInstance) {
+        setTimeout(() => {
+          if (this.reactRootInstance) {
+            this.reactRootInstance.unmount();
+            this.reactRootInstance = null; // Clean up instance
+          }
+        }, 0);
+      }
     }
 
     static get observedAttributes() {
@@ -76,11 +91,6 @@ function createWebComponent(
     }
 
     mountReactComponent() {
-      if (!this.reactRoot) {
-        this.reactRoot = document.createElement('div');
-        this.appendChild(this.reactRoot);
-      }
-
       // Generate props from attributes
       const propsFromAttributes = observedAttributes.reduce((acc, attr) => {
         const attrValue = this.getAttribute(attr);
@@ -122,10 +132,9 @@ function createWebComponent(
         }
       });
 
-      ReactDOM.render(
-        <ReactComponent {...defaultProps} {...props} />,
-        this.reactRoot,
-      );
+      if (this.reactRootInstance) {
+        this.reactRootInstance.render(<ReactComponent {...props} />);
+      }
     }
   }
 

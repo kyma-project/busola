@@ -3,7 +3,6 @@ import { MessageStrip, Select, Option, Title } from '@ui5/webcomponents-react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 
-import { spacing } from '@ui5/webcomponents-react-base';
 import './ContextChooser.scss';
 
 export function ContextChooser(params) {
@@ -29,11 +28,8 @@ export function ContextChooser(params) {
   };
 
   return (
-    <div
-      className="add-cluster__content-container"
-      style={spacing.sapUiMediumMarginBottom}
-    >
-      <ResourceForm.Wrapper {...params} style={spacing.sapUiMediumMarginBottom}>
+    <div className="add-cluster__content-container sap-margin-bottom-medium">
+      <ResourceForm.Wrapper {...params} className="sap-margin-bottom-medium">
         <Title level="H5">{'Provide Context'}</Title>
         <ResourceForm.FormField
           required
@@ -63,7 +59,7 @@ export function ContextChooser(params) {
           <MessageStrip
             design="Information"
             hideCloseButton
-            style={spacing.sapUiSmallMarginTopBottom}
+            className="sap-margin-y-small"
           >
             {t('clusters.wizard.multi-context-info', {
               context: kubeconfig.contexts[0]?.name,

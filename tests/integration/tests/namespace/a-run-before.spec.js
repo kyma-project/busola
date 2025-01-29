@@ -24,13 +24,11 @@ context('Create Namespace', () => {
 
     cy.get('[aria-label="Apply Total Memory Quotas, collapsed"]')
       .find('ui5-combobox[placeholder="Choose template"]:visible')
-      .find('ui5-icon[accessible-name="Select Options"]')
       .click();
 
-    cy.get('ui5-static-area')
-      .find('ui5-li:visible')
-      .contains('XL (limits: 9Gi, requests: 8.4Gi)')
-      .find('li[role="listitem"]')
+    cy.get('ui5-responsive-popover:visible')
+      .contains('ui5-li:visible', 'XL (limits: 9Gi, requests: 8.4Gi)')
+      .find('li')
       .click({ force: true });
 
     cy.get('.create-form')

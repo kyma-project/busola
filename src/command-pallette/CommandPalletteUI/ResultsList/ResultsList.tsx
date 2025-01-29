@@ -53,6 +53,13 @@ export function ResultsList({
   useEventListener(
     'keydown',
     (e: Event) => {
+      if (
+        document.querySelector(
+          'ui5-dialog[header-text="Discard Changes"][open]',
+        )
+      )
+        return;
+
       if (isHistoryMode) return;
 
       const { key } = e as KeyboardEvent;
@@ -63,6 +70,7 @@ export function ResultsList({
         setActiveIndex(activeIndex - 1);
         scrollInto(listRef.current!.children[activeIndex - 1]);
       } else if (key === 'Enter' && results?.[activeIndex]) {
+        e.preventDefault();
         handleActionIfFormOpen(
           isResourceEdited,
           setIsResourceEdited,

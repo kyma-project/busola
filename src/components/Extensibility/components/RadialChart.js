@@ -32,7 +32,7 @@ export const RadialChart = ({ structure, value, originalResource }) => {
   }
 
   return (
-    <div className={'item-wrapper tall'}>
+    <div className="item-wrapper card-tall">
       <Card
         className="radial-chart-card"
         header={<CardHeader titleText={t(structure?.name)} />}

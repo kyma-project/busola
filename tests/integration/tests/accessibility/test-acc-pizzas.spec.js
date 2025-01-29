@@ -58,6 +58,7 @@ context('Accessibility test Pizza Orders', () => {
     cy.loginAndSelectCluster();
 
     cy.getLeftNav()
+      .find('ui5-side-navigation-item')
       .contains('Namespaces')
       .click();
 

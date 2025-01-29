@@ -1,6 +1,6 @@
 import { parseOIDCparams } from 'components/Clusters/components/oidc-params';
 import { UserManager, User } from 'oidc-client-ts';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { atom, useSetRecoilState, useRecoilValue, RecoilState } from 'recoil';
 import { KubeconfigNonOIDCAuth, KubeconfigOIDCAuth } from 'types';
@@ -137,6 +137,7 @@ export function useAuthHandler() {
   const setAuth = useSetRecoilState(authDataState);
   const navigate = useNavigate();
   const setLastFetched = useSetRecoilState(openapiLastFetchedState);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     console.log(
@@ -145,14 +146,17 @@ export function useAuthHandler() {
 
     if (!cluster) {
       setAuth(null);
+      setIsLoading(false);
     } else {
       // don't do the auth flow on cluster list (e.g. after refresh, while the OIDC cluster is still connected)
       if (window.location.pathname === '/clusters') {
+        setIsLoading(false);
         return;
       }
       const userCredentials = cluster.currentContext?.user?.user;
       if (hasNonOidcAuth(userCredentials)) {
         setAuth(userCredentials as KubeconfigNonOIDCAuth);
+        setIsLoading(false);
       } else {
         const onAfterLogin = () => {
           if (!getPreviousPath() || getPreviousPath() === '/clusters') {
@@ -166,8 +170,12 @@ export function useAuthHandler() {
               navigate('/cluster/' + encodeURIComponent(cluster.name));
             }
           }
+          setIsLoading(false);
         };
-        const onError = () => navigate('/clusters');
+        const onError = () => {
+          navigate('/clusters');
+          setIsLoading(false);
+        };
 
         handleLogin({
           userCredentials: userCredentials as KubeconfigOIDCAuth,
@@ -181,6 +189,8 @@ export function useAuthHandler() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cluster]);
+
+  return { isLoading };
 }
 
 export const authDataState: RecoilState<AuthDataState> = atom<AuthDataState>({

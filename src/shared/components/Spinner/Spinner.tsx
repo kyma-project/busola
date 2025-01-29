@@ -1,15 +1,14 @@
 import { BusyIndicator } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 type SpinnerProps = {
   ariaLabel?: string;
-  size?: 'Large' | 'Medium' | 'Small';
+  size?: 'S' | 'M' | 'L';
   center?: boolean;
 };
 
 export const Spinner = ({
   ariaLabel = 'Loading',
-  size = 'Medium',
+  size = 'M',
   center = true,
 }: SpinnerProps) => {
   const style = center
@@ -17,13 +16,8 @@ export const Spinner = ({
         width: '100%',
         display: 'flex',
         justifyContent: 'center',
-        marginTop: spacing.sapUiSmallMarginTop.marginTop,
-        marginBottom: spacing.sapUiSmallMarginBottom.marginBottom,
       }
-    : {
-        marginTop: spacing.sapUiSmallMarginTop.marginTop,
-        marginBottom: spacing.sapUiSmallMarginBottom.marginBottom,
-      };
+    : {};
 
   return (
     <BusyIndicator
@@ -31,6 +25,7 @@ export const Spinner = ({
       size={size}
       aria-label={ariaLabel}
       style={style}
+      className="sap-margin-y-small"
     />
   );
 };

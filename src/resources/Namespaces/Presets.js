@@ -1,14 +1,12 @@
-import React from 'react';
 import { Presets } from 'shared/ResourceForm/components/Presets';
 import { createResourceQuotaTemplate } from 'resources/ResourceQuotas/templates';
 import { createLimitRangeTemplate } from 'resources/LimitRanges/templates';
 
 export const LimitPresets = ({
   presets,
-  value,
   setValue,
   namespaceName,
-  ...otherProps
+  disabled,
 }) => {
   const mappedPresets = Object.entries(presets || {}).map(
     ([preset, values]) => {
@@ -32,17 +30,16 @@ export const LimitPresets = ({
       presets={mappedPresets}
       onSelect={preset => setValue(preset.value)}
       inlinePresets={true}
-      {...otherProps}
+      disabled={disabled}
     />
   ) : null;
 };
 
 export const MemoryPresets = ({
   presets,
-  value,
   setValue,
   namespaceName,
-  ...otherProps
+  disabled,
 }) => {
   const mappedPresets = Object.entries(presets || {}).map(
     ([preset, values]) => {
@@ -65,7 +62,7 @@ export const MemoryPresets = ({
       presets={mappedPresets}
       onSelect={preset => setValue(preset.value)}
       inlinePresets={true}
-      {...otherProps}
+      disabled={disabled}
     />
   ) : null;
 };

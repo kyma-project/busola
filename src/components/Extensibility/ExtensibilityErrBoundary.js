@@ -54,11 +54,10 @@ class ExtensibilityErrBoundaryComponent extends React.Component {
   }
 }
 
-ExtensibilityErrBoundaryComponent.defaultProps = {
-  displayButton: true,
-};
-
-export const ExtensibilityErrBoundary = ({ ...props }) => {
+export const ExtensibilityErrBoundary = ({
+  displayButton = true,
+  ...props
+}) => {
   const { t } = useTranslation();
 
   return <ExtensibilityErrBoundaryComponent {...props} t={t} />;

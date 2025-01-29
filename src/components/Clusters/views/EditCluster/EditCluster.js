@@ -16,7 +16,6 @@ import { authDataState } from 'state/authDataAtom';
 import { Title } from '@ui5/webcomponents-react';
 
 import { addCluster, getContext, deleteCluster } from '../../shared';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { getUserIndex } from '../../shared';
 
 export const findInitialValues = (kubeconfig, id, userIndex = 0) => {
@@ -267,13 +266,8 @@ function EditClusterComponent({
 
   return (
     <>
-      <div
-        style={{
-          ...spacing.sapUiLargeMarginBeginEnd,
-          ...spacing.sapUiSmallMarginTopBottom,
-        }}
-      >
-        <Title level="H3" style={spacing.sapUiSmallMarginBottom}>
+      <div className="sap-margin-x-large sap-margin-y-small">
+        <Title level="H3" size="H3" className="sap-margin-bottom-small">
           {t('clusters.storage.choose-storage.label')}
         </Title>
         <ChooseStorage
@@ -284,7 +278,7 @@ function EditClusterComponent({
           }}
         />
         <ResourceForm.FormField
-          style={spacing.sapUiMediumMarginTop}
+          className="sap-margin-top-medium"
           label={t('common.headers.description')}
           data-testid="cluster-description"
           input={Inputs.Text}

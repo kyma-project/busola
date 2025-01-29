@@ -49,8 +49,7 @@ export function ResourceButton({
   return (
     <Button
       design="Emphasized"
-      icon={structure?.icon}
-      iconEnd
+      endIcon={structure?.icon}
       inline={true}
       onClick={() =>
         navigate(

@@ -36,12 +36,17 @@ context('Test navigation features', () => {
       .wait(1000)
       .type('cronjob-controller');
 
-    cy.get('ui5-li-suggestion-item:visible')
-      .contains('cronjob-controller')
+    cy.get('ui5-suggestion-item:visible')
+      .contains('li', /cronjob-controller/)
       .click();
 
-    cy.contains('cronjob-controller (SA)') // link wrapper
-      .contains('cronjob-controller') // link itself
+    cy.wait(1000);
+
+    cy.contains('ui5-text', 'system:controller:cronjob-controller').click();
+
+    cy.getMidColumn()
+      .contains('ui5-panel', 'Subjects')
+      .contains('ui5-link', 'cronjob-controller')
       .click();
 
     cy.contains('disabled').should('exist');

@@ -106,6 +106,7 @@ context('Test reduced permissions 2', () => {
       .click();
 
     cy.getLeftNav()
+      .find('ui5-side-navigation-item')
       .contains('Namespaces')
       .click();
 
