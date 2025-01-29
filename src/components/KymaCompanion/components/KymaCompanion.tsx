@@ -8,7 +8,6 @@ import {
   Toolbar,
   ToolbarSpacer,
 } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { useRecoilState } from 'recoil';
 import {
   ShowKymaCompanion,
@@ -24,11 +23,11 @@ export default function KymaCompanion() {
   );
 
   return (
-    <div id="companion_wrapper" style={spacing.sapUiTinyMargin}>
+    <div id="companion_wrapper" className="sap-margin-tiny">
       <Card
         className="kyma-companion"
         header={
-          <Toolbar toolbarStyle="Clear" className="kyma-companion__header">
+          <Toolbar design="Transparent" className="kyma-companion__header">
             <Title level="H4" className="title">
               {t('kyma-companion.name')}
             </Title>
@@ -60,7 +59,6 @@ export default function KymaCompanion() {
         }
       >
         <TabContainer
-          fixed
           contentBackgroundDesign="Transparent"
           className={`tab-container`}
         >

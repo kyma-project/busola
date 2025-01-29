@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import React, { useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { FlexBox, Icon, Input } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { initialPromptState } from 'components/KymaCompanion/state/initalPromptAtom';
 import Message from './messages/Message';
 import Bubbles from './messages/Bubbles';
@@ -113,11 +112,7 @@ export default function Chat() {
       justifyContent="SpaceBetween"
       className="chat-container"
     >
-      <div
-        className="chat-list"
-        style={spacing.sapUiTinyMargin}
-        ref={containerRef}
-      >
+      <div className="chat-list sap-margin-tiny" ref={containerRef}>
         {chatHistory.map((message, index) => {
           return message.author === 'ai' ? (
             <React.Fragment key={index}>
@@ -149,7 +144,7 @@ export default function Chat() {
           />
         )}
       </div>
-      <div style={spacing.sapUiTinyMarginBeginEnd}>
+      <div className="sap-margin-x-tiny">
         <Input
           className="full-width"
           disabled={chatHistory[chatHistory.length - 1]?.isLoading}

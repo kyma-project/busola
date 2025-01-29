@@ -81,6 +81,7 @@ export default function App() {
   useGetKymaResources();
 
   const showCompanion = useRecoilValue(showKymaCompanionState);
+
   if (isLoading) {
     return <Spinner />;
   }

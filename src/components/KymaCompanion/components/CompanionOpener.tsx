@@ -2,17 +2,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Button,
-  CustomListItem,
+  ListItemCustom,
   FlexBox,
   Icon,
   Input,
   List,
-  Loader,
   Popover,
   Text,
   Title,
+  BusyIndicator,
 } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
@@ -100,10 +99,10 @@ export default function CompanionOpener({
         <Popover
           className="suggestions-popover"
           open={popoverOpen}
-          onAfterClose={() => setPopoverOpen(false)}
+          onClose={() => setPopoverOpen(false)}
           opener="openPopoverBtn"
-          placementType="Bottom"
-          horizontalAlign="Right"
+          horizontalAlign="End"
+          placement="Bottom"
         >
           <Input
             icon={<Icon name="paper-plane" onClick={onSubmitInput} />}
@@ -113,16 +112,17 @@ export default function CompanionOpener({
             placeholder={t('kyma-companion.opener.input-placeholder')}
             className="popover-input"
           />
-          <Title level="H5" style={spacing.sapUiTinyMargin}>
+          <Title level="H5" className="sap-margin-tiny">
             {t('kyma-companion.opener.suggestions')}
           </Title>
           {errorOccured || (!isLoading && suggestions.length === 0) ? (
             <FlexBox
               alignItems="Center"
               direction="Column"
-              style={{ gap: '8px', ...spacing.sapUiTinyMarginBottom }}
+              className="sap-margin-bottom-tiny"
+              style={{ gap: '8px' }}
             >
-              <Text style={spacing.sapUiTinyMargin}>
+              <Text className="sap-margin-tiny">
                 {t('kyma-companion.opener.error-message')}
               </Text>
               <Button onClick={fetchSuggestions}>
@@ -130,25 +130,20 @@ export default function CompanionOpener({
               </Button>
             </FlexBox>
           ) : isLoading ? (
-            <div
-              style={{
-                ...spacing.sapUiTinyMargin,
-                ...spacing.sapUiSmallMarginTop,
-              }}
-            >
-              <Loader progress="60%" />
+            <div className="sap-margin-tiny sap-margin-top-small">
+              <BusyIndicator active delay={1000} size="M" />
             </div>
           ) : (
-            <List style={spacing.sapUiTinyMarginTop}>
+            <List className="sap-margin-top-tiny">
               {suggestions.map((suggestion, index) => (
-                <CustomListItem
+                <ListItemCustom
                   key={index}
                   onClick={() => sendInitialPrompt(suggestion)}
                   className="custom-list-item"
                 >
                   <Text className="text">{suggestion}</Text>
                   <Icon name="navigation-right-arrow" />
-                </CustomListItem>
+                </ListItemCustom>
               ))}
             </List>
           )}

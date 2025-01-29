@@ -1,6 +1,5 @@
 import { Button, IllustratedMessage } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 interface ErrorMessageProps {
   errorOnInitialMessage: boolean;
@@ -19,7 +18,7 @@ export default function ErrorMessage({
       key="error-message"
       titleText={t('kyma-companion.error.title')}
       subtitleText={t('kyma-companion.error.subtitle')}
-      style={{ ...spacing.sapUiSmallMarginTop, padding: 0 }}
+      className="sap-margin-top-small no-padding"
     >
       {errorOnInitialMessage && (
         <Button onClick={resendInitialPrompt}>

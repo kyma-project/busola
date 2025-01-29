@@ -11,15 +11,11 @@ export default function CodePanel({ text }: CodePanelProps): JSX.Element {
   //const { language, code } = formatCodeSegment(text);
   return !language ? (
     <div className="code-response">
-      <Text className="text" renderWhitespace>
-        {code}
-      </Text>
+      <Text className="text">{code}</Text>
     </div>
   ) : (
     <Panel headerText={language} className="code-panel" fixed>
-      <Text className="text" renderWhitespace>
-        {code}
-      </Text>
+      <Text className="text">{code}</Text>
     </Panel>
   );
 }
