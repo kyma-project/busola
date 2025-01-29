@@ -5,8 +5,6 @@ import {
   Tab,
   TabContainer,
   Title,
-  Toolbar,
-  ToolbarSpacer,
 } from '@ui5/webcomponents-react';
 import { useRecoilState } from 'recoil';
 import {
@@ -27,11 +25,10 @@ export default function KymaCompanion() {
       <Card
         className="kyma-companion"
         header={
-          <Toolbar design="Transparent" className="kyma-companion__header">
-            <Title level="H4" className="title">
+          <div className="kyma-companion__header">
+            <Title level="H4" size="H4" className="title">
               {t('kyma-companion.name')}
             </Title>
-            <ToolbarSpacer />
             <div>
               <Button
                 design="Transparent"
@@ -55,7 +52,7 @@ export default function KymaCompanion() {
                 }
               />
             </div>
-          </Toolbar>
+          </div>
         }
       >
         <TabContainer
