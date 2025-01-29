@@ -389,23 +389,20 @@ export default function KymaModulesCreate({ resource, ...props }) {
   };
 
   const skipModuleFn = () => {
-    const shouldShowManagedWarning = isManagedChanged;
-    const shouldShowChannelWarning = showChannelChangeWarning;
-
-    if (shouldShowManagedWarning) {
+    if (isManagedChanged) {
       setShowManagedBox({
         ...showManagedBox,
         isOpen: true,
         onSave: true,
       });
     }
-    if (shouldShowChannelWarning) {
+    if (showChannelChangeWarning) {
       setShowMessageBox({
         ...showMessageBox,
         isOpen: true,
       });
     }
-    return shouldShowManagedWarning || shouldShowChannelWarning;
+    return isManagedChanged || showChannelChangeWarning;
   };
 
   return (
