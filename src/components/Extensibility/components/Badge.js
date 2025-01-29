@@ -40,7 +40,7 @@ export function Badge({
     if (tooltip && !tooltipError) {
       return tooltip;
     }
-    if (!tooltip && !tooltipError) {
+    if (tooltip === null && !tooltipError) {
       return '';
     }
     return description;

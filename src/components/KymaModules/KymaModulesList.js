@@ -4,19 +4,19 @@ import jsyaml from 'js-yaml';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import {
-  Badge,
+  Tag,
   Button,
   DynamicPageHeader,
   FlexBox,
   List,
   MessageStrip,
-  StandardListItem,
+  ListItemStandard,
   Text,
 } from '@ui5/webcomponents-react';
 
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
-import { spacing } from '@ui5/webcomponents-react-base';
-import { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import {
   useGet,
@@ -41,7 +41,7 @@ import pluralize from 'pluralize';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { Label } from 'shared/ResourceForm/components/Label';
 import { isFormOpenState } from 'state/formOpenAtom';
-import { ModuleStatus } from './components/ModuleStatus';
+import { ModuleStatus, resolveType } from './components/ModuleStatus';
 import { cloneDeep } from 'lodash';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useNavigate } from 'react-router-dom';
@@ -226,9 +226,14 @@ export default function KymaModulesList({
             resource.name
           )}
           {checkBeta(currentModule, currentModuleReleaseMeta) ? (
-            <Badge style={spacing.sapUiTinyMarginBegin}>
-              {t('kyma-moduleTemplates.beta')}
-            </Badge>
+            <Tag
+              className="sap-margin-begin-tiny"
+              hideStateIcon
+              colorScheme="3"
+              design="Set2"
+            >
+              {t('kyma-modules.beta')}
+            </Tag>
           ) : null}
         </>,
         // Namespace
@@ -239,14 +244,14 @@ export default function KymaModulesList({
             ? moduleStatus?.channel
             : kymaResource?.spec?.modules?.[moduleIndex]?.channel}
           {isChannelOverriden ? (
-            <Badge
+            <Tag
               hideStateIcon
               design="Set2"
               colorScheme="5"
-              style={spacing.sapUiTinyMarginBegin}
+              className="sap-margin-begin-tiny"
             >
               {t('kyma-modules.channel-overridden')}
-            </Badge>
+            </Tag>
           ) : (
             ''
           )}
@@ -258,16 +263,7 @@ export default function KymaModulesList({
         // Installation State
         <StatusBadge
           resourceKind="kymas"
-          type={
-            moduleStatus?.state === 'Ready'
-              ? 'Success'
-              : moduleStatus?.state === 'Processing' ||
-                moduleStatus?.state === 'Deleting' ||
-                moduleStatus?.state === 'Unmanaged' ||
-                moduleStatus?.state === 'Unknown'
-              ? 'None'
-              : moduleStatus?.state || 'None'
-          }
+          type={resolveType(moduleStatus?.state)}
           tooltipContent={moduleStatus?.message}
         >
           {moduleStatus?.state || 'Unknown'}
@@ -467,7 +463,7 @@ export default function KymaModulesList({
     };
 
     return (
-      <>
+      <React.Fragment key="modules-list">
         {!detailsOpen &&
           createPortal(
             <DeleteMessageBox
@@ -475,7 +471,7 @@ export default function KymaModulesList({
               additionalDeleteInfo={
                 getAssociatedResources().length > 0 && (
                   <>
-                    <MessageStrip design="Warning" hideCloseButton>
+                    <MessageStrip design="Critical" hideCloseButton>
                       {t('kyma-modules.associated-resources-warning')}
                     </MessageStrip>
                     <List
@@ -490,7 +486,7 @@ export default function KymaModulesList({
                           ];
 
                         return (
-                          <StandardListItem
+                          <ListItemStandard
                             onClick={e => {
                               e.preventDefault();
                               handleItemClick(
@@ -507,7 +503,7 @@ export default function KymaModulesList({
                             }
                           >
                             {pluralize(assResource?.kind)}
-                          </StandardListItem>
+                          </ListItemStandard>
                         );
                       })}
                     </List>
@@ -567,7 +563,7 @@ export default function KymaModulesList({
             onClick: handleShowAddModule,
           }}
         />
-      </>
+      </React.Fragment>
     );
   };
 
@@ -577,13 +573,13 @@ export default function KymaModulesList({
       layoutNumber="StartColumn"
       windowTitle={t('kyma-modules.title')}
       headerContent={
-        <DynamicPageHeader>
+        <DynamicPageHeader className="no-shadow">
           <FlexBox alignItems="Center">
             <Label showColon>{t('kyma-modules.release-channel')}</Label>
-            <Text renderWhitespace={true}> </Text>
+            <Text style={{ marginRight: '0.2rem' }}> </Text>
             <Text>{kymaResource?.spec.channel}</Text>
             <HintButton
-              style={spacing.sapUiTinyMarginBegin}
+              className="sap-margin-begin-tiny"
               setShowTitleDescription={setShowReleaseChannelTitleDescription}
               showTitleDescription={showReleaseChannelTitleDescription}
               description={ReleaseChannelDescription}

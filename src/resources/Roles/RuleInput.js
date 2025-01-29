@@ -13,7 +13,6 @@ import {
 import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { groupVersionState } from 'state/discoverability/groupVersionsSelector';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { getDescription } from 'shared/helpers/schema';
 
 const nonResourceUrls = [
@@ -144,7 +143,7 @@ export function RuleInput({ rule, rules, setRules, schema }) {
         newItemActionWidth={2}
         newItemAction={
           loading ? (
-            <BusyIndicator size="Small" active={true} delay="0" />
+            <BusyIndicator size="S" active={true} delay="0" />
           ) : (
             <Button
               design="Transparent"
@@ -168,14 +167,11 @@ export function RuleInput({ rule, rules, setRules, schema }) {
           </Button>,
         ]}
       />
-
       {loadable && (
         <MessageStrip
           design="Information"
           hideCloseButton
-          style={{
-            marginBottom: spacing.sapUiSmallMarginBottom.marginBottom,
-          }}
+          className="sap-margin-bottom-small"
         >
           {t('roles.messages.load-resources')}
         </MessageStrip>

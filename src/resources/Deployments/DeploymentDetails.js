@@ -65,7 +65,7 @@ export function DeploymentDetails(props) {
     return deployment?.status?.conditions?.map(condition => {
       const overridenStatus = () => {
         if (condition.type === 'ReplicaFailure')
-          return condition.status === 'True' ? 'Error' : 'Success';
+          return condition.status === 'True' ? 'Negative' : 'Positive';
         return undefined;
       };
       return {

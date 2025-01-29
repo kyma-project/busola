@@ -1,3 +1,4 @@
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { isEqual } from 'lodash';
 
@@ -18,7 +19,6 @@ import PersistentVolumeClaimCreate from './PersistentVolumeClaimCreate';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ResourceDescription } from 'resources/PersistentVolumeClaims';
 import { Link } from 'shared/components/Link/Link';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 import './PersistentVolumeClaim.scss';
 
@@ -69,11 +69,12 @@ export const PVCConfiguration = pvc => {
     '/apis/storage.k8s.io/v1/storageclasses',
   );
   return (
-    <>
+    <React.Fragment key="pvc-configuration">
       {pvc.spec.resources && (
         <UI5Panel
           title={t('persistent-volume-claims.headers.resources.title')}
           keyComponent={'pvc-resources'}
+          key="pvc-resources"
         >
           <div
             className={
@@ -115,6 +116,7 @@ export const PVCConfiguration = pvc => {
       <UI5Panel
         title={t('common.headers.specification')}
         keyComponent={'pvc-specification'}
+        key="pvc-specification"
       >
         <LayoutPanelRow
           key={pvc.spec?.volumeMode}
@@ -163,7 +165,7 @@ export const PVCConfiguration = pvc => {
           }
         />
       </UI5Panel>
-    </>
+    </React.Fragment>
   );
 };
 
@@ -223,13 +225,7 @@ export function PersistentVolumeClaimDetails(props) {
                 );
               })
             ) : (
-              <div
-                className="content bsl-has-color-text-1"
-                style={{
-                  ...spacing.sapUiSmallMarginBegin,
-                  ...spacing.sapUiSmallMarginBottom,
-                }}
-              >
+              <div className="content bsl-has-color-text-1 sap-margin-begin-small sap-margin-bottom-small">
                 {EMPTY_TEXT_PLACEHOLDER}
               </div>
             ),

@@ -2,7 +2,6 @@ import { useTranslation } from 'react-i18next';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
 import { ResourcesUsage } from './ResourcesUsage';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { Button, Title } from '@ui5/webcomponents-react';
 import LimitRangeList from 'resources/LimitRanges/LimitRangeList';
 import { EventsList } from 'shared/components/EventsList';
@@ -66,14 +65,12 @@ export function AllNamespacesDetails() {
           <>
             <Title
               level="H3"
-              style={{
-                ...spacing.sapUiMediumMarginBegin,
-                ...spacing.sapUiMediumMarginTopBottom,
-              }}
+              size="H3"
+              className="sap-margin-begin-medium sap-margin-y-medium"
             >
               {t('common.headers.monitoring-and-health')}
             </Title>
-            <div className="cluster-stats" style={spacing.sapUiTinyMargin}>
+            <div className="cluster-stats sap-margin-tiny">
               <ResourcesUsage />
               <NamespaceWorkloads />
             </div>

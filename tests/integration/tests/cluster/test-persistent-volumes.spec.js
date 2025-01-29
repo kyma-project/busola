@@ -28,7 +28,7 @@ context('Test Persistent Volumes', () => {
   it('Create PV with NFS', () => {
     cy.navigateTo('Storage', 'Persistent Volumes');
 
-    cy.openCreate().click();
+    cy.openCreate();
 
     cy.wrap(loadPV(PV_NFS_NAME, 'test-persistent-volume-NFS.yaml')).then(
       PV_CONFIG => {
@@ -83,7 +83,7 @@ context('Test Persistent Volumes', () => {
   });
 
   it('Create PV with CSI', () => {
-    cy.openCreate().click();
+    cy.openCreate();
 
     cy.wrap(loadPV(PV_CSI_NAME, 'test-persistent-volume-CSI.yaml')).then(
       PV_CONFIG => {

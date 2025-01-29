@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import { MessageStrip } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 import { Spinner } from 'shared/components/Spinner/Spinner';
@@ -229,6 +228,7 @@ export default function KymaModulesAddModule({
           module={module}
           kymaResource={kymaResource}
           index={index}
+          key={module.name}
           isChecked={isChecked}
           setCheckbox={setCheckbox}
           selectedModules={selectedModules}
@@ -241,9 +241,8 @@ export default function KymaModulesAddModule({
 
     return (
       <div
-        className="gridbox-addModule"
+        className="gridbox-addModule sap-margin-top-small"
         ref={setCardsContainerRef}
-        style={spacing.sapUiSmallMarginTop}
       >
         {columns.map((column, columnIndex) => (
           <div
@@ -274,15 +273,16 @@ export default function KymaModulesAddModule({
       initialUnchangedResource={initialUnchangedResource}
       afterCreatedCustomMessage={t('kyma-modules.module-added')}
       formWithoutPanel
+      className="add-modules-form"
     >
       {modulesAddData?.length !== 0 ? (
         <>
           {checkIfSelectedModuleIsBeta() ? (
             <MessageStrip
               key={'beta'}
-              design="Warning"
+              design="Critical"
               hideCloseButton
-              style={spacing.sapUiSmallMarginTop}
+              className="sap-margin-top-small"
             >
               {t('kyma-modules.beta-alert')}
             </MessageStrip>
@@ -293,15 +293,15 @@ export default function KymaModulesAddModule({
         <MessageStrip
           design="Information"
           hideCloseButton
-          style={spacing.sapUiSmallMarginTop}
+          className="sap-margin-top-small"
         >
           {t('extensibility.widgets.modules.all-modules-added')}
         </MessageStrip>
       ) : (
         <MessageStrip
-          design="Warning"
+          design="Critical"
           hideCloseButton
-          style={spacing.sapUiSmallMarginTop}
+          className="sap-margin-top-small"
         >
           {t('extensibility.widgets.modules.no-modules')}
         </MessageStrip>

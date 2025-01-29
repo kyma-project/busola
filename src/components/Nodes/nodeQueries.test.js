@@ -1,5 +1,17 @@
 import { calcNodeResources } from './nodeQueries.js';
 
+vi.mock('shared/components/UI5RadialChart/UI5RadialChart', () => {
+  return {
+    default: () => ({}),
+  };
+});
+
+vi.mock('@ui5/webcomponents-react', () => {
+  return {
+    Spinner: () => ({}),
+  };
+});
+
 describe('Calculate resources for node', () => {
   const testCases = [
     {
