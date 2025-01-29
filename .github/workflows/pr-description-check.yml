@@ -1,0 +1,22 @@
+name: Description Check
+
+on: 
+  pull_request:
+    types: [opened, edited, synchronize, reopened, ready_for_review]
+
+jobs:
+  check-description:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            const prBody = context?.payload?.pull_request?.body;
+            const descriptionSubtitle = "Changes proposed in this pull request";
+            const subString = prBody.substring(prBody.search(/Changes proposed in this pull request/) + descriptionSubtitle.length, prBody.search(/Related issue/));
+            const regExp = /[a-zA-Z]/g;
+            if(regExp.test(subString)){
+              core.info('SUCCESS: Some description found');
+            } else {
+              core.setFailed('FAILED: No description found!');
+            }
