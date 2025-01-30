@@ -26,7 +26,7 @@ import {
 } from 'shared/hooks/BackendAPI/useGet';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import KymaModulesCreate from './KymaModulesCreate';
+import KymaModulesEdit from 'components/KymaModules/KymaModulesEdit.js';
 import {
   apiGroup,
   apiVersion,
@@ -597,7 +597,7 @@ export default function KymaModulesList({
       namespace={namespace}
       customTitle={t('kyma-modules.title')}
       headerDescription={ResourceDescription}
-      createResourceForm={KymaModulesCreate}
+      createResourceForm={KymaModulesEdit}
       disableResourceDetailsCard
       disableDelete
     />
