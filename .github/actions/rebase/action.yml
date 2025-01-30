@@ -23,7 +23,6 @@ runs:
 
         # go back to the HEAD commit
         git switch --detach ${{ github.sha }}
-        echo "SHA  ${github.sha}"
       shell: bash
 
     - name: Rebase to main
