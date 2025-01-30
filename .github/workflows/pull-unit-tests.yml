@@ -21,7 +21,7 @@ jobs:
         with:
           comment_on_pr: false
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/rebase # Would it work?
+      # - uses: ./.github/actions/rebase # Would it work?
       - uses: actions/setup-node@v4
         with:
           node-version: 20
